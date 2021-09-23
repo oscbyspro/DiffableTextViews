@@ -3,26 +3,39 @@
 
 import PackageDescription
 
+// MARK: -
+
+struct Source {
+    let name: String
+    
+    var tests: String {
+        name.appending("Tests")
+    }
+    
+    var dependency: Target.Dependency {
+        .init(stringLiteral: name)
+    }
+}
+
+// MARK: -
+
+let OBETextFields = Source(name: "OBETextFields")
+
+// MARK: -
+
 let package = Package(
     name: "OBETextFields",
     products: [
-        // Products define the executables and libraries a package produces, and make them visible to other packages.
         .library(
-            name: "OBETextFields",
-            targets: ["OBETextFields"]),
-    ],
-    dependencies: [
-        // Dependencies declare other packages that this package depends on.
-        // .package(url: /* package url */, from: "1.0.0"),
+            name: OBETextFields.name,
+            targets: [OBETextFields.name]),
     ],
     targets: [
-        // Targets are the basic building blocks of a package. A target can define a module or a test suite.
-        // Targets can depend on other targets in this package, and on products in packages this package depends on.
         .target(
-            name: "OBETextFields",
+            name: OBETextFields.name,
             dependencies: []),
         .testTarget(
-            name: "OBETextFieldsTests",
-            dependencies: ["OBETextFields"]),
+            name: OBETextFields.tests,
+            dependencies: [OBETextFields.dependency]),
     ]
 )
