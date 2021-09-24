@@ -10,7 +10,7 @@ public protocol Adapter {
     
     func value(content: String) throws -> Value
     
-    func content(value: Value) throws -> String
+    func content(value: Value) -> String
     
-    func format(content: String) -> Format    
+    func format(content: String) -> Symbols    
 }

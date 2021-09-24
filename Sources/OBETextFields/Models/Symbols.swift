@@ -1,11 +1,15 @@
 //
-//  Format.swift
+//  Symbols.swift
 //  
 //
 //  Created by Oscar Byström Ericsson on 2021-09-23.
 //
 
-public struct Format: BidirectionalCollection, RangeReplaceableCollection {
+public struct Symbols: BidirectionalCollection, RangeReplaceableCollection {
+    public typealias SubSequence = Slice<Self>
+    
+    // MARK: Properties
+    
     @usableFromInline var characters: String
     @usableFromInline var attributes: [Attribute]
 
@@ -71,16 +75,22 @@ public struct Format: BidirectionalCollection, RangeReplaceableCollection {
         }
         
         /// - Complexity: O(1).
-        @inlinable public static func < (lhs: Format.Index, rhs: Format.Index) -> Bool {
+        @inlinable public static func < (lhs: Symbols.Index, rhs: Symbols.Index) -> Bool {
             lhs.offset < rhs.offset
         }
     }
 }
 
-// MARK: - Positions
+// MARK: - Carets
 
-extension Format {
-    @inlinable var positions: Positions {
-        Positions(self)
+extension Symbols {
+    @inlinable var carets: Carets {
+        Carets(self)
+    }
+}
+
+extension Symbols.SubSequence {
+    @inlinable var carets: Carets {
+        Carets(self)
     }
 }
