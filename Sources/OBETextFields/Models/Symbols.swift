@@ -49,6 +49,7 @@ public struct Symbols: BidirectionalCollection, RangeReplaceableCollection {
             yield Symbol(characters[position.character], attribute: attributes[position.attribute])
         }
     }
+    
     // MARK: RangeReplacableCollection
     
     /// - Complexity: O(n + m) where n is length of this collection and m is the length of newElements.

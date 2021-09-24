@@ -8,6 +8,10 @@
 #warning("!!!")
 
 @usableFromInline struct Pairs: BidirectionalCollection {
+    public typealias SubSequence = Slice<Self>
+
+    // MARK: Properties
+    
     @usableFromInline let symbols: Symbols.SubSequence
     @usableFromInline let indices: Carets.SubSequence
     

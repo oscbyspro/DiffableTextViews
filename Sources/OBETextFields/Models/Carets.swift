@@ -6,6 +6,10 @@
 //
 
 @usableFromInline struct Carets: BidirectionalCollection {
+    public typealias SubSequence = Slice<Self>
+
+    // MARK: Properties
+    
     @usableFromInline let symbols: Symbols.SubSequence
 
     // MARK: Initializers
