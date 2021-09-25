@@ -5,55 +5,54 @@
 //  Created by Oscar Byström Ericsson on 2021-09-24.
 //
 
-#warning("Rename.")
-
 struct Field {
-    let symbols: Symbols
-    let selection: Range<Caret>
+    let carets: Carets
+    let selection: Range<Carets.Index>
     
     // MARK: Initializers
     
     /// - Complexity: O(1).
-    @inlinable init(_ symbols: Symbols = Symbols()) {
-        self.symbols = symbols
-        let last = symbols.carets.last
-        self.selection = last ..< last
+    @inlinable init(_ carets: Carets) {
+        let index = carets.indices.last
+        self.init(carets, selection: index ..< index)
     }
-    
+        
     /// - Complexity: O(1).
-    @inlinable init(_ symbols: Symbols, selection: Range<Caret>) {
-        self.symbols = symbols
+    @inlinable init(_ carets: Carets, selection: Range<Carets.Index>) {
+        self.carets = carets
         self.selection = selection
     }
     
     // MARK: Transformations
     
+    #warning("Updating selection method needs a rework.")
+    #warning("Should calculate correct selection based on attributes, and previous selection.")
     /// - Complexity: O(1).
-    @inlinable func updated(selection newValue: Range<Caret>) -> Self {
-        Self(symbols, selection: selection)
+    @inlinable func updated(selection newValue: Range<Carets.Index>) -> Self {
+        Self(carets, selection: selection)
     }
     
     /// - Complexity: O(min(n, m)) where n is the length of the current carets and m is the length of next.
-    @inlinable func updated(symbols newValue: Symbols) -> Self {
-        func relevant(element: Pair) -> Bool {
-            element.rhs?.attribute == .content
+    @inlinable func updated(carets newValue: Carets) -> Self {
+        func relevant(element: Caret) -> Bool {
+            element.rhs.attribute == .content
         }
         
-        func equality(lhs: Pair, rhs: Pair) -> Bool {
-            lhs.rhs?.character == rhs.rhs?.character
+        func equality(lhs: Caret, rhs: Caret) -> Bool {
+            lhs.rhs.character == rhs.rhs.character
         }
         
-        func caret(current: Pairs.SubSequence, next: Pairs.SubSequence) -> Caret {
+        func index(current: Carets.SubSequence, next: Carets.SubSequence) -> Carets.Index {
             next.suffix(suffixing: current, comparing: relevant, using: equality).startIndex
         }
         
-        let upperNext = newValue.pairs[...]
-        let upperCurrent = symbols.pairs[selection.upperBound...]
-        let upperBound = caret(current: upperCurrent, next: upperNext)
+        let upperNext = newValue[...]
+        let upperCurrent = carets[selection.upperBound...]
+        let upperBound = index(current: upperCurrent, next: upperNext)
          
-        let lowerNext = newValue.pairs[...upperBound]
-        let lowerCurrent = symbols.pairs[selection]
-        let lowerBound = caret(current: lowerCurrent, next: lowerNext)
+        let lowerNext = newValue[...upperBound]
+        let lowerCurrent = carets[selection]
+        let lowerBound = index(current: lowerCurrent, next: lowerNext)
         
         return Self(newValue, selection: lowerBound ..< upperBound)
     }

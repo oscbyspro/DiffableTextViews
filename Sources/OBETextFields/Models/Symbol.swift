@@ -9,6 +9,8 @@ public struct Symbol {
     public let attribute: Attribute
     public let character: Character
     
+    // MARK: Initializers
+    
     @inlinable public init(_ character: Character, attribute: Attribute) {
         self.character = character
         self.attribute = attribute

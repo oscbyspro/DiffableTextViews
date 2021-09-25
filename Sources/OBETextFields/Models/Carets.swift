@@ -7,6 +7,7 @@
 
 @usableFromInline struct Carets: BidirectionalCollection {
     public typealias SubSequence = Slice<Self>
+    public typealias Indices = DefaultIndices<Self>
 
     // MARK: Properties
     
@@ -15,7 +16,7 @@
     // MARK: Initializers
     
     /// - Complexity: O(1).
-    @inlinable init(_ symbols: Symbols = Symbols()) {
+    @inlinable init(_ symbols: Symbols) {
         self.symbols = symbols[...]
     }
     
@@ -26,79 +27,135 @@
     // MARK: BidirectionalCollection
     
     /// - Complexity: O(1).
-    @inlinable var startIndex: Caret {
+    @inlinable var startIndex: Index {
         Index(lhs: nil, rhs: symbols.startIndex)
     }
     
     /// - Complexity: O(1).
-    @inlinable var endIndex: Caret {
+    @inlinable var endIndex: Index {
         Index(lhs: symbols.endIndex, rhs: nil)
     }
 
     /// - Complexity: O(1).
-    @inlinable func index(after i: Caret) -> Caret {
-        Index(lhs: i.rhs!, rhs: subindex(after: i.rhs!))
+    @inlinable func index(after i: Index) -> Index {
+        Index(lhs: i.rhs!, rhs: symbolsIndex(after: i.rhs!))
     }
 
     /// - Complexity: O(1).
-    @inlinable func index(before i: Caret) -> Caret {
-        Index(lhs: subindex(before: i.lhs!), rhs: i.lhs!)
+    @inlinable func index(before i: Index) -> Index {
+        Index(lhs: symbolsIndex(before: i.lhs!), rhs: i.lhs!)
     }
 
     /// - Complexity: O(1).
-    @inlinable subscript(position: Caret) -> Caret {
-        position
+    @inlinable subscript(position: Index) -> Caret {
+        _read {
+            yield Caret(lhs: symbol(at: position.lhs), rhs: symbol(at: position.rhs))
+        }
     }
 
     // MARK: Interoperabilities
 
     /// - Complexity: O(1).
-    @usableFromInline func index(lhs: Symbols.Index) -> Caret {
-        Index(lhs: lhs, rhs: subindex(after: lhs))
+    @usableFromInline func index(lhs: Symbols.Index) -> Index {
+        Index(lhs: lhs, rhs: symbolsIndex(after: lhs))
     }
 
     /// - Complexity: O(1).
-    @usableFromInline func index(rhs: Symbols.Index) -> Caret {
-        Index(lhs: subindex(before: rhs), rhs: rhs)
+    @usableFromInline func index(rhs: Symbols.Index) -> Index {
+        Index(lhs: symbolsIndex(before: rhs), rhs: rhs)
     }
 
-    // MARK: Helpers
+    // MARK: Helpers: Symbols.Index
 
     /// - Complexity: O(1).
-    @inlinable func subindex(after subindex: Symbols.Index) -> Symbols.Index? {
-        guard subindex < symbols.endIndex else {
+    @inlinable func symbolsIndex(after symbolsIndex: Symbols.Index) -> Symbols.Index? {
+        symbolsIndex < symbols.endIndex ? symbols.index(after: symbolsIndex) : nil
+    }
+
+    /// - Complexity: O(1).
+    @inlinable func symbolsIndex(before symbolsIndex: Symbols.Index) -> Symbols.Index? {
+        symbolsIndex > symbols.startIndex ? symbols.index(before: symbolsIndex) : nil
+    }
+    
+    // MARK: Helpers: Symbols.Element
+    
+    @inlinable func symbol(at symbolsIndex: Symbols.Index?) -> Symbols.Element? {
+        guard let symbolsIndex = symbolsIndex, symbolsIndex < symbols.endIndex else {
             return nil
         }
 
-        return symbols.index(after: subindex)
+        return symbols[symbolsIndex]
     }
-
-    /// - Complexity: O(1).
-    @inlinable func subindex(before subindex: Symbols.Index) -> Symbols.Index? {
-        guard subindex > symbols.startIndex else {
-            return nil
+    
+    
+    // MARK: Components
+    
+    @usableFromInline struct Index: Comparable {
+        @usableFromInline let lhs: Symbols.Index?
+        @usableFromInline let rhs: Symbols.Index?
+            
+        // MARK: Initializers
+        
+        @inlinable init(lhs: Symbols.Index, rhs: Symbols.Index?) {
+            self.lhs = lhs
+            self.rhs = rhs
         }
-
-        return symbols.index(before: subindex)
+        
+        @inlinable init(lhs: Symbols.Index?, rhs: Symbols.Index) {
+            self.lhs = lhs
+            self.rhs = rhs
+        }
+        
+        // MARK: Utilities
+        
+        @inlinable var offset: Int {
+            lhs.map({ $0.offset + 1 }) ?? 0
+        }
+        
+        // MARK: Comparable
+        
+        @inlinable static func < (lhs: Self, rhs: Self) -> Bool {
+            lhs.offset < rhs.offset
+        }
     }
 }
 
 // MARK: - Nonempty
 
 extension Carets {
-    var first: Caret {
+    @inlinable var first: Caret {
         self.first!
     }
     
-    var last: Caret {
-        self.last!
-    }
-    
-    func min() -> Caret {
-        self.first!
-    }
-    
-    func max() -> Caret {
+    @inlinable var last: Caret {
         self.last!
     }
 }
+
+extension Carets.Indices {
+    @inlinable var first: Carets.Index {
+        self.first!
+    }
+    
+    @inlinable var last: Carets.Index {
+        self.first!
+    }
+}
+
+// MARK: - Symbols
+
+extension Symbols {
+    @inlinable var carets: Carets {
+        Carets(self)
+    }
+}
+
+extension Symbols.SubSequence {
+    @inlinable var carets: Carets {
+        Carets(self)
+    }
+}
+
+// MARK: - Nonempty
+
+protocol Nonempty: Collection where Indices: Nonempty { }

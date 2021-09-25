@@ -7,6 +7,7 @@
 
 public struct Symbols: BidirectionalCollection, RangeReplaceableCollection {
     public typealias SubSequence = Slice<Self>
+    public typealias Indices = DefaultIndices<Self>
     
     // MARK: Properties
     
@@ -79,19 +80,5 @@ public struct Symbols: BidirectionalCollection, RangeReplaceableCollection {
         @inlinable public static func < (lhs: Symbols.Index, rhs: Symbols.Index) -> Bool {
             lhs.offset < rhs.offset
         }
-    }
-}
-
-// MARK: - Carets
-
-extension Symbols {
-    @inlinable var carets: Carets {
-        Carets(self)
-    }
-}
-
-extension Symbols.SubSequence {
-    @inlinable var carets: Carets {
-        Carets(self)
     }
 }
