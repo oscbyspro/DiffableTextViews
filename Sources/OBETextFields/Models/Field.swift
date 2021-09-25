@@ -11,24 +11,24 @@ final class Field {
 
     // MARK: Properties
     
-    var map: Map
+    var container: Container
     var selection: Selection
     
     // MARK: Properties: Getters
     
     @inlinable var carets: Carets {
-        map.carets
+        container.carets
     }
     
     @inlinable var indices: Indices {
-        map.indices
+        container.indices
     }
     
     // MARK: Initializers
             
     /// - Complexity: O(1).
     @inlinable init(_ carets: Carets, selection: Selection) {
-        self.map = Map(carets: carets)
+        self.container = Container(carets: carets)
         self.selection = selection
     }
     
@@ -39,7 +39,7 @@ final class Field {
     
     // MARK: Components
     
-    struct Map {
+    struct Container {
         let carets: Carets
         let indices: Indices
         
@@ -97,7 +97,7 @@ extension Field {
         let lowerCurrent = carets[selection.lowerBound ..< selection.upperBound]
         let lowerBound = index(current: lowerCurrent, next: lowerNext)
         
-        self.map = Map(carets: newValue)
+        self.container = Container(carets: newValue)
         self.selection = Selection(lowerBound ..< upperBound)
     }
 }
@@ -113,19 +113,19 @@ extension Field {
         moveInsideBounds(&lowerBound)
         moveInsideBounds(&upperBound)
         
-        self.selection = Selection(lowerBound ..< upperBound)        
+        self.selection = Selection(lowerBound ..< upperBound)
     }
     
     // MARK: Helpers
     
     /// - Complexity: O(1).
     @inlinable func next(_ index: Index) -> Index? {
-        index < carets.indices.last ? carets.indices.index(after: index) : nil
+        index < indices.last ? indices.index(after: index) : nil
     }
     
     /// - Complexity: O(1).
     @inlinable func prev(_ index: Index) -> Index? {
-        index > carets.indices.first ? carets.indices.index(before: index) : nil
+        index > indices.first ? indices.index(before: index) : nil
     }
     
     /// - Complexity: O(n) where n is the number of elements in base.
