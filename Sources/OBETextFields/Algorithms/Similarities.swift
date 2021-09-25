@@ -5,19 +5,19 @@
 //  Created by Oscar Byström Ericsson on 2021-09-24.
 //
 
-@usableFromInline struct Similarites<Collection: Swift.Collection> where Collection.Element: Equatable {
-    @usableFromInline typealias Index = Collection.Index
-    @usableFromInline typealias Element = Collection.Element
+@usableFromInline
+struct Similarites<Element: Equatable, LHS: Collection, RHS: Collection> where LHS.Element == Element, RHS.Element == Element {
+    @usableFromInline typealias Options = SimilaritiesOptions<Element>
     
     // MARK: Properties
     
-    @usableFromInline let lhs: Collection
-    @usableFromInline let rhs: Collection
-    @usableFromInline let options: SimilaritiesOptions<Element>
+    @usableFromInline let lhs: LHS
+    @usableFromInline let rhs: RHS
+    @usableFromInline let options: Options
     
     // MARK: Initializers
     
-    @inlinable init(in lhs: Collection, alsoIn rhs: Collection, options: SimilaritiesOptions<Element>) {
+    @inlinable init(in lhs: LHS, and rhs: RHS, with options: Options) {
         self.lhs = lhs
         self.rhs = rhs
         self.options = options
@@ -25,16 +25,15 @@
     
     // MARK: Helpers
     
-    
     /// - Complexity: O(collection.count).
-    @inlinable func next(in collection: Collection, from index: Index) -> Index? {
+    @inlinable func next<C: Collection>(in collection: C, from index: C.Index) -> C.Index? where C.Element == Element {
         collection[index...].firstIndex(where: options.evaluated)
     }
     
     // MARK: Algorithms
     
     /// - Complexity: O(lhs.count).
-    @usableFromInline func prefix() -> Collection.SubSequence {
+    @usableFromInline func prefix() -> LHS.SubSequence {
         var currentLHS = lhs.startIndex
         var currentRHS = rhs.startIndex
                 
@@ -56,10 +55,12 @@
     }
     
     /// - Complexity: O(min(lhs.count, rhs.count)).
-    @inlinable func suffix() -> Collection.SubSequence where Collection: BidirectionalCollection {
-        typealias Reversed = ReversedCollection<Collection>
+    @inlinable func suffix() -> LHS.SubSequence where LHS: BidirectionalCollection, RHS: BidirectionalCollection {
+        typealias RL = ReversedCollection<LHS>
+        typealias RR = ReversedCollection<RHS>
+        typealias RS = Similarites<Element, RL, RR>
         
-        let reversed = Similarites<Reversed>(in: lhs.reversed(), alsoIn: rhs.reversed(), options: options).prefix()
+        let reversed = RS(in: lhs.reversed(), and: rhs.reversed(), with: options).prefix()
         
         return lhs[reversed.endIndex.base ..< reversed.startIndex.base]
     }
@@ -93,7 +94,7 @@
 
 extension Collection where Element: Equatable {
     @inlinable func prefix(alsoIn other: Self, options: SimilaritiesOptions<Element>) -> SubSequence {
-        Similarites(in: self, alsoIn: other, options: options).prefix()
+        Similarites(in: self, and: other, with: options).prefix()
     }
 }
 
@@ -101,6 +102,6 @@ extension Collection where Element: Equatable {
 
 extension BidirectionalCollection where Element: Equatable {
     @inlinable func suffix(alsoIn other: Self, options: SimilaritiesOptions<Element>) -> SubSequence {
-        Similarites(in: self, alsoIn: other, options: options).suffix()
+        Similarites(in: self, and: other, with: options).suffix()
     }
 }
