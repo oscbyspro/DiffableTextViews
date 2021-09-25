@@ -6,8 +6,8 @@
 //
 
 public struct Symbols: BidirectionalCollection, RangeReplaceableCollection {
-    public typealias SubSequence = Slice<Self>
     public typealias Indices = DefaultIndices<Self>
+    public typealias SubSequence = Slice<Self>
     
     // MARK: Properties
     

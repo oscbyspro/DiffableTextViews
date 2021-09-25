@@ -6,8 +6,8 @@
 //
 
 @usableFromInline struct Carets: BidirectionalCollection, Nonempty {
-    public typealias SubSequence = Slice<Self>
     public typealias Indices = DefaultIndices<Self>
+    public typealias SubSequence = Slice<Self>
 
     // MARK: Properties
     

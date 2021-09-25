@@ -5,7 +5,7 @@
 //  Created by Oscar Byström Ericsson on 2021-09-24.
 //
 
-public struct Symbol {
+public struct Symbol: Equatable {
     public let attribute: Attribute
     public let character: Character
     

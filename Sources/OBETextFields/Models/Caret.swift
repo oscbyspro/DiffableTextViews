@@ -5,9 +5,7 @@
 //  Created by Oscar Byström Ericsson on 2021-09-24.
 //
 
-#warning("Should Caret have an index/position property?")
-
-@usableFromInline struct Caret {
+@usableFromInline struct Caret: Equatable {
     @usableFromInline let lhs: Symbol
     @usableFromInline let rhs: Symbol
     
