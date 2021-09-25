@@ -12,7 +12,7 @@
     // MARK: Properties
     
     @usableFromInline let base: Symbols.SubSequence
-
+    
     // MARK: Initializers
     
     /// - Complexity: O(1).
