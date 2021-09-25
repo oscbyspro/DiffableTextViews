@@ -5,43 +5,66 @@
 //  Created by Oscar Byström Ericsson on 2021-09-24.
 //
 
-import Foundation
-
-struct Field {
+final class Field {
     typealias Index = Carets.Index
     typealias Indices = Carets.Indices
 
     // MARK: Properties
     
-    let carets: Carets
-    let indices: Indices
-    let selection: Selection
+    var map: Map
+    var selection: Selection
+    
+    // MARK: Properties: Getters
+    
+    @inlinable var carets: Carets {
+        map.carets
+    }
+    
+    @inlinable var indices: Indices {
+        map.indices
+    }
     
     // MARK: Initializers
             
     /// - Complexity: O(1).
     @inlinable init(_ carets: Carets, selection: Selection) {
-        self.carets = carets
+        self.map = Map(carets: carets)
         self.selection = selection
-        self.indices = carets.indices
     }
     
     /// - Complexity: O(1).
-    @inlinable init(_ carets: Carets) {
+    @inlinable convenience init(_ carets: Carets) {
         self.init(carets, selection: Selection(carets.indices.last))
     }
     
     // MARK: Components
     
+    struct Map {
+        let carets: Carets
+        let indices: Indices
+        
+        // MARK: Initializers
+        
+        /// - Complexity: O(1).
+        @inlinable init(carets: Carets) {
+            self.carets = carets
+            self.indices = carets.indices
+        }
+    }
+    
     struct Selection {
         var lowerBound: Index
         var upperBound: Index
             
+        // MARK: Initializers
+        
+        /// - Complexity: O(1).
         @inlinable init(_ index: Index) {
             self.lowerBound = index
             self.upperBound = index
         }
         
+        /// - Complexity: O(1).
         @inlinable init(_ range: Range<Index>) {
             self.lowerBound = range.lowerBound
             self.upperBound = range.upperBound
@@ -53,7 +76,7 @@ struct Field {
 
 extension Field {
     /// - Complexity: O(min(n, m)) where n is the length of the current carets and m is the length of next.
-    @inlinable func updated(carets newValue: Carets) -> Self {
+    @inlinable func update(carets newValue: Carets) {
         func relevant(element: Caret) -> Bool {
             element.rhs.attribute == .content
         }
@@ -73,8 +96,9 @@ extension Field {
         let lowerNext = newValue[...upperBound]
         let lowerCurrent = carets[selection.lowerBound ..< selection.upperBound]
         let lowerBound = index(current: lowerCurrent, next: lowerNext)
-                
-        return Self(newValue, selection: Selection(lowerBound ..< upperBound))
+        
+        self.map = Map(carets: newValue)
+        self.selection = Selection(lowerBound ..< upperBound)
     }
 }
 
@@ -82,14 +106,14 @@ extension Field {
 
 extension Field {
     /// - Complexity: O(k) where k is the length.in carets that consists of prefixes and suffixes.
-    @inlinable func updated(selection newValue: Range<Carets.Index>) -> Self {
+    @inlinable func update(selection newValue: Range<Carets.Index>) {
         var lowerBound = newValue.lowerBound
         var upperBound = newValue.upperBound
         
         moveInsideBounds(&lowerBound)
         moveInsideBounds(&upperBound)
         
-        return Self(carets, selection: selection)
+        self.selection = Selection(lowerBound ..< upperBound)        
     }
     
     // MARK: Helpers
