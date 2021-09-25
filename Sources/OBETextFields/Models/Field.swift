@@ -5,6 +5,8 @@
 //  Created by Oscar Byström Ericsson on 2021-09-24.
 //
 
+import Foundation
+
 struct Field {
     let carets: Carets
     let selection: Range<Carets.Index>
@@ -23,15 +25,8 @@ struct Field {
         self.selection = selection
     }
     
-    // MARK: Transformations
-    
-    #warning("Updating selection method needs a rework.")
-    #warning("Should calculate correct selection based on attributes, and previous selection.")
-    /// - Complexity: O(1).
-    @inlinable func updated(selection newValue: Range<Carets.Index>) -> Self {
-        Self(carets, selection: selection)
-    }
-    
+    // MARK: Update: Carets
+
     /// - Complexity: O(min(n, m)) where n is the length of the current carets and m is the length of next.
     @inlinable func updated(carets newValue: Carets) -> Self {
         func relevant(element: Caret) -> Bool {
@@ -55,5 +50,15 @@ struct Field {
         let lowerBound = index(current: lowerCurrent, next: lowerNext)
         
         return Self(newValue, selection: lowerBound ..< upperBound)
+    }
+    
+    // MARK: Update: Selection
+    
+    #warning("Updating selection method needs a rework.")
+    #warning("Should calculate correct selection based on attributes, and previous selection.")
+    /// - Complexity: O(1).
+    @inlinable func updated(selection newValue: Range<Carets.Index>) -> Self {
+        fatalError("....................")
+        Self(carets, selection: selection)
     }
 }

@@ -5,51 +5,51 @@
 //  Created by Oscar Byström Ericsson on 2021-09-24.
 //
 
-@usableFromInline struct Carets: BidirectionalCollection, NonemptyCollection {
+@usableFromInline struct Carets: BidirectionalCollection, Nonempty {
     public typealias SubSequence = Slice<Self>
     public typealias Indices = DefaultIndices<Self>
 
     // MARK: Properties
     
-    @usableFromInline let symbols: Symbols.SubSequence
+    @usableFromInline let base: Symbols.SubSequence
 
     // MARK: Initializers
     
     /// - Complexity: O(1).
-    @inlinable init(_ symbols: Symbols) {
-        self.symbols = symbols[...]
+    @inlinable init(_ base: Symbols) {
+        self.base = base[...]
     }
     
-    @inlinable init(_ symbols: Symbols.SubSequence) {
-        self.symbols = symbols
+    @inlinable init(_ base: Symbols.SubSequence) {
+        self.base = base
     }
     
     // MARK: BidirectionalCollection
     
     /// - Complexity: O(1).
     @inlinable var startIndex: Index {
-        Index(lhs: nil, rhs: symbols.startIndex)
+        Index(lhs: nil, rhs: base.startIndex)
     }
     
     /// - Complexity: O(1).
     @inlinable var endIndex: Index {
-        Index(lhs: symbols.endIndex, rhs: nil)
+        Index(lhs: base.endIndex, rhs: nil)
     }
 
     /// - Complexity: O(1).
     @inlinable func index(after i: Index) -> Index {
-        Index(lhs: i.rhs!, rhs: symbolsIndex(after: i.rhs!))
+        Index(lhs: i.rhs!, rhs: baseIndex(after: i.rhs!))
     }
 
     /// - Complexity: O(1).
     @inlinable func index(before i: Index) -> Index {
-        Index(lhs: symbolsIndex(before: i.lhs!), rhs: i.lhs!)
+        Index(lhs: baseIndex(before: i.lhs!), rhs: i.lhs!)
     }
 
     /// - Complexity: O(1).
     @inlinable subscript(position: Index) -> Caret {
         _read {
-            yield Caret(lhs: symbol(at: position.lhs), rhs: symbol(at: position.rhs))
+            yield Caret(lhs: baseElement(at: position.lhs), rhs: baseElement(at: position.rhs))
         }
     }
 
@@ -57,36 +57,35 @@
 
     /// - Complexity: O(1).
     @usableFromInline func index(lhs: Symbols.Index) -> Index {
-        Index(lhs: lhs, rhs: symbolsIndex(after: lhs))
+        Index(lhs: lhs, rhs: baseIndex(after: lhs))
     }
 
     /// - Complexity: O(1).
     @usableFromInline func index(rhs: Symbols.Index) -> Index {
-        Index(lhs: symbolsIndex(before: rhs), rhs: rhs)
+        Index(lhs: baseIndex(before: rhs), rhs: rhs)
     }
 
     // MARK: Helpers: Symbols.Index
 
     /// - Complexity: O(1).
-    @inlinable func symbolsIndex(after symbolsIndex: Symbols.Index) -> Symbols.Index? {
-        symbolsIndex < symbols.endIndex ? symbols.index(after: symbolsIndex) : nil
+    @inlinable func baseIndex(after baseIndex: Symbols.Index) -> Symbols.Index? {
+        baseIndex < base.endIndex ? base.index(after: baseIndex) : nil
     }
 
     /// - Complexity: O(1).
-    @inlinable func symbolsIndex(before symbolsIndex: Symbols.Index) -> Symbols.Index? {
-        symbolsIndex > symbols.startIndex ? symbols.index(before: symbolsIndex) : nil
+    @inlinable func baseIndex(before baseIndex: Symbols.Index) -> Symbols.Index? {
+        baseIndex > base.startIndex ? base.index(before: baseIndex) : nil
     }
     
     // MARK: Helpers: Symbols.Element
     
-    @inlinable func symbol(at symbolsIndex: Symbols.Index?) -> Symbols.Element? {
-        guard let symbolsIndex = symbolsIndex, symbolsIndex < symbols.endIndex else {
+    @inlinable func baseElement(at baseIndex: Symbols.Index?) -> Symbols.Element? {
+        guard let symbolsIndex = baseIndex, symbolsIndex < base.endIndex else {
             return nil
         }
 
-        return symbols[symbolsIndex]
+        return base[symbolsIndex]
     }
-    
     
     // MARK: Components
     

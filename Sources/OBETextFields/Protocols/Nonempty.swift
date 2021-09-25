@@ -1,19 +1,19 @@
 //
-//  NonemptyCollection.swift
+//  Nonempty.swift
 //  
 //
 //  Created by Oscar Byström Ericsson on 2021-09-25.
 //
 
-protocol NonemptyCollection: Collection where Indices: NonemptyCollection { }
+protocol Nonempty: Collection where Indices: Nonempty { }
 
 // MARK: DefaultIndices
 
-extension DefaultIndices: NonemptyCollection where Elements: NonemptyCollection { }
+extension DefaultIndices: Nonempty where Elements: Nonempty { }
 
 // MARK: - Collection
 
-extension NonemptyCollection {
+extension Nonempty {
     @inlinable var first: Element {
         self.first!
     }
@@ -29,7 +29,7 @@ extension NonemptyCollection {
 
 // MARK: - BidirectionalCollection
 
-extension NonemptyCollection where Self: BidirectionalCollection {
+extension Nonempty where Self: BidirectionalCollection {
     @inlinable var last: Element {
         self.last!
     }
