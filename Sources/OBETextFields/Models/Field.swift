@@ -77,7 +77,7 @@ final class Field {
 extension Field {
     /// - Complexity: O(min(n, m)) where n is the length of the current carets and m is the length of next.
     @inlinable func update(carets newValue: Carets) {
-        func evaluated(element: Caret) -> Bool {
+        func relevant(element: Caret) -> Bool {
             element.rhs.attribute == .content
         }
         
@@ -86,7 +86,7 @@ extension Field {
         }
         
         func index(current: Carets.SubSequence, next: Carets.SubSequence) -> Carets.Index {
-            next.suffix(alsoIn: current, options: .overshoot(evaluated)).startIndex
+            next.suffix(alsoIn: current, options: .inspect(relevant, overshoot: true)).startIndex
         }
         
         let upperNext = newValue[...]

@@ -27,7 +27,7 @@ struct Similarites<Element: Equatable, LHS: Collection, RHS: Collection> where L
     
     /// - Complexity: O(collection.count).
     @inlinable func next<C: Collection>(in collection: C, from index: C.Index) -> C.Index? where C.Element == Element {
-        collection[index...].firstIndex(where: options.evaluated)
+        collection[index...].firstIndex(where: options.relevant)
     }
     
     // MARK: Algorithms
@@ -69,24 +69,20 @@ struct Similarites<Element: Equatable, LHS: Collection, RHS: Collection> where L
 // MARK: -
 
 @usableFromInline struct SimilaritiesOptions<Element> {
-    @usableFromInline let evaluated: (Element) -> Bool
+    @usableFromInline let relevant: (Element) -> Bool
     @usableFromInline let overshoot: Bool
     
-    @inlinable init(evaluated: @escaping (Element) -> Bool, overshoot: Bool) {
-        self.evaluated = evaluated
+    @inlinable init(relevant: @escaping (Element) -> Bool, overshoot: Bool) {
+        self.relevant = relevant
         self.overshoot = overshoot
     }
     
-    @inlinable static var normal: Self {
-        Self(evaluated: { _ in true }, overshoot: false)
+    @inlinable static var defaults: Self {
+        Self(relevant: { _ in true }, overshoot: false)
     }
     
-    @inlinable static func overshoot(_ evaluated: @escaping (Element) -> Bool) -> Self {
-        Self(evaluated: evaluated, overshoot: false)
-    }
-    
-    @inlinable static func wrap(_ evaluated: @escaping (Element) -> Bool) -> Self {
-        Self(evaluated: evaluated, overshoot: false)
+    @inlinable static func inspect(_ relevant: @escaping (Element) -> Bool, overshoot: Bool = false) -> Self {
+        Self(relevant: relevant, overshoot: overshoot)
     }
 }
 
