@@ -54,11 +54,16 @@ struct Field {
     
     // MARK: Update: Selection
     
-    #warning("Updating selection method needs a rework.")
-    #warning("Should calculate correct selection based on attributes, and previous selection.")
-    /// - Complexity: O(1).
+    /// - Complexity: O(k) where k is the length.in carets that consists of prefixes and suffixes.
     @inlinable func updated(selection newValue: Range<Carets.Index>) -> Self {
-        fatalError("....................")
-        Self(carets, selection: selection)
+        let selector = Selector(field: self)
+        
+        var lowerBound = newValue.lowerBound
+        var upperBound = newValue.upperBound
+        
+        selector.moveInsideBounds(&lowerBound)
+        selector.moveInsideBounds(&upperBound)
+        
+        return Self(carets, selection: selection)
     }
 }

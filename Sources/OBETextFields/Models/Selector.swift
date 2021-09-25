@@ -5,20 +5,23 @@
 //  Created by Oscar Byström Ericsson on 2021-09-25.
 //
 
-#warning("WIP")
-
 struct Selector {
-    typealias Base = Carets
-    typealias Index = Base.Index
-    typealias Indices = Base.Indices
-    typealias Element = Base.Element
+    typealias Index = Carets.Index
+    typealias Indices = Carets.Indices
     
     // MARK: Properties
     
-    let base: Base
+    let carets: Carets
     let indices: Indices
     
-    // MARK: Uuilities
+    // MARK: Initializers
+    
+    @inlinable init(field: Field) {
+        self.carets = field.carets
+        self.indices = carets.indices
+    }
+    
+    // MARK: Utilities
     
     /// - Complexity: O(1).
     @inlinable func next(_ index: Index) -> Index? {
@@ -31,8 +34,8 @@ struct Selector {
     }
     
     /// - Complexity: O(n) where n is the number of elements in base.
-    @usableFromInline func move(_ index: inout Index, step: (Index) -> Index?, while predicate: (Element) -> Bool) {
-        while predicate(base[index]), let next = step(index) { index = next }
+    @usableFromInline func move(_ index: inout Index, step: (Index) -> Index?, while predicate: (Caret) -> Bool) {
+        while predicate(carets[index]), let next = step(index) { index = next }
     }
     
     /// - Complexity: O(n) where n is the number of elements in base.
