@@ -27,7 +27,7 @@ struct Similarites<Element: Equatable, LHS: Collection, RHS: Collection> where L
     
     /// - Complexity: O(n), where n is the length of the collection.
     @inlinable func next<C: Collection>(in collection: C, from index: C.Index) -> C.Index? where C.Element == Element {
-        collection[index...].firstIndex(where: options.relevant)
+        collection.suffix(from: index).firstIndex(where: options.relevant)
     }
     
     // MARK: Algorithms
@@ -51,7 +51,7 @@ struct Similarites<Element: Equatable, LHS: Collection, RHS: Collection> where L
             currentLHS = next(in: lhs, from: currentLHS) ?? lhs.endIndex
         }
         
-        return lhs[...currentLHS]
+        return lhs.prefix(upTo: currentLHS)
     }
     
     /// - Complexity: O(n), where n is the length of the collection (lhs).
