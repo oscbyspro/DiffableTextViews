@@ -34,7 +34,7 @@ final class Field {
     
     /// - Complexity: O(1).
     @inlinable convenience init(_ carets: Carets) {
-        self.init(carets, selection: Selection(carets.indices.last))
+        self.init(carets, selection: Selection(index: carets.indices.last))
     }
     
     // MARK: Components
@@ -59,15 +59,15 @@ final class Field {
         // MARK: Initializers
         
         /// - Complexity: O(1).
-        @inlinable init(_ index: Index) {
+        @inlinable init(index: Index) {
             self.lowerBound = index
             self.upperBound = index
         }
         
         /// - Complexity: O(1).
-        @inlinable init(_ range: Range<Index>) {
-            self.lowerBound = range.lowerBound
-            self.upperBound = range.upperBound
+        @inlinable init(bounds: Range<Index>) {
+            self.lowerBound = bounds.lowerBound
+            self.upperBound = bounds.upperBound
         }
     }
 }
@@ -98,7 +98,7 @@ extension Field {
         let lowerBound = index(current: lowerCurrent, next: lowerNext)
         
         self.container = Container(carets: newValue)
-        self.selection = Selection(lowerBound ..< upperBound)
+        self.selection = Selection(bounds: lowerBound ..< upperBound)
     }
 }
 
@@ -106,14 +106,14 @@ extension Field {
 
 extension Field {
     /// - Complexity: O(k) where k is the length.in carets that consists of prefixes and suffixes.
-    @inlinable func update(selection newValue: Range<Carets.Index>) {
+    @inlinable func update(selection newValue: Selection) {
         var lowerBound = newValue.lowerBound
         var upperBound = newValue.upperBound
         
         moveInsideBounds(&lowerBound)
         moveInsideBounds(&upperBound)
         
-        self.selection = Selection(lowerBound ..< upperBound)
+        self.selection = Selection(bounds: lowerBound ..< upperBound)
     }
     
     // MARK: Helpers
