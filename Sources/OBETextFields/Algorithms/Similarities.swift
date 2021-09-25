@@ -25,14 +25,14 @@ struct Similarites<Element: Equatable, LHS: Collection, RHS: Collection> where L
     
     // MARK: Helpers
     
-    /// - Complexity: O(collection.count).
+    /// - Complexity: O(n), where n is the length of the collection.
     @inlinable func next<C: Collection>(in collection: C, from index: C.Index) -> C.Index? where C.Element == Element {
         collection[index...].firstIndex(where: options.relevant)
     }
     
     // MARK: Algorithms
     
-    /// - Complexity: O(lhs.count).
+    /// - Complexity: O(n), where n is the length of the collection (lhs).
     @usableFromInline func prefix() -> LHS.SubSequence {
         var currentLHS = lhs.startIndex
         var currentRHS = rhs.startIndex
@@ -54,7 +54,7 @@ struct Similarites<Element: Equatable, LHS: Collection, RHS: Collection> where L
         return lhs[...currentLHS]
     }
     
-    /// - Complexity: O(min(lhs.count, rhs.count)).
+    /// - Complexity: O(n), where n is the length of the collection (lhs).
     @inlinable func suffix() -> LHS.SubSequence where LHS: BidirectionalCollection, RHS: BidirectionalCollection {
         typealias RL = ReversedCollection<LHS>
         typealias RR = ReversedCollection<RHS>
@@ -89,6 +89,7 @@ struct Similarites<Element: Equatable, LHS: Collection, RHS: Collection> where L
 // MARK: - Prefix
 
 extension Collection where Element: Equatable {
+    /// - Complexity: O(n), where n is the length of the collection.
     @inlinable func prefix(alsoIn other: Self, options: SimilaritiesOptions<Element>) -> SubSequence {
         Similarites(in: self, and: other, with: options).prefix()
     }
@@ -97,6 +98,7 @@ extension Collection where Element: Equatable {
 // MARK: - Suffix
 
 extension BidirectionalCollection where Element: Equatable {
+    /// - Complexity: O(n), where n is the length of the collection.
     @inlinable func suffix(alsoIn other: Self, options: SimilaritiesOptions<Element>) -> SubSequence {
         Similarites(in: self, and: other, with: options).suffix()
     }
