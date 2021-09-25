@@ -90,7 +90,7 @@ struct Similarites<Element: Equatable, LHS: Collection, RHS: Collection> where L
 
 extension Collection where Element: Equatable {
     /// - Complexity: O(n), where n is the length of the collection.
-    @inlinable func prefix(alsoIn other: Self, options: SimilaritiesOptions<Element>) -> SubSequence {
+    @inlinable func prefix<Other: Collection>(alsoIn other: Other, options: SimilaritiesOptions<Element>) -> SubSequence where Other.Element == Element {
         Similarites(in: self, and: other, with: options).prefix()
     }
 }
@@ -99,7 +99,7 @@ extension Collection where Element: Equatable {
 
 extension BidirectionalCollection where Element: Equatable {
     /// - Complexity: O(n), where n is the length of the collection.
-    @inlinable func suffix(alsoIn other: Self, options: SimilaritiesOptions<Element>) -> SubSequence {
+    @inlinable func suffix<Other: BidirectionalCollection>(alsoIn other: Other, options: SimilaritiesOptions<Element>) -> SubSequence where Other.Element == Element {
         Similarites(in: self, and: other, with: options).suffix()
     }
 }
