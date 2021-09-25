@@ -5,7 +5,7 @@
 //  Created by Oscar Byström Ericsson on 2021-09-24.
 //
 
-@usableFromInline struct Carets: BidirectionalCollection {
+@usableFromInline struct Carets: BidirectionalCollection, NonemptyCollection {
     public typealias SubSequence = Slice<Self>
     public typealias Indices = DefaultIndices<Self>
 
@@ -120,28 +120,6 @@
     }
 }
 
-// MARK: - Nonempty
-
-extension Carets {
-    @inlinable var first: Caret {
-        self.first!
-    }
-    
-    @inlinable var last: Caret {
-        self.last!
-    }
-}
-
-extension Carets.Indices {
-    @inlinable var first: Carets.Index {
-        self.first!
-    }
-    
-    @inlinable var last: Carets.Index {
-        self.first!
-    }
-}
-
 // MARK: - Symbols
 
 extension Symbols {
@@ -155,7 +133,3 @@ extension Symbols.SubSequence {
         Carets(self)
     }
 }
-
-// MARK: - Nonempty
-
-protocol Nonempty: Collection where Indices: Nonempty { }
