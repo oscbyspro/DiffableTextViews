@@ -24,6 +24,10 @@ final class Field {
         container.indices
     }
     
+    @inlinable var characters: String {
+        container.carets.base.base.characters
+    }
+    
     // MARK: Initializers
             
     /// - Complexity: O(1).
@@ -68,6 +72,12 @@ final class Field {
         @inlinable init(bounds: Range<Index>) {
             self.lowerBound = bounds.lowerBound
             self.upperBound = bounds.upperBound
+        }
+        
+        // MARK: Utilities
+        
+        var offsets: Range<Int> {
+            lowerBound.offset ..< upperBound.offset
         }
     }
 }
