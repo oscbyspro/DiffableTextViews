@@ -45,6 +45,7 @@ final class Field {
     struct Container {
         let symbols: Symbols
         let symbolsIndices: Symbols.Indices
+        
         let carets: Carets
         let caretsIndices: Carets.Indices
         

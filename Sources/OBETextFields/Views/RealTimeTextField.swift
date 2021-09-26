@@ -1,13 +1,11 @@
 ////
-////  OBETextField.swift
+////  RealTimeTextField.swift
 ////  
 ////
 ////  Created by Oscar Byström Ericsson on 2021-09-24.
 ////
 
 import SwiftUI
-
-#warning("WIP")
 
 @available(iOS 13.0, *)
 public struct RealTimeTextField<Adapter: OBETextFields.Adapter>: UIViewRepresentable, Equatable where Adapter.Value: Equatable {
@@ -78,15 +76,17 @@ public struct RealTimeTextField<Adapter: OBETextFields.Adapter>: UIViewRepresent
         // MARK: Protocol: UITextFieldDelegate
         
         public func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
-            let indices: Symbols.Indices = field.carets.base
+            #error("WIP")
+            
+            let indices: Symbols.Indices = field.symbols
                 .indices(in: range.lowerBound ..< range.upperBound)
             
             let replacement: Symbols = string
                 .reduce(appending: Symbol.content)
             
-            let nextContent: String = field.carets.base
-                .replacing(indices.startIndex ..< indices.endIndex, with: replacement)
-                .reduce(appending: \.character, where: { $0.attribute == .content })
+            let nextContent: String = field.symbols
+                .replacing(indices, with: replacement)
+                .reduce(appending: \.character, where: \.content)
             
             let nextValue: Value? = try? parent.adapter
                 .value(content: nextContent)
@@ -102,7 +102,6 @@ public struct RealTimeTextField<Adapter: OBETextFields.Adapter>: UIViewRepresent
 //
 //            update(value: nextValue, format: nextFormat, selection: nextSelection)
 //
-            #error("WIP")
             
             return false
         }
