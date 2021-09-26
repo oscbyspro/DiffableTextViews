@@ -5,7 +5,7 @@
 //  Created by Oscar Byström Ericsson on 2021-09-24.
 //
 
-@usableFromInline struct Carets: BidirectionalCollection, Nonempty {
+@usableFromInline struct Carets: BidirectionalCollection, NonEmpty {
     public typealias Indices = DefaultIndices<Self>
     public typealias SubSequence = Slice<Self>
 
