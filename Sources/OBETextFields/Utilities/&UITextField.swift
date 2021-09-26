@@ -7,6 +7,8 @@
 
 import SwiftUI
 
+#warning("Add a method that moves selection based on change in offsets.")
+
 extension UITextField {
     // MARK: Text
     

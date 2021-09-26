@@ -5,6 +5,8 @@
 //  Created by Oscar Byström Ericsson on 2021-09-24.
 //
 
+#warning("Something about indices is probably wrong, also NonEmptyCollection.")
+
 final class Field {
     typealias Index = Carets.Index
     typealias Indices = Carets.Indices
@@ -20,8 +22,8 @@ final class Field {
         container.carets
     }
     
-    @inlinable var indices: Indices {
-        container.indices
+    @inlinable var caretsIndices: Indices {
+        container.caretsIndices
     }
     
     @inlinable var characters: String {
@@ -32,44 +34,54 @@ final class Field {
             
     /// - Complexity: O(1).
     @inlinable init(_ carets: Carets, selection: Selection) {
-        self.container = Container(carets: carets)
+        self.container = Container(carets)
         self.selection = selection
     }
     
     /// - Complexity: O(1).
     @inlinable convenience init(_ carets: Carets) {
-        self.init(carets, selection: Selection(index: carets.indices.last))
+        self.init(carets, selection: Selection(carets.indices.last))
     }
     
     // MARK: Components
     
     struct Container {
+        #warning("Add symbols and symbolsIndoces, maybe?")
+        
         let carets: Carets
-        let indices: Indices
+        let caretsIndices: Indices
         
         // MARK: Initializers
         
         /// - Complexity: O(1).
-        @inlinable init(carets: Carets) {
+        @inlinable init(_ carets: Carets) {
             self.carets = carets
-            self.indices = carets.indices
+            self.caretsIndices = carets.indices
         }
     }
     
     struct Selection {
+        #warning("Maybe define as: caretsIndice and offsets")
+        
         var lowerBound: Index
         var upperBound: Index
             
         // MARK: Initializers
         
         /// - Complexity: O(1).
-        @inlinable init(index: Index) {
+        @inlinable init(_ index: Index) {
             self.lowerBound = index
             self.upperBound = index
         }
         
         /// - Complexity: O(1).
-        @inlinable init(bounds: Range<Index>) {
+        @inlinable init(_ indices: Indices) {
+            self.lowerBound = indices.first
+            self.upperBound = indices.last
+        }
+        
+        /// - Complexity: O(1).
+        @inlinable init(_ bounds: Range<Index>) {
             self.lowerBound = bounds.lowerBound
             self.upperBound = bounds.upperBound
         }
@@ -107,8 +119,8 @@ extension Field {
         let lowerCurrent = carets[selection.lowerBound ..< selection.upperBound]
         let lowerBound = index(current: lowerCurrent, next: lowerNext)
         
-        self.container = Container(carets: newValue)
-        self.selection = Selection(bounds: lowerBound ..< upperBound)
+        self.container = Container(newValue)
+        self.selection = Selection(lowerBound ..< upperBound)
     }
 }
 
@@ -123,19 +135,19 @@ extension Field {
         moveInsideBounds(&lowerBound)
         moveInsideBounds(&upperBound)
         
-        self.selection = Selection(bounds: lowerBound ..< upperBound)
+        self.selection = Selection(lowerBound ..< upperBound)
     }
     
     // MARK: Helpers
     
     /// - Complexity: O(1).
     @inlinable func next(_ index: Index) -> Index? {
-        index < indices.last ? indices.index(after: index) : nil
+        index < caretsIndices.last ? caretsIndices.index(after: index) : nil
     }
     
     /// - Complexity: O(1).
     @inlinable func prev(_ index: Index) -> Index? {
-        index > indices.first ? indices.index(before: index) : nil
+        index > caretsIndices.first ? caretsIndices.index(before: index) : nil
     }
     
     /// - Complexity: O(n) where n is the number of elements in base.

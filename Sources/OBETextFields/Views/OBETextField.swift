@@ -75,6 +75,52 @@ public struct OBETextField<Adapter: OBETextFields.Adapter>: UIViewRepresentable,
         var field: Field!
         var value: Value!
         
+        // MARK: Protocol: UITextFieldDelegate
+        
+        public func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+            let indices: Symbols.Indices = field.carets.base
+                .indices(in: range.lowerBound ..< range.upperBound)
+            
+            let replacement: Symbols = string
+                .reduce(appending: Symbol.content)
+            
+            let nextContent: String = field.carets.base
+                .replacing(indices.startIndex ..< indices.endIndex, with: replacement)
+                .reduce(appending: \.character, where: { $0.attribute == .content })
+            
+            let nextValue: Value? = try? parent.adapter
+                .value(content: nextContent)
+            
+            let nextSymbols: Symbols = parent.adapter
+                .format(content: nextContent)
+            
+//            let nextSelection = field................................
+//
+//            let nextSelection: Selection = cache.selection
+//                .moved(to: indices.upperBound ..< indices.upperBound)
+//                .moved(to: nextFormat.carets)
+//
+//            update(value: nextValue, format: nextFormat, selection: nextSelection)
+//
+            #error("WIP")
+            
+            return false
+        }
+        
+        #warning("Unsure if it works correctly. Untested. Improvised.")
+        public func textFieldDidChangeSelection(_ textField: UITextField) {
+            guard let offsets: Range<Int> = textField.selection() else { return }
+            
+            let indices: Field.Indices = field.carets.indices(in: offsets)
+            let selection = Field.Selection(indices)
+            let uiSelection: Range<Int> = selection.offsets
+            
+            field.update(selection: selection)
+            uiView.set(selection: uiSelection)
+        }
+        
+        // MARK: Updaters
+        
         func update(value: Value, symbols: Symbols) {
             field.update(carets: symbols.carets)
             
@@ -84,14 +130,5 @@ public struct OBETextField<Adapter: OBETextFields.Adapter>: UIViewRepresentable,
             updateLazily(&self.value, with: value)
             updateLazily(&parent.value.wrappedValue, with: value)
         }
-        
-        // MARK: Helpers
-        
-        func updateLazily(_ storage: inout Value, with newValue: Value) {
-            if storage != newValue {
-                storage = newValue
-            }
-        }
     }
 }
-
