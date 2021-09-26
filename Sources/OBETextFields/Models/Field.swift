@@ -8,54 +8,53 @@
 #warning("Something about indices is probably wrong, also NonEmptyCollection.")
 
 final class Field {
-    typealias Index = Carets.Index
-    typealias Indices = Carets.Indices
-
-    // MARK: Properties
-    
     var container: Container
     var selection: Selection
     
-    // MARK: Properties: Getters
+    // MARK: Getters
+    
+    @inlinable var symbols: Symbols {
+        container.symbols
+    }
+    
+    @inlinable var symbolsIndices: Symbols.Indices {
+        container.symbolsIndices
+    }
     
     @inlinable var carets: Carets {
         container.carets
     }
     
-    @inlinable var caretsIndices: Indices {
+    @inlinable var caretsIndices: Carets.Indices {
         container.caretsIndices
     }
-    
-    @inlinable var characters: String {
-        container.carets.base.base.characters
-    }
-    
+        
     // MARK: Initializers
             
     /// - Complexity: O(1).
-    @inlinable init(_ carets: Carets, selection: Selection) {
-        self.container = Container(carets)
+    @inlinable init(_ symbols: Symbols = Symbols()) {
+        let container = Container(symbols)
+        let selection = Selection(container.caretsIndices.last)
+        
+        self.container = container
         self.selection = selection
-    }
-    
-    /// - Complexity: O(1).
-    @inlinable convenience init(_ carets: Carets) {
-        self.init(carets, selection: Selection(carets.indices.last))
     }
     
     // MARK: Components
     
     struct Container {
-        #warning("Add symbols and symbolsIndoces, maybe?")
-        
+        let symbols: Symbols
+        let symbolsIndices: Symbols.Indices
         let carets: Carets
-        let caretsIndices: Indices
+        let caretsIndices: Carets.Indices
         
         // MARK: Initializers
         
         /// - Complexity: O(1).
-        @inlinable init(_ carets: Carets) {
-            self.carets = carets
+        @inlinable init(_ symbols: Symbols) {
+            self.symbols = symbols
+            self.symbolsIndices = symbols.indices
+            self.carets = symbols.carets
             self.caretsIndices = carets.indices
         }
     }
@@ -63,25 +62,25 @@ final class Field {
     struct Selection {
         #warning("Maybe define as: caretsIndice and offsets")
         
-        var lowerBound: Index
-        var upperBound: Index
+        var lowerBound: Carets.Index
+        var upperBound: Carets.Index
             
         // MARK: Initializers
         
         /// - Complexity: O(1).
-        @inlinable init(_ index: Index) {
+        @inlinable init(_ index: Carets.Index) {
             self.lowerBound = index
             self.upperBound = index
         }
         
         /// - Complexity: O(1).
-        @inlinable init(_ indices: Indices) {
+        @inlinable init(_ indices: Carets.Indices) {
             self.lowerBound = indices.first
             self.upperBound = indices.last
         }
         
         /// - Complexity: O(1).
-        @inlinable init(_ bounds: Range<Index>) {
+        @inlinable init(_ bounds: Range<Carets.Index>) {
             self.lowerBound = bounds.lowerBound
             self.upperBound = bounds.upperBound
         }
@@ -98,7 +97,9 @@ final class Field {
 
 extension Field {
     /// - Complexity: O(min(n, m)) where n is the length of the current carets and m is the length of next.
-    @inlinable func update(carets newValue: Carets) {
+    @inlinable func update(symbols newValue: Symbols) {
+        let next = Container(newValue)
+                        
         func relevant(element: Caret) -> Bool {
             element.rhs.attribute == .content
         }
@@ -111,15 +112,15 @@ extension Field {
             next.suffix(alsoIn: current, options: .inspect(relevant, overshoot: true)).startIndex
         }
         
-        let upperNext = newValue[...]
+        let upperNext = next.carets[...]
         let upperCurrent = carets[selection.upperBound...]
         let upperBound = index(current: upperCurrent, next: upperNext)
          
-        let lowerNext = newValue[...upperBound]
+        let lowerNext = next.carets[...upperBound]
         let lowerCurrent = carets[selection.lowerBound ..< selection.upperBound]
         let lowerBound = index(current: lowerCurrent, next: lowerNext)
         
-        self.container = Container(newValue)
+        self.container = next
         self.selection = Selection(lowerBound ..< upperBound)
     }
 }
@@ -141,22 +142,22 @@ extension Field {
     // MARK: Helpers
     
     /// - Complexity: O(1).
-    @inlinable func next(_ index: Index) -> Index? {
+    @inlinable func next(_ index: Carets.Index) -> Carets.Index? {
         index < caretsIndices.last ? caretsIndices.index(after: index) : nil
     }
     
     /// - Complexity: O(1).
-    @inlinable func prev(_ index: Index) -> Index? {
+    @inlinable func prev(_ index: Carets.Index) -> Carets.Index? {
         index > caretsIndices.first ? caretsIndices.index(before: index) : nil
     }
     
     /// - Complexity: O(n) where n is the number of elements in base.
-    @usableFromInline func move(_ index: inout Index, step: (Index) -> Index?, while predicate: (Caret) -> Bool) {
+    @usableFromInline func move(_ index: inout Carets.Index, step: (Carets.Index) -> Carets.Index?, while predicate: (Caret) -> Bool) {
         while predicate(carets[index]), let next = step(index) { index = next }
     }
     
     /// - Complexity: O(n) where n is the number of elements in base.
-    @usableFromInline func moveInsideBounds(_ index: inout Index) {
+    @usableFromInline func moveInsideBounds(_ index: inout Carets.Index) {
         move(&index, step: next, while: { $0.rhs.attribute == .prefix })
         move(&index, step: prev, while: { $0.lhs.attribute == .suffix })
     }

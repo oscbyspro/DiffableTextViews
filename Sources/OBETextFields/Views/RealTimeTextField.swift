@@ -10,7 +10,7 @@ import SwiftUI
 #warning("WIP")
 
 @available(iOS 13.0, *)
-public struct OBETextField<Adapter: OBETextFields.Adapter>: UIViewRepresentable, Equatable where Adapter.Value: Equatable {
+public struct RealTimeTextField<Adapter: OBETextFields.Adapter>: UIViewRepresentable, Equatable where Adapter.Value: Equatable {
     public typealias Value = Adapter.Value
     public typealias UIViewType = UITextField
     
@@ -70,7 +70,7 @@ public struct OBETextField<Adapter: OBETextFields.Adapter>: UIViewRepresentable,
 
     public final class Coordinator: NSObject, UITextFieldDelegate {
         var uiView: UITextField!
-        var parent: OBETextField!
+        var parent: RealTimeTextField!
                 
         var field: Field!
         var value: Value!
@@ -111,7 +111,7 @@ public struct OBETextField<Adapter: OBETextFields.Adapter>: UIViewRepresentable,
         public func textFieldDidChangeSelection(_ textField: UITextField) {
             guard let offsets: Range<Int> = textField.selection() else { return }
             
-            let indices: Field.Indices = field.carets.indices(in: offsets)
+            let indices: Carets.Indices = field.carets.indices(in: offsets)
             let selection = Field.Selection(indices)
             let uiSelection: Range<Int> = selection.offsets
             
@@ -122,9 +122,9 @@ public struct OBETextField<Adapter: OBETextFields.Adapter>: UIViewRepresentable,
         // MARK: Updaters
         
         func update(value: Value, symbols: Symbols) {
-            field.update(carets: symbols.carets)
+            field.update(symbols: symbols)
             
-            uiView.set(text: field.characters)
+            uiView.set(text: field.symbols.characters)
             uiView.set(selection: field.selection.offsets)
                 
             updateLazily(&self.value, with: value)

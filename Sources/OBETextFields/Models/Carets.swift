@@ -5,6 +5,8 @@
 //  Created by Oscar Byström Ericsson on 2021-09-24.
 //
 
+#warning("Rename 'base' as 'symbols'...")
+
 @usableFromInline struct Carets: BidirectionalCollection, NonEmptyCollection {
     public typealias Indices = DefaultIndices<Self>
     public typealias SubSequence = Slice<Self>
