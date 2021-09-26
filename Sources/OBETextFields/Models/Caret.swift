@@ -5,8 +5,7 @@
 //  Created by Oscar Byström Ericsson on 2021-09-24.
 //
 
-@usableFromInline
-struct Caret: Equatable {
+@usableFromInline struct Caret: Equatable {
     @usableFromInline let lhs: Symbol
     @usableFromInline let rhs: Symbol
     
