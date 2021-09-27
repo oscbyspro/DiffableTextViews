@@ -14,8 +14,8 @@ public struct RealTimeTextField<Adapter: OBETextFields.Adapter>: UIViewRepresent
     
     // MARK: Properties
     
-    let adapter: Adapter
-    let value: Binding<Value>
+    @usableFromInline let adapter: Adapter
+    @usableFromInline let value: Binding<Value>
     
     // MARK: Initializers
     
@@ -52,11 +52,10 @@ public struct RealTimeTextField<Adapter: OBETextFields.Adapter>: UIViewRepresent
         coordinator.parent = self
         
         if value.wrappedValue != coordinator.value {
-            let content = adapter.content(value: value.wrappedValue)
+            let content = adapter.translate(value: value.wrappedValue)
             let format = adapter.format(content: content)
-            let field = coordinator.field.updating(format: format)
             
-            coordinator.update(value: value.wrappedValue, field: field)
+            coordinator.update(value: value.wrappedValue, format: format)
         }
     }
     
@@ -69,39 +68,41 @@ public struct RealTimeTextField<Adapter: OBETextFields.Adapter>: UIViewRepresent
     // MARK: Components
     
     public final class Coordinator: NSObject, UITextFieldDelegate {
-        var uiView: UITextField!
-        var parent: RealTimeTextField!
+        @usableFromInline var uiView: UITextField!
+        @usableFromInline var parent: RealTimeTextField!
         
-        var value: Value!
-        var format: Format!
-        var selection: Selection!
+        @usableFromInline private(set) var value: Value!
+        @usableFromInline private(set) var format: Format!
+        @usableFromInline private(set) var selection: Selection!
         
         // MARK: UITextFieldDelegate
         
         public func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
             #error("WIP")
             
-            let indices: Range<Format.Index> = field.format
+            let indices: Range<Format.Index> = format
                 .indices(in: range.lowerBound ..< range.upperBound)
             
             let replacement: Format = string
                 .reduce(appending: Symbol.content)
             
-            let nextContent: String = field.format
+            let nextContent: String = format
                 .replacing(indices, with: replacement)
                 .reduce(appending: \.character, where: \.content)
             
             let nextValue: Value? = try? parent.adapter
-                .value(content: nextContent)
+                .parse(content: nextContent)
             
             let nextFormat: Format = parent.adapter
                 .format(content: nextContent)
             
-            let nextField: Field = field
-                .updating(selection: field.selection.carets.index)
+            let nextSelection: Selection = selection
+                .updating(bounds: indices)
                 .updating(format: nextFormat)
             
-            update(value: nextValue, field: nextField)
+            update(format: nextFormat)
+            update(selection: nextSelection)
+            update(value: nextValue)
         
             return false
         }
@@ -109,24 +110,33 @@ public struct RealTimeTextField<Adapter: OBETextFields.Adapter>: UIViewRepresent
         public func textFieldDidChangeSelection(_ textField: UITextField) {
             guard let offsets: Range<Int> = textField.selection() else { return }
             
+            #error("WIP")
+            
+            let selection = selection.updating(bounds: <#T##Range<Format.Index>#>)
+            
             field = field.updating(selection: offsets)
             uiView.set(selection: field.selection.offsets)
         }
         
         // MARK: Updaters
+                
+        @inlinable func update(format newValue: Format) {
+            format = newValue
         
-        func update(value nextValue: Value?, field nextField: Field) {
-            field = nextField
+            uiView.set(text: format.characters)
+        }
+        
+        @inlinable func update(selection newValue: Selection) {
+            selection = newValue
             
-            #warning("format should be optional and text should only be updated if format changes")
+            uiView.set(selection: newValue.offsets)
+        }
+        
+        @inlinable func update(value newValue: Value?) {
+            guard let newValue = newValue else { return }
             
-            uiView.set(text: nextField.format.characters)
-            uiView.set(selection: nextField.selection.offsets)
-            
-            if let nextValue = nextValue {
-                value = nextValue
-                OBETextFields.update(&parent.value.wrappedValue, nonduplicate: nextValue)
-            }
+            value = newValue
+            OBETextFields.update(&parent.value.wrappedValue, nonduplicate: newValue)
         }
     }
 }

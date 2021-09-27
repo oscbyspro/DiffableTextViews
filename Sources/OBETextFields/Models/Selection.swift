@@ -5,13 +5,13 @@
 //  Created by Oscar Byström Ericsson on 2021-09-27.
 //
 
-struct Selection {
-    typealias Carets = OBETextFields.Carets<Format>
+@usableFromInline struct Selection {
+    @usableFromInline typealias Carets = OBETextFields.Carets<Format>
     
     // MARK: Storage
     
-    let carets: Carets
-    var bounds: Range<Carets.Index>
+    @usableFromInline let carets: Carets
+    @usableFromInline var bounds: Range<Carets.Index>
     
     // MARK: Utilities
     
@@ -30,11 +30,9 @@ struct Selection {
         self.carets = carets
         self.bounds = bounds
     }
-}
 
-// MARK: - Update: Carets
-
-extension Selection {
+    // MARK: Carets
+    
     @inlinable func updating(carets newValue: Carets) -> Self {
         func relevant(element: Carets.Element) -> Bool {
             element.rhs?.attribute == .content
@@ -53,11 +51,13 @@ extension Selection {
         
         return Selection(newValue, bounds: nextLowerBound ..< nextUpperBound)
     }
-}
+    
+    @inlinable func updating(format newValue: Format) -> Self {
+        updating(carets: newValue.carets)
+    }
 
-// MARK: - Update: Bounds
-
-extension Selection {
+    // MARK: Bounds
+    
     @inlinable func updating(bounds newValue: Range<Carets.Index>) -> Self {
         var nextLowerBound = newValue.lowerBound
         var nextUpperBound = newValue.upperBound
@@ -67,8 +67,22 @@ extension Selection {
                 
         return Selection(carets, bounds: nextLowerBound ..< nextUpperBound)
     }
+        
+    @inlinable func updating(bounds newValue: Range<Format.Index>) -> Self {
+        let lowerBound = carets.index(rhs: newValue.lowerBound)
+        let upperBound = carets.index(rhs: newValue.upperBound)
+        
+        return updating(bounds: lowerBound ..< upperBound)
+    }
     
-    // MARK: Helpers
+    @inlinable func updating(bounds newValue: Range<Int>) -> Self {
+        func bound(at offset: Int) -> Carets.Index {
+            let distanceToLowerBound = bounds.lowerBound.rhs?.offset
+            
+        }
+    }
+    
+    // MARK: Bounds: Helpers
     
     @inlinable func next(_ index: Carets.Index) -> Carets.Index? {
         index < carets.lastIndex() ? carets.index(after: index) : nil

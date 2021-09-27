@@ -8,9 +8,9 @@
 public protocol Adapter {
     associatedtype Value = String
     
-    func value(content: String) throws -> Value
+    func parse(content: String) throws -> Value
     
-    func content(value: Value) -> String
+    func translate(value: Value) -> String
     
     func format(content: String) -> Format
 }
