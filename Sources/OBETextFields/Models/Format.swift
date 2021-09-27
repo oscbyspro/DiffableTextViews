@@ -1,11 +1,11 @@
 //
-//  Symbols.swift
+//  Format.swift
 //  
 //
 //  Created by Oscar Byström Ericsson on 2021-09-23.
 //
 
-public struct Symbols: BidirectionalCollection, RangeReplaceableCollection {
+public struct Format: BidirectionalCollection, RangeReplaceableCollection {
     public typealias Element = Symbol
     public typealias Indices = DefaultIndices<Self>
     public typealias SubSequence = Slice<Self>
@@ -78,7 +78,7 @@ public struct Symbols: BidirectionalCollection, RangeReplaceableCollection {
         }
         
         /// - Complexity: O(1).
-        @inlinable public static func < (lhs: Symbols.Index, rhs: Symbols.Index) -> Bool {
+        @inlinable public static func < (lhs: Format.Index, rhs: Format.Index) -> Bool {
             lhs.offset < rhs.offset
         }
     }

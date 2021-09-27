@@ -7,17 +7,19 @@
 
 #warning("Something about indices is probably wrong, also NonEmptyCollection.")
 
+#warning("Field should contain Format and Selection, it is grouped because new format invalidates the Selection. Should be a struct.")
+
 final class Field {
-    var container: Container
+    let format: Format
     var selection: Selection
     
     // MARK: Getters
     
-    @inlinable var symbols: Symbols {
+    @inlinable var symbols: Format {
         container.symbols
     }
     
-    @inlinable var symbolsIndices: Symbols.Indices {
+    @inlinable var symbolsIndices: Format.Indices {
         container.symbolsIndices
     }
     
@@ -32,7 +34,7 @@ final class Field {
     // MARK: Initializers
             
     /// - Complexity: O(1).
-    @inlinable init(_ symbols: Symbols = Symbols()) {
+    @inlinable init(_ symbols: Format = Format()) {
         let container = Container(symbols)
         let selection = Selection(container.caretsIndices.last)
         
@@ -43,8 +45,8 @@ final class Field {
     // MARK: Components
     
     struct Container {
-        let symbols: Symbols
-        let symbolsIndices: Symbols.Indices
+        let symbols: Format
+        let symbolsIndices: Format.Indices
         
         let carets: Carets
         let caretsIndices: Carets.Indices
@@ -52,7 +54,7 @@ final class Field {
         // MARK: Initializers
         
         /// - Complexity: O(1).
-        @inlinable init(_ symbols: Symbols) {
+        @inlinable init(_ symbols: Format) {
             self.symbols = symbols
             self.symbolsIndices = symbols.indices
             self.carets = symbols.carets
@@ -98,9 +100,9 @@ final class Field {
 
 extension Field {
     /// - Complexity: O(min(n, m)) where n is the length of the current carets and m is the length of next.
-    @inlinable func update(symbols newValue: Symbols) {
+    @inlinable func update(symbols newValue: Format) {
         let next = Container(newValue)
-                        
+        
         func relevant(element: Caret) -> Bool {
             element.rhs.attribute == .content
         }

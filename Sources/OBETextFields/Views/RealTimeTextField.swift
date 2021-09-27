@@ -53,7 +53,7 @@ public struct RealTimeTextField<Adapter: OBETextFields.Adapter>: UIViewRepresent
         
         if value.wrappedValue != coordinator.value {
             let content: String = adapter.content(value: value.wrappedValue)
-            let symbols: Symbols = adapter.format(content: content)
+            let symbols: Snapshot = adapter.format(content: content)
             coordinator.update(value: value.wrappedValue, symbols: symbols)
         }
     }
@@ -65,6 +65,12 @@ public struct RealTimeTextField<Adapter: OBETextFields.Adapter>: UIViewRepresent
     }
     
     // MARK: Components
+    
+    #warning("TODO")
+    final class Cache {
+        var value: Value!
+        var field: Field!
+    }
 
     public final class Coordinator: NSObject, UITextFieldDelegate {
         var uiView: UITextField!
@@ -78,21 +84,21 @@ public struct RealTimeTextField<Adapter: OBETextFields.Adapter>: UIViewRepresent
         public func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
             #error("WIP")
             
-            let indices: Symbols.Indices = field.symbols
-                .indices(in: range.lowerBound ..< range.upperBound)
-            
-            let replacement: Symbols = string
-                .reduce(appending: Symbol.content)
-            
-            let nextContent: String = field.symbols
-                .replacing(indices, with: replacement)
-                .reduce(appending: \.character, where: \.content)
-            
-            let nextValue: Value? = try? parent.adapter
-                .value(content: nextContent)
-            
-            let nextSymbols: Symbols = parent.adapter
-                .format(content: nextContent)
+//            let indices: Snapshot.Indices = field.symbols
+//                .indices(in: range.lowerBound ..< range.upperBound)
+//
+//            let replacement: Snapshot = string
+//                .reduce(appending: Symbol.content)
+//
+//            let nextContent: String = field.symbols
+//                .replacing(indices, with: replacement)
+//                .reduce(appending: \.character, where: \.content)
+//
+//            let nextValue: Value? = try? parent.adapter
+//                .value(content: nextContent)
+//
+//            let nextSymbols: Snapshot = parent.adapter
+//                .format(content: nextContent)
             
 //            let nextSelection = field................................
 //
@@ -101,7 +107,6 @@ public struct RealTimeTextField<Adapter: OBETextFields.Adapter>: UIViewRepresent
 //                .moved(to: nextFormat.carets)
 //
 //            update(value: nextValue, format: nextFormat, selection: nextSelection)
-//
             
             return false
         }
@@ -110,17 +115,19 @@ public struct RealTimeTextField<Adapter: OBETextFields.Adapter>: UIViewRepresent
         public func textFieldDidChangeSelection(_ textField: UITextField) {
             guard let offsets: Range<Int> = textField.selection() else { return }
             
-            let indices: Carets.Indices = field.carets.indices(in: offsets)
-            let selection = Field.Selection(indices)
-            let uiSelection: Range<Int> = selection.offsets
+            #error("WIP")
             
-            field.update(selection: selection)
-            uiView.set(selection: uiSelection)
+//            let indices: Carets.Indices = field.carets.indices(in: offsets)
+//            let selection = Field.Selection(indices)
+//            let uiSelection: Range<Int> = selection.offsets
+//
+//            field.update(selection: selection)
+//            uiView.set(selection: uiSelection)
         }
         
         // MARK: Updaters
         
-        func update(value: Value, symbols: Symbols) {
+        func update(value: Value, symbols: Snapshot) {
             field.update(symbols: symbols)
             
             uiView.set(text: field.symbols.characters)

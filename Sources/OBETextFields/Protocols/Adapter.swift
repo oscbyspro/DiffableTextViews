@@ -12,5 +12,5 @@ public protocol Adapter {
     
     func content(value: Value) -> String
     
-    func format(content: String) -> Symbols    
+    func snapshot(content: String) -> Format
 }
