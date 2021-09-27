@@ -130,6 +130,10 @@
     }
 }
 
+// MARK: - Equatable
+
+extension Carets.Element: Equatable where Base.Element: Equatable { }
+
 // MARK: - BidirectionalCollection
 
 extension Carets: BidirectionalCollection where Base: BidirectionalCollection { }
@@ -137,10 +141,6 @@ extension Carets: BidirectionalCollection where Base: BidirectionalCollection { 
 // MARK: - RandomAccessCollection
 
 extension Carets: RandomAccessCollection where Base: RandomAccessCollection { }
-
-// MARK: - Carets.Element: Equatable
-
-extension Carets.Element: Equatable where Base.Element: Equatable { }
 
 // MARK: - Collection + Carets
 
