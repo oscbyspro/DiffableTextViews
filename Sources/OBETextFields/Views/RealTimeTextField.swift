@@ -80,37 +80,48 @@ public struct RealTimeTextField<Adapter: OBETextFields.Adapter>: UIViewRepresent
         // MARK: UITextFieldDelegate
         
         public func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
-            let indices = snapshot
+            let replacementIndices = snapshot
                 .indices(in: range.lowerBound ..< range.upperBound)
             
             let replacementSnapshot = string
                 .reduce(into: Snapshot(), appending: Symbol.content)
             
             let nextContent = snapshot
-                .replacing(indices, with: replacementSnapshot)
+                .replacing(replacementIndices, with: replacementSnapshot)
                 .reduce(into: String(), appending: \.character, where: \.content)
             
             let nextSnapshot = parent.adapter
                 .snapshot(content: nextContent)
             
+            let nextLocation = replacementIndices
+                .upperBound
+            
             let nextSelection = selection
-                .updating(bounds: indices)
+                .updating(location: nextLocation)
                 .updating(snapshot: nextSnapshot)
             
             let nextValue = try? parent.adapter
                 .parse(content: nextContent)
             
+            // ------------------------------ //
+                        
             update(snapshot: nextSnapshot)
             update(selection: nextSelection)
             update(value: nextValue)
-        
+            
+            // ------------------------------ //
+
             return false
         }
         
         public func textFieldDidChangeSelection(_ textField: UITextField) {
             guard let offsets = textField.selection() else { return }
 
+            // ------------------------------ //
+
             let nextSelection = selection.updating(bounds: offsets)
+            
+            // ------------------------------ //
             
             update(selection: nextSelection)
         }
