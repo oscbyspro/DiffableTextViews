@@ -54,7 +54,7 @@
         last!
     }
     
-    // MARK: Traversal
+    // MARK: Traversals
     
     @inlinable func index(after i: Index) -> Index {
         Index(lhs: i.rhs!, rhs: subindex(after: i.rhs!))
@@ -64,7 +64,7 @@
         Index(lhs: subindex(before: i.lhs!), rhs: i.lhs!)
     }
     
-    // MARK: Collection: Subscripts
+    // MARK: Subscripts
     
     @inlinable subscript(position: Index) -> Element {
         _read {
@@ -72,7 +72,7 @@
         }
     }
     
-    // MARK: Helpers: Snapshot.Index
+    // MARK: Helpers: Subindex
 
     @inlinable func subindex(after subindex: Snapshot.Index) -> Snapshot.Index? {
         subindex < snapshot.endIndex ? snapshot.index(after: subindex) : nil
@@ -82,7 +82,7 @@
         subindex > snapshot.startIndex ? snapshot.index(before: subindex) : nil
     }
     
-    // MARK: Helpers: Snapshot.Element
+    // MARK: Helpers: Subelement
     
     @inlinable func subelement(at subindex: Snapshot.Index?) -> Snapshot.Element? {
         guard let subindex = subindex, subindex < snapshot.endIndex else { return nil }
@@ -138,7 +138,7 @@
     }
 }
 
-// MARK: - Others + Carret
+// MARK: - Others + Carets
 
 extension Snapshot {
     @usableFromInline var carets: Carets {
