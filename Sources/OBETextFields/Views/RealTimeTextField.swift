@@ -52,10 +52,12 @@ public struct RealTimeTextField<Adapter: OBETextFields.Adapter>: UIViewRepresent
         coordinator.parent = self
         
         if value.wrappedValue != coordinator.value {
-            let content = adapter.translate(value: value.wrappedValue)
-            let format = adapter.format(content: content)
+            let nextContent = adapter.transcribe(value: value.wrappedValue)
+            let nextSnapshot = adapter.snapshot(content: nextContent)
+            let nextSelection = coordinator.selection.updating(snapshot: nextSnapshot)
             
-            coordinator.update(value: value.wrappedValue, format: format)
+            coordinator.update(snapshot: nextSnapshot)
+            coordinator.update(selection: nextSelection)
         }
     }
     
@@ -71,36 +73,34 @@ public struct RealTimeTextField<Adapter: OBETextFields.Adapter>: UIViewRepresent
         @usableFromInline var uiView: UITextField!
         @usableFromInline var parent: RealTimeTextField!
         
-        @usableFromInline private(set) var value: Value!
-        @usableFromInline private(set) var format: Format!
+        @usableFromInline private(set) var snapshot: Snapshot!
         @usableFromInline private(set) var selection: Selection!
+        @usableFromInline private(set) var value: Value!
         
         // MARK: UITextFieldDelegate
         
         public func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
-            #error("WIP")
-            
-            let indices: Range<Format.Index> = format
+            let indices = snapshot
                 .indices(in: range.lowerBound ..< range.upperBound)
             
-            let replacement: Format = string
-                .reduce(appending: Symbol.content)
+            let replacementSnapshot = string
+                .reduce(into: Snapshot(), appending: Symbol.content)
             
-            let nextContent: String = format
-                .replacing(indices, with: replacement)
-                .reduce(appending: \.character, where: \.content)
+            let nextContent = snapshot
+                .replacing(indices, with: replacementSnapshot)
+                .reduce(into: String(), appending: \.character, where: \.content)
             
-            let nextValue: Value? = try? parent.adapter
+            let nextSnapshot = parent.adapter
+                .snapshot(content: nextContent)
+            
+            let nextSelection = selection
+                .updating(bounds: indices)
+                .updating(snapshot: nextSnapshot)
+            
+            let nextValue = try? parent.adapter
                 .parse(content: nextContent)
             
-            let nextFormat: Format = parent.adapter
-                .format(content: nextContent)
-            
-            let nextSelection: Selection = selection
-                .updating(bounds: indices)
-                .updating(format: nextFormat)
-            
-            update(format: nextFormat)
+            update(snapshot: nextSnapshot)
             update(selection: nextSelection)
             update(value: nextValue)
         
@@ -108,27 +108,22 @@ public struct RealTimeTextField<Adapter: OBETextFields.Adapter>: UIViewRepresent
         }
         
         public func textFieldDidChangeSelection(_ textField: UITextField) {
-            guard let offsets: Range<Int> = textField.selection() else { return }
+            guard let offsets = textField.selection() else { return }
+
+            let nextSelection = selection.updating(bounds: offsets)
             
-            #error("WIP")
-            
-            let selection = selection.updating(bounds: <#T##Range<Format.Index>#>)
-            
-            field = field.updating(selection: offsets)
-            uiView.set(selection: field.selection.offsets)
+            update(selection: nextSelection)
         }
         
         // MARK: Updaters
                 
-        @inlinable func update(format newValue: Format) {
-            format = newValue
-        
-            uiView.set(text: format.characters)
+        @inlinable func update(snapshot newValue: Snapshot) {
+            snapshot = newValue
+            uiView.set(text: snapshot.characters)
         }
         
         @inlinable func update(selection newValue: Selection) {
             selection = newValue
-            
             uiView.set(selection: newValue.offsets)
         }
         

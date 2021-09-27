@@ -10,7 +10,7 @@ public protocol Adapter {
     
     func parse(content: String) throws -> Value
     
-    func translate(value: Value) -> String
+    func transcribe(value: Value) -> String
     
-    func format(content: String) -> Format
+    func snapshot(content: String) -> Snapshot
 }
