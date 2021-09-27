@@ -27,13 +27,13 @@
     }
     
     // MARK: Indices: Interoperabilities
-    
-    @inlinable func index(lhs: Snapshot.Index) -> Index {
-        Index(lhs: lhs, rhs: subindex(after: lhs))
+        
+    @inlinable func index(lhs subindex: Snapshot.Index) -> Index {
+        Index(lhs: subindex, rhs: self.subindex(after: subindex))
     }
     
-    @inlinable func index(rhs: Snapshot.Index) -> Index {
-        Index(lhs: subindex(before: rhs), rhs: rhs)
+    @inlinable func index(rhs subindex: Snapshot.Index) -> Index {
+        Index(lhs: self.subindex(before: subindex), rhs: subindex)
     }
     
     @inlinable func indices(lhs subindices: Range<Snapshot.Index>) -> Range<Index> {

@@ -75,12 +75,21 @@
         func bound(at offset: Int) -> Carets.Index {
             let distanceToLowerBound = bounds.lowerBound.offset - offset
             let distanceToUpperBound = bounds.upperBound.offset - offset
-            
-            #error("WIP")
+        
+            switch min(offset.magnitude, distanceToLowerBound.magnitude, distanceToUpperBound.magnitude) {
+            case distanceToLowerBound.magnitude: return carets.index(bounds.lowerBound, offsetBy: distanceToLowerBound)
+            case distanceToUpperBound.magnitude: return carets.index(bounds.upperBound, offsetBy: distanceToLowerBound)
+            default: return carets.index(at: offset)
+            }
         }
+        
+        let lowerBound = bound(at: newValue.lowerBound)
+        let upperBound = bound(at: newValue.upperBound)
+        
+        return updating(bounds: lowerBound ..< upperBound)
     }
     
-    // MARK: Location
+    // MARK: Bounds: Location
     
     @inlinable func updating(location: Snapshot.Index) -> Self {
         updating(bounds: location ..< location)

@@ -56,6 +56,8 @@ public struct RealTimeTextField<Adapter: OBETextFields.Adapter>: UIViewRepresent
             let nextSnapshot = adapter.snapshot(content: nextContent)
             let nextSelection = coordinator.selection.updating(snapshot: nextSnapshot)
             
+            // ------------------------------ //
+            
             coordinator.update(snapshot: nextSnapshot)
             coordinator.update(selection: nextSelection)
         }
@@ -70,8 +72,8 @@ public struct RealTimeTextField<Adapter: OBETextFields.Adapter>: UIViewRepresent
     // MARK: Components
     
     public final class Coordinator: NSObject, UITextFieldDelegate {
-        @usableFromInline var uiView: UITextField!
         @usableFromInline var parent: RealTimeTextField!
+        @usableFromInline var uiView: UITextField!
         
         @usableFromInline private(set) var snapshot: Snapshot!
         @usableFromInline private(set) var selection: Selection!
@@ -89,6 +91,12 @@ public struct RealTimeTextField<Adapter: OBETextFields.Adapter>: UIViewRepresent
             let nextContent = snapshot
                 .replacing(replacementIndices, with: replacementSnapshot)
                 .reduce(into: String(), appending: \.character, where: \.content)
+            
+            // ------------------------------ //
+            
+            guard parent.adapter.validate(content: nextContent) else { return false }
+            
+            // ------------------------------ //
             
             let nextSnapshot = parent.adapter
                 .snapshot(content: nextContent)

@@ -12,5 +12,7 @@ public protocol Adapter {
     
     func transcribe(value: Value) -> String
     
+    func validate(content: String) -> Bool
+    
     func snapshot(content: String) -> Snapshot
 }
