@@ -7,12 +7,10 @@
 
 public protocol Adapter {
     associatedtype Value = String
+        
+    func transcribe(value: Value) -> String
+        
+    func snapshot(content: String) -> Snapshot
     
     func parse(content: String) throws -> Value
-    
-    func transcribe(value: Value) -> String
-    
-    func validate(content: String) -> Bool
-    
-    func snapshot(content: String) -> Snapshot
 }

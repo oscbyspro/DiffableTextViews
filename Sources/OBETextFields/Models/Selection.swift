@@ -27,7 +27,7 @@
         self.bounds = bounds
     }
 
-    // MARK: Carets
+    // MARK: Update: Carets
     
     @inlinable func updating(carets newValue: Carets) -> Self {
         func relevant(element: Carets.Element) -> Bool {
@@ -52,7 +52,7 @@
         updating(carets: newValue.carets)
     }
 
-    // MARK: Bounds
+    // MARK: Update: Bounds
     
     @inlinable func updating(bounds newValue: Range<Carets.Index>) -> Self {
         var nextLowerBound = newValue.lowerBound
@@ -88,14 +88,12 @@
         
         return updating(bounds: lowerBound ..< upperBound)
     }
-    
-    // MARK: Bounds: Location
-    
+        
     @inlinable func updating(location: Snapshot.Index) -> Self {
         updating(bounds: location ..< location)
     }
 
-    // MARK: Bounds: Helpers
+    // MARK: Update: Bounds - Helpers
     
     @inlinable func next(_ index: Carets.Index) -> Carets.Index? {
         index < carets.lastIndex ? carets.index(after: index) : nil

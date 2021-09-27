@@ -124,7 +124,7 @@
             self.rhs = rhs
         }
         
-        // MARK: Properties: Getters
+        // MARK: Getters
         
         @inlinable var offset: Int {
             rhs?.offset ?? 0

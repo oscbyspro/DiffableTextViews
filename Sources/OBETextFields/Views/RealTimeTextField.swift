@@ -94,8 +94,8 @@ public struct RealTimeTextField<Adapter: OBETextFields.Adapter>: UIViewRepresent
             
             // ------------------------------ //
             
-            guard parent.adapter.validate(content: nextContent) else { return false }
-            
+            guard let nextValue = try? parent.adapter.parse(content: nextContent) else { return false }
+                        
             // ------------------------------ //
             
             let nextSnapshot = parent.adapter
@@ -107,9 +107,6 @@ public struct RealTimeTextField<Adapter: OBETextFields.Adapter>: UIViewRepresent
             let nextSelection = selection
                 .updating(location: nextLocation)
                 .updating(snapshot: nextSnapshot)
-            
-            let nextValue = try? parent.adapter
-                .parse(content: nextContent)
             
             // ------------------------------ //
                         
