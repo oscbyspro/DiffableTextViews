@@ -12,7 +12,7 @@
     // MARK: Utilities
     
     @inlinable var offsets: Range<Int> {
-        bounds.map({ $0.rhs?.offset ?? 0 })        
+        bounds.lowerBound.offset ..< bounds.upperBound.offset
     }
     
     // MARK: Initializers
