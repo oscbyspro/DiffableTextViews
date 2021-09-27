@@ -6,10 +6,6 @@
 //
 
 @usableFromInline struct Selection {
-    @usableFromInline typealias Carets = OBETextFields.Carets<Format>
-    
-    // MARK: Storage
-    
     @usableFromInline let carets: Carets
     @usableFromInline var bounds: Range<Carets.Index>
     
@@ -23,7 +19,7 @@
     
     @inlinable init(_ carets: Carets) {
         self.carets = carets
-        self.bounds = carets.lastIndex() ..< carets.lastIndex()
+        self.bounds = carets.lastIndex ..< carets.lastIndex
     }
     
     @inlinable init(_ carets: Carets, bounds: Range<Carets.Index>) {
@@ -52,7 +48,7 @@
         return Selection(newValue, bounds: nextLowerBound ..< nextUpperBound)
     }
     
-    @inlinable func updating(format newValue: Format) -> Self {
+    @inlinable func updating(snapshot newValue: Snapshot) -> Self {
         updating(carets: newValue.carets)
     }
 
@@ -68,7 +64,7 @@
         return Selection(carets, bounds: nextLowerBound ..< nextUpperBound)
     }
         
-    @inlinable func updating(bounds newValue: Range<Format.Index>) -> Self {
+    @inlinable func updating(bounds newValue: Range<Snapshot.Index>) -> Self {
         let lowerBound = carets.index(rhs: newValue.lowerBound)
         let upperBound = carets.index(rhs: newValue.upperBound)
         
@@ -77,19 +73,21 @@
     
     @inlinable func updating(bounds newValue: Range<Int>) -> Self {
         func bound(at offset: Int) -> Carets.Index {
-            let distanceToLowerBound = bounds.lowerBound.rhs?.offset
+            let distanceToLowerBound = bounds.lowerBound.offset - offset
+            let distanceToUpperBound = bounds.upperBound.offset - offset
             
+            #error("WIP")
         }
     }
     
     // MARK: Bounds: Helpers
     
     @inlinable func next(_ index: Carets.Index) -> Carets.Index? {
-        index < carets.lastIndex() ? carets.index(after: index) : nil
+        index < carets.lastIndex ? carets.index(after: index) : nil
     }
     
     @inlinable func prev(_ index: Carets.Index) -> Carets.Index? {
-        index > carets.firstIndex() ? carets.index(before: index) : nil
+        index > carets.firstIndex ? carets.index(before: index) : nil
     }
     
     @inlinable func move(_ index: inout Carets.Index, step: (Carets.Index) -> Carets.Index?, while predicate: (Carets.Element) -> Bool) {

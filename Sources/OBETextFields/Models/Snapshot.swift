@@ -1,11 +1,11 @@
 //
-//  Format.swift
+//  Snapshot.swift
 //  
 //
 //  Created by Oscar Byström Ericsson on 2021-09-23.
 //
 
-public struct Format: BidirectionalCollection, RangeReplaceableCollection {
+public struct Snapshot: BidirectionalCollection, RangeReplaceableCollection {
     public typealias Element = Symbol
     public typealias Indices = DefaultIndices<Self>
     public typealias SubSequence = Slice<Self>
@@ -13,7 +13,7 @@ public struct Format: BidirectionalCollection, RangeReplaceableCollection {
     // MARK: Storage
     
     @usableFromInline var characters: String
-    @usableFromInline var attributes: [Attribute]
+    @usableFromInline var attributes: [Symbol.Attribute]
 
     // MARK: Initializers
     
@@ -74,7 +74,7 @@ public struct Format: BidirectionalCollection, RangeReplaceableCollection {
         
         // MARK: Comparable
         
-        @inlinable public static func < (lhs: Format.Index, rhs: Format.Index) -> Bool {
+        @inlinable public static func < (lhs: Snapshot.Index, rhs: Snapshot.Index) -> Bool {
             lhs.offset < rhs.offset
         }
     }

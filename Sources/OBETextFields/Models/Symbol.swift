@@ -15,9 +15,18 @@ public struct Symbol: Equatable {
         self.character = character
         self.attribute = attribute
     }
+    
+    // MARK: Components
+    
+    public enum Attribute: Equatable {
+        case content
+        case spacer
+        case prefix
+        case suffix
+    }
 }
 
-// MARK: - Attributes: Initializers
+// MARK: - Static Initializers
 
 public extension Symbol {
     @inlinable static func content(_ character: Character) -> Self {
@@ -37,7 +46,7 @@ public extension Symbol {
     }
 }
 
-// MARK: - Attributes: Comparisons
+// MARK: - Convenience Getters
 
 public extension Symbol {
     @inlinable var content: Bool {

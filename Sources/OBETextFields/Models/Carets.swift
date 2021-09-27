@@ -1,0 +1,147 @@
+//
+//  Carets.swift
+//  
+//
+//  Created by Oscar Byström Ericsson on 2021-09-27.
+//
+
+@usableFromInline struct Carets: BidirectionalCollection {
+    @usableFromInline let snapshot: Snapshot
+    
+    // MARK: Indices
+    
+    @inlinable var startIndex: Index {
+        Index(lhs: nil, rhs: snapshot.startIndex)
+    }
+    
+    @inlinable var endIndex: Index {
+        Index(lhs: snapshot.endIndex, rhs: nil)
+    }
+    
+    @inlinable var firstIndex: Index {
+        startIndex
+    }
+    
+    @inlinable var lastIndex: Index {
+        Index(lhs: snapshot.index(before: snapshot.endIndex), rhs: snapshot.endIndex)
+    }
+    
+    // MARK: Indices: Interoperabilities
+    
+    @inlinable func index(lhs: Snapshot.Index) -> Index {
+        Index(lhs: lhs, rhs: subindex(after: lhs))
+    }
+    
+    @inlinable func index(rhs: Snapshot.Index) -> Index {
+        Index(lhs: subindex(before: rhs), rhs: rhs)
+    }
+    
+    @inlinable func indices(lhs subindices: Range<Snapshot.Index>) -> Range<Index> {
+        index(lhs: subindices.lowerBound) ..< index(lhs: subindices.upperBound)
+    }
+    
+    @inlinable func indices(rhs subindices: Range<Snapshot.Index>) -> Range<Index> {
+        index(rhs: subindices.lowerBound) ..< index(rhs: subindices.upperBound)
+    }
+    
+    // MARK: Elements
+    
+    @inlinable var first: Element {
+        first!
+    }
+    
+    @inlinable var last: Element {
+        last!
+    }
+    
+    // MARK: Traversal
+    
+    @inlinable func index(after i: Index) -> Index {
+        Index(lhs: i.rhs!, rhs: subindex(after: i.rhs!))
+    }
+    
+    @inlinable func index(before i: Index) -> Index {
+        Index(lhs: subindex(before: i.lhs!), rhs: i.lhs!)
+    }
+    
+    // MARK: Collection: Subscripts
+    
+    @inlinable subscript(position: Index) -> Element {
+        _read {
+            yield Element(lhs: subelement(at: position.lhs), rhs: subelement(at: position.rhs))
+        }
+    }
+    
+    // MARK: Helpers: Snapshot.Index
+
+    @inlinable func subindex(after subindex: Snapshot.Index) -> Snapshot.Index? {
+        subindex < snapshot.endIndex ? snapshot.index(after: subindex) : nil
+    }
+
+    @inlinable func subindex(before subindex: Snapshot.Index) -> Snapshot.Index? {
+        subindex > snapshot.startIndex ? snapshot.index(before: subindex) : nil
+    }
+    
+    // MARK: Helpers: Snapshot.Element
+    
+    @inlinable func subelement(at subindex: Snapshot.Index?) -> Snapshot.Element? {
+        guard let subindex = subindex, subindex < snapshot.endIndex else { return nil }
+        
+        return snapshot[subindex]
+    }
+    
+    // MARK: Components
+    
+    @usableFromInline struct Element: Equatable {
+        @usableFromInline let lhs: Snapshot.Element?
+        @usableFromInline let rhs: Snapshot.Element?
+        
+        // MARK: Initializers
+        
+        @inlinable init(lhs: Snapshot.Element?, rhs: Snapshot.Element?) {
+            self.lhs = lhs
+            self.rhs = rhs
+        }
+    }
+    
+    @usableFromInline struct Index: Comparable {
+        @usableFromInline let lhs: Snapshot.Index?
+        @usableFromInline let rhs: Snapshot.Index?
+        
+        // MARK: Initializers
+        
+        @inlinable init(lhs: Snapshot.Index, rhs: Snapshot.Index) {
+            self.lhs = lhs
+            self.rhs = rhs
+        }
+        
+        @inlinable init(lhs: Snapshot.Index, rhs: Snapshot.Index?) {
+            self.lhs = lhs
+            self.rhs = rhs
+        }
+        @inlinable init(lhs: Snapshot.Index?, rhs: Snapshot.Index) {
+            self.lhs = lhs
+            self.rhs = rhs
+        }
+        
+        // MARK: Properties: Getters
+        
+        @inlinable var offset: Int {
+            rhs?.offset ?? 0
+        }
+        
+        // MARK: Comparable
+                
+        @inlinable static func < (lhs: Self, rhs: Self) -> Bool {
+            lhs.offset < rhs.offset
+        }
+    }
+}
+
+// MARK: - Others + Carret
+
+extension Snapshot {
+    @usableFromInline var carets: Carets {
+        Carets(snapshot: self)
+    }
+}
