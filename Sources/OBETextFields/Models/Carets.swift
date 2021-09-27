@@ -138,7 +138,7 @@
     }
 }
 
-// MARK: - Others + Carets
+// MARK: - Others + Initializers
 
 extension Snapshot {
     @usableFromInline var carets: Carets {
