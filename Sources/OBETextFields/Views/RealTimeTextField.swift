@@ -52,9 +52,11 @@ public struct RealTimeTextField<Adapter: OBETextFields.Adapter>: UIViewRepresent
         coordinator.parent = self
         
         if value.wrappedValue != coordinator.value {
-            let content: String = adapter.content(value: value.wrappedValue)
-            let symbols: Snapshot = adapter.format(content: content)
-            coordinator.update(value: value.wrappedValue, symbols: symbols)
+            let content = adapter.content(value: value.wrappedValue)
+            let format = adapter.format(content: content)
+            let field = coordinator.field.updating(format: format)
+            
+            coordinator.update(value: value.wrappedValue, field: field)
         }
     }
     
@@ -66,75 +68,65 @@ public struct RealTimeTextField<Adapter: OBETextFields.Adapter>: UIViewRepresent
     
     // MARK: Components
     
-    #warning("TODO")
-    final class Cache {
-        var value: Value!
-        var field: Field!
-    }
-
     public final class Coordinator: NSObject, UITextFieldDelegate {
         var uiView: UITextField!
         var parent: RealTimeTextField!
-                
-        var field: Field!
-        var value: Value!
         
-        // MARK: Protocol: UITextFieldDelegate
+        var value: Value!
+        var format: Format!
+        var selection: Selection!
+        
+        // MARK: UITextFieldDelegate
         
         public func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
             #error("WIP")
             
-//            let indices: Snapshot.Indices = field.symbols
-//                .indices(in: range.lowerBound ..< range.upperBound)
-//
-//            let replacement: Snapshot = string
-//                .reduce(appending: Symbol.content)
-//
-//            let nextContent: String = field.symbols
-//                .replacing(indices, with: replacement)
-//                .reduce(appending: \.character, where: \.content)
-//
-//            let nextValue: Value? = try? parent.adapter
-//                .value(content: nextContent)
-//
-//            let nextSymbols: Snapshot = parent.adapter
-//                .format(content: nextContent)
+            let indices: Range<Format.Index> = field.format
+                .indices(in: range.lowerBound ..< range.upperBound)
             
-//            let nextSelection = field................................
-//
-//            let nextSelection: Selection = cache.selection
-//                .moved(to: indices.upperBound ..< indices.upperBound)
-//                .moved(to: nextFormat.carets)
-//
-//            update(value: nextValue, format: nextFormat, selection: nextSelection)
+            let replacement: Format = string
+                .reduce(appending: Symbol.content)
             
+            let nextContent: String = field.format
+                .replacing(indices, with: replacement)
+                .reduce(appending: \.character, where: \.content)
+            
+            let nextValue: Value? = try? parent.adapter
+                .value(content: nextContent)
+            
+            let nextFormat: Format = parent.adapter
+                .format(content: nextContent)
+            
+            let nextField: Field = field
+                .updating(selection: field.selection.carets.index)
+                .updating(format: nextFormat)
+            
+            update(value: nextValue, field: nextField)
+        
             return false
         }
         
-        #warning("Unsure if it works correctly. Untested. Improvised.")
         public func textFieldDidChangeSelection(_ textField: UITextField) {
             guard let offsets: Range<Int> = textField.selection() else { return }
             
-            #error("WIP")
-            
-//            let indices: Carets.Indices = field.carets.indices(in: offsets)
-//            let selection = Field.Selection(indices)
-//            let uiSelection: Range<Int> = selection.offsets
-//
-//            field.update(selection: selection)
-//            uiView.set(selection: uiSelection)
+            field = field.updating(selection: offsets)
+            uiView.set(selection: field.selection.offsets)
         }
         
         // MARK: Updaters
         
-        func update(value: Value, symbols: Snapshot) {
-            field.update(symbols: symbols)
+        func update(value nextValue: Value?, field nextField: Field) {
+            field = nextField
             
-            uiView.set(text: field.symbols.characters)
-            uiView.set(selection: field.selection.offsets)
-                
-            updateLazily(&self.value, with: value)
-            updateLazily(&parent.value.wrappedValue, with: value)
+            #warning("format should be optional and text should only be updated if format changes")
+            
+            uiView.set(text: nextField.format.characters)
+            uiView.set(selection: nextField.selection.offsets)
+            
+            if let nextValue = nextValue {
+                value = nextValue
+                OBETextFields.update(&parent.value.wrappedValue, nonduplicate: nextValue)
+            }
         }
     }
 }

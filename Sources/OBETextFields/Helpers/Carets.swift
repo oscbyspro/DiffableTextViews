@@ -36,6 +36,24 @@
         Index(lhs: base.index(before: base.endIndex), rhs: base.endIndex)
     }
     
+    // MARK: Indices: Interoperabilities
+    
+    @inlinable func index(lhs: Base.Index) -> Index {
+        Index(lhs: lhs, rhs: baseIndex(after: lhs))
+    }
+    
+    @inlinable func index(rhs: Base.Index) -> Index where Base: BidirectionalCollection {
+        Index(lhs: baseIndex(before: rhs), rhs: rhs)
+    }
+    
+    @inlinable func indices(lhs baseIndices: Range<Base.Index>) -> Range<Index> {
+        index(lhs: baseIndices.lowerBound) ..< index(lhs: baseIndices.upperBound)
+    }
+    
+    @inlinable func indices(rhs baseIndices: Range<Base.Index>) -> Range<Index> where Base: BidirectionalCollection {
+        index(rhs: baseIndices.lowerBound) ..< index(rhs: baseIndices.upperBound)
+    }
+    
     // MARK: Elements
     
     @inlinable func first() -> Element {

@@ -8,12 +8,12 @@
 struct Selection {
     typealias Carets = OBETextFields.Carets<Format>
     
-    // MARK: Properties: Stored
+    // MARK: Storage
     
     let carets: Carets
     var bounds: Range<Carets.Index>
     
-    // MARK: Properties: Calculated
+    // MARK: Utilities
     
     @inlinable var offsets: Range<Int> {
         bounds.map({ $0.rhs?.offset ?? 0 })        
