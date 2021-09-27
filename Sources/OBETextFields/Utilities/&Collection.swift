@@ -6,16 +6,14 @@
 //
 
 extension Collection {
-    /// - Complexity: O(1) if the collection conforms to RandomAccessCollection; otherwise O(k) where k is the absolute value of offset.
     @inlinable func index(at offset: Int) -> Index {
         index(startIndex, offsetBy: offset)
     }
 
-    /// - Complexity: O(1) if the collection conforms to RandomAccessCollection; otherwise O(k) where k is the maximum absolute value of offsets.
-    @inlinable func indices(in offsets: Range<Int>) -> Indices {
+    @inlinable func indices(in offsets: Range<Int>) -> Range<Index> {
         let lowerBound: Index = index(startIndex, offsetBy: offsets.lowerBound)
         let upperBound: Index = index(lowerBound, offsetBy: offsets.count)
                 
-        return indices[lowerBound ..< upperBound]
+        return lowerBound ..< upperBound
     }
 }

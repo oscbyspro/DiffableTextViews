@@ -17,7 +17,6 @@
     
     // MARK: Initializers
     
-    /// - Complexity: O(1).
     @inlinable init(in lhs: LHS, and rhs: RHS, with options: Options) {
         self.lhs = lhs
         self.rhs = rhs
@@ -26,21 +25,18 @@
     
     // MARK: Maps
     
-    /// - Complexity: O(1).
     @inlinable func make<L: Collection, R: Collection>(_ lhs: L, _ rhs: R) -> Similarities<L, R> where L.Element == Element {
         Similarities<L, R>(in: lhs, and: rhs, with: options)
     }
     
     // MARK: Helpers
     
-    /// - Complexity: O(n), where n is the length of the collection.
     @inlinable func next<C: Collection>(in collection: C, from index: C.Index) -> C.Index? where C.Element == Element {
         collection.suffix(from: index).firstIndex(where: options.relevant)
     }
 
     // MARK: Methods
     
-    /// - Complexity: O(n), where n is the length of the collection (lhs).
     @usableFromInline func prefixLHS() -> LHS.SubSequence {
         var currentLHS = lhs.startIndex
         var currentRHS = rhs.startIndex
@@ -62,18 +58,15 @@
         return lhs.prefix(upTo: currentLHS)
     }
     
-    /// - Complexity: O(n), where n is the length of the collection (rhs).
     @inlinable func prefixRHS() -> RHS.SubSequence {
         make(rhs, lhs).prefixLHS()
     }
     
-    /// - Complexity: O(n), where n is the length of the collection (lhs).
     @inlinable func suffixLHS() -> LHS.SubSequence where LHS: BidirectionalCollection, RHS: BidirectionalCollection {
         let reversed = make(lhs.reversed(), rhs.reversed()).prefixLHS()
         return lhs[reversed.endIndex.base ..< reversed.startIndex.base]
     }
     
-    /// - Complexity: O(n), where n is the length of the collection (rhs).
     @inlinable func suffixRHS() -> RHS.SubSequence where LHS: BidirectionalCollection, RHS: BidirectionalCollection {
         make(rhs, lhs).suffixLHS()
     }
@@ -85,18 +78,15 @@
     @usableFromInline let relevant: (Element) -> Bool
     @usableFromInline let overshoot: Bool
     
-    /// - Complexity: O(1).
     @inlinable init(relevant: @escaping (Element) -> Bool, overshoot: Bool) {
         self.relevant = relevant
         self.overshoot = overshoot
     }
     
-    /// - Complexity: O(1).
     @inlinable static var defaults: Self {
         Self(relevant: { _ in true }, overshoot: false)
     }
     
-    /// - Complexity: O(1).
     @inlinable static func inspect(_ relevant: @escaping (Element) -> Bool, overshoot: Bool = false) -> Self {
         Self(relevant: relevant, overshoot: overshoot)
     }
@@ -105,7 +95,6 @@
 // MARK: - Prefix
 
 extension Collection where Element: Equatable {
-    /// - Complexity: O(n), where n is the length of the collection.
     @inlinable func prefix<Other: Collection>(alsoIn other: Other, options: Similarities<Self, Other>.Options) -> SubSequence where Other.Element == Element {
         Similarities(in: self, and: other, with: options).prefixLHS()
     }
@@ -114,7 +103,6 @@ extension Collection where Element: Equatable {
 // MARK: - Suffix
 
 extension BidirectionalCollection where Element: Equatable {
-    /// - Complexity: O(n), where n is the length of the collection.
     @inlinable func suffix<Other: BidirectionalCollection>(alsoIn other: Other, options: Similarities<Self, Other>.Options) -> SubSequence where Other.Element == Element {
         Similarities(in: self, and: other, with: options).suffixLHS()
     }

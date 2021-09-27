@@ -70,22 +70,18 @@ extension Selection {
     
     // MARK: Helpers
     
-    /// - Complexity: O(1).
     @inlinable func next(_ index: Carets.Index) -> Carets.Index? {
         index < carets.lastIndex() ? carets.index(after: index) : nil
     }
     
-    /// - Complexity: O(1).
     @inlinable func prev(_ index: Carets.Index) -> Carets.Index? {
         index > carets.firstIndex() ? carets.index(before: index) : nil
     }
     
-    /// - Complexity: O(n) where n is the number of elements in base.
     @inlinable func move(_ index: inout Carets.Index, step: (Carets.Index) -> Carets.Index?, while predicate: (Carets.Element) -> Bool) {
         while predicate(carets[index]), let next = step(index) { index = next }
     }
     
-    /// - Complexity: O(n) where n is the number of elements in base.
     @inlinable func moveToContent(_ index: inout Carets.Index) {
         move(&index, step: next, while: { ($0.rhs?.attribute ?? .prefix) == .prefix })
         move(&index, step: prev, while: { ($0.lhs?.attribute ?? .suffix) == .suffix })

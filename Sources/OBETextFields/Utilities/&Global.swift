@@ -7,8 +7,7 @@
 
 /// Updates storage only if the new value is different.
 ///
-/// - Complexity: O(1).
-@inlinable func updateLazily<T: Equatable>(_ storage: inout T, with newValue: T) {
+@inlinable func updateLazily<Value: Equatable>(_ storage: inout Value, with newValue: Value) {
     if storage != newValue {
         storage = newValue
     }

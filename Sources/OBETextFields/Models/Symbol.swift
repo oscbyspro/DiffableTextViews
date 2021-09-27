@@ -11,7 +11,6 @@ public struct Symbol: Equatable {
     
     // MARK: Initializers
     
-    /// - Complexity: O(1).
     @inlinable public init(_ character: Character, attribute: Attribute) {
         self.character = character
         self.attribute = attribute
@@ -21,22 +20,18 @@ public struct Symbol: Equatable {
 // MARK: - Attributes: Initializers
 
 public extension Symbol {
-    /// - Complexity: O(1).
     @inlinable static func content(_ character: Character) -> Self {
         Self(character, attribute: .content)
     }
     
-    /// - Complexity: O(1).
     @inlinable static func spacer(_ character: Character) -> Self {
         Self(character, attribute: .spacer)
     }
     
-    /// - Complexity: O(1).
     @inlinable static func prefix(_ character: Character) -> Self {
         Self(character, attribute: .prefix)
     }
     
-    /// - Complexity: O(1).
     @inlinable static func suffix(_ character: Character) -> Self {
         Self(character, attribute: .suffix)
     }
@@ -45,22 +40,18 @@ public extension Symbol {
 // MARK: - Attributes: Comparisons
 
 public extension Symbol {
-    /// - Complexity: O(1).
     @inlinable var content: Bool {
         attribute == .content
     }
     
-    /// - Complexity: O(1).
     @inlinable var spacer: Bool {
         attribute == .spacer
     }
     
-    /// - Complexity: O(1).
     @inlinable var prefix: Bool {
         attribute == .prefix
     }
     
-    /// - Complexity: O(1).
     @inlinable var suffix: Bool {
         attribute == .suffix
     }
