@@ -75,7 +75,7 @@
         func bound(at offset: Int) -> Carets.Index {
             [carets.firstIndex, carets.lastIndex, bounds.lowerBound, bounds.upperBound]
                 .map { (start: $0, distance: $0.offset - offset) }
-                .min { $0.distance.magnitude < $1.distance.magnitude }!
+                .min { abs($0.distance) < abs($1.distance) }!
                 |>>> { carets.index($0.start, offsetBy: $0.distance) }
         }
         
