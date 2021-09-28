@@ -72,21 +72,24 @@
     }
     
     @inlinable func updating(bounds newValue: Range<Int>) -> Self {
-        func bound(at offset: Int) -> Carets.Index {
-            let indices = [
-                carets.firstIndex,
-                carets.lastIndex,
-                bounds.lowerBound,
-                bounds.upperBound]
-            
+        var indices = Array<Carets.Index>(capacity: 5)
+        indices.append(contentsOf: [carets.firstIndex, carets.lastIndex])
+        indices.append(contentsOf: [bounds.lowerBound, bounds.upperBound])
+                
+        func index(at offset: Int, append: Bool) -> Carets.Index {
             let distances = indices.map({( index: $0, distance: $0.offset - offset )})
             let shortest = distances.min(by: { abs($0.distance) < abs($1.distance) })!
+            let destination = carets.index(shortest.index, offsetBy: shortest.distance)
             
-            return carets.index(shortest.index, offsetBy: shortest.distance)
+            if append {
+                indices.append(destination)
+            }
+            
+            return destination
         }
         
-        let lowerBound = bound(at: newValue.lowerBound)
-        let upperBound = bound(at: newValue.upperBound)
+        let lowerBound = index(at: newValue.lowerBound, append: true)
+        let upperBound = index(at: newValue.upperBound, append: false)
         
         return updating(bounds: lowerBound ..< upperBound)
     }
