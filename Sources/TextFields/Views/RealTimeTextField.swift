@@ -60,13 +60,8 @@ public struct RealTimeTextField<Adapter: TextFields.Adapter>: UIViewRepresentabl
             let nextSelection = coordinator.selection.updating(snapshot: nextSnapshot)
             
             // ------------------------------ //
-            
-            #warning("Cleanup.")
-            
+                        
             coordinator.update(value: nextValue, snapshot: nextSnapshot, selection: nextSelection)
-            
-//            coordinator.update(snapshot: nextSnapshot)
-//            coordinator.update(selection: nextSelection)
         }
     }
     
@@ -129,15 +124,9 @@ public struct RealTimeTextField<Adapter: TextFields.Adapter>: UIViewRepresentabl
                 .updating(snapshot: nextSnapshot)
             
             // ------------------------------ //
-            
-            #warning("Cleanup.")
-                        
+                                    
             update(value: nextValue, snapshot: nextSnapshot, selection: nextSelection)
-            
-//            update(snapshot: nextSnapshot)
-//            update(selection: nextSelection)
-//            update(value: nextValue)
-            
+
             // ------------------------------ //
 
             return false
@@ -177,23 +166,6 @@ public struct RealTimeTextField<Adapter: TextFields.Adapter>: UIViewRepresentabl
                 TextFields.update(&parent.value.wrappedValue, nonduplicate: nextValue)
             }
         }
-        
-//        @inlinable func update(snapshot newValue: Snapshot) {
-//            snapshot = newValue
-//            uiView.set(text: snapshot.characters)
-//        }
-//
-//        @inlinable func update(selection newValue: Selection) {
-//            selection = newValue
-//            uiView.set(selection: newValue.offsets)
-//        }
-//
-//        @inlinable func update(value newValue: Value?) {
-//            guard let newValue = newValue else { return }
-//
-//            value = newValue
-//            TextFields.update(&parent.value.wrappedValue, nonduplicate: newValue)
-//        }
     }
 }
 
