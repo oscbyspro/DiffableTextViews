@@ -19,23 +19,20 @@ struct Source {
 
 // MARK: -
 
-let OBETextFields = Source(name: "OBETextFields")
+let TextFields = Source(name: "TextFields")
 
 // MARK: -
 
 let package = Package(
-    name: "OBETextFields",
+    name: "TextFields",
     products: [
         .library(
-            name: OBETextFields.name,
-            targets: [OBETextFields.name]),
+            name: TextFields.name,
+            targets: [TextFields.name]),
     ],
     targets: [
         .target(
-            name: OBETextFields.name,
+            name: TextFields.name,
             dependencies: []),
-        .testTarget(
-            name: OBETextFields.tests,
-            dependencies: [OBETextFields.dependency]),
     ]
 )
