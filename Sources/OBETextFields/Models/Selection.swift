@@ -73,10 +73,16 @@
     
     @inlinable func updating(bounds newValue: Range<Int>) -> Self {
         func bound(at offset: Int) -> Carets.Index {
-            [carets.firstIndex, carets.lastIndex, bounds.lowerBound, bounds.upperBound]
-                .map { (start: $0, distance: $0.offset - offset) }
-                .min { abs($0.distance) < abs($1.distance) }!
-                |>>> { carets.index($0.start, offsetBy: $0.distance) }
+            let indices = [
+                carets.firstIndex,
+                carets.lastIndex,
+                bounds.lowerBound,
+                bounds.upperBound]
+            
+            let distances = indices.map({( index: $0, distance: $0.offset - offset )})
+            let shortest = distances.min(by: { abs($0.distance) < abs($1.distance) })!
+            
+            return carets.index(shortest.index, offsetBy: shortest.distance)
         }
         
         let lowerBound = bound(at: newValue.lowerBound)
