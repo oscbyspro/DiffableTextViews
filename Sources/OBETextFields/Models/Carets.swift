@@ -127,7 +127,7 @@
         // MARK: Getters
         
         @inlinable var offset: Int {
-            rhs?.offset ?? 0
+            rhs?.offset ?? (lhs!.offset + 1)
         }
         
         // MARK: Comparable

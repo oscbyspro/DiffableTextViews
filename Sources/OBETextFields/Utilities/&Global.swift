@@ -6,7 +6,5 @@
 //
 
 @inlinable func update<Value: Equatable>(_ storage: inout Value, nonduplicate newValue: Value) {
-    if storage != newValue {
-        storage = newValue
-    }
+    if storage != newValue { storage = newValue }
 }
