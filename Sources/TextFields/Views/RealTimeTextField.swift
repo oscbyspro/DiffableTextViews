@@ -173,6 +173,7 @@ public struct RealTimeTextField<Adapter: TextFields.Adapter>: UIViewRepresentabl
             
             if let nextValue = nextValue {
                 value = nextValue
+                #warning("This modifies state during view update, apparently.")
                 TextFields.update(&parent.value.wrappedValue, nonduplicate: nextValue)
             }
         }

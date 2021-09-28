@@ -23,6 +23,12 @@
         self.options = options
     }
     
+    @inlinable init(in lhs: LHS, and rhs: RHS, with options: Options = .defaults(check: ==)) where Element: Equatable {
+        self.lhs = lhs
+        self.rhs = rhs
+        self.options = options
+    }
+    
     // MARK: Maps
     
     @inlinable func make<L: Collection, R: Collection>(_ lhs: L, _ rhs: R) -> Similarities<L, R> where L.Element == Element {
