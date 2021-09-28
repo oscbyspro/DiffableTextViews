@@ -5,8 +5,6 @@
 //  Created by Oscar Byström Ericsson on 2021-09-27.
 //
 
-import QuartzCore
-
 @usableFromInline struct Selection {
     @usableFromInline let carets: Carets
     @usableFromInline var bounds: Range<Carets.Index>
