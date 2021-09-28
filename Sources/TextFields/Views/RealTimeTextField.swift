@@ -10,7 +10,7 @@
 import SwiftUI
 
 @available(iOS 13.0, *)
-public struct RealTimeTextField<Adapter: OBETextFields.Adapter>: UIViewRepresentable, Equatable where Adapter.Value: Equatable {
+public struct RealTimeTextField<Adapter: TextFields.Adapter>: UIViewRepresentable, Equatable where Adapter.Value: Equatable {
     public typealias Value = Adapter.Value
     public typealias UIViewType = UITextField
     
@@ -53,15 +53,20 @@ public struct RealTimeTextField<Adapter: OBETextFields.Adapter>: UIViewRepresent
     func update(coordinator: Coordinator) {
         coordinator.parent = self
         
-        if value.wrappedValue != coordinator.value {
-            let nextContent = adapter.transcribe(value: value.wrappedValue)
+        if coordinator.value != value.wrappedValue {
+            let nextValue = value.wrappedValue
+            let nextContent = adapter.transcribe(value: nextValue)
             let nextSnapshot = adapter.snapshot(content: nextContent)
             let nextSelection = coordinator.selection.updating(snapshot: nextSnapshot)
             
             // ------------------------------ //
             
-            coordinator.update(snapshot: nextSnapshot)
-            coordinator.update(selection: nextSelection)
+            #warning("Cleanup.")
+            
+            coordinator.update(value: nextValue, snapshot: nextSnapshot, selection: nextSelection)
+            
+//            coordinator.update(snapshot: nextSnapshot)
+//            coordinator.update(selection: nextSelection)
         }
     }
     
@@ -80,6 +85,19 @@ public struct RealTimeTextField<Adapter: OBETextFields.Adapter>: UIViewRepresent
         @usableFromInline private(set) var snapshot: Snapshot!
         @usableFromInline private(set) var selection: Selection!
         @usableFromInline private(set) var value: Value!
+        
+        // MARK: Initializers
+        
+        @usableFromInline override init() {
+            super.init()
+            
+            let snapshot = Snapshot()
+            let carets = Carets(snapshot)
+            let selection = Selection(carets)
+            
+            self.snapshot = snapshot
+            self.selection = selection
+        }
         
         // MARK: UITextFieldDelegate
         
@@ -111,46 +129,70 @@ public struct RealTimeTextField<Adapter: OBETextFields.Adapter>: UIViewRepresent
                 .updating(snapshot: nextSnapshot)
             
             // ------------------------------ //
+            
+            #warning("Cleanup.")
                         
-            update(snapshot: nextSnapshot)
-            update(selection: nextSelection)
-            update(value: nextValue)
+            update(value: nextValue, snapshot: nextSnapshot, selection: nextSelection)
+            
+//            update(snapshot: nextSnapshot)
+//            update(selection: nextSelection)
+//            update(value: nextValue)
             
             // ------------------------------ //
 
             return false
         }
         
+        #warning("Should use change in offsets to update uiView, similar to how it is done in selection.")
         public func textFieldDidChangeSelection(_ textField: UITextField) {
             guard let offsets = textField.selection() else { return }
 
             // ------------------------------ //
-
+            
             let nextSelection = selection.updating(bounds: offsets)
             
             // ------------------------------ //
             
-            update(selection: nextSelection)
+            #warning("This is different, and a reason why model needs to be imporved.")
+            
+            self.selection = nextSelection
+            uiView.set(selection: nextSelection.offsets)
         }
         
         // MARK: Updaters
-                
-        @inlinable func update(snapshot newValue: Snapshot) {
-            snapshot = newValue
-            uiView.set(text: snapshot.characters)
-        }
         
-        @inlinable func update(selection newValue: Selection) {
-            selection = newValue
-            uiView.set(selection: newValue.offsets)
-        }
+        #warning("Bad. Must update 'snapshot' AND 'selection' before updating 'uiView'.")
+        #warning("This might warrant making a Field struct.")
         
-        @inlinable func update(value newValue: Value?) {
-            guard let newValue = newValue else { return }
+        func update(value nextValue: Value?, snapshot nextSnapshot: Snapshot, selection nextSelection: Selection) {
+            self.snapshot = nextSnapshot
+            self.selection = nextSelection
             
-            value = newValue
-            OBETextFields.update(&parent.value.wrappedValue, nonduplicate: newValue)
+            uiView.set(text: nextSnapshot.characters)
+            uiView.set(selection: nextSelection.offsets)
+            
+            if let nextValue = nextValue {
+                value = nextValue
+                TextFields.update(&parent.value.wrappedValue, nonduplicate: nextValue)
+            }
         }
+        
+//        @inlinable func update(snapshot newValue: Snapshot) {
+//            snapshot = newValue
+//            uiView.set(text: snapshot.characters)
+//        }
+//
+//        @inlinable func update(selection newValue: Selection) {
+//            selection = newValue
+//            uiView.set(selection: newValue.offsets)
+//        }
+//
+//        @inlinable func update(value newValue: Value?) {
+//            guard let newValue = newValue else { return }
+//
+//            value = newValue
+//            TextFields.update(&parent.value.wrappedValue, nonduplicate: newValue)
+//        }
     }
 }
 

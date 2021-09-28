@@ -8,6 +8,12 @@
 @usableFromInline struct Carets: BidirectionalCollection {
     @usableFromInline let snapshot: Snapshot
     
+    // MARK: Initializers
+    
+    @inlinable init(_ snapshot: Snapshot) {
+        self.snapshot = snapshot
+    }
+    
     // MARK: Indices
     
     @inlinable var startIndex: Index {
@@ -23,7 +29,7 @@
     }
     
     @inlinable var lastIndex: Index {
-        Index(lhs: snapshot.index(before: snapshot.endIndex), rhs: snapshot.endIndex)
+        Index(lhs: subindex(before: snapshot.endIndex), rhs: snapshot.endIndex)
     }
     
     // MARK: Indices: Interoperabilities
@@ -141,7 +147,7 @@
 // MARK: - Others + Initializers
 
 extension Snapshot {
-    @usableFromInline var carets: Carets {
-        Carets(snapshot: self)
+    @inlinable var carets: Carets {
+        Carets(self)
     }
 }

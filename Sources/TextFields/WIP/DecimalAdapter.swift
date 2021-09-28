@@ -8,10 +8,10 @@
 import Foundation
 
 #warning("WIP")
-struct DecimalAdapter: Adapter {
+public struct DecimalAdapter: Adapter {
     let formatter: NumberFormatter
     
-    init() {
+    public init() {
         #warning("TODO.")
         let formatter = NumberFormatter()
         formatter.numberStyle = .decimal
@@ -23,7 +23,7 @@ struct DecimalAdapter: Adapter {
         self.formatter = formatter
     }
     
-    func parse(content: String) throws -> Decimal {
+    public func parse(content: String) throws -> Decimal {
         let parseable = content.replacingOccurrences(of: formatter.decimalSeparator, with: ".")
         
         guard let decimal = Decimal(string: parseable) else {
@@ -33,11 +33,11 @@ struct DecimalAdapter: Adapter {
         return decimal
     }
     
-    func transcribe(value: Decimal) -> String {
+    public func transcribe(value: Decimal) -> String {
         String(describing: value).replacingOccurrences(of: ".", with: formatter.decimalSeparator)
     }
     
-    func snapshot(content: String) -> Snapshot {
+    public func snapshot(content: String) -> Snapshot {
         var snapshot = Snapshot()
         
         guard let decimal: Decimal = try? parse(content: content) else {

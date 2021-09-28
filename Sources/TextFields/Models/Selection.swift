@@ -5,6 +5,8 @@
 //  Created by Oscar Byström Ericsson on 2021-09-27.
 //
 
+import QuartzCore
+
 @usableFromInline struct Selection {
     @usableFromInline let carets: Carets
     @usableFromInline var bounds: Range<Carets.Index>
@@ -29,6 +31,7 @@
 
     // MARK: Update: Carets
     
+    #warning("It no longer crashes, but sequence of same character is selectes. As an example: 888.")
     @inlinable func updating(carets newValue: Carets) -> Self {
         func relevant(element: Carets.Element) -> Bool {
             element.rhs?.attribute == .content
@@ -42,8 +45,12 @@
             next.suffix(alsoIn: current, options: .inspect(relevant, overshoot: true)).startIndex
         }
         
-        let nextUpperBound = index(current: carets[...bounds.upperBound], next: newValue[...])
-        let nextLowerBound = index(current: carets[bounds], next: newValue[...nextUpperBound])
+        let nextUpperBound = index(current: carets[bounds.upperBound...], next: newValue[...])
+        let nextLowerBound = index(current: carets[bounds], next: newValue[..<nextUpperBound])
+                
+        print(carets[bounds.upperBound...].map({ ($0.lhs?.character ?? "_", $0.rhs?.character ?? "_") }))
+        
+        print(nextLowerBound.offset, nextUpperBound.offset)
         
         return Selection(newValue, bounds: nextLowerBound ..< nextUpperBound)
     }
@@ -77,7 +84,8 @@
         indices.append(contentsOf: [bounds.lowerBound, bounds.upperBound])
                 
         func index(at offset: Int, append: Bool) -> Carets.Index {
-            let distances = indices.map({( index: $0, distance: $0.offset - offset )})
+            #warning("Make something like this in an UITextField extension.")
+            let distances = indices.map({( index: $0, distance: offset - $0.offset )})
             let shortest = distances.min(by: { abs($0.distance) < abs($1.distance) })!
             let destination = carets.index(shortest.index, offsetBy: shortest.distance)
             
