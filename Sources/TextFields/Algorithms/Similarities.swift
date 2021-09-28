@@ -5,7 +5,7 @@
 //  Created by Oscar Byström Ericsson on 2021-09-24.
 //
 
-@usableFromInline struct Similarities<LHS: Collection, RHS: Collection> where LHS.Element == RHS.Element, LHS.Element: Equatable {
+@usableFromInline struct Similarities<LHS: Collection, RHS: Collection> where LHS.Element == RHS.Element {
     @usableFromInline typealias Element = LHS.Element
     @usableFromInline typealias Options = SimilaritiesOptions<Element>
     
@@ -44,8 +44,8 @@
         while currentLHS < lhs.endIndex, currentRHS < rhs.endIndex {
             guard let nextLHS = next(in: lhs, from: currentLHS) else { break }
             guard let nextRHS = next(in: rhs, from: currentRHS) else { break }
-            
-            guard lhs[nextLHS] == rhs[nextRHS] else { break }
+
+            guard options.equivalent(lhs[nextLHS], rhs[nextRHS]) else { break }
             
             currentLHS = lhs.index(after: nextLHS)
             currentRHS = rhs.index(after: nextRHS)
@@ -76,19 +76,21 @@
 
 @usableFromInline struct SimilaritiesOptions<Element> {
     @usableFromInline let relevant: (Element) -> Bool
+    @usableFromInline let equivalent: (Element, Element) -> Bool
     @usableFromInline let overshoot: Bool
     
-    @inlinable init(relevant: @escaping (Element) -> Bool, overshoot: Bool) {
+    @inlinable init(inspect relevant: @escaping (Element) -> Bool, check equivalent: @escaping (Element, Element) -> Bool, overshoot: Bool) {
         self.relevant = relevant
+        self.equivalent = equivalent
         self.overshoot = overshoot
     }
-    
-    @inlinable static var defaults: Self {
-        Self(relevant: { _ in true }, overshoot: false)
+
+    @inlinable static func defaults(check equivalent: @escaping (Element, Element) -> Bool) -> Self {
+        Self(inspect: { _ in true }, check: equivalent, overshoot: false)
     }
     
-    @inlinable static func inspect(_ relevant: @escaping (Element) -> Bool, overshoot: Bool = false) -> Self {
-        Self(relevant: relevant, overshoot: overshoot)
+    @inlinable static func inspect(_ relevant: @escaping (Element) -> Bool, check equivalent: @escaping (Element, Element) -> Bool, overshoot: Bool) -> Self {
+        Self(inspect: relevant, check: equivalent, overshoot: overshoot)
     }
 }
 

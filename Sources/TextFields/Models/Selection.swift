@@ -31,27 +31,22 @@ import QuartzCore
 
     // MARK: Update: Carets
     
-    #warning("It no longer crashes, but sequence of same character is selectes. As an example: 888.")
     @inlinable func updating(carets newValue: Carets) -> Self {
         func relevant(element: Carets.Element) -> Bool {
             element.rhs?.attribute == .content
         }
         
-        func comparison(lhs: Carets.Element, rhs: Carets.Element) -> Bool {
+        func equivalent(lhs: Carets.Element, rhs: Carets.Element) -> Bool {
             lhs.rhs?.character == rhs.rhs?.character
         }
         
         func index(current: Carets.SubSequence, next: Carets.SubSequence) -> Carets.Index {
-            next.suffix(alsoIn: current, options: .inspect(relevant, overshoot: true)).startIndex
+            next.suffix(alsoIn: current, options: .inspect(relevant, check: equivalent, overshoot: true)).startIndex
         }
         
         let nextUpperBound = index(current: carets[bounds.upperBound...], next: newValue[...])
         let nextLowerBound = index(current: carets[bounds], next: newValue[..<nextUpperBound])
-                
-        print(carets[bounds.upperBound...].map({ ($0.lhs?.character ?? "_", $0.rhs?.character ?? "_") }))
-        
-        print(nextLowerBound.offset, nextUpperBound.offset)
-        
+
         return Selection(newValue, bounds: nextLowerBound ..< nextUpperBound)
     }
     
@@ -84,7 +79,7 @@ import QuartzCore
         indices.append(contentsOf: [bounds.lowerBound, bounds.upperBound])
                 
         func index(at offset: Int, append: Bool) -> Carets.Index {
-            #warning("Make something like this in an UITextField extension.")
+            #warning("Make something like this in the UITextField extension.")
             let distances = indices.map({( index: $0, distance: offset - $0.offset )})
             let shortest = distances.min(by: { abs($0.distance) < abs($1.distance) })!
             let destination = carets.index(shortest.index, offsetBy: shortest.distance)

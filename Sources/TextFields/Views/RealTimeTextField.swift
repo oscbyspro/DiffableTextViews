@@ -125,7 +125,7 @@ public struct RealTimeTextField<Adapter: TextFields.Adapter>: UIViewRepresentabl
                 .upperBound
             
             let nextSelection = selection
-                .updating(location: nextLocation)
+                .updating(location: nextLocation)            
                 .updating(snapshot: nextSnapshot)
             
             // ------------------------------ //
