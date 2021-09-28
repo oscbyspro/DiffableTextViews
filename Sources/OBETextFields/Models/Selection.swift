@@ -70,17 +70,13 @@
         
         return updating(bounds: lowerBound ..< upperBound)
     }
-        
+    
     @inlinable func updating(bounds newValue: Range<Int>) -> Self {
         func bound(at offset: Int) -> Carets.Index {
-            let distanceToLowerBound = bounds.lowerBound.offset - offset
-            let distanceToUpperBound = bounds.upperBound.offset - offset
-        
-            switch min(offset.magnitude, distanceToLowerBound.magnitude, distanceToUpperBound.magnitude) {
-            case distanceToLowerBound.magnitude: return carets.index(bounds.lowerBound, offsetBy: distanceToLowerBound)
-            case distanceToUpperBound.magnitude: return carets.index(bounds.upperBound, offsetBy: distanceToLowerBound)
-            default: return carets.index(at: offset)
-            }
+            [carets.firstIndex, carets.lastIndex, bounds.lowerBound, bounds.upperBound]
+                .map { (start: $0, distance: $0.offset - offset) }
+                .min { $0.distance.magnitude < $1.distance.magnitude }!
+                |>>> { carets.index($0.start, offsetBy: $0.distance) }
         }
         
         let lowerBound = bound(at: newValue.lowerBound)

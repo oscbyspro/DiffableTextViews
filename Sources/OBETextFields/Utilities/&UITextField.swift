@@ -5,7 +5,9 @@
 //  Created by Oscar Byström Ericsson on 2021-09-26.
 //
 
-import SwiftUI
+#if canImport(UIKit)
+
+import UIKit
 
 extension UITextField {
     // MARK: Text
@@ -79,3 +81,5 @@ extension UITextField {
         return start ..< start + count
     }
 }
+
+#endif
