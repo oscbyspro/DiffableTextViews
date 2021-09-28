@@ -32,16 +32,13 @@ import QuartzCore
     // MARK: Update: Carets
     
     @inlinable func updating(carets newValue: Carets) -> Self {
-        func relevant(element: Carets.Element) -> Bool {
-            element.rhs?.attribute == .content
-        }
-        
-        func equivalent(lhs: Carets.Element, rhs: Carets.Element) -> Bool {
-            lhs.rhs?.character == rhs.rhs?.character
-        }
-        
+        let options = SimilaritiesOptions<Carets.Element>
+            .evaluate(only: { $0.rhs?.attribute == .content })
+            .equate({ $0.rhs?.character == $1.rhs?.character })
+            .overshoot()
+
         func index(current: Carets.SubSequence, next: Carets.SubSequence) -> Carets.Index {
-            next.suffix(alsoIn: current, options: .inspect(relevant, check: equivalent, overshoot: true)).startIndex
+            next.suffix(alsoIn: current, options: options).startIndex
         }
         
         let nextUpperBound = index(current: carets[bounds.upperBound...], next: newValue[...])
