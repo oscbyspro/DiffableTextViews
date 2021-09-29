@@ -60,7 +60,7 @@ public struct RealTimeTextField<Adapter: TextFields.Adapter>: UIViewRepresentabl
             let nextSelection = coordinator.selection.updating(snapshot: nextSnapshot)
             
             // ------------------------------ //
-                        
+            
             coordinator.update(value: nextValue, snapshot: nextSnapshot, selection: nextSelection)
         }
     }
@@ -109,7 +109,7 @@ public struct RealTimeTextField<Adapter: TextFields.Adapter>: UIViewRepresentabl
             // ------------------------------ //
             
             guard let nextValue = try? parent.adapter.parse(content: nextContent) else { return false }
-                        
+            
             // ------------------------------ //
             
             let nextSnapshot = parent.adapter
@@ -139,12 +139,16 @@ public struct RealTimeTextField<Adapter: TextFields.Adapter>: UIViewRepresentabl
             
             let nextSelection = selection.updating(offsets: offsets)
             
+            let nextOffsets = nextSelection.offsets
+            let changeToLowerBound = nextOffsets.lowerBound - offsets.lowerBound
+            let changeToUpperBound = nextOffsets.upperBound - offsets.upperBound
+            
             // ------------------------------ //
             
             #warning("This is different, and a reason why model needs to be imporved.")
             
             self.selection = nextSelection
-            uiView.set(selection: nextSelection.offsets)
+            uiView.changeSelection(offsets: (changeToLowerBound, changeToUpperBound))
         }
         
         // MARK: Updaters

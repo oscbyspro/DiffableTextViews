@@ -95,9 +95,7 @@
     @inlinable func updating(position newValue: Position) -> Self {
         updating(range: newValue ..< newValue)
     }
-    
-    #warning("Maybe make into an algorithm.")
-    #warning("Make something like this in the UITextField extension.")
+
     @inlinable func updating(offsets newValue: Range<Int>) -> Self {
         typealias Path = (start: Position, offset: Int)
         

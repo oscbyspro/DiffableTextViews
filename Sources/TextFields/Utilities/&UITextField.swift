@@ -10,22 +10,36 @@
 import UIKit
 
 extension UITextField {
-    // MARK: Text
+    // MARK: Text: Set
     
     @inlinable func set(text content: String) {
         text = content
     }
-    
-    // MARK: Selection
+}
+
+extension UITextField {
+    // MARK: Selection: Get
     
     @inlinable func selection() -> Range<Int>? {
         selectedTextRange.map(offsets)
     }
     
+    // MARK: Selection: Set
+        
     @inlinable func set(selection bounds: Range<Int>?) {
         selectedTextRange = bounds.map(range) ?? nil
     }
     
+    @inlinable func changeSelection(offsets: (start: Int, end: Int)) {
+        guard let selection = selectedTextRange else { return }
+        let start = position(from: selection.start, offset: offsets.start)!
+        let end = position(from: selection.end, offset: offsets.end)!
+        
+        selectedTextRange = textRange(from: start, to: end)!
+    }
+}
+
+extension UITextField {
     // MARK: Positions
 
     @inlinable var start: UITextPosition {
@@ -35,50 +49,27 @@ extension UITextField {
     @inlinable var end: UITextPosition {
         endOfDocument
     }
-        
-    @inlinable func position(at offset: Int) -> UITextPosition? {
-        position(from: start, offset: offset)
-    }
-    
-    @inlinable func position(offsetting other: UITextPosition, by amount: Int) -> UITextPosition? {
-        position(from: other, offset: amount)
-    }
-    
-    @inlinable func position(closestTo position: UITextPosition, in range: UITextRange) -> UITextPosition {
-        max(range.start, min(position, range.end))
-    }
-    
-    // MARK: Comparison
+}
 
-    @inlinable func min(_ lhs: UITextPosition, _ rhs: UITextPosition) -> UITextPosition {
-        compare(lhs, to: rhs) == .orderedAscending ? lhs : rhs
-    }
-    
-    @inlinable func max(_ lhs: UITextPosition, _ rhs: UITextPosition) -> UITextPosition {
-        compare(lhs, to: rhs) == .orderedAscending ? rhs : lhs
-    }
-    
-    // MARK: Range
+extension UITextField {
+    // MARK: Ranges
     
     @inlinable func range(in offsets: Range<Int>) -> UITextRange? {
-        guard let lowerBound: UITextPosition = position(from: start, offset: offsets.lowerBound) else {
-            return nil
-        }
-                
-        guard let upperBound: UITextPosition = position(from: lowerBound, offset: offsets.count) else {
-            return nil
-        }
+        guard let lowerBound = position(from: start, offset: offsets.lowerBound) else { return nil }
+        guard let upperBound = position(from: lowerBound, offset: offsets.count) else { return nil }
         
         return textRange(from: lowerBound, to: upperBound)
     }
-    
+}
+
+extension UITextField {
     // MARK: Offsets
     
     @inlinable func offsets(in range: UITextRange) -> Range<Int> {
-        let start: Int = offset(from: start, to: range.start)
-        let count: Int = offset(from: range.start, to: range.end)
+        let start = offset(from: start, to: range.start)
+        let count = offset(from: range.start, to: range.end)
         
-        return start ..< start + count
+        return start ..< (start + count)
     }
 }
 

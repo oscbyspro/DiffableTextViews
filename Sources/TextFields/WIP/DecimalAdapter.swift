@@ -48,8 +48,8 @@ public struct DecimalAdapter: Adapter {
             return snapshot
         }
                 
-        let content = characters()
-        let spacers = spacers()
+        let content = self.content()
+        let spacers = self.spacers()
         
         for character in formatted {
             if content.contains(character) {
@@ -75,7 +75,7 @@ extension DecimalAdapter {
     static let decimalSeparator: Character = "."
     static let minus: Character = "-"
     
-    func characters() -> Set<Character> {
+    func content() -> Set<Character> {
         Self.digits.union([Character(formatter.decimalSeparator), Character(formatter.negativePrefix)])
     }
     
