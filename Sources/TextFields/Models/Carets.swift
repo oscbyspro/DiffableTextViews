@@ -32,24 +32,6 @@
         Index(lhs: subindex(before: snapshot.endIndex), rhs: snapshot.endIndex)
     }
     
-    // MARK: Indices: Interoperabilities
-        
-    @inlinable func index(lhs subindex: Snapshot.Index) -> Index {
-        Index(lhs: subindex, rhs: self.subindex(after: subindex))
-    }
-    
-    @inlinable func index(rhs subindex: Snapshot.Index) -> Index {
-        Index(lhs: self.subindex(before: subindex), rhs: subindex)
-    }
-    
-    @inlinable func indices(lhs subindices: Range<Snapshot.Index>) -> Range<Index> {
-        index(lhs: subindices.lowerBound) ..< index(lhs: subindices.upperBound)
-    }
-    
-    @inlinable func indices(rhs subindices: Range<Snapshot.Index>) -> Range<Index> {
-        index(rhs: subindices.lowerBound) ..< index(rhs: subindices.upperBound)
-    }
-    
     // MARK: Elements
     
     @inlinable var first: Element {
@@ -76,6 +58,24 @@
         _read {
             yield Element(lhs: subelement(at: position.lhs), rhs: subelement(at: position.rhs))
         }
+    }
+    
+    // MARK: Helpers: Indices
+        
+    @inlinable func index(lhs subindex: Snapshot.Index) -> Index {
+        Index(lhs: subindex, rhs: self.subindex(after: subindex))
+    }
+    
+    @inlinable func index(rhs subindex: Snapshot.Index) -> Index {
+        Index(lhs: self.subindex(before: subindex), rhs: subindex)
+    }
+    
+    @inlinable func indices(lhs subindices: Range<Snapshot.Index>) -> Range<Index> {
+        index(lhs: subindices.lowerBound) ..< index(lhs: subindices.upperBound)
+    }
+    
+    @inlinable func indices(rhs subindices: Range<Snapshot.Index>) -> Range<Index> {
+        index(rhs: subindices.lowerBound) ..< index(rhs: subindices.upperBound)
     }
     
     // MARK: Helpers: Subindex

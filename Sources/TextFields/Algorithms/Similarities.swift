@@ -27,7 +27,7 @@
         self.init(lhs: lhs, rhs: rhs, options: options)
     }
     
-    @inlinable init(in lhs: LHS, and rhs: RHS, with options: Options = .equate(==)) where Element: Equatable {
+    @inlinable init(in lhs: LHS, and rhs: RHS, with options: Options = .defaults()) where Element: Equatable {
         self.init(lhs: lhs, rhs: rhs, options: options)
     }
     
@@ -39,94 +39,129 @@
     
     // MARK: Helpers
     
-    @inlinable func next<C: Collection>(in collection: C, from index: C.Index) -> C.Index? where C.Element == Element {
-        collection[index...].firstIndex(where: options.relevant)
+    @inlinable func nextIndex<C: Collection>(in collection: C, from index: C.Index) -> C.Index? where C.Element == Element {
+        collection[index...].firstIndex(where: options.inspection.includes)
     }
-
+    
     // MARK: Methods
     
-    @usableFromInline func prefixLHS() -> LHS.SubSequence {
-        var currentLHS = lhs.startIndex
-        var currentRHS = rhs.startIndex
+    @usableFromInline func lhsPrefix() -> LHS.SubSequence {
+        var lhsIndex = lhs.startIndex
+        var rhsIndex = rhs.startIndex
 
-        while currentLHS < lhs.endIndex, currentRHS < rhs.endIndex {
-            guard let nextLHS = next(in: lhs, from: currentLHS) else { break }
-            guard let nextRHS = next(in: rhs, from: currentRHS) else { break }
+        while lhsIndex < lhs.endIndex, rhsIndex < rhs.endIndex {
+            guard let lhsNextIndex = nextIndex(in: lhs, from: lhsIndex) else { break }
+            guard let rhsNextIndex = nextIndex(in: rhs, from: rhsIndex) else { break }
 
-            guard options.equivalent(lhs[nextLHS], rhs[nextRHS]) else { break }
+            guard options.comparison.equivalent(lhs[lhsNextIndex], rhs[rhsNextIndex]) else { break }
 
-            currentLHS = lhs.index(after: nextLHS)
-            currentRHS = rhs.index(after: nextRHS)
+            lhsIndex = lhs.index(after: lhsNextIndex)
+            rhsIndex = rhs.index(after: rhsNextIndex)
         }
-
-        if options.overshoot, currentLHS < lhs.endIndex {
-            currentLHS = next(in: lhs, from: currentLHS) ?? lhs.endIndex
+        
+        switch options.production {
+        case .wrap: break
+        case .overshoot: lhsIndex = nextIndex(in: lhs, from: lhsIndex) ?? lhs.endIndex
         }
-
-        return lhs[..<currentLHS]
+        
+        return lhs[..<lhsIndex]
     }
     
-    @inlinable func prefixRHS() -> RHS.SubSequence {
-        make(rhs, lhs).prefixLHS()
+    @inlinable func rhsPrefix() -> RHS.SubSequence {
+        make(rhs, lhs).lhsPrefix()
     }
     
-    @inlinable func suffixLHS() -> LHS.SubSequence where LHS: BidirectionalCollection, RHS: BidirectionalCollection {
-        let reversed = make(lhs.reversed(), rhs.reversed()).prefixLHS()
+    @inlinable func lhsSuffix() -> LHS.SubSequence where LHS: BidirectionalCollection, RHS: BidirectionalCollection {
+        let reversed = make(lhs.reversed(), rhs.reversed()).lhsPrefix()
         return lhs[reversed.endIndex.base ..< reversed.startIndex.base]
     }
     
-    @inlinable func suffixRHS() -> RHS.SubSequence where LHS: BidirectionalCollection, RHS: BidirectionalCollection {
-        make(rhs, lhs).suffixLHS()
+    @inlinable func rhsSuffix() -> RHS.SubSequence where LHS: BidirectionalCollection, RHS: BidirectionalCollection {
+        make(rhs, lhs).lhsSuffix()
     }
 }
 
+// MARK: - Prefix
+
+extension Collection {
+    @inlinable func prefix<Other: Collection>(alsoIn other: Other, options: Similarities<Self, Other>.Options) -> SubSequence where Other.Element == Element {
+        Similarities(lhs: self, rhs: other, options: options).lhsPrefix()
+    }
+
+    @inlinable func prefix<Other: Collection>(alsoIn other: Other, options: Similarities<Self, Other>.Options = .defaults()) -> SubSequence where Other.Element == Element, Element: Equatable {
+        Similarities(lhs: self, rhs: other, options: options).lhsPrefix()
+    }
+}
+
+// MARK: - Suffix
+
+extension BidirectionalCollection {
+    @inlinable func suffix<Other: BidirectionalCollection>(alsoIn other: Other, options: Similarities<Self, Other>.Options) -> SubSequence where Other.Element == Element {
+        Similarities(lhs: self, rhs: other, options: options).lhsSuffix()
+    }
+
+    @inlinable func suffix<Other: BidirectionalCollection>(alsoIn other: Other, options: Similarities<Self, Other>.Options = .defaults()) -> SubSequence where Other.Element == Element, Element: Equatable {
+        Similarities(lhs: self, rhs: other, options: options).lhsSuffix()
+    }
+}
+
+// MARK: - Similarities: Components
+
 @usableFromInline struct SimilaritiesOptions<Element> {
-    @usableFromInline var equivalent: (Element, Element) -> Bool
-    @usableFromInline var relevant: (Element) -> Bool
-    @usableFromInline var overshoot: Bool
+    @usableFromInline typealias Comparison = SimilaritiesOptionsComparison<Element>
+    @usableFromInline typealias Inspection = SimilaritiesOptionsInspection<Element>
+    @usableFromInline typealias Production = SimilaritiesOptionsProduction
+    
+    // MARK: Storage
+    
+    @usableFromInline var comparison: Comparison
+    @usableFromInline var inspection: Inspection
+    @usableFromInline var production: Production
 
     // MARK: Initializers
-    
-    @inlinable init(equivalent: @escaping (Element, Element) -> Bool, relevant: ((Element) -> Bool)? = nil, overshoot: Bool? = nil) {
-        self.equivalent = equivalent
-        self.relevant = relevant ?? { _ in true }
-        self.overshoot = overshoot ?? false
-    }
 
-    @inlinable init(equate equivalent: @escaping (Element, Element) -> Bool, evaluate relevant: ((Element) -> Bool)? = nil, overshoot: Bool? = nil) {
-        self.init(equivalent: equivalent, relevant: relevant, overshoot: overshoot)
+    @inlinable init(comparison: Comparison, inspection: Inspection = .defaultValue, production: Production = .defaultValue) {
+        self.comparison = comparison
+        self.inspection = inspection
+        self.production = production
     }
     
-    @inlinable init(equate equivalent: @escaping (Element, Element) -> Bool = { $0 == $1 }, evaluate relevant: ((Element) -> Bool)? = nil, overshoot: Bool? = nil) where Element: Equatable {
-        self.init(equivalent: equivalent, relevant: relevant, overshoot: overshoot)
+    @inlinable init(comparison: Comparison = .equation(==), inspection: Inspection = .defaultValue, production: Production = .defaultValue) where Element: Equatable {
+        self.comparison = comparison
+        self.inspection = inspection
+        self.production = production
     }
     
     // MARK: Initializers: Static
     
-    @inlinable static func equate(_ equivalent: @escaping (Element, Element) -> Bool) -> Self {
-        Self(equate: equivalent)
+    @inlinable static func compare(_ comparison: Comparison) -> Self {
+        Self(comparison: comparison)
     }
     
-    @inlinable static func evaluate(only relevant: @escaping (Element) -> Bool) -> Self where Element: Equatable {
-        Self(evaluate: relevant)
+    @inlinable static func inspect(_ inspection: Inspection) -> Self where Element: Equatable {
+        Self(inspection: inspection)
     }
 
-    @inlinable static func overshoot(_ overshoot: Bool = true) -> Self where Element: Equatable {
-        Self(overshoot: overshoot)
+    @inlinable static func produce(_ production: Production) -> Self where Element: Equatable {
+        Self(production: production)
+    }
+    
+    @inlinable static func defaults() -> Self where Element: Equatable {
+        Self(comparison: .equation(==))
     }
     
     // MARK: Transformations
     
-    @inlinable func equate(_ equivalent: @escaping (Element, Element) -> Bool) -> Self {
-        assign(value: equivalent, to: \.equivalent)
+    @inlinable func compare(_ comparison: Comparison) -> Self {
+        assign(value: comparison, to: \.comparison)
     }
         
-    @inlinable func evaluate(only relevant: @escaping (Element) -> Bool) -> Self {
-        assign(value: relevant, to: \.relevant)
+    @inlinable func inspect(_ inspection: Inspection) -> Self {
+        assign(value: inspection, to: \.inspection)
     }
     
-    @inlinable func overshoot(_ overshoot: Bool = true) -> Self {
-        assign(value: overshoot, to: \.overshoot)
+    @inlinable func produce(_ production: Production) -> Self {
+        assign(value: production, to: \.production)
     }
     
     // MARK: Transformations: Helpers
@@ -136,26 +171,59 @@
     }
 }
 
-// MARK: - Prefix
+// MARK: - SimilaritiesOptions: Comparison
 
-extension Collection {
-    @inlinable func prefix<Other: Collection>(alsoIn other: Other, options: Similarities<Self, Other>.Options) -> SubSequence where Other.Element == Element {
-        Similarities(lhs: self, rhs: other, options: options).prefixLHS()
+@usableFromInline struct SimilaritiesOptionsComparison<Element> {
+    @usableFromInline let equivalent: (Element, Element) -> Bool
+    
+    // MARK: Initializers
+    
+    @inlinable init(equivalent: @escaping (Element, Element) -> Bool) {
+        self.equivalent = equivalent
     }
-
-    @inlinable func prefix<Other: Collection>(alsoIn other: Other, options: Similarities<Self, Other>.Options = .equate(==)) -> SubSequence where Other.Element == Element, Element: Equatable {
-        Similarities(lhs: self, rhs: other, options: options).prefixLHS()
+    
+    // MARK: Initializers: Static
+    
+    @inlinable static func equation(_ equivalent: @escaping (Element, Element) -> Bool) -> Self {
+        Self(equivalent: equivalent)
+    }
+    
+    @inlinable static func equatable<Value: Equatable>(_ value: @escaping (Element) -> Value) -> Self {
+        Self(equivalent: { value($0) == value($1) })
     }
 }
 
-// MARK: - Suffix
+// MARK: - SimilaritiesOptions: Inspection
 
-extension BidirectionalCollection {
-    @inlinable func suffix<Other: BidirectionalCollection>(alsoIn other: Other, options: Similarities<Self, Other>.Options) -> SubSequence where Other.Element == Element {
-        Similarities(lhs: self, rhs: other, options: options).suffixLHS()
+@usableFromInline struct SimilaritiesOptionsInspection<Element> {
+    @usableFromInline let includes: (Element) -> Bool
+    
+    // MARK: Initializers
+    
+    @inlinable init(includes: @escaping (Element) -> Bool) {
+        self.includes = includes
     }
+    
+    // MARK: Initializers: Static
 
-    @inlinable func suffix<Other: BidirectionalCollection>(alsoIn other: Other, options: Similarities<Self, Other>.Options = .equate(==)) -> SubSequence where Other.Element == Element, Element: Equatable {
-        Similarities(lhs: self, rhs: other, options: options).suffixLHS()
+    @inlinable static var each: Self {
+        Self(includes: { element in true })
     }
+    
+    @inlinable static func only(where includes: @escaping (Element) -> Bool) -> Self {
+        Self(includes: includes)
+    }
+    
+    @inlinable static var defaultValue: Self { .each }
+}
+
+// MARK: - SimilaritiesOptions: Production
+
+@usableFromInline enum SimilaritiesOptionsProduction {
+    case wrap
+    case overshoot
+    
+    // MARK: Initializers: Static
+    
+    @inlinable static var defaultValue: Self { .wrap }
 }

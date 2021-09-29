@@ -53,21 +53,17 @@
     }
     
     @inlinable func updating(carets newValue: Carets) -> Self {
-        func relevant(element: Caret) -> Bool {
-            element.rhs?.attribute == .content
+        let options = SimilaritiesOptions<Symbol>
+            .compare(.equatable(\.character))
+            .inspect(.only(where: \.content))
+            .produce(.overshoot)
+        
+        func symbol(caret: Caret) -> Symbol {
+            caret.rhs ?? .suffix(">")
         }
         
-        func equivalent(lhs: Caret, rhs: Caret) -> Bool {
-            rhs.rhs?.character == lhs.rhs?.character
-        }
-        
-        let options = SimilaritiesOptions<Caret>
-            .equate(equivalent)
-            .evaluate(only: relevant)
-            .overshoot()
-
         func position(current: Carets.SubSequence, next: Carets.SubSequence) -> Position {
-            next.suffix(alsoIn: current, options: options).startIndex
+            next.insights(symbol).suffix(alsoIn: current.insights(symbol), options: options).startIndex
         }
         
         let nextUpperBound = position(current: carets[range.upperBound...], next: newValue[...])
