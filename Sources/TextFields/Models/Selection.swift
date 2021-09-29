@@ -7,24 +7,24 @@
 
 #warning("Give updater methods specialized parameter signatures.")
 @usableFromInline struct Selection {
-    @usableFromInline typealias Carets = TextFields.Carets<Snapshot>
-    @usableFromInline typealias Caret = Carets.Element
-    @usableFromInline typealias Position = Carets.Index
+    @usableFromInline typealias Field = Carets<Snapshot>
+    @usableFromInline typealias Content = Field.Element
+    @usableFromInline typealias Position = Field.Index
     
     // MARK: Storage
     
-    @usableFromInline let positions: Carets
+    @usableFromInline let field: Field
     @usableFromInline var range: Range<Position>
     
     // MARK: Initializers
     
     @inlinable init(_ snapshot: Snapshot = Snapshot()) {
-        self.positions = snapshot.carets
-        self.range = positions.lastIndex ..< positions.lastIndex
+        self.field = snapshot.carets
+        self.range = field.lastIndex ..< field.lastIndex
     }
     
-    @inlinable init(_ positions: Carets, range: Range<Position>) {
-        self.positions = positions
+    @inlinable init(_ field: Field, range: Range<Position>) {
+        self.field = field
         self.range = range
     }
 
@@ -41,7 +41,7 @@
     // MARK: Interoperabilities
     
     @inlinable func position(at snapshotIndex: Snapshot.Index) -> Position {
-        positions.index(rhs: snapshotIndex)
+        field.index(rhs: snapshotIndex)
     }
     
     @inlinable func positions(in snapshotIndices: Range<Snapshot.Index>) -> Range<Position> {
@@ -51,25 +51,25 @@
     // MARK: Update: Carets
     
     @inlinable func updating(snapshot newValue: Snapshot) -> Self {
-        updating(carets: newValue.carets)
+        updating(field: newValue.carets)
     }
     
-    @inlinable func updating(carets newValue: Carets) -> Self {
+    @inlinable func updating(field newValue: Field) -> Self {
         let options = SimilaritiesOptions<Symbol>
             .compare(.equatable(\.character))
             .inspect(.only(where: \.content))
             .produce(.overshoot)
         
-        func symbol(caret: Caret) -> Symbol {
-            caret.rhs ?? .suffix(">")
+        func symbol(content: Content) -> Symbol {
+            content.rhs ?? .suffix(">")
         }
         
-        func position(current: Carets.SubSequence, next: Carets.SubSequence) -> Position {
+        func position(current: Field.SubSequence, next: Field.SubSequence) -> Position {
             next.insights(symbol).suffix(alsoIn: current.insights(symbol), options: options).startIndex
         }
         
-        let nextUpperBound = position(current: positions[range.upperBound...], next: newValue[...])
-        let nextLowerBound = position(current: positions[range], next: newValue[..<nextUpperBound])
+        let nextUpperBound = position(current: field[range.upperBound...], next: newValue[...])
+        let nextLowerBound = position(current: field[range], next: newValue[..<nextUpperBound])
 
         return Selection(newValue, range: nextLowerBound ..< nextUpperBound)
     }
@@ -77,8 +77,8 @@
     // MARK: Update: Range
     
     @inlinable func updating(range newValue: Range<Snapshot.Index>) -> Self {
-        let lowerBound = positions.index(rhs: newValue.lowerBound)
-        let upperBound = positions.index(rhs: newValue.upperBound)
+        let lowerBound = field.index(rhs: newValue.lowerBound)
+        let upperBound = field.index(rhs: newValue.upperBound)
         
         return updating(range: lowerBound ..< upperBound)
     }
@@ -90,7 +90,7 @@
         moveToContent(&nextLowerBound)
         moveToContent(&nextUpperBound)
                 
-        return Selection(positions, range: nextLowerBound ..< nextUpperBound)
+        return Selection(field, range: nextLowerBound ..< nextUpperBound)
     }
     
     @inlinable func updating(position newValue: Position) -> Self {
@@ -102,21 +102,21 @@
     @inlinable func updating(offsets newValue: Range<Int>) -> Self {
         typealias Path = (start: Position, offset: Int)
         
-        var knowns = Array<Position>(capacity: 5)
-        knowns += [range.lowerBound, range.upperBound]
-        knowns += [positions.firstIndex, positions.lastIndex]
+        var positions = Array<Position>(capacity: 5)
+        positions += [range.lowerBound, range.upperBound]
+        positions += [field.firstIndex, field.lastIndex]
         
-        func path(from position: Position, to destination: Int) -> Path {
-            Path(start: position, offset: destination - offset(at: position))
+        func path(from position: Position, to offset: Int) -> Path {
+            Path(start: position, offset: offset - self.offset(at: position))
         }
         
         func position(at offset: Int, append: Bool) -> Position {
-            let paths = knowns.map({ path(from: $0, to: offset) })
+            let paths = positions.map({ path(from: $0, to: offset) })
             let shortest = paths.min(by: { abs($0.offset) < abs($1.offset) })!
-            let position = positions.index(shortest.start, offsetBy: shortest.offset)
+            let position = field.index(shortest.start, offsetBy: shortest.offset)
             
             if append {
-                knowns.append(position)
+                positions.append(position)
             }
             
             return position
@@ -131,15 +131,15 @@
     // MARK: Update: Range - Helpers
     
     @inlinable func next(_ position: Position) -> Position? {
-        position < positions.lastIndex ? positions.index(after: position) : nil
+        position < field.lastIndex ? field.index(after: position) : nil
     }
     
     @inlinable func prev(_ position: Position) -> Position? {
-        position > positions.firstIndex ? positions.index(before: position) : nil
+        position > field.firstIndex ? field.index(before: position) : nil
     }
     
-    @inlinable func move(_ position: inout Position, step: (Position) -> Position?, while predicate: (Caret) -> Bool) {
-        while predicate(positions[position]), let next = step(position) { position = next }
+    @inlinable func move(_ position: inout Position, step: (Position) -> Position?, while predicate: (Content) -> Bool) {
+        while predicate(field[position]), let next = step(position) { position = next }
     }
     
     @inlinable func moveToContent(_ position: inout Position) {
