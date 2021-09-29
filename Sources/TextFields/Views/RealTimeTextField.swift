@@ -5,6 +5,8 @@
 ////  Created by Oscar Byström Ericsson on 2021-09-24.
 ////
 
+#if canImport(UIKit)
+
 import SwiftUI
 
 @available(iOS 13.0, *)
@@ -165,3 +167,5 @@ public struct RealTimeTextField<Adapter: TextFields.Adapter>: UIViewRepresentabl
         }
     }
 }
+
+#endif

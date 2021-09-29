@@ -97,22 +97,26 @@
         updating(range: newValue ..< newValue)
     }
     
+    #warning("Maybe make into an algorithm.")
+    #warning("Make something like this in the UITextField extension.")
     @inlinable func updating(offsets newValue: Range<Int>) -> Self {
-        var indices = Array<Carets.Index>(capacity: 5)
-        indices.append(contentsOf: [carets.firstIndex, carets.lastIndex])
-        indices.append(contentsOf: [range.lowerBound, range.upperBound])
+        typealias Path = (start: Position, offset: Int)
         
-        #warning("Maybe make into an algorithm.")
-        #warning("Make something like this in the UITextField extension.")
-        func position(at destination: Int, append: Bool) -> Position {
-            func distance(_ start: Position) -> Int { destination - offset(at: start) }
-            
-            let distances = indices.map({( index: $0, distance: distance($0) )})
-            let shortest = distances.min(by: { abs($0.distance) < abs($1.distance) })!
-            let position = carets.index(shortest.index, offsetBy: shortest.distance)
+        var positions = Array<Carets.Index>(capacity: 5)
+        positions.append(contentsOf: [carets.firstIndex, carets.lastIndex])
+        positions.append(contentsOf: [range.lowerBound, range.upperBound])
+        
+        func path(from position: Position, to destination: Int) -> Path {
+            Path(start: position, offset: destination - offset(at: position))
+        }
+        
+        func position(at offset: Int, append: Bool) -> Position {
+            let paths = positions.map({ path(from: $0, to: offset) })
+            let shortest = paths.min(by: { abs($0.offset) < abs($1.offset) })!
+            let position = carets.index(shortest.start, offsetBy: shortest.offset)
             
             if append {
-                indices.append(position)
+                positions.append(position)
             }
             
             return position
