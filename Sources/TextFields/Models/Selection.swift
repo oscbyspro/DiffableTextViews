@@ -5,7 +5,6 @@
 //  Created by Oscar Byström Ericsson on 2021-09-27.
 //
 
-#warning("Give updater methods specialized parameter signatures.")
 @usableFromInline struct Selection {
     @usableFromInline typealias Field = Carets<Snapshot>
     @usableFromInline typealias Content = Field.Element
@@ -103,8 +102,8 @@
         typealias Path = (start: Position, offset: Int)
         
         var positions = Array<Position>(capacity: 5)
-        positions += [range.lowerBound, range.upperBound]
         positions += [field.firstIndex, field.lastIndex]
+        positions += [range.lowerBound, range.upperBound]
         
         func path(from position: Position, to offset: Int) -> Path {
             Path(start: position, offset: offset - self.offset(at: position))
