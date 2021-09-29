@@ -95,7 +95,7 @@
     @inlinable func updating(position newValue: Position) -> Self {
         updating(range: newValue ..< newValue)
     }
-
+    
     @inlinable func updating(offsets newValue: Range<Int>) -> Self {
         typealias Path = (start: Position, offset: Int)
         

@@ -140,15 +140,15 @@ public struct RealTimeTextField<Adapter: TextFields.Adapter>: UIViewRepresentabl
             let nextSelection = selection.updating(offsets: offsets)
             
             let nextOffsets = nextSelection.offsets
-            let changeToLowerBound = nextOffsets.lowerBound - offsets.lowerBound
-            let changeToUpperBound = nextOffsets.upperBound - offsets.upperBound
+            let changesToLowerBound = nextOffsets.lowerBound - offsets.lowerBound
+            let changesToUpperBound = nextOffsets.upperBound - offsets.upperBound
             
             // ------------------------------ //
             
             #warning("This is different, and a reason why model needs to be imporved.")
             
             self.selection = nextSelection
-            uiView.changeSelection(offsets: (changeToLowerBound, changeToUpperBound))
+            uiView.select(changes: (changesToLowerBound, changesToUpperBound))
         }
         
         // MARK: Updaters
@@ -160,8 +160,8 @@ public struct RealTimeTextField<Adapter: TextFields.Adapter>: UIViewRepresentabl
             self.snapshot = nextSnapshot
             self.selection = nextSelection
             
-            uiView.set(text: nextSnapshot.characters)
-            uiView.set(selection: nextSelection.offsets)
+            uiView.write(nextSnapshot.characters)
+            uiView.select(offsets: nextSelection.offsets)
             
             if let nextValue = nextValue {
                 value = nextValue

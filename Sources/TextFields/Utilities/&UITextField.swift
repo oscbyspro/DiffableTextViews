@@ -12,7 +12,7 @@ import UIKit
 extension UITextField {
     // MARK: Text: Set
     
-    @inlinable func set(text content: String) {
+    @inlinable func write(_ content: String) {
         text = content
     }
 }
@@ -26,28 +26,17 @@ extension UITextField {
     
     // MARK: Selection: Set
         
-    @inlinable func set(selection bounds: Range<Int>?) {
-        selectedTextRange = bounds.map(range) ?? nil
+    @inlinable func select(offsets: Range<Int>?) {
+        selectedTextRange = offsets.map(range) ?? nil
     }
     
-    @inlinable func changeSelection(offsets: (start: Int, end: Int)) {
+    @inlinable func select(changes: (start: Int, end: Int)) {
         guard let selection = selectedTextRange else { return }
-        let start = position(from: selection.start, offset: offsets.start)!
-        let end = position(from: selection.end, offset: offsets.end)!
+                
+        let start = position(from: selection.start, offset: changes.start)!
+        let end = position(from: selection.end, offset: changes.end)!
         
         selectedTextRange = textRange(from: start, to: end)!
-    }
-}
-
-extension UITextField {
-    // MARK: Positions
-
-    @inlinable var start: UITextPosition {
-        beginningOfDocument
-    }
-    
-    @inlinable var end: UITextPosition {
-        endOfDocument
     }
 }
 
@@ -55,10 +44,10 @@ extension UITextField {
     // MARK: Ranges
     
     @inlinable func range(in offsets: Range<Int>) -> UITextRange? {
-        guard let lowerBound = position(from: start, offset: offsets.lowerBound) else { return nil }
-        guard let upperBound = position(from: lowerBound, offset: offsets.count) else { return nil }
+        guard let start = position(from: beginningOfDocument, offset: offsets.lowerBound) else { return nil }
+        guard let end = position(from: start, offset: offsets.count) else { return nil }
         
-        return textRange(from: lowerBound, to: upperBound)
+        return textRange(from: start, to: end)
     }
 }
 
@@ -66,7 +55,7 @@ extension UITextField {
     // MARK: Offsets
     
     @inlinable func offsets(in range: UITextRange) -> Range<Int> {
-        let start = offset(from: start, to: range.start)
+        let start = offset(from: beginningOfDocument, to: range.start)
         let count = offset(from: range.start, to: range.end)
         
         return start ..< (start + count)
