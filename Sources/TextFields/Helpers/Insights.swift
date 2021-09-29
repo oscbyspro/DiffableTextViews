@@ -8,6 +8,8 @@
 @usableFromInline struct Insights<Base: Collection, Element>: Collection {
     @usableFromInline typealias View = (Base.Element) -> Element
     @usableFromInline typealias Index = Base.Index
+    @usableFromInline typealias Indices = DefaultIndices<Self>
+    @usableFromInline typealias SubSequence = Slice<Self>
     
     // MARK: Storage
     

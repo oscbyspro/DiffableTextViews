@@ -7,6 +7,7 @@
 
 #warning("Give updater methods specialized parameter signatures.")
 @usableFromInline struct Selection {
+    @usableFromInline typealias Carets = TextFields.Carets<Snapshot>
     @usableFromInline typealias Caret = Carets.Element
     @usableFromInline typealias Position = Carets.Index
     
@@ -15,25 +16,26 @@
     @usableFromInline let carets: Carets
     @usableFromInline var range: Range<Position>
     
-    // MARK: Getters
-    
-    @inlinable var offsets: Range<Int> {
-        range.lowerBound.offset ..< range.upperBound.offset
-    }
-    
     // MARK: Initializers
     
     @inlinable init(_ snapshot: Snapshot = Snapshot()) {
-        let carets = snapshot.carets
-        let position = carets.lastIndex
-        
-        self.carets = carets
-        self.range = position ..< position
+        self.carets = snapshot.carets
+        self.range = carets.lastIndex ..< carets.lastIndex
     }
     
     @inlinable init(_ carets: Carets, range: Range<Position>) {
         self.carets = carets
         self.range = range
+    }
+
+    // MARK: Offsets
+    
+    @inlinable func offset(at position: Position) -> Int {
+        position.rhs?.offset ?? (position.lhs!.offset + 1)
+    }
+    
+    @inlinable var offsets: Range<Int> {
+        offset(at: range.lowerBound) ..< offset(at: range.upperBound)
     }
     
     // MARK: Interoperabilities
@@ -101,17 +103,19 @@
         indices.append(contentsOf: [range.lowerBound, range.upperBound])
         
         #warning("Maybe make into an algorithm.")
-        func position(at offset: Int, append: Bool) -> Position {
-            #warning("Make something like this in the UITextField extension.")
-            let distances = indices.map({( index: $0, distance: offset - $0.offset )})
+        #warning("Make something like this in the UITextField extension.")
+        func position(at destination: Int, append: Bool) -> Position {
+            func distance(_ start: Position) -> Int { destination - offset(at: start) }
+            
+            let distances = indices.map({( index: $0, distance: distance($0) )})
             let shortest = distances.min(by: { abs($0.distance) < abs($1.distance) })!
-            let destination = carets.index(shortest.index, offsetBy: shortest.distance)
+            let position = carets.index(shortest.index, offsetBy: shortest.distance)
             
             if append {
-                indices.append(destination)
+                indices.append(position)
             }
             
-            return destination
+            return position
         }
         
         let lowerBound = position(at: newValue.lowerBound, append: true)
