@@ -5,6 +5,7 @@
 //  Created by Oscar Byström Ericsson on 2021-09-27.
 //
 
+#warning("Give updater methods specialized parameter signatures.")
 @usableFromInline struct Selection {
     @usableFromInline let carets: Carets
     @usableFromInline var bounds: Range<Carets.Index>
@@ -30,9 +31,17 @@
     // MARK: Update: Carets
     
     @inlinable func updating(carets newValue: Carets) -> Self {
+        func relevant(element: Carets.Element) -> Bool {
+            element.rhs?.attribute == .content
+        }
+        
+        func equivalent(lhs: Carets.Element, rhs: Carets.Element) -> Bool {
+            rhs.rhs?.character == lhs.rhs?.character
+        }
+        
         let options = SimilaritiesOptions<Carets.Element>
-            .evaluate(only: { $0.rhs?.attribute == .content })
-            .equate({ $0.rhs?.character == $1.rhs?.character })
+            .equate(equivalent(lhs:rhs:))
+            .evaluate(only: relevant(element:))
             .overshoot()
 
         func index(current: Carets.SubSequence, next: Carets.SubSequence) -> Carets.Index {
@@ -72,7 +81,8 @@
         var indices = Array<Carets.Index>(capacity: 5)
         indices.append(contentsOf: [carets.firstIndex, carets.lastIndex])
         indices.append(contentsOf: [bounds.lowerBound, bounds.upperBound])
-                
+        
+        #warning("Maybe make into an algorithm.")
         func index(at offset: Int, append: Bool) -> Carets.Index {
             #warning("Make something like this in the UITextField extension.")
             let distances = indices.map({( index: $0, distance: offset - $0.offset )})
