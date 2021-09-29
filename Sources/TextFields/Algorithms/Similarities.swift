@@ -55,7 +55,7 @@
 
             guard options.comparison.equivalent(lhs[lhsInspectableIndex], rhs[rhsInspectableIndex]) else { break }
 
-            lhsIndex = lhs.index(after: lhsNextIndex)
+            lhsIndex = lhs.index(after: lhsInspectableIndex)
             rhsIndex = rhs.index(after: rhsInspectableIndex)
         }
         
