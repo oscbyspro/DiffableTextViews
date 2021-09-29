@@ -5,8 +5,6 @@
 ////  Created by Oscar Byström Ericsson on 2021-09-24.
 ////
 
-#if canImport(UIKit)
-
 import SwiftUI
 
 @available(iOS 13.0, *)
@@ -87,8 +85,7 @@ public struct RealTimeTextField<Adapter: TextFields.Adapter>: UIViewRepresentabl
             super.init()
             
             let snapshot = Snapshot()
-            let carets = Carets(snapshot)
-            let selection = Selection(carets)
+            let selection = Selection(snapshot)
             
             self.snapshot = snapshot
             self.selection = selection
@@ -116,11 +113,11 @@ public struct RealTimeTextField<Adapter: TextFields.Adapter>: UIViewRepresentabl
             let nextSnapshot = parent.adapter
                 .snapshot(content: nextContent)
             
-            let nextLocation = replacementIndices
-                .upperBound
+            let nextPosition = selection
+                .position(at: replacementIndices.upperBound)
             
             let nextSelection = selection
-                .updating(location: nextLocation)            
+                .updating(position: nextPosition)
                 .updating(snapshot: nextSnapshot)
             
             // ------------------------------ //
@@ -138,7 +135,7 @@ public struct RealTimeTextField<Adapter: TextFields.Adapter>: UIViewRepresentabl
 
             // ------------------------------ //
             
-            let nextSelection = selection.updating(bounds: offsets)
+            let nextSelection = selection.updating(offsets: offsets)
             
             // ------------------------------ //
             
@@ -168,5 +165,3 @@ public struct RealTimeTextField<Adapter: TextFields.Adapter>: UIViewRepresentabl
         }
     }
 }
-
-#endif
