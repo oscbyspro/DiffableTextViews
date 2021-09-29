@@ -39,7 +39,7 @@
     
     // MARK: Helpers
     
-    @inlinable func nextIndex<C: Collection>(in collection: C, from index: C.Index) -> C.Index? where C.Element == Element {
+    @inlinable func firstInspectableIndex<C: Collection>(in collection: C, from index: C.Index) -> C.Index? where C.Element == Element {
         collection[index...].firstIndex(where: options.inspection.includes)
     }
     
@@ -48,20 +48,19 @@
     @usableFromInline func lhsPrefix() -> LHS.SubSequence {
         var lhsIndex = lhs.startIndex
         var rhsIndex = rhs.startIndex
-
+        
         while lhsIndex < lhs.endIndex, rhsIndex < rhs.endIndex {
-            guard let lhsNextIndex = nextIndex(in: lhs, from: lhsIndex) else { break }
-            guard let rhsNextIndex = nextIndex(in: rhs, from: rhsIndex) else { break }
+            guard let lhsInspectableIndex = firstInspectableIndex(in: lhs, from: lhsIndex) else { break }
+            guard let rhsInspectableIndex = firstInspectableIndex(in: rhs, from: rhsIndex) else { break }
 
-            guard options.comparison.equivalent(lhs[lhsNextIndex], rhs[rhsNextIndex]) else { break }
+            guard options.comparison.equivalent(lhs[lhsInspectableIndex], rhs[rhsInspectableIndex]) else { break }
 
             lhsIndex = lhs.index(after: lhsNextIndex)
-            rhsIndex = rhs.index(after: rhsNextIndex)
+            rhsIndex = rhs.index(after: rhsInspectableIndex)
         }
         
-        switch options.production {
-        case .wrap: break
-        case .overshoot: lhsIndex = nextIndex(in: lhs, from: lhsIndex) ?? lhs.endIndex
+        if options.production == .overshoot {
+            lhsIndex = firstInspectableIndex(in: lhs, from: lhsIndex) ?? lhs.endIndex
         }
         
         return lhs[..<lhsIndex]

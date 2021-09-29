@@ -58,7 +58,7 @@ extension Insights: BidirectionalCollection where Base: BidirectionalCollection 
 
 extension Insights: RandomAccessCollection where Base: RandomAccessCollection { }
 
-// MARK: - Others + Initializers
+// MARK: - Collection + Initializers
 
 extension Collection {
     @inlinable func insights<Value>(_ view: @escaping (Element) -> Value) -> Insights<Self, Value> {
