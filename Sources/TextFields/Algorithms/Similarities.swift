@@ -219,10 +219,10 @@ extension BidirectionalCollection {
 // MARK: - SimilaritiesOptions: Production
 
 @usableFromInline enum SimilaritiesOptionsProduction {
-    case wrap
+    case wrapper
     case overshoot
     
     // MARK: Initializers: Static
     
-    @inlinable static var defaultValue: Self { .wrap }
+    @inlinable static var defaultValue: Self { .wrapper }
 }
