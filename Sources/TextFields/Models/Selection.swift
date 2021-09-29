@@ -13,18 +13,18 @@
     
     // MARK: Storage
     
-    @usableFromInline let carets: Carets
+    @usableFromInline let positions: Carets
     @usableFromInline var range: Range<Position>
     
     // MARK: Initializers
     
     @inlinable init(_ snapshot: Snapshot = Snapshot()) {
-        self.carets = snapshot.carets
-        self.range = carets.lastIndex ..< carets.lastIndex
+        self.positions = snapshot.carets
+        self.range = positions.lastIndex ..< positions.lastIndex
     }
     
-    @inlinable init(_ carets: Carets, range: Range<Position>) {
-        self.carets = carets
+    @inlinable init(_ positions: Carets, range: Range<Position>) {
+        self.positions = positions
         self.range = range
     }
 
@@ -41,7 +41,7 @@
     // MARK: Interoperabilities
     
     @inlinable func position(at snapshotIndex: Snapshot.Index) -> Position {
-        carets.index(rhs: snapshotIndex)
+        positions.index(rhs: snapshotIndex)
     }
     
     @inlinable func positions(in snapshotIndices: Range<Snapshot.Index>) -> Range<Position> {
@@ -68,8 +68,8 @@
             next.insights(symbol).suffix(alsoIn: current.insights(symbol), options: options).startIndex
         }
         
-        let nextUpperBound = position(current: carets[range.upperBound...], next: newValue[...])
-        let nextLowerBound = position(current: carets[range], next: newValue[..<nextUpperBound])
+        let nextUpperBound = position(current: positions[range.upperBound...], next: newValue[...])
+        let nextLowerBound = position(current: positions[range], next: newValue[..<nextUpperBound])
 
         return Selection(newValue, range: nextLowerBound ..< nextUpperBound)
     }
@@ -77,8 +77,8 @@
     // MARK: Update: Range
     
     @inlinable func updating(range newValue: Range<Snapshot.Index>) -> Self {
-        let lowerBound = carets.index(rhs: newValue.lowerBound)
-        let upperBound = carets.index(rhs: newValue.upperBound)
+        let lowerBound = positions.index(rhs: newValue.lowerBound)
+        let upperBound = positions.index(rhs: newValue.upperBound)
         
         return updating(range: lowerBound ..< upperBound)
     }
@@ -90,7 +90,7 @@
         moveToContent(&nextLowerBound)
         moveToContent(&nextUpperBound)
                 
-        return Selection(carets, range: nextLowerBound ..< nextUpperBound)
+        return Selection(positions, range: nextLowerBound ..< nextUpperBound)
     }
     
     @inlinable func updating(position newValue: Position) -> Self {
@@ -102,21 +102,21 @@
     @inlinable func updating(offsets newValue: Range<Int>) -> Self {
         typealias Path = (start: Position, offset: Int)
         
-        var positions = Array<Carets.Index>(capacity: 5)
-        positions.append(contentsOf: [carets.firstIndex, carets.lastIndex])
-        positions.append(contentsOf: [range.lowerBound, range.upperBound])
+        var knowns = Array<Position>(capacity: 5)
+        knowns += [range.lowerBound, range.upperBound]
+        knowns += [positions.firstIndex, positions.lastIndex]
         
         func path(from position: Position, to destination: Int) -> Path {
             Path(start: position, offset: destination - offset(at: position))
         }
         
         func position(at offset: Int, append: Bool) -> Position {
-            let paths = positions.map({ path(from: $0, to: offset) })
+            let paths = knowns.map({ path(from: $0, to: offset) })
             let shortest = paths.min(by: { abs($0.offset) < abs($1.offset) })!
-            let position = carets.index(shortest.start, offsetBy: shortest.offset)
+            let position = positions.index(shortest.start, offsetBy: shortest.offset)
             
             if append {
-                positions.append(position)
+                knowns.append(position)
             }
             
             return position
@@ -131,15 +131,15 @@
     // MARK: Update: Range - Helpers
     
     @inlinable func next(_ position: Position) -> Position? {
-        position < carets.lastIndex ? carets.index(after: position) : nil
+        position < positions.lastIndex ? positions.index(after: position) : nil
     }
     
     @inlinable func prev(_ position: Position) -> Position? {
-        position > carets.firstIndex ? carets.index(before: position) : nil
+        position > positions.firstIndex ? positions.index(before: position) : nil
     }
     
     @inlinable func move(_ position: inout Position, step: (Position) -> Position?, while predicate: (Caret) -> Bool) {
-        while predicate(carets[position]), let next = step(position) { position = next }
+        while predicate(positions[position]), let next = step(position) { position = next }
     }
     
     @inlinable func moveToContent(_ position: inout Position) {
