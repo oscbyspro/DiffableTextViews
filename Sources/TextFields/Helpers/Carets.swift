@@ -140,8 +140,6 @@ extension Carets {
     }
 }
 
-// MARK: - BidirectionalCollection
-
 extension Carets where Base: BidirectionalCollection {
     @inlinable var last: Element {
         self[lastIndex]
