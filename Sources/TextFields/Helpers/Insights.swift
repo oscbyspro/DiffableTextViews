@@ -5,8 +5,9 @@
 //  Created by Oscar Byström Ericsson on 2021-09-29.
 //
 
-@usableFromInline struct Insights<Base: Collection, Element>: Collection {
-    @usableFromInline typealias View = (Base.Element) -> Element
+@usableFromInline struct Insights<Base: Collection, Output>: Collection {
+    @usableFromInline typealias View = (Base.Element) -> Output
+    @usableFromInline typealias Element = Output
     @usableFromInline typealias Index = Base.Index
     @usableFromInline typealias Indices = DefaultIndices<Self>
     @usableFromInline typealias SubSequence = Slice<Self>
@@ -45,7 +46,7 @@
     
     // MARK: Subscripts
     
-    @inlinable subscript(position: Index) -> Element {
+    @inlinable subscript(position: Index) -> Self.Element {
         _read {
             yield view(base[position])
         }
@@ -63,7 +64,7 @@ extension Insights: RandomAccessCollection where Base: RandomAccessCollection { 
 // MARK: - Collection + Initializers
 
 extension Collection {
-    @inlinable func insights<Value>(_ view: @escaping (Element) -> Value) -> Insights<Self, Value> {
+    @inlinable func insights<Output>(_ view: @escaping (Element) -> Output) -> Insights<Self, Output> {
         Insights(self, view: view)
     }
 }
