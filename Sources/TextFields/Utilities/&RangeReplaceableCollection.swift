@@ -6,14 +6,7 @@
 //
 
 extension RangeReplaceableCollection {
-    // MARK: Initializers
-    
-    @inlinable init(capacity: Int) {
-        self.init()
-        self.reserveCapacity(capacity)
-    }
-    
-    // MARK: Methods: Replace Subrange
+    // MARK: Replace
     
     @inlinable func replacing<Subrange: RangeExpression, Other: Collection>(_ subrange: Subrange, with other: Other) -> Self where Subrange.Bound == Self.Index, Other.Element == Element {
         var copy = self

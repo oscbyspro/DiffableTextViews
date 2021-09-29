@@ -101,7 +101,8 @@
     @inlinable func updating(offsets newValue: Range<Int>) -> Self {
         typealias Path = (start: Position, offset: Int)
         
-        var positions = Array<Position>(capacity: 5)
+        var positions = [Position]()
+        positions.reserveCapacity(5)
         positions.append(contentsOf: [field.firstIndex, field.lastIndex])
         positions.append(contentsOf: [range.lowerBound, range.upperBound])
         

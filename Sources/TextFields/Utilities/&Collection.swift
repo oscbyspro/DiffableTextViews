@@ -6,6 +6,8 @@
 //
 
 extension Collection {
+    // MARK: Indices
+    
     @inlinable func index(at offset: Int) -> Index {
         index(startIndex, offsetBy: offset)
     }
