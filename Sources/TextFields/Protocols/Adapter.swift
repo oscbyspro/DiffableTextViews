@@ -12,5 +12,15 @@ public protocol Adapter {
         
     func snapshot(content: String) -> Snapshot
     
+    #warning("Maybe rather than throw, return an enum with cases: .failure, .partial, .success(Value).")
     func parse(content: String) throws -> Value
+}
+
+// MARK: - WIP
+
+#warning("An idea.")
+enum ParseOutput<Value> {
+    case failure // would cancel input
+    case partial // would accept input but not update value
+    case success(Value) // would accept input and update value
 }

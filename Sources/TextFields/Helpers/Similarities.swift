@@ -152,20 +152,20 @@ extension BidirectionalCollection {
     // MARK: Transformations
     
     @inlinable func compare(_ comparison: Comparison) -> Self {
-        assign(value: comparison, to: \.comparison)
+        copy(assign: comparison, to: \.comparison)
     }
         
     @inlinable func inspect(_ inspection: Inspection) -> Self {
-        assign(value: inspection, to: \.inspection)
+        copy(assign: inspection, to: \.inspection)
     }
     
     @inlinable func produce(_ production: Production) -> Self {
-        assign(value: production, to: \.production)
+        copy(assign: production, to: \.production)
     }
     
     // MARK: Transformations: Helpers
     
-    @inlinable func assign<Value>(value newValue: Value, to keyPath: WritableKeyPath<Self, Value>) -> Self {
+    @inlinable func copy<Value>(assign newValue: Value, to keyPath: WritableKeyPath<Self, Value>) -> Self {
         var copy = self; copy[keyPath: keyPath] = newValue; return copy
     }
 }

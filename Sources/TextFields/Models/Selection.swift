@@ -102,8 +102,8 @@
         typealias Path = (start: Position, offset: Int)
         
         var positions = Array<Position>(capacity: 5)
-        positions += [field.firstIndex, field.lastIndex]
-        positions += [range.lowerBound, range.upperBound]
+        positions.append(contentsOf: [field.firstIndex, field.lastIndex])
+        positions.append(contentsOf: [range.lowerBound, range.upperBound])
         
         func path(from position: Position, to offset: Int) -> Path {
             Path(start: position, offset: offset - self.offset(at: position))
