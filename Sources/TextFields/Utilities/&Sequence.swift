@@ -8,7 +8,7 @@
 extension Sequence {
     // MARK: Reduce
     
-    @inlinable func reduce<Other: RangeReplaceableCollection>(into other: Other = Other(), appending element: (Element) -> Other.Element, where relevant: (Element) -> Bool = { _ in true }) -> Other {
+    @inlinable func reduce<Other: RangeReplaceableCollection>(into other: Other = Other(), map element: (Element) -> Other.Element, where relevant: (Element) -> Bool = { _ in true }) -> Other {
         reduce(into: other) { result, next in
             if relevant(next) {
                 result.append(element(next))

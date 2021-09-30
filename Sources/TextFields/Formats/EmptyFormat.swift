@@ -18,3 +18,7 @@ struct EmptyFormat<Value>: ParsableFormat {
     
     @inlinable var inverse: Self { self }
 }
+
+func lol() {
+    let x = EmptyFormat<String>()
+}

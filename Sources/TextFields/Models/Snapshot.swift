@@ -12,7 +12,6 @@ public struct Snapshot: BidirectionalCollection, RangeReplaceableCollection {
     
     // MARK: Storage
     
-    #warning("It shuold contain content for better performance.")
     @usableFromInline var characters: String
     @usableFromInline var attributes: [Symbol.Attribute]
 
@@ -21,6 +20,12 @@ public struct Snapshot: BidirectionalCollection, RangeReplaceableCollection {
     @inlinable public init() {
         self.characters = ""
         self.attributes = []
+    }
+
+    // MARK: Utilities
+    
+    @inlinable func content() -> String {
+        reduce(into: String(), map: \.character, where: \.content)
     }
     
     // MARK: BidirectionalCollection

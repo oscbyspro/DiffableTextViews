@@ -96,41 +96,37 @@ public struct RealTimeTextField<Adapter: TextFields.Adapter>: UIViewRepresentabl
         // MARK: UITextFieldDelegate
         
         public func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
-            let replacementIndices = snapshot
-                .indices(in: range.lowerBound ..< range.upperBound)
-            
-            let proposal = (textField.text! as NSString).replacingCharacters(in: range, with: string)
-            
-            #warning("userInput as .content")
-            let replacementSnapshot = string
-                .reduce(into: Snapshot(), appending: Symbol.content)
+            let inputIndices = snapshot
+                .indices(in: range)
+                        
+            let inputSnapshot = string
+                .reduce(into: Snapshot(), map: Symbol.content)
             
             let nextContent = snapshot
-                .replacing(replacementIndices, with: replacementSnapshot)
-//                .content
-                .reduce(into: String(), appending: \.character, where: \.content)
-            
-            // ------------------------------ //
+                .replace(inputIndices, with: inputSnapshot)
+                .content()
+                        
+            // validate next content
             
             guard let nextValue = try? parent.adapter.parse(content: nextContent) else { return false }
             
-            // ------------------------------ //
+            // create snapshot from valid next content
             
             let nextSnapshot = parent.adapter
                 .snapshot(content: nextContent)
             
             let nextPosition = selection
-                .position(at: replacementIndices.upperBound)
-            
+                .position(at: inputIndices.upperBound)
+
             let nextSelection = selection
-                .updating(position: nextPosition)
-                .updating(snapshot: nextSnapshot)
+                .update(position: nextPosition)
+                .update(snapshot: nextSnapshot)
             
-            // ------------------------------ //
+            // update with new values
                                     
             update(value: nextValue, snapshot: nextSnapshot, selection: nextSelection)
 
-            // ------------------------------ //
+            // always update manually
 
             return false
         }
@@ -141,7 +137,7 @@ public struct RealTimeTextField<Adapter: TextFields.Adapter>: UIViewRepresentabl
 
             // ------------------------------ //
             
-            let nextSelection = selection.updating(offsets: offsets)
+            let nextSelection = selection.update(offsets: offsets)
             
             let nextOffsets = nextSelection.offsets
             let changesToLowerBound = nextOffsets.lowerBound - offsets.lowerBound
@@ -168,7 +164,7 @@ public struct RealTimeTextField<Adapter: TextFields.Adapter>: UIViewRepresentabl
             uiView.select(offsets: nextSelection.offsets)
             
             if let nextValue = nextValue {
-                value = nextValue
+                self.value = nextValue
                 #warning("This modifies state during view update, apparently.")
                 TextFields.update(&parent.value.wrappedValue, nonduplicate: nextValue)
             }

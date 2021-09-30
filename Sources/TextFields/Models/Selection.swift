@@ -49,11 +49,7 @@
     
     // MARK: Update: Carets
     
-    @inlinable func updating(snapshot newValue: Snapshot) -> Self {
-        updating(field: newValue.carets)
-    }
-    
-    @inlinable func updating(field newValue: Field) -> Self {
+    @inlinable func update(field newValue: Field) -> Self {
         let options = SimilaritiesOptions<Symbol>
             .compare(.equatable(\.character))
             .inspect(.only(where: \.content))
@@ -72,17 +68,14 @@
 
         return Selection(newValue, range: nextLowerBound ..< nextUpperBound)
     }
+    
+    @inlinable func update(snapshot newValue: Snapshot) -> Self {
+        update(field: newValue.carets)
+    }
 
     // MARK: Update: Range
     
-    @inlinable func updating(range newValue: Range<Snapshot.Index>) -> Self {
-        let lowerBound = field.index(rhs: newValue.lowerBound)
-        let upperBound = field.index(rhs: newValue.upperBound)
-        
-        return updating(range: lowerBound ..< upperBound)
-    }
-    
-    @inlinable func updating(range newValue: Range<Position>) -> Self {
+    @inlinable func update(range newValue: Range<Position>) -> Self {
         var nextLowerBound = newValue.lowerBound
         var nextUpperBound = newValue.upperBound
         
@@ -92,11 +85,14 @@
         return Selection(field, range: nextLowerBound ..< nextUpperBound)
     }
     
-    @inlinable func updating(position newValue: Position) -> Self {
-        updating(range: newValue ..< newValue)
+    @inlinable func update(range newValue: Range<Snapshot.Index>) -> Self {
+        let lowerBound = field.index(rhs: newValue.lowerBound)
+        let upperBound = field.index(rhs: newValue.upperBound)
+        
+        return update(range: lowerBound ..< upperBound)
     }
     
-    @inlinable func updating(offsets newValue: Range<Int>) -> Self {
+    @inlinable func update(offsets newValue: Range<Int>) -> Self {
         typealias Path = (start: Position, offset: Int)
         
         var positions = [Position]()
@@ -123,10 +119,16 @@
         let lowerBound = position(at: newValue.lowerBound, append: true)
         let upperBound = position(at: newValue.upperBound, append: false)
         
-        return updating(range: lowerBound ..< upperBound)
+        return update(range: lowerBound ..< upperBound)
+    }
+    
+    // MARK: Update: Position
+    
+    @inlinable func update(position newValue: Position) -> Self {
+        update(range: newValue ..< newValue)
     }
 
-    // MARK: Update: Range - Helpers
+    // MARK: Helpers
     
     @inlinable func next(_ position: Position) -> Position? {
         position < field.lastIndex ? field.index(after: position) : nil
