@@ -6,11 +6,11 @@
 //
 
 @usableFromInline struct Insights<Base: Collection, Output>: Collection {
-    @usableFromInline typealias View = (Base.Element) -> Output
     @usableFromInline typealias Element = Output
     @usableFromInline typealias Index = Base.Index
     @usableFromInline typealias Indices = DefaultIndices<Self>
     @usableFromInline typealias SubSequence = Slice<Self>
+    @usableFromInline typealias View = (Base.Element) -> Output
     
     // MARK: Storage
     
@@ -46,7 +46,7 @@
     
     // MARK: Subscripts
     
-    @inlinable subscript(position: Index) -> Self.Element {
+    @inlinable subscript(position: Index) -> Element {
         _read {
             yield view(base[position])
         }
@@ -64,7 +64,7 @@ extension Insights: RandomAccessCollection where Base: RandomAccessCollection { 
 // MARK: - Collection + Initializers
 
 extension Collection {
-    @inlinable func insights<Output>(_ view: @escaping (Element) -> Output) -> Insights<Self, Output> {
+    @inlinable func view<Output>(_ view: @escaping (Element) -> Output) -> Insights<Self, Output> {
         Insights(self, view: view)
     }
 }

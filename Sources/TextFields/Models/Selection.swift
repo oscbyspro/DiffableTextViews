@@ -60,7 +60,7 @@
         }
         
         func position(current: Field.SubSequence, next: Field.SubSequence) -> Position {
-            next.insights(symbol).suffix(alsoIn: current.insights(symbol), options: options).startIndex
+            next.view(symbol).suffix(alsoIn: current.view(symbol), options: options).startIndex
         }
         
         let nextUpperBound = position(current: field[range.upperBound...], next: newValue[...])

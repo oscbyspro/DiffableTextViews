@@ -51,7 +51,7 @@ public struct RealTimeTextField<Adapter: TextFields.Adapter>: UIViewRepresentabl
     // MARK: Helpers
 
     func update(coordinator: Coordinator) {
-        coordinator.parent = self
+        coordinator.source = self
         
         if coordinator.value != value.wrappedValue {
             let nextValue = value.wrappedValue
@@ -74,7 +74,7 @@ public struct RealTimeTextField<Adapter: TextFields.Adapter>: UIViewRepresentabl
     // MARK: Components
     
     public final class Coordinator: NSObject, UITextFieldDelegate {
-        @usableFromInline var parent: RealTimeTextField!
+        @usableFromInline var source: RealTimeTextField!
         @usableFromInline var uiView: UITextField!
         
         @usableFromInline private(set) var snapshot: Snapshot!
@@ -98,23 +98,33 @@ public struct RealTimeTextField<Adapter: TextFields.Adapter>: UIViewRepresentabl
         public func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
             let inputIndices = snapshot
                 .indices(in: range)
-                        
+            
             let inputSnapshot = string
                 .reduce(into: Snapshot(), map: Symbol.content)
             
-            let nextContent = snapshot
+            let inputContent = snapshot
                 .replace(inputIndices, with: inputSnapshot)
                 .content()
-                        
+            
+            #warning("Maybe validate early, here.")
+            
+            let nextSnapshot = source.adapter
+                .snapshot(content: inputContent)
+            
+            let nextContent = nextSnapshot
+                .content()
+            
             // validate next content
             
-            guard let nextValue = try? parent.adapter.parse(content: nextContent) else { return false }
+            #warning("Cases that need to be observed: [.invalid, .partial, .perfect].")
+            #warning(".invalid cannot be parsed.")
+            #warning(".partial might or might not be parsed.")
+            #warning(".perfect can always be parsed.")
+            
+            guard let nextValue = try? source.adapter.parse(content: nextContent) else { return false }
             
             // create snapshot from valid next content
-            
-            let nextSnapshot = parent.adapter
-                .snapshot(content: nextContent)
-            
+
             let nextPosition = selection
                 .position(at: inputIndices.upperBound)
 
@@ -166,7 +176,7 @@ public struct RealTimeTextField<Adapter: TextFields.Adapter>: UIViewRepresentabl
             if let nextValue = nextValue {
                 self.value = nextValue
                 #warning("This modifies state during view update, apparently.")
-                TextFields.update(&parent.value.wrappedValue, nonduplicate: nextValue)
+                TextFields.update(&source.value.wrappedValue, nonduplicate: nextValue)
             }
         }
     }
