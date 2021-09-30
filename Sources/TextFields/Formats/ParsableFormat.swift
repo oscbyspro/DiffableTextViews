@@ -5,6 +5,8 @@
 //  Created by Oscar Byström Ericsson on 2021-09-30.
 //
 
+import Foundation
+
 protocol ParsableFormat: Format {
     associatedtype Inverse: Format where Inverse.Input == Output, Inverse.Output == Input
     

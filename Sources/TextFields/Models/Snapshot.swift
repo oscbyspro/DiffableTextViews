@@ -12,6 +12,7 @@ public struct Snapshot: BidirectionalCollection, RangeReplaceableCollection {
     
     // MARK: Storage
     
+    #warning("It shuold contain content for better performance.")
     @usableFromInline var characters: String
     @usableFromInline var attributes: [Symbol.Attribute]
 

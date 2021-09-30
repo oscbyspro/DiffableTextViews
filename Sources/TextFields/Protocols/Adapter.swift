@@ -9,11 +9,11 @@ public protocol Adapter {
     associatedtype Value = String
         
     func transcribe(value: Value) -> String
-        
-    func snapshot(content: String) -> Snapshot
-    
+            
     #warning("Maybe rather than throw, return an enum with cases: .failure, .partial, .success(Value).")
     func parse(content: String) throws -> Value
+    
+    func snapshot(content: String) -> Snapshot
 }
 
 // MARK: - WIP

@@ -99,11 +99,15 @@ public struct RealTimeTextField<Adapter: TextFields.Adapter>: UIViewRepresentabl
             let replacementIndices = snapshot
                 .indices(in: range.lowerBound ..< range.upperBound)
             
+            let proposal = (textField.text! as NSString).replacingCharacters(in: range, with: string)
+            
+            #warning("userInput as .content")
             let replacementSnapshot = string
                 .reduce(into: Snapshot(), appending: Symbol.content)
             
             let nextContent = snapshot
                 .replacing(replacementIndices, with: replacementSnapshot)
+//                .content
                 .reduce(into: String(), appending: \.character, where: \.content)
             
             // ------------------------------ //
