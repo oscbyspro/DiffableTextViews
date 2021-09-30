@@ -57,7 +57,7 @@ public struct RealTimeTextField<Adapter: TextFields.Adapter>: UIViewRepresentabl
             let nextValue = value.wrappedValue
             let nextContent = adapter.transcribe(value: nextValue)
             let nextSnapshot = adapter.snapshot(content: nextContent)
-            let nextSelection = coordinator.selection.updating(snapshot: nextSnapshot)
+            let nextSelection = coordinator.selection.update(snapshot: nextSnapshot)
             
             // ------------------------------ //
             
