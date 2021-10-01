@@ -6,6 +6,6 @@
 //
 
 public protocol DiffableTextStyle: TextStyle {
-    #warning("Doccument show snapshots should be created.")
+    #warning("Document show snapshots should be created.")
     func snapshot(content: String) -> Snapshot
 }

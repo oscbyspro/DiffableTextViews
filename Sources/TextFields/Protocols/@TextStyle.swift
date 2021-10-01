@@ -10,6 +10,6 @@ public protocol TextStyle {
     
     func format(value: Value) -> String
     
-    #warning("Doccument how partial values should be handled.")
+    #warning("Document how partial values should be handled.")
     func parse(content: String) -> Value?
 }
