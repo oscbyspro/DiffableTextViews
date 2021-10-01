@@ -47,14 +47,14 @@
     
     // MARK: Protocol: ParsableFormat
     
-    @inlinable var parser: InversePlaceholderFormat<Base> {
-        InversePlaceholderFormat(pattern: pattern, placeholder: placeholder, transparent: transparent)
+    @inlinable var parser: InversePlaceholderPatternFormat<Base> {
+        InversePlaceholderPatternFormat(pattern: pattern, placeholder: placeholder, transparent: transparent)
     }
 }
 
 // MARK: -
 
-@usableFromInline struct InversePlaceholderFormat<Base: RangeReplaceableCollection>: ParsableFormat where Base.Element: Equatable {
+@usableFromInline struct InversePlaceholderPatternFormat<Base: RangeReplaceableCollection>: ParsableFormat where Base.Element: Equatable {
     @usableFromInline let pattern: Base
     @usableFromInline let placeholder: Base.Element
     @usableFromInline var transparent: Bool = false
@@ -97,5 +97,46 @@
     
     @inlinable var parser: PlaceholderPatternFormat<Base> {
         PlaceholderPatternFormat(pattern: pattern, placeholder: placeholder, transparent: transparent)
+    }
+}
+
+#warning("WIP")
+
+struct WIP_PlaceholderPatternFormat<Pattern: Sequence, Input: Sequence, Output: RangeReplaceableCollection> {
+    let pattern: Pattern
+    let content: (Pattern.Element) -> Output.Element
+    let placeholder: (Pattern.Element) -> Bool
+    let replacement: (Pattern.Element, Input.Element) -> Output.Element
+    let transparent: Bool
+    
+    func format(_ input: Input) -> Result<Output, Never> {
+        var output = Output()
+        
+        var inputIterator = input.makeIterator()
+        var patternIterator = pattern.makeIterator()
+        
+        var inputElement = inputIterator.next()
+        var patternElement = patternIterator.next()
+        
+        while inputElement != nil, patternElement != nil {
+            if !placeholder(patternElement!) {
+                output.append(content(patternElement!))
+            } else {
+                output.append(replacement(patternElement!, inputElement!))
+                inputElement = inputIterator.next()
+            }
+            
+            patternElement = patternIterator.next()
+        }
+        
+        if transparent {
+            while true {
+                patternElement = patternIterator.next()
+                guard patternElement != nil else { break }
+                output.append(content(patternElement!))
+            }
+        }
+        
+        return .success(output)
     }
 }
