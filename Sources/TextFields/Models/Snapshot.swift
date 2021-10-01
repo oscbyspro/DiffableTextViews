@@ -28,7 +28,7 @@ public struct Snapshot: BidirectionalCollection, RangeReplaceableCollection {
         reduce(into: String(), map: \.character, where: \.content)
     }
 
-    // MARK: BidirectionalCollection
+    // MARK: Index
 
     @inlinable public var startIndex: Index {
         Index(characters.startIndex, attributes.startIndex)
@@ -37,6 +37,8 @@ public struct Snapshot: BidirectionalCollection, RangeReplaceableCollection {
     @inlinable public var endIndex: Index {
         Index(characters.endIndex, attributes.endIndex)
     }
+    
+    // MARK: Traverse
 
     @inlinable public func index(after i: Index) -> Index {
         Index(characters.index(after: i.character), attributes.index(after: i.attribute))
@@ -46,17 +48,19 @@ public struct Snapshot: BidirectionalCollection, RangeReplaceableCollection {
         Index(characters.index(before: i.character), attributes.index(before: i.attribute))
     }
 
+    // MARK: Replace
+
+    @inlinable public mutating func replaceSubrange<C: Collection>(_ subrange: Range<Index>, with newElements: C) where C.Element == Symbol {
+        characters.replaceSubrange(subrange.transform(bounds: \.character), with: newElements.view(\.character))
+        attributes.replaceSubrange(subrange.transform(bounds: \.attribute), with: newElements.view(\.attribute))
+    }
+    
+    // MARK: Subscripts
+    
     @inlinable public subscript(position: Index) -> Symbol {
         _read {
             yield Symbol(characters[position.character], attribute: attributes[position.attribute])
         }
-    }
-
-    // MARK: RangeReplacableCollection
-
-    @inlinable public mutating func replaceSubrange<C: Collection>(_ subrange: Range<Index>, with newElements: C) where C.Element == Symbol {
-        characters.replaceSubrange(subrange.map(\.character), with: newElements.view(\.character))
-        attributes.replaceSubrange(subrange.map(\.attribute), with: newElements.view(\.attribute))
     }
 
     // MARK: Components
@@ -85,3 +89,4 @@ public struct Snapshot: BidirectionalCollection, RangeReplaceableCollection {
         }
     }
 }
+

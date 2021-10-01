@@ -77,39 +77,25 @@ public struct RealTimeTextField<Adapter: TextFields.Adapter>: UIViewRepresentabl
         @usableFromInline var source: RealTimeTextField!
         @usableFromInline var uiView: UITextField!
         
-        @usableFromInline private(set) var snapshot: Snapshot!
-        @usableFromInline private(set) var selection: Selection!
         @usableFromInline private(set) var value: Value!
-        
-        // MARK: Initializers
-        
-        @usableFromInline override init() {
-            super.init()
-            
-            let snapshot = Snapshot()
-            let selection = Selection(snapshot)
-            
-            self.snapshot = snapshot
-            self.selection = selection
-        }
+        @usableFromInline private(set) var snapshot = Snapshot()
+        @usableFromInline private(set) var selection = Snapshot()
         
         // MARK: UITextFieldDelegate
         
         public func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
-            let inputIndices = snapshot
+            let replacementIndices = snapshot
                 .indices(in: range)
             
-            let inputSnapshot = string
-                .reduce(into: Snapshot(), map: Symbol.content)
+            let replacementSnapshot = string
+                .reduce(into: Snapshot(), transform: Symbol.content)
             
-            let inputContent = snapshot
-                .replace(inputIndices, with: inputSnapshot)
+            let rawContent = snapshot
+                .replace(replacementIndices, with: replacementSnapshot)
                 .content()
-            
-            #warning("Maybe validate early, here.")
-            
+                        
             let nextSnapshot = source.adapter
-                .snapshot(content: inputContent)
+                .snapshot(content: rawContent)
             
             let nextContent = nextSnapshot
                 .content()
@@ -126,7 +112,7 @@ public struct RealTimeTextField<Adapter: TextFields.Adapter>: UIViewRepresentabl
             // create snapshot from valid next content
 
             let nextPosition = selection
-                .position(at: inputIndices.upperBound)
+                .position(at: replacementIndices.upperBound)
 
             let nextSelection = selection
                 .update(position: nextPosition)
