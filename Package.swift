@@ -29,10 +29,10 @@ let package = Package(
         .library(
             name: TextFields.name,
             targets: [TextFields.name]),
+        .library(name: "Cache", targets: ["Cache"])
     ],
     targets: [
-        .target(
-            name: TextFields.name,
-            dependencies: []),
+        .target(name: TextFields.name),
+        .target(name: "Cache"),
     ]
 )
