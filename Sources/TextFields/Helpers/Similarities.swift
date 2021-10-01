@@ -37,30 +37,23 @@
         Similarities<L, R>(in: lhs, and: rhs, with: options)
     }
     
-    // MARK: Helpers
-    
-    @inlinable func firstInspectableIndex<C: Collection>(in collection: C, from index: C.Index) -> C.Index? where C.Element == Element {
-        collection[index...].firstIndex(where: options.inspection.includes)
-    }
-    
     // MARK: Methods
-    
+        
     @usableFromInline func lhsPrefix() -> LHS.SubSequence {
         var lhsIndex = lhs.startIndex
         var rhsIndex = rhs.startIndex
         
-        while lhsIndex < lhs.endIndex, rhsIndex < rhs.endIndex {
-            guard let lhsInspectableIndex = firstInspectableIndex(in: lhs, from: lhsIndex) else { break }
-            guard let rhsInspectableIndex = firstInspectableIndex(in: rhs, from: rhsIndex) else { break }
+        while let nextLhsIndex = nextIndex(in: lhs, from: lhsIndex),
+              let nextRhsIndex = nextIndex(in: rhs, from: rhsIndex) {
+            
+            guard options.comparison.equivalent(lhs[nextLhsIndex], rhs[nextRhsIndex]) else { break }
 
-            guard options.comparison.equivalent(lhs[lhsInspectableIndex], rhs[rhsInspectableIndex]) else { break }
-
-            lhsIndex = lhs.index(after: lhsInspectableIndex)
-            rhsIndex = rhs.index(after: rhsInspectableIndex)
+            lhsIndex = nextLhsIndex
+            rhsIndex = nextRhsIndex
         }
         
         if options.production == .overshoot {
-            lhsIndex = firstInspectableIndex(in: lhs, from: lhsIndex) ?? lhs.endIndex
+            lhsIndex = nextIndex(in: lhs, from: lhsIndex) ?? lhs.endIndex
         }
         
         return lhs[..<lhsIndex]
@@ -77,6 +70,14 @@
     
     @inlinable func rhsSuffix() -> RHS.SubSequence where LHS: BidirectionalCollection, RHS: BidirectionalCollection {
         make(rhs, lhs).lhsSuffix()
+    }
+    
+    // MARK: Helpers
+    
+    @inlinable func nextIndex<C: Collection>(in collection: C, from index: C.Index) -> C.Index? where C.Element == Element {
+        guard index < collection.endIndex else { return nil }
+        let start = collection.index(after: index)
+        return collection[start...].firstIndex(where: options.inspection.includes)
     }
 }
 
