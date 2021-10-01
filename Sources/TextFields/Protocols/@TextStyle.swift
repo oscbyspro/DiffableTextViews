@@ -1,5 +1,5 @@
 //
-//  BasicTextStyle.swift
+//  TextStyle.swift
 //  
 //
 //  Created by Oscar Byström Ericsson on 2021-10-01.

@@ -12,4 +12,3 @@ extension Result where Failure == Never {
         }
     }
 }
-
