@@ -10,20 +10,20 @@
 import SwiftUI
 
 @available(iOS 13.0, *)
-public struct RealTimeTextField<Adapter: TextFields.Adapter>: UIViewRepresentable, Equatable where Adapter.Value: Equatable {
-    public typealias Value = Adapter.Value
+public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable, Equatable where Style.Value: Equatable {
+    public typealias Value = Style.Value
     public typealias UIViewType = UITextField
     
     // MARK: Properties
     
-    @usableFromInline let adapter: Adapter
     @usableFromInline let value: Binding<Value>
+    @usableFromInline let style: Style
     
     // MARK: Initializers
     
-    public init(value: Binding<Value>, adapter: Adapter) {
+    public init(value: Binding<Value>, style: Style) {
         self.value = value
-        self.adapter = adapter
+        self.style = style
     }
     
     // MARK: UIViewRepresentable
@@ -55,8 +55,8 @@ public struct RealTimeTextField<Adapter: TextFields.Adapter>: UIViewRepresentabl
         
         if coordinator.value != value.wrappedValue {
             let nextValue = value.wrappedValue
-            let nextContent = adapter.transcribe(value: nextValue)
-            let nextSnapshot = adapter.snapshot(content: nextContent)
+            let nextContent = style.format(value: nextValue)
+            let nextSnapshot = style.snapshot(content: nextContent)
             let nextSelection = coordinator.selection.update(snapshot: nextSnapshot)
             
             // ------------------------------ //
@@ -74,7 +74,7 @@ public struct RealTimeTextField<Adapter: TextFields.Adapter>: UIViewRepresentabl
     // MARK: Components
     
     public final class Coordinator: NSObject, UITextFieldDelegate {
-        @usableFromInline var source: RealTimeTextField!
+        @usableFromInline var source: DiffableTextField!
         @usableFromInline var uiView: UITextField!
         
         @usableFromInline private(set) var value: Value!
@@ -94,7 +94,7 @@ public struct RealTimeTextField<Adapter: TextFields.Adapter>: UIViewRepresentabl
                 .replace(replacementIndices, with: replacementSnapshot)
                 .content()
                         
-            let nextSnapshot = source.adapter
+            let nextSnapshot = source.style
                 .snapshot(content: rawContent)
             
             // a: snapshot validation
@@ -103,8 +103,13 @@ public struct RealTimeTextField<Adapter: TextFields.Adapter>: UIViewRepresentabl
             #warning(".invalid cannot be parsed.")
             #warning(".partial might or might not be parsed.")
             #warning(".perfect can always be parsed.")
-                        
-            guard let nextValue = try? source.adapter.parse(content: nextSnapshot.content()) else { return false }
+            
+            #warning("What if....")
+            #warning("1. parses 1")
+            #warning(". parses 0")
+            #warning(". snapshots 0.")
+            
+            guard let nextValue = try? source.style.parse(content: nextSnapshot.content()) else { return false }
             
             // z: snapshot validation
 

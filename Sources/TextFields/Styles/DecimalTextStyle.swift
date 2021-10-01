@@ -1,5 +1,5 @@
 //
-//  DecimalAdapter.swift
+//  DiffableTextStyle.swift
 //  
 //
 //  Created by Oscar Byström Ericsson on 2021-09-28.
@@ -8,7 +8,7 @@
 import Foundation
 
 #warning("WIP")
-public struct DecimalAdapter: Adapter {
+public struct DecimalTextStyle: DiffableTextStyle {
     let formatter: NumberFormatter
     
     public init() {
@@ -23,17 +23,13 @@ public struct DecimalAdapter: Adapter {
         self.formatter = formatter
     }
     
-    public func parse(content: String) throws -> Decimal {
+    public func parse(content: String) -> Decimal? {
         let parseable = content.replacingOccurrences(of: formatter.decimalSeparator, with: ".")
         
-        guard let decimal = Decimal(string: parseable) else {
-            throw Failure()
-        }
-        
-        return decimal
+        return Decimal(string: parseable)
     }
     
-    public func transcribe(value: Decimal) -> String {
+    public func format(value: Decimal) -> String {
         String(describing: value).replacingOccurrences(of: ".", with: formatter.decimalSeparator)
     }
     
@@ -67,7 +63,7 @@ public struct DecimalAdapter: Adapter {
 
 // MARK: - Constants
 
-extension DecimalAdapter {
+extension DecimalTextStyle {
     static let maximumNumberOfDigits: Int = 38
     static let maximumAbsoluteValue = Decimal(string: String(repeating: "9", count: maximumNumberOfDigits))!
     

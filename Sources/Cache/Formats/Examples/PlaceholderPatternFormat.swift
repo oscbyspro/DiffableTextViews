@@ -102,41 +102,36 @@
 
 #warning("WIP")
 
-struct WIP_PlaceholderPatternFormat<Pattern: Sequence, Input: Sequence, Output: RangeReplaceableCollection> {
+struct WIP_PlaceholderPatternFormat<Pattern: Collection, Input: Collection, Output: RangeReplaceableCollection> {
     let pattern: Pattern
     let content: (Pattern.Element) -> Output.Element
     let placeholder: (Pattern.Element) -> Bool
     let replacement: (Pattern.Element, Input.Element) -> Output.Element
     let transparent: Bool
     
-    func format(_ input: Input) -> Result<Output, Never> {
-        var output = Output()
+    @usableFromInline func format(_ value: Input) -> Result<Output, Never> {
+        var result = Output()
         
-        var inputIterator = input.makeIterator()
-        var patternIterator = pattern.makeIterator()
-        
-        var inputElement = inputIterator.next()
-        var patternElement = patternIterator.next()
-        
-        while inputElement != nil, patternElement != nil {
-            if !placeholder(patternElement!) {
-                output.append(content(patternElement!))
-            } else {
-                output.append(replacement(patternElement!, inputElement!))
-                inputElement = inputIterator.next()
-            }
+        var indexInValue = value.startIndex
+        var indexInPattern = pattern.startIndex
+
+        while indexInValue < value.endIndex, indexInPattern < pattern.endIndex {
+            let elementInPattern = pattern[indexInPattern]
+            indexInPattern = pattern.index(after: indexInPattern)
             
-            patternElement = patternIterator.next()
+            if placeholder(elementInPattern) {
+                let elementInValue = value[indexInValue]
+                indexInValue = value.index(after: indexInValue)
+                result.append(replacement(elementInPattern, elementInValue))
+            } else {
+                result.append(content(elementInPattern))
+            }
         }
         
         if transparent {
-            while true {
-                patternElement = patternIterator.next()
-                guard patternElement != nil else { break }
-                output.append(content(patternElement!))
-            }
+            result.append(contentsOf: pattern[indexInPattern...].view(content))
         }
         
-        return .success(output)
+        return .success(result)
     }
 }

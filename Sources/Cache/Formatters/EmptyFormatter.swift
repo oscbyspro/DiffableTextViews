@@ -26,11 +26,3 @@ extension EmptyFormatter: BidirectionalFormatter {
         .success(value)
     }
 }
-
-extension EmptyFormatter: RealTimeTextFormatter where FormatOutput == String {
-    // MARK: Protocol: RealTimeTextFormatter
-    
-    @inlinable func snapshot(_ value: String) -> Snapshot {
-        value.reduce(map: Symbol.content)
-    }
-}

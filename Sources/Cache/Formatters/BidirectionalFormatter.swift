@@ -13,3 +13,13 @@
     
     func parse(_ value: ParseInput) -> Result<ParseOutput, ParseFailure>
 }
+
+
+protocol _Formatter {
+    associatedtype Value
+    associatedtype ParseFailure: Error
+ 
+    func format(_ value: Value) -> Result<String, Never>
+    func parse(_ value: String) -> Result<Value, ParseFailure>
+    func snapshot(_ value: String) -> Result<Snapshot, Never>
+}
