@@ -6,7 +6,7 @@
 //
 
 extension Range {
-    @inlinable func transform<Value>(bounds map: (Bound) -> Value) -> Range<Value> {
+    @inlinable func map<Value>(bounds map: (Bound) -> Value) -> Range<Value> {
         map(lowerBound) ..< map(upperBound)
     }
 }

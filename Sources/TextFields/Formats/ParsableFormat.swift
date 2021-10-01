@@ -5,20 +5,18 @@
 //  Created by Oscar Byström Ericsson on 2021-09-30.
 //
 
-import Foundation
-
 protocol ParsableFormat: Format {
-    associatedtype Inverse: Format where Inverse.Input == Output, Inverse.Output == Input
+    associatedtype Parser: Format where Parser.Input == Output, Parser.Output == Input
     
     // MARK: Get
     
-    var inverse: Inverse { get }
+    var parser: Parser { get }
 }
 
 extension ParsableFormat {
     // MARK: Parse
     
-    @inlinable func parse(_ value: Output) -> Result<Input, Inverse.Failure> {
-        inverse.format(value)
+    @inlinable func parse(_ value: Output) -> Result<Input, Parser.Failure> {
+        parser.format(value)
     }
 }

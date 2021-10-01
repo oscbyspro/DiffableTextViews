@@ -5,7 +5,7 @@
 //  Created by Oscar Byström Ericsson on 2021-09-23.
 //
 
-public struct Snapshot: BidirectionalCollection, RangeReplaceableCollection {
+public struct Snapshot: BidirectionalCollection, RangeReplaceableCollection, ExpressibleByArrayLiteral {
     public typealias Element = Symbol
     public typealias Indices = DefaultIndices<Self>
     public typealias SubSequence = Slice<Self>
@@ -20,6 +20,10 @@ public struct Snapshot: BidirectionalCollection, RangeReplaceableCollection {
     @inlinable public init() {
         self.characters = ""
         self.attributes = []
+    }
+        
+    @inlinable public init(arrayLiteral elements: Symbol...) {
+        self.init(elements)
     }
 
     // MARK: Utilities
@@ -51,8 +55,8 @@ public struct Snapshot: BidirectionalCollection, RangeReplaceableCollection {
     // MARK: Replace
 
     @inlinable public mutating func replaceSubrange<C: Collection>(_ subrange: Range<Index>, with newElements: C) where C.Element == Symbol {
-        characters.replaceSubrange(subrange.transform(bounds: \.character), with: newElements.view(\.character))
-        attributes.replaceSubrange(subrange.transform(bounds: \.attribute), with: newElements.view(\.attribute))
+        characters.replaceSubrange(subrange.map(bounds: \.character), with: newElements.view(\.character))
+        attributes.replaceSubrange(subrange.map(bounds: \.attribute), with: newElements.view(\.attribute))
     }
     
     // MARK: Subscripts
@@ -89,4 +93,3 @@ public struct Snapshot: BidirectionalCollection, RangeReplaceableCollection {
         }
     }
 }
-

@@ -21,13 +21,13 @@ extension UITextField {
     // MARK: Selection: Get
     
     @inlinable func selection() -> Range<Int>? {
-        selectedTextRange.transform(bounds: offsets)
+        selectedTextRange.map(offsets)
     }
     
     // MARK: Selection: Set
         
     @inlinable func select(offsets: Range<Int>?) {
-        selectedTextRange = offsets.transform(bounds: range) ?? nil
+        selectedTextRange = offsets.map(range) ?? nil
     }
     
     @inlinable func select(changes: (start: Int, end: Int)) {

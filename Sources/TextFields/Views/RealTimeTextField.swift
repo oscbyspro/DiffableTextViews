@@ -79,7 +79,7 @@ public struct RealTimeTextField<Adapter: TextFields.Adapter>: UIViewRepresentabl
         
         @usableFromInline private(set) var value: Value!
         @usableFromInline private(set) var snapshot = Snapshot()
-        @usableFromInline private(set) var selection = Snapshot()
+        @usableFromInline private(set) var selection = Selection()
         
         // MARK: UITextFieldDelegate
         
@@ -88,7 +88,7 @@ public struct RealTimeTextField<Adapter: TextFields.Adapter>: UIViewRepresentabl
                 .indices(in: range)
             
             let replacementSnapshot = string
-                .reduce(into: Snapshot(), transform: Symbol.content)
+                .reduce(into: Snapshot(), map: Symbol.content)
             
             let rawContent = snapshot
                 .replace(replacementIndices, with: replacementSnapshot)
@@ -115,11 +115,11 @@ public struct RealTimeTextField<Adapter: TextFields.Adapter>: UIViewRepresentabl
                 .update(position: nextPosition)
                 .update(snapshot: nextSnapshot)
             
-            // update with new values
+            // a: update with new values
                                     
             update(value: nextValue, snapshot: nextSnapshot, selection: nextSelection)
 
-            // always update manually
+            // z: update with new values
 
             return false
         }

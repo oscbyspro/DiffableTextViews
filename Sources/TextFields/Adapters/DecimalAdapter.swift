@@ -27,7 +27,7 @@ public struct DecimalAdapter: Adapter {
         let parseable = content.replacingOccurrences(of: formatter.decimalSeparator, with: ".")
         
         guard let decimal = Decimal(string: parseable) else {
-            throw ParseFailure()
+            throw Failure()
         }
         
         return decimal
@@ -62,7 +62,7 @@ public struct DecimalAdapter: Adapter {
         return snapshot
     }
     
-    struct ParseFailure: Error { }
+    struct Failure: Error { }
 }
 
 // MARK: - Constants

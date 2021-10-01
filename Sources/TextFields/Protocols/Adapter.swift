@@ -15,12 +15,3 @@ public protocol Adapter {
     
     func snapshot(content: String) -> Snapshot
 }
-
-// MARK: - WIP
-
-#warning("An idea.")
-enum ParseOutput<Value> {
-    case failure // would cancel input
-    case partial // would accept input but not update value
-    case success(Value) // would accept input and update value
-}
