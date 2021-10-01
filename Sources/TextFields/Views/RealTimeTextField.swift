@@ -97,19 +97,16 @@ public struct RealTimeTextField<Adapter: TextFields.Adapter>: UIViewRepresentabl
             let nextSnapshot = source.adapter
                 .snapshot(content: rawContent)
             
-            let nextContent = nextSnapshot
-                .content()
-            
-            // validate next content
+            // a: snapshot validation
             
             #warning("Cases that need to be observed: [.invalid, .partial, .perfect].")
             #warning(".invalid cannot be parsed.")
             #warning(".partial might or might not be parsed.")
             #warning(".perfect can always be parsed.")
+                        
+            guard let nextValue = try? source.adapter.parse(content: nextSnapshot.content()) else { return false }
             
-            guard let nextValue = try? source.adapter.parse(content: nextContent) else { return false }
-            
-            // create snapshot from valid next content
+            // z: snapshot validation
 
             let nextPosition = selection
                 .position(at: replacementIndices.upperBound)
