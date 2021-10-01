@@ -99,17 +99,7 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable, 
             
             // a: snapshot validation
             
-            #warning("Cases that need to be observed: [.invalid, .partial, .perfect].")
-            #warning(".invalid cannot be parsed.")
-            #warning(".partial might or might not be parsed.")
-            #warning(".perfect can always be parsed.")
-            
-            #warning("What if....")
-            #warning("1. parses 1")
-            #warning(". parses 0")
-            #warning(". snapshots 0.")
-            
-            guard let nextValue = try? source.style.parse(content: nextSnapshot.content()) else { return false }
+            guard let nextValue = source.style.parse(content: nextSnapshot.content()) else { return false }
             
             // z: snapshot validation
 
