@@ -205,7 +205,7 @@ extension BidirectionalCollection {
     // MARK: Initializers: Static
 
     @inlinable static var each: Self {
-        Self(includes: { element in true })
+        Self(includes: { _ in true })
     }
     
     @inlinable static func only(where includes: @escaping (Element) -> Bool) -> Self {
