@@ -43,8 +43,8 @@
         var lhsIndex = lhs.startIndex
         var rhsIndex = rhs.startIndex
         
-        while let nextLhsIndex = nextIndex(in: lhs[lhsIndex...]),
-              let nextRhsIndex = nextIndex(in: rhs[rhsIndex...]) {
+        while let nextLhsIndex = firstInspectableIndex(in: lhs[lhsIndex...]),
+              let nextRhsIndex = firstInspectableIndex(in: rhs[rhsIndex...]) {
             
             guard options.comparison.equivalent(lhs[nextLhsIndex], rhs[nextRhsIndex]) else { break }
 
@@ -53,7 +53,7 @@
         }
         
         if options.production == .overshoot {
-            lhsIndex = nextIndex(in: lhs[lhsIndex...]) ?? lhs.endIndex
+            lhsIndex = firstInspectableIndex(in: lhs[lhsIndex...]) ?? lhs.endIndex
         }
         
         return lhs[..<lhsIndex]
@@ -74,7 +74,7 @@
     
     // MARK: Helpers
     
-    @inlinable func nextIndex<C: Collection>(in collection: C) -> C.Index? where C.Element == Element {
+    @inlinable func firstInspectableIndex<C: Collection>(in collection: C) -> C.Index? where C.Element == Element {
         collection.firstIndex(where: options.inspection.includes)
     }
 }
