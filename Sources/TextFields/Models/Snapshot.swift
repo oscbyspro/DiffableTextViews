@@ -69,12 +69,12 @@ public struct Snapshot: BidirectionalCollection, RangeReplaceableCollection, Exp
     
     // MARK: Optimizations
     
-    /// - Complexity: O(1), same as \Self.attributes.count.
+    /// - Complexity: O(1).
     @inlinable public var count: Int {
         attributes.count
     }
     
-    /// - Complexity: O(1), same as \Self.attributes.underestimatedCount.
+    /// - Complexity: O(1).
     @inlinable public var underestimatedCount: Int {
         attributes.underestimatedCount
     }
