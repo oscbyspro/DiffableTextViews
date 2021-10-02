@@ -37,16 +37,6 @@
         offset(at: range.lowerBound) ..< offset(at: range.upperBound)
     }
     
-    // MARK: Interoperabilities
-    
-    @inlinable func position(at snapshotIndex: Snapshot.Index) -> Position {
-        field.index(rhs: snapshotIndex)
-    }
-    
-    @inlinable func positions(in snapshotIndices: Range<Snapshot.Index>) -> Range<Position> {
-        position(at: snapshotIndices.lowerBound) ..< position(at: snapshotIndices.upperBound)
-    }
-    
     // MARK: Update: Carets
     
     @inlinable func update(field newValue: Field) -> Self {
@@ -127,8 +117,21 @@
     @inlinable func update(position newValue: Position) -> Self {
         update(range: newValue ..< newValue)
     }
-
+    
+    @inlinable func update(position newValue: Snapshot.Index) -> Self {
+        update(position: position(at: newValue))
+    }
+    
+    
     // MARK: Helpers
+    
+    @inlinable func position(at snapshotIndex: Snapshot.Index) -> Position {
+        field.index(rhs: snapshotIndex)
+    }
+    
+    @inlinable func positions(in snapshotIndices: Range<Snapshot.Index>) -> Range<Position> {
+        position(at: snapshotIndices.lowerBound) ..< position(at: snapshotIndices.upperBound)
+    }
     
     @inlinable func next(_ position: Position) -> Position? {
         position < field.lastIndex ? field.index(after: position) : nil

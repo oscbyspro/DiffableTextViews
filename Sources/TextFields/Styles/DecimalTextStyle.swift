@@ -14,26 +14,46 @@ public struct DecimalTextStyle: DiffableTextStyle {
 //    var maximum: Decimal =  .greatestFiniteMagnitude
 //    var minimum: Decimal = -.greatestFiniteMagnitude
     
+    // MARK: Initialization
+    
     @inlinable public init() {
         self.formatStyle = DecimalFormatStyle()
     }
     
+    // MARK: Protocol: DiffableTextStyle
+    
+    #warning("Bad name: this should not format.")
     public func format(_ value: Decimal) -> String {
-        formatStyle.format(value)
+        value.formatted(.number.grouping(.never))
     }
     
+    #warning("This shold simply convert content.")
     public func parse(_ content: String) -> Decimal? {
         guard !content.isEmpty else { return .zero }
         
-        guard let value = try? Decimal(content, strategy: formatStyle.parseStrategy) else { return nil }
+        print(content)
+        
+        guard let value = Decimal(string: content.replacingOccurrences(of: ",", with: ".")) else { return nil }
+        
+//        #warning("There should be no need to unformat becaues there should be no format to unformat.")
+//        guard let value = try? Decimal(content, strategy: formatStyle.parseStrategy) else { return nil }
+        
+        print(value)
         
 //        guard minimum <= value, value <= maximum else { return nil }
                 
         return value
     }
     
+    
     public func snapshot(_ content: String) -> Snapshot {
         var snapshot = Snapshot()
+        
+        guard !content.isEmpty else { return snapshot }
+        
+        guard let decimal = parse(content) else { return snapshot }
+        
+        let content = format(decimal)
         
         let contentSet = formatStyle.content()
         let spacersSet = formatStyle.spacers()
@@ -45,8 +65,11 @@ public struct DecimalTextStyle: DiffableTextStyle {
             remainders.removeFirst()
         }
         
+        print(remainders)
+        
         if let first = remainders.first, first == formatStyle.decimalSeparator {
             snapshot.append(.content(formatStyle.zero))
+            print(999)
         }
         
         for character in remainders {

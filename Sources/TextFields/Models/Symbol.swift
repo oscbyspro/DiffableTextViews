@@ -15,15 +15,6 @@ public struct Symbol: Equatable {
         self.character = character
         self.attribute = attribute
     }
-    
-    // MARK: Components
-    
-    public enum Attribute: Equatable {
-        case content
-        case spacer
-        case prefix
-        case suffix
-    }
 }
 
 // MARK: - Static Initializers

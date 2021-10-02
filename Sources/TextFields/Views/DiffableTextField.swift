@@ -87,27 +87,23 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable, 
             let replacementIndices = snapshot
                 .indices(in: range)
             
-            let replacementSnapshot = string
-                .reduce(into: Snapshot(), map: Symbol.content)
-            
-            let rawContent = snapshot
-                .replace(replacementIndices, with: replacementSnapshot)
-                .content()
+            let replacementSnapshot = Snapshot
+                .init(content: string)
                         
+            let proposalSnapshot = snapshot
+                .replace(replacementIndices, with: replacementSnapshot)
+            
             let nextSnapshot = source.style
-                .snapshot(rawContent)
+                .snapshot(proposalSnapshot.content)
             
             // a: snapshot validation
             
-            guard let nextValue = source.style.parse(nextSnapshot.content()) else { return false }
+            guard let nextValue = source.style.parse(nextSnapshot.content) else { return false }
             
             // z: snapshot validation
 
-            let nextPosition = selection
-                .position(at: replacementIndices.upperBound)
-
             let nextSelection = selection
-                .update(position: nextPosition)
+                .update(position: replacementIndices.upperBound)
                 .update(snapshot: nextSnapshot)
             
             // a: update with new values
