@@ -119,7 +119,6 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable, 
             return false
         }
         
-        #warning("Should use change in offsets to update uiView, similar to how it is done in selection.")
         public func textFieldDidChangeSelection(_ textField: UITextField) {
             guard let offsets = textField.selection() else { return }
 

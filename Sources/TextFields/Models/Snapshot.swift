@@ -66,6 +66,18 @@ public struct Snapshot: BidirectionalCollection, RangeReplaceableCollection, Exp
             yield Symbol(characters[position.character], attribute: attributes[position.attribute])
         }
     }
+    
+    // MARK: Optimizations
+    
+    /// - Complexity: O(1), same as \Self.attributes.count.
+    @inlinable public var count: Int {
+        attributes.count
+    }
+    
+    /// - Complexity: O(1), same as \Self.attributes.underestimatedCount.
+    @inlinable public var underestimatedCount: Int {
+        attributes.underestimatedCount
+    }
 
     // MARK: Components
 
