@@ -12,19 +12,19 @@ public struct Snapshot: BidirectionalCollection, RangeReplaceableCollection, Exp
 
     // MARK: Storage
 
-    public var attributes: [Attribute]
-    public var characters: String
-    public var content: String
+    public private(set) var attributes: [Attribute]
+    public private(set) var characters: String
+    public private(set) var content: String
 
     // MARK: Initialization
 
-    @inlinable public init() {
+    public init() {
         self.attributes = []
         self.characters = ""
         self.content = ""
     }
     
-    @inlinable public init(content: String) {
+    public init(content: String) {
         self.attributes = content.map({ _ in .content })
         self.characters = content
         self.content = content
@@ -76,7 +76,7 @@ public struct Snapshot: BidirectionalCollection, RangeReplaceableCollection, Exp
     
     // MARK: Replace
 
-    @inlinable public mutating func replaceSubrange<C: Collection>(_ subrange: Range<Index>, with newElements: C) where C.Element == Symbol {
+    public mutating func replaceSubrange<C: Collection>(_ subrange: Range<Index>, with newElements: C) where C.Element == Symbol {
         attributes.replaceSubrange(subrange.map(bounds: \.attribute), with: newElements.view(\.attribute))
         characters.replaceSubrange(subrange.map(bounds: \.character), with: newElements.view(\.character))
         content.replaceSubrange(subrange.map(bounds: \.content), with: newElements.compactView(content(in:)))

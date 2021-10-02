@@ -1,5 +1,5 @@
 //
-//  File.swift
+//  DiffableTextStyle.swift
 //  
 //
 //  Created by Oscar Byström Ericsson on 2021-10-02.
@@ -14,5 +14,5 @@ public protocol WIP_DiffableTextStyle {
     
     func parse(_ snapshot: Snapshot) -> Value?
     
-    func SOMETHING_ELESE()
+    func SOMETHING_ELSE()
 }
