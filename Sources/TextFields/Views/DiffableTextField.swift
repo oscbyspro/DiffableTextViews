@@ -10,7 +10,7 @@
 import SwiftUI
 
 @available(iOS 13.0, *)
-public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable, Equatable where Style.Value: Equatable {
+public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable, Equatable {
     public typealias Value = Style.Value
     public typealias UIViewType = UITextField
     
@@ -55,8 +55,8 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable, 
         
         if coordinator.value != value.wrappedValue {
             let nextValue = value.wrappedValue
-            let nextContent = style.format(value: nextValue)
-            let nextSnapshot = style.snapshot(content: nextContent)
+            let nextContent = style.format(nextValue)
+            let nextSnapshot = style.snapshot(nextContent)
             let nextSelection = coordinator.selection.update(snapshot: nextSnapshot)
             
             // ------------------------------ //
@@ -95,11 +95,11 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable, 
                 .content()
                         
             let nextSnapshot = source.style
-                .snapshot(content: rawContent)
+                .snapshot(rawContent)
             
             // a: snapshot validation
             
-            guard let nextValue = source.style.parse(content: nextSnapshot.content()) else { return false }
+            guard let nextValue = source.style.parse(nextSnapshot.content()) else { return false }
             
             // z: snapshot validation
 
@@ -125,22 +125,19 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable, 
             // ------------------------------ //
             
             let nextSelection = selection.update(offsets: offsets)
+            let nextSelectionOffset = nextSelection.offsets
             
-            let nextOffsets = nextSelection.offsets
-            let changesToLowerBound = nextOffsets.lowerBound - offsets.lowerBound
-            let changesToUpperBound = nextOffsets.upperBound - offsets.upperBound
+            let changesToLowerBound = nextSelectionOffset.lowerBound - offsets.lowerBound
+            let changesToUpperBound = nextSelectionOffset.upperBound - offsets.upperBound
             
             // ------------------------------ //
-            
-            #warning("This is different, and a reason why model needs to be imporved.")
-            
+                        
             self.selection = nextSelection
             uiView.select(changes: (changesToLowerBound, changesToUpperBound))
         }
         
         // MARK: Updaters
         
-        #warning("Bad. Must update 'snapshot' AND 'selection' before updating 'uiView'.")
         #warning("This might warrant making a Field struct.")
         
         func update(value nextValue: Value?, snapshot nextSnapshot: Snapshot, selection nextSelection: Selection) {

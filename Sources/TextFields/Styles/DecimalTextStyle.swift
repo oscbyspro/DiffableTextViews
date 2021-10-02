@@ -5,77 +5,126 @@
 //  Created by Oscar Byström Ericsson on 2021-09-28.
 //
 
-import Foundation
+import SwiftUI
 
-#warning("WIP")
+@available(iOS 15.0, *)
 public struct DecimalTextStyle: DiffableTextStyle {
-    let formatter: NumberFormatter
+    @usableFromInline let formatStyle: DecimalFormatStyle
     
-    public init() {
-        #warning("TODO.")
-        let formatter = NumberFormatter()
-        formatter.numberStyle = .decimal
-        formatter.generatesDecimalNumbers = true
-        formatter.maximumIntegerDigits = Self.maximumNumberOfDigits
-        formatter.maximumFractionDigits = Self.maximumNumberOfDigits
-        formatter.roundingMode = .down
-        formatter.groupingSeparator = " "
-        self.formatter = formatter
+//    var maximum: Decimal =  .greatestFiniteMagnitude
+//    var minimum: Decimal = -.greatestFiniteMagnitude
+    
+    @inlinable public init() {
+        self.formatStyle = DecimalFormatStyle()
     }
     
-    public func parse(content: String) -> Decimal? {
-        let parseable = content.replacingOccurrences(of: formatter.decimalSeparator, with: ".")
+    public func format(_ value: Decimal) -> String {
+        formatStyle.format(value)
+    }
+    
+    public func parse(_ content: String) -> Decimal? {
+        guard !content.isEmpty else { return .zero }
         
-        return Decimal(string: parseable)
+        guard let value = try? Decimal(content, strategy: formatStyle.parseStrategy) else { return nil }
+        
+//        guard minimum <= value, value <= maximum else { return nil }
+                
+        return value
     }
     
-    public func format(value: Decimal) -> String {
-        String(describing: value).replacingOccurrences(of: ".", with: formatter.decimalSeparator)
-    }
-    
-    public func snapshot(content: String) -> Snapshot {
+    public func snapshot(_ content: String) -> Snapshot {
         var snapshot = Snapshot()
         
-        guard let decimal: Decimal = try? parse(content: content) else {
-            return snapshot
+        let contentSet = formatStyle.content()
+        let spacersSet = formatStyle.spacers()
+        
+        var remainders = content[...]
+        
+        if let first = remainders.first, formatStyle.signs.contains(first) {
+            snapshot.append(.content(first))
+            remainders.removeFirst()
         }
         
-        guard let formatted: String = formatter.string(from: decimal as NSDecimalNumber) else {
-            return snapshot
+        if let first = remainders.first, first == formatStyle.decimalSeparator {
+            snapshot.append(.content(formatStyle.zero))
         }
-                
-        let content = self.content()
-        let spacers = self.spacers()
         
-        for character in formatted {
-            if content.contains(character) {
+        for character in remainders {
+            if contentSet.contains(character) {
                 snapshot.append(.content(character))
-            } else if spacers.contains(character) {
-                snapshot.append(.spacer(character))
+            } else if spacersSet.contains(character) {
+                snapshot.append(.content(character))
             }
         }
         
         return snapshot
     }
-    
-    struct Failure: Error { }
 }
 
-// MARK: - Constants
+// MARK: -
 
-extension DecimalTextStyle {
-    static let maximumNumberOfDigits: Int = 38
-    static let maximumAbsoluteValue = Decimal(string: String(repeating: "9", count: maximumNumberOfDigits))!
-    
-    static let digits = Set<Character>("0123456789")
-    static let decimalSeparator: Character = "."
-    static let minus: Character = "-"
-    
-    func content() -> Set<Character> {
-        Self.digits.union([Character(formatter.decimalSeparator), Character(formatter.negativePrefix)])
+@available(iOS 15.0, *)
+@usableFromInline struct DecimalFormatStyle: ParseableFormatStyle {
+    @usableFromInline let wrapped: Decimal.FormatStyle
+        
+    @inlinable init() {
+        self.wrapped = Decimal.FormatStyle(locale: .autoupdatingCurrent)
+            .grouping(.automatic)
+            .decimalSeparator(strategy: .automatic)
+            .precision(.significantDigits(0 ... 38))
     }
     
-    func spacers() -> Set<Character> {
-        Set([Character(formatter.groupingSeparator)])
+    // MARK: Protocol: FormatStyle
+    
+    @inlinable func format(_ value: Decimal) -> String {
+        wrapped.format(value)
+    }
+    
+    // MARK: Protocol: ParseableFormatStyle
+    
+    @inlinable var parseStrategy: Decimal.ParseStrategy<Decimal.FormatStyle> {
+        wrapped.parseStrategy
+    }
+    
+    // MARK: Getters
+    
+    @inlinable var locale: Locale {
+        wrapped.locale
+    }
+    
+    @inlinable var signs: String {
+        "+-"
+    }
+    
+    @inlinable var digits: String {
+        "0123456789"
+    }
+    
+    @inlinable var decimalSeparator: Character {
+        locale.decimalSeparator.map(Character.init) ?? "."
+    }
+    
+    @inlinable var groupingSeparator: Character {
+        locale.groupingSeparator.map(Character.init) ?? ","
+    }
+    
+    @inlinable var zero: Character {
+        "0"
+    }
+    
+    // MARK: CharacterSets
+    
+    @inlinable func content() -> Set<Character> {
+        var set = Set<Character>()
+        set.formUnion(signs)
+        set.formUnion(digits)
+        set.insert(decimalSeparator)
+        return set
+    }
+    
+    @inlinable func spacers() -> Set<Character> {
+        var set = Set<Character>()
+        set.insert(groupingSeparator)
+        return set
     }
 }
