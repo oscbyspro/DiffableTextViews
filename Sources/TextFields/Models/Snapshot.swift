@@ -24,10 +24,10 @@ public struct Snapshot: BidirectionalCollection, RangeReplaceableCollection, Exp
         self.content = ""
     }
     
-    @inlinable public init(content rawValue: String) {
-        self.attributes = rawValue.map({ _ in .content })
-        self.characters = rawValue
-        self.content = rawValue
+    @inlinable public init(content: String) {
+        self.attributes = content.map({ _ in .content })
+        self.characters = content
+        self.content = content
     }
         
     @inlinable public init(arrayLiteral elements: Symbol...) {
@@ -136,4 +136,3 @@ public struct Snapshot: BidirectionalCollection, RangeReplaceableCollection, Exp
         }
     }
 }
-
