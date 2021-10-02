@@ -19,15 +19,15 @@ public struct Snapshot: BidirectionalCollection, RangeReplaceableCollection, Exp
     // MARK: Initialization
 
     public init() {
-        self.attributes = []
-        self.characters = ""
-        self.content = ""
+        self.attributes = Array()
+        self.characters = String()
+        self.content = String()
     }
     
-    public init(content: String) {
-        self.attributes = content.map({ _ in .content })
-        self.characters = content
-        self.content = content
+    public init(_ characters: String, only attribute: Attribute) {
+        self.attributes = characters.map({ _ in attribute })
+        self.characters = characters
+        self.content = attribute == .content ? characters : String()
     }
         
     @inlinable public init(arrayLiteral elements: Symbol...) {
@@ -44,7 +44,7 @@ public struct Snapshot: BidirectionalCollection, RangeReplaceableCollection, Exp
         Index(attributes.endIndex, characters.endIndex, content.endIndex)
     }
     
-    // MARK: Traverse
+    // MARK: Traversal
     
     @inlinable public func index(after i: Index) -> Index {
         step(i, attributes.index(after:), characters.index(after:), contentIndex(after:peak:))
@@ -54,7 +54,7 @@ public struct Snapshot: BidirectionalCollection, RangeReplaceableCollection, Exp
         step(i, attributes.index(before:), characters.index(before:), contentIndex(before:peak:))
     }
     
-    // MARK: Traverse: Helpers
+    // MARK: Traversal: Helpers
     
     @inlinable func step(_ index: Index, _ attributes: (Int) -> Int, _ characters: (String.Index) -> String.Index, _ content: (String.Index, Int) -> String.Index) -> Index {
         let attributesIndex = attributes(index.attribute)
@@ -74,7 +74,7 @@ public struct Snapshot: BidirectionalCollection, RangeReplaceableCollection, Exp
         return attributes[peak] == .content ? content.index(before: contentIndex) : contentIndex
     }
     
-    // MARK: Replace
+    // MARK: Replacements
 
     public mutating func replaceSubrange<C: Collection>(_ subrange: Range<Index>, with newElements: C) where C.Element == Symbol {
         attributes.replaceSubrange(subrange.map(bounds: \.attribute), with: newElements.view(\.attribute))
@@ -82,7 +82,7 @@ public struct Snapshot: BidirectionalCollection, RangeReplaceableCollection, Exp
         content.replaceSubrange(subrange.map(bounds: \.content), with: newElements.compactView(content(in:)))
     }
     
-    // MARK: Replace: Helpers
+    // MARK: Replacements: Helpers
     
     @inlinable func content(in symbol: Symbol) -> Character? {
         symbol.attribute == .content ? symbol.character : nil

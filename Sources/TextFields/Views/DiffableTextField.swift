@@ -88,7 +88,7 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable, 
                 .indices(in: range)
             
             let replacementSnapshot = Snapshot
-                .init(content: string)
+                .init(string, only: .content)
                         
             let proposalSnapshot = snapshot
                 .replace(replacementIndices, with: replacementSnapshot)
