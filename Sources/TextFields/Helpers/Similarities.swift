@@ -39,23 +39,21 @@
     
     // MARK: Methods
     
-    #warning("Broken?")
-        
     @usableFromInline func lhsPrefix() -> LHS.SubSequence {
         var lhsIndex = lhs.startIndex
         var rhsIndex = rhs.startIndex
         
-        while let nextLhsIndex = index(after: lhsIndex, in: lhs),
-              let nextRhsIndex = index(after: rhsIndex, in: rhs) {
+        while let nextLhsIndex = nextIndex(in: lhs[lhsIndex...]),
+              let nextRhsIndex = nextIndex(in: rhs[rhsIndex...]) {
             
             guard options.comparison.equivalent(lhs[nextLhsIndex], rhs[nextRhsIndex]) else { break }
 
-            lhsIndex = nextLhsIndex
-            rhsIndex = nextRhsIndex
+            lhsIndex = lhs.index(after: lhsIndex)
+            rhsIndex = rhs.index(after: rhsIndex)
         }
         
         if options.production == .overshoot {
-            lhsIndex = index(after: lhsIndex, in: lhs) ?? lhs.endIndex
+            lhsIndex = nextIndex(in: lhs[lhsIndex...]) ?? lhs.endIndex
         }
         
         return lhs[..<lhsIndex]
@@ -76,10 +74,8 @@
     
     // MARK: Helpers
     
-    @inlinable func index<C: Collection>(after index: C.Index, in collection: C) -> C.Index? where C.Element == Element {
-        guard index < collection.endIndex else { return nil }
-        let start = collection.index(after: index)
-        return collection[start...].firstIndex(where: options.inspection.includes)
+    @inlinable func nextIndex<C: Collection>(in collection: C) -> C.Index? where C.Element == Element {
+        collection.firstIndex(where: options.inspection.includes)
     }
 }
 
