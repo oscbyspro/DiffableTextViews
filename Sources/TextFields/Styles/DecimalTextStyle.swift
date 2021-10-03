@@ -13,9 +13,6 @@ import SwiftUI
 public struct DecimalTextStyle: DiffableTextStyle {
     @usableFromInline let formatStyle: DecimalFormatStyle
     
-//    var maximum: Decimal =  .greatestFiniteMagnitude
-//    var minimum: Decimal = -.greatestFiniteMagnitude
-    
     // MARK: Initialization
     
     @inlinable public init() {
@@ -27,10 +24,9 @@ public struct DecimalTextStyle: DiffableTextStyle {
     public func format(_ value: Decimal) -> Snapshot {
         var snapshot = Snapshot()
         
+        let characters = formatStyle.format(value)
         let contentSet = formatStyle.content()
         let spacersSet = formatStyle.spacers()
-        
-        let characters = formatStyle.format(value)
         
         for character in characters {
             if contentSet.contains(character) {
@@ -44,38 +40,23 @@ public struct DecimalTextStyle: DiffableTextStyle {
     }
         
     public func parse(_ snapshot: Snapshot) -> Decimal? {
-        #error("TODO")
+        let content = snapshot.content()
         
-//        guard !snapshot.content.isEmpty else {
-//            return 0
-//        }
-//
-//        guard let decimal = try? Decimal(snapshot.content, strategy: formatStyle.parseStrategy) else {
-//            return nil
-//        }
-//
-//        return decimal
+        guard !content.isEmpty else {
+            return 0
+        }
+        
+        guard let decimal = Decimal(string: content, locale: formatStyle.locale) else {
+            return nil
+        }
+        
+        return decimal
     }
-
     
     public func accept(_ snapshot: Snapshot) -> Snapshot? {
-        #error("TODO")
-
-//        var result = snapshot
-//
-//        separator: if let index = result.view(\.character).firstIndex(of: formatStyle.decimalSeparator) {
-//            guard index > result.startIndex else { break separator }
-//
-//            let previousIndex = result.index(before: index)
-//
-//            if !snapshot[previousIndex].character.isNumber {
-//                result.insert(.content(formatStyle.zero), at: index)
-//            }
-//        }
-//
-//        print(result.content)
-//
-//        return result
+        guard let decimal = parse(snapshot) else { return nil }
+        
+        return format(decimal)
     }
 }
 

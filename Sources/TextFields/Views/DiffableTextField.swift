@@ -94,6 +94,7 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable, 
             
             // try to make new values
             
+            #warning("Make it possible to avoid double parse.")
             guard let nextSnapshot = source.style.accept(proposal) else { return false }
             guard let nextValue = source.style.parse(nextSnapshot) else { return false }
                         

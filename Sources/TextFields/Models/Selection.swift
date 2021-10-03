@@ -5,6 +5,7 @@
 //  Created by Oscar Byström Ericsson on 2021-09-27.
 //
 
+#warning("Cleanup.")
 @usableFromInline struct Selection {
     @usableFromInline typealias Field = Carets<Snapshot>
     @usableFromInline typealias Content = Field.Element
@@ -72,6 +73,9 @@
         moveToContent(&nextLowerBound)
         moveToContent(&nextUpperBound)
                 
+        moveOverSpacers(&nextLowerBound, momentum: Momentum(from: range.lowerBound, to: nextLowerBound))
+        moveOverSpacers(&nextUpperBound, momentum: Momentum(from: range.upperBound, to: nextUpperBound))
+                
         return Selection(field, range: nextLowerBound ..< nextUpperBound)
     }
     
@@ -122,7 +126,6 @@
         update(position: position(at: newValue))
     }
     
-    
     // MARK: Helpers
     
     @inlinable func position(at snapshotIndex: Snapshot.Index) -> Position {
@@ -148,5 +151,76 @@
     @inlinable func moveToContent(_ position: inout Position) {
         move(&position, step: next, while: { ($0.rhs?.attribute ?? .prefix) == .prefix })
         move(&position, step: prev, while: { ($0.lhs?.attribute ?? .suffix) == .suffix })
+    }
+}
+
+#warning("This is super messy.")
+extension Selection {
+    @inlinable func first(after position: Position, step: (Position) -> Position?, where predicate: (Content) -> Bool) -> Position? {
+        var current = position
+        
+        while let other = step(current) {
+            current = other
+            
+            if predicate(field[current]) { return current }
+        }
+        
+        return nil
+    }
+
+    @usableFromInline func next(_ position: Position, where predicate: (Content) -> Bool) -> Position? {
+        first(after: position, step: next(_:), where: predicate)
+    }
+
+    @usableFromInline func prev(_ position: Position, where predicate: (Content) -> Bool) -> Position? {
+        first(after: position, step: prev(_:), where: predicate)
+    }
+    
+    @inlinable func moveToNextOverSpacers(_ position: inout Position) {
+        guard field[position].lhs?.attribute == .spacer else { return }
+            
+        func destination(_ content: Content?) -> Bool {
+            content?.lhs.map(\.content) ?? false
+        }
+        
+        if let destination = next(position, where: destination(_:)) {
+            position = destination
+        }
+    }
+    
+    @inlinable func moveToPrevOverSpacers(_ position: inout Position) {
+        guard field[position].lhs?.attribute == .spacer else { return }
+        
+        func destination(_ content: Content?) -> Bool {
+            content?.lhs.map({ $0.prefix || $0.content }) ?? true
+        }
+        
+        if let destination = prev(position, where: destination(_:)) {
+            position = destination
+        }
+    }
+    
+    @inlinable func moveOverSpacers(_ position: inout Position, momentum: Momentum) {
+        switch momentum {
+        case .left: moveToPrevOverSpacers(&position)
+        case .right: moveToNextOverSpacers(&position)
+        case .none: break
+        }
+    }
+    
+    @usableFromInline enum Momentum {
+        case left
+        case right
+        case none
+
+        @inlinable init(from prev: Position, to next: Position) {
+            if next < prev {
+                self = .left
+            } else if next > prev {
+                self = .right
+            } else {
+                self = .none
+            }
+        }
     }
 }
