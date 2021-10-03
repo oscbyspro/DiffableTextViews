@@ -6,6 +6,8 @@
 //
 
 #warning("Cleanup.")
+#warning("Handle spacer jumps when range.lowerBound != range.upperBound.")
+#warning("--> It should clamp unnecessary spacers, and jump correctly from clamped positions.")
 @usableFromInline struct Selection {
     @usableFromInline typealias Field = Carets<Snapshot>
     @usableFromInline typealias Content = Field.Element
@@ -155,6 +157,7 @@
 }
 
 #warning("This is super messy.")
+#warning("I think it is better to handle lowerBound and upperBound simultaneously, to handle clamping and such.")
 extension Selection {
     @inlinable func first(after position: Position, step: (Position) -> Position?, where predicate: (Content) -> Bool) -> Position? {
         var current = position
