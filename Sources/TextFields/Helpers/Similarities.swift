@@ -79,9 +79,9 @@
     }
 }
 
-// MARK: - Prefix
-
 extension Collection {
+    // MARK: Prefix
+    
     @inlinable func prefix<Other: Collection>(alsoIn other: Other, options: Similarities<Self, Other>.Options) -> SubSequence where Other.Element == Element {
         Similarities(lhs: self, rhs: other, options: options).lhsPrefix()
     }
@@ -91,9 +91,9 @@ extension Collection {
     }
 }
 
-// MARK: - Suffix
-
 extension BidirectionalCollection {
+    // MARK: Suffix
+    
     @inlinable func suffix<Other: BidirectionalCollection>(alsoIn other: Other, options: Similarities<Self, Other>.Options) -> SubSequence where Other.Element == Element {
         Similarities(lhs: self, rhs: other, options: options).lhsSuffix()
     }
@@ -103,7 +103,7 @@ extension BidirectionalCollection {
     }
 }
 
-// MARK: - Similarities: Components
+// MARK: -
 
 @usableFromInline struct SimilaritiesOptions<Element> {
     @usableFromInline typealias Comparison = SimilaritiesOptionsComparison<Element>
@@ -169,7 +169,7 @@ extension BidirectionalCollection {
     }
 }
 
-// MARK: - SimilaritiesOptions: Comparison
+// MARK: -
 
 @usableFromInline struct SimilaritiesOptionsComparison<Element> {
     @usableFromInline let equivalent: (Element, Element) -> Bool
@@ -191,7 +191,7 @@ extension BidirectionalCollection {
     }
 }
 
-// MARK: - SimilaritiesOptions: Inspection
+// MARK: -
 
 @usableFromInline struct SimilaritiesOptionsInspection<Element> {
     @usableFromInline let includes: (Element) -> Bool
@@ -215,7 +215,7 @@ extension BidirectionalCollection {
     @inlinable static var defaultValue: Self { .each }
 }
 
-// MARK: - SimilaritiesOptions: Production
+// MARK: -
 
 @usableFromInline enum SimilaritiesOptionsProduction {
     case wrapper
