@@ -5,6 +5,8 @@
 //  Created by Oscar Byström Ericsson on 2021-09-28.
 //
 
+#if os(iOS)
+
 import SwiftUI
 
 @available(iOS 15.0, *)
@@ -22,30 +24,20 @@ public struct DecimalTextStyle: DiffableTextStyle {
     
     // MARK: Protocol: DiffableTextStyle
     
-    #warning("Bad name: this should not format.")
-    public func format(_ value: Decimal) -> String {
-        value.formatted(.number.grouping(.never))
+    public func snapshot(_ value: Value) -> Snapshot {
+        #error("TODO")
     }
     
-    #warning("This shold simply convert content.")
-    public func parse(_ content: String) -> Decimal? {
-        guard !content.isEmpty else { return .zero }
-        
-        print(content)
-        
-        guard let value = Decimal(string: content.replacingOccurrences(of: ",", with: ".")) else { return nil }
-        
-//        #warning("There should be no need to unformat becaues there should be no format to unformat.")
-//        guard let value = try? Decimal(content, strategy: formatStyle.parseStrategy) else { return nil }
-        
-        print(value)
-        
-//        guard minimum <= value, value <= maximum else { return nil }
-                
-        return value
+    public func parse(_ snapshot: Snapshot) -> Decimal? {
+        #error("TODO")
+    }
+    
+    public func merge(_ snapshot: Snapshot, with replacement: Snapshot, in range: Range<Snapshot.Index>) -> Snapshot {
+        #error("TODO")
     }
     
     
+    /*
     public func snapshot(_ content: String) -> Snapshot {
         var snapshot = Snapshot()
         
@@ -82,6 +74,8 @@ public struct DecimalTextStyle: DiffableTextStyle {
         
         return snapshot
     }
+     
+     */
 }
 
 // MARK: -
@@ -151,3 +145,5 @@ public struct DecimalTextStyle: DiffableTextStyle {
         return set
     }
 }
+
+#endif

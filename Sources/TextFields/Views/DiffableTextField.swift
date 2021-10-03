@@ -55,8 +55,7 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable, 
         
         if coordinator.value != value.wrappedValue {
             let nextValue = value.wrappedValue
-            let nextContent = style.format(nextValue)
-            let nextSnapshot = style.snapshot(nextContent)
+            let nextSnapshot = style.snapshot(nextValue)
             let nextSelection = coordinator.selection.update(snapshot: nextSnapshot)
             
             // ------------------------------ //
@@ -89,16 +88,13 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable, 
             
             let replacementSnapshot = Snapshot
                 .init(string, only: .content)
-                        
-            let proposalSnapshot = snapshot
-                .replace(replacementIndices, with: replacementSnapshot)
             
             let nextSnapshot = source.style
-                .snapshot(proposalSnapshot.content)
+                .merge(snapshot, with: replacementSnapshot, in: replacementIndices)
             
             // a: snapshot validation
             
-            guard let nextValue = source.style.parse(nextSnapshot.content) else { return false }
+            guard let nextValue = source.style.parse(nextSnapshot) else { return false }
             
             // z: snapshot validation
 
