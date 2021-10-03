@@ -55,7 +55,7 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable, 
         
         if coordinator.value != value.wrappedValue {
             let nextValue = value.wrappedValue
-            let nextSnapshot = style.snapshot(nextValue)
+            let nextSnapshot = style.format(nextValue)
             let nextSelection = coordinator.selection.update(snapshot: nextSnapshot)
             
             // ------------------------------ //
@@ -83,24 +83,22 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable, 
         // MARK: UITextFieldDelegate
         
         public func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
-            let replacementIndices = snapshot
+            let range = snapshot
                 .indices(in: range)
             
-            let replacementSnapshot = Snapshot
+            let replacement = Snapshot
                 .init(string, only: .content)
+                    
+            let proposal = snapshot
+                .replace(range, with: replacement)
             
-            let replacementProposal = snapshot
-                .replace(replacementIndices, with: replacementSnapshot)
+            // try to make new values
             
-            // make new values
-            
-            let nextSnapshot = source.style
-                .autocorrect(replacementProposal)
-                        
+            guard let nextSnapshot = source.style.accept(proposal) else { return false }
             guard let nextValue = source.style.parse(nextSnapshot) else { return false }
                         
             let nextSelection = selection
-                .update(position: replacementIndices.upperBound)
+                .update(position: range.upperBound)
                 .update(snapshot: nextSnapshot)
             
             // update with new values

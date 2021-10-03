@@ -5,6 +5,7 @@
 //  Created by Oscar Byström Ericsson on 2021-09-23.
 //
 
+/*
 public struct Snapshot: BidirectionalCollection, RangeReplaceableCollection, ExpressibleByArrayLiteral {
     public typealias Element = Symbol
     public typealias Indices = DefaultIndices<Self>
@@ -12,50 +13,66 @@ public struct Snapshot: BidirectionalCollection, RangeReplaceableCollection, Exp
 
     // MARK: Storage
 
-    public private(set) var characters: String
     public private(set) var attributes: [Attribute]
+    public private(set) var characters: String
+    public private(set) var content: String
 
     // MARK: Initialization
 
     public init() {
-        self.characters = ""
-        self.attributes = []
+        self.attributes = Array()
+        self.characters = String()
+        self.content = String()
     }
     
     public init(_ characters: String, only attribute: Attribute) {
         self.attributes = characters.map({ _ in attribute })
         self.characters = characters
+        self.content = attribute == .content ? characters : String()
     }
         
     @inlinable public init(arrayLiteral elements: Symbol...) {
         self.init(elements)
     }
-    
-    // MARK: Utilities
-    
-    /// - Complexity: O(n), where n is the length of the collection.
-    @inlinable public func content() -> String {
-        reduce(map: \.character, where: \.content)
-    }
-    
+        
     // MARK: Index
 
     @inlinable public var startIndex: Index {
-        Index(characters.startIndex, attributes.startIndex)
+        Index(attributes.startIndex, characters.startIndex, content.startIndex)
     }
 
     @inlinable public var endIndex: Index {
-        Index(characters.endIndex, attributes.endIndex)
+        Index(attributes.endIndex, characters.endIndex, content.endIndex)
     }
     
     // MARK: Traversal
     
     @inlinable public func index(after i: Index) -> Index {
-        Index(characters.index(after: i.character), attributes.index(after: i.attribute))
+        step(i, attributes.index(after:), characters.index(after:), contentIndex(after:peak:))
     }
     
     @inlinable public func index(before i: Index) -> Index {
-        Index(characters.index(before: i.character), attributes.index(before: i.attribute))
+        step(i, attributes.index(before:), characters.index(before:), contentIndex(before:peak:))
+    }
+    
+    // MARK: Traversal: Helpers
+    
+    @inlinable func step(_ index: Index, _ attributes: (Int) -> Int, _ characters: (String.Index) -> String.Index, _ content: (String.Index, Int) -> String.Index) -> Index {
+        let attributesIndex = attributes(index.attribute)
+        let charactersIndex = characters(index.character)
+        let contentIndex = content(index.content, attributesIndex)
+        
+        return Index(attributesIndex, charactersIndex, contentIndex)
+    }
+    
+    @inlinable func contentIndex(after contentIndex: String.Index, peak: Int) -> String.Index {
+        guard peak < attributes.endIndex else { return content.endIndex }
+        return attributes[peak] == .content ? content.index(after: contentIndex) : contentIndex
+    }
+    
+    @inlinable func contentIndex(before contentIndex: String.Index, peak: Int) -> String.Index {
+        guard peak > attributes.startIndex else { return content.startIndex }
+        return attributes[peak] == .content ? content.index(before: contentIndex) : contentIndex
     }
     
     // MARK: Replacements
@@ -63,6 +80,13 @@ public struct Snapshot: BidirectionalCollection, RangeReplaceableCollection, Exp
     public mutating func replaceSubrange<C: Collection>(_ subrange: Range<Index>, with newElements: C) where C.Element == Symbol {
         attributes.replaceSubrange(subrange.map(bounds: \.attribute), with: newElements.view(\.attribute))
         characters.replaceSubrange(subrange.map(bounds: \.character), with: newElements.view(\.character))
+        content.replaceSubrange(subrange.map(bounds: \.content), with: newElements.compactView(content(in:)))
+    }
+    
+    // MARK: Replacements: Helpers
+    
+    @inlinable func content(in symbol: Symbol) -> Character? {
+        symbol.attribute == .content ? symbol.character : nil
     }
     
     // MARK: Subscripts
@@ -73,7 +97,7 @@ public struct Snapshot: BidirectionalCollection, RangeReplaceableCollection, Exp
         }
     }
     
-    // MARK: Optimization
+    // MARK: Optimizations
     
     /// - Complexity: O(1).
     @inlinable public var count: Int {
@@ -88,14 +112,16 @@ public struct Snapshot: BidirectionalCollection, RangeReplaceableCollection, Exp
     // MARK: Components
 
     public struct Index: Comparable {
-        @usableFromInline let character: String.Index
         @usableFromInline let attribute: Int
+        @usableFromInline let character: String.Index
+        @usableFromInline let content: String.Index
 
         // MARK: Initializers
 
-        @inlinable init(_ character: String.Index, _ attribute: Int) {
-            self.character = character
+        @inlinable init(_ attribute: Int, _ character: String.Index, _ content: String.Index) {
             self.attribute = attribute
+            self.character = character
+            self.content = content
         }
 
         // MARK: Utilities
@@ -111,3 +137,4 @@ public struct Snapshot: BidirectionalCollection, RangeReplaceableCollection, Exp
         }
     }
 }
+*/

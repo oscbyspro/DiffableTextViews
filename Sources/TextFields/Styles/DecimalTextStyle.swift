@@ -24,7 +24,7 @@ public struct DecimalTextStyle: DiffableTextStyle {
     
     // MARK: Protocol: DiffableTextStyle
     
-    public func snapshot(_ value: Decimal) -> Snapshot {
+    public func format(_ value: Decimal) -> Snapshot {
         var snapshot = Snapshot()
         
         let contentSet = formatStyle.content()
@@ -35,10 +35,8 @@ public struct DecimalTextStyle: DiffableTextStyle {
         for character in characters {
             if contentSet.contains(character) {
                 snapshot.append(.content(character))
-                print(0)
             } else if spacersSet.contains(character) {
                 snapshot.append(.spacer(character))
-                print(1)
             }
         }
         
@@ -46,33 +44,38 @@ public struct DecimalTextStyle: DiffableTextStyle {
     }
         
     public func parse(_ snapshot: Snapshot) -> Decimal? {
-        guard !snapshot.content.isEmpty else {
-            return 0
-        }
+        #error("TODO")
         
-        guard let decimal = try? Decimal(snapshot.content, strategy: formatStyle.parseStrategy) else {
-            return nil
-        }
-        
-        return decimal
+//        guard !snapshot.content.isEmpty else {
+//            return 0
+//        }
+//
+//        guard let decimal = try? Decimal(snapshot.content, strategy: formatStyle.parseStrategy) else {
+//            return nil
+//        }
+//
+//        return decimal
     }
+
     
-    public func autocorrect(_ snapshot: Snapshot) -> Snapshot {
-        var result = snapshot
-        
-        separator: if let index = result.view(\.character).firstIndex(of: formatStyle.decimalSeparator) {
-            guard index > result.startIndex else { break separator }
-            
-            let previousIndex = result.index(before: index)
-            
-            if !snapshot[previousIndex].character.isNumber {
-                result.insert(.content(formatStyle.zero), at: index)
-            }
-        }
-        
-        print(result.content)
-        
-        return result
+    public func accept(_ snapshot: Snapshot) -> Snapshot? {
+        #error("TODO")
+
+//        var result = snapshot
+//
+//        separator: if let index = result.view(\.character).firstIndex(of: formatStyle.decimalSeparator) {
+//            guard index > result.startIndex else { break separator }
+//
+//            let previousIndex = result.index(before: index)
+//
+//            if !snapshot[previousIndex].character.isNumber {
+//                result.insert(.content(formatStyle.zero), at: index)
+//            }
+//        }
+//
+//        print(result.content)
+//
+//        return result
     }
 }
 
