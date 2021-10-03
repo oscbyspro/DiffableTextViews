@@ -84,21 +84,6 @@ extension Collection {
     @usableFromInline let base: Base
     @usableFromInline let view: View
     
-    // MARK: Calculations
-    
-    /// - Complexity: O(n), where n is the length of the base collection.
-    @usableFromInline var count: Int {
-        var count = 0
-        var index = startIndex
-        
-        while index < endIndex {
-            count = count + 1
-            index = self.index(after: index)
-        }
-        
-        return count
-    }
-    
     // MARK: Initializers
     
     @inlinable init(_ base: Base, view: @escaping View) {
@@ -149,6 +134,10 @@ extension Collection {
 
 extension CompactInsights: BidirectionalCollection where Base: BidirectionalCollection {
     // MARK: BidirectionalCollection
+}
+
+extension CompactInsights: RandomAccessCollection where Base: RandomAccessCollection {
+    // MARK: RandomAccessCollection
 }
 
 extension Collection {
