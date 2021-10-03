@@ -93,7 +93,7 @@ extension Collection {
         
         while index < endIndex {
             count = count + 1
-            index = index(after: index)
+            index = self.index(after: index)
         }
         
         return count
