@@ -24,58 +24,56 @@ public struct DecimalTextStyle: DiffableTextStyle {
     
     // MARK: Protocol: DiffableTextStyle
     
-    public func snapshot(_ value: Value) -> Snapshot {
-        #error("TODO")
-    }
-    
-    public func parse(_ snapshot: Snapshot) -> Decimal? {
-        #error("TODO")
-    }
-    
-    public func merge(_ snapshot: Snapshot, with replacement: Snapshot, in range: Range<Snapshot.Index>) -> Snapshot {
-        #error("TODO")
-    }
-    
-    
-    /*
-    public func snapshot(_ content: String) -> Snapshot {
+    public func snapshot(_ value: Decimal) -> Snapshot {
         var snapshot = Snapshot()
-        
-        guard !content.isEmpty else { return snapshot }
-        
-        guard let decimal = parse(content) else { return snapshot }
-        
-        let content = format(decimal)
         
         let contentSet = formatStyle.content()
         let spacersSet = formatStyle.spacers()
         
-        var remainders = content[...]
+        let characters = formatStyle.format(value)
         
-        if let first = remainders.first, formatStyle.signs.contains(first) {
-            snapshot.append(.content(first))
-            remainders.removeFirst()
-        }
-        
-        print(remainders)
-        
-        if let first = remainders.first, first == formatStyle.decimalSeparator {
-            snapshot.append(.content(formatStyle.zero))
-            print(999)
-        }
-        
-        for character in remainders {
+        for character in characters {
             if contentSet.contains(character) {
                 snapshot.append(.content(character))
+                print(0)
             } else if spacersSet.contains(character) {
-                snapshot.append(.content(character))
+                snapshot.append(.spacer(character))
+                print(1)
             }
         }
         
         return snapshot
     }
-     
-     */
+        
+    public func parse(_ snapshot: Snapshot) -> Decimal? {
+        guard !snapshot.content.isEmpty else {
+            return 0
+        }
+        
+        guard let decimal = try? Decimal(snapshot.content, strategy: formatStyle.parseStrategy) else {
+            return nil
+        }
+        
+        return decimal
+    }
+    
+    public func autocorrect(_ snapshot: Snapshot) -> Snapshot {
+        var result = snapshot
+        
+        separator: if let index = result.view(\.character).firstIndex(of: formatStyle.decimalSeparator) {
+            guard index > result.startIndex else { break separator }
+            
+            let previousIndex = result.index(before: index)
+            
+            if !snapshot[previousIndex].character.isNumber {
+                result.insert(.content(formatStyle.zero), at: index)
+            }
+        }
+        
+        print(result.content)
+        
+        return result
+    }
 }
 
 // MARK: -

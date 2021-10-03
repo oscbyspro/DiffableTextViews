@@ -8,17 +8,18 @@
 public protocol DiffableTextStyle {
     associatedtype Value: Equatable
     
+    // 0 -> "0"
     func snapshot(_ value: Value) -> Snapshot
-    
-    func parse(_ snapshot: Snapshot) -> Value?
         
-    func merge(_ snapshot: Snapshot, with replacement: Snapshot, in range: Range<Snapshot.Index>) -> Snapshot
+    // "" -> 0
+    func parse(_ snapshot: Snapshot) -> Value?
+    
+    // "-." -> "-0."
+    func autocorrect(_ snapshot: Snapshot) -> Snapshot
 }
-
-extension DiffableTextStyle {
+    
+public extension DiffableTextStyle {
     // MARK: Default Implementation
     
-    @inlinable func merge(_ snapshot: Snapshot, with replacement: Snapshot, in range: Range<Snapshot.Index>) -> Snapshot {
-        snapshot.replace(range, with: replacement)
-    }
+    @inlinable func autocorrect(_ snapshot: Snapshot) -> Snapshot { snapshot }
 }
