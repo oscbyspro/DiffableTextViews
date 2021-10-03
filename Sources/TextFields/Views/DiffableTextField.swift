@@ -97,7 +97,7 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable, 
             guard let nextValue = source.style.parse(nextSnapshot) else { return false }
             
             // z: snapshot validation
-
+            
             let nextSelection = selection
                 .update(position: replacementIndices.upperBound)
                 .update(snapshot: nextSnapshot)

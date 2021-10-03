@@ -5,8 +5,6 @@
 //  Created by Oscar Byström Ericsson on 2021-10-02.
 //
 
-import SwiftUI
-
 public protocol DiffableTextStyle {
     associatedtype Value: Equatable
     
@@ -18,7 +16,7 @@ public protocol DiffableTextStyle {
 }
 
 extension DiffableTextStyle {
-    // MARK: Defaults
+    // MARK: Default Implementation
     
     @inlinable func merge(_ snapshot: Snapshot, with replacement: Snapshot, in range: Range<Snapshot.Index>) -> Snapshot {
         snapshot.replace(range, with: replacement)
