@@ -34,7 +34,7 @@ extension Collection {
     }
 }
 
-#warning("Decide whether to use \Collection.method or \Selection.method.")
+#warning("Decide whether to use Collection.method or Selection.method.")
 extension Collection {
     // MARK: Traversal: Predicate
     
