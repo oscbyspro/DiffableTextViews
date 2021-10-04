@@ -54,9 +54,18 @@
         nextLowerBound = field.nearestIndexInsideContentBounds(from: nextLowerBound)
         nextUpperBound = field.nearestIndexInsideContentBounds(from: nextUpperBound)
         
-        moveOverSpacers(&nextLowerBound, momentum: Momentum(from: range.lowerBound, to: nextLowerBound))
-        moveOverSpacers(&nextUpperBound, momentum: Momentum(from: range.upperBound, to: nextUpperBound))
-                
+        #warning("Clean up this mess.")
+        
+        // lowerBound
+        if let momentum = Momentum(from: range.lowerBound, to: nextLowerBound) {
+            moveOverSpacers(&nextLowerBound, forward: momentum == .forward, left: nextLowerBound == nextUpperBound)
+        }
+        
+        // upperBound
+        if let momentum = Momentum(from: range.upperBound, to: nextUpperBound) {
+            moveOverSpacers(&nextUpperBound, forward: momentum == .forward, left: true)
+        }
+        
         return Selection(field, range: nextLowerBound ..< nextUpperBound)
     }
     
@@ -107,45 +116,71 @@
 #warning("This is super messy.")
 #warning("I think it is better to handle lowerBound and upperBound simultaneously, to handle clamping and such.")
 extension Selection {
-    @inlinable func moveToNextOverSpacers(_ position: inout Field.Index) {
-        guard field[position].lhs.spacer else { return }
+    @inlinable func moveOverSpacers(_ position: inout Field.Index, forward: Bool, left: Bool) {
+        let end: (Field.Element) -> Bool = {
+            forward ? { $0.rhs.suffix } : { $0.lhs.prefix }
+        }()
         
-        if let destination = field.firstIndex(after: position, where: \.lhs.content) {
-            print(field[position].lhs, field[destination].lhs)
+        let predicate: (Field.Element) -> Bool = {
+            left ? { $0.lhs.content } : { $0.rhs.content }
+        }()
+        
+        if let destination = field.firstIndex(from: position, forward: forward, where: { predicate($0) || end($0) }) {
             position = destination
         }
     }
     
-    @inlinable func moveToPrevOverSpacers(_ position: inout Field.Index) {
-        guard field[position].lhs.spacer else { return }
-        
-        if let destination = field.firstIndex(before: position, where: { $0.lhs.prefix || $0.lhs.content }) {
-            position = destination
-        }
-    }
-    
-    @inlinable func moveOverSpacers(_ position: inout Field.Index, momentum: Momentum) {
-        switch momentum {
-        case .left: moveToPrevOverSpacers(&position)
-        case .right: moveToNextOverSpacers(&position)
-        case .none: break
-        }
-    }
-    
-    #warning("Remove, maybe.")
     @usableFromInline enum Momentum {
-        case left
-        case right
-        case none
+        case forward
+        case backward
 
-        @inlinable init(from prev: Field.Index, to next: Field.Index) {
+        @inlinable init?(from prev: Field.Index, to next: Field.Index) {
             if next < prev {
-                self = .left
+                self = .backward
             } else if next > prev {
-                self = .right
+                self = .forward
             } else {
-                self = .none
+                return nil
             }
         }
     }
 }
+
+/*
+ @inlinable func moveToNextOverSpacers(_ position: inout Field.Index) {
+     if let destination = field[position...].firstIndex(where: { $0.lhs.content || $0.rhs.suffix }) {
+         position = destination
+     }
+ }
+ 
+ @inlinable func moveToPrevOverSpacers(_ position: inout Field.Index, equality: Bool) {
+     func point(element: Field.Element) -> Bool {
+         element.lhs.content || element.rhs.prefix
+     }
+
+     func range(element: Field.Element) -> Bool {
+         element.rhs.content || element.rhs.prefix
+     }
+
+     if let destination = field.firstIndex(from: position, forward: false, where: equality ? point : range) {
+         position = destination
+     }
+ }
+ */
+
+#warning("if lowerBound == upperBound")
+/*
+ 
+ position: move to firstIndex(where: \.lhs.content, direction: position_momentum) // direction: .left
+ 
+ */
+
+#warning("If lowerBound != upperBound")
+/*
+ 
+ lowerBound: move to firstIndex(where: \.rhs.content, direction: lowerBound_momentum) // direction: .left
+ upperBound: move to firstIndex(where: \.lhs.content, direction: upperBound_momentum) // direction: .right
+ 
+ */
+
+#warning("use momentum to decide wether to move forward or backward, use")

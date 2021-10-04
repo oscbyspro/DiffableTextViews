@@ -174,7 +174,7 @@ extension Field {
     @inlinable func firstIndex(before position: Index, where predicate: (Element) -> Bool =  { _ in true }) -> Index? {
         firstIndex(beyond: position, where: predicate, next: index(before:), end: firstIndex)
     }
-        
+
     @inlinable func firstIndex(beyond position: Index, where predicate: (Element) -> Bool, next: (Index) -> Index, end: Index) -> Index? {
         var current = position
         
@@ -191,7 +191,7 @@ extension Field {
 }
 
 extension Field {
-    // MARK: Nearest Index
+    // MARK: Nearest Index Inside Content Bounds
     
     @inlinable func nearestIndexInsideContentBounds(from position: Index) -> Index {
         var current = position == endIndex ? lastIndex : position
@@ -205,5 +205,36 @@ extension Field {
         }
         
         return current
+    }
+}
+
+extension Field {
+    @usableFromInline func firstIndex(from start: Index, forward: Bool, where predicate: (Element) -> Bool) -> Index? {
+        let next = forward ? index(after:) : index(before:)
+        let last = forward ? startIndex    : endIndex
+        
+        var index = start
+        
+        while index != last {
+            if predicate(self[index]) {
+                return index
+            }
+            
+            index = next(index)
+        }
+        
+        return nil
+    }
+}
+
+extension Field {
+    // MARK: First Non Space
+    
+    @usableFromInline func firstContentIndex(from start: Index, forward: Bool, side: (Element) -> Symbol) -> Index? {
+        let end: (Element) -> Bool = {
+            forward ? { $0.rhs.suffix } : { $0.lhs.prefix }
+        }()
+                
+        return firstIndex(from: start, forward: forward, where: { side($0).content || end($0) })
     }
 }
