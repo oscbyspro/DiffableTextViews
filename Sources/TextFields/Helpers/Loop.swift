@@ -52,10 +52,11 @@ struct Loop<Base: BidirectionalCollection>: Sequence {
     }
     
     @inlinable func predicate() -> (Base.Index) -> Bool {
-        if start.position < end.position {
-            return end.open ? { $0 < end.position } : { $0 <= end.position }
-        } else {
-            return end.open ? { $0 > end.position } : { $0 >= end.position }
+        switch (start.position < end.position, end.open) {
+        case (true,  true): return { $0 <  end.position }
+        case (true, false): return { $0 <= end.position }
+        case (false, true): return { $0 >  end.position }
+        case (false, true): return { $0 >= end.position }
         }
     }
 
