@@ -9,7 +9,7 @@
 #warning("--> It should clamp unnecessary spacers, and jump correctly from clamped positions.")
 @usableFromInline struct Selection {
     @usableFromInline let field: Field
-    @usableFromInline var range: Range<Field.Index>
+    @usableFromInline let range: Range<Field.Index>
     
     // MARK: Initializers
     
@@ -48,25 +48,16 @@
     // MARK: Update: Range
     
     @inlinable func update(with newValue: Range<Field.Index>) -> Self {
-        var nextLowerBound = newValue.lowerBound
-        var nextUpperBound = newValue.upperBound
+        var nextRange = newValue
         
-        nextLowerBound = field.nearestIndexInsideContentBounds(from: nextLowerBound)
-        nextUpperBound = field.nearestIndexInsideContentBounds(from: nextUpperBound)
+        let x = field.reversed().reduce(into: String(), map: \.lhs.character)
+        print(x)
         
-        #warning("Clean up this mess.")
+        moveInsideContent(&nextRange)
+        #warning("Is 'previous: range' required?")
+        moveAcrossSpacers(&nextRange, compare: range)
         
-        // lowerBound
-        if let momentum = Momentum(from: range.lowerBound, to: nextLowerBound) {
-            moveOverSpacers(&nextLowerBound, forward: momentum == .forward, left: nextLowerBound == nextUpperBound)
-        }
-        
-        // upperBound
-        if let momentum = Momentum(from: range.upperBound, to: nextUpperBound) {
-            moveOverSpacers(&nextUpperBound, forward: momentum == .forward, left: true)
-        }
-        
-        return Selection(field, range: nextLowerBound ..< nextUpperBound)
+        return Selection(field, range: nextRange)
     }
     
     @inlinable func update(with newValue: Range<Layout.Index>) -> Self {
@@ -113,24 +104,49 @@
     }
 }
 
-#warning("This is super messy.")
-#warning("I think it is better to handle lowerBound and upperBound simultaneously, to handle clamping and such.")
 extension Selection {
-    @inlinable func moveOverSpacers(_ position: inout Field.Index, forward: Bool, left: Bool) {
-        let end: (Field.Element) -> Bool = {
-            forward ? { $0.rhs.suffix } : { $0.lhs.prefix }
-        }()
-        
-        let predicate: (Field.Element) -> Bool = {
-            left ? { $0.lhs.content } : { $0.rhs.content }
-        }()
-        
-        if let destination = field.firstIndex(from: position, forward: forward, where: { predicate($0) || end($0) }) {
-            position = destination
-        }
-    }
+    // MARK: Clamp Inside Content
     
-    @usableFromInline enum Momentum {
+    @inlinable func moveInsideContent(_ range: inout Range<Field.Index>) {
+        let lowerBound = field.nearestIndexInsideContentBounds(from: range.lowerBound)
+        let upperBound = field.nearestIndexInsideContentBounds(from: range.upperBound)
+        
+        range = lowerBound ..< upperBound
+    }
+}
+
+#warning("This is super messy.")
+extension Selection {
+    // MARK: Ignore Spacers
+    
+    @inlinable func moveAcrossSpacers(_ next: inout Range<Field.Index>, compare previous: Range<Field.Index>) {
+        func position(_ position: Field.Index, forward: Bool, observe symbol: (Field.Element) -> Symbol) -> Field.Index {
+            let end: (Field.Element) -> Bool = {
+                forward ? { $0.rhs.suffix } : { $0.lhs.suffix }
+            }()
+            
+            return field.firstIndex(from: position, forward: forward, where: { symbol($0).content || end($0) }) ?? position
+        }
+        
+        let lowerBound: Field.Index
+        let upperBound: Field.Index
+        
+        let lowerIntent = Intent(from: range.lowerBound, to: next.lowerBound)
+        let upperIntent = Intent(from: range.upperBound, to: next.upperBound)
+        
+        if next.isEmpty {
+            lowerBound = position(next.lowerBound, forward: (lowerIntent ?? .backward) == .forward, observe: \.lhs)
+            upperBound = position(next.upperBound, forward: (upperIntent ?? .backward) == .forward, observe: \.lhs)
+        } else {
+            #warning("Only this one is different.")
+            lowerBound = position(next.lowerBound, forward: (lowerIntent ??  .forward) == .forward, observe: \.rhs)
+            upperBound = position(next.upperBound, forward: (upperIntent ?? .backward) == .forward, observe: \.lhs)
+        }
+        
+        next = lowerBound ..< upperBound
+    }
+
+    @usableFromInline enum Intent {
         case forward
         case backward
 
@@ -145,42 +161,3 @@ extension Selection {
         }
     }
 }
-
-/*
- @inlinable func moveToNextOverSpacers(_ position: inout Field.Index) {
-     if let destination = field[position...].firstIndex(where: { $0.lhs.content || $0.rhs.suffix }) {
-         position = destination
-     }
- }
- 
- @inlinable func moveToPrevOverSpacers(_ position: inout Field.Index, equality: Bool) {
-     func point(element: Field.Element) -> Bool {
-         element.lhs.content || element.rhs.prefix
-     }
-
-     func range(element: Field.Element) -> Bool {
-         element.rhs.content || element.rhs.prefix
-     }
-
-     if let destination = field.firstIndex(from: position, forward: false, where: equality ? point : range) {
-         position = destination
-     }
- }
- */
-
-#warning("if lowerBound == upperBound")
-/*
- 
- position: move to firstIndex(where: \.lhs.content, direction: position_momentum) // direction: .left
- 
- */
-
-#warning("If lowerBound != upperBound")
-/*
- 
- lowerBound: move to firstIndex(where: \.rhs.content, direction: lowerBound_momentum) // direction: .left
- upperBound: move to firstIndex(where: \.lhs.content, direction: upperBound_momentum) // direction: .right
- 
- */
-
-#warning("use momentum to decide wether to move forward or backward, use")

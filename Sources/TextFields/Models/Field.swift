@@ -213,7 +213,7 @@ extension Field {
     
     @usableFromInline func firstIndex(from start: Index, forward: Bool, where predicate: (Element) -> Bool) -> Index? {
         let next = forward ? index(after:) : index(before:)
-        let last = forward ? startIndex    : endIndex
+        let last = forward ? endIndex      : startIndex
         
         var index = start
         
