@@ -209,6 +209,8 @@ extension Field {
 }
 
 extension Field {
+    #warning("Come up with a better model.")
+    
     @usableFromInline func firstIndex(from start: Index, forward: Bool, where predicate: (Element) -> Bool) -> Index? {
         let next = forward ? index(after:) : index(before:)
         let last = forward ? startIndex    : endIndex
@@ -224,17 +226,5 @@ extension Field {
         }
         
         return nil
-    }
-}
-
-extension Field {
-    // MARK: First Non Space
-    
-    @usableFromInline func firstContentIndex(from start: Index, forward: Bool, side: (Element) -> Symbol) -> Index? {
-        let end: (Element) -> Bool = {
-            forward ? { $0.rhs.suffix } : { $0.lhs.prefix }
-        }()
-                
-        return firstIndex(from: start, forward: forward, where: { side($0).content || end($0) })
     }
 }

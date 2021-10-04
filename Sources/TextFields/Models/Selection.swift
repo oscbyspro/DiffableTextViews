@@ -116,7 +116,7 @@
 #warning("This is super messy.")
 #warning("I think it is better to handle lowerBound and upperBound simultaneously, to handle clamping and such.")
 extension Selection {
-    @inlinable func moveOverSpacers(_ position: inout Field.Index, forward: Bool, left: Bool) {
+    @inlinable func moveOverSpacers(_ position: inout Field.Index, forward: Bool, left: Bool) -> Field.Index? {
         let end: (Field.Element) -> Bool = {
             forward ? { $0.rhs.suffix } : { $0.lhs.prefix }
         }()
