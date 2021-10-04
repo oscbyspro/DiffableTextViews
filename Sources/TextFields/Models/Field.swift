@@ -178,17 +178,12 @@ extension Field {
     @inlinable func firstIndex(beyond position: Index, where predicate: (Element) -> Bool, next: (Index) -> Index, end: Index) -> Index? {
         var current = position
         
-        func peak() -> Index? {
-            current != end ? next(current) : nil
-        }
-        
-        guard let index = peak() else { return nil }
-        current = index
-        
-        while let index = peak() {
-            current = index
+        while current != end {
+            current = next(current)
             
-            if predicate(self[current]) { return current }
+            if predicate(self[current]) {
+                return current
+            }
         }
         
         return nil
@@ -196,6 +191,8 @@ extension Field {
 }
 
 extension Field {
+    // MARK: Nearest Index
+    
     @inlinable func nearestIndexInsideContentBounds(from position: Index) -> Index {
         var current = position == endIndex ? lastIndex : position
         

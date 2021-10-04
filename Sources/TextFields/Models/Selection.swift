@@ -5,7 +5,6 @@
 //  Created by Oscar Byström Ericsson on 2021-09-27.
 //
 
-#error("Cleanup. Messy. Dumb name conventions.")
 #warning("Handle spacer jumps when range.lowerBound != range.upperBound.")
 #warning("--> It should clamp unnecessary spacers, and jump correctly from clamped positions.")
 @usableFromInline struct Selection {
@@ -68,8 +67,7 @@
     @inlinable func update(with newValue: Range<Int>) -> Self {
         typealias Path = (start: Field.Index, offset: Int)
         
-        var positions: [Field.Index] = []
-        positions.reserveCapacity(5)
+        var positions = [Field.Index](size: 5)
         positions.append(contentsOf: [field.firstIndex, field.lastIndex])
         positions.append(contentsOf: [range.lowerBound, range.upperBound])
         
@@ -113,6 +111,7 @@ extension Selection {
         guard field[position].lhs.spacer else { return }
         
         if let destination = field.firstIndex(after: position, where: \.lhs.content) {
+            print(field[position].lhs, field[destination].lhs)
             position = destination
         }
     }
