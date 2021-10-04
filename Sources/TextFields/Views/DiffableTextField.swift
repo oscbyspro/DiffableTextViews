@@ -77,33 +77,29 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable, 
         @usableFromInline var uiView: UITextField!
         
         @usableFromInline private(set) var value: Value!
-        @usableFromInline private(set) var snapshot = Snapshot()
+        @usableFromInline private(set) var snapshot = Layout()
         @usableFromInline private(set) var selection = Selection()
         
         // MARK: UITextFieldDelegate
         
         public func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
-            let range = snapshot
-                .indices(in: range)
-            
-            let replacement = Snapshot
-                .init(string, only: .content)
-                    
-            let proposal = snapshot
-                .replace(range, with: replacement)
+            let range = snapshot.indices(in: range)
+            let replacement = Layout(string, only: .content)
+            let proposal = snapshot.replace(range, with: replacement)
             
             // try to make new values
             
-            #warning("Make it possible to avoid double parse.")
             guard let nextSnapshot = source.style.accept(proposal) else { return false }
             guard let nextValue = source.style.parse(nextSnapshot) else { return false }
-                        
+//            let nextSelection = selection.update(range.upperBound).update(nextSnapshot)
+            
+            
             let nextSelection = selection
-                .update(position: range.upperBound)
-                .update(snapshot: nextSnapshot)
+                .changed(range: range.upperBound)
+                .interpreted(inside: nextSnapshot)
             
             // update with new values
-                                    
+                           ß
             update(value: nextValue, snapshot: nextSnapshot, selection: nextSelection)
 
             return false
@@ -130,11 +126,11 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable, 
         
         #warning("This might warrant making a Field struct.")
         
-        func update(value nextValue: Value?, snapshot nextSnapshot: Snapshot, selection nextSelection: Selection) {
+        func update(value nextValue: Value?, snapshot nextSnapshot: Layout, selection nextSelection: Selection) {
             self.snapshot = nextSnapshot
             self.selection = nextSelection
             
-            uiView.write(nextSnapshot.characters)
+            uiView.write(text: nextSnapshot.characters)
             uiView.select(offsets: nextSelection.offsets)
             
             if let nextValue = nextValue {

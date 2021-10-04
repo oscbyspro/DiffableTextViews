@@ -78,7 +78,9 @@
     // MARK: Helpers: Subelement
     
     @inlinable func subelement(at subindex: Base.Index?) -> Base.Element? {
-        guard let subindex = subindex, subindex < base.endIndex else { return nil }
+        guard let subindex = subindex, subindex < base.endIndex else {
+            return nil
+        }
         
         return base[subindex]
     }

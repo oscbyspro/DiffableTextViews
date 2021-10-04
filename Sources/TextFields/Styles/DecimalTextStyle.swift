@@ -21,8 +21,8 @@ public struct DecimalTextStyle: DiffableTextStyle {
     
     // MARK: Protocol: DiffableTextStyle
     
-    public func format(_ value: Decimal) -> Snapshot {
-        var snapshot = Snapshot()
+    public func format(_ value: Decimal) -> Layout {
+        var snapshot = Layout()
         
         let characters = formatStyle.format(value)
         let contentSet = formatStyle.content()
@@ -39,7 +39,7 @@ public struct DecimalTextStyle: DiffableTextStyle {
         return snapshot
     }
         
-    public func parse(_ snapshot: Snapshot) -> Decimal? {
+    public func parse(_ snapshot: Layout) -> Decimal? {
         let content = snapshot.content()
         
         guard !content.isEmpty else {
@@ -53,7 +53,7 @@ public struct DecimalTextStyle: DiffableTextStyle {
         return decimal
     }
     
-    public func accept(_ snapshot: Snapshot) -> Snapshot? {
+    public func accept(_ snapshot: Layout) -> Layout? {
         guard let decimal = parse(snapshot) else { return nil }
         
         return format(decimal)
