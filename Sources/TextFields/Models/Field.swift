@@ -5,6 +5,7 @@
 //  Created by Oscar Byström Ericsson on 2021-10-04.
 //
 
+#warning("Rename names such as lastIndex to lastSubscript, or similar.")
 @usableFromInline struct Field: BidirectionalCollection {
     @usableFromInline let layout: Layout
     
@@ -166,19 +167,11 @@ extension Field {
 extension Field {
     // MARK: First Index Beyond
     
-    @inlinable func firstIndex(after position: Index) -> Index? {
-        firstIndex(after: position, where: { _ in true })
-    }
-    
-    @inlinable func firstIndex(before position: Index) -> Index? {
-        firstIndex(before: position, where: { _ in true })
-    }
-    
-    @inlinable func firstIndex(after position: Index, where predicate: (Element) -> Bool) -> Index? {
+    @inlinable func firstIndex(after position: Index, where predicate: (Element) -> Bool = { _ in true }) -> Index? {
         firstIndex(beyond: position, where: predicate, next: index(after:), end: lastIndex)
     }
     
-    @inlinable func firstIndex(before position: Index, where predicate: (Element) -> Bool) -> Index? {
+    @inlinable func firstIndex(before position: Index, where predicate: (Element) -> Bool =  { _ in true }) -> Index? {
         firstIndex(beyond: position, where: predicate, next: index(before:), end: firstIndex)
     }
         
@@ -199,5 +192,21 @@ extension Field {
         }
         
         return nil
+    }
+}
+
+extension Field {
+    @inlinable func nearestIndexInsideContentBounds(from position: Index) -> Index {
+        var current = position == endIndex ? lastIndex : position
+        
+        if self[current].rhs.prefix, let next = firstIndex(after: current, where: \.rhs.content) {
+            current = next
+        }
+        
+        if self[current].lhs.suffix, let next = firstIndex(before: current, where: \.lhs.content) {
+            current = next
+        }
+        
+        return current
     }
 }

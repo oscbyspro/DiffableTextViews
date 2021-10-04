@@ -26,8 +26,8 @@ extension UITextField {
     
     // MARK: Selection: Set
         
-    @inlinable func select(offsets: Range<Int>?) {
-        self.selectedTextRange = offsets.map(range) ?? nil
+    @inlinable func select(range offsets: Range<Int>?) {
+        self.selectedTextRange = offsets.map(range)
     }
     
     @inlinable func select(changes: (start: Int, end: Int)) {

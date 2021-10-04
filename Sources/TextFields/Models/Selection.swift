@@ -23,12 +23,6 @@
         self.field = field
         self.range = range
     }
-
-    // MARK: Offsets
-    
-    @inlinable var offsets: Range<Int> {
-        range.map(bounds: \.offset)
-    }
     
     // MARK: Update: Carets
     
@@ -54,24 +48,24 @@
 
     // MARK: Update: Range
     
-    @inlinable func update(range newValue: Range<Field.Index>) -> Self {
+    @inlinable func update(with newValue: Range<Field.Index>) -> Self {
         var nextLowerBound = newValue.lowerBound
         var nextUpperBound = newValue.upperBound
         
-        moveToContent(&nextLowerBound)
-        moveToContent(&nextUpperBound)
-                
+        nextLowerBound = field.nearestIndexInsideContentBounds(from: nextLowerBound)
+        nextUpperBound = field.nearestIndexInsideContentBounds(from: nextUpperBound)
+        
         moveOverSpacers(&nextLowerBound, momentum: Momentum(from: range.lowerBound, to: nextLowerBound))
         moveOverSpacers(&nextUpperBound, momentum: Momentum(from: range.upperBound, to: nextUpperBound))
                 
         return Selection(field, range: nextLowerBound ..< nextUpperBound)
     }
     
-    @inlinable func update(range newValue: Range<Layout.Index>) -> Self {
-        update(range: newValue.map(bounds: field.index(rhs:)))
+    @inlinable func update(with newValue: Range<Layout.Index>) -> Self {
+        update(with: newValue.map(bounds: field.index(rhs:)))
     }
     
-    @inlinable func update(range newValue: Range<Int>) -> Self {
+    @inlinable func update(with newValue: Range<Int>) -> Self {
         typealias Path = (start: Field.Index, offset: Int)
         
         var positions: [Field.Index] = []
@@ -98,30 +92,17 @@
         let lowerBound = position(at: newValue.lowerBound, append: true)
         let upperBound = position(at: newValue.upperBound, append: false)
         
-        return update(range: lowerBound ..< upperBound)
+        return update(with: lowerBound ..< upperBound)
     }
     
     // MARK: Update: Position
     
-    @inlinable func update(range newValue: Field.Index) -> Self {
-        update(range: newValue ..< newValue)
+    @inlinable func update(with newValue: Field.Index) -> Self {
+        update(with: newValue ..< newValue)
     }
     
-    @inlinable func update(range newValue: Layout.Index) -> Self {
-        update(range: newValue ..< newValue)
-    }
-    
-    // MARK: Helpers
-    
-    #warning("Move this to Field, or similar.")
-    @inlinable func moveToContent(_ position: inout Field.Index) {
-        if let destination = field.firstIndex(after: position, where: { !$0.rhs.suffix }) {
-            position = destination
-        }
-        
-        if let destination = field.firstIndex(before: position, where: { !$0.lhs.prefix }) {
-            position = destination
-        }
+    @inlinable func update(with newValue: Layout.Index) -> Self {
+        update(with: newValue ..< newValue)
     }
 }
 

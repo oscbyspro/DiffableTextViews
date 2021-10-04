@@ -56,7 +56,7 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable, 
         if coordinator.value != value.wrappedValue {
             let nextValue = value.wrappedValue
             let nextSnapshot = style.format(nextValue)
-            let nextSelection = coordinator.selection.update(snapshot: nextSnapshot)
+            let nextSelection = coordinator.selection.convert(to: nextSnapshot)
             
             // ------------------------------ //
             
@@ -89,18 +89,13 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable, 
             
             // try to make new values
             
-            guard let nextSnapshot = source.style.accept(proposal) else { return false }
-            guard let nextValue = source.style.parse(nextSnapshot) else { return false }
-//            let nextSelection = selection.update(range.upperBound).update(nextSnapshot)
-            
-            
-            let nextSelection = selection
-                .changed(range: range.upperBound)
-                .interpreted(inside: nextSnapshot)
+            guard let nextLayout = source.style.accept(proposal) else { return false }
+            guard let nextValue = source.style.parse(nextLayout) else { return false }
+            let nextSelection = selection.update(with: range.upperBound).convert(to: nextLayout)
             
             // update with new values
-                           ß
-            update(value: nextValue, snapshot: nextSnapshot, selection: nextSelection)
+
+            update(value: nextValue, snapshot: nextLayout, selection: nextSelection)
 
             return false
         }
@@ -110,8 +105,8 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable, 
 
             // ------------------------------ //
             
-            let nextSelection = selection.update(offsets: offsets)
-            let nextSelectionOffset = nextSelection.offsets
+            let nextSelection = selection.update(with: offsets)
+            let nextSelectionOffset = nextSelection.range.map(bounds: \.offset)
             
             let changesToLowerBound = nextSelectionOffset.lowerBound - offsets.lowerBound
             let changesToUpperBound = nextSelectionOffset.upperBound - offsets.upperBound
@@ -131,7 +126,7 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable, 
             self.selection = nextSelection
             
             uiView.write(text: nextSnapshot.characters)
-            uiView.select(offsets: nextSelection.offsets)
+            uiView.select(range: nextSelection.range.map(bounds: \.offset))
             
             if let nextValue = nextValue {
                 self.value = nextValue
