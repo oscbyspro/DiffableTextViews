@@ -40,6 +40,10 @@ struct Loop<Base: Collection>: Sequence {
         step.forwards ? base.endIndex : base.startIndex
     }
 
+    @inlinable func next(_ index: Index, limit: Index) -> Index? {
+        base.index(index, offsetBy: step.distance, limitedBy: limit)
+    }
+    
     @inlinable func validate() -> (Index) -> Bool {
         let last = step.forwards ? Swift.max(start, end) : Swift.min(start, end)
         
@@ -51,10 +55,6 @@ struct Loop<Base: Collection>: Sequence {
         }
     }
     
-    @inlinable func next(_ index: Index, limit: Index) -> Index? {
-        base.index(index, offsetBy: step.distance, limitedBy: limit)
-    }
-        
     // MARK: Iterators
         
     @inlinable func makeIterator() -> AnyIterator<Element> {
@@ -113,7 +113,7 @@ struct Loop<Base: Collection>: Sequence {
     }
     
     struct Step: Equatable {
-        var distance: Int
+        let distance: Int
         
         // MARK: Initialization
                 
