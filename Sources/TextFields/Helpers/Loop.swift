@@ -48,25 +48,25 @@ struct Loop<Base: Collection>: Sequence {
         
         return Self(collection, start: start, end: end, step: step)
     }
+    
+    // MARK: Helpers
+    
+    @inlinable func next(_ index: Index, limit: Bound) -> Index? {
+        base.index(index, offsetBy: step.distance, limitedBy: limit.position)
+    }
 
     // MARK: Helpers
 
-    @inlinable func next(_ index: Index, limit: Index) -> Index? {
-        base.index(index, offsetBy: step.distance, limitedBy: limit)
+    @inlinable func makeLimit() -> Bound {
+        step.forwards ? Swift.max(start, end) : Swift.min(start, end)
     }
     
-    @inlinable func makeLimit() -> Index {
-        step.forwards ? base.endIndex : base.startIndex
-    }
-    
-    @inlinable func makeValidate() -> (Index) -> Bool {
-        let last = step.forwards ? Swift.max(start, end) : Swift.min(start, end)
-        
-        switch (step.forwards, last.open) {
-        case (true,   true): return { $0 <  last.position }
-        case (true,  false): return { $0 <= last.position }
-        case (false,  true): return { $0 >  last.position }
-        case (false, false): return { $0 >= last.position }
+    @inlinable func makeValidate(limit: Bound) -> (Index) -> Bool {
+        switch (step.forwards, limit.open) {
+        case (true,   true): return { $0 <  limit.position }
+        case (true,  false): return { $0 <= limit.position }
+        case (false,  true): return { $0 >  limit.position }
+        case (false, false): return { $0 >= limit.position }
         }
     }
         
@@ -84,7 +84,7 @@ struct Loop<Base: Collection>: Sequence {
     
     @inlinable func makeIndexIterator() -> AnyIterator<Index> {
         let limit = makeLimit()
-        let validate = makeValidate()
+        let validate = makeValidate(limit: limit)
         
         var current = start.position as Index?
         
@@ -96,7 +96,7 @@ struct Loop<Base: Collection>: Sequence {
             guard let index = current, validate(index) else { return nil }
             
             defer { current = next(index, limit: limit) }
-            return index
+            return  index
         }
     }
 
