@@ -5,19 +5,19 @@
 //  Created by Oscar Byström Ericsson on 2021-10-04.
 //
 
-struct Loop<Base: Collection>: Sequence {
-    typealias Index = Base.Index
-    typealias Element = Base.Element
-    typealias Step = LoopStep<Base>
-    typealias Bound = LoopBound<Index>
-    typealias Bounds = LoopBounds<Index>
+@usableFromInline struct Loop<Base: Collection>: Sequence {
+    @usableFromInline typealias Index = Base.Index
+    @usableFromInline typealias Element = Base.Element
+    @usableFromInline typealias Step = LoopStep<Base>
+    @usableFromInline typealias Bound = LoopBound<Index>
+    @usableFromInline typealias Bounds = LoopBounds<Index>
     
     // MARK: Storage
     
-    let base: Base
-    let start: Bound
-    let end: Bound
-    let step: Step
+    @usableFromInline let base: Base
+    @usableFromInline let start: Bound
+    @usableFromInline let end: Bound
+    @usableFromInline let step: Step
 
     // MARK: Initializers
 
@@ -32,7 +32,7 @@ struct Loop<Base: Collection>: Sequence {
     
     // MARK: Initializers: Move
     
-    @inlinable static func move(through collection: Base, from start: Bound? = nil, to end: Bound? = nil, step: Step = .forwards()) -> Self {
+    @inlinable static func move(through collection: Base, from start: Bound? = nil, to end: Bound? = nil, step: Step = .forwards) -> Self {
         let start = start ?? (step.forwards ? .closed(collection.startIndex) : .open(collection.endIndex))
         let end   = end   ?? (step.forwards ? .open(collection.endIndex) : .closed(collection.startIndex))
         
@@ -41,7 +41,7 @@ struct Loop<Base: Collection>: Sequence {
     
     // MARK: Initializers: Stride
     
-    @inlinable static func stride(through collection: Base, from start: Bound? = nil, to end: Bound? = nil, step: Step = .forwards()) -> Self {
+    @inlinable static func stride(through collection: Base, from start: Bound? = nil, to end: Bound? = nil, step: Step = .forwards) -> Self {
         var start = start ?? .closed(collection.startIndex)
         var end   = end   ??     .open(collection.endIndex)
         
@@ -90,8 +90,8 @@ struct Loop<Base: Collection>: Sequence {
 
 // MARK: -
 
-struct LoopStep<Base: Collection>: Equatable {
-    let distance: Int
+@usableFromInline struct LoopStep<Base: Collection>: Equatable {
+    @usableFromInline let distance: Int
     
     // MARK: Initializers
 
@@ -102,13 +102,9 @@ struct LoopStep<Base: Collection>: Equatable {
     @inlinable static func distance(_ distance: Int) -> Self {
         Self(distance)
     }
-            
-    @inlinable static func forwards() -> Self {
-        Self(+1)
-    }
     
-    @inlinable static func backwards() -> Self where Base: BidirectionalCollection {
-        Self(-1)
+    @inlinable static var forwards: Self {
+        Self(+1)
     }
     
     // MARK: Utilities
@@ -122,11 +118,17 @@ struct LoopStep<Base: Collection>: Equatable {
     }
 }
 
+extension LoopStep where Base: BidirectionalCollection {
+    @inlinable static var backwards: Self {
+        Self(-1)
+    }
+}
+
 // MARK: -
 
-struct LoopBound<Position: Comparable>: Comparable {
-    let position: Position
-    let open: Bool
+@usableFromInline struct LoopBound<Position: Comparable>: Comparable {
+    @usableFromInline let position: Position
+    @usableFromInline let open: Bool
     
     // MARK: Initializers
 
@@ -203,9 +205,9 @@ struct LoopBound<Position: Comparable>: Comparable {
 
 // MARK: -
 
-struct LoopBounds<Position: Comparable> {
-    let lowerBound: LoopBound<Position>
-    let upperBound: LoopBound<Position>
+@usableFromInline struct LoopBounds<Position: Comparable> {
+    @usableFromInline let lowerBound: LoopBound<Position>
+    @usableFromInline let upperBound: LoopBound<Position>
     
     // MARK: Initializers
     
@@ -231,13 +233,11 @@ struct LoopBounds<Position: Comparable> {
 // MARK: - Collection + Loop
 
 extension Collection {
-    @inlinable func firstIndex(from start: LoopBound<Index>, step: LoopStep<Self>, where predicate: (Element) -> Bool = { _ in true }) -> Index? {
-        for index in Loop.move(through: self, from: start, step: step).makeIndexIterator() where predicate(self[index]) {
+    @inlinable func firstIndex(from start: LoopBound<Index>, step: LoopStep<Self> = .forwards, where predicate: (Element) -> Bool = { _ in true }) -> Index? {
+        for index in Loop.move(through: self, from: start, to: nil, step: step).makeIndexIterator() where predicate(self[index]) {
             return index
         }
         
         return nil
     }
 }
-
-
