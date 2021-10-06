@@ -51,8 +51,7 @@ struct Loop<Base: Collection>: Sequence {
     }
         
     // MARK: Helpers
-    
-    
+
     @inlinable func next(_ index: Index, limit: Index) -> Index? {
         base.index(index, offsetBy: step.distance, limitedBy: limit)
     }
