@@ -20,6 +20,7 @@ struct Source {
 // MARK: -
 
 let TextFields = Source(name: "TextFields")
+let Loop = Source(name: "Loop")
 
 // MARK: -
 
@@ -29,10 +30,13 @@ let package = Package(
         .library(
             name: TextFields.name,
             targets: [TextFields.name]),
-        .library(name: "Cache", targets: ["Cache"])
+        .library(
+            name: Loop.name,
+            targets: [Loop.name])
     ],
     targets: [
         .target(name: TextFields.name),
-        .target(name: "Cache"),
+        .target(name: Loop.name),
+        .target(name: "Trash"),
     ]
 )
