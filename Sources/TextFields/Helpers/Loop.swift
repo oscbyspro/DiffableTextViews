@@ -233,6 +233,16 @@ extension LoopStep where Base: BidirectionalCollection {
 // MARK: - Collection + Loop
 
 extension Collection {
+    // MARK: First
+    
+    @inlinable func first(from start: Loop<Self>.Bound, step: Loop<Self>.Step = .forwards, where predicate: (Element) -> Bool = { _ in true }) -> Element? {
+        for element in Loop.move(through: self, from: start, to: nil, step: step) where predicate(element) {
+            return element
+        }
+        
+        return nil
+    }
+    
     @inlinable func firstIndex(from start: Loop<Self>.Bound, step: Loop<Self>.Step = .forwards, where predicate: (Element) -> Bool = { _ in true }) -> Index? {
         for index in Loop.move(through: self, from: start, to: nil, step: step).makeIndexIterator() where predicate(self[index]) {
             return index
