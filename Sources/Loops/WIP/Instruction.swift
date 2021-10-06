@@ -6,8 +6,8 @@
 //
 
 struct Instruction<Position: Comparable> {
-    typealias Bound = Loop.Bound<Position>
-    typealias Range = Loop.Range<Position>
+    typealias Bound = Loops.Bound<Position>
+    typealias Range = Loops.Range<Position>
 
     let start: Bound
     let end: Bound

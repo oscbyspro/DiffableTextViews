@@ -6,7 +6,7 @@
 //
 
 public struct Range<Position: Comparable> {
-    public typealias Bound = Loop.Bound<Position>
+    public typealias Bound = Loops.Bound<Position>
     
     // MARK: Properties
     

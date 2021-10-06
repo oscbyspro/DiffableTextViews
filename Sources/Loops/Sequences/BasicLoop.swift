@@ -8,8 +8,8 @@
 public struct BasicLoop<Base: Collection>: Sequence {
     public typealias Element = Base.Element
     public typealias Index = Base.Index
-    public typealias Bound = Loop.Bound<Index>
-    public typealias Step = Loop.Step<Base>
+    public typealias Bound = Loops.Bound<Index>
+    public typealias Step = Loops.Step<Base>
     
     // MARK: Properties
     

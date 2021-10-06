@@ -7,9 +7,9 @@
 
 public struct IndexLoop<Base: Collection>: Sequence {
     public typealias Index = Base.Index
-    public typealias Bound = Loop.Bound<Index>
-    public typealias Range = Loop.Range<Index>
-    public typealias Step = Loop.Step<Base>
+    public typealias Bound = Loops.Bound<Index>
+    public typealias Range = Loops.Range<Index>
+    public typealias Step = Loops.Step<Base>
     
     // MARK: Properties
         
