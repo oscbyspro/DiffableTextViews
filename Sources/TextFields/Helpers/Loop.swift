@@ -27,29 +27,28 @@ struct Loop<Base: Collection>: Sequence {
         self.step = step
     }
     
-    // MARK: Initialization: Bound
+    // MARK: Initialization: Stride
     
-    @inlinable init(_ base: Base, from start: Bound? = nil, to end: Bound? = nil, step: Step = .forwards()) {
-        let start = start ?? (step.forwards ? .closed(base.startIndex) : .open(base.endIndex))
-        let end   = end   ?? (step.forwards ? .open(base.endIndex) : .closed(base.startIndex))
+    @inlinable static func stride(through collection: Base, from start: Bound? = nil, to end: Bound? = nil, step: Step = .forwards()) -> Self {
+        var start = start ?? .closed(collection.startIndex)
+        var end   = end   ??     .open(collection.endIndex)
         
-        self.init(base, start: start, end: end, step: step)
-    }
-    
-    // MARK: Initilization: Bound.Instruction
-    
-    @inlinable init(_ base: Base, from start: Bound.Instruction, to end: Bound.Instruction, step: Step = .forwards()) {
-        self.init(base, from: start.make(base), to: end.make(base), step: step)
-    }
-    
-    @inlinable init(_ base: Base, from start: Bound.Instruction, to end: Bound? = nil, step: Step = .forwards()) {
-        self.init(base, from: start.make(base), to: end, step: step)
-    }
-    
-    @inlinable init(_ base: Base, from start: Bound? = nil, to end: Bound.Instruction, step: Step = .forwards()) {
-        self.init(base, from: start, to: end.make(base), step: step)
-    }
+        if step.forwards != (start <= end) {
+            swap(&start, &end)
+        }
         
+        return Self(collection, start: start, end: end, step: step)
+    }
+    
+    // MARK: Initialization: Stroll
+    
+    @inlinable static func stroll(through collection: Base, from start: Bound? = nil, to end: Bound? = nil, step: Step = .forwards()) -> Self {
+        let start = start ?? (step.forwards ? .closed(collection.startIndex) : .open(collection.endIndex))
+        let end   = end   ?? (step.forwards ? .open(collection.endIndex) : .closed(collection.startIndex))
+        
+        return Self(collection, start: start, end: end, step: step)
+    }
+
     // MARK: Helpers
 
     @inlinable func next(_ index: Index, limit: Index) -> Index? {
@@ -101,7 +100,7 @@ struct Loop<Base: Collection>: Sequence {
         }
     }
 
-    // MARK: Components
+    // MARK: - Components
         
     struct Bound: Comparable {
         let position: Index
@@ -126,18 +125,6 @@ struct Loop<Base: Collection>: Sequence {
         
         @inlinable static func < (lhs: Self, rhs: Self) -> Bool {
             lhs.position < rhs.position
-        }
-        
-        struct Instruction {
-            let make: (Base) -> Bound
-            
-            @inlinable static func open(_ position: @escaping (Base) -> Index) -> Self {
-                Self(make: { base in .open(position(base)) })
-            }
-            
-            @inlinable static func closed(_ position: @escaping (Base) -> Index) -> Self {
-                Self(make: { base in .closed(position(base)) })
-            }
         }
     }
     
