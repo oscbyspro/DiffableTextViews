@@ -36,14 +36,14 @@ struct Loop<Base: Collection>: Sequence {
 
     // MARK: Helpers
     
-    @inlinable func limit(forwards: Bool) -> Index {
-        forwards ? base.endIndex : base.startIndex
+    @inlinable func limit() -> Index {
+        step.forwards ? base.endIndex : base.startIndex
     }
 
-    @inlinable func validate(start: Bound, end: Bound, forwards: Bool) -> (Index) -> Bool {
-        let last = forwards ? Swift.max(start, end) : Swift.min(start, end)
+    @inlinable func validate() -> (Index) -> Bool {
+        let last = step.forwards ? Swift.max(start, end) : Swift.min(start, end)
         
-        switch (forwards, last.open) {
+        switch (step.forwards, last.open) {
         case (true,   true): return { $0 <  last.position }
         case (true,  false): return { $0 <= last.position }
         case (false,  true): return { $0 >  last.position }
@@ -68,16 +68,15 @@ struct Loop<Base: Collection>: Sequence {
     }
     
     @inlinable func makeIndexIterator() -> AnyIterator<Index> {
+        let limit = limit()
+        let validate = validate()
+
         var current = start.position as Index?
         
-        let forwards = step.forwards
-        let limit = limit(forwards: forwards)
-        let validate = validate(start: start, end: end, forwards: forwards)
-
         if start.open {
             current = next(current!, limit: limit)
         }
-                
+        
         return AnyIterator {
             guard let index = current, validate(index) else { return nil }
             defer { current = next(index, limit: limit) }
