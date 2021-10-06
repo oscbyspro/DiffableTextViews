@@ -23,22 +23,37 @@ public struct Step<Base: Collection>: Equatable {
     // MARK: Initializers
 
     @inlinable init(_ distance: Int) {
-        precondition(distance != 0)
-        
+
         self.distance = distance
     }
     
     // MARK: Initializers: Public
-            
+ 
+    @inlinable public static var forwards: Self {
+        .forwards(1)
+    }
+    
+    @inlinable public static func forwards(_ distance: Int = 1) -> Self {
+        precondition(distance > 0)
+        
+        return Self(+distance)
+    }
+}
+
+extension Step where Base: BidirectionalCollection {
+    @inlinable public static var backwards: Self {
+        .backwards(1)
+    }
+    
+    @inlinable public static func backwards(_ distance: Int = 1) -> Self {
+        precondition(distance > 0)
+        
+        return Self(-distance)
+    }
+    
     @inlinable public static func distance(_ distance: Int) -> Self {
-        Self(distance)
-    }
-    
-    @inlinable public static func forwards() -> Self {
-        Self(+1)
-    }
-    
-    @inlinable public static func backwards() -> Self {
-        Self(-1)
+        precondition(distance != 0)
+
+        return Self(+distance)
     }
 }
