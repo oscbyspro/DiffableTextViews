@@ -27,24 +27,41 @@ struct Loop<Base: Collection>: Sequence {
         self.step = step
     }
     
-    @inlinable init(_ base: Base, from start: Bound? = nil, to end: Bound? = nil, step: Step) {
+    // MARK: Initialization: Bound
+    
+    @inlinable init(_ base: Base, from start: Bound? = nil, to end: Bound? = nil, step: Step = .forwards()) {
         let start = start ?? (step.forwards ? .closed(base.startIndex) : .open(base.endIndex))
         let end   = end   ?? (step.forwards ? .open(base.endIndex) : .closed(base.startIndex))
         
         self.init(base, start: start, end: end, step: step)
     }
-
+    
+    // MARK: Initilization: Bound.Instruction
+    
+    @inlinable init(_ base: Base, from start: Bound.Instruction, to end: Bound.Instruction, step: Step = .forwards()) {
+        self.init(base, from: start.make(base), to: end.make(base), step: step)
+    }
+    
+    @inlinable init(_ base: Base, from start: Bound.Instruction, to end: Bound? = nil, step: Step = .forwards()) {
+        self.init(base, from: start.make(base), to: end, step: step)
+    }
+    
+    @inlinable init(_ base: Base, from start: Bound? = nil, to end: Bound.Instruction, step: Step = .forwards()) {
+        self.init(base, from: start, to: end.make(base), step: step)
+    }
+        
     // MARK: Helpers
     
-    @inlinable func limit() -> Index {
-        step.forwards ? base.endIndex : base.startIndex
-    }
-
+    
     @inlinable func next(_ index: Index, limit: Index) -> Index? {
         base.index(index, offsetBy: step.distance, limitedBy: limit)
     }
     
-    @inlinable func validate() -> (Index) -> Bool {
+    @inlinable func makeLimit() -> Index {
+        step.forwards ? base.endIndex : base.startIndex
+    }
+    
+    @inlinable func makeValidate() -> (Index) -> Bool {
         let last = step.forwards ? Swift.max(start, end) : Swift.min(start, end)
         
         switch (step.forwards, last.open) {
@@ -54,7 +71,7 @@ struct Loop<Base: Collection>: Sequence {
         case (false, false): return { $0 >= last.position }
         }
     }
-    
+        
     // MARK: Iterators
         
     @inlinable func makeIterator() -> AnyIterator<Element> {
@@ -68,9 +85,9 @@ struct Loop<Base: Collection>: Sequence {
     }
     
     @inlinable func makeIndexIterator() -> AnyIterator<Index> {
-        let limit = limit()
-        let validate = validate()
-
+        let limit = makeLimit()
+        let validate = makeValidate()
+        
         var current = start.position as Index?
         
         if start.open {
@@ -79,6 +96,7 @@ struct Loop<Base: Collection>: Sequence {
         
         return AnyIterator {
             guard let index = current, validate(index) else { return nil }
+            
             defer { current = next(index, limit: limit) }
             return index
         }
@@ -109,6 +127,18 @@ struct Loop<Base: Collection>: Sequence {
         
         @inlinable static func < (lhs: Self, rhs: Self) -> Bool {
             lhs.position < rhs.position
+        }
+        
+        struct Instruction {
+            let make: (Base) -> Bound
+            
+            @inlinable static func open(_ position: @escaping (Base) -> Index) -> Self {
+                Self(make: { base in .open(position(base)) })
+            }
+            
+            @inlinable static func closed(_ position: @escaping (Base) -> Index) -> Self {
+                Self(make: { base in .closed(position(base)) })
+            }
         }
     }
     
