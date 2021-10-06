@@ -27,7 +27,7 @@ struct Loop<Base: Collection>: Sequence {
         self.step = step
     }
     
-    // MARK: Initialization: Stride
+    // MARK: Stride
     
     @inlinable static func stride(through collection: Base, from start: Bound? = nil, to end: Bound? = nil, step: Step = .forwards()) -> Self {
         var start = start ?? .closed(collection.startIndex)
@@ -40,7 +40,7 @@ struct Loop<Base: Collection>: Sequence {
         return Self(collection, start: start, end: end, step: step)
     }
     
-    // MARK: Initialization: Stroll
+    // MARK: Stroll
     
     @inlinable static func stroll(through collection: Base, from start: Bound? = nil, to end: Bound? = nil, step: Step = .forwards()) -> Self {
         let start = start ?? (step.forwards ? .closed(collection.startIndex) : .open(collection.endIndex))
@@ -121,7 +121,7 @@ struct Loop<Base: Collection>: Sequence {
             Self(position, open: false)
         }
         
-        // MARK: Protocol: Comparable
+        // MARK: Comparable
         
         @inlinable static func < (lhs: Self, rhs: Self) -> Bool {
             lhs.position < rhs.position
