@@ -5,8 +5,6 @@
 //  Created by Oscar Byström Ericsson on 2021-10-04.
 //
 
-#warning("WIP. Continue in .playground.")
-#warning("Implement stride also, maybe.")
 struct Loop<Base: Collection>: Sequence {
     typealias Index = Base.Index
     typealias Element = Base.Element
@@ -14,84 +12,79 @@ struct Loop<Base: Collection>: Sequence {
     // MARK: Storage
     
     let base: Base
-    let bounds: Bounds
+    let start: Bound
+    let end: Bound
     let step: Step
 
     // MARK: Initialization
     
-    @inlinable init(_ base: Base, bounds: Bounds, step: Step) {
-        var bounds = bounds
-        var step = step
+    @inlinable init(_ base: Base, start: Bound, end: Bound, step: Step) {
+        precondition(step.distance != 0)
         
-        if step.backwards {
-            bounds.swap()
-            step.negate()
-        }
-                        
         self.base = base
-        self.bounds = bounds
+        self.start = start
+        self.end = end
         self.step = step
     }
+    
+    @inlinable init(_ base: Base, from start: Bound? = nil, to end: Bound? = nil, step: Step) {
+        let start = start ?? (step.forwards ? .closed(base.startIndex) : .open(base.endIndex))
+        let end   = end   ?? (step.forwards ? .open(base.endIndex) : .closed(base.startIndex))
         
-    /// Default.
-    @inlinable init(_ base: Base, from start: Bound? = nil, to end: Bound? = nil, step: Step = .forwards()) {
-        let bounds = Bounds(start ?? .closed(base.startIndex), end ?? .open(base.endIndex))
-        self.init(base, bounds: bounds, step: step)
-    }
-    
-    /// Originates in start and proceeds in the direction of step.
-    @inlinable init(_ base: Base, origin start: Bound, step: Step = .forwards()) {
-        let bounds = step.forwards ? Bounds(start, .open(base.endIndex)) : Bounds(start, .closed(base.startIndex))
- 
-        self.init(base, bounds: bounds, step: step.absolute())
-    }
-    
-    @inlinable init(_ base: Base, towards end: Bound, step: Step = .forwards()) {
-        let bounds = step.forwards ? Bounds(.closed(base.startIndex), end) : Bounds(.open(base.endIndex), end)
-        self.init(base, bounds: bounds, step: step.absolute())
+        self.init(base, start: start, end: end, step: step)
     }
 
     // MARK: Helpers
     
-    @inlinable func makeNext() -> (Index) -> Index? {
-        let offset = bounds.ascends ? step.distance : -step.distance
+    @inlinable func limit(forwards: Bool) -> Index {
+        forwards ? base.endIndex : base.startIndex
+    }
+
+    @inlinable func validate(start: Bound, end: Bound, forwards: Bool) -> (Index) -> Bool {
+        let last = forwards ? Swift.max(start, end) : Swift.min(start, end)
         
-        return { index in
-            base.index(index, offsetBy: offset, limitedBy: bounds.end.position)
+        switch (forwards, last.open) {
+        case (true,   true): return { $0 <  last.position }
+        case (true,  false): return { $0 <= last.position }
+        case (false,  true): return { $0 >  last.position }
+        case (false, false): return { $0 >= last.position }
+        }
+    }
+    
+    @inlinable func next(_ index: Index, limit: Index) -> Index? {
+        base.index(index, offsetBy: step.distance, limitedBy: limit)
+    }
+        
+    // MARK: Iterators
+        
+    @inlinable func makeIterator() -> AnyIterator<Element> {
+        let indexIterator = makeIndexIterator()
+        
+        return AnyIterator {
+            guard let next = indexIterator.next() else { return nil }
+                        
+            return base[next]
+        }
+    }
+    
+    @inlinable func makeIndexIterator() -> AnyIterator<Index> {
+        var current = start.position as Index?
+        
+        let forwards = step.forwards
+        let limit = limit(forwards: forwards)
+        let validate = validate(start: start, end: end, forwards: forwards)
+
+        if start.open {
+            current = next(current!, limit: limit)
+        }
+                
+        return AnyIterator {
+            guard let index = current, validate(index) else { return nil }
+            defer { current = next(index, limit: limit) }
+            return index
         }
     }
 
-    @inlinable func makeValidate() -> (Index) -> Bool {
-        switch (bounds.ascends, bounds.end.open) {
-        case (true,   true): return { $0 <  bounds.end.position }
-        case (true,  false): return { $0 <= bounds.end.position }
-        case (false,  true): return { $0 >  bounds.end.position }
-        case (false, false): return { $0 >= bounds.end.position }
-        }
-    }
-    
-    // MARK: Protocol: Sequence
-    
-    @inlinable func makeIterator() -> AnyIterator<Element> {
-        let next = makeNext()
-        let validate = makeValidate()
-        
-        var current = bounds.start.position as Index?
-        
-        if bounds.start.open {
-            current = current.flatMap(next)
-        }
-        
-        print(bounds.start, bounds.end)
-        
-        return AnyIterator {
-            guard let index = current, validate(index) else { return nil }
-            
-            defer { current = next(index) }
-            return base[index]
-        }
-    }
-    
     // MARK: Components
         
     struct Bound: Comparable {
@@ -120,35 +113,12 @@ struct Loop<Base: Collection>: Sequence {
         }
     }
     
-    struct Bounds {
-        var start: Bound
-        var end: Bound
-        
-        // MARK: Initialization
-        
-        @inlinable init(_ start: Bound, _ end: Bound) {
-            self.start = start
-            self.end = end
-        }
-        
-        // MARK: Utilities
-        
-        @inlinable var ascends: Bool {
-            start <= end
-        }
-        
-        @inlinable mutating func swap() {
-            Swift.swap(&start, &end)
-        }
-    }
-     
     struct Step: Equatable {
         var distance: Int
         
         // MARK: Initialization
                 
         @inlinable init(_ distance: Int) {
-            precondition(distance != 0)
             self.distance = distance
         }
                 
@@ -172,14 +142,6 @@ struct Loop<Base: Collection>: Sequence {
         
         @inlinable var backwards: Bool {
             distance < 0
-        }
-        
-        @inlinable mutating func negate() {
-            self.distance.negate()
-        }
-        
-        @inlinable func absolute() -> Self {
-            Self(abs(distance))
         }
     }
 }
