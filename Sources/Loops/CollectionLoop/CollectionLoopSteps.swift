@@ -6,6 +6,8 @@
 //
 
 public struct CollectionLoopSteps<Collection: Swift.Collection> {
+    // MARK: Properties
+    
     public let distance: Int
     
     // MARK: Initializers

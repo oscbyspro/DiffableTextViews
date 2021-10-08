@@ -10,8 +10,8 @@ public struct Interval<Element: Comparable> {
     
     // MARK: Properties
     
-    @usableFromInline let min: Bound
-    @usableFromInline let max: Bound
+    public let min: Bound
+    public let max: Bound
     
     // MARK: Initializers
     

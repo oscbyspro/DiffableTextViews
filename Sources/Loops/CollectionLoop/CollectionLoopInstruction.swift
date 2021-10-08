@@ -27,7 +27,7 @@ public extension CollectionLoopInstruction {
     
     @inlinable static func stride(from start: Bound? = nil, to limit: Bound? = nil, steps: Steps = .forwards) -> Self {
         Self { collection in
-            CollectionLoop(through: collection, from: start, towards: limit, steps: steps)
+            CollectionLoop(collection, start: start, limit: limit, steps: steps)
         }
     }
     
@@ -35,7 +35,7 @@ public extension CollectionLoopInstruction {
     
     @inlinable static func interval(from min: Bound? = nil, to max: Bound? = nil, steps: Steps = .forwards) -> Self {
         Self { collection in
-            CollectionLoop(through: collection, min: min, max: max, steps: steps)
+            CollectionLoop(collection, min: min, max: max, steps: steps)
         }
     }
 }

@@ -10,6 +10,8 @@ public struct CollectionLoopStride<Base: Collection> {
     public typealias Interval = Loops.Interval<Base.Index>
     public typealias Steps = Loops.CollectionLoopSteps<Base>
     
+    // MARK: Properties
+    
     public let start: Bound
     public let limit: Bound
     public let steps: Steps
