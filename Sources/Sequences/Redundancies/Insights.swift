@@ -5,7 +5,9 @@
 //  Created by Oscar Byström Ericsson on 2021-09-29.
 //
 
-/// Essentially Collection.lazy.map(_:). Saved for inspiration.
+/// Depricated. Saved for inspiration.
+///
+/// Essentially Collection.lazy.map(_:).
 public struct Insights<Base: Collection, Output>: Collection {
     public typealias Element = Output
     public typealias Index = Base.Index
