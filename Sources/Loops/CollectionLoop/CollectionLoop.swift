@@ -31,12 +31,12 @@ public struct CollectionLoop<Base: Collection> {
         self.interval = interval
     }
     
-    @inlinable init(_ base: Base, interval: Interval, steps: Steps) {
-        self.init(base, stride: Stride(interval: interval, steps: steps), interval: interval)
-    }
-    
     @inlinable init(_ base: Base, stride: Stride) {
         self.init(base, stride: stride, interval: Interval(unordered: (stride.start, stride.limit)))
+    }
+    
+    @inlinable init(_ base: Base, interval: Interval, steps: Steps) {
+        self.init(base, stride: Stride(interval: interval, steps: steps), interval: interval)
     }
         
     // MARK: Helpers
@@ -81,7 +81,7 @@ public extension CollectionLoop {
 public extension CollectionLoop {
     // MARK: Stride
     
-    @inlinable init(through base: Base, from start: Bound? = nil, towards limit: Bound? = nil, steps: Steps = .forwards) {
+    @inlinable init(through base: Base, from start: Bound? = nil, to limit: Bound? = nil, steps: Steps = .forwards) {
         let start = start ?? (steps.forwards ? .closed(base.startIndex) : .open(base.endIndex))
         let limit = limit ?? (steps.forwards ? .open(base.endIndex) : .closed(base.startIndex))
                 
@@ -90,7 +90,7 @@ public extension CollectionLoop {
     
     // MARK: Interval
     
-    @inlinable init(through base: Base, min: Bound? = nil, max: Bound? = nil, steps: Steps = .forwards) {
+    @inlinable init(through base: Base, from min: Bound? = nil, to max: Bound? = nil, steps: Steps = .forwards) {
         let min = min ?? .closed(base.startIndex)
         let max = max ??     .open(base.endIndex)
         
