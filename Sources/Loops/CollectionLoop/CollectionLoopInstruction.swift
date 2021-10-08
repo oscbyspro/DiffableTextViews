@@ -5,19 +5,19 @@
 //  Created by Oscar Byström Ericsson on 2021-10-08.
 //
 
-public struct CollectionLoopInstruction<Base: Collection> {
-    public typealias Bound = Loops.Bound<Base.Index>
-    public typealias Steps = Loops.CollectionLoopSteps<Base>
-    public typealias Stride = Loops.CollectionLoopStride<Base>
-    public typealias Loop = Loops.CollectionLoop<Base>
+public struct CollectionLoopInstruction<Collection: Swift.Collection> {
+    public typealias Bound = Loops.Bound<Collection.Index>
+    public typealias Steps = Loops.CollectionLoopSteps<Collection>
+    public typealias Stride = Loops.CollectionLoopStride<Collection>
+    public typealias Loop = Loops.CollectionLoop<Collection>
     
     // MARK: Properties
     
-    @usableFromInline let make: (Base) -> Loop
+    @usableFromInline let make: (Collection) -> Loop
     
     // MARK: Initializers
     
-    @inlinable init(_ make: @escaping (Base) -> Loop) {
+    @inlinable init(_ make: @escaping (Collection) -> Loop) {
         self.make = make
     }
 }

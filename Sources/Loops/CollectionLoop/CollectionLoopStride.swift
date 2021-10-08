@@ -5,10 +5,10 @@
 //  Created by Oscar Byström Ericsson on 2021-10-08.
 //
 
-public struct CollectionLoopStride<Base: Collection> {
-    public typealias Bound = Loops.Bound<Base.Index>
-    public typealias Interval = Loops.Interval<Base.Index>
-    public typealias Steps = Loops.CollectionLoopSteps<Base>
+public struct CollectionLoopStride<Collection: Swift.Collection> {
+    public typealias Bound = Loops.Bound<Collection.Index>
+    public typealias Interval = Loops.Interval<Collection.Index>
+    public typealias Steps = Loops.CollectionLoopSteps<Collection>
     
     // MARK: Properties
     
