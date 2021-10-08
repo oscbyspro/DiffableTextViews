@@ -5,6 +5,7 @@
 //  Created by Oscar Byström Ericsson on 2021-10-08.
 //
 
+#warning("Consider renaming it.")
 public struct CollectionLoop<Collection: Swift.Collection> {
     public typealias Index = Collection.Index
     public typealias Element = Collection.Element

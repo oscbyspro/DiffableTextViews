@@ -5,6 +5,8 @@
 //  Created by Oscar Byström Ericsson on 2021-09-23.
 //
 
+import struct Collections.Insights
+
 public struct Layout: BidirectionalCollection, RangeReplaceableCollection, ExpressibleByArrayLiteral {
     public typealias Element = Symbol
     public typealias Indices = DefaultIndices<Self>
