@@ -11,8 +11,14 @@ public struct CollectionStride<Base: Collection> {
 
     public typealias Bound = Sequences.Bound<Base.Index>
     public typealias Interval = Sequences.Interval<Base.Index>
+    
     public typealias Steps = Sequences.CollectionStrideSteps<Base>
     public typealias Movement = Sequences.CollectionStrideMovement<Base>
+    public typealias Instruction = Sequences.CollectionStrideInstruction<Base>
+    
+    public typealias IndexLoop = AnyIterator<Index>
+    public typealias ElementLoop = AnyIterator<Element>
+    public typealias ContentLoop = AnyIterator<(index: Index, element: Element)>
     
     // MARK: Properties
     
@@ -46,14 +52,14 @@ public struct CollectionStride<Base: Collection> {
 public extension CollectionStride {
     // MARK: Indices
     
-    @inlinable func indices() -> AnyIterator<Index> {
+    @inlinable func indices() -> IndexLoop {
         var position = movement.start.element as Index?
         
         if !interval.contains(position!) {
             position = stride(position!)
         }
         
-        return AnyIterator {
+        return .init {
             guard let index = position, interval.contains(index) else { return nil }
 
             defer { position = stride(index) }
@@ -63,13 +69,24 @@ public extension CollectionStride {
     
     // MARK: Elements
     
-    @inlinable func elements() -> AnyIterator<Element> {
+    @inlinable func elements() -> ElementLoop {
         let indices = indices()
         
-        return AnyIterator {
+        return .init {
             indices.next().map({ index in base[index] })
         }
     }
+    
+    // MARK: Content
+    
+    @inlinable func content() -> ContentLoop {
+        let indices = indices()
+        
+        return .init {
+            indices.next().map({ index in (index, base[index]) })
+        }
+    }
+    
 }
 
 public extension CollectionStride {
@@ -94,10 +111,10 @@ public extension CollectionStride {
 
 // MARK: - Movement
 
-public struct CollectionStrideMovement<Collection: Swift.Collection> {
-    public typealias Bound = Sequences.Bound<Collection.Index>
-    public typealias Interval = Sequences.Interval<Collection.Index>
-    public typealias Steps = Sequences.CollectionStrideSteps<Collection>
+public struct CollectionStrideMovement<Base: Collection> {
+    public typealias Bound = Sequences.Bound<Base.Index>
+    public typealias Interval = Sequences.Interval<Base.Index>
+    public typealias Steps = Sequences.CollectionStrideSteps<Base>
     
     // MARK: Properties
     
@@ -228,15 +245,23 @@ public extension CollectionStrideInstruction {
 // MARK: -
 
 public extension Collection {
+    typealias Stride = CollectionStride<Self>
+    
     // MARK: Indices
     
-    @inlinable func indices(_ instruction: CollectionStrideInstruction<Self>) -> AnyIterator<Index> {
+    @inlinable func indices(_ instruction: Stride.Instruction) -> Stride.IndexLoop {
         instruction.make(self).indices()
     }
     
     // MARK: Elements
     
-    @inlinable func elements(_ instruction: CollectionStrideInstruction<Self>) -> AnyIterator<Element> {
+    @inlinable func elements(_ instruction: Stride.Instruction) -> Stride.ElementLoop {
         instruction.make(self).elements()
+    }
+    
+    // MARK: Content
+    
+    @inlinable func content(_ instruction: Stride.Instruction) -> Stride.ContentLoop {
+        instruction.make(self).content()
     }
 }
