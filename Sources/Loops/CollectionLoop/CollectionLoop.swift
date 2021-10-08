@@ -25,18 +25,18 @@ public struct CollectionLoop<Collection: Swift.Collection> {
 
     // MARK: Initializers
         
-    @inlinable init(_ collection: Collection, stride: Stride, interval: Interval) {
+    @inlinable init(_ collection: Collection, interval: Interval, stride: Stride) {
         self.collection = collection
         self.interval = interval
         self.stride = stride
     }
     
     @inlinable init(_ collection: Collection, interval: Interval, steps: Steps) {
-        self.init(collection, stride: Stride(interval: interval, steps: steps), interval: interval)
+        self.init(collection, interval: interval, stride: Stride(interval: interval, steps: steps))
     }
     
     @inlinable init(_ collection: Collection, stride: Stride) {
-        self.init(collection, stride: stride, interval: stride.interval())
+        self.init(collection, interval: Interval(unordered: (stride.start, stride.limit)), stride: stride)
     }
         
     // MARK: Helpers

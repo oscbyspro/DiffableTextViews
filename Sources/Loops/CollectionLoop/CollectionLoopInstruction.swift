@@ -23,19 +23,19 @@ public struct CollectionLoopInstruction<Collection: Swift.Collection> {
 }
 
 public extension CollectionLoopInstruction {
-    // MARK: Stride
-    
-    @inlinable static func stride(from start: Bound? = nil, to limit: Bound? = nil, steps: Steps = .forwards) -> Self {
-        Self { collection in
-            CollectionLoop(collection, start: start, limit: limit, steps: steps)
-        }
-    }
-    
     // MARK: Interval
     
     @inlinable static func interval(from min: Bound? = nil, to max: Bound? = nil, steps: Steps = .forwards) -> Self {
         Self { collection in
             CollectionLoop(collection, min: min, max: max, steps: steps)
+        }
+    }
+    
+    // MARK: Stride
+    
+    @inlinable static func stride(from start: Bound? = nil, to limit: Bound? = nil, steps: Steps = .forwards) -> Self {
+        Self { collection in
+            CollectionLoop(collection, start: start, limit: limit, steps: steps)
         }
     }
 }
