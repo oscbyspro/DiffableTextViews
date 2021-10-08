@@ -34,7 +34,7 @@ public extension Collection {
         let start = start ?? (step.forwards ? .closed(startIndex) : .open(endIndex))
             
         for index in sequence(.stride(from: start, towards: nil, step: step)).indices() {
-            if predicate(self[Index]) { return index }
+            if predicate(self[index]) { return index }
         }
         
         return nil

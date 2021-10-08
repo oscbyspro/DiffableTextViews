@@ -10,30 +10,26 @@ public struct Interval<Element: Comparable> {
     
     // MARK: Properties
     
-    @usableFromInline let lowerBound: Bound
-    @usableFromInline let upperBound: Bound
+    @usableFromInline let min: Bound
+    @usableFromInline let max: Bound
     
     // MARK: Initializers
-        
-    @inlinable public init(lowerBound: Bound, upperBound: Bound) {
-        precondition(lowerBound <= upperBound)
-        self.lowerBound = lowerBound
-        self.upperBound = upperBound
-    }
     
-    @inlinable public init(unchecked bounds: (Bound, Bound)) {
-        self.lowerBound = bounds.0
-        self.upperBound = bounds.1
+    @inlinable public init(min: Bound, max: Bound) {
+        precondition(min <= max)
+        
+        self.min = min
+        self.max = max
     }
     
     @inlinable public init(unordered bounds: (Bound, Bound)) {
-        self.lowerBound = min(bounds.0, bounds.1)
-        self.upperBound = max(bounds.0, bounds.1)
+        self.min = Swift.min(bounds.0, bounds.1)
+        self.max = Swift.max(bounds.0, bounds.1)
     }
-
+    
     // MARK: Utilities
     
     @inlinable public func contains(_ element: Element) -> Bool {
-        element >= lowerBound && element <= upperBound
+        element >= min && element <= max
     }
 }
