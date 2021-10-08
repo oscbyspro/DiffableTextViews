@@ -32,7 +32,7 @@
             .produce(.overshoot)
         
         func position(current: Field.SubSequence, next: Field.SubSequence) -> Field.Index {
-            next.view(\.rhs).suffix(alsoIn: current.view(\.rhs), options: options).startIndex
+            next.lazy.map(\.rhs).suffix(alsoIn: current.lazy.map(\.rhs), options: options).startIndex
         }
         
         let nextUpperBound = position(current: field[range.upperBound...], next: newValue[...])

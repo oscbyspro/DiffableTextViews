@@ -147,4 +147,3 @@ public extension Collection {
         CompactInsights(self, view: view)
     }
 }
-

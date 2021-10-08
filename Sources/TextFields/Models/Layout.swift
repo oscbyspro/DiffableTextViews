@@ -5,8 +5,6 @@
 //  Created by Oscar Byström Ericsson on 2021-09-23.
 //
 
-import struct Collections.Insights
-
 public struct Layout: BidirectionalCollection, RangeReplaceableCollection, ExpressibleByArrayLiteral {
     public typealias Element = Symbol
     public typealias Indices = DefaultIndices<Self>
@@ -63,8 +61,8 @@ public struct Layout: BidirectionalCollection, RangeReplaceableCollection, Expre
     // MARK: Replacements
 
     public mutating func replaceSubrange<C: Collection>(_ subrange: Range<Index>, with newElements: C) where C.Element == Symbol {
-        attributes.replaceSubrange(subrange.map(bounds: \.attribute), with: newElements.view(\.attribute))
-        characters.replaceSubrange(subrange.map(bounds: \.character), with: newElements.view(\.character))
+        attributes.replaceSubrange(subrange.map(bounds: \.attribute), with: newElements.lazy.map(\.attribute))
+        characters.replaceSubrange(subrange.map(bounds: \.character), with: newElements.lazy.map(\.character))
     }
     
     // MARK: Subscripts

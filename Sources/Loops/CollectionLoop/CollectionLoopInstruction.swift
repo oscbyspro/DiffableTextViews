@@ -5,6 +5,7 @@
 //  Created by Oscar Byström Ericsson on 2021-10-08.
 //
 
+#warning("Maybe name: CollectionStrideBlueprint")
 public struct CollectionLoopInstruction<Collection: Swift.Collection> {
     public typealias Bound = Loops.Bound<Collection.Index>
     public typealias Steps = Loops.CollectionLoopSteps<Collection>
@@ -51,13 +52,13 @@ public extension Collection {
     
     // MARK: Indices
     
-    @inlinable func indices(_ instruction: CollectionLoopInstruction<Self>) -> CollectionLoop<Self>.Indices {
+    @inlinable func indices(_ instruction: CollectionLoopInstruction<Self>) -> AnyIterator<Index> {
         instruction.make(self).indices()
     }
     
     // MARK: Elements
     
-    @inlinable func elements(_ instruction: CollectionLoopInstruction<Self>) -> CollectionLoop<Self>.Elements {
+    @inlinable func elements(_ instruction: CollectionLoopInstruction<Self>) -> AnyIterator<Element> {
         instruction.make(self).elements()
     }
 }

@@ -26,6 +26,12 @@ public struct Bound<Element: Comparable>: Comparable {
         Self(element, open: false)
     }
     
+    // MARK: Conveniences
+    
+    @inlinable public var closed: Bool {
+        !open
+    }
+    
     // MARK: Comparable
     
     @inlinable public static func < (lhs: Self, rhs: Self) -> Bool {

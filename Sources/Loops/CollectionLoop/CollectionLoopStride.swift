@@ -5,6 +5,7 @@
 //  Created by Oscar Byström Ericsson on 2021-10-08.
 //
 
+#warning("Maybe name: CollectionStrideInstruction")
 public struct CollectionLoopStride<Collection: Swift.Collection> {
     public typealias Bound = Loops.Bound<Collection.Index>
     public typealias Interval = Loops.Interval<Collection.Index>

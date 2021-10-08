@@ -5,7 +5,7 @@
 //  Created by Oscar Byström Ericsson on 2021-10-08.
 //
 
-#warning("Consider renaming it.")
+#warning("Maybe name: CollectionStride")
 public struct CollectionLoop<Collection: Swift.Collection> {
     public typealias Index = Collection.Index
     public typealias Element = Collection.Element
@@ -14,9 +14,6 @@ public struct CollectionLoop<Collection: Swift.Collection> {
     public typealias Interval = Loops.Interval<Collection.Index>
     public typealias Steps = Loops.CollectionLoopSteps<Collection>
     public typealias Stride = Loops.CollectionLoopStride<Collection>
-
-    public typealias Indices = AnyIterator<Collection.Index>
-    public typealias Elements = AnyIterator<Collection.Element>
     
     // MARK: Properties
     
@@ -50,7 +47,7 @@ public struct CollectionLoop<Collection: Swift.Collection> {
 public extension CollectionLoop {
     // MARK: Indices
     
-    @inlinable func indices() -> Indices {
+    @inlinable func indices() -> AnyIterator<Collection.Index> {
         var position = stride.start.element as Index?
         
         if !interval.contains(position!) {
@@ -70,7 +67,7 @@ public extension CollectionLoop {
     
     // MARK: Elements
     
-    @inlinable func elements() -> Elements {
+    @inlinable func elements() -> AnyIterator<Collection.Element> {
         let indices = indices()
         
         return AnyIterator {
