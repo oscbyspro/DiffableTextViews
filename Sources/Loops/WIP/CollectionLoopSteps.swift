@@ -62,14 +62,3 @@ public extension CollectionLoopSteps where Collection: BidirectionalCollection {
         Self(unchecked: -Int(distance))
     }
 }
-
-
-#warning("...")
-
-/*
- 
- collection.stride(from: start, to: nil, step: .backwards).firstIndex(where: predicate)
- 
- */
-
-
