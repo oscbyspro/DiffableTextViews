@@ -5,7 +5,7 @@
 //  Created by Oscar Byström Ericsson on 2021-09-26.
 //
 
-import Foundation
+import struct Foundation.NSRange
 
 extension Collection {
     // MARK: Indices
