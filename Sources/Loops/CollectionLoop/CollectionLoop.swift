@@ -41,7 +41,7 @@ public struct CollectionLoop<Collection: Swift.Collection> {
         
     // MARK: Helpers
     
-    @inlinable func next(_ index: Index) -> Index? {
+    @inlinable func stride(_ index: Index) -> Index? {
         collection.index(index, offsetBy: stride.steps.distance, limitedBy: stride.limit.element)
     }
 }
@@ -53,14 +53,14 @@ public extension CollectionLoop {
         var position = stride.start.element as Index?
         
         if !interval.contains(position!) {
-            position = next(position!)
+            position = stride(position!)
         }
         
         return AnyIterator {
             guard let index = position, interval.contains(index) else { return nil }
-            
+
             defer {
-                position = next(index)
+                position = stride(index)
             }
             
             return index
@@ -79,15 +79,6 @@ public extension CollectionLoop {
 }
 
 public extension CollectionLoop {
-    // MARK: Stride
-    
-    @inlinable init(_ collection: Collection, start: Bound? = nil, limit: Bound? = nil, steps: Steps = .forwards) {
-        let start = start ?? (steps.forwards ? .closed(collection.startIndex) : .open(collection.endIndex))
-        let limit = limit ?? (steps.forwards ? .open(collection.endIndex) : .closed(collection.startIndex))
-                
-        self.init(collection, stride: Stride(start: start, limit: limit, steps: steps))
-    }
-    
     // MARK: Interval
     
     @inlinable init(_ collection: Collection, min: Bound? = nil, max: Bound? = nil, steps: Steps = .forwards) {
@@ -95,5 +86,14 @@ public extension CollectionLoop {
         let max = max ??     .open(collection.endIndex)
         
         self.init(collection, interval: Interval(min: min, max: max), steps: steps)
+    }
+    
+    // MARK: Stride
+    
+    @inlinable init(_ collection: Collection, start: Bound? = nil, limit: Bound? = nil, steps: Steps = .forwards) {
+        let start = start ?? (steps.forwards ? .closed(collection.startIndex) : .open(collection.endIndex))
+        let limit = limit ?? (steps.forwards ? .open(collection.endIndex) : .closed(collection.startIndex))
+                
+        self.init(collection, stride: Stride(start: start, limit: limit, steps: steps))
     }
 }
