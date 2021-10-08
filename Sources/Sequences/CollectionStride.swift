@@ -56,11 +56,8 @@ public extension CollectionStride {
         return AnyIterator {
             guard let index = position, interval.contains(index) else { return nil }
 
-            defer {
-                position = stride(index)
-            }
-            
-            return index
+            defer { position = stride(index) }
+            return  index
         }
     }
     
