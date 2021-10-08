@@ -6,12 +6,16 @@
 //
 
 public struct CollectionLoop<Base: Collection> {
-    public typealias Element = Base.Element
     public typealias Index = Base.Index
+    public typealias Element = Base.Element
+
     public typealias Bound = Loops.Bound<Base.Index>
     public typealias Interval = Loops.Interval<Base.Index>
     public typealias Steps = Loops.CollectionLoopSteps<Base>
     public typealias Stride = Loops.CollectionLoopStride<Base>
+
+    public typealias Indices = AnyIterator<Base.Index>
+    public typealias Elements = AnyIterator<Base.Element>
     
     // MARK: Properties
     
@@ -40,10 +44,12 @@ public struct CollectionLoop<Base: Collection> {
     @inlinable func next(_ index: Index) -> Index? {
         base.index(index, offsetBy: stride.steps.distance, limitedBy: stride.limit.element)
     }
-        
-    // MARK: Iterators
+}
+
+public extension CollectionLoop {
+    // MARK: Indices
     
-    @inlinable public func indices() -> AnyIterator<Index> {
+    @inlinable func indices() -> Indices {
         var position = stride.start.element as Index?
         
         if !interval.contains(position!) {
@@ -61,7 +67,9 @@ public struct CollectionLoop<Base: Collection> {
         }
     }
     
-    @inlinable public func elements() -> AnyIterator<Element> {
+    // MARK: Elements
+    
+    @inlinable func elements() -> Elements {
         let indices = indices()
         
         return AnyIterator {
@@ -71,15 +79,6 @@ public struct CollectionLoop<Base: Collection> {
 }
 
 public extension CollectionLoop {
-    // MARK: Interval
-    
-    @inlinable init(through base: Base, min: Bound? = nil, max: Bound? = nil, steps: Steps = .forwards) {
-        let min = min ?? .closed(base.startIndex)
-        let max = max ??     .open(base.endIndex)
-        
-        self.init(base, interval: Interval(min: min, max: max), steps: steps)
-    }
-    
     // MARK: Stride
     
     @inlinable init(through base: Base, from start: Bound? = nil, towards limit: Bound? = nil, steps: Steps = .forwards) {
@@ -87,5 +86,14 @@ public extension CollectionLoop {
         let limit = limit ?? (steps.forwards ? .open(base.endIndex) : .closed(base.startIndex))
                 
         self.init(base, stride: Stride(start: start, limit: limit, steps: steps))
+    }
+    
+    // MARK: Interval
+    
+    @inlinable init(through base: Base, min: Bound? = nil, max: Bound? = nil, steps: Steps = .forwards) {
+        let min = min ?? .closed(base.startIndex)
+        let max = max ??     .open(base.endIndex)
+        
+        self.init(base, interval: Interval(min: min, max: max), steps: steps)
     }
 }
