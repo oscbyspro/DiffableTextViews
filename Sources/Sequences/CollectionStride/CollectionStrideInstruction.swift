@@ -1,16 +1,15 @@
 //
-//  CollectionLoopInstruction.swift
+//  CollectionStrideInstruction.swift
 //  
 //
 //  Created by Oscar Byström Ericsson on 2021-10-08.
 //
 
-#warning("Maybe name: CollectionStrideBlueprint")
-public struct CollectionLoopInstruction<Collection: Swift.Collection> {
-    public typealias Bound = Loops.Bound<Collection.Index>
-    public typealias Steps = Loops.CollectionLoopSteps<Collection>
-    public typealias Stride = Loops.CollectionLoopStride<Collection>
-    public typealias Loop = Loops.CollectionLoop<Collection>
+public struct CollectionStrideInstruction<Collection: Swift.Collection> {
+    public typealias Bound = Sequences.Bound<Collection.Index>
+    public typealias Steps = Sequences.CollectionStrideSteps<Collection>
+    public typealias Stride = Sequences.CollectionStrideInstruction<Collection>
+    public typealias Loop = Sequences.CollectionStride<Collection>
     
     // MARK: Properties
     
@@ -23,12 +22,12 @@ public struct CollectionLoopInstruction<Collection: Swift.Collection> {
     }
 }
 
-public extension CollectionLoopInstruction {
+public extension CollectionStrideInstruction {
     // MARK: Interval
     
     @inlinable static func interval(from min: Bound? = nil, to max: Bound? = nil, steps: Steps = .forwards) -> Self {
         Self { collection in
-            CollectionLoop(collection, min: min, max: max, steps: steps)
+            CollectionStride(collection, min: min, max: max, steps: steps)
         }
     }
     
@@ -36,7 +35,7 @@ public extension CollectionLoopInstruction {
     
     @inlinable static func stride(from start: Bound? = nil, to limit: Bound? = nil, steps: Steps = .forwards) -> Self {
         Self { collection in
-            CollectionLoop(collection, start: start, limit: limit, steps: steps)
+            CollectionStride(collection, start: start, limit: limit, steps: steps)
         }
     }
 }
@@ -46,19 +45,19 @@ public extension CollectionLoopInstruction {
 public extension Collection {
     // MARK: Loop
     
-    @inlinable func loop(_ instruction: CollectionLoopInstruction<Self>) -> CollectionLoop<Self> {
+    @inlinable func loop(_ instruction: CollectionStrideInstruction<Self>) -> CollectionStride<Self> {
         instruction.make(self)
     }
     
     // MARK: Indices
     
-    @inlinable func indices(_ instruction: CollectionLoopInstruction<Self>) -> AnyIterator<Index> {
+    @inlinable func indices(_ instruction: CollectionStrideInstruction<Self>) -> AnyIterator<Index> {
         instruction.make(self).indices()
     }
     
     // MARK: Elements
     
-    @inlinable func elements(_ instruction: CollectionLoopInstruction<Self>) -> AnyIterator<Element> {
+    @inlinable func elements(_ instruction: CollectionStrideInstruction<Self>) -> AnyIterator<Element> {
         instruction.make(self).elements()
     }
 }

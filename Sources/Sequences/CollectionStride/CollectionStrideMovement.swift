@@ -1,15 +1,14 @@
 //
-//  CollectionLoopStride.swift
+//  CollectionStrideMovement.swift
 //  
 //
 //  Created by Oscar Byström Ericsson on 2021-10-08.
 //
 
-#warning("Maybe name: CollectionStrideInstruction")
-public struct CollectionLoopStride<Collection: Swift.Collection> {
-    public typealias Bound = Loops.Bound<Collection.Index>
-    public typealias Interval = Loops.Interval<Collection.Index>
-    public typealias Steps = Loops.CollectionLoopSteps<Collection>
+public struct CollectionStrideMovement<Collection: Swift.Collection> {
+    public typealias Bound = Sequences.Bound<Collection.Index>
+    public typealias Interval = Sequences.Interval<Collection.Index>
+    public typealias Steps = Sequences.CollectionStrideSteps<Collection>
     
     // MARK: Properties
     

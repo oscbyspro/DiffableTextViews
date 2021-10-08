@@ -20,7 +20,7 @@ struct Source {
 // MARK: -
 
 let TextFields = Source(name: "TextFields")
-let Loops = Source(name: "Loops")
+let Sequences = Source(name: "Sequences")
 let Collections = Source(name: "Collections")
 
 // MARK: -
@@ -35,9 +35,11 @@ let package = Package(
     targets: [
         .target(
             name: TextFields.name,
-            dependencies: [Collections.dependency]),
+            dependencies: [
+                Collections.dependency,
+                Sequences.dependency]),
         .target(name: Collections.name),
-        .target(name: Loops.name),
+        .target(name: Sequences.name),
         .target(name: "Trash"),
     ]
 )

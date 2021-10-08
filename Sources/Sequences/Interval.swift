@@ -6,7 +6,7 @@
 //
 
 public struct Interval<Element: Comparable> {
-    public typealias Bound = Loops.Bound<Element>
+    public typealias Bound = Sequences.Bound<Element>
     
     // MARK: Properties
     

@@ -1,11 +1,11 @@
 //
-//  CollectionLoopSteps.swift
+//  CollectionStrideSteps.swift
 //  
 //
 //  Created by Oscar Byström Ericsson on 2021-10-08.
 //
 
-public struct CollectionLoopSteps<Collection: Swift.Collection> {
+public struct CollectionStrideSteps<Base: Collection> {
     // MARK: Properties
     
     public let distance: Int
@@ -30,12 +30,12 @@ public struct CollectionLoopSteps<Collection: Swift.Collection> {
     
     // MARK: Utilities
     
-    @inlinable public func reversed() -> Self where Collection: BidirectionalCollection {
+    @inlinable public func reversed() -> Self where Base: BidirectionalCollection {
         Self(unchecked: -distance)
     }
 }
 
-public extension CollectionLoopSteps {
+public extension CollectionStrideSteps {
     // MARK: Forwards
     
     @inlinable static var forwards: Self {
@@ -47,7 +47,7 @@ public extension CollectionLoopSteps {
     }
 }
 
-public extension CollectionLoopSteps where Collection: BidirectionalCollection {
+public extension CollectionStrideSteps where Base: BidirectionalCollection {
     // MARK: Backwards
     
     @inlinable static var backwards: Self {
@@ -59,7 +59,7 @@ public extension CollectionLoopSteps where Collection: BidirectionalCollection {
     }
 }
 
-public extension CollectionLoopSteps where Collection: BidirectionalCollection {
+public extension CollectionStrideSteps where Base: BidirectionalCollection {
     @inlinable static func distance(_ distance: Int) -> Self {
         Self(unchecked: -Int(distance))
     }
