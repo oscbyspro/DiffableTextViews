@@ -228,12 +228,6 @@ public extension CollectionStrideInstruction {
 // MARK: -
 
 public extension Collection {
-    // MARK: Loop
-    
-    @inlinable func loop(_ instruction: CollectionStrideInstruction<Self>) -> CollectionStride<Self> {
-        instruction.make(self)
-    }
-    
     // MARK: Indices
     
     @inlinable func indices(_ instruction: CollectionStrideInstruction<Self>) -> AnyIterator<Index> {
