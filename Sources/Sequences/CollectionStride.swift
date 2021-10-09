@@ -244,12 +244,12 @@ public struct CollectionStrideInstruction<Collection: Swift.Collection> {
     
     // MARK: Instructions
     
-    @inlinable public static func stride(from start: Bound? = nil, to limit: Bound? = nil, stepping steps: Steps = .forwards) -> Self {
-        Self({ collection in .init(collection, start: start, limit: limit, steps: steps) })
+    @inlinable public static func stride(start: Bound? = nil, limit: Bound? = nil, step: Steps = .forwards) -> Self {
+        Self({ collection in .init(collection, start: start, limit: limit, steps: step) })
     }
         
-    @inlinable public static func interval(from min: Bound? = nil, to max: Bound? = nil, stepping steps: Steps = .forwards) -> Self {
-        Self({ collection in .init(collection, min: min, max: max, steps: steps) })
+    @inlinable public static func interval(min: Bound? = nil, max: Bound? = nil, step: Steps = .forwards) -> Self {
+        Self({ collection in .init(collection, min: min, max: max, steps: step) })
     }
 }
 
@@ -261,35 +261,43 @@ public struct CollectionStrideSequence<Base: Collection, Value> {
     
     // MARK: Properties
     
-    @usableFromInline let make: (Base) -> AnySequence<Value>
+    @usableFromInline let make: (Stride) -> AnySequence<Value>
     
     // MARK: Initializers
     
-    @inlinable init(_ make: @escaping (Base) -> AnySequence<Value>) {
+    @inlinable init(_ make: @escaping (Stride) -> AnySequence<Value>) {
         self.make = make
     }
     
     // MARK: Sequences
     
-    @inlinable public static func indices(in stride: Stride.Instruction) -> Instance<Stride.Index> {
-        .init({ collection in stride.make(collection).indices() })
+    @inlinable public static var indices: Instance<Stride.Index> {
+        .init({ stride in stride.indices() })
     }
-    
-    @inlinable public static func elements(in stride: Stride.Instruction) -> Instance<Stride.Element> {
-        .init({ collection in stride.make(collection).elements() })
+
+    @inlinable public static var elements: Instance<Stride.Element> {
+        .init({ stride in stride.elements() })
     }
-    
-    @inlinable public static func contents(in stride: Stride.Instruction) -> Instance<Stride.Content> {
-        .init({ collection in stride.make(collection).contents() })
+
+    @inlinable public static var contents: Instance<Stride.Content> {
+        .init({ stride in stride.contents() })
     }
 }
 
 // MARK: - Collection
 
 extension Collection {
-    // MARK: Sequence
+    public typealias Stride = CollectionStride<Self>
     
-    @inlinable public func sequence<Value>(of values: CollectionStride<Self>.Sequence<Value>) -> AnySequence<Value> {
-        values.make(self)
+    // MARK: Sequences
+
+    @inlinable public func sequence(in stride: Stride.Instruction) -> AnySequence<Element> {
+        stride.make(self).elements()
+    }
+    
+    @inlinable public func sequence<Value>(of values: Stride.Sequence<Value>, in stride: Stride.Instruction) -> AnySequence<Value> {
+        values.make(stride.make(self))
     }
 }
+
+#warning("Stride should be renamed to something like Walkthrough.")
