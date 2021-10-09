@@ -229,8 +229,8 @@ extension CollectionStrideSteps where Base: BidirectionalCollection {
 
 public struct CollectionStrideInstruction<Collection: Swift.Collection> {
     public typealias Bound = Sequences.Bound<Collection.Index>
-    public typealias Steps = Sequences.CollectionStrideSteps<Collection>
     public typealias Stride = Sequences.CollectionStride<Collection>
+    public typealias Steps = Sequences.CollectionStrideSteps<Collection>
     
     // MARK: Properties
     
