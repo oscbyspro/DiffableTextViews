@@ -41,7 +41,7 @@ public struct CollectionStride<Base: Collection> {
         
     // MARK: Helpers
     
-    @inlinable func stride(_ index: Base.Index) -> Base.Index? {
+    @inlinable func next(_ index: Base.Index) -> Base.Index? {
         base.index(index, offsetBy: movement.steps.distance, limitedBy: movement.limit.element)
     }
 }
@@ -50,17 +50,23 @@ public extension CollectionStride {
     // MARK: Indices
     
     @inlinable func indices() -> AnySequence<Base.Index> {
-        AnySequence { () -> AnyIterator<Base.Index> in
-            AnyIterator { () -> Optional<Base.Index> in
-                var position = movement.start.element as Base.Index?
-                
-                if !interval.contains(position!) {
-                    position = stride(position!)
-                }
-                
+        var start = movement.start.element as Base.Index?
+        
+        if movement.steps.distance == .zero {
+            start = nil
+        }
+        
+        if let index = start, interval.contains(index) {
+            start = next(index)
+        }
+        
+        return AnySequence { () -> AnyIterator<Base.Index> in
+            var position = start
+            
+            return AnyIterator { () -> Optional<Base.Index> in
                 guard let index = position, interval.contains(index) else { return nil }
 
-                defer { position = stride(index) }
+                defer { position = next(index) }
                 return  index
             }
         }
@@ -158,9 +164,7 @@ public struct CollectionStrideSteps<Base: Collection> {
     
     // MARK: Initializers
     
-    @inlinable init(unchecked distance: Int) {
-        precondition(distance != .zero)
-        
+    @inlinable init(_ distance: Int) {
         self.distance = distance
     }
     
@@ -177,7 +181,7 @@ public struct CollectionStrideSteps<Base: Collection> {
     // MARK: Utilities
     
     @inlinable public func reversed() -> Self where Base: BidirectionalCollection {
-        Self(unchecked: -distance)
+        Self(-distance)
     }
 }
 
@@ -185,11 +189,11 @@ public extension CollectionStrideSteps {
     // MARK: Forwards
     
     @inlinable static var forwards: Self {
-        Self(unchecked: +1)
+        Self(+1)
     }
     
     @inlinable static func forwards(_ distance: UInt) -> Self {
-        Self(unchecked: +Int(distance))
+        Self(+Int(distance))
     }
 }
 
@@ -197,11 +201,11 @@ public extension CollectionStrideSteps where Base: BidirectionalCollection {
     // MARK: Backwards
     
     @inlinable static var backwards: Self {
-        Self(unchecked: -1)
+        Self(-1)
     }
     
     @inlinable static func backwards(_ distance: UInt) -> Self {
-        Self(unchecked: -Int(distance))
+        Self(-Int(distance))
     }
 }
 
@@ -209,7 +213,7 @@ public extension CollectionStrideSteps where Base: BidirectionalCollection {
     // MARK: Distance
     
     @inlinable static func distance(_ distance: Int) -> Self {
-        Self(unchecked: -Int(distance))
+        Self(-Int(distance))
     }
 }
 
@@ -264,7 +268,7 @@ public struct CollectionStrideSequence<Base: Collection, Item> {
         self.make = make
     }
     
-    // MARK: Productions
+    // MARK: Sequences
     
     @inlinable static var indices: CollectionStrideSequence<Base, Base.Index> {
         .init({ stride in stride.indices() })
