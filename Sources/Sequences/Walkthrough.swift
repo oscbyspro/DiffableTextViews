@@ -199,7 +199,7 @@ extension WalkthroughStride where Base: BidirectionalCollection {
 // MARK: - Instructions
 
 public struct WalkthroughInstructions<Base: Swift.Collection> {
-    public typealias Bound = Sequences.Bound<Base.Index>
+    public typealias Bound = Sequences.IndexBound<Base>
     public typealias Walkthrough = Sequences.Walkthrough<Base>
     public typealias Stride = Sequences.WalkthroughStride<Base>
     
@@ -216,11 +216,11 @@ public struct WalkthroughInstructions<Base: Swift.Collection> {
     // MARK: Instructions
 
     @inlinable public static func path(start: Bound? = nil, end: Bound? = nil) -> Self {
-        Self({ collection, stride in .init(collection, start: start, end: end, stride: stride) })
+        Self({ collection, stride in .init(collection, start: start?(collection), end: end?(collection), stride: stride) })
     }
         
     @inlinable public static func interval(min: Bound? = nil, max: Bound? = nil) -> Self {
-        Self({ collection, stride in .init(collection, min: min, max: max, stride: stride) })
+        Self({ collection, stride in .init(collection, min: min?(collection), max: max?(collection), stride: stride) })
     }
 }
 

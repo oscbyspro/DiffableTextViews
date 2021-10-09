@@ -20,6 +20,8 @@ public struct Bound<Element: Comparable>: Comparable {
         self.open = open
     }
     
+    // MARK: Initializers: Static
+    
     @inlinable public static func open(_ element: Element) -> Self {
         Self(element, open: true)
     }
@@ -99,5 +101,46 @@ public struct Bound<Element: Comparable>: Comparable {
     
     @inlinable public static func >= (element: Element, bound: Self) -> Bool {
         bound.open ? element > bound.element : element >= bound.element
+    }
+}
+
+// MARK: - IndexBound
+
+public struct IndexBound<Base: Collection> {
+    public typealias Index = Base.Index
+    public typealias Bound = Sequences.Bound<Base.Index>
+    
+    // MARK: Properties
+    
+    @usableFromInline let make: (Base) -> Bound
+    
+    // MARK: Initilizers
+    
+    @inlinable public init(_ make: @escaping (Base) -> Bound) {
+        self.make = make
+    }
+    
+    // MARK: Initializers: Static
+    
+    @inlinable public static func open(_ index: Index) -> Self {
+        .init({ collection in .open(index) })
+    }
+    
+    @inlinable public static func closed(_ index: Index) -> Self {
+        .init({ collection in .closed(index) })
+    }
+    
+    @inlinable public static func open(_ index: @escaping (Base) -> Index) -> Self {
+        .init({ collection in .open(index(collection)) })
+    }
+    
+    @inlinable public static func closed(_ index: @escaping (Base) -> Index) -> Self {
+        .init({ collection in .closed(index(collection)) })
+    }
+    
+    // MARK: Conveniences
+    
+    @inlinable public func callAsFunction(_ collection: Base) -> Bound {
+        make(collection)
     }
 }
