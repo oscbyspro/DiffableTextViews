@@ -46,10 +46,10 @@ public struct CollectionStride<Base: Collection> {
     }
 }
 
-public extension CollectionStride {
+extension CollectionStride {
     // MARK: Indices
     
-    @inlinable func indices() -> AnySequence<Base.Index> {
+    @inlinable public func indices() -> AnySequence<Base.Index> {
         var start = movement.start.element as Base.Index?
         
         if movement.steps.nowhere {
@@ -74,7 +74,7 @@ public extension CollectionStride {
     
     // MARK: Elements
     
-    @inlinable func elements() -> AnySequence<Base.Element> {
+    @inlinable public func elements() -> AnySequence<Base.Element> {
         let indices = indices()
                 
         return AnySequence { () -> AnyIterator<Base.Element> in
@@ -88,7 +88,7 @@ public extension CollectionStride {
     
     // MARK: Content
     
-    @inlinable func contents() -> AnySequence<Content> {
+    @inlinable public func contents() -> AnySequence<Content> {
         let indices = indices()
         
         return AnySequence { () -> AnyIterator<Content> in
@@ -101,10 +101,10 @@ public extension CollectionStride {
     }
 }
 
-public extension CollectionStride {
+extension CollectionStride {
     // MARK: Stride
     
-    @inlinable init(_ base: Base, start: Bound? = nil, limit: Bound? = nil, steps: Steps = .forwards) {
+    @inlinable public init(_ base: Base, start: Bound? = nil, limit: Bound? = nil, steps: Steps = .forwards) {
         let start = start ?? (steps.forwards ? .closed(base.startIndex) : .open(base.endIndex))
         let limit = limit ?? (steps.forwards ? .open(base.endIndex) : .closed(base.startIndex))
                 
@@ -113,7 +113,7 @@ public extension CollectionStride {
     
     // MARK: Interval
     
-    @inlinable init(_ base: Base, min: Bound? = nil, max: Bound? = nil, steps: Steps = .forwards) {
+    @inlinable public init(_ base: Base, min: Bound? = nil, max: Bound? = nil, steps: Steps = .forwards) {
         let min = min ?? .closed(base.startIndex)
         let max = max ??     .open(base.endIndex)
         
@@ -189,34 +189,34 @@ public struct CollectionStrideSteps<Base: Collection> {
     }
 }
 
-public extension CollectionStrideSteps {
+extension CollectionStrideSteps {
     // MARK: Forwards
     
-    @inlinable static var forwards: Self {
+    @inlinable public static var forwards: Self {
         Self(+1)
     }
     
-    @inlinable static func forwards(_ distance: UInt) -> Self {
+    @inlinable public static func forwards(_ distance: UInt) -> Self {
         Self(+Int(distance))
     }
 }
 
-public extension CollectionStrideSteps where Base: BidirectionalCollection {
+extension CollectionStrideSteps where Base: BidirectionalCollection {
     // MARK: Backwards
     
-    @inlinable static var backwards: Self {
+    @inlinable public static var backwards: Self {
         Self(-1)
     }
     
-    @inlinable static func backwards(_ distance: UInt) -> Self {
+    @inlinable public static func backwards(_ distance: UInt) -> Self {
         Self(-Int(distance))
     }
 }
 
-public extension CollectionStrideSteps where Base: BidirectionalCollection {
+extension CollectionStrideSteps where Base: BidirectionalCollection {
     // MARK: Distance
     
-    @inlinable static func distance(_ distance: Int) -> Self {
+    @inlinable public static func distance(_ distance: Int) -> Self {
         Self(-Int(distance))
     }
 }
@@ -281,12 +281,12 @@ public struct CollectionStrideSequence<Base: Collection, Item> {
 
 // MARK: - Collection
 
-public extension Collection {
-    typealias Stride = CollectionStride<Self>
+extension Collection {
+    public typealias Stride = CollectionStride<Self>
     
     // MARK: Sequence
     
-    @inlinable func sequence<Item>(of items: Stride.Sequence<Item>, in stride: Stride.Instruction) -> AnySequence<Item> {
+    @inlinable public func sequence<Item>(of items: Stride.Sequence<Item>, in stride: Stride.Instruction) -> AnySequence<Item> {
         items.make(stride.make(self))
     }
 }
