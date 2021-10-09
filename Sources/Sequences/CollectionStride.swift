@@ -243,17 +243,13 @@ public extension CollectionStrideInstruction {
     // MARK: Stride
     
     @inlinable static func stride(from start: Bound? = nil, to limit: Bound? = nil, stepping steps: Steps = .forwards) -> Self {
-        Self { collection in
-            CollectionStride(collection, start: start, limit: limit, steps: steps)
-        }
+        Self({ collection in .init(collection, start: start, limit: limit, steps: steps) })
     }
     
     // MARK: Interval
     
     @inlinable static func interval(from min: Bound? = nil, to max: Bound? = nil, stepping steps: Steps = .forwards) -> Self {
-        Self { collection in
-            CollectionStride(collection, min: min, max: max, steps: steps)
-        }
+        Self({ collection in .init(collection, min: min, max: max, steps: steps) })
     }
 }
 
