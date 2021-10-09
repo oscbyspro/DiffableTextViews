@@ -52,7 +52,7 @@ public extension CollectionStride {
     @inlinable func indices() -> AnySequence<Base.Index> {
         var start = movement.start.element as Base.Index?
         
-        if movement.steps.distance == .zero {
+        if movement.steps.nowhere {
             start = nil
         }
         
@@ -176,6 +176,10 @@ public struct CollectionStrideSteps<Base: Collection> {
     
     @inlinable public var backwards: Bool {
         distance < 0
+    }
+    
+    @inlinable public var nowhere: Bool {
+        distance == 0
     }
     
     // MARK: Utilities
