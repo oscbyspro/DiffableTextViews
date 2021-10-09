@@ -36,25 +36,25 @@ public struct Walkthrough<Base: Collection> {
         self.stride = stride
     }
     
-    // MARK: Initializers: Path
-    
     @inlinable init(_ base: Base, path: Path, stride: Stride) {
         self.init(base, interval: Interval(unordered: (path.start, path.end)), path: path, stride: stride)
     }
     
-    @inlinable public init(_ base: Base, start: Bound? = nil, end: Bound? = nil, stride: Stride = .forwards) {
-        let start = start ?? (stride.forwards ? .closed(base.startIndex) : .open(base.endIndex))
-        let   end =   end ?? (stride.forwards ? .open(base.endIndex) : .closed(base.startIndex))
-                
-        self.init(base, path: Path(start: start, end: end), stride: stride)
-    }
-    
-    // MARK: Initializers: Interval
-    
     @inlinable init(_ base: Base, interval: Interval, stride: Stride) {
         self.init(base, interval: interval, path: Path(interval: interval, stride: stride.distance), stride: stride)
     }
+    
+    // MARK: Path
+    
+    @inlinable public init(_ base: Base, start: Bound? = nil, end: Bound? = nil, stride: Stride = .forwards) {
+        let start = start ?? (stride.forwards ? .closed(base.startIndex) : .open(base.endIndex))
+        let   end =   end ?? (stride.forwards ? .open(base.endIndex) : .closed(base.startIndex))
 
+        self.init(base, path: Path(start: start, end: end), stride: stride)
+    }
+    
+    // MARK: Interval
+    
     @inlinable public init(_ base: Base, min: Bound? = nil, max: Bound? = nil, stride: Stride = .forwards) {
         let min = min ?? .closed(base.startIndex)
         let max = max ??     .open(base.endIndex)
