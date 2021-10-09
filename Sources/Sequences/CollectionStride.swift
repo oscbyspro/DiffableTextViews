@@ -8,6 +8,8 @@
 // MARK: - CollectionStride
 
 public struct CollectionStride<Base: Collection> {
+    public typealias Index = Base.Index
+    public typealias Element = Base.Element
     public typealias Content = (index: Base.Index, element: Base.Element)
     
     public typealias Bound = Sequences.Bound<Base.Index>
@@ -51,8 +53,8 @@ public struct CollectionStride<Base: Collection> {
 extension CollectionStride {
     // MARK: Indices
     
-    @inlinable public func indices() -> AnySequence<Base.Index> {
-        var start = movement.start.element as Base.Index?
+    @inlinable public func indices() -> AnySequence<Index> {
+        var start = movement.start.element as Index?
         
         if movement.steps.nowhere {
             start = nil
@@ -62,10 +64,10 @@ extension CollectionStride {
             start = next(index)
         }
         
-        return AnySequence { () -> AnyIterator<Base.Index> in
+        return AnySequence { () -> AnyIterator<Index> in
             var position = start
             
-            return AnyIterator { () -> Optional<Base.Index> in
+            return AnyIterator { () -> Optional<Index> in
                 guard let index = position, interval.contains(index) else { return nil }
 
                 defer { position = next(index) }
@@ -76,13 +78,13 @@ extension CollectionStride {
     
     // MARK: Elements
     
-    @inlinable public func elements() -> AnySequence<Base.Element> {
+    @inlinable public func elements() -> AnySequence<Element> {
         let indices = indices()
                 
-        return AnySequence { () -> AnyIterator<Base.Element> in
+        return AnySequence { () -> AnyIterator<Element> in
             let iterator = indices.makeIterator()
             
-            return AnyIterator { () -> Optional<Base.Element> in
+            return AnyIterator { () -> Optional<Element> in
                 iterator.next().map({ index in base[index] })
             }
         }
@@ -97,7 +99,7 @@ extension CollectionStride {
             let iterator = indices.makeIterator()
             
             return AnyIterator { () -> Optional<Content> in
-                iterator.next().map({ index in Content(index, base[index]) })
+                iterator.next().map({ index in (index, base[index]) })
             }
         }
     }
@@ -253,42 +255,41 @@ public struct CollectionStrideInstruction<Collection: Swift.Collection> {
 
 // MARK: - Sequence
 
-public struct CollectionStrideSequence<Base: Collection, Item> {
+public struct CollectionStrideSequence<Base: Collection, Value> {
     public typealias Stride = CollectionStride<Base>
+    public typealias Instance<T> = CollectionStrideSequence<Base, T>
     
     // MARK: Properties
     
-    @usableFromInline let make: (Stride) -> AnySequence<Item>
+    @usableFromInline let make: (Base) -> AnySequence<Value>
     
     // MARK: Initializers
     
-    @inlinable init(_ make: @escaping (Stride) -> AnySequence<Item>) {
+    @inlinable init(_ make: @escaping (Base) -> AnySequence<Value>) {
         self.make = make
     }
     
     // MARK: Sequences
     
-    @inlinable public static var indices: CollectionStrideSequence<Base, Base.Index> {
-        .init({ stride in stride.indices() })
+    @inlinable public static func indices(in stride: Stride.Instruction) -> Instance<Stride.Index> {
+        .init({ collection in stride.make(collection).indices() })
     }
     
-    @inlinable public static var elements: CollectionStrideSequence<Base, Base.Element> {
-        .init({ stride in stride.elements() })
+    @inlinable public static func elements(in stride: Stride.Instruction) -> Instance<Stride.Element> {
+        .init({ collection in stride.make(collection).elements() })
     }
     
-    @inlinable public static var contents: CollectionStrideSequence<Base, Stride.Content> {
-        .init({ stride in stride.contents() })
+    @inlinable public static func contents(in stride: Stride.Instruction) -> Instance<Stride.Content> {
+        .init({ collection in stride.make(collection).contents() })
     }
 }
 
 // MARK: - Collection
 
 extension Collection {
-    public typealias Stride = CollectionStride<Self>
-    
     // MARK: Sequence
     
-    @inlinable public func sequence<Item>(of items: Stride.Sequence<Item>, in stride: Stride.Instruction) -> AnySequence<Item> {
-        items.make(stride.make(self))
+    @inlinable public func sequence<Value>(of values: CollectionStride<Self>.Sequence<Value>) -> AnySequence<Value> {
+        values.make(self)
     }
 }
