@@ -257,7 +257,7 @@ extension Collection {
     // MARK: Sequences
 
     @inlinable public func sequence(in walkthrough: Walkthrough.Instructions) -> AnySequence<Element> {
-        sequence(of: .elements, in: walkthrough)
+        walkthrough.make(self).elements()
     }
     
     @inlinable public func sequence<Value>(of values: Walkthrough.Sequence<Value>, in walkthrough: Walkthrough.Instructions) -> AnySequence<Value> {
