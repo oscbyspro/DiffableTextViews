@@ -5,24 +5,28 @@
 //  Created by Oscar Byström Ericsson on 2021-10-09.
 //
 
+// MARK: - Path
+
 public struct Path<Element: Comparable> {
     public typealias Bound = Sequences.Bound<Element>
     
     // MARK: Properties
     
     public let start: Bound
-    public let limit: Bound
+    public let end: Bound
     
     // MARK: Initializers
     
-    @inlinable public init(start: Bound, limit: Bound) {
+    @inlinable public init(start: Bound, end: Bound) {
         self.start = start
-        self.limit = limit
+        self.end = end
     }
+    
+    // MARK: Initializers: Interval
 
     @inlinable public init(interval: Interval<Element>, ascends: Bool) {
         self.start = ascends ? interval.min : interval.max
-        self.limit = ascends ? interval.max : interval.min
+        self.end = ascends ? interval.max : interval.min
     }
     
     @inlinable public init(interval: Interval<Element>, descends: Bool) {
@@ -36,6 +40,6 @@ public struct Path<Element: Comparable> {
     // MARK: Conversions
     
     @inlinable public func interval() -> Interval<Element> {
-        Interval(min: min(start, limit), max: max(start, limit))
+        Interval(min: min(start, end), max: max(start, end))
     }
 }
