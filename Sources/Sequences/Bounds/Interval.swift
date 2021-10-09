@@ -34,4 +34,14 @@ public struct Interval<Element: Comparable> {
     @inlinable public func contains(_ element: Element) -> Bool {
         element >= min && element <= max
     }
+    
+    // MARK: Conversions
+    
+    @inlinable public func path(ascends: Bool) -> Path<Element> {
+        Path(interval: self, ascends: ascends)
+    }
+    
+    @inlinable public func path(descends: Bool) -> Path<Element> {
+        Path(interval: self, descends: descends)
+    }
 }
