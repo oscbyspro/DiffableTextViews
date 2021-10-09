@@ -6,19 +6,16 @@
 //
 
 public struct CollectionStride<Base: Collection> {
-    public typealias Index = Base.Index
-    public typealias Element = Base.Element
-
+    public typealias Content = (index: Base.Index, element: Base.Element)
+    
     public typealias Bound = Sequences.Bound<Base.Index>
     public typealias Interval = Sequences.Interval<Base.Index>
     
     public typealias Steps = Sequences.CollectionStrideSteps<Base>
     public typealias Movement = Sequences.CollectionStrideMovement<Base>
-    public typealias Instruction = Sequences.CollectionStrideInstruction<Base>
     
-    public typealias IndexLoop = AnyIterator<Index>
-    public typealias ElementLoop = AnyIterator<Element>
-    public typealias ContentLoop = AnyIterator<(index: Index, element: Element)>
+    public typealias Instruction = Sequences.CollectionStrideInstruction<Base>
+    public typealias Sequence<Item> = Sequences.CollectionStrideSequence<Base, Item>
     
     // MARK: Properties
     
@@ -44,7 +41,7 @@ public struct CollectionStride<Base: Collection> {
         
     // MARK: Helpers
     
-    @inlinable func stride(_ index: Index) -> Index? {
+    @inlinable func stride(_ index: Base.Index) -> Base.Index? {
         base.index(index, offsetBy: movement.steps.distance, limitedBy: movement.limit.element)
     }
 }
@@ -52,44 +49,62 @@ public struct CollectionStride<Base: Collection> {
 public extension CollectionStride {
     // MARK: Indices
     
-    @inlinable func indices() -> IndexLoop {
-        var position = movement.start.element as Index?
-        
-        if !interval.contains(position!) {
-            position = stride(position!)
-        }
-        
-        return .init {
-            guard let index = position, interval.contains(index) else { return nil }
+    @inlinable func indices() -> AnySequence<Base.Index> {
+        AnySequence { () -> AnyIterator<Base.Index> in
+            AnyIterator { () -> Optional<Base.Index> in
+                var position = movement.start.element as Base.Index?
+                
+                if !interval.contains(position!) {
+                    position = stride(position!)
+                }
+                
+                guard let index = position, interval.contains(index) else { return nil }
 
-            defer { position = stride(index) }
-            return  index
+                defer { position = stride(index) }
+                return  index
+            }
         }
     }
     
     // MARK: Elements
     
-    @inlinable func elements() -> ElementLoop {
+    @inlinable func elements() -> AnySequence<Base.Element> {
         let indices = indices()
-        
-        return .init {
-            indices.next().map({ index in base[index] })
+                
+        return AnySequence { () -> AnyIterator<Base.Element> in
+            let iterator = indices.makeIterator()
+            
+            return AnyIterator { () -> Optional<Base.Element> in
+                iterator.next().map({ index in base[index] })
+            }
         }
     }
     
     // MARK: Content
     
-    @inlinable func content() -> ContentLoop {
+    @inlinable func contents() -> AnySequence<Content> {
         let indices = indices()
         
-        return .init {
-            indices.next().map({ index in (index, base[index]) })
+        return AnySequence { () -> AnyIterator<Content> in
+            let iterator = indices.makeIterator()
+            
+            return AnyIterator { () -> Optional<Content> in
+                iterator.next().map({ index in Content(index, base[index]) })
+            }
         }
     }
-    
 }
 
 public extension CollectionStride {
+    // MARK: Stride
+    
+    @inlinable init(_ base: Base, start: Bound? = nil, limit: Bound? = nil, steps: Steps = .forwards) {
+        let start = start ?? (steps.forwards ? .closed(base.startIndex) : .open(base.endIndex))
+        let limit = limit ?? (steps.forwards ? .open(base.endIndex) : .closed(base.startIndex))
+                
+        self.init(base, movement: Movement(start: start, limit: limit, steps: steps))
+    }
+    
     // MARK: Interval
     
     @inlinable init(_ base: Base, min: Bound? = nil, max: Bound? = nil, steps: Steps = .forwards) {
@@ -97,15 +112,6 @@ public extension CollectionStride {
         let max = max ??     .open(base.endIndex)
         
         self.init(base, interval: Interval(min: min, max: max), steps: steps)
-    }
-    
-    // MARK: Walk
-    
-    @inlinable init(_ base: Base, start: Bound? = nil, limit: Bound? = nil, steps: Steps = .forwards) {
-        let start = start ?? (steps.forwards ? .closed(base.startIndex) : .open(base.endIndex))
-        let limit = limit ?? (steps.forwards ? .open(base.endIndex) : .closed(base.startIndex))
-                
-        self.init(base, movement: Movement(start: start, limit: limit, steps: steps))
     }
 }
 
@@ -200,6 +206,8 @@ public extension CollectionStrideSteps where Base: BidirectionalCollection {
 }
 
 public extension CollectionStrideSteps where Base: BidirectionalCollection {
+    // MARK: Distance
+    
     @inlinable static func distance(_ distance: Int) -> Self {
         Self(unchecked: -Int(distance))
     }
@@ -210,58 +218,75 @@ public extension CollectionStrideSteps where Base: BidirectionalCollection {
 public struct CollectionStrideInstruction<Collection: Swift.Collection> {
     public typealias Bound = Sequences.Bound<Collection.Index>
     public typealias Steps = Sequences.CollectionStrideSteps<Collection>
-    public typealias Stride = Sequences.CollectionStrideInstruction<Collection>
-    public typealias Loop = Sequences.CollectionStride<Collection>
+    public typealias Stride = Sequences.CollectionStride<Collection>
     
     // MARK: Properties
     
-    @usableFromInline let make: (Collection) -> Loop
+    @usableFromInline let make: (Collection) -> Stride
     
     // MARK: Initializers
     
-    @inlinable init(_ make: @escaping (Collection) -> Loop) {
+    @inlinable init(_ make: @escaping (Collection) -> Stride) {
         self.make = make
     }
 }
 
 public extension CollectionStrideInstruction {
-    // MARK: Interval
-    
-    @inlinable static func interval(from min: Bound? = nil, to max: Bound? = nil, steps: Steps = .forwards) -> Self {
-        Self { collection in
-            CollectionStride(collection, min: min, max: max, steps: steps)
-        }
-    }
-    
     // MARK: Stride
     
-    @inlinable static func stride(from start: Bound? = nil, to limit: Bound? = nil, steps: Steps = .forwards) -> Self {
+    @inlinable static func stride(from start: Bound? = nil, to limit: Bound? = nil, stepping steps: Steps = .forwards) -> Self {
         Self { collection in
             CollectionStride(collection, start: start, limit: limit, steps: steps)
         }
     }
+    
+    // MARK: Interval
+    
+    @inlinable static func interval(from min: Bound? = nil, to max: Bound? = nil, stepping steps: Steps = .forwards) -> Self {
+        Self { collection in
+            CollectionStride(collection, min: min, max: max, steps: steps)
+        }
+    }
 }
 
-// MARK: -
+// MARK: - Sequence
+
+public struct CollectionStrideSequence<Base: Collection, Item> {
+    public typealias Stride = CollectionStride<Base>
+    
+    // MARK: Properties
+    
+    @usableFromInline let make: (Stride) -> AnySequence<Item>
+    
+    // MARK: Initializers
+    
+    @inlinable init(_ make: @escaping (Stride) -> AnySequence<Item>) {
+        self.make = make
+    }
+    
+    // MARK: Productions
+    
+    @inlinable static var indices: CollectionStrideSequence<Base, Base.Index> {
+        .init({ stride in stride.indices() })
+    }
+    
+    @inlinable static var elements: CollectionStrideSequence<Base, Base.Element> {
+        .init({ stride in stride.elements() })
+    }
+    
+    @inlinable static var contents: CollectionStrideSequence<Base, Stride.Content> {
+        .init({ stride in stride.contents() })
+    }
+}
+
+// MARK: - Collection
 
 public extension Collection {
     typealias Stride = CollectionStride<Self>
     
-    // MARK: Indices
+    // MARK: Sequence
     
-    @inlinable func indices(_ instruction: Stride.Instruction) -> Stride.IndexLoop {
-        instruction.make(self).indices()
-    }
-    
-    // MARK: Elements
-    
-    @inlinable func elements(_ instruction: Stride.Instruction) -> Stride.ElementLoop {
-        instruction.make(self).elements()
-    }
-    
-    // MARK: Content
-    
-    @inlinable func content(_ instruction: Stride.Instruction) -> Stride.ContentLoop {
-        instruction.make(self).content()
+    @inlinable func sequence<Item>(of items: Stride.Sequence<Item>, in stride: Stride.Instruction) -> AnySequence<Item> {
+        items.make(stride.make(self))
     }
 }
