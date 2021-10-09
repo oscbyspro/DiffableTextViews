@@ -5,6 +5,8 @@
 //  Created by Oscar Byström Ericsson on 2021-10-06.
 //
 
+// MARK: - Bound
+
 public struct Bound<Element: Comparable>: Comparable {
     // MARK: Properties
     

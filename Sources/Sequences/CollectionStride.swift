@@ -5,6 +5,8 @@
 //  Created by Oscar Byström Ericsson on 2021-10-08.
 //
 
+// MARK: - CollectionStride
+
 public struct CollectionStride<Base: Collection> {
     public typealias Content = (index: Base.Index, element: Base.Element)
     

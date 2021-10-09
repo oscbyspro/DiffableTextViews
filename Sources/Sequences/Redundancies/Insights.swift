@@ -5,6 +5,8 @@
 //  Created by Oscar Byström Ericsson on 2021-09-29.
 //
 
+// MARK: - Insights
+
 /// Depricated. Saved for inspiration.
 ///
 /// Essentially Collection.lazy.map(_:).
@@ -56,24 +58,22 @@ public struct Insights<Base: Collection, Output>: Collection {
     }
 }
 
-extension Insights: BidirectionalCollection where Base: BidirectionalCollection {
-    // MARK: BidirectionalCollection
-}
+// MARK: Conformances
 
+extension Insights: BidirectionalCollection where Base: BidirectionalCollection { }
+extension Insights: RandomAccessCollection where Base: RandomAccessCollection { }
 
-extension Insights: RandomAccessCollection where Base: RandomAccessCollection {
-    // MARK: RandomAccessCollection
-}
+// MARK: - Collection
 
 public extension Collection {
-    // MARK: Collection + Initializers
-    
+    // MARK: Make
+
     @inlinable func view<Output>(_ view: @escaping (Element) -> Output) -> Insights<Self, Output> {
         Insights(self, view: view)
     }
 }
 
-// MARK: -
+// MARK: - CompactInsights
 
 public struct CompactInsights<Base: Collection, Output>: Collection {
     public typealias Element = Output
@@ -135,16 +135,13 @@ public struct CompactInsights<Base: Collection, Output>: Collection {
     }
 }
 
-extension CompactInsights: BidirectionalCollection where Base: BidirectionalCollection {
-    // MARK: BidirectionalCollection
-}
+// MARK: Conformances
 
-extension CompactInsights: RandomAccessCollection where Base: RandomAccessCollection {
-    // MARK: RandomAccessCollection
-}
+extension CompactInsights: BidirectionalCollection where Base: BidirectionalCollection { }
+extension CompactInsights: RandomAccessCollection where Base: RandomAccessCollection { }
 
 public extension Collection {
-    // MARK: Collection + Initializers
+    // MARK: Make
     
     @inlinable func compactView<Output>(_ view: @escaping (Element) -> Output?) -> CompactInsights<Self, Output> {
         CompactInsights(self, view: view)

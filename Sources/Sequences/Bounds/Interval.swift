@@ -5,6 +5,8 @@
 //  Created by Oscar Byström Ericsson on 2021-10-06.
 //
 
+// MARK: - Interval
+
 public struct Interval<Element: Comparable> {
     public typealias Bound = Sequences.Bound<Element>
     
