@@ -36,10 +36,17 @@ public struct Walkthrough<Base: Collection> {
         self.stride = stride
     }
     
-    // MARK: Initalizers: Path
+    // MARK: Initializers: Path
     
     @inlinable init(_ base: Base, path: Path, stride: Stride) {
         self.init(base, interval: Interval(unordered: (path.start, path.end)), path: path, stride: stride)
+    }
+    
+    @inlinable public init(_ base: Base, start: Bound? = nil, end: Bound? = nil, stride: Stride = .forwards) {
+        let start = start ?? (stride.forwards ? .closed(base.startIndex) : .open(base.endIndex))
+        let   end =   end ?? (stride.forwards ? .open(base.endIndex) : .closed(base.startIndex))
+                
+        self.init(base, path: Path(start: start, end: end), stride: stride)
     }
     
     // MARK: Initializers: Interval
@@ -47,15 +54,20 @@ public struct Walkthrough<Base: Collection> {
     @inlinable init(_ base: Base, interval: Interval, stride: Stride) {
         self.init(base, interval: interval, path: Path(interval: interval, stride: stride.distance), stride: stride)
     }
-    
+
+    @inlinable public init(_ base: Base, min: Bound? = nil, max: Bound? = nil, stride: Stride = .forwards) {
+        let min = min ?? .closed(base.startIndex)
+        let max = max ??     .open(base.endIndex)
+        
+        self.init(base, interval: Interval(min: min, max: max), stride: stride)
+    }
+
     // MARK: Helpers
     
     @inlinable func next(_ index: Index) -> Index? {
         base.index(index, offsetBy: stride.distance, limitedBy: path.end.element)
     }
-}
 
-extension Walkthrough {
     // MARK: Indices
     
     @inlinable public func indices() -> AnySequence<Index> {
@@ -107,26 +119,6 @@ extension Walkthrough {
                 iterator.next().map({ index in (index, base[index]) })
             }
         }
-    }
-}
-
-extension Walkthrough {
-    // MARK: Stride
-    
-    @inlinable public init(_ base: Base, start: Bound? = nil, end: Bound? = nil, stride: Stride = .forwards) {
-        let start = start ?? (stride.forwards ? .closed(base.startIndex) : .open(base.endIndex))
-        let   end =   end ?? (stride.forwards ? .open(base.endIndex) : .closed(base.startIndex))
-                
-        self.init(base, path: Path(start: start, end: end), stride: stride)
-    }
-    
-    // MARK: Interval
-    
-    @inlinable public init(_ base: Base, min: Bound? = nil, max: Bound? = nil, stride: Stride = .forwards) {
-        let min = min ?? .closed(base.startIndex)
-        let max = max ??     .open(base.endIndex)
-        
-        self.init(base, interval: Interval(min: min, max: max), stride: stride)
     }
 }
 
@@ -191,7 +183,7 @@ extension WalkthroughStride where Base: BidirectionalCollection {
 extension WalkthroughStride where Base: BidirectionalCollection {
     // MARK: Distance
     
-    @inlinable public static func distance(_ distance: Int) -> Self {
+    @inlinable public static func stride(_ distance: Int) -> Self {
         Self(-Int(distance))
     }
 }
@@ -205,22 +197,76 @@ public struct WalkthroughInstructions<Base: Swift.Collection> {
     
     // MARK: Properties
     
-    @usableFromInline let make: (Base, Stride) ->  Walkthrough
+    @usableFromInline let make: (Base) ->  Walkthrough
     
     // MARK: Initializers
     
-    @inlinable init(_ make: @escaping (Base, Stride) -> Walkthrough) {
+    @inlinable init(_ make: @escaping (Base) -> Walkthrough) {
         self.make = make
     }
-    
-    // MARK: Instructions
+}
 
-    @inlinable public static func path(start: Bound? = nil, end: Bound? = nil) -> Self {
-        Self({ collection, stride in .init(collection, start: start?(collection), end: end?(collection), stride: stride) })
+extension WalkthroughInstructions {
+    // MARK: Forwards
+    
+    @inlinable public static var forwards: Self {
+        Self({ collection in .init(collection, min: nil, max: nil, stride: .forwards) })
     }
+    
+    @inlinable public static func forwards(_ distance: UInt) -> Self {
+        Self({ collection in .init(collection, min: nil, max: nil, stride: .forwards(distance)) })
+    }
+}
+
+extension WalkthroughInstructions where Base: BidirectionalCollection {
+    // MARK: Backwards
+    
+    @inlinable public static var backwards: Self {
+        Self({ collection in .init(collection, min: nil, max: nil, stride: .backwards) })
+    }
+    
+    @inlinable public static func backwards(_ distance: UInt) -> Self {
+        Self({ collection in .init(collection, min: nil, max: nil, stride: .backwards(distance)) })
+    }
+}
+
+extension WalkthroughInstructions where Base: BidirectionalCollection {
+    // MARK: Distance
+    
+    @inlinable public static func stride(_ distance: Int) -> Self {
+        Self({ collection in .init(collection, min: nil, max: nil, stride: .stride(distance)) })
+    }
+}
+
+extension WalkthroughInstructions {
+    // MARK: Path
+    
+    @inlinable public static func path(start: Bound?, end: Bound?, stride: Stride = .forwards) -> Self {
+        Self({ collection in .init(collection, start: start?(collection), end: end?(collection), stride: stride) })
+    }
+
+    @inlinable public static func path(end: Bound?, stride: Stride = .forwards) -> Self {
+        Self({ collection in .init(collection, start: nil, end: end?(collection), stride: stride) })
+    }
+
+    @inlinable public static func path(start: Bound?, stride: Stride = .forwards) -> Self {
+        Self({ collection in .init(collection, start: start?(collection), end: nil, stride: stride) })
+    }
+}
+
+extension WalkthroughInstructions {
+    // MARK: Interval
         
-    @inlinable public static func interval(min: Bound? = nil, max: Bound? = nil) -> Self {
-        Self({ collection, stride in .init(collection, min: min?(collection), max: max?(collection), stride: stride) })
+    @inlinable public static func interval(min: Bound?, stride: Stride = .forwards) -> Self {
+        Self({ collection in .init(collection, min: min?(collection), max: nil, stride: stride) })
+    }
+    
+    @inlinable public static func interval(max: Bound?, stride: Stride = .forwards) -> Self {
+        Self({ collection in .init(collection, min: nil, max: max?(collection), stride: stride) })
+    }
+    
+    @inlinable public static func interval(min: Bound?, max: Bound?, stride: Stride = .forwards) -> Self {
+        Self({ collection in .init(collection, min: min?(collection), max: max?(collection), stride: stride) })
     }
 }
 
@@ -261,12 +307,8 @@ extension Collection {
     public typealias Walkthrough = Sequences.Walkthrough<Self>
     
     // MARK: Sequences
-
-    @inlinable public func sequence(in walkthrough: Walkthrough.Instructions, stride: Walkthrough.Stride = .forwards) -> AnySequence<Element> {
-        walkthrough.make(self, stride).elements()
-    }
     
-    @inlinable public func sequence<Value>(of values: Walkthrough.Sequence<Value>, in walkthrough: Walkthrough.Instructions = .interval(), stride: Walkthrough.Stride = .forwards) -> AnySequence<Value> {
-        values.make(walkthrough.make(self, stride))
+    @inlinable public func sequence<Value>(of values: Walkthrough.Sequence<Value>, in walkthrough: Walkthrough.Instructions = .forwards) -> AnySequence<Value> {
+        values.make(walkthrough.make(self))
     }
 }
