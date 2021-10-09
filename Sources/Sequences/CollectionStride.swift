@@ -237,18 +237,14 @@ public struct CollectionStrideInstruction<Collection: Swift.Collection> {
     @inlinable init(_ make: @escaping (Collection) -> Stride) {
         self.make = make
     }
-}
-
-public extension CollectionStrideInstruction {
-    // MARK: Stride
     
-    @inlinable static func stride(from start: Bound? = nil, to limit: Bound? = nil, stepping steps: Steps = .forwards) -> Self {
+    // MARK: Instructions
+    
+    @inlinable public static func stride(from start: Bound? = nil, to limit: Bound? = nil, stepping steps: Steps = .forwards) -> Self {
         Self({ collection in .init(collection, start: start, limit: limit, steps: steps) })
     }
-    
-    // MARK: Interval
-    
-    @inlinable static func interval(from min: Bound? = nil, to max: Bound? = nil, stepping steps: Steps = .forwards) -> Self {
+        
+    @inlinable public static func interval(from min: Bound? = nil, to max: Bound? = nil, stepping steps: Steps = .forwards) -> Self {
         Self({ collection in .init(collection, min: min, max: max, steps: steps) })
     }
 }
@@ -270,15 +266,15 @@ public struct CollectionStrideSequence<Base: Collection, Item> {
     
     // MARK: Sequences
     
-    @inlinable static var indices: CollectionStrideSequence<Base, Base.Index> {
+    @inlinable public static var indices: CollectionStrideSequence<Base, Base.Index> {
         .init({ stride in stride.indices() })
     }
     
-    @inlinable static var elements: CollectionStrideSequence<Base, Base.Element> {
+    @inlinable public static var elements: CollectionStrideSequence<Base, Base.Element> {
         .init({ stride in stride.elements() })
     }
     
-    @inlinable static var contents: CollectionStrideSequence<Base, Stride.Content> {
+    @inlinable public static var contents: CollectionStrideSequence<Base, Stride.Content> {
         .init({ stride in stride.contents() })
     }
 }
