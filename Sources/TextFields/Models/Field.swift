@@ -5,6 +5,8 @@
 //  Created by Oscar Byström Ericsson on 2021-10-04.
 //
 
+import struct Sequences.Walkthrough
+
 #warning("Rename names such as lastIndex to lastSubscript, or similar.")
 @usableFromInline struct Field: BidirectionalCollection {
     @usableFromInline let layout: Layout
@@ -143,6 +145,7 @@ extension Field {
 }
 
 extension Field {
+    
     // MARK: Interoperabilities
         
     @inlinable func index(lhs subindex: Layout.Index) -> Index {
@@ -162,45 +165,18 @@ extension Field {
     }
 }
 
-#warning("Rename 'position' to 'caret' or something similar.")
-    
 extension Field {
-    // MARK: First Index Beyond
     
-    @inlinable func firstIndex(after position: Index, where predicate: (Element) -> Bool = { _ in true }) -> Index? {
-        firstIndex(beyond: position, where: predicate, next: index(after:), end: lastIndex)
-    }
+    // MARK: Nearest Content Index
     
-    @inlinable func firstIndex(before position: Index, where predicate: (Element) -> Bool =  { _ in true }) -> Index? {
-        firstIndex(beyond: position, where: predicate, next: index(before:), end: firstIndex)
-    }
-
-    @inlinable func firstIndex(beyond position: Index, where predicate: (Element) -> Bool, next: (Index) -> Index, end: Index) -> Index? {
-        var current = position
-        
-        while current != end {
-            current = next(current)
-            
-            if predicate(self[current]) {
-                return current
-            }
-        }
-        
-        return nil
-    }
-}
-
-extension Field {
-    // MARK: Nearest Index Inside Content Bounds
-    
-    @inlinable func nearestIndexInsideContentBounds(from position: Index) -> Index {
+    @inlinable func nearestContentIndex(from position: Index) -> Index {
         var current = position == endIndex ? lastIndex : position
-        
-        if self[current].rhs.prefix, let next = firstIndex(after: current, where: \.rhs.content) {
+                
+        if self[current].rhs.prefix, let next = firstIndex(in: .stride(start: .closed(current), step:  .forwards), where: \.rhs.content) {
             current = next
         }
         
-        if self[current].lhs.suffix, let next = firstIndex(before: current, where: \.lhs.content) {
+        if self[current].lhs.suffix, let next = firstIndex(in: .stride(start: .closed(current), step: .backwards), where: \.lhs.content) {
             current = next
         }
         
@@ -208,23 +184,13 @@ extension Field {
     }
 }
 
+#warning("Come back to this.")
+
+import Sequences
+
 extension Field {
-    #warning("Come up with a better model.")
     
-    @usableFromInline func firstIndex(from start: Index, forward: Bool, where predicate: (Element) -> Bool) -> Index? {
-        let next = forward ? index(after:) : index(before:)
-        let last = forward ? endIndex      : startIndex
-        
-        var index = start
-        
-        while index != last {
-            if predicate(self[index]) {
-                return index
-            }
-            
-            index = next(index)
-        }
-        
-        return nil
+    @usableFromInline func firstIndex(from start: Index, forwards: Bool, where predicate: (Element) -> Bool) -> Index? {
+        firstIndex(in: .stride(start: .closed(start), step: forwards ? .forwards : .backwards), where: predicate)
     }
 }

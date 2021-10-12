@@ -56,3 +56,21 @@ public extension Symbol {
         attribute == .suffix
     }
 }
+
+public extension Symbol {
+    @inlinable var noncontent: Bool {
+        attribute != .content
+    }
+    
+    @inlinable var nonspacer: Bool {
+        attribute != .spacer
+    }
+    
+    @inlinable var nonprefix: Bool {
+        attribute != .prefix
+    }
+    
+    @inlinable var nonsuffix: Bool {
+        attribute != .suffix
+    }
+}

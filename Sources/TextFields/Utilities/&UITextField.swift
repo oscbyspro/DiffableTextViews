@@ -32,7 +32,7 @@ extension UITextField {
     
     @inlinable func select(changes: (start: Int, end: Int)) {
         guard let selection = selectedTextRange else { return }
-                
+        
         let start = position(from: selection.start, offset: changes.start)!
         let end = position(from: selection.end, offset: changes.end)!
         

@@ -5,8 +5,8 @@
 //  Created by Oscar Byström Ericsson on 2021-09-27.
 //
 
-#warning("Handle spacer jumps when range.lowerBound != range.upperBound.")
-#warning("--> It should clamp unnecessary spacers, and jump correctly from clamped positions.")
+import Sequences
+
 @usableFromInline struct Selection {
     @usableFromInline let field: Field
     @usableFromInline let range: Range<Field.Index>
@@ -54,7 +54,7 @@
         print(x)
         
         moveInsideContent(&nextRange)
-        #warning("Is 'previous: range' required?")
+        #warning("Can we calculate the jump over spacers without previous range?")
         moveAcrossSpacers(&nextRange, compare: range)
         
         return Selection(field, range: nextRange)
@@ -105,59 +105,82 @@
 }
 
 extension Selection {
+    
     // MARK: Clamp Inside Content
     
     @inlinable func moveInsideContent(_ range: inout Range<Field.Index>) {
-        let lowerBound = field.nearestIndexInsideContentBounds(from: range.lowerBound)
-        let upperBound = field.nearestIndexInsideContentBounds(from: range.upperBound)
+        let lowerBound = field.nearestContentIndex(from: range.lowerBound)
+        let upperBound = field.nearestContentIndex(from: range.upperBound)
         
         range = lowerBound ..< upperBound
     }
 }
 
-#warning("This is super messy.")
 extension Selection {
+    
     // MARK: Ignore Spacers
     
     @inlinable func moveAcrossSpacers(_ next: inout Range<Field.Index>, compare previous: Range<Field.Index>) {
-        func position(_ position: Field.Index, forward: Bool, observe symbol: (Field.Element) -> Symbol) -> Field.Index {
-            let end: (Field.Element) -> Bool = {
-                forward ? { $0.rhs.suffix } : { $0.lhs.suffix }
-            }()
+        func direction(_ position: (Range<Field.Index>) -> Field.Index) -> Direction? {
+            .momentum(from: position(previous), to: position(next))
+        }
+
+        #warning("...")
+        func position(_ start: Field.Index, attraction: Attraction, move direction: Direction?) -> Field.Index {
+            guard let direction = direction else { return start }
             
-            return field.firstIndex(from: position, forward: forward, where: { symbol($0).content || end($0) }) ?? position
+            return field.firstIndex(in: .stride(start: .closed(start), step: direction.step), where: attraction.search) ?? start
         }
-        
-        let lowerBound: Field.Index
-        let upperBound: Field.Index
-        
-        let lowerIntent = Intent(from: range.lowerBound, to: next.lowerBound)
-        let upperIntent = Intent(from: range.upperBound, to: next.upperBound)
-        
-        if next.isEmpty {
-            lowerBound = position(next.lowerBound, forward: (lowerIntent ?? .backward) == .forward, observe: \.lhs)
-            upperBound = position(next.upperBound, forward: (upperIntent ?? .backward) == .forward, observe: \.lhs)
-        } else {
-            #warning("Only this one is different.")
-            lowerBound = position(next.lowerBound, forward: (lowerIntent ??  .forward) == .forward, observe: \.rhs)
-            upperBound = position(next.upperBound, forward: (upperIntent ?? .backward) == .forward, observe: \.lhs)
+
+        let upperBound = position(next.upperBound, attraction: .backwards, move: direction(\.upperBound) ?? .backwards)
+        var lowerBound = upperBound
+
+        if next.isEmpty == false {
+            lowerBound = position(next.lowerBound, attraction:  .forwards, move: direction(\.lowerBound) ??  .forwards)
         }
-        
+
         next = lowerBound ..< upperBound
     }
-
-    @usableFromInline enum Intent {
-        case forward
-        case backward
-
-        @inlinable init?(from prev: Field.Index, to next: Field.Index) {
-            if next < prev {
-                self = .backward
-            } else if next > prev {
-                self = .forward
-            } else {
-                return nil
-            }
+    
+    // MARK: Helpers
+    
+    @usableFromInline enum Direction {
+        case forwards
+        case backwards
+        
+        // MARK: Calculations
+        
+        @inlinable var step: Sequences.Step<Field> {
+            self == .forwards ? .forwards : .backwards
+        }
+        
+        // MARK: Initializers
+        
+        @inlinable static func momentum(from previous: Field.Index, to next: Field.Index) -> Direction? {
+            guard next != previous else { return nil }
+            
+            return next > previous ? .forwards : .backwards
+        }
+    }
+    
+    @usableFromInline struct Attraction {
+        
+        // MARK: Properties
+        
+        @usableFromInline let search: (Field.Element) -> Bool
+        
+        // MARK: Initializers
+        
+        @inlinable init(search: @escaping (Field.Element) -> Bool) {
+            self.search = search
+        }
+        
+        @inlinable static var forwards: Self {
+            Self.init(search: \.rhs.nonspacer)
+        }
+        
+        @inlinable static var backwards: Self {
+            Self.init(search: \.lhs.nonspacer)
         }
     }
 }

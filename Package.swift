@@ -20,11 +20,11 @@ struct Item {
         .init(stringLiteral: name)
     }
     
-    var localPath: String {
+    var path: String {
         "../" + name
     }
     
-    var remoteURL: String {
+    var url: String {
         "https://github.com/oscbyspro/" + name
     }
 }
@@ -47,7 +47,9 @@ let package = Package(
             targets: [TextFields.name]),
     ],
     dependencies: [
-        .package(path: Sequences.localPath),
+        .package(
+            name: Sequences.name,
+            path: Sequences.path),
     ],
     targets: [
         .target(
