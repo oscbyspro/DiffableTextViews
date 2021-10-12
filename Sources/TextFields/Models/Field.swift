@@ -188,17 +188,19 @@ extension Field {
     
     // MARK: First Index Where
     
-    @inlinable func firstIndex(from start: Index, direction: Direction, attraction: Direction, where predicate: (Symbol) -> Bool) -> Index? {
-        func side() -> (Element) -> Symbol {
-            attraction == .forwards ? \.rhs : \.lhs
+    @inlinable func firstIndex(from start: Index, move direction: Direction, search side: Direction, for predicate: (Symbol) -> Bool) -> Index? {
+        func attraction() -> (Element) -> Symbol {
+            side == .forwards ? \.rhs : \.lhs
         }
         
+        #warning("Step implementation is disruptive, currently.")
         func step<T: BidirectionalCollection>() -> Walkthrough<T>.Step {
             direction == .forwards ? .forwards : .backwards
         }
         
-        return lazy.map(side()).firstIndex(in: .stride(start: .closed(start), step: step()), where: predicate)
+        return lazy.map(attraction()).firstIndex(in: .stride(start: .closed(start), step: step()), where: predicate)
     }
+
     
     // MARK: Helpers
     

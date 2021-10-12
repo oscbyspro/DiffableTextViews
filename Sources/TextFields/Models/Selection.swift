@@ -48,7 +48,7 @@
     @inlinable func update(with newValue: Range<Field.Index>) -> Self {
         var next = newValue
         next = moveToContent(next)
-        next = moveOverSpacers(next)
+        next = moveAcrossSpacers(next)
         
         return Selection(field, range: next)
     }
@@ -67,11 +67,11 @@
         func path(from position: Field.Index, to offset: Int) -> Path {
             Path(start: position, offset: offset - position.offset)
         }
-        
+                
         func position(at offset: Int, append: Bool) -> Field.Index {
-            let paths = positions.map({ path(from: $0, to: offset) })
-            let shortest = paths.min(by: { abs($0.offset) < abs($1.offset) })!
-            let position = field.index(shortest.start, offsetBy: shortest.offset)
+            let paths: [Path] = positions.map({ path(from: $0, to: offset) })
+            let shortest: Path = paths.min(by: { abs($0.offset) < abs($1.offset) })!
+            let position: Field.Index = field.index(shortest.start, offsetBy: shortest.offset)
             
             if append {
                 positions.append(position)
@@ -80,8 +80,8 @@
             return position
         }
         
-        let lowerBound = position(at: newValue.lowerBound, append: true)
-        let upperBound = position(at: newValue.upperBound, append: false)
+        let lowerBound: Field.Index = position(at: newValue.lowerBound, append: true)
+        let upperBound: Field.Index = position(at: newValue.upperBound, append: false)
         
         return update(with: lowerBound ..< upperBound)
     }
@@ -97,33 +97,33 @@
     }
 }
 
-// MARK: - Helpers
+// MARK: - Helpers: Range
 
 extension Selection {
     
     // MARK: Move To Content
     
     @inlinable func moveToContent(_ other: Range<Field.Index>) -> Range<Field.Index> {
-        let lowerBound = field.nearestContentIndex(from: other.lowerBound)
-        let upperBound = field.nearestContentIndex(from: other.upperBound)
+        let lowerBound: Field.Index = field.nearestContentIndex(from: other.lowerBound)
+        let upperBound: Field.Index = field.nearestContentIndex(from: other.upperBound)
 
         return lowerBound ..< upperBound
     }
-}
-
-extension Selection {
     
-    // MARK: Move Over Spacers
+    // MARK: Move Across Spacers
     
-    @inlinable func moveOverSpacers(_ other: Range<Field.Index>) -> Range<Field.Index> {
+    @inlinable func moveAcrossSpacers(_ other: Range<Field.Index>) -> Range<Field.Index> {
         func position(_ bound: (Range<Field.Index>) -> Field.Index, attraction: Field.Direction) -> Field.Index {
-            let current = bound(range); let next = bound(other)
-            let direction = .init(from: current, to: next) ?? attraction
-            return field.firstIndex(from: next, direction: direction, attraction: attraction, where: \.nonspacer) ?? next
+            let this: Field.Index = bound(range)
+            let next: Field.Index = bound(other)
+            
+            let direction = Field.Direction(from: this, to: next) ?? attraction
+
+            return field.firstIndex(from: next, move: direction, search: attraction, for: \.nonspacer) ?? next
         }
         
-        let upperBound = position(\.upperBound, attraction: .backwards)
-        var lowerBound = upperBound
+        let upperBound: Field.Index = position(\.upperBound, attraction: .backwards)
+        var lowerBound: Field.Index = upperBound
         
         if !other.isEmpty {
             lowerBound = position(\.lowerBound, attraction:  .forwards)
