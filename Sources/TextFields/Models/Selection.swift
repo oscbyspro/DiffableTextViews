@@ -48,7 +48,7 @@
     @inlinable func update(with newValue: Range<Field.Index>) -> Self {
         var nextRange = newValue
 
-        moveInsideContent(&nextRange)
+        moveToContent(&nextRange)
         #warning("Can we calculate the jump over spacers without previous range?")
         moveAcrossSpacers(&nextRange, compare: range)
         
@@ -101,9 +101,9 @@
 
 extension Selection {
     
-    // MARK: Clamp Inside Content
+    // MARK: Move To Content
     
-    @inlinable func moveInsideContent(_ range: inout Range<Field.Index>) {
+    @inlinable func moveToContent(_ range: inout Range<Field.Index>) {
         let lowerBound = field.nearestContentIndex(from: range.lowerBound)
         let upperBound = field.nearestContentIndex(from: range.upperBound)
         
@@ -113,7 +113,7 @@ extension Selection {
 
 extension Selection {
     
-    // MARK: Ignore Spacers
+    // MARK: Move Across Spacers
     
     @inlinable func moveAcrossSpacers(_ next: inout Range<Field.Index>, compare previous: Range<Field.Index>) {
         func position(_ bound: (Range<Field.Index>) -> Field.Index, attraction: Field.Direction) -> Field.Index {
