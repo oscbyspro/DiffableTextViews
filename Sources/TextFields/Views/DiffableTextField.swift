@@ -10,7 +10,7 @@
 import SwiftUI
 
 @available(iOS 13.0, *)
-public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable, Equatable {
+public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
     public typealias Value = Style.Value
     public typealias UIViewType = UITextField
     
@@ -18,7 +18,7 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable, 
     
     @usableFromInline let value: Binding<Value>
     @usableFromInline let style: Style
-    
+        
     // MARK: Initializers
     
     public init(value: Binding<Value>, style: Style) {
@@ -34,7 +34,7 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable, 
     
     public func makeUIView(context: Context) -> UITextField {
         let uiView = UITextField()
-
+        
         uiView.setContentHuggingPriority(.defaultHigh, for: .vertical)
         uiView.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
 
@@ -52,22 +52,16 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable, 
 
     func update(coordinator: Coordinator) {
         coordinator.source = self
-        
+                
         if coordinator.value != value.wrappedValue {
             let nextValue = value.wrappedValue
             let nextSnapshot = style.format(nextValue)
             let nextSelection = coordinator.selection.convert(to: nextSnapshot)
             
             // ------------------------------ //
-            
+                        
             coordinator.update(value: nextValue, snapshot: nextSnapshot, selection: nextSelection)
         }
-    }
-    
-    // MARK: Equatable
-    
-    public static func == (lhs: Self, rhs: Self) -> Bool {
-        lhs.value.wrappedValue == rhs.value.wrappedValue
     }
     
     // MARK: Components
@@ -119,8 +113,7 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable, 
         
         // MARK: Updaters
         
-        #warning("This might warrant making a Field struct.")
-        
+        #warning("Remember to refactor this, eventually.")
         func update(value nextValue: Value?, snapshot nextSnapshot: Layout, selection nextSelection: Selection) {
             self.snapshot = nextSnapshot
             self.selection = nextSelection
@@ -130,8 +123,10 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable, 
             
             if let nextValue = nextValue {
                 self.value = nextValue
-                #warning("This modifies state during view update, apparently.")
-                TextFields.update(&source.value.wrappedValue, nonduplicate: nextValue)
+                DispatchQueue.main.async {
+                    // TODO: wait for apple to come up with a better solution
+                    TextFields.update(&self.source.value.wrappedValue, nonduplicate: nextValue)
+                }
             }
         }
     }

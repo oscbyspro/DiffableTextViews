@@ -114,16 +114,16 @@ extension Selection {
     
     @inlinable func moveAcrossSpacers(_ other: Range<Field.Index>) -> Range<Field.Index> {
         func position(_ bound: (Range<Field.Index>) -> Field.Index, attraction: Field.Direction) -> Field.Index {
-            let this: Field.Index = bound(range)
-            let next: Field.Index = bound(other)
+            let current: Field.Index = bound(range)
+            let next:    Field.Index = bound(other)
             
-            let direction = Field.Direction(from: this, to: next) ?? attraction
+            let direction = Field.Direction(from: current, to: next) ?? attraction
 
             return field.firstIndex(from: next, move: direction, search: attraction, for: \.nonspacer) ?? next
         }
         
-        let upperBound: Field.Index = position(\.upperBound, attraction: .backwards)
-        var lowerBound: Field.Index = upperBound
+        let upperBound = position(\.upperBound, attraction: .backwards)
+        var lowerBound = upperBound
         
         if !other.isEmpty {
             lowerBound = position(\.lowerBound, attraction:  .forwards)
