@@ -184,33 +184,36 @@ extension Field {
     }
 }
 
-#warning("Come back to this.")
-
-import Sequences
-
 extension Field {
     
-    @usableFromInline func firstIndex(from start: Index, forwards: Bool, where predicate: (Element) -> Bool) -> Index? {
-        firstIndex(in: .stride(start: .closed(start), step: forwards ? .forwards : .backwards), where: predicate)
-    }
+    // MARK: First Index Where
     
-    
-    @inlinable func firstIndex(of predicate: (Symbol) -> Bool, from start: Index, direction: Direction, attraction: Direction) -> Index? {
+    @inlinable func firstIndex(from start: Index, direction: Direction, attraction: Direction, where predicate: (Symbol) -> Bool) -> Index? {
         func side() -> (Element) -> Symbol {
             attraction == .forwards ? \.rhs : \.lhs
         }
         
-        func step<T: BidirectionalCollection>() -> Step<T> {
+        func step<T: BidirectionalCollection>() -> Walkthrough<T>.Step {
             direction == .forwards ? .forwards : .backwards
         }
         
         return lazy.map(side()).firstIndex(in: .stride(start: .closed(start), step: step()), where: predicate)
     }
-}
-
-#warning("Direction -> Sequences, maybe.")
-
-@frozen @usableFromInline enum Direction {
-    case forwards
-    case backwards
+    
+    // MARK: Helpers
+    
+    @usableFromInline @frozen enum Direction {
+        case forwards
+        case backwards
+        
+        @inlinable init?<Value>(from start: Value, to end: Value) where Value: Comparable {
+            guard start != end else { return nil }
+            
+            if start > end {
+                self = .forwards
+            } else {
+                self = .backwards
+            }
+        }
+    }
 }

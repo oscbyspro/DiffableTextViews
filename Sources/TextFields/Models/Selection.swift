@@ -5,8 +5,6 @@
 //  Created by Oscar Byström Ericsson on 2021-09-27.
 //
 
-import Sequences
-
 @usableFromInline struct Selection {
     @usableFromInline let field: Field
     @usableFromInline let range: Range<Field.Index>
@@ -118,15 +116,10 @@ extension Selection {
     // MARK: Ignore Spacers
     
     @inlinable func moveAcrossSpacers(_ next: inout Range<Field.Index>, compare previous: Range<Field.Index>) {
-        func momentum(from previous: Field.Index, to next: Field.Index) -> Direction? {
-            guard next != previous else { return nil }
-            return next > previous ? .forwards : .backwards
-        }
-        
-        func position(_ bound: (Range<Field.Index>) -> Field.Index, attraction: Direction) -> Field.Index {
+        func position(_ bound: (Range<Field.Index>) -> Field.Index, attraction: Field.Direction) -> Field.Index {
             let start = bound(next); let previous = bound(previous); let next = bound(next)
-            let direction = momentum(from: previous, to: next) ?? attraction
-            return field.firstIndex(of: \.nonspacer, from: start, direction: direction, attraction: attraction) ?? start
+            let direction = .init(from: previous, to: next) ?? attraction
+            return field.firstIndex(from: start, direction: direction, attraction: attraction, where: \.nonspacer) ?? start
         }
         
         let upperBound = position(\.upperBound, attraction: .backwards)
