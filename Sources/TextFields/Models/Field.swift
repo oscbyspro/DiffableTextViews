@@ -209,7 +209,7 @@ extension Field {
         @inlinable init?<Value>(from start: Value, to end: Value) where Value: Comparable {
             guard start != end else { return nil }
             
-            if start > end {
+            if start < end {
                 self = .forwards
             } else {
                 self = .backwards

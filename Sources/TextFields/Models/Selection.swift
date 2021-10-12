@@ -46,13 +46,11 @@
     // MARK: Update: Range
     
     @inlinable func update(with newValue: Range<Field.Index>) -> Self {
-        var nextRange = newValue
-
-        moveToContent(&nextRange)
-        #warning("Can we calculate the jump over spacers without previous range?")
-        moveAcrossSpacers(&nextRange, compare: range)
+        var next = newValue
+        next = moveToContent(next)
+        next = moveOverSpacers(next)
         
-        return Selection(field, range: nextRange)
+        return Selection(field, range: next)
     }
     
     @inlinable func update(with newValue: Range<Layout.Index>) -> Self {
@@ -99,36 +97,38 @@
     }
 }
 
+// MARK: - Helpers
+
 extension Selection {
     
     // MARK: Move To Content
     
-    @inlinable func moveToContent(_ range: inout Range<Field.Index>) {
-        let lowerBound = field.nearestContentIndex(from: range.lowerBound)
-        let upperBound = field.nearestContentIndex(from: range.upperBound)
-        
-        range = lowerBound ..< upperBound
+    @inlinable func moveToContent(_ other: Range<Field.Index>) -> Range<Field.Index> {
+        let lowerBound = field.nearestContentIndex(from: other.lowerBound)
+        let upperBound = field.nearestContentIndex(from: other.upperBound)
+
+        return lowerBound ..< upperBound
     }
 }
 
 extension Selection {
     
-    // MARK: Move Across Spacers
+    // MARK: Move Over Spacers
     
-    @inlinable func moveAcrossSpacers(_ next: inout Range<Field.Index>, compare previous: Range<Field.Index>) {
+    @inlinable func moveOverSpacers(_ other: Range<Field.Index>) -> Range<Field.Index> {
         func position(_ bound: (Range<Field.Index>) -> Field.Index, attraction: Field.Direction) -> Field.Index {
-            let start = bound(next); let previous = bound(previous); let next = bound(next)
-            let direction = .init(from: previous, to: next) ?? attraction
-            return field.firstIndex(from: start, direction: direction, attraction: attraction, where: \.nonspacer) ?? start
+            let current = bound(range); let next = bound(other)
+            let direction = .init(from: current, to: next) ?? attraction
+            return field.firstIndex(from: next, direction: direction, attraction: attraction, where: \.nonspacer) ?? next
         }
         
         let upperBound = position(\.upperBound, attraction: .backwards)
         var lowerBound = upperBound
         
-        if !next.isEmpty {
+        if !other.isEmpty {
             lowerBound = position(\.lowerBound, attraction:  .forwards)
         }
         
-        next = lowerBound ..< upperBound
+        return lowerBound ..< upperBound
     }
 }
