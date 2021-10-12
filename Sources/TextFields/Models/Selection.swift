@@ -49,10 +49,7 @@ import Sequences
     
     @inlinable func update(with newValue: Range<Field.Index>) -> Self {
         var nextRange = newValue
-        
-        let x = field.reversed().reduce(into: String(), map: \.lhs.character)
-        print(x)
-        
+
         moveInsideContent(&nextRange)
         #warning("Can we calculate the jump over spacers without previous range?")
         moveAcrossSpacers(&nextRange, compare: range)
@@ -121,66 +118,24 @@ extension Selection {
     // MARK: Ignore Spacers
     
     @inlinable func moveAcrossSpacers(_ next: inout Range<Field.Index>, compare previous: Range<Field.Index>) {
-        func direction(_ position: (Range<Field.Index>) -> Field.Index) -> Direction? {
-            .momentum(from: position(previous), to: position(next))
-        }
-
-        #warning("...")
-        func position(_ start: Field.Index, attraction: Attraction, move direction: Direction?) -> Field.Index {
-            guard let direction = direction else { return start }
-            
-            return field.firstIndex(in: .stride(start: .closed(start), step: direction.step), where: attraction.search) ?? start
-        }
-
-        let upperBound = position(next.upperBound, attraction: .backwards, move: direction(\.upperBound) ?? .backwards)
-        var lowerBound = upperBound
-
-        if next.isEmpty == false {
-            lowerBound = position(next.lowerBound, attraction:  .forwards, move: direction(\.lowerBound) ??  .forwards)
-        }
-
-        next = lowerBound ..< upperBound
-    }
-    
-    // MARK: Helpers
-    
-    @usableFromInline enum Direction {
-        case forwards
-        case backwards
-        
-        // MARK: Calculations
-        
-        @inlinable var step: Sequences.Step<Field> {
-            self == .forwards ? .forwards : .backwards
-        }
-        
-        // MARK: Initializers
-        
-        @inlinable static func momentum(from previous: Field.Index, to next: Field.Index) -> Direction? {
+        func momentum(from previous: Field.Index, to next: Field.Index) -> Direction? {
             guard next != previous else { return nil }
-            
             return next > previous ? .forwards : .backwards
         }
-    }
-    
-    @usableFromInline struct Attraction {
         
-        // MARK: Properties
-        
-        @usableFromInline let search: (Field.Element) -> Bool
-        
-        // MARK: Initializers
-        
-        @inlinable init(search: @escaping (Field.Element) -> Bool) {
-            self.search = search
+        func position(_ bound: (Range<Field.Index>) -> Field.Index, attraction: Direction) -> Field.Index {
+            let start = bound(next); let previous = bound(previous); let next = bound(next)
+            let direction = momentum(from: previous, to: next) ?? attraction
+            return field.firstIndex(of: \.nonspacer, from: start, direction: direction, attraction: attraction) ?? start
         }
         
-        @inlinable static var forwards: Self {
-            Self.init(search: \.rhs.nonspacer)
+        let upperBound = position(\.upperBound, attraction: .backwards)
+        var lowerBound = upperBound
+        
+        if !next.isEmpty {
+            lowerBound = position(\.lowerBound, attraction:  .forwards)
         }
         
-        @inlinable static var backwards: Self {
-            Self.init(search: \.lhs.nonspacer)
-        }
+        next = lowerBound ..< upperBound
     }
 }

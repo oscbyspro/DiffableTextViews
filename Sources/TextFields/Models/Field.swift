@@ -7,7 +7,6 @@
 
 import struct Sequences.Walkthrough
 
-#warning("Rename names such as lastIndex to lastSubscript, or similar.")
 @usableFromInline struct Field: BidirectionalCollection {
     @usableFromInline let layout: Layout
     
@@ -20,6 +19,7 @@ import struct Sequences.Walkthrough
     // MARK: Components
     
     @usableFromInline struct Element {
+        #warning("Is this good or bad...?")
         @usableFromInline static let symbolBeyondLowerBound: Symbol = .prefix("<")
         @usableFromInline static let symbolBeyondUpperBound: Symbol = .suffix(">")
         
@@ -193,4 +193,24 @@ extension Field {
     @usableFromInline func firstIndex(from start: Index, forwards: Bool, where predicate: (Element) -> Bool) -> Index? {
         firstIndex(in: .stride(start: .closed(start), step: forwards ? .forwards : .backwards), where: predicate)
     }
+    
+    
+    @inlinable func firstIndex(of predicate: (Symbol) -> Bool, from start: Index, direction: Direction, attraction: Direction) -> Index? {
+        func side() -> (Element) -> Symbol {
+            attraction == .forwards ? \.rhs : \.lhs
+        }
+        
+        func step<T: BidirectionalCollection>() -> Step<T> {
+            direction == .forwards ? .forwards : .backwards
+        }
+        
+        return lazy.map(side()).firstIndex(in: .stride(start: .closed(start), step: step()), where: predicate)
+    }
+}
+
+#warning("Direction -> Sequences, maybe.")
+
+@frozen @usableFromInline enum Direction {
+    case forwards
+    case backwards
 }
