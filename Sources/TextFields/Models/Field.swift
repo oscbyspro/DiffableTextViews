@@ -7,7 +7,12 @@
 
 import struct Sequences.Walkthrough
 
+// MARK: - Field
+
 @usableFromInline struct Field: BidirectionalCollection {
+    
+    // MARK: Properties
+    
     @usableFromInline let layout: Layout
     
     // MARK: Initializers
@@ -19,9 +24,8 @@ import struct Sequences.Walkthrough
     // MARK: Components
     
     @usableFromInline struct Element {
-        #warning("Is this good or bad...?")
-        @usableFromInline static let symbolBeyondLowerBound: Symbol = .prefix("<")
-        @usableFromInline static let symbolBeyondUpperBound: Symbol = .suffix(">")
+        @usableFromInline static let symbolBeyondLowerBound: Symbol = .prefix("\0")
+        @usableFromInline static let symbolBeyondUpperBound: Symbol = .suffix("\0")
         
         // MARK: Storage
         
