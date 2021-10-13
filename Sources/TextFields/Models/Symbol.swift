@@ -17,9 +17,9 @@ public struct Symbol: Equatable {
     }
 }
 
-// MARK: - Static Initializers
-
 public extension Symbol {
+    // MARK: Initializers
+    
     @inlinable static func content(_ character: Character) -> Self {
         Self(character, attribute: .content)
     }
@@ -37,9 +37,9 @@ public extension Symbol {
     }
 }
 
-// MARK: - Convenience Getters
-
 public extension Symbol {
+    // MARK: Descriptions
+    
     @inlinable var content: Bool {
         attribute == .content
     }
@@ -58,6 +58,8 @@ public extension Symbol {
 }
 
 public extension Symbol {
+    // MARK: Descriptions
+    
     @inlinable var noncontent: Bool {
         attribute != .content
     }

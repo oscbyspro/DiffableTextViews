@@ -28,7 +28,7 @@ import struct Sequences.Walkthrough
         self.range = range
     }
     
-    // MARK: Update: Carets
+    // MARK: Update: Field
     
     @inlinable func convert(to newValue: Field) -> Self {
         let options = SimilaritiesOptions<Symbol>
