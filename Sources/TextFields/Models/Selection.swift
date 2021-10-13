@@ -5,7 +5,14 @@
 //  Created by Oscar Byström Ericsson on 2021-09-27.
 //
 
+import struct Sequences.Walkthrough
+
+// MARK: - Selection
+
 @usableFromInline struct Selection {
+    
+    // MARK: Properties
+    
     @usableFromInline let field: Field
     @usableFromInline let range: Range<Field.Index>
     
@@ -29,12 +36,12 @@
             .inspect(.only(where: \.content))
             .produce(.overshoot)
         
-        func position(current: Field.SubSequence, next: Field.SubSequence) -> Field.Index {
+        func position(from current: Field.SubSequence, to next: Field.SubSequence) -> Field.Index {
             next.lazy.map(\.rhs).suffix(alsoIn: current.lazy.map(\.rhs), options: options).startIndex
         }
         
-        let nextUpperBound = position(current: field[range.upperBound...], next: newValue[...])
-        let nextLowerBound = position(current: field[range], next: newValue[..<nextUpperBound])
+        let nextUpperBound = position(from: field[range.upperBound...], to: newValue[...])
+        let nextLowerBound = position(from: field[range], to: newValue[..<nextUpperBound])
 
         return Selection(newValue, range: nextLowerBound ..< nextUpperBound)
     }
@@ -47,8 +54,8 @@
     
     @inlinable func update(with newValue: Range<Field.Index>) -> Self {
         var next = newValue
-        next = moveToContent(next)
-        next = moveAcrossSpacers(next)
+        moveInoutRangeToContent(&next)
+        moveInoutRangeAcrossSpacers(&next)
         
         return Selection(field, range: next)
     }
@@ -97,38 +104,53 @@
     }
 }
 
-// MARK: - Helpers: Range
+// MARK: - Helpers
 
 extension Selection {
     
     // MARK: Move To Content
     
-    @inlinable func moveToContent(_ other: Range<Field.Index>) -> Range<Field.Index> {
-        let lowerBound: Field.Index = field.nearestContentIndex(from: other.lowerBound)
-        let upperBound: Field.Index = field.nearestContentIndex(from: other.upperBound)
+    @inlinable func moveInoutRangeToContent(_ inoutRange: inout Range<Field.Index>) {
+        func position(_ positionIn: (Range<Field.Index>) -> Field.Index) -> Field.Index {
+            var position = positionIn(inoutRange)
+                    
+            if field[position].rhs.prefix, let next = field.firstIndex(in: .stride(start: .closed(position), step:  .forwards), where: \.rhs.content) {
+                position = next
+            }
+            
+            if field[position].lhs.suffix, let next = field.firstIndex(in: .stride(start: .closed(position), step: .backwards), where: \.lhs.content) {
+                position = next
+            }
+            
+            return position
+        }
 
-        return lowerBound ..< upperBound
+        inoutRange = position(\.lowerBound) ..< position(\.upperBound)
     }
     
     // MARK: Move Across Spacers
-    
-    @inlinable func moveAcrossSpacers(_ other: Range<Field.Index>) -> Range<Field.Index> {
-        func position(_ bound: (Range<Field.Index>) -> Field.Index, attraction: Field.Direction) -> Field.Index {
-            let current: Field.Index = bound(range)
-            let next:    Field.Index = bound(other)
-            
-            let direction = Field.Direction(from: current, to: next) ?? attraction
 
-            return field.firstIndex(from: next, move: direction, search: attraction, for: \.nonspacer) ?? next
+    @inlinable func moveInoutRangeAcrossSpacers(_ inoutRange: inout Range<Field.Index>) {
+        typealias Direction = Walkthrough<Field>.Step
+                
+        func direction(from first: Field.Index, to second: Field.Index) -> Direction? {
+            guard first != second else { return nil }; return first < second ? .forwards : .backwards
         }
         
-        let upperBound = position(\.upperBound, attraction: .backwards)
+        func position(_ positionIn: (Range<Field.Index>) -> Field.Index, preference: Direction, search: (Field.Element) -> Bool) -> Field.Index {
+            let start = positionIn(inoutRange)
+            let direction = direction(from: positionIn(range), to: start) ?? preference
+            
+            return field.firstIndex(in: .stride(start: .closed(start), step: direction), where: search) ?? start
+        }
+                
+        let upperBound = position(\.upperBound, preference: .backwards, search: \.lhs.nonspacer)
         var lowerBound = upperBound
         
-        if !other.isEmpty {
-            lowerBound = position(\.lowerBound, attraction:  .forwards)
+        if !inoutRange.isEmpty {
+            lowerBound = position(\.lowerBound, preference:  .forwards, search: \.rhs.nonspacer)
         }
-        
-        return lowerBound ..< upperBound
+                
+        inoutRange = lowerBound ..< upperBound
     }
 }
