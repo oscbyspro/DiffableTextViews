@@ -18,14 +18,13 @@ final class SimilaritiesTests: XCTestCase {
         
     func test_collectionsAreSimilarToThemselves() {
         let collection = Array(0...9)
-        let expectation = collection
         
         let similarities = Similarities(in: collection, and: collection)
         
-        XCTAssert(expectation.elementsEqual(similarities.lhsPrefix()))
-        XCTAssert(expectation.elementsEqual(similarities.rhsPrefix()))
-        XCTAssert(expectation.elementsEqual(similarities.lhsSuffix()))
-        XCTAssert(expectation.elementsEqual(similarities.rhsSuffix()))
+        XCTAssert(collection.elementsEqual(similarities.lhsPrefix()))
+        XCTAssert(collection.elementsEqual(similarities.rhsPrefix()))
+        XCTAssert(collection.elementsEqual(similarities.lhsSuffix()))
+        XCTAssert(collection.elementsEqual(similarities.rhsSuffix()))
     }
     
     func test_inspection() {
@@ -48,21 +47,21 @@ final class SimilaritiesTests: XCTestCase {
         
     func test_wrapper() {
         let collection = [1, 0, 0, 0, 1]
-        let single     = [1]
+        let one        = [1]
         
         let options = Options.inspect(.only({ $0 == 1 })).produce(.wrapper)
-        let similarities = Similarities(in: collection, and: single, with: options)
+        let similarities = Similarities(in: collection, and: one, with: options)
 
-        XCTAssert(single.elementsEqual(similarities.lhsPrefix()))
-        XCTAssert(single.elementsEqual(similarities.lhsSuffix()))
+        XCTAssert(one.elementsEqual(similarities.lhsPrefix()))
+        XCTAssert(one.elementsEqual(similarities.lhsSuffix()))
     }
     
     func test_overshoot() {
         let collection = [1, 0, 0, 0, 1]
-        let single     = [1]
+        let one        = [1]
         
         let options = Options.inspect(.only({ $0 == 1 })).produce(.overshoot)
-        let similarities = Similarities(in: collection, and: single, with: options)
+        let similarities = Similarities(in: collection, and: one, with: options)
     
         XCTAssert([1, 0, 0, 0].elementsEqual(similarities.lhsPrefix()))
         XCTAssert([0, 0, 0, 1].elementsEqual(similarities.lhsSuffix()))
