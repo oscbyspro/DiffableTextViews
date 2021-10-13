@@ -29,16 +29,6 @@ final class SimilaritiesTests: XCTestCase {
     }
     
     // MARK: Tests
-            
-    func test_collectionsAreSimilarToThemselves() {
-        let collection = Array(0...3)
-        let similarities = Similarities(in: collection, and: collection)
-        
-        XCTAssert(collection.elementsEqual(similarities.lhsPrefix()))
-        XCTAssert(collection.elementsEqual(similarities.rhsPrefix()))
-        XCTAssert(collection.elementsEqual(similarities.lhsSuffix()))
-        XCTAssert(collection.elementsEqual(similarities.rhsSuffix()))
-    }
     
     func test_inspection() {
         let collection = Array(0...6)
