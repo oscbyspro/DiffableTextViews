@@ -42,7 +42,7 @@ import struct Sequences.Walkthrough
         
         let nextUpperBound = position(from: field[range.upperBound...], to: newValue[...])
         let nextLowerBound = position(from: field[range], to: newValue[..<nextUpperBound])
-
+        
         return Selection(newValue, range: nextLowerBound ..< nextUpperBound)
     }
     

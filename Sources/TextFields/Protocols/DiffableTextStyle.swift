@@ -5,6 +5,8 @@
 //  Created by Oscar Byström Ericsson on 2021-10-02.
 //
 
+// MARK: - DiffableTextStyle
+
 public protocol DiffableTextStyle {
     associatedtype Value: Equatable
     
@@ -15,13 +17,14 @@ public protocol DiffableTextStyle {
     func parse(_ layout: Layout) -> Value?
 
     // "-." -> "-0."
-    func accept(_ proposal: Layout) -> Layout?
+    func accept(_ layout: Layout) -> Layout?
 }
     
 public extension DiffableTextStyle {
-    // MARK: Default Implementations
     
-    @inlinable func accept(_ proposal: Layout) -> Layout? {
-        proposal
+    // MARK: Implementations
+    
+    @inlinable func accept(_ layout: Layout) -> Layout? {
+        layout
     }
 }

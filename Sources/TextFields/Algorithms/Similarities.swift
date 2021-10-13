@@ -43,17 +43,17 @@
         var lhsIndex = lhs.startIndex
         var rhsIndex = rhs.startIndex
         
-        while let nextLhsIndex = firstInspectableIndex(in: lhs[lhsIndex...]),
-              let nextRhsIndex = firstInspectableIndex(in: rhs[rhsIndex...]) {
+        while let nextLhsIndex = lhs[lhsIndex...].firstIndex(where: options.inspection.includes),
+              let nextRhsIndex = rhs[rhsIndex...].firstIndex(where: options.inspection.includes) {
             
             guard options.comparison.equivalent(lhs[nextLhsIndex], rhs[nextRhsIndex]) else { break }
 
-            lhsIndex = lhs.index(after: lhsIndex)
-            rhsIndex = rhs.index(after: rhsIndex)
+            lhsIndex = lhs.index(after: nextLhsIndex)
+            rhsIndex = rhs.index(after: nextRhsIndex)
         }
         
         if options.production == .overshoot {
-            lhsIndex = firstInspectableIndex(in: lhs[lhsIndex...]) ?? lhs.endIndex
+            lhsIndex = lhs[lhsIndex...].firstIndex(where: options.inspection.includes) ?? lhs.endIndex
         }
         
         return lhs[..<lhsIndex]
@@ -70,12 +70,6 @@
     
     @inlinable func rhsSuffix() -> RHS.SubSequence where LHS: BidirectionalCollection, RHS: BidirectionalCollection {
         make(rhs, lhs).lhsSuffix()
-    }
-    
-    // MARK: Helpers
-    
-    @inlinable func firstInspectableIndex<C: Collection>(in collection: C) -> C.Index? where C.Element == Element {
-        collection.firstIndex(where: options.inspection.includes)
     }
 }
 

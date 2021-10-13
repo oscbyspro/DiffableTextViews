@@ -53,8 +53,8 @@ public struct DecimalTextStyle: DiffableTextStyle {
         return decimal
     }
     
-    public func accept(_ snapshot: Layout) -> Layout? {
-        guard let decimal = parse(snapshot) else { return nil }
+    public func accept(_ layout: Layout) -> Layout? {
+        guard let decimal = parse(layout) else { return nil }
         
         return format(decimal)
     }
