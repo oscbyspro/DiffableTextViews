@@ -32,9 +32,9 @@ import struct Sequences.Walkthrough
     
     @inlinable func convert(to newValue: Field) -> Self {
         let options = SimilaritiesOptions<Symbol>
-            .compare(.equatable(\.character))
-            .inspect(.only(where: \.content))
             .produce(.overshoot)
+            .inspect(.only(\.content))
+            .compare(.equatable(\.character))
         
         func position(from current: Field.SubSequence, to next: Field.SubSequence) -> Field.Index {
             next.lazy.map(\.rhs).suffix(alsoIn: current.lazy.map(\.rhs), options: options).startIndex

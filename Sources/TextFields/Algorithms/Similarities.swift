@@ -5,6 +5,8 @@
 //  Created by Oscar Byström Ericsson on 2021-09-24.
 //
 
+// MARK: - Similarities
+
 @usableFromInline struct Similarities<LHS: Collection, RHS: Collection> where LHS.Element == RHS.Element {
     @usableFromInline typealias Element = LHS.Element
     @usableFromInline typealias Options = SimilaritiesOptions<Element>
@@ -202,7 +204,7 @@ extension BidirectionalCollection {
         Self(includes: { _ in true })
     }
     
-    @inlinable static func only(where includes: @escaping (Element) -> Bool) -> Self {
+    @inlinable static func only(_ includes: @escaping (Element) -> Bool) -> Self {
         Self(includes: includes)
     }
     
