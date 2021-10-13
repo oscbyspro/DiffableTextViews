@@ -134,21 +134,23 @@ extension Selection {
         typealias Direction = Walkthrough<Field>.Step
                 
         func direction(from first: Field.Index, to second: Field.Index) -> Direction? {
-            guard first != second else { return nil }; return first < second ? .forwards : .backwards
+            if      first < second { return  .forwards }
+            else if first > second { return .backwards }
+            else                   { return      .none }
         }
         
-        func position(_ positionIn: (Range<Field.Index>) -> Field.Index, preference: Direction, search: (Field.Element) -> Bool) -> Field.Index {
+        func position(_ positionIn: (Range<Field.Index>) -> Field.Index, preference: Direction, where predicate: (Field.Element) -> Bool) -> Field.Index {
             let start = positionIn(inoutRange)
             let direction = direction(from: positionIn(range), to: start) ?? preference
             
-            return field.firstIndex(in: .stride(start: .closed(start), step: direction), where: search) ?? start
+            return field.firstIndex(in: .stride(start: .closed(start), step: direction), where: predicate) ?? start
         }
                 
-        let upperBound = position(\.upperBound, preference: .backwards, search: \.lhs.nonspacer)
+        let upperBound = position(\.upperBound, preference: .backwards, where: \.lhs.nonspacer)
         var lowerBound = upperBound
         
         if !inoutRange.isEmpty {
-            lowerBound = position(\.lowerBound, preference:  .forwards, search: \.rhs.nonspacer)
+            lowerBound = position(\.lowerBound, preference:  .forwards, where: \.rhs.nonspacer)
         }
                 
         inoutRange = lowerBound ..< upperBound
