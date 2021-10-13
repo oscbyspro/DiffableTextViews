@@ -55,5 +55,8 @@ let package = Package(
         .target(
             name: TextFields.name,
             dependencies: [Sequences.dependency]),
+        .testTarget(
+            name: TextFields.tests,
+            dependencies: [TextFields.dependency])
     ]
 )
