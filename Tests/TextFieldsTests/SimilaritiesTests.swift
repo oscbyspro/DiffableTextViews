@@ -1,5 +1,5 @@
 //
-//  File.swift
+//  SimilaritiesTests.swift
 //  
 //
 //  Created by Oscar Byström Ericsson on 2021-10-13.
@@ -7,65 +7,88 @@
 
 import XCTest
 @testable import struct TextFields.Similarities
-@testable import struct TextFields.SimilaritiesOptions
 
-// MARK: - SimilaritiesTests
+// MARK: - SimilaritiesTestsOfInspection
 
-final class SimilaritiesTests: XCTestCase {
-    typealias Options<Element> = SimilaritiesOptions<Element>
+final class SimilaritiesTestsOfInspection: XCTestCase {
+    typealias Similarities = TextFields.Similarities<[Int], [Int]>
+    typealias Options = Similarities.Options
+    typealias Inspection = Options.Inspection
+    
+    // MARK: Setup
+    
+    let lhs = [0, 1, 2, 3, 4]
+    let rhs = [0, 2, 4]
     
     //  MARK: Helpers
     
-    func one(element: Int) -> Bool {
-        element == 1
-    }
-        
-    func even(element: Int) -> Bool {
-        element % 2 == 0
-    }
-    
-    func odd(element: Int) -> Bool {
-        element % 2 == 1
+    func similarities(_ inspection: Inspection) -> Similarities {
+        .init(lhs: lhs, rhs: rhs, options: .inspect(inspection))
     }
     
     // MARK: Tests
     
-    func test_inspection() {
-        let collection = Array(0...6)
-        let evens = collection.filter(even)
+    func test_each() {
+        let similarities = similarities(.each)
         
-        let options = Options.inspect(.only(even))
-        let similarities = Similarities(in: collection, and: evens, with: options)
+        let prefix = [0]
+        let suffix = [4]
         
-        XCTAssert(collection.elementsEqual(similarities.lhsPrefix()))
-        XCTAssert(collection.elementsEqual(similarities.lhsSuffix()))
-        XCTAssert(     evens.elementsEqual(similarities.rhsPrefix()))
-        XCTAssert(     evens.elementsEqual(similarities.rhsSuffix()))
+        XCTAssert(prefix.elementsEqual(similarities.lhsPrefix()))
+        XCTAssert(suffix.elementsEqual(similarities.lhsSuffix()))
+        XCTAssert(prefix.elementsEqual(similarities.rhsPrefix()))
+        XCTAssert(suffix.elementsEqual(similarities.rhsSuffix()))
+    }
+    
+    func test_only() {
+        let similarities = similarities(.only({ $0.isMultiple(of: 2) }))
+
+        XCTAssert(lhs.elementsEqual(similarities.lhsPrefix()))
+        XCTAssert(lhs.elementsEqual(similarities.lhsSuffix()))
+        XCTAssert(rhs.elementsEqual(similarities.rhsPrefix()))
+        XCTAssert(rhs.elementsEqual(similarities.rhsSuffix()))
+    }
+}
+
+// MARK: - SimilaritiesTestsOfProductions
+
+final class SimilaritiesTestsOfProductions: XCTestCase {
+    typealias Similarities = TextFields.Similarities<[Int], [Int]>
+    typealias Options = Similarities.Options
+    typealias Production = Options.Production
+    
+    // MARK: Setup
+    
+    let lhs = [1, 0, 0, 0, 1]
+    let rhs = [1]
+    
+    //  MARK: Helpers
+    
+    func similarities(_ production: Production) -> Similarities {
+        let options = Options
+            .inspect(.only({ $0 == 1 }))
+            .produce(production)
+        
+        return .init(lhs: lhs, rhs: rhs, options: options)
     }
         
-    func test_wrapper() {
-        let collection = [1, 0, 0, 0, 1]
-        let ones       = [1]
+    // MARK: Tests
         
-        let options = Options.inspect(.only(one)).produce(.wrapper)
-        let similarities = Similarities(in: collection, and: ones, with: options)
+    func test_wrapper() {
+        let similarities = similarities(.wrapper)
 
-        XCTAssert(ones.elementsEqual(similarities.lhsPrefix()))
-        XCTAssert(ones.elementsEqual(similarities.lhsSuffix()))
-        XCTAssert(ones.elementsEqual(similarities.rhsPrefix()))
-        XCTAssert(ones.elementsEqual(similarities.rhsSuffix()))
+        XCTAssert(rhs.elementsEqual(similarities.lhsPrefix()))
+        XCTAssert(rhs.elementsEqual(similarities.lhsSuffix()))
+        XCTAssert(rhs.elementsEqual(similarities.rhsPrefix()))
+        XCTAssert(rhs.elementsEqual(similarities.rhsSuffix()))
     }
     
     func test_overshoot() {
-        let collection = [1, 0, 0, 0, 1]
-        let ones       = [1]
+        let similarities = similarities(.overshoot)
         
-        let options = Options.inspect(.only(one)).produce(.overshoot)
-        let similarities = Similarities(in: collection, and: ones, with: options)
-    
         XCTAssert([1, 0, 0, 0].elementsEqual(similarities.lhsPrefix()))
         XCTAssert([0, 0, 0, 1].elementsEqual(similarities.lhsSuffix()))
-        XCTAssert(        ones.elementsEqual(similarities.rhsPrefix()))
-        XCTAssert(        ones.elementsEqual(similarities.rhsSuffix()))
+        XCTAssert(         rhs.elementsEqual(similarities.rhsPrefix()))
+        XCTAssert(         rhs.elementsEqual(similarities.rhsSuffix()))
     }
 }
