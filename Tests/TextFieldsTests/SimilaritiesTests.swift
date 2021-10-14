@@ -11,10 +11,10 @@ import XCTest
 // MARK: - Inspection
 
 final class SimilaritiesTestsOfInspection: XCTestCase {
-    typealias Expectations = SimilaritiesTestsExpectations<Int>
-    typealias Similarities = TextFields.Similarities<[Int], [Int]>
-    typealias Options = Similarities.Options
+    typealias Subject = Similarities<[Int], [Int]>
+    typealias Options = Subject.Options
     typealias Inspection = Options.Inspection
+    typealias Expectations = SimilaritiesTestsExpectations<Int>
     
     // MARK: Setup
     
@@ -26,7 +26,7 @@ final class SimilaritiesTestsOfInspection: XCTestCase {
     func XCTAssert(_ inspection: Inspection, expectations: () -> Expectations) {
         let options = Options.inspect(inspection)
         
-        expectations().validate(Similarities(lhs: lhs, rhs: rhs, options: options))
+        expectations().validate(Subject(lhs: lhs, rhs: rhs, options: options))
     }
         
     // MARK: Tests
@@ -58,10 +58,10 @@ final class SimilaritiesTestsOfInspection: XCTestCase {
 // MARK: - Production
 
 final class SimilaritiesTestsOfProduction: XCTestCase {
-    typealias Expectations = SimilaritiesTestsExpectations<Int>
-    typealias Similarities = TextFields.Similarities<[Int], [Int]>
-    typealias Options = Similarities.Options
+    typealias Subject = Similarities<[Int], [Int]>
+    typealias Options = Subject.Options
     typealias Production = Options.Production
+    typealias Expectations = SimilaritiesTestsExpectations<Int>
     
     // MARK: Setup
     
@@ -75,7 +75,7 @@ final class SimilaritiesTestsOfProduction: XCTestCase {
             .inspect(.only({ $0 == 1 }))
             .produce(production)
                 
-        expectations().validate(Similarities(lhs: lhs, rhs: rhs, options: options))
+        expectations().validate(Subject(lhs: lhs, rhs: rhs, options: options))
     }
         
     // MARK: Tests
