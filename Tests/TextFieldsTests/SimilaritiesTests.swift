@@ -11,10 +11,10 @@ import XCTest
 // MARK: - Inspection
 
 final class SimilaritiesTestsOfInspection: XCTestCase {
+    typealias Expectations = SimilaritiesTestsExpectations<Int>
     typealias Similarities = TextFields.Similarities<[Int], [Int]>
     typealias Options = Similarities.Options
     typealias Inspection = Options.Inspection
-    typealias Expectations = SimilaritiesTestsExpectations<Int>
     
     // MARK: Setup
     
@@ -58,10 +58,10 @@ final class SimilaritiesTestsOfInspection: XCTestCase {
 // MARK: - Production
 
 final class SimilaritiesTestsOfProduction: XCTestCase {
+    typealias Expectations = SimilaritiesTestsExpectations<Int>
     typealias Similarities = TextFields.Similarities<[Int], [Int]>
     typealias Options = Similarities.Options
     typealias Production = Options.Production
-    typealias Expectations = SimilaritiesTestsExpectations<Int>
     
     // MARK: Setup
     
