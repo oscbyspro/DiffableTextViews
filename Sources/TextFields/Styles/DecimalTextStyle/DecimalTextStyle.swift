@@ -9,28 +9,31 @@ import SwiftUI
 
 #if os(iOS)
 
+#warning("Add behaviors like clearsZero.")
 @available(iOS 15.0, *)
 public struct DecimalTextStyle: DiffableTextStyle {
     @usableFromInline typealias Base = Decimal.FormatStyle
     @usableFromInline typealias BasePrecisionStrategy = Base.Configuration.Precision
     @usableFromInline typealias BaseSeparatorStrategy = Base.Configuration.DecimalSeparatorDisplayStrategy
-    @usableFromInline typealias Precision = DecimalTextPrecision
     @usableFromInline typealias Components = DecimalTextComponents
+
+    public typealias Values = DecimalTextValues
+    public typealias Precision = DecimalTextPrecision
     
     // MARK: Properties: Static
     
-    @usableFromInline static let maxSignificantDigits: Int = 38
+    @usableFromInline static let max = Decimal(string: String(repeating: "9", count: Precision.maximum))!
     
     // MARK: Properties
     
     @usableFromInline var base: Base
-    @usableFromInline var precision: DecimalTextPrecision
+    @usableFromInline var values: Values = .init()
+    @usableFromInline var precision: Precision = .max
         
     // MARK: Initializers
     
     @inlinable public init(locale: Locale = .autoupdatingCurrent) {
         self.base = Base(locale: locale)
-        self.precision = Precision.defaults
     }
     
     // MARK: Styles
@@ -40,9 +43,7 @@ public struct DecimalTextStyle: DiffableTextStyle {
     }
     
     @inlinable func editableStyle(decimal: Bool = false) -> Base {
-        let separatorStrategy: BaseSeparatorStrategy = decimal ? .always : .automatic
-        let precisionStrategy: BasePrecisionStrategy = precision.editableStyle(decimal: decimal)
-        return base.decimalSeparator(strategy: separatorStrategy).precision(precisionStrategy)
+        base.precision(precision.editableStyle()).decimalSeparator(strategy: decimal ? .always : .automatic)
     }
     
     // MARK: Maps
@@ -51,8 +52,12 @@ public struct DecimalTextStyle: DiffableTextStyle {
         map({ $0.base = $0.base.locale(locale) })
     }
     
-    @inlinable public func precision(_ newValue: DecimalTextPrecision) -> Self {
+    @inlinable public func precision(_ newValue: Precision) -> Self {
         map({ $0.precision = newValue })
+    }
+    
+    @inlinable public func values(_ newValue: Values) -> Self {
+        map({ $0.values = newValue })
     }
 
     // MARK: Helpers
@@ -83,6 +88,10 @@ extension DecimalTextStyle {
     
     // MARK: Sets
     
+    @inlinable var minus: String? {
+        !values.nonnegative ? Components.sign : nil
+    }
+    
     @inlinable func content() -> Set<Character> {
         var set = Set<Character>()
         set.formUnion(Components.sign)
@@ -107,7 +116,7 @@ extension DecimalTextStyle {
         
     @inlinable public func showcase(_ value: Decimal) -> Snapshot {
         let style = displayableStyle()
-
+        
         return snapshot(style.format(value))
     }
     
@@ -134,18 +143,22 @@ extension DecimalTextStyle {
     // MARK: Process
     
     @inlinable public func process(_ snapshot: Snapshot) -> Snapshot? {
-        guard let components = components(snapshot) else {
+        guard var components = components(snapshot) else {
             return nil
         }
 
-        // cases
+        // components edge cases
+        
+        if values.nonnegative, !components.sign.isEmpty {
+            components.sign = String()
+        }
                 
         if components.integerDigits.isEmpty, components.decimalSeparator.isEmpty, components.decimalDigits.isEmpty {
             return Snapshot(components.characters(), only: .content)
         }
         
-        // validation
-                
+        // validate components
+                        
         guard precision.validate(editable: components) else {
             return nil
         }
@@ -154,14 +167,24 @@ extension DecimalTextStyle {
         
         let style = editableStyle(decimal: !components.decimalSeparator.isEmpty)
 
-        // format
+        // decimal
         
         guard let decimal = components.decimal() else {
             return nil
         }
         
+        // validate decimal
+        
+        guard values.contains(decimal) else {
+            return nil
+        }
+        
+        // characters
+                
         var characters = style.format(decimal)
                 
+        // characters edge cases
+        
         if !components.sign.isEmpty && !characters.hasPrefix(components.sign) {
             characters = components.sign + characters
         }
