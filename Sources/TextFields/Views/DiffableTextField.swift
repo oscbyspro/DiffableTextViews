@@ -53,6 +53,8 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
     func update(coordinator: Coordinator) {
         coordinator.source = self
                 
+        print(value.wrappedValue)
+        
         if coordinator.value != value.wrappedValue {
             let nextValue = value.wrappedValue
             let nextSnapshot = style.format(nextValue)
@@ -71,25 +73,25 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
         @usableFromInline var uiView: UITextField!
         
         @usableFromInline private(set) var value: Value!
-        @usableFromInline private(set) var snapshot = Layout()
+        @usableFromInline private(set) var snapshot = Snapshot()
         @usableFromInline private(set) var selection = Selection()
         
         // MARK: UITextFieldDelegate
         
         public func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
             let range = snapshot.indices(in: range)
-            let replacement = Layout(string, only: .content)
+            let replacement = Snapshot(string, only: .content)
             let proposal = snapshot.replace(range, with: replacement)
             
             // try to make new values
             
-            guard let nextLayout = source.style.accept(proposal) else { return false }
-            guard let nextValue = source.style.parse(nextLayout) else { return false }
-            let nextSelection = selection.update(with: range.upperBound).convert(to: nextLayout)
+            guard let nextSnapshot = source.style.accept(proposal) else { return false }
+            guard let nextValue = source.style.parse(nextSnapshot) else { return false }
+            let nextSelection = selection.update(with: range.upperBound).convert(to: nextSnapshot)
             
             // update with new values
 
-            update(value: nextValue, snapshot: nextLayout, selection: nextSelection)
+            update(value: nextValue, snapshot: nextSnapshot, selection: nextSelection)
 
             return false
         }
@@ -114,7 +116,7 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
         // MARK: Updaters
         
         #warning("Remember to refactor this, eventually.")
-        func update(value nextValue: Value?, snapshot nextSnapshot: Layout, selection nextSelection: Selection) {
+        func update(value nextValue: Value?, snapshot nextSnapshot: Snapshot, selection nextSelection: Selection) {
             self.snapshot = nextSnapshot
             self.selection = nextSelection
             

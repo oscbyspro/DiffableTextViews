@@ -18,8 +18,8 @@ import struct Sequences.Walkthrough
     
     // MARK: Initializers
     
-    @inlinable init(_ layout: Layout = Layout()) {
-        self.field = Field(layout)
+    @inlinable init(_ snapshot: Snapshot = Snapshot()) {
+        self.field = Field(snapshot)
         self.range = field.lastIndex ..< field.lastIndex
     }
     
@@ -46,7 +46,7 @@ import struct Sequences.Walkthrough
         return Selection(newValue, range: nextLowerBound ..< nextUpperBound)
     }
     
-    @inlinable func convert(to newValue: Layout) -> Self {
+    @inlinable func convert(to newValue: Snapshot) -> Self {
         convert(to: Field(newValue))
     }
 
@@ -60,7 +60,7 @@ import struct Sequences.Walkthrough
         return Selection(field, range: next)
     }
     
-    @inlinable func update(with newValue: Range<Layout.Index>) -> Self {
+    @inlinable func update(with newValue: Range<Snapshot.Index>) -> Self {
         update(with: newValue.map(bounds: field.index(rhs:)))
     }
     
@@ -99,7 +99,7 @@ import struct Sequences.Walkthrough
         update(with: newValue ..< newValue)
     }
     
-    @inlinable func update(with newValue: Layout.Index) -> Self {
+    @inlinable func update(with newValue: Snapshot.Index) -> Self {
         update(with: newValue ..< newValue)
     }
 }

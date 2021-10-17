@@ -13,11 +13,11 @@ import struct Sequences.Walkthrough
     
     // MARK: Properties
     
-    @usableFromInline let layout: Layout
+    @usableFromInline let layout: Snapshot
     
     // MARK: Initializers
     
-    @inlinable init(_ layout: Layout) {
+    @inlinable init(_ layout: Snapshot) {
         self.layout = layout
     }
     
@@ -41,21 +41,21 @@ import struct Sequences.Walkthrough
     }
     
     @usableFromInline struct Index: Comparable {
-        @usableFromInline let lhs: Layout.Index?
-        @usableFromInline let rhs: Layout.Index?
+        @usableFromInline let lhs: Snapshot.Index?
+        @usableFromInline let rhs: Snapshot.Index?
         
         // MARK: Initialization
         
-        @inlinable init(lhs: Layout.Index, rhs: Layout.Index) {
+        @inlinable init(lhs: Snapshot.Index, rhs: Snapshot.Index) {
             self.lhs = lhs
             self.rhs = rhs
         }
         
-        @inlinable init(lhs: Layout.Index, rhs: Layout.Index?) {
+        @inlinable init(lhs: Snapshot.Index, rhs: Snapshot.Index?) {
             self.lhs = lhs
             self.rhs = rhs
         }
-        @inlinable init(lhs: Layout.Index?, rhs: Layout.Index) {
+        @inlinable init(lhs: Snapshot.Index?, rhs: Snapshot.Index) {
             self.lhs = lhs
             self.rhs = rhs
         }
@@ -101,15 +101,15 @@ extension Field {
     
     // MARK: Helpers
 
-    @inlinable func subindex(after subindex: Layout.Index) -> Layout.Index? {
+    @inlinable func subindex(after subindex: Snapshot.Index) -> Snapshot.Index? {
         subindex < layout.endIndex ? layout.index(after: subindex) : nil
     }
 
-    @inlinable func subindex(before subindex: Layout.Index) -> Layout.Index? {
+    @inlinable func subindex(before subindex: Snapshot.Index) -> Snapshot.Index? {
         subindex > layout.startIndex ? layout.index(before: subindex) : nil
     }
         
-    @inlinable func subelement(at subindex: Layout.Index?) -> Layout.Element? {
+    @inlinable func subelement(at subindex: Snapshot.Index?) -> Snapshot.Element? {
         guard let subindex = subindex, subindex < layout.endIndex else {
             return nil
         }
@@ -152,19 +152,19 @@ extension Field {
     
     // MARK: Interoperabilities
         
-    @inlinable func index(lhs subindex: Layout.Index) -> Index {
+    @inlinable func index(lhs subindex: Snapshot.Index) -> Index {
         Index(lhs: subindex, rhs: self.subindex(after: subindex))
     }
     
-    @inlinable func index(rhs subindex: Layout.Index) -> Index {
+    @inlinable func index(rhs subindex: Snapshot.Index) -> Index {
         Index(lhs: self.subindex(before: subindex), rhs: subindex)
     }
     
-    @inlinable func indices(lhs subindices: Range<Layout.Index>) -> Range<Index> {
+    @inlinable func indices(lhs subindices: Range<Snapshot.Index>) -> Range<Index> {
         index(lhs: subindices.lowerBound) ..< index(lhs: subindices.upperBound)
     }
     
-    @inlinable func indices(rhs subindices: Range<Layout.Index>) -> Range<Index> {
+    @inlinable func indices(rhs subindices: Range<Snapshot.Index>) -> Range<Index> {
         index(rhs: subindices.lowerBound) ..< index(rhs: subindices.upperBound)
     }
 }

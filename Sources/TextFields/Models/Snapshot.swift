@@ -5,7 +5,7 @@
 //  Created by Oscar Byström Ericsson on 2021-09-23.
 //
 
-public struct Layout: BidirectionalCollection, RangeReplaceableCollection, ExpressibleByArrayLiteral {
+public struct Snapshot: BidirectionalCollection, RangeReplaceableCollection, ExpressibleByArrayLiteral {
     public typealias Element = Symbol
     public typealias Indices = DefaultIndices<Self>
     public typealias SubSequence = Slice<Self>
