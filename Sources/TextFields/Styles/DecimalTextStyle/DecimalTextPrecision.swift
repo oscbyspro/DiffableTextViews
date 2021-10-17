@@ -69,16 +69,15 @@ public struct DecimalTextPrecision {
     // MARK: Digits
     
     @usableFromInline struct Digits {
-        @usableFromInline typealias Limits = ClosedRange<Int>
         
         // MARK: Properties
         
-        @usableFromInline let integers: Limits
-        @usableFromInline let decimals: Limits
+        @usableFromInline let integers: ClosedRange<Int>
+        @usableFromInline let decimals: ClosedRange<Int>
         
         // MARK: Initializers
         
-        @inlinable init(integers: Limits, decimals: Limits) {
+        @inlinable init(integers: ClosedRange<Int>, decimals: ClosedRange<Int>) {
             precondition(integers.upperBound + decimals.upperBound <= This.max)
             
             self.integers = integers
