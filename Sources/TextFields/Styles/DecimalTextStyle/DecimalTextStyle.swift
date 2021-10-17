@@ -11,7 +11,10 @@ import SwiftUI
 
 @available(iOS 15.0, *)
 public struct DecimalTextStyle: DiffableTextStyle {
-    @usableFromInline typealias Wrapped = Decimal.FormatStyle
+    @usableFromInline typealias Base = Decimal.FormatStyle
+    @usableFromInline typealias BasePrecisionStrategy = Base.Configuration.Precision
+    @usableFromInline typealias BaseSeparatorStrategy = Base.Configuration.DecimalSeparatorDisplayStrategy
+    @usableFromInline typealias Precision = DecimalTextPrecision
     @usableFromInline typealias Components = DecimalTextComponents
     
     // MARK: Properties: Static
@@ -20,25 +23,35 @@ public struct DecimalTextStyle: DiffableTextStyle {
     
     // MARK: Properties
     
-    @usableFromInline var wrapped: Wrapped
-    @usableFromInline var precision: DecimalTextPrecision?
+    @usableFromInline var base: Base
+    @usableFromInline var precision: DecimalTextPrecision
         
     // MARK: Initializers
     
     @inlinable public init(locale: Locale = .autoupdatingCurrent) {
-        self.wrapped = Decimal.FormatStyle(locale: locale)
-            .precision(.significantDigits(0...38))
-            .grouping(.automatic)
-            .decimalSeparator(strategy: .automatic)
+        self.base = Base(locale: locale)
+        self.precision = Precision()
+    }
+    
+    // MARK: Styles
+    
+    @inlinable func displayableStyle() -> Base {
+        base.precision(precision.displayableStyle())
+    }
+    
+    @inlinable func editableStyle(decimal: Bool = false) -> Base {
+        let separatorStrategy: BaseSeparatorStrategy = decimal ? .always : .automatic
+        let precisionStrategy: BasePrecisionStrategy = precision.editableStyle(minIntegers: decimal ? 1 : 0)
+        return base.decimalSeparator(strategy: separatorStrategy).precision(precisionStrategy)
     }
     
     // MARK: Maps
     
     @inlinable public func locale(_ locale: Locale) -> Self {
-        map({ $0.wrapped = $0.wrapped.locale(locale) })
+        map({ $0.base = $0.base.locale(locale) })
     }
     
-    @inlinable public func precision(_ newValue: DecimalTextPrecision?) -> Self {
+    @inlinable public func precision(_ newValue: DecimalTextPrecision) -> Self {
         map({ $0.precision = newValue })
     }
 
@@ -47,24 +60,17 @@ public struct DecimalTextStyle: DiffableTextStyle {
     @inlinable func map(_ transform: (inout Self) -> Void) -> Self {
         var copy = self; transform(&copy); return copy
     }
-    
-    #warning("WIP")
-    @inlinable func displayableStyle() -> Wrapped {
-        fatalError()
-    }
-    
-    #warning("WIP")
-    @inlinable func editableStyle() -> Wrapped {
-        fatalError()
-    }
 }
+
+// MARK: DecimalTextStyle: Getters
 
 @available(iOS 15.0, *)
 extension DecimalTextStyle {
-    // MARK: Getters
+    
+    // MARK: Localization
     
     @inlinable var locale: Locale {
-        wrapped.locale
+        base.locale
     }
     
     @inlinable var decimalSeparator: String {
@@ -92,13 +98,18 @@ extension DecimalTextStyle {
     }
 }
 
+// MARK: DecimalTextStyle: DiffableTextStyle
+
 @available(iOS 15.0, *)
 extension DecimalTextStyle {
     
     // MARK: Format
     
+    #warning("Should make a destinction between editable and displayable format, maybe.")
     public func format(_ value: Decimal) -> Snapshot {
-        snapshot(from: wrapped.format(value))
+        let style = editableStyle()
+        
+        return snapshot(style.format(value))
     }
         
     // MARK: Parse
@@ -107,69 +118,63 @@ extension DecimalTextStyle {
         guard !snapshot.isEmpty else {
             return 0
         }
-                        
-        guard let decimal = try? Decimal(snapshot.characters, strategy: wrapped.parseStrategy) else {
+        
+        guard let components = components(snapshot) else {
             return nil
         }
-                
-        return decimal
+
+        return components.decimal()
     }
     
     // MARK: Accept
-        
+    
     public func accept(_ snapshot: Snapshot) -> Snapshot? {
-        guard var components = components(from: snapshot) else { return nil }
-
-        // edge cases
-                
-        if !components.decimalSeparator.isEmpty, components.integerDigits.isEmpty {
-            components.integerDigits = Components.zero
+        guard let components = components(snapshot) else {
+            return nil
         }
-        
+
+        // specials
+                
         if components.integerDigits.isEmpty, components.decimalSeparator.isEmpty, components.decimalDigits.isEmpty  {
             return Snapshot(components.characters(), only: .content)
         }
         
         // validation
                 
-        guard precision?.validate(editable: components) != .some(false) else {
+        guard precision.validate(editable: components) else {
             return nil
         }
-                
-        guard let decimal = Decimal(string: components.characters()) else {
-            return nil
-        }
-                
+        
         // style
         
-        var style = wrapped
-        
-        if !components.decimalSeparator.isEmpty {
-            style = wrapped.decimalSeparator(strategy: .always)
-        }
-        
+        let style = editableStyle(decimal: !components.decimalSeparator.isEmpty)
+
         // format
         
-        var characters = style.format(decimal)
+        guard let decimal = components.decimal() else {
+            return nil
+        }
         
+        var characters = style.format(decimal)
+                
         if !components.sign.isEmpty && !characters.hasPrefix(components.sign) {
             characters = components.sign + characters
         }
         
         // return
         
-        return self.snapshot(from: characters)
+        return self.snapshot(characters)
     }
     
     // MARK: Helpers
     
-    @inlinable func components(from snapshot: Snapshot) -> Components? {
+    @inlinable func components(_ snapshot: Snapshot) -> Components? {
         var characters = snapshot.content()
         characters = characters.replacingOccurrences(of: decimalSeparator, with: Components.decimalSeparator)
         return DecimalTextComponents(from: characters)
     }
     
-    @inlinable func snapshot(from characters: String) -> Snapshot {
+    @inlinable func snapshot(_ characters: String) -> Snapshot {
         var snapshot = Snapshot()
         
         let contentSet = content()

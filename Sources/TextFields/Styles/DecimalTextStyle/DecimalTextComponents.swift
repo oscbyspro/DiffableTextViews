@@ -5,6 +5,8 @@
 //  Created by Oscar Byström Ericsson on 2021-10-17.
 //
 
+import struct Foundation.Decimal
+
 // MARK: - DecimalTextComponents
 
 /// - Example: -123456.789
@@ -31,6 +33,10 @@ public struct DecimalTextComponents {
     }
     
     // MARK: Utilities
+    
+    @inlinable func decimal() -> Decimal? {
+        Decimal(string: characters())
+    }
     
     @inlinable func characters() -> String {
         sign + integerDigits + decimalSeparator + decimalDigits
