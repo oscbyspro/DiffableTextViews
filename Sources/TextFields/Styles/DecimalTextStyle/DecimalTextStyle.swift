@@ -6,11 +6,10 @@
 //
 
 import SwiftUI
-import Foundation
 
 #if os(iOS)
 
-#warning("Should not trim trailing zeros: 100_000_000.xxxxxxxx")
+#warning("Should not trim trailing zeros, only on editing changed.")
 #warning("Can't write 0.005, because it's not possible to add trailing decimal zeros.")
 @available(iOS 15.0, *)
 public struct DecimalTextStyle: DiffableTextStyle {
