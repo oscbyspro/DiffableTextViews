@@ -6,10 +6,12 @@
 //
 
 import SwiftUI
+import Foundation
 
 #if os(iOS)
 
-#warning("Add behaviors like clearsZero.")
+#warning("Should not trim trailing zeros: 100_000_000.xxxxxxxx")
+#warning("Can't write 0.005, because it's not possible to add trailing decimal zeros.")
 @available(iOS 15.0, *)
 public struct DecimalTextStyle: DiffableTextStyle {
     @usableFromInline typealias Base = Decimal.FormatStyle
@@ -19,15 +21,11 @@ public struct DecimalTextStyle: DiffableTextStyle {
 
     public typealias Values = DecimalTextValues
     public typealias Precision = DecimalTextPrecision
-    
-    // MARK: Properties: Static
-    
-    @usableFromInline static let max = Decimal(string: String(repeating: "9", count: Precision.maximum))!
-    
+
     // MARK: Properties
     
     @usableFromInline var base: Base
-    @usableFromInline var values: Values = .init()
+    @usableFromInline var values: Values = .all
     @usableFromInline var precision: Precision = .max
         
     // MARK: Initializers
@@ -143,22 +141,20 @@ extension DecimalTextStyle {
     // MARK: Process
     
     @inlinable public func process(_ snapshot: Snapshot) -> Snapshot? {
-        guard var components = components(snapshot) else {
+        guard let components = components(snapshot) else {
             return nil
         }
-
-        // components edge cases
         
-        if values.nonnegative, !components.sign.isEmpty {
-            components.sign = String()
+        // validate components
+        
+        guard values.min < 0 || components.sign.isEmpty else {
+            return nil
         }
                 
         if components.integerDigits.isEmpty, components.decimalSeparator.isEmpty, components.decimalDigits.isEmpty {
             return Snapshot(components.characters(), only: .content)
         }
-        
-        // validate components
-                        
+                                
         guard precision.validate(editable: components) else {
             return nil
         }
@@ -173,21 +169,19 @@ extension DecimalTextStyle {
             return nil
         }
         
-        // validate decimal
-        
         guard values.contains(decimal) else {
             return nil
         }
         
         // characters
-                
-        var characters = style.format(decimal)
-                
-        // characters edge cases
         
-        if !components.sign.isEmpty && !characters.hasPrefix(components.sign) {
+        var characters = style.format(decimal)
+        
+        if !components.sign.isEmpty, !characters.hasPrefix(components.sign) {
             characters = components.sign + characters
         }
+        
+        print(components.characters(), characters)
         
         // return
         

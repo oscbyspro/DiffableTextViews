@@ -14,7 +14,6 @@ public struct DecimalTextValues {
     // MARK: Properties: Static
     
     public static let limit = Decimal(string: String(repeating: "9", count: 38))!
-    public static let stride = Decimal(string: "0." + String(repeating: "0", count: 37) + "1")!
 
     // MARK: Properties
     
@@ -31,23 +30,21 @@ public struct DecimalTextValues {
     }
     
     // MARK: Initializers: Static
-        
+    
+    @inlinable public static var all: Self {
+        .init(min: -limit, max: limit)
+    }
+    
+    @inlinable public static func min(_ value: Decimal) -> Self {
+        .init(min: value)
+    }
+    
+    @inlinable public static func max(_ value: Decimal) -> Self {
+        .init(max: value)
+    }
+    
     @inlinable public static func range(_ values: ClosedRange<Decimal>) -> Self {
-        .init(min: Swift.max(-limit, values.lowerBound), max: Swift.min(values.upperBound, limit))
-    }
-    
-    @inlinable public static func range(_ values: Range<Decimal>) -> Self {
-        range(values.lowerBound ... values.upperBound + stride)
-    }
-    
-    // MARK: Initializers: Static
-
-    @inlinable public static var nonnegative: Self {
-        range(0 ... limit)
-    }
-    
-    @inlinable public static var nonpositive: Self {
-        range(-limit ... 0)
+        .init(min: values.lowerBound, max: values.upperBound)
     }
 
     // MARK: Utilities
@@ -58,5 +55,9 @@ public struct DecimalTextValues {
     
     @inlinable var nonnegative: Bool {
         min >= 0
+    }
+    
+    @inlinable var nonpositive: Bool {
+        min <= 0
     }
 }
