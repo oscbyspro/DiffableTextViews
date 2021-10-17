@@ -1,8 +1,8 @@
 //
-//  DecimalTextStyle.swift
+//  DecimalTextComponents.swift
 //  
 //
-//  Created by Oscar Byström Ericsson on 2021-10-15.
+//  Created by Oscar Byström Ericsson on 2021-10-17.
 //
 
 // MARK: - DecimalTextComponents
@@ -93,3 +93,5 @@ extension DecimalTextComponents {
         }
     }
 }
+
+
