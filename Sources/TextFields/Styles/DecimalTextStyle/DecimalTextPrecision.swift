@@ -5,95 +5,59 @@
 //  Created by Oscar Byström Ericsson on 2021-10-17.
 //
 
-import Foundation
+import struct Foundation.Decimal
 
 // MARK: - DecimalTextPrecision
 
-public struct DecimalTextPrecision {
+@available(iOS 15.0, *)
+public struct DecimalTextPrecision  {
     @usableFromInline typealias This = Self
-    
-    // MARK: Properties
-    
-    @usableFromInline let max: Int
-    @usableFromInline let digits: Digits?
+    @usableFromInline typealias Strategy = DecimalTextPrecisionStrategy
     
     // MARK: Properties: Static
     
     public static let max = 38
     
+    // MARK: Properties
+    
+    @usableFromInline let strategy: Strategy
+    
     // MARK: Initializers
     
-    @inlinable init(max: Int = max, digits: Digits? = nil) {
-        precondition(max <= Self.max)
-        
-        self.max = max
-        self.digits = digits
+    @inlinable init(strategy: Strategy) {
+        self.strategy = strategy
+    }
+    
+    // MARK: Initializers: Defaults
+    
+    @inlinable public static var defaults: Self {
+        .init(strategy: DecimalTextPrecisionTotal(1 ... max))
     }
     
     // MARK: Initializers: Static
-    
-    @inlinable public static func limit(max: Int) -> Self {
-        Self.init(max: max)
-    }
-    
-    @inlinable public static func limit(max: Int = max, integers: ClosedRange<Int>) -> Self {
-        Self.init(max: max, digits: Digits(integers: integers, decimals: complement(to: integers, max: max)))
-    }
-    
-    @inlinable public static func limit(max: Int = max, decimals: ClosedRange<Int>) -> Self {
-        Self.init(max: max, digits: Digits(integers: complement(to: decimals, max: max), decimals: decimals))
-    }
-    
-    @inlinable public static func limit(max: Int = max, integers: ClosedRange<Int>, decimals: ClosedRange<Int>) -> Self {
-        Self.init(max: max, digits: Digits(integers: integers, decimals: decimals))
-    }
-    
-    // MARK: Initializers: Static, Helpers
-    
-    @inlinable static func complement(to range: ClosedRange<Int>, max: Int) -> ClosedRange<Int> {
-        0 ... (max - range.upperBound)
-    }
-    
-    // MARK: Digits
-    
-    @usableFromInline struct Digits {
+
+    @inlinable public static func digits(_ limits: ClosedRange<Int>) -> Self {
+        precondition(limits.upperBound < max)
         
-        // MARK: Properties
+        return .init(strategy: DecimalTextPrecisionTotal(limits))
+    }
         
-        @usableFromInline let integers: ClosedRange<Int>
-        @usableFromInline let decimals: ClosedRange<Int>
+    @inlinable public static func digits(integers: ClosedRange<Int>, decimals: ClosedRange<Int>) -> Self {
+        precondition(integers.upperBound + decimals.upperBound <= max)
         
-        // MARK: Initializers
-        
-        @inlinable init(integers: ClosedRange<Int>, decimals: ClosedRange<Int>) {
-            precondition(integers.upperBound + decimals.upperBound <= This.max)
-            
-            self.integers = integers
-            self.decimals = decimals
-        }
+        return .init(strategy: DecimalTextPrecisionSeparate(integers: integers, decimals: decimals))
+    }
+    
+    @inlinable public static func digits(integers: ClosedRange<Int>) -> Self {
+        digits(integers: integers, decimals: 0 ... (max - integers.upperBound))
+    }
+    
+    @inlinable public static func digits(decimals: ClosedRange<Int>) -> Self {
+        digits(integers:  1 ... (max - decimals.upperBound), decimals: decimals)
     }
 }
 
-// MARK: - Interoperabilities: DecimalTextComponents
-
-extension DecimalTextPrecision {
-    
-    // MARK: Utilities
-    
-    @inlinable func validate(editable components: DecimalTextComponents) -> Bool {
-        let numberOfIntegerDigits = components.integerDigits.count
-        let numberOfDecimalDigits = components.decimalDigits.count
-        
-        if let digits = digits {
-            guard numberOfIntegerDigits <= digits.integers.upperBound else { return false }
-            guard numberOfDecimalDigits <= digits.decimals.upperBound else { return false }
-        }
-        
-        return numberOfIntegerDigits + numberOfDecimalDigits <= max
-    }
-}
-
-// MARK: - Interoperabilities: Decimal.FormatStyle.Configuration.Precision
+// MARK: - Interoperabilities
 
 @available(iOS 15.0, *)
 extension DecimalTextPrecision {
@@ -101,18 +65,89 @@ extension DecimalTextPrecision {
     // MARK: Utilities
     
     @inlinable func displayableStyle() -> Decimal.FormatStyle.Configuration.Precision {
-        if let digits = digits {
-            return .integerAndFractionLength(integerLimits: digits.integers, fractionLimits: digits.integers)
-        }
-        
-        return .significantDigits(max)
+        strategy.displayableStyle()
     }
     
-    @inlinable func editableStyle(minIntegers: Int = 0) -> Decimal.FormatStyle.Configuration.Precision {
-        if let digits = digits {
-            return .integerAndFractionLength(integerLimits: minIntegers...digits.integers.upperBound, fractionLimits: 0...digits.integers.upperBound)
-        }
-        
-        return .significantDigits(max)
+    @inlinable func editableStyle(decimal: Bool = false) -> Decimal.FormatStyle.Configuration.Precision {
+        strategy.editableStyle(decimal: decimal)
+    }
+    
+    @inlinable func validate(editable components: DecimalTextComponents) -> Bool {
+        strategy.editableValidation(numberOfIntegers: components.integerDigits.count, numberOfDecimals: components.decimalDigits.count)
+    }
+}
+
+// MARK: - Strategies
+
+@available(iOS 15.0, *)
+@usableFromInline protocol DecimalTextPrecisionStrategy {
+    typealias Style = Decimal.FormatStyle.Configuration.Precision
+    
+    func displayableStyle() -> Style
+    
+    func editableStyle(decimal: Bool) -> Style
+    
+    func editableValidation(numberOfIntegers: Int, numberOfDecimals: Int) -> Bool
+}
+
+// MARK: - Strategies: Total
+
+@usableFromInline struct DecimalTextPrecisionTotal: DecimalTextPrecisionStrategy {
+    
+    // MARK: Properties
+    
+    @usableFromInline let limits: ClosedRange<Int>
+    
+    // MARK: Initializers
+    
+    @inlinable init(_ limits: ClosedRange<Int>) {
+        self.limits = limits
+    }
+    
+    // MARK: Strategy
+    
+    @inlinable func displayableStyle() -> Style {
+        .significantDigits(limits)
+    }
+    
+    @inlinable func editableStyle(decimal: Bool) -> Style {
+        let min = (decimal && limits.lowerBound > 0) ? 1 : 0
+        return .significantDigits(min ... limits.upperBound)
+    }
+    
+    @inlinable func editableValidation(numberOfIntegers: Int, numberOfDecimals: Int) -> Bool {
+        numberOfIntegers + numberOfDecimals <= limits.upperBound
+    }
+}
+
+// MARK: - Strategies: Separate
+
+@usableFromInline struct DecimalTextPrecisionSeparate: DecimalTextPrecisionStrategy {
+    
+    // MARK: Properties
+    
+    @usableFromInline let integers: ClosedRange<Int>
+    @usableFromInline let decimals: ClosedRange<Int>
+    
+    // MARK: Initializers
+    
+    @inlinable init(integers: ClosedRange<Int>, decimals: ClosedRange<Int>) {
+        self.integers = integers
+        self.decimals = decimals
+    }
+    
+    // MARK: Strategy
+    
+    @inlinable func displayableStyle() -> Style {
+        .integerAndFractionLength(integerLimits: integers, fractionLimits: decimals)
+    }
+    
+    @inlinable func editableStyle(decimal: Bool) -> Style {
+        let minIntegers = (decimal && integers.lowerBound > 0) ? 1 : 0
+        return .integerAndFractionLength(integerLimits: minIntegers ... integers.upperBound, fractionLimits: 0 ... decimals.upperBound)
+    }
+    
+    @inlinable func editableValidation(numberOfIntegers: Int, numberOfDecimals: Int) -> Bool {
+        numberOfIntegers <= integers.upperBound && numberOfDecimals <= decimals.upperBound
     }
 }

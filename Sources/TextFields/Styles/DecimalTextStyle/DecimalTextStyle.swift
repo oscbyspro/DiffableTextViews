@@ -30,7 +30,7 @@ public struct DecimalTextStyle: DiffableTextStyle {
     
     @inlinable public init(locale: Locale = .autoupdatingCurrent) {
         self.base = Base(locale: locale)
-        self.precision = Precision()
+        self.precision = Precision.defaults
     }
     
     // MARK: Styles
@@ -41,7 +41,7 @@ public struct DecimalTextStyle: DiffableTextStyle {
     
     @inlinable func editableStyle(decimal: Bool = false) -> Base {
         let separatorStrategy: BaseSeparatorStrategy = decimal ? .always : .automatic
-        let precisionStrategy: BasePrecisionStrategy = precision.editableStyle(minIntegers: decimal ? 1 : 0)
+        let precisionStrategy: BasePrecisionStrategy = precision.editableStyle(decimal: decimal)
         return base.decimalSeparator(strategy: separatorStrategy).precision(precisionStrategy)
     }
     
@@ -103,10 +103,15 @@ extension DecimalTextStyle {
 @available(iOS 15.0, *)
 extension DecimalTextStyle {
     
-    // MARK: Format
+    // MARK: Snapshot
+        
+    @inlinable public func showcase(_ value: Decimal) -> Snapshot {
+        let style = displayableStyle()
+
+        return snapshot(style.format(value))
+    }
     
-    #warning("Should make a destinction between editable and displayable format, maybe.")
-    public func format(_ value: Decimal) -> Snapshot {
+    @inlinable public func snapshot(_ value: Decimal) -> Snapshot {
         let style = editableStyle()
         
         return snapshot(style.format(value))
@@ -114,7 +119,7 @@ extension DecimalTextStyle {
         
     // MARK: Parse
 
-    public func parse(_ snapshot: Snapshot) -> Decimal? {
+    @inlinable public func parse(_ snapshot: Snapshot) -> Decimal? {
         guard !snapshot.isEmpty else {
             return 0
         }
@@ -126,16 +131,16 @@ extension DecimalTextStyle {
         return components.decimal()
     }
     
-    // MARK: Accept
+    // MARK: Process
     
-    public func accept(_ snapshot: Snapshot) -> Snapshot? {
+    @inlinable public func process(_ snapshot: Snapshot) -> Snapshot? {
         guard let components = components(snapshot) else {
             return nil
         }
 
-        // specials
+        // cases
                 
-        if components.integerDigits.isEmpty, components.decimalSeparator.isEmpty, components.decimalDigits.isEmpty  {
+        if components.integerDigits.isEmpty, components.decimalSeparator.isEmpty, components.decimalDigits.isEmpty {
             return Snapshot(components.characters(), only: .content)
         }
         
@@ -168,12 +173,6 @@ extension DecimalTextStyle {
     
     // MARK: Helpers
     
-    @inlinable func components(_ snapshot: Snapshot) -> Components? {
-        var characters = snapshot.content()
-        characters = characters.replacingOccurrences(of: decimalSeparator, with: Components.decimalSeparator)
-        return DecimalTextComponents(from: characters)
-    }
-    
     @inlinable func snapshot(_ characters: String) -> Snapshot {
         var snapshot = Snapshot()
         
@@ -184,11 +183,17 @@ extension DecimalTextStyle {
             if contentSet.contains(character) {
                 snapshot.append(.content(character))
             } else if spacersSet.contains(character) {
-                snapshot.append( .spacer(character))
+                snapshot.append(.spacer(character))
             }
         }
         
         return snapshot
+    }
+    
+    @inlinable func components(_ snapshot: Snapshot) -> Components? {
+        var characters = snapshot.content()
+        characters = characters.replacingOccurrences(of: decimalSeparator, with: Components.decimalSeparator)
+        return DecimalTextComponents(from: characters)
     }
 }
 

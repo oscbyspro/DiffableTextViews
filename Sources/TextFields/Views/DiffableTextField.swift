@@ -38,8 +38,7 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
         uiView.setContentHuggingPriority(.defaultHigh, for: .vertical)
         uiView.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
 
-        uiView.delegate = context.coordinator
-        context.coordinator.uiView = uiView
+        context.coordinator.setup(self, uiView: uiView)
 
         return uiView
     }
@@ -53,9 +52,9 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
     func update(coordinator: Coordinator) {
         coordinator.source = self
         
-        if coordinator.value != value.wrappedValue {
+        if coordinator.value != value.wrappedValue {            
             let nextValue = value.wrappedValue
-            let nextSnapshot = style.format(nextValue)
+            let nextSnapshot = style.snapshot(nextValue)
             let nextSelection = coordinator.selection.convert(to: nextSnapshot)
             
             // ------------------------------ //
@@ -74,7 +73,27 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
         @usableFromInline private(set) var snapshot = Snapshot()
         @usableFromInline private(set) var selection = Selection()
         
-        // MARK: UITextFieldDelegate
+        // MARK: Setup
+        
+        @inlinable func setup(_ source: DiffableTextField, uiView: UIViewType) {
+            self.source = source
+            self.uiView = uiView
+            
+            uiView.delegate = self
+            
+            self.value = source.value.wrappedValue
+            self.update(snapshot: source.style.showcase(source.value.wrappedValue))
+        }
+        
+        // MARK: Delegate Methods
+        
+        public func textFieldDidBeginEditing(_ textField: UITextField) {
+            update(snapshot: source.style.snapshot(value))
+        }
+        
+        public func textFieldDidEndEditing(_ textField: UITextField, reason: UITextField.DidEndEditingReason) {
+            update(snapshot: source.style.showcase(value))
+        }
         
         public func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
             let range = snapshot.indices(in: range)
@@ -83,7 +102,7 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
             
             // try to make new values
             
-            guard let nextSnapshot = source.style.accept(proposal) else { return false }
+            guard let nextSnapshot = source.style.process(proposal) else { return false }
             guard let nextValue = source.style.parse(nextSnapshot) else { return false }
             let nextSelection = selection.update(with: range.upperBound).convert(to: nextSnapshot)
             
@@ -111,10 +130,20 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
             uiView.select(changes: (changesToLowerBound, changesToUpperBound))
         }
         
-        // MARK: Updaters
+        // MARK: Helpers
+        
+        @inlinable func update(snapshot nextSnapshot: Snapshot) {
+            let nextSelection = selection.convert(to: nextSnapshot)
+            
+            self.snapshot = nextSnapshot
+            self.selection = nextSelection
+            
+            uiView.write(text: nextSnapshot.characters)
+            uiView.select(range: nextSelection.range.map(bounds: \.offset))
+        }
         
         #warning("Remember to refactor this, eventually.")
-        func update(value nextValue: Value?, snapshot nextSnapshot: Snapshot, selection nextSelection: Selection) {
+        @inlinable func update(value nextValue: Value?, snapshot nextSnapshot: Snapshot, selection nextSelection: Selection) {
             self.snapshot = nextSnapshot
             self.selection = nextSelection
             

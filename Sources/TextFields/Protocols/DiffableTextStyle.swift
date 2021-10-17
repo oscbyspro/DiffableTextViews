@@ -10,21 +10,24 @@
 public protocol DiffableTextStyle {
     associatedtype Value: Equatable
     
-    // 0 -> "0"
-    func format(_ value: Value) -> Snapshot
+    func showcase(_ value: Value) -> Snapshot
+
+    func snapshot(_ value: Value) -> Snapshot
     
-    // "" -> 0
     func parse(_ snapshot: Snapshot) -> Value?
 
-    // "-." -> "-0."
-    func accept(_ snapshot: Snapshot) -> Snapshot?
+    func process(_ snapshot: Snapshot) -> Snapshot?
 }
     
-public extension DiffableTextStyle {
+extension DiffableTextStyle {
     
     // MARK: Implementations
+        
+    @inlinable public func showcase(_ value: Value) -> Snapshot {
+        snapshot(value)
+    }
     
-    @inlinable func accept(_ snapshot: Snapshot) -> Snapshot? {
+    @inlinable public func process(_ snapshot: Snapshot) -> Snapshot? {
         snapshot
     }
 }
