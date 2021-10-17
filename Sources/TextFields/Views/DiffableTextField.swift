@@ -52,8 +52,6 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
 
     func update(coordinator: Coordinator) {
         coordinator.source = self
-                
-        print(value.wrappedValue)
         
         if coordinator.value != value.wrappedValue {
             let nextValue = value.wrappedValue

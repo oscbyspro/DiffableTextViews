@@ -38,26 +38,24 @@ public struct DecimalTextStyle: DiffableTextStyle {
         map({ $0.wrapped = $0.wrapped.locale(locale) })
     }
     
-//    @inlinable public func precision<R: RangeExpression>(significantDigits: R) -> Self where R.Bound == Int {
-//        precondition(!significantDigits.contains(Self.maxSignificantDigits + 1))
-//        return map({ $0.precision(.significantDigits(significantDigits)) })
-//    }
-//
-//
-//    @inlinable public func precision(integerLength: Range<Int>, decimalLength: Range<Int>) -> Self {
-//        precondition((integerLength.upperBound + decimalLength.upperBound) <= (Self.maxSignificantDigits + 2))
-//        return map({ $0.precision(.integerAndFractionLength(integerLimits: integerLength, fractionLimits: decimalLength)) })
-//    }
-//
     @inlinable public func precision(_ newValue: DecimalTextPrecision?) -> Self {
         map({ $0.precision = newValue })
     }
 
-    
     // MARK: Helpers
     
     @inlinable func map(_ transform: (inout Self) -> Void) -> Self {
         var copy = self; transform(&copy); return copy
+    }
+    
+    #warning("WIP")
+    @inlinable func displayableStyle() -> Wrapped {
+        fatalError()
+    }
+    
+    #warning("WIP")
+    @inlinable func editableStyle() -> Wrapped {
+        fatalError()
     }
 }
 
@@ -133,19 +131,15 @@ extension DecimalTextStyle {
         }
         
         // validation
-        
-        if let precision = precision {
-            guard precision.validate(components) else {
-                return nil
-            }
-        }
-        
-        // parse
-        
-        guard let decimal = parse(snapshot) else {
+                
+        guard precision?.validate(editable: components) != .some(false) else {
             return nil
         }
-        
+                
+        guard let decimal = Decimal(string: components.characters()) else {
+            return nil
+        }
+                
         // style
         
         var style = wrapped

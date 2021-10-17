@@ -7,38 +7,82 @@
 
 // MARK: - DecimalTextPrecision
 
-#warning("Should make it work properly for editing/validation and displaying.")
 public struct DecimalTextPrecision {
-    
-    // MARK: Properties: Static
-    
-    @usableFromInline static let maxSignificantDigits = 38
+    @usableFromInline typealias This = Self
     
     // MARK: Properties
     
-    @usableFromInline let validate: (DecimalTextComponents) -> Bool
+    @usableFromInline let max: Int
+    @usableFromInline let digits: Digits?
+    
+    // MARK: Properties: Static
+    
+    public static let max = 38
     
     // MARK: Initializers
     
-    @inlinable init(_ validate: @escaping (DecimalTextComponents) -> Bool) {
-        self.validate = validate
+    @inlinable init(max: Int = max, digits: Digits? = nil) {
+        precondition(max <= Self.max)
+        
+        self.max = max
+        self.digits = digits
     }
     
     // MARK: Initializers: Static
     
-    @inlinable public static func digits(integers: ClosedRange<Int>, decimals: ClosedRange<Int>) -> Self {
-        precondition((integers.upperBound + decimals.upperBound) <= maxSignificantDigits)
-        
-        return .init { components in
-            integers.contains(components.integerDigits.count) && decimals.contains(components.decimalDigits.count)
-        }
+    @inlinable public static func limit(max: Int) -> Self {
+        Self.init(max: max)
     }
     
-    @inlinable public static func significands<R: RangeExpression>(_ limit: R) -> Self where R.Bound == Int {
-        precondition(!limit.contains(maxSignificantDigits + 1))
+    @inlinable public static func limit(max: Int = max, integers: ClosedRange<Int>) -> Self {
+        Self.init(max: max, digits: Digits(integers: integers, decimals: complement(to: integers, max: max)))
+    }
+    
+    @inlinable public static func limit(max: Int = max, decimals: ClosedRange<Int>) -> Self {
+        Self.init(max: max, digits: Digits(integers: complement(to: decimals, max: max), decimals: decimals))
+    }
+    
+    @inlinable public static func limit(max: Int = max, integers: ClosedRange<Int>, decimals: ClosedRange<Int>) -> Self {
+        Self.init(max: max, digits: Digits(integers: integers, decimals: decimals))
+    }
+    
+    // MARK: Initializers: Static, Helpers
+    
+    @inlinable static func complement(to range: ClosedRange<Int>, max: Int) -> ClosedRange<Int> {
+        0 ... (max - range.upperBound)
+    }
+    
+    // MARK: Utilities
+    
+    @inlinable func validate(editable components: DecimalTextComponents) -> Bool {
+        let numberOfIntegerDigits = components.integerDigits.count
+        let numberOfDecimalDigits = components.decimalDigits.count
         
-        return .init { components in
-            limit.contains(components.integerDigits.count + components.decimalDigits.count)
+        if let digits = digits {
+            guard numberOfIntegerDigits <= digits.integers.upperBound else { return false }
+            guard numberOfDecimalDigits <= digits.decimals.upperBound else { return false }
+        }
+        
+        return numberOfIntegerDigits + numberOfDecimalDigits <= max
+    }
+    
+    // MARK: Digits
+    
+    @usableFromInline struct Digits {
+        @usableFromInline typealias Limits = ClosedRange<Int>
+        
+        // MARK: Properties
+        
+        @usableFromInline let integers: Limits
+        @usableFromInline let decimals: Limits
+        
+        // MARK: Initializers
+        
+        @inlinable init(integers: Limits, decimals: Limits) {
+            precondition(integers.upperBound + decimals.upperBound <= This.max)
+            
+            self.integers = integers
+            self.decimals = decimals
         }
     }
 }
