@@ -97,7 +97,6 @@ extension DecimalTextPrecision {
         strategy.displayableStyle()
     }
     
-    #warning("WIP")
     @inlinable func editableStyle(integersLowerBound: Int? = nil, decimalsLowerBound: Int? = nil) -> Decimal.FormatStyle.Configuration.Precision {
         let integerLimits = (integersLowerBound ?? Self.defaultIntegersLowerBound) ..< Self.maximum
         let decimalLimits = (decimalsLowerBound ?? Self.defaultDecimalsLowerBound) ..< Self.maximum

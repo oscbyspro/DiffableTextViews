@@ -23,12 +23,10 @@ public protocol DiffableTextStyle {
     func parse(_ snapshot: Snapshot) -> Value? // (!)
     
     // MARK: 2
-
-    #warning("Should be applied to all calls that returns Snapshot.")
-    func process(_ snapshot: Snapshot) -> Snapshot
-
-    #warning("Should be applied to all calls that returns Value.")
+    
     func process(_ value: Value) -> Value
+
+    func process(_ snapshot: Snapshot) -> Snapshot
 }
     
 // MARK: - Implementations
@@ -49,11 +47,11 @@ extension DiffableTextStyle {
     
     // MARK: 2
 
-    @inlinable public func process(_ snapshot: Snapshot) -> Snapshot {
-        snapshot
-    }
-    
     @inlinable public func process(_ value: Value) -> Value {
         value
+    }
+    
+    @inlinable public func process(_ snapshot: Snapshot) -> Snapshot {
+        snapshot
     }
 }

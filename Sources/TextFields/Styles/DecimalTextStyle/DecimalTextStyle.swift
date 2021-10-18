@@ -28,13 +28,6 @@ public struct DecimalTextStyle: DiffableTextStyle {
     @usableFromInline var base: Base
     @usableFromInline var values: Values = .all
     @usableFromInline var precision: Precision = .max
-    
-    #warning("...")
-    /*
-     
-     var togglesSign: Bool
-     
-     */
         
     // MARK: Initializers
     
@@ -94,11 +87,7 @@ extension DecimalTextStyle {
     }
     
     // MARK: Sets
-    
-    @inlinable var minus: String? {
-        (values.min < 0) ? Components.sign : nil
-    }
-    
+  
     @inlinable func content() -> Set<Character> {
         var set = Set<Character>()
         set.formUnion(Components.sign)
