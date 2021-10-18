@@ -40,13 +40,13 @@ public struct DecimalTextPrecision  {
     // MARK: Initializers: Static, Total
 
     @inlinable public static func digits<R: RangeExpression>(_ digits: R) -> Self where R.Bound == Int {
-        let digits = limits.relative(to: range)
+        let digits = digits.relative(to: range)
                 
-        return .init(strategy: DecimalTextPrecisionTotal(limits))
+        return .init(strategy: DecimalTextPrecisionTotal(digits))
     }
     
     @inlinable public static func max(_ digits: Int) -> Self {
-        digits(defaultIntegersLowerBound ... digits)
+        .digits(defaultIntegersLowerBound ... digits)
     }
     
     // MARK: Initializers: Static, Separate
@@ -125,22 +125,22 @@ extension DecimalTextPrecision {
     
     // MARK: Properties
     
-    @usableFromInline let limits: Range<Int>
+    @usableFromInline let digits: Range<Int>
     
     // MARK: Initializers
     
-    @inlinable init(_ limits: Range<Int>) {
-        self.limits = limits
+    @inlinable init(_ digits: Range<Int>) {
+        self.digits = digits
     }
     
     // MARK: Strategy
     
     @inlinable func displayableStyle() -> Style {
-        .significantDigits(limits)
+        .significantDigits(digits)
     }
         
     @inlinable func editableValidation(numberOfIntegers: Int, numberOfDecimals: Int) -> Bool {
-        numberOfIntegers + numberOfDecimals < limits.upperBound
+        numberOfIntegers + numberOfDecimals < digits.upperBound
     }
 }
 
