@@ -15,9 +15,8 @@ public struct DecimalTextPrecision  {
     
     // MARK: Properties: Static
     
-    #warning("Clean this up.")
-    public static let maximum = 38
-    public static let range = 0 ..< maximum + 1
+    public static let limit = 38
+    public static let range = 0 ..< limit + 1
     
     public static let defaultIntegersLowerBound = 1
     public static let defaultDecimalsLowerBound = 0
@@ -35,19 +34,19 @@ public struct DecimalTextPrecision  {
     // MARK: Initializers: Defaults
     
     @inlinable public static var max: Self {
-        .digits(maximum)
+        .max(limit)
     }
     
     // MARK: Initializers: Static, Total
 
-    @inlinable public static func digits<R: RangeExpression>(_ limits: R) -> Self where R.Bound == Int {
-        let limits = limits.relative(to: range)
+    @inlinable public static func digits<R: RangeExpression>(_ digits: R) -> Self where R.Bound == Int {
+        let digits = limits.relative(to: range)
                 
         return .init(strategy: DecimalTextPrecisionTotal(limits))
     }
     
-    @inlinable public static func digits(_ limits: Int) -> Self {
-        digits(defaultIntegersLowerBound ... limits)
+    @inlinable public static func max(_ digits: Int) -> Self {
+        digits(defaultIntegersLowerBound ... digits)
     }
     
     // MARK: Initializers: Static, Separate
@@ -73,16 +72,16 @@ public struct DecimalTextPrecision  {
         return digits(integers: defaultIntegersLowerBound ..< (range.upperBound - decimals.upperBound), decimals: decimals)
     }
     
-    @inlinable public static func digits(integers: Int, decimals: Int) -> Self {
+    @inlinable public static func max(integers: Int, decimals: Int) -> Self {
         digits(integers: defaultIntegersLowerBound ... integers, decimals: defaultDecimalsLowerBound ... decimals)
     }
     
-    @inlinable public static func digits(integers: Int) -> Self {
-        digits(integers: integers, decimals: maximum - integers)
+    @inlinable public static func max(integers: Int) -> Self {
+        max(integers: integers, decimals: limit - integers)
     }
     
-    @inlinable public static func digits(decimals: Int) -> Self {
-        digits(integers: maximum - decimals, decimals: decimals)
+    @inlinable public static func max(decimals: Int) -> Self {
+        max(integers: limit - decimals, decimals: decimals)
     }
 }
 
@@ -98,8 +97,8 @@ extension DecimalTextPrecision {
     }
     
     @inlinable func editableStyle(integersLowerBound: Int? = nil, decimalsLowerBound: Int? = nil) -> Decimal.FormatStyle.Configuration.Precision {
-        let integerLimits = (integersLowerBound ?? Self.defaultIntegersLowerBound) ..< Self.maximum
-        let decimalLimits = (decimalsLowerBound ?? Self.defaultDecimalsLowerBound) ..< Self.maximum
+        let integerLimits = (integersLowerBound ?? Self.defaultIntegersLowerBound) ..< Self.limit
+        let decimalLimits = (decimalsLowerBound ?? Self.defaultDecimalsLowerBound) ..< Self.limit
 
         return .integerAndFractionLength(integerLimits: integerLimits, fractionLimits: decimalLimits)
     }
