@@ -18,15 +18,16 @@ public protocol DiffableTextStyle {
     
     // MARK: 1
     
-    func merge(_ snapshot: Snapshot, with replacement: Snapshot, in range: Range<Snapshot.Index>) -> Snapshot?
-        
-    func process(_ snapshot: Snapshot) -> Snapshot
+    func merge(_ snapshot: Snapshot, with content: Snapshot, in range: Range<Snapshot.Index>) -> Snapshot?
+    
+    func parse(_ snapshot: Snapshot) -> Value? // (!)
     
     // MARK: 2
 
-    func parse(_ snapshot: Snapshot) -> Value? // (!)
+    #warning("Should be applied to all calls that returns Snapshot.")
+    func process(_ snapshot: Snapshot) -> Snapshot
 
-    #warning("Should be applied to all calls of parse.")
+    #warning("Should be applied to all calls that returns Value.")
     func process(_ value: Value) -> Value
 }
     
@@ -42,17 +43,17 @@ extension DiffableTextStyle {
         
     // MARK: 1
     
-    @inlinable public func merge(_ snapshot: Snapshot, with replacement: Snapshot, in range: Range<Snapshot.Index>) -> Snapshot? {
-        snapshot.replace(range, with: replacement)
-    }
-    
-    @inlinable public func process(_ snapshot: Snapshot) -> Snapshot {
-        snapshot
+    @inlinable public func merge(_ snapshot: Snapshot, with content: Snapshot, in range: Range<Snapshot.Index>) -> Snapshot? {
+        snapshot.replace(range, with: content)
     }
     
     // MARK: 2
 
-    @inlinable func process(_ value: Value) -> Value {
+    @inlinable public func process(_ snapshot: Snapshot) -> Snapshot {
+        snapshot
+    }
+    
+    @inlinable public func process(_ value: Value) -> Value {
         value
     }
 }

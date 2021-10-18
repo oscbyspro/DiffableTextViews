@@ -13,8 +13,6 @@ import SwiftUI
 
 #if os(iOS)
 
-#warning("Should not trim trailing zeros, only on editing changed.")
-#warning("Can't write 0.005, because it's not possible to add trailing decimal zeros.")
 @available(iOS 15.0, *)
 public struct DecimalTextStyle: DiffableTextStyle {
     @usableFromInline typealias Base = Decimal.FormatStyle
@@ -155,28 +153,25 @@ extension DecimalTextStyle {
     
     // MARK: Process
     
-    @inlinable public func merge(_ snapshot: Snapshot, with replacement: Snapshot, in range: Range<Snapshot.Index>) -> Snapshot? {
-        var replacement = replacement
+    @inlinable public func merge(_ snapshot: Snapshot, with content: Snapshot, in range: Range<Snapshot.Index>) -> Snapshot? {
+        #warning("WIP")
+        var content = content
         var toggleSign = false
         
-        if replacement.characters == Components.sign {
-            replacement = Snapshot()
+        if content.characters == Components.sign {
+            content = Snapshot()
             toggleSign = true
         }
         
-        let proposal = snapshot.replace(range, with: replacement)
+        let result = snapshot.replace(range, with: content)
 
-        guard var components = components(proposal) else {
+        guard var components = components(result) else {
             return nil
         }
 
         if toggleSign {
             components.sign = components.sign.isEmpty ? Components.sign : ""
         }
-        
-        #warning("WIP")
-        
-        print(components, replacement.characters)
         
         return self.snapshot(components)
     }

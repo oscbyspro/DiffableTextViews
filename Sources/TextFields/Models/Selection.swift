@@ -30,7 +30,7 @@ import struct Sequences.Walkthrough
     
     // MARK: Update: Field
     
-    @inlinable func convert(to newValue: Field) -> Self {
+    @inlinable func translate(to newValue: Field) -> Self {
         let options = SimilaritiesOptions<Symbol>
             .produce(.overshoot)
             .inspect(.only(\.content))
@@ -46,8 +46,8 @@ import struct Sequences.Walkthrough
         return Selection(newValue, range: nextLowerBound ..< nextUpperBound)
     }
     
-    @inlinable func convert(to newValue: Snapshot) -> Self {
-        convert(to: Field(newValue))
+    @inlinable func translate(to newValue: Snapshot) -> Self {
+        translate(to: Field(newValue))
     }
 
     // MARK: Update: Range

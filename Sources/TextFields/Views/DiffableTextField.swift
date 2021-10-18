@@ -37,30 +37,15 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
         
         uiView.setContentHuggingPriority(.defaultHigh, for: .vertical)
         uiView.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
-
-        context.coordinator.setup(self, uiView: uiView)
+        
+        context.coordinator.connect(uiView)
 
         return uiView
     }
     
     public func updateUIView(_ uiView: UITextField, context: Context) {
-        update(coordinator: context.coordinator)
-    }
-    
-    // MARK: Helpers
-
-    func update(coordinator: Coordinator) {
-        coordinator.source = self
-        
-        if coordinator.value != value.wrappedValue {            
-            let nextValue = value.wrappedValue
-            let nextSnapshot = style.snapshot(nextValue)
-            let nextSelection = coordinator.selection.convert(to: nextSnapshot)
-            
-            // ------------------------------ //
-                        
-            coordinator.update(value: nextValue, snapshot: nextSnapshot, selection: nextSelection)
-        }
+        context.coordinator.source = self
+        context.coordinator.synchronize()
     }
     
     // MARK: Components
@@ -74,53 +59,49 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
         @usableFromInline private(set) var selection = Selection()
         
         // MARK: Setup
-        
-        @inlinable func setup(_ source: DiffableTextField, uiView: UIViewType) {
-            self.source = source
+
+        @inlinable func connect(_ uiView: UIViewType) {
             self.uiView = uiView
-            
-            uiView.delegate = self
-            
-            self.value = source.value.wrappedValue
-            self.update(snapshot: source.style.showcase(source.value.wrappedValue))
+            self.uiView.delegate = self
         }
         
-        // MARK: Delegate Methods
+        // MARK: UITextFieldDelegate
         
         public func textFieldDidBeginEditing(_ textField: UITextField) {
-            update(snapshot: source.style.snapshot(value))
+            synchronize()
         }
         
         public func textFieldDidEndEditing(_ textField: UITextField, reason: UITextField.DidEndEditingReason) {
-            update(snapshot: source.style.showcase(value))
+            synchronize()
         }
         
         public func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
             let range = snapshot.indices(in: range)
             let replacement = Snapshot(string, only: .content)
-            
-            // snapshot
+                        
+            // --------------------------------- //
             
             guard let nextSnapshot = source.style
                     .merge(snapshot, with: replacement, in: range)
                     .map(source.style.process) else { return false }
-            
-            // value
-            
+                        
             guard let nextValue = source.style
                     .parse(nextSnapshot)
                     .map(source.style.process) else { return false }
+                        
+            let nextSelection = selection.update(with: range.upperBound).translate(to: nextSnapshot)
             
-            // selection
-            
-            let nextSelectionStart = range.upperBound
-            let nextSelection = selection.update(with: nextSelectionStart).convert(to: nextSnapshot)
-            
-            // update
+            // --------------------------------- //
 
-            update(value: nextValue, snapshot: nextSnapshot, selection: nextSelection)
-
-            // return
+            self.value = nextValue
+            self.snapshot = nextSnapshot
+            self.selection = nextSelection
+            
+            // --------------------------------- //
+            
+            push()
+            
+            // --------------------------------- //
             
             return false
         }
@@ -128,7 +109,7 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
         public func textFieldDidChangeSelection(_ textField: UITextField) {
             guard let offsets = textField.selection() else { return }
 
-            // ------------------------------ //
+            // --------------------------------- //
             
             let nextSelection = selection.update(with: offsets)
             let nextSelectionOffset = nextSelection.range.map(bounds: \.offset)
@@ -136,38 +117,46 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
             let changesToLowerBound = nextSelectionOffset.lowerBound - offsets.lowerBound
             let changesToUpperBound = nextSelectionOffset.upperBound - offsets.upperBound
             
-            // ------------------------------ //
+            // --------------------------------- //
                         
             self.selection = nextSelection
             uiView.select(changes: (changesToLowerBound, changesToUpperBound))
         }
+
+        // MARK: Utilities
         
-        // MARK: Helpers
-        
-        @inlinable func update(snapshot nextSnapshot: Snapshot) {
-            let nextSelection = selection.convert(to: nextSnapshot)
-            
-            self.snapshot = nextSnapshot
-            self.selection = nextSelection
-            
-            uiView.write(text: nextSnapshot.characters)
-            uiView.select(range: nextSelection.range.map(bounds: \.offset))
+        @inlinable func synchronize() {
+            pull()
+            push()
         }
         
-        #warning("Remember to refactor this, eventually.")
-        @inlinable func update(value nextValue: Value?, snapshot nextSnapshot: Snapshot, selection nextSelection: Selection) {
-            self.snapshot = nextSnapshot
-            self.selection = nextSelection
+        @inlinable func pull() {
+            var nextValue = source.value.wrappedValue
+            nextValue = source.style.process(nextValue)
             
-            uiView.write(text: nextSnapshot.characters)
-            uiView.select(range: nextSelection.range.map(bounds: \.offset))
+            func makeSnapshot() -> Snapshot {
+                uiView.isEditing ? source.style.snapshot(nextValue) : source.style.showcase(nextValue)
+            }
             
-            if let nextValue = nextValue {
+            if value != nextValue {
+                var nextSnapshot = makeSnapshot()
+                nextSnapshot = source.style.process(nextSnapshot)
+                
+                let nextSelection = selection.translate(to: nextSnapshot)
+                
                 self.value = nextValue
-                DispatchQueue.main.async {
-                    // TODO: wait for apple to come up with a better solution
-                    TextFields.update(&self.source.value.wrappedValue, nonduplicate: nextValue)
-                }
+                self.snapshot = nextSnapshot
+                self.selection = nextSelection
+            }
+        }
+        
+        @inlinable func push() {
+            uiView.write(text: snapshot.characters)
+            uiView.select(range: selection.range.map(bounds: \.offset))
+            
+            DispatchQueue.main.async {
+                // TODO: wait for apple to come up with a better solution
+                TextFields.update(&self.source.value.wrappedValue, nonduplicate: self.value)
             }
         }
     }
