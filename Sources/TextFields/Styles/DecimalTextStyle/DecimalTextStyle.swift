@@ -5,6 +5,10 @@
 //  Created by Oscar Byström Ericsson on 2021-09-28.
 //
 
+
+#warning("Sign should be toggleable, and sign deletions should pass through prefixes.")
+#warning("This means than range and replacement need to exposed, maybe.")
+
 import SwiftUI
 
 #if os(iOS)
@@ -26,6 +30,13 @@ public struct DecimalTextStyle: DiffableTextStyle {
     @usableFromInline var base: Base
     @usableFromInline var values: Values = .all
     @usableFromInline var precision: Precision = .max
+    
+    #warning("...")
+    /*
+     
+     var togglesSign: Bool
+     
+     */
         
     // MARK: Initializers
     
@@ -39,8 +50,9 @@ public struct DecimalTextStyle: DiffableTextStyle {
         base.precision(precision.displayableStyle())
     }
     
-    @inlinable func editableStyle(decimal: Bool = false) -> Base {
-        base.precision(precision.editableStyle()).decimalSeparator(strategy: decimal ? .always : .automatic)
+    @inlinable func editableStyle(decimalSeparator: Bool = false, decimalsLowerBound: Int? = nil) -> Base {
+        base.precision(precision.editableStyle(integersLowerBound: 1, decimalsLowerBound: decimalsLowerBound))
+            .decimalSeparator(strategy: decimalSeparator ? .always : .automatic)
     }
     
     // MARK: Maps
@@ -86,7 +98,7 @@ extension DecimalTextStyle {
     // MARK: Sets
     
     @inlinable var minus: String? {
-        !values.nonnegative ? Components.sign : nil
+        (values.min < 0) ? Components.sign : nil
     }
     
     @inlinable func content() -> Set<Character> {
@@ -123,30 +135,54 @@ extension DecimalTextStyle {
         return snapshot(style.format(value))
     }
         
-    // MARK: Parse
+    // MARK: Value
 
     @inlinable public func parse(_ snapshot: Snapshot) -> Decimal? {
-        guard !snapshot.isEmpty else {
-            return 0
-        }
-        
         guard let components = components(snapshot) else {
             return nil
         }
-
+        
+        guard !components.isEmpty else {
+            return .zero
+        }
+        
         return components.decimal()
+    }
+    
+    @inlinable public func process(_ value: Decimal) -> Decimal {
+        values.displayableStyle(value)
     }
     
     // MARK: Process
     
-    @inlinable public func process(_ snapshot: Snapshot) -> Snapshot? {
-        guard let components = components(snapshot) else {
-            return nil
+    @inlinable public func merge(_ snapshot: Snapshot, with replacement: Snapshot, in range: Range<Snapshot.Index>) -> Snapshot? {
+        var replacement = replacement
+        var toggleSign = false
+        
+        if replacement.characters == Components.sign {
+            replacement = Snapshot()
+            toggleSign = true
         }
         
-        // validate components
+        let proposal = snapshot.replace(range, with: replacement)
+
+        guard var components = components(proposal) else {
+            return nil
+        }
+
+        if toggleSign {
+            components.sign = components.sign.isEmpty ? Components.sign : ""
+        }
         
-        guard values.min < 0 || components.sign.isEmpty else {
+        #warning("WIP")
+        
+        print(components, replacement.characters)
+        
+        return self.snapshot(components)
+    }
+    
+    @inlinable func snapshot(_ components: Components) -> Snapshot? {
+        guard values.min < .zero || components.sign.isEmpty else {
             return nil
         }
                 
@@ -160,7 +196,7 @@ extension DecimalTextStyle {
         
         // style
         
-        let style = editableStyle(decimal: !components.decimalSeparator.isEmpty)
+        let style = editableStyle(decimalSeparator: !components.decimalSeparator.isEmpty, decimalsLowerBound: components.decimalDigits.count)
 
         // decimal
         
@@ -168,7 +204,7 @@ extension DecimalTextStyle {
             return nil
         }
         
-        guard values.contains(decimal) else {
+        guard values.editableValidation(decimal) else {
             return nil
         }
         
@@ -180,11 +216,9 @@ extension DecimalTextStyle {
             characters = components.sign + characters
         }
         
-        print(components.characters(), characters)
+        // snapshot
         
-        // return
-        
-        return self.snapshot(characters)
+        return snapshot(characters)
     }
     
     // MARK: Helpers

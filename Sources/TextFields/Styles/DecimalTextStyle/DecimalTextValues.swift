@@ -46,18 +46,14 @@ public struct DecimalTextValues {
     @inlinable public static func range(_ values: ClosedRange<Decimal>) -> Self {
         .init(min: values.lowerBound, max: values.upperBound)
     }
-
+    
     // MARK: Utilities
     
-    @inlinable func contains(_ decimal: Decimal) -> Bool {
-        min <= decimal && decimal <= max
+    @inlinable func displayableStyle(_ decimal: Decimal) -> Decimal {
+        Swift.max(min, Swift.min(decimal, max))
     }
     
-    @inlinable var nonnegative: Bool {
-        min >= 0
-    }
-    
-    @inlinable var nonpositive: Bool {
-        min <= 0
+    @inlinable func editableValidation(_ decimal: Decimal) -> Bool {
+        Swift.min(min, 0) <= decimal && decimal <= Swift.max(0, max)
     }
 }

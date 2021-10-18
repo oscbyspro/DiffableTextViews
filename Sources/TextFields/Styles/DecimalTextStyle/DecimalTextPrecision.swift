@@ -11,13 +11,13 @@ import struct Foundation.Decimal
 
 @available(iOS 15.0, *)
 public struct DecimalTextPrecision  {
-    @usableFromInline typealias This = Self
     @usableFromInline typealias Strategy = DecimalTextPrecisionStrategy
     
     // MARK: Properties: Static
     
+    #warning("Clean this up.")
     public static let maximum = 38
-    public static let domain = 0 ..< maximum + 1
+    public static let range = 0 ..< maximum + 1
     
     public static let defaultIntegersLowerBound = 1
     public static let defaultDecimalsLowerBound = 0
@@ -41,7 +41,7 @@ public struct DecimalTextPrecision  {
     // MARK: Initializers: Static, Total
 
     @inlinable public static func digits<R: RangeExpression>(_ limits: R) -> Self where R.Bound == Int {
-        let limits = limits.relative(to: domain)
+        let limits = limits.relative(to: range)
                 
         return .init(strategy: DecimalTextPrecisionTotal(limits))
     }
@@ -53,24 +53,24 @@ public struct DecimalTextPrecision  {
     // MARK: Initializers: Static, Separate
         
     @inlinable public static func digits<R0: RangeExpression, R1: RangeExpression>(integers: R0, decimals: R1) -> Self where R0.Bound == Int, R1.Bound == Int {
-        let integers = integers.relative(to: domain)
-        let decimals = decimals.relative(to: domain)
+        let integers = integers.relative(to: range)
+        let decimals = decimals.relative(to: range)
         
-        precondition(decimals.max()! + decimals.max()! < domain.upperBound)
+        precondition(integers.upperBound + integers.upperBound < range.upperBound + 1)
         
         return .init(strategy: DecimalTextPrecisionSeparate(integers: integers, decimals: decimals))
     }
     
     @inlinable public static func digits<R: RangeExpression>(integers: R) -> Self where R.Bound == Int {
-        let integers = integers.relative(to: domain)
+        let integers = integers.relative(to: range)
         
-        return digits(integers: integers, decimals: defaultDecimalsLowerBound ..< (domain.upperBound - integers.upperBound))
+        return digits(integers: integers, decimals: defaultDecimalsLowerBound ..< (range.upperBound - integers.upperBound))
     }
     
     @inlinable public static func digits<R: RangeExpression>(decimals: R) -> Self where R.Bound == Int {
-        let decimals = decimals.relative(to: domain)
+        let decimals = decimals.relative(to: range)
 
-        return digits(integers: defaultIntegersLowerBound ..< (domain.upperBound - decimals.upperBound), decimals: decimals)
+        return digits(integers: defaultIntegersLowerBound ..< (range.upperBound - decimals.upperBound), decimals: decimals)
     }
     
     @inlinable public static func digits(integers: Int, decimals: Int) -> Self {
@@ -97,10 +97,14 @@ extension DecimalTextPrecision {
         strategy.displayableStyle()
     }
     
-    @inlinable func editableStyle() -> Decimal.FormatStyle.Configuration.Precision {
-        strategy.editableStyle()
+    #warning("WIP")
+    @inlinable func editableStyle(integersLowerBound: Int? = nil, decimalsLowerBound: Int? = nil) -> Decimal.FormatStyle.Configuration.Precision {
+        let integerLimits = (integersLowerBound ?? Self.defaultIntegersLowerBound) ..< Self.maximum
+        let decimalLimits = (decimalsLowerBound ?? Self.defaultDecimalsLowerBound) ..< Self.maximum
+
+        return .integerAndFractionLength(integerLimits: integerLimits, fractionLimits: decimalLimits)
     }
-    
+
     @inlinable func validate(editable components: DecimalTextComponents) -> Bool {
         strategy.editableValidation(numberOfIntegers: components.integerDigits.count, numberOfDecimals: components.decimalDigits.count)
     }
@@ -113,9 +117,7 @@ extension DecimalTextPrecision {
     typealias Style = Decimal.FormatStyle.Configuration.Precision
     
     func displayableStyle() -> Style
-    
-    func editableStyle() -> Style
-    
+        
     func editableValidation(numberOfIntegers: Int, numberOfDecimals: Int) -> Bool
 }
 
@@ -138,12 +140,7 @@ extension DecimalTextPrecision {
     @inlinable func displayableStyle() -> Style {
         .significantDigits(limits)
     }
-    
-    @inlinable func editableStyle() -> Style {
-        let min = limits.contains(0) ? 0 : 1
-        return .significantDigits(min ..< limits.upperBound)
-    }
-    
+        
     @inlinable func editableValidation(numberOfIntegers: Int, numberOfDecimals: Int) -> Bool {
         numberOfIntegers + numberOfDecimals < limits.upperBound
     }
@@ -169,11 +166,6 @@ extension DecimalTextPrecision {
     
     @inlinable func displayableStyle() -> Style {
         .integerAndFractionLength(integerLimits: integers, fractionLimits: decimals)
-    }
-    
-    @inlinable func editableStyle() -> Style {
-        let minIntegers = integers.contains(0) ? 0 : 1
-        return .integerAndFractionLength(integerLimits: minIntegers ..< integers.upperBound, fractionLimits: 0 ..< decimals.upperBound)
     }
     
     @inlinable func editableValidation(numberOfIntegers: Int, numberOfDecimals: Int) -> Bool {

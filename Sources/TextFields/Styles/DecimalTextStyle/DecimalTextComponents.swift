@@ -32,6 +32,12 @@ public struct DecimalTextComponents {
         self.decimalDigits = ""
     }
     
+    // MARK: Descriptions
+    
+    @inlinable var isEmpty: Bool {
+        sign.isEmpty && integerDigits.isEmpty && decimalSeparator.isEmpty && decimalDigits.isEmpty
+    }
+    
     // MARK: Utilities
     
     @inlinable func decimal() -> Decimal? {
