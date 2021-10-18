@@ -54,11 +54,11 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
         @usableFromInline var source: DiffableTextField!
         @usableFromInline var uiView: UITextField!
         
+        @usableFromInline let lock = Lock()
+        
         @usableFromInline private(set) var value: Value!
         @usableFromInline private(set) var snapshot = Snapshot()
         @usableFromInline private(set) var selection = Selection()
-        
-        @usableFromInline private(set) var isLocked: Bool = false
         
         // MARK: Setup
 
@@ -78,7 +78,10 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
         }
         
         public func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
-            guard !isLocked else { return false }
+            
+            // --------------------------------- //
+            
+            guard !lock.isLocked else { return false }
             
             // --------------------------------- //
             
@@ -113,7 +116,10 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
         }
         
         public func textFieldDidChangeSelection(_ textField: UITextField) {
-            guard !isLocked else { return }
+            
+            // --------------------------------- //
+            
+            guard !lock.isLocked else { return }
                         
             // --------------------------------- //
 
@@ -122,7 +128,7 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
             // --------------------------------- //
             
             let nextSelection = selection.update(with: offsets)
-            let nextSelectionOffset = nextSelection.range.map(bounds: \.offset)
+            let nextSelectionOffset = nextSelection.offsets
             
             let changesToLowerBound = nextSelectionOffset.lowerBound - offsets.lowerBound
             let changesToUpperBound = nextSelectionOffset.upperBound - offsets.upperBound
@@ -133,7 +139,7 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
             uiView.setSelection(changes: (changesToLowerBound, changesToUpperBound))
         }
 
-        // MARK: Utilities
+        // MARK: Update
         
         @inlinable func synchronize() {
             pull()
@@ -141,14 +147,23 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
         }
         
         @inlinable func pull() {
-            guard !isLocked else { return }
+            
+            // --------------------------------- //
+            
+            guard !lock.isLocked else { return }
+            
+            // --------------------------------- //
             
             var nextValue = source.value.wrappedValue
             nextValue = source.style.process(nextValue)
             
+            // --------------------------------- //
+            
             func makeSnapshot() -> Snapshot {
                 uiView.isEditing ? source.style.snapshot(nextValue) : source.style.showcase(nextValue)
             }
+            
+            // --------------------------------- //
             
             if value != nextValue {
                 var nextSnapshot = makeSnapshot()
@@ -163,15 +178,42 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
         }
         
         @inlinable func push() {
-            self.isLocked = true
-            self.uiView.setText(snapshot.characters)
-            self.uiView.setSelection(selection.range.map(bounds: \.offset))
-            self.isLocked = false
+            
+            // --------------------------------- //
+            
+            lock.perform {
+                // lock is needed because setting a UITextFields's text
+                // also sets its selection to its last possible position
+                self.uiView.setText(snapshot.characters)
+                self.uiView.setSelection(selection.offsets)
+            }
+            
+            // --------------------------------- //
             
             DispatchQueue.main.async {
                 // TODO: wait for apple to come up with a better solution
                 TextFields.update(&self.source.value.wrappedValue, nonduplicate: self.value)
             }
+        }
+    }
+    
+    // MARK: Lock
+    
+    @usableFromInline final class Lock {
+        
+        // MARK: Properties
+        
+        @usableFromInline private(set) var isLocked: Bool = false
+        
+        // MARK: Utilities
+        
+        @inlinable func perform(action: () -> Void) {
+            let state = isLocked
+            self.isLocked = true
+            
+            action()
+            
+            self.isLocked = state
         }
     }
 }

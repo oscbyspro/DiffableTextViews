@@ -28,6 +28,12 @@ import struct Sequences.Walkthrough
         self.range = range
     }
     
+    // MARK: Descriptions
+    
+    @inlinable var offsets: Range<Int> {
+        range.map(bounds: \.offset)
+    }
+    
     // MARK: Update: Field
     
     @inlinable func translate(to newValue: Field) -> Self {
