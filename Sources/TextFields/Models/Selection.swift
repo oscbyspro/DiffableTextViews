@@ -89,7 +89,7 @@ import struct Sequences.Walkthrough
         
         let lowerBound: Field.Index = position(at: newValue.lowerBound, append: true)
         let upperBound: Field.Index = position(at: newValue.upperBound, append: false)
-        
+                        
         return update(with: lowerBound ..< upperBound)
     }
     

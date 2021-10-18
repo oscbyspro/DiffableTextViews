@@ -10,14 +10,16 @@
 import UIKit
 
 extension UITextField {
+    
     // MARK: Text: Set
     
-    @inlinable func write(text: String) {
+    @inlinable func setText(_ text: String) {
         self.text = text
     }
 }
 
 extension UITextField {
+    
     // MARK: Selection: Get
     
     @inlinable func selection() -> Range<Int>? {
@@ -26,11 +28,11 @@ extension UITextField {
     
     // MARK: Selection: Set
         
-    @inlinable func select(range offsets: Range<Int>?) {
+    @inlinable func setSelection(_ offsets: Range<Int>?) {
         self.selectedTextRange = offsets.map(range)
     }
     
-    @inlinable func select(changes: (start: Int, end: Int)) {
+    @inlinable func setSelection(changes: (start: Int, end: Int)) {
         guard let selection = selectedTextRange else { return }
         
         let start = position(from: selection.start, offset: changes.start)!

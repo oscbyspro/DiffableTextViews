@@ -58,6 +58,8 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
         @usableFromInline private(set) var snapshot = Snapshot()
         @usableFromInline private(set) var selection = Selection()
         
+        @usableFromInline private(set) var isLocked: Bool = false
+        
         // MARK: Setup
 
         @inlinable func connect(_ uiView: UIViewType) {
@@ -76,6 +78,10 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
         }
         
         public func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+            guard !isLocked else { return false }
+            
+            // --------------------------------- //
+            
             let range = snapshot.indices(in: range)
             let replacement = Snapshot(string, only: .content)
                         
@@ -92,21 +98,25 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
             let nextSelection = selection.update(with: range.upperBound).translate(to: nextSnapshot)
             
             // --------------------------------- //
-
+            
             self.value = nextValue
             self.snapshot = nextSnapshot
             self.selection = nextSelection
-            
+                        
             // --------------------------------- //
-            
+                        
             push()
-            
+                                    
             // --------------------------------- //
             
             return false
         }
         
         public func textFieldDidChangeSelection(_ textField: UITextField) {
+            guard !isLocked else { return }
+                        
+            // --------------------------------- //
+
             guard let offsets = textField.selection() else { return }
 
             // --------------------------------- //
@@ -118,9 +128,9 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
             let changesToUpperBound = nextSelectionOffset.upperBound - offsets.upperBound
             
             // --------------------------------- //
-                        
+                                    
             self.selection = nextSelection
-            uiView.select(changes: (changesToLowerBound, changesToUpperBound))
+            uiView.setSelection(changes: (changesToLowerBound, changesToUpperBound))
         }
 
         // MARK: Utilities
@@ -131,6 +141,8 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
         }
         
         @inlinable func pull() {
+            guard !isLocked else { return }
+            
             var nextValue = source.value.wrappedValue
             nextValue = source.style.process(nextValue)
             
@@ -151,8 +163,10 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
         }
         
         @inlinable func push() {
-            uiView.write(text: snapshot.characters)
-            uiView.select(range: selection.range.map(bounds: \.offset))
+            self.isLocked = true
+            self.uiView.setText(snapshot.characters)
+            self.uiView.setSelection(selection.range.map(bounds: \.offset))
+            self.isLocked = false
             
             DispatchQueue.main.async {
                 // TODO: wait for apple to come up with a better solution
