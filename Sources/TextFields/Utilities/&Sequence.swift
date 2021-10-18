@@ -5,7 +5,10 @@
 //  Created by Oscar Byström Ericsson on 2021-09-26.
 //
 
+// MARK: - Sequence
+
 extension Sequence {
+    
     // MARK: Reduce
     
     @inlinable func reduce<Other: RangeReplaceableCollection>(into other: Other = Other(), map element: (Element) -> Other.Element, where include: (Element) -> Bool = { _ in true }) -> Other {

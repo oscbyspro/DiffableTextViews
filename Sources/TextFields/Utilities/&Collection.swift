@@ -7,6 +7,8 @@
 
 import struct Foundation.NSRange
 
+// MARK: - Collection
+
 extension Collection {
     
     // MARK: Indices
