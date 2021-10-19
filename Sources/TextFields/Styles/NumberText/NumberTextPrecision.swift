@@ -41,7 +41,11 @@ public struct NumberTextPrecision<Item: NumberTextPrecisionItem> {
     @inlinable public static func max(_ total: Int) -> Self {
         digits(Defaults.totalLowerBound...total)
     }
-    
+}
+
+@available(iOS 15.0, *)
+extension NumberTextPrecision where Item: NumberTextPrecisionItemFloat {
+
     // MARK: Initializers: Separate
     
     @inlinable public static func digits<R0: RangeExpression, R1: RangeExpression>(integer: R0, fraction: R1) -> Self where R0.Bound == Int, R1.Bound == Int {
@@ -56,7 +60,7 @@ public struct NumberTextPrecision<Item: NumberTextPrecisionItem> {
         .init(strategy: Parts(upper: Defaults.upperLowerBound..., lower: fraction))
     }
     
-    @inlinable public static func max(integer: Int, fraction: Int) -> Self {
+    @inlinable public static func max(integer: Int, fraction: Int) -> Self  {
         .digits(integer: Defaults.upperLowerBound...integer, fraction: Defaults.lowerLowerBound...fraction)
     }
     

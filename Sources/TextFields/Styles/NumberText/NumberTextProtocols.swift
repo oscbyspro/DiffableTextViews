@@ -9,17 +9,23 @@
 import Foundation
 import SwiftUI
 
+// MARK: - NumberTextItem
+
+@available(iOS 15.0, *)
+public protocol NumberTextCompatible {
+    associatedtype NumberTextItem: TextFields.NumberTextItem where NumberTextItem.Number == Self
+}
+
 // MARK: - NumberTextStyleItem
 
 @available(iOS 15.0, *)
-public protocol NumberTextStyleItem: NumberTextValuesItem, NumberTextPrecisionItem {
+public protocol NumberTextItem: NumberTextValuesItem, NumberTextPrecisionItem {
     associatedtype Style: FormatStyle where Style.FormatInput == Number, Style.FormatOutput == String
     
     // MARK: Aliases
     
-    typealias Configuration = NumberFormatStyleConfiguration
-    typealias Precision = Configuration.Precision
-    typealias Separator = Configuration.DecimalSeparatorDisplayStrategy
+    typealias Precision = NumberFormatStyleConfiguration.Precision
+    typealias Separator = NumberFormatStyleConfiguration.DecimalSeparatorDisplayStrategy
     
     // MARK: Utilities
     
@@ -30,7 +36,6 @@ public protocol NumberTextStyleItem: NumberTextValuesItem, NumberTextPrecisionIt
 
 // MARK: - NumberTextPrecisionItem
 
-#warning("Add protocols for Integer/Float distinction that limits which static functions are available.")
 public protocol NumberTextPrecisionItem {
     
     // MARK: Properties: Static
@@ -38,6 +43,18 @@ public protocol NumberTextPrecisionItem {
     static var maxTotalDigits: Int { get }
     static var maxUpperDigits: Int { get }
     static var maxLowerDigits: Int { get }
+}
+
+// MARK: NumberTextPrecisionItem: Float
+
+public protocol NumberTextPrecisionItemFloat: NumberTextPrecisionItem { }
+
+// MARK: NumberTextPrecisionItem: Integer
+
+public protocol NumberTextPrecisionItemInteger: NumberTextPrecisionItem { }
+
+public extension NumberTextPrecisionItemInteger {
+    @inlinable static var maxLowerDigits: Int { 0 }
 }
 
 // MARK: - NumberTextValuesItem

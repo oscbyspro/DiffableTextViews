@@ -11,7 +11,7 @@ import struct Foundation.Decimal
 // MARK: - NumberTextDecimal
 
 @available(iOS 15.0, *)
-public enum NumberTextDecimal: NumberTextStyleItem, NumberTextValuesItem, NumberTextPrecisionItem {
+public enum NumberTextDecimal: NumberTextItem, NumberTextValuesItem, NumberTextPrecisionItemFloat {
     public typealias Number = Decimal
     public typealias Style = Number.FormatStyle
     
@@ -43,3 +43,11 @@ public enum NumberTextDecimal: NumberTextStyleItem, NumberTextValuesItem, Number
         .init(locale: locale).precision(precision).decimalSeparator(strategy: separator)
     }
 }
+
+// MARK: - Number + Compatible
+
+@available(iOS 15.0, *)
+extension Decimal: NumberTextCompatible {
+    public typealias NumberTextItem = NumberTextDecimal
+}
+

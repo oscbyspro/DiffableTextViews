@@ -8,7 +8,7 @@
 import Foundation
 
 @available(iOS 15.0, *)
-public enum NumberTextInt: NumberTextStyleItem, NumberTextValuesItem, NumberTextPrecisionItem {
+public enum NumberTextInt: NumberTextItem, NumberTextValuesItem, NumberTextPrecisionItemInteger {
     public typealias Number = Int
     public typealias Style = IntegerFormatStyle<Number>
     
@@ -21,9 +21,7 @@ public enum NumberTextInt: NumberTextStyleItem, NumberTextValuesItem, NumberText
     // MARK: Precision
     
                public static let maxTotalDigits: Int = String(describing: Number.max).count
-    @inlinable public static var maxUpperDigits: Int { maxTotalDigits }
-    @inlinable public static var maxLowerDigits: Int { 0 }
-    
+    @inlinable public static var maxUpperDigits: Int { maxTotalDigits }    
     
     // MARK: Conversions
     
@@ -42,4 +40,11 @@ public enum NumberTextInt: NumberTextStyleItem, NumberTextValuesItem, NumberText
     @inlinable public static func style(_ locale: Locale, precision: Precision, separator: Separator) -> Style {
         .init(locale: locale).precision(precision).decimalSeparator(strategy: separator)
     }
+}
+
+// MARK: - Number + Compatible
+
+@available(iOS 15.0, *)
+extension Int: NumberTextCompatible {
+    public typealias NumberTextItem = NumberTextInt
 }

@@ -14,7 +14,8 @@ import struct Foundation.Locale
 #warning("FIXME: It does not update immediately.")
 
 @available(iOS 15.0, *)
-public struct NumberTextStyle<Item: NumberTextStyleItem>: DiffableTextStyle {
+public struct NumberText<Base: NumberTextCompatible>: DiffableTextStyle {
+    public typealias Item = Base.NumberTextItem
     public typealias Value = Item.Number
     
     @usableFromInline typealias BasePrecision = NumberFormatStyleConfiguration.Precision
@@ -75,7 +76,7 @@ public struct NumberTextStyle<Item: NumberTextStyleItem>: DiffableTextStyle {
 // MARK: DecimalTextStyle: Getters
 
 @available(iOS 15.0, *)
-extension NumberTextStyle {
+extension NumberText {
     
     // MARK: Localization
     
@@ -107,23 +108,19 @@ extension NumberTextStyle {
 // MARK: DecimalTextStyle: DiffableTextStyle
 
 @available(iOS 15.0, *)
-extension NumberTextStyle {
+extension NumberText {
     
     // MARK: Snapshot
     
     @inlinable public func showcase(_ value: Value) -> Snapshot {
         let style = displayableStyle()
-        
-        print("display:", value)
-        
+                
         return snapshot(style.format(value))
     }
     
     @inlinable public func snapshot(_ value: Value) -> Snapshot {
         let style = editableStyle()
         
-        print("snapshot:", value)
-
         return snapshot(style.format(value))
     }
         
@@ -145,24 +142,27 @@ extension NumberTextStyle {
     
     #warning("TODO")
     @inlinable public func merge(_ snapshot: Snapshot, with replacement: Snapshot, in bounds: Range<Snapshot.Index>) -> Snapshot? {
-        #warning("WIP")
         var replacement = replacement
-        var toggleSign = false
         
-        if replacement.characters == Components.minus {
-            replacement = Snapshot()
-            toggleSign = true
-        }
+        // --------------------------------- //
+        
+        let commands = Commands(input: &replacement)
+                
+        // --------------------------------- //
         
         let result = snapshot.replace(bounds, with: replacement)
-
+        
+        // --------------------------------- //
+        
         guard var components = components(result) else {
             return nil
         }
 
-        if toggleSign {
-            components.toggleSign()
-        }
+        // --------------------------------- //
+        
+        commands.act(on: &components)
+                
+        // --------------------------------- //
         
         return self.snapshot(components)
     }
@@ -189,15 +189,10 @@ extension NumberTextStyle {
         
         // --------------------------------- //
         
-        guard let number = Item.number(components) else {
+        guard let number = Item.number(components), values.editableValidation(number) else {
             return nil
         }
-        
-        guard values.editableValidation(number) else {
-            // TODO: Should this check be here?
-            return nil
-        }
-        
+
         // --------------------------------- //
         
         let style = editableStyle(digits: digits, separator: !components.separator.isEmpty)
@@ -211,6 +206,14 @@ extension NumberTextStyle {
         // --------------------------------- //
         
         return snapshot(characters)
+    }
+    
+    // MARK: Commands
+    
+    @inlinable func processCommandToggleSign(input: inout Snapshot) -> Bool {
+        guard input.characters == Components.minus else { return false }
+        input.removeAll()
+        return true
     }
     
     // MARK: Helpers
@@ -236,5 +239,31 @@ extension NumberTextStyle {
         }
         
         return snapshot
+    }
+    
+    // MARK: Commands
+    
+    @usableFromInline struct Commands {
+        
+        // MARK: Properties
+        
+        @usableFromInline var toggleSign: Bool = false
+        
+        // MARK: Initializers
+        
+        @inlinable init(input: inout Snapshot) {
+            if input.characters == Components.minus {
+                input.removeAll()
+                toggleSign = true
+            }
+        }
+        
+        // MARK: Utilities
+        
+        @inlinable func act(on components: inout Components) {
+            if toggleSign {
+                components.toggleSign()
+            }
+        }
     }
 }
