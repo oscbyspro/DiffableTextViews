@@ -41,8 +41,8 @@ public struct DecimalTextStyle: DiffableTextStyle {
         base.precision(precision.displayableStyle())
     }
     
-    @inlinable func editableStyle(decimalSeparator: Bool = false, decimalsLowerBound: Int? = nil) -> Base {
-        base.precision(precision.editableStyle(integersLowerBound: 1, decimalsLowerBound: decimalsLowerBound))
+    @inlinable func editableStyle(decimalSeparator: Bool = false, fractionLowerBound: Int? = nil) -> Base {
+        base.precision(precision.editableStyle(integersLowerBound: 1, fractionLowerBound: fractionLowerBound))
             .decimalSeparator(strategy: decimalSeparator ? .always : .automatic)
     }
     
@@ -180,7 +180,7 @@ extension DecimalTextStyle {
         
         // style
         
-        let style = editableStyle(decimalSeparator: !components.decimalSeparator.isEmpty, decimalsLowerBound: components.decimalDigits.count)
+        let style = editableStyle(decimalSeparator: !components.decimalSeparator.isEmpty, fractionLowerBound: components.decimalDigits.count)
 
         // decimal
         

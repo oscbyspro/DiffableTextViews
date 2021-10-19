@@ -7,8 +7,6 @@
 
 import enum SwiftUI.NumberFormatStyleConfiguration
 
-#warning("WIP")
-
 // MARK: - NumberTextPrecisionItem
 
 public protocol NumberTextPrecisionItem {
@@ -24,6 +22,7 @@ public protocol NumberTextPrecisionItem {
 
 @available(iOS 15.0, *)
 public struct NumberTextPrecision<Item: NumberTextPrecisionItem> {
+    @usableFromInline typealias Constants = NumberTextPrecisionConstants
     @usableFromInline typealias Strategy = NumberTextPrecisionStrategy
     @usableFromInline typealias Total = NumberTextPrecisionTotal<Item>
     @usableFromInline typealias Separate = NumberTextPrecisionSeparate<Item>
@@ -46,32 +45,30 @@ public struct NumberTextPrecision<Item: NumberTextPrecisionItem> {
         
     // MARK: Initializers: Total
     
-    @inlinable public static func digits<R: RangeExpression>(_ limits: R) -> Self
-    where R.Bound == Int {
-        .init(strategy: Total(significands: limits))
+    @inlinable public static func digits<R: RangeExpression>(_ total: R) -> Self where R.Bound == Int {
+        .init(strategy: Total(total: total))
     }
     
-    @inlinable public static func max(_ limit: Int) -> Self {
-        digits(1 ... limit)
+    @inlinable public static func max(_ total: Int) -> Self {
+        digits(Constants.totalLowerBound...total)
     }
     
     // MARK: Initializers: Separate
     
-    @inlinable public static func digits<R0: RangeExpression, R1: RangeExpression>(integer: R0, fraction: R1) -> Self
-    where R0.Bound == Int, R1.Bound == Int {
+    @inlinable public static func digits<R0: RangeExpression, R1: RangeExpression>(integer: R0, fraction: R1) -> Self where R0.Bound == Int, R1.Bound == Int {
         .init(strategy: Separate(upper: integer, lower: fraction))
     }
     
     @inlinable public static func max(integer: Int, fraction: Int) -> Self {
-        .digits(integer: 1 ... integer, fraction: 0 ... fraction)
+        .digits(integer: Constants.upperLowerBound...integer, fraction: Constants.lowerLowerBound...fraction)
     }
     
     @inlinable public static func max(integer: Int) -> Self {
-        .max(integer: integer, fraction: Item.maxLowerDigits)
+        .max(integer: integer, fraction: Item.maxTotalDigits - integer)
     }
     
     @inlinable public static func max(fraction: Int) -> Self {
-        .max(integer: Item.maxUpperDigits, fraction: fraction)
+        .max(integer: Item.maxTotalDigits - fraction, fraction: fraction)
     }
 }
 
@@ -86,11 +83,12 @@ extension NumberTextPrecision {
         strategy.displayableStyle()
     }
     
-    @inlinable func editableStyle(integersLowerBound: Int? = nil, decimalsLowerBound: Int? = nil) -> NumberFormatStyleConfiguration.Precision {
-        let integerLimits = (integersLowerBound ?? 1) ... Item.maxUpperDigits
-        let decimalLimits = (decimalsLowerBound ?? 0) ... Item.maxLowerDigits
+    #warning("numberOfIntegerDigits: components.integerDigits.count, numberOfFractionDigits: components.decimalDigits.count")
+    @inlinable func editableStyle(integersLowerBound: Int? = nil, fractionLowerBound: Int? = nil) -> NumberFormatStyleConfiguration.Precision {
+        let integersLimits = (integersLowerBound ?? Constants.upperLowerBound) ... Item.maxUpperDigits
+        let fractionLimits = (fractionLowerBound ?? Constants.lowerLowerBound) ... Item.maxLowerDigits
         
-        return .integerAndFractionLength(integerLimits: integerLimits, fractionLimits: decimalLimits)
+        return .integerAndFractionLength(integerLimits: integersLimits, fractionLimits: fractionLimits)
     }
 
     @inlinable func validate(editable components: DecimalTextComponents) -> Bool {
@@ -112,25 +110,16 @@ extension NumberTextPrecision {
 
 @available(iOS 15.0, *)
 @usableFromInline struct NumberTextPrecisionTotal<Item: NumberTextPrecisionItem>: NumberTextPrecisionStrategy {
-    
+    @usableFromInline typealias Constants = NumberTextPrecisionConstants
+
     // MARK: Properties
     
-    @usableFromInline let significands: ClosedRange<Int>
+    @usableFromInline let total: ClosedRange<Int>
     
     // MARK: Initializers
     
-    @inlinable init<R: RangeExpression>(significands: R) where R.Bound == Int {
-        self.significands = Self.limits(significands, max: Item.maxTotalDigits)
-    }
-    
-    // MARK: Strategy
-    
-    @inlinable func displayableStyle() -> NumberFormatStyleConfiguration.Precision {
-        .significantDigits(significands)
-    }
-        
-    @inlinable func editableValidation(numberOfIntegerDigits: Int, numberOfFractionDigits: Int) -> Bool {
-        numberOfIntegerDigits + numberOfFractionDigits <= significands.upperBound
+    @inlinable init<R: RangeExpression>(total: R) where R.Bound == Int {
+        self.total = Self.limits(total, max: Item.maxTotalDigits)
     }
     
     // MARK: Initializers: Helpers
@@ -138,13 +127,24 @@ extension NumberTextPrecision {
     @inlinable static func limits<R: RangeExpression>(_ range: R, max: Int) -> ClosedRange<Int> where R.Bound == Int {
         ClosedRange(range.relative(to: 0 ..< max + 1))
     }
+    
+    // MARK: Utilities
+
+    @inlinable func displayableStyle() -> NumberFormatStyleConfiguration.Precision {
+        .significantDigits(total)
+    }
+        
+    @inlinable func editableValidation(numberOfIntegerDigits: Int, numberOfFractionDigits: Int) -> Bool {
+        numberOfIntegerDigits + numberOfFractionDigits <= total.upperBound
+    }
 }
 
 // MARK: - Strategies: Separate
 
 @available(iOS 15.0, *)
 @usableFromInline struct NumberTextPrecisionSeparate<Item: NumberTextPrecisionItem>: NumberTextPrecisionStrategy {
-    
+    @usableFromInline typealias Constants = NumberTextPrecisionConstants
+
     // MARK: Properties
     
     @usableFromInline let upper: ClosedRange<Int>
@@ -155,30 +155,20 @@ extension NumberTextPrecision {
     @inlinable init<R0: RangeExpression, R1: RangeExpression>(upper: R0, lower: R1) where R0.Bound == Int, R1.Bound == Int {
         self.upper = Self.limits(upper, max: Item.maxUpperDigits)
         self.lower = Self.limits(lower, max: Item.maxLowerDigits)
+        
+        precondition(self.lower.lowerBound + self.upper.lowerBound <= Item.maxTotalDigits, "Max precision lowerBound: \(Item.maxTotalDigits).")
     }
     
     @inlinable init<R: RangeExpression>(upper: R) where R.Bound == Int {
         let upper = Self.limits(upper, max: Item.maxUpperDigits)
         
-        self.init(upper: upper, lower: 0...)
+        self.init(upper: upper, lower: Constants.lowerLowerBound...)
     }
     
     @inlinable init<R: RangeExpression>(lower: R) where R.Bound == Int {
         let lower = Self.limits(lower, max: Item.maxLowerDigits)
         
-        self.init(upper: 1..., lower: lower)
-    }
-    
-    // MARK: Protocol: Strategy
-    
-    #warning("How should this be handled when: upper + lower > total?")
-    @inlinable func displayableStyle() -> NumberFormatStyleConfiguration.Precision {
-        .integerAndFractionLength(integerLimits: upper, fractionLimits: lower)
-    }
-    
-    @inlinable func editableValidation(numberOfIntegerDigits: Int, numberOfFractionDigits: Int) -> Bool {
-        numberOfIntegerDigits + numberOfFractionDigits <= Item.maxTotalDigits &&
-        numberOfIntegerDigits <= upper.upperBound && numberOfFractionDigits <= lower.upperBound
+        self.init(upper: Constants.upperLowerBound..., lower: lower)
     }
     
     // MARK: Initializers: Helpers
@@ -186,4 +176,30 @@ extension NumberTextPrecision {
     @inlinable static func limits<R: RangeExpression>(_ range: R, max: Int) -> ClosedRange<Int> where R.Bound == Int {
         ClosedRange(range.relative(to: 0 ..< max + 1))
     }
+    
+    // MARK: Utilities
+    
+    @inlinable func displayableStyle() -> NumberFormatStyleConfiguration.Precision {
+        .integerAndFractionLength(integerLimits: upper, fractionLimits: lower)
+    }
+    
+    @inlinable func editableValidation(numberOfIntegerDigits: Int, numberOfFractionDigits: Int) -> Bool {
+        func validateTotal() -> Bool {
+            numberOfIntegerDigits + numberOfFractionDigits <= Item.maxTotalDigits
+        }
+        
+        func validateParts() -> Bool {
+            numberOfIntegerDigits <= upper.upperBound && numberOfFractionDigits <= lower.upperBound
+        }
+        
+        return validateTotal() && validateParts()
+    }
+}
+
+// MARK: - NumberTextPrecisionConstants
+
+@usableFromInline enum NumberTextPrecisionConstants {
+    @usableFromInline static let totalLowerBound: Int = 1
+    @usableFromInline static let upperLowerBound: Int = 1
+    @usableFromInline static let lowerLowerBound: Int = 0
 }
