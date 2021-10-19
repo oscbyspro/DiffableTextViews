@@ -8,7 +8,7 @@
 import Foundation
 
 @available(iOS 15.0, *)
-public enum NumberTextInt: NumberTextItem, NumberTextValuesItem, NumberTextPrecisionItemInteger {
+public enum NumberTextInt: NumberTextItem, NumberTextValuesItem, NumberTextPrecisionInteger {
     public typealias Number = Int
     
     // MARK: Values

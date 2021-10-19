@@ -59,12 +59,12 @@ public protocol NumberTextPrecisionItem {
 
 // MARK: NumberTextPrecisionItem: Float
 
-public protocol NumberTextPrecisionItemFloat: NumberTextPrecisionItem { }
+public protocol NumberTextPrecisionFloat: NumberTextPrecisionItem { }
 
 // MARK: NumberTextPrecisionItem: Integer
 
-public protocol NumberTextPrecisionItemInteger: NumberTextPrecisionItem { }
+public protocol NumberTextPrecisionInteger: NumberTextPrecisionItem { }
 
-public extension NumberTextPrecisionItemInteger {
+public extension NumberTextPrecisionInteger {
     @inlinable static var maxLowerDigits: Int { 0 }
 }
