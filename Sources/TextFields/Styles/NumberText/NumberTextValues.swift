@@ -7,7 +7,6 @@
 
 // MARK: - NumberTextValues
 
-#warning("FIXME: Positive lowerBound is ban. Negative upperBound is ban.")
 public struct NumberTextValues<Item: NumberTextValuesItem> {
     public typealias Number = Item.Number
     
@@ -33,10 +32,6 @@ public struct NumberTextValues<Item: NumberTextValuesItem> {
     
     // MARK: Initializers: Static
     
-    @inlinable public static var all: Self {
-        .init(min: min, max: max)
-    }
-    
     @inlinable public static func min(_ value: Number) -> Self {
         .init(min: value)
     }
@@ -45,8 +40,32 @@ public struct NumberTextValues<Item: NumberTextValuesItem> {
         .init(max: value)
     }
     
-    @inlinable public static func range(_ values: ClosedRange<Number>) -> Self {
+    @inlinable public static func bounds(_ values: ClosedRange<Number>) -> Self {
         .init(min: values.lowerBound, max: values.upperBound)
+    }
+    
+    // MARK: Initialiers: Static
+    
+    @inlinable public static var all: Self {
+        .bounds(min...max)
+    }
+    
+    @inlinable public static var nonnegative: Self {
+        .min(zero)
+    }
+    
+    @inlinable public static var nonpositive: Self {
+        .max(zero)
+    }
+    
+    // MARK: Descriptions
+    
+    @inlinable var nonnegative: Bool {
+        min >= Item.zero
+    }
+    
+    @inlinable var nonpositive: Bool {
+        max <= Item.zero
     }
     
     // MARK: Utilities

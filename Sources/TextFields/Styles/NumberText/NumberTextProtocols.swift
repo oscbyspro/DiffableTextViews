@@ -34,6 +34,18 @@ public protocol NumberTextItem: NumberTextValuesItem, NumberTextPrecisionItem {
     @inlinable static func style(_ locale: Locale, precision: Precision, separator: Separator) -> Style
 }
 
+// MARK: - NumberTextValuesItem
+
+public protocol NumberTextValuesItem {
+    associatedtype Number: Comparable
+    
+    // MARK: Properties: Static
+    
+    static var zero: Number { get }
+    static var  max: Number { get }
+    static var  min: Number { get }
+}
+
 // MARK: - NumberTextPrecisionItem
 
 public protocol NumberTextPrecisionItem {
@@ -55,16 +67,4 @@ public protocol NumberTextPrecisionItemInteger: NumberTextPrecisionItem { }
 
 public extension NumberTextPrecisionItemInteger {
     @inlinable static var maxLowerDigits: Int { 0 }
-}
-
-// MARK: - NumberTextValuesItem
-
-public protocol NumberTextValuesItem {
-    associatedtype Number: Comparable
-    
-    // MARK: Properties: Static
-    
-    static var zero: Number { get }
-    static var  max: Number { get }
-    static var  min: Number { get }
 }

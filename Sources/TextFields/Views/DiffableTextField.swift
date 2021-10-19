@@ -77,7 +77,7 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
             synchronize()
         }
         
-        public func textField(_ textField: UITextField, shouldChangeCharactersIn bounds: NSRange, replacementString string: String) -> Bool {
+        public func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
             
             // --------------------------------- //
             
@@ -85,20 +85,20 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
             
             // --------------------------------- //
             
-            let bounds = snapshot.indices(in: bounds)
+            let range = snapshot.indices(in: range)
             let replacement = Snapshot(string, only: .content)
                         
             // --------------------------------- //
             
             guard let nextSnapshot = source.style
-                    .merge(snapshot, with: replacement, in: bounds)
+                    .merge(snapshot, with: replacement, in: range)
                     .map(source.style.process) else { return false }
                         
             guard let nextValue = source.style
                     .parse(nextSnapshot)
                     .map(source.style.process) else { return false }
                         
-            let nextSelection = selection.update(with: bounds.upperBound).translate(to: nextSnapshot)
+            let nextSelection = selection.update(with: range.upperBound).translate(to: nextSnapshot)
             
             // --------------------------------- //
             

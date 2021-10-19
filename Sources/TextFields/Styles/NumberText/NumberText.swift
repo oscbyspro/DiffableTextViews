@@ -57,14 +57,14 @@ public struct NumberText<Base: NumberTextCompatible>: DiffableTextStyle {
         map({ $0.locale = locale })
     }
     
+    @inlinable public func values(_ newValue: Values) -> Self {
+        map({ $0.values = newValue })
+    }
+    
     @inlinable public func precision(_ newValue: Precision) -> Self {
         map({ $0.precision = newValue })
     }
     
-    @inlinable public func values(_ newValue: Values) -> Self {
-        map({ $0.values = newValue })
-    }
-
     // MARK: Helpers
     
     @inlinable func map(_ transform: (inout Self) -> Void) -> Self {
@@ -172,7 +172,7 @@ extension NumberText {
         
         // --------------------------------- //
         
-        guard values.min < Item.zero || components.minus.isEmpty else {
+        guard !values.nonnegative || components.minus.isEmpty else {
             return nil
         }
         
