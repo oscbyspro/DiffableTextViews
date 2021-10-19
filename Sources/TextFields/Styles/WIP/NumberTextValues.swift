@@ -5,18 +5,6 @@
 //  Created by Oscar Byström Ericsson on 2021-10-18.
 //
 
-// MARK: - NumberTextValuesStrategy
-
-public protocol NumberTextValuesItem {
-    associatedtype Number: Comparable
-    
-    // MARK: Properties: Static
-    
-    static var zero: Number { get }
-    static var  max: Number { get }
-    static var  min: Number { get }
-}
-
 // MARK: - NumberTextValues
 
 public struct NumberTextValues<Item: NumberTextValuesItem> {
@@ -38,8 +26,8 @@ public struct NumberTextValues<Item: NumberTextValuesItem> {
     @inlinable init(min: Number = Self.min, max: Number = Self.max) {
         precondition(min <= max)
         
-        self.min = min
-        self.max = max
+        self.min = Swift.max(min, Self.min)
+        self.max = Swift.min(Self.max, max)
     }
     
     // MARK: Initializers: Static
@@ -69,4 +57,16 @@ public struct NumberTextValues<Item: NumberTextValuesItem> {
     @inlinable func editableValidation(_ decimal: Number) -> Bool {
         Swift.min(min, Self.zero) <= decimal && decimal <= Swift.max(Self.zero, max)
     }
+}
+
+// MARK: - NumberTextValuesItem
+
+public protocol NumberTextValuesItem {
+    associatedtype Number: Comparable
+    
+    // MARK: Properties: Static
+    
+    static var zero: Number { get }
+    static var  max: Number { get }
+    static var  min: Number { get }
 }
