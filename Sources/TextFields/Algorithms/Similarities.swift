@@ -47,9 +47,9 @@
         
         while let nextLhsIndex = lhs[lhsIndex...].firstIndex(where: options.inspection.includes),
               let nextRhsIndex = rhs[rhsIndex...].firstIndex(where: options.inspection.includes) {
-            
+                        
             guard options.comparison.equivalent(lhs[nextLhsIndex], rhs[nextRhsIndex]) else { break }
-
+            
             lhsIndex = lhs.index(after: nextLhsIndex)
             rhsIndex = rhs.index(after: nextRhsIndex)
         }
@@ -213,6 +213,7 @@ extension BidirectionalCollection {
 
 // MARK: -
 
+#warning("TODO: remove, because overshoot is now redundant.")
 @usableFromInline enum SimilaritiesOptionsProduction {
     case wrapper
     case overshoot

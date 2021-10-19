@@ -82,7 +82,7 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
             // --------------------------------- //
             
             guard !lock.isLocked else { return false }
-            
+                        
             // --------------------------------- //
             
             let range = snapshot.indices(in: range)
@@ -168,7 +168,7 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
             
             self.value = nextValue
             self.snapshot = nextSnapshot
-            self.selection = nextSelection
+            self.selection = nextSelection            
         }
         
         @inlinable func push() {

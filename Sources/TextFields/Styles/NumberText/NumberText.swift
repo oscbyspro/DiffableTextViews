@@ -10,7 +10,7 @@ import struct Foundation.Locale
 
 // MARK: - NumberTextStyle
 
-#warning("FIXME: It does not update immediately, see .values(1000...).")
+#warning("FIXME: decimal separator now cuts zeros: 100.000 --> 100")
 
 @available(iOS 15.0, *)
 public struct NumberText<Base: NumberTextCompatible>: DiffableTextStyle {
@@ -72,42 +72,21 @@ public struct NumberText<Base: NumberTextCompatible>: DiffableTextStyle {
     }
 }
 
-// MARK: DecimalTextStyle: Getters
-
-@available(iOS 15.0, *)
-extension NumberText {
-    
-    // MARK: Localization
-    
-    @inlinable var separator: String {
-        locale.decimalSeparator ?? "."
-    }
-    
-    @inlinable var groupingSeparator: String {
-        locale.groupingSeparator ?? ","
-    }
-    
-    // MARK: Sets
-  
-    @inlinable func content() -> Set<Character> {
-        var set = Set<Character>()
-        set.formUnion(Components.minus)
-        set.formUnion(Components.digits)
-        set.formUnion(separator)
-        return set
-    }
-    
-    @inlinable func spacers() -> Set<Character> {
-        var set = Set<Character>()
-        set.formUnion(groupingSeparator)
-        return set
-    }
-}
-
 // MARK: DecimalTextStyle: DiffableTextStyle
 
 @available(iOS 15.0, *)
 extension NumberText {
+    
+    // MARK: Process
+    
+    @inlinable public func process(_ value: Value) -> Value {
+        values.displayableStyle(value)
+    }
+    
+    #warning("WIP")
+    @inlinable public func process(_ snapshot: Snapshot) -> Snapshot {
+        Snapshot("$ ", only: .prefix) + snapshot + Snapshot(" USD", only: .suffix)
+    }
     
     // MARK: Snapshot
     
@@ -123,18 +102,10 @@ extension NumberText {
         return snapshot(style.format(value))
     }
         
-    // MARK: Value
+    // MARK: Parse
 
     @inlinable public func parse(_ snapshot: Snapshot) -> Value? {
-        guard let components = components(snapshot) else {
-            return nil
-        }
-        
-        guard let number = number(components) else {
-            return nil
-        }
-
-        return values.displayableStyle(number)
+        components(snapshot).flatMap(number)
     }
     
     // MARK: Merge
@@ -263,5 +234,37 @@ extension NumberText {
                 components.toggleSign()
             }
         }
+    }
+}
+
+// MARK: DecimalTextStyle: Getters
+
+@available(iOS 15.0, *)
+extension NumberText {
+    
+    // MARK: Localization
+    
+    @inlinable var separator: String {
+        locale.decimalSeparator ?? "."
+    }
+    
+    @inlinable var groupingSeparator: String {
+        locale.groupingSeparator ?? ","
+    }
+    
+    // MARK: Sets
+  
+    @inlinable func content() -> Set<Character> {
+        var set = Set<Character>()
+        set.formUnion(Components.minus)
+        set.formUnion(Components.digits)
+        set.formUnion(separator)
+        return set
+    }
+    
+    @inlinable func spacers() -> Set<Character> {
+        var set = Set<Character>()
+        set.formUnion(groupingSeparator)
+        return set
     }
 }

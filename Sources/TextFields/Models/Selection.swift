@@ -9,12 +9,13 @@ import struct Sequences.Walkthrough
 
 // MARK: - Selection
 
+#warning("Backspace jumps over prefixes.")
 @usableFromInline struct Selection {
     
     // MARK: Properties
     
     @usableFromInline let field: Field
-    @usableFromInline let range: Range<Field.Index>
+    @usableFromInline var range: Range<Field.Index>
     
     // MARK: Initializers
     
@@ -38,7 +39,6 @@ import struct Sequences.Walkthrough
     
     @inlinable func translate(to newValue: Field) -> Self {
         let options = SimilaritiesOptions<Symbol>
-            .produce(.overshoot)
             .inspect(.only(\.content))
             .compare(.equatable(\.character))
         
@@ -49,7 +49,7 @@ import struct Sequences.Walkthrough
         let nextUpperBound = position(from: field[range.upperBound...], to: newValue[...])
         let nextLowerBound = position(from: field[range], to: newValue[..<nextUpperBound])
         
-        return Selection(newValue, range: nextLowerBound ..< nextUpperBound)
+        return Selection(newValue, range: nextLowerBound ..< nextUpperBound).move(.backwards, towards: \.lhs.content)
     }
     
     @inlinable func translate(to newValue: Snapshot) -> Self {
@@ -62,7 +62,6 @@ import struct Sequences.Walkthrough
         var next = newValue
         moveInoutRangeToContent(&next)
         moveInoutRangeAcrossSpacers(&next)
-        
         return Selection(field, range: next)
     }
     
@@ -113,18 +112,18 @@ import struct Sequences.Walkthrough
 // MARK: - Helpers
 
 extension Selection {
-    
+
     // MARK: Move To Content
     
     @inlinable func moveInoutRangeToContent(_ inoutRange: inout Range<Field.Index>) {
         func position(_ positionIn: (Range<Field.Index>) -> Field.Index) -> Field.Index {
             var position = positionIn(inoutRange)
                     
-            if field[position].rhs.prefix, let next = field.firstIndex(in: .stride(start: .closed(position), step:  .forwards), where: \.rhs.content) {
+            if field[position].lhs.prefix, let next = field.firstIndex(in: .stride(start: .closed(position), step:  .forwards), where: \.rhs.content) {
                 position = next
             }
             
-            if field[position].lhs.suffix, let next = field.firstIndex(in: .stride(start: .closed(position), step: .backwards), where: \.lhs.content) {
+            if field[position].rhs.suffix, let next = field.firstIndex(in: .stride(start: .closed(position), step: .backwards), where: \.lhs.content) {
                 position = next
             }
             
@@ -160,5 +159,18 @@ extension Selection {
         }
                 
         inoutRange = lowerBound ..< upperBound
+    }
+}
+
+extension Selection {
+    
+    // MARK: Movements
+    
+    @inlinable func move(_ direction: Walkthrough<Field>.Step, towards predicate: (Field.Element) -> Bool) -> Selection {
+        func position(_ position: Field.Index) -> Field.Index {
+            field.firstIndex(in: .stride(start: .closed(position), step: direction), where: predicate) ?? position
+        }
+        
+        return Selection(field, range: position(range.lowerBound) ..< position(range.upperBound))
     }
 }
