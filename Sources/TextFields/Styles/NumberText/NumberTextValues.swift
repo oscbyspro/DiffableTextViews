@@ -7,6 +7,7 @@
 
 // MARK: - NumberTextValues
 
+#warning("FIXME: Positive lowerBound is ban. Negative upperBound is ban.")
 public struct NumberTextValues<Item: NumberTextValuesItem> {
     public typealias Number = Item.Number
     

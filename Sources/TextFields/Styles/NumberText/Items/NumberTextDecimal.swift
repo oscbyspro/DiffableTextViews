@@ -13,7 +13,6 @@ import struct Foundation.Decimal
 @available(iOS 15.0, *)
 public enum NumberTextDecimal: NumberTextItem, NumberTextValuesItem, NumberTextPrecisionItemFloat {
     public typealias Number = Decimal
-    public typealias Style = Number.FormatStyle
     
     // MARK: Values
     
@@ -30,16 +29,10 @@ public enum NumberTextDecimal: NumberTextItem, NumberTextValuesItem, NumberTextP
     // MARK: Style
     
     @inlinable public static func number(_ components: NumberTextComponents) -> Number? {
-        let characters = components.characters()
-        
-        guard !characters.isEmpty else {
-            return nil
-        }
-        
-        return Number(string: characters)
+        Number(string: components.characters())
     }
     
-    @inlinable public static func style(_ locale: Locale, precision: Precision, separator: Separator) -> Style {
+    @inlinable public static func style(_ locale: Locale, precision: Precision, separator: Separator) -> Number.FormatStyle {
         .init(locale: locale).precision(precision).decimalSeparator(strategy: separator)
     }
 }

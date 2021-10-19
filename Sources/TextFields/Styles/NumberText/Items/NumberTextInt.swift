@@ -10,7 +10,6 @@ import Foundation
 @available(iOS 15.0, *)
 public enum NumberTextInt: NumberTextItem, NumberTextValuesItem, NumberTextPrecisionItemInteger {
     public typealias Number = Int
-    public typealias Style = IntegerFormatStyle<Number>
     
     // MARK: Values
     
@@ -26,18 +25,10 @@ public enum NumberTextInt: NumberTextItem, NumberTextValuesItem, NumberTextPreci
     // MARK: Conversions
     
     @inlinable public static func number(_ components: NumberTextComponents) -> Number? {
-        guard components.separator.isEmpty, components.lower.isEmpty else {
-            return nil
-        }
-        
-        guard !components.upper.isEmpty else {
-            return .zero
-        }
-        
-        return Number(components.characters())
+        Number(components.characters())
     }
     
-    @inlinable public static func style(_ locale: Locale, precision: Precision, separator: Separator) -> Style {
+    @inlinable public static func style(_ locale: Locale, precision: Precision, separator: Separator) -> IntegerFormatStyle<Number> {
         .init(locale: locale).precision(precision).decimalSeparator(strategy: separator)
     }
 }

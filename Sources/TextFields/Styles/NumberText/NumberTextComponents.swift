@@ -63,6 +63,10 @@ public struct NumberTextComponents {
         minus.isEmpty && upper.isEmpty && separator.isEmpty && lower.isEmpty
     }
     
+    @inlinable var hasNoDigits: Bool {
+        upper.isEmpty && lower.isEmpty
+    }
+    
     // MARK: Transformations
     
     @inlinable mutating func toggleSign() {

@@ -10,8 +10,7 @@ import struct Foundation.Locale
 
 // MARK: - NumberTextStyle
 
-#warning("FIXME: '1' cannot be deleted, that is one upper digit.")
-#warning("FIXME: It does not update immediately.")
+#warning("FIXME: It does not update immediately, see .values(1000...).")
 
 @available(iOS 15.0, *)
 public struct NumberText<Base: NumberTextCompatible>: DiffableTextStyle {
@@ -131,7 +130,7 @@ extension NumberText {
             return nil
         }
         
-        guard let number = Item.number(components) else {
+        guard let number = number(components) else {
             return nil
         }
 
@@ -189,7 +188,7 @@ extension NumberText {
         
         // --------------------------------- //
         
-        guard let number = Item.number(components), values.editableValidation(number) else {
+        guard let number = number(components), values.editableValidation(number) else {
             return nil
         }
 
@@ -222,6 +221,14 @@ extension NumberText {
         var characters = snapshot.content()
         characters = characters.replacingOccurrences(of: separator, with: Components.separator)
         return Components(from: characters)
+    }
+    
+    @inlinable func number(_ components: Components) -> Value? {
+        guard !components.hasNoDigits else {
+            return Item.zero
+        }
+        
+        return Item.number(components)
     }
     
     @inlinable func snapshot(_ characters: String) -> Snapshot {
