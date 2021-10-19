@@ -22,10 +22,10 @@ public protocol NumberTextPrecisionItem {
 
 @available(iOS 15.0, *)
 public struct NumberTextPrecision<Item: NumberTextPrecisionItem> {
-    @usableFromInline typealias Constants = NumberTextPrecisionConstants
+    @usableFromInline typealias Defaults = NumberTextPrecisionDefaults
     @usableFromInline typealias Strategy = NumberTextPrecisionStrategy
     @usableFromInline typealias Total = NumberTextPrecisionTotal<Item>
-    @usableFromInline typealias Separate = NumberTextPrecisionSeparate<Item>
+    @usableFromInline typealias Parts = NumberTextPrecisionParts<Item>
     
     // MARK: Properties
     
@@ -50,17 +50,17 @@ public struct NumberTextPrecision<Item: NumberTextPrecisionItem> {
     }
     
     @inlinable public static func max(_ total: Int) -> Self {
-        digits(Constants.totalLowerBound...total)
+        digits(Defaults.totalLowerBound...total)
     }
     
     // MARK: Initializers: Separate
     
     @inlinable public static func digits<R0: RangeExpression, R1: RangeExpression>(integer: R0, fraction: R1) -> Self where R0.Bound == Int, R1.Bound == Int {
-        .init(strategy: Separate(upper: integer, lower: fraction))
+        .init(strategy: Parts(upper: integer, lower: fraction))
     }
     
     @inlinable public static func max(integer: Int, fraction: Int) -> Self {
-        .digits(integer: Constants.upperLowerBound...integer, fraction: Constants.lowerLowerBound...fraction)
+        .digits(integer: Defaults.upperLowerBound...integer, fraction: Defaults.lowerLowerBound...fraction)
     }
     
     @inlinable public static func max(integer: Int) -> Self {
@@ -85,8 +85,8 @@ extension NumberTextPrecision {
     
     #warning("numberOfIntegerDigits: components.integerDigits.count, numberOfFractionDigits: components.decimalDigits.count")
     @inlinable func editableStyle(integersLowerBound: Int? = nil, fractionLowerBound: Int? = nil) -> NumberFormatStyleConfiguration.Precision {
-        let integersLimits = (integersLowerBound ?? Constants.upperLowerBound) ... Item.maxUpperDigits
-        let fractionLimits = (fractionLowerBound ?? Constants.lowerLowerBound) ... Item.maxLowerDigits
+        let integersLimits = (integersLowerBound ?? Defaults.upperLowerBound) ... Item.maxUpperDigits
+        let fractionLimits = (fractionLowerBound ?? Defaults.lowerLowerBound) ... Item.maxLowerDigits
         
         return .integerAndFractionLength(integerLimits: integersLimits, fractionLimits: fractionLimits)
     }
@@ -100,6 +100,7 @@ extension NumberTextPrecision {
 
 @available(iOS 15.0, *)
 @usableFromInline protocol NumberTextPrecisionStrategy {
+    typealias Defaults = NumberTextPrecisionDefaults
     
     func displayableStyle() -> NumberFormatStyleConfiguration.Precision
         
@@ -110,7 +111,6 @@ extension NumberTextPrecision {
 
 @available(iOS 15.0, *)
 @usableFromInline struct NumberTextPrecisionTotal<Item: NumberTextPrecisionItem>: NumberTextPrecisionStrategy {
-    @usableFromInline typealias Constants = NumberTextPrecisionConstants
 
     // MARK: Properties
     
@@ -142,8 +142,7 @@ extension NumberTextPrecision {
 // MARK: - Strategies: Separate
 
 @available(iOS 15.0, *)
-@usableFromInline struct NumberTextPrecisionSeparate<Item: NumberTextPrecisionItem>: NumberTextPrecisionStrategy {
-    @usableFromInline typealias Constants = NumberTextPrecisionConstants
+@usableFromInline struct NumberTextPrecisionParts<Item: NumberTextPrecisionItem>: NumberTextPrecisionStrategy {
 
     // MARK: Properties
     
@@ -162,13 +161,13 @@ extension NumberTextPrecision {
     @inlinable init<R: RangeExpression>(upper: R) where R.Bound == Int {
         let upper = Self.limits(upper, max: Item.maxUpperDigits)
         
-        self.init(upper: upper, lower: Constants.lowerLowerBound...)
+        self.init(upper: upper, lower: Defaults.lowerLowerBound...)
     }
     
     @inlinable init<R: RangeExpression>(lower: R) where R.Bound == Int {
         let lower = Self.limits(lower, max: Item.maxLowerDigits)
         
-        self.init(upper: Constants.upperLowerBound..., lower: lower)
+        self.init(upper: Defaults.upperLowerBound..., lower: lower)
     }
     
     // MARK: Initializers: Helpers
@@ -196,9 +195,9 @@ extension NumberTextPrecision {
     }
 }
 
-// MARK: - NumberTextPrecisionConstants
+// MARK: - NumberTextPrecisionDefaults
 
-@usableFromInline enum NumberTextPrecisionConstants {
+@usableFromInline enum NumberTextPrecisionDefaults {
     @usableFromInline static let totalLowerBound: Int = 1
     @usableFromInline static let upperLowerBound: Int = 1
     @usableFromInline static let lowerLowerBound: Int = 0
