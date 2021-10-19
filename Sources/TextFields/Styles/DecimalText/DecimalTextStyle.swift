@@ -41,9 +41,16 @@ public struct DecimalTextStyle: DiffableTextStyle {
         base.precision(precision.displayableStyle())
     }
     
-    @inlinable func editableStyle(decimalSeparator: Bool = false, fractionLowerBound: Int? = nil) -> Base {
-        base.precision(precision.editableStyle(integersLowerBound: 1, fractionLowerBound: fractionLowerBound))
-            .decimalSeparator(strategy: decimalSeparator ? .always : .automatic)
+    @inlinable func editableStyle(digits: (upper: Int, lower: Int)? = nil, separator: Bool = false) -> Base {
+        func precisionStrategy() -> BasePrecisionStrategy {
+            guard let digits = digits else {
+                return precision.editableStyle()
+            }
+            
+            return precision.editableStyle(digits: digits)
+        }
+                
+        return base.precision(precisionStrategy()).decimalSeparator(strategy: separator ? .always : .automatic)
     }
     
     // MARK: Maps
@@ -169,29 +176,26 @@ extension DecimalTextStyle {
         guard values.min < .zero || components.sign.isEmpty else {
             return nil
         }
+        
+        let digits = (components.integerDigits.count, components.decimalDigits.count)
                 
-        if components.integerDigits.isEmpty, components.decimalSeparator.isEmpty, components.decimalDigits.isEmpty {
-            return Snapshot(components.characters(), only: .content)
-        }
-                                
-        guard precision.validate(editable: components) else {
-            return nil
-        }
+   
+        guard precision.editableValidation(digits: digits) else { return nil }
         
         // style
         
-        let style = editableStyle(decimalSeparator: !components.decimalSeparator.isEmpty, fractionLowerBound: components.decimalDigits.count)
+        let style = editableStyle(digits: digits, separator: !components.decimalSeparator.isEmpty)
 
         // decimal
         
         guard let decimal = components.decimal() else {
             return nil
         }
-        
+                
         guard values.editableValidation(decimal) else {
             return nil
         }
-        
+                
         // characters
         
         var characters = style.format(decimal)
@@ -199,7 +203,7 @@ extension DecimalTextStyle {
         if !components.sign.isEmpty, !characters.hasPrefix(components.sign) {
             characters = components.sign + characters
         }
-        
+                        
         // snapshot
         
         return snapshot(characters)

@@ -59,6 +59,14 @@ public struct NumberTextPrecision<Item: NumberTextPrecisionItem> {
         .init(strategy: Parts(upper: integer, lower: fraction))
     }
     
+    @inlinable public static func digits<R: RangeExpression>(integer: R) -> Self where R.Bound == Int {
+        .init(strategy: Parts(upper: integer, lower: Defaults.lowerLowerBound...))
+    }
+    
+    @inlinable public static func digits<R: RangeExpression>(fraction: R) -> Self where R.Bound == Int {
+        .init(strategy: Parts(upper: Defaults.upperLowerBound..., lower: fraction))
+    }
+    
     @inlinable public static func max(integer: Int, fraction: Int) -> Self {
         .digits(integer: Defaults.upperLowerBound...integer, fraction: Defaults.lowerLowerBound...fraction)
     }
@@ -83,16 +91,18 @@ extension NumberTextPrecision {
         strategy.displayableStyle()
     }
     
-    #warning("numberOfIntegerDigits: components.integerDigits.count, numberOfFractionDigits: components.decimalDigits.count")
-    @inlinable func editableStyle(integersLowerBound: Int? = nil, fractionLowerBound: Int? = nil) -> NumberFormatStyleConfiguration.Precision {
-        let integersLimits = (integersLowerBound ?? Defaults.upperLowerBound) ... Item.maxUpperDigits
-        let fractionLimits = (fractionLowerBound ?? Defaults.lowerLowerBound) ... Item.maxLowerDigits
+    @inlinable func editableStyle(digits: (upper: Int, lower: Int) = (Defaults.upperLowerBound, Defaults.lowerLowerBound)) -> NumberFormatStyleConfiguration.Precision {
         
-        return .integerAndFractionLength(integerLimits: integersLimits, fractionLimits: fractionLimits)
+        let upper =            1 ... Item.maxUpperDigits
+        let lower = digits.lower ... Item.maxLowerDigits
+        
+        print(upper, lower)
+        
+        return .integerAndFractionLength(integerLimits: upper, fractionLimits: lower)
     }
 
-    @inlinable func validate(editable components: DecimalTextComponents) -> Bool {
-        strategy.editableValidation(numberOfIntegerDigits: components.integerDigits.count, numberOfFractionDigits: components.decimalDigits.count)
+    @inlinable func editableValidation(digits: (upper: Int, lower: Int)) -> Bool {
+        strategy.editableValidation(digits: digits)
     }
 }
 
@@ -104,7 +114,7 @@ extension NumberTextPrecision {
     
     func displayableStyle() -> NumberFormatStyleConfiguration.Precision
         
-    func editableValidation(numberOfIntegerDigits: Int, numberOfFractionDigits: Int) -> Bool
+    func editableValidation(digits: (upper: Int, lower: Int)) -> Bool
 }
 
 // MARK: - Strategies: Total
@@ -134,8 +144,8 @@ extension NumberTextPrecision {
         .significantDigits(total)
     }
         
-    @inlinable func editableValidation(numberOfIntegerDigits: Int, numberOfFractionDigits: Int) -> Bool {
-        numberOfIntegerDigits + numberOfFractionDigits <= total.upperBound
+    @inlinable func editableValidation(digits: (upper: Int, lower: Int)) -> Bool {
+        digits.upper + digits.lower <= total.upperBound
     }
 }
 
@@ -182,13 +192,13 @@ extension NumberTextPrecision {
         .integerAndFractionLength(integerLimits: upper, fractionLimits: lower)
     }
     
-    @inlinable func editableValidation(numberOfIntegerDigits: Int, numberOfFractionDigits: Int) -> Bool {
+    @inlinable func editableValidation(digits: (upper: Int, lower: Int)) -> Bool {
         func validateTotal() -> Bool {
-            numberOfIntegerDigits + numberOfFractionDigits <= Item.maxTotalDigits
+            digits.upper + digits.lower <= Item.maxTotalDigits
         }
         
         func validateParts() -> Bool {
-            numberOfIntegerDigits <= upper.upperBound && numberOfFractionDigits <= lower.upperBound
+            digits.upper <= upper.upperBound && digits.lower <= lower.upperBound
         }
         
         return validateTotal() && validateParts()

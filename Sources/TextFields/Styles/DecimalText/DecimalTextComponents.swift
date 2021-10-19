@@ -41,7 +41,9 @@ public struct DecimalTextComponents {
     // MARK: Utilities
     
     @inlinable func decimal() -> Decimal? {
-        Decimal(string: characters())
+        guard !isEmpty else { return .zero }
+        
+        return Decimal(string: characters())
     }
     
     @inlinable func characters() -> String {
