@@ -50,12 +50,12 @@ public struct NumberTextValues<Item: NumberTextValuesItem> {
     
     // MARK: Utilities
     
-    @inlinable func displayableStyle(_ decimal: Number) -> Number {
-        Swift.max(min, Swift.min(decimal, max))
+    @inlinable func displayableStyle(_ value: Number) -> Number {
+        Swift.max(min, Swift.min(value, max))
     }
     
-    @inlinable func editableValidation(_ decimal: Number) -> Bool {
-        Swift.min(min, Self.zero) <= decimal && decimal <= Swift.max(Self.zero, max)
+    @inlinable func editableValidation(_ value: Number) -> Bool {
+        Swift.min(min, Self.zero) <= value && value <= Swift.max(Self.zero, max)
     }
 }
 

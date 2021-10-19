@@ -1,60 +1,60 @@
 //
-//  DiffableTextStyle.swift
+//  NumberTextStyle.swift
 //  
 //
-//  Created by Oscar Byström Ericsson on 2021-09-28.
+//  Created by Oscar Byström Ericsson on 2021-10-19.
 //
 
-
-#warning("Sign should be toggleable, and sign deletions should pass through prefixes.")
-#warning("This means than range and replacement need to exposed, maybe.")
-
 import SwiftUI
+import struct Foundation.Locale
 
-#if os(iOS)
+// MARK: - NumberTextStyle
 
-#warning("Generalize it, so that one can be done for Int as well.")
+#warning("FIXME: '1' cannot be deleted, that is one upper digit.")
+
 @available(iOS 15.0, *)
-public struct DecimalTextStyle: DiffableTextStyle {
-    @usableFromInline typealias Base = Decimal.FormatStyle
-    @usableFromInline typealias BasePrecision = Base.Configuration.Precision
-    @usableFromInline typealias BaseSeparator = Base.Configuration.DecimalSeparatorDisplayStrategy
-    @usableFromInline typealias Components = DecimalTextComponents
+public struct NumberTextStyle<Item: NumberTextStyleItem>: DiffableTextStyle {
+    public typealias Value = Item.Number
+    
+    @usableFromInline typealias BasePrecision = NumberFormatStyleConfiguration.Precision
+    @usableFromInline typealias BaseSeparator = NumberFormatStyleConfiguration.DecimalSeparatorDisplayStrategy
+    @usableFromInline typealias Components = NumberTextComponents
 
-    public typealias Values = NumberTextValues<DecimalTextItem>
-    public typealias Precision = NumberTextPrecision<DecimalTextItem>
-
+    public typealias Values = NumberTextValues<Item>
+    public typealias Precision = NumberTextPrecision<Item>
+    
     // MARK: Properties
     
-    @usableFromInline var base: Base
+    @usableFromInline var locale: Locale
     @usableFromInline var values: Values = .all
     @usableFromInline var precision: Precision = .max
         
     // MARK: Initializers
     
     @inlinable public init(locale: Locale = .autoupdatingCurrent) {
-        self.base = Base(locale: locale)
+        self.locale = locale
+//        self.base = Base(locale: locale)
     }
     
     // MARK: Styles
     
-    @inlinable func displayableStyle() -> Base {
+    @inlinable func displayableStyle() -> Item.Style {
         let precision: BasePrecision = precision.displayableStyle()
 
-        return base.precision(precision)
+        return Item.style(locale, precision: precision, separator: .automatic)
     }
     
-    @inlinable func editableStyle(digits: (upper: Int, lower: Int)? = nil, separator: Bool = false) -> Base {
+    @inlinable func editableStyle(digits: (upper: Int, lower: Int)? = nil, separator: Bool = false) -> Item.Style {
         let precision: BasePrecision = precision.editableStyle(digits: digits)
         let separator: BaseSeparator = separator ? .always : .automatic
         
-        return base.precision(precision).decimalSeparator(strategy: separator)
+        return Item.style(locale, precision: precision, separator: separator)
     }
     
     // MARK: Maps
     
     @inlinable public func locale(_ locale: Locale) -> Self {
-        map({ $0.base = $0.base.locale(locale) })
+        map({ $0.locale = locale })
     }
     
     @inlinable public func precision(_ newValue: Precision) -> Self {
@@ -75,13 +75,9 @@ public struct DecimalTextStyle: DiffableTextStyle {
 // MARK: DecimalTextStyle: Getters
 
 @available(iOS 15.0, *)
-extension DecimalTextStyle {
+extension NumberTextStyle {
     
     // MARK: Localization
-    
-    @inlinable var locale: Locale {
-        base.locale
-    }
     
     @inlinable var decimalSeparator: String {
         locale.decimalSeparator ?? "."
@@ -95,7 +91,7 @@ extension DecimalTextStyle {
   
     @inlinable func content() -> Set<Character> {
         var set = Set<Character>()
-        set.formUnion(Components.sign)
+        set.formUnion(Components.minus)
         set.formUnion(Components.digits)
         set.formUnion(decimalSeparator)
         return set
@@ -111,17 +107,17 @@ extension DecimalTextStyle {
 // MARK: DecimalTextStyle: DiffableTextStyle
 
 @available(iOS 15.0, *)
-extension DecimalTextStyle {
+extension NumberTextStyle {
     
     // MARK: Snapshot
-        
-    @inlinable public func showcase(_ value: Decimal) -> Snapshot {
+    
+    @inlinable public func showcase(_ value: Value) -> Snapshot {
         let style = displayableStyle()
         
         return snapshot(style.format(value))
     }
     
-    @inlinable public func snapshot(_ value: Decimal) -> Snapshot {
+    @inlinable public func snapshot(_ value: Value) -> Snapshot {
         let style = editableStyle()
         
         return snapshot(style.format(value))
@@ -129,18 +125,16 @@ extension DecimalTextStyle {
         
     // MARK: Value
 
-    @inlinable public func parse(_ snapshot: Snapshot) -> Decimal? {
+    @inlinable public func parse(_ snapshot: Snapshot) -> Value? {
         guard let components = components(snapshot) else {
             return nil
         }
         
-        return components.decimal()
-    }
-    
-    // MARK: Value, Process
-    
-    @inlinable public func process(_ value: Decimal) -> Decimal {
-        values.displayableStyle(value)
+        guard let number = Item.number(components) else {
+            return nil
+        }
+
+        return values.displayableStyle(number)
     }
     
     // MARK: Merge
@@ -151,7 +145,7 @@ extension DecimalTextStyle {
         var content = content
         var toggleSign = false
         
-        if content.characters == Components.sign {
+        if content.characters == Components.minus {
             content = Snapshot()
             toggleSign = true
         }
@@ -163,7 +157,7 @@ extension DecimalTextStyle {
         }
 
         if toggleSign {
-            components.sign = components.sign.isEmpty ? Components.sign : ""
+            components.minus = components.minus.isEmpty ? Components.minus : String()
         }
         
         return self.snapshot(components)
@@ -175,13 +169,13 @@ extension DecimalTextStyle {
         
         // --------------------------------- //
         
-        guard values.min < .zero || components.sign.isEmpty else {
+        guard values.min < Item.zero || components.minus.isEmpty else {
             return nil
         }
         
         // --------------------------------- //
         
-        let digits = (components.integerDigits.count, components.decimalDigits.count)
+        let digits = (components.upper.count, components.lower.count)
         
         // --------------------------------- //
         
@@ -191,22 +185,23 @@ extension DecimalTextStyle {
         
         // --------------------------------- //
         
-        guard let decimal = components.decimal() else {
+        guard let number = Item.number(components) else {
             return nil
         }
-                
-        guard values.editableValidation(decimal) else {
+        
+        guard values.editableValidation(number) else {
+            // TODO: Should this check be here?
             return nil
         }
         
         // --------------------------------- //
         
-        let style = editableStyle(digits: digits, separator: !components.decimalSeparator.isEmpty)
+        let style = editableStyle(digits: digits, separator: !components.separator.isEmpty)
                         
-        var characters = style.format(decimal)
+        var characters = style.format(number)
         
-        if !components.sign.isEmpty, !characters.hasPrefix(components.sign) {
-            characters = components.sign + characters
+        if !components.minus.isEmpty, !characters.hasPrefix(components.minus) {
+            characters = components.minus + characters
         }
                         
         // --------------------------------- //
@@ -215,6 +210,12 @@ extension DecimalTextStyle {
     }
     
     // MARK: Helpers
+    
+    @inlinable func components(_ snapshot: Snapshot) -> Components? {
+        var characters = snapshot.content()
+        characters = characters.replacingOccurrences(of: decimalSeparator, with: Components.separator)
+        return Components(from: characters)
+    }
     
     @inlinable func snapshot(_ characters: String) -> Snapshot {
         var snapshot = Snapshot()
@@ -232,12 +233,4 @@ extension DecimalTextStyle {
         
         return snapshot
     }
-    
-    @inlinable func components(_ snapshot: Snapshot) -> Components? {
-        var characters = snapshot.content()
-        characters = characters.replacingOccurrences(of: decimalSeparator, with: Components.decimalSeparator)
-        return DecimalTextComponents(from: characters)
-    }
 }
-
-#endif

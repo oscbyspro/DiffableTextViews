@@ -9,6 +9,7 @@ import enum SwiftUI.NumberFormatStyleConfiguration
 
 // MARK: - NumberTextPrecisionItem
 
+#warning("Add protocols for Integer/Float distinction that limits which static functions are available.")
 public protocol NumberTextPrecisionItem {
     
     // MARK: Properties: Static
