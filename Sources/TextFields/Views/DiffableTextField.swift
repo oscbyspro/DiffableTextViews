@@ -77,7 +77,7 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
             synchronize()
         }
         
-        public func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        public func textField(_ textField: UITextField, shouldChangeCharactersIn bounds: NSRange, replacementString string: String) -> Bool {
             
             // --------------------------------- //
             
@@ -85,20 +85,20 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
             
             // --------------------------------- //
             
-            let range = snapshot.indices(in: range)
+            let bounds = snapshot.indices(in: bounds)
             let replacement = Snapshot(string, only: .content)
                         
             // --------------------------------- //
             
             guard let nextSnapshot = source.style
-                    .merge(snapshot, with: replacement, in: range)
+                    .merge(snapshot, with: replacement, in: bounds)
                     .map(source.style.process) else { return false }
                         
             guard let nextValue = source.style
                     .parse(nextSnapshot)
                     .map(source.style.process) else { return false }
                         
-            let nextSelection = selection.update(with: range.upperBound).translate(to: nextSnapshot)
+            let nextSelection = selection.update(with: bounds.upperBound).translate(to: nextSnapshot)
             
             // --------------------------------- //
             
@@ -156,25 +156,19 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
             
             var nextValue = source.value.wrappedValue
             nextValue = source.style.process(nextValue)
+                        
+            var nextSnapshot = uiView.isEditing
+            ? source.style.snapshot(nextValue)
+            : source.style.showcase(nextValue)
+            nextSnapshot = source.style.process(nextSnapshot)
             
+            let nextSelection = selection.translate(to: nextSnapshot)
+                
             // --------------------------------- //
             
-            func makeSnapshot() -> Snapshot {
-                uiView.isEditing ? source.style.snapshot(nextValue) : source.style.showcase(nextValue)
-            }
-            
-            // --------------------------------- //
-            
-            if value != nextValue {
-                var nextSnapshot = makeSnapshot()
-                nextSnapshot = source.style.process(nextSnapshot)
-                
-                let nextSelection = selection.translate(to: nextSnapshot)
-                
-                self.value = nextValue
-                self.snapshot = nextSnapshot
-                self.selection = nextSelection
-            }
+            self.value = nextValue
+            self.snapshot = nextSnapshot
+            self.selection = nextSelection
         }
         
         @inlinable func push() {

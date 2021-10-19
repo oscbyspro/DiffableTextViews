@@ -38,47 +38,40 @@ public struct NumberTextPrecision<Item: NumberTextPrecisionItem> {
         self.strategy = strategy
     }
     
-    // MARK: Initializers: Default
+    // MARK: Initializers: Defaults
     
     @inlinable public static var max: Self {
-        .max(digits: Item.maxTotalDigits)
+        .max(Item.maxTotalDigits)
     }
-    
+        
     // MARK: Initializers: Total
     
-
-    @inlinable public static func digits<R: RangeExpression>(_ digits: R) -> Self where R.Bound == Int {
-        .init(strategy: Total(significands: digits))
+    @inlinable public static func digits<R: RangeExpression>(_ limits: R) -> Self
+    where R.Bound == Int {
+        .init(strategy: Total(significands: limits))
     }
     
-    @inlinable public static func max(digits: Int) -> Self {
-        .init(strategy: Total(significands: 1...digits))
+    @inlinable public static func max(_ limit: Int) -> Self {
+        digits(1 ... limit)
     }
     
     // MARK: Initializers: Separate
     
-    @inlinable public static func digits<R0: RangeExpression, R1: RangeExpression>(integerLimits: R0, fractionLimits: R1) -> Self where R0.Bound == Int, R1.Bound == Int {
-        .init(strategy: Separate(upper: integerLimits, lower: fractionLimits))
+    @inlinable public static func digits<R0: RangeExpression, R1: RangeExpression>(integer: R0, fraction: R1) -> Self
+    where R0.Bound == Int, R1.Bound == Int {
+        .init(strategy: Separate(upper: integer, lower: fraction))
     }
     
-    @inlinable public static func digits<R: RangeExpression>(integerLimits: R) -> Self where R.Bound == Int {
-        .init(strategy: Separate(upper: integerLimits))
+    @inlinable public static func max(integer: Int, fraction: Int) -> Self {
+        .digits(integer: 1 ... integer, fraction: 0 ... fraction)
     }
     
-    @inlinable public static func digits<R: RangeExpression>(fractionLimits: R) -> Self where R.Bound == Int {
-        .init(strategy: Separate(lower: fractionLimits))
+    @inlinable public static func max(integer: Int) -> Self {
+        .max(integer: integer, fraction: Item.maxLowerDigits)
     }
     
-    @inlinable public static func max(integerDigits: Int, fractionDigits: Int) -> Self {
-        .digits(integerLimits: 1 ... integerDigits, fractionLimits: 0 ... fractionDigits)
-    }
-    
-    @inlinable public static func max(integerDigits: Int) -> Self {
-        .digits(integerLimits: 1 ... integerDigits)
-    }
-    
-    @inlinable public static func max(fractionDigits: Int) -> Self {
-        .digits(fractionLimits: 0 ... fractionDigits)
+    @inlinable public static func max(fraction: Int) -> Self {
+        .max(integer: Item.maxUpperDigits, fraction: fraction)
     }
 }
 
@@ -96,7 +89,7 @@ extension NumberTextPrecision {
     @inlinable func editableStyle(integersLowerBound: Int? = nil, decimalsLowerBound: Int? = nil) -> NumberFormatStyleConfiguration.Precision {
         let integerLimits = (integersLowerBound ?? 1) ... Item.maxUpperDigits
         let decimalLimits = (decimalsLowerBound ?? 0) ... Item.maxLowerDigits
-
+        
         return .integerAndFractionLength(integerLimits: integerLimits, fractionLimits: decimalLimits)
     }
 
@@ -162,29 +155,29 @@ extension NumberTextPrecision {
     @inlinable init<R0: RangeExpression, R1: RangeExpression>(upper: R0, lower: R1) where R0.Bound == Int, R1.Bound == Int {
         self.upper = Self.limits(upper, max: Item.maxUpperDigits)
         self.lower = Self.limits(lower, max: Item.maxLowerDigits)
-                
-        precondition(self.lower.upperBound + self.lower.upperBound <= Item.maxTotalDigits)
     }
     
     @inlinable init<R: RangeExpression>(upper: R) where R.Bound == Int {
         let upper = Self.limits(upper, max: Item.maxUpperDigits)
         
-        self.init(upper: upper, lower: 0 ... (Item.maxTotalDigits - upper.upperBound))
+        self.init(upper: upper, lower: 0...)
     }
     
     @inlinable init<R: RangeExpression>(lower: R) where R.Bound == Int {
         let lower = Self.limits(lower, max: Item.maxLowerDigits)
         
-        self.init(upper: 1 ... (Item.maxTotalDigits - lower.upperBound), lower: lower)
+        self.init(upper: 1..., lower: lower)
     }
     
     // MARK: Protocol: Strategy
     
+    #warning("How should this be handled when: upper + lower > total?")
     @inlinable func displayableStyle() -> NumberFormatStyleConfiguration.Precision {
         .integerAndFractionLength(integerLimits: upper, fractionLimits: lower)
     }
     
     @inlinable func editableValidation(numberOfIntegerDigits: Int, numberOfFractionDigits: Int) -> Bool {
+        numberOfIntegerDigits + numberOfFractionDigits <= Item.maxTotalDigits &&
         numberOfIntegerDigits <= upper.upperBound && numberOfFractionDigits <= lower.upperBound
     }
     

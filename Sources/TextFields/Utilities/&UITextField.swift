@@ -58,9 +58,9 @@ extension UITextField {
 extension UITextField {
     // MARK: Offsets
     
-    @inlinable func offsets(in range: UITextRange) -> Range<Int> {
-        let start = offset(from: beginningOfDocument, to: range.start)
-        let count = offset(from: range.start, to: range.end)
+    @inlinable func offsets(in bounds: UITextRange) -> Range<Int> {
+        let start = offset(from: beginningOfDocument, to: bounds.start)
+        let count = offset(from: bounds.start, to: bounds.end)
         
         return start ..< (start + count)
     }

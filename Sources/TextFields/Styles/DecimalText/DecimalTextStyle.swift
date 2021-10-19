@@ -142,7 +142,7 @@ extension DecimalTextStyle {
     
     // MARK: Process
     
-    @inlinable public func merge(_ snapshot: Snapshot, with content: Snapshot, in range: Range<Snapshot.Index>) -> Snapshot? {
+    @inlinable public func merge(_ snapshot: Snapshot, with content: Snapshot, in bounds: Range<Snapshot.Index>) -> Snapshot? {
         #warning("WIP")
         var content = content
         var toggleSign = false
@@ -152,7 +152,7 @@ extension DecimalTextStyle {
             toggleSign = true
         }
         
-        let result = snapshot.replace(range, with: content)
+        let result = snapshot.replace(bounds, with: content)
 
         guard var components = components(result) else {
             return nil
