@@ -1,5 +1,5 @@
 //
-//  IntNumberTextItem.swift
+//  NumberTextInt.swift
 //  
 //
 //  Created by Oscar Byström Ericsson on 2021-10-19.
@@ -8,7 +8,7 @@
 import Foundation
 
 @available(iOS 15.0, *)
-public enum IntNumberTextItem: NumberTextStyleItem, NumberTextValuesItem, NumberTextPrecisionItem {
+public enum NumberTextInt: NumberTextStyleItem, NumberTextValuesItem, NumberTextPrecisionItem {
     public typealias Number = Int
     public typealias Style = IntegerFormatStyle<Number>
     

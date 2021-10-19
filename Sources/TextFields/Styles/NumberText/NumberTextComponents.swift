@@ -63,6 +63,12 @@ public struct NumberTextComponents {
         minus.isEmpty && upper.isEmpty && separator.isEmpty && lower.isEmpty
     }
     
+    // MARK: Transformations
+    
+    @inlinable mutating func toggleSign() {
+        minus = minus.isEmpty ? Self.minus : String()
+    }
+    
     // MARK: Utilities
     
     @inlinable func characters() -> String {

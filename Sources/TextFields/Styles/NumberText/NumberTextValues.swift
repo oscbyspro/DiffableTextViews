@@ -58,15 +58,3 @@ public struct NumberTextValues<Item: NumberTextValuesItem> {
         Swift.min(min, Self.zero) <= value && value <= Swift.max(Self.zero, max)
     }
 }
-
-// MARK: - NumberTextValuesItem
-
-public protocol NumberTextValuesItem {
-    associatedtype Number: Comparable
-    
-    // MARK: Properties: Static
-    
-    static var zero: Number { get }
-    static var  max: Number { get }
-    static var  min: Number { get }
-}

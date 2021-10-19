@@ -11,6 +11,7 @@ import struct Foundation.Locale
 // MARK: - NumberTextStyle
 
 #warning("FIXME: '1' cannot be deleted, that is one upper digit.")
+#warning("FIXME: It does not update immediately.")
 
 @available(iOS 15.0, *)
 public struct NumberTextStyle<Item: NumberTextStyleItem>: DiffableTextStyle {
@@ -33,7 +34,6 @@ public struct NumberTextStyle<Item: NumberTextStyleItem>: DiffableTextStyle {
     
     @inlinable public init(locale: Locale = .autoupdatingCurrent) {
         self.locale = locale
-//        self.base = Base(locale: locale)
     }
     
     // MARK: Styles
@@ -79,7 +79,7 @@ extension NumberTextStyle {
     
     // MARK: Localization
     
-    @inlinable var decimalSeparator: String {
+    @inlinable var separator: String {
         locale.decimalSeparator ?? "."
     }
     
@@ -93,7 +93,7 @@ extension NumberTextStyle {
         var set = Set<Character>()
         set.formUnion(Components.minus)
         set.formUnion(Components.digits)
-        set.formUnion(decimalSeparator)
+        set.formUnion(separator)
         return set
     }
     
@@ -114,12 +114,16 @@ extension NumberTextStyle {
     @inlinable public func showcase(_ value: Value) -> Snapshot {
         let style = displayableStyle()
         
+        print("display:", value)
+        
         return snapshot(style.format(value))
     }
     
     @inlinable public func snapshot(_ value: Value) -> Snapshot {
         let style = editableStyle()
         
+        print("snapshot:", value)
+
         return snapshot(style.format(value))
     }
         
@@ -140,24 +144,24 @@ extension NumberTextStyle {
     // MARK: Merge
     
     #warning("TODO")
-    @inlinable public func merge(_ snapshot: Snapshot, with content: Snapshot, in bounds: Range<Snapshot.Index>) -> Snapshot? {
+    @inlinable public func merge(_ snapshot: Snapshot, with replacement: Snapshot, in bounds: Range<Snapshot.Index>) -> Snapshot? {
         #warning("WIP")
-        var content = content
+        var replacement = replacement
         var toggleSign = false
         
-        if content.characters == Components.minus {
-            content = Snapshot()
+        if replacement.characters == Components.minus {
+            replacement = Snapshot()
             toggleSign = true
         }
         
-        let result = snapshot.replace(bounds, with: content)
+        let result = snapshot.replace(bounds, with: replacement)
 
         guard var components = components(result) else {
             return nil
         }
 
         if toggleSign {
-            components.minus = components.minus.isEmpty ? Components.minus : String()
+            components.toggleSign()
         }
         
         return self.snapshot(components)
@@ -213,7 +217,7 @@ extension NumberTextStyle {
     
     @inlinable func components(_ snapshot: Snapshot) -> Components? {
         var characters = snapshot.content()
-        characters = characters.replacingOccurrences(of: decimalSeparator, with: Components.separator)
+        characters = characters.replacingOccurrences(of: separator, with: Components.separator)
         return Components(from: characters)
     }
     

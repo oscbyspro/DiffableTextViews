@@ -8,12 +8,12 @@
 import struct Foundation.Locale
 import struct Foundation.Decimal
 
-// MARK: - DecimalTextItem
+// MARK: - NumberTextDecimal
 
 @available(iOS 15.0, *)
-public enum DecimalNumberTextItem: NumberTextStyleItem, NumberTextValuesItem, NumberTextPrecisionItem {
-    public typealias Style = Decimal.FormatStyle
+public enum NumberTextDecimal: NumberTextStyleItem, NumberTextValuesItem, NumberTextPrecisionItem {
     public typealias Number = Decimal
+    public typealias Style = Number.FormatStyle
     
     // MARK: Values
     

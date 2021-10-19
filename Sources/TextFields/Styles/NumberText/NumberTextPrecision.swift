@@ -7,18 +7,6 @@
 
 import enum SwiftUI.NumberFormatStyleConfiguration
 
-// MARK: - NumberTextPrecisionItem
-
-#warning("Add protocols for Integer/Float distinction that limits which static functions are available.")
-public protocol NumberTextPrecisionItem {
-    
-    // MARK: Properties: Static
-        
-    static var maxTotalDigits: Int { get }
-    static var maxUpperDigits: Int { get }
-    static var maxLowerDigits: Int { get }
-}
-
 // MARK: - NumberTextPrecision
 
 @available(iOS 15.0, *)

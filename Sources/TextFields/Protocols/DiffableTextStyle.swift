@@ -18,7 +18,7 @@ public protocol DiffableTextStyle {
     
     // MARK: 1
     
-    func merge(_ snapshot: Snapshot, with content: Snapshot, in range: Range<Snapshot.Index>) -> Snapshot?
+    func merge(_ snapshot: Snapshot, with replacement: Snapshot, in range: Range<Snapshot.Index>) -> Snapshot?
     
     func parse(_ snapshot: Snapshot) -> Value? // (!)
     
@@ -41,8 +41,8 @@ extension DiffableTextStyle {
         
     // MARK: 1
     
-    @inlinable public func merge(_ snapshot: Snapshot, with content: Snapshot, in range: Range<Snapshot.Index>) -> Snapshot? {
-        snapshot.replace(range, with: content)
+    @inlinable public func merge(_ snapshot: Snapshot, with replacement: Snapshot, in range: Range<Snapshot.Index>) -> Snapshot? {
+        snapshot.replace(range, with: replacement)
     }
     
     // MARK: 2
