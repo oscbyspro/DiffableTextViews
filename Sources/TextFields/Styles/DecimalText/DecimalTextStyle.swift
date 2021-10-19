@@ -13,11 +13,12 @@ import SwiftUI
 
 #if os(iOS)
 
+#warning("Generalize it, so that one can be done for Int as well.")
 @available(iOS 15.0, *)
 public struct DecimalTextStyle: DiffableTextStyle {
     @usableFromInline typealias Base = Decimal.FormatStyle
-    @usableFromInline typealias BasePrecisionStrategy = Base.Configuration.Precision
-    @usableFromInline typealias BaseSeparatorStrategy = Base.Configuration.DecimalSeparatorDisplayStrategy
+    @usableFromInline typealias BasePrecision = Base.Configuration.Precision
+    @usableFromInline typealias BaseSeparator = Base.Configuration.DecimalSeparatorDisplayStrategy
     @usableFromInline typealias Components = DecimalTextComponents
 
     public typealias Values = NumberTextValues<DecimalTextItem>
@@ -38,19 +39,16 @@ public struct DecimalTextStyle: DiffableTextStyle {
     // MARK: Styles
     
     @inlinable func displayableStyle() -> Base {
-        base.precision(precision.displayableStyle())
+        let precision: BasePrecision = precision.displayableStyle()
+
+        return base.precision(precision)
     }
     
     @inlinable func editableStyle(digits: (upper: Int, lower: Int)? = nil, separator: Bool = false) -> Base {
-        func precisionStrategy() -> BasePrecisionStrategy {
-            guard let digits = digits else {
-                return precision.editableStyle()
-            }
-            
-            return precision.editableStyle(digits: digits)
-        }
-                
-        return base.precision(precisionStrategy()).decimalSeparator(strategy: separator ? .always : .automatic)
+        let precision: BasePrecision = precision.editableStyle(digits: digits)
+        let separator: BaseSeparator = separator ? .always : .automatic
+        
+        return base.precision(precision).decimalSeparator(strategy: separator)
     }
     
     // MARK: Maps
@@ -136,19 +134,18 @@ extension DecimalTextStyle {
             return nil
         }
         
-        guard !components.isEmpty else {
-            return .zero
-        }
-        
         return components.decimal()
     }
+    
+    // MARK: Value, Process
     
     @inlinable public func process(_ value: Decimal) -> Decimal {
         values.displayableStyle(value)
     }
     
-    // MARK: Process
+    // MARK: Merge
     
+    #warning("TODO")
     @inlinable public func merge(_ snapshot: Snapshot, with content: Snapshot, in bounds: Range<Snapshot.Index>) -> Snapshot? {
         #warning("WIP")
         var content = content
@@ -171,22 +168,28 @@ extension DecimalTextStyle {
         
         return self.snapshot(components)
     }
+        
+    // MARK: Helpers
     
     @inlinable func snapshot(_ components: Components) -> Snapshot? {
+        
+        // --------------------------------- //
+        
         guard values.min < .zero || components.sign.isEmpty else {
             return nil
         }
         
+        // --------------------------------- //
+        
         let digits = (components.integerDigits.count, components.decimalDigits.count)
-                
-   
-        guard precision.editableValidation(digits: digits) else { return nil }
         
-        // style
+        // --------------------------------- //
         
-        let style = editableStyle(digits: digits, separator: !components.decimalSeparator.isEmpty)
-
-        // decimal
+        guard precision.editableValidation(digits: digits) else {
+            return nil
+        }
+        
+        // --------------------------------- //
         
         guard let decimal = components.decimal() else {
             return nil
@@ -195,16 +198,18 @@ extension DecimalTextStyle {
         guard values.editableValidation(decimal) else {
             return nil
         }
-                
-        // characters
         
+        // --------------------------------- //
+        
+        let style = editableStyle(digits: digits, separator: !components.decimalSeparator.isEmpty)
+                        
         var characters = style.format(decimal)
         
         if !components.sign.isEmpty, !characters.hasPrefix(components.sign) {
             characters = components.sign + characters
         }
                         
-        // snapshot
+        // --------------------------------- //
         
         return snapshot(characters)
     }

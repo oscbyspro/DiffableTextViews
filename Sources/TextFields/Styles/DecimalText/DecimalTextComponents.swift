@@ -41,9 +41,13 @@ public struct DecimalTextComponents {
     // MARK: Utilities
     
     @inlinable func decimal() -> Decimal? {
-        guard !isEmpty else { return .zero }
+        let characters = characters()
         
-        return Decimal(string: characters())
+        guard !characters.isEmpty else {
+            return .zero
+        }
+        
+        return Decimal(string: characters)
     }
     
     @inlinable func characters() -> String {
@@ -84,7 +88,9 @@ extension DecimalTextComponents {
             into: &components.decimalDigits)
         
         // validate
-        guard characters[index...].isEmpty else { return nil }
+        guard characters[index...].isEmpty else {
+            return nil
+        }
         
         // complete
         self = components
@@ -102,6 +108,7 @@ extension DecimalTextComponents {
     @inlinable static func parse(charactersIn set: Set<Character>, in characters: String, from index: inout String.Index, into storage: inout String) {
         for character in characters[index...] {
             guard set.contains(character) else { break }
+            
             storage.append(character)
             index = characters.index(after: index)
         }

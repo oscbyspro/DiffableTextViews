@@ -91,13 +91,12 @@ extension NumberTextPrecision {
         strategy.displayableStyle()
     }
     
-    @inlinable func editableStyle(digits: (upper: Int, lower: Int) = (Defaults.upperLowerBound, Defaults.lowerLowerBound)) -> NumberFormatStyleConfiguration.Precision {
+    @inlinable func editableStyle(digits: (upper: Int, lower: Int)?) -> NumberFormatStyleConfiguration.Precision {
+        let lowerLowerBound = digits?.lower ?? Defaults.lowerLowerBound
         
-        let upper =            1 ... Item.maxUpperDigits
-        let lower = digits.lower ... Item.maxLowerDigits
-        
-        print(upper, lower)
-        
+        let upper =               1 ... Item.maxUpperDigits
+        let lower = lowerLowerBound ... Item.maxLowerDigits
+                
         return .integerAndFractionLength(integerLimits: upper, fractionLimits: lower)
     }
 
