@@ -139,7 +139,6 @@ extension NumberText {
     
     // MARK: Merge
     
-    #warning("TODO")
     @inlinable public func merge(_ snapshot: Snapshot, with replacement: Snapshot, in bounds: Range<Snapshot.Index>) -> Snapshot? {
         var replacement = replacement
         
@@ -205,14 +204,6 @@ extension NumberText {
         // --------------------------------- //
         
         return snapshot(characters)
-    }
-    
-    // MARK: Commands
-    
-    @inlinable func processCommandToggleSign(input: inout Snapshot) -> Bool {
-        guard input.characters == Components.minus else { return false }
-        input.removeAll()
-        return true
     }
     
     // MARK: Helpers
