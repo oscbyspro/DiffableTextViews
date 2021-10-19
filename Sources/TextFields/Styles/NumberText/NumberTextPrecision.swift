@@ -20,21 +20,6 @@ public protocol NumberTextPrecisionItem {
     static var maxLowerDigits: Int { get }
 }
 
-public extension NumberTextPrecisionItem {
-    
-    @inlinable static var significandsLimit: Range<Int> {
-        0 ..< maxTotalDigits + 1
-    }
-    
-    @inlinable static var integerLimits: Range<Int> {
-        0 ..< maxUpperDigits + 1
-    }
-    
-    @inlinable static var fractionLimits: Range<Int> {
-        0 ..< maxLowerDigits + 1
-    }
-}
-
 // MARK: - NumberTextPrecision
 
 @available(iOS 15.0, *)
@@ -53,28 +38,47 @@ public struct NumberTextPrecision<Item: NumberTextPrecisionItem> {
         self.strategy = strategy
     }
     
+    // MARK: Initializers: Default
+    
+    @inlinable public static var max: Self {
+        .max(digits: Item.maxTotalDigits)
+    }
+    
     // MARK: Initializers: Total
     
-    @inlinable static func digits<R: RangeExpression>(_ digits: R) -> Self where R.Bound == Int {
+
+    @inlinable public static func digits<R: RangeExpression>(_ digits: R) -> Self where R.Bound == Int {
         .init(strategy: Total(significands: digits))
     }
     
-    @inlinable static func digits(max: Int) -> Self {
-        .init(strategy: Total(significands: 1...max))
+    @inlinable public static func max(digits: Int) -> Self {
+        .init(strategy: Total(significands: 1...digits))
     }
     
     // MARK: Initializers: Separate
     
-    @inlinable static func digits<R0: RangeExpression, R1: RangeExpression>(integerLimits: R0, fractionLimits: R1) -> Self where R0.Bound == Int, R1.Bound == Int {
+    @inlinable public static func digits<R0: RangeExpression, R1: RangeExpression>(integerLimits: R0, fractionLimits: R1) -> Self where R0.Bound == Int, R1.Bound == Int {
         .init(strategy: Separate(upper: integerLimits, lower: fractionLimits))
     }
     
-    @inlinable static func digits<R: RangeExpression>(integerLimits: R) -> Self where R.Bound == Int {
+    @inlinable public static func digits<R: RangeExpression>(integerLimits: R) -> Self where R.Bound == Int {
         .init(strategy: Separate(upper: integerLimits))
     }
     
-    @inlinable static func digits<R: RangeExpression>(fractionLimits: R) -> Self where R.Bound == Int {
+    @inlinable public static func digits<R: RangeExpression>(fractionLimits: R) -> Self where R.Bound == Int {
         .init(strategy: Separate(lower: fractionLimits))
+    }
+    
+    @inlinable public static func max(integerDigits: Int, fractionDigits: Int) -> Self {
+        .digits(integerLimits: 1 ... integerDigits, fractionLimits: 0 ... fractionDigits)
+    }
+    
+    @inlinable public static func max(integerDigits: Int) -> Self {
+        .digits(integerLimits: 1 ... integerDigits)
+    }
+    
+    @inlinable public static func max(fractionDigits: Int) -> Self {
+        .digits(fractionLimits: 0 ... fractionDigits)
     }
 }
 
@@ -158,7 +162,7 @@ extension NumberTextPrecision {
     @inlinable init<R0: RangeExpression, R1: RangeExpression>(upper: R0, lower: R1) where R0.Bound == Int, R1.Bound == Int {
         self.upper = Self.limits(upper, max: Item.maxUpperDigits)
         self.lower = Self.limits(lower, max: Item.maxLowerDigits)
-        
+                
         precondition(self.lower.upperBound + self.lower.upperBound <= Item.maxTotalDigits)
     }
     

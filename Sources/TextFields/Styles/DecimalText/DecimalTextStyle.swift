@@ -20,8 +20,8 @@ public struct DecimalTextStyle: DiffableTextStyle {
     @usableFromInline typealias BaseSeparatorStrategy = Base.Configuration.DecimalSeparatorDisplayStrategy
     @usableFromInline typealias Components = DecimalTextComponents
 
-    public typealias Values = DecimalTextValues
-    public typealias Precision = DecimalTextPrecision
+    public typealias Values = NumberTextValues<DecimalTextItem>
+    public typealias Precision = NumberTextPrecision<DecimalTextItem>
 
     // MARK: Properties
     

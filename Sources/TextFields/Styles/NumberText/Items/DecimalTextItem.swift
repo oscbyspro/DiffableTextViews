@@ -9,9 +9,9 @@ import struct Foundation.Decimal
 
 // MARK: - DecimalTextItem
 
-enum DecimalTextItem: NumberTextPrecisionItem, NumberTextValuesItem {
+public enum DecimalTextItem: NumberTextPrecisionItem, NumberTextValuesItem {
     
-    typealias Number = Decimal
+    public typealias Number = Decimal
     
     // MARK: Precision
  
