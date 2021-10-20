@@ -40,9 +40,6 @@ import struct Sequences.Walkthrough
     // MARK: Update: Field
     
     @inlinable func translate(to newValue: Field) -> Self {
-        
-        // --------------------------------- //
-        
         let options = SimilaritiesOptions<Symbol>
             .produce(.overshoot)
             .inspect(.only(\.content))
