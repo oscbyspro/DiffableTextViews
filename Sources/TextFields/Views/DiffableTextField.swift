@@ -129,15 +129,14 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
             // --------------------------------- //
             
             let nextSelection = selection.update(with: offsets)
-            let nextSelectionOffset = nextSelection.offsets
             
-            let changesToLowerBound = nextSelectionOffset.lowerBound - offsets.lowerBound
-            let changesToUpperBound = nextSelectionOffset.upperBound - offsets.upperBound
+            let changesToLowerBound = nextSelection.range.lowerBound.offset - offsets.lowerBound
+            let changesToUpperBound = nextSelection.range.upperBound.offset - offsets.upperBound
             
             // --------------------------------- //
                                     
             self.selection = nextSelection
-            uiView.setSelection(changes: (changesToLowerBound, changesToUpperBound))
+            self.uiView.setSelection(changes: (changesToLowerBound, changesToUpperBound))
         }
 
         // MARK: Update
@@ -160,14 +159,14 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
             
             // --------------------------------- //
             
-            guard value != nextValue || editable != uiView.isEditing else { return }
+            guard !displays(nextValue) else { return }
             
             // --------------------------------- //
-                        
-            var nextSnapshot = uiView.isEditing
-                ? source.style.snapshot(nextValue)
-                : source.style.showcase(nextValue)
+            
+            var nextSnapshot = snapshot(nextValue)
             nextSnapshot = source.style.process(nextSnapshot)
+            
+            // --------------------------------- //
             
             let nextSelection = selection.translate(to: nextSnapshot)
                 
@@ -196,9 +195,19 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
             // --------------------------------- //
             
             DispatchQueue.main.async {
-                // TODO: wait for apple to come up with a better solution
+                // updates asynchronously to avoid the view update cycle
                 TextFields.update(&self.source.value.wrappedValue, nonduplicate: self.value)
             }
+        }
+        
+        // MARK: Update, Helpers
+        
+        @inlinable func displays(_ newValue: Value) -> Bool {
+            value == newValue && editable == uiView.isEditing
+        }
+        
+        @inlinable func snapshot(_ newValue: Value) -> Snapshot {
+            uiView.isEditing ? source.style.snapshot(newValue) : source.style.showcase(newValue)
         }
     }
     
