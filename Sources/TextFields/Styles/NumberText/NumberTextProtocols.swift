@@ -50,6 +50,13 @@ public protocol NumberTextPrecisionItem {
     static var maxLowerDigits: Int { get }
 }
 
+public extension NumberTextPrecisionItem {
+    
+    // MARK: Properties: Static
+
+    @inlinable static var isInteger: Bool { maxLowerDigits == 0 }
+}
+
 // MARK: - NumberTextFloat
 
 @available(iOS 15.0, *)

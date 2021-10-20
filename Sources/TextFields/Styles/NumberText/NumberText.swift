@@ -17,6 +17,8 @@ public struct NumberText<Item: NumberTextItem>: DiffableTextStyle {
     public typealias Precision = NumberTextPrecision<Item>
     
     @usableFromInline typealias Components = NumberTextComponents
+    @usableFromInline typealias Constants = Components.Constants
+    
     @usableFromInline typealias PrecisionStyle = NumberFormatStyleConfiguration.Precision
     @usableFromInline typealias SeparatorStyle = NumberFormatStyleConfiguration.DecimalSeparatorDisplayStrategy
 
@@ -92,8 +94,8 @@ public struct NumberText<Item: NumberTextItem>: DiffableTextStyle {
     
     @inlinable func content() -> Set<Character> {
         var set = Set<Character>()
-        set.formUnion(Components.minus)
-        set.formUnion(Components.digits)
+        set.formUnion(Constants.minus)
+        set.formUnion(Constants.digits)
         set.formUnion(decimalSeparator)
         return set
     }
@@ -117,10 +119,12 @@ extension NumberText {
     }
     
     @inlinable public func process(_ snapshot: Snapshot) -> Snapshot {
-        let prefix = prefix.map({ Snapshot($0 + " ", only: .prefix) }) ?? Snapshot()
-        let suffix = suffix.map({ Snapshot(" " + $0, only: .suffix) }) ?? Snapshot()
-    
-        return prefix + snapshot + suffix
+        let prefix = prefix.map({ Snapshot($0 + " ", only: .prefix) })
+        let suffix = suffix.map({ Snapshot(" " + $0, only: .suffix) })
+        
+        let snapshots = [prefix, snapshot, suffix].compactMap({ $0 })
+        
+        return snapshots.dropFirst().reduce(into: snapshots.first!, +=)
     }
     
     // MARK: Snapshot
@@ -133,14 +137,14 @@ extension NumberText {
     
     @inlinable public func snapshot(_ value: Value) -> Snapshot {
         let style = editableStyle()
-                
+        
         return snapshot(style.format(value))
     }
         
     // MARK: Parse
 
     @inlinable public func parse(_ snapshot: Snapshot) -> Value? {
-        components(snapshot).flatMap(number)
+        components(snapshot).flatMap(value)
     }
     
     // MARK: Merge
@@ -158,9 +162,7 @@ extension NumberText {
         
         // --------------------------------- //
         
-        guard var components = components(next) else {
-            return nil
-        }
+        guard var components = components(next) else { return nil }
 
         // --------------------------------- //
         
@@ -177,29 +179,15 @@ extension NumberText {
         
         // --------------------------------- //
         
-        guard !values.nonnegative || components.minus.isEmpty else {
-            return nil
-        }
-        
-        // --------------------------------- //
-        
         let digits = (components.upper.count, components.lower.count)
         
         // --------------------------------- //
         
-        guard precision.editableValidation(digits: digits) else {
-            return nil
-        }
+        guard precision.editableValidation(digits: digits) else { return nil }
         
         // --------------------------------- //
         
-        guard let number = number(components) else {
-            return nil
-        }
-        
-        guard values.editableValidation(number) else {
-            return nil
-        }
+        guard let value = value(components), values.editableValidation(value) else { return nil }
 
         // --------------------------------- //
         
@@ -207,10 +195,10 @@ extension NumberText {
         
         // --------------------------------- //
                                 
-        let characters = editableCharacters(style: style, value: number, components: components)
+        let characters = editableCharacters(style: style, value: value, components: components)
                         
         // --------------------------------- //
-        
+                
         return snapshot(characters)
     }
     
@@ -230,18 +218,34 @@ extension NumberText {
 
     // MARK: Helpers
     
-    @inlinable func components(_ snapshot: Snapshot) -> Components? {
-        var characters = snapshot.content()
-        characters = characters.replacingOccurrences(of: decimalSeparator, with: Components.separator)
-        return Components(from: characters)
-    }
-    
-    @inlinable func number(_ components: Components) -> Value? {
-        guard !components.hasNoDigits else {
+    @inlinable func value(_ components: Components) -> Value? {
+        guard !components.digitsAreEmpty else {
             return Item.zero
         }
         
         return Item.number(components)
+    }
+    
+    @inlinable func components(_ snapshot: Snapshot) -> Components? {
+        
+        // --------------------------------- //
+        
+        let characters = snapshot.content()
+        
+        // --------------------------------- //
+        
+        let separators = Components.Separators
+            .translates([decimalSeparator])
+        
+        let options = Components.Options()
+            .insert(.integer, when: Item.isInteger)
+            .insert(.nonnegative, when: values.nonnegative)
+        
+        guard let components = Components(characters, separators: separators, options: options) else { return nil }
+        
+        // --------------------------------- //
+
+        return components
     }
     
     @inlinable func snapshot(_ characters: String) -> Snapshot {
@@ -272,7 +276,7 @@ extension NumberText {
         // MARK: Initializers
         
         @inlinable init(input: inout Snapshot) {
-            if input.characters == Components.minus {
+            if input.characters == Constants.minus {
                 input.removeAll()
                 toggleSign = true
             }
