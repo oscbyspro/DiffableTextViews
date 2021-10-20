@@ -14,10 +14,10 @@ public struct NumberTextComponents {
     
     // MARK: Properties
 
-    public var minus = String()
-    public var upper = String()
-    public var separator = String()
-    public var lower = String()
+    public var sign = String()
+    public var integerDigits = String()
+    public var decimalSeparator = String()
+    public var decimalDigits = String()
     
     // MARK: Initializers
     
@@ -29,15 +29,15 @@ public struct NumberTextComponents {
         
         // --------------------------------- //
 
-        Self.parse(prefix: Constants.minus, in: characters, from: &index, into: &minus)
+        Self.parse(prefix: Constants.minus, in: characters, from: &index, into: &sign)
 
         if options.contains(.nonnegative) {
-            guard minus.isEmpty else { return nil }
+            guard sign.isEmpty else { return nil }
         }
         
         // --------------------------------- //
         
-        Self.parse(charactersIn: Constants.digits, in: characters, from: &index, into: &upper)
+        Self.parse(charactersIn: Constants.digits, in: characters, from: &index, into: &integerDigits)
         
         if options.contains(.integer) {
             guard characters[index...].isEmpty else { return nil }
@@ -46,11 +46,11 @@ public struct NumberTextComponents {
         
         // --------------------------------- //
         
-        separators.parse(characters, from: &index, into: &separator)
+        separators.parse(characters, from: &index, into: &decimalSeparator)
 
         // --------------------------------- //
 
-        Self.parse(charactersIn: Constants.digits, in: characters, from: &index, into: &lower)
+        Self.parse(charactersIn: Constants.digits, in: characters, from: &index, into: &decimalDigits)
     
         // --------------------------------- //
         
@@ -63,23 +63,23 @@ public struct NumberTextComponents {
     // MARK: Descriptions
     
     @inlinable public var isEmpty: Bool {
-        minus.isEmpty && upper.isEmpty && separator.isEmpty && lower.isEmpty
+        sign.isEmpty && integerDigits.isEmpty && decimalSeparator.isEmpty && decimalDigits.isEmpty
     }
     
     @inlinable public var digitsAreEmpty: Bool {
-        upper.isEmpty && lower.isEmpty
+        integerDigits.isEmpty && decimalDigits.isEmpty
     }
-        
+    
     // MARK: Transformations
     
     @inlinable mutating func toggleSign() {
-        minus = minus.isEmpty ? Constants.minus : String()
+        sign = sign.isEmpty ? Constants.minus : String()
     }
     
     // MARK: Utilities
     
     @inlinable public func characters() -> String {
-        minus + upper + separator + lower
+        sign + integerDigits + decimalSeparator + decimalDigits
     }
 }
 

@@ -5,8 +5,6 @@
 //  Created by Oscar Byström Ericsson on 2021-10-04.
 //
 
-import struct Sequences.Walkthrough
-
 // MARK: - Field
 
 @usableFromInline struct Field: BidirectionalCollection {
@@ -24,10 +22,8 @@ import struct Sequences.Walkthrough
     // MARK: Components
     
     @usableFromInline struct Element {
-        @usableFromInline static let symbolBeyondLowerBound: Symbol = .prefix("\0")
-        @usableFromInline static let symbolBeyondUpperBound: Symbol = .suffix("\0")
         
-        // MARK: Storage
+        // MARK: Properties
         
         @usableFromInline let lhs: Symbol
         @usableFromInline let rhs: Symbol
@@ -35,12 +31,15 @@ import struct Sequences.Walkthrough
         // MARK: Initialization
 
         @inlinable init(lhs: Symbol?, rhs: Symbol?) {
-            self.lhs = lhs ?? Self.symbolBeyondLowerBound
-            self.rhs = rhs ?? Self.symbolBeyondUpperBound
+            self.lhs = lhs ?? .prefix("\0")
+            self.rhs = rhs ?? .suffix("\0")
         }
     }
     
     @usableFromInline struct Index: Comparable {
+        
+        // MARK: Properties
+        
         @usableFromInline let lhs: Snapshot.Index?
         @usableFromInline let rhs: Snapshot.Index?
         
@@ -75,6 +74,7 @@ import struct Sequences.Walkthrough
 }
 
 extension Field {
+    
     // MARK: Protocol: BidirectionalCollection
     
     @inlinable var startIndex: Index {
@@ -92,7 +92,7 @@ extension Field {
     @inlinable func index(before i: Index) -> Index {
         Index(lhs: subindex(before: i.lhs!), rhs: i.lhs!)
     }
-        
+    
     @inlinable subscript(position: Index) -> Element {
         _read {
             yield Element(lhs: subelement(at: position.lhs), rhs: subelement(at: position.rhs))
@@ -108,12 +108,12 @@ extension Field {
     @inlinable func subindex(before subindex: Snapshot.Index) -> Snapshot.Index? {
         subindex > layout.startIndex ? layout.index(before: subindex) : nil
     }
-        
+    
+    // MARK: Helpers
+    
     @inlinable func subelement(at subindex: Snapshot.Index?) -> Snapshot.Element? {
-        guard let subindex = subindex, subindex < layout.endIndex else {
-            return nil
-        }
-
+        guard let subindex = subindex, subindex < layout.endIndex else { return nil }
+        
         return layout[subindex]
     }
     
@@ -129,6 +129,7 @@ extension Field {
 }
 
 extension Field {
+    
     // MARK: Never Empty
     
     @inlinable var first: Element {

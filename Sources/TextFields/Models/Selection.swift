@@ -10,11 +10,14 @@ import struct Sequences.Walkthrough
 // MARK: - Selection
 
 @usableFromInline struct Selection {
+    @usableFromInline typealias Index = Field.Index
+    @usableFromInline typealias Element = Field.Element
+    @usableFromInline typealias Direction = Walkthrough<Field>.Step
     
     // MARK: Properties
     
     @usableFromInline let field: Field
-    @usableFromInline var range: Range<Field.Index>
+    @usableFromInline var range: Range<Index>
     
     // MARK: Initializers
     
@@ -23,7 +26,7 @@ import struct Sequences.Walkthrough
         self.range = field.lastIndex ..< field.lastIndex
     }
     
-    @inlinable init(_ field: Field, range: Range<Field.Index>) {
+    @inlinable init(_ field: Field, range: Range<Index>) {
         self.field = field
         self.range = range
     }
@@ -37,18 +40,26 @@ import struct Sequences.Walkthrough
     // MARK: Update: Field
     
     @inlinable func translate(to newValue: Field) -> Self {
+        
+        // --------------------------------- //
+        
         let options = SimilaritiesOptions<Symbol>
+            .produce(.overshoot)
             .inspect(.only(\.content))
             .compare(.equatable(\.character))
         
-        func position(from current: Field.SubSequence, to next: Field.SubSequence) -> Field.Index {
+        func position(from current: Field.SubSequence, to next: Field.SubSequence) -> Index {
             next.lazy.map(\.rhs).suffix(alsoIn: current.lazy.map(\.rhs), options: options).startIndex
         }
         
+        // --------------------------------- //
+        
         let nextUpperBound = position(from: field[range.upperBound...], to: newValue[...])
         let nextLowerBound = position(from: field[range], to: newValue[..<nextUpperBound])
+                
+        // --------------------------------- //
         
-        return Selection(newValue, range: nextLowerBound ..< nextUpperBound).move(.backwards, towards: \.lhs.content)
+        return Selection(newValue, range: nextLowerBound ..< nextUpperBound).moveToContent()
     }
     
     @inlinable func translate(to newValue: Snapshot) -> Self {
@@ -57,11 +68,8 @@ import struct Sequences.Walkthrough
 
     // MARK: Update: Range
     
-    @inlinable func update(with newValue: Range<Field.Index>) -> Self {
-        var next = newValue
-        moveInoutRangeToContent(&next)
-        moveInoutRangeAcrossSpacers(&next)
-        return Selection(field, range: next)
+    @inlinable func update(with newValue: Range<Index>) -> Self {
+        move(to: newValue).moveToContent()
     }
     
     @inlinable func update(with newValue: Range<Snapshot.Index>) -> Self {
@@ -69,20 +77,20 @@ import struct Sequences.Walkthrough
     }
     
     @inlinable func update(with newValue: Range<Int>) -> Self {
-        typealias Path = (start: Field.Index, offset: Int)
+        typealias Path = (start: Index, offset: Int)
         
-        var positions = [Field.Index](size: 5)
+        var positions = [Index](size: 5)
         positions.append(contentsOf: [field.firstIndex, field.lastIndex])
         positions.append(contentsOf: [range.lowerBound, range.upperBound])
         
-        func path(from position: Field.Index, to offset: Int) -> Path {
+        func path(from position: Index, to offset: Int) -> Path {
             Path(start: position, offset: offset - position.offset)
         }
                 
-        func position(at offset: Int, append: Bool) -> Field.Index {
+        func position(at offset: Int, append: Bool) -> Index {
             let paths: [Path] = positions.map({ path(from: $0, to: offset) })
             let shortest: Path = paths.min(by: { abs($0.offset) < abs($1.offset) })!
-            let position: Field.Index = field.index(shortest.start, offsetBy: shortest.offset)
+            let position: Index = field.index(shortest.start, offsetBy: shortest.offset)
             
             if append {
                 positions.append(position)
@@ -91,20 +99,26 @@ import struct Sequences.Walkthrough
             return position
         }
         
-        let lowerBound: Field.Index = position(at: newValue.lowerBound, append: true)
-        let upperBound: Field.Index = position(at: newValue.upperBound, append: false)
+        let lowerBound: Index = position(at: newValue.lowerBound, append: true)
+        let upperBound: Index = position(at: newValue.upperBound, append: false)
                         
         return update(with: lowerBound ..< upperBound)
     }
     
     // MARK: Update: Position
     
-    @inlinable func update(with newValue: Field.Index) -> Self {
+    @inlinable func update(with newValue: Index) -> Self {
         update(with: newValue ..< newValue)
     }
     
     @inlinable func update(with newValue: Snapshot.Index) -> Self {
         update(with: newValue ..< newValue)
+    }
+    
+    // MARK: Transformations
+    
+    @inlinable func map(_ transform: (inout Selection) -> Void) -> Selection {
+        var copy = self; transform(&copy); return copy
     }
 }
 
@@ -112,66 +126,68 @@ import struct Sequences.Walkthrough
 
 extension Selection {
     
-    // MARK: Towards
+    // MARK: To Content
     
-    @inlinable func move(_ direction: Walkthrough<Field>.Step, towards predicate: (Field.Element) -> Bool) -> Selection {
-        func position(_ position: Field.Index) -> Field.Index {
-            field.firstIndex(in: .stride(start: .closed(position), step: direction), where: predicate) ?? position
-        }
-        
-        return Selection(field, range: position(range.lowerBound) ..< position(range.upperBound))
-    }
-}
-
-// MARK: - Helpers
-
-extension Selection {
-
-    // MARK: Move To Content
-    
-    @inlinable func moveInoutRangeToContent(_ inoutRange: inout Range<Field.Index>) {
-        func position(_ positionIn: (Range<Field.Index>) -> Field.Index) -> Field.Index {
-            var position = positionIn(inoutRange)
-                    
-            if field[position].lhs.prefix, let next = field.firstIndex(in: .stride(start: .closed(position), step:  .forwards), where: \.rhs.content) {
-                position = next
+    @inlinable func moveToContent() -> Selection {
+        func position(_ position: Index) -> Index {
+            var position = position
+            
+            func condition() -> Bool {
+                let element = field[position]; return element.lhs.noncontent && element.rhs.noncontent
+            }
+                        
+            func move(_ direction: Direction, towards predicate: (Element) -> Bool) {
+                position = field.firstIndex(in: .stride(start: .closed(position), step: direction), where: predicate) ?? position
             }
             
-            if field[position].rhs.suffix, let next = field.firstIndex(in: .stride(start: .closed(position), step: .backwards), where: \.lhs.content) {
-                position = next
+            if condition() {
+                move(.backwards, towards: { $0.lhs.content || $0.lhs.prefix })
+            }
+            
+            if condition() {
+                move(.forwards,  towards: { $0.rhs.content || $0.rhs.suffix })
             }
             
             return position
         }
+        
+        // --------------------------------- //
+        
+        let lowerBound = position(range.lowerBound)
+        let upperBound = position(range.upperBound)
+        
+        // --------------------------------- //
 
-        inoutRange = position(\.lowerBound) ..< position(\.upperBound)
+        return map({ $0.range = lowerBound ..< upperBound })
     }
     
-    // MARK: Move Across Spacers
-
-    @inlinable func moveInoutRangeAcrossSpacers(_ inoutRange: inout Range<Field.Index>) {
-        typealias Direction = Walkthrough<Field>.Step
-                
-        func direction(from first: Field.Index, to second: Field.Index) -> Direction? {
+    // MARK: To, Across Spacers
+    
+    @inlinable func move(to newValue: Range<Index>) -> Selection {
+        func momentum(from first: Index, to second: Index) -> Direction? {
             if      first < second { return  .forwards }
             else if first > second { return .backwards }
             else                   { return      .none }
         }
         
-        func position(_ positionIn: (Range<Field.Index>) -> Field.Index, preference: Direction, where predicate: (Field.Element) -> Bool) -> Field.Index {
-            let start = positionIn(inoutRange)
-            let direction = direction(from: positionIn(range), to: start) ?? preference
-            
-            return field.firstIndex(in: .stride(start: .closed(start), step: direction), where: predicate) ?? start
+        func position(_ positionIn: (Range<Index>) -> Index, preference: Direction, where predicate: (Element) -> Bool) -> Index {
+            let position = positionIn(newValue)
+            let momentum = momentum(from: positionIn(range), to: position) ?? preference
+    
+            return field.firstIndex(in: .stride(start: .closed(position), step: momentum), where: predicate) ?? position
         }
-                
+        
+        // --------------------------------- //
+        
         let upperBound = position(\.upperBound, preference: .backwards, where: \.lhs.nonspacer)
         var lowerBound = upperBound
-        
-        if !inoutRange.isEmpty {
+
+        if !newValue.isEmpty {
             lowerBound = position(\.lowerBound, preference:  .forwards, where: \.rhs.nonspacer)
         }
-                
-        inoutRange = lowerBound ..< upperBound
+        
+        // --------------------------------- //
+        
+        return map({ $0.range = lowerBound ..< upperBound })
     }
 }

@@ -10,6 +10,8 @@ import struct Foundation.Locale
 
 // MARK: - NumberTextStyle
 
+#warning("Separator without integer digits should add integer digits.")
+
 @available(iOS 15.0, *)
 public struct NumberText<Item: NumberTextItem>: DiffableTextStyle {
     public typealias Value = Item.Number
@@ -179,7 +181,7 @@ extension NumberText {
         
         // --------------------------------- //
         
-        let digits = (components.upper.count, components.lower.count)
+        let digits = (components.integerDigits.count, components.decimalDigits.count)
         
         // --------------------------------- //
         
@@ -191,7 +193,7 @@ extension NumberText {
 
         // --------------------------------- //
         
-        let style = editableStyle(digits: digits, separator: !components.separator.isEmpty)
+        let style = editableStyle(digits: digits, separator: !components.decimalSeparator.isEmpty)
         
         // --------------------------------- //
                                 
@@ -211,9 +213,9 @@ extension NumberText {
     }
     
     @inlinable func correctSignIsAbsent(in characters: inout String, with components: Components) {
-        guard !components.minus.isEmpty else { return }
-        guard !characters.hasPrefix(components.minus) else { return }
-        characters = components.minus + characters
+        guard !components.sign.isEmpty else { return }
+        guard !characters.hasPrefix(components.sign) else { return }
+        characters = components.sign + characters
     }
 
     // MARK: Helpers
