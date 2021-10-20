@@ -17,8 +17,8 @@ public struct NumberText<Item: NumberTextItem>: DiffableTextStyle {
     public typealias Precision = NumberTextPrecision<Item>
     
     @usableFromInline typealias Components = NumberTextComponents
-    @usableFromInline typealias NumberPrecision = NumberFormatStyleConfiguration.Precision
-    @usableFromInline typealias NumberSeparator = NumberFormatStyleConfiguration.DecimalSeparatorDisplayStrategy
+    @usableFromInline typealias PrecisionStyle = NumberFormatStyleConfiguration.Precision
+    @usableFromInline typealias SeparatorStyle = NumberFormatStyleConfiguration.DecimalSeparatorDisplayStrategy
 
     // MARK: Properties
     
@@ -38,14 +38,14 @@ public struct NumberText<Item: NumberTextItem>: DiffableTextStyle {
     // MARK: Styles
     
     @inlinable func displayableStyle() -> Item.Style {
-        let precision: NumberPrecision = precision.displayableStyle()
+        let precision: PrecisionStyle = precision.displayableStyle()
 
         return Item.style(locale, precision: precision, separator: .automatic)
     }
     
     @inlinable func editableStyle(digits: (upper: Int, lower: Int)? = nil, separator: Bool = false) -> Item.Style {
-        let precision: NumberPrecision = precision.editableStyle(digits: digits)
-        let separator: NumberSeparator = separator ? .always : .automatic
+        let precision: PrecisionStyle = precision.editableStyle(digits: digits)
+        let separator: SeparatorStyle = separator ? .always : .automatic
         
         return Item.style(locale, precision: precision, separator: separator)
     }
