@@ -10,8 +10,6 @@ import struct Foundation.Locale
 
 // MARK: - NumberTextStyle
 
-#warning("Separator without integer digits should add integer digits.")
-
 @available(iOS 15.0, *)
 public struct NumberText<Item: NumberTextItem>: DiffableTextStyle {
     public typealias Value = Item.Number

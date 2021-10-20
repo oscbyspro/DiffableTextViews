@@ -47,7 +47,7 @@ extension UITextField {
 extension UITextField {
     // MARK: Ranges
     
-    @inlinable func range(in offsets: Range<Int>) -> UITextRange {        
+    @inlinable func range(in offsets: Range<Int>) -> UITextRange {
         let start = position(from: beginningOfDocument, offset: offsets.lowerBound)!
         let end = position(from: start, offset: offsets.count)!
         
