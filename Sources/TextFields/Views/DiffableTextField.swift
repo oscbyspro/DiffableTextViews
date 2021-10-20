@@ -55,11 +55,12 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
         @usableFromInline var uiView: UITextField!
         
         @usableFromInline let lock = Lock()
+        @usableFromInline private(set) var editable = false
         
         @usableFromInline private(set) var value: Value!
         @usableFromInline private(set) var snapshot = Snapshot()
         @usableFromInline private(set) var selection = Selection()
-        
+                
         // MARK: Setup
 
         @inlinable func connect(_ uiView: UIViewType) {
@@ -82,7 +83,7 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
             // --------------------------------- //
             
             guard !lock.isLocked else { return false }
-                        
+            
             // --------------------------------- //
             
             let range = snapshot.indices(in: range)
@@ -111,7 +112,7 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
             push()
                                     
             // --------------------------------- //
-            
+                        
             return false
         }
         
@@ -156,10 +157,16 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
             
             var nextValue = source.value.wrappedValue
             nextValue = source.style.process(nextValue)
+            
+            // --------------------------------- //
+            
+            guard value != nextValue || editable != uiView.isEditing else { return }
+            
+            // --------------------------------- //
                         
             var nextSnapshot = uiView.isEditing
-            ? source.style.snapshot(nextValue)
-            : source.style.showcase(nextValue)
+                ? source.style.snapshot(nextValue)
+                : source.style.showcase(nextValue)
             nextSnapshot = source.style.process(nextSnapshot)
             
             let nextSelection = selection.translate(to: nextSnapshot)
@@ -168,7 +175,7 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
             
             self.value = nextValue
             self.snapshot = nextSnapshot
-            self.selection = nextSelection            
+            self.selection = nextSelection
         }
         
         @inlinable func push() {
@@ -181,6 +188,10 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
                 self.uiView.setText(snapshot.characters)
                 self.uiView.setSelection(selection.offsets)
             }
+            
+            // --------------------------------- //
+            
+            self.editable = uiView.isEditing
             
             // --------------------------------- //
             

@@ -9,7 +9,6 @@ import struct Sequences.Walkthrough
 
 // MARK: - Selection
 
-#warning("Backspace jumps over prefixes.")
 @usableFromInline struct Selection {
     
     // MARK: Properties
@@ -109,6 +108,21 @@ import struct Sequences.Walkthrough
     }
 }
 
+// MARK: - Movements
+
+extension Selection {
+    
+    // MARK: Towards
+    
+    @inlinable func move(_ direction: Walkthrough<Field>.Step, towards predicate: (Field.Element) -> Bool) -> Selection {
+        func position(_ position: Field.Index) -> Field.Index {
+            field.firstIndex(in: .stride(start: .closed(position), step: direction), where: predicate) ?? position
+        }
+        
+        return Selection(field, range: position(range.lowerBound) ..< position(range.upperBound))
+    }
+}
+
 // MARK: - Helpers
 
 extension Selection {
@@ -159,18 +173,5 @@ extension Selection {
         }
                 
         inoutRange = lowerBound ..< upperBound
-    }
-}
-
-extension Selection {
-    
-    // MARK: Movements
-    
-    @inlinable func move(_ direction: Walkthrough<Field>.Step, towards predicate: (Field.Element) -> Bool) -> Selection {
-        func position(_ position: Field.Index) -> Field.Index {
-            field.firstIndex(in: .stride(start: .closed(position), step: direction), where: predicate) ?? position
-        }
-        
-        return Selection(field, range: position(range.lowerBound) ..< position(range.upperBound))
     }
 }

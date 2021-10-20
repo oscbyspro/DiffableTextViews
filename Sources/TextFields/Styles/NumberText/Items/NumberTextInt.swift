@@ -8,7 +8,7 @@
 import Foundation
 
 @available(iOS 15.0, *)
-public enum NumberTextInt: NumberTextItem, NumberTextValuesItem, NumberTextPrecisionInteger {
+public enum NumberTextInt: NumberTextInteger {
     public typealias Number = Int
     
     // MARK: Values
@@ -25,7 +25,7 @@ public enum NumberTextInt: NumberTextItem, NumberTextValuesItem, NumberTextPreci
     // MARK: Conversions
     
     @inlinable public static func number(_ components: NumberTextComponents) -> Number? {
-        Number(components.characters())
+        .init(components.characters())
     }
     
     @inlinable public static func style(_ locale: Locale, precision: Precision, separator: Separator) -> IntegerFormatStyle<Number> {

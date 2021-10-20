@@ -44,7 +44,7 @@ public struct NumberTextPrecision<Item: NumberTextPrecisionItem> {
 }
 
 @available(iOS 15.0, *)
-extension NumberTextPrecision where Item: NumberTextPrecisionFloat {
+extension NumberTextPrecision where Item: NumberTextFloat {
 
     // MARK: Initializers: Separate
     

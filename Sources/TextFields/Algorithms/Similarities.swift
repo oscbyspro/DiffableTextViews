@@ -213,7 +213,6 @@ extension BidirectionalCollection {
 
 // MARK: -
 
-#warning("TODO: remove, because overshoot is now redundant.")
 @usableFromInline enum SimilaritiesOptionsProduction {
     case wrapper
     case overshoot

@@ -9,13 +9,6 @@
 import Foundation
 import SwiftUI
 
-// MARK: - NumberTextItem
-
-@available(iOS 15.0, *)
-public protocol NumberTextCompatible {
-    associatedtype NumberTextItem: TextFields.NumberTextItem where NumberTextItem.Number == Self
-}
-
 // MARK: - NumberTextStyleItem
 
 @available(iOS 15.0, *)
@@ -57,14 +50,34 @@ public protocol NumberTextPrecisionItem {
     static var maxLowerDigits: Int { get }
 }
 
-// MARK: NumberTextPrecisionItem: Float
+// MARK: - NumberTextFloat
 
-public protocol NumberTextPrecisionFloat: NumberTextPrecisionItem { }
+@available(iOS 15.0, *)
+public protocol NumberTextFloat: NumberTextItem { }
 
-// MARK: NumberTextPrecisionItem: Integer
+// MARK: - NumberTextInteger
 
-public protocol NumberTextPrecisionInteger: NumberTextPrecisionItem { }
+@available(iOS 15.0, *)
+public protocol NumberTextInteger: NumberTextItem { }
 
-public extension NumberTextPrecisionInteger {
+@available(iOS 15.0, *)
+public extension NumberTextInteger {
+    
+    // MARK: Implementations
+    
     @inlinable static var maxLowerDigits: Int { 0 }
+}
+
+// MARK: - Compatible
+
+@available(iOS 15.0, *)
+public protocol NumberTextCompatible {
+    
+    // MARK: Item
+    
+    associatedtype NumberTextItem: TextFields.NumberTextItem where NumberTextItem.Number == Self
+    
+    // MARK: Aliases
+    
+    typealias NumberText = TextFields.NumberText<NumberTextItem>
 }

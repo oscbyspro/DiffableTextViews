@@ -40,14 +40,14 @@ public struct NumberTextValues<Item: NumberTextValuesItem> {
         .init(max: value)
     }
     
-    @inlinable public static func bounds(_ values: ClosedRange<Number>) -> Self {
+    @inlinable public static func range(_ values: ClosedRange<Number>) -> Self {
         .init(min: values.lowerBound, max: values.upperBound)
     }
     
     // MARK: Initialiers: Static
     
     @inlinable public static var all: Self {
-        .bounds(min...max)
+        .range(min...max)
     }
     
     @inlinable public static var nonnegative: Self {

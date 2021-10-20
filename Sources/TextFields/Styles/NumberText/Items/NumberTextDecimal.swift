@@ -11,7 +11,7 @@ import struct Foundation.Decimal
 // MARK: - NumberTextDecimal
 
 @available(iOS 15.0, *)
-public enum NumberTextDecimal: NumberTextItem, NumberTextValuesItem, NumberTextPrecisionFloat {
+public enum NumberTextDecimal: NumberTextFloat {
     public typealias Number = Decimal
     
     // MARK: Values
@@ -29,7 +29,7 @@ public enum NumberTextDecimal: NumberTextItem, NumberTextValuesItem, NumberTextP
     // MARK: Style
     
     @inlinable public static func number(_ components: NumberTextComponents) -> Number? {
-        Number(string: components.characters())
+        .init(string: components.characters())
     }
     
     @inlinable public static func style(_ locale: Locale, precision: Precision, separator: Separator) -> Number.FormatStyle {

@@ -10,26 +10,25 @@ import struct Foundation.Locale
 
 // MARK: - NumberTextStyle
 
-#warning("FIXME: decimal separator now cuts zeros: 100.000 --> 100")
-
 @available(iOS 15.0, *)
-public struct NumberText<Base: NumberTextCompatible>: DiffableTextStyle {
-    public typealias Item = Base.NumberTextItem
+public struct NumberText<Item: NumberTextItem>: DiffableTextStyle {
     public typealias Value = Item.Number
-    
-    @usableFromInline typealias BasePrecision = NumberFormatStyleConfiguration.Precision
-    @usableFromInline typealias BaseSeparator = NumberFormatStyleConfiguration.DecimalSeparatorDisplayStrategy
-    @usableFromInline typealias Components = NumberTextComponents
-
     public typealias Values = NumberTextValues<Item>
     public typealias Precision = NumberTextPrecision<Item>
     
+    @usableFromInline typealias Components = NumberTextComponents
+    @usableFromInline typealias NumberPrecision = NumberFormatStyleConfiguration.Precision
+    @usableFromInline typealias NumberSeparator = NumberFormatStyleConfiguration.DecimalSeparatorDisplayStrategy
+
     // MARK: Properties
     
     @usableFromInline var locale: Locale
     @usableFromInline var values: Values = .all
     @usableFromInline var precision: Precision = .max
-        
+    
+    @usableFromInline var prefix: String? = nil
+    @usableFromInline var suffix: String? = nil
+    
     // MARK: Initializers
     
     @inlinable public init(locale: Locale = .autoupdatingCurrent) {
@@ -39,14 +38,14 @@ public struct NumberText<Base: NumberTextCompatible>: DiffableTextStyle {
     // MARK: Styles
     
     @inlinable func displayableStyle() -> Item.Style {
-        let precision: BasePrecision = precision.displayableStyle()
+        let precision: NumberPrecision = precision.displayableStyle()
 
         return Item.style(locale, precision: precision, separator: .automatic)
     }
     
     @inlinable func editableStyle(digits: (upper: Int, lower: Int)? = nil, separator: Bool = false) -> Item.Style {
-        let precision: BasePrecision = precision.editableStyle(digits: digits)
-        let separator: BaseSeparator = separator ? .always : .automatic
+        let precision: NumberPrecision = precision.editableStyle(digits: digits)
+        let separator: NumberSeparator = separator ? .always : .automatic
         
         return Item.style(locale, precision: precision, separator: separator)
     }
@@ -63,6 +62,14 @@ public struct NumberText<Base: NumberTextCompatible>: DiffableTextStyle {
     
     @inlinable public func precision(_ newValue: Precision) -> Self {
         map({ $0.precision = newValue })
+    }
+    
+    @inlinable public func prefix(_ newValue: String?) -> Self {
+        map({ $0.prefix = newValue })
+    }
+    
+    @inlinable public func suffix(_ newValue: String?) -> Self {
+        map({ $0.suffix = newValue })
     }
     
     // MARK: Helpers
@@ -83,22 +90,24 @@ extension NumberText {
         values.displayableStyle(value)
     }
     
-    #warning("WIP")
     @inlinable public func process(_ snapshot: Snapshot) -> Snapshot {
-        Snapshot("$ ", only: .prefix) + snapshot + Snapshot(" USD", only: .suffix)
+        let prefix = prefix.map({ Snapshot($0 + " ", only: .prefix) }) ?? Snapshot()
+        let suffix = suffix.map({ Snapshot(" " + $0, only: .suffix) }) ?? Snapshot()
+    
+        return prefix + snapshot + suffix
     }
     
     // MARK: Snapshot
     
     @inlinable public func showcase(_ value: Value) -> Snapshot {
         let style = displayableStyle()
-                
+        
         return snapshot(style.format(value))
     }
     
     @inlinable public func snapshot(_ value: Value) -> Snapshot {
         let style = editableStyle()
-        
+                
         return snapshot(style.format(value))
     }
         
@@ -110,7 +119,7 @@ extension NumberText {
     
     // MARK: Merge
     
-    @inlinable public func merge(_ snapshot: Snapshot, with replacement: Snapshot, in bounds: Range<Snapshot.Index>) -> Snapshot? {
+    @inlinable public func merge(_ snapshot: Snapshot, with replacement: Snapshot, in range: Range<Snapshot.Index>) -> Snapshot? {
         var replacement = replacement
         
         // --------------------------------- //
@@ -119,7 +128,7 @@ extension NumberText {
                 
         // --------------------------------- //
         
-        let result = snapshot.replace(bounds, with: replacement)
+        let result = snapshot.replace(range, with: replacement)
         
         // --------------------------------- //
         
@@ -165,9 +174,9 @@ extension NumberText {
         // --------------------------------- //
         
         let style = editableStyle(digits: digits, separator: !components.separator.isEmpty)
-                        
+                                
         var characters = style.format(number)
-        
+                
         if !components.minus.isEmpty, !characters.hasPrefix(components.minus) {
             characters = components.minus + characters
         }
@@ -206,7 +215,7 @@ extension NumberText {
                 snapshot.append(.spacer(character))
             }
         }
-        
+                
         return snapshot
     }
     
