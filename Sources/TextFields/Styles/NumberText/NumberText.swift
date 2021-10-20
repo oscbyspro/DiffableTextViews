@@ -72,14 +72,40 @@ public struct NumberText<Item: NumberTextItem>: DiffableTextStyle {
         map({ $0.suffix = newValue })
     }
     
-    // MARK: Helpers
+    // MARK: Helpers, Maps
     
     @inlinable func map(_ transform: (inout Self) -> Void) -> Self {
         var copy = self; transform(&copy); return copy
     }
+
+    // MARK: Helpers, Localization
+    
+    @inlinable var decimalSeparator: String {
+        locale.decimalSeparator ?? "."
+    }
+    
+    @inlinable var groupingSeparator: String {
+        locale.groupingSeparator ?? ","
+    }
+    
+    // MARK: Helpers, Snapshot
+    
+    @inlinable func content() -> Set<Character> {
+        var set = Set<Character>()
+        set.formUnion(Components.minus)
+        set.formUnion(Components.digits)
+        set.formUnion(decimalSeparator)
+        return set
+    }
+    
+    @inlinable func spacers() -> Set<Character> {
+        var set = Set<Character>()
+        set.formUnion(groupingSeparator)
+        return set
+    }
 }
 
-// MARK: DecimalTextStyle: DiffableTextStyle
+// MARK: Conformance to: DiffableTextStyle
 
 @available(iOS 15.0, *)
 extension NumberText {
@@ -119,7 +145,7 @@ extension NumberText {
     
     // MARK: Merge
     
-    @inlinable public func merge(_ snapshot: Snapshot, with replacement: Snapshot, in range: Range<Snapshot.Index>) -> Snapshot? {
+    @inlinable public func merge(_ current: Snapshot, with replacement: Snapshot, in range: Range<Snapshot.Index>) -> Snapshot? {
         var replacement = replacement
         
         // --------------------------------- //
@@ -128,11 +154,11 @@ extension NumberText {
                 
         // --------------------------------- //
         
-        let result = snapshot.replace(range, with: replacement)
+        let next = current.replace(range, with: replacement)
         
         // --------------------------------- //
         
-        guard var components = components(result) else {
+        guard var components = components(next) else {
             return nil
         }
 
@@ -142,7 +168,7 @@ extension NumberText {
                 
         // --------------------------------- //
         
-        return self.snapshot(components)
+        return snapshot(components)
     }
         
     // MARK: Helpers
@@ -167,19 +193,21 @@ extension NumberText {
         
         // --------------------------------- //
         
-        guard let number = number(components), values.editableValidation(number) else {
+        guard let number = number(components) else {
+            return nil
+        }
+        
+        guard values.editableValidation(number) else {
             return nil
         }
 
         // --------------------------------- //
         
         let style = editableStyle(digits: digits, separator: !components.separator.isEmpty)
+        
+        // --------------------------------- //
                                 
-        var characters = style.format(number)
-                
-        if !components.minus.isEmpty, !characters.hasPrefix(components.minus) {
-            characters = components.minus + characters
-        }
+        let characters = editableCharacters(style: style, value: number, components: components)
                         
         // --------------------------------- //
         
@@ -188,9 +216,23 @@ extension NumberText {
     
     // MARK: Helpers
     
+    @inlinable func editableCharacters(style: Item.Style, value: Value, components: Components) -> String {
+        var characters = style.format(value)
+        correctSignIsAbsent(in: &characters, with: components)
+        return characters
+    }
+    
+    @inlinable func correctSignIsAbsent(in characters: inout String, with components: Components) {
+        guard !components.minus.isEmpty else { return }
+        guard !characters.hasPrefix(components.minus) else { return }
+        characters = components.minus + characters
+    }
+
+    // MARK: Helpers
+    
     @inlinable func components(_ snapshot: Snapshot) -> Components? {
         var characters = snapshot.content()
-        characters = characters.replacingOccurrences(of: separator, with: Components.separator)
+        characters = characters.replacingOccurrences(of: decimalSeparator, with: Components.separator)
         return Components(from: characters)
     }
     
@@ -243,37 +285,5 @@ extension NumberText {
                 components.toggleSign()
             }
         }
-    }
-}
-
-// MARK: DecimalTextStyle: Getters
-
-@available(iOS 15.0, *)
-extension NumberText {
-    
-    // MARK: Localization
-    
-    @inlinable var separator: String {
-        locale.decimalSeparator ?? "."
-    }
-    
-    @inlinable var groupingSeparator: String {
-        locale.groupingSeparator ?? ","
-    }
-    
-    // MARK: Sets
-  
-    @inlinable func content() -> Set<Character> {
-        var set = Set<Character>()
-        set.formUnion(Components.minus)
-        set.formUnion(Components.digits)
-        set.formUnion(separator)
-        return set
-    }
-    
-    @inlinable func spacers() -> Set<Character> {
-        var set = Set<Character>()
-        set.formUnion(groupingSeparator)
-        return set
     }
 }
