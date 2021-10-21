@@ -181,7 +181,7 @@ extension NumberText {
         
         // --------------------------------- //
         
-        guard let value = Item.number(components) { return nil }
+        guard let value = Item.number(components) else { return nil }
         guard values.editableValidation(value) else { return nil }
 
         // --------------------------------- //
