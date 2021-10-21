@@ -29,7 +29,11 @@ public enum NumberTextDecimal: NumberTextFloat {
     // MARK: Style
     
     @inlinable public static func number(_ components: NumberTextComponents) -> Number? {
-        .init(string: components.characters())
+        guard !components.digitsAreEmpty else {
+            return .zero
+        }
+        
+        return .init(string: components.characters())
     }
     
     @inlinable public static func style(_ locale: Locale, precision: Precision, separator: Separator) -> Number.FormatStyle {

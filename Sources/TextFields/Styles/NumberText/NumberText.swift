@@ -144,7 +144,7 @@ extension NumberText {
     // MARK: Parse
 
     @inlinable public func parse(_ snapshot: Snapshot) -> Item.Number? {
-        components(snapshot).flatMap(value)
+        components(snapshot).flatMap(Item.number)
     }
     
     // MARK: Merge
@@ -183,51 +183,31 @@ extension NumberText {
         // --------------------------------- //
         
         let digits = (components.integerDigits.count, components.decimalDigits.count)
-        
-        // --------------------------------- //
-        
+                
         guard precision.editableValidation(digits: digits) else { return nil }
         
         // --------------------------------- //
         
-        guard let value = value(components), values.editableValidation(value) else { return nil }
+        guard let value = Item.number(components), values.editableValidation(value) else { return nil }
 
         // --------------------------------- //
         
         let style = editableStyle(digits: digits, separator: !components.decimalSeparator.isEmpty)
         
         // --------------------------------- //
-                                
-        let characters = editableCharacters(style: style, value: value, components: components)
+                  
+        var characters = style.format(value)
         
+        if !components.sign.isEmpty, !characters.hasPrefix(components.sign) {
+            characters = components.sign + characters
+        }
+
         // --------------------------------- //
                 
         return snapshot(characters)
     }
-    
-    // MARK: Helpers
-    
-    @inlinable func editableCharacters(style: Item.Style, value: Item.Number, components: Components) -> String {
-        var characters = style.format(value)
-        correctSignIsAbsent(in: &characters, expectation: components.sign)
-        return characters
-    }
-    
-    @inlinable func correctSignIsAbsent(in characters: inout String, expectation sign: String) {
-        guard !sign.isEmpty else { return }
-        guard !characters.hasPrefix(sign) else { return }
-        characters = sign + characters
-    }
 
     // MARK: Helpers
-    
-    @inlinable func value(_ components: Components) -> Value? {
-        guard !components.digitsAreEmpty else {
-            return Item.zero
-        }
-        
-        return Item.number(components)
-    }
     
     @inlinable func components(_ snapshot: Snapshot) -> Components? {
         
@@ -267,7 +247,7 @@ extension NumberText {
                 
         return snapshot
     }
-        
+    
     // MARK: Input
     
     @usableFromInline struct Input {

@@ -22,10 +22,14 @@ public enum NumberTextInt: NumberTextInteger {
                public static let maxTotalDigits: Int = String(describing: Number.max).count
     @inlinable public static var maxUpperDigits: Int { maxTotalDigits }    
     
-    // MARK: Conversions
+    // MARK: Style
     
     @inlinable public static func number(_ components: NumberTextComponents) -> Number? {
-        .init(components.characters())
+        guard !components.digitsAreEmpty else {
+            return .zero
+        }
+        
+        return .init(components.characters())
     }
     
     @inlinable public static func style(_ locale: Locale, precision: Precision, separator: Separator) -> IntegerFormatStyle<Number> {
