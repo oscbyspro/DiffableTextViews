@@ -26,8 +26,4 @@ extension RangeReplaceableCollection {
         copy.replaceSubrange(subrange, with: other)
         return copy
     }
-    
-    @inlinable func replace<Other: Collection>(_ indices: Indices, with other: Other) -> Self where Other.Element == Element {
-        replace(indices.startIndex ..< indices.endIndex, with: other)
-    }
 }

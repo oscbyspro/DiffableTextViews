@@ -196,7 +196,9 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
             
             DispatchQueue.main.async {
                 // updates asynchronously to avoid the view update cycle
-                TextFields.update(&self.source.value.wrappedValue, nonduplicate: self.value)
+                if  self.source.value.wrappedValue != self.value {
+                    self.source.value.wrappedValue  = self.value
+                }
             }
         }
         
