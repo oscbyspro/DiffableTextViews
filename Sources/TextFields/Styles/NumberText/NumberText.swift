@@ -199,7 +199,7 @@ extension NumberText {
         // --------------------------------- //
                                 
         let characters = editableCharacters(style: style, value: value, components: components)
-                        
+        
         // --------------------------------- //
                 
         return snapshot(characters)
@@ -209,14 +209,14 @@ extension NumberText {
     
     @inlinable func editableCharacters(style: Item.Style, value: Item.Number, components: Components) -> String {
         var characters = style.format(value)
-        correctSignIsAbsent(in: &characters, with: components)
+        correctSignIsAbsent(in: &characters, expectation: components.sign)
         return characters
     }
     
-    @inlinable func correctSignIsAbsent(in characters: inout String, with components: Components) {
-        guard !components.sign.isEmpty else { return }
-        guard !characters.hasPrefix(components.sign) else { return }
-        characters = components.sign + characters
+    @inlinable func correctSignIsAbsent(in characters: inout String, expectation sign: String) {
+        guard !sign.isEmpty else { return }
+        guard !characters.hasPrefix(sign) else { return }
+        characters = sign + characters
     }
 
     // MARK: Helpers
