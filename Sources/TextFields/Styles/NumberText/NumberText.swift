@@ -8,6 +8,8 @@
 import SwiftUI
 import struct Foundation.Locale
 
+#if os(iOS)
+
 // MARK: - NumberTextStyle
 
 @available(iOS 15.0, *)
@@ -17,8 +19,6 @@ public struct NumberText<Item: NumberTextItem>: DiffableTextStyle {
     public typealias Precision = NumberTextPrecision<Item>
     
     @usableFromInline typealias Components = NumberTextComponents
-    @usableFromInline typealias Constants = Components.Constants
-    
     @usableFromInline typealias PrecisionStyle = NumberFormatStyleConfiguration.Precision
     @usableFromInline typealias SeparatorStyle = NumberFormatStyleConfiguration.DecimalSeparatorDisplayStrategy
 
@@ -80,7 +80,7 @@ public struct NumberText<Item: NumberTextItem>: DiffableTextStyle {
         var copy = self; transform(&copy); return copy
     }
 
-    // MARK: Helpers, Localization
+    // MARK: Helpers, Locale
     
     @inlinable var decimalSeparator: String {
         locale.decimalSeparator ?? "."
@@ -94,8 +94,8 @@ public struct NumberText<Item: NumberTextItem>: DiffableTextStyle {
     
     @inlinable func content() -> Set<Character> {
         var set = Set<Character>()
-        set.formUnion(Constants.minus)
-        set.formUnion(Constants.digits)
+        set.formUnion(Components.Constants.minus)
+        set.formUnion(Components.Constants.digits)
         set.formUnion(decimalSeparator)
         return set
     }
@@ -114,7 +114,7 @@ extension NumberText {
     
     // MARK: Process
     
-    @inlinable public func process(_ value: Value) -> Value {
+    @inlinable public func process(_ value: Item.Number) -> Item.Number {
         values.displayableStyle(value)
     }
     
@@ -129,13 +129,13 @@ extension NumberText {
     
     // MARK: Snapshot
     
-    @inlinable public func showcase(_ value: Value) -> Snapshot {
+    @inlinable public func showcase(_ value: Item.Number) -> Snapshot {
         let style = displayableStyle()
         
         return snapshot(style.format(value))
     }
     
-    @inlinable public func snapshot(_ value: Value) -> Snapshot {
+    @inlinable public func snapshot(_ value: Item.Number) -> Snapshot {
         let style = editableStyle()
         
         return snapshot(style.format(value))
@@ -143,13 +143,16 @@ extension NumberText {
         
     // MARK: Parse
 
-    @inlinable public func parse(_ snapshot: Snapshot) -> Value? {
+    @inlinable public func parse(_ snapshot: Snapshot) -> Item.Number? {
         components(snapshot).flatMap(value)
     }
     
     // MARK: Merge
     
     @inlinable public func merge(_ current: Snapshot, with replacement: Snapshot, in range: Range<Snapshot.Index>) -> Snapshot? {
+        
+        // --------------------------------- //
+        
         var replacement = replacement
         
         // --------------------------------- //
@@ -204,7 +207,7 @@ extension NumberText {
     
     // MARK: Helpers
     
-    @inlinable func editableCharacters(style: Item.Style, value: Value, components: Components) -> String {
+    @inlinable func editableCharacters(style: Item.Style, value: Item.Number, components: Components) -> String {
         var characters = style.format(value)
         correctSignIsAbsent(in: &characters, with: components)
         return characters
@@ -276,7 +279,7 @@ extension NumberText {
         // MARK: Initializers
         
         @inlinable init(input: inout Snapshot) {
-            if input.characters == Constants.minus {
+            if input.characters == Components.Constants.minus {
                 input.removeAll()
                 toggleSign = true
             }
@@ -291,3 +294,5 @@ extension NumberText {
         }
     }
 }
+
+#endif
