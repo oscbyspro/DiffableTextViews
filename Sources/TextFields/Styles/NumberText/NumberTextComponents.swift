@@ -21,7 +21,7 @@ public struct NumberTextComponents {
     
     // MARK: Initializers
     
-    @inlinable init?(_ characters: String, separators: Separators = .system, options: Options = Options()) {
+    @inlinable init?(_ characters: String, separators: Separators = Separators(), options: Options = Options()) {
 
         // --------------------------------- //
         
@@ -134,27 +134,28 @@ extension NumberTextComponents {
 // MARK: - NumberTextComponentsSeparators
 
 @usableFromInline struct NumberTextComponentsSeparators {
-    @usableFromInline typealias Constants = NumberTextComponentsConstants
     
+    // MARK: Properties: Static
+    
+    @inlinable static var system: String {
+        NumberTextComponentsConstants.separator
+    }
+        
     // MARK: Properties
     
-    @usableFromInline var elements: [String]
+    @usableFromInline var translatables: [String]
     
     // MARK: Initializers
     
-    @inlinable init(elements: [String] = []) {
-        self.elements = elements
-        self.elements.append(Constants.separator)
+    @inlinable init(separators: [String] = []) {
+        self.translatables = separators
+        self.translatables.append(Self.system)
     }
     
     // MARK: Initializers: Static
     
-    @inlinable static var system: Self {
-        .init()
-    }
-    
-    @inlinable static func translates(_ elements: [String]) -> Self {
-        .init(elements: elements)
+    @inlinable static func translates(_ separators: [String]) -> Self {
+        .init(separators: separators)
     }
     
     // MARK: Utilities
@@ -162,10 +163,10 @@ extension NumberTextComponents {
     @inlinable func parse(_ characters: String, from index: inout String.Index, into storage: inout String) {
         let subsequence = characters[index...]
         
-        for element in elements {
+        for element in translatables {
             guard subsequence.hasPrefix(element) else { continue }
             
-            storage = Constants.separator
+            storage = Self.system
             index = subsequence.index(index, offsetBy: element.count)
             break
         }
