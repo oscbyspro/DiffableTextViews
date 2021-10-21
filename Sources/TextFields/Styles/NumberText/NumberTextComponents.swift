@@ -21,9 +21,15 @@ public struct NumberTextComponents {
     public var decimalSeparator = String()
     public var decimalDigits = String()
     
+    @usableFromInline var options: Options
+    
     // MARK: Initializers
     
     @inlinable init?(_ characters: String, signs: Signs = Signs(), digits: Digits = Digits(), separators: Separators = Separators(), options: Options = Options()) {
+        
+        // --------------------------------- //
+        
+        self.options = options
         
         // --------------------------------- //
         
@@ -40,7 +46,7 @@ public struct NumberTextComponents {
         signs.parse(characters, from: &index, into: &sign)
         
         if options.contains(.nonnegative) {
-            guard sign != signs.minus else { return nil }
+            guard sign != Constants.minus else { return nil }
         }
         
         // --------------------------------- //
@@ -78,9 +84,12 @@ public struct NumberTextComponents {
     }
     
     // MARK: Transformations
-    
+
     @inlinable mutating func toggle(sign newValue: String) {
-        sign = (sign == newValue) ? String() : newValue
+        if options.contains(.nonnegative), newValue == Constants.minus { return }
+        
+        if sign == newValue { sign = String() }
+        else                { sign = newValue }
     }
     
     // MARK: Utilities

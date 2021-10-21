@@ -183,7 +183,7 @@ extension NumberText {
         // --------------------------------- //
         
         let digits = (components.integerDigits.count, components.decimalDigits.count)
-        
+
         guard precision.editableValidation(digits: digits) else { return nil }
         
         // --------------------------------- //
