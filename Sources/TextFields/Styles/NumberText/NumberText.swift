@@ -183,12 +183,12 @@ extension NumberText {
         // --------------------------------- //
         
         let digits = (components.integerDigits.count, components.decimalDigits.count)
-
         guard precision.editableValidation(digits: digits) else { return nil }
         
         // --------------------------------- //
         
-        guard let value = Item.number(components), values.editableValidation(value) else { return nil }
+        guard let value = Item.number(components) { return nil }
+        guard values.editableValidation(value) else { return nil }
 
         // --------------------------------- //
         
@@ -198,7 +198,9 @@ extension NumberText {
         
         var characters = style.format(value)
         
-        if !components.sign.isEmpty, !characters.hasPrefix(components.sign) {
+        if !components.sign.isEmpty,
+           !characters.hasPrefix(components.sign) {
+            
             characters = components.sign + characters
         }
 
@@ -209,6 +211,7 @@ extension NumberText {
 
     // MARK: Helpers
     
+    #warning("Maybe, return: Components + Components.Configuration.")
     @inlinable func components(_ snapshot: Snapshot) -> Components? {
         
         // --------------------------------- //
@@ -280,6 +283,7 @@ extension NumberText {
         // MARK: Initializers
         
         @inlinable init?(consumable: inout Snapshot) {
+            #warning("Should not know about Components.Constants...")
             guard consumable.characters == Components.Constants.minus else { return nil }
             self.sign = consumable.characters
             consumable.removeAll()
