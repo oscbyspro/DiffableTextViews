@@ -60,9 +60,8 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
         @usableFromInline var uiView: UITextField!
         @usableFromInline var source: DiffableTextField!
 
-        @usableFromInline var cache = Cache()
         @usableFromInline let lock = Lock()
-        @usableFromInline var editable = false
+        @usableFromInline let cache = Cache()
                 
         // MARK: Setup
 
@@ -191,7 +190,7 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
             
             // --------------------------------- //
             
-            self.editable = uiView.isEditing
+            self.cache.editable = uiView.isEditing
             
             // --------------------------------- //
             
@@ -206,7 +205,7 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
         // MARK: Update, Helpers
         
         @inlinable func displays(_ value: Value) -> Bool {
-            cache.value == value && editable == uiView.isEditing
+            cache.value == value && cache.editable == uiView.isEditing
         }
         
         @inlinable func snapshot(_ value: Value) -> Snapshot {
@@ -218,10 +217,12 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
         @usableFromInline final class Cache {
             
             // MARK: Properties
-            
+                        
             @usableFromInline var value: Value!
             @usableFromInline var snapshot = Snapshot()
             @usableFromInline var selection = Selection()
+            
+            @usableFromInline var editable = false
         }
 
         // MARK: Lock
