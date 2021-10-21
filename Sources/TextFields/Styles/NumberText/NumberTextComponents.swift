@@ -42,7 +42,7 @@ public struct NumberTextComponents {
         configuration.signs.parse(characters, from: &index, into: &sign)
         
         if configuration.options.contains(.nonnegative) {
-            guard sign != Configuration.Signs.minus else { return nil }
+            guard sign != type(of: configuration.signs).minus else { return nil }
         }
         
         // --------------------------------- //
@@ -81,11 +81,17 @@ public struct NumberTextComponents {
     
     // MARK: Transformations
 
-    @inlinable mutating func toggle(sign newValue: String) {
-        if configuration.options.contains(.nonnegative), newValue == Configuration.Signs.minus { return }
+    @inlinable mutating func toggle(sign denomination: Configuration.Signs.Denomination) {
+        if configuration.options.contains(.nonnegative) && denomination == .negative { return }
+
+        // --------------------------------- //
         
-        if sign == newValue { sign = String() }
-        else                { sign = newValue }
+        let characters = configuration.signs.make(denomination)
+        
+        // --------------------------------- //
+                
+        if sign == characters { sign = String()   }
+        else                  { sign = characters }
     }
     
     // MARK: Utilities
@@ -142,37 +148,36 @@ public struct NumberTextComponents {
         self.negatives = negatives
     }
     
-    // MARK: Initializers: Static
-    
-    @inlinable static var none: Self {
-        .init(positives: [], negatives: [])
-    }
-    
-    @inlinable static var positive: Self {
-        .init(positives: [plus], negatives: [])
-    }
-    
-    @inlinable static var negative: Self {
-        .init(positives: [], negatives: [minus])
-    }
-    
-    @inlinable static var all: Self {
-        .init(positives: [plus], negatives: [minus])
-    }
-    
     // MARK: Transformations
     
-    @inlinable mutating func remove(all signs: Denomination) {
-        switch signs {
+    @inlinable mutating func remove(all denomination: Denomination) {
+        switch denomination {
         case .positive: positives.removeAll()
         case .negative: negatives.removeAll()
         }
     }
     
+    @inlinable mutating func insert(_ signs: [String], as denomination: Denomination) {
+        switch denomination {
+        case .positive: positives.append(contentsOf: signs)
+        case .negative: negatives.append(contentsOf: signs)
+        }
+    }
+    
     // MARK: Utilities
     
-    @inlinable func contains(_ sign: String) -> Bool {
-        negatives.contains(sign) || positives.contains(sign)
+    @inlinable func make(_ denomination: Denomination) -> String {
+        switch denomination {
+        case .positive: return Self.plus
+        case .negative: return Self.minus
+        }
+    }
+    
+    @inlinable func interpret(_ characters: String) -> Denomination? {
+        if negatives.contains(characters) { return .negative }
+        if positives.contains(characters) { return .positive }
+        
+        return nil
     }
     
     // MARK: Parses
@@ -207,7 +212,7 @@ public struct NumberTextComponents {
     
     // MARK: Statics
     
-    @inlinable static var zero: String { "0" }
+    @inlinable        static var zero: String { "0" }
     @usableFromInline static let all = Set<Character>("0123456789")
     
     // MARK: Properties
@@ -255,7 +260,7 @@ public struct NumberTextComponents {
     
     // MARK: Transformations
     
-    @inlinable mutating func translate(_ separators: [String]) {
+    @inlinable mutating func insert(_ separators: [String]) {
         translatables.append(contentsOf: separators)
     }
     

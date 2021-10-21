@@ -172,7 +172,7 @@ extension NumberText {
         
         guard var components = components(result, with: configuration) else { return nil }
         toggleSignInstruction?.process(&components)
-                
+        
         // --------------------------------- //
         
         return self.snapshot(components)
@@ -200,12 +200,14 @@ extension NumberText {
         
         var characters = style.format(value)
         
-        if !components.sign.isEmpty, !characters.hasPrefix(components.sign) {
+        if !components.sign.isEmpty,
+           !characters.hasPrefix(components.sign) {
+            
             characters = components.sign + characters
         }
         
         // --------------------------------- //
-                
+                        
         return snapshot(characters)
     }
 
@@ -217,9 +219,6 @@ extension NumberText {
     
     @inlinable func configuration() -> Configuration {
         let configuration = Configuration()
-        
-        // --------------------------------- //
-        
         configuration.signs.remove(all: .positive)
         
         // --------------------------------- //
@@ -227,7 +226,7 @@ extension NumberText {
         if Item.isInteger {
             configuration.options.insert(.integer)
         } else {
-            configuration.separators.translate([decimalSeparator])
+            configuration.separators.insert([decimalSeparator])
         }
         
         // --------------------------------- //
@@ -256,7 +255,7 @@ extension NumberText {
                 snapshot.append(.spacer(character))
             }
         }
-                
+        
         return snapshot
     }
     
@@ -279,7 +278,7 @@ extension NumberText {
         // MARK: Utilities
         
         @inlinable mutating func consumeToggleSignInstruction() -> ToggleSignInstruction? {
-            ToggleSignInstruction(consumable: &content, signs: configuration.signs)
+            ToggleSignInstruction(consumable: &content, with: configuration)
         }
     }
     
@@ -289,20 +288,24 @@ extension NumberText {
         
         // MARK: Properties
         
-        @usableFromInline var sign: String
+        @usableFromInline var denomination: Configuration.Signs.Denomination
         
         // MARK: Initializers
         
-        @inlinable init?(consumable: inout Snapshot, signs: Configuration.Signs) {
-            guard signs.contains(consumable.characters) else { return nil }
-            self.sign = consumable.characters
-            consumable.removeAll()
+        @inlinable init?(consumable: inout Snapshot, with configuration: Configuration) {
+            guard let denomination = configuration.signs.interpret(consumable.characters) else { return nil }
+            
+            defer {
+                consumable.removeAll()
+            }
+
+            self.denomination = denomination
         }
         
         // MARK: Utilities
         
         @inlinable func process(_ components: inout Components) {
-            components.toggle(sign: sign)
+            components.toggle(sign: denomination)
         }
     }
 }
