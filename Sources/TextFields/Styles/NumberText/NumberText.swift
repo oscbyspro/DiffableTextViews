@@ -191,12 +191,7 @@ extension NumberText {
         // --------------------------------- //
         
         var characters = style.format(value)
-        
-        if !components.sign.isEmpty,
-           !characters.hasPrefix(components.sign) {
-            
-            characters = components.sign + characters
-        }
+        if !components.sign.isEmpty, !characters.hasPrefix(components.sign) { characters = components.sign + characters }
 
         // --------------------------------- //
                 
