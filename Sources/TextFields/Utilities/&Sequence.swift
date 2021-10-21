@@ -9,7 +9,7 @@
 
 extension Sequence {
     
-    // MARK: Reduce
+    // MARK: Transformations
     
     @inlinable func reduce<Other: RangeReplaceableCollection>(into other: Other = Other(), map element: (Element) -> Other.Element, where include: (Element) -> Bool = { _ in true }) -> Other {
         reduce(into: other) { result, next in
