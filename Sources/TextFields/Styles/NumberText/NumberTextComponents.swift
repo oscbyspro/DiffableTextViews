@@ -174,8 +174,8 @@ public struct NumberTextComponents {
     }
     
     @inlinable func interpret(_ characters: String) -> Denomination? {
-        if negatives.contains(characters) { return .negative }
         if positives.contains(characters) { return .positive }
+        if negatives.contains(characters) { return .negative }
         
         return nil
     }
