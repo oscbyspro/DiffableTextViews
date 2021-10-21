@@ -154,17 +154,11 @@ extension NumberText {
         // --------------------------------- //
         
         var input = Input(content)
-                
-        // --------------------------------- //
-        
         let toggleSignInstruction = input.consumeToggleSignInstruction()
                         
         // --------------------------------- //
         
         let result = snapshot.replace(range, with: input.content)
-        
-        // --------------------------------- //
-        
         guard var components = components(result) else { return nil }
 
         // --------------------------------- //
