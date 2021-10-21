@@ -19,6 +19,8 @@ public struct NumberText<Item: NumberTextItem>: DiffableTextStyle {
     public typealias Precision = NumberTextPrecision<Item>
     
     @usableFromInline typealias Components = NumberTextComponents
+    @usableFromInline typealias Configuration = Components.Configuration
+    
     @usableFromInline typealias PrecisionStyle = NumberFormatStyleConfiguration.Precision
     @usableFromInline typealias SeparatorStyle = NumberFormatStyleConfiguration.DecimalSeparatorDisplayStrategy
 
@@ -93,17 +95,17 @@ public struct NumberText<Item: NumberTextItem>: DiffableTextStyle {
     // MARK: Helpers, Snapshot
     
     @inlinable func content() -> Set<Character> {
-        var set = Set<Character>()
-        set.formUnion(Components.Constants.minus)
-        set.formUnion(Components.Constants.digits)
-        set.formUnion(decimalSeparator)
-        return set
+        var characters = Set<Character>()
+        characters.formUnion(Configuration.Signs.both)
+        characters.formUnion(Configuration.Digits.all)
+        characters.formUnion(decimalSeparator)
+        return characters
     }
     
     @inlinable func spacers() -> Set<Character> {
-        var set = Set<Character>()
-        set.formUnion(groupingSeparator)
-        return set
+        var characters = Set<Character>()
+        characters.formUnion(groupingSeparator)
+        return characters
     }
 }
 
@@ -144,7 +146,9 @@ extension NumberText {
     // MARK: Parse
 
     @inlinable public func parse(_ snapshot: Snapshot) -> Item.Number? {
-        components(snapshot).flatMap(Item.number)
+        let configuration = configuration()
+        
+        return components(snapshot, with: configuration).flatMap(Item.number)
     }
     
     // MARK: Merge
@@ -153,16 +157,20 @@ extension NumberText {
         
         // --------------------------------- //
         
-        var input = Input(content)
+        let configuration = configuration()
+        
+        // --------------------------------- //
+        
+        var input = Input(content, with: configuration)
         let toggleSignInstruction = input.consumeToggleSignInstruction()
-                        
+        
         // --------------------------------- //
         
         let result = snapshot.replace(range, with: input.content)
         
         // --------------------------------- //
         
-        guard var components = components(result) else { return nil }
+        guard var components = components(result, with: configuration) else { return nil }
         toggleSignInstruction?.process(&components)
                 
         // --------------------------------- //
@@ -191,37 +199,49 @@ extension NumberText {
         // --------------------------------- //
         
         var characters = style.format(value)
-        if !components.sign.isEmpty, !characters.hasPrefix(components.sign) { characters = components.sign + characters }
-
+        
+        if !components.sign.isEmpty, !characters.hasPrefix(components.sign) {
+            characters = components.sign + characters
+        }
+        
         // --------------------------------- //
                 
         return snapshot(characters)
     }
 
-    // MARK: Helpers
+    // MARK: Helpers, Components
     
-    #warning("Maybe, return: Components + Components.Configuration.")
-    @inlinable func components(_ snapshot: Snapshot) -> Components? {
+    @inlinable func components(_ snapshot: Snapshot, with configuration: Configuration) -> Components? {
+        Components(snapshot.content(), with: configuration)
+    }
+    
+    @inlinable func configuration() -> Configuration {
+        let configuration = Configuration()
         
         // --------------------------------- //
         
-        let characters = snapshot.content()
+        configuration.signs.remove(all: .positive)
         
         // --------------------------------- //
         
-        let separators = Components.Separators
-            .translates([decimalSeparator])
+        if Item.isInteger {
+            configuration.options.insert(.integer)
+        } else {
+            configuration.separators.translate([decimalSeparator])
+        }
         
-        let options = Components.Options()
-            .insert(.integer, when: Item.isInteger)
-            .insert(.nonnegative, when: values.nonnegative)
+        // --------------------------------- //
         
-        guard let components = Components(characters, separators: separators, options: options) else { return nil }
+        if values.nonnegative {
+            configuration.options.insert(.nonnegative)
+        }
         
         // --------------------------------- //
 
-        return components
+        return configuration
     }
+    
+    // MARK: Helpers, Snapshot
     
     @inlinable func snapshot(_ characters: String) -> Snapshot {
         var snapshot = Snapshot()
@@ -247,17 +267,19 @@ extension NumberText {
         // MARK: Properties
         
         @usableFromInline var content: Snapshot
+        @usableFromInline var configuration: Configuration
         
         // MARK: Initializers
         
-        @inlinable init(_ content: Snapshot) {
+        @inlinable init(_ content: Snapshot, with configuration: Configuration) {
             self.content = content
+            self.configuration = configuration
         }
         
         // MARK: Utilities
         
         @inlinable mutating func consumeToggleSignInstruction() -> ToggleSignInstruction? {
-            ToggleSignInstruction(consumable: &content)
+            ToggleSignInstruction(consumable: &content, signs: configuration.signs)
         }
     }
     
@@ -271,9 +293,8 @@ extension NumberText {
         
         // MARK: Initializers
         
-        @inlinable init?(consumable: inout Snapshot) {
-            #warning("Should not know about Components.Constants...")
-            guard consumable.characters == Components.Constants.minus else { return nil }
+        @inlinable init?(consumable: inout Snapshot, signs: Configuration.Signs) {
+            guard signs.contains(consumable.characters) else { return nil }
             self.sign = consumable.characters
             consumable.removeAll()
         }

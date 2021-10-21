@@ -8,11 +8,7 @@
 // MARK: - NumberTextComponents
 
 public struct NumberTextComponents {
-    @usableFromInline typealias Constants = NumberTextComponentsConstants
-    @usableFromInline typealias Signs = NumberTextComponentsSigns
-    @usableFromInline typealias Digits = NumberTextComponentsDigits
-    @usableFromInline typealias Separators = NumberTextComponentsSeparators
-    @usableFromInline typealias Options = NumberTextComponentsOptions
+    @usableFromInline typealias Configuration = NumberTextComponentsConfiguration
     
     // MARK: Properties
 
@@ -21,15 +17,15 @@ public struct NumberTextComponents {
     public var decimalSeparator = String()
     public var decimalDigits = String()
     
-    @usableFromInline var options: Options
+    @usableFromInline var configuration: Configuration
     
     // MARK: Initializers
     
-    @inlinable init?(_ characters: String, signs: Signs = Signs(), digits: Digits = Digits(), separators: Separators = Separators(), options: Options = Options()) {
+    @inlinable init?(_ characters: String, with configuration: Configuration = Configuration()) {
         
         // --------------------------------- //
         
-        self.options = options
+        self.configuration = configuration
         
         // --------------------------------- //
         
@@ -42,25 +38,25 @@ public struct NumberTextComponents {
         }
         
         // --------------------------------- //
+                
+        configuration.signs.parse(characters, from: &index, into: &sign)
         
-        signs.parse(characters, from: &index, into: &sign)
-        
-        if options.contains(.nonnegative) {
-            guard sign != Constants.minus else { return nil }
+        if configuration.options.contains(.nonnegative) {
+            guard sign != Configuration.Signs.minus else { return nil }
         }
         
         // --------------------------------- //
         
-        digits.parse(characters, from: &index, into: &integerDigits)
+        configuration.digits.parse(characters, from: &index, into: &integerDigits)
         
-        if options.contains(.integer) {
+        if configuration.options.contains(.integer) {
             guard done() else { return nil }
             return
         }
         
         // --------------------------------- //
         
-        separators.parse(characters, from: &index, into: &decimalSeparator)
+        configuration.separators.parse(characters, from: &index, into: &decimalSeparator)
         
         if decimalSeparator.isEmpty {
             guard done() else { return nil }
@@ -69,7 +65,7 @@ public struct NumberTextComponents {
         
         // --------------------------------- //
 
-        digits.parse(characters, from: &index, into: &decimalDigits)
+        configuration.digits.parse(characters, from: &index, into: &decimalDigits)
         
         if decimalDigits.isEmpty {
             guard done() else { return nil }
@@ -86,7 +82,7 @@ public struct NumberTextComponents {
     // MARK: Transformations
 
     @inlinable mutating func toggle(sign newValue: String) {
-        if options.contains(.nonnegative), newValue == Constants.minus { return }
+        if configuration.options.contains(.nonnegative), newValue == Configuration.Signs.minus { return }
         
         if sign == newValue { sign = String() }
         else                { sign = newValue }
@@ -99,67 +95,130 @@ public struct NumberTextComponents {
     }
 }
 
-// MARK: - NumberTextComponentsConstants
+// MARK: - NumberTextComponentsConfiguration
 
-@usableFromInline enum NumberTextComponentsConstants {
+@usableFromInline final class NumberTextComponentsConfiguration {
+    @usableFromInline typealias Signs = NumberTextComponentsSigns
+    @usableFromInline typealias Digits = NumberTextComponentsDigits
+    @usableFromInline typealias Separators = NumberTextComponentsSeparators
+    @usableFromInline typealias Options = NumberTextComponentsOptions
     
-    // MARK: Properties: Static
+    // MARK: Properties
     
-    @usableFromInline static let minus: String = "-"
-    @usableFromInline static let separator: String = "."
-    @usableFromInline static let zero: String = "0"
-    @usableFromInline static let digits = Set<Character>("0123456789")
+    @usableFromInline var signs: Signs
+    @usableFromInline var digits: Digits
+    @usableFromInline var separators: Separators
+    @usableFromInline var options: Options
+    
+    // MARK: Initializers
+    
+    @inlinable init(signs: Signs = Signs(), digits: Digits = Digits(), separators: Separators = Separators(), options: Options = Options()) {
+        self.signs = signs
+        self.digits = digits
+        self.separators = separators
+        self.options = options
+    }
 }
 
 // MARK: - NumberTextComponentsSigns
 
 @usableFromInline struct NumberTextComponentsSigns {
+
+    // MARK: Statics
+    
+    @inlinable static var plus:  String { "+" }
+    @inlinable static var minus: String { "-" }
+    @inlinable static var both:  String { plus + minus }
     
     // MARK: Properties
     
-    @usableFromInline var minuses: [String]
+    @usableFromInline var positives: [String]
+    @usableFromInline var negatives: [String]
     
     // MARK: Initializers
     
-    @inlinable init(minuses: [String] = []) {
-        self.minuses = minuses
-        self.minuses.append(minus)
+    @inlinable init(positives: [String] = [Self.plus], negatives: [String] = [Self.minus]) {
+        self.positives = positives
+        self.negatives = negatives
     }
     
-    // MARK: Getters
+    // MARK: Initializers: Static
     
-    @inlinable var minus: String {
-        NumberTextComponentsConstants.minus
+    @inlinable static var none: Self {
+        .init(positives: [], negatives: [])
+    }
+    
+    @inlinable static var positive: Self {
+        .init(positives: [plus], negatives: [])
+    }
+    
+    @inlinable static var negative: Self {
+        .init(positives: [], negatives: [minus])
+    }
+    
+    @inlinable static var all: Self {
+        .init(positives: [plus], negatives: [minus])
+    }
+    
+    // MARK: Transformations
+    
+    @inlinable mutating func remove(all signs: Denomination) {
+        switch signs {
+        case .positive: positives.removeAll()
+        case .negative: negatives.removeAll()
+        }
     }
     
     // MARK: Utilities
     
+    @inlinable func contains(_ sign: String) -> Bool {
+        negatives.contains(sign) || positives.contains(sign)
+    }
+    
+    // MARK: Parses
+    
     @inlinable func parse(_ characters: String, from index: inout String.Index, into storage: inout String) {
         let subsequence = characters[index...]
-        
-        for translatable in minuses {
-            guard subsequence.hasPrefix(translatable) else { continue }
+                
+        func parse(_ signs: [String], success: String) -> Bool {
+            for sign in signs {
+                guard subsequence.hasPrefix(sign) else { continue }
+                
+                storage = success
+                index = subsequence.index(index, offsetBy: sign.count)
+                return true
+            }
             
-            storage = minus
-            index = subsequence.index(index, offsetBy: translatable.count)
-            break
+            return false
         }
+        
+        guard !parse(negatives, success: Self.minus) else { return }
+        guard !parse(positives, success: Self.plus) else { return }
     }
+    
+    // MARK: Denomination
+    
+    @usableFromInline @frozen enum Denomination { case positive, negative }
 }
 
 // MARK: - NumberTextComponentsDigits
 
 @usableFromInline struct NumberTextComponentsDigits {
     
+    // MARK: Statics
+    
+    @inlinable static var zero: String { "0" }
+    @usableFromInline static let all = Set<Character>("0123456789")
+    
     // MARK: Properties
     
-    @inlinable var digits: Set<Character> {
-        NumberTextComponentsConstants.digits
-    }
+    @usableFromInline let digits: Set<Character>
     
     // MARK: Initializers
     
-    @inlinable init() { }
+    @inlinable init() {
+        self.digits = Self.all
+    }
     
     // MARK: Utilities
     
@@ -179,27 +238,25 @@ public struct NumberTextComponents {
 
 @usableFromInline struct NumberTextComponentsSeparators {
     
+    // MARK: Statics
+    
+    @inlinable static var separator: String { "." }
+    
     // MARK: Properties
 
     @usableFromInline var translatables: [String]
     
     // MARK: Initializers
     
-    @inlinable init(translatables: [String] = []) {
-        self.translatables = translatables
-        self.translatables.append(separator)
+    @inlinable init() {
+        self.translatables = []
+        self.translatables.append(Self.separator)
     }
     
-    // MARK: Initializers: Static
+    // MARK: Transformations
     
-    @inlinable static func translates(_ separators: [String]) -> Self {
-        .init(translatables: separators)
-    }
-    
-    // MARK: Getters
-    
-    @inlinable var separator: String {
-        NumberTextComponentsConstants.separator
+    @inlinable mutating func translate(_ separators: [String]) {
+        translatables.append(contentsOf: separators)
     }
     
     // MARK: Utilities
@@ -210,7 +267,7 @@ public struct NumberTextComponents {
         for translatable in translatables {
             guard subsequence.hasPrefix(translatable) else { continue }
             
-            storage = separator
+            storage = Self.separator
             index = subsequence.index(index, offsetBy: translatable.count)
             break
         }
@@ -234,11 +291,5 @@ public struct NumberTextComponents {
     
     @inlinable init(rawValue: UInt8) {
         self.rawValue = rawValue
-    }
-
-    // MARK: Tansformations
-    
-    @inlinable func insert(_ element: Self, when predicate: Bool) -> Self {
-        var copy = self; if predicate { copy.insert(element) }; return copy
     }
 }
