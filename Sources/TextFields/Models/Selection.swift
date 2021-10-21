@@ -37,7 +37,7 @@ import struct Sequences.Walkthrough
         range.map(bounds: \.offset)
     }
     
-    // MARK: Update: Field
+    // MARK: Translate: Field
     
     @inlinable func translate(to newValue: Field) -> Self {
         let options = SimilaritiesOptions<Symbol>
@@ -63,17 +63,17 @@ import struct Sequences.Walkthrough
         translate(to: Field(newValue))
     }
 
-    // MARK: Update: Range
+    // MARK: Configure: Range
     
-    @inlinable func update(with newValue: Range<Index>) -> Self {
+    @inlinable func configure(with newValue: Range<Index>) -> Self {
         move(to: newValue).moveToContent()
     }
     
-    @inlinable func update(with newValue: Range<Snapshot.Index>) -> Self {
-        update(with: newValue.map(bounds: field.index(rhs:)))
+    @inlinable func configure(with newValue: Range<Snapshot.Index>) -> Self {
+        configure(with: newValue.map(bounds: field.index(rhs:)))
     }
     
-    @inlinable func update(with newValue: Range<Int>) -> Self {
+    @inlinable func configure(with newValue: Range<Int>) -> Self {
         typealias Path = (start: Index, offset: Int)
         
         var positions = [Index](size: 5)
@@ -99,22 +99,22 @@ import struct Sequences.Walkthrough
         let lowerBound: Index = position(at: newValue.lowerBound, append: true)
         let upperBound: Index = position(at: newValue.upperBound, append: false)
                         
-        return update(with: lowerBound ..< upperBound)
+        return configure(with: lowerBound ..< upperBound)
     }
     
-    // MARK: Update: Position
+    // MARK: Configure: Position
     
-    @inlinable func update(with newValue: Index) -> Self {
-        update(with: newValue ..< newValue)
+    @inlinable func configure(with newValue: Index) -> Self {
+        configure(with: newValue ..< newValue)
     }
     
-    @inlinable func update(with newValue: Snapshot.Index) -> Self {
-        update(with: newValue ..< newValue)
+    @inlinable func configure(with newValue: Snapshot.Index) -> Self {
+        configure(with: newValue ..< newValue)
     }
     
-    // MARK: Transformations
+    // MARK: Helpers: Update
     
-    @inlinable func map(_ transform: (inout Selection) -> Void) -> Selection {
+    @inlinable func update(_ transform: (inout Selection) -> Void) -> Selection {
         var copy = self; transform(&copy); return copy
     }
 }
@@ -155,7 +155,7 @@ extension Selection {
         
         // --------------------------------- //
 
-        return map({ $0.range = lowerBound ..< upperBound })
+        return update({ $0.range = lowerBound ..< upperBound })
     }
     
     // MARK: To, Across Spacers
@@ -185,6 +185,6 @@ extension Selection {
         
         // --------------------------------- //
         
-        return map({ $0.range = lowerBound ..< upperBound })
+        return update({ $0.range = lowerBound ..< upperBound })
     }
 }

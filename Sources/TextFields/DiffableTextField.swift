@@ -99,7 +99,7 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
                     .parse(nextSnapshot)
                     .map(source.style.process) else { return false }
                         
-            let nextSelection = selection.update(with: range.upperBound).translate(to: nextSnapshot)
+            let nextSelection = selection.configure(with: range.upperBound).translate(to: nextSnapshot)
             
             // --------------------------------- //
             
@@ -128,7 +128,7 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
 
             // --------------------------------- //
             
-            let nextSelection = selection.update(with: offsets)
+            let nextSelection = selection.configure(with: offsets)
             
             let changesToLowerBound = nextSelection.range.lowerBound.offset - offsets.lowerBound
             let changesToUpperBound = nextSelection.range.upperBound.offset - offsets.upperBound

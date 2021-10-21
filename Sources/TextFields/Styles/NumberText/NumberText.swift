@@ -55,28 +55,28 @@ public struct NumberText<Item: NumberTextItem>: DiffableTextStyle {
     // MARK: Maps
     
     @inlinable public func locale(_ locale: Locale) -> Self {
-        map({ $0.locale = locale })
+        update({ $0.locale = locale })
     }
     
     @inlinable public func values(_ newValue: Values) -> Self {
-        map({ $0.values = newValue })
+        update({ $0.values = newValue })
     }
     
     @inlinable public func precision(_ newValue: Precision) -> Self {
-        map({ $0.precision = newValue })
+        update({ $0.precision = newValue })
     }
     
     @inlinable public func prefix(_ newValue: String?) -> Self {
-        map({ $0.prefix = newValue })
+        update({ $0.prefix = newValue })
     }
     
     @inlinable public func suffix(_ newValue: String?) -> Self {
-        map({ $0.suffix = newValue })
+        update({ $0.suffix = newValue })
     }
     
     // MARK: Helpers, Maps
     
-    @inlinable func map(_ transform: (inout Self) -> Void) -> Self {
+    @inlinable func update(_ transform: (inout Self) -> Void) -> Self {
         var copy = self; transform(&copy); return copy
     }
 

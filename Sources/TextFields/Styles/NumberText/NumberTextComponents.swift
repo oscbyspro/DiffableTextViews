@@ -29,7 +29,11 @@ public struct NumberTextComponents {
         
         // --------------------------------- //
 
-        Self.parse(prefix: Constants.minus, in: characters, from: &index, into: &sign)
+        Self.parse(
+            prefix: Constants.minus,
+            in: characters,
+            from: &index,
+            into: &sign)
 
         if options.contains(.nonnegative) {
             guard sign.isEmpty else { return nil }
@@ -37,7 +41,11 @@ public struct NumberTextComponents {
         
         // --------------------------------- //
         
-        Self.parse(charactersIn: Constants.digits, in: characters, from: &index, into: &integerDigits)
+        Self.parse(
+            charactersIn: Constants.digits,
+            in: characters,
+            from: &index,
+            into: &integerDigits)
         
         if options.contains(.integer) {
             guard characters[index...].isEmpty else { return nil }
@@ -46,11 +54,18 @@ public struct NumberTextComponents {
         
         // --------------------------------- //
         
-        separators.parse(characters, from: &index, into: &decimalSeparator)
+        separators.parse(
+            characters,
+            from: &index,
+            into: &decimalSeparator)
 
         // --------------------------------- //
 
-        Self.parse(charactersIn: Constants.digits, in: characters, from: &index, into: &decimalDigits)
+        Self.parse(
+            charactersIn: Constants.digits,
+            in: characters,
+            from: &index,
+            into: &decimalDigits)
     
         // --------------------------------- //
         
