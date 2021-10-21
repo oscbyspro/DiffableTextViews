@@ -159,10 +159,10 @@ extension NumberText {
         // --------------------------------- //
         
         let result = snapshot.replace(range, with: input.content)
-        guard var components = components(result) else { return nil }
-
+        
         // --------------------------------- //
         
+        guard var components = components(result) else { return nil }
         toggleSignInstruction?.process(&components)
                 
         // --------------------------------- //
