@@ -149,31 +149,31 @@ extension NumberText {
     
     // MARK: Merge
     
-    @inlinable public func merge(_ current: Snapshot, with replacement: Snapshot, in range: Range<Snapshot.Index>) -> Snapshot? {
+    @inlinable public func merge(_ snapshot: Snapshot, with content: Snapshot, in range: Range<Snapshot.Index>) -> Snapshot? {
         
         // --------------------------------- //
         
-        var replacement = replacement
-        
-        // --------------------------------- //
-        
-        let commands = Commands(input: &replacement)
+        var input = Input(content)
                 
         // --------------------------------- //
         
-        let next = current.replace(range, with: replacement)
+        let toggleSignInstruction = input.consumeToggleSignInstruction()
+                        
+        // --------------------------------- //
+        
+        let result = snapshot.replace(range, with: input.content)
         
         // --------------------------------- //
         
-        guard var components = components(next) else { return nil }
+        guard var components = components(result) else { return nil }
 
         // --------------------------------- //
         
-        commands.act(on: &components)
+        toggleSignInstruction?.process(&components)
                 
         // --------------------------------- //
         
-        return snapshot(components)
+        return self.snapshot(components)
     }
         
     // MARK: Helpers
@@ -267,30 +267,48 @@ extension NumberText {
                 
         return snapshot
     }
+        
+    // MARK: Input
     
-    // MARK: Commands
-    
-    @usableFromInline struct Commands {
+    @usableFromInline struct Input {
         
         // MARK: Properties
         
-        @usableFromInline var toggleSign: Bool = false
+        @usableFromInline var content: Snapshot
         
         // MARK: Initializers
         
-        @inlinable init(input: inout Snapshot) {
-            if input.characters == Components.Constants.minus {
-                input.removeAll()
-                toggleSign = true
-            }
+        @inlinable init(_ content: Snapshot) {
+            self.content = content
         }
         
         // MARK: Utilities
         
-        @inlinable func act(on components: inout Components) {
-            if toggleSign {
-                components.toggleSign()
-            }
+        @inlinable mutating func consumeToggleSignInstruction() -> ToggleSignInstruction? {
+            ToggleSignInstruction(consumable: &content)
+        }
+    }
+    
+    // MARK: ToggleSignInstruction
+        
+    @usableFromInline struct ToggleSignInstruction {
+        
+        // MARK: Properties
+        
+        @usableFromInline var sign: String
+        
+        // MARK: Initializers
+        
+        @inlinable init?(consumable: inout Snapshot) {
+            guard consumable.characters == Components.Constants.minus else { return nil }
+            self.sign = consumable.characters
+            consumable.removeAll()
+        }
+        
+        // MARK: Utilities
+        
+        @inlinable func process(_ components: inout Components) {
+            components.toggle(sign: sign)
         }
     }
 }

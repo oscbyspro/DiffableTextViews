@@ -24,7 +24,7 @@ public struct NumberTextComponents {
     // MARK: Initializers
     
     @inlinable init?(_ characters: String, signs: Signs = Signs(), digits: Digits = Digits(), separators: Separators = Separators(), options: Options = Options()) {
-
+        
         // --------------------------------- //
         
         var index = characters.startIndex
@@ -32,7 +32,7 @@ public struct NumberTextComponents {
         // --------------------------------- //
         
         func done() -> Bool {
-            characters[index...].isEmpty
+            index == characters.endIndex
         }
         
         // --------------------------------- //
@@ -40,7 +40,7 @@ public struct NumberTextComponents {
         signs.parse(characters, from: &index, into: &sign)
         
         if options.contains(.nonnegative) {
-            guard sign != Constants.minus else { return nil }
+            guard nonnegative else { return nil }
         }
         
         // --------------------------------- //
@@ -55,20 +55,34 @@ public struct NumberTextComponents {
         // --------------------------------- //
         
         separators.parse(characters, from: &index, into: &decimalSeparator)
-
+        
+        if decimalSeparator.isEmpty {
+            guard done() else { return nil }
+            return
+        }
+        
         // --------------------------------- //
 
         digits.parse(characters, from: &index, into: &decimalDigits)
-    
+        
+        if decimalDigits.isEmpty {
+            guard done() else { return nil }
+            return
+        }
+        
         // --------------------------------- //
-        
+                
         guard done() else { return nil }
-        
+
         // --------------------------------- //
     }
     
     // MARK: Descriptions
 
+    @inlinable public var nonnegative: Bool {
+        sign != Constants.minus
+    }
+    
     @inlinable public var isEmpty: Bool {
         sign.isEmpty && integerDigits.isEmpty && decimalSeparator.isEmpty && decimalDigits.isEmpty
     }
@@ -79,8 +93,8 @@ public struct NumberTextComponents {
     
     // MARK: Transformations
     
-    @inlinable mutating func toggleSign() {
-        sign = sign.isEmpty ? Constants.minus : String()
+    @inlinable mutating func toggle(sign newValue: String) {
+        sign = (sign == newValue) ? String() : newValue
     }
     
     // MARK: Utilities
@@ -223,13 +237,13 @@ public struct NumberTextComponents {
     
     // MARK: Initializers
     
-    @inlinable public init(rawValue: UInt8) {
+    @inlinable init(rawValue: UInt8) {
         self.rawValue = rawValue
     }
 
     // MARK: Tansformations
     
-    @inlinable public func insert(_ element: Self, when predicate: Bool) -> Self {
+    @inlinable func insert(_ element: Self, when predicate: Bool) -> Self {
         var copy = self; if predicate { copy.insert(element) }; return copy
     }
 }

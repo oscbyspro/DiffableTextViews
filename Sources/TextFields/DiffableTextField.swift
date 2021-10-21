@@ -87,12 +87,12 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
             // --------------------------------- //
             
             let range = snapshot.indices(in: range)
-            let replacement = Snapshot(string, only: .content)
+            let input = Snapshot(string, only: .content)
                         
             // --------------------------------- //
             
             guard let nextSnapshot = source.style
-                    .merge(snapshot, with: replacement, in: range)
+                    .merge(snapshot, with: input, in: range)
                     .map(source.style.process) else { return false }
                         
             guard let nextValue = source.style
