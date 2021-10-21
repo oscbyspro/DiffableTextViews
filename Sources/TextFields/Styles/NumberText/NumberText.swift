@@ -183,7 +183,7 @@ extension NumberText {
         // --------------------------------- //
         
         let digits = (components.integerDigits.count, components.decimalDigits.count)
-                
+        
         guard precision.editableValidation(digits: digits) else { return nil }
         
         // --------------------------------- //
@@ -195,7 +195,7 @@ extension NumberText {
         let style = editableStyle(digits: digits, separator: !components.decimalSeparator.isEmpty)
         
         // --------------------------------- //
-                  
+        
         var characters = style.format(value)
         
         if !components.sign.isEmpty, !characters.hasPrefix(components.sign) {

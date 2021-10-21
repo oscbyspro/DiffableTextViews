@@ -25,7 +25,7 @@ public enum NumberTextInt: NumberTextInteger {
     // MARK: Style
     
     @inlinable public static func number(_ components: NumberTextComponents) -> Number? {
-        guard !components.digitsAreEmpty else {
+        guard !components.integerDigits.isEmpty else {
             return .zero
         }
         

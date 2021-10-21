@@ -29,7 +29,7 @@ public enum NumberTextDecimal: NumberTextFloat {
     // MARK: Style
     
     @inlinable public static func number(_ components: NumberTextComponents) -> Number? {
-        guard !components.digitsAreEmpty else {
+        guard !components.integerDigits.isEmpty || !components.decimalDigits.isEmpty else {
             return .zero
         }
         

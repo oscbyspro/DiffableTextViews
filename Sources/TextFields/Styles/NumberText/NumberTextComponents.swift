@@ -40,7 +40,7 @@ public struct NumberTextComponents {
         signs.parse(characters, from: &index, into: &sign)
         
         if options.contains(.nonnegative) {
-            guard nonnegative else { return nil }
+            guard sign != signs.minus else { return nil }
         }
         
         // --------------------------------- //
@@ -77,20 +77,6 @@ public struct NumberTextComponents {
         // --------------------------------- //
     }
     
-    // MARK: Descriptions
-
-    @inlinable public var nonnegative: Bool {
-        sign != Constants.minus
-    }
-    
-    @inlinable public var isEmpty: Bool {
-        sign.isEmpty && integerDigits.isEmpty && decimalSeparator.isEmpty && decimalDigits.isEmpty
-    }
-    
-    @inlinable public var digitsAreEmpty: Bool {
-        integerDigits.isEmpty && decimalDigits.isEmpty
-    }
-    
     // MARK: Transformations
     
     @inlinable mutating func toggle(sign newValue: String) {
@@ -120,12 +106,6 @@ public struct NumberTextComponents {
 
 @usableFromInline struct NumberTextComponentsSigns {
     
-    // MARK: Properties: Static
-    
-    @inlinable static var minus: String {
-        NumberTextComponentsConstants.minus
-    }
-    
     // MARK: Properties
     
     @usableFromInline var minuses: [String]
@@ -134,7 +114,13 @@ public struct NumberTextComponents {
     
     @inlinable init(minuses: [String] = []) {
         self.minuses = minuses
-        self.minuses.append(Self.minus)
+        self.minuses.append(minus)
+    }
+    
+    // MARK: Getters
+    
+    @inlinable var minus: String {
+        NumberTextComponentsConstants.minus
     }
     
     // MARK: Utilities
@@ -142,11 +128,11 @@ public struct NumberTextComponents {
     @inlinable func parse(_ characters: String, from index: inout String.Index, into storage: inout String) {
         let subsequence = characters[index...]
         
-        for element in minuses {
-            guard subsequence.hasPrefix(element) else { continue }
+        for translatable in minuses {
+            guard subsequence.hasPrefix(translatable) else { continue }
             
-            storage = Self.minus
-            index = subsequence.index(index, offsetBy: element.count)
+            storage = minus
+            index = subsequence.index(index, offsetBy: translatable.count)
             break
         }
     }
@@ -184,12 +170,6 @@ public struct NumberTextComponents {
 
 @usableFromInline struct NumberTextComponentsSeparators {
     
-    // MARK: Properties: Static
-    
-    @inlinable static var system: String {
-        NumberTextComponentsConstants.separator
-    }
-        
     // MARK: Properties
 
     @usableFromInline var translatables: [String]
@@ -198,7 +178,7 @@ public struct NumberTextComponents {
     
     @inlinable init(translatables: [String] = []) {
         self.translatables = translatables
-        self.translatables.append(Self.system)
+        self.translatables.append(separator)
     }
     
     // MARK: Initializers: Static
@@ -207,16 +187,22 @@ public struct NumberTextComponents {
         .init(translatables: separators)
     }
     
+    // MARK: Getters
+    
+    @inlinable var separator: String {
+        NumberTextComponentsConstants.separator
+    }
+    
     // MARK: Utilities
 
     @inlinable func parse(_ characters: String, from index: inout String.Index, into storage: inout String) {
         let subsequence = characters[index...]
         
-        for element in translatables {
-            guard subsequence.hasPrefix(element) else { continue }
+        for translatable in translatables {
+            guard subsequence.hasPrefix(translatable) else { continue }
             
-            storage = Self.system
-            index = subsequence.index(index, offsetBy: element.count)
+            storage = separator
+            index = subsequence.index(index, offsetBy: translatable.count)
             break
         }
     }
