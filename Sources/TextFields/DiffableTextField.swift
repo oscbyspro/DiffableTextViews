@@ -35,10 +35,16 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
     public func makeUIView(context: Context) -> UITextField {
         let uiView = UITextField()
         
+        // --------------------------------- //
+        
         uiView.setContentHuggingPriority(.defaultHigh, for: .vertical)
         uiView.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
         
+        // --------------------------------- //
+        
         context.coordinator.connect(uiView)
+        
+        // --------------------------------- //
 
         return uiView
     }
