@@ -5,13 +5,15 @@
 //  Created by Oscar Byström Ericsson on 2021-10-18.
 //
 
+#if os(iOS)
+
 import struct Foundation.Locale
 import struct Foundation.Decimal
 
 // MARK: - NumericTextSchemeDecimal
 
 @available(iOS 15.0, *)
-public enum NumericTextSchemeDecimal: NumericTextFloat {
+public enum NumericTextSchemeDecimal: NumericTextFloatScheme {    
     public typealias Number = Decimal
     
     // MARK: Values
@@ -36,3 +38,5 @@ public enum NumericTextSchemeDecimal: NumericTextFloat {
         .init(locale: locale).precision(precision).decimalSeparator(strategy: separator)
     }
 }
+
+#endif

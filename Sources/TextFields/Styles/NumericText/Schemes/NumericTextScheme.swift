@@ -5,9 +5,11 @@
 //  Created by Oscar Byström Ericsson on 2021-10-19.
 //
 
+#if os(iOS)
 
-import Foundation
-import SwiftUI
+import struct Foundation.Locale
+import enum Foundation.NumberFormatStyleConfiguration
+import protocol SwiftUI.FormatStyle
 
 // MARK: - NumericTextStyleScheme
 
@@ -48,13 +50,14 @@ public extension NumericTextScheme {
     @inlinable static var isInteger: Bool { maxLowerDigits == 0 }
 }
 
+
 // MARK: - NumericTextIntegerScheme
 
 @available(iOS 15.0, *)
-public protocol NumericTextInteger: NumericTextScheme { }
+public protocol NumericTextIntegerScheme: NumericTextScheme { }
 
 @available(iOS 15.0, *)
-public extension NumericTextInteger {
+public extension NumericTextIntegerScheme {
     
     // MARK: Implementations
     
@@ -64,4 +67,6 @@ public extension NumericTextInteger {
 // MARK: - NumericTextFloatScheme
 
 @available(iOS 15.0, *)
-public protocol NumericTextFloat: NumericTextScheme { }
+public protocol NumericTextFloatScheme: NumericTextScheme { }
+
+#endif

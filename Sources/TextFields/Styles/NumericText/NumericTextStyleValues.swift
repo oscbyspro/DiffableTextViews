@@ -5,10 +5,12 @@
 //  Created by Oscar Byström Ericsson on 2021-10-18.
 //
 
+#if os(iOS)
+
 // MARK: - NumericTextStyleValues
 
 @available(iOS 15.0, *)
-public struct NumericTextStyleValues<Scheme: NumericTextStyleScheme> {
+public struct NumericTextStyleValues<Scheme: NumericTextScheme> {
     public typealias Number = Scheme.Number
     
     // MARK: Properties: Static
@@ -79,3 +81,5 @@ public struct NumericTextStyleValues<Scheme: NumericTextStyleScheme> {
         Swift.min(min, Self.zero) <= value && value <= Swift.max(Self.zero, max)
     }
 }
+
+#endif

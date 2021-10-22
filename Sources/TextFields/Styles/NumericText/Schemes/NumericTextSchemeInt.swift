@@ -5,13 +5,15 @@
 //  Created by Oscar Byström Ericsson on 2021-10-19.
 //
 
+#if os(iOS)
+
 import struct Foundation.Locale
 import struct Foundation.IntegerFormatStyle
 
 // MARK: - NumericTextSchemeInt
 
 @available(iOS 15.0, *)
-public enum NumericTextSchemeInt: NumericTextInteger {
+public enum NumericTextSchemeInt: NumericTextIntegerScheme {
     public typealias Number = Int
     public typealias Style = IntegerFormatStyle<Number>
     
@@ -36,3 +38,5 @@ public enum NumericTextSchemeInt: NumericTextInteger {
         .init(locale: locale).precision(precision).decimalSeparator(strategy: separator)
     }
 }
+
+#endif
