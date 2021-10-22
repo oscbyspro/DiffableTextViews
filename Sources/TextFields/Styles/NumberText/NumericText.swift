@@ -1,5 +1,5 @@
 //
-//  NumberTextStyle.swift
+//  NumericTextStyle.swift
 //  
 //
 //  Created by Oscar Byström Ericsson on 2021-10-19.
@@ -10,15 +10,15 @@ import struct Foundation.Locale
 
 #if os(iOS)
 
-// MARK: - NumberTextStyle
+// MARK: - NumericTextStyle
 
 @available(iOS 15.0, *)
-public struct NumberText<Item: NumberTextItem>: DiffableTextStyle {
+public struct NumericText<Item: NumericTextItem>: DiffableTextStyle {
     public typealias Value = Item.Number
-    public typealias Values = NumberTextValues<Item>
-    public typealias Precision = NumberTextPrecision<Item>
+    public typealias Values = NumericTextValues<Item>
+    public typealias Precision = NumericTextPrecision<Item>
     
-    @usableFromInline typealias Components = NumberTextComponents
+    @usableFromInline typealias Components = NumericTextComponents
     @usableFromInline typealias Configuration = Components.Configuration
     
     @usableFromInline typealias PrecisionStyle = NumberFormatStyleConfiguration.Precision
@@ -112,7 +112,7 @@ public struct NumberText<Item: NumberTextItem>: DiffableTextStyle {
 // MARK: Conformance to: DiffableTextStyle
 
 @available(iOS 15.0, *)
-extension NumberText {
+extension NumericText {
     
     // MARK: Process
     

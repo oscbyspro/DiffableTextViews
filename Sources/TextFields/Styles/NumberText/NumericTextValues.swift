@@ -1,5 +1,5 @@
 //
-//  NumberTextValues.swift
+//  NumericTextValues.swift
 //  
 //
 //  Created by Oscar Byström Ericsson on 2021-10-18.
@@ -7,7 +7,7 @@
 
 // MARK: - NumberTextValues
 
-public struct NumberTextValues<Item: NumberTextValuesItem> {
+public struct NumericTextValues<Item: NumericTextValuesItem> {
     public typealias Number = Item.Number
     
     // MARK: Properties: Static

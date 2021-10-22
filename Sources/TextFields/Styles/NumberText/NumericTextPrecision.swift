@@ -1,5 +1,5 @@
 //
-//  NumberTextPrecision.swift
+//  NumericTextPrecision.swift
 //  
 //
 //  Created by Oscar Byström Ericsson on 2021-10-18.
@@ -7,13 +7,13 @@
 
 import enum SwiftUI.NumberFormatStyleConfiguration
 
-// MARK: - NumberTextPrecision
+// MARK: - NumericTextPrecision
 
 @available(iOS 15.0, *)
-public struct NumberTextPrecision<Item: NumberTextPrecisionItem> {
-    @usableFromInline typealias Defaults = NumberTextPrecisionDefaults
-    @usableFromInline typealias Strategy = NumberTextPrecisionStrategy
-    @usableFromInline typealias Total = NumberTextPrecisionTotal<Item>
+public struct NumericTextPrecision<Item: NumericTextPrecisionItem> {
+    @usableFromInline typealias Defaults = NumericTextPrecisionDefaults
+    @usableFromInline typealias Strategy = NumericTextPrecisionStrategy
+    @usableFromInline typealias Total = NumericTextPrecisionTotal<Item>
     @usableFromInline typealias Parts = NumberTextPrecisionParts<Item>
     
     // MARK: Properties
@@ -44,7 +44,7 @@ public struct NumberTextPrecision<Item: NumberTextPrecisionItem> {
 }
 
 @available(iOS 15.0, *)
-extension NumberTextPrecision where Item: NumberTextFloat {
+extension NumericTextPrecision where Item: NumericTextFloat {
 
     // MARK: Initializers: Separate
     
@@ -76,7 +76,7 @@ extension NumberTextPrecision where Item: NumberTextFloat {
 // MARK: - Interoperabilities
 
 @available(iOS 15.0, *)
-extension NumberTextPrecision {
+extension NumericTextPrecision {
     
     // MARK: Utilities
     
@@ -101,8 +101,8 @@ extension NumberTextPrecision {
 // MARK: - Strategies
 
 @available(iOS 15.0, *)
-@usableFromInline protocol NumberTextPrecisionStrategy {
-    typealias Defaults = NumberTextPrecisionDefaults
+@usableFromInline protocol NumericTextPrecisionStrategy {
+    typealias Defaults = NumericTextPrecisionDefaults
     
     func displayableStyle() -> NumberFormatStyleConfiguration.Precision
         
@@ -112,7 +112,7 @@ extension NumberTextPrecision {
 // MARK: - Strategies: Total
 
 @available(iOS 15.0, *)
-@usableFromInline struct NumberTextPrecisionTotal<Item: NumberTextPrecisionItem>: NumberTextPrecisionStrategy {
+@usableFromInline struct NumericTextPrecisionTotal<Item: NumericTextPrecisionItem>: NumericTextPrecisionStrategy {
 
     // MARK: Properties
     
@@ -144,7 +144,7 @@ extension NumberTextPrecision {
 // MARK: - Strategies: Separate
 
 @available(iOS 15.0, *)
-@usableFromInline struct NumberTextPrecisionParts<Item: NumberTextPrecisionItem>: NumberTextPrecisionStrategy {
+@usableFromInline struct NumberTextPrecisionParts<Item: NumericTextPrecisionItem>: NumericTextPrecisionStrategy {
 
     // MARK: Properties
     
@@ -197,9 +197,9 @@ extension NumberTextPrecision {
     }
 }
 
-// MARK: - NumberTextPrecisionDefaults
+// MARK: - NumericTextPrecisionDefaults
 
-@usableFromInline enum NumberTextPrecisionDefaults {
+@usableFromInline enum NumericTextPrecisionDefaults {
     @usableFromInline static let totalLowerBound: Int = 1
     @usableFromInline static let upperLowerBound: Int = 1
     @usableFromInline static let lowerLowerBound: Int = 0

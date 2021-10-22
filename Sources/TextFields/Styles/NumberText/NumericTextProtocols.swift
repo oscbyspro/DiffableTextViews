@@ -1,5 +1,5 @@
 //
-//  File.swift
+//  NumericTextProtocols.swift
 //  
 //
 //  Created by Oscar Byström Ericsson on 2021-10-19.
@@ -9,10 +9,10 @@
 import Foundation
 import SwiftUI
 
-// MARK: - NumberTextStyleItem
+// MARK: - NumericTextStyleItem
 
 @available(iOS 15.0, *)
-public protocol NumberTextItem: NumberTextValuesItem, NumberTextPrecisionItem {
+public protocol NumericTextItem: NumericTextValuesItem, NumericTextPrecisionItem {
     associatedtype Style: FormatStyle where Style.FormatInput == Number, Style.FormatOutput == String
     
     // MARK: Aliases
@@ -22,14 +22,14 @@ public protocol NumberTextItem: NumberTextValuesItem, NumberTextPrecisionItem {
     
     // MARK: Utilities
     
-    @inlinable static func number(_ components: NumberTextComponents) -> Number?
+    @inlinable static func number(_ components: NumericTextComponents) -> Number?
     
     @inlinable static func style(_ locale: Locale, precision: Precision, separator: Separator) -> Style
 }
 
-// MARK: - NumberTextValuesItem
+// MARK: - NumericTextValuesItem
 
-public protocol NumberTextValuesItem {
+public protocol NumericTextValuesItem {
     associatedtype Number: Comparable
     
     // MARK: Properties: Static
@@ -39,9 +39,9 @@ public protocol NumberTextValuesItem {
     static var  min: Number { get }
 }
 
-// MARK: - NumberTextPrecisionItem
+// MARK: - NumericTextPrecisionItem
 
-public protocol NumberTextPrecisionItem {
+public protocol NumericTextPrecisionItem {
     
     // MARK: Properties: Static
         
@@ -50,25 +50,25 @@ public protocol NumberTextPrecisionItem {
     static var maxLowerDigits: Int { get }
 }
 
-public extension NumberTextPrecisionItem {
+public extension NumericTextPrecisionItem {
     
     // MARK: Properties: Static
 
     @inlinable static var isInteger: Bool { maxLowerDigits == 0 }
 }
 
-// MARK: - NumberTextFloat
+// MARK: - NumericTextFloat
 
 @available(iOS 15.0, *)
-public protocol NumberTextFloat: NumberTextItem { }
+public protocol NumericTextFloat: NumericTextItem { }
 
 // MARK: - NumberTextInteger
 
 @available(iOS 15.0, *)
-public protocol NumberTextInteger: NumberTextItem { }
+public protocol NumericTextInteger: NumericTextItem { }
 
 @available(iOS 15.0, *)
-public extension NumberTextInteger {
+public extension NumericTextInteger {
     
     // MARK: Implementations
     
@@ -80,11 +80,7 @@ public extension NumberTextInteger {
 @available(iOS 15.0, *)
 public protocol NumberTextCompatible {
     
-    // MARK: Item
+    // MARK: Types
     
-    associatedtype NumberTextItem: TextFields.NumberTextItem where NumberTextItem.Number == Self
-    
-    // MARK: Aliases
-    
-    typealias NumberText = TextFields.NumberText<NumberTextItem>
+    associatedtype NumericTextItem: TextFields.NumericTextItem where NumericTextItem.Number == Self
 }

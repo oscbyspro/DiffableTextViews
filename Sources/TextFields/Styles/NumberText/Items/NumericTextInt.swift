@@ -1,5 +1,5 @@
 //
-//  NumberTextInt.swift
+//  NumericTextInt.swift
 //  
 //
 //  Created by Oscar Byström Ericsson on 2021-10-19.
@@ -7,8 +7,10 @@
 
 import Foundation
 
+// MARK: - NumbericTextInt
+
 @available(iOS 15.0, *)
-public enum NumberTextInt: NumberTextInteger {
+public enum NumericTextInt: NumericTextInteger {
     public typealias Number = Int
     
     // MARK: Values
@@ -24,7 +26,7 @@ public enum NumberTextInt: NumberTextInteger {
     
     // MARK: Style
     
-    @inlinable public static func number(_ components: NumberTextComponents) -> Number? {
+    @inlinable public static func number(_ components: NumericTextComponents) -> Number? {
         guard !components.integerDigits.isEmpty else {
             return .zero
         }
@@ -41,5 +43,5 @@ public enum NumberTextInt: NumberTextInteger {
 
 @available(iOS 15.0, *)
 extension Int: NumberTextCompatible {
-    public typealias NumberTextItem = NumberTextInt
+    public typealias NumericTextItem = NumericTextInt
 }

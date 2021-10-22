@@ -1,14 +1,14 @@
 //
-//  NumberTextComponents.swift
+//  NumericTextComponents.swift
 //  
 //
 //  Created by Oscar Byström Ericsson on 2021-10-19.
 //
 
-// MARK: - NumberTextComponents
+// MARK: - NumericTextComponents
 
-public struct NumberTextComponents {
-    @usableFromInline typealias Configuration = NumberTextComponentsConfiguration
+public struct NumericTextComponents {
+    @usableFromInline typealias Configuration = NumericTextComponentsConfiguration
     
     // MARK: Properties
 
@@ -101,13 +101,13 @@ public struct NumberTextComponents {
     }
 }
 
-// MARK: - NumberTextComponentsConfiguration
+// MARK: - NumericTextComponentsConfiguration
 
-@usableFromInline final class NumberTextComponentsConfiguration {
-    @usableFromInline typealias Signs = NumberTextComponentsSigns
-    @usableFromInline typealias Digits = NumberTextComponentsDigits
-    @usableFromInline typealias Separators = NumberTextComponentsSeparators
-    @usableFromInline typealias Options = NumberTextComponentsOptions
+@usableFromInline final class NumericTextComponentsConfiguration {
+    @usableFromInline typealias Signs = NumericTextComponentsSigns
+    @usableFromInline typealias Digits = NumericTextComponentsDigits
+    @usableFromInline typealias Separators = NumericTextComponentsSeparators
+    @usableFromInline typealias Options = NumericTextComponentsOptions
     
     // MARK: Properties
     
@@ -126,9 +126,9 @@ public struct NumberTextComponents {
     }
 }
 
-// MARK: - NumberTextComponentsSigns
+// MARK: - NumericTextComponentsSigns
 
-@usableFromInline struct NumberTextComponentsSigns {
+@usableFromInline struct NumericTextComponentsSigns {
 
     // MARK: Statics
     
@@ -206,9 +206,9 @@ public struct NumberTextComponents {
     @usableFromInline @frozen enum Denomination { case positive, negative }
 }
 
-// MARK: - NumberTextComponentsDigits
+// MARK: - NumericTextComponentsDigits
 
-@usableFromInline struct NumberTextComponentsDigits {
+@usableFromInline struct NumericTextComponentsDigits {
     
     // MARK: Statics
     
@@ -239,9 +239,9 @@ public struct NumberTextComponents {
     }
 }
 
-// MARK: - NumberTextComponentsSeparators
+// MARK: - NumericTextComponentsSeparators
 
-@usableFromInline struct NumberTextComponentsSeparators {
+@usableFromInline struct NumericTextComponentsSeparators {
     
     // MARK: Statics
     
@@ -279,9 +279,9 @@ public struct NumberTextComponents {
     }
 }
 
-// MARK: - NumberTextComponentsOptions
+// MARK: - NumericTextComponentsOptions
 
-@usableFromInline struct NumberTextComponentsOptions: OptionSet {
+@usableFromInline struct NumericTextComponentsOptions: OptionSet {
     
     // MARK: Options
     

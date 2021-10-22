@@ -1,5 +1,5 @@
 //
-//  NumberTextDecimal.swift
+//  NumericTextDecimal.swift
 //  
 //
 //  Created by Oscar Byström Ericsson on 2021-10-18.
@@ -8,10 +8,10 @@
 import struct Foundation.Locale
 import struct Foundation.Decimal
 
-// MARK: - NumberTextDecimal
+// MARK: - NumericTextDecimal
 
 @available(iOS 15.0, *)
-public enum NumberTextDecimal: NumberTextFloat {
+public enum NumericTextDecimal: NumericTextFloat {
     public typealias Number = Decimal
     
     // MARK: Values
@@ -28,7 +28,7 @@ public enum NumberTextDecimal: NumberTextFloat {
     
     // MARK: Style
     
-    @inlinable public static func number(_ components: NumberTextComponents) -> Number? {
+    @inlinable public static func number(_ components: NumericTextComponents) -> Number? {
         guard !components.integerDigits.isEmpty || !components.decimalDigits.isEmpty else {
             return .zero
         }
@@ -45,6 +45,6 @@ public enum NumberTextDecimal: NumberTextFloat {
 
 @available(iOS 15.0, *)
 extension Decimal: NumberTextCompatible {
-    public typealias NumberTextItem = NumberTextDecimal
+    public typealias NumericTextItem = NumericTextDecimal
 }
 
