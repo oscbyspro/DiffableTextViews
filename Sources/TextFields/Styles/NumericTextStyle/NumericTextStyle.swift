@@ -39,11 +39,11 @@ public struct NumericTextStyle<Scheme: NumericTextScheme>: DiffableTextStyle {
     // MARK: Helpers, Locale
 
     @inlinable var decimalSeparator: String {
-        locale.decimalSeparator ?? Components.Separator.some.rawValue
+        locale.decimalSeparator ?? Components.Separator.system.characters
     }
 
     @inlinable var groupingSeparator: String {
-        locale.groupingSeparator ?? Components.Separator.none.rawValue
+        locale.groupingSeparator ?? String()
     }
 }
 
@@ -187,25 +187,25 @@ extension NumericTextStyle {
         guard let value = value(components) else { return nil }
         guard values.editableValidation(value) else { return nil }
         
-        let style = editableStyle(digits: digits, separator: components.separator != .none)
-        var characters = style.format(value)
+        let style = editableStyle(digits: digits, separator: components.separator != nil)
+        var all = style.format(value)
         
-        if components.sign != .none, !characters.hasPrefix(components.sign.rawValue) {
-            characters = components.sign.rawValue + characters
+        if let sign = components.sign, !all.hasPrefix(sign.characters) {
+            all = sign.characters + all
         }
     
-        return snapshot(characters)
+        return snapshot(all)
     }
     
     // MARK: Helpers, Characters
         
-    @inlinable func snapshot(_ characters: String) -> Snapshot {
+    @inlinable func snapshot(_ system: String) -> Snapshot {
         var snapshot = Snapshot()
         
-        for character in characters {
-            if Components.Digits.all.contains(character) {
+        for character in system {
+            if Components.Digits.set.contains(character) {
                 snapshot.append(.content(character))
-            } else if Components.Sign.all.contains(character) {
+            } else if Components.Sign.set.contains(character) {
                 snapshot.append(.content(character))
             } else if decimalSeparator.contains(character) {
                 snapshot.append(.content(character))
@@ -287,10 +287,8 @@ extension NumericTextStyle {
     // MARK: Initializers
             
     @inlinable init?(consumable: inout Snapshot, with configuration: Configuration) {
-        let sign = configuration.signs.interpret(consumable.characters)
-                    
-        guard sign != .none else { return nil }
-                    
+        guard let sign = configuration.signs.interpret(consumable.characters) else { return nil }
+                                        
         self.sign = sign
         consumable.removeAll()
     }

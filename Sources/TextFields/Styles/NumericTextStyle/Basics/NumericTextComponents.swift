@@ -7,15 +7,13 @@
 
 // MARK: - NumericTextComponents
 
-#warning("Consider: Optional<Sign> and Optional<Separator>...")
 public struct NumericTextComponents {
-    @usableFromInline typealias Configuration = NumericTextConfiguration
     
     // MARK: Properties
 
-    public var sign: Sign
+    public var sign: Sign?
     public var integers: Digits
-    public var separator: Separator
+    public var separator: Separator?
     public var decimals: Digits
     
     // MARK: Initializers
@@ -28,40 +26,51 @@ public struct NumericTextComponents {
     }
     
     // MARK: Utilities
-    
+        
     @inlinable public func characters() -> String {
-        sign.rawValue + integers.characters + separator.rawValue + decimals.characters
+        [sign?.characters, integers.characters, separator?.characters, decimals.characters].compactMap({ $0 }).joined()
     }
     
     // MARK: Transformations
     
     @inlinable mutating public func toggleSign(with proposal: Sign) {
-        if sign != proposal { sign = proposal } else { sign = .none }
+        if sign != proposal { sign = proposal } else { sign = nil }
     }
     
+    // MARK: Helpers
+        
     // MARK: Components: Sign
     
     @frozen public enum Sign: String {
-        @usableFromInline static let all = Set<Character>(positive.rawValue + negative.rawValue)
+        @usableFromInline static let set = Set<Character>(positive.rawValue + negative.rawValue)
         
         case positive = "+"
         case negative = "-"
-        case none = ""
+        
+        @inlinable var characters: String { rawValue }
     }
     
     // MARK: Components: Separator
     
-    @frozen public enum Separator: String {
-        case some = "."
-        case none = ""
+    @frozen public struct Separator {
+        @usableFromInline static let system = Separator(characters: ".")
+        
+        // MARK: Properties
+        
+        public let characters: String
+        
+        // MARK: Initializers
+        
+        @inlinable init(characters: String) {
+            self.characters = characters
+        }
     }
     
     // MARK: Components: Digits
     
     @frozen public struct Digits {
-        @usableFromInline static let all = Set<Character>(zero + nonzero)
-        @inlinable        static var zero:    String { "0" }
-        @inlinable        static var nonzero: String { "123456789" }
+        @usableFromInline static let zero = "0"
+        @usableFromInline static let set = Set<Character>(zero + "123456789")
         
         // MARK: Properties
         

@@ -66,7 +66,7 @@
         
         separators.parse(characters, from: &index, into: &components.separator)
         
-        if components.separator == .none {
+        if components.separator == nil {
             guard done() else { return nil }
             
             return components
@@ -113,16 +113,16 @@
     
     // MARK: Utilities
     
-    @inlinable func interpret(_ characters: String) -> Sign {
+    @inlinable func interpret(_ characters: String) -> Sign? {
         if positives.contains(characters) { return .positive }
         if negatives.contains(characters) { return .negative }
         
-        return .none
+        return nil
     }
     
     // MARK: Helpers
     
-    @inlinable func parse(_ characters: String, from index: inout String.Index, into storage: inout Sign) {
+    @inlinable func parse(_ characters: String, from index: inout String.Index, into storage: inout Sign?) {
         let subsequence = characters[index...]
                 
         func parse(_ signs: [String], success: Sign) -> Bool {
@@ -139,6 +139,8 @@
         
         if parse(negatives, success: .negative) { return }
         if parse(positives, success: .positive) { return }
+        
+        storage = nil
     }
 }
 
@@ -154,7 +156,7 @@
     // MARK: Initializers
     
     @inlinable init() {
-        self.translatables = [Separator.some.rawValue]
+        self.translatables = [Separator.system.characters]
     }
     
     // MARK: Transformations
@@ -165,16 +167,18 @@
     
     // MARK: Helpers
 
-    @inlinable func parse(_ characters: String, from index: inout String.Index, into storage: inout Separator) {
+    @inlinable func parse(_ characters: String, from index: inout String.Index, into storage: inout Separator?) {
         let subsequence = characters[index...]
         
         for translatable in translatables {
             guard subsequence.hasPrefix(translatable) else { continue }
             
-            storage = .some
+            storage = .system
             index = subsequence.index(index, offsetBy: translatable.count)
             return
         }
+        
+        storage = nil
     }
 }
 
@@ -190,7 +194,7 @@
     // MARK: Initializers
     
     @inlinable init() {
-        self.digits = Digits.all
+        self.digits = Digits.set
     }
     
     // MARK: Helpers
