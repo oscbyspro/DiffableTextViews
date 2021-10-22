@@ -36,10 +36,3 @@ public enum NumericTextInt: NumericTextInteger {
         .init(locale: locale).precision(precision).decimalSeparator(strategy: separator)
     }
 }
-
-// MARK: - Number + Compatible
-
-@available(iOS 15.0, *)
-extension Int: NumericTextCompatible {
-    public typealias NumericTextScheme = NumericTextInt
-}

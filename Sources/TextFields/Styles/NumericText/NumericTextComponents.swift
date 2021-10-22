@@ -7,8 +7,22 @@
 
 // MARK: - NumericTextComponents
 
+struct NumericText {
+    
+    let sign: Sign?
+    let integers: String
+    let separator: Bool
+    let decimals: String
+    
+    enum Sign {
+        case positive
+        case negative
+    }
+}
+
+#warning("Remove: NumericTextComponentsStyle")
 public struct NumericTextComponents {
-    @usableFromInline typealias Configuration = NumericTextComponentsConfiguration
+    @usableFromInline typealias Style = NumericTextComponentsStyle
     
     // MARK: Properties
 
@@ -16,8 +30,6 @@ public struct NumericTextComponents {
     public var integerDigits = String()
     public var decimalSeparator = String()
     public var decimalDigits = String()
-    
-    @usableFromInline var configuration: Configuration
     
     // MARK: Descriptions
         
@@ -37,13 +49,16 @@ public struct NumericTextComponents {
     
     // MARK: Transformations
     
-    @inlinable mutating func toggle(sign denomination: Configuration.Signs.Denomination) {
-        if configuration.options.contains(.nonnegative) && denomination == .negative { return }
+    #warning("Move this to NumericTextComponentsStyle.")
+    @inlinable mutating func toggle(sign denomination: Style.Signs.Denomination) {
+        #error("....")
         
-        let newValue = configuration.signs.make(denomination)
-                
-        if sign == newValue { sign = String() }
-        else                { sign = newValue }
+//        if style.options.contains(.nonnegative) && denomination == .negative { return }
+//
+//        let newValue = style.signs.make(denomination)
+//
+//        if sign == newValue { sign = String() }
+//        else                { sign = newValue }
     }
 }
 
@@ -51,11 +66,11 @@ extension NumericTextComponents {
     
     // MARK: Initializers
     
-    @inlinable init?(_ characters: String, with configuration: Configuration = Configuration()) {
+    @inlinable init?(_ characters: String, style: Style = Style()) {
         
         // --------------------------------- //
         
-        self.configuration = configuration
+        self.style = style
         
         // --------------------------------- //
         
@@ -69,24 +84,24 @@ extension NumericTextComponents {
         
         // --------------------------------- //
                 
-        configuration.signs.parse(characters, from: &index, into: &sign)
+        style.signs.parse(characters, from: &index, into: &sign)
         
-        if configuration.options.contains(.nonnegative) {
-            guard sign != type(of: configuration.signs).minus else { return nil }
+        if style.options.contains(.nonnegative) {
+            guard sign != type(of: style.signs).minus else { return nil }
         }
         
         // --------------------------------- //
         
-        configuration.digits.parse(characters, from: &index, into: &integerDigits)
+        style.digits.parse(characters, from: &index, into: &integerDigits)
         
-        if configuration.options.contains(.integer) {
+        if style.options.contains(.integer) {
             guard done() else { return nil }
             return
         }
         
         // --------------------------------- //
         
-        configuration.separators.parse(characters, from: &index, into: &decimalSeparator)
+        style.separators.parse(characters, from: &index, into: &decimalSeparator)
         
         if decimalSeparator.isEmpty {
             guard done() else { return nil }
@@ -95,7 +110,7 @@ extension NumericTextComponents {
         
         // --------------------------------- //
 
-        configuration.digits.parse(characters, from: &index, into: &decimalDigits)
+        style.digits.parse(characters, from: &index, into: &decimalDigits)
         
         if decimalDigits.isEmpty {
             guard done() else { return nil }
@@ -112,7 +127,7 @@ extension NumericTextComponents {
 
 // MARK: - NumericTextComponentsConfiguration
 
-@usableFromInline final class NumericTextComponentsConfiguration {
+@usableFromInline final class NumericTextComponentsStyle {
     @usableFromInline typealias Signs = NumericTextComponentsSigns
     @usableFromInline typealias Digits = NumericTextComponentsDigits
     @usableFromInline typealias Separators = NumericTextComponentsSeparators

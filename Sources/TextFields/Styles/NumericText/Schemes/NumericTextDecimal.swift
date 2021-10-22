@@ -36,11 +36,3 @@ public enum NumericTextDecimal: NumericTextFloat {
         .init(locale: locale).precision(precision).decimalSeparator(strategy: separator)
     }
 }
-
-// MARK: - Number + Compatible
-
-@available(iOS 15.0, *)
-extension Decimal: NumericTextCompatible {
-    public typealias NumericTextScheme = NumericTextDecimal
-}
-

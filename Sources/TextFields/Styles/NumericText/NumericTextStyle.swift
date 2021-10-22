@@ -12,9 +12,10 @@ import struct Foundation.Locale
 
 // MARK: - NumericTextStyle
 
+#warning("Cache componentsStyle and character sets.")
+
 @available(iOS 15.0, *)
-public struct NumericText<Scheme: NumericTextScheme>: DiffableTextStyle {
-    #warning("Cache configuration and character sets.")
+public struct NumericTextStyle<Scheme: NumericTextScheme>: DiffableTextStyle {
     public typealias Value = Scheme.Number
     public typealias Values = NumericTextValues<Scheme>
     public typealias Precision = NumericTextPrecision<Scheme>
@@ -93,8 +94,8 @@ public struct NumericText<Scheme: NumericTextScheme>: DiffableTextStyle {
     
     @inlinable func content() -> Set<Character> {
         var characters = Set<Character>()
-        characters.formUnion(Components.Configuration.Signs.both)
-        characters.formUnion(Components.Configuration.Digits.all)
+        characters.formUnion(Components.Style.Signs.both)
+        characters.formUnion(Components.Style.Digits.all)
         characters.formUnion(decimalSeparator)
         return characters
     }
@@ -126,7 +127,7 @@ public struct NumericText<Scheme: NumericTextScheme>: DiffableTextStyle {
 // MARK: Conformance to: DiffableTextStyle
 
 @available(iOS 15.0, *)
-extension NumericText {
+extension NumericTextStyle {
     
     // MARK: Process
     
@@ -160,9 +161,7 @@ extension NumericText {
     // MARK: Parse
 
     @inlinable public func parse(_ snapshot: Snapshot) -> Scheme.Number? {
-        let configuration = configuration()
-
-        guard let components = components(snapshot, with: configuration) else { return nil }
+        guard let components = components(snapshot, style: componentsStyle()) else { return nil }
         
         guard !components.digitsAreEmpty else {
             return Scheme.zero
@@ -177,11 +176,11 @@ extension NumericText {
         
         // --------------------------------- //
         
-        let configuration = configuration()
+        let componentsStyle = componentsStyle()
         
         // --------------------------------- //
         
-        var input = Input(content, with: configuration)
+        var input = Input(content, style: componentsStyle)
         let toggleSignInstruction = input.consumeToggleSignInstruction()
         
         // --------------------------------- //
@@ -190,7 +189,7 @@ extension NumericText {
         
         // --------------------------------- //
         
-        guard var components = components(result, with: configuration) else { return nil }
+        guard var components = components(result, style: componentsStyle) else { return nil }
         toggleSignInstruction?.process(&components)
         
         // --------------------------------- //
@@ -233,31 +232,31 @@ extension NumericText {
 
     // MARK: Helpers, Components
     
-    @inlinable func components(_ snapshot: Snapshot, with configuration: Components.Configuration) -> Components? {
-        Components(snapshot.content(), with: configuration)
+    @inlinable func components(_ snapshot: Snapshot, style: Components.Style) -> Components? {
+        Components(snapshot.content(), style: style)
     }
     
-    @inlinable func configuration() -> Components.Configuration {
-        let configuration = Components.Configuration()
-        configuration.signs.remove(all: .positive)
+    @inlinable func componentsStyle() -> Components.Style {
+        let componentsStyle = Components.Style()
+        componentsStyle.signs.remove(all: .positive)
         
         // --------------------------------- //
         
         if Scheme.isInteger {
-            configuration.options.insert(.integer)
+            componentsStyle.options.insert(.integer)
         } else {
-            configuration.separators.insert([decimalSeparator])
+            componentsStyle.separators.insert([decimalSeparator])
         }
         
         // --------------------------------- //
         
         if values.nonnegative {
-            configuration.options.insert(.nonnegative)
+            componentsStyle.options.insert(.nonnegative)
         }
         
         // --------------------------------- //
 
-        return configuration
+        return componentsStyle
     }
     
     // MARK: Input
@@ -267,19 +266,19 @@ extension NumericText {
         // MARK: Properties
         
         @usableFromInline var content: Snapshot
-        @usableFromInline var configuration: Components.Configuration
+        @usableFromInline var style: Components.Style
         
         // MARK: Initializers
         
-        @inlinable init(_ content: Snapshot, with configuration: Components.Configuration) {
+        @inlinable init(_ content: Snapshot, style: Components.Style) {
             self.content = content
-            self.configuration = configuration
+            self.style = style
         }
         
         // MARK: Utilities
         
         @inlinable mutating func consumeToggleSignInstruction() -> ToggleSignInstruction? {
-            ToggleSignInstruction(consumable: &content, with: configuration)
+            ToggleSignInstruction(consumable: &content, with: style)
         }
     }
     
@@ -289,12 +288,12 @@ extension NumericText {
         
         // MARK: Properties
         
-        @usableFromInline var denomination: Components.Configuration.Signs.Denomination
+        @usableFromInline var denomination: Components.Style.Signs.Denomination
         
         // MARK: Initializers
         
-        @inlinable init?(consumable: inout Snapshot, with configuration: Components.Configuration) {
-            guard let denomination = configuration.signs.interpret(consumable.characters) else { return nil }
+        @inlinable init?(consumable: inout Snapshot, with style: Components.Style) {
+            guard let denomination = style.signs.interpret(consumable.characters) else { return nil }
             
             defer {
                 consumable.removeAll()
@@ -312,3 +311,82 @@ extension NumericText {
 }
 
 #endif
+
+#warning("WIP")
+
+@available(iOS 15.0, *)
+@usableFromInline final class NumericTextStorage<Scheme: NumericTextScheme> {
+    @usableFromInline typealias Components = NumericTextComponents
+    @usableFromInline typealias Values = NumericTextValues<Scheme>
+    @usableFromInline typealias Precision = NumericTextPrecision<Scheme>
+    
+    // MARK: Properties
+    
+    @usableFromInline private(set) var locale: Locale
+    @usableFromInline private(set) var values: Values
+    @usableFromInline private(set) var precision: Precision
+    
+    @usableFromInline let cache = Cache()
+    
+    // MARK: Initializers
+    
+    @inlinable init(in locale: Locale = .autoupdatingCurrent) {
+        self.locale = locale
+        self.values = .all
+        self.precision = .max
+    }
+    
+    // MARK: Getters
+    
+    @inlinable var decimalSeparator: String {
+        locale.decimalSeparator ?? "."
+    }
+    
+    @inlinable var groupingSeparator: String {
+        locale.groupingSeparator ?? ","
+    }
+    
+    // MARK: Make
+    
+    @inlinable func makeContentCharacterSet() -> Set<Character> {
+        var characters = Set<Character>()
+        characters.formUnion(Components.Style.Signs.both)
+        characters.formUnion(Components.Style.Digits.all)
+        characters.formUnion(decimalSeparator)
+        return characters
+    }
+    
+    @inlinable func makeSpacersCharacterSet() -> Set<Character> {
+        var characters = Set<Character>()
+        characters.formUnion(groupingSeparator)
+        return characters
+    }
+    
+    @inlinable func makeComponentsConfiguration() -> Components.Style {
+        let configuration = Components.Style()
+                
+        configuration.signs.remove(all: .positive)
+                
+        if Scheme.isInteger {
+            configuration.options.insert(.integer)
+        }
+                
+        if !Scheme.isInteger {
+            configuration.separators.insert([decimalSeparator])
+        }
+                
+        if values.nonnegative {
+            configuration.options.insert(.nonnegative)
+        }
+        
+        return configuration
+    }
+    
+    // MARK: Cache
+    
+    @usableFromInline final class Cache {
+        @usableFromInline private(set) var content: Set<Character> = Set()
+        @usableFromInline private(set) var spacers: Set<Character> = Set()
+        @usableFromInline private(set) var configuration: Components.Style = .init()
+    }
+}

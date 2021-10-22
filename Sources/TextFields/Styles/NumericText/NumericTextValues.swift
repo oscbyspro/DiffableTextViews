@@ -5,9 +5,10 @@
 //  Created by Oscar Byström Ericsson on 2021-10-18.
 //
 
-// MARK: - NumericTextValues
+// MARK: - NumericTextStyleValues
 
-public struct NumericTextValues<Scheme: NumericTextValuesScheme> {
+@available(iOS 15.0, *)
+public struct NumericTextValues<Scheme: NumericTextScheme> {
     public typealias Number = Scheme.Number
     
     // MARK: Properties: Static
