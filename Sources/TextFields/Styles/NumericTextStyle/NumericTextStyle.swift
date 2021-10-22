@@ -5,7 +5,6 @@
 //  Created by Oscar Byström Ericsson on 2021-10-19.
 //
 
-import SwiftUI
 import struct Foundation.Locale
 
 #if os(iOS)
@@ -204,12 +203,12 @@ extension NumericTextStyle {
         for character in characters {
             if Components.Digits.set.contains(character) {
                 snapshot.append(.content(character))
-            } else if Components.Sign.set.contains(character) {
-                snapshot.append(.content(character))
+            } else if groupingSeparator.contains(character) {
+                snapshot.append(.spacer(character))
             } else if decimalSeparator.contains(character) {
                 snapshot.append(.content(character))
-            } else if groupingSeparator.contains(character) {
-                snapshot.append( .spacer(character))
+            } else if Components.Sign.set.contains(character) {
+                snapshot.append(.content(character))
             }
         }
         
