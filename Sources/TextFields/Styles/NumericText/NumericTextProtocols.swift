@@ -78,7 +78,7 @@ public extension NumericTextInteger {
 // MARK: - Compatible
 
 @available(iOS 15.0, *)
-public protocol NumberTextCompatible {
+public protocol NumericTextCompatible {
     
     // MARK: Types
     
