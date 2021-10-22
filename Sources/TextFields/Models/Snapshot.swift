@@ -122,7 +122,7 @@ extension Snapshot {
     ///
     /// Improves performance in certain circumstances.
     ///
-    /// - Example: NumericTextStyle's CPU usage increases +3x when suffix is used, unless this method is called.
+    /// - Example: NumericTextStyle's CPU usage increases +3x when its suffix is used, unless this method is called.
     ///
     /// - Note: Should be called at most once, after all other changes have been made to this Snapshot.
     ///

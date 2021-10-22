@@ -12,7 +12,7 @@ import struct Foundation.Locale
 
 // MARK: - NumericTextStyle
 
-/// Synchonizes text and number.
+/// Formats text and number.
 @available(iOS 15.0, *)
 public struct NumericTextStyle<Scheme: NumericTextScheme>: DiffableTextStyle {
     @usableFromInline typealias Components = NumericTextComponents
@@ -200,7 +200,7 @@ extension NumericTextStyle {
             
         // --------------------------------- //
         
-        if let prefix = prefix {
+        if let prefix = prefix {
             snapshot.append(contentsOf: prefix)
         }
         
