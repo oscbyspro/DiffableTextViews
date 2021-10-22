@@ -15,6 +15,7 @@ import struct Foundation.Locale
 @available(iOS 15.0, *)
 public struct NumericTextStyle<Scheme: NumericTextScheme>: DiffableTextStyle {
     @usableFromInline typealias Components = NumericTextComponents
+    @usableFromInline typealias Configuration = NumericTextConfiguration
 
     public typealias Value = Scheme.Number
     public typealias Values = NumericTextStyleValues<Scheme>
@@ -117,7 +118,7 @@ extension NumericTextStyle {
     // MARK: Parse
 
     @inlinable public func parse(_ snapshot: Snapshot) -> Scheme.Number? {
-        components(snapshot, with: componentsStyle()).flatMap(value)
+        components(snapshot, with: configuration()).flatMap(value)
     }
     
     // MARK: Components
@@ -164,14 +165,14 @@ extension NumericTextStyle {
     // MARK: Merge
     
     @inlinable public func merge(_ snapshot: Snapshot, with content: Snapshot, in range: Range<Snapshot.Index>) -> Snapshot? {
-        let componentsStyle = componentsStyle()
+        let configuration = configuration()
                 
-        var input = NumericTextStyleInput(content, with: componentsStyle)
+        var input = NumericTextStyleInput(content, with: configuration)
         let toggleSignInstruction = input.consumeToggleSignInstruction()
                 
         let result = snapshot.replace(range, with: input.content)
                 
-        guard var components = components(result, with: componentsStyle) else { return nil }
+        guard var components = components(result, with: configuration) else { return nil }
         toggleSignInstruction?.process(&components)
                 
         return self.snapshot(components)
@@ -217,69 +218,84 @@ extension NumericTextStyle {
     }
 }
 
-// MARK: - Components
+// MARK: - NumericText
 
 @available(iOS 15.0, *)
 extension NumericTextStyle {
     
-    // MARK: Make
+    // MARK: Configuration
     
-    @inlinable func components(_ snapshot: Snapshot, with componentsStyle: Components.Style) -> Components? {
-        Components(snapshot.content(), style: componentsStyle)
-    }
-    
-    // MARK: Style
-    
-    @inlinable func componentsStyle() -> Components.Style {
-        let componentsStyle = Components.Style()
+    @inlinable func configuration() -> Configuration {
+        let configuration = Configuration()
         
-        componentsStyle.signs.positives.removeAll()
+        configuration.signs.positives.removeAll()
         
         if Scheme.isInteger {
-            componentsStyle.options.insert(.integer)
+            configuration.options.insert(.integer)
         } else {
-            componentsStyle.separators.insert([decimalSeparator])
+            configuration.separators.insert([decimalSeparator])
         }
         
         if values.nonnegative {
-            componentsStyle.options.insert(.nonnegative)
+            configuration.options.insert(.nonnegative)
         }
                 
-        return componentsStyle
+        return configuration
+    }
+    
+    // MARK: Components
+    
+    @inlinable func components(_ snapshot: Snapshot, with configuration: Configuration) -> Components? {
+        Components(snapshot.content(), configuration: configuration)
     }
 }
 
-// MARK: - Commands
+// MARK: - Inputs
 
 @usableFromInline struct NumericTextStyleInput {
-    @usableFromInline typealias Components = NumericTextComponents
+    @usableFromInline typealias Configuration = NumericTextConfiguration
+    
+    // MARK: Properties
     
     @usableFromInline var content: Snapshot
-    @usableFromInline var componentsStyle: Components.Style
+    @usableFromInline var configuration: Configuration
+        
+    // MARK: Initializers
             
-    @inlinable init(_ content: Snapshot, with componentsStyle: Components.Style) {
+    @inlinable init(_ content: Snapshot, with configuration: Configuration) {
         self.content = content
-        self.componentsStyle = componentsStyle
+        self.configuration = configuration
     }
-            
+    
+    // MARK: Utilities
+    
     @inlinable mutating func consumeToggleSignInstruction() -> NumericTextStyleToggleSignInstruction? {
-        .init(consumable: &content, with: componentsStyle)
+        .init(consumable: &content, with: configuration)
     }
 }
+
+// MARK: Commands: Toggle Sign
         
 @usableFromInline struct NumericTextStyleToggleSignInstruction {
     @usableFromInline typealias Components = NumericTextComponents
+    @usableFromInline typealias Configuration = NumericTextConfiguration
+
+    // MARK: Properties
     
     @usableFromInline var sign: Components.Sign
+    
+    // MARK: Initializers
             
-    @inlinable init?(consumable: inout Snapshot, with componentsStyle: Components.Style) {
-        let sign = componentsStyle.signs.interpret(consumable.characters)
+    @inlinable init?(consumable: inout Snapshot, with configuration: Configuration) {
+        let sign = configuration.signs.interpret(consumable.characters)
                     
         guard sign != .none else { return nil }
                     
         self.sign = sign
         consumable.removeAll()
     }
+    
+    // MARK: Utilities
             
     @inlinable func process(_ components: inout Components) {
         components.toggleSign(with: sign)

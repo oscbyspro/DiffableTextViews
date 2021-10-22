@@ -8,7 +8,6 @@
 // MARK: - NumericTextComponents
 
 public struct NumericTextComponents {
-    @usableFromInline typealias Style = NumericTextComponentsStyle
     
     // MARK: Properties
 
@@ -81,7 +80,7 @@ extension NumericTextComponents {
     
     // MARK: Style
     
-    @inlinable init?(_ characters: String, style: Style = Style()) {
+    @inlinable init?(_ characters: String, configuration: NumericTextConfiguration = .init()) {
         
         // --------------------------------- //
         
@@ -95,24 +94,24 @@ extension NumericTextComponents {
         
         // --------------------------------- //
         
-        style.signs.parse(characters, from: &index, into: &sign)
+        configuration.signs.parse(characters, from: &index, into: &sign)
         
-        if style.options.contains(.nonnegative) {
+        if configuration.options.contains(.nonnegative) {
             guard sign != .negative else { return nil }
         }
         
         // --------------------------------- //
         
-        style.digits.parse(characters, from: &index, into: &integers)
+        configuration.digits.parse(characters, from: &index, into: &integers)
         
-        if style.options.contains(.integer) {
+        if configuration.options.contains(.integer) {
             guard done() else { return nil }
             return
         }
         
         // --------------------------------- //
         
-        style.separators.parse(characters, from: &index, into: &separator)
+        configuration.separators.parse(characters, from: &index, into: &separator)
         
         if separator == .none {
             guard done() else { return nil }
@@ -121,7 +120,7 @@ extension NumericTextComponents {
         
         // --------------------------------- //
 
-        style.digits.parse(characters, from: &index, into: &decimals)
+        configuration.digits.parse(characters, from: &index, into: &decimals)
         
         if decimals.isEmpty {
             guard done() else { return nil }

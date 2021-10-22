@@ -7,13 +7,11 @@
 
 // MARK: - NumericTextComponentsStyle
 
-#warning("Make side-by-side with NumericTextComponents.")
-@usableFromInline final class NumericTextComponentsStyle {
-    @usableFromInline typealias Components = NumericTextComponents
-    @usableFromInline typealias Signs = NumericTextComponentsStyleSigns
-    @usableFromInline typealias Digits = NumericTextComponentsStyleDigits
-    @usableFromInline typealias Separators = NumericTextComponentsStyleSeparators
-    @usableFromInline typealias Options = NumericTextComponentsStyleOptions
+@usableFromInline final class NumericTextConfiguration {
+    @usableFromInline typealias Signs = NumericTextConfigurationSigns
+    @usableFromInline typealias Digits = NumericTextConfigurationDigits
+    @usableFromInline typealias Separators = NumericTextConfigurationSeparators
+    @usableFromInline typealias Options = NumericTextConfigurationOptions
     
     // MARK: Properties
     
@@ -32,9 +30,9 @@
     }
 }
 
-// MARK: - NumericTextComponentsSigns
+// MARK: - NumericTextConfigurationSigns
 
-@usableFromInline struct NumericTextComponentsStyleSigns {
+@usableFromInline struct NumericTextConfigurationSigns {
     @usableFromInline typealias Sign = NumericTextComponents.Sign
     
     // MARK: Properties
@@ -81,9 +79,9 @@
     }
 }
 
-// MARK: - NumericTextComponentsSeparators
+// MARK: - NumericTextConfigurationSeparators
 
-@usableFromInline struct NumericTextComponentsStyleSeparators {
+@usableFromInline struct NumericTextConfigurationSeparators {
     @usableFromInline typealias Separator = NumericTextComponents.Separator
     
     // MARK: Properties
@@ -117,9 +115,9 @@
     }
 }
 
-// MARK: - NumericTextComponentsDigits
+// MARK: - NumericTextConfigurationDigits
 
-@usableFromInline struct NumericTextComponentsStyleDigits {
+@usableFromInline struct NumericTextConfigurationDigits {
     @usableFromInline typealias Digits = NumericTextComponents.Digits
     
     // MARK: Properties
@@ -144,9 +142,9 @@
     }
 }
 
-// MARK: - NumericTextComponentsOptions
+// MARK: - NumericTextConfigurationOptions
 
-@usableFromInline struct NumericTextComponentsStyleOptions: OptionSet {
+@usableFromInline struct NumericTextConfigurationOptions: OptionSet {
     
     // MARK: Options
     
