@@ -12,8 +12,6 @@ import struct Foundation.Locale
 
 // MARK: - NumericTextStyle
 
-#warning("Cache Components.Style, maybe.")
-
 @available(iOS 15.0, *)
 public struct NumericTextStyle<Scheme: NumericTextScheme>: DiffableTextStyle {
     public typealias Value = Scheme.Number
@@ -160,6 +158,9 @@ extension NumericTextStyle {
     // MARK: Merge
     
     @inlinable public func merge(_ snapshot: Snapshot, with content: Snapshot, in range: Range<Snapshot.Index>) -> Snapshot? {
+        
+        // --------------------------------- //
+        
         let componentsStyle = componentsStyle()
         
         // --------------------------------- //
@@ -243,19 +244,19 @@ extension NumericTextStyle {
         // MARK: Properties
         
         @usableFromInline var content: Snapshot
-        @usableFromInline var style: Components.Style
+        @usableFromInline var componentsStyle: Components.Style
         
         // MARK: Initializers
         
-        @inlinable init(_ content: Snapshot, style: Components.Style) {
+        @inlinable init(_ content: Snapshot, style componentsStyle: Components.Style) {
             self.content = content
-            self.style = style
+            self.componentsStyle = componentsStyle
         }
         
         // MARK: Utilities
         
         @inlinable mutating func consumeToggleSignInstruction() -> ToggleSignInstruction? {
-            ToggleSignInstruction(consumable: &content, with: style)
+            ToggleSignInstruction(consumable: &content, with: componentsStyle)
         }
     }
     
@@ -271,13 +272,9 @@ extension NumericTextStyle {
         
         @inlinable init?(consumable: inout Snapshot, with style: Components.Style) {
             let sign = style.signs.interpret(consumable.characters)
-            
-            // --------------------------------- //
-            
+                        
             guard sign != .none else { return nil }
-            
-            // --------------------------------- //
-            
+                        
             self.sign = sign
             consumable.removeAll()
         }
