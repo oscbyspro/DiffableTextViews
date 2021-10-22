@@ -35,7 +35,46 @@ public struct NumericTextStyle<Scheme: NumericTextScheme>: DiffableTextStyle {
         self.locale = locale
     }
     
-    // MARK: Maps
+    // MARK: Helpers, Locale
+
+    @inlinable var decimalSeparator: String {
+        locale.decimalSeparator ?? Components.Separator.some.rawValue
+    }
+
+    @inlinable var groupingSeparator: String {
+        locale.groupingSeparator ?? Components.Separator.none.rawValue
+    }
+}
+
+// MARK: - Formats
+
+@available(iOS 15.0, *)
+extension NumericTextStyle {
+    
+    // MARK: Displayable
+    
+    @inlinable func displayableStyle() -> Scheme.Style {
+        let precision: Scheme.Precision = precision.displayableStyle()
+
+        return Scheme.style(locale, precision: precision, separator: .automatic)
+    }
+    
+    // MARK: Editable
+    
+    @inlinable func editableStyle(digits: (upper: Int, lower: Int)? = nil, separator: Bool = false) -> Scheme.Style {
+        let precision: Scheme.Precision = precision.editableStyle(digits: digits)
+        let separator: Scheme.Separator = separator ? .always : .automatic
+        
+        return Scheme.style(locale, precision: precision, separator: separator)
+    }
+}
+
+// MARK: - Update
+
+@available(iOS 15.0, *)
+extension NumericTextStyle {
+    
+    // MARK: Transformations
     
     @inlinable public func locale(_ locale: Locale) -> Self {
         update({ $0.locale = locale })
@@ -57,35 +96,10 @@ public struct NumericTextStyle<Scheme: NumericTextScheme>: DiffableTextStyle {
         update({ $0.suffix = newValue })
     }
     
-    // MARK: Helpers, Maps
+    // MARK: Helpers
     
     @inlinable func update(_ transform: (inout Self) -> Void) -> Self {
         var copy = self; transform(&copy); return copy
-    }
-    
-    // MARK: Helpers, Locale
-
-    @inlinable var decimalSeparator: String {
-        locale.decimalSeparator ?? Components.Separator.some.rawValue
-    }
-
-    @inlinable var groupingSeparator: String {
-        locale.groupingSeparator ?? Components.Separator.none.rawValue
-    }
-    
-    // MARK: Formats
-    
-    @inlinable func displayableStyle() -> Scheme.Style {
-        let precision: Scheme.Precision = precision.displayableStyle()
-
-        return Scheme.style(locale, precision: precision, separator: .automatic)
-    }
-    
-    @inlinable func editableStyle(digits: (upper: Int, lower: Int)? = nil, separator: Bool = false) -> Scheme.Style {
-        let precision: Scheme.Precision = precision.editableStyle(digits: digits)
-        let separator: Scheme.Separator = separator ? .always : .automatic
-        
-        return Scheme.style(locale, precision: precision, separator: separator)
     }
 }
 
@@ -214,12 +228,13 @@ extension NumericTextStyle {
         Components(snapshot.content(), style: componentsStyle)
     }
     
-    // MARK: Helpers, Style
+    // MARK: Style
     
     @inlinable func componentsStyle() -> Components.Style {
         let componentsStyle = Components.Style()
+        
         componentsStyle.signs.positives.removeAll()
-                
+        
         if Scheme.isInteger {
             componentsStyle.options.insert(.integer)
         } else {
@@ -229,7 +244,7 @@ extension NumericTextStyle {
         if values.nonnegative {
             componentsStyle.options.insert(.nonnegative)
         }
-        
+                
         return componentsStyle
     }
 }
