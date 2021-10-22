@@ -239,14 +239,14 @@ extension NumericTextStyle {
         if values.nonnegative {
             configuration.options.insert(.nonnegative)
         }
-                
+        
         return configuration
     }
     
     // MARK: Components
     
     @inlinable func components(_ snapshot: Snapshot, with configuration: Configuration) -> Components? {
-        Components(snapshot.content(), configuration: configuration)
+        configuration.components(snapshot.content())
     }
 }
 

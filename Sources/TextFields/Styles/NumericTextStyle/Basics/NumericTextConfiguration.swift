@@ -8,6 +8,7 @@
 // MARK: - NumericTextConfiguration
 
 @usableFromInline final class NumericTextConfiguration {
+    @usableFromInline typealias Components = NumericTextComponents
     @usableFromInline typealias Signs = NumericTextConfigurationSigns
     @usableFromInline typealias Digits = NumericTextConfigurationDigits
     @usableFromInline typealias Separators = NumericTextConfigurationSeparators
@@ -27,6 +28,69 @@
         self.digits = digits
         self.separators = separators
         self.options = options
+    }
+    
+    // MARK: Utilities
+    
+    @inlinable func components(_ characters: String) -> Components? {
+        // --------------------------------- //
+        
+        var components = Components()
+        var index = characters.startIndex
+        
+        // --------------------------------- //
+        
+        func done() -> Bool {
+            index == characters.endIndex
+        }
+        
+        // --------------------------------- //
+        
+        signs.parse(characters, from: &index, into: &components.sign)
+        
+        if options.contains(.nonnegative) {
+            guard components.sign != .negative else { return nil }
+        }
+        
+        // --------------------------------- //
+        
+        digits.parse(characters, from: &index, into: &components.integers)
+        
+        if options.contains(.integer) {
+            guard done() else { return nil }
+            
+            return components
+        }
+        
+        // --------------------------------- //
+        
+        separators.parse(characters, from: &index, into: &components.separator)
+        
+        if components.separator == .none {
+            guard done() else { return nil }
+            
+            return components
+        }
+        
+        // --------------------------------- //
+
+        digits.parse(characters, from: &index, into: &components.decimals)
+        
+        if components.decimals.isEmpty {
+            guard done() else { return nil }
+            
+            return components
+        }
+        
+        // --------------------------------- //
+                
+        guard done() else { return nil }
+        
+        // --------------------------------- //
+        
+        return components
+        
+        // --------------------------------- //
     }
 }
 

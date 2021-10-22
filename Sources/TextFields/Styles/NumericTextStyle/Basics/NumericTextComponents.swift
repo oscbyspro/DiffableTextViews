@@ -7,14 +7,25 @@
 
 // MARK: - NumericTextComponents
 
+#warning("Consider: Optional<Sign> and Optional<Separator>...")
 public struct NumericTextComponents {
+    @usableFromInline typealias Configuration = NumericTextConfiguration
     
     // MARK: Properties
 
-    public var sign: Sign = .none
-    public var integers: Digits = .init()
-    public var separator: Separator = .none
-    public var decimals: Digits = .init()
+    public var sign: Sign
+    public var integers: Digits
+    public var separator: Separator
+    public var decimals: Digits
+    
+    // MARK: Initializers
+    
+    @inlinable init() {
+        self.sign = .none
+        self.integers = .init()
+        self.separator = .none
+        self.decimals = .init()
+    }
     
     // MARK: Utilities
     
@@ -71,66 +82,5 @@ public struct NumericTextComponents {
             count += 1
             characters.append(character)
         }
-    }
-}
-
-// MARK: - Initializers
-
-extension NumericTextComponents {
-    
-    // MARK: Style
-    
-    @inlinable init?(_ characters: String, configuration: NumericTextConfiguration = .init()) {
-        
-        // --------------------------------- //
-        
-        var index = characters.startIndex
-        
-        // --------------------------------- //
-        
-        func done() -> Bool {
-            index == characters.endIndex
-        }
-        
-        // --------------------------------- //
-        
-        configuration.signs.parse(characters, from: &index, into: &sign)
-        
-        if configuration.options.contains(.nonnegative) {
-            guard sign != .negative else { return nil }
-        }
-        
-        // --------------------------------- //
-        
-        configuration.digits.parse(characters, from: &index, into: &integers)
-        
-        if configuration.options.contains(.integer) {
-            guard done() else { return nil }
-            return
-        }
-        
-        // --------------------------------- //
-        
-        configuration.separators.parse(characters, from: &index, into: &separator)
-        
-        if separator == .none {
-            guard done() else { return nil }
-            return
-        }
-        
-        // --------------------------------- //
-
-        configuration.digits.parse(characters, from: &index, into: &decimals)
-        
-        if decimals.isEmpty {
-            guard done() else { return nil }
-            return
-        }
-        
-        // --------------------------------- //
-                
-        guard done() else { return nil }
-        
-        // --------------------------------- //
     }
 }
