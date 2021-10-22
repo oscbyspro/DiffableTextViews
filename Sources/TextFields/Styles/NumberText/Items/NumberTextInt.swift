@@ -13,9 +13,9 @@ public enum NumberTextInt: NumberTextInteger {
     
     // MARK: Values
     
-    public static let zero: Number = .zero
-    public static let  min: Number =  .min
-    public static let  max: Number =  .max
+    public static var zero: Number { Number.zero }
+    public static var min:  Number { Number.min  }
+    public static var max:  Number { Number.max  }
     
     // MARK: Precision
     

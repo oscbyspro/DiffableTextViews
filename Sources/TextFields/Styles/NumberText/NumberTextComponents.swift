@@ -212,7 +212,7 @@ public struct NumberTextComponents {
     
     // MARK: Statics
     
-    @inlinable        static var zero: String { "0" }
+    @usableFromInline static let zero: String = "0"
     @usableFromInline static let all = Set<Character>("0123456789")
     
     // MARK: Properties

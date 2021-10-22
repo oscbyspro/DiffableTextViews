@@ -16,9 +16,9 @@ public enum NumberTextDecimal: NumberTextFloat {
     
     // MARK: Values
     
-    public static let zero =  Number.zero
-    public static let  min = -Number(string: String(repeating: "9", count: maxTotalDigits))!
-    public static let  max =  Number(string: String(repeating: "9", count: maxTotalDigits))!
+    public static var zero: Number {  Number.zero }
+    public static let  min: Number = -Number(string: String(repeating: "9", count: maxTotalDigits))!
+    public static let  max: Number =  Number(string: String(repeating: "9", count: maxTotalDigits))!
     
     // MARK: Precision
  
