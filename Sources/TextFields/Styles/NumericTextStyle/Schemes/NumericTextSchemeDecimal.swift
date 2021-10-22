@@ -39,4 +39,11 @@ public enum NumericTextSchemeDecimal: NumericTextFloatScheme {
     }
 }
 
+// MARK: Number + Compatible
+
+@available(iOS 15.0, *)
+extension NumericTextSchemeDecimal.Number: NumericTextSchemeCompatible {
+    public typealias NumericTextScheme = NumericTextSchemeDecimal
+}
+
 #endif

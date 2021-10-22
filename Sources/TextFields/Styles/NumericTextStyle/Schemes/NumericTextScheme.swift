@@ -8,8 +8,8 @@
 #if os(iOS)
 
 import struct Foundation.Locale
+import protocol Foundation.FormatStyle
 import enum Foundation.NumberFormatStyleConfiguration
-import protocol SwiftUI.FormatStyle
 
 // MARK: - NumericTextStyleScheme
 
@@ -68,5 +68,17 @@ public extension NumericTextIntegerScheme {
 
 @available(iOS 15.0, *)
 public protocol NumericTextFloatScheme: NumericTextScheme { }
+
+// MARK: - NumbericTextSchemeCompatible
+
+@available(iOS 15.0, *)
+public protocol NumericTextSchemeCompatible {
+    associatedtype NumericTextScheme: TextFields.NumericTextScheme where NumericTextScheme.Number == Self
+}
+
+@available(iOS 15.0, *)
+public extension NumericTextSchemeCompatible {
+    typealias NumericTextStyle = TextFields.NumericTextStyle<NumericTextScheme>
+}
 
 #endif
