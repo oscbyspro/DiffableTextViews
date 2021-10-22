@@ -12,17 +12,17 @@ public struct Snapshot: BidirectionalCollection, RangeReplaceableCollection, Exp
 
     // MARK: Storage
 
-    public var characters: String
-    public var attributes: [Attribute]
+    public private(set) var characters: String
+    public private(set) var attributes: [Attribute]
 
     // MARK: Initialization
 
-    @inlinable public init() {
+    public init() {
         self.characters = ""
         self.attributes = []
     }
     
-    @inlinable public init(_ characters: String, only attribute: Attribute) {
+    public init(_ characters: String, only attribute: Attribute) {
         self.attributes = characters.map({ _ in attribute })
         self.characters = characters
     }
@@ -60,7 +60,7 @@ public struct Snapshot: BidirectionalCollection, RangeReplaceableCollection, Exp
     
     // MARK: Replacements
 
-    @inlinable public mutating func replaceSubrange<C: Collection>(_ subrange: Range<Index>, with newElements: C) where C.Element == Symbol {
+    public mutating func replaceSubrange<C: Collection>(_ subrange: Range<Index>, with newElements: C) where C.Element == Symbol {
         attributes.replaceSubrange(subrange.map(bounds: \.attribute), with: newElements.lazy.map(\.attribute))
         characters.replaceSubrange(subrange.map(bounds: \.character), with: newElements.lazy.map(\.character))
     }

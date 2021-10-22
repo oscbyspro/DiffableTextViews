@@ -95,11 +95,11 @@ extension NumericTextStyle {
     }
     
     @inlinable public func prefix(_ newValue: String?) -> Self {
-        update({ $0.suffix = newValue.map({ Snapshot($0 + " ", only: .prefix) }) })
+        update({ $0.prefix = newValue.map({ Snapshot($0, only: .prefix) }) })
     }
     
     @inlinable public func suffix(_ newValue: String?) -> Self {
-        update({ $0.suffix = newValue.map({ Snapshot(" " + $0, only: .suffix) }) })
+        update({ $0.suffix = newValue.map({ Snapshot($0, only: .suffix) }) })
     }
     
     // MARK: Helpers
@@ -198,6 +198,7 @@ extension NumericTextStyle {
         
         if let prefix = prefix {
             snapshot.append(contentsOf: prefix)
+            snapshot.append(.prefix(" "))
         }
         
         for character in characters {
@@ -213,6 +214,7 @@ extension NumericTextStyle {
         }
         
         if let suffix = suffix {
+            snapshot.append(.suffix(" "))
             snapshot.append(contentsOf: suffix)
         }
     
