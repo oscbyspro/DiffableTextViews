@@ -7,6 +7,7 @@
 
 // MARK: - NumericTextComponentsStyle
 
+#warning("Make side-by-side with NumericTextComponents.")
 @usableFromInline final class NumericTextComponentsStyle {
     @usableFromInline typealias Components = NumericTextComponents
     @usableFromInline typealias Signs = NumericTextComponentsStyleSigns

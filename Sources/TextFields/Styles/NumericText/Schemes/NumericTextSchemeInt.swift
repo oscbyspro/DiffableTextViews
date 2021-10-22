@@ -1,5 +1,5 @@
 //
-//  NumericTextInt.swift
+//  NumericTextSchemeInt.swift
 //  
 //
 //  Created by Oscar Byström Ericsson on 2021-10-19.
@@ -8,10 +8,10 @@
 import struct Foundation.Locale
 import struct Foundation.IntegerFormatStyle
 
-// MARK: - NumericTextInt
+// MARK: - NumericTextSchemeInt
 
 @available(iOS 15.0, *)
-public enum NumericTextInt: NumericTextInteger {
+public enum NumericTextSchemeInt: NumericTextInteger {
     public typealias Number = Int
     public typealias Style = IntegerFormatStyle<Number>
     
