@@ -19,13 +19,13 @@ public enum NumericTextSchemeInt: NumericTextIntegerScheme {
     
     // MARK: Values
     
-    public static var zero: Number { Number.zero }
-    public static var min:  Number { Number.min  }
-    public static var max:  Number { Number.max  }
+    public static var zero: Number { .zero }
+    public static var min:  Number { .min  }
+    public static var max:  Number { .max  }
     
     // MARK: Precision
     
-               public static let maxTotalDigits: Int = String(describing: Number.max).count
+               public static let maxTotalDigits: Int = String(describing: max).count
     @inlinable public static var maxUpperDigits: Int { maxTotalDigits }    
     
     // MARK: Style
