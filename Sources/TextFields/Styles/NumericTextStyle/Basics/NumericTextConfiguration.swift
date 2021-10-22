@@ -1,11 +1,11 @@
 //
-//  NumericTextComponentsStyle.swift
+//  NumericTextConfiguration.swift
 //  
 //
 //  Created by Oscar Byström Ericsson on 2021-10-22.
 //
 
-// MARK: - NumericTextComponentsStyle
+// MARK: - NumericTextConfiguration
 
 @usableFromInline final class NumericTextConfiguration {
     @usableFromInline typealias Signs = NumericTextConfigurationSigns
@@ -42,9 +42,9 @@
     
     // MARK: Initializers
     
-    @inlinable init(positives: [String] = [Sign.positive.rawValue], negatives: [String] = [Sign.negative.rawValue]) {
-        self.positives = positives
-        self.negatives = negatives
+    @inlinable init() {
+        self.positives = [Sign.positive.rawValue]
+        self.negatives = [Sign.negative.rawValue]
     }
     
     // MARK: Utilities
@@ -52,30 +52,29 @@
     @inlinable func interpret(_ characters: String) -> Sign {
         if positives.contains(characters) { return .positive }
         if negatives.contains(characters) { return .negative }
+        
         return .none
     }
     
-    // MARK: Parses
+    // MARK: Helpers
     
     @inlinable func parse(_ characters: String, from index: inout String.Index, into storage: inout Sign) {
         let subsequence = characters[index...]
                 
-        func parse(_ signs: [String], success: Sign) {
+        func parse(_ signs: [String], success: Sign) -> Bool {
             for sign in signs {
                 guard subsequence.hasPrefix(sign) else { continue }
                 
                 storage = success
                 index = subsequence.index(index, offsetBy: sign.count)
+                return true
             }
+            
+            return false
         }
         
-        if storage == .none {
-            parse(negatives, success: .negative)
-        }
-
-        if storage == .none {
-            parse(positives, success: .positive)
-        }
+        if parse(negatives, success: .negative) { return }
+        if parse(positives, success: .positive) { return }
     }
 }
 
@@ -90,8 +89,8 @@
     
     // MARK: Initializers
     
-    @inlinable init(_ translatables: [String] = [Separator.some.rawValue]) {
-        self.translatables = translatables
+    @inlinable init() {
+        self.translatables = [Separator.some.rawValue]
     }
     
     // MARK: Transformations
@@ -100,7 +99,7 @@
         translatables.append(contentsOf: separators)
     }
     
-    // MARK: Utilities
+    // MARK: Helpers
 
     @inlinable func parse(_ characters: String, from index: inout String.Index, into storage: inout Separator) {
         let subsequence = characters[index...]
@@ -130,8 +129,8 @@
         self.digits = Digits.all
     }
     
-    // MARK: Utilities
-    
+    // MARK: Helpers
+
     @inlinable func parse(_ characters: String, from index: inout String.Index, into storage: inout Digits) {
         for character in characters[index...] {
             guard digits.contains(character) else { return }
@@ -145,9 +144,6 @@
 // MARK: - NumericTextConfigurationOptions
 
 @usableFromInline struct NumericTextConfigurationOptions: OptionSet {
-    
-    // MARK: Options
-    
     @usableFromInline static let integer     = Self(rawValue: 1 << 0)
     @usableFromInline static let nonnegative = Self(rawValue: 1 << 1)
     
