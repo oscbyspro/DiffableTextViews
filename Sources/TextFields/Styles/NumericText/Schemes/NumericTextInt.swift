@@ -43,5 +43,5 @@ public enum NumericTextInt: NumericTextInteger {
 
 @available(iOS 15.0, *)
 extension Int: NumericTextCompatible {
-    public typealias NumericTextItem = NumericTextInt
+    public typealias NumericTextScheme = NumericTextInt
 }

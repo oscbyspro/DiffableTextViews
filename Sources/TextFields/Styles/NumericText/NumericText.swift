@@ -13,16 +13,13 @@ import struct Foundation.Locale
 // MARK: - NumericTextStyle
 
 @available(iOS 15.0, *)
-public struct NumericText<Item: NumericTextItem>: DiffableTextStyle {
-    public typealias Value = Item.Number
-    public typealias Values = NumericTextValues<Item>
-    public typealias Precision = NumericTextPrecision<Item>
+public struct NumericText<Scheme: NumericTextScheme>: DiffableTextStyle {
+    public typealias Value = Scheme.Number
+    public typealias Values = NumericTextValues<Scheme>
+    public typealias Precision = NumericTextPrecision<Scheme>
     
     @usableFromInline typealias Components = NumericTextComponents
     @usableFromInline typealias Configuration = Components.Configuration
-    
-    @usableFromInline typealias PrecisionStyle = NumberFormatStyleConfiguration.Precision
-    @usableFromInline typealias SeparatorStyle = NumberFormatStyleConfiguration.DecimalSeparatorDisplayStrategy
 
     // MARK: Properties
     
@@ -41,17 +38,17 @@ public struct NumericText<Item: NumericTextItem>: DiffableTextStyle {
     
     // MARK: Styles
     
-    @inlinable func displayableStyle() -> Item.Style {
-        let precision: PrecisionStyle = precision.displayableStyle()
+    @inlinable func displayableStyle() -> Scheme.Style {
+        let precision: Scheme.Precision = precision.displayableStyle()
 
-        return Item.style(locale, precision: precision, separator: .automatic)
+        return Scheme.style(locale, precision: precision, separator: .automatic)
     }
     
-    @inlinable func editableStyle(digits: (upper: Int, lower: Int)? = nil, separator: Bool = false) -> Item.Style {
-        let precision: PrecisionStyle = precision.editableStyle(digits: digits)
-        let separator: SeparatorStyle = separator ? .always : .automatic
+    @inlinable func editableStyle(digits: (upper: Int, lower: Int)? = nil, separator: Bool = false) -> Scheme.Style {
+        let precision: Scheme.Precision = precision.editableStyle(digits: digits)
+        let separator: Scheme.Separator = separator ? .always : .automatic
         
-        return Item.style(locale, precision: precision, separator: separator)
+        return Scheme.style(locale, precision: precision, separator: separator)
     }
     
     // MARK: Maps
@@ -116,7 +113,7 @@ extension NumericText {
     
     // MARK: Process
     
-    @inlinable public func process(_ value: Item.Number) -> Item.Number {
+    @inlinable public func process(_ value: Scheme.Number) -> Scheme.Number {
         values.displayableStyle(value)
     }
     
@@ -131,13 +128,13 @@ extension NumericText {
     
     // MARK: Snapshot
     
-    @inlinable public func showcase(_ value: Item.Number) -> Snapshot {
+    @inlinable public func showcase(_ value: Scheme.Number) -> Snapshot {
         let style = displayableStyle()
         
         return snapshot(style.format(value))
     }
     
-    @inlinable public func snapshot(_ value: Item.Number) -> Snapshot {
+    @inlinable public func snapshot(_ value: Scheme.Number) -> Snapshot {
         let style = editableStyle()
         
         return snapshot(style.format(value))
@@ -145,10 +142,10 @@ extension NumericText {
         
     // MARK: Parse
 
-    @inlinable public func parse(_ snapshot: Snapshot) -> Item.Number? {
+    @inlinable public func parse(_ snapshot: Snapshot) -> Scheme.Number? {
         let configuration = configuration()
         
-        return components(snapshot, with: configuration).flatMap(Item.number)
+        return components(snapshot, with: configuration).flatMap(Scheme.number)
     }
     
     // MARK: Merge
@@ -189,7 +186,7 @@ extension NumericText {
         
         // --------------------------------- //
         
-        guard let value = Item.number(components) else { return nil }
+        guard let value = Scheme.number(components) else { return nil }
         guard values.editableValidation(value) else { return nil }
 
         // --------------------------------- //
@@ -223,7 +220,7 @@ extension NumericText {
         
         // --------------------------------- //
         
-        if Item.isInteger {
+        if Scheme.isInteger {
             configuration.options.insert(.integer)
         } else {
             configuration.separators.insert([decimalSeparator])

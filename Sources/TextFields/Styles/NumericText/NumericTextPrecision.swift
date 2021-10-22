@@ -10,11 +10,11 @@ import enum SwiftUI.NumberFormatStyleConfiguration
 // MARK: - NumericTextPrecision
 
 @available(iOS 15.0, *)
-public struct NumericTextPrecision<Item: NumericTextPrecisionItem> {
+public struct NumericTextPrecision<Scheme: NumericTextPrecisionScheme> {
     @usableFromInline typealias Defaults = NumericTextPrecisionDefaults
     @usableFromInline typealias Strategy = NumericTextPrecisionStrategy
-    @usableFromInline typealias Total = NumericTextPrecisionTotal<Item>
-    @usableFromInline typealias Parts = NumberTextPrecisionParts<Item>
+    @usableFromInline typealias Total = NumericTextPrecisionTotal<Scheme>
+    @usableFromInline typealias Parts = NumberTextPrecisionParts<Scheme>
     
     // MARK: Properties
     
@@ -29,7 +29,7 @@ public struct NumericTextPrecision<Item: NumericTextPrecisionItem> {
     // MARK: Initializers: Defaults
     
     @inlinable public static var max: Self {
-        .max(Item.maxTotalDigits)
+        .max(Scheme.maxTotalDigits)
     }
         
     // MARK: Initializers: Total
@@ -44,7 +44,7 @@ public struct NumericTextPrecision<Item: NumericTextPrecisionItem> {
 }
 
 @available(iOS 15.0, *)
-extension NumericTextPrecision where Item: NumericTextFloat {
+extension NumericTextPrecision where Scheme: NumericTextFloat {
 
     // MARK: Initializers: Separate
     
@@ -65,11 +65,11 @@ extension NumericTextPrecision where Item: NumericTextFloat {
     }
     
     @inlinable public static func max(integer: Int) -> Self {
-        .max(integer: integer, fraction: Item.maxTotalDigits - integer)
+        .max(integer: integer, fraction: Scheme.maxTotalDigits - integer)
     }
     
     @inlinable public static func max(fraction: Int) -> Self {
-        .max(integer: Item.maxTotalDigits - fraction, fraction: fraction)
+        .max(integer: Scheme.maxTotalDigits - fraction, fraction: fraction)
     }
 }
 
@@ -87,8 +87,8 @@ extension NumericTextPrecision {
     @inlinable func editableStyle(digits: (upper: Int, lower: Int)?) -> NumberFormatStyleConfiguration.Precision {
         let lowerLowerBound = digits?.lower ?? Defaults.lowerLowerBound
         
-        let upper =               1 ... Item.maxUpperDigits
-        let lower = lowerLowerBound ... Item.maxLowerDigits
+        let upper =               1 ... Scheme.maxUpperDigits
+        let lower = lowerLowerBound ... Scheme.maxLowerDigits
                 
         return .integerAndFractionLength(integerLimits: upper, fractionLimits: lower)
     }
@@ -112,7 +112,7 @@ extension NumericTextPrecision {
 // MARK: - Strategies: Total
 
 @available(iOS 15.0, *)
-@usableFromInline struct NumericTextPrecisionTotal<Item: NumericTextPrecisionItem>: NumericTextPrecisionStrategy {
+@usableFromInline struct NumericTextPrecisionTotal<Scheme: NumericTextPrecisionScheme>: NumericTextPrecisionStrategy {
 
     // MARK: Properties
     
@@ -121,7 +121,7 @@ extension NumericTextPrecision {
     // MARK: Initializers
     
     @inlinable init<R: RangeExpression>(total: R) where R.Bound == Int {
-        self.total = Self.limits(total, max: Item.maxTotalDigits)
+        self.total = Self.limits(total, max: Scheme.maxTotalDigits)
     }
     
     // MARK: Initializers: Helpers
@@ -144,7 +144,7 @@ extension NumericTextPrecision {
 // MARK: - Strategies: Separate
 
 @available(iOS 15.0, *)
-@usableFromInline struct NumberTextPrecisionParts<Item: NumericTextPrecisionItem>: NumericTextPrecisionStrategy {
+@usableFromInline struct NumberTextPrecisionParts<Scheme: NumericTextPrecisionScheme>: NumericTextPrecisionStrategy {
 
     // MARK: Properties
     
@@ -154,20 +154,20 @@ extension NumericTextPrecision {
     // MARK: Initializers
     
     @inlinable init<R0: RangeExpression, R1: RangeExpression>(upper: R0, lower: R1) where R0.Bound == Int, R1.Bound == Int {
-        self.upper = Self.limits(upper, max: Item.maxUpperDigits)
-        self.lower = Self.limits(lower, max: Item.maxLowerDigits)
+        self.upper = Self.limits(upper, max: Scheme.maxUpperDigits)
+        self.lower = Self.limits(lower, max: Scheme.maxLowerDigits)
         
-        precondition(self.lower.lowerBound + self.upper.lowerBound <= Item.maxTotalDigits, "Max precision lowerBound: \(Item.maxTotalDigits).")
+        precondition(self.lower.lowerBound + self.upper.lowerBound <= Scheme.maxTotalDigits, "Max precision lowerBound: \(Scheme.maxTotalDigits).")
     }
     
     @inlinable init<R: RangeExpression>(upper: R) where R.Bound == Int {
-        let upper = Self.limits(upper, max: Item.maxUpperDigits)
+        let upper = Self.limits(upper, max: Scheme.maxUpperDigits)
         
         self.init(upper: upper, lower: Defaults.lowerLowerBound...)
     }
     
     @inlinable init<R: RangeExpression>(lower: R) where R.Bound == Int {
-        let lower = Self.limits(lower, max: Item.maxLowerDigits)
+        let lower = Self.limits(lower, max: Scheme.maxLowerDigits)
         
         self.init(upper: Defaults.upperLowerBound..., lower: lower)
     }
@@ -186,7 +186,7 @@ extension NumericTextPrecision {
     
     @inlinable func editableValidation(digits: (upper: Int, lower: Int)) -> Bool {
         func validateTotal() -> Bool {
-            digits.upper + digits.lower <= Item.maxTotalDigits
+            digits.upper + digits.lower <= Scheme.maxTotalDigits
         }
         
         func validateParts() -> Bool {

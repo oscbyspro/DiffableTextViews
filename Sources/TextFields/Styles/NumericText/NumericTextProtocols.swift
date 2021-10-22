@@ -9,10 +9,10 @@
 import Foundation
 import SwiftUI
 
-// MARK: - NumericTextStyleItem
+// MARK: - NumericTextStyleScheme
 
 @available(iOS 15.0, *)
-public protocol NumericTextItem: NumericTextValuesItem, NumericTextPrecisionItem {
+public protocol NumericTextScheme: NumericTextValuesScheme, NumericTextPrecisionScheme {
     associatedtype Style: FormatStyle where Style.FormatInput == Number, Style.FormatOutput == String
     
     // MARK: Aliases
@@ -27,9 +27,9 @@ public protocol NumericTextItem: NumericTextValuesItem, NumericTextPrecisionItem
     @inlinable static func style(_ locale: Locale, precision: Precision, separator: Separator) -> Style
 }
 
-// MARK: - NumericTextValuesItem
+// MARK: - NumericTextValuesScheme
 
-public protocol NumericTextValuesItem {
+public protocol NumericTextValuesScheme {
     associatedtype Number: Comparable
     
     // MARK: Properties: Static
@@ -39,9 +39,9 @@ public protocol NumericTextValuesItem {
     static var  min: Number { get }
 }
 
-// MARK: - NumericTextPrecisionItem
+// MARK: - NumericTextPrecisionScheme
 
-public protocol NumericTextPrecisionItem {
+public protocol NumericTextPrecisionScheme {
     
     // MARK: Properties: Static
         
@@ -50,7 +50,7 @@ public protocol NumericTextPrecisionItem {
     static var maxLowerDigits: Int { get }
 }
 
-public extension NumericTextPrecisionItem {
+public extension NumericTextPrecisionScheme {
     
     // MARK: Properties: Static
 
@@ -60,12 +60,12 @@ public extension NumericTextPrecisionItem {
 // MARK: - NumericTextFloat
 
 @available(iOS 15.0, *)
-public protocol NumericTextFloat: NumericTextItem { }
+public protocol NumericTextFloat: NumericTextScheme { }
 
 // MARK: - NumberTextInteger
 
 @available(iOS 15.0, *)
-public protocol NumericTextInteger: NumericTextItem { }
+public protocol NumericTextInteger: NumericTextScheme { }
 
 @available(iOS 15.0, *)
 public extension NumericTextInteger {
@@ -82,5 +82,5 @@ public protocol NumericTextCompatible {
     
     // MARK: Types
     
-    associatedtype NumericTextItem: TextFields.NumericTextItem where NumericTextItem.Number == Self
+    associatedtype NumericTextScheme: TextFields.NumericTextScheme where NumericTextScheme.Number == Self
 }

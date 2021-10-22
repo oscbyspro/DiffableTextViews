@@ -7,14 +7,14 @@
 
 // MARK: - NumericTextValues
 
-public struct NumericTextValues<Item: NumericTextValuesItem> {
-    public typealias Number = Item.Number
+public struct NumericTextValues<Scheme: NumericTextValuesScheme> {
+    public typealias Number = Scheme.Number
     
     // MARK: Properties: Static
     
-    @inlinable public static var  max: Number { Item.max  }
-    @inlinable public static var  min: Number { Item.min  }
-    @inlinable public static var zero: Number { Item.zero }
+    @inlinable public static var  max: Number { Scheme.max  }
+    @inlinable public static var  min: Number { Scheme.min  }
+    @inlinable public static var zero: Number { Scheme.zero }
 
     // MARK: Properties
     
@@ -61,11 +61,11 @@ public struct NumericTextValues<Item: NumericTextValuesItem> {
     // MARK: Descriptions
     
     @inlinable var nonnegative: Bool {
-        min >= Item.zero
+        min >= Scheme.zero
     }
     
     @inlinable var nonpositive: Bool {
-        max <= Item.zero
+        max <= Scheme.zero
     }
     
     // MARK: Utilities

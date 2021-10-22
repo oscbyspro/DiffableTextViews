@@ -45,6 +45,6 @@ public enum NumericTextDecimal: NumericTextFloat {
 
 @available(iOS 15.0, *)
 extension Decimal: NumericTextCompatible {
-    public typealias NumericTextItem = NumericTextDecimal
+    public typealias NumericTextScheme = NumericTextDecimal
 }
 
