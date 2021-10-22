@@ -190,7 +190,7 @@ extension NumericTextStyle {
     
     // MARK: Helpers, Characters
     
-    @inlinable func snapshot(_ characters: String, count: Int? = nil) -> Snapshot {
+    @inlinable func snapshot(_ characters: String) -> Snapshot {
         var snapshot = Snapshot()
             
         // --------------------------------- //
