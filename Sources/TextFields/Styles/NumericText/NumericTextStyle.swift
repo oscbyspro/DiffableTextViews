@@ -12,7 +12,7 @@ import struct Foundation.Locale
 
 // MARK: - NumericTextStyle
 
-#warning("Cache componentsStyle and character sets.")
+#warning("Cache Components.Style, maybe.")
 
 @available(iOS 15.0, *)
 public struct NumericTextStyle<Scheme: NumericTextScheme>: DiffableTextStyle {
@@ -35,21 +35,6 @@ public struct NumericTextStyle<Scheme: NumericTextScheme>: DiffableTextStyle {
     
     @inlinable public init(locale: Locale = .autoupdatingCurrent) {
         self.locale = locale
-    }
-    
-    // MARK: Styles
-    
-    @inlinable func displayableStyle() -> Scheme.Style {
-        let precision: Scheme.Precision = precision.displayableStyle()
-
-        return Scheme.style(locale, precision: precision, separator: .automatic)
-    }
-    
-    @inlinable func editableStyle(digits: (upper: Int, lower: Int)? = nil, separator: Bool = false) -> Scheme.Style {
-        let precision: Scheme.Precision = precision.editableStyle(digits: digits)
-        let separator: Scheme.Separator = separator ? .always : .automatic
-        
-        return Scheme.style(locale, precision: precision, separator: separator)
     }
     
     // MARK: Maps
@@ -79,44 +64,46 @@ public struct NumericTextStyle<Scheme: NumericTextScheme>: DiffableTextStyle {
     @inlinable func update(_ transform: (inout Self) -> Void) -> Self {
         var copy = self; transform(&copy); return copy
     }
-
+    
     // MARK: Helpers, Locale
-    
-    @inlinable var separator: String {
-        locale.decimalSeparator ?? "."
+
+    @inlinable var decimalSeparator: String {
+        locale.decimalSeparator ?? Components.Separator.some.rawValue
     }
-    
+
     @inlinable var groupingSeparator: String {
-        locale.groupingSeparator ?? ","
+        locale.groupingSeparator ?? Components.Separator.none.rawValue
     }
     
-    // MARK: Helpers, Snapshot
+    // MARK: Formats
     
-    @inlinable func content() -> Set<Character> {
-        var characters = Set<Character>()
-        characters.formUnion(Components.Style.Signs.both)
-        characters.formUnion(Components.Style.Digits.all)
-        characters.formUnion(separator)
-        return characters
+    @inlinable func displayableStyle() -> Scheme.Style {
+        let precision: Scheme.Precision = precision.displayableStyle()
+
+        return Scheme.style(locale, precision: precision, separator: .automatic)
     }
     
-    @inlinable func spacers() -> Set<Character> {
-        var characters = Set<Character>()
-        characters.formUnion(groupingSeparator)
-        return characters
+    @inlinable func editableStyle(digits: (upper: Int, lower: Int)? = nil, separator: Bool = false) -> Scheme.Style {
+        let precision: Scheme.Precision = precision.editableStyle(digits: digits)
+        let separator: Scheme.Separator = separator ? .always : .automatic
+        
+        return Scheme.style(locale, precision: precision, separator: separator)
     }
+
+    // MARK: Snapshot
         
     @inlinable func snapshot(_ characters: String) -> Snapshot {
         var snapshot = Snapshot()
         
-        let contentSet = content()
-        let spacersSet = spacers()
-        
         for character in characters {
-            if contentSet.contains(character) {
+            if Components.Digits.all.contains(character) {
                 snapshot.append(.content(character))
-            } else if spacersSet.contains(character) {
-                snapshot.append(.spacer(character))
+            } else if Components.Sign.all.contains(character) {
+                snapshot.append(.content(character))
+            } else if decimalSeparator.contains(character) {
+                snapshot.append(.content(character))
+            } else if groupingSeparator.contains(character) {
+                snapshot.append( .spacer(character))
             }
         }
         
@@ -173,9 +160,6 @@ extension NumericTextStyle {
     // MARK: Merge
     
     @inlinable public func merge(_ snapshot: Snapshot, with content: Snapshot, in range: Range<Snapshot.Index>) -> Snapshot? {
-        
-        // --------------------------------- //
-        
         let componentsStyle = componentsStyle()
         
         // --------------------------------- //
@@ -225,7 +209,7 @@ extension NumericTextStyle {
         }
         
         // --------------------------------- //
-                        
+                                
         return snapshot(characters)
     }
 
@@ -238,23 +222,17 @@ extension NumericTextStyle {
     @inlinable func componentsStyle() -> Components.Style {
         let componentsStyle = Components.Style()
         componentsStyle.signs.positives.removeAll()
-        
-        // --------------------------------- //
-        
+                
         if Scheme.isInteger {
             componentsStyle.options.insert(.integer)
         } else {
-            componentsStyle.separators.insert([separator])
+            componentsStyle.separators.insert([decimalSeparator])
         }
-        
-        // --------------------------------- //
         
         if values.nonnegative {
             componentsStyle.options.insert(.nonnegative)
         }
         
-        // --------------------------------- //
-
         return componentsStyle
     }
     

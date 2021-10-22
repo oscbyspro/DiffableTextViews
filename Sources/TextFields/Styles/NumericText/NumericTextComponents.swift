@@ -13,14 +13,14 @@ public struct NumericTextComponents {
     // MARK: Properties
 
     public var sign: Sign = .none
-    public var integers = String()
+    public var integers = Digits()
     public var separator: Separator = .none
-    public var decimals = String()
+    public var decimals = Digits()
     
     // MARK: Utilities
     
     @inlinable public func characters() -> String {
-        sign.rawValue + integers + separator.rawValue + decimals
+        sign.rawValue + integers.characters + separator.rawValue + decimals.characters
     }
     
     // MARK: Transformations
@@ -29,17 +29,48 @@ public struct NumericTextComponents {
         if sign != proposal { sign = proposal } else { sign = .none }
     }
     
-    // MARK: Components
+    // MARK: Components: Sign
     
     @frozen public enum Sign: String {
+        @usableFromInline static let all = Set<Character>("+-")
+        
         case positive = "+"
         case negative = "-"
         case none = ""
     }
     
+    // MARK: Components: Separator
+    
     @frozen public enum Separator: String {
         case some = "."
         case none = ""
+    }
+    
+    // MARK: Components: Digits
+    
+    @frozen public struct Digits {
+        @usableFromInline static let zero: String = "0"
+        @usableFromInline static let all = Set<Character>("0123456789")
+        
+        // MARK: Properties
+        
+        @usableFromInline var count: Int = 0
+        @usableFromInline var characters: String = ""
+        
+        // MARK: Initializers
+        
+        @inlinable init() { }
+        
+        // MARK: Utilities
+        
+        @inlinable var isEmpty: Bool {
+            characters.isEmpty
+        }
+        
+        @inlinable mutating func append(_ character: Character) {
+            count += 1
+            characters.append(character)
+        }
     }
 }
 
@@ -48,9 +79,6 @@ extension NumericTextComponents {
     // MARK: Initializers
     
     @inlinable init?(_ characters: String, style: Style = Style()) {
-        
-        // --------------------------------- //
-        
         var index = characters.startIndex
         
         // --------------------------------- //
@@ -61,7 +89,7 @@ extension NumericTextComponents {
         
         // --------------------------------- //
         
-        self.sign = style.signs.parse(characters, from: &index)
+        style.signs.parse(characters, from: &index, into: &sign)
         
         if style.options.contains(.nonnegative) {
             guard sign != .negative else { return nil }
@@ -69,7 +97,7 @@ extension NumericTextComponents {
         
         // --------------------------------- //
         
-        self.integers = style.digits.parse(characters, from: &index)
+        style.digits.parse(characters, from: &index, into: &integers)
         
         if style.options.contains(.integer) {
             guard done() else { return nil }
@@ -78,7 +106,7 @@ extension NumericTextComponents {
         
         // --------------------------------- //
         
-        self.separator = style.separators.parse(characters, from: &index)
+        style.separators.parse(characters, from: &index, into: &separator)
         
         if separator == .none {
             guard done() else { return nil }
@@ -87,7 +115,7 @@ extension NumericTextComponents {
         
         // --------------------------------- //
 
-        self.decimals = style.digits.parse(characters, from: &index)
+        style.digits.parse(characters, from: &index, into: &decimals)
         
         if decimals.isEmpty {
             guard done() else { return nil }
@@ -97,8 +125,6 @@ extension NumericTextComponents {
         // --------------------------------- //
                 
         guard done() else { return nil }
-
-        // --------------------------------- //
     }
 }
 
@@ -106,10 +132,10 @@ extension NumericTextComponents {
 
 @usableFromInline final class NumericTextComponentsStyle {
     @usableFromInline typealias Components = NumericTextComponents
-    @usableFromInline typealias Signs = NumericTextComponentsSigns
-    @usableFromInline typealias Digits = NumericTextComponentsDigits
-    @usableFromInline typealias Separators = NumericTextComponentsSeparators
-    @usableFromInline typealias Options = NumericTextComponentsOptions
+    @usableFromInline typealias Signs = NumericTextComponentsStyleSigns
+    @usableFromInline typealias Digits = NumericTextComponentsStyleDigits
+    @usableFromInline typealias Separators = NumericTextComponentsStyleSeparators
+    @usableFromInline typealias Options = NumericTextComponentsStyleOptions
     
     // MARK: Properties
     
@@ -130,15 +156,8 @@ extension NumericTextComponents {
 
 // MARK: - NumericTextComponentsSigns
 
-@usableFromInline struct NumericTextComponentsSigns {
-    @usableFromInline typealias Components = NumericTextComponents
-    
-    // MARK: Statics
-    
-    #warning("TODO...")
-    @inlinable static var plus:  String { "+" }
-    @inlinable static var minus: String { "-" }
-    @inlinable static var both:  String { plus + minus }
+@usableFromInline struct NumericTextComponentsStyleSigns {
+    @usableFromInline typealias Sign = NumericTextComponents.Sign
     
     // MARK: Properties
     
@@ -147,14 +166,14 @@ extension NumericTextComponents {
     
     // MARK: Initializers
     
-    @inlinable init(positives: [String] = [Self.plus], negatives: [String] = [Self.minus]) {
+    @inlinable init(positives: [String] = [Sign.positive.rawValue], negatives: [String] = [Sign.negative.rawValue]) {
         self.positives = positives
         self.negatives = negatives
     }
     
     // MARK: Utilities
     
-    @inlinable func interpret(_ characters: String) -> Components.Sign {
+    @inlinable func interpret(_ characters: String) -> Sign {
         if positives.contains(characters) { return .positive }
         if negatives.contains(characters) { return .negative }
         return .none
@@ -162,63 +181,32 @@ extension NumericTextComponents {
     
     // MARK: Parses
     
-    @inlinable func parse(_ characters: String, from index: inout String.Index) -> Components.Sign {
+    @inlinable func parse(_ characters: String, from index: inout String.Index, into storage: inout Sign) {
         let subsequence = characters[index...]
                 
-        func parse(_ signs: [String]) -> Bool {
+        func parse(_ signs: [String], success: Sign) {
             for sign in signs {
                 guard subsequence.hasPrefix(sign) else { continue }
                 
+                storage = success
                 index = subsequence.index(index, offsetBy: sign.count)
-                return true
             }
-            
-            return false
         }
         
-        if parse(negatives) { return .negative }
-        if parse(positives) { return .positive }
-        
-        return .none
-    }
-}
+        if storage == .none {
+            parse(negatives, success: .negative)
+        }
 
-// MARK: - NumericTextComponentsDigits
-
-@usableFromInline struct NumericTextComponentsDigits {
-    
-    // MARK: Statics
-    
-    @usableFromInline static let zero: String = "0"
-    @usableFromInline static let all = Set<Character>("0123456789")
-    
-    // MARK: Properties
-    
-    @usableFromInline let digits: Set<Character>
-    
-    // MARK: Initializers
-    
-    @inlinable init() {
-        self.digits = Self.all
-    }
-    
-    // MARK: Utilities
-    
-    @inlinable func parse(_ characters: String, from index: inout String.Index) -> String {
-        let match = characters[index...].prefix(while: digits.contains)
-        index = match.endIndex
-        return String(match)
+        if storage == .none {
+            parse(positives, success: .positive)
+        }
     }
 }
 
 // MARK: - NumericTextComponentsSeparators
 
-@usableFromInline struct NumericTextComponentsSeparators {
-    @usableFromInline typealias Components = NumericTextComponents
-    
-    // MARK: Statics
-    
-    @inlinable static var separator: String { "." }
+@usableFromInline struct NumericTextComponentsStyleSeparators {
+    @usableFromInline typealias Separator = NumericTextComponents.Separator
     
     // MARK: Properties
 
@@ -226,9 +214,8 @@ extension NumericTextComponents {
     
     // MARK: Initializers
     
-    @inlinable init() {
-        self.translatables = []
-        self.translatables.append(Self.separator)
+    @inlinable init(_ translatables: [String] = [Separator.some.rawValue]) {
+        self.translatables = translatables
     }
     
     // MARK: Transformations
@@ -239,23 +226,49 @@ extension NumericTextComponents {
     
     // MARK: Utilities
 
-    @inlinable func parse(_ characters: String, from index: inout String.Index) -> Components.Separator {
+    @inlinable func parse(_ characters: String, from index: inout String.Index, into storage: inout Separator) {
         let subsequence = characters[index...]
         
         for translatable in translatables {
             guard subsequence.hasPrefix(translatable) else { continue }
             
+            storage = .some
             index = subsequence.index(index, offsetBy: translatable.count)
-            return .some
+            return
         }
-        
-        return .none
+    }
+}
+
+// MARK: - NumericTextComponentsDigits
+
+@usableFromInline struct NumericTextComponentsStyleDigits {
+    @usableFromInline typealias Digits = NumericTextComponents.Digits
+    
+    // MARK: Properties
+    
+    @usableFromInline let digits: Set<Character>
+    
+    // MARK: Initializers
+    
+    @inlinable init() {
+        self.digits = Digits.all
+    }
+    
+    // MARK: Utilities
+    
+    @inlinable func parse(_ characters: String, from index: inout String.Index, into storage: inout Digits) {
+        for character in characters[index...] {
+            guard digits.contains(character) else { return }
+            
+            storage.append(character)
+            index = characters.index(after: index)
+        }
     }
 }
 
 // MARK: - NumericTextComponentsOptions
 
-@usableFromInline struct NumericTextComponentsOptions: OptionSet {
+@usableFromInline struct NumericTextComponentsStyleOptions: OptionSet {
     
     // MARK: Options
     
