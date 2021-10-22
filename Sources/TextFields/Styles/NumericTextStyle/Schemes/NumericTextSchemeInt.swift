@@ -12,7 +12,6 @@ import struct Foundation.IntegerFormatStyle
 
 // MARK: - NumericTextSchemeInt
 
-@available(iOS 15.0, *)
 public enum NumericTextSchemeInt: NumericTextIntegerScheme {
     public typealias Number = Int
     public typealias Style = IntegerFormatStyle<Number>
@@ -41,7 +40,6 @@ public enum NumericTextSchemeInt: NumericTextIntegerScheme {
 
 // MARK: Number + Compatible
 
-@available(iOS 15.0, *)
 extension NumericTextSchemeInt.Number: NumericTextSchematic {
     public typealias NumericTextScheme = NumericTextSchemeInt
 }

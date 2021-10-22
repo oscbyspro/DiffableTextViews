@@ -11,7 +11,6 @@ import enum Foundation.NumberFormatStyleConfiguration
 
 // MARK: - NumericTextPrecision
 
-@available(iOS 15.0, *)
 public struct NumericTextStylePrecision<Scheme: NumericTextScheme> {
     @usableFromInline typealias Strategy = NumericTextPrecisionStrategy
     @usableFromInline typealias Defaults = NumericTextPrecisionDefaults
@@ -45,7 +44,6 @@ public struct NumericTextStylePrecision<Scheme: NumericTextScheme> {
     }
 }
 
-@available(iOS 15.0, *)
 extension NumericTextStylePrecision where Scheme: NumericTextFloatScheme {
 
     // MARK: Initializers: Separate
@@ -77,7 +75,6 @@ extension NumericTextStylePrecision where Scheme: NumericTextFloatScheme {
 
 // MARK: - Interoperabilities
 
-@available(iOS 15.0, *)
 extension NumericTextStylePrecision {
     
     // MARK: Utilities
@@ -102,7 +99,6 @@ extension NumericTextStylePrecision {
 
 // MARK: - Strategies
 
-@available(iOS 15.0, *)
 @usableFromInline protocol NumericTextPrecisionStrategy {
     typealias Defaults = NumericTextPrecisionDefaults
     
@@ -113,7 +109,6 @@ extension NumericTextStylePrecision {
 
 // MARK: - Strategies: Total
 
-@available(iOS 15.0, *)
 @usableFromInline struct NumericTextPrecisionTotal<Scheme: NumericTextScheme>: NumericTextPrecisionStrategy {
 
     // MARK: Properties
@@ -145,7 +140,6 @@ extension NumericTextStylePrecision {
 
 // MARK: - Strategies: Separate
 
-@available(iOS 15.0, *)
 @usableFromInline struct NumberTextPrecisionParts<Scheme: NumericTextScheme>: NumericTextPrecisionStrategy {
 
     // MARK: Properties

@@ -9,7 +9,6 @@
 
 import SwiftUI
 
-@available(iOS 13.0, *)
 public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
     public typealias Value = Style.Value
     public typealias UIViewType = UITextField
@@ -252,7 +251,6 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
 
 // MARK: - NumericTextStyle
 
-@available(iOS 15.0, *)
 extension DiffableTextField {
     
     // MARK: Initializers

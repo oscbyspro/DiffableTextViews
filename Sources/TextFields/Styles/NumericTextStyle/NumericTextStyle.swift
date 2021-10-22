@@ -13,7 +13,7 @@ import struct Foundation.Locale
 // MARK: - NumericTextStyle
 
 /// Formats text and number.
-@available(iOS 15.0, *)
+
 public struct NumericTextStyle<Scheme: NumericTextScheme>: DiffableTextStyle {
     @usableFromInline typealias Components = NumericTextComponents
     @usableFromInline typealias Configuration = NumericTextConfiguration
@@ -56,7 +56,6 @@ public struct NumericTextStyle<Scheme: NumericTextScheme>: DiffableTextStyle {
 
 // MARK: - Formats
 
-@available(iOS 15.0, *)
 extension NumericTextStyle {
     
     // MARK: Displayable
@@ -79,7 +78,6 @@ extension NumericTextStyle {
 
 // MARK: - Update
 
-@available(iOS 15.0, *)
 extension NumericTextStyle {
     
     // MARK: Transformations
@@ -113,7 +111,6 @@ extension NumericTextStyle {
 
 // MARK: - Value
 
-@available(iOS 15.0, *)
 extension NumericTextStyle {
         
     // MARK: Parse
@@ -137,7 +134,6 @@ extension NumericTextStyle {
 
 // MARK: - Snapshot
 
-@available(iOS 15.0, *)
 extension NumericTextStyle {
     
     // MARK: Snapshot
@@ -228,7 +224,6 @@ extension NumericTextStyle {
 
 // MARK: - NumericText
 
-@available(iOS 15.0, *)
 extension NumericTextStyle {
     
     // MARK: Configuration

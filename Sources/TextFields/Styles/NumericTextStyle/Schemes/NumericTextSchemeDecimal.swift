@@ -12,7 +12,6 @@ import struct Foundation.Decimal
 
 // MARK: - NumericTextSchemeDecimal
 
-@available(iOS 15.0, *)
 public enum NumericTextSchemeDecimal: NumericTextFloatScheme {    
     public typealias Number = Decimal
     
@@ -41,7 +40,6 @@ public enum NumericTextSchemeDecimal: NumericTextFloatScheme {
 
 // MARK: Number + Compatible
 
-@available(iOS 15.0, *)
 extension NumericTextSchemeDecimal.Number: NumericTextSchematic {
     public typealias NumericTextScheme = NumericTextSchemeDecimal
 }

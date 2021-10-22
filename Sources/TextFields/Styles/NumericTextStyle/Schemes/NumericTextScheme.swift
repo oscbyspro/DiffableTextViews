@@ -13,7 +13,6 @@ import enum Foundation.NumberFormatStyleConfiguration
 
 // MARK: - NumericTextStyleScheme
 
-@available(iOS 15.0, *)
 public protocol NumericTextScheme {
     associatedtype Number: Comparable
     associatedtype Style: FormatStyle where Style.FormatInput == Number, Style.FormatOutput == String
@@ -42,7 +41,6 @@ public protocol NumericTextScheme {
     @inlinable static func style(_ locale: Locale, precision: Precision, separator: Separator) -> Style
 }
 
-@available(iOS 15.0, *)
 public extension NumericTextScheme {
     
     // MARK: Properties: Static
@@ -53,10 +51,7 @@ public extension NumericTextScheme {
 
 // MARK: - NumericTextIntegerScheme
 
-@available(iOS 15.0, *)
-public protocol NumericTextIntegerScheme: NumericTextScheme { }
-
-@available(iOS 15.0, *)
+public  protocol NumericTextIntegerScheme: NumericTextScheme { }
 public extension NumericTextIntegerScheme {
     
     // MARK: Implementations
@@ -66,17 +61,14 @@ public extension NumericTextIntegerScheme {
 
 // MARK: - NumericTextFloatScheme
 
-@available(iOS 15.0, *)
 public protocol NumericTextFloatScheme: NumericTextScheme { }
 
 // MARK: - NumbericTextSchemeCompatible
 
-@available(iOS 15.0, *)
 public protocol NumericTextSchematic {
     associatedtype NumericTextScheme: TextFields.NumericTextScheme where NumericTextScheme.Number == Self
 }
 
-@available(iOS 15.0, *)
 public extension NumericTextSchematic {
     typealias NumericTextStyle = TextFields.NumericTextStyle<NumericTextScheme>
 }
