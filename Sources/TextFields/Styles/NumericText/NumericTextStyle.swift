@@ -14,11 +14,11 @@ import struct Foundation.Locale
 
 @available(iOS 15.0, *)
 public struct NumericTextStyle<Scheme: NumericTextScheme>: DiffableTextStyle {
+    @usableFromInline typealias Components = NumericTextComponents
+
     public typealias Value = Scheme.Number
     public typealias Values = NumericTextValues<Scheme>
     public typealias Precision = NumericTextPrecision<Scheme>
-    
-    @usableFromInline typealias Components = NumericTextComponents
 
     // MARK: Properties
     
@@ -87,29 +87,9 @@ public struct NumericTextStyle<Scheme: NumericTextScheme>: DiffableTextStyle {
         
         return Scheme.style(locale, precision: precision, separator: separator)
     }
-
-    // MARK: Snapshot
-        
-    @inlinable func snapshot(_ characters: String) -> Snapshot {
-        var snapshot = Snapshot()
-        
-        for character in characters {
-            if Components.Digits.all.contains(character) {
-                snapshot.append(.content(character))
-            } else if Components.Sign.all.contains(character) {
-                snapshot.append(.content(character))
-            } else if decimalSeparator.contains(character) {
-                snapshot.append(.content(character))
-            } else if groupingSeparator.contains(character) {
-                snapshot.append( .spacer(character))
-            }
-        }
-        
-        return snapshot
-    }
 }
 
-// MARK: Conformance to: DiffableTextStyle
+// MARK: - Value
 
 @available(iOS 15.0, *)
 extension NumericTextStyle {
@@ -119,6 +99,30 @@ extension NumericTextStyle {
     @inlinable public func process(_ value: Scheme.Number) -> Scheme.Number {
         values.displayableStyle(value)
     }
+    
+    // MARK: Parse
+
+    @inlinable public func parse(_ snapshot: Snapshot) -> Scheme.Number? {
+        components(snapshot, with: componentsStyle()).flatMap(value)
+    }
+    
+    // MARK: Components
+    
+    @inlinable func value(_ components: Components) -> Scheme.Number? {
+        if components.integers.isEmpty, components.decimals.isEmpty {
+            return Scheme.zero
+        }
+        
+        return Scheme.number(components)
+    }
+}
+
+// MARK: - Snapshot
+
+@available(iOS 15.0, *)
+extension NumericTextStyle {
+    
+    // MARK: Process
     
     @inlinable public func process(_ snapshot: Snapshot) -> Snapshot {
         let prefix = prefix.map({ Snapshot($0 + " ", only: .prefix) })
@@ -142,83 +146,75 @@ extension NumericTextStyle {
         
         return snapshot(style.format(value))
     }
-        
-    // MARK: Parse
-
-    @inlinable public func parse(_ snapshot: Snapshot) -> Scheme.Number? {
-        guard let components = components(snapshot, style: componentsStyle()) else { return nil }
-        
-        guard !components.integers.isEmpty, !components.decimals.isEmpty else {
-            return Scheme.zero
-        }
-        
-        return Scheme.number(components)
-    }
     
     // MARK: Merge
     
     @inlinable public func merge(_ snapshot: Snapshot, with content: Snapshot, in range: Range<Snapshot.Index>) -> Snapshot? {
-        
-        // --------------------------------- //
-        
         let componentsStyle = componentsStyle()
-        
-        // --------------------------------- //
-        
-        var input = Input(content, style: componentsStyle)
+                
+        var input = NumericTextStyleInput(content, with: componentsStyle)
         let toggleSignInstruction = input.consumeToggleSignInstruction()
-        
-        // --------------------------------- //
-        
+                
         let result = snapshot.replace(range, with: input.content)
-        
-        // --------------------------------- //
-        
-        guard var components = components(result, style: componentsStyle) else { return nil }
+                
+        guard var components = components(result, with: componentsStyle) else { return nil }
         toggleSignInstruction?.process(&components)
-        
-        // --------------------------------- //
-        
+                
         return self.snapshot(components)
     }
-        
-    // MARK: Helpers
+    
+    // MARK: Helpers, Components
     
     @inlinable func snapshot(_ components: Components) -> Snapshot? {
-        
-        // --------------------------------- //
-        
         let digits = (components.integers.count, components.decimals.count)
         guard precision.editableValidation(digits: digits) else { return nil }
         
-        // --------------------------------- //
-        
-        guard let value = Scheme.number(components) else { return nil }
+        guard let value = value(components) else { return nil }
         guard values.editableValidation(value) else { return nil }
-
-        // --------------------------------- //
         
         let style = editableStyle(digits: digits, separator: components.separator != .none)
-        
-        // --------------------------------- //
-        
         var characters = style.format(value)
         
         if components.sign != .none, !characters.hasPrefix(components.sign.rawValue) {
-            
             characters = components.sign.rawValue + characters
         }
-        
-        // --------------------------------- //
-                                
+    
         return snapshot(characters)
     }
-
-    // MARK: Helpers, Components
     
-    @inlinable func components(_ snapshot: Snapshot, style: Components.Style) -> Components? {
-        Components(snapshot.content(), style: style)
+    // MARK: Helpers, Characters
+        
+    @inlinable func snapshot(_ characters: String) -> Snapshot {
+        var snapshot = Snapshot()
+        
+        for character in characters {
+            if Components.Digits.all.contains(character) {
+                snapshot.append(.content(character))
+            } else if Components.Sign.all.contains(character) {
+                snapshot.append(.content(character))
+            } else if decimalSeparator.contains(character) {
+                snapshot.append(.content(character))
+            } else if groupingSeparator.contains(character) {
+                snapshot.append( .spacer(character))
+            }
+        }
+        
+        return snapshot
     }
+}
+
+// MARK: - Components
+
+@available(iOS 15.0, *)
+extension NumericTextStyle {
+    
+    // MARK: Make
+    
+    @inlinable func components(_ snapshot: Snapshot, with componentsStyle: Components.Style) -> Components? {
+        Components(snapshot.content(), style: componentsStyle)
+    }
+    
+    // MARK: Helpers, Style
     
     @inlinable func componentsStyle() -> Components.Style {
         let componentsStyle = Components.Style()
@@ -236,54 +232,42 @@ extension NumericTextStyle {
         
         return componentsStyle
     }
+}
+
+// MARK: - Commands
+
+@usableFromInline struct NumericTextStyleInput {
+    @usableFromInline typealias Components = NumericTextComponents
     
-    // MARK: Input
-    
-    @usableFromInline struct Input {
-        
-        // MARK: Properties
-        
-        @usableFromInline var content: Snapshot
-        @usableFromInline var componentsStyle: Components.Style
-        
-        // MARK: Initializers
-        
-        @inlinable init(_ content: Snapshot, style componentsStyle: Components.Style) {
-            self.content = content
-            self.componentsStyle = componentsStyle
-        }
-        
-        // MARK: Utilities
-        
-        @inlinable mutating func consumeToggleSignInstruction() -> ToggleSignInstruction? {
-            ToggleSignInstruction(consumable: &content, with: componentsStyle)
-        }
+    @usableFromInline var content: Snapshot
+    @usableFromInline var componentsStyle: Components.Style
+            
+    @inlinable init(_ content: Snapshot, with componentsStyle: Components.Style) {
+        self.content = content
+        self.componentsStyle = componentsStyle
     }
+            
+    @inlinable mutating func consumeToggleSignInstruction() -> NumericTextStyleToggleSignInstruction? {
+        .init(consumable: &content, with: componentsStyle)
+    }
+}
+        
+@usableFromInline struct NumericTextStyleToggleSignInstruction {
+    @usableFromInline typealias Components = NumericTextComponents
     
-    // MARK: ToggleSignInstruction
-        
-    @usableFromInline struct ToggleSignInstruction {
-        
-        // MARK: Properties
-        
-        @usableFromInline var sign: Components.Sign
-        
-        // MARK: Initializers
-        
-        @inlinable init?(consumable: inout Snapshot, with style: Components.Style) {
-            let sign = style.signs.interpret(consumable.characters)
-                        
-            guard sign != .none else { return nil }
-                        
-            self.sign = sign
-            consumable.removeAll()
-        }
-        
-        // MARK: Utilities
-        
-        @inlinable func process(_ components: inout Components) {
-            components.toggleSign(with: sign)
-        }
+    @usableFromInline var sign: Components.Sign
+            
+    @inlinable init?(consumable: inout Snapshot, with componentsStyle: Components.Style) {
+        let sign = componentsStyle.signs.interpret(consumable.characters)
+                    
+        guard sign != .none else { return nil }
+                    
+        self.sign = sign
+        consumable.removeAll()
+    }
+            
+    @inlinable func process(_ components: inout Components) {
+        components.toggleSign(with: sign)
     }
 }
 
