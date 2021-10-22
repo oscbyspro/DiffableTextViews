@@ -99,6 +99,9 @@
 @usableFromInline struct NumericTextConfigurationSigns {
     @usableFromInline typealias Sign = NumericTextComponents.Sign
     
+    @usableFromInline static let positives: Self = .init(positives: [Sign.plus],  negatives: [])
+    @usableFromInline static let negatives: Self = .init(positives: [], negatives: [Sign.minus])
+    
     // MARK: Properties
     
     @usableFromInline var positives: [String]
@@ -107,15 +110,19 @@
     // MARK: Initializers
     
     @inlinable init() {
-        self.positives = [Sign.positive.rawValue]
-        self.negatives = [Sign.negative.rawValue]
+        self.init(positives: [Sign.plus], negatives: [Sign.minus])
+    }
+    
+    @inlinable init(positives: [String], negatives: [String]) {
+        self.positives = positives
+        self.negatives = negatives
     }
     
     // MARK: Utilities
     
     @inlinable func interpret(_ characters: String) -> Sign? {
-        if positives.contains(characters) { return .positive }
         if negatives.contains(characters) { return .negative }
+        if positives.contains(characters) { return .positive }
         
         return nil
     }
@@ -161,7 +168,11 @@
     
     // MARK: Transformations
     
-    @inlinable mutating func insert(_ separators: [String]) {
+    @inlinable mutating func insert(_ separator: String) {
+        translatables.append(separator)
+    }
+    
+    @inlinable mutating func insert(contentsOf separators: [String]) {
         translatables.append(contentsOf: separators)
     }
     

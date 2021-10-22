@@ -196,7 +196,7 @@ extension NumericTextStyle {
         // --------------------------------- //
         
         if let prefix = prefix {
-            snapshot.append(contentsOf: prefix)
+            snapshot = prefix
             snapshot.append(.prefix(" "))
         }
         
@@ -230,14 +230,12 @@ extension NumericTextStyle {
     // MARK: Configuration
     
     @inlinable func configuration() -> Configuration {
-        let configuration = Configuration()
-        
-        configuration.signs.positives.removeAll()
-        
+        let configuration = Configuration(signs: .negatives)
+                
         if Scheme.isInteger {
             configuration.options.insert(.integer)
         } else {
-            configuration.separators.insert([decimalSeparator])
+            configuration.separators.insert(decimalSeparator)
         }
         
         if values.nonnegative {

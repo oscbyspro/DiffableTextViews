@@ -54,7 +54,9 @@ public struct NumericTextComponents {
     // MARK: Components: Sign
     
     @frozen public enum Sign: String {
-        @usableFromInline static let set = Set<Character>(positive.characters + negative.characters)
+        @usableFromInline static let set = Set<Character>(plus + minus)
+        @inlinable        static var plus:  String { positive.characters }
+        @inlinable        static var minus: String { negative.characters }
         
         case positive = "+"
         case negative = "-"
