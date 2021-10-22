@@ -26,6 +26,11 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
         self.style = style
     }
     
+    public init(value: Binding<Value>, style: () -> Style) {
+        self.value = value
+        self.style = style()
+    }
+
     // MARK: UIViewRepresentable
     
     public func makeCoordinator() -> Coordinator {
@@ -93,13 +98,11 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
                         
             // --------------------------------- //
             
-            guard let snapshot = source.style
-                    .merge(cache.snapshot, with: input, in: range)
-                    .map(source.style.process) else { return false }
-                        
-            guard let value = source.style
-                    .parse(snapshot)
-                    .map(source.style.process) else { return false }
+            guard var snapshot = source.style.merge(cache.snapshot, with: input, in: range) else { return false }
+            source.style.process(&snapshot)
+  
+            guard var value = source.style.parse(snapshot) else { return false }
+            source.style.process(&value)
                         
             let selection = cache.selection.configure(with: range.upperBound).translate(to: snapshot)
             
@@ -155,7 +158,7 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
             // --------------------------------- //
             
             var value = source.value.wrappedValue
-            value = source.style.process(value)
+            source.style.process(&value)
             
             // --------------------------------- //
             
@@ -164,7 +167,7 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
             // --------------------------------- //
             
             var snapshot = snapshot(value)
-            snapshot = source.style.process(snapshot)
+            source.style.process(&snapshot)
             
             // --------------------------------- //
             
@@ -247,5 +250,20 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
     }
 }
 
-#endif
+// MARK: - NumericTextStyle
 
+@available(iOS 15.0, *)
+extension DiffableTextField {
+    
+    // MARK: Initializers
+    
+    @inlinable public init<T: NumericTextSchematic>(value: Binding<T>, style: T.NumericTextStyle) where Style == T.NumericTextStyle {
+        self.init(value: value, style: style)
+    }
+    
+    @inlinable public init<T: NumericTextSchematic>(value: Binding<T>, style: () -> T.NumericTextStyle) where Style == T.NumericTextStyle {
+        self.init(value: value, style: style)
+    }
+}
+
+#endif

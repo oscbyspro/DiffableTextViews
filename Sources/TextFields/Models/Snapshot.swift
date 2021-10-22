@@ -12,17 +12,17 @@ public struct Snapshot: BidirectionalCollection, RangeReplaceableCollection, Exp
 
     // MARK: Storage
 
-    public private(set) var characters: String
-    public private(set) var attributes: [Attribute]
+    public var characters: String
+    public var attributes: [Attribute]
 
     // MARK: Initialization
 
-    public init() {
+    @inlinable public init() {
         self.characters = ""
         self.attributes = []
     }
     
-    public init(_ characters: String, only attribute: Attribute) {
+    @inlinable public init(_ characters: String, only attribute: Attribute) {
         self.attributes = characters.map({ _ in attribute })
         self.characters = characters
     }
@@ -60,11 +60,11 @@ public struct Snapshot: BidirectionalCollection, RangeReplaceableCollection, Exp
     
     // MARK: Replacements
 
-    public mutating func replaceSubrange<C: Collection>(_ subrange: Range<Index>, with newElements: C) where C.Element == Symbol {
+    @inlinable public mutating func replaceSubrange<C: Collection>(_ subrange: Range<Index>, with newElements: C) where C.Element == Symbol {
         attributes.replaceSubrange(subrange.map(bounds: \.attribute), with: newElements.lazy.map(\.attribute))
         characters.replaceSubrange(subrange.map(bounds: \.character), with: newElements.lazy.map(\.character))
     }
-    
+        
     // MARK: Subscripts
     
     @inlinable public subscript(position: Index) -> Symbol {
@@ -109,5 +109,24 @@ public struct Snapshot: BidirectionalCollection, RangeReplaceableCollection, Exp
         @inlinable public static func < (lhs: Self, rhs: Self) -> Bool {
             lhs.offset < rhs.offset
         }
+    }
+}
+
+// MARK: Optimizations
+
+extension Snapshot {
+    
+    // MARK: Complete
+    
+    /// Appends: Symbol.suffix(Character.null).
+    ///
+    /// Improves performance in certain circumstances.
+    ///
+    /// - Example: NumericTextStyle's CPU usage increases +3x when suffix is used, unless this method is called.
+    ///
+    /// - Note: Should be called at most once, after all other changes have been made to this Snapshot.
+    ///
+    @inlinable public mutating func complete() {
+        append(Symbol.suffix("\0"))
     }
 }

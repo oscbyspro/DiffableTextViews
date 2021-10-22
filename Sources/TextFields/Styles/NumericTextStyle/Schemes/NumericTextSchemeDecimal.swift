@@ -42,7 +42,7 @@ public enum NumericTextSchemeDecimal: NumericTextFloatScheme {
 // MARK: Number + Compatible
 
 @available(iOS 15.0, *)
-extension NumericTextSchemeDecimal.Number: NumericTextSchemeCompatible {
+extension NumericTextSchemeDecimal.Number: NumericTextSchematic {
     public typealias NumericTextScheme = NumericTextSchemeDecimal
 }
 

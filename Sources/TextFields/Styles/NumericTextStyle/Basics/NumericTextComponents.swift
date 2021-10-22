@@ -25,6 +25,20 @@ public struct NumericTextComponents {
         self.decimals = .init()
     }
     
+    // MARK: Descriptions
+    
+    @inlinable public var hasSign: Bool {
+        sign != nil
+    }
+    
+    @inlinable public var hasSeparator: Bool {
+        separator != nil
+    }
+            
+    @inlinable public var hasDigits: Bool {
+        !integers.isEmpty || !decimals.isEmpty
+    }
+
     // MARK: Utilities
         
     @inlinable public func characters() -> String {
@@ -36,8 +50,6 @@ public struct NumericTextComponents {
     @inlinable mutating public func toggleSign(with proposal: Sign) {
         if sign != proposal { sign = proposal } else { sign = nil }
     }
-    
-    // MARK: Helpers
         
     // MARK: Components: Sign
     

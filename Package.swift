@@ -41,6 +41,9 @@ let Sequences = Item(name: "Sequences")
 
 let package = Package(
     name: "TextFields",
+    platforms: [
+        .iOS(.v15),
+    ],
     products: [
         .library(
             name: TextFields.name,

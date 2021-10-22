@@ -24,9 +24,9 @@ public protocol DiffableTextStyle {
     
     // MARK: 2
     
-    func process(_ value: Value) -> Value
+    func process(_ value: inout Value)
 
-    func process(_ snapshot: Snapshot) -> Snapshot
+    func process(_ snapshot: inout Snapshot)
 }
     
 // MARK: - Implementations
@@ -47,11 +47,11 @@ extension DiffableTextStyle {
     
     // MARK: 2
 
-    @inlinable public func process(_ value: Value) -> Value {
-        value
+    @inlinable public func process(_ value: inout Value) {
+        // ¯\_(ツ)_/¯
     }
     
-    @inlinable public func process(_ snapshot: Snapshot) -> Snapshot {
-        snapshot
+    @inlinable public func process(_ snapshot: inout Snapshot) {
+        // ¯\_(ツ)_/¯
     }
 }

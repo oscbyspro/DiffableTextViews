@@ -12,6 +12,7 @@ import struct Foundation.Locale
 
 // MARK: - NumericTextStyle
 
+/// Synchonizes text and number.
 @available(iOS 15.0, *)
 public struct NumericTextStyle<Scheme: NumericTextScheme>: DiffableTextStyle {
     @usableFromInline typealias Components = NumericTextComponents
@@ -27,13 +28,19 @@ public struct NumericTextStyle<Scheme: NumericTextScheme>: DiffableTextStyle {
     @usableFromInline var values: Values = .all
     @usableFromInline var precision: Precision = .max
     
-    @usableFromInline var prefix: String? = nil
-    @usableFromInline var suffix: String? = nil
+    @usableFromInline var prefix: Snapshot? = nil
+    @usableFromInline var suffix: Snapshot? = nil
     
     // MARK: Initializers
     
     @inlinable public init(locale: Locale = .autoupdatingCurrent) {
         self.locale = locale
+    }
+    
+    // MARK: Initializers: Static
+    
+    @inlinable public static func number(locale: Locale = .autoupdatingCurrent) -> Self {
+        .init(locale: locale)
     }
     
     // MARK: Helpers, Locale
@@ -90,11 +97,11 @@ extension NumericTextStyle {
     }
     
     @inlinable public func prefix(_ newValue: String?) -> Self {
-        update({ $0.prefix = newValue })
+        update({ $0.suffix = newValue.map({ Snapshot($0 + " ", only: .prefix) }) })
     }
     
     @inlinable public func suffix(_ newValue: String?) -> Self {
-        update({ $0.suffix = newValue })
+        update({ $0.suffix = newValue.map({ Snapshot(" " + $0, only: .suffix) }) })
     }
     
     // MARK: Helpers
@@ -108,27 +115,23 @@ extension NumericTextStyle {
 
 @available(iOS 15.0, *)
 extension NumericTextStyle {
-    
-    // MARK: Process
-    
-    @inlinable public func process(_ value: Scheme.Number) -> Scheme.Number {
-        values.displayableStyle(value)
-    }
-    
+        
     // MARK: Parse
 
     @inlinable public func parse(_ snapshot: Snapshot) -> Scheme.Number? {
         components(snapshot, with: configuration()).flatMap(value)
     }
     
+    // MARK: Process
+    
+    @inlinable public func process(_ value: inout Scheme.Number) {
+        value = values.displayableStyle(value)
+    }
+    
     // MARK: Components
     
     @inlinable func value(_ components: Components) -> Scheme.Number? {
-        if components.integers.isEmpty, components.decimals.isEmpty {
-            return Scheme.zero
-        }
-        
-        return Scheme.number(components)
+        components.hasDigits ? Scheme.number(components) : Scheme.zero
     }
 }
 
@@ -137,18 +140,11 @@ extension NumericTextStyle {
 @available(iOS 15.0, *)
 extension NumericTextStyle {
     
-    // MARK: Process
-    
-    @inlinable public func process(_ snapshot: Snapshot) -> Snapshot {
-        let prefix = prefix.map({ Snapshot($0 + " ", only: .prefix) })
-        let suffix = suffix.map({ Snapshot(" " + $0, only: .suffix) })
-        
-        let snapshots = [prefix, snapshot, suffix].compactMap({ $0 })
-        
-        return snapshots.dropFirst().reduce(into: snapshots.first!, +=)
-    }
-    
     // MARK: Snapshot
+    
+    public func process(_ snapshot: inout Snapshot) {
+        snapshot.complete()
+    }
     
     @inlinable public func showcase(_ value: Scheme.Number) -> Snapshot {
         let style = displayableStyle()
@@ -188,21 +184,27 @@ extension NumericTextStyle {
         guard values.editableValidation(value) else { return nil }
         
         let style = editableStyle(digits: digits, separator: components.separator != nil)
-        var all = style.format(value)
+        var characters = style.format(value)
         
-        if let sign = components.sign, !all.hasPrefix(sign.characters) {
-            all = sign.characters + all
+        if let sign = components.sign, !characters.hasPrefix(sign.characters) {
+            characters = sign.characters + characters
         }
     
-        return snapshot(all)
+        return snapshot(characters)
     }
     
     // MARK: Helpers, Characters
-        
-    @inlinable func snapshot(_ system: String) -> Snapshot {
+    
+    @inlinable func snapshot(_ characters: String, count: Int? = nil) -> Snapshot {
         var snapshot = Snapshot()
+            
+        // --------------------------------- //
         
-        for character in system {
+        if let prefix = prefix {
+            snapshot.append(contentsOf: prefix)
+        }
+        
+        for character in characters {
             if Components.Digits.set.contains(character) {
                 snapshot.append(.content(character))
             } else if Components.Sign.set.contains(character) {
@@ -214,6 +216,12 @@ extension NumericTextStyle {
             }
         }
         
+        if let suffix = suffix {
+            snapshot.append(contentsOf: suffix)
+        }
+    
+        // --------------------------------- //
+                
         return snapshot
     }
 }

@@ -42,7 +42,7 @@ public enum NumericTextSchemeInt: NumericTextIntegerScheme {
 // MARK: Number + Compatible
 
 @available(iOS 15.0, *)
-extension NumericTextSchemeInt.Number: NumericTextSchemeCompatible {
+extension NumericTextSchemeInt.Number: NumericTextSchematic {
     public typealias NumericTextScheme = NumericTextSchemeInt
 }
 

@@ -72,12 +72,12 @@ public protocol NumericTextFloatScheme: NumericTextScheme { }
 // MARK: - NumbericTextSchemeCompatible
 
 @available(iOS 15.0, *)
-public protocol NumericTextSchemeCompatible {
+public protocol NumericTextSchematic {
     associatedtype NumericTextScheme: TextFields.NumericTextScheme where NumericTextScheme.Number == Self
 }
 
 @available(iOS 15.0, *)
-public extension NumericTextSchemeCompatible {
+public extension NumericTextSchematic {
     typealias NumericTextStyle = TextFields.NumericTextStyle<NumericTextScheme>
 }
 
