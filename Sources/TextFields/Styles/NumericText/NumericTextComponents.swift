@@ -7,58 +7,39 @@
 
 // MARK: - NumericTextComponents
 
-struct NumericText {
-    
-    let sign: Sign?
-    let integers: String
-    let separator: Bool
-    let decimals: String
-    
-    enum Sign {
-        case positive
-        case negative
-    }
-}
-
-#warning("Remove: NumericTextComponentsStyle")
 public struct NumericTextComponents {
     @usableFromInline typealias Style = NumericTextComponentsStyle
     
     // MARK: Properties
 
-    public var sign = String()
-    public var integerDigits = String()
-    public var decimalSeparator = String()
-    public var decimalDigits = String()
+    public var sign: Sign = .none
+    public var integers = String()
+    public var separator: Separator = .none
+    public var decimals = String()
     
-    // MARK: Descriptions
-        
-    @inlinable public var isEmpty: Bool {
-        sign.isEmpty && integerDigits.isEmpty && decimalSeparator.isEmpty && decimalDigits.isEmpty
-    }
-    
-    @inlinable public var digitsAreEmpty: Bool {
-        integerDigits.isEmpty && decimalSeparator.isEmpty
-    }
-        
     // MARK: Utilities
     
     @inlinable public func characters() -> String {
-        sign + integerDigits + decimalSeparator + decimalDigits
+        sign.rawValue + integers + separator.rawValue + decimals
     }
     
     // MARK: Transformations
     
-    #warning("Move this to NumericTextComponentsStyle.")
-    @inlinable mutating func toggle(sign denomination: Style.Signs.Denomination) {
-        #error("....")
-        
-//        if style.options.contains(.nonnegative) && denomination == .negative { return }
-//
-//        let newValue = style.signs.make(denomination)
-//
-//        if sign == newValue { sign = String() }
-//        else                { sign = newValue }
+    @inlinable mutating public func toggleSign(with proposal: Sign) {
+        if sign != proposal { sign = proposal } else { sign = .none }
+    }
+    
+    // MARK: Components
+    
+    @frozen public enum Sign: String {
+        case positive = "+"
+        case negative = "-"
+        case none = ""
+    }
+    
+    @frozen public enum Separator: String {
+        case some = "."
+        case none = ""
     }
 }
 
@@ -67,10 +48,6 @@ extension NumericTextComponents {
     // MARK: Initializers
     
     @inlinable init?(_ characters: String, style: Style = Style()) {
-        
-        // --------------------------------- //
-        
-        self.style = style
         
         // --------------------------------- //
         
@@ -83,16 +60,16 @@ extension NumericTextComponents {
         }
         
         // --------------------------------- //
-                
-        style.signs.parse(characters, from: &index, into: &sign)
+        
+        self.sign = style.signs.parse(characters, from: &index)
         
         if style.options.contains(.nonnegative) {
-            guard sign != type(of: style.signs).minus else { return nil }
+            guard sign != .negative else { return nil }
         }
         
         // --------------------------------- //
         
-        style.digits.parse(characters, from: &index, into: &integerDigits)
+        self.integers = style.digits.parse(characters, from: &index)
         
         if style.options.contains(.integer) {
             guard done() else { return nil }
@@ -101,18 +78,18 @@ extension NumericTextComponents {
         
         // --------------------------------- //
         
-        style.separators.parse(characters, from: &index, into: &decimalSeparator)
+        self.separator = style.separators.parse(characters, from: &index)
         
-        if decimalSeparator.isEmpty {
+        if separator == .none {
             guard done() else { return nil }
             return
         }
         
         // --------------------------------- //
 
-        style.digits.parse(characters, from: &index, into: &decimalDigits)
+        self.decimals = style.digits.parse(characters, from: &index)
         
-        if decimalDigits.isEmpty {
+        if decimals.isEmpty {
             guard done() else { return nil }
             return
         }
@@ -128,6 +105,7 @@ extension NumericTextComponents {
 // MARK: - NumericTextComponentsConfiguration
 
 @usableFromInline final class NumericTextComponentsStyle {
+    @usableFromInline typealias Components = NumericTextComponents
     @usableFromInline typealias Signs = NumericTextComponentsSigns
     @usableFromInline typealias Digits = NumericTextComponentsDigits
     @usableFromInline typealias Separators = NumericTextComponentsSeparators
@@ -153,9 +131,11 @@ extension NumericTextComponents {
 // MARK: - NumericTextComponentsSigns
 
 @usableFromInline struct NumericTextComponentsSigns {
-
+    @usableFromInline typealias Components = NumericTextComponents
+    
     // MARK: Statics
     
+    #warning("TODO...")
     @inlinable static var plus:  String { "+" }
     @inlinable static var minus: String { "-" }
     @inlinable static var both:  String { plus + minus }
@@ -172,48 +152,23 @@ extension NumericTextComponents {
         self.negatives = negatives
     }
     
-    // MARK: Transformations
-    
-    @inlinable mutating func remove(all denomination: Denomination) {
-        switch denomination {
-        case .positive: positives.removeAll()
-        case .negative: negatives.removeAll()
-        }
-    }
-    
-    @inlinable mutating func insert(_ signs: [String], as denomination: Denomination) {
-        switch denomination {
-        case .positive: positives.append(contentsOf: signs)
-        case .negative: negatives.append(contentsOf: signs)
-        }
-    }
-    
     // MARK: Utilities
     
-    @inlinable func make(_ denomination: Denomination) -> String {
-        switch denomination {
-        case .positive: return Self.plus
-        case .negative: return Self.minus
-        }
-    }
-    
-    @inlinable func interpret(_ characters: String) -> Denomination? {
+    @inlinable func interpret(_ characters: String) -> Components.Sign {
         if positives.contains(characters) { return .positive }
         if negatives.contains(characters) { return .negative }
-        
-        return nil
+        return .none
     }
     
     // MARK: Parses
     
-    @inlinable func parse(_ characters: String, from index: inout String.Index, into storage: inout String) {
+    @inlinable func parse(_ characters: String, from index: inout String.Index) -> Components.Sign {
         let subsequence = characters[index...]
                 
-        func parse(_ signs: [String], success: String) -> Bool {
+        func parse(_ signs: [String]) -> Bool {
             for sign in signs {
                 guard subsequence.hasPrefix(sign) else { continue }
                 
-                storage = success
                 index = subsequence.index(index, offsetBy: sign.count)
                 return true
             }
@@ -221,13 +176,11 @@ extension NumericTextComponents {
             return false
         }
         
-        guard !parse(negatives, success: Self.minus) else { return }
-        guard !parse(positives, success: Self.plus) else { return }
+        if parse(negatives) { return .negative }
+        if parse(positives) { return .positive }
+        
+        return .none
     }
-    
-    // MARK: Denomination
-    
-    @usableFromInline @frozen enum Denomination { case positive, negative }
 }
 
 // MARK: - NumericTextComponentsDigits
@@ -251,21 +204,17 @@ extension NumericTextComponents {
     
     // MARK: Utilities
     
-    @inlinable func parse(_ characters: String, from index: inout String.Index, into storage: inout String) {
-        let subsequence = characters[index...]
-        
-        for character in subsequence {
-            guard digits.contains(character) else { break }
-            
-            storage.append(character)
-            index = subsequence.index(after: index)
-        }
+    @inlinable func parse(_ characters: String, from index: inout String.Index) -> String {
+        let match = characters[index...].prefix(while: digits.contains)
+        index = match.endIndex
+        return String(match)
     }
 }
 
 // MARK: - NumericTextComponentsSeparators
 
 @usableFromInline struct NumericTextComponentsSeparators {
+    @usableFromInline typealias Components = NumericTextComponents
     
     // MARK: Statics
     
@@ -290,16 +239,17 @@ extension NumericTextComponents {
     
     // MARK: Utilities
 
-    @inlinable func parse(_ characters: String, from index: inout String.Index, into storage: inout String) {
+    @inlinable func parse(_ characters: String, from index: inout String.Index) -> Components.Separator {
         let subsequence = characters[index...]
         
         for translatable in translatables {
             guard subsequence.hasPrefix(translatable) else { continue }
             
-            storage = Self.separator
             index = subsequence.index(index, offsetBy: translatable.count)
-            break
+            return .some
         }
+        
+        return .none
     }
 }
 
