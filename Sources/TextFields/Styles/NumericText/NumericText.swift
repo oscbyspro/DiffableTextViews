@@ -14,12 +14,12 @@ import struct Foundation.Locale
 
 @available(iOS 15.0, *)
 public struct NumericText<Scheme: NumericTextScheme>: DiffableTextStyle {
+    #warning("Cache configuration and character sets.")
     public typealias Value = Scheme.Number
     public typealias Values = NumericTextValues<Scheme>
     public typealias Precision = NumericTextPrecision<Scheme>
     
     @usableFromInline typealias Components = NumericTextComponents
-    @usableFromInline typealias Configuration = Components.Configuration
 
     // MARK: Properties
     
@@ -93,8 +93,8 @@ public struct NumericText<Scheme: NumericTextScheme>: DiffableTextStyle {
     
     @inlinable func content() -> Set<Character> {
         var characters = Set<Character>()
-        characters.formUnion(Configuration.Signs.both)
-        characters.formUnion(Configuration.Digits.all)
+        characters.formUnion(Components.Configuration.Signs.both)
+        characters.formUnion(Components.Configuration.Digits.all)
         characters.formUnion(decimalSeparator)
         return characters
     }
@@ -103,6 +103,23 @@ public struct NumericText<Scheme: NumericTextScheme>: DiffableTextStyle {
         var characters = Set<Character>()
         characters.formUnion(groupingSeparator)
         return characters
+    }
+        
+    @inlinable func snapshot(_ characters: String) -> Snapshot {
+        var snapshot = Snapshot()
+        
+        let contentSet = content()
+        let spacersSet = spacers()
+        
+        for character in characters {
+            if contentSet.contains(character) {
+                snapshot.append(.content(character))
+            } else if spacersSet.contains(character) {
+                snapshot.append(.spacer(character))
+            }
+        }
+        
+        return snapshot
     }
 }
 
@@ -144,8 +161,14 @@ extension NumericText {
 
     @inlinable public func parse(_ snapshot: Snapshot) -> Scheme.Number? {
         let configuration = configuration()
+
+        guard let components = components(snapshot, with: configuration) else { return nil }
         
-        return components(snapshot, with: configuration).flatMap(Scheme.number)
+        guard !components.digitsAreEmpty else {
+            return Scheme.zero
+        }
+        
+        return Scheme.number(components)
     }
     
     // MARK: Merge
@@ -210,12 +233,12 @@ extension NumericText {
 
     // MARK: Helpers, Components
     
-    @inlinable func components(_ snapshot: Snapshot, with configuration: Configuration) -> Components? {
+    @inlinable func components(_ snapshot: Snapshot, with configuration: Components.Configuration) -> Components? {
         Components(snapshot.content(), with: configuration)
     }
     
-    @inlinable func configuration() -> Configuration {
-        let configuration = Configuration()
+    @inlinable func configuration() -> Components.Configuration {
+        let configuration = Components.Configuration()
         configuration.signs.remove(all: .positive)
         
         // --------------------------------- //
@@ -237,25 +260,6 @@ extension NumericText {
         return configuration
     }
     
-    // MARK: Helpers, Snapshot
-    
-    @inlinable func snapshot(_ characters: String) -> Snapshot {
-        var snapshot = Snapshot()
-        
-        let contentSet = content()
-        let spacersSet = spacers()
-        
-        for character in characters {
-            if contentSet.contains(character) {
-                snapshot.append(.content(character))
-            } else if spacersSet.contains(character) {
-                snapshot.append(.spacer(character))
-            }
-        }
-        
-        return snapshot
-    }
-    
     // MARK: Input
     
     @usableFromInline struct Input {
@@ -263,11 +267,11 @@ extension NumericText {
         // MARK: Properties
         
         @usableFromInline var content: Snapshot
-        @usableFromInline var configuration: Configuration
+        @usableFromInline var configuration: Components.Configuration
         
         // MARK: Initializers
         
-        @inlinable init(_ content: Snapshot, with configuration: Configuration) {
+        @inlinable init(_ content: Snapshot, with configuration: Components.Configuration) {
             self.content = content
             self.configuration = configuration
         }
@@ -285,11 +289,11 @@ extension NumericText {
         
         // MARK: Properties
         
-        @usableFromInline var denomination: Configuration.Signs.Denomination
+        @usableFromInline var denomination: Components.Configuration.Signs.Denomination
         
         // MARK: Initializers
         
-        @inlinable init?(consumable: inout Snapshot, with configuration: Configuration) {
+        @inlinable init?(consumable: inout Snapshot, with configuration: Components.Configuration) {
             guard let denomination = configuration.signs.interpret(consumable.characters) else { return nil }
             
             defer {

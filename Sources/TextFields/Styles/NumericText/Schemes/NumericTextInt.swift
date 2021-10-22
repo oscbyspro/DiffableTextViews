@@ -5,13 +5,15 @@
 //  Created by Oscar Byström Ericsson on 2021-10-19.
 //
 
-import Foundation
+import struct Foundation.Locale
+import struct Foundation.IntegerFormatStyle
 
 // MARK: - NumericTextInt
 
 @available(iOS 15.0, *)
 public enum NumericTextInt: NumericTextInteger {
     public typealias Number = Int
+    public typealias Style = IntegerFormatStyle<Number>
     
     // MARK: Values
     
@@ -27,14 +29,10 @@ public enum NumericTextInt: NumericTextInteger {
     // MARK: Style
     
     @inlinable public static func number(_ components: NumericTextComponents) -> Number? {
-        guard !components.integerDigits.isEmpty else {
-            return .zero
-        }
-        
-        return .init(components.characters())
+        .init(components.characters())
     }
     
-    @inlinable public static func style(_ locale: Locale, precision: Precision, separator: Separator) -> IntegerFormatStyle<Number> {
+    @inlinable public static func style(_ locale: Locale, precision: Precision, separator: Separator) -> Style {
         .init(locale: locale).precision(precision).decimalSeparator(strategy: separator)
     }
 }

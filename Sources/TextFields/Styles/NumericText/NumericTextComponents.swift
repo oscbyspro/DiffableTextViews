@@ -19,6 +19,36 @@ public struct NumericTextComponents {
     
     @usableFromInline var configuration: Configuration
     
+    // MARK: Descriptions
+        
+    @inlinable public var isEmpty: Bool {
+        sign.isEmpty && integerDigits.isEmpty && decimalSeparator.isEmpty && decimalDigits.isEmpty
+    }
+    
+    @inlinable public var digitsAreEmpty: Bool {
+        integerDigits.isEmpty && decimalSeparator.isEmpty
+    }
+        
+    // MARK: Utilities
+    
+    @inlinable public func characters() -> String {
+        sign + integerDigits + decimalSeparator + decimalDigits
+    }
+    
+    // MARK: Transformations
+    
+    @inlinable mutating func toggle(sign denomination: Configuration.Signs.Denomination) {
+        if configuration.options.contains(.nonnegative) && denomination == .negative { return }
+        
+        let newValue = configuration.signs.make(denomination)
+                
+        if sign == newValue { sign = String() }
+        else                { sign = newValue }
+    }
+}
+
+extension NumericTextComponents {
+    
     // MARK: Initializers
     
     @inlinable init?(_ characters: String, with configuration: Configuration = Configuration()) {
@@ -77,27 +107,6 @@ public struct NumericTextComponents {
         guard done() else { return nil }
 
         // --------------------------------- //
-    }
-    
-    // MARK: Transformations
-
-    @inlinable mutating func toggle(sign denomination: Configuration.Signs.Denomination) {
-        if configuration.options.contains(.nonnegative) && denomination == .negative { return }
-
-        // --------------------------------- //
-        
-        let characters = configuration.signs.make(denomination)
-        
-        // --------------------------------- //
-                
-        if sign == characters { sign = String()   }
-        else                  { sign = characters }
-    }
-    
-    // MARK: Utilities
-    
-    @inlinable public func characters() -> String {
-        sign + integerDigits + decimalSeparator + decimalDigits
     }
 }
 
