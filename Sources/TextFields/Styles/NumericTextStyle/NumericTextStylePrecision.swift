@@ -10,9 +10,9 @@ import enum SwiftUI.NumberFormatStyleConfiguration
 // MARK: - NumericTextPrecision
 
 @available(iOS 15.0, *)
-public struct NumericTextPrecision<Scheme: NumericTextScheme> {
-    @usableFromInline typealias Defaults = NumericTextPrecisionDefaults
+public struct NumericTextStylePrecision<Scheme: NumericTextStyleScheme> {
     @usableFromInline typealias Strategy = NumericTextPrecisionStrategy
+    @usableFromInline typealias Defaults = NumericTextPrecisionDefaults
     @usableFromInline typealias Total = NumericTextPrecisionTotal<Scheme>
     @usableFromInline typealias Parts = NumberTextPrecisionParts<Scheme>
     
@@ -44,7 +44,7 @@ public struct NumericTextPrecision<Scheme: NumericTextScheme> {
 }
 
 @available(iOS 15.0, *)
-extension NumericTextPrecision where Scheme: NumericTextScheme {
+extension NumericTextStylePrecision where Scheme: NumericTextStyleScheme {
 
     // MARK: Initializers: Separate
     
@@ -76,7 +76,7 @@ extension NumericTextPrecision where Scheme: NumericTextScheme {
 // MARK: - Interoperabilities
 
 @available(iOS 15.0, *)
-extension NumericTextPrecision {
+extension NumericTextStylePrecision {
     
     // MARK: Utilities
     
@@ -112,7 +112,7 @@ extension NumericTextPrecision {
 // MARK: - Strategies: Total
 
 @available(iOS 15.0, *)
-@usableFromInline struct NumericTextPrecisionTotal<Scheme: NumericTextScheme>: NumericTextPrecisionStrategy {
+@usableFromInline struct NumericTextPrecisionTotal<Scheme: NumericTextStyleScheme>: NumericTextPrecisionStrategy {
 
     // MARK: Properties
     
@@ -144,7 +144,7 @@ extension NumericTextPrecision {
 // MARK: - Strategies: Separate
 
 @available(iOS 15.0, *)
-@usableFromInline struct NumberTextPrecisionParts<Scheme: NumericTextScheme>: NumericTextPrecisionStrategy {
+@usableFromInline struct NumberTextPrecisionParts<Scheme: NumericTextStyleScheme>: NumericTextPrecisionStrategy {
 
     // MARK: Properties
     

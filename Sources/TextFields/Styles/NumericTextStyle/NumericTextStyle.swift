@@ -13,12 +13,12 @@ import struct Foundation.Locale
 // MARK: - NumericTextStyle
 
 @available(iOS 15.0, *)
-public struct NumericTextStyle<Scheme: NumericTextScheme>: DiffableTextStyle {
+public struct NumericTextStyle<Scheme: NumericTextStyleScheme>: DiffableTextStyle {
     @usableFromInline typealias Components = NumericTextComponents
 
     public typealias Value = Scheme.Number
-    public typealias Values = NumericTextValues<Scheme>
-    public typealias Precision = NumericTextPrecision<Scheme>
+    public typealias Values = NumericTextStyleValues<Scheme>
+    public typealias Precision = NumericTextStylePrecision<Scheme>
 
     // MARK: Properties
     

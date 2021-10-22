@@ -12,7 +12,7 @@ import SwiftUI
 // MARK: - NumericTextStyleScheme
 
 @available(iOS 15.0, *)
-public protocol NumericTextScheme {
+public protocol NumericTextStyleScheme {
     associatedtype Number: Comparable
     associatedtype Style: FormatStyle where Style.FormatInput == Number, Style.FormatOutput == String
     
@@ -41,7 +41,7 @@ public protocol NumericTextScheme {
 }
 
 @available(iOS 15.0, *)
-public extension NumericTextScheme {
+public extension NumericTextStyleScheme {
     
     // MARK: Properties: Static
 
@@ -51,7 +51,7 @@ public extension NumericTextScheme {
 // MARK: - NumericTextIntegerScheme
 
 @available(iOS 15.0, *)
-public protocol NumericTextInteger: NumericTextScheme { }
+public protocol NumericTextInteger: NumericTextStyleScheme { }
 
 @available(iOS 15.0, *)
 public extension NumericTextInteger {
@@ -64,4 +64,4 @@ public extension NumericTextInteger {
 // MARK: - NumericTextFloatScheme
 
 @available(iOS 15.0, *)
-public protocol NumericTextFloat: NumericTextScheme { }
+public protocol NumericTextFloat: NumericTextStyleScheme { }

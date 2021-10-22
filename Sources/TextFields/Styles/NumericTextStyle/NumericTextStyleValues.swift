@@ -8,7 +8,7 @@
 // MARK: - NumericTextStyleValues
 
 @available(iOS 15.0, *)
-public struct NumericTextValues<Scheme: NumericTextScheme> {
+public struct NumericTextStyleValues<Scheme: NumericTextStyleScheme> {
     public typealias Number = Scheme.Number
     
     // MARK: Properties: Static
