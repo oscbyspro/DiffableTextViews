@@ -5,7 +5,7 @@
 //  Created by Oscar Byström Ericsson on 2021-10-18.
 //
 
-// MARK: - NumberTextValues
+// MARK: - NumericTextValues
 
 public struct NumericTextValues<Item: NumericTextValuesItem> {
     public typealias Number = Item.Number

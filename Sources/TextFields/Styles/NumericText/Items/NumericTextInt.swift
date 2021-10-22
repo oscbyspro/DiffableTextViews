@@ -7,7 +7,7 @@
 
 import Foundation
 
-// MARK: - NumbericTextInt
+// MARK: - NumericTextInt
 
 @available(iOS 15.0, *)
 public enum NumericTextInt: NumericTextInteger {
@@ -42,6 +42,6 @@ public enum NumericTextInt: NumericTextInteger {
 // MARK: - Number + Compatible
 
 @available(iOS 15.0, *)
-extension Int: NumberTextCompatible {
+extension Int: NumericTextCompatible {
     public typealias NumericTextItem = NumericTextInt
 }
