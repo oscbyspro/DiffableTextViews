@@ -1,5 +1,5 @@
 //
-//  Selection.swift
+//  Field.swift
 //  
 //
 //  Created by Oscar Byström Ericsson on 2021-09-27.
@@ -44,7 +44,7 @@ import struct Sequences.Walkthrough
 //        return start ..< (start + count)
     }
     
-    // MARK: Translate: Field
+    // MARK: Translate: To Carets
     
     @inlinable func translate(to newValue: Carets) -> Self {
         let options = SimilaritiesOptions<Symbol>

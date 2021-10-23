@@ -1,13 +1,12 @@
 //
-//  Field.swift
+//  Carets.swift
 //  
 //
 //  Created by Oscar Byström Ericsson on 2021-10-04.
 //
 
-// MARK: - Field
+// MARK: - Carets
 
-#warning("Rename as Carets.")
 #warning("Count optimizations were removed, rememver to check whether they are still called.")
 @usableFromInline struct Carets: BidirectionalCollection {
     @usableFromInline typealias Layout = TextFields.Layout<UTF16>
@@ -73,9 +72,11 @@
     }
 }
 
+// MARK: - BidirectionalCollection
+
 extension Carets {
     
-    // MARK: Protocol: BidirectionalCollection
+    // MARK: Bounds
     
     @inlinable var startIndex: Index {
         Index(lhs: nil, rhs: layout.startIndex)
@@ -85,6 +86,8 @@ extension Carets {
         Index(lhs: layout.endIndex, rhs: nil)
     }
     
+    // MARK: Traversals
+    
     @inlinable func index(after i: Index) -> Index {
         Index(lhs: i.rhs!, rhs: subindex(after: i.rhs!))
     }
@@ -93,13 +96,15 @@ extension Carets {
         Index(lhs: subindex(before: i.lhs!), rhs: i.lhs!)
     }
     
+    // MARK: Subscripts
+    
     @inlinable subscript(position: Index) -> Element {
         _read {
             yield Element(lhs: subelement(at: position.lhs), rhs: subelement(at: position.rhs))
         }
     }
     
-    // MARK: Helpers
+    // MARK: Helpers: Subindex
 
     @inlinable func subindex(after subindex: Layout.Index) -> Layout.Index? {
         subindex < layout.endIndex ? layout.index(after: subindex) : nil
@@ -109,7 +114,7 @@ extension Carets {
         subindex > layout.startIndex ? layout.index(before: subindex) : nil
     }
     
-    // MARK: Helpers
+    // MARK: Helpers: Subelement
     
     @inlinable func subelement(at subindex: Layout.Index?) -> Snapshot.Element? {
         guard let subindex = subindex, subindex < layout.endIndex else { return nil }
