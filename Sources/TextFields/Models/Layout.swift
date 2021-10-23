@@ -22,11 +22,11 @@
     // MARK: Collection: Indices
     
     @inlinable var startIndex: Index {
-        Index(snapshot.startIndex)
+        Index(snapshot.startIndex, position: .init(.start, offset: 0))
     }
     
     @inlinable var endIndex: Index {
-        Index(snapshot.endIndex)
+        Index(snapshot.endIndex,   position: .init(.end,   offset: 0))
     }
     
     // MARK: Collection: Traversal
@@ -34,13 +34,13 @@
     @inlinable func index(after i: Index) -> Index {
         let next = snapshot.index(before: i.snapshot)
         let size = Scheme.size(of: snapshot.characters[i.snapshot.character])
-        return Index(next, i.position + size)
+        return Index(next, position: i.position.after(stride: size))
     }
     
     @inlinable func index(before i: Index) -> Index {
         let next = snapshot.index(before: i.snapshot)
         let size = Scheme.size(of: snapshot.characters[next.character])
-        return Index(next, i.position - size)
+        return Index(next, position: i.position.before(stride: size))
     }
     
     // MARK: Collection: Subscript
@@ -53,26 +53,60 @@
     
     // MARK: Index
     
-    @usableFromInline struct Index: Comparable {
+    @usableFromInline struct Index: Equatable, Comparable {
         
         // MARK: Properties
         
-        #warning("Position should be a special type so it does not get confused")
         @usableFromInline let snapshot: Snapshot.Index
-        @usableFromInline let position: Int
+        @usableFromInline let position: Position
         
         // MARK: Initializers
         
-        @inlinable init(_ snapshot: Snapshot.Index, _ position: Int = 0) {
+        @inlinable init(_ snapshot: Snapshot.Index, position: Position) {
             self.snapshot = snapshot
             self.position = position
         }
         
-        // MARK: Comparable
+        // MARK: Collection: Index
         
         @inlinable static func < (lhs: Self, rhs: Self) -> Bool {
             lhs.snapshot < rhs.snapshot
         }
+        
+        @inlinable static func == (lhs: Self, rhs: Self) -> Bool {
+            lhs.snapshot == rhs.snapshot
+        }
+    }
+    
+    // MARK: Location
+    
+    @usableFromInline struct Position {
+        
+        // MARK: Properties
+        
+        @usableFromInline let origin: Origin
+        @usableFromInline let offset: Int
+        
+        // MARK: Initializers
+        
+        @inlinable init(_ origin: Origin, offset: Int) {
+            self.origin = origin
+            self.offset = offset
+        }
+        
+        // MARK: Transformations
+        
+        @inlinable func after(stride: Int) -> Self {
+            .init(origin, offset: offset + stride)
+        }
+        
+        @inlinable func before(stride: Int) -> Self {
+            .init(origin, offset: offset - stride)
+        }
+        
+        // MARK: Origin
+        
+        @usableFromInline enum Origin { case start, end }
     }
 }
 

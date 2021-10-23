@@ -103,13 +103,12 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
             guard var value = source.style.parse(snapshot) else { return false }
             source.style.process(&value)
                         
-            let selection = cache.selection.configure(with: range.upperBound).translate(to: snapshot)
+            let field = cache.field.configure(with: range.upperBound).translate(to: snapshot)
             
             // --------------------------------- //
 
             self.cache.value = value
-            self.cache.snapshot = snapshot
-            self.cache.selection = selection
+            self.cache.field = field
                         
             // --------------------------------- //
                         
@@ -130,15 +129,15 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
 
             guard let offsets = textField.selection() else { return }
                         
-            let selection = cache.selection.configure(with: offsets)
-            let selectionOffsets = selection.offsets16()
+            let field = cache.field.configure(with: offsets)
+            let selectionOffsets = field.offsets16()
                         
             let changesToLowerBound = selectionOffsets.lowerBound - offsets.lowerBound
             let changesToUpperBound = selectionOffsets.upperBound - offsets.upperBound
             
             // --------------------------------- //
                                     
-            self.cache.selection = selection
+            self.cache.field = field
             self.uiView.setSelection(changes: (changesToLowerBound, changesToUpperBound))
         }
 
@@ -171,13 +170,12 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
             
             // --------------------------------- //
             
-            let selection = cache.selection.translate(to: snapshot)
+            let field = cache.field.translate(to: snapshot)
                 
             // --------------------------------- //
             
             self.cache.value = value
-            self.cache.snapshot = snapshot
-            self.cache.selection = selection
+            self.cache.field = field
         }
         
         @inlinable func push() {
@@ -188,12 +186,12 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
                 // lock is needed because setting a UITextFields's text
                 // also sets its selection to its last possible position
                 self.uiView.setText(cache.snapshot.characters)
-                self.uiView.setSelection(cache.selection.offsets16())
+                self.uiView.setSelection(cache.field.offsets16())
             }
             
             // --------------------------------- //
             
-            self.cache.editable = uiView.isEditing
+            self.cache.edits = uiView.isEditing
             
             // --------------------------------- //
             
@@ -208,7 +206,7 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
         // MARK: Update, Helpers
         
         @inlinable func displays(_ value: Value) -> Bool {
-            cache.value == value && cache.editable == uiView.isEditing
+            cache.value == value && cache.edits == uiView.isEditing
         }
         
         @inlinable func snapshot(_ value: Value) -> Snapshot {
@@ -222,24 +220,20 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
             // MARK: Properties
                         
             @usableFromInline var value: Value!
-            @usableFromInline var snapshot = Snapshot()
-            @usableFromInline var selection = Selection()
+            @usableFromInline var field: Field
+            @usableFromInline var edits:  Bool
             
-            @usableFromInline var editable = false
+            // MARK: Initializers
             
+            @inlinable init() {
+                self.field = Field()
+                self.edits = false
+            }
             
-            #warning("Snapshot/Layout does not need to be stored since it is contained by Selection/Field.")
-            /*
-
-             @inlinable var _snapshot: Snapshot {
-                selection.field.layout.snapshot             
-             }
-             
-             @inlinable var _snapshot: Snapshot {
+            #warning("Clean up, remove.")
+            @inlinable var snapshot: Snapshot {
                 field.carets.layout.snapshot
-             }
-             
-             */
+            }
         }
 
         // MARK: Lock

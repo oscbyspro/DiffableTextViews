@@ -12,13 +12,13 @@ import struct Foundation.Locale
 // MARK: - NumericTextStyle
 
 /// Formats text and number.
-public struct NumericTextStyle<Scheme: NumericTextScheme>: DiffableTextStyle {
+public struct NumericTextStyle<Style: NumericTextScheme>: DiffableTextStyle {
     @usableFromInline typealias Components = NumericTextComponents
     @usableFromInline typealias Configuration = NumericTextConfiguration
 
-    public typealias Value = Scheme.Number
-    public typealias Values = NumericTextStyleValues<Scheme>
-    public typealias Precision = NumericTextStylePrecision<Scheme>
+    public typealias Value = Style.Number
+    public typealias Values = NumericTextStyleValues<Style>
+    public typealias Precision = NumericTextStylePrecision<Style>
 
     // MARK: Properties
     
@@ -58,19 +58,19 @@ extension NumericTextStyle {
     
     // MARK: Displayable
     
-    @inlinable func displayableStyle() -> Scheme.Style {
-        let precision: Scheme.Precision = precision.displayableStyle()
+    @inlinable func displayableStyle() -> Style.Style {
+        let precision: Style.Precision = precision.displayableStyle()
 
-        return Scheme.style(locale, precision: precision, separator: .automatic)
+        return Style.style(locale, precision: precision, separator: .automatic)
     }
     
     // MARK: Editable
     
-    @inlinable func editableStyle(digits: (upper: Int, lower: Int)? = nil, separator: Bool = false) -> Scheme.Style {
-        let precision: Scheme.Precision = precision.editableStyle(digits: digits)
-        let separator: Scheme.Separator = separator ? .always : .automatic
+    @inlinable func editableStyle(digits: (upper: Int, lower: Int)? = nil, separator: Bool = false) -> Style.Style {
+        let precision: Style.Precision = precision.editableStyle(digits: digits)
+        let separator: Style.Separator = separator ? .always : .automatic
         
-        return Scheme.style(locale, precision: precision, separator: separator)
+        return Style.style(locale, precision: precision, separator: separator)
     }
 }
 
@@ -113,20 +113,20 @@ extension NumericTextStyle {
         
     // MARK: Parse
 
-    @inlinable public func parse(_ snapshot: Snapshot) -> Scheme.Number? {
+    @inlinable public func parse(_ snapshot: Snapshot) -> Style.Number? {
         components(snapshot, with: configuration()).flatMap(value)
     }
     
     // MARK: Process
     
-    @inlinable public func process(_ value: inout Scheme.Number) {
+    @inlinable public func process(_ value: inout Style.Number) {
         value = values.displayableStyle(value)
     }
     
     // MARK: Components
     
-    @inlinable func value(_ components: Components) -> Scheme.Number? {
-        components.hasDigits ? Scheme.number(components) : Scheme.zero
+    @inlinable func value(_ components: Components) -> Style.Number? {
+        components.hasDigits ? Style.number(components) : Style.zero
     }
 }
 
@@ -140,13 +140,13 @@ extension NumericTextStyle {
         snapshot.complete()
     }
     
-    @inlinable public func showcase(_ value: Scheme.Number) -> Snapshot {
+    @inlinable public func showcase(_ value: Style.Number) -> Snapshot {
         let style = displayableStyle()
         
         return snapshot(style.format(value))
     }
     
-    @inlinable public func snapshot(_ value: Scheme.Number) -> Snapshot {
+    @inlinable public func snapshot(_ value: Style.Number) -> Snapshot {
         let style = editableStyle()
         
         return snapshot(style.format(value))
@@ -231,7 +231,7 @@ extension NumericTextStyle {
     @inlinable func configuration() -> Configuration {
         let configuration = Configuration(signs: .negatives)
                 
-        if Scheme.isInteger {
+        if Style.isInteger {
             configuration.options.insert(.integer)
         } else {
             configuration.separators.insert(decimalSeparator)

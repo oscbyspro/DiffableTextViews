@@ -9,14 +9,14 @@
 
 // MARK: - NumericTextStyleValues
 
-public struct NumericTextStyleValues<Scheme: NumericTextScheme> {
-    public typealias Number = Scheme.Number
+public struct NumericTextStyleValues<Style: NumericTextScheme> {
+    public typealias Number = Style.Number
     
     // MARK: Properties: Static
     
-    @inlinable public static var  max: Number { Scheme.max  }
-    @inlinable public static var  min: Number { Scheme.min  }
-    @inlinable public static var zero: Number { Scheme.zero }
+    @inlinable public static var  max: Number { Style.max  }
+    @inlinable public static var  min: Number { Style.min  }
+    @inlinable public static var zero: Number { Style.zero }
 
     // MARK: Properties
     
@@ -63,11 +63,11 @@ public struct NumericTextStyleValues<Scheme: NumericTextScheme> {
     // MARK: Descriptions
     
     @inlinable var nonnegative: Bool {
-        min >= Scheme.zero
+        min >= Style.zero
     }
     
     @inlinable var nonpositive: Bool {
-        max <= Scheme.zero
+        max <= Style.zero
     }
     
     // MARK: Utilities
