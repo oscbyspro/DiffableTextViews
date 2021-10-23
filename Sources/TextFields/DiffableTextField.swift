@@ -227,16 +227,21 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
             @usableFromInline var field: Field
             @usableFromInline var edits:  Bool
             
-            // MARK: Getters
-            
-            @inlinable var carets: Carets { field.carets }
-            @inlinable var snapshot: Snapshot { carets.snapshot }
-            
             // MARK: Initializers
             
             @inlinable init() {
                 self.field = Field()
                 self.edits = false
+            }
+            
+            // MARK: Getters
+            
+            @inlinable var carets: Carets {
+                field.carets
+            }
+            
+            @inlinable var snapshot: Snapshot {
+                carets.snapshot
             }
         }
 

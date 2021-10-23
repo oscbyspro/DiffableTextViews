@@ -67,14 +67,10 @@ import struct Sequences.Walkthrough
         translate(to: Carets(newValue))
     }
 
-    // MARK: Configure: Range
+    // MARK: Configure: Selection
     
     @inlinable func configure(selection newValue: Range<Carets.Index>) -> Self {
         move(to: newValue).moveToContent()
-    }
-    
-    @inlinable func configure(selection newValue: Range<Snapshot.Index>) -> Self {
-        configure(selection: newValue.map(bounds: carets.index(rhs:)))
     }
     
     @inlinable func configure(selection newValue: Range<Int>) -> Self {
@@ -109,10 +105,6 @@ import struct Sequences.Walkthrough
     // MARK: Configure: Position
     
     @inlinable func configure(selection newValue: Carets.Index) -> Self {
-        configure(selection: newValue ..< newValue)
-    }
-    
-    @inlinable func configure(selection newValue: Snapshot.Index) -> Self {
         configure(selection: newValue ..< newValue)
     }
     
