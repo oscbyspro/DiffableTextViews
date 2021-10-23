@@ -61,7 +61,7 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
     // MARK: Components
     
     public final class Coordinator: NSObject, UITextFieldDelegate {
-        @usableFromInline typealias Layout = TextFields.Layout<UTF16>
+        @usableFromInline typealias Landscape = TextFields.Landscape<UTF16>
         
         @usableFromInline var uiView: UITextField!
         @usableFromInline var source: DiffableTextField!
@@ -229,7 +229,7 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
             // MARK: Getters
             
             @inlinable var   carets:   Carets {    field.carets }
-            @inlinable var   layout:   Layout {   carets.layout }
+            @inlinable var   layout:   Landscape {   carets.layout }
             @inlinable var snapshot: Snapshot { layout.snapshot }
             
             // MARK: Initializers

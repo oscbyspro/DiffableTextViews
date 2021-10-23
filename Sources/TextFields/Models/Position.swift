@@ -7,7 +7,7 @@
 
 // MARK: - Position
 
-@usableFromInline struct Position<Scheme: TextFields.Scheme> {
+@usableFromInline struct Position<Scheme: TextFields.Layout> {
     
     // MARK: Properties
     
@@ -16,19 +16,29 @@
     
     // MARK: Initializers
     
-    @inlinable init(_ origin: Origin, offset: Int = 0) {
+    @inlinable init(_ origin: Origin, offset: Int) {
         self.origin = origin
         self.offset = offset
     }
     
-    // MARK: Transformations
+    // MARK: Initializers: Static
     
-    @inlinable func after(stride: Int) -> Self {
-        .init(origin, offset: offset + stride)
+    @inlinable static var start: Self {
+        .init(.start, offset: .zero)
     }
     
-    @inlinable func before(stride: Int) -> Self {
-        .init(origin, offset: offset - stride)
+    @inlinable static var end: Self {
+        .init(.end,   offset: .zero)
+    }
+    
+    // MARK: Transformations
+    
+    @inlinable static func + (position: Self, stride: Int) -> Self {
+        .init(position.origin, offset: position.offset + stride)
+    }
+    
+    @inlinable static func - (position: Self, stride: Int) -> Self {
+        .init(position.origin, offset: position.offset - stride)
     }
     
     // MARK: Origin
