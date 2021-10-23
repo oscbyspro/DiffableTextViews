@@ -46,6 +46,18 @@ public struct Snapshot: BidirectionalCollection, RangeReplaceableCollection, Exp
         reduce(map: \.character, where: \.content)
     }
     
+    // MARK: Collection: Counts
+    
+    /// - Complexity: O(1).
+    @inlinable public var count: Int {
+        attributes.count
+    }
+    
+    /// - Complexity: O(1).
+    @inlinable public var underestimatedCount: Int {
+        attributes.underestimatedCount
+    }
+    
     // MARK: Collection: Indices
 
     @inlinable public var startIndex: Index {
@@ -120,33 +132,23 @@ public struct Snapshot: BidirectionalCollection, RangeReplaceableCollection, Exp
 
 // MARK: Optimizations
 
-#warning("Move this up...")
 extension Snapshot {
     
-    // MARK: Counts
-    
-    /// - Complexity: O(1).
-    @inlinable public var count: Int {
-        attributes.count
-    }
-    
-    /// - Complexity: O(1).
-    @inlinable public var underestimatedCount: Int {
-        attributes.underestimatedCount
-    }
-    
-
-    
-    // MARK: Complete
+    // MARK: Weird
     
     /// Appends: Symbol.suffix(Character.null).
     ///
-    /// Improves performance in certain circumstances.
+    /// Improves performance under some circumstances.
     ///
-    /// - Example: NumericTextStyle's CPU usage increases to 3x when its suffix is used, unless this method is called.
+    /// ```
+    /// let reason = "¯\_(ツ)_/¯"
+    /// ```
+    ///
+    /// - NumericTextStyle's CPU usage doubles when it applies a suffix, unless this method is called.
     ///
     /// - Note: Should be called at most once, after all other changes have been made to this Snapshot.
     ///
+    /// - Complexity: O(1) on average.
     @inlinable public mutating func complete() {
         append(.suffix("\0"))
     }
