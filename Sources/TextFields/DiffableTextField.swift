@@ -130,13 +130,13 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
             
             // --------------------------------- //
 
-            guard let offsets = textField.selection() else { return }
+            guard let newValue = textField.selection() else { return }
             
-            let field = cache.field.configure(selection: offsets)
-            let selectionOffsets = field.offsets16()
+            let field = cache.field.configure(selection: newValue)
+            let offsets = field.offsets16()
                         
-            let changesToLowerBound = selectionOffsets.lowerBound - offsets.lowerBound
-            let changesToUpperBound = selectionOffsets.upperBound - offsets.upperBound
+            let changesToLowerBound = offsets.lowerBound - newValue.lowerBound
+            let changesToUpperBound = offsets.upperBound - newValue.upperBound
             
             // --------------------------------- //
                                     

@@ -7,7 +7,7 @@
 
 // MARK: - Layout
 
-@usableFromInline struct Layout<Scheme: LayoutScheme>: BidirectionalCollection {
+@usableFromInline struct Layout<Scheme: TextFields.Scheme>: BidirectionalCollection {
     
     // MARK: Properties
     
@@ -58,11 +58,11 @@
         // MARK: Properties
         
         @usableFromInline let snapshot: Snapshot.Index
-        @usableFromInline let position: Position
+        @usableFromInline let position: Position<Scheme>
         
         // MARK: Initializers
         
-        @inlinable init(_ snapshot: Snapshot.Index, position: Position) {
+        @inlinable init(_ snapshot: Snapshot.Index, position: Position<Scheme>) {
             self.snapshot = snapshot
             self.position = position
         }
@@ -77,53 +77,4 @@
             lhs.snapshot == rhs.snapshot
         }
     }
-    
-    // MARK: Location
-    
-    @usableFromInline struct Position {
-        
-        // MARK: Properties
-        
-        @usableFromInline let origin: Origin
-        @usableFromInline let offset: Int
-        
-        // MARK: Initializers
-        
-        @inlinable init(_ origin: Origin, offset: Int = 0) {
-            self.origin = origin
-            self.offset = offset
-        }
-        
-        // MARK: Transformations
-        
-        @inlinable func after(stride: Int) -> Self {
-            .init(origin, offset: offset + stride)
-        }
-        
-        @inlinable func before(stride: Int) -> Self {
-            .init(origin, offset: offset - stride)
-        }
-        
-        // MARK: Origin
-        
-        @usableFromInline enum Origin { case start, end }
-    }
-}
-
-// MARK: - LayoutScheme
-
-@usableFromInline protocol LayoutScheme {
-    @inlinable static func size(of character: Character) -> Int
-}
-
-extension Character {
-    @inlinable static func size(of character: Character) -> Int { 1 }
-}
-
-extension UTF8: LayoutScheme {
-    @inlinable static func size(of character: Character) -> Int { character.utf8.count }
-}
-
-extension UTF16: LayoutScheme {
-    @inlinable static func size(of character: Character) -> Int { character.utf16.count }
 }
