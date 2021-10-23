@@ -22,18 +22,6 @@
         self.layout = Layout(snapshot)
     }
     
-    // MARK: Utilities
-    
-    #warning("FIXME")
-    @inlinable func offset16(from start: Index, to end: Index) -> Int {
-        fatalError()
-        
-//        let lowerBound = start.rhs?.character ?? layout.characters.endIndex
-//        let upperBound =   end.rhs?.character ?? layout.characters.endIndex
-//
-//        return layout.characters.utf16[lowerBound ..< upperBound].count
-    }
-    
     // MARK: Components
     
     @usableFromInline struct Element {
@@ -130,9 +118,11 @@ extension Carets {
     }
 }
 
+// MARK: - Nonempty
+
 extension Carets {
     
-    // MARK: Never Empty
+    // MARK: Element
     
     @inlinable var first: Element {
         first!
@@ -141,6 +131,8 @@ extension Carets {
     @inlinable var last: Element {
         last!
     }
+    
+    // MARK: Index
     
     @inlinable var firstIndex: Index {
         startIndex
@@ -151,23 +143,27 @@ extension Carets {
     }
 }
 
+// MARK: - Interoperabilities
+
 extension Carets {
     
-    // MARK: Interoperabilities
+    // MARK: Index
         
-//    @inlinable func index(lhs subindex: Layout.Index) -> Index {
-//        Index(lhs: subindex, rhs: self.subindex(after: subindex))
-//    }
-//    
-//    @inlinable func index(rhs subindex: Layout.Index) -> Index {
-//        Index(lhs: self.subindex(before: subindex), rhs: subindex)
-//    }
-//    
-//    @inlinable func indices(lhs subindices: Range<Layout.Index>) -> Range<Index> {
-//        index(lhs: subindices.lowerBound) ..< index(lhs: subindices.upperBound)
-//    }
-//    
-//    @inlinable func indices(rhs subindices: Range<Layout.Index>) -> Range<Index> {
-//        index(rhs: subindices.lowerBound) ..< index(rhs: subindices.upperBound)
-//    }
+    @inlinable func index(lhs i: Layout.Index) -> Index {
+        Index(lhs: i, rhs: subindex(after: i))
+    }
+
+    @inlinable func index(rhs i: Layout.Index) -> Index {
+        Index(lhs: subindex(before: i), rhs: i)
+    }
+    
+    // MARK: Indices
+    
+    @inlinable func indices(lhs subindices: Range<Layout.Index>) -> Range<Index> {
+        index(lhs: subindices.lowerBound) ..< index(lhs: subindices.upperBound)
+    }
+    
+    @inlinable func indices(rhs subindices: Range<Layout.Index>) -> Range<Index> {
+        index(rhs: subindices.lowerBound) ..< index(rhs: subindices.upperBound)
+    }
 }

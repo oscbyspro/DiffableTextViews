@@ -7,7 +7,7 @@
 
 // MARK: - Layout
 
-@usableFromInline struct Layout<Scheme: LayoutScheme> {
+@usableFromInline struct Layout<Scheme: LayoutScheme>: BidirectionalCollection {
     
     // MARK: Properties
     

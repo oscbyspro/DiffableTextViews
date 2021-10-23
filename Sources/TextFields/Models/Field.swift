@@ -11,8 +11,9 @@ import struct Sequences.Walkthrough
 
 #warning("Rename as Field.")
 @usableFromInline struct Field {
-    @usableFromInline typealias Index = Carets.Index
     @usableFromInline typealias Element = Carets.Element
+    @usableFromInline typealias Index = Carets.Index
+    @usableFromInline typealias Layout = Carets.Layout
     @usableFromInline typealias Direction = Walkthrough<Carets>.Step
     
     // MARK: Properties
@@ -71,15 +72,15 @@ import struct Sequences.Walkthrough
 
     // MARK: Configure: Range
     
-    @inlinable func configure(with newValue: Range<Index>) -> Self {
+    @inlinable func configure(selection newValue: Range<Index>) -> Self {
         move(to: newValue).moveToContent()
     }
     
-    @inlinable func configure(with newValue: Range<Snapshot.Index>) -> Self {
-        configure(with: newValue.map(bounds: carets.index(rhs:)))
+    @inlinable func configure(selection newValue: Range<Layout.Index>) -> Self {
+        configure(selection: newValue.map(bounds: carets.index(rhs:)))
     }
     
-    @inlinable func configure(with newValue: Range<Int>) -> Self {
+    @inlinable func configure(selection newValue: Range<Int>) -> Self {
         typealias Path = (start: Index, offset: Int)
         
         var positions = [Index](size: 5)
@@ -105,17 +106,17 @@ import struct Sequences.Walkthrough
         let lowerBound: Index = position(at: newValue.lowerBound, append: true)
         let upperBound: Index = position(at: newValue.upperBound, append: false)
                         
-        return configure(with: lowerBound ..< upperBound)
+        return configure(selection: lowerBound ..< upperBound)
     }
     
     // MARK: Configure: Position
     
-    @inlinable func configure(with newValue: Index) -> Self {
-        configure(with: newValue ..< newValue)
+    @inlinable func configure(selection newValue: Index) -> Self {
+        configure(selection: newValue ..< newValue)
     }
     
-    @inlinable func configure(with newValue: Snapshot.Index) -> Self {
-        configure(with: newValue ..< newValue)
+    @inlinable func configure(selection newValue: Layout.Index) -> Self {
+        configure(selection: newValue ..< newValue)
     }
     
     // MARK: Helpers: Update

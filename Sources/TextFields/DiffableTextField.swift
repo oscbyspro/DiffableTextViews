@@ -94,18 +94,19 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
             
             // --------------------------------- //
             
-            let range = cache.snapshot.indices(in: range)
+            #warning("Range should be interpreted as Layout, then -> Snapshot & Carets")
+            let range = cache.layout.indices(in: range)
             let input = Snapshot(string, only: .content)
                         
             // --------------------------------- //
             
-            guard var snapshot = source.style.merge(cache.snapshot, with: input, in: range) else { return false }
+            guard var snapshot = source.style.merge(cache.snapshot, with: input, in: range.map(bounds: \.snapshot)) else { return false }
             source.style.process(&snapshot)
   
             guard var value = source.style.parse(snapshot) else { return false }
             source.style.process(&value)
                         
-            let field = cache.field.configure(with: range.upperBound).translate(to: snapshot)
+            let field = cache.field.configure(selection: range.upperBound).translate(to: snapshot)
             
             // --------------------------------- //
 
@@ -131,7 +132,7 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
 
             guard let offsets = textField.selection() else { return }
             
-            let field = cache.field.configure(with: offsets)
+            let field = cache.field.configure(selection: offsets)
             let selectionOffsets = field.offsets16()
                         
             let changesToLowerBound = selectionOffsets.lowerBound - offsets.lowerBound
