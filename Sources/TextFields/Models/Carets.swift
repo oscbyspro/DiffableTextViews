@@ -151,3 +151,11 @@ extension Carets {
         index(before: endIndex)
     }
 }
+
+// MARK: - Interoperabilities & Utilities
+
+extension Carets {
+    
+    #warning("...")
+    
+}

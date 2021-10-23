@@ -10,16 +10,13 @@ import struct Sequences.Walkthrough
 // MARK: - Field
 
 #warning("Rename as Field.")
-@usableFromInline struct Field {
-    @usableFromInline typealias Element = Carets.Element
-    @usableFromInline typealias Index = Carets.Index
-    @usableFromInline typealias Layout = Carets.Layout
-    @usableFromInline typealias Direction = Walkthrough<Carets>.Step
+@usableFromInline struct Field<Layout: TextFields.Layout> {
+    @usableFromInline typealias Carets = TextFields.Carets<Layout>
     
     // MARK: Properties
     
     @usableFromInline let carets: Carets
-    @usableFromInline var selection: Range<Index>
+    @usableFromInline var selection: Range<Carets.Index>
     
     // MARK: Initializers
     
@@ -28,7 +25,7 @@ import struct Sequences.Walkthrough
         self.selection = carets.lastIndex ..< carets.lastIndex
     }
     
-    @inlinable init(_ field: Carets, selection: Range<Index>) {
+    @inlinable init(_ field: Carets, selection: Range<Carets.Index>) {
         self.carets = field
         self.selection = selection
     }
@@ -52,7 +49,7 @@ import struct Sequences.Walkthrough
             .inspect(.only(\.content))
             .compare(.equatable(\.character))
         
-        func position(from current: Carets.SubSequence, to next: Carets.SubSequence) -> Index {
+        func position(from current: Carets.SubSequence, to next: Carets.SubSequence) -> Carets.Index {
             next.lazy.map(\.rhs).suffix(alsoIn: current.lazy.map(\.rhs), options: options).startIndex
         }
         
@@ -72,29 +69,29 @@ import struct Sequences.Walkthrough
 
     // MARK: Configure: Range
     
-    @inlinable func configure(selection newValue: Range<Index>) -> Self {
+    @inlinable func configure(selection newValue: Range<Carets.Index>) -> Self {
         move(to: newValue).moveToContent()
     }
     
-    @inlinable func configure(selection newValue: Range<Layout.Index>) -> Self {
+    @inlinable func configure(selection newValue: Range<Snapshot.Index>) -> Self {
         configure(selection: newValue.map(bounds: carets.index(rhs:)))
     }
     
     @inlinable func configure(selection newValue: Range<Int>) -> Self {
-        typealias Path = (start: Index, offset: Int)
+        typealias Path = (start: Carets.Index, offset: Int)
         
-        var positions = [Index](size: 5)
+        var positions = [Carets.Index](size: 5)
         positions.append(contentsOf: [carets.firstIndex, carets.lastIndex])
         positions.append(contentsOf: [selection.lowerBound, selection.upperBound])
         
-        func path(from position: Index, to offset: Int) -> Path {
+        func path(from position: Carets.Index, to offset: Int) -> Path {
             Path(start: position, offset: offset - position.offset)
         }
                 
-        func position(at offset: Int, append: Bool) -> Index {
-            let paths: [Path] = positions.map({ path(from: $0, to: offset) })
-            let shortest: Path = paths.min(by: { abs($0.offset) < abs($1.offset) })!
-            let position: Index = carets.index(shortest.start, offsetBy: shortest.offset)
+        func position(at offset: Int, append: Bool) -> Carets.Index {
+            let paths = positions.map({ path(from: $0, to: offset) })
+            let shortest = paths.min(by: { abs($0.offset) < abs($1.offset) })!
+            let position = carets.index(shortest.start, offsetBy: shortest.offset)
             
             if append {
                 positions.append(position)
@@ -103,19 +100,19 @@ import struct Sequences.Walkthrough
             return position
         }
         
-        let lowerBound: Index = position(at: newValue.lowerBound, append: true)
-        let upperBound: Index = position(at: newValue.upperBound, append: false)
+        let lowerBound = position(at: newValue.lowerBound, append: true)
+        let upperBound = position(at: newValue.upperBound, append: false)
                         
         return configure(selection: lowerBound ..< upperBound)
     }
     
     // MARK: Configure: Position
     
-    @inlinable func configure(selection newValue: Index) -> Self {
+    @inlinable func configure(selection newValue: Carets.Index) -> Self {
         configure(selection: newValue ..< newValue)
     }
     
-    @inlinable func configure(selection newValue: Layout.Index) -> Self {
+    @inlinable func configure(selection newValue: Snapshot.Index) -> Self {
         configure(selection: newValue ..< newValue)
     }
     
@@ -128,14 +125,14 @@ import struct Sequences.Walkthrough
     // MARK: Move: To Content
     
     @inlinable func moveToContent() -> Field {
-        func position(_ position: Index) -> Index {
+        func position(_ position: Carets.Index) -> Carets.Index {
             var position = position
             
             func condition() -> Bool {
                 let element = carets[position]; return element.lhs.noncontent && element.rhs.noncontent
             }
                         
-            func move(_ direction: Direction, towards predicate: (Element) -> Bool) {
+            func move(_ direction: Walkthrough<Carets>.Step, towards predicate: (Carets.Element) -> Bool) {
                 position = carets.firstIndex(in: .stride(start: .closed(position), step: direction), where: predicate) ?? position
             }
             
@@ -162,14 +159,14 @@ import struct Sequences.Walkthrough
     
     // MARK: Move: To, Jumps Over Spacers
     
-    @inlinable func move(to newValue: Range<Index>) -> Field {
-        func momentum(from first: Index, to second: Index) -> Direction? {
+    @inlinable func move(to newValue: Range<Carets.Index>) -> Field {
+        func momentum(from first: Carets.Index, to second: Carets.Index) -> Walkthrough<Carets>.Step? {
             if      first < second { return  .forwards }
             else if first > second { return .backwards }
             else                   { return      .none }
         }
         
-        func position(_ positionIn: (Range<Index>) -> Index, preference: Direction, where predicate: (Element) -> Bool) -> Index {
+        func position(_ positionIn: (Range<Carets.Index>) -> Carets.Index, preference: Walkthrough<Carets>.Step, where predicate: (Carets.Element) -> Bool) -> Carets.Index {
             let position = positionIn(newValue)
             let momentum = momentum(from: positionIn(selection), to: position) ?? preference
     
