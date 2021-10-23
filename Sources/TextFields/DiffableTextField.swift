@@ -94,7 +94,6 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
             
             // --------------------------------- //
             
-            #warning("Range should be interpreted as Layout, then -> Snapshot & Carets")
             let range = cache.layout.indices(in: range)
             let input = Snapshot(string, only: .content)
                         
@@ -130,6 +129,7 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
             
             // --------------------------------- //
 
+            #warning("UITextField will have to know from which side to caclulate offset.")
             guard let newValue = textField.selection() else { return }
             
             let field = cache.field.configure(selection: newValue)

@@ -7,7 +7,7 @@
 
 // MARK: - Carets
 
-#warning("Count optimizations were removed, rememver to check whether they are still called.")
+#warning("Count optimizations were removed, remember to check whether they are still called.")
 @usableFromInline struct Carets: BidirectionalCollection {
     @usableFromInline typealias Layout = TextFields.Layout<UTF16>
     
