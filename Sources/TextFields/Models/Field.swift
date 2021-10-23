@@ -123,13 +123,8 @@ import struct Sequences.Walkthrough
     @inlinable func update(_ transform: (inout Field) -> Void) -> Field {
         var copy = self; transform(&copy); return copy
     }
-}
 
-// MARK: - Movements
-
-extension Field {
-    
-    // MARK: To Content
+    // MARK: Move: To Content
     
     @inlinable func moveToContent() -> Field {
         func position(_ position: Index) -> Index {
@@ -164,7 +159,7 @@ extension Field {
         return update({ $0.selection = lowerBound ..< upperBound })
     }
     
-    // MARK: To, Across Spacers
+    // MARK: Move: To, Jumps Over Spacers
     
     @inlinable func move(to newValue: Range<Index>) -> Field {
         func momentum(from first: Index, to second: Index) -> Direction? {

@@ -22,25 +22,25 @@
     // MARK: Collection: Indices
     
     @inlinable var startIndex: Index {
-        Index(snapshot.startIndex, position: .init(.start, offset: 0))
+        Index(snapshot.startIndex, position: .init(.start))
     }
     
     @inlinable var endIndex: Index {
-        Index(snapshot.endIndex,   position: .init(.end,   offset: 0))
+        Index(snapshot.endIndex, position: .init(.end))
     }
     
     // MARK: Collection: Traversal
     
-    @inlinable func index(after i: Index) -> Index {
-        let next = snapshot.index(before: i.snapshot)
-        let size = Scheme.size(of: snapshot.characters[i.snapshot.character])
-        return Index(next, position: i.position.after(stride: size))
+    @inlinable func index(after index: Index) -> Index {
+        let next = snapshot.index(before: index.snapshot)
+        let size = Scheme.size(of: snapshot.characters[index.snapshot.character])
+        return Index(next, position: index.position.after(stride: size))
     }
     
-    @inlinable func index(before i: Index) -> Index {
-        let next = snapshot.index(before: i.snapshot)
+    @inlinable func index(before index: Index) -> Index {
+        let next = snapshot.index(before: index.snapshot)
         let size = Scheme.size(of: snapshot.characters[next.character])
-        return Index(next, position: i.position.before(stride: size))
+        return Index(next, position: index.position.before(stride: size))
     }
     
     // MARK: Collection: Subscript
@@ -89,7 +89,7 @@
         
         // MARK: Initializers
         
-        @inlinable init(_ origin: Origin, offset: Int) {
+        @inlinable init(_ origin: Origin, offset: Int = 0) {
             self.origin = origin
             self.offset = offset
         }
@@ -113,7 +113,7 @@
 // MARK: - LayoutScheme
 
 @usableFromInline protocol LayoutScheme {
-    static func size(of character: Character) -> Int
+    @inlinable static func size(of character: Character) -> Int
 }
 
 extension Character {
