@@ -61,6 +61,8 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
     // MARK: Components
     
     public final class Coordinator: NSObject, UITextFieldDelegate {
+        @usableFromInline typealias Layout = TextFields.Layout<UTF16>
+        
         @usableFromInline var uiView: UITextField!
         @usableFromInline var source: DiffableTextField!
 
@@ -128,7 +130,7 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
             // --------------------------------- //
 
             guard let offsets = textField.selection() else { return }
-                        
+            
             let field = cache.field.configure(with: offsets)
             let selectionOffsets = field.offsets16()
                         
@@ -218,21 +220,22 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
         @usableFromInline final class Cache {
             
             // MARK: Properties
-                        
+            
             @usableFromInline var value: Value!
             @usableFromInline var field: Field
             @usableFromInline var edits:  Bool
+            
+            // MARK: Getters
+            
+            @inlinable var   carets:   Carets {    field.carets }
+            @inlinable var   layout:   Layout {   carets.layout }
+            @inlinable var snapshot: Snapshot { layout.snapshot }
             
             // MARK: Initializers
             
             @inlinable init() {
                 self.field = Field()
                 self.edits = false
-            }
-            
-            #warning("Clean up, remove.")
-            @inlinable var snapshot: Snapshot {
-                field.carets.layout.snapshot
             }
         }
 
