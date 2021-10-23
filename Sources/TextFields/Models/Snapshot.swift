@@ -10,24 +10,32 @@ public struct Snapshot: BidirectionalCollection, RangeReplaceableCollection, Exp
     public typealias Indices = DefaultIndices<Self>
     public typealias SubSequence = Slice<Self>
 
-    // MARK: Storage
+    public typealias Characters = String
+    public typealias Attributes = Array<Attribute>
+    
+    // MARK: Properties
 
-    public private(set) var characters: String
-    public private(set) var attributes: [Attribute]
+    @usableFromInline var _characters: Characters
+    @usableFromInline var _attributes: Attributes
+        
+    // MARK: Getters
+    
+    @inlinable public var characters: Characters { _characters }
+    @inlinable public var attributes: Attributes { _attributes }
 
     // MARK: Initialization
 
     public init() {
-        self.characters = ""
-        self.attributes = []
+        self._characters = ""
+        self._attributes = []
     }
     
     public init(_ characters: String, only attribute: Attribute) {
-        self.attributes = characters.map({ _ in attribute })
-        self.characters = characters
+        self._characters = characters
+        self._attributes = Attributes(repeating: attribute, count: characters.count)
     }
         
-    @inlinable public init(arrayLiteral elements: Symbol...) {
+    @inlinable public init(arrayLiteral elements: Element...) {
         self.init(elements)
     }
     
@@ -38,54 +46,52 @@ public struct Snapshot: BidirectionalCollection, RangeReplaceableCollection, Exp
         reduce(map: \.character, where: \.content)
     }
     
-    // MARK: Index
+    // MARK: Collection: Indices
 
     @inlinable public var startIndex: Index {
         Index(characters.startIndex, attributes.startIndex)
     }
 
     @inlinable public var endIndex: Index {
-        Index(characters.endIndex, attributes.endIndex)
+        Index(characters.endIndex,   attributes.endIndex)
     }
     
-    // MARK: Traversal
+    // MARK: Collection: Traversals
     
     @inlinable public func index(after i: Index) -> Index {
-        Index(characters.index(after: i.character), attributes.index(after: i.attribute))
+        Index(characters.index(after:  i.character), attributes.index(after: i.attribute))
     }
     
     @inlinable public func index(before i: Index) -> Index {
         Index(characters.index(before: i.character), attributes.index(before: i.attribute))
     }
     
-    // MARK: Replacements
+    // MARK: Collection: Replacements
+        
+    @inlinable public mutating func append(_ element: Element) {
+        _characters.append(element.character)
+        _attributes.append(element.attribute)
+    }
+    
+    @inlinable public mutating func insert(_ element: Element, at index: Index) {
+        _characters.insert(element.character, at: index.character)
+        _attributes.insert(element.attribute, at: index.attribute)
+    }
 
-    public mutating func replaceSubrange<C: Collection>(_ subrange: Range<Index>, with newElements: C) where C.Element == Symbol {
-        attributes.replaceSubrange(subrange.map(bounds: \.attribute), with: newElements.lazy.map(\.attribute))
-        characters.replaceSubrange(subrange.map(bounds: \.character), with: newElements.lazy.map(\.character))
+    @inlinable public mutating func replaceSubrange<C: Collection>(_ range: Range<Index>, with elements: C) where C.Element == Element {
+        _characters.replaceSubrange(range.map(bounds: \.character), with: elements.lazy.map(\.character))
+        _attributes.replaceSubrange(range.map(bounds: \.attribute), with: elements.lazy.map(\.attribute))
     }
         
-    // MARK: Subscripts
+    // MARK: Collection: Subscripts
     
-    @inlinable public subscript(position: Index) -> Symbol {
+    @inlinable public subscript(position: Index) -> Element {
         _read {
-            yield Symbol(characters[position.character], attribute: attributes[position.attribute])
+            yield Element(characters[position.character], attribute: attributes[position.attribute])
         }
     }
     
-    // MARK: Optimization
-    
-    /// - Complexity: O(1).
-    @inlinable public var count: Int {
-        attributes.count
-    }
-    
-    /// - Complexity: O(1).
-    @inlinable public var underestimatedCount: Int {
-        attributes.underestimatedCount
-    }
-
-    // MARK: Components
+    // MARK: Index
 
     public struct Index: Comparable {
         @usableFromInline let character: String.Index
@@ -114,7 +120,22 @@ public struct Snapshot: BidirectionalCollection, RangeReplaceableCollection, Exp
 
 // MARK: Optimizations
 
+#warning("Move this up...")
 extension Snapshot {
+    
+    // MARK: Counts
+    
+    /// - Complexity: O(1).
+    @inlinable public var count: Int {
+        attributes.count
+    }
+    
+    /// - Complexity: O(1).
+    @inlinable public var underestimatedCount: Int {
+        attributes.underestimatedCount
+    }
+    
+
     
     // MARK: Complete
     
@@ -122,11 +143,11 @@ extension Snapshot {
     ///
     /// Improves performance in certain circumstances.
     ///
-    /// - Example: NumericTextStyle's CPU usage increases +3x when its suffix is used, unless this method is called.
+    /// - Example: NumericTextStyle's CPU usage increases to 3x when its suffix is used, unless this method is called.
     ///
     /// - Note: Should be called at most once, after all other changes have been made to this Snapshot.
     ///
     @inlinable public mutating func complete() {
-        append(Symbol.suffix("\0"))
+        append(.suffix("\0"))
     }
 }

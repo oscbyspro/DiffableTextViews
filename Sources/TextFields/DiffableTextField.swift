@@ -106,7 +106,7 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
             let selection = cache.selection.configure(with: range.upperBound).translate(to: snapshot)
             
             // --------------------------------- //
-            
+
             self.cache.value = value
             self.cache.snapshot = snapshot
             self.cache.selection = selection
@@ -125,15 +125,16 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
             // --------------------------------- //
             
             guard !lock.isLocked else { return }
-                        
+            
             // --------------------------------- //
 
             guard let offsets = textField.selection() else { return }
                         
             let selection = cache.selection.configure(with: offsets)
+            let selectionOffsets = selection.offsets16()
                         
-            let changesToLowerBound = selection.range.lowerBound.offset - offsets.lowerBound
-            let changesToUpperBound = selection.range.upperBound.offset - offsets.upperBound
+            let changesToLowerBound = selectionOffsets.lowerBound - offsets.lowerBound
+            let changesToUpperBound = selectionOffsets.upperBound - offsets.upperBound
             
             // --------------------------------- //
                                     
@@ -187,7 +188,7 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
                 // lock is needed because setting a UITextFields's text
                 // also sets its selection to its last possible position
                 self.uiView.setText(cache.snapshot.characters)
-                self.uiView.setSelection(cache.selection.offsets)
+                self.uiView.setSelection(cache.selection.offsets16())
             }
             
             // --------------------------------- //
@@ -225,6 +226,20 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
             @usableFromInline var selection = Selection()
             
             @usableFromInline var editable = false
+            
+            
+            #warning("Snapshot/Layout does not need to be stored since it is contained by Selection/Field.")
+            /*
+
+             @inlinable var _snapshot: Snapshot {
+                selection.field.layout.snapshot             
+             }
+             
+             @inlinable var _snapshot: Snapshot {
+                field.carets.layout.snapshot
+             }
+             
+             */
         }
 
         // MARK: Lock

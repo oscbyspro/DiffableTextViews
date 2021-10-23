@@ -12,7 +12,6 @@ import struct Foundation.Locale
 // MARK: - NumericTextStyle
 
 /// Formats text and number.
-
 public struct NumericTextStyle<Scheme: NumericTextScheme>: DiffableTextStyle {
     @usableFromInline typealias Components = NumericTextComponents
     @usableFromInline typealias Configuration = NumericTextConfiguration
@@ -179,18 +178,18 @@ extension NumericTextStyle {
         guard values.editableValidation(value) else { return nil }
         
         let style = editableStyle(digits: digits, separator: components.separator != nil)
-        var characters = style.format(value)
+        var _characters = style.format(value)
         
-        if let sign = components.sign, !characters.hasPrefix(sign.characters) {
-            characters = sign.characters + characters
+        if let sign = components.sign, !_characters.hasPrefix(sign.characters) {
+            _characters = sign.characters + _characters
         }
     
-        return snapshot(characters)
+        return snapshot(_characters)
     }
     
     // MARK: Helpers, Characters
     
-    @inlinable func snapshot(_ characters: String) -> Snapshot {
+    @inlinable func snapshot(_ _characters: String) -> Snapshot {
         var snapshot = Snapshot()
             
         // --------------------------------- //
@@ -200,7 +199,7 @@ extension NumericTextStyle {
             snapshot.append(.prefix(" "))
         }
         
-        for character in characters {
+        for character in _characters {
             if Components.Digits.set.contains(character) {
                 snapshot.append(.content(character))
             } else if groupingSeparator.contains(character) {

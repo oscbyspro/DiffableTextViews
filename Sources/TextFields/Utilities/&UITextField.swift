@@ -22,12 +22,6 @@ extension UITextField {
 
 extension UITextField {
     
-    // MARK: Selection: Get
-    
-    @inlinable func selection() -> Range<Int>? {
-        selectedTextRange.map(offsets)
-    }
-    
     // MARK: Selection: Set
         
     @inlinable func setSelection(_ offsets: Range<Int>?) {
@@ -42,11 +36,9 @@ extension UITextField {
         
         self.selectedTextRange = textRange(from: start, to: end)!
     }
-}
-
-extension UITextField {
-    // MARK: Ranges
     
+    // MARK: Selection: Set, Helpers
+
     @inlinable func range(in offsets: Range<Int>) -> UITextRange {
         let start = position(from: beginningOfDocument, offset: offsets.lowerBound)!
         let end = position(from: start, offset: offsets.count)!
@@ -56,11 +48,19 @@ extension UITextField {
 }
 
 extension UITextField {
-    // MARK: Offsets
     
+    // MARK: Selection: Get
+    
+    @inlinable func selection() -> Range<Int>? {
+        selectedTextRange.map(offsets)
+    }
+    
+    // MARK: Selection: Get, Helpers
+
+    #warning("offsetsFromStart, make offsetsFromEnd also.")
     @inlinable func offsets(in bounds: UITextRange) -> Range<Int> {
         let start = offset(from: beginningOfDocument, to: bounds.start)
-        let count = offset(from: bounds.start, to: bounds.end)
+        let count = offset(from: bounds.start,        to: bounds.end)
         
         return start ..< (start + count)
     }

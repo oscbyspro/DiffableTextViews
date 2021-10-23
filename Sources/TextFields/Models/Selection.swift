@@ -9,6 +9,7 @@ import struct Sequences.Walkthrough
 
 // MARK: - Selection
 
+#warning("Rename as Field.")
 @usableFromInline struct Selection {
     @usableFromInline typealias Index = Field.Index
     @usableFromInline typealias Element = Field.Element
@@ -33,9 +34,12 @@ import struct Sequences.Walkthrough
     
     // MARK: Descriptions
     
-    #warning("UITextField uses UTF-16 offsets, not characters.")
-    @inlinable var offsets: Range<Int> {
-        range.map(bounds: \.offset)
+    #warning("Make an OffsetUTF16 struct, so that it can't be accidentally misused.")
+    @inlinable func offsets16() -> Range<Int> {        
+        let start = field.offset16(from: field.startIndex, to: range.lowerBound)
+        let count = field.offset16(from: range.lowerBound, to: range.upperBound)
+
+        return start ..< (start + count)
     }
     
     // MARK: Translate: Field
