@@ -33,6 +33,7 @@ import struct Sequences.Walkthrough
     
     // MARK: Descriptions
     
+    #warning("UITextField uses UTF-16 offsets, not characters.")
     @inlinable var offsets: Range<Int> {
         range.map(bounds: \.offset)
     }
