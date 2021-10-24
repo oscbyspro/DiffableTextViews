@@ -92,7 +92,7 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
             synchronize()
         }
         
-        public func textField(_ textField: UITextField, shouldChangeCharactersIn nsRange: NSRange, replacementString string: String) -> Bool {
+        @inlinable public func textField(_ textField: UITextField, shouldChangeCharactersIn nsRange: NSRange, replacementString string: String) -> Bool {
                         
             // --------------------------------- //
             
@@ -102,11 +102,11 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
             
             let offets = Offset(at: nsRange.lowerBound) ..< Offset(at: nsRange.upperBound)
             let range = cache.field.indices(in: offets)
-            let replacement = Snapshot(string, only: .content)
-                        
+            let input = Snapshot(string, only: .content)
+            
             // --------------------------------- //
             
-            guard var snapshot = source.style.merge(cache.snapshot, with: replacement, in: range.map(bounds: \.rhs!)) else { return false }
+            guard var snapshot = source.style.merge(cache.snapshot, with: input, in: range.map(bounds: \.rhs!)) else { return false }
             source.style.process(&snapshot)
   
             guard var value = source.style.parse(snapshot) else { return false }
@@ -118,7 +118,7 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
 
             self.cache.value = value
             self.cache.field = field
-                        
+            
             // --------------------------------- //
                         
             push()
@@ -236,12 +236,8 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
             
             // MARK: Getters
             
-            @inlinable var carets: Carets {
-                field.carets
-            }
-            
             @inlinable var snapshot: Snapshot {
-                carets.snapshot
+                field.carets.snapshot
             }
         }
 
