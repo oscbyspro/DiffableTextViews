@@ -8,12 +8,12 @@
 // MARK: - Carets
 
 @usableFromInline struct Carets<Layout: TextFields.Layout>: BidirectionalCollection {
-    @usableFromInline typealias Position = TextFields.Position<Layout>
+    @usableFromInline typealias Offset = TextFields.Offset<Layout>
     
     // MARK: Properties
     
     @usableFromInline let snapshot: Snapshot
-    @usableFromInline let range: Range<Position>
+    @usableFromInline let range: Range<Offset>
 
     // MARK: Initializers
     
@@ -35,11 +35,11 @@
     // MARK: Collection: Traversals
     
     @inlinable func index(after i: Index) -> Index {
-        Index(at: i.position.after(character(at: i.rhs!.character)), lhs: i.rhs!, rhs: subindex(after: i.rhs!))
+        Index(at: i.offset.after(character(at: i.rhs!.character)), lhs: i.rhs!, rhs: subindex(after: i.rhs!))
     }
     
     @inlinable func index(before i: Index) -> Index {
-        Index(at: i.position.before(character(at: i.lhs!.character)), lhs: subindex(before: i.lhs!), rhs: i.lhs!)
+        Index(at: i.offset.before(character(at: i.lhs!.character)), lhs: subindex(before: i.lhs!), rhs: i.lhs!)
     }
     
     // MARK: Collection: Subscripts
@@ -99,28 +99,22 @@
         
         // MARK: Properties
         
-        @usableFromInline let position: Position
+        @usableFromInline let offset: Offset
         @usableFromInline let lhs: Snapshot.Index?
         @usableFromInline let rhs: Snapshot.Index?
         
         // MARK: Initialization
 
-        @inlinable init(at position: Position, lhs: Snapshot.Index, rhs: Snapshot.Index?) {
-            self.position = position
+        @inlinable init(at position: Offset, lhs: Snapshot.Index, rhs: Snapshot.Index?) {
+            self.offset = position
             self.lhs = lhs
             self.rhs = rhs
         }
         
-        @inlinable init(at position: Position, lhs: Snapshot.Index?, rhs: Snapshot.Index) {
-            self.position = position
+        @inlinable init(at position: Offset, lhs: Snapshot.Index?, rhs: Snapshot.Index) {
+            self.offset = position
             self.lhs = lhs
             self.rhs = rhs
-        }
-        
-        // MARK: Utilities
-        
-        @inlinable var offset: Int {
-            position.offset
         }
                 
         // MARK: Collection: Index
@@ -167,13 +161,13 @@ extension Carets {
 
 extension Carets {
     
-    @inlinable func index(_ start: Index, offsetBy stride: Position) -> Index {
-        let destination = start.position.offset + stride.offset
+    @inlinable func index(start: Index, offset: Offset) -> Index {
+        let destination = start.offset.distance + offset.distance
         
-        if stride.offset >= 0 {
-            return indices[start...].first(where: { $0.offset >= destination }) ?? endIndex
+        if offset.distance >= .zero {
+            return indices[start...].first(where: { index in index.offset.distance >= destination }) ?? endIndex
         } else {
-            return indices[...start].reversed().first(where: { $0.offset <= destination }) ?? startIndex
+            return indices[...start].reversed().first(where: { index in index.offset.distance <= destination }) ?? startIndex
         }
     }
 }

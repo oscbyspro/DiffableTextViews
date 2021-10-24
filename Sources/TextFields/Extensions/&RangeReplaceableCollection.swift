@@ -8,7 +8,7 @@
 // MARK: - RangeReplaceableCollection
 
 extension RangeReplaceableCollection {
-
+    
     // MARK: Transformations
     
     @inlinable func replace<R: RangeExpression, C: Collection>(_ range: R, with elements: C) -> Self where R.Bound == Self.Index, C.Element == Element {

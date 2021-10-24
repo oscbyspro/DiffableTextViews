@@ -1,22 +1,22 @@
 //
-//  Position.swift
+//  Offset.swift
 //  
 //
 //  Created by Oscar Byström Ericsson on 2021-10-23.
 //
 
-// MARK: - Position
+// MARK: - Offset
 
-@usableFromInline struct Position<Layout: TextFields.Layout>: Comparable {
+@usableFromInline struct Offset<Layout: TextFields.Layout>: Equatable, Comparable {
 
     // MARK: Properties
     
-    @usableFromInline let offset: Int
+    @usableFromInline let distance: Int
     
     // MARK: Initializers
     
     @inlinable init(at offset: Int) {
-        self.offset = offset
+        self.distance = offset
     }
     
     // MARK: Initializers: Static
@@ -29,14 +29,14 @@
         .init(at: Layout.size(of: characters))
     }
     
-    // MARK: Transformations
+    // MARK: Stride
     
     @inlinable func after(_ character: Character?) -> Self {
         guard let character = character else {
             return self
         }
         
-        return .init(at: offset + Layout.size(of: character))
+        return .init(at: distance + Layout.size(of: character))
     }
     
     @inlinable func before(_ character: Character?) -> Self {
@@ -44,12 +44,22 @@
             return self
         }
 
-        return .init(at: offset - Layout.size(of: character))
+        return .init(at: distance - Layout.size(of: character))
     }
     
     // MARK: Comparisons
     
     @inlinable static func < (lhs: Self, rhs: Self) -> Bool {
-        lhs.offset < rhs.offset
+        lhs.distance < rhs.distance
+    }
+    
+    // MARK: Calculations
+    
+    @inlinable static func + (lhs: Self, rhs: Self) -> Self {
+        .init(at: lhs.distance + rhs.distance)
+    }
+    
+    @inlinable static func - (lhs: Self, rhs: Self) -> Self {
+        .init(at: lhs.distance - rhs.distance)
     }
 }

@@ -12,7 +12,7 @@ import struct Sequences.Walkthrough
 
 @usableFromInline struct Field<Layout: TextFields.Layout> {
     @usableFromInline typealias Carets = TextFields.Carets<Layout>
-    @usableFromInline typealias Position = TextFields.Position<Layout>
+    @usableFromInline typealias Offset = TextFields.Offset<Layout>
     
     // MARK: Properties
     
@@ -63,7 +63,7 @@ import struct Sequences.Walkthrough
         move(to: newValue).moveToContent()
     }
     
-    @inlinable func configure(selection newValue: Range<Position>) -> Self {
+    @inlinable func configure(selection newValue: Range<Offset>) -> Self {
        configure(selection: indices(in: newValue))
     }
     
@@ -151,7 +151,7 @@ extension Field {
     
     // MARK: Indices: In Position Range
     
-    @inlinable func indices(in range: Range<Position>) -> Range<Carets.Index> {
+    @inlinable func indices(in range: Range<Offset>) -> Range<Carets.Index> {
         var indices = [Carets.Index]()
         indices.reserveCapacity(5)
         indices.append(contentsOf: [carets.firstIndex,         carets.endIndex])
@@ -159,21 +159,16 @@ extension Field {
         
         // --------------------------------- //
     
-        func index(at position: Position, append: Bool) -> Carets.Index {
-            let shortestPath = indices.map({ Path($0, distance: position) }).min()!
-            let index = carets.index(shortestPath.start, offsetBy: shortestPath.distance)
-                        
-            if append {
-                indices.append(index)
-            }
-            
-            return index
+        func index(at offset: Offset) -> Carets.Index {
+            let shortestPath = indices.map({ Path($0, offset: offset) }).min()!
+            return carets.index(start: shortestPath.start, offset: shortestPath.offset)
         }
         
         // --------------------------------- //
         
-        let lowerBound = index(at: range.lowerBound, append: true)
-        let upperBound = index(at: range.upperBound, append: false)
+        let lowerBound = index(at: range.lowerBound)
+        indices.append(lowerBound)
+        let upperBound = index(at: range.upperBound)
                         
         // --------------------------------- //
         
@@ -187,19 +182,19 @@ extension Field {
         // MARK: Properties
         
         @usableFromInline let start: Carets.Index
-        @usableFromInline let distance: Position
+        @usableFromInline let offset: Offset
         
         // MARK: Initializers
         
-        @inlinable init(_ start: Carets.Index, distance: Position) {
+        @inlinable init(_ start: Carets.Index, offset: Offset) {
             self.start = start
-            self.distance = distance
+            self.offset = offset
         }
         
         // MARK: Comparisons
         
         @inlinable static func < (lhs: Self, rhs: Self) -> Bool {
-            abs(lhs.distance.offset) < abs(rhs.distance.offset)
+            abs(lhs.offset.distance) < abs(rhs.offset.distance)
         }
     }
 }
