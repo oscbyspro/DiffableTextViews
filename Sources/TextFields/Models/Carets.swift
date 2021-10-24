@@ -14,35 +14,37 @@
     // MARK: Properties
     
     @usableFromInline let snapshot: Snapshot
-    
+    @usableFromInline let range: Range<Position>
+
     // MARK: Initializers
     
-    @inlinable init(_ snapshot: Snapshot) {
+    @inlinable init(_ snapshot: Snapshot, last: Position) {
         self.snapshot = snapshot
+        self.range = Position(at: 0) ..< Position(at: last.offset + 1)
+    }
+    
+    @inlinable init(_ snapshot: Snapshot) {
+        self.init(snapshot, last: Position(at: Layout.size(of: snapshot.characters)))
     }
     
     // MARK: Collection: Bounds
     
     @inlinable var startIndex: Index {
-        Index(at: .start, lhs: nil, rhs: snapshot.startIndex)
+        Index(at: range.lowerBound, lhs: nil, rhs: snapshot.startIndex)
     }
     
     @inlinable var endIndex: Index {
-        Index(at: .end, lhs: snapshot.endIndex, rhs: nil)
+        Index(at: range.upperBound, lhs: snapshot.endIndex, rhs: nil)
     }
     
     // MARK: Collection: Traversals
     
-    @inlinable func size(of index: String.Index) -> Int {
-        Layout.size(of: snapshot.characters[index])
-    }
-    
     @inlinable func index(after i: Index) -> Index {
-        Index(at: i.position + size(of: i.rhs!.character), lhs: i.rhs!, rhs: subindex(after: i.rhs!))
+        Index(at: i.position.after(snapshot.characters[i.rhs!.character]), lhs: i.rhs!, rhs: subindex(after: i.rhs!))
     }
     
     @inlinable func index(before i: Index) -> Index {
-        Index(at: i.position - size(of: i.lhs!.character), lhs: subindex(before: i.lhs!), rhs: i.lhs!)
+        Index(at: i.position.before(snapshot.characters[i.lhs!.character]), lhs: subindex(before: i.lhs!), rhs: i.lhs!)
     }
     
     // MARK: Collection: Subscripts
@@ -150,12 +152,4 @@ extension Carets {
     @inlinable var lastIndex: Index {
         index(before: endIndex)
     }
-}
-
-// MARK: - Interoperabilities & Utilities
-
-extension Carets {
-    
-    #warning("...")
-    
 }

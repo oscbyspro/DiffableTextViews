@@ -5,7 +5,12 @@
 //  Created by Oscar Byström Ericsson on 2021-09-24.
 //
 
+// MARK: Symbol
+
 public struct Symbol: Equatable {
+    
+    // MARK: Properties
+    
     public let attribute: Attribute
     public let character: Character
     
@@ -15,10 +20,8 @@ public struct Symbol: Equatable {
         self.character = character
         self.attribute = attribute
     }
-}
-
-public extension Symbol {
-    // MARK: Initializers
+    
+    // MARK: Initializers: Static
     
     @inlinable static func content(_ character: Character) -> Self {
         Self(character, attribute: .content)
@@ -35,10 +38,8 @@ public extension Symbol {
     @inlinable static func suffix(_ character: Character) -> Self {
         Self(character, attribute: .suffix)
     }
-}
-
-public extension Symbol {
-    // MARK: Descriptions
+    
+    // MARK: Descriptions: Positive
     
     @inlinable var content: Bool {
         attribute == .content
@@ -55,10 +56,8 @@ public extension Symbol {
     @inlinable var suffix: Bool {
         attribute == .suffix
     }
-}
 
-public extension Symbol {
-    // MARK: Descriptions
+    // MARK: Descriptions: Negative
     
     @inlinable var noncontent: Bool {
         attribute != .content

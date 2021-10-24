@@ -66,4 +66,18 @@ extension UITextField {
     }
 }
 
+
+#warning("WIP")
+
+extension UITextField {
+    @usableFromInline typealias Position = TextFields.Position<UTF16>
+    
+    #warning("...")
+    @inlinable func position(at uiTextPosition: UITextPosition) -> Position {
+        .init(at: offset(from: beginningOfDocument, to: uiTextPosition))
+    }
+}
+
+
 #endif
+

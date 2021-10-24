@@ -7,41 +7,31 @@
 
 // MARK: - Position
 
-@usableFromInline struct Position<Scheme: TextFields.Layout> {
-    
+@usableFromInline struct Position<Layout: TextFields.Layout>: Comparable {
+
     // MARK: Properties
     
-    @usableFromInline let origin: Origin
     @usableFromInline let offset: Int
     
     // MARK: Initializers
     
-    @inlinable init(_ origin: Origin, offset: Int) {
-        self.origin = origin
+    @inlinable init(at offset: Int) {
         self.offset = offset
     }
-    
-    // MARK: Initializers: Static
-    
-    @inlinable static var start: Self {
-        .init(.start, offset: .zero)
-    }
-    
-    @inlinable static var end: Self {
-        .init(.end,   offset: .zero)
-    }
-    
+
     // MARK: Transformations
     
-    @inlinable static func + (position: Self, stride: Int) -> Self {
-        .init(position.origin, offset: position.offset + stride)
+    @inlinable func after(_ character: Character) -> Self {
+        .init(at: offset + Layout.size(of: character))
     }
     
-    @inlinable static func - (position: Self, stride: Int) -> Self {
-        .init(position.origin, offset: position.offset - stride)
+    @inlinable func before(_ character: Character) -> Self {
+        .init(at: offset - Layout.size(of: character))
     }
     
-    // MARK: Origin
+    // MARK: Comparisons
     
-    @usableFromInline enum Origin { case start, end }
+    @inlinable static func < (lhs: Self, rhs: Self) -> Bool {
+        lhs.offset < rhs.offset
+    }
 }

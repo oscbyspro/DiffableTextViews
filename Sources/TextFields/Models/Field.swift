@@ -9,7 +9,6 @@ import struct Sequences.Walkthrough
 
 // MARK: - Field
 
-#warning("Rename as Field.")
 @usableFromInline struct Field<Layout: TextFields.Layout> {
     @usableFromInline typealias Carets = TextFields.Carets<Layout>
     
@@ -32,7 +31,7 @@ import struct Sequences.Walkthrough
     
     // MARK: Descriptions
     
-    #warning("Make an OffsetUTF16 struct, so that it can't be accidentally misused.")
+    #warning("Fixme/remove.")
     @inlinable func offsets16() -> Range<Int> {
         fatalError()
 //        let start = carets.offset16(from: carets.startIndex, to: selection.lowerBound)
@@ -80,8 +79,10 @@ import struct Sequences.Walkthrough
         positions.append(contentsOf: [carets.firstIndex, carets.lastIndex])
         positions.append(contentsOf: [selection.lowerBound, selection.upperBound])
         
-        func path(from position: Carets.Index, to offset: Int) -> Path {
-            Path(start: position, offset: offset - position.offset)
+        func path(from index: Carets.Index, to offset: Int) -> Path {
+            #warning("...")
+            fatalError()
+            Path(start: index, offset: offset - index.position.offset)
         }
                 
         func position(at offset: Int, append: Bool) -> Carets.Index {
@@ -178,4 +179,16 @@ import struct Sequences.Walkthrough
         
         return update({ $0.selection = lowerBound ..< upperBound })
     }
+}
+
+// MARK: - Interoperabilities & Utilities
+
+extension Field {
+    @usableFromInline typealias Position = TextFields.Position<Layout>
+    
+    @inlinable func positions(in offsets: Range<Int>) -> (lower: Position, upper: Position) {
+        #warning("...")
+        fatalError()
+    }
+    
 }

@@ -20,23 +20,23 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
 
     // MARK: Initializers
     
-    public init(value: Binding<Value>, style: Style) {
+    @inlinable public init(value: Binding<Value>, style: Style) {
         self.value = value
         self.style = style
     }
     
-    public init(value: Binding<Value>, style: () -> Style) {
+    @inlinable public init(value: Binding<Value>, style: () -> Style) {
         self.value = value
         self.style = style()
     }
 
     // MARK: UIViewRepresentable
     
-    public func makeCoordinator() -> Coordinator {
+    @inlinable public func makeCoordinator() -> Coordinator {
         Coordinator()
     }
     
-    public func makeUIView(context: Context) -> UITextField {
+    @inlinable public func makeUIView(context: Context) -> UITextField {
         let uiView = UITextField()
         
         // --------------------------------- //
@@ -53,7 +53,7 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
         return uiView
     }
     
-    public func updateUIView(_ uiView: UITextField, context: Context) {
+    @inlinable public func updateUIView(_ uiView: UITextField, context: Context) {
         context.coordinator.source = self
         context.coordinator.synchronize()
     }
@@ -79,15 +79,15 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
         
         // MARK: UITextFieldDelegate
         
-        public func textFieldDidBeginEditing(_ textField: UITextField) {
+        @inlinable public func textFieldDidBeginEditing(_ textField: UITextField) {
             synchronize()
         }
         
-        public func textFieldDidEndEditing(_ textField: UITextField, reason: UITextField.DidEndEditingReason) {
+        @inlinable public func textFieldDidEndEditing(_ textField: UITextField, reason: UITextField.DidEndEditingReason) {
             synchronize()
         }
         
-        public func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        public func textField(_ textField: UITextField, shouldChangeCharactersIn nsRange: NSRange, replacementString string: String) -> Bool {
             
             // --------------------------------- //
             
@@ -95,7 +95,8 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
             
             // --------------------------------- //
             
-            let range = cache.carets.indices(in: range)
+            #warning(".indices should not be used, will traverse from start to range, should use shortest path")
+            let range = cache.field.positions(in: nsRange.lowerBound ..< nsRange.upperBound)
             let input = Snapshot(string, only: .content)
                         
             // --------------------------------- //

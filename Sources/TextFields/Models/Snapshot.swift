@@ -91,8 +91,8 @@ public struct Snapshot: BidirectionalCollection, RangeReplaceableCollection, Exp
     }
 
     @inlinable public mutating func replaceSubrange<C: Collection>(_ range: Range<Index>, with elements: C) where C.Element == Element {
-        _characters.replaceSubrange(range.map(bounds: \.character), with: elements.lazy.map(\.character))
-        _attributes.replaceSubrange(range.map(bounds: \.attribute), with: elements.lazy.map(\.attribute))
+        _characters.replaceSubrange(range.lowerBound.character ..< range.upperBound.character, with: elements.lazy.map(\.character))
+        _attributes.replaceSubrange(range.lowerBound.attribute ..< range.upperBound.attribute, with: elements.lazy.map(\.attribute))
     }
         
     // MARK: Collection: Subscripts
@@ -103,7 +103,7 @@ public struct Snapshot: BidirectionalCollection, RangeReplaceableCollection, Exp
         }
     }
     
-    // MARK: Index
+    // MARK: Collection: Index
 
     public struct Index: Comparable {
         @usableFromInline let character: String.Index
