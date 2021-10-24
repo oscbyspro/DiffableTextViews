@@ -72,12 +72,20 @@ extension UITextField {
 extension UITextField {
     @usableFromInline typealias Position = TextFields.Position<UTF16>
     
-    #warning("...")
+    /// - Complexity: O(1).
+    @inlinable func first() -> Position {
+        .init(at: .zero)
+    }
+    
+    /// - Complexity: Unknown, either O(n) or O(1).
+    @inlinable func last() -> Position {
+        .init(at: offset(from: beginningOfDocument, to: endOfDocument))
+    }
+    
+    /// - Complexity: Unknown, either O(n) or O(1).
     @inlinable func position(at uiTextPosition: UITextPosition) -> Position {
         .init(at: offset(from: beginningOfDocument, to: uiTextPosition))
     }
 }
 
-
 #endif
-

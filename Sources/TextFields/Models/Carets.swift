@@ -23,6 +23,7 @@
         self.range = Position(at: 0) ..< Position(at: last.offset + 1)
     }
     
+    #warning("Remove this for a moment, to see where range can be provided.")
     @inlinable init(_ snapshot: Snapshot) {
         self.init(snapshot, last: Position(at: Layout.size(of: snapshot.characters)))
     }
@@ -113,18 +114,21 @@
             self.lhs = lhs
             self.rhs = rhs
         }
+        
+        // MARK: Utilities
+        
+        @inlinable var offset: Int {
+            position.offset
+        }
                 
         // MARK: Collection: Index
                 
         @inlinable static func < (lhs: Self, rhs: Self) -> Bool {
-            guard let a = lhs.rhs else { return false }
-            guard let b = rhs.rhs else { return  true }
-            
-            return a < b
+            lhs.offset < rhs.offset
         }
         
         @inlinable static func == (lhs: Self, rhs: Self) -> Bool {
-            lhs.lhs == rhs.lhs && lhs.rhs == rhs.rhs
+            lhs.offset == rhs.offset
         }
     }
 }

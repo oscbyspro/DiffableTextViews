@@ -87,7 +87,7 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
             synchronize()
         }
         
-        public func textField(_ textField: UITextField, shouldChangeCharactersIn nsRange: NSRange, replacementString string: String) -> Bool {
+        public func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
             
             // --------------------------------- //
             
@@ -95,8 +95,7 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
             
             // --------------------------------- //
             
-            #warning(".indices should not be used, will traverse from start to range, should use shortest path")
-            let range = cache.field.positions(in: nsRange.lowerBound ..< nsRange.upperBound)
+            let range = cache.field.indices(in: range)
             let input = Snapshot(string, only: .content)
                         
             // --------------------------------- //

@@ -18,7 +18,7 @@
     @inlinable init(at offset: Int) {
         self.offset = offset
     }
-
+    
     // MARK: Transformations
     
     @inlinable func after(_ character: Character) -> Self {

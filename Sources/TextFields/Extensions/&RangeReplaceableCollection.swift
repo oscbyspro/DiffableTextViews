@@ -8,13 +8,6 @@
 // MARK: - RangeReplaceableCollection
 
 extension RangeReplaceableCollection {
-    
-    // MARK: Initializers
-    
-    @inlinable init(size: Int) {
-        self.init()
-        reserveCapacity(size)
-    }
 
     // MARK: Transformations
     

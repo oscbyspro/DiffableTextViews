@@ -144,9 +144,9 @@ extension Snapshot {
     /// let reason = "¯\_(ツ)_/¯"
     /// ```
     ///
-    /// - NumericTextStyle's CPU usage doubles when it applies a suffix, unless this method is called.
+    /// - NumericTextStyle's CPU usage (with suffix) more than doubles without this method.
     ///
-    /// - Note: Should be called at most once, after all other changes have been made to this Snapshot.
+    /// - Note: Should be called at most once, and only after all other changes have been made.
     ///
     /// - Complexity: O(1) on average.
     @inlinable public mutating func complete() {

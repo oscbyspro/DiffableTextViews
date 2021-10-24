@@ -5,6 +5,7 @@
 //  Created by Oscar Byström Ericsson on 2021-09-27.
 //
 
+import struct Foundation.NSRange
 import struct Sequences.Walkthrough
 
 // MARK: - Field
@@ -27,17 +28,6 @@ import struct Sequences.Walkthrough
     @inlinable init(_ field: Carets, selection: Range<Carets.Index>) {
         self.carets = field
         self.selection = selection
-    }
-    
-    // MARK: Descriptions
-    
-    #warning("Fixme/remove.")
-    @inlinable func offsets16() -> Range<Int> {
-        fatalError()
-//        let start = carets.offset16(from: carets.startIndex, to: selection.lowerBound)
-//        let count = carets.offset16(from: selection.lowerBound, to: selection.upperBound)
-//
-//        return start ..< (start + count)
     }
     
     // MARK: Translate: To Carets
@@ -73,34 +63,7 @@ import struct Sequences.Walkthrough
     }
     
     @inlinable func configure(selection newValue: Range<Int>) -> Self {
-        typealias Path = (start: Carets.Index, offset: Int)
-        
-        var positions = [Carets.Index](size: 5)
-        positions.append(contentsOf: [carets.firstIndex, carets.lastIndex])
-        positions.append(contentsOf: [selection.lowerBound, selection.upperBound])
-        
-        func path(from index: Carets.Index, to offset: Int) -> Path {
-            #warning("...")
-            fatalError()
-            Path(start: index, offset: offset - index.position.offset)
-        }
-                
-        func position(at offset: Int, append: Bool) -> Carets.Index {
-            let paths = positions.map({ path(from: $0, to: offset) })
-            let shortest = paths.min(by: { abs($0.offset) < abs($1.offset) })!
-            let position = carets.index(shortest.start, offsetBy: shortest.offset)
-            
-            if append {
-                positions.append(position)
-            }
-            
-            return position
-        }
-        
-        let lowerBound = position(at: newValue.lowerBound, append: true)
-        let upperBound = position(at: newValue.upperBound, append: false)
-                        
-        return configure(selection: lowerBound ..< upperBound)
+       configure(selection: indices(in: newValue))
     }
     
     // MARK: Configure: Position
@@ -181,14 +144,66 @@ import struct Sequences.Walkthrough
     }
 }
 
-// MARK: - Interoperabilities & Utilities
+// MARK: - Indices, Shortest Path
 
 extension Field {
-    @usableFromInline typealias Position = TextFields.Position<Layout>
     
-    @inlinable func positions(in offsets: Range<Int>) -> (lower: Position, upper: Position) {
-        #warning("...")
-        fatalError()
+    @inlinable func indices(in range: NSRange) -> Range<Carets.Index> {
+        indices(in: range.lowerBound ..< range.upperBound)
     }
     
+    @inlinable func indices(in range: Range<Int>) -> Range<Carets.Index> {
+        
+        // --------------------------------- //
+        
+        var indices = [Carets.Index]()
+        indices.reserveCapacity(5)
+        indices += [carets.firstIndex, carets.endIndex, selection.lowerBound, selection.upperBound]
+        
+        // --------------------------------- //
+    
+        func index(at offset: Int, append: Bool) -> Carets.Index {
+            let shortestPath = indices.map({ Path($0, distance: offset) }).min()!
+            let index = carets.index(shortestPath.start, offsetBy: shortestPath.distance)
+            
+            if append {
+                indices.append(index)
+            }
+            
+            return index
+        }
+        
+        // --------------------------------- //
+        
+        let lowerBound = index(at: range.lowerBound, append: true)
+        let upperBound = index(at: range.upperBound, append: false)
+                        
+        // --------------------------------- //
+        
+        return lowerBound ..< upperBound
+        
+    }
+    
+    // MARK: Path
+    
+    @usableFromInline struct Path: Comparable {
+        
+        // MARK: Properties
+        
+        @usableFromInline let start: Carets.Index
+        @usableFromInline let distance: Int
+        
+        // MARK: Initializers
+        
+        @inlinable init(_ start: Carets.Index, distance: Int) {
+            self.start = start
+            self.distance = distance
+        }
+        
+        // MARK: Comparisons
+        
+        @inlinable static func < (lhs: Self, rhs: Self) -> Bool {
+            abs(lhs.distance) < abs(rhs.distance)
+        }
+    }
 }
