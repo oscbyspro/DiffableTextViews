@@ -95,10 +95,6 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
                         
             // --------------------------------- //
             
-            guard !lock.isLocked else { return false }
-                        
-            // --------------------------------- //
-            
             let offsets = Offset(at: nsRange.lowerBound) ..< Offset(at: nsRange.upperBound)
             let range = cache.field.indices(in: offsets)
             let input = Snapshot(string, only: .content)
@@ -155,10 +151,6 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
             
             // --------------------------------- //
             
-            guard !lock.isLocked else { return }
-            
-            // --------------------------------- //
-            
             var value = source.value.wrappedValue
             source.style.process(&value)
             
@@ -184,14 +176,14 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
         @inlinable func push() {
             
             // --------------------------------- //
-            
+                        
             lock.perform {
                 // lock is needed because setting a UITextFields's text
                 // also sets its selection to its last possible position
                 self.uiView.write(cache.snapshot.characters)
                 self.uiView.select(cache.field.selection.map(bounds: \.offset))
             }
-            
+                        
             // --------------------------------- //
             
             self.cache.edits = uiView.edits
