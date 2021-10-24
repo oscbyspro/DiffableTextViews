@@ -152,12 +152,10 @@ extension Field {
     // MARK: Indices: In Position Range
     
     @inlinable func indices(in range: Range<Position>) -> Range<Carets.Index> {
-        
-        // --------------------------------- //
-        
         var indices = [Carets.Index]()
         indices.reserveCapacity(5)
-        indices += [carets.firstIndex, carets.endIndex, selection.lowerBound, selection.upperBound]
+        indices.append(contentsOf: [carets.firstIndex,         carets.endIndex])
+        indices.append(contentsOf: [selection.lowerBound, selection.upperBound])
         
         // --------------------------------- //
     
@@ -180,8 +178,6 @@ extension Field {
         // --------------------------------- //
         
         return lowerBound ..< upperBound
-        
-        // --------------------------------- //
     }
     
     // MARK: Path
