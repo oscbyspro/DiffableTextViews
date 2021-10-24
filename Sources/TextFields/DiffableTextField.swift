@@ -55,12 +55,7 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
     
     @inlinable public func updateUIView(_ uiView: UIViewType, context: Context) {
         context.coordinator.source = self
-//        context.coordinator.synchronize()
-        
-        if  context.coordinator.pull() {
-            context.coordinator.push()
-        }
-        
+        context.coordinator.synchronize()
     }
     
     // MARK: Components
@@ -153,8 +148,7 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
         // MARK: Update
         
         @inlinable func synchronize() {
-            pull()
-            push()
+            if pull() { push() }
         }
         
         @inlinable @discardableResult func pull() -> Bool {
