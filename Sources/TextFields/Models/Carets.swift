@@ -7,7 +7,6 @@
 
 // MARK: - Carets
 
-#warning("Count optimizations were removed, remember to check whether they are still called.")
 @usableFromInline struct Carets<Layout: TextFields.Layout>: BidirectionalCollection {
     @usableFromInline typealias Position = TextFields.Position<Layout>
     
@@ -20,10 +19,9 @@
     
     @inlinable init(_ snapshot: Snapshot, last: Position) {
         self.snapshot = snapshot
-        self.range = Position(at: 0) ..< Position(at: last.offset + 1)
+        self.range = Position(at: 0) ..< Position(at: last.offset)
     }
     
-    #warning("Remove this for a moment, to see where range can be provided.")
     @inlinable init(_ snapshot: Snapshot) {
         self.init(snapshot, last: Position(at: Layout.size(of: snapshot.characters)))
     }
@@ -41,11 +39,11 @@
     // MARK: Collection: Traversals
     
     @inlinable func index(after i: Index) -> Index {
-        Index(at: i.position.after(snapshot.characters[i.rhs!.character]), lhs: i.rhs!, rhs: subindex(after: i.rhs!))
+        Index(at: i.position.after(character(at: i.rhs!.character)), lhs: i.rhs!, rhs: subindex(after: i.rhs!))
     }
     
     @inlinable func index(before i: Index) -> Index {
-        Index(at: i.position.before(snapshot.characters[i.lhs!.character]), lhs: subindex(before: i.lhs!), rhs: i.lhs!)
+        Index(at: i.position.before(character(at: i.lhs!.character)), lhs: subindex(before: i.lhs!), rhs: i.lhs!)
     }
     
     // MARK: Collection: Subscripts
@@ -54,6 +52,14 @@
         _read {
             yield Element(lhs: lhsSymbol(at: position.lhs), rhs: rhsSymbol(at: position.rhs))
         }
+    }
+    
+    // MARK: Helpers: Character
+    
+    @inlinable func character(at index: String.Index) -> Character? {
+        guard index < snapshot.characters.endIndex else { return nil }
+        
+        return snapshot.characters[index]
     }
     
     // MARK: Helpers: Subindex
@@ -124,11 +130,14 @@
         // MARK: Collection: Index
                 
         @inlinable static func < (lhs: Self, rhs: Self) -> Bool {
-            lhs.offset < rhs.offset
+            guard let a = lhs.rhs else { return false }
+            guard let b = rhs.rhs else { return  true }
+
+            return a < b
         }
         
         @inlinable static func == (lhs: Self, rhs: Self) -> Bool {
-            lhs.offset == rhs.offset
+            lhs.rhs == rhs.rhs
         }
     }
 }
@@ -154,6 +163,8 @@ extension Carets {
     }
     
     @inlinable var lastIndex: Index {
-        index(before: endIndex)
+        print(endIndex.offset)
+        print(index(before: endIndex))
+        return index(before: endIndex)
     }
 }

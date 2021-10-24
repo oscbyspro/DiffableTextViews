@@ -32,7 +32,7 @@ extension UITextField {
         guard let selection = selectedTextRange else { return }
         
         let start = position(from: selection.start, offset: changes.start)!
-        let end = position(from: selection.end, offset: changes.end)!
+        let end   = position(from: selection.end,   offset: changes.end)!
         
         self.selectedTextRange = textRange(from: start, to: end)!
     }
@@ -41,7 +41,7 @@ extension UITextField {
 
     @inlinable func range(in offsets: Range<Int>) -> UITextRange {
         let start = position(from: beginningOfDocument, offset: offsets.lowerBound)!
-        let end = position(from: start, offset: offsets.count)!
+        let end   = position(from: start,               offset: offsets.count)!
         
         return textRange(from: start, to: end)!
     }

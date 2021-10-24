@@ -130,14 +130,13 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
             
             // --------------------------------- //
 
-            #warning("UITextField will have to know from which side to caclulate offset.")
             guard let newValue = textField.selection() else { return }
             
+            // --------------------------------- //
+            
             let field = cache.field.configure(selection: newValue)
-            let offsets = field.offsets16()
-                        
-            let changesToLowerBound = offsets.lowerBound - newValue.lowerBound
-            let changesToUpperBound = offsets.upperBound - newValue.upperBound
+            let changesToLowerBound = field.selection.lowerBound.offset - newValue.lowerBound
+            let changesToUpperBound = field.selection.upperBound.offset - newValue.upperBound
             
             // --------------------------------- //
                                     
@@ -190,7 +189,7 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
                 // lock is needed because setting a UITextFields's text
                 // also sets its selection to its last possible position
                 self.uiView.setText(cache.snapshot.characters)
-                self.uiView.setSelection(cache.field.offsets16())
+                self.uiView.setSelection(cache.field.selection.map(bounds: \.offset))
             }
             
             // --------------------------------- //

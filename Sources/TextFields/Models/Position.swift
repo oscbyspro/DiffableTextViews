@@ -21,12 +21,20 @@
     
     // MARK: Transformations
     
-    @inlinable func after(_ character: Character) -> Self {
-        .init(at: offset + Layout.size(of: character))
+    @inlinable func after(_ character: Character?) -> Self {
+        guard let character = character else {
+            return self
+        }
+        
+        return .init(at: offset + Layout.size(of: character))
     }
     
-    @inlinable func before(_ character: Character) -> Self {
-        .init(at: offset - Layout.size(of: character))
+    @inlinable func before(_ character: Character?) -> Self {
+        guard let character = character else {
+            return self
+        }
+
+        return .init(at: offset - Layout.size(of: character))
     }
     
     // MARK: Comparisons
