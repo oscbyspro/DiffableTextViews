@@ -61,8 +61,13 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
     // MARK: Components
     
     public final class Coordinator: NSObject, UITextFieldDelegate {
-        @usableFromInline typealias Field = TextFields.Field<UTF16>
-        @usableFromInline typealias Carets = TextFields.Carets<UTF16>
+        @usableFromInline typealias Layout = UTF16
+        
+        @usableFromInline typealias Field  = TextFields.Field<Layout>
+        @usableFromInline typealias Carets = TextFields.Carets<Layout>
+        @usableFromInline typealias Offset = TextFields.Offset<Layout>
+        
+        // MARK: Properties
         
         @usableFromInline var uiView: Proxy!
         @usableFromInline var source: DiffableTextField!
@@ -95,12 +100,13 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
                         
             // --------------------------------- //
             
-            let range = cache.field.indices(in: (nsRange.lowerBound ..< nsRange.upperBound).map(bounds: Offset.init))
-            let input = Snapshot(string, only: .content)
+            let offets = Offset(at: nsRange.lowerBound) ..< Offset(at: nsRange.upperBound)
+            let range = cache.field.indices(in: offets)
+            let replacement = Snapshot(string, only: .content)
                         
             // --------------------------------- //
             
-            guard var snapshot = source.style.merge(cache.snapshot, with: input, in: range.map(bounds: \.rhs!)) else { return false }
+            guard var snapshot = source.style.merge(cache.snapshot, with: replacement, in: range.map(bounds: \.rhs!)) else { return false }
             source.style.process(&snapshot)
   
             guard var value = source.style.parse(snapshot) else { return false }
@@ -130,18 +136,13 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
             
             // --------------------------------- //
 
-            guard let newValue = uiView.selection() else { return }
-            
-            // --------------------------------- //
-            
-            let field = cache.field.configure(selection: newValue)
-            let changesToLowerBound = field.selection.lowerBound.offset - newValue.lowerBound
-            let changesToUpperBound = field.selection.upperBound.offset - newValue.upperBound
+            guard let offsets = uiView.selection() else { return }
+            let field = cache.field.configure(selection: offsets)
             
             // --------------------------------- //
                                     
             self.cache.field = field
-            self.uiView.select(changes: (changesToLowerBound, changesToUpperBound))
+            self.uiView.select(field.selection.map(bounds: \.offset))
         }
 
         // MARK: Update

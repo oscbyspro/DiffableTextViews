@@ -39,35 +39,32 @@ import UIKit
     // MARK: Selection
     
     @inlinable func selection() -> Range<Offset>? {
-        uiTextField.selectedTextRange.map(positions(in:))
+        uiTextField.selectedTextRange.map(offsets)
     }
     
     @inlinable func select(_ offsets: Range<Offset>) {
-        uiTextField.selectedTextRange = range(in: offsets)
+        uiTextField.selectedTextRange = positions(of: offsets)
     }
     
-    @inlinable func select(changes: (start: Offset, end: Offset)) {
-        guard let selection = uiTextField.selectedTextRange else { return }
-        
-        let start = uiTextField.position(from: selection.start, offset: changes.start.distance)!
-        let end   = uiTextField.position(from: selection.end,   offset:   changes.end.distance)!
-        
-        uiTextField.selectedTextRange = uiTextField.textRange(from: start, to: end)!
+    // MARK: Helpers: Range & Offset
+
+    /// - Complexity: O(1).
+    @inlinable func offsets(in bounds: UITextRange) -> Range<Offset> {
+        offset(at: bounds.start) ..< offset(at: bounds.end)
     }
     
-    // MARK: Helpers: Positions
-
-    @inlinable func positions(in bounds: UITextRange) -> Range<Offset> {
-        let start = uiTextField.offset(from: uiTextField.beginningOfDocument, to: bounds.start)
-        let count = uiTextField.offset(from: bounds.start,                to: bounds.end)
-        
-        return Offset(at: start) ..< Offset(at: start + count)
+    /// - Complexity: O(1).
+    @inlinable func offset(at position: UITextPosition) -> Offset {
+        .init(at: uiTextField.offset(from: uiTextField.beginningOfDocument, to: position))
     }
-
-    @inlinable func range(in positions: Range<Offset>) -> UITextRange {
-        let start = uiTextField.position(from: uiTextField.beginningOfDocument, offset: positions.lowerBound.distance)!
-        let end   = uiTextField.position(from: start, offset: positions.upperBound.distance - positions.lowerBound.distance)!
-        
-        return uiTextField.textRange(from: start, to: end)!
+    
+    /// - Complexity: O(1).
+    @inlinable func position(at offset: Offset) -> UITextPosition {
+        uiTextField.position(from: uiTextField.beginningOfDocument, offset: offset.distance)!
+    }
+    
+    /// - Complexity: O(1).
+    @inlinable func positions(of offsets: Range<Offset>) -> UITextRange {
+        uiTextField.textRange(from: position(at: offsets.lowerBound), to: position(at: offsets.upperBound))!
     }
 }
