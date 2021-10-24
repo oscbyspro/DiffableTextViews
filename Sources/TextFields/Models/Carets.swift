@@ -17,14 +17,9 @@
 
     // MARK: Initializers
     
-    @inlinable init(_ snapshot: Snapshot, last: Position) {
-        self.snapshot = snapshot
-        self.range = Position() ..< Position(at: last.offset)
-    }
-    
     @inlinable init(_ snapshot: Snapshot) {
-        print(1)
-        self.init(snapshot, last: Position(at: Layout.size(of: snapshot.characters)))
+        self.snapshot = snapshot
+        self.range = .origin ..< .max(in: snapshot.characters)
     }
     
     // MARK: Collection: Bounds
@@ -181,5 +176,4 @@ extension Carets {
             return indices[...start].reversed().first(where: { $0.offset <= destination }) ?? startIndex
         }
     }
-    
 }

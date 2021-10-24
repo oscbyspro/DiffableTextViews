@@ -15,8 +15,18 @@
     
     // MARK: Initializers
     
-    @inlinable init(at offset: Int = 0) {
+    @inlinable init(at offset: Int) {
         self.offset = offset
+    }
+    
+    // MARK: Initializers: Static
+    
+    @inlinable static var origin: Self {
+        .init(at: .zero)
+    }
+    
+    @inlinable static func max(in characters: String) -> Self {
+        .init(at: Layout.size(of: characters))
     }
     
     // MARK: Transformations

@@ -64,17 +64,17 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
         @usableFromInline typealias Field = TextFields.Field<UTF16>
         @usableFromInline typealias Carets = TextFields.Carets<UTF16>
         
-        @usableFromInline var uiView: SomeTextField!
+        @usableFromInline var uiView: Proxy!
         @usableFromInline var source: DiffableTextField!
 
-        @usableFromInline let lock = Lock()
+        @usableFromInline let lock  = Lock()
         @usableFromInline let cache = Cache()
                 
         // MARK: Setup
 
         @inlinable func connect(_ uiView: UIViewType) {
             uiView.delegate = self
-            self.uiView = SomeTextField(uiView)
+            self.uiView = Proxy(uiView)
         }
         
         // MARK: UITextFieldDelegate

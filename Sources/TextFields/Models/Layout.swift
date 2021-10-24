@@ -26,3 +26,8 @@ extension UTF16: Layout {
     @inlinable static func size(of character: Character) -> Int {  character.utf16.count }
     @inlinable static func size(of characters:   String) -> Int { characters.utf16.count }
 }
+
+extension UnicodeScalar: Layout {
+    @inlinable static func size(of character: Character) -> Int {  character.unicodeScalars.count }
+    @inlinable static func size(of characters:   String) -> Int { characters.unicodeScalars.count }
+}
