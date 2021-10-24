@@ -55,7 +55,12 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
     
     @inlinable public func updateUIView(_ uiView: UIViewType, context: Context) {
         context.coordinator.source = self
-        context.coordinator.synchronize()
+//        context.coordinator.synchronize()
+        
+        if  context.coordinator.pull() {
+            context.coordinator.push()
+        }
+        
     }
     
     // MARK: Components
@@ -116,7 +121,7 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
             // --------------------------------- //
             
             DispatchQueue.main.async {
-                // async processes special commands (like: option + delete) first
+                // async makes special commands (like: option + delete) process first
                 self.cache.value = value
                 self.cache.field = field
                 self.push(asynchronously: false)
@@ -127,7 +132,7 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
             return false
         }
 
-        public func textFieldDidChangeSelection(_ textField: UITextField) {
+        @inlinable public func textFieldDidChangeSelection(_ textField: UITextField) {
             
             // --------------------------------- //
             
@@ -152,7 +157,7 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
             push()
         }
         
-        @inlinable func pull() {
+        @inlinable @discardableResult func pull() -> Bool {
             
             // --------------------------------- //
             
@@ -161,7 +166,7 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
             
             // --------------------------------- //
             
-            guard !displays(value) else { return }
+            guard !displays(value) else { return false }
             
             // --------------------------------- //
             
@@ -176,11 +181,14 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
             
             self.cache.value = value
             self.cache.field = field
+            
+            // --------------------------------- //
+            
+            return true
         }
-        
-        #warning("Prevent unecessary duplicate call: calls twice per edit.")
-        @inlinable func push(asynchronously: Bool = true) {
-                        
+                 
+        @inlinable @discardableResult func push(asynchronously: Bool = true) -> Bool {
+                    
             // --------------------------------- //
                                     
             lock.perform {
@@ -200,6 +208,10 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
                 // async avoids view update loop
                 self.nonduplicate(update: &self.source.value.wrappedValue, with: self.cache.value)
             }
+            
+            // --------------------------------- //
+            
+            return true
         }
         
         // MARK: Update, Helpers
