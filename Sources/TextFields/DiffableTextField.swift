@@ -100,8 +100,8 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
                         
             // --------------------------------- //
             
-            let offets = Offset(at: nsRange.lowerBound) ..< Offset(at: nsRange.upperBound)
-            let range = cache.field.indices(in: offets)
+            let offsets = Offset(at: nsRange.lowerBound) ..< Offset(at: nsRange.upperBound)
+            let range = cache.field.indices(in: offsets)
             let input = Snapshot(string, only: .content)
             
             // --------------------------------- //
@@ -200,7 +200,7 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
             // --------------------------------- //
             
             DispatchQueue.main.async {
-                // updates asynchronously to avoid the view update cycle
+                // updating asynchronously avoids current update cycle
                 if  self.source.value.wrappedValue != self.cache.value {
                     self.source.value.wrappedValue  = self.cache.value
                 }

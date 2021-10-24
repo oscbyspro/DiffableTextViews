@@ -22,26 +22,31 @@ import UIKit
     
     // MARK: Getters
     
+    /// - Complexity: O(1).
     @inlinable var edits: Bool {
         uiTextField.isEditing
     }
     
     // MARK: Text
     
+    /// - Complexity: O(1).
     @inlinable var text: String {
         uiTextField.text!
     }
     
+    /// - Complexity: High.
     @inlinable func write(_ text: String) {
         uiTextField.text = text
     }
     
     // MARK: Selection
     
+    /// - Complexity: O(1).
     @inlinable func selection() -> Range<Offset>? {
         uiTextField.selectedTextRange.map(offsets)
     }
     
+    /// - Complexity: High.
     @inlinable func select(_ offsets: Range<Offset>) {
         uiTextField.selectedTextRange = positions(of: offsets)
     }
