@@ -131,18 +131,31 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
             
             // --------------------------------- //
             
-            print("textFieldDidChangeSelection", !lock.isLocked)
             guard !lock.isLocked else { return }
             
             // --------------------------------- //
 
+            #warning("...")
             guard let offsets = uiView.selection() else { return }
-            let field = cache.field.configure(selection: offsets)
             
             // --------------------------------- //
-                                    
+                        
+            let field = cache.field.configure(selection: offsets)
+            let selection = field.selection.map(bounds: \.offset)
+            
+            // --------------------------------- //
+            
             self.cache.field = field
-            self.uiView.select(field.selection.map(bounds: \.offset))
+            
+            // --------------------------------- //
+            
+            guard selection != offsets else { return }
+            
+            // --------------------------------- //
+            
+            lock.perform {
+                self.uiView.select(selection)
+            }
         }
 
         // MARK: Update
@@ -151,7 +164,7 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
             if pull() { push() }
         }
         
-        @inlinable @discardableResult func pull() -> Bool {
+        @inlinable func pull() -> Bool {
             
             // --------------------------------- //
             
@@ -181,31 +194,26 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
             return true
         }
                  
-        @inlinable @discardableResult func push(asynchronously: Bool = true) -> Bool {
+        @inlinable func push(asynchronously: Bool = true) {
                     
             // --------------------------------- //
                                     
             lock.perform {
-                // lock is needed because setting a UITextFields's text
-                // also sets its selection to its last possible position
+                // write and select both call textFieldDidChangeSelection(_:)
                 self.uiView.write(cache.snapshot.characters)
                 self.uiView.select(cache.field.selection.map(bounds: \.offset))
             }
             
             // --------------------------------- //
             
-            self.cache.edits = uiView.edits
-            
+            self.cache.edits = self.uiView.edits
+
             // --------------------------------- //
             
             perform(asynchronously: asynchronously) {
                 // async avoids view update loop
                 self.nonduplicate(update: &self.source.value.wrappedValue, with: self.cache.value)
             }
-            
-            // --------------------------------- //
-            
-            return true
         }
         
         // MARK: Update, Helpers

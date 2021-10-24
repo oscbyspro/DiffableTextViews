@@ -63,13 +63,17 @@ import struct Sequences.Walkthrough
         move(to: newValue).moveToContent()
     }
     
-    @inlinable func configure(selection newValue: Range<Offset>) -> Self {
-       configure(selection: indices(in: newValue))
+    @inlinable func configure(selection newValue: Carets.Index) -> Self {
+        configure(selection: newValue ..< newValue)
     }
     
-    // MARK: Configure: Position
+    // MARK: Configure: Offsets
     
-    @inlinable func configure(selection newValue: Carets.Index) -> Self {
+    @inlinable func configure(selection newValue: Range<Offset>) -> Self {
+        configure(selection: indices(in: newValue))
+    }
+    
+    @inlinable func configure(selection newValue: Offset) -> Self {
         configure(selection: newValue ..< newValue)
     }
     
