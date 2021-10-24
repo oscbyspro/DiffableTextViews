@@ -14,6 +14,7 @@ import struct Foundation.Decimal
 
 public enum NumericTextSchemeDecimal: NumericTextFloatScheme {    
     public typealias Number = Decimal
+    public typealias Style = Number.FormatStyle
     
     // MARK: Values
     
@@ -33,7 +34,7 @@ public enum NumericTextSchemeDecimal: NumericTextFloatScheme {
         .init(string: components.characters())
     }
     
-    @inlinable public static func style(_ locale: Locale, precision: Precision, separator: Separator) -> Number.FormatStyle {
+    @inlinable public static func style(_ locale: Locale, precision: Precision, separator: Separator) -> Style {
         .init(locale: locale).precision(precision).decimalSeparator(strategy: separator)
     }
 }

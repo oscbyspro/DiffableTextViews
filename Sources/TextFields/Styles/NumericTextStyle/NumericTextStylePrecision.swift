@@ -11,11 +11,11 @@ import enum Foundation.NumberFormatStyleConfiguration
 
 // MARK: - NumericTextPrecision
 
-public struct NumericTextStylePrecision<Style: NumericTextScheme> {
+public struct NumericTextStylePrecision<Scheme: NumericTextScheme> {
     @usableFromInline typealias Strategy = NumericTextPrecisionStrategy
     @usableFromInline typealias Defaults = NumericTextPrecisionDefaults
-    @usableFromInline typealias Total = NumericTextPrecisionTotal<Style>
-    @usableFromInline typealias Parts = NumberTextPrecisionParts<Style>
+    @usableFromInline typealias Total = NumericTextPrecisionTotal<Scheme>
+    @usableFromInline typealias Parts = NumberTextPrecisionParts<Scheme>
     
     // MARK: Properties
     
@@ -30,7 +30,7 @@ public struct NumericTextStylePrecision<Style: NumericTextScheme> {
     // MARK: Initializers: Defaults
     
     @inlinable public static var max: Self {
-        .max(Style.maxTotalDigits)
+        .max(Scheme.maxTotalDigits)
     }
         
     // MARK: Initializers: Total
@@ -44,7 +44,7 @@ public struct NumericTextStylePrecision<Style: NumericTextScheme> {
     }
 }
 
-extension NumericTextStylePrecision where Style: NumericTextFloatScheme {
+extension NumericTextStylePrecision where Scheme: NumericTextFloatScheme {
 
     // MARK: Initializers: Separate
     
@@ -65,11 +65,11 @@ extension NumericTextStylePrecision where Style: NumericTextFloatScheme {
     }
     
     @inlinable public static func max(integer: Int) -> Self {
-        .max(integer: integer, fraction: Style.maxTotalDigits - integer)
+        .max(integer: integer, fraction: Scheme.maxTotalDigits - integer)
     }
     
     @inlinable public static func max(fraction: Int) -> Self {
-        .max(integer: Style.maxTotalDigits - fraction, fraction: fraction)
+        .max(integer: Scheme.maxTotalDigits - fraction, fraction: fraction)
     }
 }
 
@@ -86,8 +86,8 @@ extension NumericTextStylePrecision {
     @inlinable func editableStyle(digits: (upper: Int, lower: Int)?) -> NumberFormatStyleConfiguration.Precision {
         let lowerLowerBound = digits?.lower ?? Defaults.lowerLowerBound
         
-        let upper =               1 ... Style.maxUpperDigits
-        let lower = lowerLowerBound ... Style.maxLowerDigits
+        let upper =               1 ... Scheme.maxUpperDigits
+        let lower = lowerLowerBound ... Scheme.maxLowerDigits
                 
         return .integerAndFractionLength(integerLimits: upper, fractionLimits: lower)
     }
@@ -109,7 +109,7 @@ extension NumericTextStylePrecision {
 
 // MARK: - Strategies: Total
 
-@usableFromInline struct NumericTextPrecisionTotal<Style: NumericTextScheme>: NumericTextPrecisionStrategy {
+@usableFromInline struct NumericTextPrecisionTotal<Scheme: NumericTextScheme>: NumericTextPrecisionStrategy {
 
     // MARK: Properties
     
@@ -118,7 +118,7 @@ extension NumericTextStylePrecision {
     // MARK: Initializers
     
     @inlinable init<R: RangeExpression>(total: R) where R.Bound == Int {
-        self.total = Self.limits(total, max: Style.maxTotalDigits)
+        self.total = Self.limits(total, max: Scheme.maxTotalDigits)
     }
     
     // MARK: Initializers: Helpers
@@ -140,7 +140,7 @@ extension NumericTextStylePrecision {
 
 // MARK: - Strategies: Separate
 
-@usableFromInline struct NumberTextPrecisionParts<Style: NumericTextScheme>: NumericTextPrecisionStrategy {
+@usableFromInline struct NumberTextPrecisionParts<Scheme: NumericTextScheme>: NumericTextPrecisionStrategy {
 
     // MARK: Properties
     
@@ -150,20 +150,20 @@ extension NumericTextStylePrecision {
     // MARK: Initializers
     
     @inlinable init<R0: RangeExpression, R1: RangeExpression>(upper: R0, lower: R1) where R0.Bound == Int, R1.Bound == Int {
-        self.upper = Self.limits(upper, max: Style.maxUpperDigits)
-        self.lower = Self.limits(lower, max: Style.maxLowerDigits)
+        self.upper = Self.limits(upper, max: Scheme.maxUpperDigits)
+        self.lower = Self.limits(lower, max: Scheme.maxLowerDigits)
         
-        precondition(self.lower.lowerBound + self.upper.lowerBound <= Style.maxTotalDigits, "Max precision lowerBound: \(Style.maxTotalDigits).")
+        precondition(self.lower.lowerBound + self.upper.lowerBound <= Scheme.maxTotalDigits, "Max precision lowerBound: \(Scheme.maxTotalDigits).")
     }
     
     @inlinable init<R: RangeExpression>(upper: R) where R.Bound == Int {
-        let upper = Self.limits(upper, max: Style.maxUpperDigits)
+        let upper = Self.limits(upper, max: Scheme.maxUpperDigits)
         
         self.init(upper: upper, lower: Defaults.lowerLowerBound...)
     }
     
     @inlinable init<R: RangeExpression>(lower: R) where R.Bound == Int {
-        let lower = Self.limits(lower, max: Style.maxLowerDigits)
+        let lower = Self.limits(lower, max: Scheme.maxLowerDigits)
         
         self.init(upper: Defaults.upperLowerBound..., lower: lower)
     }
@@ -182,7 +182,7 @@ extension NumericTextStylePrecision {
     
     @inlinable func editableValidation(digits: (upper: Int, lower: Int)) -> Bool {
         func validateTotal() -> Bool {
-            digits.upper + digits.lower <= Style.maxTotalDigits
+            digits.upper + digits.lower <= Scheme.maxTotalDigits
         }
         
         func validateParts() -> Bool {

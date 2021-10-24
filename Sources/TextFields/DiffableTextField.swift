@@ -24,7 +24,7 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
         self.value = value
         self.style = style
     }
-    
+
     @inlinable public init(value: Binding<Value>, style: () -> Style) {
         self.value = value
         self.style = style()
@@ -91,7 +91,10 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
             synchronize()
         }
         
+        #warning("FIXME: cursor does not move when when: Cmd + Del, Opt + Del.")
         @inlinable public func textField(_ textField: UITextField, shouldChangeCharactersIn nsRange: NSRange, replacementString string: String) -> Bool {
+            
+            print(nsRange)
                         
             // --------------------------------- //
             
@@ -100,7 +103,7 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
             let input = Snapshot(string, only: .content)
             
             // --------------------------------- //
-            
+
             guard var snapshot = source.style.merge(cache.snapshot, with: input, in: range.map(bounds: \.rhs!)) else { return false }
             source.style.process(&snapshot)
   
@@ -251,21 +254,6 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
                 self.isLocked = state
             }
         }
-    }
-}
-
-// MARK: - NumericTextStyle
-
-extension DiffableTextField {
-    
-    // MARK: Initializers
-    
-    @inlinable public init<T: NumericTextSchematic>(value: Binding<T>, style: T.NumericTextStyle) where Style == T.NumericTextStyle {
-        self.init(value: value, style: style)
-    }
-    
-    @inlinable public init<T: NumericTextSchematic>(value: Binding<T>, style: () -> T.NumericTextStyle) where Style == T.NumericTextStyle {
-        self.init(value: value, style: style)
     }
 }
 
