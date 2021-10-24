@@ -36,8 +36,8 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
         Coordinator()
     }
     
-    @inlinable public func makeUIView(context: Context) -> UITextField {
-        let uiView = UITextField()
+    @inlinable public func makeUIView(context: Context) -> UIViewType {
+        let uiView = UIViewType()
         
         // --------------------------------- //
         
@@ -53,7 +53,7 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
         return uiView
     }
     
-    @inlinable public func updateUIView(_ uiView: UITextField, context: Context) {
+    @inlinable public func updateUIView(_ uiView: UIViewType, context: Context) {
         context.coordinator.source = self
         context.coordinator.synchronize()
     }
@@ -87,14 +87,15 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
             synchronize()
         }
         
+        @inlinable public func textFieldDidEndEditing(_ textField: UITextField) {
+            synchronize()
+        }
+        
         @inlinable public func textFieldDidEndEditing(_ textField: UITextField, reason: UITextField.DidEndEditingReason) {
             synchronize()
         }
         
-        #warning("FIXME: cursor does not move when when: Cmd + Del, Opt + Del.")
         @inlinable public func textField(_ textField: UITextField, shouldChangeCharactersIn nsRange: NSRange, replacementString string: String) -> Bool {
-            
-            print(nsRange)
                         
             // --------------------------------- //
             
@@ -110,26 +111,27 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
             guard var value = source.style.parse(snapshot) else { return false }
             source.style.process(&value)
                         
-            let field = cache.field.configure(selection: range.upperBound).translate(to: snapshot)
+            let field = cache.field.configure(selection: range.lowerBound).translate(to: snapshot)
             
             // --------------------------------- //
-
-            self.cache.value = value
-            self.cache.field = field
             
-            // --------------------------------- //
-                        
-            push()
+            DispatchQueue.main.async {
+                // async processes special commands (like: option + delete) first
+                self.cache.value = value
+                self.cache.field = field
+                self.push(asynchronously: false)
+            }
                                     
             // --------------------------------- //
                         
             return false
         }
-        
+
         public func textFieldDidChangeSelection(_ textField: UITextField) {
             
             // --------------------------------- //
             
+            print("textFieldDidChangeSelection", !lock.isLocked)
             guard !lock.isLocked else { return }
             
             // --------------------------------- //
@@ -176,28 +178,27 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
             self.cache.field = field
         }
         
-        @inlinable func push() {
-            
-            // --------------------------------- //
+        #warning("Prevent unecessary duplicate call: calls twice per edit.")
+        @inlinable func push(asynchronously: Bool = true) {
                         
+            // --------------------------------- //
+                                    
             lock.perform {
                 // lock is needed because setting a UITextFields's text
                 // also sets its selection to its last possible position
                 self.uiView.write(cache.snapshot.characters)
                 self.uiView.select(cache.field.selection.map(bounds: \.offset))
             }
-                        
+            
             // --------------------------------- //
             
             self.cache.edits = uiView.edits
             
             // --------------------------------- //
             
-            DispatchQueue.main.async {
-                // updating asynchronously avoids current update cycle
-                if  self.source.value.wrappedValue != self.cache.value {
-                    self.source.value.wrappedValue  = self.cache.value
-                }
+            perform(asynchronously: asynchronously) {
+                // async avoids view update loop
+                self.nonduplicate(update: &self.source.value.wrappedValue, with: self.cache.value)
             }
         }
         
@@ -209,6 +210,14 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
         
         @inlinable func snapshot(_ value: Value) -> Snapshot {
             uiView.edits ? source.style.snapshot(value) : source.style.showcase(value)
+        }
+
+        @inlinable func nonduplicate(update storage: inout Value, with newValue: Value) {
+            if storage != newValue { storage = newValue }
+        }
+        
+        @inlinable func perform(asynchronously: Bool, action: @escaping () -> Void) {
+            if asynchronously { DispatchQueue.main.async(execute: action) } else { action() }
         }
         
         // MARK: Cache
