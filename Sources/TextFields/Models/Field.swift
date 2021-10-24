@@ -145,13 +145,13 @@ import struct Sequences.Walkthrough
     }
 }
 
-// MARK: - Indices, Shortest Path
+// MARK: - Offsets
 
 extension Field {
     
-    // MARK: Indices: In Position Range
+    // MARK: Indices: In Offsets
     
-    @inlinable func indices(in range: Range<Offset>) -> Range<Carets.Index> {
+    @inlinable func indices(in offsets: Range<Offset>) -> Range<Carets.Index> {
         var indices = [Carets.Index]()
         indices.reserveCapacity(5)
         indices.append(contentsOf: [carets.firstIndex,         carets.endIndex])
@@ -161,14 +161,14 @@ extension Field {
     
         func index(at offset: Offset) -> Carets.Index {
             let shortestPath = indices.map({ Path($0, offset: offset) }).min()!
-            return carets.index(start: shortestPath.start, offset: shortestPath.offset)
+            return carets.index(start: shortestPath.origin, offset: shortestPath.offset)
         }
         
         // --------------------------------- //
         
-        let lowerBound = index(at: range.lowerBound)
+        let lowerBound = index(at: offsets.lowerBound)
         indices.append(lowerBound)
-        let upperBound = index(at: range.upperBound)
+        let upperBound = index(at: offsets.upperBound)
                         
         // --------------------------------- //
         
@@ -181,13 +181,13 @@ extension Field {
         
         // MARK: Properties
         
-        @usableFromInline let start: Carets.Index
+        @usableFromInline let origin: Carets.Index
         @usableFromInline let offset: Offset
         
         // MARK: Initializers
         
-        @inlinable init(_ start: Carets.Index, offset: Offset) {
-            self.start = start
+        @inlinable init(_ origin: Carets.Index, offset: Offset) {
+            self.origin = origin
             self.offset = offset
         }
         
