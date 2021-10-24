@@ -157,9 +157,11 @@ extension Carets {
     }
 }
 
-// MARK: - Position
+// MARK: - Offset
 
 extension Carets {
+    
+    // MARK: Index, Stride
     
     @inlinable func index(start: Index, offset: Offset) -> Index {
         let destination = start.offset.distance + offset.distance

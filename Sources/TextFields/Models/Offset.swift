@@ -53,7 +53,7 @@
         lhs.distance < rhs.distance
     }
     
-    // MARK: Calculations
+    // MARK: Arithmetics
     
     @inlinable static func + (lhs: Self, rhs: Self) -> Self {
         .init(at: lhs.distance + rhs.distance)
