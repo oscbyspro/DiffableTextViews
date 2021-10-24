@@ -19,10 +19,11 @@
     
     @inlinable init(_ snapshot: Snapshot, last: Position) {
         self.snapshot = snapshot
-        self.range = Position(at: 0) ..< Position(at: last.offset)
+        self.range = Position() ..< Position(at: last.offset)
     }
     
     @inlinable init(_ snapshot: Snapshot) {
+        print(1)
         self.init(snapshot, last: Position(at: Layout.size(of: snapshot.characters)))
     }
     
@@ -142,7 +143,7 @@
     }
 }
 
-// MARK: - Collection: Nonempty
+// MARK: - Is Never Empty
 
 extension Carets {
     
@@ -163,8 +164,22 @@ extension Carets {
     }
     
     @inlinable var lastIndex: Index {
-        print(endIndex.offset)
-        print(index(before: endIndex))
-        return index(before: endIndex)
+        index(before: endIndex)
     }
+}
+
+// MARK: - Position
+
+extension Carets {
+    
+    @inlinable func index(_ start: Index, offsetBy stride: Position) -> Index {
+        let destination = start.position.offset + stride.offset
+        
+        if stride.offset >= 0 {
+            return indices[start...].first(where: { $0.offset >= destination }) ?? endIndex
+        } else {
+            return indices[...start].reversed().first(where: { $0.offset <= destination }) ?? startIndex
+        }
+    }
+    
 }

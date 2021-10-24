@@ -141,15 +141,11 @@ extension NumericTextStyle {
     }
     
     @inlinable public func showcase(_ value: Style.Number) -> Snapshot {
-        let style = displayableStyle()
-        
-        return snapshot(style.format(value))
+        snapshot(displayableStyle().format(value))
     }
     
     @inlinable public func snapshot(_ value: Style.Number) -> Snapshot {
-        let style = editableStyle()
-        
-        return snapshot(style.format(value))
+        snapshot(editableStyle().format(value))
     }
     
     // MARK: Merge

@@ -64,7 +64,7 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
         @usableFromInline typealias Field = TextFields.Field<UTF16>
         @usableFromInline typealias Carets = TextFields.Carets<UTF16>
         
-        @usableFromInline var uiView: UITextField!
+        @usableFromInline var uiView: SomeTextField!
         @usableFromInline var source: DiffableTextField!
 
         @usableFromInline let lock = Lock()
@@ -73,8 +73,8 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
         // MARK: Setup
 
         @inlinable func connect(_ uiView: UIViewType) {
-            self.uiView = uiView
-            self.uiView.delegate = self
+            uiView.delegate = self
+            self.uiView = SomeTextField(uiView)
         }
         
         // MARK: UITextFieldDelegate
@@ -87,15 +87,15 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
             synchronize()
         }
         
-        public func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
-            
+        public func textField(_ textField: UITextField, shouldChangeCharactersIn nsRange: NSRange, replacementString string: String) -> Bool {
+                        
             // --------------------------------- //
             
             guard !lock.isLocked else { return false }
-            
+                        
             // --------------------------------- //
             
-            let range = cache.field.indices(in: range)
+            let range = cache.field.indices(in: (nsRange.lowerBound ..< nsRange.upperBound).map(bounds: Position.init))
             let input = Snapshot(string, only: .content)
                         
             // --------------------------------- //
@@ -130,18 +130,18 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
             
             // --------------------------------- //
 
-            guard let newValue = textField.selection() else { return }
+            guard let newValue = uiView.selection() else { return }
             
             // --------------------------------- //
             
             let field = cache.field.configure(selection: newValue)
-            let changesToLowerBound = field.selection.lowerBound.offset - newValue.lowerBound
-            let changesToUpperBound = field.selection.upperBound.offset - newValue.upperBound
+            let changesToLowerBound = field.selection.lowerBound.offset - newValue.lowerBound.offset
+            let changesToUpperBound = field.selection.upperBound.offset - newValue.upperBound.offset
             
             // --------------------------------- //
                                     
             self.cache.field = field
-            self.uiView.setSelection(changes: (changesToLowerBound, changesToUpperBound))
+            self.uiView.select(changes: (changesToLowerBound, changesToUpperBound))
         }
 
         // MARK: Update
@@ -188,13 +188,13 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
             lock.perform {
                 // lock is needed because setting a UITextFields's text
                 // also sets its selection to its last possible position
-                self.uiView.setText(cache.snapshot.characters)
-                self.uiView.setSelection(cache.field.selection.map(bounds: \.offset))
+                self.uiView.write(cache.snapshot.characters)
+                self.uiView.select(cache.field.selection.map(bounds: \.position))
             }
             
             // --------------------------------- //
             
-            self.cache.edits = uiView.isEditing
+            self.cache.edits = uiView.edits
             
             // --------------------------------- //
             
@@ -209,11 +209,11 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
         // MARK: Update, Helpers
         
         @inlinable func displays(_ value: Value) -> Bool {
-            cache.value == value && cache.edits == uiView.isEditing
+            cache.value == value && cache.edits == uiView.edits
         }
         
         @inlinable func snapshot(_ value: Value) -> Snapshot {
-            uiView.isEditing ? source.style.snapshot(value) : source.style.showcase(value)
+            uiView.edits ? source.style.snapshot(value) : source.style.showcase(value)
         }
         
         // MARK: Cache

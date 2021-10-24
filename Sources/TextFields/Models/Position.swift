@@ -15,7 +15,7 @@
     
     // MARK: Initializers
     
-    @inlinable init(at offset: Int) {
+    @inlinable init(at offset: Int = 0) {
         self.offset = offset
     }
     

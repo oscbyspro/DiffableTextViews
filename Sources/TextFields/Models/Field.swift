@@ -12,6 +12,7 @@ import struct Sequences.Walkthrough
 
 @usableFromInline struct Field<Layout: TextFields.Layout> {
     @usableFromInline typealias Carets = TextFields.Carets<Layout>
+    @usableFromInline typealias Position = TextFields.Position<Layout>
     
     // MARK: Properties
     
@@ -62,7 +63,7 @@ import struct Sequences.Walkthrough
         move(to: newValue).moveToContent()
     }
     
-    @inlinable func configure(selection newValue: Range<Int>) -> Self {
+    @inlinable func configure(selection newValue: Range<Position>) -> Self {
        configure(selection: indices(in: newValue))
     }
     
@@ -148,11 +149,9 @@ import struct Sequences.Walkthrough
 
 extension Field {
     
-    @inlinable func indices(in range: NSRange) -> Range<Carets.Index> {
-        indices(in: range.lowerBound ..< range.upperBound)
-    }
+    // MARK: Indices: In Position Range
     
-    @inlinable func indices(in range: Range<Int>) -> Range<Carets.Index> {
+    @inlinable func indices(in range: Range<Position>) -> Range<Carets.Index> {
         
         // --------------------------------- //
         
@@ -162,10 +161,10 @@ extension Field {
         
         // --------------------------------- //
     
-        func index(at offset: Int, append: Bool) -> Carets.Index {
-            let shortestPath = indices.map({ Path($0, distance: offset) }).min()!
+        func index(at position: Position, append: Bool) -> Carets.Index {
+            let shortestPath = indices.map({ Path($0, distance: position) }).min()!
             let index = carets.index(shortestPath.start, offsetBy: shortestPath.distance)
-            
+                        
             if append {
                 indices.append(index)
             }
@@ -182,6 +181,7 @@ extension Field {
         
         return lowerBound ..< upperBound
         
+        // --------------------------------- //
     }
     
     // MARK: Path
@@ -191,11 +191,11 @@ extension Field {
         // MARK: Properties
         
         @usableFromInline let start: Carets.Index
-        @usableFromInline let distance: Int
+        @usableFromInline let distance: Position
         
         // MARK: Initializers
         
-        @inlinable init(_ start: Carets.Index, distance: Int) {
+        @inlinable init(_ start: Carets.Index, distance: Position) {
             self.start = start
             self.distance = distance
         }
@@ -203,7 +203,7 @@ extension Field {
         // MARK: Comparisons
         
         @inlinable static func < (lhs: Self, rhs: Self) -> Bool {
-            abs(lhs.distance) < abs(rhs.distance)
+            abs(lhs.distance.offset) < abs(rhs.distance.offset)
         }
     }
 }
