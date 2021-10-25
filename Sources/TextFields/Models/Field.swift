@@ -5,7 +5,6 @@
 //  Created by Oscar Byström Ericsson on 2021-09-27.
 //
 
-import struct Foundation.NSRange
 import struct Sequences.Walkthrough
 
 // MARK: - Field

@@ -84,7 +84,7 @@ public struct NumericTextComponents {
     
     @frozen public struct Digits {
         @usableFromInline static let zero = "0"
-        @usableFromInline static let set = Set<Character>(zero + "123456789")
+        @usableFromInline static let set = Set<Character>("0123456789")
         
         // MARK: Properties
         

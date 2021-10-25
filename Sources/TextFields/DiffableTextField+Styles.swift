@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-// MARK: - DiffableTextField + NumericTextStyle
+// MARK: - NumericTextStyle
 
 public extension DiffableTextField {
     
