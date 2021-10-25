@@ -54,29 +54,22 @@ public struct NumericTextStyle<Scheme: NumericTextScheme>: DiffableTextStyle {
     }
 }
 
-// MARK: - Formats
+// MARK: - Format
 
 extension NumericTextStyle {
     
-    // MARK: Displayable
+    // MARK: Styles
     
     @inlinable func displayableStyle() -> Scheme.FormatStyle {
-        let precision: Scheme.Precision = precision.displayableStyle()
-
-        return Scheme.style(locale, precision: precision, separator: .automatic)
+        Scheme.style(locale, precision: precision.displayableStyle(), separator: .automatic)
     }
-    
-    // MARK: Editable
-    
+        
     @inlinable func editableStyle() -> Scheme.FormatStyle {
         Scheme.style(locale, precision: precision.editableStyle(), separator: .automatic)
     }
     
     @inlinable func editableStyle(digits: (upper: Int, lower: Int), separator: Bool) -> Scheme.FormatStyle {
-        let precision: Scheme.Precision = precision.editableStyle(digits)
-        let separator: Scheme.Separator = separator ? .always : .automatic
-
-        return Scheme.style(locale, precision: precision, separator: separator)
+        Scheme.style(locale, precision: precision.editableStyle(digits), separator: separator ? .always : .automatic)
     }
 }
 
@@ -180,7 +173,6 @@ extension NumericTextStyle {
         guard values.editableValidation(value) else { return nil }
         
         let style = editableStyle(digits: digits, separator: components.separator != nil)
-        print(value, components.integers.count, components.integers.characters)
         var characters = style.format(value)
                 
         if let sign = components.sign, !characters.hasPrefix(sign.characters) {
@@ -192,7 +184,7 @@ extension NumericTextStyle {
     
     // MARK: Helpers, Characters
     
-    @inlinable func snapshot(_ _characters: String) -> Snapshot {
+    @inlinable func snapshot(_ characters: String) -> Snapshot {
         var snapshot = Snapshot()
             
         // --------------------------------- //
@@ -202,7 +194,7 @@ extension NumericTextStyle {
             snapshot.append(.prefix(" "))
         }
         
-        for character in _characters {
+        for character in characters {
             if Components.Digits.set.contains(character) {
                 snapshot.append(.content(character))
             } else if groupingSeparator.contains(character) {
