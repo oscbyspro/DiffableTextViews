@@ -76,11 +76,6 @@ public extension NumericTextFloatScheme {
     @inlinable static var maxLowerDigits: Int { maxTotalDigits }
 }
 
-public extension NumericTextFloatScheme where Number: FloatingPoint {
-    @inlinable static var min: Number { -.greatestFiniteMagnitude }
-    @inlinable static var max: Number {  .greatestFiniteMagnitude }
-}
-
 public extension NumericTextFloatScheme where FormatStyle == FloatingPointFormatStyle<Number> {
     @inlinable static func style(_ locale: Locale, precision: Precision, separator: Separator) -> FormatStyle {
         .init(locale: locale).precision(precision).decimalSeparator(strategy: separator)

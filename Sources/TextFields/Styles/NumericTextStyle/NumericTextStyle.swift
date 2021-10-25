@@ -12,6 +12,8 @@ import struct Foundation.Locale
 // MARK: - NumericTextStyle
 
 /// Formats text and number.
+///
+/// - Performance: It can easily format 1000+ digits.
 public struct NumericTextStyle<Scheme: NumericTextScheme>: DiffableTextStyle {
     @usableFromInline typealias Components = NumericTextComponents
     @usableFromInline typealias Configuration = NumericTextConfiguration
