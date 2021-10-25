@@ -27,7 +27,7 @@ public enum NumericTextSchemeDecimal: NumericTextFloatScheme {
  
     @inlinable public static var maxTotalDigits: Int { 38 }
     
-    // MARK: Style
+    // MARK: Components
     
     @inlinable public static func number(_ components: NumericTextComponents) -> Number? {
         .init(string: components.characters())

@@ -26,8 +26,8 @@ public enum NumericTextSchemeFloat16: NumericTextFloatScheme {
     
     @inlinable public static var maxTotalDigits: Int { 3 }
 
-    // MARK: Style
-    
+    // MARK: Components
+
     @inlinable public static func number(_ components: NumericTextComponents) -> Number? {
         .init(components.characters())
     }
