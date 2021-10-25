@@ -96,9 +96,12 @@ extension NumericTextStylePrecision {
     }
     
     @inlinable func editableStyle(_ digits: NumberOfDigits) -> NumberFormatStyleConfiguration.Precision {
-        let upper = Defaults.upperLowerBound...(Swift.max(Defaults.upperLowerBound, digits.upper))
-        let lower = Defaults.lowerLowerBound...(digits.lower)
-
+        let upperUpperBound = Swift.max(Defaults.upperLowerBound, digits.upper)
+        let lowerLowerBound = Swift.max(Defaults.lowerLowerBound, digits.lower)
+                
+        let upper = Defaults.upperLowerBound...upperUpperBound
+        let lower =          lowerLowerBound...lowerLowerBound
+        
         return .integerAndFractionLength(integerLimits: upper, fractionLimits: lower)
     }
 }

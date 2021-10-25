@@ -182,7 +182,7 @@ extension NumericTextStyle {
         
         guard let value = value(components) else { return nil }
         guard values.editableValidation(value) else { return nil }
-                
+        
         let style = editableStyle(digits: digits, separator: components.separator != nil)
         var characters = style.format(value)
                 
