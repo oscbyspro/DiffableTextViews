@@ -5,6 +5,8 @@
 //  Created by Oscar Byström Ericsson on 2021-10-19.
 //
 
+#if os(iOS)
+
 import Foundation
 
 // MARK: - NumericTextStyleScheme
@@ -72,6 +74,8 @@ public extension NumericTextFloatScheme {
 // MARK: - NumericTextSchematic
 
 public protocol NumericTextSchematic {
-    associatedtype NumericTextScheme: TextFields.NumericTextScheme where NumericTextScheme.Number == Self
-    typealias      NumericTextStyle = TextFields.NumericTextStyle<NumericTextScheme>
+    associatedtype NumericTextScheme: TextViews.NumericTextScheme where NumericTextScheme.Number == Self
+    typealias      NumericTextStyle = TextViews.NumericTextStyle<NumericTextScheme>
 }
+
+#endif

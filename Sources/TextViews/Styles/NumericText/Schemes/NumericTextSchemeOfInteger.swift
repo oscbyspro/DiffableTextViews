@@ -5,6 +5,8 @@
 //  Created by Oscar Byström Ericsson on 2021-10-25.
 //
 
+#if os(iOS)
+
 import struct Foundation.Locale
 import struct Foundation.IntegerFormatStyle
 
@@ -114,3 +116,5 @@ extension UInt64: NumericTextSchemeOfIntegerSchematic {
         Int64.maxSignificands
     }
 }
+
+#endif

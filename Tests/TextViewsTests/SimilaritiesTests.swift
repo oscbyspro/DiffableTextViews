@@ -6,7 +6,7 @@
 //
 
 import XCTest
-@testable import struct TextFields.Similarities
+@testable import struct TextViews.Similarities
 
 // MARK: - Inspection
 

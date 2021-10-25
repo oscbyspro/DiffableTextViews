@@ -5,6 +5,8 @@
 //  Created by Oscar Byström Ericsson on 2021-10-18.
 //
 
+#if os(iOS)
+
 import struct Foundation.Locale
 import struct Foundation.Decimal
 
@@ -43,3 +45,5 @@ public enum NumericTextSchemeDecimal: NumericTextFloatScheme {
 extension NumericTextSchemeDecimal.Number: NumericTextSchematic {
     public typealias NumericTextScheme = NumericTextSchemeDecimal
 }
+
+#endif

@@ -31,23 +31,20 @@ struct Item {
 
 // MARK: Source
 
-let TextFields = Item(name: "TextFields")
-
-// MARK: Dependencies
-
+let TextViews = Item(name: "TextViews")
 let Sequences = Item(name: "Sequences")
 
 // MARK: - Package
 
 let package = Package(
-    name: "TextFields",
+    name: TextViews.name,
     platforms: [
         .iOS(.v15),
     ],
     products: [
         .library(
-            name: TextFields.name,
-            targets: [TextFields.name]),
+            name: TextViews.name,
+            targets: [TextViews.name]),
     ],
     dependencies: [
         .package(
@@ -56,10 +53,10 @@ let package = Package(
     ],
     targets: [
         .target(
-            name: TextFields.name,
+            name: TextViews.name,
             dependencies: [Sequences.dependency]),
         .testTarget(
-            name: TextFields.tests,
-            dependencies: [TextFields.dependency])
+            name: TextViews.tests,
+            dependencies: [TextViews.dependency])
     ]
 )

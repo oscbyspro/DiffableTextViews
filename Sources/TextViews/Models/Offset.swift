@@ -7,7 +7,7 @@
 
 // MARK: - Offset
 
-@usableFromInline struct Offset<Layout: TextFields.Layout>: Equatable, Comparable {
+@usableFromInline struct Offset<Layout: TextViews.Layout>: Equatable, Comparable {
 
     // MARK: Properties
     

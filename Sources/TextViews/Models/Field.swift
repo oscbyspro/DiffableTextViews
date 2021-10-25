@@ -9,9 +9,9 @@ import struct Sequences.Walkthrough
 
 // MARK: - Field
 
-@usableFromInline struct Field<Layout: TextFields.Layout> {
-    @usableFromInline typealias Carets = TextFields.Carets<Layout>
-    @usableFromInline typealias Offset = TextFields.Offset<Layout>
+@usableFromInline struct Field<Layout: TextViews.Layout> {
+    @usableFromInline typealias Carets = TextViews.Carets<Layout>
+    @usableFromInline typealias Offset = TextViews.Offset<Layout>
     
     // MARK: Properties
     

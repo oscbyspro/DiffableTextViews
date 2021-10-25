@@ -5,6 +5,8 @@
 //  Created by Oscar Byström Ericsson on 2021-10-19.
 //
 
+#if os(iOS)
+
 import struct Foundation.Locale
 
 // MARK: - NumericTextStyle
@@ -296,3 +298,5 @@ extension NumericTextStyle {
         components.toggleSign(with: sign)
     }
 }
+
+#endif

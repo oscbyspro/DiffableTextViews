@@ -5,6 +5,8 @@
 //  Created by Oscar Byström Ericsson on 2021-09-26.
 //
 
+#if os(iOS)
+
 import UIKit
 
 // MARK: - Proxy
@@ -14,7 +16,7 @@ import UIKit
 /// - UITextField.text is never nil.
 /// - UITextField.selectedTextRange is never nil
 @usableFromInline final class Proxy {
-    @usableFromInline typealias Offset = TextFields.Offset<UTF16>
+    @usableFromInline typealias Offset = TextViews.Offset<UTF16>
     
     // MARK: Properties
     
@@ -79,3 +81,5 @@ import UIKit
         uiTextField.textRange(from: position(at: offsets.lowerBound), to: position(at: offsets.upperBound))!
     }
 }
+
+#endif

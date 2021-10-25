@@ -5,6 +5,8 @@
 //  Created by Oscar Byström Ericsson on 2021-10-18.
 //
 
+#if os(iOS)
+
 // MARK: - NumericTextStyleValues
 
 public struct NumericTextStyleValues<Scheme: NumericTextScheme> {
@@ -78,3 +80,5 @@ public struct NumericTextStyleValues<Scheme: NumericTextScheme> {
         Swift.min(min, Self.zero) <= value && value <= Swift.max(Self.zero, max)
     }
 }
+
+#endif

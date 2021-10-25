@@ -5,6 +5,8 @@
 //  Created by Oscar Byström Ericsson on 2021-10-25.
 //
 
+#if os(iOS)
+
 import struct Foundation.Locale
 import struct Foundation.FloatingPointFormatStyle
 
@@ -68,3 +70,5 @@ extension Float64: NumericTextSchemeOfFloatSchematic {
     @inlinable public static var maxLosslessValue: Self { 999_999_999_999_999 }
     @inlinable public static var maxLosslessSignificands: Int { 15 }
 }
+
+#endif

@@ -5,6 +5,8 @@
 //  Created by Oscar Byström Ericsson on 2021-10-24.
 //
 
+#if os(iOS)
+
 import SwiftUI
 
 // MARK: - NumericTextStyle
@@ -21,3 +23,5 @@ public extension DiffableTextField {
         self.init(value: value, style: style)
     }
 }
+
+#endif
