@@ -11,8 +11,8 @@ import struct Foundation.FloatingPointFormatStyle
 
 /// NumericTextSchemeFloat64.
 ///
-/// - abs == 2 ^ (significandBitCount + 1)
-/// - maxTotalDigits = String(describing: abs).count
+/// - 8, maxTotalDigits == String(describing: abs).count
+/// - 16777216, abs == 2 ^ (Number.significandBitCount + 1)
 public enum NumericTextSchemeFloat32: NumericTextFloatScheme {
     public typealias Number = Float32
     public typealias FormatStyle = FloatingPointFormatStyle<Number>
