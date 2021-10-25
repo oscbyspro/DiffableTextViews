@@ -7,6 +7,8 @@
 
 import UIKit
 
+// MARK: - Proxy
+
 /// An affordance layer wrapping a UITextField object.
 ///
 /// - UITextField.text is never nil.

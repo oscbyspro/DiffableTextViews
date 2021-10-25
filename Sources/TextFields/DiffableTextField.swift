@@ -131,7 +131,6 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
             
             // --------------------------------- //
             
-            print("textFieldDidChangeSelection:", !lock.isLocked)
             guard !lock.isLocked else { return }
             
             // --------------------------------- //
