@@ -40,6 +40,7 @@ public protocol NumericTextScheme {
 // MARK: - Default
 
 public extension NumericTextScheme {
+    @inlinable static var isFloat:   Bool { maxLowerDigits != 0 }
     @inlinable static var isInteger: Bool { maxLowerDigits == 0 }
 }
 
@@ -48,7 +49,6 @@ public extension NumericTextScheme {
 public extension NumericTextScheme where Number: Numeric {
     @inlinable static var zero: Number { .zero }
 }
-
 
 // MARK: - NumericTextIntegerScheme
 

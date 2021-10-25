@@ -5,7 +5,6 @@
 //  Created by Oscar Byström Ericsson on 2021-10-19.
 //
 
-import struct Foundation.Locale
 import struct Foundation.IntegerFormatStyle
 
 // MARK: - NumericTextSchemeInt

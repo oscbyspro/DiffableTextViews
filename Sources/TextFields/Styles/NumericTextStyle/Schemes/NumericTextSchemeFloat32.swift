@@ -5,7 +5,6 @@
 //  Created by Oscar Byström Ericsson on 2021-10-25.
 //
 
-import struct Foundation.Locale
 import struct Foundation.FloatingPointFormatStyle
 
 // MARK: - NumericTextSchemeFloat32
