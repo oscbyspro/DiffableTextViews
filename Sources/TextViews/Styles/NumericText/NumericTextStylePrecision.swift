@@ -204,7 +204,7 @@ extension NumericTextStylePrecision {
         let upperCapacity = upper.upperBound - digits.upper
         guard upperCapacity >= 0 else { return nil }
         
-        return NumberOfDigits(upper: lowerCapacity, lower: upperCapacity)
+        return NumberOfDigits(upper: upperCapacity, lower: lowerCapacity)
     }
 }
 
