@@ -18,7 +18,7 @@ public struct NumericTextSchemeOfInteger<Number: NumericTextSchemeOfIntegerSubje
     // MARK: Precision
     
     @inlinable public static var maxTotalDigits: Int {
-        Number.maxNumberOfDecimalDigits
+        Number.maxSignificands
     }
     
     // MARK: Components
@@ -33,7 +33,7 @@ public struct NumericTextSchemeOfInteger<Number: NumericTextSchemeOfIntegerSubje
 public protocol NumericTextSchemeOfIntegerSubject: FixedWidthInteger {
     @inlinable init?(_ description: String)
     
-    @inlinable static var maxNumberOfDecimalDigits: Int { get }
+    @inlinable static var maxSignificands: Int { get }
 }
 
 // MARK: - NumericTextIntegerSchemeOfSchematic
@@ -43,43 +43,43 @@ public protocol NumericTextSchemeOfIntegerSchematic: NumericTextSchematic, Numer
 // MARK: - Ints
 
 extension Int: NumericTextSchemeOfIntegerSchematic {
-    public static let maxNumberOfDecimalDigits: Int = String(max).count
+    public static let maxSignificands: Int = String(max).count
 }
 
 extension Int8: NumericTextSchemeOfIntegerSchematic {
-    @inlinable public static var maxNumberOfDecimalDigits: Int { 3 }
+    @inlinable public static var maxSignificands: Int { 3 }
 }
 
 extension Int16: NumericTextSchemeOfIntegerSchematic {
-    @inlinable public static var maxNumberOfDecimalDigits: Int { 5 }
+    @inlinable public static var maxSignificands: Int { 5 }
 }
 
 extension Int32: NumericTextSchemeOfIntegerSchematic {
-    @inlinable public static var maxNumberOfDecimalDigits: Int { 10 }
+    @inlinable public static var maxSignificands: Int { 10 }
 }
 
 extension Int64: NumericTextSchemeOfIntegerSchematic {
-    @inlinable public static var maxNumberOfDecimalDigits: Int { 19 }
+    @inlinable public static var maxSignificands: Int { 19 }
 }
 
 // MARK: - UInts
 
 extension UInt: NumericTextSchemeOfIntegerSchematic {
-    public static let maxNumberOfDecimalDigits: Int = String(max).count
+    public static let maxSignificands: Int = String(max).count
 }
 
 extension UInt8: NumericTextSchemeOfIntegerSchematic {
-    @inlinable public static var maxNumberOfDecimalDigits: Int { 3 }
+    @inlinable public static var maxSignificands: Int { 3 }
 }
 
 extension UInt32: NumericTextSchemeOfIntegerSchematic {
-    @inlinable public static var maxNumberOfDecimalDigits: Int { 10 }
+    @inlinable public static var maxSignificands: Int { 10 }
 }
 
 extension UInt16: NumericTextSchemeOfIntegerSchematic {
-    @inlinable public static var maxNumberOfDecimalDigits: Int { 5 }
+    @inlinable public static var maxSignificands: Int { 5 }
 }
 
 extension UInt64: NumericTextSchemeOfIntegerSchematic {
-    @inlinable public static var maxNumberOfDecimalDigits: Int { 20 }
+    @inlinable public static var maxSignificands: Int { 20 }
 }
