@@ -17,6 +17,7 @@ import struct Foundation.Locale
 public struct NumericTextStyle<Scheme: NumericTextScheme>: DiffableTextStyle {
     @usableFromInline typealias Components = NumericTextComponents
     @usableFromInline typealias Configuration = NumericTextConfiguration
+    @usableFromInline typealias NumberOfDigits = NumericTextNumberOfDigits
 
     public typealias Value = Scheme.Number
     public typealias Values = NumericTextStyleValues<Scheme>
@@ -68,7 +69,7 @@ extension NumericTextStyle {
         Scheme.style(locale, precision: precision.editableStyle(), separator: .automatic)
     }
     
-    @inlinable func editableStyle(digits: (upper: Int, lower: Int), separator: Bool) -> Scheme.FormatStyle {
+    @inlinable func editableStyle(digits: NumberOfDigits, separator: Bool) -> Scheme.FormatStyle {
         Scheme.style(locale, precision: precision.editableStyle(digits), separator: separator ? .always : .automatic)
     }
 }
@@ -166,12 +167,12 @@ extension NumericTextStyle {
     // MARK: Helpers, Components
     
     @inlinable func snapshot(_ components: Components) -> Snapshot? {
-        let digits = (components.integers.count, components.decimals.count)
+        let digits = components.numberOfDigitsWithoutZeroInteger()
         guard precision.editableValidation(digits: digits) else { return nil }
         
         guard let value = value(components) else { return nil }
         guard values.editableValidation(value) else { return nil }
-        
+                
         let style = editableStyle(digits: digits, separator: components.separator != nil)
         var characters = style.format(value)
                 

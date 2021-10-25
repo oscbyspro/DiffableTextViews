@@ -14,6 +14,7 @@ public struct NumericTextStylePrecision<Scheme: NumericTextScheme> {
     @usableFromInline typealias Defaults = NumericTextPrecisionDefaults
     @usableFromInline typealias Total = NumericTextPrecisionTotal<Scheme>
     @usableFromInline typealias Parts = NumberTextPrecisionParts<Scheme>
+    @usableFromInline typealias NumberOfDigits = NumericTextNumberOfDigits
     
     // MARK: Properties
     
@@ -81,7 +82,7 @@ extension NumericTextStylePrecision {
         strategy.displayableStyle()
     }
     
-    @inlinable func editableValidation(digits: (upper: Int, lower: Int)) -> Bool {
+    @inlinable func editableValidation(digits: NumberOfDigits) -> Bool {
         strategy.editableValidation(digits: digits)
     }
     
@@ -92,7 +93,7 @@ extension NumericTextStylePrecision {
         return .integerAndFractionLength(integerLimits: integers, fractionLimits: fraction)
     }
     
-    @inlinable func editableStyle(_ digits: (upper: Int, lower: Int)) -> NumberFormatStyleConfiguration.Precision {
+    @inlinable func editableStyle(_ digits: NumberOfDigits) -> NumberFormatStyleConfiguration.Precision {
         let upper = Defaults.upperLowerBound...(Swift.max(Defaults.upperLowerBound, digits.upper))
         let lower = Defaults.lowerLowerBound...(digits.lower)
 
@@ -104,10 +105,12 @@ extension NumericTextStylePrecision {
 
 @usableFromInline protocol NumericTextPrecisionStrategy {
     typealias Defaults = NumericTextPrecisionDefaults
+    typealias NumberOfDigits = NumericTextNumberOfDigits
+    
     
     func displayableStyle() -> NumberFormatStyleConfiguration.Precision
         
-    func editableValidation(digits: (upper: Int, lower: Int)) -> Bool
+    func editableValidation(digits: NumberOfDigits) -> Bool
 }
 
 // MARK: - Strategies: Total
@@ -136,7 +139,7 @@ extension NumericTextStylePrecision {
         .significantDigits(total)
     }
         
-    @inlinable func editableValidation(digits: (upper: Int, lower: Int)) -> Bool {
+    @inlinable func editableValidation(digits: NumberOfDigits) -> Bool {
         digits.upper + digits.lower <= total.upperBound
     }
 }
@@ -183,7 +186,7 @@ extension NumericTextStylePrecision {
         .integerAndFractionLength(integerLimits: upper, fractionLimits: lower)
     }
     
-    @inlinable func editableValidation(digits: (upper: Int, lower: Int)) -> Bool {
+    @inlinable func editableValidation(digits: NumberOfDigits) -> Bool {
         func validateTotal() -> Bool {
             digits.upper + digits.lower <= Scheme.maxTotalDigits
         }

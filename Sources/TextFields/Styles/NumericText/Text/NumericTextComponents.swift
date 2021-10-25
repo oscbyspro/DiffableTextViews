@@ -50,7 +50,7 @@ public struct NumericTextComponents {
     @inlinable mutating public func toggleSign(with proposal: Sign) {
         if sign != proposal { sign = proposal } else { sign = nil }
     }
-        
+    
     // MARK: Components: Sign
     
     @frozen public enum Sign: String {
@@ -83,7 +83,7 @@ public struct NumericTextComponents {
     // MARK: Components: Digits
     
     @frozen public struct Digits {
-        @usableFromInline static let zero = "0"
+        @usableFromInline static let zero: Character = "0"
         @usableFromInline static let set = Set<Character>("0123456789")
         
         // MARK: Properties
@@ -95,15 +95,57 @@ public struct NumericTextComponents {
         
         @inlinable init() { }
         
-        // MARK: Utilities
-        
-        @inlinable var isEmpty: Bool {
-            characters.isEmpty
-        }
+        // MARK: Transformations
         
         @inlinable mutating func append(_ character: Character) {
             count += 1
             characters.append(character)
         }
+        
+        // MARK: Descriptions
+        
+        @inlinable var isZero: Bool {
+            characters == String(Self.zero)
+        }
+        
+        @inlinable var isEmpty: Bool {
+            characters.isEmpty
+        }
+        
+        @inlinable func numberOfZerosAsPrefix() -> Int {
+            characters.prefix(while: digitIsZero).count
+        }
+        
+        @inlinable func numberOfZerosAsSuffix() -> Int {
+            characters.reversed().prefix(while: digitIsZero).count
+        }
+        
+        // MARK: Helpers
+        
+        @inlinable func digitIsZero(_ character: Character) -> Bool {
+            character == Self.zero
+        }
+    }
+}
+
+// MARK: - Descriptions: Numer Of Digits
+
+extension NumericTextComponents {
+    @usableFromInline typealias NumberOfDigits = NumericTextNumberOfDigits
+    
+    // MARK: Total
+    
+    @inlinable func numberOfDigits() -> NumberOfDigits {
+        .init(upper: integers.count, lower: decimals.count)
+    }
+    
+    @inlinable func numberOfDigitsWithoutZeroInteger() -> NumberOfDigits {
+        .init(upper: integers.isZero ? .zero : integers.count, lower: decimals.count)
+    }
+    
+    // MARK: Significands
+        
+    @inlinable func numberOfSignificands() -> NumberOfDigits {
+        .init(upper: integers.count - integers.numberOfZerosAsPrefix(), lower: decimals.count - decimals.numberOfZerosAsSuffix())
     }
 }
