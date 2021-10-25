@@ -199,11 +199,13 @@ extension NumericTextStyle {
     
     // MARK: Helpers, Characters
     
+    #warning("Snapshot needs a priority system like: case .diffable, .ignore.")
     @inlinable func snapshot(_ characters: String) -> Snapshot {
         var snapshot = Snapshot()
             
         // --------------------------------- //
         
+        #warning("Never diff prefix.")
         if let prefix = prefix {
             snapshot = prefix
             snapshot.append(.prefix(" "))
@@ -221,6 +223,12 @@ extension NumericTextStyle {
             }
         }
         
+        #warning("If decimal separator is last, don't diff it.")
+//        if snapshot.last.map(decimalSeparator.contains) {
+            #warning("...")
+//        }
+        
+        #warning("Never diff suffix.")
         if let suffix = suffix {
             snapshot.append(.suffix(" "))
             snapshot.append(contentsOf: suffix)
