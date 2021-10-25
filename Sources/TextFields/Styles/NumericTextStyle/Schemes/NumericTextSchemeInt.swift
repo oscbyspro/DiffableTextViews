@@ -9,6 +9,9 @@ import struct Foundation.IntegerFormatStyle
 
 // MARK: - NumericTextSchemeInt
 
+/// NumericTextSchemeInt.
+///
+/// - Supports all values between Int.min and Int.max.
 public enum NumericTextSchemeInt: NumericTextIntegerScheme {
     public typealias Number = Int
     public typealias FormatStyle = IntegerFormatStyle<Number>

@@ -9,10 +9,9 @@ import struct Foundation.FloatingPointFormatStyle
 
 // MARK: - NumericTextSchemeFloat
 
-/// NumericTextSchemeFloat64.
+/// NumericTextSchemeFloat32.
 ///
-/// - 8, maxTotalDigits == String(describing: abs).count
-/// - 16777216, abs == 2 ^ (Number.significandBitCount + 1)
+/// - Supports up to 8 decimal digits and values of ±16,777,216.
 public enum NumericTextSchemeFloat32: NumericTextFloatScheme {
     public typealias Number = Float32
     public typealias FormatStyle = FloatingPointFormatStyle<Number>

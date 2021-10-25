@@ -1,5 +1,5 @@
 //
-//  NumericTextSchemeFloat64.swift
+//  File.swift
 //  
 //
 //  Created by Oscar Byström Ericsson on 2021-10-25.
@@ -7,24 +7,24 @@
 
 import struct Foundation.FloatingPointFormatStyle
 
-// MARK: - NumericTextSchemeFloat64
+// MARK: - NumericTextSchemeFloat
 
-/// NumericTextSchemeFloat64.
+/// NumericTextSchemeFloat16.
 ///
-/// - Supports up to 16 decimal digits and values of ±9,007,199,254,740,992.
-public enum NumericTextSchemeFloat64: NumericTextFloatScheme {
-    public typealias Number = Float64
+/// - Supports up to 4 decimal digits and values of ±2,048.
+public enum NumericTextSchemeFloat16: NumericTextFloatScheme {
+    public typealias Number = Float16
     public typealias FormatStyle = FloatingPointFormatStyle<Number>
     
     // MARK: Values
-    
-    @inlinable public static var abs: Number { 9007199254740992 }
+        
+    @inlinable public static var abs: Number { 2048 }
     @inlinable public static var min: Number { -abs }
     @inlinable public static var max: Number {  abs }
-    
+
     // MARK: Precision
     
-    public static let maxTotalDigits: Int = 16
+    @inlinable public static var maxTotalDigits: Int { 4 }
 
     // MARK: Style
     
@@ -35,7 +35,8 @@ public enum NumericTextSchemeFloat64: NumericTextFloatScheme {
 
 // MARK: Number + Compatible
 
-extension NumericTextSchemeFloat64.Number: NumericTextSchematic {
-    public typealias NumericTextScheme = NumericTextSchemeFloat64
+extension NumericTextSchemeFloat16.Number: NumericTextSchematic {
+    public typealias NumericTextScheme = NumericTextSchemeFloat16
 }
+
 
