@@ -81,13 +81,16 @@ extension NumericTextStylePrecision {
         strategy.displayableStyle()
     }
     
+    #warning("Come back to this.")
     @inlinable func editableStyle(digits: (upper: Int, lower: Int)?) -> NumberFormatStyleConfiguration.Precision {
+        let upperLowerBound = Defaults.upperLowerBound
+        let upperUpperBound = Swift.max(Defaults.upperLowerBound, (digits?.upper ?? Scheme.maxUpperDigits))
+        
         let lowerLowerBound = digits?.lower ?? Defaults.lowerLowerBound
+        let lowerUpperBound = digits?.lower ?? Scheme.maxLowerDigits
         
-        let upper =               1 ... Scheme.maxUpperDigits
-        let lower = lowerLowerBound ... Scheme.maxLowerDigits
-        
-        return .integerAndFractionLength(integerLimits: upper, fractionLimits: lower)
+        print(upperLowerBound...upperUpperBound, lowerLowerBound ... lowerUpperBound)
+        return .integerAndFractionLength(integerLimits: upperLowerBound...upperUpperBound, fractionLimits: lowerLowerBound...lowerUpperBound)
     }
 
     @inlinable func editableValidation(digits: (upper: Int, lower: Int)) -> Bool {

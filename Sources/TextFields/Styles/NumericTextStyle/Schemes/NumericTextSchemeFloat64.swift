@@ -11,7 +11,7 @@ import struct Foundation.FloatingPointFormatStyle
 
 /// NumericTextSchemeFloat64.
 ///
-/// - Supports up to 16 decimal digits and values of ±9,007,199,254,740,992.
+/// - Supports up to 15 decimal digits: ±9,007,199,254,740,992 (rounded towards zero).
 public enum NumericTextSchemeFloat64: NumericTextFloatScheme {
     public typealias Number = Float64
     public typealias FormatStyle = FloatingPointFormatStyle<Number>
@@ -24,7 +24,7 @@ public enum NumericTextSchemeFloat64: NumericTextFloatScheme {
     
     // MARK: Precision
     
-    public static let maxTotalDigits: Int = 16
+    public static let maxTotalDigits: Int = 15
 
     // MARK: Style
     

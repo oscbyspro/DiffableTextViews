@@ -11,7 +11,10 @@ import struct Foundation.Locale
 
 /// Formats text and number.
 ///
-/// - Performance: It can easily format 1000+ digits.
+/// Performance is comparable to unformatted text.
+/// It can easily format 1,000+ digits if its scheme allows it.
+///
+/// - Complexity: O(n) or less for all calculations.
 public struct NumericTextStyle<Scheme: NumericTextScheme>: DiffableTextStyle {
     @usableFromInline typealias Components = NumericTextComponents
     @usableFromInline typealias Configuration = NumericTextConfiguration
@@ -174,13 +177,13 @@ extension NumericTextStyle {
         guard values.editableValidation(value) else { return nil }
         
         let style = editableStyle(digits: digits, separator: components.separator != nil)
-        var _characters = style.format(value)
-        
-        if let sign = components.sign, !_characters.hasPrefix(sign.characters) {
-            _characters = sign.characters + _characters
+        var characters = style.format(value)
+                
+        if let sign = components.sign, !characters.hasPrefix(sign.characters) {
+            characters = sign.characters + characters
         }
     
-        return snapshot(_characters)
+        return snapshot(characters)
     }
     
     // MARK: Helpers, Characters

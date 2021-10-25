@@ -11,7 +11,7 @@ import struct Foundation.FloatingPointFormatStyle
 
 /// NumericTextSchemeFloat32.
 ///
-/// - Supports up to 8 decimal digits and values of ±16,777,216.
+/// - Supports up to 7 decimal digits: ±16,777,216 (rounded towards zero).
 public enum NumericTextSchemeFloat32: NumericTextFloatScheme {
     public typealias Number = Float32
     public typealias FormatStyle = FloatingPointFormatStyle<Number>
@@ -24,7 +24,7 @@ public enum NumericTextSchemeFloat32: NumericTextFloatScheme {
 
     // MARK: Precision
     
-    @inlinable public static var maxTotalDigits: Int { 8 }
+    @inlinable public static var maxTotalDigits: Int { 7 }
 
     // MARK: Style
     
