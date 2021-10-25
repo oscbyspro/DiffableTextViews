@@ -36,16 +36,20 @@ public protocol NumericTextScheme {
     @inlinable static func style(_ locale: Locale, precision: Precision, separator: Separator) -> FormatStyle
 }
 
-// MARK: - Default
 
 public extension NumericTextScheme {
+    
+    // MARK: Descriptions
+
     @inlinable static var isFloat:   Bool { maxLowerDigits != 0 }
     @inlinable static var isInteger: Bool { maxLowerDigits == 0 }
 }
 
-// MARK: - Numeric
 
 public extension NumericTextScheme where Number: Numeric {
+    
+    // MARK: Implementations: Numeric
+    
     @inlinable static var zero: Number { .zero }
 }
 
@@ -57,29 +61,12 @@ public extension NumericTextIntegerScheme {
     @inlinable static var maxLowerDigits: Int { 0 }
 }
 
-public extension NumericTextIntegerScheme where Number: FixedWidthInteger {
-    @inlinable static var min: Number { .min }
-    @inlinable static var max: Number { .max }
-}
-
-public extension NumericTextIntegerScheme where FormatStyle == IntegerFormatStyle<Number> {
-    @inlinable static func style(_ locale: Locale, precision: Precision, separator: Separator) -> FormatStyle {
-        .init(locale: locale).precision(precision).decimalSeparator(strategy: separator)
-    }
-}
-
 // MARK: - NumericTextFloatScheme
 
 public  protocol NumericTextFloatScheme: NumericTextScheme { }
 public extension NumericTextFloatScheme {
     @inlinable static var maxUpperDigits: Int { maxTotalDigits }
     @inlinable static var maxLowerDigits: Int { maxTotalDigits }
-}
-
-public extension NumericTextFloatScheme where FormatStyle == FloatingPointFormatStyle<Number> {
-    @inlinable static func style(_ locale: Locale, precision: Precision, separator: Separator) -> FormatStyle {
-        .init(locale: locale).precision(precision).decimalSeparator(strategy: separator)
-    }
 }
 
 // MARK: - NumericTextSchematic

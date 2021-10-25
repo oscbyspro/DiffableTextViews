@@ -5,6 +5,7 @@
 //  Created by Oscar Byström Ericsson on 2021-10-25.
 //
 
+import struct Foundation.Locale
 import struct Foundation.FloatingPointFormatStyle
 
 // MARK: - NumericTextSchemeOfFloat
@@ -29,6 +30,10 @@ public struct NumericTextSchemeOfFloat<Number: NumericTextSchemeOfFloatSubject>:
 
     @inlinable public static func number(_ components: NumericTextComponents) -> Number? {
         .init(components.characters())
+    }
+    
+    @inlinable public static func style(_ locale: Locale, precision: Precision, separator: Separator) -> FormatStyle {
+        .init(locale: locale).precision(precision).decimalSeparator(strategy: separator)
     }
 }
 

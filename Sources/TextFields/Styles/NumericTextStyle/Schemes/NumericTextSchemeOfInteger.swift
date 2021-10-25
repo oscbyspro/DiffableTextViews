@@ -5,6 +5,7 @@
 //  Created by Oscar Byström Ericsson on 2021-10-25.
 //
 
+import struct Foundation.Locale
 import struct Foundation.IntegerFormatStyle
 
 // MARK: - NumericTextSchemeOfInteger
@@ -12,19 +13,27 @@ import struct Foundation.IntegerFormatStyle
 /// NumericTextSchemeOfInteger.
 ///
 /// - Supports all values between Number.min and Number.max.
+/// - UInt64.max is limited to Int64.max because Apple uses Int64 (2021-10-25).
 public struct NumericTextSchemeOfInteger<Number: NumericTextSchemeOfIntegerSubject>: NumericTextIntegerScheme {
     public typealias FormatStyle = IntegerFormatStyle<Number>
     
+    // MARK: Values
+    
+    @inlinable public static var min: Number { Number.minValue }
+    @inlinable public static var max: Number { Number.maxValue }
+    
     // MARK: Precision
     
-    @inlinable public static var maxTotalDigits: Int {
-        Number.maxSignificands
-    }
+    @inlinable public static var maxTotalDigits: Int { Number.maxSignificands }
     
     // MARK: Components
 
     @inlinable public static func number(_ components: NumericTextComponents) -> Number? {
         Number.init(components.characters())
+    }
+    
+    @inlinable public static func style(_ locale: Locale, precision: Precision, separator: Separator) -> FormatStyle {
+        .init(locale: locale).precision(precision).decimalSeparator(strategy: separator)
     }
 }
 
@@ -33,7 +42,14 @@ public struct NumericTextSchemeOfInteger<Number: NumericTextSchemeOfIntegerSubje
 public protocol NumericTextSchemeOfIntegerSubject: FixedWidthInteger {
     @inlinable init?(_ description: String)
     
+    @inlinable static var minValue: Self { get }
+    @inlinable static var maxValue: Self { get }
     @inlinable static var maxSignificands: Int { get }
+}
+
+extension NumericTextSchemeOfIntegerSubject {
+    @inlinable public static var minValue: Self { min }
+    @inlinable public static var maxValue: Self { max }
 }
 
 // MARK: - NumericTextIntegerSchemeOfSchematic
@@ -65,8 +81,15 @@ extension Int64: NumericTextSchemeOfIntegerSchematic {
 // MARK: - UInts
 
 extension UInt: NumericTextSchemeOfIntegerSchematic {
-    /// Issue: IntegerFormatStyle[UInt64] only supports 18 digits rather than 19.
-    public static let maxSignificands: Int = Swift.min(String(max).count, UInt64.maxSignificands)
+    /// Apple, please fix IntegerFormatStyleUInt64 — it uses an Int64.
+    @inlinable public static var maxValue: UInt {
+        UInt(Int.maxValue)
+    }
+    
+    /// Apple, please fix IntegerFormatStyleUInt64 — it uses an Int64.
+    @inlinable public static var maxSignificands: Int {
+        Int64.maxSignificands
+    }
 }
 
 extension UInt8: NumericTextSchemeOfIntegerSchematic {
@@ -82,7 +105,12 @@ extension UInt32: NumericTextSchemeOfIntegerSchematic {
 }
 
 extension UInt64: NumericTextSchemeOfIntegerSchematic {
-    /// Issue: IntegerFormatStyle[UInt64] only supports 18 digits rather than 19.
-    /// - It probably means that Apple uses an Int64, rather than a UInt64. Sad.
-    @inlinable public static var maxSignificands: Int { 18 }
+    /// Apple, please fix IntegerFormatStyleUInt64 — it uses an Int64.
+    @inlinable public static var maxValue: UInt64 {
+        UInt64(Int64.maxValue)
+    }
+    /// Apple, please fix IntegerFormatStyleUInt64 — it uses an Int64.
+    @inlinable public static var maxSignificands: Int {
+        Int64.maxSignificands
+    }
 }
