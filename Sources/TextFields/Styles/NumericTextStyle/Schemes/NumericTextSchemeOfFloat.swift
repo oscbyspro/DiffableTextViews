@@ -12,7 +12,7 @@ import struct Foundation.FloatingPointFormatStyle
 
 /// NumericTextSchemeOfFloat.
 ///
-/// - Range:  ±Number.maxLosslessValue.
+/// - Range: ±Number.maxLosslessValue.
 /// - Significands: Number.maxLosslessSignificands
 public struct NumericTextSchemeOfFloat<Number: NumericTextSchemeOfFloatSubject>: NumericTextFloatScheme {
     public typealias FormatStyle = FloatingPointFormatStyle<Number>
@@ -44,7 +44,7 @@ public protocol NumericTextSchemeOfFloatSubject: BinaryFloatingPoint {
     
     /// Largest value where all values from it to zero (with the same number of significants) can be represented.
     @inlinable static var maxLosslessValue: Self { get }
-    /// Largest number of significands all values can be represented.
+    /// Largest number of significands where each of its combinations represents a value.
     @inlinable static var maxLosslessSignificands: Int { get }
 }
 

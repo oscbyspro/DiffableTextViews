@@ -12,7 +12,7 @@ import struct Foundation.Decimal
 
 /// NumericTextSchemeDecimal.
 ///
-/// - Supports up to 38 significant decimal digits.
+/// - Supports up to 38 significant digits.
 public enum NumericTextSchemeDecimal: NumericTextFloatScheme {    
     public typealias Number = Decimal
     public typealias FormatStyle = Number.FormatStyle

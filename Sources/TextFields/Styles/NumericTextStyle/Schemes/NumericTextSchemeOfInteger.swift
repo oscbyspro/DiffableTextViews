@@ -12,7 +12,7 @@ import struct Foundation.IntegerFormatStyle
 
 /// NumericTextSchemeOfInteger.
 ///
-/// - Supports all values between Number.min and Number.max.
+/// - Supports all values from Number.min to Number.max.
 /// - UInt64.max is limited to Int64.max because Apple uses Int64 (2021-10-25).
 public struct NumericTextSchemeOfInteger<Number: NumericTextSchemeOfIntegerSubject>: NumericTextIntegerScheme {
     public typealias FormatStyle = IntegerFormatStyle<Number>
@@ -81,12 +81,12 @@ extension Int64: NumericTextSchemeOfIntegerSchematic {
 // MARK: - UInts
 
 extension UInt: NumericTextSchemeOfIntegerSchematic {
-    /// Apple, please fix IntegerFormatStyleUInt64 — it uses an Int64.
+    /// Apple, please fix IntegerFormatStyleUInt64, it uses an Int64.
     @inlinable public static var maxValue: UInt {
         UInt(Int.maxValue)
     }
     
-    /// Apple, please fix IntegerFormatStyleUInt64 — it uses an Int64.
+    /// Apple, please fix IntegerFormatStyleUInt64, it uses an Int64.
     @inlinable public static var maxSignificands: Int {
         Int64.maxSignificands
     }
@@ -105,11 +105,11 @@ extension UInt32: NumericTextSchemeOfIntegerSchematic {
 }
 
 extension UInt64: NumericTextSchemeOfIntegerSchematic {
-    /// Apple, please fix IntegerFormatStyleUInt64 — it uses an Int64.
+    /// Apple, please fix IntegerFormatStyleUInt64, it uses an Int64.
     @inlinable public static var maxValue: UInt64 {
         UInt64(Int64.maxValue)
     }
-    /// Apple, please fix IntegerFormatStyleUInt64 — it uses an Int64.
+    /// Apple, please fix IntegerFormatStyleUInt64, it uses an Int64.
     @inlinable public static var maxSignificands: Int {
         Int64.maxSignificands
     }
