@@ -11,7 +11,7 @@ import Foundation
 
 public protocol NumericTextScheme {
     associatedtype Number: Comparable
-    associatedtype Style: FormatStyle where Style.FormatInput == Number, Style.FormatOutput == String
+    associatedtype FormatStyle: Foundation.FormatStyle where FormatStyle.FormatInput == Number, FormatStyle.FormatOutput == String
     
     // MARK: Aliases
     
@@ -34,7 +34,7 @@ public protocol NumericTextScheme {
     
     @inlinable static func number(_ components: NumericTextComponents) -> Number?
     
-    @inlinable static func style(_ locale: Locale, precision: Precision, separator: Separator) -> Style
+    @inlinable static func style(_ locale: Locale, precision: Precision, separator: Separator) -> FormatStyle
 }
 
 // MARK: - Default
@@ -63,8 +63,8 @@ public extension NumericTextIntegerScheme where Number: FixedWidthInteger {
     @inlinable static var max: Number { .max }
 }
 
-public extension NumericTextIntegerScheme where Style == IntegerFormatStyle<Number> {
-    @inlinable static func style(_ locale: Locale, precision: Precision, separator: Separator) -> Style {
+public extension NumericTextIntegerScheme where FormatStyle == IntegerFormatStyle<Number> {
+    @inlinable static func style(_ locale: Locale, precision: Precision, separator: Separator) -> FormatStyle {
         .init(locale: locale).precision(precision).decimalSeparator(strategy: separator)
     }
 }
@@ -82,8 +82,8 @@ public extension NumericTextFloatScheme where Number: FloatingPoint {
     @inlinable static var max: Number {  .greatestFiniteMagnitude }
 }
 
-public extension NumericTextFloatScheme where Style == FloatingPointFormatStyle<Number> {
-    @inlinable static func style(_ locale: Locale, precision: Precision, separator: Separator) -> Style {
+public extension NumericTextFloatScheme where FormatStyle == FloatingPointFormatStyle<Number> {
+    @inlinable static func style(_ locale: Locale, precision: Precision, separator: Separator) -> FormatStyle {
         .init(locale: locale).precision(precision).decimalSeparator(strategy: separator)
     }
 }

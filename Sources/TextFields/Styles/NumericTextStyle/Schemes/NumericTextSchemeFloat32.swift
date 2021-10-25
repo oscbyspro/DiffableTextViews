@@ -11,7 +11,7 @@ import struct Foundation.FloatingPointFormatStyle
 
 public enum NumericTextSchemeFloat32: NumericTextFloatScheme {
     public typealias Number = Float32
-    public typealias Style = FloatingPointFormatStyle<Number>
+    public typealias FormatStyle = FloatingPointFormatStyle<Number>
     
     // MARK: Precision
     

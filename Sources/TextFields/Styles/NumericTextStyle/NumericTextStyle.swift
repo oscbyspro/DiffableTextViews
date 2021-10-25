@@ -58,7 +58,7 @@ extension NumericTextStyle {
     
     // MARK: Displayable
     
-    @inlinable func displayableStyle() -> Scheme.Style {
+    @inlinable func displayableStyle() -> Scheme.FormatStyle {
         let precision: Scheme.Precision = precision.displayableStyle()
 
         return Scheme.style(locale, precision: precision, separator: .automatic)
@@ -66,7 +66,7 @@ extension NumericTextStyle {
     
     // MARK: Editable
     
-    @inlinable func editableStyle(digits: (upper: Int, lower: Int)? = nil, separator: Bool = false) -> Scheme.Style {
+    @inlinable func editableStyle(digits: (upper: Int, lower: Int)? = nil, separator: Bool = false) -> Scheme.FormatStyle {
         let precision: Scheme.Precision = precision.editableStyle(digits: digits)
         let separator: Scheme.Separator = separator ? .always : .automatic
         

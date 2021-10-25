@@ -11,7 +11,7 @@ import struct Foundation.IntegerFormatStyle
 
 public enum NumericTextSchemeInt: NumericTextIntegerScheme {
     public typealias Number = Int
-    public typealias Style = IntegerFormatStyle<Number>
+    public typealias FormatStyle = IntegerFormatStyle<Number>
     
     // MARK: Precision
     
