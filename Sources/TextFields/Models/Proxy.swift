@@ -7,6 +7,10 @@
 
 import UIKit
 
+/// An affordance layer wrapping a UITextField object.
+///
+/// - UITextField.text is never nil.
+/// - UITextField.selectedTextRange is never nil
 @usableFromInline final class Proxy {
     @usableFromInline typealias Offset = TextFields.Offset<UTF16>
     
@@ -20,7 +24,7 @@ import UIKit
         self.uiTextField = uiTextField
     }
     
-    // MARK: Getters
+    // MARK: Edits
     
     /// - Complexity: O(1).
     @inlinable var edits: Bool {
@@ -42,8 +46,8 @@ import UIKit
     // MARK: Selection
     
     /// - Complexity: O(1).
-    @inlinable func selection() -> Range<Offset>? {
-        uiTextField.selectedTextRange.map(offsets)
+    @inlinable func selection() -> Range<Offset> {
+        offsets(in: uiTextField.selectedTextRange!)
     }
     
     /// - Complexity: High.

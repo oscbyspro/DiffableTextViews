@@ -77,7 +77,7 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
         // MARK: Setup
 
         @inlinable func connect(_ uiView: UIViewType) {
-            uiView.delegate = self
+            uiView.delegate = self            
             self.uiView = Proxy(uiView)
         }
         
@@ -134,12 +134,8 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
             guard !lock.isLocked else { return }
             
             // --------------------------------- //
-
-            #warning("...")
-            guard let offsets = uiView.selection() else { return }
-            
-            // --------------------------------- //
                         
+            let offsets = uiView.selection()
             let field = cache.field.configure(selection: offsets)
             let selection = field.selection.map(bounds: \.offset)
             

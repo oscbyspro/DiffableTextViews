@@ -1,5 +1,5 @@
 //
-//  DiffableTextField+NumericTextStyle.swift
+//  DiffableTextField+Styles.swift
 //  
 //
 //  Created by Oscar Byström Ericsson on 2021-10-24.

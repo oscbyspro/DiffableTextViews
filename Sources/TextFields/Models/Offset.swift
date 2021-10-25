@@ -15,8 +15,8 @@
     
     // MARK: Initializers
     
-    @inlinable init(at offset: Int) {
-        self.distance = offset
+    @inlinable init(at distance: Int) {
+        self.distance = distance
     }
     
     // MARK: Initializers: Static
