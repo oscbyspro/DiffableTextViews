@@ -25,7 +25,7 @@ public struct NumericTextStylePrecision<Scheme: NumericTextScheme> {
         self.strategy = strategy
     }
     
-    // MARK: Initializers: Defaults
+    // MARK: Initializers: Named
     
     @inlinable public static var max: Self {
         .max(Scheme.maxTotalDigits)
@@ -44,7 +44,7 @@ public struct NumericTextStylePrecision<Scheme: NumericTextScheme> {
 
 extension NumericTextStylePrecision where Scheme: NumericTextFloatScheme {
 
-    // MARK: Initializers: Separate
+    // MARK: Initializers: Parts
     
     @inlinable public static func digits<R0: RangeExpression, R1: RangeExpression>(integer: R0, fraction: R1) -> Self where R0.Bound == Int, R1.Bound == Int {
         .init(strategy: Parts(upper: integer, lower: fraction))

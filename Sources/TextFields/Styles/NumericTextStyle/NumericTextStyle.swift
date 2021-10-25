@@ -11,7 +11,7 @@ import struct Foundation.Locale
 
 /// Formats text and number.
 ///
-/// It can easily format 1,000+ digits if its scheme allows it.
+/// It can easily format 1,000+ digits if its scheme permits it.
 ///
 /// - Complexity: O(n) or less for all calculations.
 public struct NumericTextStyle<Scheme: NumericTextScheme>: DiffableTextStyle {
