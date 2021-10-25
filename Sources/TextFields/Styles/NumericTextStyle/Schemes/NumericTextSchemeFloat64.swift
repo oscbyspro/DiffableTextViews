@@ -19,9 +19,9 @@ public enum NumericTextSchemeFloat64: NumericTextFloatScheme {
     
     // MARK: Values
     
-    public static let abs: Number = 9007199254740992
-    @inlinable public static var min: Double { -abs }
-    @inlinable public static var max: Double {  abs }
+    @inlinable public static var abs: Number { 9007199254740992 }
+    @inlinable public static var min: Number { -abs }
+    @inlinable public static var max: Number {  abs }
     
     // MARK: Precision
     
