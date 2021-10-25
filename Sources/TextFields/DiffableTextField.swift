@@ -111,7 +111,7 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
             guard var value = source.style.parse(snapshot) else { return false }
             source.style.process(&value)
                         
-            let field = cache.field.configure(selection: range.lowerBound).translate(to: snapshot)
+            let field = cache.field.configure(selection: range.upperBound).translate(to: snapshot)
             
             // --------------------------------- //
             
@@ -131,6 +131,7 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
             
             // --------------------------------- //
             
+            print("textFieldDidChangeSelection:", !lock.isLocked)
             guard !lock.isLocked else { return }
             
             // --------------------------------- //
