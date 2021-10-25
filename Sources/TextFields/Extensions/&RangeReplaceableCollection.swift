@@ -12,6 +12,8 @@ extension RangeReplaceableCollection {
     // MARK: Transformations
     
     @inlinable func replace<R: RangeExpression, C: Collection>(_ range: R, with elements: C) -> Self where R.Bound == Self.Index, C.Element == Element {
-        var copy = self; copy.replaceSubrange(range, with: elements); return copy
+        var result = self
+        result.replaceSubrange(range, with: elements)
+        return result
     }
 }

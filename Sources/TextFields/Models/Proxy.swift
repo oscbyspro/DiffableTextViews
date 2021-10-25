@@ -24,13 +24,6 @@ import UIKit
         self.uiTextField = uiTextField
     }
     
-    // MARK: Edits
-    
-    /// - Complexity: O(1).
-    @inlinable var edits: Bool {
-        uiTextField.isEditing
-    }
-    
     // MARK: Text
     
     /// - Complexity: O(1).
@@ -53,6 +46,13 @@ import UIKit
     /// - Complexity: High.
     @inlinable func select(_ offsets: Range<Offset>) {
         uiTextField.selectedTextRange = positions(of: offsets)
+    }
+    
+    // MARK: Descriptions
+    
+    /// - Complexity: O(1).
+    @inlinable var edits: Bool {
+        uiTextField.isEditing
     }
     
     // MARK: Helpers: Range & Offset
