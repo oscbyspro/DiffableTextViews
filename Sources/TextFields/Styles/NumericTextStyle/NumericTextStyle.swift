@@ -7,8 +7,6 @@
 
 import struct Foundation.Locale
 
-#if os(iOS)
-
 // MARK: - NumericTextStyle
 
 /// Formats text and number.
@@ -298,5 +296,3 @@ extension NumericTextStyle {
         components.toggleSign(with: sign)
     }
 }
-
-#endif

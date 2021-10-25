@@ -5,8 +5,6 @@
 //  Created by Oscar Byström Ericsson on 2021-10-18.
 //
 
-#if os(iOS)
-
 import enum Foundation.NumberFormatStyleConfiguration
 
 // MARK: - NumericTextPrecision
@@ -88,7 +86,7 @@ extension NumericTextStylePrecision {
         
         let upper =               1 ... Scheme.maxUpperDigits
         let lower = lowerLowerBound ... Scheme.maxLowerDigits
-                
+        
         return .integerAndFractionLength(integerLimits: upper, fractionLimits: lower)
     }
 
@@ -200,5 +198,3 @@ extension NumericTextStylePrecision {
     @usableFromInline static let upperLowerBound: Int = 1
     @usableFromInline static let lowerLowerBound: Int = 0
 }
-
-#endif
