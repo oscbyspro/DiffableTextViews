@@ -11,7 +11,6 @@ import struct Foundation.Locale
 
 /// Formats text and number.
 ///
-/// Performance is comparable to unformatted text.
 /// It can easily format 1,000+ digits if its scheme allows it.
 ///
 /// - Complexity: O(n) or less for all calculations.
@@ -69,10 +68,14 @@ extension NumericTextStyle {
     
     // MARK: Editable
     
-    @inlinable func editableStyle(digits: (upper: Int, lower: Int)? = nil, separator: Bool = false) -> Scheme.FormatStyle {
-        let precision: Scheme.Precision = precision.editableStyle(digits: digits)
+    @inlinable func editableStyle() -> Scheme.FormatStyle {
+        Scheme.style(locale, precision: precision.editableStyle(), separator: .automatic)
+    }
+    
+    @inlinable func editableStyle(digits: (upper: Int, lower: Int), separator: Bool) -> Scheme.FormatStyle {
+        let precision: Scheme.Precision = precision.editableStyle(digits)
         let separator: Scheme.Separator = separator ? .always : .automatic
-        
+
         return Scheme.style(locale, precision: precision, separator: separator)
     }
 }

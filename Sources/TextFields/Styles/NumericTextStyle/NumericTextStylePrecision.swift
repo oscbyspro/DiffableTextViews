@@ -81,20 +81,22 @@ extension NumericTextStylePrecision {
         strategy.displayableStyle()
     }
     
-    #warning("Come back to this.")
-    @inlinable func editableStyle(digits: (upper: Int, lower: Int)?) -> NumberFormatStyleConfiguration.Precision {
-        let upperLowerBound = Defaults.upperLowerBound
-        let upperUpperBound = Swift.max(Defaults.upperLowerBound, (digits?.upper ?? Scheme.maxUpperDigits))
-        
-        let lowerLowerBound = digits?.lower ?? Defaults.lowerLowerBound
-        let lowerUpperBound = digits?.lower ?? Scheme.maxLowerDigits
-        
-        print(upperLowerBound...upperUpperBound, lowerLowerBound ... lowerUpperBound)
-        return .integerAndFractionLength(integerLimits: upperLowerBound...upperUpperBound, fractionLimits: lowerLowerBound...lowerUpperBound)
-    }
-
     @inlinable func editableValidation(digits: (upper: Int, lower: Int)) -> Bool {
         strategy.editableValidation(digits: digits)
+    }
+    
+    @inlinable func editableStyle() -> NumberFormatStyleConfiguration.Precision {
+        let integers = Defaults.upperLowerBound...Scheme.maxUpperDigits
+        let fraction = Defaults.lowerLowerBound...Scheme.maxLowerDigits
+        
+        return .integerAndFractionLength(integerLimits: integers, fractionLimits: fraction)
+    }
+    
+    @inlinable func editableStyle(_ digits: (upper: Int, lower: Int)) -> NumberFormatStyleConfiguration.Precision {
+        let upper = Defaults.upperLowerBound...(Swift.max(Defaults.upperLowerBound, digits.upper))
+        let lower = Defaults.lowerLowerBound...(digits.lower)
+
+        return .integerAndFractionLength(integerLimits: upper, fractionLimits: lower)
     }
 }
 
@@ -154,7 +156,7 @@ extension NumericTextStylePrecision {
         self.upper = Self.limits(upper, max: Scheme.maxUpperDigits)
         self.lower = Self.limits(lower, max: Scheme.maxLowerDigits)
         
-        precondition(self.lower.lowerBound + self.upper.lowerBound <= Scheme.maxTotalDigits, "Max precision lowerBound: \(Scheme.maxTotalDigits).")
+        precondition(self.lower.lowerBound + self.upper.lowerBound <= Scheme.maxTotalDigits, "Max precision: \(Scheme.maxTotalDigits).")
     }
     
     @inlinable init<R: RangeExpression>(upper: R) where R.Bound == Int {
