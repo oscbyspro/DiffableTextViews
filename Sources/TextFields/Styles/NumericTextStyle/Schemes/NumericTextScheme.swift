@@ -1,5 +1,5 @@
 //
-//  NumericTextProtocols.swift
+//  NumericTextStyleScheme.swift
 //  
 //
 //  Created by Oscar Byström Ericsson on 2021-10-19.
@@ -33,7 +33,6 @@ public protocol NumericTextScheme {
     // MARK: Utilities
     
     @inlinable static func number(_ components: NumericTextComponents) -> Number?
-    
     @inlinable static func style(_ locale: Locale, precision: Precision, separator: Separator) -> FormatStyle
 }
 
