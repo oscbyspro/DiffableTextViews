@@ -5,8 +5,6 @@
 //  Created by Oscar Byström Ericsson on 2021-10-18.
 //
 
-#if os(iOS)
-
 import struct Foundation.Locale
 import struct Foundation.Decimal
 
@@ -17,16 +15,13 @@ public enum NumericTextSchemeDecimal: NumericTextFloatScheme {
     public typealias Style = Number.FormatStyle
     
     // MARK: Values
-    
-    public static var zero: Number {  Number.zero }
-    public static let  min: Number = -Number(string: String(repeating: "9", count: maxTotalDigits))!
-    public static let  max: Number =  Number(string: String(repeating: "9", count: maxTotalDigits))!
+        
+    @inlinable public static var min: Number { -.greatestFiniteMagnitude }
+    @inlinable public static var max: Number {  .greatestFiniteMagnitude }
     
     // MARK: Precision
  
-               public static let maxTotalDigits: Int = 38
-    @inlinable public static var maxUpperDigits: Int { maxTotalDigits }
-    @inlinable public static var maxLowerDigits: Int { maxTotalDigits }
+    public static let maxTotalDigits: Int = 38
     
     // MARK: Style
     
@@ -44,5 +39,3 @@ public enum NumericTextSchemeDecimal: NumericTextFloatScheme {
 extension NumericTextSchemeDecimal.Number: NumericTextSchematic {
     public typealias NumericTextScheme = NumericTextSchemeDecimal
 }
-
-#endif

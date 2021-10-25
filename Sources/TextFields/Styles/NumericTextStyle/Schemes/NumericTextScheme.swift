@@ -5,11 +5,7 @@
 //  Created by Oscar Byström Ericsson on 2021-10-19.
 //
 
-#if os(iOS)
-
-import struct Foundation.Locale
-import protocol Foundation.FormatStyle
-import enum Foundation.NumberFormatStyleConfiguration
+import Foundation
 
 // MARK: - NumericTextStyleScheme
 
@@ -22,13 +18,13 @@ public protocol NumericTextScheme {
     typealias Precision = NumberFormatStyleConfiguration.Precision
     typealias Separator = NumberFormatStyleConfiguration.DecimalSeparatorDisplayStrategy
     
-    // MARK: Static: Values
+    // MARK: Values
     
     static var zero: Number { get }
     static var  max: Number { get }
     static var  min: Number { get }
     
-    // MARK: Properties: Static
+    // MARK: Precision
         
     static var maxTotalDigits: Int { get }
     static var maxUpperDigits: Int { get }
@@ -41,11 +37,16 @@ public protocol NumericTextScheme {
     @inlinable static func style(_ locale: Locale, precision: Precision, separator: Separator) -> Style
 }
 
-public extension NumericTextScheme {
-    
-    // MARK: Properties: Static
+// MARK: - Default
 
+public extension NumericTextScheme {
     @inlinable static var isInteger: Bool { maxLowerDigits == 0 }
+}
+
+// MARK: - Numeric
+
+public extension NumericTextScheme where Number: Numeric {
+    @inlinable static var zero: Number { .zero }
 }
 
 
@@ -53,24 +54,43 @@ public extension NumericTextScheme {
 
 public  protocol NumericTextIntegerScheme: NumericTextScheme { }
 public extension NumericTextIntegerScheme {
-    
-    // MARK: Implementations
-    
+    @inlinable static var maxUpperDigits: Int { maxTotalDigits }
     @inlinable static var maxLowerDigits: Int { 0 }
+}
+
+public extension NumericTextIntegerScheme where Number: FixedWidthInteger {
+    @inlinable static var min: Number { .min }
+    @inlinable static var max: Number { .max }
+}
+
+public extension NumericTextIntegerScheme where Style == IntegerFormatStyle<Number> {
+    @inlinable static func style(_ locale: Locale, precision: Precision, separator: Separator) -> Style {
+        .init(locale: locale).precision(precision).decimalSeparator(strategy: separator)
+    }
 }
 
 // MARK: - NumericTextFloatScheme
 
-public protocol NumericTextFloatScheme: NumericTextScheme { }
+public  protocol NumericTextFloatScheme: NumericTextScheme { }
+public extension NumericTextFloatScheme {
+    @inlinable static var maxUpperDigits: Int { maxTotalDigits }
+    @inlinable static var maxLowerDigits: Int { maxTotalDigits }
+}
+
+public extension NumericTextFloatScheme where Number: FloatingPoint {
+    @inlinable static var min: Number { -.greatestFiniteMagnitude }
+    @inlinable static var max: Number {  .greatestFiniteMagnitude }
+}
+
+public extension NumericTextFloatScheme where Style == FloatingPointFormatStyle<Number> {
+    @inlinable static func style(_ locale: Locale, precision: Precision, separator: Separator) -> Style {
+        .init(locale: locale).precision(precision).decimalSeparator(strategy: separator)
+    }
+}
 
 // MARK: - NumbericTextSchemeCompatible
 
 public protocol NumericTextSchematic {
     associatedtype NumericTextScheme: TextFields.NumericTextScheme where NumericTextScheme.Number == Self
+    typealias      NumericTextStyle = TextFields.NumericTextStyle<NumericTextScheme>
 }
-
-public extension NumericTextSchematic {
-    typealias NumericTextStyle = TextFields.NumericTextStyle<NumericTextScheme>
-}
-
-#endif
