@@ -65,21 +65,24 @@ extension Int64: NumericTextSchemeOfIntegerSchematic {
 // MARK: - UInts
 
 extension UInt: NumericTextSchemeOfIntegerSchematic {
-    public static let maxSignificands: Int = String(max).count
+    /// Issue: IntegerFormatStyle[UInt64] only supports 18 digits rather than 19.
+    public static let maxSignificands: Int = Swift.min(String(max).count, UInt64.maxSignificands)
 }
 
 extension UInt8: NumericTextSchemeOfIntegerSchematic {
     @inlinable public static var maxSignificands: Int { 3 }
 }
 
-extension UInt32: NumericTextSchemeOfIntegerSchematic {
-    @inlinable public static var maxSignificands: Int { 10 }
-}
-
 extension UInt16: NumericTextSchemeOfIntegerSchematic {
     @inlinable public static var maxSignificands: Int { 5 }
 }
 
+extension UInt32: NumericTextSchemeOfIntegerSchematic {
+    @inlinable public static var maxSignificands: Int { 10 }
+}
+
 extension UInt64: NumericTextSchemeOfIntegerSchematic {
-    @inlinable public static var maxSignificands: Int { 20 }
+    /// Issue: IntegerFormatStyle[UInt64] only supports 18 digits rather than 19.
+    /// - It probably means that Apple uses an Int64, rather than a UInt64. Sad.
+    @inlinable public static var maxSignificands: Int { 18 }
 }

@@ -180,6 +180,7 @@ extension NumericTextStyle {
         guard values.editableValidation(value) else { return nil }
         
         let style = editableStyle(digits: digits, separator: components.separator != nil)
+        print(value, components.integers.count, components.integers.characters)
         var characters = style.format(value)
                 
         if let sign = components.sign, !characters.hasPrefix(sign.characters) {
