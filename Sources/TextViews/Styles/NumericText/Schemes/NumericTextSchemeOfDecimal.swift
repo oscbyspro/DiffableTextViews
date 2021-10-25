@@ -10,12 +10,12 @@
 import struct Foundation.Locale
 import struct Foundation.Decimal
 
-// MARK: - NumericTextSchemeDecimal
+// MARK: - NumericTextSchemeOfDecimal
 
-/// NumericTextSchemeDecimal.
+/// NumericTextSchemeOfDecimal.
 ///
 /// - Supports up to 38 significant digits.
-public enum NumericTextSchemeDecimal: NumericTextFloatScheme {    
+public enum NumericTextSchemeOfDecimal: NumericTextFloatScheme {    
     public typealias Number = Decimal
     public typealias FormatStyle = Number.FormatStyle
     
@@ -42,8 +42,8 @@ public enum NumericTextSchemeDecimal: NumericTextFloatScheme {
 
 // MARK: Number + Compatible
 
-extension NumericTextSchemeDecimal.Number: NumericTextSchematic {
-    public typealias NumericTextScheme = NumericTextSchemeDecimal
+extension NumericTextSchemeOfDecimal.Number: NumericTextSchematic {
+    public typealias NumericTextScheme = NumericTextSchemeOfDecimal
 }
 
 #endif

@@ -152,25 +152,33 @@ extension NumericTextStyle {
     
     // MARK: Merge
     
-    @inlinable public func merge(_ snapshot: Snapshot, with content: Snapshot, in range: Range<Snapshot.Index>) -> Snapshot? {
+    @inlinable public func merge(_ current: Snapshot, with content: Snapshot, in range: Range<Snapshot.Index>) -> Snapshot? {
         let configuration = configuration()
                 
         var input = NumericTextStyleInput(content, with: configuration)
         let toggleSignInstruction = input.consumeToggleSignInstruction()
                 
-        let result = snapshot.replace(range, with: input.content)
+        let next = current.replace(range, with: input.content)
                 
-        guard var components = components(result, with: configuration) else { return nil }
+        guard var components = components(next, with: configuration) else { return nil }
         toggleSignInstruction?.process(&components)
                 
-        return self.snapshot(components)
+        return snapshot(&components)
     }
     
     // MARK: Helpers, Components
     
-    @inlinable func snapshot(_ components: Components) -> Snapshot? {
+    @inlinable func snapshot(_ components: inout Components) -> Snapshot? {
         let digits = components.numberOfDigitsWithoutZeroInteger()
-        guard precision.editableValidation(digits: digits) else { return nil }
+        guard let capacity = precision.editableValidationWithCapacity(digits: digits) else { return nil }
+        
+        // --------------------------------- //
+        
+        if components.decimals.isEmpty, capacity.lower == .zero {
+            components.separator = nil
+        }
+        
+        // --------------------------------- //
         
         guard let value = value(components) else { return nil }
         guard values.editableValidation(value) else { return nil }
@@ -178,9 +186,13 @@ extension NumericTextStyle {
         let style = editableStyle(digits: digits, separator: components.separator != nil)
         var characters = style.format(value)
                 
+        // --------------------------------- //
+        
         if let sign = components.sign, !characters.hasPrefix(sign.characters) {
             characters = sign.characters + characters
         }
+        
+        // --------------------------------- //
     
         return snapshot(characters)
     }

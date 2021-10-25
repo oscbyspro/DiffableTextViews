@@ -84,8 +84,8 @@ extension NumericTextStylePrecision {
         strategy.displayableStyle()
     }
     
-    @inlinable func editableValidation(digits: NumberOfDigits) -> Bool {
-        strategy.editableValidation(digits: digits)
+    @inlinable func editableValidationWithCapacity(digits: NumberOfDigits) -> NumberOfDigits? {
+        strategy.editableValidationWithCapacity(digits: digits)
     }
     
     @inlinable func editableStyle() -> NumberFormatStyleConfiguration.Precision {
@@ -109,10 +109,9 @@ extension NumericTextStylePrecision {
     typealias Defaults = NumericTextPrecisionDefaults
     typealias NumberOfDigits = NumericTextNumberOfDigits
     
-    
-    func displayableStyle() -> NumberFormatStyleConfiguration.Precision
+    @inlinable func displayableStyle() -> NumberFormatStyleConfiguration.Precision
         
-    func editableValidation(digits: NumberOfDigits) -> Bool
+    @inlinable func editableValidationWithCapacity(digits: NumberOfDigits) -> NumberOfDigits?
 }
 
 // MARK: - Strategies: Total
@@ -141,8 +140,12 @@ extension NumericTextStylePrecision {
         .significantDigits(total)
     }
         
-    @inlinable func editableValidation(digits: NumberOfDigits) -> Bool {
-        digits.upper + digits.lower <= total.upperBound
+
+    @inlinable func editableValidationWithCapacity(digits: NumberOfDigits) -> NumberOfDigits? {
+        let totalCapacity = total.upperBound - digits.upper - digits.lower
+        guard totalCapacity >= 0 else { return nil }
+
+        return NumberOfDigits(upper: totalCapacity, lower: totalCapacity)
     }
 }
 
@@ -188,16 +191,17 @@ extension NumericTextStylePrecision {
         .integerAndFractionLength(integerLimits: upper, fractionLimits: lower)
     }
     
-    @inlinable func editableValidation(digits: NumberOfDigits) -> Bool {
-        func validateTotal() -> Bool {
-            digits.upper + digits.lower <= Scheme.maxTotalDigits
-        }
+    @inlinable func editableValidationWithCapacity(digits: NumberOfDigits) -> NumberOfDigits? {
+        let totalCapacity = Scheme.maxTotalDigits - digits.upper - digits.lower
+        guard totalCapacity >= 0 else { return nil }
         
-        func validateParts() -> Bool {
-            digits.upper <= upper.upperBound && digits.lower <= lower.upperBound
-        }
+        let lowerCapacity = lower.upperBound - digits.lower
+        guard lowerCapacity >= 0 else { return nil }
         
-        return validateTotal() && validateParts()
+        let upperCapacity = upper.upperBound - digits.upper
+        guard upperCapacity >= 0 else { return nil }
+        
+        return NumberOfDigits(upper: lowerCapacity, lower: upperCapacity)
     }
 }
 
