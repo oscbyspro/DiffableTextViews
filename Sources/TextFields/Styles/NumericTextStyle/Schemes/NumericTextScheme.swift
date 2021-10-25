@@ -82,7 +82,7 @@ public extension NumericTextFloatScheme where FormatStyle == FloatingPointFormat
     }
 }
 
-// MARK: - NumbericTextSchemeCompatible
+// MARK: - NumericTextSchematic
 
 public protocol NumericTextSchematic {
     associatedtype NumericTextScheme: TextFields.NumericTextScheme where NumericTextScheme.Number == Self

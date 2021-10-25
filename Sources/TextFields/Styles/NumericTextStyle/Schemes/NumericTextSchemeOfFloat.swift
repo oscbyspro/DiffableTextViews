@@ -9,7 +9,6 @@ import struct Foundation.FloatingPointFormatStyle
 
 // MARK: - NumericTextSchemeOfFloat
 
-#warning("Rename: NumericTextIntegerScheme and NumericTextFloatScheme")
 /// NumericTextSchemeOfFloat.
 ///
 /// - Range:  ±Number.maxLosslessValue.

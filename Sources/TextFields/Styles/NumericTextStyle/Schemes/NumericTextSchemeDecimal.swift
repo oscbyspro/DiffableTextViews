@@ -12,16 +12,16 @@ import struct Foundation.Decimal
 
 /// NumericTextSchemeDecimal.
 ///
-/// - Supports up to 38 significant decimal digits: ±340,282,366,920,938,463,463,374,607,431,768,211,455 (rounded towards zero).
+/// - Supports up to 38 significant decimal digits.
 public enum NumericTextSchemeDecimal: NumericTextFloatScheme {    
     public typealias Number = Decimal
     public typealias FormatStyle = Number.FormatStyle
     
     // MARK: Values
         
-    public static let abs = Decimal(string: "340282366920938463463374607431768211455")!
-    @inlinable public static var min: Number { -abs }
-    @inlinable public static var max: Number {  abs }
+    public static let maxLosslessValue = Decimal(string: String(repeating: "9", count: maxTotalDigits))!
+    @inlinable public static var min: Number { -maxLosslessValue }
+    @inlinable public static var max: Number {  maxLosslessValue }
     
     // MARK: Precision
  
