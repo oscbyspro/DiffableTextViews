@@ -46,7 +46,7 @@ import struct Sequences.Walkthrough
         }
         
         let options = SimilaritiesOptions<Symbol>
-            .inspect(.only({ $0.attribute.intersects(with: .diffableOnChange) }))
+            .inspect(.only(\.diffable))
             .compare(.instruction(steps))
             .produce(.overshoot)
         
@@ -104,7 +104,7 @@ import struct Sequences.Walkthrough
             
         #warning("FIXME.")
             func condition() -> Bool {
-                let element = carets[position]; return element.lhs.nonreal && element.rhs.nonreal
+                let element = carets[position]; return !element.lhs.real && !element.rhs.real
             }
                         
             func move(_ direction: Walkthrough<Carets>.Step, towards predicate: (Carets.Element) -> Bool) {
@@ -113,12 +113,11 @@ import struct Sequences.Walkthrough
             
             #warning("FIXME.")
             if condition() {
-                move(.backwards, towards: { $0.lhs.real || $0.lhs.forwards })
+                move(.backwards, towards: { $0.lhs.attribute.intersects(with: .breakpointBackwards) })
             }
             
-            #warning("FIXME.")
             if condition() {
-                move(.forwards,  towards: { $0.rhs.real || $0.rhs.backwards })
+                move(.forwards,  towards: { $0.rhs.attribute.intersects(with: .breakpointForwards) })
             }
             
             return position
@@ -151,18 +150,13 @@ import struct Sequences.Walkthrough
         }
         
         // --------------------------------- //
-        
-        let xxx: Attribute = [.real, .forwards, .backwards]
-        
-        #warning("maybe rename editable as real")
+                
         #warning("nonspacer == editable or forwards or backwards")
-        let nonspacerAttributes: Attribute = [.real, .forwards, .backwards]
-        
-        let upperBound = position(\.upperBound, preference: .backwards, where: \.lhs.real)
+        let upperBound = position(\.upperBound, preference: .backwards, where: { $0.lhs.attribute.intersects(with: .breakpointBothWays) })
         var lowerBound = upperBound
 
         if !newValue.isEmpty {
-            lowerBound = position(\.lowerBound, preference:  .forwards, where: \.rhs.real)
+            lowerBound = position(\.lowerBound, preference:  .forwards, where: { $0.rhs.attribute.intersects(with: .breakpointBothWays) })
         }
         
         // --------------------------------- //

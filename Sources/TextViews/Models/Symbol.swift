@@ -23,59 +23,45 @@ public struct Symbol: Equatable {
     
     // MARK: Initializers: Static
     
-    @inlinable static func content(_ character: Character) -> Self {
+    @inlinable public static func content(_ character: Character) -> Self {
         Self(character, attribute: .content)
     }
     
-    @inlinable static func spacer(_ character: Character) -> Self {
+    @inlinable public static func spacer(_ character: Character) -> Self {
         Self(character, attribute: .spacer)
     }
     
-    @inlinable static func prefix(_ character: Character) -> Self {
+    @inlinable public static func prefix(_ character: Character) -> Self {
         Self(character, attribute: .prefix)
     }
     
-    @inlinable static func suffix(_ character: Character) -> Self {
+    @inlinable public static func suffix(_ character: Character) -> Self {
         Self(character, attribute: .suffix)
     }
     
-    // MARK: Descriptions: Real
+    // MARK: Descriptions
     
     @inlinable var real: Bool {
         attribute.contains(.real)
     }
     
-    @inlinable var nonreal: Bool {
-        !real
-    }
-
-    // MARK: Descriptions: Diffable
-    
     @inlinable var diffable: Bool {
         attribute.intersects(with: .diffableOnChange)
     }
-    
-    @inlinable var nondiffable: Bool {
-        !diffable
-    }
 
-    // MARK: Descriptions: Forwards
+    // MARK: Descriptions: Caret
     
-    @inlinable var forwards: Bool {
-        attribute.contains(.forwards)
+    @inlinable var directsCaretForwards: Bool {
+        attribute.contains(.directsCaretForwards)
+    }
+        
+    @inlinable var directsCaretBackwards: Bool {
+        attribute.contains(.directsCaretBackwards)
     }
     
-    @inlinable var nonforwards: Bool {
-       !forwards
-    }
+    // MARK: Utilities, Static
     
-    // MARK: Descriptions: Backwards
-    
-    @inlinable var backwards: Bool {
-        attribute.contains(.backwards)
-    }
-    
-    @inlinable var nonbackwards: Bool {
-        !backwards
+    @inlinable static func predicate(intersects attribute: Attribute) -> (Self) -> Bool {
+        { symbol in symbol.attribute.intersects(with: attribute) }
     }
 }
