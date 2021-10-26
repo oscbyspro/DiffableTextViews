@@ -7,99 +7,104 @@
 
 // MARK: - Similarities
 
-#warning("Make common method for lhsPrefix and rhsPrefix.")
-@usableFromInline struct Similarities<LHS: Collection, RHS: Collection> where LHS.Element == RHS.Element {
-    @usableFromInline typealias Element = LHS.Element
+#warning("Make common method for primaryPrefix and secondaryPrefix.")
+@usableFromInline struct Similarities<Primary: Collection, Secondary: Collection> where Primary.Element == Secondary.Element {
+    @usableFromInline typealias Element = Primary.Element
     @usableFromInline typealias Options = SimilaritiesOptions<Element>
     @usableFromInline typealias Instruction = SimilaritiesInstruction
+    @usableFromInline typealias Reversed<T: BidirectionalCollection> = ReversedCollection<T>
     
     // MARK: Properties
     
-    @usableFromInline let lhs: LHS
-    @usableFromInline let rhs: RHS
+    @usableFromInline let primary: Primary
+    @usableFromInline let secondary: Secondary
     @usableFromInline let options: Options
     
     // MARK: Initializers
     
-    @inlinable init(lhs: LHS, rhs: RHS, options: Options) {
-        self.lhs = lhs
-        self.rhs = rhs
+    @inlinable init(primary: Primary, secondary: Secondary, options: Options) {
+        self.primary = primary
+        self.secondary = secondary
         self.options = options
     }
     
-    @inlinable init(in lhs: LHS, and rhs: RHS, with options: Options) {
-        self.init(lhs: lhs, rhs: rhs, options: options)
+    @inlinable init(in primary: Primary, and secondary: Secondary, with options: Options) {
+        self.init(primary: primary, secondary: secondary, options: options)
     }
     
-    @inlinable init(in lhs: LHS, and rhs: RHS, with options: Options = .defaults()) where Element: Equatable {
-        self.init(lhs: lhs, rhs: rhs, options: options)
+    @inlinable init(in primary: Primary, and secondary: Secondary, with options: Options = .defaults()) where Element: Equatable {
+        self.init(primary: primary, secondary: secondary, options: options)
     }
     
-    // MARK: Maps
+    // MARK: Transformations
     
-    @inlinable func make<L: Collection, R: Collection>(_ lhs: L, _ rhs: R) -> Similarities<L, R> where L.Element == Element {
-        Similarities<L, R>(in: lhs, and: rhs, with: options)
+    @inlinable func make<L: Collection, R: Collection>(_ primary: L, _ secondary: R) -> Similarities<L, R> where L.Element == Element {
+        Similarities<L, R>(in: primary, and: secondary, with: options)
+    }
+    
+    @inlinable func swap() -> Similarities<Secondary, Primary> {
+        make(secondary, primary)
+    }
+
+    @inlinable func reverse() -> Similarities<Reversed<Primary>, Reversed<Secondary>> where Primary: BidirectionalCollection, Secondary: BidirectionalCollection {
+        make(primary.reversed(), secondary.reversed())
     }
     
     // MARK: Methods
     
-    @usableFromInline func lhsPrefix() -> LHS.SubSequence {
-        var lhsIndex = lhs.startIndex
-        var rhsIndex = rhs.startIndex
+    @usableFromInline func prefix() -> Primary.SubSequence {
+        var primaryIndex = primary.startIndex
+        var secondaryIndex = secondary.startIndex
         
         // --------------------------------- //
         
-        while let nextLhsIndex = lhs[lhsIndex...].firstIndex(where: options.inspection.includes),
-              let nextRhsIndex = rhs[rhsIndex...].firstIndex(where: options.inspection.includes) {
+        print()
+
+        
+        while let nextPrimaryIndex = primary[primaryIndex...].firstIndex(where: options.inspection.includes),
+              let nextSecondaryIndex = secondary[secondaryIndex...].firstIndex(where: options.inspection.includes) {
             
             // --------------------------------- //
             
-            let instruction = options.comparison.instruction(lhs[nextLhsIndex], rhs[nextRhsIndex])
+            let instruction = options.comparison.instruction(primary[nextPrimaryIndex], secondary[nextSecondaryIndex])
 
             // --------------------------------- //
             
-            guard instruction.isEmpty else { break }
+            print(primary[nextPrimaryIndex], secondary[nextSecondaryIndex], instruction.rawValue)
+            print("primary: \(instruction.contains(.continueInPrimary)), secondary: \(instruction.contains(.continueInSecondary))")
+            
+            guard !instruction.isEmpty else { break }
             
             // --------------------------------- //
-            
-            if instruction.contains(.nextLHS) {
-                lhsIndex = lhs.index(after: nextLhsIndex)
+                        
+            if instruction.contains(.continueInPrimary) {
+
+                primaryIndex = primary.index(after: nextPrimaryIndex)
             }
             
-            if instruction.contains(.nextRHS) {
-                rhsIndex = rhs.index(after: nextRhsIndex)
+            if instruction.contains(.continueInSecondary) {
+                secondaryIndex = secondary.index(after: nextSecondaryIndex)
             }
         }
         
         // --------------------------------- //
         
         if options.production == .overshoot {
-            lhsIndex = lhs[lhsIndex...].firstIndex(where: options.inspection.includes) ?? lhs.endIndex
+            primaryIndex = primary[primaryIndex...].firstIndex(where: options.inspection.includes) ?? primary.endIndex
         }
         
         // --------------------------------- //
         
-        return lhs[..<lhsIndex]
+        return primary[..<primaryIndex]
     }
     
-    @inlinable func rhsPrefix() -> RHS.SubSequence {
-        make(rhs, lhs).lhsPrefix()
-    }
-    
-    @inlinable func lhsSuffix() -> LHS.SubSequence where LHS: BidirectionalCollection, RHS: BidirectionalCollection {
-        let reversed = make(lhs.reversed(), rhs.reversed()).lhsPrefix()
-        return lhs[reversed.endIndex.base ..< reversed.startIndex.base]
-    }
-    
-    @inlinable func rhsSuffix() -> RHS.SubSequence where LHS: BidirectionalCollection, RHS: BidirectionalCollection {
-        make(rhs, lhs).lhsSuffix()
+    @inlinable func suffix() -> Primary.SubSequence where Primary: BidirectionalCollection, Secondary: BidirectionalCollection {
+        let reversed = make(primary.reversed(), secondary.reversed()).prefix()
+        return primary[reversed.endIndex.base ..< reversed.startIndex.base]
     }
 }
 
 // MARK: - Comparison
-
-#warning("If skipLHS & skipRHS is used, then rhsPrefix cannot invert itself like it does.")
-#warning("Instead a common method must be made and used by both.")
 
 @usableFromInline struct SimilaritiesInstruction: OptionSet {
     @usableFromInline let rawValue: UInt8
@@ -111,12 +116,14 @@
     }
     
     // MARK: Options
+
+    @usableFromInline static let continueInPrimary   = Self(rawValue: 1 << 0)
+    @usableFromInline static let continueInSecondary = Self(rawValue: 1 << 1)
     
-    @usableFromInline static let nextLHS = Self(rawValue: 1 << 0)
-    @usableFromInline static let nextRHS = Self(rawValue: 1 << 1)
+    // MARK: Composites
     
-    @usableFromInline static let next = Self([.nextLHS, .nextRHS])
-    @usableFromInline static let done = Self([])
+    @usableFromInline static let `continue` = Self([.continueInPrimary, .continueInSecondary])
+    @usableFromInline static let `done`     = Self([])
 }
             
 // MARK: - Collection
@@ -126,11 +133,11 @@ extension Collection {
     // MARK: Prefix
     
     @inlinable func prefix<Other: Collection>(alsoIn other: Other, options: Similarities<Self, Other>.Options) -> SubSequence where Other.Element == Element {
-        Similarities(lhs: self, rhs: other, options: options).lhsPrefix()
+        Similarities(primary: self, secondary: other, options: options).prefix()
     }
 
     @inlinable func prefix<Other: Collection>(alsoIn other: Other, options: Similarities<Self, Other>.Options = .defaults()) -> SubSequence where Other.Element == Element, Element: Equatable {
-        Similarities(lhs: self, rhs: other, options: options).lhsPrefix()
+        Similarities(primary: self, secondary: other, options: options).prefix()
     }
 }
 
@@ -141,11 +148,11 @@ extension BidirectionalCollection {
     // MARK: Suffix
     
     @inlinable func suffix<Other: BidirectionalCollection>(alsoIn other: Other, options: Similarities<Self, Other>.Options) -> SubSequence where Other.Element == Element {
-        Similarities(lhs: self, rhs: other, options: options).lhsSuffix()
+        Similarities(primary: self, secondary: other, options: options).suffix()
     }
 
     @inlinable func suffix<Other: BidirectionalCollection>(alsoIn other: Other, options: Similarities<Self, Other>.Options = .defaults()) -> SubSequence where Other.Element == Element, Element: Equatable {
-        Similarities(lhs: self, rhs: other, options: options).lhsSuffix()
+        Similarities(primary: self, secondary: other, options: options).suffix()
     }
 }
 
@@ -237,11 +244,11 @@ extension BidirectionalCollection {
     }
     
     @inlinable static func equation(_ equivalent: @escaping (Element, Element) -> Bool) -> Self {
-        Self({ equivalent($0, $1) ? .next : .done })
+        Self({ equivalent($0, $1) ? .continue : .done })
     }
     
     @inlinable static func equatable<Value: Equatable>(_ value: @escaping (Element) -> Value) -> Self {
-        Self({ value($0) == value($1) ? .next : .done })
+        Self({ value($0) == value($1) ? .continue : .done })
     }
 }
 
