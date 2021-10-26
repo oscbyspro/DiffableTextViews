@@ -52,7 +52,7 @@ public struct Symbol: Equatable {
     }
     
     @inlinable var diffable: Bool {
-        attribute.intersects(with: .diffableOnChange)
+        attribute.intersects(.diffableOnChange)
     }
 
     // MARK: Descriptions: Caret
@@ -68,6 +68,6 @@ public struct Symbol: Equatable {
     // MARK: Utilities, Static
     
     @inlinable static func predicate(intersects attribute: Attribute) -> (Self) -> Bool {
-        { symbol in symbol.attribute.intersects(with: attribute) }
+        { symbol in symbol.attribute.intersects(attribute) }
     }
 }

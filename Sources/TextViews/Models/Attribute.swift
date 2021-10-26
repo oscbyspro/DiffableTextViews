@@ -34,7 +34,7 @@ public struct Attribute: OptionSet {
     
     // MARK: Comparisons
     
-    @inlinable func intersects(with other: Self) -> Bool {
+    @inlinable func intersects(_ other: Self) -> Bool {
         !isDisjoint(with: other)
     }
     

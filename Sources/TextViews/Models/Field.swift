@@ -111,11 +111,11 @@ import struct Sequences.Walkthrough
             
             #warning("Clean this up.")
             if condition() {
-                move(.backwards, towards: { $0.lhs.attribute.intersects(with: Attribute.Breakpoints.backwards) })
+                move(.backwards, towards: { $0.lhs.attribute.intersects(Attribute.Breakpoints.backwards) })
             }
             
             if condition() {
-                move(.forwards,  towards: { $0.rhs.attribute.intersects(with: Attribute.Breakpoints.forwards) })
+                move(.forwards,  towards: { $0.rhs.attribute.intersects(Attribute.Breakpoints.forwards) })
             }
             
             return position
@@ -140,14 +140,13 @@ import struct Sequences.Walkthrough
             else                   { return      .none }
         }
         
-        #warning("Clean this up.")
-        func position(_ positionIn: (Range<Carets.Index>) -> Carets.Index, preference: Walkthrough<Carets>.Step, with symbol: (Carets.Element) -> Symbol) -> Carets.Index {
+        func position(_ positionIn: (Range<Carets.Index>) -> Carets.Index, preference: Walkthrough<Carets>.Step, evaluate symbol: (Carets.Element) -> Symbol) -> Carets.Index {
             let position = positionIn(newValue)
             let momentum = momentum(from: positionIn(selection), to: position) ?? preference
-            let breakpoint = momentum.forwards ? Attribute.Breakpoints.forwards : Attribute.Breakpoints.backwards
+            let limit = Attribute(.content, momentum.forwards ? .directsCaretBackwards : .directsCaretForwards)
             
             func predicate(element: Carets.Element) -> Bool {
-                symbol(element).attribute.intersects(with: breakpoint)
+                symbol(element).attribute.intersects(limit)
             }
             
             return carets.firstIndex(in: .stride(start: .closed(position), step: momentum), where: predicate) ?? position
@@ -155,11 +154,11 @@ import struct Sequences.Walkthrough
         
         // --------------------------------- //
                 
-        let upperBound = position(\.upperBound, preference: .backwards, with: \.lhs)
+        let upperBound = position(\.upperBound, preference: .backwards, evaluate: \.lhs)
         var lowerBound = upperBound
 
         if !newValue.isEmpty {
-            lowerBound = position(\.lowerBound, preference:  .forwards, with: \.rhs)
+            lowerBound = position(\.lowerBound, preference:  .forwards, evaluate: \.rhs)
         }
         
         // --------------------------------- //
