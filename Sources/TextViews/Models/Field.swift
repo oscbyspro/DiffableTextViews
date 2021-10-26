@@ -110,9 +110,7 @@ import UIKit
                     symbol(element).attribute.layout.intersects(limit)
                 }
                 
-                if let next = carets.firstIndex(in: .stride(start: .closed(position), step: direction), where: predicate) {
-                    position = next
-                }
+                position = carets.firstIndex(in: .stride(start: .closed(position), step: direction), where: predicate) ?? position
             }
             
             if condition() {

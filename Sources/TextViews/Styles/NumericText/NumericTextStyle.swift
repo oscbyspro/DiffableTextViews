@@ -220,18 +220,17 @@ extension NumericTextStyle {
                 snapshot.append(.content(character))
             }
         }
+                
+        // --------------------------------- //
         
-        #warning("Clean this up.")
-        let decimalSeparatorAsSuffixStartIndex = snapshot.reversed()
+        let decimalSeparatorAsSuffixStart = snapshot.reversed()
             .prefix(while: { decimalSeparator.contains($0.character) }).endIndex.base
-        
-        if decimalSeparatorAsSuffixStartIndex < snapshot.endIndex {
-            
-            let replacement = snapshot[decimalSeparatorAsSuffixStartIndex...]
-                .map({ Symbol($0.character, attribute: $0.attribute.update({ $0.differentiation.subtract(.onRemove) })) })
-            
-            snapshot.replaceSubrange(decimalSeparatorAsSuffixStartIndex..., with: replacement)
+                
+        if decimalSeparatorAsSuffixStart < snapshot.endIndex {
+            snapshot.replace(attributes: decimalSeparatorAsSuffixStart...) { attribute in attribute.update({ $0.subtract(.onRemove) }) }
         }
+        
+        // --------------------------------- //
 
         if let suffix = suffix {
             snapshot.append(.suffix(" "))
@@ -273,7 +272,7 @@ extension NumericTextStyle {
     }
 }
 
-// MARK: - Inputs
+// MARK: - Input
 
 @usableFromInline struct NumericTextStyleInput {
     @usableFromInline typealias Configuration = NumericTextConfiguration
@@ -297,7 +296,7 @@ extension NumericTextStyle {
     }
 }
 
-// MARK: Commands: Toggle Sign
+// MARK: Toggle Sign Instruction
         
 @usableFromInline struct NumericTextStyleToggleSignInstruction {
     @usableFromInline typealias Components = NumericTextComponents

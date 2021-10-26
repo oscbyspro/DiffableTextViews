@@ -35,6 +35,14 @@ public struct Attribute: Equatable {
     @inlinable public func update(_ transform: (inout Self) -> Void) -> Self {
         var result = self; transform(&result); return result
     }
+    
+    @inlinable public func update(_ transform: (inout Layout) -> Void) -> Self {
+        var result = self; transform(&result.layout); return result
+    }
+    
+    @inlinable public func update(_ transform: (inout Differentiation) -> Void) -> Self {
+        var result = self; transform(&result.differentiation); return result
+    }
 }
 
 // MARK: - Option Set
@@ -54,7 +62,7 @@ public extension AttributeOptionSet {
 public struct AttributeOfLayout: AttributeOptionSet {
     public static let content: Self = .init(rawValue: 1 << 0)
     public static let prefix:  Self = .init(rawValue: 1 << 1)
-    public static let suffix:  Self = .init(rawValue: 1 << 1)
+    public static let suffix:  Self = .init(rawValue: 1 << 2)
     public static let spacer:  Self = .init()
     
     // MARK: Properties

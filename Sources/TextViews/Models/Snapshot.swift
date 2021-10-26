@@ -8,7 +8,6 @@
 public struct Snapshot: BidirectionalCollection, RangeReplaceableCollection, ExpressibleByArrayLiteral {
     public typealias Element = Symbol
     public typealias Indices = DefaultIndices<Self>
-    public typealias SubSequence = Slice<Self>
 
     public typealias Characters = String
     public typealias Attributes = Array<Attribute>
@@ -151,5 +150,26 @@ extension Snapshot {
     /// - Complexity: O(1) on average.
     @inlinable public mutating func complete() {
         append(.suffix("\0"))
+    }
+}
+
+// MARK: - Utilities
+
+extension Snapshot {
+    
+    // MARK: Update
+    
+    @inlinable public mutating func replace<R: RangeExpression>(_ indices: R, with transform: (Symbol) -> Symbol) where R.Bound == Index {
+        replaceSubrange(indices, with: self[indices].map(transform))
+    }
+    
+    @inlinable public mutating func replace<R: RangeExpression>(characters indices: R, with transform: (Character) -> Character) where R.Bound == Index {
+        let slice = self[indices]; let indices = slice.startIndex.character ..< slice.endIndex.character
+        _characters.replaceSubrange(indices, with: characters[indices].map(transform))
+    }
+    
+    @inlinable public mutating func replace<R: RangeExpression>(attributes indices: R, with transform: (Attribute) -> Attribute) where R.Bound == Index {
+        let slice = self[indices]; let indices = slice.startIndex.attribute ..< slice.endIndex.attribute
+        _attributes.replaceSubrange(indices, with: attributes[indices].map(transform))
     }
 }
