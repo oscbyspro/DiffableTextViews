@@ -67,15 +67,15 @@ import Foundation
 
             // --------------------------------- //
                         
-            if instruction == .done {
+            if instruction == .`done` {
                 break loop
             }
             
-            if instruction.contains(.nextLHS) {
+            if instruction.contains(.continueOnLHS) {
                 lhsIndex = lhs.index(after: nextLHSIndex)
             }
             
-            if instruction.contains(.nextRHS) {
+            if instruction.contains(.continueOnRHS) {
                 rhsIndex = rhs.index(after: nextRHSIndex)
             }
         }
@@ -141,13 +141,13 @@ import Foundation
     
     // MARK: Options
 
-    @usableFromInline static let nextLHS = Self(rawValue: 1 << 0)
-    @usableFromInline static let nextRHS = Self(rawValue: 1 << 1)
+    @usableFromInline static let continueOnLHS = Self(rawValue: 1 << 0)
+    @usableFromInline static let continueOnRHS = Self(rawValue: 1 << 1)
     
     // MARK: Composites
     
-    @usableFromInline static let next = Self([.nextLHS, .nextRHS])
-    @usableFromInline static let done = Self([])
+    @usableFromInline static let `continue` = Self([.continueOnLHS, .continueOnRHS])
+    @usableFromInline static let `done` = Self([])
 }
             
 // MARK: - Collection
@@ -268,11 +268,11 @@ extension BidirectionalCollection {
     }
     
     @inlinable static func equation(_ equivalent: @escaping (Element, Element) -> Bool) -> Self {
-        Self({ equivalent($0, $1) ? .next : .done })
+        Self({ equivalent($0, $1) ? .`continue` : .`done` })
     }
     
     @inlinable static func equatable<Value: Equatable>(_ value: @escaping (Element) -> Value) -> Self {
-        Self({ value($0) == value($1) ? .next : .done })
+        Self({ value($0) == value($1) ? .`continue` : .`done` })
     }
 }
 

@@ -39,36 +39,26 @@ public struct Symbol: Equatable {
         Self(character, attribute: .suffix)
     }
     
-    // MARK: Descriptions: Editable
+    // MARK: Descriptions: Real
     
-    @inlinable var editable: Bool {
-        attribute.contains(.editable)
+    @inlinable var real: Bool {
+        attribute.contains(.real)
     }
     
-    @inlinable var noneditable: Bool {
-        !editable
+    @inlinable var nonreal: Bool {
+        !real
     }
-    
-    // MARK: Descriptions: Removable
 
-    @inlinable var removable: Bool {
-        attribute.contains(.removable)
+    // MARK: Descriptions: Diffable
+    
+    @inlinable var diffable: Bool {
+        attribute.intersects(with: .diffableOnChange)
     }
     
-    @inlinable var nonremovable: Bool {
-        !removable
+    @inlinable var nondiffable: Bool {
+        !diffable
     }
-    
-    // MARK: Descriptions: Insertable
-    
-    @inlinable var insertable: Bool {
-        attribute.contains(.insertable)
-    }
-    
-    @inlinable var noninsertable: Bool {
-        !insertable
-    }
-    
+
     // MARK: Descriptions: Forwards
     
     @inlinable var forwards: Bool {
@@ -87,15 +77,5 @@ public struct Symbol: Equatable {
     
     @inlinable var nonbackwards: Bool {
         !backwards
-    }
-    
-    // MARK: - Descriptions: Spacer
-    
-    @inlinable var spacer: Bool {
-        attribute.isSuperset(of: .spacer)
-    }
-    
-    @inlinable var nonspacer: Bool {
-        !spacer
     }
 }

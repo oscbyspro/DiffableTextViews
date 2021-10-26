@@ -33,17 +33,22 @@ import struct Sequences.Walkthrough
     // MARK: Translate: To Carets
     
     @inlinable func translate(to newValue: Carets) -> Self {
-        func steps(current: Symbol, next: Symbol) -> SimilaritiesInstruction {
-            if current == next        { return .next    }
-            else if current.removable { return .nextLHS }
-            else if next.insertable   { return .nextRHS }
-            else                      { return .done    }
+        func steps(prev: Symbol, next: Symbol) -> SimilaritiesInstruction {
+            if prev == next {
+                return .continue
+            } else if !prev.attribute.contains(.diffableOnRemove) {
+                return .continueOnLHS
+            } else if !next.attribute.contains(.diffableOnInsert) {
+                return .continueOnRHS
+            } else{
+                return .done
+            }
         }
         
         let options = SimilaritiesOptions<Symbol>
-            .produce(.overshoot)
-            .inspect(.only(\.editable))
+            .inspect(.only({ $0.attribute.intersects(with: .diffableOnChange) }))
             .compare(.instruction(steps))
+            .produce(.overshoot)
         
         func position(from current: Carets.SubSequence, to next: Carets.SubSequence) -> Carets.Index {
             Similarities(in: current.lazy.map(\.rhs), and: next.lazy.map(\.rhs), with: options).rhsSuffix().startIndex
@@ -92,24 +97,28 @@ import struct Sequences.Walkthrough
     // MARK: Move: To Content
     
     #warning("FIXME.")
+    #warning("Rename: moveToDiffable")
     @inlinable func moveToContent() -> Field {
         func position(_ position: Carets.Index) -> Carets.Index {
             var position = position
             
+        #warning("FIXME.")
             func condition() -> Bool {
-                let element = carets[position]; return !element.lhs.editable && !element.rhs.editable
+                let element = carets[position]; return element.lhs.nonreal && element.rhs.nonreal
             }
                         
             func move(_ direction: Walkthrough<Carets>.Step, towards predicate: (Carets.Element) -> Bool) {
                 position = carets.firstIndex(in: .stride(start: .closed(position), step: direction), where: predicate) ?? position
             }
             
+            #warning("FIXME.")
             if condition() {
-                move(.backwards, towards: { $0.lhs.editable || $0.lhs.forwards })
+                move(.backwards, towards: { $0.lhs.real || $0.lhs.forwards })
             }
             
+            #warning("FIXME.")
             if condition() {
-                move(.forwards,  towards: { $0.rhs.editable || $0.rhs.backwards })
+                move(.forwards,  towards: { $0.rhs.real || $0.rhs.backwards })
             }
             
             return position
@@ -137,19 +146,23 @@ import struct Sequences.Walkthrough
         func position(_ positionIn: (Range<Carets.Index>) -> Carets.Index, preference: Walkthrough<Carets>.Step, where predicate: (Carets.Element) -> Bool) -> Carets.Index {
             let position = positionIn(newValue)
             let momentum = momentum(from: positionIn(selection), to: position) ?? preference
-    
+            
             return carets.firstIndex(in: .stride(start: .closed(position), step: momentum), where: predicate) ?? position
         }
         
         // --------------------------------- //
         
+        let xxx: Attribute = [.real, .forwards, .backwards]
+        
         #warning("maybe rename editable as real")
         #warning("nonspacer == editable or forwards or backwards")
-        let upperBound = position(\.upperBound, preference: .backwards, where: \.lhs.nonspacer)
+        let nonspacerAttributes: Attribute = [.real, .forwards, .backwards]
+        
+        let upperBound = position(\.upperBound, preference: .backwards, where: \.lhs.real)
         var lowerBound = upperBound
 
         if !newValue.isEmpty {
-            lowerBound = position(\.lowerBound, preference:  .forwards, where: \.rhs.nonspacer)
+            lowerBound = position(\.lowerBound, preference:  .forwards, where: \.rhs.real)
         }
         
         // --------------------------------- //

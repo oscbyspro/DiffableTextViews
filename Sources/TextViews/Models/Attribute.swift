@@ -7,15 +7,15 @@
 
 // MARK: - Attribute
 
-#warning("Make namespaces for composites/nonstandards.")
-#warning("Rather than diffable, it should be removable, and insertible")
+#warning("Make it so spacer is an empty attribute, because that makes the most sense.")
 public struct Attribute: OptionSet {
-    public static let editable   = Self(rawValue: 1 << 0) // flag for extraction
-    public static let removable  = Self(rawValue: 1 << 1) // flag for ignore removal
-    public static let insertable = Self(rawValue: 1 << 2) // flag for ignore insertion
+    public static let real: Self             = .init(rawValue: 1 << 0)
+    public static let diffableOnInsert: Self = .init(rawValue: 1 << 1)
+    public static let diffableOnRemove: Self = .init(rawValue: 1 << 2)
+    public static let diffableOnChange: Self = .init(diffableOnInsert, diffableOnRemove)
+    public static let forwards: Self         = .init(rawValue: 1 << 3)
+    public static let backwards: Self        = .init(rawValue: 1 << 4)
     
-    public static let forwards   = Self(rawValue: 1 << 3) // flag for movement (essentially prefix)
-    public static let backwards  = Self(rawValue: 1 << 4) // flag for movement (essentially suffix)
     
     // MARK: Properties
     
@@ -27,32 +27,21 @@ public struct Attribute: OptionSet {
         self.rawValue = rawValue
     }
     
+    @inlinable public init(_ attributes: Attribute...) {
+        self.init(attributes)
+    }
+    
+    // MARK: Utilities
+    
+    @inlinable func intersects(with other: Self) -> Bool {
+        !isDisjoint(with: other)
+    }
+    
     // MARK: Composites
     
-    public static let content: Self = [.editable]
-    public static let spacer:  Self = [.removable, .insertable]
-    public static let prefix:  Self = [.removable, .insertable,  .forwards]
-    public static let suffix:  Self = [.removable, .insertable, .backwards]
-}
-
-#warning("OLD")
-
-func lol() {
-    #warning("...")
-    let forces = "-><-"
-}
-
-public enum OLD_Attribute: Equatable {
-    
-    /// The `content` attribute makes it so the character `editable`.
-    case content
-    
-    /// The `spacer` attribute makes it so the character is `noneditable` and the `cursor skips over it.`
-    case spacer
-    
-    /// The `prefix` attribute makes it so the character is `noneditable` and the `cursor moves forwards from it.`
-    case prefix
-    
-    /// The `suffix` attribute makes it so the character is `noneditable` and  the `cursor moves backwards from it.`
-    case suffix
+    #warning("Remove, maybe.")
+    public static let spacer:  Attribute = []
+    public static let prefix:  Attribute = [.forwards]
+    public static let suffix:  Attribute = [.backwards]
+    public static let content: Attribute = [.real, .diffableOnChange]
 }

@@ -199,13 +199,12 @@ extension NumericTextStyle {
     
     // MARK: Helpers, Characters
     
-    #warning("Snapshot needs a priority system like: case .diffable, .ignore.")
+    #warning("FIXME.")
     @inlinable func snapshot(_ characters: String) -> Snapshot {
         var snapshot = Snapshot()
             
         // --------------------------------- //
         
-        #warning("Never diff prefix.")
         if let prefix = prefix {
             snapshot.append(contentsOf: Snapshot(prefix, only: .prefix))
             snapshot.append(.prefix(" "))
@@ -223,15 +222,15 @@ extension NumericTextStyle {
             }
         }
         
-        #warning("If decimal separator is last, don't diff it.")
+        #warning("Clean this up.")
         let decimalSeparatorAsSuffixStartIndex = snapshot.reversed()
             .prefix(while: { decimalSeparator.contains($0.character) }).endIndex.base
         if decimalSeparatorAsSuffixStartIndex < snapshot.endIndex {
-            let replacement = snapshot[decimalSeparatorAsSuffixStartIndex...].map({ Symbol($0.character, attribute: [$0.attribute, .removable]) })
+            let replacement = snapshot[decimalSeparatorAsSuffixStartIndex...]
+                .map({ Symbol($0.character, attribute: $0.attribute.subtracting(.diffableOnRemove)) })
             snapshot.replaceSubrange(decimalSeparatorAsSuffixStartIndex..., with: replacement)
         }
 
-        #warning("Never diff suffix.")
         if let suffix = suffix {
             snapshot.append(.suffix(" "))
             snapshot.append(contentsOf: Snapshot(suffix, only: .suffix))
@@ -269,7 +268,7 @@ extension NumericTextStyle {
     
     #warning("Double check, later.")
     @inlinable func components(_ snapshot: Snapshot, with configuration: Configuration) -> Components? {
-        configuration.components(snapshot.characters(where: \.editable))
+        configuration.components(snapshot.characters(where: \.real))
     }
 }
 
