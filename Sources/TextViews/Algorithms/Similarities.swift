@@ -7,9 +7,11 @@
 
 // MARK: - Similarities
 
+#warning("Make common method for lhsPrefix and rhsPrefix.")
 @usableFromInline struct Similarities<LHS: Collection, RHS: Collection> where LHS.Element == RHS.Element {
     @usableFromInline typealias Element = LHS.Element
     @usableFromInline typealias Options = SimilaritiesOptions<Element>
+    @usableFromInline typealias Instruction = SimilaritiesInstruction
     
     // MARK: Properties
     
@@ -45,18 +47,37 @@
         var lhsIndex = lhs.startIndex
         var rhsIndex = rhs.startIndex
         
+        // --------------------------------- //
+        
         while let nextLhsIndex = lhs[lhsIndex...].firstIndex(where: options.inspection.includes),
               let nextRhsIndex = rhs[rhsIndex...].firstIndex(where: options.inspection.includes) {
-                        
-            guard options.comparison.equivalent(lhs[nextLhsIndex], rhs[nextRhsIndex]) else { break }
             
-            lhsIndex = lhs.index(after: nextLhsIndex)
-            rhsIndex = rhs.index(after: nextRhsIndex)
+            // --------------------------------- //
+            
+            let instruction = options.comparison.instruction(lhs[nextLhsIndex], rhs[nextRhsIndex])
+
+            // --------------------------------- //
+            
+            guard instruction.isEmpty else { break }
+            
+            // --------------------------------- //
+            
+            if instruction.contains(.nextLHS) {
+                lhsIndex = lhs.index(after: nextLhsIndex)
+            }
+            
+            if instruction.contains(.nextRHS) {
+                rhsIndex = rhs.index(after: nextRhsIndex)
+            }
         }
+        
+        // --------------------------------- //
         
         if options.production == .overshoot {
             lhsIndex = lhs[lhsIndex...].firstIndex(where: options.inspection.includes) ?? lhs.endIndex
         }
+        
+        // --------------------------------- //
         
         return lhs[..<lhsIndex]
     }
@@ -75,7 +96,33 @@
     }
 }
 
+// MARK: - Comparison
+
+#warning("If skipLHS & skipRHS is used, then rhsPrefix cannot invert itself like it does.")
+#warning("Instead a common method must be made and used by both.")
+
+@usableFromInline struct SimilaritiesInstruction: OptionSet {
+    @usableFromInline let rawValue: UInt8
+    
+    // MARK: Initializers
+    
+    @inlinable init(rawValue: UInt8 = 0) {
+        self.rawValue = rawValue
+    }
+    
+    // MARK: Options
+    
+    @usableFromInline static let nextLHS = Self(rawValue: 1 << 0)
+    @usableFromInline static let nextRHS = Self(rawValue: 1 << 1)
+    
+    @usableFromInline static let next = Self([.nextLHS, .nextRHS])
+    @usableFromInline static let done = Self([])
+}
+            
+// MARK: - Collection
+
 extension Collection {
+    
     // MARK: Prefix
     
     @inlinable func prefix<Other: Collection>(alsoIn other: Other, options: Similarities<Self, Other>.Options) -> SubSequence where Other.Element == Element {
@@ -87,7 +134,10 @@ extension Collection {
     }
 }
 
+// MARK: - BidirectionalCollection
+            
 extension BidirectionalCollection {
+    
     // MARK: Suffix
     
     @inlinable func suffix<Other: BidirectionalCollection>(alsoIn other: Other, options: Similarities<Self, Other>.Options) -> SubSequence where Other.Element == Element {
@@ -165,29 +215,38 @@ extension BidirectionalCollection {
     }
 }
 
-// MARK: -
+// MARK: - Options: Comparison
 
 @usableFromInline struct SimilaritiesOptionsComparison<Element> {
-    @usableFromInline let equivalent: (Element, Element) -> Bool
+    @usableFromInline typealias Instruction = SimilaritiesInstruction
+    
+    // MARK: Properties
+    
+    @usableFromInline let instruction: (Element, Element) -> Instruction
     
     // MARK: Initializers
     
-    @inlinable init(equivalent: @escaping (Element, Element) -> Bool) {
-        self.equivalent = equivalent
+    @inlinable init(_ instruction: @escaping (Element, Element) -> Instruction) {
+        self.instruction = instruction
     }
     
     // MARK: Initializers: Static
     
+    @inlinable static func instruction(_ instruction: @escaping (Element, Element) -> Instruction) -> Self {
+        Self(instruction)
+    }
+    
     @inlinable static func equation(_ equivalent: @escaping (Element, Element) -> Bool) -> Self {
-        Self(equivalent: equivalent)
+        Self({ equivalent($0, $1) ? .next : .done })
     }
     
     @inlinable static func equatable<Value: Equatable>(_ value: @escaping (Element) -> Value) -> Self {
-        Self(equivalent: { value($0) == value($1) })
+        Self({ value($0) == value($1) ? .next : .done })
     }
 }
 
-// MARK: -
+
+// MARK: - Options: Inspection
 
 @usableFromInline struct SimilaritiesOptionsInspection<Element> {
     @usableFromInline let includes: (Element) -> Bool
@@ -211,7 +270,7 @@ extension BidirectionalCollection {
     @inlinable static var defaultValue: Self { .each }
 }
 
-// MARK: -
+// MARK: - Options: Production
 
 @usableFromInline enum SimilaritiesOptionsProduction {
     case wrapper
