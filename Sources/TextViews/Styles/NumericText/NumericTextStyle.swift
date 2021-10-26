@@ -231,7 +231,6 @@ extension NumericTextStyle {
             snapshot.replaceSubrange(decimalSeparatorAsSuffixStartIndex..., with: replacement)
         }
 
-        
         #warning("Never diff suffix.")
         if let suffix = suffix {
             snapshot.append(.suffix(" "))
