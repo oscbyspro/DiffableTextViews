@@ -11,8 +11,8 @@ public struct Symbol: Equatable {
     
     // MARK: Properties
     
-    public let attribute: Attribute
     public let character: Character
+    public let attribute: Attribute
     
     // MARK: Initializers
     
@@ -39,39 +39,63 @@ public struct Symbol: Equatable {
         Self(character, attribute: .suffix)
     }
     
-    // MARK: Descriptions: Positive
+    // MARK: Descriptions: Editable
     
-    @inlinable var content: Bool {
-        attribute == .content
+    @inlinable var editable: Bool {
+        attribute.contains(.editable)
     }
+    
+    @inlinable var noneditable: Bool {
+        !editable
+    }
+    
+    // MARK: Descriptions: Removable
+
+    @inlinable var removable: Bool {
+        attribute.contains(.removable)
+    }
+    
+    @inlinable var nonremovable: Bool {
+        !removable
+    }
+    
+    // MARK: Descriptions: Insertable
+    
+    @inlinable var insertable: Bool {
+        attribute.contains(.insertable)
+    }
+    
+    @inlinable var noninsertable: Bool {
+        !insertable
+    }
+    
+    // MARK: Descriptions: Forwards
+    
+    @inlinable var forwards: Bool {
+        attribute.contains(.forwards)
+    }
+    
+    @inlinable var nonforwards: Bool {
+       !forwards
+    }
+    
+    // MARK: Descriptions: Backwards
+    
+    @inlinable var backwards: Bool {
+        attribute.contains(.backwards)
+    }
+    
+    @inlinable var nonbackwards: Bool {
+        !backwards
+    }
+    
+    // MARK: - Descriptions: Spacer
     
     @inlinable var spacer: Bool {
-        attribute == .spacer
-    }
-    
-    @inlinable var prefix: Bool {
-        attribute == .prefix
-    }
-    
-    @inlinable var suffix: Bool {
-        attribute == .suffix
-    }
-
-    // MARK: Descriptions: Negative
-    
-    @inlinable var noncontent: Bool {
-        attribute != .content
+        attribute.isSuperset(of: .spacer)
     }
     
     @inlinable var nonspacer: Bool {
-        attribute != .spacer
-    }
-    
-    @inlinable var nonprefix: Bool {
-        attribute != .prefix
-    }
-    
-    @inlinable var nonsuffix: Bool {
-        attribute != .suffix
+        !spacer
     }
 }

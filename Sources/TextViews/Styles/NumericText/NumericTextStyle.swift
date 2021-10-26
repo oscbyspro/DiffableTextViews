@@ -31,8 +31,8 @@ public struct NumericTextStyle<Scheme: NumericTextScheme>: DiffableTextStyle {
     @usableFromInline var values: Values = .all
     @usableFromInline var precision: Precision = .max
     
-    @usableFromInline var prefix: Snapshot? = nil
-    @usableFromInline var suffix: Snapshot? = nil
+    @usableFromInline var prefix: String? = nil
+    @usableFromInline var suffix: String? = nil
     
     // MARK: Initializers
     
@@ -95,11 +95,11 @@ extension NumericTextStyle {
     }
     
     @inlinable public func prefix(_ newValue: String?) -> Self {
-        update({ $0.prefix = newValue.map({ Snapshot($0, only: .prefix) }) })
+        update({ $0.prefix = newValue })
     }
     
     @inlinable public func suffix(_ newValue: String?) -> Self {
-        update({ $0.suffix = newValue.map({ Snapshot($0, only: .suffix) }) })
+        update({ $0.suffix = newValue })
     }
     
     // MARK: Helpers
@@ -207,7 +207,7 @@ extension NumericTextStyle {
         
         #warning("Never diff prefix.")
         if let prefix = prefix {
-            snapshot = prefix
+            snapshot.append(contentsOf: Snapshot(prefix, only: .prefix))
             snapshot.append(.prefix(" "))
         }
         
@@ -224,14 +224,18 @@ extension NumericTextStyle {
         }
         
         #warning("If decimal separator is last, don't diff it.")
-//        if snapshot.last.map(decimalSeparator.contains) {
-            #warning("...")
-//        }
+        let decimalSeparatorAsSuffixStartIndex = snapshot.reversed()
+            .prefix(while: { decimalSeparator.contains($0.character) }).endIndex.base
+        if decimalSeparatorAsSuffixStartIndex < snapshot.endIndex {
+            let replacement = snapshot[decimalSeparatorAsSuffixStartIndex...].map({ Symbol($0.character, attribute: [$0.attribute, .removable]) })
+            snapshot.replaceSubrange(decimalSeparatorAsSuffixStartIndex..., with: replacement)
+        }
+
         
         #warning("Never diff suffix.")
         if let suffix = suffix {
             snapshot.append(.suffix(" "))
-            snapshot.append(contentsOf: suffix)
+            snapshot.append(contentsOf: Snapshot(suffix, only: .suffix))
         }
     
         // --------------------------------- //
@@ -264,8 +268,9 @@ extension NumericTextStyle {
     
     // MARK: Components
     
+    #warning("Double check, later.")
     @inlinable func components(_ snapshot: Snapshot, with configuration: Configuration) -> Components? {
-        configuration.components(snapshot.content())
+        configuration.components(snapshot.characters(where: \.editable))
     }
 }
 

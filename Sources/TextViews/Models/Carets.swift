@@ -90,8 +90,10 @@
         // MARK: Initialization
 
         @inlinable init(lhs: Symbol?, rhs: Symbol?) {
-            self.lhs = lhs ?? .prefix("\0")
-            self.rhs = rhs ?? .suffix("\0")
+//            self.lhs = lhs ?? .prefix("\0")
+//            self.rhs = rhs ?? .suffix("\0")
+            self.lhs = lhs ?? Symbol("\0", attribute: [.forwards])
+            self.rhs = rhs ?? Symbol("\0", attribute: [.backwards])
         }
     }
     

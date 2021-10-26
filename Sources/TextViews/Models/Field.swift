@@ -33,13 +33,31 @@ import struct Sequences.Walkthrough
     // MARK: Translate: To Carets
     
     @inlinable func translate(to newValue: Carets) -> Self {
+        func equation(lhs: Symbol, rhs: Symbol) -> Bool {
+            return fatalError()
+            
+            #warning("...")
+            if lhs == rhs            { return .success }
+            else if rhs.nonremovable { return .skipRHS }
+            else if lhs.insertable   { return .skipLHS }
+            else                     { return .failure }
+        }
+        
         let options = SimilaritiesOptions<Symbol>
             .produce(.overshoot)
-            .inspect(.only(\.content))
-            .compare(.equatable(\.character))
+            .inspect(.only(\.editable))
+//            .compare(.equatable(\.character))
+            .compare(.equation(equation))
         
         func position(from current: Carets.SubSequence, to next: Carets.SubSequence) -> Carets.Index {
-            next.lazy.map(\.rhs).suffix(alsoIn: current.lazy.map(\.rhs), options: options).startIndex
+            let lhs =    next.lazy.map(\.rhs).filter(\.noninsertable)
+            let rhs = current.lazy.map(\.rhs).filter(\.nonremovable)
+            return Similarities(lhs: lhs, rhs: rhs, options: options).lhsSuffix().startIndex
+            
+            
+            #warning("   next.lazy.compactMap: rhs.nonremovable")
+            #warning("current.lazy.compactMap: rhs.noninsertable")
+            return next.lazy.map(\.rhs).suffix(alsoIn: current.lazy.map(\.rhs), options: options).startIndex
         }
         
         // --------------------------------- //
@@ -84,12 +102,13 @@ import struct Sequences.Walkthrough
 
     // MARK: Move: To Content
     
+    #warning("FIXME.")
     @inlinable func moveToContent() -> Field {
         func position(_ position: Carets.Index) -> Carets.Index {
             var position = position
             
             func condition() -> Bool {
-                let element = carets[position]; return element.lhs.noncontent && element.rhs.noncontent
+                let element = carets[position]; return !element.lhs.editable && !element.rhs.editable
             }
                         
             func move(_ direction: Walkthrough<Carets>.Step, towards predicate: (Carets.Element) -> Bool) {
@@ -97,11 +116,11 @@ import struct Sequences.Walkthrough
             }
             
             if condition() {
-                move(.backwards, towards: { $0.lhs.content || $0.lhs.prefix })
+                move(.backwards, towards: { $0.lhs.editable || $0.lhs.forwards })
             }
             
             if condition() {
-                move(.forwards,  towards: { $0.rhs.content || $0.rhs.suffix })
+                move(.forwards,  towards: { $0.rhs.editable || $0.rhs.backwards })
             }
             
             return position
@@ -135,6 +154,8 @@ import struct Sequences.Walkthrough
         
         // --------------------------------- //
         
+        #warning("maybe rename editable as real")
+        #warning("nonspacer == editable or forwards or backwards")
         let upperBound = position(\.upperBound, preference: .backwards, where: \.lhs.nonspacer)
         var lowerBound = upperBound
 

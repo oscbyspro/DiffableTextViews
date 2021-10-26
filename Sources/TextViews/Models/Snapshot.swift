@@ -42,10 +42,10 @@ public struct Snapshot: BidirectionalCollection, RangeReplaceableCollection, Exp
     // MARK: Utilities
     
     /// - Complexity: O(n), where n is the length of the collection.
-    @inlinable public func content() -> String {
-        reduce(map: \.character, where: \.content)
+    @inlinable public func characters(where predicate: (Symbol) -> Bool) -> String {
+        reduce(map: \.character, where: predicate)
     }
-    
+
     // MARK: Collection: Counts
     
     /// - Complexity: O(1).
