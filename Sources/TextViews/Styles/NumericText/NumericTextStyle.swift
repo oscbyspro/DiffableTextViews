@@ -206,19 +206,19 @@ extension NumericTextStyle {
         // --------------------------------- //
         
         if let prefix = prefix {
-            snapshot.append(contentsOf: Snapshot(prefix, only: .prefix))
+            snapshot.append(contentsOf: Snapshot(prefix, only: .spacer))
             snapshot.append(.prefix(" "))
         }
         
         for character in characters {
             if Components.Digits.set.contains(character) {
-                snapshot.append(.content(character))
+                snapshot.append(.editable(character))
             } else if groupingSeparator.contains(character) {
                 snapshot.append(.spacer(character))
             } else if decimalSeparator.contains(character) {
-                snapshot.append(.content(character))
+                snapshot.append(.editable(character))
             } else if Components.Sign.set.contains(character) {
-                snapshot.append(.content(character))
+                snapshot.append(.editable(character))
             }
         }
         
@@ -268,7 +268,7 @@ extension NumericTextStyle {
     
     #warning("Double check, later.")
     @inlinable func components(_ snapshot: Snapshot, with configuration: Configuration) -> Components? {
-        configuration.components(snapshot.characters(where: \.real))
+        configuration.components(snapshot.characters(where: \.content))
     }
 }
 

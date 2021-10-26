@@ -7,9 +7,8 @@
 
 // MARK: - Attribute
 
-#warning("Make it so spacer is an empty attribute, because that makes the most sense.")
 public struct Attribute: OptionSet {
-    public static let real: Self = .init(rawValue: 1 << 0)
+    public static let content: Self = .init(rawValue: 1 << 0)
 
     public static let diffableOnInsert: Self = .init(rawValue: 1 << 1)
     public static let diffableOnRemove: Self = .init(rawValue: 1 << 2)
@@ -19,11 +18,6 @@ public struct Attribute: OptionSet {
     public static let directsCaretBackwards: Self = .init(rawValue: 1 << 4)
     public static let directsCaretBothWays:  Self = .init(directsCaretForwards, directsCaretBackwards)
 
-    public static let markAlpha: Self = .init(rawValue: 1 << 5)
-    public static let markBeta:  Self = .init(rawValue: 1 << 6)
-    public static let markGamma: Self = .init(rawValue: 1 << 7)
-
-    
     // MARK: Properties
     
     public let rawValue: UInt8
@@ -38,22 +32,37 @@ public struct Attribute: OptionSet {
         self.init(attributes)
     }
     
-    // MARK: Utilities
+    // MARK: Comparisons
     
     @inlinable func intersects(with other: Self) -> Bool {
         !isDisjoint(with: other)
     }
     
-    // MARK: Composites
+    // MARK: Components: Intuitive
+            
+    public struct Intuitive {
+        public static let spacer:   Self = .init()
+        public static let prefix:   Self = .init(.directsCaretForwards)
+        public static let suffix:   Self = .init(.directsCaretBackwards)
+        public static let content:  Self = .init(.content, .diffableOnChange)
+        
+        // MARK: Properties
+        
+        public let attribute: Attribute
+        
+        // MARK: Initializers
+        
+        @inlinable init(_ attribute: Attribute...) {
+            self.attribute = .init(attribute)
+        }
+    }
     
-    #warning("Remove, maybe.")
-    public static let spacer:  Attribute = .init()
-    public static let prefix:  Attribute = .init(directsCaretForwards)
-    public static let suffix:  Attribute = .init(directsCaretBackwards)
-    public static let content: Attribute = .init(real, diffableOnChange)
+    // MARK: Components: Breakpoints
     
-    #warning("Remove, maybe")
-    public static let breakpointForwards: Attribute = .init(real, directsCaretBackwards)
-    public static let breakpointBackwards: Attribute = .init(real, directsCaretForwards)
-    public static let breakpointBothWays: Attribute = .init(real, directsCaretBothWays)
+    #warning("...")
+    public enum Breakpoints {
+        public static let forwards:  Attribute = .init(.content, .directsCaretBackwards)
+        public static let backwards: Attribute = .init(.content, .directsCaretForwards)
+        public static let bothWays:  Attribute = .init(.content, .directsCaretBothWays)
+    }
 }

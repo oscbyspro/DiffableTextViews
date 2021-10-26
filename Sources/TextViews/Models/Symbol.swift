@@ -7,6 +7,7 @@
 
 // MARK: Symbol
 
+#warning("Rename: Attribute.Layout -> Attribute.Intuitive")
 public struct Symbol: Equatable {
     
     // MARK: Properties
@@ -21,28 +22,33 @@ public struct Symbol: Equatable {
         self.attribute = attribute
     }
     
+    @inlinable public init(_ character: Character, intuitive: Attribute.Intuitive) {
+        self.character = character
+        self.attribute = intuitive.attribute
+    }
+    
     // MARK: Initializers: Static
     
-    @inlinable public static func content(_ character: Character) -> Self {
-        Self(character, attribute: .content)
+    @inlinable public static func editable(_ character: Character) -> Self {
+        Self(character, intuitive: .content)
     }
     
     @inlinable public static func spacer(_ character: Character) -> Self {
-        Self(character, attribute: .spacer)
+        Self(character, intuitive: .spacer)
     }
     
     @inlinable public static func prefix(_ character: Character) -> Self {
-        Self(character, attribute: .prefix)
+        Self(character, intuitive: .prefix)
     }
     
     @inlinable public static func suffix(_ character: Character) -> Self {
-        Self(character, attribute: .suffix)
+        Self(character, intuitive: .suffix)
     }
     
     // MARK: Descriptions
     
-    @inlinable var real: Bool {
-        attribute.contains(.real)
+    @inlinable var content: Bool {
+        attribute.contains(.content)
     }
     
     @inlinable var diffable: Bool {

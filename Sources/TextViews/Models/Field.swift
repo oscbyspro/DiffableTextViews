@@ -96,28 +96,26 @@ import struct Sequences.Walkthrough
 
     // MARK: Move: To Content
     
-    #warning("FIXME.")
-    #warning("Rename: moveToDiffable")
     @inlinable func moveToContent() -> Field {
         func position(_ position: Carets.Index) -> Carets.Index {
             var position = position
             
         #warning("FIXME.")
             func condition() -> Bool {
-                let element = carets[position]; return !element.lhs.real && !element.rhs.real
+                let element = carets[position]; return !element.lhs.content && !element.rhs.content
             }
                         
             func move(_ direction: Walkthrough<Carets>.Step, towards predicate: (Carets.Element) -> Bool) {
                 position = carets.firstIndex(in: .stride(start: .closed(position), step: direction), where: predicate) ?? position
             }
             
-            #warning("FIXME.")
+            #warning("Clean this up.")
             if condition() {
-                move(.backwards, towards: { $0.lhs.attribute.intersects(with: .breakpointBackwards) })
+                move(.backwards, towards: { $0.lhs.attribute.intersects(with: Attribute.Breakpoints.backwards) })
             }
             
             if condition() {
-                move(.forwards,  towards: { $0.rhs.attribute.intersects(with: .breakpointForwards) })
+                move(.forwards,  towards: { $0.rhs.attribute.intersects(with: Attribute.Breakpoints.forwards) })
             }
             
             return position
@@ -142,21 +140,26 @@ import struct Sequences.Walkthrough
             else                   { return      .none }
         }
         
-        func position(_ positionIn: (Range<Carets.Index>) -> Carets.Index, preference: Walkthrough<Carets>.Step, where predicate: (Carets.Element) -> Bool) -> Carets.Index {
+        #warning("Clean this up.")
+        func position(_ positionIn: (Range<Carets.Index>) -> Carets.Index, preference: Walkthrough<Carets>.Step, with symbol: (Carets.Element) -> Symbol) -> Carets.Index {
             let position = positionIn(newValue)
             let momentum = momentum(from: positionIn(selection), to: position) ?? preference
+            let breakpoint = momentum.forwards ? Attribute.Breakpoints.forwards : Attribute.Breakpoints.backwards
+            
+            func predicate(element: Carets.Element) -> Bool {
+                symbol(element).attribute.intersects(with: breakpoint)
+            }
             
             return carets.firstIndex(in: .stride(start: .closed(position), step: momentum), where: predicate) ?? position
         }
         
         // --------------------------------- //
                 
-        #warning("nonspacer == editable or forwards or backwards")
-        let upperBound = position(\.upperBound, preference: .backwards, where: { $0.lhs.attribute.intersects(with: .breakpointBothWays) })
+        let upperBound = position(\.upperBound, preference: .backwards, with: \.lhs)
         var lowerBound = upperBound
 
         if !newValue.isEmpty {
-            lowerBound = position(\.lowerBound, preference:  .forwards, where: { $0.rhs.attribute.intersects(with: .breakpointBothWays) })
+            lowerBound = position(\.lowerBound, preference:  .forwards, with: \.rhs)
         }
         
         // --------------------------------- //
