@@ -24,12 +24,12 @@ public struct Snapshot: BidirectionalCollection, RangeReplaceableCollection, Exp
 
     // MARK: Initialization
 
-    public init() {
+    @inlinable public init() {
         self._characters = ""
         self._attributes = []
     }
     
-    public init(_ characters: String, only attribute: Attribute) {
+    @inlinable public init(_ characters: String, only attribute: Attribute) {
         self._characters = characters
         self._attributes = Attributes(repeating: attribute, count: characters.count)
     }
@@ -129,6 +129,27 @@ public struct Snapshot: BidirectionalCollection, RangeReplaceableCollection, Exp
     }
 }
 
+// MARK: - Transformations
+
+extension Snapshot {
+    
+    // MARK: Update
+    
+    @inlinable public mutating func replace<R: RangeExpression>(_ indices: R, with transform: (Symbol) -> Symbol) where R.Bound == Index {
+        replaceSubrange(indices, with: self[indices].lazy.map(transform))
+    }
+    
+    @inlinable public mutating func replace<R: RangeExpression>(characters indices: R, with transform: (Character) -> Character) where R.Bound == Index {
+        let slice = self[indices]; let indices = slice.startIndex.character ..< slice.endIndex.character
+        _characters.replaceSubrange(indices, with: characters[indices].lazy.map(transform))
+    }
+    
+    @inlinable public mutating func replace<R: RangeExpression>(attributes indices: R, with transform: (Attribute) -> Attribute) where R.Bound == Index {
+        let slice = self[indices]; let indices = slice.startIndex.attribute ..< slice.endIndex.attribute
+        _attributes.replaceSubrange(indices, with: attributes[indices].lazy.map(transform))
+    }
+}
+
 // MARK: Optimizations
 
 extension Snapshot {
@@ -150,26 +171,5 @@ extension Snapshot {
     /// - Complexity: O(1) on average.
     @inlinable public mutating func complete() {
         append(.suffix("\0"))
-    }
-}
-
-// MARK: - Utilities
-
-extension Snapshot {
-    
-    // MARK: Update
-    
-    @inlinable public mutating func replace<R: RangeExpression>(_ indices: R, with transform: (Symbol) -> Symbol) where R.Bound == Index {
-        replaceSubrange(indices, with: self[indices].map(transform))
-    }
-    
-    @inlinable public mutating func replace<R: RangeExpression>(characters indices: R, with transform: (Character) -> Character) where R.Bound == Index {
-        let slice = self[indices]; let indices = slice.startIndex.character ..< slice.endIndex.character
-        _characters.replaceSubrange(indices, with: characters[indices].map(transform))
-    }
-    
-    @inlinable public mutating func replace<R: RangeExpression>(attributes indices: R, with transform: (Attribute) -> Attribute) where R.Bound == Index {
-        let slice = self[indices]; let indices = slice.startIndex.attribute ..< slice.endIndex.attribute
-        _attributes.replaceSubrange(indices, with: attributes[indices].map(transform))
     }
 }
