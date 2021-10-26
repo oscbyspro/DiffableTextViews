@@ -7,7 +7,6 @@
 
 // MARK: Symbol
 
-#warning("Rename: Attribute.Layout -> Attribute.Intuitive")
 public struct Symbol: Equatable {
     
     // MARK: Properties
@@ -22,52 +21,32 @@ public struct Symbol: Equatable {
         self.attribute = attribute
     }
     
-    @inlinable public init(_ character: Character, intuitive: Attribute.Intuitive) {
-        self.character = character
-        self.attribute = intuitive.attribute
-    }
-    
     // MARK: Initializers: Static
     
-    @inlinable public static func editable(_ character: Character) -> Self {
-        Self(character, intuitive: .content)
+    @inlinable public static func content(_ character: Character) -> Self {
+        Self(character, attribute: .content)
     }
     
     @inlinable public static func spacer(_ character: Character) -> Self {
-        Self(character, intuitive: .spacer)
+        Self(character, attribute: .spacer)
     }
     
     @inlinable public static func prefix(_ character: Character) -> Self {
-        Self(character, intuitive: .prefix)
+        Self(character, attribute: .prefix)
     }
     
     @inlinable public static func suffix(_ character: Character) -> Self {
-        Self(character, intuitive: .suffix)
+        Self(character, attribute: .suffix)
     }
     
     // MARK: Descriptions
     
-    @inlinable var content: Bool {
-        attribute.contains(.content)
+    @inlinable public var content: Bool {
+        attribute.layout.intersects(.content)
     }
     
-    @inlinable var diffable: Bool {
-        attribute.intersects(.diffableOnChange)
-    }
-
-    // MARK: Descriptions: Caret
-    
-    @inlinable var directsCaretForwards: Bool {
-        attribute.contains(.directsCaretForwards)
-    }
-        
-    @inlinable var directsCaretBackwards: Bool {
-        attribute.contains(.directsCaretBackwards)
-    }
-    
-    // MARK: Utilities, Static
-    
-    @inlinable static func predicate(intersects attribute: Attribute) -> (Self) -> Bool {
-        { symbol in symbol.attribute.intersects(attribute) }
+    #warning("Replace with some kind of curry method.")
+    @inlinable public var diffable: Bool {
+        attribute.differentiation.intersects(.onChange)
     }
 }

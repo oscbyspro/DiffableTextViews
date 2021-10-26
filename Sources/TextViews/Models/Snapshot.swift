@@ -17,7 +17,7 @@ public struct Snapshot: BidirectionalCollection, RangeReplaceableCollection, Exp
 
     @usableFromInline var _characters: Characters
     @usableFromInline var _attributes: Attributes
-        
+
     // MARK: Getters
     
     @inlinable public var characters: Characters { _characters }
@@ -30,9 +30,9 @@ public struct Snapshot: BidirectionalCollection, RangeReplaceableCollection, Exp
         self._attributes = []
     }
     
-    public init(_ characters: String, only intuitive: Attribute.Intuitive) {
+    public init(_ characters: String, only attribute: Attribute) {
         self._characters = characters
-        self._attributes = Attributes(repeating: intuitive.attribute, count: characters.count)
+        self._attributes = Attributes(repeating: attribute, count: characters.count)
     }
         
     @inlinable public init(arrayLiteral elements: Element...) {

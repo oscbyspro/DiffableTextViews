@@ -212,22 +212,25 @@ extension NumericTextStyle {
         
         for character in characters {
             if Components.Digits.set.contains(character) {
-                snapshot.append(.editable(character))
+                snapshot.append(.content(character))
             } else if groupingSeparator.contains(character) {
                 snapshot.append(.spacer(character))
             } else if decimalSeparator.contains(character) {
-                snapshot.append(.editable(character))
+                snapshot.append(.content(character))
             } else if Components.Sign.set.contains(character) {
-                snapshot.append(.editable(character))
+                snapshot.append(.content(character))
             }
         }
         
         #warning("Clean this up.")
         let decimalSeparatorAsSuffixStartIndex = snapshot.reversed()
             .prefix(while: { decimalSeparator.contains($0.character) }).endIndex.base
+        
         if decimalSeparatorAsSuffixStartIndex < snapshot.endIndex {
+            
             let replacement = snapshot[decimalSeparatorAsSuffixStartIndex...]
-                .map({ Symbol($0.character, attribute: $0.attribute.subtracting(.diffableOnRemove)) })
+                .map({ Symbol($0.character, attribute: $0.attribute.update({ $0.differentiation.subtract(.onRemove) })) })
+            
             snapshot.replaceSubrange(decimalSeparatorAsSuffixStartIndex..., with: replacement)
         }
 

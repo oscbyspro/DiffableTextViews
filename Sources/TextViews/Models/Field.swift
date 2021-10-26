@@ -6,6 +6,7 @@
 //
 
 import struct Sequences.Walkthrough
+import UIKit
 
 // MARK: - Field
 
@@ -36,9 +37,9 @@ import struct Sequences.Walkthrough
         func steps(prev: Symbol, next: Symbol) -> SimilaritiesInstruction {
             if prev == next {
                 return .continue
-            } else if !prev.attribute.contains(.diffableOnRemove) {
+            } else if !prev.attribute.differentiation.contains(.onRemove) {
                 return .continueOnLHS
-            } else if !next.attribute.contains(.diffableOnInsert) {
+            } else if !next.attribute.differentiation.contains(.onInsert) {
                 return .continueOnRHS
             } else{
                 return .done
@@ -100,22 +101,27 @@ import struct Sequences.Walkthrough
         func position(_ position: Carets.Index) -> Carets.Index {
             var position = position
             
-        #warning("FIXME.")
+            #warning("FIXME.")
             func condition() -> Bool {
                 let element = carets[position]; return !element.lhs.content && !element.rhs.content
             }
-                        
-            func move(_ direction: Walkthrough<Carets>.Step, towards predicate: (Carets.Element) -> Bool) {
-                position = carets.firstIndex(in: .stride(start: .closed(position), step: direction), where: predicate) ?? position
+            
+            func move(_ direction: Walkthrough<Carets>.Step, symbol: (Carets.Element) -> Symbol, limit: Attribute.Layout) {
+                func predicate(element: Carets.Element) -> Bool {
+                    symbol(element).attribute.layout.intersects(limit)
+                }
+                
+                if let next = carets.firstIndex(in: .stride(start: .closed(position), step: direction), where: predicate) {
+                    position = next
+                }
             }
             
-            #warning("Clean this up.")
             if condition() {
-                move(.backwards, towards: { $0.lhs.attribute.intersects(Attribute.Breakpoints.backwards) })
+                move(.backwards, symbol: \.lhs, limit: [.content, .prefix])
             }
             
             if condition() {
-                move(.forwards,  towards: { $0.rhs.attribute.intersects(Attribute.Breakpoints.forwards) })
+                move(.forwards,  symbol: \.rhs, limit: [.content, .suffix])
             }
             
             return position
@@ -143,10 +149,10 @@ import struct Sequences.Walkthrough
         func position(_ positionIn: (Range<Carets.Index>) -> Carets.Index, preference: Walkthrough<Carets>.Step, evaluate symbol: (Carets.Element) -> Symbol) -> Carets.Index {
             let position = positionIn(newValue)
             let momentum = momentum(from: positionIn(selection), to: position) ?? preference
-            let limit = Attribute(.content, momentum.forwards ? .directsCaretBackwards : .directsCaretForwards)
+            let limit = Attribute.Layout(.content, momentum.forwards ? .suffix : .prefix)
             
             func predicate(element: Carets.Element) -> Bool {
-                symbol(element).attribute.intersects(limit)
+                symbol(element).attribute.layout.intersects(limit)
             }
             
             return carets.firstIndex(in: .stride(start: .closed(position), step: momentum), where: predicate) ?? position
