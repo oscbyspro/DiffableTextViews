@@ -101,7 +101,6 @@ import UIKit
         func position(_ position: Carets.Index) -> Carets.Index {
             var position = position
             
-            #warning("FIXME.")
             func condition() -> Bool {
                 let element = carets[position]; return !element.lhs.content && !element.rhs.content
             }
@@ -146,10 +145,10 @@ import UIKit
             else                   { return      .none }
         }
         
-        func position(_ positionIn: (Range<Carets.Index>) -> Carets.Index, preference: Walkthrough<Carets>.Step, evaluate symbol: (Carets.Element) -> Symbol) -> Carets.Index {
+        func position(_ positionIn: (Range<Carets.Index>) -> Carets.Index, preference: Walkthrough<Carets>.Step, symbol: (Carets.Element) -> Symbol) -> Carets.Index {
             let position = positionIn(newValue)
             let momentum = momentum(from: positionIn(selection), to: position) ?? preference
-            let limit = Attribute.Layout(.content, momentum.forwards ? .suffix : .prefix)
+            let limit: Attribute.Layout = [.content, momentum.forwards ? .suffix : .prefix]
             
             func predicate(element: Carets.Element) -> Bool {
                 symbol(element).attribute.layout.intersects(limit)
@@ -160,11 +159,11 @@ import UIKit
         
         // --------------------------------- //
                 
-        let upperBound = position(\.upperBound, preference: .backwards, evaluate: \.lhs)
+        let upperBound = position(\.upperBound, preference: .backwards, symbol: \.lhs)
         var lowerBound = upperBound
 
         if !newValue.isEmpty {
-            lowerBound = position(\.lowerBound, preference:  .forwards, evaluate: \.rhs)
+            lowerBound = position(\.lowerBound, preference:  .forwards, symbol: \.rhs)
         }
         
         // --------------------------------- //

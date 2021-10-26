@@ -199,14 +199,13 @@ extension NumericTextStyle {
     
     // MARK: Helpers, Characters
     
-    #warning("FIXME.")
     @inlinable func snapshot(_ characters: String) -> Snapshot {
         var snapshot = Snapshot()
             
         // --------------------------------- //
         
         if let prefix = prefix {
-            snapshot.append(contentsOf: Snapshot(prefix, only: .spacer))
+            snapshot.append(contentsOf: Snapshot(prefix, only: .prefix))
             snapshot.append(.prefix(" "))
         }
         
@@ -269,7 +268,6 @@ extension NumericTextStyle {
     
     // MARK: Components
     
-    #warning("Double check, later.")
     @inlinable func components(_ snapshot: Snapshot, with configuration: Configuration) -> Components? {
         configuration.components(snapshot.characters(where: \.content))
     }

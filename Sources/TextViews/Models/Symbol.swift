@@ -45,7 +45,6 @@ public struct Symbol: Equatable {
         attribute.layout.intersects(.content)
     }
     
-    #warning("Replace with some kind of curry method.")
     @inlinable public var diffable: Bool {
         attribute.differentiation.intersects(.onChange)
     }
