@@ -199,6 +199,7 @@ extension NumericTextStyle {
     
     // MARK: Helpers, Characters
     
+    #warning("Turn sign and first integer digit into [.content, .prefix] if it is zero.")
     @inlinable func snapshot(_ characters: String) -> Snapshot {
         var snapshot = Snapshot()
             
@@ -208,6 +209,8 @@ extension NumericTextStyle {
             snapshot.append(contentsOf: Snapshot(prefix, only: .prefix))
             snapshot.append(.prefix(" "))
         }
+                
+        // --------------------------------- //
         
         for character in characters {
             if Components.Digits.set.contains(character) {
@@ -218,6 +221,8 @@ extension NumericTextStyle {
                 snapshot.append(.content(character))
             } else if Components.Sign.set.contains(character) {
                 snapshot.append(.content(character))
+                #warning(".prefix does nothing in [.content, .prefix]")
+//                snapshot.append(Symbol(character, attribute: .init(layout: [.content, .prefix])))
             }
         }
                 

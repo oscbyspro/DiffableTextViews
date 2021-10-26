@@ -18,7 +18,7 @@ public struct Attribute: Equatable {
     
     // MARK: Initializers
         
-    @inlinable public init(layout: Layout, differentiation: Differentiation) {
+    @inlinable public init(layout: Layout = Layout(), differentiation: Differentiation = Differentiation()) {
         self.layout = layout
         self.differentiation = differentiation
     }
