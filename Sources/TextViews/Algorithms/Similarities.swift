@@ -9,12 +9,10 @@ import Foundation
 
 // MARK: - Similarities
 
-#warning("Make common method for lhsPrefix and rhsPrefix.")
 @usableFromInline struct Similarities<LHS: Collection, RHS: Collection> where LHS.Element == RHS.Element {
     @usableFromInline typealias Element = LHS.Element
     @usableFromInline typealias Options = SimilaritiesOptions<Element>
     @usableFromInline typealias Instruction = SimilaritiesInstruction
-    @usableFromInline typealias Reversed<T: BidirectionalCollection> = ReversedCollection<T>
     
     // MARK: Properties
     
@@ -48,7 +46,7 @@ import Foundation
         make(rhs, lhs)
     }
 
-    @inlinable func reverse() -> Similarities<Reversed<LHS>, Reversed<RHS>> where LHS: BidirectionalCollection, RHS: BidirectionalCollection {
+    @inlinable func reverse() -> Similarities<ReversedCollection<LHS>, ReversedCollection<RHS>> where LHS: BidirectionalCollection, RHS: BidirectionalCollection {
         make(lhs.reversed(), rhs.reversed())
     }
     
@@ -93,7 +91,7 @@ import Foundation
         
         return Indices(lhsIndex, rhsIndex)
     }
-        
+
     // MARK: Utilities
     
     @inlinable func lhsPrefix() -> LHS.SubSequence {

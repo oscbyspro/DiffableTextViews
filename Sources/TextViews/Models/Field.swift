@@ -33,21 +33,20 @@ import struct Sequences.Walkthrough
     // MARK: Translate: To Carets
     
     @inlinable func translate(to newValue: Carets) -> Self {
-        func instruction(lhs: Symbol, rhs: Symbol) -> SimilaritiesInstruction {
-            if lhs == rhs          { return .next    }
-            else if lhs.insertable { return .nextLHS }
-            else if rhs.removable  { return .nextRHS }
-            else                   { return .done    }
+        func steps(current: Symbol, next: Symbol) -> SimilaritiesInstruction {
+            if current == next        { return .next    }
+            else if current.removable { return .nextLHS }
+            else if next.insertable   { return .nextRHS }
+            else                      { return .done    }
         }
         
         let options = SimilaritiesOptions<Symbol>
             .produce(.overshoot)
             .inspect(.only(\.editable))
-            .compare(.instruction(instruction))
+            .compare(.instruction(steps))
         
         func position(from current: Carets.SubSequence, to next: Carets.SubSequence) -> Carets.Index {
-            #warning("similarities.suffix(in: .lhs).startIndex")
-            return Similarities(in: next.lazy.map(\.rhs), and: current.lazy.map(\.rhs), with: options).lhsSuffix().startIndex
+            Similarities(in: current.lazy.map(\.rhs), and: next.lazy.map(\.rhs), with: options).rhsSuffix().startIndex
         }
         
         // --------------------------------- //
