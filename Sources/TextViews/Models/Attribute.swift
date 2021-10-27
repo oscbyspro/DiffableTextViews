@@ -28,12 +28,12 @@ public struct Attribute: OptionSet {
     /// Signifies that the symbol will be ignored by the differentiation algorithm when it is removed.
     public static let remove: Self = .init(rawValue: 1 << 4)
     /// A free bit, 0b00100000. Useful as a flag.
-    public static let  alpha: Self = .init(rawValue: 1 << 5)
+    public static let xAlpha: Self = .init(rawValue: 1 << 5)
     /// A free bit, 0b01000000. Useful as a flag.
-    public static let   beta: Self = .init(rawValue: 1 << 6)
+    public static let xBeta:  Self = .init(rawValue: 1 << 6)
     /// A free bit, 0b10000000. Useful as a flag.
-    public static let  gamma: Self = .init(rawValue: 1 << 7)
-
+    public static let xGamma: Self = .init(rawValue: 1 << 7)
+    
     // MARK: Properties
     
     public let rawValue: UInt8
@@ -54,17 +54,18 @@ public struct Attribute: OptionSet {
         var result = self; transform(&result); return result
     }
     
-    // MARK: Components: Composites
+    // MARK: Components: Thematic
     
     public enum Sets {
         public static let nondiffable: Attribute = .init(.insert, .remove)
-        public static let nonreal: Attribute = .init(.format, nondiffable)
     }
+    
+    // MARK: Components: Intuative
     
     public enum Layout {
         public static let content: Attribute = .init()
-        public static let prefix:  Attribute = .init(Sets.nonreal, .prefix)
-        public static let suffix:  Attribute = .init(Sets.nonreal, .suffix)
-        public static let spacer:  Attribute = .init(Sets.nonreal, .prefix, .suffix)
+        public static let prefix:  Attribute = .init(.format, .insert, .remove, .prefix)
+        public static let suffix:  Attribute = .init(.format, .insert, .remove, .suffix)
+        public static let spacer:  Attribute = .init(.format, .insert, .remove, .prefix, .suffix)
     }
 }
