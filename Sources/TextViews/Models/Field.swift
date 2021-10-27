@@ -37,9 +37,9 @@ import UIKit
         func steps(prev: Symbol, next: Symbol) -> SimilaritiesInstruction {
             if prev == next {
                 return .continue
-            } else if !prev.attribute.differentiation.contains(.onRemove) {
+            } else if prev.attribute.contains(.remove) {
                 return .continueOnLHS
-            } else if !next.attribute.differentiation.contains(.onInsert) {
+            } else if next.attribute.contains(.insert) {
                 return .continueOnRHS
             } else{
                 return .done
@@ -47,7 +47,7 @@ import UIKit
         }
         
         let options = SimilaritiesOptions<Symbol>
-            .inspect(.only(\.diffable))
+            .inspect(.only(Symbol.contains([.insert, .remove], is: false)))
             .compare(.instruction(steps))
             .produce(.overshoot)
         
@@ -102,86 +102,27 @@ import UIKit
         func position(_ position: Carets.Index) -> Carets.Index {
             var position = position
             
-//            func condition() -> Bool {
-//                let element = carets[position]; return !element.lhs.content && !element.rhs.content
-//            }
-            
-            /*
-             lhs.prefix == +1, lhs.suffix = -1 = { lhs.sum }
-             rhs.prefix == +1, rhs.suffix = -1 = { rhs.sum }
-             */
-            
-            func move(_ direction: Walkthrough<Carets>.Step, symbol: (Carets.Element) -> Symbol, limit: Attribute.Layout) {
-                func predicate(element: Carets.Element) -> Bool {
-                    symbol(element).attribute.layout.intersects(limit)
-                }
-                
-                position = carets.firstIndex(in: .stride(start: .closed(position), step: direction), where: predicate) ?? position
-            }
-            
-            func xxx(_ direction: Walkthrough<Carets>.Step, symbol: (Carets.Element) -> Symbol, while attribute: Attribute.Layout) {
-                func intersects(element: Carets.Element) -> Bool {
-                    symbol(element).attribute.layout.intersects(attribute)
-                }
-                
-                func doesNotIntersect(element: Carets.Element) -> Bool {
-                    symbol(element).attribute.layout.isDisjoint(with: attribute)
-                }
-                
-                if intersects(element: carets[position]) {
-                    position = carets.firstIndex(in: .stride(start: .closed(position), step: direction), where: doesNotIntersect) ?? position
-                }
-            }
-            
-            /*
-             .content
-             ---
-             .directsCaretForwards
-             .directsCaretBackwards
-                :: content d== []
-                :: spacer  d== [.directsCaretForwards, .directsCaretBackwards]
-             ---
-             .comparableOnInsert
-             .comparableOnRemove
-                :: content d== [.comparableOnInsert, comparableOnRemove]
-                :: ....... d== []
-             */
-            
-            "->,->,-,-,<->,<->,<->,-,-,<-,<-"
-            
-            /*
-             
-             Evaluate (lhs & rhs), choose a direction or no direction, then stop that side no longer throws caret.
-             
-             */
-            
-            if carets[position].lhs.attribute.layout.contains(.suffix) {
+            #warning("FIXME.")
+            #warning("FIXME.")
+            #warning("FIXME.")
+            if carets[position].lhs.attribute.contains(.suffix) {
                 let next = carets.firstIndex(in: .stride(start: .closed(position), step: .backwards)) { element in
-                    !element.lhs.attribute.layout.contains(.suffix) || element.lhs.attribute.layout.contains(.prefix)
+                    !element.lhs.attribute.contains(.suffix) || element.lhs.attribute.contains(.prefix)
                 }
                 
                 position = next ?? position
             }
             
-            if carets[position].rhs.attribute.layout.contains(.prefix) {
+            #warning("FIXME.")
+            #warning("FIXME.")
+            #warning("FIXME.")
+            if carets[position].rhs.attribute.contains(.prefix) {
                 let next = carets.firstIndex(in: .stride(start: .closed(position), step: .forwards)) { element in
-                    !element.rhs.attribute.layout.contains(.prefix) || element.rhs.attribute.layout.contains(.suffix)
+                    !element.rhs.attribute.contains(.prefix) || element.rhs.attribute.contains(.suffix)
                 }
                 
                 position = next ?? position
             }
-            
-            
-//            xxx(.backwards, symbol: \.lhs, while: .suffix)
-//            xxx(.forwards,  symbol: \.rhs, while: .prefix)
-            
-//            if carets[position].lhs.attribute.layout.intersects([.suffix]) {
-//                move(.backwards, symbol: \.lhs, limit: [.prefix])
-//            }
-//
-//            if carets[position].rhs.attribute.layout.intersects([.prefix]) {
-//                move(.forwards,  symbol: \.rhs, limit: [.suffix])
-//            }
             
             return position
         }
@@ -205,14 +146,11 @@ import UIKit
             else                   { return      .none }
         }
         
-        func position(_ positionIn: (Range<Carets.Index>) -> Carets.Index, preference: Walkthrough<Carets>.Step, symbol: (Carets.Element) -> Symbol) -> Carets.Index {
+        #warning("Doublecheck.")
+        func position(_ positionIn: (Range<Carets.Index>) -> Carets.Index, preference: Walkthrough<Carets>.Step, symbol: @escaping (Carets.Element) -> Symbol) -> Carets.Index {
             let position = positionIn(newValue)
             let momentum = momentum(from: positionIn(selection), to: position) ?? preference
-            let limit: Attribute.Layout = [.content, momentum.forwards ? .suffix : .prefix]
-            
-            func predicate(element: Carets.Element) -> Bool {
-                symbol(element).attribute.layout.intersects(limit)
-            }
+            let predicate = Carets.Element.symbol(symbol, contains: momentum.forwards ? .prefix : .suffix, is: false)
             
             return carets.firstIndex(in: .stride(start: .closed(position), step: momentum), where: predicate) ?? position
         }

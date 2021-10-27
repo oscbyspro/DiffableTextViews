@@ -199,14 +199,14 @@ extension NumericTextStyle {
     
     // MARK: Helpers, Characters
     
-    #warning("Turn sign and first integer digit into [.content, .prefix] if it is zero.")
+    #warning("Turn first integer digit into [.content, .prefix] if it is zero.")
     @inlinable func snapshot(_ characters: String) -> Snapshot {
         var snapshot = Snapshot()
             
         // --------------------------------- //
         
         if let prefix = prefix {
-            snapshot.append(contentsOf: Snapshot(prefix, only: .prefix))
+            snapshot.append(contentsOf: Snapshot(prefix, only: Attribute.Layout.prefix))
             snapshot.append(.prefix(" "))
         }
                 
@@ -220,9 +220,7 @@ extension NumericTextStyle {
             } else if decimalSeparator.contains(character) {
                 snapshot.append(.content(character))
             } else if Components.Sign.set.contains(character) {
-//                snapshot.append(.content(character))
-                #warning(".prefix does nothing in [.content, .prefix]")
-                snapshot.append(Symbol(character, attribute: .init(layout: [.content, .prefix])))
+                snapshot.append(.content(character).union([.prefix]))
             }
         }
                 
@@ -232,14 +230,14 @@ extension NumericTextStyle {
             .prefix(while: { decimalSeparator.contains($0.character) }).endIndex.base
                 
         if decimalSeparatorAsSuffixStart < snapshot.endIndex {
-            snapshot.replace(attributes: decimalSeparatorAsSuffixStart...) { attribute in attribute.update({ $0.subtract(.onRemove) }) }
+            snapshot.replace(attributes: decimalSeparatorAsSuffixStart...) { attribute in attribute.update({ $0.insert(.remove) }) }
         }
         
         // --------------------------------- //
 
         if let suffix = suffix {
             snapshot.append(.suffix(" "))
-            snapshot.append(contentsOf: Snapshot(suffix, only: .suffix))
+            snapshot.append(contentsOf: Snapshot(suffix, only: Attribute.Layout.suffix))
         }
     
         // --------------------------------- //

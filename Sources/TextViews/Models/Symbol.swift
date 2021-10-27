@@ -5,14 +5,16 @@
 //  Created by Oscar Byström Ericsson on 2021-09-24.
 //
 
+import UIKit
+
 // MARK: Symbol
 
 public struct Symbol: Equatable {
     
     // MARK: Properties
     
-    public let character: Character
-    public let attribute: Attribute
+    public var character: Character
+    public var attribute: Attribute
     
     // MARK: Initializers
     
@@ -24,28 +26,38 @@ public struct Symbol: Equatable {
     // MARK: Initializers: Static
     
     @inlinable public static func content(_ character: Character) -> Self {
-        Self(character, attribute: .content)
-    }
-    
-    @inlinable public static func spacer(_ character: Character) -> Self {
-        Self(character, attribute: .spacer)
+        Self(character, attribute: Attribute.Layout.content)
     }
     
     @inlinable public static func prefix(_ character: Character) -> Self {
-        Self(character, attribute: .prefix)
+        Self(character, attribute: Attribute.Layout.prefix)
     }
     
     @inlinable public static func suffix(_ character: Character) -> Self {
-        Self(character, attribute: .suffix)
+        Self(character, attribute: Attribute.Layout.suffix)
+    }
+    
+    @inlinable public static func spacer(_ character: Character) -> Self {
+        Self(character, attribute: Attribute.Layout.spacer)
     }
     
     // MARK: Descriptions
     
     @inlinable public var content: Bool {
-        attribute.layout.intersects(.content)
+        !attribute.contains(.format)
     }
     
-    @inlinable public var diffable: Bool {
-        attribute.differentiation.intersects(.onChange)
+    // MARK: Transformations
+    
+    @inlinable public func union(_ attribute: Attribute) -> Self {
+        update({ $0.attribute.formUnion(attribute) })
+    }
+    
+    @inlinable public func intersection(_ attribute: Attribute) -> Self {
+        update({ $0.attribute.formIntersection(attribute) })
+    }
+    
+    @inlinable public func update(_ transform: (inout Self) -> Void) -> Self {
+        var result = self; transform(&result); return result
     }
 }

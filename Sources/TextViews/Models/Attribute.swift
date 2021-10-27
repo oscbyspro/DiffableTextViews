@@ -7,109 +7,10 @@
 
 // MARK: - Attribute
 
-public struct Attribute: Equatable {
-    public typealias Layout = AttributeOfLayout
-    public typealias Differentiation = AttributeOfDifferentiation
-    
-    // MARK: Properties
-    
-    public var layout: Layout
-    public var differentiation: Differentiation
-    
-    // MARK: Initializers
-        
-    @inlinable public init(layout: Layout = Layout(), differentiation: Differentiation = Differentiation()) {
-        self.layout = layout
-        self.differentiation = differentiation
-    }
-    
-    // MARK: Initializers, Static
-    
-    public static let content: Self = .init(layout: .content, differentiation: .onChange)
-    public static let spacer:  Self = .init(layout: .spacer,  differentiation: .none)
-    public static let prefix:  Self = .init(layout: .prefix,  differentiation: .none)
-    public static let suffix:  Self = .init(layout: .suffix,  differentiation: .none)
-    
-    // MARK: Transformations
-    
-    @inlinable public func update(_ transform: (inout Self) -> Void) -> Self {
-        var result = self; transform(&result); return result
-    }
-    
-    @inlinable public func update(_ transform: (inout Layout) -> Void) -> Self {
-        var result = self; transform(&result.layout); return result
-    }
-    
-    @inlinable public func update(_ transform: (inout Differentiation) -> Void) -> Self {
-        var result = self; transform(&result.differentiation); return result
-    }
-}
-
-// MARK: - Option Set
-
-public protocol  AttributeOptionSet: OptionSet { }
-public extension AttributeOptionSet {
-    
-    // MARK: Utilities
-    
-    @inlinable func intersects(_ other: Self) -> Bool {
-        !isDisjoint(with: other)
-    }
-}
-
-// MARK: - Layout
-
-#warning("Content is not layout attribute.")
-#warning("Only prefix and suffix.")
-#warning("Question is should: .content or .spacer equal [.prefix, .suffix]?")
-public struct AttributeOfLayout: AttributeOptionSet {
-    public static let content: Self = .init(rawValue: 1 << 0)
-    public static let prefix:  Self = .init(rawValue: 1 << 1)
-    public static let suffix:  Self = .init(rawValue: 1 << 2)
-    public static let spacer:  Self = .init()
-    
-    // MARK: Properties
-    
-    public let rawValue: UInt8
-    
-    // MARK: Initializers
-    
-    @inlinable public init(rawValue: UInt8 = 0) {
-        self.rawValue = rawValue
-    }
-    
-    @inlinable public init(_ elements: Self...) {
-        self.init(elements)
-    }
-}
-
-// MARK: - Update
-
-public struct AttributeOfDifferentiation: AttributeOptionSet {
-    public static let onInsert: Self = .init(rawValue: 1 << 0)
-    public static let onRemove: Self = .init(rawValue: 1 << 1)
-    public static let onChange: Self = .init(onInsert, onRemove)
-    public static let none:     Self = .init()
-    
-    // MARK: Properties
-    
-    public let rawValue: UInt8
-    
-    // MARK: Initializers
-    
-    @inlinable public init(rawValue: UInt8 = 0) {
-        self.rawValue = rawValue
-    }
-    
-    @inlinable public init(_ elements: Self...) {
-        self.init(elements)
-    }
-}
-
-#warning("WIP")
-
-#warning("Attribute should signal specialized behaviour, so therefore Symbol.content(), should have a rawValue of 0.")
-public struct WIP_Attribute: OptionSet {
+/// A set of options, where each option represents a specialized behavior.
+///
+/// - Ordinary text equals 0.
+public struct Attribute: OptionSet {
     public static let format: Self = .init(rawValue: 1 << 0)
     public static let prefix: Self = .init(rawValue: 1 << 1)
     public static let suffix: Self = .init(rawValue: 1 << 2)
@@ -122,7 +23,7 @@ public struct WIP_Attribute: OptionSet {
     
     // MARK: Initializers
     
-    @inlinable public init(rawValue: UInt8) {
+    @inlinable public init(rawValue: UInt8 = .zero) {
         self.rawValue = rawValue
     }
     
@@ -131,31 +32,44 @@ public struct WIP_Attribute: OptionSet {
     }
     
     // MARK: Utilities
-    
-    @inlinable func intersects(_ other: Self) {
-        !isDisjoint(with: other)
+
+    @inlinable public func update(_ transform: (inout Self) -> Void) -> Self {
+        var result = self; transform(&result); return result
     }
     
-    // MARK: Components: Templates
+    // MARK: Components: Composites
     
-    enum TemplateOfFormat {
-        static let content: WIP_Attribute = []
-        static let prefix:  WIP_Attribute = [.format]
-        static let suffix:  WIP_Attribute = [.format]
-        static let spacer:  WIP_Attribute = [.format]
+    public enum Sets {
+        public static let nondiffable: Attribute = .init(.insert, .remove)
+        public static let nonreal: Attribute = .init(.format, nondiffable)
     }
     
-    enum TemplateOfLayout {
-        static let content: WIP_Attribute = []
-        static let prefix:  WIP_Attribute = [.prefix]
-        static let suffix:  WIP_Attribute = [.suffix]
-        static let spacer:  WIP_Attribute = [.prefix, .suffix]
+    public enum Layout {
+        public static let content: Attribute = .init()
+        public static let prefix:  Attribute = .init(Sets.nonreal, .prefix)
+        public static let suffix:  Attribute = .init(Sets.nonreal, .suffix)
+        public static let spacer:  Attribute = .init(Sets.nonreal, .prefix, .suffix)
     }
-    
-    enum TemplateOfChange {
-        static let content: WIP_Attribute = []
-        static let prefix:  WIP_Attribute = [.insert, .remove]
-        static let suffix:  WIP_Attribute = [.insert, .remove]
-        static let spacer:  WIP_Attribute = [.insert, .remove]
+}
+
+// MARK: - Symbol + Attribute
+
+extension Symbol {
+    @inlinable static func contains(_ attribute: Attribute, is option: Bool = true) -> (Self) -> Bool {
+        func yes(symbol: Self) -> Bool {  symbol.attribute.contains(attribute) }
+        func  no(symbol: Self) -> Bool { !symbol.attribute.contains(attribute) }
+
+        return option ? yes : no
+    }
+}
+
+// MARK: - Carets.Element + Attribute
+
+extension Carets.Element {
+    @inlinable static func symbol(_ symbol: @escaping (Self) -> Symbol, contains attribute: Attribute, is option: Bool = true) -> (Self) -> Bool {
+        func yes(element: Self) -> Bool {  symbol(element).attribute.contains(attribute) }
+        func  no(element: Self) -> Bool { !symbol(element).attribute.contains(attribute) }
+
+        return option ? yes : no
     }
 }

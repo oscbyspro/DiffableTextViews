@@ -298,6 +298,9 @@ extension BidirectionalCollection {
         Self(includes: includes)
     }
     
+    @inlinable static func only(not includes: @escaping (Element) -> Bool) -> Self {
+        Self(includes: { !includes($0) })
+    }
     @inlinable static var defaultValue: Self { .each }
 }
 
