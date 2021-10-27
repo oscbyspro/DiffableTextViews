@@ -199,7 +199,6 @@ extension NumericTextStyle {
     
     // MARK: Helpers, Characters
     
-    #warning("Turn first integer digit into [.content, .prefix] if it is zero.")
     @inlinable func snapshot(_ characters: String) -> Snapshot {
         var snapshot = Snapshot()
             
@@ -223,14 +222,22 @@ extension NumericTextStyle {
                 snapshot.append(.content(character).union([.prefix]))
             }
         }
-                
+        
+        // --------------------------------- //
+                        
+        if let firstDigitIndex = snapshot.firstIndex(where: { Components.Digits.set.contains($0.character) }) {
+            if snapshot.characters[firstDigitIndex.character] == Components.Digits.zero {
+                snapshot.mutate(attributes: firstDigitIndex) { attribute in attribute.insert(.prefix) }
+            }
+        }
+        
         // --------------------------------- //
         
-        let decimalSeparatorAsSuffixStart = snapshot.reversed()
+        let decimalSeparatorAsSuffixStartIndex = snapshot.reversed()
             .prefix(while: { decimalSeparator.contains($0.character) }).endIndex.base
                 
-        if decimalSeparatorAsSuffixStart < snapshot.endIndex {
-            snapshot.replace(attributes: decimalSeparatorAsSuffixStart...) { attribute in attribute.update({ $0.insert(.remove) }) }
+        if decimalSeparatorAsSuffixStartIndex < snapshot.endIndex {
+            snapshot.mutate(attributes: decimalSeparatorAsSuffixStartIndex...) { attribute in attribute.insert(.remove) }
         }
         
         // --------------------------------- //

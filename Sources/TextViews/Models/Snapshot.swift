@@ -49,32 +49,32 @@ public struct Snapshot: BidirectionalCollection, RangeReplaceableCollection, Exp
     
     /// - Complexity: O(1).
     @inlinable public var count: Int {
-        attributes.count
+        _attributes.count
     }
     
     /// - Complexity: O(1).
     @inlinable public var underestimatedCount: Int {
-        attributes.underestimatedCount
+        _attributes.underestimatedCount
     }
     
     // MARK: Collection: Indices
 
     @inlinable public var startIndex: Index {
-        Index(characters.startIndex, attributes.startIndex)
+        Index(_characters.startIndex, _attributes.startIndex)
     }
 
     @inlinable public var endIndex: Index {
-        Index(characters.endIndex,   attributes.endIndex)
+        Index(_characters.endIndex,   attributes.endIndex)
     }
     
     // MARK: Collection: Traversals
     
     @inlinable public func index(after i: Index) -> Index {
-        Index(characters.index(after:  i.character), attributes.index(after: i.attribute))
+        Index(_characters.index(after:  i.character), _attributes.index(after: i.attribute))
     }
     
     @inlinable public func index(before i: Index) -> Index {
-        Index(characters.index(before: i.character), attributes.index(before: i.attribute))
+        Index(_characters.index(before: i.character), _attributes.index(before: i.attribute))
     }
     
     // MARK: Collection: Replacements
@@ -98,8 +98,17 @@ public struct Snapshot: BidirectionalCollection, RangeReplaceableCollection, Exp
     
     @inlinable public subscript(position: Index) -> Element {
         _read {
-            yield Element(characters[position.character], attribute: attributes[position.attribute])
+            yield Element(_characters[position.character], attribute: _attributes[position.attribute])
         }
+    }
+    
+    @inlinable public subscript(character position: Index) -> Character {
+        _read   { yield _characters[position.character] }
+    }
+    
+    @inlinable public subscript(attribute position: Index) -> Attribute {
+        _read   { yield  _attributes[position.attribute] }
+        _modify { yield &_attributes[position.attribute] }
     }
     
     // MARK: Collection: Index
@@ -133,20 +142,30 @@ public struct Snapshot: BidirectionalCollection, RangeReplaceableCollection, Exp
 
 extension Snapshot {
     
-    // MARK: Update
+    // MARK: Replace
     
     @inlinable public mutating func replace<R: RangeExpression>(_ indices: R, with transform: (Symbol) -> Symbol) where R.Bound == Index {
         replaceSubrange(indices, with: self[indices].lazy.map(transform))
     }
     
     @inlinable public mutating func replace<R: RangeExpression>(characters indices: R, with transform: (Character) -> Character) where R.Bound == Index {
-        let slice = self[indices]; let indices = slice.startIndex.character ..< slice.endIndex.character
-        _characters.replaceSubrange(indices, with: characters[indices].lazy.map(transform))
+        let indices = indices.relative(to: self).map(bounds: \.character)
+        _characters.replaceSubrange(indices, with: _characters[indices].lazy.map(transform))
     }
     
     @inlinable public mutating func replace<R: RangeExpression>(attributes indices: R, with transform: (Attribute) -> Attribute) where R.Bound == Index {
-        let slice = self[indices]; let indices = slice.startIndex.attribute ..< slice.endIndex.attribute
-        _attributes.replaceSubrange(indices, with: attributes[indices].lazy.map(transform))
+        let indices = indices.relative(to: self).map(bounds: \.attribute)
+        _attributes.replaceSubrange(indices, with: _attributes[indices].lazy.map(transform))
+    }
+    
+    // MARK: Mutate
+    
+    @inlinable public mutating func mutate(attributes index: Index, with transform: (inout Attribute) -> Void) {
+        transform(&_attributes[index.attribute])
+    }
+    
+    @inlinable public mutating func mutate<R: RangeExpression>(attributes indices: R, with transform: (inout Attribute) -> Void) where R.Bound == Index {
+        for index in indices.relative(to: self).map(bounds: \.attribute) { transform(&_attributes[index]) }
     }
 }
 
