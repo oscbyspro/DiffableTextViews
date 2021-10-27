@@ -112,17 +112,17 @@ extension NumericTextStyle {
 // MARK: - Value
 
 extension NumericTextStyle {
-        
-    // MARK: Parse
-
-    @inlinable public func parse(_ snapshot: Snapshot) -> Scheme.Number? {
-        components(snapshot, with: configuration()).flatMap(value)
-    }
     
     // MARK: Process
     
     @inlinable public func process(_ value: inout Scheme.Number) {
         value = values.displayableStyle(value)
+    }
+        
+    // MARK: Parse
+
+    @inlinable public func parse(_ snapshot: Snapshot) -> Scheme.Number? {
+        components(snapshot, with: configuration()).flatMap(value)
     }
     
     // MARK: Components
@@ -136,19 +136,28 @@ extension NumericTextStyle {
 
 extension NumericTextStyle {
     
-    // MARK: Snapshot
+    // MARK: Process
     
     public func process(_ snapshot: inout Snapshot) {
         snapshot.complete()
     }
-    
-    @inlinable public func showcase(_ value: Scheme.Number) -> Snapshot {
-        snapshot(displayableStyle().format(value))
-    }
+            
+    // MARK: Edit
     
     @inlinable public func snapshot(_ value: Scheme.Number) -> Snapshot {
         snapshot(editableStyle().format(value))
     }
+    
+    // MARK: Showcase
+    
+    @inlinable public func showcase(_ value: Scheme.Number) -> Snapshot {
+        snapshot(displayableStyle().format(value))
+    }
+}
+
+// MARK: - Snapshot
+
+extension NumericTextStyle {
     
     // MARK: Merge
     
@@ -224,22 +233,10 @@ extension NumericTextStyle {
         }
         
         // --------------------------------- //
-                        
-        if let firstDigitIndex = snapshot.firstIndex(where: { Components.Digits.set.contains($0.character) }) {
-            if snapshot.characters[firstDigitIndex.character] == Components.Digits.zero {
-                snapshot.mutate(attributes: firstDigitIndex) { attribute in attribute.insert(.prefix) }
-            }
-        }
         
-        // --------------------------------- //
-        
-        let decimalSeparatorAsSuffixStartIndex = snapshot.reversed()
-            .prefix(while: { decimalSeparator.contains($0.character) }).endIndex.base
+        configureFirstDigitIfItIsZero(in:         &snapshot, insert: .prefix)
+        configureDecimalSeparatorIfItIsSuffix(in: &snapshot, insert: .remove)
                 
-        if decimalSeparatorAsSuffixStartIndex < snapshot.endIndex {
-            snapshot.mutate(attributes: decimalSeparatorAsSuffixStartIndex...) { attribute in attribute.insert(.remove) }
-        }
-        
         // --------------------------------- //
 
         if let suffix = suffix {
@@ -250,6 +247,18 @@ extension NumericTextStyle {
         // --------------------------------- //
                 
         return snapshot
+    }
+    
+    @inlinable func configureFirstDigitIfItIsZero(in snapshot: UnsafeMutablePointer<Snapshot>, insert insertable: Attribute) {
+        guard let firstDigitIndex = snapshot.pointee.firstIndex(where: { Components.Digits.set.contains($0.character) }) else { return }
+        guard snapshot.pointee.characters[firstDigitIndex.character] == Components.Digits.zero else { return }
+        snapshot.pointee.configure(attributes: firstDigitIndex, with: { attribute in attribute.insert(insertable) })
+    }
+    
+    @inlinable func configureDecimalSeparatorIfItIsSuffix(in snapshot: UnsafeMutablePointer<Snapshot>, insert insertable: Attribute) {
+        let decimalSeparatorAsSuffix = snapshot.pointee.suffix(while: { decimalSeparator.contains($0.character) })
+        let indices = decimalSeparatorAsSuffix.startIndex ..< decimalSeparatorAsSuffix.endIndex
+        snapshot.pointee.configure(attributes: indices, with: { attribute in attribute.insert(insertable) })
     }
 }
 
@@ -275,7 +284,7 @@ extension NumericTextStyle {
         return configuration
     }
     
-    // MARK: Components
+    // MARK: Components With Configuration
     
     @inlinable func components(_ snapshot: Snapshot, with configuration: Configuration) -> Components? {
         configuration.components(snapshot.characters(where: \.content))

@@ -143,28 +143,23 @@ public struct Snapshot: BidirectionalCollection, RangeReplaceableCollection, Exp
 extension Snapshot {
     
     // MARK: Replace
-    
-    @inlinable public mutating func replace<R: RangeExpression>(_ indices: R, with transform: (Symbol) -> Symbol) where R.Bound == Index {
-        replaceSubrange(indices, with: self[indices].lazy.map(transform))
+        
+    @inlinable public mutating func update(attributes index: Index, with transform: (Attribute) -> Attribute) {
+        _attributes[index.attribute] = transform(_attributes[index.attribute])
     }
     
-    @inlinable public mutating func replace<R: RangeExpression>(characters indices: R, with transform: (Character) -> Character) where R.Bound == Index {
-        let indices = indices.relative(to: self).map(bounds: \.character)
-        _characters.replaceSubrange(indices, with: _characters[indices].lazy.map(transform))
-    }
-    
-    @inlinable public mutating func replace<R: RangeExpression>(attributes indices: R, with transform: (Attribute) -> Attribute) where R.Bound == Index {
+    @inlinable public mutating func update<R: RangeExpression>(attributes indices: R, with transform: (Attribute) -> Attribute) where R.Bound == Index {
         let indices = indices.relative(to: self).map(bounds: \.attribute)
-        _attributes.replaceSubrange(indices, with: _attributes[indices].lazy.map(transform))
+        _attributes.replaceSubrange(indices, with: _attributes[indices].map(transform))
     }
     
     // MARK: Mutate
     
-    @inlinable public mutating func mutate(attributes index: Index, with transform: (inout Attribute) -> Void) {
+    @inlinable public mutating func configure(attributes index: Index, with transform: (inout Attribute) -> Void) {
         transform(&_attributes[index.attribute])
     }
     
-    @inlinable public mutating func mutate<R: RangeExpression>(attributes indices: R, with transform: (inout Attribute) -> Void) where R.Bound == Index {
+    @inlinable public mutating func configure<R: RangeExpression>(attributes indices: R, with transform: (inout Attribute) -> Void) where R.Bound == Index {
         for index in indices.relative(to: self).map(bounds: \.attribute) { transform(&_attributes[index]) }
     }
 }
