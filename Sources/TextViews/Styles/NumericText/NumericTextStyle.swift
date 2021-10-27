@@ -220,9 +220,9 @@ extension NumericTextStyle {
             } else if decimalSeparator.contains(character) {
                 snapshot.append(.content(character))
             } else if Components.Sign.set.contains(character) {
-                snapshot.append(.content(character))
+//                snapshot.append(.content(character))
                 #warning(".prefix does nothing in [.content, .prefix]")
-//                snapshot.append(Symbol(character, attribute: .init(layout: [.content, .prefix])))
+                snapshot.append(Symbol(character, attribute: .init(layout: [.content, .prefix])))
             }
         }
                 

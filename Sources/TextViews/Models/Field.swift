@@ -97,13 +97,19 @@ import UIKit
 
     // MARK: Move: To Content
     
+    #warning("Bad name.")
     @inlinable func moveToContent() -> Field {
         func position(_ position: Carets.Index) -> Carets.Index {
             var position = position
             
-            func condition() -> Bool {
-                let element = carets[position]; return !element.lhs.content && !element.rhs.content
-            }
+//            func condition() -> Bool {
+//                let element = carets[position]; return !element.lhs.content && !element.rhs.content
+//            }
+            
+            /*
+             lhs.prefix == +1, lhs.suffix = -1 = { lhs.sum }
+             rhs.prefix == +1, rhs.suffix = -1 = { rhs.sum }
+             */
             
             func move(_ direction: Walkthrough<Carets>.Step, symbol: (Carets.Element) -> Symbol, limit: Attribute.Layout) {
                 func predicate(element: Carets.Element) -> Bool {
@@ -113,13 +119,69 @@ import UIKit
                 position = carets.firstIndex(in: .stride(start: .closed(position), step: direction), where: predicate) ?? position
             }
             
-            if condition() {
-                move(.backwards, symbol: \.lhs, limit: [.content, .prefix])
+            func xxx(_ direction: Walkthrough<Carets>.Step, symbol: (Carets.Element) -> Symbol, while attribute: Attribute.Layout) {
+                func intersects(element: Carets.Element) -> Bool {
+                    symbol(element).attribute.layout.intersects(attribute)
+                }
+                
+                func doesNotIntersect(element: Carets.Element) -> Bool {
+                    symbol(element).attribute.layout.isDisjoint(with: attribute)
+                }
+                
+                if intersects(element: carets[position]) {
+                    position = carets.firstIndex(in: .stride(start: .closed(position), step: direction), where: doesNotIntersect) ?? position
+                }
             }
             
-            if condition() {
-                move(.forwards,  symbol: \.rhs, limit: [.content, .suffix])
+            /*
+             .content
+             ---
+             .directsCaretForwards
+             .directsCaretBackwards
+                :: content d== []
+                :: spacer  d== [.directsCaretForwards, .directsCaretBackwards]
+             ---
+             .comparableOnInsert
+             .comparableOnRemove
+                :: content d== [.comparableOnInsert, comparableOnRemove]
+                :: ....... d== []
+             */
+            
+            "->,->,-,-,<->,<->,<->,-,-,<-,<-"
+            
+            /*
+             
+             Evaluate (lhs & rhs), choose a direction or no direction, then stop that side no longer throws caret.
+             
+             */
+            
+            if carets[position].lhs.attribute.layout.contains(.suffix) {
+                let next = carets.firstIndex(in: .stride(start: .closed(position), step: .backwards)) { element in
+                    !element.lhs.attribute.layout.contains(.suffix) || element.lhs.attribute.layout.contains(.prefix)
+                }
+                
+                position = next ?? position
             }
+            
+            if carets[position].rhs.attribute.layout.contains(.prefix) {
+                let next = carets.firstIndex(in: .stride(start: .closed(position), step: .forwards)) { element in
+                    !element.rhs.attribute.layout.contains(.prefix) || element.rhs.attribute.layout.contains(.suffix)
+                }
+                
+                position = next ?? position
+            }
+            
+            
+//            xxx(.backwards, symbol: \.lhs, while: .suffix)
+//            xxx(.forwards,  symbol: \.rhs, while: .prefix)
+            
+//            if carets[position].lhs.attribute.layout.intersects([.suffix]) {
+//                move(.backwards, symbol: \.lhs, limit: [.prefix])
+//            }
+//
+//            if carets[position].rhs.attribute.layout.intersects([.prefix]) {
+//                move(.forwards,  symbol: \.rhs, limit: [.suffix])
+//            }
             
             return position
         }

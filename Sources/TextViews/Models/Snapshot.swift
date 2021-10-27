@@ -5,6 +5,8 @@
 //  Created by Oscar Byström Ericsson on 2021-09-23.
 //
 
+#warning("Attributes can be constructed as a single UInt8, if layout and differentiation does not share rawValues.")
+#warning("Or Attribute as it is now can be renamed IntuitiveAttribute and be combined into a single Attribute of size UInt8.")
 public struct Snapshot: BidirectionalCollection, RangeReplaceableCollection, ExpressibleByArrayLiteral {
     public typealias Element = Symbol
     public typealias Indices = DefaultIndices<Self>

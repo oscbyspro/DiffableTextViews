@@ -67,7 +67,7 @@ import Foundation
 
             // --------------------------------- //
                         
-            if instruction == .`done` {
+            if instruction == .done {
                 break loop
             }
             
@@ -147,7 +147,7 @@ import Foundation
     // MARK: Composites
     
     @usableFromInline static let `continue` = Self([.continueOnLHS, .continueOnRHS])
-    @usableFromInline static let `done` = Self([])
+    @usableFromInline static let     `done` = Self([])
 }
             
 // MARK: - Collection
@@ -227,22 +227,22 @@ extension BidirectionalCollection {
     
     // MARK: Transformations
     
-    @inlinable func compare(_ comparison: Comparison) -> Self {
-        copy(assign: comparison, to: \.comparison)
+    @inlinable func compare(_ newValue: Comparison) -> Self {
+        update({ $0.comparison = newValue })
     }
         
-    @inlinable func inspect(_ inspection: Inspection) -> Self {
-        copy(assign: inspection, to: \.inspection)
+    @inlinable func inspect(_ newValue: Inspection) -> Self {
+        update({ $0.inspection = newValue })
     }
     
-    @inlinable func produce(_ production: Production) -> Self {
-        copy(assign: production, to: \.production)
+    @inlinable func produce(_ newValue: Production) -> Self {
+        update({ $0.production = newValue })
     }
     
     // MARK: Transformations: Helpers
     
-    @inlinable func copy<Value>(assign newValue: Value, to keyPath: WritableKeyPath<Self, Value>) -> Self {
-        var copy = self; copy[keyPath: keyPath] = newValue; return copy
+    @inlinable func update(_ transform: (inout Self) -> Void) -> Self {
+        var copy = self; transform(&copy); return copy
     }
 }
 
