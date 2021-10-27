@@ -51,7 +51,7 @@ import UIKit
             .produce(.overshoot)
             .compare(.instruction(step))
             .inspect(.only(inspectable))
-        
+
         func position(from current: Carets.SubSequence, to next: Carets.SubSequence) -> Carets.Index {
             Similarities(in: current.lazy.map(\.rhs), and: next.lazy.map(\.rhs), with: options).rhsSuffix().startIndex
         }

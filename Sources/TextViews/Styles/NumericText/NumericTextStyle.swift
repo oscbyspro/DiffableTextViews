@@ -46,7 +46,7 @@ public struct NumericTextStyle<Scheme: NumericTextScheme>: DiffableTextStyle {
         .init(locale: locale)
     }
     
-    // MARK: Helpers, Locale
+    // MARK: Getters, Locale
 
     @inlinable var decimalSeparator: String {
         locale.decimalSeparator ?? Components.Separator.system.characters
@@ -54,6 +54,20 @@ public struct NumericTextStyle<Scheme: NumericTextScheme>: DiffableTextStyle {
 
     @inlinable var groupingSeparator: String {
         locale.groupingSeparator ?? String()
+    }
+    
+    // MARK: Getters, Numbers
+    
+    @inlinable var zero: Character {
+        Components.Digits.zero
+    }
+    
+    @inlinable var digits: Set<Character> {
+        Components.Digits.set
+    }
+    
+    @inlinable var signs: Set<Character> {
+        Components.Sign.set
     }
 }
 
@@ -136,12 +150,6 @@ extension NumericTextStyle {
 
 extension NumericTextStyle {
     
-    // MARK: Process
-    
-    public func process(_ snapshot: inout Snapshot) {
-        snapshot.complete()
-    }
-            
     // MARK: Edit
     
     @inlinable public func snapshot(_ value: Scheme.Number) -> Snapshot {
@@ -221,19 +229,19 @@ extension NumericTextStyle {
         // --------------------------------- //
         
         for character in characters {
-            if Components.Digits.set.contains(character) {
+            if digits.contains(character) {
                 snapshot.append(.content(character))
             } else if groupingSeparator.contains(character) {
                 snapshot.append(.spacer(character))
             } else if decimalSeparator.contains(character) {
                 snapshot.append(.content(character))
-            } else if Components.Sign.set.contains(character) {
-                snapshot.append(.content(character).union([.prefix]))
+            } else if signs.contains(character) {
+                snapshot.append(.content(character).union(.prefix))
             }
         }
         
         // --------------------------------- //
-        
+
         configureFirstDigitIfItIsZero(in:         &snapshot, with: { $0.insert(.prefix) })
         configureDecimalSeparatorIfItIsSuffix(in: &snapshot, with: { $0.insert(.remove) })
                 
@@ -249,18 +257,23 @@ extension NumericTextStyle {
         return snapshot
     }
     
-    @inlinable func configureFirstDigitIfItIsZero(in snapshot: UnsafeMutablePointer<Snapshot>, with transform: (inout Attribute) -> Void) {
-        guard let firstDigitIndex = snapshot.pointee.firstIndex(where: { Components.Digits.set.contains($0.character) }) else { return }
-        guard snapshot.pointee.characters[firstDigitIndex.character] == Components.Digits.zero else { return }
-        snapshot.pointee.configure(attributes: firstDigitIndex, with: transform)
+    @inlinable func configureFirstDigitIfItIsZero(in snapshot: UnsafeMutablePointer<Snapshot>, with instruction: (inout Attribute) -> Void) {
+        func digit(symbol: Symbol) -> Bool { digits.contains(symbol.character) }
+        guard let firstDigitIndex = snapshot.pointee.firstIndex(where: digit) else { return }
+        guard snapshot.pointee.characters[firstDigitIndex.character] == zero  else { return }
+        snapshot.pointee.configure(attributes: firstDigitIndex, with: instruction)
+        
     }
     
-    @inlinable func configureDecimalSeparatorIfItIsSuffix(in snapshot: UnsafeMutablePointer<Snapshot>, with transform: (inout Attribute) -> Void) {
-        let decimalSeparatorAsSuffix = snapshot.pointee.suffix(while: { decimalSeparator.contains($0.character) })
+    @inlinable func configureDecimalSeparatorIfItIsSuffix(in snapshot: UnsafeMutablePointer<Snapshot>, with instruction: (inout Attribute) -> Void) {
+        func predicate(symbol: Symbol) -> Bool { decimalSeparator.contains(symbol.character) }
+        let decimalSeparatorAsSuffix = snapshot.pointee.suffix(while: predicate)
         let indices = decimalSeparatorAsSuffix.startIndex ..< decimalSeparatorAsSuffix.endIndex
-        snapshot.pointee.configure(attributes: indices, with: transform)
+        snapshot.pointee.configure(attributes: indices, with: instruction)
     }
 }
+
+
 
 // MARK: - NumericText
 

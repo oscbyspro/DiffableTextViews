@@ -163,27 +163,3 @@ extension Snapshot {
         for index in indices.relative(to: self).map(bounds: \.attribute) { transform(&_attributes[index]) }
     }
 }
-
-// MARK: Optimizations
-
-extension Snapshot {
-    
-    // MARK: Weird
-    
-    /// Appends: Symbol.suffix(Character.null).
-    ///
-    /// Improves performance under some circumstances.
-    ///
-    /// ```
-    /// let reason = "¯\_(ツ)_/¯"
-    /// ```
-    ///
-    /// - NumericTextStyle's CPU usage (with suffix) more than doubles without this method.
-    ///
-    /// - Note: Should be called at most once, and only after all other changes have been made.
-    ///
-    /// - Complexity: O(1) on average.
-    @inlinable public mutating func complete() {
-        append(.suffix("\0"))
-    }
-}
