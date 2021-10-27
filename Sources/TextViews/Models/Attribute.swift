@@ -5,6 +5,8 @@
 //  Created by Oscar Byström Ericsson on 2021-10-02.
 //
 
+import SwiftUI
+
 // MARK: - Attribute
 
 /// A set of options, where each option represents a specialized behavior.
@@ -49,27 +51,5 @@ public struct Attribute: OptionSet {
         public static let prefix:  Attribute = .init(Sets.nonreal, .prefix)
         public static let suffix:  Attribute = .init(Sets.nonreal, .suffix)
         public static let spacer:  Attribute = .init(Sets.nonreal, .prefix, .suffix)
-    }
-}
-
-// MARK: - Symbol + Attribute
-
-extension Symbol {
-    @inlinable static func contains(_ attribute: Attribute, is option: Bool = true) -> (Self) -> Bool {
-        func yes(symbol: Self) -> Bool {  symbol.attribute.contains(attribute) }
-        func  no(symbol: Self) -> Bool { !symbol.attribute.contains(attribute) }
-
-        return option ? yes : no
-    }
-}
-
-// MARK: - Carets.Element + Attribute
-
-extension Carets.Element {
-    @inlinable static func symbol(_ symbol: @escaping (Self) -> Symbol, contains attribute: Attribute, is option: Bool = true) -> (Self) -> Bool {
-        func yes(element: Self) -> Bool {  symbol(element).attribute.contains(attribute) }
-        func  no(element: Self) -> Bool { !symbol(element).attribute.contains(attribute) }
-
-        return option ? yes : no
     }
 }

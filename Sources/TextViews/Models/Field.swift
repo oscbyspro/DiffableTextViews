@@ -34,22 +34,23 @@ import UIKit
     // MARK: Translate: To Carets
     
     @inlinable func translate(to newValue: Carets) -> Self {
-        func steps(prev: Symbol, next: Symbol) -> SimilaritiesInstruction {
-            if prev == next {
-                return .continue
-            } else if prev.attribute.contains(.remove) {
-                return .continueOnLHS
-            } else if next.attribute.contains(.insert) {
-                return .continueOnRHS
-            } else{
-                return .done
-            }
+        func step(prev: Symbol, next: Symbol) -> SimilaritiesInstruction {
+            if      prev == next                     { return .continue      }
+            else if prev.attribute.contains(.remove) { return .continueOnLHS }
+            else if next.attribute.contains(.insert) { return .continueOnRHS }
+            else                                     { return .done          }
         }
         
+        func inspectable(symbol: Symbol) -> Bool {
+            !symbol.attribute.contains(Attribute.Sets.nondiffable)
+        }
+        
+        // --------------------------------- //
+        
         let options = SimilaritiesOptions<Symbol>
-            .inspect(.only(Symbol.contains([.insert, .remove], is: false)))
-            .compare(.instruction(steps))
             .produce(.overshoot)
+            .compare(.instruction(step))
+            .inspect(.only(inspectable))
         
         func position(from current: Carets.SubSequence, to next: Carets.SubSequence) -> Carets.Index {
             Similarities(in: current.lazy.map(\.rhs), and: next.lazy.map(\.rhs), with: options).rhsSuffix().startIndex
@@ -94,36 +95,29 @@ import UIKit
     @inlinable func update(_ transform: (inout Field) -> Void) -> Field {
         var copy = self; transform(&copy); return copy
     }
+}
 
-    // MARK: Move: To Content
+// MARK: Move: To Content
+
+extension Field {
     
-    #warning("Bad name.")
+    // MARK: Transformation
+
     @inlinable func moveToContent() -> Field {
         func position(_ position: Carets.Index) -> Carets.Index {
-            var position = position
-            
-            #warning("FIXME.")
-            #warning("FIXME.")
-            #warning("FIXME.")
-            if carets[position].lhs.attribute.contains(.suffix) {
-                let next = carets.firstIndex(in: .stride(start: .closed(position), step: .backwards)) { element in
-                    !element.lhs.attribute.contains(.suffix) || element.lhs.attribute.contains(.prefix)
+            func move(_ direction: Walkthrough<Carets>.Step, when side: Side, contains attribute: Attribute) -> Carets.Index? {
+                guard side.current(carets[position]).attribute.contains(attribute) else { return nil }
+
+                func predicate(element: Carets.Element) -> Bool {
+                    !side.inverse(element).attribute.contains(attribute)
                 }
                 
-                position = next ?? position
+                return carets.firstIndex(in: .stride(start: .closed(position), step: direction), where: predicate)
             }
             
-            #warning("FIXME.")
-            #warning("FIXME.")
-            #warning("FIXME.")
-            if carets[position].rhs.attribute.contains(.prefix) {
-                let next = carets.firstIndex(in: .stride(start: .closed(position), step: .forwards)) { element in
-                    !element.rhs.attribute.contains(.prefix) || element.rhs.attribute.contains(.suffix)
-                }
-                
-                position = next ?? position
-            }
-            
+            if let next = move(.backwards, when: .rhs, contains: .suffix) { return next }
+            if let next = move(.forwards,  when: .lhs, contains: .prefix) { return next }
+                        
             return position
         }
         
@@ -137,20 +131,49 @@ import UIKit
         return update({ $0.selection = lowerBound ..< upperBound })
     }
     
-    // MARK: Move: To, Jumps Over Spacers
+    // MARK: Helpers
     
-    @inlinable func move(to newValue: Range<Carets.Index>) -> Field {
-        func momentum(from first: Carets.Index, to second: Carets.Index) -> Walkthrough<Carets>.Step? {
-            if      first < second { return  .forwards }
-            else if first > second { return .backwards }
-            else                   { return      .none }
+    @usableFromInline struct Side {
+        
+        // MARK: Properties
+        
+        @usableFromInline let current: (Carets.Element) -> Symbol
+        @usableFromInline let inverse: (Carets.Element) -> Symbol
+        
+        // MARK: Initializers
+        
+        @inlinable init(current: @escaping (Carets.Element) -> Symbol, inverse: @escaping (Carets.Element) -> Symbol) {
+            self.current = current
+            self.inverse = inverse
         }
         
-        #warning("Doublecheck.")
+        // MARK: Initializers, Static
+        
+        @inlinable static var lhs: Self {
+            .init(current: \.lhs, inverse: \.rhs)
+        }
+        
+        @inlinable static var rhs: Self {
+            .init(current: \.rhs, inverse: \.lhs)
+        }
+    }
+}
+
+// MARK: Move: To
+
+extension Field {
+    
+    // MARK: Transformation
+    
+    @inlinable func move(to newValue: Range<Carets.Index>) -> Field {
         func position(_ positionIn: (Range<Carets.Index>) -> Carets.Index, preference: Walkthrough<Carets>.Step, symbol: @escaping (Carets.Element) -> Symbol) -> Carets.Index {
             let position = positionIn(newValue)
             let momentum = momentum(from: positionIn(selection), to: position) ?? preference
-            let predicate = Carets.Element.symbol(symbol, contains: momentum.forwards ? .prefix : .suffix, is: false)
+            let limit: Attribute = momentum.forwards ? .prefix : .suffix
+            
+            func predicate(element: Carets.Element) -> Bool {
+                symbol(element).attribute.contains(limit)
+            }
             
             return carets.firstIndex(in: .stride(start: .closed(position), step: momentum), where: predicate) ?? position
         }
@@ -167,6 +190,14 @@ import UIKit
         // --------------------------------- //
         
         return update({ $0.selection = lowerBound ..< upperBound })
+    }
+    
+    // MARK: Heleprs
+    
+    @inlinable func momentum(from first: Carets.Index, to second: Carets.Index) -> Walkthrough<Carets>.Step? {
+        if      first < second { return  .forwards }
+        else if first > second { return .backwards }
+        else                   { return      .none }
     }
 }
 
