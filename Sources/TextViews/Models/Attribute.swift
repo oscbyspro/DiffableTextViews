@@ -11,7 +11,7 @@ import SwiftUI
 
 /// A set of options, where each option represents a specialized behavior.
 ///
-/// The easiest way to unformat text is to exclude symbols with this attribute.
+/// The easiest way to unformat text is to exclude symbols with the format attribute.
 ///
 /// - Ordinary text has a raw value of 0, and is empty.
 /// - A spacer is defined as both a prefix and a suffix.
