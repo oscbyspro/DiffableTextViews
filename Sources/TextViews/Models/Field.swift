@@ -168,14 +168,14 @@ extension Field {
     @inlinable func move(to newValue: Range<Carets.Index>) -> Field {
         func position(_ positionIn: (Range<Carets.Index>) -> Carets.Index, preference: Walkthrough<Carets>.Step, symbol: @escaping (Carets.Element) -> Symbol) -> Carets.Index {
             let position = positionIn(newValue)
-            let momentum = momentum(from: positionIn(selection), to: position) ?? preference
-            let limit: Attribute = momentum.forwards ? .prefix : .suffix
-            
+            let direction = momentum(from: positionIn(selection), to: position) ?? preference
+            let limit: Attribute = direction.forwards ? .prefix : .suffix
+                        
             func predicate(element: Carets.Element) -> Bool {
-                symbol(element).attribute.contains(limit)
+                !symbol(element).attribute.contains(limit)
             }
             
-            return carets.firstIndex(in: .stride(start: .closed(position), step: momentum), where: predicate) ?? position
+            return carets.firstIndex(in: .stride(start: .closed(position), step: direction), where: predicate) ?? position
         }
         
         // --------------------------------- //
