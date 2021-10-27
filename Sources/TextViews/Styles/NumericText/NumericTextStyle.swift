@@ -234,8 +234,8 @@ extension NumericTextStyle {
         
         // --------------------------------- //
         
-        configureFirstDigitIfItIsZero(in:         &snapshot, insert: .prefix)
-        configureDecimalSeparatorIfItIsSuffix(in: &snapshot, insert: .remove)
+        configureFirstDigitIfItIsZero(in:         &snapshot, with: { $0.insert(.prefix) })
+        configureDecimalSeparatorIfItIsSuffix(in: &snapshot, with: { $0.insert(.remove) })
                 
         // --------------------------------- //
 
@@ -249,16 +249,16 @@ extension NumericTextStyle {
         return snapshot
     }
     
-    @inlinable func configureFirstDigitIfItIsZero(in snapshot: UnsafeMutablePointer<Snapshot>, insert insertable: Attribute) {
+    @inlinable func configureFirstDigitIfItIsZero(in snapshot: UnsafeMutablePointer<Snapshot>, with transform: (inout Attribute) -> Void) {
         guard let firstDigitIndex = snapshot.pointee.firstIndex(where: { Components.Digits.set.contains($0.character) }) else { return }
         guard snapshot.pointee.characters[firstDigitIndex.character] == Components.Digits.zero else { return }
-        snapshot.pointee.configure(attributes: firstDigitIndex, with: { attribute in attribute.insert(insertable) })
+        snapshot.pointee.configure(attributes: firstDigitIndex, with: transform)
     }
     
-    @inlinable func configureDecimalSeparatorIfItIsSuffix(in snapshot: UnsafeMutablePointer<Snapshot>, insert insertable: Attribute) {
+    @inlinable func configureDecimalSeparatorIfItIsSuffix(in snapshot: UnsafeMutablePointer<Snapshot>, with transform: (inout Attribute) -> Void) {
         let decimalSeparatorAsSuffix = snapshot.pointee.suffix(while: { decimalSeparator.contains($0.character) })
         let indices = decimalSeparatorAsSuffix.startIndex ..< decimalSeparatorAsSuffix.endIndex
-        snapshot.pointee.configure(attributes: indices, with: { attribute in attribute.insert(insertable) })
+        snapshot.pointee.configure(attributes: indices, with: transform)
     }
 }
 

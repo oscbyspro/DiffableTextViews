@@ -1,5 +1,5 @@
 //
-//  BidirectionalCollection.swift
+//  &BidirectionalCollection.swift
 //  
 //
 //  Created by Oscar Byström Ericsson on 2021-10-27.
