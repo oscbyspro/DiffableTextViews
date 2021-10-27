@@ -14,9 +14,8 @@ extension BidirectionalCollection {
     
     @inlinable func suffix(while predicate: (Element) -> Bool) -> SubSequence {
         var index = endIndex
-        
 
-        loop: while index != startIndex {
+        while index != startIndex {
             let after = index
             formIndex(before: &index)
             if !predicate(self[index]) { return self[after...] }
