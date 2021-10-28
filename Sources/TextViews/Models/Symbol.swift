@@ -5,8 +5,6 @@
 //  Created by Oscar Byström Ericsson on 2021-09-24.
 //
 
-import UIKit
-
 // MARK: Symbol
 
 public struct Symbol: Equatable {
@@ -26,19 +24,19 @@ public struct Symbol: Equatable {
     // MARK: Initializers: Static
     
     @inlinable public static func content(_ character: Character) -> Self {
-        Self(character, attribute: Attribute.Layout.content)
+        Self(character, attribute: .intuitive(.content))
     }
     
     @inlinable public static func prefix(_ character: Character) -> Self {
-        Self(character, attribute: Attribute.Layout.prefix)
+        Self(character, attribute: .intuitive(.prefix))
     }
     
     @inlinable public static func suffix(_ character: Character) -> Self {
-        Self(character, attribute: Attribute.Layout.suffix)
+        Self(character, attribute: .intuitive(.suffix))
     }
     
     @inlinable public static func spacer(_ character: Character) -> Self {
-        Self(character, attribute: Attribute.Layout.spacer)
+        Self(character, attribute: .intuitive(.spacer))
     }
     
     // MARK: Descriptions

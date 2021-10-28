@@ -222,7 +222,7 @@ extension NumericTextStyle {
         // --------------------------------- //
         
         if let prefix = prefix {
-            snapshot.append(contentsOf: Snapshot(prefix, only: Attribute.Layout.prefix))
+            snapshot.append(contentsOf: Snapshot(prefix, only: .intuitive(.prefix)))
             snapshot.append(.prefix(" "))
         }
                 
@@ -237,6 +237,9 @@ extension NumericTextStyle {
                 snapshot.append(.content(character))
             } else if signs.contains(character) {
                 snapshot.append(.content(character).union(.prefix))
+                
+                // snapshot.append(.content(character).union(.prefix, .suffix))
+                #warning("Spacer logic is flawed, as the code commented above should work as intended.")
             }
         }
         
@@ -249,7 +252,7 @@ extension NumericTextStyle {
 
         if let suffix = suffix {
             snapshot.append(.suffix(" "))
-            snapshot.append(contentsOf: Snapshot(suffix, only: Attribute.Layout.suffix))
+            snapshot.append(contentsOf: Snapshot(suffix, only: .intuitive(.suffix)))
         }
     
         // --------------------------------- //

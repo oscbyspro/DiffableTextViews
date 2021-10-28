@@ -6,7 +6,6 @@
 //
 
 import struct Sequences.Walkthrough
-import UIKit
 
 // MARK: - Field
 
@@ -42,7 +41,7 @@ import UIKit
         }
         
         func inspectable(symbol: Symbol) -> Bool {
-            !symbol.attribute.contains(Attribute.Sets.nondiffable)
+            !symbol.attribute.contains(.thematic(.nondifferentiable))
         }
         
         // --------------------------------- //

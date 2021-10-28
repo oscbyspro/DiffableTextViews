@@ -101,7 +101,7 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
             
             let offsets = Offset(at: nsRange.lowerBound) ..< Offset(at: nsRange.upperBound)
             let range = cache.field.indices(in: offsets)
-            let input = Snapshot(string, only: Attribute.Layout.content)
+            let input = Snapshot(string, only: .intuitive(.content))
             
             // --------------------------------- //
 

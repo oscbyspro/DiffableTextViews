@@ -27,11 +27,11 @@ public struct Attribute: OptionSet {
     public static let insert: Self = .init(rawValue: 1 << 3)
     /// Signifies that the symbol will be ignored by the differentiation algorithm when it is removed.
     public static let remove: Self = .init(rawValue: 1 << 4)
-    /// A free bit, 0b00100000. Useful as a flag.
+    /// A free bit, 0b00100000.
     public static let xAlpha: Self = .init(rawValue: 1 << 5)
-    /// A free bit, 0b01000000. Useful as a flag.
+    /// A free bit, 0b01000000.
     public static let xBeta:  Self = .init(rawValue: 1 << 6)
-    /// A free bit, 0b10000000. Useful as a flag.
+    /// A free bit, 0b10000000.
     public static let xGamma: Self = .init(rawValue: 1 << 7)
     
     // MARK: Properties
@@ -54,18 +54,69 @@ public struct Attribute: OptionSet {
         var result = self; transform(&result); return result
     }
     
-    // MARK: Components: Thematic
+    // MARK: Components: Domain
+
+    public struct Domain {
+        public static let all:    Self = .init(Attribute(rawValue: .max))
+        public static let normal: Self = .init(.format, .prefix, .suffix, .insert, .remove)
+        public static let extras: Self = .init(.xAlpha, .xBeta, .xGamma)
+
+        // MARK: Properties
+        
+        public let attribute: Attribute
+        
+        // MARK: Initializersb
+        
+        @inlinable init(_ attribute: Attribute...) {
+            self.attribute = .init(attribute)
+        }
+    }
     
-    public enum Sets {
-        public static let nondiffable: Attribute = .init(.insert, .remove)
+    @inlinable @inline(__always) public static func domain(_ domain: Domain) -> Self {
+        domain.attribute
+    }
+    
+    // MARK: Components: Thematic
+
+    public struct Thematic {
+        public static let spacer: Self = .init(.prefix, .suffix)
+        public static let nondifferentiable: Self = .init(.insert, .remove)
+        
+        // MARK: Properties
+        
+        public let attribute: Attribute
+        
+        // MARK: Initializers
+        
+        @inlinable init(_ attribute: Attribute...) {
+            self.attribute = .init(attribute)
+        }
+    }
+    
+    @inlinable @inline(__always) public static func thematic(_ thematic: Thematic) -> Self {
+        thematic.attribute
     }
     
     // MARK: Components: Intuative
     
-    public enum Layout {
-        public static let content: Attribute = .init()
-        public static let prefix:  Attribute = .init(.format, .insert, .remove, .prefix)
-        public static let suffix:  Attribute = .init(.format, .insert, .remove, .suffix)
-        public static let spacer:  Attribute = .init(.format, .insert, .remove, .prefix, .suffix)
+    public struct Intuitive {
+        public static let content: Self = .init()
+        public static let prefix:  Self = .init(.format, .insert, .remove, .prefix)
+        public static let suffix:  Self = .init(.format, .insert, .remove, .suffix)
+        public static let spacer:  Self = .init(.format, .insert, .remove, .prefix, .suffix)
+        
+        // MARK: Properties
+        
+        public let attribute: Attribute
+        
+        // MARK: Initializers
+        
+        @inlinable init(_ attribute: Attribute...) {
+            self.attribute = .init(attribute)
+        }
+    }
+    
+    @inlinable @inline(__always) public static func intuitive(_ intuitive: Intuitive) -> Self {
+        intuitive.attribute
     }
 }
