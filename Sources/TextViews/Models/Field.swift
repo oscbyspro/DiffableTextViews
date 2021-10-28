@@ -32,6 +32,7 @@ import struct Sequences.Walkthrough
     
     // MARK: Translate: To Carets
     
+    #warning("Should be like configure(carets:) with a separate move(to:) method.")
     @inlinable func translate(to newValue: Carets) -> Self {
         func step(prev: Symbol, next: Symbol) -> SimilaritiesInstruction {
             if      prev == next                     { return .continue      }
@@ -96,36 +97,86 @@ import struct Sequences.Walkthrough
     @inlinable func update(_ transform: (inout Field) -> Void) -> Field {
         var copy = self; transform(&copy); return copy
     }
+    
+    // MARK: Components: Direction
+    
+    @usableFromInline enum Direction {
+        case forwards
+        case backwards
+        
+        // MARK: Utilities
+        
+        @inlinable var opposite: Direction {
+            switch self {
+            case .forwards: return .backwards
+            case .backwards: return .forwards
+            }
+        }
+        
+        @inlinable var step: Walkthrough<Carets>.Step {
+            switch self {
+            case .forwards: return .forwards
+            case .backwards: return .backwards
+            }
+        }
+    }
 }
 
-// MARK: Move: To
+// MARK: - Move To Anchor
 
 extension Field {
     
-    // MARK: Transformation
+    // MARK: Transformations
     
+    #warning("TODO.")
+    @inlinable func moveInoutPositionToAnchor(_ position: Carets.Index, preference: Direction) -> Carets.Index {
+        func first(in direction: Direction) -> Carets.Index? {
+            switch direction {
+            case .forwards:
+                return carets.firstIndex(in: .stride(start: .closed(position), step: .forwards),  where: { !$0.rhs.attribute.contains(.prefix) })
+            case .backwards:
+                return carets.firstIndex(in: .stride(start: .closed(position), step: .backwards), where: { !$0.lhs.attribute.contains(.suffix) })
+            }
+        }
+        
+        return first(in: preference) ?? first(in: preference.opposite) ?? position
+    }
+}
+
+// MARK: Move To Range
+
+extension Field {
+    
+    // MARK: Transformations
+    
+    #warning("End with moveToAnchor with opposite preference to the direction of movement.")
     @inlinable func move(to newValue: Range<Carets.Index>) -> Field {
-        func position(_ positionIn: (Range<Carets.Index>) -> Carets.Index, preference: Walkthrough<Carets>.Step, symbol: @escaping (Carets.Element) -> Symbol) -> Carets.Index {
+        func position(_ positionIn: (Range<Carets.Index>) -> Carets.Index, preference: Direction, symbol: @escaping (Carets.Element) -> Symbol) -> Carets.Index {
             let current = positionIn(selection)
-            let next = positionIn(newValue)
+            let next    = positionIn(newValue)
+            
             let direction = momentum(from: current, to: next) ?? preference
-            let limit: Attribute = direction.forwards ? .suffix : .prefix
+            let limit: Attribute = direction == .forwards ? .suffix : .prefix
                         
             func predicate(element: Carets.Element) -> Bool {
                 !symbol(element).attribute.contains(limit)
             }
             
-            return carets.firstIndex(in: .stride(start: .closed(next), step: direction), where: predicate) ?? current
+            return carets.firstIndex(in: .stride(start: .closed(next), step: direction.step), where: predicate) ?? next
         }
         
         // --------------------------------- //
-                
-        let upperBound = position(\.upperBound, preference: .backwards, symbol: \.lhs)
+        
+        var upperBound = position(\.upperBound, preference: .backwards, symbol: \.lhs)
+        upperBound = moveInoutPositionToAnchor(upperBound, preference: .backwards)
+        
         var lowerBound = upperBound
 
         if !newValue.isEmpty {
             lowerBound = position(\.lowerBound, preference:  .forwards, symbol: \.rhs)
-            lowerBound = min(lowerBound, upperBound)
+            lowerBound = moveInoutPositionToAnchor(lowerBound, preference: .backwards)
+            #warning("Not needed if position is corrected.")
+//            lowerBound = min(lowerBound, upperBound)
         }
         
         // --------------------------------- //
@@ -135,7 +186,7 @@ extension Field {
     
     // MARK: Heleprs
     
-    @inlinable func momentum(from first: Carets.Index, to second: Carets.Index) -> Walkthrough<Carets>.Step? {
+    @inlinable func momentum(from first: Carets.Index, to second: Carets.Index) -> Direction? {
         if      first < second { return  .forwards }
         else if first > second { return .backwards }
         else                   { return      .none }
