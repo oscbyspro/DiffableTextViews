@@ -40,8 +40,9 @@ import struct Sequences.Walkthrough
             else                                     { return .done          }
         }
         
+        #warning("Think about this.")
         func inspectable(symbol: Symbol) -> Bool {
-            !symbol.attribute.contains(.thematic(.nondifferentiable))
+            !symbol.attribute.contains(.theme(.change))
         }
         
         // --------------------------------- //
@@ -62,7 +63,7 @@ import struct Sequences.Walkthrough
                 
         // --------------------------------- //
         
-        return Field(newValue, selection: nextLowerBound ..< nextUpperBound).moveToAttributes()
+        return Field(newValue, selection: nextLowerBound ..< nextUpperBound)
     }
     
     @inlinable func translate(to newValue: Snapshot) -> Self {
@@ -71,8 +72,9 @@ import struct Sequences.Walkthrough
 
     // MARK: Configure: Selection
     
+    #warning("This should be named move to, or translate should be like this.")
     @inlinable func configure(selection newValue: Range<Carets.Index>) -> Self {
-        move(to: newValue).moveToAttributes()
+        move(to: newValue)
     }
     
     @inlinable func configure(selection newValue: Carets.Index) -> Self {
@@ -96,63 +98,6 @@ import struct Sequences.Walkthrough
     }
 }
 
-// MARK: Move: To Content
-
-extension Field {
-    
-    // MARK: Transformation
-    
-    @inlinable func moveToAttributes(preference direction: Direction = .backwards) -> Field {
-        func position(_ position: Carets.Index) -> Carets.Index {
-            func next(_ direction: Walkthrough<Carets>.Step, while predicate: (Carets.Element) -> Bool) -> Carets.Index? {
-                guard predicate(carets[position]) else { return nil }
-                
-                for next in carets.sequence(of: .indices, in: .stride(start: .open(position), step: direction)) {
-                    guard predicate(carets[next]) else { return next }
-                }
-                
-                return nil
-            }
-    
-            func anchor(in direction: Direction) -> Carets.Index? {
-                switch direction {
-                case .forwards:  return next(.forwards,  while: { $0.rhs.attribute.contains(.prefix) })
-                case .backwards: return next(.backwards, while: { $0.lhs.attribute.contains(.suffix) })
-                }
-            }
-            
-            let i = anchor(in: direction) ?? anchor(in: direction.opposite) ?? position
-            let e = carets[i]
-            print(e.lhs.character, e.rhs.character)
-            
-            return anchor(in: direction) ?? anchor(in: direction.opposite) ?? position
-        }
-        
-        // --------------------------------- //
-        
-        let lowerBound = position(selection.lowerBound)
-        let upperBound = position(selection.upperBound)
-        
-        // --------------------------------- //
-
-        return update({ $0.selection = lowerBound ..< upperBound })
-    }
-    
-    // MARK: Components: Direction
-    
-    @usableFromInline enum Direction {
-        case forwards
-        case backwards
-                
-        @inlinable var opposite: Self {
-            switch self {
-            case .forwards: return .backwards
-            case .backwards: return .forwards
-            }
-        }
-    }
-}
-
 // MARK: Move: To
 
 extension Field {
@@ -161,15 +106,16 @@ extension Field {
     
     @inlinable func move(to newValue: Range<Carets.Index>) -> Field {
         func position(_ positionIn: (Range<Carets.Index>) -> Carets.Index, preference: Walkthrough<Carets>.Step, symbol: @escaping (Carets.Element) -> Symbol) -> Carets.Index {
-            let position = positionIn(newValue)
-            let direction = momentum(from: positionIn(selection), to: position) ?? preference
-            let limit: Attribute = direction.forwards ? .prefix : .suffix
+            let current = positionIn(selection)
+            let next = positionIn(newValue)
+            let direction = momentum(from: current, to: next) ?? preference
+            let limit: Attribute = direction.forwards ? .suffix : .prefix
                         
             func predicate(element: Carets.Element) -> Bool {
                 !symbol(element).attribute.contains(limit)
             }
             
-            return carets.firstIndex(in: .stride(start: .closed(position), step: direction), where: predicate) ?? position
+            return carets.firstIndex(in: .stride(start: .closed(next), step: direction), where: predicate) ?? current
         }
         
         // --------------------------------- //

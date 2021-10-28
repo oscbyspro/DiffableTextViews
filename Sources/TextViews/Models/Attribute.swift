@@ -76,11 +76,11 @@ public struct Attribute: OptionSet {
         domain.attribute
     }
     
-    // MARK: Components: Thematic
+    // MARK: Components: Theme
 
-    public struct Thematic {
+    public struct Theme {
         public static let spacer: Self = .init(.prefix, .suffix)
-        public static let nondifferentiable: Self = .init(.insert, .remove)
+        public static let change: Self = .init(.insert, .remove)
         
         // MARK: Properties
         
@@ -93,8 +93,8 @@ public struct Attribute: OptionSet {
         }
     }
     
-    @inlinable @inline(__always) public static func thematic(_ thematic: Thematic) -> Self {
-        thematic.attribute
+    @inlinable @inline(__always) public static func theme(_ theme: Theme) -> Self {
+        theme.attribute
     }
     
     // MARK: Components: Intuative

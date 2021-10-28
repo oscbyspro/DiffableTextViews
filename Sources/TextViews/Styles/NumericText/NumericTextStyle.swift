@@ -224,7 +224,7 @@ extension NumericTextStyle {
     #warning("Fixme: make prefix.")
         if let prefix = prefix {
             snapshot.append(contentsOf: Snapshot(prefix, only: .intuitive(.spacer)))
-            snapshot.append(.spacer(" "))
+            snapshot.append(Symbol(" ", attribute: .intuitive(.spacer)))
         }
                 
         // --------------------------------- //
@@ -243,14 +243,16 @@ extension NumericTextStyle {
         
         // --------------------------------- //
 
-        configureFirstDigitIfItIsZero(in:         &snapshot, with: { $0.insert(.prefix) })
+//        snapshot.removeLast()
+        
+//        configureFirstDigitIfItIsZero(in:         &snapshot, with: { $0.insert(.prefix) })
         configureDecimalSeparatorIfItIsSuffix(in: &snapshot, with: { $0.insert(.remove) })
                 
         // --------------------------------- //
 
         #warning("Fixme: make suffix.")
         if let suffix = suffix {
-            snapshot.append(.spacer(" "))
+            snapshot.append(Symbol(" ", attribute: .intuitive(.spacer)))
             snapshot.append(contentsOf: Snapshot(suffix, only: .intuitive(.spacer)))
         }
     

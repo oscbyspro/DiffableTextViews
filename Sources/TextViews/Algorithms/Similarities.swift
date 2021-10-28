@@ -81,10 +81,10 @@ import Foundation
         }
         
         // --------------------------------- //
-        
+ 
         if options.production == .overshoot {
-            lhsIndex = lhs[lhsIndex...].firstIndex(where: options.inspection.includes) ?? lhs.endIndex
-            rhsIndex = rhs[rhsIndex...].firstIndex(where: options.inspection.includes) ?? rhs.endIndex
+            lhsIndex = lhs[lhsIndex...].firstIndex(where: options.inspection.includes) ?? lhsIndex
+            rhsIndex = rhs[rhsIndex...].firstIndex(where: options.inspection.includes) ?? rhsIndex
         }
         
         // --------------------------------- //
