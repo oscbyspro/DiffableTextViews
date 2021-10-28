@@ -221,9 +221,10 @@ extension NumericTextStyle {
             
         // --------------------------------- //
         
+    #warning("Fixme: make prefix.")
         if let prefix = prefix {
-            snapshot.append(contentsOf: Snapshot(prefix, only: .intuitive(.prefix)))
-            snapshot.append(.prefix(" "))
+            snapshot.append(contentsOf: Snapshot(prefix, only: .intuitive(.spacer)))
+            snapshot.append(.spacer(" "))
         }
                 
         // --------------------------------- //
@@ -236,10 +237,7 @@ extension NumericTextStyle {
             } else if decimalSeparator.contains(character) {
                 snapshot.append(.content(character))
             } else if signs.contains(character) {
-                snapshot.append(.content(character).union(.prefix))
-                
-                // snapshot.append(.content(character).union(.prefix, .suffix))
-                #warning("Spacer logic is flawed, as the code commented above should work as intended.")
+                 snapshot.append(.content(character).union([.prefix, .suffix]))
             }
         }
         
@@ -250,9 +248,10 @@ extension NumericTextStyle {
                 
         // --------------------------------- //
 
+        #warning("Fixme: make suffix.")
         if let suffix = suffix {
-            snapshot.append(.suffix(" "))
-            snapshot.append(contentsOf: Snapshot(suffix, only: .intuitive(.suffix)))
+            snapshot.append(.spacer(" "))
+            snapshot.append(contentsOf: Snapshot(suffix, only: .intuitive(.spacer)))
         }
     
         // --------------------------------- //

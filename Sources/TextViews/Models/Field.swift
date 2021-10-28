@@ -62,7 +62,7 @@ import struct Sequences.Walkthrough
                 
         // --------------------------------- //
         
-        return Field(newValue, selection: nextLowerBound ..< nextUpperBound).moveToContent()
+        return Field(newValue, selection: nextLowerBound ..< nextUpperBound).moveToAttributes()
     }
     
     @inlinable func translate(to newValue: Snapshot) -> Self {
@@ -72,7 +72,7 @@ import struct Sequences.Walkthrough
     // MARK: Configure: Selection
     
     @inlinable func configure(selection newValue: Range<Carets.Index>) -> Self {
-        move(to: newValue).moveToContent()
+        move(to: newValue).moveToAttributes()
     }
     
     @inlinable func configure(selection newValue: Carets.Index) -> Self {
@@ -101,23 +101,31 @@ import struct Sequences.Walkthrough
 extension Field {
     
     // MARK: Transformation
-
-    @inlinable func moveToContent() -> Field {
+    
+    @inlinable func moveToAttributes(preference direction: Direction = .backwards) -> Field {
         func position(_ position: Carets.Index) -> Carets.Index {
-            func move(_ direction: Walkthrough<Carets>.Step, when side: Side, contains attribute: Attribute) -> Carets.Index? {
-                guard side.current(carets[position]).attribute.contains(attribute) else { return nil }
-
-                func predicate(element: Carets.Element) -> Bool {
-                    !side.inverse(element).attribute.contains(attribute)
+            func next(_ direction: Walkthrough<Carets>.Step, while predicate: (Carets.Element) -> Bool) -> Carets.Index? {
+                guard predicate(carets[position]) else { return nil }
+                
+                for next in carets.sequence(of: .indices, in: .stride(start: .open(position), step: direction)) {
+                    guard predicate(carets[next]) else { return next }
                 }
                 
-                return carets.firstIndex(in: .stride(start: .closed(position), step: direction), where: predicate)
+                return nil
+            }
+    
+            func anchor(in direction: Direction) -> Carets.Index? {
+                switch direction {
+                case .forwards:  return next(.forwards,  while: { $0.rhs.attribute.contains(.prefix) })
+                case .backwards: return next(.backwards, while: { $0.lhs.attribute.contains(.suffix) })
+                }
             }
             
-            if let next = move(.backwards, when: .rhs, contains: .suffix) { return next }
-            if let next = move(.forwards,  when: .lhs, contains: .prefix) { return next }
-                        
-            return position
+            let i = anchor(in: direction) ?? anchor(in: direction.opposite) ?? position
+            let e = carets[i]
+            print(e.lhs.character, e.rhs.character)
+            
+            return anchor(in: direction) ?? anchor(in: direction.opposite) ?? position
         }
         
         // --------------------------------- //
@@ -130,30 +138,17 @@ extension Field {
         return update({ $0.selection = lowerBound ..< upperBound })
     }
     
-    // MARK: Helpers
+    // MARK: Components: Direction
     
-    @usableFromInline struct Side {
-        
-        // MARK: Properties
-        
-        @usableFromInline let current: (Carets.Element) -> Symbol
-        @usableFromInline let inverse: (Carets.Element) -> Symbol
-        
-        // MARK: Initializers
-        
-        @inlinable init(current: @escaping (Carets.Element) -> Symbol, inverse: @escaping (Carets.Element) -> Symbol) {
-            self.current = current
-            self.inverse = inverse
-        }
-        
-        // MARK: Initializers, Static
-        
-        @inlinable static var lhs: Self {
-            .init(current: \.lhs, inverse: \.rhs)
-        }
-        
-        @inlinable static var rhs: Self {
-            .init(current: \.rhs, inverse: \.lhs)
+    @usableFromInline enum Direction {
+        case forwards
+        case backwards
+                
+        @inlinable var opposite: Self {
+            switch self {
+            case .forwards: return .backwards
+            case .backwards: return .forwards
+            }
         }
     }
 }
@@ -184,6 +179,7 @@ extension Field {
 
         if !newValue.isEmpty {
             lowerBound = position(\.lowerBound, preference:  .forwards, symbol: \.rhs)
+            lowerBound = min(lowerBound, upperBound)
         }
         
         // --------------------------------- //
