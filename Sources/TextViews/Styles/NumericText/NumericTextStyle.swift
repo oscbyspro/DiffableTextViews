@@ -216,6 +216,7 @@ extension NumericTextStyle {
     
     // MARK: Helpers, Characters
     
+    #warning("This is in development phase.")
     @inlinable func snapshot(_ characters: String) -> Snapshot {
         var snapshot = Snapshot()
             
@@ -243,9 +244,11 @@ extension NumericTextStyle {
                 
         // --------------------------------- //
 
-//        snapshot.removeLast()
-        configureFirstDigitIfItIsZero(in:         &snapshot, with: { $0.insert(.intuitive(.prefix)) })
-        configureDecimalSeparatorIfItIsSuffix(in: &snapshot, with: { $0.insert(.remove) })
+        #warning("Shuold be stuck at end if only spacers.")
+        snapshot.removeLast()
+        
+//        configureFirstDigitIfItIsZero(in:         &snapshot, with: { $0.insert(.prefix) })
+//        configureDecimalSeparatorIfItIsSuffix(in: &snapshot, with: { $0.insert(.remove) })
                 
         // --------------------------------- //
 

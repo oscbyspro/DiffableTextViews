@@ -79,7 +79,7 @@ public struct Attribute: OptionSet {
     // MARK: Components: Theme
 
     public struct Theme {
-        public static let spacer: Self = .init(.prefix, .suffix)
+        public static let stop:   Self = .init(.prefix, .suffix)
         public static let change: Self = .init(.insert, .remove)
         
         // MARK: Properties
@@ -101,9 +101,9 @@ public struct Attribute: OptionSet {
     
     public struct Intuitive {
         public static let content: Self = .init()
+        public static let spacer:  Self = .init(.format, .insert, .remove)
         public static let prefix:  Self = .init(.format, .insert, .remove, .prefix)
         public static let suffix:  Self = .init(.format, .insert, .remove, .suffix)
-        public static let spacer:  Self = .init(.format, .insert, .remove, .prefix, .suffix)
         
         // MARK: Properties
         

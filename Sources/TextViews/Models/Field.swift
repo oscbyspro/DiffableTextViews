@@ -6,9 +6,16 @@
 //
 
 import struct Sequences.Walkthrough
+import Combine
 
 // MARK: - Field
 
+#warning("Eureka!")
+#warning("A spacer should be defined as [.format], not [.prefix, .suffix]")
+
+#warning("move(to|nextCarets) should only use [.insert, .remove]")
+#warning("move(to|nextSelection) should only use [.format], but not cross [.prefix, .suffix]")
+#warning("moveAccordingToAttributes() should only use [.prefix, .suffix]")
 @usableFromInline struct Field<Layout: TextViews.Layout> {
     @usableFromInline typealias Carets = TextViews.Carets<Layout>
     @usableFromInline typealias Offset = TextViews.Offset<Layout>
@@ -19,7 +26,6 @@ import struct Sequences.Walkthrough
     @usableFromInline var selection: Range<Carets.Index>
     
     // MARK: Initializers
-    
     
     @inlinable init(_ snapshot: Snapshot = Snapshot()) {
         self.carets = Carets(snapshot)
@@ -34,7 +40,7 @@ import struct Sequences.Walkthrough
     // MARK: Configure: Carets
     
     @inlinable func configure(carets newValue: Carets) -> Self {
-        move(to: newValue)
+        move(to: newValue).moveToAttributes()
     }
     
     @inlinable func configure(carets newValue: Snapshot) -> Self {
@@ -44,7 +50,7 @@ import struct Sequences.Walkthrough
     // MARK: Configure: Selection
     
     @inlinable func configure(selection newValue: Range<Carets.Index>) -> Self {
-        move(to: newValue)
+        move(to: newValue).moveToAttributes()
     }
     
     @inlinable func configure(selection newValue: Carets.Index) -> Self {
@@ -96,15 +102,10 @@ import struct Sequences.Walkthrough
             case .backwards: return .backwards
             }
         }
-        
-        @inlinable var side: (Carets.Element) -> Symbol {
-            switch self {
-            case .forwards:  return \.rhs
-            case .backwards: return \.lhs
-            }
-        }
     }
 }
+
+// MARK: - Offsets
 
 extension Field {
     
@@ -134,7 +135,7 @@ extension Field {
         return lowerBound ..< upperBound
     }
     
-    // MARK: Path
+    // MARK: Helpers, Path
     
     @usableFromInline struct Path: Comparable {
         
@@ -158,7 +159,7 @@ extension Field {
     }
 }
 
-// MARK: Move To Carets
+// MARK: - Move To Carets
 
 extension Field {
     
@@ -190,53 +191,208 @@ extension Field {
         
         // --------------------------------- //
         
+        #warning("Needs to be corrected forwards.")
         let nextUpperBound = position(from: carets[selection.upperBound...], to: nextCarets[...])
         let nextLowerBound = position(from: carets[selection], to: nextCarets[..<nextUpperBound])
                 
         // --------------------------------- //
         
+        #warning("Should be post-processed to follow attributes.")
         return Field(nextCarets, selection: nextLowerBound ..< nextUpperBound)
     }
 }
 
-/*
- 
- Forwards momentum, upperBound(<-):
-    1. if !lhs.contains(.suffix) -> return position (collides with upperBound's preference)
-    2. otherwise, find first collision towards rhs (because forwards momentum)
-        a) not end: return position beyond it, carets.index(lhs: collisionIndex)
-        b)  at end: return position
-    3, otherwise, find first collision towards lhs
- 
- */
+// MARK: - Move To Selection
+
+#warning("WIP")
+
+#warning("Eureka!")
 
 extension Field {
+    static var mockLayout0: String {
+        ">|>,>,>,<>,<>,<>,*,*,*,*,*,-,-,-,<,<,<|<"
+    }
     
-    #warning("Retarded.")
+    static var mockLayout1: String {
+        "->|->,->,->,<-,<-,<-|<-"
+    }
     
+    static var mockLayout2: String {
+        "<-,->" + "->,<-" + "<-,-"
+    }
+    
+    // --------------------------------- //
+    
+    @inlinable func firstPosition(from position: Carets.Index, direction: Direction, where predicate: (Carets.Element) -> Bool) -> Carets.Index? {
+        switch direction {
+        case .forwards: return carets[position...].firstIndex(where: predicate)
+        case .backwards: return carets[...position].lastIndex(where: predicate)
+        }
+    }
+    
+    #warning("Calculate direction with preference or none.")
+    #warning("Try first contentOrStop  ")
+    
+    
+    #warning("This does not work.")
+    @inlinable func moveToAttributes() -> Field {
+        func moveForwards(_ element: Carets.Element) -> Bool {
+            element.rhs.attribute.contains(.prefix) && !element.rhs.attribute.contains(.suffix)
+        }
+        
+        func moveBackwards(_ element: Carets.Element) -> Bool {
+            element.lhs.attribute.contains(.suffix) && !element.rhs.attribute.contains(.prefix)
+        }
+        
+        func noncontent(_ element: Carets.Element) -> Bool {
+            element.lhs.attribute.contains(.format) && element.rhs.attribute.contains(.format)
+        }
+        
+        func position(_ position: Carets.Index, preference: Direction) -> Carets.Index {
+            let start = carets[position]
+            
+            if moveForwards(start) {
+                print("forwards")
+                return firstPosition(from: position, direction: .forwards,  where: { !moveForwards($0) }) ?? carets.lastIndex
+            }
+            
+            if moveBackwards(start) {
+                print("backwards")
+                return firstPosition(from: position, direction: .backwards, where: { !moveBackwards($0) }) ?? carets.firstIndex
+            }
+            
+            if noncontent(start) {
+                switch preference {
+                case .forwards:
+                    print("forwards #2")
+                    return firstPosition(from: position, direction: .forwards,  where: { !moveForwards($0) })  ?? carets.lastIndex
+                case .backwards:
+                    print("backwards #2")
+                    return firstPosition(from: position, direction: .backwards, where: { !moveBackwards($0) }) ?? carets.firstIndex
+                }
+            }
+            
+            print("xxx")
+            
+            return position
+        }
+        
+        let upperBound = position(selection.upperBound, preference: .backwards)
+        var lowerBound = upperBound
+        
+        if !selection.isEmpty {
+            lowerBound = position(selection.lowerBound, preference: .forwards)
+            lowerBound = min(lowerBound, upperBound)
+        }
+        
+        return update({ $0.selection = lowerBound ..< upperBound })
+    }
+}
+
+#warning("WIP")
+
+extension Field {
+        
+    @inlinable func predicateIsContent(_ direction: Direction) -> (Carets.Element) -> Bool {
+        func forwards(element: Carets.Element) -> Bool {
+            !element.rhs.attribute.contains(.format)
+        }
+        
+        func backwards(element: Carets.Element) -> Bool {
+            !element.lhs.attribute.contains(.format)
+        }
+        
+        return direction == .forwards ? forwards : backwards
+    }
+    
+    @inlinable func predicateIsStop(_ direction: Direction) -> (Carets.Element) -> Bool {
+        func forwards(element: Carets.Element) -> Bool {
+            element.rhs.attribute.contains(.suffix)
+        }
+        
+        func backwards(element: Carets.Element) -> Bool {
+            element.lhs.attribute.contains(.prefix)
+        }
+        
+        return direction == .forwards ? forwards : backwards
+    }
+    
+    @inlinable func predicateIsLessThanLimit(_ direction: Direction) -> (Carets.Index) -> Bool {
+        func forwards(position: Carets.Index) -> Bool {
+            position < carets.lastIndex
+        }
+        
+        func backwards(position: Carets.Index) -> Bool {
+            position > carets.firstIndex
+        }
+        
+        return direction == .forwards ? forwards : backwards
+    }
+    
+    #warning("Can be foreunwrapped so long as carets starts with carets min.contains(.prefix), max.contains(.suffix)")
+    @inlinable func contentOrStop(from position: Carets.Index, direction: Direction) -> Carets.Index? {
+        let isContent = predicateIsContent(direction)
+        let isStop = predicateIsStop(direction)
+
+        func predicate(element: Carets.Element) -> Bool {
+            isContent(element) || isStop(element)
+        }
+        
+        switch direction {
+        case .forwards: return carets[position...].firstIndex(where: predicate)
+        case .backwards: return carets[...position].lastIndex(where: predicate)
+        }
+    }
+
+    @inlinable func correct(_ position: Carets.Index, direction: Direction, preference: Direction) -> Carets.Index {
+        guard preference != direction else { return position }
+        guard predicateIsContent(direction)(carets[position]) else { return position }
+        guard predicateIsLessThanLimit(direction)(position) else { return position }
+        
+        switch direction {
+        case .forwards:  return carets.index(after:  position)
+        case .backwards: return carets.index(before: position)
+        }
+    }
+    
+    #warning("Use simple logic then use post process shared with moveTo(nextCarets).")
     @inlinable func move(to nextSelection: Range<Carets.Index>) -> Field {
-        func position(_ positionIn: (Range<Carets.Index>) -> Carets.Index, preference: Direction, predicate: (Carets.Element) -> Bool) -> Carets.Index {
+        func position(_ positionIn: (Range<Carets.Index>) -> Carets.Index, preference: Direction) -> Carets.Index {
             let current = positionIn(selection)
             let next = positionIn(nextSelection)
             
-            let direction: Direction = .init(current, to: next) ?? preference
-            let limit: Attribute = direction == .forwards ? .suffix : .prefix
+            // --------------------------------- //
+          
+            if predicateIsContent(preference)(carets[next]) {
+                print(0)
+                return next
+            }
             
-            return carets.firstIndex(in: .stride(start: .closed(next), step: direction.step), where: predicate) ?? next
-        }
-        
-        // --------------------------------- //
-        
-        #warning("It should not check like this. It should check in the direction it is going.")
-        let upperBound = position(\.upperBound, preference: .backwards, predicate: { !$0.lhs.attribute.contains(.suffix) })
-        var lowerBound = upperBound
-        
-        if !nextSelection.isEmpty {
-            lowerBound = position(\.lowerBound, preference:  .forwards, predicate: { !$0.rhs.attribute.contains(.prefix) })
-            lowerBound = min(lowerBound, upperBound)
+            // --------------------------------- //
+            
+            let momentum = Direction(current, to: next)
+            let direction = momentum ?? preference
+            
+            // --------------------------------- //
+            
+            if let breakpoint = contentOrStop(from: next, direction: direction) {
+                print(1)
+                return correct(breakpoint, direction: direction, preference: preference)
+            }
+            
+            // --------------------------------- //
+            
+            print(3)
+            return current
         }
                 
-        // --------------------------------- //
+        let upperBound = position(\.upperBound, preference: .backwards)
+        var lowerBound = upperBound
+
+        if !nextSelection.isEmpty {
+            lowerBound = position(\.lowerBound, preference:  .forwards)
+            lowerBound = min(lowerBound, upperBound)
+        }
         
         return update({ $0.selection = lowerBound ..< upperBound })
     }

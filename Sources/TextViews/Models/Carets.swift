@@ -7,6 +7,7 @@
 
 // MARK: - Carets
 
+#warning("Rename, maybe. Separate element, maybe.")
 @usableFromInline struct Carets<Layout: TextViews.Layout>: BidirectionalCollection {
     @usableFromInline typealias Offset = TextViews.Offset<Layout>
     
@@ -84,12 +85,10 @@
         
         // MARK: Initialization
 
+        #warning("...")
         @inlinable init(lhs: Symbol?, rhs: Symbol?) {
-//            self.lhs = lhs ?? .prefix("\0")
-//            self.rhs = rhs ?? .suffix("\0")
-            
-            self.lhs = lhs ?? .spacer("\0")
-            self.rhs = rhs ?? .spacer("\0")
+            self.lhs = lhs ?? .prefix("\0")
+            self.rhs = rhs ?? .suffix("\0")
         }
     }
     
