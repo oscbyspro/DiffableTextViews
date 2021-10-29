@@ -247,8 +247,8 @@ extension NumericTextStyle {
         #warning("Shuold be stuck at end if only spacers.")
 //        snapshot.removeLast()
         
-//        configureFirstDigitIfItIsZero(in:         &snapshot, with: { $0.insert(.prefix) })
-//        configureDecimalSeparatorIfItIsSuffix(in: &snapshot, with: { $0.insert(.remove) })
+        configureFirstDigitIfItIsZero(in:         &snapshot, with: { $0.insert(.prefix) })
+        configureDecimalSeparatorIfItIsSuffix(in: &snapshot, with: { $0.insert(.remove) })
                 
         // --------------------------------- //
 
