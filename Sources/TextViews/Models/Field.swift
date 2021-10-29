@@ -216,20 +216,24 @@ extension Field {
     static var mockLayout0: String {
         ">|>,>,>,<>,<>,<>,*>,*,*,<>,<>,<>,*,*,*,*,*,<>,<>,<>,<,<,<|<"
     }
-
 }
 
 #warning("WIP")
 
 extension Field {
     
-    #warning("Think about this.")
-    @usableFromInline struct Peak {
-        let lowerBound: Carets.Index?
-        let upperBound: Carets.Index?
+    @inlinable func moveToContent() -> Field {
+        fatalError()
     }
     
-    @inlinable func lookahead(start: Carets.Index) -> Carets.Index {
+    
+}
+
+#warning("WIP")
+
+extension Field {
+    
+    @inlinable func lookahead(_ start: Carets.Index) -> Carets.Index {
         func predicate(element: Carets.Element) -> Bool {
             !element.rhs.attribute.contains(.lookahead)
         }
@@ -237,7 +241,7 @@ extension Field {
         return carets[start...].firstIndex(where: predicate) ?? carets.lastIndex
     }
     
-    @inlinable func lookbehind(start: Carets.Index) -> Carets.Index {
+    @inlinable func lookbehind(_ start: Carets.Index) -> Carets.Index {
         func predicate(element: Carets.Element) -> Bool {
             !element.lhs.attribute.contains(.lookbehind)
         }
@@ -245,50 +249,81 @@ extension Field {
         return carets[...start].lastIndex(where: predicate) ?? carets.firstIndex
     }
     
+    @inlinable func predicateIsContent(_ direction: Direction) -> (Carets.Element) -> Bool {
+        func forwards(element: Carets.Element) -> Bool {
+            !element.rhs.attribute.contains(.formatting)
+        }
+
+        func backwards(element: Carets.Element) -> Bool {
+            !element.lhs.attribute.contains(.formatting)
+        }
+
+        return direction == .forwards ? forwards : backwards
+    }
+    
+    @inlinable func predicateHasNotReachedLimit(_ direction: Direction) -> (Carets.Index) -> Bool {
+        func forwards(position: Carets.Index) -> Bool {
+            position < carets.lastIndex
+        }
+
+        func backwards(position: Carets.Index) -> Bool {
+            position > carets.firstIndex
+        }
+
+        return direction == .forwards ? forwards : backwards
+    }
+    
+    @inlinable func correct(_ position: Carets.Index, direction: Direction, preference: Direction) -> Carets.Index {
+        guard direction != preference else { return position }
+        guard predicateIsContent(direction)(carets[position]) else { return position }
+        guard predicateHasNotReachedLimit(direction)(position) else { return position }
+        
+        switch direction {
+        case .forwards:  return carets.index(after:  position)
+        case .backwards: return carets.index(before: position)
+        }
+    }
     
     @inlinable func move(to nextSelection: Range<Carets.Index>) -> Field {
         func position(_ positionIn: (Range<Carets.Index>) -> Carets.Index, preference: Direction) -> Carets.Index {
-            let next = positionIn(nextSelection)
-            let direction = Direction(positionIn(selection), to: next) ?? preference
+            let start = positionIn(nextSelection)
+            let direction = Direction(positionIn(selection), to: start) ?? preference
             
             // --------------------------------- //
-          
-//            if predicateIsContent(preference)(carets[next]) {
-//                print(0)
-//                return next
-//            }
-//
-//            // --------------------------------- //
-//
-//            let momentum = Direction(current, to: next)
-//            let direction = momentum ?? preference
-//
-//            // --------------------------------- //
-//
-//            if let breakpoint = contentOrStop(from: next, direction: direction) {
-//                print(1)
-//                return correct(breakpoint, direction: direction, preference: preference)
-//            }
-//
-//            // --------------------------------- //
-//
-//            print(3)
-//            return current
             
-            #error("...")
-        }
+            func asValid() -> Carets.Index? {
+                predicateIsContent(preference)(carets[start]) ? start : nil
+            }
+            
+            func lookaround() -> Carets.Index {
+                direction == .forwards ? lookahead(start) : lookbehind(start)
+            }
+                        
+            func process(_ position: Carets.Index) -> Carets.Index {
+                guard direction != preference else { return position }
+                guard predicateIsContent(direction)(carets[position]) else { return position }
+                guard predicateHasNotReachedLimit(direction)(position) else { return position }
                 
-        #error("...")
+                switch direction {
+                case .forwards:  return carets.index(after:  position)
+                case .backwards: return carets.index(before: position)
+                }
+            }
+            
+            // --------------------------------- //
+            
+            return asValid() ?? process(lookaround())
+        }
         
-//        let upperBound = position(\.upperBound, preference: .backwards)
-//        var lowerBound = upperBound
-//
-//        if !nextSelection.isEmpty {
-//            lowerBound = position(\.lowerBound, preference:  .forwards)
-//            lowerBound = min(lowerBound, upperBound)
-//        }
-//
-//        return update({ $0.selection = lowerBound ..< upperBound })
+        let upperBound = position(\.upperBound, preference: .backwards)
+        var lowerBound = upperBound
+
+        if !nextSelection.isEmpty {
+            lowerBound = position(\.lowerBound, preference:  .forwards)
+            lowerBound = min(lowerBound, upperBound)
+        }
+
+        return update({ $0.selection = lowerBound ..< upperBound })
     }
 }
 
