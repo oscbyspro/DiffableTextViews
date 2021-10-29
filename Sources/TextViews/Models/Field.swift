@@ -20,6 +20,7 @@ import struct Sequences.Walkthrough
     
     // MARK: Initializers
     
+    
     @inlinable init(_ snapshot: Snapshot = Snapshot()) {
         self.carets = Carets(snapshot)
         self.selection = carets.lastIndex ..< carets.lastIndex
@@ -30,50 +31,18 @@ import struct Sequences.Walkthrough
         self.selection = selection
     }
     
-    // MARK: Translate: To Carets
+    // MARK: Configure: Carets
     
-    #warning("Should be like configure(carets:) with a separate move(to:) method.")
-    @inlinable func translate(to newValue: Carets) -> Self {
-        func step(prev: Symbol, next: Symbol) -> SimilaritiesInstruction {
-            if      prev == next                     { return .continue      }
-            else if prev.attribute.contains(.remove) { return .continueOnLHS }
-            else if next.attribute.contains(.insert) { return .continueOnRHS }
-            else                                     { return .done          }
-        }
-        
-        #warning("Think about this.")
-        func inspectable(symbol: Symbol) -> Bool {
-            !symbol.attribute.contains(.theme(.change))
-        }
-        
-        // --------------------------------- //
-        
-        let options = SimilaritiesOptions<Symbol>
-            .produce(.overshoot)
-            .compare(.instruction(step))
-            .inspect(.only(inspectable))
-
-        func position(from current: Carets.SubSequence, to next: Carets.SubSequence) -> Carets.Index {
-            Similarities(in: current.lazy.map(\.rhs), and: next.lazy.map(\.rhs), with: options).rhsSuffix().startIndex
-        }
-        
-        // --------------------------------- //
-        
-        let nextUpperBound = position(from: carets[selection.upperBound...], to: newValue[...])
-        let nextLowerBound = position(from: carets[selection], to: newValue[..<nextUpperBound])
-                
-        // --------------------------------- //
-        
-        return Field(newValue, selection: nextLowerBound ..< nextUpperBound)
+    @inlinable func configure(carets newValue: Carets) -> Self {
+        move(to: newValue)
     }
     
-    @inlinable func translate(to newValue: Snapshot) -> Self {
-        translate(to: Carets(newValue))
+    @inlinable func configure(carets newValue: Snapshot) -> Self {
+        configure(carets: Carets(newValue))
     }
 
     // MARK: Configure: Selection
     
-    #warning("This should be named move to, or translate should be like this.")
     @inlinable func configure(selection newValue: Range<Carets.Index>) -> Self {
         move(to: newValue)
     }
@@ -104,100 +73,42 @@ import struct Sequences.Walkthrough
         case forwards
         case backwards
         
+        // MARK: Initializers
+        
+        @inlinable init?(_ start: Carets.Index, to end: Carets.Index) {
+            if start < end { self = .forwards }
+            else if start > end { self = .backwards }
+            else { return nil }
+        }
+        
         // MARK: Utilities
         
         @inlinable var opposite: Direction {
             switch self {
-            case .forwards: return .backwards
+            case .forwards:  return .backwards
             case .backwards: return .forwards
             }
         }
         
         @inlinable var step: Walkthrough<Carets>.Step {
             switch self {
-            case .forwards: return .forwards
+            case .forwards:  return .forwards
             case .backwards: return .backwards
             }
         }
-    }
-}
-
-// MARK: - Move To Anchor
-
-extension Field {
-    
-    // MARK: Transformations
-    
-    #warning("TODO.")
-    @inlinable func moveInoutPositionToAnchor(_ position: Carets.Index, preference: Direction) -> Carets.Index {
-        func first(in direction: Direction) -> Carets.Index? {
-            switch direction {
-            case .forwards:
-                return carets.firstIndex(in: .stride(start: .closed(position), step: .forwards),  where: { !$0.rhs.attribute.contains(.prefix) })
-            case .backwards:
-                return carets.firstIndex(in: .stride(start: .closed(position), step: .backwards), where: { !$0.lhs.attribute.contains(.suffix) })
+        
+        @inlinable var side: (Carets.Element) -> Symbol {
+            switch self {
+            case .forwards:  return \.rhs
+            case .backwards: return \.lhs
             }
         }
-        
-        return first(in: preference) ?? first(in: preference.opposite) ?? position
     }
 }
 
-// MARK: Move To Range
-
 extension Field {
     
-    // MARK: Transformations
-    
-    #warning("End with moveToAnchor with opposite preference to the direction of movement.")
-    @inlinable func move(to newValue: Range<Carets.Index>) -> Field {
-        func position(_ positionIn: (Range<Carets.Index>) -> Carets.Index, preference: Direction, symbol: @escaping (Carets.Element) -> Symbol) -> Carets.Index {
-            let current = positionIn(selection)
-            let next    = positionIn(newValue)
-            
-            let direction = momentum(from: current, to: next) ?? preference
-            let limit: Attribute = direction == .forwards ? .suffix : .prefix
-                        
-            func predicate(element: Carets.Element) -> Bool {
-                !symbol(element).attribute.contains(limit)
-            }
-            
-            return carets.firstIndex(in: .stride(start: .closed(next), step: direction.step), where: predicate) ?? next
-        }
-        
-        // --------------------------------- //
-        
-        var upperBound = position(\.upperBound, preference: .backwards, symbol: \.lhs)
-        upperBound = moveInoutPositionToAnchor(upperBound, preference: .backwards)
-        
-        var lowerBound = upperBound
-
-        if !newValue.isEmpty {
-            lowerBound = position(\.lowerBound, preference:  .forwards, symbol: \.rhs)
-            lowerBound = moveInoutPositionToAnchor(lowerBound, preference: .backwards)
-            #warning("Not needed if position is corrected.")
-//            lowerBound = min(lowerBound, upperBound)
-        }
-        
-        // --------------------------------- //
-        
-        return update({ $0.selection = lowerBound ..< upperBound })
-    }
-    
-    // MARK: Heleprs
-    
-    @inlinable func momentum(from first: Carets.Index, to second: Carets.Index) -> Direction? {
-        if      first < second { return  .forwards }
-        else if first > second { return .backwards }
-        else                   { return      .none }
-    }
-}
-
-// MARK: - Offsets
-
-extension Field {
-    
-    // MARK: Indices: In Offsets
+    // MARK: Indices In Offsets
     
     @inlinable func indices(in offsets: Range<Offset>) -> Range<Carets.Index> {
         var indices = [Carets.Index]()
@@ -244,5 +155,89 @@ extension Field {
         @inlinable static func < (lhs: Self, rhs: Self) -> Bool {
             abs(lhs.offset.distance) < abs(rhs.offset.distance)
         }
+    }
+}
+
+// MARK: Move To Carets
+
+extension Field {
+    
+    #warning("This works OK.")
+    @inlinable func move(to nextCarets: Carets) -> Field {
+        func step(prev: Symbol, next: Symbol) -> SimilaritiesInstruction {
+            if      prev == next                     { return .continue      }
+            else if prev.attribute.contains(.remove) { return .continueOnLHS }
+            else if next.attribute.contains(.insert) { return .continueOnRHS }
+            else                                     { return .done          }
+        }
+        
+        #warning("Think about this.")
+        func inspectable(symbol: Symbol) -> Bool {
+            !symbol.attribute.contains(.theme(.change))
+        }
+        
+        // --------------------------------- //
+        
+        #warning("...")
+        let options = SimilaritiesOptions<Symbol>
+            .produce(.overshoot)
+            .compare(.instruction(step))
+            .inspect(.only(inspectable))
+
+        func position(from current: Carets.SubSequence, to next: Carets.SubSequence) -> Carets.Index {
+            Similarities(in: current.lazy.map(\.rhs), and: next.lazy.map(\.rhs), with: options).rhsSuffix().startIndex
+        }
+        
+        // --------------------------------- //
+        
+        let nextUpperBound = position(from: carets[selection.upperBound...], to: nextCarets[...])
+        let nextLowerBound = position(from: carets[selection], to: nextCarets[..<nextUpperBound])
+                
+        // --------------------------------- //
+        
+        return Field(nextCarets, selection: nextLowerBound ..< nextUpperBound)
+    }
+}
+
+/*
+ 
+ Forwards momentum, upperBound(<-):
+    1. if !lhs.contains(.suffix) -> return position (collides with upperBound's preference)
+    2. otherwise, find first collision towards rhs (because forwards momentum)
+        a) not end: return position beyond it, carets.index(lhs: collisionIndex)
+        b)  at end: return position
+    3, otherwise, find first collision towards lhs
+ 
+ */
+
+extension Field {
+    
+    #warning("Retarded.")
+    
+    @inlinable func move(to nextSelection: Range<Carets.Index>) -> Field {
+        func position(_ positionIn: (Range<Carets.Index>) -> Carets.Index, preference: Direction, predicate: (Carets.Element) -> Bool) -> Carets.Index {
+            let current = positionIn(selection)
+            let next = positionIn(nextSelection)
+            
+            let direction: Direction = .init(current, to: next) ?? preference
+            let limit: Attribute = direction == .forwards ? .suffix : .prefix
+            
+            return carets.firstIndex(in: .stride(start: .closed(next), step: direction.step), where: predicate) ?? next
+        }
+        
+        // --------------------------------- //
+        
+        #warning("It should not check like this. It should check in the direction it is going.")
+        let upperBound = position(\.upperBound, preference: .backwards, predicate: { !$0.lhs.attribute.contains(.suffix) })
+        var lowerBound = upperBound
+        
+        if !nextSelection.isEmpty {
+            lowerBound = position(\.lowerBound, preference:  .forwards, predicate: { !$0.rhs.attribute.contains(.prefix) })
+            lowerBound = min(lowerBound, upperBound)
+        }
+                
+        // --------------------------------- //
+        
+        return update({ $0.selection = lowerBound ..< upperBound })
     }
 }

@@ -111,7 +111,7 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
             guard var value = source.style.parse(snapshot) else { return false }
             source.style.process(&value)
                         
-            let field = cache.field.configure(selection: range.upperBound).translate(to: snapshot)
+            let field = cache.field.configure(selection: range.upperBound).configure(carets: snapshot)
             
             // --------------------------------- //
             
@@ -178,7 +178,7 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
             
             // --------------------------------- //
             
-            let field = cache.field.translate(to: snapshot)
+            let field = cache.field.configure(carets: snapshot)
                 
             // --------------------------------- //
             

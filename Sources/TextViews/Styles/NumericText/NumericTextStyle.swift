@@ -240,12 +240,11 @@ extension NumericTextStyle {
                  snapshot.append(.content(character).union([.prefix, .suffix]))
             }
         }
-        
+                
         // --------------------------------- //
 
 //        snapshot.removeLast()
-        
-//        configureFirstDigitIfItIsZero(in:         &snapshot, with: { $0.insert(.prefix) })
+        configureFirstDigitIfItIsZero(in:         &snapshot, with: { $0.insert(.intuitive(.prefix)) })
         configureDecimalSeparatorIfItIsSuffix(in: &snapshot, with: { $0.insert(.remove) })
                 
         // --------------------------------- //

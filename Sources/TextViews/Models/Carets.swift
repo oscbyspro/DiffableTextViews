@@ -16,7 +16,8 @@
     @usableFromInline let range: Range<Offset>
 
     // MARK: Initializers
-    
+
+    #warning("Hm.")
     @inlinable init(_ snapshot: Snapshot) {
         self.snapshot = snapshot
         self.range = .origin ..< .max(in: snapshot.characters)
@@ -45,9 +46,7 @@
     // MARK: Collection: Subscripts
     
     @inlinable subscript(position: Index) -> Element {
-        _read {
-            yield Element(lhs: lhsSymbol(at: position.lhs), rhs: rhsSymbol(at: position.rhs))
-        }
+        .init(lhs: subelement(at: position.lhs), rhs: subelement(at: position.rhs))
     }
     
     // MARK: Helpers: Character
@@ -70,14 +69,10 @@
     
     // MARK: Helpers: Subelement
     
-    @inlinable func lhsSymbol(at index: Snapshot.Index?) -> Symbol? {
-        guard let index = index else { return nil }; return snapshot[index]
-    }
-    
-    @inlinable func rhsSymbol(at index: Snapshot.Index?) -> Symbol? {
+    @inlinable func subelement(at index: Snapshot.Index?) -> Symbol? {
         guard let index = index, index < snapshot.endIndex else { return nil }; return snapshot[index]
     }
-    
+
     // MARK: Components
     
     @usableFromInline struct Element {
@@ -90,8 +85,11 @@
         // MARK: Initialization
 
         @inlinable init(lhs: Symbol?, rhs: Symbol?) {
-            self.lhs = lhs ?? Symbol("\0", attribute: .intuitive(.spacer))
-            self.rhs = rhs ?? Symbol("\0", attribute: .intuitive(.spacer))
+//            self.lhs = lhs ?? .prefix("\0")
+//            self.rhs = rhs ?? .suffix("\0")
+            
+            self.lhs = lhs ?? .spacer("\0")
+            self.rhs = rhs ?? .spacer("\0")
         }
     }
     
@@ -118,7 +116,8 @@
         }
                 
         // MARK: Collection: Index
-                
+        
+        #warning("Use offset, maybe?...")
         @inlinable static func < (lhs: Self, rhs: Self) -> Bool {
             guard let a = lhs.rhs else { return false }
             guard let b = rhs.rhs else { return  true }
@@ -178,4 +177,12 @@ extension Carets {
         let destination = start.offset.distance + offset.distance
         return indices[...start].reversed().first(where: { index in index.offset.distance <= destination }) ?? startIndex
     }
+}
+
+#warning("WIP")
+#warning("Could use this.")
+@usableFromInline enum Subindex {
+    case subscriptable(Snapshot.Index)
+    case prefix
+    case suffix
 }
