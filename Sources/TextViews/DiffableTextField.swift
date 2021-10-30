@@ -286,39 +286,47 @@ public final class MyTextField: UITextField {
     
     @usableFromInline var intent: Direction? = nil
 
-    // MARK: Overrides
+    // MARK: Parses
     
-    public override func pressesBegan(_ presses: Set<UIPress>, with event: UIPressesEvent?) {
+    @inlinable func parseIntentStart(_ presses: Set<UIPress>) {
         guard let key = presses.first?.key else { return }
-
+        
         switch key.keyCode {
         case .keyboardLeftArrow: intent = .backwards
         case .keyboardRightArrow: intent = .forwards
         default: break
         }
+    }
+    
+    @inlinable func parseIntentEnd(_ presses: Set<UIPress>) {
+        guard let key = presses.first?.key else { return }
         
+        switch (intent, key.keyCode) {
+        case (.backwards, .keyboardLeftArrow): intent = nil
+        case (.forwards, .keyboardRightArrow): intent = nil
+        default: break
+        }
+    }
+    
+    // MARK: Overrides
+    
+    public override func pressesBegan(_ presses: Set<UIPress>, with event: UIPressesEvent?) {
+        parseIntentStart(presses)
         super.pressesBegan(presses, with: event)
     }
     
     public override func pressesChanged(_ presses: Set<UIPress>, with event: UIPressesEvent?) {
-        guard let key = presses.first?.key else { return }
-        
-        switch key.keyCode {
-        case .keyboardLeftArrow: intent = .backwards
-        case .keyboardRightArrow: intent = .forwards
-        default: break
-        }
-        
+        parseIntentStart(presses)
         super.pressesChanged(presses, with: event)
     }
     
     public override func pressesEnded(_ presses: Set<UIPress>, with event: UIPressesEvent?) {
-        intent = nil
+        parseIntentEnd(presses)
         super.pressesEnded(presses, with: event)
     }
     
     public override func pressesCancelled(_ presses: Set<UIPress>, with event: UIPressesEvent?) {
-        intent = nil
+        parseIntentEnd(presses)
         super.pressesCancelled(presses, with: event)
     }
 }
