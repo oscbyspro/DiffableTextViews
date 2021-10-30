@@ -11,19 +11,11 @@
     case forwards
     case backwards
     
-    // MARK: Initializers
-    
-    @inlinable init?<Position: Comparable>(from start: Position, to end: Position) {
-        if      start < end { self = .forwards  }
-        else if start > end { self = .backwards }
-        else                { return nil }
-    }
-    
     // MARK: Utilities
     
     @inlinable var opposite: Direction {
         switch self {
-        case .forwards:  return .backwards
+        case .forwards: return .backwards
         case .backwards: return .forwards
         }
     }
