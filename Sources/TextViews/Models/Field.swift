@@ -5,14 +5,12 @@
 //  Created by Oscar Byström Ericsson on 2021-09-27.
 //
 
-import struct Sequences.Walkthrough
 import Combine
 import Foundation
 
 // MARK: - Field
 
 #warning("Selection should NOT be momentum based.")
-#warning("Or selection should not be updated while dragging.")
 
 @usableFromInline struct Field<Layout: TextViews.Layout> {
     @usableFromInline typealias Carets = TextViews.Carets<Layout>
@@ -145,11 +143,11 @@ extension Field {
     }
 }
 
-// MARK: -
+// MARK: - Move To Carets
 
 extension Field {
     
-    // MARK: Move To Carets
+    // MARK: Movements
     
     @inlinable func move(to nextCarets: Carets) -> Field {
         func step(prev: Symbol, next: Symbol) -> SimilaritiesInstruction {
@@ -190,7 +188,7 @@ extension Field {
 
 extension Field {
     
-    // MARK: Main
+    // MARK: Movements
 
     @inlinable func move(to nextSelection: Range<Carets.Index>) -> Field {
         update({ $0.selection = nextSelection })
@@ -223,7 +221,7 @@ extension Field {
 
 extension Field {
     
-    // MARK: Main
+    // MARK: Movements
     
     @inlinable func moveToAttributes() -> Field {
         func position(_ position: Carets.Index, preference: Direction) -> Carets.Index {
@@ -247,14 +245,12 @@ extension Field {
     @inlinable func directionOfAttributes(at position: Carets.Index) -> Direction? {
         let element = carets[position]
         
-        func bothSidesContains(_ attribute: Attribute) -> Bool {
+        func containsOnBothSides(_ attribute: Attribute) -> Bool {
             element.lhs.attribute.contains(attribute) && element.rhs.attribute.contains(attribute)
         }
         
-        let forwards  = bothSidesContains(.prefix)
-        let backwards = bothSidesContains(.suffix)
-        
-        print(element.lhs.character, element.rhs.character)
+        let forwards  = containsOnBothSides(.prefix)
+        let backwards = containsOnBothSides(.suffix)
         
         guard forwards != backwards else {
             return nil

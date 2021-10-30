@@ -1,11 +1,9 @@
 //
-//  File.swift
+//  Direction.swift
 //  
 //
 //  Created by Oscar Byström Ericsson on 2021-10-29.
 //
-
-import struct Sequences.Walkthrough
 
 // MARK: - Direction
 
@@ -27,14 +25,6 @@ import struct Sequences.Walkthrough
         switch self {
         case .forwards:  return .backwards
         case .backwards: return .forwards
-        }
-    }
-    
-    #warning("Is this used anywhere?")
-    @inlinable func step<T: BidirectionalCollection>(_ collection: T.Type = T.self) -> Walkthrough<T>.Step {
-        switch self {
-        case .forwards:  return .forwards
-        case .backwards: return .backwards
         }
     }
 }
