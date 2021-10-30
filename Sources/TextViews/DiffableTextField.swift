@@ -112,7 +112,7 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
             guard var value = source.style.parse(snapshot) else { return false }
             source.style.process(&value)
                         
-            let field = cache.field.configure(selection: range.upperBound).configure(carets: snapshot)
+            let field = cache.field.configure(selection: range.upperBound, intent: nil).configure(carets: snapshot)
             
             // --------------------------------- //
             
@@ -129,7 +129,8 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
         }
 
         @inlinable public func textFieldDidChangeSelection(_ textField: UITextField) {
-
+            guard let textField = textField as? MyTextField else { fatalError() }
+            
             // --------------------------------- //
             
             guard !lock.isLocked else { return }
@@ -137,7 +138,7 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
             // --------------------------------- //
                         
             let offsets = uiView.selection()
-            let field = cache.field.configure(selection: offsets)
+            let field = cache.field.configure(selection: offsets, intent: textField.intent)
             let selection = field.selection.map(bounds: \.offset)
             
             // --------------------------------- //
@@ -283,19 +284,41 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
 #warning("Use intent/momentum flag for keypresses.")
 public final class MyTextField: UITextField {
     
+    @usableFromInline var intent: Direction? = nil
+
+    // MARK: Overrides
+    
     public override func pressesBegan(_ presses: Set<UIPress>, with event: UIPressesEvent?) {
+        guard let key = presses.first?.key else { return }
+
+        switch key.keyCode {
+        case .keyboardLeftArrow: intent = .backwards
+        case .keyboardRightArrow: intent = .forwards
+        default: break
+        }
+        
         super.pressesBegan(presses, with: event)
     }
     
     public override func pressesChanged(_ presses: Set<UIPress>, with event: UIPressesEvent?) {
+        guard let key = presses.first?.key else { return }
+        
+        switch key.keyCode {
+        case .keyboardLeftArrow: intent = .backwards
+        case .keyboardRightArrow: intent = .forwards
+        default: break
+        }
+        
         super.pressesChanged(presses, with: event)
     }
     
     public override func pressesEnded(_ presses: Set<UIPress>, with event: UIPressesEvent?) {
+        intent = nil
         super.pressesEnded(presses, with: event)
     }
     
     public override func pressesCancelled(_ presses: Set<UIPress>, with event: UIPressesEvent?) {
+        intent = nil
         super.pressesCancelled(presses, with: event)
     }
 }

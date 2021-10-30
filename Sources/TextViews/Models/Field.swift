@@ -11,7 +11,6 @@ import Foundation
 // MARK: - Field
 
 #warning("Selection should NOT be momentum based.")
-
 @usableFromInline struct Field<Layout: TextViews.Layout> {
     @usableFromInline typealias Carets = TextViews.Carets<Layout>
     @usableFromInline typealias Offset = TextViews.Offset<Layout>
@@ -35,10 +34,8 @@ import Foundation
     
     // MARK: Configure: Carets
     
-    #warning("...")
     @inlinable func configure(carets newValue: Carets) -> Self {
-        move(to: newValue)
-            .moveToAttributes()
+        move(to: newValue).moveToAttributes()
     }
     
     @inlinable func configure(carets newValue: Snapshot) -> Self {
@@ -47,24 +44,22 @@ import Foundation
 
     // MARK: Configure: Selection
     
-    #warning("...")
-    @inlinable func configure(selection newValue: Range<Carets.Index>) -> Self {
-        move(to: newValue)
-            .moveToAttributes()
+    @inlinable func configure(selection newValue: Range<Carets.Index>, intent: Direction?) -> Self {
+        move(to: newValue, intent: intent).moveToAttributes()
     }
     
-    @inlinable func configure(selection newValue: Carets.Index) -> Self {
-        configure(selection: newValue ..< newValue)
+    @inlinable func configure(selection newValue: Carets.Index, intent: Direction?) -> Self {
+        configure(selection: newValue ..< newValue, intent: intent)
     }
     
     // MARK: Configure: Offsets
     
-    @inlinable func configure(selection newValue: Range<Offset>) -> Self {
-        configure(selection: indices(in: newValue))
+    @inlinable func configure(selection newValue: Range<Offset>, intent: Direction?) -> Self {
+        configure(selection: indices(in: newValue), intent: intent)
     }
     
-    @inlinable func configure(selection newValue: Offset) -> Self {
-        configure(selection: newValue ..< newValue)
+    @inlinable func configure(selection newValue: Offset, intent: Direction?) -> Self {
+        configure(selection: newValue ..< newValue, intent: intent)
     }
     
     // MARK: Helpers: Update
@@ -128,21 +123,6 @@ extension Field {
     }
 }
 
-#warning("Remove...")
-extension Field {
-    static var mockLayout0: String {
-        ">|>,>,>,<>,<>,<>,*>,*,*,<>,<>,<>,*,*,*,*,*,<>,<>,<>,<,<,<|<"
-    }
-    
-    static var mockLayout1: String {
-        ">|>,>,>,*,*,*,<>,*,*,*,<,<,<|<"
-    }
-    
-    static var mockLayout2: String {
-        "<,>" + ">,<"
-    }
-}
-
 // MARK: - Move To Carets
 
 extension Field {
@@ -184,14 +164,61 @@ extension Field {
     }
 }
 
+#warning("Remove...")
+extension Field {
+    static var mockLayout0: String {
+        ">|>,>,>,<>,<>,<>,*>,*,*,<>,<>,<>,*,*,*,*,*,<>,<>,<>,<,<,<|<"
+    }
+}
+
 // MARK: Move To Selection
 
 extension Field {
     
     // MARK: Movements
+    
+    #warning("WIP")
+    @inlinable func move(to nextSelection: Range<Carets.Index>, intent: Direction?) -> Field {
+        func position(_ start: Carets.Index, preference: Direction) -> Carets.Index {
+            if preferable(start, by: preference) {
+                return start
+            }
+            
+            let direction = intent ?? preference
+            let next = look(start, direction: direction)
+                        
+            return target(next, direction: direction, preference: preference)
+        }
+        
+        let upperBound = position(nextSelection.upperBound, preference: .backwards)
+        var lowerBound = upperBound
 
-    @inlinable func move(to nextSelection: Range<Carets.Index>) -> Field {
-        update({ $0.selection = nextSelection })
+        if !nextSelection.isEmpty {
+            lowerBound = position(nextSelection.lowerBound, preference:  .forwards)
+            lowerBound = min(lowerBound, upperBound)
+        }
+
+        return update({ $0.selection = lowerBound ..< upperBound })
+    }
+    
+    // MARK: Helpers
+    
+    @inlinable func preferable(_ position: Carets.Index, by preference: Direction) -> Bool {
+        let element = carets[position]
+        
+        switch preference {
+        case .forwards:  return !element.rhs.attribute.contains(.prefix)
+        case .backwards: return !element.lhs.attribute.contains(.suffix)
+        }
+    }
+    
+    @inlinable func target(_ position: Carets.Index, direction: Direction, preference: Direction) -> Carets.Index {
+        guard direction != preference else { return position }
+        
+        switch direction {
+        case .forwards:  return position < carets.endIndex   ? carets.index(after:  position) : position
+        case .backwards: return position > carets.startIndex ? carets.index(before: position) : position
+        }
     }
     
     // MARK: Looks
