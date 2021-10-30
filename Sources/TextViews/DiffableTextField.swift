@@ -279,10 +279,9 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
 
 #endif
 
+#warning("WIP.")
 #warning("Use intent/momentum flag for keypresses.")
 public final class MyTextField: UITextField {
-    
-    #warning("Use these to set momentum/intent flag.")
     
     public override func pressesBegan(_ presses: Set<UIPress>, with event: UIPressesEvent?) {
         super.pressesBegan(presses, with: event)
@@ -294,5 +293,9 @@ public final class MyTextField: UITextField {
     
     public override func pressesEnded(_ presses: Set<UIPress>, with event: UIPressesEvent?) {
         super.pressesEnded(presses, with: event)
+    }
+    
+    public override func pressesCancelled(_ presses: Set<UIPress>, with event: UIPressesEvent?) {
+        super.pressesCancelled(presses, with: event)
     }
 }
