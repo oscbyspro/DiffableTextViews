@@ -131,11 +131,27 @@ extension Field {
     }
 }
 
-// MARK: - Move To Carets
+#warning("Remove...")
+extension Field {
+    static var mockLayout0: String {
+        ">|>,>,>,<>,<>,<>,*>,*,*,<>,<>,<>,*,*,*,*,*,<>,<>,<>,<,<,<|<"
+    }
+    
+    static var mockLayout1: String {
+        ">|>,>,>,*,*,*,<>,*,*,*,<,<,<|<"
+    }
+    
+    static var mockLayout2: String {
+        "<,>" + ">,<"
+    }
+}
+
+// MARK: -
 
 extension Field {
     
-    #warning("This works OK.")
+    // MARK: Move To Carets
+    
     @inlinable func move(to nextCarets: Carets) -> Field {
         func step(prev: Symbol, next: Symbol) -> SimilaritiesInstruction {
             if prev == next                          { return .continue      }
@@ -151,7 +167,6 @@ extension Field {
         
         // --------------------------------- //
         
-        #warning("...")
         let options = SimilaritiesOptions<Symbol>
             .produce(.overshoot)
             .compare(.instruction(step))
@@ -163,38 +178,47 @@ extension Field {
         
         // --------------------------------- //
         
-        #warning("Needs to be corrected forwards.")
         let nextUpperBound = position(from: carets[selection.upperBound...], to: nextCarets[...])
         let nextLowerBound = position(from: carets[selection], to: nextCarets[..<nextUpperBound])
                 
         // --------------------------------- //
         
-        #warning("Should be post-processed to follow attributes.")
         return Field(nextCarets, selection: nextLowerBound ..< nextUpperBound)
     }
 }
 
-// MARK: - Move To Selection
-
-#warning("WIP")
+// MARK: Move To Attributes
 
 extension Field {
-    static var mockLayout0: String {
-        ">|>,>,>,<>,<>,<>,*>,*,*,<>,<>,<>,*,*,*,*,*,<>,<>,<>,<,<,<|<"
+    
+    // MARK: Main
+    
+    #warning("May or may not work.")
+    @inlinable func moveToAttributes() -> Field {
+        func position(_ position: Carets.Index, preference: Direction) -> Carets.Index {
+            let direction = directionsOfAttributes(at: position)
+            
+            switch (direction.forwards, direction.backwards) {
+            case (false, false): return position
+            case (true,  false): return lookahead(position)
+            case (false,  true): return lookbehind(position)
+            case (true,   true): return looktowards(position, direction: preference)
+            }
+        }
+        
+        #warning("This is similar to other.")
+        let upperBound = position(selection.upperBound, preference: .backwards)
+        var lowerBound = upperBound
+
+        if !selection.isEmpty {
+            lowerBound = position(selection.lowerBound, preference:  .forwards)
+            lowerBound = min(lowerBound, upperBound)
+        }
+        
+        return update({ $0.selection = lowerBound ..< upperBound })
     }
     
-    static var mockLayout1: String {
-        ">|>,>,>,*,*,*,<>,*,*,*,<,<,<|<"
-    }
-    
-    static var mockLayout2: String {
-        "<,>" + ">,<"
-    }
-}
-
-#warning("WIP")
-
-extension Field {
+    // MARK: Helpers
     
     @inlinable func directionsOfAttributes(at position: Carets.Index) -> (forwards: Bool, backwards: Bool) {
         let element = carets[position]
@@ -208,36 +232,56 @@ extension Field {
         
         return (forwards, backwards)
     }
+}
+
+// MARK: Move To Selection
+
+extension Field {
     
-    #warning("May or may not work.")
-    @inlinable func moveToAttributes() -> Field {
-        func position(_ position: Carets.Index, preference: Direction) -> Carets.Index {
-            let direction = directionsOfAttributes(at: position)
+    // MARK: Main
+
+    @inlinable func move(to nextSelection: Range<Carets.Index>) -> Field {
+        func position(_ positionIn: (Range<Carets.Index>) -> Carets.Index, preference: Direction) -> Carets.Index {
+            let start = positionIn(nextSelection)
+            let direction = Direction(from: positionIn(selection), to: start) ?? preference
             
-            switch (direction.forwards, direction.backwards) {
-            case (false, false): return position
-            case (true,  false): return lookahead(start: position)
-            case (false,  true): return lookbehind(start: position)
-            case (true,   true): return look(preference, start: position)
+            // --------------------------------- //
+            
+            func validation() -> Carets.Index? {
+                !predicate(side: preference, where: subpredicate(points: direction))(carets[start]) ? start : nil
             }
+            
+            func lookaround() -> Carets.Index {
+                direction == .forwards ? lookahead(start) : lookbehind(start)
+            }
+                        
+            func correct(_ position: Carets.Index) -> Carets.Index {
+                guard direction != preference else { return position }
+                
+                switch direction {
+                case .forwards:  return position < carets.lastIndex  ? carets.index(after:  position) : position
+                case .backwards: return position > carets.firstIndex ? carets.index(before: position) : position
+                }
+            }
+            
+            // --------------------------------- //
+            
+            return validation() ?? correct(lookaround())
         }
         
-        let upperBound = position(selection.upperBound, preference: .backwards)
+        #warning("This is similar to other.")
+        let upperBound = position(\.upperBound, preference: .backwards)
         var lowerBound = upperBound
 
-        if !selection.isEmpty {
-            lowerBound = position(selection.lowerBound, preference:  .forwards)
+        if !nextSelection.isEmpty {
+            lowerBound = position(\.lowerBound, preference:  .forwards)
             lowerBound = min(lowerBound, upperBound)
         }
-        
+
         return update({ $0.selection = lowerBound ..< upperBound })
     }
     
-}
-
-#warning("WIP")
-
-extension Field {
+    // MARK: Helpers
     
     @inlinable func subpredicate(points direction: Direction) -> (Symbol) -> Bool {
         func forwards(symbol: Symbol) -> Bool {
@@ -263,7 +307,7 @@ extension Field {
         return direction == .forwards ? forwards : backwards
     }
     
-    @inlinable func lookahead(start: Carets.Index) -> Carets.Index {
+    @inlinable func lookahead(_ start: Carets.Index) -> Carets.Index {
         func predicate(element: Carets.Element) -> Bool {
             !element.rhs.attribute.contains(.prefix)
         }
@@ -271,7 +315,7 @@ extension Field {
         return carets[start...].firstIndex(where: predicate) ?? carets.lastIndex
     }
     
-    @inlinable func lookbehind(start: Carets.Index) -> Carets.Index {
+    @inlinable func lookbehind(_ start: Carets.Index) -> Carets.Index {
         func predicate(element: Carets.Element) -> Bool {
             !element.lhs.attribute.contains(.suffix)
         }
@@ -279,50 +323,10 @@ extension Field {
         return carets[...start].lastIndex(where: predicate) ?? carets.firstIndex
     }
     
-    @inlinable func look(_ direction: Direction, start: Carets.Index) -> Carets.Index {
+    @inlinable func looktowards(_ start: Carets.Index, direction: Direction) -> Carets.Index {
         switch direction {
-        case .forwards: return lookahead(start: start)
-        case .backwards: return lookbehind(start: start)
+        case .forwards: return lookahead(start)
+        case .backwards: return lookbehind(start)
         }
-    }
-    
-    @inlinable func move(to nextSelection: Range<Carets.Index>) -> Field {
-        func position(_ positionIn: (Range<Carets.Index>) -> Carets.Index, preference: Direction) -> Carets.Index {
-            let start = positionIn(nextSelection)
-            let direction = Direction(from: positionIn(selection), to: start) ?? preference
-            
-            // --------------------------------- //
-            
-            func validation() -> Carets.Index? {
-                !predicate(side: preference, where: subpredicate(points: direction))(carets[start]) ? start : nil
-            }
-            
-            func lookaround() -> Carets.Index {
-                direction == .forwards ? lookahead(start: start) : lookbehind(start: start)
-            }
-                        
-            func correct(_ position: Carets.Index) -> Carets.Index {
-                guard direction != preference else { return position }
-                
-                switch direction {
-                case .forwards:  return position < carets.lastIndex  ? carets.index(after:  position) : position
-                case .backwards: return position > carets.firstIndex ? carets.index(before: position) : position
-                }
-            }
-            
-            // --------------------------------- //
-            
-            return validation() ?? correct(lookaround())
-        }
-        
-        let upperBound = position(\.upperBound, preference: .backwards)
-        var lowerBound = upperBound
-
-        if !nextSelection.isEmpty {
-            lowerBound = position(\.lowerBound, preference:  .forwards)
-            lowerBound = min(lowerBound, upperBound)
-        }
-
-        return update({ $0.selection = lowerBound ..< upperBound })
     }
 }

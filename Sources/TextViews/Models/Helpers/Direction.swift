@@ -30,6 +30,7 @@ import struct Sequences.Walkthrough
         }
     }
     
+    #warning("Is this used anywhere?")
     @inlinable func step<T: BidirectionalCollection>(_ collection: T.Type = T.self) -> Walkthrough<T>.Step {
         switch self {
         case .forwards:  return .forwards
