@@ -9,9 +9,10 @@
 
 import SwiftUI
 
+#warning("Field should not use momentum, rather key presses should be handled separately.")
 public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
     public typealias Value = Style.Value
-    public typealias UIViewType = UITextField
+    public typealias UIViewType = MyTextField
     
     // MARK: Properties
     
@@ -37,7 +38,7 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
     }
     
     @inlinable public func makeUIView(context: Context) -> UIViewType {
-        let uiView = UIViewType()
+        let uiView = MyTextField()
         
         // --------------------------------- //
         
@@ -128,7 +129,7 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
         }
 
         @inlinable public func textFieldDidChangeSelection(_ textField: UITextField) {
-            
+
             // --------------------------------- //
             
             guard !lock.isLocked else { return }
@@ -277,3 +278,21 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
 }
 
 #endif
+
+#warning("Use intent/momentum flag for keypresses.")
+public final class MyTextField: UITextField {
+    
+    #warning("Use these to set momentum/intent flag.")
+    
+    public override func pressesBegan(_ presses: Set<UIPress>, with event: UIPressesEvent?) {
+        super.pressesBegan(presses, with: event)
+    }
+    
+    public override func pressesChanged(_ presses: Set<UIPress>, with event: UIPressesEvent?) {
+        super.pressesChanged(presses, with: event)
+    }
+    
+    public override func pressesEnded(_ presses: Set<UIPress>, with event: UIPressesEvent?) {
+        super.pressesEnded(presses, with: event)
+    }
+}

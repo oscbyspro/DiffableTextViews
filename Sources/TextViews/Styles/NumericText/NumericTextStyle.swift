@@ -234,7 +234,12 @@ extension NumericTextStyle {
             if digits.contains(character) {
                 snapshot.append(.content(character))
             } else if groupingSeparator.contains(character) {
-                snapshot.append(.spacer(character))
+//                snapshot.append(.spacer(character))
+                snapshot.append(.spacer("_"))
+                snapshot.append(.spacer("_"))
+                snapshot.append(.spacer("_"))
+                snapshot.append(.spacer("_"))
+                snapshot.append(.spacer("_"))
             } else if decimalSeparator.contains(character) {
                 snapshot.append(.content(character))
             } else if signs.contains(character) {
