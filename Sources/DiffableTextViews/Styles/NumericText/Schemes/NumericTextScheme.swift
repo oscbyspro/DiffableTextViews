@@ -74,8 +74,8 @@ public extension NumericTextFloatScheme {
 // MARK: - NumericTextSchematic
 
 public protocol NumericTextSchematic {
-    associatedtype NumericTextScheme: TextViews.NumericTextScheme where NumericTextScheme.Number == Self
-    typealias      NumericTextStyle = TextViews.NumericTextStyle<NumericTextScheme>
+    associatedtype NumericTextScheme: DiffableTextViews.NumericTextScheme where NumericTextScheme.Number == Self
+    typealias      NumericTextStyle = DiffableTextViews.NumericTextStyle<NumericTextScheme>
 }
 
 #endif

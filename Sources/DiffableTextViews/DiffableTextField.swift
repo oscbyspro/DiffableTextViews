@@ -62,9 +62,9 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
     
     public final class Coordinator: NSObject, UITextFieldDelegate {
         @usableFromInline typealias Layout = UTF16
-        @usableFromInline typealias Field  = TextViews.Field<Layout>
-        @usableFromInline typealias Carets = TextViews.Carets<Layout>
-        @usableFromInline typealias Offset = TextViews.Offset<Layout>
+        @usableFromInline typealias Field  = DiffableTextViews.Field<Layout>
+        @usableFromInline typealias Carets = DiffableTextViews.Carets<Layout>
+        @usableFromInline typealias Offset = DiffableTextViews.Offset<Layout>
         
         // MARK: Properties
         

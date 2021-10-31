@@ -16,7 +16,7 @@ import UIKit
 /// - UITextField.text is never nil.
 /// - UITextField.selectedTextRange is never nil
 @usableFromInline final class Proxy<Wrapped: UITextField> {
-    @usableFromInline typealias Offset = TextViews.Offset<UTF16>
+    @usableFromInline typealias Offset = DiffableTextViews.Offset<UTF16>
     
     // MARK: Properties
     
