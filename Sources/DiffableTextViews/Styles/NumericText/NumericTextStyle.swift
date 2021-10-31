@@ -271,8 +271,6 @@ extension NumericTextStyle {
     }
 }
 
-
-
 // MARK: - NumericText
 
 extension NumericTextStyle {
