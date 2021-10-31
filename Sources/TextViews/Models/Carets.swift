@@ -7,7 +7,6 @@
 
 // MARK: - Carets
 
-#warning("Rename, maybe. Separate element, maybe.")
 @usableFromInline struct Carets<Layout: TextViews.Layout>: BidirectionalCollection {
     @usableFromInline typealias Offset = TextViews.Offset<Layout>
     

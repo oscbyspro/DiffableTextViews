@@ -191,20 +191,20 @@ extension Field {
     // MARK: Movements
     
     @inlinable func move(to nextSelection: Range<Carets.Index>, intent: Direction?) -> Field {
-        func position(_ start: Carets.Index, preference: Direction) -> Carets.Index {
+        func move(_ start: Carets.Index, preference: Direction) -> Carets.Index {
             if preferable(start, by: preference) { return start }
             
             let direction = intent ?? preference
             let next = look(start, direction: direction)
                    
-            return correct(next, side: direction, preference: preference)
+            return position(target: next, side: direction, preference: preference)
         }
         
-        let upperBound = position(nextSelection.upperBound, preference: .backwards)
+        let upperBound = move(nextSelection.upperBound, preference: .backwards)
         var lowerBound = upperBound
 
         if !nextSelection.isEmpty {
-            lowerBound = position(nextSelection.lowerBound, preference:  .forwards)
+            lowerBound = move(nextSelection.lowerBound, preference:  .forwards)
             lowerBound = min(lowerBound, upperBound)
         }
 
@@ -222,7 +222,7 @@ extension Field {
         }
     }
     
-    @inlinable func correct(_ position: Carets.Index, side: Direction, preference: Direction) -> Carets.Index {
+    @inlinable func position(target position: Carets.Index, side: Direction, preference: Direction) -> Carets.Index {
         if side == preference { return position }
         
         switch side {
@@ -239,16 +239,16 @@ extension Field {
     // MARK: Movements
     
     @inlinable func moveToAttributes() -> Field {
-        func position(_ position: Carets.Index, preference: Direction) -> Carets.Index {
+        func move(_ position: Carets.Index, preference: Direction) -> Carets.Index {
             let direction = directionOfAttributes(at: position)
             return look(position, direction: direction ?? preference)
         }
         
-        let upperBound = position(selection.upperBound, preference: .backwards)
+        let upperBound = move(selection.upperBound, preference: .backwards)
         var lowerBound = upperBound
 
         if !selection.isEmpty {
-            lowerBound = position(selection.lowerBound, preference:  .forwards)
+            lowerBound = move(selection.lowerBound, preference:  .forwards)
             lowerBound = min(lowerBound, upperBound)
         }
         
