@@ -48,7 +48,7 @@
         configure(selection: newValue ..< newValue, intent: intent)
     }
     
-    // MARK: Configure: Offsets
+    // MARK: Configure: Selection, Offsets
     
     @inlinable func configure(selection newValue: Range<Offset>, intent: Direction?) -> Self {
         configure(selection: indices(in: newValue), intent: intent)
@@ -65,9 +65,11 @@
     }
 }
 
-// - MARK: Looks
+// MARK: - Seek
 
 extension Field {
+    
+    // MARK: Look In Direction
     
     @inlinable func look(_ start: Carets.Index, direction: Direction) -> Carets.Index {
         direction == .forwards ? lookahead(start) : lookbehind(start)
