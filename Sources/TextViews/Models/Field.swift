@@ -227,8 +227,8 @@ extension Field {
         if side == preference { return position }
         
         switch side {
-        case .forwards:  return position < carets.endIndex   ? carets.index(after:  position) : position
-        case .backwards: return position > carets.startIndex ? carets.index(before: position) : position
+        case .forwards:  return position < carets.lastIndex  ? carets.index(after:  position) : position
+        case .backwards: return position > carets.firstIndex ? carets.index(before: position) : position
         }
     }
 }
@@ -242,6 +242,7 @@ extension Field {
     @inlinable func moveToAttributes() -> Field {
         func position(_ position: Carets.Index, preference: Direction) -> Carets.Index {
             let direction = directionOfAttributes(at: position)
+            print(position.offset, carets.endIndex.offset)
             return look(position, direction: direction ?? preference)
         }
         

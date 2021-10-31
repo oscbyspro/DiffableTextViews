@@ -224,8 +224,8 @@ extension NumericTextStyle {
         
     #warning("Fixme: make prefix.")
         if let prefix = prefix {
-            snapshot.append(contentsOf: Snapshot(prefix, only: .intuitive(.prefix)))
-            snapshot.append(Symbol(" ", attribute: .intuitive(.prefix)))
+            snapshot.append(contentsOf: Snapshot(prefix, only: .intuitive(.spacer)))
+            snapshot.append(Symbol(" ", attribute: .intuitive(.spacer)))
         }
                 
         // --------------------------------- //
@@ -234,10 +234,7 @@ extension NumericTextStyle {
             if digits.contains(character) {
                 snapshot.append(.content(character))
             } else if groupingSeparator.contains(character) {
-//                snapshot.append(.spacer(character))
-                snapshot.append(.spacer("_"))
-                snapshot.append(.spacer("_"))
-                snapshot.append(.spacer("_"))
+                snapshot.append(.spacer(character))
             } else if decimalSeparator.contains(character) {
                 snapshot.append(.content(character))
             } else if signs.contains(character) {
@@ -250,15 +247,15 @@ extension NumericTextStyle {
         #warning("Shuold be stuck at end if only spacers.")
 //        snapshot.removeLast()
         
-        configureFirstDigitIfItIsZero(in:         &snapshot, with: { $0.insert(.prefix) })
+//        configureFirstDigitIfItIsZero(in:         &snapshot, with: { $0.insert(.prefix) })
         configureDecimalSeparatorIfItIsSuffix(in: &snapshot, with: { $0.insert(.remove) })
                 
         // --------------------------------- //
 
         #warning("Fixme: make suffix.")
         if let suffix = suffix {
-            snapshot.append(Symbol(" ", attribute: .intuitive(.suffix)))
-            snapshot.append(contentsOf: Snapshot(suffix, only: .intuitive(.suffix)))
+            snapshot.append(Symbol(" ", attribute: .intuitive(.spacer)))
+            snapshot.append(contentsOf: Snapshot(suffix, only: .intuitive(.spacer)))
         }
     
         // --------------------------------- //

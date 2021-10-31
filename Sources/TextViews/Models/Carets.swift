@@ -13,6 +13,7 @@
     
     // MARK: Properties
     
+    #warning("Could allow negative offsets, rather than calculating rangge every instance.")
     @usableFromInline let snapshot: Snapshot
     @usableFromInline let range: Range<Offset>
 
