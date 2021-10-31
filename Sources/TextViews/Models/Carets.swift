@@ -13,7 +13,6 @@
     
     // MARK: Properties
     
-    #warning("Could allow negative offsets, rather than calculating rangge every instance.")
     @usableFromInline let snapshot: Snapshot
     @usableFromInline let range: Range<Offset>
 
@@ -116,7 +115,6 @@
                 
         // MARK: Collection: Index
         
-        #warning("Use offset, maybe?...")
         @inlinable static func < (lhs: Self, rhs: Self) -> Bool {
             guard let a = lhs.rhs else { return false }
             guard let b = rhs.rhs else { return  true }

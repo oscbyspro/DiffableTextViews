@@ -216,16 +216,14 @@ extension NumericTextStyle {
     
     // MARK: Helpers, Characters
     
-    #warning("This is in development phase.")
     @inlinable func snapshot(_ characters: String) -> Snapshot {
         var snapshot = Snapshot()
             
         // --------------------------------- //
         
-    #warning("Fixme: make prefix.")
         if let prefix = prefix {
-            snapshot.append(contentsOf: Snapshot(prefix, only: .intuitive(.spacer)))
-            snapshot.append(Symbol(" ", attribute: .intuitive(.spacer)))
+            snapshot.append(contentsOf: Snapshot(prefix, only: .intuitive(.prefix)))
+            snapshot.append(Symbol(" ", attribute: .intuitive(.prefix)))
         }
                 
         // --------------------------------- //
@@ -238,24 +236,20 @@ extension NumericTextStyle {
             } else if decimalSeparator.contains(character) {
                 snapshot.append(.content(character))
             } else if signs.contains(character) {
-                snapshot.append(.content(character).union(.intuitive(.spacer)))
+                snapshot.append(.content(character).union([.prefix]))
             }
         }
                 
         // --------------------------------- //
 
-        #warning("Shuold be stuck at end if only spacers.")
-//        snapshot.removeLast()
-        
-//        configureFirstDigitIfItIsZero(in:         &snapshot, with: { $0.insert(.prefix) })
+        configureFirstDigitIfItIsZero(in:         &snapshot, with: { $0.insert(.prefix) })
         configureDecimalSeparatorIfItIsSuffix(in: &snapshot, with: { $0.insert(.remove) })
                 
         // --------------------------------- //
 
-        #warning("Fixme: make suffix.")
         if let suffix = suffix {
-            snapshot.append(Symbol(" ", attribute: .intuitive(.spacer)))
-            snapshot.append(contentsOf: Snapshot(suffix, only: .intuitive(.spacer)))
+            snapshot.append(Symbol(" ", attribute: .intuitive(.suffix)))
+            snapshot.append(contentsOf: Snapshot(suffix, only: .intuitive(.suffix)))
         }
     
         // --------------------------------- //

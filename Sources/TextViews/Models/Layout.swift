@@ -7,6 +7,8 @@
 
 // MARK: - Layout
 
+#warning("Rename: Layout as Unit.")
+#warning("Rename: Carets as Layout.")
 @usableFromInline protocol Layout {
     @inlinable static func size(of character: Character) -> Int
     @inlinable static func size(of characters:   String) -> Int

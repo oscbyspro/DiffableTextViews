@@ -158,7 +158,6 @@ extension Field {
             else                                     { return .done          }
         }
         
-        #warning("Think about this.")
         func inspectable(symbol: Symbol) -> Bool {
             !symbol.attribute.contains(.composite(.change))
         }
@@ -242,7 +241,6 @@ extension Field {
     @inlinable func moveToAttributes() -> Field {
         func position(_ position: Carets.Index, preference: Direction) -> Carets.Index {
             let direction = directionOfAttributes(at: position)
-            print(position.offset, carets.endIndex.offset)
             return look(position, direction: direction ?? preference)
         }
         
