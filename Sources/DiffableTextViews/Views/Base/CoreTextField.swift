@@ -57,35 +57,34 @@ extension CoreTextField {
     // MARK: Presses
     
     public override func pressesBegan(_ presses: Set<UIPress>, with event: UIPressesEvent?) {
-        parseIntentStart(presses)
+        processIntentStarted(presses)
         super.pressesBegan(presses, with: event)
     }
     
     public override func pressesChanged(_ presses: Set<UIPress>, with event: UIPressesEvent?) {
-        parseIntentStart(presses)
+        processIntentStarted(presses)
         super.pressesChanged(presses, with: event)
     }
     
     public override func pressesEnded(_ presses: Set<UIPress>, with event: UIPressesEvent?) {
-        parseIntentEnd(presses)
+        processIntentEnded(presses)
         super.pressesEnded(presses, with: event)
     }
     
     public override func pressesCancelled(_ presses: Set<UIPress>, with event: UIPressesEvent?) {
-        parseIntentEnd(presses)
+        processIntentEnded(presses)
         super.pressesCancelled(presses, with: event)
     }
     
     // MARK: Presses, Intent
     
-    @inlinable func parseIntentStart(_ presses: Set<UIPress>) {
+    @inlinable func processIntentStarted(_ presses: Set<UIPress>) {
         self.intent = Intent.parse(presses)
     }
     
-    @inlinable func parseIntentEnd(_ presses: Set<UIPress>) {
+    @inlinable func processIntentEnded(_ presses: Set<UIPress>) {
         guard let current = intent else { return }
         guard let ending = Intent.parse(presses) else { return }
-        
         if current == ending { self.intent = nil }
     }
 }
