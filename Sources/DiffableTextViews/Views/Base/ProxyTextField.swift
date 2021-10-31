@@ -30,6 +30,9 @@ import UIKit
     
     // MARK: Text
     
+    /// - Note: Force unwrapping the UITextField's text is always OK,
+    /// because it can never be nil. It is a relic of Apple's Objective-C implementation.
+    ///
     /// - Complexity: O(1).
     @inlinable var text: String {
         wrapped.text!
@@ -42,6 +45,9 @@ import UIKit
     
     // MARK: Selection
     
+    /// - Note: Force unwrapping the UITextField's selection is always OK,
+    /// because it can never be nil. It is a relic of Apple's Objective-C implementation.
+    ///
     /// - Complexity: O(1).
     @inlinable func selection() -> Range<Offset> {
         offsets(in: wrapped.selectedTextRange!)
