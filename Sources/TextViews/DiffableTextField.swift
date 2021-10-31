@@ -9,10 +9,9 @@
 
 import SwiftUI
 
-#warning("Field should not use momentum, rather key presses should be handled separately.")
 public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
+    public typealias UIViewType = OBETextField
     public typealias Value = Style.Value
-    public typealias UIViewType = MyTextField
     
     // MARK: Properties
     
@@ -38,7 +37,7 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
     }
     
     @inlinable public func makeUIView(context: Context) -> UIViewType {
-        let uiView = MyTextField()
+        let uiView = OBETextField()
         
         // --------------------------------- //
         
@@ -69,7 +68,7 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
         
         // MARK: Properties
         
-        @usableFromInline var uiView: Proxy!
+        @usableFromInline var uiView: Proxy<UIViewType>!
         @usableFromInline var source: DiffableTextField!
 
         @usableFromInline let lock  = Lock()
@@ -129,7 +128,6 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
         }
 
         @inlinable public func textFieldDidChangeSelection(_ textField: UITextField) {
-            guard let textField = textField as? MyTextField else { fatalError() }
             
             // --------------------------------- //
             
@@ -138,7 +136,8 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
             // --------------------------------- //
                         
             let offsets = uiView.selection()
-            let field = cache.field.configure(selection: offsets, intent: textField.intent)
+            let intent = uiView.wrapped.intent?.direction
+            let field = cache.field.configure(selection: offsets, intent: intent)
             let selection = field.selection.map(bounds: \.offset)
             
             // --------------------------------- //
@@ -279,54 +278,3 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
 }
 
 #endif
-
-#warning("WIP.")
-#warning("Use intent/momentum flag for keypresses.")
-public final class MyTextField: UITextField {
-    
-    @usableFromInline var intent: Direction? = nil
-
-    // MARK: Parses
-    
-    @inlinable func parseIntentStart(_ presses: Set<UIPress>) {
-        guard let key = presses.first?.key else { return }
-        
-        switch key.keyCode {
-        case .keyboardLeftArrow: intent = .backwards
-        case .keyboardRightArrow: intent = .forwards
-        default: break
-        }
-    }
-    
-    @inlinable func parseIntentEnd(_ presses: Set<UIPress>) {
-        guard let key = presses.first?.key else { return }
-        
-        switch (intent, key.keyCode) {
-        case (.backwards, .keyboardLeftArrow): intent = nil
-        case (.forwards, .keyboardRightArrow): intent = nil
-        default: break
-        }
-    }
-    
-    // MARK: Overrides
-    
-    public override func pressesBegan(_ presses: Set<UIPress>, with event: UIPressesEvent?) {
-        parseIntentStart(presses)
-        super.pressesBegan(presses, with: event)
-    }
-    
-    public override func pressesChanged(_ presses: Set<UIPress>, with event: UIPressesEvent?) {
-        parseIntentStart(presses)
-        super.pressesChanged(presses, with: event)
-    }
-    
-    public override func pressesEnded(_ presses: Set<UIPress>, with event: UIPressesEvent?) {
-        parseIntentEnd(presses)
-        super.pressesEnded(presses, with: event)
-    }
-    
-    public override func pressesCancelled(_ presses: Set<UIPress>, with event: UIPressesEvent?) {
-        parseIntentEnd(presses)
-        super.pressesCancelled(presses, with: event)
-    }
-}

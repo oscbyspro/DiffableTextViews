@@ -15,48 +15,48 @@ import UIKit
 ///
 /// - UITextField.text is never nil.
 /// - UITextField.selectedTextRange is never nil
-@usableFromInline final class Proxy {
+@usableFromInline final class Proxy<Wrapped: UITextField> {
     @usableFromInline typealias Offset = TextViews.Offset<UTF16>
     
     // MARK: Properties
     
-    @usableFromInline let uiTextField: UITextField
+    @usableFromInline let wrapped: Wrapped
     
     // MARK: Initializers
     
-    @inlinable init(_ uiTextField: UITextField) {
-        self.uiTextField = uiTextField
+    @inlinable init(_ wrapped: Wrapped) {
+        self.wrapped = wrapped
     }
     
     // MARK: Text
     
     /// - Complexity: O(1).
     @inlinable var text: String {
-        uiTextField.text!
+        wrapped.text!
     }
     
     /// - Complexity: High.
     @inlinable func write(_ text: String) {
-        uiTextField.text = text
+        wrapped.text = text
     }
     
     // MARK: Selection
     
     /// - Complexity: O(1).
     @inlinable func selection() -> Range<Offset> {
-        offsets(in: uiTextField.selectedTextRange!)
+        offsets(in: wrapped.selectedTextRange!)
     }
     
     /// - Complexity: High.
     @inlinable func select(_ offsets: Range<Offset>) {
-        uiTextField.selectedTextRange = positions(of: offsets)
+        wrapped.selectedTextRange = positions(of: offsets)
     }
     
     // MARK: Descriptions
     
     /// - Complexity: O(1).
     @inlinable var edits: Bool {
-        uiTextField.isEditing
+        wrapped.isEditing
     }
     
     // MARK: Helpers: Range & Offset
@@ -68,17 +68,17 @@ import UIKit
     
     /// - Complexity: O(1).
     @inlinable func offset(at position: UITextPosition) -> Offset {
-        .init(at: uiTextField.offset(from: uiTextField.beginningOfDocument, to: position))
+        .init(at: wrapped.offset(from: wrapped.beginningOfDocument, to: position))
     }
     
     /// - Complexity: O(1).
     @inlinable func position(at offset: Offset) -> UITextPosition {
-        uiTextField.position(from: uiTextField.beginningOfDocument, offset: offset.distance)!
+        wrapped.position(from: wrapped.beginningOfDocument, offset: offset.distance)!
     }
     
     /// - Complexity: O(1).
     @inlinable func positions(of offsets: Range<Offset>) -> UITextRange {
-        uiTextField.textRange(from: position(at: offsets.lowerBound), to: position(at: offsets.upperBound))!
+        wrapped.textRange(from: position(at: offsets.lowerBound), to: position(at: offsets.upperBound))!
     }
 }
 
