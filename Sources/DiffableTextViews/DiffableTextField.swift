@@ -10,7 +10,7 @@
 import SwiftUI
 
 public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
-    public typealias UIViewType = OBETextField
+    public typealias UIViewType = CoreTextField
     public typealias Value = Style.Value
     
     // MARK: Properties
@@ -37,7 +37,7 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
     }
     
     @inlinable public func makeUIView(context: Context) -> UIViewType {
-        let uiView = OBETextField()
+        let uiView = CoreTextField()
         
         // --------------------------------- //
         
@@ -68,8 +68,8 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
         
         // MARK: Properties
         
-        @usableFromInline var uiView: Proxy<UIViewType>!
         @usableFromInline var source: DiffableTextField!
+        @usableFromInline var uiView: ProxyTextField<UIViewType>!
 
         @usableFromInline let lock  = Lock()
         @usableFromInline let cache = Cache()
@@ -78,7 +78,7 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
 
         @inlinable func connect(_ uiView: UIViewType) {
             uiView.delegate = self            
-            self.uiView = Proxy(uiView)
+            self.uiView = ProxyTextField(uiView)
         }
         
         // MARK: UITextFieldDelegate

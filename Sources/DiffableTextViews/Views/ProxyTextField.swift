@@ -1,5 +1,5 @@
 //
-//  Proxy.swift
+//  ProxyTextField.swift
 //  
 //
 //  Created by Oscar Byström Ericsson on 2021-09-26.
@@ -9,13 +9,13 @@
 
 import UIKit
 
-// MARK: - Proxy
+// MARK: - ProxyTextField
 
 /// An affordance layer wrapping a UITextField object.
 ///
 /// - UITextField.text is never nil.
 /// - UITextField.selectedTextRange is never nil
-@usableFromInline final class Proxy<Wrapped: UITextField> {
+@usableFromInline final class ProxyTextField<Wrapped: UITextField> {
     @usableFromInline typealias Offset = DiffableTextViews.Offset<UTF16>
     
     // MARK: Properties

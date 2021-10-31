@@ -1,5 +1,5 @@
 //
-//  OBETextField.swift
+//  CoreTextField.swift
 //  
 //
 //  Created by Oscar Byström Ericsson on 2021-10-31.
@@ -9,47 +9,11 @@
 
 import UIKit
 
-public final class OBETextField: UITextField {
+public final class CoreTextField: UITextField {
     
     // MARK: Properties
     
     @usableFromInline var intent: Intent? = nil
-    
-    // MARK: Presses
-    
-    public override func pressesBegan(_ presses: Set<UIPress>, with event: UIPressesEvent?) {
-        parseIntentStart(presses)
-        super.pressesBegan(presses, with: event)
-    }
-    
-    public override func pressesChanged(_ presses: Set<UIPress>, with event: UIPressesEvent?) {
-        parseIntentStart(presses)
-        super.pressesChanged(presses, with: event)
-    }
-    
-    public override func pressesEnded(_ presses: Set<UIPress>, with event: UIPressesEvent?) {
-        parseIntentEnd(presses)
-        super.pressesEnded(presses, with: event)
-    }
-    
-    public override func pressesCancelled(_ presses: Set<UIPress>, with event: UIPressesEvent?) {
-        parseIntentEnd(presses)
-        super.pressesCancelled(presses, with: event)
-    }
-    
-    // MARK: Presses, Intent
-    
-    @inlinable func parseIntentStart(_ presses: Set<UIPress>) {
-        self.intent = Intent.parse(presses)
-    }
-    
-    @inlinable func parseIntentEnd(_ presses: Set<UIPress>) {
-        guard let current = intent else { return }
-        guard let ending = Intent.parse(presses) else { return }
-        guard current == ending else { return }
-        
-        self.intent = nil
-    }
     
     // MARK: Intent
     
@@ -84,6 +48,45 @@ public final class OBETextField: UITextField {
             default: return nil
             }
         }
+    }
+    
+}
+
+extension CoreTextField {
+    
+    // MARK: Presses
+    
+    public override func pressesBegan(_ presses: Set<UIPress>, with event: UIPressesEvent?) {
+        parseIntentStart(presses)
+        super.pressesBegan(presses, with: event)
+    }
+    
+    public override func pressesChanged(_ presses: Set<UIPress>, with event: UIPressesEvent?) {
+        parseIntentStart(presses)
+        super.pressesChanged(presses, with: event)
+    }
+    
+    public override func pressesEnded(_ presses: Set<UIPress>, with event: UIPressesEvent?) {
+        parseIntentEnd(presses)
+        super.pressesEnded(presses, with: event)
+    }
+    
+    public override func pressesCancelled(_ presses: Set<UIPress>, with event: UIPressesEvent?) {
+        parseIntentEnd(presses)
+        super.pressesCancelled(presses, with: event)
+    }
+    
+    // MARK: Presses, Intent
+    
+    @inlinable func parseIntentStart(_ presses: Set<UIPress>) {
+        self.intent = Intent.parse(presses)
+    }
+    
+    @inlinable func parseIntentEnd(_ presses: Set<UIPress>) {
+        guard let current = intent else { return }
+        guard let ending = Intent.parse(presses) else { return }
+        
+        if current == ending { self.intent = nil }
     }
 }
 
