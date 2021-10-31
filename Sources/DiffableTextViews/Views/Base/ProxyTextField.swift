@@ -30,7 +30,7 @@ import UIKit
     
     // MARK: Text
     
-    /// - Note: Force unwrapping the UITextField's text is always OK,
+    /// - Note: Force unwrapping a UITextField's text is always OK,
     /// because it can never be nil. It is a relic of Apple's Objective-C implementation.
     ///
     /// - Complexity: O(1).
@@ -45,7 +45,7 @@ import UIKit
     
     // MARK: Selection
     
-    /// - Note: Force unwrapping the UITextField's selection is always OK,
+    /// - Note: Force unwrapping a UITextField's selection is always OK,
     /// because it can never be nil. It is a relic of Apple's Objective-C implementation.
     ///
     /// - Complexity: O(1).
