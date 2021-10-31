@@ -15,7 +15,7 @@
     
     @usableFromInline let carets: Carets
     @usableFromInline var selection: Range<Carets.Index>
-    
+
     // MARK: Initializers
     
     @inlinable init(_ snapshot: Snapshot = Snapshot()) {
