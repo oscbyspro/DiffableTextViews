@@ -32,7 +32,6 @@ struct Item {
 // MARK: Source
 
 let TextViews = Item(name: "TextViews")
-let Sequences = Item(name: "Sequences")
 
 // MARK: - Package
 
@@ -46,15 +45,10 @@ let package = Package(
             name: TextViews.name,
             targets: [TextViews.name]),
     ],
-    dependencies: [
-        .package(
-            name: Sequences.name,
-            path: Sequences.path),
-    ],
     targets: [
         .target(
             name: TextViews.name,
-            dependencies: [Sequences.dependency]),
+            dependencies: []),
         .testTarget(
             name: TextViews.tests,
             dependencies: [TextViews.dependency])
