@@ -5,12 +5,8 @@
 //  Created by Oscar Byström Ericsson on 2021-09-27.
 //
 
-import Combine
-import Foundation
-
 // MARK: - Field
 
-#warning("Selection should NOT be momentum based.")
 @usableFromInline struct Field<Layout: TextViews.Layout> {
     @usableFromInline typealias Carets = TextViews.Carets<Layout>
     @usableFromInline typealias Offset = TextViews.Offset<Layout>
@@ -66,6 +62,31 @@ import Foundation
     
     @inlinable func update(_ transform: (inout Field) -> Void) -> Field {
         var copy = self; transform(&copy); return copy
+    }
+}
+
+// - MARK: Looks
+
+extension Field {
+    
+    @inlinable func look(_ start: Carets.Index, direction: Direction) -> Carets.Index {
+        direction == .forwards ? lookahead(start) : lookbehind(start)
+    }
+
+    @inlinable func lookahead(_ start: Carets.Index) -> Carets.Index {
+        func predicate(element: Carets.Element) -> Bool {
+            !element.rhs.attribute.contains(.prefix)
+        }
+        
+        return carets[start...].firstIndex(where: predicate) ?? carets.lastIndex
+    }
+    
+    @inlinable func lookbehind(_ start: Carets.Index) -> Carets.Index {
+        func predicate(element: Carets.Element) -> Bool {
+            !element.lhs.attribute.contains(.suffix)
+        }
+        
+        return carets[...start].lastIndex(where: predicate) ?? carets.firstIndex
     }
 }
 
@@ -164,30 +185,20 @@ extension Field {
     }
 }
 
-#warning("Remove...")
-extension Field {
-    static var mockLayout0: String {
-        ">|>,>,>,<>,<>,<>,*>,*,*,<>,<>,<>,*,*,*,*,*,<>,<>,<>,<,<,<|<"
-    }
-}
-
 // MARK: Move To Selection
 
 extension Field {
     
     // MARK: Movements
     
-    #warning("WIP")
     @inlinable func move(to nextSelection: Range<Carets.Index>, intent: Direction?) -> Field {
         func position(_ start: Carets.Index, preference: Direction) -> Carets.Index {
-            if preferable(start, by: preference) {
-                return start
-            }
+            if preferable(start, by: preference) { return start }
             
             let direction = intent ?? preference
             let next = look(start, direction: direction)
-                        
-            return target(next, direction: direction, preference: preference)
+                   
+            return correct(next, side: direction, preference: preference)
         }
         
         let upperBound = position(nextSelection.upperBound, preference: .backwards)
@@ -212,35 +223,13 @@ extension Field {
         }
     }
     
-    @inlinable func target(_ position: Carets.Index, direction: Direction, preference: Direction) -> Carets.Index {
-        guard direction != preference else { return position }
+    @inlinable func correct(_ position: Carets.Index, side: Direction, preference: Direction) -> Carets.Index {
+        if side == preference { return position }
         
-        switch direction {
+        switch side {
         case .forwards:  return position < carets.endIndex   ? carets.index(after:  position) : position
         case .backwards: return position > carets.startIndex ? carets.index(before: position) : position
         }
-    }
-    
-    // MARK: Looks
-    
-    @inlinable func look(_ start: Carets.Index, direction: Direction) -> Carets.Index {
-        direction == .forwards ? lookahead(start) : lookbehind(start)
-    }
-
-    @inlinable func lookahead(_ start: Carets.Index) -> Carets.Index {
-        func predicate(element: Carets.Element) -> Bool {
-            !element.rhs.attribute.contains(.prefix)
-        }
-        
-        return carets[start...].firstIndex(where: predicate) ?? carets.lastIndex
-    }
-    
-    @inlinable func lookbehind(_ start: Carets.Index) -> Carets.Index {
-        func predicate(element: Carets.Element) -> Bool {
-            !element.lhs.attribute.contains(.suffix)
-        }
-        
-        return carets[...start].lastIndex(where: predicate) ?? carets.firstIndex
     }
 }
 
@@ -279,10 +268,7 @@ extension Field {
         let forwards  = containsOnBothSides(.prefix)
         let backwards = containsOnBothSides(.suffix)
         
-        guard forwards != backwards else {
-            return nil
-        }
-        
+        if forwards == backwards { return nil }
         return forwards ? .forwards : .backwards
     }
 }

@@ -85,7 +85,6 @@
         
         // MARK: Initialization
 
-        #warning("...")
         @inlinable init(lhs: Symbol?, rhs: Symbol?) {
             self.lhs = lhs ?? .prefix("\0")
             self.rhs = rhs ?? .suffix("\0")

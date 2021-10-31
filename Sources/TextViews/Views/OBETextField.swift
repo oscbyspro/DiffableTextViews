@@ -1,5 +1,5 @@
 //
-//  File.swift
+//  OBETextField.swift
 //  
 //
 //  Created by Oscar Byström Ericsson on 2021-10-31.
@@ -32,7 +32,7 @@ public final class OBETextField: UITextField {
         super.pressesEnded(presses, with: event)
     }
     
-    public override func pressesCancelled(_ presses: Set<UIPress>, with event: UIPressesEvent?) {        
+    public override func pressesCancelled(_ presses: Set<UIPress>, with event: UIPressesEvent?) {
         parseIntentEnd(presses)
         super.pressesCancelled(presses, with: event)
     }
