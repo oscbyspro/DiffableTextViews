@@ -3,54 +3,22 @@
 
 import PackageDescription
 
-// MARK: - Item
-
-struct Item {
-    // MARK: Properties
-    
-    let name: String
-    
-    // MARK: Calculations
-    
-    var tests: String {
-        name + "Tests"
-    }
-    
-    var dependency: Target.Dependency {
-        .init(stringLiteral: name)
-    }
-    
-    var path: String {
-        "../" + name
-    }
-    
-    var url: String {
-        "https://github.com/oscbyspro/" + name
-    }
-}
-
-// MARK: Source
-
-let TextViews = Item(name: "TextViews")
-
-// MARK: - Package
-
 let package = Package(
-    name: TextViews.name,
+    name: "DiffableTextViews",
     platforms: [
         .iOS(.v15),
     ],
     products: [
         .library(
-            name: TextViews.name,
-            targets: [TextViews.name]),
+            name: "DiffableTextViews",
+            targets: ["DiffableTextViews"]),
     ],
     targets: [
         .target(
-            name: TextViews.name,
+            name: "DiffableTextViews",
             dependencies: []),
         .testTarget(
-            name: TextViews.tests,
-            dependencies: [TextViews.dependency])
+            name: "DiffableTextViewsTests",
+            dependencies: ["DiffableTextViews"])
     ]
 )

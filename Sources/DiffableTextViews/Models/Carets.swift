@@ -7,8 +7,8 @@
 
 // MARK: - Carets
 
-@usableFromInline struct Carets<Layout: TextViews.Layout>: BidirectionalCollection {
-    @usableFromInline typealias Offset = TextViews.Offset<Layout>
+@usableFromInline struct Carets<Layout: DiffableTextViews.Layout>: BidirectionalCollection {
+    @usableFromInline typealias Offset = DiffableTextViews.Offset<Layout>
     
     // MARK: Properties
     
