@@ -12,6 +12,7 @@ import UIKit
 // MARK: - ProxyTextField
 
 /// An affordance layer wrapping a UITextField object.
+/// Makes it easier to enforce UITextField's UTF-16 layout.
 ///
 /// - UITextField.text is never nil.
 /// - UITextField.selectedTextRange is never nil
@@ -65,7 +66,7 @@ import UIKit
         wrapped.isEditing
     }
     
-    // MARK: Helpers: Range & Offset
+    // MARK: Utilities: Range & Offset
 
     /// - Complexity: O(1).
     @inlinable func offsets(in bounds: UITextRange) -> Range<Offset> {
