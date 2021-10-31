@@ -17,7 +17,6 @@
 
     // MARK: Initializers
 
-    #warning("Hm.")
     @inlinable init(_ snapshot: Snapshot) {
         self.snapshot = snapshot
         self.range = .origin ..< .max(in: snapshot.characters)
@@ -171,14 +170,6 @@ extension Carets {
     @inlinable func index(start: Index, backwards offset: Offset) -> Index {
         assert(offset.distance <= 0)
         let destination = start.offset.distance + offset.distance
-        return indices[...start].reversed().first(where: { index in index.offset.distance <= destination }) ?? startIndex
+        return indices[...start].last(where: { index in index.offset.distance <= destination }) ?? startIndex
     }
-}
-
-#warning("WIP")
-#warning("Could use this.")
-@usableFromInline enum Subindex {
-    case subscriptable(Snapshot.Index)
-    case prefix
-    case suffix
 }
