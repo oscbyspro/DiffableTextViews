@@ -7,7 +7,7 @@
 
 // MARK: - Direction
 
-@usableFromInline enum Direction {
+@usableFromInline @frozen enum Direction {
     case forwards
     case backwards
 }

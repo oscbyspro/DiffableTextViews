@@ -21,12 +21,42 @@
         self.rhs = rhs ?? .suffix("\0")
     }
     
-    // MARK: Descriptions
+    // MARK: Descriptions: Lookahead
     
+    @inlinable var lookaheadable: Bool {
+        rhs.attribute.contains(.prefix)
+    }
+    
+    @inlinable var nonlookaheadable: Bool {
+        !lookaheadable
+    }
+    
+    // MARK: Descriptions: Lookbehind
+    
+    @inlinable var lookbehindable: Bool {
+        lhs.attribute.contains(.suffix)
+    }
+    
+    @inlinable var nonlookbehindable: Bool {
+        !lookbehindable
+    }
+    
+    // MARK: Descriptions: Preference
+    
+    @inlinable func lookable(_ direction: Direction) -> Bool {
+        direction == .forwards ? lookaheadable : lookbehindable
+    }
+    
+    @inlinable func nonlookable(_ direction: Direction) -> Bool {
+        !lookable(direction)
+    }
+    
+    // MARK: Descriptions: Attributes
+
     @inlinable func containsOnBothSides(_ attribute: Attribute) -> Bool {
         lhs.attribute.contains(attribute) && rhs.attribute.contains(attribute)
     }
-    
+        
     @inlinable func directionOfAttributes() -> Direction? {
         let forwards  = containsOnBothSides(.prefix)
         let backwards = containsOnBothSides(.suffix)

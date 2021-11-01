@@ -74,8 +74,8 @@ import UIKit
     }
     
     /// - Complexity: O(1).
-    @inlinable func offset(at position: UITextPosition) -> Offset {
-        .init(at: wrapped.offset(from: wrapped.beginningOfDocument, to: position))
+    @inlinable func offset(at reposition: UITextPosition) -> Offset {
+        .init(at: wrapped.offset(from: wrapped.beginningOfDocument, to: reposition))
     }
     
     /// - Complexity: O(1).

@@ -28,6 +28,20 @@
         self.selection = selection
     }
     
+    // MARK: Look
+    
+    @inlinable func look(_ start: Carets.Index, direction: Direction) -> Carets.Index {
+        direction == .forwards ? lookahead(start) : lookbehind(start)
+    }
+
+    @inlinable func lookahead(_ start: Carets.Index) -> Carets.Index {
+        carets[start...].firstIndex(where: \.nonlookaheadable) ?? carets.lastIndex
+    }
+    
+    @inlinable func lookbehind(_ start: Carets.Index) -> Carets.Index {
+        carets[...start].lastIndex(where: \.nonlookbehindable) ?? carets.firstIndex
+    }
+    
     // MARK: Configure: Carets
     
     @inlinable func configure(carets newValue: Carets) -> Self {
@@ -58,41 +72,107 @@
         configure(selection: newValue ..< newValue, intent: intent)
     }
     
-    // MARK: Helpers: Update
+    // MARK: Configure, Helpers
     
     @inlinable func update(_ transform: (inout Field) -> Void) -> Field {
         var copy = self; transform(&copy); return copy
     }
 }
 
-// MARK: - Seek
+// MARK: Movements
 
 extension Field {
     
-    // MARK: Look In Direction
+    // MARK: To Attribute
     
-    @inlinable func look(_ start: Carets.Index, direction: Direction) -> Carets.Index {
-        direction == .forwards ? lookahead(start) : lookbehind(start)
+    @inlinable func moveToAttributes() -> Field {
+        func move(_ position: Carets.Index, preference: Direction) -> Carets.Index {
+            let direction = carets[position].directionOfAttributes()
+            return look(position, direction: direction ?? preference)
+        }
+        
+        #warning("Similar")
+        let upperBound = move(selection.upperBound, preference: .backwards)
+        var lowerBound = upperBound
+
+        if !selection.isEmpty {
+            lowerBound = move(selection.lowerBound, preference:  .forwards)
+            lowerBound = min(lowerBound, upperBound)
+        }
+        
+        return update({ $0.selection = lowerBound ..< upperBound })
     }
 
-    @inlinable func lookahead(_ start: Carets.Index) -> Carets.Index {
-        func predicate(element: Carets.Element) -> Bool {
-            !element.rhs.attribute.contains(.prefix)
-        }
-        
-        return carets[start...].firstIndex(where: predicate) ?? carets.lastIndex
-    }
+    // MARK: To Selection
     
-    @inlinable func lookbehind(_ start: Carets.Index) -> Carets.Index {
-        func predicate(element: Carets.Element) -> Bool {
-            !element.lhs.attribute.contains(.suffix)
+    @inlinable func move(to nextSelection: Range<Carets.Index>, intent: Direction?) -> Field {
+        func move(_ start: Carets.Index, preference: Direction) -> Carets.Index {
+            if carets[start].nonlookable(preference) { return start }
+                        
+            // --------------------------------- //
+            
+            let direction = intent ?? preference
+            let next = look(start, direction: direction)
+            
+            // --------------------------------- //
+            
+            if direction == preference { return next }
+            
+            switch direction {
+            case .forwards:  return next < carets.lastIndex  ? carets.index(after:  next) : next
+            case .backwards: return next > carets.firstIndex ? carets.index(before: next) : next
+            }
         }
         
-        return carets[...start].lastIndex(where: predicate) ?? carets.firstIndex
+        #warning("Similar")
+        let upperBound = move(nextSelection.upperBound, preference: .backwards)
+        var lowerBound = upperBound
+
+        if !nextSelection.isEmpty {
+            lowerBound = move(nextSelection.lowerBound, preference:  .forwards)
+            lowerBound = min(lowerBound, upperBound)
+        }
+
+        return update({ $0.selection = lowerBound ..< upperBound })
+    }
+
+    // MARK: To Carets
+    
+    @inlinable func move(to nextCarets: Carets) -> Field {
+        func step(prev: Symbol, next: Symbol) -> SimilaritiesInstruction {
+            if prev == next                          { return .continue      }
+            else if prev.attribute.contains(.remove) { return .continueOnLHS }
+            else if next.attribute.contains(.insert) { return .continueOnRHS }
+            else                                     { return .done          }
+        }
+        
+        func inspectable(symbol: Symbol) -> Bool {
+            !symbol.attribute.contains(.composite(.change))
+        }
+        
+        // --------------------------------- //
+        
+        let options = SimilaritiesOptions<Symbol>
+            .produce(.overshoot)
+            .compare(.instruction(step))
+            .inspect(.only(inspectable))
+
+        func position(from current: Carets.SubSequence, to next: Carets.SubSequence) -> Carets.Index {
+            Similarities(in: current.lazy.map(\.rhs), and: next.lazy.map(\.rhs), with: options).rhsSuffix().startIndex
+        }
+        
+        // --------------------------------- //
+        
+        let nextUpperBound = position(from: carets[selection.upperBound...], to: nextCarets[...])
+        let nextLowerBound = position(from: carets[selection], to: nextCarets[..<nextUpperBound])
+                
+        // --------------------------------- //
+        
+        return Field(nextCarets, selection: nextLowerBound ..< nextUpperBound)
     }
 }
 
-// MARK: - Offsets
+// MARK: - Indices & Offsets
 
 extension Field {
     
@@ -143,117 +223,5 @@ extension Field {
         @inlinable static func < (lhs: Self, rhs: Self) -> Bool {
             abs(lhs.offset.distance) < abs(rhs.offset.distance)
         }
-    }
-}
-
-// MARK: - Move To Carets
-
-extension Field {
-    
-    // MARK: Movements
-    
-    @inlinable func move(to nextCarets: Carets) -> Field {
-        func step(prev: Symbol, next: Symbol) -> SimilaritiesInstruction {
-            if prev == next                          { return .continue      }
-            else if prev.attribute.contains(.remove) { return .continueOnLHS }
-            else if next.attribute.contains(.insert) { return .continueOnRHS }
-            else                                     { return .done          }
-        }
-        
-        func inspectable(symbol: Symbol) -> Bool {
-            !symbol.attribute.contains(.composite(.change))
-        }
-        
-        // --------------------------------- //
-        
-        let options = SimilaritiesOptions<Symbol>
-            .produce(.overshoot)
-            .compare(.instruction(step))
-            .inspect(.only(inspectable))
-
-        func position(from current: Carets.SubSequence, to next: Carets.SubSequence) -> Carets.Index {
-            Similarities(in: current.lazy.map(\.rhs), and: next.lazy.map(\.rhs), with: options).rhsSuffix().startIndex
-        }
-        
-        // --------------------------------- //
-        
-        let nextUpperBound = position(from: carets[selection.upperBound...], to: nextCarets[...])
-        let nextLowerBound = position(from: carets[selection], to: nextCarets[..<nextUpperBound])
-                
-        // --------------------------------- //
-        
-        return Field(nextCarets, selection: nextLowerBound ..< nextUpperBound)
-    }
-}
-
-// MARK: Move To Selection
-
-extension Field {
-    
-    // MARK: Movements
-    
-    @inlinable func move(to nextSelection: Range<Carets.Index>, intent: Direction?) -> Field {
-        func move(_ start: Carets.Index, preference: Direction) -> Carets.Index {
-            if preferable(start, by: preference) { return start }
-            
-            let direction = intent ?? preference
-            let next = look(start, direction: direction)
-                   
-            return position(target: next, side: direction, preference: preference)
-        }
-        
-        let upperBound = move(nextSelection.upperBound, preference: .backwards)
-        var lowerBound = upperBound
-
-        if !nextSelection.isEmpty {
-            lowerBound = move(nextSelection.lowerBound, preference:  .forwards)
-            lowerBound = min(lowerBound, upperBound)
-        }
-
-        return update({ $0.selection = lowerBound ..< upperBound })
-    }
-    
-    // MARK: Helpers
-    
-    @inlinable func preferable(_ position: Carets.Index, by preference: Direction) -> Bool {
-        let element = carets[position]
-        
-        switch preference {
-        case .forwards:  return !element.rhs.attribute.contains(.prefix)
-        case .backwards: return !element.lhs.attribute.contains(.suffix)
-        }
-    }
-    
-    @inlinable func position(target position: Carets.Index, side: Direction, preference: Direction) -> Carets.Index {
-        if side == preference { return position }
-        
-        switch side {
-        case .forwards:  return position < carets.lastIndex  ? carets.index(after:  position) : position
-        case .backwards: return position > carets.firstIndex ? carets.index(before: position) : position
-        }
-    }
-}
-
-// MARK: Move To Attributes
-
-extension Field {
-    
-    // MARK: Movements
-    
-    @inlinable func moveToAttributes() -> Field {
-        func move(_ position: Carets.Index, preference: Direction) -> Carets.Index {
-            let direction = carets[position].directionOfAttributes()
-            return look(position, direction: direction ?? preference)
-        }
-        
-        let upperBound = move(selection.upperBound, preference: .backwards)
-        var lowerBound = upperBound
-
-        if !selection.isEmpty {
-            lowerBound = move(selection.lowerBound, preference:  .forwards)
-            lowerBound = min(lowerBound, upperBound)
-        }
-        
-        return update({ $0.selection = lowerBound ..< upperBound })
     }
 }
