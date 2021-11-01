@@ -5,8 +5,6 @@
 //  Created by Oscar Byström Ericsson on 2021-10-02.
 //
 
-import SwiftUI
-
 // MARK: - Attribute
 
 /// A set of options, where each option represents a specialized behavior.

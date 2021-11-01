@@ -5,8 +5,6 @@
 //  Created by Oscar Byström Ericsson on 2021-09-24.
 //
 
-import Foundation
-
 // MARK: - Similarities
 
 @usableFromInline struct Similarities<LHS: Collection, RHS: Collection> where LHS.Element == RHS.Element {

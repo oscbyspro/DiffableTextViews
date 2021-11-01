@@ -7,7 +7,10 @@
 
 #if os(iOS)
 
-import Foundation
+import struct Foundation.Locale
+import protocol Foundation.FormatStyle
+import enum Foundation.NumberFormatStyleConfiguration
+
 
 // MARK: - NumericTextStyleScheme
 
