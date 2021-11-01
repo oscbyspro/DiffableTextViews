@@ -10,8 +10,8 @@
 
 extension BidirectionalCollection {
     
-    // MARK: Suffix
-    
+    // MARK: Transformations
+
     @inlinable func suffix(while predicate: (Element) -> Bool) -> SubSequence {
         var index = endIndex
 
