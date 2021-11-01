@@ -91,6 +91,8 @@ extension Field {
             return look(position, direction: direction ?? preference)
         }
         
+        // --------------------------------- //
+        
         let upperBound = move(selection.upperBound, preference: .backwards)
         var lowerBound = upperBound
 
@@ -98,6 +100,8 @@ extension Field {
             lowerBound = move(selection.lowerBound, preference:  .forwards)
             lowerBound = min(lowerBound, upperBound)
         }
+        
+        // --------------------------------- //
         
         return update({ $0.selection = lowerBound ..< upperBound })
     }
@@ -123,6 +127,8 @@ extension Field {
             }
         }
         
+        // --------------------------------- //
+        
         let upperBound = move(nextSelection.upperBound, preference: .backwards)
         var lowerBound = upperBound
 
@@ -130,6 +136,8 @@ extension Field {
             lowerBound = move(nextSelection.lowerBound, preference:  .forwards)
             lowerBound = min(lowerBound, upperBound)
         }
+        
+        // --------------------------------- //
 
         return update({ $0.selection = lowerBound ..< upperBound })
     }
