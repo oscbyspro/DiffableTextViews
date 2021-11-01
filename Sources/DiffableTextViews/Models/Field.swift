@@ -91,7 +91,6 @@ extension Field {
             return look(position, direction: direction ?? preference)
         }
         
-        #warning("Similar")
         let upperBound = move(selection.upperBound, preference: .backwards)
         var lowerBound = upperBound
 
@@ -124,7 +123,6 @@ extension Field {
             }
         }
         
-        #warning("Similar")
         let upperBound = move(nextSelection.upperBound, preference: .backwards)
         var lowerBound = upperBound
 
@@ -135,7 +133,7 @@ extension Field {
 
         return update({ $0.selection = lowerBound ..< upperBound })
     }
-
+    
     // MARK: To Carets
     
     @inlinable func move(to nextCarets: Carets) -> Field {
@@ -176,7 +174,7 @@ extension Field {
 
 extension Field {
     
-    // MARK: Indices In Offsets
+    // MARK: Utilities
     
     @inlinable func indices(in offsets: Range<Offset>) -> Range<Carets.Index> {
         var indices = [Carets.Index]()
@@ -202,7 +200,7 @@ extension Field {
         return lowerBound ..< upperBound
     }
     
-    // MARK: Helpers, Path
+    // MARK: Helpers
     
     @usableFromInline struct Path: Comparable {
         
