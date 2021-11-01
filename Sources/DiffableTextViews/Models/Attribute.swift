@@ -54,7 +54,7 @@ public struct Attribute: OptionSet {
         var result = self; transform(&result); return result
     }
     
-    // MARK: Components: Domain
+    // MARK: Composites: Collection
 
     public struct Collection {
         public static let all:    Self = .init(Attribute(rawValue: .max))
@@ -76,7 +76,7 @@ public struct Attribute: OptionSet {
         collection.attribute
     }
     
-    // MARK: Components: Set
+    // MARK: Composites: Composite
     
     public struct Composite {
         public static let spacer: Self = .init(.prefix, .suffix)
@@ -97,7 +97,7 @@ public struct Attribute: OptionSet {
         composite.attribute
     }
     
-    // MARK: Components: Intuative
+    // MARK: Composites: Intuitive
     
     public struct Intuitive {
         public static let content: Self = .init()
