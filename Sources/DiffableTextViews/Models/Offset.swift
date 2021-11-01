@@ -7,7 +7,7 @@
 
 // MARK: - Offset
 
-@usableFromInline struct Offset<Layout: DiffableTextViews.Layout>: Equatable, Comparable {
+@usableFromInline struct Offset<Scheme: DiffableTextViews.Scheme>: Equatable, Comparable {
 
     // MARK: Properties
     
@@ -26,7 +26,7 @@
     }
     
     @inlinable static func max(in characters: String) -> Self {
-        .init(at: Layout.size(of: characters))
+        .init(at: Scheme.size(of: characters))
     }
     
     // MARK: Stride
@@ -36,7 +36,7 @@
             return self
         }
         
-        return .init(at: distance + Layout.size(of: character))
+        return .init(at: distance + Scheme.size(of: character))
     }
     
     @inlinable func before(_ character: Character?) -> Self {
@@ -44,7 +44,7 @@
             return self
         }
 
-        return .init(at: distance - Layout.size(of: character))
+        return .init(at: distance - Scheme.size(of: character))
     }
     
     // MARK: Comparisons

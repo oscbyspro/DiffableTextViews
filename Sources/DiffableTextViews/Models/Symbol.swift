@@ -20,7 +20,7 @@ public struct Symbol: Equatable {
         self.character = character
         self.attribute = attribute
     }
-    
+
     // MARK: Initializers: Static
     
     @inlinable public static func content(_ character: Character) -> Self {

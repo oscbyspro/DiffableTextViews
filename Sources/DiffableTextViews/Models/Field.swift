@@ -7,9 +7,9 @@
 
 // MARK: - Field
 
-@usableFromInline struct Field<Layout: DiffableTextViews.Layout> {
-    @usableFromInline typealias Carets = DiffableTextViews.Carets<Layout>
-    @usableFromInline typealias Offset = DiffableTextViews.Offset<Layout>
+@usableFromInline struct Field<Scheme: DiffableTextViews.Scheme> {
+    @usableFromInline typealias Carets = DiffableTextViews.Carets<Scheme>
+    @usableFromInline typealias Offset = DiffableTextViews.Offset<Scheme>
     
     // MARK: Properties
     
