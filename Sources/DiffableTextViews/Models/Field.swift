@@ -242,7 +242,7 @@ extension Field {
     
     @inlinable func moveToAttributes() -> Field {
         func move(_ position: Carets.Index, preference: Direction) -> Carets.Index {
-            let direction = directionOfAttributes(at: position)
+            let direction = carets[position].directionOfAttributes()
             return look(position, direction: direction ?? preference)
         }
         
@@ -255,21 +255,5 @@ extension Field {
         }
         
         return update({ $0.selection = lowerBound ..< upperBound })
-    }
-    
-    // MARK: Direction Of Attributes
-    
-    @inlinable func directionOfAttributes(at position: Carets.Index) -> Direction? {
-        let element = carets[position]
-        
-        func containsOnBothSides(_ attribute: Attribute) -> Bool {
-            element.lhs.attribute.contains(attribute) && element.rhs.attribute.contains(attribute)
-        }
-        
-        let forwards  = containsOnBothSides(.prefix)
-        let backwards = containsOnBothSides(.suffix)
-        
-        if forwards == backwards { return nil }
-        return forwards ? .forwards : .backwards
     }
 }

@@ -44,7 +44,7 @@
     
     // MARK: Collection: Subscripts
     
-    @inlinable subscript(position: Index) -> Element {
+    @inlinable subscript(position: Index) -> Peek {
         .init(lhs: subelement(at: position.lhs), rhs: subelement(at: position.rhs))
     }
     
@@ -72,22 +72,7 @@
         guard let index = index, index < snapshot.endIndex else { return nil }; return snapshot[index]
     }
 
-    // MARK: Components
-    
-    @usableFromInline struct Element {
-        
-        // MARK: Properties
-        
-        @usableFromInline let lhs: Symbol
-        @usableFromInline let rhs: Symbol
-        
-        // MARK: Initialization
-
-        @inlinable init(lhs: Symbol?, rhs: Symbol?) {
-            self.lhs = lhs ?? .prefix("\0")
-            self.rhs = rhs ?? .suffix("\0")
-        }
-    }
+    // MARK: Components: Index
     
     @usableFromInline struct Index: Comparable {
         
