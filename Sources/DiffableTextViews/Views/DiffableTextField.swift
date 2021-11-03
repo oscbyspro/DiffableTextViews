@@ -12,11 +12,16 @@ import SwiftUI
 public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
     public typealias UIViewType = CoreTextField
     public typealias Value = Style.Value
+    public typealias Proxy = ProxyTextField<UIViewType>
     
     // MARK: Properties
     
     @usableFromInline let value: Binding<Value>
     @usableFromInline let style: Style
+
+    @usableFromInline var setup:  (Proxy) -> Void = { _ in }
+    @usableFromInline var update: (Proxy) -> Void = { _ in }
+    @usableFromInline var submit: (Proxy) -> Void = { _ in }
 
     // MARK: Initializers
     
@@ -24,10 +29,28 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
         self.value = value
         self.style = style
     }
-
+    
     @inlinable public init(value: Binding<Value>, style: () -> Style) {
         self.value = value
         self.style = style()
+    }
+    
+    // MARK: Transformations
+    
+    @inlinable public func setup(_ setup: @escaping (Proxy) -> Void) -> Self {
+        configure({ $0.setup = setup })
+    }
+    
+    @inlinable public func update(_ update: @escaping (Proxy) -> Void) -> Self {
+        configure({ $0.update = update })
+    }
+    
+    @inlinable public func submit(_ submit: @escaping (Proxy) -> Void) -> Self {
+        configure({ $0.submit = submit })
+    }
+    
+    @inlinable internal func configure(_ configure: (inout Self) -> Void) -> Self {
+        var copy = self; configure(&copy); return copy
     }
 
     // MARK: UIViewRepresentable
@@ -49,16 +72,21 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
         context.coordinator.connect(uiView)
         
         // --------------------------------- //
+        
+        setup(context.coordinator.uiView)
+        
+        // --------------------------------- //
 
         return uiView
     }
     
     @inlinable public func updateUIView(_ uiView: UIViewType, context: Context) {
+        update(context.coordinator.uiView)
         context.coordinator.source = self
         context.coordinator.synchronize()
     }
     
-    // MARK: Components
+    // MARK: Components: Coordinator
     
     public final class Coordinator: NSObject, UITextFieldDelegate {
         @usableFromInline typealias Scheme = UTF16
@@ -80,7 +108,14 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
             self.uiView = ProxyTextField(uiView)
         }
         
-        // MARK: UITextFieldDelegate
+        // MARK: UITextFieldDelegate: Return
+        
+        @inlinable public func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+            source.submit(uiView)
+            return false
+        }
+        
+        // MARK: UITextFieldDelegate: Edits
         
         @inlinable public func textFieldDidBeginEditing(_ textField: UITextField) {
             synchronize()
@@ -93,6 +128,8 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
         @inlinable public func textFieldDidEndEditing(_ textField: UITextField, reason: UITextField.DidEndEditingReason) {
             synchronize()
         }
+        
+        // MARK: UITextFieldDelegate: Input
         
         @inlinable public func textField(_ textField: UITextField, shouldChangeCharactersIn nsRange: NSRange, replacementString string: String) -> Bool {
                         
@@ -125,6 +162,8 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
                         
             return false
         }
+        
+        // MARK: UITextFieldDelegate: Selection
 
         @inlinable public func textFieldDidChangeSelection(_ textField: UITextField) {
             

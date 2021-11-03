@@ -42,14 +42,14 @@ public struct NumericTextStyleValues<Scheme: NumericTextScheme> {
         .init(max: value)
     }
     
-    @inlinable public static func range(_ values: ClosedRange<Number>) -> Self {
+    @inlinable public static func inside(of values: ClosedRange<Number>) -> Self {
         .init(min: values.lowerBound, max: values.upperBound)
     }
     
     // MARK: Initialiers: Static
     
     @inlinable public static var all: Self {
-        .range(min...max)
+        .inside(of: min...max)
     }
     
     @inlinable public static var nonnegative: Self {

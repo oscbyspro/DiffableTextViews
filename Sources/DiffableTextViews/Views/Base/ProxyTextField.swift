@@ -8,6 +8,7 @@
 #if os(iOS)
 
 import UIKit
+import SwiftUI
 
 // MARK: - ProxyTextField
 
@@ -16,7 +17,7 @@ import UIKit
 ///
 /// - UITextField.text is never nil.
 /// - UITextField.selectedTextRange is never nil
-@usableFromInline final class ProxyTextField<Wrapped: UITextField> {
+public final class ProxyTextField<Wrapped: UITextField> {
     @usableFromInline typealias Offset = DiffableTextViews.Offset<UTF16>
     
     // MARK: Properties
@@ -86,6 +87,39 @@ import UIKit
     /// - Complexity: O(1).
     @inlinable func positions(of offsets: Range<Offset>) -> UITextRange {
         wrapped.textRange(from: position(at: offsets.lowerBound), to: position(at: offsets.upperBound))!
+    }
+}
+
+// MARK: - Public Interface
+
+public extension ProxyTextField {
+        
+    // MARK: Actions
+    
+    @inlinable func resign() {
+        wrapped.resignFirstResponder()
+    }
+    
+    // MARK: Setters
+    
+    @inlinable func autocorrect(_ autocorrect: UITextAutocorrectionType) {
+        wrapped.autocorrectionType = autocorrect
+    }
+    
+    @inlinable func caret(_ color: Color) {
+        wrapped.tintColor = UIColor(color)
+    }
+    
+    @inlinable func keyboard(_ keyboard: UIKeyboardType) {
+        wrapped.keyboardType = keyboard
+    }
+    
+    @inlinable func `return`(_ key: UIReturnKeyType) {
+        wrapped.returnKeyType = key
+    }
+    
+    @inlinable func secure(_ secure: Bool) {
+        wrapped.isSecureTextEntry = secure
     }
 }
 
