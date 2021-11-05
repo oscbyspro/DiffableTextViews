@@ -155,7 +155,7 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
                 // async makes special commands (like: option + delete) process first
                 self.cache.value = value
                 self.cache.field = field
-                self.push(asynchronously: false)
+                self.push(update: [.upstream, .downstream], async: false)
             }
                                     
             // --------------------------------- //
@@ -196,10 +196,11 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
         // MARK: Update
         
         @inlinable func synchronize() {
-            if pull() { push() }
+            push(update: pull(), async: true)
         }
         
-        @inlinable func pull() -> Bool {
+        @inlinable func pull() -> Update {
+            var update = Update()
             
             // --------------------------------- //
             
@@ -207,47 +208,48 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
             source.style.process(&value)
             
             // --------------------------------- //
-            
-            guard !displays(value) else { return false }
-            
-            // --------------------------------- //
-            
-            var snapshot = snapshot(value)
-            source.style.process(&snapshot)
-            
-            // --------------------------------- //
-            
-            let field = cache.field.configure(carets: snapshot)
-                
-            // --------------------------------- //
-            
-            self.cache.value = value
-            self.cache.field = field
-            
-            // --------------------------------- //
-            
-            return true
-        }
-                 
-        @inlinable func push(asynchronously: Bool = true) {
-                    
-            // --------------------------------- //
-                                    
-            lock.perform {
-                // write and select both call textFieldDidChangeSelection(_:)
-                self.uiView.write(cache.snapshot.characters)
-                self.uiView.select(cache.field.selection.map(bounds: \.offset))
+        
+            if value != source.value.wrappedValue {
+                update.insert(.upstream)
             }
-            
-            // --------------------------------- //
-            
-            self.cache.edits = self.uiView.edits
+         
+            if !displays(value) {
+                update.insert(.downstream)
 
-            // --------------------------------- //
-            
-            perform(asynchronously: asynchronously) {
-                // async avoids view update loop
-                self.nonduplicate(update: &self.source.value.wrappedValue, with: self.cache.value)
+                // --------------------------------- //
+                
+                var snapshot = snapshot(value)
+                source.style.process(&snapshot)
+                
+                // --------------------------------- //
+                
+                let field = cache.field.configure(carets: snapshot)
+                                
+                // --------------------------------- //
+                
+                self.cache.value = value
+                self.cache.field = field
+            }
+                
+            return update
+        }
+        
+        @inlinable func push(update: Update, async: Bool) {
+            if update.contains(.downstream) {
+                lock.perform {
+                    // write and select both call textFieldDidChangeSelection(_:)
+                    self.uiView.write(cache.snapshot.characters)
+                    self.uiView.select(cache.field.selection.map(bounds: \.offset))
+                }
+                            
+                self.cache.edits = self.uiView.edits
+            }
+                        
+            if update.contains(.upstream) {
+                perform(async: async) {
+                    // async avoids view update loop
+                    self.nonduplicate(update: &self.source.value.wrappedValue, with: self.cache.value)
+                }
             }
         }
         
@@ -265,8 +267,8 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
             if storage != newValue { storage = newValue }
         }
         
-        @inlinable func perform(asynchronously: Bool, action: @escaping () -> Void) {
-            if asynchronously { DispatchQueue.main.async(execute: action) } else { action() }
+        @inlinable func perform(async: Bool, action: @escaping () -> Void) {
+            if async { DispatchQueue.main.async(execute: action) } else { action() }
         }
         
         // MARK: Cache
@@ -290,26 +292,6 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
             
             @inlinable var snapshot: Snapshot {
                 field.carets.snapshot
-            }
-        }
-
-        // MARK: Lock
-        
-        @usableFromInline final class Lock {
-            
-            // MARK: Properties
-            
-            @usableFromInline private(set) var isLocked: Bool = false
-            
-            // MARK: Utilities
-            
-            @inlinable func perform(action: () -> Void) {
-                let state = isLocked
-                self.isLocked = true
-                
-                action()
-                
-                self.isLocked = state
             }
         }
     }
