@@ -10,10 +10,9 @@
 import SwiftUI
 
 public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
-    public typealias UIViewType = CoreTextField
     public typealias Value = Style.Value
-    public typealias Proxy = ProxyTextField<UIViewType>
-    public typealias Configuration = (Proxy) -> Void
+    public typealias UIViewType = CoreTextField
+    public typealias Configuration = (ProxyTextField<UIViewType>) -> Void
     
     // MARK: Properties
     
@@ -90,20 +89,20 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
     // MARK: Coordinator
     
     public final class Coordinator: NSObject, UITextFieldDelegate {
-        @usableFromInline typealias Scheme = UTF16
-        @usableFromInline typealias Offset = DiffableTextViews.Offset<Scheme>
-        @usableFromInline typealias Field  = DiffableTextViews.Field<Scheme>
-        @usableFromInline typealias Cache  = DiffableTextViews.Cache<Scheme, Value>
+        @usableFromInline typealias Offset = DiffableTextViews.Offset<UTF16>
+        @usableFromInline typealias Cache = DiffableTextViews.Cache<UTF16, Value>
         
-        // MARK: Properties
+        // MARK: Properties: Subjects
         
         @usableFromInline var upstream: DiffableTextField!
         @usableFromInline var downstream: ProxyTextField<UIViewType>!
-
-        @usableFromInline let lock  = Lock()
+        
+        // MARK: Properties: Components
+                
+        @usableFromInline let lock = Lock()
         @usableFromInline let cache = Cache()
                 
-        // MARK: Setup
+        // MARK: Initializers: Setup
 
         @inlinable func connect(_ uiView: UIViewType) {
             uiView.delegate = self            
@@ -246,7 +245,8 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
         @inlinable func push(_ update: Update) {
             if update.contains(.downstream) {
                 lock.perform {
-                    // write and select both call textFieldDidChangeSelection(_:)
+                    // changes to UITextField's text and selection both call
+                    // the delegate's method: textFieldDidChangeSelection(_:)
                     self.downstream.update(cache.snapshot.characters)
                     self.downstream.select(cache.field.selection.map(bounds: \.offset))
                 }
@@ -262,7 +262,7 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
             }
         }
         
-        // MARK: Synchronize: Helpers
+        // MARK: Synchronize: Status
 
         @inlinable func upstream(represents value: Value) -> Bool {
             upstream.value.wrappedValue == value
@@ -271,17 +271,19 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
         @inlinable func downstream(displays value: Value) -> Bool {
             cache.value == value && cache.edits == downstream.edits
         }
-
-        @inlinable func snapshot(_ value: Value) -> Snapshot {
-            downstream.edits ? upstream.style.snapshot(value) : upstream.style.showcase(value)
-        }
-
+        
+        // MARK: Synchronize: Utilities
+        
         @inlinable func nonduplicate(update storage: inout Value, with newValue: Value) {
             if storage != newValue { storage = newValue }
         }
         
         @inlinable func perform(async: Bool, action: @escaping () -> Void) {
             if async { DispatchQueue.main.async(execute: action) } else { action() }
+        }
+
+        @inlinable func snapshot(_ value: Value) -> Snapshot {
+            downstream.edits ? upstream.style.snapshot(value) : upstream.style.showcase(value)
         }
     }
 }
