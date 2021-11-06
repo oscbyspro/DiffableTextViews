@@ -41,7 +41,7 @@ public final class ProxyTextField<Wrapped: UITextField> {
     }
     
     /// - Complexity: High.
-    @inlinable func write(_ text: String) {
+    @inlinable func update(_ text: String) {
         wrapped.text = text
     }
     

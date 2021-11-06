@@ -13,7 +13,7 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
     public typealias UIViewType = CoreTextField
     public typealias Value = Style.Value
     public typealias Proxy = ProxyTextField<UIViewType>
-    public typealias Configuration = (inout Proxy) -> Void
+    public typealias Configuration = (Proxy) -> Void
     
     // MARK: Properties
     
@@ -74,7 +74,7 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
         
         // --------------------------------- //
         
-        setup?(&context.coordinator.uiView)
+        setup?(context.coordinator.downstream)
         
         // --------------------------------- //
 
@@ -82,8 +82,8 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
     }
     
     @inlinable public func updateUIView(_ uiView: UIViewType, context: Context) {
-        update?(&context.coordinator.uiView)
-        context.coordinator.source = self
+        context.coordinator.upstream = self
+        update?(context.coordinator.downstream)
         context.coordinator.synchronize(.async)
     }
     
@@ -97,8 +97,8 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
         
         // MARK: Properties
         
-        @usableFromInline var source: DiffableTextField!
-        @usableFromInline var uiView: ProxyTextField<UIViewType>!
+        @usableFromInline var upstream: DiffableTextField!
+        @usableFromInline var downstream: ProxyTextField<UIViewType>!
 
         @usableFromInline let lock  = Lock()
         @usableFromInline let cache = Cache()
@@ -107,13 +107,13 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
 
         @inlinable func connect(_ uiView: UIViewType) {
             uiView.delegate = self            
-            self.uiView = ProxyTextField(uiView)
+            self.downstream = ProxyTextField(uiView)
         }
         
         // MARK: Delegate: Submit
         
         @inlinable public func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-            source.submit?(&uiView) == nil ? true : false
+            upstream.submit?(downstream) == nil ? true : false
         }
         
         // MARK: Delegate: Edits
@@ -142,11 +142,11 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
             
             // --------------------------------- //
 
-            guard var snapshot = source.style.merge(cache.snapshot, with: input, in: range.map(bounds: \.rhs!)) else { return false }
-            source.style.process(&snapshot)
+            guard var snapshot = upstream.style.merge(cache.snapshot, with: input, in: range.map(bounds: \.rhs!)) else { return false }
+            upstream.style.process(&snapshot)
   
-            guard var value = source.style.parse(snapshot) else { return false }
-            source.style.process(&value)
+            guard var value = upstream.style.parse(snapshot) else { return false }
+            upstream.style.process(&value)
                         
             let field = cache.field.configure(selection: range.upperBound, intent: nil).configure(carets: snapshot)
             
@@ -174,8 +174,8 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
             
             // --------------------------------- //
                         
-            let offsets = uiView.selection()
-            let intent = uiView.wrapped.intent?.direction
+            let offsets = downstream.selection()
+            let intent = downstream.wrapped.intent?.direction
             let field = cache.field.configure(selection: offsets, intent: intent)
             let selection = field.selection.map(bounds: \.offset)
             
@@ -190,7 +190,7 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
             // --------------------------------- //
             
             lock.perform {
-                self.uiView.select(selection)
+                self.downstream.select(selection)
             }
         }
 
@@ -207,24 +207,24 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
             
             // --------------------------------- //
             
-            var value = source.value.wrappedValue
-            source.style.process(&value)
+            var value = upstream.value.wrappedValue
+            upstream.style.process(&value)
             
             // --------------------------------- //
         
-            if !upstream(has: value) {
+            if !upstream(represents: value) {
                 update.insert(.upstream)
             }
          
             // --------------------------------- //
             
-            if !downstream(has: value) {
+            if !downstream(displays: value) {
                 update.insert(.downstream)
 
                 // --------------------------------- //
                 
                 var snapshot = snapshot(value)
-                source.style.process(&snapshot)
+                upstream.style.process(&snapshot)
                 
                 // --------------------------------- //
                 
@@ -247,33 +247,33 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
             if update.contains(.downstream) {
                 lock.perform {
                     // write and select both call textFieldDidChangeSelection(_:)
-                    self.uiView.write(cache.snapshot.characters)
-                    self.uiView.select(cache.field.selection.map(bounds: \.offset))
+                    self.downstream.update(cache.snapshot.characters)
+                    self.downstream.select(cache.field.selection.map(bounds: \.offset))
                 }
                             
-                self.cache.edits = self.uiView.edits
+                self.cache.edits = self.downstream.edits
             }
                                     
             if update.contains(.upstream) {
                 perform(async: update.contains(.async)) {
                     // async avoids view update loop
-                    self.nonduplicate(update: &self.source.value.wrappedValue, with: self.cache.value)
+                    self.nonduplicate(update: &self.upstream.value.wrappedValue, with: self.cache.value)
                 }
             }
         }
         
         // MARK: Synchronize: Helpers
 
-        @inlinable func upstream(has value: Value) -> Bool {
-            source.value.wrappedValue == value
+        @inlinable func upstream(represents value: Value) -> Bool {
+            upstream.value.wrappedValue == value
         }
         
-        @inlinable func downstream(has value: Value) -> Bool {
-            cache.value == value && cache.edits == uiView.edits
+        @inlinable func downstream(displays value: Value) -> Bool {
+            cache.value == value && cache.edits == downstream.edits
         }
 
         @inlinable func snapshot(_ value: Value) -> Snapshot {
-            uiView.edits ? source.style.snapshot(value) : source.style.showcase(value)
+            downstream.edits ? upstream.style.snapshot(value) : upstream.style.showcase(value)
         }
 
         @inlinable func nonduplicate(update storage: inout Value, with newValue: Value) {
