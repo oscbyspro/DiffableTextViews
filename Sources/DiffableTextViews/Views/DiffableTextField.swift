@@ -83,15 +83,16 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
     @inlinable public func updateUIView(_ uiView: UIViewType, context: Context) {
         update(context.coordinator.uiView)
         context.coordinator.source = self
-        context.coordinator.synchronize()
+        context.coordinator.synchronize(.async)
     }
     
-    // MARK: Components: Coordinator
+    // MARK: Coordinator
     
     public final class Coordinator: NSObject, UITextFieldDelegate {
         @usableFromInline typealias Scheme = UTF16
-        @usableFromInline typealias Field  = DiffableTextViews.Field<Scheme>
         @usableFromInline typealias Offset = DiffableTextViews.Offset<Scheme>
+        @usableFromInline typealias Field  = DiffableTextViews.Field<Scheme>
+        @usableFromInline typealias Cache  = DiffableTextViews.Cache<Scheme, Value>
         
         // MARK: Properties
         
@@ -108,14 +109,14 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
             self.uiView = ProxyTextField(uiView)
         }
         
-        // MARK: UITextFieldDelegate: Return
+        // MARK: Delegate: Submit
         
         @inlinable public func textFieldShouldReturn(_ textField: UITextField) -> Bool {
             source.submit(uiView)
             return false
         }
         
-        // MARK: UITextFieldDelegate: Edits
+        // MARK: Delegate: Edits
         
         @inlinable public func textFieldDidBeginEditing(_ textField: UITextField) {
             synchronize()
@@ -129,7 +130,7 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
             synchronize()
         }
         
-        // MARK: UITextFieldDelegate: Input
+        // MARK: Delegate: Inputs
         
         @inlinable public func textField(_ textField: UITextField, shouldChangeCharactersIn nsRange: NSRange, replacementString string: String) -> Bool {
                         
@@ -155,15 +156,15 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
                 // async makes special commands (like: option + delete) process first
                 self.cache.value = value
                 self.cache.field = field
-                self.push(update: [.upstream, .downstream], async: false)
+                self.push([.upstream, .downstream])
             }
                                     
             // --------------------------------- //
-                        
+            
             return false
         }
         
-        // MARK: UITextFieldDelegate: Selection
+        // MARK: Delegate: Selection
 
         @inlinable public func textFieldDidChangeSelection(_ textField: UITextField) {
             
@@ -193,11 +194,13 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
             }
         }
 
-        // MARK: Update
+        // MARK: Synchronize
         
-        @inlinable func synchronize() {
-            push(update: pull(), async: true)
+        @inlinable func synchronize(_ update: Update = []) {
+            push(pull().union(update))
         }
+        
+        // MARK: Synchronize: Pull
         
         @inlinable func pull() -> Update {
             var update = Update()
@@ -209,11 +212,13 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
             
             // --------------------------------- //
         
-            if value != source.value.wrappedValue {
+            if !upstream(has: value) {
                 update.insert(.upstream)
             }
          
-            if !displays(value) {
+            // --------------------------------- //
+            
+            if !downstream(has: value) {
                 update.insert(.downstream)
 
                 // --------------------------------- //
@@ -230,11 +235,15 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
                 self.cache.value = value
                 self.cache.field = field
             }
+            
+            // --------------------------------- //
                 
             return update
         }
         
-        @inlinable func push(update: Update, async: Bool) {
+        // MARK: Synchronize: Push
+        
+        @inlinable func push(_ update: Update) {
             if update.contains(.downstream) {
                 lock.perform {
                     // write and select both call textFieldDidChangeSelection(_:)
@@ -244,21 +253,25 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
                             
                 self.cache.edits = self.uiView.edits
             }
-                        
+                                    
             if update.contains(.upstream) {
-                perform(async: async) {
+                perform(async: update.contains(.async)) {
                     // async avoids view update loop
                     self.nonduplicate(update: &self.source.value.wrappedValue, with: self.cache.value)
                 }
             }
         }
         
-        // MARK: Update, Helpers
-        
-        @inlinable func displays(_ value: Value) -> Bool {
-            cache.value == value && cache.edits == uiView.edits
+        // MARK: Synchronize: Helpers
+
+        @inlinable func upstream(has value: Value) -> Bool {
+            source.value.wrappedValue == value
         }
         
+        @inlinable func downstream(has value: Value) -> Bool {
+            cache.value == value && cache.edits == uiView.edits
+        }
+
         @inlinable func snapshot(_ value: Value) -> Snapshot {
             uiView.edits ? source.style.snapshot(value) : source.style.showcase(value)
         }
@@ -269,30 +282,6 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
         
         @inlinable func perform(async: Bool, action: @escaping () -> Void) {
             if async { DispatchQueue.main.async(execute: action) } else { action() }
-        }
-        
-        // MARK: Cache
-        
-        @usableFromInline final class Cache {
-            
-            // MARK: Properties
-            
-            @usableFromInline var value: Value!
-            @usableFromInline var field: Field
-            @usableFromInline var edits:  Bool
-            
-            // MARK: Initializers
-            
-            @inlinable init() {
-                self.field = Field()
-                self.edits = false
-            }
-            
-            // MARK: Getters
-            
-            @inlinable var snapshot: Snapshot {
-                field.carets.snapshot
-            }
         }
     }
 }
