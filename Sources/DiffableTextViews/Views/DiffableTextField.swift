@@ -13,15 +13,16 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
     public typealias UIViewType = CoreTextField
     public typealias Value = Style.Value
     public typealias Proxy = ProxyTextField<UIViewType>
+    public typealias Configuration = (inout Proxy) -> Void
     
     // MARK: Properties
     
     @usableFromInline let value: Binding<Value>
     @usableFromInline let style: Style
 
-    @usableFromInline var setup:  (Proxy) -> Void = { _ in }
-    @usableFromInline var update: (Proxy) -> Void = { _ in }
-    @usableFromInline var submit: (Proxy) -> Void = { _ in }
+    @usableFromInline var setup:  Configuration? = nil
+    @usableFromInline var update: Configuration? = nil
+    @usableFromInline var submit: Configuration? = nil
 
     // MARK: Initializers
     
@@ -37,15 +38,15 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
     
     // MARK: Transformations
     
-    @inlinable public func setup(_ setup: @escaping (Proxy) -> Void) -> Self {
+    @inlinable public func setup(_ setup: Configuration?) -> Self {
         configure({ $0.setup = setup })
     }
     
-    @inlinable public func update(_ update: @escaping (Proxy) -> Void) -> Self {
+    @inlinable public func update(_ update: Configuration?) -> Self {
         configure({ $0.update = update })
     }
     
-    @inlinable public func submit(_ submit: @escaping (Proxy) -> Void) -> Self {
+    @inlinable public func submit(_ submit: Configuration?) -> Self {
         configure({ $0.submit = submit })
     }
     
@@ -73,7 +74,7 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
         
         // --------------------------------- //
         
-        setup(context.coordinator.uiView)
+        setup?(&context.coordinator.uiView)
         
         // --------------------------------- //
 
@@ -81,7 +82,7 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
     }
     
     @inlinable public func updateUIView(_ uiView: UIViewType, context: Context) {
-        update(context.coordinator.uiView)
+        update?(&context.coordinator.uiView)
         context.coordinator.source = self
         context.coordinator.synchronize(.async)
     }
@@ -112,8 +113,7 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
         // MARK: Delegate: Submit
         
         @inlinable public func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-            source.submit(uiView)
-            return false
+            source.submit?(&uiView) == nil ? true : false
         }
         
         // MARK: Delegate: Edits
