@@ -41,6 +41,8 @@ public struct NumericTextSchemeOfInteger<Value: NumericTextIntegerSubject>: Nume
 
 // MARK: - NumericTextInteger
 
+#warning("No public properties exposed in main scope.")
+
 public protocol NumericTextInteger: NumericTextIntegerSubject where NumericTextScheme == NumericTextSchemeOfInteger<Self> { }
 public protocol NumericTextIntegerSubject: NumericTextValue, FixedWidthInteger {
     @inlinable init?(_ description: String)

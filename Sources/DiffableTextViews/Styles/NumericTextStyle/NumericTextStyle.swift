@@ -11,6 +11,8 @@ import struct Foundation.Locale
 
 // MARK: - NumericTextStyle
 
+#warning("Break recursion with: NumericTextStyle<Scheme, Value>...?")
+
 /// Formats text and number.
 ///
 /// - Complexity: O(n) or less for all calculations.
@@ -28,7 +30,7 @@ public struct NumericTextStyle<Scheme: NumericTextScheme>: DiffableTextStyle {
     @usableFromInline var locale: Locale
     
     @usableFromInline var bounds: Bounds = .all
-    @usableFromInline var precision: Precision = .maxLosslessValue
+    @usableFromInline var precision: Precision = .max
     
     @usableFromInline var prefix: String? = nil
     @usableFromInline var suffix: String? = nil

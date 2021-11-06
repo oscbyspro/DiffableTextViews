@@ -41,6 +41,8 @@ public struct NumericTextSchemeOfFloat<Value: NumericTextFloatSubject>: NumericT
 
 // MARK: - NumericTextSchemeOfFloatSchematic
 
+#warning("No public properties exposed in main scope.")
+
 public protocol NumericTextFloat: NumericTextFloatSubject where NumericTextScheme == NumericTextSchemeOfFloat<Self> { }
 public protocol NumericTextFloatSubject: NumericTextValue, BinaryFloatingPoint {
     @inlinable init?(_ description: String)

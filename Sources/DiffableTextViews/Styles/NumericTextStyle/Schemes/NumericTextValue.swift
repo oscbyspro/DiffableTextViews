@@ -42,6 +42,7 @@ public protocol NumericTextScheme {
 
 // MARK: - Descriptions
 
+#warning("Rename.")
 public extension NumericTextScheme {
     @inlinable static var float:   Bool { maxLosslessDecimalDigits != 0 }
     @inlinable static var integer: Bool { maxLosslessDecimalDigits == 0 }

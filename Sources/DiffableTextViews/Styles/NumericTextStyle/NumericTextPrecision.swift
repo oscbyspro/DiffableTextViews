@@ -14,8 +14,8 @@ import enum Foundation.NumberFormatStyleConfiguration
 public struct NumericTextPrecision<Scheme: NumericTextScheme> {
     @usableFromInline typealias Strategy = NumericTextPrecisionStrategy
     @usableFromInline typealias Defaults = NumericTextPrecisionDefaults
-    @usableFromInline typealias Total = NumericTextDigitsTotal<Scheme>
-    @usableFromInline typealias Parts = NumberTextDigitsParts<Scheme>
+    @usableFromInline typealias Total = NumericTextPrecisionTotal<Scheme>
+    @usableFromInline typealias Parts = NumericTextPrecisionParts<Scheme>
     @usableFromInline typealias NumberOfDigits = NumericTextNumberOfDigits
     
     // MARK: Properties
@@ -30,7 +30,7 @@ public struct NumericTextPrecision<Scheme: NumericTextScheme> {
     
     // MARK: Initializers: Named
     
-    @inlinable public static var maxLosslessValue: Self {
+    @inlinable public static var max: Self {
         .max(Scheme.maxLosslessDigits)
     }
         
@@ -119,7 +119,7 @@ extension NumericTextPrecision {
 
 // MARK: - Strategies: Total
 
-@usableFromInline struct NumericTextDigitsTotal<Scheme: NumericTextScheme>: NumericTextPrecisionStrategy {
+@usableFromInline struct NumericTextPrecisionTotal<Scheme: NumericTextScheme>: NumericTextPrecisionStrategy {
 
     // MARK: Properties
     
@@ -154,7 +154,7 @@ extension NumericTextPrecision {
 
 // MARK: - Strategies: Separate
 
-@usableFromInline struct NumberTextDigitsParts<Scheme: NumericTextScheme>: NumericTextPrecisionStrategy {
+@usableFromInline struct NumericTextPrecisionParts<Scheme: NumericTextScheme>: NumericTextPrecisionStrategy {
 
     // MARK: Properties
     
