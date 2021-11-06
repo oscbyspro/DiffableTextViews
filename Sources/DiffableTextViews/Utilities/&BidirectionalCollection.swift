@@ -5,7 +5,6 @@
 //  Created by Oscar Byström Ericsson on 2021-10-27.
 //
 
-
 // MARK: - BidirectionalCollection
 
 extension BidirectionalCollection {
