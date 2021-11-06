@@ -16,22 +16,22 @@ import struct Foundation.Decimal
 ///
 /// - Supports up to 38 significant digits.
 public enum NumericTextSchemeOfDecimal: NumericTextFloatScheme {    
-    public typealias Number = Decimal
-    public typealias FormatStyle = Number.FormatStyle
+    public typealias Value = Decimal
+    public typealias FormatStyle = Value.FormatStyle
     
     // MARK: Values
         
-    public static let maxLosslessValue = Decimal(string: String(repeating: "9", count: maxTotalDigits))!
-    @inlinable public static var min: Number { -maxLosslessValue }
-    @inlinable public static var max: Number {  maxLosslessValue }
+    public static let maxLosslessLimit = Decimal(string: String(repeating: "9", count: maxLosslessDigits))!
+    @inlinable public static var minLosslessValue: Value { -maxLosslessLimit }
+    @inlinable public static var maxLosslessValue: Value {  maxLosslessLimit }
     
     // MARK: Precision
  
-    @inlinable public static var maxTotalDigits: Int { 38 }
+    @inlinable public static var maxLosslessDigits: Int { 38 }
     
     // MARK: Components
     
-    @inlinable public static func number(_ components: NumericTextComponents) -> Number? {
+    @inlinable public static func value(_ components: NumericTextComponents) -> Value? {
         .init(string: components.characters())
     }
     
@@ -42,7 +42,7 @@ public enum NumericTextSchemeOfDecimal: NumericTextFloatScheme {
 
 // MARK: Number + Compatible
 
-extension NumericTextSchemeOfDecimal.Number: NumericTextSchematic {
+extension NumericTextSchemeOfDecimal.Value: NumericTextValue {
     public typealias NumericTextScheme = NumericTextSchemeOfDecimal
 }
 

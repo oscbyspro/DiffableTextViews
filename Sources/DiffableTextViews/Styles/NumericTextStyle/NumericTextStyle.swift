@@ -19,15 +19,16 @@ public struct NumericTextStyle<Scheme: NumericTextScheme>: DiffableTextStyle {
     @usableFromInline typealias Configuration = NumericTextConfiguration
     @usableFromInline typealias NumberOfDigits = NumericTextNumberOfDigits
 
-    public typealias Value = Scheme.Number
-    public typealias Values = NumericTextStyleValues<Scheme>
-    public typealias Precision = NumericTextStylePrecision<Scheme>
+    public typealias Value = Scheme.Value
+    public typealias Bounds = NumericTextBounds<Scheme>
+    public typealias Precision = NumericTextPrecision<Scheme>
 
     // MARK: Properties
     
     @usableFromInline var locale: Locale
-    @usableFromInline var values: Values = .all
-    @usableFromInline var precision: Precision = .max
+    
+    @usableFromInline var bounds: Bounds = .all
+    @usableFromInline var precision: Precision = .maxLosslessValue
     
     @usableFromInline var prefix: String? = nil
     @usableFromInline var suffix: String? = nil
@@ -98,8 +99,8 @@ extension NumericTextStyle {
         update({ $0.locale = locale })
     }
     
-    @inlinable public func values(_ newValue: Values) -> Self {
-        update({ $0.values = newValue })
+    @inlinable public func values(_ newValue: Bounds) -> Self {
+        update({ $0.bounds = newValue })
     }
     
     @inlinable public func precision(_ newValue: Precision) -> Self {
@@ -127,20 +128,20 @@ extension NumericTextStyle {
     
     // MARK: Process
     
-    @inlinable public func process(_ value: inout Scheme.Number) {
-        value = values.displayableStyle(value)
+    @inlinable public func process(_ value: inout Scheme.Value) {
+        value = bounds.displayableStyle(value)
     }
         
     // MARK: Parse
 
-    @inlinable public func parse(_ snapshot: Snapshot) -> Scheme.Number? {
+    @inlinable public func parse(_ snapshot: Snapshot) -> Scheme.Value? {
         components(snapshot, with: configuration()).flatMap(value)
     }
     
     // MARK: Components
     
-    @inlinable func value(_ components: Components) -> Scheme.Number? {
-        components.hasDigits ? Scheme.number(components) : Scheme.zero
+    @inlinable func value(_ components: Components) -> Scheme.Value? {
+        components.hasDigits ? Scheme.value(components) : Scheme.zero
     }
 }
 
@@ -150,13 +151,13 @@ extension NumericTextStyle {
     
     // MARK: Edit
     
-    @inlinable public func snapshot(_ value: Scheme.Number) -> Snapshot {
+    @inlinable public func snapshot(_ value: Scheme.Value) -> Snapshot {
         snapshot(editableStyle().format(value))
     }
     
     // MARK: Showcase
     
-    @inlinable public func showcase(_ value: Scheme.Number) -> Snapshot {
+    @inlinable public func showcase(_ value: Scheme.Value) -> Snapshot {
         snapshot(displayableStyle().format(value))
     }
 }
@@ -196,7 +197,7 @@ extension NumericTextStyle {
         // --------------------------------- //
         
         guard let value = value(components) else { return nil }
-        guard values.editableValidation(value) else { return nil }
+        guard bounds.editableValidation(value) else { return nil }
         
         let style = editableStyle(digits: digits, separator: components.separator != nil)
         var characters = style.format(value)
@@ -280,13 +281,13 @@ extension NumericTextStyle {
     @inlinable func configuration() -> Configuration {
         let configuration = Configuration(signs: .negatives)
                 
-        if Scheme.isInteger {
+        if Scheme.integer {
             configuration.options.insert(.integer)
         } else {
             configuration.separators.insert(decimalSeparator)
         }
         
-        if values.nonnegative {
+        if bounds.nonnegative {
             configuration.options.insert(.nonnegative)
         }
         

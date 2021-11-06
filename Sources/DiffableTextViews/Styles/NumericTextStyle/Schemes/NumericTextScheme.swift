@@ -11,12 +11,11 @@ import struct Foundation.Locale
 import protocol Foundation.FormatStyle
 import enum Foundation.NumberFormatStyleConfiguration
 
-
 // MARK: - NumericTextStyleScheme
 
 public protocol NumericTextScheme {
-    associatedtype Number: Comparable
-    associatedtype FormatStyle: Foundation.FormatStyle where FormatStyle.FormatInput == Number, FormatStyle.FormatOutput == String
+    associatedtype Value: Comparable
+    associatedtype FormatStyle: Foundation.FormatStyle where FormatStyle.FormatInput == Value, FormatStyle.FormatOutput == String
     
     // MARK: Aliases
     
@@ -25,59 +24,55 @@ public protocol NumericTextScheme {
     
     // MARK: Values
     
-    static var zero: Number { get }
-    static var  max: Number { get }
-    static var  min: Number { get }
+    static var zero: Value { get }
+    static var minLosslessValue: Value { get }
+    static var maxLosslessValue: Value { get }
     
     // MARK: Precision
         
-    static var maxTotalDigits: Int { get }
-    static var maxUpperDigits: Int { get }
-    static var maxLowerDigits: Int { get }
+    static var maxLosslessDigits: Int { get }
+    static var maxLosslessIntegerDigits: Int { get }
+    static var maxLosslessDecimalDigits: Int { get }
     
     // MARK: Utilities
     
-    @inlinable static func number(_ components: NumericTextComponents) -> Number?
+    @inlinable static func value(_ components: NumericTextComponents) -> Value?
     @inlinable static func style(_ locale: Locale, precision: Precision, separator: Separator) -> FormatStyle
 }
 
+// MARK: - Descriptions
 
 public extension NumericTextScheme {
-    
-    // MARK: Descriptions
-
-    @inlinable static var isFloat:   Bool { maxLowerDigits != 0 }
-    @inlinable static var isInteger: Bool { maxLowerDigits == 0 }
+    @inlinable static var float:   Bool { maxLosslessDecimalDigits != 0 }
+    @inlinable static var integer: Bool { maxLosslessDecimalDigits == 0 }
 }
 
+// MARK: - Implementations: Numeric
 
-public extension NumericTextScheme where Number: Numeric {
-    
-    // MARK: Implementations: Numeric
-    
-    @inlinable static var zero: Number { .zero }
+public extension NumericTextScheme where Value: Numeric {
+    @inlinable static var zero: Value { .zero }
 }
 
 // MARK: - NumericTextIntegerScheme
 
 public  protocol NumericTextIntegerScheme: NumericTextScheme { }
 public extension NumericTextIntegerScheme {
-    @inlinable static var maxUpperDigits: Int { maxTotalDigits }
-    @inlinable static var maxLowerDigits: Int { 0 }
+    @inlinable static var maxLosslessIntegerDigits: Int { maxLosslessDigits }
+    @inlinable static var maxLosslessDecimalDigits: Int { 0 }
 }
 
 // MARK: - NumericTextFloatScheme
 
 public  protocol NumericTextFloatScheme: NumericTextScheme { }
 public extension NumericTextFloatScheme {
-    @inlinable static var maxUpperDigits: Int { maxTotalDigits }
-    @inlinable static var maxLowerDigits: Int { maxTotalDigits }
+    @inlinable static var maxLosslessIntegerDigits: Int { maxLosslessDigits }
+    @inlinable static var maxLosslessDecimalDigits: Int { maxLosslessDigits }
 }
 
-// MARK: - NumericTextSchematic
+// MARK: - NumericTextValue
 
-public protocol NumericTextSchematic {
-    associatedtype NumericTextScheme: DiffableTextViews.NumericTextScheme where NumericTextScheme.Number == Self
+public protocol NumericTextValue {
+    associatedtype NumericTextScheme: DiffableTextViews.NumericTextScheme where NumericTextScheme.Value == Self
     typealias      NumericTextStyle = DiffableTextViews.NumericTextStyle<NumericTextScheme>
 }
 

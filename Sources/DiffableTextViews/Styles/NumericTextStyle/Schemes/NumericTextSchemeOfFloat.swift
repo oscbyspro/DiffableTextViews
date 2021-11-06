@@ -16,21 +16,21 @@ import struct Foundation.FloatingPointFormatStyle
 ///
 /// - Range: ±Number.maxLosslessValue.
 /// - Significands: Number.maxLosslessSignificands
-public struct NumericTextSchemeOfFloat<Number: NumericTextSchemeOfFloatSubject>: NumericTextFloatScheme {
-    public typealias FormatStyle = FloatingPointFormatStyle<Number>
+public struct NumericTextSchemeOfFloat<Value: NumericTextFloatSubject>: NumericTextFloatScheme {
+    public typealias FormatStyle = FloatingPointFormatStyle<Value>
     
     // MARK: Values
     
-    @inlinable public static var min: Number { -Number.maxLosslessValue }
-    @inlinable public static var max: Number {  Number.maxLosslessValue }
+    @inlinable public static var minLosslessValue: Value { -Value.maxLosslessValue }
+    @inlinable public static var maxLosslessValue: Value {  Value.maxLosslessValue }
     
     // MARK: Precision
     
-    @inlinable public static var maxTotalDigits: Int { Number.maxLosslessSignificands }
+    @inlinable public static var maxLosslessDigits: Int { Value.maxLosslessDigits }
 
     // MARK: Components
 
-    @inlinable public static func number(_ components: NumericTextComponents) -> Number? {
+    @inlinable public static func value(_ components: NumericTextComponents) -> Value? {
         .init(components.characters())
     }
     
@@ -39,36 +39,31 @@ public struct NumericTextSchemeOfFloat<Number: NumericTextSchemeOfFloatSubject>:
     }
 }
 
-// MARK: - NumericTextSchemeOfFloatSubject
-
-public protocol NumericTextSchemeOfFloatSubject: BinaryFloatingPoint {
-    @inlinable init?(_ description: String)
-    
-    /// Largest value where all values from it to zero (with the same number of significants) can be represented.
-    @inlinable static var maxLosslessValue: Self { get }
-    /// Largest number of significands where each of its combinations represents a value.
-    @inlinable static var maxLosslessSignificands: Int { get }
-}
-
 // MARK: - NumericTextSchemeOfFloatSchematic
 
-public protocol NumericTextSchemeOfFloatSchematic: NumericTextSchematic, NumericTextSchemeOfFloatSubject where NumericTextScheme == NumericTextSchemeOfFloat<Self> { }
+public protocol NumericTextFloat: NumericTextFloatSubject where NumericTextScheme == NumericTextSchemeOfFloat<Self> { }
+public protocol NumericTextFloatSubject: NumericTextValue, BinaryFloatingPoint {
+    @inlinable init?(_ description: String)
+    
+    @inlinable static var maxLosslessValue: Self { get }
+    @inlinable static var maxLosslessDigits: Int { get }
+}
 
 // MARK: - Floats
 
-extension Float16: NumericTextSchemeOfFloatSchematic {
+extension Float16: NumericTextFloat {
     @inlinable public static var maxLosslessValue: Self { 999 }
-    @inlinable public static var maxLosslessSignificands: Int { 3 }
+    @inlinable public static var maxLosslessDigits: Int { 3 }
 }
 
-extension Float32: NumericTextSchemeOfFloatSchematic {
+extension Float32: NumericTextFloat {
     @inlinable public static var maxLosslessValue: Self { 9_999_999 }
-    @inlinable public static var maxLosslessSignificands: Int { 7 }
+    @inlinable public static var maxLosslessDigits: Int { 7 }
 }
 
-extension Float64: NumericTextSchemeOfFloatSchematic {
+extension Float64: NumericTextFloat {
     @inlinable public static var maxLosslessValue: Self { 999_999_999_999_999 }
-    @inlinable public static var maxLosslessSignificands: Int { 15 }
+    @inlinable public static var maxLosslessDigits: Int { 15 }
 }
 
 #endif

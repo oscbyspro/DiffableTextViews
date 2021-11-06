@@ -1,5 +1,5 @@
 //
-//  NumericTextPrecision.swift
+//  NumericTextStyleDigits.swift
 //  
 //
 //  Created by Oscar Byström Ericsson on 2021-10-18.
@@ -9,13 +9,13 @@
 
 import enum Foundation.NumberFormatStyleConfiguration
 
-// MARK: - NumericTextPrecision
+// MARK: - NumericTextStyleDigits
 
-public struct NumericTextStylePrecision<Scheme: NumericTextScheme> {
+public struct NumericTextPrecision<Scheme: NumericTextScheme> {
     @usableFromInline typealias Strategy = NumericTextPrecisionStrategy
     @usableFromInline typealias Defaults = NumericTextPrecisionDefaults
-    @usableFromInline typealias Total = NumericTextPrecisionTotal<Scheme>
-    @usableFromInline typealias Parts = NumberTextPrecisionParts<Scheme>
+    @usableFromInline typealias Total = NumericTextDigitsTotal<Scheme>
+    @usableFromInline typealias Parts = NumberTextDigitsParts<Scheme>
     @usableFromInline typealias NumberOfDigits = NumericTextNumberOfDigits
     
     // MARK: Properties
@@ -30,8 +30,8 @@ public struct NumericTextStylePrecision<Scheme: NumericTextScheme> {
     
     // MARK: Initializers: Named
     
-    @inlinable public static var max: Self {
-        .max(Scheme.maxTotalDigits)
+    @inlinable public static var maxLosslessValue: Self {
+        .max(Scheme.maxLosslessDigits)
     }
         
     // MARK: Initializers: Total
@@ -45,7 +45,7 @@ public struct NumericTextStylePrecision<Scheme: NumericTextScheme> {
     }
 }
 
-extension NumericTextStylePrecision where Scheme: NumericTextFloatScheme {
+extension NumericTextPrecision where Scheme: NumericTextFloatScheme {
 
     // MARK: Initializers: Parts
     
@@ -66,17 +66,17 @@ extension NumericTextStylePrecision where Scheme: NumericTextFloatScheme {
     }
     
     @inlinable public static func max(integer: Int) -> Self {
-        .max(integer: integer, fraction: Scheme.maxTotalDigits - integer)
+        .max(integer: integer, fraction: Scheme.maxLosslessDigits - integer)
     }
     
     @inlinable public static func max(fraction: Int) -> Self {
-        .max(integer: Scheme.maxTotalDigits - fraction, fraction: fraction)
+        .max(integer: Scheme.maxLosslessDigits - fraction, fraction: fraction)
     }
 }
 
 // MARK: - Interoperabilities
 
-extension NumericTextStylePrecision {
+extension NumericTextPrecision {
     
     // MARK: Utilities
     
@@ -89,8 +89,8 @@ extension NumericTextStylePrecision {
     }
     
     @inlinable func editableStyle() -> NumberFormatStyleConfiguration.Precision {
-        let integers = Defaults.upperLowerBound...Scheme.maxUpperDigits
-        let fraction = Defaults.lowerLowerBound...Scheme.maxLowerDigits
+        let integers = Defaults.upperLowerBound...Scheme.maxLosslessIntegerDigits
+        let fraction = Defaults.lowerLowerBound...Scheme.maxLosslessDecimalDigits
         
         return .integerAndFractionLength(integerLimits: integers, fractionLimits: fraction)
     }
@@ -119,7 +119,7 @@ extension NumericTextStylePrecision {
 
 // MARK: - Strategies: Total
 
-@usableFromInline struct NumericTextPrecisionTotal<Scheme: NumericTextScheme>: NumericTextPrecisionStrategy {
+@usableFromInline struct NumericTextDigitsTotal<Scheme: NumericTextScheme>: NumericTextPrecisionStrategy {
 
     // MARK: Properties
     
@@ -128,13 +128,13 @@ extension NumericTextStylePrecision {
     // MARK: Initializers
     
     @inlinable init<R: RangeExpression>(total: R) where R.Bound == Int {
-        self.total = Self.limits(total, max: Scheme.maxTotalDigits)
+        self.total = Self.limits(total, maxLosslessValue: Scheme.maxLosslessDigits)
     }
     
     // MARK: Initializers: Helpers
     
-    @inlinable static func limits<R: RangeExpression>(_ range: R, max: Int) -> ClosedRange<Int> where R.Bound == Int {
-        ClosedRange(range.relative(to: 0 ..< max + 1))
+    @inlinable static func limits<R: RangeExpression>(_ range: R, maxLosslessValue: Int) -> ClosedRange<Int> where R.Bound == Int {
+        ClosedRange(range.relative(to: 0 ..< maxLosslessValue + 1))
     }
     
     // MARK: Utilities
@@ -154,7 +154,7 @@ extension NumericTextStylePrecision {
 
 // MARK: - Strategies: Separate
 
-@usableFromInline struct NumberTextPrecisionParts<Scheme: NumericTextScheme>: NumericTextPrecisionStrategy {
+@usableFromInline struct NumberTextDigitsParts<Scheme: NumericTextScheme>: NumericTextPrecisionStrategy {
 
     // MARK: Properties
     
@@ -164,28 +164,28 @@ extension NumericTextStylePrecision {
     // MARK: Initializers
     
     @inlinable init<R0: RangeExpression, R1: RangeExpression>(upper: R0, lower: R1) where R0.Bound == Int, R1.Bound == Int {
-        self.upper = Self.limits(upper, max: Scheme.maxUpperDigits)
-        self.lower = Self.limits(lower, max: Scheme.maxLowerDigits)
+        self.upper = Self.limits(upper, maxLosslessValue: Scheme.maxLosslessIntegerDigits)
+        self.lower = Self.limits(lower, maxLosslessValue: Scheme.maxLosslessDecimalDigits)
         
-        precondition(self.lower.lowerBound + self.upper.lowerBound <= Scheme.maxTotalDigits, "Max precision: \(Scheme.maxTotalDigits).")
+        precondition(self.lower.lowerBound + self.upper.lowerBound <= Scheme.maxLosslessDigits, "Max precision: \(Scheme.maxLosslessDigits).")
     }
     
     @inlinable init<R: RangeExpression>(upper: R) where R.Bound == Int {
-        let upper = Self.limits(upper, max: Scheme.maxUpperDigits)
+        let upper = Self.limits(upper, maxLosslessValue: Scheme.maxLosslessIntegerDigits)
         
         self.init(upper: upper, lower: Defaults.lowerLowerBound...)
     }
     
     @inlinable init<R: RangeExpression>(lower: R) where R.Bound == Int {
-        let lower = Self.limits(lower, max: Scheme.maxLowerDigits)
+        let lower = Self.limits(lower, maxLosslessValue: Scheme.maxLosslessDecimalDigits)
         
         self.init(upper: Defaults.upperLowerBound..., lower: lower)
     }
     
     // MARK: Initializers: Helpers
     
-    @inlinable static func limits<R: RangeExpression>(_ range: R, max: Int) -> ClosedRange<Int> where R.Bound == Int {
-        ClosedRange(range.relative(to: 0 ..< max + 1))
+    @inlinable static func limits<R: RangeExpression>(_ range: R, maxLosslessValue: Int) -> ClosedRange<Int> where R.Bound == Int {
+        ClosedRange(range.relative(to: 0 ..< maxLosslessValue + 1))
     }
     
     // MARK: Utilities
@@ -195,7 +195,7 @@ extension NumericTextStylePrecision {
     }
     
     @inlinable func editableValidationWithCapacity(digits: NumberOfDigits) -> NumberOfDigits? {
-        let totalCapacity = Scheme.maxTotalDigits - digits.upper - digits.lower
+        let totalCapacity = Scheme.maxLosslessDigits - digits.upper - digits.lower
         guard totalCapacity >= 0 else { return nil }
         
         let lowerCapacity = lower.upperBound - digits.lower
