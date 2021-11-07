@@ -1,6 +1,6 @@
 //
 //  NumericTextSchemeDecimal.swift
-//  
+//
 //
 //  Created by Oscar Byström Ericsson on 2021-10-18.
 //
@@ -12,15 +12,9 @@ import struct Foundation.Decimal
 
 // MARK: - Decimal
 
-public protocol NumericTextStyleOfDecimal: NumericTextStyle where Value == Decimal { }
-                 extension Style: NumericTextStyleOfDecimal where Value == Decimal { }
-
 /// - Supports up to 38 significant digits.
 extension Decimal: NumericTextValueAsFloat { }
 extension Decimal {
-    public static func numericTextStyle(_ locale: Locale) -> some NumericTextStyleOfDecimal {
-        Style<Self>(locale: locale)
-    }
     
     // MARK: Bounds
         
@@ -42,6 +36,12 @@ extension Decimal {
     
     @inlinable static func style(_ locale: Locale, precision: Self.Precision, separator: Separator) -> FormatStyle {
         .init(locale: locale).precision(precision).decimalSeparator(strategy: separator)
+    }
+    
+    // MARK: Style
+    
+    public static func numericTextStyle(_ locale: Locale) -> some NumericTextStyle {
+        Style<Self>(locale: locale)
     }
 }
 

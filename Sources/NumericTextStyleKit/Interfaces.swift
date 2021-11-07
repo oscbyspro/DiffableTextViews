@@ -12,7 +12,7 @@ import struct Foundation.Locale
 #warning("TODO")
 public protocol NumericTextValue: Comparable {
     associatedtype NumericTextStyle: NumericTextStyleKit.NumericTextStyle
-    
+
     @inlinable static func numericTextStyle(_ locale: Locale) -> NumericTextStyle
 }
 
@@ -46,16 +46,13 @@ public protocol NumericTextBounds {
 public protocol NumericTextPrecision {
     associatedtype Value: Comparable
         
-    @inlinable static var max: Self { get }
-            
+    @inlinable static var  max: Self { get }
     @inlinable static func max(_ total: Int) -> Self
-    
     @inlinable static func digits<R: RangeExpression>(_ total: R) -> Self where R.Bound == Int
 }
 
 #warning("TODO")
 public protocol NumericTextPrecisionOfFloat: NumericTextPrecision {
-        
     @inlinable static func max(integer: Int, decimal: Int) -> Self
     @inlinable static func max(integer: Int) -> Self
     @inlinable static func max(decimal: Int) -> Self

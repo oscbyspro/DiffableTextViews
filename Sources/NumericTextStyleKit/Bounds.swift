@@ -10,12 +10,6 @@
 // MARK: - Bounds
 
 @usableFromInline struct Bounds<Value: NumericTextStyleKit.Value>: NumericTextBounds {
-    
-    // MARK: Properties: Static
-    
-    @inlinable public static var zero: Value { Value.zero }
-    @inlinable public static var  max: Value { Value.maxLosslessValue }
-    @inlinable public static var  min: Value { Value.maxLosslessValue }
 
     // MARK: Properties
     
@@ -24,17 +18,17 @@
     
     // MARK: Initializers
     
-    @inlinable init(min: Value = Self.min, max: Value = Self.max) {
+    @inlinable init(min: Value = Value.minLosslessValue, max: Value = Value.maxLosslessValue) {
         precondition(min <= max)
         
-        self.min = Swift.max(min, Self.min)
-        self.max = Swift.min(Self.max, max)
+        self.min = Swift.max(min, Value.minLosslessValue)
+        self.max = Swift.min(Value.maxLosslessValue, max)
     }
     
     // MARK: Initialiers: Static
     
     @inlinable static var all: Self {
-        .values(in: min...max)
+        .values(in: Value.minLosslessValue...Value.maxLosslessValue)
     }
     
     // MARK: Initializers: Static
@@ -47,8 +41,8 @@
         .init(max: value)
     }
     
-    @inlinable static func values(in values: ClosedRange<Value>) -> Self {
-        .init(min: values.lowerBound, max: values.upperBound)
+    @inlinable static func values(in expression: ClosedRange<Value>) -> Self {
+        .init(min: expression.lowerBound, max: expression.upperBound)
     }
     
     // MARK: Descriptions
@@ -68,7 +62,7 @@
     }
     
     @inlinable func editableValidation(_ value: Value) -> Bool {
-        Swift.min(min, Self.zero) <= value && value <= Swift.max(Self.zero, max)
+        Swift.min(min, Value.zero) <= value && value <= Swift.max(Value.zero, max)
     }
 }
 

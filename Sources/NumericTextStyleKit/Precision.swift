@@ -131,6 +131,8 @@ extension Precision {
     
     @inlinable init<R: RangeExpression>(total: R) where R.Bound == Int {
         self.total = Self.limits(total, maxLosslessValue: Value.maxLosslessDigits)
+        
+        precondition(self.total.upperBound <= Value.maxLosslessDigits, "Max precision: \(Value.maxLosslessDigits).")
     }
     
     // MARK: Initializers: Helpers

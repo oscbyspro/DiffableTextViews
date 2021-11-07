@@ -10,6 +10,12 @@
 import DiffableTextViews
 import struct Foundation.Locale
 
+#warning("WIP")
+
+public struct AnyStyle<Value> {
+    
+}
+
 // MARK: - NumericTextStyle
 
 /// Formats text and number.
@@ -33,8 +39,13 @@ import struct Foundation.Locale
     @inlinable public init(locale: Locale = .autoupdatingCurrent) {
         self.locale = locale
     }
+}
+
+// MARK: - Getters
+
+extension Style {
     
-    // MARK: Getters: Locale
+    // MARK: Locale
 
     @inlinable var decimalSeparator: String {
         locale.decimalSeparator ?? Components.Separator.system.characters
@@ -44,7 +55,7 @@ import struct Foundation.Locale
         locale.groupingSeparator ?? String()
     }
     
-    // MARK: Getters: Characters
+    // MARK: Characters
     
     @inlinable var zero: Character {
         Components.Digits.zero
