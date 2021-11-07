@@ -13,12 +13,12 @@ import struct Foundation.Decimal
 // MARK: - Decimal
 
 /// - Supports up to 38 significant digits.
-extension Decimal { }
-extension Decimal {
+extension Decimal: NumericTextValue, FloatSubject, FormatSubject { }
+public extension Decimal {
     
     // MARK: Bounds
         
-    @usableFromInline static let maxLosslessLimit =
+    @usableFromInline internal static let maxLosslessLimit =
     Decimal(string: String(repeating: "9", count: maxLosslessDigits))!
     
     @inlinable static var minLosslessValue: Self { -maxLosslessLimit }
@@ -27,9 +27,15 @@ extension Decimal {
     // MARK: Precision
  
     @inlinable static var maxLosslessDigits: Int { 38 }
+        
+    // MARK: Styles
     
-    // MARK: Utilities
+    @inlinable static func numericTextStyle(_ locale: Locale) -> some NumericTextStyle {
+        Style<Self>(locale: locale)
+    }
+}
 
+extension Decimal {
     @inlinable static func value(_ components: Components) -> Self? {
         .init(string: components.characters())
     }

@@ -38,8 +38,8 @@ extension IntegerSubject {
 
 public protocol FloatSubject: PrecisionSubject { }
 extension FloatSubject {
-    @inlinable static var maxLosslessIntegerDigits: Int { maxLosslessDigits }
-    @inlinable static var maxLosslessDecimalDigits: Int { maxLosslessDigits }
+    @inlinable public static var maxLosslessIntegerDigits: Int { maxLosslessDigits }
+    @inlinable public static var maxLosslessDecimalDigits: Int { maxLosslessDigits }
 }
 
 

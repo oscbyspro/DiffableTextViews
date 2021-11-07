@@ -26,9 +26,7 @@ import struct Foundation.Locale
 /// Formats text and number.
 ///
 /// - Complexity: O(n) or less for all calculations.
-@usableFromInline struct Style<Value>: DiffableTextStyle where Value: BoundsSubject, Value: PrecisionSubject, Value: FormatSubject  {
-        @usableFromInline typealias Bounds = NumericTextStyleKit.Bounds<Value>
-    @usableFromInline typealias Precision = NumericTextStyleKit.Precision<Value>
+@usableFromInline struct Style<Value: BoundsSubject & PrecisionSubject & FormatSubject>: NumericTextStyle {
 
     // MARK: Properties
     
@@ -36,8 +34,8 @@ import struct Foundation.Locale
     @usableFromInline var prefix: String? = nil
     @usableFromInline var suffix: String? = nil
     
-    @usableFromInline var bounds: Bounds = .all
-    @usableFromInline var precision: Precision = .max
+    @usableFromInline var bounds = Bounds.all
+    @usableFromInline var precision = Precision.max
     
     // MARK: Initializers
     
@@ -112,11 +110,11 @@ extension Style {
         update({ $0.suffix = newValue })
     }
     
-    @inlinable public func bounds(_ newValue: Bounds) -> Self {
+    @inlinable public func bounds(_ newValue: Self.Bounds) -> Self {
         update({ $0.bounds = newValue })
     }
     
-    @inlinable public func precision(_ newValue: Precision) -> Self {
+    @inlinable public func precision(_ newValue: Self.Precision) -> Self {
         update({ $0.precision = newValue })
     }
     

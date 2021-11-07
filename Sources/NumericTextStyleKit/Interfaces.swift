@@ -6,20 +6,19 @@
 //
 
 import struct Foundation.Locale
+import protocol DiffableTextViews.DiffableTextStyle
 
 // MARK: - NumericTextStyle
 
 #warning("TODO")
-public protocol NumericTextValue {
-    associatedtype NumericTextStyle: NumericTextStyleKit.NumericTextStyle where NumericTextStyle.Value == Self
+public protocol NumericTextValue: BoundsSubject, PrecisionSubject {
+    associatedtype NumericTextStyle: NumericTextStyleKit.NumericTextStyle
 
-    @inlinable static func defaultNumericTextStyle(_ locale: Locale) -> NumericTextStyle
+    @inlinable static func numericTextStyle(_ locale: Locale) -> NumericTextStyle
 }
 
 #warning("TODO")
-public protocol NumericTextStyle {
-    associatedtype Value: BoundsSubject & PrecisionSubject
-
+public protocol NumericTextStyle: DiffableTextStyle where Value: BoundsSubject & PrecisionSubject {
     typealias Bounds = NumericTextStyleKit.Bounds<Value>
     typealias Precision = NumericTextStyleKit.Precision<Value>
     
@@ -28,6 +27,6 @@ public protocol NumericTextStyle {
     @inlinable func suffix(_ newValue: String?) -> Self
     
     #warning("Replace with initializer")
-    @inlinable func bounds(_ newValue: Bounds) -> Self
-    @inlinable func precision(_ newValue: Precision) -> Self
+//    @inlinable func bounds(_ newValue: Bounds) -> Self
+//    @inlinable func precision(_ newValue: Precision) -> Self
 }
