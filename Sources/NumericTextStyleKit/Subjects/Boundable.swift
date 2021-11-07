@@ -1,11 +1,11 @@
 //
-//  BoundsSubject.swift
+//  Boundable.swift
 //  
 //
 //  Created by Oscar Byström Ericsson on 2021-11-07.
 //
 
-// MARK: - BoundsSubject
+// MARK: - Boundable
 
 public protocol Boundable: Comparable {
     @inlinable static var zero:             Self { get }

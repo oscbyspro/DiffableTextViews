@@ -11,7 +11,6 @@ import enum Foundation.NumberFormatStyleConfiguration
 
 // MARK: - Precision
 
-#warning("Rename: Strategy.")
 public struct Precision<Value: Precise> {
     @usableFromInline typealias Strategy = PrecisionStrategy
     @usableFromInline typealias Defaults = PrecisionDefaults
@@ -140,7 +139,7 @@ extension Precision {
     
     @inlinable init<R: RangeExpression>(total: R) where R.Bound == Int {
         self.total = Self.limits(total, maxLosslessValue: Value.maxLosslessDigits)
-        
+
         precondition(self.total.upperBound <= Value.maxLosslessDigits, "Max precision: \(Value.maxLosslessDigits).")
     }
     
@@ -222,7 +221,6 @@ extension Precision {
 
 // MARK: - Defaults
 
-#warning("Clean this up.")
 @usableFromInline enum PrecisionDefaults {
     @usableFromInline static let totalLowerBound: Int = 1
     @usableFromInline static let upperLowerBound: Int = 1

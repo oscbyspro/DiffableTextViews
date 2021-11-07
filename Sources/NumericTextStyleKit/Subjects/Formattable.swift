@@ -1,5 +1,5 @@
 //
-//  FormatSubject.swift
+//  Formattable.swift
 //  
 //
 //  Created by Oscar Byström Ericsson on 2021-11-07.
@@ -9,7 +9,7 @@ import struct Foundation.Locale
 import protocol Foundation.FormatStyle
 import enum Foundation.NumberFormatStyleConfiguration
 
-// MARK: - FormatSubject
+// MARK: - Formattable
 
 public protocol Formattable {
     associatedtype FormatStyle: Foundation.FormatStyle where FormatStyle.FormatInput == Self, FormatStyle.FormatOutput == String

@@ -1,11 +1,11 @@
 //
-//  PrecisionSubject.swift
+//  Precise.swift
 //  
 //
 //  Created by Oscar Byström Ericsson on 2021-11-07.
 //
 
-// MARK: - PrecisionSubject
+// MARK: - Precise
 
 public protocol Precise {
     @inlinable static var maxLosslessDigits:        Int { get }
