@@ -10,54 +10,35 @@
 import struct Foundation.Locale
 import struct Foundation.IntegerFormatStyle
 
-// MARK: - NumericTextSchemeOfInteger
+// MARK: - NumericTextInteger
 
-/// NumericTextSchemeOfInteger.
+/// Numeric text value for integers.
 ///
-/// - Supports all values from Number.min to Number.max.
+/// - Supports all values from Self.min to Self.max.
 /// - UInt64.max is limited to Int64.max because Apple uses Int64 (2021-10-25).
-public struct NumericTextSchemeOfInteger<Value: NumericTextIntegerSubject>: NumericTextIntegerScheme {
-    public typealias FormatStyle = IntegerFormatStyle<Value>
+public protocol NumericTextInteger: NumericTextValueAsInteger, FixedWidthInteger {
+    @inlinable init?(_ description: String)
+}
+
+public extension NumericTextInteger {
     
-    // MARK: Values
+    // MARK: Bounds
     
-    @inlinable public static var minLosslessValue: Value { Value.minLosslessValue }
-    @inlinable public static var maxLosslessValue: Value { Value.maxLosslessValue }
-    
-    // MARK: Precision
-    
-    @inlinable public static var maxLosslessDigits: Int { Value.maxLosslessDigits }
+    @inlinable static var minLosslessValue: Self { min }
+    @inlinable static var maxLosslessValue: Self { max }
     
     // MARK: Components
 
-    @inlinable public static func value(_ components: NumericTextComponents) -> Value? {
-        Value.init(components.characters())
+    @inlinable static func value(_ components: NumericTextComponents) -> Self? {
+        .init(components.characters())
     }
     
-    @inlinable public static func style(_ locale: Locale, precision: Precision, separator: Separator) -> FormatStyle {
+    @inlinable static func style(_ locale: Locale, precision: Precision, separator: Separator) -> IntegerFormatStyle<Self> {
         .init(locale: locale).precision(precision).decimalSeparator(strategy: separator)
     }
 }
 
-// MARK: - NumericTextInteger
-
-#warning("No public properties exposed in main scope.")
-
-public protocol NumericTextInteger: NumericTextIntegerSubject where NumericTextScheme == NumericTextSchemeOfInteger<Self> { }
-public protocol NumericTextIntegerSubject: NumericTextValue, FixedWidthInteger {
-    @inlinable init?(_ description: String)
-    
-    @inlinable static var minLosslessValue: Self { get }
-    @inlinable static var maxLosslessValue: Self { get }
-    @inlinable static var maxLosslessDigits: Int { get }
-}
-
-public extension NumericTextIntegerSubject {
-    @inlinable static var minLosslessValue: Self { min }
-    @inlinable static var maxLosslessValue: Self { max }
-}
-
-// MARK: - Ints
+// MARK: - Implementations
 
 extension Int: NumericTextInteger {
     public static let maxLosslessDigits: Int = String(maxLosslessValue).count
@@ -83,11 +64,6 @@ extension Int64: NumericTextInteger {
 
 extension UInt: NumericTextInteger {
     /// Apple, please fix IntegerFormatStyleUInt64, it uses an Int64.
-    @inlinable public static var minLosslessValue: UInt {
-        UInt(Int.minLosslessValue)
-    }
-    
-    /// Apple, please fix IntegerFormatStyleUInt64, it uses an Int64.
     @inlinable public static var maxLosslessValue: UInt {
         UInt(Int.maxLosslessValue)
     }
@@ -111,11 +87,6 @@ extension UInt32: NumericTextInteger {
 }
 
 extension UInt64: NumericTextInteger {
-    /// Apple, please fix IntegerFormatStyleUInt64, it uses an Int64.
-    @inlinable public static var minLosslessValue: UInt64 {
-        UInt64(Int64.minLosslessValue)
-    }
-    
     /// Apple, please fix IntegerFormatStyleUInt64, it uses an Int64.
     @inlinable public static var maxLosslessValue: UInt64 {
         UInt64(Int64.maxLosslessValue)

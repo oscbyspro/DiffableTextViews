@@ -9,14 +9,13 @@
 
 // MARK: - NumericTextStyleBounds
 
-public struct NumericTextBounds<Scheme: NumericTextScheme> {
-    public typealias Value = Scheme.Value
+public struct NumericTextBounds<Value: NumericTextValue> {
     
     // MARK: Properties: Static
     
-    @inlinable public static var  maxLosslessValue: Value { Scheme.maxLosslessValue  }
-    @inlinable public static var  minLosslessValue: Value { Scheme.minLosslessValue  }
-    @inlinable public static var zero: Value { Scheme.zero }
+    @inlinable public static var zero:             Value { Value.zero }
+    @inlinable public static var maxLosslessValue: Value { Value.maxLosslessValue  }
+    @inlinable public static var minLosslessValue: Value { Value.minLosslessValue  }
 
     // MARK: Properties
     
@@ -63,11 +62,11 @@ public struct NumericTextBounds<Scheme: NumericTextScheme> {
     // MARK: Descriptions
     
     @inlinable var nonnegative: Bool {
-        minLosslessValue >= Scheme.zero
+        minLosslessValue >= Value.zero
     }
     
     @inlinable var nonpositive: Bool {
-        maxLosslessValue <= Scheme.zero
+        maxLosslessValue <= Value.zero
     }
     
     // MARK: Utilities

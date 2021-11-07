@@ -11,19 +11,19 @@ import struct Foundation.Locale
 
 // MARK: - NumericTextStyle
 
-#warning("Break recursion with: NumericTextStyle<Scheme, Value>...?")
+#warning("Could hide public values inside this struct.")
+#warning("Break recursion with: NumericTextStyle<Value, Value>...?")
 
 /// Formats text and number.
 ///
 /// - Complexity: O(n) or less for all calculations.
-public struct NumericTextStyle<Scheme: NumericTextScheme>: DiffableTextStyle {
+public struct NumericTextStyle<Value: NumericTextValue>: DiffableTextStyle {
     @usableFromInline typealias Components = NumericTextComponents
     @usableFromInline typealias Configuration = NumericTextConfiguration
     @usableFromInline typealias NumberOfDigits = NumericTextNumberOfDigits
 
-    public typealias Value = Scheme.Value
-    public typealias Bounds = NumericTextBounds<Scheme>
-    public typealias Precision = NumericTextPrecision<Scheme>
+    public typealias Bounds = NumericTextBounds<Value>
+    public typealias Precision = NumericTextPrecision<Value>
 
     // MARK: Properties
     
@@ -78,16 +78,16 @@ extension NumericTextStyle {
     
     // MARK: Styles
     
-    @inlinable func displayableStyle() -> Scheme.FormatStyle {
-        Scheme.style(locale, precision: precision.displayableStyle(), separator: .automatic)
+    @inlinable func displayableStyle() -> Value.FormatStyle {
+        Value.style(locale, precision: precision.displayableStyle(), separator: .automatic)
     }
         
-    @inlinable func editableStyle() -> Scheme.FormatStyle {
-        Scheme.style(locale, precision: precision.editableStyle(), separator: .automatic)
+    @inlinable func editableStyle() -> Value.FormatStyle {
+        Value.style(locale, precision: precision.editableStyle(), separator: .automatic)
     }
     
-    @inlinable func editableStyle(digits: NumberOfDigits, separator: Bool) -> Scheme.FormatStyle {
-        Scheme.style(locale, precision: precision.editableStyle(digits), separator: separator ? .always : .automatic)
+    @inlinable func editableStyle(digits: NumberOfDigits, separator: Bool) -> Value.FormatStyle {
+        Value.style(locale, precision: precision.editableStyle(digits), separator: separator ? .always : .automatic)
     }
 }
 
@@ -130,20 +130,20 @@ extension NumericTextStyle {
     
     // MARK: Process
     
-    @inlinable public func process(_ value: inout Scheme.Value) {
+    @inlinable public func process(_ value: inout Value) {
         value = bounds.displayableStyle(value)
     }
         
     // MARK: Parse
 
-    @inlinable public func parse(_ snapshot: Snapshot) -> Scheme.Value? {
+    @inlinable public func parse(_ snapshot: Snapshot) -> Value? {
         components(snapshot, with: configuration()).flatMap(value)
     }
     
     // MARK: Components
     
-    @inlinable func value(_ components: Components) -> Scheme.Value? {
-        components.hasDigits ? Scheme.value(components) : Scheme.zero
+    @inlinable func value(_ components: Components) -> Value? {
+        components.hasDigits ? Value.value(components) : Value.zero
     }
 }
 
@@ -153,13 +153,13 @@ extension NumericTextStyle {
     
     // MARK: Edit
     
-    @inlinable public func snapshot(_ value: Scheme.Value) -> Snapshot {
+    @inlinable public func snapshot(_ value: Value) -> Snapshot {
         snapshot(editableStyle().format(value))
     }
     
     // MARK: Showcase
     
-    @inlinable public func showcase(_ value: Scheme.Value) -> Snapshot {
+    @inlinable public func showcase(_ value: Value) -> Snapshot {
         snapshot(displayableStyle().format(value))
     }
 }
@@ -283,7 +283,7 @@ extension NumericTextStyle {
     @inlinable func configuration() -> Configuration {
         let configuration = Configuration(signs: .negatives)
                 
-        if Scheme.integer {
+        if Value.integer {
             configuration.options.insert(.integer)
         } else {
             configuration.separators.insert(decimalSeparator)

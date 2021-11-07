@@ -11,7 +11,7 @@ import enum Foundation.NumberFormatStyleConfiguration
 
 // MARK: - NumericTextStyleDigits
 
-public struct NumericTextPrecision<Scheme: NumericTextScheme> {
+public struct NumericTextPrecision<Scheme: NumericTextValue> {
     @usableFromInline typealias Strategy = NumericTextPrecisionStrategy
     @usableFromInline typealias Defaults = NumericTextPrecisionDefaults
     @usableFromInline typealias Total = NumericTextPrecisionTotal<Scheme>
@@ -45,7 +45,7 @@ public struct NumericTextPrecision<Scheme: NumericTextScheme> {
     }
 }
 
-extension NumericTextPrecision where Scheme: NumericTextFloatScheme {
+extension NumericTextPrecision where Scheme: NumericTextValueAsFloat {
 
     // MARK: Initializers: Parts
     
@@ -119,7 +119,7 @@ extension NumericTextPrecision {
 
 // MARK: - Strategies: Total
 
-@usableFromInline struct NumericTextPrecisionTotal<Scheme: NumericTextScheme>: NumericTextPrecisionStrategy {
+@usableFromInline struct NumericTextPrecisionTotal<Scheme: NumericTextValue>: NumericTextPrecisionStrategy {
 
     // MARK: Properties
     
@@ -154,7 +154,7 @@ extension NumericTextPrecision {
 
 // MARK: - Strategies: Separate
 
-@usableFromInline struct NumericTextPrecisionParts<Scheme: NumericTextScheme>: NumericTextPrecisionStrategy {
+@usableFromInline struct NumericTextPrecisionParts<Scheme: NumericTextValue>: NumericTextPrecisionStrategy {
 
     // MARK: Properties
     
