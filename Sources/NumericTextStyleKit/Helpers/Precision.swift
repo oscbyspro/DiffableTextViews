@@ -116,7 +116,6 @@ extension Precision {
     }
 }
 
-#warning("Everything below this line is a mess.")
 // MARK: - Strategies
 
 @usableFromInline protocol PrecisionStrategy {
