@@ -26,7 +26,7 @@ import struct Foundation.Locale
 /// Formats text and number.
 ///
 /// - Complexity: O(n) or less for all calculations.
-@usableFromInline struct Style<Value: BoundsSubject & PrecisionSubject & FormatSubject>: NumericTextStyle {
+@usableFromInline struct Style<Value: BoundsSubject & PrecisionSubject & FormatSubject>: NumericTextStyle {    
 
     // MARK: Properties
     
