@@ -1,11 +1,11 @@
 //
-//  &BidirectionalCollection.swift
+//  &Collections.swift
 //  
 //
 //  Created by Oscar Byström Ericsson on 2021-10-27.
 //
 
-// MARK: - BidirectionalCollection
+// MARK: - Collections
 
 extension BidirectionalCollection {
     
@@ -23,4 +23,3 @@ extension BidirectionalCollection {
         return self[index...]
     }
 }
-

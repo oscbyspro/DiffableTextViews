@@ -1,22 +1,20 @@
 //
-//  NumericTextComponents.swift
+//  Components.swift
 //  
 //
 //  Created by Oscar Byström Ericsson on 2021-10-19.
 //
 
-// MARK: - NumericTextComponents
+// MARK: - Components
 
-#warning("Make this internal.")
-#warning("Rename as components.")
-public struct NumericTextComponents {
+@usableFromInline struct Components {
     
     // MARK: Properties
 
-    public var sign: Sign?
-    public var integers: Digits
-    public var separator: Separator?
-    public var decimals: Digits
+    @usableFromInline var sign: Sign?
+    @usableFromInline var integers: Digits
+    @usableFromInline var separator: Separator?
+    @usableFromInline var decimals: Digits
     
     // MARK: Initializers
     
@@ -29,22 +27,22 @@ public struct NumericTextComponents {
 
     // MARK: Utilities
         
-    @inlinable public func characters() -> String {
+    @inlinable func characters() -> String {
         [sign?.characters, integers.characters, separator?.characters, decimals.characters].compactMap({ $0 }).joined()
     }
     
     // MARK: Transformations
     
-    @inlinable mutating public func toggleSign(with proposal: Sign) {
+    @inlinable mutating func toggleSign(with proposal: Sign) {
         if sign != proposal { sign = proposal } else { sign = nil }
     }
     
     // MARK: Components: Sign
     
-    @frozen public enum Sign: String {
+    @usableFromInline enum Sign: String {
         @usableFromInline static let set = Set<Character>(plus + minus)
-        @inlinable        static var plus:  String { positive.characters }
-        @inlinable        static var minus: String { negative.characters }
+        @inlinable static var plus:  String { positive.characters }
+        @inlinable static var minus: String { negative.characters }
         
         case positive = "+"
         case negative = "-"
@@ -54,7 +52,7 @@ public struct NumericTextComponents {
     
     // MARK: Components: Separator
     
-    @frozen public struct Separator {
+    @usableFromInline struct Separator {
         @usableFromInline static let system = Separator(characters: ".")
         
         // MARK: Properties
@@ -70,7 +68,7 @@ public struct NumericTextComponents {
     
     // MARK: Components: Digits
     
-    @frozen public struct Digits {
+    @usableFromInline struct Digits {
         @usableFromInline static let zero: Character = "0"
         @usableFromInline static let set = Set<Character>("0123456789")
         
@@ -118,8 +116,7 @@ public struct NumericTextComponents {
 
 // MARK: - Descriptions: Numer Of Digits
 
-extension NumericTextComponents {
-    @usableFromInline typealias NumberOfDigits = NumericTextNumberOfDigits
+extension Components {
     
     // MARK: Total
     

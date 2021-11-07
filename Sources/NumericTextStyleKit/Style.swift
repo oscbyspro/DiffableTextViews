@@ -15,13 +15,9 @@ import struct Foundation.Locale
 /// Formats text and number.
 ///
 /// - Complexity: O(n) or less for all calculations.
-struct NumericTextStyle<Value: NumericTextValue>: DiffableTextStyle, NumericTextStyleInterface {
-    @usableFromInline typealias Components = NumericTextComponents
-    @usableFromInline typealias Configuration = NumericTextConfiguration
-    @usableFromInline typealias NumberOfDigits = NumericTextNumberOfDigits
-
-    public typealias Bounds = NumericTextBounds<Value>
-    public typealias Precision = NumericTextPrecision<Value>
+@usableFromInline struct Style<Value: NumericTextStyleKit.Value>: DiffableTextStyle, NumericTextStyle {
+    @usableFromInline typealias Bounds = NumericTextStyleKit.Bounds<Value>
+    @usableFromInline typealias Precision = NumericTextStyleKit.Precision<Value>
 
     // MARK: Properties
     
@@ -71,7 +67,7 @@ struct NumericTextStyle<Value: NumericTextValue>: DiffableTextStyle, NumericText
 
 // MARK: - Format
 
-extension NumericTextStyle {
+extension Style {
     
     // MARK: Styles
     
@@ -90,7 +86,7 @@ extension NumericTextStyle {
 
 // MARK: - Update
 
-extension NumericTextStyle {
+extension Style {
     
     // MARK: Transformations
     
@@ -123,7 +119,7 @@ extension NumericTextStyle {
 
 // MARK: - Value
 
-extension NumericTextStyle {
+extension Style {
     
     // MARK: Process
     
@@ -146,7 +142,7 @@ extension NumericTextStyle {
 
 // MARK: - Snapshot
 
-extension NumericTextStyle {
+extension Style {
     
     // MARK: Edit
     
@@ -163,7 +159,7 @@ extension NumericTextStyle {
 
 // MARK: - Snapshot
 
-extension NumericTextStyle {
+extension Style {
     
     // MARK: Merge
     
@@ -273,7 +269,7 @@ extension NumericTextStyle {
 
 // MARK: - NumericText
 
-extension NumericTextStyle {
+extension Style {
     
     // MARK: Configuration
     
@@ -303,7 +299,6 @@ extension NumericTextStyle {
 // MARK: - Input
 
 @usableFromInline struct NumericTextStyleInput {
-    @usableFromInline typealias Configuration = NumericTextConfiguration
     
     // MARK: Properties
     
@@ -327,8 +322,6 @@ extension NumericTextStyle {
 // MARK: Toggle Sign Instruction
         
 @usableFromInline struct NumericTextStyleToggleSignInstruction {
-    @usableFromInline typealias Components = NumericTextComponents
-    @usableFromInline typealias Configuration = NumericTextConfiguration
 
     // MARK: Properties
     

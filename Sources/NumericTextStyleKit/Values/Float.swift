@@ -16,13 +16,13 @@ import struct Foundation.FloatingPointFormatStyle
 ///
 /// - Range: ±Self.maxLosslessValue.
 /// - Significands: Self.maxLosslessDigits.
-public protocol NumericTextFloat: NumericTextValueAsFloat, BinaryFloatingPoint {
+@usableFromInline protocol Float: NumericTextValueAsFloat, BinaryFloatingPoint {
     @inlinable init?(_ description: String)
 }
 
 // MARK: - Defaults
 
-public extension NumericTextFloat {
+extension Float {
     
     // MARK: Bounds
     
@@ -30,28 +30,28 @@ public extension NumericTextFloat {
 
     // MARK: Utilities
 
-    @inlinable static func value(_ components: NumericTextComponents) -> Self? {
+    @inlinable static func value(_ components: Components) -> Self? {
         .init(components.characters())
     }
     
-    @inlinable static func style(_ locale: Locale, precision: NumericTextPrecision.Wrapped, separator: NumericTextSeparator) -> FloatingPointFormatStyle<Self> {
+    @inlinable static func style(_ locale: Locale, precision: Precision.Wrapped, separator: NumericTextSeparator) -> FloatingPointFormatStyle<Self> {
         .init(locale: locale).precision(precision).decimalSeparator(strategy: separator)
     }
 }
 
 // MARK: - Floats
 
-extension Float16: NumericTextFloat {
+extension Float16: Float {
     @inlinable public static var maxLosslessValue: Self { 999 }
     @inlinable public static var maxLosslessDigits: Int { 3 }
 }
 
-extension Float32: NumericTextFloat {
+extension Float32: Float {
     @inlinable public static var maxLosslessValue: Self { 9_999_999 }
     @inlinable public static var maxLosslessDigits: Int { 7 }
 }
 
-extension Float64: NumericTextFloat {
+extension Float64: Float {
     @inlinable public static var maxLosslessValue: Self { 999_999_999_999_999 }
     @inlinable public static var maxLosslessDigits: Int { 15 }
 }

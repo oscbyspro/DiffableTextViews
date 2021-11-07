@@ -1,5 +1,5 @@
 //
-//  NumericTextStyleDigits.swift
+//  Precision.swift
 //  
 //
 //  Created by Oscar Byström Ericsson on 2021-10-18.
@@ -9,15 +9,15 @@
 
 import enum Foundation.NumberFormatStyleConfiguration
 
-// MARK: - NumericTextStyleDigits
+// MARK: - Precision
 
-public struct NumericTextPrecision<Value: NumericTextValue> {
-    public typealias Wrapped = NumberFormatStyleConfiguration.Precision
-    @usableFromInline typealias Strategy = NumericTextPrecisionStrategy
-    @usableFromInline typealias Defaults = NumericTextPrecisionDefaults
-    @usableFromInline typealias Total = NumericTextPrecisionTotal<Value>
-    @usableFromInline typealias Parts = NumericTextPrecisionParts<Value>
-    @usableFromInline typealias NumberOfDigits = NumericTextNumberOfDigits
+#warning("Rename: Strategy.")
+@usableFromInline struct Precision<Value: NumericTextStyleKit.Value>: NumericTextPrecision {
+    @usableFromInline typealias Wrapped = NumberFormatStyleConfiguration.Precision
+    @usableFromInline typealias Strategy = PrecisionStrategy
+    @usableFromInline typealias Defaults = PrecisionDefaults
+    @usableFromInline typealias Total = PrecisionTotal<Value>
+    @usableFromInline typealias Parts = PrecisionParts<Value>
     
     // MARK: Properties
     
@@ -46,38 +46,38 @@ public struct NumericTextPrecision<Value: NumericTextValue> {
     }
 }
 
-extension NumericTextPrecision where Value: NumericTextValueAsFloat {
+extension Precision where Value: NumericTextValueAsFloat {
 
     // MARK: Initializers: Parts
     
-    @inlinable public static func digits<R0: RangeExpression, R1: RangeExpression>(integer: R0, fraction: R1) -> Self where R0.Bound == Int, R1.Bound == Int {
+    @inlinable static func digits<R0: RangeExpression, R1: RangeExpression>(integer: R0, fraction: R1) -> Self where R0.Bound == Int, R1.Bound == Int {
         .init(strategy: Parts(upper: integer, lower: fraction))
     }
     
-    @inlinable public static func digits<R: RangeExpression>(integer: R) -> Self where R.Bound == Int {
+    @inlinable static func digits<R: RangeExpression>(integer: R) -> Self where R.Bound == Int {
         .init(strategy: Parts(upper: integer, lower: Defaults.lowerLowerBound...))
     }
     
-    @inlinable public static func digits<R: RangeExpression>(fraction: R) -> Self where R.Bound == Int {
+    @inlinable static func digits<R: RangeExpression>(fraction: R) -> Self where R.Bound == Int {
         .init(strategy: Parts(upper: Defaults.upperLowerBound..., lower: fraction))
     }
     
-    @inlinable public static func max(integer: Int, fraction: Int) -> Self  {
+    @inlinable static func max(integer: Int, fraction: Int) -> Self  {
         .digits(integer: Defaults.upperLowerBound...integer, fraction: Defaults.lowerLowerBound...fraction)
     }
     
-    @inlinable public static func max(integer: Int) -> Self {
+    @inlinable static func max(integer: Int) -> Self {
         .max(integer: integer, fraction: Value.maxLosslessDigits - integer)
     }
     
-    @inlinable public static func max(fraction: Int) -> Self {
+    @inlinable static func max(fraction: Int) -> Self {
         .max(integer: Value.maxLosslessDigits - fraction, fraction: fraction)
     }
 }
 
 // MARK: - Interoperabilities
 
-extension NumericTextPrecision {
+extension Precision {
     
     // MARK: Utilities
     
@@ -109,10 +109,9 @@ extension NumericTextPrecision {
 
 // MARK: - Strategies
 
-@usableFromInline protocol NumericTextPrecisionStrategy {
+@usableFromInline protocol PrecisionStrategy {
     typealias Wrapped = NumberFormatStyleConfiguration.Precision
-    typealias Defaults = NumericTextPrecisionDefaults
-    typealias NumberOfDigits = NumericTextNumberOfDigits
+    typealias Defaults = PrecisionDefaults
     
     @inlinable func displayableStyle() -> Wrapped
         
@@ -121,7 +120,7 @@ extension NumericTextPrecision {
 
 // MARK: - Strategies: Total
 
-@usableFromInline struct NumericTextPrecisionTotal<Value: NumericTextValue>: NumericTextPrecisionStrategy {
+@usableFromInline struct PrecisionTotal<Value: NumericTextStyleKit.Value>: PrecisionStrategy {
 
     // MARK: Properties
     
@@ -156,7 +155,7 @@ extension NumericTextPrecision {
 
 // MARK: - Strategies: Separate
 
-@usableFromInline struct NumericTextPrecisionParts<Value: NumericTextValue>: NumericTextPrecisionStrategy {
+@usableFromInline struct PrecisionParts<Value: NumericTextStyleKit.Value>: PrecisionStrategy {
 
     // MARK: Properties
     
@@ -210,9 +209,10 @@ extension NumericTextPrecision {
     }
 }
 
-// MARK: - NumericTextPrecisionDefaults
+// MARK: - Defaults
 
-@usableFromInline enum NumericTextPrecisionDefaults {
+#warning("Clean this up.")
+@usableFromInline enum PrecisionDefaults {
     @usableFromInline static let totalLowerBound: Int = 1
     @usableFromInline static let upperLowerBound: Int = 1
     @usableFromInline static let lowerLowerBound: Int = 0

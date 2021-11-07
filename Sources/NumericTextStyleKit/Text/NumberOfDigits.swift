@@ -1,13 +1,13 @@
 //
-//  File.swift
+//  NumberOfDigits.swift
 //  
 //
 //  Created by Oscar Byström Ericsson on 2021-10-25.
 //
 
-// MARK: - NumericTextNumberOfDigits
+// MARK: - NumberOfDigits
 
-@usableFromInline struct NumericTextNumberOfDigits {
+@usableFromInline struct NumberOfDigits {
     
     // MARK: Properties
     

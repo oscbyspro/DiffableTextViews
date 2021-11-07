@@ -13,58 +13,58 @@ import enum Foundation.NumberFormatStyleConfiguration
 
 // MARK: - NumericTextValue
 
-public protocol NumericTextValue: Comparable {
+@usableFromInline protocol Value: Comparable {
     associatedtype FormatStyle: Foundation.FormatStyle where FormatStyle.FormatInput == Self, FormatStyle.FormatOutput == String
     
     // MARK: Aliases
     
-    typealias NumericTextStyle = NumericTextStyleKit.NumericTextStyle<Self>
-    typealias NumericTextPrecision = NumericTextStyleKit.NumericTextPrecision<Self>
+    typealias Style = NumericTextStyleKit.Style<Self>
+    typealias Precision = NumericTextStyleKit.Precision<Self>
     typealias NumericTextSeparator = NumberFormatStyleConfiguration.DecimalSeparatorDisplayStrategy
     
     // MARK: Values
     
-    static var zero:             Self { get }
-    static var minLosslessValue: Self { get }
-    static var maxLosslessValue: Self { get }
+    @inlinable static var zero:             Self { get }
+    @inlinable static var minLosslessValue: Self { get }
+    @inlinable static var maxLosslessValue: Self { get }
     
     // MARK: Precision
     
-    static var maxLosslessDigits:        Int { get }
-    static var maxLosslessIntegerDigits: Int { get }
-    static var maxLosslessDecimalDigits: Int { get }
+    @inlinable static var maxLosslessDigits:        Int { get }
+    @inlinable static var maxLosslessIntegerDigits: Int { get }
+    @inlinable static var maxLosslessDecimalDigits: Int { get }
     
     // MARK: Utilities
     
-    @inlinable static func value(_ components: NumericTextComponents) -> Self?
-    @inlinable static func style(_ locale: Locale, precision: NumericTextPrecision.Wrapped, separator: NumericTextSeparator) -> FormatStyle
+    @inlinable static func value(_ components: Components) -> Self?
+    @inlinable static func style(_ locale: Locale, precision: Precision.Wrapped, separator: NumericTextSeparator) -> FormatStyle
 }
 
 // MARK: - Descriptions
 
-public extension NumericTextValue {
+extension Value {
     @inlinable static var float:   Bool { maxLosslessDecimalDigits != 0 }
     @inlinable static var integer: Bool { maxLosslessDecimalDigits == 0 }
 }
 
 // MARK: - Implementations: Numeric
 
-public extension NumericTextValue where Self: Numeric {
+extension Value where Self: Numeric {
     @inlinable static var zero: Self { .zero }
 }
 
 // MARK: - NumericTextValueAsInteger
 
-public  protocol NumericTextValueAsInteger: NumericTextValue { }
-public extension NumericTextValueAsInteger {
+@usableFromInline protocol NumericTextValueAsInteger: Value { }
+extension NumericTextValueAsInteger {
     @inlinable static var maxLosslessIntegerDigits: Int { maxLosslessDigits }
     @inlinable static var maxLosslessDecimalDigits: Int { 0 }
 }
 
 // MARK: - NumericTextValueAsFloat
 
-public  protocol NumericTextValueAsFloat: NumericTextValue { }
-public extension NumericTextValueAsFloat {
+@usableFromInline protocol NumericTextValueAsFloat: Value { }
+extension NumericTextValueAsFloat {
     @inlinable static var maxLosslessIntegerDigits: Int { maxLosslessDigits }
     @inlinable static var maxLosslessDecimalDigits: Int { maxLosslessDigits }
 }

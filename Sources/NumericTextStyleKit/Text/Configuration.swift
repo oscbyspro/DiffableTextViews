@@ -1,18 +1,17 @@
 //
-//  NumericTextConfiguration.swift
+//  Configuration.swift
 //  
 //
 //  Created by Oscar Byström Ericsson on 2021-10-22.
 //
 
-// MARK: - NumericTextConfiguration
+// MARK: - Configuration
 
-@usableFromInline final class NumericTextConfiguration {
-    @usableFromInline typealias Components = NumericTextComponents
-    @usableFromInline typealias Signs = NumericTextConfigurationSigns
-    @usableFromInline typealias Digits = NumericTextConfigurationDigits
-    @usableFromInline typealias Separators = NumericTextConfigurationSeparators
-    @usableFromInline typealias Options = NumericTextConfigurationOptions
+@usableFromInline final class Configuration {
+    @usableFromInline typealias Signs = ConfigurationSigns
+    @usableFromInline typealias Digits = ConfigurationDigits
+    @usableFromInline typealias Separators = ConfigurationSeparators
+    @usableFromInline typealias Options = ConfigurationOptions
     
     // MARK: Properties
     
@@ -94,10 +93,10 @@
     }
 }
 
-// MARK: - NumericTextConfigurationSigns
+// MARK: - ConfigurationSigns
 
-@usableFromInline struct NumericTextConfigurationSigns {
-    @usableFromInline typealias Sign = NumericTextComponents.Sign
+@usableFromInline struct ConfigurationSigns {
+    @usableFromInline typealias Sign = Components.Sign
     
     @usableFromInline static let positives: Self = .init(positives: [Sign.plus],  negatives: [])
     @usableFromInline static let negatives: Self = .init(positives: [], negatives: [Sign.minus])
@@ -151,10 +150,10 @@
     }
 }
 
-// MARK: - NumericTextConfigurationSeparators
+// MARK: - ConfigurationSeparators
 
-@usableFromInline struct NumericTextConfigurationSeparators {
-    @usableFromInline typealias Separator = NumericTextComponents.Separator
+@usableFromInline struct ConfigurationSeparators {
+    @usableFromInline typealias Separator = Components.Separator
     
     // MARK: Properties
 
@@ -193,10 +192,10 @@
     }
 }
 
-// MARK: - NumericTextConfigurationDigits
+// MARK: - ConfigurationDigits
 
-@usableFromInline struct NumericTextConfigurationDigits {
-    @usableFromInline typealias Digits = NumericTextComponents.Digits
+@usableFromInline struct ConfigurationDigits {
+    @usableFromInline typealias Digits = Components.Digits
     
     // MARK: Properties
     
@@ -220,9 +219,9 @@
     }
 }
 
-// MARK: - NumericTextConfigurationOptions
+// MARK: - ConfigurationOptions
 
-@usableFromInline struct NumericTextConfigurationOptions: OptionSet {
+@usableFromInline struct ConfigurationOptions: OptionSet {
     @usableFromInline static let integer     = Self(rawValue: 1 << 0)
     @usableFromInline static let nonnegative = Self(rawValue: 1 << 1)
     

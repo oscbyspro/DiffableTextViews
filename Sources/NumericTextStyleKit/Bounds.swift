@@ -1,5 +1,5 @@
 //
-//  NumericTextStyleBounds.swift
+//  Bounds.swift
 //  
 //
 //  Created by Oscar Byström Ericsson on 2021-10-18.
@@ -7,9 +7,9 @@
 
 #if os(iOS)
 
-// MARK: - NumericTextStyleBounds
+// MARK: - Bounds
 
-public struct NumericTextBounds<Value: NumericTextValue> {
+@usableFromInline struct Bounds<Value: NumericTextStyleKit.Value>: NumericTextBounds {
     
     // MARK: Properties: Static
     
