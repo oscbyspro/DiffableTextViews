@@ -33,12 +33,6 @@ public struct NumericTextStyle<Value: Boundable & Precise & Formattable>: Diffab
     @inlinable public init(locale: Locale = .autoupdatingCurrent) {
         self.locale = locale
     }
-    
-    // MARK: Initializers: Static
-    
-    @inlinable public static func numeric(locale: Locale = .autoupdatingCurrent) -> Self {
-        .init(locale: locale)
-    }
 }
 
 // MARK: - Getters
@@ -107,11 +101,11 @@ extension NumericTextStyle {
         update({ $0.suffix = newValue })
     }
     
-    @inlinable public func bounds(_ newValue: Self.Bounds) -> Self {
+    @inlinable public func bounds(_ newValue: Bounds) -> Self {
         update({ $0.bounds = newValue })
     }
     
-    @inlinable public func precision(_ newValue: Self.Precision) -> Self {
+    @inlinable public func precision(_ newValue: Precision) -> Self {
         update({ $0.precision = newValue })
     }
     
