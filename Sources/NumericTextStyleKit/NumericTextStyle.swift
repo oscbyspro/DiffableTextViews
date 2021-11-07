@@ -102,7 +102,7 @@ extension NumericTextStyle {
         update({ $0.locale = locale })
     }
     
-    @inlinable public func values(_ newValue: Bounds) -> Self {
+    @inlinable public func bounds(_ newValue: Bounds) -> Self {
         update({ $0.bounds = newValue })
     }
     
@@ -265,7 +265,6 @@ extension NumericTextStyle {
         guard let firstDigitIndex = snapshot.pointee.firstIndex(where: digit) else { return }
         guard snapshot.pointee[firstDigitIndex].character == zero else { return }
         snapshot.pointee.configure(attributes: firstDigitIndex, with: instruction)
-        
     }
     
     @inlinable func configureDecimalSeparatorIfItIsSuffix(in snapshot: UnsafeMutablePointer<Snapshot>, with instruction: (inout Attribute) -> Void) {

@@ -42,7 +42,9 @@ extension DiffableTextStyle {
     // MARK: 1
     
     @inlinable public func merge(_ snapshot: Snapshot, with content: Snapshot, in range: Range<Snapshot.Index>) -> Snapshot? {
-        snapshot.replace(range, with: content)
+        var snapshot = snapshot
+        snapshot.replaceSubrange(range, with: content)
+        return snapshot        
     }
     
     // MARK: 2

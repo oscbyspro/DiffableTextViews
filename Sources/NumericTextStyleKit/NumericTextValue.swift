@@ -1,5 +1,5 @@
 //
-//  NumericTextStyleScheme.swift
+//  NumericTextValue.swift
 //  
 //
 //  Created by Oscar Byström Ericsson on 2021-10-19.
@@ -11,7 +11,7 @@ import struct Foundation.Locale
 import protocol Foundation.FormatStyle
 import enum Foundation.NumberFormatStyleConfiguration
 
-// MARK: - NumericTextStyleScheme
+// MARK: - NumericTextValue
 
 public protocol NumericTextValue: Comparable {
     associatedtype FormatStyle: Foundation.FormatStyle where FormatStyle.FormatInput == Self, FormatStyle.FormatOutput == String
@@ -53,7 +53,7 @@ public extension NumericTextValue where Self: Numeric {
     @inlinable static var zero: Self { .zero }
 }
 
-// MARK: - NumericTextIntegerScheme
+// MARK: - NumericTextValueAsInteger
 
 #warning("Rename.")
 #warning("Remove.")
@@ -63,7 +63,7 @@ public extension NumericTextValueAsInteger {
     @inlinable static var maxLosslessDecimalDigits: Int { 0 }
 }
 
-// MARK: - NumericTextFloatScheme
+// MARK: - NumericTextValueAsFloat
 
 #warning("Rename.")
 #warning("Remove.")

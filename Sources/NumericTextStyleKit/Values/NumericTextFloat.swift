@@ -24,13 +24,9 @@ public protocol NumericTextFloat: NumericTextValueAsFloat, BinaryFloatingPoint {
 
 public extension NumericTextFloat {
     
-    // MARK: Values
+    // MARK: Bounds
     
     @inlinable static var minLosslessValue: Self { -maxLosslessValue }
-    
-    // MARK: Precision
-    
-    @inlinable static var maxLosslessDigits: Int { Self.maxLosslessDigits }
 
     // MARK: Components
 

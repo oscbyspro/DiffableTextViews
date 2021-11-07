@@ -21,14 +21,14 @@ public struct NumericTextComponents {
     // MARK: Initializers
     
     @inlinable init() {
-        self.sign = .none
+        self.sign = nil
         self.integers = .init()
-        self.separator = .none
+        self.separator = nil
         self.decimals = .init()
     }
     
     // MARK: Descriptions
-            
+    
     @inlinable public var hasDigits: Bool {
         !integers.isEmpty || !decimals.isEmpty
     }
