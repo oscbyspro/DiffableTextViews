@@ -16,20 +16,21 @@ import struct Foundation.FloatingPointFormatStyle
 ///
 /// - Range: ±Self.maxLosslessValue.
 /// - Significands: Self.maxLosslessDigits.
-@usableFromInline protocol Float: NumericTextValue, IntegerSubject, FormatSubject, BinaryFloatingPoint {
+@usableFromInline protocol Float: NumericTextValue, FormatSubject, FloatSubject, BinaryFloatingPoint {
     @inlinable init?(_ description: String)
 }
 
-// MARK: - Defaults
+// MARK: - BoundsSubject
 
 extension Float {
-    
-    // MARK: Bounds
-    
-    @inlinable public static var minLosslessValue: Self { -maxLosslessValue }
+    @inlinable public static var minLosslessValue: Self {
+        -maxLosslessValue
+    }
+}
 
-    // MARK: Utilities
+// MARK: - FormatSubject
 
+extension Float {
     @inlinable static func value(_ components: Components) -> Self? {
         .init(components.characters())
     }
@@ -46,17 +47,17 @@ extension Float16: Float {
     @inlinable public static var maxLosslessDigits: Int {   3 }
     
     public static func numericTextStyle(locale: Locale) -> some NumericTextStyleOfFloat16 {
-        Style<Self>(locale: locale)
+        Style(locale: locale)
     }
 }
 
 // MARK: - Float32
 
 extension Float32: Float {
-    @inlinable static var maxLosslessValue: Self { 9_999_999 }
-    @inlinable static var maxLosslessDigits: Int {         7 }
+    @inlinable public static var maxLosslessValue: Self { 9_999_999 }
+    @inlinable public static var maxLosslessDigits: Int {         7 }
     
-    public static func numericTextStyle(_ locale: Locale) -> some NumericTextStyleOfFloat32 {
+    @inlinable public static func numericTextStyle(locale: Locale) -> some NumericTextStyleOfFloat32 {
         Style(locale: locale)
     }
 }
@@ -64,10 +65,10 @@ extension Float32: Float {
 // MARK: - Float64
 
 extension Float64: Float {
-    @inlinable static var maxLosslessValue: Self { 999_999_999_999_999 }
-    @inlinable static var maxLosslessDigits: Int { 15 }
+    @inlinable public static var maxLosslessValue: Self { 999_999_999_999_999 }
+    @inlinable public static var maxLosslessDigits: Int { 15 }
     
-    public static func numericTextStyle(_ locale: Locale) -> some NumericTextStyleOfFloat64 {
+    @inlinable public static func numericTextStyle(locale: Locale) -> some NumericTextStyleOfFloat64 {
         Style(locale: locale)
     }
 }

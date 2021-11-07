@@ -31,7 +31,7 @@ public extension Decimal {
     // MARK: Styles
     
     @inlinable static func numericTextStyle(locale: Locale) -> some NumericTextStyleOfDecimal {
-        Style<Self>(locale: locale)
+        Style(locale: locale)
     }
 }
 

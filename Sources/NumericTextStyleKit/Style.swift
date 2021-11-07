@@ -7,19 +7,10 @@
 
 #if os(iOS)
 
-import DiffableTextViews
 import struct Foundation.Locale
-
-#warning("WIP")
-
-/*
- 
- .number(0...100_000_000, precision: .digits(integer: 1..., decimal: 2...2))
- .locale(locale)
- .suffix(locale.currencyCode)
- 
- */
-
+import struct DiffableTextViews.Attribute
+import struct DiffableTextViews.Snapshot
+import struct DiffableTextViews.Symbol
 
 // MARK: - NumericTextStyle
 

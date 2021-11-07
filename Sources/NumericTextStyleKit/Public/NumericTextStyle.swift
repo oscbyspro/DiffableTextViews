@@ -10,12 +10,6 @@ import protocol DiffableTextViews.DiffableTextStyle
 
 // MARK: - NumericTextStyle
 
-public protocol NumericTextValue: BoundsSubject, PrecisionSubject {
-    associatedtype NumericTextStyle: NumericTextStyleKit.NumericTextStyle
-    
-    @inlinable static func numericTextStyle(locale: Locale) -> NumericTextStyle
-}
-
 public protocol NumericTextStyle: DiffableTextStyle where Value: BoundsSubject & PrecisionSubject {
     typealias Bounds = NumericTextStyleKit.Bounds<Value>
     typealias Precision = NumericTextStyleKit.Precision<Value>
@@ -27,4 +21,3 @@ public protocol NumericTextStyle: DiffableTextStyle where Value: BoundsSubject &
     @inlinable func bounds(_ newValue: Bounds) -> Self
     @inlinable func precision(_ newValue: Precision) -> Self
 }
-

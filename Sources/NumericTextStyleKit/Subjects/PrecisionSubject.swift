@@ -23,15 +23,15 @@ extension PrecisionSubject {
 // MARK: - Specialization: Integer
 
 public protocol IntegerSubject: PrecisionSubject { }
-extension IntegerSubject {
-    @inlinable public static var maxLosslessIntegerDigits: Int { maxLosslessDigits }
+public extension IntegerSubject {
+    @inlinable static var maxLosslessIntegerDigits: Int { maxLosslessDigits }
     @inlinable static var maxLosslessDecimalDigits: Int { 0 }
 }
 
 // MARK: - Specialization: Float
 
 public protocol FloatSubject: PrecisionSubject { }
-extension FloatSubject {
-    @inlinable public static var maxLosslessIntegerDigits: Int { maxLosslessDigits }
-    @inlinable public static var maxLosslessDecimalDigits: Int { maxLosslessDigits }
+public extension FloatSubject {
+    @inlinable static var maxLosslessIntegerDigits: Int { maxLosslessDigits }
+    @inlinable static var maxLosslessDecimalDigits: Int { maxLosslessDigits }
 }
