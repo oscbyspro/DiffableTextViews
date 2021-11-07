@@ -12,13 +12,10 @@ import struct Foundation.Locale
 
 // MARK: - NumericTextStyle
 
-#warning("Could hide public values inside this struct.")
-#warning("Break recursion with: NumericTextStyle<Value, Value>...?")
-
 /// Formats text and number.
 ///
 /// - Complexity: O(n) or less for all calculations.
-public struct NumericTextStyle<Value: NumericTextValue>: DiffableTextStyle {
+struct NumericTextStyle<Value: NumericTextValue>: DiffableTextStyle, NumericTextStyleInterface {
     @usableFromInline typealias Components = NumericTextComponents
     @usableFromInline typealias Configuration = NumericTextConfiguration
     @usableFromInline typealias NumberOfDigits = NumericTextNumberOfDigits
@@ -29,12 +26,11 @@ public struct NumericTextStyle<Value: NumericTextValue>: DiffableTextStyle {
     // MARK: Properties
     
     @usableFromInline var locale: Locale
+    @usableFromInline var prefix: String? = nil
+    @usableFromInline var suffix: String? = nil
     
     @usableFromInline var bounds: Bounds = .all
     @usableFromInline var precision: Precision = .max
-    
-    @usableFromInline var prefix: String? = nil
-    @usableFromInline var suffix: String? = nil
     
     // MARK: Initializers
     
@@ -48,7 +44,7 @@ public struct NumericTextStyle<Value: NumericTextValue>: DiffableTextStyle {
         .init(locale: locale)
     }
     
-    // MARK: Getters, Locale
+    // MARK: Getters: Locale
 
     @inlinable var decimalSeparator: String {
         locale.decimalSeparator ?? Components.Separator.system.characters
@@ -58,7 +54,7 @@ public struct NumericTextStyle<Value: NumericTextValue>: DiffableTextStyle {
         locale.groupingSeparator ?? String()
     }
     
-    // MARK: Getters, Numbers
+    // MARK: Getters: Characters
     
     @inlinable var zero: Character {
         Components.Digits.zero
@@ -102,20 +98,20 @@ extension NumericTextStyle {
         update({ $0.locale = locale })
     }
     
-    @inlinable public func bounds(_ newValue: Bounds) -> Self {
-        update({ $0.bounds = newValue })
-    }
-    
-    @inlinable public func precision(_ newValue: Precision) -> Self {
-        update({ $0.precision = newValue })
-    }
-    
     @inlinable public func prefix(_ newValue: String?) -> Self {
         update({ $0.prefix = newValue })
     }
     
     @inlinable public func suffix(_ newValue: String?) -> Self {
         update({ $0.suffix = newValue })
+    }
+    
+    @inlinable public func bounds(_ newValue: Bounds) -> Self {
+        update({ $0.bounds = newValue })
+    }
+    
+    @inlinable public func precision(_ newValue: Precision) -> Self {
+        update({ $0.precision = newValue })
     }
     
     // MARK: Helpers
@@ -144,7 +140,7 @@ extension NumericTextStyle {
     // MARK: Components
     
     @inlinable func value(_ components: Components) -> Value? {
-        components.hasDigits ? Value.value(components) : Value.zero
+        components.integers.isEmpty && components.decimals.isEmpty ? Value.zero : Value.value(components)
     }
 }
 

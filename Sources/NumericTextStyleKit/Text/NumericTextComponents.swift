@@ -26,12 +26,6 @@ public struct NumericTextComponents {
         self.separator = nil
         self.decimals = .init()
     }
-    
-    // MARK: Descriptions
-    
-    @inlinable public var hasDigits: Bool {
-        !integers.isEmpty || !decimals.isEmpty
-    }
 
     // MARK: Utilities
         
