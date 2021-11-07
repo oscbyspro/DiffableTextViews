@@ -12,17 +12,22 @@ import struct Foundation.Locale
 
 #warning("WIP")
 
-public struct AnyStyle<Value> {
-    
-}
+/*
+ 
+ .number(0...100_000_000, precision: .digits(integer: 1..., decimal: 2...2))
+ .locale(locale)
+ .suffix(locale.currencyCode)
+ 
+ */
+
 
 // MARK: - NumericTextStyle
 
 /// Formats text and number.
 ///
 /// - Complexity: O(n) or less for all calculations.
-@usableFromInline struct Style<Value: NumericTextStyleKit.Value>: DiffableTextStyle, NumericTextStyle {
-    @usableFromInline typealias Bounds = NumericTextStyleKit.Bounds<Value>
+@usableFromInline struct Style<Value>: DiffableTextStyle where Value: BoundsSubject, Value: PrecisionSubject, Value: FormatSubject  {
+        @usableFromInline typealias Bounds = NumericTextStyleKit.Bounds<Value>
     @usableFromInline typealias Precision = NumericTextStyleKit.Precision<Value>
 
     // MARK: Properties

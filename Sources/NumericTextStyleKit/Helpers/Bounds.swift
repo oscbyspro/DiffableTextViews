@@ -9,12 +9,13 @@
 
 // MARK: - Bounds
 
-@usableFromInline struct Bounds<Value: NumericTextStyleKit.Value>: NumericTextBounds {
+public struct Bounds<Value: BoundsSubject> {
 
     // MARK: Properties
     
     public let min: Value
     public let max: Value
+    
     
     // MARK: Initializers
     
@@ -24,6 +25,9 @@
         self.min = Swift.max(min, Value.minLosslessValue)
         self.max = Swift.min(Value.maxLosslessValue, max)
     }
+}
+
+public extension Bounds {
     
     // MARK: Initialiers: Static
     

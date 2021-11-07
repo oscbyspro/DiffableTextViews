@@ -13,7 +13,7 @@ import struct Foundation.Decimal
 // MARK: - Decimal
 
 /// - Supports up to 38 significant digits.
-extension Decimal: NumericTextValueAsFloat { }
+extension Decimal { }
 extension Decimal {
     
     // MARK: Bounds
@@ -34,14 +34,8 @@ extension Decimal {
         .init(string: components.characters())
     }
     
-    @inlinable static func style(_ locale: Locale, precision: Self.Precision, separator: Separator) -> FormatStyle {
+    @inlinable static func style(_ locale: Locale, precision: FormatSubject.Precision, separator: FormatSubject.Separator) -> FormatStyle {
         .init(locale: locale).precision(precision).decimalSeparator(strategy: separator)
-    }
-    
-    // MARK: Style
-    
-    public static func numericTextStyle(_ locale: Locale) -> some NumericTextStyle {
-        Style<Self>(locale: locale)
     }
 }
 

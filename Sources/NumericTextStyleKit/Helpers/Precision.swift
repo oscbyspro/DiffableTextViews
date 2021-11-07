@@ -12,7 +12,7 @@ import enum Foundation.NumberFormatStyleConfiguration
 // MARK: - Precision
 
 #warning("Rename: Strategy.")
-@usableFromInline struct Precision<Value: NumericTextStyleKit.Value>: NumericTextPrecision {
+public struct Precision<Value: PrecisionSubject> {
     @usableFromInline typealias Strategy = PrecisionStrategy
     @usableFromInline typealias Defaults = PrecisionDefaults
     @usableFromInline typealias Total = PrecisionTotal<Value>
@@ -29,28 +29,34 @@ import enum Foundation.NumberFormatStyleConfiguration
     }
 }
 
-extension Precision {
+// MARK: - Initializers: Total
+
+public extension Precision {
     
-    // MARK: Initializers: Named
+    // MARK: Special
     
-    @inlinable public static var max: Self {
+    @inlinable static var max: Self {
         .max(Value.maxLosslessDigits)
     }
-        
-    // MARK: Initializers: Total
     
-    @inlinable public static func digits<R: RangeExpression>(_ total: R) -> Self where R.Bound == Int {
+    // MARK: Expressions
+    
+    @inlinable static func digits<R: RangeExpression>(_ total: R) -> Self where R.Bound == Int {
         .init(strategy: Total(total: total))
     }
     
-    @inlinable public static func max(_ total: Int) -> Self {
+    // MARK: Subexpressions
+    
+    @inlinable static func max(_ total: Int) -> Self {
         digits(Defaults.totalLowerBound...total)
     }
 }
 
-extension Precision: NumericTextPrecisionOfFloat where Value: NumericTextValueAsFloat {
+// MARK: - Initializers: Parts
 
-    // MARK: Initializers: Parts
+public extension Precision where Value: FloatSubject {
+
+    // MARK: Expressions
     
     @inlinable static func digits<R0: RangeExpression, R1: RangeExpression>(integer: R0, decimal: R1) -> Self where R0.Bound == Int, R1.Bound == Int {
         .init(strategy: Parts(upper: integer, lower: decimal))
@@ -63,6 +69,8 @@ extension Precision: NumericTextPrecisionOfFloat where Value: NumericTextValueAs
     @inlinable static func digits<R: RangeExpression>(decimal: R) -> Self where R.Bound == Int {
         .init(strategy: Parts(upper: Defaults.upperLowerBound..., lower: decimal))
     }
+    
+    // MARK: Subexpressions
     
     @inlinable static func max(integer: Int, decimal: Int) -> Self  {
         .digits(integer: Defaults.upperLowerBound...integer, decimal: Defaults.lowerLowerBound...decimal)
@@ -83,7 +91,7 @@ extension Precision {
     
     // MARK: Utilities
     
-    @inlinable func displayableStyle() -> Value.Precision {
+    @inlinable func displayableStyle() -> FormatSubject.Precision {
         strategy.displayableStyle()
     }
     
@@ -91,14 +99,14 @@ extension Precision {
         strategy.editableValidationWithCapacity(digits: digits)
     }
     
-    @inlinable func editableStyle() -> Value.Precision {
+    @inlinable func editableStyle() -> FormatSubject.Precision {
         let integer = Defaults.upperLowerBound...Value.maxLosslessIntegerDigits
         let decimal = Defaults.lowerLowerBound...Value.maxLosslessDecimalDigits
         
         return .integerAndFractionLength(integerLimits: integer, fractionLimits: decimal)
     }
     
-    @inlinable func editableStyle(_ digits: NumberOfDigits) -> Value.Precision {
+    @inlinable func editableStyle(_ digits: NumberOfDigits) -> FormatSubject.Precision {
         let upperUpperBound = Swift.max(Defaults.upperLowerBound, digits.upper)
         let lowerLowerBound = Swift.max(Defaults.lowerLowerBound, digits.lower)
                 
@@ -109,19 +117,20 @@ extension Precision {
     }
 }
 
+#warning("Everything below this line is a mess.")
 // MARK: - Strategies
 
 @usableFromInline protocol PrecisionStrategy {
     typealias Defaults = PrecisionDefaults
     
-    @inlinable func displayableStyle() -> Value.Precision
+    @inlinable func displayableStyle() -> FormatSubject.Precision
         
     @inlinable func editableValidationWithCapacity(digits: NumberOfDigits) -> NumberOfDigits?
 }
 
 // MARK: - Strategies: Total
 
-@usableFromInline struct PrecisionTotal<Value: NumericTextStyleKit.Value>: PrecisionStrategy {
+@usableFromInline struct PrecisionTotal<Value: PrecisionSubject>: PrecisionStrategy {
 
     // MARK: Properties
     
@@ -143,11 +152,10 @@ extension Precision {
     
     // MARK: Utilities
 
-    @inlinable func displayableStyle() -> Value.Precision {
+    @inlinable func displayableStyle() -> FormatSubject.Precision {
         .significantDigits(total)
     }
-        
-
+    
     @inlinable func editableValidationWithCapacity(digits: NumberOfDigits) -> NumberOfDigits? {
         let totalCapacity = total.upperBound - digits.upper - digits.lower
         guard totalCapacity >= 0 else { return nil }
@@ -158,7 +166,7 @@ extension Precision {
 
 // MARK: - Strategies: Separate
 
-@usableFromInline struct PrecisionParts<Value: NumericTextStyleKit.Value>: PrecisionStrategy {
+@usableFromInline struct PrecisionParts<Value: PrecisionSubject>: PrecisionStrategy {
 
     // MARK: Properties
     
@@ -194,7 +202,7 @@ extension Precision {
     
     // MARK: Utilities
     
-    @inlinable func displayableStyle() -> Value.Precision {
+    @inlinable func displayableStyle() -> FormatSubject.Precision {
         .integerAndFractionLength(integerLimits: upper, fractionLimits: lower)
     }
     
