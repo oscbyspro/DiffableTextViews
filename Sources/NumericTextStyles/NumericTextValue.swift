@@ -6,5 +6,5 @@
 //
 
 public protocol NumericTextValue: Boundable, Precise, Formattable {
-    typealias NumericTextStyle = NumericTextStyleKit.NumericTextStyle<Self>
+    typealias NumericTextStyle = NumericTextStyles.NumericTextStyle<Self>
 }

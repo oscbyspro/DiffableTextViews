@@ -16,8 +16,8 @@ import struct Foundation.Locale
 ///
 /// - Complexity: O(n) or less for all calculations.
 public struct NumericTextStyle<Value: Boundable & Precise & Formattable>: DiffableTextStyle {
-    public typealias Bounds = NumericTextStyleKit.Bounds<Value>
-    public typealias Precision = NumericTextStyleKit.Precision<Value>
+    public typealias Bounds = NumericTextStyles.Bounds<Value>
+    public typealias Precision = NumericTextStyles.Precision<Value>
 
     // MARK: Properties
     

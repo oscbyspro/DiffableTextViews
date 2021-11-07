@@ -11,7 +11,7 @@ let package = Package(
     products: [
         .library(
             name: "DiffableTextViews",
-            targets: ["DiffableTextViews", "NumericTextStyleKit"]),
+            targets: ["DiffableTextViews", "NumericTextStyles"]),
     ],
     targets: [
         .target(
@@ -22,7 +22,7 @@ let package = Package(
             dependencies: ["DiffableTextViews"]),
         // --------------------------------- //
         .target(
-            name: "NumericTextStyleKit",
+            name: "NumericTextStyles",
             dependencies: ["DiffableTextViews"]),
     ]
 )
