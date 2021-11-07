@@ -19,8 +19,8 @@ public protocol NumericTextValue: Comparable {
     // MARK: Aliases
     
     typealias NumericTextStyle = NumericTextStyleKit.NumericTextStyle<Self>
-    typealias Precision = NumberFormatStyleConfiguration.Precision
-    typealias Separator = NumberFormatStyleConfiguration.DecimalSeparatorDisplayStrategy
+    typealias NumericTextPrecision = NumericTextStyleKit.NumericTextPrecision<Self>
+    typealias NumericTextSeparator = NumberFormatStyleConfiguration.DecimalSeparatorDisplayStrategy
     
     // MARK: Values
     
@@ -37,7 +37,7 @@ public protocol NumericTextValue: Comparable {
     // MARK: Utilities
     
     @inlinable static func value(_ components: NumericTextComponents) -> Self?
-    @inlinable static func style(_ locale: Locale, precision: Precision, separator: Separator) -> FormatStyle
+    @inlinable static func style(_ locale: Locale, precision: NumericTextPrecision.Wrapped, separator: NumericTextSeparator) -> FormatStyle
 }
 
 // MARK: - Descriptions
@@ -55,8 +55,6 @@ public extension NumericTextValue where Self: Numeric {
 
 // MARK: - NumericTextValueAsInteger
 
-#warning("Rename.")
-#warning("Remove.")
 public  protocol NumericTextValueAsInteger: NumericTextValue { }
 public extension NumericTextValueAsInteger {
     @inlinable static var maxLosslessIntegerDigits: Int { maxLosslessDigits }
@@ -65,8 +63,6 @@ public extension NumericTextValueAsInteger {
 
 // MARK: - NumericTextValueAsFloat
 
-#warning("Rename.")
-#warning("Remove.")
 public  protocol NumericTextValueAsFloat: NumericTextValue { }
 public extension NumericTextValueAsFloat {
     @inlinable static var maxLosslessIntegerDigits: Int { maxLosslessDigits }

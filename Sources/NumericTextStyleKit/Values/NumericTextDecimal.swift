@@ -16,7 +16,7 @@ import struct Foundation.Decimal
 extension Decimal: NumericTextValueAsFloat { }
 public extension Decimal {
     
-    // MARK: Values
+    // MARK: Bounds
         
     @usableFromInline internal static let maxLosslessLimit = Decimal(string: String(repeating: "9", count: maxLosslessDigits))!
     @inlinable static var minLosslessValue: Self { -maxLosslessLimit }
@@ -26,13 +26,13 @@ public extension Decimal {
  
     @inlinable static var maxLosslessDigits: Int { 38 }
     
-    // MARK: Components
-    
+    // MARK: Utilities
+
     @inlinable static func value(_ components: NumericTextComponents) -> Self? {
         .init(string: components.characters())
     }
     
-    @inlinable static func style(_ locale: Locale, precision: Precision, separator: Separator) -> FormatStyle {
+    @inlinable static func style(_ locale: Locale, precision: NumericTextPrecision.Wrapped, separator: NumericTextSeparator) -> FormatStyle {
         .init(locale: locale).precision(precision).decimalSeparator(strategy: separator)
     }
 }

@@ -28,13 +28,13 @@ public extension NumericTextFloat {
     
     @inlinable static var minLosslessValue: Self { -maxLosslessValue }
 
-    // MARK: Components
+    // MARK: Utilities
 
     @inlinable static func value(_ components: NumericTextComponents) -> Self? {
         .init(components.characters())
     }
     
-    @inlinable static func style(_ locale: Locale, precision: Precision, separator: Separator) -> FloatingPointFormatStyle<Self> {
+    @inlinable static func style(_ locale: Locale, precision: NumericTextPrecision.Wrapped, separator: NumericTextSeparator) -> FloatingPointFormatStyle<Self> {
         .init(locale: locale).precision(precision).decimalSeparator(strategy: separator)
     }
 }

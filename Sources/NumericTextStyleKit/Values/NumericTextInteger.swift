@@ -27,13 +27,13 @@ public extension NumericTextInteger {
     @inlinable static var minLosslessValue: Self { min }
     @inlinable static var maxLosslessValue: Self { max }
     
-    // MARK: Components
+    // MARK: Utilities
 
     @inlinable static func value(_ components: NumericTextComponents) -> Self? {
         .init(components.characters())
     }
     
-    @inlinable static func style(_ locale: Locale, precision: Precision, separator: Separator) -> IntegerFormatStyle<Self> {
+    @inlinable static func style(_ locale: Locale, precision: NumericTextPrecision.Wrapped, separator: NumericTextSeparator) -> IntegerFormatStyle<Self> {
         .init(locale: locale).precision(precision).decimalSeparator(strategy: separator)
     }
 }
