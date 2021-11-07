@@ -33,6 +33,12 @@ public struct NumericTextStyle<Value: Boundable & Precise & Formattable>: Diffab
     @inlinable public init(locale: Locale = .autoupdatingCurrent) {
         self.locale = locale
     }
+    
+    // MARK: Initializers: Static
+    
+    @inlinable public static func numeric(locale: Locale = .autoupdatingCurrent) -> Self {
+        .init(locale: locale)
+    }
 }
 
 // MARK: - Getters

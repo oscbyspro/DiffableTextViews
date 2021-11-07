@@ -16,7 +16,7 @@ import struct Foundation.IntegerFormatStyle
 ///
 /// - Supports all values from Self.min to Self.max.
 /// - UInt64.max is limited to Int64.max because Apple uses Int64 (2021-10-25).
-public protocol NormalInteger: Formattable, Integer, FixedWidthInteger {
+public protocol NormalInteger: NumericTextValue, Integer, FixedWidthInteger {
     @inlinable init?(_ description: String)
 }
 
