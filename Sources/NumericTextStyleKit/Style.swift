@@ -34,12 +34,6 @@ import struct Foundation.Locale
         self.locale = locale
     }
     
-    // MARK: Initializers: Static
-    
-    @inlinable public static func number(locale: Locale = .autoupdatingCurrent) -> Self {
-        .init(locale: locale)
-    }
-    
     // MARK: Getters: Locale
 
     @inlinable var decimalSeparator: String {
@@ -166,8 +160,8 @@ extension Style {
     @inlinable public func merge(_ current: Snapshot, with content: Snapshot, in range: Range<Snapshot.Index>) -> Snapshot? {
         let configuration = configuration()
                 
-        var input = NumericTextStyleInput(content, with: configuration)
-        let toggleSignInstruction = input.consumeToggleSignInstruction()
+        var input = Input(content, with: configuration)
+        let toggleSignInstruction = input.consumeToggleSignCommand()
         
         var next = current
         next.replaceSubrange(range, with: input.content)
@@ -293,53 +287,6 @@ extension Style {
     
     @inlinable func components(_ snapshot: Snapshot, with configuration: Configuration) -> Components? {
         configuration.components(snapshot.characters(where: \.content))
-    }
-}
-
-// MARK: - Input
-
-@usableFromInline struct NumericTextStyleInput {
-    
-    // MARK: Properties
-    
-    @usableFromInline var content: Snapshot
-    @usableFromInline var configuration: Configuration
-        
-    // MARK: Initializers
-            
-    @inlinable init(_ content: Snapshot, with configuration: Configuration) {
-        self.content = content
-        self.configuration = configuration
-    }
-    
-    // MARK: Utilities
-    
-    @inlinable mutating func consumeToggleSignInstruction() -> NumericTextStyleToggleSignInstruction? {
-        .init(consumable: &content, with: configuration)
-    }
-}
-
-// MARK: Toggle Sign Instruction
-        
-@usableFromInline struct NumericTextStyleToggleSignInstruction {
-
-    // MARK: Properties
-    
-    @usableFromInline var sign: Components.Sign
-    
-    // MARK: Initializers
-            
-    @inlinable init?(consumable: inout Snapshot, with configuration: Configuration) {
-        guard let sign = configuration.signs.interpret(consumable.characters) else { return nil }
-                                        
-        self.sign = sign
-        consumable.removeAll()
-    }
-    
-    // MARK: Utilities
-            
-    @inlinable func process(_ components: inout Components) {
-        components.toggleSign(with: sign)
     }
 }
 

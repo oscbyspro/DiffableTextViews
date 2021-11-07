@@ -33,34 +33,80 @@ extension Integer {
         .init(components.characters())
     }
     
-    @inlinable static func style(_ locale: Locale, precision: Precision.Wrapped, separator: NumericTextSeparator) -> IntegerFormatStyle<Self> {
+    @inlinable static func style(_ locale: Locale, precision: Precision, separator: Separator) -> IntegerFormatStyle<Self> {
         .init(locale: locale).precision(precision).decimalSeparator(strategy: separator)
     }
 }
 
-// MARK: - Implementations
+// MARK: - Int
+
+public protocol NumericTextStyleOfInt: NumericTextStyle where Value == Int { }
+extension Style: NumericTextStyleOfInt where Value == Int { }
 
 extension Int: Integer {
     @usableFromInline static let maxLosslessDigits: Int = String(maxLosslessValue).count
+    
+    public static func numericTextStyle(_ locale: Locale) -> some NumericTextStyleOfInt {
+        Style(locale: locale)
+    }
 }
+
+// MARK: - Int8
+
+public protocol NumericTextStyleOfInt8: NumericTextStyle where Value == Int8 { }
+extension Style: NumericTextStyleOfInt8 where Value == Int8 { }
 
 extension Int8: Integer {
     @inlinable public static var maxLosslessDigits: Int { 3 }
+    
+    public static func numericTextStyle(_ locale: Locale) -> some NumericTextStyleOfInt8 {
+        Style(locale: locale)
+    }
 }
+
+// MARK: - Int16
+
+public protocol NumericTextStyleOfInt16: NumericTextStyle where Value == Int16 { }
+extension Style: NumericTextStyleOfInt16 where Value == Int16 { }
 
 extension Int16: Integer {
     @inlinable public static var maxLosslessDigits: Int { 5 }
+    
+    public static func numericTextStyle(_ locale: Locale) -> some NumericTextStyleOfInt16 {
+        Style(locale: locale)
+    }
 }
+
+// MARK: - Int32
+
+public protocol NumericTextStyleOfInt32: NumericTextStyle where Value == Int32 { }
+extension Style: NumericTextStyleOfInt32 where Value == Int32 { }
 
 extension Int32: Integer {
     @inlinable public static var maxLosslessDigits: Int { 10 }
+    
+    public static func numericTextStyle(_ locale: Locale) -> some NumericTextStyleOfInt32 {
+        Style(locale: locale)
+    }
 }
+
+// MARK: Int64
+
+public protocol NumericTextStyleOfInt64: NumericTextStyle where Value == Int64 { }
+extension Style: NumericTextStyleOfInt64 where Value == Int64 { }
 
 extension Int64: Integer {
     @inlinable public static var maxLosslessDigits: Int { 19 }
+    
+    public static func numericTextStyle(_ locale: Locale) -> some NumericTextStyleOfInt64 {
+        Style(locale: locale)
+    }
 }
 
-// MARK: - UInts
+// MARK: - UInt
+
+public protocol NumericTextStyleOfUInt: NumericTextStyle where Value == UInt { }
+extension Style: NumericTextStyleOfUInt where Value == UInt { }
 
 extension UInt: Integer {
     /// Apple, please fix IntegerFormatStyleUInt64, it uses an Int64.
@@ -72,19 +118,55 @@ extension UInt: Integer {
     @inlinable public static var maxLosslessDigits: Int {
         Int64.maxLosslessDigits
     }
+    
+    public static func numericTextStyle(_ locale: Locale) -> some NumericTextStyleOfUInt {
+        Style(locale: locale)
+    }
 }
+
+// MARK: - UInt8
+
+public protocol NumericTextStyleOfUInt8: NumericTextStyle where Value == UInt8 { }
+extension Style: NumericTextStyleOfUInt8 where Value == UInt8 { }
 
 extension UInt8: Integer {
     @inlinable public static var maxLosslessDigits: Int { 3 }
+    
+    public static func numericTextStyle(_ locale: Locale) -> some NumericTextStyleOfUInt8 {
+        Style(locale: locale)
+    }
 }
+
+// MARK: - UInt8
+
+public protocol NumericTextStyleOfUInt16: NumericTextStyle where Value == UInt16 { }
+extension Style: NumericTextStyleOfUInt16 where Value == UInt16 { }
 
 extension UInt16: Integer {
     @inlinable public static var maxLosslessDigits: Int { 5 }
+    
+    public static func numericTextStyle(_ locale: Locale) -> some NumericTextStyleOfUInt16 {
+        Style(locale: locale)
+    }
 }
+
+// MARK: - UInt8
+
+public protocol NumericTextStyleOfUInt32: NumericTextStyle where Value == UInt32 { }
+extension Style: NumericTextStyleOfUInt32 where Value == UInt32 { }
 
 extension UInt32: Integer {
     @inlinable public static var maxLosslessDigits: Int { 10 }
+    
+    public static func numericTextStyle(_ locale: Locale) -> some NumericTextStyleOfUInt32 {
+        Style(locale: locale)
+    }
 }
+
+// MARK: - UInt8
+
+public protocol NumericTextStyleOfUInt64: NumericTextStyle where Value == UInt64 { }
+extension Style: NumericTextStyleOfUInt64 where Value == UInt64 { }
 
 extension UInt64: Integer {
     /// Apple, please fix IntegerFormatStyleUInt64, it uses an Int64.
@@ -95,6 +177,10 @@ extension UInt64: Integer {
     /// Apple, please fix IntegerFormatStyleUInt64, it uses an Int64.
     @inlinable public static var maxLosslessDigits: Int {
         Int64.maxLosslessDigits
+    }
+    
+    public static func numericTextStyle(_ locale: Locale) -> some NumericTextStyleOfUInt64 {
+        Style(locale: locale)
     }
 }
 

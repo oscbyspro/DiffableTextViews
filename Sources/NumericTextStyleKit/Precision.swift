@@ -13,7 +13,6 @@ import enum Foundation.NumberFormatStyleConfiguration
 
 #warning("Rename: Strategy.")
 @usableFromInline struct Precision<Value: NumericTextStyleKit.Value>: NumericTextPrecision {
-    @usableFromInline typealias Wrapped = NumberFormatStyleConfiguration.Precision
     @usableFromInline typealias Strategy = PrecisionStrategy
     @usableFromInline typealias Defaults = PrecisionDefaults
     @usableFromInline typealias Total = PrecisionTotal<Value>
@@ -28,6 +27,9 @@ import enum Foundation.NumberFormatStyleConfiguration
     @inlinable init(strategy: Strategy) {
         self.strategy = strategy
     }
+}
+
+extension Precision {
     
     // MARK: Initializers: Named
     
@@ -46,32 +48,32 @@ import enum Foundation.NumberFormatStyleConfiguration
     }
 }
 
-extension Precision where Value: NumericTextValueAsFloat {
+extension Precision: NumericTextPrecisionOfFloat where Value: NumericTextValueAsFloat {
 
     // MARK: Initializers: Parts
     
-    @inlinable static func digits<R0: RangeExpression, R1: RangeExpression>(integer: R0, fraction: R1) -> Self where R0.Bound == Int, R1.Bound == Int {
-        .init(strategy: Parts(upper: integer, lower: fraction))
+    @inlinable static func digits<R0: RangeExpression, R1: RangeExpression>(integer: R0, decimal: R1) -> Self where R0.Bound == Int, R1.Bound == Int {
+        .init(strategy: Parts(upper: integer, lower: decimal))
     }
     
     @inlinable static func digits<R: RangeExpression>(integer: R) -> Self where R.Bound == Int {
         .init(strategy: Parts(upper: integer, lower: Defaults.lowerLowerBound...))
     }
     
-    @inlinable static func digits<R: RangeExpression>(fraction: R) -> Self where R.Bound == Int {
-        .init(strategy: Parts(upper: Defaults.upperLowerBound..., lower: fraction))
+    @inlinable static func digits<R: RangeExpression>(decimal: R) -> Self where R.Bound == Int {
+        .init(strategy: Parts(upper: Defaults.upperLowerBound..., lower: decimal))
     }
     
-    @inlinable static func max(integer: Int, fraction: Int) -> Self  {
-        .digits(integer: Defaults.upperLowerBound...integer, fraction: Defaults.lowerLowerBound...fraction)
+    @inlinable static func max(integer: Int, decimal: Int) -> Self  {
+        .digits(integer: Defaults.upperLowerBound...integer, decimal: Defaults.lowerLowerBound...decimal)
     }
     
     @inlinable static func max(integer: Int) -> Self {
-        .max(integer: integer, fraction: Value.maxLosslessDigits - integer)
+        .max(integer: integer, decimal: Value.maxLosslessDigits - integer)
     }
     
-    @inlinable static func max(fraction: Int) -> Self {
-        .max(integer: Value.maxLosslessDigits - fraction, fraction: fraction)
+    @inlinable static func max(decimal: Int) -> Self {
+        .max(integer: Value.maxLosslessDigits - decimal, decimal: decimal)
     }
 }
 
@@ -81,7 +83,7 @@ extension Precision {
     
     // MARK: Utilities
     
-    @inlinable func displayableStyle() -> Wrapped {
+    @inlinable func displayableStyle() -> Value.Precision {
         strategy.displayableStyle()
     }
     
@@ -89,14 +91,14 @@ extension Precision {
         strategy.editableValidationWithCapacity(digits: digits)
     }
     
-    @inlinable func editableStyle() -> Wrapped {
-        let integers = Defaults.upperLowerBound...Value.maxLosslessIntegerDigits
-        let fraction = Defaults.lowerLowerBound...Value.maxLosslessDecimalDigits
+    @inlinable func editableStyle() -> Value.Precision {
+        let integer = Defaults.upperLowerBound...Value.maxLosslessIntegerDigits
+        let decimal = Defaults.lowerLowerBound...Value.maxLosslessDecimalDigits
         
-        return .integerAndFractionLength(integerLimits: integers, fractionLimits: fraction)
+        return .integerAndFractionLength(integerLimits: integer, fractionLimits: decimal)
     }
     
-    @inlinable func editableStyle(_ digits: NumberOfDigits) -> Wrapped {
+    @inlinable func editableStyle(_ digits: NumberOfDigits) -> Value.Precision {
         let upperUpperBound = Swift.max(Defaults.upperLowerBound, digits.upper)
         let lowerLowerBound = Swift.max(Defaults.lowerLowerBound, digits.lower)
                 
@@ -110,10 +112,9 @@ extension Precision {
 // MARK: - Strategies
 
 @usableFromInline protocol PrecisionStrategy {
-    typealias Wrapped = NumberFormatStyleConfiguration.Precision
     typealias Defaults = PrecisionDefaults
     
-    @inlinable func displayableStyle() -> Wrapped
+    @inlinable func displayableStyle() -> Value.Precision
         
     @inlinable func editableValidationWithCapacity(digits: NumberOfDigits) -> NumberOfDigits?
 }
@@ -140,7 +141,7 @@ extension Precision {
     
     // MARK: Utilities
 
-    @inlinable func displayableStyle() -> Wrapped {
+    @inlinable func displayableStyle() -> Value.Precision {
         .significantDigits(total)
     }
         
@@ -191,7 +192,7 @@ extension Precision {
     
     // MARK: Utilities
     
-    @inlinable func displayableStyle() -> Wrapped {
+    @inlinable func displayableStyle() -> Value.Precision {
         .integerAndFractionLength(integerLimits: upper, fractionLimits: lower)
     }
     

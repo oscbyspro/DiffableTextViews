@@ -13,14 +13,13 @@ import enum Foundation.NumberFormatStyleConfiguration
 
 // MARK: - NumericTextValue
 
-@usableFromInline protocol Value: Comparable {
+@usableFromInline protocol Value: NumericTextValue {
     associatedtype FormatStyle: Foundation.FormatStyle where FormatStyle.FormatInput == Self, FormatStyle.FormatOutput == String
     
     // MARK: Aliases
     
-    typealias Style = NumericTextStyleKit.Style<Self>
-    typealias Precision = NumericTextStyleKit.Precision<Self>
-    typealias NumericTextSeparator = NumberFormatStyleConfiguration.DecimalSeparatorDisplayStrategy
+    typealias Precision = NumberFormatStyleConfiguration.Precision
+    typealias Separator = NumberFormatStyleConfiguration.DecimalSeparatorDisplayStrategy
     
     // MARK: Values
     
@@ -37,7 +36,7 @@ import enum Foundation.NumberFormatStyleConfiguration
     // MARK: Utilities
     
     @inlinable static func value(_ components: Components) -> Self?
-    @inlinable static func style(_ locale: Locale, precision: Precision.Wrapped, separator: NumericTextSeparator) -> FormatStyle
+    @inlinable static func style(_ locale: Locale, precision: Precision, separator: Separator) -> FormatStyle
 }
 
 // MARK: - Descriptions

@@ -13,70 +13,62 @@
     
     // MARK: Properties: Static
     
-    @inlinable public static var zero:             Value { Value.zero }
-    @inlinable public static var maxLosslessValue: Value { Value.maxLosslessValue  }
-    @inlinable public static var minLosslessValue: Value { Value.minLosslessValue  }
+    @inlinable public static var zero: Value { Value.zero }
+    @inlinable public static var  max: Value { Value.maxLosslessValue }
+    @inlinable public static var  min: Value { Value.maxLosslessValue }
 
     // MARK: Properties
     
-    public let minLosslessValue: Value
-    public let maxLosslessValue: Value
+    public let min: Value
+    public let max: Value
     
     // MARK: Initializers
     
-    @inlinable init(minLosslessValue: Value = Self.minLosslessValue, maxLosslessValue: Value = Self.maxLosslessValue) {
-        precondition(minLosslessValue <= maxLosslessValue)
+    @inlinable init(min: Value = Self.min, max: Value = Self.max) {
+        precondition(min <= max)
         
-        self.minLosslessValue = Swift.max(minLosslessValue, Self.minLosslessValue)
-        self.maxLosslessValue = Swift.min(Self.maxLosslessValue, maxLosslessValue)
-    }
-    
-    // MARK: Initializers: Static
-    
-    @inlinable public static func min(_ value: Value) -> Self {
-        .init(minLosslessValue: value)
-    }
-    
-    @inlinable public static func max(_ value: Value) -> Self {
-        .init(maxLosslessValue: value)
-    }
-    
-    @inlinable public static func inside(of values: ClosedRange<Value>) -> Self {
-        .init(minLosslessValue: values.lowerBound, maxLosslessValue: values.upperBound)
+        self.min = Swift.max(min, Self.min)
+        self.max = Swift.min(Self.max, max)
     }
     
     // MARK: Initialiers: Static
     
-    @inlinable public static var all: Self {
-        .inside(of: minLosslessValue...maxLosslessValue)
+    @inlinable static var all: Self {
+        .values(in: min...max)
     }
     
-    @inlinable public static var nonnegative: Self {
-        .min(zero)
+    // MARK: Initializers: Static
+    
+    @inlinable static func min(_ value: Value) -> Self {
+        .init(min: value)
     }
     
-    @inlinable public static var nonpositive: Self {
-        .max(zero)
+    @inlinable static func max(_ value: Value) -> Self {
+        .init(max: value)
+    }
+    
+    @inlinable static func values(in values: ClosedRange<Value>) -> Self {
+        .init(min: values.lowerBound, max: values.upperBound)
     }
     
     // MARK: Descriptions
     
     @inlinable var nonnegative: Bool {
-        minLosslessValue >= Value.zero
+        min >= Value.zero
     }
     
     @inlinable var nonpositive: Bool {
-        maxLosslessValue <= Value.zero
+        max <= Value.zero
     }
     
     // MARK: Utilities
     
     @inlinable func displayableStyle(_ value: Value) -> Value {
-        Swift.max(minLosslessValue, Swift.min(value, maxLosslessValue))
+        Swift.max(min, Swift.min(value, max))
     }
     
     @inlinable func editableValidation(_ value: Value) -> Bool {
-        Swift.min(minLosslessValue, Self.zero) <= value && value <= Swift.max(Self.zero, maxLosslessValue)
+        Swift.min(min, Self.zero) <= value && value <= Swift.max(Self.zero, max)
     }
 }
 
