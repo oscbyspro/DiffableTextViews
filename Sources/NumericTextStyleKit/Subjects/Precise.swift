@@ -7,7 +7,7 @@
 
 // MARK: - PrecisionSubject
 
-public protocol PrecisionSubject {
+public protocol Precise {
     @inlinable static var maxLosslessDigits:        Int { get }
     @inlinable static var maxLosslessIntegerDigits: Int { get }
     @inlinable static var maxLosslessDecimalDigits: Int { get }
@@ -15,23 +15,23 @@ public protocol PrecisionSubject {
 
 // MARK: - Descriptions: Internal
 
-extension PrecisionSubject {
+extension Precise {
     @inlinable static var float:   Bool { maxLosslessDecimalDigits != 0 }
     @inlinable static var integer: Bool { maxLosslessDecimalDigits == 0 }
 }
 
 // MARK: - Specialization: Integer
 
-public protocol IntegerSubject: PrecisionSubject { }
-public extension IntegerSubject {
+public protocol Integer: Precise { }
+public extension Integer {
     @inlinable static var maxLosslessIntegerDigits: Int { maxLosslessDigits }
     @inlinable static var maxLosslessDecimalDigits: Int { 0 }
 }
 
 // MARK: - Specialization: Float
 
-public protocol FloatSubject: PrecisionSubject { }
-public extension FloatSubject {
+public protocol Float: Precise { }
+public extension Float {
     @inlinable static var maxLosslessIntegerDigits: Int { maxLosslessDigits }
     @inlinable static var maxLosslessDecimalDigits: Int { maxLosslessDigits }
 }

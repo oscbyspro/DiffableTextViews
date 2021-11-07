@@ -9,15 +9,15 @@
 
 import SwiftUI
 
-public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
-    public typealias Value = Style.Value
+public struct DiffableTextField<NumericTextStyle: DiffableTextStyle>: UIViewRepresentable {
+    public typealias Value = NumericTextStyle.Value
     public typealias UIViewType = CoreTextField
     public typealias Configuration = (ProxyTextField<UIViewType>) -> Void
     
     // MARK: Properties
     
     @usableFromInline let value: Binding<Value>
-    @usableFromInline let style: Style
+    @usableFromInline let style: NumericTextStyle
 
     @usableFromInline var setup:  Configuration? = nil
     @usableFromInline var update: Configuration? = nil
@@ -25,9 +25,15 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
 
     // MARK: Initializers
     
-    @inlinable public init(value: Binding<Value>, style: () -> Style) {
+    @inlinable public init(_ value: Binding<Value>, style: () -> NumericTextStyle) {
         self.value = value
         self.style = style()
+    }
+    
+    // MARK: Initializers: Static
+    
+    @inlinable public static func make(_ value: Binding<Value>, style: () -> NumericTextStyle) -> Self {
+        .init(value, style: style)
     }
     
     // MARK: Transformations

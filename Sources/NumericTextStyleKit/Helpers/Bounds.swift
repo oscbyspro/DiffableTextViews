@@ -9,7 +9,7 @@
 
 // MARK: - Bounds
 
-public struct Bounds<Value: BoundsSubject> {
+public struct Bounds<Value: Boundable> {
 
     // MARK: Properties
     

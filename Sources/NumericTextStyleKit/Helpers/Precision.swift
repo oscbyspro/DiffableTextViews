@@ -12,7 +12,7 @@ import enum Foundation.NumberFormatStyleConfiguration
 // MARK: - Precision
 
 #warning("Rename: Strategy.")
-public struct Precision<Value: PrecisionSubject> {
+public struct Precision<Value: Precise> {
     @usableFromInline typealias Strategy = PrecisionStrategy
     @usableFromInline typealias Defaults = PrecisionDefaults
     @usableFromInline typealias Total = PrecisionTotal<Value>
@@ -54,7 +54,7 @@ public extension Precision {
 
 // MARK: - Initializers: Parts
 
-public extension Precision where Value: FloatSubject {
+public extension Precision where Value: Float {
 
     // MARK: Expressions
     
@@ -91,7 +91,7 @@ extension Precision {
     
     // MARK: Utilities
     
-    @inlinable func displayableStyle() -> FormatSubject.Precision {
+    @inlinable func displayableStyle() -> Formattable.Precision {
         strategy.displayableStyle()
     }
     
@@ -99,14 +99,14 @@ extension Precision {
         strategy.editableValidationWithCapacity(digits: digits)
     }
     
-    @inlinable func editableStyle() -> FormatSubject.Precision {
+    @inlinable func editableStyle() -> Formattable.Precision {
         let integer = Defaults.upperLowerBound...Value.maxLosslessIntegerDigits
         let decimal = Defaults.lowerLowerBound...Value.maxLosslessDecimalDigits
         
         return .integerAndFractionLength(integerLimits: integer, fractionLimits: decimal)
     }
     
-    @inlinable func editableStyle(_ digits: NumberOfDigits) -> FormatSubject.Precision {
+    @inlinable func editableStyle(_ digits: NumberOfDigits) -> Formattable.Precision {
         let upperUpperBound = Swift.max(Defaults.upperLowerBound, digits.upper)
         let lowerLowerBound = Swift.max(Defaults.lowerLowerBound, digits.lower)
                 
@@ -123,14 +123,14 @@ extension Precision {
 @usableFromInline protocol PrecisionStrategy {
     typealias Defaults = PrecisionDefaults
     
-    @inlinable func displayableStyle() -> FormatSubject.Precision
+    @inlinable func displayableStyle() -> Formattable.Precision
         
     @inlinable func editableValidationWithCapacity(digits: NumberOfDigits) -> NumberOfDigits?
 }
 
 // MARK: - Strategies: Total
 
-@usableFromInline struct PrecisionTotal<Value: PrecisionSubject>: PrecisionStrategy {
+@usableFromInline struct PrecisionTotal<Value: Precise>: PrecisionStrategy {
 
     // MARK: Properties
     
@@ -152,7 +152,7 @@ extension Precision {
     
     // MARK: Utilities
 
-    @inlinable func displayableStyle() -> FormatSubject.Precision {
+    @inlinable func displayableStyle() -> Formattable.Precision {
         .significantDigits(total)
     }
     
@@ -166,7 +166,7 @@ extension Precision {
 
 // MARK: - Strategies: Separate
 
-@usableFromInline struct PrecisionParts<Value: PrecisionSubject>: PrecisionStrategy {
+@usableFromInline struct PrecisionParts<Value: Precise>: PrecisionStrategy {
 
     // MARK: Properties
     
@@ -202,7 +202,7 @@ extension Precision {
     
     // MARK: Utilities
     
-    @inlinable func displayableStyle() -> FormatSubject.Precision {
+    @inlinable func displayableStyle() -> Formattable.Precision {
         .integerAndFractionLength(integerLimits: upper, fractionLimits: lower)
     }
     

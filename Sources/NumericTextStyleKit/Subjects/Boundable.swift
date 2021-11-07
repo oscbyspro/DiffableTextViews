@@ -7,7 +7,7 @@
 
 // MARK: - BoundsSubject
 
-public protocol BoundsSubject: Comparable {
+public protocol Boundable: Comparable {
     @inlinable static var zero:             Self { get }
     @inlinable static var minLosslessValue: Self { get }
     @inlinable static var maxLosslessValue: Self { get }

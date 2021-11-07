@@ -11,7 +11,7 @@ import enum Foundation.NumberFormatStyleConfiguration
 
 // MARK: - FormatSubject
 
-@usableFromInline protocol FormatSubject {
+public protocol Formattable {
     associatedtype FormatStyle: Foundation.FormatStyle where FormatStyle.FormatInput == Self, FormatStyle.FormatOutput == String
     
     // MARK: Aliases
@@ -21,7 +21,6 @@ import enum Foundation.NumberFormatStyleConfiguration
     
     // MARK: Utilities
     
-    @inlinable static func value(_ components: Components) -> Self?
+    @inlinable static func value(_ system: String) -> Self?
     @inlinable static func style(_ locale: Locale, precision: Precision, separator: Separator) -> FormatStyle
 }
-

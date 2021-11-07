@@ -7,17 +7,17 @@
 
 #if os(iOS)
 
+import DiffableTextViews
 import struct Foundation.Locale
-import struct DiffableTextViews.Attribute
-import struct DiffableTextViews.Snapshot
-import struct DiffableTextViews.Symbol
 
 // MARK: - NumericTextStyle
 
 /// Formats text and number.
 ///
 /// - Complexity: O(n) or less for all calculations.
-@usableFromInline struct Style<Value: BoundsSubject & PrecisionSubject & FormatSubject>: NumericTextStyle {    
+public struct NumericTextStyle<Value: Boundable & Precise & Formattable>: DiffableTextStyle {
+    public typealias Bounds = NumericTextStyleKit.Bounds<Value>
+    public typealias Precision = NumericTextStyleKit.Precision<Value>
 
     // MARK: Properties
     
@@ -25,8 +25,8 @@ import struct DiffableTextViews.Symbol
     @usableFromInline var prefix: String? = nil
     @usableFromInline var suffix: String? = nil
     
-    @usableFromInline var bounds = Bounds.all
-    @usableFromInline var precision = Precision.max
+    @usableFromInline var bounds: Bounds = .all
+    @usableFromInline var precision: Precision = .max
     
     // MARK: Initializers
     
@@ -37,7 +37,7 @@ import struct DiffableTextViews.Symbol
 
 // MARK: - Getters
 
-extension Style {
+extension NumericTextStyle {
     
     // MARK: Locale
 
@@ -66,7 +66,7 @@ extension Style {
 
 // MARK: - Format
 
-extension Style {
+extension NumericTextStyle {
     
     // MARK: Styles
     
@@ -85,7 +85,7 @@ extension Style {
 
 // MARK: - Update
 
-extension Style {
+extension NumericTextStyle {
     
     // MARK: Transformations
     
@@ -118,7 +118,7 @@ extension Style {
 
 // MARK: - Value
 
-extension Style {
+extension NumericTextStyle {
     
     // MARK: Process
     
@@ -135,13 +135,13 @@ extension Style {
     // MARK: Components
     
     @inlinable func value(_ components: Components) -> Value? {
-        components.integers.isEmpty && components.decimals.isEmpty ? Value.zero : Value.value(components)
+        components.integers.isEmpty && components.decimals.isEmpty ? Value.zero : Value.value(components.characters())
     }
 }
 
 // MARK: - Snapshot
 
-extension Style {
+extension NumericTextStyle {
     
     // MARK: Edit
     
@@ -158,7 +158,7 @@ extension Style {
 
 // MARK: - Snapshot
 
-extension Style {
+extension NumericTextStyle {
     
     // MARK: Merge
     
@@ -268,7 +268,7 @@ extension Style {
 
 // MARK: - NumericText
 
-extension Style {
+extension NumericTextStyle {
     
     // MARK: Configuration
     

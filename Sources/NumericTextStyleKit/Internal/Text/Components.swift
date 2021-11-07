@@ -7,7 +7,6 @@
 
 // MARK: - Components
 
-#warning("Rename as Text.")
 @usableFromInline struct Components {
     
     // MARK: Properties
