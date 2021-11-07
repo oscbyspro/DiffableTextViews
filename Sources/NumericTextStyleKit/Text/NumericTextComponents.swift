@@ -7,6 +7,8 @@
 
 // MARK: - NumericTextComponents
 
+#warning("Make this internal.")
+#warning("Rename as components.")
 public struct NumericTextComponents {
     
     // MARK: Properties
@@ -26,14 +28,6 @@ public struct NumericTextComponents {
     }
     
     // MARK: Descriptions
-    
-    @inlinable public var hasSign: Bool {
-        sign != nil
-    }
-    
-    @inlinable public var hasSeparator: Bool {
-        separator != nil
-    }
             
     @inlinable public var hasDigits: Bool {
         !integers.isEmpty || !decimals.isEmpty

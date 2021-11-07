@@ -18,7 +18,7 @@ public protocol NumericTextValue: Comparable {
     
     // MARK: Aliases
     
-    typealias NumericTextStyle = DiffableTextViews.NumericTextStyle<Self>
+    typealias NumericTextStyle = NumericTextStyleKit.NumericTextStyle<Self>
     typealias Precision = NumberFormatStyleConfiguration.Precision
     typealias Separator = NumberFormatStyleConfiguration.DecimalSeparatorDisplayStrategy
     

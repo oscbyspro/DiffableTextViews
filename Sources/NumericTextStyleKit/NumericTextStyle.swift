@@ -7,6 +7,7 @@
 
 #if os(iOS)
 
+import DiffableTextViews
 import struct Foundation.Locale
 
 // MARK: - NumericTextStyle
@@ -175,9 +176,10 @@ extension NumericTextStyle {
                 
         var input = NumericTextStyleInput(content, with: configuration)
         let toggleSignInstruction = input.consumeToggleSignInstruction()
-                
-        let next = current.replace(range, with: input.content)
-                
+        
+        var next = current
+        next.replaceSubrange(range, with: input.content)
+                        
         guard var components = components(next, with: configuration) else { return nil }
         toggleSignInstruction?.process(&components)
                 
@@ -261,7 +263,7 @@ extension NumericTextStyle {
     @inlinable func configureFirstDigitIfItIsZero(in snapshot: UnsafeMutablePointer<Snapshot>, with instruction: (inout Attribute) -> Void) {
         func digit(symbol: Symbol) -> Bool { digits.contains(symbol.character) }
         guard let firstDigitIndex = snapshot.pointee.firstIndex(where: digit) else { return }
-        guard snapshot.pointee.characters[firstDigitIndex.character] == zero  else { return }
+        guard snapshot.pointee[firstDigitIndex].character == zero else { return }
         snapshot.pointee.configure(attributes: firstDigitIndex, with: instruction)
         
     }

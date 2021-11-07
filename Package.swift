@@ -11,7 +11,7 @@ let package = Package(
     products: [
         .library(
             name: "DiffableTextViews",
-            targets: ["DiffableTextViews"]),
+            targets: ["DiffableTextViews", "NumericTextStyleKit"]),
     ],
     targets: [
         .target(
@@ -19,6 +19,10 @@ let package = Package(
             dependencies: []),
         .testTarget(
             name: "DiffableTextViewsTests",
-            dependencies: ["DiffableTextViews"])
+            dependencies: ["DiffableTextViews"]),
+        // --------------------------------- //
+        .target(
+            name: "NumericTextStyleKit",
+            dependencies: ["DiffableTextViews"]),
     ]
 )

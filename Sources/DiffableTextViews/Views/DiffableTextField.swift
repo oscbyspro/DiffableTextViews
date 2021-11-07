@@ -29,13 +29,6 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
         self.value = value
         self.style = style()
     }
-        
-    // MARK: Initializers: Styles
-
-    @inlinable init<T: NumericTextValue>(value: Binding<T>, style: () -> Style) where Style == T.NumericTextStyle {
-        self.value = value
-        self.style = style()
-    }
     
     // MARK: Transformations
     
