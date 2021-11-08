@@ -5,6 +5,8 @@
 //  Created by Oscar Byström Ericsson on 2021-11-07.
 //
 
+#if os(iOS)
+
 import Foundation
 import DiffableTextViews
 
@@ -75,3 +77,5 @@ public extension DiffableTextStyle where Self == NumericTextStyle<Float64> {
 public extension DiffableTextStyle where Self == NumericTextStyle<Decimal> {
     @inlinable static var numeric: Self { .init() }
 }
+
+#endif

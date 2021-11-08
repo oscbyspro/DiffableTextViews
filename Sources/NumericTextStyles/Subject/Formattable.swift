@@ -5,6 +5,8 @@
 //  Created by Oscar Byström Ericsson on 2021-11-07.
 //
 
+#if os(iOS)
+
 import struct Foundation.Locale
 import protocol Foundation.FormatStyle
 import enum Foundation.NumberFormatStyleConfiguration
@@ -24,3 +26,5 @@ public protocol Formattable {
     @inlinable static func value(_ system: String) -> Self?
     @inlinable static func style(_ locale: Locale, precision: Precision, separator: Separator) -> FormatStyle
 }
+
+#endif

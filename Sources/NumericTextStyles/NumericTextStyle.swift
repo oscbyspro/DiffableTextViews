@@ -35,6 +35,39 @@ public struct NumericTextStyle<Value: Boundable & Precise & Formattable>: Diffab
     }
 }
 
+// MARK: - Update
+
+extension NumericTextStyle {
+    
+    // MARK: Transformations
+    
+    @inlinable public func locale(_ locale: Locale) -> Self {
+        update({ $0.locale = locale })
+    }
+    
+    @inlinable public func prefix(_ newValue: String?) -> Self {
+        update({ $0.prefix = newValue })
+    }
+    
+    @inlinable public func suffix(_ newValue: String?) -> Self {
+        update({ $0.suffix = newValue })
+    }
+    
+    @inlinable public func bounds(_ newValue: Bounds) -> Self {
+        update({ $0.bounds = newValue })
+    }
+    
+    @inlinable public func precision(_ newValue: Precision) -> Self {
+        update({ $0.precision = newValue })
+    }
+    
+    // MARK: Helpers
+    
+    @inlinable func update(_ transform: (inout Self) -> Void) -> Self {
+        var copy = self; transform(&copy); return copy
+    }
+}
+
 // MARK: - Getters
 
 extension NumericTextStyle {
@@ -46,7 +79,7 @@ extension NumericTextStyle {
     }
 
     @inlinable var groupingSeparator: String {
-        locale.groupingSeparator ?? String()
+        locale.groupingSeparator ?? .init()
     }
     
     // MARK: Characters
@@ -80,39 +113,6 @@ extension NumericTextStyle {
     
     @inlinable func editableStyle(digits: NumberOfDigits, separator: Bool) -> Value.FormatStyle {
         Value.style(locale, precision: precision.editableStyle(digits), separator: separator ? .always : .automatic)
-    }
-}
-
-// MARK: - Update
-
-extension NumericTextStyle {
-    
-    // MARK: Transformations
-    
-    @inlinable public func locale(_ locale: Locale) -> Self {
-        update({ $0.locale = locale })
-    }
-    
-    @inlinable public func prefix(_ newValue: String?) -> Self {
-        update({ $0.prefix = newValue })
-    }
-    
-    @inlinable public func suffix(_ newValue: String?) -> Self {
-        update({ $0.suffix = newValue })
-    }
-    
-    @inlinable public func bounds(_ newValue: Bounds) -> Self {
-        update({ $0.bounds = newValue })
-    }
-    
-    @inlinable public func precision(_ newValue: Precision) -> Self {
-        update({ $0.precision = newValue })
-    }
-    
-    // MARK: Helpers
-    
-    @inlinable func update(_ transform: (inout Self) -> Void) -> Self {
-        var copy = self; transform(&copy); return copy
     }
 }
 
@@ -177,7 +177,7 @@ extension NumericTextStyle {
         return snapshot(&components)
     }
     
-    // MARK: Helpers, Components
+    // MARK: Components
     
     @inlinable func snapshot(_ components: inout Components) -> Snapshot? {
         let digits = components.numberOfDigitsWithoutZeroInteger()
@@ -208,7 +208,7 @@ extension NumericTextStyle {
         return snapshot(characters)
     }
     
-    // MARK: Helpers, Characters
+    // MARK: Characters
     
     @inlinable func snapshot(_ characters: String) -> Snapshot {
         var snapshot = Snapshot()
@@ -251,6 +251,8 @@ extension NumericTextStyle {
         return snapshot
     }
     
+    // MARK: Characters, Helpers
+    
     @inlinable func configureFirstDigitIfItIsZero(in snapshot: UnsafeMutablePointer<Snapshot>, with instruction: (inout Attribute) -> Void) {
         func digit(symbol: Symbol) -> Bool { digits.contains(symbol.character) }
         guard let firstDigitIndex = snapshot.pointee.firstIndex(where: digit) else { return }
@@ -266,29 +268,36 @@ extension NumericTextStyle {
     }
 }
 
-// MARK: - NumericText
+// MARK: - Text
 
 extension NumericTextStyle {
     
     // MARK: Configuration
     
     @inlinable func configuration() -> Configuration {
-        let configuration = Configuration(signs: .negatives)
-                
-        if Value.integer {
-            configuration.options.insert(.integer)
-        } else {
-            configuration.separators.insert(decimalSeparator)
-        }
+        let configuration = Configuration(signs: .negatives, separators: .none)
+        
+        // --------------------------------- //
         
         if bounds.nonnegative {
             configuration.options.insert(.nonnegative)
         }
         
+        // --------------------------------- //
+        
+        if Value.integer {
+            configuration.options.insert(.integer)
+        } else {
+            configuration.separators.insert(decimalSeparator)
+            configuration.separators.insert(contentsOf: .system)
+        }
+        
+        // --------------------------------- //
+        
         return configuration
     }
     
-    // MARK: Components With Configuration
+    // MARK: Components
     
     @inlinable func components(_ snapshot: Snapshot, with configuration: Configuration) -> Components? {
         configuration.components(snapshot.characters(where: \.content))

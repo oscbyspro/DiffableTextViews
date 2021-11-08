@@ -98,6 +98,8 @@
 @usableFromInline struct ConfigurationSigns {
     @usableFromInline typealias Sign = Components.Sign
     
+    // MARK: Instances
+    
     @usableFromInline static let positives: Self = .init(positives: [Sign.plus],  negatives: [])
     @usableFromInline static let negatives: Self = .init(positives: [], negatives: [Sign.minus])
     
@@ -155,14 +157,19 @@
 @usableFromInline struct ConfigurationSeparators {
     @usableFromInline typealias Separator = Components.Separator
     
+    // MARK: Instances
+    
+    @usableFromInline static let none:   Self = .init([])
+    @usableFromInline static let system: Self = .init([Separator.system.characters])
+    
     // MARK: Properties
 
     @usableFromInline var translatables: [String]
     
     // MARK: Initializers
     
-    @inlinable init() {
-        self.translatables = [Separator.system.characters]
+    @inlinable init(_ translatables: [String] = [Separator.system.characters]) {
+        self.translatables = translatables
     }
     
     // MARK: Transformations
@@ -173,6 +180,10 @@
     
     @inlinable mutating func insert(contentsOf separators: [String]) {
         translatables.append(contentsOf: separators)
+    }
+    
+    @inlinable mutating func insert(contentsOf instance: Self) {
+        translatables.append(contentsOf: instance.translatables)
     }
     
     // MARK: Helpers

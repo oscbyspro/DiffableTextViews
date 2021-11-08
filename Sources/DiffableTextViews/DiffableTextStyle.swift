@@ -5,8 +5,6 @@
 //  Created by Oscar Byström Ericsson on 2021-10-02.
 //
 
-import UIKit
-
 // MARK: - DiffableTextStyle
 
 public protocol DiffableTextStyle {
