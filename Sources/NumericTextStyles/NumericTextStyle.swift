@@ -165,15 +165,23 @@ extension NumericTextStyle {
     @inlinable public func merge(_ current: Snapshot, with content: Snapshot, in range: Range<Snapshot.Index>) -> Snapshot? {
         let configuration = configuration()
                 
+        // --------------------------------- //
+        
         var input = Input(content, with: configuration)
         let toggleSignInstruction = input.consumeToggleSignCommand()
         
+        // --------------------------------- //
+        
         var next = current
         next.replaceSubrange(range, with: input.content)
-                        
+        
+        // --------------------------------- //
+        
         guard var components = components(next, with: configuration) else { return nil }
         toggleSignInstruction?.process(&components)
-                
+        
+        // --------------------------------- //
+        
         return snapshot(&components)
     }
     
@@ -253,18 +261,36 @@ extension NumericTextStyle {
     
     // MARK: Characters, Helpers
     
-    @inlinable func configureFirstDigitIfItIsZero(in snapshot: UnsafeMutablePointer<Snapshot>, with instruction: (inout Attribute) -> Void) {
-        func digit(symbol: Symbol) -> Bool { digits.contains(symbol.character) }
-        guard let firstDigitIndex = snapshot.pointee.firstIndex(where: digit) else { return }
-        guard snapshot.pointee[firstDigitIndex].character == zero else { return }
-        snapshot.pointee.configure(attributes: firstDigitIndex, with: instruction)
+    @inlinable func configureFirstDigitIfItIsZero(in snapshot: UnsafeMutablePointer<Snapshot>, with configuration: (inout Attribute) -> Void) {
+        func digit(symbol: Symbol) -> Bool {
+            digits.contains(symbol.character)
+        }
+        
+        // --------------------------------- //
+        
+        guard let position = snapshot.pointee.firstIndex(where: digit) else { return }
+        guard snapshot.pointee[position].character == zero else { return }
+        
+        // --------------------------------- //
+        
+        snapshot.pointee.configure(attributes: position, with: configuration)
     }
     
-    @inlinable func configureDecimalSeparatorIfItIsSuffix(in snapshot: UnsafeMutablePointer<Snapshot>, with instruction: (inout Attribute) -> Void) {
-        func predicate(symbol: Symbol) -> Bool { decimalSeparator.contains(symbol.character) }
-        let decimalSeparatorAsSuffix = snapshot.pointee.suffix(while: predicate)
-        let indices = decimalSeparatorAsSuffix.startIndex ..< decimalSeparatorAsSuffix.endIndex
-        snapshot.pointee.configure(attributes: indices, with: instruction)
+    @inlinable func configureDecimalSeparatorIfItIsSuffix(in snapshot: UnsafeMutablePointer<Snapshot>, with configuration: (inout Attribute) -> Void) {
+        func predicate(symbol: Symbol) -> Bool {
+            decimalSeparator.contains(symbol.character)
+        }
+        
+        // --------------------------------- //
+        
+        let start = snapshot.pointee
+            .reversed()
+            .prefix(while: predicate)
+            .endIndex.base
+        
+        // --------------------------------- //
+        
+        snapshot.pointee.configure(attributes: start..., with: configuration)
     }
 }
 

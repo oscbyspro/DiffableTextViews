@@ -89,19 +89,19 @@ extension UInt8: NormalInteger {
     @inlinable public static var maxLosslessDigits: Int { 3 }
 }
 
-// MARK: - UInt8
+// MARK: - UInt16
 
 extension UInt16: NormalInteger {
     @inlinable public static var maxLosslessDigits: Int { 5 }
 }
 
-// MARK: - UInt8
+// MARK: - UInt32
 
 extension UInt32: NormalInteger {
     @inlinable public static var maxLosslessDigits: Int { 10 }
 }
 
-// MARK: - UInt8
+// MARK: - UInt64
 
 extension UInt64: NormalInteger {
     /// Apple, please fix IntegerFormatStyleUInt64, it uses an Int64.
