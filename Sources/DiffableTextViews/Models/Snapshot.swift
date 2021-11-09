@@ -40,13 +40,6 @@ public struct Snapshot: BidirectionalCollection, RangeReplaceableCollection, Exp
         self.init(elements)
     }
     
-    // MARK: Utilities
-    
-    /// - Complexity: O(n), where n is the length of the collection.
-    @inlinable public func characters(where predicate: (Symbol) -> Bool) -> String {
-        reduce(map: \.character, where: predicate)
-    }
-
     // MARK: Collection: Counts
     
     /// - Complexity: O(1).
@@ -140,28 +133,44 @@ public struct Snapshot: BidirectionalCollection, RangeReplaceableCollection, Exp
     }
 }
 
+// MARK: - Utilities
+
+public extension Snapshot {
+    
+    // MARK: Characters
+    
+    /// - Complexity: O(n), where n is the length of the collection.
+    @inlinable public func characters(where predicate: (Element) -> Bool) -> String {
+        reduce(into: String()) { result, element in
+            if predicate(element) {
+                result.append(element.character)
+            }
+        }
+    }
+}
+
 // MARK: - Transformations
 
-extension Snapshot {
+public extension Snapshot {
     
     // MARK: Replace
         
-    @inlinable public mutating func update(attributes index: Index, with transform: (Attribute) -> Attribute) {
+    @inlinable mutating func update(attributes index: Index, with transform: (Attribute) -> Attribute) {
         _attributes[index.attribute] = transform(_attributes[index.attribute])
     }
     
-    @inlinable public mutating func update<R: RangeExpression>(attributes indices: R, with transform: (Attribute) -> Attribute) where R.Bound == Index {
+    @inlinable mutating func update<R: RangeExpression>(attributes indices: R, with transform: (Attribute) -> Attribute) where R.Bound == Index {
         let indices = indices.relative(to: self).map(bounds: \.attribute)
         _attributes.replaceSubrange(indices, with: _attributes[indices].map(transform))
     }
     
     // MARK: Mutate
     
-    @inlinable public mutating func configure(attributes index: Index, with transform: (inout Attribute) -> Void) {
+    @inlinable mutating func configure(attributes index: Index, with transform: (inout Attribute) -> Void) {
         transform(&_attributes[index.attribute])
     }
     
-    @inlinable public mutating func configure<R: RangeExpression>(attributes indices: R, with transform: (inout Attribute) -> Void) where R.Bound == Index {
+    @inlinable mutating func configure<R: RangeExpression>(attributes indices: R, with transform: (inout Attribute) -> Void) where R.Bound == Index {
         for index in indices.relative(to: self).map(bounds: \.attribute) { transform(&_attributes[index]) }
     }
 }
