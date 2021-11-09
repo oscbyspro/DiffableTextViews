@@ -155,13 +155,13 @@ public extension Snapshot {
     
     // MARK: Replace
         
-    @inlinable mutating func update(attributes index: Index, with transform: (Attribute) -> Attribute) {
-        _attributes[index.attribute] = transform(_attributes[index.attribute])
+    @inlinable mutating func update(attributes index: Index, with map: (Attribute) -> Attribute) {
+        _attributes[index.attribute] = map(_attributes[index.attribute])
     }
     
-    @inlinable mutating func update<R: RangeExpression>(attributes indices: R, with transform: (Attribute) -> Attribute) where R.Bound == Index {
-        let indices = relative(indices, transform: \.attribute)
-        _attributes.replaceSubrange(indices, with: _attributes[indices].map(transform))
+    @inlinable mutating func update<R: RangeExpression>(attributes indices: R, with map: (Attribute) -> Attribute) where R.Bound == Index {
+        let indices = interpret(indices, map: \.attribute)
+        _attributes.replaceSubrange(indices, with: _attributes[indices].map(map))
     }
     
     // MARK: Mutate
@@ -170,13 +170,13 @@ public extension Snapshot {
         transform(&_attributes[index.attribute])
     }
     
-    @inlinable mutating func configure<R: RangeExpression>(attributes indices: R, with transform: (inout Attribute) -> Void) where R.Bound == Index {
-        for index in relative(indices, transform: \.attribute) { transform(&_attributes[index]) }
+    @inlinable mutating func configure<R: RangeExpression>(attributes indices: R, with map: (inout Attribute) -> Void) where R.Bound == Index {
+        for index in interpret(indices, map: \.attribute) { map(&_attributes[index]) }
     }
     
-    // MARK: Transformations, Helpers
+    // MARK: Helpers
     
-    @inlinable func relative<R: RangeExpression, Bound>(_ indices: R, transform: (Index) -> Bound) -> Range<Bound> where R.Bound == Index {
-        let indices = indices.relative(to: self); return transform(indices.lowerBound) ..< transform(indices.upperBound)
+    @inlinable internal func interpret<R: RangeExpression, Bound>(_ indices: R, map: (Index) -> Bound) -> Range<Bound> where R.Bound == Index {
+        let indices = indices.relative(to: self); return map(indices.lowerBound) ..< map(indices.upperBound)
     }
 }
