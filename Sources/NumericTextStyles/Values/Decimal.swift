@@ -34,7 +34,7 @@ public extension Decimal {
         .init(string: system)
     }
     
-    @inlinable static func style(_ locale: Locale, precision: Formattable.Precision, separator: Formattable.Separator) -> FormatStyle {
+    @inlinable static func style(_ locale: Locale, precision: Format.Precision, separator: Format.Separator) -> FormatStyle {
         .init(locale: locale).precision(precision).decimalSeparator(strategy: separator)
     }
 }

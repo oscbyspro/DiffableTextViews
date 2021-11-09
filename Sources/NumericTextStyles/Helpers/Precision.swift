@@ -7,8 +7,6 @@
 
 #if os(iOS)
 
-import enum Foundation.NumberFormatStyleConfiguration
-
 // MARK: - Precision
 
 public struct Precision<Value: Precise> {
@@ -90,7 +88,7 @@ extension Precision {
     
     // MARK: Utilities
     
-    @inlinable func displayableStyle() -> Formattable.Precision {
+    @inlinable func displayableStyle() -> Format.Precision {
         strategy.displayableStyle()
     }
     
@@ -98,14 +96,14 @@ extension Precision {
         strategy.editableValidationWithCapacity(digits: digits)
     }
     
-    @inlinable func editableStyle() -> Formattable.Precision {
+    @inlinable func editableStyle() -> Format.Precision {
         let integer = Defaults.upperLowerBound...Value.maxLosslessIntegerDigits
         let decimal = Defaults.lowerLowerBound...Value.maxLosslessDecimalDigits
         
         return .integerAndFractionLength(integerLimits: integer, fractionLimits: decimal)
     }
     
-    @inlinable func editableStyle(_ digits: NumberOfDigits) -> Formattable.Precision {
+    @inlinable func editableStyle(_ digits: NumberOfDigits) -> Format.Precision {
         let upperUpperBound = Swift.max(Defaults.upperLowerBound, digits.upper)
         let lowerLowerBound = Swift.max(Defaults.lowerLowerBound, digits.lower)
                 
@@ -121,7 +119,7 @@ extension Precision {
 @usableFromInline protocol PrecisionStrategy {
     typealias Defaults = PrecisionDefaults
     
-    @inlinable func displayableStyle() -> Formattable.Precision
+    @inlinable func displayableStyle() -> Format.Precision
         
     @inlinable func editableValidationWithCapacity(digits: NumberOfDigits) -> NumberOfDigits?
 }
@@ -150,7 +148,7 @@ extension Precision {
     
     // MARK: Utilities
 
-    @inlinable func displayableStyle() -> Formattable.Precision {
+    @inlinable func displayableStyle() -> Format.Precision {
         .significantDigits(total)
     }
     
@@ -200,7 +198,7 @@ extension Precision {
     
     // MARK: Utilities
     
-    @inlinable func displayableStyle() -> Formattable.Precision {
+    @inlinable func displayableStyle() -> Format.Precision {
         .integerAndFractionLength(integerLimits: upper, fractionLimits: lower)
     }
     

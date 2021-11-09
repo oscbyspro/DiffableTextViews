@@ -35,7 +35,7 @@ public extension NormalFloat {
         .init(system)
     }
     
-    @inlinable static func style(_ locale: Locale, precision: Precision, separator: Separator) -> FloatingPointFormatStyle<Self> {
+    @inlinable static func style(_ locale: Locale, precision: Format.Precision, separator: Format.Separator) -> FloatingPointFormatStyle<Self> {
         .init(locale: locale).precision(precision).decimalSeparator(strategy: separator)
     }
 }

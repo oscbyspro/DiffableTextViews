@@ -34,7 +34,7 @@ extension NormalInteger {
         .init(system)
     }
 
-    @inlinable public static func style(_ locale: Locale, precision: Precision, separator: Separator) -> IntegerFormatStyle<Self> {
+    @inlinable public static func style(_ locale: Locale, precision: Format.Precision, separator: Format.Separator) -> IntegerFormatStyle<Self> {
         .init(locale: locale).precision(precision).decimalSeparator(strategy: separator)
     }
 }
