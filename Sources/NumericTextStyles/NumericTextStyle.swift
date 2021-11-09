@@ -12,7 +12,7 @@ import struct Foundation.Locale
 
 // MARK: - NumericTextStyle
 
-/// Formats text and number.
+/// Formats text and numbers.
 ///
 /// - Complexity: O(n) or less for all calculations.
 public struct NumericTextStyle<Value: Boundable & Precise & Formattable>: DiffableTextStyle {
