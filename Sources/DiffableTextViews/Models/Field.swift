@@ -28,6 +28,12 @@
         self.selection = selection
     }
     
+    // MARK: Getters
+    
+    @inlinable var offsets: Range<Offset> {
+        selection.lowerBound.offset ..< selection.upperBound.offset
+    }
+    
     // MARK: Look
     
     @inlinable func look(_ start: Carets.Index, direction: Direction) -> Carets.Index {
@@ -42,39 +48,39 @@
         carets[...start].lastIndex(where: \.nonlookbehindable) ?? carets.firstIndex
     }
     
-    // MARK: Configure: Carets
+    // MARK: Update: Carets
     
-    @inlinable func configure(carets newValue: Carets) -> Self {
+    @inlinable func update(carets newValue: Carets) -> Self {
         move(to: newValue).moveToAttributes()
     }
     
-    @inlinable func configure(carets newValue: Snapshot) -> Self {
-        configure(carets: Carets(newValue))
+    @inlinable func update(carets newValue: Snapshot) -> Self {
+        update(carets: Carets(newValue))
     }
 
-    // MARK: Configure: Selection
+    // MARK: Update: Selection
     
-    @inlinable func configure(selection newValue: Range<Carets.Index>, intent: Direction?) -> Self {
+    @inlinable func update(selection newValue: Range<Carets.Index>, intent: Direction?) -> Self {
         move(to: newValue, intent: intent).moveToAttributes()
     }
     
-    @inlinable func configure(selection newValue: Carets.Index, intent: Direction?) -> Self {
-        configure(selection: newValue ..< newValue, intent: intent)
+    @inlinable func update(selection newValue: Carets.Index, intent: Direction?) -> Self {
+        update(selection: newValue ..< newValue, intent: intent)
     }
     
     // MARK: Configure: Selection, Offsets
     
-    @inlinable func configure(selection newValue: Range<Offset>, intent: Direction?) -> Self {
-        configure(selection: indices(in: newValue), intent: intent)
+    @inlinable func update(selection newValue: Range<Offset>, intent: Direction?) -> Self {
+        update(selection: indices(in: newValue), intent: intent)
     }
     
-    @inlinable func configure(selection newValue: Offset, intent: Direction?) -> Self {
-        configure(selection: newValue ..< newValue, intent: intent)
+    @inlinable func update(selection newValue: Offset, intent: Direction?) -> Self {
+        update(selection: newValue ..< newValue, intent: intent)
     }
     
     // MARK: Configure, Helpers
     
-    @inlinable func update(_ transform: (inout Field) -> Void) -> Field {
+    @inlinable func configure(_ transform: (inout Field) -> Void) -> Field {
         var copy = self; transform(&copy); return copy
     }
 }
@@ -103,7 +109,7 @@ extension Field {
         
         // --------------------------------- //
         
-        return update({ $0.selection = lowerBound ..< upperBound })
+        return configure({ $0.selection = lowerBound ..< upperBound })
     }
 
     // MARK: To Selection
@@ -139,7 +145,7 @@ extension Field {
         
         // --------------------------------- //
 
-        return update({ $0.selection = lowerBound ..< upperBound })
+        return configure({ $0.selection = lowerBound ..< upperBound })
     }
     
     // MARK: To Carets

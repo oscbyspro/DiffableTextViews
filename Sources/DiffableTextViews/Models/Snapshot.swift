@@ -140,7 +140,7 @@ public extension Snapshot {
     // MARK: Characters
     
     /// - Complexity: O(n), where n is the length of the collection.
-    @inlinable public func characters(where predicate: (Element) -> Bool) -> String {
+    @inlinable func characters(where predicate: (Element) -> Bool) -> String {
         reduce(into: String()) { result, element in
             if predicate(element) {
                 result.append(element.character)
@@ -160,7 +160,7 @@ public extension Snapshot {
     }
     
     @inlinable mutating func update<R: RangeExpression>(attributes indices: R, with transform: (Attribute) -> Attribute) where R.Bound == Index {
-        let indices = indices.relative(to: self).map(bounds: \.attribute)
+        let indices = relative(indices, transform: \.attribute)
         _attributes.replaceSubrange(indices, with: _attributes[indices].map(transform))
     }
     
@@ -171,6 +171,12 @@ public extension Snapshot {
     }
     
     @inlinable mutating func configure<R: RangeExpression>(attributes indices: R, with transform: (inout Attribute) -> Void) where R.Bound == Index {
-        for index in indices.relative(to: self).map(bounds: \.attribute) { transform(&_attributes[index]) }
+        for index in relative(indices, transform: \.attribute) { transform(&_attributes[index]) }
+    }
+    
+    // MARK: Transformations, Helpers
+    
+    @inlinable func relative<R: RangeExpression, Bound>(_ indices: R, transform: (Index) -> Bound) -> Range<Bound> where R.Bound == Index {
+        let indices = indices.relative(to: self); return transform(indices.lowerBound) ..< transform(indices.upperBound)
     }
 }
