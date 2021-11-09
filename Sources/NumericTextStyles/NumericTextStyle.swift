@@ -168,7 +168,7 @@ extension NumericTextStyle {
         // --------------------------------- //
         
         var input = Input(content, with: configuration)
-        let toggleSignInstruction = input.consumeToggleSignCommand()
+        let toggleSignInstruction = input.consumeToggleSignInstruction()
         
         // --------------------------------- //
         

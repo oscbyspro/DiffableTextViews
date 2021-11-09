@@ -9,7 +9,7 @@ import struct DiffableTextViews.Snapshot
 
 // MARK: - Toggle Sign Command
         
-@usableFromInline struct ToggleSignCommand {
+@usableFromInline struct ToggleSignInstruction {
 
     // MARK: Properties
     
