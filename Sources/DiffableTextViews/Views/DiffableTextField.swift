@@ -153,7 +153,7 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
             // --------------------------------- //
             
             Task { [value] in
-                // async makes special commands (like: option + delete) process first
+                // async to process special commands (like: option + delete) first
                 self.cache.value = value
                 self.cache.field = field
                 self.push([.upstream, .downstream])
