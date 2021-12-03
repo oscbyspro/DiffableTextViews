@@ -88,7 +88,7 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
     
     // MARK: Coordinator
     
-    public final class Coordinator: NSObject, UITextFieldDelegate {
+    @MainActor public final class Coordinator: NSObject, UITextFieldDelegate {
         @usableFromInline typealias Offset = DiffableTextViews.Offset<UTF16>
         @usableFromInline typealias Cache = DiffableTextViews.Cache<UTF16, Value>
         
@@ -152,13 +152,13 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
             
             // --------------------------------- //
             
-            DispatchQueue.main.async {
+            Task { [value] in
                 // async makes special commands (like: option + delete) process first
                 self.cache.value = value
                 self.cache.field = field
                 self.push([.upstream, .downstream])
             }
-                                    
+                
             // --------------------------------- //
             
             return false
@@ -167,9 +167,6 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
         // MARK: Delegate: Selection
 
         @inlinable public func textFieldDidChangeSelection(_ textField: UITextField) {
-            
-            // --------------------------------- //
-            
             guard !lock.isLocked else { return }
             
             // --------------------------------- //
@@ -279,7 +276,7 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
         }
         
         @inlinable func perform(async: Bool, action: @escaping () -> Void) {
-            if async { DispatchQueue.main.async(execute: action) } else { action() }
+            if async { Task { action() } } else { action() }
         }
 
         @inlinable func snapshot(_ value: Value) -> Snapshot {

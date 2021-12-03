@@ -29,4 +29,3 @@
         field.carets.snapshot
     }
 }
-
