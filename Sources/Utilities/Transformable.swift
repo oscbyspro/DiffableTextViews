@@ -12,6 +12,9 @@ public protocol Transformable { }
 // MARK: - Utilities
 
 public extension Transformable {
+    
+    // MARK: Transform
+    
     @inlinable mutating func transform(using transformation: (Self) -> Self) {
         self = transformation(self)
     }
@@ -19,6 +22,8 @@ public extension Transformable {
     @inlinable mutating func transform(using transformation: (inout Self) -> Void) {
         transformation(&self)
     }
+    
+    // MARK: Transforming
     
     @inlinable func transforming(using transformation: (Self) -> Self) -> Self {
         transformation(self)
