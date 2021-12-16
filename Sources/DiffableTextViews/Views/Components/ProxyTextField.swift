@@ -16,7 +16,7 @@ import SwiftUI
 /// Makes it easier to enforce UITextField's UTF-16 layout.
 ///
 /// - UITextField.text is never nil.
-/// - UITextField.selectedTextRange is never nil
+/// - UITextField.selectedTextRange is never nil.
 public final class ProxyTextField<Wrapped: UITextField> {
     @usableFromInline typealias Offset = DiffableTextViews.Offset<UTF16>
     

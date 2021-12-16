@@ -20,7 +20,6 @@ let package = Package(
         .testTarget(
             name: "DiffableTextViewsTests",
             dependencies: ["DiffableTextViews"]),
-        // --------------------------------- //
         .target(
             name: "NumericTextStyles",
             dependencies: ["DiffableTextViews"]),

@@ -160,8 +160,7 @@ public extension Snapshot {
     }
     
     @inlinable mutating func update<R: RangeExpression>(attributes indices: R, with map: (Attribute) -> Attribute) where R.Bound == Index {
-        let indices = interpret(indices, map: \.attribute)
-        _attributes.replaceSubrange(indices, with: _attributes[indices].map(map))
+        _attributes.replaceSubrange(interpret(indices, map: \.attribute), with: _attributes[indices].map(map))
     }
     
     // MARK: Mutate
