@@ -79,7 +79,7 @@ extension UInt: NormalInteger {
 
     /// Apple, please fix IntegerFormatStyleUInt64, it uses an Int64.
     @inlinable public static var maxLosslessDigits: Int {
-        Int64.maxLosslessDigits
+        Int.maxLosslessDigits
     }
 }
 
