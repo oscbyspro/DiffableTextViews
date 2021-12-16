@@ -1,2 +1,2 @@
 
-1. Make instantiation of Attributes easier and/or more intuitive.
+1. Cleanup Field so tha Field/Look makes sense.

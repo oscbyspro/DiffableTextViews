@@ -148,17 +148,17 @@ extension Field {
     
     @inlinable func move(to nextCarets: Carets) -> Field {
         func step(prev: Symbol, next: Symbol) -> SimilaritiesInstruction {
-            if prev == next                          { return .continue      }
-            else if prev.attribute.contains(.remove) { return .continueOnLHS }
-            else if next.attribute.contains(.insert) { return .continueOnRHS }
-            else                                     { return .done          }
+            if prev == next                              { return .continue      }
+            else if prev.attribute.contains(.removable)  { return .continueOnLHS }
+            else if next.attribute.contains(.insertable) { return .continueOnRHS }
+            else                                         { return .done          }
         }
         
         // --------------------------------- //
         
-        let change: Attribute = [.insert, .remove]
+        let ignorable: Attribute = [.insertable, .removable]
         func inspectable(symbol: Symbol) -> Bool {
-            !symbol.attribute.contains(change)
+            !symbol.attribute.contains(ignorable)
         }
         
         // --------------------------------- //

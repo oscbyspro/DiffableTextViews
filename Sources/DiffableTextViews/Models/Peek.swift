@@ -24,7 +24,7 @@
     // MARK: Descriptions: Lookable
     
     @inlinable var lookaheadable: Bool {
-        rhs.attribute.contains(.prefix)
+        rhs.attribute.contains(.prefixing)
     }
     
     @inlinable var nonlookaheadable: Bool {
@@ -32,7 +32,7 @@
     }
         
     @inlinable var lookbehindable: Bool {
-        lhs.attribute.contains(.suffix)
+        lhs.attribute.contains(.suffixing)
     }
     
     @inlinable var nonlookbehindable: Bool {
@@ -50,8 +50,8 @@
     // MARK: Descriptions: Attributes
         
     @inlinable func directionOfAttributes() -> Direction? {
-        let forwards  = containsOnBothSides(.prefix)
-        let backwards = containsOnBothSides(.suffix)
+        let forwards  = containsOnBothSides(.prefixing)
+        let backwards = containsOnBothSides(.suffixing)
         
         if forwards == backwards {
             return nil

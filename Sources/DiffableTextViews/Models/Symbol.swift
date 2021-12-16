@@ -26,25 +26,25 @@ public struct Symbol: Equatable, Transformable {
     // MARK: Initializers: Static
     
     @inlinable public static func content(_ character: Character) -> Self {
-        Self(character, attribute: .intuitive(.content))
+        Self(character, attribute: .content)
     }
     
     @inlinable public static func prefix(_ character: Character) -> Self {
-        Self(character, attribute: .intuitive(.prefix))
+        Self(character, attribute: .prefix)
     }
     
     @inlinable public static func suffix(_ character: Character) -> Self {
-        Self(character, attribute: .intuitive(.suffix))
+        Self(character, attribute: .suffix)
     }
     
     @inlinable public static func spacer(_ character: Character) -> Self {
-        Self(character, attribute: .intuitive(.spacer))
+        Self(character, attribute: .spacer)
     }
     
     // MARK: Descriptions
     
     @inlinable public var content: Bool {
-        !attribute.contains(.format)
+        !attribute.contains(.formatting)
     }
     
     // MARK: Transformations: Union

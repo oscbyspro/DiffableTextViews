@@ -219,8 +219,8 @@ extension NumericTextStyle {
         // --------------------------------- //
         
         if let prefix = prefix {
-            snapshot.append(contentsOf: Snapshot(prefix, only: .intuitive(.prefix)))
-            snapshot.append(Symbol(" ", attribute: .intuitive(.prefix)))
+            snapshot.append(contentsOf: Snapshot(prefix, only: .prefix))
+            snapshot.append(.prefix(" "))
         }
                 
         // --------------------------------- //
@@ -233,20 +233,20 @@ extension NumericTextStyle {
             } else if decimalSeparator.contains(character) {
                 snapshot.append(.content(character))
             } else if signs.contains(character) {
-                snapshot.append(.content(character).union(.prefix))
+                snapshot.append(.content(character).union(.prefixing))
             }
         }
                 
         // --------------------------------- //
 
-        transformFirstDigitIfItIsZero(in:         &snapshot, using: { $0.insert(.prefix) })
-        transformDecimalSeparatorIfItIsSuffix(in: &snapshot, using: { $0.insert(.remove) })
+        transformFirstDigitIfItIsZero(in:         &snapshot, using: { $0.insert(.prefixing) })
+        transformDecimalSeparatorIfItIsSuffix(in: &snapshot, using: { $0.insert(.removable) })
                 
         // --------------------------------- //
 
         if let suffix = suffix {
-            snapshot.append(Symbol(" ", attribute: .intuitive(.suffix)))
-            snapshot.append(contentsOf: Snapshot(suffix, only: .intuitive(.suffix)))
+            snapshot.append(.suffix(" "))
+            snapshot.append(contentsOf: Snapshot(suffix, only: .suffix))
         }
     
         // --------------------------------- //
