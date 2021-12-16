@@ -48,51 +48,9 @@ public struct Attribute: OptionSet, Transformable {
         self.init(attributes)
     }
     
-    // MARK: Composites: Collection
-
-    public struct Collection {
-        public static let all:    Self = .init(Attribute(rawValue: .max))
-        public static let normal: Self = .init(.format, .prefix, .suffix, .insert, .remove)
-        public static let extras: Self = .init(.xAlpha, .xBeta, .xGamma)
-
-        // MARK: Properties
-        
-        public let attribute: Attribute
-        
-        // MARK: Initializersb
-        
-        @inlinable init(_ attribute: Attribute...) {
-            self.attribute = .init(attribute)
-        }
-    }
-    
-    @inlinable @inline(__always) public static func collection(_ collection: Collection) -> Self {
-        collection.attribute
-    }
-    
-    // MARK: Composites: Composite
-    
-    public struct Composite {
-        public static let spacer: Self = .init(.prefix, .suffix)
-        public static let change: Self = .init(.insert, .remove)
-        
-        // MARK: Properties
-        
-        public let attribute: Attribute
-        
-        // MARK: Initializers
-        
-        @inlinable init(_ attribute: Attribute...) {
-            self.attribute = .init(attribute)
-        }
-    }
-    
-    @inlinable @inline(__always) public static func composite(_ composite: Composite) -> Self {
-        composite.attribute
-    }
-    
     // MARK: Composites: Intuitive
     
+    #warning("Remove/rethink.")
     public struct Intuitive {
         public static let content: Self = .init()
         public static let prefix:  Self = .init(.format, .insert, .remove, .prefix)

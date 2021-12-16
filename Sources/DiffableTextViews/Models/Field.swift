@@ -154,8 +154,9 @@ extension Field {
             else                                     { return .done          }
         }
         
+        let change: Attribute = [.insert, .remove]
         func inspectable(symbol: Symbol) -> Bool {
-            !symbol.attribute.contains(.composite(.change))
+            !symbol.attribute.contains(change)
         }
         
         // --------------------------------- //

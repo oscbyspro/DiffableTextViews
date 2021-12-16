@@ -178,8 +178,8 @@
         translatables.append(contentsOf: separators)
     }
     
-    @inlinable mutating func insert(contentsOf instance: Self) {
-        translatables.append(contentsOf: instance.translatables)
+    @inlinable mutating func insert(contentsOf other: Self) {
+        translatables.append(contentsOf: other.translatables)
     }
     
     // MARK: Helpers
