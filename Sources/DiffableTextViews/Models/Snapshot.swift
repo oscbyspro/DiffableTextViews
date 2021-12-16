@@ -153,25 +153,20 @@ public extension Snapshot {
 
 public extension Snapshot {
     
-    // MARK: Replace
+    @inlinable mutating func transform(attributes index: Index, using transformation: (Attribute) -> Attribute) {
+        _attributes[index.attribute] = transformation(_attributes[index.attribute])
+    }
+    
+    @inlinable mutating func transform(attributes index: Index, using transformation: (inout Attribute) -> Void) {
+        transformation(&_attributes[index.attribute])
+    }
+    
+    @inlinable mutating func transform<R: RangeExpression>(attributes indices: R, using transformation: (Attribute) -> Attribute) where R.Bound == Index {
+        let indices = interpret(indices, map: \.attribute); _attributes.replaceSubrange(indices, with: _attributes[indices].map(transformation))
+    }
         
-    @inlinable mutating func update(attributes index: Index, with map: (Attribute) -> Attribute) {
-        _attributes[index.attribute] = map(_attributes[index.attribute])
-    }
-    
-    @inlinable mutating func update<R: RangeExpression>(attributes indices: R, with map: (Attribute) -> Attribute) where R.Bound == Index {
-        let indices = interpret(indices, map: \.attribute)
-        _attributes.replaceSubrange(indices, with: _attributes[indices].map(map))
-    }
-    
-    // MARK: Mutate
-    
-    @inlinable mutating func configure(attributes index: Index, with transform: (inout Attribute) -> Void) {
-        transform(&_attributes[index.attribute])
-    }
-    
-    @inlinable mutating func configure<R: RangeExpression>(attributes indices: R, with map: (inout Attribute) -> Void) where R.Bound == Index {
-        for index in interpret(indices, map: \.attribute) { map(&_attributes[index]) }
+    @inlinable mutating func transform<R: RangeExpression>(attributes indices: R, using transformation: (inout Attribute) -> Void) where R.Bound == Index {
+        for index in interpret(indices, map: \.attribute) { transformation(&_attributes[index]) }
     }
     
     // MARK: Helpers

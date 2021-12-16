@@ -273,7 +273,7 @@ extension NumericTextStyle {
         
         // --------------------------------- //
         
-        snapshot.pointee.configure(attributes: position, with: configuration)
+        snapshot.pointee.transform(attributes: position, using: configuration)
     }
     
     @inlinable func configureDecimalSeparatorIfItIsSuffix(in snapshot: UnsafeMutablePointer<Snapshot>, with configuration: (inout Attribute) -> Void) {
@@ -290,7 +290,7 @@ extension NumericTextStyle {
         
         // --------------------------------- //
         
-        snapshot.pointee.configure(attributes: start..., with: configuration)
+        snapshot.pointee.transform(attributes: start..., using: configuration)
     }
 }
 
