@@ -99,7 +99,7 @@ extension Field {
         var lowerBound = upperBound
 
         if !selection.isEmpty {
-            lowerBound = move(selection.lowerBound, preference:  .forwards)
+            lowerBound = move(selection.lowerBound, preference: .forwards)
             lowerBound = min(lowerBound, upperBound)
         }
         
@@ -135,7 +135,7 @@ extension Field {
         var lowerBound = upperBound
 
         if !nextSelection.isEmpty {
-            lowerBound = move(nextSelection.lowerBound, preference:  .forwards)
+            lowerBound = move(nextSelection.lowerBound, preference: .forwards)
             lowerBound = min(lowerBound, upperBound)
         }
         

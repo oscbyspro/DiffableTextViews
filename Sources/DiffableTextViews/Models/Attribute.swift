@@ -41,8 +41,8 @@ public struct Attribute: OptionSet, Transformable {
     public static let prefix = Self(.formatting, .insertable, .removable, .prefixing)
     /// Contains: .formatting, .insertable, .removable, .suffixing.
     public static let suffix = Self(.formatting, .insertable, .removable, .suffixing)
-    /// Contains: .formatting, .insertable, .removable, .prefixing, .prefixing.
-    public static let spacer = Self(.formatting, .insertable, .removable, .prefixing, .prefixing)
+    /// Contains: .formatting, .insertable, .removable, .prefixing, .suffixing.
+    public static let spacer = Self(.formatting, .insertable, .removable, .prefixing, .suffixing)
     
     // MARK: Properties
     

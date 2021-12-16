@@ -321,7 +321,7 @@ extension NumericTextStyle {
     // MARK: Components
     
     @inlinable func components(_ snapshot: Snapshot, with configuration: Configuration) -> Components? {
-        configuration.components(snapshot.characters(where: \.content))
+        configuration.components(snapshot.characters(where: \.nonformatting))
     }
 }
 

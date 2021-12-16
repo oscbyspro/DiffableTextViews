@@ -43,7 +43,7 @@ public struct Symbol: Equatable, Transformable {
     
     // MARK: Descriptions
     
-    @inlinable public var content: Bool {
+    @inlinable public var nonformatting: Bool {
         !attribute.contains(.formatting)
     }
     
