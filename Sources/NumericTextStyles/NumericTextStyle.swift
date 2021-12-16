@@ -238,14 +238,14 @@ extension NumericTextStyle {
             } else if decimalSeparator.contains(character) {
                 snapshot.append(.content(character))
             } else if signs.contains(character) {
-                snapshot.append(.content(character).union([.prefix]))
+                snapshot.append(.content(character).union(.prefix))
             }
         }
                 
         // --------------------------------- //
 
-        configureFirstDigitIfItIsZero(in:         &snapshot, with: { $0.insert(.prefix) })
-        configureDecimalSeparatorIfItIsSuffix(in: &snapshot, with: { $0.insert(.remove) })
+        transformFirstDigitIfItIsZero(in:         &snapshot, using: { $0.insert(.prefix) })
+        transformDecimalSeparatorIfItIsSuffix(in: &snapshot, using: { $0.insert(.remove) })
                 
         // --------------------------------- //
 
@@ -261,7 +261,7 @@ extension NumericTextStyle {
     
     // MARK: Characters, Helpers
     
-    @inlinable func configureFirstDigitIfItIsZero(in snapshot: UnsafeMutablePointer<Snapshot>, with configuration: (inout Attribute) -> Void) {
+    @inlinable func transformFirstDigitIfItIsZero(in snapshot: UnsafeMutablePointer<Snapshot>, using transformation: (inout Attribute) -> Void) {
         func digit(symbol: Symbol) -> Bool {
             digits.contains(symbol.character)
         }
@@ -273,10 +273,10 @@ extension NumericTextStyle {
         
         // --------------------------------- //
         
-        snapshot.pointee.transform(attributes: position, using: configuration)
+        snapshot.pointee.transform(attributes: position, using: transformation)
     }
     
-    @inlinable func configureDecimalSeparatorIfItIsSuffix(in snapshot: UnsafeMutablePointer<Snapshot>, with configuration: (inout Attribute) -> Void) {
+    @inlinable func transformDecimalSeparatorIfItIsSuffix(in snapshot: UnsafeMutablePointer<Snapshot>, using transformation: (inout Attribute) -> Void) {
         func predicate(symbol: Symbol) -> Bool {
             decimalSeparator.contains(symbol.character)
         }
@@ -290,7 +290,7 @@ extension NumericTextStyle {
         
         // --------------------------------- //
         
-        snapshot.pointee.transform(attributes: start..., using: configuration)
+        snapshot.pointee.transform(attributes: start..., using: transformation)
     }
 }
 
