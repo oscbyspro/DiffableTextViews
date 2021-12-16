@@ -11,16 +11,16 @@ import protocol Utilities.Transformable
 
 /// A set of options, where each option represents a specialized behavior.
 ///
-/// The easiest way to unformat text is to exclude symbols with the format attribute.
+/// Ordinary text is empty. Spacers are both prefixing and suffixing.
 ///
-/// - Ordinary text has a raw value of zero, and is empty.
-/// - A spacer is defined such that it is both prefixing and suffixing.
+/// - Singular: formatting, prefixing, suffixing, insertable, removable.
+/// - Composites: content, prefix, suffix, spacer.
 ///
-/// - Note: Singular options appear as adjectives (ends in either -able or -ing), whereas composite options appear as nouns (see: spacer).
+/// - Note: The easiest way to unformat text is to filter out symbols marked as formatting.
 ///
 public struct Attribute: OptionSet, Transformable {
     
-    // MARK: Singular (Adjectives)
+    // MARK: Singular
     
     /// Signifies that the symbol is part of formatting and therefore not 'real'.
     public static let formatting = Self(rawValue: 1 << 0)
@@ -33,7 +33,7 @@ public struct Attribute: OptionSet, Transformable {
     /// Signifies that the symbol will be ignored by the differentiation algorithm when it is removed.
     public static let removable = Self(rawValue: 1 << 4)
     
-    // MARK: Composites (Nouns)
+    // MARK: Composites
     
     /// Empty option set.
     public static let content = Self()
