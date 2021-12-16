@@ -8,8 +8,9 @@
 #if os(iOS)
 
 import SwiftUI
+import protocol Utilities.Transformable
 
-public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
+public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable, Transformable {
     public typealias Value = Style.Value
     public typealias UIViewType = CoreTextField
     public typealias Configuration = (ProxyTextField<UIViewType>) -> Void
@@ -38,19 +39,15 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
     // MARK: Transformations
     
     @inlinable public func setup(_ setup: Configuration?) -> Self {
-        configure({ $0.setup = setup })
+        transforming(using: { $0.setup = setup })
     }
     
     @inlinable public func update(_ update: Configuration?) -> Self {
-        configure({ $0.update = update })
+        transforming(using: { $0.update = update })
     }
     
     @inlinable public func submit(_ submit: Configuration?) -> Self {
-        configure({ $0.submit = submit })
-    }
-    
-    @inlinable internal func configure(_ configure: (inout Self) -> Void) -> Self {
-        var copy = self; configure(&copy); return copy
+        transforming(using: { $0.submit = submit })
     }
 
     // MARK: UIViewRepresentable

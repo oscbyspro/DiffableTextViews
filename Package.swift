@@ -16,12 +16,15 @@ let package = Package(
     targets: [
         .target(
             name: "DiffableTextViews",
-            dependencies: []),
+            dependencies: ["Utilities"]),
         .testTarget(
             name: "DiffableTextViewsTests",
             dependencies: ["DiffableTextViews"]),
         .target(
             name: "NumericTextStyles",
-            dependencies: ["DiffableTextViews"]),
+            dependencies: ["DiffableTextViews", "Utilities"]),
+        .target(
+            name: "Utilities",
+            dependencies: []),
     ]
 )

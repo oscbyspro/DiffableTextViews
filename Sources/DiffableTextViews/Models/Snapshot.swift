@@ -5,9 +5,11 @@
 //  Created by Oscar Byström Ericsson on 2021-09-23.
 //
 
+import protocol Utilities.Transformable
+
 // MARK: - Snapshot
 
-public struct Snapshot: BidirectionalCollection, RangeReplaceableCollection, ExpressibleByArrayLiteral {
+public struct Snapshot: BidirectionalCollection, RangeReplaceableCollection, ExpressibleByArrayLiteral, Transformable {
     public typealias Element = Symbol
     public typealias Indices = DefaultIndices<Self>
 
@@ -133,22 +135,6 @@ public struct Snapshot: BidirectionalCollection, RangeReplaceableCollection, Exp
     }
 }
 
-// MARK: - Utilities
-
-public extension Snapshot {
-    
-    // MARK: Characters
-    
-    /// - Complexity: O(n), where n is the length of the collection.
-    @inlinable func characters(where predicate: (Element) -> Bool) -> String {
-        reduce(into: String()) { result, element in
-            if predicate(element) {
-                result.append(element.character)
-            }
-        }
-    }
-}
-
 // MARK: - Transformations
 
 public extension Snapshot {
@@ -173,5 +159,21 @@ public extension Snapshot {
     
     @inlinable internal func interpret<R: RangeExpression, Bound>(_ indices: R, map: (Index) -> Bound) -> Range<Bound> where R.Bound == Index {
         let indices = indices.relative(to: self); return map(indices.lowerBound) ..< map(indices.upperBound)
+    }
+}
+
+// MARK: - Utilities
+
+public extension Snapshot {
+    
+    // MARK: Characters
+    
+    /// - Complexity: O(n), where n is the length of the collection.
+    @inlinable func characters(where predicate: (Element) -> Bool) -> String {
+        reduce(into: String()) { result, element in
+            if predicate(element) {
+                result.append(element.character)
+            }
+        }
     }
 }

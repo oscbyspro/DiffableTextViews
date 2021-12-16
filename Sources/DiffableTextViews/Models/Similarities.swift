@@ -5,6 +5,8 @@
 //  Created by Oscar Byström Ericsson on 2021-09-24.
 //
 
+import protocol Utilities.Transformable
+
 // MARK: - Similarities
 
 @usableFromInline struct Similarities<LHS: Collection, RHS: Collection> where LHS.Element == RHS.Element {
@@ -180,7 +182,7 @@ extension BidirectionalCollection {
 
 // MARK: -
 
-@usableFromInline struct SimilaritiesOptions<Element> {
+@usableFromInline struct SimilaritiesOptions<Element>: Transformable {
     @usableFromInline typealias Comparison = SimilaritiesOptionsComparison<Element>
     @usableFromInline typealias Inspection = SimilaritiesOptionsInspection<Element>
     @usableFromInline typealias Production = SimilaritiesOptionsProduction
@@ -226,21 +228,15 @@ extension BidirectionalCollection {
     // MARK: Transformations
     
     @inlinable func compare(_ newValue: Comparison) -> Self {
-        update({ $0.comparison = newValue })
+        transforming(using: { $0.comparison = newValue })
     }
         
     @inlinable func inspect(_ newValue: Inspection) -> Self {
-        update({ $0.inspection = newValue })
+        transforming(using: { $0.inspection = newValue })
     }
     
     @inlinable func produce(_ newValue: Production) -> Self {
-        update({ $0.production = newValue })
-    }
-    
-    // MARK: Transformations: Helpers
-    
-    @inlinable func update(_ transform: (inout Self) -> Void) -> Self {
-        var copy = self; transform(&copy); return copy
+        transforming(using: { $0.production = newValue })
     }
 }
 

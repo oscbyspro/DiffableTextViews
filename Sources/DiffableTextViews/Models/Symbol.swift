@@ -5,9 +5,11 @@
 //  Created by Oscar Byström Ericsson on 2021-09-24.
 //
 
+import protocol Utilities.Transformable
+
 // MARK: Symbol
 
-public struct Symbol: Equatable {
+public struct Symbol: Equatable, Transformable {
     
     // MARK: Properties
     
@@ -45,17 +47,23 @@ public struct Symbol: Equatable {
         !attribute.contains(.format)
     }
     
-    // MARK: Transformations
+    // MARK: Transformations: Union
+    
+    @inlinable public mutating func formUnion(_ attribute: Attribute) {
+        transform(using: { $0.attribute.formUnion(attribute) })
+    }
     
     @inlinable public func union(_ attribute: Attribute) -> Self {
-        update({ $0.attribute.formUnion(attribute) })
+        transforming(using: { $0.attribute.formUnion(attribute) })
+    }
+    
+    // MARK: Transformations: Intersection
+    
+    @inlinable public mutating func formIntersection(_ attribute: Attribute) {
+        transform(using: { $0.attribute.formIntersection(attribute) })
     }
     
     @inlinable public func intersection(_ attribute: Attribute) -> Self {
-        update({ $0.attribute.formIntersection(attribute) })
-    }
-    
-    @inlinable public func update(_ transform: (inout Self) -> Void) -> Self {
-        var result = self; transform(&result); return result
+        transforming(using: { $0.attribute.formIntersection(attribute) })
     }
 }

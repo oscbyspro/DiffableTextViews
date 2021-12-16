@@ -9,13 +9,14 @@
 
 import DiffableTextViews
 import struct Foundation.Locale
+import protocol Utilities.Transformable
 
 // MARK: - NumericTextStyle
 
 /// Formats text and numbers.
 ///
 /// - Complexity: O(n) or less for all calculations.
-public struct NumericTextStyle<Value: Boundable & Precise & Formattable>: DiffableTextStyle {
+public struct NumericTextStyle<Value: Boundable & Precise & Formattable>: DiffableTextStyle, Transformable {
     public typealias Bounds = NumericTextStyles.Bounds<Value>
     public typealias Precision = NumericTextStyles.Precision<Value>
 
@@ -42,29 +43,23 @@ extension NumericTextStyle {
     // MARK: Transformations
     
     @inlinable public func locale(_ locale: Locale) -> Self {
-        update({ $0.locale = locale })
+        transforming(using: { $0.locale = locale })
     }
     
     @inlinable public func prefix(_ newValue: String?) -> Self {
-        update({ $0.prefix = newValue })
+        transforming(using: { $0.prefix = newValue })
     }
     
     @inlinable public func suffix(_ newValue: String?) -> Self {
-        update({ $0.suffix = newValue })
+        transforming(using: { $0.suffix = newValue })
     }
     
     @inlinable public func bounds(_ newValue: Bounds) -> Self {
-        update({ $0.bounds = newValue })
+        transforming(using: { $0.bounds = newValue })
     }
     
     @inlinable public func precision(_ newValue: Precision) -> Self {
-        update({ $0.precision = newValue })
-    }
-    
-    // MARK: Helpers
-    
-    @inlinable func update(_ transform: (inout Self) -> Void) -> Self {
-        var copy = self; transform(&copy); return copy
+        transforming(using: { $0.precision = newValue })
     }
 }
 

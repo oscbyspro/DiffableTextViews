@@ -5,9 +5,11 @@
 //  Created by Oscar Byström Ericsson on 2021-09-27.
 //
 
+import protocol Utilities.Transformable
+
 // MARK: - Field
 
-@usableFromInline struct Field<Scheme: DiffableTextViews.Scheme> {
+@usableFromInline struct Field<Scheme: DiffableTextViews.Scheme>: Transformable {
     @usableFromInline typealias Carets = DiffableTextViews.Carets<Scheme>
     @usableFromInline typealias Offset = DiffableTextViews.Offset<Scheme>
     
@@ -76,12 +78,6 @@
     
     @inlinable func update(selection newValue: Offset, intent: Direction?) -> Self {
         update(selection: newValue ..< newValue, intent: intent)
-    }
-    
-    // MARK: Configure, Helpers
-    
-    @inlinable func transforming(using transformation: (inout Field) -> Void) -> Field {
-        var copy = self; transformation(&copy); return copy
     }
 }
 
