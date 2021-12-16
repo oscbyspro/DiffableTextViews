@@ -13,7 +13,7 @@ import protocol Utilities.Transformable
 ///
 /// The easiest way to unformat text is to exclude symbols with the format attribute.
 ///
-/// - Ordinary text has a raw value of 0, and is empty.
+/// - Ordinary text has a raw value of zero, and is empty.
 /// - A spacer is defined such that it is both prefixing and suffixing.
 ///
 /// - Note: Singular options appear as adjectives (ends in either -able or -ing), whereas composite options appear as nouns (see: spacer).
