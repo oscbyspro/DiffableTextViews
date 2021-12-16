@@ -32,8 +32,6 @@
     // MARK: Utilities
     
     @inlinable func components(_ characters: String) -> Components? {
-        // --------------------------------- //
-        
         var components = Components()
         var index = characters.startIndex
         
@@ -88,8 +86,6 @@
         // --------------------------------- //
         
         return components
-        
-        // --------------------------------- //
     }
 }
 

@@ -16,7 +16,6 @@ public struct Bounds<Value: Boundable> {
     public let min: Value
     public let max: Value
     
-    
     // MARK: Initializers
     
     @inlinable init(min: Value = Value.minLosslessValue, max: Value = Value.maxLosslessValue) {

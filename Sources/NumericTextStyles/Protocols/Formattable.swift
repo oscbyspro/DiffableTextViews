@@ -23,4 +23,3 @@ public protocol Formattable {
 }
 
 #endif
-

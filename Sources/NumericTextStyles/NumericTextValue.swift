@@ -10,7 +10,7 @@
 import Foundation
 import DiffableTextViews
 
-public protocol NumericTextValue: Boundable, Precise, Formattable {
+public protocol NumericTextValue: Boundable, Formattable, Precise {
     typealias NumericTextStyle = NumericTextStyles.NumericTextStyle<Self>
 }
 
