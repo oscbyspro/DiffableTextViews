@@ -62,8 +62,4 @@
     @inlinable static func - (lhs: Self, rhs: Self) -> Self {
         .init(at: lhs.distance - rhs.distance)
     }
-    
-    @inlinable static func % (lhs: Self, rhs: Self) -> Self {
-        .init(at: lhs.distance % rhs.distance)
-    }
 }

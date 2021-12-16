@@ -8,9 +8,9 @@
 // MARK: - Update
 
 @usableFromInline struct Update: OptionSet {
-    @usableFromInline static var async:      Self = .init(rawValue: 1 << 0)
-    @usableFromInline static var upstream:   Self = .init(rawValue: 1 << 1)
-    @usableFromInline static var downstream: Self = .init(rawValue: 1 << 2)
+    @usableFromInline static let async:      Self = .init(rawValue: 1 << 0)
+    @usableFromInline static let upstream:   Self = .init(rawValue: 1 << 1)
+    @usableFromInline static let downstream: Self = .init(rawValue: 1 << 2)
 
     // MARK: Properties
     
@@ -22,4 +22,3 @@
         self.rawValue = rawValue
     }
 }
-

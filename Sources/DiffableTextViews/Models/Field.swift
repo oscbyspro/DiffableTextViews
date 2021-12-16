@@ -80,8 +80,8 @@
     
     // MARK: Configure, Helpers
     
-    @inlinable func configure(_ transform: (inout Field) -> Void) -> Field {
-        var copy = self; transform(&copy); return copy
+    @inlinable func transforming(using transformation: (inout Field) -> Void) -> Field {
+        var copy = self; transformation(&copy); return copy
     }
 }
 
@@ -109,7 +109,7 @@ extension Field {
         
         // --------------------------------- //
         
-        return configure({ $0.selection = lowerBound ..< upperBound })
+        return transforming(using: { $0.selection = lowerBound ..< upperBound })
     }
 
     // MARK: To Selection
@@ -145,7 +145,7 @@ extension Field {
         
         // --------------------------------- //
 
-        return configure({ $0.selection = lowerBound ..< upperBound })
+        return transforming(using: { $0.selection = lowerBound ..< upperBound })
     }
     
     // MARK: To Carets
@@ -193,14 +193,14 @@ extension Field {
     @inlinable func indices(in offsets: Range<Offset>) -> Range<Carets.Index> {
         var indices = [Carets.Index]()
         indices.reserveCapacity(5)
-        indices.append(contentsOf: [carets.firstIndex,         carets.endIndex])
+        indices.append(contentsOf: [carets.firstIndex, carets.endIndex])
         indices.append(contentsOf: [selection.lowerBound, selection.upperBound])
         
         // --------------------------------- //
-    
+        
         func index(at offset: Offset) -> Carets.Index {
-            let shortestPath = indices.map({ Path($0, offset: offset) }).min()!
-            return carets.index(start: shortestPath.origin, offset: shortestPath.offset)
+            let shortestIndexPath = indices.map({ PathToIndex($0, offset: offset) }).min()!
+            return carets.index(start: shortestIndexPath.origin, offset: shortestIndexPath.offset)
         }
         
         // --------------------------------- //
@@ -214,9 +214,9 @@ extension Field {
         return lowerBound ..< upperBound
     }
     
-    // MARK: Helpers
+    // MARK: Objects
     
-    @usableFromInline struct Path: Comparable {
+    @usableFromInline struct PathToIndex: Comparable {
         
         // MARK: Properties
         
