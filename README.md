@@ -20,7 +20,7 @@ import DiffableTextViews
 import NumericTextStyles
 
 struct Example: View {
-    @State var decimal: Decimal = 0
+    @State var amount: Decimal = 0
     
     let locale = Locale(identifier: "en_US")
     
