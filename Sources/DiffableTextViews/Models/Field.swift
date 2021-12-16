@@ -154,6 +154,8 @@ extension Field {
             else                                     { return .done          }
         }
         
+        // --------------------------------- //
+        
         let change: Attribute = [.insert, .remove]
         func inspectable(symbol: Symbol) -> Bool {
             !symbol.attribute.contains(change)
@@ -165,6 +167,8 @@ extension Field {
             .produce(.overshoot)
             .compare(.instruction(step))
             .inspect(.only(inspectable))
+        
+        // --------------------------------- //
 
         func position(from current: Carets.SubSequence, to next: Carets.SubSequence) -> Carets.Index {
             Similarities(in: current.lazy.map(\.rhs), and: next.lazy.map(\.rhs), with: options).rhsSuffix().startIndex
