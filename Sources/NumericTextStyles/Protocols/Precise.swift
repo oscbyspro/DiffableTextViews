@@ -13,11 +13,11 @@ public protocol Precise {
     @inlinable static var maxLosslessDecimalDigits: Int { get }
 }
 
-// MARK: - Descriptions: Internal
+// MARK: - Precise: Descriptions
 
 extension Precise {
-    @inlinable static var float:   Bool { maxLosslessDecimalDigits != 0 }
-    @inlinable static var integer: Bool { maxLosslessDecimalDigits == 0 }
+    @inlinable static var isFloat:   Bool { maxLosslessDecimalDigits >= 0 }
+    @inlinable static var isInteger: Bool { maxLosslessDecimalDigits == 0 }
 }
 
 // MARK: - Specialization: Integer

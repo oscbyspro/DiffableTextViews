@@ -7,7 +7,7 @@
 
 import struct DiffableTextViews.Snapshot
 
-// MARK: - Toggle Sign Instruction
+// MARK: - ToggleSignInstruction
         
 @usableFromInline struct ToggleSignInstruction {
 

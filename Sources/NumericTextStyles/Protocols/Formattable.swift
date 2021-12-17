@@ -5,11 +5,11 @@
 //  Created by Oscar Byström Ericsson on 2021-11-07.
 //
 
-#if os(iOS)
-
 import struct Foundation.Locale
 import protocol Foundation.FormatStyle
 import enum Foundation.NumberFormatStyleConfiguration
+
+#if os(iOS)
 
 // MARK: - Formattable
 

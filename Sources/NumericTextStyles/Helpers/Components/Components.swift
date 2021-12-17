@@ -90,8 +90,13 @@
         
         // MARK: Descriptions
         
+        #warning("...")
         @inlinable var isZero: Bool {
             characters == String(Self.zero)
+        }
+        
+        @inlinable var equalsZero: Bool {
+            characters.allSatisfy(digitIsZero)
         }
         
         @inlinable var isEmpty: Bool {
@@ -124,7 +129,7 @@ extension Components {
         .init(upper: integers.count, lower: decimals.count)
     }
     
-    @inlinable func numberOfDigitsWithoutZeroInteger() -> NumberOfDigits {
+    @inlinable func numberOfDigitsIgnoringSingleIntegerZero() -> NumberOfDigits {
         .init(upper: integers.isZero ? .zero : integers.count, lower: decimals.count)
     }
     

@@ -5,10 +5,12 @@
 //  Created by Oscar Byström Ericsson on 2021-11-07.
 //
 
-#if os(iOS)
-
 import Foundation
 import DiffableTextViews
+
+#if os(iOS)
+
+// MARK: - NumericTextValue
 
 public protocol NumericTextValue: Boundable, Formattable, Precise {
     typealias NumericTextStyle = NumericTextStyles.NumericTextStyle<Self>

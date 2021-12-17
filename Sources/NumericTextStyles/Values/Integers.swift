@@ -72,12 +72,12 @@ extension Int64: NormalInteger {
 // MARK: - UInt
 
 extension UInt: NormalInteger {
-    /// Apple, please fix IntegerFormatStyleUInt64, it uses an Int64.
+    /// Apple, please fix IntegerFormatStyleUInt, it uses an Int.
     @inlinable public static var maxLosslessValue: UInt {
         UInt(Int.maxLosslessValue)
     }
 
-    /// Apple, please fix IntegerFormatStyleUInt64, it uses an Int64.
+    /// Apple, please fix IntegerFormatStyleUInt, it uses an Int.
     @inlinable public static var maxLosslessDigits: Int {
         Int.maxLosslessDigits
     }

@@ -16,7 +16,7 @@ import protocol Utilities.Transformable
 /// Formats text and numbers.
 ///
 /// - Complexity: O(n) or less for all calculations.
-public struct NumericTextStyle<Value: Boundable & Precise & Formattable>: DiffableTextStyle, Transformable {
+public struct NumericTextStyle<Value: NumericTextValue>: DiffableTextStyle, Transformable {
     public typealias Bounds = NumericTextStyles.Bounds<Value>
     public typealias Precision = NumericTextStyles.Precision<Value>
 
@@ -138,16 +138,16 @@ extension NumericTextStyle {
 
 extension NumericTextStyle {
     
-    // MARK: Edit
-    
-    @inlinable public func snapshot(_ value: Value) -> Snapshot {
-        snapshot(editableStyle().format(value))
-    }
-    
-    // MARK: Showcase
+    // MARK: Displayable
     
     @inlinable public func showcase(_ value: Value) -> Snapshot {
-        snapshot(displayableStyle().format(value))
+        snapshot(characters: displayableStyle().format(value))
+    }
+    
+    // MARK: Editable
+
+    @inlinable public func snapshot(_ value: Value) -> Snapshot {
+        snapshot(characters: editableStyle().format(value))
     }
 }
 
@@ -177,25 +177,27 @@ extension NumericTextStyle {
         
         // --------------------------------- //
         
-        return snapshot(&components)
+        return snapshot(components: &components)
     }
     
     // MARK: Components
     
-    @inlinable func snapshot(_ components: inout Components) -> Snapshot? {
-        let digits = components.numberOfDigitsWithoutZeroInteger()
+    @inlinable func snapshot(components: inout Components) -> Snapshot? {
+        let digits = components.numberOfDigitsIgnoringSingleIntegerZero()
         guard let capacity = precision.editableValidationWithCapacity(digits: digits) else { return nil }
         
         // --------------------------------- //
         
-        if components.decimals.isEmpty, capacity.lower == .zero {
+        if capacity.lower <= 0, components.decimals.isEmpty {
             components.separator = nil
         }
         
         // --------------------------------- //
         
-        guard let value = value(components) else { return nil }
+        guard let value = value(components)    else { return nil }
         guard bounds.editableValidation(value) else { return nil }
+        
+        // --------------------------------- //
         
         let style = editableStyle(digits: digits, separator: components.separator != nil)
         var characters = style.format(value)
@@ -208,12 +210,12 @@ extension NumericTextStyle {
         
         // --------------------------------- //
     
-        return snapshot(characters)
+        return snapshot(characters: characters)
     }
     
     // MARK: Characters
     
-    @inlinable func snapshot(_ characters: String) -> Snapshot {
+    @inlinable func snapshot(characters: String) -> Snapshot {
         var snapshot = Snapshot()
             
         // --------------------------------- //
@@ -306,7 +308,7 @@ extension NumericTextStyle {
         
         // --------------------------------- //
         
-        if Value.integer {
+        if Value.isInteger {
             configuration.options.insert(.integer)
         } else {
             configuration.separators.insert(decimalSeparator)
