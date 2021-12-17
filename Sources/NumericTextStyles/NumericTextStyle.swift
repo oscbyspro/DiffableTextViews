@@ -16,6 +16,7 @@ import protocol Utilities.Transformable
 /// Formats text and numbers.
 ///
 /// - Complexity: O(n) or less for all calculations.
+///
 public struct NumericTextStyle<Value: NumericTextValue>: DiffableTextStyle, Transformable {
     public typealias Bounds = NumericTextStyles.Bounds<Value>
     public typealias Precision = NumericTextStyles.Precision<Value>
@@ -23,9 +24,8 @@ public struct NumericTextStyle<Value: NumericTextValue>: DiffableTextStyle, Tran
     // MARK: Properties
     
     @usableFromInline var locale: Locale
-    @usableFromInline var prefix: String? = nil
-    @usableFromInline var suffix: String? = nil
-    
+    @usableFromInline var prefix: String = ""
+    @usableFromInline var suffix: String = ""
     @usableFromInline var bounds: Bounds = .all
     @usableFromInline var precision: Precision = .max
     
@@ -46,11 +46,11 @@ extension NumericTextStyle {
         transforming(using: { $0.locale = locale })
     }
     
-    @inlinable public func prefix(_ newValue: String?) -> Self {
+    @inlinable public func prefix(_ newValue: String) -> Self {
         transforming(using: { $0.prefix = newValue })
     }
     
-    @inlinable public func suffix(_ newValue: String?) -> Self {
+    @inlinable public func suffix(_ newValue: String) -> Self {
         transforming(using: { $0.suffix = newValue })
     }
     
@@ -218,7 +218,7 @@ extension NumericTextStyle {
             
         // --------------------------------- //
         
-        if let prefix = prefix {
+        if !prefix.isEmpty {
             snapshot.append(contentsOf: Snapshot(prefix, only: .prefix))
             snapshot.append(.prefix(" "))
         }
@@ -245,7 +245,7 @@ extension NumericTextStyle {
                 
         // --------------------------------- //
 
-        if let suffix = suffix {
+        if !suffix.isEmpty {
             snapshot.append(.suffix(" "))
             snapshot.append(contentsOf: Snapshot(suffix, only: .suffix))
         }

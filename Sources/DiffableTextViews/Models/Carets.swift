@@ -5,11 +5,11 @@
 //  Created by Oscar Byström Ericsson on 2021-10-04.
 //
 
-import protocol Utilities.NonemptyCollection
+import protocol Utilities.Nonempty
 
 // MARK: - Carets
 
-@usableFromInline struct Carets<Scheme: DiffableTextViews.Scheme>: BidirectionalCollection, NonemptyCollection {
+@usableFromInline struct Carets<Scheme: DiffableTextViews.Scheme>: BidirectionalCollection, Nonempty {
     @usableFromInline typealias Offset = DiffableTextViews.Offset<Scheme>
     
     // MARK: Properties
