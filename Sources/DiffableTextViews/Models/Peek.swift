@@ -7,7 +7,6 @@
 
 // MARK: - Peek
 
-#warning("Cleanup: Look.")
 @usableFromInline struct Peek {
     
     // MARK: Properties
@@ -22,7 +21,7 @@
         self.rhs = rhs ?? .suffix("\0")
     }
     
-    // MARK: Descriptions: Lookable
+    // MARK: Descriptions: Look
     
     @inlinable var lookaheadable: Bool {
         rhs.attribute.contains(.prefixing)
