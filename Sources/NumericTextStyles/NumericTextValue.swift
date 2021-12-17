@@ -5,8 +5,8 @@
 //  Created by Oscar Byström Ericsson on 2021-11-07.
 //
 
-import Foundation
 import DiffableTextViews
+import struct Foundation.Decimal
 
 #if os(iOS)
 

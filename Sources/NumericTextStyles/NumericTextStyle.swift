@@ -67,16 +67,6 @@ extension NumericTextStyle {
 
 extension NumericTextStyle {
     
-    // MARK: Locale
-
-    @inlinable var decimalSeparator: String {
-        locale.decimalSeparator ?? Components.Separator.system.characters
-    }
-
-    @inlinable var groupingSeparator: String {
-        locale.groupingSeparator ?? .init()
-    }
-    
     // MARK: Characters
     
     @inlinable var zero: Character {
@@ -89,6 +79,14 @@ extension NumericTextStyle {
     
     @inlinable var signs: Set<Character> {
         Components.Sign.set
+    }
+    
+    @inlinable var decimalSeparator: String {
+        locale.decimalSeparator ?? Components.Separator.system.characters
+    }
+
+    @inlinable var groupingSeparator: String {
+        locale.groupingSeparator ?? ""
     }
 }
 
@@ -227,6 +225,7 @@ extension NumericTextStyle {
                 
         // --------------------------------- //
         
+        #warning("Clean this up.")
         for character in characters {
             if digits.contains(character) {
                 snapshot.append(.content(character))
@@ -322,6 +321,7 @@ extension NumericTextStyle {
     
     // MARK: Components
     
+    #warning("Unformatting can and should be lazy.")
     @inlinable func components(_ snapshot: Snapshot, with configuration: Configuration) -> Components? {
         configuration.components(snapshot.characters(where: \.nonformatting))
     }
