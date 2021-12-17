@@ -90,7 +90,6 @@
         
         // MARK: Descriptions
         
-        #warning("...")
         @inlinable var isZero: Bool {
             characters == String(Self.zero)
         }
