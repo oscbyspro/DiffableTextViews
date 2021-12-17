@@ -17,6 +17,12 @@ extension DefaultIndices: NonemptyCollection where Elements: NonemptyCollection 
 
 public extension NonemptyCollection {
     
+    // MARK: State
+    
+    @inlinable var isEmpty: Bool {
+        false
+    }
+    
     // MARK: Index
     
     @inlinable var firstIndex: Index {

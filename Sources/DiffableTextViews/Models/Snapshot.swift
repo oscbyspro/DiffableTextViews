@@ -21,7 +21,7 @@ public struct Snapshot: BidirectionalCollection, RangeReplaceableCollection, Exp
     @usableFromInline var _characters: Characters
     @usableFromInline var _attributes: Attributes
 
-    // MARK: Getters
+    // MARK: Properties: Get
     
     @inlinable public var characters: Characters { _characters }
     @inlinable public var attributes: Attributes { _attributes }
@@ -94,13 +94,11 @@ public struct Snapshot: BidirectionalCollection, RangeReplaceableCollection, Exp
     // MARK: Collection: Subscripts
     
     @inlinable public subscript(position: Index) -> Element {
-        _read {
-            yield Element(_characters[position.character], attribute: _attributes[position.attribute])
-        }
+        .init(_characters[position.character], attribute: _attributes[position.attribute])
     }
     
     @inlinable public subscript(character position: Index) -> Character {
-        _read   { yield _characters[position.character] }
+        _read   { yield  _characters[position.character] }
     }
     
     @inlinable public subscript(attribute position: Index) -> Attribute {
@@ -147,12 +145,12 @@ public extension Snapshot {
         transformation(&_attributes[index.attribute])
     }
     
-    @inlinable mutating func transform<R: RangeExpression>(attributes indices: R, using transformation: (Attribute) -> Attribute) where R.Bound == Index {
-        let indices = interpret(indices, map: \.attribute); _attributes.replaceSubrange(indices, with: _attributes[indices].map(transformation))
+    @inlinable mutating func transform<R: RangeExpression>(attributes expression: R, using transformation: (Attribute) -> Attribute) where R.Bound == Index {
+        let indices = interpret(expression, map: \.attribute); _attributes.replaceSubrange(indices, with: _attributes[indices].map(transformation))
     }
         
-    @inlinable mutating func transform<R: RangeExpression>(attributes indices: R, using transformation: (inout Attribute) -> Void) where R.Bound == Index {
-        for index in interpret(indices, map: \.attribute) { transformation(&_attributes[index]) }
+    @inlinable mutating func transform<R: RangeExpression>(attributes expression: R, using transformation: (inout Attribute) -> Void) where R.Bound == Index {
+        for index in interpret(expression, map: \.attribute) { transformation(&_attributes[index]) }
     }
     
     // MARK: Helpers
