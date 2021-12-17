@@ -9,6 +9,7 @@ import protocol Utilities.Transformable
 
 // MARK: - Field
 
+#warning("Cleanup: Look.")
 @usableFromInline struct Field<Scheme: DiffableTextViews.Scheme>: Transformable {
     @usableFromInline typealias Carets = DiffableTextViews.Carets<Scheme>
     @usableFromInline typealias Offset = DiffableTextViews.Offset<Scheme>

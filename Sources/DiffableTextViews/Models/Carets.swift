@@ -5,9 +5,11 @@
 //  Created by Oscar Byström Ericsson on 2021-10-04.
 //
 
+import protocol Utilities.NonemptyCollection
+
 // MARK: - Carets
 
-@usableFromInline struct Carets<Scheme: DiffableTextViews.Scheme>: BidirectionalCollection {
+@usableFromInline struct Carets<Scheme: DiffableTextViews.Scheme>: BidirectionalCollection, NonemptyCollection {
     @usableFromInline typealias Offset = DiffableTextViews.Offset<Scheme>
     
     // MARK: Properties
@@ -108,31 +110,6 @@
         @inlinable static func == (lhs: Self, rhs: Self) -> Bool {
             lhs.rhs == rhs.rhs
         }
-    }
-}
-
-// MARK: - Is Never Empty
-
-extension Carets {
-    
-    // MARK: Element
-    
-    @inlinable var first: Element {
-        first!
-    }
-    
-    @inlinable var last: Element {
-        last!
-    }
-    
-    // MARK: Index
-    
-    @inlinable var firstIndex: Index {
-        startIndex
-    }
-    
-    @inlinable var lastIndex: Index {
-        index(before: endIndex)
     }
 }
 
