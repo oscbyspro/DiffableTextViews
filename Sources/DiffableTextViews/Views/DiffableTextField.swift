@@ -10,6 +10,8 @@
 import SwiftUI
 import protocol Utilities.Transformable
 
+// MARK: - DiffableTextField
+
 public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable, Transformable {
     public typealias Value = Style.Value
     public typealias UIViewType = CoreTextField
