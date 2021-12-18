@@ -147,20 +147,11 @@ extension Field {
     // MARK: To Carets
     
     @inlinable func move(to nextCarets: Carets) -> Field {
-        #warning("This block belongs inside Similarities.swift.")
-        func step(prev: Symbol, next: Symbol) -> SimilaritiesInstruction {
-            if prev == next                              { return .continue      }
-            else if prev.attribute.contains(.removable)  { return .continueOnLHS }
-            else if next.attribute.contains(.insertable) { return .continueOnRHS }
-            else                                         { return .done          }
-        }
-        
-        // --------------------------------- //
-        
-        #warning("This block belongs inside Similarities.swift.")
-        let ignorable: Attribute = [.insertable, .removable]
-        func inspectable(symbol: Symbol) -> Bool {
-            !symbol.attribute.contains(ignorable)
+        func step(previous lhs: Symbol, next rhs: Symbol) -> SimilaritiesInstruction {
+            if lhs == rhs                               { return .continue      }
+            else if lhs.attribute.contains(.removable)  { return .continueOnLHS }
+            else if rhs.attribute.contains(.insertable) { return .continueOnRHS }
+            else                                        { return .done          }
         }
         
         // --------------------------------- //
@@ -168,7 +159,7 @@ extension Field {
         let options = SimilaritiesOptions<Symbol>
             .produce(.overshoot)
             .compare(.instruction(step))
-            .inspect(.only(inspectable))
+            .inspect(.only(\.nonformatting))
         
         // --------------------------------- //
 

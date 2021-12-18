@@ -50,8 +50,26 @@ import protocol Utilities.Transformable
     @inlinable func reverse() -> Similarities<ReversedCollection<LHS>, ReversedCollection<RHS>> where LHS: BidirectionalCollection, RHS: BidirectionalCollection {
         make(lhs.reversed(), rhs.reversed())
     }
+
+    // MARK: Utilities
     
-    // MARK: Calculations
+    @inlinable func lhsPrefix() -> LHS.SubSequence {
+        lhs.prefix(upTo: prefixIndices().lhs)
+    }
+    
+    @inlinable func rhsPrefix() -> RHS.SubSequence {
+        rhs.prefix(upTo: prefixIndices().rhs)
+    }
+    
+    @inlinable func lhsSuffix() -> LHS.SubSequence where LHS: BidirectionalCollection, RHS: BidirectionalCollection {
+        let reversed = reverse().lhsPrefix(); return lhs[reversed.endIndex.base ..< reversed.startIndex.base]
+    }
+    
+    @inlinable func rhsSuffix() -> RHS.SubSequence where LHS: BidirectionalCollection, RHS: BidirectionalCollection {
+        let reversed = reverse().rhsPrefix(); return rhs[reversed.endIndex.base ..< reversed.startIndex.base]
+    }
+    
+    // MARK: Utilities: Helpers
     
     @inlinable func prefixIndices() -> Indices {
         var lhsIndex = lhs.startIndex
@@ -92,31 +110,10 @@ import protocol Utilities.Transformable
         
         return Indices(lhsIndex, rhsIndex)
     }
-
-    // MARK: Utilities
     
-    @inlinable func lhsPrefix() -> LHS.SubSequence {
-        lhs.prefix(upTo: prefixIndices().lhs)
-    }
-    
-    @inlinable func rhsPrefix() -> RHS.SubSequence {
-        rhs.prefix(upTo: prefixIndices().rhs)
-    }
-    
-    @inlinable func lhsSuffix() -> LHS.SubSequence where LHS: BidirectionalCollection, RHS: BidirectionalCollection {
-        let reversed = reverse().lhsPrefix(); return lhs[reversed.endIndex.base ..< reversed.startIndex.base]
-    }
-    
-    @inlinable func rhsSuffix() -> RHS.SubSequence where LHS: BidirectionalCollection, RHS: BidirectionalCollection {
-        let reversed = reverse().rhsPrefix(); return rhs[reversed.endIndex.base ..< reversed.startIndex.base]
-    }
-    
-    // MARK: Components: Indices
+    // MARK: Objects
     
     @usableFromInline struct Indices {
-        
-        // MARK: Properties
-        
         @usableFromInline var lhs: LHS.Index
         @usableFromInline var rhs: RHS.Index
         
@@ -132,52 +129,25 @@ import protocol Utilities.Transformable
 // MARK: - Comparison
 
 @usableFromInline struct SimilaritiesInstruction: OptionSet {
-    @usableFromInline let rawValue: UInt8
     
-    // MARK: Initializers
-    
-    @inlinable init(rawValue: UInt8 = 0) {
-        self.rawValue = rawValue
-    }
-    
-    // MARK: Options
+    // MARK: Singular
 
     @usableFromInline static let continueOnLHS = Self(rawValue: 1 << 0)
     @usableFromInline static let continueOnRHS = Self(rawValue: 1 << 1)
     
     // MARK: Composites
     
+    @usableFromInline static let `done`     = Self()
     @usableFromInline static let `continue` = Self([.continueOnLHS, .continueOnRHS])
-    @usableFromInline static let     `done` = Self([])
-}
-            
-// MARK: - Collection
-
-extension Collection {
     
-    // MARK: Prefix
+    // MARK: Properties
     
-    @inlinable func prefix<Other: Collection>(alsoIn other: Other, options: Similarities<Self, Other>.Options) -> SubSequence where Other.Element == Element {
-        Similarities(lhs: self, rhs: other, options: options).lhsPrefix()
-    }
-
-    @inlinable func prefix<Other: Collection>(alsoIn other: Other, options: Similarities<Self, Other>.Options = .defaults()) -> SubSequence where Other.Element == Element, Element: Equatable {
-        Similarities(lhs: self, rhs: other, options: options).lhsPrefix()
-    }
-}
-
-// MARK: - BidirectionalCollection
-            
-extension BidirectionalCollection {
+    @usableFromInline let rawValue: UInt8
     
-    // MARK: Suffix
+    // MARK: Initializers
     
-    @inlinable func suffix<Other: BidirectionalCollection>(alsoIn other: Other, options: Similarities<Self, Other>.Options) -> SubSequence where Other.Element == Element {
-        Similarities(lhs: self, rhs: other, options: options).lhsSuffix()
-    }
-
-    @inlinable func suffix<Other: BidirectionalCollection>(alsoIn other: Other, options: Similarities<Self, Other>.Options = .defaults()) -> SubSequence where Other.Element == Element, Element: Equatable {
-        Similarities(lhs: self, rhs: other, options: options).lhsSuffix()
+    @inlinable init(rawValue: UInt8 = 0) {
+        self.rawValue = rawValue
     }
 }
 
@@ -263,14 +233,13 @@ extension BidirectionalCollection {
     }
     
     @inlinable static func equation(_ equivalent: @escaping (Element, Element) -> Bool) -> Self {
-        Self({ equivalent($0, $1) ? .`continue` : .`done` })
+        Self({ equivalent($0, $1) ? .continue : .done })
     }
     
     @inlinable static func equatable<Value: Equatable>(_ value: @escaping (Element) -> Value) -> Self {
-        Self({ value($0) == value($1) ? .`continue` : .`done` })
+        Self({ value($0) == value($1) ? .continue : .done })
     }
 }
-
 
 // MARK: - Options: Inspection
 
@@ -305,4 +274,34 @@ extension BidirectionalCollection {
     // MARK: Initializers: Static
     
     @inlinable static var defaultValue: Self { .wrapper }
+}
+
+// MARK: - Collection + Similarities
+
+extension Collection {
+    
+    // MARK: Prefix
+    
+    @inlinable func prefix<Other: Collection>(alsoIn other: Other, options: Similarities<Self, Other>.Options) -> SubSequence where Other.Element == Element {
+        Similarities(lhs: self, rhs: other, options: options).lhsPrefix()
+    }
+
+    @inlinable func prefix<Other: Collection>(alsoIn other: Other, options: Similarities<Self, Other>.Options = .defaults()) -> SubSequence where Other.Element == Element, Element: Equatable {
+        Similarities(lhs: self, rhs: other, options: options).lhsPrefix()
+    }
+}
+
+// MARK: - BidirectionalCollection + Similarities
+            
+extension BidirectionalCollection {
+    
+    // MARK: Suffix
+    
+    @inlinable func suffix<Other: BidirectionalCollection>(alsoIn other: Other, options: Similarities<Self, Other>.Options) -> SubSequence where Other.Element == Element {
+        Similarities(lhs: self, rhs: other, options: options).lhsSuffix()
+    }
+
+    @inlinable func suffix<Other: BidirectionalCollection>(alsoIn other: Other, options: Similarities<Self, Other>.Options = .defaults()) -> SubSequence where Other.Element == Element, Element: Equatable {
+        Similarities(lhs: self, rhs: other, options: options).lhsSuffix()
+    }
 }

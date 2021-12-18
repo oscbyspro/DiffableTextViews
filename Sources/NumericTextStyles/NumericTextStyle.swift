@@ -225,7 +225,6 @@ extension NumericTextStyle {
                 
         // --------------------------------- //
         
-        #warning("Clean this up.")
         for character in characters {
             if digits.contains(character) {
                 snapshot.append(.content(character))
@@ -321,7 +320,7 @@ extension NumericTextStyle {
     
     // MARK: Components
     
-    #warning("Unformatting can and should be lazy.")
+    /// Unformatting can be made lazy.
     @inlinable func components(_ snapshot: Snapshot, with configuration: Configuration) -> Components? {
         configuration.components(snapshot.characters(where: \.nonformatting))
     }
