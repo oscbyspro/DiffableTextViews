@@ -136,7 +136,7 @@ import protocol Utilities.Transformable
 
 // MARK: - Comparison
 
-@usableFromInline struct SimilaritiesInstruction: OptionSet, Transformable {
+@usableFromInline struct SimilaritiesInstruction: OptionSet {
     
     // MARK: Singular
 
@@ -256,35 +256,5 @@ import protocol Utilities.Transformable
     
     @inlinable static func only(_ includes: @escaping (Element) -> Bool) -> Self {
         Self(includes: includes)
-    }
-}
-
-// MARK: - Collection + Similarities
-
-extension Collection {
-    
-    // MARK: Prefix
-    
-    @inlinable func prefix<Other: Collection>(alsoIn other: Other, options: Similarities<Self, Other>.Options) -> SubSequence where Other.Element == Element {
-        Similarities(lhs: self, rhs: other, options: options).lhsPrefix()
-    }
-
-    @inlinable func prefix<Other: Collection>(alsoIn other: Other, options: Similarities<Self, Other>.Options = .defaults()) -> SubSequence where Other.Element == Element, Element: Equatable {
-        Similarities(lhs: self, rhs: other, options: options).lhsPrefix()
-    }
-}
-
-// MARK: - BidirectionalCollection + Similarities
-            
-extension BidirectionalCollection {
-    
-    // MARK: Suffix
-    
-    @inlinable func suffix<Other: BidirectionalCollection>(alsoIn other: Other, options: Similarities<Self, Other>.Options) -> SubSequence where Other.Element == Element {
-        Similarities(lhs: self, rhs: other, options: options).lhsSuffix()
-    }
-
-    @inlinable func suffix<Other: BidirectionalCollection>(alsoIn other: Other, options: Similarities<Self, Other>.Options = .defaults()) -> SubSequence where Other.Element == Element, Element: Equatable {
-        Similarities(lhs: self, rhs: other, options: options).lhsSuffix()
     }
 }
