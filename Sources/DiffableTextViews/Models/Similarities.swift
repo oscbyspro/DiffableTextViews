@@ -9,6 +9,7 @@ import protocol Utilities.Transformable
 
 // MARK: - Similarities
 
+#warning("Streamline.")
 @usableFromInline struct Similarities<LHS: Collection, RHS: Collection> where LHS.Element == RHS.Element {
     @usableFromInline typealias Element = LHS.Element
     @usableFromInline typealias Options = SimilaritiesOptions<Element>

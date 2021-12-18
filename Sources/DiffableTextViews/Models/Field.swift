@@ -147,6 +147,7 @@ extension Field {
     // MARK: To Carets
     
     @inlinable func move(to nextCarets: Carets) -> Field {
+        #warning("This block belongs inside Similarities.swift.")
         func step(prev: Symbol, next: Symbol) -> SimilaritiesInstruction {
             if prev == next                              { return .continue      }
             else if prev.attribute.contains(.removable)  { return .continueOnLHS }
@@ -156,6 +157,7 @@ extension Field {
         
         // --------------------------------- //
         
+        #warning("This block belongs inside Similarities.swift.")
         let ignorable: Attribute = [.insertable, .removable]
         func inspectable(symbol: Symbol) -> Bool {
             !symbol.attribute.contains(ignorable)
@@ -218,9 +220,6 @@ extension Field {
     // MARK: Objects
     
     @usableFromInline struct PathToIndex: Comparable {
-        
-        // MARK: Properties
-        
         @usableFromInline let origin: Carets.Index
         @usableFromInline let offset: Offset
         
