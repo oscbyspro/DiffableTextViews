@@ -134,7 +134,7 @@ import protocol Utilities.Transformable
     }
 }
 
-// MARK: - Comparison
+// MARK: - Instruction
 
 @usableFromInline struct SimilaritiesInstruction: OptionSet {
     
@@ -156,54 +156,6 @@ import protocol Utilities.Transformable
     
     @inlinable init(rawValue: UInt8 = 0) {
         self.rawValue = rawValue
-    }
-}
-
-// MARK: -
-
-@usableFromInline struct SimilaritiesOptions<Element>: Transformable {
-    @usableFromInline typealias Comparison = SimilaritiesComparison<Element>
-    @usableFromInline typealias Inspection = SimilaritiesInspection<Element>
-    
-    // MARK: Storage
-    
-    @usableFromInline var comparison: Comparison
-    @usableFromInline var inspection: Inspection
-
-    // MARK: Initializers
-
-    @inlinable init(comparison: Comparison, inspection: Inspection = .each) {
-        self.comparison = comparison
-        self.inspection = inspection
-    }
-    
-    @inlinable init(comparison: Comparison = .equation(==), inspection: Inspection = .each) where Element: Equatable {
-        self.comparison = comparison
-        self.inspection = inspection
-    }
-    
-    // MARK: Initializers: Static
-    
-    @inlinable static func compare(_ comparison: Comparison) -> Self {
-        Self(comparison: comparison)
-    }
-    
-    @inlinable static func inspect(_ inspection: Inspection) -> Self where Element: Equatable {
-        Self(inspection: inspection)
-    }
-
-    @inlinable static func defaults() -> Self where Element: Equatable {
-        Self(comparison: .equation(==))
-    }
-    
-    // MARK: Transformations
-    
-    @inlinable func compare(_ newValue: Comparison) -> Self {
-        transforming(using: { $0.comparison = newValue })
-    }
-        
-    @inlinable func inspect(_ newValue: Inspection) -> Self {
-        transforming(using: { $0.inspection = newValue })
     }
 }
 
@@ -256,5 +208,53 @@ import protocol Utilities.Transformable
     
     @inlinable static func only(_ includes: @escaping (Element) -> Bool) -> Self {
         Self(includes: includes)
+    }
+}
+
+// MARK: - Options
+
+@usableFromInline struct SimilaritiesOptions<Element>: Transformable {
+    @usableFromInline typealias Comparison = SimilaritiesComparison<Element>
+    @usableFromInline typealias Inspection = SimilaritiesInspection<Element>
+    
+    // MARK: Storage
+    
+    @usableFromInline var comparison: Comparison
+    @usableFromInline var inspection: Inspection
+
+    // MARK: Initializers
+
+    @inlinable init(comparison: Comparison, inspection: Inspection = .each) {
+        self.comparison = comparison
+        self.inspection = inspection
+    }
+    
+    @inlinable init(comparison: Comparison = .equation(==), inspection: Inspection = .each) where Element: Equatable {
+        self.comparison = comparison
+        self.inspection = inspection
+    }
+    
+    // MARK: Initializers: Static
+    
+    @inlinable static func compare(_ comparison: Comparison) -> Self {
+        Self(comparison: comparison)
+    }
+    
+    @inlinable static func inspect(_ inspection: Inspection) -> Self where Element: Equatable {
+        Self(inspection: inspection)
+    }
+
+    @inlinable static func defaults() -> Self where Element: Equatable {
+        Self(comparison: .equation(==))
+    }
+    
+    // MARK: Transformations
+    
+    @inlinable func compare(_ newValue: Comparison) -> Self {
+        transforming(using: { $0.comparison = newValue })
+    }
+        
+    @inlinable func inspect(_ newValue: Inspection) -> Self {
+        transforming(using: { $0.inspection = newValue })
     }
 }
