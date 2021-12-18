@@ -14,7 +14,7 @@ public protocol DiffableTextStyle {
     
     func showcase(_ value: Value) -> Snapshot
 
-    func snapshot(_ value: Value) -> Snapshot // (!)
+    func editable(_ value: Value) -> Snapshot // (!)
     
     // MARK: 1
     
@@ -36,7 +36,7 @@ extension DiffableTextStyle {
     // MARK: 0
         
     @inlinable public func showcase(_ value: Value) -> Snapshot {
-        snapshot(value)
+        editable(value)
     }
         
     // MARK: 1

@@ -277,7 +277,7 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable, 
         }
 
         @inlinable func snapshot(_ value: Value) -> Snapshot {
-            downstream.edits ? upstream.style.snapshot(value) : upstream.style.showcase(value)
+            downstream.edits ? upstream.style.editable(value) : upstream.style.showcase(value)
         }
     }
 }

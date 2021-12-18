@@ -144,8 +144,7 @@ extension NumericTextStyle {
     
     // MARK: Editable
 
-    #warning("Rename as: editable(_:), maybe.")
-    @inlinable public func snapshot(_ value: Value) -> Snapshot {
+    @inlinable public func editable(_ value: Value) -> Snapshot {
         snapshot(characters: editableStyle().format(value))
     }
 }
