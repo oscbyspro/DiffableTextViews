@@ -24,27 +24,22 @@ public struct Bounds<Value: Boundable> {
         self.min = Swift.max(min, Value.minLosslessValue)
         self.max = Swift.min(Value.maxLosslessValue, max)
     }
-}
-
-public extension Bounds {
     
     // MARK: Initialiers: Static
     
-    @inlinable static var all: Self {
+    @inlinable public static var all: Self {
         .values(in: Value.minLosslessValue...Value.maxLosslessValue)
     }
-    
-    // MARK: Initializers: Static
-    
-    @inlinable static func min(_ value: Value) -> Self {
+        
+    @inlinable public static func min(_ value: Value) -> Self {
         .init(min: value)
     }
     
-    @inlinable static func max(_ value: Value) -> Self {
+    @inlinable public static func max(_ value: Value) -> Self {
         .init(max: value)
     }
     
-    @inlinable static func values(in expression: ClosedRange<Value>) -> Self {
+    @inlinable public static func values(in expression: ClosedRange<Value>) -> Self {
         .init(min: expression.lowerBound, max: expression.upperBound)
     }
     

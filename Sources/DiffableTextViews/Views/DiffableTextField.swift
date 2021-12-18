@@ -147,7 +147,7 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable, 
             guard var value = upstream.style.parse(snapshot) else { return false }
             upstream.style.process(&value)
                         
-            let field = cache.field.update(selection: range.upperBound, intent: nil).update(carets: snapshot)
+            let field = cache.field.updating(selection: range.upperBound, intent: nil).updating(carets: snapshot)
             
             // --------------------------------- //
             
@@ -172,7 +172,7 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable, 
                         
             let offsets = downstream.selection()
             let intent = downstream.wrapped.intent?.direction
-            let field = cache.field.update(selection: offsets, intent: intent)
+            let field = cache.field.updating(selection: offsets, intent: intent)
             
             // --------------------------------- //
             
@@ -223,7 +223,7 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable, 
                 
                 // --------------------------------- //
                 
-                let field = cache.field.update(carets: snapshot)
+                let field = cache.field.updating(carets: snapshot)
                                 
                 // --------------------------------- //
                 

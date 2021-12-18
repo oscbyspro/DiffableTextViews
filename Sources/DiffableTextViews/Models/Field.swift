@@ -52,32 +52,32 @@ import protocol Utilities.Transformable
     
     // MARK: Update: Carets
     
-    @inlinable func update(carets newValue: Carets) -> Self {
-        moveToCarets(newValue).moveToAttributes()
+    @inlinable func updating(carets newValue: Carets) -> Self {
+        movingToCarets(newValue).movingToAttributes()
     }
     
-    @inlinable func update(carets newValue: Snapshot) -> Self {
-        update(carets: Carets(newValue))
+    @inlinable func updating(carets newValue: Snapshot) -> Self {
+        updating(carets: Carets(newValue))
     }
 
     // MARK: Update: Selection
     
-    @inlinable func update(selection newValue: Range<Carets.Index>, intent: Direction?) -> Self {
-        moveToSelection(newValue, intent: intent).moveToAttributes()
+    @inlinable func updating(selection newValue: Range<Carets.Index>, intent: Direction?) -> Self {
+        movingToSelection(newValue, intent: intent).movingToAttributes()
     }
     
-    @inlinable func update(selection newValue: Carets.Index, intent: Direction?) -> Self {
-        update(selection: newValue ..< newValue, intent: intent)
+    @inlinable func updating(selection newValue: Carets.Index, intent: Direction?) -> Self {
+        updating(selection: newValue ..< newValue, intent: intent)
     }
     
     // MARK: Configure: Selection, Offsets
     
-    @inlinable func update(selection newValue: Range<Offset>, intent: Direction?) -> Self {
-        update(selection: indices(in: newValue), intent: intent)
+    @inlinable func updating(selection newValue: Range<Offset>, intent: Direction?) -> Self {
+        updating(selection: indices(in: newValue), intent: intent)
     }
     
-    @inlinable func update(selection newValue: Offset, intent: Direction?) -> Self {
-        update(selection: newValue ..< newValue, intent: intent)
+    @inlinable func updating(selection newValue: Offset, intent: Direction?) -> Self {
+        updating(selection: newValue ..< newValue, intent: intent)
     }
 }
 
@@ -85,9 +85,9 @@ import protocol Utilities.Transformable
 
 extension Field {
     
-    // MARK: Move To Attribute
+    // MARK: To Attribute
     
-    @inlinable func moveToAttributes() -> Field {
+    @inlinable func movingToAttributes() -> Field {
         func move(_ position: Carets.Index, preference: Direction) -> Carets.Index {
             let direction = carets[position].directionOfAttributes() ?? preference
             return look(position, direction: direction)
@@ -108,9 +108,9 @@ extension Field {
         return transforming(using: { $0.selection = lowerBound ..< upperBound })
     }
 
-    // MARK: Move To Selection
+    // MARK: To Selection
     
-    @inlinable func moveToSelection(_ newValue: Range<Carets.Index>, intent: Direction?) -> Field {
+    @inlinable func movingToSelection(_ newValue: Range<Carets.Index>, intent: Direction?) -> Field {
         func move(_ start: Carets.Index, preference: Direction) -> Carets.Index {
             if carets[start].nonlookable(direction: preference) { return start }
                         
@@ -144,9 +144,9 @@ extension Field {
         return transforming(using: { $0.selection = lowerBound ..< upperBound })
     }
     
-    // MARK: Move To Carets
-    
-    @inlinable func moveToCarets(_ newValue: Carets) -> Field {
+    // MARK: To Carets
+            
+    @inlinable func movingToCarets(_ newValue: Carets) -> Field {
         func step(previous lhs: Symbol, next rhs: Symbol) -> SimilaritiesInstruction {
             if lhs == rhs                               { return .continue      }
             else if lhs.attribute.contains(.removable)  { return .continueOnLHS }
@@ -156,9 +156,7 @@ extension Field {
         
         // --------------------------------- //
         
-        let options = SimilaritiesOptions<Symbol>
-            .compare(.instruction(step))
-            .inspect(.only(\.nonformatting))
+        let options = SimilaritiesOptions(comparison: .instruction(step), inspection: .only(\.nonformatting))
         
         // --------------------------------- //
 

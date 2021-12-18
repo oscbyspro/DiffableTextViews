@@ -24,7 +24,7 @@ final class SimilaritiesTestsOfInspection: XCTestCase {
     // MARK: Assertions
     
     func XCTAssert(_ inspection: Inspection, expectations: () -> Expectations) {
-        let options = Options.inspect(inspection)
+        let options = Options().inspection(inspection)
         expectations().validate(Subject(lhs: lhs, rhs: rhs, options: options))
     }
         
@@ -69,7 +69,7 @@ final class SimilaritiesTestsOfBounds: XCTestCase {
     // MARK: Assertions
     
     func XCTAssert(expectations: () -> Expectations) {
-        let options = Options.inspect(.only({ value in value == 1 }))
+        let options = Options().inspection(.only({ value in value == 1 }))
         expectations().validate(Subject(lhs: lhs, rhs: rhs, options: options))
     }
         

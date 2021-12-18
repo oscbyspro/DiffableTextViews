@@ -12,7 +12,10 @@ import struct Foundation.Decimal
 
 // MARK: - Decimal
 
+/// Decimal: conformance to NumericTextValue.
+///
 /// - Supports up to 38 significant digits.
+///
 extension Decimal: NumericTextValue, Float { }; public extension Decimal {
     
     // MARK: Boundable

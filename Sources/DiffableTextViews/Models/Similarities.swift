@@ -236,23 +236,13 @@ import protocol Utilities.Transformable
         self.inspection = inspection
     }
     
-    // MARK: Initializers: Static
-    
-    @inlinable static func compare(_ comparison: Comparison) -> Self {
-        Self(comparison: comparison)
-    }
-    
-    @inlinable static func inspect(_ inspection: Inspection) -> Self where Element: Equatable {
-        Self(inspection: inspection)
-    }
-    
     // MARK: Transformations
     
-    @inlinable func compare(_ newValue: Comparison) -> Self {
+    @inlinable func comparison(_ newValue: Comparison) -> Self {
         transforming(using: { $0.comparison = newValue })
     }
         
-    @inlinable func inspect(_ newValue: Inspection) -> Self {
+    @inlinable func inspection(_ newValue: Inspection) -> Self {
         transforming(using: { $0.inspection = newValue })
     }
 }

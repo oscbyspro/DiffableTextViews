@@ -13,8 +13,10 @@ import struct Foundation.FloatingPointFormatStyle
 // MARK: - NumericTextFloat
 
 /// Numeric text value protocol for normal floats.
+/// 
 /// - Range: ±Self.maxLosslessValue.
 /// - Significands: Self.maxLosslessDigits.
+///
 public protocol NormalFloat: NumericTextValue, Float, BinaryFloatingPoint {
     @inlinable init?(_ description: String)
 }

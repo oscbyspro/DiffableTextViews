@@ -17,6 +17,7 @@ import SwiftUI
 ///
 /// - UITextField.text is never nil.
 /// - UITextField.selectedTextRange is never nil.
+///
 public final class ProxyTextField<Wrapped: UITextField> {
     @usableFromInline typealias Offset = DiffableTextViews.Offset<UTF16>
     
@@ -104,7 +105,7 @@ public extension ProxyTextField {
         wrapped.autocorrectionType = autocorrect
     }
     
-    @inlinable func caret(_ color: Color) {
+    @inlinable func caret(color: Color) {
         wrapped.tintColor = UIColor(color)
     }
     
@@ -112,12 +113,12 @@ public extension ProxyTextField {
         wrapped.keyboardType = keyboard
     }
     
-    @inlinable func `return`(_ key: UIReturnKeyType) {
-        wrapped.returnKeyType = key
+    @inlinable func key(return: UIReturnKeyType) {
+        wrapped.returnKeyType = `return`
     }
     
-    @inlinable func secure(_ secure: Bool) {
-        wrapped.isSecureTextEntry = secure
+    @inlinable func secure(text: Bool) {
+        wrapped.isSecureTextEntry = text
     }
 }
 
