@@ -99,7 +99,7 @@ import protocol Utilities.Nonempty
             self.rhs = rhs
         }
                 
-        // MARK: Collection: Index
+        // MARK: Comparable
         
         @inlinable static func < (lhs: Self, rhs: Self) -> Bool {
             guard let a = lhs.rhs else { return false }
@@ -108,17 +108,19 @@ import protocol Utilities.Nonempty
             return a < b
         }
         
+        // MARK: Equatable
+        
         @inlinable static func == (lhs: Self, rhs: Self) -> Bool {
             lhs.rhs == rhs.rhs
         }
     }
 }
 
-// MARK: - Offset
+// MARK: - Index
 
 extension Carets {
     
-    // MARK: Index, Stride
+    // MARK: Offset
     
     @inlinable func index(start: Index, offset: Offset) -> Index {
         offset.distance >= 0 ? index(start: start, forwards: offset) : index(start: start, backwards: offset)

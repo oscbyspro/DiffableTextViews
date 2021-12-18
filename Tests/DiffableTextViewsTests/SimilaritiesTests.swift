@@ -55,46 +55,32 @@ final class SimilaritiesTestsOfInspection: XCTestCase {
     }
 }
 
-// MARK: - Production
+// MARK: - Bounds
 
-final class SimilaritiesTestsOfProduction: XCTestCase {
+final class SimilaritiesTestsOfBounds: XCTestCase {
     typealias Subject = Similarities<[Int], [Int]>
     typealias Options = Subject.Options
-    typealias Production = Options.Production
     typealias Expectations = SimilaritiesTestsExpectations<Int>
     
     // MARK: Setup
     
-    let lhs = [1, 0, 0, 0, 1]
+    let lhs = [0, 0, 1, 0, 0, 0, 0, 1, 0, 0]
     let rhs = [1]
         
     // MARK: Assertions
     
-    func XCTAssert(_ production: Production, expectations: () -> Expectations) {
-        let options = Options
-            .inspect(.only({ $0 == 1 }))
-            .produce(production)
-                
+    func XCTAssert(expectations: () -> Expectations) {
+        let options = Options.inspect(.only({ $0 == 1 }))
         expectations().validate(Subject(lhs: lhs, rhs: rhs, options: options))
     }
         
     // MARK: Tests
-        
-    func test_wrapper() {
-        XCTAssert(.wrapper) {
-            Expectations(
-                lhsPrefix: rhs,
-                lhsSuffix: rhs,
-                rhsPrefix: rhs,
-                rhsSuffix: rhs)
-        }
-    }
-    
+
     func test_overshoot() {
-        XCTAssert(.overshoot) {
+        XCTAssert() {
             Expectations(
-                lhsPrefix: [1, 0, 0, 0],
-                lhsSuffix: [0, 0, 0, 1],
+                lhsPrefix: [0, 0, 1, 0, 0, 0, 0],
+                lhsSuffix: [0, 0, 0, 0, 1, 0, 0],
                 rhsPrefix: rhs,
                 rhsSuffix: rhs)
         }

@@ -9,9 +9,9 @@ import protocol Utilities.Transformable
 
 // MARK: - Similarities
 
-#warning("Streamline.")
 @usableFromInline struct Similarities<LHS: Collection, RHS: Collection> where LHS.Element == RHS.Element {
     @usableFromInline typealias Element = LHS.Element
+    @usableFromInline typealias Indices = SimilaritiesIndices<LHS, RHS>
     @usableFromInline typealias Options = SimilaritiesOptions<Element>
     @usableFromInline typealias Instruction = SimilaritiesInstruction
     
@@ -37,6 +37,16 @@ import protocol Utilities.Transformable
         self.init(lhs: lhs, rhs: rhs, options: options)
     }
     
+    // MARK: Getters
+    
+    @inlinable func inspectable(_ element: Element) -> Bool {
+        options.inspection.includes(element)
+    }
+
+    @inlinable func instruction(_ lhs: LHS.Element, _ rhs: RHS.Element) -> Instruction {
+        options.comparison.instruction(lhs, rhs)
+    }
+
     // MARK: Transformations
     
     @inlinable func make<L: Collection, R: Collection>(_ lhs: L, _ rhs: R) -> Similarities<L, R> where L.Element == Element {
@@ -54,11 +64,11 @@ import protocol Utilities.Transformable
     // MARK: Utilities
     
     @inlinable func lhsPrefix() -> LHS.SubSequence {
-        lhs.prefix(upTo: prefixIndices().lhs)
+        lhs.prefix(upTo: prefixEndIndices().lhs)
     }
     
     @inlinable func rhsPrefix() -> RHS.SubSequence {
-        rhs.prefix(upTo: prefixIndices().rhs)
+        rhs.prefix(upTo: prefixEndIndices().rhs)
     }
     
     @inlinable func lhsSuffix() -> LHS.SubSequence where LHS: BidirectionalCollection, RHS: BidirectionalCollection {
@@ -71,23 +81,23 @@ import protocol Utilities.Transformable
     
     // MARK: Utilities: Helpers
     
-    @inlinable func prefixIndices() -> Indices {
+    @inlinable func prefixEndIndices() -> Indices {
         var lhsIndex = lhs.startIndex
         var rhsIndex = rhs.startIndex
         
         // --------------------------------- //
         
-        loop: while let nextLHSIndex = lhs[lhsIndex...].firstIndex(where: options.inspection.includes),
-                    let nextRHSIndex = rhs[rhsIndex...].firstIndex(where: options.inspection.includes) {
+        while let nextLHSIndex = lhs[lhsIndex...].firstIndex(where: inspectable),
+              let nextRHSIndex = rhs[rhsIndex...].firstIndex(where: inspectable) {
             
             // --------------------------------- //
             
-            let instruction = options.comparison.instruction(lhs[nextLHSIndex], rhs[nextRHSIndex])
+            let instruction = instruction(lhs[nextLHSIndex], rhs[nextRHSIndex])
 
             // --------------------------------- //
-                        
-            if instruction == .done {
-                break loop
+            
+            if instruction.isEmpty {
+                break
             }
             
             if instruction.contains(.continueOnLHS) {
@@ -100,35 +110,33 @@ import protocol Utilities.Transformable
         }
         
         // --------------------------------- //
- 
-        if options.production == .overshoot {
-            lhsIndex = lhs[lhsIndex...].firstIndex(where: options.inspection.includes) ?? lhs.endIndex
-            rhsIndex = rhs[rhsIndex...].firstIndex(where: options.inspection.includes) ?? rhs.endIndex
-        }
+        
+        lhsIndex = lhs[lhsIndex...].firstIndex(where: inspectable) ?? lhs.endIndex
+        rhsIndex = rhs[rhsIndex...].firstIndex(where: inspectable) ?? rhs.endIndex
         
         // --------------------------------- //
         
         return Indices(lhsIndex, rhsIndex)
     }
+}
+
+// MARK: - Indices
+
+@usableFromInline struct SimilaritiesIndices<LHS: Collection, RHS: Collection> {
+    @usableFromInline var lhs: LHS.Index
+    @usableFromInline var rhs: RHS.Index
     
-    // MARK: Objects
+    // MARK: Initializers
     
-    @usableFromInline struct Indices {
-        @usableFromInline var lhs: LHS.Index
-        @usableFromInline var rhs: RHS.Index
-        
-        // MARK: Initializers
-        
-        @inlinable init(_ lhs: LHS.Index, _ rhs: RHS.Index) {
-            self.lhs = lhs
-            self.rhs = rhs
-        }
+    @inlinable init(_ lhs: LHS.Index, _ rhs: RHS.Index) {
+        self.lhs = lhs
+        self.rhs = rhs
     }
 }
 
 // MARK: - Comparison
 
-@usableFromInline struct SimilaritiesInstruction: OptionSet {
+@usableFromInline struct SimilaritiesInstruction: OptionSet, Transformable {
     
     // MARK: Singular
 
@@ -154,28 +162,24 @@ import protocol Utilities.Transformable
 // MARK: -
 
 @usableFromInline struct SimilaritiesOptions<Element>: Transformable {
-    @usableFromInline typealias Comparison = SimilaritiesOptionsComparison<Element>
-    @usableFromInline typealias Inspection = SimilaritiesOptionsInspection<Element>
-    @usableFromInline typealias Production = SimilaritiesOptionsProduction
+    @usableFromInline typealias Comparison = SimilaritiesComparison<Element>
+    @usableFromInline typealias Inspection = SimilaritiesInspection<Element>
     
     // MARK: Storage
     
     @usableFromInline var comparison: Comparison
     @usableFromInline var inspection: Inspection
-    @usableFromInline var production: Production
 
     // MARK: Initializers
 
-    @inlinable init(comparison: Comparison, inspection: Inspection = .defaultValue, production: Production = .defaultValue) {
+    @inlinable init(comparison: Comparison, inspection: Inspection = .each) {
         self.comparison = comparison
         self.inspection = inspection
-        self.production = production
     }
     
-    @inlinable init(comparison: Comparison = .equation(==), inspection: Inspection = .defaultValue, production: Production = .defaultValue) where Element: Equatable {
+    @inlinable init(comparison: Comparison = .equation(==), inspection: Inspection = .each) where Element: Equatable {
         self.comparison = comparison
         self.inspection = inspection
-        self.production = production
     }
     
     // MARK: Initializers: Static
@@ -188,10 +192,6 @@ import protocol Utilities.Transformable
         Self(inspection: inspection)
     }
 
-    @inlinable static func produce(_ production: Production) -> Self where Element: Equatable {
-        Self(production: production)
-    }
-    
     @inlinable static func defaults() -> Self where Element: Equatable {
         Self(comparison: .equation(==))
     }
@@ -205,15 +205,11 @@ import protocol Utilities.Transformable
     @inlinable func inspect(_ newValue: Inspection) -> Self {
         transforming(using: { $0.inspection = newValue })
     }
-    
-    @inlinable func produce(_ newValue: Production) -> Self {
-        transforming(using: { $0.production = newValue })
-    }
 }
 
-// MARK: - Options: Comparison
+// MARK: - Comparison
 
-@usableFromInline struct SimilaritiesOptionsComparison<Element> {
+@usableFromInline struct SimilaritiesComparison<Element> {
     @usableFromInline typealias Instruction = SimilaritiesInstruction
     
     // MARK: Properties
@@ -222,28 +218,28 @@ import protocol Utilities.Transformable
     
     // MARK: Initializers
     
-    @inlinable init(_ instruction: @escaping (Element, Element) -> Instruction) {
+    @inlinable init(instruction: @escaping (Element, Element) -> Instruction) {
         self.instruction = instruction
     }
     
     // MARK: Initializers: Static
     
-    @inlinable static func instruction(_ instruction: @escaping (Element, Element) -> Instruction) -> Self {
-        Self(instruction)
-    }
-    
     @inlinable static func equation(_ equivalent: @escaping (Element, Element) -> Bool) -> Self {
-        Self({ equivalent($0, $1) ? .continue : .done })
+        Self(instruction: { equivalent($0, $1) ? .continue : .done })
     }
     
     @inlinable static func equatable<Value: Equatable>(_ value: @escaping (Element) -> Value) -> Self {
-        Self({ value($0) == value($1) ? .continue : .done })
+        Self(instruction: { value($0) == value($1) ? .continue : .done })
+    }
+    
+    @inlinable static func instruction(_ instruction: @escaping (Element, Element) -> Instruction) -> Self {
+        Self(instruction: instruction)
     }
 }
 
-// MARK: - Options: Inspection
+// MARK: - Inspection
 
-@usableFromInline struct SimilaritiesOptionsInspection<Element> {
+@usableFromInline struct SimilaritiesInspection<Element> {
     @usableFromInline let includes: (Element) -> Bool
     
     // MARK: Initializers
@@ -261,19 +257,6 @@ import protocol Utilities.Transformable
     @inlinable static func only(_ includes: @escaping (Element) -> Bool) -> Self {
         Self(includes: includes)
     }
-
-    @inlinable static var defaultValue: Self { .each }
-}
-
-// MARK: - Options: Production
-
-@usableFromInline enum SimilaritiesOptionsProduction {
-    case wrapper
-    case overshoot
-    
-    // MARK: Initializers: Static
-    
-    @inlinable static var defaultValue: Self { .wrapper }
 }
 
 // MARK: - Collection + Similarities

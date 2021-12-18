@@ -8,9 +8,6 @@
 // MARK: - Peek
 
 @usableFromInline struct Peek {
-    
-    // MARK: Properties
-    
     @usableFromInline let lhs: Symbol
     @usableFromInline let rhs: Symbol
     
@@ -39,12 +36,12 @@
         !lookbehindable
     }
         
-    @inlinable func lookable(_ direction: Direction) -> Bool {
+    @inlinable func lookable(direction: Direction) -> Bool {
         direction == .forwards ? lookaheadable : lookbehindable
     }
     
-    @inlinable func nonlookable(_ direction: Direction) -> Bool {
-        !lookable(direction)
+    @inlinable func nonlookable(direction: Direction) -> Bool {
+        !lookable(direction: direction)
     }
     
     // MARK: Descriptions: Attributes

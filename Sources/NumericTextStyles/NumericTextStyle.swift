@@ -198,9 +198,10 @@ extension NumericTextStyle {
         // --------------------------------- //
         
         let style = editableStyle(digits: digits, separator: components.separator != nil)
-        var characters = style.format(value)
                 
         // --------------------------------- //
+        
+        var characters = style.format(value)
         
         if let sign = components.sign, !characters.hasPrefix(sign.characters) {
             characters = sign.characters + characters

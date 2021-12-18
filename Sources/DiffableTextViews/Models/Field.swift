@@ -112,7 +112,7 @@ extension Field {
     
     @inlinable func move(to nextSelection: Range<Carets.Index>, intent: Direction?) -> Field {
         func move(_ start: Carets.Index, preference: Direction) -> Carets.Index {
-            if carets[start].nonlookable(preference) { return start }
+            if carets[start].nonlookable(direction: preference) { return start }
                         
             // --------------------------------- //
             
@@ -157,7 +157,6 @@ extension Field {
         // --------------------------------- //
         
         let options = SimilaritiesOptions<Symbol>
-            .produce(.overshoot)
             .compare(.instruction(step))
             .inspect(.only(\.nonformatting))
         
