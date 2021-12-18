@@ -7,7 +7,7 @@
 
 // MARK: - Lock
 
-@usableFromInline final class Lock {
+@usableFromInline @MainActor final class Lock {
     
     // MARK: Properties
     

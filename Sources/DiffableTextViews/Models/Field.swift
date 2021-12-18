@@ -25,8 +25,8 @@ import protocol Utilities.Transformable
         self.selection = carets.lastIndex ..< carets.lastIndex
     }
     
-    @inlinable init(_ field: Carets, selection: Range<Carets.Index>) {
-        self.carets = field
+    @inlinable init(_ carets: Carets, selection: Range<Carets.Index>) {
+        self.carets = carets
         self.selection = selection
     }
     
@@ -53,7 +53,7 @@ import protocol Utilities.Transformable
     // MARK: Update: Carets
     
     @inlinable func update(carets newValue: Carets) -> Self {
-        move(to: newValue).moveToAttributes()
+        moveToCarets(newValue).moveToAttributes()
     }
     
     @inlinable func update(carets newValue: Snapshot) -> Self {
@@ -63,7 +63,7 @@ import protocol Utilities.Transformable
     // MARK: Update: Selection
     
     @inlinable func update(selection newValue: Range<Carets.Index>, intent: Direction?) -> Self {
-        move(to: newValue, intent: intent).moveToAttributes()
+        moveToSelection(newValue, intent: intent).moveToAttributes()
     }
     
     @inlinable func update(selection newValue: Carets.Index, intent: Direction?) -> Self {
@@ -85,7 +85,7 @@ import protocol Utilities.Transformable
 
 extension Field {
     
-    // MARK: To Attribute
+    // MARK: Move To Attribute
     
     @inlinable func moveToAttributes() -> Field {
         func move(_ position: Carets.Index, preference: Direction) -> Carets.Index {
@@ -108,9 +108,9 @@ extension Field {
         return transforming(using: { $0.selection = lowerBound ..< upperBound })
     }
 
-    // MARK: To Selection
+    // MARK: Move To Selection
     
-    @inlinable func move(to nextSelection: Range<Carets.Index>, intent: Direction?) -> Field {
+    @inlinable func moveToSelection(_ newValue: Range<Carets.Index>, intent: Direction?) -> Field {
         func move(_ start: Carets.Index, preference: Direction) -> Carets.Index {
             if carets[start].nonlookable(direction: preference) { return start }
                         
@@ -131,11 +131,11 @@ extension Field {
         
         // --------------------------------- //
         
-        let upperBound = move(nextSelection.upperBound, preference: .backwards)
+        let upperBound = move(newValue.upperBound, preference: .backwards)
         var lowerBound = upperBound
 
-        if !nextSelection.isEmpty {
-            lowerBound = move(nextSelection.lowerBound, preference: .forwards)
+        if !newValue.isEmpty {
+            lowerBound = move(newValue.lowerBound, preference:  .forwards)
             lowerBound = min(lowerBound, upperBound)
         }
         
@@ -144,9 +144,9 @@ extension Field {
         return transforming(using: { $0.selection = lowerBound ..< upperBound })
     }
     
-    // MARK: To Carets
+    // MARK: Move To Carets
     
-    @inlinable func move(to nextCarets: Carets) -> Field {
+    @inlinable func moveToCarets(_ newValue: Carets) -> Field {
         func step(previous lhs: Symbol, next rhs: Symbol) -> SimilaritiesInstruction {
             if lhs == rhs                               { return .continue      }
             else if lhs.attribute.contains(.removable)  { return .continueOnLHS }
@@ -168,12 +168,12 @@ extension Field {
         
         // --------------------------------- //
         
-        let nextUpperBound = position(from: carets[selection.upperBound...], to: nextCarets[...])
-        let nextLowerBound = position(from: carets[selection], to: nextCarets[..<nextUpperBound])
+        let nextUpperBound = position(from: carets[selection.upperBound...], to: newValue[...])
+        let nextLowerBound = position(from: carets[selection], to: newValue[..<nextUpperBound])
                 
         // --------------------------------- //
         
-        return Field(nextCarets, selection: nextLowerBound ..< nextUpperBound)
+        return Field(newValue, selection: nextLowerBound ..< nextUpperBound)
     }
 }
 
@@ -210,6 +210,9 @@ extension Field {
     // MARK: Objects
     
     @usableFromInline struct PathToIndex: Comparable {
+        
+        // MARK: Properties
+        
         @usableFromInline let origin: Carets.Index
         @usableFromInline let offset: Offset
         

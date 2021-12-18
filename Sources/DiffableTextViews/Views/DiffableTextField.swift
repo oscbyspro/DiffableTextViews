@@ -251,7 +251,7 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable, 
             if update.contains(.upstream) {
                 perform(async: update.contains(.async)) {
                     // async avoids view update loop
-                    self.nonduplicate(update: &self.upstream.value.wrappedValue, with: self.cache.value)
+                    self.update(&self.upstream.value.wrappedValue, nonduplicate: self.cache.value)
                 }
             }
         }
@@ -268,7 +268,7 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable, 
         
         // MARK: Synchronize: Utilities
         
-        @inlinable func nonduplicate(update storage: inout Value, with newValue: Value) {
+        @inlinable func update(_ storage: inout Value, nonduplicate newValue: Value) {
             if storage != newValue { storage = newValue }
         }
         
