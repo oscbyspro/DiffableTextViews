@@ -24,6 +24,35 @@ public struct Precision<Value: Precise> {
     @inlinable init(strategy: Strategy) {
         self.strategy = strategy
     }
+    
+    // MARK: Utilities: Showcase
+
+    @inlinable func showcaseStyle() -> Format.Precision {
+        strategy.showcaseStyle()
+    }
+    
+    // MARK: Utilities: Editable
+    
+    @inlinable func editableStyle() -> Format.Precision {
+        let integer = Defaults.upperLowerBound...Value.maxLosslessIntegerDigits
+        let decimal = Defaults.lowerLowerBound...Value.maxLosslessDecimalDigits
+        
+        return .integerAndFractionLength(integerLimits: integer, fractionLimits: decimal)
+    }
+    
+    @inlinable func editableStyle(_ digits: NumberOfDigits) -> Format.Precision {
+        let upperUpperBound = Swift.max(Defaults.upperLowerBound, digits.upper)
+        let lowerLowerBound = Swift.max(Defaults.lowerLowerBound, digits.lower)
+                
+        let upper = Defaults.upperLowerBound...upperUpperBound
+        let lower =          lowerLowerBound...lowerLowerBound
+        
+        return .integerAndFractionLength(integerLimits: upper, fractionLimits: lower)
+    }
+    
+    @inlinable func editableValidationWithCapacity(digits: NumberOfDigits) -> NumberOfDigits? {
+        strategy.editableValidationWithCapacity(digits: digits)
+    }
 }
 
 // MARK: - Initializers: Total
@@ -82,38 +111,6 @@ public extension Precision where Value: Float {
     }
 }
 
-// MARK: - Interoperabilities
-
-extension Precision {
-    
-    // MARK: Utilities
-    
-    @inlinable func showcaseStyle() -> Format.Precision {
-        strategy.showcaseStyle()
-    }
-    
-    @inlinable func editableValidationWithCapacity(digits: NumberOfDigits) -> NumberOfDigits? {
-        strategy.editableValidationWithCapacity(digits: digits)
-    }
-    
-    @inlinable func editableStyle() -> Format.Precision {
-        let integer = Defaults.upperLowerBound...Value.maxLosslessIntegerDigits
-        let decimal = Defaults.lowerLowerBound...Value.maxLosslessDecimalDigits
-        
-        return .integerAndFractionLength(integerLimits: integer, fractionLimits: decimal)
-    }
-    
-    @inlinable func editableStyle(_ digits: NumberOfDigits) -> Format.Precision {
-        let upperUpperBound = Swift.max(Defaults.upperLowerBound, digits.upper)
-        let lowerLowerBound = Swift.max(Defaults.lowerLowerBound, digits.lower)
-                
-        let upper = Defaults.upperLowerBound...upperUpperBound
-        let lower =          lowerLowerBound...lowerLowerBound
-        
-        return .integerAndFractionLength(integerLimits: upper, fractionLimits: lower)
-    }
-}
-
 // MARK: - Strategies
 
 @usableFromInline protocol PrecisionStrategy {
@@ -147,7 +144,7 @@ extension Precision {
     }
     
     // MARK: Utilities
-
+    
     @inlinable func showcaseStyle() -> Format.Precision {
         .significantDigits(total)
     }

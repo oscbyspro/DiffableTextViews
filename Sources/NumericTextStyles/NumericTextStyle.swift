@@ -94,12 +94,14 @@ extension NumericTextStyle {
 
 extension NumericTextStyle {
     
-    // MARK: Styles
+    // MARK: Showcase
     
     @inlinable func showcaseStyle() -> Value.FormatStyle {
         Value.style(locale, precision: precision.showcaseStyle(), separator: .automatic)
     }
-        
+    
+    // MARK: Editable
+    
     @inlinable func editableStyle() -> Value.FormatStyle {
         Value.style(locale, precision: precision.editableStyle(), separator: .automatic)
     }

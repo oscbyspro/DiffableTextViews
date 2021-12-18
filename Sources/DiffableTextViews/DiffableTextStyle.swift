@@ -13,14 +13,14 @@ public protocol DiffableTextStyle {
     // MARK: 0
     
     func showcase(_ value: Value) -> Snapshot
-
+    
     func editable(_ value: Value) -> Snapshot // (!)
     
     // MARK: 1
     
-    func merge(_ snapshot: Snapshot, with content: Snapshot, in range: Range<Snapshot.Index>) -> Snapshot?
-    
     func parse(_ snapshot: Snapshot) -> Value? // (!)
+
+    func merge(_ snapshot: Snapshot, with content: Snapshot, in range: Range<Snapshot.Index>) -> Snapshot?    
     
     // MARK: 2
     
