@@ -8,6 +8,9 @@
 // MARK: - Peek
 
 @usableFromInline struct Peek {
+    
+    // MARK: Properties
+
     @usableFromInline let lhs: Symbol
     @usableFromInline let rhs: Symbol
     

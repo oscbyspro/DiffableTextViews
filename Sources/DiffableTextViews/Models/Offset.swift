@@ -8,6 +8,9 @@
 // MARK: - Offset
 
 @usableFromInline struct Offset<Scheme: DiffableTextViews.Scheme>: Equatable, Comparable {
+    
+    // MARK: Properties
+
     @usableFromInline let distance: Int
     
     // MARK: Initializers

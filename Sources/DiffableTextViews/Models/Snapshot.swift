@@ -12,7 +12,6 @@ import protocol Utilities.Transformable
 public struct Snapshot: BidirectionalCollection, RangeReplaceableCollection, ExpressibleByArrayLiteral, Transformable {
     public typealias Element = Symbol
     public typealias Indices = DefaultIndices<Self>
-
     public typealias Characters = String
     public typealias Attributes = Array<Attribute>
     

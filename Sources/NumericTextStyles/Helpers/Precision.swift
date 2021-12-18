@@ -88,8 +88,8 @@ extension Precision {
     
     // MARK: Utilities
     
-    @inlinable func displayableStyle() -> Format.Precision {
-        strategy.displayableStyle()
+    @inlinable func showcaseStyle() -> Format.Precision {
+        strategy.showcaseStyle()
     }
     
     @inlinable func editableValidationWithCapacity(digits: NumberOfDigits) -> NumberOfDigits? {
@@ -119,7 +119,7 @@ extension Precision {
 @usableFromInline protocol PrecisionStrategy {
     typealias Defaults = PrecisionDefaults
     
-    @inlinable func displayableStyle() -> Format.Precision
+    @inlinable func showcaseStyle() -> Format.Precision
         
     @inlinable func editableValidationWithCapacity(digits: NumberOfDigits) -> NumberOfDigits?
 }
@@ -148,7 +148,7 @@ extension Precision {
     
     // MARK: Utilities
 
-    @inlinable func displayableStyle() -> Format.Precision {
+    @inlinable func showcaseStyle() -> Format.Precision {
         .significantDigits(total)
     }
     
@@ -198,7 +198,7 @@ extension Precision {
     
     // MARK: Utilities
     
-    @inlinable func displayableStyle() -> Format.Precision {
+    @inlinable func showcaseStyle() -> Format.Precision {
         .integerAndFractionLength(integerLimits: upper, fractionLimits: lower)
     }
     

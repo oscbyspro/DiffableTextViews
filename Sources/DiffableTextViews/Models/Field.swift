@@ -89,8 +89,8 @@ extension Field {
     
     @inlinable func moveToAttributes() -> Field {
         func move(_ position: Carets.Index, preference: Direction) -> Carets.Index {
-            let direction = carets[position].directionOfAttributes()
-            return look(position, direction: direction ?? preference)
+            let direction = carets[position].directionOfAttributes() ?? preference
+            return look(position, direction: direction)
         }
         
         // --------------------------------- //

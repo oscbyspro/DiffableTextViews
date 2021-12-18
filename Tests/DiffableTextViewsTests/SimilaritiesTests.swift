@@ -25,17 +25,16 @@ final class SimilaritiesTestsOfInspection: XCTestCase {
     
     func XCTAssert(_ inspection: Inspection, expectations: () -> Expectations) {
         let options = Options.inspect(inspection)
-        
         expectations().validate(Subject(lhs: lhs, rhs: rhs, options: options))
     }
         
     // MARK: Tests
     
-    func test_each() {
+    func test_all() {
         let prefix = [0]
         let suffix = [4]
         
-        XCTAssert(.each) {
+        XCTAssert(.all) {
             Expectations(
                 lhsPrefix: prefix,
                 lhsSuffix: suffix,
@@ -45,7 +44,7 @@ final class SimilaritiesTestsOfInspection: XCTestCase {
     }
     
     func test_only() {
-        XCTAssert(.only({ $0.isMultiple(of: 2) })) {
+        XCTAssert(.only({ value in value.isMultiple(of: 2) })) {
             Expectations(
                 lhsPrefix: lhs,
                 lhsSuffix: lhs,
@@ -70,7 +69,7 @@ final class SimilaritiesTestsOfBounds: XCTestCase {
     // MARK: Assertions
     
     func XCTAssert(expectations: () -> Expectations) {
-        let options = Options.inspect(.only({ $0 == 1 }))
+        let options = Options.inspect(.only({ value in value == 1 }))
         expectations().validate(Subject(lhs: lhs, rhs: rhs, options: options))
     }
         

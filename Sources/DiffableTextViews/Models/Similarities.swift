@@ -33,7 +33,7 @@ import protocol Utilities.Transformable
         self.init(lhs: lhs, rhs: rhs, options: options)
     }
     
-    @inlinable init(in lhs: LHS, and rhs: RHS, with options: Options = .defaults()) where Element: Equatable {
+    @inlinable init(in lhs: LHS, and rhs: RHS, with options: Options = Options()) where Element: Equatable {
         self.init(lhs: lhs, rhs: rhs, options: options)
     }
     
@@ -49,16 +49,12 @@ import protocol Utilities.Transformable
 
     // MARK: Transformations
     
-    @inlinable func make<L: Collection, R: Collection>(_ lhs: L, _ rhs: R) -> Similarities<L, R> where L.Element == Element {
-        Similarities<L, R>(in: lhs, and: rhs, with: options)
-    }
-    
-    @inlinable func swap() -> Similarities<RHS, LHS> {
-        make(rhs, lhs)
+    @inlinable func swapped() -> Similarities<RHS, LHS> {
+        .init(lhs: rhs, rhs: lhs, options: options)
     }
 
-    @inlinable func reverse() -> Similarities<ReversedCollection<LHS>, ReversedCollection<RHS>> where LHS: BidirectionalCollection, RHS: BidirectionalCollection {
-        make(lhs.reversed(), rhs.reversed())
+    @inlinable func reversed() -> Similarities<ReversedCollection<LHS>, ReversedCollection<RHS>> where LHS: BidirectionalCollection, RHS: BidirectionalCollection {
+        .init(lhs: lhs.reversed(), rhs: rhs.reversed(), options: options)
     }
 
     // MARK: Utilities
@@ -72,11 +68,11 @@ import protocol Utilities.Transformable
     }
     
     @inlinable func lhsSuffix() -> LHS.SubSequence where LHS: BidirectionalCollection, RHS: BidirectionalCollection {
-        let reversed = reverse().lhsPrefix(); return lhs[reversed.endIndex.base ..< reversed.startIndex.base]
+        let reversed = reversed().lhsPrefix(); return lhs[reversed.endIndex.base ..< reversed.startIndex.base]
     }
     
     @inlinable func rhsSuffix() -> RHS.SubSequence where LHS: BidirectionalCollection, RHS: BidirectionalCollection {
-        let reversed = reverse().rhsPrefix(); return rhs[reversed.endIndex.base ..< reversed.startIndex.base]
+        let reversed = reversed().rhsPrefix(); return rhs[reversed.endIndex.base ..< reversed.startIndex.base]
     }
     
     // MARK: Utilities: Helpers
@@ -116,19 +112,22 @@ import protocol Utilities.Transformable
         
         // --------------------------------- //
         
-        return Indices(lhsIndex, rhsIndex)
+        return Indices(lhs: lhsIndex, rhs: rhsIndex)
     }
 }
 
 // MARK: - Indices
 
 @usableFromInline struct SimilaritiesIndices<LHS: Collection, RHS: Collection> {
+    
+    // MARK: Properties
+    
     @usableFromInline var lhs: LHS.Index
     @usableFromInline var rhs: RHS.Index
     
     // MARK: Initializers
     
-    @inlinable init(_ lhs: LHS.Index, _ rhs: RHS.Index) {
+    @inlinable init(lhs: LHS.Index, rhs: RHS.Index) {
         self.lhs = lhs
         self.rhs = rhs
     }
@@ -192,6 +191,9 @@ import protocol Utilities.Transformable
 // MARK: - Inspection
 
 @usableFromInline struct SimilaritiesInspection<Element> {
+    
+    // MARK: Properties
+    
     @usableFromInline let includes: (Element) -> Bool
     
     // MARK: Initializers
@@ -202,7 +204,7 @@ import protocol Utilities.Transformable
     
     // MARK: Initializers: Static
 
-    @inlinable static var each: Self {
+    @inlinable static var all: Self {
         Self(includes: { _ in true })
     }
     
@@ -217,19 +219,19 @@ import protocol Utilities.Transformable
     @usableFromInline typealias Comparison = SimilaritiesComparison<Element>
     @usableFromInline typealias Inspection = SimilaritiesInspection<Element>
     
-    // MARK: Storage
-    
+    // MARK: Properties
+
     @usableFromInline var comparison: Comparison
     @usableFromInline var inspection: Inspection
 
     // MARK: Initializers
 
-    @inlinable init(comparison: Comparison, inspection: Inspection = .each) {
+    @inlinable init(comparison: Comparison, inspection: Inspection = .all) {
         self.comparison = comparison
         self.inspection = inspection
     }
     
-    @inlinable init(comparison: Comparison = .equation(==), inspection: Inspection = .each) where Element: Equatable {
+    @inlinable init(comparison: Comparison = .equation(==), inspection: Inspection = .all) where Element: Equatable {
         self.comparison = comparison
         self.inspection = inspection
     }
@@ -242,10 +244,6 @@ import protocol Utilities.Transformable
     
     @inlinable static func inspect(_ inspection: Inspection) -> Self where Element: Equatable {
         Self(inspection: inspection)
-    }
-
-    @inlinable static func defaults() -> Self where Element: Equatable {
-        Self(comparison: .equation(==))
     }
     
     // MARK: Transformations

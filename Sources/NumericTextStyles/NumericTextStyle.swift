@@ -96,8 +96,8 @@ extension NumericTextStyle {
     
     // MARK: Styles
     
-    @inlinable func displayableStyle() -> Value.FormatStyle {
-        Value.style(locale, precision: precision.displayableStyle(), separator: .automatic)
+    @inlinable func showcaseStyle() -> Value.FormatStyle {
+        Value.style(locale, precision: precision.showcaseStyle(), separator: .automatic)
     }
         
     @inlinable func editableStyle() -> Value.FormatStyle {
@@ -136,14 +136,15 @@ extension NumericTextStyle {
 
 extension NumericTextStyle {
     
-    // MARK: Displayable
+    // MARK: Showcase
     
     @inlinable public func showcase(_ value: Value) -> Snapshot {
-        snapshot(characters: displayableStyle().format(value))
+        snapshot(characters: showcaseStyle().format(value))
     }
     
     // MARK: Editable
 
+    #warning("Rename as: editable(_:), maybe.")
     @inlinable public func snapshot(_ value: Value) -> Snapshot {
         snapshot(characters: editableStyle().format(value))
     }
@@ -154,7 +155,7 @@ extension NumericTextStyle {
 extension NumericTextStyle {
     
     // MARK: Merge
-    
+
     @inlinable public func merge(_ current: Snapshot, with content: Snapshot, in range: Range<Snapshot.Index>) -> Snapshot? {
         let configuration = configuration()
                 
