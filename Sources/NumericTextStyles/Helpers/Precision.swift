@@ -118,6 +118,8 @@ public extension Precision where Value: PreciseFloat {
 @usableFromInline protocol PrecisionStrategy {
     typealias Defaults = PrecisionDefaults
     
+    // MARK: Requirements
+    
     @inlinable func showcaseStyle() -> NumberFormatStyleConfiguration.Precision
         
     @inlinable func editableValidationWithCapacity(digits: NumberOfDigits) -> NumberOfDigits?
