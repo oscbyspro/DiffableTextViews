@@ -9,6 +9,7 @@
 
 import struct Foundation.Locale
 import struct Foundation.IntegerFormatStyle
+import enum Foundation.NumberFormatStyleConfiguration
 
 // MARK: - ValueAsInteger
 
@@ -32,11 +33,11 @@ extension NormalInteger {
 
     // MARK: Formattable
 
-    @inlinable public static func value(_ system: String) -> Self? {
-        .init(system)
+    @inlinable public static func value(of description: String) -> Self? {
+        .init(description)
     }
 
-    @inlinable public static func style(_ locale: Locale, precision: Format.Precision, separator: Format.Separator) -> IntegerFormatStyle<Self> {
+    @inlinable public static func style(in locale: Locale, precision: NumberFormatStyleConfiguration.Precision, separator: NumberFormatStyleConfiguration.DecimalSeparatorDisplayStrategy) -> IntegerFormatStyle<Self> {
         .init(locale: locale).precision(precision).decimalSeparator(strategy: separator)
     }
 }

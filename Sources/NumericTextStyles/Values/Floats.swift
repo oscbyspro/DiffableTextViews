@@ -9,6 +9,7 @@
 
 import struct Foundation.Locale
 import struct Foundation.FloatingPointFormatStyle
+import enum Foundation.NumberFormatStyleConfiguration
 
 // MARK: - NumericTextFloat
 
@@ -33,11 +34,11 @@ public extension NormalFloat {
     
     // MARK: Formattable
 
-    @inlinable static func value(_ system: String) -> Self? {
-        .init(system)
+    @inlinable static func value(of description: String) -> Self? {
+        .init(description)
     }
     
-    @inlinable static func style(_ locale: Locale, precision: Format.Precision, separator: Format.Separator) -> FloatingPointFormatStyle<Self> {
+    @inlinable static func style(in locale: Locale, precision: NumberFormatStyleConfiguration.Precision, separator: NumberFormatStyleConfiguration.DecimalSeparatorDisplayStrategy) -> FloatingPointFormatStyle<Self> {
         .init(locale: locale).precision(precision).decimalSeparator(strategy: separator)
     }
 }

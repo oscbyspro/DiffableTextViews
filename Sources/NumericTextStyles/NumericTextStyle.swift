@@ -97,17 +97,17 @@ extension NumericTextStyle {
     // MARK: Showcase
     
     @inlinable func showcaseStyle() -> Value.FormatStyle {
-        Value.style(locale, precision: precision.showcaseStyle(), separator: .automatic)
+        Value.style(in: locale, precision: precision.showcaseStyle(), separator: .automatic)
     }
     
     // MARK: Editable
     
     @inlinable func editableStyle() -> Value.FormatStyle {
-        Value.style(locale, precision: precision.editableStyle(), separator: .automatic)
+        Value.style(in: locale, precision: precision.editableStyle(), separator: .automatic)
     }
     
     @inlinable func editableStyle(digits: NumberOfDigits, separator: Bool) -> Value.FormatStyle {
-        Value.style(locale, precision: precision.editableStyle(digits), separator: separator ? .always : .automatic)
+        Value.style(in: locale, precision: precision.editableStyle(digits), separator: separator ? .always : .automatic)
     }
 }
 
@@ -117,20 +117,20 @@ extension NumericTextStyle {
     
     // MARK: Process
     
-    @inlinable public func process(_ value: inout Value) {
+    @inlinable public func process(value: inout Value) {
         value = bounds.displayableStyle(value)
     }
         
     // MARK: Parse
 
-    @inlinable public func parse(_ snapshot: Snapshot) -> Value? {
+    @inlinable public func parse(snapshot: Snapshot) -> Value? {
         components(snapshot, with: configuration()).flatMap(value)
     }
     
     // MARK: Components
     
-    @inlinable func value(_ components: Components) -> Value? {
-        components.integers.isEmpty && components.decimals.isEmpty ? Value.zero : Value.value(components.characters())
+    @inlinable func value(of components: Components) -> Value? {
+        components.integers.isEmpty && components.decimals.isEmpty ? Value.zero : Value.value(of: components.characters())
     }
 }
 
@@ -140,13 +140,13 @@ extension NumericTextStyle {
     
     // MARK: Showcase
     
-    @inlinable public func showcase(_ value: Value) -> Snapshot {
+    @inlinable public func snapshot(showcase value: Value) -> Snapshot {
         snapshot(characters: showcaseStyle().format(value))
     }
     
     // MARK: Editable
 
-    @inlinable public func editable(_ value: Value) -> Snapshot {
+    @inlinable public func snapshot(editable value: Value) -> Snapshot {
         snapshot(characters: editableStyle().format(value))
     }
 }
@@ -157,7 +157,8 @@ extension NumericTextStyle {
     
     // MARK: Merge
 
-    @inlinable public func merge(_ current: Snapshot, with content: Snapshot, in range: Range<Snapshot.Index>) -> Snapshot? {
+    #warning("Cleanup.")
+    @inlinable public func merge(snapshot: Snapshot, with content: Snapshot, in range: Range<Snapshot.Index>) -> Snapshot? {
         let configuration = configuration()
                 
         // --------------------------------- //
@@ -167,7 +168,7 @@ extension NumericTextStyle {
         
         // --------------------------------- //
         
-        var next = current
+        var next = snapshot
         next.replaceSubrange(range, with: input.content)
         
         // --------------------------------- //
@@ -177,7 +178,7 @@ extension NumericTextStyle {
         
         // --------------------------------- //
         
-        return snapshot(components: &components)
+        return self.snapshot(components: &components)
     }
     
     // MARK: Components
@@ -194,7 +195,7 @@ extension NumericTextStyle {
         
         // --------------------------------- //
         
-        guard let value = value(components)    else { return nil }
+        guard let value = value(of: components)    else { return nil }
         guard bounds.editableValidation(value) else { return nil }
         
         // --------------------------------- //

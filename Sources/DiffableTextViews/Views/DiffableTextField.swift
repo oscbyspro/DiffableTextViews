@@ -130,6 +130,7 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable, 
         
         // MARK: Delegate: Inputs
         
+        #warning("Cleanup.")
         @inlinable public func textField(_ textField: UITextField, shouldChangeCharactersIn nsRange: NSRange, replacementString string: String) -> Bool {
                         
             // --------------------------------- //
@@ -141,11 +142,11 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable, 
             // --------------------------------- //
 
             let indices = range.lowerBound.rhs! ..< range.upperBound.rhs!
-            guard var snapshot = upstream.style.merge(cache.snapshot, with: input, in: indices) else { return false }
-            upstream.style.process(&snapshot)
+            guard var snapshot = upstream.style.merge(snapshot: cache.snapshot, with: input, in: indices) else { return false }
+            upstream.style.process(snapshot: &snapshot)
   
-            guard var value = upstream.style.parse(snapshot) else { return false }
-            upstream.style.process(&value)
+            guard var value = upstream.style.parse(snapshot: snapshot) else { return false }
+            upstream.style.process(value: &value)
                         
             let field = cache.field.updating(selection: range.upperBound, intent: nil).updating(carets: snapshot)
             
@@ -203,7 +204,7 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable, 
             // --------------------------------- //
             
             var value = upstream.value.wrappedValue
-            upstream.style.process(&value)
+            upstream.style.process(value: &value)
             
             // --------------------------------- //
         
@@ -219,7 +220,7 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable, 
                 // --------------------------------- //
                 
                 var snapshot = snapshot(value)
-                upstream.style.process(&snapshot)
+                upstream.style.process(snapshot: &snapshot)
                 
                 // --------------------------------- //
                 
@@ -279,7 +280,7 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable, 
         }
 
         @inlinable func snapshot(_ value: Value) -> Snapshot {
-            downstream.edits ? upstream.style.editable(value) : upstream.style.showcase(value)
+            downstream.edits ? upstream.style.snapshot(editable: value) : upstream.style.snapshot(showcase: value)
         }
     }
 }

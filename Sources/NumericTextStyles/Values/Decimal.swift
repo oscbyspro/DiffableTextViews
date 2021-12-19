@@ -9,6 +9,7 @@
 
 import struct Foundation.Locale
 import struct Foundation.Decimal
+import enum Foundation.NumberFormatStyleConfiguration
 
 // MARK: - Decimal
 
@@ -32,11 +33,11 @@ extension Decimal: NumericTextValue, Float { }; public extension Decimal {
         
     // MARK: Formattable
     
-    @inlinable static func value(_ system: String) -> Self? {
-        .init(string: system)
+    @inlinable static func value(of description: String) -> Self? {
+        .init(string: description)
     }
     
-    @inlinable static func style(_ locale: Locale, precision: Format.Precision, separator: Format.Separator) -> FormatStyle {
+    @inlinable static func style(in locale: Locale, precision: NumberFormatStyleConfiguration.Precision, separator: NumberFormatStyleConfiguration.DecimalSeparatorDisplayStrategy) -> FormatStyle {
         .init(locale: locale).precision(precision).decimalSeparator(strategy: separator)
     }
 }

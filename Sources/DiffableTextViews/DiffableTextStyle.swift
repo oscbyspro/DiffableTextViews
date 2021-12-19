@@ -10,50 +10,50 @@
 public protocol DiffableTextStyle {
     associatedtype Value: Equatable
     
-    // MARK: 0
+    // MARK: Snapshot
     
-    func showcase(_ value: Value) -> Snapshot
-    
-    func editable(_ value: Value) -> Snapshot // (!)
-    
-    // MARK: 1
-    
-    func parse(_ snapshot: Snapshot) -> Value? // (!)
+    func snapshot(showcase value: Value) -> Snapshot
 
-    func merge(_ snapshot: Snapshot, with content: Snapshot, in range: Range<Snapshot.Index>) -> Snapshot?    
+    func snapshot(editable value: Value) -> Snapshot // required (!)
     
-    // MARK: 2
+    // MARK: Interpret
     
-    func process(_ value: inout Value)
+    func parse(snapshot: Snapshot) -> Value? // required (!)
 
-    func process(_ snapshot: inout Snapshot)
+    func merge(snapshot: Snapshot, with content: Snapshot, in range: Range<Snapshot.Index>) -> Snapshot?
+    
+    // MARK: Process
+    
+    func process(value: inout Value)
+
+    func process(snapshot: inout Snapshot)
 }
     
 // MARK: - Implementations
 
 extension DiffableTextStyle {
     
-    // MARK: 0
-        
-    @inlinable public func showcase(_ value: Value) -> Snapshot {
-        editable(value)
+    // MARK: Snapshot
+
+    @inlinable public func snapshot(showcase value: Value) -> Snapshot {
+        snapshot(editable: value)
     }
-        
-    // MARK: 1
-    
-    @inlinable public func merge(_ snapshot: Snapshot, with content: Snapshot, in range: Range<Snapshot.Index>) -> Snapshot? {
+
+    // MARK: Interpret
+
+    @inlinable public func merge(snapshot: Snapshot, with content: Snapshot, in range: Range<Snapshot.Index>) -> Snapshot? {
         var snapshot = snapshot
         snapshot.replaceSubrange(range, with: content)
         return snapshot
     }
-    
-    // MARK: 2
 
-    @inlinable public func process(_ value: inout Value) {
+    // MARK: Process
+
+    @inlinable public func process(value: inout Value) {
         // ¯\_(ツ)_/¯
     }
-    
-    @inlinable public func process(_ snapshot: inout Snapshot) {
+
+    @inlinable public func process(snapshot: inout Snapshot) {
         // ¯\_(ツ)_/¯
     }
 }

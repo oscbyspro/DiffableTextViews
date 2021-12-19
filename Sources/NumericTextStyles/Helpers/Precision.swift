@@ -5,6 +5,8 @@
 //  Created by Oscar Byström Ericsson on 2021-10-18.
 //
 
+import enum Foundation.NumberFormatStyleConfiguration
+
 #if os(iOS)
 
 // MARK: - Precision
@@ -27,20 +29,20 @@ public struct Precision<Value: Precise> {
     
     // MARK: Utilities: Showcase
 
-    @inlinable func showcaseStyle() -> Format.Precision {
+    @inlinable func showcaseStyle() -> NumberFormatStyleConfiguration.Precision {
         strategy.showcaseStyle()
     }
     
     // MARK: Utilities: Editable
     
-    @inlinable func editableStyle() -> Format.Precision {
+    @inlinable func editableStyle() -> NumberFormatStyleConfiguration.Precision {
         let integer  = Defaults.upperLowerBound...Value.maxLosslessIntegerDigits
         let fraction = Defaults.lowerLowerBound...Value.maxLosslessDecimalDigits
         
         return .integerAndFractionLength(integerLimits: integer, fractionLimits: fraction)
     }
     
-    @inlinable func editableStyle(_ digits: NumberOfDigits) -> Format.Precision {
+    @inlinable func editableStyle(_ digits: NumberOfDigits) -> NumberFormatStyleConfiguration.Precision {
         let upperUpperBound = Swift.max(Defaults.upperLowerBound, digits.upper)
         let lowerLowerBound = Swift.max(Defaults.lowerLowerBound, digits.lower)
                 
@@ -116,7 +118,7 @@ public extension Precision where Value: Float {
 @usableFromInline protocol PrecisionStrategy {
     typealias Defaults = PrecisionDefaults
     
-    @inlinable func showcaseStyle() -> Format.Precision
+    @inlinable func showcaseStyle() -> NumberFormatStyleConfiguration.Precision
         
     @inlinable func editableValidationWithCapacity(digits: NumberOfDigits) -> NumberOfDigits?
 }
@@ -145,7 +147,7 @@ public extension Precision where Value: Float {
     
     // MARK: Utilities
     
-    @inlinable func showcaseStyle() -> Format.Precision {
+    @inlinable func showcaseStyle() -> NumberFormatStyleConfiguration.Precision {
         .significantDigits(total)
     }
     
@@ -195,7 +197,7 @@ public extension Precision where Value: Float {
     
     // MARK: Utilities
     
-    @inlinable func showcaseStyle() -> Format.Precision {
+    @inlinable func showcaseStyle() -> NumberFormatStyleConfiguration.Precision {
         .integerAndFractionLength(integerLimits: upper, fractionLimits: lower)
     }
     
