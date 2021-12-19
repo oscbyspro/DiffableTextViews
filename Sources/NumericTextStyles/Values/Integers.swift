@@ -13,18 +13,18 @@ import enum Foundation.NumberFormatStyleConfiguration
 
 // MARK: - ValueAsInteger
 
-/// Numeric text value protocol for normal integers.
+/// Numeric text value protocol for ordinary integers.
 ///
 /// - Supports all values from Self.min to Self.max.
 /// - UInt64.max is limited to Int64.max because Apple uses Int64 (2021-10-25).
 ///
-public protocol NormalInteger: NumericTextValue, PreciseInteger, FixedWidthInteger {
+public protocol NumericTextInteger: NumericTextValue, PreciseInteger, FixedWidthInteger {
     @inlinable init?(_ description: String)
 }
 
 // MARK: - Details
 
-extension NormalInteger {
+extension NumericTextInteger {
     
     // MARK: Boundable
     
@@ -44,37 +44,37 @@ extension NormalInteger {
 
 // MARK: - Int
 
-extension Int: NormalInteger {
+extension Int: NumericTextInteger {
     public static let maxLosslessDigits: Int = String(maxLosslessValue).count
 }
 
 // MARK: - Int8
 
-extension Int8: NormalInteger {
+extension Int8: NumericTextInteger {
     @inlinable public static var maxLosslessDigits: Int { 3 }
 }
 
 // MARK: - Int16
 
-extension Int16: NormalInteger {
+extension Int16: NumericTextInteger {
     @inlinable public static var maxLosslessDigits: Int { 5 }
 }
 
 // MARK: - Int32
 
-extension Int32: NormalInteger {
+extension Int32: NumericTextInteger {
     @inlinable public static var maxLosslessDigits: Int { 10 }
 }
 
 // MARK: Int64
 
-extension Int64: NormalInteger {
+extension Int64: NumericTextInteger {
     @inlinable public static var maxLosslessDigits: Int { 19 }
 }
 
 // MARK: - UInt
 
-extension UInt: NormalInteger {
+extension UInt: NumericTextInteger {
     /// Apple, please fix IntegerFormatStyleUInt, it uses an Int.
     @inlinable public static var maxLosslessValue: UInt {
         UInt(Int.maxLosslessValue)
@@ -88,25 +88,25 @@ extension UInt: NormalInteger {
 
 // MARK: - UInt8
 
-extension UInt8: NormalInteger {
+extension UInt8: NumericTextInteger {
     @inlinable public static var maxLosslessDigits: Int { 3 }
 }
 
 // MARK: - UInt16
 
-extension UInt16: NormalInteger {
+extension UInt16: NumericTextInteger {
     @inlinable public static var maxLosslessDigits: Int { 5 }
 }
 
 // MARK: - UInt32
 
-extension UInt32: NormalInteger {
+extension UInt32: NumericTextInteger {
     @inlinable public static var maxLosslessDigits: Int { 10 }
 }
 
 // MARK: - UInt64
 
-extension UInt64: NormalInteger {
+extension UInt64: NumericTextInteger {
     /// Apple, please fix IntegerFormatStyleUInt64, it uses an Int64.
     @inlinable public static var maxLosslessValue: UInt64 {
         UInt64(Int64.maxLosslessValue)

@@ -13,18 +13,18 @@ import enum Foundation.NumberFormatStyleConfiguration
 
 // MARK: - NumericTextFloat
 
-/// Numeric text value protocol for normal floats.
+/// Numeric text value protocol for ordinary floats.
 /// 
 /// - Range: ±Self.maxLosslessValue.
 /// - Significands: Self.maxLosslessDigits.
 ///
-public protocol NormalFloat: NumericTextValue, PreciseFloat, BinaryFloatingPoint {
+public protocol NumericTextFloat: NumericTextValue, PreciseFloat, BinaryFloatingPoint {
     @inlinable init?(_ description: String)
 }
 
 // MARK: - Details
 
-public extension NormalFloat {
+public extension NumericTextFloat {
     
     // MARK: Boundable
     
@@ -45,21 +45,21 @@ public extension NormalFloat {
 
 // MARK: - Float16
 
-extension Float16: NormalFloat {
+extension Float16: NumericTextFloat {
     @inlinable public static var maxLosslessValue: Self { 999 }
     @inlinable public static var maxLosslessDigits: Int { 3 }
 }
 
 // MARK: - Float32
 
-extension Float32: NormalFloat {
+extension Float32: NumericTextFloat {
     @inlinable public static var maxLosslessValue: Self { 9_999_999 }
     @inlinable public static var maxLosslessDigits: Int { 7 }
 }
 
 // MARK: - Float64
 
-extension Float64: NormalFloat {
+extension Float64: NumericTextFloat {
     @inlinable public static var maxLosslessValue: Self { 999_999_999_999_999 }
     @inlinable public static var maxLosslessDigits: Int { 15 }
 }
