@@ -105,10 +105,6 @@ public extension ProxyTextField {
         wrapped.autocorrectionType = autocorrect
     }
     
-    @inlinable func caret(color: Color) {
-        wrapped.tintColor = UIColor(color)
-    }
-    
     @inlinable func keyboard(_ keyboard: UIKeyboardType) {
         wrapped.keyboardType = keyboard
     }
@@ -117,8 +113,12 @@ public extension ProxyTextField {
         wrapped.returnKeyType = `return`
     }
     
-    @inlinable func secure(text: Bool) {
-        wrapped.isSecureTextEntry = text
+    @inlinable func secure(entry: Bool) {
+        wrapped.isSecureTextEntry = entry
+    }
+    
+    @inlinable func tint(color: Color) {
+        wrapped.tintColor = UIColor(color)
     }
 }
 
