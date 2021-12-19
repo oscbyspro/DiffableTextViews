@@ -130,7 +130,6 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable, 
         
         // MARK: Delegate: Inputs
         
-        #warning("Cleanup.")
         @inlinable public func textField(_ textField: UITextField, shouldChangeCharactersIn nsRange: NSRange, replacementString string: String) -> Bool {
                         
             // --------------------------------- //

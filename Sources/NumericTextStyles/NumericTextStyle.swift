@@ -157,7 +157,6 @@ extension NumericTextStyle {
     
     // MARK: Merge
 
-    #warning("Cleanup.")
     @inlinable public func merge(snapshot: Snapshot, with content: Snapshot, in range: Range<Snapshot.Index>) -> Snapshot? {
         let configuration = configuration()
                 
@@ -195,8 +194,8 @@ extension NumericTextStyle {
         
         // --------------------------------- //
         
-        guard let value = value(of: components)    else { return nil }
-        guard bounds.editableValidation(value) else { return nil }
+        guard let value = value(of: components) else { return nil }
+        guard bounds.editableValidation(value)  else { return nil }
         
         // --------------------------------- //
         
