@@ -87,7 +87,7 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable, 
     
     // MARK: Coordinator
     
-    @MainActor public final class Coordinator: NSObject, UITextFieldDelegate {
+    public final class Coordinator: NSObject, UITextFieldDelegate {
         @usableFromInline typealias Offset = DiffableTextViews.Offset<UTF16>
         @usableFromInline typealias Cache = DiffableTextViews.Cache<UTF16, Value>
         
@@ -151,7 +151,7 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable, 
             
             // --------------------------------- //
             
-            Task { [value] in
+            Task { @MainActor [value] in
                 // async to process special commands (like: option + delete) first
                 self.cache.value = value
                 self.cache.field = field
@@ -185,7 +185,7 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable, 
             // --------------------------------- //
             
             lock.perform {
-                self.downstream.select(field.offsets)
+                self.downstream.select(offsets: field.offsets)
             }
         }
 
@@ -218,11 +218,8 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable, 
 
                 // --------------------------------- //
                 
-                var snapshot = snapshot(value)
+                var snapshot = snapshot(value: value)
                 upstream.style.process(snapshot: &snapshot)
-                
-                // --------------------------------- //
-                
                 let field = cache.field.updating(carets: snapshot)
                                 
                 // --------------------------------- //
@@ -243,17 +240,19 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable, 
                 lock.perform {
                     // changes to UITextField's text and selection both call
                     // the delegate's method: textFieldDidChangeSelection(_:)
-                    self.downstream.update(cache.snapshot.characters)
-                    self.downstream.select(cache.field.offsets)
+                    self.downstream.update(text: cache.snapshot.characters)
+                    self.downstream.select(offsets: cache.field.offsets)
                 }
                             
                 self.cache.edits = self.downstream.edits
             }
+            
+            // --------------------------------- //
                                     
             if update.contains(.upstream) {
                 perform(async: update.contains(.async)) {
                     // async avoids view update loop
-                    self.update(&self.upstream.value.wrappedValue, nonduplicate: self.cache.value)
+                    self.update(storage: &self.upstream.value.wrappedValue, nonduplicate: self.cache.value)
                 }
             }
         }
@@ -270,15 +269,15 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable, 
         
         // MARK: Synchronize: Utilities
         
-        @inlinable func update(_ storage: inout Value, nonduplicate newValue: Value) {
+        @inlinable func update(storage: inout Value, nonduplicate newValue: Value) {
             if storage != newValue { storage = newValue }
         }
         
         @inlinable func perform(async: Bool, action: @escaping () -> Void) {
-            if async { Task { action() } } else { action() }
+            if async { Task { @MainActor in action() } } else { action() }
         }
 
-        @inlinable func snapshot(_ value: Value) -> Snapshot {
+        @inlinable func snapshot(value: Value) -> Snapshot {
             downstream.edits ? upstream.style.snapshot(editable: value) : upstream.style.snapshot(showcase: value)
         }
     }

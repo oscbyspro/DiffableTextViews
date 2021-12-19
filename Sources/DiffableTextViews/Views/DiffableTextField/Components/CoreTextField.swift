@@ -9,12 +9,14 @@
 
 import UIKit
 
+// MARK: - CoreTextField
+
 public final class CoreTextField: UITextField {
     
     // MARK: Properties
     
     @usableFromInline var intent: Intent? = nil
-    
+
     // MARK: Intent
     
     @usableFromInline struct Intent: Equatable {
@@ -49,8 +51,9 @@ public final class CoreTextField: UITextField {
             }
         }
     }
-    
 }
+
+// MARK: - Events
 
 extension CoreTextField {
     
@@ -76,7 +79,7 @@ extension CoreTextField {
         super.pressesCancelled(presses, with: event)
     }
     
-    // MARK: Presses, Intent
+    // MARK: Presses: Helpers
     
     @inlinable func processIntentStarted(_ presses: Set<UIPress>) {
         self.intent = Intent.parse(presses)

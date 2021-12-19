@@ -41,7 +41,7 @@ public final class ProxyTextField<Wrapped: UITextField> {
     }
     
     /// - Complexity: High.
-    @inlinable func update(_ text: String) {
+    @inlinable func update(text: String) {
         wrapped.text = text
     }
     
@@ -55,7 +55,7 @@ public final class ProxyTextField<Wrapped: UITextField> {
     }
     
     /// - Complexity: High.
-    @inlinable func select(_ offsets: Range<Offset>) {
+    @inlinable func select(offsets: Range<Offset>) {
         wrapped.selectedTextRange = positions(of: offsets)
     }
     
