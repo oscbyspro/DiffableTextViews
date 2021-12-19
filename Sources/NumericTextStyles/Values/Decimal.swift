@@ -5,8 +5,6 @@
 //  Created by Oscar Byström Ericsson on 2021-10-18.
 //
 
-#if os(iOS)
-
 import struct Foundation.Locale
 import struct Foundation.Decimal
 import enum Foundation.NumberFormatStyleConfiguration
@@ -37,10 +35,7 @@ extension Decimal: NumericTextValue, PreciseFloat { }; public extension Decimal 
         .init(string: description)
     }
     
-    @inlinable static func style(in locale: Locale, precision: NumberFormatStyleConfiguration.Precision, separator: NumberFormatStyleConfiguration.DecimalSeparatorDisplayStrategy) -> FormatStyle {
+    @inlinable static func style(locale: Locale, precision: NumberFormatStyleConfiguration.Precision, separator: NumberFormatStyleConfiguration.DecimalSeparatorDisplayStrategy) -> FormatStyle {
         .init(locale: locale).precision(precision).decimalSeparator(strategy: separator)
     }
 }
-
-#endif
-

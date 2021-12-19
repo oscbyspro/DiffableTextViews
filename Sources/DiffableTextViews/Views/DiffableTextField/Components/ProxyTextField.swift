@@ -5,7 +5,7 @@
 //  Created by Oscar Byström Ericsson on 2021-09-26.
 //
 
-#if os(iOS)
+#if canImport(UIKit)
 
 import UIKit
 import SwiftUI

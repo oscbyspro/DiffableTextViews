@@ -5,8 +5,6 @@
 //  Created by Oscar Byström Ericsson on 2021-10-18.
 //
 
-#if os(iOS)
-
 // MARK: - Bounds
 
 public struct Bounds<Value: Boundable> {
@@ -63,5 +61,3 @@ public struct Bounds<Value: Boundable> {
         Swift.min(min, Value.zero) <= value && value <= Swift.max(Value.zero, max)
     }
 }
-
-#endif

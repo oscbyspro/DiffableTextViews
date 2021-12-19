@@ -9,8 +9,6 @@ import struct Foundation.Locale
 import protocol Foundation.FormatStyle
 import enum Foundation.NumberFormatStyleConfiguration
 
-#if os(iOS)
-
 // MARK: - Formattable
 
 public protocol Formattable {
@@ -27,7 +25,5 @@ public protocol Formattable {
     ///
     @inlinable static func value(of description: String) -> Self?
     
-    @inlinable static func style(in locale: Locale, precision: NumberFormatStyleConfiguration.Precision, separator: NumberFormatStyleConfiguration.DecimalSeparatorDisplayStrategy) -> FormatStyle
+    @inlinable static func style(locale: Locale, precision: NumberFormatStyleConfiguration.Precision, separator: NumberFormatStyleConfiguration.DecimalSeparatorDisplayStrategy) -> FormatStyle
 }
-
-#endif

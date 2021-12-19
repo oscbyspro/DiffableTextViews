@@ -5,8 +5,6 @@
 //  Created by Oscar Byström Ericsson on 2021-10-25.
 //
 
-#if os(iOS)
-
 import struct Foundation.Locale
 import struct Foundation.FloatingPointFormatStyle
 import enum Foundation.NumberFormatStyleConfiguration
@@ -38,7 +36,7 @@ public extension NumericTextFloat {
         .init(description)
     }
     
-    @inlinable static func style(in locale: Locale, precision: NumberFormatStyleConfiguration.Precision, separator: NumberFormatStyleConfiguration.DecimalSeparatorDisplayStrategy) -> FloatingPointFormatStyle<Self> {
+    @inlinable static func style(locale: Locale, precision: NumberFormatStyleConfiguration.Precision, separator: NumberFormatStyleConfiguration.DecimalSeparatorDisplayStrategy) -> FloatingPointFormatStyle<Self> {
         .init(locale: locale).precision(precision).decimalSeparator(strategy: separator)
     }
 }
@@ -63,5 +61,3 @@ extension Float64: NumericTextFloat {
     @inlinable public static var maxLosslessValue: Self { 999_999_999_999_999 }
     @inlinable public static var maxLosslessDigits: Int { 15 }
 }
-
-#endif

@@ -7,8 +7,6 @@
 
 import enum Foundation.NumberFormatStyleConfiguration
 
-#if os(iOS)
-
 // MARK: - Precision
 
 public struct Precision<Value: Precise> {
@@ -224,5 +222,3 @@ public extension Precision where Value: PreciseFloat {
     @usableFromInline static let upperLowerBound: Int = 1
     @usableFromInline static let lowerLowerBound: Int = 0
 }
-
-#endif

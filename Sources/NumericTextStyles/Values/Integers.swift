@@ -5,8 +5,6 @@
 //  Created by Oscar Byström Ericsson on 2021-10-25.
 //
 
-#if os(iOS)
-
 import struct Foundation.Locale
 import struct Foundation.IntegerFormatStyle
 import enum Foundation.NumberFormatStyleConfiguration
@@ -37,7 +35,7 @@ extension NumericTextInteger {
         .init(description)
     }
 
-    @inlinable public static func style(in locale: Locale, precision: NumberFormatStyleConfiguration.Precision, separator: NumberFormatStyleConfiguration.DecimalSeparatorDisplayStrategy) -> IntegerFormatStyle<Self> {
+    @inlinable public static func style(locale: Locale, precision: NumberFormatStyleConfiguration.Precision, separator: NumberFormatStyleConfiguration.DecimalSeparatorDisplayStrategy) -> IntegerFormatStyle<Self> {
         .init(locale: locale).precision(precision).decimalSeparator(strategy: separator)
     }
 }
@@ -117,5 +115,3 @@ extension UInt64: NumericTextInteger {
         Int64.maxLosslessDigits
     }
 }
-
-#endif

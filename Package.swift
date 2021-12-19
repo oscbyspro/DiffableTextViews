@@ -7,6 +7,7 @@ let package = Package(
     name: "DiffableTextViews",
     platforms: [
         .iOS(.v15),
+        .macOS(.v12),
     ],
     products: [
         .library(

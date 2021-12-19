@@ -5,7 +5,7 @@
 //  Created by Oscar Byström Ericsson on 2021-09-24.
 //
 
-#if os(iOS)
+#if canImport(UIKit)
 
 import SwiftUI
 import protocol Utilities.Transformable

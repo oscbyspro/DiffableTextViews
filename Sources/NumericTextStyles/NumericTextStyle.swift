@@ -5,8 +5,6 @@
 //  Created by Oscar Byström Ericsson on 2021-10-19.
 //
 
-#if os(iOS)
-
 import DiffableTextViews
 import struct Foundation.Locale
 import protocol Utilities.Transformable
@@ -97,17 +95,17 @@ extension NumericTextStyle {
     // MARK: Showcase
     
     @inlinable func showcaseStyle() -> Value.FormatStyle {
-        Value.style(in: locale, precision: precision.showcaseStyle(), separator: .automatic)
+        Value.style(locale: locale, precision: precision.showcaseStyle(), separator: .automatic)
     }
     
     // MARK: Editable
     
     @inlinable func editableStyle() -> Value.FormatStyle {
-        Value.style(in: locale, precision: precision.editableStyle(), separator: .automatic)
+        Value.style(locale: locale, precision: precision.editableStyle(), separator: .automatic)
     }
     
     @inlinable func editableStyle(digits: NumberOfDigits, separator: Bool) -> Value.FormatStyle {
-        Value.style(in: locale, precision: precision.editableStyle(digits), separator: separator ? .always : .automatic)
+        Value.style(locale: locale, precision: precision.editableStyle(digits), separator: separator ? .always : .automatic)
     }
 }
 
@@ -328,5 +326,3 @@ extension NumericTextStyle {
         configuration.components(snapshot.characters(where: \.nonformatting))
     }
 }
-
-#endif

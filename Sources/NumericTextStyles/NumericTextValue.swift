@@ -8,8 +8,6 @@
 import DiffableTextViews
 import struct Foundation.Decimal
 
-#if os(iOS)
-
 // MARK: - NumericTextValue
 
 public protocol NumericTextValue: Boundable, Formattable, Precise {
@@ -79,5 +77,3 @@ public extension DiffableTextStyle where Self == NumericTextStyle<Float64> {
 public extension DiffableTextStyle where Self == NumericTextStyle<Decimal> {
     @inlinable static var numeric: Self { .init() }
 }
-
-#endif
