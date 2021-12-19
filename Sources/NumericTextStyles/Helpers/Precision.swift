@@ -82,7 +82,7 @@ public extension Precision {
 
 // MARK: - Initializers: Parts
 
-public extension Precision where Value: Float {
+public extension Precision where Value: PreciseFloat {
 
     // MARK: Expressions
     

@@ -8,6 +8,9 @@
 // MARK: - Precise
 
 public protocol Precise {
+    
+    // MARK: Requirements
+    
     @inlinable static var maxLosslessDigits:        Int { get }
     @inlinable static var maxLosslessIntegerDigits: Int { get }
     @inlinable static var maxLosslessDecimalDigits: Int { get }
@@ -16,22 +19,31 @@ public protocol Precise {
 // MARK: - Precise: Descriptions
 
 extension Precise {
+    
+    // MARK: Descriptions
+    
     @inlinable static var isFloat:   Bool { maxLosslessDecimalDigits >= 0 }
     @inlinable static var isInteger: Bool { maxLosslessDecimalDigits == 0 }
 }
 
 // MARK: - Specialization: Integer
 
-public protocol Integer: Precise { }
-public extension Integer {
+public  protocol PreciseInteger: Precise { }
+public extension PreciseInteger {
+    
+    // MARK: Implementations
+    
     @inlinable static var maxLosslessIntegerDigits: Int { maxLosslessDigits }
     @inlinable static var maxLosslessDecimalDigits: Int { 0 }
 }
 
 // MARK: - Specialization: Float
 
-public protocol Float: Precise { }
-public extension Float {
+public  protocol PreciseFloat: Precise { }
+public extension PreciseFloat {
+    
+    // MARK: Implementations
+
     @inlinable static var maxLosslessIntegerDigits: Int { maxLosslessDigits }
     @inlinable static var maxLosslessDecimalDigits: Int { maxLosslessDigits }
 }
