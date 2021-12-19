@@ -22,8 +22,8 @@ public struct Snapshot: BidirectionalCollection, RangeReplaceableCollection, Exp
 
     // MARK: Properties: Get
     
-    @inlinable public var characters: Characters { _characters }
-    @inlinable public var attributes: Attributes { _attributes }
+    @inlinable @inline(__always) public var characters: Characters { _characters }
+    @inlinable @inline(__always) public var attributes: Attributes { _attributes }
 
     // MARK: Initialization
 
@@ -44,33 +44,33 @@ public struct Snapshot: BidirectionalCollection, RangeReplaceableCollection, Exp
     // MARK: Collection: Counts
     
     /// - Complexity: O(1).
-    @inlinable public var count: Int {
+    @inlinable @inline(__always) public var count: Int {
         _attributes.count
     }
     
     /// - Complexity: O(1).
-    @inlinable public var underestimatedCount: Int {
+    @inlinable @inline(__always) public var underestimatedCount: Int {
         _attributes.underestimatedCount
     }
     
     // MARK: Collection: Indices
 
     @inlinable public var startIndex: Index {
-        Index(_characters.startIndex, _attributes.startIndex)
+        Index(character: _characters.startIndex, attribute: _attributes.startIndex)
     }
 
     @inlinable public var endIndex: Index {
-        Index(_characters.endIndex,   attributes.endIndex)
+        Index(character: _characters.endIndex, attribute: _attributes.endIndex)
     }
     
     // MARK: Collection: Traversals
     
     @inlinable public func index(after i: Index) -> Index {
-        Index(_characters.index(after:  i.character), _attributes.index(after: i.attribute))
+        Index(character: _characters.index(after:  i.character), attribute: _attributes.index(after: i.attribute))
     }
     
     @inlinable public func index(before i: Index) -> Index {
-        Index(_characters.index(before: i.character), _attributes.index(before: i.attribute))
+        Index(character: _characters.index(before: i.character), attribute: _attributes.index(before: i.attribute))
     }
     
     // MARK: Collection: Replacements
@@ -97,7 +97,7 @@ public struct Snapshot: BidirectionalCollection, RangeReplaceableCollection, Exp
     }
     
     @inlinable public subscript(character position: Index) -> Character {
-        _read   { yield  _characters[position.character] }
+        _read { yield _characters[position.character] }
     }
     
     @inlinable public subscript(attribute position: Index) -> Attribute {
@@ -113,14 +113,14 @@ public struct Snapshot: BidirectionalCollection, RangeReplaceableCollection, Exp
 
         // MARK: Initializers
 
-        @inlinable init(_ character: String.Index, _ attribute: Int) {
+        @inlinable init(character: String.Index, attribute: Int) {
             self.character = character
             self.attribute = attribute
         }
 
         // MARK: Utilities
 
-        @inlinable var offset: Int {
+        @inlinable @inline(__always) var offset: Int {
             attribute
         }
 
@@ -135,6 +135,8 @@ public struct Snapshot: BidirectionalCollection, RangeReplaceableCollection, Exp
 // MARK: - Transformations
 
 public extension Snapshot {
+    
+    // MARK: Attributes
     
     @inlinable mutating func transform(attributes index: Index, using transformation: (Attribute) -> Attribute) {
         _attributes[index.attribute] = transformation(_attributes[index.attribute])
@@ -152,16 +154,11 @@ public extension Snapshot {
         for index in interpret(expression, map: \.attribute) { transformation(&_attributes[index]) }
     }
     
-    // MARK: Helpers
-    
+    // MARK: Attributes: Helpers
+
     @inlinable internal func interpret<R: RangeExpression, Bound>(_ indices: R, map: (Index) -> Bound) -> Range<Bound> where R.Bound == Index {
         let indices = indices.relative(to: self); return map(indices.lowerBound) ..< map(indices.upperBound)
     }
-}
-
-// MARK: - Utilities
-
-public extension Snapshot {
     
     // MARK: Characters
     
