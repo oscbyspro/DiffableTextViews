@@ -28,7 +28,7 @@ struct Example: View {
         DiffableTextField($amount) {
             .numeric.locale(locale).suffix(locale.currencyCode)
             .bounds(.values(in: 0...1_000_000 as ClosedRange<Decimal>))
-            .precision(.digits(integer: 1..., decimal: 2...2))
+            .precision(.digits(integer: 1..., fraction: 2...2))
         }
         .setup({ textField in textField.keyboard(.decimalPad) })
     }

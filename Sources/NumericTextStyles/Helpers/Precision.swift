@@ -34,10 +34,10 @@ public struct Precision<Value: Precise> {
     // MARK: Utilities: Editable
     
     @inlinable func editableStyle() -> Format.Precision {
-        let integer = Defaults.upperLowerBound...Value.maxLosslessIntegerDigits
-        let decimal = Defaults.lowerLowerBound...Value.maxLosslessDecimalDigits
+        let integer  = Defaults.upperLowerBound...Value.maxLosslessIntegerDigits
+        let fraction = Defaults.lowerLowerBound...Value.maxLosslessDecimalDigits
         
-        return .integerAndFractionLength(integerLimits: integer, fractionLimits: decimal)
+        return .integerAndFractionLength(integerLimits: integer, fractionLimits: fraction)
     }
     
     @inlinable func editableStyle(_ digits: NumberOfDigits) -> Format.Precision {
@@ -84,30 +84,30 @@ public extension Precision where Value: Float {
 
     // MARK: Expressions
     
-    @inlinable static func digits<R0: RangeExpression, R1: RangeExpression>(integer: R0, decimal: R1) -> Self where R0.Bound == Int, R1.Bound == Int {
-        .init(strategy: Parts(upper: integer, lower: decimal))
+    @inlinable static func digits<R0: RangeExpression, R1: RangeExpression>(integer: R0, fraction: R1) -> Self where R0.Bound == Int, R1.Bound == Int {
+        .init(strategy: Parts(upper: integer, lower: fraction))
     }
     
     @inlinable static func digits<R: RangeExpression>(integer: R) -> Self where R.Bound == Int {
         .init(strategy: Parts(upper: integer, lower: Defaults.lowerLowerBound...))
     }
     
-    @inlinable static func digits<R: RangeExpression>(decimal: R) -> Self where R.Bound == Int {
-        .init(strategy: Parts(upper: Defaults.upperLowerBound..., lower: decimal))
+    @inlinable static func digits<R: RangeExpression>(fraction: R) -> Self where R.Bound == Int {
+        .init(strategy: Parts(upper: Defaults.upperLowerBound..., lower: fraction))
     }
     
     // MARK: Subexpressions
     
-    @inlinable static func max(integer: Int, decimal: Int) -> Self  {
-        .digits(integer: Defaults.upperLowerBound...integer, decimal: Defaults.lowerLowerBound...decimal)
+    @inlinable static func max(integer: Int, fraction: Int) -> Self  {
+        .digits(integer: Defaults.upperLowerBound...integer, fraction: Defaults.lowerLowerBound...fraction)
     }
     
     @inlinable static func max(integer: Int) -> Self {
-        .max(integer: integer, decimal: Value.maxLosslessDigits - integer)
+        .max(integer: integer, fraction: Value.maxLosslessDigits - integer)
     }
     
-    @inlinable static func max(decimal: Int) -> Self {
-        .max(integer: Value.maxLosslessDigits - decimal, decimal: decimal)
+    @inlinable static func max(fraction: Int) -> Self {
+        .max(integer: Value.maxLosslessDigits - fraction, fraction: fraction)
     }
 }
 
