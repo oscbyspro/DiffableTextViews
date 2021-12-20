@@ -16,9 +16,13 @@
     
     // MARK: Initializers
     
-    @inlinable init() {
-        self.characters = ""
+    @inlinable init(characters: String) {
+        self.characters = characters
     }
+    
+    // MARK: Instances: Static
+    
+    @usableFromInline static let dot = Self(characters: ".")
 }
 
 // MARK: - ParseableSeparators

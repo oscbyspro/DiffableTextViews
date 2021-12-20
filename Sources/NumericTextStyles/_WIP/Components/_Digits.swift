@@ -28,6 +28,11 @@
         characters.append(character)
         count += 1
     }
+
+    // MARK: Characters: Static
+    
+    @usableFromInline static let zero: Character = "0"
+    @usableFromInline static let decimals = Set<Character>("0123456789")
 }
 
 #warning("WIP")

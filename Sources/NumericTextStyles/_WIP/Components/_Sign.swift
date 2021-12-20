@@ -9,6 +9,9 @@
 
 #warning("WIP")
 @usableFromInline enum _Sign: String, Component {
+    
+    // MARK: Instances
+    
     case positive = "+"
     case negative = "-"
     case none = ""

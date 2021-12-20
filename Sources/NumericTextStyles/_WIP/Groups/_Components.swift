@@ -24,5 +24,5 @@
     
     associatedtype Parser: NumericTextStyles._Parser
     
-    init<C: Collection>(_ collection: C, parser: Parser)
+    init<C: Collection>(_ collection: C, parser: Parser) where C.Element == Character
 }
