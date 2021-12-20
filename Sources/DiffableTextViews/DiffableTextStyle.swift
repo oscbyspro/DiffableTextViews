@@ -12,20 +12,26 @@ public protocol DiffableTextStyle {
     
     // MARK: Snapshot
     
+    /// Snapshot for when the view is idle.
     @inlinable func snapshot(showcase value: Value) -> Snapshot
 
+    /// Snapshot for when the view is in editing mode.
     @inlinable func snapshot(editable value: Value) -> Snapshot // required (!)
     
     // MARK: Interpret
     
+    /// Value represented by the snapshot or nil when the snapshot is invalid.
     @inlinable func parse(snapshot: Snapshot) -> Value? // required (!)
 
+    /// Merges the current snapshot with the input snapshot proposed by the user, which contains only symbols with empty attributes.
     @inlinable func merge(snapshot: Snapshot, with content: Snapshot, in range: Range<Snapshot.Index>) -> Snapshot?
     
     // MARK: Process
     
+    /// Processes the value once whenever it is called. It is used both downstream and upstream so it can be used to constrain the value.
     @inlinable func process(value: inout Value)
 
+    /// Processes the snapshot once whenever it is called. Can be used to apply transformation after other snapshot and merge functions.
     @inlinable func process(snapshot: inout Snapshot)
 }
     
@@ -42,9 +48,7 @@ extension DiffableTextStyle {
     // MARK: Interpret
 
     @inlinable public func merge(snapshot: Snapshot, with content: Snapshot, in range: Range<Snapshot.Index>) -> Snapshot? {
-        var snapshot = snapshot
-        snapshot.replaceSubrange(range, with: content)
-        return snapshot
+        snapshot.transforming({ $0.replaceSubrange(range, with: content) })
     }
 
     // MARK: Process

@@ -32,7 +32,7 @@ public struct Attribute: OptionSet, Transformable {
 
     // MARK: Instances: Singular
     
-    /// Signifies that the symbol is part of the text's formatting and therefore that it is not real.
+    /// Signifies that the symbol is part of the text's formatting and therefore not real.
     public static let formatting = Self(rawValue: 1 << 0)
     /// Signifies that the symbol should be ignored by the differentiation algorithm when it is inserted.
     public static let insertable = Self(rawValue: 1 << 1)
