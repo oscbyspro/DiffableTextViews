@@ -14,15 +14,3 @@
     
     @inlinable var characters: String { get }
 }
-
-// MARK: - ParsableComponents
-
-#warning("WIP")
-@usableFromInline protocol _ParsableComponents: _Components {
-    
-    // MARK: Requirements
-    
-    associatedtype Parser: NumericTextStyles._Parser
-    
-    @inlinable init<C: Collection>(_ collection: C, parser: Parser) where C.Element == Character
-}

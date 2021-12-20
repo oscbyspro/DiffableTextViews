@@ -13,7 +13,7 @@ import protocol Utilities.Transformable
 ///
 /// Ordinary text is empty. Spacers are both prefixing and suffixing.
 ///
-/// - Singular: formatting, prefixing, suffixing, insertable, removable.
+/// - Singular: formatting, insertable, removable, prefixing, suffixing.
 /// - Composites: content, prefix, suffix, spacer.
 ///
 /// - Note: The easiest way to unformat text is to filter out symbols marked as formatting.
@@ -22,20 +22,20 @@ public struct Attribute: OptionSet, Transformable {
     
     // MARK: Singular
     
-    /// Signifies that the symbol is part of formatting and therefore not 'real'.
+    /// Signifies that the symbol is part of the text's formatting and therefore that it is not real.
     public static let formatting = Self(rawValue: 1 << 0)
-    /// Signifies that the symbol should direct the cursor in the forwards direction.
-    public static let prefixing = Self(rawValue: 1 << 1)
-    /// Signifies that the symbol should direct the cursor in the backwards direction.
-    public static let suffixing = Self(rawValue: 1 << 2)
     /// Signifies that the symbol will be ignored by the differentiation algorithm when it is inserted.
-    public static let insertable = Self(rawValue: 1 << 3)
+    public static let insertable = Self(rawValue: 1 << 1)
     /// Signifies that the symbol will be ignored by the differentiation algorithm when it is removed.
-    public static let removable = Self(rawValue: 1 << 4)
+    public static let removable = Self(rawValue: 1 << 2)
+    /// Signifies that the symbol should direct text selection forwards.
+    public static let prefixing = Self(rawValue: 1 << 3)
+    /// Signifies that the symbol should direct text selection backwards.
+    public static let suffixing = Self(rawValue: 1 << 4)
     
     // MARK: Composites
     
-    /// Empty option set.
+    /// Default behavior used to describe plain text. Contains no options.
     public static let content = Self()
     /// Contains: .formatting, .insertable, .removable, .prefixing.
     public static let prefix = Self(.formatting, .insertable, .removable, .prefixing)

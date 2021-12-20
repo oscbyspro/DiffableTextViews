@@ -22,7 +22,7 @@ import protocol Utilities.Nonempty
     /// It might be possible to fetch the range from the view, as opposed to calculating it for each instance of this object.
     @inlinable init(_ snapshot: Snapshot) {
         self.snapshot = snapshot
-        self.range = .origin ..< .max(in: snapshot.characters)
+        self.range = .zero ..< .max(in: snapshot.characters)
     }
     
     // MARK: Collection: Bounds

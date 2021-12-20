@@ -21,7 +21,7 @@
         self.rhs = rhs ?? .suffix("\0")
     }
     
-    // MARK: Descriptions: Look
+    // MARK: Descriptions: Looks
     
     @inlinable var lookaheadable: Bool {
         rhs.attribute.contains(.prefixing)

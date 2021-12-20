@@ -21,7 +21,7 @@
     
     // MARK: Initializers: Static
     
-    @inlinable static var origin: Self {
+    @inlinable static var zero: Self {
         .init(at: .zero)
     }
     
