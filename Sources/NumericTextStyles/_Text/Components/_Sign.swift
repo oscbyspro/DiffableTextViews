@@ -10,7 +10,7 @@
 #warning("WIP")
 @usableFromInline enum _Sign: String, Component {
     
-    // MARK: Instances
+    // MARK: Cases
     
     case positive = "+"
     case negative = "-"

@@ -12,7 +12,7 @@
     
     // MARK: Requirements
     
-    var characters: String { get }
+    @inlinable var characters: String { get }
 }
 
 // MARK: - ParsableComponents
@@ -24,5 +24,5 @@
     
     associatedtype Parser: NumericTextStyles._Parser
     
-    init<C: Collection>(_ collection: C, parser: Parser) where C.Element == Character
+    @inlinable init<C: Collection>(_ collection: C, parser: Parser) where C.Element == Character
 }

@@ -17,6 +17,15 @@
     @usableFromInline let separator: _Separator
     @usableFromInline let fraction: _Digits
     
+    // MARK: Initializers
+    
+    @inlinable init() {
+        self.sign = .init()
+        self.integer = .init()
+        self.separator = .init()
+        self.fraction = .init()
+    }
+    
     // MARK: Getters
     
     @inlinable var characters: String {

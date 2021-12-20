@@ -16,6 +16,10 @@
     
     // MARK: Initializers
     
+    @inlinable init() {
+        self.characters = ""
+    }
+    
     @inlinable init(characters: String) {
         self.characters = characters
     }

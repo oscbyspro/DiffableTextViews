@@ -12,21 +12,21 @@ public protocol DiffableTextStyle {
     
     // MARK: Snapshot
     
-    func snapshot(showcase value: Value) -> Snapshot
+    @inlinable func snapshot(showcase value: Value) -> Snapshot
 
-    func snapshot(editable value: Value) -> Snapshot // required (!)
+    @inlinable func snapshot(editable value: Value) -> Snapshot // required (!)
     
     // MARK: Interpret
     
-    func parse(snapshot: Snapshot) -> Value? // required (!)
+    @inlinable func parse(snapshot: Snapshot) -> Value? // required (!)
 
-    func merge(snapshot: Snapshot, with content: Snapshot, in range: Range<Snapshot.Index>) -> Snapshot?
+    @inlinable func merge(snapshot: Snapshot, with content: Snapshot, in range: Range<Snapshot.Index>) -> Snapshot?
     
     // MARK: Process
     
-    func process(value: inout Value)
+    @inlinable func process(value: inout Value)
 
-    func process(snapshot: inout Snapshot)
+    @inlinable func process(snapshot: inout Snapshot)
 }
     
 // MARK: - Implementations

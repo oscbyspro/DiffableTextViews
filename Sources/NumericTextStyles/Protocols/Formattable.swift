@@ -19,7 +19,7 @@ public protocol Formattable {
     
     /// Interprets a system description this type and returns an instance of it, if the description is valid.
     ///
-    /// System description means that fraction separators appear as dots and positive/negative signs appear as single character plus/minus prefixes, etc.
+    /// System formatted means that fraction separators appear as dots and positive/negative signs appear as single character plus/minus prefixes, etc.
     ///
     /// - Parameters:
     ///     - description: A system formatted representation of the value.

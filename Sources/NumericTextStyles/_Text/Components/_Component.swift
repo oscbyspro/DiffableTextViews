@@ -13,5 +13,9 @@
     
     // MARK: Requirements
     
-    var characters: String { get }
+    /// Instantiates an empty instance.
+    @inlinable init()
+    
+    /// String representation of the instance.
+    @inlinable var characters: String { get }
 }
