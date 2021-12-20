@@ -15,7 +15,7 @@
     
     // MARK: Initializers
     
-    @inlinable init(rawValue: UInt8 = 0) {
+    @inlinable init(rawValue: UInt8) {
         self.rawValue = rawValue
     }
     

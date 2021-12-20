@@ -34,13 +34,13 @@ public struct Attribute: OptionSet, Transformable {
     
     /// Signifies that the symbol is part of the text's formatting and therefore that it is not real.
     public static let formatting = Self(rawValue: 1 << 0)
-    /// Signifies that the symbol will be ignored by the differentiation algorithm when it is inserted.
+    /// Signifies that the symbol should be ignored by the differentiation algorithm when it is inserted.
     public static let insertable = Self(rawValue: 1 << 1)
-    /// Signifies that the symbol will be ignored by the differentiation algorithm when it is removed.
+    /// Signifies that the symbol should be ignored by the differentiation algorithm when it is removed.
     public static let removable  = Self(rawValue: 1 << 2)
-    /// Signifies that the symbol should direct text selection forwards.
+    /// Signifies that the symbol should direct the user's text selection forwards.
     public static let prefixing  = Self(rawValue: 1 << 3)
-    /// Signifies that the symbol should direct text selection backwards.
+    /// Signifies that the symbol should direct the user's text selection backwards.
     public static let suffixing  = Self(rawValue: 1 << 4)
     
     // MARK: Instances: Composites
