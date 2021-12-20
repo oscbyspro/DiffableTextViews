@@ -4,3 +4,5 @@
 2. Reimagine: Boundable & Precise.
     - Precise.maxLosslessValue makes sense for integers, but not for floating points. 
     - Precise.maxLosslessDigits makes sense for floating points, but not for integers.
+
+3. Streamline: NumericTextStyles/Inputs.

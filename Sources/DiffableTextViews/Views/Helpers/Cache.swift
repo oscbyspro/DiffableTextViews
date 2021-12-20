@@ -25,7 +25,7 @@
     
     // MARK: Getters
     
-    @inlinable var snapshot: Snapshot {
+    @inlinable @inline(__always) var snapshot: Snapshot {
         field.carets.snapshot
     }
 }

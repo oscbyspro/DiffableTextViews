@@ -73,7 +73,7 @@ public struct Snapshot: BidirectionalCollection, RangeReplaceableCollection, Exp
         Index(character: _characters.index(before: i.character), attribute: _attributes.index(before: i.attribute))
     }
     
-    // MARK: Collection: Replacements
+    // MARK: Collection: Transformations
         
     @inlinable public mutating func append(_ element: Element) {
         _characters.append(element.character)
