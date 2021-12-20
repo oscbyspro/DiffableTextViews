@@ -85,8 +85,8 @@ import protocol Utilities.Transformable
 
 extension Field {
     
-    // MARK: To Attribute
-    
+    // MARK: Attribute
+            
     @inlinable func movingToAttributes() -> Field {
         func move(_ position: Carets.Index, preference: Direction) -> Carets.Index {
             let direction = carets[position].directionOfAttributes() ?? preference
@@ -108,7 +108,7 @@ extension Field {
         return transforming({ $0.selection = lowerBound ..< upperBound })
     }
 
-    // MARK: To Selection
+    // MARK: Selection
     
     @inlinable func movingToSelection(_ newValue: Range<Carets.Index>, intent: Direction?) -> Field {
         func move(_ start: Carets.Index, preference: Direction) -> Carets.Index {
@@ -144,7 +144,7 @@ extension Field {
         return transforming({ $0.selection = lowerBound ..< upperBound })
     }
     
-    // MARK: To Carets
+    // MARK: Carets
             
     @inlinable func movingToCarets(_ newValue: Carets) -> Field {
         func step(previous lhs: Symbol, next rhs: Symbol) -> SimilaritiesInstruction {

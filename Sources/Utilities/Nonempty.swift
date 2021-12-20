@@ -13,6 +13,8 @@ public protocol Nonempty { }
 
 public extension Nonempty where Self: Collection {
     
+    // MARK: Descriptions
+    
     @inlinable var isEmpty: Bool {
         false
     }
