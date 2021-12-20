@@ -5,8 +5,6 @@
 //  Created by Oscar Byström Ericsson on 2021-12-20.
 //
 
-#warning("Replace: Sign, Digits, Separator.")
-
 // MARK: - Components
 
 #warning("WIP")
@@ -15,7 +13,7 @@
 // MARK: - IntegerComponents
 
 #warning("WIP")
-@usableFromInline struct IntegerComponents: _Components {
+@usableFromInline struct _IntegerComponents: _Components {
     
     // MARK: Properties
     
@@ -26,7 +24,7 @@
 // MARK: - FloatingPointComponents
 
 #warning("WIP")
-@usableFromInline struct FloatingPointComponents: _Components {
+@usableFromInline struct _FloatingPointComponents: _Components {
     
     // MARK: Properties
     
