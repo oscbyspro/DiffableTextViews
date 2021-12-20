@@ -8,4 +8,4 @@
 // MARK: - IntegerParser
 
 #warning("WIP")
-@usableFromInline final class _IntegerParser { }
+@usableFromInline struct _IntegerParser { }

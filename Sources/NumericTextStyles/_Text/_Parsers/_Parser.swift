@@ -8,4 +8,5 @@
 // MARK: - Parser
 
 #warning("WIP")
-@usableFromInline final class _Parser { }
+#warning("Parser/ParseStrategy definitions may share file with the parsed object, maybe.")
+@usableFromInline protocol _Parser { }

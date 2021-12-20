@@ -1,14 +1,14 @@
 //
-//  DigitParseStrategy.swift
+//  DigitParser.swift
 //  
 //
 //  Created by Oscar Byström Ericsson on 2021-12-20.
 //
 
-// MARK: - DigitParseStrategy
+// MARK: - DigitParser
 
 #warning("WIP")
-@usableFromInline struct _DigitParseStrategy {
+@usableFromInline struct _DigitParser: _Parser {
     
     // MARK: Properties
     

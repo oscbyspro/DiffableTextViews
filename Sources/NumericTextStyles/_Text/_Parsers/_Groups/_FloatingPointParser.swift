@@ -8,4 +8,4 @@
 // MARK: - FloatingPointParser
 
 #warning("WIP")
-@usableFromInline final class _FloatingPointParser { }
+@usableFromInline struct _FloatingPointParser { }
