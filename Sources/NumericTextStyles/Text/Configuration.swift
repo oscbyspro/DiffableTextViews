@@ -229,9 +229,7 @@
 // MARK: - ConfigurationOptions
 
 @usableFromInline struct ConfigurationOptions: OptionSet {
-    @usableFromInline static let integer     = Self(rawValue: 1 << 0)
-    @usableFromInline static let nonnegative = Self(rawValue: 1 << 1)
-    
+
     // MARK: Properties
     
     @usableFromInline let rawValue: UInt8
@@ -241,4 +239,9 @@
     @inlinable init(rawValue: UInt8) {
         self.rawValue = rawValue
     }
+    
+    // MARK: Instances: Singular
+    
+    @usableFromInline static let integer     = Self(rawValue: 1 << 0)
+    @usableFromInline static let nonnegative = Self(rawValue: 1 << 1)
 }

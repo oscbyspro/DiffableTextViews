@@ -137,25 +137,25 @@ import protocol Utilities.Transformable
 
 @usableFromInline struct SimilaritiesInstruction: OptionSet {
     
-    // MARK: Singular
-
-    @usableFromInline static let continueOnLHS = Self(rawValue: 1 << 0)
-    @usableFromInline static let continueOnRHS = Self(rawValue: 1 << 1)
-    
-    // MARK: Composites
-    
-    @usableFromInline static let `done`     = Self()
-    @usableFromInline static let `continue` = Self([.continueOnLHS, .continueOnRHS])
-    
     // MARK: Properties
     
     @usableFromInline let rawValue: UInt8
     
     // MARK: Initializers
     
-    @inlinable init(rawValue: UInt8 = 0) {
+    @inlinable init(rawValue: UInt8) {
         self.rawValue = rawValue
     }
+    
+    // MARK: Instances: Singular
+
+    @usableFromInline static let continueOnLHS = Self(rawValue: 1 << 0)
+    @usableFromInline static let continueOnRHS = Self(rawValue: 1 << 1)
+    
+    // MARK: Instances: Composites
+    
+    @usableFromInline static let `done`     = Self()
+    @usableFromInline static let `continue` = Self([.continueOnLHS, .continueOnRHS])
 }
 
 // MARK: - Comparison
