@@ -28,14 +28,3 @@
         rawValue
     }
 }
-
-// MARK: - ParseableSigns
-
-#warning("WIP")
-@usableFromInline struct _ParsableSigns {
-    
-    // MARK: Properties
-    
-    @usableFromInline let positives: [String]
-    @usableFromInline let negatives: [String]
-}

@@ -34,11 +34,3 @@
     @usableFromInline static let zero: Character = "0"
     @usableFromInline static let decimals = Set<Character>("0123456789")
 }
-
-#warning("WIP")
-@usableFromInline struct _ParsableDigits {
-    
-    // MARK: Properties
-    
-    @usableFromInline let digits: Set<Character>
-}

@@ -28,13 +28,3 @@
     
     @usableFromInline static let dot = Self(characters: ".")
 }
-
-// MARK: - ParseableSeparators
-
-#warning("WIP")
-@usableFromInline struct _ParsableSeparatos {
-    
-    // MARK: Properties
-    
-    @usableFromInline let separators: [String]
-}
