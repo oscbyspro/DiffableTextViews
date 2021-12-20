@@ -105,7 +105,7 @@ extension Field {
         
         // --------------------------------- //
         
-        return transforming(using: { $0.selection = lowerBound ..< upperBound })
+        return transforming({ $0.selection = lowerBound ..< upperBound })
     }
 
     // MARK: To Selection
@@ -141,7 +141,7 @@ extension Field {
         
         // --------------------------------- //
 
-        return transforming(using: { $0.selection = lowerBound ..< upperBound })
+        return transforming({ $0.selection = lowerBound ..< upperBound })
     }
     
     // MARK: To Carets

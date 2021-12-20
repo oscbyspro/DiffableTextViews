@@ -15,21 +15,21 @@ public extension Transformable {
     
     // MARK: Transform
     
-    @inlinable mutating func transform(using transformation: (inout Self) -> Void) {
+    @inlinable mutating func transform(_ transformation: (inout Self) -> Void) {
         transformation(&self)
     }
     
-    @inlinable mutating func transform(using transformation: (Self) -> Self) {
+    @inlinable mutating func transform(_ transformation: (Self) -> Self) {
         self = transformation(self)
     }
     
     // MARK: Transforming
     
-    @inlinable func transforming(using transformation: (inout Self) -> Void) -> Self {
+    @inlinable func transforming(_ transformation: (inout Self) -> Void) -> Self {
         var result = self; transformation(&result); return result
     }
     
-    @inlinable func transforming(using transformation: (Self) -> Self) -> Self {
+    @inlinable func transforming(_ transformation: (Self) -> Self) -> Self {
         transformation(self)
     }
 }

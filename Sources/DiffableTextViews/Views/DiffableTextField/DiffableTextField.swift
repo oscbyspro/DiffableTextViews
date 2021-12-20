@@ -41,15 +41,15 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable, 
     // MARK: Transformations
     
     @inlinable public func setup(_ setup: Configuration?) -> Self {
-        transforming(using: { $0.setup = setup })
+        transforming({ $0.setup = setup })
     }
     
     @inlinable public func update(_ update: Configuration?) -> Self {
-        transforming(using: { $0.update = update })
+        transforming({ $0.update = update })
     }
     
     @inlinable public func submit(_ submit: Configuration?) -> Self {
-        transforming(using: { $0.submit = submit })
+        transforming({ $0.submit = submit })
     }
 
     // MARK: UIViewRepresentable

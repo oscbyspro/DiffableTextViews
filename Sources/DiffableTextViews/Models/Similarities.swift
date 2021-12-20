@@ -239,10 +239,10 @@ import protocol Utilities.Transformable
     // MARK: Transformations
     
     @inlinable func comparison(_ newValue: Comparison) -> Self {
-        transforming(using: { $0.comparison = newValue })
+        transforming({ $0.comparison = newValue })
     }
         
     @inlinable func inspection(_ newValue: Inspection) -> Self {
-        transforming(using: { $0.inspection = newValue })
+        transforming({ $0.inspection = newValue })
     }
 }

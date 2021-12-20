@@ -50,20 +50,20 @@ public struct Symbol: Equatable, Transformable {
     // MARK: Transformations: Union
     
     @inlinable public mutating func formUnion(_ attribute: Attribute) {
-        transform(using: { $0.attribute.formUnion(attribute) })
+        transform({ $0.attribute.formUnion(attribute) })
     }
     
     @inlinable public func union(_ attribute: Attribute) -> Self {
-        transforming(using: { $0.attribute.formUnion(attribute) })
+        transforming({ $0.attribute.formUnion(attribute) })
     }
     
     // MARK: Transformations: Intersection
     
     @inlinable public mutating func formIntersection(_ attribute: Attribute) {
-        transform(using: { $0.attribute.formIntersection(attribute) })
+        transform({ $0.attribute.formIntersection(attribute) })
     }
     
     @inlinable public func intersection(_ attribute: Attribute) -> Self {
-        transforming(using: { $0.attribute.formIntersection(attribute) })
+        transforming({ $0.attribute.formIntersection(attribute) })
     }
 }

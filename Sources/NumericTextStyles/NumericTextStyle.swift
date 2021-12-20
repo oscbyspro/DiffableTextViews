@@ -41,23 +41,23 @@ extension NumericTextStyle {
     // MARK: Transformations
     
     @inlinable public func locale(_ locale: Locale) -> Self {
-        transforming(using: { $0.locale = locale })
+        transforming({ $0.locale = locale })
     }
     
     @inlinable public func prefix(_ newValue: String) -> Self {
-        transforming(using: { $0.prefix = newValue })
+        transforming({ $0.prefix = newValue })
     }
     
     @inlinable public func suffix(_ newValue: String) -> Self {
-        transforming(using: { $0.suffix = newValue })
+        transforming({ $0.suffix = newValue })
     }
     
     @inlinable public func bounds(_ newValue: Bounds) -> Self {
-        transforming(using: { $0.bounds = newValue })
+        transforming({ $0.bounds = newValue })
     }
     
     @inlinable public func precision(_ newValue: Precision) -> Self {
-        transforming(using: { $0.precision = newValue })
+        transforming({ $0.precision = newValue })
     }
 }
 
