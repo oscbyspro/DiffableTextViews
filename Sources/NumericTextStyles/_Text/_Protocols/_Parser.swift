@@ -19,7 +19,6 @@ import struct Foundation.Locale
     /// If the parser allows selecting a locale, returns a copy of the parser with the new locale set. Default implementation returns an unmodified self.
     @inlinable func locale(_ locale: Locale) -> Self
     
-    #warning("Comment.")
     @inlinable func parse<C: Collection>(characters: C, index: inout C.Index, storage: inout Output) where C.Element == Character
 }
 

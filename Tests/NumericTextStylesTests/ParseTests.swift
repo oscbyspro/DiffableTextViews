@@ -127,7 +127,7 @@ final class ParseTestsOfSign: XCTestCase {
     
     // MARK: Tests
     
-    func test() {
+    func test_initialization() {
         components(plus).expectation {
             Components(
                 all:       Subject.positive,

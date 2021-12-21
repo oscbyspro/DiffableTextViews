@@ -63,6 +63,7 @@ extension NumericTextStyle {
 
 // MARK: - Getters
 
+#warning("Unknown how much this will be needed once done.")
 extension NumericTextStyle {
     
     // MARK: Characters
@@ -181,6 +182,7 @@ extension NumericTextStyle {
     // MARK: Components
     
     @inlinable func snapshot(components: inout Components) -> Snapshot? {
+        #warning("Ignoring leading zeros is only relevant for floats.")
         let digits = components.numberOfDigitsIgnoringSingleIntegerZero()
         guard let capacity = precision.editableValidationWithCapacity(digits: digits) else { return nil }
         
@@ -226,6 +228,7 @@ extension NumericTextStyle {
                 
         // --------------------------------- //
         
+        #warning("Depends on type.")
         for character in characters {
             if digits.contains(character) {
                 snapshot.append(.content(character))
@@ -241,6 +244,8 @@ extension NumericTextStyle {
         // --------------------------------- //
 
         transformFirstDigitIfItIsZero(in:         &snapshot, using: { $0.insert(.prefixing) })
+        
+        #warning("Depends on type.")
         transformDecimalSeparatorIfItIsSuffix(in: &snapshot, using: { $0.insert(.removable) })
                 
         // --------------------------------- //
@@ -296,6 +301,7 @@ extension NumericTextStyle {
     
     // MARK: Configuration
     
+    #warning("Removable once done.")
     @inlinable func configuration() -> Configuration {
         let configuration = Configuration(signs: .negatives, separators: .none)
         
