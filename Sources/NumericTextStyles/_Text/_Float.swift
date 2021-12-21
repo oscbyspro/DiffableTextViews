@@ -80,8 +80,19 @@ import struct Foundation.Locale
     
     @inlinable func parse<C: Collection>(characters: C, index: inout C.Index, storage: inout Output) where C.Element == Character {
         sign.parse(characters: characters, index: &index, storage: &storage.sign)
+        
+        // --------------------------------- //
+        
         digits.parse(characters: characters, index: &index, storage: &storage.integer)
+        guard !storage.integer.isEmpty else { return }
+        
+        // --------------------------------- //
+        
         separator.parse(characters: characters, index: &index, storage: &storage.separator)
+        guard !storage.separator.isEmpty else { return }
+
+        // --------------------------------- //
+        
         digits.parse(characters: characters, index: &index, storage: &storage.fraction)
     }
     
