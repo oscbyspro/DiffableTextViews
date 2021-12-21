@@ -13,9 +13,9 @@
     
     // MARK: Cases
     
+    case none = ""
     case positive = "+"
     case negative = "-"
-    case none = ""
     
     // MARK: Initializers
     

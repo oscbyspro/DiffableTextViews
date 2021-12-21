@@ -66,10 +66,6 @@ import struct Foundation.Locale
         self.separator = separator
     }
     
-    @inlinable init(integer: _IntegerParser, separator: _SeparatorParser) {
-        self.init(sign: integer.sign, digits: integer.digits, separator: separator)
-    }
-    
     // MARK: Transformations
     
     @inlinable func locale(_ locale: Locale) -> Self {
@@ -98,5 +94,5 @@ import struct Foundation.Locale
     
     // MARK: Instances: Static
     
-    @usableFromInline static let decimal = Self(integer: .decimal, separator: .dot)
+    @usableFromInline static let decimal = Self(sign: .negatives, digits: .decimals, separator: .dot)
 }

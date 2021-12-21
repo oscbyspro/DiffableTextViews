@@ -8,6 +8,7 @@
 // MARK: - Text
 
 #warning("WIP")
+/// A system representation of the conforming object.
 @usableFromInline protocol _Text {
     
     // MARK: Requirements
@@ -17,11 +18,10 @@
     /// Creates an empty instance.
     @inlinable init()
     
-    #warning("Currently unused.")
-    /// A Boolean value indicating whether the text is empty.
+    /// A Boolean value indicating whether the instance  is empty.
     @inlinable var isEmpty: Bool { get }
     
-    /// String representation of the instance.
+    /// A sytem representation of the instance.
     @inlinable var characters: String { get }
     
     /// Creates a parser configured to parse decimal numbers.

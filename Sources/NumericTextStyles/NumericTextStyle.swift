@@ -32,11 +32,6 @@ public struct NumericTextStyle<Value: NumericTextValue>: DiffableTextStyle, Tran
     @inlinable public init(locale: Locale = .autoupdatingCurrent) {
         self.locale = locale
     }
-}
-
-// MARK: - Update
-
-extension NumericTextStyle {
     
     // MARK: Transformations
     
@@ -80,7 +75,7 @@ extension NumericTextStyle {
         Components.Sign.set
     }
     
-    @inlinable var decimalSeparator: String {
+    @inlinable var fractionSeparator: String {
         locale.decimalSeparator ?? Components.Separator.system.characters
     }
 
@@ -166,8 +161,7 @@ extension NumericTextStyle {
         
         // --------------------------------- //
         
-        var next = snapshot
-        next.replaceSubrange(range, with: input.content)
+        let next = snapshot.transforming({ $0.replaceSubrange(range, with: input.content) })
         
         // --------------------------------- //
         
@@ -234,19 +228,17 @@ extension NumericTextStyle {
                 snapshot.append(.content(character))
             } else if groupingSeparator.contains(character) {
                 snapshot.append(.spacer(character))
-            } else if decimalSeparator.contains(character) {
+            } else if fractionSeparator.contains(character) {
                 snapshot.append(.content(character))
             } else if signs.contains(character) {
                 snapshot.append(.content(character).union(.prefixing))
             }
         }
-                
+        
         // --------------------------------- //
 
-        transformFirstDigitIfItIsZero(in:         &snapshot, using: { $0.insert(.prefixing) })
-        
-        #warning("Depends on type.")
-        transformDecimalSeparatorIfItIsSuffix(in: &snapshot, using: { $0.insert(.removable) })
+        transformFirstDigitIfItIsZero(in:           &snapshot, using: { $0.insert(.prefixing) })
+        transformFreactionSeparatorIfItIsSuffix(in: &snapshot, using: { $0.insert(.removable) })
                 
         // --------------------------------- //
 
@@ -277,9 +269,9 @@ extension NumericTextStyle {
         snapshot.pointee.transform(attributes: position, using: transformation)
     }
     
-    @inlinable func transformDecimalSeparatorIfItIsSuffix(in snapshot: UnsafeMutablePointer<Snapshot>, using transformation: (inout Attribute) -> Void) {
+    @inlinable func transformFreactionSeparatorIfItIsSuffix(in snapshot: UnsafeMutablePointer<Snapshot>, using transformation: (inout Attribute) -> Void) {
         func predicate(symbol: Symbol) -> Bool {
-            decimalSeparator.contains(symbol.character)
+            fractionSeparator.contains(symbol.character)
         }
         
         // --------------------------------- //
@@ -316,7 +308,7 @@ extension NumericTextStyle {
         if Value.isInteger {
             configuration.options.insert(.integer)
         } else {
-            configuration.separators.insert(decimalSeparator)
+            configuration.separators.insert(fractionSeparator)
             configuration.separators.insert(contentsOf: .system)
         }
         
