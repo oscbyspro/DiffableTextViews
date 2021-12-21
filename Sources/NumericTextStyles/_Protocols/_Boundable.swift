@@ -21,3 +21,18 @@ public protocol _Boundable: Comparable {
     /// - Greater than or equal to zero.
     @inlinable static var maxLosslessValue: Self { get }
 }
+
+// MARK: - Utilities
+
+extension _Boundable {
+    
+    // MARK: Descriptions
+    
+    @inlinable static var isUnsigned: Bool {
+        minLosslessValue >= .zero
+    }
+    
+    @inlinable static var isSigned: Bool {
+        minLosslessValue <= .zero
+    }
+}

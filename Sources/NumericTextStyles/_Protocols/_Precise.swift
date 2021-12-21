@@ -12,6 +12,44 @@ public protocol _Precise {
     
     // MARK: Requirements
     
-    #warning("This is the only requirement needed, the rest can be done with affordance protocols.")
     @inlinable static var maxLosslessDigits: Int { get }
+    @inlinable static var maxLosslessDigitsInInteger: Int { get }
+    @inlinable static var maxLosslessDigitsInFraction: Int { get }
+}
+
+// MARK: - Utilities
+
+extension _Precise {
+    
+    // MARK: Descriptions
+    
+    @inlinable static var isInteger: Bool {
+        maxLosslessDigitsInFraction <= 0
+    }
+    
+    @inlinable static var isFractional: Bool {
+        maxLosslessDigitsInFraction >= 1
+    }
+}
+
+// MARK: - UsesIntegerPrecision
+
+public  protocol _UsesIntegerPrecision: _Precise { }
+public extension _UsesIntegerPrecision {
+    
+    // MARK: Implementations
+    
+    @inlinable static var maxLosslessDigitsInInteger:  Int { maxLosslessDigits }
+    @inlinable static var maxLosslessDigitsInFraction: Int { 0 }
+}
+
+// MARK: - UsesFloatPrecision
+
+public  protocol _UsesFloatPrecision: _Precise { }
+public extension _UsesFloatPrecision {
+    
+    // MARK: Implementations
+
+    @inlinable static var maxLosslessDigitsInInteger:  Int { maxLosslessDigits }
+    @inlinable static var maxLosslessDigitsInFraction: Int { maxLosslessDigits }
 }

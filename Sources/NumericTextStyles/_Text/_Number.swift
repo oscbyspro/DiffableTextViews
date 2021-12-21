@@ -40,16 +40,17 @@ import protocol Utilities.Transformable
         sign.characters + integer.characters + separator.characters + fraction.characters
     }
     
-    // MARK: Utilities: Options
+    // MARK: Utilities
     
     #warning("Unused.")
-    @inlinable func validate(with options: Options) -> Bool {
-        if options.contains(.unsigned) {
+    @inlinable func validate<Value: _Boundable & _Precise>(type: Value.Type) -> Bool {
+        if type.isUnsigned {
             if !sign.isEmpty { return false }
         }
         
-        if options.contains(.integer) {
-            if !separator.isEmpty, !fraction.isEmpty { return false }
+        if type.isInteger {
+            if !separator.isEmpty { return false }
+            if  !fraction.isEmpty { return false }
         }
         
         return true
@@ -60,43 +61,12 @@ import protocol Utilities.Transformable
     @inlinable @inline(__always) static var parser: Parser {
         .decimal
     }
-    
-    // MARK: Components
-    
-    @usableFromInline struct Options: OptionSet {
-        
-        // MARK: Properties
-        
-        @usableFromInline var rawValue: UInt8
-        
-        // MARK: Initializers
-        
-        @inlinable init(rawValue: UInt8) {
-            self.rawValue = rawValue
-        }
-        
-        @inlinable init<Value: Boundable & Precise>(bounds: _Bounds<Value>, precision: _Precision<Value>) {
-            self.init()
-            
-            if bounds.lowerBound >= Value.zero {
-                insert(.unsigned)
-            }
-            
-            if precision.fraction <= Int.zero {
-                insert(.integer)
-            }
-        }
-        
-        // MARK: Instances: Singular
-        
-        @usableFromInline static let unsigned = Self(rawValue: 1 << 0)
-        @usableFromInline static let integer  = Self(rawValue: 1 << 1)
-    }
 }
 
 // MARK: - NumberParser
 
 #warning("WIP")
+#error("Rather than validate: UnsignedIntegerParser, IntegerParser, FloatParser where each has Output: _Number.")
 @usableFromInline struct _NumberParser: _Parser {
     @usableFromInline typealias Output = _Number
     

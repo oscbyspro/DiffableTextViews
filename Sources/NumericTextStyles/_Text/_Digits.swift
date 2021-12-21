@@ -35,15 +35,17 @@
         characters.append(character)
         count += 1
     }
+    
+    // MARK: Parsers: Static
 
+    @inlinable @inline(__always) static var parser: Parser {
+        .decimals
+    }
+    
     // MARK: Characters: Static
     
     @usableFromInline static let zero: Character = "0"
     @usableFromInline static let decimals = Set<Character>("0123456789")
-    
-    // MARK: Parsers: Static
-
-    @inlinable @inline(__always) static var parser: Parser { .decimals }
 }
 
 // MARK: - DigitParser
