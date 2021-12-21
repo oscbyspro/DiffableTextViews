@@ -24,6 +24,9 @@ let package = Package(
         .target(
             name: "NumericTextStyles",
             dependencies: ["DiffableTextViews", "Utilities"]),
+        .testTarget(
+            name: "NumericTextStylesTests",
+            dependencies: ["NumericTextStyles"]),
         .target(
             name: "Utilities",
             dependencies: []),
