@@ -28,7 +28,7 @@ import struct Foundation.Locale
     
     // MARK: Getters
     
-    @inlinable var isEmpty: Bool {
+    @inlinable @inline(__always) var isEmpty: Bool {
         characters.isEmpty
     }
     

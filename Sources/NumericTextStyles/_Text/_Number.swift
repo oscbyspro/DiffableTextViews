@@ -39,7 +39,7 @@ import struct Foundation.Locale
     }
 }
 
-// MARK: - UnsignedIntegerNumberParser
+// MARK: - UnsignedIntegerParser
 
 @usableFromInline struct _UnsignedIntegerParser: _Parser {
     @usableFromInline typealias Output = _Number
@@ -71,7 +71,7 @@ import struct Foundation.Locale
     @usableFromInline static let standard = Self(digits: .standard)
 }
 
-// MARK: - IntegerNumberParser
+// MARK: - IntegerParser
 
 @usableFromInline struct _IntegerParser: _Parser {
     @usableFromInline typealias Output = _Number

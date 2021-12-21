@@ -24,8 +24,8 @@
         
     // MARK: Getters
     
-    @inlinable var isEmpty: Bool {
-        self == .none
+    @inlinable @inline(__always) var isEmpty: Bool {
+        rawValue.isEmpty
     }
     
     @inlinable @inline(__always) var characters: String {
