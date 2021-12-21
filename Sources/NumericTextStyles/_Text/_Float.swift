@@ -10,6 +10,7 @@ import struct Foundation.Locale
 // MARK: - Float
 
 #warning("WIP")
+#warning("Could reconsider and merge _Integer & _Float into _Number, maybe.")
 @usableFromInline struct _Float: _Text {
     @usableFromInline typealias Parser = _FloatParser
     
