@@ -9,7 +9,7 @@
 
 #warning("WIP")
 /// A system representation of the conforming object.
-@usableFromInline protocol _Text {
+public protocol _Text {
     
     // MARK: Requirements
     

@@ -10,7 +10,7 @@ import struct Foundation.Locale
 // MARK: - Number
 
 #warning("WIP")
-@usableFromInline struct _Number: _Text {
+public struct _Number: _Text {
     
     // MARK: Properties
     
@@ -21,7 +21,7 @@ import struct Foundation.Locale
     
     // MARK: Initializers
     
-    @inlinable init() {
+    @inlinable public init() {
         self.sign = .init()
         self.integer = .init()
         self.separator = .init()
@@ -30,19 +30,19 @@ import struct Foundation.Locale
     
     // MARK: Getters
     
-    @inlinable var isEmpty: Bool {
+    @inlinable public var isEmpty: Bool {
         sign.isEmpty && integer.isEmpty && separator.isEmpty && fraction.isEmpty
     }
     
-    @inlinable var characters: String {
+    @inlinable public var characters: String {
         sign.characters + integer.characters + separator.characters + fraction.characters
     }
 }
 
 // MARK: - UnsignedIntegerParser
 
-@usableFromInline struct _UnsignedIntegerParser: _Parser {
-    @usableFromInline typealias Output = _Number
+public struct _UnsignedIntegerParser: _Parser {
+    public typealias Output = _Number
     
     // MARK: Properties
     
@@ -56,25 +56,25 @@ import struct Foundation.Locale
     
     // MARK: Transformations
     
-    @inlinable func locale(_ locale: Locale) -> Self {
+    @inlinable public func locale(_ locale: Locale) -> Self {
         .init(digits: digits.locale(locale))
     }
 
     // MARK: Parse
     
-    @inlinable func parse<C: Collection>(characters: C, index: inout C.Index, storage: inout Output) where C.Element == Character {
+    @inlinable public func parse<C: Collection>(characters: C, index: inout C.Index, storage: inout Output) where C.Element == Character {
         digits.parse(characters: characters, index: &index, storage: &storage.integer)
     }
     
     // MARK: Instances: Static
     
-    @usableFromInline static let standard = Self(digits: .standard)
+    public static let standard = Self(digits: .standard)
 }
 
 // MARK: - IntegerParser
 
-@usableFromInline struct _IntegerParser: _Parser {
-    @usableFromInline typealias Output = _Number
+public struct _IntegerParser: _Parser {
+    public typealias Output = _Number
     
     // MARK: Properties
     
@@ -90,27 +90,27 @@ import struct Foundation.Locale
     
     // MARK: Transformations
     
-    @inlinable func locale(_ locale: Locale) -> Self {
+    @inlinable public func locale(_ locale: Locale) -> Self {
         .init(sign: sign.locale(locale), digits: digits.locale(locale))
     }
 
     // MARK: Parse
     
-    @inlinable func parse<C: Collection>(characters: C, index: inout C.Index, storage: inout Output) where C.Element == Character {
+    @inlinable public func parse<C: Collection>(characters: C, index: inout C.Index, storage: inout Output) where C.Element == Character {
         sign.parse(characters: characters, index: &index, storage: &storage.sign)
         digits.parse(characters: characters, index: &index, storage: &storage.integer)
     }
     
     // MARK: Instances: Static
     
-    @usableFromInline static let standard = Self(sign: .standard, digits: .standard)
+    public static let standard = Self(sign: .standard, digits: .standard)
 }
 
 // MARK: - FloatingPointParser
 
 #warning("WIP")
-@usableFromInline struct _FloatingPointParser: _Parser {
-    @usableFromInline typealias Output = _Number
+public struct _FloatingPointParser: _Parser {
+    public typealias Output = _Number
     
     // MARK: Properties
     
@@ -128,13 +128,13 @@ import struct Foundation.Locale
     
     // MARK: Transformations
     
-    @inlinable func locale(_ locale: Locale) -> Self {
+    @inlinable public func locale(_ locale: Locale) -> Self {
         .init(sign: sign.locale(locale), digits: digits.locale(locale), separator: separator.locale(locale))
     }
 
     // MARK: Parse
     
-    @inlinable func parse<C: Collection>(characters: C, index: inout C.Index, storage: inout Output) where C.Element == Character {
+    @inlinable public func parse<C: Collection>(characters: C, index: inout C.Index, storage: inout Output) where C.Element == Character {
         sign.parse(characters: characters, index: &index, storage: &storage.sign)
         
         // --------------------------------- //
@@ -154,6 +154,6 @@ import struct Foundation.Locale
     
     // MARK: Instances: Static
     
-    @usableFromInline static let standard = Self(sign: .standard, digits: .standard, separator: .standard)
+    public static let standard = Self(sign: .standard, digits: .standard, separator: .standard)
 }
 

@@ -10,7 +10,7 @@ import struct Foundation.Locale
 // MARK: - Parser
 
 #warning("WIP")
-@usableFromInline protocol _Parser {
+public protocol _Parser {
     
     // MARK: Requirements
     

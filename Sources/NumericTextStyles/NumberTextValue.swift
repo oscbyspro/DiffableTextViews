@@ -10,6 +10,7 @@ import struct Foundation.Decimal
 
 // MARK: - NumberTextValue
 
+#warning("Removable.")
 public protocol NumberTextValue: Boundable, Formattable, Precise {
     typealias NumberTextStyle = NumericTextStyles.NumberTextStyle<Self>
 }
