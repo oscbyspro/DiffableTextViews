@@ -11,6 +11,7 @@ import struct Foundation.Locale
 
 #warning("WIP")
 @usableFromInline struct _Float: _Text {
+    @usableFromInline typealias Parser = _FloatParser
     
     // MARK: Properties
     
@@ -33,12 +34,16 @@ import struct Foundation.Locale
     @inlinable var characters: String {
         sign.characters + integer.characters + separator.characters + fraction.characters
     }
+    
+    // MARK: Parsers: Static
+
+    @inlinable static var parser: Parser { .decimal }
 }
 
 // MARK: - FloatingPointComponentsParser
 
 #warning("WIP")
-@usableFromInline struct _FloatParser {
+@usableFromInline struct _FloatParser: _Parser {
     @usableFromInline typealias Output = _Float
     
     // MARK: Properties
@@ -64,7 +69,11 @@ import struct Foundation.Locale
     // MARK: Parse
     
     #warning("WIP")
-    @inlinable func parse<C>(_ characters: C, from index: inout C.Index, into storage: inout Output) where C : Collection, C.Element == Character {
+    @inlinable func parse<C: Collection>(_ characters: C, from index: inout C.Index, into storage: inout Output) where C.Element == Character {
         fatalError()
     }
+    
+    // MARK: Instances: Static
+    
+    @usableFromInline static let decimal = Self(sign: .negatives, digits: .decimals, separator: .dot)
 }

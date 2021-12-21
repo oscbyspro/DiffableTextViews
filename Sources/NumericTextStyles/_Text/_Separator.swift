@@ -11,6 +11,7 @@ import struct Foundation.Locale
 
 #warning("WIP")
 @usableFromInline struct _Separator: _Text {
+    @usableFromInline typealias Parser = _SeparatorParser
     
     // MARK: Properties
     
@@ -29,6 +30,10 @@ import struct Foundation.Locale
     // MARK: Instances: Static
     
     @usableFromInline static let dot = Self(characters: ".")
+    
+    // MARK: Parsers: Static
+
+    @usableFromInline static var parser: Parser { .dot }
 }
 
 // MARK: - SeparatorParser
@@ -69,5 +74,5 @@ import struct Foundation.Locale
     
     // MARK: Instances: Static
     
-    @usableFromInline static let dot = Self(separators: [_Separator.dot.characters])
+    @usableFromInline static let dot = Self(separators: [Output.dot.characters])
 }

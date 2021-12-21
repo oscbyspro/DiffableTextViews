@@ -9,6 +9,7 @@
 
 #warning("WIP")
 @usableFromInline enum _Sign: String, _Text {
+    @usableFromInline typealias Parser = _SignParser
     
     // MARK: Cases
     
@@ -27,6 +28,10 @@
     @inlinable @inline(__always) var characters: String {
         rawValue
     }
+    
+    // MARK: Parsers: Static
+
+    @inlinable static var parser: Parser { .negatives }
 }
 
 // MARK: - SignParser

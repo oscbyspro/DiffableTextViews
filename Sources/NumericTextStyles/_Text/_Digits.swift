@@ -9,6 +9,7 @@
 
 #warning("WIP")
 @usableFromInline struct _Digits: _Text {
+    @usableFromInline typealias Parser = _DigitParser
     
     // MARK: Properties
     
@@ -33,6 +34,10 @@
     
     @usableFromInline static let zero: Character = "0"
     @usableFromInline static let decimals = Set<Character>("0123456789")
+    
+    // MARK: Parsers: Static
+
+    @inlinable static var parser: Parser { .decimals }
 }
 
 // MARK: - DigitParser
@@ -64,5 +69,5 @@
     
     // MARK: Instances: Static
     
-    @usableFromInline static let decimals = Self(digits: _Digits.decimals)
+    @usableFromInline static let decimals = Self(digits: Output.decimals)
 }
