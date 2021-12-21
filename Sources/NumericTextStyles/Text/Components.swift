@@ -125,16 +125,16 @@ extension Components {
     // MARK: Total
     
     @inlinable func numberOfDigits() -> NumberOfDigits {
-        .init(upper: integers.count, lower: decimals.count)
+        .init(integer: integers.count, fraction: decimals.count)
     }
     
     @inlinable func numberOfDigitsIgnoringSingleIntegerZero() -> NumberOfDigits {
-        .init(upper: integers.isZero ? .zero : integers.count, lower: decimals.count)
+        .init(integer: integers.isZero ? .zero : integers.count, fraction: decimals.count)
     }
     
     // MARK: Significands
         
     @inlinable func numberOfSignificands() -> NumberOfDigits {
-        .init(upper: integers.count - integers.numberOfZerosAsPrefix(), lower: decimals.count - decimals.numberOfZerosAsSuffix())
+        .init(integer: integers.count - integers.numberOfZerosAsPrefix(), fraction: decimals.count - decimals.numberOfZerosAsSuffix())
     }
 }

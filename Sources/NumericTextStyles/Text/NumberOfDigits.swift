@@ -11,13 +11,13 @@
     
     // MARK: Properties
     
-    @usableFromInline let upper: Int
-    @usableFromInline let lower: Int
+    @usableFromInline let integer: Int
+    @usableFromInline let fraction: Int
     
     // MARK: Initializers
     
-    @inlinable init(upper: Int = 0, lower: Int = 0) {
-        self.upper = upper
-        self.lower = lower
+    @inlinable init(integer: Int = 0, fraction: Int = 0) {
+        self.integer = integer
+        self.fraction = fraction
     }
 }

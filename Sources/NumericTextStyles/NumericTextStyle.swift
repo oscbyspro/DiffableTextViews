@@ -182,7 +182,7 @@ extension NumericTextStyle {
         
         // --------------------------------- //
         
-        if capacity.lower <= 0, components.decimals.isEmpty {
+        if capacity.fraction <= 0, components.decimals.isEmpty {
             components.separator = nil
         }
         

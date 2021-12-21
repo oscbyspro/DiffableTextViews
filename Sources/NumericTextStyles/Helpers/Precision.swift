@@ -41,8 +41,8 @@ public struct Precision<Value: Precise> {
     }
     
     @inlinable func editableStyle(_ digits: NumberOfDigits) -> NumberFormatStyleConfiguration.Precision {
-        let upperUpperBound = Swift.max(Defaults.upperLowerBound, digits.upper)
-        let lowerLowerBound = Swift.max(Defaults.lowerLowerBound, digits.lower)
+        let upperUpperBound = Swift.max(Defaults.upperLowerBound, digits.integer)
+        let lowerLowerBound = Swift.max(Defaults.lowerLowerBound, digits.fraction)
                 
         let upper = Defaults.upperLowerBound...upperUpperBound
         let lower =          lowerLowerBound...lowerLowerBound
@@ -152,10 +152,10 @@ public extension Precision where Value: PreciseFloat {
     }
     
     @inlinable func editableValidationWithCapacity(digits: NumberOfDigits) -> NumberOfDigits? {
-        let totalCapacity = total.upperBound - digits.upper - digits.lower
+        let totalCapacity = total.upperBound - digits.integer - digits.fraction
         guard totalCapacity >= 0 else { return nil }
 
-        return NumberOfDigits(upper: totalCapacity, lower: totalCapacity)
+        return NumberOfDigits(integer: totalCapacity, fraction: totalCapacity)
     }
 }
 
@@ -202,16 +202,16 @@ public extension Precision where Value: PreciseFloat {
     }
     
     @inlinable func editableValidationWithCapacity(digits: NumberOfDigits) -> NumberOfDigits? {
-        let totalCapacity = Value.maxLosslessDigits - digits.upper - digits.lower
+        let totalCapacity = Value.maxLosslessDigits - digits.integer - digits.fraction
         guard totalCapacity >= 0 else { return nil }
         
-        let lowerCapacity = lower.upperBound - digits.lower
+        let lowerCapacity = lower.upperBound - digits.fraction
         guard lowerCapacity >= 0 else { return nil }
         
-        let upperCapacity = upper.upperBound - digits.upper
+        let upperCapacity = upper.upperBound - digits.integer
         guard upperCapacity >= 0 else { return nil }
         
-        return NumberOfDigits(upper: upperCapacity, lower: lowerCapacity)
+        return NumberOfDigits(integer: upperCapacity, fraction: lowerCapacity)
     }
 }
 
