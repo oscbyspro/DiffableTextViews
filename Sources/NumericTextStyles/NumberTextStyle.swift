@@ -11,9 +11,9 @@ import protocol Utilities.Transformable
 
 // MARK: - NumberTextStyle
 
-/// Formats text and numbers.
+/// Formats numbers to and from user interactive text.
 ///
-/// - Complexity: O(n) or less for all calculations.
+/// - Complexity: O(n) or less for all computations.
 ///
 public struct NumberTextStyle<Value: NumberTextValue>: DiffableTextStyle, Transformable {
     public typealias Bounds = NumericTextStyles.Bounds<Value>
@@ -319,7 +319,7 @@ extension NumberTextStyle {
     
     // MARK: Components
     
-    /// Unformatting can be made lazy.
+    #warning("Unformatting should be made lazy.")
     @inlinable func components(_ snapshot: Snapshot, with configuration: Configuration) -> Components? {
         configuration.components(snapshot.characters(where: \.nonformatting))
     }

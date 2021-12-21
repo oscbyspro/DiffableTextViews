@@ -21,8 +21,8 @@ public struct _Bounds<Value: _Boundable> {
     // MARK: Initializers
     
     @inlinable init(lowerBound: Value = Value.minLosslessValue, upperBound: Value = Value.maxLosslessValue) {
-        precondition(lowerBound <= Value.zero, "Precondition: min <= 0 unsatisfied.")
-        precondition(upperBound >= Value.zero, "Precondition: max >= 0 unsatisfied.")
+        precondition(lowerBound <= Value.zero, "Bounds: contraint 'lowerBound <= 0' was broken.")
+        precondition(upperBound >= Value.zero, "Bounds: contraint 'upperBound >= 0' was broken.")
 
         self.lowerBound = lowerBound
         self.upperBound = upperBound
@@ -30,7 +30,7 @@ public struct _Bounds<Value: _Boundable> {
     
     // MARK: Initialiers: Static
     
-    @inlinable public static var none: Self {
+    @inlinable public static var max: Self {
         .init()
     }
     
@@ -39,22 +39,22 @@ public struct _Bounds<Value: _Boundable> {
     }
     
     @inlinable public static func values(in range: PartialRangeFrom<Value>) -> Self {
-        .init(lowerBound: range.lowerBound, upperBound: Value.minLosslessValue)
+        .init(lowerBound: range.lowerBound)
     }
     
     @inlinable public static func values(in range: PartialRangeThrough<Value>) -> Self {
-        .init(lowerBound: Value.maxLosslessValue, upperBound: range.upperBound)
+        .init(upperBound: range.upperBound)
     }
     
     // MARK: Utilities
-    
-    #warning("Unused.")
-    @inlinable func bounded(_ value: Value) -> Value {
-        max(lowerBound, min(value, upperBound))
-    }
 
     #warning("Unused.")
     @inlinable func validate(_ value: Value) -> Bool {
         lowerBound <= value && value <= upperBound
+    }
+    
+    #warning("Unused.")
+    @inlinable func bounded(_ value: Value) -> Value {
+        Swift.max(lowerBound, Swift.min(value, upperBound))
     }
 }
