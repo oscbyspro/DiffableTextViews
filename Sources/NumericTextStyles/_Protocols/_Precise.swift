@@ -22,7 +22,7 @@ public protocol _Precise {
 public  protocol _UsesIntegerPrecision: _Precise { }
 public extension _UsesIntegerPrecision {
     
-    // MARK: Implementations
+    // MARK: Implementation
     
     @inlinable static var maxLosslessIntegerDigits:  Int { maxLosslessDigits }
     @inlinable static var maxLosslessFractionDigits: Int { 0 }
@@ -33,7 +33,7 @@ public extension _UsesIntegerPrecision {
 public  protocol _UsesFloatingPointPrecision: _Precise { }
 public extension _UsesFloatingPointPrecision {
     
-    // MARK: Implementations
+    // MARK: Implementation
 
     @inlinable static var maxLosslessIntegerDigits:  Int { maxLosslessDigits }
     @inlinable static var maxLosslessFractionDigits: Int { maxLosslessDigits }

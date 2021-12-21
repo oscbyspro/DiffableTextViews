@@ -1,5 +1,5 @@
 //
-//  NumericTextStyle.swift
+//  NumberTextStyle.swift
 //  
 //
 //  Created by Oscar Byström Ericsson on 2021-10-19.
@@ -9,13 +9,13 @@ import DiffableTextViews
 import struct Foundation.Locale
 import protocol Utilities.Transformable
 
-// MARK: - NumericTextStyle
+// MARK: - NumberTextStyle
 
 /// Formats text and numbers.
 ///
 /// - Complexity: O(n) or less for all calculations.
 ///
-public struct NumericTextStyle<Value: NumericTextValue>: DiffableTextStyle, Transformable {
+public struct NumberTextStyle<Value: NumberTextValue>: DiffableTextStyle, Transformable {
     public typealias Bounds = NumericTextStyles.Bounds<Value>
     public typealias Precision = NumericTextStyles.Precision<Value>
 
@@ -59,7 +59,7 @@ public struct NumericTextStyle<Value: NumericTextValue>: DiffableTextStyle, Tran
 // MARK: - Getters
 
 #warning("Unknown how much this will be needed once done.")
-extension NumericTextStyle {
+extension NumberTextStyle {
     
     // MARK: Characters
     
@@ -86,7 +86,7 @@ extension NumericTextStyle {
 
 // MARK: - Format
 
-extension NumericTextStyle {
+extension NumberTextStyle {
     
     // MARK: Showcase
     
@@ -107,7 +107,7 @@ extension NumericTextStyle {
 
 // MARK: - Value
 
-extension NumericTextStyle {
+extension NumberTextStyle {
     
     // MARK: Process
     
@@ -130,7 +130,7 @@ extension NumericTextStyle {
 
 // MARK: - Snapshot
 
-extension NumericTextStyle {
+extension NumberTextStyle {
     
     // MARK: Showcase
     
@@ -147,7 +147,7 @@ extension NumericTextStyle {
 
 // MARK: - Snapshot
 
-extension NumericTextStyle {
+extension NumberTextStyle {
     
     // MARK: Merge
 
@@ -289,7 +289,7 @@ extension NumericTextStyle {
 
 // MARK: - Text
 
-extension NumericTextStyle {
+extension NumberTextStyle {
     
     // MARK: Configuration
     

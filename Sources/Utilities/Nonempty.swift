@@ -15,19 +15,19 @@ public extension Nonempty where Self: Collection {
     
     // MARK: Descriptions
     
-    @inlinable var isEmpty: Bool {
+    @inlinable @inline(__always) var isEmpty: Bool {
         false
     }
     
     // MARK: Element
     
-    @inlinable var first: Element {
+    @inlinable @inline(__always) var first: Element {
         first!
     }
     
     // MARK: Index
     
-    @inlinable var firstIndex: Index {
+    @inlinable @inline(__always) var firstIndex: Index {
         startIndex
     }
 }
@@ -38,13 +38,13 @@ public extension Nonempty where Self: BidirectionalCollection {
     
     // MARK: Element
     
-    @inlinable var last: Element {
+    @inlinable @inline(__always) var last: Element {
         last!
     }
     
     // MARK: Index
     
-    @inlinable var lastIndex: Index {
+    @inlinable @inline(__always) var lastIndex: Index {
         index(before: endIndex)
     }
 }

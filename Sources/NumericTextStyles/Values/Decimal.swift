@@ -11,11 +11,11 @@ import enum Foundation.NumberFormatStyleConfiguration
 
 // MARK: - Decimal
 
-/// Decimal: conformance to NumericTextValue.
+/// Decimal: conformance to NumberTextValue.
 ///
 /// - Supports up to 38 significant digits.
 ///
-extension Decimal: NumericTextValue, PreciseFloat { }; public extension Decimal {
+extension Decimal: NumberTextValue, PreciseFloat { }; public extension Decimal {
     
     // MARK: Boundable
         

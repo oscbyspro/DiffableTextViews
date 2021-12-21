@@ -1,11 +1,11 @@
 //
-//  NumberOfDigits.swift
+//  Count.swift
 //  
 //
 //  Created by Oscar Byström Ericsson on 2021-10-25.
 //
 
-// MARK: - NumberOfDigits
+// MARK: - Count
 
 @usableFromInline struct _Count {
     

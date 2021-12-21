@@ -9,6 +9,7 @@ import struct DiffableTextViews.Snapshot
 
 // MARK: - Input
 
+#warning("Needs rework or be removed.")
 @usableFromInline struct Input {
     
     // MARK: Properties

@@ -9,20 +9,21 @@ import struct Foundation.Locale
 import struct Foundation.FloatingPointFormatStyle
 import enum Foundation.NumberFormatStyleConfiguration
 
-// MARK: - NumericTextFloat
+// MARK: - NumberTextFloat
 
 /// Numeric text value protocol for ordinary floats.
 /// 
 /// - Range: ±Self.maxLosslessValue.
 /// - Significands: Self.maxLosslessDigits.
 ///
-public protocol NumericTextFloat: NumericTextValue, PreciseFloat, BinaryFloatingPoint {
+public protocol NumberTextFloat: NumberTextValue, PreciseFloat, BinaryFloatingPoint {
     @inlinable init?(_ description: String)
 }
 
 // MARK: - Details
 
-public extension NumericTextFloat {
+public extension NumberTextFloat {
+    
     
     // MARK: Boundable
     
@@ -43,21 +44,21 @@ public extension NumericTextFloat {
 
 // MARK: - Float16
 
-extension Float16: NumericTextFloat {
+extension Float16: NumberTextFloat {
     @inlinable public static var maxLosslessValue: Self { 999 }
     @inlinable public static var maxLosslessDigits: Int { 3 }
 }
 
 // MARK: - Float32
 
-extension Float32: NumericTextFloat {
+extension Float32: NumberTextFloat {
     @inlinable public static var maxLosslessValue: Self { 9_999_999 }
     @inlinable public static var maxLosslessDigits: Int { 7 }
 }
 
 // MARK: - Float64
 
-extension Float64: NumericTextFloat {
+extension Float64: NumberTextFloat {
     @inlinable public static var maxLosslessValue: Self { 999_999_999_999_999 }
     @inlinable public static var maxLosslessDigits: Int { 15 }
 }
