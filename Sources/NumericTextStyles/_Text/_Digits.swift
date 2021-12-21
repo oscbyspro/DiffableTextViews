@@ -41,10 +41,10 @@
     @usableFromInline static let decimals = Set<Character>("0123456789")
 }
 
-// MARK: - DigitParser
+// MARK: - DigitsParser
 
 #warning("WIP")
-@usableFromInline struct _DigitParser: _Parser {
+@usableFromInline struct _DigitsParser: _Parser {
     @usableFromInline typealias Output = _Digits
 
     // MARK: Properties
@@ -70,5 +70,5 @@
     
     // MARK: Instances: Static
     
-    @usableFromInline static let decimals = Self(digits: Output.decimals)
+    @usableFromInline static let standard = Self(digits: Output.decimals)
 }

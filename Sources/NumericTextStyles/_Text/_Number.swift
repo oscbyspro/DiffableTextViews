@@ -46,11 +46,11 @@ import struct Foundation.Locale
     
     // MARK: Properties
     
-    @usableFromInline let digits: _DigitParser
+    @usableFromInline let digits: _DigitsParser
     
     // MARK: Initializers
     
-    @inlinable init(digits: _DigitParser) {
+    @inlinable init(digits: _DigitsParser) {
         self.digits = digits
     }
     
@@ -68,7 +68,7 @@ import struct Foundation.Locale
     
     // MARK: Instances: Static
     
-    @usableFromInline static let decimal = Self(digits: .decimals)
+    @usableFromInline static let standard = Self(digits: .standard)
 }
 
 // MARK: - IntegerNumberParser
@@ -79,11 +79,11 @@ import struct Foundation.Locale
     // MARK: Properties
     
     @usableFromInline let sign: _SignParser
-    @usableFromInline let digits: _DigitParser
+    @usableFromInline let digits: _DigitsParser
     
     // MARK: Initializers
     
-    @inlinable init(sign: _SignParser, digits: _DigitParser) {
+    @inlinable init(sign: _SignParser, digits: _DigitsParser) {
         self.sign = sign
         self.digits = digits
     }
@@ -103,7 +103,7 @@ import struct Foundation.Locale
     
     // MARK: Instances: Static
     
-    @usableFromInline static let decimal = Self(sign: .negatives, digits: .decimals)
+    @usableFromInline static let standard = Self(sign: .standard, digits: .standard)
 }
 
 // MARK: - FloatingPointParser
@@ -115,12 +115,12 @@ import struct Foundation.Locale
     // MARK: Properties
     
     @usableFromInline let sign: _SignParser
-    @usableFromInline let digits: _DigitParser
+    @usableFromInline let digits: _DigitsParser
     @usableFromInline let separator: _SeparatorParser
     
     // MARK: Initializers
     
-    @inlinable init(sign: _SignParser, digits: _DigitParser, separator: _SeparatorParser) {
+    @inlinable init(sign: _SignParser, digits: _DigitsParser, separator: _SeparatorParser) {
         self.sign = sign
         self.digits = digits
         self.separator = separator
@@ -154,6 +154,6 @@ import struct Foundation.Locale
     
     // MARK: Instances: Static
     
-    @usableFromInline static let decimal = Self(sign: .negatives, digits: .decimals, separator: .dot)
+    @usableFromInline static let standard = Self(sign: .standard, digits: .standard, separator: .standard)
 }
 

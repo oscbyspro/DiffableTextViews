@@ -75,5 +75,5 @@ import struct Foundation.Locale
     
     // MARK: Instances: Static
     
-    @usableFromInline static let dot = Self(separators: [String(Output.dot)])
+    @usableFromInline static let standard = Self(separators: [String(Output.dot)])
 }

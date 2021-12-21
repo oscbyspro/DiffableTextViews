@@ -74,17 +74,5 @@
     
     // MARK: Instances: Static
     
-    #warning("Remove unnecessaty, maybe.")
-    @usableFromInline static let all = Self(
-        positives: [_Sign.positive.characters],
-        negatives: [_Sign.negative.characters])
-    
-    #warning("Remove unnecessaty, maybe.")
-    @usableFromInline static let positives = Self(
-        positives: [_Sign.positive.characters],
-        negatives: [])
-    
-    @usableFromInline static let negatives = Self(
-        positives: [],
-        negatives: [_Sign.negative.characters])
+    @usableFromInline static let standard = Self(positives: [], negatives: [_Sign.negative.characters])
 }

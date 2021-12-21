@@ -28,10 +28,10 @@ public extension _UsesIntegerPrecision {
     @inlinable static var maxLosslessDigitsInFraction: Int { 0 }
 }
 
-// MARK: - UsesFloatPrecision
+// MARK: - UsesFloatingPointPrecision
 
-public  protocol _UsesFloatPrecision: _Precise { }
-public extension _UsesFloatPrecision {
+public  protocol _UsesFloatingPointPrecision: _Precise { }
+public extension _UsesFloatingPointPrecision {
     
     // MARK: Implementations
 

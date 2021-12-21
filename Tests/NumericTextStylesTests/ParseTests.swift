@@ -12,6 +12,7 @@ import XCTest
 
 final class ParseTestsOfDigits: XCTestCase {
     typealias Subject = _Digits
+    typealias Parser = _DigitsParser
     
     // MARK: Setup
     
@@ -19,13 +20,11 @@ final class ParseTestsOfDigits: XCTestCase {
     let invalidL: String = ".1234"
     let invalidM: String = "12.34"
     let invalidT: String = "1234."
-    
-    let parser: Subject.Parser = .decimals
-    
+        
     // MARK: Helpers
 
     func make(_ characters: String) -> Subject? {
-        .init(characters: characters, parser: parser)
+        .init(characters: characters, parser: Parser.standard)
     }
     
     // MARK: Tests
@@ -42,6 +41,7 @@ final class ParseTestsOfDigits: XCTestCase {
 
 final class ParseTestsOfSeparator: XCTestCase {
     typealias Subject = _Separator
+    typealias Parser = _SeparatorParser
     
     // MARK: Setup
     
@@ -49,9 +49,9 @@ final class ParseTestsOfSeparator: XCTestCase {
     let comma = ","
     let dash  = "-"
     
-    let parser:   Subject.Parser = .dot
-    let parserSE: Subject.Parser = .dot.locale(Locale(identifier: "sv_SE"))
-    let parserUS: Subject.Parser = .dot.locale(Locale(identifier: "en_US"))
+    let parser:   Parser = .standard
+    let parserSE: Parser = .standard.locale(Locale(identifier: "sv_SE"))
+    let parserUS: Parser = .standard.locale(Locale(identifier: "en_US"))
 
     // MARK: Helpers
     
@@ -108,6 +108,7 @@ final class ParseTestsOfSeparator: XCTestCase {
 
 final class ParseTestsOfSign: XCTestCase {
     typealias Subject = _Sign
+    typealias Parser = _SignParser
     
     // MARK: Setup
     
@@ -119,57 +120,38 @@ final class ParseTestsOfSign: XCTestCase {
     // MARK: Helpers
     
     func components(_ characters: String) -> Components {
-        Components(
-            all:       Subject(characters: characters, parser: .all),
-            positives: Subject(characters: characters, parser: .positives),
-            negatives: Subject(characters: characters, parser: .negatives))
+        Components(standard: Subject(characters: characters, parser: Parser.standard))
     }
     
     // MARK: Tests
     
     func test_initialization() {
         components(plus).expectation {
-            Components(
-                all:       Subject.positive,
-                positives: Subject.positive,
-                negatives: nil)
+            Components(standard: nil)
         }
         
         components(minus).expectation {
-            Components(
-                all:       Subject.negative,
-                positives: nil,
-                negatives: Subject.negative)
+            Components(standard: Subject.negative)
         }
 
         components(none).expectation {
-            Components(
-                all:       Subject.none,
-                positives: Subject.none,
-                negatives: Subject.none)
+            Components(standard: Subject.none)
         }
 
         components(invalid).expectation {
-            Components(
-                all:       nil,
-                positives: nil,
-                negatives: nil)
+            Components(standard: nil)
         }
     }
     
     // MARK: Components
     
     struct Components {
-        let all: Subject?
-        let positives: Subject?
-        let negatives: Subject?
+        let standard: Subject?
         
         func expectation(_ expectation: () -> Self) {
             let expectation = expectation()
             
-            XCTAssertEqual(all?.characters,       expectation.all?.characters)
-            XCTAssertEqual(positives?.characters, expectation.positives?.characters)
-            XCTAssertEqual(negatives?.characters, expectation.negatives?.characters)
+            XCTAssertEqual(standard?.characters, expectation.standard?.characters)
         }
     }
 }
