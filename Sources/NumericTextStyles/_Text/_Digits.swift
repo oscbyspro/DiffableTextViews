@@ -60,7 +60,9 @@
     // MARK: Parse
     
     @inlinable func parse<C: Collection>(characters: C, index: inout C.Index, storage: inout Output) where C.Element == Character {
-        for character in characters[index...] {
+        while index < characters.endIndex {
+            let character = characters[index]
+            
             guard digits.contains(character) else { break }
             
             storage.append(character)

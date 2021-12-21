@@ -58,11 +58,11 @@
         
         func parse(_ signs: [String], success: Output) -> Bool {
             for sign in signs {
-                guard subsequence.starts(with: sign) else { continue }
-                
-                storage = success
-                characters.formIndex(&index, offsetBy: sign.count)
-                return true
+                if subsequence.starts(with: sign) {
+                    storage = success
+                    characters.formIndex(&index, offsetBy: sign.count)
+                    return true
+                }
             }
             
             return false

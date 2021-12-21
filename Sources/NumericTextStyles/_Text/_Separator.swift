@@ -65,11 +65,11 @@ import struct Foundation.Locale
         let subsequence = characters[index...]
         
         for separator in separators {
-            guard subsequence.starts(with: separator) else { continue }
-            
-            storage = Output(characters: String(Output.dot))
-            characters.formIndex(&index, offsetBy: separator.count)
-            break
+            if subsequence.starts(with: separator) {
+                storage = Output(characters: String(Output.dot))
+                characters.formIndex(&index, offsetBy: separator.count)
+                return
+            }
         }
     }
     
