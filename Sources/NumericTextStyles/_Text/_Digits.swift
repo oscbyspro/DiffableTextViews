@@ -39,7 +39,8 @@
 
 #warning("WIP")
 @usableFromInline struct _DigitParser: _Parser {
-    
+    @usableFromInline typealias Output = _Digits
+
     // MARK: Properties
     
     @usableFromInline let digits: Set<Character>
@@ -52,7 +53,7 @@
     
     // MARK: Parse
     
-    @inlinable func parse<C: Collection>(_ characters: C, from index: inout C.Index, into storage: inout _Digits) where C.Element == Character {
+    @inlinable func parse<C: Collection>(_ characters: C, from index: inout C.Index, into storage: inout Output) where C.Element == Character {
         for character in characters[index...] {
             guard digits.contains(character) else { return }
             

@@ -33,7 +33,8 @@
 
 #warning("WIP")
 @usableFromInline struct _SignParser: _Parser {
-    
+    @usableFromInline typealias Output = _Sign
+
     // MARK: Properties
     
     @usableFromInline let positives: [String]
@@ -48,7 +49,7 @@
     
     // MARK: Parse
     
-    @inlinable func parse<C: Collection>(_ characters: C, from index: inout C.Index, into storage: inout _Sign) where C.Element == Character {
+    @inlinable func parse<C: Collection>(_ characters: C, from index: inout C.Index, into storage: inout Output) where C.Element == Character {
         let subsequence = characters[index...]
                 
         func parse(_ signs: [String], success: _Sign) -> Bool {

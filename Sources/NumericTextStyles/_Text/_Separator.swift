@@ -5,7 +5,7 @@
 //  Created by Oscar Byström Ericsson on 2021-12-20.
 //
 
-import Foundation
+import struct Foundation.Locale
 
 // MARK: - Separator
 
@@ -35,7 +35,8 @@ import Foundation
 
 #warning("WIP")
 @usableFromInline struct _SeparatorParser: _Parser {
-    
+    @usableFromInline typealias Output = _Separator
+
     // MARK: Properties
     
     @usableFromInline let separators: [String]
@@ -46,12 +47,18 @@ import Foundation
         self.separators = separators
     }
     
+    // MARK: Transformations
+    
+    @inlinable func locale(_ locale: Locale) -> _SeparatorParser {
+        .init(separators: separators + [locale.decimalSeparator].compactMap({ $0 }))
+    }
+    
     // MARK: Parse
     
-    @inlinable func parse<C: Collection>(_ characters: C, from index: inout C.Index, into storage: inout _Separator) where C.Element == Character {
+    @inlinable func parse<C: Collection>(_ characters: C, from index: inout C.Index, into storage: inout Output) where C.Element == Character {
         let subsequence = characters[index...]
         
-        for separator in separators {
+        for separator in separators.reversed() {
             guard subsequence.starts(with: separator) else { continue }
             
             storage = .dot
@@ -63,8 +70,4 @@ import Foundation
     // MARK: Instances: Static
     
     @usableFromInline static let dot = Self(separators: [_Separator.dot.characters])
-    
-    @inlinable static func localized(in locale: Locale) -> Self {
-        .init(separators: [locale.decimalSeparator, _Separator.dot.characters].compactMap({ $0 }))
-    }
 }
