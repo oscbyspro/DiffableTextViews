@@ -9,7 +9,6 @@
 
 #warning("WIP")
 @usableFromInline enum _Sign: String, _Text {
-    @usableFromInline typealias Parser = _SignParser
     
     // MARK: Cases
     
@@ -31,12 +30,6 @@
     
     @inlinable @inline(__always) var characters: String {
         rawValue
-    }
-    
-    // MARK: Parsers: Static
-
-    @inlinable @inline(__always) static var parser: Parser {
-        .negatives
     }
 }
 
@@ -81,10 +74,12 @@
     
     // MARK: Instances: Static
     
+    #warning("Remove unnecessaty, maybe.")
     @usableFromInline static let all = Self(
         positives: [_Sign.positive.characters],
         negatives: [_Sign.negative.characters])
     
+    #warning("Remove unnecessaty, maybe.")
     @usableFromInline static let positives = Self(
         positives: [_Sign.positive.characters],
         negatives: [])

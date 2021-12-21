@@ -17,21 +17,6 @@ public protocol _Precise {
     @inlinable static var maxLosslessDigitsInFraction: Int { get }
 }
 
-// MARK: - Utilities
-
-extension _Precise {
-    
-    // MARK: Descriptions
-    
-    @inlinable static var isInteger: Bool {
-        maxLosslessDigitsInFraction <= 0
-    }
-    
-    @inlinable static var isFractional: Bool {
-        maxLosslessDigitsInFraction >= 1
-    }
-}
-
 // MARK: - UsesIntegerPrecision
 
 public  protocol _UsesIntegerPrecision: _Precise { }

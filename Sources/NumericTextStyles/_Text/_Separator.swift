@@ -11,7 +11,6 @@ import struct Foundation.Locale
 
 #warning("WIP")
 @usableFromInline struct _Separator: _Text {
-    @usableFromInline typealias Parser = _SeparatorParser
     
     // MARK: Properties
     
@@ -32,16 +31,9 @@ import struct Foundation.Locale
     @inlinable var isEmpty: Bool {
         characters.isEmpty
     }
-
-    // MARK: Parsers: Static
-
-    @inlinable @inline(__always) static var parser: Parser {
-        .dot
-    }
     
     // MARK: Characters: Static
     
-    #warning("String, maybe.")
     @usableFromInline static let dot: Character = "."
 }
 

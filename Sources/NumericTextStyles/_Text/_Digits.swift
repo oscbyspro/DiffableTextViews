@@ -9,7 +9,6 @@
 
 #warning("WIP")
 @usableFromInline struct _Digits: _Text {
-    @usableFromInline typealias Parser = _DigitParser
     
     // MARK: Properties
     
@@ -34,12 +33,6 @@
     @inlinable mutating func append(_ character: Character) {
         characters.append(character)
         count += 1
-    }
-    
-    // MARK: Parsers: Static
-
-    @inlinable @inline(__always) static var parser: Parser {
-        .decimals
     }
     
     // MARK: Characters: Static
