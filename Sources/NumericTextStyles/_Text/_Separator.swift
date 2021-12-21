@@ -33,7 +33,7 @@ import struct Foundation.Locale
     
     // MARK: Parsers: Static
 
-    @usableFromInline static var parser: Parser { .dot }
+    @inlinable static var parser: Parser { .dot }
 }
 
 // MARK: - SeparatorParser
