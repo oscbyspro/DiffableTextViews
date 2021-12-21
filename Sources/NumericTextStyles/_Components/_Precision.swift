@@ -1,5 +1,5 @@
 //
-//  File.swift
+//  Precision.swift
 //  
 //
 //  Created by Oscar Byström Ericsson on 2021-12-21.
@@ -51,7 +51,7 @@ public struct _Precision<Value: _Precise> {
     
     // MARK: Editable: Validation
     
-    @inlinable func editableValidationWithCapacity(count: _Count) -> _Count? {
+    @inlinable func editableValidationThatGeneratesCapacity(count: _Count) -> _Count? {
         implementation.editableValidationThatGeneratesCapacity(count: count)
     }
 }
@@ -63,7 +63,7 @@ public extension _Precision {
     // MARK: Special
     
     @inlinable static var max: Self {
-        .max(Value.maxLosslessDigits)
+        .max(Value.maxLosslessTotalDigits)
     }
     
     // MARK: Expressions
@@ -104,11 +104,11 @@ public extension _Precision where Value: _UsesFloatingPointPrecision {
     }
     
     @inlinable static func max(integer: Int) -> Self {
-        .max(integer: integer, fraction: Value.maxLosslessDigits - integer)
+        .max(integer: integer, fraction: Value.maxLosslessTotalDigits - integer)
     }
     
     @inlinable static func max(fraction: Int) -> Self {
-        .max(integer: Value.maxLosslessDigits - fraction, fraction: fraction)
+        .max(integer: Value.maxLosslessTotalDigits - fraction, fraction: fraction)
     }
 }
 
@@ -135,9 +135,9 @@ public extension _Precision where Value: _UsesFloatingPointPrecision {
     // MARK: Initializers
     
     @inlinable init<R: RangeExpression>(total: R) where R.Bound == Int {
-        self.total = ClosedRange(total.relative(to: 0 ..< Value.maxLosslessDigits + 1))
+        self.total = ClosedRange(total.relative(to: 0 ..< Value.maxLosslessTotalDigits + 1))
         
-        precondition(self.total.upperBound <= Value.maxLosslessDigits, "Precision: max \(Value.maxLosslessDigits).")
+        precondition(self.total.upperBound <= Value.maxLosslessTotalDigits, "Precision: max \(Value.maxLosslessTotalDigits).")
     }
     
     // MARK: Utilities
@@ -147,7 +147,7 @@ public extension _Precision where Value: _UsesFloatingPointPrecision {
     }
     
     @inlinable func editableValidationThatGeneratesCapacity(count: _Count) -> _Count? {
-        let sharedCapacity = total.upperBound - count.integer - count.fraction
+        let sharedCapacity = total.upperBound - count.total
         guard sharedCapacity >= 0 else { return nil }
 
         return .init(integer: sharedCapacity, fraction: sharedCapacity)
@@ -170,7 +170,7 @@ public extension _Precision where Value: _UsesFloatingPointPrecision {
         self.fraction = ClosedRange(integer.relative(to: 0 ..< Value.maxLosslessFractionDigits + 1))
 
         let total = self.fraction.lowerBound + self.integer.lowerBound
-        precondition(total <= Value.maxLosslessDigits, "Precision: max \(Value.maxLosslessDigits).")
+        precondition(total <= Value.maxLosslessTotalDigits, "Precision: max \(Value.maxLosslessTotalDigits).")
     }
     
     @inlinable init<R: RangeExpression>(integer: R) where R.Bound == Int {
@@ -188,7 +188,7 @@ public extension _Precision where Value: _UsesFloatingPointPrecision {
     }
     
     @inlinable func editableValidationThatGeneratesCapacity(count: _Count) -> _Count? {
-        guard Value.maxLosslessDigits - count.integer - count.fraction >= 0 else { return nil }
+        guard Value.maxLosslessTotalDigits - count.total >= 0 else { return nil }
         
         let integerCapacity = integer.upperBound - count.integer
         guard integerCapacity >= 0 else { return nil }

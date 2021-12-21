@@ -14,7 +14,7 @@ import enum Foundation.NumberFormatStyleConfiguration
 /// Numeric text value protocol for ordinary floats.
 /// 
 /// - Range: ±Self.maxLosslessValue.
-/// - Significands: Self.maxLosslessDigits.
+/// - Significands: Self.maxLosslessTotalDigits.
 ///
 public protocol NumberTextFloat: NumberTextValue, PreciseFloat, BinaryFloatingPoint {
     @inlinable init?(_ description: String)

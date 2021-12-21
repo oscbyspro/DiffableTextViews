@@ -20,4 +20,10 @@
         self.integer = integer
         self.fraction = fraction
     }
+    
+    // MARK: Getters
+    
+    @inlinable var total: Int {
+        integer + fraction
+    }
 }
