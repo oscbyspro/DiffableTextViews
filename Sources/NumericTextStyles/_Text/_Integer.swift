@@ -15,8 +15,8 @@ import struct Foundation.Locale
 
     // MARK: Properties
     
-    @usableFromInline let sign: _Sign
-    @usableFromInline let digits: _Digits
+    @usableFromInline var sign: _Sign
+    @usableFromInline var digits: _Digits
     
     // MARK: Initializers
     
@@ -26,6 +26,10 @@ import struct Foundation.Locale
     }
     
     // MARK: Getters
+    
+    @inlinable var isEmpty: Bool {
+        sign.isEmpty && digits.isEmpty
+    }
     
     @inlinable var characters: String {
         sign.characters + digits.characters
@@ -62,11 +66,11 @@ import struct Foundation.Locale
     
     // MARK: Parse
     
-    #warning("WIP")
-    @inlinable func parse<C: Collection>(_ characters: C, from index: inout C.Index, into storage: inout Output) where C.Element == Character {
-        fatalError()
+    @inlinable func parse<C: Collection>(characters: C, index: inout C.Index, storage: inout Output) where C.Element == Character {
+        sign.parse(characters: characters, index: &index, storage: &storage.sign)
+        digits.parse(characters: characters, index: &index, storage: &storage.digits)
     }
-    
+
     // MARK: Instances: Static
     
     @usableFromInline static let decimal = Self(sign: .negatives, digits: .decimals)

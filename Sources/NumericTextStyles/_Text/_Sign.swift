@@ -22,14 +22,22 @@
     @inlinable init() {
         self = .none
     }
-    
+        
     // MARK: Getters
     
-    @inlinable @inline(__always) var characters: String { rawValue }
+    @inlinable var isEmpty: Bool {
+        self == .none
+    }
+    
+    @inlinable @inline(__always) var characters: String {
+        rawValue
+    }
     
     // MARK: Parsers: Static
 
-    @inlinable @inline(__always) static var parser: Parser { .negatives }
+    @inlinable @inline(__always) static var parser: Parser {
+        .negatives
+    }
 }
 
 // MARK: - SignParser
@@ -52,10 +60,10 @@
     
     // MARK: Parse
     
-    @inlinable func parse<C: Collection>(_ characters: C, from index: inout C.Index, into storage: inout Output) where C.Element == Character {
+    @inlinable func parse<C: Collection>(characters: C, index: inout C.Index, storage: inout Output) where C.Element == Character {
         let subsequence = characters[index...]
-                
-        func parse(_ signs: [String], success: _Sign) -> Bool {
+        
+        func parse(_ signs: [String], success: Output) -> Bool {
             for sign in signs {
                 guard subsequence.starts(with: sign) else { continue }
                 

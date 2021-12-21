@@ -17,6 +17,10 @@
     /// Creates an empty instance.
     @inlinable init()
     
+    #warning("Currently unused.")
+    /// A Boolean value indicating whether the text is empty.
+    @inlinable var isEmpty: Bool { get }
+    
     /// String representation of the instance.
     @inlinable var characters: String { get }
     

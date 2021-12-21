@@ -22,18 +22,27 @@ import struct Foundation.Locale
     @inlinable init() {
         self.characters = ""
     }
-    
+
     @inlinable init(characters: String) {
         self.characters = characters
     }
     
-    // MARK: Instances: Static
+    // MARK: Getters
     
-    @usableFromInline static let dot = Self(characters: ".")
-    
+    @inlinable var isEmpty: Bool {
+        characters.isEmpty
+    }
+
     // MARK: Parsers: Static
 
-    @inlinable @inline(__always) static var parser: Parser { .dot }
+    @inlinable @inline(__always) static var parser: Parser {
+        .dot
+    }
+    
+    // MARK: Characters: Static
+    
+    #warning("String, maybe.")
+    @usableFromInline static let dot: Character = "."
 }
 
 // MARK: - SeparatorParser
@@ -60,19 +69,19 @@ import struct Foundation.Locale
     
     // MARK: Parse
     
-    @inlinable func parse<C: Collection>(_ characters: C, from index: inout C.Index, into storage: inout Output) where C.Element == Character {
+    @inlinable func parse<C: Collection>(characters: C, index: inout C.Index, storage: inout Output) where C.Element == Character {
         let subsequence = characters[index...]
         
-        for separator in separators.reversed() {
+        for separator in separators {
             guard subsequence.starts(with: separator) else { continue }
             
-            storage = .dot
+            storage = Output(characters: String(Output.dot))
             characters.formIndex(&index, offsetBy: separator.count)
-            return
+            break
         }
     }
     
     // MARK: Instances: Static
     
-    @usableFromInline static let dot = Self(separators: [Output.dot.characters])
+    @usableFromInline static let dot = Self(separators: [String(Output.dot)])
 }

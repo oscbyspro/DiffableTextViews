@@ -23,6 +23,12 @@
         self.count = 0
     }
     
+    // MARK: Getters
+    
+    @inlinable var isEmpty: Bool {
+        characters.isEmpty
+    }
+    
     // MARK: Transformations
     
     @inlinable mutating func append(_ character: Character) {
@@ -58,9 +64,9 @@
     
     // MARK: Parse
     
-    @inlinable func parse<C: Collection>(_ characters: C, from index: inout C.Index, into storage: inout Output) where C.Element == Character {
+    @inlinable func parse<C: Collection>(characters: C, index: inout C.Index, storage: inout Output) where C.Element == Character {
         for character in characters[index...] {
-            guard digits.contains(character) else { return }
+            guard digits.contains(character) else { break }
             
             storage.append(character)
             characters.formIndex(after: &index)

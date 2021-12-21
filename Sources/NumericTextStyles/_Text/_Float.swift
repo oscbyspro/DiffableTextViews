@@ -15,10 +15,10 @@ import struct Foundation.Locale
     
     // MARK: Properties
     
-    @usableFromInline let sign: _Sign
-    @usableFromInline let integer: _Digits
-    @usableFromInline let separator: _Separator
-    @usableFromInline let fraction: _Digits
+    @usableFromInline var sign: _Sign
+    @usableFromInline var integer: _Digits
+    @usableFromInline var separator: _Separator
+    @usableFromInline var fraction: _Digits
     
     // MARK: Initializers
     
@@ -31,13 +31,19 @@ import struct Foundation.Locale
     
     // MARK: Getters
     
+    @inlinable var isEmpty: Bool {
+        sign.isEmpty && integer.isEmpty && separator.isEmpty && fraction.isEmpty
+    }
+    
     @inlinable var characters: String {
         sign.characters + integer.characters + separator.characters + fraction.characters
     }
     
     // MARK: Parsers: Static
 
-    @inlinable @inline(__always) static var parser: Parser { .decimal }
+    @inlinable @inline(__always) static var parser: Parser {
+        .decimal
+    }
 }
 
 // MARK: - FloatParser
@@ -72,9 +78,11 @@ import struct Foundation.Locale
     
     // MARK: Parse
     
-    #warning("WIP")
-    @inlinable func parse<C: Collection>(_ characters: C, from index: inout C.Index, into storage: inout Output) where C.Element == Character {
-        fatalError()
+    @inlinable func parse<C: Collection>(characters: C, index: inout C.Index, storage: inout Output) where C.Element == Character {
+        sign.parse(characters: characters, index: &index, storage: &storage.sign)
+        digits.parse(characters: characters, index: &index, storage: &storage.integer)
+        separator.parse(characters: characters, index: &index, storage: &storage.separator)
+        digits.parse(characters: characters, index: &index, storage: &storage.fraction)
     }
     
     // MARK: Instances: Static
