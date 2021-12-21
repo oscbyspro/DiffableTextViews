@@ -1,14 +1,14 @@
 //
-//  FloatingPointComponents.swift
+//  Float.swift
 //  
 //
 //  Created by Oscar Byström Ericsson on 2021-12-20.
 //
 
-// MARK: - FloatingPointComponents
+// MARK: - Float
 
 #warning("WIP")
-@usableFromInline struct _FloatingPointComponents: _Components {
+@usableFromInline struct _Float: _Text {
     
     // MARK: Properties
     
@@ -32,3 +32,8 @@
         sign.characters + integer.characters + separator.characters + fraction.characters
     }
 }
+
+// MARK: - FloatingPointComponentsParser
+
+#warning("WIP")
+@usableFromInline struct _FloatParser { }

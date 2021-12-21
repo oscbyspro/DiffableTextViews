@@ -8,8 +8,7 @@
 // MARK: - Component
 
 #warning("WIP")
-
-@usableFromInline protocol Component {
+@usableFromInline protocol _Text {
     
     // MARK: Requirements
     

@@ -8,7 +8,7 @@
 // MARK: - Digits
 
 #warning("WIP")
-@usableFromInline struct _Digits: Component {
+@usableFromInline struct _Digits: _Text {
     
     // MARK: Properties
     
@@ -33,4 +33,35 @@
     
     @usableFromInline static let zero: Character = "0"
     @usableFromInline static let decimals = Set<Character>("0123456789")
+}
+
+// MARK: - DigitParser
+
+#warning("WIP")
+@usableFromInline struct _DigitParser: _Parser {
+    
+    // MARK: Properties
+    
+    @usableFromInline let digits: Set<Character>
+    
+    // MARK: Initializers
+    
+    @inlinable init(digits: Set<Character>) {
+        self.digits = digits
+    }
+    
+    // MARK: Parse
+    
+    @inlinable func parse<C: Collection>(_ characters: C, from index: inout C.Index, into storage: inout _Digits) where C.Element == Character {
+        for character in characters[index...] {
+            guard digits.contains(character) else { return }
+            
+            storage.append(character)
+            characters.formIndex(after: &index)
+        }
+    }
+    
+    // MARK: Instances: Static
+    
+    @usableFromInline static let decimals = Self(digits: _Digits.decimals)
 }

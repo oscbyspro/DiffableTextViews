@@ -22,7 +22,7 @@ extension Character: Scheme {
     // MARK: Implementation
 
     @inlinable static func size(of character: Character) -> Int { 1 }
-    @inlinable static func size(of characters: String) -> Int { characters.count }
+    @inlinable static func size(of characters:   String) -> Int { characters.count }
 }
 
 // MARK: - UTF8
