@@ -37,7 +37,7 @@ import struct Foundation.Locale
     
     // MARK: Parsers: Static
 
-    @inlinable static var parser: Parser { .decimal }
+    @inlinable @inline(__always) static var parser: Parser { .decimal }
 }
 
 // MARK: - FloatParser

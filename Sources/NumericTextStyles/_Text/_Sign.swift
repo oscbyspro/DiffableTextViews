@@ -25,13 +25,11 @@
     
     // MARK: Getters
     
-    @inlinable @inline(__always) var characters: String {
-        rawValue
-    }
+    @inlinable @inline(__always) var characters: String { rawValue }
     
     // MARK: Parsers: Static
 
-    @inlinable static var parser: Parser { .negatives }
+    @inlinable @inline(__always) static var parser: Parser { .negatives }
 }
 
 // MARK: - SignParser
