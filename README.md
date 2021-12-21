@@ -10,7 +10,7 @@ This package contains views that use snapshots and attributes to process a user'
 ### DiffableTextField
 
 # Styles
-### NumericTextStyle
+### NumberTextStyle
 
 # Usage
 
@@ -26,7 +26,7 @@ struct Example: View {
     
     var body: some View {
         DiffableTextField($amount) {
-            .numeric.locale(locale).suffix(locale.currencyCode)
+            .number.locale(locale).suffix(locale.currencyCode)
             .bounds(.values(in: 0...1_000_000 as ClosedRange<Decimal>))
             .precision(.digits(integer: 1..., fraction: 2...2))
         }
