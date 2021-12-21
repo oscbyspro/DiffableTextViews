@@ -10,6 +10,7 @@ import struct Foundation.Locale
 // MARK: - Integer
 
 #warning("WIP")
+#warning("Remove, maybe.")
 @usableFromInline struct _Integer: _Text {
     @usableFromInline typealias Parser = _IntegerParser
 

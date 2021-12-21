@@ -11,12 +11,13 @@ import enum Foundation.NumberFormatStyleConfiguration
 
 // MARK: - Formattable
 
+#warning("WIP")
 public protocol _Formattable {
     
     // MARK: Requirements
     
     associatedtype FormatStyle: Foundation.FormatStyle where FormatStyle.FormatInput == Self, FormatStyle.FormatOutput == String
-    
+        
     /// Interprets a system description of this type and returns an instance of it the description is valid, else it returns nil.
     ///
     /// System formatted means that fraction separators appear as dots and positive/negative signs appear as single character plus/minus prefixes, etc.

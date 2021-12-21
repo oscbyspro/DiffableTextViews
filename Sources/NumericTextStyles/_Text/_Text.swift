@@ -21,6 +21,7 @@
     /// A Boolean value indicating whether the instance  is empty.
     @inlinable var isEmpty: Bool { get }
     
+    #warning("Should probably be a func since there is no O(1) guarantee.")
     /// A sytem representation of the instance.
     @inlinable var characters: String { get }
     

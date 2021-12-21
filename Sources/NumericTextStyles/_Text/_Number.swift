@@ -1,18 +1,18 @@
 //
-//  Float.swift
+//  Number.swift
 //  
 //
-//  Created by Oscar Byström Ericsson on 2021-12-20.
+//  Created by Oscar Byström Ericsson on 2021-12-21.
 //
 
 import struct Foundation.Locale
+import protocol Utilities.Transformable
 
-// MARK: - Float
+// MARK: - Number
 
 #warning("WIP")
-#warning("Remove, maybe.")
-@usableFromInline struct _Float: _Text {
-    @usableFromInline typealias Parser = _FloatParser
+@usableFromInline struct _Number: _Text, Transformable {
+    @usableFromInline typealias Parser = _NumberParser
     
     // MARK: Properties
     
@@ -40,18 +40,65 @@ import struct Foundation.Locale
         sign.characters + integer.characters + separator.characters + fraction.characters
     }
     
+    // MARK: Utilities: Options
+    
+    #warning("Unused.")
+    @inlinable func validate(with options: Options) -> Bool {
+        if options.contains(.unsigned) {
+            if !sign.isEmpty { return false }
+        }
+        
+        if options.contains(.integer) {
+            if !separator.isEmpty, !fraction.isEmpty { return false }
+        }
+        
+        return true
+    }
+    
     // MARK: Parsers: Static
 
     @inlinable @inline(__always) static var parser: Parser {
         .decimal
     }
+    
+    // MARK: Components
+    
+    @usableFromInline struct Options: OptionSet {
+        
+        // MARK: Properties
+        
+        @usableFromInline var rawValue: UInt8
+        
+        // MARK: Initializers
+        
+        @inlinable init(rawValue: UInt8) {
+            self.rawValue = rawValue
+        }
+        
+        @inlinable init<Value: Boundable & Precise>(bounds: _Bounds<Value>, precision: _Precision<Value>) {
+            self.init()
+            
+            if bounds.lowerBound >= Value.zero {
+                insert(.unsigned)
+            }
+            
+            if precision.fraction <= Int.zero {
+                insert(.integer)
+            }
+        }
+        
+        // MARK: Instances: Singular
+        
+        @usableFromInline static let unsigned = Self(rawValue: 1 << 0)
+        @usableFromInline static let integer  = Self(rawValue: 1 << 1)
+    }
 }
 
-// MARK: - FloatParser
+// MARK: - NumberParser
 
 #warning("WIP")
-@usableFromInline struct _FloatParser: _Parser {
-    @usableFromInline typealias Output = _Float
+@usableFromInline struct _NumberParser: _Parser {
+    @usableFromInline typealias Output = _Number
     
     // MARK: Properties
     
@@ -72,7 +119,7 @@ import struct Foundation.Locale
     @inlinable func locale(_ locale: Locale) -> Self {
         .init(sign: sign.locale(locale), digits: digits.locale(locale), separator: separator.locale(locale))
     }
-    
+
     // MARK: Parse
     
     @inlinable func parse<C: Collection>(characters: C, index: inout C.Index, storage: inout Output) where C.Element == Character {
@@ -97,3 +144,4 @@ import struct Foundation.Locale
     
     @usableFromInline static let decimal = Self(sign: .negatives, digits: .decimals, separator: .dot)
 }
+
