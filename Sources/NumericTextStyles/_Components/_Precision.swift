@@ -9,6 +9,7 @@ import enum Foundation.NumberFormatStyleConfiguration
 
 // MARK: - Precision
 
+/// - Note: Lower precision bounds are enforced only when the view is idle.
 public struct _Precision<Value: _Precise> {
     @usableFromInline typealias Defaults = _PrecisionDefaults
     @usableFromInline typealias Total = _PrecisionTotal<Value>

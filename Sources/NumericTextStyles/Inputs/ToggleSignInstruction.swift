@@ -10,6 +10,7 @@ import struct DiffableTextViews.Snapshot
 // MARK: - ToggleSignInstruction
 
 #warning("Needs rework or be removed.")
+#warning("Rename: ToggleSignInput, maybe.")
 @usableFromInline struct ToggleSignInstruction {
 
     // MARK: Properties
