@@ -33,25 +33,25 @@ public struct _Precision<Value: _Precise> {
     // MARK: Editable: Styles
     
     @inlinable func editableStyle() -> NumberFormatStyleConfiguration.Precision {
-        let integer = Defaults.integerLowerBound...Value.maxLosslessDigitsInInteger
-        let fraction = Defaults.fractionLowerBound...Value.maxLosslessDigitsInFraction
+        let integer = Defaults.integerLowerBound...Value.maxLosslessIntegerDigits
+        let fraction = Defaults.fractionLowerBound...Value.maxLosslessFractionDigits
         
         return .integerAndFractionLength(integerLimits: integer, fractionLimits: fraction)
     }
     
-    @inlinable func editableStyle(_ digits: NumberOfDigits) -> NumberFormatStyleConfiguration.Precision {
-        let upperUpperBound = Swift.max(Defaults.integerLowerBound, digits.integer)
-        let lowerLowerBound = Swift.max(Defaults.fractionLowerBound, digits.fraction)
-                
-        let upper = Defaults.integerLowerBound...upperUpperBound
-        let lower =          lowerLowerBound...lowerLowerBound
+    @inlinable func editableStyle(_ count: _Count) -> NumberFormatStyleConfiguration.Precision {
+        let integerUpperBound = Swift.max(Defaults.integerLowerBound, count.integer)
+        let integer = Defaults.integerLowerBound...integerUpperBound
         
-        return .integerAndFractionLength(integerLimits: upper, fractionLimits: lower)
+        let fractionLowerBound = Swift.max(Defaults.fractionLowerBound, count.fraction)
+        let fraction = fractionLowerBound...fractionLowerBound
+        
+        return .integerAndFractionLength(integerLimits: integer, fractionLimits: fraction)
     }
     
     // MARK: Editable: Validation
     
-    @inlinable func editableValidationWithCapacity(count: NumberOfDigits) -> NumberOfDigits? {
+    @inlinable func editableValidationWithCapacity(count: _Count) -> _Count? {
         implementation.editableValidationThatGeneratesCapacity(count: count)
     }
 }
@@ -75,7 +75,7 @@ public extension _Precision {
     // MARK: Subexpressions
     
     @inlinable static func max(_ total: Int) -> Self {
-        digits(Defaults.digitsLowerBound...total)
+        digits(Defaults.totalLowerBound...total)
     }
 }
 
@@ -121,7 +121,7 @@ public extension _Precision where Value: _UsesFloatingPointPrecision {
         
     @inlinable func showcaseStyle() -> NumberFormatStyleConfiguration.Precision
         
-    @inlinable func editableValidationThatGeneratesCapacity(count: NumberOfDigits) -> NumberOfDigits?
+    @inlinable func editableValidationThatGeneratesCapacity(count: _Count) -> _Count?
 }
 
 // MARK: - Implementations: Total
@@ -146,11 +146,11 @@ public extension _Precision where Value: _UsesFloatingPointPrecision {
         .significantDigits(total)
     }
     
-    @inlinable func editableValidationThatGeneratesCapacity(count: NumberOfDigits) -> NumberOfDigits? {
+    @inlinable func editableValidationThatGeneratesCapacity(count: _Count) -> _Count? {
         let sharedCapacity = total.upperBound - count.integer - count.fraction
         guard sharedCapacity >= 0 else { return nil }
 
-        return NumberOfDigits(integer: sharedCapacity, fraction: sharedCapacity)
+        return .init(integer: sharedCapacity, fraction: sharedCapacity)
     }
 }
 
@@ -160,14 +160,14 @@ public extension _Precision where Value: _UsesFloatingPointPrecision {
 
     // MARK: Properties
     
-    @usableFromInline let integer: ClosedRange<Int>
+    @usableFromInline let integer:  ClosedRange<Int>
     @usableFromInline let fraction: ClosedRange<Int>
 
     // MARK: Initializers
     
     @inlinable init<R0: RangeExpression, R1: RangeExpression>(integer: R0, fraction: R1) where R0.Bound == Int, R1.Bound == Int {
-        self.integer  = ClosedRange(integer.relative(to: 0 ..< Value.maxLosslessDigitsInInteger  + 1))
-        self.fraction = ClosedRange(integer.relative(to: 0 ..< Value.maxLosslessDigitsInFraction + 1))
+        self.integer  = ClosedRange(integer.relative(to: 0 ..< Value.maxLosslessIntegerDigits  + 1))
+        self.fraction = ClosedRange(integer.relative(to: 0 ..< Value.maxLosslessFractionDigits + 1))
 
         let total = self.fraction.lowerBound + self.integer.lowerBound
         precondition(total <= Value.maxLosslessDigits, "Precision: max \(Value.maxLosslessDigits).")
@@ -187,7 +187,7 @@ public extension _Precision where Value: _UsesFloatingPointPrecision {
         .integerAndFractionLength(integerLimits: integer, fractionLimits: fraction)
     }
     
-    @inlinable func editableValidationThatGeneratesCapacity(count: NumberOfDigits) -> NumberOfDigits? {
+    @inlinable func editableValidationThatGeneratesCapacity(count: _Count) -> _Count? {
         guard Value.maxLosslessDigits - count.integer - count.fraction >= 0 else { return nil }
         
         let integerCapacity = integer.upperBound - count.integer
@@ -196,15 +196,14 @@ public extension _Precision where Value: _UsesFloatingPointPrecision {
         let fractionCapacity = fraction.upperBound - count.fraction
         guard fractionCapacity >= 0 else { return nil }
         
-        return NumberOfDigits(integer: integerCapacity, fraction: fractionCapacity)
+        return .init(integer: integerCapacity, fraction: fractionCapacity)
     }
 }
 
 // MARK: - Defaults
 
 @usableFromInline enum _PrecisionDefaults {
-    @usableFromInline static let digitsLowerBound: Int = 1
+    @usableFromInline static let totalLowerBound: Int = 1
     @usableFromInline static let integerLowerBound: Int = 1
     @usableFromInline static let fractionLowerBound: Int = 0
 }
-

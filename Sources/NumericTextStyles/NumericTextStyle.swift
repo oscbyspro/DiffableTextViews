@@ -100,7 +100,7 @@ extension NumericTextStyle {
         Value.style(locale: locale, precision: precision.editableStyle(), separator: .automatic)
     }
     
-    @inlinable func editableStyle(digits: NumberOfDigits, separator: Bool) -> Value.FormatStyle {
+    @inlinable func editableStyle(digits: _Count, separator: Bool) -> Value.FormatStyle {
         Value.style(locale: locale, precision: precision.editableStyle(digits), separator: separator ? .always : .automatic)
     }
 }

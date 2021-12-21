@@ -7,7 +7,7 @@
 
 // MARK: - NumberOfDigits
 
-@usableFromInline struct NumberOfDigits {
+@usableFromInline struct _Count {
     
     // MARK: Properties
     

@@ -13,8 +13,8 @@ public protocol _Precise {
     // MARK: Requirements
     
     @inlinable static var maxLosslessDigits: Int { get }
-    @inlinable static var maxLosslessDigitsInInteger: Int { get }
-    @inlinable static var maxLosslessDigitsInFraction: Int { get }
+    @inlinable static var maxLosslessIntegerDigits:  Int { get }
+    @inlinable static var maxLosslessFractionDigits: Int { get }
 }
 
 // MARK: - UsesIntegerPrecision
@@ -24,8 +24,8 @@ public extension _UsesIntegerPrecision {
     
     // MARK: Implementations
     
-    @inlinable static var maxLosslessDigitsInInteger:  Int { maxLosslessDigits }
-    @inlinable static var maxLosslessDigitsInFraction: Int { 0 }
+    @inlinable static var maxLosslessIntegerDigits:  Int { maxLosslessDigits }
+    @inlinable static var maxLosslessFractionDigits: Int { 0 }
 }
 
 // MARK: - UsesFloatingPointPrecision
@@ -35,6 +35,6 @@ public extension _UsesFloatingPointPrecision {
     
     // MARK: Implementations
 
-    @inlinable static var maxLosslessDigitsInInteger:  Int { maxLosslessDigits }
-    @inlinable static var maxLosslessDigitsInFraction: Int { maxLosslessDigits }
+    @inlinable static var maxLosslessIntegerDigits:  Int { maxLosslessDigits }
+    @inlinable static var maxLosslessFractionDigits: Int { maxLosslessDigits }
 }

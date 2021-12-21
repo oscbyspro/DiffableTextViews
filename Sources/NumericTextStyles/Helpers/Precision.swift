@@ -40,7 +40,7 @@ public struct Precision<Value: Precise> {
         return .integerAndFractionLength(integerLimits: integer, fractionLimits: fraction)
     }
     
-    @inlinable func editableStyle(_ digits: NumberOfDigits) -> NumberFormatStyleConfiguration.Precision {
+    @inlinable func editableStyle(_ digits: _Count) -> NumberFormatStyleConfiguration.Precision {
         let upperUpperBound = Swift.max(Defaults.upperLowerBound, digits.integer)
         let lowerLowerBound = Swift.max(Defaults.lowerLowerBound, digits.fraction)
                 
@@ -50,7 +50,7 @@ public struct Precision<Value: Precise> {
         return .integerAndFractionLength(integerLimits: upper, fractionLimits: lower)
     }
     
-    @inlinable func editableValidationWithCapacity(digits: NumberOfDigits) -> NumberOfDigits? {
+    @inlinable func editableValidationWithCapacity(digits: _Count) -> _Count? {
         strategy.editableValidationWithCapacity(digits: digits)
     }
 }
@@ -120,7 +120,7 @@ public extension Precision where Value: PreciseFloat {
     
     @inlinable func showcaseStyle() -> NumberFormatStyleConfiguration.Precision
         
-    @inlinable func editableValidationWithCapacity(digits: NumberOfDigits) -> NumberOfDigits?
+    @inlinable func editableValidationWithCapacity(digits: _Count) -> _Count?
 }
 
 // MARK: - Strategies: Total
@@ -151,11 +151,11 @@ public extension Precision where Value: PreciseFloat {
         .significantDigits(total)
     }
     
-    @inlinable func editableValidationWithCapacity(digits: NumberOfDigits) -> NumberOfDigits? {
+    @inlinable func editableValidationWithCapacity(digits: _Count) -> _Count? {
         let totalCapacity = total.upperBound - digits.integer - digits.fraction
         guard totalCapacity >= 0 else { return nil }
 
-        return NumberOfDigits(integer: totalCapacity, fraction: totalCapacity)
+        return _Count(integer: totalCapacity, fraction: totalCapacity)
     }
 }
 
@@ -201,7 +201,7 @@ public extension Precision where Value: PreciseFloat {
         .integerAndFractionLength(integerLimits: upper, fractionLimits: lower)
     }
     
-    @inlinable func editableValidationWithCapacity(digits: NumberOfDigits) -> NumberOfDigits? {
+    @inlinable func editableValidationWithCapacity(digits: _Count) -> _Count? {
         let totalCapacity = Value.maxLosslessDigits - digits.integer - digits.fraction
         guard totalCapacity >= 0 else { return nil }
         
@@ -211,7 +211,7 @@ public extension Precision where Value: PreciseFloat {
         let upperCapacity = upper.upperBound - digits.integer
         guard upperCapacity >= 0 else { return nil }
         
-        return NumberOfDigits(integer: upperCapacity, fraction: lowerCapacity)
+        return _Count(integer: upperCapacity, fraction: lowerCapacity)
     }
 }
 
