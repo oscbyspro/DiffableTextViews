@@ -1,5 +1,5 @@
 //
-//  Precision.swift
+//  NumberTextPrecision.swift
 //  
 //
 //  Created by Oscar Byström Ericsson on 2021-12-21.
@@ -7,10 +7,10 @@
 
 import enum Foundation.NumberFormatStyleConfiguration
 
-// MARK: - Precision
+// MARK: - NumberTextPrecision
 
 /// - Note: Lower precision bounds are enforced only when the view is idle.
-public struct Precision<Value: PreciseTextValue> {
+public struct NumberTextPrecision<Value: PreciseTextValue> {
     @usableFromInline typealias Defaults = PrecisionDefaults
     @usableFromInline typealias Total = PrecisionTotal<Value>
     @usableFromInline typealias Parts = PrecisionParts<Value>
@@ -58,9 +58,9 @@ public struct Precision<Value: PreciseTextValue> {
     }
 }
 
-// MARK: - Precision: Total
+// MARK: - NumberTextPrecision: Total
 
-public extension Precision {
+public extension NumberTextPrecision {
 
     // MARK: Digits
     
@@ -81,9 +81,9 @@ public extension Precision {
     }
 }
 
-// MARK: - Precision: Parts
+// MARK: - NumberTextPrecision: Parts
 
-public extension Precision where Value: _UsesFloatingPointPrecision {
+public extension NumberTextPrecision where Value: _UsesFloatingPointPrecision {
 
     // MARK: Digits
     

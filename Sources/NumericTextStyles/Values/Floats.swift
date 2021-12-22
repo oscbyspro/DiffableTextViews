@@ -33,7 +33,7 @@ public extension NumberTextFloatingPoint {
         -maxLosslessValue
     }
     
-    // MARK: Formattable
+    // MARK: FormattableTextValue
 
     @inlinable static func value(description: String) -> Self? {
         .init(description)

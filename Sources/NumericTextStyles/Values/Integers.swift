@@ -32,7 +32,7 @@ extension NumberTextInteger {
     @inlinable public static var minLosslessValue: Self { min }
     @inlinable public static var maxLosslessValue: Self { max }
 
-    // MARK: Formattable
+    // MARK: FormattableTextValue
 
     @inlinable public static func value(description: String) -> Self? {
         .init(description)

@@ -7,7 +7,7 @@
 
 // MARK: - NumberTextValue
 
-public protocol NumberTextValue: Boundable, Formattable, PreciseValue {
+public protocol NumberTextValue: BoundableTextValue, FormattableTextValue, PreciseTextValue {
     typealias NumberTextStyle = NumericTextStyles.NumberTextStyle<Self>
 
     // MARK: Requirements

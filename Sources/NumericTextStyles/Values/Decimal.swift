@@ -33,7 +33,7 @@ extension Decimal: NumberTextValue, _UsesFloatingPointPrecision { }; extension D
  
     @inlinable public static var maxLosslessTotalDigits: Int { 38 }
         
-    // MARK: Implementation: Formattable
+    // MARK: Implementation: FormattableTextValue
     
     @inlinable public static func value(description: String) -> Self? {
         .init(string: description)

@@ -17,8 +17,8 @@ import protocol Utilities.Transformable
 ///
 public struct NumberTextStyle<Value: NumberTextValue>: DiffableTextStyle, Transformable {
     public typealias Parser = Value.NumberParser
-    public typealias Bounds = NumericTextStyles.Bounds<Value>
-    public typealias Precision = NumericTextStyles.Precision<Value>
+    public typealias Bounds = NumericTextStyles.NumberTextBounds<Value>
+    public typealias Precision = NumericTextStyles.NumberTextPrecision<Value>
 
     // MARK: Properties
     

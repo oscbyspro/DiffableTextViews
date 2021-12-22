@@ -1,14 +1,13 @@
 //
-//  Boundable.swift
+//  BoundableTextValue.swift
 //  
 //
 //  Created by Oscar Byström Ericsson on 2021-12-21.
 //
 
-// MARK: - Boundable
+// MARK: - BoundableTextValue
 
-#warning("Rename as BoundableTextValue, maybe.")
-public protocol Boundable: Comparable {
+public protocol BoundableTextValue: Comparable {
     
     // MARK: Requirements
     

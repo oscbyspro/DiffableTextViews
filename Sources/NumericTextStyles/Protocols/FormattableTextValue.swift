@@ -1,5 +1,5 @@
 //
-//  Formattable.swift
+//  FormattableTextValue.swift
 //  
 //
 //  Created by Oscar Byström Ericsson on 2021-12-21.
@@ -9,10 +9,10 @@ import struct Foundation.Locale
 import protocol Foundation.FormatStyle
 import enum Foundation.NumberFormatStyleConfiguration
 
-// MARK: - Formattable
+// MARK: - FormattableTextValue
 
 #warning("Rename as FormattableTextValue, maybe.")
-public protocol Formattable {
+public protocol FormattableTextValue {
     
     // MARK: Requirements
     

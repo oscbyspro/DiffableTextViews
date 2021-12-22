@@ -1,5 +1,5 @@
 //
-//  Bounds.swift
+//  NumberTextBounds.swift
 //  
 //
 //  Created by Oscar Byström Ericsson on 2021-12-21.
@@ -12,7 +12,7 @@
 ///
 /// Requires that lowerBound ≤ zero ≤ upperBound to ensure intuitive behavior.
 ///
-public struct Bounds<Value: Boundable> {
+public struct NumberTextBounds<Value: BoundableTextValue> {
 
     // MARK: Properties
     
