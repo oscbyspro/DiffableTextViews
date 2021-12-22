@@ -177,12 +177,12 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable, 
             
             // --------------------------------- //
             
-            guard field.offsets != offsets else { return }
+            guard field.selection.offsets != offsets else { return }
             
             // --------------------------------- //
             
             lock.perform {
-                self.downstream.select(offsets: field.offsets)
+                self.downstream.select(offsets: field.selection.offsets)
             }
         }
 
@@ -238,7 +238,7 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable, 
                     // changes to UITextField's text and selection both call
                     // the delegate's method: textFieldDidChangeSelection(_:)
                     self.downstream.update(text: cache.snapshot.characters)
-                    self.downstream.select(offsets: cache.field.offsets)
+                    self.downstream.select(offsets: cache.field.selection.offsets)
                 }
                             
                 self.cache.edits = self.downstream.edits

@@ -10,30 +10,25 @@ import protocol Utilities.Transformable
 // MARK: - Field
 
 @usableFromInline struct Field<Scheme: DiffableTextViews.Scheme>: Transformable {
+    @usableFromInline typealias Selection = DiffableTextViews.Selection<Scheme>
     @usableFromInline typealias Carets = DiffableTextViews.Carets<Scheme>
     @usableFromInline typealias Offset = DiffableTextViews.Offset<Scheme>
-    
+
     // MARK: Properties
     
     @usableFromInline let carets: Carets
-    @usableFromInline var selection: Range<Carets.Index>
+    @usableFromInline var selection: Selection
 
     // MARK: Initializers
     
     @inlinable init(_ snapshot: Snapshot = Snapshot()) {
         self.carets = Carets(snapshot)
-        self.selection = carets.lastIndex ..< carets.lastIndex
+        self.selection = Selection(carets.lastIndex ..< carets.lastIndex)
     }
     
-    @inlinable init(_ carets: Carets, selection: Range<Carets.Index>) {
+    @inlinable init(_ carets: Carets, selection: Selection) {
         self.carets = carets
         self.selection = selection
-    }
-    
-    // MARK: Getters
-    
-    @inlinable var offsets: Range<Offset> {
-        selection.lowerBound.offset ..< selection.upperBound.offset
     }
     
     // MARK: Look
@@ -62,20 +57,24 @@ import protocol Utilities.Transformable
 
     // MARK: Update: Selection
     
-    @inlinable func updating(selection newValue: Range<Carets.Index>, intent: Direction?) -> Self {
+    @inlinable func updating(selection newValue: Selection, intent: Direction?) -> Self {
         transformingAccordingToSelection(newValue, intent: intent).transformingAccordingToAttributes()
     }
     
+    @inlinable func updating(selection newValue: Range<Carets.Index>, intent: Direction?) -> Self {
+        updating(selection: Selection(newValue), intent: intent)
+    }
+    
     @inlinable func updating(selection newValue: Carets.Index, intent: Direction?) -> Self {
-        updating(selection: newValue ..< newValue, intent: intent)
+        updating(selection: Selection(newValue ..< newValue), intent: intent)
     }
     
     @inlinable func updating(selection newValue: Range<Offset>, intent: Direction?) -> Self {
-        updating(selection: indices(in: newValue), intent: intent)
+        updating(selection: Selection(indices(in: newValue)), intent: intent)
     }
     
     @inlinable func updating(selection newValue: Offset, intent: Direction?) -> Self {
-        updating(selection: newValue ..< newValue, intent: intent)
+        updating(selection: Selection(indices(in: newValue ..< newValue)), intent: intent)
     }
 
     // MARK: Transformations: Attribute
@@ -87,12 +86,12 @@ import protocol Utilities.Transformable
         
         // --------------------------------- //
         
-        return transforming({ $0.selection = map(selection, transformation: position) })
+        return transforming({ $0.selection = selection.transforming(position) })
     }
 
     // MARK: Transformations: Selection
         
-    @inlinable func transformingAccordingToSelection(_ newValue: Range<Carets.Index>, intent: Direction?) -> Field {
+    @inlinable func transformingAccordingToSelection(_ newValue: Selection, intent: Direction?) -> Field {
         func position(_ start: Carets.Index, preference: Direction) -> Carets.Index {
             if carets[start].nonlookable(direction: preference) { return start }
                         
@@ -113,7 +112,7 @@ import protocol Utilities.Transformable
         
         // --------------------------------- //
 
-        return transforming({ $0.selection = map(newValue, transformation: position) })
+        return transforming({ $0.selection = newValue.transforming(position) })
     }
     
     // MARK: Transformations: Carets
@@ -138,30 +137,15 @@ import protocol Utilities.Transformable
         
         // --------------------------------- //
         
-        let upperBound = position(from: carets.suffix(from: selection.upperBound), to: newValue[...])
-        let lowerBound = position(from: carets[selection],     to: newValue.prefix(upTo: upperBound))
+        let upperBound = position(from: carets.suffix(from: selection.upperBound),   to: newValue[...])
+        let lowerBound = position(from: carets[selection.range], to: newValue.prefix(upTo: upperBound))
                 
         // --------------------------------- //
         
-        return Field(newValue, selection: lowerBound ..< upperBound)
+        return Field(newValue, selection: Selection(lowerBound ..< upperBound))
     }
     
-    // MARK: Transformations: Helpers
-    
-    #warning("Make a Selection model and add this method to it, maybe.")
-    @inlinable func map(_ range: Range<Carets.Index>, transformation: (Carets.Index, Direction) -> Carets.Index) -> Range<Carets.Index> {
-        let upperBound = transformation(range.upperBound, .backwards)
-        var lowerBound = upperBound
-
-        if !range.isEmpty {
-            lowerBound = transformation(range.lowerBound,  .forwards)
-            lowerBound = min(lowerBound, upperBound)
-        }
-        
-        return lowerBound ..< upperBound
-    }
-    
-    // MARK: Utilities: Indices
+    // MARK: Utilities: Offsets
     
     @inlinable func indices(in offsets: Range<Offset>) -> Range<Carets.Index> {
         func position(_ start: Carets.Index, destination: Offset) -> Carets.Index {
@@ -172,7 +156,6 @@ import protocol Utilities.Transformable
             }
         }
         
-        #warning("Add to Selection model, maybe.")
         let upperBound = position(selection.upperBound, destination: offsets.upperBound)
         var lowerBound = upperBound
         
