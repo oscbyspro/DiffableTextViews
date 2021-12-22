@@ -8,6 +8,9 @@
 // MARK: - Direction
 
 @usableFromInline @frozen enum Direction {
+    
+    // MARK: Instances
+    
     case forwards
     case backwards
 }

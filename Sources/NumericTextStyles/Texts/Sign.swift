@@ -9,7 +9,7 @@
 
 @usableFromInline enum Sign: String, Text {
     
-    // MARK: Cases
+    // MARK: Instances
     
     case none = ""
     case positive = "+"

@@ -80,20 +80,20 @@ import protocol Utilities.Transformable
 
     // MARK: Transformations: Attribute
                     
-    @inlinable @inline(never) func transformingAccordingToAttributes() -> Field {
-        func move(_ position: Carets.Index, preference: Direction) -> Carets.Index {
+    @inlinable func transformingAccordingToAttributes() -> Field {
+        func position(_ position: Carets.Index, preference: Direction) -> Carets.Index {
             look(position, direction: carets[position].directionOfAttributes() ?? preference)
         }
         
         // --------------------------------- //
         
-        return transforming({ $0.selection = map(selection, transformation: move) })
+        return transforming({ $0.selection = map(selection, transformation: position) })
     }
 
     // MARK: Transformations: Selection
         
-    @inlinable @inline(never) func transformingAccordingToSelection(_ newValue: Range<Carets.Index>, intent: Direction?) -> Field {
-        func move(_ start: Carets.Index, preference: Direction) -> Carets.Index {
+    @inlinable func transformingAccordingToSelection(_ newValue: Range<Carets.Index>, intent: Direction?) -> Field {
+        func position(_ start: Carets.Index, preference: Direction) -> Carets.Index {
             if carets[start].nonlookable(direction: preference) { return start }
                         
             // --------------------------------- //
@@ -113,12 +113,12 @@ import protocol Utilities.Transformable
         
         // --------------------------------- //
 
-        return transforming({ $0.selection = map(newValue, transformation: move) })
+        return transforming({ $0.selection = map(newValue, transformation: position) })
     }
     
     // MARK: Transformations: Carets
             
-    @inlinable @inline(never) func transformingAccordingToCarets(_ newValue: Carets) -> Field {
+    @inlinable func transformingAccordingToCarets(_ newValue: Carets) -> Field {
         func step(previous lhs: Symbol, next rhs: Symbol) -> SimilaritiesInstruction {
             if lhs == rhs                               { return .continue      }
             else if lhs.attribute.contains(.removable)  { return .continueOnLHS }
@@ -148,6 +148,7 @@ import protocol Utilities.Transformable
     
     // MARK: Transformations: Helpers
     
+    #warning("Make a Selection model and add this method to it, maybe.")
     @inlinable func map(_ range: Range<Carets.Index>, transformation: (Carets.Index, Direction) -> Carets.Index) -> Range<Carets.Index> {
         let upperBound = transformation(range.upperBound, .backwards)
         var lowerBound = upperBound
@@ -162,56 +163,23 @@ import protocol Utilities.Transformable
     
     // MARK: Utilities: Indices
     
-    @inlinable @inline(never) func indices(in offsets: Range<Offset>) -> Range<Carets.Index> {
-        var indices = [Carets.Index]()
-        indices.reserveCapacity(4)
-        indices.append(contentsOf: [selection.upperBound, selection.lowerBound, carets.firstIndex])
-        
-        // --------------------------------- //
-        
-        func index(at offset: Offset) -> Carets.Index {
-            var shortestPathToIndex = PathToIndex(start: carets.lastIndex, destination: offset)
-            
-            // indices are sorted in reverse order at compile time
-            for index in indices {
-                let pathToIndex = PathToIndex(start: index, destination: offset)
-                guard pathToIndex <= shortestPathToIndex else { break }
-                shortestPathToIndex = pathToIndex
+    @inlinable func indices(in offsets: Range<Offset>) -> Range<Carets.Index> {
+        func position(_ start: Carets.Index, destination: Offset) -> Carets.Index {
+            if start.offset <= destination {
+                return carets.indices[start...].first(where: { index in index.offset >= destination }) ?? carets.lastIndex
+            } else {
+                return carets.indices[...start].last(where: { index in index.offset <= destination }) ?? carets.firstIndex
             }
-
-            return carets.index(start: shortestPathToIndex.start, offset: shortestPathToIndex.distance)
         }
         
-        // --------------------------------- //
+        #warning("Add to Selection model, maybe.")
+        let upperBound = position(selection.upperBound, destination: offsets.upperBound)
+        var lowerBound = upperBound
         
-        let lowerBound = index(at: offsets.lowerBound); indices.append(lowerBound)
-        let upperBound = index(at: offsets.upperBound);
-                        
-        // --------------------------------- //
+        if !offsets.isEmpty {
+            lowerBound = position(selection.lowerBound, destination: offsets.lowerBound)
+        }
         
         return lowerBound ..< upperBound
-    }
-    
-    // MARK: Components
-    
-    @usableFromInline struct PathToIndex: Comparable {
-        
-        // MARK: Properties
-        
-        @usableFromInline let start: Carets.Index
-        @usableFromInline let distance: Offset
-        
-        // MARK: Initializers
-        
-        @inlinable init(start: Carets.Index, destination: Offset) {
-            self.start = start
-            self.distance = destination - start.offset
-        }
-
-        // MARK: Comparisons
-        
-        @inlinable static func < (lhs: Self, rhs: Self) -> Bool {
-            abs(lhs.distance.units) < abs(rhs.distance.units)
-        }
     }
 }
