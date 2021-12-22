@@ -10,10 +10,6 @@
 extension UInt: NumberTextUInt {
     
     // MARK: Implementation
-    
-    @inlinable static var options: Options {
-        [.unsigned, .integer]
-    }
         
     /// Apple, please fix IntegerFormatStyleUInt, it uses an Int.
     @inlinable public static var maxLosslessValue: UInt {
@@ -31,11 +27,7 @@ extension UInt: NumberTextUInt {
 extension UInt8: NumberTextUInt {
     
     // MARK: Implementation
-    
-    @inlinable static var options: Options {
-        [.unsigned, .integer]
-    }
-    
+
     @inlinable public static var maxLosslessTotalDigits: Int { 3 }
 }
 
@@ -44,10 +36,6 @@ extension UInt8: NumberTextUInt {
 extension UInt16: NumberTextUInt {
     
     // MARK: Implementation
-    
-    @inlinable static var options: Options {
-        [.unsigned, .integer]
-    }
     
     @inlinable public static var maxLosslessTotalDigits: Int { 5 }
 }
@@ -58,10 +46,6 @@ extension UInt32: NumberTextUInt {
     
     // MARK: Implementation
     
-    @inlinable static var options: Options {
-        [.unsigned, .integer]
-    }
-    
     @inlinable public static var maxLosslessTotalDigits: Int { 10 }
 }
 
@@ -70,10 +54,6 @@ extension UInt32: NumberTextUInt {
 extension UInt64: NumberTextUInt {
     
     // MARK: Implementation
-    
-    @inlinable static var options: Options {
-        [.unsigned, .integer]
-    }
     
     /// Apple, please fix IntegerFormatStyleUInt64, it uses an Int64.
     @inlinable public static var maxLosslessValue: UInt64 {
