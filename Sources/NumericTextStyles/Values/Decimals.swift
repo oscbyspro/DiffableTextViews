@@ -22,26 +22,26 @@ extension Decimal: NumericTextValue, PreciseFloatingPoint { }; extension Decimal
     @usableFromInline static let maxLosslessLimit =
     Decimal(string: String(repeating: "9", count: maxLosslessTotalDigits))!
     
-    @inlinable public static var minLosslessValue: Self { -maxLosslessLimit }
-    @inlinable public static var maxLosslessValue: Self {  maxLosslessLimit }
+    @inlinable @inline(__always) public static var minLosslessValue: Self { -maxLosslessLimit }
+    @inlinable @inline(__always) public static var maxLosslessValue: Self {  maxLosslessLimit }
     
     // MARK: Precise
  
-    @inlinable public static var maxLosslessTotalDigits: Int { 38 }
+    @inlinable @inline(__always) public static var maxLosslessTotalDigits: Int { 38 }
         
     // MARK: Formattable
     
-    @inlinable public static func value(description: String) -> Self? {
+    @inlinable @inline(__always) public static func value(description: String) -> Self? {
         .init(string: description)
     }
     
-    @inlinable public static func style(locale: Locale, precision: NumberFormatStyleConfiguration.Precision, separator: NumberFormatStyleConfiguration.DecimalSeparatorDisplayStrategy) -> FormatStyle {
+    @inlinable @inline(__always) public static func style(locale: Locale, precision: NumberFormatStyleConfiguration.Precision, separator: NumberFormatStyleConfiguration.DecimalSeparatorDisplayStrategy) -> FormatStyle {
         .init(locale: locale).precision(precision).decimalSeparator(strategy: separator)
     }
     
     // MARK: Parsable
     
-    @inlinable public static var parser: NumberParser {
+    @inlinable @inline(__always) public static var parser: NumberParser {
         .standard
     }
 }

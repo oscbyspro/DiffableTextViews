@@ -86,7 +86,7 @@ public struct NumericTextStyle<Value: NumericTextValue>: DiffableTextStyle, Tran
     // MARK: Numbers
     
     @inlinable func number(snapshot: Snapshot) -> Number? {
-        parser.parse(characters: snapshot.lazy.compactMap({ $0.nonformatting ? $0.character : nil }))
+        parser.parse(snapshot.lazy.compactMap({ $0.nonformatting ? $0.character : nil }))
     }
     
     @inlinable func value(number: Number) -> Value? {
@@ -156,7 +156,11 @@ public struct NumericTextStyle<Value: NumericTextValue>: DiffableTextStyle, Tran
         
         // --------------------------------- //
         
-        if capacity.fraction == .zero, number.fraction.isEmpty {
+        if bounds.lowerBound >= .zero {
+            number.sign.removeAll()
+        }
+        
+        if capacity.fraction <= .zero, number.fraction.isEmpty {
             number.separator.removeAll()
         }
         

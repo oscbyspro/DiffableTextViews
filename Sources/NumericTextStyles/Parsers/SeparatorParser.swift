@@ -30,7 +30,7 @@ import struct Foundation.Locale
     
     // MARK: Parse
     
-    @inlinable func parse<C: Collection>(characters: C, index: inout C.Index, storage: inout Output) where C.Element == Character {
+    @inlinable func parse<C: Collection>(_ characters: C, index: inout C.Index, storage: inout Output) where C.Element == Character {
         let subsequence = characters[index...]
         
         for separator in separators {

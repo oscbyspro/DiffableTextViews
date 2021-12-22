@@ -19,7 +19,7 @@ import struct Foundation.Locale
     @inlinable func locale(_ locale: Locale) -> Self
     
     /// Parses characters by iterating the index and storing the valid characters inside the storage. Completes without effects if the characters are invalid.
-    @inlinable func parse<C: Collection>(characters: C, index: inout C.Index, storage: inout Output) where C.Element == Character
+    @inlinable func parse<C: Collection>(_ characters: C, index: inout C.Index, storage: inout Output) where C.Element == Character
     
     /// An instance of self configured to parse system numbers.
     @inlinable static var standard: Self { get }
@@ -36,9 +36,17 @@ extension Parser {
     // MARK: Utilities
     
     /// Creates and returns a new instance if the characters are valid, else it returns nil.
-    @inlinable func parse<C: Collection>(characters: C) -> Output? where C.Element == Character {
-        var (output, index) = (Output(), characters.startIndex)
-        parse(characters: characters, index: &index, storage: &output)
-        return index == characters.endIndex ? output : nil
+    @inlinable func parse<C: Collection>(_ characters: C) -> Output? where C.Element == Character {
+        var output = Output()
+        var index = characters.startIndex
+        
+        // --------------------------------- //
+        
+        parse(characters, index: &index, storage: &output)
+        guard index == characters.endIndex else { return nil }
+        
+        // --------------------------------- //
+        
+        return output
     }
 }

@@ -34,16 +34,16 @@ extension NumericTextInteger {
     
     // MARK: Boundable
     
-    @inlinable public static var minLosslessValue: Self { min }
-    @inlinable public static var maxLosslessValue: Self { max }
+    @inlinable @inline(__always) public static var minLosslessValue: Self { min }
+    @inlinable @inline(__always) public static var maxLosslessValue: Self { max }
 
     // MARK: Formattable
 
-    @inlinable public static func value(description: String) -> Self? {
+    @inlinable @inline(__always) public static func value(description: String) -> Self? {
         .init(description)
     }
 
-    @inlinable public static func style(locale: Locale, precision: NumberFormatStyleConfiguration.Precision, separator: NumberFormatStyleConfiguration.DecimalSeparatorDisplayStrategy) -> IntegerFormatStyle<Self> {
+    @inlinable @inline(__always) public static func style(locale: Locale, precision: NumberFormatStyleConfiguration.Precision, separator: NumberFormatStyleConfiguration.DecimalSeparatorDisplayStrategy) -> IntegerFormatStyle<Self> {
         .init(locale: locale).precision(precision).decimalSeparator(strategy: separator)
     }
 }
@@ -55,7 +55,7 @@ extension NumericTextInteger {
     
     // MARK: Implementation
     
-    @inlinable public static var parser: NumberParser {
+    @inlinable @inline(__always) public static var parser: NumberParser {
         .standard.options(.integer)
     }
 }
@@ -67,7 +67,7 @@ extension NumericTextInteger {
     
     // MARK: Implementation
     
-    @inlinable public static var parser: NumberParser {
+    @inlinable @inline(__always) public static var parser: NumberParser {
         .standard.options(.unsignedInteger)
     }
 }
@@ -92,23 +92,23 @@ extension NumericTextFloat {
     
     // MARK: Boundable
     
-    @inlinable public static var minLosslessValue: Self {
+    @inlinable @inline(__always) public static var minLosslessValue: Self {
         -maxLosslessValue
     }
     
     // MARK: Formattable
 
-    @inlinable public static func value(description: String) -> Self? {
+    @inlinable @inline(__always) public static func value(description: String) -> Self? {
         .init(description)
     }
     
-    @inlinable public static func style(locale: Locale, precision: NumberFormatStyleConfiguration.Precision, separator: NumberFormatStyleConfiguration.DecimalSeparatorDisplayStrategy) -> FloatingPointFormatStyle<Self> {
+    @inlinable @inline(__always) public static func style(locale: Locale, precision: NumberFormatStyleConfiguration.Precision, separator: NumberFormatStyleConfiguration.DecimalSeparatorDisplayStrategy) -> FloatingPointFormatStyle<Self> {
         .init(locale: locale).precision(precision).decimalSeparator(strategy: separator)
     }
     
     // MARK: Parsable
     
-    @inlinable public static var parser: NumberParser {
+    @inlinable @inline(__always) public static var parser: NumberParser {
         .standard
     }
 }
