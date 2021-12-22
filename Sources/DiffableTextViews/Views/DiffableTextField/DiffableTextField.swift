@@ -131,9 +131,6 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable, 
         // MARK: Delegate: Inputs
         
         @inlinable public func textField(_ textField: UITextField, shouldChangeCharactersIn nsRange: NSRange, replacementString string: String) -> Bool {
-                        
-            // --------------------------------- //
-            
             let offsets = Offset(at: nsRange.lowerBound) ..< Offset(at: nsRange.upperBound)
             let range = cache.field.indices(in: offsets)
             let input = Snapshot(string, only: .content)
