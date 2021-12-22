@@ -7,6 +7,14 @@
 
 import enum Foundation.NumberFormatStyleConfiguration
 
+// MARK: - Precision: Defaults
+
+@usableFromInline enum PrecisionDefaults {
+    @usableFromInline static let totalLowerBound: Int = 1
+    @usableFromInline static let integerLowerBound: Int = 1
+    @usableFromInline static let fractionLowerBound: Int = 0
+}
+
 // MARK: - Precision
 
 /// - Note: Lower precision bounds are enforced only when the view is idle.
@@ -200,12 +208,4 @@ public extension Precision where Value: UsesFloatingPointPrecision {
         
         return .init(integer: integerCapacity, fraction: fractionCapacity)
     }
-}
-
-// MARK: - Defaults
-
-@usableFromInline enum PrecisionDefaults {
-    @usableFromInline static let totalLowerBound: Int = 1
-    @usableFromInline static let integerLowerBound: Int = 1
-    @usableFromInline static let fractionLowerBound: Int = 0
 }

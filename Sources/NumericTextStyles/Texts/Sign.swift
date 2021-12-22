@@ -17,17 +17,17 @@
     
     // MARK: Initializers
     
-    @inlinable public init() {
+    @inlinable init() {
         self = .none
     }
         
     // MARK: Getters
     
-    @inlinable @inline(__always) public var isEmpty: Bool {
+    @inlinable @inline(__always) var isEmpty: Bool {
         rawValue.isEmpty
     }
     
-    @inlinable @inline(__always) public var characters: String {
+    @inlinable @inline(__always) var characters: String {
         rawValue
     }
     

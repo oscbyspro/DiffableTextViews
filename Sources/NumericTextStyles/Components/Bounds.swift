@@ -15,8 +15,8 @@ public struct Bounds<Value: Boundable> {
 
     // MARK: Properties
     
-    public let lowerBound: Value
-    public let upperBound: Value
+    @usableFromInline let lowerBound: Value
+    @usableFromInline let upperBound: Value
     
     // MARK: Initializers
     

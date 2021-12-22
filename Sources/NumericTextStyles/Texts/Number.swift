@@ -7,6 +7,7 @@
 
 // MARK: - Number
 
+#warning("Make internal if possible.")
 public struct Number: Text {
     
     // MARK: Properties

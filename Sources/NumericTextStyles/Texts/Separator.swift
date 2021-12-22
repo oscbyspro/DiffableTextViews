@@ -7,15 +7,15 @@
 
 // MARK: - Separator
 
-public struct Separator: Text {
+@usableFromInline struct Separator: Text {
     
     // MARK: Properties
     
-    public let characters: String
+    @usableFromInline let characters: String
     
     // MARK: Initializers
     
-    @inlinable public init() {
+    @inlinable init() {
         self.characters = ""
     }
 
@@ -25,7 +25,7 @@ public struct Separator: Text {
     
     // MARK: Getters
     
-    @inlinable @inline(__always) public var isEmpty: Bool {
+    @inlinable @inline(__always) var isEmpty: Bool {
         characters.isEmpty
     }
     

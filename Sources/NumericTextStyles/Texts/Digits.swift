@@ -7,36 +7,31 @@
 
 // MARK: - Digits
 
-public struct Digits: Text {
+@usableFromInline struct Digits: Text {
     
     // MARK: Properties
     
-    @usableFromInline private(set) var _characters: String
-    @usableFromInline private(set) var _count: Int
-    
-    // MARK: Properties: Getters
-    
-    @inlinable @inline(__always) public var characters: String { _characters }
-    @inlinable @inline(__always) public var count: Int { _count }
+    @usableFromInline private(set) var characters: String
+    @usableFromInline private(set) var count: Int
 
     // MARK: Initializers
     
-    @inlinable public init() {
-        self._characters = ""
-        self._count = 0
+    @inlinable init() {
+        self.characters = ""
+        self.count = 0
     }
     
     // MARK: Getters
     
-    @inlinable @inline(__always) public var isEmpty: Bool {
-        _characters.isEmpty
+    @inlinable @inline(__always) var isEmpty: Bool {
+        characters.isEmpty
     }
     
     // MARK: Transformations
     
     @inlinable mutating func append(_ character: Character) {
-        _characters.append(character)
-        _count += 1
+        characters.append(character)
+        count += 1
     }
     
     // MARK: Characters: Static
