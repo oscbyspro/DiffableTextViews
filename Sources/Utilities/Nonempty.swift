@@ -9,7 +9,7 @@
 
 public protocol Nonempty { }
 
-// MARK: - Utilities: Collection
+// MARK: - Nonempty: Collection
 
 public extension Nonempty where Self: Collection {
     
@@ -32,7 +32,7 @@ public extension Nonempty where Self: Collection {
     }
 }
 
-// MARK: - Utilities: BidirectionalCollection
+// MARK: - Nonempty: BidirectionalCollection
 
 public extension Nonempty where Self: BidirectionalCollection {
     
