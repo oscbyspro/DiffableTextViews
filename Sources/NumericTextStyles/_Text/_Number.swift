@@ -97,7 +97,7 @@ public struct _IntegerParser: _Parser {
     // MARK: Parse
     
     @inlinable public func parse<C: Collection>(characters: C, index: inout C.Index, storage: inout Output) where C.Element == Character {
-        sign.parse(characters: characters, index: &index, storage: &storage.sign)
+        sign.parse(characters: characters, index: &index, storage: &storage.sign)        
         digits.parse(characters: characters, index: &index, storage: &storage.integer)
     }
     

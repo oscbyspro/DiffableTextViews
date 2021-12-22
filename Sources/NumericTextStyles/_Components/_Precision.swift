@@ -57,34 +57,34 @@ public struct _Precision<Value: _Precise> {
     }
 }
 
-// MARK: - Initializers: Total
+// MARK: - Precision: Total
 
 public extension _Precision {
-    
-    // MARK: Special
-    
-    @inlinable static var max: Self {
-        .max(Value.maxLosslessTotalDigits)
-    }
-    
-    // MARK: Expressions
+
+    // MARK: Digits
     
     @inlinable static func digits<R: RangeExpression>(_ total: R) -> Self where R.Bound == Int {
         .init(implementation: Total(total: total))
     }
     
-    // MARK: Subexpressions
+    // MARK: Max
     
     @inlinable static func max(_ total: Int) -> Self {
         digits(Defaults.totalLowerBound...total)
     }
+    
+    // MARK: Max: Standard
+        
+    @inlinable static var max: Self {
+        .max(Value.maxLosslessTotalDigits)
+    }
 }
 
-// MARK: - Initializers: Parts
+// MARK: - Precision: Parts
 
 public extension _Precision where Value: _UsesFloatingPointPrecision {
 
-    // MARK: Expressions
+    // MARK: Digits
     
     @inlinable static func digits<R0: RangeExpression, R1: RangeExpression>(integer: R0, fraction: R1) -> Self where R0.Bound == Int, R1.Bound == Int {
         .init(implementation: Parts(integer: integer, fraction: fraction))
@@ -98,7 +98,7 @@ public extension _Precision where Value: _UsesFloatingPointPrecision {
         .init(implementation: Parts(integer: Defaults.integerLowerBound..., fraction: fraction))
     }
     
-    // MARK: Subexpressions
+    // MARK: Max
     
     @inlinable static func max(integer: Int, fraction: Int) -> Self  {
         .digits(integer: Defaults.integerLowerBound...integer, fraction: Defaults.fractionLowerBound...fraction)

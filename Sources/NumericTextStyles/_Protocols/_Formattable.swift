@@ -25,7 +25,7 @@ public protocol _Formattable {
     /// - Parameters:
     ///     - description: A system formatted representation of the value.
     ///
-    @inlinable static func value(of description: String) -> Self?
+    @inlinable static func value(description: String) -> Self?
     
     /// Creates a format style instance configured with the function's parameters.
     @inlinable static func style(locale: Locale, precision: NumberFormatStyleConfiguration.Precision, separator: NumberFormatStyleConfiguration.DecimalSeparatorDisplayStrategy) -> FormatStyle

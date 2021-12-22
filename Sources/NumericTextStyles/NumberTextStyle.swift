@@ -254,36 +254,36 @@ extension NumberTextStyle {
     
     // MARK: Characters, Helpers
     
-    @inlinable func transformFirstDigitIfItIsZero(in snapshot: UnsafeMutablePointer<Snapshot>, using transformation: (inout Attribute) -> Void) {
+    @inlinable func transformFirstDigitIfItIsZero(in snapshot: inout Snapshot, using transformation: (inout Attribute) -> Void) {
         func digit(symbol: Symbol) -> Bool {
             digits.contains(symbol.character)
         }
         
         // --------------------------------- //
         
-        guard let position = snapshot.pointee.firstIndex(where: digit) else { return }
-        guard snapshot.pointee[position].character == zero else { return }
+        guard let position = snapshot.firstIndex(where: digit) else { return }
+        guard snapshot[position].character == zero else { return }
         
         // --------------------------------- //
         
-        snapshot.pointee.transform(attributes: position, using: transformation)
+        snapshot.transform(attributes: position, using: transformation)
     }
     
-    @inlinable func transformFreactionSeparatorIfItIsSuffix(in snapshot: UnsafeMutablePointer<Snapshot>, using transformation: (inout Attribute) -> Void) {
+    @inlinable func transformFreactionSeparatorIfItIsSuffix(in snapshot: inout Snapshot, using transformation: (inout Attribute) -> Void) {
         func predicate(symbol: Symbol) -> Bool {
             fractionSeparator.contains(symbol.character)
         }
         
         // --------------------------------- //
         
-        let start = snapshot.pointee
+        let start = snapshot
             .reversed()
             .prefix(while: predicate)
             .endIndex.base
         
         // --------------------------------- //
         
-        snapshot.pointee.transform(attributes: start..., using: transformation)
+        snapshot.transform(attributes: start..., using: transformation)
     }
 }
 
