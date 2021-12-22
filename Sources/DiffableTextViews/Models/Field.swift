@@ -179,13 +179,13 @@ import protocol Utilities.Transformable
         // --------------------------------- //
         
         func index(at offset: Offset) -> Carets.Index {
-            var shortestPathToIndex = PathToIndex(carets.lastIndex, to: offset)
+            var shortestPathToIndex = PathToIndex(start: carets.lastIndex, destination: offset)
             
             // indices are sorted in reverse order at compile time
             for index in indices {
-                let nextPathToIndex = PathToIndex(index, to: offset)
-                guard nextPathToIndex <= shortestPathToIndex else { break }
-                shortestPathToIndex = nextPathToIndex
+                let pathToIndex = PathToIndex(start: index, destination: offset)
+                guard pathToIndex <= shortestPathToIndex else { break }
+                shortestPathToIndex = pathToIndex
             }
 
             return carets.index(start: shortestPathToIndex.start, offset: shortestPathToIndex.distance)
@@ -212,7 +212,7 @@ import protocol Utilities.Transformable
         
         // MARK: Initializers
         
-        @inlinable init(_ start: Carets.Index, to destination: Offset) {
+        @inlinable init(start: Carets.Index, destination: Offset) {
             self.start = start
             self.distance = destination - start.offset
         }
