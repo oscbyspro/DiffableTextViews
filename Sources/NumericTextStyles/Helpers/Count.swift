@@ -7,7 +7,7 @@
 
 // MARK: - Count
 
-#warning("Rename, maybe.")
+#warning("Rename as NumberDigitsCount, maybe.")
 @usableFromInline struct Count {
     
     // MARK: Properties

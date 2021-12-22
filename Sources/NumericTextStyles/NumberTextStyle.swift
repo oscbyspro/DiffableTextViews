@@ -15,7 +15,7 @@ import protocol Utilities.Transformable
 ///
 /// - Complexity: O(n) or less for all computations.
 ///
-public struct NumberTextStyle<Value: NumberValue>: DiffableTextStyle, Transformable {
+public struct NumberTextStyle<Value: NumberTextValue>: DiffableTextStyle, Transformable {
     public typealias Parser = Value.NumberParser
     public typealias Bounds = NumericTextStyles.Bounds<Value>
     public typealias Precision = NumericTextStyles.Precision<Value>

@@ -1,14 +1,14 @@
 //
-//  EmptyParser.swift
+//  EmptyTextParser.swift
 //  
 //
 //  Created by Oscar Byström Ericsson on 2021-12-22.
 //
 
-// MARK: - EmptyParser
+// MARK: - EmptyTextParser
 
 #warning("WIP")
-public struct EmptyParser<Output: Text>: Parser {
+public struct EmptyTextParser<Output: Text>: TextParser {
     
     // MARK: Implementation
     

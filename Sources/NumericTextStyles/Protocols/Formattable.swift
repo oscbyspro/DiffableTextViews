@@ -11,6 +11,7 @@ import enum Foundation.NumberFormatStyleConfiguration
 
 // MARK: - Formattable
 
+#warning("Rename as FormattableTextValue, maybe.")
 public protocol Formattable {
     
     // MARK: Requirements

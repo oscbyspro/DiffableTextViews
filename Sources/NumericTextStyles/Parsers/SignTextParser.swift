@@ -1,14 +1,14 @@
 //
-//  SignParser.swift
+//  SignTextParser.swift
 //  
 //
 //  Created by Oscar Byström Ericsson on 2021-12-22.
 //
 
-// MARK: - SignParser
+// MARK: - SignTextParser
 
 #warning("WIP")
-public struct SignParser: Parser {
+public struct SignTextParser: TextParser {
     public typealias Output = SignText
 
     // MARK: Properties

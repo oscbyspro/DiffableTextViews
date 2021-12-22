@@ -1,5 +1,5 @@
 //
-//  Parser.swift
+//  TextParser.swift
 //  
 //
 //  Created by Oscar Byström Ericsson on 2021-12-20.
@@ -7,10 +7,9 @@
 
 import struct Foundation.Locale
 
-// MARK: - Parser
+// MARK: - TextParser
 
-#warning("WIP")
-public protocol Parser {
+public protocol TextParser {
     
     // MARK: Requirements
     
@@ -26,9 +25,9 @@ public protocol Parser {
     @inlinable static var standard: Self { get }
 }
 
-// MARK: - Parser: Details
+// MARK: - TextParser: Details
 
-public extension Parser {
+public extension TextParser {
     
     // MARK: Implementation
     

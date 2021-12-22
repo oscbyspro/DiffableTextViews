@@ -1,5 +1,5 @@
 //
-//  SeparatorParser.swift
+//  SeparatorTextParser.swift
 //  
 //
 //  Created by Oscar Byström Ericsson on 2021-12-22.
@@ -7,10 +7,9 @@
 
 import struct Foundation.Locale
 
-// MARK: - SeparatorParser
+// MARK: - SeparatorTextParser
 
-#warning("WIP")
-public struct SeparatorParser: Parser {
+public struct SeparatorTextParser: TextParser {
     public typealias Output = SeparatorText
 
     // MARK: Properties
@@ -25,7 +24,7 @@ public struct SeparatorParser: Parser {
     
     // MARK: Transformations
     
-    @inlinable public func locale(_ locale: Locale) -> SeparatorParser {
+    @inlinable public func locale(_ locale: Locale) -> SeparatorTextParser {
         .init(separators: separators + [locale.decimalSeparator].compactMap({ $0 }))
     }
     

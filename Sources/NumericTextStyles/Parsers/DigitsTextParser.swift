@@ -1,14 +1,14 @@
 //
-//  DigitsParser.swift
+//  DigitsTextParser.swift
 //  
 //
 //  Created by Oscar Byström Ericsson on 2021-12-22.
 //
 
-// MARK: - DigitsParser
+// MARK: - DigitsTextParser
 
 #warning("WIP")
-public struct DigitsParser: Parser {
+public struct DigitsTextParser: TextParser {
     public typealias Output = DigitsText
 
     // MARK: Properties

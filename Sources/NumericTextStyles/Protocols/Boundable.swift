@@ -7,7 +7,7 @@
 
 // MARK: - Boundable
 
-#warning("WIP")
+#warning("Rename as BoundableTextValue, maybe.")
 public protocol Boundable: Comparable {
     
     // MARK: Requirements

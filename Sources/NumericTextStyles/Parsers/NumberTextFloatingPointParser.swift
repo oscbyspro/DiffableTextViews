@@ -1,5 +1,5 @@
 //
-//  FloatingPointParser.swift
+//  NumberTextFloatingPointParser.swift
 //  
 //
 //  Created by Oscar Byström Ericsson on 2021-12-22.
@@ -7,20 +7,20 @@
 
 import struct Foundation.Locale
 
-// MARK: - FloatingPointParser
+// MARK: - NumberTextFloatingPointParser
 
-public struct FloatingPointParser: NumberParser {
+public struct NumberTextFloatingPointParser: NumberTextParser {
     public typealias Output = NumberText
     
     // MARK: Properties
     
-    public let sign: SignParser
-    public let digits: DigitsParser
-    public let separator: SeparatorParser
+    public let sign: SignTextParser
+    public let digits: DigitsTextParser
+    public let separator: SeparatorTextParser
     
     // MARK: Initializers
     
-    @inlinable init(sign: SignParser, digits: DigitsParser, separator: SeparatorParser) {
+    @inlinable init(sign: SignTextParser, digits: DigitsTextParser, separator: SeparatorTextParser) {
         self.sign = sign
         self.digits = digits
         self.separator = separator

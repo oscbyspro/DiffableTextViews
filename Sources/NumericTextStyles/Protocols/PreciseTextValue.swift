@@ -1,14 +1,13 @@
 //
-//  Precise.swift
+//  PreciseTextValue.swift
 //  
 //
 //  Created by Oscar Byström Ericsson on 2021-12-21.
 //
 
-// MARK: - Precise
+// MARK: - PreciseTextValue
 
-#warning("WIP")
-public protocol Precise {
+public protocol PreciseTextValue {
     
     // MARK: Requirements
     
@@ -19,7 +18,7 @@ public protocol Precise {
 
 // MARK: - UsesIntegerPrecision
 
-public  protocol _UsesIntegerPrecision: Precise { }
+public  protocol _UsesIntegerPrecision: PreciseTextValue { }
 public extension _UsesIntegerPrecision {
     
     // MARK: Implementation
@@ -30,7 +29,7 @@ public extension _UsesIntegerPrecision {
 
 // MARK: - UsesFloatingPointPrecision
 
-public  protocol _UsesFloatingPointPrecision: Precise { }
+public  protocol _UsesFloatingPointPrecision: PreciseTextValue { }
 public extension _UsesFloatingPointPrecision {
     
     // MARK: Implementation

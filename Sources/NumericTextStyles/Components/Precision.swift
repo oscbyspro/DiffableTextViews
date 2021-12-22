@@ -10,7 +10,7 @@ import enum Foundation.NumberFormatStyleConfiguration
 // MARK: - Precision
 
 /// - Note: Lower precision bounds are enforced only when the view is idle.
-public struct Precision<Value: Precise> {
+public struct Precision<Value: PreciseTextValue> {
     @usableFromInline typealias Defaults = PrecisionDefaults
     @usableFromInline typealias Total = PrecisionTotal<Value>
     @usableFromInline typealias Parts = PrecisionParts<Value>
@@ -128,7 +128,7 @@ public extension Precision where Value: _UsesFloatingPointPrecision {
 
 // MARK: - Implementations: Total
 
-@usableFromInline struct PrecisionTotal<Value: Precise>: PrecisionImplementation {
+@usableFromInline struct PrecisionTotal<Value: PreciseTextValue>: PrecisionImplementation {
 
     // MARK: Properties
     
@@ -158,7 +158,7 @@ public extension Precision where Value: _UsesFloatingPointPrecision {
 
 // MARK: - Implementations: Parts
 
-@usableFromInline struct PrecisionParts<Value: Precise>: PrecisionImplementation {
+@usableFromInline struct PrecisionParts<Value: PreciseTextValue>: PrecisionImplementation {
 
     // MARK: Properties
     
