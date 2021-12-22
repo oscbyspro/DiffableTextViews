@@ -167,10 +167,10 @@ public extension NumberTextPrecision where Value: _UsesFloatingPointPrecision {
     // MARK: Initializers
     
     @inlinable init<R0: RangeExpression, R1: RangeExpression>(integer: R0, fraction: R1) where R0.Bound == Int, R1.Bound == Int {
-        self.integer  = ClosedRange(integer.relative(to: 0 ..< Value.maxLosslessIntegerDigits  + 1))
-        self.fraction = ClosedRange(integer.relative(to: 0 ..< Value.maxLosslessFractionDigits + 1))
+        self.integer = ClosedRange(integer.relative(to: 0 ..< Value.maxLosslessIntegerDigits + 1))
+        self.fraction = ClosedRange(fraction.relative(to: 0 ..< Value.maxLosslessFractionDigits + 1))
 
-        let total = self.fraction.lowerBound + self.integer.lowerBound
+        let total = self.integer.lowerBound + self.fraction.lowerBound
         precondition(total <= Value.maxLosslessTotalDigits, "Precision: max \(Value.maxLosslessTotalDigits).")
     }
     
@@ -189,13 +189,16 @@ public extension NumberTextPrecision where Value: _UsesFloatingPointPrecision {
     }
     
     @inlinable func editableValidationThatGeneratesCapacity(count: Count) -> Count? {
-        guard Value.maxLosslessTotalDigits - count.total >= 0 else { return nil }
+        let totalCapacity = Value.maxLosslessTotalDigits - count.total
+        guard totalCapacity >= 0 else { return nil }
         
         let integerCapacity = integer.upperBound - count.integer
         guard integerCapacity >= 0 else { return nil }
         
         let fractionCapacity = fraction.upperBound - count.fraction
         guard fractionCapacity >= 0 else { return nil }
+        
+        print(integerCapacity, fractionCapacity)
         
         return .init(integer: integerCapacity, fraction: fractionCapacity)
     }

@@ -66,12 +66,12 @@ public struct NumberTextStyle<Value: NumberTextValue>: DiffableTextStyle, Transf
         transforming({ $0.locale = locale })
     }
     
-    @inlinable public func prefix(_ newValue: String) -> Self {
-        transforming({ $0.prefix = newValue })
+    @inlinable public func prefix(_ newValue: String?) -> Self {
+        transforming({ $0.prefix = newValue ?? "" })
     }
     
-    @inlinable public func suffix(_ newValue: String) -> Self {
-        transforming({ $0.suffix = newValue })
+    @inlinable public func suffix(_ newValue: String?) -> Self {
+        transforming({ $0.suffix = newValue ?? "" })
     }
     
     @inlinable public func bounds(_ newValue: Bounds) -> Self {

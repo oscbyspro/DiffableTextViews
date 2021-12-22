@@ -11,7 +11,7 @@ import protocol Utilities.Transformable
 
 /// A set of options, where each option represents a specialized behavior.
 ///
-/// Ordinary text is empty. Spacers are both prefixing and suffixing.
+/// Plain text is empty. Spacers are both prefixing and suffixing.
 ///
 /// - Singular: formatting, insertable, removable, prefixing, suffixing.
 /// - Composites: content, prefix, suffix, spacer.
