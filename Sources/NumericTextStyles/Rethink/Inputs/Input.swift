@@ -34,13 +34,13 @@ import struct DiffableTextViews.Snapshot
 
     // MARK: Properties
     
-    @usableFromInline var sign: _Sign
+    @usableFromInline var sign: _SignText
     
     // MARK: Initializers
     
     #warning("WIP.")
     @inlinable init?<P: _Parser>(consumable: inout Snapshot, parser: P) {
-        guard let sign = _Sign(characters: consumable.characters, parser: parser) else { return nil }
+        guard let sign = _SignText(characters: consumable.characters, parser: parser) else { return nil }
                                         
         self.sign = sign
         consumable.removeAll()
@@ -48,7 +48,7 @@ import struct DiffableTextViews.Snapshot
     
     // MARK: Utilities
             
-    @inlinable func process(_ number: inout _Number) {
+    @inlinable func process(_ number: inout _NumberText) {
         number.toggle(sign: sign)
     }
 }

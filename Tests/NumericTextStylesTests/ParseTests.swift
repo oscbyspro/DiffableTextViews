@@ -11,7 +11,7 @@ import XCTest
 // MARK: - ParseTestsOfDigits
 
 final class ParseTestsOfDigits: XCTestCase {
-    typealias Subject = _Digits
+    typealias Subject = _DigitsText
     typealias Parser = _DigitsParser
     
     // MARK: Setup
@@ -40,7 +40,7 @@ final class ParseTestsOfDigits: XCTestCase {
 // MARK: - ParseTestsOfSeparator
 
 final class ParseTestsOfSeparator: XCTestCase {
-    typealias Subject = _Separator
+    typealias Subject = _SeparatorText
     typealias Parser = _SeparatorParser
     
     // MARK: Setup
@@ -107,7 +107,7 @@ final class ParseTestsOfSeparator: XCTestCase {
 // MARK: - ParseTestsOfSeparator
 
 final class ParseTestsOfSign: XCTestCase {
-    typealias Subject = _Sign
+    typealias Subject = _SignText
     typealias Parser = _SignParser
     
     // MARK: Setup

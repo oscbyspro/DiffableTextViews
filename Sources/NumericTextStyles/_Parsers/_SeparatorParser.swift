@@ -11,7 +11,7 @@ import struct Foundation.Locale
 
 #warning("WIP")
 public struct _SeparatorParser: _Parser {
-    public typealias Output = _Separator
+    public typealias Output = _SeparatorText
 
     // MARK: Properties
     

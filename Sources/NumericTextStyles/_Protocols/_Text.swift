@@ -30,6 +30,7 @@ extension _Text {
     
     // MARK: Initializers
     
+    #warning("Move to _Parser, maybe.")
     /// Creates an instance of this object or returns nil if the parsed characters don't represent an instance of this object.
     @inlinable init?<C: Collection, P: _Parser>(characters: C, parser: P) where C.Element == Character, P.Output == Self {
         self.init(); var index = characters.startIndex

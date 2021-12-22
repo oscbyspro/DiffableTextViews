@@ -16,7 +16,7 @@ import enum Foundation.NumberFormatStyleConfiguration
 /// - Range: ±Self.maxLosslessValue.
 /// - Significands: Self.maxLosslessTotalDigits.
 ///
-public protocol NumberTextFloatingPoint: _NumberTextValue, _UsesFloatingPointPrecision, BinaryFloatingPoint {
+public protocol NumberTextFloatingPoint: _NumberValue, _UsesFloatingPointPrecision, BinaryFloatingPoint {
     
     // MARK: Requirements
     
@@ -50,7 +50,7 @@ extension Float16: NumberTextFloatingPoint {
     
     // MARK: Implementation
     
-    public typealias NumberTextParser = _FloatingPointParser
+    public typealias NumberParser = _FloatingPointParser
     
     @inlinable public static var maxLosslessValue: Self { 999 }
     @inlinable public static var maxLosslessTotalDigits: Int { 3 }
@@ -62,7 +62,7 @@ extension Float32: NumberTextFloatingPoint {
     
     // MARK: Implementation
     
-    public typealias NumberTextParser = _FloatingPointParser
+    public typealias NumberParser = _FloatingPointParser
     
     @inlinable public static var maxLosslessValue: Self { 9_999_999 }
     @inlinable public static var maxLosslessTotalDigits: Int { 7 }
@@ -74,7 +74,7 @@ extension Float64: NumberTextFloatingPoint {
     
     // MARK: Implementation
     
-    public typealias NumberTextParser = _FloatingPointParser
+    public typealias NumberParser = _FloatingPointParser
     
     @inlinable public static var maxLosslessValue: Self { 999_999_999_999_999 }
     @inlinable public static var maxLosslessTotalDigits: Int { 15 }

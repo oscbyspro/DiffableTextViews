@@ -7,6 +7,7 @@
 
 // MARK: - Count
 
+#warning("Rename, maybe.")
 @usableFromInline struct _Count {
     
     // MARK: Properties

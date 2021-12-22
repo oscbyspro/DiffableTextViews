@@ -1,14 +1,14 @@
 //
-//  Sign.swift
+//  SignText.swift
 //  
 //
 //  Created by Oscar Byström Ericsson on 2021-12-20.
 //
 
-// MARK: - Sign
+// MARK: - SignText
 
 #warning("WIP")
-public enum _Sign: String, _Text {
+public enum _SignText: String, _Text {
     
     // MARK: Cases
     

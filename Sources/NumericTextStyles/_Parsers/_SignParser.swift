@@ -9,7 +9,7 @@
 
 #warning("WIP")
 public struct _SignParser: _Parser {
-    public typealias Output = _Sign
+    public typealias Output = _SignText
 
     // MARK: Properties
     
@@ -46,6 +46,6 @@ public struct _SignParser: _Parser {
     
     // MARK: Instances: Static
     
-    public static let standard = Self(positives: [], negatives: [_Sign.negative.characters])
+    public static let standard = Self(positives: [], negatives: [_SignText.negative.characters])
 }
 

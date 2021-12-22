@@ -1,14 +1,14 @@
 //
-//  Digits.swift
+//  DigitsText.swift
 //  
 //
 //  Created by Oscar Byström Ericsson on 2021-12-20.
 //
 
-// MARK: - Digits
+// MARK: - DigitsText
 
 #warning("WIP")
-public struct _Digits: _Text {
+public struct _DigitsText: _Text {
     
     // MARK: Properties
     

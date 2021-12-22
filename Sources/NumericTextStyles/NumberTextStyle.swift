@@ -15,7 +15,7 @@ import protocol Utilities.Transformable
 ///
 /// - Complexity: O(n) or less for all computations.
 ///
-public struct NumberTextStyle<Value: _NumberTextValue>: DiffableTextStyle, Transformable {
+public struct NumberTextStyle<Value: _NumberValue>: DiffableTextStyle, Transformable {
     public typealias Parser = Value.NumberTextParser
     public typealias Bounds = NumericTextStyles._Bounds<Value>
     public typealias Precision = NumericTextStyles._Precision<Value>
@@ -66,7 +66,7 @@ public struct NumberTextStyle<Value: _NumberTextValue>: DiffableTextStyle, Trans
     
     // MARK: Helpers
     
-    @inlinable func number(snapshot: Snapshot) -> _Number? {
+    @inlinable func number(snapshot: Snapshot) -> _NumberText? {
         .init(characters: snapshot.lazy.compactMap({ $0.nonformatting ? $0.character : nil }), parser: parser)
     }
 }
@@ -79,11 +79,11 @@ extension NumberTextStyle {
     // MARK: Characters
     
     @inlinable var zero: Character {
-        _Digits.zero
+        _DigitsText.zero
     }
     
     @inlinable var digits: Set<Character> {
-        _Digits.decimals
+        _DigitsText.decimals
     }
     
     @inlinable var signs: Set<Character> {
@@ -91,7 +91,7 @@ extension NumberTextStyle {
     }
     
     @inlinable var fractionSeparator: String {
-        locale.decimalSeparator ?? _Separator.dot
+        locale.decimalSeparator ?? _SeparatorText.dot
     }
 
     @inlinable var groupingSeparator: String {
@@ -139,7 +139,7 @@ extension NumberTextStyle {
     // MARK: Components
     
     #warning("Cleanup.")
-    @inlinable func value(number: _Number) -> Value? {
+    @inlinable func value(number: _NumberText) -> Value? {
         number.integer.isEmpty && number.fraction.isEmpty ? Value.zero : Value.value(description: number.characters)
     }
 }
@@ -191,7 +191,7 @@ extension NumberTextStyle {
     
     // MARK: Components
     
-    @inlinable func snapshot(number: inout _Number) -> Snapshot? {
+    @inlinable func snapshot(number: inout _NumberText) -> Snapshot? {
         let count = number.numberOfSignificantDigits()
         guard let capacity = precision.editableValidationThatGeneratesCapacity(count: count) else { return nil }
         

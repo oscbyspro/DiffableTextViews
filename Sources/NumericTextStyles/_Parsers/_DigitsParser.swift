@@ -9,7 +9,7 @@
 
 #warning("WIP")
 public struct _DigitsParser: _Parser {
-    public typealias Output = _Digits
+    public typealias Output = _DigitsText
 
     // MARK: Properties
     

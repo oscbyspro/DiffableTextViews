@@ -5,10 +5,10 @@
 //  Created by Oscar Byström Ericsson on 2021-12-20.
 //
 
-// MARK: - Separator
+// MARK: - SeparatorText
 
 #warning("WIP")
-public struct _Separator: _Text {
+public struct _SeparatorText: _Text {
     
     // MARK: Properties
     
