@@ -1,2 +1,2 @@
 
-- Streamline/improve names of objects.
+- NumericTextStyles: streamline/improve names of objects.

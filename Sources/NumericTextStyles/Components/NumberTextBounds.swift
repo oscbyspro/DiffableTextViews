@@ -7,7 +7,6 @@
 
 // MARK: - Bounds
 
-#warning("Rename as NumberTextBounds, maybe.")
 /// Bounds that constrain values to a range.
 ///
 /// Requires that lowerBound ≤ zero ≤ upperBound to ensure intuitive behavior.

@@ -7,7 +7,6 @@
 
 // MARK: - SignTextParser
 
-#warning("WIP")
 public struct SignTextParser: TextParser {
     public typealias Output = SignText
 

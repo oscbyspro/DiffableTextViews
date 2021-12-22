@@ -40,7 +40,6 @@ public struct NumberTextPrecision<Value: PreciseTextValue> {
         return .integerAndFractionLength(integerLimits: integer, fractionLimits: fraction)
     }
     
-    #warning("Rename to clarify what it does differently.")
     @inlinable func editableStyle(count: Count) -> NumberFormatStyleConfiguration.Precision {
         let integerUpperBound = Swift.max(Defaults.integerLowerBound, count.integer)
         let integer = Defaults.integerLowerBound...integerUpperBound
