@@ -38,7 +38,9 @@ public struct NumericTextStyle<Value: NumericTextValue>: DiffableTextStyle, Tran
     @inlinable @inline(__always) var parser: NumberParser {
         Value.parser.locale(locale)
     }
-        
+    
+    // MARK: Getters: Characters
+    
     @inlinable var zero: Character {
         Digits.zero
     }
@@ -81,24 +83,23 @@ public struct NumericTextStyle<Value: NumericTextValue>: DiffableTextStyle, Tran
         transforming({ $0.precision = newValue })
     }
     
-    // MARK: Helpers
+    // MARK: Numbers
     
     @inlinable func number(snapshot: Snapshot) -> Number? {
-        parser.parse(characters: snapshot.lazy.compactMap({ $0.nonformatting ? $0.character : nil }))        
+        parser.parse(characters: snapshot.lazy.compactMap({ $0.nonformatting ? $0.character : nil }))
     }
-}
-
-// MARK: - Styles
-
-extension NumericTextStyle {
     
-    // MARK: Showcase
+    @inlinable func value(number: Number) -> Value? {
+        number.integer.isEmpty && number.fraction.isEmpty ? Value.zero : Value.value(description: number.characters)
+    }
+    
+    // MARK: Style: Showcase
     
     @inlinable func showcaseStyle() -> Value.FormatStyle {
         Value.style(locale: locale, precision: precision.showcaseStyle(), separator: .automatic)
     }
     
-    // MARK: Editable
+    // MARK: Style: Editable
     
     @inlinable func editableStyle() -> Value.FormatStyle {
         Value.style(locale: locale, precision: precision.editableStyle(), separator: .automatic)
@@ -107,53 +108,32 @@ extension NumericTextStyle {
     @inlinable func editableStyle(count: Count, separator: Bool) -> Value.FormatStyle {
         Value.style(locale: locale, precision: precision.editableStyle(count: count), separator: separator ? .always : .automatic)
     }
-}
-
-// MARK: - Value
-
-extension NumericTextStyle {
     
-    // MARK: Process
+    // MARK: Value: Process
     
     @inlinable public func process(value: inout Value) {
-        value = bounds.bounded(value)
+        bounds.clamp(&value)
     }
         
-    // MARK: Parse
+    // MARK: Value: Parse
 
     @inlinable public func parse(snapshot: Snapshot) -> Value? {
         number(snapshot: snapshot).flatMap(value)
     }
     
-    // MARK: Components
-    
-    @inlinable func value(number: Number) -> Value? {
-        number.integer.isEmpty && number.fraction.isEmpty ? Value.zero : Value.value(description: number.characters)
-    }
-}
-
-// MARK: - Snapshot
-
-extension NumericTextStyle {
-    
-    // MARK: Showcase
+    // MARK: Snapshot: Showcase
     
     @inlinable public func snapshot(showcase value: Value) -> Snapshot {
         snapshot(characters: showcaseStyle().format(value))
     }
     
-    // MARK: Editable
+    // MARK: Snapshot: Editable
 
     @inlinable public func snapshot(editable value: Value) -> Snapshot {
         snapshot(characters: editableStyle().format(value))
     }
-}
 
-// MARK: - Snapshot
-
-extension NumericTextStyle {
-    
-    // MARK: Merge
+    // MARK: Snapshot: Merge
 
     @inlinable public func merge(snapshot: Snapshot, with content: Snapshot, in range: Range<Snapshot.Index>) -> Snapshot? {
         var input = Input(content, parser: parser)
@@ -171,12 +151,6 @@ extension NumericTextStyle {
         
         // --------------------------------- //
 
-        return self.snapshot(number: &number)
-    }
-    
-    // MARK: Number
-    
-    @inlinable func snapshot(number: inout Number) -> Snapshot? {
         let count = number.numberOfSignificantDigits()
         guard let capacity = precision.editableValidationThatGeneratesCapacity(count: count) else { return nil }
         
@@ -205,10 +179,10 @@ extension NumericTextStyle {
         
         // --------------------------------- //
     
-        return snapshot(characters: characters)
+        return self.snapshot(characters: characters)
     }
     
-    // MARK: Characters
+    // MARK: Snapshot: Characters
     
     @inlinable func snapshot(characters: String) -> Snapshot {
         var snapshot = Snapshot()
@@ -251,7 +225,7 @@ extension NumericTextStyle {
         return snapshot
     }
     
-    // MARK: Characters, Helpers
+    // MARK: Snapshot: Characters: Helpers
     
     @inlinable func transformFirstDigitIfItIsZero(in snapshot: inout Snapshot, using transformation: (inout Attribute) -> Void) {
         func digit(symbol: Symbol) -> Bool {

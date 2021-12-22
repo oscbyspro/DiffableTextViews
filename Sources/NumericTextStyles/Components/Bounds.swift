@@ -47,12 +47,12 @@ public struct Bounds<Value: Boundable> {
     }
     
     // MARK: Utilities
-    
-    @inlinable func bounded(_ value: Value) -> Value {
-        Swift.max(lowerBound, Swift.min(value, upperBound))
-    }
 
     @inlinable func contains(_ value: Value) -> Bool {
         lowerBound <= value && value <= upperBound
+    }
+    
+    @inlinable func clamp(_ value: inout Value) {
+        value = Swift.max(lowerBound, Swift.min(value, upperBound))
     }
 }
