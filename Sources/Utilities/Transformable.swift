@@ -9,7 +9,7 @@
 
 public protocol Transformable { }
 
-// MARK: - Utilities
+// MARK: - Transformable: Details
 
 public extension Transformable {
     

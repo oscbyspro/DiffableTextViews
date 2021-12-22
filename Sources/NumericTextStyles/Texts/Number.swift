@@ -41,9 +41,9 @@
         if sign == proposal { sign = .none } else { sign = proposal }
     }
     
-    // MARK: Utilities
+    // MARK: Counts
     
-    @inlinable var numberOfDigits: Count {
+    @inlinable func numberOfDigits() -> Count {
         .init(integer: integer.count, fraction: fraction.count)
     }
     
@@ -52,8 +52,6 @@
         let fractionValue = fraction.count - numberOfRedundantFractionDigits()
         return .init(integer: integerValue, fraction: fractionValue)
     }
-    
-    // MARK: Utilities: Helpers
         
     @inlinable func numberOfRedundantIntegerDigits() -> Int {
         integer.characters.prefix(while: { $0 == Digits.zero }).count
