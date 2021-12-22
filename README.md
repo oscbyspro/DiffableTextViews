@@ -10,7 +10,7 @@ This package contains views that use snapshots and attributes to process a user'
 ### DiffableTextField
 
 # Styles
-### NumberTextStyle
+### NumericTextStyle
 
 # Usage
 

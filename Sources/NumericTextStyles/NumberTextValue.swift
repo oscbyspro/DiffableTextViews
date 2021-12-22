@@ -12,9 +12,7 @@ import enum Foundation.NumberFormatStyleConfiguration
 
 // MARK: - NumberTextValue
 
-public protocol NumberTextValue: Parsable, Formattable, Boundable, Precise {
-    typealias NumberTextStyle = NumericTextStyles.NumberTextStyle<Self>
-}
+public protocol NumberTextValue: Parsable, Formattable, Boundable, Precise { }
 
 // MARK: - NumberTextInteger
 
