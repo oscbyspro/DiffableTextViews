@@ -198,8 +198,6 @@ public extension NumberTextPrecision where Value: _UsesFloatingPointPrecision {
         let fractionCapacity = fraction.upperBound - count.fraction
         guard fractionCapacity >= 0 else { return nil }
         
-        print(integerCapacity, fractionCapacity)
-        
         return .init(integer: integerCapacity, fraction: fractionCapacity)
     }
 }
