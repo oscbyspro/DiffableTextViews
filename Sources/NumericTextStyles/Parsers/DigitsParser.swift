@@ -1,14 +1,14 @@
 //
-//  DigitsTextParser.swift
+//  DigitsParser.swift
 //  
 //
 //  Created by Oscar Byström Ericsson on 2021-12-22.
 //
 
-// MARK: - DigitsTextParser
+// MARK: - DigitsParser
 
-public struct DigitsTextParser: TextParser {
-    public typealias Output = DigitsText
+@usableFromInline struct DigitsParser: Parser {
+    @usableFromInline typealias Output = Digits
 
     // MARK: Properties
     
@@ -22,7 +22,7 @@ public struct DigitsTextParser: TextParser {
     
     // MARK: Parse
     
-    @inlinable public func parse<C: Collection>(characters: C, index: inout C.Index, storage: inout Output) where C.Element == Character {
+    @inlinable func parse<C: Collection>(characters: C, index: inout C.Index, storage: inout Output) where C.Element == Character {
         while index < characters.endIndex {
             let character = characters[index]
             
@@ -35,6 +35,6 @@ public struct DigitsTextParser: TextParser {
     
     // MARK: Instances
     
-    public static let standard = Self(digits: Output.decimals)
+    @usableFromInline static let standard = Self(digits: Output.decimals)
 }
 

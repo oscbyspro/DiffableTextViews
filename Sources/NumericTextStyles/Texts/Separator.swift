@@ -5,9 +5,9 @@
 //  Created by Oscar Byström Ericsson on 2021-12-20.
 //
 
-// MARK: - SeparatorText
+// MARK: - Separator
 
-public struct SeparatorText: Text {
+public struct Separator: Text {
     
     // MARK: Properties
     

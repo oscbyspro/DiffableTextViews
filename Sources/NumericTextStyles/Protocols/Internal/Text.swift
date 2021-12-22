@@ -8,7 +8,7 @@
 // MARK: - Text
 
 /// A system representation of the conforming object.
-public protocol Text {
+@usableFromInline protocol Text {
     
     // MARK: Requirements
     

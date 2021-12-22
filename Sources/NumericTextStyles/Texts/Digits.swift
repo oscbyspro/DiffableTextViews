@@ -1,13 +1,13 @@
 //
-//  DigitsText.swift
+//  Digits.swift
 //  
 //
 //  Created by Oscar Byström Ericsson on 2021-12-20.
 //
 
-// MARK: - DigitsText
+// MARK: - Digits
 
-public struct DigitsText: Text {
+public struct Digits: Text {
     
     // MARK: Properties
     

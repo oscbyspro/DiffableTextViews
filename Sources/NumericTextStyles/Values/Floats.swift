@@ -9,48 +9,52 @@ import struct Foundation.Locale
 import struct Foundation.FloatingPointFormatStyle
 import enum Foundation.NumberFormatStyleConfiguration
 
-// MARK: - NumberTextFloatingPoint
+// MARK: - FloatingPoint
 
 /// Numeric text value protocol for ordinary floats.
 /// 
 /// - Range: ±Self.maxLosslessValue.
 /// - Significands: Self.maxLosslessTotalDigits.
 ///
-public protocol NumberTextFloatingPoint: NumberTextValue, _UsesFloatingPointPrecision, BinaryFloatingPoint {
+@usableFromInline protocol FloatingPoint: NumberTextValue, UsesFloatingPointPrecision, BinaryFloatingPoint {
     
     // MARK: Requirements
     
     @inlinable init?(_ description: String)
 }
 
-// MARK: - NumberTextFloatingPoint: Details
+// MARK: - FloatingPoint: Details
 
-public extension NumberTextFloatingPoint {
+extension FloatingPoint {
     
     // MARK: Boundable
     
-    @inlinable static var minLosslessValue: Self {
+    @inlinable public static var minLosslessValue: Self {
         -maxLosslessValue
     }
     
-    // MARK: FormattableTextValue
+    // MARK: Formattable
 
-    @inlinable static func value(description: String) -> Self? {
+    @inlinable public static func value(description: String) -> Self? {
         .init(description)
     }
     
-    @inlinable static func style(locale: Locale, precision: NumberFormatStyleConfiguration.Precision, separator: NumberFormatStyleConfiguration.DecimalSeparatorDisplayStrategy) -> FloatingPointFormatStyle<Self> {
+    @inlinable public static func style(locale: Locale, precision: NumberFormatStyleConfiguration.Precision, separator: NumberFormatStyleConfiguration.DecimalSeparatorDisplayStrategy) -> FloatingPointFormatStyle<Self> {
         .init(locale: locale).precision(precision).decimalSeparator(strategy: separator)
+    }
+    
+    // MARK: Parsable
+    
+    @inlinable public static var parser: NumberParser {
+        .standard
     }
 }
 
 // MARK: - Float16
 
-extension Float16: NumberTextFloatingPoint {
+extension Float16: FloatingPoint {
     
     // MARK: Implementation
-    
-    public typealias NumberParser = NumberTextFloatingPointParser
     
     @inlinable public static var maxLosslessValue: Self { 999 }
     @inlinable public static var maxLosslessTotalDigits: Int { 3 }
@@ -58,24 +62,20 @@ extension Float16: NumberTextFloatingPoint {
 
 // MARK: - Float32
 
-extension Float32: NumberTextFloatingPoint {
+extension Float32: FloatingPoint {
     
     // MARK: Implementation
-    
-    public typealias NumberParser = NumberTextFloatingPointParser
-    
+        
     @inlinable public static var maxLosslessValue: Self { 9_999_999 }
     @inlinable public static var maxLosslessTotalDigits: Int { 7 }
 }
 
 // MARK: - Float64
 
-extension Float64: NumberTextFloatingPoint {
+extension Float64: FloatingPoint {
     
     // MARK: Implementation
-    
-    public typealias NumberParser = NumberTextFloatingPointParser
-    
+        
     @inlinable public static var maxLosslessValue: Self { 999_999_999_999_999 }
     @inlinable public static var maxLosslessTotalDigits: Int { 15 }
 }

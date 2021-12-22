@@ -1,20 +1,20 @@
 //
-//  NumberText.swift
+//  Number.swift
 //  
 //
 //  Created by Oscar Byström Ericsson on 2021-12-21.
 //
 
-// MARK: - NumberText
+// MARK: - Number
 
-public struct NumberText: Text {
+public struct Number: Text {
     
     // MARK: Properties
     
-    @usableFromInline var sign: SignText
-    @usableFromInline var integer: DigitsText
-    @usableFromInline var separator: SeparatorText
-    @usableFromInline var fraction: DigitsText
+    @usableFromInline var sign: Sign
+    @usableFromInline var integer: Digits
+    @usableFromInline var separator: Separator
+    @usableFromInline var fraction: Digits
     
     // MARK: Initializers
     
@@ -37,7 +37,7 @@ public struct NumberText: Text {
     
     // MARK: Transformations
     
-    @inlinable mutating func toggle(sign proposal: SignText) {
+    @inlinable mutating func toggle(sign proposal: Sign) {
         if sign == proposal { sign = .none } else { sign = proposal }
     }
     
@@ -56,10 +56,10 @@ public struct NumberText: Text {
     // MARK: Utilities: Helpers
         
     @inlinable func numberOfRedundantIntegerDigits() -> Int {
-        integer.characters.prefix(while: { $0 == DigitsText.zero }).count
+        integer.characters.prefix(while: { $0 == Digits.zero }).count
     }
     
     @inlinable func numberOfRedundantFractionDigits() -> Int {
-        fraction.characters.reversed().prefix(while: { $0 == DigitsText.zero }).count
+        fraction.characters.reversed().prefix(while: { $0 == Digits.zero }).count
     }
 }

@@ -9,16 +9,16 @@ import struct DiffableTextViews.Snapshot
 
 // MARK: - Input
 
-@usableFromInline struct Input<Parser: NumberTextParser> {
+@usableFromInline struct Input {
     
     // MARK: Properties
     
     @usableFromInline var content: Snapshot
-    @usableFromInline let parser: Parser
+    @usableFromInline let parser: NumberParser
         
     // MARK: Initializers
             
-    @inlinable init(_ content: Snapshot, parser: Parser) {
+    @inlinable init(_ content: Snapshot, parser: NumberParser) {
         self.content = content
         self.parser = parser
     }
@@ -36,11 +36,11 @@ import struct DiffableTextViews.Snapshot
 
     // MARK: Properties
     
-    @usableFromInline var sign: SignText
+    @usableFromInline var sign: Sign
     
     // MARK: Initializers
     
-    @inlinable init?<P: TextParser>(consumable: inout Snapshot, parser: P) where P.Output == SignText {
+    @inlinable init?<P: Parser>(consumable: inout Snapshot, parser: P) where P.Output == Sign {
         guard let sign = parser.parse(characters: consumable.characters) else { return nil }
         
         self.sign = sign
@@ -49,7 +49,7 @@ import struct DiffableTextViews.Snapshot
     
     // MARK: Utilities
             
-    @inlinable func process(_ number: inout NumberText) {
+    @inlinable func process(_ number: inout Number) {
         number.toggle(sign: sign)
     }
 }

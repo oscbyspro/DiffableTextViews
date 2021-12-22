@@ -1,13 +1,13 @@
 //
-//  PreciseTextValue.swift
+//  Precise.swift
 //  
 //
 //  Created by Oscar Byström Ericsson on 2021-12-21.
 //
 
-// MARK: - PreciseTextValue
+// MARK: - Precise
 
-public protocol PreciseTextValue {
+public protocol Precise {
     
     // MARK: Requirements
     
@@ -16,10 +16,10 @@ public protocol PreciseTextValue {
     @inlinable static var maxLosslessFractionDigits: Int { get }
 }
 
-// MARK: - UsesIntegerPrecision
+// MARK: - Precise: Integer
 
-public  protocol _UsesIntegerPrecision: PreciseTextValue { }
-public extension _UsesIntegerPrecision {
+public  protocol UsesIntegerPrecision: Precise { }
+public extension UsesIntegerPrecision {
     
     // MARK: Implementation
     
@@ -27,10 +27,10 @@ public extension _UsesIntegerPrecision {
     @inlinable static var maxLosslessFractionDigits: Int { 0 }
 }
 
-// MARK: - UsesFloatingPointPrecision
+// MARK: - Precise: FloatingPoint
 
-public  protocol _UsesFloatingPointPrecision: PreciseTextValue { }
-public extension _UsesFloatingPointPrecision {
+public  protocol UsesFloatingPointPrecision: Precise { }
+public extension UsesFloatingPointPrecision {
     
     // MARK: Implementation
 

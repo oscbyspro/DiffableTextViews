@@ -1,13 +1,13 @@
 //
-//  SignText.swift
+//  Sign.swift
 //  
 //
 //  Created by Oscar Byström Ericsson on 2021-12-20.
 //
 
-// MARK: - SignText
+// MARK: - Sign
 
-public enum SignText: String, Text {
+@usableFromInline enum Sign: String, Text {
     
     // MARK: Cases
     

@@ -1,5 +1,5 @@
 //
-//  NumberTextPrecision.swift
+//  Precision.swift
 //  
 //
 //  Created by Oscar Byström Ericsson on 2021-12-21.
@@ -7,21 +7,21 @@
 
 import enum Foundation.NumberFormatStyleConfiguration
 
-// MARK: - NumberTextPrecision
+// MARK: - Precision
 
 /// - Note: Lower precision bounds are enforced only when the view is idle.
-public struct NumberTextPrecision<Value: PreciseTextValue> {
-    @usableFromInline typealias Defaults = NumberTextPrecisionDefaults
-    @usableFromInline typealias Total = NumberTextPrecisionTotal<Value>
-    @usableFromInline typealias Parts = NumberTextPrecisionParts<Value>
+public struct Precision<Value: Precise> {
+    @usableFromInline typealias Defaults = PrecisionDefaults
+    @usableFromInline typealias Total = PrecisionTotal<Value>
+    @usableFromInline typealias Parts = PrecisionParts<Value>
     
     // MARK: Properties
     
-    @usableFromInline let implementation: NumberTextPrecisionImplementation
+    @usableFromInline let implementation: PrecisionImplementation
     
     // MARK: Initializers
     
-    @inlinable init(implementation: NumberTextPrecisionImplementation) {
+    @inlinable init(implementation: PrecisionImplementation) {
         self.implementation = implementation
     }
     
@@ -57,9 +57,9 @@ public struct NumberTextPrecision<Value: PreciseTextValue> {
     }
 }
 
-// MARK: - NumberTextPrecision: Total
+// MARK: - Precision: Total
 
-public extension NumberTextPrecision {
+public extension Precision {
 
     // MARK: Digits
     
@@ -80,9 +80,9 @@ public extension NumberTextPrecision {
     }
 }
 
-// MARK: - NumberTextPrecision: Parts
+// MARK: - Precision: Parts
 
-public extension NumberTextPrecision where Value: _UsesFloatingPointPrecision {
+public extension Precision where Value: UsesFloatingPointPrecision {
 
     // MARK: Digits
     
@@ -115,8 +115,8 @@ public extension NumberTextPrecision where Value: _UsesFloatingPointPrecision {
 
 // MARK: - Implementations
 
-@usableFromInline protocol NumberTextPrecisionImplementation {
-    typealias Defaults = NumberTextPrecisionDefaults
+@usableFromInline protocol PrecisionImplementation {
+    typealias Defaults = PrecisionDefaults
     
     // MARK: Requirements
         
@@ -127,7 +127,7 @@ public extension NumberTextPrecision where Value: _UsesFloatingPointPrecision {
 
 // MARK: - Implementations: Total
 
-@usableFromInline struct NumberTextPrecisionTotal<Value: PreciseTextValue>: NumberTextPrecisionImplementation {
+@usableFromInline struct PrecisionTotal<Value: Precise>: PrecisionImplementation {
 
     // MARK: Properties
     
@@ -157,7 +157,7 @@ public extension NumberTextPrecision where Value: _UsesFloatingPointPrecision {
 
 // MARK: - Implementations: Parts
 
-@usableFromInline struct NumberTextPrecisionParts<Value: PreciseTextValue>: NumberTextPrecisionImplementation {
+@usableFromInline struct PrecisionParts<Value: Precise>: PrecisionImplementation {
 
     // MARK: Properties
     
@@ -204,7 +204,7 @@ public extension NumberTextPrecision where Value: _UsesFloatingPointPrecision {
 
 // MARK: - Defaults
 
-@usableFromInline enum NumberTextPrecisionDefaults {
+@usableFromInline enum PrecisionDefaults {
     @usableFromInline static let totalLowerBound: Int = 1
     @usableFromInline static let integerLowerBound: Int = 1
     @usableFromInline static let fractionLowerBound: Int = 0

@@ -1,14 +1,15 @@
 //
-//  SignTextParser.swift
+//  SignParser.swift
 //  
 //
 //  Created by Oscar Byström Ericsson on 2021-12-22.
 //
 
-// MARK: - SignTextParser
+// MARK: - SignParser
 
-public struct SignTextParser: TextParser {
-    public typealias Output = SignText
+#warning("Rename.")
+@usableFromInline struct SignParser: Parser {
+    @usableFromInline typealias Output = Sign
 
     // MARK: Properties
     
@@ -24,7 +25,7 @@ public struct SignTextParser: TextParser {
     
     // MARK: Parse
     
-    @inlinable public func parse<C: Collection>(characters: C, index: inout C.Index, storage: inout Output) where C.Element == Character {
+    @inlinable func parse<C: Collection>(characters: C, index: inout C.Index, storage: inout Output) where C.Element == Character {
         let subsequence = characters[index...]
         
         func parse(_ signs: [String], success: Output) -> Bool {
@@ -45,6 +46,6 @@ public struct SignTextParser: TextParser {
     
     // MARK: Instances
     
-    public static let standard = Self(positives: [], negatives: [Output.negative.characters])
+    @usableFromInline static let standard = Self(positives: [], negatives: [Output.negative.characters])
 }
 

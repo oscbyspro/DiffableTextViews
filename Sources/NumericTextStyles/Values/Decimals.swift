@@ -15,13 +15,9 @@ import enum Foundation.NumberFormatStyleConfiguration
 ///
 /// - Supports up to 38 significant digits.
 ///
-extension Decimal: NumberTextValue, _UsesFloatingPointPrecision { }; extension Decimal {
+extension Decimal: NumberTextValue, UsesFloatingPointPrecision { }; extension Decimal {
     
-    // MARK: Implementation
-    
-    public typealias NumberParser = NumberTextFloatingPointParser
-    
-    // MARK: Implementation: Boundable
+    // MARK: Boundable
         
     @usableFromInline static let maxLosslessLimit =
     Decimal(string: String(repeating: "9", count: maxLosslessTotalDigits))!
@@ -29,11 +25,11 @@ extension Decimal: NumberTextValue, _UsesFloatingPointPrecision { }; extension D
     @inlinable public static var minLosslessValue: Self { -maxLosslessLimit }
     @inlinable public static var maxLosslessValue: Self {  maxLosslessLimit }
     
-    // MARK: Implementation: Precise
+    // MARK: Precise
  
     @inlinable public static var maxLosslessTotalDigits: Int { 38 }
         
-    // MARK: Implementation: FormattableTextValue
+    // MARK: Formattable
     
     @inlinable public static func value(description: String) -> Self? {
         .init(string: description)
@@ -41,5 +37,11 @@ extension Decimal: NumberTextValue, _UsesFloatingPointPrecision { }; extension D
     
     @inlinable public static func style(locale: Locale, precision: NumberFormatStyleConfiguration.Precision, separator: NumberFormatStyleConfiguration.DecimalSeparatorDisplayStrategy) -> FormatStyle {
         .init(locale: locale).precision(precision).decimalSeparator(strategy: separator)
+    }
+    
+    // MARK: Parsable
+    
+    @inlinable public static var parser: NumberParser {
+        .standard
     }
 }

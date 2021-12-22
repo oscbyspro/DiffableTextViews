@@ -1,13 +1,13 @@
 //
-//  EmptyTextParser.swift
+//  EmptyParser.swift
 //  
 //
 //  Created by Oscar Byström Ericsson on 2021-12-22.
 //
 
-// MARK: - EmptyTextParser
+// MARK: - EmptyParser
 
-public struct EmptyTextParser<Output: Text>: TextParser {
+@usableFromInline struct EmptyParser<Output: Text>: Parser {
     
     // MARK: Implementation
     
@@ -17,4 +17,3 @@ public struct EmptyTextParser<Output: Text>: TextParser {
     
     @inlinable @inline(__always) public static var standard: Self { .init() }
 }
-

@@ -9,6 +9,8 @@ import DiffableTextViews
 import struct Foundation.Locale
 import protocol Utilities.Transformable
 
+#warning("Rename.")
+
 // MARK: - NumberTextStyle
 
 /// Formats numbers to and from user interactive text.
@@ -16,9 +18,8 @@ import protocol Utilities.Transformable
 /// - Complexity: O(n) or less for all computations.
 ///
 public struct NumberTextStyle<Value: NumberTextValue>: DiffableTextStyle, Transformable {
-    public typealias Parser = Value.NumberParser
-    public typealias Bounds = NumericTextStyles.NumberTextBounds<Value>
-    public typealias Precision = NumericTextStyles.NumberTextPrecision<Value>
+    public typealias Bounds = NumericTextStyles.Bounds<Value>
+    public typealias Precision = NumericTextStyles.Precision<Value>
 
     // MARK: Properties
     
@@ -36,24 +37,24 @@ public struct NumberTextStyle<Value: NumberTextValue>: DiffableTextStyle, Transf
     
     // MARK: Getters
     
-    @inlinable @inline(__always) var parser: Parser {
-        .standard.locale(locale)
+    @inlinable @inline(__always) var parser: NumberParser {
+        Value.parser.locale(locale)
     }
         
     @inlinable var zero: Character {
-        DigitsText.zero
+        Digits.zero
     }
     
     @inlinable var digits: Set<Character> {
-        DigitsText.decimals
+        Digits.decimals
     }
     
     @inlinable var signs: Set<Character> {
-        SignText.all
+        Sign.all
     }
     
     @inlinable var fractionSeparator: String {
-        locale.decimalSeparator ?? SeparatorText.dot
+        locale.decimalSeparator ?? Separator.dot
     }
 
     @inlinable var groupingSeparator: String {
@@ -84,7 +85,7 @@ public struct NumberTextStyle<Value: NumberTextValue>: DiffableTextStyle, Transf
     
     // MARK: Helpers
     
-    @inlinable func number(snapshot: Snapshot) -> NumberText? {
+    @inlinable func number(snapshot: Snapshot) -> Number? {
         parser.parse(characters: snapshot.lazy.compactMap({ $0.nonformatting ? $0.character : nil }))        
     }
 }
@@ -128,7 +129,7 @@ extension NumberTextStyle {
     
     // MARK: Components
     
-    @inlinable func value(number: NumberText) -> Value? {
+    @inlinable func value(number: Number) -> Value? {
         number.integer.isEmpty && number.fraction.isEmpty ? Value.zero : Value.value(description: number.characters)
     }
 }
@@ -177,7 +178,7 @@ extension NumberTextStyle {
     
     // MARK: Number
     
-    @inlinable func snapshot(number: inout NumberText) -> Snapshot? {
+    @inlinable func snapshot(number: inout Number) -> Snapshot? {
         let count = number.numberOfSignificantDigits()
         guard let capacity = precision.editableValidationThatGeneratesCapacity(count: count) else { return nil }
         

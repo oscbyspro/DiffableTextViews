@@ -11,7 +11,7 @@
 ///
 /// Requires that lowerBound ≤ zero ≤ upperBound to ensure intuitive behavior.
 ///
-public struct NumberTextBounds<Value: BoundableTextValue> {
+public struct Bounds<Value: Boundable> {
 
     // MARK: Properties
     
