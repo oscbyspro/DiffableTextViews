@@ -90,7 +90,7 @@ public extension Precision {
 
 // MARK: - Precision: Parts
 
-public extension Precision where Value: UsesFloatingPointPrecision {
+public extension Precision where Value: PreciseFloatingPoint {
 
     // MARK: Digits
     

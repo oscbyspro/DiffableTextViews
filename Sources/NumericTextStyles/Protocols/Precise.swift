@@ -18,8 +18,8 @@ public protocol Precise {
 
 // MARK: - Precise: Integer
 
-public  protocol UsesIntegerPrecision: Precise { }
-public extension UsesIntegerPrecision {
+public  protocol PreciseInteger: Precise { }
+public extension PreciseInteger {
     
     // MARK: Implementation
     
@@ -29,8 +29,8 @@ public extension UsesIntegerPrecision {
 
 // MARK: - Precise: FloatingPoint
 
-public  protocol UsesFloatingPointPrecision: Precise { }
-public extension UsesFloatingPointPrecision {
+public  protocol PreciseFloatingPoint: Precise { }
+public extension PreciseFloatingPoint {
     
     // MARK: Implementation
 

@@ -19,8 +19,12 @@
         self.rawValue = rawValue
     }
     
-    // MARK: Instances
+    // MARK: Instances: Singular
     
     @usableFromInline static let unsigned = Self(rawValue: 1 << 0)
     @usableFromInline static let integer  = Self(rawValue: 1 << 1)
+    
+    // MARK: Instances: Composites
+    
+    @usableFromInline static let unsignedInteger = Self([.unsigned, .integer])
 }

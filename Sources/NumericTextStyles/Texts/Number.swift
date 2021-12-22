@@ -7,8 +7,7 @@
 
 // MARK: - Number
 
-#warning("Make internal if possible.")
-public struct Number: Text {
+@usableFromInline struct Number: Text {
     
     // MARK: Properties
     
@@ -19,7 +18,7 @@ public struct Number: Text {
     
     // MARK: Initializers
     
-    @inlinable public init() {
+    @inlinable init() {
         self.sign = .init()
         self.integer = .init()
         self.separator = .init()
@@ -28,11 +27,11 @@ public struct Number: Text {
     
     // MARK: Getters
  
-    @inlinable public var isEmpty: Bool {
+    @inlinable var isEmpty: Bool {
         sign.isEmpty && integer.isEmpty && separator.isEmpty && fraction.isEmpty
     }
     
-    @inlinable public var characters: String {
+    @inlinable var characters: String {
         sign.characters + integer.characters + separator.characters + fraction.characters
     }
     

@@ -5,54 +5,9 @@
 //  Created by Oscar Byström Ericsson on 2021-10-25.
 //
 
-import struct Foundation.Locale
-import struct Foundation.FloatingPointFormatStyle
-import enum Foundation.NumberFormatStyleConfiguration
-
-// MARK: - FloatingPoint
-
-/// Numeric text value protocol for ordinary floats.
-/// 
-/// - Range: ±Self.maxLosslessValue.
-/// - Significands: Self.maxLosslessTotalDigits.
-///
-@usableFromInline protocol FloatingPoint: NumberTextValue, UsesFloatingPointPrecision, BinaryFloatingPoint {
-    
-    // MARK: Requirements
-    
-    @inlinable init?(_ description: String)
-}
-
-// MARK: - FloatingPoint: Details
-
-extension FloatingPoint {
-    
-    // MARK: Boundable
-    
-    @inlinable public static var minLosslessValue: Self {
-        -maxLosslessValue
-    }
-    
-    // MARK: Formattable
-
-    @inlinable public static func value(description: String) -> Self? {
-        .init(description)
-    }
-    
-    @inlinable public static func style(locale: Locale, precision: NumberFormatStyleConfiguration.Precision, separator: NumberFormatStyleConfiguration.DecimalSeparatorDisplayStrategy) -> FloatingPointFormatStyle<Self> {
-        .init(locale: locale).precision(precision).decimalSeparator(strategy: separator)
-    }
-    
-    // MARK: Parsable
-    
-    @inlinable public static var parser: NumberParser {
-        .standard
-    }
-}
-
 // MARK: - Float16
 
-extension Float16: FloatingPoint {
+extension Float16: NumberTextFloat {
     
     // MARK: Implementation
     
@@ -62,7 +17,7 @@ extension Float16: FloatingPoint {
 
 // MARK: - Float32
 
-extension Float32: FloatingPoint {
+extension Float32: NumberTextFloat {
     
     // MARK: Implementation
         
@@ -72,7 +27,7 @@ extension Float32: FloatingPoint {
 
 // MARK: - Float64
 
-extension Float64: FloatingPoint {
+extension Float64: NumberTextFloat {
     
     // MARK: Implementation
         
