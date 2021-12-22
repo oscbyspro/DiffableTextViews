@@ -34,7 +34,7 @@ public struct NumberTextUnsignedIntegerParser: NumberTextParser {
         digits.parse(characters: characters, index: &index, storage: &storage.integer)
     }
     
-    // MARK: Instances: Static
+    // MARK: Instances
     
     public static let standard = Self(digits: .standard)
 }

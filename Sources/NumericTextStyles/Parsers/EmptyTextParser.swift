@@ -7,7 +7,6 @@
 
 // MARK: - EmptyTextParser
 
-#warning("WIP")
 public struct EmptyTextParser<Output: Text>: TextParser {
     
     // MARK: Implementation

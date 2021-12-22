@@ -44,7 +44,7 @@ public struct SignTextParser: TextParser {
         if parse(positives, success: .positive) { return }
     }
     
-    // MARK: Instances: Static
+    // MARK: Instances
     
     public static let standard = Self(positives: [], negatives: [Output.negative.characters])
 }

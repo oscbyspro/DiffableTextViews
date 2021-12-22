@@ -7,7 +7,6 @@
 
 // MARK: - DigitsText
 
-#warning("WIP")
 public struct DigitsText: Text {
     
     // MARK: Properties

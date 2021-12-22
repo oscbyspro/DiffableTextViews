@@ -36,10 +36,28 @@ public struct NumberTextStyle<Value: NumberTextValue>: DiffableTextStyle, Transf
     
     // MARK: Getters
     
-    #warning("Use a stored property, maybe.")
-    #warning("Could store inside a reference, maybe.")
     @inlinable @inline(__always) var parser: Parser {
         .standard.locale(locale)
+    }
+        
+    @inlinable var zero: Character {
+        DigitsText.zero
+    }
+    
+    @inlinable var digits: Set<Character> {
+        DigitsText.decimals
+    }
+    
+    @inlinable var signs: Set<Character> {
+        SignText.all
+    }
+    
+    @inlinable var fractionSeparator: String {
+        locale.decimalSeparator ?? SeparatorText.dot
+    }
+
+    @inlinable var groupingSeparator: String {
+        locale.groupingSeparator ?? ""
     }
     
     // MARK: Transformations
@@ -67,39 +85,11 @@ public struct NumberTextStyle<Value: NumberTextValue>: DiffableTextStyle, Transf
     // MARK: Helpers
     
     @inlinable func number(snapshot: Snapshot) -> NumberText? {
-        .init(characters: snapshot.lazy.compactMap({ $0.nonformatting ? $0.character : nil }), parser: parser)
+        parser.parse(characters: snapshot.lazy.compactMap({ $0.nonformatting ? $0.character : nil }))        
     }
 }
 
-// MARK: - Getters
-
-#warning("Unknown how much this will be needed once done.")
-extension NumberTextStyle {
-    
-    // MARK: Characters
-    
-    @inlinable var zero: Character {
-        DigitsText.zero
-    }
-    
-    @inlinable var digits: Set<Character> {
-        DigitsText.decimals
-    }
-    
-    @inlinable var signs: Set<Character> {
-        #error("...")
-    }
-    
-    @inlinable var fractionSeparator: String {
-        locale.decimalSeparator ?? SeparatorText.dot
-    }
-
-    @inlinable var groupingSeparator: String {
-        locale.groupingSeparator ?? ""
-    }
-}
-
-// MARK: - Format
+// MARK: - Styles
 
 extension NumberTextStyle {
     
@@ -138,7 +128,6 @@ extension NumberTextStyle {
     
     // MARK: Components
     
-    #warning("Cleanup.")
     @inlinable func value(number: NumberText) -> Value? {
         number.integer.isEmpty && number.fraction.isEmpty ? Value.zero : Value.value(description: number.characters)
     }
@@ -186,7 +175,7 @@ extension NumberTextStyle {
         return self.snapshot(number: &number)
     }
     
-    // MARK: Components
+    // MARK: Number
     
     @inlinable func snapshot(number: inout NumberText) -> Snapshot? {
         let count = number.numberOfSignificantDigits()
@@ -248,8 +237,8 @@ extension NumberTextStyle {
         
         // --------------------------------- //
 
-        transformFirstDigitIfItIsZero(in:           &snapshot, using: { $0.insert(.prefixing) })
-        transformFreactionSeparatorIfItIsSuffix(in: &snapshot, using: { $0.insert(.removable) })
+        transformFirstDigitIfItIsZero(in:          &snapshot, using: { $0.insert(.prefixing) })
+        transformFractionSeparatorIfItIsSuffix(in: &snapshot, using: { $0.insert(.removable) })
                 
         // --------------------------------- //
 
@@ -280,7 +269,7 @@ extension NumberTextStyle {
         snapshot.transform(attributes: position, using: transformation)
     }
     
-    @inlinable func transformFreactionSeparatorIfItIsSuffix(in snapshot: inout Snapshot, using transformation: (inout Attribute) -> Void) {
+    @inlinable func transformFractionSeparatorIfItIsSuffix(in snapshot: inout Snapshot, using transformation: (inout Attribute) -> Void) {
         func predicate(symbol: Symbol) -> Bool {
             fractionSeparator.contains(symbol.character)
         }

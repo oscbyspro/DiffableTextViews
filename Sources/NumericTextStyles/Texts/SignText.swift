@@ -7,7 +7,6 @@
 
 // MARK: - SignText
 
-#warning("WIP")
 public enum SignText: String, Text {
     
     // MARK: Cases
@@ -31,4 +30,8 @@ public enum SignText: String, Text {
     @inlinable @inline(__always) public var characters: String {
         rawValue
     }
+    
+    // MARK: Characters: Static
+    
+    @usableFromInline static let all = Set<Character>(["+", "-"])
 }

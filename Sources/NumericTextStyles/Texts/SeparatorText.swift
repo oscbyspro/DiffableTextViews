@@ -7,7 +7,6 @@
 
 // MARK: - SeparatorText
 
-#warning("WIP")
 public struct SeparatorText: Text {
     
     // MARK: Properties

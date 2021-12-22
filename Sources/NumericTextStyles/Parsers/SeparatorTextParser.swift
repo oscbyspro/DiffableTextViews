@@ -42,7 +42,7 @@ public struct SeparatorTextParser: TextParser {
         }
     }
     
-    // MARK: Instances: Static
+    // MARK: Instances
     
     public static let standard = Self(separators: [Output.dot])
 }

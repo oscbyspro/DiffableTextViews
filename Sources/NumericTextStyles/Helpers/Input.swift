@@ -41,8 +41,8 @@ import struct DiffableTextViews.Snapshot
     // MARK: Initializers
     
     @inlinable init?<P: TextParser>(consumable: inout Snapshot, parser: P) where P.Output == SignText {
-        guard let sign = SignText(characters: consumable.characters, parser: parser) else { return nil }
-                                        
+        guard let sign = parser.parse(characters: consumable.characters) else { return nil }
+        
         self.sign = sign
         consumable.removeAll()
     }

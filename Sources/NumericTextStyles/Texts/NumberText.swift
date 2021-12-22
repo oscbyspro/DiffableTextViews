@@ -7,8 +7,6 @@
 
 // MARK: - NumberText
 
-#warning("WIP")
-#warning("Rename as NumberText, maybe.")
 public struct NumberText: Text {
     
     // MARK: Properties

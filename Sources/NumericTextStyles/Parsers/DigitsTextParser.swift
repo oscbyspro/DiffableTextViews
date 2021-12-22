@@ -7,7 +7,6 @@
 
 // MARK: - DigitsTextParser
 
-#warning("WIP")
 public struct DigitsTextParser: TextParser {
     public typealias Output = DigitsText
 
@@ -34,7 +33,7 @@ public struct DigitsTextParser: TextParser {
         }
     }
     
-    // MARK: Instances: Static
+    // MARK: Instances
     
     public static let standard = Self(digits: Output.decimals)
 }
