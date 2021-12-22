@@ -70,8 +70,6 @@ import protocol Utilities.Transformable
         updating(selection: newValue ..< newValue, intent: intent)
     }
     
-    // MARK: Configure: Selection, Offsets
-    
     @inlinable func updating(selection newValue: Range<Offset>, intent: Direction?) -> Self {
         updating(selection: indices(in: newValue), intent: intent)
     }
@@ -84,23 +82,12 @@ import protocol Utilities.Transformable
                     
     @inlinable @inline(never) func transformingAccordingToAttributes() -> Field {
         func move(_ position: Carets.Index, preference: Direction) -> Carets.Index {
-            let direction = carets[position].directionOfAttributes() ?? preference
-            return look(position, direction: direction)
+            look(position, direction: carets[position].directionOfAttributes() ?? preference)
         }
         
         // --------------------------------- //
         
-        let upperBound = move(selection.upperBound, preference: .backwards)
-        var lowerBound = upperBound
-
-        if !selection.isEmpty {
-            lowerBound = move(selection.lowerBound, preference: .forwards)
-            lowerBound = min(lowerBound, upperBound)
-        }
-        
-        // --------------------------------- //
-        
-        return transforming({ $0.selection = lowerBound ..< upperBound })
+        return transforming({ $0.selection = map(selection, transformation: move) })
     }
 
     // MARK: Transformations: Selection
@@ -125,18 +112,8 @@ import protocol Utilities.Transformable
         }
         
         // --------------------------------- //
-        
-        let upperBound = move(newValue.upperBound, preference: .backwards)
-        var lowerBound = upperBound
 
-        if !newValue.isEmpty {
-            lowerBound = move(newValue.lowerBound, preference:  .forwards)
-            lowerBound = min(lowerBound, upperBound)
-        }
-        
-        // --------------------------------- //
-
-        return transforming({ $0.selection = lowerBound ..< upperBound })
+        return transforming({ $0.selection = map(newValue, transformation: move) })
     }
     
     // MARK: Transformations: Carets
@@ -167,6 +144,20 @@ import protocol Utilities.Transformable
         // --------------------------------- //
         
         return Field(newValue, selection: lowerBound ..< upperBound)
+    }
+    
+    // MARK: Transformations: Helpers
+    
+    @inlinable func map(_ range: Range<Carets.Index>, transformation: (Carets.Index, Direction) -> Carets.Index) -> Range<Carets.Index> {
+        let upperBound = transformation(range.upperBound, .backwards)
+        var lowerBound = upperBound
+
+        if !range.isEmpty {
+            lowerBound = transformation(range.lowerBound,  .forwards)
+            lowerBound = min(lowerBound, upperBound)
+        }
+        
+        return lowerBound ..< upperBound
     }
     
     // MARK: Utilities: Indices
