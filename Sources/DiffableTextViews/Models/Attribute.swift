@@ -5,8 +5,6 @@
 //  Created by Oscar Byström Ericsson on 2021-10-02.
 //
 
-import protocol Utilities.Transformable
-
 // MARK: - Attribute
 
 /// A set of options, where each option represents a specialized behavior.
@@ -18,7 +16,7 @@ import protocol Utilities.Transformable
 ///
 /// - Note: The easiest way to unformat text is to filter out symbols marked as formatting.
 ///
-public struct Attribute: OptionSet, Transformable {
+public struct Attribute: OptionSet {
     
     // MARK: Properties
     
@@ -32,7 +30,7 @@ public struct Attribute: OptionSet, Transformable {
 
     // MARK: Instances: Singular
     
-    /// Signifies that the symbol is part of the text's formatting and therefore not real.
+    /// Signifies that the symbol is part of a text's formatting and therefore not real.
     public static let formatting = Self(rawValue: 1 << 0)
     /// Signifies that the symbol should be ignored by the differentiation algorithm when it is inserted.
     public static let insertable = Self(rawValue: 1 << 1)
