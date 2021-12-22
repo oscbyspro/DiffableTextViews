@@ -53,7 +53,7 @@ import protocol Utilities.Transformable
     // MARK: Update: Carets
     
     @inlinable func updating(carets newValue: Carets) -> Self {
-        movingToCarets(newValue).movingToAttributes()
+        transformingAccordingToCarets(newValue).transformingAccordingToAttributes()
     }
     
     @inlinable func updating(carets newValue: Snapshot) -> Self {
@@ -63,7 +63,7 @@ import protocol Utilities.Transformable
     // MARK: Update: Selection
     
     @inlinable func updating(selection newValue: Range<Carets.Index>, intent: Direction?) -> Self {
-        movingToSelection(newValue, intent: intent).movingToAttributes()
+        transformingAccordingToSelection(newValue, intent: intent).transformingAccordingToAttributes()
     }
     
     @inlinable func updating(selection newValue: Carets.Index, intent: Direction?) -> Self {
@@ -79,15 +79,10 @@ import protocol Utilities.Transformable
     @inlinable func updating(selection newValue: Offset, intent: Direction?) -> Self {
         updating(selection: newValue ..< newValue, intent: intent)
     }
-}
 
-// MARK: Movements
-
-extension Field {
-    
-    // MARK: Attribute
-            
-    @inlinable func movingToAttributes() -> Field {
+    // MARK: Transformations: Attribute
+                    
+    @inlinable func transformingAccordingToAttributes() -> Field {
         func move(_ position: Carets.Index, preference: Direction) -> Carets.Index {
             let direction = carets[position].directionOfAttributes() ?? preference
             return look(position, direction: direction)
@@ -108,9 +103,9 @@ extension Field {
         return transforming({ $0.selection = lowerBound ..< upperBound })
     }
 
-    // MARK: Selection
-    
-    @inlinable func movingToSelection(_ newValue: Range<Carets.Index>, intent: Direction?) -> Field {
+    // MARK: Transformations: Selection
+        
+    @inlinable func transformingAccordingToSelection(_ newValue: Range<Carets.Index>, intent: Direction?) -> Field {
         func move(_ start: Carets.Index, preference: Direction) -> Carets.Index {
             if carets[start].nonlookable(direction: preference) { return start }
                         
@@ -144,9 +139,9 @@ extension Field {
         return transforming({ $0.selection = lowerBound ..< upperBound })
     }
     
-    // MARK: Carets
+    // MARK: Transformations: Carets
             
-    @inlinable func movingToCarets(_ newValue: Carets) -> Field {
+    @inlinable func transformingAccordingToCarets(_ newValue: Carets) -> Field {
         func step(previous lhs: Symbol, next rhs: Symbol) -> SimilaritiesInstruction {
             if lhs == rhs                               { return .continue      }
             else if lhs.attribute.contains(.removable)  { return .continueOnLHS }
@@ -173,13 +168,8 @@ extension Field {
         
         return Field(newValue, selection: nextLowerBound ..< nextUpperBound)
     }
-}
-
-// MARK: - Indices & Offsets
-
-extension Field {
     
-    // MARK: Utilities
+    // MARK: Utilities: Indices
     
     @inlinable func indices(in offsets: Range<Offset>) -> Range<Carets.Index> {
         var indices = [Carets.Index]()
@@ -205,7 +195,7 @@ extension Field {
         return lowerBound ..< upperBound
     }
     
-    // MARK: Objects
+    // MARK: Components
     
     @usableFromInline struct PathToIndex: Comparable {
         
