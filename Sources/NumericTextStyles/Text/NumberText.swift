@@ -9,14 +9,14 @@
 
 #warning("WIP")
 #warning("Rename as NumberText, maybe.")
-public struct _NumberText: _Text {
+public struct NumberText: Text {
     
     // MARK: Properties
     
-    @usableFromInline var sign: _SignText
-    @usableFromInline var integer: _DigitsText
-    @usableFromInline var separator: _SeparatorText
-    @usableFromInline var fraction: _DigitsText
+    @usableFromInline var sign: SignText
+    @usableFromInline var integer: DigitsText
+    @usableFromInline var separator: SeparatorText
+    @usableFromInline var fraction: DigitsText
     
     // MARK: Initializers
     
@@ -39,17 +39,17 @@ public struct _NumberText: _Text {
     
     // MARK: Transformations
     
-    @inlinable mutating func toggle(sign proposal: _SignText) {
+    @inlinable mutating func toggle(sign proposal: SignText) {
         if sign == proposal { sign = .none } else { sign = proposal }
     }
     
     // MARK: Utilities
     
-    @inlinable var numberOfDigits: _Count {
+    @inlinable var numberOfDigits: Count {
         .init(integer: integer.count, fraction: fraction.count)
     }
     
-    @inlinable func numberOfSignificantDigits() -> _Count {
+    @inlinable func numberOfSignificantDigits() -> Count {
         let integerValue = integer.count - numberOfRedundantIntegerDigits()
         let fractionValue = fraction.count - numberOfRedundantFractionDigits()
         return .init(integer: integerValue, fraction: fractionValue)
@@ -58,10 +58,10 @@ public struct _NumberText: _Text {
     // MARK: Utilities: Helpers
         
     @inlinable func numberOfRedundantIntegerDigits() -> Int {
-        integer.characters.prefix(while: { $0 == _DigitsText.zero }).count
+        integer.characters.prefix(while: { $0 == DigitsText.zero }).count
     }
     
     @inlinable func numberOfRedundantFractionDigits() -> Int {
-        fraction.characters.reversed().prefix(while: { $0 == _DigitsText.zero }).count
+        fraction.characters.reversed().prefix(while: { $0 == DigitsText.zero }).count
     }
 }

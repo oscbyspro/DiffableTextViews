@@ -11,8 +11,7 @@ import enum Foundation.NumberFormatStyleConfiguration
 
 // MARK: - Formattable
 
-#warning("WIP")
-public protocol _Formattable {
+public protocol Formattable {
     
     // MARK: Requirements
     

@@ -15,10 +15,10 @@ import protocol Utilities.Transformable
 ///
 /// - Complexity: O(n) or less for all computations.
 ///
-public struct NumberTextStyle<Value: _NumberValue>: DiffableTextStyle, Transformable {
-    public typealias Parser = Value.NumberTextParser
-    public typealias Bounds = NumericTextStyles._Bounds<Value>
-    public typealias Precision = NumericTextStyles._Precision<Value>
+public struct NumberTextStyle<Value: NumberValue>: DiffableTextStyle, Transformable {
+    public typealias Parser = Value.NumberParser
+    public typealias Bounds = NumericTextStyles.Bounds<Value>
+    public typealias Precision = NumericTextStyles.Precision<Value>
 
     // MARK: Properties
     
@@ -66,7 +66,7 @@ public struct NumberTextStyle<Value: _NumberValue>: DiffableTextStyle, Transform
     
     // MARK: Helpers
     
-    @inlinable func number(snapshot: Snapshot) -> _NumberText? {
+    @inlinable func number(snapshot: Snapshot) -> NumberText? {
         .init(characters: snapshot.lazy.compactMap({ $0.nonformatting ? $0.character : nil }), parser: parser)
     }
 }
@@ -79,11 +79,11 @@ extension NumberTextStyle {
     // MARK: Characters
     
     @inlinable var zero: Character {
-        _DigitsText.zero
+        DigitsText.zero
     }
     
     @inlinable var digits: Set<Character> {
-        _DigitsText.decimals
+        DigitsText.decimals
     }
     
     @inlinable var signs: Set<Character> {
@@ -91,7 +91,7 @@ extension NumberTextStyle {
     }
     
     @inlinable var fractionSeparator: String {
-        locale.decimalSeparator ?? _SeparatorText.dot
+        locale.decimalSeparator ?? SeparatorText.dot
     }
 
     @inlinable var groupingSeparator: String {
@@ -115,7 +115,7 @@ extension NumberTextStyle {
         Value.style(locale: locale, precision: precision.editableStyle(), separator: .automatic)
     }
     
-    @inlinable func editableStyle(count: _Count, separator: Bool) -> Value.FormatStyle {
+    @inlinable func editableStyle(count: Count, separator: Bool) -> Value.FormatStyle {
         Value.style(locale: locale, precision: precision.editableStyle(count: count), separator: separator ? .always : .automatic)
     }
 }
@@ -139,7 +139,7 @@ extension NumberTextStyle {
     // MARK: Components
     
     #warning("Cleanup.")
-    @inlinable func value(number: _NumberText) -> Value? {
+    @inlinable func value(number: NumberText) -> Value? {
         number.integer.isEmpty && number.fraction.isEmpty ? Value.zero : Value.value(description: number.characters)
     }
 }
@@ -167,21 +167,18 @@ extension NumberTextStyle {
     
     // MARK: Merge
 
-    #warning("ToggleSignInput should be opaque, kinda, and depend on Value.")
     @inlinable public func merge(snapshot: Snapshot, with content: Snapshot, in range: Range<Snapshot.Index>) -> Snapshot? {
-        var input = Input(content)
+        var input = Input(content, parser: parser)
         let toggleSignInput = input.consumeToggleSignInput()
         
         // --------------------------------- //
         
-        let next = snapshot.transforming({ $0.replaceSubrange(range, with: input.content) })
+        var next = snapshot
+        next.replaceSubrange(range, with: input.content)
         
         // --------------------------------- //
 
         guard var number = number(snapshot: next) else { return nil }
-        
-        // --------------------------------- //
-        
         toggleSignInput?.process(&number)
         
         // --------------------------------- //
@@ -191,7 +188,7 @@ extension NumberTextStyle {
     
     // MARK: Components
     
-    @inlinable func snapshot(number: inout _NumberText) -> Snapshot? {
+    @inlinable func snapshot(number: inout NumberText) -> Snapshot? {
         let count = number.numberOfSignificantDigits()
         guard let capacity = precision.editableValidationThatGeneratesCapacity(count: count) else { return nil }
         

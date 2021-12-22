@@ -8,7 +8,7 @@
 // MARK: - EmptyParser
 
 #warning("WIP")
-public struct EmptyParser<Output: _Text>: _Parser {
+public struct EmptyParser<Output: Text>: Parser {
     
     // MARK: Implementation
     

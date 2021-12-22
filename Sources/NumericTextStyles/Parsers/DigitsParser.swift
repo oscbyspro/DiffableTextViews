@@ -8,8 +8,8 @@
 // MARK: - DigitsParser
 
 #warning("WIP")
-public struct _DigitsParser: _Parser {
-    public typealias Output = _DigitsText
+public struct DigitsParser: Parser {
+    public typealias Output = DigitsText
 
     // MARK: Properties
     

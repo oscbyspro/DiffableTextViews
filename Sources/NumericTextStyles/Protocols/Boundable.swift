@@ -8,7 +8,7 @@
 // MARK: - Boundable
 
 #warning("WIP")
-public protocol _Boundable: Comparable {
+public protocol Boundable: Comparable {
     
     // MARK: Requirements
     

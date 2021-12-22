@@ -8,7 +8,7 @@
 // MARK: - DigitsText
 
 #warning("WIP")
-public struct _DigitsText: _Text {
+public struct DigitsText: Text {
     
     // MARK: Properties
     

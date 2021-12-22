@@ -9,16 +9,16 @@ import struct Foundation.Locale
 
 // MARK: - UnsignedIntegerParser
 
-public struct _UnsignedIntegerParser: _NumberParser {
-    public typealias Output = _NumberText
+public struct UnsignedIntegerParser: NumberParser {
+    public typealias Output = NumberText
     
     // MARK: Properties
     
-    public let digits: _DigitsParser
+    public let digits: DigitsParser
     
     // MARK: Initializers
     
-    @inlinable init(digits: _DigitsParser) {
+    @inlinable init(digits: DigitsParser) {
         self.digits = digits
     }
     

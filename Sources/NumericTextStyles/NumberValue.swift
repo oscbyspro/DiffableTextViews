@@ -9,10 +9,10 @@
 
 #warning("WIP")
 #warning("Rename, maybe.")
-public protocol _NumberValue: _Boundable, _Formattable, _Precise {
+public protocol NumberValue: Boundable, Formattable, Precise {
     #warning("typealias NumberTextStyle = NumericTextStyles.NumberTextStyle<Self>")
 
     // MARK: Requirements
     
-    associatedtype NumberParser: NumericTextStyles._NumberParser
+    associatedtype NumberParser: NumericTextStyles.NumberParser
 }

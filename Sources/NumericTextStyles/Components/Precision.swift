@@ -10,18 +10,18 @@ import enum Foundation.NumberFormatStyleConfiguration
 // MARK: - Precision
 
 /// - Note: Lower precision bounds are enforced only when the view is idle.
-public struct _Precision<Value: _Precise> {
-    @usableFromInline typealias Defaults = _PrecisionDefaults
-    @usableFromInline typealias Total = _PrecisionTotal<Value>
-    @usableFromInline typealias Parts = _PrecisionParts<Value>
+public struct Precision<Value: Precise> {
+    @usableFromInline typealias Defaults = PrecisionDefaults
+    @usableFromInline typealias Total = PrecisionTotal<Value>
+    @usableFromInline typealias Parts = PrecisionParts<Value>
     
     // MARK: Properties
     
-    @usableFromInline let implementation: _PrecisionImplementation
+    @usableFromInline let implementation: PrecisionImplementation
     
     // MARK: Initializers
     
-    @inlinable init(implementation: _PrecisionImplementation) {
+    @inlinable init(implementation: PrecisionImplementation) {
         self.implementation = implementation
     }
     
@@ -41,7 +41,7 @@ public struct _Precision<Value: _Precise> {
     }
     
     #warning("Rename to clarify what it does differently.")
-    @inlinable func editableStyle(count: _Count) -> NumberFormatStyleConfiguration.Precision {
+    @inlinable func editableStyle(count: Count) -> NumberFormatStyleConfiguration.Precision {
         let integerUpperBound = Swift.max(Defaults.integerLowerBound, count.integer)
         let integer = Defaults.integerLowerBound...integerUpperBound
         
@@ -53,14 +53,14 @@ public struct _Precision<Value: _Precise> {
     
     // MARK: Editable: Validation
     
-    @inlinable func editableValidationThatGeneratesCapacity(count: _Count) -> _Count? {
+    @inlinable func editableValidationThatGeneratesCapacity(count: Count) -> Count? {
         implementation.editableValidationThatGeneratesCapacity(count: count)
     }
 }
 
 // MARK: - Precision: Total
 
-public extension _Precision {
+public extension Precision {
 
     // MARK: Digits
     
@@ -83,7 +83,7 @@ public extension _Precision {
 
 // MARK: - Precision: Parts
 
-public extension _Precision where Value: _UsesFloatingPointPrecision {
+public extension Precision where Value: _UsesFloatingPointPrecision {
 
     // MARK: Digits
     
@@ -116,19 +116,19 @@ public extension _Precision where Value: _UsesFloatingPointPrecision {
 
 // MARK: - Implementations
 
-@usableFromInline protocol _PrecisionImplementation {
-    typealias Defaults = _PrecisionDefaults
+@usableFromInline protocol PrecisionImplementation {
+    typealias Defaults = PrecisionDefaults
     
     // MARK: Requirements
         
     @inlinable func showcaseStyle() -> NumberFormatStyleConfiguration.Precision
         
-    @inlinable func editableValidationThatGeneratesCapacity(count: _Count) -> _Count?
+    @inlinable func editableValidationThatGeneratesCapacity(count: Count) -> Count?
 }
 
 // MARK: - Implementations: Total
 
-@usableFromInline struct _PrecisionTotal<Value: _Precise>: _PrecisionImplementation {
+@usableFromInline struct PrecisionTotal<Value: Precise>: PrecisionImplementation {
 
     // MARK: Properties
     
@@ -148,7 +148,7 @@ public extension _Precision where Value: _UsesFloatingPointPrecision {
         .significantDigits(total)
     }
     
-    @inlinable func editableValidationThatGeneratesCapacity(count: _Count) -> _Count? {
+    @inlinable func editableValidationThatGeneratesCapacity(count: Count) -> Count? {
         let sharedCapacity = total.upperBound - count.total
         guard sharedCapacity >= 0 else { return nil }
 
@@ -158,7 +158,7 @@ public extension _Precision where Value: _UsesFloatingPointPrecision {
 
 // MARK: - Implementations: Parts
 
-@usableFromInline struct _PrecisionParts<Value: _Precise>: _PrecisionImplementation {
+@usableFromInline struct PrecisionParts<Value: Precise>: PrecisionImplementation {
 
     // MARK: Properties
     
@@ -189,7 +189,7 @@ public extension _Precision where Value: _UsesFloatingPointPrecision {
         .integerAndFractionLength(integerLimits: integer, fractionLimits: fraction)
     }
     
-    @inlinable func editableValidationThatGeneratesCapacity(count: _Count) -> _Count? {
+    @inlinable func editableValidationThatGeneratesCapacity(count: Count) -> Count? {
         guard Value.maxLosslessTotalDigits - count.total >= 0 else { return nil }
         
         let integerCapacity = integer.upperBound - count.integer
@@ -204,7 +204,7 @@ public extension _Precision where Value: _UsesFloatingPointPrecision {
 
 // MARK: - Defaults
 
-@usableFromInline enum _PrecisionDefaults {
+@usableFromInline enum PrecisionDefaults {
     @usableFromInline static let totalLowerBound: Int = 1
     @usableFromInline static let integerLowerBound: Int = 1
     @usableFromInline static let fractionLowerBound: Int = 0

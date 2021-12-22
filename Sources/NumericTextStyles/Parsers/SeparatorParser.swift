@@ -10,8 +10,8 @@ import struct Foundation.Locale
 // MARK: - SeparatorParser
 
 #warning("WIP")
-public struct _SeparatorParser: _Parser {
-    public typealias Output = _SeparatorText
+public struct SeparatorParser: Parser {
+    public typealias Output = SeparatorText
 
     // MARK: Properties
     
@@ -25,7 +25,7 @@ public struct _SeparatorParser: _Parser {
     
     // MARK: Transformations
     
-    @inlinable public func locale(_ locale: Locale) -> _SeparatorParser {
+    @inlinable public func locale(_ locale: Locale) -> SeparatorParser {
         .init(separators: separators + [locale.decimalSeparator].compactMap({ $0 }))
     }
     
@@ -47,4 +47,3 @@ public struct _SeparatorParser: _Parser {
     
     public static let standard = Self(separators: [Output.dot])
 }
-

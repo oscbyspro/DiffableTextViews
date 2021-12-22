@@ -8,23 +8,23 @@
 // MARK: - NumberTextParser
 
 #warning("WIP")
-public protocol _NumberParser: _Parser where Output == _NumberText {
+public protocol NumberParser: Parser where Output == NumberText {
     
     // MARK: Requirements
     
-    associatedtype SignParser: _Parser = EmptyParser<_SignText> where SignParser.Output == _SignText
+    associatedtype SignParser: Parser = EmptyParser<SignText> where SignParser.Output == SignText
     @inlinable var sign: SignParser { get }
     
-    associatedtype DigitsParser: _Parser = EmptyParser<_DigitsText> where DigitsParser.Output == _DigitsText
+    associatedtype DigitsParser: Parser = EmptyParser<DigitsText> where DigitsParser.Output == DigitsText
     @inlinable var digits: DigitsParser { get }
     
-    associatedtype SeparatorParser: _Parser = EmptyParser<_SeparatorText> where SeparatorParser.Output == _SeparatorText
+    associatedtype SeparatorParser: Parser = EmptyParser<SeparatorText> where SeparatorParser.Output == SeparatorText
     @inlinable var separator: SeparatorParser { get }
 }
 
 // MARK: - NumberTextParser: Sign
 
-public extension _NumberParser where SignParser == EmptyParser<_SignText> {
+public extension NumberParser where SignParser == EmptyParser<SignText> {
     
     // MARK: Implementation
     
@@ -33,7 +33,7 @@ public extension _NumberParser where SignParser == EmptyParser<_SignText> {
 
 // MARK: - NumberTextParser: Digits
 
-public extension _NumberParser where DigitsParser == EmptyParser<_DigitsText> {
+public extension NumberParser where DigitsParser == EmptyParser<DigitsText> {
     
     // MARK: Implementation
     
@@ -42,7 +42,7 @@ public extension _NumberParser where DigitsParser == EmptyParser<_DigitsText> {
 
 // MARK: - NumberTextParser: Separator
 
-public extension _NumberParser where SeparatorParser == EmptyParser<_SeparatorText> {
+public extension NumberParser where SeparatorParser == EmptyParser<SeparatorText> {
     
     // MARK: Implementation
     

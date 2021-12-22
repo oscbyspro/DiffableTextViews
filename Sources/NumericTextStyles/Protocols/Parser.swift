@@ -10,11 +10,11 @@ import struct Foundation.Locale
 // MARK: - Parser
 
 #warning("WIP")
-public protocol _Parser {
+public protocol Parser {
     
     // MARK: Requirements
     
-    associatedtype Output: _Text
+    associatedtype Output: Text
         
     /// If the parser allows selecting a locale, returns a copy of the parser with the new locale set. Default implementation returns an unmodified self.
     @inlinable func locale(_ locale: Locale) -> Self
@@ -28,7 +28,7 @@ public protocol _Parser {
 
 // MARK: - Parser: Details
 
-public extension _Parser {
+public extension Parser {
     
     // MARK: Implementation
     

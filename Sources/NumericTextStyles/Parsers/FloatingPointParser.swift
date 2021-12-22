@@ -9,18 +9,18 @@ import struct Foundation.Locale
 
 // MARK: - FloatingPointParser
 
-public struct _FloatingPointParser: _NumberParser {
-    public typealias Output = _NumberText
+public struct FloatingPointParser: NumberParser {
+    public typealias Output = NumberText
     
     // MARK: Properties
     
-    public let sign: _SignParser
-    public let digits: _DigitsParser
-    public let separator: _SeparatorParser
+    public let sign: SignParser
+    public let digits: DigitsParser
+    public let separator: SeparatorParser
     
     // MARK: Initializers
     
-    @inlinable init(sign: _SignParser, digits: _DigitsParser, separator: _SeparatorParser) {
+    @inlinable init(sign: SignParser, digits: DigitsParser, separator: SeparatorParser) {
         self.sign = sign
         self.digits = digits
         self.separator = separator

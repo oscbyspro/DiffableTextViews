@@ -8,7 +8,7 @@
 // MARK: - SignText
 
 #warning("WIP")
-public enum _SignText: String, _Text {
+public enum SignText: String, Text {
     
     // MARK: Cases
     

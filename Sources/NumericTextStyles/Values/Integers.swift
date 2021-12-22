@@ -16,7 +16,7 @@ import enum Foundation.NumberFormatStyleConfiguration
 /// - Supports all values from Self.min to Self.max.
 /// - UInt64.max is limited to Int64.max because Apple uses Int64 (2021-10-25).
 ///
-public protocol NumberTextInteger: _NumberValue, _UsesIntegerPrecision, FixedWidthInteger {
+public protocol NumberTextInteger: NumberValue, _UsesIntegerPrecision, FixedWidthInteger {
     
     // MARK: Requirements
     
@@ -49,7 +49,7 @@ extension UInt: NumberTextInteger {
     
     // MARK: Implementation
     
-    public typealias NumberParser = _UnsignedIntegerParser
+    public typealias NumberParser = UnsignedIntegerParser
     
     /// Apple, please fix IntegerFormatStyleUInt, it uses an Int.
     @inlinable public static var maxLosslessValue: UInt {
@@ -68,7 +68,7 @@ extension UInt8: NumberTextInteger {
     
     // MARK: Implementation
     
-    public typealias NumberParser = _UnsignedIntegerParser
+    public typealias NumberParser = UnsignedIntegerParser
     
     @inlinable public static var maxLosslessTotalDigits: Int { 3 }
 }
@@ -79,7 +79,7 @@ extension UInt16: NumberTextInteger {
     
     // MARK: Implementation
     
-    public typealias NumberParser = _UnsignedIntegerParser
+    public typealias NumberParser = UnsignedIntegerParser
     
     @inlinable public static var maxLosslessTotalDigits: Int { 5 }
 }
@@ -90,7 +90,7 @@ extension UInt32: NumberTextInteger {
     
     // MARK: Implementation
     
-    public typealias NumberParser = _UnsignedIntegerParser
+    public typealias NumberParser = UnsignedIntegerParser
     
     @inlinable public static var maxLosslessTotalDigits: Int { 10 }
 }
@@ -101,7 +101,7 @@ extension UInt64: NumberTextInteger {
     
     // MARK: Implementation
     
-    public typealias NumberParser = _UnsignedIntegerParser
+    public typealias NumberParser = UnsignedIntegerParser
     
     /// Apple, please fix IntegerFormatStyleUInt64, it uses an Int64.
     @inlinable public static var maxLosslessValue: UInt64 {
@@ -120,7 +120,7 @@ extension Int: NumberTextInteger {
     
     // MARK: Implementation
     
-    public typealias NumberParser = _IntegerParser
+    public typealias NumberParser = IntegerParser
     
     public static let maxLosslessTotalDigits: Int = String(maxLosslessValue).count
 }
@@ -131,7 +131,7 @@ extension Int8: NumberTextInteger {
     
     // MARK: Implementation
     
-    public typealias NumberParser = _IntegerParser
+    public typealias NumberParser = IntegerParser
     
     @inlinable public static var maxLosslessTotalDigits: Int { 3 }
 }
@@ -142,7 +142,7 @@ extension Int16: NumberTextInteger {
     
     // MARK: Implementation
     
-    public typealias NumberParser = _IntegerParser
+    public typealias NumberParser = IntegerParser
     
     @inlinable public static var maxLosslessTotalDigits: Int { 5 }
 }
@@ -153,7 +153,7 @@ extension Int32: NumberTextInteger {
     
     // MARK: Implementation
     
-    public typealias NumberParser = _IntegerParser
+    public typealias NumberParser = IntegerParser
     
     @inlinable public static var maxLosslessTotalDigits: Int { 10 }
 }
@@ -164,7 +164,7 @@ extension Int64: NumberTextInteger {
     
     // MARK: Implementation
     
-    public typealias NumberParser = _IntegerParser
+    public typealias NumberParser = IntegerParser
     
     @inlinable public static var maxLosslessTotalDigits: Int { 19 }
 }

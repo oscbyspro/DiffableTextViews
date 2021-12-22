@@ -8,7 +8,7 @@
 // MARK: - Precise
 
 #warning("WIP")
-public protocol _Precise {
+public protocol Precise {
     
     // MARK: Requirements
     
@@ -19,7 +19,7 @@ public protocol _Precise {
 
 // MARK: - UsesIntegerPrecision
 
-public  protocol _UsesIntegerPrecision: _Precise { }
+public  protocol _UsesIntegerPrecision: Precise { }
 public extension _UsesIntegerPrecision {
     
     // MARK: Implementation
@@ -30,7 +30,7 @@ public extension _UsesIntegerPrecision {
 
 // MARK: - UsesFloatingPointPrecision
 
-public  protocol _UsesFloatingPointPrecision: _Precise { }
+public  protocol _UsesFloatingPointPrecision: Precise { }
 public extension _UsesFloatingPointPrecision {
     
     // MARK: Implementation
