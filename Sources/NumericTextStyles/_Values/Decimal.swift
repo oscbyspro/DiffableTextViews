@@ -15,7 +15,7 @@ import enum Foundation.NumberFormatStyleConfiguration
 ///
 /// - Supports up to 38 significant digits.
 ///
-extension Decimal: _NumberTextValue, _UsesFloatingPointPrecision { }; extension Decimal {
+extension Decimal: _Value, _UsesFloatingPointPrecision { }; extension Decimal {
     
     // MARK: Implementation
     

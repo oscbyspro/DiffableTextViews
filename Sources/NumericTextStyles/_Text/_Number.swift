@@ -10,6 +10,7 @@ import struct Foundation.Locale
 // MARK: - Number
 
 #warning("WIP")
+#warning("Rename as Components, maybe.")
 public struct _Number: _Text {
     
     // MARK: Properties
@@ -29,13 +30,41 @@ public struct _Number: _Text {
     }
     
     // MARK: Getters
-    
+ 
     @inlinable public var isEmpty: Bool {
         sign.isEmpty && integer.isEmpty && separator.isEmpty && fraction.isEmpty
     }
     
     @inlinable public var characters: String {
         sign.characters + integer.characters + separator.characters + fraction.characters
+    }
+    
+    // MARK: Transformations
+    
+    @inlinable mutating func toggle(sign proposal: _Sign) {
+        if sign == proposal { sign = .none } else { sign = proposal }
+    }
+    
+    // MARK: Utilities
+    
+    @inlinable var numberOfDigits: _Count {
+        .init(integer: integer.count, fraction: fraction.count)
+    }
+    
+    @inlinable func numberOfSignificantDigits() -> _Count {
+        let integerValue = integer.count - numberOfRedundantIntegerDigits()
+        let fractionValue = fraction.count - numberOfRedundantFractionDigits()
+        return .init(integer: integerValue, fraction: fractionValue)
+    }
+    
+    // MARK: Utilities: Helpers
+        
+    @inlinable func numberOfRedundantIntegerDigits() -> Int {
+        integer.characters.prefix(while: { $0 == _Digits.zero }).count
+    }
+    
+    @inlinable func numberOfRedundantFractionDigits() -> Int {
+        fraction.characters.reversed().prefix(while: { $0 == _Digits.zero }).count
     }
 }
 

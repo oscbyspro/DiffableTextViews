@@ -34,7 +34,7 @@ import struct Foundation.Locale
     
     // MARK: Characters: Static
     
-    @usableFromInline static let dot: Character = "."
+    @usableFromInline static let dot: String = "."
 }
 
 // MARK: - SeparatorParser
@@ -66,7 +66,7 @@ import struct Foundation.Locale
         
         for separator in separators {
             if subsequence.starts(with: separator) {
-                storage = Output(characters: String(Output.dot))
+                storage = Output(characters: Output.dot)
                 characters.formIndex(&index, offsetBy: separator.count)
                 return
             }
@@ -75,5 +75,5 @@ import struct Foundation.Locale
     
     // MARK: Instances: Static
     
-    @usableFromInline static let standard = Self(separators: [String(Output.dot)])
+    @usableFromInline static let standard = Self(separators: [Output.dot])
 }

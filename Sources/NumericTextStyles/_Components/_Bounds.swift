@@ -47,14 +47,12 @@ public struct _Bounds<Value: _Boundable> {
     }
     
     // MARK: Utilities
-
-    #warning("Unused.")
-    @inlinable func validate(_ value: Value) -> Bool {
-        lowerBound <= value && value <= upperBound
-    }
     
-    #warning("Unused.")
     @inlinable func bounded(_ value: Value) -> Value {
         Swift.max(lowerBound, Swift.min(value, upperBound))
+    }
+
+    @inlinable func contains(_ value: Value) -> Bool {
+        lowerBound <= value && value <= upperBound
     }
 }

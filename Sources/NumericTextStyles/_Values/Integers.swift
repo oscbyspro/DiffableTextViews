@@ -16,7 +16,7 @@ import enum Foundation.NumberFormatStyleConfiguration
 /// - Supports all values from Self.min to Self.max.
 /// - UInt64.max is limited to Int64.max because Apple uses Int64 (2021-10-25).
 ///
-public protocol NumberTextInteger: _NumberTextValue, _UsesIntegerPrecision, FixedWidthInteger {
+public protocol NumberTextInteger: _Value, _UsesIntegerPrecision, FixedWidthInteger {
     
     // MARK: Requirements
     

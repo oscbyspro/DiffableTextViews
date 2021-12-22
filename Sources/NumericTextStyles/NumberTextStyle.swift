@@ -15,7 +15,8 @@ import protocol Utilities.Transformable
 ///
 /// - Complexity: O(n) or less for all computations.
 ///
-public struct NumberTextStyle<Value: _NumberTextValue>: DiffableTextStyle, Transformable {
+public struct NumberTextStyle<Value: NumericTextStyles._Value>: DiffableTextStyle, Transformable {
+    public typealias Parser = Value.NumberTextParser
     public typealias Bounds = NumericTextStyles._Bounds<Value>
     public typealias Precision = NumericTextStyles._Precision<Value>
 
@@ -31,6 +32,14 @@ public struct NumberTextStyle<Value: _NumberTextValue>: DiffableTextStyle, Trans
     
     @inlinable public init(locale: Locale = .autoupdatingCurrent) {
         self.locale = locale
+    }
+    
+    // MARK: Getters
+    
+    #warning("Use a stored property, maybe.")
+    #warning("Could store inside a reference, maybe.")
+    @inlinable @inline(__always) var parser: Parser {
+        .standard.locale(locale)
     }
     
     // MARK: Transformations
@@ -54,6 +63,12 @@ public struct NumberTextStyle<Value: _NumberTextValue>: DiffableTextStyle, Trans
     @inlinable public func precision(_ newValue: Precision) -> Self {
         transforming({ $0.precision = newValue })
     }
+    
+    // MARK: Helpers
+    
+    @inlinable func number(snapshot: Snapshot) -> _Number? {
+        .init(characters: snapshot.lazy.compactMap({ $0.nonformatting ? $0.character : nil }), parser: parser)
+    }
 }
 
 // MARK: - Getters
@@ -64,19 +79,19 @@ extension NumberTextStyle {
     // MARK: Characters
     
     @inlinable var zero: Character {
-        Components.Digits.zero
+        _Digits.zero
     }
     
     @inlinable var digits: Set<Character> {
-        Components.Digits.set
+        _Digits.decimals
     }
     
     @inlinable var signs: Set<Character> {
-        Components.Sign.set
+        #error("...")
     }
     
     @inlinable var fractionSeparator: String {
-        locale.decimalSeparator ?? Components.Separator.system.characters
+        locale.decimalSeparator ?? _Separator.dot
     }
 
     @inlinable var groupingSeparator: String {
@@ -100,8 +115,8 @@ extension NumberTextStyle {
         Value.style(locale: locale, precision: precision.editableStyle(), separator: .automatic)
     }
     
-    @inlinable func editableStyle(digits: _Count, separator: Bool) -> Value.FormatStyle {
-        Value.style(locale: locale, precision: precision.editableStyle(digits), separator: separator ? .always : .automatic)
+    @inlinable func editableStyle(count: _Count, separator: Bool) -> Value.FormatStyle {
+        Value.style(locale: locale, precision: precision.editableStyle(count: count), separator: separator ? .always : .automatic)
     }
 }
 
@@ -112,19 +127,20 @@ extension NumberTextStyle {
     // MARK: Process
     
     @inlinable public func process(value: inout Value) {
-        value = bounds.displayableStyle(value)
+        value = bounds.bounded(value)
     }
         
     // MARK: Parse
 
     @inlinable public func parse(snapshot: Snapshot) -> Value? {
-        components(snapshot, with: configuration()).flatMap(value)
+        number(snapshot: snapshot).flatMap(value)
     }
     
     // MARK: Components
     
-    @inlinable func value(of components: Components) -> Value? {
-        components.integers.isEmpty && components.decimals.isEmpty ? Value.zero : Value.value(of: components.characters())
+    #warning("Cleanup.")
+    @inlinable func value(number: _Number) -> Value? {
+        number.integer.isEmpty && number.fraction.isEmpty ? Value.zero : Value.value(description: number.characters)
     }
 }
 
@@ -151,56 +167,55 @@ extension NumberTextStyle {
     
     // MARK: Merge
 
+    #warning("ToggleSignInput should be opaque, kinda, and depend on Value.")
     @inlinable public func merge(snapshot: Snapshot, with content: Snapshot, in range: Range<Snapshot.Index>) -> Snapshot? {
-        let configuration = configuration()
-                
-        // --------------------------------- //
-        
-        var input = Input(content, with: configuration)
-        let toggleSignInstruction = input.consumeToggleSignInstruction()
+        var input = Input(content)
+        let toggleSignInput = input.consumeToggleSignInput()
         
         // --------------------------------- //
         
         let next = snapshot.transforming({ $0.replaceSubrange(range, with: input.content) })
         
         // --------------------------------- //
-        
-        guard var components = components(next, with: configuration) else { return nil }
-        toggleSignInstruction?.process(&components)
+
+        guard var number = number(snapshot: next) else { return nil }
         
         // --------------------------------- //
         
-        return self.snapshot(components: &components)
+        toggleSignInput?.process(&number)
+        
+        // --------------------------------- //
+
+        return self.snapshot(number: &number)
     }
     
     // MARK: Components
     
-    @inlinable func snapshot(components: inout Components) -> Snapshot? {
-        #warning("Ignoring leading zeros is only relevant for floats.")
-        let digits = components.numberOfDigitsIgnoringSingleIntegerZero()
-        guard let capacity = precision.editableValidationWithCapacity(digits: digits) else { return nil }
+    @inlinable func snapshot(number: inout _Number) -> Snapshot? {
+        let count = number.numberOfSignificantDigits()
+        guard let capacity = precision.editableValidationThatGeneratesCapacity(count: count) else { return nil }
         
         // --------------------------------- //
         
-        if capacity.fraction <= 0, components.decimals.isEmpty {
-            components.separator = nil
+        if capacity.fraction == .zero, number.fraction.isEmpty {
+            number.separator.removeAll()
         }
         
         // --------------------------------- //
         
-        guard let value = value(of: components) else { return nil }
-        guard bounds.editableValidation(value)  else { return nil }
+        guard let value = value(number: number) else { return nil }
+        guard bounds.contains(value) else { return nil }
         
         // --------------------------------- //
         
-        let style = editableStyle(digits: digits, separator: components.separator != nil)
+        let style = editableStyle(count: count, separator: !number.separator.isEmpty)
                 
         // --------------------------------- //
         
         var characters = style.format(value)
         
-        if let sign = components.sign, !characters.hasPrefix(sign.characters) {
-            characters = sign.characters + characters
+        if !number.sign.isEmpty, !characters.hasPrefix(number.sign.characters) {
+            characters = number.sign.characters + characters
         }
         
         // --------------------------------- //
@@ -222,7 +237,6 @@ extension NumberTextStyle {
                 
         // --------------------------------- //
         
-        #warning("Depends on type.")
         for character in characters {
             if digits.contains(character) {
                 snapshot.append(.content(character))
@@ -284,43 +298,5 @@ extension NumberTextStyle {
         // --------------------------------- //
         
         snapshot.transform(attributes: start..., using: transformation)
-    }
-}
-
-// MARK: - Text
-
-extension NumberTextStyle {
-    
-    // MARK: Configuration
-    
-    #warning("Removable once done.")
-    @inlinable func configuration() -> Configuration {
-        let configuration = Configuration(signs: .negatives, separators: .none)
-        
-        // --------------------------------- //
-        
-        if bounds.nonnegative {
-            configuration.options.insert(.nonnegative)
-        }
-        
-        // --------------------------------- //
-        
-        if Value.isInteger {
-            configuration.options.insert(.integer)
-        } else {
-            configuration.separators.insert(fractionSeparator)
-            configuration.separators.insert(contentsOf: .system)
-        }
-        
-        // --------------------------------- //
-        
-        return configuration
-    }
-    
-    // MARK: Components
-    
-    #warning("Unformatting should be made lazy.")
-    @inlinable func components(_ snapshot: Snapshot, with configuration: Configuration) -> Components? {
-        configuration.components(snapshot.characters(where: \.nonformatting))
     }
 }

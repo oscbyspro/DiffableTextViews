@@ -16,7 +16,7 @@ import enum Foundation.NumberFormatStyleConfiguration
 /// - Range: ±Self.maxLosslessValue.
 /// - Significands: Self.maxLosslessTotalDigits.
 ///
-public protocol NumberTextFloatingPoint: _NumberTextValue, _UsesFloatingPointPrecision, BinaryFloatingPoint {
+public protocol NumberTextFloatingPoint: _Value, _UsesFloatingPointPrecision, BinaryFloatingPoint {
     
     // MARK: Requirements
     

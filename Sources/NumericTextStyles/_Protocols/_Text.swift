@@ -36,4 +36,11 @@ extension _Text {
         parser.parse(characters: characters, index: &index, storage: &self)
         guard index == characters.endIndex else { return nil }
     }
+    
+    // MARK: Transformations
+    
+    /// Resets the instance to an empty state.
+    @inlinable mutating func removeAll() {
+        self = .init()
+    }
 }
