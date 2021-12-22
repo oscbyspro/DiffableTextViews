@@ -7,7 +7,7 @@
 
 // MARK: - Int
 
-extension Int: NumberTextInt {
+extension Int: NumericTextInt {
     
     // MARK: Implementation
     
@@ -16,7 +16,7 @@ extension Int: NumberTextInt {
 
 // MARK: - Int8
 
-extension Int8: NumberTextInt {
+extension Int8: NumericTextInt {
     
     // MARK: Implementation
     
@@ -25,7 +25,7 @@ extension Int8: NumberTextInt {
 
 // MARK: - Int16
 
-extension Int16: NumberTextInt {
+extension Int16: NumericTextInt {
     
     // MARK: Implementation
     
@@ -34,7 +34,7 @@ extension Int16: NumberTextInt {
 
 // MARK: - Int32
 
-extension Int32: NumberTextInt {
+extension Int32: NumericTextInt {
     
     // MARK: Implementation
     
@@ -43,7 +43,7 @@ extension Int32: NumberTextInt {
 
 // MARK: Int64
 
-extension Int64: NumberTextInt {
+extension Int64: NumericTextInt {
     
     // MARK: Implementation
     

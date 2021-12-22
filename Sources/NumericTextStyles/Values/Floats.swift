@@ -7,7 +7,7 @@
 
 // MARK: - Float16
 
-extension Float16: NumberTextFloat {
+extension Float16: NumericTextFloat {
     
     // MARK: Implementation
     
@@ -17,7 +17,7 @@ extension Float16: NumberTextFloat {
 
 // MARK: - Float32
 
-extension Float32: NumberTextFloat {
+extension Float32: NumericTextFloat {
     
     // MARK: Implementation
         
@@ -27,7 +27,7 @@ extension Float32: NumberTextFloat {
 
 // MARK: - Float64
 
-extension Float64: NumberTextFloat {
+extension Float64: NumericTextFloat {
     
     // MARK: Implementation
         

@@ -7,7 +7,7 @@
 
 // MARK: - UInt
 
-extension UInt: NumberTextUInt {
+extension UInt: NumericTextUInt {
     
     // MARK: Implementation
         
@@ -24,7 +24,7 @@ extension UInt: NumberTextUInt {
 
 // MARK: - UInt8
 
-extension UInt8: NumberTextUInt {
+extension UInt8: NumericTextUInt {
     
     // MARK: Implementation
 
@@ -33,7 +33,7 @@ extension UInt8: NumberTextUInt {
 
 // MARK: - UInt16
 
-extension UInt16: NumberTextUInt {
+extension UInt16: NumericTextUInt {
     
     // MARK: Implementation
     
@@ -42,7 +42,7 @@ extension UInt16: NumberTextUInt {
 
 // MARK: - UInt32
 
-extension UInt32: NumberTextUInt {
+extension UInt32: NumericTextUInt {
     
     // MARK: Implementation
     
@@ -51,7 +51,7 @@ extension UInt32: NumberTextUInt {
 
 // MARK: - UInt64
 
-extension UInt64: NumberTextUInt {
+extension UInt64: NumericTextUInt {
     
     // MARK: Implementation
     

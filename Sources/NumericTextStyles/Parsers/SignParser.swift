@@ -7,7 +7,6 @@
 
 // MARK: - SignParser
 
-#warning("Rename.")
 @usableFromInline struct SignParser: Parser {
     @usableFromInline typealias Output = Sign
 

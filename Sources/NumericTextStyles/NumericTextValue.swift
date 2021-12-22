@@ -12,25 +12,25 @@ import enum Foundation.NumberFormatStyleConfiguration
 
 // MARK: - NumberTextValue
 
-public protocol NumberTextValue: Parsable, Formattable, Boundable, Precise { }
+public protocol NumericTextValue: Parsable, Formattable, Boundable, Precise { }
 
-// MARK: - NumberTextInteger
+// MARK: - NumericTextInteger
 
 /// Numeric text value protocol for ordinary integers.
 ///
 /// - Supports all values from Self.min to Self.max.
 /// - UInt64.max is limited to Int64.max because Apple uses Int64 (2021-10-25).
 ///
-@usableFromInline protocol NumberTextInteger: NumberTextValue, PreciseInteger, FixedWidthInteger {
+@usableFromInline protocol NumericTextInteger: NumericTextValue, PreciseInteger, FixedWidthInteger {
     
     // MARK: Requirements
         
     @inlinable init?(_ description: String)
 }
 
-// MARK: - NumberTextInteger: Details
+// MARK: - NumericTextInteger: Details
 
-extension NumberTextInteger {
+extension NumericTextInteger {
     
     // MARK: Boundable
     
@@ -48,10 +48,10 @@ extension NumberTextInteger {
     }
 }
 
-// MARK: - NumberTextInt
+// MARK: - NumericTextInt
 
-/// NumberTextInteger implementation for Int types.
-@usableFromInline protocol NumberTextInt: NumberTextInteger { }; extension NumberTextInt {
+/// NumericTextInteger implementation for Int types.
+@usableFromInline protocol NumericTextInt: NumericTextInteger { }; extension NumericTextInt {
     
     // MARK: Implementation
     
@@ -60,10 +60,10 @@ extension NumberTextInteger {
     }
 }
 
-// MARK: - NumberTextUInt
+// MARK: - NumericTextUInt
 
-/// NumberTextInteger implementation for UInt types.
-@usableFromInline protocol NumberTextUInt: NumberTextInteger { }; extension NumberTextUInt {
+/// NumericTextInteger implementation for UInt types.
+@usableFromInline protocol NumericTextUInt: NumericTextInteger { }; extension NumericTextUInt {
     
     // MARK: Implementation
     
@@ -72,23 +72,23 @@ extension NumberTextInteger {
     }
 }
 
-// MARK: - NumberTextFloat
+// MARK: - NumericTextFloat
 
 /// Numeric text value protocol for ordinary floats.
 ///
 /// - Range: ±Self.maxLosslessValue.
 /// - Significands: Self.maxLosslessTotalDigits.
 ///
-@usableFromInline protocol NumberTextFloat: NumberTextValue, PreciseFloatingPoint, BinaryFloatingPoint {
+@usableFromInline protocol NumericTextFloat: NumericTextValue, PreciseFloatingPoint, BinaryFloatingPoint {
     
     // MARK: Requirements
     
     @inlinable init?(_ description: String)
 }
 
-// MARK: - NumberTextFloatingPoint: Details
+// MARK: - NumericTextFloat: Details
 
-extension NumberTextFloat {
+extension NumericTextFloat {
     
     // MARK: Boundable
     
