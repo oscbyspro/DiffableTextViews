@@ -15,16 +15,16 @@ import protocol Utilities.Transformable
 ///
 /// - Complexity: O(n) or less for all computations.
 ///
-public struct NumberTextStyle<Value: NumberTextValue>: DiffableTextStyle, Transformable {
-    public typealias Bounds = NumericTextStyles.Bounds<Value>
-    public typealias Precision = NumericTextStyles.Precision<Value>
+public struct NumberTextStyle<Value: _NumberTextValue>: DiffableTextStyle, Transformable {
+    public typealias Bounds = NumericTextStyles._Bounds<Value>
+    public typealias Precision = NumericTextStyles._Precision<Value>
 
     // MARK: Properties
     
     @usableFromInline var locale: Locale
     @usableFromInline var prefix: String = ""
     @usableFromInline var suffix: String = ""
-    @usableFromInline var bounds: Bounds = .all
+    @usableFromInline var bounds: Bounds = .max
     @usableFromInline var precision: Precision = .max
     
     // MARK: Initializers

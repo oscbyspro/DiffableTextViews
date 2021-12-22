@@ -9,21 +9,23 @@ import struct Foundation.Locale
 import struct Foundation.FloatingPointFormatStyle
 import enum Foundation.NumberFormatStyleConfiguration
 
-// MARK: - NumberTextFloat
+// MARK: - NumberTextFloatingPoint
 
 /// Numeric text value protocol for ordinary floats.
 /// 
 /// - Range: ±Self.maxLosslessValue.
 /// - Significands: Self.maxLosslessTotalDigits.
 ///
-public protocol NumberTextFloat: NumberTextValue, PreciseFloat, BinaryFloatingPoint {
+public protocol NumberTextFloatingPoint: _NumberTextValue, _UsesFloatingPointPrecision, BinaryFloatingPoint {
+    
+    // MARK: Requirements
+    
     @inlinable init?(_ description: String)
 }
 
-// MARK: - Details
+// MARK: - NumberTextFloatingPoint: Details
 
-public extension NumberTextFloat {
-    
+public extension NumberTextFloatingPoint {
     
     // MARK: Boundable
     
@@ -33,7 +35,7 @@ public extension NumberTextFloat {
     
     // MARK: Formattable
 
-    @inlinable static func value(of description: String) -> Self? {
+    @inlinable static func value(description: String) -> Self? {
         .init(description)
     }
     
@@ -44,21 +46,36 @@ public extension NumberTextFloat {
 
 // MARK: - Float16
 
-extension Float16: NumberTextFloat {
+extension Float16: NumberTextFloatingPoint {
+    
+    // MARK: Implementation
+    
+    public typealias NumberTextParser = _FloatingPointParser
+    
     @inlinable public static var maxLosslessValue: Self { 999 }
-    @inlinable public static var maxLosslessDigits: Int { 3 }
+    @inlinable public static var maxLosslessTotalDigits: Int { 3 }
 }
 
 // MARK: - Float32
 
-extension Float32: NumberTextFloat {
+extension Float32: NumberTextFloatingPoint {
+    
+    // MARK: Implementation
+    
+    public typealias NumberTextParser = _FloatingPointParser
+    
     @inlinable public static var maxLosslessValue: Self { 9_999_999 }
-    @inlinable public static var maxLosslessDigits: Int { 7 }
+    @inlinable public static var maxLosslessTotalDigits: Int { 7 }
 }
 
 // MARK: - Float64
 
-extension Float64: NumberTextFloat {
+extension Float64: NumberTextFloatingPoint {
+    
+    // MARK: Implementation
+    
+    public typealias NumberTextParser = _FloatingPointParser
+    
     @inlinable public static var maxLosslessValue: Self { 999_999_999_999_999 }
-    @inlinable public static var maxLosslessDigits: Int { 15 }
+    @inlinable public static var maxLosslessTotalDigits: Int { 15 }
 }

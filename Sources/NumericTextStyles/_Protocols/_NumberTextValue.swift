@@ -8,6 +8,7 @@
 // MARK: - NumberTextValue
 
 #warning("WIP")
+#warning("Rename, maybe.")
 public protocol _NumberTextValue: _Boundable, _Formattable, _Precise {
     #warning("typealias NumberTextStyle = NumericTextStyles.NumberTextStyle<Self>")
 
