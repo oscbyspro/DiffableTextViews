@@ -80,7 +80,7 @@ public final class ProxyTextField<Wrapped: UITextField> {
     
     /// - Complexity: O(1).
     @inlinable func position(at offset: Offset) -> UITextPosition {
-        wrapped.position(from: wrapped.beginningOfDocument, offset: offset.distance)!
+        wrapped.position(from: wrapped.beginningOfDocument, offset: offset.units)!
     }
     
     /// - Complexity: O(1).

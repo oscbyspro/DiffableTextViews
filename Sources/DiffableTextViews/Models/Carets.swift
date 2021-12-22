@@ -123,18 +123,18 @@ extension Carets {
     // MARK: Offset
     
     @inlinable func index(start: Index, offset: Offset) -> Index {
-        offset.distance >= 0 ? index(start: start, forwards: offset) : index(start: start, backwards: offset)
+        offset.units >= 0 ? index(start: start, forwards: offset) : index(start: start, backwards: offset)
     }
     
     @inlinable func index(start: Index, forwards offset: Offset) -> Index {
-        assert(offset.distance >= 0)
-        let destination = start.offset.distance + offset.distance
-        return indices[start...].first(where: { index in index.offset.distance >= destination }) ?? endIndex
+        assert(offset.units >= 0)
+        let destination = start.offset.units + offset.units
+        return indices[start...].first(where: { index in index.offset.units >= destination }) ?? endIndex
     }
     
     @inlinable func index(start: Index, backwards offset: Offset) -> Index {
-        assert(offset.distance <= 0)
-        let destination = start.offset.distance + offset.distance
-        return indices[...start].last(where: { index in index.offset.distance <= destination }) ?? startIndex
+        assert(offset.units <= 0)
+        let destination = start.offset.units + offset.units
+        return indices[...start].last(where: { index in index.offset.units <= destination }) ?? startIndex
     }
 }

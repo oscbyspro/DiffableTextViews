@@ -11,12 +11,12 @@
     
     // MARK: Properties
 
-    @usableFromInline let distance: Int
+    @usableFromInline let units: Int
     
     // MARK: Initializers
     
-    @inlinable init(at distance: Int) {
-        self.distance = distance
+    @inlinable init(at units: Int) {
+        self.units = units
     }
     
     // MARK: Initializers: Static
@@ -36,7 +36,7 @@
             return self
         }
         
-        return .init(at: distance + Scheme.size(of: character))
+        return .init(at: units + Scheme.size(of: character))
     }
     
     @inlinable func before(_ character: Character?) -> Self {
@@ -44,22 +44,22 @@
             return self
         }
 
-        return .init(at: distance - Scheme.size(of: character))
+        return .init(at: units - Scheme.size(of: character))
     }
     
     // MARK: Comparisons
     
     @inlinable static func < (lhs: Self, rhs: Self) -> Bool {
-        lhs.distance < rhs.distance
+        lhs.units < rhs.units
     }
     
     // MARK: Arithmetics
     
     @inlinable static func + (lhs: Self, rhs: Self) -> Self {
-        .init(at: lhs.distance + rhs.distance)
+        .init(at: lhs.units + rhs.units)
     }
     
     @inlinable static func - (lhs: Self, rhs: Self) -> Self {
-        .init(at: lhs.distance - rhs.distance)
+        .init(at: lhs.units - rhs.units)
     }
 }
