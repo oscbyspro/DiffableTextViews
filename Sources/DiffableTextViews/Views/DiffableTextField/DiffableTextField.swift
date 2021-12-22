@@ -58,7 +58,7 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable, 
         Coordinator()
     }
     
-    @inlinable public func makeUIView(context: Context) -> UIViewType {
+    @inlinable @inline(never) public func makeUIView(context: Context) -> UIViewType {
         let uiView = CoreTextField()
         
         // --------------------------------- //
@@ -79,7 +79,7 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable, 
         return uiView
     }
     
-    @inlinable public func updateUIView(_ uiView: UIViewType, context: Context) {
+    @inlinable @inline(never) public func updateUIView(_ uiView: UIViewType, context: Context) {
         context.coordinator.upstream = self
         update?(context.coordinator.downstream)
         context.coordinator.synchronize(.async)
@@ -130,7 +130,7 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable, 
         
         // MARK: Delegate: Inputs
         
-        @inlinable public func textField(_ textField: UITextField, shouldChangeCharactersIn nsRange: NSRange, replacementString string: String) -> Bool {
+        @inlinable @inline(never) public func textField(_ textField: UITextField, shouldChangeCharactersIn nsRange: NSRange, replacementString string: String) -> Bool {
             let offsets = Offset(at: nsRange.lowerBound) ..< Offset(at: nsRange.upperBound)
             let range = cache.field.indices(in: offsets)
             let input = Snapshot(string, only: .content)
@@ -162,7 +162,7 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable, 
         
         // MARK: Delegate: Selection
 
-        @inlinable public func textFieldDidChangeSelection(_ textField: UITextField) {
+        @inlinable @inline(never) public func textFieldDidChangeSelection(_ textField: UITextField) {
             guard !lock.isLocked else { return }
             
             // --------------------------------- //
@@ -194,7 +194,7 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable, 
         
         // MARK: Synchronize: Pull
         
-        @inlinable func pull() -> Update {
+        @inlinable @inline(never) func pull() -> Update {
             var update = Update()
             
             // --------------------------------- //
@@ -232,7 +232,7 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable, 
         
         // MARK: Synchronize: Push
         
-        @inlinable func push(_ update: Update) {
+        @inlinable @inline(never) func push(_ update: Update) {
             if update.contains(.downstream) {
                 lock.perform {
                     // changes to UITextField's text and selection both call

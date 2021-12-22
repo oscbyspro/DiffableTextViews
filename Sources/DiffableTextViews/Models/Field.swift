@@ -82,7 +82,7 @@ import protocol Utilities.Transformable
 
     // MARK: Transformations: Attribute
                     
-    @usableFromInline func transformingAccordingToAttributes() -> Field {
+    @inlinable @inline(never) func transformingAccordingToAttributes() -> Field {
         func move(_ position: Carets.Index, preference: Direction) -> Carets.Index {
             let direction = carets[position].directionOfAttributes() ?? preference
             return look(position, direction: direction)
@@ -105,7 +105,7 @@ import protocol Utilities.Transformable
 
     // MARK: Transformations: Selection
         
-    @usableFromInline func transformingAccordingToSelection(_ newValue: Range<Carets.Index>, intent: Direction?) -> Field {
+    @inlinable @inline(never) func transformingAccordingToSelection(_ newValue: Range<Carets.Index>, intent: Direction?) -> Field {
         func move(_ start: Carets.Index, preference: Direction) -> Carets.Index {
             if carets[start].nonlookable(direction: preference) { return start }
                         
@@ -141,7 +141,7 @@ import protocol Utilities.Transformable
     
     // MARK: Transformations: Carets
             
-    @usableFromInline func transformingAccordingToCarets(_ newValue: Carets) -> Field {
+    @inlinable @inline(never) func transformingAccordingToCarets(_ newValue: Carets) -> Field {
         func step(previous lhs: Symbol, next rhs: Symbol) -> SimilaritiesInstruction {
             if lhs == rhs                               { return .continue      }
             else if lhs.attribute.contains(.removable)  { return .continueOnLHS }
@@ -171,7 +171,7 @@ import protocol Utilities.Transformable
     
     // MARK: Utilities: Indices
     
-    @usableFromInline func indices(in offsets: Range<Offset>) -> Range<Carets.Index> {
+    @inlinable @inline(never) func indices(in offsets: Range<Offset>) -> Range<Carets.Index> {
         var indices = [Carets.Index]()
         indices.reserveCapacity(4)
         indices.append(contentsOf: [selection.upperBound, selection.lowerBound, carets.firstIndex])

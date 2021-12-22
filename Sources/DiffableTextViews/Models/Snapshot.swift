@@ -126,7 +126,7 @@ public struct Snapshot: BidirectionalCollection, RangeReplaceableCollection, Exp
 
         // MARK: Comparable
 
-        @inlinable public static func < (lhs: Self, rhs: Self) -> Bool {
+        @inlinable @inline(__always) public static func < (lhs: Self, rhs: Self) -> Bool {
             lhs.offset < rhs.offset
         }
     }

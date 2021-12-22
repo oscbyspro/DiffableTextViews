@@ -135,7 +135,7 @@ public struct NumericTextStyle<Value: NumericTextValue>: DiffableTextStyle, Tran
 
     // MARK: Snapshot: Merge
 
-    @inlinable public func merge(snapshot: Snapshot, with content: Snapshot, in range: Range<Snapshot.Index>) -> Snapshot? {
+    @inlinable @inline(never) public func merge(snapshot: Snapshot, with content: Snapshot, in range: Range<Snapshot.Index>) -> Snapshot? {
         var input = Input(content, parser: parser)
         let toggleSignInput = input.consumeToggleSignInput()
         
@@ -188,7 +188,7 @@ public struct NumericTextStyle<Value: NumericTextValue>: DiffableTextStyle, Tran
     
     // MARK: Snapshot: Characters
     
-    @inlinable func snapshot(characters: String) -> Snapshot {
+    @inlinable @inline(never) func snapshot(characters: String) -> Snapshot {
         var snapshot = Snapshot()
             
         // --------------------------------- //
