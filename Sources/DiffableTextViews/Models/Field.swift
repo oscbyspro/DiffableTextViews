@@ -186,9 +186,8 @@ import protocol Utilities.Transformable
         
         // --------------------------------- //
         
-        let lowerBound = index(at: offsets.lowerBound)
-        indices.append(lowerBound)
-        let upperBound = index(at: offsets.upperBound)
+        let lowerBound = index(at: offsets.lowerBound); indices.append(lowerBound)
+        let upperBound = index(at: offsets.upperBound);
                         
         // --------------------------------- //
         
