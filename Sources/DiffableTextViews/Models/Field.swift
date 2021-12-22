@@ -174,14 +174,14 @@ import protocol Utilities.Transformable
     @inlinable func indices(in offsets: Range<Offset>) -> Range<Carets.Index> {
         var indices = [Carets.Index]()
         indices.reserveCapacity(5)
-        indices.append(contentsOf: [carets.firstIndex, carets.endIndex])
+        indices.append(contentsOf: [carets.firstIndex,         carets.endIndex])
         indices.append(contentsOf: [selection.lowerBound, selection.upperBound])
         
         // --------------------------------- //
         
         func index(at offset: Offset) -> Carets.Index {
-            let shortestIndexPath = indices.map({ PathToIndex($0, offset: offset) }).min()!
-            return carets.index(start: shortestIndexPath.origin, offset: shortestIndexPath.offset)
+            let shortestPathToIndex = indices.map({ PathToIndex($0, offset: offset) }).min()!
+            return carets.index(start: shortestPathToIndex.origin, offset: shortestPathToIndex.offset)
         }
         
         // --------------------------------- //
