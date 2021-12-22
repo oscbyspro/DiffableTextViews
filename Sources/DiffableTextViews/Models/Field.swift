@@ -161,12 +161,12 @@ import protocol Utilities.Transformable
         
         // --------------------------------- //
         
-        let nextUpperBound = position(from: carets[selection.upperBound...], to: newValue[...])
-        let nextLowerBound = position(from: carets[selection], to: newValue[..<nextUpperBound])
+        let upperBound = position(from: carets.suffix(from: selection.upperBound), to: newValue[...])
+        let lowerBound = position(from: carets[selection],     to: newValue.prefix(upTo: upperBound))
                 
         // --------------------------------- //
         
-        return Field(newValue, selection: nextLowerBound ..< nextUpperBound)
+        return Field(newValue, selection: lowerBound ..< upperBound)
     }
     
     // MARK: Utilities: Indices
