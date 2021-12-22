@@ -40,7 +40,7 @@ import struct DiffableTextViews.Snapshot
     
     #warning("WIP.")
     @inlinable init?<P: _Parser>(consumable: inout Snapshot, parser: P) {
-        guard let sign = configuration.signs.interpret(consumable.characters) else { return nil }
+        guard let sign = _Sign(characters: consumable.characters, parser: parser) else { return nil }
                                         
         self.sign = sign
         consumable.removeAll()

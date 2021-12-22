@@ -5,20 +5,18 @@
 //  Created by Oscar Byström Ericsson on 2021-12-20.
 //
 
-import struct Foundation.Locale
-
 // MARK: - Separator
 
 #warning("WIP")
-@usableFromInline struct _Separator: _Text {
+public struct _Separator: _Text {
     
     // MARK: Properties
     
-    @usableFromInline let characters: String
+    public let characters: String
     
     // MARK: Initializers
     
-    @inlinable init() {
+    @inlinable public init() {
         self.characters = ""
     }
 
@@ -28,52 +26,11 @@ import struct Foundation.Locale
     
     // MARK: Getters
     
-    @inlinable @inline(__always) var isEmpty: Bool {
+    @inlinable @inline(__always) public var isEmpty: Bool {
         characters.isEmpty
     }
     
     // MARK: Characters: Static
     
     @usableFromInline static let dot: String = "."
-}
-
-// MARK: - SeparatorParser
-
-#warning("WIP")
-@usableFromInline struct _SeparatorParser: _Parser {
-    @usableFromInline typealias Output = _Separator
-
-    // MARK: Properties
-    
-    @usableFromInline let separators: [String]
-    
-    // MARK: Initializers
-    
-    @inlinable init(separators: [String]) {
-        self.separators = separators
-    }
-    
-    // MARK: Transformations
-    
-    @inlinable func locale(_ locale: Locale) -> _SeparatorParser {
-        .init(separators: separators + [locale.decimalSeparator].compactMap({ $0 }))
-    }
-    
-    // MARK: Parse
-    
-    @inlinable func parse<C: Collection>(characters: C, index: inout C.Index, storage: inout Output) where C.Element == Character {
-        let subsequence = characters[index...]
-        
-        for separator in separators {
-            if subsequence.starts(with: separator) {
-                storage = Output(characters: Output.dot)
-                characters.formIndex(&index, offsetBy: separator.count)
-                return
-            }
-        }
-    }
-    
-    // MARK: Instances: Static
-    
-    @usableFromInline static let standard = Self(separators: [Output.dot])
 }

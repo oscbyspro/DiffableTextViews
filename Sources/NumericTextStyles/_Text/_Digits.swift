@@ -8,69 +8,40 @@
 // MARK: - Digits
 
 #warning("WIP")
-@usableFromInline struct _Digits: _Text {
+public struct _Digits: _Text {
     
     // MARK: Properties
     
-    @usableFromInline private(set) var characters: String
-    @usableFromInline private(set) var count: Int
+    @usableFromInline private(set) var _characters: String
+    @usableFromInline private(set) var _count: Int
     
+    // MARK: Properties: Getters
+    
+    @inlinable @inline(__always) public var characters: String { _characters }
+    @inlinable @inline(__always) public var count: Int { _count }
+
     // MARK: Initializers
     
-    @inlinable init() {
-        self.characters = ""
-        self.count = 0
+    @inlinable public init() {
+        self._characters = ""
+        self._count = 0
     }
     
     // MARK: Getters
     
-    @inlinable @inline(__always) var isEmpty: Bool {
-        characters.isEmpty
+    @inlinable @inline(__always) public var isEmpty: Bool {
+        _characters.isEmpty
     }
     
     // MARK: Transformations
     
     @inlinable mutating func append(_ character: Character) {
-        characters.append(character)
-        count += 1
+        _characters.append(character)
+        _count += 1
     }
     
     // MARK: Characters: Static
     
     @usableFromInline static let zero: Character = "0"
     @usableFromInline static let decimals = Set<Character>("0123456789")
-}
-
-// MARK: - DigitsParser
-
-#warning("WIP")
-@usableFromInline struct _DigitsParser: _Parser {
-    @usableFromInline typealias Output = _Digits
-
-    // MARK: Properties
-    
-    @usableFromInline let digits: Set<Character>
-    
-    // MARK: Initializers
-    
-    @inlinable init(digits: Set<Character>) {
-        self.digits = digits
-    }
-    
-    // MARK: Parse
-    
-    @inlinable func parse<C: Collection>(characters: C, index: inout C.Index, storage: inout Output) where C.Element == Character {
-        while index < characters.endIndex {
-            let character = characters[index]
-            
-            guard digits.contains(character) else { break }
-            
-            storage.append(character)
-            characters.formIndex(after: &index)
-        }
-    }
-    
-    // MARK: Instances: Static
-    
-    @usableFromInline static let standard = Self(digits: Output.decimals)
 }

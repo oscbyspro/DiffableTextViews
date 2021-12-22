@@ -26,9 +26,9 @@ public protocol _Parser {
     @inlinable static var standard: Self { get }
 }
 
-// MARK: - Defaults
+// MARK: - Parser: Details
 
-extension _Parser {
+public extension _Parser {
     
     // MARK: Implementation
     

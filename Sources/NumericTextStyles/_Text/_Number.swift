@@ -70,7 +70,7 @@ public struct _Number: _Text {
 
 // MARK: - UnsignedIntegerParser
 
-public struct _UnsignedIntegerParser: _Parser {
+public struct _UnsignedIntegerParser: _NumberTextParser {
     public typealias Output = _Number
     
     // MARK: Properties
@@ -102,7 +102,7 @@ public struct _UnsignedIntegerParser: _Parser {
 
 // MARK: - IntegerParser
 
-public struct _IntegerParser: _Parser {
+public struct _IntegerParser: _NumberTextParser {
     public typealias Output = _Number
     
     // MARK: Properties
@@ -126,7 +126,7 @@ public struct _IntegerParser: _Parser {
     // MARK: Parse
     
     @inlinable public func parse<C: Collection>(characters: C, index: inout C.Index, storage: inout Output) where C.Element == Character {
-        sign.parse(characters: characters, index: &index, storage: &storage.sign)        
+        sign.parse(characters: characters, index: &index, storage: &storage.sign)
         digits.parse(characters: characters, index: &index, storage: &storage.integer)
     }
     
@@ -138,7 +138,7 @@ public struct _IntegerParser: _Parser {
 // MARK: - FloatingPointParser
 
 #warning("WIP")
-public struct _FloatingPointParser: _Parser {
+public struct _FloatingPointParser: _NumberTextParser {
     public typealias Output = _Number
     
     // MARK: Properties
