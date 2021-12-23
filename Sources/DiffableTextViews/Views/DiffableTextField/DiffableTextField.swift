@@ -190,7 +190,7 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable, 
         // MARK: Synchronize: Pull
         
         @inlinable func pull() -> Update {
-            var update = Update()
+            var update: Update = []
             
             // --------------------------------- //
             

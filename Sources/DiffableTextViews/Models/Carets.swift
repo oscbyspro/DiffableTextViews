@@ -38,7 +38,7 @@ import protocol Utilities.Nonempty
     // MARK: Traverse
     
     @inlinable func index(after i: Index) -> Index {
-        Index(at: i.offset.after(character(at: i.rhs!.character)), lhs: i.rhs!, rhs: subindex(after: i.rhs!))
+        Index(at: i.offset.after(character(at: i.rhs!.character)),  lhs: i.rhs!,  rhs: subindex(after: i.rhs!))
     }
     
     @inlinable func index(before i: Index) -> Index {
