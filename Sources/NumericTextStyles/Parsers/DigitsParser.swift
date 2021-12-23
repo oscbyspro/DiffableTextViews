@@ -19,7 +19,6 @@
     
     @inlinable init(zero: Character, digits: Set<Character>) {
         assert(digits.contains(zero))
-        
         self.zero = zero
         self.digits = digits
     }
@@ -36,13 +35,8 @@
             characters.formIndex(after: &index)
         }
     }
-        
-    @inlinable func parseZero(storage: inout Output) {
-        storage.append(zero)
-    }
     
     // MARK: Instances
     
     @usableFromInline static let standard = Self(zero: Output.zero, digits: Output.decimals)
 }
-
