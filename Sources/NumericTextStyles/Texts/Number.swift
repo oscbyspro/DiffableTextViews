@@ -42,6 +42,10 @@
     // MARK: Transformations
     
     @inlinable mutating func toggle(sign proposal: Sign) {
-        if sign == proposal { sign = .none } else { sign = proposal }
+        switch proposal {
+        case .none: return
+        case  sign: sign.removeAll()
+        default:    sign = proposal
+        }
     }
 }
