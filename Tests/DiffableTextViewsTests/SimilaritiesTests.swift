@@ -34,15 +34,10 @@ final class SimilaritiesTestsOfInspection: XCTestCase {
         
         // --------------------------------- //
         
-        let prefix = [0]
-        let suffix = [4]
-        
-        // --------------------------------- //
-        
-        XCTAssert(input: similarities.lhsPrefix(), output: prefix)
-        XCTAssert(input: similarities.lhsSuffix(), output: suffix)
-        XCTAssert(input: similarities.rhsPrefix(), output: prefix)
-        XCTAssert(input: similarities.rhsSuffix(), output: suffix)
+        XCTAssert(input: similarities.lhsPrefix(), output: [0])
+        XCTAssert(input: similarities.lhsSuffix(), output: [4])
+        XCTAssert(input: similarities.rhsPrefix(), output: [0])
+        XCTAssert(input: similarities.rhsSuffix(), output: [4])
     }
     
     func test_only() {
