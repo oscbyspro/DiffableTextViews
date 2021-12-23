@@ -17,15 +17,19 @@
     
     // MARK: Initializers
     
-    @inlinable init(_ range: Range<Carets.Index>) {
+    @inlinable init(range: Range<Carets.Index>) {
         self.range = range
     }
     
-    @inlinable init(_ position: Carets.Index) {
+    @inlinable init(position: Carets.Index) {
         self.range = position ..< position
     }
     
     // MARK: Getters
+    
+    @inlinable var isEmpty: Bool {
+        range.isEmpty
+    }
     
     @inlinable var lowerBound: Carets.Index {
         range.lowerBound
@@ -42,14 +46,14 @@
     // MARK: Transformations
     
     @inlinable func preferential(_ transformation: (Carets.Index, Direction) -> Carets.Index) -> Self {
-        let upperBound = transformation(range.upperBound, .backwards)
-        var lowerBound = upperBound
+        let nextUpperBound = transformation(upperBound, .backwards)
+        var nextLowerBound = nextUpperBound
 
-        if !range.isEmpty {
-            lowerBound = transformation(range.lowerBound,  .forwards)
-            lowerBound = min(lowerBound, upperBound)
+        if !isEmpty {
+            nextLowerBound = transformation(lowerBound,  .forwards)
+            nextLowerBound = min(nextLowerBound,    nextUpperBound)
         }
         
-        return .init(lowerBound ..< upperBound)
+        return Self(range: nextLowerBound ..< nextUpperBound)
     }
 }

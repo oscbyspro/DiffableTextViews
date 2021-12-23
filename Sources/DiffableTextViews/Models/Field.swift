@@ -21,12 +21,16 @@ import protocol Utilities.Transformable
 
     // MARK: Initializers
     
-    @inlinable init(_ snapshot: Snapshot = Snapshot()) {
-        self.carets = Carets(snapshot)
-        self.selection = Selection(carets.lastIndex)
+    @inlinable init() {
+        self.init(snapshot: Snapshot())
     }
     
-    @inlinable init(_ carets: Carets, selection: Selection) {
+    @inlinable init(snapshot: Snapshot) {
+        self.carets = Carets(snapshot: snapshot)
+        self.selection = Selection(position: carets.lastIndex)
+    }
+    
+    @inlinable init(carets: Carets, selection: Selection) {
         self.carets = carets
         self.selection = selection
     }
@@ -51,7 +55,7 @@ import protocol Utilities.Transformable
     }
     
     @inlinable func updating(carets newValue: Snapshot) -> Self {
-        updating(carets: Carets(newValue))
+        updating(carets: Carets(snapshot: newValue))
     }
 
     // MARK: Transformations: Selection
@@ -61,19 +65,19 @@ import protocol Utilities.Transformable
     }
     
     @inlinable func updating(selection newValue: Range<Carets.Index>, intent: Direction?) -> Self {
-        updating(selection: Selection(newValue), intent: intent)
+        updating(selection: Selection(range: newValue), intent: intent)
     }
     
     @inlinable func updating(selection newValue: Carets.Index, intent: Direction?) -> Self {
-        updating(selection: Selection(newValue ..< newValue), intent: intent)
+        updating(selection: Selection(position: newValue), intent: intent)
     }
     
     @inlinable func updating(selection newValue: Range<Offset>, intent: Direction?) -> Self {
-        updating(selection: Selection(indices(at: newValue)), intent: intent)
+        updating(selection: Selection(range: indices(at: newValue)), intent: intent)
     }
     
     @inlinable func updating(selection newValue: Offset, intent: Direction?) -> Self {
-        updating(selection: Selection(indices(at: newValue ..< newValue)), intent: intent)
+        updating(selection: Selection(range: indices(at: newValue ..< newValue)), intent: intent)
     }
     
     // MARK: Transformations: Helpers
@@ -155,6 +159,6 @@ import protocol Utilities.Transformable
                 
         // --------------------------------- //
         
-        return Field(newValue, selection: Selection(lowerBound ..< upperBound))
+        return Field(carets: newValue, selection: Selection(range: lowerBound ..< upperBound))
     }
 }

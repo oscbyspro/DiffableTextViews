@@ -79,7 +79,7 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable, 
     @inlinable public func updateUIView(_ uiView: UIViewType, context: Context) {
         context.coordinator.upstream = self
         update?(context.coordinator.downstream)
-        context.coordinator.synchronize(.async)
+        context.coordinator.synchronize(update: .async)
     }
     
     // MARK: Coordinator
@@ -88,16 +88,16 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable, 
         @usableFromInline typealias Offset = DiffableTextViews.Offset<UTF16>
         @usableFromInline typealias Cache = DiffableTextViews.Cache<UTF16, Value>
         
-        // MARK: Properties: Subjects
+        // MARK: Properties
         
         @usableFromInline var upstream: DiffableTextField!
         @usableFromInline var downstream: ProxyTextField<UIViewType>!
         
-        // MARK: Properties: Components
-                
+        // MARK: Properties: Helpers
+        
         @usableFromInline let lock = Lock()
         @usableFromInline let cache = Cache()
-                
+        
         // MARK: Initializers: Setup
 
         @inlinable func connect(_ uiView: UIViewType) {
@@ -149,7 +149,7 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable, 
                 // async to process special commands (like: option + delete) first
                 self.cache.value = value
                 self.cache.field = field
-                self.push([.upstream, .downstream])
+                self.push(update: [.upstream, .downstream])
             }
                 
             // --------------------------------- //
@@ -183,8 +183,8 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable, 
 
         // MARK: Synchronize
         
-        @inlinable func synchronize(_ update: Update = []) {
-            push(pull().union(update))
+        @inlinable func synchronize(update: Update = []) {
+            push(update: pull().union(update))
         }
         
         // MARK: Synchronize: Pull
@@ -227,7 +227,7 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable, 
         
         // MARK: Synchronize: Push
         
-        @inlinable func push(_ update: Update) {
+        @inlinable func push(update: Update) {
             if update.contains(.downstream) {
                 lock.perform {
                     // changes to UITextField's text and selection both call
@@ -244,7 +244,9 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable, 
             if update.contains(.upstream) {
                 perform(async: update.contains(.async)) {
                     // async avoids view update loop
-                    self.update(storage: &self.upstream.value.wrappedValue, nonduplicate: self.cache.value)
+                    if  self.upstream.value.wrappedValue != self.cache.value {
+                        self.upstream.value.wrappedValue  = self.cache.value
+                    }
                 }
             }
         }
@@ -259,11 +261,7 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable, 
             cache.value == value && cache.edits == downstream.edits
         }
         
-        // MARK: Synchronize: Utilities
-        
-        @inlinable func update(storage: inout Value, nonduplicate newValue: Value) {
-            if storage != newValue { storage = newValue }
-        }
+        // MARK: Synchronize: Helpers
         
         @inlinable func perform(async: Bool, action: @escaping () -> Void) {
             if async { Task { @MainActor in action() } } else { action() }

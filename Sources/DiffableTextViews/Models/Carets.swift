@@ -19,8 +19,8 @@ import protocol Utilities.Nonempty
 
     // MARK: Initializers
     
-    /// It might be possible to fetch the range from the view, as opposed to calculating it for each instance of this object.
-    @inlinable init(_ snapshot: Snapshot) {
+    /// - Complexity: O(n).
+    @inlinable init(snapshot: Snapshot) {
         self.snapshot = snapshot
         self.range = .zero ..< .max(in: snapshot.characters)
     }
@@ -45,6 +45,7 @@ import protocol Utilities.Nonempty
         Index(at: i.offset.before(character(at: i.lhs!.character)), lhs: subindex(before: i.lhs!), rhs: i.lhs!)
     }
     
+    /// - Complexity: O(n).
     @inlinable func index(at destination: Offset, start: Index) -> Index {
         if start.offset <= destination {
             return indices[start...].first(where: { $0.offset == destination })!
@@ -79,7 +80,7 @@ import protocol Utilities.Nonempty
         guard let index = index, index < snapshot.endIndex else { return nil }; return snapshot[index]
     }
     
-    // MARK: Components: Index
+    // MARK: Index
     
     @usableFromInline struct Index: Comparable {
         
