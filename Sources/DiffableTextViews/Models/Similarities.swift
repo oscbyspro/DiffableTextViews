@@ -238,23 +238,3 @@ import protocol Utilities.Transformable
         transforming({ $0.inspection = newValue })
     }
 }
-
-// MARK: - Options: Symbol
-
-extension SimilaritiesOptions where Element == Symbol {
-    
-    // MARK: Instances
-    
-    @usableFromInline static let symbols: Self = {
-        .init(comparison: .instruction(step), inspection: .only(\.nonformatting))
-    }()
-
-    // MARK: Utilities
-    
-    @inlinable static func step(previous lhs: Symbol, next rhs: Symbol) -> SimilaritiesInstruction {
-        if lhs == rhs                               { return .continue      }
-        else if lhs.attribute.contains(.removable)  { return .continueOnLHS }
-        else if rhs.attribute.contains(.insertable) { return .continueOnRHS }
-        else                                        { return .done          }
-    }
-}

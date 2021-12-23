@@ -136,7 +136,7 @@ import protocol Utilities.Transformable
             
     @inlinable func transformingAccordingToCarets(_ newValue: Carets) -> Field {
         func position(current: Carets.SubSequence, next: Carets.SubSequence) -> Carets.Index {
-            Similarities(lhs: next.lazy.map(\.rhs), rhs: current.lazy.map(\.rhs), options: .symbols).lhsSuffix().startIndex
+            _Field.position(current: current.lazy.map(\.rhs), next: next.lazy.map(\.rhs))
         }
         
         // --------------------------------- //
@@ -147,5 +147,31 @@ import protocol Utilities.Transformable
         // --------------------------------- //
         
         return Field(carets: newValue, selection: Selection(range: lowerBound ..< upperBound))
+    }
+}
+
+// MARK: - Field: Constants
+
+@usableFromInline enum _Field {
+    
+    // MARK: Similarities: Position
+    
+    @inlinable static func position<Current: BidirectionalCollection, Next: BidirectionalCollection>(current: Current, next: Next) -> Next.Index where Current.Element == Symbol, Next.Element == Symbol {
+        Similarities(lhs: current, rhs: next, options: options).rhsSuffix().startIndex
+    }
+    
+    // MARK: Similarities: Options
+    
+    @usableFromInline static let options: SimilaritiesOptions = {
+        .init(comparison: .instruction(step), inspection: .only(\.nonformatting))
+    }()
+    
+    // MARK: Similarities: Helpers
+    
+    @inlinable static func step(current lhs: Symbol, next rhs: Symbol) -> SimilaritiesInstruction {
+        if lhs == rhs                               { return .continue      }
+        else if lhs.attribute.contains(.removable)  { return .continueOnLHS }
+        else if rhs.attribute.contains(.insertable) { return .continueOnRHS }
+        else                                        { return .done          }
     }
 }

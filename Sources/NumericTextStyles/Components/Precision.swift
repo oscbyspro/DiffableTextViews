@@ -7,19 +7,10 @@
 
 import enum Foundation.NumberFormatStyleConfiguration
 
-// MARK: - Precision: Defaults
-
-@usableFromInline enum PrecisionDefaults {
-    @usableFromInline static let totalLowerBound: Int = 1
-    @usableFromInline static let integerLowerBound: Int = 1
-    @usableFromInline static let fractionLowerBound: Int = 0
-}
-
 // MARK: - Precision
 
 /// - Note: Lower precision bounds are enforced only when the view is idle.
 public struct Precision<Value: Precise> {
-    @usableFromInline typealias Defaults = PrecisionDefaults
     @usableFromInline typealias Total = PrecisionTotal<Value>
     @usableFromInline typealias Parts = PrecisionParts<Value>
     
@@ -42,17 +33,17 @@ public struct Precision<Value: Precise> {
     // MARK: Editable: Styles
     
     @inlinable func editableStyle() -> NumberFormatStyleConfiguration.Precision {
-        let integer = Defaults.integerLowerBound...Value.maxLosslessIntegerDigits
-        let fraction = Defaults.fractionLowerBound...Value.maxLosslessFractionDigits
+        let integer = _Precision.defaultIntegerLowerBound...Value.maxLosslessIntegerDigits
+        let fraction = _Precision.defaultFractionLowerBound...Value.maxLosslessFractionDigits
         
         return .integerAndFractionLength(integerLimits: integer, fractionLimits: fraction)
     }
     
     @inlinable func editableStyle(count: Count) -> NumberFormatStyleConfiguration.Precision {
-        let integerUpperBound = Swift.max(Defaults.integerLowerBound, count.integer)
-        let integer = Defaults.integerLowerBound...integerUpperBound
+        let integerUpperBound = Swift.max(_Precision.defaultIntegerLowerBound, count.integer)
+        let integer = _Precision.defaultIntegerLowerBound...integerUpperBound
         
-        let fractionLowerBound = Swift.max(Defaults.fractionLowerBound, count.fraction)
+        let fractionLowerBound = Swift.max(_Precision.defaultFractionLowerBound, count.fraction)
         let fraction = fractionLowerBound...fractionLowerBound
         
         return .integerAndFractionLength(integerLimits: integer, fractionLimits: fraction)
@@ -78,7 +69,7 @@ public extension Precision {
     // MARK: Max
     
     @inlinable static func max(_ total: Int) -> Self {
-        digits(Defaults.totalLowerBound...total)
+        digits(_Precision.defaultTotalLowerBound...total)
     }
     
     // MARK: Max: Standard
@@ -99,17 +90,17 @@ public extension Precision where Value: PreciseFloatingPoint {
     }
     
     @inlinable static func digits<R: RangeExpression>(integer: R) -> Self where R.Bound == Int {
-        .init(implementation: Parts(integer: integer, fraction: Defaults.fractionLowerBound...))
+        .init(implementation: Parts(integer: integer, fraction: _Precision.defaultFractionLowerBound...))
     }
     
     @inlinable static func digits<R: RangeExpression>(fraction: R) -> Self where R.Bound == Int {
-        .init(implementation: Parts(integer: Defaults.integerLowerBound..., fraction: fraction))
+        .init(implementation: Parts(integer: _Precision.defaultIntegerLowerBound..., fraction: fraction))
     }
     
     // MARK: Max
     
     @inlinable static func max(integer: Int, fraction: Int) -> Self  {
-        .digits(integer: Defaults.integerLowerBound...integer, fraction: Defaults.fractionLowerBound...fraction)
+        .digits(integer: _Precision.defaultIntegerLowerBound...integer, fraction: _Precision.defaultFractionLowerBound...fraction)
     }
     
     @inlinable static func max(integer: Int) -> Self {
@@ -124,7 +115,7 @@ public extension Precision where Value: PreciseFloatingPoint {
 // MARK: - Implementations
 
 @usableFromInline protocol PrecisionImplementation {
-    typealias Defaults = PrecisionDefaults
+    typealias Defaults = _Precision
     
     // MARK: Requirements
         
@@ -183,11 +174,11 @@ public extension Precision where Value: PreciseFloatingPoint {
     }
     
     @inlinable init<R: RangeExpression>(integer: R) where R.Bound == Int {
-        self.init(integer: integer, fraction: Defaults.fractionLowerBound...)
+        self.init(integer: integer, fraction: Defaults.defaultFractionLowerBound...)
     }
     
     @inlinable init<R: RangeExpression>(fraction: R) where R.Bound == Int {
-        self.init(integer: Defaults.integerLowerBound..., fraction: fraction)
+        self.init(integer: Defaults.defaultIntegerLowerBound..., fraction: fraction)
     }
     
     // MARK: Utilities
@@ -208,4 +199,15 @@ public extension Precision where Value: PreciseFloatingPoint {
         
         return .init(integer: integerCapacity, fraction: fractionCapacity)
     }
+}
+
+// MARK: - Precision: Constants
+
+@usableFromInline enum _Precision {
+    
+    // MARK: Defaults
+    
+    @usableFromInline static let defaultTotalLowerBound: Int = 1
+    @usableFromInline static let defaultIntegerLowerBound: Int = 1
+    @usableFromInline static let defaultFractionLowerBound: Int = 0
 }
