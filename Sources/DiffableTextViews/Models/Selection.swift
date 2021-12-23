@@ -23,11 +23,11 @@
     
     // MARK: Getters
     
-    @inlinable @inline(__always) var lowerBound: Carets.Index {
+    @inlinable var lowerBound: Carets.Index {
         range.lowerBound
     }
     
-    @inlinable @inline(__always) var upperBound: Carets.Index {
+    @inlinable var upperBound: Carets.Index {
         range.upperBound
     }
         

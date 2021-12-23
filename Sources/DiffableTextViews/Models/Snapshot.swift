@@ -22,8 +22,8 @@ public struct Snapshot: BidirectionalCollection, RangeReplaceableCollection, Exp
 
     // MARK: Properties: Get
     
-    @inlinable @inline(__always) public var characters: Characters { _characters }
-    @inlinable @inline(__always) public var attributes: Attributes { _attributes }
+    @inlinable public var characters: Characters { _characters }
+    @inlinable public var attributes: Attributes { _attributes }
 
     // MARK: Initialization
 
@@ -44,12 +44,12 @@ public struct Snapshot: BidirectionalCollection, RangeReplaceableCollection, Exp
     // MARK: Collection: Counts
     
     /// - Complexity: O(1).
-    @inlinable @inline(__always) public var count: Int {
+    @inlinable public var count: Int {
         _attributes.count
     }
     
     /// - Complexity: O(1).
-    @inlinable @inline(__always) public var underestimatedCount: Int {
+    @inlinable public var underestimatedCount: Int {
         _attributes.underestimatedCount
     }
     
@@ -120,13 +120,13 @@ public struct Snapshot: BidirectionalCollection, RangeReplaceableCollection, Exp
 
         // MARK: Utilities
 
-        @inlinable @inline(__always) var offset: Int {
+        @inlinable var offset: Int {
             attribute
         }
 
         // MARK: Comparable
 
-        @inlinable @inline(__always) public static func < (lhs: Self, rhs: Self) -> Bool {
+        @inlinable public static func < (lhs: Self, rhs: Self) -> Bool {
             lhs.offset < rhs.offset
         }
     }

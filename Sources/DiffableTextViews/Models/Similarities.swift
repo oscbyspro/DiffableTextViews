@@ -77,7 +77,7 @@ import protocol Utilities.Transformable
     
     // MARK: Utilities: Helpers
     
-    @inlinable @inline(never) func prefixEndIndices() -> Indices {
+    @inlinable func prefixEndIndices() -> Indices {
         var lhsIndex = lhs.startIndex
         var rhsIndex = rhs.startIndex
         

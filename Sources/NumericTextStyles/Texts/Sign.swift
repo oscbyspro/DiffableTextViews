@@ -23,11 +23,11 @@
         
     // MARK: Getters
     
-    @inlinable @inline(__always) var isEmpty: Bool {
+    @inlinable var isEmpty: Bool {
         rawValue.isEmpty
     }
     
-    @inlinable @inline(__always) var characters: String {
+    @inlinable var characters: String {
         rawValue
     }
     

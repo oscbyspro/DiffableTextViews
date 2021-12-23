@@ -23,7 +23,7 @@
     
     // MARK: Getters
     
-    @inlinable @inline(__always) var isEmpty: Bool {
+    @inlinable var isEmpty: Bool {
         characters.isEmpty
     }
     

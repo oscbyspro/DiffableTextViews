@@ -20,7 +20,7 @@ extension Int8: NumericTextInt {
     
     // MARK: Implementation
     
-    @inlinable @inline(__always) public static var maxLosslessTotalDigits: Int { 3 }
+    public static let maxLosslessTotalDigits: Int = 3
 }
 
 // MARK: - Int16
@@ -29,7 +29,7 @@ extension Int16: NumericTextInt {
     
     // MARK: Implementation
     
-    @inlinable @inline(__always) public static var maxLosslessTotalDigits: Int { 5 }
+    public static let maxLosslessTotalDigits: Int = 5
 }
 
 // MARK: - Int32
@@ -38,7 +38,7 @@ extension Int32: NumericTextInt {
     
     // MARK: Implementation
     
-    @inlinable @inline(__always) public static var maxLosslessTotalDigits: Int { 10 }
+    public static let maxLosslessTotalDigits: Int = 10
 }
 
 // MARK: Int64
@@ -47,5 +47,5 @@ extension Int64: NumericTextInt {
     
     // MARK: Implementation
     
-    @inlinable @inline(__always) public static var maxLosslessTotalDigits: Int { 19 }
+    public static let maxLosslessTotalDigits: Int = 19
 }

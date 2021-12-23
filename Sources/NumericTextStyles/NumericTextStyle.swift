@@ -35,7 +35,7 @@ public struct NumericTextStyle<Value: NumericTextValue>: DiffableTextStyle, Tran
     
     // MARK: Getters
     
-    @inlinable @inline(__always) var parser: NumberParser {
+    @inlinable var parser: NumberParser {
         Value.parser.locale(locale)
     }
     
@@ -135,7 +135,7 @@ public struct NumericTextStyle<Value: NumericTextValue>: DiffableTextStyle, Tran
 
     // MARK: Snapshot: Merge
 
-    @inlinable @inline(never) public func merge(snapshot: Snapshot, with content: Snapshot, in range: Range<Snapshot.Index>) -> Snapshot? {
+    @inlinable public func merge(snapshot: Snapshot, with content: Snapshot, in range: Range<Snapshot.Index>) -> Snapshot? {
         var input = Input(content, parser: parser)
         let toggleSignInput = input.consumeToggleSignInput()
         
@@ -188,7 +188,7 @@ public struct NumericTextStyle<Value: NumericTextValue>: DiffableTextStyle, Tran
     
     // MARK: Snapshot: Characters
     
-    @inlinable @inline(never) func snapshot(characters: String) -> Snapshot {
+    @inlinable func snapshot(characters: String) -> Snapshot {
         var snapshot = Snapshot()
             
         // --------------------------------- //

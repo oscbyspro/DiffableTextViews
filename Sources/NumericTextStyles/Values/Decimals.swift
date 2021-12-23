@@ -17,31 +17,31 @@ import enum Foundation.NumberFormatStyleConfiguration
 ///
 extension Decimal: NumericTextValue, PreciseFloatingPoint { }; extension Decimal {
     
-    // MARK: Boundable
-        
-    @usableFromInline static let maxLosslessLimit =
-    Decimal(string: String(repeating: "9", count: maxLosslessTotalDigits))!
-    
-    @inlinable @inline(__always) public static var minLosslessValue: Self { -maxLosslessLimit }
-    @inlinable @inline(__always) public static var maxLosslessValue: Self {  maxLosslessLimit }
-    
     // MARK: Precise
  
-    @inlinable @inline(__always) public static var maxLosslessTotalDigits: Int { 38 }
+    public static let maxLosslessTotalDigits: Int = 38
+    
+    // MARK: Boundable
+        
+    @inlinable public static var minLosslessValue: Self { -maxLosslessLimit }
+    @inlinable public static var maxLosslessValue: Self {  maxLosslessLimit }
+    
+    @usableFromInline static let maxLosslessLimit =
+    Decimal(string: String(repeating: "9", count: maxLosslessTotalDigits))!
         
     // MARK: Formattable
     
-    @inlinable @inline(__always) public static func value(description: String) -> Self? {
+    @inlinable public static func value(description: String) -> Self? {
         .init(string: description)
     }
     
-    @inlinable @inline(__always) public static func style(locale: Locale, precision: NumberFormatStyleConfiguration.Precision, separator: NumberFormatStyleConfiguration.DecimalSeparatorDisplayStrategy) -> FormatStyle {
+    @inlinable public static func style(locale: Locale, precision: NumberFormatStyleConfiguration.Precision, separator: NumberFormatStyleConfiguration.DecimalSeparatorDisplayStrategy) -> FormatStyle {
         .init(locale: locale).precision(precision).decimalSeparator(strategy: separator)
     }
     
     // MARK: Parsable
     
-    @inlinable @inline(__always) public static var parser: NumberParser {
+    @inlinable public static var parser: NumberParser {
         .standard
     }
 }

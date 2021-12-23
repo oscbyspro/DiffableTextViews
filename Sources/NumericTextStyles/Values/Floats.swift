@@ -11,8 +11,8 @@ extension Float16: NumericTextFloat {
     
     // MARK: Implementation
     
-    @inlinable @inline(__always) public static var maxLosslessValue: Self { 999 }
-    @inlinable @inline(__always) public static var maxLosslessTotalDigits: Int { 3 }
+    public static let maxLosslessValue: Self = 999
+    public static let maxLosslessTotalDigits: Int = 3
 }
 
 // MARK: - Float32
@@ -21,8 +21,8 @@ extension Float32: NumericTextFloat {
     
     // MARK: Implementation
         
-    @inlinable @inline(__always) public static var maxLosslessValue: Self { 9_999_999 }
-    @inlinable @inline(__always) public static var maxLosslessTotalDigits: Int { 7 }
+    public static let maxLosslessValue: Self = 9_999_999
+    public static let maxLosslessTotalDigits: Int = 7
 }
 
 // MARK: - Float64
@@ -31,6 +31,6 @@ extension Float64: NumericTextFloat {
     
     // MARK: Implementation
         
-    @inlinable @inline(__always) public static var maxLosslessValue: Self { 999_999_999_999_999 }
-    @inlinable @inline(__always) public static var maxLosslessTotalDigits: Int { 15 }
+    public static let maxLosslessValue: Self = 999_999_999_999_999
+    public static let maxLosslessTotalDigits: Int = 15
 }
