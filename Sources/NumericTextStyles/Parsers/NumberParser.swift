@@ -50,6 +50,8 @@ public struct NumberParser: Parser, Transformable {
         
         digits.parse(characters, index: &index, storage: &storage.integer)
         
+        storage.integer.removeRedundantZerosPrefix()
+                
         if storage.integer.isEmpty {
             storage.integer.append(digits.zero)
         }
