@@ -8,7 +8,7 @@
 #if canImport(UIKit)
 
 import UIKit
-import SwiftUI
+import struct SwiftUI.Color
 
 // MARK: - ProxyTextField
 
@@ -23,50 +23,46 @@ public final class ProxyTextField<Wrapped: UITextField> {
     
     // MARK: Properties
     
-    @usableFromInline let wrapped: Wrapped
+    @usableFromInline let uiTextField: Wrapped
     
     // MARK: Initializers
     
-    @inlinable init(_ wrapped: Wrapped) {
-        self.wrapped = wrapped
+    @inlinable init(_ uiTextField: Wrapped) {
+        self.uiTextField = uiTextField
     }
     
     // MARK: Text
-    
-    /// - Note: Force unwrapping a UITextField's text is always OK.
-    ///
+
     /// - Complexity: O(1).
     @inlinable var text: String {
-        wrapped.text!
+        uiTextField.text!
     }
     
     /// - Complexity: High.
     @inlinable func update(text: String) {
-        wrapped.text = text
+        uiTextField.text = text
     }
     
     // MARK: Selection
     
-    /// - Note: Force unwrapping a UITextField's selection is always OK.
-    ///
     /// - Complexity: O(1).
     @inlinable func selection() -> Range<Offset> {
-        offsets(in: wrapped.selectedTextRange!)
+        offsets(in: uiTextField.selectedTextRange!)
     }
     
     /// - Complexity: High.
     @inlinable func select(offsets: Range<Offset>) {
-        wrapped.selectedTextRange = positions(of: offsets)
+        uiTextField.selectedTextRange = positions(of: offsets)
     }
     
     // MARK: Descriptions
     
     /// - Complexity: O(1).
     @inlinable var edits: Bool {
-        wrapped.isEditing
+        uiTextField.isEditing
     }
     
-    // MARK: Utilities: Range & Offset
+    // MARK: Range & Offset
 
     /// - Complexity: O(1).
     @inlinable func offsets(in bounds: UITextRange) -> Range<Offset> {
@@ -75,50 +71,47 @@ public final class ProxyTextField<Wrapped: UITextField> {
     
     /// - Complexity: O(1).
     @inlinable func offset(at position: UITextPosition) -> Offset {
-        .init(at: wrapped.offset(from: wrapped.beginningOfDocument, to: position))
+        .init(at: uiTextField.offset(from: uiTextField.beginningOfDocument, to: position))
     }
     
     /// - Complexity: O(1).
     @inlinable func position(at offset: Offset) -> UITextPosition {
-        wrapped.position(from: wrapped.beginningOfDocument, offset: offset.units)!
+        uiTextField.position(from: uiTextField.beginningOfDocument, offset: offset.units)!
     }
     
     /// - Complexity: O(1).
     @inlinable func positions(of offsets: Range<Offset>) -> UITextRange {
-        wrapped.textRange(from: position(at: offsets.lowerBound), to: position(at: offsets.upperBound))!
+        uiTextField.textRange(from: position(at: offsets.lowerBound), to: position(at: offsets.upperBound))!
     }
-}
-
-// MARK: - Public Interface
-
-public extension ProxyTextField {
-        
-    // MARK: Actions
+    
+    // MARK: Transformations
     
     @inlinable func resign() {
-        wrapped.resignFirstResponder()
+        uiTextField.resignFirstResponder()
     }
-    
-    // MARK: Setters
-    
+        
     @inlinable func autocorrect(_ autocorrect: UITextAutocorrectionType) {
-        wrapped.autocorrectionType = autocorrect
+        uiTextField.autocorrectionType = autocorrect
     }
     
     @inlinable func keyboard(_ keyboard: UIKeyboardType) {
-        wrapped.keyboardType = keyboard
+        uiTextField.keyboardType = keyboard
     }
     
     @inlinable func key(return: UIReturnKeyType) {
-        wrapped.returnKeyType = `return`
+        uiTextField.returnKeyType = `return`
     }
     
     @inlinable func secure(entry: Bool) {
-        wrapped.isSecureTextEntry = entry
+        uiTextField.isSecureTextEntry = entry
+    }
+    
+    @inlinable func tint(color: UIColor) {
+        uiTextField.tintColor = color
     }
     
     @inlinable func tint(color: Color) {
-        wrapped.tintColor = UIColor(color)
+        uiTextField.tintColor = UIColor(color)
     }
 }
 

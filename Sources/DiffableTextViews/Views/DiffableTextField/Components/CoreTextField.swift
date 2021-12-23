@@ -7,7 +7,10 @@
 
 #if canImport(UIKit)
 
-import UIKit
+import class UIKit.UITextField
+import class UIKit.UIPress
+import class UIKit.UIPressesEvent
+import  enum UIKit.UIKeyboardHIDUsage
 
 // MARK: - CoreTextField
 
@@ -45,7 +48,7 @@ public final class CoreTextField: UITextField {
             guard let key = presses.first?.key else { return nil }
             
             switch key.keyCode {
-            case forwards.code:  return .forwards
+            case  forwards.code: return  .forwards
             case backwards.code: return .backwards
             default: return nil
             }
@@ -87,8 +90,8 @@ extension CoreTextField {
     
     @inlinable func processIntentEnded(_ presses: Set<UIPress>) {
         guard let current = intent else { return }
-        guard let ending = Intent.parse(presses) else { return }
-        if current == ending { self.intent = nil }
+        guard let ended = Intent.parse(presses) else { return }
+        if current == ended { self.intent = nil }
     }
 }
 

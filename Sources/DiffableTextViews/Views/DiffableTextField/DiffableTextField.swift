@@ -165,7 +165,7 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable, 
             // --------------------------------- //
                         
             let offsets = downstream.selection()
-            let intent = downstream.wrapped.intent?.direction
+            let intent = downstream.uiTextField.intent?.direction
             let field = cache.field.updating(selection: offsets, intent: intent)
             
             // --------------------------------- //
