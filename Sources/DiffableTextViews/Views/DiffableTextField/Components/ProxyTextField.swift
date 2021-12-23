@@ -86,31 +86,31 @@ public final class ProxyTextField<Wrapped: UITextField> {
     
     // MARK: Transformations
     
-    @inlinable func resign() {
+    @inlinable public func resign() {
         uiTextField.resignFirstResponder()
     }
         
-    @inlinable func autocorrect(_ autocorrect: UITextAutocorrectionType) {
+    @inlinable public func autocorrect(_ autocorrect: UITextAutocorrectionType) {
         uiTextField.autocorrectionType = autocorrect
     }
     
-    @inlinable func keyboard(_ keyboard: UIKeyboardType) {
+    @inlinable public func keyboard(_ keyboard: UIKeyboardType) {
         uiTextField.keyboardType = keyboard
     }
     
-    @inlinable func key(return: UIReturnKeyType) {
+    @inlinable public func key(return: UIReturnKeyType) {
         uiTextField.returnKeyType = `return`
     }
     
-    @inlinable func secure(entry: Bool) {
+    @inlinable public func secure(entry: Bool) {
         uiTextField.isSecureTextEntry = entry
     }
     
-    @inlinable func tint(color: UIColor) {
+    @inlinable public func tint(color: UIColor) {
         uiTextField.tintColor = color
     }
     
-    @inlinable func tint(color: Color) {
+    @inlinable public func tint(color: Color) {
         uiTextField.tintColor = UIColor(color)
     }
 }
