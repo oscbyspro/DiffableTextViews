@@ -43,8 +43,50 @@ public struct Symbol: Equatable, Transformable {
     
     // MARK: Descriptions
     
+    @inlinable public var formatting: Bool {
+        attribute.contains(.formatting)
+    }
+    
     @inlinable public var nonformatting: Bool {
         !attribute.contains(.formatting)
+    }
+    
+    @inlinable public var removable: Bool {
+        attribute.contains(.removable)
+    }
+    
+    @inlinable public var nonremovable: Bool {
+        !attribute.contains(.removable)
+    }
+    
+    @inlinable public var insertable: Bool {
+        attribute.contains(.insertable)
+    }
+    
+    @inlinable public var noninsertable: Bool {
+        !attribute.contains(.insertable)
+    }
+    
+    @inlinable public var prefixing: Bool {
+        attribute.contains(.prefixing)
+    }
+    
+    @inlinable public var nonprefixing: Bool {
+        !attribute.contains(.prefixing)
+    }
+    
+    @inlinable public var suffixing: Bool {
+        attribute.contains(.suffixing)
+    }
+    
+    @inlinable public var nonsuffixing: Bool {
+        !attribute.contains(.suffixing)
+    }
+    
+    // MARK: Descriptions: Utilities
+    
+    @inlinable public func contains(_ attribute: Attribute) -> Bool {
+        self.attribute.contains(attribute)
     }
     
     // MARK: Transformations: Union
