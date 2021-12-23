@@ -160,13 +160,11 @@ import protocol Utilities.Transformable
         Similarities(lhs: current, rhs: next, options: options).rhsSuffix().startIndex
     }
     
-    // MARK: Similarities: Options
+    // MARK: Similarities: Position: Helpers
     
     @usableFromInline static let options: SimilaritiesOptions = {
         .init(comparison: .instruction(step), inspection: .only(\.nonformatting))
     }()
-    
-    // MARK: Similarities: Helpers
     
     @inlinable static func step(current lhs: Symbol, next rhs: Symbol) -> SimilaritiesInstruction {
         if lhs == rhs                               { return .continue      }
