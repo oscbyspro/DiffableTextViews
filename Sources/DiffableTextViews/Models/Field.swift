@@ -157,8 +157,8 @@ import protocol Utilities.Transformable
     
     // MARK: Similarities
     
-    @inlinable static func similarities<Current: BidirectionalCollection, Next: BidirectionalCollection>(current: Current, next: Next) -> Next.SubSequence where Current.Element == Symbol, Next.Element == Symbol {
-        Similarities(lhs: current, rhs: next, options: options).rhsSuffix()
+    @inlinable static func similarities<Current: BidirectionalCollection, Next: BidirectionalCollection>(current lhs: Current, next rhs: Next) -> Next.SubSequence where Current.Element == Symbol, Next.Element == Symbol {
+        Similarities(lhs: lhs, rhs: rhs, options: options).rhsSuffix()
     }
     
     // MARK: Similarities: Options
@@ -168,7 +168,7 @@ import protocol Utilities.Transformable
             if lhs == rhs                               { return .continue      }
             else if lhs.attribute.contains(.removable)  { return .continueOnLHS }
             else if rhs.attribute.contains(.insertable) { return .continueOnRHS }
-            else                                        { return .done          }
+            else                                        { return .none          }
         }
         
         // --------------------------------- //

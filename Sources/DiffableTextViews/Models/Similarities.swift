@@ -11,10 +11,8 @@ import protocol Utilities.Transformable
 
 @usableFromInline struct Similarities<LHS: Collection, RHS: Collection> where LHS.Element == RHS.Element {
     @usableFromInline typealias Element = LHS.Element
-    @usableFromInline typealias Indices = SimilaritiesIndices<LHS, RHS>
     @usableFromInline typealias Options = SimilaritiesOptions<Element>
-    @usableFromInline typealias Instruction = SimilaritiesInstruction
-    
+
     // MARK: Properties
     
     @usableFromInline let lhs: LHS
@@ -35,15 +33,11 @@ import protocol Utilities.Transformable
         options.inspection.includes(element)
     }
 
-    @inlinable func instruction(_ lhs: LHS.Element, _ rhs: RHS.Element) -> Instruction {
+    @inlinable func instruction(_ lhs: LHS.Element, _ rhs: RHS.Element) -> SimilaritiesInstruction {
         options.comparison.instruction(lhs, rhs)
     }
 
     // MARK: Transformations
-    
-    @inlinable func swapped() -> Similarities<RHS, LHS> {
-        .init(lhs: rhs, rhs: lhs, options: options)
-    }
 
     @inlinable func reversed() -> Similarities<ReversedCollection<LHS>, ReversedCollection<RHS>> where LHS: BidirectionalCollection, RHS: BidirectionalCollection {
         .init(lhs: lhs.reversed(), rhs: rhs.reversed(), options: options)
@@ -69,7 +63,7 @@ import protocol Utilities.Transformable
     
     // MARK: Utilities: Helpers
     
-    @inlinable func prefixEndIndices() -> Indices {
+    @inlinable func prefixEndIndices() -> (lhs: LHS.Index, rhs: RHS.Index) {
         var lhsIndex = lhs.startIndex
         var rhsIndex = rhs.startIndex
         
@@ -104,24 +98,7 @@ import protocol Utilities.Transformable
         
         // --------------------------------- //
         
-        return Indices(lhs: lhsIndex, rhs: rhsIndex)
-    }
-}
-
-// MARK: - Indices
-
-@usableFromInline struct SimilaritiesIndices<LHS: Collection, RHS: Collection> {
-    
-    // MARK: Properties
-    
-    @usableFromInline var lhs: LHS.Index
-    @usableFromInline var rhs: RHS.Index
-    
-    // MARK: Initializers
-    
-    @inlinable init(lhs: LHS.Index, rhs: RHS.Index) {
-        self.lhs = lhs
-        self.rhs = rhs
+        return (lhs: lhsIndex, rhs: rhsIndex)
     }
 }
 
@@ -146,7 +123,7 @@ import protocol Utilities.Transformable
     
     // MARK: Instances: Composites
     
-    @usableFromInline static let `done`     = Self()
+    @usableFromInline static let `none`     = Self()
     @usableFromInline static let `continue` = Self([.continueOnLHS, .continueOnRHS])
 }
 
@@ -168,11 +145,11 @@ import protocol Utilities.Transformable
     // MARK: Initializers: Static
     
     @inlinable static func equation(_ equivalent: @escaping (Element, Element) -> Bool) -> Self {
-        Self(instruction: { equivalent($0, $1) ? .continue : .done })
+        Self(instruction: { equivalent($0, $1) ? .continue : .none })
     }
     
     @inlinable static func equatable<Value: Equatable>(_ value: @escaping (Element) -> Value) -> Self {
-        Self(instruction: { value($0) == value($1) ? .continue : .done })
+        Self(instruction: { value($0) == value($1) ? .continue : .none })
     }
     
     @inlinable static func instruction(_ instruction: @escaping (Element, Element) -> Instruction) -> Self {
@@ -223,18 +200,8 @@ import protocol Utilities.Transformable
         self.inspection = inspection
     }
     
-    @inlinable init(comparison: Comparison = .equation(==), inspection: Inspection = .all) where Element: Equatable {
-        self.comparison = comparison
+    @inlinable init(inspection: Inspection = .all) where Element: Equatable {
+        self.comparison = Comparison.equation(==)
         self.inspection = inspection
-    }
-    
-    // MARK: Transformations
-    
-    @inlinable func comparison(_ newValue: Comparison) -> Self {
-        transforming({ $0.comparison = newValue })
-    }
-        
-    @inlinable func inspection(_ newValue: Inspection) -> Self {
-        transforming({ $0.inspection = newValue })
     }
 }
