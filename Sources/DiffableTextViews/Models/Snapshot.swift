@@ -20,12 +20,12 @@ public struct Snapshot: BidirectionalCollection, RangeReplaceableCollection, Exp
     @usableFromInline var _characters: Characters
     @usableFromInline var _attributes: Attributes
 
-    // MARK: Properties: Get
+    // MARK: Properties: Getters
     
     @inlinable public var characters: Characters { _characters }
     @inlinable public var attributes: Attributes { _attributes }
 
-    // MARK: Initialization
+    // MARK: Initializers
 
     @inlinable public init() {
         self._characters = ""
@@ -41,7 +41,7 @@ public struct Snapshot: BidirectionalCollection, RangeReplaceableCollection, Exp
         self.init(elements)
     }
     
-    // MARK: Collection: Counts
+    // MARK: Counts
     
     /// - Complexity: O(1).
     @inlinable public var count: Int {
@@ -53,7 +53,7 @@ public struct Snapshot: BidirectionalCollection, RangeReplaceableCollection, Exp
         _attributes.underestimatedCount
     }
     
-    // MARK: Collection: Indices
+    // MARK: Positions
 
     @inlinable public var startIndex: Index {
         Index(character: _characters.startIndex, attribute: _attributes.startIndex)
@@ -63,7 +63,7 @@ public struct Snapshot: BidirectionalCollection, RangeReplaceableCollection, Exp
         Index(character: _characters.endIndex, attribute: _attributes.endIndex)
     }
     
-    // MARK: Collection: Traversals
+    // MARK: Traverse
     
     @inlinable public func index(after i: Index) -> Index {
         Index(character: _characters.index(after:  i.character), attribute: _attributes.index(after: i.attribute))
@@ -73,7 +73,22 @@ public struct Snapshot: BidirectionalCollection, RangeReplaceableCollection, Exp
         Index(character: _characters.index(before: i.character), attribute: _attributes.index(before: i.attribute))
     }
     
-    // MARK: Collection: Transformations
+    // MARK: Subscripts
+    
+    @inlinable public subscript(position: Index) -> Element {
+        .init(_characters[position.character], attribute: _attributes[position.attribute])
+    }
+    
+    @inlinable public subscript(character position: Index) -> Character {
+        _read   { yield  _characters[position.character] }
+    }
+    
+    @inlinable public subscript(attribute position: Index) -> Attribute {
+        _read   { yield  _attributes[position.attribute] }
+        _modify { yield &_attributes[position.attribute] }
+    }
+    
+    // MARK: Transformations
         
     @inlinable public mutating func append(_ element: Element) {
         _characters.append(element.character)
@@ -89,25 +104,37 @@ public struct Snapshot: BidirectionalCollection, RangeReplaceableCollection, Exp
         _characters.replaceSubrange(range.lowerBound.character ..< range.upperBound.character, with: elements.lazy.map(\.character))
         _attributes.replaceSubrange(range.lowerBound.attribute ..< range.upperBound.attribute, with: elements.lazy.map(\.attribute))
     }
+    
+    // MARK: Transformations: Attributes
+    
+    @inlinable public mutating func transform(attributes index: Index, using transformation: (Attribute) -> Attribute) {
+        _attributes[index.attribute] = transformation(_attributes[index.attribute])
+    }
+    
+    @inlinable public mutating func transform(attributes index: Index, using transformation: (inout Attribute) -> Void) {
+        transformation(&_attributes[index.attribute])
+    }
+    
+    @inlinable public mutating func transform<R: RangeExpression>(attributes expression: R, using transformation: (Attribute) -> Attribute) where R.Bound == Index {
+        let indices = interpret(expression, map: \.attribute); _attributes.replaceSubrange(indices, with: _attributes[indices].map(transformation))
+    }
         
-    // MARK: Collection: Subscripts
-    
-    @inlinable public subscript(position: Index) -> Element {
-        .init(_characters[position.character], attribute: _attributes[position.attribute])
+    @inlinable public mutating func transform<R: RangeExpression>(attributes expression: R, using transformation: (inout Attribute) -> Void) where R.Bound == Index {
+        for index in interpret(expression, map: \.attribute) { transformation(&_attributes[index]) }
     }
     
-    @inlinable public subscript(character position: Index) -> Character {
-        _read { yield _characters[position.character] }
+    // MARK: Helpers
+
+    @inlinable internal func interpret<R: RangeExpression, T>(_ indices: R, map: (Index) -> T) -> Range<T> where R.Bound == Index {
+        let indices = indices.relative(to: self); return map(indices.lowerBound) ..< map(indices.upperBound)
     }
     
-    @inlinable public subscript(attribute position: Index) -> Attribute {
-        _read   { yield  _attributes[position.attribute] }
-        _modify { yield &_attributes[position.attribute] }
-    }
-    
-    // MARK: Collection: Index
+    // MARK: Index
 
     public struct Index: Comparable {
+        
+        // MARK: Properties
+        
         @usableFromInline let character: String.Index
         @usableFromInline let attribute: Int
 
@@ -118,56 +145,22 @@ public struct Snapshot: BidirectionalCollection, RangeReplaceableCollection, Exp
             self.attribute = attribute
         }
 
-        // MARK: Utilities
+        // MARK: Getters
 
         @inlinable var offset: Int {
             attribute
         }
+        
+        // MARK: Equations
+        
+        @inlinable public static func == (lhs: Self, rhs: Self) -> Bool {
+            lhs.offset == rhs.offset
+        }
 
-        // MARK: Comparable
+        // MARK: Comparisons
 
         @inlinable public static func < (lhs: Self, rhs: Self) -> Bool {
             lhs.offset < rhs.offset
-        }
-    }
-}
-
-// MARK: - Transformations
-
-public extension Snapshot {
-    
-    // MARK: Attributes
-    
-    @inlinable mutating func transform(attributes index: Index, using transformation: (Attribute) -> Attribute) {
-        _attributes[index.attribute] = transformation(_attributes[index.attribute])
-    }
-    
-    @inlinable mutating func transform(attributes index: Index, using transformation: (inout Attribute) -> Void) {
-        transformation(&_attributes[index.attribute])
-    }
-    
-    @inlinable mutating func transform<R: RangeExpression>(attributes expression: R, using transformation: (Attribute) -> Attribute) where R.Bound == Index {
-        let indices = interpret(expression, map: \.attribute); _attributes.replaceSubrange(indices, with: _attributes[indices].map(transformation))
-    }
-        
-    @inlinable mutating func transform<R: RangeExpression>(attributes expression: R, using transformation: (inout Attribute) -> Void) where R.Bound == Index {
-        for index in interpret(expression, map: \.attribute) { transformation(&_attributes[index]) }
-    }
-    
-    // MARK: Attributes: Helpers
-
-    @inlinable internal func interpret<R: RangeExpression, Bound>(_ indices: R, map: (Index) -> Bound) -> Range<Bound> where R.Bound == Index {
-        let indices = indices.relative(to: self); return map(indices.lowerBound) ..< map(indices.upperBound)
-    }
-    
-    // MARK: Characters
-    
-    /// - Complexity: O(n), where n is the length of the collection.
-    @inlinable func characters(where predicate: (Element) -> Bool) -> String {
-        reduce(into: String()) { result, element in
-            if predicate(element) {
-                result.append(element.character)
-            }
         }
     }
 }

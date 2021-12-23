@@ -69,9 +69,6 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable, 
         // --------------------------------- //
         
         context.coordinator.connect(uiView)
-        
-        // --------------------------------- //
-        
         setup?(context.coordinator.downstream)
         
         // --------------------------------- //
@@ -132,7 +129,7 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable, 
         
         @inlinable public func textField(_ textField: UITextField, shouldChangeCharactersIn nsRange: NSRange, replacementString string: String) -> Bool {
             let offsets = Offset(at: nsRange.lowerBound) ..< Offset(at: nsRange.upperBound)
-            let range = cache.field.indices(in: offsets)
+            let range = cache.field.indices(at: offsets)
             let input = Snapshot(string, only: .content)
             
             // --------------------------------- //
@@ -178,8 +175,6 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable, 
             // --------------------------------- //
             
             guard field.selection.offsets != offsets else { return }
-            
-            // --------------------------------- //
             
             lock.perform {
                 self.downstream.select(offsets: field.selection.offsets)

@@ -21,6 +21,10 @@
         self.range = range
     }
     
+    @inlinable init(_ position: Carets.Index) {
+        self.range = position ..< position
+    }
+    
     // MARK: Getters
     
     @inlinable var lowerBound: Carets.Index {
@@ -37,7 +41,7 @@
     
     // MARK: Transformations
     
-    @inlinable func transforming(_ transformation: (Carets.Index, Direction) -> Carets.Index) -> Self {
+    @inlinable func preferential(_ transformation: (Carets.Index, Direction) -> Carets.Index) -> Self {
         let upperBound = transformation(range.upperBound, .backwards)
         var lowerBound = upperBound
 
