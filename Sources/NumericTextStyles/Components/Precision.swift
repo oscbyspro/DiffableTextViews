@@ -201,7 +201,7 @@ public extension Precision where Value: PreciseFloatingPoint {
     }
 }
 
-// MARK: - Precision: Constants
+// MARK: - Precision: Helpers
 
 @usableFromInline enum _Precision {
     

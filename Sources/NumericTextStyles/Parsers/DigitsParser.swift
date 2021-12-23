@@ -12,11 +12,13 @@
 
     // MARK: Properties
     
+    @usableFromInline let zero: Character
     @usableFromInline let digits: Set<Character>
     
     // MARK: Initializers
     
-    @inlinable init(digits: Set<Character>) {
+    @inlinable init(zero: Character, digits: Set<Character>) {
+        self.zero = zero
         self.digits = digits
     }
     
@@ -32,9 +34,13 @@
             characters.formIndex(after: &index)
         }
     }
+        
+    @inlinable func parseZero(storage: inout Output) {
+        storage.append(zero)
+    }
     
     // MARK: Instances
     
-    @usableFromInline static let standard = Self(digits: Output.decimals)
+    @usableFromInline static let standard = Self(zero: Output.zero, digits: Output.decimals)
 }
 

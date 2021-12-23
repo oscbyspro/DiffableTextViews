@@ -12,16 +12,18 @@
     // MARK: Properties
     
     @usableFromInline private(set) var characters: String
-    @usableFromInline private(set) var count: Int
 
     // MARK: Initializers
     
     @inlinable init() {
         self.characters = ""
-        self.count = 0
     }
     
     // MARK: Getters
+    
+    @inlinable var count: Int {
+        characters.count
+    }
     
     @inlinable var isEmpty: Bool {
         characters.isEmpty
@@ -31,9 +33,22 @@
     
     @inlinable mutating func append(_ character: Character) {
         characters.append(character)
-        count += 1
     }
     
+    @inlinable mutating func removeZeroPrefix() {
+        characters.removeSubrange(..<characters.prefix(while: digitIsZero).endIndex)
+    }
+    
+    @inlinable mutating func removeZeroSuffix() {
+        characters.removeSubrange(characters.reversed().prefix(while: digitIsZero).endIndex.base...)
+    }
+    
+    // MARK: Utilities: Helpers
+    
+    @inlinable func digitIsZero(character: Character) -> Bool {
+        character == Self.zero
+    }
+
     // MARK: Characters: Static
     
     @usableFromInline static let zero: Character = "0"

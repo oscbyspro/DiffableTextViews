@@ -151,7 +151,7 @@ public struct NumericTextStyle<Value: NumericTextValue>: DiffableTextStyle, Tran
         
         // --------------------------------- //
 
-        let count = number.numberOfSignificantDigits()
+        let count = number.numberOfDigits()
         guard let capacity = precision.editableValidationThatGeneratesCapacity(count: count) else { return nil }
         
         // --------------------------------- //
@@ -168,7 +168,7 @@ public struct NumericTextStyle<Value: NumericTextValue>: DiffableTextStyle, Tran
         
         guard let value = value(number: number) else { return nil }
         guard bounds.contains(value) else { return nil }
-        
+                
         // --------------------------------- //
         
         let style = editableStyle(count: count, separator: !number.separator.isEmpty)
@@ -180,7 +180,7 @@ public struct NumericTextStyle<Value: NumericTextValue>: DiffableTextStyle, Tran
         if !number.sign.isEmpty, !characters.hasPrefix(number.sign.characters) {
             characters = number.sign.characters + characters
         }
-        
+                
         // --------------------------------- //
     
         return self.snapshot(characters: characters)
@@ -214,8 +214,13 @@ public struct NumericTextStyle<Value: NumericTextValue>: DiffableTextStyle, Tran
         
         // --------------------------------- //
 
-        transformFirstDigitIfItIsZero(in:          &snapshot, using: { $0.insert(.prefixing) })
-        transformFractionSeparatorIfItIsSuffix(in: &snapshot, using: { $0.insert(.removable) })
+        processZeroFirstDigit(&snapshot) { attribute in
+            attribute.insert(.prefixing)
+        }
+        
+        processFractionSeparatorSuffix(&snapshot) { attribute in
+            attribute.insert(.removable)
+        }
                 
         // --------------------------------- //
 
@@ -231,35 +236,26 @@ public struct NumericTextStyle<Value: NumericTextValue>: DiffableTextStyle, Tran
     
     // MARK: Snapshot: Characters: Helpers
     
-    @inlinable func transformFirstDigitIfItIsZero(in snapshot: inout Snapshot, using transformation: (inout Attribute) -> Void) {
-        func digit(symbol: Symbol) -> Bool {
+    @inlinable func processZeroFirstDigit(_ snapshot: inout Snapshot, transformation: (inout Attribute) -> Void) {
+        func predicate(symbol: Symbol) -> Bool {
             digits.contains(symbol.character)
         }
-        
+
         // --------------------------------- //
         
-        guard let position = snapshot.firstIndex(where: digit) else { return }
+        guard let position = snapshot.firstIndex(where: predicate) else { return }
         guard snapshot[position].character == zero else { return }
-        
-        // --------------------------------- //
-        
         snapshot.transform(attributes: position, using: transformation)
     }
     
-    @inlinable func transformFractionSeparatorIfItIsSuffix(in snapshot: inout Snapshot, using transformation: (inout Attribute) -> Void) {
+    @inlinable func processFractionSeparatorSuffix(_ snapshot: inout Snapshot, transformation: (inout Attribute) -> Void) {
         func predicate(symbol: Symbol) -> Bool {
             fractionSeparator.contains(symbol.character)
         }
         
         // --------------------------------- //
         
-        let start = snapshot
-            .reversed()
-            .prefix(while: predicate)
-            .endIndex.base
-        
-        // --------------------------------- //
-        
+        let start = snapshot.reversed().prefix(while: predicate).endIndex.base
         snapshot.transform(attributes: start..., using: transformation)
     }
 }

@@ -151,7 +151,7 @@ import protocol Utilities.Transformable
     }
 }
 
-// MARK: - Field: Constants
+// MARK: - Field: Helpers
 
 @usableFromInline enum _Field {
     
@@ -170,6 +170,8 @@ import protocol Utilities.Transformable
             else if rhs.attribute.contains(.insertable) { return .continueOnRHS }
             else                                        { return .done          }
         }
+        
+        // --------------------------------- //
         
         return .init(comparison: .instruction(step), inspection: .only(\.nonformatting))
     }()

@@ -49,13 +49,19 @@ public struct NumberParser: Parser, Transformable {
         // --------------------------------- //
         
         digits.parse(characters, index: &index, storage: &storage.integer)
-        guard !options.contains(.integer), !storage.integer.isEmpty else { return }
+        guard !options.contains(.integer) else { return }
         
         // --------------------------------- //
         
         separator.parse(characters, index: &index, storage: &storage.separator)
         guard !storage.separator.isEmpty else { return }
 
+        // --------------------------------- //
+        
+        if storage.integer.isEmpty {
+            digits.parseZero(storage: &storage.integer)
+        }
+        
         // --------------------------------- //
         
         digits.parse(characters, index: &index, storage: &storage.fraction)
