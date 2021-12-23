@@ -18,6 +18,8 @@
     // MARK: Initializers
     
     @inlinable init(zero: Character, digits: Set<Character>) {
+        assert(digits.contains(zero))
+        
         self.zero = zero
         self.digits = digits
     }
