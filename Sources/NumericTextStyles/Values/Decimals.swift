@@ -25,9 +25,9 @@ extension Decimal: NumericTextValue, PreciseFloatingPoint { }; extension Decimal
         
     @inlinable public static var minLosslessValue: Self { -maxLosslessLimit }
     @inlinable public static var maxLosslessValue: Self {  maxLosslessLimit }
-    
-    @usableFromInline static let maxLosslessLimit =
-    Decimal(string: String(repeating: "9", count: maxLosslessTotalDigits))!
+    @usableFromInline static let maxLosslessLimit: Self = {
+        Decimal(string: String(repeating: "9", count: maxLosslessTotalDigits))!
+    }()
         
     // MARK: Formattable
     

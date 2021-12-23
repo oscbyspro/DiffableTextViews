@@ -135,21 +135,8 @@ import protocol Utilities.Transformable
     // MARK: Transformations: * Carets *
             
     @inlinable func transformingAccordingToCarets(_ newValue: Carets) -> Field {
-        func step(previous lhs: Symbol, next rhs: Symbol) -> SimilaritiesInstruction {
-            if lhs == rhs                               { return .continue      }
-            else if lhs.attribute.contains(.removable)  { return .continueOnLHS }
-            else if rhs.attribute.contains(.insertable) { return .continueOnRHS }
-            else                                        { return .done          }
-        }
-        
-        // --------------------------------- //
-        
-        let options = SimilaritiesOptions(comparison: .instruction(step), inspection: .only(\.nonformatting))
-        
-        // --------------------------------- //
-
         func position(current: Carets.SubSequence, next: Carets.SubSequence) -> Carets.Index {
-            Similarities(in: current.lazy.map(\.rhs), and: next.lazy.map(\.rhs), with: options).rhsSuffix().startIndex
+            Similarities(lhs: next.lazy.map(\.rhs), rhs: current.lazy.map(\.rhs), options: .symbols).lhsSuffix().startIndex
         }
         
         // --------------------------------- //

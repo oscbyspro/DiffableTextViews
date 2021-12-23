@@ -8,7 +8,6 @@
 #if canImport(UIKit)
 
 import UIKit
-import struct SwiftUI.Color
 
 // MARK: - ProxyTextField
 
@@ -52,7 +51,7 @@ public final class ProxyTextField<Wrapped: UITextField> {
     
     /// - Complexity: High.
     @inlinable func select(offsets: Range<Offset>) {
-        uiTextField.selectedTextRange = positions(of: offsets)
+        uiTextField.selectedTextRange = positions(in: offsets)
     }
     
     // MARK: Descriptions
@@ -62,11 +61,11 @@ public final class ProxyTextField<Wrapped: UITextField> {
         uiTextField.isEditing
     }
     
-    // MARK: Range & Offset
+    // MARK: Offsets
 
     /// - Complexity: O(1).
-    @inlinable func offsets(in bounds: UITextRange) -> Range<Offset> {
-        offset(at: bounds.start) ..< offset(at: bounds.end)
+    @inlinable func offsets(in range: UITextRange) -> Range<Offset> {
+        offset(at: range.start) ..< offset(at: range.end)
     }
     
     /// - Complexity: O(1).
@@ -74,13 +73,15 @@ public final class ProxyTextField<Wrapped: UITextField> {
         .init(at: uiTextField.offset(from: uiTextField.beginningOfDocument, to: position))
     }
     
+    // MARK: Positions
+    
     /// - Complexity: O(1).
     @inlinable func position(at offset: Offset) -> UITextPosition {
         uiTextField.position(from: uiTextField.beginningOfDocument, offset: offset.units)!
     }
     
     /// - Complexity: O(1).
-    @inlinable func positions(of offsets: Range<Offset>) -> UITextRange {
+    @inlinable func positions(in offsets: Range<Offset>) -> UITextRange {
         uiTextField.textRange(from: position(at: offsets.lowerBound), to: position(at: offsets.upperBound))!
     }
     
@@ -108,10 +109,6 @@ public final class ProxyTextField<Wrapped: UITextField> {
     
     @inlinable public func tint(color: UIColor) {
         uiTextField.tintColor = color
-    }
-    
-    @inlinable public func tint(color: Color) {
-        uiTextField.tintColor = UIColor(color)
     }
 }
 

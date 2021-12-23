@@ -29,14 +29,6 @@ import protocol Utilities.Transformable
         self.options = options
     }
     
-    @inlinable init(in lhs: LHS, and rhs: RHS, with options: Options) {
-        self.init(lhs: lhs, rhs: rhs, options: options)
-    }
-    
-    @inlinable init(in lhs: LHS, and rhs: RHS, with options: Options = Options()) where Element: Equatable {
-        self.init(lhs: lhs, rhs: rhs, options: options)
-    }
-    
     // MARK: Getters
     
     @inlinable func inspectable(_ element: Element) -> Bool {
@@ -244,5 +236,25 @@ import protocol Utilities.Transformable
         
     @inlinable func inspection(_ newValue: Inspection) -> Self {
         transforming({ $0.inspection = newValue })
+    }
+}
+
+// MARK: - Options: Symbol
+
+extension SimilaritiesOptions where Element == Symbol {
+    
+    // MARK: Instances
+    
+    @usableFromInline static let symbols: Self = {
+        .init(comparison: .instruction(step), inspection: .only(\.nonformatting))
+    }()
+
+    // MARK: Utilities
+    
+    @inlinable static func step(previous lhs: Symbol, next rhs: Symbol) -> SimilaritiesInstruction {
+        if lhs == rhs                               { return .continue      }
+        else if lhs.attribute.contains(.removable)  { return .continueOnLHS }
+        else if rhs.attribute.contains(.insertable) { return .continueOnRHS }
+        else                                        { return .done          }
     }
 }
