@@ -111,7 +111,7 @@ import protocol Utilities.Transformable
             
     @inlinable func transformingAccordingToCarets(_ newValue: Carets) -> Field {
         func position(current: Carets.SubSequence, next: Carets.SubSequence) -> Carets.Index {
-            _Field.position(current: current.lazy.map(\.rhs), next: next.lazy.map(\.rhs))
+            _Field.similarities(current: current.lazy.map(\.rhs), next: next.lazy.map(\.rhs)).startIndex
         }
         
         // --------------------------------- //
@@ -155,22 +155,22 @@ import protocol Utilities.Transformable
 
 @usableFromInline enum _Field {
     
-    // MARK: Similarities: Position
+    // MARK: Similarities
     
-    @inlinable static func position<Current: BidirectionalCollection, Next: BidirectionalCollection>(current: Current, next: Next) -> Next.Index where Current.Element == Symbol, Next.Element == Symbol {
-        Similarities(lhs: current, rhs: next, options: options).rhsSuffix().startIndex
+    @inlinable static func similarities<Current: BidirectionalCollection, Next: BidirectionalCollection>(current: Current, next: Next) -> Next.SubSequence where Current.Element == Symbol, Next.Element == Symbol {
+        Similarities(lhs: current, rhs: next, options: options).rhsSuffix()
     }
     
-    // MARK: Similarities: Position: Helpers
+    // MARK: Similarities: Options
     
-    @usableFromInline static let options: SimilaritiesOptions = {
-        .init(comparison: .instruction(step), inspection: .only(\.nonformatting))
+    @usableFromInline static let options: SimilaritiesOptions<Symbol> = {
+        func step(current lhs: Symbol, next rhs: Symbol) -> SimilaritiesInstruction {
+            if lhs == rhs                               { return .continue      }
+            else if lhs.attribute.contains(.removable)  { return .continueOnLHS }
+            else if rhs.attribute.contains(.insertable) { return .continueOnRHS }
+            else                                        { return .done          }
+        }
+        
+        return .init(comparison: .instruction(step), inspection: .only(\.nonformatting))
     }()
-    
-    @inlinable static func step(current lhs: Symbol, next rhs: Symbol) -> SimilaritiesInstruction {
-        if lhs == rhs                               { return .continue      }
-        else if lhs.attribute.contains(.removable)  { return .continueOnLHS }
-        else if rhs.attribute.contains(.insertable) { return .continueOnRHS }
-        else                                        { return .done          }
-    }
 }
