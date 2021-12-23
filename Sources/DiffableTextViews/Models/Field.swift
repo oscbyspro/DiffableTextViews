@@ -105,6 +105,24 @@ import protocol Utilities.Transformable
 
         return transforming({ $0.selection = selection.preferential(position) })
     }
+    
+    
+    // MARK: Transformations: * Carets *
+            
+    @inlinable func transformingAccordingToCarets(_ newValue: Carets) -> Field {
+        func position(current: Carets.SubSequence, next: Carets.SubSequence) -> Carets.Index {
+            _Field.position(current: current.lazy.map(\.rhs), next: next.lazy.map(\.rhs))
+        }
+        
+        // --------------------------------- //
+        
+        let upperBound = position(current: carets.suffix(from: selection.upperBound),   next: newValue[...])
+        let lowerBound = position(current: carets[selection.range], next: newValue.prefix(upTo: upperBound))
+                
+        // --------------------------------- //
+        
+        return Field(carets: newValue, selection: Selection(range: lowerBound ..< upperBound))
+    }
 
     // MARK: Transformations: * Selection *
         
@@ -130,23 +148,6 @@ import protocol Utilities.Transformable
         // --------------------------------- //
 
         return transforming({ $0.selection = newValue.preferential(position) })
-    }
-    
-    // MARK: Transformations: * Carets *
-            
-    @inlinable func transformingAccordingToCarets(_ newValue: Carets) -> Field {
-        func position(current: Carets.SubSequence, next: Carets.SubSequence) -> Carets.Index {
-            _Field.position(current: current.lazy.map(\.rhs), next: next.lazy.map(\.rhs))
-        }
-        
-        // --------------------------------- //
-        
-        let upperBound = position(current: carets.suffix(from: selection.upperBound),   next: newValue[...])
-        let lowerBound = position(current: carets[selection.range], next: newValue.prefix(upTo: upperBound))
-                
-        // --------------------------------- //
-        
-        return Field(carets: newValue, selection: Selection(range: lowerBound ..< upperBound))
     }
 }
 
