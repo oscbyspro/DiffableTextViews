@@ -11,7 +11,6 @@ import protocol Utilities.Transformable
 // MARK: - NumberParser
 
 public struct NumberParser: Parser, Transformable {
-    @usableFromInline typealias Output = Number
     
     // MARK: Properties
     
@@ -41,26 +40,26 @@ public struct NumberParser: Parser, Transformable {
 
     // MARK: Parse
     
-    @inlinable func parse<C: Collection>(_ characters: C, index: inout C.Index, storage: inout Output) where C.Element == Character {
+    @inlinable func parse<C: Collection>(_ characters: C, index: inout C.Index, value: inout Number) where C.Element == Character {
         
         // --------------------------------- //
         // MARK: Sign
         // --------------------------------- //
         
         if !options.contains(.unsigned) {
-            sign.parse(characters, index: &index, storage: &storage.sign)
+            sign.parse(characters, index: &index, value: &value.sign)
         }
         
         // --------------------------------- //
         // MARK: Integer
         // --------------------------------- //
 
-        digits.parse(characters, index: &index, storage: &storage.integer)
+        digits.parse(characters, index: &index, value: &value.integer)
         
-        storage.integer.removeRedundantZerosPrefix()
+        value.integer.removeRedundantZerosPrefix()
                 
-        if storage.integer.isEmpty {
-            storage.integer.append(digits.zero)
+        if value.integer.isEmpty {
+            value.integer.append(digits.zero)
         }
         
         guard !options.contains(.integer) else { return }
@@ -69,15 +68,15 @@ public struct NumberParser: Parser, Transformable {
         // MARK: Separator
         // --------------------------------- //
         
-        separator.parse(characters, index: &index, storage: &storage.separator)
+        separator.parse(characters, index: &index, value: &value.separator)
 
-        guard !storage.separator.isEmpty else { return }
+        guard !value.separator.isEmpty else { return }
         
         // --------------------------------- //
         // MARK: Fraction
         // --------------------------------- //
         
-        digits.parse(characters, index: &index, storage: &storage.fraction)
+        digits.parse(characters, index: &index, value: &value.fraction)
     }
     
     // MARK: Instances

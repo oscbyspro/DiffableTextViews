@@ -208,7 +208,7 @@ public struct NumericTextStyle<Value: NumericTextValue>: DiffableTextStyle, Tran
             } else if fractionSeparator.contains(character) {
                 snapshot.append(.content(character))
             } else if signs.contains(character) {
-                snapshot.append(.content(character).union(.prefixing))
+                snapshot.append(Symbol(character, attribute: .prefixing))
             }
         }
         

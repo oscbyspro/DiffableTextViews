@@ -6,7 +6,7 @@
 
 ### NumericTextStyles
     - Trailing redundant characters should be removable. Remove trailing redundant characters if number is at max value.
-    - Consider implementing some parser structs as Copy-On-Write.
+    - Consider implementing parsers as Copy-On-Write.
 
 # FIXMEs
 

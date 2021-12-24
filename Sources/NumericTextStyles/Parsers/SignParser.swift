@@ -7,8 +7,8 @@
 
 // MARK: - SignParser
 
+#warning("Use a dictionary instead.")
 @usableFromInline struct SignParser: Parser {
-    @usableFromInline typealias Output = Sign
 
     // MARK: Properties
     
@@ -24,13 +24,13 @@
     
     // MARK: Parse
     
-    @inlinable func parse<C: Collection>(_ characters: C, index: inout C.Index, storage: inout Output) where C.Element == Character {
+    @inlinable func parse<C: Collection>(_ characters: C, index: inout C.Index, value: inout Sign) where C.Element == Character {
         let subsequence = characters[index...]
         
-        func parse(_ signs: [String], success: Output) -> Bool {
+        func parse(_ signs: [String], success: Sign) -> Bool {
             for sign in signs {
                 if subsequence.starts(with: sign) {
-                    storage = success
+                    value = success
                     characters.formIndex(&index, offsetBy: sign.count)
                     return true
                 }
@@ -45,6 +45,6 @@
     
     // MARK: Instances
     
-    @usableFromInline static let standard = Self(positives: [], negatives: [Output.negative.characters])
+    @usableFromInline static let standard = Self(positives: [], negatives: [Value.negative.characters])
 }
 

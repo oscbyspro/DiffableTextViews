@@ -10,7 +10,6 @@ import struct Foundation.Locale
 // MARK: - SeparatorParser
 
 @usableFromInline struct SeparatorParser: Parser {
-    @usableFromInline typealias Output = Separator
 
     // MARK: Properties
     
@@ -30,12 +29,11 @@ import struct Foundation.Locale
     
     // MARK: Parse
     
-    @inlinable func parse<C: Collection>(_ characters: C, index: inout C.Index, storage: inout Output) where C.Element == Character {
+    @inlinable func parse<C: Collection>(_ characters: C, index: inout C.Index, value: inout Separator) where C.Element == Character {
         let subsequence = characters[index...]
-        
         for separator in separators {
             if subsequence.starts(with: separator) {
-                storage = Output(characters: Output.dot)
+                value = Separator(characters: Separator.dot)
                 characters.formIndex(&index, offsetBy: separator.count)
                 return
             }
@@ -44,5 +42,5 @@ import struct Foundation.Locale
     
     // MARK: Instances
     
-    @usableFromInline static let standard = Self(separators: [Output.dot])
+    @usableFromInline static let standard = Self(separators: [Value.dot])
 }
