@@ -7,6 +7,7 @@
 
 // MARK: - Digits
 
+#warning("Consider adding a stored count property, again.")
 @usableFromInline struct Digits: Text {
     
     // MARK: Properties

@@ -39,7 +39,7 @@ public struct Precision<Value: Precise> {
         return .integerAndFractionLength(integerLimits: integer, fractionLimits: fraction)
     }
     
-    @inlinable func editableStyleThatUses(numberDigitsCount: NumberDigitsCount) -> NumberFormatStyleConfiguration.Precision {
+    @inlinable func editableStyleThatUses(numberDigitsCount: Number.DigitsCount) -> NumberFormatStyleConfiguration.Precision {
         let integerUpperBound = Swift.max(_Precision.defaultIntegerLowerBound, numberDigitsCount.integer)
         let integer = _Precision.defaultIntegerLowerBound...integerUpperBound
         
@@ -51,7 +51,7 @@ public struct Precision<Value: Precise> {
     
     // MARK: Editable: Capacity
     
-    @inlinable func editableCapacity(numberDigitsCount: NumberDigitsCount) -> NumberDigitsCount? {
+    @inlinable func editableCapacity(numberDigitsCount: Number.DigitsCount) -> Number.DigitsCount? {
         implementation.editableCapacity(numberDigitsCount: numberDigitsCount)
     }
 }
@@ -121,7 +121,7 @@ public extension Precision where Value: PreciseFloatingPoint {
         
     @inlinable func showcaseStyle() -> NumberFormatStyleConfiguration.Precision
         
-    @inlinable func editableCapacity(numberDigitsCount: NumberDigitsCount) -> NumberDigitsCount?
+    @inlinable func editableCapacity(numberDigitsCount: Number.DigitsCount) -> Number.DigitsCount?
 }
 
 // MARK: - Implementations: Total
@@ -146,7 +146,7 @@ public extension Precision where Value: PreciseFloatingPoint {
         .significantDigits(total)
     }
     
-    @inlinable func editableCapacity(numberDigitsCount: NumberDigitsCount) -> NumberDigitsCount? {
+    @inlinable func editableCapacity(numberDigitsCount: Number.DigitsCount) -> Number.DigitsCount? {
         let capacity = total.upperBound - numberDigitsCount.total
         guard capacity >= 0 else { return nil }
 
@@ -187,7 +187,7 @@ public extension Precision where Value: PreciseFloatingPoint {
         .integerAndFractionLength(integerLimits: integer, fractionLimits: fraction)
     }
     
-    @inlinable func editableCapacity(numberDigitsCount: NumberDigitsCount) -> NumberDigitsCount? {
+    @inlinable func editableCapacity(numberDigitsCount: Number.DigitsCount) -> Number.DigitsCount? {
         let totalCapacity = Value.maxLosslessTotalDigits - numberDigitsCount.total
         guard totalCapacity >= 0 else { return nil }
         

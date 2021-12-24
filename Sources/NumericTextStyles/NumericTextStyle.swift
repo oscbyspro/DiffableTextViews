@@ -103,7 +103,7 @@ public struct NumericTextStyle<Value: NumericTextValue>: DiffableTextStyle, Tran
         Value.style(locale: locale, precision: precision.editableStyle(), separator: .automatic)
     }
     
-    @inlinable func editableStyleThatUses(numberDigitsCount: NumberDigitsCount, separator: Bool) -> Value.FormatStyle {
+    @inlinable func editableStyleThatUses(numberDigitsCount: Number.DigitsCount, separator: Bool) -> Value.FormatStyle {
         let precision = precision.editableStyleThatUses(numberDigitsCount: numberDigitsCount)
         return Value.style(locale: locale, precision: precision, separator: separator ? .always : .automatic)
     }
