@@ -8,15 +8,15 @@
 // MARK: - SignParser
 
 @usableFromInline struct SignParser: Parser {
-    @usableFromInline typealias Map = [Character: Sign]
+    @usableFromInline typealias Translations = [Character: Sign]
 
     // MARK: Properties
     
-    @usableFromInline let signs: Map
+    @usableFromInline let signs: Translations
     
     // MARK: Initializers
     
-    @inlinable init(signs: Map) {
+    @inlinable init(signs: Translations) {
         self.signs = signs
     }
     
@@ -31,7 +31,7 @@
     
     // MARK: Maps
     
-    @usableFromInline static let negatives: Map = [
+    @usableFromInline static let negatives: Translations = [
         Sign.minus: Sign.negative
     ]
     
