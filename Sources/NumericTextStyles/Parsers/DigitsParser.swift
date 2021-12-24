@@ -7,19 +7,15 @@
 
 // MARK: - DigitsParser
 
-#warning("Cleanup.")
 @usableFromInline struct DigitsParser: Parser {
 
     // MARK: Properties
     
-    @usableFromInline let zero: Character
     @usableFromInline let digits: Set<Character>
     
     // MARK: Initializers
     
-    @inlinable init(zero: Character, digits: Set<Character>) {
-        assert(digits.contains(zero))
-        self.zero = zero
+    @inlinable init(digits: Set<Character>) {
         self.digits = digits
     }
     
@@ -38,5 +34,5 @@
     
     // MARK: Instances
     
-    @usableFromInline static let standard = Self(zero: Digits.zero, digits: Digits.decimals)
+    @usableFromInline static let standard = Self(digits: Digits.decimals)
 }

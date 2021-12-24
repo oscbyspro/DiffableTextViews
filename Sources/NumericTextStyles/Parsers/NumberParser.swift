@@ -57,10 +57,7 @@ public struct NumberParser: Parser, Transformable {
         digits.parse(characters, index: &index, value: &value.integer)
         
         value.integer.removeRedundantZerosPrefix()
-                
-        if value.integer.isEmpty {
-            value.integer.append(digits.zero)
-        }
+        value.integer.replaceWithZeroIfItIsEmpty()
         
         guard !options.contains(.integer) else { return }
         

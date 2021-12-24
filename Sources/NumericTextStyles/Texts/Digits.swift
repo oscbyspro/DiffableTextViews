@@ -36,13 +36,11 @@
     }
     
     @inlinable mutating func removeRedundantZerosPrefix() {
-        characters.removeSubrange(..<characters.dropLast().prefix(while: digitIsZero).endIndex)
+        characters.removeSubrange(..<characters.dropLast().prefix(while: { $0 == Self.zero }).endIndex)
     }
     
-    // MARK: Transformations: Helpers
-    
-    @inlinable func digitIsZero(character: Character) -> Bool {
-        character == Self.zero
+    @inlinable mutating func replaceWithZeroIfItIsEmpty() {
+        guard isEmpty else { return }; characters.append(Self.zero)
     }
 
     // MARK: Characters
