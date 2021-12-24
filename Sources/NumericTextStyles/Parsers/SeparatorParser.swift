@@ -42,5 +42,5 @@ import struct Foundation.Locale
     
     // MARK: Instances
     
-    @usableFromInline static let standard = Self(separators: [Value.dot])
+    @usableFromInline static let standard = Self(separators: [Separator.dot])
 }

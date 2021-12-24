@@ -29,7 +29,7 @@
         characters.isEmpty
     }
     
-    // MARK: Characters: Static
+    // MARK: Characters
     
     @usableFromInline static let dot: String = "."
 }

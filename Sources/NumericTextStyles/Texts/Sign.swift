@@ -7,13 +7,13 @@
 
 // MARK: - Sign
 
-@usableFromInline enum Sign: String, Text {
+@usableFromInline enum Sign: Text {
     
     // MARK: Instances
     
-    case none = ""
-    case positive = "+"
-    case negative = "-"
+    case none
+    case positive
+    case negative
     
     // MARK: Initializers
     
@@ -24,14 +24,22 @@
     // MARK: Getters
     
     @inlinable var isEmpty: Bool {
-        rawValue.isEmpty
+        self == .none
     }
     
     @inlinable var characters: String {
-        rawValue
+        switch self {
+        case .none:     return String()
+        case .negative: return String(Self.minus)
+        case .positive: return String(Self.plus)
+        }
     }
     
-    // MARK: Characters: Static
+    // MARK: Characters
     
+    @usableFromInline static let plus:  Character = "+"
+    @usableFromInline static let minus: Character = "-"
+    
+    #warning("Remove.")
     @usableFromInline static let all = Set<Character>(["+", "-"])
 }

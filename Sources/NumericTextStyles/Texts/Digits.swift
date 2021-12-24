@@ -45,7 +45,7 @@
         character == Self.zero
     }
 
-    // MARK: Characters: Static
+    // MARK: Characters
     
     @usableFromInline static let zero: Character = "0"
     @usableFromInline static let decimals = Set<Character>("0123456789")
