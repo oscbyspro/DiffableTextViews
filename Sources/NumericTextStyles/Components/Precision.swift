@@ -147,10 +147,10 @@ public extension Precision where Value: PreciseFloatingPoint {
     }
     
     @inlinable func editableValidationThatGeneratesCapacity(count: Count) -> Count? {
-        let sharedCapacity = total.upperBound - count.total
-        guard sharedCapacity >= 0 else { return nil }
+        let capacity = total.upperBound - count.total
+        guard capacity >= 0 else { return nil }
 
-        return .init(integer: sharedCapacity, fraction: sharedCapacity)
+        return .init(integer: capacity, fraction: capacity)
     }
 }
 

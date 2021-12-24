@@ -10,9 +10,9 @@ import protocol Utilities.Transformable
 // MARK: - Field
 
 @usableFromInline struct Field<Scheme: DiffableTextViews.Scheme>: Transformable {
-    @usableFromInline typealias Selection = DiffableTextViews.Selection<Scheme>
-    @usableFromInline typealias Carets = DiffableTextViews.Carets<Scheme>
     @usableFromInline typealias Offset = DiffableTextViews.Offset<Scheme>
+    @usableFromInline typealias Carets = DiffableTextViews.Carets<Scheme>
+    @usableFromInline typealias Selection = DiffableTextViews.Selection<Scheme>
 
     // MARK: Properties
     
@@ -139,7 +139,7 @@ import protocol Utilities.Transformable
             
             switch direction {
             case preference: return next
-            case .forwards:  return next < carets.lastIndex  ? carets.index(after:  next) : next
+            case  .forwards: return next < carets.lastIndex  ? carets.index(after:  next) : next
             case .backwards: return next > carets.firstIndex ? carets.index(before: next) : next
             }
         }
