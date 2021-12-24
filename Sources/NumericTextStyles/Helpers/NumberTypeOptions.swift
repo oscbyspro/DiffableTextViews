@@ -1,14 +1,13 @@
 //
-//  Options.swift
+//  NumberTypeOptions.swift
 //  
 //
-//  Created by Oscar Byström Ericsson on 2021-12-22.
+//  Created by Oscar Byström Ericsson on 2021-12-24.
 //
 
-// MARK: - Options
+// MARK: - NumberTypeOptions
 
-#warning("Rename/move to NumberParser, maybe.")
-@usableFromInline struct Options: OptionSet {
+@usableFromInline struct NumberTypeOptions: OptionSet {
     
     // MARK: Properties
     

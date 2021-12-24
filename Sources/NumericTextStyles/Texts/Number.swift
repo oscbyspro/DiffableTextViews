@@ -35,7 +35,7 @@
         sign.characters + integer.characters + separator.characters + fraction.characters
     }
         
-    @inlinable func digitsCount() -> Number.DigitsCount {
+    @inlinable func digitsCount() -> NumberDigitsCount {
         .init(integer: integer.count, fraction: fraction.count)
     }
     
@@ -46,29 +46,6 @@
         case .none: return
         case  sign: sign.removeAll()
         default:    sign = proposal
-        }
-    }
-    
-    // MARK: Components
-    
-    @usableFromInline struct DigitsCount {
-
-        // MARK: Properties
-
-        @usableFromInline let integer:  Int
-        @usableFromInline let fraction: Int
-
-        // MARK: Initializers
-
-        @inlinable init(integer: Int = 0, fraction: Int = 0) {
-            self.integer  = integer
-            self.fraction = fraction
-        }
-
-        // MARK: Getters
-
-        @inlinable var total: Int {
-            integer + fraction
         }
     }
 }

@@ -17,11 +17,11 @@ public struct NumberParser: Parser, Transformable {
     @usableFromInline var sign: SignParser
     @usableFromInline var digits: DigitsParser
     @usableFromInline var separator: SeparatorParser
-    @usableFromInline var options: Options
+    @usableFromInline var options: NumberTypeOptions
     
     // MARK: Initializers
     
-    @inlinable init(sign: SignParser, digits: DigitsParser, separator: SeparatorParser, options: Options) {
+    @inlinable init(sign: SignParser, digits: DigitsParser, separator: SeparatorParser, options: NumberTypeOptions) {
         self.sign = sign
         self.digits = digits
         self.separator = separator
@@ -34,7 +34,7 @@ public struct NumberParser: Parser, Transformable {
         .init(sign: sign.locale(locale), digits: digits.locale(locale), separator: separator.locale(locale), options: options)
     }
     
-    @inlinable func options(_ options: Options) -> Self {
+    @inlinable func options(_ options: NumberTypeOptions) -> Self {
         transforming({ $0.options = options })
     }
 
