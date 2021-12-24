@@ -23,7 +23,7 @@
         
     // MARK: Getters
     
-    @inlinable var empty: Bool {
+    @inlinable var isEmpty: Bool {
         self == .none
     }
     

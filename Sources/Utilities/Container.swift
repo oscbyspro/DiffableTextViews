@@ -12,17 +12,5 @@ public protocol Container {
     // MARK: Requirements
     
     /// A Boolean value indicating whether the instance  is empty.
-    @inlinable var empty: Bool { get }
-}
-
-// MARK: - Container: Details
-
-public extension Container {
-    
-    // MARK: Getters
-    
-    /// A Boolean value indicating whether the instance  is nonempty.
-    @inlinable var nonempty: Bool {
-        !empty
-    }
+    @inlinable var isEmpty: Bool { get }
 }

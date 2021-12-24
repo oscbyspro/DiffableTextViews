@@ -27,8 +27,8 @@
     
     // MARK: Descriptions
     
-    @inlinable var empty: Bool {
-        sign.empty && integer.empty && separator.empty && fraction.empty
+    @inlinable var isEmpty: Bool {
+        sign.isEmpty && integer.isEmpty && separator.isEmpty && fraction.isEmpty
     }
     
     @inlinable var characters: String {

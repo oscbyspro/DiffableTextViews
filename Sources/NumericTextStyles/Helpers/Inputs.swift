@@ -9,6 +9,7 @@ import struct DiffableTextViews.Snapshot
 
 // MARK: - Input
 
+#warning("Remove.")
 @usableFromInline struct Input {
     @usableFromInline typealias Parser = NumberParser
     
@@ -33,17 +34,18 @@ import struct DiffableTextViews.Snapshot
 
 // MARK: - ToggleSignInput
 
+#warning("Make standalone.")
 @usableFromInline struct ToggleSignInput {
     @usableFromInline typealias Parser = SignParser
 
     // MARK: Properties
     
-    @usableFromInline var sign: Sign
+    @usableFromInline private(set) var sign: Sign
     
     // MARK: Initializers
     
     @inlinable init?(consumable: inout Snapshot, parser: Parser) {
-        guard let sign = parser.parse(consumable.characters), sign.nonempty else { return nil }
+        guard let sign = parser.parse(consumable.characters), !sign.isEmpty else { return nil }
         
         self.sign = sign
         consumable.removeAll()
