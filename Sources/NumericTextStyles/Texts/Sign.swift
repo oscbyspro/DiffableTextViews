@@ -38,8 +38,6 @@
     // MARK: Characters
     
     @usableFromInline static let plus:  Character = "+"
-    @usableFromInline static let minus: Character = "-"
-    
-    #warning("Remove.")
-    @usableFromInline static let all = Set<Character>(["+", "-"])
+    @usableFromInline static let minus: Character = "-"    
+    @usableFromInline static let all = Set<Character>([plus, minus])
 }

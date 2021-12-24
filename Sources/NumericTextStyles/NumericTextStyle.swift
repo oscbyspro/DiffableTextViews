@@ -38,9 +38,7 @@ public struct NumericTextStyle<Value: NumericTextValue>: DiffableTextStyle, Tran
     @inlinable var parser: NumberParser {
         Value.parser.locale(locale)
     }
-    
-    // MARK: Getters: Characters
-    
+        
     @inlinable var zero: Character {
         Digits.zero
     }
