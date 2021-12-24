@@ -29,7 +29,7 @@
         }
     }
     
-    // MARK: Maps
+    // MARK: Translations
     
     @usableFromInline static let negatives: Translations = [
         Sign.minus: Sign.negative
@@ -39,4 +39,3 @@
     
     @usableFromInline static let standard = Self(signs: negatives)
 }
-

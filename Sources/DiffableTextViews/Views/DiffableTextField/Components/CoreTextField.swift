@@ -10,7 +10,6 @@
 import class UIKit.UITextField
 import class UIKit.UIPress
 import class UIKit.UIPressesEvent
-import  enum UIKit.UIKeyboardHIDUsage
 
 // MARK: - CoreTextField
 
@@ -18,48 +17,8 @@ public final class CoreTextField: UITextField {
     
     // MARK: Properties
     
-    @usableFromInline var intent: Intent? = nil
+    @usableFromInline private(set) var intent: Direction? = nil
 
-    // MARK: Intent
-    
-    @usableFromInline struct Intent: Equatable {
-        @usableFromInline typealias Code = UIKeyboardHIDUsage
-        
-        // MARK: Instances
-        
-        @usableFromInline static let forwards  = Self(direction: .forwards,  code: .keyboardRightArrow)
-        @usableFromInline static let backwards = Self(direction: .backwards, code:  .keyboardLeftArrow)
-        
-        // MARK: Properties
-        
-        @usableFromInline let direction: Direction
-        @usableFromInline let code: Code
-        
-        // MARK: Initializers
-        
-        @inlinable init(direction: Direction,  code: Code) {
-            self.direction = direction
-            self.code = code
-        }
-
-        // MARK: Initializers, Static
-        
-        @inlinable static func parse(_ presses: Set<UIPress>) -> Intent? {
-            guard let key = presses.first?.key else { return nil }
-            
-            switch key.keyCode {
-            case  forwards.code: return  .forwards
-            case backwards.code: return .backwards
-            default: return nil
-            }
-        }
-    }
-}
-
-// MARK: - Events
-
-extension CoreTextField {
-    
     // MARK: Presses
     
     public override func pressesBegan(_ presses: Set<UIPress>, with event: UIPressesEvent?) {
@@ -85,12 +44,12 @@ extension CoreTextField {
     // MARK: Presses: Helpers
     
     @inlinable func processIntentStarted(_ presses: Set<UIPress>) {
-        self.intent = Intent.parse(presses)
+        self.intent = Direction(presses: presses)
     }
     
     @inlinable func processIntentEnded(_ presses: Set<UIPress>) {
         guard let current = intent else { return }
-        guard let ended = Intent.parse(presses) else { return }
+        guard let ended = Direction(presses: presses) else { return }
         if current == ended { self.intent = nil }
     }
 }
