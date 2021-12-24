@@ -15,7 +15,7 @@
     case backwards
 }
 
-// MARK: - Direction: UIKit
+// MARK: - UIKit
 
 #if canImport(UIKit)
 
@@ -28,17 +28,14 @@ extension Direction {
     
     // MARK: Initializers
     
-    @inlinable init?(presses: Set<UIPress>) {
-        guard let key = presses.first?.key else { return nil }
-        guard let direction = Self.intentions[key.keyCode] else { return nil }
-        self = direction
+    @inlinable static func intent(_ presses: Set<UIPress>) -> Self? {
+        presses.first?.key.flatMap({ intentions[$0.keyCode] })
     }
     
     // MARK: Translations
     
-    @usableFromInline static let intentions: [UIKeyboardHIDUsage: Direction] = [
-        .keyboardRightArrow: .forwards,
-        .keyboardLeftArrow: .backwards,
+    @usableFromInline static let intentions: [UIKeyboardHIDUsage: Self] = [
+        .keyboardLeftArrow: .backwards, .keyboardRightArrow: .forwards
     ]
 }
 

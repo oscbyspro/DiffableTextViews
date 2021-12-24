@@ -44,13 +44,11 @@ public final class BasicTextField: UITextField {
     // MARK: Presses: Helpers
     
     @inlinable func processIntentStarted(_ presses: Set<UIPress>) {
-        self.intent = Direction(presses: presses)
+        intent = .intent(presses)
     }
     
     @inlinable func processIntentEnded(_ presses: Set<UIPress>) {
-        guard let current = intent else { return }
-        guard let ended = Direction(presses: presses) else { return }
-        if current == ended { self.intent = nil }
+        if intent == .intent(presses) { intent = nil }
     }
 }
 
