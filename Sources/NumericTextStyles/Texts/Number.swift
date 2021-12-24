@@ -27,15 +27,15 @@
     
     // MARK: Descriptions
     
-    @inlinable var isEmpty: Bool {
-        sign.isEmpty && integer.isEmpty && separator.isEmpty && fraction.isEmpty
+    @inlinable var empty: Bool {
+        sign.empty && integer.empty && separator.empty && fraction.empty
     }
     
     @inlinable var characters: String {
         sign.characters + integer.characters + separator.characters + fraction.characters
     }
         
-    @inlinable func numberOfDigits() -> Count {
+    @inlinable func digitsCount() -> Count {
         .init(integer: integer.count, fraction: fraction.count)
     }
     

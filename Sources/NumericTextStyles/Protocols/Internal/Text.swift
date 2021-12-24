@@ -5,18 +5,17 @@
 //  Created by Oscar Byström Ericsson on 2021-12-20.
 //
 
+import protocol Utilities.Container
+
 // MARK: - Text
 
 /// A system representation of the conforming object.
-@usableFromInline protocol Text {
+@usableFromInline protocol Text: Container {
     
     // MARK: Requirements
     
     /// Creates an empty instance.
     @inlinable init()
-    
-    /// A Boolean value indicating whether the instance  is empty.
-    @inlinable var isEmpty: Bool { get }
     
     /// A sytem representation of the instance.
     @inlinable var characters: String { get }
@@ -25,7 +24,7 @@
 // MARK: - Text: Details
 
 extension Text {
-    
+
     // MARK: Transformations
     
     /// Resets the instance to an empty state.

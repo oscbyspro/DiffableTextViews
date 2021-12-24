@@ -23,7 +23,7 @@
         
     // MARK: Getters
     
-    @inlinable var isEmpty: Bool {
+    @inlinable var empty: Bool {
         self == .none
     }
     
@@ -39,5 +39,5 @@
     
     @usableFromInline static let plus:  Character = "+"
     @usableFromInline static let minus: Character = "-"    
-    @usableFromInline static let all = Set<Character>([plus, minus])
+    @usableFromInline static let all: Set<Character> = [plus, minus]
 }

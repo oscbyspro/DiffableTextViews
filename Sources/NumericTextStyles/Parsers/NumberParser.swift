@@ -67,7 +67,7 @@ public struct NumberParser: Parser, Transformable {
         
         separator.parse(characters, index: &index, value: &value.separator)
 
-        guard !value.separator.isEmpty else { return }
+        guard value.separator.nonempty else { return }
         
         // --------------------------------- //
         // MARK: Fraction

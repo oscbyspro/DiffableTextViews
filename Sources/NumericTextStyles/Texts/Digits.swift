@@ -25,7 +25,7 @@
         characters.count
     }
     
-    @inlinable var isEmpty: Bool {
+    @inlinable var empty: Bool {
         characters.isEmpty
     }
     
@@ -40,7 +40,7 @@
     }
     
     @inlinable mutating func replaceWithZeroIfItIsEmpty() {
-        guard isEmpty else { return }; characters.append(Self.zero)
+        guard empty else { return }; characters.append(Self.zero)
     }
 
     // MARK: Characters

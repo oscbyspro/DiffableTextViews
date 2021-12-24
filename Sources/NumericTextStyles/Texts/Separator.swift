@@ -25,7 +25,7 @@
     
     // MARK: Getters
     
-    @inlinable var isEmpty: Bool {
+    @inlinable var empty: Bool {
         characters.isEmpty
     }
     

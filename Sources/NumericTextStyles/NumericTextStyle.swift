@@ -88,7 +88,7 @@ public struct NumericTextStyle<Value: NumericTextValue>: DiffableTextStyle, Tran
     }
     
     @inlinable func value(number: Number) -> Value? {
-        number.integer.isEmpty && number.fraction.isEmpty ? Value.zero : Value.value(description: number.characters)
+        number.integer.empty && number.fraction.empty ? Value.zero : Value.value(description: number.characters)
     }
     
     // MARK: Style: Showcase
@@ -149,7 +149,7 @@ public struct NumericTextStyle<Value: NumericTextValue>: DiffableTextStyle, Tran
         
         // --------------------------------- //
 
-        let count = number.numberOfDigits()
+        let count = number.digitsCount()
         guard let capacity = precision.editableValidationThatGeneratesCapacity(count: count) else { return nil }
         
         // --------------------------------- //
@@ -158,7 +158,7 @@ public struct NumericTextStyle<Value: NumericTextValue>: DiffableTextStyle, Tran
             number.sign.removeAll()
         }
         
-        if capacity.fraction <= .zero, number.fraction.isEmpty {
+        if capacity.fraction <= .zero, number.fraction.empty {
             number.separator.removeAll()
         }
         
@@ -169,13 +169,13 @@ public struct NumericTextStyle<Value: NumericTextValue>: DiffableTextStyle, Tran
                 
         // --------------------------------- //
         
-        let style = editableStyle(count: count, separator: !number.separator.isEmpty)
+        let style = editableStyle(count: count, separator: number.separator.nonempty)
                 
         // --------------------------------- //
         
         var characters = style.format(value)
         
-        if !number.sign.isEmpty, !characters.hasPrefix(number.sign.characters) {
+        if number.sign.nonempty, !characters.hasPrefix(number.sign.characters) {
             characters = number.sign.characters + characters
         }
                 
