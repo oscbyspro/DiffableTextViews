@@ -14,8 +14,8 @@ import protocol Utilities.Transformable
 
 public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable, Transformable {
     public typealias Value = Style.Value
-    public typealias UIViewType = CoreTextField
-    public typealias Configuration = (ProxyTextField<UIViewType>) -> Void
+    public typealias UIViewType = BasicTextField
+    public typealias Configuration = (ProxyTextField) -> Void
     
     // MARK: Properties
     
@@ -59,7 +59,7 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable, 
     }
     
     @inlinable public func makeUIView(context: Context) -> UIViewType {
-        let uiView = CoreTextField()
+        let uiView = BasicTextField()
         
         // --------------------------------- //
         
@@ -91,11 +91,11 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable, 
         // MARK: Properties
         
         @usableFromInline var upstream: DiffableTextField!
-        @usableFromInline var downstream: ProxyTextField<UIViewType>!
+        @usableFromInline var downstream:  ProxyTextField!
         
         // MARK: Properties: Helpers
         
-        @usableFromInline let lock = Lock()
+        @usableFromInline let lock  =  Lock()
         @usableFromInline let cache = Cache()
         
         // MARK: Initializers: Setup
@@ -165,8 +165,7 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable, 
             // --------------------------------- //
                         
             let offsets = downstream.selection()
-            let intent = downstream.uiTextField.intent
-            let field = cache.field.updating(selection: offsets, intent: intent)
+            let field = cache.field.updating(selection: offsets, intent: downstream.intent)
             
             // --------------------------------- //
             

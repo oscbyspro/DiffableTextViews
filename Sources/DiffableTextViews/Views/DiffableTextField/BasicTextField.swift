@@ -1,5 +1,5 @@
 //
-//  CoreTextField.swift
+//  BasicTextField.swift
 //  
 //
 //  Created by Oscar Byström Ericsson on 2021-10-31.
@@ -11,9 +11,9 @@ import class UIKit.UITextField
 import class UIKit.UIPress
 import class UIKit.UIPressesEvent
 
-// MARK: - CoreTextField
+// MARK: - BasicTextField
 
-public final class CoreTextField: UITextField {
+public final class BasicTextField: UITextField {
     
     // MARK: Properties
     
