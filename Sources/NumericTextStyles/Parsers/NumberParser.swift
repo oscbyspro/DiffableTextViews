@@ -42,12 +42,19 @@ public struct NumberParser: Parser, Transformable {
     // MARK: Parse
     
     @inlinable func parse<C: Collection>(_ characters: C, index: inout C.Index, storage: inout Output) where C.Element == Character {
+        
+        // --------------------------------- //
+        // MARK: Sign
+        // --------------------------------- //
+        
         if !options.contains(.unsigned) {
             sign.parse(characters, index: &index, storage: &storage.sign)
         }
         
         // --------------------------------- //
-        
+        // MARK: Integer
+        // --------------------------------- //
+
         digits.parse(characters, index: &index, storage: &storage.integer)
         
         storage.integer.removeRedundantZerosPrefix()
@@ -56,18 +63,18 @@ public struct NumberParser: Parser, Transformable {
             storage.integer.append(digits.zero)
         }
         
-        // --------------------------------- //
-        
         guard !options.contains(.integer) else { return }
         
         // --------------------------------- //
-        
-        separator.parse(characters, index: &index, storage: &storage.separator)
-        
+        // MARK: Separator
         // --------------------------------- //
         
+        separator.parse(characters, index: &index, storage: &storage.separator)
+
         guard !storage.separator.isEmpty else { return }
         
+        // --------------------------------- //
+        // MARK: Fraction
         // --------------------------------- //
         
         digits.parse(characters, index: &index, storage: &storage.fraction)
