@@ -35,7 +35,7 @@
         sign.characters + integer.characters + separator.characters + fraction.characters
     }
         
-    @inlinable func digitsCount() -> Count {
+    @inlinable func digitsCount() -> NumberDigitsCount {
         .init(integer: integer.count, fraction: fraction.count)
     }
     

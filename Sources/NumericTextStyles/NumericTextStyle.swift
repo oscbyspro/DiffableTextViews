@@ -103,8 +103,9 @@ public struct NumericTextStyle<Value: NumericTextValue>: DiffableTextStyle, Tran
         Value.style(locale: locale, precision: precision.editableStyle(), separator: .automatic)
     }
     
-    @inlinable func editableStyle(count: Count, separator: Bool) -> Value.FormatStyle {
-        Value.style(locale: locale, precision: precision.editableStyle(count: count), separator: separator ? .always : .automatic)
+    @inlinable func editableStyleThatUses(numberDigitsCount: NumberDigitsCount, separator: Bool) -> Value.FormatStyle {
+        let precision = precision.editableStyleThatUses(numberDigitsCount: numberDigitsCount)
+        return Value.style(locale: locale, precision: precision, separator: separator ? .always : .automatic)
     }
     
     // MARK: Value: Process
@@ -149,8 +150,8 @@ public struct NumericTextStyle<Value: NumericTextValue>: DiffableTextStyle, Tran
         
         // --------------------------------- //
 
-        let count = number.digitsCount()
-        guard let capacity = precision.editableValidationThatGeneratesCapacity(count: count) else { return nil }
+        let numberDigitsCount = number.digitsCount()
+        guard let capacity = precision.editableCapacity(numberDigitsCount: numberDigitsCount) else { return nil }
         
         // --------------------------------- //
         
@@ -169,8 +170,7 @@ public struct NumericTextStyle<Value: NumericTextValue>: DiffableTextStyle, Tran
                 
         // --------------------------------- //
         
-        #warning("Clarify how this editableStyle is different.")
-        let style = editableStyle(count: count, separator: !number.separator.isEmpty)
+        let style = editableStyleThatUses(numberDigitsCount: numberDigitsCount, separator: !number.separator.isEmpty)
                 
         // --------------------------------- //
         

@@ -1,14 +1,14 @@
 //
-//  Count.swift
+//  NumberDigitsCount.swift
 //  
 //
 //  Created by Oscar Byström Ericsson on 2021-10-25.
 //
 
-// MARK: - Count
+// MARK: - NumberDigitsCount
 
-#warning("Rename as NumberDigitsCount, maybe.")
-@usableFromInline struct Count {
+#warning("Move to Number, maybe.")
+@usableFromInline struct NumberDigitsCount {
     
     // MARK: Properties
     
