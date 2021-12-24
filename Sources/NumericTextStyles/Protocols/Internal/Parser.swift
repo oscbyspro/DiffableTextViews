@@ -37,16 +37,8 @@ extension Parser {
     
     /// Creates and returns a new instance if the characters are valid, else it returns nil.
     @inlinable func parse<C: Collection>(_ characters: C) -> Value? where C.Element == Character {
-        var value = Value()
-        var index = characters.startIndex
-        
-        // --------------------------------- //
-        
+        var value = Value(); var index = characters.startIndex
         parse(characters, index: &index, value: &value)
-        guard index == characters.endIndex else { return nil }
-        
-        // --------------------------------- //
-        
-        return value
+        return index == characters.endIndex ? value : nil
     }
 }
