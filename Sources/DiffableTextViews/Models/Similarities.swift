@@ -145,15 +145,15 @@ import protocol Utilities.Transformable
     // MARK: Initializers: Static
     
     @inlinable static func equation(_ equivalent: @escaping (Element, Element) -> Bool) -> Self {
-        Self(instruction: { equivalent($0, $1) ? .continue : .none })
+        .init(instruction: { equivalent($0, $1) ? .continue : .none })
     }
     
     @inlinable static func equatable<Value: Equatable>(_ value: @escaping (Element) -> Value) -> Self {
-        Self(instruction: { value($0) == value($1) ? .continue : .none })
+        .init(instruction: { value($0) == value($1) ? .continue : .none })
     }
     
     @inlinable static func instruction(_ instruction: @escaping (Element, Element) -> Instruction) -> Self {
-        Self(instruction: instruction)
+        .init(instruction: instruction)
     }
 }
 
@@ -174,11 +174,11 @@ import protocol Utilities.Transformable
     // MARK: Initializers: Static
 
     @inlinable static var all: Self {
-        Self(includes: { _ in true })
+        .init(includes: { _ in true })
     }
     
     @inlinable static func only(_ includes: @escaping (Element) -> Bool) -> Self {
-        Self(includes: includes)
+        .init(includes: includes)
     }
 }
 
