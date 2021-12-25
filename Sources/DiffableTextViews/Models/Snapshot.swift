@@ -107,22 +107,22 @@ public struct Snapshot: BidirectionalCollection, RangeReplaceableCollection, Exp
     
     // MARK: Transformations: Attributes
     
-    @inlinable public mutating func transform(attributes index: Index, using transformation: (inout Attribute) -> Void) {
+    @inlinable public mutating func transform(attributes index: Index, with transformation: (inout Attribute) -> Void) {
         transformation(&_attributes[index.attribute])
     }
     
-    @inlinable public mutating func transform(attributes indices: Indices, using transformation: (inout Attribute) -> Void) {
+    @inlinable public mutating func transform(attributes indices: Indices, with transformation: (inout Attribute) -> Void) {
         for index in indices { transformation(&_attributes[index.attribute]) }
     }
         
-    @inlinable public mutating func transform<R: RangeExpression>(attributes expression: R, using transformation: (inout Attribute) -> Void) where R.Bound == Index {
-        for index in interpret(expression, map: \.attribute) { transformation(&_attributes[index]) }
+    @inlinable public mutating func transform<R: RangeExpression>(attributes range: R, with transformation: (inout Attribute) -> Void) where R.Bound == Index {
+        for index in interpret(range, map: \.attribute) { transformation(&_attributes[index]) }
     }
     
     // MARK: Helpers
 
-    @inlinable internal func interpret<R: RangeExpression, T>(_ indices: R, map: (Index) -> T) -> Range<T> where R.Bound == Index {
-        let indices = indices.relative(to: self); return map(indices.lowerBound) ..< map(indices.upperBound)
+    @inlinable internal func interpret<R: RangeExpression, T>(_ range: R, map: (Index) -> T) -> Range<T> where R.Bound == Index {
+        let indices = range.relative(to: self); return map(indices.lowerBound) ..< map(indices.upperBound)
     }
     
     // MARK: Index

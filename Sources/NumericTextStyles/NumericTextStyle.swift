@@ -243,7 +243,7 @@ public struct NumericTextStyle<Value: NumericTextValue>: DiffableTextStyle, Tran
         
         guard let position = snapshot.firstIndex(where: predicate) else { return }
         guard snapshot[position].character == zero else { return }
-        snapshot.transform(attributes: position, using: transformation)
+        snapshot.transform(attributes: position, with: transformation)
     }
     
     @inlinable func processFractionSeparatorSuffix(_ snapshot: inout Snapshot, transformation: (inout Attribute) -> Void) {
@@ -253,6 +253,6 @@ public struct NumericTextStyle<Value: NumericTextValue>: DiffableTextStyle, Tran
         
         // --------------------------------- //
         
-        snapshot.transform(attributes: snapshot.suffix(while: predicate).indices, using: transformation)
+        snapshot.transform(attributes: snapshot.suffix(while: predicate).indices, with: transformation)
     }
 }
