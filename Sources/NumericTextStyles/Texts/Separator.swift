@@ -11,22 +11,26 @@
     
     // MARK: Properties
     
-    @usableFromInline let characters: String
+    @usableFromInline var characters: String = ""
     
     // MARK: Initializers
     
-    @inlinable init() {
-        self.characters = ""
-    }
-
-    @inlinable init(characters: String) {
-        self.characters = characters
-    }
+    @inlinable init() { }
     
     // MARK: Getters
     
     @inlinable var isEmpty: Bool {
         characters.isEmpty
+    }
+    
+    // MARK: Transformations
+    
+    @inlinable mutating func append(_ element: Character) {
+        characters.append(element)
+    }
+    
+    @inlinable mutating func append(contentsOf elements: String) {
+        characters.append(contentsOf: elements)
     }
     
     // MARK: Characters

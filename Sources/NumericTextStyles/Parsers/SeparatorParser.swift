@@ -33,7 +33,7 @@ import struct Foundation.Locale
         let subsequence = characters[index...]
         for separator in separators {
             if subsequence.starts(with: separator) {
-                value = Separator(characters: Separator.dot)
+                value.append(contentsOf: Separator.dot)
                 characters.formIndex(&index, offsetBy: separator.count)
                 return
             }

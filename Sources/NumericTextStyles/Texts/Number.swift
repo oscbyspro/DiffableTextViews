@@ -11,19 +11,14 @@
     
     // MARK: Properties
     
-    @usableFromInline var sign: Sign
-    @usableFromInline var integer: Digits
-    @usableFromInline var separator: Separator
-    @usableFromInline var fraction: Digits
+    @usableFromInline var sign = Sign()
+    @usableFromInline var integer = Digits()
+    @usableFromInline var separator = Separator()
+    @usableFromInline var fraction = Digits()
     
     // MARK: Initializers
     
-    @inlinable init() {
-        self.sign = .init()
-        self.integer = .init()
-        self.separator = .init()
-        self.fraction = .init()
-    }
+    @inlinable init() { }
     
     // MARK: Descriptions
     
@@ -35,7 +30,7 @@
         sign.characters + integer.characters + separator.characters + fraction.characters
     }
         
-    @inlinable func digitsCount() -> NumberDigitsCount {
+    @inlinable var digitsCount: NumberDigitsCount {
         .init(integer: integer.count, fraction: fraction.count)
     }
     

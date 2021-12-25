@@ -7,24 +7,18 @@
 
 // MARK: - Digits
 
-#warning("Consider adding a stored count property, again.")
 @usableFromInline struct Digits: Text {
     
     // MARK: Properties
     
-    @usableFromInline private(set) var characters: String
+    @usableFromInline private(set) var characters: String = ""
+    @usableFromInline private(set) var count: Int = 0
 
     // MARK: Initializers
     
-    @inlinable init() {
-        self.characters = ""
-    }
+    @inlinable init() { }
     
     // MARK: Getters
-    
-    @inlinable var count: Int {
-        characters.count
-    }
     
     @inlinable var isEmpty: Bool {
         characters.isEmpty
@@ -34,6 +28,7 @@
     
     @inlinable mutating func append(_ character: Character) {
         characters.append(character)
+        count += 1
     }
     
     @inlinable mutating func removeRedundantZerosPrefix() {

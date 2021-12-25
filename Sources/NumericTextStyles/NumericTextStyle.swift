@@ -150,8 +150,7 @@ public struct NumericTextStyle<Value: NumericTextValue>: DiffableTextStyle, Tran
         
         // --------------------------------- //
 
-        let numberDigitsCount = number.digitsCount()
-        guard let capacity = precision.editableCapacity(numberDigitsCount: numberDigitsCount) else { return nil }
+        guard let capacity = precision.editableCapacity(numberDigitsCount: number.digitsCount) else { return nil }
         
         // --------------------------------- //
         
@@ -170,7 +169,7 @@ public struct NumericTextStyle<Value: NumericTextValue>: DiffableTextStyle, Tran
                 
         // --------------------------------- //
         
-        let style = editableStyleThatUses(numberDigitsCount: numberDigitsCount, separator: !number.separator.isEmpty)
+        let style = editableStyleThatUses(numberDigitsCount: number.digitsCount, separator: !number.separator.isEmpty)
                 
         // --------------------------------- //
         
