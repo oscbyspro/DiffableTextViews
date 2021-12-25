@@ -8,14 +8,15 @@
 // MARK: - SignParser
 
 @usableFromInline struct SignParser: Parser {
+    @usableFromInline typealias Translatables = [Character: Sign]
 
     // MARK: Properties
     
-    @usableFromInline let translatables: [Character: Sign]
+    @usableFromInline private(set) var translatables: Translatables
     
     // MARK: Initializers
     
-    @inlinable init(translatables: [Character: Sign]) {
+    @inlinable init(translatables: Translatables) {
         self.translatables = translatables
     }
     

@@ -10,21 +10,22 @@ import struct Foundation.Locale
 // MARK: - SeparatorParser
 
 @usableFromInline struct SeparatorParser: Parser {
+    @usableFromInline typealias Translatables = Set<String>
 
     // MARK: Properties
     
-    @usableFromInline let translatables: Set<String>
+    @usableFromInline private(set) var translatables: Translatables
     
     // MARK: Initializers
     
-    @inlinable init(translatables: Set<String>) {
+    @inlinable init(translatables: Translatables) {
         self.translatables = translatables
     }
     
     // MARK: Transformations
     
-    @inlinable func locale(_ locale: Locale) -> Self {
-        .init(translatables: translatables.union([locale.decimalSeparator ?? Separator.dot]))
+    @inlinable mutating func update(locale newValue: Locale) {
+        translatables.insert(newValue.decimalSeparator ?? Separator.dot)
     }
     
     // MARK: Parse

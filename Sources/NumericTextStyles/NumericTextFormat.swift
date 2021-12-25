@@ -9,6 +9,7 @@ import struct Foundation.Locale
 
 // MARK: - NumericTextFormat
 
+#warning("Make: Copy-On-Write.")
 @usableFromInline struct NumericTextFormat<Value: NumericTextValue> {
     @usableFromInline typealias Bounds = NumericTextStyles.Bounds<Value>
     @usableFromInline typealias Precision = NumericTextStyles.Precision<Value>
@@ -26,14 +27,16 @@ import struct Foundation.Locale
         self.locale = locale
         self.bounds = .max
         self.precision = .max
-        self.parser = .standard.locale(locale).options(Value.options)
+        self.parser = .standard
+        parser.update(locale: locale)
+        parser.update(options: Value.options)
     }
     
     // MARK: Transformations
     
     @inlinable mutating func update(locale newValue: Locale) {
         locale = newValue
-        parser = parser.locale(newValue)
+        parser.update(locale: newValue)
     }
     
     @inlinable mutating func update(bounds newValue: Bounds) {

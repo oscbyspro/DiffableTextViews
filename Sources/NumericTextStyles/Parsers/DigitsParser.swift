@@ -8,14 +8,15 @@
 // MARK: - DigitsParser
 
 @usableFromInline struct DigitsParser: Parser {
+    @usableFromInline typealias Translatables = Set<Character>
 
     // MARK: Properties
     
-    @usableFromInline let translatables: Set<Character>
+    @usableFromInline private(set) var translatables: Translatables
     
     // MARK: Initializers
     
-    @inlinable init(translatables: Set<Character>) {
+    @inlinable init(translatables: Translatables) {
         self.translatables = translatables
     }
     

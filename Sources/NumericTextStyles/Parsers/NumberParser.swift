@@ -10,14 +10,15 @@ import protocol Utilities.Transformable
 
 // MARK: - NumberParser
 
+#warning("Make: Copy-On-Write.")
 @usableFromInline struct NumberParser: Parser, Transformable {
     
     // MARK: Properties
     
-    @usableFromInline var sign: SignParser
-    @usableFromInline var digits: DigitsParser
-    @usableFromInline var separator: SeparatorParser
-    @usableFromInline var options: NumberTypeOptions
+    @usableFromInline private(set) var sign: SignParser
+    @usableFromInline private(set) var digits: DigitsParser
+    @usableFromInline private(set) var separator: SeparatorParser
+    @usableFromInline private(set) var options: NumberTypeOptions
     
     // MARK: Initializers
     
@@ -29,13 +30,15 @@ import protocol Utilities.Transformable
     }
     
     // MARK: Transformations
-    
-    @inlinable func locale(_ locale: Locale) -> Self {
-        .init(sign: sign.locale(locale), digits: digits.locale(locale), separator: separator.locale(locale), options: options)
+
+    @inlinable mutating func update(locale newValue: Locale) {
+        sign.update(locale: newValue)
+        digits.update(locale: newValue)
+        separator.update(locale: newValue)
     }
     
-    @inlinable func options(_ options: NumberTypeOptions) -> Self {
-        transforming({ $0.options = options })
+    @inlinable mutating func update(options newValue: NumberTypeOptions) {
+        options = newValue
     }
 
     // MARK: Parse
