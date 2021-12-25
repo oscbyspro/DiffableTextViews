@@ -10,16 +10,15 @@ This package contains views that use snapshots and attributes to process a user'
 ### DiffableTextField
 
 # Styles
-### NumericTextStyle
 
-# Usage
+### NumericTextStyle
 
 ```swift
 import SwiftUI
 import DiffableTextViews
 import NumericTextStyles
 
-struct Example: View {
+struct NumericTextStyleExample: View {
     @State var amount: Decimal = 0
     
     let locale = Locale(identifier: "en_US")
@@ -34,3 +33,11 @@ struct Example: View {
     }
 }
 ```
+
+### PatternTextStyle
+
+👷‍♂️🛠🚧🚧🚧🧱🏗🧱🚧🚧🚧⚙️
+
+# Usage
+
+

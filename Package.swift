@@ -15,20 +15,39 @@ let package = Package(
             targets: ["DiffableTextViews", "NumericTextStyles"]),
     ],
     targets: [
+        // --------------------------------- //
+        // MARK: DiffableTextViews
+        // --------------------------------- //
         .target(
             name: "DiffableTextViews",
             dependencies: ["Utilities"]),
         .testTarget(
             name: "DiffableTextViewsTests",
             dependencies: ["DiffableTextViews"]),
+        // --------------------------------- //
+        // MARK: NumericTextStyles
+        // --------------------------------- //
         .target(
             name: "NumericTextStyles",
             dependencies: ["DiffableTextViews", "Utilities"]),
         .testTarget(
             name: "NumericTextStylesTests",
             dependencies: ["NumericTextStyles"]),
+        // --------------------------------- //
+        // MARK: PatternTextStyles
+        // --------------------------------- //
+        .target(
+            name: "PatternTextStyles",
+            dependencies: ["DiffableTextViews", "Utilities"]),
+        .testTarget(
+            name: "PatternTextStylesTests",
+            dependencies: ["PatternTextStyles"]),
+        // --------------------------------- //
+        // MARK: Utilities
+        // --------------------------------- //
         .target(
             name: "Utilities",
             dependencies: []),
     ]
 )
+
