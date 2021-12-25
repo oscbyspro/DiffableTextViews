@@ -9,7 +9,6 @@ import struct Foundation.Locale
 
 // MARK: - NumericTextFormat
 
-#warning("Make: Copy-On-Write.")
 @usableFromInline struct NumericTextFormat<Value: NumericTextValue> {
     @usableFromInline typealias Bounds = NumericTextStyles.Bounds<Value>
     @usableFromInline typealias Precision = NumericTextStyles.Precision<Value>
@@ -28,6 +27,7 @@ import struct Foundation.Locale
         self.bounds = .max
         self.precision = .max
         self.parser = .standard
+        
         parser.update(locale: locale)
         parser.update(options: Value.options)
     }

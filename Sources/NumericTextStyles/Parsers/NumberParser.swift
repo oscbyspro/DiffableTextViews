@@ -10,7 +10,6 @@ import protocol Utilities.Transformable
 
 // MARK: - NumberParser
 
-#warning("Make: Copy-On-Write.")
 @usableFromInline struct NumberParser: Parser, Transformable {
     
     // MARK: Properties
