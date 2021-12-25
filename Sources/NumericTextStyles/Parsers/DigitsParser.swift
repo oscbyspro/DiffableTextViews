@@ -11,12 +11,12 @@
 
     // MARK: Properties
     
-    @usableFromInline let digits: Set<Character>
+    @usableFromInline let translatables: Set<Character>
     
     // MARK: Initializers
     
-    @inlinable init(digits: Set<Character>) {
-        self.digits = digits
+    @inlinable init(translatables: Set<Character>) {
+        self.translatables = translatables
     }
     
     // MARK: Parse
@@ -25,7 +25,7 @@
         while index < characters.endIndex {
             let character = characters[index]
             
-            guard digits.contains(character) else { break }
+            guard translatables.contains(character) else { break }
             
             value.append(character)
             characters.formIndex(after: &index)
@@ -34,5 +34,5 @@
     
     // MARK: Instances
     
-    @usableFromInline static let standard = Self(digits: Digits.decimals)
+    @usableFromInline static let standard = Self(translatables: Digits.decimals)
 }

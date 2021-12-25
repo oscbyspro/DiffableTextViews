@@ -7,7 +7,7 @@
 
 import protocol Utilities.Transformable
 
-// MARK: Symbol
+// MARK: - Symbol
 
 public struct Symbol: Equatable, Transformable {
     

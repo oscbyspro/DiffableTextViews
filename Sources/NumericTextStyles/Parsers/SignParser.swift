@@ -8,22 +8,21 @@
 // MARK: - SignParser
 
 @usableFromInline struct SignParser: Parser {
-    @usableFromInline typealias Translations = [Character: Sign]
 
     // MARK: Properties
     
-    @usableFromInline let signs: Translations
+    @usableFromInline let translatables: [Character: Sign]
     
     // MARK: Initializers
     
-    @inlinable init(signs: Translations) {
-        self.signs = signs
+    @inlinable init(translatables: [Character: Sign]) {
+        self.translatables = translatables
     }
     
     // MARK: Parse
     
     @inlinable func parse<C: Collection>(_ characters: C, index: inout C.Index, value: inout Sign) where C.Element == Character {
-        if index < characters.endIndex, let sign = signs[characters[index]] {
+        if index < characters.endIndex, let sign = translatables[characters[index]] {
             value = sign
             characters.formIndex(after: &index)
         }
@@ -31,11 +30,11 @@
     
     // MARK: Translations
     
-    @usableFromInline static let negatives: Translations = [
+    @usableFromInline static let negatives: [Character: Sign] = [
         Sign.minus: Sign.negative
     ]
     
     // MARK: Instances
     
-    @usableFromInline static let standard = Self(signs: negatives)
+    @usableFromInline static let standard = Self(translatables: negatives)
 }
