@@ -91,31 +91,57 @@ public final class ProxyTextField {
     @inlinable func positions(in offsets: Range<Offset>) -> UITextRange {
         wrapped.textRange(from: position(at: offsets.lowerBound), to: position(at: offsets.upperBound))!
     }
+}
+
+// MARK: - ProxyTextField: Public
+
+public extension ProxyTextField {
+    
+    // MARK: Actions
+    
+    @inlinable func resign() {
+        wrapped.resignFirstResponder()
+    }
     
     // MARK: Transformations
     
-    @inlinable public func resign() {
-        wrapped.resignFirstResponder()
-    }
-        
-    @inlinable public func autocorrect(_ autocorrect: UITextAutocorrectionType) {
+    @inlinable func autocorrect(_ autocorrect: UITextAutocorrectionType) {
         wrapped.autocorrectionType = autocorrect
     }
+        
+    @inlinable func font(_ font: UIFont) {
+        wrapped.font = font
+    }
     
-    @inlinable public func keyboard(_ keyboard: UIKeyboardType) {
+    @inlinable func monospaced(_ font: MonospacedFont = .standard, weight: UIFont.Weight = .regular) {
+        let size = wrapped.font!.pointSize
+        
+        switch font {
+        case .standard: wrapped.font = UIFont.monospacedSystemFont(ofSize: size, weight: weight)
+        case .digits: wrapped.font = UIFont.monospacedDigitSystemFont(ofSize: size, weight: weight)
+        }
+    }
+    
+    @inlinable func keyboard(_ keyboard: UIKeyboardType) {
         wrapped.keyboardType = keyboard
     }
     
-    @inlinable public func key(return: UIReturnKeyType) {
+    @inlinable func key(return: UIReturnKeyType) {
         wrapped.returnKeyType = `return`
     }
-    
-    @inlinable public func secure(entry: Bool) {
+        
+    @inlinable func secure(entry: Bool) {
         wrapped.isSecureTextEntry = entry
     }
-    
-    @inlinable public func tint(color: UIColor) {
+        
+    @inlinable func tint(color: UIColor) {
         wrapped.tintColor = color
+    }
+    
+    // MARK: Components
+    
+    enum MonospacedFont {
+        case standard, digits
     }
 }
 

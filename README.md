@@ -52,7 +52,10 @@ struct PatternTextStyleExample: View {
         DiffableTextField($phoneNumber) {
             .pattern("+## (###) ###-##-##", placeholder: "#")
         }
-        .setup({ textField in textField.keyboard(.decimalPad) })
+        .setup({ textField in
+            textField.monospaced(.standard)
+            textField.keyboard(.decimalPad)
+        })
     }
 }
 ```

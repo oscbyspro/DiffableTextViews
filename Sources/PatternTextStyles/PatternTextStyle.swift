@@ -76,8 +76,7 @@ public struct PatternTextStyle<Pattern, Value>: DiffableTextStyle, Transformable
         // --------------------------------- //
         
         if visible, patternIndex != pattern.endIndex {
-            let patternTail = pattern[patternIndex...]
-            snapshot.append(contentsOf: Snapshot(String(patternTail), only: .suffix))
+            snapshot.append(contentsOf: Snapshot(String(pattern[patternIndex...]), only: .suffix))
         }
         
         // --------------------------------- //
