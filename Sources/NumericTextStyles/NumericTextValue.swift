@@ -100,7 +100,7 @@ extension NumericTextFloat {
     // MARK: Value
     
     @inlinable public static var options: NumberTypeOptions {
-        .none
+        .floatingPoint
     }
     
     // MARK: Boundable

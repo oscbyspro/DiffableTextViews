@@ -7,6 +7,10 @@
 
 // MARK: - NumberTypeOptions
 
+/// Number type description.
+///
+/// FloatingPoints are empty.
+///
 public struct NumberTypeOptions: OptionSet {
     
     // MARK: Properties
@@ -26,6 +30,6 @@ public struct NumberTypeOptions: OptionSet {
     
     // MARK: Instances: Composites
     
-    public static let none = Self()
+    public static let floatingPoint   = Self()
     public static let unsignedInteger = Self([.unsigned, .integer])
 }
