@@ -113,11 +113,11 @@ public extension ProxyTextField {
         wrapped.font = font
     }
     
-    @inlinable func monospaced(_ font: MonospacedFont = .standard, weight: UIFont.Weight = .regular) {
+    @inlinable func monospaced(_ font: MonospacedFont = .normal, weight: UIFont.Weight = .regular) {
         let size = wrapped.font!.pointSize
         
         switch font {
-        case .standard: wrapped.font = UIFont.monospacedSystemFont(ofSize: size, weight: weight)
+        case .normal: wrapped.font = UIFont.monospacedSystemFont(ofSize: size, weight: weight)
         case .digits: wrapped.font = UIFont.monospacedDigitSystemFont(ofSize: size, weight: weight)
         }
     }
@@ -141,7 +141,7 @@ public extension ProxyTextField {
     // MARK: Components
     
     enum MonospacedFont {
-        case standard, digits
+        case normal, digits
     }
 }
 

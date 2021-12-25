@@ -45,6 +45,7 @@ public struct PatternTextStyle<Pattern, Value>: DiffableTextStyle, Transformable
     
     // MARK: Snapshot: Merge
     
+    #warning("Don't merge if proposal exceeds maximum capacity, otherwise it right-shifts (bad).")
     @inlinable public func merge(snapshot: Snapshot, with content: Snapshot, in range: Range<Snapshot.Index>) -> Snapshot? {
         let proposal = snapshot.replacing(range, with: content)
         guard let value = parse(snapshot: proposal) else { return nil }
