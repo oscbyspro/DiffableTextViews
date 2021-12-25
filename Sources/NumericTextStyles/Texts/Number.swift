@@ -36,15 +36,17 @@
     
     // MARK: Transformations
 
-    @inlinable mutating func correctImpossibleSign<Value: Boundable>(bounds: Bounds<Value>) {
-        switch sign {
-        case .negative: if bounds.lowerBound >= .zero { sign.removeAll() }
-        case .positive: if bounds.upperBound <  .zero { sign.removeAll() }
-        case .none:     if bounds.lowerBound <  .zero, bounds.upperBound <= .zero { sign = .negative }
+    #warning("WIP")
+    @inlinable mutating func autocorrectSign<Value: Boundable>(bounds: Bounds<Value>) {
+        if bounds.nonpositive {
+            sign = .negative
+        } else if sign == .negative, .zero <= bounds.lowerBound {
+            sign = .none
         }
     }
     
-    @inlinable mutating func correctImpossibleSeparator(capacity: NumberDigitsCount) {
+    #warning("WIP")
+    @inlinable mutating func autocorrectSeparator(capacity: NumberDigitsCount) {
         if fraction.isEmpty, capacity.fraction <= .zero { separator.removeAll() }
     }
     

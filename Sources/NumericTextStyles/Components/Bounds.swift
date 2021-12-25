@@ -9,7 +9,7 @@
 
 /// Bounds that constrain values to a range.
 ///
-/// Requires that lowerBound ≤ zero ≤ upperBound to ensure intuitive behavior.
+/// Requires that lowerBound ≤ zero ≤ upperBound and lowerBound != upperBound to ensure intuitive behavior.
 ///
 public struct Bounds<Value: Boundable> {
 
@@ -21,8 +21,9 @@ public struct Bounds<Value: Boundable> {
     // MARK: Initializers
     
     @inlinable init(lowerBound: Value = Value.minLosslessValue, upperBound: Value = Value.maxLosslessValue) {
-        precondition(lowerBound <= Value.zero, "Bounds: contraint 'lowerBound <= 0' was broken.")
-        precondition(upperBound >= Value.zero, "Bounds: contraint 'upperBound >= 0' was broken.")
+        precondition(lowerBound != upperBound, "Bounds: constraint 'lowerBound != upperBound' was broken.")
+        precondition(lowerBound <= Value.zero, "Bounds: constraint 'lowerBound <= Value.zero' was broken.")
+        precondition(upperBound >= Value.zero, "Bounds: constraint 'upperBound >= Value.zero' was broken.")
 
         self.lowerBound = lowerBound
         self.upperBound = upperBound
@@ -44,6 +45,16 @@ public struct Bounds<Value: Boundable> {
     
     @inlinable public static func values(in range: PartialRangeThrough<Value>) -> Self {
         .init(upperBound: range.upperBound)
+    }
+    
+    // MARK: Descriptions
+    
+    @inlinable var nonegative: Bool {
+        .zero <= lowerBound
+    }
+    
+    @inlinable var nonpositive: Bool {
+        upperBound <= .zero
     }
     
     // MARK: Utilities
