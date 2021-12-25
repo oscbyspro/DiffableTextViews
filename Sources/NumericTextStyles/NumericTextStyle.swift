@@ -111,8 +111,8 @@ public struct NumericTextStyle<Value: NumericTextValue>: DiffableTextStyle, Tran
         
         // --------------------------------- //
         
-        number.removeImpossibleSign(bounds: format.bounds)
-        number.removeImpossibleSeparator(capacity: capacity)
+        number.correctImpossibleSign(bounds: format.bounds)
+        number.correctImpossibleSeparator(capacity: capacity)
         
         // --------------------------------- //
         

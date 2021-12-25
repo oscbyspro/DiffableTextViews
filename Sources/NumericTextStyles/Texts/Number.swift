@@ -35,6 +35,20 @@
     }
     
     // MARK: Transformations
+
+    @inlinable mutating func correctImpossibleSign<Value: Boundable>(bounds: Bounds<Value>) {
+        switch sign {
+        case .negative: if bounds.lowerBound >= .zero { sign.removeAll() }
+        case .positive: if bounds.upperBound <  .zero { sign.removeAll() }
+        case .none:     if bounds.lowerBound <  .zero, bounds.upperBound <= .zero { sign = .negative }
+        }
+    }
+    
+    @inlinable mutating func correctImpossibleSeparator(capacity: NumberDigitsCount) {
+        if fraction.isEmpty, capacity.fraction <= .zero { separator.removeAll() }
+    }
+    
+    // MARK: Transformations: Commands
     
     @inlinable mutating func toggle(sign proposal: Sign) {
         switch proposal {
@@ -42,17 +56,5 @@
         case  sign: sign.removeAll()
         default:    sign = proposal
         }
-    }
-    
-    @inlinable mutating func removeImpossibleSign<Value: Boundable>(bounds: Bounds<Value>) {
-        switch sign {
-        case .none:     return
-        case .negative: if bounds.lowerBound >= Value.zero { sign.removeAll() }
-        case .positive: if bounds.upperBound <  Value.zero { sign.removeAll() }
-        }
-    }
-    
-    @inlinable mutating func removeImpossibleSeparator(capacity: NumberDigitsCount) {
-        if fraction.isEmpty, capacity.fraction <= .zero { separator.removeAll() }
     }
 }
