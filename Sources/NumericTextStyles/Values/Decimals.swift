@@ -15,13 +15,12 @@ import enum Foundation.NumberFormatStyleConfiguration
 ///
 /// - Supports up to 38 significant digits.
 ///
-extension Decimal: NumericTextValue, PreciseFloatingPoint { }; extension Decimal {
+extension Decimal: NumericTextValue, PreciseFloatingPoint { }
+extension Decimal {
     
     // MARK: Value
     
-    @inlinable public static var numberTypeOptions: NumberTypeOptions {
-        .none
-    }
+    public static let numberTypeOptions: NumberTypeOptions = .none
     
     // MARK: Precise
  

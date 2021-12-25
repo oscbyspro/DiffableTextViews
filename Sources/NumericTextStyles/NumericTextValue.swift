@@ -56,7 +56,8 @@ extension NumericTextInteger {
 // MARK: - NumericTextInt
 
 /// NumericTextInteger implementation for Int types.
-@usableFromInline protocol NumericTextInt: NumericTextInteger { }; extension NumericTextInt {
+@usableFromInline protocol NumericTextInt: NumericTextInteger { }
+extension NumericTextInt {
     
     // MARK: Implementation
     
@@ -68,7 +69,8 @@ extension NumericTextInteger {
 // MARK: - NumericTextUInt
 
 /// NumericTextInteger implementation for UInt types.
-@usableFromInline protocol NumericTextUInt: NumericTextInteger { }; extension NumericTextUInt {
+@usableFromInline protocol NumericTextUInt: NumericTextInteger { }
+extension NumericTextUInt {
     
     // MARK: Implementation
     

@@ -11,7 +11,7 @@ public struct NumberTypeOptions: OptionSet {
     
     // MARK: Properties
     
-    public var rawValue: UInt8
+    public let rawValue: UInt8
     
     // MARK: Initializers
     
