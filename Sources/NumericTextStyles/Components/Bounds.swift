@@ -9,7 +9,7 @@
 
 /// Bounds that constrain values to a range.
 ///
-/// Requires that lowerBound ≤ zero ≤ upperBound and lowerBound != upperBound to ensure intuitive behavior.
+/// - Requires: That (min ≤ zero ≤ max) and (min != max) to ensure intuitive behavior.
 ///
 public struct Bounds<Value: Boundable> {
 
@@ -24,7 +24,7 @@ public struct Bounds<Value: Boundable> {
         precondition(lowerBound != upperBound, "Bounds: constraint 'lowerBound != upperBound' was broken.")
         precondition(lowerBound <= Value.zero, "Bounds: constraint 'lowerBound <= Value.zero' was broken.")
         precondition(upperBound >= Value.zero, "Bounds: constraint 'upperBound >= Value.zero' was broken.")
-
+        
         self.lowerBound = lowerBound
         self.upperBound = upperBound
     }
@@ -49,7 +49,7 @@ public struct Bounds<Value: Boundable> {
     
     // MARK: Descriptions
     
-    @inlinable var nonegative: Bool {
+    @inlinable var nonnegative: Bool {
         .zero <= lowerBound
     }
     
