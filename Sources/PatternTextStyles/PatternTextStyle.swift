@@ -35,7 +35,6 @@ public struct PatternTextStyle<Pattern, Value>: DiffableTextStyle, Transformable
     
     // MARK: Value: Parse
     
-    #warning("Try without optional.")
     @inlinable public func parse(snapshot: Snapshot) -> Value? {
         snapshot.reduce(into: Value()) { result, symbol in
             if symbol.nonformatting {
@@ -48,7 +47,7 @@ public struct PatternTextStyle<Pattern, Value>: DiffableTextStyle, Transformable
     
     @inlinable public func merge(snapshot: Snapshot, with content: Snapshot, in range: Range<Snapshot.Index>) -> Snapshot? {
         let proposal = snapshot.replacing(range, with: content)
-        let value = parse(snapshot: proposal)!
+        guard let value = parse(snapshot: proposal) else { return nil }
         return self.snapshot(editable: value)
     }
     
@@ -83,8 +82,12 @@ public struct PatternTextStyle<Pattern, Value>: DiffableTextStyle, Transformable
         
         // --------------------------------- //
         
-        #warning("Prefix until first placeholder, if valueIndex == characters.startIndex.")
-
+        if valueIndex == value.startIndex {
+            if let firstPlaceholderIndex = snapshot.firstIndex(where: { symbol in symbol.character == placeholder }) {
+                snapshot.transform(attributes: ..<firstPlaceholderIndex, with: { attribute in attribute = .prefix })
+            }
+        }
+        
         // --------------------------------- //
         
         return snapshot
