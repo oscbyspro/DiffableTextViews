@@ -43,4 +43,16 @@
         default:    sign = proposal
         }
     }
+    
+    @inlinable mutating func removeImpossibleSign<Value: Boundable>(bounds: Bounds<Value>) {
+        switch sign {
+        case .none:     return
+        case .negative: if bounds.lowerBound >= Value.zero { sign.removeAll() }
+        case .positive: if bounds.upperBound <  Value.zero { sign.removeAll() }
+        }
+    }
+    
+    @inlinable mutating func removeImpossibleSeparator(capacity: NumberDigitsCount) {
+        if fraction.isEmpty, capacity.fraction <= .zero { separator.removeAll() }
+    }
 }

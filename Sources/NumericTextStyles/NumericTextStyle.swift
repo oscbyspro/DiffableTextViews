@@ -98,8 +98,7 @@ public struct NumericTextStyle<Value: NumericTextValue>: DiffableTextStyle, Tran
         
         // --------------------------------- //
         
-        var next = snapshot
-        next.replaceSubrange(range, with: input.content)
+        let next = snapshot.transforming({ $0.replaceSubrange(range, with: input.content) })
         
         // --------------------------------- //
 
@@ -108,17 +107,12 @@ public struct NumericTextStyle<Value: NumericTextValue>: DiffableTextStyle, Tran
         
         // --------------------------------- //
 
-        guard let capacity = format.precision.editableCapacity(numberDigitsCount: number.digitsCount) else { return nil }
+        guard let capacity = format.precision.capacity(numberDigitsCount: number.digitsCount) else { return nil }
         
         // --------------------------------- //
         
-        if format.bounds.lowerBound >= .zero {
-            number.sign.removeAll()
-        }
-        
-        if capacity.fraction <= .zero, number.fraction.isEmpty {
-            number.separator.removeAll()
-        }
+        number.removeImpossibleSign(bounds: format.bounds)
+        number.removeImpossibleSeparator(capacity: capacity)
         
         // --------------------------------- //
         

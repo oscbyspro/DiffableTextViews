@@ -49,10 +49,10 @@ public struct Precision<Value: Precise> {
         return .integerAndFractionLength(integerLimits: integer, fractionLimits: fraction)
     }
     
-    // MARK: Editable: Capacity
+    // MARK: Validation: Capacity
     
-    @inlinable func editableCapacity(numberDigitsCount: NumberDigitsCount) -> NumberDigitsCount? {
-        implementation.editableCapacity(numberDigitsCount: numberDigitsCount)
+    @inlinable func capacity(numberDigitsCount: NumberDigitsCount) -> NumberDigitsCount? {
+        implementation.capacity(numberDigitsCount: numberDigitsCount)
     }
 }
 
@@ -121,7 +121,7 @@ public extension Precision where Value: PreciseFloatingPoint {
         
     @inlinable func showcaseStyle() -> NumberFormatStyleConfiguration.Precision
         
-    @inlinable func editableCapacity(numberDigitsCount: NumberDigitsCount) -> NumberDigitsCount?
+    @inlinable func capacity(numberDigitsCount: NumberDigitsCount) -> NumberDigitsCount?
 }
 
 // MARK: - Implementations: Total
@@ -140,13 +140,15 @@ public extension Precision where Value: PreciseFloatingPoint {
         precondition(self.total.upperBound <= Value.maxLosslessTotalDigits, "Precision: max \(Value.maxLosslessTotalDigits).")
     }
     
-    // MARK: Utilities
+    // MARK: Showcase: Styles
     
     @inlinable func showcaseStyle() -> NumberFormatStyleConfiguration.Precision {
         .significantDigits(total)
     }
     
-    @inlinable func editableCapacity(numberDigitsCount: NumberDigitsCount) -> NumberDigitsCount? {
+    // MARK: Validation: Capacity
+    
+    @inlinable func capacity(numberDigitsCount: NumberDigitsCount) -> NumberDigitsCount? {
         let capacity = total.upperBound - numberDigitsCount.total
         guard capacity >= 0 else { return nil }
 
@@ -181,13 +183,15 @@ public extension Precision where Value: PreciseFloatingPoint {
         self.init(integer: Defaults.defaultIntegerLowerBound..., fraction: fraction)
     }
     
-    // MARK: Utilities
-    
+    // MARK: Showcase: Styles
+
     @inlinable func showcaseStyle() -> NumberFormatStyleConfiguration.Precision {
         .integerAndFractionLength(integerLimits: integer, fractionLimits: fraction)
     }
     
-    @inlinable func editableCapacity(numberDigitsCount: NumberDigitsCount) -> NumberDigitsCount? {
+    // MARK: Validation: Capacity
+    
+    @inlinable func capacity(numberDigitsCount: NumberDigitsCount) -> NumberDigitsCount? {
         let totalCapacity = Value.maxLosslessTotalDigits - numberDigitsCount.total
         guard totalCapacity >= 0 else { return nil }
         
