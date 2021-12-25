@@ -9,7 +9,6 @@ import struct DiffableTextViews.Snapshot
 
 // MARK: - Input
 
-#warning("Remove.")
 @usableFromInline struct Input {
     
     // MARK: Properties
@@ -28,30 +27,5 @@ import struct DiffableTextViews.Snapshot
     
     @inlinable mutating func consumeToggleSignInput() -> ToggleSignInput? {
         .init(consumable: &content, parser: parser.sign)
-    }
-}
-
-// MARK: - ToggleSignInput
-
-#warning("Make standalone.")
-@usableFromInline struct ToggleSignInput {
-
-    // MARK: Properties
-    
-    @usableFromInline private(set) var sign: Sign
-    
-    // MARK: Initializers
-    
-    @inlinable init?(consumable: inout Snapshot, parser: SignParser) {
-        guard let sign = parser.parse(consumable.characters), !sign.isEmpty else { return nil }
-        
-        self.sign = sign
-        consumable.removeAll()
-    }
-    
-    // MARK: Utilities
-            
-    @inlinable func process(_ number: inout Number) {
-        number.toggle(sign: sign)
     }
 }
