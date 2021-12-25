@@ -5,12 +5,10 @@
 //  Created by Oscar Byström Ericsson on 2021-12-20.
 //
 
-import protocol Utilities.Container
-
 // MARK: - Text
 
 /// A system representation of the conforming object.
-@usableFromInline protocol Text: Container {
+@usableFromInline protocol Text {
     
     // MARK: Requirements
     
@@ -19,6 +17,9 @@ import protocol Utilities.Container
     
     /// A sytem representation of the instance.
     @inlinable var characters: String { get }
+    
+    /// A Boolean value indicating whether the instance  is empty.
+    @inlinable var isEmpty: Bool { get }
 }
 
 // MARK: - Text: Details

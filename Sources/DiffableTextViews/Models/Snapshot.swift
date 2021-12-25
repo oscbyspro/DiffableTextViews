@@ -107,16 +107,12 @@ public struct Snapshot: BidirectionalCollection, RangeReplaceableCollection, Exp
     
     // MARK: Transformations: Attributes
     
-    @inlinable public mutating func transform(attributes index: Index, using transformation: (Attribute) -> Attribute) {
-        _attributes[index.attribute] = transformation(_attributes[index.attribute])
-    }
-    
     @inlinable public mutating func transform(attributes index: Index, using transformation: (inout Attribute) -> Void) {
         transformation(&_attributes[index.attribute])
     }
     
-    @inlinable public mutating func transform<R: RangeExpression>(attributes expression: R, using transformation: (Attribute) -> Attribute) where R.Bound == Index {
-        let indices = interpret(expression, map: \.attribute); _attributes.replaceSubrange(indices, with: _attributes[indices].map(transformation))
+    @inlinable public mutating func transform(attributes indices: Indices, using transformation: (inout Attribute) -> Void) {
+        for index in indices { transformation(&_attributes[index.attribute]) }
     }
         
     @inlinable public mutating func transform<R: RangeExpression>(attributes expression: R, using transformation: (inout Attribute) -> Void) where R.Bound == Index {

@@ -5,9 +5,9 @@
 //  Created by Oscar Byström Ericsson on 2021-10-19.
 //
 
+import Utilities
 import DiffableTextViews
 import struct Foundation.Locale
-import protocol Utilities.Transformable
 
 // MARK: - NumericTextStyle
 
@@ -253,7 +253,6 @@ public struct NumericTextStyle<Value: NumericTextValue>: DiffableTextStyle, Tran
         
         // --------------------------------- //
         
-        let start = snapshot.reversed().prefix(while: predicate).endIndex.base
-        snapshot.transform(attributes: start..., using: transformation)
+        snapshot.transform(attributes: snapshot.suffix(while: predicate).indices, using: transformation)
     }
 }
