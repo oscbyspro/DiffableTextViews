@@ -37,7 +37,3 @@ struct NumericTextStyleExample: View {
 ### PatternTextStyle
 
 👷‍♂️🛠🚧🚧🚧🧱🏗🧱🚧🚧🚧⏳
-
-# Usage
-
-
