@@ -5,6 +5,8 @@
 //  Created by Oscar Byström Ericsson on 2021-10-02.
 //
 
+import Utilities
+
 // MARK: - DiffableTextStyle
 
 public protocol DiffableTextStyle {
@@ -48,7 +50,7 @@ extension DiffableTextStyle {
     // MARK: Interpret
 
     @inlinable public func merge(snapshot: Snapshot, with content: Snapshot, in range: Range<Snapshot.Index>) -> Snapshot? {
-        snapshot.transforming({ $0.replaceSubrange(range, with: content) })
+        snapshot.replacing(range, with: content)
     }
 
     // MARK: Process

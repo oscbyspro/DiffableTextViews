@@ -97,12 +97,8 @@ public struct NumericTextStyle<Value: NumericTextValue>: DiffableTextStyle, Tran
         let toggleSignCommand = input.consumeToggleSignCommand()
         
         // --------------------------------- //
-        
-        let next = snapshot.transforming({ $0.replaceSubrange(range, with: input.content) })
-        
-        // --------------------------------- //
 
-        guard var number = number(snapshot: next) else { return nil }
+        guard var number = number(snapshot: snapshot.replacing(range, with: input.content)) else { return nil }
         toggleSignCommand?.process(&number)
         
         // --------------------------------- //

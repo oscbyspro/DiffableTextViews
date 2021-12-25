@@ -13,6 +13,8 @@ This package contains views that use snapshots and attributes to process a user'
 
 ### NumericTextStyle
 
+👷‍♂️🛠🚧🚧🧱🏗🧱🚧🚧⏳
+
 ```swift
 import SwiftUI
 import DiffableTextViews
@@ -37,3 +39,20 @@ struct NumericTextStyleExample: View {
 ### PatternTextStyle
 
 👷‍♂️🛠🚧🚧🧱🏗🧱🚧🚧⏳
+
+```swift
+import SwiftUI
+import DiffableTextViews
+import PatternTextStyles
+
+struct PatternTextStyleExample: View {
+    @State var phoneNumber: String = ""
+
+    var body: some View {
+        DiffableTextField($phoneNumber) {
+            .pattern("+## (###) ###-##-##", placeholder: "#")
+        }
+        .setup({ textField in textField.keyboard(.decimalPad) })
+    }
+}
+```

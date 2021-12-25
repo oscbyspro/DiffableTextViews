@@ -27,3 +27,14 @@ public extension BidirectionalCollection {
         return self[start()...]
     }
 }
+
+// MARK: - RangeReplaceableCollection
+
+public extension RangeReplaceableCollection {
+    
+    // MARK: Transformations
+    
+    @inlinable func replacing<C: Collection>(_ range: Range<Index>, with elements: C) -> Self where C.Element == Element {
+        var result = self; result.replaceSubrange(range, with: elements); return result
+    }
+}
