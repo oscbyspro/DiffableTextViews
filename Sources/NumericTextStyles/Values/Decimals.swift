@@ -20,7 +20,7 @@ extension Decimal {
     
     // MARK: Value
     
-    public static let numberTypeOptions: NumberTypeOptions = .none
+    public static let options: NumberTypeOptions = .none
     
     // MARK: Precise
  

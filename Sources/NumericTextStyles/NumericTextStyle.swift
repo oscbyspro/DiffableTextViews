@@ -36,7 +36,7 @@ public struct NumericTextStyle<Value: NumericTextValue>: DiffableTextStyle, Tran
     // MARK: Getters
     
     @inlinable var parser: NumberParser {
-        NumberParser.standard.options(Value.numberTypeOptions).locale(locale)
+        NumberParser.standard.options(Value.options).locale(locale)
     }
         
     @inlinable var zero: Character {
