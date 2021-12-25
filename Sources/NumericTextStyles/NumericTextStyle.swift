@@ -136,7 +136,7 @@ public struct NumericTextStyle<Value: NumericTextValue>: DiffableTextStyle, Tran
 
     @inlinable public func merge(snapshot: Snapshot, with content: Snapshot, in range: Range<Snapshot.Index>) -> Snapshot? {
         var input = Input(content, parser: parser)
-        let toggleSignInput = input.consumeToggleSignInput()
+        let toggleSignCommand = input.consumeToggleSignCommand()
         
         // --------------------------------- //
         
@@ -146,7 +146,7 @@ public struct NumericTextStyle<Value: NumericTextValue>: DiffableTextStyle, Tran
         // --------------------------------- //
 
         guard var number = number(snapshot: next) else { return nil }
-        toggleSignInput?.process(&number)
+        toggleSignCommand?.process(&number)
         
         // --------------------------------- //
 

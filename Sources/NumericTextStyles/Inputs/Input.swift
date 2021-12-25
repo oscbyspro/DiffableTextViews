@@ -25,7 +25,7 @@ import struct DiffableTextViews.Snapshot
     
     // MARK: Utilities
     
-    @inlinable mutating func consumeToggleSignInput() -> ToggleSignInput? {
+    @inlinable mutating func consumeToggleSignCommand() -> ToggleSignCommand? {
         .init(consumable: &content, parser: parser.sign)
     }
 }

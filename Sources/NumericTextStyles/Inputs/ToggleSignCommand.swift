@@ -1,5 +1,5 @@
 //
-//  ToggleSignInput.swift
+//  ToggleSignCommand.swift
 //  
 //
 //  Created by Oscar Byström Ericsson on 2021-12-25.
@@ -7,9 +7,9 @@
 
 import struct DiffableTextViews.Snapshot
 
-// MARK: - ToggleSignInput
+// MARK: - ToggleSignCommand
 
-@usableFromInline struct ToggleSignInput {
+@usableFromInline struct ToggleSignCommand {
 
     // MARK: Properties
     
