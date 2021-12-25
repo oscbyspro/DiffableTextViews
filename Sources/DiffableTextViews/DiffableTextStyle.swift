@@ -54,10 +54,10 @@ extension DiffableTextStyle {
     // MARK: Process
 
     @inlinable public func process(value: inout Value) {
-        // ¯\_(ツ)_/¯
+        // default implementation does nothing
     }
 
     @inlinable public func process(snapshot: inout Snapshot) {
-        // ¯\_(ツ)_/¯
+        // default implementation does nothing
     }
 }

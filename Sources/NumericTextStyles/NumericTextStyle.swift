@@ -56,10 +56,10 @@ public struct NumericTextStyle<Value: NumericTextValue>: DiffableTextStyle, Tran
         transforming({ $0.suffix = newValue ?? "" })
     }
     
-    // MARK: Numbers
-    
-    @inlinable func number(snapshot: Snapshot) -> Number? {
-        format.parser.parse(snapshot.lazy.compactMap({ $0.nonformatting ? $0.character : nil }))
+    // MARK: Value: Parse
+
+    @inlinable public func parse(snapshot: Snapshot) -> Value? {
+        number(snapshot: snapshot).flatMap(value)
     }
     
     @inlinable func value(number: Number) -> Value? {
@@ -71,11 +71,11 @@ public struct NumericTextStyle<Value: NumericTextValue>: DiffableTextStyle, Tran
     @inlinable public func process(value: inout Value) {
         format.bounds.clamp(&value)
     }
+    
+    // MARK: Snapshot: Number
         
-    // MARK: Value: Parse
-
-    @inlinable public func parse(snapshot: Snapshot) -> Value? {
-        number(snapshot: snapshot).flatMap(value)
+    @inlinable func number(snapshot: Snapshot) -> Number? {
+        format.parser.parse(snapshot.lazy.compactMap({ $0.nonformatting ? $0.character : nil }))
     }
     
     // MARK: Snapshot: Showcase
