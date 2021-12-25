@@ -13,18 +13,18 @@ import struct Foundation.Locale
 
     // MARK: Properties
     
-    @usableFromInline let separators: [String]
+    @usableFromInline let separators: Set<String>
     
     // MARK: Initializers
     
-    @inlinable init(separators: [String]) {
+    @inlinable init(separators: Set<String>) {
         self.separators = separators
     }
     
     // MARK: Transformations
     
-    @inlinable func locale(_ locale: Locale) -> SeparatorParser {
-        .init(separators: separators + [locale.decimalSeparator].compactMap({ $0 }))
+    @inlinable func locale(_ locale: Locale) -> Self {
+        .init(separators: separators.union([locale.decimalSeparator ?? Separator.dot]))
     }
     
     // MARK: Parse
