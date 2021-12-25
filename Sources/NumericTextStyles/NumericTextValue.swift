@@ -12,7 +12,12 @@ import enum Foundation.NumberFormatStyleConfiguration
 
 // MARK: - NumberTextValue
 
-public protocol NumericTextValue: Parsable, Formattable, Boundable, Precise { }
+public protocol NumericTextValue: Formattable, Boundable, Precise {
+    
+    // MARK: Requirements
+    
+    @inlinable static var numberTypeOptions: NumberTypeOptions { get }
+}
 
 // MARK: - NumericTextInteger
 
@@ -55,8 +60,8 @@ extension NumericTextInteger {
     
     // MARK: Implementation
     
-    @inlinable public static var parser: NumberParser {
-        .standard.options(.integer)
+    @inlinable public static var numberTypeOptions: NumberTypeOptions {
+        .integer
     }
 }
 
@@ -67,8 +72,8 @@ extension NumericTextInteger {
     
     // MARK: Implementation
     
-    @inlinable public static var parser: NumberParser {
-        .standard.options(.unsignedInteger)
+    @inlinable public static var numberTypeOptions: NumberTypeOptions {
+        .unsignedInteger
     }
 }
 
@@ -90,6 +95,12 @@ extension NumericTextInteger {
 
 extension NumericTextFloat {
     
+    // MARK: Value
+    
+    @inlinable public static var numberTypeOptions: NumberTypeOptions {
+        .none
+    }
+    
     // MARK: Boundable
     
     @inlinable public static var minLosslessValue: Self {
@@ -104,11 +115,5 @@ extension NumericTextFloat {
     
     @inlinable public static func style(locale: Locale, precision: NumberFormatStyleConfiguration.Precision, separator: NumberFormatStyleConfiguration.DecimalSeparatorDisplayStrategy) -> FloatingPointFormatStyle<Self> {
         .init(locale: locale).precision(precision).decimalSeparator(strategy: separator)
-    }
-    
-    // MARK: Parsable
-    
-    @inlinable public static var parser: NumberParser {
-        .standard
     }
 }

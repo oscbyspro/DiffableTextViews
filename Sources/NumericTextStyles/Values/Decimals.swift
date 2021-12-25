@@ -17,6 +17,12 @@ import enum Foundation.NumberFormatStyleConfiguration
 ///
 extension Decimal: NumericTextValue, PreciseFloatingPoint { }; extension Decimal {
     
+    // MARK: Value
+    
+    @inlinable public static var numberTypeOptions: NumberTypeOptions {
+        .none
+    }
+    
     // MARK: Precise
  
     public static let maxLosslessTotalDigits: Int = 38
@@ -37,11 +43,5 @@ extension Decimal: NumericTextValue, PreciseFloatingPoint { }; extension Decimal
     
     @inlinable public static func style(locale: Locale, precision: NumberFormatStyleConfiguration.Precision, separator: NumberFormatStyleConfiguration.DecimalSeparatorDisplayStrategy) -> FormatStyle {
         .init(locale: locale).precision(precision).decimalSeparator(strategy: separator)
-    }
-    
-    // MARK: Parsable
-    
-    @inlinable public static var parser: NumberParser {
-        .standard
     }
 }

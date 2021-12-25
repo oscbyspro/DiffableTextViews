@@ -10,7 +10,7 @@ import protocol Utilities.Transformable
 
 // MARK: - NumberParser
 
-public struct NumberParser: Parser, Transformable {
+@usableFromInline struct NumberParser: Parser, Transformable {
     
     // MARK: Properties
     

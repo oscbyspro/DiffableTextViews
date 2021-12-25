@@ -7,24 +7,25 @@
 
 // MARK: - NumberTypeOptions
 
-@usableFromInline struct NumberTypeOptions: OptionSet {
+public struct NumberTypeOptions: OptionSet {
     
     // MARK: Properties
     
-    @usableFromInline var rawValue: UInt8
+    public var rawValue: UInt8
     
     // MARK: Initializers
     
-    @inlinable init(rawValue: UInt8) {
+    @inlinable public init(rawValue: UInt8) {
         self.rawValue = rawValue
     }
     
     // MARK: Instances: Singular
     
-    @usableFromInline static let unsigned = Self(rawValue: 1 << 0)
-    @usableFromInline static let integer  = Self(rawValue: 1 << 1)
+    public static let unsigned = Self(rawValue: 1 << 0)
+    public static let integer  = Self(rawValue: 1 << 1)
     
     // MARK: Instances: Composites
     
-    @usableFromInline static let unsignedInteger = Self([.unsigned, .integer])
+    public static let none = Self()
+    public static let unsignedInteger = Self([.unsigned, .integer])
 }
