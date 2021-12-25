@@ -23,13 +23,15 @@ public struct NumericTextStyle<Value: NumericTextValue>: DiffableTextStyle, Tran
     // MARK: Properties
     
     @usableFromInline var format: Format
-    @usableFromInline var prefix: String = ""
-    @usableFromInline var suffix: String = ""
+    @usableFromInline var prefix: String
+    @usableFromInline var suffix: String
     
     // MARK: Initializers
     
     @inlinable public init(locale: Locale = .autoupdatingCurrent) {
-        self.format = .init(locale: locale)
+        self.format = Format(locale: locale)
+        self.prefix = ""
+        self.suffix = ""
     }
     
     // MARK: Transformations
