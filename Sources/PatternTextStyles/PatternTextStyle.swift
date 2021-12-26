@@ -10,14 +10,14 @@ import Utilities
 
 // MARK: - PatternTextStyle
 
-#warning("WIP")
 public struct PatternTextStyle<Pattern, Value>: DiffableTextStyle, Transformable where Pattern: Collection, Pattern.Element == Character, Value: RangeReplaceableCollection, Value: Equatable, Value.Element == Character {
     
     // MARK: Properties
     
-    @usableFromInline var pattern: Pattern
-    @usableFromInline var placeholder: Character
+    @usableFromInline let pattern: Pattern
+    @usableFromInline let placeholder: Character
     @usableFromInline var visible: Bool
+    @usableFromInline var filter: (Character) -> Bool
     
     // MARK: Initializers
     
@@ -25,6 +25,15 @@ public struct PatternTextStyle<Pattern, Value>: DiffableTextStyle, Transformable
         self.pattern = pattern
         self.placeholder = placeholder
         self.visible = true
+        self.filter = { _ in true }
+    }
+    
+    // MARK: Validation
+    
+    @inlinable func capacity() -> Int {
+        var count = 0
+        for element in pattern where element == placeholder { count += 1 }
+        return count
     }
     
     // MARK: Transformations
@@ -33,26 +42,35 @@ public struct PatternTextStyle<Pattern, Value>: DiffableTextStyle, Transformable
         transforming({ $0.visible = false })
     }
     
-    // MARK: Value: Parse
-    
-    @inlinable public func parse(snapshot: Snapshot) -> Value? {
-        snapshot.reduce(into: Value()) { result, symbol in
-            if symbol.nonformatting {
-                result.append(symbol.character)
-            }
-        }
+    @inlinable public func filter(_ validation: @escaping (Character) -> Bool) -> Self {
+        transforming({ $0.filter = validation })
     }
     
-    // MARK: Snapshot: Merge
+    // MARK: Parse
     
-    #warning("Don't merge if proposal exceeds maximum capacity, otherwise it right-shifts (bad).")
+    @inlinable public func parse(snapshot: Snapshot) -> Value? {
+        var value = Value()
+        var count = 0
+        
+        for symbol in snapshot where symbol.nonformatting {
+            guard filter(symbol.character) else { return nil }
+            value.append(symbol.character)
+            count += 1
+        }
+        
+        guard count <= capacity() else { return nil }
+        return value
+    }
+    
+    // MARK: Merge
+    
     @inlinable public func merge(snapshot: Snapshot, with content: Snapshot, in range: Range<Snapshot.Index>) -> Snapshot? {
         let proposal = snapshot.replacing(range, with: content)
         guard let value = parse(snapshot: proposal) else { return nil }
         return self.snapshot(editable: value)
     }
     
-    // MARK: Snapshot: Editable
+    // MARK: Editable
     
     @inlinable public func snapshot(editable value: Value) -> Snapshot {
         var snapshot = Snapshot()

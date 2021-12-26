@@ -28,8 +28,8 @@ struct NumericTextStyleExample: View {
     var body: some View {
         DiffableTextField($amount) {
             .numeric.locale(locale).suffix(locale.currencyCode)
-            .bounds(.values(in: 0...1_000_000 as ClosedRange<Decimal>))
             .precision(.digits(integer: 1..., fraction: 2...2))
+            .bounds(.values(in: 0...1_000_000 as ClosedRange<Decimal>))
         }
         .setup { 
             textField in 
@@ -55,6 +55,7 @@ struct PatternTextStyleExample: View {
     var body: some View {
         DiffableTextField($phoneNumber) {
             .pattern("+## (###) ###-##-##", placeholder: "#")
+            .filter({ character in character.isASCII && character.isNumber })
         }
         .setup { 
             textField in
