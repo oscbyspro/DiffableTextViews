@@ -38,13 +38,14 @@ extension UIFontDescriptor {
     
     // MARK: Transformations: Helpers
     
+    /// https://stackoverflow.com/questions/46642335/how-do-i-get-a-monospace-font-that-respects-acessibility-settings
     @inlinable func monospaced(template: UIFontDescriptor) -> UIFontDescriptor {
-        // https://stackoverflow.com/questions/46642335/how-do-i-get-a-monospace-font-that-respects-acessibility-settings
         var attributes = fontAttributes
         attributes.removeValue(forKey: .family)
         attributes.removeValue(forKey: .name)
         attributes.removeValue(forKey: .nsctFontUIUsage)
-        return template.addingAttributes(attributes).withSymbolicTraits(symbolicTraits) ?? template
+        let descriptor = template.addingAttributes(attributes)
+        return template.withSymbolicTraits(symbolicTraits) ?? descriptor
     }
 }
 
