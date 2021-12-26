@@ -60,7 +60,7 @@ public struct OBEFont {
     // MARK: Instances: Helpers
     
     @inlinable static func preferred(style: UIFont.TextStyle) -> Self {
-        .init(UIFont.preferredFont(forTextStyle: style))
+        .init(.preferredFont(forTextStyle: style))
     }
 }
 

@@ -15,9 +15,7 @@ extension UIFontDescriptor {
 
     // MARK: Instances
     
-    @usableFromInline static let standard: UIFontDescriptor = {
-        UIFontDescriptor.preferredFontDescriptor(withTextStyle: .body)
-    }()
+    @usableFromInline static let standard: UIFontDescriptor = .preferredFontDescriptor(withTextStyle: .body)
 }
 
 // MARK: - UIFontDescriptor: Monospace

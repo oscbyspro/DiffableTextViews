@@ -25,13 +25,8 @@ public struct Monospace {
     
     // MARK: Instances
     
-    public static let text: Self = {
-        .init(UIFont.monospacedSystemFont(ofSize: .zero, weight: .regular))
-    }()
-    
-    public static let digits: Self = {
-        .init(UIFont.monospacedDigitSystemFont(ofSize: .zero, weight: .regular))
-    }()
+    public static let text   = Self(.monospacedSystemFont(ofSize:      .zero, weight: .regular))
+    public static let digits = Self(.monospacedDigitSystemFont(ofSize: .zero, weight: .regular))
 }
 
 #endif
