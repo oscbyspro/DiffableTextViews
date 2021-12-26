@@ -8,7 +8,6 @@
 #if canImport(UIKit)
 
 import UIKit
-import SwiftUI
 
 // MARK: - OBEFont
 
@@ -28,11 +27,7 @@ public struct OBEFont {
         self.descriptor = font.fontDescriptor
     }
     
-    // MARK: Internal
-    
-    @inlinable func makeFont() -> Font {
-        .init(makeUIFont() as CTFont)
-    }
+    // MARK: Conversions
     
     @inlinable func makeUIFont() -> UIFont {
         .init(descriptor: descriptor, size: .zero)
