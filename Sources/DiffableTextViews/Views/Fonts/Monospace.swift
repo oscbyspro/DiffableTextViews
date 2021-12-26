@@ -9,54 +9,29 @@
 
 import UIKit
 
-// MARK: - Monospace
+// MARK: Monospace
 
-public enum Monospace {
+public struct Monospace {
+    
+    // MARK: Properties
+    
+    @usableFromInline let template: UIFontDescriptor
+    
+    // MARK: Initializers
+    
+    @inlinable init(_ base: UIFont) {
+        self.template = base.fontDescriptor
+    }
     
     // MARK: Instances
     
-    case text
-    case digits
+    public static let text: Self = {
+        .init(UIFont.monospacedSystemFont(ofSize: .zero, weight: .regular))
+    }()
     
-    // MARK: Utilities
-    
-    @inlinable func configuration() -> Configuration {
-        switch self {
-        case .text:   return .text
-        case .digits: return .digits
-        }
-    }
-
-    // MARK: Components
-    
-    public struct Configuration {
-        
-        // MARK: Properties
-        
-        @usableFromInline let type: Int
-        @usableFromInline let selector: Int
-        
-        // MARK: Initializers
-        
-        @inlinable init(type: Int, selector: Int) {
-            self.type = type
-            self.selector = selector
-        }
-        
-        // MARK: Utilities
-        
-        @inlinable func attributes() -> [UIFontDescriptor.AttributeName: Any] {
-            [UIFontDescriptor.AttributeName.featureSettings: [[
-                UIFontDescriptor.FeatureKey.type: type,
-                UIFontDescriptor.FeatureKey.selector: selector
-            ]]]
-        }
-        
-        // MARK: Instances
-        
-        public static let text   = Self(type: kTextSpacingType,   selector: kMonospacedTextSelector)
-        public static let digits = Self(type: kNumberSpacingType, selector: kMonospacedNumbersSelector)
-    }
+    public static let digits: Self = {
+        .init(UIFont.monospacedDigitSystemFont(ofSize: .zero, weight: .regular))
+    }()
 }
 
 #endif

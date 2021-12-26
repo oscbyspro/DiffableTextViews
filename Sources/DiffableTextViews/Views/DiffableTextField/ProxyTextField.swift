@@ -137,14 +137,9 @@ public extension ProxyTextField {
     @inlinable func font(_ font: UIFont) {
         self.font = font
     }
-    
-    @inlinable func font(_ font: SystemFontValues) {
-        self.font = font.make(template: self.font)
-    }
-    
-    /// - Note: Only has an effect if the current font supports monospacing of the chosen type.
-    @inlinable func monospaced(_ monospace: Monospace = .text) {
-        font = font.monospaced(monospace)
+        
+    @inlinable func font(_ font: OBEFont) {
+        self.font = font.makeUIFont()
     }
     
     // MARK: Keyboard

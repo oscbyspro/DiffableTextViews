@@ -34,7 +34,7 @@ struct NumericTextStyleExample: View {
         .setup { 
             textField in 
             textField.keyboard(.decimalPad) 
-            textField.font(.system.monospaced())
+            textField.font(.body.monospaced())
         }    
     }
 }
@@ -59,7 +59,7 @@ struct PatternTextStyleExample: View {
         .setup { 
             textField in
             textField.keyboard(.phonePad)
-            textField.font(.system.monospaced())
+            textField.font(.body.monospaced())
         }
     }
 }
