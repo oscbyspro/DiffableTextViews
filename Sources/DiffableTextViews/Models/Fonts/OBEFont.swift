@@ -12,8 +12,6 @@ import SwiftUI
 
 // MARK: - OBEFont
 
-#warning("WIP")
-#warning("Add: Weight.")
 public struct OBEFont {
     
     // MARK: Properties
@@ -32,6 +30,10 @@ public struct OBEFont {
     
     // MARK: Internal
     
+    @inlinable func makeFont() -> Font {
+        .init(makeUIFont() as CTFont)
+    }
+    
     @inlinable func makeUIFont() -> UIFont {
         .init(descriptor: descriptor, size: .zero)
     }
@@ -41,7 +43,7 @@ public struct OBEFont {
     @inlinable public func size(_ size: CGFloat) -> Self {
         .init(descriptor.withSize(size))
     }
-        
+
     @inlinable public func monospaced(_ monospace: Monospace = .text) -> Self {
         .init(descriptor.monospaced(monospace))
     }

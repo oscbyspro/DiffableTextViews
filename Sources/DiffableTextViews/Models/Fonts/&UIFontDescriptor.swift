@@ -12,13 +12,7 @@ import UIKit
 // MARK: - UIFontDescriptor
 
 extension UIFontDescriptor {
-    
-    // MARK: Getters
-    
-    @inlinable var traits: [UIFontDescriptor.TraitKey: Any] {
-        object(forKey: .traits) as? [UIFontDescriptor.TraitKey: Any] ?? [:]
-    }
-    
+
     // MARK: Instances
     
     @usableFromInline static let standard: UIFontDescriptor = {
