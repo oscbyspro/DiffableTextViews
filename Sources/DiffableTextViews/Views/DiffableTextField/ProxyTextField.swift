@@ -14,8 +14,13 @@ import UIKit
 /// An affordance layer wrapping a UITextField object.
 /// Makes it easier to enforce UITextField's UTF-16 layout, as well as which properties and methods may be called.
 ///
+/// ---------------------------------
+///
 /// - UITextField.text is never nil.
 /// - UITextField.selectedTextRange is never nil.
+/// - UITextField.font is never nil.
+///
+/// ---------------------------------
 ///
 public final class ProxyTextField {
     @usableFromInline typealias Wrapped = BasicTextField
@@ -33,6 +38,7 @@ public final class ProxyTextField {
     
     // MARK: Getters
     
+    /// - Complexity: O(1).
     @inlinable var intent: Direction? {
         wrapped.intent
     }
@@ -61,9 +67,8 @@ public final class ProxyTextField {
         wrapped.selectedTextRange = positions(in: offsets)
     }
     
-    // MARK: Descriptions
+    // MARK: State
     
-    /// - Complexity: O(1).
     @inlinable var edits: Bool {
         wrapped.isEditing
     }
@@ -93,55 +98,77 @@ public final class ProxyTextField {
     }
 }
 
-// MARK: - ProxyTextField: Public
+// MARK: - ProxyTextField: Accessors
+
+extension ProxyTextField {
+    
+    // MARK: Font
+    
+    @inlinable var font: UIFont {
+        get { wrapped.font! }
+        set { wrapped.font = newValue }
+    }
+    
+}
+
+// MARK: - ProxyTextField: Actions
 
 public extension ProxyTextField {
     
-    // MARK: Actions
+    // MARK: Resign
     
     @inlinable func resign() {
         wrapped.resignFirstResponder()
     }
+}
+
+// MARK: - ProxyTextField: Transformations
+
+public extension ProxyTextField {
     
-    // MARK: Transformations
+    // MARK: Autocorrect
     
     @inlinable func autocorrect(_ autocorrect: UITextAutocorrectionType) {
         wrapped.autocorrectionType = autocorrect
     }
-        
+    
+    // MARK: Font
+    
     @inlinable func font(_ font: UIFont) {
-        wrapped.font = font
+        self.font = font
     }
     
-    @inlinable func monospaced(_ font: MonospacedFont = .normal, weight: UIFont.Weight = .regular) {
-        let size = wrapped.font!.pointSize
-        
-        switch font {
-        case .normal: wrapped.font = UIFont.monospacedSystemFont(ofSize: size, weight: weight)
-        case .digits: wrapped.font = UIFont.monospacedDigitSystemFont(ofSize: size, weight: weight)
-        }
+    @inlinable func font(system font: SystemFontValues) {
+        self.font = font.make(template: self.font)
     }
+    
+    /// - Note: Only has a visible effect if the font supports monospacing of the chosen type.
+    @inlinable func monospaced(_ monospacing: Monospacing = .text) {
+        font = font.monospaced(using: monospacing)
+    }
+    
+    // MARK: Keyboard
     
     @inlinable func keyboard(_ keyboard: UIKeyboardType) {
         wrapped.keyboardType = keyboard
     }
     
+    // MARK: Key
+    
     @inlinable func key(return: UIReturnKeyType) {
         wrapped.returnKeyType = `return`
     }
+    
+    // MARK: Secure
         
     @inlinable func secure(entry: Bool) {
         wrapped.isSecureTextEntry = entry
     }
+    
+    // MARK: Tint
         
     @inlinable func tint(color: UIColor) {
         wrapped.tintColor = color
-    }
-    
-    // MARK: Components
-    
-    enum MonospacedFont {
-        case normal, digits
     }
 }
 
