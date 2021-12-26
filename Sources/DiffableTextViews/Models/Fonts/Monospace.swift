@@ -25,7 +25,7 @@ public struct Monospace {
     
     // MARK: Instances
     
-    public static let text   = Self(.monospacedSystemFont(ofSize:      .zero, weight: .regular))
+    public static let text   = Self(     .monospacedSystemFont(ofSize: .zero, weight: .regular))
     public static let digits = Self(.monospacedDigitSystemFont(ofSize: .zero, weight: .regular))
 }
 
