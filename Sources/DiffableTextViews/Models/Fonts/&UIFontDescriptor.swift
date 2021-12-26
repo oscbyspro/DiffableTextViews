@@ -45,7 +45,7 @@ extension UIFontDescriptor {
         attributes.removeValue(forKey: .name)
         attributes.removeValue(forKey: .nsctFontUIUsage)
         let descriptor = template.addingAttributes(attributes)
-        return template.withSymbolicTraits(symbolicTraits) ?? descriptor
+        return descriptor.withSymbolicTraits(symbolicTraits) ?? descriptor
     }
 }
 
