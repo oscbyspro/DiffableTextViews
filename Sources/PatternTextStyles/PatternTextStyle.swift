@@ -16,16 +16,16 @@ public struct PatternTextStyle<Pattern, Value>: DiffableTextStyle, Transformable
     
     @usableFromInline let pattern: Pattern
     @usableFromInline let placeholder: Character
-    @usableFromInline var visible: Bool
     @usableFromInline var filter: (Character) -> Bool
+    @usableFromInline var visible: Bool
     
     // MARK: Initializers
     
     @inlinable public init(pattern: Pattern, placeholder: Character) {
         self.pattern = pattern
         self.placeholder = placeholder
-        self.visible = true
         self.filter = { _ in true }
+        self.visible = true
     }
     
     // MARK: Validation
@@ -42,8 +42,8 @@ public struct PatternTextStyle<Pattern, Value>: DiffableTextStyle, Transformable
         transforming({ $0.visible = false })
     }
     
-    @inlinable public func filter(_ validation: @escaping (Character) -> Bool) -> Self {
-        transforming({ $0.filter = validation })
+    @inlinable public func filter(_ filter: @escaping (Character) -> Bool) -> Self {
+        transforming({ $0.filter = filter })
     }
     
     // MARK: Parse
