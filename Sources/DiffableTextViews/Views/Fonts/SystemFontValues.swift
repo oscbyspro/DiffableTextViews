@@ -22,20 +22,20 @@ public struct SystemFontValues: Transformable {
     
     @usableFromInline var size: CGFloat?
     @usableFromInline var weight: UIFont.Weight?
-    @usableFromInline var make: (CGFloat, UIFont.Weight) -> UIFont
+    @usableFromInline var builder: (CGFloat, UIFont.Weight) -> UIFont
     
     // MARK: Initializers
     
-    @inlinable init(_ make: @escaping (CGFloat, UIFont.Weight) -> UIFont) {
+    @inlinable init(_ builder: @escaping (CGFloat, UIFont.Weight) -> UIFont) {
         self.size = nil
         self.weight = nil
-        self.make = make
+        self.builder = builder
     }
     
     // MARK: Transformations
     
-    @inlinable func make(template font: UIFont) -> UIFont {
-        make(size ?? font.pointSize, weight ?? font.weight)
+    @inlinable func make(template: UIFont) -> UIFont {
+        builder(size ?? template.pointSize, weight ?? template.weight)
     }
 }
 
@@ -55,8 +55,8 @@ public extension SystemFontValues {
     
     @inlinable func monospaced(_ monospace: Monospace = .text) -> Self {
         switch monospace {
-        case .text:   return transforming({ $0.make = UIFont.monospacedSystemFont      })
-        case .digits: return transforming({ $0.make = UIFont.monospacedDigitSystemFont })
+        case .text:   return transforming({ $0.builder = UIFont.monospacedSystemFont      })
+        case .digits: return transforming({ $0.builder = UIFont.monospacedDigitSystemFont })
         }
     }
     
