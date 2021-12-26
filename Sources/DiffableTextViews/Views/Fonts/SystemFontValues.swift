@@ -1,5 +1,5 @@
 //
-//  &UIFont.swift
+//  &SystemFontValues.swift
 //  
 //
 //  Created by Oscar Byström Ericsson on 2021-12-26.
@@ -12,26 +12,30 @@ import Utilities
 
 // MARK: - SystemFontValues
 
+/// UIFont configuration object.
+///
+/// - Adopts current size and weight unless specified.
+///
 public struct SystemFontValues: Transformable {
     
     // MARK: Properties
     
     @usableFromInline var size: CGFloat?
     @usableFromInline var weight: UIFont.Weight?
-    @usableFromInline var instruction: (CGFloat, UIFont.Weight) -> UIFont
+    @usableFromInline var make: (CGFloat, UIFont.Weight) -> UIFont
     
     // MARK: Initializers
     
-    @inlinable init(_ instruction: @escaping (CGFloat, UIFont.Weight) -> UIFont) {
+    @inlinable init(_ make: @escaping (CGFloat, UIFont.Weight) -> UIFont) {
         self.size = nil
         self.weight = nil
-        self.instruction = instruction
+        self.make = make
     }
     
     // MARK: Transformations
     
     @inlinable func make(template font: UIFont) -> UIFont {
-        instruction(size ?? font.pointSize, weight ?? font.weight)
+        make(size ?? font.pointSize, weight ?? font.weight)
     }
 }
 
@@ -49,17 +53,17 @@ public extension SystemFontValues {
         transforming({ $0.weight = weight })
     }
     
-    // MARK: Instances
-    
-    @inlinable static var standard: Self {
-        .init(UIFont.systemFont)
+    @inlinable func monospaced(_ monospace: Monospace = .text) -> Self {
+        switch monospace {
+        case .text:   return transforming({ $0.make = UIFont.monospacedSystemFont      })
+        case .digits: return transforming({ $0.make = UIFont.monospacedDigitSystemFont })
+        }
     }
     
-    @inlinable static func monospaced(_ monospacing: Monospace = .text) -> Self {
-        switch monospacing {
-        case .text:   return .init(UIFont.monospacedSystemFont)
-        case .digits: return .init(UIFont.monospacedDigitSystemFont)
-        }
+    // MARK: Instances
+    
+    @inlinable static var system: Self {
+        .init(UIFont.systemFont)
     }
 }
 

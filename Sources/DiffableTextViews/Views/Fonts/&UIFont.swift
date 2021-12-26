@@ -24,9 +24,19 @@ extension UIFont {
     }
     
     // MARK: Transformations
+        
+    @inlinable func monospaced(_ monospace: Monospace) -> UIFont {
+        adding(attributes: monospace.configuration().attributes())        
+    }
     
-    @inlinable func monospaced(using monospacing: Monospace) -> UIFont {
-        UIFont(descriptor: fontDescriptor.adding(monospacing: monospacing), size: pointSize)
+    // MARK: Transformations: Helpers
+    
+    @inlinable func with(descriptor: UIFontDescriptor) -> UIFont {
+        UIFont(descriptor: descriptor, size: pointSize)
+    }
+    
+    @inlinable func adding(attributes: [UIFontDescriptor.AttributeName: Any]) -> UIFont {
+        with(descriptor: fontDescriptor.addingAttributes(attributes))
     }
 }
 

@@ -18,9 +18,9 @@ public enum Monospace {
     case text
     case digits
     
-    // MARK: Getters
+    // MARK: Utilities
     
-    @inlinable var configuration: Configuration {
+    @inlinable func configuration() -> Configuration {
         switch self {
         case .text:   return .text
         case .digits: return .digits
@@ -41,6 +41,15 @@ public enum Monospace {
         @inlinable init(type: Int, selector: Int) {
             self.type = type
             self.selector = selector
+        }
+        
+        // MARK: Utilities
+        
+        @inlinable func attributes() -> [UIFontDescriptor.AttributeName: Any] {
+            [UIFontDescriptor.AttributeName.featureSettings: [[
+                UIFontDescriptor.FeatureKey.type: type,
+                UIFontDescriptor.FeatureKey.selector: selector
+            ]]]
         }
         
         // MARK: Instances

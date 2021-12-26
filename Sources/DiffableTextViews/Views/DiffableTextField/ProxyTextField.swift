@@ -138,13 +138,13 @@ public extension ProxyTextField {
         self.font = font
     }
     
-    @inlinable func font(system font: SystemFontValues) {
+    @inlinable func font(_ font: SystemFontValues) {
         self.font = font.make(template: self.font)
     }
     
     /// - Note: Only has a visible effect if the font supports monospacing of the chosen type.
-    @inlinable func monospaced(_ monospacing: Monospace = .text) {
-        font = font.monospaced(using: monospacing)
+    @inlinable func monospaced(_ monospace: Monospace = .text) {
+        font = font.monospaced(monospace)
     }
     
     // MARK: Keyboard

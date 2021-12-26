@@ -18,19 +18,6 @@ extension UIFontDescriptor {
     @inlinable var traits: [UIFontDescriptor.TraitKey: Any] {
         object(forKey: .traits) as? [UIFontDescriptor.TraitKey: Any] ?? [:]
     }
-    
-    // MARK: Transformations
-    
-    @inlinable func adding(monospacing: Monospace) -> UIFontDescriptor {
-        let configuration = monospacing.configuration
-        
-        return addingAttributes([
-            UIFontDescriptor.AttributeName.featureSettings: [[
-                UIFontDescriptor.FeatureKey.type: configuration.type,
-                UIFontDescriptor.FeatureKey.selector: configuration.selector
-            ]]
-        ])
-    }
 }
 
 #endif
