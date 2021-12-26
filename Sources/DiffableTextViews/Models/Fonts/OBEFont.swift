@@ -13,6 +13,7 @@ import SwiftUI
 // MARK: - OBEFont
 
 #warning("WIP")
+#warning("Add: Weight.")
 public struct OBEFont {
     
     // MARK: Properties
@@ -47,21 +48,21 @@ public struct OBEFont {
     
     // MARK: Instances
     
-    public static let largeTitle:  Self = .preffered(style: .largeTitle)
-    public static let title1:      Self = .preffered(style: .title1)
-    public static let title2:      Self = .preffered(style: .title2)
-    public static let title3:      Self = .preffered(style: .title3)
-    public static let headline:    Self = .preffered(style: .headline)
-    public static let subheadline: Self = .preffered(style: .subheadline)
-    public static let body:        Self = .preffered(style: .body)
-    public static let callout:     Self = .preffered(style: .callout)
-    public static let footnote:    Self = .preffered(style: .footnote)
-    public static let caption1:    Self = .preffered(style: .caption1)
-    public static let caption2:    Self = .preffered(style: .caption2)
+    public static let largeTitle:  Self = .preferred(style: .largeTitle)
+    public static let title1:      Self = .preferred(style: .title1)
+    public static let title2:      Self = .preferred(style: .title2)
+    public static let title3:      Self = .preferred(style: .title3)
+    public static let headline:    Self = .preferred(style: .headline)
+    public static let subheadline: Self = .preferred(style: .subheadline)
+    public static let body:        Self = .preferred(style: .body)
+    public static let callout:     Self = .preferred(style: .callout)
+    public static let footnote:    Self = .preferred(style: .footnote)
+    public static let caption1:    Self = .preferred(style: .caption1)
+    public static let caption2:    Self = .preferred(style: .caption2)
     
     // MARK: Instances: Helpers
     
-    @inlinable static func preffered(style: UIFont.TextStyle) -> Self {
+    @inlinable static func preferred(style: UIFont.TextStyle) -> Self {
         .init(UIFont.preferredFont(forTextStyle: style))
     }
 }

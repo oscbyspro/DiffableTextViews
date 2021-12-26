@@ -21,7 +21,7 @@ extension UIFontDescriptor {
     
     // MARK: Instances
     
-    @usableFromInline static let body: UIFontDescriptor = {
+    @usableFromInline static let standard: UIFontDescriptor = {
         UIFontDescriptor.preferredFontDescriptor(withTextStyle: .body)
     }()
 }
@@ -46,16 +46,6 @@ extension UIFontDescriptor {
         attributes.removeValue(forKey: .nsctFontUIUsage)
         return template.addingAttributes(attributes).withSymbolicTraits(symbolicTraits) ?? template
     }
-    
-    // MARK: Instances
-    
-    @usableFromInline static let monospacedSystemValue: UIFontDescriptor = {
-        UIFont.monospacedSystemFont(ofSize: body.pointSize, weight: .regular).fontDescriptor
-    }()
-    
-    @usableFromInline static let monospacedDigitSystemValue: UIFontDescriptor = {
-        UIFont.monospacedDigitSystemFont(ofSize: body.pointSize, weight: .regular).fontDescriptor
-    }()
 }
 
 // MARK: - UIFontDescriptor.AttributeName
