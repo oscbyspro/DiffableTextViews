@@ -28,6 +28,7 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable, 
 
     // MARK: Initializers
     
+    #warning("Configuration could be trailing closures.")
     @inlinable public init(_ value: Binding<Value>, style: Style) {
         self.value = value
         self.style = style

@@ -143,7 +143,7 @@ public extension ProxyTextField {
     }
     
     /// - Note: Only has a visible effect if the font supports monospacing of the chosen type.
-    @inlinable func monospaced(_ monospacing: Monospacing = .text) {
+    @inlinable func monospaced(_ monospacing: Monospace = .text) {
         font = font.monospaced(using: monospacing)
     }
     

@@ -31,7 +31,11 @@ struct NumericTextStyleExample: View {
             .bounds(.values(in: 0...1_000_000 as ClosedRange<Decimal>))
             .precision(.digits(integer: 1..., fraction: 2...2))
         }
-        .setup({ textField in textField.keyboard(.decimalPad) })    
+        .setup { 
+            textField in 
+            textField.keyboard(.decimalPad) 
+            textField.font(system: .monospaced())
+        }    
     }
 }
 ```
@@ -52,7 +56,8 @@ struct PatternTextStyleExample: View {
         DiffableTextField($phoneNumber) {
             .pattern("+## (###) ###-##-##", placeholder: "#")
         }
-        .setup { textField in
+        .setup { 
+            textField in
             textField.keyboard(.phonePad)
             textField.font(system: .monospaced())
         }
