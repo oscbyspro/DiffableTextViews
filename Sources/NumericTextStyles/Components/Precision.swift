@@ -147,17 +147,17 @@ public struct Precision<Value: Precise> {
     @inlinable static func capacity(number: Number, max: Capacity) throws -> Capacity {
         let integer = max.integer - number.integer.count
         guard integer >= 0 else {
-            throw _Precision.cancellation(excess: .integer)
+            throw cancellation(excess: .integer)
         }
         
         let fraction = max.fraction - number.fraction.count
         guard fraction >= 0 else {
-            throw _Precision.cancellation(excess: .fraction)
+            throw cancellation(excess: .fraction)
         }
         
         let significant = max.significant - number.significantCount()
         guard significant >= 0 else {
-            throw _Precision.cancellation(excess: .significant)
+            throw cancellation(excess: .significant)
         }
         
         return .init(integer: integer, fraction: fraction, significant: significant)
