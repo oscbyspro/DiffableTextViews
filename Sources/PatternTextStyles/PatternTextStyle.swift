@@ -42,7 +42,7 @@ public struct PatternTextStyle<Pattern, Value>: DiffableTextStyle, Transformable
     @inlinable public func parse(snapshot: Snapshot) throws -> Value {
         var value = Value()
         
-        for symbol in snapshot where symbol.nonformatting {
+        for symbol in snapshot where symbol.is(non: .formatting) {
             try filter.validate(symbol.character)
             value.append(symbol.character)
         }

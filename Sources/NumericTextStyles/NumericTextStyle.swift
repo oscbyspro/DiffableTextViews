@@ -75,7 +75,7 @@ public struct NumericTextStyle<Value: NumericTextValue>: DiffableTextStyle, Tran
     // MARK: Snapshot: Number
         
     @inlinable func number(snapshot: Snapshot) throws -> Number {
-        try format.parser.parse(snapshot.lazy.filter(\.nonformatting).map(\.character))
+        try format.parser.parse(snapshot.lazy.filter(Symbol.is(non: .formatting)).map(\.character))
     }
     
     // MARK: Snapshot: Showcase
@@ -176,7 +176,7 @@ public struct NumericTextStyle<Value: NumericTextValue>: DiffableTextStyle, Tran
         }
     
         // --------------------------------- //
-                
+        
         return snapshot
     }
     

@@ -172,6 +172,6 @@ import protocol Utilities.Transformable
         
         // --------------------------------- //
         
-        return .init(comparison: .instruction(step), inspection: .only(\.nonformatting))
+        return .init(comparison: .instruction(step), inspection: .only(Symbol.is(non: .formatting)))
     }()
 }

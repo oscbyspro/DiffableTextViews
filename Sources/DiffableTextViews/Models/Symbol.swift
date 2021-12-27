@@ -41,20 +41,6 @@ public struct Symbol: Equatable, Transformable {
         Self(character, attribute: .spacer)
     }
     
-    // MARK: Getters
-    
-    @inlinable public var formatting: Bool {
-        attribute.contains(.formatting)
-    }
-    
-    @inlinable public var nonformatting: Bool {
-        !attribute.contains(.formatting)
-    }
-
-    @inlinable public func contains(_ attribute: Attribute) -> Bool {
-        self.attribute.contains(attribute)
-    }
-    
     // MARK: Transformations: Union
     
     @inlinable public mutating func formUnion(_ attribute: Attribute) {
@@ -74,6 +60,26 @@ public struct Symbol: Equatable, Transformable {
     @inlinable public func intersection(_ attribute: Attribute) -> Self {
         transforming({ $0.attribute.formIntersection(attribute) })
     }
+    
+    // MARK: Predicates
+    
+    @inlinable public func `is`(_ attribute: Attribute) -> Bool {
+        self.attribute.contains(attribute)
+    }
+    
+    @inlinable public func `is`(non attribute: Attribute) -> Bool {
+        !self.attribute.contains(attribute)
+    }
+    
+    // MARK: Predicates: Static
+    
+    @inlinable public static func `is`(_ attribute: Attribute) -> (Self) -> Bool {{
+        $0.is(attribute)
+    }}
+    
+    @inlinable public static func `is`(non attribute: Attribute) -> (Self) -> Bool {{
+        $0.is(non: attribute)
+    }}
 }
 
 // MARK: - Symbol: Descriptions
