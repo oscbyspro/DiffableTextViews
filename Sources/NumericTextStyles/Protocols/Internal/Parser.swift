@@ -5,9 +5,9 @@
 //  Created by Oscar Byström Ericsson on 2021-12-20.
 //
 
+import   struct Foundation.Locale
+import   struct Utilities.Cancellation
 import protocol Utilities.Transformable
-import struct DiffableTextViews.Cancellation
-import struct Foundation.Locale
 
 // MARK: - Parser
 

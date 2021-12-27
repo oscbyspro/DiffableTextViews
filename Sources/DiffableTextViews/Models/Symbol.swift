@@ -41,7 +41,7 @@ public struct Symbol: Equatable, Transformable {
         Self(character, attribute: .spacer)
     }
     
-    // MARK: Descriptions
+    // MARK: Getters
     
     @inlinable public var formatting: Bool {
         attribute.contains(.formatting)
@@ -50,9 +50,7 @@ public struct Symbol: Equatable, Transformable {
     @inlinable public var nonformatting: Bool {
         !attribute.contains(.formatting)
     }
-    
-    // MARK: Descriptions: Utilities
-    
+
     @inlinable public func contains(_ attribute: Attribute) -> Bool {
         self.attribute.contains(attribute)
     }

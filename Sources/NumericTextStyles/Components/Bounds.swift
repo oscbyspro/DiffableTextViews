@@ -5,7 +5,7 @@
 //  Created by Oscar Byström Ericsson on 2021-12-21.
 //
 
-import struct DiffableTextViews.Cancellation
+import struct Utilities.Cancellation
 
 // MARK: - Bounds
 

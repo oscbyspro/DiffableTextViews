@@ -26,7 +26,7 @@ public struct Cancellation: Error, CustomStringConvertible {
     }
 }
 
-// MARK: Cancellation: Error
+// MARK: - Cancellation: Error
 
 public extension Error where Self == Cancellation {
     

@@ -59,7 +59,7 @@ public struct NumericTextStyle<Value: NumericTextValue>: DiffableTextStyle, Tran
     // MARK: Value: Parse
 
     @inlinable public func parse(snapshot: Snapshot) throws -> Value {
-        try value(number: try number(snapshot: snapshot))
+        try value(number: number(snapshot: snapshot))
     }
     
     @inlinable func value(number: Number) throws -> Value {

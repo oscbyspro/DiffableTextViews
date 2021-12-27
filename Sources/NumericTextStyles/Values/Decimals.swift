@@ -7,8 +7,8 @@
 
 import struct Foundation.Locale
 import struct Foundation.Decimal
-import enum   Foundation.NumberFormatStyleConfiguration
-import struct DiffableTextViews.Cancellation
+import   enum Foundation.NumberFormatStyleConfiguration
+import struct Utilities.Cancellation
 
 // MARK: - Decimal
 

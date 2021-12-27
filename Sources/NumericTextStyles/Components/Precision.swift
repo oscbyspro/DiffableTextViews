@@ -5,8 +5,8 @@
 //  Created by Oscar Byström Ericsson on 2021-12-21.
 //
 
-import struct DiffableTextViews.Cancellation
-import enum   Foundation.NumberFormatStyleConfiguration
+import struct Utilities.Cancellation
+import   enum Foundation.NumberFormatStyleConfiguration
 
 // MARK: - Precision
 
@@ -118,7 +118,8 @@ public extension Precision where Value: PreciseFloatingPoint {
     // MARK: Requirements
         
     @inlinable func showcaseStyle() -> NumberFormatStyleConfiguration.Precision
-        
+    
+    #warning("Maybe accept number rather than count.")
     @inlinable func capacity(count: NumberDigitsCount) throws -> NumberDigitsCount
 }
 
