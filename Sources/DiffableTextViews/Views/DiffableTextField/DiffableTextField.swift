@@ -150,10 +150,10 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable, 
                     self.push(update: [.upstream, .downstream])
                 }
                 
-            } catch let cancellation {
+            } catch let reason {
                 #if DEBUG
                 
-                print("User input cancelled: \(cancellation)")
+                print("User input cancelled: \(reason)")
                 
                 #endif
             }
