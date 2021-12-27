@@ -153,7 +153,7 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable, 
             } catch let cancellation {
                 #if DEBUG
                 
-                print("User input cancelled due to: \(cancellation).")
+                print("User input cancelled due to reason: \(cancellation)")
                 
                 #endif
             }

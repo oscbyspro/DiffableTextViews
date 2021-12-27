@@ -5,7 +5,8 @@
 //  Created by Oscar Byström Ericsson on 2021-12-21.
 //
 
-import enum Foundation.NumberFormatStyleConfiguration
+import struct DiffableTextViews.Cancellation
+import enum   Foundation.NumberFormatStyleConfiguration
 
 // MARK: - Precision
 
@@ -35,24 +36,21 @@ public struct Precision<Value: Precise> {
     @inlinable func editableStyle() -> NumberFormatStyleConfiguration.Precision {
         let integer = _Precision.defaultIntegerLowerBound...Value.maxLosslessIntegerDigits
         let fraction = _Precision.defaultFractionLowerBound...Value.maxLosslessFractionDigits
-        
         return .integerAndFractionLength(integerLimits: integer, fractionLimits: fraction)
     }
     
-    @inlinable func editableStyleThatUses(numberDigitsCount: NumberDigitsCount) -> NumberFormatStyleConfiguration.Precision {
-        let integerUpperBound = Swift.max(_Precision.defaultIntegerLowerBound, numberDigitsCount.integer)
+    @inlinable func editableStyleThatUses(count: NumberDigitsCount) -> NumberFormatStyleConfiguration.Precision {
+        let integerUpperBound = Swift.max(_Precision.defaultIntegerLowerBound, count.integer)
         let integer = _Precision.defaultIntegerLowerBound...integerUpperBound
-        
-        let fractionLowerBound = Swift.max(_Precision.defaultFractionLowerBound, numberDigitsCount.fraction)
+        let fractionLowerBound = Swift.max(_Precision.defaultFractionLowerBound, count.fraction)
         let fraction = fractionLowerBound...fractionLowerBound
-        
         return .integerAndFractionLength(integerLimits: integer, fractionLimits: fraction)
     }
     
     // MARK: Validation: Capacity
     
-    @inlinable func capacity(numberDigitsCount: NumberDigitsCount) -> NumberDigitsCount? {
-        implementation.capacity(numberDigitsCount: numberDigitsCount)
+    @inlinable func capacity(count: NumberDigitsCount) throws -> NumberDigitsCount {
+        try implementation.capacity(count: count)
     }
 }
 
@@ -121,7 +119,7 @@ public extension Precision where Value: PreciseFloatingPoint {
         
     @inlinable func showcaseStyle() -> NumberFormatStyleConfiguration.Precision
         
-    @inlinable func capacity(numberDigitsCount: NumberDigitsCount) -> NumberDigitsCount?
+    @inlinable func capacity(count: NumberDigitsCount) throws -> NumberDigitsCount
 }
 
 // MARK: - Implementations: Total
@@ -136,7 +134,6 @@ public extension Precision where Value: PreciseFloatingPoint {
     
     @inlinable init<R: RangeExpression>(total: R) where R.Bound == Int {
         self.total = ClosedRange(total.relative(to: 0 ..< Value.maxLosslessTotalDigits + 1))
-        
         precondition(self.total.upperBound <= Value.maxLosslessTotalDigits, "Precision: max \(Value.maxLosslessTotalDigits).")
     }
     
@@ -148,9 +145,12 @@ public extension Precision where Value: PreciseFloatingPoint {
     
     // MARK: Validation: Capacity
     
-    @inlinable func capacity(numberDigitsCount: NumberDigitsCount) -> NumberDigitsCount? {
-        let capacity = total.upperBound - numberDigitsCount.total
-        guard capacity >= 0 else { return nil }
+    #warning("Should ignore single integer zero, probably; add property to NumberDigitsCount.")
+    @inlinable func capacity(count: NumberDigitsCount) throws -> NumberDigitsCount {
+        let capacity = total.upperBound - count.total
+        guard capacity >= 0 else {
+            throw .cancellation(reason: "Total capacity is less than zero.")
+        }
 
         return .init(integer: capacity, fraction: capacity)
     }
@@ -191,15 +191,21 @@ public extension Precision where Value: PreciseFloatingPoint {
     
     // MARK: Validation: Capacity
     
-    @inlinable func capacity(numberDigitsCount: NumberDigitsCount) -> NumberDigitsCount? {
-        let totalCapacity = Value.maxLosslessTotalDigits - numberDigitsCount.total
-        guard totalCapacity >= 0 else { return nil }
+    @inlinable func capacity(count: NumberDigitsCount) throws -> NumberDigitsCount {
+        let totalCapacity = Value.maxLosslessTotalDigits - count.total
+        guard totalCapacity >= 0 else {
+            throw .cancellation(reason: "Total capacity is less than zero.")
+        }
         
-        let integerCapacity = integer.upperBound - numberDigitsCount.integer
-        guard integerCapacity >= 0 else { return nil }
+        let integerCapacity = integer.upperBound - count.integer
+        guard integerCapacity >= 0 else {
+            throw .cancellation(reason: "Integer capacity is less than zero.")
+        }
         
-        let fractionCapacity = fraction.upperBound - numberDigitsCount.fraction
-        guard fractionCapacity >= 0 else { return nil }
+        let fractionCapacity = fraction.upperBound - count.fraction
+        guard fractionCapacity >= 0 else {
+            throw .cancellation(reason: "Fraction capacity is less than zero.")
+        }
         
         return .init(integer: integerCapacity, fraction: fractionCapacity)
     }

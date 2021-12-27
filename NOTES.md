@@ -13,5 +13,4 @@
     - Trailing redundant characters should be removable. Remove trailing redundant characters if number is at max value.
 
 ### DiffableTextViews
-    - Replace nondescriptive errors with descriptive ones, so they can be printed during debug.
-    - Use throwing methods because do/catch and try/throw actually makes the code less complex.
+    - Make models such as Snapshot conform to CustomStringConvertible for better debug messages.

@@ -51,14 +51,19 @@ public struct PatternTextStyle<Pattern, Value>: DiffableTextStyle, Transformable
         var count = 0
         
         for symbol in snapshot where symbol.nonformatting {
-            guard filter(symbol.character) else { throw .failure }
-            
+            #warning("Make a separate filter model.")
+            guard filter(symbol.character) else {
+                throw .cancellation(reason: "Character '\(symbol.character)' is invalid.")
+            }
             
             value.append(symbol.character)
             count += 1
         }
         
-        guard count <= capacity() else { throw .failure }
+        guard count <= capacity() else {
+            throw .cancellation(reason: "Number of characters exceeds pattern capacity.")
+        }
+        
         return value
     }
     

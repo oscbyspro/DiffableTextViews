@@ -63,7 +63,7 @@ public struct NumericTextStyle<Value: NumericTextValue>: DiffableTextStyle, Tran
     }
     
     @inlinable func value(number: Number) throws -> Value {
-        number.integer.isEmpty && number.fraction.isEmpty ? Value.zero : try Value.value(description: number.characters).get()
+        number.integer.isEmpty && number.fraction.isEmpty ? Value.zero : try Value.value(description: number.characters)
     }
     
     // MARK: Value: Process
@@ -75,7 +75,7 @@ public struct NumericTextStyle<Value: NumericTextValue>: DiffableTextStyle, Tran
     // MARK: Snapshot: Number
         
     @inlinable func number(snapshot: Snapshot) throws -> Number {
-        try format.parser.parse(snapshot.lazy.compactMap({ $0.nonformatting ? $0.character : nil })).get()
+        try format.parser.parse(snapshot.lazy.filter(\.nonformatting).map(\.character))
     }
     
     // MARK: Snapshot: Showcase
@@ -92,7 +92,6 @@ public struct NumericTextStyle<Value: NumericTextValue>: DiffableTextStyle, Tran
 
     // MARK: Snapshot: Merge
 
-    #warning("implement as throws")
     @inlinable public func merge(snapshot: Snapshot, with content: Snapshot, in range: Range<Snapshot.Index>) throws -> Snapshot {
         var input = Input(content, parser: format.parser)
         let toggleSignCommand = input.consumeToggleSignCommand()
@@ -104,7 +103,7 @@ public struct NumericTextStyle<Value: NumericTextValue>: DiffableTextStyle, Tran
         
         // --------------------------------- //
 
-        let capacity = try format.precision.capacity(numberDigitsCount: number.digitsCount).get()
+        let capacity = try format.precision.capacity(count: number.digitsCount)
         
         // --------------------------------- //
         
@@ -114,13 +113,11 @@ public struct NumericTextStyle<Value: NumericTextValue>: DiffableTextStyle, Tran
         // --------------------------------- //
         
         let value = try value(number: number)
-        try format.bounds.contains(value).true()
+        try format.bounds.validate(contains: value)
                 
         // --------------------------------- //
         
-        let style = format.editableStyleThatUses(
-            numberDigitsCount: number.digitsCount,
-            separator: !number.separator.isEmpty)
+        let style = format.editableStyleThatUses(count: number.digitsCount, separator: !number.separator.isEmpty)
                 
         // --------------------------------- //
         

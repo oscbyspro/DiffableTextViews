@@ -5,7 +5,7 @@
 //  Created by Oscar Byström Ericsson on 2021-12-21.
 //
 
-#warning("WIP")
+import struct DiffableTextViews.Cancellation
 
 // MARK: - Bounds
 
@@ -22,6 +22,7 @@ public struct Bounds<Value: Boundable> {
     
     // MARK: Initializers
     
+    #warning("Precondition: min <= max.")
     @inlinable init(lowerBound: Value = Value.minLosslessValue, upperBound: Value = Value.maxLosslessValue) {
         precondition(lowerBound != upperBound, "Bounds: constraint 'lowerBound != upperBound' was broken.")
         precondition(lowerBound <= Value.zero, "Bounds: constraint 'lowerBound <= Value.zero' was broken.")
@@ -60,12 +61,16 @@ public struct Bounds<Value: Boundable> {
     }
     
     // MARK: Utilities
-
-    @inlinable func contains(_ value: Value) -> Bool {
-        lowerBound <= value && value <= upperBound
-    }
-    
+        
     @inlinable func clamp(_ value: inout Value) {
         value = Swift.max(lowerBound, Swift.min(value, upperBound))
+    }
+    
+    // MARK: Validation
+    
+    @inlinable func validate(contains value: Value) throws {
+        guard lowerBound <= value && value <= upperBound else {
+            throw .cancellation(reason: "Bounds from \(lowerBound) to \(upperBound) do no contain: \(value).")
+        }
     }
 }

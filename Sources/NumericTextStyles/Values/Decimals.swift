@@ -7,7 +7,8 @@
 
 import struct Foundation.Locale
 import struct Foundation.Decimal
-import enum Foundation.NumberFormatStyleConfiguration
+import enum   Foundation.NumberFormatStyleConfiguration
+import struct DiffableTextViews.Cancellation
 
 // MARK: - Decimal
 
@@ -36,11 +37,15 @@ extension Decimal {
         
     // MARK: Formattable
     
-    @inlinable public static func value(description: String) -> Self? {
-        .init(string: description)
-    }
-    
     @inlinable public static func style(locale: Locale, precision: NumberFormatStyleConfiguration.Precision, separator: NumberFormatStyleConfiguration.DecimalSeparatorDisplayStrategy) -> FormatStyle {
         .init(locale: locale).precision(precision).decimalSeparator(strategy: separator)
+    }
+    
+    @inlinable public static func value(description: String) throws -> Self {
+        guard let value = Self(string: description) else {
+            throw .cancellation(reason: "Failed to make \(Self.self) from \(description).")
+        }
+        
+        return value
     }
 }

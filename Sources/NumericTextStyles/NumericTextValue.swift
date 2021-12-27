@@ -44,12 +44,16 @@ extension NumericTextInteger {
 
     // MARK: Formattable
 
-    @inlinable public static func value(description: String) -> Self? {
-        .init(description)
-    }
-
     @inlinable public static func style(locale: Locale, precision: NumberFormatStyleConfiguration.Precision, separator: NumberFormatStyleConfiguration.DecimalSeparatorDisplayStrategy) -> IntegerFormatStyle<Self> {
         .init(locale: locale).precision(precision).decimalSeparator(strategy: separator)
+    }
+    
+    @inlinable public static func value(description: String) throws -> Self {
+        guard let value = Self(description) else {
+            throw .cancellation(reason: "Failed to make \(Self.self) from \(description).")
+        }
+        
+        return value
     }
 }
 
@@ -110,12 +114,16 @@ extension NumericTextFloat {
     }
     
     // MARK: Formattable
-
-    @inlinable public static func value(description: String) -> Self? {
-        .init(description)
-    }
     
     @inlinable public static func style(locale: Locale, precision: NumberFormatStyleConfiguration.Precision, separator: NumberFormatStyleConfiguration.DecimalSeparatorDisplayStrategy) -> FloatingPointFormatStyle<Self> {
         .init(locale: locale).precision(precision).decimalSeparator(strategy: separator)
+    }
+    
+    @inlinable public static func value(description: String) throws -> Self {
+        guard let value = Self(description) else {
+            throw .cancellation(reason: "Failed to make \(Self.self) from \(description).")
+        }
+        
+        return value
     }
 }

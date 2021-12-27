@@ -5,8 +5,9 @@
 //  Created by Oscar Byström Ericsson on 2021-12-20.
 //
 
-import struct   Foundation.Locale
 import protocol Utilities.Transformable
+import struct DiffableTextViews.Cancellation
+import struct Foundation.Locale
 
 // MARK: - Parser
 
@@ -37,10 +38,19 @@ extension Parser {
     // MARK: Utilities
     
     /// Creates and returns a new instance if the characters are valid, else it returns nil.
-    @inlinable func parse<C: Collection>(_ characters: C) -> Value? where C.Element == Character {
+    @inlinable func parse<C: Collection>(_ characters: C) throws -> Value where C.Element == Character {
         var value = Value()
         var index = characters.startIndex
+        
+        // --------------------------------- //
+        
         parse(characters, index: &index, value: &value)
-        return index == characters.endIndex ? value : nil
+        guard index == characters.endIndex else {
+            throw .cancellation(reason: "Failed to parse \(Value.self) from characters: \(characters).")
+        }
+        
+        // --------------------------------- //
+        
+        return value
     }
 }

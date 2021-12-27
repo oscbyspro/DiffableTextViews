@@ -79,8 +79,8 @@ import struct Foundation.Locale
         Value.style(locale: locale, precision: precision.editableStyle(), separator: .automatic)
     }
     
-    @inlinable func editableStyleThatUses(numberDigitsCount: NumberDigitsCount, separator: Bool) -> Value.FormatStyle {
-        let precision = precision.editableStyleThatUses(numberDigitsCount: numberDigitsCount)
+    @inlinable func editableStyleThatUses(count: NumberDigitsCount, separator: Bool) -> Value.FormatStyle {
+        let precision = precision.editableStyleThatUses(count: count)
         return Value.style(locale: locale, precision: precision, separator: separator ? .always : .automatic)
     }
 }
