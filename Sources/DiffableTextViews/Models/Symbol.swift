@@ -77,3 +77,18 @@ public struct Symbol: Equatable, Transformable {
         transforming({ $0.attribute.formIntersection(attribute) })
     }
 }
+
+// MARK: - Symbol: Descriptions
+
+extension Symbol: CustomStringConvertible, CustomDebugStringConvertible {
+    
+    // MARK: Implementation
+    
+    public var description: String {
+        String(character)
+    }
+    
+    public var debugDescription: String {
+        "(\(character), \(attribute))"
+    }
+}

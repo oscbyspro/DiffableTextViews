@@ -160,3 +160,18 @@ public struct Snapshot: BidirectionalCollection, RangeReplaceableCollection, Exp
         }
     }
 }
+
+// MARK: - Snapshot: Descriptions
+
+extension Snapshot: CustomStringConvertible, CustomDebugStringConvertible {
+    
+    // MARK: Implementation
+    
+    public var description: String {
+        "\(Self.self)(characters: \(characters))"
+    }
+    
+    public var debugDescription: String {
+        "\(Self.self)(characters: \(characters), attributes: \(attributes))"
+    }
+}

@@ -52,3 +52,18 @@ public struct Attribute: OptionSet {
     /// Contains: .formatting, .insertable, .removable, .prefixing, .suffixing.
     public static let spacer  = Self([.formatting, .insertable, .removable, .prefixing, .suffixing])
 }
+
+// MARK: - Attribute: Descriptions
+
+extension Attribute: CustomStringConvertible, CustomDebugStringConvertible {
+    
+    // MARK: Implementation
+    
+    public var description: String {
+        String(describing: rawValue)
+    }
+    
+    public var debugDescription: String {
+        description
+    }
+}

@@ -149,7 +149,7 @@ public extension Precision where Value: PreciseFloatingPoint {
     @inlinable func capacity(count: NumberDigitsCount) throws -> NumberDigitsCount {
         let capacity = total.upperBound - count.total
         guard capacity >= 0 else {
-            throw .cancellation(reason: "Total capacity is less than zero.")
+            throw .cancellation(reason: "\(Self.self) capacity exceeded.")
         }
 
         return .init(integer: capacity, fraction: capacity)
@@ -194,17 +194,17 @@ public extension Precision where Value: PreciseFloatingPoint {
     @inlinable func capacity(count: NumberDigitsCount) throws -> NumberDigitsCount {
         let totalCapacity = Value.maxLosslessTotalDigits - count.total
         guard totalCapacity >= 0 else {
-            throw .cancellation(reason: "Total capacity is less than zero.")
+            throw .cancellation(reason: "\(Self.self) total capacity exceeded.")
         }
         
         let integerCapacity = integer.upperBound - count.integer
         guard integerCapacity >= 0 else {
-            throw .cancellation(reason: "Integer capacity is less than zero.")
+            throw .cancellation(reason: "\(Self.self) integer capacity exceeded.")
         }
         
         let fractionCapacity = fraction.upperBound - count.fraction
         guard fractionCapacity >= 0 else {
-            throw .cancellation(reason: "Fraction capacity is less than zero.")
+            throw .cancellation(reason: "\(Self.self) fraction capacity exceeded.")
         }
         
         return .init(integer: integerCapacity, fraction: fractionCapacity)
