@@ -22,4 +22,15 @@
         self.fraction = fraction
         self.significant = significant
     }
+    
+    // MARK: Initializers: Static
+    
+    @inlinable static func max<Value: Precise>(
+        in type: Value.Type = Value.self,
+        integer: Int = Value.maxLosslessIntegerDigits,
+        fraction: Int = Value.maxLosslessFractionDigits,
+        significant: Int = Value.maxLosslessSignificantDigits
+    ) -> Self {
+        .init(integer: integer, fraction: fraction, significant: significant)
+    }
 }

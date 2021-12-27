@@ -55,11 +55,11 @@ import   enum Foundation.NumberFormatStyleConfiguration
     }
     
     @inlinable var digits: Set<Character> {
-        parser.digits.translatables
+        Digits.decimals
     }
     
-    @inlinable var signs: [Character: Sign] {
-        parser.sign.translatables
+    @inlinable var signs: Set<Character> {
+        Sign.all
     }
     
     @inlinable var fractionSeparator: String {

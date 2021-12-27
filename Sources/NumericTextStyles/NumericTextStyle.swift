@@ -153,7 +153,7 @@ public struct NumericTextStyle<Value: NumericTextValue>: DiffableTextStyle, Tran
                 snapshot.append(.spacer(character))
             } else if format.fractionSeparator.contains(character) {
                 snapshot.append(.content(character))
-            } else if format.signs.keys.contains(character) {
+            } else if format.signs.contains(character) {
                 snapshot.append(.content(character).union(.prefixing))
             }
         }
