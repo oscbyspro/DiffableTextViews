@@ -39,15 +39,13 @@ public struct Precision<Value: Precise> {
     }
     
     @inlinable func editableStyle() -> NumberFormatStyleConfiguration.Precision {
-        let integer = _Precision.minIntegerDigits...Value.maxLosslessIntegerDigits
-        let fraction = _Precision.minFractionDigits...Value.maxLosslessFractionDigits
-        return .integerAndFractionLength(integerLimits: integer, fractionLimits: fraction)
+        .integerAndFractionLength(integerLimits: Value.losslessIntegerLimits, fractionLimits: Value.losslessFractionLimits)
     }
     
     @inlinable func editableStyleThatUses(number: Number) -> NumberFormatStyleConfiguration.Precision {
-        let integerUpperBound = Swift.max(_Precision.minIntegerDigits, number.integer.count)
-        let integer = _Precision.minIntegerDigits...integerUpperBound
-        let fractionLowerBound = Swift.max(_Precision.minFractionDigits, number.fraction.count)
+        let integerUpperBound = Swift.max(Value.minLosslessIntegerDigits, number.integer.count)
+        let integer = Value.minLosslessIntegerDigits...integerUpperBound
+        let fractionLowerBound = Swift.max(Value.minLosslessFractionDigits, number.fraction.count)
         let fraction = fractionLowerBound...fractionLowerBound
         return .integerAndFractionLength(integerLimits: integer, fractionLimits: fraction)
     }
@@ -76,7 +74,7 @@ public struct Precision<Value: Precise> {
     // MARK: Initializers
     
     @inlinable init<R: RangeExpression>(significant: R) where R.Bound == Int {
-        self.significant = _Precision.clamped(significant, to: _Precision.minSignificantDigits...Value.maxLosslessSignificantDigits)
+        self.significant = _Precision.clamped(significant, to: Value.losslessSignificantLimits)
     }
     
     // MARK: Styles
@@ -107,16 +105,16 @@ public struct Precision<Value: Precise> {
     // MARK: Initializers
     
     @inlinable init<R0: RangeExpression, R1: RangeExpression>(integer: R0, fraction: R1) where R0.Bound == Int, R1.Bound == Int {
-        self.integer = _Precision.clamped(integer, to: _Precision.minIntegerDigits...Value.maxLosslessIntegerDigits)
-        self.fraction = _Precision.clamped(fraction, to: _Precision.minFractionDigits...Value.maxLosslessFractionDigits)
+        self.integer  = _Precision.clamped(integer,  to: Value.losslessIntegerLimits)
+        self.fraction = _Precision.clamped(fraction, to: Value.losslessFractionLimits)
     }
     
     @inlinable init<R: RangeExpression>(integer: R) where R.Bound == Int {
-        self.init(integer: integer, fraction: _Precision.minFractionDigits...)
+        self.init(integer: integer, fraction: Value.minLosslessFractionDigits...)
     }
     
     @inlinable init<R: RangeExpression>(fraction: R) where R.Bound == Int {
-        self.init(integer: _Precision.minIntegerDigits..., fraction: fraction)
+        self.init(integer: Value.minLosslessIntegerDigits..., fraction: fraction)
     }
     
     // MARK: Styles
@@ -136,12 +134,6 @@ public struct Precision<Value: Precise> {
 // MARK: - Helpers
 
 @usableFromInline enum _Precision {
-    
-    // MARK: Defaults
-    
-    @usableFromInline static let     minIntegerDigits: Int = 1
-    @usableFromInline static let    minFractionDigits: Int = 0
-    @usableFromInline static let minSignificantDigits: Int = 1
 
     // MARK: Bounds
     
@@ -199,7 +191,7 @@ public extension Precision {
     // MARK: Named
             
     @inlinable static var standard: Self {
-        .init(implementation: SignificantDigits(significant: _Precision.minSignificantDigits...))
+        .init(implementation: SignificantDigits(significant: Value.minLosslessSignificantDigits...))
     }
 }
 
@@ -214,10 +206,10 @@ public extension Precision where Value: PreciseFloatingPoint {
     }
     
     @inlinable static func digits<R: RangeExpression>(integer: R) -> Self where R.Bound == Int {
-        .init(implementation: IntegerAndFractionLength(integer: integer, fraction: _Precision.minFractionDigits...))
+        .init(implementation: IntegerAndFractionLength(integer: integer, fraction: Value.minLosslessFractionDigits...))
     }
     
     @inlinable static func digits<R: RangeExpression>(fraction: R) -> Self where R.Bound == Int {
-        .init(implementation: IntegerAndFractionLength(integer: _Precision.minIntegerDigits..., fraction: fraction))
+        .init(implementation: IntegerAndFractionLength(integer: Value.minLosslessIntegerDigits..., fraction: fraction))
     }
 }

@@ -11,9 +11,34 @@ public protocol Precise {
     
     // MARK: Requirements
     
-    @inlinable static var maxLosslessIntegerDigits: Int { get }
-    @inlinable static var maxLosslessFractionDigits: Int { get }
+    @inlinable static var maxLosslessIntegerDigits:     Int { get }
+    @inlinable static var maxLosslessFractionDigits:    Int { get }
     @inlinable static var maxLosslessSignificantDigits: Int { get }
+}
+
+// MARK: - Prscise: Details
+
+extension Precise {
+    
+    // MARK: Min
+    
+    @inlinable static var minLosslessIntegerDigits:     Int { 1 }
+    @inlinable static var minLosslessFractionDigits:    Int { 0 }
+    @inlinable static var minLosslessSignificantDigits: Int { 1 }
+    
+    // MARK: Bounds
+    
+    @inlinable static var losslessIntegerLimits: ClosedRange<Int> {
+        minLosslessIntegerDigits ... maxLosslessIntegerDigits
+    }
+    
+    @inlinable static var losslessFractionLimits: ClosedRange<Int> {
+        minLosslessFractionDigits ... maxLosslessFractionDigits
+    }
+    
+    @inlinable static var losslessSignificantLimits: ClosedRange<Int> {
+        minLosslessSignificantDigits ... maxLosslessSignificantDigits
+    }
 }
 
 // MARK: - Precise: Integer
