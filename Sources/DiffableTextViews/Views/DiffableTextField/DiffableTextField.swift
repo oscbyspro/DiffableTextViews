@@ -111,7 +111,7 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable, 
             upstream.submit?(downstream) == nil ? true : false
         }
         
-        // MARK: Delegate: Edits
+        // MARK: Delegate: Mode
         
         @inlinable public func textFieldDidBeginEditing(_ textField: UITextField) {
             synchronize()
@@ -125,7 +125,7 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable, 
             synchronize()
         }
         
-        // MARK: Delegate: Inputs
+        // MARK: Delegate: Input
         
         @inlinable public func textField(_ textField: UITextField, shouldChangeCharactersIn nsRange: NSRange, replacementString string: String) -> Bool {
             do {
@@ -144,7 +144,7 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable, 
                 let field = cache.field.updating(selection: range.upperBound, intent: nil).updating(carets: snapshot)
                                 
                 Task { @MainActor [value] in
-                    // async to process special commands (like: option + delete) first
+                    // async to process special commands first
                     self.cache.value = value
                     self.cache.field = field
                     self.push(update: [.upstream, .downstream])
@@ -162,25 +162,23 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable, 
         }
         
         // MARK: Delegate: Selection
-
+        
         @inlinable public func textFieldDidChangeSelection(_ textField: UITextField) {
             guard !lock.isLocked else { return }
-            
+
             // --------------------------------- //
-                        
-            let offsets = downstream.selection()
-            let field = cache.field.updating(selection: offsets, intent: downstream.intent)
+            
+            let selection = downstream.selection()
+            let field = cache.field.updating(selection: selection, intent: downstream.intent)
+            let synchronized = field.selection.offsets == selection
             
             // --------------------------------- //
             
             self.cache.field = field
-            
-            // --------------------------------- //
-            
-            guard field.selection.offsets != offsets else { return }
-            
-            lock.perform {
-                self.downstream.select(offsets: field.selection.offsets)
+            if !synchronized {
+                lock.perform {
+                    self.downstream.update(selection: field.selection.offsets)
+                }
             }
         }
 
@@ -236,7 +234,7 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable, 
                     // changes to UITextField's text and selection both call
                     // the delegate's method: textFieldDidChangeSelection(_:)
                     self.downstream.update(text: cache.snapshot.characters)
-                    self.downstream.select(offsets: cache.field.selection.offsets)
+                    self.downstream.update(selection: cache.field.selection.offsets)
                 }
                             
                 self.cache.edits = self.downstream.edits

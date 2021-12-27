@@ -63,8 +63,8 @@ public final class ProxyTextField {
     }
     
     /// - Complexity: High.
-    @inlinable func select(offsets: Range<Offset>) {
-        wrapped.selectedTextRange = positions(in: offsets)
+    @inlinable func update(selection: Range<Offset>) {
+        wrapped.selectedTextRange = positions(in: selection)
     }
     
     // MARK: State

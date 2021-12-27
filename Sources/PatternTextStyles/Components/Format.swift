@@ -21,7 +21,7 @@
         self.placeholder = placeholder
     }
     
-    // MARK: Utilities
+    // MARK: Descriptions
         
     @inlinable func capacity() -> Int {
         var count = 0
