@@ -14,11 +14,9 @@ public protocol DiffableTextStyle {
     
     // MARK: Snapshot
     
-    #warning("Consider: throws.")
     /// Snapshot for when the view is idle.
     @inlinable func snapshot(showcase value: Value) -> Snapshot
 
-    #warning("Consider: throws.")
     /// Snapshot for when the view is in editing mode.
     @inlinable func snapshot(editable value: Value) -> Snapshot // required (!)
     

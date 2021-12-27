@@ -1,5 +1,5 @@
 //
-//  NumericTextFormat.swift
+//  Format.swift
 //  
 //
 //  Created by Oscar Byström Ericsson on 2021-12-25.
@@ -7,10 +7,9 @@
 
 import struct Foundation.Locale
 
-// MARK: - NumericTextFormat
+// MARK: - Format
 
-#warning("Seems useless. Merge into Numeric formatStyle, maybe.")
-@usableFromInline struct NumericTextFormat<Value: NumericTextValue> {
+@usableFromInline struct Format<Value: NumericTextValue> {
     @usableFromInline typealias Bounds = NumericTextStyles.Bounds<Value>
     @usableFromInline typealias Precision = NumericTextStyles.Precision<Value>
 

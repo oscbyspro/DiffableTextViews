@@ -1,12 +1,15 @@
 # DiffableTextViews
 
-This package contains views that use snapshots and attributes to process a user's text input, detect changes and set caret positions. This makes it easy to implement as-you-type formatting. Such implementations are made by styles conforming to: DiffableTextStyle.
+This package contains views that use snapshots and attributes to process changes and setting caret positions. This makes it comparatively easy to implement as-you-type formatting. Such implementations are made by styles conforming to the protocol: DiffableTextStyle.
 
 # Progress
 
-🔵🔵🔵⚪️⚪️⚪️⚪️⚪️⚪️⚪️
+🔵🔵🔵🔵🔵⚪️⚪️⚪️⚪️⚪️
 
 # Views
+
+👷‍♂️🛠🚧🚧🧱🏗🧱🚧🚧⏳
+
 ### DiffableTextField
 
 # Styles

@@ -137,10 +137,10 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable, 
                 let indices = range.lowerBound.rhs! ..< range.upperBound.rhs!
                 var snapshot = try upstream.style.merge(snapshot: cache.snapshot, with: input, in: indices)
                 upstream.style.process(snapshot: &snapshot)
-      
+                
                 var value = try upstream.style.parse(snapshot: snapshot)
                 upstream.style.process(value: &value)
-                            
+                
                 let field = cache.field.updating(selection: range.upperBound, intent: nil).updating(carets: snapshot)
                                 
                 Task { @MainActor [value] in
@@ -242,8 +242,6 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable, 
                 self.cache.edits = self.downstream.edits
             }
             
-            // --------------------------------- //
-                                    
             if update.contains(.upstream) {
                 perform(async: update.contains(.async)) {
                     // async avoids view update loop

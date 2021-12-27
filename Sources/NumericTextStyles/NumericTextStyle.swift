@@ -18,7 +18,7 @@ import struct Foundation.Locale
 public struct NumericTextStyle<Value: NumericTextValue>: DiffableTextStyle, Transformable {
     public typealias Bounds = NumericTextStyles.Bounds<Value>
     public typealias Precision = NumericTextStyles.Precision<Value>
-    @usableFromInline typealias Format = NumericTextFormat<Value>
+    @usableFromInline typealias Format = NumericTextStyles.Format<Value>
 
     // MARK: Properties
     
