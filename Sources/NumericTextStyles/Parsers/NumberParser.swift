@@ -56,10 +56,10 @@ import protocol Utilities.Transformable
         // MARK: Integer
         // --------------------------------- //
 
-        digits.parse(characters, index: &index, value: &value.upper)
+        digits.parse(characters, index: &index, value: &value.integer)
         
-        value.upper.removeRedundantZerosPrefix()
-        value.upper.replaceWithZeroIfItIsEmpty()
+        value.integer.removeRedundantZerosPrefix()
+        value.integer.replaceWithZeroIfItIsEmpty()
         
         guard !options.contains(.integer) else { return }
         
@@ -75,7 +75,7 @@ import protocol Utilities.Transformable
         // MARK: Fraction
         // --------------------------------- //
         
-        digits.parse(characters, index: &index, value: &value.lower)
+        digits.parse(characters, index: &index, value: &value.fraction)
     }
     
     // MARK: Instances

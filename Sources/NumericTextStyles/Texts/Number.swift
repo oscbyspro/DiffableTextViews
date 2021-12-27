@@ -17,9 +17,9 @@
     // MARK: Properties
     
     @usableFromInline var sign = Sign()
-    @usableFromInline var upper = Digits()
+    @usableFromInline var integer = Digits()
     @usableFromInline var separator = Separator()
-    @usableFromInline var lower = Digits()
+    @usableFromInline var fraction = Digits()
     
     // MARK: Initializers
     
@@ -28,20 +28,27 @@
     // MARK: Descriptions
     
     @inlinable var isEmpty: Bool {
-        sign.isEmpty && upper.isEmpty && separator.isEmpty && lower.isEmpty
+        sign.isEmpty && integer.isEmpty && separator.isEmpty && fraction.isEmpty
     }
     
     @inlinable var characters: String {
-        sign.characters + upper.characters + separator.characters + lower.characters
+        sign.characters + integer.characters + separator.characters + fraction.characters
+    }
+        
+    @inlinable func significantCount() -> Int {
+        let significantIntegerCount = integer.count - integer.countZerosInPrefix()
+        let significantFractionCount = fraction.count - fraction.countZerosInSuffix()
+        return significantIntegerCount + significantFractionCount
     }
     
-    // MARK: Count
+    // MARK: Command
     
-    @inlinable func valueCount() -> Int {
-        let upperCount = upper.count - upper.countZerosInPrefix()
-        let lowerCount = lower.count - lower.countZerosInSuffix()
-        
-        return upperCount + lowerCount
+    @inlinable mutating func toggle(sign proposal: Sign) {
+        switch proposal {
+        case .none: return
+        case  sign: sign.removeAll()
+        default:    sign = proposal
+        }
     }
     
     // MARK: Correct
@@ -57,16 +64,6 @@
     
     #warning("WIP")
     @inlinable mutating func autocorrectSeparator(capacity: Capacity) {
-        if lower.isEmpty, capacity.lower <= .zero { separator.removeAll() }
-    }
-    
-    // MARK: Command
-    
-    @inlinable mutating func toggle(sign proposal: Sign) {
-        switch proposal {
-        case .none: return
-        case  sign: sign.removeAll()
-        default:    sign = proposal
-        }
+        if fraction.isEmpty, capacity.fraction <= .zero { separator.removeAll() }
     }
 }
