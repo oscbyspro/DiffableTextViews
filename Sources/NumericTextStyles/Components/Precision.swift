@@ -12,16 +12,17 @@ import   enum Foundation.NumberFormatStyleConfiguration
 
 /// - Note: Lower precision bounds are enforced only when the view is idle.
 public struct Precision<Value: Precise> {
-    @usableFromInline typealias Significant = SignificantPrecision<Value>
-    @usableFromInline typealias IntegerAndFraction = IntegerAndFractionPrecision<Value>
+    @usableFromInline typealias Implementation = PrecisionImplementation
+    @usableFromInline typealias SignificantDigits = SignificantDigitsPrecision<Value>
+    @usableFromInline typealias IntegerAndFractionLength = IntegerAndFractionLengthPrecision<Value>
 
     // MARK: Properties
     
-    @usableFromInline let implementation: PrecisionImplementation
+    @usableFromInline let implementation: Implementation
     
     // MARK: Initializers
     
-    @inlinable init(implementation: PrecisionImplementation) {
+    @inlinable init(implementation: Implementation) {
         self.implementation = implementation
     }
     
@@ -63,10 +64,10 @@ public struct Precision<Value: Precise> {
     @inlinable func capacity(number: Number) throws -> Capacity
 }
 
-// MARK: - SignificantPrecision
+// MARK: - SignificantDigitsPrecision
 
 /// Evaluates significant digits.
-@usableFromInline struct SignificantPrecision<Value: Precise>: PrecisionImplementation {
+@usableFromInline struct SignificantDigitsPrecision<Value: Precise>: PrecisionImplementation {
 
     // MARK: Properties
     
@@ -106,10 +107,10 @@ public struct Precision<Value: Precise> {
     }
 }
 
-// MARK: - IntegerAndFractionPrecision
+// MARK: - IntegerAndFractionLengthPrecision
 
 /// Evaluates integer and fraction digits.
-@usableFromInline struct IntegerAndFractionPrecision<Value: Precise>: PrecisionImplementation {
+@usableFromInline struct IntegerAndFractionLengthPrecision<Value: Precise>: PrecisionImplementation {
     @usableFromInline typealias Precision = NumericTextStyles.Precision<Value>
 
     // MARK: Properties
@@ -199,51 +200,31 @@ public extension Precision {
     // MARK: Digits
     
     @inlinable static func digits<R: RangeExpression>(_ significant: R) -> Self where R.Bound == Int {
-        .init(implementation: Significant(significant: significant))
-    }
-    
-    // MARK: Max
-    
-    @inlinable static func max(_ significant: Int) -> Self {
-        digits(_Precision.significantLowerBound...significant)
+        .init(implementation: SignificantDigits(significant: significant))
     }
     
     // MARK: Named
             
     @inlinable static var standard: Self {
-        .max(Value.maxLosslessSignificantDigits)
+        .init(implementation: SignificantDigits(significant: _Precision.significantLowerBound...))
     }
 }
 
-// MARK: - Instances: IntegerAndFraction
+// MARK: - Instances: IntegerAndFractionLength
 
 public extension Precision where Value: PreciseFloatingPoint {
     
     // MARK: Digits
 
     @inlinable static func digits<R0: RangeExpression, R1: RangeExpression>(integer: R0, fraction: R1) -> Self where R0.Bound == Int, R1.Bound == Int {
-        .init(implementation: IntegerAndFraction(integer: integer, fraction: fraction))
+        .init(implementation: IntegerAndFractionLength(integer: integer, fraction: fraction))
     }
     
     @inlinable static func digits<R: RangeExpression>(integer: R) -> Self where R.Bound == Int {
-        .init(implementation: IntegerAndFraction(integer: integer, fraction: _Precision.fractionLowerBound...))
+        .init(implementation: IntegerAndFractionLength(integer: integer, fraction: _Precision.fractionLowerBound...))
     }
     
     @inlinable static func digits<R: RangeExpression>(fraction: R) -> Self where R.Bound == Int {
-        .init(implementation: IntegerAndFraction(integer: _Precision.integerLowerBound..., fraction: fraction))
-    }
-    
-    // MARK: Max
-    
-    @inlinable static func max(integer: Int, fraction: Int) -> Self  {
-        .digits(integer: _Precision.integerLowerBound...integer, fraction: _Precision.fractionLowerBound...fraction)
-    }
-    
-    @inlinable static func max(integer: Int) -> Self {
-        .max(integer: integer, fraction: Value.maxLosslessSignificantDigits - integer)
-    }
-    
-    @inlinable static func max(fraction: Int) -> Self {
-        .max(integer: Value.maxLosslessSignificantDigits - fraction, fraction: fraction)
+        .init(implementation: IntegerAndFractionLength(integer: _Precision.integerLowerBound..., fraction: fraction))
     }
 }

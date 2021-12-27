@@ -63,7 +63,7 @@ public struct Bounds<Value: Boundable> {
     // MARK: Utilities
         
     @inlinable func clamp(_ value: inout Value) {
-        value = Swift.max(lowerBound, Swift.min(value, upperBound))
+        value = max(lowerBound, min(value, upperBound))
     }
     
     // MARK: Validation
