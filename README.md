@@ -54,11 +54,12 @@ import PatternTextStyles
 
 struct PatternTextStyleExample: View {
     @State var phoneNumber: String = ""
-
+    
     var body: some View {
         DiffableTextField($phoneNumber) {
             .pattern("+## (###) ###-##-##", placeholder: "#")
-            .filter({ character in character.isASCII && character.isNumber })
+            .filter({ character in character.isASCII  })
+            .filter({ character in character.isNumber })
         }
         .setup { 
             textField in

@@ -11,59 +11,43 @@ import Utilities
 // MARK: - PatternTextStyle
 
 public struct PatternTextStyle<Pattern, Value>: DiffableTextStyle, Transformable where Pattern: Collection, Pattern.Element == Character, Value: RangeReplaceableCollection, Value: Equatable, Value.Element == Character {
+    @usableFromInline typealias Format = PatternTextStyles.Format<Pattern>
     
     // MARK: Properties
     
-    @usableFromInline let pattern: Pattern
-    @usableFromInline let placeholder: Character
-    @usableFromInline var filter: (Character) -> Bool
+    @usableFromInline let format: Format
+    @usableFromInline var filter: Filter
     @usableFromInline var visible: Bool
     
     // MARK: Initializers
     
     @inlinable public init(pattern: Pattern, placeholder: Character) {
-        self.pattern = pattern
-        self.placeholder = placeholder
-        self.filter = { _ in true }
+        self.format = Format(pattern: pattern, placeholder: placeholder)
+        self.filter = Filter()
         self.visible = true
     }
     
     // MARK: Transformations
     
+    @inlinable public func filter(_ validation: @escaping (Character) -> Bool) -> Self {
+        transforming({ $0.filter.concatenate(validation) })
+    }
+    
     @inlinable public func hidden() -> Self {
         transforming({ $0.visible = false })
-    }
-    
-    @inlinable public func filter(_ filter: @escaping (Character) -> Bool) -> Self {
-        transforming({ $0.filter = filter })
-    }
-    
-    // MARK: Validation
-    
-    @inlinable func capacity() -> Int {
-        var count = 0; for element in pattern where element == placeholder { count += 1 }; return count
     }
     
     // MARK: Parse
     
     @inlinable public func parse(snapshot: Snapshot) throws -> Value {
         var value = Value()
-        var count = 0
         
         for symbol in snapshot where symbol.nonformatting {
-            #warning("Make a separate filter model.")
-            guard filter(symbol.character) else {
-                throw .cancellation(reason: "Character '\(symbol.character)' is invalid.")
-            }
-            
+            try filter.validate(symbol.character)
             value.append(symbol.character)
-            count += 1
         }
         
-        guard count <= capacity() else {
-            throw .cancellation(reason: "Number of characters exceeds pattern capacity.")
-        }
-        
+        try format.validate(characters: value)
         return value
     }
     
@@ -80,15 +64,15 @@ public struct PatternTextStyle<Pattern, Value>: DiffableTextStyle, Transformable
     @inlinable public func snapshot(editable value: Value) -> Snapshot {
         var snapshot = Snapshot()
         var valueIndex = value.startIndex
-        var patternIndex = pattern.startIndex
+        var patternIndex = format.pattern.startIndex
         
         // --------------------------------- //
         
-        while patternIndex != pattern.endIndex, valueIndex != value.endIndex {
-            let patternElement = pattern[patternIndex]
-            pattern.formIndex(after:    &patternIndex)
+        while patternIndex != format.pattern.endIndex, valueIndex != value.endIndex {
+            let patternElement = format.pattern[patternIndex]
+            format.pattern.formIndex(after:    &patternIndex)
             
-            if patternElement == placeholder {
+            if patternElement == format.placeholder {
                 let valueElement = value[valueIndex]
                 value.formIndex(after:  &valueIndex)
                 snapshot.append(.content(valueElement))
@@ -99,14 +83,14 @@ public struct PatternTextStyle<Pattern, Value>: DiffableTextStyle, Transformable
         
         // --------------------------------- //
         
-        if visible, patternIndex != pattern.endIndex {
-            snapshot.append(contentsOf: Snapshot(String(pattern[patternIndex...]), only: .suffix))
+        if visible, patternIndex != format.pattern.endIndex {
+            snapshot.append(contentsOf: Snapshot(String(format.pattern[patternIndex...]), only: .suffix))
         }
         
         // --------------------------------- //
         
         if valueIndex == value.startIndex {
-            if let firstPlaceholderIndex = snapshot.firstIndex(where: { symbol in symbol.character == placeholder }) {
+            if let firstPlaceholderIndex = snapshot.firstIndex(where: { $0.character == format.placeholder }) {
                 snapshot.transform(attributes: ..<firstPlaceholderIndex, with: { attribute in attribute = .prefix })
             }
         }
