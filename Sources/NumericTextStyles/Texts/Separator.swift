@@ -7,6 +7,7 @@
 
 // MARK: - Separator
 
+/// A representation of system separator.
 @usableFromInline struct Separator: Text {
     
     // MARK: Properties

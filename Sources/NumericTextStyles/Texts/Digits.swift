@@ -7,7 +7,7 @@
 
 // MARK: - Digits
 
-/// Representation of system digits.
+/// A representation of system digits.
 ///
 /// - Digits.count (stored) is accessed in O(1) time.
 ///

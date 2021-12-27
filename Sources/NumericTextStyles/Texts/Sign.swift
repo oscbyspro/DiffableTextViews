@@ -7,6 +7,7 @@
 
 // MARK: - Sign
 
+/// A representation of a system sign.
 @usableFromInline enum Sign: Text {
     
     // MARK: Instances

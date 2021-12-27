@@ -48,7 +48,7 @@ extension NumericTextInteger {
         .init(locale: locale).precision(precision).decimalSeparator(strategy: separator)
     }
     
-    @inlinable public static func value(description: String) throws -> Self {
+    @inlinable public static func make(description: String) throws -> Self {
         guard let value = Self(description) else {
             throw .cancellation(reason: "Failed to make \(Self.self) from \(description).")
         }
@@ -119,7 +119,7 @@ extension NumericTextFloat {
         .init(locale: locale).precision(precision).decimalSeparator(strategy: separator)
     }
     
-    @inlinable public static func value(description: String) throws -> Self {
+    @inlinable public static func make(description: String) throws -> Self {
         guard let value = Self(description) else {
             throw .cancellation(reason: "Failed to make \(Self.self) from \(description).")
         }

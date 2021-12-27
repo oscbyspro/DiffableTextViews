@@ -25,14 +25,14 @@ extension Decimal {
     
     // MARK: Precise
  
-    public static let maxLosslessValueDigits: Int = 38
+    public static let maxLosslessSignificantDigits: Int = 38
     
     // MARK: Boundable
         
     @inlinable public static var minLosslessValue: Self { -maxLosslessLimit }
     @inlinable public static var maxLosslessValue: Self {  maxLosslessLimit }
     @usableFromInline static let maxLosslessLimit: Self = {
-        Decimal(string: String(repeating: "9", count: maxLosslessValueDigits))!
+        Decimal(string: String(repeating: "9", count: maxLosslessSignificantDigits))!
     }()
         
     // MARK: Formattable
@@ -41,7 +41,7 @@ extension Decimal {
         .init(locale: locale).precision(precision).decimalSeparator(strategy: separator)
     }
     
-    @inlinable public static func value(description: String) throws -> Self {
+    @inlinable public static func make(description: String) throws -> Self {
         guard let value = Self(string: description) else {
             throw .cancellation(reason: "Failed to make \(Self.self) from \(description).")
         }

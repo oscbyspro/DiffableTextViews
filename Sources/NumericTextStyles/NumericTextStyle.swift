@@ -63,7 +63,7 @@ public struct NumericTextStyle<Value: NumericTextValue>: DiffableTextStyle, Tran
     }
     
     @inlinable func value(number: Number) throws -> Value {
-        number.integer.isEmpty && number.fraction.isEmpty ? Value.zero : try Value.value(description: number.characters)
+        number.integer.isEmpty && number.fraction.isEmpty ? .zero : try .make(description: number.characters)
     }
     
     // MARK: Value: Process

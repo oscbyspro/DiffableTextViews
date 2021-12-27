@@ -7,11 +7,7 @@
 
 // MARK: - Number
 
-/// Representation of a system number.
-///
-/// - Upper refers to integer digits.
-/// - Lower refers to fraction digits.
-///
+/// A representation of a system number.
 @usableFromInline struct Number: Text {
     
     // MARK: Properties
@@ -64,6 +60,8 @@
     
     #warning("WIP")
     @inlinable mutating func autocorrectSeparator(capacity: Capacity) {
-        if fraction.isEmpty, capacity.fraction <= .zero { separator.removeAll() }
+        guard fraction.isEmpty else { return }
+        guard capacity.fraction <= 0 || capacity.significant <= 0 else { return }
+        separator.removeAll()
     }
 }

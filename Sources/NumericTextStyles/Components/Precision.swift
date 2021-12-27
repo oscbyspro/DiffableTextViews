@@ -38,8 +38,8 @@ public struct Precision<Value: Precise> {
     }
     
     @inlinable func editableStyle() -> NumberFormatStyleConfiguration.Precision {
-        let integer = _Precision.integerLowerBound...Value.maxLosslessUpperDigits
-        let fraction = _Precision.fractionLowerBound...Value.maxLosslessLowerDigits
+        let integer = _Precision.integerLowerBound...Value.maxLosslessIntegerDigits
+        let fraction = _Precision.fractionLowerBound...Value.maxLosslessFractionDigits
         return .integerAndFractionLength(integerLimits: integer, fractionLimits: fraction)
     }
     
@@ -75,7 +75,7 @@ public struct Precision<Value: Precise> {
     // MARK: Initializers
     
     @inlinable init<R: RangeExpression>(significant: R) where R.Bound == Int {
-        self.significant = _Precision.clamped(significant, to: _Precision.significantLowerBound...Value.maxLosslessValueDigits)
+        self.significant = _Precision.clamped(significant, to: _Precision.significantLowerBound...Value.maxLosslessSignificantDigits)
     }
     
     // MARK: Styles
@@ -87,12 +87,12 @@ public struct Precision<Value: Precise> {
     // MARK: Capacity
     
     @inlinable func capacity(number: Number) throws -> Capacity {
-        let integerCapacity = Value.maxLosslessUpperDigits - number.integer.count
+        let integerCapacity = Value.maxLosslessIntegerDigits - number.integer.count
         guard integerCapacity >= 0 else {
             throw _Precision.cancellation(excess: .integer)
         }
         
-        let fractionCapacity = Value.maxLosslessLowerDigits - number.fraction.count
+        let fractionCapacity = Value.maxLosslessFractionDigits - number.fraction.count
         guard fractionCapacity >= 0 else {
             throw _Precision.cancellation(excess: .fraction)
         }
@@ -120,8 +120,8 @@ public struct Precision<Value: Precise> {
     // MARK: Initializers
     
     @inlinable init<R0: RangeExpression, R1: RangeExpression>(integer: R0, fraction: R1) where R0.Bound == Int, R1.Bound == Int {
-        self.integer = _Precision.clamped(integer, to: _Precision.integerLowerBound...Value.maxLosslessUpperDigits)
-        self.fraction = _Precision.clamped(fraction, to: _Precision.fractionLowerBound...Value.maxLosslessLowerDigits)
+        self.integer = _Precision.clamped(integer, to: _Precision.integerLowerBound...Value.maxLosslessIntegerDigits)
+        self.fraction = _Precision.clamped(fraction, to: _Precision.fractionLowerBound...Value.maxLosslessFractionDigits)
     }
     
     @inlinable init<R: RangeExpression>(integer: R) where R.Bound == Int {
@@ -151,7 +151,7 @@ public struct Precision<Value: Precise> {
             throw _Precision.cancellation(excess: .fraction)
         }
         
-        let significantCapacity = Value.maxLosslessValueDigits - number.significantCount()
+        let significantCapacity = Value.maxLosslessSignificantDigits - number.significantCount()
         guard significantCapacity >= 0 else {
             throw _Precision.cancellation(excess: .significant)
         }
@@ -186,9 +186,9 @@ public struct Precision<Value: Precise> {
     // MARK: Components
     
     @usableFromInline enum Component: String {
-        case significant
         case integer
         case fraction
+        case significant
     }
 }
 
@@ -211,7 +211,7 @@ public extension Precision {
     // MARK: Named
             
     @inlinable static var standard: Self {
-        .max(Value.maxLosslessValueDigits)
+        .max(Value.maxLosslessSignificantDigits)
     }
 }
 
@@ -240,10 +240,10 @@ public extension Precision where Value: PreciseFloatingPoint {
     }
     
     @inlinable static func max(integer: Int) -> Self {
-        .max(integer: integer, fraction: Value.maxLosslessValueDigits - integer)
+        .max(integer: integer, fraction: Value.maxLosslessSignificantDigits - integer)
     }
     
     @inlinable static func max(fraction: Int) -> Self {
-        .max(integer: Value.maxLosslessValueDigits - fraction, fraction: fraction)
+        .max(integer: Value.maxLosslessSignificantDigits - fraction, fraction: fraction)
     }
 }
