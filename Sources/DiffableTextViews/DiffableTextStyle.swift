@@ -25,7 +25,13 @@ public protocol DiffableTextStyle {
     /// Value represented by the snapshot or nil if the snapshot is invalid.
     @inlinable func parse(snapshot: Snapshot) throws -> Value // required (!)
 
-    /// Merges the current snapshot with the input snapshot proposed by the user, which only contains symbols with empty attributes.
+    /// Merges the current snapshot with the input snapshot proposed by the user,
+    ///
+    /// - Parameters:
+    ///     - snapshot: current snapshot
+    ///     - content: user input with empty attributes
+    ///     - range: indices in snapshot that content is proposed to change
+    ///
     @inlinable func merge(snapshot: Snapshot, with content: Snapshot, in range: Range<Snapshot.Index>) throws -> Snapshot
     
     // MARK: Process

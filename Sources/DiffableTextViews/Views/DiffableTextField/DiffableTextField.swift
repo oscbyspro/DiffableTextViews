@@ -257,7 +257,7 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable, 
         }
         
         @inlinable func downstream(displays value: Value) -> Bool {
-            cache.value == value && cache.edits == downstream.edits
+           cache.edits == downstream.edits && cache.value == value
         }
         
         // MARK: Synchronize: Helpers

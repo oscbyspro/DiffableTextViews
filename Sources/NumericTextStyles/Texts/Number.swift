@@ -7,14 +7,19 @@
 
 // MARK: - Number
 
+/// Representation of a system number.
+///
+/// - Upper refers to integer digits.
+/// - Lower refers to fraction digits.
+///
 @usableFromInline struct Number: Text {
     
     // MARK: Properties
     
     @usableFromInline var sign = Sign()
-    @usableFromInline var integer = Digits()
+    @usableFromInline var upper = Digits()
     @usableFromInline var separator = Separator()
-    @usableFromInline var fraction = Digits()
+    @usableFromInline var lower = Digits()
     
     // MARK: Initializers
     
@@ -23,18 +28,23 @@
     // MARK: Descriptions
     
     @inlinable var isEmpty: Bool {
-        sign.isEmpty && integer.isEmpty && separator.isEmpty && fraction.isEmpty
+        sign.isEmpty && upper.isEmpty && separator.isEmpty && lower.isEmpty
     }
     
     @inlinable var characters: String {
-        sign.characters + integer.characters + separator.characters + fraction.characters
-    }
-        
-    @inlinable var digitsCount: NumberDigitsCount {
-        .init(integer: integer.count, fraction: fraction.count)
+        sign.characters + upper.characters + separator.characters + lower.characters
     }
     
-    // MARK: Transformations
+    // MARK: Count
+    
+    @inlinable func valueCount() -> Int {
+        let upperCount = upper.count - upper.countZerosInPrefix()
+        let lowerCount = lower.count - lower.countZerosInSuffix()
+        
+        return upperCount + lowerCount
+    }
+    
+    // MARK: Correct
 
     #warning("WIP")
     @inlinable mutating func autocorrectSign<Value: Boundable>(bounds: Bounds<Value>) {
@@ -46,11 +56,11 @@
     }
     
     #warning("WIP")
-    @inlinable mutating func autocorrectSeparator(capacity: NumberDigitsCount) {
-        if fraction.isEmpty, capacity.fraction <= .zero { separator.removeAll() }
+    @inlinable mutating func autocorrectSeparator(capacity: Capacity) {
+        if lower.isEmpty, capacity.lower <= .zero { separator.removeAll() }
     }
     
-    // MARK: Transformations: Commands
+    // MARK: Command
     
     @inlinable mutating func toggle(sign proposal: Sign) {
         switch proposal {

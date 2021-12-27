@@ -34,7 +34,7 @@ public struct Bounds<Value: Boundable> {
     
     // MARK: Initialiers: Static
     
-    @inlinable public static var max: Self {
+    @inlinable public static var standard: Self {
         .init()
     }
     
@@ -70,7 +70,7 @@ public struct Bounds<Value: Boundable> {
     
     @inlinable func validate(contains value: Value) throws {
         guard lowerBound <= value && value <= upperBound else {
-            throw .cancellation(reason: "Bounds from \(lowerBound) to \(upperBound) do no contain: \(value).")
+            throw .cancellation(reason: "Bounds from \(lowerBound) to \(upperBound) do not contain: \(value).")
         }
     }
 }

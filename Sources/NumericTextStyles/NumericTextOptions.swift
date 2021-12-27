@@ -1,17 +1,17 @@
 //
-//  NumberTypeOptions.swift
+//  NumericTextOptions.swift
 //  
 //
 //  Created by Oscar Byström Ericsson on 2021-12-24.
 //
 
-// MARK: - NumberTypeOptions
+// MARK: - NumericTextOptions
 
 /// Number type description.
 ///
 /// FloatingPoints are empty.
 ///
-public struct NumberTypeOptions: OptionSet {
+public struct NumericTextOptions: OptionSet {
     
     // MARK: Properties
     

@@ -16,7 +16,7 @@ public protocol NumericTextValue: Formattable, Boundable, Precise {
     
     // MARK: Requirements
     
-    @inlinable static var options: NumberTypeOptions { get }
+    @inlinable static var options: NumericTextOptions { get }
 }
 
 // MARK: - NumericTextInteger
@@ -65,7 +65,7 @@ extension NumericTextInt {
     
     // MARK: Implementation
     
-    @inlinable public static var options: NumberTypeOptions {
+    @inlinable public static var options: NumericTextOptions {
         .integer
     }
 }
@@ -78,7 +78,7 @@ extension NumericTextUInt {
     
     // MARK: Implementation
     
-    @inlinable public static var options: NumberTypeOptions {
+    @inlinable public static var options: NumericTextOptions {
         .unsignedInteger
     }
 }
@@ -103,7 +103,7 @@ extension NumericTextFloat {
     
     // MARK: Value
     
-    @inlinable public static var options: NumberTypeOptions {
+    @inlinable public static var options: NumericTextOptions {
         .floatingPoint
     }
     

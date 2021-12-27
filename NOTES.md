@@ -14,6 +14,9 @@
 
 ### NumericTextStyles
     - Trailing redundant characters should be removable. Remove trailing redundant characters if number is at max value.
-
-### DiffableTextViews
-    - Make models such as Snapshot conform to CustomStringConvertible for better debug messages.
+    
+### NumericTextStyles/Precision+Capacity+Number:
+    - Rename:
+        - upper: integrals
+        - lower: fractionals
+        - value: significands

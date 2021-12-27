@@ -7,6 +7,10 @@
 
 // MARK: - Digits
 
+/// Representation of system digits.
+///
+/// - Digits.count (stored) is accessed in O(1) time.
+///
 @usableFromInline struct Digits: Text {
     
     // MARK: Properties
@@ -18,10 +22,20 @@
     
     @inlinable init() { }
     
-    // MARK: Getters
+    // MARK: Descriptions
     
     @inlinable var isEmpty: Bool {
         characters.isEmpty
+    }
+    
+    // MARK: Count
+    
+    @inlinable func countZerosInPrefix() -> Int {
+        characters.count(while: digitIsZero)
+    }
+    
+    @inlinable func countZerosInSuffix() -> Int {
+        characters.reversed().count(while: digitIsZero)
     }
     
     // MARK: Transformations
@@ -32,11 +46,17 @@
     }
     
     @inlinable mutating func removeRedundantZerosPrefix() {
-        characters.removeSubrange(..<characters.dropLast().prefix(while: { $0 == Self.zero }).endIndex)
+        characters.removeSubrange(..<characters.dropLast().prefix(while: digitIsZero).endIndex)
     }
     
     @inlinable mutating func replaceWithZeroIfItIsEmpty() {
         guard isEmpty else { return }; characters.append(Self.zero)
+    }
+    
+    // MARK: Helpers
+    
+    @inlinable func digitIsZero(_ character: Character) -> Bool {
+        character == Self.zero
     }
 
     // MARK: Characters

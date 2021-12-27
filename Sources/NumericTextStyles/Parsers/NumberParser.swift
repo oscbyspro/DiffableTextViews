@@ -17,11 +17,11 @@ import protocol Utilities.Transformable
     @usableFromInline private(set) var sign: SignParser
     @usableFromInline private(set) var digits: DigitsParser
     @usableFromInline private(set) var separator: SeparatorParser
-    @usableFromInline private(set) var options: NumberTypeOptions
+    @usableFromInline private(set) var options: NumericTextOptions
     
     // MARK: Initializers
     
-    @inlinable init(sign: SignParser, digits: DigitsParser, separator: SeparatorParser, options: NumberTypeOptions) {
+    @inlinable init(sign: SignParser, digits: DigitsParser, separator: SeparatorParser, options: NumericTextOptions) {
         self.sign = sign
         self.digits = digits
         self.separator = separator
@@ -36,7 +36,7 @@ import protocol Utilities.Transformable
         separator.update(locale: newValue)
     }
     
-    @inlinable mutating func update(options newValue: NumberTypeOptions) {
+    @inlinable mutating func update(options newValue: NumericTextOptions) {
         options = newValue
     }
 
@@ -56,10 +56,10 @@ import protocol Utilities.Transformable
         // MARK: Integer
         // --------------------------------- //
 
-        digits.parse(characters, index: &index, value: &value.integer)
+        digits.parse(characters, index: &index, value: &value.upper)
         
-        value.integer.removeRedundantZerosPrefix()
-        value.integer.replaceWithZeroIfItIsEmpty()
+        value.upper.removeRedundantZerosPrefix()
+        value.upper.replaceWithZeroIfItIsEmpty()
         
         guard !options.contains(.integer) else { return }
         
@@ -75,7 +75,7 @@ import protocol Utilities.Transformable
         // MARK: Fraction
         // --------------------------------- //
         
-        digits.parse(characters, index: &index, value: &value.fraction)
+        digits.parse(characters, index: &index, value: &value.lower)
     }
     
     // MARK: Instances

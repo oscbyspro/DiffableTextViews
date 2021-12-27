@@ -11,7 +11,7 @@
     
     // MARK: Properties
     
-    @usableFromInline var conditions: [(Character) -> Bool]
+    @usableFromInline private(set) var conditions: [(Character) -> Bool]
         
     // MARK: Initializers
     

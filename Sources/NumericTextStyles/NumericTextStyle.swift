@@ -63,7 +63,7 @@ public struct NumericTextStyle<Value: NumericTextValue>: DiffableTextStyle, Tran
     }
     
     @inlinable func value(number: Number) throws -> Value {
-        number.integer.isEmpty && number.fraction.isEmpty ? Value.zero : try Value.value(description: number.characters)
+        number.upper.isEmpty && number.lower.isEmpty ? Value.zero : try Value.value(description: number.characters)
     }
     
     // MARK: Value: Process
@@ -103,7 +103,7 @@ public struct NumericTextStyle<Value: NumericTextValue>: DiffableTextStyle, Tran
         
         // --------------------------------- //
 
-        let capacity = try format.precision.capacity(count: number.digitsCount)
+        let capacity = try format.precision.capacity(number: number)
         
         // --------------------------------- //
         
@@ -114,10 +114,10 @@ public struct NumericTextStyle<Value: NumericTextValue>: DiffableTextStyle, Tran
         
         let value = try value(number: number)
         try format.bounds.validate(contains: value)
-                
+        
         // --------------------------------- //
         
-        let style = format.editableStyleThatUses(count: number.digitsCount, separator: !number.separator.isEmpty)
+        let style = format.editableStyleThatUses(number: number)
                 
         // --------------------------------- //
         

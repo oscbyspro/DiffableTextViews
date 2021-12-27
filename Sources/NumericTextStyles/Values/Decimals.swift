@@ -21,18 +21,18 @@ extension Decimal {
     
     // MARK: Value
     
-    public static let options: NumberTypeOptions = .floatingPoint
+    public static let options: NumericTextOptions = .floatingPoint
     
     // MARK: Precise
  
-    public static let maxLosslessTotalDigits: Int = 38
+    public static let maxLosslessValueDigits: Int = 38
     
     // MARK: Boundable
         
     @inlinable public static var minLosslessValue: Self { -maxLosslessLimit }
     @inlinable public static var maxLosslessValue: Self {  maxLosslessLimit }
     @usableFromInline static let maxLosslessLimit: Self = {
-        Decimal(string: String(repeating: "9", count: maxLosslessTotalDigits))!
+        Decimal(string: String(repeating: "9", count: maxLosslessValueDigits))!
     }()
         
     // MARK: Formattable

@@ -6,6 +6,7 @@
 //
 
 import struct Foundation.Locale
+import   enum Foundation.NumberFormatStyleConfiguration
 
 // MARK: - Format
 
@@ -24,10 +25,10 @@ import struct Foundation.Locale
     
     @inlinable init(locale: Locale) {
         self.locale = locale
-        self.bounds = .max
-        self.precision = .max
+        self.bounds = .standard
+        self.precision = .standard
         self.parser = .standard
-        
+
         parser.update(locale: locale)
         parser.update(options: Value.options)
     }
@@ -79,8 +80,16 @@ import struct Foundation.Locale
         Value.style(locale: locale, precision: precision.editableStyle(), separator: .automatic)
     }
     
-    @inlinable func editableStyleThatUses(count: NumberDigitsCount, separator: Bool) -> Value.FormatStyle {
-        let precision = precision.editableStyleThatUses(count: count)
-        return Value.style(locale: locale, precision: precision, separator: separator ? .always : .automatic)
+    @inlinable func editableStyleThatUses(number: Number) -> Value.FormatStyle {
+        let precision: _Format.Precision = precision.editableStyleThatUses(number: number)
+        let separator: _Format.Separator = number.separator.isEmpty ? .automatic : .always
+        return Value.style(locale: locale, precision: precision, separator: separator)
     }
+}
+
+// MARK: - Format: Helpers
+
+@usableFromInline enum _Format {
+    @usableFromInline typealias Precision = NumberFormatStyleConfiguration.Precision
+    @usableFromInline typealias Separator = NumberFormatStyleConfiguration.DecimalSeparatorDisplayStrategy
 }
