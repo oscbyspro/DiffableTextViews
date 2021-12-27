@@ -24,7 +24,13 @@
     // MARK: Utilities
         
     @inlinable func capacity() -> Int {
-        var count = 0; for element in pattern where element == placeholder { count += 1 }; return count
+        var count = 0
+        
+        for element in pattern where element == placeholder {
+            count += 1
+        }
+        
+        return count
     }
     
     // MARK: Validation
