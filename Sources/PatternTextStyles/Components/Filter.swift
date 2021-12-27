@@ -11,29 +11,27 @@
     
     // MARK: Properties
     
-    @usableFromInline var validation: ((Character) -> Bool)?
-    
+    @usableFromInline var conditions: [(Character) -> Bool]
+        
     // MARK: Initializers
     
     @inlinable init() {
-        self.validation = nil
+        self.conditions = []
     }
     
     // MARK: Transformations
     
-    @inlinable mutating func concatenate(_ next: @escaping (Character) -> Bool) {
-        if let validation = validation {
-            self.validation = { validation($0) && next($0) }
-        } else {
-            self.validation = next
-        }
+    @inlinable mutating func concatenate(_ condition: @escaping (Character) -> Bool) {
+        conditions.append(condition)
     }
     
     // MARK: Validation
     
     @inlinable func validate(_ character: Character) throws {
-        if let validation = validation, !validation(character) {
-            throw .cancellation(reason: "Character '\(character)' is invalid.")
+        for (index, condition) in conditions.enumerated() {
+            guard condition(character) else {
+                throw .cancellation(reason: "Character '\(character)' is invalid [\(index)].")
+            }
         }
     }
 }
