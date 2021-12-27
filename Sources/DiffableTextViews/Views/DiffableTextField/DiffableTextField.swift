@@ -128,31 +128,35 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable, 
         // MARK: Delegate: Inputs
         
         @inlinable public func textField(_ textField: UITextField, shouldChangeCharactersIn nsRange: NSRange, replacementString string: String) -> Bool {
-            let offsets = Offset(at: nsRange.lowerBound) ..< Offset(at: nsRange.upperBound)
-            let range = cache.field.indices(at: offsets)
-            let input = Snapshot(string, only: .content)
-            
-            // --------------------------------- //
-
-            let indices = range.lowerBound.rhs! ..< range.upperBound.rhs!
-            guard var snapshot = upstream.style.merge(snapshot: cache.snapshot, with: input, in: indices) else { return false }
-            upstream.style.process(snapshot: &snapshot)
-  
-            guard var value = upstream.style.parse(snapshot: snapshot) else { return false }
-            upstream.style.process(value: &value)
-                        
-            let field = cache.field.updating(selection: range.upperBound, intent: nil).updating(carets: snapshot)
-            
-            // --------------------------------- //
-            
-            Task { @MainActor [value] in
-                // async to process special commands (like: option + delete) first
-                self.cache.value = value
-                self.cache.field = field
-                self.push(update: [.upstream, .downstream])
-            }
+            do {
                 
-            // --------------------------------- //
+                let offsets = Offset(at: nsRange.lowerBound) ..< Offset(at: nsRange.upperBound)
+                let range = cache.field.indices(at: offsets)
+                let input = Snapshot(string, only: .content)
+                
+                let indices = range.lowerBound.rhs! ..< range.upperBound.rhs!
+                var snapshot = try upstream.style.merge(snapshot: cache.snapshot, with: input, in: indices)
+                upstream.style.process(snapshot: &snapshot)
+      
+                var value = try upstream.style.parse(snapshot: snapshot)
+                upstream.style.process(value: &value)
+                            
+                let field = cache.field.updating(selection: range.upperBound, intent: nil).updating(carets: snapshot)
+                                
+                Task { @MainActor [value] in
+                    // async to process special commands (like: option + delete) first
+                    self.cache.value = value
+                    self.cache.field = field
+                    self.push(update: [.upstream, .downstream])
+                }
+                
+            } catch let cancellation {
+                #if DEBUG
+                
+                print("User input cancelled due to: \(cancellation).")
+                
+                #endif
+            }
             
             return false
         }

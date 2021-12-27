@@ -28,14 +28,6 @@ public struct PatternTextStyle<Pattern, Value>: DiffableTextStyle, Transformable
         self.visible = true
     }
     
-    // MARK: Validation
-    
-    @inlinable func capacity() -> Int {
-        var count = 0
-        for element in pattern where element == placeholder { count += 1 }
-        return count
-    }
-    
     // MARK: Transformations
     
     @inlinable public func hidden() -> Self {
@@ -46,27 +38,35 @@ public struct PatternTextStyle<Pattern, Value>: DiffableTextStyle, Transformable
         transforming({ $0.filter = filter })
     }
     
+    // MARK: Validation
+    
+    @inlinable func capacity() -> Int {
+        var count = 0; for element in pattern where element == placeholder { count += 1 }; return count
+    }
+    
     // MARK: Parse
     
-    @inlinable public func parse(snapshot: Snapshot) -> Value? {
+    @inlinable public func parse(snapshot: Snapshot) throws -> Value {
         var value = Value()
         var count = 0
         
         for symbol in snapshot where symbol.nonformatting {
-            guard filter(symbol.character) else { return nil }
+            guard filter(symbol.character) else { throw .failure }
+            
+            
             value.append(symbol.character)
             count += 1
         }
         
-        guard count <= capacity() else { return nil }
+        guard count <= capacity() else { throw .failure }
         return value
     }
     
     // MARK: Merge
     
-    @inlinable public func merge(snapshot: Snapshot, with content: Snapshot, in range: Range<Snapshot.Index>) -> Snapshot? {
+    @inlinable public func merge(snapshot: Snapshot, with content: Snapshot, in range: Range<Snapshot.Index>) throws -> Snapshot {
         let proposal = snapshot.replacing(range, with: content)
-        guard let value = parse(snapshot: proposal) else { return nil }
+        let value = try parse(snapshot: proposal)
         return self.snapshot(editable: value)
     }
     

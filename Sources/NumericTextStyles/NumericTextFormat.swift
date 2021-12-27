@@ -9,7 +9,7 @@ import struct Foundation.Locale
 
 // MARK: - NumericTextFormat
 
-#warning("WIP")
+#warning("Seems useless. Merge into Numeric formatStyle, maybe.")
 @usableFromInline struct NumericTextFormat<Value: NumericTextValue> {
     @usableFromInline typealias Bounds = NumericTextStyles.Bounds<Value>
     @usableFromInline typealias Precision = NumericTextStyles.Precision<Value>

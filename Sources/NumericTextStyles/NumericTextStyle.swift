@@ -58,12 +58,12 @@ public struct NumericTextStyle<Value: NumericTextValue>: DiffableTextStyle, Tran
     
     // MARK: Value: Parse
 
-    @inlinable public func parse(snapshot: Snapshot) -> Value? {
-        number(snapshot: snapshot).flatMap(value)
+    @inlinable public func parse(snapshot: Snapshot) throws -> Value {
+        try value(number: try number(snapshot: snapshot))
     }
     
-    @inlinable func value(number: Number) -> Value? {
-        number.integer.isEmpty && number.fraction.isEmpty ? Value.zero : Value.value(description: number.characters)
+    @inlinable func value(number: Number) throws -> Value {
+        number.integer.isEmpty && number.fraction.isEmpty ? Value.zero : try Value.value(description: number.characters).get()
     }
     
     // MARK: Value: Process
@@ -74,8 +74,8 @@ public struct NumericTextStyle<Value: NumericTextValue>: DiffableTextStyle, Tran
     
     // MARK: Snapshot: Number
         
-    @inlinable func number(snapshot: Snapshot) -> Number? {
-        format.parser.parse(snapshot.lazy.compactMap({ $0.nonformatting ? $0.character : nil }))
+    @inlinable func number(snapshot: Snapshot) throws -> Number {
+        try format.parser.parse(snapshot.lazy.compactMap({ $0.nonformatting ? $0.character : nil })).get()
     }
     
     // MARK: Snapshot: Showcase
@@ -92,18 +92,19 @@ public struct NumericTextStyle<Value: NumericTextValue>: DiffableTextStyle, Tran
 
     // MARK: Snapshot: Merge
 
-    @inlinable public func merge(snapshot: Snapshot, with content: Snapshot, in range: Range<Snapshot.Index>) -> Snapshot? {
+    #warning("implement as throws")
+    @inlinable public func merge(snapshot: Snapshot, with content: Snapshot, in range: Range<Snapshot.Index>) throws -> Snapshot {
         var input = Input(content, parser: format.parser)
         let toggleSignCommand = input.consumeToggleSignCommand()
-        
+                
         // --------------------------------- //
 
-        guard var number = number(snapshot: snapshot.replacing(range, with: input.content)) else { return nil }
+        var number = try number(snapshot: snapshot.replacing(range, with: input.content))
         toggleSignCommand?.process(&number)
         
         // --------------------------------- //
 
-        guard let capacity = format.precision.capacity(numberDigitsCount: number.digitsCount) else { return nil }
+        let capacity = try format.precision.capacity(numberDigitsCount: number.digitsCount).get()
         
         // --------------------------------- //
         
@@ -112,8 +113,8 @@ public struct NumericTextStyle<Value: NumericTextValue>: DiffableTextStyle, Tran
         
         // --------------------------------- //
         
-        guard let value = value(number: number) else { return nil }
-        guard format.bounds.contains(value) else { return nil }
+        let value = try value(number: number)
+        try format.bounds.contains(value).true()
                 
         // --------------------------------- //
         
@@ -128,7 +129,7 @@ public struct NumericTextStyle<Value: NumericTextValue>: DiffableTextStyle, Tran
         if !number.sign.isEmpty, !characters.hasPrefix(number.sign.characters) {
             characters = number.sign.characters + characters
         }
-                
+        
         // --------------------------------- //
     
         return self.snapshot(characters: characters)
