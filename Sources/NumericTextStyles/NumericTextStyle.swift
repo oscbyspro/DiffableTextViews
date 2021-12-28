@@ -203,13 +203,13 @@ public struct NumericTextStyle<Value: NumericTextValue>: DiffableTextStyle, Tran
         // --------------------------------- //
         
         xProcessRedundantTail: do {
-            let fractionSeparator = snapshot.suffix {
+            let redundantTail = snapshot.suffix {
                 if format.zero == $0.character { return true }
                 if format.fractionSeparator.contains($0.character) { return true }
                 return false
             }
             
-            snapshot.transform(attributes: fractionSeparator.indices) { attribute in
+            snapshot.transform(attributes: redundantTail.indices) { attribute in
                 attribute.insert(.removable)
             }
         }
