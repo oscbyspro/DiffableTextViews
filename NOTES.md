@@ -13,10 +13,4 @@
     - Take a pen and a piece of paper and work out how it should *actually* work.
 
 ### NumericTextStyles
-    - Trailing redundant characters should be removable. Remove trailing redundant characters if number is at max value.
-    
-### NumericTextStyles/Precision+Capacity+Number:
-    - Rename:
-        - upper: integrals
-        - lower: fractionals
-        - value: significands
+    - Remove trailing redundant characters if number is at max value.

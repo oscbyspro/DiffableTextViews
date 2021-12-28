@@ -209,9 +209,9 @@ public struct NumericTextStyle<Value: NumericTextValue>: DiffableTextStyle, Tran
         // --------------------------------- //
         
         PROCESS_REDUNDANT_TAIL: do {
-            let redundantTail = snapshot.suffix {
-                if format.zero == $0.character { return true }
-                if format.fractionSeparator.contains($0.character) { return true }
+            let redundantTail = snapshot.suffix { symbol in
+                if format.zero == symbol.character { return true }
+                if format.fractionSeparator.contains(symbol.character) { return true }
                 return false
             }
             
