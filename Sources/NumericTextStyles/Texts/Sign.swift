@@ -54,8 +54,8 @@ extension Sign: CustomStringConvertible {
     
     @usableFromInline var description: String {
         switch self {
-        case .positive: return "{ positive }"
-        case .negative: return "{ negative }"
+        case .positive: return "positive"
+        case .negative: return "negative"
         }
     }
 }
