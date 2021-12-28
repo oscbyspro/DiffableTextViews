@@ -36,24 +36,24 @@ public struct NumericTextStyle<Value: NumericTextValue>: DiffableTextStyle, Tran
     
     // MARK: Transformations
     
-    @inlinable public func locale(_ newValue: Locale) -> Self {
-        transforming({ $0.format.update(locale: newValue) })
+    @inlinable public func locale(_ locale: Locale) -> Self {
+        transforming({ $0.format.update(locale: locale) })
     }
     
-    @inlinable public func bounds(_ newValue: Bounds) -> Self {
-        transforming({ $0.format.update(bounds: newValue) })
+    @inlinable public func bounds(_ bounds: Bounds) -> Self {
+        transforming({ $0.format.update(bounds: bounds) })
     }
     
-    @inlinable public func precision(_ newValue: Precision) -> Self {
-        transforming({ $0.format.update(precision: newValue) })
+    @inlinable public func precision(_ precision: Precision) -> Self {
+        transforming({ $0.format.update(precision: precision) })
     }
     
-    @inlinable public func prefix(_ newValue: String?) -> Self {
-        transforming({ $0.prefix = newValue ?? "" })
+    @inlinable public func prefix(_ prefix: String?) -> Self {
+        transforming({ $0.prefix = prefix ?? "" })
     }
     
-    @inlinable public func suffix(_ newValue: String?) -> Self {
-        transforming({ $0.suffix = newValue ?? "" })
+    @inlinable public func suffix(_ suffix: String?) -> Self {
+        transforming({ $0.suffix = suffix ?? "" })
     }
     
     // MARK: Value: Parse

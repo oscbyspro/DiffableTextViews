@@ -30,14 +30,14 @@ import protocol Utilities.Transformable
     
     // MARK: Transformations
 
-    @inlinable mutating func update(locale newValue: Locale) {
-        sign.update(locale: newValue)
-        digits.update(locale: newValue)
-        separator.update(locale: newValue)
+    @inlinable mutating func update(locale: Locale) {
+        self.sign.update(locale: locale)
+        self.digits.update(locale: locale)
+        self.separator.update(locale: locale)
     }
     
-    @inlinable mutating func update(options newValue: NumericTextOptions) {
-        options = newValue
+    @inlinable mutating func update(options: NumericTextOptions) {
+        self.options = options
     }
 
     // MARK: Parse

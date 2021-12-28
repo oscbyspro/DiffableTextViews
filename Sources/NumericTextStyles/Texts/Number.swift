@@ -32,8 +32,8 @@
     }
         
     @inlinable func significantCount() -> Int {
-        let significantIntegerCount = integer.count - integer.countZerosInPrefix()
-        let significantFractionCount = fraction.count - fraction.countZerosInSuffix()
+        let significantIntegerCount = integer.count - integer.prefixZerosCount()
+        let significantFractionCount = fraction.count - fraction.suffixZerosCount()
         return significantIntegerCount + significantFractionCount
     }
     
@@ -58,7 +58,6 @@
         }
     }
     
-    #warning("WIP")
     @inlinable mutating func autocorrectSeparator(capacity: Capacity) {
         guard fraction.isEmpty else { return }
         guard capacity.fraction <= 0 || capacity.significant <= 0 else { return }

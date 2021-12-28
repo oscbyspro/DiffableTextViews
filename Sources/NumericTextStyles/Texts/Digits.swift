@@ -30,12 +30,12 @@
     
     // MARK: Count
     
-    @inlinable func countZerosInPrefix() -> Int {
-        characters.count(while: digitIsZero)
+    @inlinable func prefixZerosCount() -> Int {
+        characters.count(while: Self.isZero)
     }
     
-    @inlinable func countZerosInSuffix() -> Int {
-        characters.reversed().count(while: digitIsZero)
+    @inlinable func suffixZerosCount() -> Int {
+        characters.reversed().count(while: Self.isZero)
     }
     
     // MARK: Transformations
@@ -46,7 +46,7 @@
     }
     
     @inlinable mutating func removeRedundantZerosPrefix() {
-        characters.removeSubrange(..<characters.dropLast().prefix(while: digitIsZero).endIndex)
+        characters.removeSubrange(..<characters.dropLast().prefix(while: Self.isZero).endIndex)
     }
     
     @inlinable mutating func replaceWithZeroIfItIsEmpty() {
@@ -55,7 +55,7 @@
     
     // MARK: Helpers
     
-    @inlinable func digitIsZero(_ character: Character) -> Bool {
+    @inlinable static func isZero(_ character: Character) -> Bool {
         character == Self.zero
     }
 

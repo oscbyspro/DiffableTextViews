@@ -35,17 +35,17 @@ import   enum Foundation.NumberFormatStyleConfiguration
     
     // MARK: Transformations
     
-    @inlinable mutating func update(locale newValue: Locale) {
-        locale = newValue
-        parser.update(locale: newValue)
+    @inlinable mutating func update(locale: Locale) {
+        self.locale = locale
+        self.parser.update(locale: locale)
     }
     
-    @inlinable mutating func update(bounds newValue: Bounds) {
-        bounds = newValue
+    @inlinable mutating func update(bounds: Bounds) {
+        self.bounds = bounds
     }
     
-    @inlinable mutating func update(precision newValue: Precision) {
-        precision = newValue
+    @inlinable mutating func update(precision: Precision) {
+        self.precision = precision
     }
     
     // MARK: Characters

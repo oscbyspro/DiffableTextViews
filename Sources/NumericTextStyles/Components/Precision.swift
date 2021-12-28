@@ -5,8 +5,8 @@
 //  Created by Oscar Byström Ericsson on 2021-12-21.
 //
 
+import enum Foundation.NumberFormatStyleConfiguration
 import struct Utilities.Cancellation
-import   enum Foundation.NumberFormatStyleConfiguration
 
 // MARK: - Precision
 
@@ -52,7 +52,7 @@ public struct Precision<Value: Precise> {
     }
 }
 
-// MARK: - Namespace
+// MARK: - Helpers
 
 @usableFromInline enum _Precision {
 
@@ -64,7 +64,7 @@ public struct Precision<Value: Precise> {
     }
     
     // MARK: Capacity
-        
+    
     @inlinable static func capacity(number: Number, max: Capacity) throws -> Capacity {
         let integer = max.integer - number.integer.count
         guard integer >= 0 else {
@@ -98,7 +98,6 @@ public struct Precision<Value: Precise> {
         case significant
     }
 }
-
 
 // MARK: - Implementation
 
@@ -179,7 +178,7 @@ public struct Precision<Value: Precise> {
     }
 }
 
-// MARK: - Instances: Significant
+// MARK: - Instances: SignificantDigits
 
 public extension Precision {
 
