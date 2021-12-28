@@ -6,7 +6,7 @@
 //
 
 import enum Foundation.NumberFormatStyleConfiguration
-import struct Utilities.Cancellation
+import struct Utilities.Reason
 
 // MARK: - Precision
 
@@ -68,17 +68,17 @@ public struct Precision<Value: Precise> {
     @inlinable static func capacity(number: Number, max: Capacity) throws -> Capacity {
         let integer = max.integer - number.integer.count
         guard integer >= 0 else {
-            throw cancellation(excess: .integer, max: max.integer)
+            throw failure(excess: .integer, max: max.integer)
         }
         
         let fraction = max.fraction - number.fraction.count
         guard fraction >= 0 else {
-            throw cancellation(excess: .fraction, max: max.fraction)
+            throw failure(excess: .fraction, max: max.fraction)
         }
         
         let significant = max.significant - number.significantCount()
         guard significant >= 0 else {
-            throw cancellation(excess: .significant, max: max.significant)
+            throw failure(excess: .significant, max: max.significant)
         }
         
         return .init(integer: integer, fraction: fraction, significant: significant)
@@ -86,8 +86,8 @@ public struct Precision<Value: Precise> {
     
     // MARK: Errors
     
-    @inlinable static func cancellation(excess component: Component, max: Int) -> Cancellation {
-        .init(reason: "Precision of { \(component.rawValue) } digits exceeded its capacity { \(max) }.")
+    @inlinable static func failure(excess component: Component, max: Int) -> Reason {
+        .reason(component, "digits exceeded its capacity of", max)
     }
     
     // MARK: Components

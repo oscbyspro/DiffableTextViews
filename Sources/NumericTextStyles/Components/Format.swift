@@ -7,7 +7,7 @@
 
 import struct Foundation.Locale
 import enum Foundation.NumberFormatStyleConfiguration
-import struct Utilities.Cancellation
+import struct Utilities.Reason
 
 // MARK: - Format
 
@@ -87,7 +87,7 @@ import struct Utilities.Cancellation
         return Value.style(locale: locale, precision: precision, separator: separator)
     }
     
-    // MARK: Format: Sign
+    // MARK: Validation: Sign
     
     @inlinable func correct(sign: inout Sign) {
         switch sign {
@@ -103,7 +103,15 @@ import struct Utilities.Cancellation
     
     @inlinable func validate(sign: Sign) throws {
         guard sign == sign.transforming(correct) else {
-            throw .cancellation(reason: "Sign { \(sign) } is not permitted in \(bounds).")
+            throw .reason(sign, "is not permitted in", bounds)
+        }
+    }
+    
+    // MARK: Validation: Value
+
+    @inlinable func validate(value: Value) throws {
+        guard bounds.contains(value) else {
+            throw .reason(value, "is outside of", bounds)
         }
     }
 }

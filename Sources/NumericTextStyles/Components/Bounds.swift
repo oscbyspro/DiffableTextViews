@@ -5,8 +5,6 @@
 //  Created by Oscar Byström Ericsson on 2021-12-21.
 //
 
-import struct Utilities.Cancellation
-
 // MARK: - Bounds
 
 /// A model that constrains values to a closed range.
@@ -52,30 +50,22 @@ public struct Bounds<Value: Boundable> {
     
     // MARK: Utilities
         
-    @inlinable func clamp(value: inout Value) {
+    @inlinable func clamp(_ value: inout Value) {
         value = Swift.max(min, Swift.min(value, max))
     }
     
-    // MARK: Validation
-    
-    @inlinable func validate(value: Value) throws {
-        guard values.contains(value) else {
-            throw .cancellation(reason: "Bounds \(self) do not contain { \(value) }.")
-        }
+    @inlinable func contains(_ value: Value) -> Bool {
+        values.contains(value)
     }
 }
 
-// MARK: - Bounds: Descriptions
+// MARK: - Bounds: Conversions
 
-extension Bounds: CustomStringConvertible, CustomDebugStringConvertible {
+extension Bounds: CustomStringConvertible {
     
     // MARK: Implementation
     
     @inlinable public var description: String {
         "[\(min),\(max)]"
-    }
-    
-    @inlinable public var debugDescription: String {
-        description
     }
 }

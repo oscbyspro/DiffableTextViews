@@ -73,7 +73,7 @@ public struct NumericTextStyle<Value: NumericTextValue>: DiffableTextStyle, Tran
     // MARK: Process
     
     @inlinable public func process(value: inout Value) {
-        format.bounds.clamp(value: &value)
+        format.bounds.clamp(&value)
     }
     
     // MARK: Parse
@@ -92,7 +92,7 @@ public struct NumericTextStyle<Value: NumericTextValue>: DiffableTextStyle, Tran
         let unformatted = snapshot.lazy.filter(Symbol.is(non: .formatting)).map(\.character)
                 
         guard let number = format.parser.parse(unformatted) else {
-            throw .cancellation(reason: "Unable to parse number in { \(snapshot.characters) }.")
+            throw .reason("unable to parse number in", snapshot.characters)
         }
                 
         return number
@@ -121,7 +121,7 @@ public struct NumericTextStyle<Value: NumericTextValue>: DiffableTextStyle, Tran
         // --------------------------------- //
         
         let value = try value(number: number)
-        try format.bounds.validate(value: value)
+        try format.validate(value: value)
         
         // --------------------------------- //
         

@@ -7,8 +7,8 @@
 
 import struct Foundation.Locale
 import struct Foundation.Decimal
-import   enum Foundation.NumberFormatStyleConfiguration
-import struct Utilities.Cancellation
+import enum Foundation.NumberFormatStyleConfiguration
+import struct Utilities.Reason
 
 // MARK: - Decimal
 
@@ -42,10 +42,6 @@ extension Decimal {
     }
     
     @inlinable public static func make(description: String) throws -> Self {
-        guard let value = Self(string: description) else {
-            throw cancellation(description: description)
-        }
-        
-        return value
+        try Decimal(string: description) ?? { throw failure(make: description) }()
     }
 }

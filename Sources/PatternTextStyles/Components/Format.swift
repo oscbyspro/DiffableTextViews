@@ -5,6 +5,8 @@
 //  Created by Oscar Byström Ericsson on 2021-12-27.
 //
 
+import struct Utilities.Reason
+
 // MARK: - Format
 
 @usableFromInline struct Format<Pattern> where Pattern: Collection, Pattern.Element == Character {
@@ -37,7 +39,7 @@
     
     @inlinable func validate<C: Collection>(characters: C) throws where C.Element == Character {
         guard characters.count <= capacity() else {
-            throw .cancellation(reason: "Number of characters exceeds pattern capacity.")
+            throw .reason("Number of characters exceeds pattern capacity.")
         }
     }
 }

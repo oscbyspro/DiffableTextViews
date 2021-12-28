@@ -5,6 +5,8 @@
 //  Created by Oscar Byström Ericsson on 2021-12-27.
 //
 
+import struct Utilities.Reason
+
 // MARK: - Filter
 
 @usableFromInline struct Filter {
@@ -30,7 +32,7 @@
     @inlinable func validate(_ character: Character) throws {
         for (index, condition) in conditions.enumerated() {
             guard condition(character) else {
-                throw .cancellation(reason: "Character '\(character)' is invalid [\(index)].")
+                throw .reason("Character '\(character)' is invalid [\(index)].")
             }
         }
     }

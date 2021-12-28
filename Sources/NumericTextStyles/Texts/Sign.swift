@@ -48,7 +48,7 @@ import protocol Utilities.Transformable
     @usableFromInline static let all:  [Character: Sign] = [plus:  .positive, minus: .negative]
 }
 
-// MARK: - Sign: Descriptions
+// MARK: - Sign: Conversions
 
 extension Sign: CustomStringConvertible {
     
