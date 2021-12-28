@@ -10,15 +10,14 @@ import struct Foundation.Locale
 // MARK: - SeparatorParser
 
 @usableFromInline struct SeparatorParser: Parser {
-    @usableFromInline typealias Translatables = Set<String>
 
     // MARK: Properties
     
-    @usableFromInline private(set) var translatables: Translatables
+    @usableFromInline private(set) var translatables: Set<String>
     
     // MARK: Initializers
     
-    @inlinable init(translatables: Translatables) {
+    @inlinable init(translatables: Set<String>) {
         self.translatables = translatables
     }
     

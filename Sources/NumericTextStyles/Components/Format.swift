@@ -52,16 +52,16 @@ import Utilities
     
     // MARK: Characters
     
+    @inlinable var signs: [Character: Sign] {
+        Sign.all
+    }
+ 
     @inlinable var zero: Character {
         Digits.zero
     }
     
     @inlinable var digits: Set<Character> {
         Digits.decimals
-    }
-    
-    @inlinable var signs: Set<Character> {
-        Sign.all
     }
     
     @inlinable var fractionSeparator: String {
@@ -88,16 +88,28 @@ import Utilities
         return Value.style(locale: locale, precision: precision, separator: separator)
     }
     
-    // MARK: Validation
+    // MARK: Format: Sign
     
-    @inlinable func validate(sign: Sign) throws {
+    @inlinable func corrected(sign: Sign) -> Sign {
+        var sign = sign
+        
         switch sign {
-        case .none:     return
-        case .positive: if bounds.max <= .zero { break }
-        case .negative: if bounds.min >= .zero { break }
+        case .positive:
+            if bounds.max >  .zero { break }
+            if bounds.min == .zero { break }
+            sign.toggle()
+        case .negative:
+            if bounds.min <  .zero { break }
+            sign.toggle()
         }
         
-        throw .cancellation(reason: "Sign '\(sign.characters)' not allowed in \(bounds).")
+        return sign
+    }
+    
+    @inlinable func validate(sign: Sign) throws {
+        guard sign == corrected(sign: sign) else {
+            throw .cancellation(reason: "Sign '\(sign)' is not allowed in \(bounds).")
+        }
     }
 }
 

@@ -5,6 +5,8 @@
 //  Created by Oscar Byström Ericsson on 2021-12-20.
 //
 
+#warning("Rework.")
+
 // MARK: - Separator
 
 /// A representation of system separator.

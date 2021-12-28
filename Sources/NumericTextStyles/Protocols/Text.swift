@@ -16,20 +16,5 @@
     @inlinable init()
     
     /// A sytem representation of the instance.
-    @inlinable var characters: String { get }
-    
-    /// A Boolean value indicating whether the instance  is empty.
-    @inlinable var isEmpty: Bool { get }
-}
-
-// MARK: - Text: Details
-
-extension Text {
-
-    // MARK: Transformations
-    
-    /// Resets the instance to an empty state.
-    @inlinable mutating func removeAll() {
-        self = .init()
-    }
+    @inlinable var characters: String { get }    
 }

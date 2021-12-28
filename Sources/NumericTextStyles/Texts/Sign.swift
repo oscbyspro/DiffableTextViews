@@ -12,33 +12,50 @@
     
     // MARK: Instances
     
-    case none
     case positive
     case negative
     
     // MARK: Initializers
     
     @inlinable init() {
-        self = .none
+        self = .positive
     }
         
-    // MARK: Getters
-    
-    @inlinable var isEmpty: Bool {
-        self == .none
-    }
+    // MARK: Accessors
     
     @inlinable var characters: String {
         switch self {
-        case .none:     return String()
+        case .positive: return String()
         case .negative: return String(Self.minus)
-        case .positive: return String(Self.plus)
+        }
+    }
+    
+    // MARK: Utilities
+    
+    @inlinable mutating func toggle() {
+        switch self {
+        case .positive: self = .negative
+        case .negative: self = .positive
         }
     }
     
     // MARK: Characters
     
     @usableFromInline static let plus:  Character = "+"
-    @usableFromInline static let minus: Character = "-"    
-    @usableFromInline static let all: Set<Character> = [plus, minus]
+    @usableFromInline static let minus: Character = "-"
+    @usableFromInline static let all:  [Character: Sign] = [plus:  .positive, minus: .negative]
+}
+
+// MARK: - Sign: Descriptions
+
+extension Sign: CustomStringConvertible {
+    
+    // MARK: Implementation
+    
+    @usableFromInline var description: String {
+        switch self {
+        case .positive: return "{ positive }"
+        case .negative: return "{ negative }"
+        }
+    }
 }

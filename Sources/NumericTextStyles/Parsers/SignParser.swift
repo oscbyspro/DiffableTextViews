@@ -8,15 +8,14 @@
 // MARK: - SignParser
 
 @usableFromInline struct SignParser: Parser {
-    @usableFromInline typealias Translatables = [Character: Sign]
 
     // MARK: Properties
     
-    @usableFromInline private(set) var translatables: Translatables
+    @usableFromInline private(set) var translatables: [Character: Sign]
     
     // MARK: Initializers
     
-    @inlinable init(translatables: Translatables) {
+    @inlinable init(translatables: [Character: Sign]) {
         self.translatables = translatables
     }
     
@@ -28,14 +27,8 @@
             characters.formIndex(after: &index)
         }
     }
-    
-    // MARK: Translations
-    
-    @usableFromInline static let negatives: [Character: Sign] = [
-        Sign.minus: Sign.negative
-    ]
-    
+ 
     // MARK: Instances
     
-    @usableFromInline static let standard = Self(translatables: negatives)
+    @usableFromInline static let standard = Self(translatables: Sign.all)
 }

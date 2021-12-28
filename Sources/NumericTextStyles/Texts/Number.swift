@@ -23,10 +23,6 @@
     
     // MARK: Descriptions
     
-    @inlinable var isEmpty: Bool {
-        sign.isEmpty && integer.isEmpty && separator.isEmpty && fraction.isEmpty
-    }
-    
     @inlinable var characters: String {
         sign.characters + integer.characters + separator.characters + fraction.characters
     }
@@ -39,17 +35,9 @@
     
     // MARK: Transformations
     
-    @inlinable mutating func toggle(sign proposal: Sign) {
-        switch proposal {
-        case .none: return
-        case  sign: sign.removeAll()
-        default:    sign = proposal
-        }
-    }
-    
     @inlinable mutating func removeImpossibleSeparator(capacity: Capacity) {
         guard fraction.isEmpty else { return }
         guard capacity.fraction <= 0 || capacity.significant <= 0 else { return }
-        separator.removeAll()
+        separator = Separator()
     }
 }

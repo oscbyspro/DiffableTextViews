@@ -94,7 +94,7 @@ public struct NumericTextStyle<Value: NumericTextValue>: DiffableTextStyle, Tran
 
     @inlinable public func merge(snapshot: Snapshot, with content: Snapshot, in range: Range<Snapshot.Index>) throws -> Snapshot {
         var input = Input(content, parser: format.parser)
-        let toggleSignCommand = input.consumeToggleSignCommand()
+        let signInput = input.consumeSignInput()
                 
         // --------------------------------- //
 
@@ -102,7 +102,7 @@ public struct NumericTextStyle<Value: NumericTextValue>: DiffableTextStyle, Tran
         
         // --------------------------------- //
         
-        toggleSignCommand?.process(&number)
+        signInput?.process(&number)
         try format.validate(sign: number.sign)
         
         // --------------------------------- //
@@ -121,7 +121,7 @@ public struct NumericTextStyle<Value: NumericTextValue>: DiffableTextStyle, Tran
         
         var characters = style.format(value)
         
-        if !number.sign.isEmpty, !characters.hasPrefix(number.sign.characters) {
+        if !characters.hasPrefix(number.sign.characters) {
             characters = number.sign.characters + characters
         }
         
@@ -134,43 +134,80 @@ public struct NumericTextStyle<Value: NumericTextValue>: DiffableTextStyle, Tran
     
     @inlinable func snapshot(characters: String) -> Snapshot {
         var snapshot = Snapshot()
-        
+        var index = characters.startIndex
+
         // --------------------------------- //
-        
+        // MARK: Prefix
+        // --------------------------------- //
+
         if !prefix.isEmpty {
             snapshot.append(contentsOf: Snapshot(prefix, only: .prefix))
             snapshot.append(.prefix(" "))
         }
+        
+        // --------------------------------- //
+        // MARK: Sign
+        // --------------------------------- //
+                
+        var sign = Sign()
+        if index != characters.endIndex, let value = format.signs[characters[index]] {
+            sign = value
+            characters.formIndex(after: &index)
+        }
+        
+        sign = format.corrected(sign: sign)
+        snapshot.append(contentsOf: Snapshot(sign.characters, only: [.content, .prefixing]))
+        
+        // --------------------------------- //
+        // MARK: First Digit
+        // --------------------------------- //
+                
+        if index != characters.endIndex {
+            let character = characters[index]
+            if format.digits.contains(character) {
+                characters.formIndex(after: &index)
+                
+                var attribute: Attribute = .content
+                if character == format.zero {
+                    attribute.insert(.prefixing)
+                }
+                
+                snapshot.append(Symbol(character, attribute: attribute))
+            }
+        }
                 
         // --------------------------------- //
-        
-        #warning("Can loop here to first nonformatting.")
-        #warning("Can configure first zero digit here, also.")
-        
+        // MARK: Body
         // --------------------------------- //
         
-        for character in characters {
+        while index != characters.endIndex {
+            let character = characters[index]
+            
             if format.digits.contains(character) {
                 snapshot.append(.content(character))
             } else if format.groupingSeparator.contains(character) {
                 snapshot.append(.spacer(character))
             } else if format.fractionSeparator.contains(character) {
                 snapshot.append(.content(character))
-            } else if format.signs.contains(character) {
-                snapshot.append(.content(character).union(.prefixing))
             }
+            
+            characters.formIndex(after: &index)
         }
         
         // --------------------------------- //
-                
-        processZeroFirstDigit(&snapshot) { attribute in
-            attribute.insert(.prefixing)
+        // MARK: Tail
+        // --------------------------------- //
+        
+        let fractionSeparator = snapshot.suffix { symbol in
+            format.fractionSeparator.contains(symbol.character)
         }
         
-        processFractionSeparatorSuffix(&snapshot) { attribute in
+        snapshot.transform(attributes: fractionSeparator.indices) { attribute in
             attribute.insert(.removable)
         }
-                
+        
+        // --------------------------------- //
+        // MARK: Suffix
         // --------------------------------- //
 
         if !suffix.isEmpty {
@@ -179,39 +216,9 @@ public struct NumericTextStyle<Value: NumericTextValue>: DiffableTextStyle, Tran
         }
     
         // --------------------------------- //
+        // MARK: Return
+        // --------------------------------- //
         
         return snapshot
-    }
-    
-    // MARK: Helpers
-    
-    @inlinable func processSign(_ snapshot: inout Snapshot) {
-        guard let start = snapshot.first(where: Symbol.is(non: .formatting)) else { return }
-        
-        if format.signs.contains(start.character) {
-            
-        }
-    }
-    
-    @inlinable func processZeroFirstDigit(_ snapshot: inout Snapshot, transformation: (inout Attribute) -> Void) {
-        func predicate(symbol: Symbol) -> Bool {
-            format.digits.contains(symbol.character)
-        }
-
-        // --------------------------------- //
-        
-        guard let position = snapshot.firstIndex(where: predicate) else { return }
-        guard snapshot[position].character == format.zero else { return }
-        snapshot.transform(attributes: position, with: transformation)
-    }
-    
-    @inlinable func processFractionSeparatorSuffix(_ snapshot: inout Snapshot, transformation: (inout Attribute) -> Void) {
-        func predicate(symbol: Symbol) -> Bool {
-            format.fractionSeparator.contains(symbol.character)
-        }
-        
-        // --------------------------------- //
-        
-        snapshot.transform(attributes: snapshot.suffix(while: predicate).indices, with: transformation)
     }
 }

@@ -1,5 +1,5 @@
 //
-//  ToggleSignCommand.swift
+//  SignInput.swift
 //  
 //
 //  Created by Oscar Byström Ericsson on 2021-12-25.
@@ -7,9 +7,9 @@
 
 import struct DiffableTextViews.Snapshot
 
-// MARK: - ToggleSignCommand
+// MARK: - SignInput
 
-@usableFromInline struct ToggleSignCommand {
+@usableFromInline struct SignInput {
 
     // MARK: Properties
     
@@ -18,15 +18,16 @@ import struct DiffableTextViews.Snapshot
     // MARK: Initializers
     
     @inlinable init?(consumable: inout Snapshot, parser: SignParser) {
-        guard let sign = try? parser.parse(consumable.characters), !sign.isEmpty else { return nil }
+        guard let first = consumable.characters.first else { return nil }
+        guard let sign  = parser.translatables[first] else { return nil }
         
         self.sign = sign
         consumable.removeAll()
     }
     
-    // MARK: Utilities
+    // MARK: Process
             
     @inlinable func process(_ number: inout Number) {
-        number.toggle(sign: sign)
+        number.sign = sign
     }
 }
