@@ -83,7 +83,9 @@ struct NumericTextStyleExample: View {
         - precision: 19
         - bounds: -9,223,372,036,854,775,808...9,223,372,036,854,775,807
 
-    - UInt: depends on system.
+    - UInt:
+        - precision: depends on the system.
+        - bounds:    depends on the system.
 
     - UInt8:
         - precision: 3
