@@ -87,7 +87,13 @@ public struct NumericTextStyle<Value: NumericTextValue>: DiffableTextStyle, Tran
     }
         
     @inlinable func number(snapshot: Snapshot) throws -> Number {
-        try format.parser.parse(snapshot.lazy.filter(Symbol.is(non: .formatting)).map(\.character))
+        let sequence = snapshot.lazy.filter(Symbol.is(non: .formatting)).map(\.character)
+                
+        guard let number = format.parser.parse(sequence) else {
+            throw .cancellation(reason: "Unable to parse number in { \(snapshot.characters) }.")
+        }
+                
+        return number
     }
 
     // MARK: Merge

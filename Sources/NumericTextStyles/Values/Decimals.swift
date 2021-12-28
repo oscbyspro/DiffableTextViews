@@ -43,7 +43,7 @@ extension Decimal {
     
     @inlinable public static func make(description: String) throws -> Self {
         guard let value = Self(string: description) else {
-            throw .cancellation(reason: "Failed to make \(Self.self) from \(description).")
+            throw cancellation(description: description)
         }
         
         return value

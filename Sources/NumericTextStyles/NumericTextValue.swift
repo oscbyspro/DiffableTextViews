@@ -9,6 +9,7 @@ import struct Foundation.Locale
 import struct Foundation.IntegerFormatStyle
 import struct Foundation.FloatingPointFormatStyle
 import enum Foundation.NumberFormatStyleConfiguration
+import struct Utilities.Cancellation
 
 // MARK: - NumberTextValue
 
@@ -17,6 +18,17 @@ public protocol NumericTextValue: Formattable, Boundable, Precise {
     // MARK: Requirements
     
     @inlinable static var options: NumericTextOptions { get }
+}
+
+// MARK: - NumberTextValue: Details
+
+extension NumericTextValue {
+    
+    // MARK: Errors
+    
+    @inlinable static func cancellation(description: String) -> Cancellation {
+        .init(reason: "Unable to make \(Self.self) instance with description { \(description) }")
+    }
 }
 
 // MARK: - NumericTextInteger
@@ -50,7 +62,7 @@ extension NumericTextInteger {
     
     @inlinable public static func make(description: String) throws -> Self {
         guard let value = Self(description) else {
-            throw .cancellation(reason: "Failed to make \(Self.self) from \(description).")
+            throw cancellation(description: description)
         }
         
         return value
@@ -121,7 +133,7 @@ extension NumericTextFloat {
     
     @inlinable public static func make(description: String) throws -> Self {
         guard let value = Self(description) else {
-            throw .cancellation(reason: "Failed to make \(Self.self) from \(description).")
+            throw cancellation(description: description)
         }
         
         return value

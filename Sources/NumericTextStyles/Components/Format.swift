@@ -103,7 +103,7 @@ import struct Utilities.Cancellation
     
     @inlinable func validate(sign: Sign) throws {
         guard sign == sign.transforming(correct) else {
-            throw .cancellation(reason: "Sign '\(sign)' is not allowed in \(bounds).")
+            throw .cancellation(reason: "Sign { \(sign) } is not permitted in \(bounds).")
         }
     }
 }

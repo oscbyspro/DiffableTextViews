@@ -60,7 +60,7 @@ public struct Bounds<Value: Boundable> {
     
     @inlinable func validate(value: Value) throws {
         guard values.contains(value) else {
-            throw .cancellation(reason: "Bounds \(self) do not contain: \(value).")
+            throw .cancellation(reason: "Bounds \(self) do not contain { \(value) }.")
         }
     }
 }

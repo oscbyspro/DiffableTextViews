@@ -87,7 +87,7 @@ public struct Precision<Value: Precise> {
     // MARK: Errors
     
     @inlinable static func cancellation(excess component: Component) -> Cancellation {
-        .init(reason: "Precision of \(component.rawValue) digits exceeded its capacity.")
+        .init(reason: "Precision of { \(component.rawValue) } digits exceeded its capacity.")
     }
     
     // MARK: Components

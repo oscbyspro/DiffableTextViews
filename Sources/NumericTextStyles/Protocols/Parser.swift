@@ -38,19 +38,10 @@ extension Parser {
     // MARK: Utilities
     
     /// Creates and returns a new instance if the characters are valid, else it returns nil.
-    @inlinable func parse<C: Collection>(_ characters: C) throws -> Value where C.Element == Character {
+    @inlinable func parse<C: Collection>(_ characters: C) -> Value? where C.Element == Character {
         var value = Value()
         var index = characters.startIndex
-        
-        // --------------------------------- //
-        
         parse(characters, index: &index, value: &value)
-        guard index == characters.endIndex else {
-            throw .cancellation(reason: "Failed to parse \(Value.self) from characters: \(characters).")
-        }
-        
-        // --------------------------------- //
-        
-        return value
+        return index == characters.endIndex ? value : nil
     }
 }
