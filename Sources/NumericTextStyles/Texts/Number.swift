@@ -37,7 +37,7 @@
         return significantIntegerCount + significantFractionCount
     }
     
-    // MARK: Command
+    // MARK: Transformations
     
     @inlinable mutating func toggle(sign proposal: Sign) {
         switch proposal {
@@ -47,17 +47,7 @@
         }
     }
     
-    // MARK: Correct
-
-    @inlinable mutating func autocorrectSign<Value: Boundable>(bounds: Bounds<Value>) {
-        if bounds.negative {
-            sign = .negative
-        } else if sign == .negative, bounds.nonnegative {
-            sign = .none
-        }
-    }
-    
-    @inlinable mutating func autocorrectSeparator(capacity: Capacity) {
+    @inlinable mutating func removeImpossibleSeparator(capacity: Capacity) {
         guard fraction.isEmpty else { return }
         guard capacity.fraction <= 0 || capacity.significant <= 0 else { return }
         separator.removeAll()

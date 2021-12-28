@@ -73,7 +73,7 @@ public struct NumericTextStyle<Value: NumericTextValue>: DiffableTextStyle, Tran
     // MARK: Process
     
     @inlinable public func process(value: inout Value) {
-        format.bounds.clamp(&value)
+        format.bounds.clamp(value: &value)
     }
     
     // MARK: Parse
@@ -99,27 +99,25 @@ public struct NumericTextStyle<Value: NumericTextValue>: DiffableTextStyle, Tran
         // --------------------------------- //
 
         var number = try number(snapshot: snapshot.replacing(range, with: input.content))
+        
+        // --------------------------------- //
+        
         toggleSignCommand?.process(&number)
+        try format.validate(sign: number.sign)
         
         // --------------------------------- //
 
         let capacity = try format.precision.capacity(number: number)
-        
-        // --------------------------------- //
-        
-        number.autocorrectSign(bounds: format.bounds)
-        number.autocorrectSeparator(capacity: capacity)
+        number.removeImpossibleSeparator(capacity: capacity)
         
         // --------------------------------- //
         
         let value = try value(number: number)
-        try format.bounds.validate(contains: value)
+        try format.bounds.validate(value: value)
         
         // --------------------------------- //
         
         let style = format.editableStyleThatUses(number: number)
-                
-        // --------------------------------- //
         
         var characters = style.format(value)
         
@@ -136,7 +134,7 @@ public struct NumericTextStyle<Value: NumericTextValue>: DiffableTextStyle, Tran
     
     @inlinable func snapshot(characters: String) -> Snapshot {
         var snapshot = Snapshot()
-            
+        
         // --------------------------------- //
         
         if !prefix.isEmpty {
@@ -144,6 +142,11 @@ public struct NumericTextStyle<Value: NumericTextValue>: DiffableTextStyle, Tran
             snapshot.append(.prefix(" "))
         }
                 
+        // --------------------------------- //
+        
+        #warning("Can loop here to first nonformatting.")
+        #warning("Can configure first zero digit here, also.")
+        
         // --------------------------------- //
         
         for character in characters {
@@ -159,7 +162,7 @@ public struct NumericTextStyle<Value: NumericTextValue>: DiffableTextStyle, Tran
         }
         
         // --------------------------------- //
-
+                
         processZeroFirstDigit(&snapshot) { attribute in
             attribute.insert(.prefixing)
         }
@@ -181,6 +184,14 @@ public struct NumericTextStyle<Value: NumericTextValue>: DiffableTextStyle, Tran
     }
     
     // MARK: Helpers
+    
+    @inlinable func processSign(_ snapshot: inout Snapshot) {
+        guard let start = snapshot.first(where: Symbol.is(non: .formatting)) else { return }
+        
+        if format.signs.contains(start.character) {
+            
+        }
+    }
     
     @inlinable func processZeroFirstDigit(_ snapshot: inout Snapshot, transformation: (inout Attribute) -> Void) {
         func predicate(symbol: Symbol) -> Bool {

@@ -6,7 +6,9 @@
 //
 
 import struct Foundation.Locale
-import   enum Foundation.NumberFormatStyleConfiguration
+import enum Foundation.NumberFormatStyleConfiguration
+import struct Utilities.Cancellation
+import Utilities
 
 // MARK: - Format
 
@@ -84,6 +86,18 @@ import   enum Foundation.NumberFormatStyleConfiguration
         let precision: _Format.Precision = precision.editableStyleThatUses(number: number)
         let separator: _Format.Separator = number.separator.isEmpty ? .automatic : .always
         return Value.style(locale: locale, precision: precision, separator: separator)
+    }
+    
+    // MARK: Validation
+    
+    @inlinable func validate(sign: Sign) throws {
+        switch sign {
+        case .none:     return
+        case .positive: if bounds.max <= .zero { break }
+        case .negative: if bounds.min >= .zero { break }
+        }
+        
+        throw .cancellation(reason: "Sign '\(sign.characters)' not allowed in \(bounds).")
     }
 }
 

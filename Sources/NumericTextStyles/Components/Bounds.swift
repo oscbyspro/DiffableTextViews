@@ -50,35 +50,32 @@ public struct Bounds<Value: Boundable> {
         .init(max: values.upperBound)
     }
     
-    // MARK: Descriptions
-    
-    @inlinable var positive: Bool {
-        Value.zero <= min && Value.zero < max
-    }
-    
-    @inlinable var negative: Bool {
-        min < Value.zero && max <= Value.zero
-    }
-
-    @inlinable var nonpositive: Bool {
-        max <= Value.zero
-    }
-
-    @inlinable var nonnegative: Bool {
-        Value.zero <= min
-    }
-    
     // MARK: Utilities
         
-    @inlinable func clamp(_ value: inout Value) {
+    @inlinable func clamp(value: inout Value) {
         value = Swift.max(min, Swift.min(value, max))
     }
     
     // MARK: Validation
     
-    @inlinable func validate(contains value: Value) throws {
+    @inlinable func validate(value: Value) throws {
         guard values.contains(value) else {
-            throw .cancellation(reason: "Bounds from \(min) to \(max) do not contain: \(value).")
+            throw .cancellation(reason: "Bounds \(self) do not contain: \(value).")
         }
+    }
+}
+
+// MARK: - Bounds: Descriptions
+
+extension Bounds: CustomStringConvertible, CustomDebugStringConvertible {
+    
+    // MARK: Implementation
+    
+    @inlinable public var description: String {
+        "[\(min),\(max)]"
+    }
+    
+    @inlinable public var debugDescription: String {
+        description
     }
 }
