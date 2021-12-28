@@ -5,10 +5,12 @@
 //  Created by Oscar Byström Ericsson on 2021-12-20.
 //
 
+import protocol Utilities.Transformable
+
 // MARK: - Sign
 
 /// A representation of a system sign.
-@usableFromInline enum Sign: Text {
+@usableFromInline enum Sign: Text, Transformable {
     
     // MARK: Instances
     

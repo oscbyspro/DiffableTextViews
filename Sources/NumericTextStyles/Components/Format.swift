@@ -90,9 +90,7 @@ import Utilities
     
     // MARK: Format: Sign
     
-    @inlinable func corrected(sign: Sign) -> Sign {
-        var sign = sign
-        
+    @inlinable func correct(sign: inout Sign) {
         switch sign {
         case .positive:
             if bounds.max >  .zero { break }
@@ -102,12 +100,10 @@ import Utilities
             if bounds.min <  .zero { break }
             sign.toggle()
         }
-        
-        return sign
     }
     
     @inlinable func validate(sign: Sign) throws {
-        guard sign == corrected(sign: sign) else {
+        guard sign == sign.transforming(correct) else {
             throw .cancellation(reason: "Sign '\(sign)' is not allowed in \(bounds).")
         }
     }

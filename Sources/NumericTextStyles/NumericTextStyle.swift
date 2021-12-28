@@ -140,7 +140,7 @@ public struct NumericTextStyle<Value: NumericTextValue>: DiffableTextStyle, Tran
         // MARK: Prefix
         // --------------------------------- //
 
-        if !prefix.isEmpty {
+        xPrefix: if !prefix.isEmpty {
             snapshot.append(contentsOf: Snapshot(prefix, only: .prefix))
             snapshot.append(.prefix(" "))
         }
@@ -148,39 +148,43 @@ public struct NumericTextStyle<Value: NumericTextValue>: DiffableTextStyle, Tran
         // --------------------------------- //
         // MARK: Sign
         // --------------------------------- //
-                
-        var sign = Sign()
-        if index != characters.endIndex, let value = format.signs[characters[index]] {
-            sign = value
-            characters.formIndex(after: &index)
+        
+        xSign: if index != characters.endIndex {
+            var sign = Sign()
+            let character = characters[index]
+            
+            if let value = format.signs[character] {
+                sign = value
+                characters.formIndex(after: &index)
+            }
+                    
+            format.correct(sign: &sign)
+            let value = Snapshot(sign.characters, only: .prefixing)
+            
+            snapshot.append(contentsOf: value)
         }
-        
-        sign = format.corrected(sign: sign)
-        snapshot.append(contentsOf: Snapshot(sign.characters, only: [.content, .prefixing]))
-        
+            
         // --------------------------------- //
         // MARK: First Digit
         // --------------------------------- //
-                
-        if index != characters.endIndex {
+
+        xFirstDigit: if index != characters.endIndex {
             let character = characters[index]
-            if format.digits.contains(character) {
-                characters.formIndex(after: &index)
-                
-                var attribute: Attribute = .content
-                if character == format.zero {
-                    attribute.insert(.prefixing)
-                }
-                
-                snapshot.append(Symbol(character, attribute: attribute))
-            }
+            
+            guard format.digits.contains(character) else { break xFirstDigit }
+            characters.formIndex(after: &index)
+            
+            var symbol = Symbol(character, attribute: .content)
+            symbol.attribute.insert(character == format.zero ? .prefixing : .content)
+                        
+            snapshot.append(symbol)
         }
-                
+                     
         // --------------------------------- //
         // MARK: Body
         // --------------------------------- //
         
-        while index != characters.endIndex {
+        xBody: while index != characters.endIndex {
             let character = characters[index]
             
             if format.digits.contains(character) {
@@ -198,19 +202,21 @@ public struct NumericTextStyle<Value: NumericTextValue>: DiffableTextStyle, Tran
         // MARK: Tail
         // --------------------------------- //
         
-        let fractionSeparator = snapshot.suffix { symbol in
-            format.fractionSeparator.contains(symbol.character)
-        }
-        
-        snapshot.transform(attributes: fractionSeparator.indices) { attribute in
-            attribute.insert(.removable)
+        xTail: if index == characters.endIndex {
+            let fractionSeparator = snapshot.suffix { symbol in
+                format.fractionSeparator.contains(symbol.character)
+            }
+            
+            snapshot.transform(attributes: fractionSeparator.indices) { attribute in
+                attribute.insert(.removable)
+            }
         }
         
         // --------------------------------- //
         // MARK: Suffix
         // --------------------------------- //
 
-        if !suffix.isEmpty {
+        xSuffix: if !suffix.isEmpty {
             snapshot.append(.suffix(" "))
             snapshot.append(contentsOf: Snapshot(suffix, only: .suffix))
         }
