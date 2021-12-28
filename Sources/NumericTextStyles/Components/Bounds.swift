@@ -38,15 +38,15 @@ public struct Bounds<Value: Boundable> {
         .init()
     }
     
-    @inlinable public static func values(in range: ClosedRange<Value>) -> Self {
+    @inlinable public static func values(_ range: ClosedRange<Value>) -> Self {
         .init(lowerBound: range.lowerBound, upperBound: range.upperBound)
     }
     
-    @inlinable public static func values(in range: PartialRangeFrom<Value>) -> Self {
+    @inlinable public static func values(_ range: PartialRangeFrom<Value>) -> Self {
         .init(lowerBound: range.lowerBound)
     }
     
-    @inlinable public static func values(in range: PartialRangeThrough<Value>) -> Self {
+    @inlinable public static func values(_ range: PartialRangeThrough<Value>) -> Self {
         .init(upperBound: range.upperBound)
     }
     

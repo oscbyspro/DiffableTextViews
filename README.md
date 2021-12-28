@@ -30,9 +30,11 @@ struct NumericTextStyleExample: View {
     
     var body: some View {
         DiffableTextField($amount) {
-            .numeric.locale(locale).suffix(locale.currencyCode)
-            .precision(.digits(integer: 1..., fraction: 2...2))
-            .bounds(.values(in: 0...1_000_000 as ClosedRange<Decimal>))
+            .numeric
+            .locale(locale)
+            .suffix(locale.currencyCode)
+            .precision(.digits(integer: 1..., fraction: 2))
+            .bounds(.values((0 as Decimal)...(1_000_000 as Decimal)))
         }
         .setup { 
             textField in 
