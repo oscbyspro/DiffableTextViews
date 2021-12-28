@@ -23,9 +23,12 @@
     
     // MARK: Descriptions
     
+    #warning("Text should have a characters() func requirement to show O(n) possibility.")
     @inlinable var characters: String {
         sign.characters + integer.characters + separator.characters + fraction.characters
     }
+    
+    // MARK: Count
         
     @inlinable func significantCount() -> Int {
         let significantIntegerCount = integer.count - integer.prefixZerosCount()

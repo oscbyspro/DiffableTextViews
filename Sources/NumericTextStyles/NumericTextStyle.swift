@@ -82,14 +82,16 @@ public struct NumericTextStyle<Value: NumericTextValue>: DiffableTextStyle, Tran
         try value(number: number(snapshot: snapshot))
     }
     
+    #warning("Integer is never empty.")
+    #warning("Can use: 'try .make(description: number.characters)' only.")
     @inlinable func value(number: Number) throws -> Value {
         number.integer.isEmpty && number.fraction.isEmpty ? .zero : try .make(description: number.characters)
     }
         
     @inlinable func number(snapshot: Snapshot) throws -> Number {
-        let sequence = snapshot.lazy.filter(Symbol.is(non: .formatting)).map(\.character)
+        let unformatted = snapshot.lazy.filter(Symbol.is(non: .formatting)).map(\.character)
                 
-        guard let number = format.parser.parse(sequence) else {
+        guard let number = format.parser.parse(unformatted) else {
             throw .cancellation(reason: "Unable to parse number in { \(snapshot.characters) }.")
         }
                 
@@ -141,11 +143,11 @@ public struct NumericTextStyle<Value: NumericTextValue>: DiffableTextStyle, Tran
     @inlinable func snapshot(characters: String) -> Snapshot {
         var snapshot = Snapshot()
         var index = characters.startIndex
-
+        
         // --------------------------------- //
         // MARK: Prefix
         // --------------------------------- //
-
+        
         PREFIX: if !prefix.isEmpty {
             snapshot.append(contentsOf: Snapshot(prefix, only: .prefix))
             snapshot.append(.prefix(" "))
