@@ -8,7 +8,6 @@
 import struct Foundation.Locale
 import enum Foundation.NumberFormatStyleConfiguration
 import struct Utilities.Cancellation
-import Utilities
 
 // MARK: - Format
 
