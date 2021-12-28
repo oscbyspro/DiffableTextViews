@@ -49,11 +49,10 @@
     
     // MARK: Correct
 
-    #warning("WIP")
     @inlinable mutating func autocorrectSign<Value: Boundable>(bounds: Bounds<Value>) {
-        if bounds.nonpositive {
+        if bounds.negative {
             sign = .negative
-        } else if sign == .negative, .zero <= bounds.lowerBound {
+        } else if sign == .negative, bounds.nonnegative {
             sign = .none
         }
     }

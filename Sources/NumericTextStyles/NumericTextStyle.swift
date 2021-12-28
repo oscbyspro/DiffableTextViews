@@ -56,7 +56,27 @@ public struct NumericTextStyle<Value: NumericTextValue>: DiffableTextStyle, Tran
         transforming({ $0.suffix = suffix ?? "" })
     }
     
-    // MARK: Value: Parse
+    // MARK: Snapshot
+    
+    @inlinable public func snapshot(showcase value: Value) -> Snapshot {
+        snapshot(value: value, style: format.showcaseStyle())
+    }
+    
+    @inlinable public func snapshot(editable value: Value) -> Snapshot {
+        snapshot(value: value, style: format.editableStyle())
+    }
+    
+    @inlinable func snapshot(value: Value, style: Value.FormatStyle) -> Snapshot {
+        snapshot(characters: style.format(value))
+    }
+    
+    // MARK: Process
+    
+    @inlinable public func process(value: inout Value) {
+        format.bounds.clamp(&value)
+    }
+    
+    // MARK: Parse
 
     @inlinable public func parse(snapshot: Snapshot) throws -> Value {
         try value(number: number(snapshot: snapshot))
@@ -65,32 +85,12 @@ public struct NumericTextStyle<Value: NumericTextValue>: DiffableTextStyle, Tran
     @inlinable func value(number: Number) throws -> Value {
         number.integer.isEmpty && number.fraction.isEmpty ? .zero : try .make(description: number.characters)
     }
-    
-    // MARK: Value: Process
-    
-    @inlinable public func process(value: inout Value) {
-        format.bounds.clamp(&value)
-    }
-    
-    // MARK: Snapshot: Number
         
     @inlinable func number(snapshot: Snapshot) throws -> Number {
         try format.parser.parse(snapshot.lazy.filter(Symbol.is(non: .formatting)).map(\.character))
     }
-    
-    // MARK: Snapshot: Showcase
-    
-    @inlinable public func snapshot(showcase value: Value) -> Snapshot {
-        snapshot(characters: format.showcaseStyle().format(value))
-    }
-    
-    // MARK: Snapshot: Editable
 
-    @inlinable public func snapshot(editable value: Value) -> Snapshot {
-        snapshot(characters: format.editableStyle().format(value))
-    }
-
-    // MARK: Snapshot: Merge
+    // MARK: Merge
 
     @inlinable public func merge(snapshot: Snapshot, with content: Snapshot, in range: Range<Snapshot.Index>) throws -> Snapshot {
         var input = Input(content, parser: format.parser)
@@ -132,7 +132,7 @@ public struct NumericTextStyle<Value: NumericTextValue>: DiffableTextStyle, Tran
         return self.snapshot(characters: characters)
     }
     
-    // MARK: Snapshot: Characters
+    // MARK: Characters
     
     @inlinable func snapshot(characters: String) -> Snapshot {
         var snapshot = Snapshot()
@@ -180,7 +180,7 @@ public struct NumericTextStyle<Value: NumericTextValue>: DiffableTextStyle, Tran
         return snapshot
     }
     
-    // MARK: Snapshot: Characters: Helpers
+    // MARK: Helpers
     
     @inlinable func processZeroFirstDigit(_ snapshot: inout Snapshot, transformation: (inout Attribute) -> Void) {
         func predicate(symbol: Symbol) -> Bool {

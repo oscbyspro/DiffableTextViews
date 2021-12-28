@@ -9,27 +9,27 @@ import struct Utilities.Cancellation
 
 // MARK: - Bounds
 
-/// Bounds that constrain values to a range.
-///
-/// - Requires: That (min ≤ zero ≤ max) and (min != max) to ensure intuitive behavior.
-///
+/// A model that constrains values to a closed range.
 public struct Bounds<Value: Boundable> {
 
     // MARK: Properties
     
-    @usableFromInline let lowerBound: Value
-    @usableFromInline let upperBound: Value
+    @usableFromInline let values: ClosedRange<Value>
     
     // MARK: Initializers
     
-    #warning("Precondition: min <= max.")
-    @inlinable init(lowerBound: Value = Value.minLosslessValue, upperBound: Value = Value.maxLosslessValue) {
-        precondition(lowerBound != upperBound, "Bounds: constraint 'lowerBound != upperBound' was broken.")
-        precondition(lowerBound <= Value.zero, "Bounds: constraint 'lowerBound <= Value.zero' was broken.")
-        precondition(upperBound >= Value.zero, "Bounds: constraint 'upperBound >= Value.zero' was broken.")
-        
-        self.lowerBound = lowerBound
-        self.upperBound = upperBound
+    @inlinable init(min: Value = Value.minLosslessValue, max: Value = Value.maxLosslessValue) {
+        self.values = min ... max
+    }
+    
+    // MARK: Getters
+    
+    @inlinable var min: Value {
+        values.lowerBound
+    }
+    
+    @inlinable var max: Value {
+        values.upperBound
     }
     
     // MARK: Initialiers: Static
@@ -38,39 +38,47 @@ public struct Bounds<Value: Boundable> {
         .init()
     }
     
-    @inlinable public static func values(_ range: ClosedRange<Value>) -> Self {
-        .init(lowerBound: range.lowerBound, upperBound: range.upperBound)
+    @inlinable public static func values(_ values: ClosedRange<Value>) -> Self {
+        .init(min: values.lowerBound, max: values.upperBound)
     }
     
-    @inlinable public static func values(_ range: PartialRangeFrom<Value>) -> Self {
-        .init(lowerBound: range.lowerBound)
+    @inlinable public static func values(_ values: PartialRangeFrom<Value>) -> Self {
+        .init(min: values.lowerBound)
     }
     
-    @inlinable public static func values(_ range: PartialRangeThrough<Value>) -> Self {
-        .init(upperBound: range.upperBound)
+    @inlinable public static func values(_ values: PartialRangeThrough<Value>) -> Self {
+        .init(max: values.upperBound)
     }
     
     // MARK: Descriptions
     
-    @inlinable var nonnegative: Bool {
-        .zero <= lowerBound
+    @inlinable var positive: Bool {
+        Value.zero <= min && Value.zero < max
     }
     
+    @inlinable var negative: Bool {
+        min < Value.zero && max <= Value.zero
+    }
+
     @inlinable var nonpositive: Bool {
-        upperBound <= .zero
+        max <= Value.zero
+    }
+
+    @inlinable var nonnegative: Bool {
+        Value.zero <= min
     }
     
     // MARK: Utilities
         
     @inlinable func clamp(_ value: inout Value) {
-        value = max(lowerBound, min(value, upperBound))
+        value = Swift.max(min, Swift.min(value, max))
     }
     
     // MARK: Validation
     
     @inlinable func validate(contains value: Value) throws {
-        guard lowerBound <= value && value <= upperBound else {
-            throw .cancellation(reason: "Bounds from \(lowerBound) to \(upperBound) do not contain: \(value).")
+        guard values.contains(value) else {
+            throw .cancellation(reason: "Bounds from \(min) to \(max) do not contain: \(value).")
         }
     }
 }
