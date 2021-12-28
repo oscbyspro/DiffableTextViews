@@ -199,10 +199,10 @@ public struct NumericTextStyle<Value: NumericTextValue>: DiffableTextStyle, Tran
         }
         
         // --------------------------------- //
-        // MARK: Tail
+        // MARK: Process Body Suffix
         // --------------------------------- //
         
-        xTail: if index == characters.endIndex {
+        xProcessBodySuffix: do {
             let fractionSeparator = snapshot.suffix { symbol in
                 format.fractionSeparator.contains(symbol.character)
             }
