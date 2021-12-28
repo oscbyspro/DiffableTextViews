@@ -79,7 +79,7 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable, 
     @inlinable public func updateUIView(_ uiView: UIViewType, context: Context) {
         context.coordinator.upstream = self
         update?(context.coordinator.downstream)
-        context.coordinator.synchronize(update: .async)
+        context.coordinator.synchronize()
     }
     
     // MARK: Coordinator
@@ -184,8 +184,8 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable, 
 
         // MARK: Synchronize
         
-        @inlinable func synchronize(update: Update = []) {
-            push(update: pull().union(update))
+        @inlinable func synchronize() {
+            push(update: pull())
         }
         
         // MARK: Synchronize: Pull
@@ -241,16 +241,13 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable, 
             }
             
             if update.contains(.upstream) {
-                perform(async: update.contains(.async)) {
-                    // async avoids view update loop
-                    if  self.upstream.value.wrappedValue != self.cache.value {
-                        self.upstream.value.wrappedValue  = self.cache.value
-                    }
+                if  self.upstream.value.wrappedValue != self.cache.value {
+                    self.upstream.value.wrappedValue  = self.cache.value
                 }
             }
         }
         
-        // MARK: Synchronize: Status
+        // MARK: Synchronize: Helpers
 
         @inlinable func upstream(represents value: Value) -> Bool {
             upstream.value.wrappedValue == value
@@ -259,13 +256,7 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable, 
         @inlinable func downstream(displays value: Value) -> Bool {
            cache.edits == downstream.edits && cache.value == value
         }
-        
-        // MARK: Synchronize: Helpers
-        
-        @inlinable func perform(async: Bool, action: @escaping () -> Void) {
-            if async { Task { @MainActor in action() } } else { action() }
-        }
-
+                
         @inlinable func snapshot(value: Value) -> Snapshot {
             downstream.edits ? upstream.style.snapshot(editable: value) : upstream.style.snapshot(showcase: value)
         }

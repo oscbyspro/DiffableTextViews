@@ -21,7 +21,6 @@
     
     // MARK: Instances: Singular
     
-    @usableFromInline static let async = Self(rawValue: 1 << 0)
-    @usableFromInline static let upstream = Self(rawValue: 1 << 1)
-    @usableFromInline static let downstream = Self(rawValue: 1 << 2)
+    @usableFromInline static let upstream   = Self(rawValue: 1 << 0)
+    @usableFromInline static let downstream = Self(rawValue: 1 << 1)
 }

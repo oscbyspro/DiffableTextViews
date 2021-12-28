@@ -146,7 +146,7 @@ public struct NumericTextStyle<Value: NumericTextValue>: DiffableTextStyle, Tran
         // MARK: Prefix
         // --------------------------------- //
 
-        xPrefix: if !prefix.isEmpty {
+        PREFIX: if !prefix.isEmpty {
             snapshot.append(contentsOf: Snapshot(prefix, only: .prefix))
             snapshot.append(.prefix(" "))
         }
@@ -155,7 +155,7 @@ public struct NumericTextStyle<Value: NumericTextValue>: DiffableTextStyle, Tran
         // MARK: Sign
         // --------------------------------- //
         
-        xSign: if index != characters.endIndex {
+        SIGN: if index != characters.endIndex {
             var sign = Sign()
             let character = characters[index]
             
@@ -174,10 +174,10 @@ public struct NumericTextStyle<Value: NumericTextValue>: DiffableTextStyle, Tran
         // MARK: First Digit
         // --------------------------------- //
 
-        xFirstDigit: if index != characters.endIndex {
+        FIRST_DIGIT: if index != characters.endIndex {
             let character = characters[index]
             
-            guard format.digits.contains(character) else { break xFirstDigit }
+            guard format.digits.contains(character) else { break FIRST_DIGIT }
             characters.formIndex(after: &index)
             
             var symbol = Symbol(character, attribute: .content)
@@ -190,7 +190,7 @@ public struct NumericTextStyle<Value: NumericTextValue>: DiffableTextStyle, Tran
         // MARK: Body
         // --------------------------------- //
         
-        xBody: while index != characters.endIndex {
+        BODY: while index != characters.endIndex {
             let character = characters[index]
             
             if format.digits.contains(character) {
@@ -208,7 +208,7 @@ public struct NumericTextStyle<Value: NumericTextValue>: DiffableTextStyle, Tran
         // MARK: Process Redundant Tail
         // --------------------------------- //
         
-        xProcessRedundantTail: do {
+        PROCESS_REDUNDANT_TAIL: do {
             let redundantTail = snapshot.suffix {
                 if format.zero == $0.character { return true }
                 if format.fractionSeparator.contains($0.character) { return true }
@@ -224,7 +224,7 @@ public struct NumericTextStyle<Value: NumericTextValue>: DiffableTextStyle, Tran
         // MARK: Suffix
         // --------------------------------- //
 
-        xSuffix: if !suffix.isEmpty {
+        SUFFIX: if !suffix.isEmpty {
             snapshot.append(.suffix(" "))
             snapshot.append(contentsOf: Snapshot(suffix, only: .suffix))
         }
