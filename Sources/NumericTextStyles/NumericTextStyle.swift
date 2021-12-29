@@ -80,15 +80,9 @@ public struct NumericTextStyle<Value: Valuable>: DiffableTextStyle, Transformabl
     // MARK: Parse
 
     @inlinable public func parse(snapshot: Snapshot) throws -> Value {
-        try value(number: number(snapshot: snapshot))
+        try Value(number: number(snapshot: snapshot))
     }
     
-    #warning("Integer is never empty.")
-    #warning("Can use: 'try .make(description: number.characters)' only.")
-    @inlinable func value(number: Number) throws -> Value {
-        number.integer.isEmpty && number.fraction.isEmpty ? .zero : try .make(description: number.characters)
-    }
-        
     @inlinable func number(snapshot: Snapshot) throws -> Number {
         let unformatted = snapshot.lazy.filter(Symbol.is(non: .formatting)).map(\.character)
                 
@@ -133,7 +127,7 @@ public struct NumericTextStyle<Value: Valuable>: DiffableTextStyle, Transformabl
         // MARK: Value
         // --------------------------------- //
         
-        let value = try value(number: number)
+        let value = try Value(number: number)
         
         VALIDATE_VALUE: do {
             try format.validate(value: value)
@@ -152,7 +146,10 @@ public struct NumericTextStyle<Value: Valuable>: DiffableTextStyle, Transformabl
         var characters = style.format(value)
         
         CORRECT_CHARACTERS_SIGN: do {
-            if !characters.hasPrefix(number.sign.characters) {
+            let sign = number.sign.characters
+            
+            if !sign.isEmpty, !characters.hasPrefix(sign) {
+                /// occurs when sign is negative and value is zero
                 characters = number.sign.characters + characters
             }
         }
@@ -160,7 +157,7 @@ public struct NumericTextStyle<Value: Valuable>: DiffableTextStyle, Transformabl
         // --------------------------------- //
         // MARK: Continue
         // --------------------------------- //
-    
+                
         return self.snapshot(characters: characters)
     }
     

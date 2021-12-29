@@ -5,9 +5,14 @@
 //  Created by Oscar Byström Ericsson on 2021-12-21.
 //
 
+#warning("Make sure that integer is never empty.")
+
 // MARK: - Number
 
 /// A representation of a system number.
+///
+/// - Integer component is never empty.
+///
 @usableFromInline struct Number: Text {
     
     // MARK: Properties

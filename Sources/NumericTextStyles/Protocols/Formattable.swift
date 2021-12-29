@@ -8,14 +8,12 @@
 import Foundation
 import Utilities
 
-#warning("PrecisionStyle, SeparatorStyle, think about.")
-
 // MARK: - Formattable
 
 public protocol Formattable {
     typealias PrecisionStyle = NumberFormatStyleConfiguration.Precision
     typealias SeparatorStyle = NumberFormatStyleConfiguration.DecimalSeparatorDisplayStrategy
-    
+
     // MARK: Requirements
     
     associatedtype FormatStyle: Foundation.FormatStyle where FormatStyle.FormatInput == Self, FormatStyle.FormatOutput == String
@@ -27,7 +25,7 @@ public protocol Formattable {
     /// - Parameters:
     ///     - description: A system formatted representation of the value.
     ///
-    @inlinable static func make(description: String) throws -> Self
+    @inlinable static func make(description: String) -> Optional<Self>
     
     /// Creates a format style instance configured with the function's parameters.
     @inlinable static func style(locale: Locale, precision: PrecisionStyle, separator: SeparatorStyle) -> FormatStyle
@@ -35,10 +33,16 @@ public protocol Formattable {
 
 extension Formattable {
     
-    // MARK: Errors
+    // MARK: Initializers
     
-    @inlinable static func error(make description: String) -> Reason {
-        .reason("unable to instantiate number with description", description)
+    @inlinable init(number: Number) throws {
+        let description = number.characters
+        
+        guard let instance = Self.make(description: description) else {
+            throw .reason("unable to instantiate number with description", description)
+        }
+        
+        self = instance
     }
 }
 
@@ -55,8 +59,8 @@ extension FormattableFloatingPoint {
     
     // MARK: Implementation
 
-    @inlinable public static func make(description: String) throws -> Self {
-        try Self(description) ?? { throw error(make: description) }()
+    @inlinable public static func make(description: String) -> Optional<Self> {
+        .init(description)
     }
     
     @inlinable public static func style(locale: Locale, precision: PrecisionStyle, separator: SeparatorStyle) -> FormatStyle {
@@ -77,8 +81,8 @@ extension FormattableInteger {
     
     // MARK: Implementation
     
-    @inlinable public static func make(description: String) throws -> Self {
-        try Self(description) ?? { throw error(make: description) }()
+    @inlinable public static func make(description: String) -> Optional<Self> {
+        .init(description)
     }
     
     @inlinable public static func style(locale: Locale, precision: PrecisionStyle, separator: SeparatorStyle) -> FormatStyle {

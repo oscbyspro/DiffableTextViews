@@ -30,8 +30,8 @@ extension Decimal: Valuable, PreciseFloatingPoint {
 
     // MARK: Formattable
     
-    @inlinable public static func make(description: String) throws -> Self {
-        try Decimal(string: description) ?? { throw error(make: description) }()
+    @inlinable public static func make(description: String) -> Optional<Self> {
+        .init(string: description)
     }
     
     @inlinable public static func style(locale: Locale, precision: PrecisionStyle, separator: SeparatorStyle) -> FormatStyle {

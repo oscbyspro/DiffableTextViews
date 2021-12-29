@@ -81,8 +81,8 @@ import Utilities
     }
     
     @inlinable func editableStyleThatUses(number: Number) -> Value.FormatStyle {
-        let precision: _Format.Precision = precision.editableStyleThatUses(number: number)
-        let separator: _Format.Separator = number.separator.isEmpty ? .automatic : .always
+        let precision: Value.PrecisionStyle = precision.editableStyleThatUses(number: number)
+        let separator: Value.SeparatorStyle = number.separator.isEmpty ? .automatic : .always
         return Value.style(locale: locale, precision: precision, separator: separator)
     }
     
@@ -113,11 +113,4 @@ import Utilities
             throw .reason(value, "is outside of", bounds)
         }
     }
-}
-
-// MARK: - Format: Helpers
-
-@usableFromInline enum _Format {
-    @usableFromInline typealias Precision = NumberFormatStyleConfiguration.Precision
-    @usableFromInline typealias Separator = NumberFormatStyleConfiguration.DecimalSeparatorDisplayStrategy
 }
