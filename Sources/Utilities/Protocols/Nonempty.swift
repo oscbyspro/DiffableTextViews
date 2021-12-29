@@ -49,6 +49,6 @@ public extension Nonempty where Self: BidirectionalCollection {
     }
 }
 
-// MARK: - Implementations
+// MARK: - Objects
 
 extension DefaultIndices: Nonempty where Elements: Nonempty { }

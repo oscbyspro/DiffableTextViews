@@ -14,12 +14,9 @@ public protocol Valuable: Formattable, Boundable, Precise {
     @inlinable static var options: Options { get }
 }
 
-// MARK: - ValuableFloat
+// MARK: - Valuable x Float
 
-@usableFromInline protocol ValuableFloat: Valuable, FormattableFloat, BoundableFloat, PreciseFloat { }
-
-// MARK: - ValuableFloat: Details
-
+@usableFromInline protocol ValuableFloat: Valuable, FormattableFloatingPoint, BoundableFloatingPoint, PreciseFloatingPoint { }
 extension ValuableFloat {
     
     // MARK: Implementation
@@ -27,9 +24,9 @@ extension ValuableFloat {
     @inlinable public static var options: Options { .floatingPoint }
 }
 
-// MARK: - ValuableInt
+// MARK: - Valuable x Int
 
-@usableFromInline protocol ValuableInt: Valuable, FormattableInt, BoundableInt, PreciseInt { }
+@usableFromInline protocol ValuableInt: Valuable, FormattableInteger, BoundableInteger, PreciseInteger { }
 extension ValuableInt {
     
     // MARK: Implementation
@@ -37,12 +34,9 @@ extension ValuableInt {
     @inlinable public static var options: Options { .integer }
 }
 
-// MARK: - ValuableUInt
+// MARK: - Valuable x UInt
 
-@usableFromInline protocol ValuableUInt: Valuable, FormattableInt, BoundableInt, PreciseInt { }
-
-// MARK: - ValuableUInt: Details
-
+@usableFromInline protocol ValuableUInt: Valuable, FormattableInteger, BoundableInteger, PreciseInteger { }
 extension ValuableUInt {
     
     // MARK: Implementation

@@ -26,8 +26,6 @@ import protocol Utilities.Transformable
     @inlinable static var standard: Self { get }
 }
 
-// MARK: - Parser: Details
-
 extension Parser {
     
     // MARK: Implementation

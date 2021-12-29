@@ -7,20 +7,15 @@
 
 // MARK: - Transformable
 
-public protocol Transformable { }
-
-// MARK: - Transformable: Details
-
+public protocol  Transformable { }
 public extension Transformable {
     
-    // MARK: Transform
-    
+    // MARK: Transformations
+        
     @inlinable mutating func transform(_ transformation: (inout Self) -> Void) {
         transformation(&self)
     }
-    
-    // MARK: Transforming
-    
+        
     @inlinable func transforming(_ transformation: (inout Self) -> Void) -> Self {
         var result = self; transformation(&result); return result
     }

@@ -10,7 +10,7 @@ import struct Foundation.Locale
 
 // MARK: - Decimal
 
-extension Decimal: Valuable, PreciseFloat {
+extension Decimal: Valuable, PreciseFloatingPoint {
     
     // MARK: Valuable
     

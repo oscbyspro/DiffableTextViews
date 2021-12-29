@@ -44,8 +44,6 @@ public protocol DiffableTextStyle {
     /// Processes the snapshot once whenever it is called. Can be used to apply transformation after other snapshot and merge functions.
     @inlinable func process(snapshot: inout Snapshot)
 }
-    
-// MARK: - Implementations
 
 extension DiffableTextStyle {
     

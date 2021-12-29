@@ -8,6 +8,8 @@
 import Foundation
 import Utilities
 
+#warning("PrecisionStyle, SeparatorStyle, think about.")
+
 // MARK: - Formattable
 
 public protocol Formattable {
@@ -31,8 +33,6 @@ public protocol Formattable {
     @inlinable static func style(locale: Locale, precision: PrecisionStyle, separator: SeparatorStyle) -> FormatStyle
 }
 
-// MARK: - Formattable: Details
-
 extension Formattable {
     
     // MARK: Errors
@@ -42,18 +42,16 @@ extension Formattable {
     }
 }
 
-// MARK: - FormattableFloat
+// MARK: - Formattable x FloatingPoint
 
-@usableFromInline protocol FormattableFloat: Formattable, BinaryFloatingPoint where FormatStyle == FloatingPointFormatStyle<Self> {
+@usableFromInline protocol FormattableFloatingPoint: Formattable, BinaryFloatingPoint where FormatStyle == FloatingPointFormatStyle<Self> {
     
     // MARK: Requirements
     
     @inlinable init?(_ description: String)
 }
 
-// MARK: - FormattableFloat: Details
-
-extension FormattableFloat {
+extension FormattableFloatingPoint {
     
     // MARK: Implementation
 
@@ -66,18 +64,16 @@ extension FormattableFloat {
     }
 }
 
-// MARK: - FormattableInt
+// MARK: - Formattable x Integer
 
-@usableFromInline protocol FormattableInt: Formattable, FixedWidthInteger where FormatStyle == IntegerFormatStyle<Self> {
+@usableFromInline protocol FormattableInteger: Formattable, FixedWidthInteger where FormatStyle == IntegerFormatStyle<Self> {
     
     // MARK: Requirements
     
     @inlinable init?(_ description: String)
 }
 
-// MARK: - FormattableInt: Details
-
-extension FormattableInt {
+extension FormattableInteger {
     
     // MARK: Implementation
     
