@@ -24,20 +24,14 @@ public struct Autoredactable: Error, CustomStringConvertible {
     
     // MARK: Initializers
     
-    @inlinable @inline(__always) internal init(_ content: @autoclosure () -> String) {
+    @inlinable @inline(__always) internal init(content: @autoclosure () -> String) {
         #if DEBUG
         self.content = content()
         #endif
     }
-    
-    // MARK: Initializers: Public
-    
-    @inlinable @inline(__always) public init(_ components: [Component]) {
-        self.init(Autoredactable.combine(components))
-    }
-    
+        
     @inlinable @inline(__always) public init(_ components: Component...) {
-        self.init(components)
+        self.init(content: Autoredactable.combine(components))
     }
     
     // MARK: Descriptions
@@ -72,7 +66,7 @@ public struct Autoredactable: Error, CustomStringConvertible {
         
         // MARK: Initializers
         
-        @inlinable @inline(__always) internal init(_ content: @autoclosure () -> String) {
+        @inlinable @inline(__always) internal init(content: @autoclosure () -> String) {
             #if DEBUG
             self.content = content()
             #endif
@@ -81,21 +75,21 @@ public struct Autoredactable: Error, CustomStringConvertible {
         // MARK: Initializers: Literals
         
         @inlinable @inline(__always) public init(stringLiteral value: String) {
-            self.init(value)
+            self.init(content: value)
         }
         
         @inlinable @inline(__always) public init(arrayLiteral elements: Any...) {
-            self.init(Autoredactable.mark((Autoredactable.combine(elements))))
+            self.init(content: Autoredactable.mark((Autoredactable.combine(elements))))
         }
         
         // MARK: Initializers: Static
         
         @inlinable @inline(__always) public static func text(_ value: Any) -> Self {
-            Self.init(String(describing: value))
+            Self.init(content: Autoredactable.text(value))
         }
         
         @inlinable @inline(__always) public static func mark(_ value: Any) -> Self {
-            Self.init(Autoredactable.mark(value))
+            Self.init(content: Autoredactable.mark(value))
         }
         
         // MARK: Descriptions
