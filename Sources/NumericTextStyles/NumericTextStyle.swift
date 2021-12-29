@@ -164,8 +164,8 @@ public struct NumericTextStyle<Value: Valuable>: DiffableTextStyle, Transformabl
     // MARK: Characters
     
     @inlinable func snapshot(characters: String) -> Snapshot {
-        var snapshot = Snapshot()
         var index = characters.startIndex
+        var snapshot = Snapshot()
         
         // --------------------------------- //
         // MARK: Prefix
@@ -181,18 +181,16 @@ public struct NumericTextStyle<Value: Valuable>: DiffableTextStyle, Transformabl
         // --------------------------------- //
         
         SIGN: if index != characters.endIndex {
-            var sign = Sign()
             let character = characters[index]
+            var result = Sign()
             
-            if let value = format.signs[character] {
-                sign = value
+            if let sign = format.signs[character] {
+                result = sign
                 characters.formIndex(after: &index)
             }
-                    
-            format.correct(sign: &sign)
-            let value = Snapshot(sign.characters, only: .prefixing)
             
-            snapshot.append(contentsOf: value)
+            format.correct(sign: &result)
+            snapshot.append(contentsOf: Snapshot(result.characters, only: .prefixing))
         }
         
         // --------------------------------- //
@@ -210,12 +208,12 @@ public struct NumericTextStyle<Value: Valuable>: DiffableTextStyle, Transformabl
                         
             snapshot.append(symbol)
         }
-                     
+        
         // --------------------------------- //
-        // MARK: Body
+        // MARK: Remainders
         // --------------------------------- //
         
-        BODY: while index != characters.endIndex {
+        REMAINDERS: while index != characters.endIndex {
             let character = characters[index]
             
             if format.digits.contains(character) {
@@ -230,17 +228,17 @@ public struct NumericTextStyle<Value: Valuable>: DiffableTextStyle, Transformabl
         }
         
         // --------------------------------- //
-        // MARK: Process Redundant Tail
+        // MARK: Process Redundance
         // --------------------------------- //
         
-        PROCESS_REDUNDANT_TAIL: do {
-            let redundantTail = snapshot.suffix { symbol in
+        PROCESS_REDUNDANCE: do {
+            let redundance = snapshot.suffix { symbol in
                 if format.zero == symbol.character { return true }
                 if format.fractionSeparator.contains(symbol.character) { return true }
                 return false
             }
             
-            snapshot.transform(attributes: redundantTail.indices) { attribute in
+            snapshot.transform(attributes: redundance.indices) { attribute in
                 attribute.insert(.removable)
             }
         }
