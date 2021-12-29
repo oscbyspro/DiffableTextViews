@@ -5,8 +5,8 @@
 //  Created by Oscar Byström Ericsson on 2021-12-21.
 //
 
+import struct Utilities.Autoredactable
 import enum Foundation.NumberFormatStyleConfiguration
-import struct Utilities.Reason
 
 // MARK: - Precision
 
@@ -34,15 +34,15 @@ public struct Precision<Value: Precise> {
     
     // MARK: Styles
 
-    @inlinable func showcaseStyle() -> NumberFormatStyleConfiguration.Precision {
+    @inlinable func showcaseStyle() -> _Precision.Style {
         implementation.showcaseStyle()
     }
     
-    @inlinable func editableStyle() -> NumberFormatStyleConfiguration.Precision {
+    @inlinable func editableStyle() -> _Precision.Style {
         .integerAndFractionLength(integerLimits: Value.losslessIntegerLimits, fractionLimits: Value.losslessFractionLimits)
     }
     
-    @inlinable func editableStyleThatUses(number: Number) -> NumberFormatStyleConfiguration.Precision {
+    @inlinable func editableStyleThatUses(number: Number) -> _Precision.Style{
         let integerUpperBound = max(Value.minLosslessIntegerDigits, number.integer.count)
         let integer = Value.minLosslessIntegerDigits...integerUpperBound
         let fractionLowerBound = max(Value.minLosslessFractionDigits, number.fraction.count)
@@ -54,6 +54,7 @@ public struct Precision<Value: Precise> {
 // MARK: - Precision x Namespace
 
 @usableFromInline enum _Precision {
+    @usableFromInline typealias Style = NumberFormatStyleConfiguration.Precision
 
     // MARK: Bounds
     
@@ -85,8 +86,8 @@ public struct Precision<Value: Precise> {
     
     // MARK: Errors
     
-    @inlinable static func failure(excess component: Component, max: Int) -> Reason {
-        .reason([component], "digits exceeded precision capacity", [max])
+    @inlinable static func failure(excess component: Component, max: Int) -> Autoredactable {
+        Autoredactable([component], "digits exceeded precision capacity", [max])
     }
     
     // MARK: Components
@@ -104,7 +105,7 @@ public struct Precision<Value: Precise> {
 
     // MARK: Requirements
             
-    @inlinable func showcaseStyle() -> NumberFormatStyleConfiguration.Precision
+    @inlinable func showcaseStyle() -> _Precision.Style
     
     @inlinable func capacity(number: Number) throws -> Capacity
 }
@@ -125,7 +126,7 @@ public struct Precision<Value: Precise> {
     
     // MARK: Styles
     
-    @inlinable func showcaseStyle() -> NumberFormatStyleConfiguration.Precision {
+    @inlinable func showcaseStyle() -> _Precision.Style {
         .significantDigits(significant)
     }
     
@@ -163,7 +164,7 @@ public struct Precision<Value: Precise> {
     
     // MARK: Styles
 
-    @inlinable func showcaseStyle() -> NumberFormatStyleConfiguration.Precision {
+    @inlinable func showcaseStyle() -> _Precision.Style {
         .integerAndFractionLength(integerLimits: integer, fractionLimits: fraction)
     }
     

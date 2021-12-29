@@ -41,7 +41,7 @@ import Utilities
         let capacity = capacity()
 
         guard characters.count <= capacity else {
-            throw .reason(.mark(characters), "exceeded pattern capacity", .mark(capacity))
+            throw Autoredactable([characters], "exceeded pattern capacity", [capacity])
         }
     }
 }
