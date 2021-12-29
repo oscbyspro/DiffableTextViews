@@ -41,7 +41,7 @@ import Utilities
         let capacity = capacity()
 
         guard characters.count <= capacity else {
-            throw .reason(characters, "exceeded pattern capacity", capacity)
+            throw .reason(.mark(characters), "exceeded pattern capacity", .mark(capacity))
         }
     }
 }
