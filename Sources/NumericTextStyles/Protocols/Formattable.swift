@@ -66,18 +66,18 @@ extension FormattableFloat {
     }
 }
 
-// MARK: - FormattableInteger
+// MARK: - FormattableInt
 
-@usableFromInline protocol FormattableInteger: Formattable, FixedWidthInteger where FormatStyle == IntegerFormatStyle<Self> {
+@usableFromInline protocol FormattableInt: Formattable, FixedWidthInteger where FormatStyle == IntegerFormatStyle<Self> {
     
     // MARK: Requirements
     
     @inlinable init?(_ description: String)
 }
 
-// MARK: - FormattableInteger: Details
+// MARK: - FormattableInt: Details
 
-extension FormattableInteger {
+extension FormattableInt {
     
     // MARK: Implementation
     

@@ -5,6 +5,8 @@
 //  Created by Oscar Byström Ericsson on 2021-12-21.
 //
 
+#warning("Require: static var bounds: Self { get }.")
+
 // MARK: - Boundable
 
 public protocol Boundable: Comparable {
@@ -36,13 +38,13 @@ extension BoundableFloat {
     }
 }
 
-// MARK: - BoundableInteger
+// MARK: - BoundableInt
 
-@usableFromInline protocol BoundableInteger: Boundable, FixedWidthInteger { }
+@usableFromInline protocol BoundableInt: Boundable, FixedWidthInteger { }
 
-// MARK: - BoundableInteger: Details
+// MARK: - BoundableInt: Details
 
-extension BoundableInteger {
+extension BoundableInt {
     
     // MARK: Implementation
     

@@ -10,10 +10,6 @@ import struct Foundation.Locale
 
 // MARK: - Decimal
 
-/// Decimal: conformance to Valuable.
-///
-/// - Supports up to 38 significant digits.
-///
 extension Decimal: Valuable, PreciseFloat {
     
     // MARK: Valuable

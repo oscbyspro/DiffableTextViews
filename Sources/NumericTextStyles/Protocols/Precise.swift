@@ -5,6 +5,8 @@
 //  Created by Oscar Byström Ericsson on 2021-12-21.
 //
 
+#warning("Require: static var precision: Int { get }.")
+
 // MARK: - Precise
 
 public protocol Precise {
@@ -60,13 +62,13 @@ public extension PreciseFloat {
     }
 }
 
-// MARK: - PreciseInteger
+// MARK: - PreciseInt
 
-public  protocol PreciseInteger: Precise { }
+public  protocol PreciseInt: Precise { }
 
-// MARK: - PreciseInteger: Details
+// MARK: - PreciseInt: Details
 
-public extension PreciseInteger {
+public extension PreciseInt {
     
     // MARK: Implementation
     

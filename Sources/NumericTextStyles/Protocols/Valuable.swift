@@ -24,26 +24,22 @@ extension ValuableFloat {
     
     // MARK: Implementation
     
-    @inlinable public static var options: Options {
-        .floatingPoint
-    }
+    @inlinable public static var options: Options { .floatingPoint }
 }
 
 // MARK: - ValuableInt
 
-@usableFromInline protocol ValuableInt: Valuable, FormattableInteger, BoundableInteger, PreciseInteger { }
+@usableFromInline protocol ValuableInt: Valuable, FormattableInt, BoundableInt, PreciseInt { }
 extension ValuableInt {
     
     // MARK: Implementation
     
-    @inlinable public static var options: Options {
-        .integer
-    }
+    @inlinable public static var options: Options { .integer }
 }
 
 // MARK: - ValuableUInt
 
-@usableFromInline protocol ValuableUInt: Valuable, FormattableInteger, BoundableInteger, PreciseInteger { }
+@usableFromInline protocol ValuableUInt: Valuable, FormattableInt, BoundableInt, PreciseInt { }
 
 // MARK: - ValuableUInt: Details
 
@@ -51,7 +47,5 @@ extension ValuableUInt {
     
     // MARK: Implementation
     
-    @inlinable public static var options: Options {
-        .unsignedInteger
-    }
+    @inlinable public static var options: Options { .unsignedInteger }
 }

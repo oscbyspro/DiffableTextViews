@@ -27,10 +27,9 @@ public struct Options: OptionSet {
     
     public static let unsigned = Self(rawValue: 1 << 0)
     public static let integer  = Self(rawValue: 1 << 1)
-        
+    
     // MARK: Instances: Composites
     
-    public static let floatingPoint = Self()
+    public static let floatingPoint   = Self()
     public static let unsignedInteger = Self([.unsigned, .integer])
 }
-
