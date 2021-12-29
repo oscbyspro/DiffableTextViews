@@ -28,11 +28,17 @@ public struct Reason: Error, CustomStringConvertible {
     }
     
     @inlinable @inline(__always) public init(_ components: [Component]) {
-        self.init(components.lazy.map(\.description).joined(separator: " "))
+        self.init(Reason.combine(components))
     }
     
     @inlinable @inline(__always) public init(_ components: Component...) {
         self.init(components)
+    }
+    
+    // MARK: Helpers
+    
+    @inlinable @inline(__always) static func combine(_ elements: [Any], separator: String = " ") -> String {
+        elements.lazy.map(String.init(describing:)).joined(separator: separator)
     }
     
     // MARK: Components
@@ -58,7 +64,7 @@ public struct Reason: Error, CustomStringConvertible {
         // MARK: Initializers: Literals
         
         @inlinable @inline(__always) public init(arrayLiteral elements: Any...) {
-            self = .mark(elements.lazy.map(String.init(describing:)).joined(separator: ", "))
+            self = .mark(Reason.combine(elements))
         }
         
         @inlinable @inline(__always) public init(stringLiteral value: StringLiteralType) {
