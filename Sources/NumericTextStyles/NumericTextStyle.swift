@@ -13,7 +13,8 @@ import Utilities
 
 /// Formats numbers to and from user interactive text.
 ///
-/// - Complexity: O(n) or less for all computations.
+/// - Complexity: O(k · n) where k is some constant and n is the number of characters in the snapshot.
+///               This is reasonably efficient considering that sequences are read in at least O(n) time.
 ///
 public struct NumericTextStyle<Value: Valuable>: DiffableTextStyle, Transformable {
     public typealias Bounds = NumericTextStyles.Bounds<Value>
@@ -101,38 +102,63 @@ public struct NumericTextStyle<Value: Valuable>: DiffableTextStyle, Transformabl
     // MARK: Merge
 
     @inlinable public func merge(snapshot: Snapshot, with content: Snapshot, in range: Range<Snapshot.Index>) throws -> Snapshot {
-        var input = Input(content)
-        let signInput = input.consumeSignInput(with: format.parser.sign)
-                
+        
         // --------------------------------- //
-
+        // MARK: Input
+        // --------------------------------- //
+        
+        var input = Input(content)
+        
+        PARSE_COMMANDS: do {
+            input.consumeSignInput(with: format.parser.sign)
+        }
+        
+        // --------------------------------- //
+        // MARK: Number
+        // --------------------------------- //
+        
         var number = try number(snapshot: snapshot.replacing(range, with: input.content))
         
+        EXECUTE_COMMANDS: do {
+            input.process?(&number)
+        }
+        
+        VALIDATE_NUMBER: do {
+            try format.validate(sign: number.sign)
+            let capacity = try format.precision.capacity(number: number)
+            number.removeImpossibleSeparator(capacity: capacity)
+        }
+        
         // --------------------------------- //
-        
-        signInput?.process(&number)
-        try format.validate(sign: number.sign)
-        
-        // --------------------------------- //
-
-        let capacity = try format.precision.capacity(number: number)
-        number.removeImpossibleSeparator(capacity: capacity)
-        
+        // MARK: Value
         // --------------------------------- //
         
         let value = try value(number: number)
-        try format.validate(value: value)
         
+        VALIDATE_VALUE: do {
+            try format.validate(value: value)
+        }
+        
+        // --------------------------------- //
+        // MARK: Style
         // --------------------------------- //
         
         let style = format.editableStyleThatUses(number: number)
         
+        // --------------------------------- //
+        // MARK: Characters
+        // --------------------------------- //
+        
         var characters = style.format(value)
         
-        if !characters.hasPrefix(number.sign.characters) {
-            characters = number.sign.characters + characters
+        CORRECT_CHARACTERS_SIGN: do {
+            if !characters.hasPrefix(number.sign.characters) {
+                characters = number.sign.characters + characters
+            }
         }
         
+        // --------------------------------- //
+        // MARK: Continue
         // --------------------------------- //
     
         return self.snapshot(characters: characters)
@@ -171,7 +197,7 @@ public struct NumericTextStyle<Value: Valuable>: DiffableTextStyle, Transformabl
             
             snapshot.append(contentsOf: value)
         }
-            
+        
         // --------------------------------- //
         // MARK: First Digit
         // --------------------------------- //
