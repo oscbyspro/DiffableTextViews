@@ -43,7 +43,7 @@ public struct Reason: Error, CustomStringConvertible {
     
     // MARK: Components
     
-    public struct Component: CustomStringConvertible, ExpressibleByArrayLiteral, ExpressibleByStringLiteral {
+    public struct Component: CustomStringConvertible, ExpressibleByStringLiteral, ExpressibleByArrayLiteral {
         
         // MARK: Properties
         
@@ -63,18 +63,18 @@ public struct Reason: Error, CustomStringConvertible {
         
         // MARK: Initializers: Literals
         
-        @inlinable @inline(__always) public init(arrayLiteral elements: Any...) {
-            self = .mark(Reason.combine(elements))
-        }
-        
         @inlinable @inline(__always) public init(stringLiteral value: StringLiteralType) {
             self.init(value)
         }
         
-        // MARK: Instances
+        @inlinable @inline(__always) public init(arrayLiteral elements: Any...) {
+            self = .mark(Reason.combine(elements))
+        }
+        
+        // MARK: Initializers: Static
         
         @inlinable @inline(__always) public static func text(_ value: Any) -> Self {
-            .init("\(value)")
+            .init(String(describing: value))
         }
         
         @inlinable @inline(__always) public static func mark(_ value: Any) -> Self {
