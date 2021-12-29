@@ -73,10 +73,6 @@ public extension Error where Self == Reason {
 
     // MARK: Instances
 
-    @inlinable @inline(__always) static func reason(_ description: String) -> Self {
-        .init(description)
-    }
-
     @inlinable @inline(__always) static func reason(_ components: Self.Component...) -> Self {
         .init(components)
     }
