@@ -42,18 +42,18 @@ extension Formattable {
     }
 }
 
-// MARK: - FormattableFloatingPoint
+// MARK: - FormattableFloat
 
-@usableFromInline protocol FormattableFloatingPoint: Formattable, BinaryFloatingPoint where FormatStyle == FloatingPointFormatStyle<Self> {
+@usableFromInline protocol FormattableFloat: Formattable, BinaryFloatingPoint where FormatStyle == FloatingPointFormatStyle<Self> {
     
     // MARK: Requirements
     
     @inlinable init?(_ description: String)
 }
 
-// MARK: - FormattableFloatingPoint: Details
+// MARK: - FormattableFloat: Details
 
-extension FormattableFloatingPoint {
+extension FormattableFloat {
     
     // MARK: Implementation
 

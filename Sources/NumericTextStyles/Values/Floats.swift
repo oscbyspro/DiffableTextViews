@@ -7,7 +7,7 @@
 
 // MARK: - Float16
 
-extension Float16: ValuableFloatingPoint {
+extension Float16: ValuableFloat {
     
     // MARK: Implementation
     
@@ -17,7 +17,7 @@ extension Float16: ValuableFloatingPoint {
 
 // MARK: - Float32
 
-extension Float32: ValuableFloatingPoint {
+extension Float32: ValuableFloat {
     
     // MARK: Implementation
         
@@ -27,7 +27,7 @@ extension Float32: ValuableFloatingPoint {
 
 // MARK: - Float64
 
-extension Float64: ValuableFloatingPoint {
+extension Float64: ValuableFloat {
     
     // MARK: Implementation
         

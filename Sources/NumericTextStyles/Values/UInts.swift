@@ -7,7 +7,7 @@
 
 // MARK: - UInt
 
-extension UInt: ValuableUnsignedInteger {
+extension UInt: ValuableUInt {
     
     // MARK: Implementation
         
@@ -20,7 +20,7 @@ extension UInt: ValuableUnsignedInteger {
 
 // MARK: - UInt8
 
-extension UInt8: ValuableUnsignedInteger {
+extension UInt8: ValuableUInt {
     
     // MARK: Implementation
 
@@ -29,7 +29,7 @@ extension UInt8: ValuableUnsignedInteger {
 
 // MARK: - UInt16
 
-extension UInt16: ValuableUnsignedInteger {
+extension UInt16: ValuableUInt {
     
     // MARK: Implementation
     
@@ -38,7 +38,7 @@ extension UInt16: ValuableUnsignedInteger {
 
 // MARK: - UInt32
 
-extension UInt32: ValuableUnsignedInteger {
+extension UInt32: ValuableUInt {
     
     // MARK: Implementation
     
@@ -47,7 +47,7 @@ extension UInt32: ValuableUnsignedInteger {
 
 // MARK: - UInt64
 
-extension UInt64: ValuableUnsignedInteger {
+extension UInt64: ValuableUInt {
     
     // MARK: Implementation
     

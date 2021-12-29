@@ -14,23 +14,12 @@ import struct Foundation.Locale
 ///
 /// - Supports up to 38 significant digits.
 ///
-extension Decimal: Valuable, PreciseFloatingPoint {
+extension Decimal: Valuable, PreciseFloat {
     
     // MARK: Valuable
     
     public static let options: Options = .floatingPoint
-    
-    
-    // MARK: Formattable
-    
-    @inlinable public static func make(description: String) throws -> Self {
-        try Decimal(string: description) ?? { throw error(make: description) }()
-    }
-    
-    @inlinable public static func style(locale: Locale, precision: PrecisionStyle, separator: SeparatorStyle) -> FormatStyle {
-        .init(locale: locale).precision(precision).decimalSeparator(strategy: separator)
-    }
-    
+
     // MARK: Precise
  
     public static let maxLosslessSignificantDigits: Int = 38
@@ -43,4 +32,13 @@ extension Decimal: Valuable, PreciseFloatingPoint {
         Decimal(string: String(repeating: "9", count: maxLosslessSignificantDigits))!
     }()
 
+    // MARK: Formattable
+    
+    @inlinable public static func make(description: String) throws -> Self {
+        try Decimal(string: description) ?? { throw error(make: description) }()
+    }
+    
+    @inlinable public static func style(locale: Locale, precision: PrecisionStyle, separator: SeparatorStyle) -> FormatStyle {
+        .init(locale: locale).precision(precision).decimalSeparator(strategy: separator)
+    }
 }

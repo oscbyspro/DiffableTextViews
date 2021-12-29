@@ -14,13 +14,13 @@ public protocol Valuable: Formattable, Boundable, Precise {
     @inlinable static var options: Options { get }
 }
 
-// MARK: - ValuableFloatingPoint
+// MARK: - ValuableFloat
 
-@usableFromInline protocol ValuableFloatingPoint: Valuable, FormattableFloatingPoint, BoundableFloatingPoint, PreciseFloatingPoint { }
+@usableFromInline protocol ValuableFloat: Valuable, FormattableFloat, BoundableFloat, PreciseFloat { }
 
-// MARK: - ValuableFloatingPoint: Details
+// MARK: - ValuableFloat: Details
 
-extension ValuableFloatingPoint {
+extension ValuableFloat {
     
     // MARK: Implementation
     
@@ -29,10 +29,10 @@ extension ValuableFloatingPoint {
     }
 }
 
-// MARK: - ValuableTextInteger
+// MARK: - ValuableInt
 
-@usableFromInline protocol ValuableTextInteger: Valuable, FormattableInteger, BoundableInteger, PreciseInteger { }
-extension ValuableTextInteger {
+@usableFromInline protocol ValuableInt: Valuable, FormattableInteger, BoundableInteger, PreciseInteger { }
+extension ValuableInt {
     
     // MARK: Implementation
     
@@ -41,13 +41,13 @@ extension ValuableTextInteger {
     }
 }
 
-// MARK: - ValuableUnsignedInteger
+// MARK: - ValuableUInt
 
-@usableFromInline protocol ValuableUnsignedInteger: Valuable, FormattableInteger, BoundableInteger, PreciseInteger { }
+@usableFromInline protocol ValuableUInt: Valuable, FormattableInteger, BoundableInteger, PreciseInteger { }
 
-// MARK: - ValuableUnsignedInteger: Details
+// MARK: - ValuableUInt: Details
 
-extension ValuableUnsignedInteger {
+extension ValuableUInt {
     
     // MARK: Implementation
     

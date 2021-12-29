@@ -21,13 +21,13 @@ public protocol Boundable: Comparable {
     @inlinable static var maxLosslessValue: Self { get }
 }
 
-// MARK: - BoundableFloatingPoint
+// MARK: - BoundableFloat
 
-@usableFromInline protocol BoundableFloatingPoint: Boundable, BinaryFloatingPoint { }
+@usableFromInline protocol BoundableFloat: Boundable, BinaryFloatingPoint { }
 
-// MARK: - BoundableFloatingPoint: Details
+// MARK: - BoundableFloat: Details
 
-extension BoundableFloatingPoint {
+extension BoundableFloat {
     
     // MARK: Implementation
     

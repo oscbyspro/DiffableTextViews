@@ -203,7 +203,7 @@ public extension Precision {
 
 // MARK: - Instances: IntegerAndFractionLength
 
-public extension Precision where Value: PreciseFloatingPoint {
+public extension Precision where Value: PreciseFloat {
     
     // MARK: Limits
 

@@ -7,7 +7,7 @@
 
 // MARK: - Int
 
-extension Int: ValuableTextInteger {
+extension Int: ValuableInt {
     
     // MARK: Implementation
     
@@ -16,7 +16,7 @@ extension Int: ValuableTextInteger {
 
 // MARK: - Int8
 
-extension Int8: ValuableTextInteger {
+extension Int8: ValuableInt {
     
     // MARK: Implementation
     
@@ -25,7 +25,7 @@ extension Int8: ValuableTextInteger {
 
 // MARK: - Int16
 
-extension Int16: ValuableTextInteger {
+extension Int16: ValuableInt {
     
     // MARK: Implementation
     
@@ -34,7 +34,7 @@ extension Int16: ValuableTextInteger {
 
 // MARK: - Int32
 
-extension Int32: ValuableTextInteger {
+extension Int32: ValuableInt {
     
     // MARK: Implementation
     
@@ -43,7 +43,7 @@ extension Int32: ValuableTextInteger {
 
 // MARK: Int64
 
-extension Int64: ValuableTextInteger {
+extension Int64: ValuableInt {
     
     // MARK: Implementation
     

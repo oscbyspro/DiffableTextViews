@@ -41,13 +41,13 @@ extension Precise {
     }
 }
 
-// MARK: - PreciseFloatingPoint
+// MARK: - PreciseFloat
 
-public  protocol PreciseFloatingPoint: Precise { }
+public  protocol PreciseFloat: Precise { }
 
-// MARK: - PreciseFloatingPoint: Details
+// MARK: - PreciseFloat: Details
 
-public extension PreciseFloatingPoint {
+public extension PreciseFloat {
     
     // MARK: Implementation
 
