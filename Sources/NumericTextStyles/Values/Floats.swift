@@ -7,7 +7,7 @@
 
 // MARK: - Float16
 
-extension Float16: NumericTextFloat {
+extension Float16: ValuableFloatingPoint {
     
     // MARK: Implementation
     
@@ -17,7 +17,7 @@ extension Float16: NumericTextFloat {
 
 // MARK: - Float32
 
-extension Float32: NumericTextFloat {
+extension Float32: ValuableFloatingPoint {
     
     // MARK: Implementation
         
@@ -27,7 +27,7 @@ extension Float32: NumericTextFloat {
 
 // MARK: - Float64
 
-extension Float64: NumericTextFloat {
+extension Float64: ValuableFloatingPoint {
     
     // MARK: Implementation
         

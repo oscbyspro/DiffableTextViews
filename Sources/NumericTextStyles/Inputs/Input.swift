@@ -14,18 +14,16 @@ import struct DiffableTextViews.Snapshot
     // MARK: Properties
     
     @usableFromInline var content: Snapshot
-    @usableFromInline let parser: NumberParser
         
     // MARK: Initializers
             
-    @inlinable init(_ content: Snapshot, parser: NumberParser) {
+    @inlinable init(_ content: Snapshot) {
         self.content = content
-        self.parser = parser
     }
     
     // MARK: Utilities
     
-    @inlinable mutating func consumeSignInput() -> SignInput? {
-        .init(consumable: &content, parser: parser.sign)
+    @inlinable mutating func consumeSignInput(with parser: SignParser) -> SignInput? {
+        .init(consumable: &content, parser: parser)
     }
 }

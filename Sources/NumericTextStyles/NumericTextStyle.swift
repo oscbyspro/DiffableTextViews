@@ -15,7 +15,7 @@ import struct Foundation.Locale
 ///
 /// - Complexity: O(n) or less for all computations.
 ///
-public struct NumericTextStyle<Value: NumericTextValue>: DiffableTextStyle, Transformable {
+public struct NumericTextStyle<Value: Valuable>: DiffableTextStyle, Transformable {
     public typealias Bounds = NumericTextStyles.Bounds<Value>
     public typealias Precision = NumericTextStyles.Precision<Value>
     @usableFromInline typealias Format = NumericTextStyles.Format<Value>
@@ -101,8 +101,8 @@ public struct NumericTextStyle<Value: NumericTextValue>: DiffableTextStyle, Tran
     // MARK: Merge
 
     @inlinable public func merge(snapshot: Snapshot, with content: Snapshot, in range: Range<Snapshot.Index>) throws -> Snapshot {
-        var input = Input(content, parser: format.parser)
-        let signInput = input.consumeSignInput()
+        var input = Input(content)
+        let signInput = input.consumeSignInput(with: format.parser.sign)
                 
         // --------------------------------- //
 

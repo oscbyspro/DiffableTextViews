@@ -11,7 +11,7 @@ import struct Utilities.Reason
 
 // MARK: - Format
 
-@usableFromInline struct Format<Value: NumericTextValue> {
+@usableFromInline struct Format<Value: Valuable> {
     @usableFromInline typealias Bounds = NumericTextStyles.Bounds<Value>
     @usableFromInline typealias Precision = NumericTextStyles.Precision<Value>
 

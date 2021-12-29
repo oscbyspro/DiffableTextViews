@@ -17,11 +17,11 @@ import protocol Utilities.Transformable
     @usableFromInline private(set) var sign: SignParser
     @usableFromInline private(set) var digits: DigitsParser
     @usableFromInline private(set) var separator: SeparatorParser
-    @usableFromInline private(set) var options: NumericTextOptions
+    @usableFromInline private(set) var options: Options
     
     // MARK: Initializers
     
-    @inlinable init(sign: SignParser, digits: DigitsParser, separator: SeparatorParser, options: NumericTextOptions) {
+    @inlinable init(sign: SignParser, digits: DigitsParser, separator: SeparatorParser, options: Options) {
         self.sign = sign
         self.digits = digits
         self.separator = separator
@@ -36,7 +36,7 @@ import protocol Utilities.Transformable
         self.separator.update(locale: locale)
     }
     
-    @inlinable mutating func update(options: NumericTextOptions) {
+    @inlinable mutating func update(options: Options) {
         self.options = options
     }
 

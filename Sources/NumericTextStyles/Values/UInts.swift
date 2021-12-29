@@ -7,7 +7,7 @@
 
 // MARK: - UInt
 
-extension UInt: NumericTextUInt {
+extension UInt: ValuableUnsignedInteger {
     
     // MARK: Implementation
         
@@ -20,7 +20,7 @@ extension UInt: NumericTextUInt {
 
 // MARK: - UInt8
 
-extension UInt8: NumericTextUInt {
+extension UInt8: ValuableUnsignedInteger {
     
     // MARK: Implementation
 
@@ -29,7 +29,7 @@ extension UInt8: NumericTextUInt {
 
 // MARK: - UInt16
 
-extension UInt16: NumericTextUInt {
+extension UInt16: ValuableUnsignedInteger {
     
     // MARK: Implementation
     
@@ -38,7 +38,7 @@ extension UInt16: NumericTextUInt {
 
 // MARK: - UInt32
 
-extension UInt32: NumericTextUInt {
+extension UInt32: ValuableUnsignedInteger {
     
     // MARK: Implementation
     
@@ -47,7 +47,7 @@ extension UInt32: NumericTextUInt {
 
 // MARK: - UInt64
 
-extension UInt64: NumericTextUInt {
+extension UInt64: ValuableUnsignedInteger {
     
     // MARK: Implementation
     

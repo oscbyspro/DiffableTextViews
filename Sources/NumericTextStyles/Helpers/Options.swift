@@ -1,17 +1,17 @@
 //
-//  NumericTextOptions.swift
+//  Options.swift
 //  
 //
-//  Created by Oscar Byström Ericsson on 2021-12-24.
+//  Created by Oscar Byström Ericsson on 2021-12-29.
 //
 
-// MARK: - NumericTextOptions
+// MARK: - Options
 
 /// Number type description.
 ///
 /// FloatingPoints are empty.
 ///
-public struct NumericTextOptions: OptionSet {
+public struct Options: OptionSet {
     
     // MARK: Properties
     
@@ -27,9 +27,10 @@ public struct NumericTextOptions: OptionSet {
     
     public static let unsigned = Self(rawValue: 1 << 0)
     public static let integer  = Self(rawValue: 1 << 1)
-    
+        
     // MARK: Instances: Composites
     
-    public static let floatingPoint   = Self()
+    public static let floatingPoint = Self()
     public static let unsignedInteger = Self([.unsigned, .integer])
 }
+

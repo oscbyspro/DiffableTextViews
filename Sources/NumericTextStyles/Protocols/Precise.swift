@@ -16,7 +16,7 @@ public protocol Precise {
     @inlinable static var maxLosslessSignificantDigits: Int { get }
 }
 
-// MARK: - Prscise: Details
+// MARK: - Precise: Details
 
 extension Precise {
     
@@ -41,25 +41,12 @@ extension Precise {
     }
 }
 
-// MARK: - Precise: Integer
-
-public  protocol PreciseInteger: Precise { }
-public extension PreciseInteger {
-    
-    // MARK: Implementation
-    
-    @inlinable static var maxLosslessIntegerDigits: Int {
-        maxLosslessSignificantDigits
-    }
-    
-    @inlinable static var maxLosslessFractionDigits: Int {
-        Int.zero
-    }
-}
-
-// MARK: - Precise: FloatingPoint
+// MARK: - PreciseFloatingPoint
 
 public  protocol PreciseFloatingPoint: Precise { }
+
+// MARK: - PreciseFloatingPoint: Details
+
 public extension PreciseFloatingPoint {
     
     // MARK: Implementation
@@ -70,5 +57,24 @@ public extension PreciseFloatingPoint {
     
     @inlinable static var maxLosslessFractionDigits: Int {
         maxLosslessSignificantDigits
+    }
+}
+
+// MARK: - PreciseInteger
+
+public  protocol PreciseInteger: Precise { }
+
+// MARK: - PreciseInteger: Details
+
+public extension PreciseInteger {
+    
+    // MARK: Implementation
+    
+    @inlinable static var maxLosslessIntegerDigits: Int {
+        maxLosslessSignificantDigits
+    }
+    
+    @inlinable static var maxLosslessFractionDigits: Int {
+        Int.zero
     }
 }

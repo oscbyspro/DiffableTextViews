@@ -47,6 +47,10 @@ struct NumericTextStyleExample: View {
         
 ### Values
 
+    - Decimal:
+        - precision: 38
+        - bounds: ±99,999,999,999,999,999,999,999,999,999,999,999,999
+
     - Float16:
         - precision: 3
         - bounds: ±999
@@ -58,10 +62,6 @@ struct NumericTextStyleExample: View {
     - Float64 = Double:
         - precision: 15
         - bounds: ±999,999,999,999,999
-
-    - Decimal:
-        - precision: 38
-        - bounds: ±99,999,999,999,999,999,999,999,999,999,999,999,999
 
     - Int:
         - precision: depends on the system.

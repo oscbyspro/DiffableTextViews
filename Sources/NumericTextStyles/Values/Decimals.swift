@@ -5,23 +5,31 @@
 //  Created by Oscar Byström Ericsson on 2021-10-18.
 //
 
-import struct Foundation.Locale
 import struct Foundation.Decimal
-import enum Foundation.NumberFormatStyleConfiguration
-import struct Utilities.Reason
+import struct Foundation.Locale
 
 // MARK: - Decimal
 
-/// Decimal: conformance to NumericTextValue.
+/// Decimal: conformance to Valuable.
 ///
 /// - Supports up to 38 significant digits.
 ///
-extension Decimal: NumericTextValue, PreciseFloatingPoint { }
-extension Decimal {
+extension Decimal: Valuable, PreciseFloatingPoint {
     
-    // MARK: Value
+    // MARK: Valuable
     
-    public static let options: NumericTextOptions = .floatingPoint
+    public static let options: Options = .floatingPoint
+    
+    
+    // MARK: Formattable
+    
+    @inlinable public static func make(description: String) throws -> Self {
+        try Decimal(string: description) ?? { throw error(make: description) }()
+    }
+    
+    @inlinable public static func style(locale: Locale, precision: PrecisionStyle, separator: SeparatorStyle) -> FormatStyle {
+        .init(locale: locale).precision(precision).decimalSeparator(strategy: separator)
+    }
     
     // MARK: Precise
  
@@ -34,14 +42,5 @@ extension Decimal {
     @usableFromInline static let maxLosslessLimit: Self = {
         Decimal(string: String(repeating: "9", count: maxLosslessSignificantDigits))!
     }()
-        
-    // MARK: Formattable
-    
-    @inlinable public static func style(locale: Locale, precision: NumberFormatStyleConfiguration.Precision, separator: NumberFormatStyleConfiguration.DecimalSeparatorDisplayStrategy) -> FormatStyle {
-        .init(locale: locale).precision(precision).decimalSeparator(strategy: separator)
-    }
-    
-    @inlinable public static func make(description: String) throws -> Self {
-        try Decimal(string: description) ?? { throw failure(make: description) }()
-    }
+
 }

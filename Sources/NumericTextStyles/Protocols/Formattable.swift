@@ -5,13 +5,14 @@
 //  Created by Oscar Byström Ericsson on 2021-12-21.
 //
 
-import struct Foundation.Locale
-import protocol Foundation.FormatStyle
-import enum Foundation.NumberFormatStyleConfiguration
+import Foundation
+import Utilities
 
 // MARK: - Formattable
 
 public protocol Formattable {
+    typealias PrecisionStyle = NumberFormatStyleConfiguration.Precision
+    typealias SeparatorStyle = NumberFormatStyleConfiguration.DecimalSeparatorDisplayStrategy
     
     // MARK: Requirements
     
@@ -27,5 +28,64 @@ public protocol Formattable {
     @inlinable static func make(description: String) throws -> Self
     
     /// Creates a format style instance configured with the function's parameters.
-    @inlinable static func style(locale: Locale, precision: NumberFormatStyleConfiguration.Precision, separator: NumberFormatStyleConfiguration.DecimalSeparatorDisplayStrategy) -> FormatStyle
+    @inlinable static func style(locale: Locale, precision: PrecisionStyle, separator: SeparatorStyle) -> FormatStyle
+}
+
+// MARK: - Formattable: Details
+
+extension Formattable {
+    
+    // MARK: Errors
+    
+    @inlinable static func error(make description: String) -> Reason {
+        .reason("unable to instantiate number with description", description)
+    }
+}
+
+// MARK: - FormattableFloatingPoint
+
+@usableFromInline protocol FormattableFloatingPoint: Formattable, BinaryFloatingPoint where FormatStyle == FloatingPointFormatStyle<Self> {
+    
+    // MARK: Requirements
+    
+    @inlinable init?(_ description: String)
+}
+
+// MARK: - FormattableFloatingPoint: Details
+
+extension FormattableFloatingPoint {
+    
+    // MARK: Implementation
+
+    @inlinable public static func make(description: String) throws -> Self {
+        try Self(description) ?? { throw error(make: description) }()
+    }
+    
+    @inlinable public static func style(locale: Locale, precision: PrecisionStyle, separator: SeparatorStyle) -> FormatStyle {
+        .init(locale: locale).precision(precision).decimalSeparator(strategy: separator)
+    }
+}
+
+// MARK: - FormattableInteger
+
+@usableFromInline protocol FormattableInteger: Formattable, FixedWidthInteger where FormatStyle == IntegerFormatStyle<Self> {
+    
+    // MARK: Requirements
+    
+    @inlinable init?(_ description: String)
+}
+
+// MARK: - FormattableInteger: Details
+
+extension FormattableInteger {
+    
+    // MARK: Implementation
+    
+    @inlinable public static func make(description: String) throws -> Self {
+        try Self(description) ?? { throw error(make: description) }()
+    }
+    
+    @inlinable public static func style(locale: Locale, precision: PrecisionStyle, separator: SeparatorStyle) -> FormatStyle {
+        .init(locale: locale).precision(precision).decimalSeparator(strategy: separator)
+    }
 }
