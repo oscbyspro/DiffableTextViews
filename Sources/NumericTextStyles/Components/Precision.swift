@@ -43,9 +43,9 @@ public struct Precision<Value: Precise> {
     }
     
     @inlinable func editableStyleThatUses(number: Number) -> NumberFormatStyleConfiguration.Precision {
-        let integerUpperBound = Swift.max(Value.minLosslessIntegerDigits, number.integer.count)
+        let integerUpperBound = max(Value.minLosslessIntegerDigits, number.integer.count)
         let integer = Value.minLosslessIntegerDigits...integerUpperBound
-        let fractionLowerBound = Swift.max(Value.minLosslessFractionDigits, number.fraction.count)
+        let fractionLowerBound = max(Value.minLosslessFractionDigits, number.fraction.count)
         let fraction = fractionLowerBound...fractionLowerBound
         return .integerAndFractionLength(integerLimits: integer, fractionLimits: fraction)
     }
