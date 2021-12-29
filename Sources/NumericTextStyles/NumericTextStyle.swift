@@ -5,9 +5,9 @@
 //  Created by Oscar Byström Ericsson on 2021-10-19.
 //
 
-import Utilities
+import Foundation
 import DiffableTextViews
-import struct Foundation.Locale
+import Utilities
 
 // MARK: - NumericTextStyle
 

@@ -5,8 +5,6 @@
 //  Created by Oscar Byström Ericsson on 2021-12-21.
 //
 
-#warning("Require: static var bounds: Self { get }.")
-
 // MARK: - Boundable
 
 public protocol Boundable: Comparable {
@@ -45,4 +43,3 @@ extension BoundableInteger {
     @inlinable public static var minLosslessValue: Self { min }
     @inlinable public static var maxLosslessValue: Self { max }
 }
-

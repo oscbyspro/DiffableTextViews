@@ -10,9 +10,8 @@ import struct Utilities.Reason
 
 // MARK: - Precision
 
-/// - Note: Lower precision bounds are enforced only when the view is idle.
+/// - Note: Lower bound is enforced only when the view is idle.
 public struct Precision<Value: Precise> {
-    @usableFromInline typealias Namespace = PrecisionNamespace
     @usableFromInline typealias Implementation = PrecisionImplementation
     @usableFromInline typealias SignificantDigits = SignificantDigitsPrecision<Value>
     @usableFromInline typealias IntegerAndFractionLength = IntegerAndFractionLengthPrecision<Value>
@@ -52,9 +51,9 @@ public struct Precision<Value: Precise> {
     }
 }
 
-// MARK: - PrecisionNamespace
+// MARK: - Precision x Namespace
 
-@usableFromInline enum PrecisionNamespace {
+@usableFromInline enum _Precision {
 
     // MARK: Bounds
     
@@ -99,7 +98,7 @@ public struct Precision<Value: Precise> {
     }
 }
 
-// MARK: - PrecisionImplementation
+// MARK: - Precision x Implementation
 
 @usableFromInline protocol PrecisionImplementation {
 
@@ -110,11 +109,9 @@ public struct Precision<Value: Precise> {
     @inlinable func capacity(number: Number) throws -> Capacity
 }
 
-// MARK: - SignificantDigitsPrecision
+// MARK: - Precision x SignificantDigits
 
-/// Evaluates significant digits.
 @usableFromInline struct SignificantDigitsPrecision<Value: Precise>: PrecisionImplementation {
-    @usableFromInline typealias Namespace = PrecisionNamespace
 
     // MARK: Properties
     
@@ -123,7 +120,7 @@ public struct Precision<Value: Precise> {
     // MARK: Initializers
     
     @inlinable init<R: RangeExpression>(_ significant: R) where R.Bound == Int {
-        self.significant = PrecisionNamespace.clamped(significant, to: Value.losslessSignificantLimits)
+        self.significant = _Precision.clamped(significant, to: Value.losslessSignificantLimits)
     }
     
     // MARK: Styles
@@ -136,34 +133,32 @@ public struct Precision<Value: Precise> {
     
     @inlinable func capacity(number: Number) throws -> Capacity {
         let max = Capacity.max(in: Value.self, significant: significant.upperBound)
-        return try Namespace.capacity(number: number, max: max)
+        return try _Precision.capacity(number: number, max: max)
     }
 }
 
-// MARK: - IntegerAndFractionLengthPrecision
+// MARK: - Precision x IntegerAndFractionLength
 
-/// Evaluates integer and fraction digits.
 @usableFromInline struct IntegerAndFractionLengthPrecision<Value: Precise>: PrecisionImplementation {
-    @usableFromInline typealias Namespace = PrecisionNamespace
     
     // MARK: Properties
     
-    @usableFromInline let integer: ClosedRange<Int>
+    @usableFromInline let integer:  ClosedRange<Int>
     @usableFromInline let fraction: ClosedRange<Int>
 
     // MARK: Initializers
     
     @inlinable init<R0: RangeExpression, R1: RangeExpression>(integer: R0, fraction: R1) where R0.Bound == Int, R1.Bound == Int {
-        self.integer  = Namespace.clamped(integer,  to: Value.losslessIntegerLimits)
-        self.fraction = Namespace.clamped(fraction, to: Value.losslessFractionLimits)
+        self.integer  = _Precision.clamped(integer,  to: Value.losslessIntegerLimits)
+        self.fraction = _Precision.clamped(fraction, to: Value.losslessFractionLimits)
     }
     
     @inlinable init<R: RangeExpression>(integer: R) where R.Bound == Int {
-        self.init(integer: integer, fraction: Value.minLosslessFractionDigits...)
+        self.init(integer: integer, fraction: Value.losslessFractionLimits)
     }
     
     @inlinable init<R: RangeExpression>(fraction: R) where R.Bound == Int {
-        self.init(integer: Value.minLosslessIntegerDigits..., fraction: fraction)
+        self.init(integer: Value.losslessIntegerLimits, fraction: fraction)
     }
     
     // MARK: Styles
@@ -176,7 +171,7 @@ public struct Precision<Value: Precise> {
     
     @inlinable func capacity(number: Number) throws -> Capacity {
         let max = Capacity.max(in: Value.self, integer: integer.upperBound, fraction: fraction.upperBound)
-        return try Namespace.capacity(number: number, max: max)
+        return try _Precision.capacity(number: number, max: max)
     }
 }
 
@@ -199,7 +194,7 @@ public extension Precision {
     // MARK: Named
             
     @inlinable static var standard: Self {
-        .init(SignificantDigits(Value.minLosslessSignificantDigits...))
+        .init(SignificantDigits(Value.losslessSignificantLimits))
     }
 }
 

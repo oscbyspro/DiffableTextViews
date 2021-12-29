@@ -5,7 +5,7 @@
 //  Created by Oscar Byström Ericsson on 2021-12-27.
 //
 
-import struct Utilities.Reason
+import Utilities
 
 // MARK: - Filter
 
@@ -32,7 +32,7 @@ import struct Utilities.Reason
     @inlinable func validate(_ character: Character) throws {
         for (index, condition) in conditions.enumerated() {
             guard condition(character) else {
-                throw .reason("Character '\(character)' is invalid [\(index)].")
+                throw .reason(character, "is invalidated by condition at index", index)
             }
         }
     }

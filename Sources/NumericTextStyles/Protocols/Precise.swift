@@ -5,8 +5,6 @@
 //  Created by Oscar Byström Ericsson on 2021-12-21.
 //
 
-#warning("Require: static var precision: Int { get }.")
-
 // MARK: - Precise
 
 public protocol Precise {

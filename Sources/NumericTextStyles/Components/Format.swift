@@ -5,9 +5,8 @@
 //  Created by Oscar Byström Ericsson on 2021-12-25.
 //
 
-import struct Foundation.Locale
-import enum Foundation.NumberFormatStyleConfiguration
-import struct Utilities.Reason
+import Foundation
+import Utilities
 
 // MARK: - Format
 
