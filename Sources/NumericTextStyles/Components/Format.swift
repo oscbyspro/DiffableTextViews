@@ -102,7 +102,7 @@ import Utilities
     
     @inlinable func validate(sign: Sign) throws {
         guard sign == sign.transforming(correct) else {
-            throw .reason(.mark(sign), "is not permitted in", .mark(bounds))
+            throw .reason([sign], "is not permitted in", [bounds])
         }
     }
     
@@ -110,7 +110,7 @@ import Utilities
 
     @inlinable func validate(value: Value) throws {
         guard bounds.contains(value) else {
-            throw .reason(.mark(value), "is outside of", .mark(bounds))
+            throw .reason([value], "is outside of", [bounds])
         }
     }
 }

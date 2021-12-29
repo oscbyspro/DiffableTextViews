@@ -86,7 +86,7 @@ public struct Precision<Value: Precise> {
     // MARK: Errors
     
     @inlinable static func failure(excess component: Component, max: Int) -> Reason {
-        .reason(.mark(component), "digits exceeded precision capacity", .mark(max))
+        .reason([component], "digits exceeded precision capacity", [max])
     }
     
     // MARK: Components
