@@ -7,93 +7,120 @@
 
 // MARK: - Autoredactable
 
-/// An error that contains a description in DEBUG mode, but is redacted in RELEASE mode.
+/// An error that contains a description in DEBUG mode, but is redacted otherwise.
 ///
-/// - MemoryLayout«Self».size == 0 in RELEASE mode.
+/// It is essentially Void in RELEASE mode, and a String builder in DEBUG mode.
 ///
-public struct Autoredactable: Error, CustomStringConvertible {
-    @usableFromInline internal static let redacted = "[REDACTED]"
+/// - MemoryLayout«Self».size == 0 in RELEASE mode (vs 16 in DEBUG mode).
+/// - MemoryLayout«Self».alignment == 1 in RELEASE mode (vs 8 in DEBUG mode).
+/// - MemoryLayout«Self».stride == 1 in RELEASE mode  (vs 16 in DEBUG mode).
+///
+/// - Note: Parameters and related calculations *should* be ignored in RELEASE mode.
+///
+@frozen public struct Autoredactable: Error, CustomStringConvertible {
     
     // MARK: Properties
     
-    #if DEBUG
-    @usableFromInline internal let content: String
-    #else
-    @inlinable @inline(__always) internal var content: String { Autoredactable.redacted }
-    #endif
+    @usableFromInline
+    internal let storage: Storage
     
     // MARK: Initializers
-    
-    @inlinable @inline(__always) internal init(content: @autoclosure () -> String) {
-        #if DEBUG
-        self.content = content()
-        #endif
+
+    @inlinable @inline(__always)
+    internal init(_ content: @autoclosure () -> String) {
+        self.storage = .init(content: content)
     }
+    
+    // MARK: Initializers (Indirect)
         
-    @inlinable @inline(__always) public init(_ components: Component...) {
-        self.init(content: Autoredactable.combine(components))
+    @inlinable @inline(__always)
+    public init(_ components: Component...) {
+        self.init(Autoredactable.combine(components))
     }
     
-    // MARK: Descriptions
+    // MARK: Utilities
     
-    @inlinable @inline(__always) public var description: String { content }
+    @inlinable @inline(__always)
+    public var description: String { storage.content }
     
     // MARK: Helpers
     
-    @inlinable @inline(__always) internal static func text(_ value: Any) -> String {
-        String(describing: value)
+    @inlinable @inline(__always)
+    internal static func text(_ value: Any) -> String {
+        .init(describing: value)
     }
     
-    @inlinable @inline(__always) internal static func mark(_ value: Any) -> String {
+    @inlinable @inline(__always)
+    internal static func mark(_ value: Any) -> String {
         combine(["«", value, "»"])
     }
     
-    @inlinable @inline(__always) internal static func combine(_ values: [Any]) -> String {
+    @inlinable @inline(__always)
+    internal static func combine(_ values: [Any]) -> String {
         values.lazy.map(text).joined(separator: " ")
     }
     
-    // MARK: Components
+    // MARK: Component
     
-    public struct Component: CustomStringConvertible, ExpressibleByStringLiteral, ExpressibleByArrayLiteral {
+    @frozen public struct Component: ExpressibleByStringLiteral, ExpressibleByArrayLiteral {
+        
+        // MARK: Properties
+        
+        @usableFromInline
+        internal let storage: Storage
+        
+        // MARK: Initializers
+
+        @inlinable @inline(__always)
+        internal init(_ content: @autoclosure () -> String) {
+            self.storage = .init(content: content)
+        }
+        
+        // MARK: Initializers (Indirect)
+
+        @inlinable @inline(__always)
+        public init(stringLiteral value: String) {
+            self.init(value)
+        }
+        
+        @inlinable @inline(__always)
+        public init(arrayLiteral elements: Any...) {
+            self.init(Autoredactable.mark((Autoredactable.combine(elements))))
+        }
+                
+        @inlinable @inline(__always)
+        public static func text(_ value: Any) -> Self {
+            Self.init(Autoredactable.text(value))
+        }
+        
+        @inlinable @inline(__always)
+        public static func mark(_ value: Any) -> Self {
+            Self.init(Autoredactable.mark(value))
+        }
+    }
+    
+    // MARK: Storage
+    
+    @frozen @usableFromInline internal struct Storage {
+        @usableFromInline internal static let content = "[REDACTED]"
         
         // MARK: Properties
         
         #if DEBUG
-        @usableFromInline internal let content: String
+        @usableFromInline
+        internal let content: String
         #else
-        @inlinable @inline(__always) internal var content: String { Autoredactable.redacted }
+        @inlinable @inline(__always)
+        internal var content: String { Self.content }
         #endif
-        
+
         // MARK: Initializers
-        
-        @inlinable @inline(__always) internal init(content: @autoclosure () -> String) {
+
+        @inlinable @inline(__always)
+        internal init(content: () -> String) {
             #if DEBUG
             self.content = content()
             #endif
         }
-        
-        // MARK: Initializers: Literals
-        
-        @inlinable @inline(__always) public init(stringLiteral value: String) {
-            self.init(content: value)
-        }
-        
-        @inlinable @inline(__always) public init(arrayLiteral elements: Any...) {
-            self.init(content: Autoredactable.mark((Autoredactable.combine(elements))))
-        }
-        
-        // MARK: Initializers: Static
-        
-        @inlinable @inline(__always) public static func text(_ value: Any) -> Self {
-            Self.init(content: Autoredactable.text(value))
-        }
-        
-        @inlinable @inline(__always) public static func mark(_ value: Any) -> Self {
-            Self.init(content: Autoredactable.mark(value))
-        }
-        
-        // MARK: Descriptions
-        
-        @inlinable @inline(__always) public var description: String { content }
     }
 }
