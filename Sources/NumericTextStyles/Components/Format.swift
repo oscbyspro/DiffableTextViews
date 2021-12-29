@@ -5,8 +5,8 @@
 //  Created by Oscar Byström Ericsson on 2021-12-25.
 //
 
-import Foundation
-import Utilities
+import struct Foundation.Locale
+import struct Utilities.Autoredactable
 
 // MARK: - Format
 

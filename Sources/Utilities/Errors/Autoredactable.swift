@@ -9,7 +9,7 @@
 
 /// An error that contains a description in DEBUG mode, but is redacted in RELEASE mode.
 ///
-/// - MemoryLayout<Self>.size == 0 in RELEASE mode.
+/// - MemoryLayout«Self».size == 0 in RELEASE mode.
 ///
 public struct Autoredactable: Error, CustomStringConvertible {
     @usableFromInline internal static let redacted = "[REDACTED]"
