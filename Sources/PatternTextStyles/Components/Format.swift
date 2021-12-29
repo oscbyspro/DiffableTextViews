@@ -38,8 +38,10 @@ import Utilities
     // MARK: Validation
     
     @inlinable func validate<C: Collection>(characters: C) throws where C.Element == Character {
-        guard characters.count <= capacity() else {
-            throw .reason(characters, "exceeded the capacity of", pattern)
+        let capacity = capacity()
+
+        guard characters.count <= capacity else {
+            throw .reason(characters, "exceeded pattern capacity", capacity)
         }
     }
 }

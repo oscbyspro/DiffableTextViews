@@ -32,7 +32,7 @@ import Utilities
     @inlinable func validate(_ character: Character) throws {
         for (index, condition) in conditions.enumerated() {
             guard condition(character) else {
-                throw .reason(character, "is invalidated by condition at index", index)
+                throw .reason(character, "was invalidated by condition at index", index)
             }
         }
     }
