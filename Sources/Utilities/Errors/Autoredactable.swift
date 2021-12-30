@@ -13,12 +13,13 @@
 ///
 /// - MemoryLayout«Self».size == 0 in RELEASE mode (vs 16 in DEBUG mode).
 /// - MemoryLayout«Self».alignment == 1 in RELEASE mode (vs 8 in DEBUG mode).
-/// - MemoryLayout«Self».stride == 1 in RELEASE mode  (vs 16 in DEBUG mode).
+/// - MemoryLayout«Self».stride == 1 in RELEASE mode (vs 16 in DEBUG mode).
 ///
 /// - Note: Parameters and related calculations *should* be ignored in RELEASE mode.
 ///
 @frozen public struct Autoredactable: Error, CustomStringConvertible {
-    
+    @usableFromInline internal static let redacted = "[REDACTED]"
+
     // MARK: Properties
     
     @usableFromInline
@@ -102,7 +103,6 @@
     // MARK: Storage
     
     @frozen @usableFromInline internal struct Storage {
-        @usableFromInline internal static let content = "[REDACTED]"
         
         // MARK: Properties
         
@@ -111,7 +111,7 @@
         internal let content: String
         #else
         @inlinable @inline(__always)
-        internal var content: String { Self.content }
+        internal var content: String { Autoredactable.redacted }
         #endif
 
         // MARK: Initializers
