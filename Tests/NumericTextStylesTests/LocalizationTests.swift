@@ -24,42 +24,52 @@ final class LocalizationTests: XCTestCase {
     // MARK: Tests: Locale
     
     func testThereAreManyManyManyLocalesOutThere() {
-        XCTAssertGreaterThanOrEqual(availableLocales.count, 937)
+        let locales = availableLocales
+        XCTAssertGreaterThanOrEqual(locales.count, 937)
     }
     
     
     // MARK: Tests: Digits
     
     func testCantHardcodeDigits() {
-        XCTAssertGreaterThanOrEqual(availableDigitSets.count, 11)
+        let digitSets = availableDigitSets.keys
+        XCTAssertGreaterThanOrEqual(digitSets.count, 11)
     }
     
     // MARK: Tests: Fraction Separators
     
     func testCantHardcodeFractionSeparators() {
-        XCTAssertGreaterThanOrEqual(availableFractionSeparators.count, 3)
+        let separators = availableFractionSeparators.keys
+        XCTAssertGreaterThanOrEqual(separators.count, 3)
     }
     
     func testFractionSeparatorsAreAllSingleCharacters() {
-        XCTAssertTrue(availableFractionSeparators.keys.lazy.map(\.count).allSatisfy({ $0 == 1 }))
+        let separators = availableFractionSeparators.keys
+        XCTAssertTrue(separators.lazy.map(\.count).allSatisfy({ $0 == 1 }))
     }
     
     // MARK: Tests: Grouping Separators
     
     func testCantHardcodeGroupingSeparators() {
-        XCTAssertGreaterThanOrEqual(availableGroupingSeparators.count, 10)
+        let separators = availableGroupingSeparators.keys
+        XCTAssertGreaterThanOrEqual(separators.count, 10)
     }
     
-    func testGroupingSeparatorsAreAllSingleCharacters() {
-        let nonemptySeparators = availableGroupingSeparators.keys.lazy.filter({ !$0.isEmpty })
-        XCTAssertTrue(nonemptySeparators.map(\.count).allSatisfy({ $0 == 1 }))
+    func testGroupingSeparatorsAreAllOneOrZeroCharacters() {
+        let separators = availableGroupingSeparators.keys
+        XCTAssertTrue(separators.lazy.map(\.count).allSatisfy({ $0 <= 1 }))
+    }
+    
+    func testNotAllLocalesUseGroupingSeparators() {
+        let separators = availableGroupingSeparators.keys
+        XCTAssertNotNil(separators.first(where: \.isEmpty))
     }
     
     // MARK: Tests: Signs
     
     func testCantHardcodeSigns() {
-        print(availableSignSets.count)
-        XCTAssertGreaterThanOrEqual(availableSignSets.keys.count, 7)
+        let signSets = availableSignSets.keys
+        XCTAssertGreaterThanOrEqual(signSets.count, 7)
     }
     
     // MARK: Helpers
