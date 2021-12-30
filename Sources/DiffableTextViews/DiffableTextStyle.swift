@@ -45,27 +45,23 @@ public protocol DiffableTextStyle {
     @inlinable func process(snapshot: inout Snapshot)
 }
 
-extension DiffableTextStyle {
+public extension DiffableTextStyle {
     
-    // MARK: Snapshot
+    // MARK: Implementation
 
-    @inlinable public func snapshot(showcase value: Value) -> Snapshot {
+    @inlinable func snapshot(showcase value: Value) -> Snapshot {
         snapshot(editable: value)
     }
 
-    // MARK: Interpret
-
-    @inlinable public func merge(snapshot: Snapshot, with content: Snapshot, in range: Range<Snapshot.Index>) -> Snapshot? {
+    @inlinable func merge(snapshot: Snapshot, with content: Snapshot, in range: Range<Snapshot.Index>) -> Snapshot? {
         snapshot.replacing(range, with: content)
     }
 
-    // MARK: Process
-
-    @inlinable public func process(value: inout Value) {
+    @inlinable func process(value: inout Value) {
         // default implementation does nothing
     }
 
-    @inlinable public func process(snapshot: inout Snapshot) {
+    @inlinable func process(snapshot: inout Snapshot) {
         // default implementation does nothing
     }
 }

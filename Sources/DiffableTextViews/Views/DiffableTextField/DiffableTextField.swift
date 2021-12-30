@@ -222,7 +222,9 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable, 
                 // MARK: Calculate Next State
                 // --------------------------------- //
                 
-                var snapshot = snapshot(value: value)
+                var snapshot = downstream.edits
+                ? upstream.style.snapshot(editable: value)
+                : upstream.style.snapshot(showcase: value)
                 upstream.style.process(snapshot: &snapshot)
                 let field = cache.field.updating(carets: snapshot)
                 
@@ -259,12 +261,6 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable, 
             if  self.upstream.value.wrappedValue != self.cache.value {
                 self.upstream.value.wrappedValue  = self.cache.value
             }
-        }
-        
-        // MARK: Synchronize: Helpers
-                
-        @inlinable func snapshot(value: Value) -> Snapshot {
-            downstream.edits ? upstream.style.snapshot(editable: value) : upstream.style.snapshot(showcase: value)
         }
     }
 }
