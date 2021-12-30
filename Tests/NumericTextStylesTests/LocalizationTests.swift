@@ -21,139 +21,141 @@ final class LocalizationTests: XCTestCase {
     
     // MARK: Setup
     
-    lazy var availableLocales: [Locale] = Locale.availableIdentifiers.map(Locale.init)
-    lazy var availableDigitSets: [String: Int] = makeAllAvailableDigitSets()
-    lazy var availableFractionSeparators: [String: Int] = makeAllAvailableFractionSeparators()
-    lazy var availableGroupingSeparators: [String: Int] = makeAllAvailableGroupingSeparators()
-    lazy var availableSignSets: [String: Int] = makeAllAvailableSignSets()
+    lazy var locales: [Locale] = Locale.availableIdentifiers.map(Locale.init)
+    lazy var digitsSets: Set<Set<String>> = makeAvailableDigitsSets()
+    lazy var fractionSeparators: Set<String> = makeAvailableFractionSeparators()
+    lazy var groupingSeparators: Set<String> = makeAvailableGroupingSeparators()
+    lazy var signsSets: Set<Set<String>> = makeAvailableSignSets()
 
     // MARK: Tests: Is Hardcodable
-    
+
     func testThereAreManyLocales() {
-        let locales = availableLocales
         XCTAssertGreaterThanOrEqual(locales.count, 937)
     }
-    
+
     func testCantHardcodeDigits() {
-        let digitsSets = availableDigitSets.keys
         XCTAssertGreaterThanOrEqual(digitsSets.count, 11)
     }
-    
+
     func testCantHardcodeFractionSeparators() {
-        let separators = availableFractionSeparators.keys
-        XCTAssertGreaterThanOrEqual(separators.count, 3)
+        XCTAssertGreaterThanOrEqual(fractionSeparators.count, 3)
     }
-    
+
     func testCantHardcodeGroupingSeparators() {
-        let separators = availableGroupingSeparators.keys
-        XCTAssertGreaterThanOrEqual(separators.count, 10)
+        XCTAssertGreaterThanOrEqual(groupingSeparators.count, 10)
     }
-    
+
     func testCantHardcodeSigns() {
-        let signsSets = availableSignSets.keys
         XCTAssertGreaterThanOrEqual(signsSets.count, 7)
     }
 
     // MARK: Tests: Is Number
-    
+
     func testDigitsAreNumbers() {
-        let digitsSets = availableDigitSets.keys
         for digits in digitsSets {
-            XCTAssertEqual(digits.lazy.filter(\.isNumber).count, digits.count)
+            for digit in digits {
+                XCTAssertEqual(digit.lazy.filter(\.isNumber).count, digit.count)
+            }
         }
     }
-    
+
     func testFractionSeparatorsAreNotNumbers() {
-        let separators = availableFractionSeparators.keys
-        for separator in separators {
+        for separator in fractionSeparators {
             XCTAssertTrue(separator.lazy.filter(\.isNumber).isEmpty)
         }
     }
-    
+
     func testGroupingSeparatorsAreNotNumbers() {
-        let separators = availableGroupingSeparators.keys
-        for separator in separators {
+        for separator in groupingSeparators {
             XCTAssertTrue(separator.lazy.filter(\.isNumber).isEmpty)
         }
     }
-    
+
     func testSignsAreNotNumbers() {
-        let signsSets = availableSignSets.keys
         for signs in signsSets {
-            XCTAssertTrue(signs.lazy.filter(\.isNumber).isEmpty)
+            for sign in signs {
+                XCTAssertTrue(sign.lazy.filter(\.isNumber).isEmpty)
+            }
         }
     }
     
     // MARK: Helpers
     
-    func makeAllAvailableDigitSets() -> [String: Int] {
-        var result: [String: Int] = [:]
-        let value: Double = 123456789
+    func makeAvailableDigitsSets() -> Set<Set<String>> {
+        var result: Set<Set<String>> = []
+        let values: [Double] = "1234567890".map({ Double(String($0))! })
         let unlocalized: Style = .number.grouping(.never)
         
-        for locale in availableLocales {
+        for locale in locales {
             let style: Style = unlocalized.locale(locale)
-            let formatted: String = value.formatted(style)
-            result[formatted] = (result[formatted] ?? 0) + 1
+            var digits: Set<String> = []
+            
+            for value in values {
+                let digit: String = value.formatted(style)
+                digits.insert(digit)
+            }
+            
+            result.insert(digits)
         }
         
         return result
     }
     
-    func makeAllAvailableFractionSeparators() -> [String: Int] {
-        var result: [String: Int] = [:]
+    func makeAvailableFractionSeparators() -> Set<String> {
+        var result: Set<String> = []
         let value: Double = 0
         let unlocalized: Style = .number.decimalSeparator(strategy: .always)
-        
-        for locale in availableLocales {
+
+        for locale in locales {
             let style: Style = unlocalized.locale(locale)
-            var formatted: String = value.formatted(style)
-            formatted.removeAll(where: \.isNumber)
-            result[formatted] = (result[formatted] ?? 0) + 1
+            var separator: String = value.formatted(style)
+            separator.removeAll(where: \.isNumber)
+            result.insert(separator)
         }
-        
+
         return result
     }
-    
-    func makeAllAvailableGroupingSeparators() -> [String: Int] {
-        var result: [String: Int] = [:]
-        let value: Double = 123456789
+
+    func makeAvailableGroupingSeparators() -> Set<String> {
+        var result: Set<String> = []
+        let value: Double = 1234567890
         let unlocalized: Style = .number.grouping(.automatic)
-        
-        for locale in availableLocales {
+
+        for locale in locales {
             let style: Style = unlocalized.locale(locale)
             let formatted: String = value.formatted(style)
             var separator: String = ""
-            
+
             if  let start = formatted.firstIndex(where: { !$0.isNumber }),
                 let end = formatted[formatted.index(after: start)...].firstIndex(where: \.isNumber) {
                 separator = String(formatted[start ..< end])
             }
-            
-            result[separator] = (result[separator] ?? 0) + 1
+
+            result.insert(separator)
         }
-        
+
         return result
     }
-    
-    func makeAllAvailableSignSets() -> [String: Int] {
-        var result: [String: Int] = [:]
+
+    func makeAvailableSignSets() -> Set<Set<String>> {
+        var result: Set<Set<String>> = []
         let unlocalized: Style = .number.sign(strategy: .always())
-        
-        for locale in availableLocales {
+
+        for locale in locales {
             let style: Style = unlocalized.locale(locale)
+            var signs: Set<String> = []
             
             var positive: String = (+1.0).formatted(style)
             positive.removeAll(where: \.isNumber)
-            
+            signs.insert(positive)
+
             var negative: String = (-1.0).formatted(style)
             negative.removeAll(where: \.isNumber)
-            
-            let signs = positive + negative
-            
-            result[signs] = (result[signs] ?? 0) + 1
+            signs.insert(negative)
+
+            result.insert(signs)
         }
-        
+
         return result
     }
 }
