@@ -134,7 +134,7 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable, 
                 let indices = range.lowerBound.rhs! ..< range.upperBound.rhs!
                 
                 // --------------------------------- //
-                // MARK: Calculate
+                // MARK: Calculate Next State
                 // --------------------------------- //
                 
                 var snapshot = try upstream.style.merge(snapshot: cache.snapshot, with: input, in: indices)
@@ -146,7 +146,7 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable, 
                 let field = cache.field.updating(selection: range.upperBound, intent: nil).updating(carets: snapshot)
                 
                 // --------------------------------- //
-                // MARK: Push
+                // MARK: Update
                 // --------------------------------- //
                 
                 Task { @MainActor [value] in
@@ -154,7 +154,7 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable, 
                     // see option + delete as one such example
                     self.cache.value = value
                     self.cache.field = field
-                    self.push(update: [.upstream, .downstream])
+                    self.push()
                 }
                 
             } catch let reason {
@@ -204,77 +204,60 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable, 
         // MARK: Synchronize
         
         @inlinable func synchronize() {
-            push(update: pull())
-        }
-        
-        // MARK: Synchronize: Pull
-        
-        @inlinable func pull() -> Update {
-            var update: Update = []
             
             // --------------------------------- //
-            // MARK: Upstream
+            // MARK: Pull
             // --------------------------------- //
             
             var value = upstream.value.wrappedValue
             upstream.style.process(value: &value)
             
-            defer {
-                self.cache.value = value
-            }
-            
-            if upstream.value.wrappedValue != value {
-                update.insert(.upstream)
-            }
-            
             // --------------------------------- //
-            // MARK: Downstream
+            // MARK: Compare
             // --------------------------------- //
             
             if cache.value != value || cache.edits != downstream.edits {
-                update.insert(.downstream)
+                
+                // --------------------------------- //
+                // MARK: Calculate Next State
+                // --------------------------------- //
                 
                 var snapshot = snapshot(value: value)
                 upstream.style.process(snapshot: &snapshot)
                 let field = cache.field.updating(carets: snapshot)
                 
+                // --------------------------------- //
+                // MARK: Push
+                // --------------------------------- //
+                
+                self.cache.value = value
                 self.cache.field = field
+                self.push()
             }
-            
-            // --------------------------------- //
-            // MARK: Return Push Request
-            // --------------------------------- //
-                            
-            return update
         }
         
         // MARK: Synchronize: Push
         
-        @inlinable func push(update: Update) {
+        @inlinable func push() {
             
             // --------------------------------- //
             // MARK: Downstream
             // --------------------------------- //
             
-            if update.contains(.downstream) {
-                lock.perform {
-                    // changes to UITextField's text and selection both call
-                    // the delegate's method: textFieldDidChangeSelection(_:)
-                    self.downstream.update(text: cache.snapshot.characters)
-                    self.downstream.update(selection: cache.field.selection.offsets)
-                }
-                            
-                self.cache.edits = self.downstream.edits
+            lock.perform {
+                // changes to UITextField's text and selection both call
+                // the delegate's method: textFieldDidChangeSelection(_:)
+                self.downstream.update(text: cache.snapshot.characters)
+                self.downstream.update(selection: cache.field.selection.offsets)
+                self.cache.edits = downstream.edits
             }
-            
+                        
             // --------------------------------- //
             // MARK: Upstream
             // --------------------------------- //
             
-            if update.contains(.upstream) {
-                if  self.upstream.value.wrappedValue != self.cache.value {
-                    self.upstream.value.wrappedValue  = self.cache.value
-                }
+            if  self.upstream.value.wrappedValue != self.cache.value {
+                self.upstream.value.wrappedValue  = self.cache.value
             }
         }
         
