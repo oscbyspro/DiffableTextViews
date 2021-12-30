@@ -43,7 +43,7 @@
     
     @inlinable @inline(__always)
     public var description: String { storage.content }
-    
+
     // MARK: Helpers
     
     @inlinable @inline(__always)
@@ -63,7 +63,7 @@
     
     // MARK: Component
     
-    @frozen public struct Component: ExpressibleByStringLiteral, ExpressibleByArrayLiteral {
+    @frozen public struct Component: CustomStringConvertible, ExpressibleByStringLiteral, ExpressibleByArrayLiteral {
         
         // MARK: Properties
         
@@ -98,6 +98,11 @@
         public static func mark(_ value: Any) -> Self {
             Self.init(Autoredactable.mark(value))
         }
+        
+        // MARK: Utilities
+        
+        @inlinable @inline(__always)
+        public var description: String { storage.content }
     }
     
     // MARK: Storage

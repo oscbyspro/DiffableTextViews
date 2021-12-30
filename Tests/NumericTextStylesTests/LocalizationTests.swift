@@ -8,6 +8,8 @@
 import XCTest
 import Foundation
 
+#warning("Figure out a suitable way to handle localization.")
+
 // MARK: - LocalizationTests
 
 /// Guarantees some assumptions about number format styles.
@@ -24,7 +26,7 @@ import Foundation
 /// Asserts: Digits are always 1 character in size.
 /// Asserts: Fraction separators are always 1 character in size.
 /// Asserts: Grouping separators are always 1 character in size.
-/// Asserts: Signs are NOT always 1 character in size (!).
+/// Asserts: Signs are NOT always 1 character in size. (!)
 /// ```
 /// ```
 /// Asserts: Grouping separators are NOT always used.
