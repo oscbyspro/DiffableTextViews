@@ -8,13 +8,14 @@
 // MARK: - Cache
 
 @usableFromInline final class Cache<Scheme: DiffableTextViews.Scheme, Value: Equatable> {
+    @usableFromInline typealias Selection = DiffableTextViews.Selection<Scheme>
     @usableFromInline typealias Field = DiffableTextViews.Field<Scheme>
     
     // MARK: Properties
     
     @usableFromInline var value: Value!
     @usableFromInline var field: Field
-    @usableFromInline var edits:  Bool
+    @usableFromInline var edits: Bool
     
     // MARK: Initializers
     
@@ -24,6 +25,10 @@
     }
     
     // MARK: Getters
+    
+    @inlinable var selection: Selection {
+        field.selection
+    }
     
     @inlinable var snapshot: Snapshot {
         field.carets.snapshot

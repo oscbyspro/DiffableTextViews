@@ -60,13 +60,11 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable, 
     
     @inlinable public func makeUIView(context: Context) -> UIViewType {
         let uiView = BasicTextField()
-        
+        context.coordinator.downstream = ProxyTextField(uiView)
         uiView.setContentHuggingPriority(.defaultHigh, for: .vertical)
         uiView.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
-        
-        context.coordinator.connect(uiView)
+        uiView.delegate = context.coordinator
         setup?(context.coordinator.downstream)
-        
         return uiView
     }
     
@@ -87,25 +85,16 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable, 
         @usableFromInline var upstream: DiffableTextField!
         @usableFromInline var downstream:  ProxyTextField!
         
-        // MARK: Properties: Helpers
-        
         @usableFromInline let lock  =  Lock()
         @usableFromInline let cache = Cache()
         
-        // MARK: Initializers: Setup
-
-        @inlinable func connect(_ uiView: UIViewType) {
-            uiView.delegate = self            
-            self.downstream = ProxyTextField(uiView)
-        }
-        
-        // MARK: Delegate: Submit
+        // MARK: Submit
         
         @inlinable public func textFieldShouldReturn(_ textField: UITextField) -> Bool {
             upstream.submit?(downstream) == nil ? true : false
         }
         
-        // MARK: Delegate: Mode
+        // MARK: Mode
         
         @inlinable public func textFieldDidBeginEditing(_ textField: UITextField) {
             synchronize()
@@ -119,7 +108,7 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable, 
             synchronize()
         }
         
-        // MARK: Delegate: Input
+        // MARK: Input
         
         @inlinable public func textField(_ textField: UITextField, shouldChangeCharactersIn nsRange: NSRange, replacementString string: String) -> Bool {
             do {
@@ -177,7 +166,7 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable, 
             return false
         }
         
-        // MARK: Delegate: Selection
+        // MARK: Selection
         
         @inlinable public func textFieldDidChangeSelection(_ textField: UITextField) {
             guard !lock.isLocked else { return }
@@ -250,7 +239,7 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable, 
                 // changes to UITextField's text and selection both call
                 // the delegate's method: textFieldDidChangeSelection(_:)
                 self.downstream.update(text: cache.snapshot.characters)
-                self.downstream.update(selection: cache.field.selection.offsets)
+                self.downstream.update(selection: cache.selection.offsets)
                 self.cache.edits = downstream.edits
             }
                         
