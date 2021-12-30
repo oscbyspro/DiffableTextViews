@@ -47,11 +47,12 @@ final class LocalizationTests: XCTestCase {
     // MARK: Tests: Grouping Separators
     
     func testCantHardcodeGroupingSeparators() {
-        XCTAssertGreaterThanOrEqual(availableGroupingSeparators.count, 12)
+        XCTAssertGreaterThanOrEqual(availableGroupingSeparators.count, 10)
     }
     
     func testGroupingSeparatorsAreAllSingleCharacters() {
-        XCTAssertTrue(availableFractionSeparators.keys.lazy.map(\.count).allSatisfy({ $0 == 1 }))
+        let nonemptySeparators = availableGroupingSeparators.keys.lazy.filter({ !$0.isEmpty })
+        XCTAssertTrue(nonemptySeparators.map(\.count).allSatisfy({ $0 == 1 }))
     }
     
     // MARK: Tests: Signs
@@ -99,9 +100,15 @@ final class LocalizationTests: XCTestCase {
         
         for locale in availableLocales {
             let style: Style = unlocalized.locale(locale)
-            var formatted: String = value.formatted(style)
-            formatted.removeAll(where: \.isNumber)
-            result[formatted] = (result[formatted] ?? 0) + 1
+            let formatted: String = value.formatted(style)
+            var separator: String = ""
+            
+            if  let start = formatted.firstIndex(where: { !$0.isNumber }),
+                let end = formatted[formatted.index(after: start)...].firstIndex(where: \.isNumber) {
+                separator = String(formatted[start ..< end])
+            }
+            
+            result[separator] = (result[separator] ?? 0) + 1
         }
         
         return result
