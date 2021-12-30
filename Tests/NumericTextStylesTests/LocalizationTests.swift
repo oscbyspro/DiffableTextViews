@@ -16,9 +16,10 @@ final class LocalizationTests: XCTestCase {
     // MARK: Setup
     
     lazy var availableLocales: [Locale] = Locale.availableIdentifiers.map(Locale.init)
-    lazy var availableSignSets: [String: Int] = makeAllAvailableSignSets()
     lazy var availableDigitSets: [String: Int] = makeAllAvailableDigitSets()
     lazy var availableFractionSeparators: [String: Int] = makeAllAvailableFractionSeparators()
+    lazy var availableGroupingSeparators: [String: Int] = makeAllAvailableGroupingSeparators()
+    lazy var availableSignSets: [String: Int] = makeAllAvailableSignSets()
 
     // MARK: Tests: Locale
     
@@ -26,13 +27,13 @@ final class LocalizationTests: XCTestCase {
         XCTAssertGreaterThanOrEqual(availableLocales.count, 937)
     }
     
-    // MARK: Tests: Signs
     
-    func testCantHardcodeSigns() {
-        print(availableSignSets.count)
-        XCTAssertGreaterThanOrEqual(availableSignSets.keys.count, 7)
+    // MARK: Tests: Digits
+    
+    func testCantHardcodeDigits() {
+        XCTAssertGreaterThanOrEqual(availableDigitSets.count, 11)
     }
-        
+    
     // MARK: Tests: Fraction Separators
     
     func testCantHardcodeFractionSeparators() {
@@ -43,17 +44,72 @@ final class LocalizationTests: XCTestCase {
         XCTAssertTrue(availableFractionSeparators.keys.lazy.map(\.count).allSatisfy({ $0 == 1 }))
     }
     
-    // MARK: Tests: Digits
+    // MARK: Tests: Grouping Separators
     
-    func testCantHardcodeDigits() {
-        XCTAssertGreaterThanOrEqual(availableDigitSets.count, 11)
+    func testCantHardcodeGroupingSeparators() {
+        XCTAssertGreaterThanOrEqual(availableGroupingSeparators.count, 12)
+    }
+    
+    func testGroupingSeparatorsAreAllSingleCharacters() {
+        XCTAssertTrue(availableFractionSeparators.keys.lazy.map(\.count).allSatisfy({ $0 == 1 }))
+    }
+    
+    // MARK: Tests: Signs
+    
+    func testCantHardcodeSigns() {
+        print(availableSignSets.count)
+        XCTAssertGreaterThanOrEqual(availableSignSets.keys.count, 7)
     }
     
     // MARK: Helpers
     
+    func makeAllAvailableDigitSets() -> [String: Int] {
+        var result: [String: Int] = [:]
+        let value: Double = 123456789
+        let unlocalized: Style = .number.grouping(.never)
+        
+        for locale in availableLocales {
+            let style: Style = unlocalized.locale(locale)
+            let formatted: String = value.formatted(style)
+            result[formatted] = (result[formatted] ?? 0) + 1
+        }
+        
+        return result
+    }
+    
+    func makeAllAvailableFractionSeparators() -> [String: Int] {
+        var result: [String: Int] = [:]
+        let value: Double = 0
+        let unlocalized: Style = .number.decimalSeparator(strategy: .always)
+        
+        for locale in availableLocales {
+            let style: Style = unlocalized.locale(locale)
+            var formatted: String = value.formatted(style)
+            formatted.removeAll(where: \.isNumber)
+            result[formatted] = (result[formatted] ?? 0) + 1
+        }
+        
+        return result
+    }
+    
+    func makeAllAvailableGroupingSeparators() -> [String: Int] {
+        var result: [String: Int] = [:]
+        let value: Double = 123456789
+        let unlocalized: Style = .number.grouping(.automatic)
+        
+        for locale in availableLocales {
+            let style: Style = unlocalized.locale(locale)
+            var formatted: String = value.formatted(style)
+            formatted.removeAll(where: \.isNumber)
+            result[formatted] = (result[formatted] ?? 0) + 1
+        }
+        
+        return result
+    }
+    
     func makeAllAvailableSignSets() -> [String: Int] {
-        var signs: [String: Int] = [:]
-        let unlocalized: Style = .number
+        var result: [String: Int] = [:]
+        let unlocalized: Style = .number.sign(strategy: .always())
         
         for locale in availableLocales {
             let style: Style = unlocalized.locale(locale)
@@ -64,42 +120,11 @@ final class LocalizationTests: XCTestCase {
             var negative: String = (-1.0).formatted(style)
             negative.removeAll(where: \.isNumber)
             
-            let pair = positive + negative
+            let signs = positive + negative
             
-            signs[pair] = (signs[pair] ?? 0) + 1
+            result[signs] = (result[signs] ?? 0) + 1
         }
         
-        return signs
-    }
-    
-    func makeAllAvailableFractionSeparators() -> [String: Int] {
-        var fractionSeparators: [String: Int] = [:]
-        let value: Double = 0
-        let unlocalized: Style = .number
-            .precision(.significantDigits(0))
-            .decimalSeparator(strategy: .always)
-        
-        for locale in availableLocales {
-            let style: Style = unlocalized.locale(locale)
-            var formatted: String = value.formatted(style)
-            formatted.removeAll(where: \.isNumber)
-            fractionSeparators[formatted] = (fractionSeparators[formatted] ?? 0) + 1
-        }
-        
-        return fractionSeparators
-    }
-    
-    func makeAllAvailableDigitSets() -> [String: Int] {
-        var digits: [String: Int] = [:]
-        let value: Double = 123456789
-        let unlocalized: Style = .number.grouping(.never)
-        
-        for locale in availableLocales {
-            let style: Style = unlocalized.locale(locale)
-            let formatted: String = value.formatted(style)
-            digits[formatted] = (digits[formatted] ?? 0) + 1
-        }
-        
-        return digits
+        return result
     }
 }
