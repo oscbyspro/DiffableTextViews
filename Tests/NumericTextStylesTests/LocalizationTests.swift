@@ -10,6 +10,14 @@ import Foundation
 
 // MARK: - LocalizationTests
 
+/// Guarantees some assumptions about number format styles.
+///
+/// ```Asserts: Hardcoding character values is a bad idea.```
+///
+/// ```Asserts: [digit, nondigit].map(\.isNumber) == [true, false]```
+///
+/// ```Asserts: [f-separator, g-separator].map(\.count) == [1...1, 0...1]```
+///
 final class LocalizationTests: XCTestCase {
     typealias Style = FloatingPointFormatStyle<Double>
     
@@ -21,55 +29,73 @@ final class LocalizationTests: XCTestCase {
     lazy var availableGroupingSeparators: [String: Int] = makeAllAvailableGroupingSeparators()
     lazy var availableSignSets: [String: Int] = makeAllAvailableSignSets()
 
-    // MARK: Tests: Locale
+    // MARK: Tests: Is Hardcodable
     
-    func testThereAreManyManyManyLocalesOutThere() {
+    func testThereAreManyLocalesOutThere() {
         let locales = availableLocales
         XCTAssertGreaterThanOrEqual(locales.count, 937)
     }
-    
-    
-    // MARK: Tests: Digits
     
     func testCantHardcodeDigits() {
         let digitSets = availableDigitSets.keys
         XCTAssertGreaterThanOrEqual(digitSets.count, 11)
     }
     
-    // MARK: Tests: Fraction Separators
-    
     func testCantHardcodeFractionSeparators() {
         let separators = availableFractionSeparators.keys
         XCTAssertGreaterThanOrEqual(separators.count, 3)
     }
-    
-    func testFractionSeparatorsAreAllSingleCharacters() {
-        let separators = availableFractionSeparators.keys
-        XCTAssertTrue(separators.lazy.map(\.count).allSatisfy({ $0 == 1 }))
-    }
-    
-    // MARK: Tests: Grouping Separators
     
     func testCantHardcodeGroupingSeparators() {
         let separators = availableGroupingSeparators.keys
         XCTAssertGreaterThanOrEqual(separators.count, 10)
     }
     
-    func testGroupingSeparatorsAreAllOneOrZeroCharacters() {
-        let separators = availableGroupingSeparators.keys
-        XCTAssertTrue(separators.lazy.map(\.count).allSatisfy({ $0 <= 1 }))
-    }
-    
-    func testNotAllLocalesUseGroupingSeparators() {
-        let separators = availableGroupingSeparators.keys
-        XCTAssertNotNil(separators.first(where: \.isEmpty))
-    }
-    
-    // MARK: Tests: Signs
-    
     func testCantHardcodeSigns() {
         let signSets = availableSignSets.keys
         XCTAssertGreaterThanOrEqual(signSets.count, 7)
+    }
+
+    // MARK: Tests: Character Is Number
+    
+    func testDigitsAreNumbers() {
+        let digitSets = availableDigitSets.keys
+        for digits in digitSets {
+            XCTAssertEqual(digits.filter(\.isNumber).count, digits.count)
+        }
+    }
+    
+    func testFractionSeparatorsAreNotNumbers() {
+        let separators = availableFractionSeparators.keys
+        for separator in separators {
+            XCTAssertTrue(separator.lazy.filter(\.isNumber).isEmpty)
+        }
+    }
+    
+    func testGroupingSeparatorsAreNotNumbers() {
+        let separators = availableGroupingSeparators.keys
+        for separator in separators {
+            XCTAssertTrue(separator.lazy.filter(\.isNumber).isEmpty)
+        }
+    }
+    
+    func testSignsAreNotNumbers() {
+        let signsSets = availableSignSets.keys
+        for signs in signsSets {
+            XCTAssertTrue(signs.lazy.filter(\.isNumber).isEmpty)
+        }
+    }
+    
+    // MARK: Tests: Separator Size.
+
+    func testFractionSeparatorsAreAllSingleCharacters() {
+        let separators = availableFractionSeparators.keys
+        XCTAssertTrue(separators.lazy.map(\.count).allSatisfy({ $0 == 1 }))
+    }
+    
+    func testGroupingSeparatorsAreAllOneOrZeroCharacters() {
+        let separators = availableGroupingSeparators.keys
+        XCTAssertTrue(separators.lazy.map(\.count).allSatisfy({ $0 <= 1 }))
     }
     
     // MARK: Helpers
