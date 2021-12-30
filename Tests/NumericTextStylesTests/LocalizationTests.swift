@@ -12,11 +12,9 @@ import Foundation
 
 /// Guarantees some assumptions about number format styles.
 ///
-/// ```Asserts: Hardcoding character values is a bad idea.```
+/// ```Asserts: Hardcoding character values is not feasible.```
 ///
-/// ```Asserts: [digit, nondigit].map(\.isNumber) == [true, false]```
-///
-/// ```Asserts: [f-separator, g-separator].map(\.count) == [1...1, 0...1]```
+/// ```Asserts: Digits are numbers and non-digits are not numbers.```
 ///
 final class LocalizationTests: XCTestCase {
     typealias Style = FloatingPointFormatStyle<Double>
@@ -31,14 +29,14 @@ final class LocalizationTests: XCTestCase {
 
     // MARK: Tests: Is Hardcodable
     
-    func testThereAreManyLocalesOutThere() {
+    func testThereAreManyLocales() {
         let locales = availableLocales
         XCTAssertGreaterThanOrEqual(locales.count, 937)
     }
     
     func testCantHardcodeDigits() {
-        let digitSets = availableDigitSets.keys
-        XCTAssertGreaterThanOrEqual(digitSets.count, 11)
+        let digitsSets = availableDigitSets.keys
+        XCTAssertGreaterThanOrEqual(digitsSets.count, 11)
     }
     
     func testCantHardcodeFractionSeparators() {
@@ -52,16 +50,16 @@ final class LocalizationTests: XCTestCase {
     }
     
     func testCantHardcodeSigns() {
-        let signSets = availableSignSets.keys
-        XCTAssertGreaterThanOrEqual(signSets.count, 7)
+        let signsSets = availableSignSets.keys
+        XCTAssertGreaterThanOrEqual(signsSets.count, 7)
     }
 
-    // MARK: Tests: Character Is Number
+    // MARK: Tests: Is Number
     
     func testDigitsAreNumbers() {
-        let digitSets = availableDigitSets.keys
-        for digits in digitSets {
-            XCTAssertEqual(digits.filter(\.isNumber).count, digits.count)
+        let digitsSets = availableDigitSets.keys
+        for digits in digitsSets {
+            XCTAssertEqual(digits.lazy.filter(\.isNumber).count, digits.count)
         }
     }
     
@@ -84,18 +82,6 @@ final class LocalizationTests: XCTestCase {
         for signs in signsSets {
             XCTAssertTrue(signs.lazy.filter(\.isNumber).isEmpty)
         }
-    }
-    
-    // MARK: Tests: Separator Size.
-
-    func testFractionSeparatorsAreAllSingleCharacters() {
-        let separators = availableFractionSeparators.keys
-        XCTAssertTrue(separators.lazy.map(\.count).allSatisfy({ $0 == 1 }))
-    }
-    
-    func testGroupingSeparatorsAreAllOneOrZeroCharacters() {
-        let separators = availableGroupingSeparators.keys
-        XCTAssertTrue(separators.lazy.map(\.count).allSatisfy({ $0 <= 1 }))
     }
     
     // MARK: Helpers
