@@ -115,7 +115,7 @@ final class LocalizationTests: XCTestCase {
         }
     }
     
-    func testSignsCanBeLargerThanOneCharacterInSize() {
+    func testSignsCanBeMoreThanOneCharacterInSize() {
         for signs in signsSets {
             for sign in signs {
                 if sign.count > 1 { return }
