@@ -15,7 +15,7 @@ extension UIFontDescriptor {
 
     // MARK: Instances
     
-    @usableFromInline static let standard: UIFontDescriptor = .preferredFontDescriptor(withTextStyle: .body)
+    @usableFromInline static let standard = UIFontDescriptor.preferredFontDescriptor(withTextStyle: .body)
 }
 
 // MARK: - UIFontDescriptor: Monospace
@@ -24,13 +24,7 @@ extension UIFontDescriptor {
     
     // MARK: Transformations
     
-    @inlinable func monospaced(_ monospace: Monospace) -> UIFontDescriptor {
-        monospaced(template: monospace.template)
-    }
-    
-    // MARK: Transformations: Helpers
-    
-    /// https://stackoverflow.com/questions/46642335/how-do-i-get-a-monospace-font-that-respects-acessibility-settings
+    /// [Question](https://stackoverflow.com/questions/46642335)
     @inlinable func monospaced(template: UIFontDescriptor) -> UIFontDescriptor {
         var attributes = fontAttributes
         attributes.removeValue(forKey: .family)
