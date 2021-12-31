@@ -103,7 +103,7 @@ public struct NumericTextStyle<Value: Valuable>: DiffableTextStyle, Transformabl
         
         var input = Input(content)
         
-        PARSE_COMMANDS: do {
+        parse_commands: do {
             input.consumeSignInput(with: format.parser.sign)
         }
         
@@ -113,11 +113,11 @@ public struct NumericTextStyle<Value: Valuable>: DiffableTextStyle, Transformabl
         
         var number = try number(snapshot: snapshot.replacing(range, with: input.content))
         
-        EXECUTE_COMMANDS: do {
+        execute_commands: do {
             input.process?(&number)
         }
         
-        VALIDATE_NUMBER: do {
+        validate_number: do {
             try format.validate(sign: number.sign)
             let capacity = try format.precision.capacity(number: number)
             number.removeImpossibleSeparator(capacity: capacity)
@@ -129,7 +129,7 @@ public struct NumericTextStyle<Value: Valuable>: DiffableTextStyle, Transformabl
         
         let value = try Value(number: number)
         
-        VALIDATE_VALUE: do {
+        validate_value: do {
             try format.validate(value: value)
         }
         
@@ -145,9 +145,8 @@ public struct NumericTextStyle<Value: Valuable>: DiffableTextStyle, Transformabl
         
         var characters = style.format(value)
         
-        CORRECT_CHARACTERS_SIGN: do {
+        insert_absent_sign: do {
             let sign = number.sign.characters
-            
             if !sign.isEmpty, !characters.hasPrefix(sign) {
                 /// occurs when sign is negative and value is zero
                 characters = number.sign.characters + characters
@@ -166,12 +165,12 @@ public struct NumericTextStyle<Value: Valuable>: DiffableTextStyle, Transformabl
     @inlinable func snapshot(characters: String) -> Snapshot {
         var index = characters.startIndex
         var snapshot = Snapshot()
-        
+                
         // --------------------------------- //
         // MARK: Prefix
         // --------------------------------- //
         
-        PREFIX: if !prefix.isEmpty {
+        snapshot_prefix: if !prefix.isEmpty {
             snapshot.append(contentsOf: Snapshot(prefix, only: .prefix))
             snapshot.append(.prefix(" "))
         }
@@ -180,7 +179,7 @@ public struct NumericTextStyle<Value: Valuable>: DiffableTextStyle, Transformabl
         // MARK: Sign
         // --------------------------------- //
         
-        SIGN: if index != characters.endIndex {
+        snapshot_sign: if index != characters.endIndex {
             let character = characters[index]
             var result = Sign()
             
@@ -197,10 +196,10 @@ public struct NumericTextStyle<Value: Valuable>: DiffableTextStyle, Transformabl
         // MARK: First Digit
         // --------------------------------- //
 
-        FIRST_DIGIT: if index != characters.endIndex {
+        snapshot_first_digit: if index != characters.endIndex {
             let character = characters[index]
-            
-            guard format.digits.contains(character) else { break FIRST_DIGIT }
+                        
+            guard format.digits.contains(character) else { break snapshot_first_digit }
             characters.formIndex(after: &index)
             
             var symbol = Symbol(character, attribute: .content)
@@ -213,7 +212,7 @@ public struct NumericTextStyle<Value: Valuable>: DiffableTextStyle, Transformabl
         // MARK: Remainders
         // --------------------------------- //
         
-        REMAINDERS: while index != characters.endIndex {
+        snapshot_remainders: while index != characters.endIndex {
             let character = characters[index]
             
             if format.digits.contains(character) {
@@ -228,10 +227,10 @@ public struct NumericTextStyle<Value: Valuable>: DiffableTextStyle, Transformabl
         }
         
         // --------------------------------- //
-        // MARK: Process Redundance
+        // MARK: Redundance
         // --------------------------------- //
         
-        PROCESS_REDUNDANCE: do {
+        process_redundance: do {
             let redundance = snapshot.suffix { symbol in
                 if format.zero == symbol.character { return true }
                 if format.fractionSeparator.contains(symbol.character) { return true }
@@ -247,7 +246,7 @@ public struct NumericTextStyle<Value: Valuable>: DiffableTextStyle, Transformabl
         // MARK: Suffix
         // --------------------------------- //
 
-        SUFFIX: if !suffix.isEmpty {
+        snapshot_suffix: if !suffix.isEmpty {
             snapshot.append(.suffix(" "))
             snapshot.append(contentsOf: Snapshot(suffix, only: .suffix))
         }
