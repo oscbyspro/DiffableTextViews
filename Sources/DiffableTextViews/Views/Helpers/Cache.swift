@@ -15,13 +15,13 @@
     
     @usableFromInline var value: Value!
     @usableFromInline var field: Field
-    @usableFromInline var edits: Bool
+    @usableFromInline var  mode:  Mode
     
     // MARK: Initializers
     
     @inlinable init() {
         self.field = Field()
-        self.edits = false
+        self.mode = .showcase
     }
     
     // MARK: Getters

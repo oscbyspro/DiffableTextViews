@@ -10,17 +10,16 @@ import Utilities
 // MARK: - DiffableTextStyle
 
 public protocol DiffableTextStyle {
-    associatedtype Value: Equatable
     
-    // MARK: Snapshot
+    // MARK: Requirements
+    
+    associatedtype Value: Equatable
     
     /// Snapshot for when the view is idle.
     @inlinable func snapshot(showcase value: Value) -> Snapshot
 
     /// Snapshot for when the view is in editing mode.
     @inlinable func snapshot(editable value: Value) -> Snapshot // required (!)
-    
-    // MARK: Interpret
     
     /// Value represented by the snapshot or nil if the snapshot is invalid.
     @inlinable func parse(snapshot: Snapshot) throws -> Value // required (!)
@@ -33,8 +32,6 @@ public protocol DiffableTextStyle {
     ///     - range: indices in snapshot that content is proposed to change
     ///
     @inlinable func merge(snapshot: Snapshot, with content: Snapshot, in range: Range<Snapshot.Index>) throws -> Snapshot
-    
-    // MARK: Process
     
     #warning("Consider: throws.")
     /// Processes the value once whenever it is called. It is used both downstream and upstream so it can be used to constrain the value.
@@ -63,5 +60,17 @@ public extension DiffableTextStyle {
 
     @inlinable func process(snapshot: inout Snapshot) {
         // default implementation does nothing
+    }
+}
+
+internal extension DiffableTextStyle {
+    
+    // MARK: Utilities
+    
+    @inlinable func snapshot(value: Value, mode: Mode) -> Snapshot {
+        switch mode {
+        case .showcase: return snapshot(showcase: value)
+        case .editable: return snapshot(editable: value)
+        }
     }
 }

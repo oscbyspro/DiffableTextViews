@@ -11,7 +11,7 @@
     
     // MARK: Properties
     
-    @usableFromInline private(set) var isLocked: Bool = false
+    @usableFromInline private(set) var isLocked = false
     
     // MARK: Utilities
     

@@ -60,10 +60,10 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable, 
     
     @inlinable public func makeUIView(context: Context) -> UIViewType {
         let uiView = BasicTextField()
-        context.coordinator.downstream = ProxyTextField(uiView)
         uiView.setContentHuggingPriority(.defaultHigh, for: .vertical)
         uiView.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
         uiView.delegate = context.coordinator
+        context.coordinator.downstream = ProxyTextField(uiView)
         setup?(context.coordinator.downstream)
         return uiView
     }
@@ -85,7 +85,7 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable, 
         @usableFromInline var upstream: DiffableTextField!
         @usableFromInline var downstream:  ProxyTextField!
         
-        @usableFromInline let lock  =  Lock()
+        @usableFromInline let lock =  Lock()
         @usableFromInline let cache = Cache()
         
         // MARK: Submit
@@ -205,15 +205,13 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable, 
             // MARK: Compare
             // --------------------------------- //
             
-            if cache.value != value || cache.edits != downstream.edits {
+            if cache.value != value || cache.mode != downstream.mode {
                 
                 // --------------------------------- //
                 // MARK: Calculate Next State
                 // --------------------------------- //
                 
-                var snapshot = downstream.edits
-                ? upstream.style.snapshot(editable: value)
-                : upstream.style.snapshot(showcase: value)
+                var snapshot = upstream.style.snapshot(value: value, mode: downstream.mode)
                 upstream.style.process(snapshot: &snapshot)
                 let field = cache.field.updating(carets: snapshot)
                 
@@ -240,7 +238,7 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable, 
                 // the delegate's method: textFieldDidChangeSelection(_:)
                 self.downstream.update(text: cache.snapshot.characters)
                 self.downstream.update(selection: cache.selection.offsets)
-                self.cache.edits = downstream.edits
+                self.cache.mode = downstream.mode
             }
                         
             // --------------------------------- //

@@ -36,11 +36,14 @@ public final class ProxyTextField {
         self.wrapped = wrapped
     }
     
-    // MARK: Getters
+    // MARK: Descriptions
     
-    /// - Complexity: O(1).
     @inlinable var intent: Direction? {
         wrapped.intent
+    }
+    
+    @inlinable var mode: Mode {
+        wrapped.isEditing ? .editable : .showcase
     }
     
     // MARK: Text
@@ -65,12 +68,6 @@ public final class ProxyTextField {
     /// - Complexity: High.
     @inlinable func update(selection: Range<Offset>) {
         wrapped.selectedTextRange = positions(in: selection)
-    }
-    
-    // MARK: State
-    
-    @inlinable var edits: Bool {
-        wrapped.isEditing
     }
     
     // MARK: Offsets
