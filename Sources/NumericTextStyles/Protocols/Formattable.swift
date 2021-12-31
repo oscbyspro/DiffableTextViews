@@ -5,8 +5,12 @@
 //  Created by Oscar Byström Ericsson on 2021-12-21.
 //
 
-import Foundation
-import Utilities
+import struct Foundation.Locale
+import protocol Foundation.FormatStyle
+import struct Foundation.FloatingPointFormatStyle
+import struct Foundation.IntegerFormatStyle
+import enum Foundation.NumberFormatStyleConfiguration
+import struct Quick.Redacted
 
 // MARK: - Formattable
 
@@ -39,7 +43,7 @@ extension Formattable {
         let description = number.characters
         
         guard let instance = Self.make(description: description) else {
-            throw Autoredactable([.text("unable to instantiate number with description"), .mark(description)])
+            throw Redacted([.text("unable to instantiate number with description"), .mark(description)])
         }
         
         self = instance

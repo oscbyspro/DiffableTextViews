@@ -1,0 +1,16 @@
+{
+  "object": {
+    "pins": [
+      {
+        "package": "Quick",
+        "repositoryURL": "https://github.com/oscbyspro/Quick",
+        "state": {
+          "branch": "main",
+          "revision": "c97e1c788858aa5825cdeab972a6c58b19df4469",
+          "version": null
+        }
+      }
+    ]
+  },
+  "version": 1
+}

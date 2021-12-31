@@ -5,7 +5,7 @@
 //  Created by Oscar Byström Ericsson on 2021-12-27.
 //
 
-import Utilities
+import struct Quick.Redacted
 
 // MARK: - Format
 
@@ -41,7 +41,7 @@ import Utilities
         let capacity = capacity()
 
         guard characters.count <= capacity else {
-            throw Autoredactable([.mark(characters), .text("exceeded pattern capacity"), .mark(capacity)])
+            throw Redacted([.mark(characters), .text("exceeded pattern capacity"), .mark(capacity)])
         }
     }
 }

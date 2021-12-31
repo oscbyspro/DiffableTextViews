@@ -5,7 +5,7 @@
 //  Created by Oscar Byström Ericsson on 2021-12-27.
 //
 
-import Utilities
+import struct Quick.Redacted
 
 // MARK: - Filter
 
@@ -32,7 +32,7 @@ import Utilities
     @inlinable func validate(_ character: Character) throws {
         for (index, condition) in conditions.enumerated() {
             guard condition(character) else {
-                throw Autoredactable([.mark(character), .text("was invalidated by condition at index"), .mark(index)])
+                throw Redacted([.mark(character), .text("was invalidated by condition at index"), .mark(index)])
             }
         }
     }

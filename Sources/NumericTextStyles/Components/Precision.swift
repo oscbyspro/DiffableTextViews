@@ -5,8 +5,8 @@
 //  Created by Oscar Byström Ericsson on 2021-12-21.
 //
 
-import struct Utilities.Autoredactable
 import enum Foundation.NumberFormatStyleConfiguration
+import struct Quick.Redacted
 
 // MARK: - Precision
 
@@ -86,8 +86,8 @@ public struct Precision<Value: Precise> {
     
     // MARK: Errors
     
-    @inlinable static func failure(excess component: Component, max: Int) -> Autoredactable {
-        Autoredactable([.mark(component), .text("digits exceeded precision capacity"), .mark(max)])
+    @inlinable static func failure(excess component: Component, max: Int) -> Redacted {
+        Redacted([.mark(component), .text("digits exceeded precision capacity"), .mark(max)])
     }
     
     // MARK: Components

@@ -3,6 +3,7 @@
 
 import PackageDescription
 
+/// TODO: Once done, use stable versions of remote packages.
 let package = Package(
     name: "DiffableTextViews",
     platforms: [
@@ -12,7 +13,16 @@ let package = Package(
     products: [
         .library(
             name: "DiffableTextViews",
-            targets: ["DiffableTextViews", "NumericTextStyles", "PatternTextStyles"]),
+            targets: [
+                "DiffableTextViews",
+                "NumericTextStyles",
+                "PatternTextStyles"]),
+    ],
+    dependencies: [
+        // --------------------------------- //
+        // MARK: https://github.com/oscbyspro/
+        // --------------------------------- //
+        .package(name: "Quick", url: "https://github.com/oscbyspro/Quick", .branch("main")),
     ],
     targets: [
         // --------------------------------- //
@@ -20,7 +30,7 @@ let package = Package(
         // --------------------------------- //
         .target(
             name: "DiffableTextViews",
-            dependencies: ["Utilities"]),
+            dependencies: ["Utilities", "Quick"]),
         .testTarget(
             name: "DiffableTextViewsTests",
             dependencies: ["DiffableTextViews"]),
@@ -29,7 +39,7 @@ let package = Package(
         // --------------------------------- //
         .target(
             name: "NumericTextStyles",
-            dependencies: ["DiffableTextViews", "Utilities"]),
+            dependencies: ["DiffableTextViews", "Utilities", "Quick"]),
         .testTarget(
             name: "NumericTextStylesTests",
             dependencies: ["NumericTextStyles"]),
@@ -38,7 +48,7 @@ let package = Package(
         // --------------------------------- //
         .target(
             name: "PatternTextStyles",
-            dependencies: ["DiffableTextViews", "Utilities"]),
+            dependencies: ["DiffableTextViews", "Utilities", "Quick"]),
         .testTarget(
             name: "PatternTextStylesTests",
             dependencies: ["PatternTextStyles"]),

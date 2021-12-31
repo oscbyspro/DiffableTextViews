@@ -6,7 +6,7 @@
 //
 
 import struct Foundation.Locale
-import struct Utilities.Autoredactable
+import struct Quick.Redacted
 
 // MARK: - Format
 
@@ -102,7 +102,7 @@ import struct Utilities.Autoredactable
     
     @inlinable func validate(sign: Sign) throws {
         guard sign == sign.transforming(correct) else {
-            throw Autoredactable([.mark(sign), .text("is not permitted in"), .mark(bounds)])
+            throw Redacted([.mark(sign), .text("is not permitted in"), .mark(bounds)])
         }
     }
     
@@ -110,7 +110,7 @@ import struct Utilities.Autoredactable
 
     @inlinable func validate(value: Value) throws {
         guard bounds.contains(value) else {
-            throw Autoredactable([.mark(value), .text("is outside of"), .mark(bounds)])
+            throw Redacted([.mark(value), .text("is outside of"), .mark(bounds)])
         }
     }
 }
