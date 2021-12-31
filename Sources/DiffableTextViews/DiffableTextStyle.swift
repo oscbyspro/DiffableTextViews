@@ -63,7 +63,7 @@ public extension DiffableTextStyle {
     }
 }
 
-internal extension DiffableTextStyle {
+extension DiffableTextStyle {
     
     // MARK: Utilities
     

@@ -141,6 +141,8 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable, 
                 Task { @MainActor [value] in
                     // async to process special commands first
                     // see option + delete as one such example
+                    // where textFieldDidChangeSelection(_:)
+                    // is called after this method completes
                     self.cache.value = value
                     self.cache.field = field
                     self.push()
