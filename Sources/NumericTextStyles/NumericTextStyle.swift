@@ -87,7 +87,7 @@ public struct NumericTextStyle<Value: Valuable>: DiffableTextStyle, Transformabl
         let unformatted = snapshot.lazy.filter(Symbol.is(non: .formatting)).map(\.character)
                 
         guard let number = format.parser.parse(unformatted) else {
-            throw Autoredactable("unable to parse number in", [snapshot.characters])
+            throw Autoredactable([.text("unable to parse number in"), .mark(snapshot.characters)])
         }
                 
         return number

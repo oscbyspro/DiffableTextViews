@@ -102,7 +102,7 @@ import struct Utilities.Autoredactable
     
     @inlinable func validate(sign: Sign) throws {
         guard sign == sign.transforming(correct) else {
-            throw Autoredactable([sign], "is not permitted in", [bounds])
+            throw Autoredactable([.mark(sign), .text("is not permitted in"), .mark(bounds)])
         }
     }
     
@@ -110,7 +110,7 @@ import struct Utilities.Autoredactable
 
     @inlinable func validate(value: Value) throws {
         guard bounds.contains(value) else {
-            throw Autoredactable([value], "is outside of", [bounds])
+            throw Autoredactable([.mark(value), .text("is outside of"), .mark(bounds)])
         }
     }
 }

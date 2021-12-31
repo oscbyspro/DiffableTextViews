@@ -15,74 +15,52 @@
 /// - MemoryLayout«Self».alignment == 1 in RELEASE mode (vs 8 in DEBUG mode).
 /// - MemoryLayout«Self».stride == 1 in RELEASE mode (vs 16 in DEBUG mode).
 ///
-/// - Note: Parameters and related calculations *should* be ignored in RELEASE mode.
+/// - Note: It can only be initialized with closures (or Autoredactable.Storage) so that its parameter expressions are not evaluated in RELEASE mode.
 ///
-@frozen public struct Autoredactable: Error, CustomStringConvertible, ExpressibleByArrayLiteral, ExpressibleByStringLiteral {
-
+@frozen public struct Autoredactable: Error, CustomStringConvertible {
+    
     // MARK: Properties
     
     @usableFromInline
     internal let storage: Storage
     
     // MARK: Initializers
-
+    
     @inlinable @inline(__always)
-    internal init(_ content: @autoclosure () -> String) {
-        self.storage = .init(content: content)
+    internal init(_ storage: Storage) {
+        self.storage = storage
     }
     
     // MARK: Initializers (Indirect)
-            
+    
     @inlinable @inline(__always)
-    public init(_ components: Self...) {
-        self.init(Self._reduce(components))
+    public init(_ components: @autoclosure () -> [Self]) {
+        self.init(Storage(components().map(\.storage.content).joined(separator: " ")))
+    }
+    
+    // MARK: Initializers (Indirect) (Static)
+    
+    @inlinable @inline(__always)
+    public static func text(_ value: @autoclosure () -> Any) -> Self {
+        Self.init(Storage(String(describing: value())))
     }
     
     @inlinable @inline(__always)
-    public init(stringLiteral value: String) {
-        self.init(Self._text(value))
-    }
-    
-    @inlinable @inline(__always)
-    public init(arrayLiteral elements: Any...) {
-        self.init(Self._mark((Self._reduce(elements))))
-    }
-            
-    @inlinable @inline(__always)
-    public static func text(_ value: Any) -> Self {
-        Self.init(Self._text(value))
-    }
-    
-    @inlinable @inline(__always)
-    public static func mark(_ value: Any) -> Self {
-        Self.init(Self._mark(value))
+    public static func mark(_ value: @autoclosure () -> Any) -> Self {
+        Self.init([Self.text("«" as Any), Self.text(value() as Any), Self.text("»" as Any)] as [Self])
     }
     
     // MARK: Utilities
     
     @inlinable @inline(__always)
     public var description: String { storage.content }
-
-    // MARK: Helpers
-    
-    @inlinable @inline(__always)
-    internal static func _text(_ value: Any) -> String {
-        .init(describing: value)
-    }
-    
-    @inlinable @inline(__always)
-    internal static func _mark(_ value: Any) -> String {
-        _reduce(["«", value, "»"])
-    }
-    
-    @inlinable @inline(__always)
-    internal static func _reduce(_ values: [Any]) -> String {
-        values.lazy.map(_text).joined(separator: " ")
-    }
     
     // MARK: Storage
     
-    /// A super simple object that encapsulates the compiler conditions.
+    /// An internal object that is responsible for the conditional compilation in DEBUG and RELEASE mode.
+    ///
+    /// - Note: It can only be initialized with closures so that its parameter expressions are not evaluated in RELEASE mode.
+    ///
     @frozen @usableFromInline internal struct Storage {
         @usableFromInline static let redacted = "[REDACTED]"
         
@@ -99,7 +77,7 @@
         // MARK: Initializers
 
         @inlinable @inline(__always)
-        internal init(content: () -> String) {
+        internal init(_ content: @autoclosure () -> String) {
             #if DEBUG
             self.content = content()
             #endif

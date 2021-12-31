@@ -87,7 +87,7 @@ public struct Precision<Value: Precise> {
     // MARK: Errors
     
     @inlinable static func failure(excess component: Component, max: Int) -> Autoredactable {
-        Autoredactable([component], "digits exceeded precision capacity", [max])
+        Autoredactable([.mark(component), .text("digits exceeded precision capacity"), .mark(max)])
     }
     
     // MARK: Components

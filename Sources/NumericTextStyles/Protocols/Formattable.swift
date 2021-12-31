@@ -39,7 +39,7 @@ extension Formattable {
         let description = number.characters
         
         guard let instance = Self.make(description: description) else {
-            throw Autoredactable("unable to instantiate number with description", [description])
+            throw Autoredactable([.text("unable to instantiate number with description"), .mark(description)])
         }
         
         self = instance
