@@ -47,7 +47,7 @@
     
     @inlinable @inline(__always)
     public static func mark(_ value: @autoclosure () -> Any) -> Self {
-        Self.init([Self.text("«" as Any), Self.text(value() as Any), Self.text("»" as Any)] as [Self])
+        Self.init([Self.text("«" as Any), Self.text(value()), Self.text("»" as Any)] as [Self])
     }
     
     // MARK: Utilities
