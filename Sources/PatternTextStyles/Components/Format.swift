@@ -41,7 +41,7 @@ import struct Quick.Redacted
         let capacity = capacity()
 
         guard characters.count <= capacity else {
-            throw Redacted([.mark(characters), .text("exceeded pattern capacity"), .mark(capacity)])
+            throw Redacted.mark(characters).text("exceeded pattern capacity").mark(capacity)
         }
     }
 }

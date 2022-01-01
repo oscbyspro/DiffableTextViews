@@ -32,7 +32,7 @@ import struct Quick.Redacted
     @inlinable func validate(_ character: Character) throws {
         for (index, condition) in conditions.enumerated() {
             guard condition(character) else {
-                throw Redacted([.mark(character), .text("was invalidated by condition at index"), .mark(index)])
+                throw Redacted.mark(character).text("was invalidated by condition at index").mark(index)
             }
         }
     }

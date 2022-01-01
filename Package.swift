@@ -3,7 +3,7 @@
 
 import PackageDescription
 
-/// TODO: Once done, use stable versions of remote packages.
+/// TODO: Once done, use stable versions of remote packages or make local copies.
 let package = Package(
     name: "DiffableTextViews",
     platforms: [
@@ -60,4 +60,3 @@ let package = Package(
             dependencies: []),
     ]
 )
-

@@ -102,7 +102,7 @@ import struct Quick.Redacted
     
     @inlinable func validate(sign: Sign) throws {
         guard sign == sign.transforming(correct) else {
-            throw Redacted([.mark(sign), .text("is not permitted in"), .mark(bounds)])
+            throw Redacted.mark(sign).text("is not permitted in").mark(bounds)
         }
     }
     
@@ -110,7 +110,7 @@ import struct Quick.Redacted
 
     @inlinable func validate(value: Value) throws {
         guard bounds.contains(value) else {
-            throw Redacted([.mark(value), .text("is outside of"), .mark(bounds)])
+            throw Redacted.mark(value).text("is not in").mark(bounds)
         }
     }
 }
