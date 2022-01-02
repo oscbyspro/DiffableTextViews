@@ -6,6 +6,8 @@
 //
 
 #warning("Rework.")
+#warning("Rework.")
+#warning("Rework.")
 
 import protocol Utilities.Nonempty
 
@@ -35,7 +37,7 @@ import protocol Utilities.Nonempty
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: Carets - Collection
+// MARK: Carets - BidirectionalCollection
 //=----------------------------------------------------------------------------=
 
 extension Carets {
@@ -53,22 +55,23 @@ extension Carets {
     }
     
     //=------------------------------------------------------------------------=
-    // MARK: Indices
+    // MARK: Traversal
     //=------------------------------------------------------------------------=
     
+    #warning("Improve, maybe.")
     @inlinable func index(after i: Index) -> Index {
         Index(at: i.offset.after(character(at: i.rhs!.character)),  lhs: i.rhs!,  rhs: subindex(after: i.rhs!))
     }
     
+    #warning("Improve, maybe.")
     @inlinable func index(before i: Index) -> Index {
         Index(at: i.offset.before(character(at: i.lhs!.character)), lhs: subindex(before: i.lhs!), rhs: i.lhs!)
     }
     
     //
-    // MARK: Indices - Offset
+    // MARK: Traversal - Offset
     //=------------------------------------------------------------------------=
     
-    /// - Complexity: O(n).
     @inlinable func index(at offset: Offset, start: Index) -> Index {
         if start.offset <= offset {
             return indices[start...].first(where: { $0.offset == offset })!
@@ -85,23 +88,8 @@ extension Carets {
         .init(lhs: subelement(at: position.lhs), rhs: subelement(at: position.rhs))
     }
     
-    #warning("Rename, maybe.")
     //
-    // MARK: Access - Character
-    //=------------------------------------------------------------------------=
-    
-    #warning("Move, make subscript that yields, maybe.")
-    @inlinable func character(at index: String.Index) -> Character? {
-        index < snapshot.characters.endIndex ? snapshot.characters[index] : nil
-    }
-
-    #warning("WIP.")
-    @inlinable subscript(character index: String.Index) -> Character? {
-        index < snapshot.characters.endIndex ? snapshot.characters[index] : nil
-    }
-    
-    //
-    // MARK: Access - Snapshot
+    // MARK: Access - Components
     //=------------------------------------------------------------------------=
 
     @inlinable func subindex(after subindex: Snapshot.Index) -> Snapshot.Index? {
@@ -115,6 +103,21 @@ extension Carets {
     @inlinable func subelement(at subindex: Snapshot.Index?) -> Snapshot.Element? {
         guard let subindex = subindex else { return nil }
         return subindex < snapshot.endIndex ? snapshot[subindex] : nil
+    }
+    
+    #warning("Rename, maybe.")
+    //
+    // MARK: Access - Components - Character
+    //=------------------------------------------------------------------------=
+
+    #warning("Move, make subscript, maybe.")
+    @inlinable func character(at index: String.Index) -> Character? {
+        index < snapshot.characters.endIndex ? snapshot.characters[index] : nil
+    }
+
+    #warning("WIP.")
+    @inlinable subscript(character index: String.Index) -> Character? {
+        index < snapshot.characters.endIndex ? snapshot.characters[index] : nil
     }
     
     //*========================================================================*
@@ -148,7 +151,7 @@ extension Carets {
         }
         
         //=--------------------------------------------------------------------=
-        // MARK: Comparable
+        // MARK: Comparisons
         //=--------------------------------------------------------------------=
         
         @inlinable static func == (lhs: Self, rhs: Self) -> Bool {

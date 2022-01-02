@@ -5,23 +5,31 @@
 //  Created by Oscar Byström Ericsson on 2021-11-01.
 //
 
-// MARK: - Peek
+//*============================================================================*
+// MARK: * Peek
+//*============================================================================*
 
 @usableFromInline struct Peek {
     
+    //=------------------------------------------------------------------------=
     // MARK: Properties
-
+    //=------------------------------------------------------------------------=
+    
     @usableFromInline let lhs: Symbol
     @usableFromInline let rhs: Symbol
     
+    //=------------------------------------------------------------------------=
     // MARK: Initializers
+    //=------------------------------------------------------------------------=
     
     @inlinable init(lhs: Symbol?, rhs: Symbol?) {
         self.lhs = lhs ?? .prefix("\0")
         self.rhs = rhs ?? .suffix("\0")
     }
     
-    // MARK: Descriptions: Looks
+    //=------------------------------------------------------------------------=
+    // MARK: Utilities
+    //=------------------------------------------------------------------------=
     
     @inlinable var lookaheadable: Bool {
         rhs.attribute.contains(.prefixing)
@@ -47,8 +55,10 @@
         !lookable(direction: direction)
     }
     
-    // MARK: Descriptions: Attributes
-        
+    //
+    // MARK: Utilities - Direction
+    //=------------------------------------------------------------------------=
+    
     @inlinable func directionOfAttributes() -> Direction? {
         let forwards  = containsOnBothSides(.prefixing)
         let backwards = containsOnBothSides(.suffixing)
@@ -59,7 +69,11 @@
         
         return forwards ? .forwards : .backwards
     }
-        
+    
+    //
+    // MARK: Utilities - Helpers
+    //=------------------------------------------------------------------------=
+    
     @inlinable func containsOnBothSides(_ attribute: Attribute) -> Bool {
         lhs.attribute.contains(attribute) && rhs.attribute.contains(attribute)
     }

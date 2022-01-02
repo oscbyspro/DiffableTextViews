@@ -5,6 +5,10 @@
 //  Created by Oscar Byström Ericsson on 2021-09-27.
 //
 
+#warning("Continue.")
+#warning("Continue.")
+#warning("Continue.")
+
 import protocol Utilities.Transformable
 
 // MARK: - Field

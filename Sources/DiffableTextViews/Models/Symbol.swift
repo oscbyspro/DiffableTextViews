@@ -5,25 +5,34 @@
 //  Created by Oscar Byström Ericsson on 2021-09-24.
 //
 
+#warning("Remove, maybe.")
 import protocol Utilities.Transformable
 
-// MARK: - Symbol
+//*============================================================================*
+// MARK: * Symbol
+//*============================================================================*
 
 public struct Symbol: Equatable, Transformable {
     
+    //=------------------------------------------------------------------------=
     // MARK: Properties
+    //=------------------------------------------------------------------------=
     
     public var character: Character
     public var attribute: Attribute
     
+    //=------------------------------------------------------------------------=
     // MARK: Initializers
+    //=------------------------------------------------------------------------=
     
     @inlinable public init(_ character: Character, attribute: Attribute) {
         self.character = character
         self.attribute = attribute
     }
 
-    // MARK: Initializers: Static
+    //
+    // MARK: Initializers - Static
+    //=------------------------------------------------------------------------=
     
     @inlinable public static func content(_ character: Character) -> Self {
         Self(character, attribute: .content)
@@ -40,27 +49,7 @@ public struct Symbol: Equatable, Transformable {
     @inlinable public static func spacer(_ character: Character) -> Self {
         Self(character, attribute: .spacer)
     }
-    
-    // MARK: Transformations: Union
-    
-    @inlinable public mutating func formUnion(_ attribute: Attribute) {
-        transform({ $0.attribute.formUnion(attribute) })
-    }
-    
-    @inlinable public func union(_ attribute: Attribute) -> Self {
-        transforming({ $0.attribute.formUnion(attribute) })
-    }
-    
-    // MARK: Transformations: Intersection
-    
-    @inlinable public mutating func formIntersection(_ attribute: Attribute) {
-        transform({ $0.attribute.formIntersection(attribute) })
-    }
-    
-    @inlinable public func intersection(_ attribute: Attribute) -> Self {
-        transforming({ $0.attribute.formIntersection(attribute) })
-    }
-    
+
     // MARK: Predicates
     
     @inlinable public func `is`(_ attribute: Attribute) -> Bool {
@@ -82,17 +71,17 @@ public struct Symbol: Equatable, Transformable {
     }}
 }
 
-// MARK: - Symbol: Descriptions
+//=----------------------------------------------------------------------------=
+// MARK: Symbol - CustomStringConvertible
+//=----------------------------------------------------------------------------=
 
-extension Symbol: CustomStringConvertible, CustomDebugStringConvertible {
+extension Symbol: CustomStringConvertible {
     
-    // MARK: Implementation
+    //=------------------------------------------------------------------------=
+    // MARK: Description
+    //=------------------------------------------------------------------------=
     
     public var description: String {
-        String(character)
-    }
-    
-    public var debugDescription: String {
         "(\(character), \(attribute))"
     }
 }

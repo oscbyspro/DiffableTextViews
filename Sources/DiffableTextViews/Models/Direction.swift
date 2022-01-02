@@ -5,34 +5,41 @@
 //  Created by Oscar Byström Ericsson on 2021-10-29.
 //
 
-// MARK: - Direction
+//*============================================================================*
+// MARK: * Direction
+//*============================================================================*
 
 @usableFromInline @frozen enum Direction {
     
+    //=------------------------------------------------------------------------=
     // MARK: Instances
+    //=------------------------------------------------------------------------=
     
     case forwards
     case backwards
 }
 
-// MARK: - UIKit
+//=----------------------------------------------------------------------------=
+// MARK: Direction - UIKit
+//=----------------------------------------------------------------------------=
 
 #if canImport(UIKit)
 
-import class UIKit.UIPress
-import enum  UIKit.UIKeyboardHIDUsage
-
-// MARK: - Direction: Intent
+import UIKit
 
 extension Direction {
     
-    // MARK: Initializers
+    //=------------------------------------------------------------------------=
+    // MARK: Intent
+    //=------------------------------------------------------------------------=
     
     @inlinable static func intent(_ presses: Set<UIPress>) -> Self? {
         presses.first?.key.flatMap({ intentions[$0.keyCode] })
     }
     
-    // MARK: Translations
+    //
+    // MARK: Intent - Map
+    //=------------------------------------------------------------------------=
     
     @usableFromInline static let intentions: [UIKeyboardHIDUsage: Self] = [
         .keyboardLeftArrow: .backwards, .keyboardRightArrow: .forwards
