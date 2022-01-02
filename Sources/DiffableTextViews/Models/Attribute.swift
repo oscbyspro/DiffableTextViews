@@ -26,12 +26,16 @@ public struct Attribute: OptionSet {
     
     /// Signifies that the symbol is part of a text's formatting and therefore not real.
     public static let formatting = Self(rawValue: 1 << 0)
+    
     /// Signifies that the symbol should be ignored by the differentiation algorithm when it is inserted.
     public static let insertable = Self(rawValue: 1 << 1)
+    
     /// Signifies that the symbol should be ignored by the differentiation algorithm when it is removed.
     public static let removable  = Self(rawValue: 1 << 2)
+    
     /// Signifies that the symbol should direct the user's text selection forwards.
     public static let prefixing  = Self(rawValue: 1 << 3)
+    
     /// Signifies that the symbol should direct the user's text selection backwards.
     public static let suffixing  = Self(rawValue: 1 << 4)
     
@@ -41,10 +45,13 @@ public struct Attribute: OptionSet {
     
     /// Default behavior used to describe plain text. Contains no options.
     public static let content = Self([])
+    
     /// Contains: .formatting, .insertable, .removable, .prefixing.
     public static let prefix  = Self([.formatting, .insertable, .removable, .prefixing])
+    
     /// Contains: .formatting, .insertable, .removable, .suffixing.
     public static let suffix  = Self([.formatting, .insertable, .removable, .suffixing])
+    
     /// Contains: .formatting, .insertable, .removable, .prefixing, .suffixing.
     public static let spacer  = Self([.formatting, .insertable, .removable, .prefixing, .suffixing])
     

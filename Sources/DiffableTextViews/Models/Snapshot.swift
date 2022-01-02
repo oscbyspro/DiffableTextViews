@@ -5,15 +5,11 @@
 //  Created by Oscar Byström Ericsson on 2021-09-23.
 //
 
-#warning("Remove.")
-import protocol Utilities.Transformable
-
 //*============================================================================*
 // MARK: * Snapshot
 //*============================================================================*
 
-#warning("Separate: BidirectionalCollection and RangeReplaceableCollection.")
-public struct Snapshot: BidirectionalCollection, RangeReplaceableCollection, Transformable {
+public struct Snapshot: BidirectionalCollection, RangeReplaceableCollection {
     public typealias Element = Symbol
     public typealias Indices = DefaultIndices<Self>
     public typealias Characters = String
@@ -45,24 +41,6 @@ public struct Snapshot: BidirectionalCollection, RangeReplaceableCollection, Tra
     @inlinable public init(_ characters: String, only attribute: Attribute) {
         self._characters = characters
         self._attributes = Attributes(repeating: attribute, count: characters.count)
-    }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Transformations
-    //=------------------------------------------------------------------------=
-    
-    @inlinable public mutating func transform(attributes index: Index, with transformation: (inout Attribute) -> Void) {
-        transformation(&_attributes[index.attribute])
-    }
-    
-    @inlinable public mutating func transform<S: Sequence>(attributes indices: S, with transformation: (inout Attribute) -> Void) where S.Element == Index {
-        for index in indices {
-            transform(attributes: index, with: transformation)
-        }
-    }
-        
-    @inlinable public mutating func transform<R: RangeExpression>(attributes range: R, with transformation: (inout Attribute) -> Void) where R.Bound == Index {
-        transform(attributes: indices[range.relative(to: self)], with: transformation)
     }
     
     //*========================================================================*
@@ -194,5 +172,39 @@ public extension Snapshot {
     @inlinable mutating func insert(_ element: Element, at index: Index) {
         _characters.insert(element.character, at: index.character)
         _attributes.insert(element.attribute, at: index.attribute)
+    }
+}
+
+//=------------------------------------------------------------------------=
+// MARK: Snapshot - Transformations
+//=------------------------------------------------------------------------=
+
+public extension Snapshot {
+
+    //=------------------------------------------------------------------------=
+    // MARK: Attributes
+    //=------------------------------------------------------------------------=
+    
+    @inlinable mutating func transform(
+        attributes index: Index,
+        with transformation: (inout Attribute) -> Void) {
+        //=-----------------------------=
+        transformation(&_attributes[index.attribute])
+    }
+    
+    @inlinable mutating func transform<S: Sequence>(
+        attributes sequence: S,
+        with transformation: (inout Attribute) -> Void) where S.Element == Index {
+        //=-----------------------------=
+        for index in sequence {
+            transform(attributes: index, with: transformation)
+        }
+    }
+        
+    @inlinable mutating func transform<R: RangeExpression>(
+        attributes range: R,
+        with transformation: (inout Attribute) -> Void) where R.Bound == Index {
+        //=-----------------------------=
+        transform(attributes: indices[range.relative(to: self)], with: transformation)
     }
 }
