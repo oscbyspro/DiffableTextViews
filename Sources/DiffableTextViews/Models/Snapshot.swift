@@ -44,7 +44,7 @@ public struct Snapshot: BidirectionalCollection, RangeReplaceableCollection {
     }
     
     //*========================================================================*
-    // MARK: Index
+    // MARK: * Index
     //*========================================================================*
 
     public struct Index: Comparable {
@@ -175,9 +175,9 @@ public extension Snapshot {
     }
 }
 
-//=------------------------------------------------------------------------=
+//=----------------------------------------------------------------------------=
 // MARK: Snapshot - Transformations
-//=------------------------------------------------------------------------=
+//=----------------------------------------------------------------------------=
 
 public extension Snapshot {
 
@@ -185,17 +185,19 @@ public extension Snapshot {
     // MARK: Attributes
     //=------------------------------------------------------------------------=
     
+    #warning("Short divs.")
     @inlinable mutating func transform(
         attributes index: Index,
         with transformation: (inout Attribute) -> Void) {
-        //=-----------------------------=
+        //=----------------------------=
         transformation(&_attributes[index.attribute])
     }
     
     @inlinable mutating func transform<S: Sequence>(
         attributes sequence: S,
-        with transformation: (inout Attribute) -> Void) where S.Element == Index {
-        //=-----------------------------=
+        with transformation: (inout Attribute) -> Void)
+        where S.Element == Index {
+        //=----------------------------=
         for index in sequence {
             transform(attributes: index, with: transformation)
         }
@@ -203,8 +205,9 @@ public extension Snapshot {
         
     @inlinable mutating func transform<R: RangeExpression>(
         attributes range: R,
-        with transformation: (inout Attribute) -> Void) where R.Bound == Index {
-        //=-----------------------------=
+        with transformation: (inout Attribute) -> Void)
+        where R.Bound == Index {
+        //=----------------------------=
         transform(attributes: indices[range.relative(to: self)], with: transformation)
     }
 }
