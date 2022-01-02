@@ -9,7 +9,9 @@
 
 import UIKit
 
-// MARK: - ProxyTextField
+//*============================================================================*
+// MARK: * ProxyTextField
+//*============================================================================*
 
 /// An affordance layer wrapping a UITextField object.
 /// Makes it easier to enforce UITextField's UTF-16 layout, as well as which properties and methods may be called.
@@ -26,17 +28,25 @@ public final class ProxyTextField {
     @usableFromInline typealias Wrapped = BasicTextField
     @usableFromInline typealias Offset = DiffableTextViews.Offset<UTF16>
     
+    //=------------------------------------------------------------------------=
     // MARK: Properties
+    //=------------------------------------------------------------------------=
     
     @usableFromInline let wrapped: Wrapped
     
-    // MARK: Initializers
+    //
+    // MARK: Properties - Accessors
+    //=------------------------------------------------------------------------=
     
-    @inlinable init(_ wrapped: Wrapped) {
-        self.wrapped = wrapped
+    @inlinable var text: String {
+        wrapped.text!
     }
     
-    // MARK: Descriptions
+    #warning("Make this into a calculated propert maybe.")
+    /// - Complexity: O(1).
+    @inlinable func selection() -> Range<Offset> {
+        offsets(in: wrapped.selectedTextRange!)
+    }
     
     @inlinable var intent: Direction? {
         wrapped.intent
@@ -46,31 +56,31 @@ public final class ProxyTextField {
         wrapped.isEditing ? .editable : .showcase
     }
     
-    // MARK: Text
-
-    /// - Complexity: O(1).
-    @inlinable var text: String {
-        wrapped.text!
+    //=------------------------------------------------------------------------=
+    // MARK: Initializers
+    //=------------------------------------------------------------------------=
+    
+    @inlinable init(_ wrapped: Wrapped) {
+        self.wrapped = wrapped
     }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Update
+    //=------------------------------------------------------------------------=
     
     /// - Complexity: High.
     @inlinable func update(text: String) {
         wrapped.text = text
     }
-    
-    // MARK: Selection
-    
-    /// - Complexity: O(1).
-    @inlinable func selection() -> Range<Offset> {
-        offsets(in: wrapped.selectedTextRange!)
-    }
-    
+        
     /// - Complexity: High.
     @inlinable func update(selection: Range<Offset>) {
         wrapped.selectedTextRange = positions(in: selection)
     }
     
+    //=------------------------------------------------------------------------=
     // MARK: Offsets
+    //=------------------------------------------------------------------------=
 
     /// - Complexity: O(1).
     @inlinable func offsets(in range: UITextRange) -> Range<Offset> {
@@ -82,7 +92,9 @@ public final class ProxyTextField {
         .init(at: wrapped.offset(from: wrapped.beginningOfDocument, to: position))
     }
     
+    //=------------------------------------------------------------------------=
     // MARK: Positions
+    //=------------------------------------------------------------------------=
     
     /// - Complexity: O(1).
     @inlinable func position(at offset: Offset) -> UITextPosition {
@@ -95,20 +107,9 @@ public final class ProxyTextField {
     }
 }
 
-// MARK: - ProxyTextField: Accessors
-
-extension ProxyTextField {
-    
-    // MARK: Font
-    
-    @inlinable var font: UIFont {
-        get { wrapped.font! }
-        set { wrapped.font = newValue }
-    }
-    
-}
-
-// MARK: - ProxyTextField: Actions
+//=----------------------------------------------------------------------------=
+// MARK: ProxyTextField - Actions
+//=----------------------------------------------------------------------------=
 
 public extension ProxyTextField {
     
@@ -119,45 +120,59 @@ public extension ProxyTextField {
     }
 }
 
-// MARK: - ProxyTextField: Transformations
+//=----------------------------------------------------------------------------=
+// MARK: ProxyTextField - Transformations
+//=----------------------------------------------------------------------------=
 
 public extension ProxyTextField {
     
+    //=------------------------------------------------------------------------=
     // MARK: Autocorrect
+    //=------------------------------------------------------------------------=
     
     @inlinable func autocorrect(_ autocorrect: UITextAutocorrectionType) {
         wrapped.autocorrectionType = autocorrect
     }
     
+    //=------------------------------------------------------------------------=
+    // MARK: Entry
+    //=------------------------------------------------------------------------=
+        
+    @inlinable func entry(secure: Bool) {
+        wrapped.isSecureTextEntry = secure
+    }
+    
+    //=------------------------------------------------------------------------=
     // MARK: Font
+    //=------------------------------------------------------------------------=
     
     @inlinable func font(_ font: UIFont) {
-        self.font = font
+        wrapped.font = font
     }
         
     @inlinable func font(_ font: OBEFont) {
-        self.font = font.makeUIFont()
+        wrapped.font = font.makeUIFont()
     }
     
+    //=------------------------------------------------------------------------=
     // MARK: Keyboard
+    //=------------------------------------------------------------------------=
     
     @inlinable func keyboard(_ keyboard: UIKeyboardType) {
         wrapped.keyboardType = keyboard
     }
     
+    //=------------------------------------------------------------------------=
     // MARK: Key
+    //=------------------------------------------------------------------------=
     
     @inlinable func key(return: UIReturnKeyType) {
         wrapped.returnKeyType = `return`
     }
     
-    // MARK: Secure
-        
-    @inlinable func secure(entry: Bool) {
-        wrapped.isSecureTextEntry = entry
-    }
-    
+    //=------------------------------------------------------------------------=
     // MARK: Tint
+    //=------------------------------------------------------------------------=
         
     @inlinable func tint(color: UIColor) {
         wrapped.tintColor = color

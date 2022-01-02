@@ -9,11 +9,15 @@
 
 import UIKit
 
-// MARK: - OBEFont
+//*============================================================================*
+// MARK: * OBEFont
+//*============================================================================*
 
 public struct OBEFont {
     
+    //=------------------------------------------------------------------------=
     // MARK: Instances
+    //=------------------------------------------------------------------------=
     
     public static let largeTitle:  Self = .preferred(style: .largeTitle)
     public static let title1:      Self = .preferred(style: .title1)
@@ -27,11 +31,15 @@ public struct OBEFont {
     public static let caption1:    Self = .preferred(style: .caption1)
     public static let caption2:    Self = .preferred(style: .caption2)
     
+    //=------------------------------------------------------------------------=
     // MARK: Properties
+    //=------------------------------------------------------------------------=
     
     @usableFromInline var descriptor: UIFontDescriptor
 
+    //=------------------------------------------------------------------------=
     // MARK: Initializers
+    //=------------------------------------------------------------------------=
     
     @inlinable public init(_ descriptor: UIFontDescriptor) {
         self.descriptor = descriptor
@@ -41,16 +49,12 @@ public struct OBEFont {
         self.descriptor = font.fontDescriptor
     }
     
-    // MARK: Initializers: Static
+    //
+    // MARK: Initializers - Static
+    //=------------------------------------------------------------------------=
     
     @inlinable static func preferred(style: UIFont.TextStyle) -> Self {
         .init(.preferredFont(forTextStyle: style))
-    }
-    
-    // MARK: Conversions
-    
-    @inlinable func makeUIFont() -> UIFont {
-        .init(descriptor: descriptor, size: .zero)
     }
     
     // MARK: Transformations
@@ -61,6 +65,14 @@ public struct OBEFont {
 
     @inlinable public func monospaced(_ template: MonospaceTemplate = .text) -> Self {
         .init(descriptor.monospaced(template: template.descriptor))
+    }
+    
+    //
+    // MARK: Transformations - Conversions
+    //=------------------------------------------------------------------------=
+    
+    @inlinable func makeUIFont() -> UIFont {
+        .init(descriptor: descriptor, size: .zero)
     }
 }
 

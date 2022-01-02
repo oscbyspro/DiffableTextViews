@@ -5,7 +5,9 @@
 //  Created by Oscar Byström Ericsson on 2021-12-31.
 //
 
-// MARK: - Mode
+//*============================================================================*
+// MARK: * Mode
+//*============================================================================*
 
 @frozen @usableFromInline enum Mode {
     case showcase

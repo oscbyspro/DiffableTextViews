@@ -9,20 +9,28 @@
 
 import UIKit
 
-// MARK: - MonospaceTemplate
+//*============================================================================*
+// MARK: * MonospaceTemplate
+//*============================================================================*
 
 public struct MonospaceTemplate {
     
+    //=------------------------------------------------------------------------=
     // MARK: Instances
+    //=------------------------------------------------------------------------=
     
     public static let text   = Self(     .monospacedSystemFont(ofSize: .zero, weight: .regular))
     public static let digits = Self(.monospacedDigitSystemFont(ofSize: .zero, weight: .regular))
     
+    //=------------------------------------------------------------------------=
     // MARK: Properties
+    //=------------------------------------------------------------------------=
     
     @usableFromInline let descriptor: UIFontDescriptor
     
+    //=------------------------------------------------------------------------=
     // MARK: Initializers
+    //=------------------------------------------------------------------------=
     
     @inlinable init(_ base: UIFont) {
         self.descriptor = base.fontDescriptor

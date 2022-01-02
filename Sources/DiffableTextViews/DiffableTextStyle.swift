@@ -86,13 +86,9 @@ public extension DiffableTextStyle {
     // MARK: Process
     //=------------------------------------------------------------------------=
 
-    @inlinable func process(value: inout Value) {
-        // default implementation does nothing
-    }
+    @inlinable func process(value: inout Value) { }
 
-    @inlinable func process(snapshot: inout Snapshot) {
-        // default implementation does nothing
-    }
+    @inlinable func process(snapshot: inout Snapshot) { }
 }
 
 //=----------------------------------------------------------------------------=
