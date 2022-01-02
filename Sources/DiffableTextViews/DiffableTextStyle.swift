@@ -5,15 +5,21 @@
 //  Created by Oscar Byström Ericsson on 2021-10-02.
 //
 
-import Utilities
-
-// MARK: - DiffableTextStyle
+//*============================================================================*
+// MARK: * DiffableTextStyle
+//*============================================================================*
 
 public protocol DiffableTextStyle {
     
-    // MARK: Requirements
+    //=------------------------------------------------------------------------=
+    // MARK: Value
+    //=------------------------------------------------------------------------=
     
     associatedtype Value: Equatable
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Snapshot
+    //=------------------------------------------------------------------------=
     
     /// Snapshot for when the view is idle.
     @inlinable func snapshot(showcase value: Value) -> Snapshot
@@ -21,9 +27,17 @@ public protocol DiffableTextStyle {
     /// Snapshot for when the view is in editing mode.
     @inlinable func snapshot(editable value: Value) -> Snapshot // required (!)
     
+    //=------------------------------------------------------------------------=
+    // MARK: Parse
+    //=------------------------------------------------------------------------=
+    
     /// Value represented by the snapshot or nil if the snapshot is invalid.
     @inlinable func parse(snapshot: Snapshot) throws -> Value // required (!)
 
+    //=------------------------------------------------------------------------=
+    // MARK: Merge
+    //=------------------------------------------------------------------------=
+    
     /// Merges the current snapshot with the input snapshot proposed by the user,
     ///
     /// - Parameters:
@@ -32,6 +46,10 @@ public protocol DiffableTextStyle {
     ///     - range: indices in snapshot that content is proposed to change
     ///
     @inlinable func merge(snapshot: Snapshot, with content: Snapshot, in range: Range<Snapshot.Index>) throws -> Snapshot
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Processs
+    //=------------------------------------------------------------------------=
     
     #warning("Consider: throws.")
     /// Processes the value once whenever it is called. It is used both downstream and upstream so it can be used to constrain the value.
@@ -42,17 +60,31 @@ public protocol DiffableTextStyle {
     @inlinable func process(snapshot: inout Snapshot)
 }
 
+//=----------------------------------------------------------------------------=
+// MARK: DiffableTextStyle - Implementation
+//=----------------------------------------------------------------------------=
+
 public extension DiffableTextStyle {
     
-    // MARK: Implementation
+    //=------------------------------------------------------------------------=
+    // MARK: Snapshot
+    //=------------------------------------------------------------------------=
 
     @inlinable func snapshot(showcase value: Value) -> Snapshot {
         snapshot(editable: value)
     }
 
+    //=------------------------------------------------------------------------=
+    // MARK: Merge
+    //=------------------------------------------------------------------------=
+    
     @inlinable func merge(snapshot: Snapshot, with content: Snapshot, in range: Range<Snapshot.Index>) -> Snapshot? {
-        snapshot.replacing(range, with: content)
+        var result = snapshot; result.replaceSubrange(range, with: content); return result
     }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Process
+    //=------------------------------------------------------------------------=
 
     @inlinable func process(value: inout Value) {
         // default implementation does nothing
@@ -63,9 +95,15 @@ public extension DiffableTextStyle {
     }
 }
 
+//=----------------------------------------------------------------------------=
+// MARK: DiffableTextStyle - Utilities
+//=----------------------------------------------------------------------------=
+
 extension DiffableTextStyle {
     
-    // MARK: Utilities
+    //=------------------------------------------------------------------------=
+    // MARK: Snapshot
+    //=------------------------------------------------------------------------=
     
     @inlinable func snapshot(value: Value, mode: Mode) -> Snapshot {
         switch mode {

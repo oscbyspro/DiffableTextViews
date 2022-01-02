@@ -7,19 +7,23 @@
 
 #if canImport(UIKit)
 
-import class UIKit.UITextField
-import class UIKit.UIPress
-import class UIKit.UIPressesEvent
+import UIKit
 
-// MARK: - BasicTextField
+//*============================================================================*
+// MARK: * BasicTextField
+//*============================================================================*
 
 public final class BasicTextField: UITextField {
     
+    //=------------------------------------------------------------------------=
     // MARK: Properties
+    //=------------------------------------------------------------------------=
     
     @usableFromInline private(set) var intent: Direction? = nil
 
+    //=------------------------------------------------------------------------=
     // MARK: Presses
+    //=------------------------------------------------------------------------=
     
     public override func pressesBegan(_ presses: Set<UIPress>, with event: UIPressesEvent?) {
         processIntentStarted(presses)
@@ -41,7 +45,9 @@ public final class BasicTextField: UITextField {
         super.pressesCancelled(presses, with: event)
     }
     
-    // MARK: Presses: Helpers
+    //
+    // MARK: Presses - Intent
+    //=------------------------------------------------------------------------=
     
     @inlinable func processIntentStarted(_ presses: Set<UIPress>) {
         intent = .intent(presses)
@@ -51,5 +57,4 @@ public final class BasicTextField: UITextField {
         if intent == .intent(presses) { intent = nil }
     }
 }
-
 #endif

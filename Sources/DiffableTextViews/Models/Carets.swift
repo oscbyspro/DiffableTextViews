@@ -9,13 +9,11 @@
 #warning("Rework.")
 #warning("Rework.")
 
-import protocol Utilities.Nonempty
-
 //*============================================================================*
 // MARK: * Carets
 //*============================================================================*
 
-@usableFromInline struct Carets<Scheme: DiffableTextViews.Scheme>: BidirectionalCollection, Nonempty {
+@usableFromInline struct Carets<Scheme: DiffableTextViews.Scheme>: BidirectionalCollection {
     @usableFromInline typealias Offset = DiffableTextViews.Offset<Scheme>
     
     //=------------------------------------------------------------------------=
@@ -43,6 +41,22 @@ import protocol Utilities.Nonempty
 extension Carets {
     
     //=------------------------------------------------------------------------=
+    // MARK: Nonempty
+    //=------------------------------------------------------------------------=
+    
+    @inlinable var isEmpty: Bool {
+        false
+    }
+    
+    @inlinable var firstIndex: Index {
+        startIndex
+    }
+    
+    @inlinable var lastIndex: Index {
+        index(before: endIndex)
+    }
+    
+    //=------------------------------------------------------------------------=
     // MARK: Range
     //=------------------------------------------------------------------------=
     
@@ -68,6 +82,14 @@ extension Carets {
         Index(at: i.offset.before(character(at: i.lhs!.character)), lhs: subindex(before: i.lhs!), rhs: i.lhs!)
     }
     
+    // MARK: Traversal - Look
+    
+    @inlinable func look(start: Carets.Index, direction: Direction) -> Carets.Index {
+        direction == .forwards
+        ? self[start...].firstIndex(where: \.nonlookaheadable) ??  lastIndex
+        : self[...start].lastIndex(where: \.nonlookbehindable) ?? startIndex
+    }
+    
     //
     // MARK: Traversal - Offset
     //=------------------------------------------------------------------------=
@@ -78,14 +100,6 @@ extension Carets {
         : indices[...start].last (where: { $0.offset == offset })!
     }
     
-    // MARK: Traversal - Look
-    
-    @inlinable func look(start: Carets.Index, direction: Direction) -> Carets.Index {
-        direction == .forwards
-        ? self[start...].firstIndex(where: \.nonlookaheadable) ??  lastIndex
-        : self[...start].lastIndex(where: \.nonlookbehindable) ?? firstIndex
-    }
-
     //=------------------------------------------------------------------------=
     // MARK: Access
     //=------------------------------------------------------------------------=
@@ -111,7 +125,6 @@ extension Carets {
         return subindex < snapshot.endIndex ? snapshot[subindex] : nil
     }
     
-    #warning("Rename, maybe.")
     //
     // MARK: Access - Components - Character
     //=------------------------------------------------------------------------=

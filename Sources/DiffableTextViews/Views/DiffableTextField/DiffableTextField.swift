@@ -8,25 +8,34 @@
 #if canImport(UIKit)
 
 import SwiftUI
-import protocol Utilities.Transformable
 
-// MARK: - DiffableTextField
+//*============================================================================*
+// MARK: * DiffableTextField
+//*============================================================================*
 
-public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable, Transformable {
+public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
     public typealias Value = Style.Value
     public typealias UIViewType = BasicTextField
     public typealias Configuration = (ProxyTextField) -> Void
     
+    //=------------------------------------------------------------------------=
     // MARK: Properties
+    //=------------------------------------------------------------------------=
     
     @usableFromInline let value: Binding<Value>
     @usableFromInline let style: Style
+    
+    //
+    // MARK: Properties - Configurations
+    //=------------------------------------------------------------------------=
 
     @usableFromInline var setup:  Configuration? = nil
     @usableFromInline var update: Configuration? = nil
     @usableFromInline var submit: Configuration? = nil
 
+    //=------------------------------------------------------------------------=
     // MARK: Initializers
+    //=------------------------------------------------------------------------=
     
     @inlinable public init(_ value: Binding<Value>, style: Style) {
         self.value = value
@@ -37,36 +46,64 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable, 
         self.value = value
         self.style = style()
     }
-
+    
+    //=------------------------------------------------------------------------=
     // MARK: Transformations
+    //=------------------------------------------------------------------------=
     
     @inlinable public func setup(_ setup: Configuration?) -> Self {
-        transforming({ $0.setup = setup })
+        var result = self; result.setup = setup; return result
     }
     
     @inlinable public func update(_ update: Configuration?) -> Self {
-        transforming({ $0.update = update })
+        var result = self; result.update = update; return result
     }
     
     @inlinable public func submit(_ submit: Configuration?) -> Self {
-        transforming({ $0.submit = submit })
+        var result = self; result.submit = submit; return result
     }
 
-    // MARK: UIViewRepresentable
+    //=------------------------------------------------------------------------=
+    // MARK: Life - Coordinator
+    //=------------------------------------------------------------------------=
     
     @inlinable public func makeCoordinator() -> Coordinator {
         Coordinator()
     }
     
+    //
+    // MARK: Life - UIView
+    //=------------------------------------------------------------------------=
+    
     @inlinable public func makeUIView(context: Context) -> UIViewType {
+        
+        //=--------------------------------------=
+        // MARK: BasicTextField
+        //=--------------------------------------=
+        
         let uiView = BasicTextField()
+        uiView.delegate = context.coordinator
         uiView.setContentHuggingPriority(.defaultHigh, for: .vertical)
         uiView.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
-        uiView.delegate = context.coordinator
-        context.coordinator.downstream = ProxyTextField(uiView)
-        setup?(context.coordinator.downstream)
+        
+        //=--------------------------------------=
+        // MARK: ProxyTextField
+        //=--------------------------------------=
+        
+        let downstream = ProxyTextField(uiView)
+        context.coordinator.downstream = downstream
+        setup?(downstream)
+
+        //=--------------------------------------=
+        // MARK: Done
+        //=--------------------------------------=
+        
         return uiView
     }
+    
+    //
+    // MARK: Life - UIView - Update
+    //=------------------------------------------------------------------------=
     
     @inlinable public func updateUIView(_ uiView: UIViewType, context: Context) {
         context.coordinator.upstream = self
@@ -74,27 +111,39 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable, 
         context.coordinator.synchronize()
     }
     
-    // MARK: Coordinator
+    //*========================================================================*
+    // MARK: * Coordinator
+    //*========================================================================*
     
     public final class Coordinator: NSObject, UITextFieldDelegate {
         @usableFromInline typealias Offset = DiffableTextViews.Offset<UTF16>
         @usableFromInline typealias Cache = DiffableTextViews.Cache<UTF16, Value>
         
+        //=--------------------------------------------------------------------=
         // MARK: Properties
+        //=--------------------------------------------------------------------=
         
         @usableFromInline var upstream: DiffableTextField!
         @usableFromInline var downstream:  ProxyTextField!
         
+        //
+        // MARK: Properties - Support
+        //=--------------------------------------------------------------------=
+        
         @usableFromInline let lock =  Lock()
         @usableFromInline let cache = Cache()
         
-        // MARK: Submit
+        //=----------------------------------------------------------------------------=
+        // MARK: Delegate - Respond To Submit Events
+        //=----------------------------------------------------------------------------=
         
         @inlinable public func textFieldShouldReturn(_ textField: UITextField) -> Bool {
             upstream.submit?(downstream) == nil ? true : false
         }
         
-        // MARK: Mode
+        //=--------------------------------------------------------------------=
+        // MARK: Delegate - Respond To Mode Change Events
+        //=--------------------------------------------------------------------=
         
         @inlinable public func textFieldDidBeginEditing(_ textField: UITextField) {
             synchronize()
@@ -108,23 +157,25 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable, 
             synchronize()
         }
         
-        // MARK: Input
+        //=--------------------------------------------------------------------=
+        // MARK: Delegate - Respond To Input Events
+        //=--------------------------------------------------------------------=
         
         @inlinable public func textField(_ textField: UITextField, shouldChangeCharactersIn nsRange: NSRange, replacementString string: String) -> Bool {
             do {
                 
-                // --------------------------------- //
-                // MARK: Interpret
-                // --------------------------------- //
-                
+                //=------------------------------=
+                // MARK: Process Arguments
+                //=------------------------------=
+
                 let input = Snapshot(string, only: .content)
                 let offsets = Offset(at: nsRange.lowerBound) ..< Offset(at: nsRange.upperBound)
                 let range = cache.field.indices(at: offsets)
                 let indices = range.lowerBound.rhs! ..< range.upperBound.rhs!
                 
-                // --------------------------------- //
+                //=------------------------------=
                 // MARK: Calculate Next State
-                // --------------------------------- //
+                //=------------------------------=
                 
                 var snapshot = try upstream.style.merge(snapshot: cache.snapshot, with: input, in: indices)
                 upstream.style.process(snapshot: &snapshot)
@@ -134,9 +185,9 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable, 
                 
                 let field = cache.field.updating(selection: range.upperBound, intent: nil).updating(carets: snapshot)
                 
-                // --------------------------------- //
+                //=------------------------------=
                 // MARK: Push
-                // --------------------------------- //
+                //=------------------------------=
                 
                 Task { @MainActor [value] in
                     // async to process special commands first
@@ -150,9 +201,9 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable, 
                 
             } catch let reason {
                 
-                // --------------------------------- //
-                // MARK: Cancellation
-                // --------------------------------- //
+                //=------------------------------=
+                // MARK: Respond To Cancellation
+                //=------------------------------=
                 
                 #if DEBUG
                 
@@ -161,28 +212,30 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable, 
                 #endif
             }
             
-            // --------------------------------- //
+            //=----------------------------------=
             // MARK: Decline Automatic Insertion
-            // --------------------------------- //
+            //=----------------------------------=
             
             return false
         }
         
-        // MARK: Selection
+        //=--------------------------------------------------------------------=
+        // MARK: Respond To Selection Change Events
+        //=--------------------------------------------------------------------=
         
         @inlinable public func textFieldDidChangeSelection(_ textField: UITextField) {
             guard !lock.isLocked else { return }
             
-            // --------------------------------- //
-            // MARK: Calculate Corrected Outcome
-            // --------------------------------- //
+            //=----------------------------------=
+            // MARK: Correct Selection
+            //=----------------------------------=
             
             let selection = downstream.selection()
             let corrected = cache.field.updating(selection: selection, intent: downstream.intent)
             
-            // --------------------------------- //
+            //=----------------------------------=
             // MARK: Update Downstream If Needed
-            // --------------------------------- //
+            //=----------------------------------=
             
             if selection != corrected.selection.offsets {
                 lock.perform {
@@ -192,34 +245,36 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable, 
             }
         }
 
+        //=--------------------------------------------------------------------=
         // MARK: Synchronize
+        //=--------------------------------------------------------------------=
         
         @inlinable func synchronize() {
             
-            // --------------------------------- //
+            //=----------------------------------=
             // MARK: Pull
-            // --------------------------------- //
+            //=----------------------------------=
             
             var value = upstream.value.wrappedValue
             upstream.style.process(value: &value)
             
-            // --------------------------------- //
-            // MARK: Compare
-            // --------------------------------- //
+            //=----------------------------------=
+            // MARK: Evaluate New Values
+            //=----------------------------------=
             
             if cache.value != value || cache.mode != downstream.mode {
                 
-                // --------------------------------- //
+                //=------------------------------=
                 // MARK: Calculate Next State
-                // --------------------------------- //
+                //=------------------------------=
                 
                 var snapshot = upstream.style.snapshot(value: value, mode: downstream.mode)
                 upstream.style.process(snapshot: &snapshot)
                 let field = cache.field.updating(carets: snapshot)
                 
-                // --------------------------------- //
+                //=------------------------------=
                 // MARK: Push
-                // --------------------------------- //
+                //=------------------------------=
                 
                 self.cache.value = value
                 self.cache.field = field
@@ -227,13 +282,15 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable, 
             }
         }
         
+        //
         // MARK: Synchronize: Push
+        //=--------------------------------------------------------------------=
         
         @inlinable func push() {
             
-            // --------------------------------- //
+            //=----------------------------------=
             // MARK: Downstream
-            // --------------------------------- //
+            //=----------------------------------=
             
             lock.perform {
                 // changes to UITextField's text and selection both call
@@ -243,9 +300,9 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable, 
                 self.cache.mode = downstream.mode
             }
                         
-            // --------------------------------- //
+            //=----------------------------------=
             // MARK: Upstream
-            // --------------------------------- //
+            //=----------------------------------=
             
             if  self.upstream.value.wrappedValue != self.cache.value {
                 self.upstream.value.wrappedValue  = self.cache.value

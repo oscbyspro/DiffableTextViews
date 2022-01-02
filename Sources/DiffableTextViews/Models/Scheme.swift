@@ -11,7 +11,9 @@
 
 @usableFromInline protocol Scheme {
     
-    // MARK: Requirements
+    //=------------------------------------------------------------------------=
+    // MARK: Size
+    //=------------------------------------------------------------------------=
     
     @inlinable static func size(of character: Character) -> Int
     @inlinable static func size(of characters:   String) -> Int
@@ -24,7 +26,7 @@
 extension Character: Scheme {
     
     //=------------------------------------------------------------------------=
-    // MARK: Implementation
+    // MARK: Size
     //=------------------------------------------------------------------------=
 
     @inlinable static func size(of character: Character) -> Int { 1 }
@@ -38,7 +40,7 @@ extension Character: Scheme {
 extension UTF8: Scheme {
     
     //=------------------------------------------------------------------------=
-    // MARK: Implementation
+    // MARK: Size
     //=------------------------------------------------------------------------=
 
     @inlinable static func size(of character: Character) -> Int {  character.utf8.count }
@@ -52,7 +54,7 @@ extension UTF8: Scheme {
 extension UTF16: Scheme {
     
     //=------------------------------------------------------------------------=
-    // MARK: Implementation
+    // MARK: Size
     //=------------------------------------------------------------------------=
 
     @inlinable static func size(of character: Character) -> Int {  character.utf16.count }
@@ -66,7 +68,7 @@ extension UTF16: Scheme {
 extension UnicodeScalar: Scheme {
     
     //=------------------------------------------------------------------------=
-    // MARK: Implementation
+    // MARK: Size
     //=------------------------------------------------------------------------=
 
     @inlinable static func size(of character: Character) -> Int {  character.unicodeScalars.count }
