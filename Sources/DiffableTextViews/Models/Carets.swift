@@ -5,27 +5,44 @@
 //  Created by Oscar Byström Ericsson on 2021-10-04.
 //
 
+#warning("Rework.")
+
 import protocol Utilities.Nonempty
 
-// MARK: - Carets
+//*============================================================================*
+// MARK: * Carets
+//*============================================================================*
 
 @usableFromInline struct Carets<Scheme: DiffableTextViews.Scheme>: BidirectionalCollection, Nonempty {
     @usableFromInline typealias Offset = DiffableTextViews.Offset<Scheme>
     
+    //=------------------------------------------------------------------------=
     // MARK: Properties
+    //=------------------------------------------------------------------------=
     
     @usableFromInline let snapshot: Snapshot
     @usableFromInline let range: Range<Offset>
 
+    //=------------------------------------------------------------------------=
     // MARK: Initializers
+    //=------------------------------------------------------------------------=
     
     /// - Complexity: O(n).
     @inlinable init(snapshot: Snapshot) {
         self.snapshot = snapshot
         self.range = .zero ..< .max(in: snapshot.characters)
     }
+}
+
+//=----------------------------------------------------------------------------=
+// MARK: Carets - Collection
+//=----------------------------------------------------------------------------=
+
+extension Carets {
     
-    // MARK: Positions
+    //=------------------------------------------------------------------------=
+    // MARK: Range
+    //=------------------------------------------------------------------------=
     
     @inlinable var startIndex: Index {
         Index(at: range.lowerBound, lhs: nil, rhs: snapshot.startIndex)
@@ -35,7 +52,9 @@ import protocol Utilities.Nonempty
         Index(at: range.upperBound, lhs: snapshot.endIndex, rhs: nil)
     }
     
-    // MARK: Traverse
+    //=------------------------------------------------------------------------=
+    // MARK: Indices
+    //=------------------------------------------------------------------------=
     
     @inlinable func index(after i: Index) -> Index {
         Index(at: i.offset.after(character(at: i.rhs!.character)),  lhs: i.rhs!,  rhs: subindex(after: i.rhs!))
@@ -45,28 +64,45 @@ import protocol Utilities.Nonempty
         Index(at: i.offset.before(character(at: i.lhs!.character)), lhs: subindex(before: i.lhs!), rhs: i.lhs!)
     }
     
+    //
+    // MARK: Indices - Offset
+    //=------------------------------------------------------------------------=
+    
     /// - Complexity: O(n).
-    @inlinable func index(at destination: Offset, start: Index) -> Index {
-        if start.offset <= destination {
-            return indices[start...].first(where: { $0.offset == destination })!
+    @inlinable func index(at offset: Offset, start: Index) -> Index {
+        if start.offset <= offset {
+            return indices[start...].first(where: { $0.offset == offset })!
         } else {
-            return indices[...start].last(where:  { $0.offset == destination })!
+            return indices[...start].last(where:  { $0.offset == offset })!
         }
     }
-    
-    // MARK: Traverse: Helpers
-    
-    @inlinable func character(at index: String.Index) -> Character? {
-        index < snapshot.characters.endIndex ? snapshot.characters[index] : nil
-    }
 
-    // MARK: Subscripts
+    //=------------------------------------------------------------------------=
+    // MARK: Access
+    //=------------------------------------------------------------------------=
     
     @inlinable subscript(position: Index) -> Peek {
         .init(lhs: subelement(at: position.lhs), rhs: subelement(at: position.rhs))
     }
     
-    // MARK: Subscripts: Helpers
+    #warning("Rename, maybe.")
+    //
+    // MARK: Access - Character
+    //=------------------------------------------------------------------------=
+    
+    #warning("Move, make subscript that yields, maybe.")
+    @inlinable func character(at index: String.Index) -> Character? {
+        index < snapshot.characters.endIndex ? snapshot.characters[index] : nil
+    }
+
+    #warning("WIP.")
+    @inlinable subscript(character index: String.Index) -> Character? {
+        index < snapshot.characters.endIndex ? snapshot.characters[index] : nil
+    }
+    
+    //
+    // MARK: Access - Snapshot
+    //=------------------------------------------------------------------------=
 
     @inlinable func subindex(after subindex: Snapshot.Index) -> Snapshot.Index? {
         subindex < snapshot.endIndex ? snapshot.index(after: subindex) : nil
@@ -76,46 +112,53 @@ import protocol Utilities.Nonempty
         subindex > snapshot.startIndex ? snapshot.index(before: subindex) : nil
     }
         
-    @inlinable func subelement(at index: Snapshot.Index?) -> Symbol? {
-        guard let index = index, index < snapshot.endIndex else { return nil }; return snapshot[index]
+    @inlinable func subelement(at subindex: Snapshot.Index?) -> Snapshot.Element? {
+        guard let subindex = subindex else { return nil }
+        return subindex < snapshot.endIndex ? snapshot[subindex] : nil
     }
     
-    // MARK: Index
+    //*========================================================================*
+    // MARK: * Index
+    //*========================================================================*
     
     @usableFromInline struct Index: Comparable {
         
+        //=--------------------------------------------------------------------=
         // MARK: Properties
+        //=--------------------------------------------------------------------=
         
         @usableFromInline let offset: Offset
         @usableFromInline let lhs: Snapshot.Index?
         @usableFromInline let rhs: Snapshot.Index?
         
+        //=--------------------------------------------------------------------=
         // MARK: Initializers
+        //=--------------------------------------------------------------------=
 
-        @inlinable init(at position: Offset, lhs: Snapshot.Index, rhs: Snapshot.Index?) {
-            self.offset = position
+        @inlinable init(at offset: Offset, lhs: Snapshot.Index, rhs: Snapshot.Index?) {
+            self.offset = offset
             self.lhs = lhs
             self.rhs = rhs
         }
         
-        @inlinable init(at position: Offset, lhs: Snapshot.Index?, rhs: Snapshot.Index) {
-            self.offset = position
+        @inlinable init(at offset: Offset, lhs: Snapshot.Index?, rhs: Snapshot.Index) {
+            self.offset = offset
             self.lhs = lhs
             self.rhs = rhs
         }
         
-        // MARK: Equations
+        //=--------------------------------------------------------------------=
+        // MARK: Comparable
+        //=--------------------------------------------------------------------=
         
         @inlinable static func == (lhs: Self, rhs: Self) -> Bool {
             lhs.rhs == rhs.rhs
         }
         
-        // MARK: Comparisons
-        
         @inlinable static func < (lhs: Self, rhs: Self) -> Bool {
-            guard let a = lhs.rhs else { return false }
-            guard let b = rhs.rhs else { return  true }
-            return a < b
+            guard let l = lhs.rhs else { return false }
+            guard let r = rhs.rhs else { return  true }
+            return l < r
         }
     }
 }

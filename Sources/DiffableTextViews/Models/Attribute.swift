@@ -5,7 +5,9 @@
 //  Created by Oscar Byström Ericsson on 2021-10-02.
 //
 
-// MARK: - Attribute
+//*============================================================================*
+// MARK: * Attribute
+//*============================================================================*
 
 /// A set of options, where each option represents a specialized behavior.
 ///
@@ -18,17 +20,9 @@
 ///
 public struct Attribute: OptionSet {
     
-    // MARK: Properties
-    
-    public let rawValue: UInt8
-    
-    // MARK: Initializers
-    
-    @inlinable public init(rawValue: UInt8) {
-        self.rawValue = rawValue
-    }
-
-    // MARK: Instances: Singular
+    //=------------------------------------------------------------------------=
+    // MARK: Instances
+    //=------------------------------------------------------------------------=
     
     /// Signifies that the symbol is part of a text's formatting and therefore not real.
     public static let formatting = Self(rawValue: 1 << 0)
@@ -41,7 +35,9 @@ public struct Attribute: OptionSet {
     /// Signifies that the symbol should direct the user's text selection backwards.
     public static let suffixing  = Self(rawValue: 1 << 4)
     
-    // MARK: Instances: Composites
+    //
+    // MARK: Instances - Composites
+    //=------------------------------------------------------------------------=
     
     /// Default behavior used to describe plain text. Contains no options.
     public static let content = Self([])
@@ -51,19 +47,33 @@ public struct Attribute: OptionSet {
     public static let suffix  = Self([.formatting, .insertable, .removable, .suffixing])
     /// Contains: .formatting, .insertable, .removable, .prefixing, .suffixing.
     public static let spacer  = Self([.formatting, .insertable, .removable, .prefixing, .suffixing])
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Properties
+    //=------------------------------------------------------------------------=
+    
+    public let rawValue: UInt8
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Initializers
+    //=------------------------------------------------------------------------=
+    
+    @inlinable public init(rawValue: UInt8) {
+        self.rawValue = rawValue
+    }
 }
 
-// MARK: - Attribute: Descriptions
+//=----------------------------------------------------------------------------=
+// MARK: Attribute - CustomStringConvertible
+//=----------------------------------------------------------------------------=
 
-extension Attribute: CustomStringConvertible, CustomDebugStringConvertible {
+extension Attribute: CustomStringConvertible {
     
-    // MARK: Implementation
+    //=------------------------------------------------------------------------=
+    // MARK: Description
+    //=------------------------------------------------------------------------=
     
     public var description: String {
         String(describing: rawValue)
-    }
-    
-    public var debugDescription: String {
-        description
     }
 }

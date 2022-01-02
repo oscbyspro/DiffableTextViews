@@ -5,6 +5,8 @@
 //  Created by Oscar Byström Ericsson on 2021-12-16.
 //
 
+#warning("Remove, maybe.")
+
 // MARK: - Transformable
 
 public protocol  Transformable { }

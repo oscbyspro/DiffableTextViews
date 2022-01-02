@@ -5,6 +5,8 @@
 //  Created by Oscar Byström Ericsson on 2021-12-17.
 //
 
+#warning("Remove, maybe.")
+
 // MARK: - Nonempty
 
 public protocol Nonempty { }
