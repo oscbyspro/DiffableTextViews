@@ -73,11 +73,17 @@ extension Carets {
     //=------------------------------------------------------------------------=
     
     @inlinable func index(at offset: Offset, start: Index) -> Index {
-        if start.offset <= offset {
-            return indices[start...].first(where: { $0.offset == offset })!
-        } else {
-            return indices[...start].last(where:  { $0.offset == offset })!
-        }
+        start.offset <= offset
+        ? indices[start...].first(where: { $0.offset == offset })!
+        : indices[...start].last (where: { $0.offset == offset })!
+    }
+    
+    // MARK: Traversal - Look
+    
+    @inlinable func look(start: Carets.Index, direction: Direction) -> Carets.Index {
+        direction == .forwards
+        ? self[start...].firstIndex(where: \.nonlookaheadable) ??  lastIndex
+        : self[...start].lastIndex(where: \.nonlookbehindable) ?? firstIndex
     }
 
     //=------------------------------------------------------------------------=

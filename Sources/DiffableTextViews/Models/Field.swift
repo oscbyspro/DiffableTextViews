@@ -5,26 +5,25 @@
 //  Created by Oscar Byström Ericsson on 2021-09-27.
 //
 
-#warning("Continue.")
-#warning("Continue.")
-#warning("Continue.")
+//*============================================================================*
+// MARK: * Field
+//*============================================================================*
 
-#warning("Remove, maybe.")
-import protocol Utilities.Transformable
-
-// MARK: - Field
-
-@usableFromInline struct Field<Scheme: DiffableTextViews.Scheme>: Transformable {
+@usableFromInline struct Field<Scheme: DiffableTextViews.Scheme> {
     @usableFromInline typealias Offset = DiffableTextViews.Offset<Scheme>
     @usableFromInline typealias Carets = DiffableTextViews.Carets<Scheme>
     @usableFromInline typealias Selection = DiffableTextViews.Selection<Scheme>
 
+    //=------------------------------------------------------------------------=
     // MARK: Properties
+    //=------------------------------------------------------------------------=
     
     @usableFromInline let carets: Carets
     @usableFromInline var selection: Selection
 
+    //=------------------------------------------------------------------------=
     // MARK: Initializers
+    //=------------------------------------------------------------------------=
     
     @inlinable init() {
         self.init(snapshot: Snapshot())
@@ -39,21 +38,17 @@ import protocol Utilities.Transformable
         self.carets = carets
         self.selection = selection
     }
-    
-    // MARK: Utilities
-    
-    @inlinable func indices(at offsets: Range<Offset>) -> Range<Carets.Index> {
-        let upperBound = carets.index(at: offsets.upperBound, start: selection.upperBound)
-        var lowerBound = upperBound
-        
-        if !offsets.isEmpty {
-            lowerBound = carets.index(at: offsets.lowerBound, start: selection.lowerBound)
-        }
-        
-        return lowerBound ..< upperBound
-    }
-    
-    // MARK: Transformations: Carets
+}
+
+//=----------------------------------------------------------------------------=
+// MARK: Field - Update
+//=----------------------------------------------------------------------------=
+
+extension Field {
+
+    //=------------------------------------------------------------------------=
+    // MARK: Carets
+    //=------------------------------------------------------------------------=
     
     @inlinable func updating(carets newValue: Carets) -> Self {
         transformingAccordingToCarets(newValue).transformingAccordingToAttributes()
@@ -63,7 +58,9 @@ import protocol Utilities.Transformable
         updating(carets: Carets(snapshot: newValue))
     }
 
-    // MARK: Transformations: Selection
+    //=------------------------------------------------------------------------=
+    // MARK: Selection
+    //=------------------------------------------------------------------------=
     
     @inlinable func updating(selection newValue: Selection, intent: Direction?) -> Self {
         transformingAccordingToSelection(newValue, intent: intent).transformingAccordingToAttributes()
@@ -85,63 +82,66 @@ import protocol Utilities.Transformable
         updating(selection: Selection(range: indices(at: newValue ..< newValue)), intent: intent)
     }
     
-    // MARK: Transformations: Helpers
+    //
+    // MARK: Selection - Helpers
+    //=------------------------------------------------------------------------=
     
-    @inlinable func look(_ start: Carets.Index, direction: Direction) -> Carets.Index {
-        direction == .forwards ? lookahead(start) : lookbehind(start)
-    }
+    @inlinable func indices(at offsets: Range<Offset>) -> Range<Carets.Index> {
+        let upperBound = carets.index(at: offsets.upperBound, start: selection.upperBound)
+        var lowerBound = upperBound
 
-    @inlinable func lookahead(_ start: Carets.Index) -> Carets.Index {
-        carets[start...].firstIndex(where: \.nonlookaheadable) ?? carets.lastIndex
+        if !offsets.isEmpty {
+            lowerBound = carets.index(at: offsets.lowerBound, start: selection.lowerBound)
+        }
+
+        return lowerBound ..< upperBound
     }
-    
-    @inlinable func lookbehind(_ start: Carets.Index) -> Carets.Index {
-        carets[...start].lastIndex(where: \.nonlookbehindable) ?? carets.firstIndex
-    }
-    
-    // MARK: Transformations: * Attributes *
+}
+
+//=----------------------------------------------------------------------------=
+// MARK: Field - Tranformations
+//=----------------------------------------------------------------------------=
+
+extension Field {
+
+    //=------------------------------------------------------------------------=
+    // MARK: Attributes
+    //=------------------------------------------------------------------------=
                     
     @inlinable func transformingAccordingToAttributes() -> Field {
         func position(start: Carets.Index, preference: Direction) -> Carets.Index {
-            look(start, direction: carets[start].directionOfAttributes() ?? preference)
+            carets.look(start: start, direction: carets[start].directionOfAttributes() ?? preference)
         }
 
-        // --------------------------------- //
-
-        return transforming({ $0.selection = selection.preferential(position) })
+        var result = self; result.selection = selection.preferential(position); return result
     }
     
-    
-    // MARK: Transformations: * Carets *
+    //=------------------------------------------------------------------------=
+    // MARK: Carets
+    //=------------------------------------------------------------------------=
             
     @inlinable func transformingAccordingToCarets(_ newValue: Carets) -> Field {
         func position(current: Carets.SubSequence, next: Carets.SubSequence) -> Carets.Index {
             _Field.similarities(current: current.lazy.map(\.rhs), next: next.lazy.map(\.rhs)).startIndex
         }
-        
-        // --------------------------------- //
-        
+                
         let upperBound = position(current: carets.suffix(from: selection.upperBound),   next: newValue[...])
         let lowerBound = position(current: carets[selection.range], next: newValue.prefix(upTo: upperBound))
-                
-        // --------------------------------- //
         
         return Field(carets: newValue, selection: Selection(range: lowerBound ..< upperBound))
     }
 
-    // MARK: Transformations: * Selection *
+    //=------------------------------------------------------------------------=
+    // MARK: Selection
+    //=------------------------------------------------------------------------=
         
     @inlinable func transformingAccordingToSelection(_ newValue: Selection, intent: Direction?) -> Field {
         func position(start: Carets.Index, preference: Direction) -> Carets.Index {
             if carets[start].nonlookable(direction: preference) { return start }
-                        
-            // --------------------------------- //
             
             let direction = intent ?? preference
-            let next = look(start, direction: direction)
-            
-            // --------------------------------- //
-            
+            let next = carets.look(start: start, direction: direction)
+                        
             switch direction {
             case preference: return next
             case  .forwards: return next < carets.lastIndex  ? carets.index(after:  next) : next
@@ -149,23 +149,27 @@ import protocol Utilities.Transformable
             }
         }
         
-        // --------------------------------- //
-
-        return transforming({ $0.selection = newValue.preferential(position) })
+        var result = self; result.selection = newValue.preferential(position); return result
     }
 }
 
-// MARK: - Field x Namespace
+//=------------------------------------------------------------------------=
+// MARK: Field - Namespace
+//=------------------------------------------------------------------------=
 
 @usableFromInline enum _Field {
     
+    //=------------------------------------------------------------------------=
     // MARK: Similarities
+    //=------------------------------------------------------------------------=
     
     @inlinable static func similarities<Current: BidirectionalCollection, Next: BidirectionalCollection>(current lhs: Current, next rhs: Next) -> Next.SubSequence where Current.Element == Symbol, Next.Element == Symbol {
         Similarities(lhs: lhs, rhs: rhs, options: options).rhsSuffix()
     }
     
-    // MARK: Similarities: Options
+    //
+    // MARK: Similarities - Options
+    //=------------------------------------------------------------------------=
     
     @usableFromInline static let options: SimilaritiesOptions<Symbol> = {
         func step(current lhs: Symbol, next rhs: Symbol) -> SimilaritiesInstruction {
@@ -174,8 +178,6 @@ import protocol Utilities.Transformable
             else if rhs.attribute.contains(.insertable) { return .continueOnRHS }
             else                                        { return .none          }
         }
-        
-        // --------------------------------- //
         
         return .init(comparison: .instruction(step), inspection: .only(Symbol.is(non: .formatting)))
     }()

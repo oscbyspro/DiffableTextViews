@@ -37,7 +37,7 @@ public struct Snapshot: BidirectionalCollection, RangeReplaceableCollection {
         self._characters = ""
         self._attributes = []
     }
-    
+
     @inlinable public init(_ characters: String, only attribute: Attribute) {
         self._characters = characters
         self._attributes = Attributes(repeating: attribute, count: characters.count)
@@ -104,11 +104,13 @@ public extension Snapshot {
     //=------------------------------------------------------------------------=
     
     @inlinable var startIndex: Index {
-        Index(character: _characters.startIndex, attribute: _attributes.startIndex)
+        Index(character: _characters.startIndex,
+              attribute: _attributes.startIndex)
     }
 
     @inlinable var endIndex: Index {
-        Index(character: _characters.endIndex, attribute: _attributes.endIndex)
+        Index(character: _characters.endIndex,
+              attribute: _attributes.endIndex)
     }
     
     //=------------------------------------------------------------------------=
@@ -116,11 +118,13 @@ public extension Snapshot {
     //=------------------------------------------------------------------------=
     
     @inlinable func index(after i: Index) -> Index {
-        Index(character: _characters.index(after:  i.character), attribute: _attributes.index(after: i.attribute))
+        Index(character: _characters.index(after: i.character),
+              attribute: _attributes.index(after: i.attribute))
     }
     
     @inlinable func index(before i: Index) -> Index {
-        Index(character: _characters.index(before: i.character), attribute: _attributes.index(before: i.attribute))
+        Index(character: _characters.index(before: i.character),
+              attribute: _attributes.index(before: i.attribute))
     }
     
     //=------------------------------------------------------------------------=
@@ -156,8 +160,12 @@ public extension Snapshot {
     //=------------------------------------------------------------------------=
 
     @inlinable mutating func replaceSubrange<C: Collection>(_ range: Range<Index>, with elements: C) where C.Element == Element {
-        _characters.replaceSubrange(range.lowerBound.character ..< range.upperBound.character, with: elements.lazy.map(\.character))
-        _attributes.replaceSubrange(range.lowerBound.attribute ..< range.upperBound.attribute, with: elements.lazy.map(\.attribute))
+        _characters.replaceSubrange(
+            range.lowerBound.character ..< range.upperBound.character,
+            with: elements.lazy.map(\.character))
+        _attributes.replaceSubrange(
+            range.lowerBound.attribute ..< range.upperBound.attribute,
+            with: elements.lazy.map(\.attribute))
     }
     
     //
@@ -185,11 +193,10 @@ public extension Snapshot {
     // MARK: Attributes
     //=------------------------------------------------------------------------=
     
-    #warning("Short divs.")
     @inlinable mutating func transform(
         attributes index: Index,
         with transformation: (inout Attribute) -> Void) {
-        //=----------------------------=
+        
         transformation(&_attributes[index.attribute])
     }
     
@@ -197,7 +204,7 @@ public extension Snapshot {
         attributes sequence: S,
         with transformation: (inout Attribute) -> Void)
         where S.Element == Index {
-        //=----------------------------=
+        
         for index in sequence {
             transform(attributes: index, with: transformation)
         }
@@ -207,7 +214,7 @@ public extension Snapshot {
         attributes range: R,
         with transformation: (inout Attribute) -> Void)
         where R.Bound == Index {
-        //=----------------------------=
+        
         transform(attributes: indices[range.relative(to: self)], with: transformation)
     }
 }
