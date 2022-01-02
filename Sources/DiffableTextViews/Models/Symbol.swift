@@ -5,14 +5,11 @@
 //  Created by Oscar Byström Ericsson on 2021-09-24.
 //
 
-#warning("Remove, maybe.")
-import protocol Utilities.Transformable
-
 //*============================================================================*
 // MARK: * Symbol
 //*============================================================================*
 
-public struct Symbol: Equatable, Transformable {
+public struct Symbol: Equatable {
     
     //=------------------------------------------------------------------------=
     // MARK: Properties
@@ -50,25 +47,29 @@ public struct Symbol: Equatable, Transformable {
         Self(character, attribute: .spacer)
     }
 
+    //=------------------------------------------------------------------------=
     // MARK: Predicates
+    //=------------------------------------------------------------------------=
     
     @inlinable public func `is`(_ attribute: Attribute) -> Bool {
         self.attribute.contains(attribute)
     }
     
     @inlinable public func `is`(non attribute: Attribute) -> Bool {
-        !self.attribute.contains(attribute)
+        self.attribute.contains(attribute) == false
     }
     
+    //
     // MARK: Predicates: Static
+    //=------------------------------------------------------------------------=
     
-    @inlinable public static func `is`(_ attribute: Attribute) -> (Self) -> Bool {{
-        $0.is(attribute)
-    }}
+    @inlinable public static func `is`(_ attribute: Attribute) -> (Self) -> Bool {
+        { $0.attribute.contains(attribute) }
+    }
     
-    @inlinable public static func `is`(non attribute: Attribute) -> (Self) -> Bool {{
-        $0.is(non: attribute)
-    }}
+    @inlinable public static func `is`(non attribute: Attribute) -> (Self) -> Bool {
+        { $0.attribute.contains(attribute) == false }
+    }
 }
 
 //=----------------------------------------------------------------------------=
