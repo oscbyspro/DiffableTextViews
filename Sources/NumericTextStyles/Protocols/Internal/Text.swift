@@ -5,15 +5,23 @@
 //  Created by Oscar Byström Ericsson on 2021-12-20.
 //
 
-// MARK: - Text
+//*============================================================================*
+// MARK: * Text
+//*============================================================================*
 
 /// A system representation of the conforming object.
 @usableFromInline protocol Text {
     
-    // MARK: Requirements
+    //=------------------------------------------------------------------------=
+    // MARK: Initializers
+    //=------------------------------------------------------------------------=
     
     /// Creates an empty instance.
     @inlinable init()
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Properties
+    //=------------------------------------------------------------------------=
     
     /// A sytem representation of the instance.
     @inlinable var characters: String { get }    
