@@ -5,11 +5,15 @@
 //  Created by Oscar Byström Ericsson on 2021-12-21.
 //
 
-// MARK: - Boundable
+//*============================================================================*
+// MARK: * Boundable
+//*============================================================================*
 
 public protocol Boundable: Comparable {
     
-    // MARK: Requirements
+    //=------------------------------------------------------------------------=
+    // MARK: Values
+    //=------------------------------------------------------------------------=
     
     /// The zero value.
     @inlinable static var zero: Self { get }
@@ -21,24 +25,32 @@ public protocol Boundable: Comparable {
     @inlinable static var maxLosslessValue: Self { get }
 }
 
-// MARK: - Boundable x FloatingPoint
+//*============================================================================*
+// MARK: * Boundable x Floating Point
+//*============================================================================*
 
 @usableFromInline protocol BoundableFloatingPoint: Boundable, BinaryFloatingPoint { }
 extension BoundableFloatingPoint {
     
-    // MARK: Implementation
+    //=------------------------------------------------------------------------=
+    // MARK: Values
+    //=------------------------------------------------------------------------=
     
     @inlinable public static var minLosslessValue: Self {
         -maxLosslessValue
     }
 }
 
-// MARK: - Boundable x Integer
+//*============================================================================*
+// MARK: * Boundable x Integer
+//*============================================================================*
 
 @usableFromInline protocol BoundableInteger: Boundable, FixedWidthInteger { }
 extension BoundableInteger {
     
-    // MARK: Implementation
+    //=------------------------------------------------------------------------=
+    // MARK: Values
+    //=------------------------------------------------------------------------=
     
     @inlinable public static var minLosslessValue: Self { min }
     @inlinable public static var maxLosslessValue: Self { max }

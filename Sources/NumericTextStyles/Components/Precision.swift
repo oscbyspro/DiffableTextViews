@@ -62,13 +62,13 @@ public struct Precision<Value: Precise> {
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: Precision - SignificantDigitsPrecision
+// MARK: Precision - Initializers - Significant Digits
 //=----------------------------------------------------------------------------=
 
 public extension Precision {
 
-    //=------------------------------------------------------------------------=
-    // MARK: Limits
+    //=------------------------------------------------------------------------
+    // MARK: Static - Limits
     //=------------------------------------------------------------------------=
     
     @inlinable static func digits<R: RangeExpression>(_ significant: R) -> Self where R.Bound == Int {
@@ -76,7 +76,7 @@ public extension Precision {
     }
     
     //=------------------------------------------------------------------------=
-    // MARK: Length
+    // MARK: Static - Length
     //=------------------------------------------------------------------------=
     
     @inlinable static func digits(_ significant: Int) -> Self {
@@ -84,7 +84,7 @@ public extension Precision {
     }
 
     //=------------------------------------------------------------------------=
-    // MARK: Named
+    // MARK: Static - Named
     //=------------------------------------------------------------------------=
             
     @inlinable static var standard: Self {
@@ -93,13 +93,13 @@ public extension Precision {
 }
 
 //=------------------------------------------------------------------------=
-// MARK: Precision - IntegerAndFractionLengthPrecision
+// MARK: Precision - Initializers - Integer And Fraction Length
 //=------------------------------------------------------------------------=
 
 public extension Precision where Value: PreciseFloatingPoint {
     
     //=------------------------------------------------------------------------=
-    // MARK: Limits
+    // MARK: Static - Limits
     //=------------------------------------------------------------------------=
 
     @inlinable static func digits<R0: RangeExpression, R1: RangeExpression>(integer: R0, fraction: R1) -> Self where R0.Bound == Int, R1.Bound == Int {
@@ -115,7 +115,7 @@ public extension Precision where Value: PreciseFloatingPoint {
     }
     
     //=------------------------------------------------------------------------=
-    // MARK: Mixed
+    // MARK: Static - Mixed
     //=------------------------------------------------------------------------=
     
     @inlinable static func digits<R: RangeExpression>(integer: R, fraction: Int) -> Self where R.Bound == Int {
@@ -127,7 +127,7 @@ public extension Precision where Value: PreciseFloatingPoint {
     }
     
     //=------------------------------------------------------------------------=
-    // MARK: Length
+    // MARK: Static - Length
     //=------------------------------------------------------------------------=
     
     @inlinable static func digits(integer: Int, fraction: Int) -> Self {
@@ -144,7 +144,7 @@ public extension Precision where Value: PreciseFloatingPoint {
 }
 
 //*============================================================================*
-// MARK: * Precision - Namespace
+// MARK: * Precision x Namespace
 //*============================================================================*
 
 @usableFromInline enum _Precision {
@@ -202,7 +202,7 @@ public extension Precision where Value: PreciseFloatingPoint {
 }
 
 //*============================================================================*
-// MARK: * Precision - PrecisionImplementation
+// MARK: * Precision x Implementation
 //*============================================================================*
 
 @usableFromInline protocol PrecisionImplementation {
@@ -221,7 +221,7 @@ public extension Precision where Value: PreciseFloatingPoint {
 }
 
 //*============================================================================*
-// MARK: * Precision - SignificantDigitsPrecision
+// MARK: * Precision x Significant Digits
 //*============================================================================*
 
 @usableFromInline struct SignificantDigitsPrecision<Value: Precise>: PrecisionImplementation {
@@ -259,7 +259,7 @@ public extension Precision where Value: PreciseFloatingPoint {
 }
 
 //*============================================================================*
-// MARK: * Precision - IntegerAndFractionLengthPrecision
+// MARK: * Precision x Integer And Fraction Length
 //*============================================================================*
 
 @usableFromInline struct IntegerAndFractionLengthPrecision<Value: Precise>: PrecisionImplementation {

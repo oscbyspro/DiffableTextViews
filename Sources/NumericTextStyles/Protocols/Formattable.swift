@@ -5,23 +5,27 @@
 //  Created by Oscar Byström Ericsson on 2021-12-21.
 //
 
-import struct Foundation.Locale
-import protocol Foundation.FormatStyle
-import struct Foundation.FloatingPointFormatStyle
-import struct Foundation.IntegerFormatStyle
-import enum Foundation.NumberFormatStyleConfiguration
-import struct Quick.Redacted
+import Foundation
+import Quick
 
-// MARK: - Formattable
+//*============================================================================*
+// MARK: * Formattable
+//*============================================================================*
 
 public protocol Formattable {
     typealias PrecisionStyle = NumberFormatStyleConfiguration.Precision
     typealias SeparatorStyle = NumberFormatStyleConfiguration.DecimalSeparatorDisplayStrategy
 
-    // MARK: Requirements
+    //=------------------------------------------------------------------------=
+    // MARK: Types
+    //=------------------------------------------------------------------------=
     
     associatedtype FormatStyle: Foundation.FormatStyle where FormatStyle.FormatInput == Self, FormatStyle.FormatOutput == String
         
+    //=------------------------------------------------------------------------=
+    // MARK: Initializers - Static
+    //=------------------------------------------------------------------------=
+    
     /// Interprets a system description of this type and returns an instance of it the description is valid, else it returns nil.
     ///
     /// System formatted means that fraction separators appear as dots and positive/negative signs appear as single character plus/minus prefixes, etc.
@@ -31,13 +35,23 @@ public protocol Formattable {
     ///
     @inlinable static func make(description: String) -> Optional<Self>
     
+    //=------------------------------------------------------------------------=
+    // MARK: Styles
+    //=------------------------------------------------------------------------=
+    
     /// Creates a format style instance configured with the function's parameters.
     @inlinable static func style(locale: Locale, precision: PrecisionStyle, separator: SeparatorStyle) -> FormatStyle
 }
 
+//=----------------------------------------------------------------------------=
+// MARK: Formattable - Utilities
+//=----------------------------------------------------------------------------=
+
 extension Formattable {
     
+    //=------------------------------------------------------------------------=
     // MARK: Initializers
+    //=------------------------------------------------------------------------=
     
     @inlinable init(number: Number) throws {
         let description = number.characters
@@ -50,44 +64,72 @@ extension Formattable {
     }
 }
 
-// MARK: - Formattable x FloatingPoint
+//*============================================================================*
+// MARK: * Formattable x Floating Point
+//*============================================================================*
 
 @usableFromInline protocol FormattableFloatingPoint: Formattable, BinaryFloatingPoint where FormatStyle == FloatingPointFormatStyle<Self> {
     
-    // MARK: Requirements
+    //=------------------------------------------------------------------------=
+    // MARK: Initializers
+    //=------------------------------------------------------------------------=
     
     @inlinable init?(_ description: String)
 }
 
+//=----------------------------------------------------------------------------=
+// MARK: Formattable x Floating Point - Implementation
+//=----------------------------------------------------------------------------=
+
 extension FormattableFloatingPoint {
     
-    // MARK: Implementation
+    //=------------------------------------------------------------------------=
+    // MARK: Initializers - Static
+    //=------------------------------------------------------------------------=
 
     @inlinable public static func make(description: String) -> Optional<Self> {
         .init(description)
     }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Styles
+    //=------------------------------------------------------------------------=
     
     @inlinable public static func style(locale: Locale, precision: PrecisionStyle, separator: SeparatorStyle) -> FormatStyle {
         .init(locale: locale).precision(precision).decimalSeparator(strategy: separator)
     }
 }
 
-// MARK: - Formattable x Integer
+//*============================================================================*
+// MARK: * Formattable x Integer
+//*============================================================================*
 
 @usableFromInline protocol FormattableInteger: Formattable, FixedWidthInteger where FormatStyle == IntegerFormatStyle<Self> {
     
-    // MARK: Requirements
+    //=------------------------------------------------------------------------=
+    // MARK: Initializers
+    //=------------------------------------------------------------------------=
     
     @inlinable init?(_ description: String)
 }
 
+//=----------------------------------------------------------------------------=
+// MARK: Formattable x Integer - Implementation
+//=----------------------------------------------------------------------------=
+
 extension FormattableInteger {
     
-    // MARK: Implementation
+    //=------------------------------------------------------------------------=
+    // MARK: Initializers - Static
+    //=------------------------------------------------------------------------=
     
     @inlinable public static func make(description: String) -> Optional<Self> {
         .init(description)
     }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Styles
+    //=------------------------------------------------------------------------=
     
     @inlinable public static func style(locale: Locale, precision: PrecisionStyle, separator: SeparatorStyle) -> FormatStyle {
         .init(locale: locale).precision(precision).decimalSeparator(strategy: separator)
