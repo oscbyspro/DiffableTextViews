@@ -5,32 +5,36 @@
 //  Created by Oscar Byström Ericsson on 2021-11-07.
 //
 
-import   struct Foundation.Decimal
-import protocol DiffableTextViews.DiffableTextStyle
+import DiffableTextViews
+import Foundation
 
-// MARK: - UInts
+//*============================================================================*
+// MARK: * Decimals
+//*============================================================================*
 
-public extension DiffableTextStyle where Self == NumericTextStyle<UInt> {
+public extension DiffableTextStyle where Self == NumericTextStyle<Decimal> {
     @inlinable static var numeric: Self { .init() }
 }
 
-public extension DiffableTextStyle where Self == NumericTextStyle<UInt8> {
+//*============================================================================*
+// MARK: * Floats
+//*============================================================================*
+
+public extension DiffableTextStyle where Self == NumericTextStyle<Float16> {
     @inlinable static var numeric: Self { .init() }
 }
 
-public extension DiffableTextStyle where Self == NumericTextStyle<UInt16> {
+public extension DiffableTextStyle where Self == NumericTextStyle<Float32> {
     @inlinable static var numeric: Self { .init() }
 }
 
-public extension DiffableTextStyle where Self == NumericTextStyle<UInt32> {
+public extension DiffableTextStyle where Self == NumericTextStyle<Float64> {
     @inlinable static var numeric: Self { .init() }
 }
 
-public extension DiffableTextStyle where Self == NumericTextStyle<UInt64> {
-    @inlinable static var numeric: Self { .init() }
-}
-
-// MARK: - Ints
+//*============================================================================*
+// MARK: * Ints
+//*============================================================================*
 
 public extension DiffableTextStyle where Self == NumericTextStyle<Int> {
     @inlinable static var numeric: Self { .init() }
@@ -52,22 +56,26 @@ public extension DiffableTextStyle where Self == NumericTextStyle<Int64> {
     @inlinable static var numeric: Self { .init() }
 }
 
-// MARK: - Floats
+//*============================================================================*
+// MARK: * UInts
+//*============================================================================*
 
-public extension DiffableTextStyle where Self == NumericTextStyle<Float16> {
+public extension DiffableTextStyle where Self == NumericTextStyle<UInt> {
     @inlinable static var numeric: Self { .init() }
 }
 
-public extension DiffableTextStyle where Self == NumericTextStyle<Float32> {
+public extension DiffableTextStyle where Self == NumericTextStyle<UInt8> {
     @inlinable static var numeric: Self { .init() }
 }
 
-public extension DiffableTextStyle where Self == NumericTextStyle<Float64> {
+public extension DiffableTextStyle where Self == NumericTextStyle<UInt16> {
     @inlinable static var numeric: Self { .init() }
 }
 
-// MARK: - Decimals
+public extension DiffableTextStyle where Self == NumericTextStyle<UInt32> {
+    @inlinable static var numeric: Self { .init() }
+}
 
-public extension DiffableTextStyle where Self == NumericTextStyle<Decimal> {
+public extension DiffableTextStyle where Self == NumericTextStyle<UInt64> {
     @inlinable static var numeric: Self { .init() }
 }

@@ -28,13 +28,6 @@ public protocol DiffableTextStyle {
     @inlinable func snapshot(editable value: Value) -> Snapshot // required (!)
     
     //=------------------------------------------------------------------------=
-    // MARK: Parse
-    //=------------------------------------------------------------------------=
-    
-    /// Value represented by the snapshot or nil if the snapshot is invalid.
-    @inlinable func parse(snapshot: Snapshot) throws -> Value // required (!)
-
-    //=------------------------------------------------------------------------=
     // MARK: Merge
     //=------------------------------------------------------------------------=
     
@@ -46,7 +39,14 @@ public protocol DiffableTextStyle {
     ///     - range: indices in snapshot that content is proposed to change
     ///
     @inlinable func merge(snapshot: Snapshot, with content: Snapshot, in range: Range<Snapshot.Index>) throws -> Snapshot
+        
+    //=------------------------------------------------------------------------=
+    // MARK: Parse
+    //=------------------------------------------------------------------------=
     
+    /// Value represented by the snapshot or nil if the snapshot is invalid.
+    @inlinable func parse(snapshot: Snapshot) throws -> Value // required (!)
+
     //=------------------------------------------------------------------------=
     // MARK: Process
     //=------------------------------------------------------------------------=
