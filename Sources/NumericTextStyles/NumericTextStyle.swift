@@ -47,15 +47,15 @@ public struct NumericTextStyle<Value: Valuable>: DiffableTextStyle {
     //=------------------------------------------------------------------------=
     
     @inlinable public func locale(_ locale: Locale) -> Self {
-        var result = self; result.format.update(locale: locale); return self
+        var result = self; result.format.update(locale: locale); return result
     }
     
     @inlinable public func bounds(_ bounds: Bounds) -> Self {
-        var result = self; result.format.update(bounds: bounds); return self
+        var result = self; result.format.update(bounds: bounds); return result
     }
     
     @inlinable public func precision(_ precision: Precision) -> Self {
-        var result = self; result.format.update(precision: precision); return self
+        var result = self; result.format.update(precision: precision); return result
     }
     
     @inlinable public func prefix(_ prefix: String?) -> Self {

@@ -41,7 +41,7 @@ public struct PatternTextStyle<Pattern, Value>: DiffableTextStyle where Pattern:
     }
     
     @inlinable public func hidden() -> Self {
-        var result = self; result.visible = false; return self
+        var result = self; result.visible = false; return result
     }
     
     //=------------------------------------------------------------------------=
