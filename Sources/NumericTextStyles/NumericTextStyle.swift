@@ -180,7 +180,7 @@ public struct NumericTextStyle<Value: Valuable>: DiffableTextStyle {
         }
 
         //=--------------------------------------=
-        // MARK: Return
+        // MARK: Done
         //=--------------------------------------=
         
         return snapshot
