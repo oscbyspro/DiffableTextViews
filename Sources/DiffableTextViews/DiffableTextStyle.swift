@@ -48,7 +48,7 @@ public protocol DiffableTextStyle {
     @inlinable func merge(snapshot: Snapshot, with content: Snapshot, in range: Range<Snapshot.Index>) throws -> Snapshot
     
     //=------------------------------------------------------------------------=
-    // MARK: Processs
+    // MARK: Process
     //=------------------------------------------------------------------------=
     
     #warning("Consider: throws.")

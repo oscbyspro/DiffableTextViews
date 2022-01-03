@@ -21,7 +21,7 @@
 public struct Attribute: OptionSet {
     
     //=------------------------------------------------------------------------=
-    // MARK: Instances
+    // MARK: Instances - Singular
     //=------------------------------------------------------------------------=
     
     /// Signifies that the symbol is part of a text's formatting and therefore not real.

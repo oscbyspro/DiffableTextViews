@@ -7,23 +7,31 @@
 
 import DiffableTextViews
 
-// MARK: - Input
+//*============================================================================*
+// MARK: * Input
+//*============================================================================*
 
 @usableFromInline struct Input {
     @usableFromInline typealias Command = (inout Number) -> Void
     
+    //=------------------------------------------------------------------------=
     // MARK: Properties
+    //=------------------------------------------------------------------------=
     
     @usableFromInline var content: Snapshot
     @usableFromInline var process: Command?
-        
+    
+    //=------------------------------------------------------------------------=
     // MARK: Initializers
+    //=------------------------------------------------------------------------=
             
     @inlinable init(_ content: Snapshot) {
         self.content = content
     }
     
+    //=------------------------------------------------------------------------=
     // MARK: Utilities
+    //=------------------------------------------------------------------------=
     
     @inlinable mutating func consumeSignInput(with parser: SignParser) {
         guard let first = content.characters.first   else { return }

@@ -5,22 +5,22 @@
 //  Created by Oscar Byström Ericsson on 2021-12-21.
 //
 
-// MARK: - Bounds
+//*============================================================================*
+// MARK: * Bounds
+//*============================================================================*
 
 /// A model that constrains values to a closed range.
 public struct Bounds<Value: Boundable> {
 
+    //=------------------------------------------------------------------------=
     // MARK: Properties
+    //=------------------------------------------------------------------------=
     
     @usableFromInline let values: ClosedRange<Value>
     
-    // MARK: Initializers
-    
-    @inlinable init(min: Value = Value.minLosslessValue, max: Value = Value.maxLosslessValue) {
-        self.values = min ... max
-    }
-    
-    // MARK: Getters
+    //=------------------------------------------------------------------------=
+    // MARK: Properties - Accessors
+    //=------------------------------------------------------------------------=
     
     @inlinable var min: Value {
         values.lowerBound
@@ -30,7 +30,17 @@ public struct Bounds<Value: Boundable> {
         values.upperBound
     }
     
+    //=------------------------------------------------------------------------=
+    // MARK: Initializers
+    //=------------------------------------------------------------------------=
+    
+    @inlinable init(min: Value = Value.minLosslessValue, max: Value = Value.maxLosslessValue) {
+        self.values = min ... max
+    }
+    
+    //
     // MARK: Initialiers: Static
+    //=------------------------------------------------------------------------=
     
     @inlinable public static var standard: Self {
         .init()
@@ -48,8 +58,10 @@ public struct Bounds<Value: Boundable> {
         .init(max: values.upperBound)
     }
     
+    //=------------------------------------------------------------------------=
     // MARK: Utilities
-        
+    //=------------------------------------------------------------------------=
+    
     @inlinable func clamp(_ value: inout Value) {
         value = Swift.max(min, Swift.min(value, max))
     }
@@ -59,11 +71,15 @@ public struct Bounds<Value: Boundable> {
     }
 }
 
-// MARK: - Bounds: Conversions
+//=------------------------------------------------------------------------=
+// MARK: Bounds - CustomStringConvertible
+//=------------------------------------------------------------------------=
 
 extension Bounds: CustomStringConvertible {
     
-    // MARK: Implementation
+    //=------------------------------------------------------------------------=
+    // MARK: Description
+    //=------------------------------------------------------------------------=
     
     @inlinable public var description: String {
         "[\(min),\(max)]"

@@ -5,29 +5,45 @@
 //  Created by Oscar Byström Ericsson on 2021-12-22.
 //
 
-import struct Foundation.Locale
+import Foundation
 
-// MARK: - SeparatorParser
+//*============================================================================*
+// MARK: * SeparatorParser
+//*============================================================================*
 
 @usableFromInline struct SeparatorParser: Parser {
-
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Instances
+    //=------------------------------------------------------------------------=
+    
+    @usableFromInline static let standard = Self(translatables: [Separator.dot])
+    
+    //=------------------------------------------------------------------------=
     // MARK: Properties
+    //=------------------------------------------------------------------------=
     
     @usableFromInline private(set) var translatables: Set<String>
     
+    //=------------------------------------------------------------------------=
     // MARK: Initializers
+    //=------------------------------------------------------------------------=
     
     @inlinable init(translatables: Set<String>) {
         self.translatables = translatables
     }
     
-    // MARK: Transformations
+    //=------------------------------------------------------------------------=
+    // MARK: Update
+    //=------------------------------------------------------------------------=
     
     @inlinable mutating func update(locale newValue: Locale) {
         translatables.insert(newValue.decimalSeparator ?? Separator.dot)
     }
     
+    //=------------------------------------------------------------------------=
     // MARK: Parse
+    //=------------------------------------------------------------------------=
     
     @inlinable func parse<C: Collection>(_ characters: C, index: inout C.Index, value: inout Separator) where C.Element == Character {
         let subsequence = characters[index...]
@@ -39,8 +55,4 @@ import struct Foundation.Locale
             }
         }
     }
-    
-    // MARK: Instances
-    
-    @usableFromInline static let standard = Self(translatables: [Separator.dot])
 }

@@ -5,7 +5,9 @@
 //  Created by Oscar Byström Ericsson on 2021-12-29.
 //
 
-// MARK: - Options
+//*============================================================================*
+// MARK: * Options
+//*============================================================================*
 
 /// Number type description.
 ///
@@ -13,23 +15,31 @@
 ///
 public struct Options: OptionSet {
     
-    // MARK: Properties
-    
-    public let rawValue: UInt8
-    
-    // MARK: Initializers
-    
-    @inlinable public init(rawValue: UInt8) {
-        self.rawValue = rawValue
-    }
-    
-    // MARK: Instances: Singular
+    //=------------------------------------------------------------------------=
+    // MARK: Instances - Singular
+    //=------------------------------------------------------------------------=
     
     public static let unsigned = Self(rawValue: 1 << 0)
     public static let integer  = Self(rawValue: 1 << 1)
     
-    // MARK: Instances: Composites
+    //
+    // MARK: Instances - Composites
+    //=------------------------------------------------------------------------=
     
     public static let floatingPoint   = Self()
     public static let unsignedInteger = Self([.unsigned, .integer])
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Properties
+    //=------------------------------------------------------------------------=
+    
+    public let rawValue: UInt8
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Initializers
+    //=------------------------------------------------------------------------=
+    
+    @inlinable public init(rawValue: UInt8) {
+        self.rawValue = rawValue
+    }
 }

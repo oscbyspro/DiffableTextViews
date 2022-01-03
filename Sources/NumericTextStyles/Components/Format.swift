@@ -5,23 +5,29 @@
 //  Created by Oscar Byström Ericsson on 2021-12-25.
 //
 
-import struct Foundation.Locale
-import struct Quick.Redacted
+import Foundation
+import Quick
 
-// MARK: - Format
+//*============================================================================*
+// MARK: * Format
+//*============================================================================*
 
 @usableFromInline struct Format<Value: Valuable> {
     @usableFromInline typealias Bounds = NumericTextStyles.Bounds<Value>
     @usableFromInline typealias Precision = NumericTextStyles.Precision<Value>
 
+    //=------------------------------------------------------------------------=
     // MARK: Properties
-
+    //=------------------------------------------------------------------------=
+    
     @usableFromInline private(set) var locale: Locale
     @usableFromInline private(set) var bounds: Bounds
     @usableFromInline private(set) var precision: Precision
     @usableFromInline private(set) var parser: NumberParser
 
+    //=------------------------------------------------------------------------=
     // MARK: Initializers
+    //=------------------------------------------------------------------------=
     
     @inlinable init(locale: Locale) {
         self.locale = locale
@@ -33,7 +39,9 @@ import struct Quick.Redacted
         parser.update(options: Value.options)
     }
     
-    // MARK: Transformations
+    //=------------------------------------------------------------------------=
+    // MARK: Update
+    //=------------------------------------------------------------------------=
     
     @inlinable mutating func update(locale: Locale) {
         self.locale = locale
@@ -48,7 +56,9 @@ import struct Quick.Redacted
         self.precision = precision
     }
     
+    //=------------------------------------------------------------------------=
     // MARK: Characters
+    //=------------------------------------------------------------------------=
     
     @inlinable var signs: [Character: Sign] {
         Sign.all
@@ -69,8 +79,10 @@ import struct Quick.Redacted
     @inlinable var groupingSeparator: String {
         locale.groupingSeparator ?? ""
     }
-        
+    
+    //=------------------------------------------------------------------------=
     // MARK: Styles
+    //=------------------------------------------------------------------------=
     
     @inlinable func showcaseStyle() -> Value.FormatStyle {
         Value.style(locale: locale, precision: precision.showcaseStyle(), separator: .automatic)
@@ -86,7 +98,9 @@ import struct Quick.Redacted
         return Value.style(locale: locale, precision: precision, separator: separator)
     }
     
-    // MARK: Validation: Sign
+    //=------------------------------------------------------------------------=
+    // MARK: Validation - Sign
+    //=------------------------------------------------------------------------=
     
     @inlinable func correct(sign: inout Sign) {
         switch sign {
@@ -106,8 +120,10 @@ import struct Quick.Redacted
         }
     }
     
-    // MARK: Validation: Value
-
+    //
+    // MARK: Validation - Value
+    //=------------------------------------------------------------------------=
+    
     @inlinable func validate(value: Value) throws {
         guard bounds.contains(value) else {
             throw Redacted.mark(value).text("is not in").mark(bounds)
