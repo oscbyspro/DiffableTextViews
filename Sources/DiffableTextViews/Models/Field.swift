@@ -151,13 +151,14 @@ extension Field {
             }
         }
         
+        #warning("Make it more obvious that newValue should be used.")
         return map({ $0.selection = newValue.preferential(position) })
     }
 }
 
-//=------------------------------------------------------------------------=
-// MARK: Field - Namespace
-//=------------------------------------------------------------------------=
+//=----------------------------------------------------------------------------=
+// MARK: Field x Namespace
+//=----------------------------------------------------------------------------=
 
 @usableFromInline enum _Field {
     
