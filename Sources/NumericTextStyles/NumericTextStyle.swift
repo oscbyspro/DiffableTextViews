@@ -242,6 +242,7 @@ public struct NumericTextStyle<Value: Valuable>: DiffableTextStyle, Mappable {
         
         insert_absent_sign: do {
             let sign = number.sign.characters
+            
             if !sign.isEmpty, !characters.hasPrefix(sign) {
                 /// occurs when sign is negative and value is zero
                 characters = number.sign.characters + characters

@@ -151,7 +151,7 @@ extension Field {
             }
         }
         
-        return map({ $0.selection = $0.selection.preferential(position) })
+        return map({ $0.selection = newValue.preferential(position) })
     }
 }
 
