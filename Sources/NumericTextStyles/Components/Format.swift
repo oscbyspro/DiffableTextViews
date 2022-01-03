@@ -115,7 +115,9 @@ import Quick
     }
     
     @inlinable func validate(sign: Sign) throws {
-        guard sign == sign.transforming(correct) else {
+        var subject = sign; correct(sign: &subject)
+
+        guard sign == subject else {
             throw Redacted.mark(sign).text("is not permitted in").mark(bounds)
         }
     }

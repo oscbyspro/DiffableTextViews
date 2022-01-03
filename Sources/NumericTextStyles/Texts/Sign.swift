@@ -5,31 +5,26 @@
 //  Created by Oscar Byström Ericsson on 2021-12-20.
 //
 
-import protocol Utilities.Transformable
-
-// MARK: - Sign
+//*============================================================================*
+// MARK: * Sign
+//*============================================================================*
 
 /// A representation of a system sign.
-@usableFromInline enum Sign: Text, Transformable {
+@usableFromInline enum Sign: Text {
     
+    //=------------------------------------------------------------------------=
     // MARK: Instances
+    //=------------------------------------------------------------------------=
     
     case positive
     case negative
     
+    //=------------------------------------------------------------------------=
     // MARK: Initializers
+    //=------------------------------------------------------------------------=
     
     @inlinable init() {
         self = .positive
-    }
-        
-    // MARK: Accessors
-    
-    @inlinable var characters: String {
-        switch self {
-        case .positive: return String()
-        case .negative: return String(Self.minus)
-        }
     }
     
     // MARK: Utilities
@@ -41,18 +36,35 @@ import protocol Utilities.Transformable
         }
     }
     
+    //=------------------------------------------------------------------------=
     // MARK: Characters
+    //=------------------------------------------------------------------------=
+    
+    @inlinable var characters: String {
+        switch self {
+        case .positive: return String()
+        case .negative: return String(Self.minus)
+        }
+    }
+    
+    //
+    // MARK: Characters - Static
+    //=------------------------------------------------------------------------=
     
     @usableFromInline static let plus:  Character = "+"
     @usableFromInline static let minus: Character = "-"
     @usableFromInline static let all:  [Character: Sign] = [plus:  .positive, minus: .negative]
 }
 
-// MARK: - Sign: Conversions
+//=----------------------------------------------------------------------------=
+// MARK: Sign - CustomStringConvertible
+//=----------------------------------------------------------------------------=
 
 extension Sign: CustomStringConvertible {
     
-    // MARK: Implementation
+    //=------------------------------------------------------------------------=
+    // MARK: Description
+    //=------------------------------------------------------------------------=
     
     @usableFromInline var description: String {
         switch self {

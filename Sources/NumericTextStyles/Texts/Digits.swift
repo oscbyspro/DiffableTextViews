@@ -5,7 +5,9 @@
 //  Created by Oscar Byström Ericsson on 2021-12-20.
 //
 
-// MARK: - Digits
+//*============================================================================*
+// MARK: * Digits
+//*============================================================================*
 
 /// A representation of system digits.
 ///
@@ -13,22 +15,30 @@
 ///
 @usableFromInline struct Digits: Text {
     
+    //=------------------------------------------------------------------------=
     // MARK: Properties
+    //=------------------------------------------------------------------------=
     
     @usableFromInline private(set) var characters: String = ""
     @usableFromInline private(set) var count: Int = 0
-
-    // MARK: Initializers
     
-    @inlinable init() { }
-    
-    // MARK: Descriptions
+    //
+    // MARK: Properties - Accessors
+    //=------------------------------------------------------------------------=
     
     @inlinable var isEmpty: Bool {
         characters.isEmpty
     }
+
+    //=------------------------------------------------------------------------=
+    // MARK: Initializers
+    //=------------------------------------------------------------------------=
     
+    @inlinable init() { }
+    
+    //=------------------------------------------------------------------------=
     // MARK: Count
+    //=------------------------------------------------------------------------=
     
     @inlinable func prefixZerosCount() -> Int {
         characters.count(while: Self.isZero)
@@ -38,7 +48,9 @@
         characters.reversed().count(while: Self.isZero)
     }
     
+    //=------------------------------------------------------------------------=
     // MARK: Transformations
+    //=------------------------------------------------------------------------=
     
     @inlinable mutating func append(_ character: Character) {
         characters.append(character)
@@ -53,13 +65,17 @@
         guard isEmpty else { return }; characters.append(Self.zero)
     }
     
-    // MARK: Helpers
+    //=----------------------------------------------------------------------------=
+    // MARK: Predicates - Static
+    //=----------------------------------------------------------------------------=
     
     @inlinable static func isZero(_ character: Character) -> Bool {
         character == Self.zero
     }
 
-    // MARK: Characters
+    //=----------------------------------------------------------------------------=
+    // MARK: Characters - Static
+    //=----------------------------------------------------------------------------=
     
     @usableFromInline static let zero: Character = "0"
     @usableFromInline static let decimals = Set<Character>("0123456789")

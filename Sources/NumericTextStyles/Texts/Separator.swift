@@ -7,26 +7,36 @@
 
 #warning("Rework.")
 
-// MARK: - Separator
+//*============================================================================*
+// MARK: * Separator
+//*============================================================================*
 
 /// A representation of system separator.
 @usableFromInline struct Separator: Text {
     
+    //=------------------------------------------------------------------------=
     // MARK: Properties
+    //=------------------------------------------------------------------------=
     
     @usableFromInline var characters: String = ""
     
-    // MARK: Initializers
-    
-    @inlinable init() { }
-    
-    // MARK: Getters
+    //
+    // MARK: Properties - Accessors
+    //=------------------------------------------------------------------------=
     
     @inlinable var isEmpty: Bool {
         characters.isEmpty
     }
     
+    //=------------------------------------------------------------------------=
+    // MARK: Initializers
+    //=------------------------------------------------------------------------=
+    
+    @inlinable init() { }
+    
+    //=------------------------------------------------------------------------=
     // MARK: Transformations
+    //=------------------------------------------------------------------------=
     
     @inlinable mutating func append(_ element: Character) {
         characters.append(element)
@@ -36,7 +46,9 @@
         characters.append(contentsOf: elements)
     }
     
-    // MARK: Characters
+    //=------------------------------------------------------------------------=
+    // MARK: Characters - Static
+    //=------------------------------------------------------------------------=
     
     @usableFromInline static let dot: String = "."
 }

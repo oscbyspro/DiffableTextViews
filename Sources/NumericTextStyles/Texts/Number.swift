@@ -7,7 +7,9 @@
 
 #warning("Make sure that integer is never empty.")
 
-// MARK: - Number
+//*============================================================================*
+// MARK: * Number
+//*============================================================================*
 
 /// A representation of a system number.
 ///
@@ -15,25 +17,32 @@
 ///
 @usableFromInline struct Number: Text {
     
+    //=------------------------------------------------------------------------=
     // MARK: Properties
+    //=------------------------------------------------------------------------=
     
     @usableFromInline var sign = Sign()
     @usableFromInline var integer = Digits()
     @usableFromInline var separator = Separator()
     @usableFromInline var fraction = Digits()
     
-    // MARK: Initializers
+    //
+    // MARK: Properties - Accessors
+    //=------------------------------------------------------------------------=
     
-    @inlinable init() { }
-    
-    // MARK: Descriptions
-    
-    #warning("Text should have a characters() func requirement to show O(n) possibility.")
     @inlinable var characters: String {
         sign.characters + integer.characters + separator.characters + fraction.characters
     }
     
+    //=------------------------------------------------------------------------=
+    // MARK: Initializers
+    //=------------------------------------------------------------------------=
+    
+    @inlinable init() { }
+    
+    //=------------------------------------------------------------------------=
     // MARK: Count
+    //=------------------------------------------------------------------------=
         
     @inlinable func significantCount() -> Int {
         let significantIntegerCount = integer.count - integer.prefixZerosCount()
@@ -41,7 +50,9 @@
         return significantIntegerCount + significantFractionCount
     }
     
+    //=------------------------------------------------------------------------=
     // MARK: Transformations
+    //=------------------------------------------------------------------------=
     
     @inlinable mutating func removeImpossibleSeparator(capacity: Capacity) {
         guard fraction.isEmpty else { return }
