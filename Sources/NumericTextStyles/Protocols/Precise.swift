@@ -12,7 +12,7 @@
 public protocol Precise {
     
     //=------------------------------------------------------------------------=
-    // MARK: Lossless Limits
+    // MARK: Digits
     //=------------------------------------------------------------------------=
     
     @inlinable static var maxLosslessIntegerDigits:     Int { get }
@@ -27,7 +27,7 @@ public protocol Precise {
 extension Precise {
     
     //=------------------------------------------------------------------------=
-    // MARK: Values
+    // MARK: Digits
     //=------------------------------------------------------------------------=
     
     @inlinable static var minLosslessIntegerDigits:     Int { 1 }
@@ -35,7 +35,7 @@ extension Precise {
     @inlinable static var minLosslessSignificantDigits: Int { 1 }
     
     //=------------------------------------------------------------------------=
-    // MARK: Bounds
+    // MARK: Limits
     //=------------------------------------------------------------------------=
     
     @inlinable static var losslessIntegerLimits: ClosedRange<Int> {
@@ -64,7 +64,7 @@ public protocol PreciseFloatingPoint: Precise { }
 public extension PreciseFloatingPoint {
     
     //=------------------------------------------------------------------------=
-    // MARK: Lossless Limits
+    // MARK: Digits
     //=------------------------------------------------------------------------=
 
     @inlinable static var maxLosslessIntegerDigits: Int {
@@ -89,7 +89,7 @@ public protocol PreciseInteger: Precise { }
 public extension PreciseInteger {
     
     //=------------------------------------------------------------------------
-    // MARK: Lossless Limits
+    // MARK: Digits
     //=------------------------------------------------------------------------=
     
     @inlinable static var maxLosslessIntegerDigits: Int {
