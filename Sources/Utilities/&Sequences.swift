@@ -5,11 +5,15 @@
 //  Created by Oscar Byström Ericsson on 2021-12-25.
 //
 
-// MARK: - Sequence
+//*============================================================================*
+// MARK: * Sequence
+//*============================================================================*
 
 public extension Sequence {
     
+    //=------------------------------------------------------------------------=
     // MARK: Count
+    //=------------------------------------------------------------------------=
     
     @inlinable func count(while predicate: (Element) throws -> Bool) rethrows -> Int {
         var count = 0
@@ -23,11 +27,15 @@ public extension Sequence {
     }
 }
 
-// MARK: - BidirectionalCollection
+//*============================================================================*
+// MARK: * BidirectionalCollection
+//*============================================================================*
 
 public extension BidirectionalCollection {
     
+    //=------------------------------------------------------------------------=
     // MARK: Suffix
+    //=------------------------------------------------------------------------=
     
     @inlinable func suffix(while predicate: (Element) throws -> Bool) rethrows -> SubSequence {
         return try self[startOfSuffix(while: predicate)...]
@@ -48,11 +56,15 @@ public extension BidirectionalCollection {
     }
 }
 
-// MARK: - RangeReplaceableCollection
+//*============================================================================*
+// MARK: * RangeReplaceableCollection
+//*============================================================================*
 
 public extension RangeReplaceableCollection {
     
-    // MARK: Transformations
+    //=------------------------------------------------------------------------=
+    // MARK: Replace
+    //=------------------------------------------------------------------------=
     
     @inlinable func replacing<C: Collection>(_ range: Range<Index>, with elements: C) -> Self where C.Element == Element {
         var result = self; result.replaceSubrange(range, with: elements); return result
