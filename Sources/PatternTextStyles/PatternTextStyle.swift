@@ -5,13 +5,14 @@
 //  Created by Oscar Byström Ericsson on 2021-12-25.
 //
 
+import Quick
 import DiffableTextViews
 
 //*============================================================================*
 // MARK: * PatternTextStyle
 //*============================================================================*
 
-public struct PatternTextStyle<Pattern, Value>: DiffableTextStyle where Pattern: Collection, Pattern.Element == Character, Value: RangeReplaceableCollection, Value: Equatable, Value.Element == Character {
+public struct PatternTextStyle<Pattern, Value>: DiffableTextStyle, Mappable where Pattern: Collection, Pattern.Element == Character, Value: RangeReplaceableCollection, Value: Equatable, Value.Element == Character {
     @usableFromInline typealias Format = PatternTextStyles.Format<Pattern>
     
     //=------------------------------------------------------------------------=
@@ -36,14 +37,14 @@ public struct PatternTextStyle<Pattern, Value>: DiffableTextStyle where Pattern:
     // MARK: Update
     //=------------------------------------------------------------------------=
     
-    @inlinable public func filter(_ validation: @escaping (Character) -> Bool) -> Self {
-        var result = self; result.filter.concatenate(validation); return result
-    }
-    
     @inlinable public func hidden() -> Self {
-        var result = self; result.visible = false; return result
+        map({ $0.visible = false })
     }
     
+    @inlinable public func filter(_ validation: @escaping (Character) -> Bool) -> Self {
+        map({ $0.filter.concatenate(validation) })
+    }
+
     //=------------------------------------------------------------------------=
     // MARK: Snapshot
     //=------------------------------------------------------------------------=

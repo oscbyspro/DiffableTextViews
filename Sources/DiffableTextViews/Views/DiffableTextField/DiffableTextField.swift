@@ -7,13 +7,14 @@
 
 #if canImport(UIKit)
 
+import Quick
 import SwiftUI
 
 //*============================================================================*
 // MARK: * DiffableTextField
 //*============================================================================*
 
-public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
+public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable, Mappable {
     public typealias Value = Style.Value
     public typealias UIViewType = BasicTextField
     public typealias Configuration = (ProxyTextField) -> Void
@@ -52,15 +53,15 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
     //=------------------------------------------------------------------------=
     
     @inlinable public func setup(_ setup: Configuration?) -> Self {
-        var result = self; result.setup = setup; return result
+        map({ $0.setup  = setup  })
     }
     
     @inlinable public func update(_ update: Configuration?) -> Self {
-        var result = self; result.update = update; return result
+        map({ $0.update = update })
     }
     
     @inlinable public func submit(_ submit: Configuration?) -> Self {
-        var result = self; result.submit = submit; return result
+        map({ $0.submit = submit })
     }
 
     //=------------------------------------------------------------------------=

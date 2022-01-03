@@ -19,7 +19,7 @@ import Utilities
 /// - Complexity: O(k · n) where k is some constant and n is the number of characters in the snapshot.
 ///               This is reasonably efficient considering that sequences are read in at least O(n) time.
 ///
-public struct NumericTextStyle<Value: Valuable>: DiffableTextStyle {
+public struct NumericTextStyle<Value: Valuable>: DiffableTextStyle, Mappable {
     public typealias Bounds = NumericTextStyles.Bounds<Value>
     public typealias Precision = NumericTextStyles.Precision<Value>
     @usableFromInline typealias Format = NumericTextStyles.Format<Value>
@@ -47,23 +47,23 @@ public struct NumericTextStyle<Value: Valuable>: DiffableTextStyle {
     //=------------------------------------------------------------------------=
     
     @inlinable public func locale(_ locale: Locale) -> Self {
-        var result = self; result.format.update(locale: locale); return result
+        map({ $0.format.update(locale: locale) })
     }
     
     @inlinable public func bounds(_ bounds: Bounds) -> Self {
-        var result = self; result.format.update(bounds: bounds); return result
+        map({ $0.format.update(bounds: bounds) })
     }
     
     @inlinable public func precision(_ precision: Precision) -> Self {
-        var result = self; result.format.update(precision: precision); return result
+        map({ $0.format.update(precision: precision) })
     }
     
     @inlinable public func prefix(_ prefix: String?) -> Self {
-        var result = self; result.prefix = prefix ?? ""; return result
+        map({ $0.prefix = prefix ?? "" })
     }
     
     @inlinable public func suffix(_ suffix: String?) -> Self {
-        var result = self; result.suffix = suffix ?? ""; return result
+        map({ $0.suffix = suffix ?? "" })
     }
     
     //=------------------------------------------------------------------------=

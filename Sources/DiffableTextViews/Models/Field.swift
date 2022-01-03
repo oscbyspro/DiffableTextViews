@@ -5,11 +5,13 @@
 //  Created by Oscar Byström Ericsson on 2021-09-27.
 //
 
+import Quick
+
 //*============================================================================*
 // MARK: * Field
 //*============================================================================*
 
-@usableFromInline struct Field<Scheme: DiffableTextViews.Scheme> {
+@usableFromInline struct Field<Scheme: DiffableTextViews.Scheme>: Mappable {
     @usableFromInline typealias Offset = DiffableTextViews.Offset<Scheme>
     @usableFromInline typealias Carets = DiffableTextViews.Carets<Scheme>
     @usableFromInline typealias Selection = DiffableTextViews.Selection<Scheme>
@@ -113,7 +115,7 @@ extension Field {
             carets.look(start: start, direction: carets[start].directionOfAttributes() ?? preference)
         }
 
-        var result = self; result.selection = selection.preferential(position); return result
+        return map({ $0.selection = $0.selection.preferential(position) })
     }
     
     //=------------------------------------------------------------------------=
@@ -149,7 +151,7 @@ extension Field {
             }
         }
         
-        var result = self; result.selection = newValue.preferential(position); return result
+        return map({ $0.selection = $0.selection.preferential(position) })
     }
 }
 
