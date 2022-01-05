@@ -5,6 +5,8 @@
 //  Created by Oscar Byström Ericsson on 2021-12-25.
 //
 
+#warning("Separate this into multiple files in folder: Algorithms.")
+
 //*============================================================================*
 // MARK: * Sequence
 //*============================================================================*

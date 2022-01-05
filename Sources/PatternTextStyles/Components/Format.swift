@@ -5,7 +5,7 @@
 //  Created by Oscar Byström Ericsson on 2021-12-27.
 //
 
-import Quick
+import Utilities
 
 //*============================================================================*
 // MARK: * Format
@@ -37,7 +37,7 @@ import Quick
         let capacity = pattern.reduce(into: 0) { count, _ in count += 1 }
 
         guard characters.count <= capacity else {
-            throw Redacted.mark(characters).text("exceeded pattern capacity").mark(capacity)
+            throw DEBUG([.mark(characters), "exceeded pattern capacity", .mark(capacity)])
         }
     }
 }

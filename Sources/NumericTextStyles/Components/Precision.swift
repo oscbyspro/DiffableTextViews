@@ -6,7 +6,7 @@
 //
 
 import Foundation
-import Quick
+import Utilities
 
 //*============================================================================*
 // MARK: * Precision
@@ -186,8 +186,8 @@ public extension Precision where Value: PreciseFloatingPoint {
     // MARK: Errors
     //=------------------------------------------------------------------------=
     
-    @inlinable static func failure(excess component: Component, max: Int) -> Redacted {
-        Redacted.mark(component).text("digits exceed precision capacity of").mark(max)
+    @inlinable static func failure(excess component: Component, max: Int) -> DEBUG {
+        DEBUG([.mark(component), "digits exceed precision capacity of", .mark(max)])
     }
     
     //=------------------------------------------------------------------------=

@@ -17,7 +17,6 @@ import Utilities
 /// Formats numbers to and from user interactive text.
 ///
 /// - Complexity: O(k · n) where k is some constant and n is the number of characters in the snapshot.
-///               This is reasonably efficient considering that sequences are read in at least O(n) time.
 ///
 public struct NumericTextStyle<Value: Valuable>: DiffableTextStyle, Mappable {
     public typealias Bounds = NumericTextStyles.Bounds<Value>
@@ -268,7 +267,7 @@ public struct NumericTextStyle<Value: Valuable>: DiffableTextStyle, Mappable {
         let unformatted = snapshot.lazy.filter(Symbol.is(non: .formatting)).map(\.character)
                 
         guard let number = format.parser.parse(unformatted) else {
-            throw Redacted.text("unable to parse number in").mark(snapshot.characters)
+            throw DEBUG(["unable to parse number in", .mark(snapshot.characters)])
         }
                 
         return number

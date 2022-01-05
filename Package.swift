@@ -27,6 +27,7 @@ let package = Package(
         // MARK: https://github.com/oscbyspro/
         //=--------------------------------------=
         .package(name: "Quick", url: "https://github.com/oscbyspro/Quick", .branch("main")),
+        .package(name: "QuickText", url: "https://github.com/oscbyspro/QuickText", .branch("main")),
     ],
     targets: [
         //=--------------------------------------=
@@ -61,6 +62,6 @@ let package = Package(
         //=--------------------------------------=
         .target(
             name: "Utilities",
-            dependencies: []),
+            dependencies: ["Quick", "QuickText"]),
     ]
 )

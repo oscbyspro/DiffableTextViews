@@ -26,6 +26,7 @@ public struct Snapshot: BidirectionalCollection, RangeReplaceableCollection {
     // MARK: Properties - Accessors
     //=------------------------------------------------------------------------=
     
+    #warning("Should these be public?")
     @inlinable public var characters: Characters { _characters }
     @inlinable public var attributes: Attributes { _attributes }
 
@@ -172,14 +173,15 @@ public extension Snapshot {
     // MARK: Replace - Optimizations
     //=------------------------------------------------------------------------=
     
-    @inlinable mutating func append(_ element: Element) {
-        _characters.append(element.character)
-        _attributes.append(element.attribute)
-    }
-
     @inlinable mutating func insert(_ element: Element, at index: Index) {
         _characters.insert(element.character, at: index.character)
         _attributes.insert(element.attribute, at: index.attribute)
+    }
+    
+    @inlinable mutating func remove(at index: Index) -> Symbol {
+        let character = _characters.remove(at: index.character)
+        let attribute = _attributes.remove(at: index.attribute)
+        return Symbol(character, attribute: attribute)
     }
 }
 

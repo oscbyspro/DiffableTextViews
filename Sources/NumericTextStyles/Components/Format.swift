@@ -6,7 +6,8 @@
 //
 
 import Foundation
-import Quick
+import Utilities
+//import Quick
 
 //*============================================================================*
 // MARK: * Format
@@ -118,7 +119,7 @@ import Quick
         var subject = sign; correct(sign: &subject)
 
         guard sign == subject else {
-            throw Redacted.mark(sign).text("is not permitted in").mark(bounds)
+            throw DEBUG([.mark(sign), "is not permitted in", .mark(bounds)])
         }
     }
     
@@ -128,7 +129,7 @@ import Quick
     
     @inlinable func validate(value: Value) throws {
         guard bounds.contains(value) else {
-            throw Redacted.mark(value).text("is not in").mark(bounds)
+            throw DEBUG([.mark(value), "is not in", .mark(bounds)])
         }
     }
 }

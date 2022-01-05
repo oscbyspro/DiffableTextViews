@@ -6,7 +6,16 @@
         "repositoryURL": "https://github.com/oscbyspro/Quick",
         "state": {
           "branch": "main",
-          "revision": "fb8f3e732cbe9806c1d7895b8a35377dfaa502b3",
+          "revision": "0c299e8fe06fdd5677bbd9ce3cfd63c45fd38f47",
+          "version": null
+        }
+      },
+      {
+        "package": "QuickText",
+        "repositoryURL": "https://github.com/oscbyspro/QuickText",
+        "state": {
+          "branch": "main",
+          "revision": "a56d3c88983024e859cf02835213f2ea7da572a8",
           "version": null
         }
       }

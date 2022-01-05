@@ -87,7 +87,7 @@ extension Carets {
     @inlinable func look(start: Carets.Index, direction: Direction) -> Carets.Index {
         direction == .forwards
         ? self[start...].firstIndex(where: \.nonlookaheadable) ??  lastIndex
-        : self[...start].lastIndex(where: \.nonlookbehindable) ?? startIndex
+        : self[...start].lastIndex(where: \.nonlookbehindable) ?? firstIndex
     }
     
     //
@@ -100,6 +100,7 @@ extension Carets {
         : indices[...start].last (where: { $0.offset == offset })!
     }
     
+    #warning("Accessors.")
     //=------------------------------------------------------------------------=
     // MARK: Access
     //=------------------------------------------------------------------------=

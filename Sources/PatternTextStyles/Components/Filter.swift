@@ -5,7 +5,7 @@
 //  Created by Oscar Byström Ericsson on 2021-12-27.
 //
 
-import Quick
+import Utilities
 
 //*============================================================================*
 // MARK: * Filter
@@ -42,7 +42,7 @@ import Quick
     @inlinable func validate(_ character: Character) throws {
         for (index, condition) in conditions.enumerated() {
             guard condition(character) else {
-                throw Redacted.mark(character).text("was invalidated by condition at index").mark(index)
+                throw DEBUG([.mark(character), "was invalidated by condition at index", .mark(index)])
             }
         }
     }

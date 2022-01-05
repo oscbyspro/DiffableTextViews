@@ -42,7 +42,7 @@ public final class ProxyTextField {
         wrapped.text!
     }
     
-    #warning("Make this into a calculated propert maybe.")
+    #warning("Make this a property, maybe.")
     /// - Complexity: O(1).
     @inlinable func selection() -> Range<Offset> {
         offsets(in: wrapped.selectedTextRange!)

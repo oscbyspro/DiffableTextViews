@@ -146,7 +146,7 @@ extension Field {
                         
             switch direction {
             case preference: return next
-            case  .forwards: return next < carets.lastIndex  ? carets.index(after:  next) : next
+            case  .forwards: return next < carets .lastIndex ? carets.index(after:  next) : next
             case .backwards: return next > carets.firstIndex ? carets.index(before: next) : next
             }
         }
