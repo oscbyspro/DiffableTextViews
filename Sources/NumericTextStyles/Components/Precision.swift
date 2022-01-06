@@ -186,8 +186,8 @@ public extension Precision where Value: PreciseFloatingPoint {
     // MARK: Errors
     //=------------------------------------------------------------------------=
     
-    @inlinable static func failure(excess component: Component, max: Int) -> Description {
-        Description([.mark(component), "digits exceed precision capacity of", .mark(max)])
+    @inlinable static func failure(excess component: Component, max: Int) -> Info {
+        Info([.mark(component), "digits exceed precision capacity of", .mark(max)])
     }
     
     //=------------------------------------------------------------------------=

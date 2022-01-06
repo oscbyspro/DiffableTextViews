@@ -1,5 +1,5 @@
 //
-//  Description.swift
+//  Info.swift
 //  
 //
 //  Created by Oscar Byström Ericsson on 2022-01-05.
@@ -8,10 +8,11 @@
 import QuickText
 
 //*============================================================================*
-// MARK: * Description
+// MARK: * Info
 //*============================================================================*
 
-public struct Description: Text {
+/// An error message that is only constructed in DEBUG mode.
+public struct Info: Text {
     
     //=------------------------------------------------------------------------=
     // MARK: Properties

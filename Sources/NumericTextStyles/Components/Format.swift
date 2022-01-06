@@ -119,7 +119,7 @@ import Utilities
         var subject = sign; correct(sign: &subject)
 
         guard sign == subject else {
-            throw Description([.mark(sign), "is not permitted in", .mark(bounds)])
+            throw Info([.mark(sign), "is not permitted in", .mark(bounds)])
         }
     }
     
@@ -129,7 +129,7 @@ import Utilities
     
     @inlinable func validate(value: Value) throws {
         guard bounds.contains(value) else {
-            throw Description([.mark(value), "is not in", .mark(bounds)])
+            throw Info([.mark(value), "is not in", .mark(bounds)])
         }
     }
 }
