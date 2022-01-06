@@ -62,7 +62,7 @@ public struct Info: Text {
         
         //
         // MARK: Initializers - Static
-        //=------------------------------------------------------------------------=
+        //=--------------------------------------------------------------------=
         
         @inlinable public static func note(_ value: Any) -> Self {
             Self({ Note(String(describing: value)) })
