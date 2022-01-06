@@ -267,7 +267,7 @@ public struct NumericTextStyle<Value: Valuable>: DiffableTextStyle, Mappable {
         let unformatted = snapshot.lazy.filter(Symbol.is(non: .formatting)).map(\.character)
                 
         guard let number = format.parser.parse(unformatted) else {
-            throw DEBUG(["unable to parse number in", .mark(snapshot.characters)])
+            throw Description(["unable to parse number in", .mark(snapshot.characters)])
         }
                 
         return number

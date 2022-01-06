@@ -1,5 +1,5 @@
 //
-//  DEBUG.swift
+//  Description.swift
 //  
 //
 //  Created by Oscar Byström Ericsson on 2022-01-05.
@@ -8,25 +8,23 @@
 import QuickText
 
 //*============================================================================*
-// MARK: * DEBUG
+// MARK: * Description
 //*============================================================================*
 
-public struct DEBUG: Text {
+public struct Description: Text {
     
     //=------------------------------------------------------------------------=
     // MARK: Properties
     //=------------------------------------------------------------------------=
     
-    public let body: Redacted
+    public let body: DEBUG
     
     //=------------------------------------------------------------------------=
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
     @inlinable public init(@MakeUnknown _ content: () -> Unknown) {
-        self.body = Redacted {
-            content().joined(with: " ")
-        }
+        self.body = DEBUG({ content() })
     }
     
     //
@@ -34,7 +32,7 @@ public struct DEBUG: Text {
     //=------------------------------------------------------------------------=
     
     @inlinable public init(_ components: @autoclosure () -> [Component]) {
-        self.init({ List(components()) })
+        self.init({ List(components()).joined(with: " ") })
     }
 
     //*========================================================================*
@@ -66,11 +64,17 @@ public struct DEBUG: Text {
         //=------------------------------------------------------------------------=
         
         @inlinable public static func note(_ value: Any) -> Self {
-            Self { Note(value) }
+            Self({ Note(String(describing: value)) })
         }
         
         @inlinable public static func mark(_ value: Any) -> Self {
-            Self { Note(value).quote(with: .angle) }
+            Self {
+                Joined(with: " ") {
+                    Note("«")
+                    Note(String(describing: value)).filter({ !$0.isEmpty })
+                    Note("»")
+                }
+            }
         }
     }
 }

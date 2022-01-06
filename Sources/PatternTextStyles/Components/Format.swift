@@ -37,7 +37,7 @@ import Utilities
         let capacity = pattern.reduce(into: 0) { count, _ in count += 1 }
 
         guard characters.count <= capacity else {
-            throw DEBUG([.mark(characters), "exceeded pattern capacity", .mark(capacity)])
+            throw Description([.mark(characters), "exceeded pattern capacity", .mark(capacity)])
         }
     }
 }
