@@ -5,9 +5,10 @@
 //  Created by Oscar Byström Ericsson on 2021-10-13.
 //
 
+#if DEBUG
+
 import XCTest
-@testable import struct DiffableTextViews.Similarities
-@testable import struct DiffableTextViews.SimilaritiesOptions
+@testable import DiffableTextViews
 
 // MARK: - Inspection
 
@@ -74,3 +75,5 @@ final class SimilaritiesTestsOfInspection: XCTestCase {
         XCTAssert(input: similarities.rhsSuffix(), output: rhs)
     }
 }
+
+#endif

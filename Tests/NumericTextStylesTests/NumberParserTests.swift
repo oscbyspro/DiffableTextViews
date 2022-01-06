@@ -5,6 +5,8 @@
 //  Created by Oscar Byström Ericsson on 2021-12-23.
 //
 
+#if DEBUG
+
 import XCTest
 @testable import NumericTextStyles
 
@@ -65,3 +67,5 @@ final class NumberParserTests: XCTestCase {
         XCTAssert(input: "0.110", output: "0.110")
     }
 }
+
+#endif
