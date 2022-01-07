@@ -70,11 +70,12 @@ public struct Info: Text {
         
         @inlinable public static func mark(_ value: Any) -> Self {
             Self {
-                Joined(by: .whitespace) {
+                Group {
                     Note("«")
                     Note(String(describing: value)).filter({ !$0.isEmpty })
                     Note("»")
                 }
+                .joined(by: .whitespace)
             }
         }
     }
