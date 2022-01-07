@@ -33,7 +33,7 @@ public struct Info: Text {
     //=------------------------------------------------------------------------=
     
     @inlinable public init(_ components: @autoclosure () -> [Component]) {
-        self.init({ List(components()).joined(with: " ") })
+        self.init({ List(components()).joined(by: .whitespace) })
     }
 
     //*========================================================================*
@@ -70,7 +70,7 @@ public struct Info: Text {
         
         @inlinable public static func mark(_ value: Any) -> Self {
             Self {
-                Joined(with: " ") {
+                Joined(by: .whitespace) {
                     Note("«")
                     Note(String(describing: value)).filter({ !$0.isEmpty })
                     Note("»")
