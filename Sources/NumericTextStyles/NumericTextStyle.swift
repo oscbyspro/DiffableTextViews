@@ -97,7 +97,7 @@ public struct NumericTextStyle<Value: Valuable>: DiffableTextStyle, Mappable {
         // MARK: Prefix
         //=--------------------------------------=
         
-        snapshot_prefix: if !prefix.isEmpty {
+        if !prefix.isEmpty {
             snapshot.append(contentsOf: Snapshot(prefix, only: .prefix))
             snapshot.append(.prefix(" "))
         }
@@ -106,7 +106,7 @@ public struct NumericTextStyle<Value: Valuable>: DiffableTextStyle, Mappable {
         // MARK: Sign
         //=--------------------------------------=
         
-        snapshot_sign: if index != characters.endIndex {
+        if index != characters.endIndex {
             let character = characters[index]
             var result = Sign()
             
@@ -139,7 +139,7 @@ public struct NumericTextStyle<Value: Valuable>: DiffableTextStyle, Mappable {
         // MARK: Remainders
         //=--------------------------------------=
         
-        snapshot_remainders: while index != characters.endIndex {
+        while index != characters.endIndex {
             let character = characters[index]
             
             if format.digits.contains(character) {
@@ -156,24 +156,22 @@ public struct NumericTextStyle<Value: Valuable>: DiffableTextStyle, Mappable {
         //=--------------------------------------=
         // MARK: Redundance
         //=--------------------------------------=
+    
+        let redundance = snapshot.suffix { symbol in
+            if format.zero == symbol.character { return true }
+            if format.fractionSeparator.contains(symbol.character) { return true }
+            return false
+        }
         
-        process_redundance: do {
-            let redundance = snapshot.suffix { symbol in
-                if format.zero == symbol.character { return true }
-                if format.fractionSeparator.contains(symbol.character) { return true }
-                return false
-            }
-            
-            snapshot.transform(attributes: redundance.indices) { attribute in
-                attribute.insert(.removable)
-            }
+        snapshot.transform(attributes: redundance.indices) { attribute in
+            attribute.insert(.removable)
         }
         
         //=--------------------------------------=
         // MARK: Suffix
         //=--------------------------------------=
 
-        snapshot_suffix: if !suffix.isEmpty {
+        if !suffix.isEmpty {
             snapshot.append(.suffix(" "))
             snapshot.append(contentsOf: Snapshot(suffix, only: .suffix))
         }
@@ -197,25 +195,38 @@ public struct NumericTextStyle<Value: Valuable>: DiffableTextStyle, Mappable {
         
         var input = Input(content)
         
-        parse_commands: do {
-            input.consumeSignInput(with: format.parser.sign)
-        }
+        //
+        // MARK: Input - Parse Commands
+        //=--------------------------------------=
+        
+        input.consumeSignInput(with: format.parser.sign)
+        
+        //=--------------------------------------=
+        // MARK: Proposal
+        //=--------------------------------------=
+        
+        var proposal = snapshot
+        proposal.replaceSubrange(range, with: input.content)
         
         //=--------------------------------------=
         // MARK: Number
         //=--------------------------------------=
         
-        var number = try number(snapshot: snapshot.replacing(range, with: input.content))
+        var number = try number(snapshot: proposal)
         
-        execute_commands: do {
-            input.process?(&number)
-        }
+        //
+        // MARK: Number - Run Input Commands
+        //=--------------------------------------=
         
-        validate_number: do {
-            try format.validate(sign: number.sign)
-            let capacity = try format.precision.capacity(number: number)
-            number.removeImpossibleSeparator(capacity: capacity)
-        }
+        input.process?(&number)
+        
+        //
+        // MARK: Number - Validation & Capacity
+        //=--------------------------------------=
+        
+        try format.validate(sign: number.sign)
+        let capacity = try format.precision.capacity(number: number)
+        number.removeImpossibleSeparator(capacity: capacity)
         
         //=--------------------------------------=
         // MARK: Value
@@ -223,9 +234,11 @@ public struct NumericTextStyle<Value: Valuable>: DiffableTextStyle, Mappable {
         
         let value = try Value(number: number)
         
-        validate_value: do {
-            try format.validate(value: value)
-        }
+        //
+        // MARK: Value - Validation
+        //=--------------------------------------=
+        
+        try format.validate(value: value)
         
         //=--------------------------------------=
         // MARK: Style
@@ -239,13 +252,14 @@ public struct NumericTextStyle<Value: Valuable>: DiffableTextStyle, Mappable {
         
         var characters = style.format(value)
         
-        insert_absent_sign: do {
-            let sign = number.sign.characters
-            
-            if !sign.isEmpty, !characters.hasPrefix(sign) {
-                /// occurs when sign is negative and value is zero
-                characters = number.sign.characters + characters
-            }
+        //
+        // MARK: Characters - Correct
+        //=--------------------------------------=
+        
+        let sign = number.sign.characters
+        /// insert absent sign when sign is negative and value is zero
+        if !sign.isEmpty, !characters.hasPrefix(sign) {
+            characters = number.sign.characters + characters
         }
         
         //=--------------------------------------=
