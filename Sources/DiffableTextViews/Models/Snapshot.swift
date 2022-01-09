@@ -84,6 +84,15 @@ public struct Snapshot: BidirectionalCollection, RangeReplaceableCollection {
 public extension Snapshot {
     
     //=------------------------------------------------------------------------=
+    // MARK: Accessors
+    //=------------------------------------------------------------------------=
+    
+    @inlinable subscript(position: Index) -> Symbol {
+        Symbol(character: _characters[position.character],
+               attribute: _attributes[position.attribute])
+    }
+    
+    //=------------------------------------------------------------------------=
     // MARK: Count is O(1)
     //=------------------------------------------------------------------------=
     
@@ -115,23 +124,14 @@ public extension Snapshot {
     // MARK: Traversal
     //=------------------------------------------------------------------------=
     
-    @inlinable func index(after i: Index) -> Index {
-        Index(character: _characters.index(after: i.character),
-              attribute: _attributes.index(after: i.attribute))
+    @inlinable func index(after position: Index) -> Index {
+        Index(character: _characters.index(after: position.character),
+              attribute: _attributes.index(after: position.attribute))
     }
     
-    @inlinable func index(before i: Index) -> Index {
-        Index(character: _characters.index(before: i.character),
-              attribute: _attributes.index(before: i.attribute))
-    }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Accessors
-    //=------------------------------------------------------------------------=
-    
-    @inlinable subscript(position: Index) -> Symbol {
-        Symbol(character: _characters[position.character],
-               attribute: _attributes[position.attribute])
+    @inlinable func index(before position: Index) -> Index {
+        Index(character: _characters.index(before: position.character),
+              attribute: _attributes.index(before: position.attribute))
     }
 }
 
@@ -145,7 +145,11 @@ public extension Snapshot {
     // MARK: Replace
     //=------------------------------------------------------------------------=
 
-    @inlinable mutating func replaceSubrange<C: Collection>(_ range: Range<Index>, with elements: C) where C.Element == Symbol {
+    @inlinable mutating func replaceSubrange<E: Collection>(
+        _ range: Range<Index>,
+        with elements: E)
+        where E.Element == Symbol {
+        
         _characters.replaceSubrange(
             range.lowerBound.character ..< range.upperBound.character,
             with: elements.lazy.map(\.character))
@@ -158,14 +162,14 @@ public extension Snapshot {
     // MARK: Replace - Optimizations
     //=------------------------------------------------------------------------=
     
-    @inlinable mutating func insert(_ element: Element, at index: Index) {
-        _characters.insert(element.character, at: index.character)
-        _attributes.insert(element.attribute, at: index.attribute)
+    @inlinable mutating func insert(_ element: Element, at position: Index) {
+        _characters.insert(element.character, at: position.character)
+        _attributes.insert(element.attribute, at: position.attribute)
     }
     
-    @discardableResult @inlinable mutating func remove(at index: Index) -> Symbol {
-        Symbol(character: _characters.remove(at: index.character),
-               attribute: _attributes.remove(at: index.attribute))
+    @discardableResult @inlinable mutating func remove(at position: Index) -> Symbol {
+        Symbol(character: _characters.remove(at: position.character),
+               attribute: _attributes.remove(at: position.attribute))
     }
 }
 
@@ -180,10 +184,10 @@ public extension Snapshot {
     //=------------------------------------------------------------------------=
     
     @inlinable mutating func transform(
-        attributes index: Index,
+        attributes position: Index,
         with transformation: (inout Attribute) -> Void) {
         
-        transformation(&_attributes[index.attribute])
+        transformation(&_attributes[position.attribute])
     }
     
     @inlinable mutating func transform<S: Sequence>(
@@ -191,8 +195,8 @@ public extension Snapshot {
         with transformation: (inout Attribute) -> Void)
         where S.Element == Index {
         
-        for index in sequence {
-            transform(attributes: index, with: transformation)
+        for position in sequence {
+            transform(attributes: position, with: transformation)
         }
     }
         

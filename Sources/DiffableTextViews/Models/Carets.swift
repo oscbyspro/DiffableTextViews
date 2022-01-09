@@ -78,8 +78,24 @@
 // MARK: Carets - BidirectionalCollection
 //=----------------------------------------------------------------------------=
 
-#warning("WIP")
 extension Carets {
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Accessors
+    //=------------------------------------------------------------------------=
+    
+    @inlinable subscript(position: Index) -> Peek {
+        Peek(lhs: subelement(at: position.lhs), rhs: subelement(at: position.rhs))
+    }
+    
+    //
+    // MARK: Accessors - Components
+    //=------------------------------------------------------------------------=
+        
+    @inlinable func subelement(at position: Snapshot.Index?) -> Snapshot.Element? {
+        guard let position = position else { return nil }
+        return position < snapshot.endIndex ? snapshot[position] : nil
+    }
     
     //=------------------------------------------------------------------------=
     // MARK: Indices
@@ -101,30 +117,42 @@ extension Carets {
     // MARK: Traversal
     //=------------------------------------------------------------------------=
     
-    @inlinable func index(after i: Index) -> Index {
-        Index(at: i.offset.after(character(at: i.rhs!.character)), lhs: i.rhs!, rhs: subindex(after: i.rhs!))
+    @inlinable func index(after position: Index) -> Index {
+        Index(at: offset(after: position), lhs: position.rhs!, rhs: subindex(after: position.rhs!))
     }
     
-    @inlinable func index(before i: Index) -> Index {
-        Index(at: i.offset.before(character(at: i.lhs!.character)), lhs: subindex(before: i.lhs!), rhs: i.lhs!)
+    @inlinable func index(before position: Index) -> Index {
+        Index(at: offset(before: position), lhs: subindex(before: position.lhs!), rhs: position.lhs!)
     }
     
     //
     // MARK: Traversal - Components
     //=------------------------------------------------------------------------=
     
-    @inlinable func subindex(after subindex: Snapshot.Index) -> Snapshot.Index? {
-        subindex < snapshot.endIndex ? snapshot.index(after: subindex) : nil
+    @inlinable func offset(after position: Index) -> Offset {
+        position.offset.after(character(at: position.rhs!.character))
+    }
+    
+    @inlinable func offset(before position: Index) -> Offset {
+        position.offset.before(character(at: position.lhs!.character))
+    }
+    
+    //
+    // MARK: Traversal - Subcomponents
+    //=------------------------------------------------------------------------=
+    
+    @inlinable func subindex(after position: Snapshot.Index) -> Snapshot.Index? {
+        position < snapshot.endIndex ? snapshot.index(after: position) : nil
     }
 
-    @inlinable func subindex(before subindex: Snapshot.Index) -> Snapshot.Index? {
-        subindex > snapshot.startIndex ? snapshot.index(before: subindex) : nil
+    @inlinable func subindex(before position: Snapshot.Index) -> Snapshot.Index? {
+        position > snapshot.startIndex ? snapshot.index(before: position) : nil
     }
     
-    @inlinable func character(at index: String.Index) -> Character? {
-        index < snapshot.characters.endIndex ? snapshot.characters[index] : nil
+    @inlinable func character(at position: String.Index) -> Character? {
+        position < snapshot.characters.endIndex ? snapshot.characters[position] : nil
     }
-    
+
     //=------------------------------------------------------------------------=
     // MARK: Traversal - Look In Direction
     //=------------------------------------------------------------------------=
@@ -149,22 +177,5 @@ extension Carets {
         let upperBound =                              index(at: range.upperBound, start: start.upperBound)
         let lowerBound = range.isEmpty ? upperBound : index(at: range.lowerBound, start: start.lowerBound)
         return lowerBound ..< upperBound
-    }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Accessors
-    //=------------------------------------------------------------------------=
-    
-    @inlinable subscript(position: Index) -> Peek {
-        Peek(lhs: subelement(at: position.lhs), rhs: subelement(at: position.rhs))
-    }
-    
-    //
-    // MARK: Accessors - Components
-    //=------------------------------------------------------------------------=
-        
-    @inlinable func subelement(at subindex: Snapshot.Index?) -> Snapshot.Element? {
-        guard let subindex = subindex else { return nil }
-        return subindex < snapshot.endIndex ? snapshot[subindex] : nil
     }
 }
