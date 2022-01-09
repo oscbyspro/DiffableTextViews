@@ -46,30 +46,6 @@ public struct Symbol: Equatable {
     @inlinable public static func spacer(_ character: Character) -> Self {
         Self(character, attribute: .spacer)
     }
-
-    //=------------------------------------------------------------------------=
-    // MARK: Predicates
-    //=------------------------------------------------------------------------=
-    
-    @inlinable public func `is`(_ attribute: Attribute) -> Bool {
-        self.attribute.contains(attribute)
-    }
-    
-    @inlinable public func `is`(non attribute: Attribute) -> Bool {
-        self.attribute.contains(attribute) == false
-    }
-    
-    //
-    // MARK: Predicates: Static
-    //=------------------------------------------------------------------------=
-    
-    @inlinable public static func `is`(_ attribute: Attribute) -> (Self) -> Bool {
-        { $0.attribute.contains(attribute) }
-    }
-    
-    @inlinable public static func `is`(non attribute: Attribute) -> (Self) -> Bool {
-        { $0.attribute.contains(attribute) == false }
-    }
 }
 
 //=----------------------------------------------------------------------------=

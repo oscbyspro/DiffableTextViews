@@ -131,7 +131,7 @@ public struct PatternTextStyle<Pattern, Value>: DiffableTextStyle, Mappable wher
     @inlinable public func parse(snapshot: Snapshot) throws -> Value {
         var value = Value()
         
-        for symbol in snapshot where symbol.is(non: .formatting) {
+        for symbol in snapshot where !symbol.attribute.contains(.formatting) {
             try filter.validate(symbol.character)
             value.append(symbol.character)
         }

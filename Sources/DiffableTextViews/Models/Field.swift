@@ -182,6 +182,6 @@ extension Field {
             else                                        { return .none          }
         }
         
-        return .init(comparison: .instruction(step), inspection: .only(Symbol.is(non: .formatting)))
+        return .init(comparison: .instruction(step), inspection: .only({ !$0.attribute.contains(.formatting) }))
     }()
 }
