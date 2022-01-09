@@ -41,13 +41,11 @@
     // MARK: Stride
     //=------------------------------------------------------------------------=
 
-    #warning("Make nonoptional, maybe.")
     @inlinable func after(_ character: Character?) -> Self {
         guard let character = character else { return self }
         return .init(at: units + Scheme.size(of: character))
     }
     
-    #warning("Make nonoptional, maybe.")
     @inlinable func before(_ character: Character?) -> Self {
         guard let character = character else { return self }
         return .init(at: units - Scheme.size(of: character))
