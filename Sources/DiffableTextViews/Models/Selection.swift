@@ -25,8 +25,20 @@
 
     @usableFromInline var range: Range<Carets.Index>
     
-    //
-    // MARK: Properties - Accessors
+    //=------------------------------------------------------------------------=
+    // MARK: Initializers
+    //=------------------------------------------------------------------------=
+    
+    @inlinable init(range: Range<Carets.Index>) {
+        self.range = range
+    }
+    
+    @inlinable init(position: Carets.Index) {
+        self.range = position ..< position
+    }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Accessors
     //=------------------------------------------------------------------------=
     
     @inlinable var isEmpty: Bool {
@@ -43,18 +55,6 @@
         
     @inlinable var offsets: Range<Offset> {
         range.lowerBound.offset ..< range.upperBound.offset
-    }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Initializers
-    //=------------------------------------------------------------------------=
-    
-    @inlinable init(range: Range<Carets.Index>) {
-        self.range = range
-    }
-    
-    @inlinable init(position: Carets.Index) {
-        self.range = position ..< position
     }
     
     //=------------------------------------------------------------------------=
