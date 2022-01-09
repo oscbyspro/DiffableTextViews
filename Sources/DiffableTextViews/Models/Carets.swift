@@ -5,10 +5,6 @@
 //  Created by Oscar Byström Ericsson on 2021-10-04.
 //
 
-#warning("Rework.")
-#warning("Rework.")
-#warning("Rework.")
-
 //*============================================================================*
 // MARK: * Carets
 //*============================================================================*
@@ -32,32 +28,9 @@
         self.snapshot = snapshot
         self.range = .zero ..< .max(in: snapshot.characters)
     }
-}
-
-//=----------------------------------------------------------------------------=
-// MARK: Carets - BidirectionalCollection
-//=----------------------------------------------------------------------------=
-
-extension Carets {
     
     //=------------------------------------------------------------------------=
-    // MARK: Nonempty
-    //=------------------------------------------------------------------------=
-    
-    @inlinable var isEmpty: Bool {
-        false
-    }
-    
-    @inlinable var firstIndex: Index {
-        startIndex
-    }
-    
-    @inlinable var lastIndex: Index {
-        index(before: endIndex)
-    }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Range
+    // MARK: Indices
     //=------------------------------------------------------------------------=
     
     @inlinable var startIndex: Index {
@@ -68,6 +41,18 @@ extension Carets {
         Index(at: range.upperBound, lhs: snapshot.endIndex, rhs: nil)
     }
     
+    //
+    // MARK: Indices - Nonempty
+    //=------------------------------------------------------------------------=
+    
+    @inlinable var firstIndex: Index {
+        startIndex
+    }
+    
+    @inlinable var lastIndex: Index {
+        index(before: endIndex)
+    }
+
     //=------------------------------------------------------------------------=
     // MARK: Traversal
     //=------------------------------------------------------------------------=
@@ -82,18 +67,18 @@ extension Carets {
         Index(at: i.offset.before(character(at: i.lhs!.character)), lhs: subindex(before: i.lhs!), rhs: i.lhs!)
     }
     
-    //=------------------------------------------------------------------------=
-    // MARK: Traversal - Look
+    //
+    // MARK: Traversal - Look In Direction
     //=------------------------------------------------------------------------=
     
-    @inlinable func look(start: Carets.Index, direction: Direction) -> Carets.Index {
+    @inlinable func look(start: Index, direction: Direction) -> Index {
         direction == .forwards
         ? self[start...].firstIndex(where: \.nonlookaheadable) ??  lastIndex
         : self[...start].lastIndex(where: \.nonlookbehindable) ?? firstIndex
     }
     
     //
-    // MARK: Traversal - Offset
+    // MARK: Traversal - Index At Offset
     //=------------------------------------------------------------------------=
     
     @inlinable func index(at position: Offset, start: Index) -> Index {
@@ -103,13 +88,8 @@ extension Carets {
     }
     
     @inlinable func indices(at range: Range<Offset>, start: Range<Index>) -> Range<Index> {
-        let upperBound = index(at: range.upperBound, start: start.upperBound)
-        var lowerBound = upperBound
-
-        if !range.isEmpty {
-            lowerBound = index(at: range.lowerBound, start: start.lowerBound)
-        }
-
+        let upperBound =                              index(at: range.upperBound, start: start.upperBound)
+        let lowerBound = range.isEmpty ? upperBound : index(at: range.lowerBound, start: start.lowerBound)
         return lowerBound ..< upperBound
     }
     
@@ -118,7 +98,7 @@ extension Carets {
     //=------------------------------------------------------------------------=
     
     @inlinable subscript(position: Index) -> Peek {
-        .init(lhs: subelement(at: position.lhs), rhs: subelement(at: position.rhs))
+        Peek(lhs: subelement(at: position.lhs), rhs: subelement(at: position.rhs))
     }
     
     //
