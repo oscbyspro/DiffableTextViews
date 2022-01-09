@@ -12,8 +12,8 @@ import Quick
 //*============================================================================*
 
 @usableFromInline struct Field<Scheme: DiffableTextViews.Scheme>: Mappable {
-    @usableFromInline typealias Offset = DiffableTextViews.Offset<Scheme>
-    @usableFromInline typealias Carets = DiffableTextViews.Carets<Scheme>
+    @usableFromInline typealias Offset    = DiffableTextViews.Offset<Scheme>
+    @usableFromInline typealias Carets    = DiffableTextViews.Carets<Scheme>
     @usableFromInline typealias Selection = DiffableTextViews.Selection<Scheme>
 
     //=------------------------------------------------------------------------=

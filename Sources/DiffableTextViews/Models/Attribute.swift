@@ -18,7 +18,7 @@
 ///
 /// - Note: The easiest way to unformat text is to filter out symbols marked as formatting.
 ///
-public struct Attribute: OptionSet {
+public struct Attribute: OptionSet, CustomStringConvertible {
     
     //=------------------------------------------------------------------------=
     // MARK: Instances - Singular
@@ -68,19 +68,12 @@ public struct Attribute: OptionSet {
     @inlinable public init(rawValue: UInt8) {
         self.rawValue = rawValue
     }
-}
-
-//=----------------------------------------------------------------------------=
-// MARK: Attribute - CustomStringConvertible
-//=----------------------------------------------------------------------------=
-
-extension Attribute: CustomStringConvertible {
     
     //=------------------------------------------------------------------------=
     // MARK: Description
     //=------------------------------------------------------------------------=
     
-    public var description: String {
+    @inlinable public var description: String {
         String(describing: rawValue)
     }
 }
