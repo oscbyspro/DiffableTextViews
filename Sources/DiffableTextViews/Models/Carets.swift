@@ -82,7 +82,9 @@ extension Carets {
         Index(at: i.offset.before(character(at: i.lhs!.character)), lhs: subindex(before: i.lhs!), rhs: i.lhs!)
     }
     
+    //=------------------------------------------------------------------------=
     // MARK: Traversal - Look
+    //=------------------------------------------------------------------------=
     
     @inlinable func look(start: Carets.Index, direction: Direction) -> Carets.Index {
         direction == .forwards
@@ -94,15 +96,25 @@ extension Carets {
     // MARK: Traversal - Offset
     //=------------------------------------------------------------------------=
     
-    @inlinable func index(at offset: Offset, start: Index) -> Index {
-        start.offset <= offset
-        ? indices[start...].first(where: { $0.offset == offset })!
-        : indices[...start].last (where: { $0.offset == offset })!
+    @inlinable func index(at position: Offset, start: Index) -> Index {
+        start.offset <= position
+        ? indices[start...].first(where: { $0.offset == position })!
+        : indices[...start].last (where: { $0.offset == position })!
     }
     
-    #warning("Accessors.")
+    @inlinable func indices(at range: Range<Offset>, start: Range<Index>) -> Range<Index> {
+        let upperBound = index(at: range.upperBound, start: start.upperBound)
+        var lowerBound = upperBound
+
+        if !range.isEmpty {
+            lowerBound = index(at: range.lowerBound, start: start.lowerBound)
+        }
+
+        return lowerBound ..< upperBound
+    }
+    
     //=------------------------------------------------------------------------=
-    // MARK: Access
+    // MARK: Accessors
     //=------------------------------------------------------------------------=
     
     @inlinable subscript(position: Index) -> Peek {

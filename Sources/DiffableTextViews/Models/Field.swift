@@ -45,19 +45,12 @@ import Quick
     // MARK: Utilities
     //=------------------------------------------------------------------------=
     
-    @inlinable func indices(at offsets: Range<Offset>) -> Range<Carets.Index> {
-        let upperBound = carets.index(at: offsets.upperBound, start: selection.upperBound)
-        var lowerBound = upperBound
-
-        if !offsets.isEmpty {
-            lowerBound = carets.index(at: offsets.lowerBound, start: selection.lowerBound)
-        }
-
-        return lowerBound ..< upperBound
+    @inlinable func indices(at range: Range<Offset>) -> Range<Carets.Index> {
+        carets.indices(at: range, start: selection.range)
     }
     
     //=------------------------------------------------------------------------=
-    // MARK: Autocorrect
+    // MARK: Attributes
     //=------------------------------------------------------------------------=
 
     @inlinable func autocorrected() -> Self {
