@@ -37,34 +37,40 @@
         Index(at: range.lowerBound, lhs: nil, rhs: snapshot.startIndex)
     }
     
-    @inlinable var endIndex: Index {
-        Index(at: range.upperBound, lhs: snapshot.endIndex, rhs: nil)
-    }
-    
-    //
-    // MARK: Indices - Nonempty
-    //=------------------------------------------------------------------------=
-    
-    @inlinable var firstIndex: Index {
-        startIndex
-    }
-    
     @inlinable var lastIndex: Index {
         index(before: endIndex)
     }
+    
+    @inlinable var endIndex: Index {
+        Index(at: range.upperBound, lhs: snapshot.endIndex, rhs: nil)
+    }
 
     //=------------------------------------------------------------------------=
-    // MARK: Traversal
+    // MARK: Traversal - Standard
     //=------------------------------------------------------------------------=
     
-    #warning("Improve, maybe.")
     @inlinable func index(after i: Index) -> Index {
-        Index(at: i.offset.after(character(at: i.rhs!.character)),  lhs: i.rhs!,  rhs: subindex(after: i.rhs!))
+        Index(at: i.offset.after(character(at: i.rhs!.character)), lhs: i.rhs!, rhs: subindex(after: i.rhs!))
     }
     
-    #warning("Improve, maybe.")
     @inlinable func index(before i: Index) -> Index {
         Index(at: i.offset.before(character(at: i.lhs!.character)), lhs: subindex(before: i.lhs!), rhs: i.lhs!)
+    }
+    
+    //
+    // MARK: Traversal - Standard - Components
+    //=------------------------------------------------------------------------=
+    
+    @inlinable func subindex(after subindex: Snapshot.Index) -> Snapshot.Index? {
+        subindex < snapshot.endIndex ? snapshot.index(after: subindex) : nil
+    }
+
+    @inlinable func subindex(before subindex: Snapshot.Index) -> Snapshot.Index? {
+        subindex > snapshot.startIndex ? snapshot.index(before: subindex) : nil
+    }
+    
+    @inlinable func character(at index: String.Index) -> Character? {
+        index < snapshot.characters.endIndex ? snapshot.characters[index] : nil
     }
     
     //
@@ -74,7 +80,7 @@
     @inlinable func look(start: Index, direction: Direction) -> Index {
         direction == .forwards
         ? self[start...].firstIndex(where: \.nonlookaheadable) ??  lastIndex
-        : self[...start].lastIndex(where: \.nonlookbehindable) ?? firstIndex
+        : self[...start].lastIndex(where: \.nonlookbehindable) ?? startIndex
     }
     
     //
@@ -102,36 +108,14 @@
     }
     
     //
-    // MARK: Access - Components
+    // MARK: Accessors - Components
     //=------------------------------------------------------------------------=
-
-    @inlinable func subindex(after subindex: Snapshot.Index) -> Snapshot.Index? {
-        subindex < snapshot.endIndex ? snapshot.index(after: subindex) : nil
-    }
-
-    @inlinable func subindex(before subindex: Snapshot.Index) -> Snapshot.Index? {
-        subindex > snapshot.startIndex ? snapshot.index(before: subindex) : nil
-    }
         
     @inlinable func subelement(at subindex: Snapshot.Index?) -> Snapshot.Element? {
         guard let subindex = subindex else { return nil }
         return subindex < snapshot.endIndex ? snapshot[subindex] : nil
     }
-    
-    //
-    // MARK: Access - Components - Character
-    //=------------------------------------------------------------------------=
 
-    #warning("Move, make subscript, maybe.")
-    @inlinable func character(at index: String.Index) -> Character? {
-        index < snapshot.characters.endIndex ? snapshot.characters[index] : nil
-    }
-
-    #warning("WIP.")
-    @inlinable subscript(character index: String.Index) -> Character? {
-        index < snapshot.characters.endIndex ? snapshot.characters[index] : nil
-    }
-    
     //*========================================================================*
     // MARK: * Index
     //*========================================================================*
