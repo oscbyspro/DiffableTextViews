@@ -23,10 +23,9 @@
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    /// - Complexity: O(n).
     @inlinable init(snapshot: Snapshot) {
         self.snapshot = snapshot
-        self.range = .zero ..< .max(in: snapshot.characters)
+        self.range = .zero ..< .max(in: snapshot.characters) // UTF16 is O(1)
     }
     
     //=------------------------------------------------------------------------=
