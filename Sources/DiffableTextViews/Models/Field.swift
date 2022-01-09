@@ -65,7 +65,7 @@ extension Field {
             carets.look(start: start, direction: carets[start].directionOfAttributes() ?? preference)
         }
         
-        return map({ $0.selection = $0.selection.preferential(position) })
+        return map({ $0.selection = $0.selection.preferred(position) })
     }
 }
 
@@ -115,7 +115,7 @@ extension Field {
             
             let direction = intent ?? preference
             let next = carets.look(start: start, direction: direction)
-                        
+            
             switch direction {
             case preference: return next
             case  .forwards: return next < carets .lastIndex ? carets.index(after:  next) : next
@@ -123,7 +123,7 @@ extension Field {
             }
         }
         
-        return map({ $0.selection = newValue.preferential(position) }).autocorrected()
+        return map({ $0.selection = newValue.preferred(position) }).autocorrected()
     }
     
     //

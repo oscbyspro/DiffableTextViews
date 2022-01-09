@@ -9,6 +9,12 @@
 // MARK: * Selection
 //*============================================================================*
 
+/// Represents the user's selection in a text view.
+///
+/// It encapsulates the different behaviors of the lower and upper bound.
+///
+/// - Preferences: (lower, upper) == (.forwards, .backwards).
+///
 @usableFromInline struct Selection<Scheme: DiffableTextViews.Scheme> {
     @usableFromInline typealias Carets = DiffableTextViews.Carets<Scheme>
     @usableFromInline typealias Offset = DiffableTextViews.Offset<Scheme>
@@ -55,16 +61,15 @@
     // MARK: Transformations
     //=------------------------------------------------------------------------=
     
-    #warning("Rename.")
-    @inlinable func preferential(_ transformation: (Carets.Index, Direction) -> Carets.Index) -> Self {
-        let nextUpperBound = transformation(upperBound, .backwards)
-        var nextLowerBound = nextUpperBound
+    @inlinable func preferred(_ position: (Carets.Index, Direction) -> Carets.Index) -> Self {
+        let upperBound = position(self.upperBound, .backwards)
+        var lowerBound = upperBound
 
         if !isEmpty {
-            nextLowerBound = transformation(lowerBound,  .forwards)
-            nextLowerBound = min(nextLowerBound,    nextUpperBound)
+            lowerBound = position(self.lowerBound,  .forwards)
+            lowerBound = min(lowerBound, upperBound)
         }
         
-        return Self(range: nextLowerBound ..< nextUpperBound)
+        return Self(range: lowerBound ..< upperBound)
     }
 }

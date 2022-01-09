@@ -24,9 +24,10 @@ final class SchemeTests: XCTestCase {
     // MARK: State
     //=------------------------------------------------------------------------=
     
-    lazy var loremIpsum1__ = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, magna aliqua."
-    lazy var loremIpsum10_ = String(repeating: loremIpsum1__, count: 10_)
-    lazy var loremIpsum100 = String(repeating: loremIpsum1__, count: 100)
+    lazy var scheme     = UTF16.self
+    lazy var content1__ = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, magna aliqua."
+    lazy var content10_ = String(repeating: content1__, count: 10_)
+    lazy var content100 = String(repeating: content1__, count: 100)
 
     //=------------------------------------------------------------------------=
     // MARK: Tests
@@ -34,25 +35,25 @@ final class SchemeTests: XCTestCase {
     
     /// UTF16: 0.202 sec.
     /// Character: 0.578 sec.
-    func testUTF16x1__() {
+    func test1__() {
         measure {
-            count(loremIpsum1__, with: UTF16.self)
+            count(content1__)
         }
     }
     
     /// UTF16: 0.204 sec.
     /// Character: 3.970 sec.
-    func testUTF16x10_() {
+    func test10_() {
         measure {
-            count(loremIpsum10_, with: UTF16.self)
+            count(content10_)
         }
     }
     
     /// UTF16: 0.206 sec.
     /// Character: ain't nobody got time for that.
-    func testUTF16x100() {
+    func test100() {
         measure {
-            count(loremIpsum100, with: UTF16.self)
+            count(content100)
         }
     }
     
@@ -60,9 +61,9 @@ final class SchemeTests: XCTestCase {
     // MARK: Helpers
     //=------------------------------------------------------------------------=
     
-    func count<S: Scheme>(_ content: String, with scheme: S.Type) {
+    func count(_ content: String) {
         for _ in 0 ..< 1_000_000 {
-            _ = S.size(of: content)
+            _ = scheme.size(of: content)
         }
     }
 }
