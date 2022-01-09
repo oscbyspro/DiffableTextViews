@@ -10,8 +10,6 @@
 //*============================================================================*
 
 public struct Snapshot: BidirectionalCollection, RangeReplaceableCollection {
-    public typealias Element = Symbol
-    public typealias Indices = DefaultIndices<Self>
     public typealias Characters = String
     public typealias Attributes = Array<Attribute>
     
@@ -26,7 +24,6 @@ public struct Snapshot: BidirectionalCollection, RangeReplaceableCollection {
     // MARK: Properties - Accessors
     //=------------------------------------------------------------------------=
     
-    #warning("Should these be public?")
     @inlinable public var characters: Characters { _characters }
     @inlinable public var attributes: Attributes { _attributes }
 
@@ -132,8 +129,8 @@ public extension Snapshot {
     // MARK: Access
     //=------------------------------------------------------------------------=
     
-    @inlinable subscript(position: Index) -> Element {
-        .init(_characters[position.character], attribute: _attributes[position.attribute])
+    @inlinable subscript(position: Index) -> Symbol {
+        Symbol(_characters[position.character], attribute: _attributes[position.attribute])
     }
     
     //
@@ -160,7 +157,7 @@ public extension Snapshot {
     // MARK: Replace
     //=------------------------------------------------------------------------=
 
-    @inlinable mutating func replaceSubrange<C: Collection>(_ range: Range<Index>, with elements: C) where C.Element == Element {
+    @inlinable mutating func replaceSubrange<C: Collection>(_ range: Range<Index>, with elements: C) where C.Element == Symbol {
         _characters.replaceSubrange(
             range.lowerBound.character ..< range.upperBound.character,
             with: elements.lazy.map(\.character))
@@ -178,7 +175,7 @@ public extension Snapshot {
         _attributes.insert(element.attribute, at: index.attribute)
     }
     
-    @inlinable mutating func remove(at index: Index) -> Symbol {
+    @discardableResult @inlinable mutating func remove(at index: Index) -> Symbol {
         let character = _characters.remove(at: index.character)
         let attribute = _attributes.remove(at: index.attribute)
         return Symbol(character, attribute: attribute)

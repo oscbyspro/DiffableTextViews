@@ -27,65 +27,22 @@ import Quick
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable init() {
-        self.init(snapshot: Snapshot())
-    }
-    
-    @inlinable init(snapshot: Snapshot) {
-        self.carets = Carets(snapshot: snapshot)
-        self.selection = Selection(position: carets.lastIndex)
-    }
-    
     @inlinable init(carets: Carets, selection: Selection) {
         self.carets = carets
         self.selection = selection
     }
-}
-
-//=----------------------------------------------------------------------------=
-// MARK: Field - Update
-//=----------------------------------------------------------------------------=
-
-extension Field {
-
-    //=------------------------------------------------------------------------=
-    // MARK: Carets
-    //=------------------------------------------------------------------------=
-    
-    @inlinable func updating(carets newValue: Carets) -> Self {
-        transformingAccordingToCarets(newValue).transformingAccordingToAttributes()
-    }
-    
-    @inlinable func updating(carets newValue: Snapshot) -> Self {
-        updating(carets: Carets(snapshot: newValue))
-    }
-
-    //=------------------------------------------------------------------------=
-    // MARK: Selection
-    //=------------------------------------------------------------------------=
-    
-    @inlinable func updating(selection newValue: Selection, intent: Direction?) -> Self {
-        transformingAccordingToSelection(newValue, intent: intent).transformingAccordingToAttributes()
-    }
-    
-    @inlinable func updating(selection newValue: Range<Carets.Index>, intent: Direction?) -> Self {
-        updating(selection: Selection(range: newValue), intent: intent)
-    }
-    
-    @inlinable func updating(selection newValue: Carets.Index, intent: Direction?) -> Self {
-        updating(selection: Selection(position: newValue), intent: intent)
-    }
-    
-    @inlinable func updating(selection newValue: Range<Offset>, intent: Direction?) -> Self {
-        updating(selection: Selection(range: indices(at: newValue)), intent: intent)
-    }
-    
-    @inlinable func updating(selection newValue: Offset, intent: Direction?) -> Self {
-        updating(selection: Selection(range: indices(at: newValue ..< newValue)), intent: intent)
-    }
     
     //
-    // MARK: Selection - Helpers
+    // MARK: Initializers - Initial
+    //=------------------------------------------------------------------------=
+    
+    @inlinable init() {
+        self.carets = Carets(snapshot: Snapshot())
+        self.selection = Selection(position: carets.lastIndex)
+    }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Utilities
     //=------------------------------------------------------------------------=
     
     @inlinable func indices(at offsets: Range<Offset>) -> Range<Carets.Index> {
@@ -98,31 +55,24 @@ extension Field {
 
         return lowerBound ..< upperBound
     }
-}
-
-//=----------------------------------------------------------------------------=
-// MARK: Field - Tranformations
-//=----------------------------------------------------------------------------=
-
-extension Field {
-
+    
     //=------------------------------------------------------------------------=
-    // MARK: Attributes
+    // MARK: Autocorrect
     //=------------------------------------------------------------------------=
-                    
-    @inlinable func transformingAccordingToAttributes() -> Field {
+
+    @inlinable func autocorrected() -> Self {
         func position(start: Carets.Index, preference: Direction) -> Carets.Index {
             carets.look(start: start, direction: carets[start].directionOfAttributes() ?? preference)
         }
-
+        
         return map({ $0.selection = $0.selection.preferential(position) })
     }
     
     //=------------------------------------------------------------------------=
     // MARK: Carets
     //=------------------------------------------------------------------------=
-            
-    @inlinable func transformingAccordingToCarets(_ newValue: Carets) -> Field {
+    
+    @inlinable func updated(carets newValue: Carets) -> Field {
         func position(current: Carets.SubSequence, next: Carets.SubSequence) -> Carets.Index {
             _Field.similarities(current: current.lazy.map(\.rhs), next: next.lazy.map(\.rhs)).startIndex
         }
@@ -130,14 +80,22 @@ extension Field {
         let upperBound = position(current: carets.suffix(from: selection.upperBound),   next: newValue[...])
         let lowerBound = position(current: carets[selection.range], next: newValue.prefix(upTo: upperBound))
         
-        return Field(carets: newValue, selection: Selection(range: lowerBound ..< upperBound))
+        return Field(carets: newValue, selection: Selection(range: lowerBound ..< upperBound)).autocorrected()
+    }
+    
+    //
+    // MARK: Carets - Indirect
+    //=------------------------------------------------------------------------=
+    
+    @inlinable func updated(carets newValue: Snapshot) -> Self {
+        updated(carets: Carets(snapshot: newValue))
     }
 
     //=------------------------------------------------------------------------=
     // MARK: Selection
     //=------------------------------------------------------------------------=
         
-    @inlinable func transformingAccordingToSelection(_ newValue: Selection, intent: Direction?) -> Field {
+    @inlinable func updated(selection newValue: Selection, intent: Direction?) -> Self {
         func position(start: Carets.Index, preference: Direction) -> Carets.Index {
             if carets[start].nonlookable(direction: preference) { return start }
             
@@ -151,14 +109,33 @@ extension Field {
             }
         }
         
-        #warning("Make it more obvious that newValue should be used.")
-        return map({ $0.selection = newValue.preferential(position) })
+        return map({ $0.selection = newValue.preferential(position) }).autocorrected()
+    }
+    
+    //
+    // MARK: Selection - Indirect
+    //=------------------------------------------------------------------------=
+    
+    @inlinable func updated(selection newValue: Range<Carets.Index>, intent: Direction?) -> Self {
+        updated(selection: Selection(range: newValue), intent: intent)
+    }
+    
+    @inlinable func updated(selection newValue: Carets.Index, intent: Direction?) -> Self {
+        updated(selection: Selection(position: newValue), intent: intent)
+    }
+    
+    @inlinable func updated(selection newValue: Range<Offset>, intent: Direction?) -> Self {
+        updated(selection: Selection(range: indices(at: newValue)), intent: intent)
+    }
+    
+    @inlinable func updated(selection newValue: Offset, intent: Direction?) -> Self {
+        updated(selection: Selection(range: indices(at: newValue ..< newValue)), intent: intent)
     }
 }
 
-//=----------------------------------------------------------------------------=
-// MARK: Field x Namespace
-//=----------------------------------------------------------------------------=
+//*============================================================================*
+// MARK: * Field x Namespace
+//*============================================================================*
 
 @usableFromInline enum _Field {
     

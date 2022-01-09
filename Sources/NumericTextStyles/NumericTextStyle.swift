@@ -156,17 +156,12 @@ public struct NumericTextStyle<Value: Valuable>: DiffableTextStyle, Mappable {
         //=--------------------------------------=
         // MARK: Redundance
         //=--------------------------------------=
-    
-        let redundance = snapshot.suffix { symbol in
+        
+        snapshot.transform(attributes: snapshot.suffix { symbol in
             if format.zero == symbol.character { return true }
             if format.fractionSeparator.contains(symbol.character) { return true }
-            return false
-        }
-        
-        snapshot.transform(attributes: redundance.indices) { attribute in
-            attribute.insert(.removable)
-        }
-        
+            return false }.indices) { attribute in  attribute.insert(.removable) }
+
         //=--------------------------------------=
         // MARK: Suffix
         //=--------------------------------------=
