@@ -129,7 +129,7 @@ public struct NumericTextStyle<Value: Valuable>: DiffableTextStyle, Mappable {
             guard format.digits.contains(character) else { break snapshot_first_digit }
             characters.formIndex(after: &index)
             
-            var symbol = Symbol(character, attribute: .content)
+            var symbol = Symbol(character: character, attribute: .content)
             symbol.attribute.insert(character == format.zero ? .prefixing : .content)
                         
             snapshot.append(symbol)

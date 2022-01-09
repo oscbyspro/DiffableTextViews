@@ -22,7 +22,7 @@ public struct Symbol: Equatable, CustomStringConvertible {
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable public init(_ character: Character, attribute: Attribute) {
+    @inlinable public init(character: Character, attribute: Attribute) {
         self.character = character
         self.attribute = attribute
     }
@@ -32,19 +32,19 @@ public struct Symbol: Equatable, CustomStringConvertible {
     //=------------------------------------------------------------------------=
     
     @inlinable public static func content(_ character: Character) -> Self {
-        Self(character, attribute: .content)
+        Self(character: character, attribute: .content)
     }
     
     @inlinable public static func prefix(_ character: Character) -> Self {
-        Self(character, attribute: .prefix)
+        Self(character: character, attribute: .prefix)
     }
     
     @inlinable public static func suffix(_ character: Character) -> Self {
-        Self(character, attribute: .suffix)
+        Self(character: character, attribute: .suffix)
     }
     
     @inlinable public static func spacer(_ character: Character) -> Self {
-        Self(character, attribute: .spacer)
+        Self(character: character, attribute: .spacer)
     }
 
     //=------------------------------------------------------------------------=

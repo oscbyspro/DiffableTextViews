@@ -98,7 +98,7 @@ public extension Snapshot {
     }
     
     //=------------------------------------------------------------------------=
-    // MARK: Range
+    // MARK: Indices
     //=------------------------------------------------------------------------=
     
     @inlinable var startIndex: Index {
@@ -126,24 +126,12 @@ public extension Snapshot {
     }
     
     //=------------------------------------------------------------------------=
-    // MARK: Access
+    // MARK: Accessors
     //=------------------------------------------------------------------------=
     
     @inlinable subscript(position: Index) -> Symbol {
-        Symbol(_characters[position.character], attribute: _attributes[position.attribute])
-    }
-    
-    //
-    // MARK: Access - Components
-    //=------------------------------------------------------------------------=
-    
-    @inlinable subscript(character position: Index) -> Character {
-        _read   { yield  _characters[position.character] }
-    }
-    
-    @inlinable subscript(attribute position: Index) -> Attribute {
-        _read   { yield  _attributes[position.attribute] }
-        _modify { yield &_attributes[position.attribute] }
+        Symbol(character: _characters[position.character],
+               attribute: _attributes[position.attribute])
     }
 }
 
@@ -176,9 +164,8 @@ public extension Snapshot {
     }
     
     @discardableResult @inlinable mutating func remove(at index: Index) -> Symbol {
-        let character = _characters.remove(at: index.character)
-        let attribute = _attributes.remove(at: index.attribute)
-        return Symbol(character, attribute: attribute)
+        Symbol(character: _characters.remove(at: index.character),
+               attribute: _attributes.remove(at: index.attribute))
     }
 }
 

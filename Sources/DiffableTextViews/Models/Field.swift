@@ -48,9 +48,16 @@ import Quick
     @inlinable func indices(at range: Range<Offset>) -> Range<Carets.Index> {
         carets.indices(at: range, start: selection.range)
     }
+}
+
+//=----------------------------------------------------------------------------=
+// MARK: Field - Attributes
+//=----------------------------------------------------------------------------=
+    
+extension Field {
     
     //=------------------------------------------------------------------------=
-    // MARK: Attributes
+    // MARK: Transformations
     //=------------------------------------------------------------------------=
 
     @inlinable func autocorrected() -> Self {
@@ -60,9 +67,16 @@ import Quick
         
         return map({ $0.selection = $0.selection.preferential(position) })
     }
-    
+}
+
+//=----------------------------------------------------------------------------=
+// MARK: Field - Carets
+//=----------------------------------------------------------------------------=
+
+extension Field {
+
     //=------------------------------------------------------------------------=
-    // MARK: Carets
+    // MARK: Transformations
     //=------------------------------------------------------------------------=
     
     @inlinable func updated(carets newValue: Carets) -> Field {
@@ -77,15 +91,22 @@ import Quick
     }
     
     //
-    // MARK: Carets - Indirect
+    // MARK: Transformations - Indirect
     //=------------------------------------------------------------------------=
     
     @inlinable func updated(carets newValue: Snapshot) -> Self {
         updated(carets: Carets(snapshot: newValue))
     }
+}
+
+//=----------------------------------------------------------------------------=
+// MARK: Field - Selection
+//=----------------------------------------------------------------------------=
+
+extension Field {
 
     //=------------------------------------------------------------------------=
-    // MARK: Selection
+    // MARK: Transformations
     //=------------------------------------------------------------------------=
         
     @inlinable func updated(selection newValue: Selection, intent: Direction?) -> Self {
@@ -106,7 +127,7 @@ import Quick
     }
     
     //
-    // MARK: Selection - Indirect
+    // MARK: Transformations - Indirect
     //=------------------------------------------------------------------------=
     
     @inlinable func updated(selection newValue: Range<Carets.Index>, intent: Direction?) -> Self {
