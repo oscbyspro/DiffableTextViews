@@ -170,13 +170,13 @@ public extension Snapshot {
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: Snapshot - Transformations
+// MARK: Snapshot - Attributes
 //=----------------------------------------------------------------------------=
 
 public extension Snapshot {
 
     //=------------------------------------------------------------------------=
-    // MARK: Attributes
+    // MARK: Transformations
     //=------------------------------------------------------------------------=
     
     @inlinable mutating func transform(
