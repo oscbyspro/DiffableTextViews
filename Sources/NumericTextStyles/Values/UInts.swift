@@ -10,16 +10,14 @@
 //*============================================================================*
 
 extension UInt: ValuableUInt {
+    typealias Limitation = Int
     
     //=------------------------------------------------------------------------=
     // MARK: Precision, Bounds
     //=------------------------------------------------------------------------=
     
-    /// Apple, please fix IntegerFormatStyle«UInt» because it uses an Int.
-    public static let precision: Capacity = Int.precision
-    
-    /// Apple, please fix IntegerFormatStyle«UInt» because it uses an Int.
-    public static let maxLosslessValue: UInt = UInt(Int.maxLosslessValue)
+    public static let precision: Capacity = Limitation.precision
+    public static let bounds: ClosedRange<Self> = 0...Self(Limitation.bounds.upperBound)
 }
 
 //*============================================================================*
@@ -29,10 +27,11 @@ extension UInt: ValuableUInt {
 extension UInt8: ValuableUInt {
     
     //=------------------------------------------------------------------------=
-    // MARK: Precision
+    // MARK: Precision, Bounds
     //=------------------------------------------------------------------------=
 
     public static let precision: Capacity = precision(3)
+    public static let bounds: ClosedRange<Self> = bounds()
 }
 
 //*============================================================================*
@@ -42,10 +41,11 @@ extension UInt8: ValuableUInt {
 extension UInt16: ValuableUInt {
     
     //=------------------------------------------------------------------------=
-    // MARK: Precision
+    // MARK: Precision, Bounds
     //=------------------------------------------------------------------------=
 
     public static let precision: Capacity = precision(5)
+    public static let bounds: ClosedRange<Self> = bounds()
 }
 
 //*============================================================================*
@@ -55,10 +55,11 @@ extension UInt16: ValuableUInt {
 extension UInt32: ValuableUInt {
     
     //=------------------------------------------------------------------------=
-    // MARK: Precision
+    // MARK: Precision, Bounds
     //=------------------------------------------------------------------------=
 
     public static let precision: Capacity = precision(10)
+    public static let bounds: ClosedRange<Self> = bounds()
 }
 
 //*============================================================================*
@@ -66,14 +67,12 @@ extension UInt32: ValuableUInt {
 //*============================================================================*
 
 extension UInt64: ValuableUInt {
+    typealias Limitation = Int64
     
     //=------------------------------------------------------------------------=
     // MARK: Precision, Bounds
     //=------------------------------------------------------------------------=
 
-    /// Apple, please fix IntegerFormatStyleU«Int64» because it uses an Int64.
-    public static let precision: Capacity = Int64.precision
-    
-    /// Apple, please fix IntegerFormatStyleU«Int64» because it uses an Int64.
-    public static let maxLosslessValue: UInt64 = UInt64(Int64.maxLosslessValue)
+    public static let precision: Capacity = Limitation.precision
+    public static let bounds: ClosedRange<Self> = 0...Self(Limitation.bounds.upperBound)
 }

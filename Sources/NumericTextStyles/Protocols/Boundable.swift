@@ -12,17 +12,10 @@
 public protocol Boundable: Comparable {
     
     //=------------------------------------------------------------------------=
-    // MARK: Values
+    // MARK: Bounds
     //=------------------------------------------------------------------------=
     
-    /// The zero value.
-    @inlinable static var zero: Self { get }
-    
-    /// - Less than or equal to zero.
-    @inlinable static var minLosslessValue: Self { get }
-    
-    /// - Greater than or equal to zero.
-    @inlinable static var maxLosslessValue: Self { get }
+    @inlinable static var bounds: ClosedRange<Self> { get }
 }
 
 //*============================================================================*
@@ -30,14 +23,19 @@ public protocol Boundable: Comparable {
 //*============================================================================*
 
 @usableFromInline protocol BoundableFloatingPoint: Boundable, BinaryFloatingPoint { }
+
+//=----------------------------------------------------------------------------=
+// MARK: Boundable x Floating Point - Utilities
+//=----------------------------------------------------------------------------=
+
 extension BoundableFloatingPoint {
     
     //=------------------------------------------------------------------------=
-    // MARK: Values
+    // MARK: Bounds - Make
     //=------------------------------------------------------------------------=
     
-    @inlinable public static var minLosslessValue: Self {
-        -maxLosslessValue
+    @inlinable public static func bounds(limit: Self) -> ClosedRange<Self> {
+        -limit...limit
     }
 }
 
@@ -46,12 +44,18 @@ extension BoundableFloatingPoint {
 //*============================================================================*
 
 @usableFromInline protocol BoundableInteger: Boundable, FixedWidthInteger { }
+
+//=----------------------------------------------------------------------------=
+// MARK: Boundable x Integer - Utilities
+//=----------------------------------------------------------------------------=
+
 extension BoundableInteger {
     
     //=------------------------------------------------------------------------=
-    // MARK: Values
+    // MARK: Bounds - Make
     //=------------------------------------------------------------------------=
     
-    @inlinable public static var minLosslessValue: Self { min }
-    @inlinable public static var maxLosslessValue: Self { max }
+    @inlinable static func bounds() -> ClosedRange<Self> {
+        min...max
+    }
 }

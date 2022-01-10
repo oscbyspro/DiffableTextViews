@@ -34,8 +34,8 @@ public struct Bounds<Value: Boundable> {
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable init(min: Value = Value.minLosslessValue, max: Value = Value.maxLosslessValue) {
-        self.values = min ... max
+    @inlinable init(min: Value = Value.bounds.lowerBound, max: Value = Value.bounds.upperBound) {
+        self.values = min...max
     }
     
     //

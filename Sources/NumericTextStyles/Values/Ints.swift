@@ -12,10 +12,11 @@
 extension Int: ValuableInt {
     
     //=------------------------------------------------------------------------=
-    // MARK: Precision
+    // MARK: Precision, Bounds
     //=------------------------------------------------------------------------=
     
     public static let precision: Capacity = precision(String(max).count)
+    public static let bounds: ClosedRange<Self> = bounds()
 }
 
 //*============================================================================*
@@ -25,10 +26,11 @@ extension Int: ValuableInt {
 extension Int8: ValuableInt {
     
     //=------------------------------------------------------------------------=
-    // MARK: Precision
+    // MARK: Precision, Bounds
     //=------------------------------------------------------------------------=
     
     public static let precision: Capacity = precision(3)
+    public static let bounds: ClosedRange<Self> = bounds()
 }
 
 //*============================================================================*
@@ -38,10 +40,11 @@ extension Int8: ValuableInt {
 extension Int16: ValuableInt {
     
     //=------------------------------------------------------------------------=
-    // MARK: Precision
+    // MARK: Precision, Bounds
     //=------------------------------------------------------------------------=
     
     public static let precision: Capacity = precision(5)
+    public static let bounds: ClosedRange<Self> = bounds()
 }
 
 //*============================================================================*
@@ -51,10 +54,11 @@ extension Int16: ValuableInt {
 extension Int32: ValuableInt {
     
     //=------------------------------------------------------------------------=
-    // MARK: Precision
+    // MARK: Precision, Bounds
     //=------------------------------------------------------------------------=
     
     public static let precision: Capacity = precision(10)
+    public static let bounds: ClosedRange<Self> = bounds()
 }
 
 //*============================================================================*
@@ -64,8 +68,9 @@ extension Int32: ValuableInt {
 extension Int64: ValuableInt {
     
     //=------------------------------------------------------------------------=
-    // MARK: Precision
+    // MARK: Precision, Bounds
     //=------------------------------------------------------------------------=
     
     public static let precision: Capacity = precision(19)
+    public static let bounds: ClosedRange<Self> = bounds()
 }

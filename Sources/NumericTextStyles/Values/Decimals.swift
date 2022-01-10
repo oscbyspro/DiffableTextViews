@@ -28,13 +28,10 @@ extension Decimal: Valuable, PreciseFloatingPoint {
     //=------------------------------------------------------------------------=
     // MARK: Bounds
     //=------------------------------------------------------------------------=
-        
-    @inlinable public static var minLosslessValue: Self   { -maxLosslessLimit }
-    @inlinable public static var maxLosslessValue: Self   {  maxLosslessLimit }
-    @usableFromInline static let maxLosslessLimit: Self = {
-        Decimal(string: String(repeating: "9", count: 38))!
-    }()
 
+    public static let bounds: ClosedRange<Self> = -limit...limit
+    static let limit = Self(string: String(repeating: "9", count: 38))!
+    
     //=------------------------------------------------------------------------=
     // MARK: Formattable
     //=------------------------------------------------------------------------=
