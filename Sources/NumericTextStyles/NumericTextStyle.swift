@@ -14,10 +14,6 @@ import Utilities
 // MARK: * NumericTextStyle
 //*============================================================================*
 
-/// Formats numbers to and from user interactive text.
-///
-/// - Complexity: O(k · n) where k is some constant and n is the number of characters in the snapshot.
-///
 public struct NumericTextStyle<Value: Valuable>: DiffableTextStyle, Mappable {
     public typealias Bounds = NumericTextStyles.Bounds<Value>
     public typealias Precision = NumericTextStyles.Precision<Value>
@@ -172,7 +168,7 @@ extension NumericTextStyle {
             if format.zero == symbol.character { return true }
             if format.fractionSeparator.contains(symbol.character) { return true }
             return false }.indices) { attribute in  attribute.insert(.removable) }
-
+        
         //=--------------------------------------=
         // MARK: Suffix
         //=--------------------------------------=
@@ -302,7 +298,8 @@ extension NumericTextStyle {
     //=------------------------------------------------------------------------=
     
     @inlinable func number(snapshot: Snapshot) throws -> Number {
-        let unformatted = snapshot.lazy
+        let unformatted = snapshot
+            .lazy
             .filter({ !$0.attribute.contains(.formatting) })
             .map(\.character)
                 
