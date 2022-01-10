@@ -44,7 +44,7 @@ public protocol DiffableTextStyle {
     // MARK: Parse
     //=------------------------------------------------------------------------=
     
-    /// Value represented by the snapshot or nil if the snapshot is invalid.
+    /// Value represented by the snapshot.
     @inlinable func parse(snapshot: Snapshot) throws -> Value // required (!)
 
     //=------------------------------------------------------------------------=
