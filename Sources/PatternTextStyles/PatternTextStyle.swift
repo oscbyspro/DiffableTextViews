@@ -63,6 +63,17 @@ extension PatternTextStyle {
         var patternIndex = format.pattern.startIndex
         
         //=--------------------------------------=
+        // MARK: Prefix Up To First Placeholder
+        //=--------------------------------------=
+        
+        while patternIndex != format.pattern.endIndex {
+            let patternElement = format.pattern[patternIndex]
+            guard patternElement != format.placeholder else { break }
+            format.pattern.formIndex(after: &patternIndex)
+            snapshot.append(.prefix(patternElement))
+        }
+        
+        //=--------------------------------------=
         // MARK: Body
         //=--------------------------------------=
         
@@ -80,23 +91,11 @@ extension PatternTextStyle {
         }
         
         //=--------------------------------------=
-        // MARK: Tail
+        // MARK: Remainders
         //=--------------------------------------=
         
         if visible, patternIndex != format.pattern.endIndex {
             snapshot.append(contentsOf: Snapshot(String(format.pattern[patternIndex...]), only: .suffix))
-        }
-        
-        //=--------------------------------------=
-        // MARK: Process Empty Value Prefix
-        //=--------------------------------------=
-        
-        if valueIndex == value.startIndex {
-            if let firstPlaceholderIndex = snapshot.firstIndex(where: { $0.character == format.placeholder }) {
-                snapshot.transform(attributes: ..<firstPlaceholderIndex) { attribute in
-                    attribute = .prefix
-                }
-            }
         }
         
         //=--------------------------------------=
