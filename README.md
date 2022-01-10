@@ -2,7 +2,7 @@
 
 👷‍♂️🛠🚧🚧🧱🏗🧱🚧🚧⏳
 
-This package contains DiffableTextField. It uses snapshots and attributes to process changes to its text and set its caret positions. It also makes it easy to implement and reason about as-you-type formatting, through styles conforming to DiffableTextStyle.
+This package contains views and styles that use snapshots and attributes to process changes to text and set caret positions. This approach makes it easy to implement and reason about as-you-type formatting.
 
 # Progress
 
