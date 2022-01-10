@@ -9,6 +9,10 @@
 // MARK: * Boundable
 //*============================================================================*
 
+/// A boundable value.
+///
+/// BoundableFloatingPoint and BoundableInteger are used as affordances by Bounds.
+///
 public protocol Boundable: Comparable {
     
     //=------------------------------------------------------------------------=
@@ -22,13 +26,13 @@ public protocol Boundable: Comparable {
 // MARK: * Boundable x Floating Point
 //*============================================================================*
 
-@usableFromInline protocol BoundableFloatingPoint: Boundable, SignedNumeric { }
+public protocol BoundableFloatingPoint: Boundable { }
 
 //=----------------------------------------------------------------------------=
 // MARK: Boundable x Floating Point - Utilities
 //=----------------------------------------------------------------------------=
 
-extension BoundableFloatingPoint {
+extension BoundableFloatingPoint where Self: SignedNumeric {
     
     //=------------------------------------------------------------------------=
     // MARK: Bounds - Make
@@ -43,19 +47,19 @@ extension BoundableFloatingPoint {
 // MARK: * Boundable x Integer
 //*============================================================================*
 
-@usableFromInline protocol BoundableInteger: Boundable, FixedWidthInteger { }
+public protocol BoundableInteger: Boundable { }
 
 //=----------------------------------------------------------------------------=
 // MARK: Boundable x Integer - Utilities
 //=----------------------------------------------------------------------------=
 
-extension BoundableInteger {
+extension BoundableInteger where Self: FixedWidthInteger {
     
     //=------------------------------------------------------------------------=
     // MARK: Bounds - Make
     //=------------------------------------------------------------------------=
     
-    @inlinable static func bounds() -> ClosedRange<Self> {
+    @inlinable public static func bounds() -> ClosedRange<Self> {
         min...max
     }
 }
