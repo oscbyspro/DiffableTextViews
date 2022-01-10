@@ -42,7 +42,7 @@ public struct NumericTextStyle<Value: Valuable>: DiffableTextStyle, Mappable {
     }
     
     //=------------------------------------------------------------------------=
-    // MARK: Update
+    // MARK: Transformations
     //=------------------------------------------------------------------------=
     
     @inlinable public func locale(_ locale: Locale) -> Self {
@@ -64,9 +64,16 @@ public struct NumericTextStyle<Value: Valuable>: DiffableTextStyle, Mappable {
     @inlinable public func suffix(_ suffix: String?) -> Self {
         map({ $0.suffix = suffix ?? "" })
     }
+}
+
+//=----------------------------------------------------------------------------=
+// MARK: NumericTextStyle - Snapshot
+//=----------------------------------------------------------------------------=
+
+extension NumericTextStyle {
     
     //=------------------------------------------------------------------------=
-    // MARK: Snapshot
+    // MARK: Mode
     //=------------------------------------------------------------------------=
     
     @inlinable public func snapshot(showcase value: Value) -> Snapshot {
@@ -77,16 +84,16 @@ public struct NumericTextStyle<Value: Valuable>: DiffableTextStyle, Mappable {
         snapshot(value: value, style: format.editableStyle())
     }
     
-    //
-    // MARK: Snapshot - Value
+    //=------------------------------------------------------------------------=
+    // MARK: Value
     //=------------------------------------------------------------------------=
     
     @inlinable func snapshot(value: Value, style: Value.FormatStyle) -> Snapshot {
         snapshot(characters: style.format(value))
     }
     
-    //
-    // MARK: Snapshot - Characters
+    //=------------------------------------------------------------------------=
+    // MARK: Characters
     //=------------------------------------------------------------------------=
 
     @inlinable func snapshot(characters: String) -> Snapshot {
@@ -177,9 +184,16 @@ public struct NumericTextStyle<Value: Valuable>: DiffableTextStyle, Mappable {
         
         return snapshot
     }
+}
+
+//=----------------------------------------------------------------------------=
+// MARK: NumericTextStyle - Merge
+//=----------------------------------------------------------------------------=
+
+extension NumericTextStyle {
     
     //=------------------------------------------------------------------------=
-    // MARK: Merge
+    // MARK: Implementation
     //=------------------------------------------------------------------------=
     
     @inlinable public func merge(snapshot: Snapshot, with content: Snapshot, in range: Range<Snapshot.Index>) throws -> Snapshot {
@@ -263,14 +277,25 @@ public struct NumericTextStyle<Value: Valuable>: DiffableTextStyle, Mappable {
                 
         return self.snapshot(characters: characters)
     }
-    
+}
+
+//=----------------------------------------------------------------------------=
+// MARK: NumericTextStyle - Parse
+//=----------------------------------------------------------------------------=
+
+extension NumericTextStyle {
+
     //=------------------------------------------------------------------------=
-    // MARK: Parse
+    // MARK: Snapshot as Value
     //=------------------------------------------------------------------------=
 
     @inlinable public func parse(snapshot: Snapshot) throws -> Value {
         try Value(number: number(snapshot: snapshot))
     }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Snapshot as Number
+    //=------------------------------------------------------------------------=
     
     @inlinable func number(snapshot: Snapshot) throws -> Number {
         let unformatted = snapshot.lazy
@@ -283,9 +308,16 @@ public struct NumericTextStyle<Value: Valuable>: DiffableTextStyle, Mappable {
                 
         return number
     }
+}
+
+//=----------------------------------------------------------------------------=
+// MARK: NumericTextStyle - Process
+//=----------------------------------------------------------------------------=
+
+extension NumericTextStyle {
     
     //=------------------------------------------------------------------------=
-    // MARK: Process
+    // MARK: Value
     //=------------------------------------------------------------------------=
 
     @inlinable public func process(value: inout Value) {
