@@ -14,7 +14,7 @@ import Foundation
 extension Decimal: Valuable, BoundableFloatingPoint, PreciseFloatingPoint {
     
     //=------------------------------------------------------------------------=
-    // MARK: Valuable
+    // MARK: Options
     //=------------------------------------------------------------------------=
     
     public static let options: Options = .floatingPoint
@@ -29,20 +29,18 @@ extension Decimal: Valuable, BoundableFloatingPoint, PreciseFloatingPoint {
     // MARK: Bounds
     //=------------------------------------------------------------------------=
 
-    public static let bounds: ClosedRange<Self> = bounds(
-        limit: Self(string: String(repeating: "9", count: 38))!
-    )
+    public static let bounds: ClosedRange<Self> = bounds(limit: Self(string: String(repeating: "9", count: 38))!)
     
     //=------------------------------------------------------------------------=
-    // MARK: Formattable
+    // MARK: Make
     //=------------------------------------------------------------------------=
     
     @inlinable public static func make(description: String) -> Optional<Self> {
         .init(string: description)
     }
-    
-    //
-    // MARK: Formattable - Styles
+
+    //=------------------------------------------------------------------------=
+    // MARK: Styles
     //=------------------------------------------------------------------------=
     
     @inlinable public static func style(locale: Locale, precision: PrecisionStyle, separator: SeparatorStyle) -> FormatStyle {

@@ -23,7 +23,7 @@ public protocol Formattable {
     associatedtype FormatStyle: Foundation.FormatStyle where FormatStyle.FormatInput == Self, FormatStyle.FormatOutput == String
         
     //=------------------------------------------------------------------------=
-    // MARK: Initializers - Static
+    // MARK: Make
     //=------------------------------------------------------------------------=
     
     /// Interprets a system description of this type and returns an instance of it the description is valid, else it returns nil.
@@ -84,7 +84,7 @@ extension Formattable {
 extension FormattableFloatingPoint {
     
     //=------------------------------------------------------------------------=
-    // MARK: Initializers - Static
+    // MARK: Make
     //=------------------------------------------------------------------------=
 
     @inlinable public static func make(description: String) -> Optional<Self> {
@@ -120,7 +120,7 @@ extension FormattableFloatingPoint {
 extension FormattableInteger {
     
     //=------------------------------------------------------------------------=
-    // MARK: Initializers - Static
+    // MARK: Make
     //=------------------------------------------------------------------------=
     
     @inlinable public static func make(description: String) -> Optional<Self> {
