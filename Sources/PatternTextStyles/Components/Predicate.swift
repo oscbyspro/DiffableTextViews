@@ -1,5 +1,5 @@
 //
-//  File.swift
+//  Predicate.swift
 //  
 //
 //  Created by Oscar Byström Ericsson on 2022-01-10.
