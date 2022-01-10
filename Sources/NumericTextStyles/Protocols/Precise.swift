@@ -12,43 +12,10 @@
 public protocol Precise {
     
     //=------------------------------------------------------------------------=
-    // MARK: Digits
+    // MARK: Capacity
     //=------------------------------------------------------------------------=
     
-    @inlinable static var maxLosslessIntegerDigits:     Int { get }
-    @inlinable static var maxLosslessFractionDigits:    Int { get }
-    @inlinable static var maxLosslessSignificantDigits: Int { get }
-}
-
-//=----------------------------------------------------------------------------=
-// MARK: Precise - Details
-//=----------------------------------------------------------------------------=
-
-extension Precise {
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Digits
-    //=------------------------------------------------------------------------=
-    
-    @inlinable static var minLosslessIntegerDigits:     Int { 1 }
-    @inlinable static var minLosslessFractionDigits:    Int { 0 }
-    @inlinable static var minLosslessSignificantDigits: Int { 1 }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Limits
-    //=------------------------------------------------------------------------=
-    
-    @inlinable static var losslessIntegerLimits: ClosedRange<Int> {
-        minLosslessIntegerDigits ... maxLosslessIntegerDigits
-    }
-    
-    @inlinable static var losslessFractionLimits: ClosedRange<Int> {
-        minLosslessFractionDigits ... maxLosslessFractionDigits
-    }
-    
-    @inlinable static var losslessSignificantLimits: ClosedRange<Int> {
-        minLosslessSignificantDigits ... maxLosslessSignificantDigits
-    }
+    @inlinable static var precision: Capacity { get }
 }
 
 //*============================================================================*
@@ -58,7 +25,7 @@ extension Precise {
 public protocol PreciseFloatingPoint: Precise { }
 
 //=----------------------------------------------------------------------------=
-// MARK: Precise x Floating Point - Implementation
+// MARK: Precise x Floating Point - Utilities
 //=----------------------------------------------------------------------------=
 
 public extension PreciseFloatingPoint {
@@ -67,23 +34,19 @@ public extension PreciseFloatingPoint {
     // MARK: Digits
     //=------------------------------------------------------------------------=
 
-    @inlinable static var maxLosslessIntegerDigits: Int {
-        maxLosslessSignificantDigits
-    }
-    
-    @inlinable static var maxLosslessFractionDigits: Int {
-        maxLosslessSignificantDigits
+    @inlinable static func precision(_ max: Int) -> Capacity {
+        .init(integer: max, fraction: max, significant: max)
     }
 }
 
 //*============================================================================*
-// MARK: * Precise x Floating Point
+// MARK: * Precise x Integer
 //*============================================================================*
 
 public protocol PreciseInteger: Precise { }
 
 //=----------------------------------------------------------------------------=
-// MARK: Precise x Integer - Implementation
+// MARK: Precise x Integer - Utilities
 //=----------------------------------------------------------------------------=
 
 public extension PreciseInteger {
@@ -92,11 +55,7 @@ public extension PreciseInteger {
     // MARK: Digits
     //=------------------------------------------------------------------------=
     
-    @inlinable static var maxLosslessIntegerDigits: Int {
-        maxLosslessSignificantDigits
-    }
-    
-    @inlinable static var maxLosslessFractionDigits: Int {
-        Int.zero
+    @inlinable static func precision(_ max: Int) -> Capacity {
+        .init(integer: max, fraction: .zero, significant: max)
     }
 }

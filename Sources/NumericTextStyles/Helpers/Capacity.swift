@@ -5,41 +5,35 @@
 //  Created by Oscar Byström Ericsson on 2021-12-24.
 //
 
+#warning("Rename.")
+
 //*============================================================================*
 // MARK: * Capacity
 //*============================================================================*
 
-@usableFromInline struct Capacity {
+public struct Capacity {
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Instance
+    //=------------------------------------------------------------------------=
+    
+    @usableFromInline static let min = Self(integer: 1, fraction: 0, significant: 1)
 
     //=------------------------------------------------------------------------=
     // MARK: Properties
     //=------------------------------------------------------------------------=
-
-    @usableFromInline let integer: Int
-    @usableFromInline let fraction: Int
-    @usableFromInline let significant: Int
+    
+    @usableFromInline var integer: Int
+    @usableFromInline var fraction: Int
+    @usableFromInline var significant: Int
 
     //=------------------------------------------------------------------------=
     // MARK: Initializers
     //=------------------------------------------------------------------------=
 
-    @inlinable init(integer: Int, fraction: Int, significant: Int) {
+    @inlinable public init(integer: Int, fraction: Int, significant: Int) {
         self.integer = integer
         self.fraction = fraction
         self.significant = significant
-    }
-    
-    //
-    // MARK: Initializers - Static
-    //=------------------------------------------------------------------------=
-    
-    @inlinable static func max<Value: Precise>(
-        in type: Value.Type = Value.self,
-        integer: Int = Value.maxLosslessIntegerDigits,
-        fraction: Int = Value.maxLosslessFractionDigits,
-        significant: Int = Value.maxLosslessSignificantDigits)
-        -> Self {
-            
-        .init(integer: integer, fraction: fraction, significant: significant)
     }
 }

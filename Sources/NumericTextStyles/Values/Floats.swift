@@ -12,11 +12,11 @@
 extension Float16: ValuableFloat {
     
     //=------------------------------------------------------------------------=
-    // MARK: Boundable, Precise - Values, Digits
+    // MARK: Precise, Boundable
     //=------------------------------------------------------------------------=
     
+    public static let precision: Capacity = precision(3)
     public static let maxLosslessValue: Self = 999
-    public static let maxLosslessSignificantDigits: Int = 3
 }
 
 //*============================================================================*
@@ -26,11 +26,11 @@ extension Float16: ValuableFloat {
 extension Float32: ValuableFloat {
     
     //=------------------------------------------------------------------------=
-    // MARK: Boundable, Precise - Values, Digits
+    // MARK: Precise, Boundable
     //=------------------------------------------------------------------------=
-        
+    
+    public static let precision: Capacity = precision(7)
     public static let maxLosslessValue: Self = 9_999_999
-    public static let maxLosslessSignificantDigits: Int = 7
 }
 
 //*============================================================================*
@@ -40,9 +40,9 @@ extension Float32: ValuableFloat {
 extension Float64: ValuableFloat {
     
     //=------------------------------------------------------------------------=
-    // MARK: Boundable, Precise - Values, Digits
+    // MARK: Precise, Boundable
     //=------------------------------------------------------------------------=
-        
+    
+    public static let precision: Capacity = precision(15)
     public static let maxLosslessValue: Self = 999_999_999_999_999
-    public static let maxLosslessSignificantDigits: Int = 15
 }

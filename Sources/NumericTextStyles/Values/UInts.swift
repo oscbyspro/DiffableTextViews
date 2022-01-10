@@ -12,14 +12,14 @@
 extension UInt: ValuableUInt {
     
     //=------------------------------------------------------------------------=
-    // MARK: Boundable, Precise - Values, Digits
+    // MARK: Precise, Boundable
     //=------------------------------------------------------------------------=
-        
+    
+    /// Apple, please fix IntegerFormatStyle«UInt» because it uses an Int.
+    public static let precision: Capacity = Int.precision
+    
     /// Apple, please fix IntegerFormatStyle«UInt» because it uses an Int.
     public static let maxLosslessValue: UInt = UInt(Int.maxLosslessValue)
-
-    /// Apple, please fix IntegerFormatStyle«UInt» because it uses an Int.
-    public static let maxLosslessSignificantDigits: Int = Int.maxLosslessSignificantDigits
 }
 
 //*============================================================================*
@@ -29,10 +29,10 @@ extension UInt: ValuableUInt {
 extension UInt8: ValuableUInt {
     
     //=------------------------------------------------------------------------=
-    // MARK: Precise - Digits
+    // MARK: Precise
     //=------------------------------------------------------------------------=
 
-    public static let maxLosslessSignificantDigits: Int = 3
+    public static let precision: Capacity = precision(3)
 }
 
 //*============================================================================*
@@ -42,10 +42,10 @@ extension UInt8: ValuableUInt {
 extension UInt16: ValuableUInt {
     
     //=------------------------------------------------------------------------=
-    // MARK: Precise - Digits
+    // MARK: Precise
     //=------------------------------------------------------------------------=
-    
-    public static let maxLosslessSignificantDigits: Int = 5
+
+    public static let precision: Capacity = precision(5)
 }
 
 //*============================================================================*
@@ -55,10 +55,10 @@ extension UInt16: ValuableUInt {
 extension UInt32: ValuableUInt {
     
     //=------------------------------------------------------------------------=
-    // MARK: Precise - Digits
+    // MARK: Precise
     //=------------------------------------------------------------------------=
-    
-    public static let maxLosslessSignificantDigits: Int = 10
+
+    public static let precision: Capacity = precision(10)
 }
 
 //*============================================================================*
@@ -68,12 +68,12 @@ extension UInt32: ValuableUInt {
 extension UInt64: ValuableUInt {
     
     //=------------------------------------------------------------------------=
-    // MARK: Boundable, Precise - Values, Digits
+    // MARK: Precise, Boundable
     //=------------------------------------------------------------------------=
+
+    /// Apple, please fix IntegerFormatStyleU«Int64» because it uses an Int64.
+    public static let precision: Capacity = Int64.precision
     
     /// Apple, please fix IntegerFormatStyleU«Int64» because it uses an Int64.
     public static let maxLosslessValue: UInt64 = UInt64(Int64.maxLosslessValue)
-
-    /// Apple, please fix IntegerFormatStyleU«Int64» because it uses an Int64.
-    public static let maxLosslessSignificantDigits: Int = Int64.maxLosslessSignificantDigits
 }

@@ -14,16 +14,16 @@ import Foundation
 extension Decimal: Valuable, PreciseFloatingPoint {
     
     //=------------------------------------------------------------------------=
-    // MARK: Valuable - Options
+    // MARK: Valuable
     //=------------------------------------------------------------------------=
     
     public static let options: Options = .floatingPoint
 
     //=------------------------------------------------------------------------=
-    // MARK: Precise - Digits
+    // MARK: Precise
     //=------------------------------------------------------------------------=
- 
-    public static let maxLosslessSignificantDigits: Int = 38
+    
+    public static let precision: Capacity = precision(38)
     
     //=------------------------------------------------------------------------=
     // MARK: Boundable - Values
@@ -32,11 +32,11 @@ extension Decimal: Valuable, PreciseFloatingPoint {
     @inlinable public static var minLosslessValue: Self   { -maxLosslessLimit }
     @inlinable public static var maxLosslessValue: Self   {  maxLosslessLimit }
     @usableFromInline static let maxLosslessLimit: Self = {
-        Decimal(string: String(repeating: "9", count: maxLosslessSignificantDigits))!
+        Decimal(string: String(repeating: "9", count: 38))!
     }()
 
     //=------------------------------------------------------------------------=
-    // MARK: Formattable - Initializers - Static
+    // MARK: Formattable
     //=------------------------------------------------------------------------=
     
     @inlinable public static func make(description: String) -> Optional<Self> {
