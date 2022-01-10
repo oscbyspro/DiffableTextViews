@@ -11,7 +11,7 @@ import Foundation
 // MARK: * Decimal
 //*============================================================================*
 
-extension Decimal: Valuable, PreciseFloatingPoint {
+extension Decimal: Valuable, BoundableFloatingPoint, PreciseFloatingPoint {
     
     //=------------------------------------------------------------------------=
     // MARK: Valuable
@@ -29,8 +29,9 @@ extension Decimal: Valuable, PreciseFloatingPoint {
     // MARK: Bounds
     //=------------------------------------------------------------------------=
 
-    public static let bounds: ClosedRange<Self> = -limit...limit
-    static let limit = Self(string: String(repeating: "9", count: 38))!
+    public static let bounds: ClosedRange<Self> = bounds(
+        limit: Self(string: String(repeating: "9", count: 38))!
+    )
     
     //=------------------------------------------------------------------------=
     // MARK: Formattable

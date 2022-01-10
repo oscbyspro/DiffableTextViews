@@ -22,7 +22,7 @@ public protocol Boundable: Comparable {
 // MARK: * Boundable x Floating Point
 //*============================================================================*
 
-@usableFromInline protocol BoundableFloatingPoint: Boundable, BinaryFloatingPoint { }
+@usableFromInline protocol BoundableFloatingPoint: Boundable, SignedNumeric { }
 
 //=----------------------------------------------------------------------------=
 // MARK: Boundable x Floating Point - Utilities
