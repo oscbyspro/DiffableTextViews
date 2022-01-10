@@ -62,7 +62,7 @@ extension Field {
 
     @inlinable func autocorrected() -> Self {
         func position(start: Carets.Index, preference: Direction) -> Carets.Index {
-            carets.look(start: start, direction: carets[start].directionOfAttributes() ?? preference)
+            carets.look(start: start, direction: carets[start].directionality() ?? preference)
         }
         
         return map({ $0.selection = $0.selection.preferred(position) })

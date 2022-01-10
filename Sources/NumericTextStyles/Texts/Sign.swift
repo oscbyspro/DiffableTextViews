@@ -63,7 +63,7 @@
 extension Sign: CustomStringConvertible {
     
     //=------------------------------------------------------------------------=
-    // MARK: Description
+    // MARK: Descriptions
     //=------------------------------------------------------------------------=
     
     @usableFromInline var description: String {

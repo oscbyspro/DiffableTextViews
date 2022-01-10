@@ -9,7 +9,7 @@
 // MARK: * Symbol
 //*============================================================================*
 
-public struct Symbol: Equatable, CustomStringConvertible {
+public struct Symbol: Equatable {
     
     //=------------------------------------------------------------------------=
     // MARK: Properties
@@ -46,9 +46,16 @@ public struct Symbol: Equatable, CustomStringConvertible {
     @inlinable public static func spacer(_ character: Character) -> Self {
         Self(character: character, attribute: .spacer)
     }
+}
 
+//=----------------------------------------------------------------------------=
+// MARK: Symbol - CustomStringConvertible
+//=----------------------------------------------------------------------------=
+
+extension Symbol: CustomStringConvertible {
+    
     //=------------------------------------------------------------------------=
-    // MARK: Description
+    // MARK: Descriptions
     //=------------------------------------------------------------------------=
     
     @inlinable public var description: String {

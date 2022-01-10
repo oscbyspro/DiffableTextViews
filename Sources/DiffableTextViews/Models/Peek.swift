@@ -31,17 +31,17 @@
     // MARK: Utilities
     //=------------------------------------------------------------------------=
     
-    @inlinable func containsOnBothSides(_ attribute: Attribute) -> Bool {
+    @inlinable func expresses(_ attribute: Attribute) -> Bool {
         lhs.attribute.contains(attribute) && rhs.attribute.contains(attribute)
     }
     
-    //=------------------------------------------------------------------------=
-    // MARK: Direction
+    //
+    // MARK: Utilities - Directions
     //=------------------------------------------------------------------------=
     
-    @inlinable func directionOfAttributes() -> Direction? {
-        let forwards  = containsOnBothSides(.prefixing)
-        let backwards = containsOnBothSides(.suffixing)
+    @inlinable func directionality() -> Direction? {
+        let  forwards = expresses(.prefixing)
+        let backwards = expresses(.suffixing)
         
         if forwards == backwards {
             return nil
@@ -50,8 +50,8 @@
         return forwards ? .forwards : .backwards
     }
     
-    //=------------------------------------------------------------------------=
-    // MARK: Lookable
+    //
+    // MARK: Utilities - Lookabilities
     //=------------------------------------------------------------------------=
     
     @inlinable var lookaheadable: Bool {
