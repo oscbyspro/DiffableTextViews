@@ -31,7 +31,7 @@ public protocol PreciseFloatingPoint: Precise { }
 public extension PreciseFloatingPoint {
     
     //=------------------------------------------------------------------------=
-    // MARK: Digits
+    // MARK: Capacity - Make
     //=------------------------------------------------------------------------=
 
     @inlinable static func precision(_ max: Int) -> Capacity {
@@ -52,7 +52,7 @@ public protocol PreciseInteger: Precise { }
 public extension PreciseInteger {
     
     //=------------------------------------------------------------------------
-    // MARK: Digits
+    // MARK: Capacity - Make
     //=------------------------------------------------------------------------=
     
     @inlinable static func precision(_ max: Int) -> Capacity {

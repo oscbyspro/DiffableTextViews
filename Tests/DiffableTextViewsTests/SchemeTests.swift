@@ -25,6 +25,7 @@ final class SchemeTests: XCTestCase {
     //=------------------------------------------------------------------------=
     
     lazy var scheme     = UTF16.self
+    lazy var iterations = 1_000_000
     lazy var content1__ = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, magna aliqua."
     lazy var content10_ = String(repeating: content1__, count: 10_)
     lazy var content100 = String(repeating: content1__, count: 100)
@@ -37,7 +38,7 @@ final class SchemeTests: XCTestCase {
     /// Character: 0.578 sec.
     func test1__() {
         measure {
-            count(content1__)
+            sizeTest(content1__)
         }
     }
     
@@ -45,7 +46,7 @@ final class SchemeTests: XCTestCase {
     /// Character: 3.970 sec.
     func test10_() {
         measure {
-            count(content10_)
+            sizeTest(content10_)
         }
     }
     
@@ -53,7 +54,7 @@ final class SchemeTests: XCTestCase {
     /// Character: ain't nobody got time for that.
     func test100() {
         measure {
-            count(content100)
+            sizeTest(content100)
         }
     }
     
@@ -61,8 +62,8 @@ final class SchemeTests: XCTestCase {
     // MARK: Helpers
     //=------------------------------------------------------------------------=
     
-    func count(_ content: String) {
-        for _ in 0 ..< 1_000_000 {
+    func sizeTest(_ content: String) {
+        for _ in 0 ..< iterations {
             _ = scheme.size(of: content)
         }
     }
