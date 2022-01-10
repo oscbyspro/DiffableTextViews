@@ -35,7 +35,7 @@ public struct PatternTextStyle<Pattern, Value>: DiffableTextStyle, Mappable wher
     }
     
     //=------------------------------------------------------------------------=
-    // MARK: Update
+    // MARK: Transformations
     //=------------------------------------------------------------------------=
     
     @inlinable public func hidden() -> Self {
@@ -45,9 +45,16 @@ public struct PatternTextStyle<Pattern, Value>: DiffableTextStyle, Mappable wher
     @inlinable public func predicate(_ predicate: Predicate<Value>) -> Self {
         map({ $0.predicates.add(predicate) })
     }
+}
+
+//=----------------------------------------------------------------------------=
+// MARK: PatternTextStyle - Snapshot
+//=----------------------------------------------------------------------------=
+
+extension PatternTextStyle {
 
     //=------------------------------------------------------------------------=
-    // MARK: Snapshot
+    // MARK: Editable
     //=------------------------------------------------------------------------=
     
     @inlinable public func snapshot(editable value: Value) -> Snapshot {
@@ -98,9 +105,16 @@ public struct PatternTextStyle<Pattern, Value>: DiffableTextStyle, Mappable wher
         
         return snapshot
     }
+}
+
+//=----------------------------------------------------------------------------=
+// MARK: PatternTextStyle - Merge
+//=----------------------------------------------------------------------------=
+
+extension PatternTextStyle {
         
     //=------------------------------------------------------------------------=
-    // MARK: Merge
+    // MARK: Input
     //=------------------------------------------------------------------------=
     
     @inlinable public func merge(snapshot: Snapshot, with content: Snapshot, in range: Range<Snapshot.Index>) throws -> Snapshot {
@@ -124,9 +138,16 @@ public struct PatternTextStyle<Pattern, Value>: DiffableTextStyle, Mappable wher
         
         return self.snapshot(editable: value)
     }
+}
+
+//=----------------------------------------------------------------------------=
+// MARK: PatternTextStyle - Parse
+//=----------------------------------------------------------------------------=
+
+extension PatternTextStyle {
     
     //=------------------------------------------------------------------------=
-    // MARK: Parse
+    // MARK: Value
     //=------------------------------------------------------------------------=
     
     @inlinable public func parse(snapshot: Snapshot) throws -> Value {

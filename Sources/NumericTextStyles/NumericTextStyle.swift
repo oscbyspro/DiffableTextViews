@@ -73,12 +73,16 @@ public struct NumericTextStyle<Value: Valuable>: DiffableTextStyle, Mappable {
 extension NumericTextStyle {
     
     //=------------------------------------------------------------------------=
-    // MARK: Mode
+    // MARK: Showcase
     //=------------------------------------------------------------------------=
     
     @inlinable public func snapshot(showcase value: Value) -> Snapshot {
         snapshot(value: value, style: format.showcaseStyle())
     }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Editable
+    //=------------------------------------------------------------------------=
     
     @inlinable public func snapshot(editable value: Value) -> Snapshot {
         snapshot(value: value, style: format.editableStyle())
@@ -193,7 +197,7 @@ extension NumericTextStyle {
 extension NumericTextStyle {
     
     //=------------------------------------------------------------------------=
-    // MARK: Implementation
+    // MARK: Input
     //=------------------------------------------------------------------------=
     
     @inlinable public func merge(snapshot: Snapshot, with content: Snapshot, in range: Range<Snapshot.Index>) throws -> Snapshot {
