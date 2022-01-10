@@ -47,9 +47,9 @@ public struct Precision<Value: Precise> {
     }
     
     @inlinable func editableStyleThatUses(number: Number) -> _Precision.Style{
-        let integerUpperBound = max(Capacity.min.integer, number.integer.count)
-        let integer = Capacity.min.integer...integerUpperBound
-        let fractionLowerBound = max(Capacity.min.fraction, number.fraction.count)
+        let integerUpperBound = max(_Precision.lowerBound.integer, number.integer.count)
+        let integer = _Precision.lowerBound.integer...integerUpperBound
+        let fractionLowerBound = max(_Precision.lowerBound.fraction, number.fraction.count)
         let fraction = fractionLowerBound...fractionLowerBound
         return .integerAndFractionLength(integerLimits: integer, fractionLimits: fraction)
     }
@@ -66,8 +66,8 @@ public struct Precision<Value: Precise> {
     // MARK: Utilities - Static
     //=------------------------------------------------------------------------=
     
-    @inlinable public static func limits(_ component: (Capacity) -> Int) -> ClosedRange<Int> {
-        component(Capacity.min)...component(Value.precision)
+    @inlinable static func limits(_ component: (Capacity) -> Int) -> ClosedRange<Int> {
+        component(_Precision.lowerBound)...component(Value.precision)
     }
 }
 
@@ -173,6 +173,12 @@ public extension Precision where Value: PreciseFloatingPoint {
     // MARK: Capacity
     //=------------------------------------------------------------------------=
     
+    @usableFromInline static let lowerBound = Capacity(integer: 1, fraction: 0, significant: 1)
+    
+    //
+    // MARK: Capacity - Make
+    //=------------------------------------------------------------------------=
+    
     @inlinable static func capacity(number: Number, max: Capacity) throws -> Capacity {
         let integer = max.integer - number.integer.count
         guard integer >= 0 else {
@@ -191,7 +197,7 @@ public extension Precision where Value: PreciseFloatingPoint {
         
         return .init(integer: integer, fraction: fraction, significant: significant)
     }
-    
+
     //=------------------------------------------------------------------------=
     // MARK: Errors
     //=------------------------------------------------------------------------=
