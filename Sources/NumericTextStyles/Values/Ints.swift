@@ -12,7 +12,7 @@
 extension Int: ValuableInt {
     
     //=------------------------------------------------------------------------=
-    // MARK: Precise
+    // MARK: Precision
     //=------------------------------------------------------------------------=
     
     public static let precision: Capacity = precision(String(max).count)
@@ -25,7 +25,7 @@ extension Int: ValuableInt {
 extension Int8: ValuableInt {
     
     //=------------------------------------------------------------------------=
-    // MARK: Precise
+    // MARK: Precision
     //=------------------------------------------------------------------------=
     
     public static let precision: Capacity = precision(3)
@@ -38,7 +38,7 @@ extension Int8: ValuableInt {
 extension Int16: ValuableInt {
     
     //=------------------------------------------------------------------------=
-    // MARK: Precise
+    // MARK: Precision
     //=------------------------------------------------------------------------=
     
     public static let precision: Capacity = precision(5)
@@ -51,7 +51,7 @@ extension Int16: ValuableInt {
 extension Int32: ValuableInt {
     
     //=------------------------------------------------------------------------=
-    // MARK: Precise
+    // MARK: Precision
     //=------------------------------------------------------------------------=
     
     public static let precision: Capacity = precision(10)
@@ -64,7 +64,7 @@ extension Int32: ValuableInt {
 extension Int64: ValuableInt {
     
     //=------------------------------------------------------------------------=
-    // MARK: Precise
+    // MARK: Precision
     //=------------------------------------------------------------------------=
     
     public static let precision: Capacity = precision(19)

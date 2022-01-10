@@ -12,7 +12,7 @@
 extension Float16: ValuableFloat {
     
     //=------------------------------------------------------------------------=
-    // MARK: Precise, Boundable
+    // MARK: Precision, Bounds
     //=------------------------------------------------------------------------=
     
     public static let precision: Capacity = precision(3)
@@ -26,7 +26,7 @@ extension Float16: ValuableFloat {
 extension Float32: ValuableFloat {
     
     //=------------------------------------------------------------------------=
-    // MARK: Precise, Boundable
+    // MARK: Precision, Bounds
     //=------------------------------------------------------------------------=
     
     public static let precision: Capacity = precision(7)
@@ -40,7 +40,7 @@ extension Float32: ValuableFloat {
 extension Float64: ValuableFloat {
     
     //=------------------------------------------------------------------------=
-    // MARK: Precise, Boundable
+    // MARK: Precision, Bounds
     //=------------------------------------------------------------------------=
     
     public static let precision: Capacity = precision(15)

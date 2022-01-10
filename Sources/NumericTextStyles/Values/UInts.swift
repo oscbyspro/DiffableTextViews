@@ -12,7 +12,7 @@
 extension UInt: ValuableUInt {
     
     //=------------------------------------------------------------------------=
-    // MARK: Precise, Boundable
+    // MARK: Precision, Bounds
     //=------------------------------------------------------------------------=
     
     /// Apple, please fix IntegerFormatStyle«UInt» because it uses an Int.
@@ -29,7 +29,7 @@ extension UInt: ValuableUInt {
 extension UInt8: ValuableUInt {
     
     //=------------------------------------------------------------------------=
-    // MARK: Precise
+    // MARK: Precision
     //=------------------------------------------------------------------------=
 
     public static let precision: Capacity = precision(3)
@@ -42,7 +42,7 @@ extension UInt8: ValuableUInt {
 extension UInt16: ValuableUInt {
     
     //=------------------------------------------------------------------------=
-    // MARK: Precise
+    // MARK: Precision
     //=------------------------------------------------------------------------=
 
     public static let precision: Capacity = precision(5)
@@ -55,7 +55,7 @@ extension UInt16: ValuableUInt {
 extension UInt32: ValuableUInt {
     
     //=------------------------------------------------------------------------=
-    // MARK: Precise
+    // MARK: Precision
     //=------------------------------------------------------------------------=
 
     public static let precision: Capacity = precision(10)
@@ -68,7 +68,7 @@ extension UInt32: ValuableUInt {
 extension UInt64: ValuableUInt {
     
     //=------------------------------------------------------------------------=
-    // MARK: Precise, Boundable
+    // MARK: Precision, Bounds
     //=------------------------------------------------------------------------=
 
     /// Apple, please fix IntegerFormatStyleU«Int64» because it uses an Int64.

@@ -20,13 +20,13 @@ extension Decimal: Valuable, PreciseFloatingPoint {
     public static let options: Options = .floatingPoint
 
     //=------------------------------------------------------------------------=
-    // MARK: Precise
+    // MARK: Precision
     //=------------------------------------------------------------------------=
     
     public static let precision: Capacity = precision(38)
     
     //=------------------------------------------------------------------------=
-    // MARK: Boundable - Values
+    // MARK: Bounds
     //=------------------------------------------------------------------------=
         
     @inlinable public static var minLosslessValue: Self   { -maxLosslessLimit }
