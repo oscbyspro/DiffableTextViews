@@ -7,6 +7,7 @@
 
 #if canImport(UIKit)
 
+import SwiftUI
 import UIKit
 
 //*============================================================================*
@@ -57,7 +58,9 @@ public struct OBEFont {
         .init(.preferredFont(forTextStyle: style))
     }
     
+    //=------------------------------------------------------------------------=
     // MARK: Transformations
+    //=------------------------------------------------------------------------=
     
     @inlinable public func size(_ size: CGFloat) -> Self {
         .init(descriptor.withSize(size))
@@ -66,13 +69,35 @@ public struct OBEFont {
     @inlinable public func monospaced(_ template: MonospaceTemplate = .text) -> Self {
         .init(descriptor.monospaced(template: template.descriptor))
     }
+}
+
+//*============================================================================*
+// MARK: * UIKit.UIFont x OBEFont
+//*============================================================================*
+
+extension UIKit.UIFont {
     
-    //
-    // MARK: Transformations - Conversions
+    //=------------------------------------------------------------------------=
+    // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable func makeUIFont() -> UIFont {
-        .init(descriptor: descriptor, size: .zero)
+    @inlinable public convenience init(_ font: OBEFont) {
+        self.init(descriptor: font.descriptor, size: .zero)
+    }
+}
+
+//*============================================================================*
+// MARK: * SwiftUI.Font x OBEFont
+//*============================================================================*
+
+extension SwiftUI.Font {
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Initializers
+    //=------------------------------------------------------------------------=
+    
+    @inlinable public init(_ font: OBEFont) {
+        self.init(UIFont(font))
     }
 }
 
