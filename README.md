@@ -45,6 +45,7 @@ struct NumericTextStyleExample: View {
         }    
     }
 }
+```
 
 ## PatternTextStyle
 
