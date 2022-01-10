@@ -16,7 +16,7 @@ This package contains views that use snapshots and attributes to process changes
 
 # Styles
 
-## NumericTextStyle ([Values](../blob/dev/Notes/NumericTextStyles/VALUES.md))
+## NumericTextStyle ([Values](../main/Notes/NumericTextStyles/VALUES.md))
 
 👷‍♂️🛠🚧🚧🧱🏗🧱🚧🚧⏳
 
