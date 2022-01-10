@@ -33,7 +33,7 @@ import Utilities
     // MARK: Validation
     //=------------------------------------------------------------------------=
     
-    @inlinable func validate<C: Collection>(characters: C) throws where C.Element == Character {
+    @inlinable func validate<C: Collection>(_ characters: C) throws where C.Element == Character {
         let capacity = pattern.reduce(into: 0) { count, _ in count += 1 }
 
         guard characters.count <= capacity else {

@@ -14,13 +14,14 @@ import DiffableTextViews
 
 public struct PatternTextStyle<Pattern, Value>: DiffableTextStyle, Mappable where Pattern: Collection, Pattern.Element == Character, Value: RangeReplaceableCollection, Value: Equatable, Value.Element == Character {
     @usableFromInline typealias Format = PatternTextStyles.Format<Pattern>
+    @usableFromInline typealias Predicates = PatternTextStyles.Predicates<Value>
     
     //=------------------------------------------------------------------------=
     // MARK: Properties
     //=------------------------------------------------------------------------=
     
     @usableFromInline let format: Format
-    @usableFromInline var filter: Filter
+    @usableFromInline var predicates: Predicates
     @usableFromInline var visible: Bool
     
     //=------------------------------------------------------------------------=
@@ -29,7 +30,7 @@ public struct PatternTextStyle<Pattern, Value>: DiffableTextStyle, Mappable wher
     
     @inlinable public init(pattern: Pattern, placeholder: Character) {
         self.format = Format(pattern: pattern, placeholder: placeholder)
-        self.filter = Filter()
+        self.predicates = Predicates()
         self.visible = true
     }
     
@@ -41,8 +42,8 @@ public struct PatternTextStyle<Pattern, Value>: DiffableTextStyle, Mappable wher
         map({ $0.visible = false })
     }
     
-    @inlinable public func filter(_ validation: @escaping (Character) -> Bool) -> Self {
-        map({ $0.filter.concatenate(validation) })
+    @inlinable public func predicate(_ predicate: Predicate<Value>) -> Self {
+        map({ $0.predicates.add(predicate) })
     }
 
     //=------------------------------------------------------------------------=
@@ -129,14 +130,27 @@ public struct PatternTextStyle<Pattern, Value>: DiffableTextStyle, Mappable wher
     //=------------------------------------------------------------------------=
     
     @inlinable public func parse(snapshot: Snapshot) throws -> Value {
-        var value = Value()
         
-        for symbol in snapshot where !symbol.attribute.contains(.formatting) {
-            try filter.validate(symbol.character)
-            value.append(symbol.character)
-        }
+        //=--------------------------------------=
+        // MARK: Value
+        //=--------------------------------------=
         
-        try format.validate(characters: value)
+        let value = Value(snapshot
+            .lazy
+            .filter({ !$0.attribute.contains(.formatting) })
+            .map(\.character))
+                          
+        //=--------------------------------------=
+        // MARK: Validation
+        //=--------------------------------------=
+        
+        try format.validate(value)
+        try predicates.validate(value)
+        
+        //=--------------------------------------=
+        // MARK: Done
+        //=--------------------------------------=
+        
         return value
     }
 }
