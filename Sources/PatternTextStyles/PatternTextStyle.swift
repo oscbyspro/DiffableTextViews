@@ -67,10 +67,11 @@ extension PatternTextStyle {
         //=--------------------------------------=
         
         while patternIndex != format.pattern.endIndex {
-            let patternElement = format.pattern[patternIndex]
-            guard patternElement != format.placeholder else { break }
-            format.pattern.formIndex(after: &patternIndex)
+            let patternElement =  format.pattern[patternIndex]
+            if  patternElement == format.placeholder { break }
+
             snapshot.append(.prefix(patternElement))
+            format.pattern.formIndex(after: &patternIndex)
         }
         
         //=--------------------------------------=
