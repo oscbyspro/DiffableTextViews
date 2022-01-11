@@ -71,9 +71,16 @@ public struct Bounds<Value: Boundable> {
     @inlinable func contains(_ value: Value) -> Bool {
         values.contains(value)
     }
+}
+
+//=----------------------------------------------------------------------------=
+// MARK: Bounds - Validation
+//=----------------------------------------------------------------------------=
+
+extension Bounds {
     
-    //=----------------------------------------------------------------------------=
-    // MARK: Validation - Value
+    //=------------------------------------------------------------------------=
+    // MARK: Value
     //=------------------------------------------------------------------------=
     
     @inlinable func validate(value: Value) throws {
@@ -82,8 +89,8 @@ public struct Bounds<Value: Boundable> {
         }
     }
     
-    //
-    // MARK: Validation - Sign
+    //=------------------------------------------------------------------------=
+    // MARK: Sign
     //=------------------------------------------------------------------------=
     
     @inlinable func validate(sign: Sign) throws {
