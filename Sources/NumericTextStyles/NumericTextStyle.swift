@@ -280,7 +280,7 @@ extension NumericTextStyle {
     //=------------------------------------------------------------------------=
     
     @inlinable func number(snapshot: Snapshot) throws -> Number {
-        try Number.parse(snapshot, with: Value.options, in: format.region)
+        try Number(snapshot, with: Value.options, in: format.region)
     }
 }
 

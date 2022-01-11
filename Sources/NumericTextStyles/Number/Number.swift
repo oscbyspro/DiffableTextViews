@@ -87,14 +87,13 @@ extension Number {
     //=------------------------------------------------------------------------=
     
     #warning("Document assumptions made.")
-    @inlinable static func parse(_ snapshot: Snapshot, with options: Options, in region: Region) throws -> Self {
-        guard let start = snapshot.firstIndex(where: \.nonformatting) else { return .zero }
+    @inlinable init(_ snapshot: Snapshot, with options: Options, in region: Region) throws {
+        guard let start = snapshot.firstIndex(where: \.nonformatting) else { self = .zero; return }
         
         //=--------------------------------------=
         // MARK: State
         //=--------------------------------------=
         
-        var instance = Self()
         var index = start
         var element = snapshot[start]
         var done = false
@@ -115,48 +114,51 @@ extension Number {
                 }
             }
         }
+        
+        attempt: do {
 
-        //=--------------------------------------=
-        // MARK: Sign
-        //=--------------------------------------=
+            //=----------------------------------=
+            // MARK: Sign
+            //=----------------------------------=
 
-        if index != snapshot.endIndex, !options.contains(.unsigned), let sign = region.signs[element.character] {
-            instance.sign = sign
-            iterate()
-        }
+            if index != snapshot.endIndex, !options.contains(.unsigned), let sign = region.signs[element.character] {
+                self.sign = sign
+                iterate()
+            }
 
-        //=--------------------------------------=
-        // MARK: Digits
-        //=--------------------------------------=
+            //=----------------------------------=
+            // MARK: Digits
+            //=----------------------------------=
 
-        while index != snapshot.endIndex, let digit = region.digits[element.character] {
-            instance.integer.append(digit)
-            iterate()
-        }
-        
-        instance.integer.removeZerosPrefix()
-        instance.integer.makeItAtLeastZero()
-        
-        guard !options.contains(.integer) else { return instance }
-        
-        //=--------------------------------------=
-        // MARK: Separator
-        //=--------------------------------------=
+            while index != snapshot.endIndex, let digit = region.digits[element.character] {
+                self.integer.append(digit)
+                iterate()
+            }
+            
+            self.integer.removeZerosPrefix()
+            self.integer.makeItAtLeastZero()
+            
+            guard !options.contains(.integer) else { break attempt }
+            
+            //=----------------------------------=
+            // MARK: Separator
+            //=----------------------------------=
 
-        if index != snapshot.endIndex, region.fractionSeparator == element.character {
-            instance.separator = .some
-            iterate()
-        }
-        
-        guard instance.separator != .none else { return instance }
-        
-        //=--------------------------------------=
-        // MARK: Fraction
-        //=--------------------------------------=
-        
-        while index != snapshot.endIndex, let digit = region.digits[element.character] {
-            instance.fraction.append(digit)
-            iterate()
+            if index != snapshot.endIndex, region.fractionSeparator == element.character {
+                self.separator = .some
+                iterate()
+            }
+            
+            guard self.separator == .some else { break attempt }
+            
+            //=----------------------------------=
+            // MARK: Fraction
+            //=----------------------------------=
+            
+            while index != snapshot.endIndex, let digit = region.digits[element.character] {
+                self.fraction.append(digit)
+                iterate()
+            }
         }
         
         //=--------------------------------------=
@@ -166,13 +168,5 @@ extension Number {
         guard index == snapshot.endIndex else {
             throw Info(["unable to parse number in", .mark(snapshot.characters)])
         }
-        
-        print(instance)
-        
-        //=--------------------------------------=
-        // MARK: Done
-        //=--------------------------------------=
-        
-        return instance
     }
 }
