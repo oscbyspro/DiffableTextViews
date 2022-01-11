@@ -72,32 +72,7 @@ public struct Bounds<Value: Boundable> {
         values.contains(value)
     }
     
-    //=------------------------------------------------------------------------=
-    // MARK: Validation - Sign
-    //=------------------------------------------------------------------------=
-    
-    @inlinable func correct(sign: inout Sign) {
-        switch sign {
-        case .positive:
-            if self.max >  .zero { break }
-            if self.min == .zero { break }
-            sign.toggle()
-        case .negative:
-            if self.min <  .zero { break }
-            sign.toggle()
-        }
-    }
-    
-    @inlinable func validate(sign: Sign) throws {
-        var subject = sign;
-        correct(sign: &subject)
-
-        guard sign == subject else {
-            throw Info([.mark(sign), "is not permitted in", .mark(self)])
-        }
-    }
-    
-    //
+    //=----------------------------------------------------------------------------=
     // MARK: Validation - Value
     //=------------------------------------------------------------------------=
     
@@ -105,6 +80,22 @@ public struct Bounds<Value: Boundable> {
         guard contains(value) else {
             throw Info([.mark(value), "is not in", .mark(self)])
         }
+    }
+    
+    //
+    // MARK: Validation - Sign
+    //=------------------------------------------------------------------------=
+    
+    @inlinable func validate(sign: Sign) throws {
+        switch sign {
+        case .positive:
+            if max >  .zero { return }
+            if min == .zero { return }
+        case .negative:
+            if min <  .zero { return }
+        }
+        
+        throw Info([.mark(sign), "is not permitted in", .mark(self)])
     }
 }
 
