@@ -90,28 +90,26 @@ public final class ProxyTextField {
 
 extension ProxyTextField {
     
-    //
+    //=------------------------------------------------------------------------=
     // MARK: Accessors
     //=------------------------------------------------------------------------=
-    
-    @inlinable var text: String {
-        wrapped.text!
-    }
-    
-    #warning("Make this a property, maybe.")
-    /// - Complexity: O(1).
-    @inlinable func selection() -> Range<Offset> {
-        offsets(in: wrapped.selectedTextRange!)
-    }
-    
-    @inlinable var intent: Direction? {
-        wrapped.intent
-    }
     
     @inlinable var mode: Mode {
         wrapped.isEditing ? .editable : .showcase
     }
 
+    @inlinable var intent: Direction? {
+        wrapped.intent
+    }
+    
+    @inlinable var text: String {
+        wrapped.text!
+    }
+    
+    @inlinable func selection() -> Range<Offset> {
+        offsets(in: wrapped.selectedTextRange!)
+    }
+    
     //=------------------------------------------------------------------------=
     // MARK: Transformations
     //=------------------------------------------------------------------------=

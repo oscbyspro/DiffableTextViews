@@ -65,14 +65,14 @@ public struct Info: Text {
         //=--------------------------------------------------------------------=
         
         @inlinable public static func note(_ value: Any) -> Self {
-            Self({ Note(String(describing: value)) })
+            Self({ Note(value) })
         }
         
         @inlinable public static func mark(_ value: Any) -> Self {
             Self {
                 Group {
                     Note("«")
-                    Note(String(describing: value)).filter({ !$0.isEmpty })
+                    Note(value).filter({ !$0.isEmpty })
                     Note("»")
                 }
                 .joined(by: .whitespace)
