@@ -59,7 +59,15 @@
         digits.append(element)
     }
     
-    @inlinable mutating func replaceEmptyWithZero() {
+    @inlinable mutating func removeZerosPrefix() {
+        digits.removeSubrange(..<digits.prefix(while: \.isZero).endIndex)
+    }
+    
+    @inlinable mutating func removeZerosSuffix() {
+        digits.removeSubrange(digits.suffix(while: \.isZero).startIndex...)
+    }
+    
+    @inlinable mutating func makeItAtLeastZero() {
         if digits.isEmpty { self = .zero }
     }
     

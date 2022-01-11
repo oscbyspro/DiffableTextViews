@@ -41,7 +41,10 @@ public protocol Formattable {
     //=------------------------------------------------------------------------=
     
     /// Creates a format style instance configured with the function's parameters.
-    @inlinable static func style(locale: Locale, precision: PrecisionStyle, separator: SeparatorStyle) -> FormatStyle
+    @inlinable static func style(
+        locale: Locale,
+        precision: PrecisionStyle,
+        separator: SeparatorStyle) -> FormatStyle
 }
 
 //=----------------------------------------------------------------------------=
@@ -96,8 +99,13 @@ extension FormattableFloatingPoint {
     // MARK: Styles
     //=------------------------------------------------------------------------=
     
-    @inlinable public static func style(locale: Locale, precision: PrecisionStyle, separator: SeparatorStyle) -> FormatStyle {
-        .init(locale: locale).precision(precision).decimalSeparator(strategy: separator)
+    @inlinable public static func style(
+        locale: Locale,
+        precision: PrecisionStyle,
+        separator: SeparatorStyle) -> FormatStyle {
+        return FormatStyle(locale: locale)
+            .precision(precision)
+            .decimalSeparator(strategy: separator)
     }
 }
 
@@ -132,7 +140,12 @@ extension FormattableInteger {
     // MARK: Styles
     //=------------------------------------------------------------------------=
     
-    @inlinable public static func style(locale: Locale, precision: PrecisionStyle, separator: SeparatorStyle) -> FormatStyle {
-        .init(locale: locale).precision(precision).decimalSeparator(strategy: separator)
+    @inlinable public static func style(
+        locale: Locale,
+        precision: PrecisionStyle,
+        separator: SeparatorStyle) -> FormatStyle {
+        return FormatStyle(locale: locale)
+            .precision(precision)
+            .decimalSeparator(strategy: separator)
     }
 }

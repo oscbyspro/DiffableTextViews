@@ -134,7 +134,8 @@ extension Number {
             iterate()
         }
         
-        instance.integer.replaceEmptyWithZero()
+        instance.integer.removeZerosPrefix()
+        instance.integer.makeItAtLeastZero()
         
         guard !options.contains(.integer) else { return instance }
         

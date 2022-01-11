@@ -107,4 +107,15 @@ import Foundation
             return instance
         }
     }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Accessors
+    //=------------------------------------------------------------------------=
+    
+    @inlinable func localized(sign: Sign) -> String {
+        switch sign {
+        case .positive: return formatter.positivePrefix
+        case .negative: return formatter.negativePrefix
+        }
+    }
 }

@@ -238,7 +238,7 @@ extension NumericTextStyle {
         //=--------------------------------------=
         // MARK: Style
         //=--------------------------------------=
-
+        
         let style = format.editableStyleThatUses(number: number)
 
         //=--------------------------------------=
@@ -251,13 +251,16 @@ extension NumericTextStyle {
         // MARK: Characters - Correct
         //=--------------------------------------=
         
-        #warning("This is invalid.")
-//        let sign = number.sign.characters()
-//        /// insert absent sign when sign is negative and value is zero
-//        if !sign.isEmpty, !characters.hasPrefix(sign) {
-//            characters = sign + characters
-//        }
-
+        correct_zero_sign: if value == .zero, number.sign == .negative {
+            guard let index = characters.firstIndex(where: \.isNumber) else { break correct_zero_sign }
+            
+            var result = ""
+            result.append(contentsOf: characters[..<index])
+            result.append(contentsOf: format.region.localized(sign: number.sign))
+            result.append(contentsOf: characters[index...])
+            characters = result
+        }
+        
         //=--------------------------------------=
         // MARK: Continue
         //=--------------------------------------=
