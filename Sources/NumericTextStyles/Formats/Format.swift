@@ -21,5 +21,5 @@ public protocol Format: FormatStyle {
         
     @inlinable func precision(_ precision: PrecisionStyle) -> Self
     
-    @inlinable func decimalSeparator(strategy separator: SeparatorStyle) -> Self
+    @inlinable func decimalSeparator(strategy: SeparatorStyle) -> Self
 }

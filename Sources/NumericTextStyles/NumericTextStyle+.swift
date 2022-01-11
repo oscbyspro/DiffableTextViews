@@ -46,7 +46,6 @@ extension NumericTextStyle {
         // MARK: Prefix
         //=--------------------------------------=
         
-        #warning("Remove when currency is implemented.")
         if !prefix.isEmpty {
             snapshot.append(contentsOf: Snapshot(prefix, only: .prefix))
             snapshot.append(.prefix(" "))
@@ -105,7 +104,6 @@ extension NumericTextStyle {
         // MARK: Suffix
         //=--------------------------------------=
 
-        #warning("Remove when currency is implemented.")
         if !suffix.isEmpty {
             snapshot.append(.suffix(" "))
             snapshot.append(contentsOf: Snapshot(suffix, only: .suffix))
@@ -178,21 +176,6 @@ extension NumericTextStyle {
         //=--------------------------------------=
 
         let characters = style.format(value)
-
-        //
-        // MARK: Characters - Correct
-        //=--------------------------------------=
-        
-        #warning("This is invalid.")
-//        correct_zero_sign: if value == .zero, number.sign == .negative {
-//            guard let index = characters.firstIndex(where: \.isNumber) else { break correct_zero_sign }
-//
-//            var result = ""
-//            result.append(contentsOf: characters[..<index])
-//            result.append(contentsOf: region.localized(sign: number.sign))
-//            result.append(contentsOf: characters[index...])
-//            characters = result
-//        }
         
         //=--------------------------------------=
         // MARK: Continue
