@@ -38,3 +38,21 @@
         }
     }
 }
+
+//=----------------------------------------------------------------------------=
+// MARK: Sign - CustomStringConvertible
+//=----------------------------------------------------------------------------=
+
+extension Sign: CustomStringConvertible {
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Description
+    //=------------------------------------------------------------------------=
+    
+    @inlinable var description: String {
+        switch self {
+        case .positive: return "positive"
+        case .negative: return "negative"
+        }
+    }
+}

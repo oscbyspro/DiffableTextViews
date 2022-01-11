@@ -86,7 +86,10 @@ extension Number {
     // MARK: Snapshot
     //=------------------------------------------------------------------------=
     
-    #warning("Document assumptions made.")
+    /// Parses the value represented by a snapshot.
+    ///
+    /// To use this method, all formatting characters must be marked as formatting.
+    ///
     @inlinable init(_ snapshot: Snapshot, with options: Options, in region: Region) throws {
         guard let start = snapshot.firstIndex(where: \.nonformatting) else { self = .zero; return }
         
