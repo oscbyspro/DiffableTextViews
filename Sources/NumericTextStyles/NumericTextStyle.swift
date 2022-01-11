@@ -90,7 +90,8 @@ extension NumericTextStyle {
 
     /// Snapshots characters.
     ///
-    /// Assumes that there is always at least one integer digit.
+    /// - Assumes: that there is at least one integer digit.
+    /// - Assumes: that there is at most one prefix integer digit zero.
     ///
     @inlinable func snapshot(characters: String) -> Snapshot {
         var snapshot = Snapshot()
