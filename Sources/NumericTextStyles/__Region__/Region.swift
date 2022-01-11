@@ -18,20 +18,21 @@ import Foundation
     // MARK: Properties
     //=------------------------------------------------------------------------=
     
-    @usableFromInline let locale: Locale
+    @usableFromInline let formatter: NumberFormatter
+    @inlinable var locale: Locale { formatter.locale }
     
     //
     // MARK: Properties - Signs
     //=------------------------------------------------------------------------=
     
-    @usableFromInline let signs: Set<Character>
+    @usableFromInline let signs: [Character: Sign]
     
     //
     // MARK: Properties - Digits
     //=------------------------------------------------------------------------=
     
     @usableFromInline let zero: Character
-    @usableFromInline let digits: Set<Character>
+    @usableFromInline let digits: [Character: Character]
     
     //
     // MARK: Properties - Separators
@@ -47,21 +48,22 @@ import Foundation
     @inlinable init(_ locale: Locale) {
         let formatter = NumberFormatter()
         formatter.locale = locale
+        formatter.numberStyle = .decimal
         formatter.usesGroupingSeparator = false
         
         //=--------------------------------------=
-        // MARK: Locale
+        // MARK: Formatter
         //=--------------------------------------=
         
-        self.locale = locale
+        self.formatter = formatter
         
         //=--------------------------------------=
         // MARK: Generate Localized - Signs
         //=--------------------------------------=
         
-        var signs = Set<Character>()
-        signs.insert(formatter .plusSign.filter({ $0.isPunctuation || $0.isMathSymbol }).first!)
-        signs.insert(formatter.minusSign.filter({ $0.isPunctuation || $0.isMathSymbol }).first!)
+        var signs = [Character: Sign]()
+        signs[formatter .plusSign.filter({ $0.isPunctuation || $0.isMathSymbol }).first!] = .positive
+        signs[formatter.minusSign.filter({ $0.isPunctuation || $0.isMathSymbol }).first!] = .negative
         self.signs = signs
         
         //=--------------------------------------=

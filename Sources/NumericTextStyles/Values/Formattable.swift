@@ -20,7 +20,8 @@ public protocol Formattable {
     // MARK: Types
     //=------------------------------------------------------------------------=
     
-    associatedtype FormatStyle: Foundation.FormatStyle where FormatStyle.FormatInput == Self, FormatStyle.FormatOutput == String
+    associatedtype FormatStyle: Foundation.ParseableFormatStyle
+    where FormatStyle.FormatInput == Self, FormatStyle.FormatOutput == String
         
     //=------------------------------------------------------------------------=
     // MARK: Make

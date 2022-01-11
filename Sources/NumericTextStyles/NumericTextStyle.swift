@@ -24,6 +24,7 @@ public struct NumericTextStyle<Value: Valuable>: DiffableTextStyle, Mappable {
     //=------------------------------------------------------------------------=
     
     @usableFromInline var format: Format
+    @usableFromInline let region: Region
     @usableFromInline var prefix: String
     @usableFromInline var suffix: String
     
@@ -33,6 +34,7 @@ public struct NumericTextStyle<Value: Valuable>: DiffableTextStyle, Mappable {
     
     @inlinable public init(locale: Locale = .autoupdatingCurrent) {
         self.format = Format(locale: locale)
+        self.region = Region.reusable(locale)
         self.prefix = ""
         self.suffix = ""
     }
@@ -196,87 +198,108 @@ extension NumericTextStyle {
     // MARK: Input
     //=------------------------------------------------------------------------=
     
+    #warning("merge(snapshot: Snapshot, with input: ???) throws -> Snapshot")
     @inlinable public func merge(snapshot: Snapshot, with content: Snapshot, in range: Range<Snapshot.Index>) throws -> Snapshot {
         
-        //=--------------------------------------=
-        // MARK: Input
-        //=--------------------------------------=
-        
-        var input = Input(content)
-        
-        //
-        // MARK: Input - Parse Commands
-        //=--------------------------------------=
-        
-        input.consumeSignInput(with: format.parser.sign)
-        
-        //=--------------------------------------=
-        // MARK: Proposal
-        //=--------------------------------------=
-        
         var proposal = snapshot
-        proposal.replaceSubrange(range, with: input.content)
+        proposal.replaceSubrange(range, with: content)
         
-        //=--------------------------------------=
-        // MARK: Number
-        //=--------------------------------------=
-        
-        var number = try number(snapshot: proposal)
-        
-        //
-        // MARK: Number - Run Input Commands
-        //=--------------------------------------=
-        
-        input.process?(&number)
-        
-        //
-        // MARK: Number - Validation & Capacity
-        //=--------------------------------------=
-        
-        try format.validate(sign: number.sign)
-        let capacity = try format.precision.capacity(number: number)
-        number.removeImpossibleSeparator(capacity: capacity)
-        
-        //=--------------------------------------=
-        // MARK: Value
-        //=--------------------------------------=
-        
-        let value = try Value(number: number)
-        
-        //
-        // MARK: Value - Validation
-        //=--------------------------------------=
+        let value = try format.editableStyle().parseStrategy.parse(proposal.characters)
         
         try format.validate(value: value)
+    
+        #warning("Wrong style, needs capacity.")
+        let style = format.editableStyle()
         
-        //=--------------------------------------=
-        // MARK: Style
-        //=--------------------------------------=
+        let characters = style.format(value)
         
-        let style = format.editableStyleThatUses(number: number)
+        #warning("fix sign")
         
-        //=--------------------------------------=
-        // MARK: Characters
-        //=--------------------------------------=
-        
-        var characters = style.format(value)
-        
-        //
-        // MARK: Characters - Correct
-        //=--------------------------------------=
-        
-        let sign = number.sign.characters
-        /// insert absent sign when sign is negative and value is zero
-        if !sign.isEmpty, !characters.hasPrefix(sign) {
-            characters = number.sign.characters + characters
-        }
-        
-        //=--------------------------------------=
-        // MARK: Continue
-        //=--------------------------------------=
-                
-        return self.snapshot(characters: characters)
+        return self.snapshot(characters: characters)        
     }
+    
+    #warning("OLD.")
+//    @inlinable public func OLD_merge(snapshot: Snapshot, with content: Snapshot, in range: Range<Snapshot.Index>) throws -> Snapshot {
+//
+//        //=--------------------------------------=
+//        // MARK: Input
+//        //=--------------------------------------=
+//
+//        var input = Input(content)
+//
+//        //
+//        // MARK: Input - Parse Commands
+//        //=--------------------------------------=
+//
+//        input.consumeSignInput(with: format.parser.sign)
+//
+//        //=--------------------------------------=
+//        // MARK: Proposal
+//        //=--------------------------------------=
+//
+//        var proposal = snapshot
+//        proposal.replaceSubrange(range, with: input.content)
+//
+//        //=--------------------------------------=
+//        // MARK: Number
+//        //=--------------------------------------=
+//
+//        var number = try number(snapshot: proposal)
+//
+//        //
+//        // MARK: Number - Run Input Commands
+//        //=--------------------------------------=
+//
+//        input.process?(&number)
+//
+//        //
+//        // MARK: Number - Validation & Capacity
+//        //=--------------------------------------=
+//
+//        try format.validate(sign: number.sign)
+//        let capacity = try format.precision.capacity(number: number)
+//        number.removeImpossibleSeparator(capacity: capacity)
+//
+//        //=--------------------------------------=
+//        // MARK: Value
+//        //=--------------------------------------=
+//
+//        let value = try Value(number: number)
+//
+//        //
+//        // MARK: Value - Validation
+//        //=--------------------------------------=
+//
+//        try format.validate(value: value)
+//
+//        //=--------------------------------------=
+//        // MARK: Style
+//        //=--------------------------------------=
+//
+//        let style = format.editableStyleThatUses(number: number)
+//
+//        //=--------------------------------------=
+//        // MARK: Characters
+//        //=--------------------------------------=
+//
+//        var characters = style.format(value)
+//
+//        //
+//        // MARK: Characters - Correct
+//        //=--------------------------------------=
+//
+//        let sign = number.sign.characters
+//        /// insert absent sign when sign is negative and value is zero
+//        if !sign.isEmpty, !characters.hasPrefix(sign) {
+//            characters = number.sign.characters + characters
+//        }
+//
+//        //=--------------------------------------=
+//        // MARK: Continue
+//        //=--------------------------------------=
+//
+//        return self.snapshot(characters: characters)
+//    }
 }
 
 //=----------------------------------------------------------------------------=

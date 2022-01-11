@@ -20,82 +20,36 @@ import Utilities
     // MARK: Properties
     //=------------------------------------------------------------------------=
     
-    @usableFromInline private(set) var locale: Locale
+    @usableFromInline private(set) var region: Region
     @usableFromInline private(set) var bounds: Bounds
     @usableFromInline private(set) var precision: Precision
-    @usableFromInline private(set) var parser: NumberParser
 
     //=------------------------------------------------------------------------=
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable init(locale: Locale) {
-        self.locale = locale
+    @inlinable init(region: Region) {
+        self.region = region
         self.bounds = .standard
         self.precision = .standard
-        self.parser = .standard
-
-        parser.update(locale: locale)
-        parser.update(options: Value.options)
-    }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Update
-    //=------------------------------------------------------------------------=
-    
-    @inlinable mutating func update(locale: Locale) {
-        self.locale = locale
-        self.parser.update(locale: locale)
-    }
-    
-    @inlinable mutating func update(bounds: Bounds) {
-        self.bounds = bounds
-    }
-    
-    @inlinable mutating func update(precision: Precision) {
-        self.precision = precision
-    }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Characters
-    //=------------------------------------------------------------------------=
-    
-    @inlinable var signs: [Character: Sign] {
-        Sign.all
-    }
- 
-    @inlinable var zero: Character {
-        Digits.zero
-    }
-    
-    @inlinable var digits: Set<Character> {
-        Digits.decimals
-    }
-    
-    @inlinable var fractionSeparator: String {
-        locale.decimalSeparator ?? Separator.dot
     }
 
-    @inlinable var groupingSeparator: String {
-        locale.groupingSeparator ?? ""
-    }
-    
     //=------------------------------------------------------------------------=
     // MARK: Styles
     //=------------------------------------------------------------------------=
     
     @inlinable func showcaseStyle() -> Value.FormatStyle {
-        Value.style(locale: locale, precision: precision.showcaseStyle(), separator: .automatic)
+        Value.style(locale: region.locale, precision: precision.showcaseStyle(), separator: .automatic)
     }
         
     @inlinable func editableStyle() -> Value.FormatStyle {
-        Value.style(locale: locale, precision: precision.editableStyle(), separator: .automatic)
+        Value.style(locale: region.locale, precision: precision.editableStyle(), separator: .automatic)
     }
     
     @inlinable func editableStyleThatUses(number: Number) -> Value.FormatStyle {
+        let separator: Value.SeparatorStyle = number.separator ? .always : .automatic
         let precision: Value.PrecisionStyle = precision.editableStyleThatUses(number: number)
-        let separator: Value.SeparatorStyle = number.separator.isEmpty ? .automatic : .always
-        return Value.style(locale: locale, precision: precision, separator: separator)
+        return Value.style(locale: region.locale, precision: precision, separator: separator)
     }
     
     //=------------------------------------------------------------------------=

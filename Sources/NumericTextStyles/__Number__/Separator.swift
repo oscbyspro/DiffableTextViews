@@ -1,30 +1,29 @@
 //
-//  Text.swift
+//  Separator.swift
 //  
 //
-//  Created by Oscar Byström Ericsson on 2021-12-20.
+//  Created by Oscar Byström Ericsson on 2022-01-11.
 //
 
-#warning("Charactes should be a function, O(1) - O(n), plus other reasons.")
-
 //*============================================================================*
-// MARK: * Text
+// MARK: * Separator
 //*============================================================================*
 
-/// A system representation of the conforming object.
-@usableFromInline protocol Text {
+/// A system representation of a fraction separator.
+@usableFromInline enum Separator: String {
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Instances
+    //=------------------------------------------------------------------------=
+    
+    case none = ""
+    case some = "."
     
     //=------------------------------------------------------------------------=
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    /// Creates an empty instance.
-    @inlinable init()
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Properties
-    //=------------------------------------------------------------------------=
-    
-    /// A sytem representation of the instance.
-    @inlinable var characters: String { get }    
+    @inlinable init() {
+        self = .none
+    }
 }

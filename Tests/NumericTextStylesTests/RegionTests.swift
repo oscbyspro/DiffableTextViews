@@ -43,10 +43,10 @@ final class RegionTests: XCTestCase {
                 .sign(strategy: .always())
             
             let positives = positive.formatted(style)
-            XCTAssertNotNil(positives.first(where: region.signs.contains))
+            XCTAssertNotNil(positives.first(where: region.signs.keys.contains))
 
             let negatives = negative.formatted(style)
-            XCTAssertNotNil(negatives.first(where: region.signs.contains))
+            XCTAssertNotNil(negatives.first(where: region.signs.keys.contains))
         }
     }
     
