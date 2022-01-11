@@ -15,7 +15,6 @@ public protocol Valuable: Formattable, Boundable, Precise {
     // MARK: Value, Options
     //=------------------------------------------------------------------------=
     
-    @inlinable static var zero: Self { get }
     @inlinable static var options: Options { get }
 }
 

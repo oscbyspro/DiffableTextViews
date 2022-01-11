@@ -5,6 +5,8 @@
 //  Created by Oscar Byström Ericsson on 2021-12-21.
 //
 
+import Utilities
+
 //*============================================================================*
 // MARK: * Bounds
 //*============================================================================*
@@ -68,6 +70,41 @@ public struct Bounds<Value: Boundable> {
     
     @inlinable func contains(_ value: Value) -> Bool {
         values.contains(value)
+    }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Validation - Sign
+    //=------------------------------------------------------------------------=
+    
+    @inlinable func correct(sign: inout Sign) {
+        switch sign {
+        case .positive:
+            if self.max >  .zero { break }
+            if self.min == .zero { break }
+            sign.toggle()
+        case .negative:
+            if self.min <  .zero { break }
+            sign.toggle()
+        }
+    }
+    
+    @inlinable func validate(sign: Sign) throws {
+        var subject = sign;
+        correct(sign: &subject)
+
+        guard sign == subject else {
+            throw Info([.mark(sign), "is not permitted in", .mark(self)])
+        }
+    }
+    
+    //
+    // MARK: Validation - Value
+    //=------------------------------------------------------------------------=
+    
+    @inlinable func validate(value: Value) throws {
+        guard contains(value) else {
+            throw Info([.mark(value), "is not in", .mark(self)])
+        }
     }
 }
 

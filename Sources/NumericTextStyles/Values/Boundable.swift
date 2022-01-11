@@ -19,6 +19,7 @@ public protocol Boundable: Comparable {
     // MARK: Bounds
     //=------------------------------------------------------------------------=
     
+    @inlinable static var zero: Self { get }
     @inlinable static var bounds: ClosedRange<Self> { get }
 }
 

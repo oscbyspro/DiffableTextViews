@@ -155,8 +155,8 @@ extension NumericTextStyle {
         //
         // MARK: Number - Validation & Capacity
         //=--------------------------------------=
-
-        try validate(sign: number.sign)
+        
+        try bounds.validate(sign: number.sign)
         let capacity = try precision.capacity(number: number)
         number.removeImpossibleSeparator(capacity: capacity)
 
@@ -165,7 +165,7 @@ extension NumericTextStyle {
         //=--------------------------------------=
 
         let value = try Value(number: number)
-        try validate(value: value)
+        try bounds.validate(value: value)
 
         //=--------------------------------------=
         // MARK: Style
