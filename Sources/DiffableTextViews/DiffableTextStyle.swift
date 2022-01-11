@@ -38,7 +38,7 @@ public protocol DiffableTextStyle {
     ///     - content: user input with empty attributes
     ///     - range: indices in snapshot that content is proposed to change
     ///
-    @inlinable func merge(snapshot: Snapshot, with content: Snapshot, in range: Range<Snapshot.Index>) throws -> Snapshot
+    @inlinable func merge(snapshot: Snapshot, with input: Input) throws -> Snapshot
         
     //=------------------------------------------------------------------------=
     // MARK: Parse
@@ -78,8 +78,10 @@ public extension DiffableTextStyle {
     // MARK: Merge
     //=------------------------------------------------------------------------=
     
-    @inlinable func merge(snapshot: Snapshot, with content: Snapshot, in range: Range<Snapshot.Index>) -> Snapshot? {
-        var result = snapshot; result.replaceSubrange(range, with: content); return result
+    @inlinable func merge(snapshot: Snapshot, with input: Input) throws -> Snapshot {
+        var proposal = snapshot
+        proposal.replaceSubrange(input.range, with: input.content)
+        return proposal
     }
     
     //=------------------------------------------------------------------------=

@@ -185,22 +185,23 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable, 
                 // MARK: Process Arguments
                 //=------------------------------=
 
-                let input = Snapshot(string, only: .content)
+                let content = Snapshot(string, only: .content)
                 let offsets = Offset(at: nsRange.lowerBound) ..< Offset(at: nsRange.upperBound)
-                let range = cache.field.indices(at: offsets)
-                let indices = range.lowerBound.rhs! ..< range.upperBound.rhs!
+                let selection = cache.field.indices(at: offsets)
+                let range = selection.lowerBound.rhs! ..< selection.upperBound.rhs!
+                let input = Input(content: content, range: range)
                 
                 //=------------------------------=
                 // MARK: Calculate Next State
                 //=------------------------------=
                 
-                var snapshot = try upstream.style.merge(snapshot: cache.snapshot, with: input, in: indices)
+                var snapshot = try upstream.style.merge(snapshot: cache.snapshot, with: input)
                 upstream.style.process(snapshot: &snapshot)
                 
                 var value = try upstream.style.parse(snapshot: snapshot)
                 upstream.style.process(value: &value)
                 
-                let field = cache.field.updated(selection: range.upperBound, intent: nil).updated(carets: snapshot)
+                let field = cache.field.updated(selection: selection.upperBound, intent: nil).updated(carets: snapshot)
                 
                 //=------------------------------=
                 // MARK: Push

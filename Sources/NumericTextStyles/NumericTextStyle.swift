@@ -189,28 +189,28 @@ extension NumericTextStyle {
     //=------------------------------------------------------------------------=
     
     #warning("merge(sanpshot: Snapshot, with input: Input) throws -> Snapshot")
-    @inlinable public func merge(snapshot: Snapshot, with content: Snapshot, in range: Range<Snapshot.Index>) throws -> Snapshot {
+    @inlinable public func merge(snapshot: Snapshot, with input: Input) throws -> Snapshot {
 
         //=--------------------------------------=
         // MARK: Reader
         //=--------------------------------------=
 
-        var input = Reader(content)
-        input.consumeSignInput(region: format.region)
+        var reader = Reader(input.content)
+        reader.consumeSignInput(region: format.region)
 
         //=--------------------------------------=
         // MARK: Proposal
         //=--------------------------------------=
 
         var proposal = snapshot
-        proposal.replaceSubrange(range, with: input.content)
+        proposal.replaceSubrange(input.range, with: reader.content)
 
         //=--------------------------------------=
         // MARK: Number
         //=--------------------------------------=
 
         var number = try number(snapshot: proposal)
-        input.process?(&number)
+        reader.process?(&number)
 
         //
         // MARK: Number - Validation & Capacity

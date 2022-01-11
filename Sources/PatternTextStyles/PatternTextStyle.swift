@@ -117,26 +117,20 @@ extension PatternTextStyle {
     // MARK: Input
     //=------------------------------------------------------------------------=
     
-    @inlinable public func merge(snapshot: Snapshot, with content: Snapshot, in range: Range<Snapshot.Index>) throws -> Snapshot {
+    @inlinable public func merge(snapshot: Snapshot, with input: Input) throws -> Snapshot {
         
         //=--------------------------------------=
-        // MARK: Input
+        // MARK: Proposal
         //=--------------------------------------=
         
         var proposal = snapshot
-        proposal.replaceSubrange(range, with: content)
+        proposal.replaceSubrange(input.range, with: input.content)
         
         //=--------------------------------------=
-        // MARK: Value
+        // MARK: Value, Continue
         //=--------------------------------------=
         
-        let value = try parse(snapshot: proposal)
-        
-        //=--------------------------------------=
-        // MARK: Continue
-        //=--------------------------------------=
-        
-        return self.snapshot(editable: value)
+        return try self.snapshot(editable: parse(snapshot: proposal))
     }
 }
 
