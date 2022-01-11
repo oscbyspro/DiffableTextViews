@@ -177,21 +177,22 @@ extension NumericTextStyle {
         // MARK: Characters
         //=--------------------------------------=
 
-        var characters = style.format(value)
+        let characters = style.format(value)
 
         //
         // MARK: Characters - Correct
         //=--------------------------------------=
         
-        correct_zero_sign: if value == .zero, number.sign == .negative {
-            guard let index = characters.firstIndex(where: \.isNumber) else { break correct_zero_sign }
-            
-            var result = ""
-            result.append(contentsOf: characters[..<index])
-            result.append(contentsOf: region.localized(sign: number.sign))
-            result.append(contentsOf: characters[index...])
-            characters = result
-        }
+        #warning("This is invalid.")
+//        correct_zero_sign: if value == .zero, number.sign == .negative {
+//            guard let index = characters.firstIndex(where: \.isNumber) else { break correct_zero_sign }
+//
+//            var result = ""
+//            result.append(contentsOf: characters[..<index])
+//            result.append(contentsOf: region.localized(sign: number.sign))
+//            result.append(contentsOf: characters[index...])
+//            characters = result
+//        }
         
         //=--------------------------------------=
         // MARK: Continue

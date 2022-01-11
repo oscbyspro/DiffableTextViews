@@ -35,16 +35,6 @@ public protocol Formattable {
     ///     - description: A system formatted representation of the value.
     ///
     @inlinable static func make(description: String) -> Optional<Self>
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Styles
-    //=------------------------------------------------------------------------=
-    
-    /// Creates a format style instance configured with the function's parameters.
-    @inlinable static func style(
-        locale: Locale,
-        precision: PrecisionStyle,
-        separator: SeparatorStyle) -> FormatStyle
 }
 
 //=----------------------------------------------------------------------------=
@@ -94,19 +84,6 @@ extension FormattableFloatingPoint {
     @inlinable public static func make(description: String) -> Optional<Self> {
         .init(description)
     }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Styles
-    //=------------------------------------------------------------------------=
-    
-    @inlinable public static func style(
-        locale: Locale,
-        precision: PrecisionStyle,
-        separator: SeparatorStyle) -> FormatStyle {
-        return FormatStyle(locale: locale)
-            .precision(precision)
-            .decimalSeparator(strategy: separator)
-    }
 }
 
 //*============================================================================*
@@ -134,18 +111,5 @@ extension FormattableInteger {
     
     @inlinable public static func make(description: String) -> Optional<Self> {
         .init(description)
-    }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Styles
-    //=------------------------------------------------------------------------=
-    
-    @inlinable public static func style(
-        locale: Locale,
-        precision: PrecisionStyle,
-        separator: SeparatorStyle) -> FormatStyle {
-        return FormatStyle(locale: locale)
-            .precision(precision)
-            .decimalSeparator(strategy: separator)
     }
 }

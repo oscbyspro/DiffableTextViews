@@ -38,17 +38,4 @@ extension Decimal: Valuable, BoundableFloatingPoint, PreciseFloatingPoint {
     @inlinable public static func make(description: String) -> Optional<Self> {
         Self(string: description)
     }
-
-    //=------------------------------------------------------------------------=
-    // MARK: Styles
-    //=------------------------------------------------------------------------=
-    
-    @inlinable public static func style(
-        locale: Locale,
-        precision: PrecisionStyle,
-        separator: SeparatorStyle) -> FormatStyle {
-        return FormatStyle(locale: locale)
-            .precision(precision)
-            .decimalSeparator(strategy: separator)
-    }
 }

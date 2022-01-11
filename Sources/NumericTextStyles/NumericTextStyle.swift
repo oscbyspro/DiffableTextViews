@@ -13,7 +13,8 @@ import Quick
 // MARK: * NumericTextStyle
 //*============================================================================*
 
-public struct NumericTextStyle<Value: Valuable>: DiffableTextStyle, Mappable {
+public struct NumericTextStyle<Format: NumericTextFormat>: DiffableTextStyle, Mappable where Format.FormatInput: Valuable, Format.FormatOutput == String {
+    public typealias Value = Format.FormatInput
     public typealias Bounds = NumericTextStyles.Bounds<Value>
     public typealias Precision = NumericTextStyles.Precision<Value>
 
@@ -21,6 +22,7 @@ public struct NumericTextStyle<Value: Valuable>: DiffableTextStyle, Mappable {
     // MARK: Properties
     //=------------------------------------------------------------------------=
     
+    @usableFromInline var format: Format
     @usableFromInline var region: Region
     @usableFromInline var bounds: Bounds
     @usableFromInline var precision: Precision
@@ -31,10 +33,11 @@ public struct NumericTextStyle<Value: Valuable>: DiffableTextStyle, Mappable {
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable public init(locale: Locale = .autoupdatingCurrent) {
-        self.region = .reusable(locale)
-        self.bounds = .standard
-        self.precision = .standard
+    @inlinable public init(format: Format, locale: Locale = .autoupdatingCurrent) {
+        self.format = format
+        self.region = Region.reusable(locale)
+        self.bounds = Bounds.standard
+        self.precision = Precision.standard
         self.prefix = ""
         self.suffix = ""
     }
@@ -67,20 +70,17 @@ public struct NumericTextStyle<Value: Valuable>: DiffableTextStyle, Mappable {
     // MARK: Styles
     //=------------------------------------------------------------------------=
     
-    #warning("Should modify a base style.")
-    @inlinable func showcaseStyle() -> Value.FormatStyle {
-        Value.style(locale: region.locale, precision: precision.showcaseStyle(), separator: .automatic)
+    @inlinable func showcaseStyle() -> Format {
+        format.style(locale: region.locale, precision: precision.showcaseStyle(), separator: .automatic)
     }
     
-    #warning("Should modify a base style.")
-    @inlinable func editableStyle() -> Value.FormatStyle {
-        Value.style(locale: region.locale, precision: precision.editableStyle(), separator: .automatic)
+    @inlinable func editableStyle() -> Format {
+        format.style(locale: region.locale, precision: precision.editableStyle(), separator: .automatic)
     }
     
-    #warning("Should modify a base style.")
-    @inlinable func editableStyleThatUses(number: Number) -> Value.FormatStyle {
+    @inlinable func editableStyleThatUses(number: Number) -> Format {
         let separator: Value.SeparatorStyle = number.separator == .some ? .always : .automatic
         let precision: Value.PrecisionStyle = precision.editableStyleThatUses(number: number)
-        return Value.style(locale: region.locale, precision: precision, separator: separator)
+        return format.style(locale: region.locale, precision: precision, separator: separator)
     }
 }
