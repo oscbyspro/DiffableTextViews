@@ -50,6 +50,16 @@ final class RegionTests: XCTestCase {
         }
     }
     
+    func testZero() {
+        for region in regions {
+            let style = IntegerFormatStyle<Int>
+                .number
+                .locale(region.locale)
+            
+            XCTAssertEqual(0, try! style.parseStrategy.parse(String(region.zero)))
+        }
+    }
+    
     func testDigits() {
         let number: Int = 1234567890
         
