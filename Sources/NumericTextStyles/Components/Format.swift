@@ -47,7 +47,7 @@ import Utilities
     }
     
     @inlinable func editableStyleThatUses(number: Number) -> Value.FormatStyle {
-        let separator: Value.SeparatorStyle = number.separator ? .always : .automatic
+        let separator: Value.SeparatorStyle = number.separator == .some ? .always : .automatic
         let precision: Value.PrecisionStyle = precision.editableStyleThatUses(number: number)
         return Value.style(locale: region.locale, precision: precision, separator: separator)
     }

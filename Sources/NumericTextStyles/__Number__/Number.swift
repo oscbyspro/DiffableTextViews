@@ -27,7 +27,7 @@ import Utilities
     // MARK: Properties
     //=------------------------------------------------------------------------=
 
-    @usableFromInline private(set) var sign = Sign()
+    @usableFromInline var sign = Sign()
     @usableFromInline private(set) var integer = Digits()
     @usableFromInline private(set) var separator = Separator()
     @usableFromInline private(set) var fraction = Digits()
@@ -37,6 +37,26 @@ import Utilities
     //=------------------------------------------------------------------------=
     
     @inlinable init() { }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Count
+    //=------------------------------------------------------------------------=
+        
+    @inlinable func significantCount() -> Int {
+        let significantIntegerCount = integer.count - integer.prefixZerosCount()
+        let significantFractionCount = fraction.count - fraction.suffixZerosCount()
+        return significantIntegerCount + significantFractionCount
+    }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Transformations
+    //=------------------------------------------------------------------------=
+    
+    @inlinable mutating func removeImpossibleSeparator(capacity: Capacity) {
+        guard fraction.digits.isEmpty else { return }
+        guard capacity.fraction <= 0 || capacity.significant <= 0 else { return }
+        separator = .none
+    }
     
     //=------------------------------------------------------------------------=
     // MARK: Text
@@ -66,6 +86,7 @@ extension Number {
     // MARK: Snapshot
     //=------------------------------------------------------------------------=
     
+    #warning("Document assumptions made.")
     @inlinable static func parse(_ snapshot: Snapshot, with options: Options, in region: Region) throws -> Self {
         guard let start = snapshot.firstIndex(where: \.nonformatting) else { return .zero }
         

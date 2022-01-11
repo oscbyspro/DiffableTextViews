@@ -70,7 +70,7 @@ final class RegionTests: XCTestCase {
                 .grouping(.never)
             
             let numbers = number.formatted(style)
-            XCTAssert(numbers.allSatisfy({ region.digits.contains($0) }))
+            XCTAssert(numbers.allSatisfy({ region.digits.keys.contains($0) }))
         }
     }
     

@@ -55,7 +55,7 @@ extension Formattable {
     //=------------------------------------------------------------------------=
     
     @inlinable init(number: Number) throws {
-        let description = number.characters
+        let description = number.characters()
         
         guard let instance = Self.make(description: description) else {
             throw Info(["unable to instantiate number with description", .mark(description)])
