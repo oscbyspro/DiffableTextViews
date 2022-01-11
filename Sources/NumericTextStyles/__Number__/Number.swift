@@ -97,16 +97,22 @@ extension Number {
         var instance = Self()
         var index = start
         var element = snapshot[start]
+        var done = false
         
         //=--------------------------------------=
         // MARK: Helpers
         //=--------------------------------------=
 
         func iterate() {
-            while index != snapshot.endIndex {
+            loop: while !done {
                 snapshot.formIndex(after: &index)
-                element = snapshot[index]
-                if element.nonformatting { break }
+
+                if index != snapshot.endIndex {
+                    element = snapshot[index]
+                    if element.nonformatting { break loop }
+                } else {
+                    done = true
+                }
             }
         }
 
