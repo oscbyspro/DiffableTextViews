@@ -20,9 +20,9 @@ import Utilities
     // MARK: Properties
     //=------------------------------------------------------------------------=
     
-    @usableFromInline private(set) var region: Region
-    @usableFromInline private(set) var bounds: Bounds
-    @usableFromInline private(set) var precision: Precision
+    @usableFromInline var region: Region
+    @usableFromInline var bounds: Bounds
+    @usableFromInline var precision: Precision
 
     //=------------------------------------------------------------------------=
     // MARK: Initializers

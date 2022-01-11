@@ -10,7 +10,7 @@
 //*============================================================================*
 
 /// A system representation of a sign.
-@usableFromInline enum Sign: Character, Component {
+@usableFromInline enum Sign: String, Component {
     
     //=------------------------------------------------------------------------=
     // MARK: Instances

@@ -6,13 +6,14 @@
 //
 
 import DiffableTextViews
+import Utilities
 
 //*============================================================================*
 // MARK: * Number
 //*============================================================================*
 
 /// A system representation of a number.
-@usableFromInline struct Number {
+@usableFromInline struct Number: Component {
     
     //=------------------------------------------------------------------------=
     // MARK: Instances
@@ -38,16 +39,20 @@ import DiffableTextViews
     @inlinable init() { }
     
     //=------------------------------------------------------------------------=
-    // MARK: Utilities
+    // MARK: Text
     //=------------------------------------------------------------------------=
     
     @inlinable func characters() -> String {
-        var characters = String()
-        sign.write(to: &characters)
-        integer.write(to: &characters)
-        separator.write(to: &characters)
-        fraction.write(to: &characters)
+        var characters = ""
+        write(to: &characters)
         return characters
+    }
+    
+    @inlinable func write<Stream: TextOutputStream>(to stream: inout Stream) {
+        sign.write(to: &stream)
+        integer.write(to: &stream)
+        separator.write(to: &stream)
+        fraction.write(to: &stream)
     }
 }
 
@@ -124,6 +129,14 @@ extension Number {
         while index != snapshot.endIndex, let digit = region.digits[element.character] {
             instance.fraction.append(digit)
             iterate()
+        }
+        
+        //=--------------------------------------=
+        // MARK: Validate
+        //=--------------------------------------=
+        
+        guard index == snapshot.endIndex else {
+            throw Info(["unable to parse number in", .mark(snapshot.characters)])
         }
         
         //=--------------------------------------=

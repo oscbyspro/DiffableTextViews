@@ -67,9 +67,15 @@
     // MARK: Text
     //=------------------------------------------------------------------------=
     
-    @inlinable func write<Target: TextOutputStream>(to target: inout Target) {
+    @inlinable func characters() -> String {
+        var characters = ""
+        write(to: &characters)
+        return characters
+    }
+    
+    @inlinable func write<Stream: TextOutputStream>(to stream: inout Stream) {
         for digits in digits {
-            digits.write(to: &target)
+            digits.write(to: &stream)
         }
     }
 }

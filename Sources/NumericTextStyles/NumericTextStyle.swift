@@ -24,7 +24,6 @@ public struct NumericTextStyle<Value: Valuable>: DiffableTextStyle, Mappable {
     //=------------------------------------------------------------------------=
     
     @usableFromInline var format: Format
-    @usableFromInline let region: Region
     @usableFromInline var prefix: String
     @usableFromInline var suffix: String
     
@@ -33,8 +32,7 @@ public struct NumericTextStyle<Value: Valuable>: DiffableTextStyle, Mappable {
     //=------------------------------------------------------------------------=
     
     @inlinable public init(locale: Locale = .autoupdatingCurrent) {
-        self.format = Format(locale: locale)
-        self.region = Region.reusable(locale)
+        self.format = Format(region: Region.reusable(locale))
         self.prefix = ""
         self.suffix = ""
     }
@@ -44,15 +42,15 @@ public struct NumericTextStyle<Value: Valuable>: DiffableTextStyle, Mappable {
     //=------------------------------------------------------------------------=
     
     @inlinable public func locale(_ locale: Locale) -> Self {
-        map({ $0.format.update(locale: locale) })
+        map({ $0.format.region = Region.reusable(locale) })
     }
     
     @inlinable public func bounds(_ bounds: Bounds) -> Self {
-        map({ $0.format.update(bounds: bounds) })
+        map({ $0.format.bounds = bounds })
     }
     
     @inlinable public func precision(_ precision: Precision) -> Self {
-        map({ $0.format.update(precision: precision) })
+        map({ $0.format.precision = precision })
     }
     
     @inlinable public func prefix(_ prefix: String?) -> Self {
@@ -119,29 +117,29 @@ extension NumericTextStyle {
             let character = characters[index]
             var result = Sign()
             
-            if let sign = format.signs[character] {
+            if let sign = format.region.signs[character] {
                 result = sign
                 characters.formIndex(after: &index)
             }
             
             format.correct(sign: &result)
-            snapshot.append(contentsOf: Snapshot(result.characters, only: .prefixing))
+            snapshot.append(contentsOf: Snapshot(result.characters(), only: .prefixing))
         }
         
         //=--------------------------------------=
         // MARK: First Digit
         //=--------------------------------------=
-
+        
+        #warning("Should be until first nonzero.")
         snapshot_first_digit: if index != characters.endIndex {
             let character = characters[index]
-                        
-            guard format.digits.contains(character) else { break snapshot_first_digit }
+            
+            guard format.region.digits.keys.contains(character) else { break snapshot_first_digit }
             characters.formIndex(after: &index)
             
-            var symbol = Symbol(character: character, attribute: .content)
-            symbol.attribute.insert(character == format.zero ? .prefixing : .content)
-                        
-            snapshot.append(symbol)
+            snapshot.append(Symbol(
+                character: character,
+                attribute: character == format.region.zero ? .prefixing : .content))
         }
         
         //=--------------------------------------=
@@ -151,11 +149,11 @@ extension NumericTextStyle {
         while index != characters.endIndex {
             let character = characters[index]
             
-            if format.digits.contains(character) {
+            if format.region.digits.keys.contains(character) {
                 snapshot.append(.content(character))
-            } else if format.groupingSeparator.contains(character) {
+            } else if format.region.groupingSeparator == character {
                 snapshot.append(.spacer(character))
-            } else if format.fractionSeparator.contains(character) {
+            } else if format.region.fractionSeparator == character {
                 snapshot.append(.content(character))
             }
             
@@ -167,8 +165,8 @@ extension NumericTextStyle {
         //=--------------------------------------=
         
         snapshot.transform(attributes: snapshot.suffix { symbol in
-            if format.zero == symbol.character { return true }
-            if format.fractionSeparator.contains(symbol.character) { return true }
+            if format.region.zero == symbol.character { return true }
+            if format.region.fractionSeparator == symbol.character { return true }
             return false }.indices) { attribute in  attribute.insert(.removable) }
         
         //=--------------------------------------=
@@ -321,16 +319,7 @@ extension NumericTextStyle {
     //=------------------------------------------------------------------------=
     
     @inlinable func number(snapshot: Snapshot) throws -> Number {
-        let unformatted = snapshot
-            .lazy
-            .filter({ !$0.attribute.contains(.formatting) })
-            .map(\.character)
-                
-        guard let number = format.parser.parse(unformatted) else {
-            throw Info(["unable to parse number in", .mark(snapshot.characters)])
-        }
-                
-        return number
+        try Number.parse(snapshot, with: Value.options, in: format.region)
     }
 }
 
