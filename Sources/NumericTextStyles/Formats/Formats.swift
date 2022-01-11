@@ -11,89 +11,35 @@ import Foundation
 // MARK: * Decimal
 //*============================================================================*
 
-extension Decimal.FormatStyle: Format {
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Transformations
-    //=------------------------------------------------------------------------=
-    
-    @inlinable public func style(locale: Locale, precision: PrecisionStyle, separator: SeparatorStyle) -> Self {
-        self.locale(locale).precision(precision).decimalSeparator(strategy: separator)
-    }
-}
+extension Decimal.FormatStyle: Format { }
 
 //*============================================================================*
-// MARK: * Decimal - Currency
+// MARK: * Decimal x Currency
 //*============================================================================*
 
-extension Decimal.FormatStyle.Currency: Format {
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Transformations
-    //=------------------------------------------------------------------------=
-    
-    @inlinable public func style(locale: Locale, precision: PrecisionStyle, separator: SeparatorStyle) -> Self {
-        self.locale(locale).precision(precision).decimalSeparator(strategy: separator)
-    }
-}
+extension Decimal.FormatStyle.Currency: Format { }
 
 //*============================================================================*
 // MARK: * Floating Point
 //*============================================================================*
 
-extension FloatingPointFormatStyle: Format {
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Transformations
-    //=------------------------------------------------------------------------=
-    
-    @inlinable public func style(locale: Locale, precision: PrecisionStyle, separator: SeparatorStyle) -> Self {
-        self.locale(locale).precision(precision).decimalSeparator(strategy: separator)
-    }
-}
+extension FloatingPointFormatStyle: Format { }
 
 //*============================================================================*
-// MARK: * Floating Point - Currency
+// MARK: * Floating Point x Currency
 //*============================================================================*
 
-extension FloatingPointFormatStyle.Currency: Format {
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Transformations
-    //=------------------------------------------------------------------------=
-    
-    @inlinable public func style(locale: Locale, precision: PrecisionStyle, separator: SeparatorStyle) -> Self {
-        self.locale(locale).precision(precision).decimalSeparator(strategy: separator)
-    }
-}
+extension FloatingPointFormatStyle.Currency: Format { }
 
 //*============================================================================*
 // MARK: * Integer
 //*============================================================================*
 
-extension IntegerFormatStyle: Format {
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Transformations
-    //=------------------------------------------------------------------------=
-    
-    @inlinable public func style(locale: Locale, precision: PrecisionStyle, separator: SeparatorStyle) -> Self {
-        self.locale(locale).precision(precision).decimalSeparator(strategy: separator)
-    }
-}
+extension IntegerFormatStyle: Format { }
 
 //*============================================================================*
-// MARK: * Integer - Currency
+// MARK: * Integer x Currency
 //*============================================================================*
 
-extension IntegerFormatStyle.Currency: Format {
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Transformations
-    //=------------------------------------------------------------------------=
-    
-    @inlinable public func style(locale: Locale, precision: PrecisionStyle, separator: SeparatorStyle) -> Self {
-        self.locale(locale).precision(precision).decimalSeparator(strategy: separator)
-    }
-}
+extension IntegerFormatStyle.Currency: Format { }
 

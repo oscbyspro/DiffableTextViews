@@ -18,6 +18,8 @@ public protocol Format: FormatStyle {
     //=------------------------------------------------------------------------=
     // MARK: Transformations
     //=------------------------------------------------------------------------=
+        
+    @inlinable func precision(_ precision: PrecisionStyle) -> Self
     
-    @inlinable func style(locale: Locale, precision: PrecisionStyle, separator: SeparatorStyle) -> Self
+    @inlinable func decimalSeparator(strategy separator: SeparatorStyle) -> Self
 }

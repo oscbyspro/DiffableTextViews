@@ -72,16 +72,24 @@ where Format.FormatInput: Valuable, Format.FormatOutput == String {
     //=------------------------------------------------------------------------=
     
     @inlinable func showcaseStyle() -> Format {
-        format.style(locale: region.locale, precision: precision.showcaseStyle(), separator: .automatic)
+        style(precision: precision.showcaseStyle(), separator: .automatic)
     }
     
     @inlinable func editableStyle() -> Format {
-        format.style(locale: region.locale, precision: precision.editableStyle(), separator: .automatic)
+        style(precision: precision.editableStyle(), separator: .automatic)
     }
     
     @inlinable func editableStyleThatUses(number: Number) -> Format {
-        let separator: Value.SeparatorStyle = number.separator == .some ? .always : .automatic
-        let precision: Value.PrecisionStyle = precision.editableStyleThatUses(number: number)
-        return format.style(locale: region.locale, precision: precision, separator: separator)
+        let precision: Format.PrecisionStyle = precision.editableStyleThatUses(number: number)
+        let separator: Format.SeparatorStyle = number.separator == .some ? .always : .automatic
+        return style(precision: precision, separator: separator)
+    }
+    
+    //
+    // MARK: Styles - Helpers
+    //=------------------------------------------------------------------------=
+    
+    @inlinable func style(precision: Format.PrecisionStyle, separator: Format.SeparatorStyle) -> Format {
+        format.locale(region.locale).precision(precision).decimalSeparator(strategy: separator)
     }
 }
