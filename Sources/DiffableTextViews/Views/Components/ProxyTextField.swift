@@ -34,8 +34,64 @@ public final class ProxyTextField {
     
     @usableFromInline let wrapped: Wrapped
     
+    //=------------------------------------------------------------------------=
+    // MARK: Initializers
+    //=------------------------------------------------------------------------=
+    
+    @inlinable init(_ wrapped: Wrapped) {
+        self.wrapped = wrapped
+    }
+    
+    //*========================================================================*
+    // MARK: * Configuration
+    //*========================================================================*
+    
+    public struct Transformations {
+        
+        //=--------------------------------------------------------------------=
+        // MARK: Properties
+        //=--------------------------------------------------------------------=
+        
+        @usableFromInline var transformations: [(ProxyTextField) -> Void]
+        
+        //=--------------------------------------------------------------------=
+        // MARK: Initializers
+        //=--------------------------------------------------------------------=
+        
+        @inlinable init() {
+            self.transformations = []
+        }
+        
+        //=--------------------------------------------------------------------=
+        // MARK: Transformations
+        //=--------------------------------------------------------------------=
+        
+        @inlinable mutating func add(_ transformation: @escaping (ProxyTextField) -> Void) {
+            self.transformations.append(transformation)
+        }
+        
+        //=--------------------------------------------------------------------=
+        // MARK: Utilities
+        //=--------------------------------------------------------------------=
+        
+        @discardableResult @inlinable func apply(on proxy: ProxyTextField) -> Bool {
+            for transformation in transformations {
+                transformation(proxy)
+            }
+            
+            return !transformations.isEmpty
+        }
+    }
+}
+
+//=----------------------------------------------------------------------------=
+// MARK: ProxyTextField - Internal
+//=----------------------------------------------------------------------------=
+
+extension ProxyTextField {
+    
     //
-    // MARK: Properties - Accessors
+    // MARK: Accessors
     //=------------------------------------------------------------------------=
     
     @inlinable var text: String {
@@ -55,17 +111,9 @@ public final class ProxyTextField {
     @inlinable var mode: Mode {
         wrapped.isEditing ? .editable : .showcase
     }
-    
+
     //=------------------------------------------------------------------------=
-    // MARK: Initializers
-    //=------------------------------------------------------------------------=
-    
-    @inlinable init(_ wrapped: Wrapped) {
-        self.wrapped = wrapped
-    }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Update
+    // MARK: Transformations
     //=------------------------------------------------------------------------=
     
     /// - Complexity: High.

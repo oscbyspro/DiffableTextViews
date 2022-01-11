@@ -39,8 +39,7 @@ struct NumericTextStyleExample: View {
             .bounds(.values((0 as Decimal)...(1_000_000 as Decimal)))
         }
         .setup { 
-            textField in 
-            textField.keyboard(.decimalPad) 
+            textField in
             textField.font(.body.monospaced())
         }    
     }

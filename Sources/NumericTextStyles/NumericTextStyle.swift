@@ -306,3 +306,24 @@ extension NumericTextStyle {
         format.bounds.clamp(&value)
     }
 }
+
+//=----------------------------------------------------------------------------=
+// MARK: NumericTextStyle - UIKit
+//=----------------------------------------------------------------------------=
+
+#if canImport(UIKit)
+
+import UIKit
+
+extension NumericTextStyle: UIKitDiffableTextStyle {
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Keyboard
+    //=------------------------------------------------------------------------=
+    
+    @inlinable public var keyboard: UIKeyboardType {
+        .decimalPad
+    }
+}
+
+#endif

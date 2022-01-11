@@ -17,7 +17,7 @@ import SwiftUI
 public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable, Mappable {
     public typealias Value = Style.Value
     public typealias UIViewType = BasicTextField
-    public typealias Configuration = (ProxyTextField) -> Void
+    public typealias Transformation = (ProxyTextField) -> Void
     
     //=------------------------------------------------------------------------=
     // MARK: Properties
@@ -30,9 +30,9 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable, 
     // MARK: Properties - Configurations
     //=------------------------------------------------------------------------=
 
-    @usableFromInline var setup:  Configuration? = nil
-    @usableFromInline var update: Configuration? = nil
-    @usableFromInline var submit: Configuration? = nil
+    @usableFromInline var setup  = ProxyTextField.Transformations()
+    @usableFromInline var update = ProxyTextField.Transformations()
+    @usableFromInline var submit = ProxyTextField.Transformations()
 
     //=------------------------------------------------------------------------=
     // MARK: Initializers
@@ -44,24 +44,40 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable, 
     }
     
     @inlinable public init(_ value: Binding<Value>, style: () -> Style) {
+        self.init(value, style: style())
+    }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Initializers - UIKit
+    //=------------------------------------------------------------------------=
+    
+    @inlinable public init(_ value: Binding<Value>, style: Style) where Style: UIKitDiffableTextStyle {
         self.value = value
-        self.style = style()
+        self.style = style
+        self.setup.add {
+            textField in
+            textField.keyboard(style.keyboard)
+        }
+    }
+    
+    @inlinable public init(_ value: Binding<Value>, style: () -> Style) where Style: UIKitDiffableTextStyle {
+        self.init(value, style: style())
     }
     
     //=------------------------------------------------------------------------=
     // MARK: Transformations
     //=------------------------------------------------------------------------=
     
-    @inlinable public func setup(_ setup: Configuration?) -> Self {
-        map({ $0.setup  = setup  })
+    @inlinable public func setup(_ transformation: @escaping Transformation) -> Self {
+        map({ $0.setup.add(transformation) })
     }
     
-    @inlinable public func update(_ update: Configuration?) -> Self {
-        map({ $0.update = update })
+    @inlinable public func update(_ transformation: @escaping Transformation) -> Self {
+        map({ $0.update.add(transformation) })
     }
     
-    @inlinable public func submit(_ submit: Configuration?) -> Self {
-        map({ $0.submit = submit })
+    @inlinable public func submit(_ transformation: @escaping Transformation) -> Self {
+        map({ $0.submit.add(transformation) })
     }
 
     //=------------------------------------------------------------------------=
@@ -93,7 +109,7 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable, 
         
         let downstream = ProxyTextField(uiView)
         context.coordinator.downstream = downstream
-        setup?(downstream)
+        setup.apply(on: downstream)
 
         //=--------------------------------------=
         // MARK: Done
@@ -108,7 +124,7 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable, 
     
     @inlinable public func updateUIView(_ uiView: UIViewType, context: Context) {
         context.coordinator.upstream = self
-        update?(context.coordinator.downstream)
+        update.apply(on: context.coordinator.downstream)
         context.coordinator.synchronize()
     }
     
@@ -139,7 +155,7 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable, 
         //=----------------------------------------------------------------------------=
         
         @inlinable public func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-            upstream.submit?(downstream) == nil ? true : false
+            !upstream.submit.apply(on: downstream)
         }
         
         //=--------------------------------------------------------------------=
