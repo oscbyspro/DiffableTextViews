@@ -31,8 +31,8 @@ import Foundation
     // MARK: Properties - Digits
     //=------------------------------------------------------------------------=
     
-    @usableFromInline let zero: Character
-    @usableFromInline let digits: [Character: Character]
+    @usableFromInline let digits: [Character: Digit]
+    @usableFromInline let   zero:  Character
     
     //
     // MARK: Properties - Separators
@@ -71,10 +71,15 @@ import Foundation
         //=--------------------------------------=
         
         let digits = formatter.string(from: 1234567890)!
-        assert(digits.count == 10 && formatter.number(from: String(digits.last!)) == 0)
+        assert(digits.count == 10)
+        
+        self.digits = zip(digits, [Digit.x1, .x2, .x3, .x4, .x5, .x6, .x7, .x8, .x9, .x0]).reduce(into: [:]) {
+            result, element in
+            result[element.0] = element.1
+        }
         
         self.zero = digits.last!
-        self.digits = Set(digits)
+        assert(formatter.number(from: String(self.zero)) == 0)
         
         //=--------------------------------------=
         // MARK: Generate Localized - Separators

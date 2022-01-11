@@ -27,9 +27,9 @@ import DiffableTextViews
     //=------------------------------------------------------------------------=
 
     @usableFromInline private(set) var sign = Sign()
-    @usableFromInline private(set) var integer = [Digit]()
+    @usableFromInline private(set) var integer = Digits()
     @usableFromInline private(set) var separator = Separator()
-    @usableFromInline private(set) var fraction = [Digit]()
+    @usableFromInline private(set) var fraction = Digits()
     
     //=------------------------------------------------------------------------=
     // MARK: Initializers
@@ -42,12 +42,12 @@ import DiffableTextViews
     //=------------------------------------------------------------------------=
     
     @inlinable func characters() -> String {
-        var result = ""
-        result += sign.rawValue
-        for digit in integer  { result += digit.rawValue }
-        result += separator.rawValue
-        for digit in fraction { result += digit.rawValue }
-        return result
+        var characters = String()
+        sign.write(to: &characters)
+        integer.write(to: &characters)
+        separator.write(to: &characters)
+        fraction.write(to: &characters)
+        return characters
     }
 }
 
@@ -97,12 +97,12 @@ extension Number {
         // MARK: Digits
         //=--------------------------------------=
 
-        while index != snapshot.endIndex, region.digits.contains(element.character) {
-            instance.integer.append(element.character)
+        while index != snapshot.endIndex, let digit = region.digits[element.character] {
+            instance.integer.append(digit)
             iterate()
         }
         
-        if instance.integer.isEmpty { instance.integer = "0" }
+        instance.integer.replaceEmptyWithZero()
         
         guard !options.contains(.integer) else { return instance }
         
@@ -111,18 +111,18 @@ extension Number {
         //=--------------------------------------=
 
         if index != snapshot.endIndex, region.fractionSeparator == element.character {
-            instance.separator = true
+            instance.separator = .some
             iterate()
         }
         
-        guard instance.separator else { return instance }
+        guard instance.separator != .none else { return instance }
         
         //=--------------------------------------=
         // MARK: Fraction
         //=--------------------------------------=
         
-        while index != snapshot.endIndex, region.digits.contains(element.character) {
-            instance.integer.append(element.character)
+        while index != snapshot.endIndex, let digit = region.digits[element.character] {
+            instance.fraction.append(digit)
             iterate()
         }
         
