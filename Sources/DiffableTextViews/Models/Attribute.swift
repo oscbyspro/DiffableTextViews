@@ -74,7 +74,8 @@ public struct Attribute: OptionSet {
 // MARK: Attribute - CustomStringConvertible
 //=----------------------------------------------------------------------------=
 
-extension Attribute {
+extension Attribute: CustomStringConvertible {
+    
     //=------------------------------------------------------------------------=
     // MARK: Descriptions
     //=------------------------------------------------------------------------=

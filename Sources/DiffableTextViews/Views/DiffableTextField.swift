@@ -212,9 +212,11 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable, 
                     // see option + delete as one such example
                     // where textFieldDidChangeSelection(_:)
                     // is called after this method completes
-                    self.cache.value = value
-                    self.cache.field = field
-                    self.push()
+                    self.lock.perform {
+                        self.cache.value = value
+                        self.cache.field = field
+                        self.push()
+                    }
                 }
                 
             } catch let reason {

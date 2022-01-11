@@ -169,8 +169,8 @@ extension Carets {
     
     @inlinable func index(at position: Offset, start: Index) -> Index {
         start.offset <= position
-        ? indices[start...].first(where: { $0.offset == position })!
-        : indices[...start].last (where: { $0.offset == position })!
+        ? indices[start...].first(where: { $0.offset >= position })!
+        : indices[...start].last (where: { $0.offset <= position })!
     }
     
     @inlinable func indices(at range: Range<Offset>, start: Range<Index>) -> Range<Index> {
