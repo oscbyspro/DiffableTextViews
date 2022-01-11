@@ -9,7 +9,7 @@
 // MARK: Digit
 //*============================================================================*
 
-@usableFromInline enum Digit: String, Component {
+@usableFromInline enum Digit: String, CaseIterable, Component {
     
     //=------------------------------------------------------------------------=
     // MARK: Instances

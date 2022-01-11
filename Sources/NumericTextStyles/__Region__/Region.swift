@@ -70,15 +70,17 @@ import Foundation
         // MARK: Generate Localized - Digits
         //=--------------------------------------=
         
-        let digits = formatter.string(from: 1234567890)!
-        assert(digits.count == 10)
-        
-        self.digits = zip(digits, [Digit.x1, .x2, .x3, .x4, .x5, .x6, .x7, .x8, .x9, .x0]).reduce(into: [:]) {
-            result, element in
-            result[element.0] = element.1
+        var digits = [Character: Digit]()
+        for digit in Digit.allCases {
+            let localized = formatter.string(from: NSNumber(value: UInt8(digit.rawValue)!))!
+            assert(localized.count == 1)
+            digits[localized.first!] = digit
         }
         
-        self.zero = digits.last!
+        self.digits = digits
+        assert(digits.count == 10)
+        
+        self.zero = digits.first(where: \.value.isZero)!.key
         assert(formatter.number(from: String(self.zero)) == 0)
         
         //=--------------------------------------=

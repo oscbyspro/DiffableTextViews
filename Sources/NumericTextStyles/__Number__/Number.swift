@@ -19,7 +19,7 @@ import DiffableTextViews
     //=------------------------------------------------------------------------=
     
     @usableFromInline static let zero: Self = {
-        var instance = Self(); instance.integer = [.x0]; return instance
+        var instance = Self(); instance.integer = .zero; return instance
     }()
     
     //=------------------------------------------------------------------------=
