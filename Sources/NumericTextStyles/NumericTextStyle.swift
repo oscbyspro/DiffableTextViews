@@ -32,7 +32,7 @@ public struct NumericTextStyle<Value: Valuable>: DiffableTextStyle, Mappable {
     //=------------------------------------------------------------------------=
     
     @inlinable public init(locale: Locale = .autoupdatingCurrent) {
-        self.format = Format(region: Region.reusable(locale))
+        self.format = Format(region: .reusable(locale))
         self.prefix = ""
         self.suffix = ""
     }
@@ -42,7 +42,7 @@ public struct NumericTextStyle<Value: Valuable>: DiffableTextStyle, Mappable {
     //=------------------------------------------------------------------------=
     
     @inlinable public func locale(_ locale: Locale) -> Self {
-        map({ $0.format.region = Region.reusable(locale) })
+        map({ $0.format.region = .reusable(locale) })
     }
     
     @inlinable public func bounds(_ bounds: Bounds) -> Self {
@@ -73,7 +73,7 @@ extension NumericTextStyle {
     //=------------------------------------------------------------------------=
     
     @inlinable public func snapshot(showcase value: Value) -> Snapshot {
-        snapshot(value: value, style: format.showcaseStyle())
+        snapshot(characters: format.showcaseStyle().format(value))
     }
     
     //=------------------------------------------------------------------------=
@@ -81,17 +81,9 @@ extension NumericTextStyle {
     //=------------------------------------------------------------------------=
     
     @inlinable public func snapshot(editable value: Value) -> Snapshot {
-        snapshot(value: value, style: format.editableStyle())
+        snapshot(characters: format.editableStyle().format(value))
     }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Value
-    //=------------------------------------------------------------------------=
-    
-    @inlinable func snapshot(value: Value, style: Value.FormatStyle) -> Snapshot {
-        snapshot(characters: style.format(value))
-    }
-    
+
     //=------------------------------------------------------------------------=
     // MARK: Characters
     //=------------------------------------------------------------------------=
@@ -200,10 +192,10 @@ extension NumericTextStyle {
     @inlinable public func merge(snapshot: Snapshot, with content: Snapshot, in range: Range<Snapshot.Index>) throws -> Snapshot {
 
         //=--------------------------------------=
-        // MARK: Input
+        // MARK: Reader
         //=--------------------------------------=
 
-        var input = Input(content)
+        var input = Reader(content)
         input.consumeSignInput(region: format.region)
 
         //=--------------------------------------=

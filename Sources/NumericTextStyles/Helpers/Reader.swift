@@ -1,5 +1,5 @@
 //
-//  Input.swift
+//  Reader.swift
 //
 //
 //  Created by Oscar Byström Ericsson on 2021-11-07.
@@ -8,10 +8,10 @@
 import DiffableTextViews
 
 //*============================================================================*
-// MARK: * Input
+// MARK: * Reader
 //*============================================================================*
 
-@usableFromInline struct Input {
+@usableFromInline struct Reader {
     @usableFromInline typealias Command = (inout Number) -> Void
     
     //=------------------------------------------------------------------------=

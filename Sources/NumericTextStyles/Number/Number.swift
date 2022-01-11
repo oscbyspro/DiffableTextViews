@@ -167,6 +167,8 @@ extension Number {
             throw Info(["unable to parse number in", .mark(snapshot.characters)])
         }
         
+        print(instance)
+        
         //=--------------------------------------=
         // MARK: Done
         //=--------------------------------------=
