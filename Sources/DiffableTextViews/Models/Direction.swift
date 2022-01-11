@@ -17,6 +17,17 @@
     
     case forwards
     case backwards
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Utilities
+    //=------------------------------------------------------------------------=
+    
+    @inlinable func reversed() -> Self {
+        switch self {
+        case .forwards: return .backwards
+        case .backwards: return .forwards
+        }
+    }
 }
 
 //=----------------------------------------------------------------------------=

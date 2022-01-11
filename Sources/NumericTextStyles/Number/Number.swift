@@ -162,6 +162,7 @@ extension Number {
                 self.fraction.append(digit)
                 iterate()
             }
+            
         }
         
         //=--------------------------------------=

@@ -88,58 +88,50 @@ extension NumericTextStyle {
     // MARK: Characters
     //=------------------------------------------------------------------------=
 
+    /// Snapshots characters.
+    ///
+    /// Assumes that there is always at least one integer digit.
+    ///
     @inlinable func snapshot(characters: String) -> Snapshot {
-        var index = characters.startIndex
         var snapshot = Snapshot()
-                
+        var index = characters.startIndex
+        
         //=--------------------------------------=
         // MARK: Prefix
         //=--------------------------------------=
         
+        #warning("Remove when currency is implemented.")
         if !prefix.isEmpty {
             snapshot.append(contentsOf: Snapshot(prefix, only: .prefix))
             snapshot.append(.prefix(" "))
         }
         
         //=--------------------------------------=
-        // MARK: Sign
+        // MARK: Through First Digit
         //=--------------------------------------=
         
-        if index != characters.endIndex {
-            let character = characters[index]
-            var result = Sign()
-            
-            if let sign = format.region.signs[character] {
-                result = sign
-                characters.formIndex(after: &index)
-            }
-            
-            format.correct(sign: &result)
-            snapshot.append(contentsOf: Snapshot(result.characters(), only: .prefixing))
-        }
-        
-        //=--------------------------------------=
-        // MARK: First Digit
-        //=--------------------------------------=
-        
-        #warning("Should be until first nonzero.")
-        snapshot_first_digit: if index != characters.endIndex {
-            let character = characters[index]
-            
-            guard format.region.digits.keys.contains(character) else { break snapshot_first_digit }
+        through_first_digit: while index != characters.endIndex {
+            let character = characters[  index]
             characters.formIndex(after: &index)
-            
-            snapshot.append(Symbol(
-                character: character,
-                attribute: character == format.region.zero ? .prefixing : .content))
+                        
+            if let digit = format.region.digits[character] {
+                let attribute: Attribute = digit.isZero ? .prefixing : .content
+                snapshot.append(Symbol(character: character, attribute: attribute))
+                break through_first_digit
+            } else if format.region.signs.keys.contains(character) {
+                snapshot.append(Symbol(character: character, attribute: .prefixing))
+            } else {
+                snapshot.append(.prefix(character))
+            }
         }
         
         //=--------------------------------------=
-        // MARK: Remainders
+        // MARK: Body
         //=--------------------------------------=
         
         while index != characters.endIndex {
-            let character = characters[index]
+            let character = characters[  index]
+            characters.formIndex(after: &index)
             
             if format.region.digits.keys.contains(character) {
                 snapshot.append(.content(character))
@@ -147,9 +139,11 @@ extension NumericTextStyle {
                 snapshot.append(.spacer(character))
             } else if format.region.fractionSeparator == character {
                 snapshot.append(.content(character))
+            } else if format.region.signs.keys.contains(character) {
+                snapshot.append(Symbol(character: character, attribute: .prefixing))
+            } else {
+                snapshot.append(.spacer(character))
             }
-            
-            characters.formIndex(after: &index)
         }
         
         //=--------------------------------------=
@@ -165,6 +159,7 @@ extension NumericTextStyle {
         // MARK: Suffix
         //=--------------------------------------=
 
+        #warning("Remove when currency is implemented.")
         if !suffix.isEmpty {
             snapshot.append(.suffix(" "))
             snapshot.append(contentsOf: Snapshot(suffix, only: .suffix))
@@ -188,7 +183,6 @@ extension NumericTextStyle {
     // MARK: Input
     //=------------------------------------------------------------------------=
     
-    #warning("merge(sanpshot: Snapshot, with input: Input) throws -> Snapshot")
     @inlinable public func merge(snapshot: Snapshot, with input: Input) throws -> Snapshot {
 
         //=--------------------------------------=
@@ -314,7 +308,7 @@ extension NumericTextStyle: UIKitDiffableTextStyle {
     //=------------------------------------------------------------------------=
     
     @inlinable public var keyboard: UIKeyboardType {
-        .decimalPad
+        Value.options.contains(.integer) ? .numberPad : .decimalPad
     }
 }
 
