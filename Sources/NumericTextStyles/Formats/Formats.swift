@@ -1,5 +1,5 @@
 //
-//  NumericTextFormats.swift
+//  Formats.swift
 //  
 //
 //  Created by Oscar Byström Ericsson on 2022-01-11.
@@ -11,7 +11,7 @@ import Foundation
 // MARK: * Decimal
 //*============================================================================*
 
-extension Decimal.FormatStyle: NumericTextFormat {
+extension Decimal.FormatStyle: Format {
     
     //=------------------------------------------------------------------------=
     // MARK: Transformations
@@ -26,7 +26,7 @@ extension Decimal.FormatStyle: NumericTextFormat {
 // MARK: * Decimal - Currency
 //*============================================================================*
 
-extension Decimal.FormatStyle.Currency: NumericTextFormat {
+extension Decimal.FormatStyle.Currency: Format {
     
     //=------------------------------------------------------------------------=
     // MARK: Transformations
@@ -41,7 +41,7 @@ extension Decimal.FormatStyle.Currency: NumericTextFormat {
 // MARK: * Floating Point
 //*============================================================================*
 
-extension FloatingPointFormatStyle: NumericTextFormat {
+extension FloatingPointFormatStyle: Format {
     
     //=------------------------------------------------------------------------=
     // MARK: Transformations
@@ -56,7 +56,7 @@ extension FloatingPointFormatStyle: NumericTextFormat {
 // MARK: * Floating Point - Currency
 //*============================================================================*
 
-extension FloatingPointFormatStyle.Currency: NumericTextFormat {
+extension FloatingPointFormatStyle.Currency: Format {
     
     //=------------------------------------------------------------------------=
     // MARK: Transformations
@@ -71,7 +71,7 @@ extension FloatingPointFormatStyle.Currency: NumericTextFormat {
 // MARK: * Integer
 //*============================================================================*
 
-extension IntegerFormatStyle: NumericTextFormat {
+extension IntegerFormatStyle: Format {
     
     //=------------------------------------------------------------------------=
     // MARK: Transformations
@@ -86,7 +86,7 @@ extension IntegerFormatStyle: NumericTextFormat {
 // MARK: * Integer - Currency
 //*============================================================================*
 
-extension IntegerFormatStyle.Currency: NumericTextFormat {
+extension IntegerFormatStyle.Currency: Format {
     
     //=------------------------------------------------------------------------=
     // MARK: Transformations

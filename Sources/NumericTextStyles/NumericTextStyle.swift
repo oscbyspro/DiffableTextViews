@@ -13,7 +13,8 @@ import Quick
 // MARK: * NumericTextStyle
 //*============================================================================*
 
-public struct NumericTextStyle<Format: NumericTextFormat>: DiffableTextStyle, Mappable where Format.FormatInput: Valuable, Format.FormatOutput == String {
+public struct NumericTextStyle<Format: NumericTextStyles.Format>: DiffableTextStyle, Mappable
+where Format.FormatInput: Valuable, Format.FormatOutput == String {
     public typealias Value = Format.FormatInput
     public typealias Bounds = NumericTextStyles.Bounds<Value>
     public typealias Precision = NumericTextStyles.Precision<Value>

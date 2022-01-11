@@ -1,5 +1,5 @@
 //
-//  NumericTextFormat.swift
+//  Format.swift
 //  
 //
 //  Created by Oscar Byström Ericsson on 2022-01-11.
@@ -7,13 +7,11 @@
 
 import Foundation
 
-#warning("Rename as Format.")
-
 //*============================================================================*
-// MARK: * NumericTextFormat
+// MARK: * Format
 //*============================================================================*
 
-public protocol NumericTextFormat: FormatStyle {
+public protocol Format: FormatStyle {
     typealias PrecisionStyle = NumberFormatStyleConfiguration.Precision
     typealias SeparatorStyle = NumberFormatStyleConfiguration.DecimalSeparatorDisplayStrategy
     
