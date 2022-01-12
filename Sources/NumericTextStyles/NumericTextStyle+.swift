@@ -62,7 +62,9 @@ extension NumericTextStyle {
         while index != characters.endIndex {
             let character = characters[  index]
             characters.formIndex(after: &index)
-            
+            //=----------------------------------=
+            // MARK: Digit
+            //=----------------------------------=
             if let digit = region.digits[character] {
                 snapshot.append(.content(character))
                 interactableRHS = snapshot.endIndex
@@ -71,14 +73,26 @@ extension NumericTextStyle {
                     guard interactableLHS == nil else { break digit_check }
                     interactableLHS = snapshot.endIndex
                 }
+            //=----------------------------------=
+            // MARK: Grouping Separator
+            //=----------------------------------=
             } else if region.groupingSeparator == character {
                 snapshot.append(Symbol(character: character, attribute: .spacer))
+            //=----------------------------------=
+            // MARK: Fraction Separator
+            //=----------------------------------=
             } else if region.fractionSeparator == character {
                 redundanceStart = snapshot.endIndex
                 snapshot.append(Symbol(character: character, attribute: .content))
                 interactableRHS = snapshot.endIndex
+            //=----------------------------------=
+            // MARK: Sign
+            //=----------------------------------=
             } else if region.signs.keys.contains(character) {
                 snapshot.append(Symbol(character: character, attribute: .prefixing))
+            //=----------------------------------=
+            // MARK: None Of The Above
+            //=----------------------------------=
             } else {
                 snapshot.append(Symbol(character: character, attribute: .spacer))
             }
