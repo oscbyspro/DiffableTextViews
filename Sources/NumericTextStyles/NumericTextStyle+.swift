@@ -41,10 +41,10 @@ extension NumericTextStyle {
     @inlinable func snapshot(characters: String) -> Snapshot {
         var snapshot = Snapshot()
         var index = characters.startIndex
-        
-        var interactableStartIndex: Snapshot.Index? = nil
-        var interactableEndIndex = snapshot.startIndex
-        var redundanceStartIndex = snapshot.startIndex
+
+        var interactableLHS: Snapshot.Index? = nil
+        var interactableRHS = snapshot.startIndex
+        var redundanceStart = snapshot.startIndex
         
         //=--------------------------------------=
         // MARK: Prefix
@@ -65,19 +65,18 @@ extension NumericTextStyle {
             
             if let digit = region.digits[character] {
                 snapshot.append(.content(character))
-                interactableEndIndex = snapshot.endIndex
-                
-                if !digit.isZero {
-                    redundanceStartIndex = snapshot.endIndex
-                } else if interactableStartIndex == nil {
-                    interactableStartIndex = snapshot.endIndex
+                interactableRHS = snapshot.endIndex
+                digit_check: if digit.isZero {
+                    redundanceStart = snapshot.endIndex
+                    guard interactableLHS == nil else { break digit_check }
+                    interactableLHS = snapshot.endIndex
                 }
-                
             } else if region.groupingSeparator == character {
                 snapshot.append(Symbol(character: character, attribute: .spacer))
             } else if region.fractionSeparator == character {
+                redundanceStart = snapshot.endIndex
                 snapshot.append(Symbol(character: character, attribute: .content))
-                interactableEndIndex = snapshot.endIndex
+                interactableRHS = snapshot.endIndex
             } else if region.signs.keys.contains(character) {
                 snapshot.append(Symbol(character: character, attribute: .prefixing))
             } else {
@@ -86,28 +85,34 @@ extension NumericTextStyle {
         }
         
         //=--------------------------------------=
-        // MARK: Attributes
+        // MARK: Interactable - LHS
         //=--------------------------------------=
         
-        if let interactableStartIndex = interactableStartIndex {
-            snapshot.transform(attributes: ..<interactableStartIndex) {
+        if let interactableLHS = interactableLHS {
+            snapshot.transform(attributes: ..<interactableLHS) {
                 attribute in
                 attribute.insert(.prefixing)
             }
         }
         
-        redundant_symbols_are_removable: do {
-            snapshot.transform(attributes: redundanceStartIndex...) {
+        //=--------------------------------------=
+        // MARK: Redundance - Start
+        //=--------------------------------------=
+        
+        if redundanceStart != snapshot.startIndex {
+            snapshot.transform(attributes: (redundanceStart)...) {
                 attribute in
                 attribute.insert(.removable)
             }
         }
         
-        trailing_symbols_are_suffix: do {
-            snapshot.transform(attributes: interactableEndIndex...) {
-                attribute in
-                attribute = .suffix
-            }
+        //=--------------------------------------=
+        // MARK: Interactable - RHS
+        //=--------------------------------------=
+        
+        snapshot.transform(attributes: interactableRHS...) {
+            attribute in
+            attribute = .suffix
         }
 
         //=--------------------------------------=
@@ -182,8 +187,6 @@ extension NumericTextStyle {
         //=--------------------------------------=
 
         let characters = style.format(value)
-                
-        print(number, value, characters)
         
         //=--------------------------------------=
         // MARK: Continue
