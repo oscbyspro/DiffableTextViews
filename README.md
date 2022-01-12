@@ -22,8 +22,8 @@ This package contains views and styles that use snapshots and attributes to proc
 
 👷‍♂️🛠🚧🚧🧱🏗🧱🚧🚧⏳
 
-- Values: [Details](../main/Notes/NumericTextStyles/VALUES.md)
 - Formats: Number, Currency.
+- [Values](../main/Notes/NumericTextStyles/VALUES.md): Decimal, Float[16-64], (U)Int[8-64]
 
 ```swift
 import SwiftUI
