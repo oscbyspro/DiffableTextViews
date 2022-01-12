@@ -206,10 +206,6 @@ extension NumericTextStyle {
         // MARK: Value
         //=--------------------------------------=
 
-        #warning("This is bad.")
-        #warning("Should convert formatted characters.")
-//        let value = try Value(number: number)
-        
         let value = try style.parseStrategy.parse(number.characters(in: region))
         try bounds.validate(value: value)
 
