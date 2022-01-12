@@ -72,7 +72,7 @@ extension NumericTextStyle {
             //=----------------------------------=
             
             if let digit = region.digits[character] {
-                snapshot.append(Symbol(character: digit, attribute: .content))
+                snapshot.append(Symbol(character: character, attribute: .content))
                 interactableRHS = snapshot.endIndex
                 
                 zero_digit: if digit == .x0 {
@@ -88,10 +88,10 @@ extension NumericTextStyle {
             } else if let separator = region.separators[character] {
                 switch separator {
                 case .grouping:
-                    snapshot.append(Symbol(character: separator, attribute: .spacer))
+                    snapshot.append(Symbol(character: character, attribute: .spacer))
                 case .fraction:
                     redundanceStart = snapshot.endIndex
-                    snapshot.append(Symbol(character: separator, attribute: .content))
+                    snapshot.append(Symbol(character: character, attribute: .content))
                     interactableRHS = snapshot.endIndex
                 }
             
@@ -99,8 +99,8 @@ extension NumericTextStyle {
             // MARK: Sign
             //=----------------------------------=
             
-            } else if let sign = region.signs[character] {
-                snapshot.append(Symbol(character: sign, attribute: [.prefixing, .suffixing]))
+            } else if let _ = region.signs[character] {
+                snapshot.append(Symbol(character: character, attribute: [.prefixing, .suffixing]))
                 
             //=----------------------------------=
             // MARK: None Of The Above
