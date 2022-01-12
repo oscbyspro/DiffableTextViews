@@ -215,8 +215,8 @@ extension NumericTextStyle {
         //=--------------------------------------=
         
         var characters = style.format(value)
-        correctSign(in: &characters, with: value, and: number.sign)
-        
+        autocorrectSign(in: &characters, with: value, and: number.sign)
+                
         //=--------------------------------------=
         // MARK: Continue
         //=--------------------------------------=

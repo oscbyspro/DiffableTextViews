@@ -85,7 +85,7 @@ public struct NumericTextStyle<Format: NumericTextStyles.Format>: DiffableTextSt
     @inlinable func editableStyle(number: Number) -> Format {
         let precision: Format.PrecisionStyle = precision.editableStyleThatUses(number: number)
         let separator: Format.SeparatorStyle = number.separator == .fraction ? .always : .automatic
-        let sign:                 Sign.Style = number.sign == .negative ? .always : .automatic
+        let sign: Sign.Style = number.sign == .negative ? .always : .automatic
         return style(precision: precision, separator: separator, sign: sign)
     }
     
@@ -104,7 +104,7 @@ public struct NumericTextStyle<Format: NumericTextStyles.Format>: DiffableTextSt
     // MARK: Uilities
     //=------------------------------------------------------------------------=
     
-    @inlinable func correctSign(in characters: inout String, with value: Value, and sign: Sign) {
+    @inlinable func autocorrectSign(in characters: inout String, with value: Value, and sign: Sign) {
         guard sign == .negative && value == .zero else { return }
         guard let position = characters.firstIndex(where: region.signs.keys.contains) else { return }
         guard let sign = region.signsInLocale[sign] else { return }

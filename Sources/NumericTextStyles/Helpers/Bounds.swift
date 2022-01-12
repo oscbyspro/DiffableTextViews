@@ -95,11 +95,8 @@ extension Bounds {
     
     @inlinable func validate(sign: Sign) throws {
         switch sign {
-        case .positive:
-            if max >  .zero { return }
-            if min == .zero { return }
-        case .negative:
-            if min <  .zero { return }
+        case .positive: if max >= .zero { return }
+        case .negative: if min <  .zero { return }
         }
         
         throw Info([.mark(sign), "is not permitted in", .mark(self)])

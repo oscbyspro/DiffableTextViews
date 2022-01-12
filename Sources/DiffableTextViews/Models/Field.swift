@@ -86,8 +86,11 @@ extension Field {
                 
         let upperBound = position(current: carets.suffix(from: selection.upperBound),   next: newValue[...])
         let lowerBound = position(current: carets[selection.range], next: newValue.prefix(upTo: upperBound))
-        
-        return Field(carets: newValue, selection: Selection(range: lowerBound ..< upperBound)).autocorrected()
+
+        #warning("Rework similarities so that it does not need to autocorrect twice.")
+        return Field(carets: newValue, selection: Selection(range: lowerBound ..< upperBound))
+            .autocorrected()
+            .autocorrected()
     }
     
     //
