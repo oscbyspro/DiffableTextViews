@@ -167,11 +167,10 @@ extension Carets {
     // MARK: Traversal - Index At Offset
     //=------------------------------------------------------------------------=
     
-    #warning("This « .first » crashes when you enter the « ´ » character at the start of a snapshot.")
     @inlinable func index(at position: Offset, start: Index) -> Index {
         start.offset <= position
-        ? indices[start...].first(where: { $0.offset >= position })!
-        : indices[...start].last (where: { $0.offset <= position })!
+        ? indices[start...].first(where: { $0.offset >= position }) ??  lastIndex
+        : indices[...start].last (where: { $0.offset <= position }) ?? startIndex
     }
     
     @inlinable func indices(at range: Range<Offset>, start: Range<Index>) -> Range<Index> {
