@@ -13,7 +13,7 @@ import DiffableTextViews
 //*============================================================================*
 
 @usableFromInline final class Region {
-    @usableFromInline static var cache = [String: Region]()
+    @usableFromInline static let cache = NSCache<NSString, Region>()
     
     //=------------------------------------------------------------------------=
     // MARK: Properties
@@ -127,13 +127,13 @@ import DiffableTextViews
     // MARK: Initializers - Static
     //=------------------------------------------------------------------------=
     
-    #warning("Limit cache size, maybe.")
     @inlinable static func reusable(_ locale: Locale) -> Region {
-        if let reusable = cache[locale.identifier] {
+        let key = NSString(string: locale.identifier)
+        if let reusable = cache.object(forKey: key) {
             return reusable
         } else {
             let instance = Region(locale)
-            cache[locale.identifier] = instance
+            cache.setObject(instance,  forKey: key)
             return instance
         }
     }
