@@ -75,24 +75,39 @@ public struct NumericTextStyle<Format: NumericTextStyles.Format>: DiffableTextSt
     //=------------------------------------------------------------------------=
     
     @inlinable func showcaseStyle() -> Format {
-        style(precision: precision.showcaseStyle(), separator: .automatic)
+        style(precision: precision.showcaseStyle())
     }
     
     @inlinable func editableStyle() -> Format {
-        style(precision: precision.editableStyle(), separator: .automatic)
+        style(precision: precision.editableStyle())
     }
     
     @inlinable func editableStyle(number: Number) -> Format {
         let precision: Format.PrecisionStyle = precision.editableStyleThatUses(number: number)
         let separator: Format.SeparatorStyle = number.separator == .fraction ? .always : .automatic
-        return style(precision: precision, separator: separator)
+        let sign:                 Sign.Style = number.sign == .negative ? .always : .automatic
+        return style(precision: precision, separator: separator, sign: sign)
     }
     
     //
     // MARK: Styles - Helpers
     //=------------------------------------------------------------------------=
     
-    @inlinable func style(precision: Format.PrecisionStyle, separator: Format.SeparatorStyle) -> Format {
-        format.precision(precision).decimalSeparator(strategy: separator)
+    @inlinable func style(
+        precision: Format.PrecisionStyle,
+        separator: Format.SeparatorStyle = .automatic,
+        sign: Sign.Style = .automatic) -> Format {
+        format.precision(precision).decimalSeparator(strategy: separator).sign(style: sign)
+    }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Uilities
+    //=------------------------------------------------------------------------=
+    
+    @inlinable func correctSign(in characters: inout String, with value: Value, and sign: Sign) {
+        guard sign == .negative && value == .zero else { return }
+        guard let position = characters.firstIndex(where: region.signs.keys.contains) else { return }
+        guard let sign = region.signsInLocale[sign] else { return }
+        characters.replaceSubrange(position...position, with: String(sign))
     }
 }

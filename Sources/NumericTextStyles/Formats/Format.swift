@@ -16,10 +16,20 @@ public protocol Format: ParseableFormatStyle {
     typealias SeparatorStyle = NumberFormatStyleConfiguration.DecimalSeparatorDisplayStrategy
     
     //=------------------------------------------------------------------------=
-    // MARK: Transformations
+    // MARK: Precision
     //=------------------------------------------------------------------------=
-        
+    
     @inlinable func precision(_ precision: PrecisionStyle) -> Self
     
+    //=------------------------------------------------------------------------=
+    // MARK: Separator
+    //=------------------------------------------------------------------------=
+    
     @inlinable func decimalSeparator(strategy: SeparatorStyle) -> Self
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Sign
+    //=------------------------------------------------------------------------=
+    
+    @inlinable func sign(style: Sign.Style) -> Self
 }

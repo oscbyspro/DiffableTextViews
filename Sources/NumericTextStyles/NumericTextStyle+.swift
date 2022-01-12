@@ -205,11 +205,17 @@ extension NumericTextStyle {
         try bounds.validate(value: value)
 
         //=--------------------------------------=
-        // MARK: Characters
+        // MARK: Style
         //=--------------------------------------=
 
         let style = editableStyle(number: number)
-        let characters = style.format(value)
+        
+        //=--------------------------------------=
+        // MARK: Characters
+        //=--------------------------------------=
+        
+        var characters = style.format(value)
+        correctSign(in: &characters, with: value, and: number.sign)
         
         //=--------------------------------------=
         // MARK: Continue
