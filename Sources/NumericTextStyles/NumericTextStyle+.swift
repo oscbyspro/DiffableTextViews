@@ -92,13 +92,24 @@ extension NumericTextStyle {
         }
         
         //=--------------------------------------=
+        // MARK: After Last Digit Or Fraction Separator
+        //=--------------------------------------=
+        
+        #warning("Cleanup.")
+        snapshot.transform(attributes: snapshot.suffix { symbol in
+            if region.digits.keys.contains(symbol.character) { return false }
+            if region.fractionSeparator == symbol.character  { return false }
+            return true }.indices) { attribute in attribute = .suffix }
+        
+        //=--------------------------------------=
         // MARK: Redundance
         //=--------------------------------------=
         
+        #warning("Cleanup.")
         snapshot.transform(attributes: snapshot.suffix { symbol in
             if region.zero == symbol.character { return true }
             if region.fractionSeparator == symbol.character { return true }
-            return false }.indices) { attribute in  attribute.insert(.removable) }
+            return false }.indices) { attribute in attribute.insert(.removable) }
         
         //=--------------------------------------=
         // MARK: Suffix
@@ -108,6 +119,8 @@ extension NumericTextStyle {
             snapshot.append(.suffix(" "))
             snapshot.append(contentsOf: Snapshot(suffix, only: .suffix))
         }
+        
+        print(snapshot)
 
         //=--------------------------------------=
         // MARK: Done

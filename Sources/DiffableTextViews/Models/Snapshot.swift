@@ -136,7 +136,22 @@ public extension Snapshot {
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: Sbapshot - RangeReplaceableCollection
+// MARK: Snapshot - CustomStringConvertible
+//=----------------------------------------------------------------------------=
+
+extension Snapshot: CustomStringConvertible {
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Description
+    //=------------------------------------------------------------------------=
+    
+    @inlinable public var description: String {
+        "\(Self.self)(\"\(_characters)\", \(_attributes))"
+    }
+}
+
+//=----------------------------------------------------------------------------=
+// MARK: Snapshot - RangeReplaceableCollection
 //=----------------------------------------------------------------------------=
 
 public extension Snapshot {
