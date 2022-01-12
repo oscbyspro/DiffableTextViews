@@ -20,7 +20,6 @@ import DiffableTextViews
     //=------------------------------------------------------------------------=
     
     @usableFromInline let formatter: NumberFormatter
-    @usableFromInline let direction: Locale.LanguageDirection
         
     //
     // MARK: Properties - Characters
@@ -56,8 +55,6 @@ import DiffableTextViews
         let formatter = NumberFormatter()
         formatter.locale = locale
         formatter.numberStyle = .decimal
-
-        let direction = Locale.characterDirection(forLanguage: locale.languageCode!)
         
         //=--------------------------------------=
         // MARK: Characters - Signs
@@ -115,7 +112,6 @@ import DiffableTextViews
         //=--------------------------------------=
         
         self.formatter = formatter
-        self.direction = direction
         
         self.signs = signs
         self.signsInLocale = signsLocal
@@ -125,7 +121,6 @@ import DiffableTextViews
         
         self.separators = separators
         self.separatorsInLocale = separatorsInLocale
-                
     }
     
     //
