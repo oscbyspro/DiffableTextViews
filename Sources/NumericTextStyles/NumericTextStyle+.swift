@@ -149,10 +149,6 @@ extension NumericTextStyle {
 
         var number = try number(snapshot: proposal)
         reader.process?(&number)
-
-        //
-        // MARK: Number - Validation & Capacity
-        //=--------------------------------------=
         
         try bounds.validate(sign: number.sign)
         let capacity = try precision.capacity(number: number)
@@ -169,7 +165,7 @@ extension NumericTextStyle {
         // MARK: Style
         //=--------------------------------------=
         
-        let style = editableStyleThatUses(number: number)
+        let style = editableStyle(number: number)
 
         //=--------------------------------------=
         // MARK: Characters
@@ -192,7 +188,7 @@ extension NumericTextStyle {
 extension NumericTextStyle {
 
     //=------------------------------------------------------------------------=
-    // MARK: Snapshot as Value
+    // MARK: Snapshot As Value
     //=------------------------------------------------------------------------=
 
     @inlinable public func parse(snapshot: Snapshot) throws -> Value {
@@ -200,7 +196,7 @@ extension NumericTextStyle {
     }
     
     //=------------------------------------------------------------------------=
-    // MARK: Snapshot as Number
+    // MARK: Snapshot As Number
     //=------------------------------------------------------------------------=
     
     @inlinable func number(snapshot: Snapshot) throws -> Number {

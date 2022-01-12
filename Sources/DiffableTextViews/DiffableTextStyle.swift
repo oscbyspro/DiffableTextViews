@@ -31,13 +31,7 @@ public protocol DiffableTextStyle {
     // MARK: Merge
     //=------------------------------------------------------------------------=
     
-    /// Merges the current snapshot with the input snapshot proposed by the user,
-    ///
-    /// - Parameters:
-    ///     - snapshot: current snapshot
-    ///     - content: user input with empty attributes
-    ///     - range: indices in snapshot that content is proposed to change
-    ///
+    /// Merges the current snapshot with the input proposed by the user,
     @inlinable func merge(snapshot: Snapshot, with input: Input) throws -> Snapshot
         
     //=------------------------------------------------------------------------=
@@ -51,11 +45,9 @@ public protocol DiffableTextStyle {
     // MARK: Process
     //=------------------------------------------------------------------------=
     
-    #warning("Consider: throws.")
     /// Processes the value once whenever it is called. It is used both downstream and upstream so it can be used to constrain the value.
     @inlinable func process(value: inout Value)
 
-    #warning("Consider: throws.")
     /// Processes the snapshot once whenever it is called. Can be used to apply transformation after other snapshot and merge functions.
     @inlinable func process(snapshot: inout Snapshot)
 }

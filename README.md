@@ -14,11 +14,16 @@ This package contains views and styles that use snapshots and attributes to proc
 
 👷‍♂️🛠🚧🚧🧱🏗🧱🚧🚧⏳
 
+- Standard font is monospaced.
+
 # Styles
 
-## NumericTextStyle ([Values](../main/Notes/NumericTextStyles/VALUES.md))
+## NumericTextStyle 
 
 👷‍♂️🛠🚧🚧🧱🏗🧱🚧🚧⏳
+
+- Values: [Details](../main/Notes/NumericTextStyles/VALUES.md)
+- Formats: Number, Currency.
 
 ```swift
 import SwiftUI
@@ -33,13 +38,10 @@ struct NumericTextStyleExample: View {
     var body: some View {
         DiffableTextField($amount) {
             .currency(code: locale.currencyCode!)
-            .precision(.digits(integer: 1..., fraction: 2))
             .bounds(.values((0 as Decimal)...(1_000_000 as Decimal)))
+            .precision(.digits(integer: 1..., fraction: 2))
         }
-        .setup { 
-            textField in
-            textField.font(.body.monospaced())
-        }    
+        .environment(\.locale, locale)
     }
 }
 ```
@@ -62,11 +64,7 @@ struct PatternTextStyleExample: View {
             .predicate(.value({ $0.allSatisfy(\.isNumber) }))
             .predicate(.character(\.isASCII))
         }
-        .setup { 
-            textField in
-            textField.keyboard(.phonePad)
-            textField.font(.body.monospaced())
-        }
+        .setup { textField in textField.keyboard(.phonePad) }
     }
 }
 ```
