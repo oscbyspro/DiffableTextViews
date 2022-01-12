@@ -27,7 +27,7 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable, 
     @usableFromInline let style: Style
     
     //
-    // MARK: Properties - Configurations
+    // MARK: Properties - Transformations
     //=------------------------------------------------------------------------=
 
     @usableFromInline var setup  = ProxyTextField.Transformations()

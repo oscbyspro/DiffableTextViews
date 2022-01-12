@@ -41,7 +41,7 @@ extension NumericTextStyle {
     @inlinable func snapshot(characters: String) -> Snapshot {
         var snapshot = Snapshot()
         var index = characters.startIndex
-        
+
         //=--------------------------------------=
         // MARK: Markers
         //=--------------------------------------=
@@ -197,30 +197,24 @@ extension NumericTextStyle {
         number.removeImpossibleSeparator(capacity: capacity)
         
         //=--------------------------------------=
-        // MARK: Style
-        //=--------------------------------------=
-        
-        let style = editableStyle(number: number)
-
-        //=--------------------------------------=
         // MARK: Value
         //=--------------------------------------=
-
-        let value = try style.parseStrategy.parse(number.characters(in: region))
+        
+        let formatted = number.characters(in: region)
+        let value = try format.parseStrategy.parse(formatted)
         try bounds.validate(value: value)
 
         //=--------------------------------------=
         // MARK: Characters
         //=--------------------------------------=
 
+        let style = editableStyle(number: number)
         let characters = style.format(value)
         
         //=--------------------------------------=
         // MARK: Continue
         //=--------------------------------------=
         
-        print(characters)
-
         return self.snapshot(characters: characters)
     }
 }
