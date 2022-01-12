@@ -9,7 +9,7 @@
 // MARK: * Float16
 //*============================================================================*
 
-extension Float16: ValuableFloat {
+extension Float16: FloatingPoint {
     
     //=------------------------------------------------------------------------=
     // MARK: Precision, Bounds
@@ -23,7 +23,7 @@ extension Float16: ValuableFloat {
 // MARK: * Float32
 //*============================================================================*
 
-extension Float32: ValuableFloat {
+extension Float32: FloatingPoint {
     
     //=------------------------------------------------------------------------=
     // MARK: Precision, Bounds
@@ -37,7 +37,7 @@ extension Float32: ValuableFloat {
 // MARK: * Float64
 //*============================================================================*
 
-extension Float64: ValuableFloat {
+extension Float64: FloatingPoint {
     
     //=------------------------------------------------------------------------=
     // MARK: Precision, Bounds

@@ -11,7 +11,7 @@ import Foundation
 // MARK: * Decimal
 //*============================================================================*
 
-extension Decimal: Valuable, BoundableFloatingPoint, PreciseFloatingPoint {
+extension Decimal: FloatingPoint {
     
     //=------------------------------------------------------------------------=
     // MARK: Options

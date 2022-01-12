@@ -14,7 +14,7 @@ import Quick
 //*============================================================================*
 
 public struct NumericTextStyle<Format: NumericTextStyles.Format>: DiffableTextStyle, Mappable
-    where Format.FormatInput: Valuable, Format.FormatOutput == String {
+    where Format.FormatInput: Value, Format.FormatOutput == String {
     public typealias Value = Format.FormatInput
     public typealias Bounds = NumericTextStyles.Bounds<Value>
     public typealias Precision = NumericTextStyles.Precision<Value>

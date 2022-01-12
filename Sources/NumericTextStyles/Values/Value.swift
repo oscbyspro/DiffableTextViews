@@ -1,34 +1,34 @@
 //
-//  Valuable.swift
+//  Value.swift
 //  
 //
 //  Created by Oscar Byström Ericsson on 2021-12-21.
 //
 
 //*============================================================================*
-// MARK: * Valuable
+// MARK: * Value
 //*============================================================================*
 
-public protocol Valuable: Boundable, Precise {
+public protocol Value: Boundable, Precise {
     
     //=------------------------------------------------------------------------=
-    // MARK: Value, Options
+    // MARK: Options
     //=------------------------------------------------------------------------=
     
     @inlinable static var options: Options { get }
 }
 
 //*============================================================================*
-// MARK: * Valuable x Float
+// MARK: * Value x Floating Point
 //*============================================================================*
 
-@usableFromInline protocol ValuableFloat: Valuable, BoundableFloatingPoint, PreciseFloatingPoint { }
+@usableFromInline protocol FloatingPoint: Value, BoundableFloatingPoint, PreciseFloatingPoint { }
 
 //=----------------------------------------------------------------------------=
-// MARK: Valuable x Float - Implementation
+// MARK: Value x Floating Point - Implementation
 //=----------------------------------------------------------------------------=
 
-extension ValuableFloat {
+extension FloatingPoint {
     
     //=------------------------------------------------------------------------=
     // MARK: Options
@@ -38,16 +38,16 @@ extension ValuableFloat {
 }
 
 //*============================================================================*
-// MARK: * Valuable x Int
+// MARK: * Value x Integer
 //*============================================================================*
 
-@usableFromInline protocol ValuableInt: Valuable, BoundableInteger, PreciseInteger { }
+@usableFromInline protocol Integer: Value, BoundableInteger, PreciseInteger { }
 
 //=----------------------------------------------------------------------------=
-// MARK: Valuable x Int - Implementation
+// MARK: Value x Integer - Implementation
 //=----------------------------------------------------------------------------=
 
-extension ValuableInt {
+extension Integer {
     
     //=------------------------------------------------------------------------=
     // MARK: Options
@@ -57,16 +57,16 @@ extension ValuableInt {
 }
 
 //*============================================================================*
-// MARK: * Valuable x UInt
+// MARK: * Value x Unsigned Integer
 //*============================================================================*
 
-@usableFromInline protocol ValuableUInt: Valuable, BoundableInteger, PreciseInteger { }
+@usableFromInline protocol UnsignedInteger: Value, BoundableInteger, PreciseInteger { }
 
 //=----------------------------------------------------------------------------=
-// MARK: Valuable x UInt - Implementation
+// MARK: Value x Unsigned Integer - Implementation
 //=----------------------------------------------------------------------------=
 
-extension ValuableUInt {
+extension UnsignedInteger {
     
     //=------------------------------------------------------------------------=
     // MARK: Options

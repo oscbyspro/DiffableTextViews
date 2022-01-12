@@ -9,7 +9,7 @@
 // MARK: * Int
 //*============================================================================*
 
-extension Int: ValuableInt {
+extension Int: Integer {
     
     //=------------------------------------------------------------------------=
     // MARK: Precision, Bounds
@@ -23,7 +23,7 @@ extension Int: ValuableInt {
 // MARK: * Int8
 //*============================================================================*
 
-extension Int8: ValuableInt {
+extension Int8: Integer {
     
     //=------------------------------------------------------------------------=
     // MARK: Precision, Bounds
@@ -37,7 +37,7 @@ extension Int8: ValuableInt {
 // MARK: * Int16
 //*============================================================================*
 
-extension Int16: ValuableInt {
+extension Int16: Integer {
     
     //=------------------------------------------------------------------------=
     // MARK: Precision, Bounds
@@ -51,7 +51,7 @@ extension Int16: ValuableInt {
 // MARK: * Int32
 //*============================================================================*
 
-extension Int32: ValuableInt {
+extension Int32: Integer {
     
     //=------------------------------------------------------------------------=
     // MARK: Precision, Bounds
@@ -65,7 +65,7 @@ extension Int32: ValuableInt {
 // MARK: * Int64
 //*============================================================================*
 
-extension Int64: ValuableInt {
+extension Int64: Integer {
     
     //=------------------------------------------------------------------------=
     // MARK: Precision, Bounds
