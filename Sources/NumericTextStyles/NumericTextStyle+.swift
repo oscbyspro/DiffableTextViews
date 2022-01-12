@@ -41,6 +41,10 @@ extension NumericTextStyle {
     @inlinable func snapshot(characters: String) -> Snapshot {
         var snapshot = Snapshot()
         var index = characters.startIndex
+        
+        //=--------------------------------------=
+        // MARK: Markers
+        //=--------------------------------------=
 
         var interactableLHS: Snapshot.Index? = nil
         var interactableRHS = snapshot.startIndex

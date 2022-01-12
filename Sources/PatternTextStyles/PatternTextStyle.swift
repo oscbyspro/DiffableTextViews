@@ -7,20 +7,21 @@
 
 import Quick
 import DiffableTextViews
+import Utilities
 
 //*============================================================================*
 // MARK: * PatternTextStyle
 //*============================================================================*
 
 public struct PatternTextStyle<Pattern, Value>: DiffableTextStyle, Mappable where Pattern: Collection, Pattern.Element == Character, Value: RangeReplaceableCollection, Value: Equatable, Value.Element == Character {
-    @usableFromInline typealias Format = PatternTextStyles.Format<Pattern>
     @usableFromInline typealias Predicates = PatternTextStyles.Predicates<Value>
     
     //=------------------------------------------------------------------------=
     // MARK: Properties
     //=------------------------------------------------------------------------=
     
-    @usableFromInline let format: Format
+    @usableFromInline let pattern: Pattern
+    @usableFromInline let placeholder: Character
     @usableFromInline var predicates: Predicates
     @usableFromInline var visible: Bool
     
@@ -29,7 +30,8 @@ public struct PatternTextStyle<Pattern, Value>: DiffableTextStyle, Mappable wher
     //=------------------------------------------------------------------------=
     
     @inlinable public init(pattern: Pattern, placeholder: Character) {
-        self.format = Format(pattern: pattern, placeholder: placeholder)
+        self.pattern = pattern
+        self.placeholder = placeholder
         self.predicates = Predicates()
         self.visible = true
     }
@@ -44,5 +46,17 @@ public struct PatternTextStyle<Pattern, Value>: DiffableTextStyle, Mappable wher
     
     @inlinable public func predicate(_ predicate: Predicate<Value>) -> Self {
         map({ $0.predicates.add(predicate) })
+    }
+        
+    //=------------------------------------------------------------------------=
+    // MARK: Validation
+    //=------------------------------------------------------------------------=
+    
+    @inlinable func validate<C: Collection>(_ characters: C) throws where C.Element == Character {
+        let capacity = pattern.count(where: { $0 == placeholder })
+        
+        guard characters.count <= capacity else {
+            throw Info([.mark(characters), "exceeded pattern capacity", .mark(capacity)])
+        }
     }
 }

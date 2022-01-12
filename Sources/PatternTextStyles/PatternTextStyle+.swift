@@ -20,29 +20,29 @@ extension PatternTextStyle {
     @inlinable public func snapshot(editable value: Value) -> Snapshot {
         var snapshot = Snapshot()
         var valueIndex = value.startIndex
-        var patternIndex = format.pattern.startIndex
+        var patternIndex = pattern.startIndex
         
         //=--------------------------------------=
         // MARK: Prefix Up To First Placeholder
         //=--------------------------------------=
         
-        while patternIndex != format.pattern.endIndex {
-            let patternElement =  format.pattern[patternIndex]
-            if  patternElement == format.placeholder { break }
+        while patternIndex != pattern.endIndex {
+            let patternElement =  pattern[patternIndex]
+            if  patternElement == placeholder { break }
 
             snapshot.append(.prefix(patternElement))
-            format.pattern.formIndex(after: &patternIndex)
+            pattern.formIndex(after: &patternIndex)
         }
         
         //=--------------------------------------=
         // MARK: Body
         //=--------------------------------------=
         
-        while patternIndex != format.pattern.endIndex, valueIndex != value.endIndex {
-            let patternElement = format.pattern[patternIndex]
-            format.pattern.formIndex(after:    &patternIndex)
+        while patternIndex != pattern.endIndex, valueIndex != value.endIndex {
+            let patternElement = pattern[patternIndex]
+            pattern.formIndex(after:    &patternIndex)
             
-            if patternElement == format.placeholder {
+            if patternElement == placeholder {
                 let valueElement = value[valueIndex]
                 value.formIndex(after:  &valueIndex)
                 snapshot.append(.content(valueElement))
@@ -55,8 +55,8 @@ extension PatternTextStyle {
         // MARK: Remainders
         //=--------------------------------------=
         
-        if visible, patternIndex != format.pattern.endIndex {
-            snapshot.append(contentsOf: Snapshot(String(format.pattern[patternIndex...]), only: .suffix))
+        if visible, patternIndex != pattern.endIndex {
+            snapshot.append(contentsOf: Snapshot(String(pattern[patternIndex...]), only: .suffix))
         }
         
         //=--------------------------------------=
@@ -119,7 +119,7 @@ extension PatternTextStyle {
         // MARK: Validation
         //=--------------------------------------=
         
-        try format.validate(value)
+        try validate(value)
         try predicates.validate(value)
         
         //=--------------------------------------=
