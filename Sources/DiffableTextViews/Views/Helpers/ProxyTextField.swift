@@ -40,6 +40,7 @@ public final class ProxyTextField {
     
     @inlinable init(_ wrapped: Wrapped) {
         self.wrapped = wrapped
+        self.font(.body.monospaced())
     }
     
     //*========================================================================*

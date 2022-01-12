@@ -48,23 +48,6 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable, 
     }
     
     //=------------------------------------------------------------------------=
-    // MARK: Initializers - UIKit
-    //=------------------------------------------------------------------------=
-    
-    @inlinable public init(_ value: Binding<Value>, style: Style) where Style: UIKitDiffableTextStyle {
-        self.value = value
-        self.style = style
-        self.setup.add {
-            textField in
-            textField.keyboard(style.keyboard)
-        }
-    }
-    
-    @inlinable public init(_ value: Binding<Value>, style: () -> Style) where Style: UIKitDiffableTextStyle {
-        self.init(value, style: style())
-    }
-    
-    //=------------------------------------------------------------------------=
     // MARK: Transformations
     //=------------------------------------------------------------------------=
     
@@ -108,9 +91,9 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable, 
         //=--------------------------------------=
         
         let downstream = ProxyTextField(uiView)
-        context.coordinator.downstream = downstream
-        context.coordinator.downstream.font(.body.monospaced())
+        style.setup(downstream)
         setup.apply(on: downstream)
+        context.coordinator.downstream = downstream
 
         //=--------------------------------------=
         // MARK: Done

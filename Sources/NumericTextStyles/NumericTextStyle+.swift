@@ -273,7 +273,7 @@ extension NumericTextStyle {
 
 import UIKit
 
-extension NumericTextStyle: UIKitDiffableTextStyle {
+extension NumericTextStyle: UIKitSetupable {
     
     //=------------------------------------------------------------------------=
     // MARK: Keyboard
