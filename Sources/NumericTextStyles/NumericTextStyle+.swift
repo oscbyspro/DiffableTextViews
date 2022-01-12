@@ -42,6 +42,10 @@ extension NumericTextStyle {
         var snapshot = Snapshot()
         var index = characters.startIndex
         
+        var interactableStartIndex: Snapshot.Index? = nil
+        var interactableEndIndex = snapshot.startIndex
+        var redundanceStartIndex = snapshot.startIndex
+        
         //=--------------------------------------=
         // MARK: Prefix
         //=--------------------------------------=
@@ -50,26 +54,7 @@ extension NumericTextStyle {
             snapshot.append(contentsOf: Snapshot(prefix, only: .prefix))
             snapshot.append(.prefix(" "))
         }
-        
-        //=--------------------------------------=
-        // MARK: Through First Digit
-        //=--------------------------------------=
-        
-        through_first_digit: while index != characters.endIndex {
-            let character = characters[  index]
-            characters.formIndex(after: &index)
-                        
-            if let digit = region.digits[character] {
-                let attribute: Attribute = digit.isZero ? .prefixing : .content
-                snapshot.append(Symbol(character: character, attribute: attribute))
-                break through_first_digit
-            } else if region.signs.keys.contains(character) {
-                snapshot.append(Symbol(character: character, attribute: .prefixing))
-            } else {
-                snapshot.append(.prefix(character))
-            }
-        }
-        
+
         //=--------------------------------------=
         // MARK: Body
         //=--------------------------------------=
@@ -78,40 +63,53 @@ extension NumericTextStyle {
             let character = characters[  index]
             characters.formIndex(after: &index)
             
-            if region.digits.keys.contains(character) {
+            if let digit = region.digits[character] {
                 snapshot.append(.content(character))
+                interactableEndIndex = snapshot.endIndex
+                
+                if !digit.isZero {
+                    redundanceStartIndex = snapshot.endIndex
+                } else if interactableStartIndex == nil {
+                    interactableStartIndex = snapshot.endIndex
+                }
+                
             } else if region.groupingSeparator == character {
-                snapshot.append(.spacer(character))
+                snapshot.append(Symbol(character: character, attribute: .spacer))
             } else if region.fractionSeparator == character {
-                snapshot.append(.content(character))
+                snapshot.append(Symbol(character: character, attribute: .content))
+                interactableEndIndex = snapshot.endIndex
             } else if region.signs.keys.contains(character) {
                 snapshot.append(Symbol(character: character, attribute: .prefixing))
             } else {
-                snapshot.append(.spacer(character))
+                snapshot.append(Symbol(character: character, attribute: .spacer))
             }
         }
         
         //=--------------------------------------=
-        // MARK: Tail
+        // MARK: Attributes
         //=--------------------------------------=
         
-        #warning("Cleanup.")
-        snapshot.transform(attributes: snapshot.suffix { symbol in
-            if region.digits.keys.contains(symbol.character) { return false }
-            if region.fractionSeparator == symbol.character  { return false }
-            return true }.indices) { attribute in attribute = .suffix }
+        if let interactableStartIndex = interactableStartIndex {
+            snapshot.transform(attributes: ..<interactableStartIndex) {
+                attribute in
+                attribute.insert(.prefixing)
+            }
+        }
         
-        //=--------------------------------------=
-        // MARK: Redundance
-        //=--------------------------------------=
+        redundant_symbols_are_removable: do {
+            snapshot.transform(attributes: redundanceStartIndex...) {
+                attribute in
+                attribute.insert(.removable)
+            }
+        }
         
-        #warning("Cleanup.")
-        snapshot.transform(attributes: snapshot.suffix { symbol in
-            if region.zero == symbol.character { return true }
-            if region.digits.keys.contains(symbol.character) { return false }
-            if region.fractionSeparator == symbol.character  { return  true }
-            return false }.indices) { attribute in attribute.insert(.removable) }
-        
+        trailing_symbols_are_suffix: do {
+            snapshot.transform(attributes: interactableEndIndex...) {
+                attribute in
+                attribute = .suffix
+            }
+        }
+
         //=--------------------------------------=
         // MARK: Suffix
         //=--------------------------------------=
@@ -121,8 +119,6 @@ extension NumericTextStyle {
             snapshot.append(contentsOf: Snapshot(suffix, only: .suffix))
         }
         
-        print(snapshot)
-
         //=--------------------------------------=
         // MARK: Done
         //=--------------------------------------=
@@ -163,7 +159,7 @@ extension NumericTextStyle {
 
         var number = try number(snapshot: proposal)
         reader.process?(&number)
-        
+                
         try bounds.validate(sign: number.sign)
         let capacity = try precision.capacity(number: number)
         number.removeImpossibleSeparator(capacity: capacity)
@@ -174,7 +170,7 @@ extension NumericTextStyle {
 
         let value = try Value(number: number)
         try bounds.validate(value: value)
-
+        
         //=--------------------------------------=
         // MARK: Style
         //=--------------------------------------=
@@ -186,6 +182,8 @@ extension NumericTextStyle {
         //=--------------------------------------=
 
         let characters = style.format(value)
+                
+        print(number, value, characters)
         
         //=--------------------------------------=
         // MARK: Continue
