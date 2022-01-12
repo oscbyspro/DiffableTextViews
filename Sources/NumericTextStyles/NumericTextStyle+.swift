@@ -92,7 +92,7 @@ extension NumericTextStyle {
         }
         
         //=--------------------------------------=
-        // MARK: After Last Digit Or Fraction Separator
+        // MARK: Tail
         //=--------------------------------------=
         
         #warning("Cleanup.")
@@ -108,7 +108,8 @@ extension NumericTextStyle {
         #warning("Cleanup.")
         snapshot.transform(attributes: snapshot.suffix { symbol in
             if region.zero == symbol.character { return true }
-            if region.fractionSeparator == symbol.character { return true }
+            if region.digits.keys.contains(symbol.character) { return false }
+            if region.fractionSeparator == symbol.character  { return  true }
             return false }.indices) { attribute in attribute.insert(.removable) }
         
         //=--------------------------------------=
