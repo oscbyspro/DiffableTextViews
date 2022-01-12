@@ -11,7 +11,7 @@ import Foundation
 // MARK: * Format
 //*============================================================================*
 
-public protocol Format: FormatStyle {
+public protocol Format: ParseableFormatStyle {
     typealias PrecisionStyle = NumberFormatStyleConfiguration.Precision
     typealias SeparatorStyle = NumberFormatStyleConfiguration.DecimalSeparatorDisplayStrategy
     

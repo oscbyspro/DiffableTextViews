@@ -99,7 +99,7 @@ extension NumericTextStyle {
             // MARK: Sign
             //=----------------------------------=
             
-            } else if let _ = region.signs[character] {
+            } else if region.signs.keys.contains(character) {
                 snapshot.append(Symbol(character: character, attribute: [.prefixing, .suffixing]))
                 
             //=----------------------------------=
@@ -110,7 +110,7 @@ extension NumericTextStyle {
                 snapshot.append(Symbol(character: character, attribute: .spacer))
             }
         }
-        
+                
         //=--------------------------------------=
         // MARK: Interactable - LHS
         //=--------------------------------------=
@@ -195,19 +195,23 @@ extension NumericTextStyle {
         try bounds.validate(sign: number.sign)
         let capacity = try precision.capacity(number: number)
         number.removeImpossibleSeparator(capacity: capacity)
-
-        //=--------------------------------------=
-        // MARK: Value
-        //=--------------------------------------=
-
-        let value = try Value(number: number)
-        try bounds.validate(value: value)
         
         //=--------------------------------------=
         // MARK: Style
         //=--------------------------------------=
         
         let style = editableStyle(number: number)
+
+        //=--------------------------------------=
+        // MARK: Value
+        //=--------------------------------------=
+
+        #warning("This is bad.")
+        #warning("Should convert formatted characters.")
+//        let value = try Value(number: number)
+        
+        let value = try style.parseStrategy.parse(number.characters(in: region))
+        try bounds.validate(value: value)
 
         //=--------------------------------------=
         // MARK: Characters
@@ -218,6 +222,8 @@ extension NumericTextStyle {
         //=--------------------------------------=
         // MARK: Continue
         //=--------------------------------------=
+        
+        print(characters)
 
         return self.snapshot(characters: characters)
     }
@@ -234,9 +240,11 @@ extension NumericTextStyle {
     //=------------------------------------------------------------------------=
 
     @inlinable public func parse(snapshot: Snapshot) throws -> Value {
-        try Value(number: number(snapshot: snapshot))
+        let number = try number(snapshot: snapshot)
+        let characters = number.characters(in: region)
+        return try format.parseStrategy.parse(characters)
     }
-    
+        
     //=------------------------------------------------------------------------=
     // MARK: Snapshot As Number
     //=------------------------------------------------------------------------=

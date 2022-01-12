@@ -59,21 +59,22 @@ import Utilities
     }
     
     //=------------------------------------------------------------------------=
-    // MARK: Text
+    // MARK: Write
     //=------------------------------------------------------------------------=
     
-    @inlinable func characters() -> String {
-        var characters = ""
-        write(to: &characters)
-        return characters
+    @inlinable func write<Stream: TextOutputStream>(characters: inout Stream) {
+        sign.write(characters: &characters)
+        integer.write(characters: &characters)
+        separator?.write(characters: &characters)
+        fraction.write(characters: &characters)
     }
-    
-    @inlinable func write<Stream: TextOutputStream>(to stream: inout Stream) {
-        sign.write(to: &stream)
-        integer.write(to: &stream)
-        separator?.write(to: &stream)
-        fraction.write(to: &stream)
-    }
+
+    @inlinable func write<Stream: TextOutputStream>(characters: inout Stream, in region: Region) {
+        sign.write(characters: &characters, in: region)
+        integer.write(characters: &characters, in: region)
+        separator?.write(characters: &characters, in: region)
+        fraction.write(characters: &characters, in: region)
+    }    
 }
 
 //=----------------------------------------------------------------------------=
@@ -147,8 +148,8 @@ extension Number {
             // MARK: Separator
             //=----------------------------------=
 
-            if index != snapshot.endIndex, let separator = region.separators[element.character] {
-                self.separator = separator
+            if index != snapshot.endIndex, region.separators.keys.contains(element.character) {
+                self.separator = .fraction
                 iterate()
             }
             

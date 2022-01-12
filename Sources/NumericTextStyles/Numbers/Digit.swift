@@ -33,4 +33,12 @@
     @inlinable var isZero: Bool {
         self == .x0
     }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Write
+    //=------------------------------------------------------------------------=
+    
+    @inlinable func write<Characters: TextOutputStream>(characters: inout Characters, in region: Region) {
+        region[self]?.write(to: &characters)
+    }
 }

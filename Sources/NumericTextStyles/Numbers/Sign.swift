@@ -37,6 +37,14 @@
         case .negative: self = .positive
         }
     }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Write
+    //=------------------------------------------------------------------------=
+    
+    @inlinable func write<Characters: TextOutputStream>(characters: inout Characters, in region: Region) {
+        region[self]?.write(to: &characters)
+    }
 }
 
 //=----------------------------------------------------------------------------=

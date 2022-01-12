@@ -9,7 +9,7 @@
 // MARK: * Valuable
 //*============================================================================*
 
-public protocol Valuable: Formattable, Boundable, Precise {
+public protocol Valuable: Boundable, Precise {
     
     //=------------------------------------------------------------------------=
     // MARK: Value, Options
@@ -22,7 +22,7 @@ public protocol Valuable: Formattable, Boundable, Precise {
 // MARK: * Valuable x Float
 //*============================================================================*
 
-@usableFromInline protocol ValuableFloat: Valuable, FormattableFloatingPoint, BoundableFloatingPoint, PreciseFloatingPoint { }
+@usableFromInline protocol ValuableFloat: Valuable, BoundableFloatingPoint, PreciseFloatingPoint { }
 
 //=----------------------------------------------------------------------------=
 // MARK: Valuable x Float - Implementation
@@ -41,7 +41,7 @@ extension ValuableFloat {
 // MARK: * Valuable x Int
 //*============================================================================*
 
-@usableFromInline protocol ValuableInt: Valuable, FormattableInteger, BoundableInteger, PreciseInteger { }
+@usableFromInline protocol ValuableInt: Valuable, BoundableInteger, PreciseInteger { }
 
 //=----------------------------------------------------------------------------=
 // MARK: Valuable x Int - Implementation
@@ -60,7 +60,7 @@ extension ValuableInt {
 // MARK: * Valuable x UInt
 //*============================================================================*
 
-@usableFromInline protocol ValuableUInt: Valuable, FormattableInteger, BoundableInteger, PreciseInteger { }
+@usableFromInline protocol ValuableUInt: Valuable, BoundableInteger, PreciseInteger { }
 
 //=----------------------------------------------------------------------------=
 // MARK: Valuable x UInt - Implementation

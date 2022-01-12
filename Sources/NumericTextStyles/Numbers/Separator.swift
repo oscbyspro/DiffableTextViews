@@ -26,4 +26,12 @@
     @inlinable init() {
         self = .fraction
     }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Write
+    //=------------------------------------------------------------------------=
+    
+    @inlinable func write<Characters: TextOutputStream>(characters: inout Characters, in region: Region) {
+        region[self]?.write(to: &characters)
+    }
 }

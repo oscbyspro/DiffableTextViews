@@ -6,52 +6,62 @@
 //
 
 //*============================================================================*
-// MARK: * Components
+// MARK: * Component
 //*============================================================================*
 
 @usableFromInline protocol Component {
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Write
+    //=------------------------------------------------------------------------=
+        
+    @inlinable func write<Characters: TextOutputStream>(characters: inout Characters)
+    @inlinable func write<Characters: TextOutputStream>(characters: inout Characters, in region: Region)
     
     //=------------------------------------------------------------------------=
     // MARK: Characters
     //=------------------------------------------------------------------------=
     
     @inlinable func characters() -> String
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Write
-    //=------------------------------------------------------------------------=
-    
-    @inlinable func write<Stream: TextOutputStream>(to stream: inout Stream)
+    @inlinable func characters(in region: Region) -> String
 }
 
-//=------------------------------------------------------------------------=
-// MARK: Components - RawValue == String
-//=------------------------------------------------------------------------=
+//=----------------------------------------------------------------------------=
+// MARK: Component - Utilities
+//=----------------------------------------------------------------------------=
 
-extension Component where Self: RawRepresentable, RawValue == String {
+extension Component {
     
     //=------------------------------------------------------------------------=
     // MARK: Characters
     //=------------------------------------------------------------------------=
-    
+ 
     @inlinable func characters() -> String {
-        rawValue
+        var characters = ""
+        write(characters: &characters)
+        return characters
     }
+    
+    @inlinable func characters(in region: Region) -> String {
+        var characters = ""
+        write(characters: &characters, in: region)
+        return characters
+    }
+}
+
+//=----------------------------------------------------------------------------=
+// MARK: Component - RawValue == Character
+//=----------------------------------------------------------------------------=
+
+extension Component where Self: RawRepresentable, RawValue == Character {
     
     //=------------------------------------------------------------------------=
     // MARK: Write
     //=------------------------------------------------------------------------=
     
-    @inlinable func write<Stream: TextOutputStream>(to stream: inout Stream) {
-        rawValue.write(to: &stream)
+    @inlinable func write<Characters: TextOutputStream>(characters: inout Characters) {
+        rawValue.write(to: &characters)
     }
-}
-
-//=----------------------------------------------------------------------------=
-// MARK: Components - RawValue == Character
-//=----------------------------------------------------------------------------=
-
-extension Component where Self: RawRepresentable, RawValue == Character {
     
     //=------------------------------------------------------------------------=
     // MARK: Characters
@@ -59,13 +69,5 @@ extension Component where Self: RawRepresentable, RawValue == Character {
     
     @inlinable func characters() -> String {
         String(rawValue)
-    }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Write
-    //=------------------------------------------------------------------------=
-    
-    @inlinable func write<Stream: TextOutputStream>(to stream: inout Stream) {
-        rawValue.write(to: &stream)
     }
 }

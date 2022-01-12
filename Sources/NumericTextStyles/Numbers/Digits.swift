@@ -75,15 +75,15 @@
     // MARK: Text
     //=------------------------------------------------------------------------=
     
-    @inlinable func characters() -> String {
-        var characters = ""
-        write(to: &characters)
-        return characters
+    @inlinable func write<Characters: TextOutputStream>(characters: inout Characters) {
+        for digit in digits {
+            digit.write(characters: &characters)
+        }
     }
     
-    @inlinable func write<Stream: TextOutputStream>(to stream: inout Stream) {
-        for digits in digits {
-            digits.write(to: &stream)
+    @inlinable func write<Characters: TextOutputStream>(characters: inout Characters, in region: Region) {
+        for digit in digits {
+            digit.write(characters: &characters, in: region)
         }
     }
 }
