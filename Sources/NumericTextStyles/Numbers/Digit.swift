@@ -15,30 +15,22 @@
     // MARK: Instances
     //=------------------------------------------------------------------------=
     
-    case x0 = "0"
-    case x1 = "1"
-    case x2 = "2"
-    case x3 = "3"
-    case x4 = "4"
-    case x5 = "5"
-    case x6 = "6"
-    case x7 = "7"
-    case x8 = "8"
-    case x9 = "9"
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Utilities
-    //=------------------------------------------------------------------------=
-    
-    @inlinable var isZero: Bool {
-        self == .x0
-    }
+    case zero  = "0"
+    case one   = "1"
+    case two   = "2"
+    case three = "3"
+    case four  = "4"
+    case five  = "5"
+    case six   = "6"
+    case seven = "7"
+    case eight = "8"
+    case nine  = "9"
     
     //=------------------------------------------------------------------------=
     // MARK: Write
     //=------------------------------------------------------------------------=
     
     @inlinable func write<Characters: TextOutputStream>(characters: inout Characters, in region: Region) {
-        region[self]?.write(to: &characters)
+        region.digitsInLocale[self]?.write(to: &characters)
     }
 }

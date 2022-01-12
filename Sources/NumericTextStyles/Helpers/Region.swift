@@ -6,8 +6,7 @@
 //
 
 import Foundation
-
-#warning("Rename, maybe.")
+import DiffableTextViews
 
 //*============================================================================*
 // MARK: * Region
@@ -21,51 +20,50 @@ import Foundation
     //=------------------------------------------------------------------------=
     
     @usableFromInline let formatter: NumberFormatter
-    @inlinable var locale: Locale { formatter.locale }
-    
+    @usableFromInline let direction: Locale.LanguageDirection
+        
     //
     // MARK: Properties - Characters
     //=------------------------------------------------------------------------=
     
-    @usableFromInline let signs:      [Character: Sign]
-    @usableFromInline let signsLocal: [Sign: Character]
+    @usableFromInline let signs: [Character: Sign]
+    @usableFromInline let signsInLocale: [Sign: Character]
     
-    @usableFromInline let digits:      [Character: Digit]
-    @usableFromInline let digitsLocal: [Digit: Character]
+    @usableFromInline let digits: [Character: Digit]
+    @usableFromInline let digitsInLocale: [Digit: Character]
     
-    @usableFromInline let separators:      [Character: Separator]
-    @usableFromInline let separatorsLocal: [Separator: Character]
+    @usableFromInline let separators: [Character: Separator]
+    @usableFromInline let separatorsInLocale: [Separator: Character]
     
-    //=----------------------------------------------------------------------------=
-    // MARK: Subscripts
-    //=----------------------------------------------------------------------------=
+    //=------------------------------------------------------------------------=
+    // MARK: Properties - Accessors
+    //=------------------------------------------------------------------------=
     
-    @inlinable subscript(sign: Sign) -> Character? {
-        _read { yield signsLocal[sign] }
+    @inlinable var locale: Locale {
+        formatter.locale
     }
-    
-    @inlinable subscript(digit: Digit) -> Character? {
-        _read { yield digitsLocal[digit] }
-    }
-    
-    @inlinable subscript(separator: Separator) -> Character? {
-        _read { yield separatorsLocal[separator] }
-    }
-    
+
     //=------------------------------------------------------------------------=
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
     @inlinable init(_ locale: Locale) {
+        
+        //=--------------------------------------=
+        // MARK: Formatter
+        //=--------------------------------------=
+        
         let formatter = NumberFormatter()
         formatter.locale = locale
         formatter.numberStyle = .decimal
+
+        let direction = Locale.characterDirection(forLanguage: locale.languageCode!)
         
         //=--------------------------------------=
         // MARK: Characters - Signs
         //=--------------------------------------=
         
-        var signs      = [Character: Sign]()
+        var signs = [Character: Sign]()
         var signsLocal = [Sign: Character]()
         
         signs[Sign.positive.rawValue] = .positive
@@ -84,48 +82,50 @@ import Foundation
         //=--------------------------------------=
         
         var digits = [Character: Digit]()
-        var digitsLocal = [Digit: Character]()
+        var digitsInLocale = [Digit: Character]()
         
         for digit in Digit.allCases {
             digits[digit.rawValue] = digit
             
-            let digitLocal = formatter.string(from: UInt8(String(digit.rawValue))! as NSNumber)!.first!
-            digits[digitLocal] = digit
-            digitsLocal[digit] = digitLocal
+            let digitInLocale = formatter.string(from: UInt8(String(digit.rawValue))! as NSNumber)!.first!
+            digits[digitInLocale] = digit
+            digitsInLocale[digit] = digitInLocale
         }
         
         //=--------------------------------------=
         // MARK: Characters - Separators
         //=--------------------------------------=
     
-        var separators      = [Character: Separator]()
-        var separatorsLocal = [Separator: Character]()
+        var separators = [Character: Separator]()
+        var separatorsInLocale = [Separator: Character]()
         
         separators[Separator.fraction.rawValue] = .fraction
         separators[Separator.grouping.rawValue] = .grouping
         
-        let fractionLocal = formatter.decimalSeparator.first!
-        separators[fractionLocal] = .fraction
-        separatorsLocal[.fraction] = fractionLocal
+        let fractionInLocale = formatter.decimalSeparator.first!
+        separators[fractionInLocale] = .fraction
+        separatorsInLocale[.fraction] = fractionInLocale
         
-        let groupingLocal = formatter.groupingSeparator.first!
-        separators[groupingLocal] = .grouping
-        separatorsLocal[.grouping] = groupingLocal
+        let groupingInLocale = formatter.groupingSeparator.first!
+        separators[groupingInLocale] = .grouping
+        separatorsInLocale[.grouping] = groupingInLocale
 
         //=--------------------------------------=
         // MARK: Done
         //=--------------------------------------=
         
         self.formatter = formatter
+        self.direction = direction
         
-        self.signs      = signs
-        self.signsLocal = signsLocal
+        self.signs = signs
+        self.signsInLocale = signsLocal
         
-        self.digits      = digits
-        self.digitsLocal = digitsLocal
+        self.digits = digits
+        self.digitsInLocale = digitsInLocale
         
-        self.separators      = separators
-        self.separatorsLocal = separatorsLocal
+        self.separators = separators
+        self.separatorsInLocale = separatorsInLocale
+                
     }
     
     //

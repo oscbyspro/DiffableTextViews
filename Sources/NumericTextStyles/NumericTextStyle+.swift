@@ -46,9 +46,9 @@ extension NumericTextStyle {
         // MARK: Markers
         //=--------------------------------------=
 
-        var interactableLHS: Snapshot.Index? = nil
-        var interactableRHS = snapshot.startIndex
-        var redundanceStart = snapshot.startIndex
+        var interactableStart: Snapshot.Index? = nil
+        var interactableEnd   = snapshot.startIndex
+        var redundanciesStart = snapshot.startIndex
         
         //=--------------------------------------=
         // MARK: Prefix
@@ -73,12 +73,12 @@ extension NumericTextStyle {
             
             if let digit = region.digits[character] {
                 snapshot.append(Symbol(character: character, attribute: .content))
-                interactableRHS = snapshot.endIndex
+                interactableEnd = snapshot.endIndex
                 
-                zero_digit: if digit == .x0 {
-                    redundanceStart = snapshot.endIndex
-                    guard interactableLHS == nil else { break zero_digit }
-                    interactableLHS = snapshot.endIndex
+                zero_digit: if digit == .zero {
+                    redundanciesStart = snapshot.endIndex
+                    guard interactableStart == nil else { break zero_digit }
+                    interactableStart = snapshot.endIndex
                 }
                 
             //=----------------------------------=
@@ -90,16 +90,16 @@ extension NumericTextStyle {
                 case .grouping:
                     snapshot.append(Symbol(character: character, attribute: .spacer))
                 case .fraction:
-                    redundanceStart = snapshot.endIndex
+                    redundanciesStart = snapshot.endIndex
                     snapshot.append(Symbol(character: character, attribute: .content))
-                    interactableRHS = snapshot.endIndex
+                    interactableEnd = snapshot.endIndex
                 }
             
             //=----------------------------------=
             // MARK: Sign
             //=----------------------------------=
             
-            } else if region.signs.keys.contains(character) {
+            } else if let _ = region.signs[character] {
                 snapshot.append(Symbol(character: character, attribute: [.prefixing, .suffixing]))
                 
             //=----------------------------------=
@@ -112,10 +112,10 @@ extension NumericTextStyle {
         }
                 
         //=--------------------------------------=
-        // MARK: Interactable - LHS
+        // MARK: Interactable - Start
         //=--------------------------------------=
         
-        if let interactableLHS = interactableLHS {
+        if let interactableLHS = interactableStart {
             snapshot.transform(attributes: ..<interactableLHS) {
                 attribute in
                 attribute.insert(.prefixing)
@@ -123,21 +123,21 @@ extension NumericTextStyle {
         }
         
         //=--------------------------------------=
-        // MARK: Redundance - Start
+        // MARK: Redundancies - Start
         //=--------------------------------------=
         
-        if redundanceStart != snapshot.startIndex {
-            snapshot.transform(attributes: (redundanceStart)...) {
+        if redundanciesStart != snapshot.startIndex {
+            snapshot.transform(attributes: redundanciesStart...) {
                 attribute in
                 attribute.insert(.removable)
             }
         }
         
         //=--------------------------------------=
-        // MARK: Interactable - RHS
+        // MARK: Interactable - End
         //=--------------------------------------=
         
-        snapshot.transform(attributes: interactableRHS...) {
+        snapshot.transform(attributes: interactableEnd...) {
             attribute in
             attribute = .suffix
         }

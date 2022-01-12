@@ -43,7 +43,7 @@
     //=------------------------------------------------------------------------=
     
     @inlinable func write<Characters: TextOutputStream>(characters: inout Characters, in region: Region) {
-        region[self]?.write(to: &characters)
+        region.signsInLocale[self]?.write(to: &characters)
     }
 }
 

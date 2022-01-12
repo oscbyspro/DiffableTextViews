@@ -32,6 +32,6 @@
     //=------------------------------------------------------------------------=
     
     @inlinable func write<Characters: TextOutputStream>(characters: inout Characters, in region: Region) {
-        region[self]?.write(to: &characters)
+        region.separatorsInLocale[self]?.write(to: &characters)
     }
 }

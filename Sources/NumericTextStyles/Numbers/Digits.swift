@@ -15,7 +15,7 @@
     // MARK: Instances
     //=------------------------------------------------------------------------=
     
-    @usableFromInline static let zero: Self = [.x0]
+    @usableFromInline static let zero: Self = [.zero]
     
     //=------------------------------------------------------------------------=
     // MARK: Properties
@@ -44,11 +44,11 @@
     }
     
     @inlinable func prefixZerosCount() -> Int {
-        digits.count(while: \.isZero)
+        digits.count(while: { $0 == .zero })
     }
     
     @inlinable func suffixZerosCount() -> Int {
-        digits.reversed().count(while: \.isZero)
+        digits.reversed().count(while: { $0 == .zero })
     }
     
     //=------------------------------------------------------------------------=
@@ -60,11 +60,11 @@
     }
     
     @inlinable mutating func removeZerosPrefix() {
-        digits.removeSubrange(..<digits.prefix(while: \.isZero).endIndex)
+        digits.removeSubrange(..<digits.prefix(while: { $0 == .zero }).endIndex)
     }
     
     @inlinable mutating func removeZerosSuffix() {
-        digits.removeSubrange(digits.suffix(while: \.isZero).startIndex...)
+        digits.removeSubrange(digits.suffix(while: { $0 == .zero }).startIndex...)
     }
     
     @inlinable mutating func makeItAtLeastZero() {
