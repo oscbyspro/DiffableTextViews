@@ -25,7 +25,7 @@
 }
 
 //=------------------------------------------------------------------------=
-// MARK: Components - Implementation
+// MARK: Components - RawValue == String
 //=------------------------------------------------------------------------=
 
 extension Component where Self: RawRepresentable, RawValue == String {
@@ -36,6 +36,29 @@ extension Component where Self: RawRepresentable, RawValue == String {
     
     @inlinable func characters() -> String {
         rawValue
+    }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Write
+    //=------------------------------------------------------------------------=
+    
+    @inlinable func write<Stream: TextOutputStream>(to stream: inout Stream) {
+        rawValue.write(to: &stream)
+    }
+}
+
+//=----------------------------------------------------------------------------=
+// MARK: Components - RawValue == Character
+//=----------------------------------------------------------------------------=
+
+extension Component where Self: RawRepresentable, RawValue == Character {
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Characters
+    //=------------------------------------------------------------------------=
+    
+    @inlinable func characters() -> String {
+        String(rawValue)
     }
     
     //=------------------------------------------------------------------------=

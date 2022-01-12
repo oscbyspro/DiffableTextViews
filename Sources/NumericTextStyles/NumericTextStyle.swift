@@ -15,32 +15,32 @@ import Quick
 
 public struct NumericTextStyle<Format: NumericTextStyles.Format>: DiffableTextStyle, Mappable
     where Format.FormatInput: Valuable, Format.FormatOutput == String {
-    public typealias Value     = Format.FormatInput
-    public typealias Bounds    = NumericTextStyles.Bounds<Value>
+    public typealias Value = Format.FormatInput
+    public typealias Bounds = NumericTextStyles.Bounds<Value>
     public typealias Precision = NumericTextStyles.Precision<Value>
 
     //=------------------------------------------------------------------------=
     // MARK: Properties
     //=------------------------------------------------------------------------=
     
-    @usableFromInline var format:    Format
-    @usableFromInline var region:    Region
-    @usableFromInline var bounds:    Bounds
+    @usableFromInline var format: Format
+    @usableFromInline var region: Region
+    @usableFromInline var bounds: Bounds
     @usableFromInline var precision: Precision
-    @usableFromInline var prefix:    String
-    @usableFromInline var suffix:    String
+    @usableFromInline var prefix: String
+    @usableFromInline var suffix: String
     
     //=------------------------------------------------------------------------=
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
     @inlinable public init(format: Format, locale: Locale = .autoupdatingCurrent) {
-        self.format    =   format
-        self.region    = .reusable(locale)
-        self.bounds    = .standard
+        self.format = format
+        self.region = .reusable(locale)
+        self.bounds = .standard
         self.precision = .standard
-        self.prefix    =  String()
-        self.suffix    =  String()
+        self.prefix = ""
+        self.suffix = ""
     }
     
     //=------------------------------------------------------------------------=
@@ -81,7 +81,7 @@ public struct NumericTextStyle<Format: NumericTextStyles.Format>: DiffableTextSt
     
     @inlinable func editableStyle(number: Number) -> Format {
         let precision: Format.PrecisionStyle = precision.editableStyleThatUses(number: number)
-        let separator: Format.SeparatorStyle = number.separator == .some ? .always : .automatic
+        let separator: Format.SeparatorStyle = number.separator == .fraction ? .always : .automatic
         return style(precision: precision, separator: separator)
     }
     

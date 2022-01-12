@@ -10,13 +10,13 @@
 //*============================================================================*
 
 /// A system representation of a sign.
-@usableFromInline enum Sign: String, Component {
+@usableFromInline enum Sign: Character, Component {
     
     //=------------------------------------------------------------------------=
     // MARK: Instances
     //=------------------------------------------------------------------------=
     
-    case positive = ""
+    case positive = "+"
     case negative = "-"
     
     //=------------------------------------------------------------------------=

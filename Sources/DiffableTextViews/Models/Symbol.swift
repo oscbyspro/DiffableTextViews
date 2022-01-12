@@ -26,6 +26,10 @@ public struct Symbol: Equatable {
         self.character = character
         self.attribute = attribute
     }
+    
+    @inlinable public init<Value: RawRepresentable>(character: Value, attribute: Attribute) where Value.RawValue == Character {
+        self.init(character: character.rawValue, attribute: attribute)
+    }
 
     //
     // MARK: Initializers - Static

@@ -72,35 +72,35 @@ extension NumericTextStyle {
             //=----------------------------------=
             
             if let digit = region.digits[character] {
-                snapshot.append(.content(character))
+                snapshot.append(Symbol(character: digit, attribute: .content))
                 interactableRHS = snapshot.endIndex
-                digit_check: if digit.isZero {
+                
+                zero_digit: if digit == .x0 {
                     redundanceStart = snapshot.endIndex
-                    guard interactableLHS == nil else { break digit_check }
+                    guard interactableLHS == nil else { break zero_digit }
                     interactableLHS = snapshot.endIndex
                 }
                 
             //=----------------------------------=
-            // MARK: Grouping Separator
+            // MARK: Separator
             //=----------------------------------=
                 
-            } else if region.groupingSeparator == character {
-                snapshot.append(Symbol(character: character, attribute: .spacer))
-                
-            //=----------------------------------=
-            // MARK: Fraction Separator
-            //=----------------------------------=
-                
-            } else if region.fractionSeparator == character {
-                redundanceStart = snapshot.endIndex
-                snapshot.append(Symbol(character: character, attribute: .content))
-                interactableRHS = snapshot.endIndex
-                
+            } else if let separator = region.separators[character] {
+                switch separator {
+                case .grouping:
+                    snapshot.append(Symbol(character: separator, attribute: .spacer))
+                case .fraction:
+                    redundanceStart = snapshot.endIndex
+                    snapshot.append(Symbol(character: separator, attribute: .content))
+                    interactableRHS = snapshot.endIndex
+                }
+            
             //=----------------------------------=
             // MARK: Sign
             //=----------------------------------=
-            } else if region.signs.keys.contains(character) {
-                snapshot.append(Symbol(character: character, attribute: .prefixing))
+            
+            } else if let sign = region.signs[character] {
+                snapshot.append(Symbol(character: sign, attribute: [.prefixing, .suffixing]))
                 
             //=----------------------------------=
             // MARK: None Of The Above

@@ -29,7 +29,7 @@ import Utilities
 
     @usableFromInline var sign = Sign()
     @usableFromInline private(set) var integer = Digits()
-    @usableFromInline private(set) var separator = Separator()
+    @usableFromInline private(set) var separator: Separator? = nil
     @usableFromInline private(set) var fraction = Digits()
     
     //=------------------------------------------------------------------------=
@@ -55,7 +55,7 @@ import Utilities
     @inlinable mutating func removeImpossibleSeparator(capacity: Capacity) {
         guard fraction.digits.isEmpty else { return }
         guard capacity.fraction <= 0 || capacity.significant <= 0 else { return }
-        separator = .none
+        separator = nil
     }
     
     //=------------------------------------------------------------------------=
@@ -71,7 +71,7 @@ import Utilities
     @inlinable func write<Stream: TextOutputStream>(to stream: inout Stream) {
         sign.write(to: &stream)
         integer.write(to: &stream)
-        separator.write(to: &stream)
+        separator?.write(to: &stream)
         fraction.write(to: &stream)
     }
 }
@@ -147,12 +147,12 @@ extension Number {
             // MARK: Separator
             //=----------------------------------=
 
-            if index != snapshot.endIndex, region.fractionSeparator == element.character {
-                self.separator = .some
+            if index != snapshot.endIndex, let separator = region.separators[element.character] {
+                self.separator = separator
                 iterate()
             }
             
-            guard self.separator == .some else { break attempt }
+            guard self.separator == .fraction else { break attempt }
             
             //=----------------------------------=
             // MARK: Fraction

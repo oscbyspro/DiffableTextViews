@@ -22,25 +22,13 @@ import Foundation
     @inlinable var locale: Locale { formatter.locale }
     
     //
-    // MARK: Properties - Signs
+    // MARK: Properties - Characters
     //=------------------------------------------------------------------------=
     
-    @usableFromInline let signs: [Character: Sign]
-    
-    //
-    // MARK: Properties - Digits
-    //=------------------------------------------------------------------------=
-    
-    @usableFromInline let digits: [Character: Digit]
-    @usableFromInline let   zero:  Character
-    
-    //
-    // MARK: Properties - Separators
-    //=------------------------------------------------------------------------=
-    
-    @usableFromInline let fractionSeparator: Character
-    @usableFromInline let groupingSeparator: Character
-        
+    @usableFromInline let signs:      [Character: Sign]
+    @usableFromInline let digits:     [Character: Digit]
+    @usableFromInline let separators: [Character: Separator]
+
     //=------------------------------------------------------------------------=
     // MARK: Initializers
     //=------------------------------------------------------------------------=
@@ -52,52 +40,48 @@ import Foundation
         formatter.usesGroupingSeparator = false
         
         //=--------------------------------------=
-        // MARK: Formatter
-        //=--------------------------------------=
-        
-        self.formatter = formatter
-        
-        //=--------------------------------------=
-        // MARK: Generate Localized - Signs
+        // MARK: Characters - Signs
         //=--------------------------------------=
         
         var signs = [Character: Sign]()
+        signs[Sign.positive.rawValue] = .positive
+        signs[Sign.negative.rawValue] = .negative
         signs[formatter .plusSign.filter({ $0.isPunctuation || $0.isMathSymbol }).first!] = .positive
         signs[formatter.minusSign.filter({ $0.isPunctuation || $0.isMathSymbol }).first!] = .negative
-        self.signs = signs
-        
+                        
         //=--------------------------------------=
-        // MARK: Generate Localized - Digits
+        // MARK: Characters - Digits
         //=--------------------------------------=
         
         var digits = [Character: Digit]()
         for digit in Digit.allCases {
-            let localized = formatter.string(from: NSNumber(value: UInt8(digit.rawValue)!))!
-            assert(localized.count == 1)
-            digits[localized.first!] = digit
+            digits[digit.rawValue] = digit
+            digits[formatter.string(from: UInt8(String(digit.rawValue))! as NSNumber)!.first!] = digit
         }
         
+        //=--------------------------------------=
+        // MARK: Characters - Separators
+        //=--------------------------------------=
+    
+        var separators = [Character: Separator]()
+        separators[formatter .decimalSeparator.first!] = .fraction
+        separators[formatter.groupingSeparator.first!] = .grouping
+
+        //=--------------------------------------=
+        // MARK: Done
+        //=--------------------------------------=
+        
+        self.formatter = formatter
+        self.signs = signs
         self.digits = digits
-        assert(digits.count == 10)
-        
-        self.zero = digits.first(where: \.value.isZero)!.key
-        assert(formatter.number(from: String(self.zero)) == 0)
-        
-        //=--------------------------------------=
-        // MARK: Generate Localized - Separators
-        //=--------------------------------------=
-        
-        assert(formatter.decimalSeparator.count == 1)
-        self.fractionSeparator = formatter.decimalSeparator.first!
-        
-        assert(formatter.groupingSeparator.count == 1)
-        self.groupingSeparator = formatter.groupingSeparator.first!
+        self.separators = separators
     }
     
     //
     // MARK: Initializers - Static
     //=------------------------------------------------------------------------=
     
+    #warning("Limit cache size, maybe.")
     @inlinable static func reusable(_ locale: Locale) -> Region {
         if let reusable = cache[locale.identifier] {
             return reusable

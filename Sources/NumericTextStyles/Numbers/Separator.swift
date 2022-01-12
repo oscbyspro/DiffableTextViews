@@ -10,20 +10,20 @@
 //*============================================================================*
 
 /// A system representation of a fraction separator.
-@usableFromInline enum Separator: String, Component {
+@usableFromInline enum Separator: Character, Component {
     
     //=------------------------------------------------------------------------=
     // MARK: Instances
     //=------------------------------------------------------------------------=
     
-    case none = ""
-    case some = "."
+    case grouping = ","
+    case fraction = "."
     
     //=------------------------------------------------------------------------=
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
     @inlinable init() {
-        self = .none
+        self = .fraction
     }
 }
