@@ -9,36 +9,34 @@
 // MARK: * Cache
 //*============================================================================*
 
-@usableFromInline final class Cache<Scheme: DiffableTextViews.Scheme, Value: Equatable> {
-    @usableFromInline typealias Selection = DiffableTextViews.Selection<Scheme>
-    @usableFromInline typealias Field = DiffableTextViews.Field<Scheme>
+@usableFromInline final class Cache<Value: Equatable> {
     
     //=------------------------------------------------------------------------=
     // MARK: Properties
     //=------------------------------------------------------------------------=
     
     @usableFromInline var value: Value!
-    @usableFromInline var field: Field
+    @usableFromInline var state: State
     @usableFromInline var  mode:  Mode
-    
-    //
-    // MARK: Properties - Accessors
-    //=------------------------------------------------------------------------=
-    
-    @inlinable var selection: Selection {
-        field.selection
-    }
-    
-    @inlinable var snapshot: Snapshot {
-        field.carets.snapshot
-    }
     
     //=------------------------------------------------------------------------=
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
     @inlinable init() {
-        self.field = Field()
+        self.state = State()
         self.mode = .showcase
+    }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Accessors
+    //=------------------------------------------------------------------------=
+    
+    @inlinable var snapshot: Snapshot {
+        state.snapshot
+    }
+    
+    @inlinable var selection: Range<Snapshot.Index> {
+        state.selection
     }
 }

@@ -1,5 +1,5 @@
 //
-//  Field.swift
+//  State.swift
 //  
 //
 //  Created by Oscar Byström Ericsson on 2021-09-27.
@@ -8,19 +8,17 @@
 import Quick
 
 //*============================================================================*
-// MARK: * Field
+// MARK: * State
 //*============================================================================*
 
-@usableFromInline struct Field: Mappable {
-    @usableFromInline typealias Index = Snapshot.Index
-    @usableFromInline typealias Selection = Range<Index>
+@usableFromInline struct State: Mappable {
 
     //=------------------------------------------------------------------------=
     // MARK: Properties
     //=------------------------------------------------------------------------=
     
     @usableFromInline private(set) var snapshot:  Snapshot
-    @usableFromInline private(set) var selection: Selection
+    @usableFromInline private(set) var selection: Range<Snapshot.Index>
 
     //=------------------------------------------------------------------------=
     // MARK: Initializers
@@ -31,8 +29,8 @@ import Quick
         self.selection = snapshot.endIndex..<snapshot.endIndex
     }
     
-    @inlinable init(snapshot: Snapshot, selection: Selection) {
-        self.snapshot = snapshot
+    @inlinable init(snapshot: Snapshot, selection: Range<Snapshot.Index>) {
+        self.snapshot  = snapshot
         self.selection = selection
     }
 
