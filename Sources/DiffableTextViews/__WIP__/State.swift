@@ -35,15 +35,13 @@ import Quick
     }
     
     //=------------------------------------------------------------------------=
-    // MARK: #warning("WIP")
+    // MARK: WIP
     //=------------------------------------------------------------------------=
     
     #warning("WIP")
-    @inlinable func position(start: Snapshot.Index, preference: Direction, intent: Direction?) -> Snapshot.Index {
-        if peek(at: start).nonlookable(direction: preference) { return start }
-        
-        let direction = intent ?? preference
-        let next = look(start: start, direction: direction)
+    @inlinable mutating func position(caret: Snapshot.Index, preference: Direction, intent: Direction?) -> Snapshot.Index {
+        let direction = directionality(at: caret) ?? intent ?? preference
+        let next = look(start: caret, direction: direction)
         
         switch direction {
         case preference: return next
@@ -51,14 +49,22 @@ import Quick
         case .backwards: return next != snapshot.startIndex ? snapshot.index(before: next) : next
         }
     }
-
+    
     #warning("WIP")
-    @inlinable func look(start: Snapshot.Index, direction: Direction) -> Snapshot.Index {
-        switch direction {
-        case  .forwards: return snapshot[start...].firstIndex(where: \.nonprefixing) ?? snapshot  .endIndex
-        case .backwards: return snapshot[...start] .lastIndex(where: \.nonsuffixing) ?? snapshot.startIndex
-        }
+    @inlinable func directionality(at position: Snapshot.Index) -> Direction? {
+        let lhs = position == snapshot.startIndex ? .prefixing : snapshot[snapshot.index(before: position)].attribute
+        let rhs = position == snapshot  .endIndex ? .suffixing : snapshot[position].attribute
+
+        let forwards  = lhs.contains(.prefixing) && rhs.contains(.prefixing)
+        let backwards = lhs.contains(.suffixing) && rhs.contains(.suffixing)
+        
+        if forwards == backwards { return nil }
+        return forwards ? .forwards : .backwards
     }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: #warning("WIP")
+    //=------------------------------------------------------------------------=
     
     #warning("WIP")
     @inlinable func peek(at position: Snapshot.Index) -> Peek {
@@ -128,17 +134,52 @@ extension State {
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: Update - Selection
+// MARK: State - Look In Direction
 //=----------------------------------------------------------------------------=
 
 extension State {
-
+    
     //=------------------------------------------------------------------------=
-    // MARK: Transformations
+    // MARK: Direction
     //=------------------------------------------------------------------------=
     
-    @inlinable mutating func update(selection: Range<Snapshot.Index>) {
-        self.selection = selection
-        #warning("Autocorrect.")
+    @inlinable func look(start: Snapshot.Index, direction: Direction) -> Snapshot.Index? {
+        switch direction {
+        case  .forwards: return lookahead (start: start)
+        case .backwards: return lookbehind(start: start)
+        }
+    }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Forwards
+    //=------------------------------------------------------------------------=
+    
+    /// - Returns: The first caret position « forwards » that is nonprefixing.
+    @inlinable func lookahead(start: Snapshot.Index) -> Snapshot.Index? {
+        var position = start
+        
+        while position != snapshot.endIndex {
+            guard snapshot[position].attribute.contains(.prefixing) else { return position }
+            snapshot.formIndex(after: &position)
+        }
+        
+        return position
+    }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Backwards
+    //=------------------------------------------------------------------------=
+    
+    /// - Returns: The first caret position « backwards » that is nonsuffixing.
+    @inlinable func lookbehind(start: Snapshot.Index) -> Snapshot.Index? {
+        var position = start
+        
+        while position != snapshot.startIndex {
+            let after = position
+            snapshot.formIndex(before: &position)
+            guard snapshot[position].attribute.contains(.suffixing) else { return after }
+        }
+        
+        return position
     }
 }

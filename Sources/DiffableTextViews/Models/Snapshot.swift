@@ -214,7 +214,7 @@ public extension Snapshot {
             transform(attributes: position, with: transformation)
         }
     }
-        
+    
     @inlinable mutating func transform<R: RangeExpression>(
         attributes range: R,
         with transformation: (inout Attribute) -> Void)
