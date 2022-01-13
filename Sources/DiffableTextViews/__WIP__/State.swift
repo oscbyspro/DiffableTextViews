@@ -12,28 +12,42 @@ import Quick
 //*============================================================================*
 
 #warning("Needs: Scheme.")
-@usableFromInline struct State {
+@usableFromInline struct State<Scheme: DiffableTextViews.Scheme> {
+    @usableFromInline typealias Caret = DiffableTextViews.Caret<Scheme>
+    @usableFromInline typealias Offset = DiffableTextViews.Offset<Scheme>
 
     //=------------------------------------------------------------------------=
     // MARK: Properties
     //=------------------------------------------------------------------------=
     
-    #warning("Needs: range.")
-    @usableFromInline private(set) var snapshot:  Snapshot
-    @usableFromInline private(set) var selection: Range<Snapshot.Index>
+    @usableFromInline private(set) var snapshot: Snapshot
+    @usableFromInline private(set) var selection: Range<Caret>
 
     //=------------------------------------------------------------------------=
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
     @inlinable init() {
-        self.snapshot = Snapshot()
-        self.selection = snapshot.endIndex..<snapshot.endIndex
+        let snapshot = Snapshot()
+        let position = Caret(position: snapshot.startIndex, at:  .zero)
+        self.init(snapshot: snapshot, selection: position ..< position)
     }
     
-    @inlinable init(snapshot: Snapshot, selection: Range<Snapshot.Index>) {
+    @inlinable init(snapshot: Snapshot, selection: Range<Caret>) {
         self.snapshot = snapshot
         self.selection = selection
+    }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Accessors
+    //=------------------------------------------------------------------------=
+    
+    @inlinable var upperBound: Snapshot.Index {
+        selection.upperBound.position
+    }
+    
+    @inlinable var lowerBound: Snapshot.Index {
+        selection.lowerBound.position
     }
 }
 
@@ -52,7 +66,7 @@ extension State {
         // MARK: Upper
         //=--------------------------------------=
         let upperBound = changesEndIndices(
-            past: self.snapshot[self.selection.upperBound...],
+            past: self.snapshot[self.upperBound...],
             next: snapshot[...]).next
         //=--------------------------------------=
         // MARK: Lower
@@ -60,15 +74,19 @@ extension State {
         var lowerBound = upperBound
         if !self.selection.isEmpty {
             lowerBound = changesStartIndices(
-                past: self.snapshot[...self.selection.lowerBound],
+                past: self.snapshot[...lowerBound],
                 next: snapshot[...]).next
             lowerBound = min(lowerBound, upperBound)
         }
         //=--------------------------------------=
+        // MARK: Selection
+        //=--------------------------------------=
+        let selection = lowerBound ..< upperBound
+        //=--------------------------------------=
         // MARK: Update
         //=--------------------------------------=
         self.snapshot = snapshot
-        self.selection = lowerBound ..< upperBound
+        self.selection = selection
         self.autocorrect(intent: nil)
     }
 }

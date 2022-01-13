@@ -118,7 +118,7 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable, 
     
     public final class Coordinator: NSObject, UITextFieldDelegate {
         @usableFromInline typealias Offset = DiffableTextViews.Offset<UTF16>
-        @usableFromInline typealias Cache = DiffableTextViews.Cache<Value>
+        @usableFromInline typealias Cache = DiffableTextViews.Cache<Value, UTF16>
         
         //=--------------------------------------------------------------------=
         // MARK: Properties

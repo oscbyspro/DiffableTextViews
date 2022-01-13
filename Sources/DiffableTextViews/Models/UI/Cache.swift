@@ -9,7 +9,8 @@
 // MARK: * Cache
 //*============================================================================*
 
-@usableFromInline final class Cache<Value: Equatable> {
+@usableFromInline final class Cache<Value: Equatable, Scheme: DiffableTextViews.Scheme> {
+    @usableFromInline typealias State = DiffableTextViews.State<Scheme>
     
     //=------------------------------------------------------------------------=
     // MARK: Properties

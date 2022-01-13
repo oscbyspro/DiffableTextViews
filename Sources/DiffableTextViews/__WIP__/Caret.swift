@@ -9,7 +9,7 @@
 // MARK: * Caret
 //*============================================================================*
 
-@usableFromInline struct Caret<Scheme: DiffableTextViews.Scheme> {
+@usableFromInline struct Caret<Scheme: DiffableTextViews.Scheme>: Comparable {
     @usableFromInline typealias Offset = DiffableTextViews.Offset<Scheme>
     @usableFromInline typealias Index = Snapshot.Index
     
@@ -28,5 +28,16 @@
         self.position = position
         self.offset = offset
     }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Comparisons
+    //=------------------------------------------------------------------------=
+    
+    @inlinable static func == (lhs: Self, rhs: Self) -> Bool {
+        lhs.offset == rhs.offset
+    }
+    
+    @inlinable static func <  (lhs: Self, rhs: Self) -> Bool {
+        lhs.offset <  rhs.offset
+    }
 }
-
