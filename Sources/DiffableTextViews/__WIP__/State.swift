@@ -33,9 +33,16 @@ import Quick
         self.snapshot  = snapshot
         self.selection = selection
     }
-    
+}
+
+//=----------------------------------------------------------------------------=
+// MARK: State - Move
+//=----------------------------------------------------------------------------=
+
+extension State {
+
     //=------------------------------------------------------------------------=
-    // MARK: Move - Direction
+    // MARK: Direction
     //=------------------------------------------------------------------------=
     
     @inlinable func move(start: Snapshot.Index, direction: Direction) -> Snapshot.Index {
@@ -46,7 +53,7 @@ import Quick
     }
     
     //=------------------------------------------------------------------------=
-    // MARK: Move - Forwards
+    // MARK: Forwards
     //=------------------------------------------------------------------------=
     
     @inlinable func forwards(start: Snapshot.Index) -> Snapshot.Index {
@@ -61,7 +68,7 @@ import Quick
     }
     
     //=------------------------------------------------------------------------=
-    // MARK: Move - Backwards
+    // MARK: Backwards
     //=------------------------------------------------------------------------=
     
     @inlinable func backwards(start: Snapshot.Index) -> Snapshot.Index {
@@ -75,7 +82,13 @@ import Quick
         
         return position
     }
-    
+}
+
+//=----------------------------------------------------------------------------=
+// MARK: State - Inspect
+//=----------------------------------------------------------------------------=
+
+extension State {
     //=------------------------------------------------------------------------=
     // MARK: Direction
     //=------------------------------------------------------------------------=
@@ -166,22 +179,26 @@ extension State {
     
     @inlinable mutating func update(snapshot: Snapshot) {
         //=--------------------------------------=
-        // MARK: Single
+        // MARK: Upper
         //=--------------------------------------=
-        let upperBound = Changes(from: self.snapshot[self.selection.upperBound...], to: snapshot[...]).end().next
+        let upperBound = changesEndIndices(
+            past: self.snapshot[self.selection.upperBound...],
+            next: snapshot[...]).next
+        //=--------------------------------------=
+        // MARK: Lower
+        //=--------------------------------------=
         var lowerBound = upperBound
-        //=--------------------------------------=
-        // MARK: Double
-        //=--------------------------------------=
         if !self.selection.isEmpty {
-            lowerBound = Changes(from: self.snapshot[...self.selection.lowerBound], to: snapshot[...]).start().next
+            lowerBound = changesStartIndices(
+                past: self.snapshot[...self.selection.lowerBound],
+                next: snapshot[...]).next
             lowerBound = min(lowerBound, upperBound)
         }
         //=--------------------------------------=
         // MARK: Update
         //=--------------------------------------=
         self.snapshot  = snapshot
-        self.selection = lowerBound..<upperBound
+        self.selection = lowerBound ..< upperBound
         self.autocorrect(intent: nil)
     }
 }

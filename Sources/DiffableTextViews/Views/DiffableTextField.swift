@@ -118,7 +118,7 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable, 
     
     public final class Coordinator: NSObject, UITextFieldDelegate {
         @usableFromInline typealias Offset = DiffableTextViews.Offset<UTF16>
-        @usableFromInline typealias Cache = DiffableTextViews.Cache<UTF16, Value>
+        @usableFromInline typealias Cache = DiffableTextViews.Cache<Value>
         
         //=--------------------------------------------------------------------=
         // MARK: Properties
@@ -172,7 +172,7 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable, 
                 #warning("Move most of this to Input init method.")
                 let content = Snapshot(string, only: .content)
                 let offsets = Offset(at: nsRange.lowerBound) ..< Offset(at: nsRange.upperBound)
-                let selection = cache.field.indices(at: offsets)
+                let selection = cache.state.indices(at: offsets)
                 let range = selection.lowerBound.rhs! ..< selection.upperBound.rhs!
                 let input = Input(content: content, range: range)
                 
@@ -186,7 +186,7 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable, 
                 var value = try upstream.style.parse(snapshot: snapshot)
                 upstream.style.process(value: &value)
                 
-                let field = cache.field.updated(selection: selection.upperBound, intent: nil).updated(carets: snapshot)
+                let state = cache.state.updated(selection: selection.upperBound, intent: nil).updated(carets: snapshot)
                 
                 //=------------------------------=
                 // MARK: Push
@@ -195,7 +195,7 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable, 
                 Task { @MainActor [value] in
                     // async to process special commands first
                     self.cache.value = value
-                    self.cache.field = field
+                    self.cache.state = state
                     self.push()
                 }
                 
@@ -231,7 +231,7 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable, 
             //=----------------------------------=
             
             let selection = downstream.selection()
-            let corrected = cache.field.updated(selection: selection, intent: downstream.intent)
+            let corrected = cache.state.updated(selection: selection, intent: downstream.intent)
             
             //=----------------------------------=
             // MARK: Update Downstream If Needed
@@ -239,7 +239,7 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable, 
             
             if selection != corrected.selection.offsets {
                 lock.perform {
-                    self.cache.field = corrected
+                    self.cache.state = corrected
                     self.downstream.update(selection: corrected.selection.offsets)
                 }
             }
@@ -270,14 +270,14 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable, 
                 
                 var snapshot = upstream.style.snapshot(value: value, mode: downstream.mode)
                 upstream.style.process(snapshot: &snapshot)
-                let field = cache.field.updated(carets: snapshot)
+                let state = cache.state.updated(carets: snapshot)
                 
                 //=------------------------------=
                 // MARK: Push
                 //=------------------------------=
                 
                 self.cache.value = value
-                self.cache.field = field
+                self.cache.state = state
                 self.push()
             }
         }
