@@ -35,22 +35,51 @@ import Quick
     }
     
     //=------------------------------------------------------------------------=
-    // MARK: WIP
+    // MARK: Move - Direction
     //=------------------------------------------------------------------------=
     
-    #warning("WIP")
-    @inlinable mutating func position(caret: Snapshot.Index, preference: Direction, intent: Direction?) -> Snapshot.Index {
-        let direction = direction(at: caret) ?? intent ?? preference
-        let next = move(start: caret, direction: direction)
-        
+    @inlinable func move(start: Snapshot.Index, direction: Direction) -> Snapshot.Index {
         switch direction {
-        case preference: return next
-        case  .forwards: return next != snapshot  .endIndex ? snapshot.index(after:  next) : next
-        case .backwards: return next != snapshot.startIndex ? snapshot.index(before: next) : next
+        case  .forwards: return  forwards(start: start)
+        case .backwards: return backwards(start: start)
         }
     }
     
-    #warning("WIP")
+    //=------------------------------------------------------------------------=
+    // MARK: Move - Forwards
+    //=------------------------------------------------------------------------=
+    
+    @inlinable func forwards(start: Snapshot.Index) -> Snapshot.Index {
+        var position = start
+        
+        while position != snapshot.endIndex {
+            if !snapshot[position].attribute.contains(.prefixing) { return position }
+            snapshot.formIndex(after: &position)
+        }
+        
+        return position
+    }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Move - Backwards
+    //=------------------------------------------------------------------------=
+    
+    @inlinable func backwards(start: Snapshot.Index) -> Snapshot.Index {
+        var position = start
+        
+        while position != snapshot.startIndex {
+            let after = position
+            snapshot.formIndex(before: &position)
+            if !snapshot[position].attribute.contains(.suffixing) { return after }
+        }
+        
+        return position
+    }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Direction
+    //=------------------------------------------------------------------------=
+    
     @inlinable func direction(at position: Snapshot.Index) -> Direction? {
         let lhs = position == snapshot.startIndex ? .prefixing : snapshot[snapshot.index(before: position)].attribute
         let rhs = position == snapshot  .endIndex ? .suffixing : snapshot[position].attribute
@@ -60,76 +89,6 @@ import Quick
         
         if forwards == backwards { return nil }
         return forwards ? .forwards : .backwards
-    }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: #warning("WIP")
-    //=------------------------------------------------------------------------=
-    
-    #warning("WIP")
-    @inlinable func peek(at position: Snapshot.Index) -> Peek {
-        let lhs = position != snapshot.startIndex ? snapshot.index(before: position) : nil
-        let rhs = position != snapshot  .endIndex ? position : nil
-        return Peek(lhs: lhs.map({ snapshot[$0] }), rhs: rhs.map({ snapshot[$0] }))
-    }
-}
-
-//=----------------------------------------------------------------------------=
-// MARK: Update - Attributes
-//=----------------------------------------------------------------------------=
-
-extension State {
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Transformations
-    //=------------------------------------------------------------------------=
-    
-    @inlinable mutating func autocorrect() {
-        func position(start: Snapshot.Index, preference: Direction) -> Snapshot.Index {
-            move(start: start, direction: peek(at: start).directionality() ?? preference)
-        }
-        
-        let upperBound = position(start: selection.upperBound, preference: .backwards)
-        var lowerBound = upperBound
-
-        if !selection.isEmpty {
-            lowerBound = position(start: selection.lowerBound, preference:  .forwards)
-            lowerBound = min(lowerBound, upperBound)
-        }
-        
-        self.selection = lowerBound..<upperBound
-    }
-}
-
-//=----------------------------------------------------------------------------=
-// MARK: Update - Snapshot
-//=----------------------------------------------------------------------------=
-
-extension State {
-
-    //=------------------------------------------------------------------------=
-    // MARK: Transformations
-    //=------------------------------------------------------------------------=
-    
-    @inlinable mutating func update(snapshot: Snapshot) {
-        //=--------------------------------------=
-        // MARK: Single
-        //=--------------------------------------=
-        let upperBound = Changes(from: self.snapshot[self.selection.upperBound...], to: snapshot[...]).end().next
-        var lowerBound = upperBound
-        //=--------------------------------------=
-        // MARK: Double
-        //=--------------------------------------=
-        if !self.selection.isEmpty {
-            lowerBound = Changes(from: self.snapshot[...self.selection.lowerBound], to: snapshot[...]).start().next
-            lowerBound = min(lowerBound, upperBound)
-        }
-        //=--------------------------------------=
-        // MARK: Properties
-        //=--------------------------------------=
-        self.snapshot  = snapshot
-        self.selection = lowerBound..<upperBound
-        #warning("Autocorrect...")
     }
 }
 
@@ -194,51 +153,51 @@ extension State {
     }
 }
 
+
 //=----------------------------------------------------------------------------=
-// MARK: State - Move
+// MARK: Update - Snapshot
+//=----------------------------------------------------------------------------=
+
+extension State {
+
+    //=------------------------------------------------------------------------=
+    // MARK: Transformations
+    //=------------------------------------------------------------------------=
+    
+    @inlinable mutating func update(snapshot: Snapshot) {
+        //=--------------------------------------=
+        // MARK: Single
+        //=--------------------------------------=
+        let upperBound = Changes(from: self.snapshot[self.selection.upperBound...], to: snapshot[...]).end().next
+        var lowerBound = upperBound
+        //=--------------------------------------=
+        // MARK: Double
+        //=--------------------------------------=
+        if !self.selection.isEmpty {
+            lowerBound = Changes(from: self.snapshot[...self.selection.lowerBound], to: snapshot[...]).start().next
+            lowerBound = min(lowerBound, upperBound)
+        }
+        //=--------------------------------------=
+        // MARK: Update
+        //=--------------------------------------=
+        self.snapshot  = snapshot
+        self.selection = lowerBound..<upperBound
+        self.autocorrect(intent: nil)
+    }
+}
+
+//=----------------------------------------------------------------------------=
+// MARK: Update - Selection
 //=----------------------------------------------------------------------------=
 
 extension State {
     
     //=------------------------------------------------------------------------=
-    // MARK: Direction
+    // MARK: Transformations
     //=------------------------------------------------------------------------=
     
-    @inlinable func move(start: Snapshot.Index, direction: Direction) -> Snapshot.Index {
-        switch direction {
-        case  .forwards: return  forwards(start: start)
-        case .backwards: return backwards(start: start)
-        }
-    }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Forwards
-    //=------------------------------------------------------------------------=
-    
-    @inlinable func forwards(start: Snapshot.Index) -> Snapshot.Index {
-        var position = start
-        
-        while position != snapshot.endIndex {
-            if !snapshot[position].attribute.contains(.prefixing) { return position }
-            snapshot.formIndex(after: &position)
-        }
-        
-        return position
-    }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Backwards
-    //=------------------------------------------------------------------------=
-    
-    @inlinable func backwards(start: Snapshot.Index) -> Snapshot.Index {
-        var position = start
-        
-        while position != snapshot.startIndex {
-            let after = position
-            snapshot.formIndex(before: &position)
-            if !snapshot[position].attribute.contains(.suffixing) { return after }
-        }
-        
-        return position
+    @inlinable mutating func update(selection: Range<Snapshot.Index>, intent: Direction?) {
+        self.selection = selection
+        self.autocorrect(intent: intent)
     }
 }
