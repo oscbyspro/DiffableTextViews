@@ -186,8 +186,8 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable, 
                 upstream.style.process(value: &value)
                 
                 var state = cache.state
-                state.update(selection: selection.upperBound, intent: nil)
-                state.update(snapshot: snapshot)
+                state.update(selection: selection.upperBound ..< selection.upperBound, intent: nil)
+                state.update(snapshot:  snapshot)
                 
                 //=------------------------------=
                 // MARK: Push

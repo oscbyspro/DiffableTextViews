@@ -120,6 +120,14 @@ extension State {
         self.selection = selection
         self.autocorrect(intent: intent)
     }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Transformations - Indirect
+    //=------------------------------------------------------------------------=
+    
+    @inlinable mutating func update(selection: Range<Offset>, intent: Direction?) {
+        update(selection: indices(at: selection), intent: intent)
+    }
 }
 
 //=----------------------------------------------------------------------------=
