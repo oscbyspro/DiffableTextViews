@@ -13,20 +13,19 @@
 
 @usableFromInline struct Caret<Scheme: DiffableTextViews.Scheme>: Comparable {
     @usableFromInline typealias Offset = DiffableTextViews.Offset<Scheme>
-    @usableFromInline typealias Index = Snapshot.Index
     
     //=------------------------------------------------------------------------=
     // MARK: Properties
     //=------------------------------------------------------------------------=
     
-    @usableFromInline let position: Index
+    @usableFromInline let position: Snapshot.Index
     @usableFromInline let offset: Offset
 
     //=------------------------------------------------------------------------=
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable init(_ position: Index, at offset: Offset) {
+    @inlinable init(_ position: Snapshot.Index, at offset: Offset) {
         self.position = position
         self.offset = offset
     }

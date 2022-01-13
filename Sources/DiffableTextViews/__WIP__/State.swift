@@ -21,7 +21,7 @@ import Quick
     // MARK: Properties
     //=------------------------------------------------------------------------=
     
-    @usableFromInline private(set) var snapshot: Snapshot
+    @usableFromInline private(set) var carets: Carets
     @usableFromInline private(set) var selection: Range<Caret>
 
     //=------------------------------------------------------------------------=
@@ -29,13 +29,12 @@ import Quick
     //=------------------------------------------------------------------------=
     
     @inlinable init() {
-        let snapshot = Snapshot()
-        let position = Caret(snapshot.startIndex, at: .zero)
-        self.init(snapshot: snapshot, selection: position ..< position)
+        let carets = Carets(Snapshot())
+        self.init(carets: carets, selection: carets.start ..< carets.start)
     }
     
-    @inlinable init(snapshot: Snapshot, selection: Range<Caret>) {
-        self.snapshot = snapshot
+    @inlinable init(carets: Carets, selection: Range<Caret>) {
+        self.carets = carets
         self.selection = selection
     }
     
@@ -43,22 +42,16 @@ import Quick
     // MARK: Accessors
     //=------------------------------------------------------------------------=
     
+    @inlinable var snapshot: Snapshot {
+        carets.snapshot
+    }
+    
     @inlinable var upperBound: Snapshot.Index {
         selection.upperBound.position
     }
     
     @inlinable var lowerBound: Snapshot.Index {
         selection.lowerBound.position
-    }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Utilities - Static
-    //=------------------------------------------------------------------------=
-    
-    @inlinable static func carets(_ range: Range<Snapshot.Index>, in snapshot: Snapshot) -> Range<Caret> {
-        let lowerBound = Offset(at: range.lowerBound.character, in: snapshot.characters)
-        let difference = Offset(at: range.upperBound.character, in: snapshot.characters[range.lowerBound.character...])
-        return Caret(range.lowerBound, at: lowerBound) ..< Caret(range.upperBound, at: lowerBound + difference)
     }
 }
 
@@ -90,13 +83,14 @@ extension State {
             lowerBound = min(lowerBound, upperBound)
         }
         //=--------------------------------------=
-        // MARK: Selection
+        // MARK: Values
         //=--------------------------------------=
-        let selection = Self.carets(lowerBound ..< upperBound, in: snapshot)
+        let carets = Carets(snapshot)
+        let selection = carets.indices(lowerBound ..< upperBound)
         //=--------------------------------------=
         // MARK: Update
         //=--------------------------------------=
-        self.snapshot = snapshot
+        self.carets = carets
         self.selection = selection
         self.autocorrect(intent: nil)
     }
@@ -130,11 +124,11 @@ extension State {
     
     /// It is OK to use intent on both carets at once, because they each have different preferred directions.
     @inlinable mutating func autocorrect(intent: Direction?) {
-        let upperBound = position(start: selection.upperBound, preference: .backwards, intent: intent)
+        let upperBound = position(caret: selection.upperBound, preference: .backwards, intent: intent)
         var lowerBound = upperBound
         
         if !selection.isEmpty {
-            lowerBound = position(start: selection.lowerBound, preference:  .forwards, intent: intent)
+            lowerBound = position(caret: selection.lowerBound, preference:  .forwards, intent: intent)
             lowerBound = min(lowerBound, upperBound)
         }
         
@@ -145,12 +139,12 @@ extension State {
     // MARK: Position
     //=------------------------------------------------------------------------=
     
-    @inlinable func position(start: Caret, preference: Direction, intent: Direction?) -> Caret {
+    @inlinable func position(caret: Caret, preference: Direction, intent: Direction?) -> Caret {
         //=--------------------------------------=
         // MARK: Position, Direction
         //=--------------------------------------=
-        var caret = start
-        var direction = direction(at: start) ?? intent ?? preference
+        var current = caret
+        var direction = carets.direction(at: current) ?? intent ?? preference
         //=--------------------------------------=
         // MARK: Correct
         //=--------------------------------------=
@@ -158,14 +152,14 @@ extension State {
             //=----------------------------------=
             // MARK: Move To Next Position
             //=----------------------------------=
-            caret = move(start: caret, direction: direction)
+            current = carets.move(caret: current, direction: direction)
             //=----------------------------------=
             // MARK: Break Loop Or Jump To Side
             //=----------------------------------=
             switch direction {
             case preference: break loop
-            case  .forwards: caret = (caret != snapshot  .endIndex) ? snapshot.index(after:  caret) : caret
-            case .backwards: caret = (caret != snapshot.startIndex) ? snapshot.index(before: caret) : caret
+            case  .forwards: current = (current.position != snapshot  .endIndex) ? carets .after(current) : current
+            case .backwards: current = (current.position != snapshot.startIndex) ? carets.before(current) : current
             }
             //=----------------------------------=
             // MARK: Repeat In Preferred Direction
@@ -175,85 +169,6 @@ extension State {
         //=--------------------------------------=
         // MARK: Return
         //=--------------------------------------=
-        return caret
-    }
-}
-
-//=----------------------------------------------------------------------------=
-// MARK: State - Move
-//=----------------------------------------------------------------------------=
-
-extension State {
-
-    //=------------------------------------------------------------------------=
-    // MARK: Direction
-    //=------------------------------------------------------------------------=
-    
-    @inlinable func move(start: Caret, direction: Direction) -> Caret {
-        switch direction {
-        case  .forwards: return  forwards(start: start)
-        case .backwards: return backwards(start: start)
-        }
-    }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Forwards
-    //=------------------------------------------------------------------------=
-    
-    @inlinable func forwards(start: Caret) -> Caret {
-        var current = start
-        
-        while current.position != snapshot.endIndex {
-            if !snapshot[current].attribute.contains(.prefixing) { return current }
-            snapshot.formIndex(after: &current)
-        }
-        
         return current
     }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Backwards
-    //=------------------------------------------------------------------------=
-    
-    @inlinable func backwards(start: Caret) -> Caret {
-        var current = start
-        
-        while current.position != snapshot.startIndex {
-            let after = current
-            snapshot.formIndex(before: &current)
-            if !snapshot[current].attribute.contains(.suffixing) { return after }
-        }
-        
-        return current
-    }
-}
-
-//=----------------------------------------------------------------------------=
-// MARK: State - Inspect
-//=----------------------------------------------------------------------------=
-
-extension State {
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Direction
-    //=------------------------------------------------------------------------=
-    
-    @inlinable func direction(at position: Snapshot.Index) -> Direction? {
-        let peek = peek(at: position)
-
-        let forwards  = peek.lhs.contains(.prefixing) && peek.rhs.contains(.prefixing)
-        let backwards = peek.lhs.contains(.suffixing) && peek.rhs.contains(.suffixing)
-        
-        if forwards == backwards { return nil }
-        return forwards ? .forwards : .backwards
-    }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Peek
-    //=------------------------------------------------------------------------=
-    
-    @inlinable func peek(at position: Snapshot.Index) -> (lhs: Attribute, rhs: Attribute) {(
-        position != snapshot.startIndex ? snapshot[snapshot.index(before: position)].attribute : .prefixing,
-        position !=   snapshot.endIndex ? snapshot[position].attribute : .suffixing
-    )}
 }
