@@ -11,7 +11,7 @@ import Quick
 // MARK: * State
 //*============================================================================*
 
-@usableFromInline struct State: Mappable {
+@usableFromInline struct State {
 
     //=------------------------------------------------------------------------=
     // MARK: Properties
@@ -67,20 +67,66 @@ import Quick
     // MARK: Transformations - Selection
     //=------------------------------------------------------------------------=
     
-    @inlinable func updated(selection newValue: Selection, intent: Direction?) -> Self {
-        func position(start: Carets.Index, preference: Direction) -> Carets.Index {
-            if carets[start].nonlookable(direction: preference) { return start }
+    @inlinable mutating func update(intent: Direction?) {
+        func position(start: Snapshot.Index, preference: Direction) -> Snapshot.Index {
+            if peek(at: start).nonlookable(direction: preference) { return start }
             
             let direction = intent ?? preference
-            let next = carets.look(start: start, direction: direction)
+            let next = look(start: start, direction: direction)
             
             switch direction {
             case preference: return next
-            case  .forwards: return next < carets .lastIndex ? carets.index(after:  next) : next
-            case .backwards: return next > carets.startIndex ? carets.index(before: next) : next
+            case  .forwards: return next != snapshot  .endIndex ? snapshot.index(after:  next) : next
+            case .backwards: return next != snapshot.startIndex ? snapshot.index(before: next) : next
             }
         }
         
-        return map({ $0.selection = newValue.preferred(position) }).autocorrected()
+        let nextUpperBound = position(start: selection.upperBound, preference: .backwards)
+        var nextLowerBound = nextUpperBound
+
+        if !selection.isEmpty {
+            nextLowerBound = position(start: selection.lowerBound, preference:  .forwards)
+            nextLowerBound = min(nextLowerBound, nextUpperBound)
+        }
+        
+        self.selection = nextLowerBound..<nextUpperBound
+        #warning("Autocorrect.")
+    }
+}
+
+//=----------------------------------------------------------------------------=
+// MARK: #warning("Work in progress.")
+//=----------------------------------------------------------------------------=
+
+#warning("WIP")
+extension State {
+    
+    //=------------------------------------------------------------------------=
+    // MARK: WIP
+    //=------------------------------------------------------------------------=
+    
+    @inlinable func look(start: Snapshot.Index, direction: Direction) -> Snapshot.Index {
+        switch direction {
+        case  .forwards: return snapshot[start...].firstIndex(where: \.nonprefixing) ?? snapshot  .endIndex
+        case .backwards: return snapshot[...start] .lastIndex(where: \.nonsuffixing) ?? snapshot.startIndex
+        }
+    }
+}
+
+//=----------------------------------------------------------------------------=
+// MARK: #warning("Work in progress.")
+//=----------------------------------------------------------------------------=
+
+#warning("WIP")
+extension State {
+    
+    //=------------------------------------------------------------------------=
+    // MARK: WIP
+    //=------------------------------------------------------------------------=
+    
+    @inlinable func peek(at position: Snapshot.Index) -> Peek {
+        let lhs = position != snapshot.startIndex ? snapshot.index(before: position) : nil
+        let rhs = position != snapshot  .endIndex ? position : nil
+        return Peek(lhs: lhs.map({ snapshot[$0] }), rhs: rhs.map({ snapshot[$0] }))
     }
 }

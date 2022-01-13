@@ -81,11 +81,10 @@
     }
     
     //=------------------------------------------------------------------------=
-    // MARK: End
+    // MARK: Utilities - End
     //=------------------------------------------------------------------------=
     
     @inlinable func end() -> (past: Elements.Index, next: Elements.Index) {
-        let reversed = self.reversed().start()
-        return (reversed.past.base, reversed.next.base)
+        let reversed = self.reversed().start(); return (reversed.past.base, reversed.next.base)
     }
 }
