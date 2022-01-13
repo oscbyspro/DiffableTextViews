@@ -202,18 +202,27 @@ extension State {
 //=----------------------------------------------------------------------------=
 
 extension State {
+    
     //=------------------------------------------------------------------------=
     // MARK: Direction
     //=------------------------------------------------------------------------=
     
     @inlinable func direction(at position: Snapshot.Index) -> Direction? {
-        let lhs = position == snapshot.startIndex ? .prefixing : snapshot[snapshot.index(before: position)].attribute
-        let rhs = position == snapshot  .endIndex ? .suffixing : snapshot[position].attribute
+        let peek = peek(at: position)
 
-        let forwards  = lhs.contains(.prefixing) && rhs.contains(.prefixing)
-        let backwards = lhs.contains(.suffixing) && rhs.contains(.suffixing)
+        let forwards  = peek.lhs.contains(.prefixing) && peek.rhs.contains(.prefixing)
+        let backwards = peek.lhs.contains(.suffixing) && peek.rhs.contains(.suffixing)
         
         if forwards == backwards { return nil }
         return forwards ? .forwards : .backwards
     }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Peek
+    //=------------------------------------------------------------------------=
+    
+    @inlinable func peek(at position: Snapshot.Index) -> (lhs: Attribute, rhs: Attribute) {(
+        position != snapshot.startIndex ? snapshot[snapshot.index(before: position)].attribute : .prefixing,
+        position !=   snapshot.endIndex ? snapshot[position].attribute : .suffixing
+    )}
 }
