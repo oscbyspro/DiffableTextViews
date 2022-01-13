@@ -9,7 +9,7 @@
 // MARK: * Direction
 //*============================================================================*
 
-@usableFromInline @frozen enum Direction {
+@frozen @usableFromInline enum Direction {
     
     //=------------------------------------------------------------------------=
     // MARK: Instances

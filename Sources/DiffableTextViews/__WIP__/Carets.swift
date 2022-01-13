@@ -50,16 +50,9 @@ extension Carets {
     @inlinable var start: Caret {
         Caret(snapshot.startIndex, at: .zero)
     }
-}
-
-//=----------------------------------------------------------------------------=
-// MARK: Carets - Collections Esque - Traverse
-//=----------------------------------------------------------------------------=
-
-extension Carets {
-        
+    
     //=------------------------------------------------------------------------=
-    // MARK: Single
+    // MARK: Move - Single
     //=------------------------------------------------------------------------=
     
     @inlinable func after(_ caret: Caret) -> Caret {
@@ -75,8 +68,15 @@ extension Carets {
     }
     
     //=------------------------------------------------------------------------=
-    // MARK: Multiple
+    // MARK: Move - Multiple
     //=------------------------------------------------------------------------=
+    
+    @inlinable func move(caret: Caret, direction: Direction) -> Caret {
+        switch direction {
+        case  .forwards: return  forwards(caret)
+        case .backwards: return backwards(caret)
+        }
+    }
     
     @inlinable func forwards(_ caret: Caret) -> Caret {
         var current = caret
@@ -99,17 +99,6 @@ extension Carets {
         }
         
         return current
-    }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Multiple - Direction
-    //=------------------------------------------------------------------------=
-    
-    @inlinable func move(caret: Caret, direction: Direction) -> Caret {
-        switch direction {
-        case  .forwards: return  forwards(caret)
-        case .backwards: return backwards(caret)
-        }
     }
 }
 
