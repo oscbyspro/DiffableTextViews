@@ -28,15 +28,19 @@
     }
     
     //=------------------------------------------------------------------------=
-    // MARK: Utilities
+    // MARK: Utilities - Lookable
     //=------------------------------------------------------------------------=
     
-    @inlinable func expresses(_ attribute: Attribute) -> Bool {
-        lhs.attribute.contains(attribute) && rhs.attribute.contains(attribute)
+    @inlinable func lookable(direction: Direction) -> Bool {
+        direction == .forwards ? rhs.prefixing : lhs.suffixing
     }
     
-    //
-    // MARK: Utilities - Directions
+    @inlinable func nonlookable(direction: Direction) -> Bool {
+        !lookable(direction: direction)
+    }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Utilities - Direction
     //=------------------------------------------------------------------------=
     
     @inlinable func directionality() -> Direction? {
@@ -50,31 +54,11 @@
         return forwards ? .forwards : .backwards
     }
     
-    //
-    // MARK: Utilities - Lookabilities
+    //=------------------------------------------------------------------------=
+    // MARK: Utilities - Helpers
     //=------------------------------------------------------------------------=
     
-    @inlinable var lookaheadable: Bool {
-        rhs.attribute.contains(.prefixing)
-    }
-    
-    @inlinable var nonlookaheadable: Bool {
-        !lookaheadable
-    }
-        
-    @inlinable var lookbehindable: Bool {
-        lhs.attribute.contains(.suffixing)
-    }
-    
-    @inlinable var nonlookbehindable: Bool {
-        !lookbehindable
-    }
-        
-    @inlinable func lookable(direction: Direction) -> Bool {
-        direction == .forwards ? lookaheadable : lookbehindable
-    }
-    
-    @inlinable func nonlookable(direction: Direction) -> Bool {
-        !lookable(direction: direction)
+    @inlinable func expresses(_ attribute: Attribute) -> Bool {
+        lhs.attribute.contains(attribute) && rhs.attribute.contains(attribute)
     }
 }

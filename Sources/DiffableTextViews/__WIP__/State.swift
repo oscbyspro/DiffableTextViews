@@ -36,6 +36,33 @@ import Quick
 }
 
 //=----------------------------------------------------------------------------=
+// MARK: Update - Attributes
+//=----------------------------------------------------------------------------=
+
+extension State {
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Transformations
+    //=------------------------------------------------------------------------=
+    
+    @inlinable mutating func autocorrect() {
+        func position(start: Snapshot.Index, preference: Direction) -> Snapshot.Index {
+            look(start: start, direction: peek(at: start).directionality() ?? preference)
+        }
+        
+        let upperBound = position(start: selection.upperBound, preference: .backwards)
+        var lowerBound = upperBound
+
+        if !selection.isEmpty {
+            lowerBound = position(start: selection.lowerBound, preference:  .forwards)
+            lowerBound = min(lowerBound, upperBound)
+        }
+        
+        self.selection = lowerBound..<upperBound
+    }
+}
+
+//=----------------------------------------------------------------------------=
 // MARK: Update - Snapshot
 //=----------------------------------------------------------------------------=
 
@@ -90,6 +117,8 @@ extension State {
     // MARK: Transformations - Intent
     //=------------------------------------------------------------------------=
     
+    #warning("Is this")
+    #warning("This affects both, not sure if it should.")
     @inlinable mutating func update(intent: Direction?) {
         func position(start: Snapshot.Index, preference: Direction) -> Snapshot.Index {
             if peek(at: start).nonlookable(direction: preference) { return start }
