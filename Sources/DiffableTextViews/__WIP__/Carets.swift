@@ -31,7 +31,6 @@
     //*========================================================================*
     
     @usableFromInline struct Index: Comparable {
-        @usableFromInline typealias Offset = DiffableTextViews.Offset<Scheme>
         
         //=------------------------------------------------------------------------=
         // MARK: Properties
@@ -164,13 +163,13 @@ extension Carets {
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: Utilities
+// MARK: Carets - Indices
 //=----------------------------------------------------------------------------=
 
 extension Carets {
     
     //=------------------------------------------------------------------------=
-    // MARK: Indices - Offset
+    // MARK: Offset
     //=------------------------------------------------------------------------=
 
     @inlinable func indices(at range: Range<Offset>, start: Range<Index>) -> Range<Index> {
@@ -191,7 +190,7 @@ extension Carets {
     }
     
     //=------------------------------------------------------------------------=
-    // MARK: Indices - Snapshot
+    // MARK: Snapshot
     //=------------------------------------------------------------------------=
     
     @inlinable func indices(at range: Range<Snapshot.Index>) -> Range<Index> {
@@ -199,6 +198,13 @@ extension Carets {
         let difference = Offset(at: range.upperBound.character, in: snapshot.characters[range.lowerBound.character...])
         return Index(range.lowerBound, at: lowerBound) ..< Index(range.upperBound, at: lowerBound + difference)
     }
+}
+
+//=----------------------------------------------------------------------------=
+// MARK: Carets - Utilities
+//=----------------------------------------------------------------------------=
+
+extension Carets {
     
     //=------------------------------------------------------------------------=
     // MARK: Direction

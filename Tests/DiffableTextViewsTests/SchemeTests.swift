@@ -16,7 +16,6 @@ import XCTest
 
 /// ```
 /// Asserts: UTF16.size(of:) is O(1).
-/// Checked: Character.size(of:) is not O(1).
 /// ```
 final class SchemeTests: XCTestCase {
     
