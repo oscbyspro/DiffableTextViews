@@ -10,10 +10,10 @@
 import UIKit
 
 //*============================================================================*
-// MARK: * UIKitSetupable
+// MARK: * UIKitCompatibleStyle
 //*============================================================================*
 
-public protocol UIKitSetupable {
+public protocol UIKitCompatibleStyle {
     
     //=------------------------------------------------------------------------=
     // MARK: Keyboard
@@ -23,10 +23,10 @@ public protocol UIKitSetupable {
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: UIKitSetupable - Implementation
+// MARK: UIKitCompatibleStyle - Implementation
 //=----------------------------------------------------------------------------=
 
-extension UIKitSetupable {
+extension UIKitCompatibleStyle {
     
     //=------------------------------------------------------------------------=
     // MARK: Keyboard
@@ -38,7 +38,7 @@ extension UIKitSetupable {
 }
 
 //*============================================================================*
-// MARK: DiffableTextStyle x UIKitSetupable
+// MARK: DiffableTextStyle x UIKitCompatibleStyle
 //*============================================================================*
 
 extension DiffableTextStyle {
@@ -48,8 +48,8 @@ extension DiffableTextStyle {
     //=------------------------------------------------------------------------=
     
     @inlinable func setup(_ proxy: ProxyTextField) {
-        guard let existential = self as? UIKitSetupable else { return }
-        proxy.keyboard(existential.keyboard)
+        guard let self = self as? UIKitCompatibleStyle else { return }
+        proxy.keyboard(self.keyboard)
     }
 }
 

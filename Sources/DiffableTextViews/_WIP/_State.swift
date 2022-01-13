@@ -9,7 +9,7 @@
 // MARK: * State
 //*============================================================================*
 
-@usableFromInline struct State {
+@usableFromInline struct _State {
     @usableFromInline typealias Index = Snapshot.Index
     @usableFromInline typealias SubSequence = Snapshot.SubSequence
     
@@ -40,28 +40,27 @@
     
     @inlinable mutating func update(snapshot newSnapshot: Snapshot) {
         //=--------------------------------------=
-        // MARK: Upper Bound
+        // MARK: Upper
         //=--------------------------------------=
-        let newUpperBound = Self.breakpoint(
-            prev: snapshot[selection.upperBound...],
-            next: newSnapshot[...])
+        let upper = Self.breakpoint(
+            old: snapshot[selection.upperBound...],
+            new: newSnapshot[...])
         //=--------------------------------------=
-        // MARK: Lower Bound
+        // MARK: Lower
         //=--------------------------------------=
-        let newLowerBound = Self.breakpoint(
-            prev: snapshot[selection.lowerBound..<newUpperBound.prev],
-            next: newSnapshot[..<newUpperBound.next])
+        let lower = Self.breakpoint(
+            old: snapshot[selection.lowerBound..<upper.old],
+            new: newSnapshot[..<upper.new])
         //=--------------------------------------=
         // MARK: Selection
         //=--------------------------------------=
         let newSelection = Self.selection(
             snapshot: newSnapshot,
-            lower: newUpperBound.next,
-            upper: newLowerBound.next)
+            targets: (lower.new, upper.new))
         //=--------------------------------------=
-        // MARK: Properties
+        // MARK: Set
         //=--------------------------------------=
-        self.snapshot = newSnapshot
+        self.snapshot  = newSnapshot
         self.selection = newSelection
     }
     
@@ -72,50 +71,50 @@
 // MARK: State - Algorithms
 //=----------------------------------------------------------------------------=
 
-extension State {
+extension _State {
     
     //=------------------------------------------------------------------------=
     // MARK: Breakpoint
     //=------------------------------------------------------------------------=
     
-    @inlinable static func breakpoint(prev: SubSequence, next: SubSequence) -> (prev: Index, next: Index) {
+    @inlinable static func breakpoint(old: SubSequence, new: SubSequence) -> (old: Index, new: Index) {
         //=--------------------------------------=
         // MARK: Indices
         //=--------------------------------------=
-        var prevIndex = prev.endIndex
-        var nextIndex = next.endIndex
+        var oldIndex = old.endIndex
+        var newIndex = new.endIndex
         //=--------------------------------------=
         // MARK: Attempt
         //=--------------------------------------=
-        if prevIndex != prev.startIndex, nextIndex != next.startIndex {
+        if oldIndex != old.startIndex, newIndex != new.startIndex {
             //=----------------------------------=
-            // MARK: Indices
+            // MARK: Indices, Elements
             //=----------------------------------=
-            prev.formIndex(before: &prevIndex)
-            next.formIndex(before: &nextIndex)
+            old.formIndex(before: &oldIndex)
+            new.formIndex(before: &newIndex)
             //=----------------------------------=
             // MARK: Elements
             //=----------------------------------=
-            var prevElement = prev[prevIndex]
-            var nextElement = next[nextIndex]
+            var oldElement = old[oldIndex]
+            var newElement = new[newIndex]
             //=----------------------------------=
             // MARK: Loop
             //=----------------------------------=
-            while prevIndex != prev.startIndex, nextIndex != next.startIndex {
+            while oldIndex != old.startIndex, newIndex != new.startIndex {
                 //=------------------------------=
-                // MARK: Step
+                // MARK: Indices, Elements
                 //=------------------------------=
-                if prevElement == nextElement {
-                    prev.formIndex(before: &prevIndex)
-                    prevElement = prev[prevIndex]
-                    next.formIndex(before: &nextIndex)
-                    nextElement = next[nextIndex]
-                } else if prevElement.removable {
-                    prev.formIndex(before: &prevIndex)
-                    prevElement = prev[prevIndex]
-                } else if nextElement.insertable {
-                    next.formIndex(before: &nextIndex)
-                    nextElement = next[nextIndex]
+                if oldElement == newElement {
+                    old.formIndex(before: &oldIndex)
+                    oldElement = old[oldIndex]
+                    new.formIndex(before: &newIndex)
+                    newElement = new[newIndex]
+                } else if oldElement.removable {
+                    old.formIndex(before: &oldIndex)
+                    oldElement = old[oldIndex]
+                } else if newElement.insertable {
+                    new.formIndex(before: &newIndex)
+                    newElement = new[newIndex]
                 } else {
                     break
                 }
@@ -124,17 +123,14 @@ extension State {
         //=--------------------------------------=
         // MARK: Done
         //=--------------------------------------=
-        return (prevIndex, nextIndex)
+        return (oldIndex, newIndex)
     }
     
     //=------------------------------------------------------------------------=
     // MARK: Selection
     //=------------------------------------------------------------------------=
         
-    @inlinable static func selection(snapshot: Snapshot, lower: Index, upper: Index) -> Range<Index> {
-        
-        
-        
+    @inlinable static func selection(snapshot: Snapshot, targets: (lower: Index, upper: Index)) -> Range<Index> {
         #warning("T##message##")
         fatalError()
     }
@@ -157,12 +153,12 @@ extension State {
          if carets[start].nonlookable(direction: preference) { return start }
          
          let direction = intent ?? preference
-         let next = carets.look(start: start, direction: direction)
+         let new = carets.look(start: start, direction: direction)
          
          switch direction {
-         case preference: return next
-         case  .forwards: return next < carets .lastIndex ? carets.index(after:  next) : next
-         case .backwards: return next > carets.startIndex ? carets.index(before: next) : next
+         case preference: return new
+         case  .forwards: return new < carets .lastIndex ? carets.index(after:  new) : new
+         case .backwards: return new > carets.startIndex ? carets.index(before: new) : new
          }
      }
      
