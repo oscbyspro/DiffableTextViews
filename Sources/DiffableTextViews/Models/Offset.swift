@@ -21,8 +21,12 @@
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable init(at units: Int) {
+    @inlinable init(at units: Int = 0) {
         self.units = units
+    }
+    
+    @inlinable init<S: StringProtocol>(at position: String.Index, in characters: S) {
+        self.units = Scheme.size(of: characters[...position])
     }
     
     //
@@ -30,11 +34,15 @@
     //=------------------------------------------------------------------------=
 
     @inlinable static var zero: Self {
-        .init(at: .zero)
+        Self()
     }
     
-    @inlinable static func max(in characters: String) -> Self {
-        .init(at: Scheme.size(of: characters))
+    @inlinable static func size(of character: Character) -> Self {
+        Self(at: Scheme.size(of: character))
+    }
+        
+    @inlinable static func size<S: StringProtocol>(of characters: S) -> Self {
+        Self(at: Scheme.size(of: characters))
     }
     
     //=------------------------------------------------------------------------=

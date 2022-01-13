@@ -5,6 +5,8 @@
 //  Created by Oscar Byström Ericsson on 2022-01-13.
 //
 
+#warning("Remake: Carets.")
+
 //*============================================================================*
 // MARK: * Caret
 //*============================================================================*
@@ -24,7 +26,7 @@
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable init(position: Index, at offset: Offset) {
+    @inlinable init(_ position: Index, at offset: Offset) {
         self.position = position
         self.offset = offset
     }

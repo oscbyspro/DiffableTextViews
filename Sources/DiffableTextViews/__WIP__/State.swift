@@ -13,7 +13,8 @@ import Quick
 
 #warning("Needs: Scheme.")
 @usableFromInline struct State<Scheme: DiffableTextViews.Scheme> {
-    @usableFromInline typealias Caret = DiffableTextViews.Caret<Scheme>
+    @usableFromInline typealias Caret  = DiffableTextViews.Caret <Scheme>
+    @usableFromInline typealias Carets = DiffableTextViews.Carets<Scheme>
     @usableFromInline typealias Offset = DiffableTextViews.Offset<Scheme>
 
     //=------------------------------------------------------------------------=
@@ -29,7 +30,7 @@ import Quick
     
     @inlinable init() {
         let snapshot = Snapshot()
-        let position = Caret(position: snapshot.startIndex, at:  .zero)
+        let position = Caret(snapshot.startIndex, at: .zero)
         self.init(snapshot: snapshot, selection: position ..< position)
     }
     
@@ -48,6 +49,16 @@ import Quick
     
     @inlinable var lowerBound: Snapshot.Index {
         selection.lowerBound.position
+    }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Utilities - Static
+    //=------------------------------------------------------------------------=
+    
+    @inlinable static func carets(_ range: Range<Snapshot.Index>, in snapshot: Snapshot) -> Range<Caret> {
+        let lowerBound = Offset(at: range.lowerBound.character, in: snapshot.characters)
+        let difference = Offset(at: range.upperBound.character, in: snapshot.characters[range.lowerBound.character...])
+        return Caret(range.lowerBound, at: lowerBound) ..< Caret(range.upperBound, at: lowerBound + difference)
     }
 }
 
@@ -74,14 +85,14 @@ extension State {
         var lowerBound = upperBound
         if !self.selection.isEmpty {
             lowerBound = changesStartIndices(
-                past: self.snapshot[...lowerBound],
+                past: self.snapshot[...self.lowerBound],
                 next: snapshot[...]).next
             lowerBound = min(lowerBound, upperBound)
         }
         //=--------------------------------------=
         // MARK: Selection
         //=--------------------------------------=
-        let selection = lowerBound ..< upperBound
+        let selection = Self.carets(lowerBound ..< upperBound, in: snapshot)
         //=--------------------------------------=
         // MARK: Update
         //=--------------------------------------=
@@ -101,7 +112,7 @@ extension State {
     // MARK: Transformations
     //=------------------------------------------------------------------------=
     
-    @inlinable mutating func update(selection: Range<Snapshot.Index>, intent: Direction?) {
+    @inlinable mutating func update(selection: Range<Caret>, intent: Direction?) {
         self.selection = selection
         self.autocorrect(intent: intent)
     }
@@ -134,11 +145,11 @@ extension State {
     // MARK: Position
     //=------------------------------------------------------------------------=
     
-    @inlinable func position(start: Snapshot.Index, preference: Direction, intent: Direction?) -> Snapshot.Index {
+    @inlinable func position(start: Caret, preference: Direction, intent: Direction?) -> Caret {
         //=--------------------------------------=
         // MARK: Position, Direction
         //=--------------------------------------=
-        var position = start
+        var caret = start
         var direction = direction(at: start) ?? intent ?? preference
         //=--------------------------------------=
         // MARK: Correct
@@ -147,14 +158,14 @@ extension State {
             //=----------------------------------=
             // MARK: Move To Next Position
             //=----------------------------------=
-            position = move(start: position, direction: direction)
+            caret = move(start: caret, direction: direction)
             //=----------------------------------=
             // MARK: Break Loop Or Jump To Side
             //=----------------------------------=
             switch direction {
             case preference: break loop
-            case  .forwards: position = (position != snapshot  .endIndex) ? snapshot.index(after:  position) : position
-            case .backwards: position = (position != snapshot.startIndex) ? snapshot.index(before: position) : position
+            case  .forwards: caret = (caret != snapshot  .endIndex) ? snapshot.index(after:  caret) : caret
+            case .backwards: caret = (caret != snapshot.startIndex) ? snapshot.index(before: caret) : caret
             }
             //=----------------------------------=
             // MARK: Repeat In Preferred Direction
@@ -164,7 +175,7 @@ extension State {
         //=--------------------------------------=
         // MARK: Return
         //=--------------------------------------=
-        return position
+        return caret
     }
 }
 
@@ -178,7 +189,7 @@ extension State {
     // MARK: Direction
     //=------------------------------------------------------------------------=
     
-    @inlinable func move(start: Snapshot.Index, direction: Direction) -> Snapshot.Index {
+    @inlinable func move(start: Caret, direction: Direction) -> Caret {
         switch direction {
         case  .forwards: return  forwards(start: start)
         case .backwards: return backwards(start: start)
@@ -189,31 +200,31 @@ extension State {
     // MARK: Forwards
     //=------------------------------------------------------------------------=
     
-    @inlinable func forwards(start: Snapshot.Index) -> Snapshot.Index {
-        var position = start
+    @inlinable func forwards(start: Caret) -> Caret {
+        var current = start
         
-        while position != snapshot.endIndex {
-            if !snapshot[position].attribute.contains(.prefixing) { return position }
-            snapshot.formIndex(after: &position)
+        while current.position != snapshot.endIndex {
+            if !snapshot[current].attribute.contains(.prefixing) { return current }
+            snapshot.formIndex(after: &current)
         }
         
-        return position
+        return current
     }
     
     //=------------------------------------------------------------------------=
     // MARK: Backwards
     //=------------------------------------------------------------------------=
     
-    @inlinable func backwards(start: Snapshot.Index) -> Snapshot.Index {
-        var position = start
+    @inlinable func backwards(start: Caret) -> Caret {
+        var current = start
         
-        while position != snapshot.startIndex {
-            let after = position
-            snapshot.formIndex(before: &position)
-            if !snapshot[position].attribute.contains(.suffixing) { return after }
+        while current.position != snapshot.startIndex {
+            let after = current
+            snapshot.formIndex(before: &current)
+            if !snapshot[current].attribute.contains(.suffixing) { return after }
         }
         
-        return position
+        return current
     }
 }
 
