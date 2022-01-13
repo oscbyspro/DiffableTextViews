@@ -169,6 +169,7 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable, 
                 // MARK: Process Arguments
                 //=------------------------------=
 
+                #warning("Move most of this to Input init method.")
                 let content = Snapshot(string, only: .content)
                 let offsets = Offset(at: nsRange.lowerBound) ..< Offset(at: nsRange.upperBound)
                 let selection = cache.field.indices(at: offsets)

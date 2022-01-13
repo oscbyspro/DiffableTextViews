@@ -24,7 +24,7 @@ public struct Attribute: OptionSet {
     // MARK: Instances - Singular
     //=------------------------------------------------------------------------=
     
-    /// Signifies that the symbol is part of a text's formatting and therefore not real.
+    /// Signifies that the symbol is part of a text's formatting.
     public static let formatting = Self(rawValue: 1 << 0)
     
     /// Signifies that the symbol should be ignored by the differentiation algorithm when it is inserted.

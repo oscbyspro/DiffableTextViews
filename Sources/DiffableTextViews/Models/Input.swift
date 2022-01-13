@@ -22,6 +22,7 @@ public struct Input {
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
+    #warning("Make this more usable.")
     @inlinable init(content: Snapshot, range: Range<Snapshot.Index>) {
         self.content = content
         self.range = range
