@@ -61,7 +61,6 @@
             lhs.offset <  rhs.offset
         }
     }
-
 }
 
 //=----------------------------------------------------------------------------=
@@ -112,7 +111,7 @@ extension Carets {
         case .backwards: return backwards(start: position)
         }
     }
-    
+        
     @inlinable func forwards(start: Index) -> Index {
         var position = start
         
@@ -130,7 +129,34 @@ extension Carets {
         while position.snapshot != snapshot.startIndex {
             let after = position
             position = before(position)
-            if !snapshot.attributes[position.snapshot.attribute].contains(.suffixing) { return after }
+            guard snapshot.attributes[position.snapshot.attribute].contains(.suffixing) else { return after }
+        }
+        
+        return position
+    }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Move - Multiple - Destination
+    //=------------------------------------------------------------------------=
+        
+    @inlinable func forwards(start: Index, destination: Offset) -> Index {
+        var position = start
+        
+        while position.snapshot != snapshot.endIndex {
+            guard position.offset < destination else { return position }
+            position = after(position)
+        }
+        
+        return position
+    }
+    
+    @inlinable func backwards(start: Index, destination: Offset) -> Index {
+        var position = start
+        
+        while position.snapshot != snapshot.startIndex {
+            let after = position
+            position = before(position)
+            guard position.offset > destination else { return after }
         }
         
         return position
@@ -144,10 +170,31 @@ extension Carets {
 extension Carets {
     
     //=------------------------------------------------------------------------=
-    // MARK: Indices
+    // MARK: Indices - Offset
+    //=------------------------------------------------------------------------=
+
+    @inlinable func indices(at range: Range<Offset>, start: Range<Index>) -> Range<Index> {
+        let upperBound = index(at: range.upperBound, start: start.upperBound)
+        var lowerBound = upperBound
+        
+        if !range.isEmpty {
+            lowerBound = index(at: range.lowerBound, start: start.lowerBound)
+            lowerBound = min(lowerBound, upperBound)
+        }
+
+        return lowerBound ..< upperBound
+    }
+    
+    @inlinable func index(at destination: Offset, start: Index) -> Index {
+        if start.offset <= destination { return  forwards(start: start, destination: destination) }
+        else                           { return backwards(start: start, destination: destination) }
+    }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Indices - Snapshot
     //=------------------------------------------------------------------------=
     
-    @inlinable func indices(_ range: Range<Snapshot.Index>) -> Range<Index> {
+    @inlinable func indices(at range: Range<Snapshot.Index>) -> Range<Index> {
         let lowerBound = Offset(at: range.lowerBound.character, in: snapshot.characters)
         let difference = Offset(at: range.upperBound.character, in: snapshot.characters[range.lowerBound.character...])
         return Index(range.lowerBound, at: lowerBound) ..< Index(range.upperBound, at: lowerBound + difference)

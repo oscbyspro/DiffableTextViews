@@ -11,7 +11,6 @@ import Quick
 // MARK: * State
 //*============================================================================*
 
-#warning("Needs: Scheme.")
 @usableFromInline struct State<Scheme: DiffableTextViews.Scheme> {
     @usableFromInline typealias Carets = DiffableTextViews.Carets<Scheme>
     @usableFromInline typealias Offset = DiffableTextViews.Offset<Scheme>
@@ -56,6 +55,14 @@ import Quick
     @inlinable var offsets: Range<Offset> {
         selection.lowerBound.offset ..< selection.upperBound.offset
     }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Utilities
+    //=------------------------------------------------------------------------=
+    
+    @inlinable func indices(at range: Range<Offset>) -> Range<Carets.Index> {
+        carets.indices(at: range, start: selection)
+    }
 }
 
 //=----------------------------------------------------------------------------=
@@ -89,7 +96,7 @@ extension State {
         // MARK: Values
         //=--------------------------------------=
         let carets = Carets(snapshot)
-        let selection = carets.indices(lowerBound ..< upperBound)
+        let selection = carets.indices(at: lowerBound ..< upperBound)
         //=--------------------------------------=
         // MARK: Update
         //=--------------------------------------=

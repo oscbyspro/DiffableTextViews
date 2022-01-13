@@ -173,8 +173,7 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable, 
                 let content = Snapshot(string, only: .content)
                 let offsets = Offset(at: nsRange.lowerBound) ..< Offset(at: nsRange.upperBound)
                 let selection = cache.state.indices(at: offsets)
-                let range = selection.lowerBound.rhs! ..< selection.upperBound.rhs!
-                let input = Input(content: content, range: range)
+                let input = Input(content: content, range: selection.lowerBound.snapshot ..< selection.upperBound.snapshot)
                 
                 //=------------------------------=
                 // MARK: Calculate Next State
@@ -194,7 +193,7 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable, 
                 // MARK: Push
                 //=------------------------------=
                 
-                Task { @MainActor [value] in
+                Task { @MainActor [value, state] in
                     // async to process special commands first
                     self.cache.value = value
                     self.cache.state = state
