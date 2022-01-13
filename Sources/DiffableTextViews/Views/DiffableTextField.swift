@@ -240,10 +240,10 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable, 
             // MARK: Update Downstream If Needed
             //=----------------------------------=
             
-            if selection != corrected.selection.offsets {
+            if selection != corrected.offsets {
                 lock.perform {
                     self.cache.state = corrected
-                    self.downstream.update(selection: corrected.selection.offsets)
+                    self.downstream.update(selection: corrected.offsets)
                 }
             }
         }
@@ -273,7 +273,8 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable, 
                 
                 var snapshot = upstream.style.snapshot(value: value, mode: downstream.mode)
                 upstream.style.process(snapshot: &snapshot)
-                let state = cache.state.updated(snapshot: snapshot)
+                var state = cache.state
+                state.update(snapshot: snapshot)
                 
                 //=------------------------------=
                 // MARK: Push
@@ -299,7 +300,7 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable, 
                 // changes to UITextField's text and selection both call
                 // the delegate's method: textFieldDidChangeSelection(_:)
                 self.downstream.update(text: cache.snapshot.characters)
-                self.downstream.update(selection: cache.selection.offsets)
+                self.downstream.update(selection:  cache.state.offsets)
                 self.cache.mode = downstream.mode
             }
                         

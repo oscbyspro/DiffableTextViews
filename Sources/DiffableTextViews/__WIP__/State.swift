@@ -53,6 +53,10 @@ import Quick
     @inlinable var lowerBound: Snapshot.Index {
         selection.lowerBound.position
     }
+    
+    @inlinable var offsets: Range<Offset> {
+        selection.lowerBound.offset ..< selection.upperBound.offset
+    }
 }
 
 //=----------------------------------------------------------------------------=
