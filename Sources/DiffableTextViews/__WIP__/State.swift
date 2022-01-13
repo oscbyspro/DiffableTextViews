@@ -40,7 +40,7 @@ import Quick
     
     #warning("WIP")
     @inlinable mutating func position(caret: Snapshot.Index, preference: Direction, intent: Direction?) -> Snapshot.Index {
-        let direction = directionality(at: caret) ?? intent ?? preference
+        let direction = direction(at: caret) ?? intent ?? preference
         let next = move(start: caret, direction: direction)
         
         switch direction {
@@ -51,7 +51,7 @@ import Quick
     }
     
     #warning("WIP")
-    @inlinable func directionality(at position: Snapshot.Index) -> Direction? {
+    @inlinable func direction(at position: Snapshot.Index) -> Direction? {
         let lhs = position == snapshot.startIndex ? .prefixing : snapshot[snapshot.index(before: position)].attribute
         let rhs = position == snapshot  .endIndex ? .suffixing : snapshot[position].attribute
 
@@ -138,6 +138,39 @@ extension State {
 //=----------------------------------------------------------------------------=
 
 extension State {
+    
+    @inlinable func position(start: Snapshot.Index, preference: Direction, intent: Direction?) -> Snapshot.Index {
+        //=--------------------------------------=
+        // MARK: Position, Direction
+        //=--------------------------------------=
+        var position  = start
+        var direction = direction(at: start) ?? intent ?? preference
+        //=--------------------------------------=
+        // MARK: Correct
+        //=--------------------------------------=
+        loop: while true {
+            //=----------------------------------=
+            // MARK: Move To Next Position
+            //=----------------------------------=
+            position = move(start: position, direction: direction)
+            //=----------------------------------=
+            // MARK: Break Loop Or Jump To Side
+            //=----------------------------------=
+            switch direction {
+            case preference: break loop
+            case  .forwards: position = (position != snapshot  .endIndex) ? snapshot.index(after:  position) : position
+            case .backwards: position = (position != snapshot.startIndex) ? snapshot.index(before: position) : position
+            }
+            //=----------------------------------=
+            // MARK: Repeat In Preferred Direction
+            //=----------------------------------=
+            direction = preference
+        }
+        //=--------------------------------------=
+        // MARK: Return
+        //=--------------------------------------=
+        return position
+    }
     
     //=------------------------------------------------------------------------=
     // MARK: Direction
