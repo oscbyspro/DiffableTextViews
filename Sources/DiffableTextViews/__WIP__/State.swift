@@ -33,38 +33,61 @@ import Quick
         self.snapshot  = snapshot
         self.selection = selection
     }
+}
+
+//=----------------------------------------------------------------------------=
+// MARK: Update - Snapshot
+//=----------------------------------------------------------------------------=
+
+extension State {
 
     //=------------------------------------------------------------------------=
-    // MARK: Transformations - Snapshot
+    // MARK: Transformations
     //=------------------------------------------------------------------------=
     
-    @inlinable mutating func update(snapshot newSnapshot: Snapshot) {
+    @inlinable mutating func update(snapshot: Snapshot) {
         //=--------------------------------------=
         // MARK: Bounds
         //=--------------------------------------=
-        let newUpperBound = Changes(from: snapshot[selection.upperBound...], to: newSnapshot[...]).end().next
-        var newLowerBound = newUpperBound
+        let upperBound = Changes(from: self.snapshot[self.selection.upperBound...], to: snapshot[...]).end().next
+        var lowerBound = upperBound
         //=--------------------------------------=
         // MARK: Double
         //=--------------------------------------=
-        if !selection.isEmpty {
-            newLowerBound = Changes(from: snapshot[...selection.lowerBound], to: newSnapshot[...]).start().next
-            newLowerBound = min(newLowerBound, newUpperBound)
+        if !self.selection.isEmpty {
+            lowerBound = Changes(from: self.snapshot[...self.selection.lowerBound], to: snapshot[...]).start().next
+            lowerBound = min(lowerBound, upperBound)
         }
         //=--------------------------------------=
         // MARK: Selection
         //=--------------------------------------=
-        let newSelection = newLowerBound..<newUpperBound
+        let selection = lowerBound..<upperBound
         //=--------------------------------------=
         // MARK: Set
         //=--------------------------------------=
-        self.snapshot  = newSnapshot
-        self.selection = newSelection
+        self.snapshot  =  snapshot
+        self.selection = selection
         #warning("Autocorrect...")
     }
-    
+}
+
+//=----------------------------------------------------------------------------=
+// MARK: Update - Selection
+//=----------------------------------------------------------------------------=
+
+extension State {
+
     //=------------------------------------------------------------------------=
-    // MARK: Transformations - Selection
+    // MARK: Transformations
+    //=------------------------------------------------------------------------=
+    
+    @inlinable mutating func update(selection: Range<Snapshot.Index>) {
+        self.selection = selection
+        #warning("Autocorrect.")
+    }
+
+    //=------------------------------------------------------------------------=
+    // MARK: Transformations - Intent
     //=------------------------------------------------------------------------=
     
     @inlinable mutating func update(intent: Direction?) {
@@ -81,15 +104,15 @@ import Quick
             }
         }
         
-        let nextUpperBound = position(start: selection.upperBound, preference: .backwards)
-        var nextLowerBound = nextUpperBound
+        let upperBound = position(start: selection.upperBound, preference: .backwards)
+        var lowerBound = upperBound
 
         if !selection.isEmpty {
-            nextLowerBound = position(start: selection.lowerBound, preference:  .forwards)
-            nextLowerBound = min(nextLowerBound, nextUpperBound)
+            lowerBound = position(start: selection.lowerBound, preference:  .forwards)
+            lowerBound = min(lowerBound, upperBound)
         }
         
-        self.selection = nextLowerBound..<nextUpperBound
+        self.selection = lowerBound..<upperBound
         #warning("Autocorrect.")
     }
 }
