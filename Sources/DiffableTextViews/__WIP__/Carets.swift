@@ -9,9 +9,7 @@
 // MARK: * Carets
 //*============================================================================*
 
-#warning("Rename as Positions, maybe.")
 @usableFromInline struct Carets<Scheme: DiffableTextViews.Scheme> {
-    @usableFromInline typealias Caret = DiffableTextViews.Caret<Scheme>
     @usableFromInline typealias Offset = DiffableTextViews.Offset<Scheme>
     
     //=------------------------------------------------------------------------=
@@ -27,6 +25,43 @@
     @usableFromInline init(_ snapshot: Snapshot) {
         self.snapshot = snapshot
     }
+    
+    //*========================================================================*
+    // MARK: * Index
+    //*========================================================================*
+    
+    @usableFromInline struct Index: Comparable {
+        @usableFromInline typealias Offset = DiffableTextViews.Offset<Scheme>
+        
+        //=------------------------------------------------------------------------=
+        // MARK: Properties
+        //=------------------------------------------------------------------------=
+        
+        @usableFromInline let snapshot: Snapshot.Index
+        @usableFromInline let offset: Offset
+
+        //=------------------------------------------------------------------------=
+        // MARK: Initializers
+        //=------------------------------------------------------------------------=
+        
+        @inlinable init(_ snapshot: Snapshot.Index, at offset: Offset) {
+            self.snapshot = snapshot
+            self.offset = offset
+        }
+        
+        //=------------------------------------------------------------------------=
+        // MARK: Comparisons
+        //=------------------------------------------------------------------------=
+        
+        @inlinable static func == (lhs: Self, rhs: Self) -> Bool {
+            lhs.offset == rhs.offset
+        }
+        
+        @inlinable static func <  (lhs: Self, rhs: Self) -> Bool {
+            lhs.offset <  rhs.offset
+        }
+    }
+
 }
 
 //=----------------------------------------------------------------------------=
@@ -39,66 +74,66 @@ extension Carets {
     // MARK: Subscripts
     //=------------------------------------------------------------------------=
     
-    @inlinable subscript(caret: Caret) -> Symbol {
-        snapshot[caret.position]
+    @inlinable subscript(position: Index) -> Symbol {
+        snapshot[position.snapshot]
     }
     
     //=------------------------------------------------------------------------=
     // MARK: Positions
     //=------------------------------------------------------------------------=
     
-    @inlinable var start: Caret {
-        Caret(snapshot.startIndex, at: .zero)
+    @inlinable var start: Index {
+        Index(snapshot.startIndex, at: .zero)
     }
     
     //=------------------------------------------------------------------------=
     // MARK: Move - Single
     //=------------------------------------------------------------------------=
     
-    @inlinable func after(_ caret: Caret) -> Caret {
-        let index = snapshot.index(after:   caret.position)
-        let character = snapshot.characters[caret.position.character]
-        return Caret(index, at: caret.offset + .size(of: character))
+    @inlinable func after(_ position: Index) -> Index {
+        let index = snapshot.index(after: position.snapshot)
+        let character = snapshot.characters[position.snapshot.character]
+        return Index(index, at: position.offset + .size(of: character))
     }
     
-    @inlinable func before(_ caret: Caret) -> Caret {
-        let index = snapshot.index(before:  caret.position)
+    @inlinable func before(_ position: Index) -> Index {
+        let index = snapshot.index(before: position.snapshot)
         let character = snapshot.characters[index.character]
-        return Caret(index, at: caret.offset + .size(of: character))
+        return Index(index, at: position.offset + .size(of: character))
     }
     
     //=------------------------------------------------------------------------=
     // MARK: Move - Multiple
     //=------------------------------------------------------------------------=
     
-    @inlinable func move(caret: Caret, direction: Direction) -> Caret {
+    @inlinable func move(position: Index, direction: Direction) -> Index {
         switch direction {
-        case  .forwards: return  forwards(caret)
-        case .backwards: return backwards(caret)
+        case  .forwards: return  forwards(start: position)
+        case .backwards: return backwards(start: position)
         }
     }
     
-    @inlinable func forwards(_ caret: Caret) -> Caret {
-        var current = caret
+    @inlinable func forwards(start: Index) -> Index {
+        var position = start
         
-        while current.position != snapshot.endIndex {
-            if !snapshot.attributes[current.position.attribute].contains(.prefixing) { return current }
-            current = after(current)
+        while position.snapshot != snapshot.endIndex {
+            if !snapshot.attributes[position.snapshot.attribute].contains(.prefixing) { return position }
+            position = after(position)
         }
         
-        return current
+        return position
     }
     
-    @inlinable func backwards(_ caret: Caret) -> Caret {
-        var current = caret
+    @inlinable func backwards(start: Index) -> Index {
+        var position = start
         
-        while current.position != snapshot.startIndex {
-            let after = current
-            current = before(current)
-            if !snapshot.attributes[current.position.attribute].contains(.suffixing) { return after }
+        while position.snapshot != snapshot.startIndex {
+            let after = position
+            position = before(position)
+            if !snapshot.attributes[position.snapshot.attribute].contains(.suffixing) { return after }
         }
         
-        return current
+        return position
     }
 }
 
@@ -112,18 +147,18 @@ extension Carets {
     // MARK: Indices
     //=------------------------------------------------------------------------=
     
-    @inlinable func indices(_ range: Range<Snapshot.Index>) -> Range<Caret> {
+    @inlinable func indices(_ range: Range<Snapshot.Index>) -> Range<Index> {
         let lowerBound = Offset(at: range.lowerBound.character, in: snapshot.characters)
         let difference = Offset(at: range.upperBound.character, in: snapshot.characters[range.lowerBound.character...])
-        return Caret(range.lowerBound, at: lowerBound) ..< Caret(range.upperBound, at: lowerBound + difference)
+        return Index(range.lowerBound, at: lowerBound) ..< Index(range.upperBound, at: lowerBound + difference)
     }
     
     //=------------------------------------------------------------------------=
     // MARK: Direction
     //=------------------------------------------------------------------------=
     
-    @inlinable func direction(at caret: Caret) -> Direction? {
-        let peek = peek(at: caret)
+    @inlinable func direction(at position: Index) -> Direction? {
+        let peek = peek(at: position)
 
         let forwards  = peek.lhs.contains(.prefixing) && peek.rhs.contains(.prefixing)
         let backwards = peek.lhs.contains(.suffixing) && peek.rhs.contains(.suffixing)
@@ -136,8 +171,8 @@ extension Carets {
     // MARK: Peek
     //=------------------------------------------------------------------------=
     
-    @inlinable func peek(at caret: Caret) -> (lhs: Attribute, rhs: Attribute) {(
-        caret.position != snapshot.startIndex ? snapshot[snapshot.index(before: caret.position)].attribute : .prefixing,
-        caret.position !=   snapshot.endIndex ? snapshot[caret.position].attribute : .suffixing
+    @inlinable func peek(at position: Index) -> (lhs: Attribute, rhs: Attribute) {(
+        position.snapshot != snapshot.startIndex ? snapshot[snapshot.index(before: position.snapshot)].attribute : .prefixing,
+        position.snapshot !=   snapshot.endIndex ? snapshot[position.snapshot].attribute : .suffixing
     )}
 }

@@ -13,7 +13,6 @@ import Quick
 
 #warning("Needs: Scheme.")
 @usableFromInline struct State<Scheme: DiffableTextViews.Scheme> {
-    @usableFromInline typealias Caret  = DiffableTextViews.Caret <Scheme>
     @usableFromInline typealias Carets = DiffableTextViews.Carets<Scheme>
     @usableFromInline typealias Offset = DiffableTextViews.Offset<Scheme>
 
@@ -22,7 +21,7 @@ import Quick
     //=------------------------------------------------------------------------=
     
     @usableFromInline private(set) var carets: Carets
-    @usableFromInline private(set) var selection: Range<Caret>
+    @usableFromInline private(set) var selection: Range<Carets.Index>
 
     //=------------------------------------------------------------------------=
     // MARK: Initializers
@@ -33,7 +32,7 @@ import Quick
         self.init(carets: carets, selection: carets.start ..< carets.start)
     }
     
-    @inlinable init(carets: Carets, selection: Range<Caret>) {
+    @inlinable init(carets: Carets, selection: Range<Carets.Index>) {
         self.carets = carets
         self.selection = selection
     }
@@ -47,11 +46,11 @@ import Quick
     }
     
     @inlinable var upperBound: Snapshot.Index {
-        selection.upperBound.position
+        selection.upperBound.snapshot
     }
     
     @inlinable var lowerBound: Snapshot.Index {
-        selection.lowerBound.position
+        selection.lowerBound.snapshot
     }
     
     @inlinable var offsets: Range<Offset> {
@@ -110,7 +109,7 @@ extension State {
     // MARK: Transformations
     //=------------------------------------------------------------------------=
     
-    @inlinable mutating func update(selection: Range<Caret>, intent: Direction?) {
+    @inlinable mutating func update(selection: Range<Carets.Index>, intent: Direction?) {
         self.selection = selection
         self.autocorrect(intent: intent)
     }
@@ -128,11 +127,11 @@ extension State {
     
     /// It is OK to use intent on both carets at once, because they each have different preferred directions.
     @inlinable mutating func autocorrect(intent: Direction?) {
-        let upperBound = position(caret: selection.upperBound, preference: .backwards, intent: intent)
+        let upperBound = position(start: selection.upperBound, preference: .backwards, intent: intent)
         var lowerBound = upperBound
         
         if !selection.isEmpty {
-            lowerBound = position(caret: selection.lowerBound, preference:  .forwards, intent: intent)
+            lowerBound = position(start: selection.lowerBound, preference:  .forwards, intent: intent)
             lowerBound = min(lowerBound, upperBound)
         }
         
@@ -143,12 +142,12 @@ extension State {
     // MARK: Position
     //=------------------------------------------------------------------------=
     
-    @inlinable func position(caret: Caret, preference: Direction, intent: Direction?) -> Caret {
+    @inlinable func position(start: Carets.Index, preference: Direction, intent: Direction?) -> Carets.Index {
         //=--------------------------------------=
         // MARK: Position, Direction
         //=--------------------------------------=
-        var current = caret
-        var direction = carets.direction(at: current) ?? intent ?? preference
+        var position = start
+        var direction = carets.direction(at: position) ?? intent ?? preference
         //=--------------------------------------=
         // MARK: Correct
         //=--------------------------------------=
@@ -156,14 +155,14 @@ extension State {
             //=----------------------------------=
             // MARK: Move To Next Position
             //=----------------------------------=
-            current = carets.move(caret: current, direction: direction)
+            position = carets.move(position: position, direction: direction)
             //=----------------------------------=
             // MARK: Break Loop Or Jump To Side
             //=----------------------------------=
             switch direction {
             case preference: break loop
-            case  .forwards: current = (current.position != snapshot  .endIndex) ? carets .after(current) : current
-            case .backwards: current = (current.position != snapshot.startIndex) ? carets.before(current) : current
+            case  .forwards: position = (position.snapshot != snapshot  .endIndex) ? carets .after(position) : position
+            case .backwards: position = (position.snapshot != snapshot.startIndex) ? carets.before(position) : position
             }
             //=----------------------------------=
             // MARK: Repeat In Preferred Direction
@@ -173,6 +172,6 @@ extension State {
         //=--------------------------------------=
         // MARK: Return
         //=--------------------------------------=
-        return current
+        return position
     }
 }
