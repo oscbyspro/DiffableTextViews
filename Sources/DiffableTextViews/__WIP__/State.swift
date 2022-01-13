@@ -11,12 +11,14 @@ import Quick
 // MARK: * State
 //*============================================================================*
 
+#warning("Needs: Scheme.")
 @usableFromInline struct State {
 
     //=------------------------------------------------------------------------=
     // MARK: Properties
     //=------------------------------------------------------------------------=
     
+    #warning("Needs: range.")
     @usableFromInline private(set) var snapshot:  Snapshot
     @usableFromInline private(set) var selection: Range<Snapshot.Index>
 
@@ -25,12 +27,12 @@ import Quick
     //=------------------------------------------------------------------------=
     
     @inlinable init() {
-        self.snapshot  = Snapshot()
+        self.snapshot = Snapshot()
         self.selection = snapshot.endIndex..<snapshot.endIndex
     }
     
     @inlinable init(snapshot: Snapshot, selection: Range<Snapshot.Index>) {
-        self.snapshot  = snapshot
+        self.snapshot = snapshot
         self.selection = selection
     }
 }
@@ -65,7 +67,7 @@ extension State {
         //=--------------------------------------=
         // MARK: Update
         //=--------------------------------------=
-        self.snapshot  = snapshot
+        self.snapshot = snapshot
         self.selection = lowerBound ..< upperBound
         self.autocorrect(intent: nil)
     }
@@ -118,7 +120,7 @@ extension State {
         //=--------------------------------------=
         // MARK: Position, Direction
         //=--------------------------------------=
-        var position  = start
+        var position = start
         var direction = direction(at: start) ?? intent ?? preference
         //=--------------------------------------=
         // MARK: Correct
