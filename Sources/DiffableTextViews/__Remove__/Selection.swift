@@ -15,9 +15,8 @@
 ///
 /// - Preferences: (lower, upper) == (.forwards, .backwards).
 ///
-@usableFromInline struct Selection<Scheme: DiffableTextViews.Scheme> {
-    @usableFromInline typealias Carets = DiffableTextViews.Carets<Scheme>
-    @usableFromInline typealias Offset = DiffableTextViews.Offset<Scheme>
+@usableFromInline struct Selection {
+    @usableFromInline typealias Index = Snapshot.Index
     
     //=------------------------------------------------------------------------=
     // MARK: Properties
