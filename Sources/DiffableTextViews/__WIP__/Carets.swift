@@ -158,8 +158,8 @@ extension Carets {
     
     @inlinable func index(start: Index, direction: Direction) -> Index {
         switch direction {
-        case  .forwards: return self[start...].firstIndex(where: \.nonprefixing) ??   endIndex
-        case .backwards: return self[..<start] .lastIndex(where: \.nonsuffixing) ?? startIndex
+        case  .forwards: return breakpoint( forwards: start)
+        case .backwards: return breakpoint(backwards: start)
         }
     }
     
@@ -178,7 +178,9 @@ extension Carets {
         var position = start
         
         while position != startIndex {
-            
+            let after = position
+            formIndex(before: &position)
+            if !attributes[position.attribute].contains(.suffixing) { return after }
         }
         
         return position
