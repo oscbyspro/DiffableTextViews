@@ -41,7 +41,7 @@ let package = Package(
         //=--------------------------------------=
         .target(
             name: "NumericTextStyles",
-            dependencies: ["DiffableTextViews", "Utilities", "Quick"]),
+            dependencies: ["DiffableTextViews", "Quick"]),
         .testTarget(
             name: "NumericTextStylesTests",
             dependencies: ["NumericTextStyles"]),
@@ -50,15 +50,9 @@ let package = Package(
         //=--------------------------------------=
         .target(
             name: "PatternTextStyles",
-            dependencies: ["DiffableTextViews", "Utilities", "Quick"]),
+            dependencies: ["DiffableTextViews", "Quick"]),
         .testTarget(
             name: "PatternTextStylesTests",
             dependencies: ["PatternTextStyles"]),
-        //=--------------------------------------=
-        // MARK: Utilities
-        //=--------------------------------------=
-        .target(
-            name: "Utilities",
-            dependencies: ["Quick", "QuickText"]),
     ]
 )

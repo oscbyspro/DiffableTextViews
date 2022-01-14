@@ -21,8 +21,6 @@ public final class BasicTextField: UITextField {
     // MARK: Properties
     //=------------------------------------------------------------------------=
     
-    #warning("Record that an 'intent' key was pressed.")
-    #warning("Then convert the 'intent' to change in momentum, once.")
     @usableFromInline private(set) var intent: Direction? = nil
 
     //=------------------------------------------------------------------------=
