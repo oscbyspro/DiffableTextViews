@@ -257,13 +257,14 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable, 
                 // MARK: State
                 //=------------------------------=
                 let snapshot = upstream.style
-                    .snapshot(value: value, mode: downstream.mode)
+                    .snapshot(downstream.mode, value)
                     .transform(upstream.style.process)
                 
                 let state = cache.state.transform {
                     state in
                     state.update(snapshot: snapshot)
                 }
+                
                 //=------------------------------=
                 // MARK: Push
                 //=------------------------------=

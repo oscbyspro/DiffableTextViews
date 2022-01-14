@@ -95,7 +95,7 @@ extension DiffableTextStyle {
     // MARK: Snapshot
     //=------------------------------------------------------------------------=
     
-    @inlinable func snapshot(value: Value, mode: Mode) -> Snapshot {
+    @inlinable func snapshot(_ mode: Mode, _ value: Value) -> Snapshot {
         switch mode {
         case .showcase: return snapshot(showcase: value)
         case .editable: return snapshot(editable: value)
