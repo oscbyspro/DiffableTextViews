@@ -12,13 +12,14 @@
 @usableFromInline enum Changes<Past, Next> where
 Past: BidirectionalCollection, Past.Element == Symbol,
 Next: BidirectionalCollection, Next.Element == Symbol {
+    @usableFromInline typealias Indices  = (past: Past.Index, next: Next.Index)
     @usableFromInline typealias Reversed = Changes<ReversedCollection<Past>, ReversedCollection<Next>>
 
     //=------------------------------------------------------------------------=
     // MARK: Start
     //=------------------------------------------------------------------------=
     
-    @inlinable static func start(past: Past, next: Next) -> (past: Past.Index, next: Next.Index) {
+    @inlinable static func start(past: Past, next: Next) -> Indices {
         //=--------------------------------------=
         // MARK: Indices
         //=--------------------------------------=
@@ -58,7 +59,7 @@ Next: BidirectionalCollection, Next.Element == Symbol {
     // MARK: End
     //=------------------------------------------------------------------------=
     
-    @inlinable static func end(past: Past, next: Next) -> (past: Past.Index, next: Next.Index) {
+    @inlinable static func end(past: Past, next: Next) -> Indices {
         //=--------------------------------------=
         // MARK: Reverse
         //=--------------------------------------=
