@@ -16,7 +16,6 @@
     // MARK: Properties
     //=------------------------------------------------------------------------=
     
-    #warning("Use: Range or ClosedRange?")
     @usableFromInline let snapshot: Snapshot
     @usableFromInline let range: Range<Offset>
     
@@ -104,17 +103,18 @@ extension Carets {
     @inlinable func index(before position: Index) -> Index {
         let index = snapshot.index(before: position.snapshot)
         let character = snapshot.characters[index.character]
-        return Index(index, at: position.offset + .size(of: character))
+        return Index(index, at: position.offset - .size(of: character))
     }
 }
 
-#warning("WIP")
-#warning("WIP")
-#warning("WIP")
+//=----------------------------------------------------------------------------=
+// MARK: Carets - Move In Direction
+//=----------------------------------------------------------------------------=
+
 extension Carets {
   
     //=------------------------------------------------------------------------=
-    // MARK: Move - Multiple
+    // MARK: Dynamic
     //=------------------------------------------------------------------------=
     
     @inlinable func move(position: Index, direction: Direction) -> Index {
@@ -123,6 +123,10 @@ extension Carets {
         case .backwards: return backwards(start: position)
         }
     }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Forwards
+    //=------------------------------------------------------------------------=
         
     @inlinable func forwards(start: Index) -> Index {
         var position = start
@@ -135,6 +139,10 @@ extension Carets {
         return position
     }
     
+    //=------------------------------------------------------------------------=
+    // MARK: Backwards
+    //=------------------------------------------------------------------------=
+    
     @inlinable func backwards(start: Index) -> Index {
         var position = start
         
@@ -146,11 +154,27 @@ extension Carets {
         
         return position
     }
+}
+
+//=----------------------------------------------------------------------------=
+// MARK: Carets - Move To Destination
+//=----------------------------------------------------------------------------=
+
+extension Carets {
     
     //=------------------------------------------------------------------------=
-    // MARK: Move - Multiple - Destination
+    // MARK: Dynamic
     //=------------------------------------------------------------------------=
         
+    @inlinable func move(start: Index, destination: Offset) -> Index {
+        if start.offset <= destination { return  forwards(start: start, destination: destination) }
+        else                           { return backwards(start: start, destination: destination) }
+    }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Forwards
+    //=------------------------------------------------------------------------=
+    
     @inlinable func forwards(start: Index, destination: Offset) -> Index {
         var position = start
         
@@ -161,6 +185,10 @@ extension Carets {
         
         return position
     }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Backwards
+    //=------------------------------------------------------------------------=
     
     @inlinable func backwards(start: Index, destination: Offset) -> Index {
         var position = start
@@ -228,7 +256,15 @@ extension Carets {
     //=------------------------------------------------------------------------=
     
     @inlinable func peek(at position: Index) -> (lhs: Attribute, rhs: Attribute) {(
-        position.snapshot != snapshot.startIndex ? snapshot[snapshot.index(before: position.snapshot)].attribute : .prefixing,
-        position.snapshot !=   snapshot.endIndex ? snapshot[position.snapshot].attribute : .suffixing
+        //=--------------------------------------=
+        // MARK: LHS
+        //=--------------------------------------=
+        position.snapshot != snapshot.startIndex
+        ? snapshot[snapshot.index(before: position.snapshot)].attribute : .prefixing,
+        //=--------------------------------------=
+        // MARK: RHS
+        //=--------------------------------------=
+        position.snapshot != snapshot.endIndex
+        ? snapshot[position.snapshot].attribute : .suffixing
     )}
 }

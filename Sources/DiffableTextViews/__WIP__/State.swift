@@ -77,7 +77,7 @@ extension State {
         //=--------------------------------------=
         let upperBound = Changes.end(
             past: self.carets[self.selection.upperBound...],
-            next: carets[...]).next
+            next: carets).next
         //=--------------------------------------=
         // MARK: Selection - Lower Bound
         //=--------------------------------------=
@@ -85,7 +85,7 @@ extension State {
         if !self.selection.isEmpty {
             lowerBound = Changes.start(
                 past: self.carets[...self.selection.lowerBound],
-                next: carets[...]).next
+                next: carets).next
             lowerBound = min(lowerBound, upperBound)
         }
         //=--------------------------------------=
