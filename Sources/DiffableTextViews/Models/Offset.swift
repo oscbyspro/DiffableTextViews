@@ -25,11 +25,7 @@
         self.units = units
     }
     
-    @inlinable init<S: StringProtocol>(at position: String.Index, in characters: S) {
-        self.units = Scheme.size(of: characters[...position])
-    }
-    
-    //
+    //=------------------------------------------------------------------------=
     // MARK: Initializers - Static
     //=------------------------------------------------------------------------=
 
@@ -46,25 +42,15 @@
     }
     
     //=------------------------------------------------------------------------=
-    // MARK: Stride
-    //=------------------------------------------------------------------------=
-
-    @inlinable func after(_ character: Character?) -> Self {
-        guard let character = character else { return self }
-        return .init(at: units + Scheme.size(of: character))
-    }
-    
-    @inlinable func before(_ character: Character?) -> Self {
-        guard let character = character else { return self }
-        return .init(at: units - Scheme.size(of: character))
-    }
-    
-    //=------------------------------------------------------------------------=
     // MARK: Comparisons
     //=------------------------------------------------------------------------=
 
+    @inlinable static func == (lhs: Self, rhs: Self) -> Bool {
+        lhs.units == rhs.units
+    }
+    
     @inlinable static func < (lhs: Self, rhs: Self) -> Bool {
-        lhs.units < rhs.units
+        lhs.units <  rhs.units
     }
     
     //=------------------------------------------------------------------------=

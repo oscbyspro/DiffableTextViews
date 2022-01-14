@@ -28,7 +28,7 @@ import Quick
     
     @inlinable init() {
         let carets = Carets(Snapshot())
-        self.init(carets: carets, selection: carets.start ..< carets.start)
+        self.init(carets: carets, selection: carets.startIndex ..< carets.startIndex)
     }
     
     @inlinable init(carets: Carets, selection: Range<Carets.Index>) {
@@ -42,14 +42,6 @@ import Quick
     
     @inlinable var snapshot: Snapshot {
         carets.snapshot
-    }
-    
-    @inlinable var upperBound: Snapshot.Index {
-        selection.upperBound.snapshot
-    }
-    
-    @inlinable var lowerBound: Snapshot.Index {
-        selection.lowerBound.snapshot
     }
     
     @inlinable var offsets: Range<Offset> {
@@ -77,28 +69,29 @@ extension State {
     
     @inlinable mutating func update(snapshot: Snapshot) {
         //=--------------------------------------=
-        // MARK: Upper
+        // MARK: Carets
         //=--------------------------------------=
-        let upperBound = changesEndIndices(
-            past: self.snapshot[self.upperBound...],
-            next: snapshot[...]).next
+        let carets = Carets(snapshot)
         //=--------------------------------------=
-        // MARK: Lower
+        // MARK: Selection - Upper Bound
+        //=--------------------------------------=
+        let upperBound = Changes.end(
+            past: self.carets[self.selection.upperBound...],
+            next: carets[...]).next
+        //=--------------------------------------=
+        // MARK: Selection - Lower Bound
         //=--------------------------------------=
         var lowerBound = upperBound
         if !self.selection.isEmpty {
-            lowerBound = changesStartIndices(
-                past: self.snapshot[...self.lowerBound],
-                next: snapshot[...]).next
+            lowerBound = Changes.start(
+                past: self.carets[...self.selection.lowerBound],
+                next: carets[...]).next
             lowerBound = min(lowerBound, upperBound)
         }
         //=--------------------------------------=
-        // MARK: Values
+        // MARK: Selection
         //=--------------------------------------=
-        #warning("Use carets in changes, maybe.")
-        #warning("Remove, Offset.init(at:in:), maybe.")
-        let carets = Carets(snapshot)
-        let selection = carets.indices(at: lowerBound ..< upperBound)
+        let selection = lowerBound ..< upperBound
         //=--------------------------------------=
         // MARK: Update
         //=--------------------------------------=
@@ -174,12 +167,28 @@ extension State {
             //=----------------------------------=
             position = carets.move(position: position, direction: direction)
             //=----------------------------------=
-            // MARK: Break Loop Or Jump To Side
+            // MARK: Select
             //=----------------------------------=
             switch direction {
-            case preference: break loop
-            case  .forwards: position = (position.snapshot != snapshot  .endIndex) ? carets .after(position) : position
-            case .backwards: position = (position.snapshot != snapshot.startIndex) ? carets.before(position) : position
+                //=------------------------------=
+                // MARK: Break
+                //=------------------------------=
+            case preference:
+                break loop
+                //=------------------------------=
+                // MARK: Forwards
+                //=------------------------------=
+            case  .forwards:
+                if position.snapshot != snapshot.endIndex {
+                    position = carets.index(after:  position)
+                }
+                //=------------------------------=
+                // MARK: Backwards
+                //=------------------------------=
+            case .backwards:
+                if position.snapshot != snapshot.startIndex {
+                    position = carets.index(before: position)
+                }
             }
             //=----------------------------------=
             // MARK: Repeat In Preferred Direction

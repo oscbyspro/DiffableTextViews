@@ -9,14 +9,16 @@
 // MARK: * Carets
 //*============================================================================*
 
-@usableFromInline struct Carets<Scheme: DiffableTextViews.Scheme> {
+@usableFromInline struct Carets<Scheme: DiffableTextViews.Scheme>: BidirectionalCollection {
     @usableFromInline typealias Offset = DiffableTextViews.Offset<Scheme>
     
     //=------------------------------------------------------------------------=
     // MARK: Properties
     //=------------------------------------------------------------------------=
     
+    #warning("Use: Range or ClosedRange?")
     @usableFromInline let snapshot: Snapshot
+    @usableFromInline let range: Range<Offset>
     
     //=------------------------------------------------------------------------=
     // MARK: Initializers
@@ -24,6 +26,7 @@
     
     @usableFromInline init(_ snapshot: Snapshot) {
         self.snapshot = snapshot
+        self.range = Offset() ..< .size(of: snapshot.characters) // UTF16 is O(1)
     }
     
     //*========================================================================*
@@ -80,26 +83,36 @@ extension Carets {
     // MARK: Positions
     //=------------------------------------------------------------------------=
     
-    @inlinable var start: Index {
-        Index(snapshot.startIndex, at: .zero)
+    @inlinable var startIndex: Index {
+        Index(snapshot.startIndex, at: range.lowerBound)
+    }
+    
+    @inlinable var endIndex: Index {
+        Index(snapshot  .endIndex, at: range.upperBound)
     }
     
     //=------------------------------------------------------------------------=
-    // MARK: Move - Single
+    // MARK: Translate
     //=------------------------------------------------------------------------=
     
-    @inlinable func after(_ position: Index) -> Index {
+    @inlinable func index(after position: Index) -> Index {
         let index = snapshot.index(after: position.snapshot)
         let character = snapshot.characters[position.snapshot.character]
         return Index(index, at: position.offset + .size(of: character))
     }
     
-    @inlinable func before(_ position: Index) -> Index {
+    @inlinable func index(before position: Index) -> Index {
         let index = snapshot.index(before: position.snapshot)
         let character = snapshot.characters[index.character]
         return Index(index, at: position.offset + .size(of: character))
     }
-    
+}
+
+#warning("WIP")
+#warning("WIP")
+#warning("WIP")
+extension Carets {
+  
     //=------------------------------------------------------------------------=
     // MARK: Move - Multiple
     //=------------------------------------------------------------------------=
@@ -116,7 +129,7 @@ extension Carets {
         
         while position.snapshot != snapshot.endIndex {
             if !snapshot.attributes[position.snapshot.attribute].contains(.prefixing) { return position }
-            position = after(position)
+            formIndex(after: &position)
         }
         
         return position
@@ -127,7 +140,7 @@ extension Carets {
         
         while position.snapshot != snapshot.startIndex {
             let after = position
-            position = before(position)
+            formIndex(before: &position)
             guard snapshot.attributes[position.snapshot.attribute].contains(.suffixing) else { return after }
         }
         
@@ -143,7 +156,7 @@ extension Carets {
         
         while position.snapshot != snapshot.endIndex {
             guard position.offset < destination else { return position }
-            position = after(position)
+            formIndex(after: &position)
         }
         
         return position
@@ -154,7 +167,7 @@ extension Carets {
         
         while position.snapshot != snapshot.startIndex {
             let after = position
-            position = before(position)
+            formIndex(before: &position)
             guard position.offset > destination else { return after }
         }
         
@@ -178,7 +191,7 @@ extension Carets {
         
         if !range.isEmpty {
             lowerBound = index(at: range.lowerBound, start: start.lowerBound)
-            lowerBound = min(lowerBound, upperBound)
+            lowerBound = Swift.min(lowerBound, upperBound)
         }
 
         return lowerBound ..< upperBound
@@ -188,17 +201,6 @@ extension Carets {
         if start.offset <= destination { return  forwards(start: start, destination: destination) }
         else                           { return backwards(start: start, destination: destination) }
     }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Snapshot
-    //=------------------------------------------------------------------------=
-    
-    #error("Remove, maybe.")
-//    @inlinable func indices(at range: Range<Snapshot.Index>) -> Range<Index> {
-//        let lowerBound = Offset(at: range.lowerBound.character, in: snapshot.characters)
-//        let difference = Offset(at: range.upperBound.character, in: snapshot.characters[range.lowerBound.character...])
-//        return Index(range.lowerBound, at: lowerBound) ..< Index(range.upperBound, at: lowerBound + difference)
-//    }
 }
 
 //=----------------------------------------------------------------------------=
