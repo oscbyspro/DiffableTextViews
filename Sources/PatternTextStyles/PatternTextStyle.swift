@@ -13,7 +13,7 @@ import Utilities
 // MARK: * PatternTextStyle
 //*============================================================================*
 
-public struct PatternTextStyle<Pattern, Value>: DiffableTextStyle, Mappable where Pattern: Collection, Pattern.Element == Character, Value: RangeReplaceableCollection, Value: Equatable, Value.Element == Character {
+public struct PatternTextStyle<Pattern, Value>: DiffableTextStyle, Transformable where Pattern: Collection, Pattern.Element == Character, Value: RangeReplaceableCollection, Value: Equatable, Value.Element == Character {
     @usableFromInline typealias Predicates = PatternTextStyles.Predicates<Value>
     
     //=------------------------------------------------------------------------=
@@ -41,11 +41,11 @@ public struct PatternTextStyle<Pattern, Value>: DiffableTextStyle, Mappable wher
     //=------------------------------------------------------------------------=
     
     @inlinable public func hidden() -> Self {
-        map({ $0.visible = false })
+        transform({ $0.visible = false })
     }
     
     @inlinable public func predicate(_ predicate: Predicate<Value>) -> Self {
-        map({ $0.predicates.add(predicate) })
+        transform({ $0.predicates.add(predicate) })
     }
         
     //=------------------------------------------------------------------------=

@@ -5,11 +5,13 @@
 //  Created by Oscar Byström Ericsson on 2021-09-23.
 //
 
+import Quick
+
 //*============================================================================*
 // MARK: * Snapshot
 //*============================================================================*
 
-public struct Snapshot: BidirectionalCollection, RangeReplaceableCollection {
+public struct Snapshot: BidirectionalCollection, RangeReplaceableCollection, Transformable {
     public typealias Characters = String
     public typealias Attributes = Array<Attribute>
     

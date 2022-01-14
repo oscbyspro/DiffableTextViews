@@ -11,7 +11,7 @@ import Quick
 // MARK: * State
 //*============================================================================*
 
-@usableFromInline struct State<Scheme: DiffableTextViews.Scheme> {
+@usableFromInline struct State<Scheme: DiffableTextViews.Scheme>: Transformable {
     @usableFromInline typealias Carets = DiffableTextViews.Carets<Scheme>
     @usableFromInline typealias Offset = DiffableTextViews.Offset<Scheme>
 

@@ -13,7 +13,7 @@ import Quick
 // MARK: * NumericTextStyle
 //*============================================================================*
 
-public struct NumericTextStyle<Format: NumericTextStyles.Format>: DiffableTextStyle, Mappable
+public struct NumericTextStyle<Format: NumericTextStyles.Format>: DiffableTextStyle, Transformable
     where Format.FormatInput: Value, Format.FormatOutput == String {
     public typealias Value = Format.FormatInput
     public typealias Bounds = NumericTextStyles.Bounds<Value>
@@ -55,19 +55,19 @@ public struct NumericTextStyle<Format: NumericTextStyles.Format>: DiffableTextSt
     }
     
     @inlinable public func bounds(_ bounds: Bounds) -> Self {
-        map({ $0.bounds = bounds })
+        transform({ $0.bounds = bounds })
     }
     
     @inlinable public func precision(_ precision: Precision) -> Self {
-        map({ $0.precision = precision })
+        transform({ $0.precision = precision })
     }
     
     @inlinable public func prefix(_ prefix: String?) -> Self {
-        map({ $0.prefix = prefix ?? String() })
+        transform({ $0.prefix = prefix ?? String() })
     }
     
     @inlinable public func suffix(_ suffix: String?) -> Self {
-        map({ $0.suffix = suffix ?? String() })
+        transform({ $0.suffix = suffix ?? String() })
     }
     
     //=------------------------------------------------------------------------=
