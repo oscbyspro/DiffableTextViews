@@ -144,6 +144,37 @@ extension Carets {
         let character = characters[index.character]
         return Index(index, at: position.offset - .size(of: character))
     }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Forwards - While
+    //=------------------------------------------------------------------------=
+    
+    @inlinable func index(after position: Index, while predicate: (Index) throws -> Bool) rethrows -> Index {
+        var position = position
+        
+        while position != endIndex {
+            guard try predicate(position) else { return position }
+            formIndex(after: &position)
+        }
+        
+        return position
+    }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Backwards - While
+    //=------------------------------------------------------------------------=
+    
+    @inlinable func index(before position: Index, while predicate: (Index) throws -> Bool) rethrows -> Index {
+        var position = position
+        
+        while position != startIndex {
+            let after = position
+            formIndex(before: &position)
+            guard try predicate(position) else { return after }
+        }
+        
+        return position
+    }
 }
 
 //=----------------------------------------------------------------------------=
@@ -164,26 +195,15 @@ extension Carets {
     }
     
     @inlinable func breakpoint(forwards start: Index) -> Index {
-        var position = start
-        
-        while position != endIndex {
-            if !attributes[position.attribute].contains(.prefixing) { return position }
-            formIndex(after: &position)
+        index(after: start) { position in
+            attributes[position.attribute].contains(.prefixing)
         }
-        
-        return position
     }
     
     @inlinable func breakpoint(backwards start: Index) -> Index {
-        var position = start
-        
-        while position != startIndex {
-            let after = position
-            formIndex(before: &position)
-            if !attributes[position.attribute].contains(.suffixing) { return after }
+        index(before: start) { position in
+            attributes[position.attribute].contains(.suffixing)
         }
-        
-        return position
     }
 }
 
@@ -194,18 +214,7 @@ extension Carets {
 extension Carets {
     
     //=------------------------------------------------------------------------=
-    // MARK: Dynamic - One
-    //=------------------------------------------------------------------------=
-        
-    @inlinable func index(start: Index, destination: Offset) -> Index {
-        switch start.offset <= destination {
-        case true:  return indices[start...].first(where: { $0.offset >= destination }) ??   endIndex
-        case false: return indices[..<start] .last(where: { $0.offset <= destination }) ?? startIndex
-        }
-    }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Dynamic - Two
+    // MARK: Double
     //=------------------------------------------------------------------------=
     
     @inlinable func indices(start: Range<Index>, destination: Range<Offset>) -> Range<Index> {
@@ -218,6 +227,37 @@ extension Carets {
         }
         
         return lowerBound ..< upperBound
+    }
+
+    //=------------------------------------------------------------------------=
+    // MARK: Single
+    //=------------------------------------------------------------------------=
+    
+    @inlinable func index(start: Index, destination: Offset) -> Index {
+        switch start.offset <= destination {
+        case true:  return index(forwards:  start, destination: destination)
+        case false: return index(backwards: start, destination: destination)
+        }
+    }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Forwards
+    //=------------------------------------------------------------------------=
+    
+    @inlinable func index(forwards start: Index, destination: Offset) -> Index {
+        index(after: start) { position in
+            position.offset < destination
+        }
+    }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Backwards
+    //=------------------------------------------------------------------------=
+    
+    @inlinable func index(backwards start: Index, destination: Offset) -> Index {
+        index(before: start) { position in
+            position.offset > destination
+        }
     }
 }
 
