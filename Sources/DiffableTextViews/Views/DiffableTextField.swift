@@ -26,7 +26,7 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable, 
     @usableFromInline let value: Binding<Value>
     @usableFromInline let style: Style
     
-    //
+    //=------------------------------------------------------------------------=
     // MARK: Properties - Transformations
     //=------------------------------------------------------------------------=
 
@@ -71,34 +71,28 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable, 
         Coordinator()
     }
     
-    //
+    //=------------------------------------------------------------------------=
     // MARK: Life - UIView
     //=------------------------------------------------------------------------=
     
     @inlinable public func makeUIView(context: Context) -> UIViewType {
-        
         //=--------------------------------------=
         // MARK: BasicTextField
         //=--------------------------------------=
-        
         let uiView = BasicTextField()
         uiView.delegate = context.coordinator
         uiView.setContentHuggingPriority(.defaultHigh, for: .vertical)
         uiView.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
-        
         //=--------------------------------------=
         // MARK: ProxyTextField
         //=--------------------------------------=
-        
         let downstream = ProxyTextField(uiView)
         style.setup(downstream)
         setup.apply(on: downstream)
         context.coordinator.downstream = downstream
-
         //=--------------------------------------=
         // MARK: Done
         //=--------------------------------------=
-        
         return uiView
     }
     
@@ -280,11 +274,9 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable, 
         //=--------------------------------------------------------------------=
         
         @inlinable func push() {
-            
             //=----------------------------------=
             // MARK: Downstream
             //=----------------------------------=
-            
             lock.perform {
                 // changes to UITextField's text and selection both call
                 // the delegate's method: textFieldDidChangeSelection(_:)
@@ -292,11 +284,9 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable, 
                 self.downstream.update(selection:  cache.state.offsets)
                 self.cache.mode = downstream.mode
             }
-                        
             //=----------------------------------=
             // MARK: Upstream
             //=----------------------------------=
-            
             if  self.upstream.value.wrappedValue != self.cache.value {
                 self.upstream.value.wrappedValue  = self.cache.value
             }
