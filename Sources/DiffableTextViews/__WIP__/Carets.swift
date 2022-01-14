@@ -36,13 +36,11 @@
     // MARK: Utilities
     //=------------------------------------------------------------------------=
         
-    @inlinable func preferred(_ position: Index, by preference: Direction) -> Bool {
+    @inlinable func acceptable(_ position: Index, preference: Direction) -> Bool {
         switch preference {
-        case .forwards:  if position !=   endIndex { return self[position].nonprefixing }
-        case .backwards: if position != startIndex { return self[index(before: position)].nonsuffixing }
+        case  .forwards: return !peek(position).rhs.contains(.prefixing)
+        case .backwards: return !peek(position).lhs.contains(.suffixing)
         }
-        
-        return false
     }
     
     //*========================================================================*
@@ -198,7 +196,7 @@ extension Carets {
     //=------------------------------------------------------------------------=
     
     @inlinable func direction(at position: Index) -> Direction? {
-        let peek = peek(at: position)
+        let peek = peek(position)
 
         let forwards  = peek.lhs.contains(.prefixing) && peek.rhs.contains(.prefixing)
         let backwards = peek.lhs.contains(.suffixing) && peek.rhs.contains(.suffixing)
@@ -211,7 +209,7 @@ extension Carets {
     // MARK: Peek
     //=------------------------------------------------------------------------=
     
-    @inlinable func peek(at position: Index) -> (lhs: Attribute, rhs: Attribute) {(
+    @inlinable func peek(_ position: Index) -> (lhs: Attribute, rhs: Attribute) {(
         //=--------------------------------------=
         // MARK: LHS
         //=--------------------------------------=

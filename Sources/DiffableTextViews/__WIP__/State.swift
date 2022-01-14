@@ -153,7 +153,7 @@ extension State {
     //=------------------------------------------------------------------------=
     
     @inlinable func position(start: Carets.Index, preference: Direction, intent: Direction?) -> Carets.Index {
-        if carets.preferred(start, by: preference) { return start }
+        if carets.acceptable(start, preference: preference) { return start }
         //=--------------------------------------=
         // MARK: Position, Direction
         //=--------------------------------------=
@@ -179,9 +179,9 @@ extension State {
             //=----------------------------------=
             // MARK: Correct - Forwards
             //=----------------------------------=
-            case  .forwards:
+            case .forwards:
                 if position.snapshot != snapshot.endIndex {
-                    position = carets.index(after:  position)
+                    position = carets.index(after: position)
                 }
             //=----------------------------------=
             // MARK: Correct - Backwards
