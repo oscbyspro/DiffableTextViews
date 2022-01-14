@@ -41,9 +41,9 @@ Next: BidirectionalCollection, Next.Element == Symbol {
             if pastElement == nextElement {
                 past.formIndex(after: &pastIndex)
                 next.formIndex(after: &nextIndex)
-            } else if pastElement.removable {
+            } else if pastElement.attribute.contains( .removable) {
                 past.formIndex(after: &pastIndex)
-            } else if nextElement.insertable {
+            } else if nextElement.attribute.contains(.insertable) {
                 next.formIndex(after: &nextIndex)
             } else {
                 break

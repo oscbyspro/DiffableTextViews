@@ -125,7 +125,7 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable, 
         // MARK: Properties - Support
         //=--------------------------------------------------------------------=
         
-        @usableFromInline let lock =  Lock()
+        @usableFromInline let lock  = Lock()
         @usableFromInline let cache = Cache()
 
         //=----------------------------------------------------------------------------=

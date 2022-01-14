@@ -152,6 +152,7 @@ extension State {
     // MARK: Position
     //=------------------------------------------------------------------------=
     
+    #warning("Broken.")
     @inlinable func position(start: Carets.Index, preference: Direction, intent: Direction?) -> Carets.Index {
         if carets.breaks(at: start, direction: preference) { return start }
         //=--------------------------------------=
@@ -172,19 +173,19 @@ extension State {
             //=----------------------------------=
             switch direction {
             //=----------------------------------=
-            // MARK: Correct - Break
+            // MARK: Done
             //=----------------------------------=
             case preference:
                 break loop
             //=----------------------------------=
-            // MARK: Correct - Forwards
+            // MARK: Forwards
             //=----------------------------------=
             case .forwards:
                 if position != carets.endIndex {
                     position = carets.index(after: position)
                 }
             //=----------------------------------=
-            // MARK: Correct - Backwards
+            // MARK: Backwards
             //=----------------------------------=
             case .backwards:
                 if position != carets.startIndex {

@@ -16,6 +16,7 @@
     //=------------------------------------------------------------------------=
     
     @inlinable static func size(of character: Character) -> Int
+    
     @inlinable static func size<S: StringProtocol>(of characters: S) -> Int
 }
 

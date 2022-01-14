@@ -33,6 +33,7 @@ extension NumericTextStyle {
     // MARK: Characters
     //=------------------------------------------------------------------------=
 
+    #warning("Rework ")
     /// Snapshots characters.
     ///
     /// - Assumes: that there is at least one integer digit.
@@ -41,50 +42,45 @@ extension NumericTextStyle {
     @inlinable func snapshot(characters: String) -> Snapshot {
         var snapshot = Snapshot()
         var index = characters.startIndex
-
         //=--------------------------------------=
         // MARK: Markers
         //=--------------------------------------=
-
-        var interactableStart: Snapshot.Index? = nil
+        var interactableStart = Snapshot.Index?(nil)
         var interactableEnd   = snapshot.startIndex
         var redundanciesStart = snapshot.startIndex
-        
         //=--------------------------------------=
         // MARK: Prefix
         //=--------------------------------------=
-        
         if !prefix.isEmpty {
             snapshot.append(contentsOf: Snapshot(prefix, only: .prefix))
             snapshot.append(.prefix(" "))
         }
 
+        #warning("Up to first digit")
+        #warning("Remove interactable start.")
+        
         //=--------------------------------------=
         // MARK: Body
         //=--------------------------------------=
-        
         while index != characters.endIndex {
             let character = characters[  index]
             characters.formIndex(after: &index)
-            
             //=----------------------------------=
             // MARK: Digit
             //=----------------------------------=
-            
             if let digit = region.digits[character] {
                 snapshot.append(Symbol(character: character, attribute: .content))
                 interactableEnd = snapshot.endIndex
-                
-                zero_digit: if digit == .zero {
+
+                if digit == .zero {
                     redundanciesStart = snapshot.endIndex
-                    guard interactableStart == nil else { break zero_digit }
-                    interactableStart = snapshot.endIndex
+                    if interactableStart == nil {
+                        interactableStart = snapshot.endIndex
+                    }
                 }
-                
             //=----------------------------------=
             // MARK: Separator
             //=----------------------------------=
-                
             } else if let separator = region.separators[character] {
                 switch separator {
                 case .grouping:
@@ -98,63 +94,50 @@ extension NumericTextStyle {
             //=----------------------------------=
             // MARK: Sign
             //=----------------------------------=
-            
             } else if let _ = region.signs[character] {
                 snapshot.append(Symbol(character: character, attribute: [.prefixing, .suffixing]))
-                
             //=----------------------------------=
             // MARK: None Of The Above
             //=----------------------------------=
-                
             } else {
                 snapshot.append(Symbol(character: character, attribute: .spacer))
             }
         }
-                
         //=--------------------------------------=
         // MARK: Interactable - Start
         //=--------------------------------------=
-        
-        if let interactableLHS = interactableStart {
-            snapshot.transform(attributes: ..<interactableLHS) {
+        if let interactableStart = interactableStart {
+            snapshot.transform(attributes: ..<interactableStart) {
                 attribute in
                 attribute.insert(.prefixing)
             }
         }
-        
         //=--------------------------------------=
         // MARK: Redundancies - Start
         //=--------------------------------------=
-        
         if redundanciesStart != snapshot.startIndex {
             snapshot.transform(attributes: redundanciesStart...) {
                 attribute in
                 attribute.insert(.removable)
             }
         }
-        
         //=--------------------------------------=
         // MARK: Interactable - End
         //=--------------------------------------=
-        
         snapshot.transform(attributes: interactableEnd...) {
             attribute in
             attribute = .suffix
         }
-
         //=--------------------------------------=
         // MARK: Suffix
         //=--------------------------------------=
-
         if !suffix.isEmpty {
             snapshot.append(.suffix(" "))
             snapshot.append(contentsOf: Snapshot(suffix, only: .suffix))
         }
-        
         //=--------------------------------------=
         // MARK: Done
         //=--------------------------------------=
-        
         return snapshot
     }
 }
@@ -170,57 +153,43 @@ extension NumericTextStyle {
     //=------------------------------------------------------------------------=
     
     @inlinable public func merge(snapshot: Snapshot, with input: Input) throws -> Snapshot {
-
         //=--------------------------------------=
         // MARK: Reader
         //=--------------------------------------=
-
         var reader = Reader(input.content)
         reader.consumeSignInput(region: region)
-
         //=--------------------------------------=
         // MARK: Proposal
         //=--------------------------------------=
-
         var proposal = snapshot
         proposal.replaceSubrange(input.range, with: reader.content)
-
         //=--------------------------------------=
         // MARK: Number
         //=--------------------------------------=
-
         var number = try number(snapshot: proposal)
         reader.process?(&number)
                 
         try bounds.validate(sign: number.sign)
         let capacity = try precision.capacity(number: number)
         number.removeImpossibleSeparator(capacity: capacity)
-        
         //=--------------------------------------=
         // MARK: Value
         //=--------------------------------------=
-        
         let formatted = number.characters(in: region)
         let value = try format.parseStrategy.parse(formatted)
         try bounds.validate(value: value)
-
         //=--------------------------------------=
         // MARK: Style
         //=--------------------------------------=
-
         let style = editableStyle(number: number)
-        
         //=--------------------------------------=
         // MARK: Characters
         //=--------------------------------------=
-        
         var characters = style.format(value)
         autocorrectSign(in: &characters, with: value, and: number.sign)
-                
         //=--------------------------------------=
         // MARK: Continue
         //=--------------------------------------=
-        
         return self.snapshot(characters: characters)
     }
 }

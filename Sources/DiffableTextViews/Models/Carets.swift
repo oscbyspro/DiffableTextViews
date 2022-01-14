@@ -177,7 +177,7 @@ extension Carets {
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: Carets - Look - While
+// MARK: Carets - Look
 //=----------------------------------------------------------------------------=
 
 extension Carets {
@@ -219,56 +219,7 @@ extension Carets {
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: Carets - Breakpoint
-//=----------------------------------------------------------------------------=
-
-extension Carets {
-
-    //=------------------------------------------------------------------------=
-    // MARK: Inspect
-    //=------------------------------------------------------------------------=
-
-    @inlinable func breaks(at position: Index, direction: Direction) -> Bool {
-        switch direction {
-        case  .forwards: return !peek(position).rhs.contains(.prefixing)
-        case .backwards: return !peek(position).lhs.contains(.suffixing)
-        }
-    }
-
-    //=------------------------------------------------------------------------=
-    // MARK: Dynamic
-    //=------------------------------------------------------------------------=
-
-    @inlinable func breakpoint(start: Index, direction: Direction) -> Index {
-        switch direction {
-        case  .forwards: return breakpoint( forwards: start)
-        case .backwards: return breakpoint(backwards: start)
-        }
-    }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Forwards
-    //=------------------------------------------------------------------------=
-
-    @inlinable func breakpoint(forwards start: Index) -> Index {
-        look(forwards: start) { position in
-            attributes[position.attribute].contains(.prefixing)
-        }
-    }
-
-    //=------------------------------------------------------------------------=
-    // MARK: Backwards
-    //=------------------------------------------------------------------------=
-    
-    @inlinable func breakpoint(backwards start: Index) -> Index {
-        look(backwards: start) { position in
-            attributes[position.attribute].contains(.suffixing)
-        }
-    }
-}
-
-//=----------------------------------------------------------------------------=
-// MARK: Carets - Move To Destination
+// MARK: Carets - Index At Destination
 //=----------------------------------------------------------------------------=
 
 extension Carets {
@@ -319,42 +270,4 @@ extension Carets {
             position.offset > destination
         }
     }
-}
-
-//=----------------------------------------------------------------------------=
-// MARK: Carets - Utilities
-//=----------------------------------------------------------------------------=
-
-extension Carets {
-
-    //=------------------------------------------------------------------------=
-    // MARK: Direction
-    //=------------------------------------------------------------------------=
-
-    @inlinable func direction(at position: Index) -> Direction? {
-        let peek = peek(position)
-
-        let forwards  = peek.lhs.contains(.prefixing) && peek.rhs.contains(.prefixing)
-        let backwards = peek.lhs.contains(.suffixing) && peek.rhs.contains(.suffixing)
-
-        if forwards == backwards { return nil }
-        return forwards ? .forwards : .backwards
-    }
-
-    //=------------------------------------------------------------------------=
-    // MARK: Peek
-    //=------------------------------------------------------------------------=
-
-    @inlinable func peek(_ position: Index) -> (lhs: Attribute, rhs: Attribute) {(
-        //=--------------------------------------=
-        // MARK: LHS
-        //=--------------------------------------=
-        position.snapshot != snapshot.startIndex
-        ? snapshot[snapshot.index(before: position.snapshot)].attribute : .prefixing,
-        //=--------------------------------------=
-        // MARK: RHS
-        //=--------------------------------------=
-        position.snapshot != snapshot.endIndex
-        ? snapshot[position.snapshot].attribute : .suffixing
-    )}
 }

@@ -5,18 +5,17 @@
 //  Created by Oscar Byström Ericsson on 2021-10-02.
 //
 
+#warning("Replace « .prefixing and .suffixing » with « .spacing ».")
+
 //*============================================================================*
 // MARK: * Attribute
 //*============================================================================*
 
 /// A set of options, where each option represents a specialized behavior.
 ///
-/// Plain text is empty. Spacers are both prefixing and suffixing.
+/// Plain text is empty.
 ///
-/// - Singular: formatting, insertable, removable, prefixing, suffixing.
-/// - Composites: content, prefix, suffix, spacer.
-///
-/// - Note: The easiest way to unformat text is to filter out symbols marked as formatting.
+/// - Note: The easiest way to unformat text is to filter symbosl marked as formatting.
 ///
 public struct Attribute: OptionSet {
     
@@ -25,35 +24,26 @@ public struct Attribute: OptionSet {
     //=------------------------------------------------------------------------=
     
     /// Signifies that the symbol is part of a text's formatting.
-    public static let formatting = Self(rawValue: 1 << 0)
+    public static let virtual = Self(rawValue: 1 << 0)
     
+    /// Signifies that the symbol has no real size.
+    public static let passthough = Self(rawValue: 1 << 1)
+        
     /// Signifies that the symbol should be ignored by the differentiation algorithm when it is inserted.
-    public static let insertable = Self(rawValue: 1 << 1)
+    public static let insertable = Self(rawValue: 1 << 2)
     
     /// Signifies that the symbol should be ignored by the differentiation algorithm when it is removed.
-    public static let removable  = Self(rawValue: 1 << 2)
-    
-    /// Signifies that the symbol should direct the user's text selection forwards.
-    public static let prefixing  = Self(rawValue: 1 << 3)
-    
-    /// Signifies that the symbol should direct the user's text selection backwards.
-    public static let suffixing  = Self(rawValue: 1 << 4)
-    
-    //
+    public static let removable  = Self(rawValue: 1 << 3)
+
+    //=------------------------------------------------------------------------=
     // MARK: Instances - Composites
     //=------------------------------------------------------------------------=
     
     /// Default behavior used to describe plain text. Contains no options.
     public static let content = Self([])
     
-    /// Contains: .formatting, .insertable, .removable, .prefixing.
-    public static let prefix  = Self([.formatting, .insertable, .removable, .prefixing])
-    
-    /// Contains: .formatting, .insertable, .removable, .suffixing.
-    public static let suffix  = Self([.formatting, .insertable, .removable, .suffixing])
-    
-    /// Contains: .formatting, .insertable, .removable, .prefixing, .suffixing.
-    public static let spacer  = Self([.formatting, .insertable, .removable, .prefixing, .suffixing])
+    /// Contains: .formatting, .passthrough, .insertable, .removable.
+    public static let format  = Self([.virtual, .passthough, .insertable, .removable])
     
     //=------------------------------------------------------------------------=
     // MARK: Properties
