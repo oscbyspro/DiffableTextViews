@@ -153,7 +153,7 @@ extension State {
     //=------------------------------------------------------------------------=
     
     @inlinable func position(start: Carets.Index, preference: Direction, intent: Direction?) -> Carets.Index {
-        if carets.acceptable(start, preference: preference) { return start }
+        if carets.breaks(at: start, direction: preference) { return start }
         //=--------------------------------------=
         // MARK: Position, Direction
         //=--------------------------------------=
@@ -166,7 +166,7 @@ extension State {
             //=----------------------------------=
             // MARK: Move To Next Position
             //=----------------------------------=
-            position = carets.index(start: position, direction: direction)
+            position = carets.breakpoint(start: position, direction: direction)
             //=----------------------------------=
             // MARK: Correct
             //=----------------------------------=

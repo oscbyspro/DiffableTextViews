@@ -46,6 +46,18 @@
     }
     
     //=------------------------------------------------------------------------=
+    // MARK: Transformations
+    //=------------------------------------------------------------------------=
+    
+    @inlinable func after(_ character: Character) -> Self {
+        Self(units + Scheme.size(of: character))
+    }
+    
+    @inlinable func before(_ character: Character) -> Self {
+        Self(units - Scheme.size(of: character))
+    }
+    
+    //=------------------------------------------------------------------------=
     // MARK: Comparisons
     //=------------------------------------------------------------------------=
 
