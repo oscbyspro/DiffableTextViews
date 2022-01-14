@@ -20,7 +20,7 @@ import Quick
     //=------------------------------------------------------------------------=
     
     @usableFromInline private(set) var carets: Carets
-    @usableFromInline private(set) var selection: Range<Carets.Index>
+    @usableFromInline var selection: Range<Carets.Index>
 
     //=------------------------------------------------------------------------=
     // MARK: Initializers
