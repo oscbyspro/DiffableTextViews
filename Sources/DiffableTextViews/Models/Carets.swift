@@ -5,13 +5,15 @@
 //  Created by Oscar Byström Ericsson on 2022-01-13.
 //
 
+#warning("Rename as Positions, maybe.")
+
 //*============================================================================*
 // MARK: * Carets
 //*============================================================================*
 
 /// ```
 /// |$|1|2|3|,|4|5|6|.|7|8|9|_|U|S|D|~
-/// |>|o|o|o|x|o|o|o|o|o|o|o|<|<|<|<|~
+/// |x|o|o|o|x|o|o|o|o|o|o|o|x|x|x|x|x
 /// ```
 ///
 /// - Methods prefixed as move treat indices as is, whereas methods prefixed as look treat indices from the caret's point of view.

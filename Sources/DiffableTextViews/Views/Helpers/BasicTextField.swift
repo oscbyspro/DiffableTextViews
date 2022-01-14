@@ -5,6 +5,8 @@
 //  Created by Oscar Byström Ericsson on 2021-10-31.
 //
 
+#warning("Rework: Intent.")
+
 #if canImport(UIKit)
 
 import UIKit
@@ -19,6 +21,8 @@ public final class BasicTextField: UITextField {
     // MARK: Properties
     //=------------------------------------------------------------------------=
     
+    #warning("Record that an 'intent' key was pressed.")
+    #warning("Then convert the 'intent' to change in momentum, once.")
     @usableFromInline private(set) var intent: Direction? = nil
 
     //=------------------------------------------------------------------------=

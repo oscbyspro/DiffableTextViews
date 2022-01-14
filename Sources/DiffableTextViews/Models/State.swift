@@ -151,6 +151,14 @@ extension State {
     //=------------------------------------------------------------------------=
     // MARK: Position
     //=------------------------------------------------------------------------=
+
+    #warning("Plan.")
+    /*
+     
+     1. try to fall
+     2. if both sides are passthrough, try to climb
+     
+     */
     
     #warning("Broken.")
     @inlinable func position(start: Carets.Index, preference: Direction, intent: Direction?) -> Carets.Index {
