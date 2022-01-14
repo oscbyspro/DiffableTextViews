@@ -180,14 +180,14 @@ extension State {
             // MARK: Correct - Forwards
             //=----------------------------------=
             case .forwards:
-                if position.snapshot != snapshot.endIndex {
+                if position != carets.endIndex {
                     position = carets.index(after: position)
                 }
             //=----------------------------------=
             // MARK: Correct - Backwards
             //=----------------------------------=
             case .backwards:
-                if position.snapshot != snapshot.startIndex {
+                if position != carets.startIndex {
                     position = carets.index(before: position)
                 }
             }

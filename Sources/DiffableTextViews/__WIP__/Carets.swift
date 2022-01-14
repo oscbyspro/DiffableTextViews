@@ -235,7 +235,7 @@ extension Carets {
     
     @inlinable func index(start: Index, destination: Offset) -> Index {
         switch start.offset <= destination {
-        case true:  return index(forwards:  start, destination: destination)
+        case  true: return index( forwards: start, destination: destination)
         case false: return index(backwards: start, destination: destination)
         }
     }
