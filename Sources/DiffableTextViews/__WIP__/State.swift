@@ -153,14 +153,11 @@ extension State {
     //=------------------------------------------------------------------------=
     
     @inlinable func position(start: Carets.Index, preference: Direction, intent: Direction?) -> Carets.Index {
+        if carets.preferred(start, by: preference) { return start }
         //=--------------------------------------=
-        // MARK: Position
+        // MARK: Position, Direction
         //=--------------------------------------=
         var position = start
-        if !carets.movable(start: position, direction: preference) { return position }
-        //=--------------------------------------=
-        // MARK: Direction
-        //=--------------------------------------=
         var direction = carets.direction(at: position) ?? intent ?? preference
         //=--------------------------------------=
         // MARK: Correct

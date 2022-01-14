@@ -5,6 +5,10 @@
 //  Created by Oscar Byström Ericsson on 2022-01-13.
 //
 
+#warning("WIP")
+#warning("WIP")
+#warning("WIP")
+
 //*============================================================================*
 // MARK: * Carets
 //*============================================================================*
@@ -26,6 +30,19 @@
     @usableFromInline init(_ snapshot: Snapshot) {
         self.snapshot = snapshot
         self.range = Offset() ..< .size(of: snapshot.characters) // UTF16 is O(1)
+    }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Utilities
+    //=------------------------------------------------------------------------=
+        
+    @inlinable func preferred(_ position: Index, by preference: Direction) -> Bool {
+        switch preference {
+        case .forwards:  if position !=   endIndex { return self[position].nonprefixing }
+        case .backwards: if position != startIndex { return self[index(before: position)].nonsuffixing }
+        }
+        
+        return false
     }
     
     //*========================================================================*
@@ -65,7 +82,7 @@
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: Carets - Collections Esque
+// MARK: Carets - Collection
 //=----------------------------------------------------------------------------=
 
 extension Carets {
@@ -89,9 +106,16 @@ extension Carets {
     @inlinable var endIndex: Index {
         Index(snapshot  .endIndex, at: range.upperBound)
     }
+}
+
+//=----------------------------------------------------------------------------=
+// MARK: Carets - Move
+//=----------------------------------------------------------------------------=
+
+extension Carets {
     
     //=------------------------------------------------------------------------=
-    // MARK: Translate
+    // MARK: Forwards
     //=------------------------------------------------------------------------=
     
     @inlinable func index(after position: Index) -> Index {
@@ -99,6 +123,10 @@ extension Carets {
         let character = snapshot.characters[position.snapshot.character]
         return Index(index, at: position.offset + .size(of: character))
     }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Backwards
+    //=------------------------------------------------------------------------=
     
     @inlinable func index(before position: Index) -> Index {
         let index = snapshot.index(before: position.snapshot)
@@ -108,78 +136,20 @@ extension Carets {
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: Carets - Inspect
-//=----------------------------------------------------------------------------=
-
-extension Carets {
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Movable
-    //=------------------------------------------------------------------------=
-    
-    @inlinable func movable(start: Index, direction: Direction) -> Bool {
-        switch direction {
-        case .forwards:  return movable(forwards:  start)
-        case .backwards: return movable(backwards: start)
-        }
-    }
-    
-    @inlinable func movable(forwards start: Index) -> Bool {
-        snapshot.attributes[start.snapshot.attribute].contains(.prefixing)
-    }
-    
-    @inlinable func movable(backwards start: Index) -> Bool {
-        snapshot.attributes[start.snapshot.attribute].contains(.suffixing)
-    }
-}
-
-//=----------------------------------------------------------------------------=
 // MARK: Carets - Move In Direction
 //=----------------------------------------------------------------------------=
 
 extension Carets {
-  
+    
     //=------------------------------------------------------------------------=
     // MARK: Dynamic
     //=------------------------------------------------------------------------=
     
     @inlinable func index(start: Index, direction: Direction) -> Index {
         switch direction {
-        case  .forwards: return index(forwards:  start)
-        case .backwards: return index(backwards: start)
+        case  .forwards: return firstIndex(where: \.nonprefixing) ??   endIndex
+        case .backwards: return  lastIndex(where: \.nonsuffixing) ?? startIndex
         }
-    }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Forwards
-    //=------------------------------------------------------------------------=
-    
-    #warning("FIXME.")
-    @inlinable func index(forwards start: Index) -> Index {
-        var position = start
-        
-        while position.snapshot != snapshot.endIndex {
-            guard movable(forwards: position) else { return position }
-            formIndex(after: &position)
-        }
-        
-        return position
-    }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Backwards
-    //=------------------------------------------------------------------------=
-    
-    #warning("FIXME.")
-    @inlinable func index(backwards start: Index) -> Index {
-        var position = start
-        
-        while position.snapshot != snapshot.startIndex {
-            formIndex(before: &position)
-            guard movable(backwards: position) else { return position }
-        }
-        
-        return position
     }
 }
 
@@ -190,34 +160,18 @@ extension Carets {
 extension Carets {
     
     //=------------------------------------------------------------------------=
-    // MARK: Forwards
-    //=------------------------------------------------------------------------=
-    
-    @inlinable func index(forwards start: Index, destination: Offset) -> Index {
-        indices.first(where: { $0.offset >= destination }) ?? endIndex
-    }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Backwards
-    //=------------------------------------------------------------------------=
-    
-    @inlinable func index(backwards start: Index, destination: Offset) -> Index {
-        indices.reversed().first(where: { $0.offset <= destination }) ?? startIndex
-    }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Index
+    // MARK: Dynamic - One
     //=------------------------------------------------------------------------=
         
     @inlinable func index(start: Index, destination: Offset) -> Index {
         switch start.offset <= destination {
-        case true:  return index(forwards:  start, destination: destination)
-        case false: return index(backwards: start, destination: destination)
+        case true:  return indices[start...].first(where: { $0.offset >= destination }) ??   endIndex
+        case false: return indices[...start] .last(where: { $0.offset <= destination }) ?? startIndex
         }
     }
     
     //=------------------------------------------------------------------------=
-    // MARK: Indices
+    // MARK: Dynamic - Two
     //=------------------------------------------------------------------------=
     
     @inlinable func indices(start: Range<Index>, destination: Range<Offset>) -> Range<Index> {
@@ -228,8 +182,6 @@ extension Carets {
             lowerBound = index(start: start.upperBound, destination: destination.lowerBound)
             lowerBound = Swift.min(lowerBound, upperBound)
         }
-
-        print("indices:", range.upperBound, "-->", upperBound.offset)
         
         return lowerBound ..< upperBound
     }
