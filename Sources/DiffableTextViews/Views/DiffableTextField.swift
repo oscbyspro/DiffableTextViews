@@ -163,9 +163,12 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable, 
         //=--------------------------------------------------------------------=
         
         @inlinable public func textField(_ textField: UITextField, shouldChangeCharactersIn nsRange: NSRange, replacementString string: String) -> Bool {
+            //=----------------------------------=
+            // MARK: Process User Input
+            //=----------------------------------=
             do {
                 //=------------------------------=
-                // MARK: Process Arguments
+                // MARK: Arguments
                 //=------------------------------=
                 #warning("Move most of this to Input init method.")
                 let content = Snapshot(string, only: .content)
@@ -173,7 +176,7 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable, 
                 let selection = cache.state.indices(at: offsets)
                 let input = Input(content: content, range: selection.lowerBound.snapshot ..< selection.upperBound.snapshot)
                 //=------------------------------=
-                // MARK: Calculate Next State
+                // MARK: State
                 //=------------------------------=
                 let snapshot = try upstream.style
                     .merge(snapshot: cache.snapshot, with: input)
@@ -197,10 +200,10 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable, 
                     self.cache.state = state
                     self.push()
                 }
+            //=----------------------------------=
+            // MARK: Respond To Cancellation
+            //=----------------------------------=
             } catch let reason {
-                //=------------------------------=
-                // MARK: Respond To Cancellation
-                //=------------------------------=
                 #if DEBUG
                 
                 print("User input cancelled: \(reason)")
