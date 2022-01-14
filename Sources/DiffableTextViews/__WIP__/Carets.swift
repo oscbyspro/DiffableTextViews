@@ -193,11 +193,12 @@ extension Carets {
     // MARK: Snapshot
     //=------------------------------------------------------------------------=
     
-    @inlinable func indices(at range: Range<Snapshot.Index>) -> Range<Index> {
-        let lowerBound = Offset(at: range.lowerBound.character, in: snapshot.characters)
-        let difference = Offset(at: range.upperBound.character, in: snapshot.characters[range.lowerBound.character...])
-        return Index(range.lowerBound, at: lowerBound) ..< Index(range.upperBound, at: lowerBound + difference)
-    }
+    #error("Remove, maybe.")
+//    @inlinable func indices(at range: Range<Snapshot.Index>) -> Range<Index> {
+//        let lowerBound = Offset(at: range.lowerBound.character, in: snapshot.characters)
+//        let difference = Offset(at: range.upperBound.character, in: snapshot.characters[range.lowerBound.character...])
+//        return Index(range.lowerBound, at: lowerBound) ..< Index(range.upperBound, at: lowerBound + difference)
+//    }
 }
 
 //=----------------------------------------------------------------------------=

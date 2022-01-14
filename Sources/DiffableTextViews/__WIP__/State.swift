@@ -95,6 +95,8 @@ extension State {
         //=--------------------------------------=
         // MARK: Values
         //=--------------------------------------=
+        #warning("Use carets in changes, maybe.")
+        #warning("Remove, Offset.init(at:in:), maybe.")
         let carets = Carets(snapshot)
         let selection = carets.indices(at: lowerBound ..< upperBound)
         //=--------------------------------------=
