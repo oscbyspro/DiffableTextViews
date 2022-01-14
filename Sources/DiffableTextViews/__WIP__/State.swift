@@ -53,7 +53,7 @@ import Quick
     //=------------------------------------------------------------------------=
     
     @inlinable func indices(at range: Range<Offset>) -> Range<Carets.Index> {
-        carets.indices(at: range, start: selection)
+        carets.indices(start: selection, destination: range)
     }
 }
 
@@ -154,9 +154,13 @@ extension State {
     
     @inlinable func position(start: Carets.Index, preference: Direction, intent: Direction?) -> Carets.Index {
         //=--------------------------------------=
-        // MARK: Position, Direction
+        // MARK: Position
         //=--------------------------------------=
         var position = start
+        if !carets.movable(start: position, direction: preference) { return position }
+        //=--------------------------------------=
+        // MARK: Direction
+        //=--------------------------------------=
         var direction = carets.direction(at: position) ?? intent ?? preference
         //=--------------------------------------=
         // MARK: Correct
@@ -165,7 +169,7 @@ extension State {
             //=----------------------------------=
             // MARK: Move To Next Position
             //=----------------------------------=
-            position = carets.move(position: position, direction: direction)
+            position = carets.index(start: position, direction: direction)
             //=----------------------------------=
             // MARK: Correct
             //=----------------------------------=

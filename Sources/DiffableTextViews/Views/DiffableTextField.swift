@@ -238,6 +238,7 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable, 
             if selection != corrected.offsets {
                 lock.perform {
                     self.cache.state = corrected
+                    print(selection, "-->", corrected.offsets)
                     self.downstream.update(selection: corrected.offsets)
                 }
             }
