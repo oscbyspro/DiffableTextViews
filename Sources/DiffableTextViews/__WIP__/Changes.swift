@@ -59,10 +59,15 @@ Next: BidirectionalCollection, Next.Element == Symbol {
     //=------------------------------------------------------------------------=
     
     @inlinable static func end(past: Past, next: Next) -> (past: Past.Index, next: Next.Index) {
+        //=--------------------------------------=
+        // MARK: Reverse
+        //=--------------------------------------=
         let reversed = Reversed.start(
             past: past.reversed(),
             next: next.reversed())
-        
+        //=--------------------------------------=
+        // MARK: Finalize
+        //=--------------------------------------=
         return (reversed.past.base, reversed.next.base)
     }
 }
