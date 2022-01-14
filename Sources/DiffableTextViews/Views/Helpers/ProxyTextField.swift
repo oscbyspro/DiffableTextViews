@@ -136,7 +136,7 @@ extension ProxyTextField {
     
     /// - Complexity: O(1).
     @inlinable func offset(at position: UITextPosition) -> Offset {
-        .init(at: wrapped.offset(from: wrapped.beginningOfDocument, to: position))
+        Offset(wrapped.offset(from: wrapped.beginningOfDocument, to: position))
     }
     
     //=------------------------------------------------------------------------=

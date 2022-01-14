@@ -170,21 +170,23 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable, 
                 //=------------------------------=
                 // MARK: Arguments
                 //=------------------------------=
-                #warning("Move most of this to Input init method.")
-                let content = Snapshot(string, only: .content)
-                let offsets = Offset(at: nsRange.lowerBound) ..< Offset(at: nsRange.upperBound)
-                let selection = cache.state.indices(at: offsets)
-                let input = Input(content: content, range: selection.lowerBound.snapshot ..< selection.upperBound.snapshot)
+                let selection = TransformableValue
+                    .init(Offset(nsRange.lowerBound) ..< Offset(nsRange.upperBound))
+                    .transform(cache.state.indices(at:))
+                
+                let input = Input(
+                    content: Snapshot(string, only: .content),
+                    range: selection.lowerBound.snapshot ..< selection.upperBound.snapshot)
                 //=------------------------------=
                 // MARK: State
                 //=------------------------------=
                 let snapshot = try upstream.style
                     .merge(snapshot: cache.snapshot, with: input)
-                    .transform(upstream.style.process)
+                    .transform(upstream.style.process(snapshot:))
                 
                 let value = try snapshot
                     .transformableValue(upstream.style.parse)
-                    .transform(upstream.style.process)
+                    .transform(upstream.style.process(value:))
                 
                 let state = cache.state.transform {
                     state in
@@ -251,7 +253,7 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable, 
             //=----------------------------------=
             let value = TransformableValue
                 .init(upstream.value.wrappedValue)
-                .transform(upstream.style.process)
+                .transform(upstream.style.process(value:))
             //=----------------------------------=
             // MARK: Accept Or Discard
             //=----------------------------------=
@@ -261,7 +263,7 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable, 
                 //=------------------------------=
                 let snapshot = upstream.style
                     .snapshot(downstream.mode, value)
-                    .transform(upstream.style.process)
+                    .transform(upstream.style.process(snapshot:))
                 
                 let state = cache.state.transform {
                     state in

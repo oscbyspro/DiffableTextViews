@@ -9,7 +9,7 @@
 // MARK: * Offset
 //*============================================================================*
 
-@usableFromInline struct Offset<Scheme: DiffableTextViews.Scheme>: Equatable, Comparable {
+@usableFromInline struct Offset<Scheme: DiffableTextViews.Scheme>: Equatable, Comparable, ExpressibleByIntegerLiteral {
     
     //=------------------------------------------------------------------------=
     // MARK: Properties
@@ -21,8 +21,12 @@
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable init(at units: Int = 0) {
+    @inlinable init(_ units: Int = 0) {
         self.units = units
+    }
+    
+    @inlinable init(integerLiteral value: Int) {
+        self.units = value
     }
     
     //=------------------------------------------------------------------------=
@@ -34,11 +38,11 @@
     }
     
     @inlinable static func size(of character: Character) -> Self {
-        Self(at: Scheme.size(of: character))
+        Self(Scheme.size(of: character))
     }
         
     @inlinable static func size<S: StringProtocol>(of characters: S) -> Self {
-        Self(at: Scheme.size(of: characters))
+        Self(Scheme.size(of: characters))
     }
     
     //=------------------------------------------------------------------------=
@@ -58,10 +62,10 @@
     //=------------------------------------------------------------------------=
 
     @inlinable static func + (lhs: Self, rhs: Self) -> Self {
-        .init(at: lhs.units + rhs.units)
+        Self(lhs.units + rhs.units)
     }
     
     @inlinable static func - (lhs: Self, rhs: Self) -> Self {
-        .init(at: lhs.units - rhs.units)
+        Self(lhs.units - rhs.units)
     }
 }

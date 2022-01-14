@@ -167,24 +167,24 @@ extension State {
             //=----------------------------------=
             position = carets.move(position: position, direction: direction)
             //=----------------------------------=
-            // MARK: Select
+            // MARK: Correct
             //=----------------------------------=
             switch direction {
-                //=------------------------------=
-                // MARK: Break
-                //=------------------------------=
+            //=----------------------------------=
+            // MARK: Correct - Break
+            //=----------------------------------=
             case preference:
                 break loop
-                //=------------------------------=
-                // MARK: Forwards
-                //=------------------------------=
+            //=----------------------------------=
+            // MARK: Correct - Forwards
+            //=----------------------------------=
             case  .forwards:
                 if position.snapshot != snapshot.endIndex {
                     position = carets.index(after:  position)
                 }
-                //=------------------------------=
-                // MARK: Backwards
-                //=------------------------------=
+            //=----------------------------------=
+            // MARK: Correct - Backwards
+            //=----------------------------------=
             case .backwards:
                 if position.snapshot != snapshot.startIndex {
                     position = carets.index(before: position)
