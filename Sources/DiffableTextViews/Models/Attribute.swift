@@ -25,15 +25,15 @@ public struct Attribute: OptionSet {
     
     /// Signifies that the symbol is part of a text's formatting.
     public static let virtual = Self(rawValue: 1 << 0)
-    
-    /// Signifies that the symbol has no real size.
-    public static let passthough = Self(rawValue: 1 << 1)
         
     /// Signifies that the symbol should be ignored by the differentiation algorithm when it is inserted.
-    public static let insertable = Self(rawValue: 1 << 2)
+    public static let insertable = Self(rawValue: 1 << 1)
     
     /// Signifies that the symbol should be ignored by the differentiation algorithm when it is removed.
-    public static let removable  = Self(rawValue: 1 << 3)
+    public static let removable  = Self(rawValue: 1 << 2)
+    
+    /// Signifies that the symbol has no real size.
+    public static let passthough = Self(rawValue: 1 << 3)
 
     //=------------------------------------------------------------------------=
     // MARK: Instances - Composites
@@ -42,8 +42,12 @@ public struct Attribute: OptionSet {
     /// Default behavior used to describe plain text. Contains no options.
     public static let content = Self([])
     
-    /// Contains: .formatting, .passthrough, .insertable, .removable.
-    public static let format  = Self([.virtual, .passthough, .insertable, .removable])
+    /// Contains: .formatting, .insertable, .removable.
+    public static let anchor  = Self([.virtual, .insertable, .removable])
+    
+    /// Contains: .formatting, .insertable, .removable, .passthrough.
+    public static let format  = Self([.virtual, .insertable, .removable, .passthough])
+    
     
     //=------------------------------------------------------------------------=
     // MARK: Properties
