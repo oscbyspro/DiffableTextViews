@@ -21,7 +21,13 @@
     //=------------------------------------------------------------------------=
     
     @usableFromInline let snapshot: Snapshot
-    @usableFromInline let range: Range<Offset>
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Properties - Indices
+    //=------------------------------------------------------------------------=
+    
+    @usableFromInline let startIndex: Index
+    @usableFromInline let   endIndex: Index
     
     //=------------------------------------------------------------------------=
     // MARK: Initializers
@@ -29,13 +35,35 @@
     
     @usableFromInline init(_ snapshot: Snapshot) {
         self.snapshot = snapshot
-        self.range = Offset() ..< .size(of: snapshot.characters) // UTF16 is O(1)
+        self.startIndex = Index(snapshot.startIndex, at: .zero)
+        self  .endIndex = Index(snapshot  .endIndex, at: .size(of: snapshot.characters))
     }
     
     //=------------------------------------------------------------------------=
+    // MARK: Accessors
+    //=------------------------------------------------------------------------=
+    
+    @inlinable var characters: Snapshot.Characters {
+        snapshot.characters
+    }
+    
+    @inlinable var attributes: Snapshot.Attributes {
+        snapshot.attributes
+    }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Subscripts
+    //=------------------------------------------------------------------------=
+    
+    @inlinable subscript(position: Index) -> Symbol {
+        snapshot[position.snapshot]
+    }
+
+    //=------------------------------------------------------------------------=
     // MARK: Utilities
     //=------------------------------------------------------------------------=
-        
+    
+    #warning("Remove.")
     @inlinable func acceptable(_ position: Index, preference: Direction) -> Bool {
         switch preference {
         case  .forwards: return !peek(position).rhs.contains(.prefixing)
@@ -66,6 +94,18 @@
         }
         
         //=------------------------------------------------------------------------=
+        // MARK: Accessors
+        //=------------------------------------------------------------------------=
+        
+        @inlinable var character: Snapshot.Characters.Index {
+            snapshot.character
+        }
+        
+        @inlinable var attribute: Snapshot.Attributes.Index {
+            snapshot.attribute
+        }
+        
+        //=------------------------------------------------------------------------=
         // MARK: Comparisons
         //=------------------------------------------------------------------------=
         
@@ -76,33 +116,6 @@
         @inlinable static func <  (lhs: Self, rhs: Self) -> Bool {
             lhs.offset <  rhs.offset
         }
-    }
-}
-
-//=----------------------------------------------------------------------------=
-// MARK: Carets - Collection
-//=----------------------------------------------------------------------------=
-
-extension Carets {
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Subscripts
-    //=------------------------------------------------------------------------=
-    
-    @inlinable subscript(position: Index) -> Symbol {
-        snapshot[position.snapshot]
-    }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Positions
-    //=------------------------------------------------------------------------=
-    
-    @inlinable var startIndex: Index {
-        Index(snapshot.startIndex, at: range.lowerBound)
-    }
-    
-    @inlinable var endIndex: Index {
-        Index(snapshot  .endIndex, at: range.upperBound)
     }
 }
 
@@ -118,7 +131,7 @@ extension Carets {
     
     @inlinable func index(after position: Index) -> Index {
         let index = snapshot.index(after: position.snapshot)
-        let character = snapshot.characters[position.snapshot.character]
+        let character = characters[position.character]
         return Index(index, at: position.offset + .size(of: character))
     }
     
@@ -128,7 +141,7 @@ extension Carets {
     
     @inlinable func index(before position: Index) -> Index {
         let index = snapshot.index(before: position.snapshot)
-        let character = snapshot.characters[index.character]
+        let character = characters[index.character]
         return Index(index, at: position.offset - .size(of: character))
     }
 }
@@ -145,9 +158,30 @@ extension Carets {
     
     @inlinable func index(start: Index, direction: Direction) -> Index {
         switch direction {
-        case  .forwards: return firstIndex(where: \.nonprefixing) ??   endIndex
-        case .backwards: return  lastIndex(where: \.nonsuffixing) ?? startIndex
+        case  .forwards: return self[start...].firstIndex(where: \.nonprefixing) ??   endIndex
+        case .backwards: return self[..<start] .lastIndex(where: \.nonsuffixing) ?? startIndex
         }
+    }
+    
+    @inlinable func breakpoint(forwards start: Index) -> Index {
+        var position = start
+        
+        while position != endIndex {
+            if !attributes[position.attribute].contains(.prefixing) { return position }
+            formIndex(after: &position)
+        }
+        
+        return position
+    }
+    
+    @inlinable func breakpoint(backwards start: Index) -> Index {
+        var position = start
+        
+        while position != startIndex {
+            
+        }
+        
+        return position
     }
 }
 
@@ -164,7 +198,7 @@ extension Carets {
     @inlinable func index(start: Index, destination: Offset) -> Index {
         switch start.offset <= destination {
         case true:  return indices[start...].first(where: { $0.offset >= destination }) ??   endIndex
-        case false: return indices[...start] .last(where: { $0.offset <= destination }) ?? startIndex
+        case false: return indices[..<start] .last(where: { $0.offset <= destination }) ?? startIndex
         }
     }
     
@@ -176,8 +210,8 @@ extension Carets {
         let upperBound = index(start: start.upperBound, destination: destination.upperBound)
         var lowerBound = upperBound
         
-        if !range.isEmpty {
-            lowerBound = index(start: start.upperBound, destination: destination.lowerBound)
+        if !destination.isEmpty {
+            lowerBound = index(start: start.lowerBound, destination: destination.lowerBound)
             lowerBound = Swift.min(lowerBound, upperBound)
         }
         
