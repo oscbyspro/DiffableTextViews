@@ -30,10 +30,10 @@ public struct Attribute: OptionSet {
     public static let insertable = Self(rawValue: 1 << 1)
     
     /// Signifies that the symbol should be ignored by the differentiation algorithm when it is removed.
-    public static let removable  = Self(rawValue: 1 << 2)
+    public static let removable = Self(rawValue: 1 << 2)
     
     /// Signifies that the symbol has no real size.
-    public static let passthough = Self(rawValue: 1 << 3)
+    public static let passthrough = Self(rawValue: 1 << 3)
 
     //=------------------------------------------------------------------------=
     // MARK: Instances - Composites
@@ -46,7 +46,7 @@ public struct Attribute: OptionSet {
     public static let anchor  = Self([.virtual, .insertable, .removable])
     
     /// Contains: .formatting, .insertable, .removable, .passthrough.
-    public static let format  = Self([.virtual, .insertable, .removable, .passthough])
+    public static let format  = Self([.virtual, .insertable, .removable, .passthrough])
     
     
     //=------------------------------------------------------------------------=

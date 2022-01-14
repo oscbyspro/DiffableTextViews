@@ -47,11 +47,11 @@ protocol Caret {
     // MARK: Utilities
     
     @inlinable func fall(in positions: Positions) -> Positions.Index? {
-        positions.prefix(upTo: position).lastIndex(where: { !$0.attribute.contains(.passthough) })
+        positions.prefix(upTo: position).lastIndex(where: { !$0.attribute.contains(.passthrough) })
     }
     
     @inlinable func climb(in positions: Positions) -> Positions.Index? {
-        positions.suffix(from: position).firstIndex(where: { !$0.attribute.contains(.passthough) })
+        positions.suffix(from: position).firstIndex(where: { !$0.attribute.contains(.passthrough) })
     }
 }
 

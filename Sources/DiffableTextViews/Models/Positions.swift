@@ -135,11 +135,11 @@
 extension Positions {
     
     @inlinable func nonpassthrough(_ symbol: Symbol) -> Bool {
-        !symbol.attribute.contains(.passthough)
+        !symbol.attribute.contains(.passthrough)
     }
     
     @inlinable func nonpassthrough(_ position: Index) -> Bool {
-        !attributes[position.attribute].contains(.passthough)
+        !attributes[position.attribute].contains(.passthrough)
     }
     
     
