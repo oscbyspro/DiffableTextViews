@@ -24,38 +24,28 @@ Next: BidirectionalCollection, Next.Element == Symbol {
         //=--------------------------------------=
         var pastIndex = past.startIndex
         var nextIndex = next.startIndex
-        //=--------------------------------------=
-        // MARK: Attempt
-        //=--------------------------------------=
-        if pastIndex != past.endIndex,
-           nextIndex != next.endIndex {
-            //=----------------------------------=
+        //=-------------------------------------=
+        // MARK: Loop
+        //=-------------------------------------=
+        while pastIndex != past.endIndex,
+              nextIndex != next.endIndex {
+            //=---------------------------------=
             // MARK: Elements
-            //=----------------------------------=
-            var pastElement = past[pastIndex]
-            var nextElement = next[nextIndex]
-            //=----------------------------------=
-            // MARK: Loop
-            //=----------------------------------=
-            while pastIndex != past.endIndex,
-                  nextIndex != next.endIndex {
-                //=------------------------------=
-                // MARK: Indices, Elements
-                //=------------------------------=
-                if pastElement == nextElement {
-                    past.formIndex(after: &pastIndex)
-                    pastElement = past[pastIndex]
-                    next.formIndex(after: &nextIndex)
-                    nextElement = next[nextIndex]
-                } else if pastElement.removable {
-                    past.formIndex(after: &pastIndex)
-                    pastElement = past[pastIndex]
-                } else if nextElement.insertable {
-                    next.formIndex(after: &nextIndex)
-                    nextElement = next[nextIndex]
-                } else {
-                    break
-                }
+            //=---------------------------------=
+            let pastElement = past[pastIndex]
+            let nextElement = next[nextIndex]
+            //=---------------------------------=
+            // MARK: Indices
+            //=---------------------------------=
+            if pastElement == nextElement {
+                past.formIndex(after: &pastIndex)
+                next.formIndex(after: &nextIndex)
+            } else if pastElement.removable {
+                past.formIndex(after: &pastIndex)
+            } else if nextElement.insertable {
+                next.formIndex(after: &nextIndex)
+            } else {
+                break
             }
         }
         //=--------------------------------------=
