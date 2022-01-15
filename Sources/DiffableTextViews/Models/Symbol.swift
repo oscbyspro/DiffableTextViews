@@ -15,7 +15,9 @@ public struct Symbol: Equatable {
     // MARK: Instances
     //=------------------------------------------------------------------------=
     
-    public static let anchor = Self(character: "\u{200B}", attribute: .anchor)
+    public static let anchor = Self(
+        character: "\u{200B}",
+        attribute: [.virtual, .insertable, .removable])
     
     //=------------------------------------------------------------------------=
     // MARK: Properties

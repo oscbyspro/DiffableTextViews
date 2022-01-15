@@ -14,7 +14,7 @@ import SwiftUI
 // MARK: * DiffableTextField
 //*============================================================================*
 
-public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable, Transformable {
+public struct DiffableTextField<Style: DiffableTextStyle & UIKitTextStyle>: UIViewRepresentable, Transformable {
     public typealias Value = Style.Value
     public typealias UIViewType = BasicTextField
     public typealias Transformation = (ProxyTextField) -> Void
@@ -222,7 +222,7 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable, 
             //=----------------------------------=
             let selection = downstream.selection()
             let corrected = cache.state.transform { corrected in
-                corrected.update(selection: selection, intent: downstream.intent)
+                corrected.update(selection: selection, momentum: downstream.intent != nil)
             }
             //=----------------------------------=
             // MARK: Update Downstream If Needed

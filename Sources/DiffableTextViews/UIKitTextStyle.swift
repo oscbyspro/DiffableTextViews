@@ -1,5 +1,5 @@
 //
-//  File.swift
+//  UIKitTextStyle.swift
 //  
 //
 //  Created by Oscar Byström Ericsson on 2022-01-12.
@@ -10,23 +10,29 @@
 import UIKit
 
 //*============================================================================*
-// MARK: * UIKitCompatibleStyle
+// MARK: * UIKitTextStyle
 //*============================================================================*
 
-public protocol UIKitCompatibleStyle {
+public protocol UIKitTextStyle: DiffableTextStyle {
     
     //=------------------------------------------------------------------------=
     // MARK: Keyboard
     //=------------------------------------------------------------------------=
     
     @inlinable var keyboard: UIKeyboardType { get }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Setup
+    //=------------------------------------------------------------------------=
+    
+    @inlinable func setup(_ proxy: ProxyTextField)
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: UIKitCompatibleStyle - Implementation
+// MARK: UIKitTextStyle - Implementation
 //=----------------------------------------------------------------------------=
 
-extension UIKitCompatibleStyle {
+extension UIKitTextStyle {
     
     //=------------------------------------------------------------------------=
     // MARK: Keyboard
@@ -35,20 +41,12 @@ extension UIKitCompatibleStyle {
     @inlinable var keyboard: UIKeyboardType {
         .default
     }
-}
-
-//*============================================================================*
-// MARK: DiffableTextStyle x UIKitCompatibleStyle
-//*============================================================================*
-
-extension DiffableTextStyle {
     
     //=------------------------------------------------------------------------=
     // MARK: Setup
     //=------------------------------------------------------------------------=
     
     @inlinable func setup(_ proxy: ProxyTextField) {
-        guard let self = self as? UIKitCompatibleStyle else { return }
         proxy.keyboard(self.keyboard)
     }
 }

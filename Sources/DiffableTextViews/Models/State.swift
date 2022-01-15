@@ -97,7 +97,7 @@ extension State {
         //=--------------------------------------=
         self.positions = positions
         self.selection = selection
-        self.autocorrect(intent: nil)
+        self.autocorrect(momentum: nil)
     }
 }
 
@@ -111,17 +111,17 @@ extension State {
     // MARK: Transformations
     //=------------------------------------------------------------------------=
     
-    @inlinable mutating func update(selection: Range<Positions.Index>, intent: Direction?) {
+    @inlinable mutating func update(selection: Range<Positions.Index>, momentum: Bool) {
         self.selection = selection
-        self.autocorrect(intent: intent)
+        self.autocorrect(momentum: momentum)
     }
     
     //=------------------------------------------------------------------------=
     // MARK: Transformations - Indirect
     //=------------------------------------------------------------------------=
     
-    @inlinable mutating func update(selection: Range<Offset>, intent: Direction?) {
-        update(selection: indices(at: selection), intent: intent)
+    @inlinable mutating func update(selection: Range<Offset>, momentum: Bool) {
+        update(selection: indices(at: selection), momentum: momentum)
     }
 }
 
@@ -130,18 +130,20 @@ extension State {
 //=----------------------------------------------------------------------------=
 
 extension State {
-    
+        
     //=------------------------------------------------------------------------=
     // MARK: Selection
     //=------------------------------------------------------------------------=
     
-    /// It is OK to use intent on both positions at once, because they each have different preferred directions.
-    @inlinable mutating func autocorrect(intent: Direction?) {
-        let upperBound = position(start: selection.upperBound, preference: .backwards, intent: intent)
+    /// It is OK to use momentum on both positions at once, because they each have different preferred directions.
+    @inlinable mutating func autocorrect(momentum: Bool) {
+        #warning("Convert momentum.")
+        
+        let upperBound = position(start: selection.upperBound, preference: .backwards, momentum: momentum)
         var lowerBound = upperBound
         
         if !selection.isEmpty {
-            lowerBound = position(start: selection.lowerBound, preference:  .forwards, intent: intent)
+            lowerBound = position(start: selection.lowerBound, preference:  .forwards, momentum: momentum)
             lowerBound = min(lowerBound, upperBound)
         }
         
@@ -161,7 +163,7 @@ extension State {
      */
     
     #warning("Broken.")
-    @inlinable func position(start: Positions.Index, preference: Direction, intent: Direction?) -> Positions.Index {
+    @inlinable func position(start: Positions.Index, preference: Direction, momentum: Direction?) -> Positions.Index {
         //=--------------------------------------=
         // MARK: Validate
         //=--------------------------------------=
@@ -170,7 +172,7 @@ extension State {
         // MARK: Position, Direction
         //=--------------------------------------=
         var position = start
-        var direction = intent ?? preference
+        var direction = momentum ?? preference
         //=--------------------------------------=
         // MARK: Correct
         //=--------------------------------------=

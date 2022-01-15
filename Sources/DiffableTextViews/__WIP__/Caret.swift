@@ -8,19 +8,12 @@
 #warning("Ideas.")
 
 protocol Caret {
+
     
-//    var preference: Direction { get }
-//
-//    func validate() -> Bool { }
-//
-//    func fall() -> Positions.Index?
-//
-//    func climb() -> Positions.Index?
 }
 
-
 //*============================================================================*
-// MARK: * Caret x Upper
+// MARK: * Caret x UpperBound
 //*============================================================================*
 
 @usableFromInline struct UpperBound<Scheme: DiffableTextViews.Scheme>: Caret {
@@ -30,11 +23,17 @@ protocol Caret {
     // MARK: Properties
     //=------------------------------------------------------------------------=
     
-    @usableFromInline let position: Positions.Index
+    @usableFromInline let positions: Positions
+    @usableFromInline let index: Positions.Index
     
     //=------------------------------------------------------------------------=
     // MARK: Initializers
     //=------------------------------------------------------------------------=
+    
+    @inlinable init(positions: Positions, index: Positions.Index) {
+        self.positions = positions
+        self.index = index
+    }
     
     //=------------------------------------------------------------------------=
     // MARK: Attributes
@@ -44,49 +43,28 @@ protocol Caret {
         .backwards
     }
     
+    //=------------------------------------------------------------------------=
+    // MARK: Helpers
+    //=------------------------------------------------------------------------=
+    
+    @inlinable func primary() -> Attribute {
+        guard index != positions.startIndex else {
+            return .passthrough
+        }
+        
+        let side = positions.index(before: index)
+        return positions[side].attribute
+    }
+    
+    @inlinable func secondary() -> Attribute {
+        positions[index].attribute
+    }
+    
+    //=------------------------------------------------------------------------=
     // MARK: Utilities
-    
-    @inlinable func fall(in positions: Positions) -> Positions.Index? {
-        positions.prefix(upTo: position).lastIndex(where: { !$0.attribute.contains(.passthrough) })
-    }
-    
-    @inlinable func climb(in positions: Positions) -> Positions.Index? {
-        positions.suffix(from: position).firstIndex(where: { !$0.attribute.contains(.passthrough) })
-    }
-}
-
-//*============================================================================*
-// MARK: * Caret x Lower
-//*============================================================================*
-
-@usableFromInline struct LowerBound<Scheme: DiffableTextViews.Scheme>: Caret {
-    @usableFromInline typealias Positions = DiffableTextViews.Positions<Scheme>
-
-    //=------------------------------------------------------------------------=
-    // MARK: Properties
     //=------------------------------------------------------------------------=
     
-    @usableFromInline let position: Positions.Index
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Initializers
-    //=------------------------------------------------------------------------=
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Attributes
-    //=------------------------------------------------------------------------=
-    
-    @inlinable var preference: Direction {
-        .forwards
-    }
-    
-    // MARK: Utilities
-    
-    @inlinable func fall(in positions: Positions) -> Positions.Index? {
-//        positions.prefix(upTo: position).lastIndex(where: { !$0.attribute.contains(.passthough) })
-    }
-    
-    @inlinable func climb(in positions: Positions) -> Positions.Index? {
-//        positions.suffix(from: position).firstIndex(where: { !$0.attribute.contains(.passthough) })
+    @inlinable func startIsDone() -> Bool {
+        primary() != .passthrough
     }
 }

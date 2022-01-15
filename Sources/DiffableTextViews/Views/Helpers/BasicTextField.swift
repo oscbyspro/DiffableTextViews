@@ -5,8 +5,6 @@
 //  Created by Oscar Byström Ericsson on 2021-10-31.
 //
 
-#warning("Rework: Intent.")
-
 #if canImport(UIKit)
 
 import UIKit
@@ -21,6 +19,7 @@ public final class BasicTextField: UITextField {
     // MARK: Properties
     //=------------------------------------------------------------------------=
     
+    #warning("Rework: Intent.")
     @usableFromInline private(set) var intent: Direction? = nil
 
     //=------------------------------------------------------------------------=
@@ -52,11 +51,23 @@ public final class BasicTextField: UITextField {
     //=------------------------------------------------------------------------=
     
     @inlinable func processIntentStarted(_ presses: Set<UIPress>) {
-        intent = .intent(presses)
+        intent = Self.intent(presses)
     }
     
     @inlinable func processIntentEnded(_ presses: Set<UIPress>) {
-        if intent == .intent(presses) { intent = nil }
+        if intent == Self.intent(presses) { intent = nil }
     }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Intent
+    //=------------------------------------------------------------------------=
+    
+    @inlinable static func intent(_ presses: Set<UIPress>) -> Direction? {
+        presses.first?.key.flatMap({ intents[$0.keyCode] })
+    }
+    
+    @usableFromInline static let intents: [UIKeyboardHIDUsage: Direction] = [
+        .keyboardLeftArrow: .backwards, .keyboardRightArrow: .forwards
+    ]
 }
 #endif

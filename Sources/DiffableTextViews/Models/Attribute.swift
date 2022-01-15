@@ -41,13 +41,9 @@ public struct Attribute: OptionSet {
     
     /// Default behavior used to describe plain text. Contains no options.
     public static let content = Self([])
-    
-    /// Contains: .formatting, .insertable, .removable.
-    public static let anchor  = Self([.virtual, .insertable, .removable])
-    
+
     /// Contains: .formatting, .insertable, .removable, .passthrough.
-    public static let format  = Self([.virtual, .insertable, .removable, .passthrough])
-    
+    public static let format = Self([.virtual, .insertable, .removable, .passthrough])
     
     //=------------------------------------------------------------------------=
     // MARK: Properties
