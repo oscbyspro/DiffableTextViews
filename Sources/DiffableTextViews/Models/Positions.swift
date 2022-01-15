@@ -122,39 +122,3 @@
         }
     }
 }
-
-//=----------------------------------------------------------------------------=
-// MARK: Positions - Attribute
-//=----------------------------------------------------------------------------=
-
-extension Positions {
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Forwards
-    //=------------------------------------------------------------------------=
-        
-    @inlinable func attribute(forwards position: Snapshot.Attributes.Index) -> Attribute {
-        guard position != attributes.endIndex else { return .passthrough }
-        return attributes[position]
-    }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Backwards
-    //=------------------------------------------------------------------------=
-    
-    @inlinable func attribute(backwards position: Snapshot.Attributes.Index) -> Attribute {
-        guard position != attributes.startIndex else { return .passthrough }
-        return attributes[attributes.index(before: position)]
-    }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Direction
-    //=------------------------------------------------------------------------=
-    
-    @inlinable func attribute(_ position: Snapshot.Attributes.Index, direction: Direction) -> Attribute {
-        switch direction {
-        case  .forwards: return attribute( forwards: position)
-        case .backwards: return attribute(backwards: position)
-        }
-    }
-}
