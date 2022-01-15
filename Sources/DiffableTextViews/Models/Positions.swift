@@ -76,27 +76,6 @@
         let character = characters[before.character]
         return Index(before, at: index.position.before(character))
     }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Traversal - Index At Offset
-    //=------------------------------------------------------------------------=
-    
-    @inlinable func index(start: Index, destination: Position) -> Index {
-        start.position <= destination
-        ? indices[start...].first(where: { $0.position >= destination }) ??   endIndex
-        : indices[...start].last (where: { $0.position <= destination }) ?? startIndex
-    }
-    
-    @inlinable func indices(start: Range<Index>, destination: Range<Position>) -> Range<Index> {
-        let upperBound = index(start: start.upperBound, destination: destination.upperBound)
-        var lowerBound = upperBound
-        
-        if !start.isEmpty {
-            lowerBound = index(start: start.lowerBound, destination: destination.lowerBound)
-        }
-        
-        return lowerBound ..< upperBound
-    }
 
     //*========================================================================*
     // MARK: * Index
@@ -143,5 +122,71 @@
         @inlinable static func <  (lhs: Self, rhs: Self) -> Bool {
             lhs.position <  rhs.position
         }
+    }
+}
+
+//=----------------------------------------------------------------------------=
+// MARK: Positions - Move To Destination
+//=----------------------------------------------------------------------------=
+
+extension Positions {
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Forwards
+    //=------------------------------------------------------------------------=
+    
+    #warning("rework")
+    @inlinable func forwards(start: Index, destination: Position) -> Index {
+        var position = start
+        
+        while position.snapshot != snapshot.endIndex {
+            guard position.position < destination else { return position }
+            formIndex(after: &position)
+        }
+        
+        return position
+    }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Backwards
+    //=------------------------------------------------------------------------=
+    
+    #warning("rework")
+    @inlinable func backwards(start: Index, destination: Position) -> Index {
+        var position = start
+        
+        while position.snapshot != snapshot.startIndex {
+            let after = position
+            formIndex(before: &position)
+            guard position.position > destination else { return after }
+        }
+        
+        return position
+    }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Single
+    //=------------------------------------------------------------------------=
+    
+    @inlinable func index(start: Index, destination: Position) -> Index {
+        start.position <= destination
+        ?  forwards(start: start, destination: destination)
+        : backwards(start: start, destination: destination)
+    }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Double
+    //=------------------------------------------------------------------------=
+
+    @inlinable func indices(start: Range<Index>, destination: Range<Position>) -> Range<Index> {
+        let upperBound = index(start: start.upperBound, destination: destination.upperBound)
+        var lowerBound = upperBound
+        
+        if !destination.isEmpty {
+            lowerBound = index(start: start.lowerBound, destination: destination.lowerBound)
+            lowerBound = Swift.min(lowerBound, upperBound)
+        }
+
+        return lowerBound ..< upperBound
     }
 }
