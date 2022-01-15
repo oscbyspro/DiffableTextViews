@@ -23,7 +23,7 @@ This package contains views and styles that use snapshots and attributes to proc
 👷‍♂️🛠🚧🚧🧱🏗🧱🚧🚧⏳
 
 - Formats: Number, Currency.
-- Locales: Yes ...every single one of them (untested).
+- Locales: Yes ...every single one (untested).
 - [Values](../main/Notes/NumericTextStyles/VALUES.md): Decimal, Float(16-64), (U)Int(8-64).
 
 ```swift
