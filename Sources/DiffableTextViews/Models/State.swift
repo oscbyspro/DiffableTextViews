@@ -112,10 +112,17 @@ extension State {
     //=------------------------------------------------------------------------=
     
     @inlinable mutating func update(selection: Range<Positions.Index>, intent: Direction?) {
-        self.selection  = selection
-        let upperIntent = intent.flatMap({ _ in Direction(start: self.selection.upperBound, end: selection.upperBound) })
-        let lowerIntent = intent.flatMap({ _ in Direction(start: self.selection.lowerBound, end: selection.lowerBound) })
-        self.autocorrect(intent: (lowerIntent, upperIntent))
+        //=--------------------------------------=
+        // MARK: Reinterpret Intent As Momentum
+        //=--------------------------------------=
+        let intent = (intent == nil) ? (nil, nil) : (
+        Direction(start: self.selection.lowerBound, end: selection.lowerBound),
+        Direction(start: self.selection.upperBound, end: selection.upperBound))
+        //=--------------------------------------=
+        // MARK: Update
+        //=--------------------------------------=
+        self.selection = selection
+        self.autocorrect(intent: intent)
     }
     
     //=------------------------------------------------------------------------=
@@ -143,8 +150,9 @@ extension State {
         
         if !selection.isEmpty, upperBound != positions.startIndex {
             lowerBound = positions.caret(start: selection.lowerBound, preference:  .forwards, intent: intent.lower)
+            lowerBound = min(lowerBound, upperBound)
         }
-        
+                
         self.selection = lowerBound ..< upperBound
     }
 }

@@ -358,7 +358,7 @@ extension Positions {
             return caret
         }
         //=--------------------------------------=
-        // MARK: Failure
+        // MARK: Default
         //=--------------------------------------=
         return startIndex
     }
