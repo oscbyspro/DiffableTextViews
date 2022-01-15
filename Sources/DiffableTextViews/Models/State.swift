@@ -97,7 +97,7 @@ extension State {
         //=--------------------------------------=
         self.positions = positions
         self.selection = selection
-        self.autocorrect(intent: nil)
+        self.autocorrect(intent: (nil, nil))
     }
 }
 
@@ -112,8 +112,10 @@ extension State {
     //=------------------------------------------------------------------------=
     
     @inlinable mutating func update(selection: Range<Positions.Index>, intent: Direction?) {
-        self.selection = selection
-        self.autocorrect(intent: intent)
+        self.selection  = selection
+        let upperIntent = intent.flatMap({ _ in Direction(start: self.selection.upperBound, end: selection.upperBound) })
+        let lowerIntent = intent.flatMap({ _ in Direction(start: self.selection.lowerBound, end: selection.lowerBound) })
+        self.autocorrect(intent: (lowerIntent, upperIntent))
     }
     
     //=------------------------------------------------------------------------=
@@ -135,34 +137,12 @@ extension State {
     // MARK: Selection
     //=------------------------------------------------------------------------=
     
-    /// It is OK to use momentum on both positions at once, because they each have different preferred directions.
-    @inlinable mutating func autocorrect(intent: Direction?) {
-        switch selection.isEmpty {
-        case  true: autocorrectSingleCaret(intent: intent)
-        case false: autocorrectDoubleCaret(intent: intent)
-        }
-    }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Single
-    //=------------------------------------------------------------------------=
-    
-    @inlinable mutating func autocorrectSingleCaret(intent: Direction?) {
-        let position = positions.single.position(start: selection.upperBound, intent: intent)
-        self.selection = position ..< position
-    }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Double
-    //=------------------------------------------------------------------------=
-    
-    @inlinable mutating func autocorrectDoubleCaret(intent: Direction?) {
-        let upperBound = positions.upper.position(start: selection.upperBound, intent: intent)
+    @inlinable mutating func autocorrect(intent: (lower: Direction?, upper: Direction?)) {
+        let upperBound = positions.caret(start: selection.upperBound, preference: .backwards, intent: intent.upper)
         var lowerBound = upperBound
-
-        if upperBound != positions.startIndex {
-            lowerBound = positions.lower.position(start: selection.lowerBound, intent: intent)
-            lowerBound = min(lowerBound, upperBound)
+        
+        if !selection.isEmpty, upperBound != positions.startIndex {
+            lowerBound = positions.caret(start: selection.lowerBound, preference:  .forwards, intent: intent.lower)
         }
         
         self.selection = lowerBound ..< upperBound

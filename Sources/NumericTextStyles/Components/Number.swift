@@ -98,18 +98,18 @@ extension Number {
         //=--------------------------------------=
         
         var index = start
-        var symbol = snapshot[start]
+        var element = snapshot[start]
         
         //=--------------------------------------=
         // MARK: Helpers
         //=--------------------------------------=
 
-        func iterate() {
+        func next() {
             while true {
                 snapshot.formIndex(after: &index)
                 if index == snapshot.endIndex { break }
-                symbol = snapshot[index]
-                if !symbol.attribute.contains(.formatting) { break }
+                element = snapshot[index]
+                if !element.attribute.contains(.formatting) { break }
             }
         }
         
@@ -119,18 +119,18 @@ extension Number {
             // MARK: Sign
             //=----------------------------------=
 
-            if index != snapshot.endIndex, !options.contains(.unsigned), let sign = region.signs[symbol.character] {
+            if index != snapshot.endIndex, !options.contains(.unsigned), let sign = region.signs[element.character] {
                 self.sign = sign
-                iterate()
+                next()
             }
 
             //=----------------------------------=
             // MARK: Digits
             //=----------------------------------=
 
-            while index != snapshot.endIndex, let digit = region.digits[symbol.character] {
+            while index != snapshot.endIndex, let digit = region.digits[element.character] {
                 self.integer.append(digit)
-                iterate()
+                next()
             }
             
             self.integer.removeZerosPrefix()
@@ -142,9 +142,9 @@ extension Number {
             // MARK: Separator
             //=----------------------------------=
 
-            if index != snapshot.endIndex, region.separators.keys.contains(symbol.character) {
+            if index != snapshot.endIndex, region.separators.keys.contains(element.character) {
                 self.separator = .fraction
-                iterate()
+                next()
             }
             
             guard self.separator == .fraction else { break attempt }
@@ -153,9 +153,9 @@ extension Number {
             // MARK: Fraction
             //=----------------------------------=
             
-            while index != snapshot.endIndex, let digit = region.digits[symbol.character] {
+            while index != snapshot.endIndex, let digit = region.digits[element.character] {
                 self.fraction.append(digit)
-                iterate()
+                next()
             }
             
         }

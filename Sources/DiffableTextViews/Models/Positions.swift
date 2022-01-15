@@ -53,28 +53,16 @@
         snapshot.attributes
     }
     
+    @inlinable func nonpassthrough(_ position: Index) -> Bool {
+        !attributes[position.attribute].contains(.passthrough)
+    }
+
     //=------------------------------------------------------------------------=
     // MARK: Elements
     //=------------------------------------------------------------------------=
 
     @inlinable subscript(position: Index) -> Symbol {
         snapshot[position.snapshot]
-    }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Traversal
-    //=------------------------------------------------------------------------=
-
-    @inlinable func index(after index: Index) -> Index {
-        let character = characters[index.character]
-        let after = snapshot.index(after: index.snapshot)
-        return Index(after, at: index.position.after(character))
-    }
-    
-    @inlinable func index(before index: Index) -> Index {
-        let before = snapshot.index(before: index.snapshot)
-        let character = characters[before.character]
-        return Index(before, at: index.position.before(character))
     }
 
     //*========================================================================*
@@ -110,7 +98,7 @@
         @inlinable var attribute: Snapshot.Attributes.Index {
             snapshot.attribute
         }
-
+        
         //=------------------------------------------------------------------------=
         // MARK: Comparisons
         //=------------------------------------------------------------------------=
@@ -126,44 +114,71 @@
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: Positions - Predicate
+// MARK: Positions - Traversal
 //=----------------------------------------------------------------------------=
 
 extension Positions {
     
     //=------------------------------------------------------------------------=
-    // MARK: After
+    // MARK: Next - After
+    //=------------------------------------------------------------------------=
+
+    @inlinable func index(after index: Index) -> Index {
+        let character = characters[index.character]
+        let after = snapshot.index(after: index.snapshot)
+        return Index(after, at: index.position.after(character))
+    }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Next - Before
+    //=------------------------------------------------------------------------=
+    
+    @inlinable func index(before index: Index) -> Index {
+        let before = snapshot.index(before: index.snapshot)
+        let character = characters[before.character]
+        return Index(before, at: index.position.before(character))
+    }
+}
+
+//=----------------------------------------------------------------------------=
+// MARK: Positions - Traversal
+//=----------------------------------------------------------------------------=
+
+extension Positions {
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Predicate - After
     //=------------------------------------------------------------------------=
     
     @inlinable func index(after start: Index, while predicate: (Index) -> Bool) -> Index {
         var position = start
-        
+        //=--------------------------------------=
         while position != endIndex {
             guard predicate(position) else { return position }
             formIndex(after: &position)
         }
-        
+        //=--------------------------------------=
         return position
     }
     
     //=------------------------------------------------------------------------=
-    // MARK: Before
+    // MARK: Predicate - Before
     //=------------------------------------------------------------------------=
-    
+
     @inlinable func index(before start: Index, while predicate: (Index) -> Bool) -> Index {
         var position = start
-        
+        //=--------------------------------------=
         while position != startIndex {
             guard predicate(position) else { return position }
             formIndex(before: &position)
         }
-        
+        //=--------------------------------------=
         return position
     }
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: Positions - Destination
+// MARK: Positions - Index
 //=----------------------------------------------------------------------------=
 
 extension Positions {
@@ -191,5 +206,160 @@ extension Positions {
         }
         
         return lowerBound ..< upperBound
+    }
+}
+
+//=----------------------------------------------------------------------------=
+// MARK: Positions - Validation
+//=----------------------------------------------------------------------------=
+
+extension Positions {
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Preference - Forwards
+    //=------------------------------------------------------------------------=
+    
+    @inlinable func preferableForwards(position: Index) -> Bool {
+        position != endIndex ? nonpassthrough(position) : false
+    }
+    
+    @inlinable func preferableBackwards(position: Index) -> Bool {
+        position != startIndex ? nonpassthrough(index(before: position)) : false
+    }
+    
+    @inlinable func preferable(position: Index, by preference: Direction) -> Bool {
+        switch preference {
+        case .forwards: return preferableForwards(position: position)
+        case .backwards: return preferableBackwards(position: position)
+        }
+    }
+}
+
+//=----------------------------------------------------------------------------=
+// MARK: Positions - Caret
+//=----------------------------------------------------------------------------=
+
+extension Positions {
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Forwards - To
+    //=------------------------------------------------------------------------=
+    
+    @inlinable func firstCaretForwardsTo(start: Index) -> Index? {
+        var position = start
+        
+        while position != endIndex {
+            if nonpassthrough(position) { return position }
+            formIndex(after: &position)
+        }
+        
+        return nil
+    }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Forwards - Through
+    //=------------------------------------------------------------------------=
+    
+    @inlinable func firstCaretForwardsThrough(start: Index) -> Index? {
+        var position = start
+        
+        while position != endIndex {
+            if nonpassthrough(position) { return index(after: position) }
+            formIndex(after: &position)
+        }
+        
+        return nil
+    }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Backwards - To
+    //=------------------------------------------------------------------------=
+    
+    @inlinable func firstCaretBackwardsTo(start: Index) -> Index? {
+        var position = start
+
+        while position != startIndex {
+            let after = position
+            formIndex(before: &position)
+            if nonpassthrough(position) { return after }
+        }
+
+        return nil
+    }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Backwards - Through
+    //=------------------------------------------------------------------------=
+    
+    @inlinable func firstCaretBackwardsThrough(start: Index) -> Index? {
+        var position = start
+
+        while position != startIndex {
+            formIndex(before: &position)
+            if nonpassthrough(position) { return position }
+        }
+
+        return nil
+    }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Dynamic - Direction, Skip
+    //=------------------------------------------------------------------------=
+    
+    @inlinable func firstCaret(start: Index, direction: Direction, skip: Bool) -> Index? {
+        switch (direction, skip) {
+        case (.forwards, false): return firstCaretForwardsTo(start: start)
+        case (.forwards, true): return firstCaretForwardsThrough(start: start)
+        case (.backwards, false): return firstCaretBackwardsTo(start: start)
+        case (.backwards, true): return firstCaretBackwardsThrough(start: start)
+        }
+    }
+}
+
+//=----------------------------------------------------------------------------=
+// MARK: Positions - Caret
+//=----------------------------------------------------------------------------=
+
+extension Positions {
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Caret
+    //=------------------------------------------------------------------------=
+        
+    @inlinable func caret(start: Index, preference: Direction, intent: Direction?) -> Index {
+        //=--------------------------------------=
+        // MARK: Validate
+        //=--------------------------------------=
+        if preferable(
+            position: start,
+            by: preference) {
+            return start
+        }
+        //=--------------------------------------=
+        // MARK: Direction
+        //=--------------------------------------=
+        let direction = intent ?? preference
+        //=--------------------------------------=
+        // MARK: Try
+        //=--------------------------------------=
+        if let caret = firstCaret(
+            start: start,
+            direction: direction,
+            skip: direction != preference) {
+            return caret
+        }
+        //=--------------------------------------=
+        // MARK: Try In Reverse Direction
+        //=--------------------------------------=
+        if let caret = firstCaret(
+            start: start,
+            direction: direction.reversed(),
+            skip: false) {
+            return caret
+        }
+        //=--------------------------------------=
+        // MARK: Failure
+        //=--------------------------------------=
+        return startIndex
     }
 }
