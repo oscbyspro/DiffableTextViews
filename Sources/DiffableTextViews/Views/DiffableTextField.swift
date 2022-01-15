@@ -88,7 +88,7 @@ public struct DiffableTextField<Style: DiffableTextStyle & UIKitTextStyle>: UIVi
         //=--------------------------------------=
         let downstream = ProxyTextField(uiView)
         style.setup(downstream)
-        setup.apply(on: downstream)
+        setup.apply(downstream)
         context.coordinator.downstream = downstream
         //=--------------------------------------=
         // MARK: Done
@@ -102,7 +102,7 @@ public struct DiffableTextField<Style: DiffableTextStyle & UIKitTextStyle>: UIVi
     
     @inlinable public func updateUIView(_ uiView: UIViewType, context: Context) {
         context.coordinator.upstream = self
-        update.apply(on: context.coordinator.downstream)
+        update.apply(context.coordinator.downstream)
         context.coordinator.synchronize()
     }
     
@@ -133,7 +133,7 @@ public struct DiffableTextField<Style: DiffableTextStyle & UIKitTextStyle>: UIVi
         //=----------------------------------------------------------------------------=
         
         @inlinable public func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-            !upstream.submit.apply(on: downstream)
+            !upstream.submit.apply(downstream)
         }
         
         //=--------------------------------------------------------------------=

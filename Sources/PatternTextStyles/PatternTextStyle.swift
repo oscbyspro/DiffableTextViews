@@ -12,7 +12,7 @@ import DiffableTextViews
 // MARK: * PatternTextStyle
 //*============================================================================*
 
-public struct PatternTextStyle<Pattern, Value>: DiffableTextStyle, Transformable where Pattern: Collection, Pattern.Element == Character, Value: RangeReplaceableCollection, Value: Equatable, Value.Element == Character {
+public struct PatternTextStyle<Pattern, Value>: DiffableTextStyle, UIKitTextStyle, Transformable where Pattern: Collection, Pattern.Element == Character, Value: RangeReplaceableCollection, Value: Equatable, Value.Element == Character {
     @usableFromInline typealias Predicates = PatternTextStyles.Predicates<Value>
     
     //=------------------------------------------------------------------------=
