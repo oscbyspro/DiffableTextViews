@@ -52,8 +52,8 @@ extension NumericTextStyle {
         // MARK: Prefix
         //=--------------------------------------=
         if !prefix.isEmpty {
-            snapshot.append(contentsOf: Snapshot(prefix, only: .prefix))
-            snapshot.append(.prefix(" "))
+            snapshot.append(contentsOf: Snapshot(prefix, only: .format))
+            snapshot.append(.format(" "))
         }
 
         #warning("Up to first digit")
@@ -84,7 +84,7 @@ extension NumericTextStyle {
             } else if let separator = region.separators[character] {
                 switch separator {
                 case .grouping:
-                    snapshot.append(Symbol(character: character, attribute: .spacer))
+                    snapshot.append(Symbol(character: character, attribute: .format))
                 case .fraction:
                     redundanciesStart = snapshot.endIndex
                     snapshot.append(Symbol(character: character, attribute: .content))
@@ -95,12 +95,12 @@ extension NumericTextStyle {
             // MARK: Sign
             //=----------------------------------=
             } else if let _ = region.signs[character] {
-                snapshot.append(Symbol(character: character, attribute: [.prefixing, .suffixing]))
+                snapshot.append(Symbol(character: character, attribute: .passthrough))
             //=----------------------------------=
             // MARK: None Of The Above
             //=----------------------------------=
             } else {
-                snapshot.append(Symbol(character: character, attribute: .spacer))
+                snapshot.append(Symbol(character: character, attribute: .format))
             }
         }
         //=--------------------------------------=
@@ -109,7 +109,7 @@ extension NumericTextStyle {
         if let interactableStart = interactableStart {
             snapshot.transform(attributes: ..<interactableStart) {
                 attribute in
-                attribute.insert(.prefixing)
+                attribute.insert(.passthrough)
             }
         }
         //=--------------------------------------=
@@ -126,14 +126,14 @@ extension NumericTextStyle {
         //=--------------------------------------=
         snapshot.transform(attributes: interactableEnd...) {
             attribute in
-            attribute = .suffix
+            attribute = .format
         }
         //=--------------------------------------=
         // MARK: Suffix
         //=--------------------------------------=
         if !suffix.isEmpty {
-            snapshot.append(.suffix(" "))
-            snapshot.append(contentsOf: Snapshot(suffix, only: .suffix))
+            snapshot.append(.format(" "))
+            snapshot.append(contentsOf: Snapshot(suffix, only: .format))
         }
         //=--------------------------------------=
         // MARK: Done
@@ -242,7 +242,7 @@ extension NumericTextStyle {
 
 import UIKit
 
-extension NumericTextStyle: UIKitCompatibleStyle {
+extension NumericTextStyle: UIKitTextStyle {    
     
     //=------------------------------------------------------------------------=
     // MARK: Keyboard

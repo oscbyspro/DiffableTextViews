@@ -7,7 +7,6 @@
 
 import Quick
 import DiffableTextViews
-import Utilities
 
 //*============================================================================*
 // MARK: * PatternTextStyle

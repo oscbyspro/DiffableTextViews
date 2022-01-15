@@ -6,7 +6,6 @@
 //
 
 import DiffableTextViews
-import Utilities
 
 //*============================================================================*
 // MARK: * Number
@@ -92,14 +91,14 @@ extension Number {
     /// To use this method, all formatting characters must be marked as formatting.
     ///
     @inlinable init(_ snapshot: Snapshot, with options: Options, in region: Region) throws {
-        guard let start = snapshot.firstIndex(where: \.nonformatting) else { self = .zero; return }
+        guard let start = snapshot.firstIndex(where: Symbol.is(not: .virtual)) else { self = .zero; return }
         
         //=--------------------------------------=
         // MARK: State
         //=--------------------------------------=
         
         var index = start
-        var element = snapshot[start]
+        var symbol = snapshot[start]
         var done = false
         
         //=--------------------------------------=
@@ -111,8 +110,8 @@ extension Number {
                 snapshot.formIndex(after: &index)
 
                 if index != snapshot.endIndex {
-                    element = snapshot[index]
-                    if element.nonformatting { break loop }
+                    symbol = snapshot[index]
+                    if !symbol.is(.virtual) { break loop }
                 } else {
                     done = true
                 }
@@ -125,7 +124,7 @@ extension Number {
             // MARK: Sign
             //=----------------------------------=
 
-            if index != snapshot.endIndex, !options.contains(.unsigned), let sign = region.signs[element.character] {
+            if index != snapshot.endIndex, !options.contains(.unsigned), let sign = region.signs[symbol.character] {
                 self.sign = sign
                 iterate()
             }
@@ -134,7 +133,7 @@ extension Number {
             // MARK: Digits
             //=----------------------------------=
 
-            while index != snapshot.endIndex, let digit = region.digits[element.character] {
+            while index != snapshot.endIndex, let digit = region.digits[symbol.character] {
                 self.integer.append(digit)
                 iterate()
             }
@@ -148,7 +147,7 @@ extension Number {
             // MARK: Separator
             //=----------------------------------=
 
-            if index != snapshot.endIndex, region.separators.keys.contains(element.character) {
+            if index != snapshot.endIndex, region.separators.keys.contains(symbol.character) {
                 self.separator = .fraction
                 iterate()
             }
@@ -159,7 +158,7 @@ extension Number {
             // MARK: Fraction
             //=----------------------------------=
             
-            while index != snapshot.endIndex, let digit = region.digits[element.character] {
+            while index != snapshot.endIndex, let digit = region.digits[symbol.character] {
                 self.fraction.append(digit)
                 iterate()
             }

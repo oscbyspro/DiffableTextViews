@@ -30,7 +30,7 @@ extension PatternTextStyle {
             let patternElement =  pattern[patternIndex]
             if  patternElement == placeholder { break }
 
-            snapshot.append(.prefix(patternElement))
+            snapshot.append(.format(patternElement))
             pattern.formIndex(after: &patternIndex)
         }
         
@@ -47,7 +47,7 @@ extension PatternTextStyle {
                 value.formIndex(after:  &valueIndex)
                 snapshot.append(.content(valueElement))
             } else {
-                snapshot.append(.spacer(patternElement))
+                snapshot.append(.format(patternElement))
             }
         }
         
@@ -56,7 +56,7 @@ extension PatternTextStyle {
         //=--------------------------------------=
         
         if visible, patternIndex != pattern.endIndex {
-            snapshot.append(contentsOf: Snapshot(String(pattern[patternIndex...]), only: .suffix))
+            snapshot.append(contentsOf: Snapshot(String(pattern[patternIndex...]), only: .format))
         }
         
         //=--------------------------------------=
@@ -112,7 +112,7 @@ extension PatternTextStyle {
         
         let value = Value(snapshot
             .lazy
-            .filter({ !$0.attribute.contains(.formatting) })
+            .filter({ !$0.attribute.contains(.virtual) })
             .map(\.character))
                           
         //=--------------------------------------=

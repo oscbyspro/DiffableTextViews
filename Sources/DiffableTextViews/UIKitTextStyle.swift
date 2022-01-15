@@ -32,7 +32,7 @@ public protocol UIKitTextStyle: DiffableTextStyle {
 // MARK: UIKitTextStyle - Implementation
 //=----------------------------------------------------------------------------=
 
-extension UIKitTextStyle {
+public extension UIKitTextStyle {
     
     //=------------------------------------------------------------------------=
     // MARK: Keyboard

@@ -5,8 +5,8 @@
 //  Created by Oscar Byström Ericsson on 2021-12-21.
 //
 
+import DiffableTextViews
 import Foundation
-import  Utilities
 
 //*============================================================================*
 // MARK: * Precision
