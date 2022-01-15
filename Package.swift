@@ -32,7 +32,7 @@ let package = Package(
         //=--------------------------------------=
         .target(
             name: "DiffableTextViews",
-            dependencies: ["Quick"]),
+            dependencies: ["Quick", "QuickText"]),
         .testTarget(
             name: "DiffableTextViewsTests",
             dependencies: ["DiffableTextViews"]),

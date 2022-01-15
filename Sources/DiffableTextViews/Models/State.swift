@@ -13,7 +13,7 @@ import Quick
 
 @usableFromInline struct State<Scheme: DiffableTextViews.Scheme>: Transformable {
     @usableFromInline typealias Positions = DiffableTextViews.Positions<Scheme>
-    @usableFromInline typealias Offset    = DiffableTextViews.Offset<Scheme>
+    @usableFromInline typealias Offset    = DiffableTextViews.Position<Scheme>
 
     //=------------------------------------------------------------------------=
     // MARK: Properties
@@ -97,7 +97,7 @@ extension State {
         //=--------------------------------------=
         self.positions = positions
         self.selection = selection
-        self.autocorrect(momentum: nil)
+        self.autocorrect(momentum: false)
     }
 }
 
@@ -111,17 +111,17 @@ extension State {
     // MARK: Transformations
     //=------------------------------------------------------------------------=
     
-    @inlinable mutating func update(selection: Range<Positions.Index>, momentum: Bool) {
+    @inlinable mutating func update(selection: Range<Positions.Index>, intent: Direction?) {
         self.selection = selection
-        self.autocorrect(momentum: momentum)
+        self.autocorrect(intent: intent)
     }
     
     //=------------------------------------------------------------------------=
     // MARK: Transformations - Indirect
     //=------------------------------------------------------------------------=
     
-    @inlinable mutating func update(selection: Range<Offset>, momentum: Bool) {
-        update(selection: indices(at: selection), momentum: momentum)
+    @inlinable mutating func update(selection: Range<Offset>, intent: Direction?) {
+        update(selection: indices(at: selection), intent: intent)
     }
 }
 
@@ -136,7 +136,7 @@ extension State {
     //=------------------------------------------------------------------------=
     
     /// It is OK to use momentum on both positions at once, because they each have different preferred directions.
-    @inlinable mutating func autocorrect(momentum: Bool) {
+    @inlinable mutating func autocorrect(intent: Direction?) {
         #warning("Convert momentum.")
         
         let upperBound = position(start: selection.upperBound, preference: .backwards, momentum: momentum)
@@ -153,66 +153,9 @@ extension State {
     //=------------------------------------------------------------------------=
     // MARK: Position
     //=------------------------------------------------------------------------=
-
-    #warning("Plan.")
-    /*
-     
-     1. try to fall
-     2. if both sides are passthrough, try to climb
-     
-     */
     
-    #warning("Broken.")
+    #warning("Rework.")
     @inlinable func position(start: Positions.Index, preference: Direction, momentum: Direction?) -> Positions.Index {
-        //=--------------------------------------=
-        // MARK: Validate
-        //=--------------------------------------=
-        if positions.breaks(at: start, direction: preference) { return start }
-        //=--------------------------------------=
-        // MARK: Position, Direction
-        //=--------------------------------------=
-        var position = start
-        var direction = momentum ?? preference
-        //=--------------------------------------=
-        // MARK: Correct
-        //=--------------------------------------=
-        loop: while true {
-            //=----------------------------------=
-            // MARK: Move To Next Position
-            //=----------------------------------=
-            position = positions.breakpoint(start: position, direction: direction)
-            //=----------------------------------=
-            // MARK: Correct
-            //=----------------------------------=
-            switch direction {
-            //=----------------------------------=
-            // MARK: Done
-            //=----------------------------------=
-            case preference:
-                break loop
-            //=----------------------------------=
-            // MARK: Forwards
-            //=----------------------------------=
-            case .forwards:
-                if position != positions.endIndex {
-                    position = positions.index(after: position)
-                }
-            //=----------------------------------=
-            // MARK: Backwards
-            //=----------------------------------=
-            case .backwards:
-                if position != positions.startIndex {
-                    position = positions.index(before: position)
-                }
-            }
-            //=----------------------------------=
-            // MARK: Repeat In Preferred Direction
-            //=----------------------------------=
-            direction = preference
-        }
-        //=--------------------------------------=
-        // MARK: Return
-        //=--------------------------------------=
-        return position
+        fatalError()
     }
 }

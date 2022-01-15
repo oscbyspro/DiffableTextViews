@@ -26,7 +26,7 @@ import UIKit
 ///
 public final class ProxyTextField {
     @usableFromInline typealias Wrapped = BasicTextField
-    @usableFromInline typealias Offset = DiffableTextViews.Offset<UTF16>
+    @usableFromInline typealias Position = DiffableTextViews.Position<UTF16>
     
     //=------------------------------------------------------------------------=
     // MARK: Properties
@@ -107,7 +107,7 @@ extension ProxyTextField {
         wrapped.text!
     }
     
-    @inlinable func selection() -> Range<Offset> {
+    @inlinable func selection() -> Range<Position> {
         offsets(in: wrapped.selectedTextRange!)
     }
     
@@ -121,7 +121,7 @@ extension ProxyTextField {
     }
         
     /// - Complexity: High.
-    @inlinable func update(selection: Range<Offset>) {
+    @inlinable func update(selection: Range<Position>) {
         wrapped.selectedTextRange = positions(in: selection)
     }
     
@@ -130,12 +130,12 @@ extension ProxyTextField {
     //=------------------------------------------------------------------------=
 
     /// - Complexity: O(1).
-    @inlinable func offsets(in range: UITextRange) -> Range<Offset> {
+    @inlinable func offsets(in range: UITextRange) -> Range<Position> {
         offset(at: range.start) ..< offset(at: range.end)
     }
     
     /// - Complexity: O(1).
-    @inlinable func offset(at position: UITextPosition) -> Offset {
+    @inlinable func offset(at position: UITextPosition) -> Position {
         Offset(wrapped.offset(from: wrapped.beginningOfDocument, to: position))
     }
     
@@ -144,12 +144,12 @@ extension ProxyTextField {
     //=------------------------------------------------------------------------=
     
     /// - Complexity: O(1).
-    @inlinable func position(at offset: Offset) -> UITextPosition {
-        wrapped.position(from: wrapped.beginningOfDocument, offset: offset.units)!
+    @inlinable func position(at offset: Position) -> UITextPosition {
+        wrapped.position(from: wrapped.beginningOfDocument, offset: offset.offset)!
     }
     
     /// - Complexity: O(1).
-    @inlinable func positions(in offsets: Range<Offset>) -> UITextRange {
+    @inlinable func positions(in offsets: Range<Position>) -> UITextRange {
         wrapped.textRange(from: position(at: offsets.lowerBound), to: position(at: offsets.upperBound))!
     }
 }

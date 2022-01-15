@@ -13,13 +13,8 @@
 /// |$|1|2|3|,|4|5|6|.|7|8|9|_|U|S|D|~
 /// |x|o|o|o|x|o|o|o|o|o|o|o|x|x|x|x|x
 /// ```
-///
-/// - Methods prefixed as move treat indices as is, whereas methods prefixed as look treat indices from the caret's point of view.
-/// As such, they behave the same way forwards and differently backwards — since a carets position is in front of its index.
-///
-///
 @usableFromInline struct Positions<Scheme: DiffableTextViews.Scheme>: BidirectionalCollection {
-    @usableFromInline typealias Offset = DiffableTextViews.Offset<Scheme>
+    @usableFromInline typealias Position = DiffableTextViews.Position<Scheme>
 
     //=------------------------------------------------------------------------=
     // MARK: Properties
@@ -40,8 +35,8 @@
 
     @usableFromInline init(_ snapshot: Snapshot) {
         self.snapshot = snapshot
-        self.startIndex = Index(snapshot.startIndex, at: .zero)
-        self  .endIndex = Index(snapshot  .endIndex, at: .size(of: snapshot.characters))
+        self.startIndex = Index(snapshot.startIndex, at: .start)
+        self  .endIndex = Index(snapshot  .endIndex, at: .end(of: snapshot.characters))
     }
 
     //=------------------------------------------------------------------------=
@@ -65,19 +60,19 @@
     }
     
     //=------------------------------------------------------------------------=
-    // MARK: Traversal
+    // MARK: Move
     //=------------------------------------------------------------------------=
 
-    @inlinable func index(after position: Index) -> Index {
-        let character = characters[position.character]
-        let after = snapshot.index(after: position.snapshot)
-        return Index(after, at: position.offset.after(character))
+    @inlinable func index(after index: Index) -> Index {
+        let character = characters[index.character]
+        let after = snapshot.index(after: index.snapshot)
+        return Index(after, at: index.position.after(character))
     }
     
-    @inlinable func index(before position: Index) -> Index {
-        let before = snapshot.index(before: position.snapshot)
+    @inlinable func index(before index: Index) -> Index {
+        let before = snapshot.index(before: index.snapshot)
         let character = characters[before.character]
-        return Index(before, at: position.offset.before(character))
+        return Index(before, at: index.position.before(character))
     }
 
     //*========================================================================*
@@ -91,17 +86,17 @@
         //=------------------------------------------------------------------------=
 
         @usableFromInline let snapshot: Snapshot.Index
-        @usableFromInline let offset: Offset
+        @usableFromInline let position: Position
 
         //=------------------------------------------------------------------------=
         // MARK: Initializers
         //=------------------------------------------------------------------------=
 
-        @inlinable init(_ snapshot: Snapshot.Index, at offset: Offset) {
+        @inlinable init(_ snapshot: Snapshot.Index, at position: Position) {
             self.snapshot = snapshot
-            self.offset = offset
+            self.position = position
         }
-
+        
         //=------------------------------------------------------------------------=
         // MARK: Accessors
         //=------------------------------------------------------------------------=
@@ -119,52 +114,47 @@
         //=------------------------------------------------------------------------=
 
         @inlinable static func == (lhs: Self, rhs: Self) -> Bool {
-            lhs.offset == rhs.offset
+            lhs.position == rhs.position
         }
 
         @inlinable static func <  (lhs: Self, rhs: Self) -> Bool {
-            lhs.offset <  rhs.offset
+            lhs.position <  rhs.position
         }
     }
 }
 
-#warning("WIP")
-#warning("WIP")
-#warning("WIP")
+//=----------------------------------------------------------------------------=
+// MARK: Positions - Attribute
+//=----------------------------------------------------------------------------=
 
 extension Positions {
     
-    @inlinable func nonpassthrough(_ symbol: Symbol) -> Bool {
-        !symbol.attribute.contains(.passthrough)
+    //=------------------------------------------------------------------------=
+    // MARK: Forwards
+    //=------------------------------------------------------------------------=
+        
+    @inlinable func attribute(forwards position: Snapshot.Attributes.Index) -> Attribute {
+        guard position != attributes.endIndex else { return .passthrough }
+        return attributes[position]
     }
     
-    @inlinable func nonpassthrough(_ position: Index) -> Bool {
-        !attributes[position.attribute].contains(.passthrough)
+    //=------------------------------------------------------------------------=
+    // MARK: Backwards
+    //=------------------------------------------------------------------------=
+    
+    @inlinable func attribute(backwards position: Snapshot.Attributes.Index) -> Attribute {
+        guard position != attributes.startIndex else { return .passthrough }
+        return attributes[attributes.index(before: position)]
     }
     
+    //=------------------------------------------------------------------------=
+    // MARK: Direction
+    //=------------------------------------------------------------------------=
     
-    @inlinable func stop(at position: Index, direction: Direction) -> Bool {
+    @inlinable func attribute(_ position: Snapshot.Attributes.Index, direction: Direction) -> Attribute {
         switch direction {
-        case  .forwards: return position !=   endIndex ? nonpassthrough(position) : false
-        case .backwards: return position != startIndex ? nonpassthrough(index(before: position)) : false
+        case  .forwards: return attribute( forwards: position)
+        case .backwards: return attribute(backwards: position)
         }
     }
-    
-    @inlinable func stop(start position: Index, direction: Direction) -> Index? {
-        switch direction {
-        case .forwards:  return self[position...].firstIndex(where: nonpassthrough)
-        case .backwards: return self[..<position] .lastIndex(where: nonpassthrough)
-        }
-    }
-
-}
-
-
-struct Peek {
-    
-    let  forwards: Attribute
-    let backwards: Attribute
-    
-    
-    
 }
