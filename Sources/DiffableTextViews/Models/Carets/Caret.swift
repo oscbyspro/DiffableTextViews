@@ -22,10 +22,15 @@
     @inlinable var preference: Direction { get }
     
     //=------------------------------------------------------------------------=
-    // MARK: Utilities
+    // MARK: Validate
     //=------------------------------------------------------------------------=
     
     @inlinable func  validate(start: Index) -> Bool
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Traverse
+    //=------------------------------------------------------------------------=
+    
     @inlinable func  forwards(start: Index) -> Index?
     @inlinable func backwards(start: Index) -> Index?    
 }
@@ -44,11 +49,11 @@ extension Caret {
         positions[position].attribute.contains(.passthrough)
     }
     
-    @inlinable func passthrough(forwards position: Index) -> Bool {
+    @inlinable func lookaheadable(_ position: Index) -> Bool {
         position != positions.endIndex ? passthrough(position) : true
     }
     
-    @inlinable func passthrough(backwards position: Index) -> Bool {
+    @inlinable func lookbehindable(_ position: Index) -> Bool {
         position != positions.startIndex ? passthrough(positions.index(before: position)) : true
     }
 }

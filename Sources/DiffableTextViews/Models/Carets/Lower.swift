@@ -36,12 +36,16 @@
     }
     
     //=------------------------------------------------------------------------=
-    // MARK: Utilities
+    // MARK: Validate
     //=------------------------------------------------------------------------=
     
     @inlinable func validate(start: Index) -> Bool {
-        !passthrough(forwards: start)
+        !lookaheadable(start)
     }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Traverse
+    //=------------------------------------------------------------------------=
     
     @inlinable func forwards(start: Index) -> Index? {
         Single(positions).forwards(start: start)
@@ -51,7 +55,10 @@
         var position = start
         
         while position != positions.startIndex {
-            guard positions.attributes[position.attribute].contains(.passthrough) else { return position }
+            if !passthrough(position) {
+                return position
+            }
+            
             positions.formIndex(before: &position)
         }
 
