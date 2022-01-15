@@ -27,34 +27,34 @@ public final class BasicTextField: UITextField {
     //=------------------------------------------------------------------------=
     
     public override func pressesBegan(_ presses: Set<UIPress>, with event: UIPressesEvent?) {
-        processIntentStarted(presses)
+        process(new: presses)
         super.pressesBegan(presses, with: event)
     }
     
     public override func pressesChanged(_ presses: Set<UIPress>, with event: UIPressesEvent?) {
-        processIntentStarted(presses)
+        process(new: presses)
         super.pressesChanged(presses, with: event)
     }
     
     public override func pressesEnded(_ presses: Set<UIPress>, with event: UIPressesEvent?) {
-        processIntentEnded(presses)
+        process(old: presses)
         super.pressesEnded(presses, with: event)
     }
     
     public override func pressesCancelled(_ presses: Set<UIPress>, with event: UIPressesEvent?) {
-        processIntentEnded(presses)
+        process(old: presses)
         super.pressesCancelled(presses, with: event)
     }
     
-    //
-    // MARK: Presses - Intent
+    //=------------------------------------------------------------------------=
+    // MARK: Presses - Process
     //=------------------------------------------------------------------------=
     
-    @inlinable func processIntentStarted(_ presses: Set<UIPress>) {
+    @inlinable func process(new presses: Set<UIPress>) {
         intent = Self.intent(presses)
     }
     
-    @inlinable func processIntentEnded(_ presses: Set<UIPress>) {
+    @inlinable func process(old presses: Set<UIPress>) {
         if intent == Self.intent(presses) { intent = nil }
     }
     
