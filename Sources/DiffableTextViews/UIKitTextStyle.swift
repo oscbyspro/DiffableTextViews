@@ -16,12 +16,6 @@ import UIKit
 public protocol UIKitTextStyle: DiffableTextStyle {
     
     //=------------------------------------------------------------------------=
-    // MARK: Keyboard
-    //=------------------------------------------------------------------------=
-    
-    @inlinable var keyboard: UIKeyboardType { get }
-    
-    //=------------------------------------------------------------------------=
     // MARK: Setup
     //=------------------------------------------------------------------------=
     
@@ -35,20 +29,10 @@ public protocol UIKitTextStyle: DiffableTextStyle {
 public extension UIKitTextStyle {
     
     //=------------------------------------------------------------------------=
-    // MARK: Keyboard
-    //=------------------------------------------------------------------------=
-    
-    @inlinable var keyboard: UIKeyboardType {
-        .default
-    }
-    
-    //=------------------------------------------------------------------------=
     // MARK: Setup
     //=------------------------------------------------------------------------=
     
-    @inlinable func setup(_ proxy: ProxyTextField) {
-        proxy.keyboard(self.keyboard)
-    }
+    @inlinable func setup(_ proxy: ProxyTextField) { }
 }
 
 #endif

@@ -126,21 +126,20 @@
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: Positions - Move To Destination
+// MARK: Positions - Predicate
 //=----------------------------------------------------------------------------=
 
 extension Positions {
     
     //=------------------------------------------------------------------------=
-    // MARK: Forwards
+    // MARK: After
     //=------------------------------------------------------------------------=
     
-    #warning("rework")
-    @inlinable func forwards(start: Index, destination: Position) -> Index {
+    @inlinable func index(after start: Index, while predicate: (Index) -> Bool) -> Index {
         var position = start
         
-        while position.snapshot != snapshot.endIndex {
-            guard position.position < destination else { return position }
+        while position != endIndex {
+            guard predicate(position) else { return position }
             formIndex(after: &position)
         }
         
@@ -148,30 +147,35 @@ extension Positions {
     }
     
     //=------------------------------------------------------------------------=
-    // MARK: Backwards
+    // MARK: Before
     //=------------------------------------------------------------------------=
     
-    #warning("rework")
-    @inlinable func backwards(start: Index, destination: Position) -> Index {
+    @inlinable func index(before start: Index, while predicate: (Index) -> Bool) -> Index {
         var position = start
         
-        while position.snapshot != snapshot.startIndex {
-            let after = position
+        while position != startIndex {
+            guard predicate(position) else { return position }
             formIndex(before: &position)
-            guard position.position > destination else { return after }
         }
         
         return position
     }
-    
+}
+
+//=----------------------------------------------------------------------------=
+// MARK: Positions - Destination
+//=----------------------------------------------------------------------------=
+
+extension Positions {
+
     //=------------------------------------------------------------------------=
     // MARK: Single
     //=------------------------------------------------------------------------=
     
-    @inlinable func index(start: Index, destination: Position) -> Index {
+    @inlinable func index(start: Index, destination: Position) -> Index {        
         start.position <= destination
-        ?  forwards(start: start, destination: destination)
-        : backwards(start: start, destination: destination)
+        ? index(after:  start, while: { $0.position < destination })
+        : index(before: start, while: { $0.position > destination })
     }
     
     //=------------------------------------------------------------------------=
@@ -186,7 +190,7 @@ extension Positions {
             lowerBound = index(start: start.lowerBound, destination: destination.lowerBound)
             lowerBound = Swift.min(lowerBound, upperBound)
         }
-
+        
         return lowerBound ..< upperBound
     }
 }
