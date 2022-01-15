@@ -50,16 +50,6 @@ final class RegionTests: XCTestCase {
         }
     }
     
-    func testZero() {
-        for region in regions {
-            let style = IntegerFormatStyle<Int>
-                .number
-                .locale(region.locale)
-            
-            XCTAssertEqual(0, try! style.parseStrategy.parse(String(region.zero)))
-        }
-    }
-    
     func testDigits() {
         let number: Int = 1234567890
         
@@ -70,7 +60,7 @@ final class RegionTests: XCTestCase {
                 .grouping(.never)
             
             let numbers = number.formatted(style)
-            XCTAssert(numbers.allSatisfy({ region.digits.keys.contains($0) }))
+            XCTAssert(numbers.allSatisfy(region.digits.keys.contains))
         }
     }
     
@@ -83,7 +73,7 @@ final class RegionTests: XCTestCase {
                 .locale(region.locale)
             
             let nonnumbers = number.formatted(style).filter({ !$0.isNumber })
-            XCTAssertNotNil(nonnumbers.allSatisfy({ $0 == region.groupingSeparator }))
+            XCTAssertNotNil(nonnumbers.allSatisfy({ region.separators[$0] == .grouping }))
         }
     }
     
@@ -96,7 +86,7 @@ final class RegionTests: XCTestCase {
                 .locale(region.locale)
             
             let nonnumbers = number.formatted(style).filter({ !$0.isNumber })
-            XCTAssertNotNil(nonnumbers.allSatisfy({ $0 == region.fractionSeparator }))
+            XCTAssertNotNil(nonnumbers.allSatisfy({ region.separators[$0] == .fraction }))
         }
     }
 }

@@ -142,7 +142,7 @@ extension Number {
             // MARK: Separator
             //=----------------------------------=
 
-            if index != snapshot.endIndex, region.separators.keys.contains(element.character) {
+            if index != snapshot.endIndex, let _ = region.separators[element.character] {
                 self.separator = .fraction
                 next()
             }

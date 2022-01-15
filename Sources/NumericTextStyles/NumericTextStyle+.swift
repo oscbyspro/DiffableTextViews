@@ -42,10 +42,6 @@ extension NumericTextStyle {
         var snapshot = Snapshot()
         var index = characters.startIndex
         //=--------------------------------------=
-        // MARK: Markers
-        //=--------------------------------------=
-        var lastInteractableIndex = snapshot.startIndex
-        //=--------------------------------------=
         // MARK: Prefix
         //=--------------------------------------=
         if !prefix.isEmpty {
@@ -58,41 +54,21 @@ extension NumericTextStyle {
         while index != characters.endIndex {
             let character = characters[  index]
             characters.formIndex(after: &index)
+            var attribute: Attribute = .spacer
             //=----------------------------------=
-            // MARK: Digit
+            // MARK: Content
             //=----------------------------------=
             if let _ = region.digits[character] {
-                snapshot.append(Symbol(character: character, attribute: .content))
-                lastInteractableIndex = snapshot.endIndex
-            //=----------------------------------=
-            // MARK: Separator
-            //=----------------------------------=
-            } else if let separator = region.separators[character] {
-                switch separator {
-                case .grouping:
-                    snapshot.append(Symbol(character: character, attribute: .spacer))
-                case .fraction:
-                    snapshot.append(Symbol(character: character, attribute: .removable))
-                    lastInteractableIndex = snapshot.endIndex
-                }
-            //=----------------------------------=
-            // MARK: Sign
-            //=----------------------------------=
+                attribute = .content
+            } else if let separator = region.separators[character], separator == .fraction {
+                attribute = .removable
             } else if let _ = region.signs[character] {
-                snapshot.append(Symbol(character: character, attribute: [.insertable, .removable, .passthrough]))
-            //=----------------------------------=
-            // MARK: None Of The Above
-            //=----------------------------------=
-            } else {
-                snapshot.append(Symbol(character: character, attribute: .spacer))
+                attribute.remove(.formatting)
             }
-        }
-        //=--------------------------------------=
-        // MARK: Interactable - End
-        //=--------------------------------------=
-        snapshot.transform(attributes: lastInteractableIndex...) {
-            attribute in
-            attribute.insert(.passthrough)
+            //=----------------------------------=
+            // MARK: Insert
+            //=----------------------------------=
+            snapshot.append(Symbol(character: character, attribute: attribute))
         }
         //=--------------------------------------=
         // MARK: Suffix
