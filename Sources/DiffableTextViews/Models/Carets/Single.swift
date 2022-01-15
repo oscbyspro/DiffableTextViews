@@ -49,30 +49,46 @@
     
     @inlinable func forwards(start: Index) -> Index? {
         var position = start
-
+        //=--------------------------------------=
+        // MARK: Loop
+        //=--------------------------------------=
         while position != positions.endIndex {
+            //=----------------------------------=
+            // MARK: Validate
+            //=----------------------------------=
             if !passthrough(position) {
                 return position
             }
-            
+            //=----------------------------------=
+            // MARK: Continue
+            //=----------------------------------=
             positions.formIndex(after: &position)
         }
-
+        //=--------------------------------------=
+        // MARK: Failure
+        //=--------------------------------------=
         return nil
     }
     
     @inlinable func backwards(start: Index) -> Index? {
         var position = start
-
+        //=--------------------------------------=
+        // MARK: Attempt
+        //=--------------------------------------=
         while position != positions.startIndex {
+            //=--------------------------------------=
+            // MARK: Scry
+            //=--------------------------------------=
             let after = position
             positions.formIndex(before: &position)
-            
-            if !passthrough(position) {
-                return after
-            }
+            //=--------------------------------------=
+            // MARK: Validate
+            //=--------------------------------------=
+            if !passthrough(position) { return after }
         }
-
+        //=--------------------------------------=
+        // MARK: Failure
+        //=--------------------------------------=
         return nil
     }
 }

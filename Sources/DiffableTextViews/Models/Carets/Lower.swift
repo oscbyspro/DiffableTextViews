@@ -53,15 +53,22 @@
     
     @inlinable func backwards(start: Index) -> Index? {
         var position = start
-        
+        //=--------------------------------------=
+        // MARK: Attempt
+        //=--------------------------------------=
         while position != positions.startIndex {
-            if !passthrough(position) {
-                return position
-            }
-            
+            //=--------------------------------------=
+            // MARK: Validate
+            //=--------------------------------------=
+            if !passthrough(position) { return position }
+            //=--------------------------------------=
+            // MARK: Continue
+            //=--------------------------------------=
             positions.formIndex(before: &position)
         }
-
+        //=--------------------------------------=
+        // MARK: Failure
+        //=--------------------------------------=
         return nil
     }
 }

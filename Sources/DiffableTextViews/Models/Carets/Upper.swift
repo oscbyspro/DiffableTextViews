@@ -50,16 +50,23 @@
     @inlinable func forwards(start: Index) -> Index? {
         var position = start
         var lookbehindable = lookbehindable(position)
-        
+        //=--------------------------------------=
+        // MARK: Attempt
+        //=--------------------------------------=
         while position != positions.endIndex {
-            if !lookbehindable {
-                return position
-            }
-            
+            //=----------------------------------=
+            // MARK: Validate
+            //=----------------------------------=
+            if !lookbehindable { return position }
+            //=----------------------------------=
+            // MARK: Continue
+            //=------------------------ ---------=
             lookbehindable = passthrough(position)
             positions.formIndex(after: &position)
         }
-
+        //=--------------------------------------=
+        // MARK: Failure
+        //=--------------------------------------=
         return nil
     }
     
