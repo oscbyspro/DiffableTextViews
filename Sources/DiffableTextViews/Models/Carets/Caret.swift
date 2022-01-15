@@ -27,7 +27,7 @@
     
     @inlinable func  validate(start: Index) -> Bool
     @inlinable func  forwards(start: Index) -> Index?
-    @inlinable func backwards(start: Index) -> Index?
+    @inlinable func backwards(start: Index) -> Index?    
 }
 
 //=----------------------------------------------------------------------------=

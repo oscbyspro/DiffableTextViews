@@ -13,7 +13,7 @@ import Quick
 
 @usableFromInline struct State<Scheme: DiffableTextViews.Scheme>: Transformable {
     @usableFromInline typealias Positions = DiffableTextViews.Positions<Scheme>
-    @usableFromInline typealias Offset    = DiffableTextViews.Position<Scheme>
+    @usableFromInline typealias Position = DiffableTextViews.Position<Scheme>
 
     //=------------------------------------------------------------------------=
     // MARK: Properties
@@ -44,16 +44,16 @@ import Quick
         positions.snapshot
     }
     
-    @inlinable var offsets: Range<Offset> {
-        selection.lowerBound.offset ..< selection.upperBound.offset
+    @inlinable var offsets: Range<Position> {
+        selection.lowerBound.position ..< selection.upperBound.position
     }
     
     //=------------------------------------------------------------------------=
     // MARK: Utilities
     //=------------------------------------------------------------------------=
     
-    @inlinable func indices(at range: Range<Offset>) -> Range<Positions.Index> {
-        positions.indices(start: selection, destination: range)
+    @inlinable func indices(at destination: Range<Position>) -> Range<Positions.Index> {
+        positions.indices(start: selection, destination: destination)
     }
 }
 
@@ -97,7 +97,7 @@ extension State {
         //=--------------------------------------=
         self.positions = positions
         self.selection = selection
-        self.autocorrect(momentum: false)
+        self.autocorrect(intent: nil)
     }
 }
 
@@ -120,7 +120,7 @@ extension State {
     // MARK: Transformations - Indirect
     //=------------------------------------------------------------------------=
     
-    @inlinable mutating func update(selection: Range<Offset>, intent: Direction?) {
+    @inlinable mutating func update(selection: Range<Position>, intent: Direction?) {
         update(selection: indices(at: selection), intent: intent)
     }
 }
@@ -139,11 +139,11 @@ extension State {
     @inlinable mutating func autocorrect(intent: Direction?) {
         #warning("Convert momentum.")
         
-        let upperBound = position(start: selection.upperBound, preference: .backwards, momentum: momentum)
+        let upperBound = position(start: selection.upperBound, preference: .backwards, intent: intent)
         var lowerBound = upperBound
         
         if !selection.isEmpty {
-            lowerBound = position(start: selection.lowerBound, preference:  .forwards, momentum: momentum)
+            lowerBound = position(start: selection.lowerBound, preference:  .forwards, intent: intent)
             lowerBound = min(lowerBound, upperBound)
         }
         
@@ -155,7 +155,9 @@ extension State {
     //=------------------------------------------------------------------------=
     
     #warning("Rework.")
-    @inlinable func position(start: Positions.Index, preference: Direction, momentum: Direction?) -> Positions.Index {
+    @inlinable func position(start: Positions.Index, preference: Direction, intent: Direction?) -> Positions.Index {
         fatalError()
+        
+        
     }
 }

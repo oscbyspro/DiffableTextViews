@@ -165,7 +165,7 @@ public struct DiffableTextField<Style: DiffableTextStyle & UIKitTextStyle>: UIVi
                 // MARK: Process
                 //=------------------------------=
                 let selection = TransformableValue
-                    .init(Offset(nsRange.lowerBound) ..< Offset(nsRange.upperBound))
+                    .init(Position(nsRange.lowerBound) ..< Position(nsRange.upperBound))
                     .transform(cache.state.indices(at:))
                 
                 let input = Input(
@@ -222,7 +222,7 @@ public struct DiffableTextField<Style: DiffableTextStyle & UIKitTextStyle>: UIVi
             //=----------------------------------=
             let selection = downstream.selection()
             let corrected = cache.state.transform { corrected in
-                corrected.update(selection: selection, momentum: downstream.intent != nil)
+                corrected.update(selection: selection, intent: downstream.intent)
             }
             //=----------------------------------=
             // MARK: Update Downstream If Needed
