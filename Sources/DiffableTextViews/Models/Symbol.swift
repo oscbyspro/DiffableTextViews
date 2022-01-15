@@ -17,7 +17,7 @@ public struct Symbol: Equatable {
     
     public static let anchor = Self(
         character: "\u{200B}",
-        attribute: [.virtual, .insertable, .removable])
+        attribute: [.formatting, .insertable, .removable])
     
     //=------------------------------------------------------------------------=
     // MARK: Properties
@@ -43,33 +43,9 @@ public struct Symbol: Equatable {
         Self(character: character, attribute: .content)
     }
     
-    @inlinable public static func format(_ character: Character) -> Self {
-        Self(character: character, attribute: .format)
+    @inlinable public static func spacer(_ character: Character) -> Self {
+        Self(character: character, attribute: .spacer)
     }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Predicates
-    //=------------------------------------------------------------------------=
-    
-    @inlinable public func `is`(_ attribute: Attribute) -> Bool {
-        attribute.contains(attribute)
-    }
-    
-    @inlinable public func `is`(not attribute: Attribute) -> Bool {
-        attribute.contains(attribute) == false
-    }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Predicates - Static
-    //=------------------------------------------------------------------------=
-    
-    @inlinable public static func `is`(_ attribute: Attribute) -> (Self) -> Bool {{
-        $0.attribute.contains(attribute)
-    }}
-    
-    @inlinable public static func `is`(not attribute: Attribute) -> (Self) -> Bool {{
-        $0.attribute.contains(attribute) == false
-    }}
 }
 
 //=----------------------------------------------------------------------------=

@@ -52,8 +52,8 @@ extension NumericTextStyle {
         // MARK: Prefix
         //=--------------------------------------=
         if !prefix.isEmpty {
-            snapshot.append(contentsOf: Snapshot(prefix, only: .format))
-            snapshot.append(.format(" "))
+            snapshot.append(contentsOf: Snapshot(prefix, only: .spacer))
+            snapshot.append(Symbol(character: " ",  attribute: .spacer))
         }
 
         #warning("Up to first digit")
@@ -84,7 +84,7 @@ extension NumericTextStyle {
             } else if let separator = region.separators[character] {
                 switch separator {
                 case .grouping:
-                    snapshot.append(Symbol(character: character, attribute: .format))
+                    snapshot.append(Symbol(character: character, attribute: .spacer))
                 case .fraction:
                     redundanciesStart = snapshot.endIndex
                     snapshot.append(Symbol(character: character, attribute: .content))
@@ -95,23 +95,23 @@ extension NumericTextStyle {
             // MARK: Sign
             //=----------------------------------=
             } else if let _ = region.signs[character] {
-                snapshot.append(Symbol(character: character, attribute: .passthrough))
+                snapshot.append(Symbol(character: character, attribute: [.insertable, .removable, .passthrough]))
             //=----------------------------------=
             // MARK: None Of The Above
             //=----------------------------------=
             } else {
-                snapshot.append(Symbol(character: character, attribute: .format))
+                snapshot.append(Symbol(character: character, attribute: .spacer))
             }
         }
         //=--------------------------------------=
         // MARK: Interactable - Start
         //=--------------------------------------=
-        if let interactableStart = interactableStart {
-            snapshot.transform(attributes: ..<interactableStart) {
-                attribute in
-                attribute.insert(.passthrough)
-            }
-        }
+//        if let interactableStart = interactableStart {
+//            snapshot.transform(attributes: ..<interactableStart) {
+//                attribute in
+//                attribute.insert(.passthrough)
+//            }
+//        }
         //=--------------------------------------=
         // MARK: Redundancies - Start
         //=--------------------------------------=
@@ -126,18 +126,18 @@ extension NumericTextStyle {
         //=--------------------------------------=
         snapshot.transform(attributes: interactableEnd...) {
             attribute in
-            attribute = .format
+            attribute = .spacer
         }
         //=--------------------------------------=
         // MARK: Suffix
         //=--------------------------------------=
         if !suffix.isEmpty {
-            snapshot.append(.format(" "))
-            snapshot.append(contentsOf: Snapshot(suffix, only: .format))
+            snapshot.append(Symbol(character: " ",  attribute: .spacer))
+            snapshot.append(contentsOf: Snapshot(suffix, only: .spacer))
         }
         //=--------------------------------------=
         // MARK: Done
-        //=--------------------------------------=
+        //=--------------------------------------=        
         return snapshot
     }
 }

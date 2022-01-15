@@ -91,7 +91,7 @@ extension Number {
     /// To use this method, all formatting characters must be marked as formatting.
     ///
     @inlinable init(_ snapshot: Snapshot, with options: Options, in region: Region) throws {
-        guard let start = snapshot.firstIndex(where: Symbol.is(not: .virtual)) else { self = .zero; return }
+        guard let start = snapshot.firstIndex(where: { !$0.attribute.contains(.formatting) }) else { self = .zero; return }
         
         //=--------------------------------------=
         // MARK: State
@@ -99,22 +99,17 @@ extension Number {
         
         var index = start
         var symbol = snapshot[start]
-        var done = false
         
         //=--------------------------------------=
         // MARK: Helpers
         //=--------------------------------------=
 
         func iterate() {
-            loop: while !done {
+            while true {
                 snapshot.formIndex(after: &index)
-
-                if index != snapshot.endIndex {
-                    symbol = snapshot[index]
-                    if !symbol.is(.virtual) { break loop }
-                } else {
-                    done = true
-                }
+                if index == snapshot.endIndex { break }
+                symbol = snapshot[index]
+                if !symbol.attribute.contains(.formatting) { break }
             }
         }
         

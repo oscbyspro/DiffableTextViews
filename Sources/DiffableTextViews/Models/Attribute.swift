@@ -5,8 +5,6 @@
 //  Created by Oscar Byström Ericsson on 2021-10-02.
 //
 
-#warning("Replace « .prefixing and .suffixing » with « .spacing ».")
-
 //*============================================================================*
 // MARK: * Attribute
 //*============================================================================*
@@ -24,7 +22,7 @@ public struct Attribute: OptionSet {
     //=------------------------------------------------------------------------=
     
     /// Signifies that the symbol is part of a text's formatting.
-    public static let virtual = Self(rawValue: 1 << 0)
+    public static let formatting = Self(rawValue: 1 << 0)
         
     /// Signifies that the symbol should be ignored by the differentiation algorithm when it is inserted.
     public static let insertable = Self(rawValue: 1 << 1)
@@ -39,11 +37,11 @@ public struct Attribute: OptionSet {
     // MARK: Instances - Composites
     //=------------------------------------------------------------------------=
     
-    /// Default behavior used to describe plain text. Contains no options.
+    /// Default behavior used to describe plain text.
     public static let content = Self([])
 
-    /// Contains: .formatting, .insertable, .removable, .passthrough.
-    public static let format = Self([.virtual, .insertable, .removable, .passthrough])
+    /// - Contains: .formatting, .insertable, .removable, .passthrough.
+    public static let spacer = Self([.formatting, .insertable, .removable, .passthrough])
     
     //=------------------------------------------------------------------------=
     // MARK: Properties

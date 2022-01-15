@@ -188,7 +188,6 @@ extension Positions {
         
         if !destination.isEmpty {
             lowerBound = index(start: start.lowerBound, destination: destination.lowerBound)
-            lowerBound = Swift.min(lowerBound, upperBound)
         }
         
         return lowerBound ..< upperBound
