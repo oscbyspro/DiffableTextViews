@@ -16,8 +16,8 @@ public struct Symbol: Equatable {
     //=------------------------------------------------------------------------=
     
     public static let anchor = Self(
-        character: "\u{200B}", // unicode zero-width space
-        attribute: [.formatting, .insertable, .removable])
+        character: "\u{200B}", // a zero-width space
+        attribute: .phantom.subtracting(.passthrough))
     
     //=------------------------------------------------------------------------=
     // MARK: Properties
@@ -43,8 +43,8 @@ public struct Symbol: Equatable {
         Self(character: character, attribute: .content)
     }
     
-    @inlinable public static func spacer(_ character: Character) -> Self {
-        Self(character: character, attribute: .spacer)
+    @inlinable public static func phantom(_ character: Character) -> Self {
+        Self(character: character, attribute: .phantom)
     }
 }
 

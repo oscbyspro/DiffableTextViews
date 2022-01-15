@@ -53,7 +53,6 @@ public struct PatternTextStyle<Pattern, Value>: DiffableTextStyle, UIKitTextStyl
     
     @inlinable func validate<C: Collection>(_ characters: C) throws where C.Element == Character {
         let capacity = pattern.count(where: { $0 == placeholder })
-        
         guard characters.count <= capacity else {
             throw Info([.mark(characters), "exceeded pattern capacity", .mark(capacity)])
         }

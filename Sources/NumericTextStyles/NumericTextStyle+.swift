@@ -40,30 +40,29 @@ extension NumericTextStyle {
     ///
     @inlinable func snapshot(characters: String) -> Snapshot {
         var snapshot = Snapshot()
-        var index = characters.startIndex
         //=--------------------------------------=
         // MARK: Prefix
         //=--------------------------------------=
         if !prefix.isEmpty {
-            snapshot.append(contentsOf: Snapshot(prefix, only: .spacer))
-            snapshot.append(Symbol(character: " ",  attribute: .spacer))
+            snapshot.append(contentsOf: Snapshot(prefix, only: .phantom))
+            snapshot.append(Symbol(character: " ",  attribute: .phantom))
         }
         //=--------------------------------------=
         // MARK: Body
         //=--------------------------------------=
-        while index != characters.endIndex {
-            let character = characters[  index]
-            characters.formIndex(after: &index)
-            var attribute: Attribute = .spacer
+        for character in characters {
+            let attribute: Attribute
             //=----------------------------------=
-            // MARK: Content
+            // MARK: Matches
             //=----------------------------------=
             if let _ = region.digits[character] {
                 attribute = .content
             } else if let separator = region.separators[character], separator == .fraction {
                 attribute = .removable
             } else if let _ = region.signs[character] {
-                attribute.remove(.formatting)
+                attribute = .phantom.subtracting(.formatting)
+            } else {
+                attribute = .phantom
             }
             //=----------------------------------=
             // MARK: Insert
@@ -74,8 +73,8 @@ extension NumericTextStyle {
         // MARK: Suffix
         //=--------------------------------------=
         if !suffix.isEmpty {
-            snapshot.append(Symbol(character: " ",  attribute: .spacer))
-            snapshot.append(contentsOf: Snapshot(suffix, only: .spacer))
+            snapshot.append(Symbol(character: " ",  attribute: .phantom))
+            snapshot.append(contentsOf: Snapshot(suffix, only: .phantom))
         }
         //=--------------------------------------=
         // MARK: Done

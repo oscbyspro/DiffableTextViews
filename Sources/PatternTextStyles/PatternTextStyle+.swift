@@ -21,55 +21,56 @@ extension PatternTextStyle {
         var snapshot = Snapshot()
         var valueIndex = value.startIndex
         var patternIndex = pattern.startIndex
-        
         //=--------------------------------------=
         // MARK: Prefix Up To First Placeholder
         //=--------------------------------------=
-        
         while patternIndex != pattern.endIndex {
             let patternElement =  pattern[patternIndex]
             if  patternElement == placeholder { break }
-
-            snapshot.append(.spacer(patternElement))
+            //=----------------------------------=
+            // MARK: Insert
+            //=----------------------------------=
+            snapshot.append(Symbol(character: patternElement, attribute: .phantom))
             pattern.formIndex(after: &patternIndex)
         }
-        
         //=--------------------------------------=
         // MARK: Body
         //=--------------------------------------=
-        
         while patternIndex != pattern.endIndex, valueIndex != value.endIndex {
             let patternElement = pattern[patternIndex]
             pattern.formIndex(after:    &patternIndex)
-            
+            //=----------------------------------=
+            // MARK: Matches, Insert
+            //=----------------------------------=
             if patternElement == placeholder {
                 let valueElement = value[valueIndex]
                 value.formIndex(after:  &valueIndex)
-                snapshot.append(.content(valueElement))
+                snapshot.append(Symbol(character:   valueElement, attribute: .content))
             } else {
-                snapshot.append(.spacer(patternElement))
+                snapshot.append(Symbol(character: patternElement, attribute: .phantom))
             }
         }
-        
         //=--------------------------------------=
         // MARK: Remainders
         //=--------------------------------------=
-        
         if visible {
+            //=----------------------------------=
+            // MARK: Head
+            //=----------------------------------=
             if valueIndex == value.startIndex {
                 let endIndex = pattern.prefix(while: { $0 != placeholder }).endIndex
-                snapshot.append(contentsOf: Snapshot(String(pattern[patternIndex..<endIndex]), only: .spacer))
+                snapshot.append(contentsOf: Snapshot(String(pattern[patternIndex..<endIndex]), only: .phantom))
                 snapshot.anchor()
                 patternIndex = endIndex
             }
-        
-            snapshot.append(contentsOf: Snapshot(String(pattern[patternIndex...]), only: .spacer))
+            //=----------------------------------=
+            // MARK: Tail
+            //=----------------------------------=
+            snapshot.append(contentsOf: Snapshot(String(pattern[patternIndex...]), only: .phantom))
         }
-        
         //=--------------------------------------=
         // MARK: Done
         //=--------------------------------------=
-        
         return snapshot
     }
 }
@@ -85,18 +86,14 @@ extension PatternTextStyle {
     //=------------------------------------------------------------------------=
     
     @inlinable public func merge(snapshot: Snapshot, with input: Input) throws -> Snapshot {
-        
         //=--------------------------------------=
         // MARK: Proposal
         //=--------------------------------------=
-        
         var proposal = snapshot
         proposal.replaceSubrange(input.range, with: input.content)
-        
         //=--------------------------------------=
         // MARK: Value, Continue
         //=--------------------------------------=
-        
         return try self.snapshot(editable: parse(snapshot: proposal))
     }
 }
@@ -112,28 +109,21 @@ extension PatternTextStyle {
     //=------------------------------------------------------------------------=
     
     @inlinable public func parse(snapshot: Snapshot) throws -> Value {
-        
         //=--------------------------------------=
         // MARK: Value
         //=--------------------------------------=
-        
         let value = Value(snapshot
             .lazy
             .filter({ !$0.attribute.contains(.formatting) })
             .map(\.character))
-                          
         //=--------------------------------------=
         // MARK: Validation
         //=--------------------------------------=
-        
         try validate(value)
         try predicates.validate(value)
-        
         //=--------------------------------------=
         // MARK: Done
         //=--------------------------------------=
-        
         return value
     }
 }
-
