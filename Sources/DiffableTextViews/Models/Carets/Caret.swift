@@ -9,9 +9,10 @@
 // MARK: * Caret
 //*============================================================================*
 
-@usableFromInline protocol Caret: BidirectionalCollection where Index == Positions.Index {
+@usableFromInline protocol Caret {
     associatedtype Scheme: DiffableTextViews.Scheme
     typealias Positions = DiffableTextViews.Positions<Scheme>
+    typealias Index = DiffableTextViews.Positions<Scheme>.Index
     
     //=------------------------------------------------------------------------=
     // MARK: Properties
@@ -24,7 +25,7 @@
     // MARK: Validate
     //=------------------------------------------------------------------------=
     
-    @inlinable func  validate(start: Index) -> Bool
+    @inlinable func validate(start: Index) -> Bool
     
     //=------------------------------------------------------------------------=
     // MARK: Traverse
@@ -34,65 +35,34 @@
     @inlinable func backwards(start: Index) -> Index?    
 }
 
-//=------------------------------------------------------------------------=
-// MARK: Caret - Collection
-//=------------------------------------------------------------------------=
+//=----------------------------------------------------------------------------=
+// MARK: Caret - Convenience
+//=----------------------------------------------------------------------------=
 
 extension Caret {
     
     //=------------------------------------------------------------------------=
-    // MARK: Elements
+    // MARK: Attribute
     //=------------------------------------------------------------------------=
     
-    @inlinable subscript(position: Index) -> Attribute {
+    @inlinable func attribute(_ position: Index) -> Attribute {
         positions.attributes[position.attribute]
     }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Indices
-    //=------------------------------------------------------------------------=
-    
-    @inlinable var startIndex: Index {
-        positions.startIndex
-    }
-    
-    @inlinable var endIndex: Index {
-        positions.endIndex
-    }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Traverse
-    //=------------------------------------------------------------------------=
-    
-    @inlinable func index(after position: Index) -> Index {
-        positions.index(after: position)
-    }
-    
-    @inlinable func index(before position: Index) -> Index {
-        positions.index(before: position)
-    }
-}
-
-//=----------------------------------------------------------------------------=
-// MARK: Caret - Helpers
-//=----------------------------------------------------------------------------=
-
-extension Caret {
     
     //=------------------------------------------------------------------------=
     // MARK: Passthrough
     //=------------------------------------------------------------------------=
     
     @inlinable func passthrough(_ position: Index) -> Bool {
-        self[position].contains(.passthrough)
+        attribute(position).contains(.passthrough)
     }
     
     @inlinable func lookaheadable(_ position: Index) -> Bool {
-        position != endIndex ? passthrough(position) : true
+        position != positions.endIndex ? passthrough(position) : true
     }
     
     @inlinable func lookbehindable(_ position: Index) -> Bool {
-        position != startIndex ? passthrough(index(before: position)) : true
+        position != positions.startIndex ? passthrough(positions.index(before: position)) : true
     }
 }
 
@@ -117,23 +87,23 @@ extension Caret {
     // MARK: Autocorrect
     //=------------------------------------------------------------------------=
     
-    @inlinable func autocorrect(position: Index, intent: Direction?) -> Index? {
+    @inlinable func position(start: Index, intent: Direction?) -> Index {
         //=--------------------------------------=
         // MARK: Validate
         //=--------------------------------------=
-        if validate(start: position) { return position }
+        if validate(start: start) { return start }
         //=--------------------------------------=
-        // MARK: Choose A Direction
+        // MARK: Direction
         //=--------------------------------------=
         let direction = intent ?? preference
         //=--------------------------------------=
-        // MARK: Try It, Try The Other
+        // MARK: Try, Then Try In Reverse
         //=--------------------------------------=
-        if let next = move(start: position, direction: direction)            { return next }
-        if let next = move(start: position, direction: direction.reversed()) { return next }
+        if let next = move(start: start, direction: direction)            { return next }
+        if let next = move(start: start, direction: direction.reversed()) { return next }
         //=--------------------------------------=
-        // MARK: No Acceptable Position Found
+        // MARK: Failure
         //=--------------------------------------=
-        return nil
+        return positions.startIndex
     }
 }

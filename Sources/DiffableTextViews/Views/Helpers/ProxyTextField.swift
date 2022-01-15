@@ -177,8 +177,8 @@ public extension ProxyTextField {
     // MARK: Autocorrect
     //=------------------------------------------------------------------------=
     
-    @inlinable func autocorrect(_ autocorrect: UITextAutocorrectionType) {
-        wrapped.autocorrectionType = autocorrect
+    @inlinable func autocorrect(_ position: UITextAutocorrectionType) {
+        wrapped.autocorrectionType = position
     }
     
     //=------------------------------------------------------------------------=

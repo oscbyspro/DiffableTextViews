@@ -53,7 +53,7 @@
         //=--------------------------------------=
         // MARK: Attempt
         //=--------------------------------------=
-        while position != endIndex {
+        while position != positions.endIndex {
             //=----------------------------------=
             // MARK: Validate
             //=----------------------------------=
@@ -62,7 +62,7 @@
             // MARK: Continue
             //=------------------------ ---------=
             lookbehindable = passthrough(position)
-            formIndex(after: &position)
+            positions.formIndex(after: &position)
         }
         //=--------------------------------------=
         // MARK: Failure

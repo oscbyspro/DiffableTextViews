@@ -52,7 +52,7 @@
         //=--------------------------------------=
         // MARK: Loop
         //=--------------------------------------=
-        while position != endIndex {
+        while position != positions.endIndex {
             //=----------------------------------=
             // MARK: Validate
             //=----------------------------------=
@@ -62,7 +62,7 @@
             //=----------------------------------=
             // MARK: Continue
             //=----------------------------------=
-            formIndex(after: &position)
+            positions.formIndex(after: &position)
         }
         //=--------------------------------------=
         // MARK: Failure
@@ -75,12 +75,12 @@
         //=--------------------------------------=
         // MARK: Attempt
         //=--------------------------------------=
-        while position != startIndex {
+        while position != positions.startIndex {
             //=--------------------------------------=
             // MARK: Scry
             //=--------------------------------------=
             let after = position
-            formIndex(before: &position)
+            positions.formIndex(before: &position)
             //=--------------------------------------=
             // MARK: Validate
             //=--------------------------------------=

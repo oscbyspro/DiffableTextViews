@@ -138,27 +138,34 @@ extension State {
     
     /// It is OK to use momentum on both positions at once, because they each have different preferred directions.
     @inlinable mutating func autocorrect(intent: Direction?) {
-        #warning("Convert momentum.")
-        
-        let upperBound = position(start: selection.upperBound, preference: .backwards, intent: intent)
+        switch selection.isEmpty {
+        case  true: autocorrectSingleCaret(intent: intent)
+        case false: autocorrectDoubleCaret(intent: intent)
+        }
+    }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Single
+    //=------------------------------------------------------------------------=
+    
+    @inlinable mutating func autocorrectSingleCaret(intent: Direction?) {
+        let position = positions.single.position(start: selection.upperBound, intent: intent)
+        self.selection = position ..< position
+    }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Double
+    //=------------------------------------------------------------------------=
+    
+    @inlinable mutating func autocorrectDoubleCaret(intent: Direction?) {
+        let upperBound = positions.upper.position(start: selection.upperBound, intent: intent)
         var lowerBound = upperBound
-        
-        if !selection.isEmpty {
-            lowerBound = position(start: selection.lowerBound, preference:  .forwards, intent: intent)
+
+        if upperBound != positions.startIndex {
+            lowerBound = positions.lower.position(start: selection.lowerBound, intent: intent)
             lowerBound = min(lowerBound, upperBound)
         }
         
         self.selection = lowerBound ..< upperBound
-    }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Position
-    //=------------------------------------------------------------------------=
-    
-    #warning("Rework.")
-    @inlinable func position(start: Positions.Index, preference: Direction, intent: Direction?) -> Positions.Index {
-        fatalError()
-        
-        
     }
 }

@@ -56,7 +56,7 @@
         //=--------------------------------------=
         // MARK: Attempt
         //=--------------------------------------=
-        while position != startIndex {
+        while position != positions.startIndex {
             //=--------------------------------------=
             // MARK: Validate
             //=--------------------------------------=
@@ -64,7 +64,7 @@
             //=--------------------------------------=
             // MARK: Continue
             //=--------------------------------------=
-            formIndex(before: &position)
+            positions.formIndex(before: &position)
         }
         //=--------------------------------------=
         // MARK: Failure
