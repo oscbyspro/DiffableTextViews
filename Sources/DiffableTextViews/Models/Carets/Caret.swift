@@ -9,10 +9,9 @@
 // MARK: * Caret
 //*============================================================================*
 
-@usableFromInline protocol Caret: BidirectionalCollection {
+@usableFromInline protocol Caret: BidirectionalCollection where Index == Positions.Index {
     associatedtype Scheme: DiffableTextViews.Scheme
     typealias Positions = DiffableTextViews.Positions<Scheme>
-    typealias Index = DiffableTextViews.Positions<Scheme>.Index
     
     //=------------------------------------------------------------------------=
     // MARK: Properties
@@ -85,15 +84,15 @@ extension Caret {
     //=------------------------------------------------------------------------=
     
     @inlinable func passthrough(_ position: Index) -> Bool {
-        positions[position].attribute.contains(.passthrough)
+        self[position].contains(.passthrough)
     }
     
     @inlinable func lookaheadable(_ position: Index) -> Bool {
-        position != positions.endIndex ? passthrough(position) : true
+        position != endIndex ? passthrough(position) : true
     }
     
     @inlinable func lookbehindable(_ position: Index) -> Bool {
-        position != positions.startIndex ? passthrough(positions.index(before: position)) : true
+        position != startIndex ? passthrough(index(before: position)) : true
     }
 }
 
