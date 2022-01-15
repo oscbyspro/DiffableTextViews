@@ -52,9 +52,8 @@ import Quick
     // MARK: Utilities
     //=------------------------------------------------------------------------=
     
-    #warning("...")
     @inlinable func indices(at destination: Range<Position>) -> Range<Positions.Index> {
-        fatalError() // positions.indices(start: selection, destination: destination)
+        positions.indices(start: selection, destination: destination)
     }
 }
 

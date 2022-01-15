@@ -54,7 +54,7 @@
     }
     
     //=------------------------------------------------------------------------=
-    // MARK: Subscripts
+    // MARK: Elements
     //=------------------------------------------------------------------------=
 
     @inlinable subscript(position: Index) -> Symbol {
@@ -62,7 +62,7 @@
     }
     
     //=------------------------------------------------------------------------=
-    // MARK: Move
+    // MARK: Traversal
     //=------------------------------------------------------------------------=
 
     @inlinable func index(after index: Index) -> Index {
@@ -75,6 +75,27 @@
         let before = snapshot.index(before: index.snapshot)
         let character = characters[before.character]
         return Index(before, at: index.position.before(character))
+    }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Traversal - Index At Offset
+    //=------------------------------------------------------------------------=
+    
+    @inlinable func index(start: Index, destination: Position) -> Index {
+        start.position <= destination
+        ? indices[start...].first(where: { $0.position >= destination }) ??   endIndex
+        : indices[...start].last (where: { $0.position <= destination }) ?? startIndex
+    }
+    
+    @inlinable func indices(start: Range<Index>, destination: Range<Position>) -> Range<Index> {
+        let upperBound = index(start: start.upperBound, destination: destination.upperBound)
+        var lowerBound = upperBound
+        
+        if !start.isEmpty {
+            lowerBound = index(start: start.lowerBound, destination: destination.lowerBound)
+        }
+        
+        return lowerBound ..< upperBound
     }
 
     //*========================================================================*
