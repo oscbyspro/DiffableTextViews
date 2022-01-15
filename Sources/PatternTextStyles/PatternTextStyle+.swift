@@ -55,7 +55,14 @@ extension PatternTextStyle {
         // MARK: Remainders
         //=--------------------------------------=
         
-        if visible, patternIndex != pattern.endIndex {
+        if visible {
+            if valueIndex == value.startIndex {
+                let endIndex = pattern.prefix(while: { $0 != placeholder }).endIndex
+                snapshot.append(contentsOf: Snapshot(String(pattern[patternIndex..<endIndex]), only: .spacer))
+                snapshot.anchor()
+                patternIndex = endIndex
+            }
+        
             snapshot.append(contentsOf: Snapshot(String(pattern[patternIndex...]), only: .spacer))
         }
         

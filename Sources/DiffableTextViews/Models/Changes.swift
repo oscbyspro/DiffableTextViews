@@ -38,7 +38,7 @@ Next: BidirectionalCollection, Next.Element == Symbol {
             //=---------------------------------=
             // MARK: Indices
             //=---------------------------------=
-            if pastElement == nextElement {
+            if pastElement.character == nextElement.character {
                 past.formIndex(after: &pastIndex)
                 next.formIndex(after: &nextIndex)
             } else if pastElement.attribute.contains( .removable) {

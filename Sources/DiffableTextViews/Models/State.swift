@@ -145,14 +145,25 @@ extension State {
     //=------------------------------------------------------------------------=
     
     @inlinable mutating func autocorrect(intent: (lower: Direction?, upper: Direction?)) {
+        //=--------------------------------------=
+        // MARK: Special
+        //=--------------------------------------=
+        if selection == positions.startIndex ..< positions.endIndex { return }
+        //=--------------------------------------=
+        // MARK: Upper Bound, Single
+        //=--------------------------------------=
         let upperBound = positions.caret(start: selection.upperBound, preference: .backwards, intent: intent.upper)
         var lowerBound = upperBound
-        
+        //=--------------------------------------=
+        // MARK: Lower Bound, Double
+        //=--------------------------------------=
         if !selection.isEmpty, upperBound != positions.startIndex {
             lowerBound = positions.caret(start: selection.lowerBound, preference:  .forwards, intent: intent.lower)
             lowerBound = min(lowerBound, upperBound)
         }
-                
+        //=--------------------------------------=
+        // MARK: Update
+        //=--------------------------------------=
         self.selection = lowerBound ..< upperBound
     }
 }

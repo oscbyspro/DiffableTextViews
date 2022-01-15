@@ -16,7 +16,7 @@ public struct Symbol: Equatable {
     //=------------------------------------------------------------------------=
     
     public static let anchor = Self(
-        character: "\u{200B}",
+        character: "\u{200B}", // unicode zero-width space
         attribute: [.formatting, .insertable, .removable])
     
     //=------------------------------------------------------------------------=

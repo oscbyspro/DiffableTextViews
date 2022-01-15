@@ -33,7 +33,6 @@ extension NumericTextStyle {
     // MARK: Characters
     //=------------------------------------------------------------------------=
 
-    #warning("Rework ")
     /// Snapshots characters.
     ///
     /// - Assumes: that there is at least one integer digit.
@@ -45,9 +44,7 @@ extension NumericTextStyle {
         //=--------------------------------------=
         // MARK: Markers
         //=--------------------------------------=
-        var interactableStart = Snapshot.Index?(nil)
-        var interactableEnd   = snapshot.startIndex
-        var redundanciesStart = snapshot.startIndex
+        var lastInteractableIndex = snapshot.startIndex
         //=--------------------------------------=
         // MARK: Prefix
         //=--------------------------------------=
@@ -55,10 +52,6 @@ extension NumericTextStyle {
             snapshot.append(contentsOf: Snapshot(prefix, only: .spacer))
             snapshot.append(Symbol(character: " ",  attribute: .spacer))
         }
-
-        #warning("Up to first digit")
-        #warning("Remove interactable start.")
-        
         //=--------------------------------------=
         // MARK: Body
         //=--------------------------------------=
@@ -68,16 +61,9 @@ extension NumericTextStyle {
             //=----------------------------------=
             // MARK: Digit
             //=----------------------------------=
-            if let digit = region.digits[character] {
+            if let _ = region.digits[character] {
                 snapshot.append(Symbol(character: character, attribute: .content))
-                interactableEnd = snapshot.endIndex
-
-                if digit == .zero {
-                    redundanciesStart = snapshot.endIndex
-                    if interactableStart == nil {
-                        interactableStart = snapshot.endIndex
-                    }
-                }
+                lastInteractableIndex = snapshot.endIndex
             //=----------------------------------=
             // MARK: Separator
             //=----------------------------------=
@@ -86,11 +72,9 @@ extension NumericTextStyle {
                 case .grouping:
                     snapshot.append(Symbol(character: character, attribute: .spacer))
                 case .fraction:
-                    redundanciesStart = snapshot.endIndex
-                    snapshot.append(Symbol(character: character, attribute: .content))
-                    interactableEnd = snapshot.endIndex
+                    snapshot.append(Symbol(character: character, attribute: .removable))
+                    lastInteractableIndex = snapshot.endIndex
                 }
-            
             //=----------------------------------=
             // MARK: Sign
             //=----------------------------------=
@@ -104,30 +88,11 @@ extension NumericTextStyle {
             }
         }
         //=--------------------------------------=
-        // MARK: Interactable - Start
-        //=--------------------------------------=
-        #warning("Rework.")
-//        if let interactableStart = interactableStart {
-//            snapshot.transform(attributes: ..<interactableStart) {
-//                attribute in
-//                attribute.insert(.passthrough)
-//            }
-//        }
-        //=--------------------------------------=
-        // MARK: Redundancies - Start
-        //=--------------------------------------=
-        if redundanciesStart != snapshot.startIndex {
-            snapshot.transform(attributes: redundanciesStart...) {
-                attribute in
-                attribute.insert(.removable)
-            }
-        }
-        //=--------------------------------------=
         // MARK: Interactable - End
         //=--------------------------------------=
-        snapshot.transform(attributes: interactableEnd...) {
+        snapshot.transform(attributes: lastInteractableIndex...) {
             attribute in
-            attribute = .spacer
+            attribute.insert(.passthrough)
         }
         //=--------------------------------------=
         // MARK: Suffix

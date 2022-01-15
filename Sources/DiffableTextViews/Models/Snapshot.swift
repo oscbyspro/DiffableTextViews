@@ -43,6 +43,18 @@ public struct Snapshot: BidirectionalCollection, RangeReplaceableCollection, Tra
         self._attributes = Attributes(repeating: attribute, count: characters.count)
     }
     
+    //=------------------------------------------------------------------------=
+    // MARK: Transformations
+    //=------------------------------------------------------------------------=
+    
+    @inlinable public mutating func anchor() {
+        self.append(.anchor)
+    }
+    
+    @inlinable public mutating func anchor(at index: Index) {
+        self.insert(.anchor, at: index)
+    }
+    
     //*========================================================================*
     // MARK: * Index
     //*========================================================================*
@@ -138,21 +150,6 @@ public extension Snapshot {
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: Snapshot - CustomStringConvertible
-//=----------------------------------------------------------------------------=
-
-extension Snapshot: CustomStringConvertible {
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Description
-    //=------------------------------------------------------------------------=
-    
-    @inlinable public var description: String {
-        "\(Self.self)(\"\(_characters)\", \(_attributes))"
-    }
-}
-
-//=----------------------------------------------------------------------------=
 // MARK: Snapshot - RangeReplaceableCollection
 //=----------------------------------------------------------------------------=
 
@@ -178,6 +175,11 @@ public extension Snapshot {
     //
     // MARK: Replace - Optimizations
     //=------------------------------------------------------------------------=
+    
+    @inlinable mutating func append(_ element: Symbol) {
+        _characters.append(element.character)
+        _attributes.append(element.attribute)
+    }
     
     @inlinable mutating func insert(_ element: Element, at position: Index) {
         _characters.insert(element.character, at: position.character)
@@ -223,5 +225,20 @@ public extension Snapshot {
         where R.Bound == Index {
         
         transform(attributes: indices[range.relative(to: self)], with: transformation)
+    }
+}
+
+//=----------------------------------------------------------------------------=
+// MARK: Snapshot - CustomStringConvertible
+//=----------------------------------------------------------------------------=
+
+extension Snapshot: CustomStringConvertible {
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Description
+    //=------------------------------------------------------------------------=
+    
+    @inlinable public var description: String {
+        "\(Self.self)(\"\(_characters)\", \(_attributes))"
     }
 }
