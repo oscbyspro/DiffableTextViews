@@ -9,7 +9,6 @@
 // MARK: * Caret
 //*============================================================================*
 
-/// The forwards and backwards methods must check the start position.
 @usableFromInline protocol Caret {
     associatedtype Scheme: DiffableTextViews.Scheme
     typealias Positions = DiffableTextViews.Positions<Scheme>
@@ -26,6 +25,7 @@
     // MARK: Utilities
     //=------------------------------------------------------------------------=
     
+    @inlinable func  validate(start: Index) -> Bool
     @inlinable func  forwards(start: Index) -> Index?
     @inlinable func backwards(start: Index) -> Index?
 }
@@ -36,7 +36,6 @@
 
 extension Caret {
 
-    
     //=------------------------------------------------------------------------=
     // MARK: Traversal
     //=------------------------------------------------------------------------=
@@ -53,6 +52,10 @@ extension Caret {
     //=------------------------------------------------------------------------=
     
     @inlinable func autocorrect(position: Index, intent: Direction?) -> Index? {
+        //=--------------------------------------=
+        // MARK: Validate
+        //=--------------------------------------=
+        if validate(start: position) { return position }
         //=--------------------------------------=
         // MARK: Choose A Direction
         //=--------------------------------------=
@@ -104,20 +107,17 @@ extension Caret {
     }
     
     //=------------------------------------------------------------------------=
-    // MARK: Locate
+    // MARK: Utilities
     //=------------------------------------------------------------------------=
     
+    @inlinable func validate(start: Index) -> Bool {
+        !positions.attribute(forwards:  start.attribute).contains(.passthrough) ||
+        !positions.attribute(backwards: start.attribute).contains(.passthrough)
+    }
+    
     @inlinable func forwards(start: Index) -> Index? {
-        //=--------------------------------------=
-        // MARK: Start
-        //=--------------------------------------=
-        if !positions.attribute(backwards: start.attribute).contains(.passthrough) {
-            return start
-        }
-        //=--------------------------------------=
-        // MARK: Loop
-        //=--------------------------------------=
         var position = start
+
         while position != positions.endIndex {
             if !positions.attributes[position.attribute].contains(.passthrough) {
                 return position
@@ -125,23 +125,13 @@ extension Caret {
             
             positions.formIndex(after: &position)
         }
-        //=--------------------------------------=
-        // MARK: Failure
-        //=--------------------------------------=
+
         return nil
     }
     
     @inlinable func backwards(start: Index) -> Index? {
         var position = start
-        //=--------------------------------------=
-        // MARK: Start
-        //=--------------------------------------=
-        if !positions.attributes[position.attribute].contains(.passthrough) {
-            return position
-        }
-        //=--------------------------------------=
-        // MARK: Loop
-        //=--------------------------------------=
+
         while position != positions.startIndex {
             let after = position
             positions.formIndex(before: &position)
@@ -149,9 +139,121 @@ extension Caret {
                 return after
             }
         }
-        //=--------------------------------------=
-        // MARK: Failure
-        //=--------------------------------------=
+
+        return nil
+    }
+}
+
+#warning("WIP")
+#warning("WIP")
+#warning("WIP")
+
+//*============================================================================*
+// MARK: * Upper
+//*============================================================================*
+
+@usableFromInline struct Upper<Scheme: DiffableTextViews.Scheme>: Caret {
+    @usableFromInline typealias Positions = DiffableTextViews.Positions<Scheme>
+    @usableFromInline typealias Index = DiffableTextViews.Positions<Scheme>.Index
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Properties
+    //=------------------------------------------------------------------------=
+    
+    @usableFromInline let positions: Positions
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Initializers
+    //=------------------------------------------------------------------------=
+    
+    @inlinable init(_ positions: Positions) {
+        self.positions = positions
+    }
+
+    //=------------------------------------------------------------------------=
+    // MARK: Attributes
+    //=------------------------------------------------------------------------=
+    
+    @inlinable var preference: Direction {
+        .backwards
+    }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Utilities
+    //=------------------------------------------------------------------------=
+    
+    @inlinable func validate(start: Index) -> Bool {
+        !positions.attribute(backwards: start.attribute).contains(.passthrough)
+    }
+    
+    @inlinable func forwards(start: Index) -> Index? {
+        var position  = start
+        var backwards = positions.attribute(backwards: start.attribute)
+        
+        while position != positions.endIndex, backwards.contains(.passthrough) {
+            backwards = positions.attributes[position.attribute]
+            positions.formIndex(after: &position)
+        }
+
+        return nil
+    }
+    
+    @inlinable func backwards(start: Index) -> Index? {
+        Single(positions).backwards(start: start)
+    }
+}
+
+#warning("WIP")
+#warning("WIP")
+#warning("WIP")
+
+@usableFromInline struct Lower<Scheme: DiffableTextViews.Scheme>: Caret {
+    @usableFromInline typealias Positions = DiffableTextViews.Positions<Scheme>
+    @usableFromInline typealias Index = DiffableTextViews.Positions<Scheme>.Index
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Properties
+    //=------------------------------------------------------------------------=
+    
+    @usableFromInline let positions: Positions
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Initializers
+    //=------------------------------------------------------------------------=
+    
+    @inlinable init(_ positions: Positions) {
+        self.positions = positions
+    }
+
+    //=------------------------------------------------------------------------=
+    // MARK: Attributes
+    //=------------------------------------------------------------------------=
+    
+    @inlinable var preference: Direction {
+        .forwards
+    }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Utilities
+    //=------------------------------------------------------------------------=
+    
+    @inlinable func validate(start: Index) -> Bool {
+        !positions.attribute(forwards: start.attribute).contains(.passthrough)
+    }
+    
+    @inlinable func forwards(start: Index) -> Index? {
+        Single(positions).forwards(start: start)
+    }
+    
+    @inlinable func backwards(start: Index) -> Index? {
+        var position = start
+        var forwards = positions.attribute(forwards: start.attribute)
+        
+        while position != positions.startIndex, forwards.contains(.passthrough) {
+            positions.formIndex(before: &position)
+            forwards = positions.attributes[position.attribute]
+        }
+
         return nil
     }
 }
