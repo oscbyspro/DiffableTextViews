@@ -9,7 +9,7 @@
 // MARK: * Caret
 //*============================================================================*
 
-@usableFromInline protocol Caret {
+@usableFromInline protocol Caret: BidirectionalCollection {
     associatedtype Scheme: DiffableTextViews.Scheme
     typealias Positions = DiffableTextViews.Positions<Scheme>
     typealias Index = DiffableTextViews.Positions<Scheme>.Index
@@ -33,6 +33,45 @@
     
     @inlinable func  forwards(start: Index) -> Index?
     @inlinable func backwards(start: Index) -> Index?    
+}
+
+//=------------------------------------------------------------------------=
+// MARK: Caret - Collection
+//=------------------------------------------------------------------------=
+
+extension Caret {
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Elements
+    //=------------------------------------------------------------------------=
+    
+    @inlinable subscript(position: Index) -> Attribute {
+        positions.attributes[position.attribute]
+    }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Indices
+    //=------------------------------------------------------------------------=
+    
+    @inlinable var startIndex: Index {
+        positions.startIndex
+    }
+    
+    @inlinable var endIndex: Index {
+        positions.endIndex
+    }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Traverse
+    //=------------------------------------------------------------------------=
+    
+    @inlinable func index(after position: Index) -> Index {
+        positions.index(after: position)
+    }
+    
+    @inlinable func index(before position: Index) -> Index {
+        positions.index(before: position)
+    }
 }
 
 //=----------------------------------------------------------------------------=
