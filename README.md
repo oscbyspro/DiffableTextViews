@@ -51,8 +51,8 @@ extension NumericTextStyle: UIKitTextStyle {
 |   | Features | Description |
 |---|----------|-------------|
 | :arrows_counterclockwise: | [Values](../main/Notes/NumericTextStyles/VALUES.md) | Decimal, Float(16-64) and (U)Int(8-64). |
-| :straight_ruler: | Bounds | Clamps input and output to specified range. |
 | :mag_right: | Precision | Up to 38 significant digits. |
+| :straight_ruler: | Bounds | Clamps input and output to specified range. |
 | :art: | Formats | Number, Currency and Percent. |
 | :national_park: | Locales | All available in the Foundation framework. |
 
