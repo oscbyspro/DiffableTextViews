@@ -97,7 +97,7 @@ public struct NumericTextStyle<Format: NumericTextStyles.Format>: DiffableTextSt
     
     @inlinable func autocorrectSign(in characters: inout String, with value: Value, and sign: Sign) {
         guard sign == .negative && value == .zero else { return }
-        guard let position = characters.firstIndex(where: region.signs.contains) else { return }
+        guard let position = characters.firstIndex(where: region.signs.values.keys.contains) else { return }
         guard let sign = region.signs[sign] else { return }
         characters.replaceSubrange(position...position, with: String(sign))
     }

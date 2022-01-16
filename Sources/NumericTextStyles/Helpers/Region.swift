@@ -6,7 +6,6 @@
 //
 
 import Foundation
-import DiffableTextViews
 
 //*============================================================================*
 // MARK: * Region
@@ -65,7 +64,7 @@ import DiffableTextViews
             digits.link(formatter.string(from: digit.uInt8 as NSNumber)!.first!, digit)
         }
         //=--------------------------------------=
-        // MARK: Characters - Separators
+        // MARK: Separators
         //=--------------------------------------=
         self.separators = Lexicon<Separator>()
         separators[Separator.fraction.character] = .fraction
@@ -133,8 +132,8 @@ import DiffableTextViews
         // MARK: Properties
         //=--------------------------------------------------------------------=
         
-        @usableFromInline var system: [Character: Value] = [:]
-        @usableFromInline var region: [Value: Character] = [:]
+        @usableFromInline var values:     [Character: Value] = [:]
+        @usableFromInline var characters: [Value: Character] = [:]
         
         //=--------------------------------------------------------------------=
         // MARK: Initializers
@@ -146,14 +145,14 @@ import DiffableTextViews
         // MARK: Subscripts
         //=--------------------------------------------------------------------=
         
-        @inlinable subscript(key: Character) -> Value? {
-            _read   { yield  system[key] }
-            _modify { yield &system[key] }
+        @inlinable subscript(character: Character) -> Value? {
+            _read   { yield  values[character] }
+            _modify { yield &values[character] }
         }
         
-        @inlinable subscript(key: Value) -> Character? {
-            _read   { yield  region[key] }
-            _modify { yield &region[key] }
+        @inlinable subscript(value: Value) -> Character? {
+            _read   { yield  characters[value] }
+            _modify { yield &characters[value] }
         }
         
         //=--------------------------------------------------------------------=
@@ -161,25 +160,13 @@ import DiffableTextViews
         //=--------------------------------------------------------------------=
 
         @inlinable mutating func link(_ character: Character, _ value: Value) {
-            system[character] = value
-            region[value] = character
+            values[character] = value
+            characters[value] = character
         }
         
         @inlinable mutating func link(_ value: Value, _ character: Character) {
-            system[character] = value
-            region[value] = character
-        }
-        
-        //=--------------------------------------------------------------------=
-        // MARK: Utilities
-        //=--------------------------------------------------------------------=
-        
-        @inlinable func contains(_ key: Character) -> Bool {
-            self[key] != nil
-        }
-        
-        @inlinable func contains(_ key: Value) -> Bool {
-            self[key] != nil
+            values[character] = value
+            characters[value] = character
         }
     }
 }
