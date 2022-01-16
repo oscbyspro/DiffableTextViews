@@ -6,7 +6,6 @@
 //
 
 import DiffableTextViews
-import Quick
 
 //=----------------------------------------------------------------------------=
 // MARK: NumericTextStyle - Snapshot

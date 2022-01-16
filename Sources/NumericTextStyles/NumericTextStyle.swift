@@ -7,13 +7,12 @@
 
 import DiffableTextViews
 import Foundation
-import Quick
 
 //*============================================================================*
 // MARK: * NumericTextStyle
 //*============================================================================*
 
-public struct NumericTextStyle<Format: NumericTextStyles.Format>: DiffableTextStyle, Transformable
+public struct NumericTextStyle<Format: NumericTextStyles.Format>: DiffableTextStyle
     where Format.FormatInput: Value, Format.FormatOutput == String {
     public typealias Value = Format.FormatInput
     public typealias Bounds = NumericTextStyles.Bounds<Value>
@@ -45,17 +44,20 @@ public struct NumericTextStyle<Format: NumericTextStyles.Format>: DiffableTextSt
     
     @inlinable public func locale(_ locale: Locale) -> Self {
         var result = self
-        result.format = format.locale(locale)
         result.region = Region.reusable(locale)
         return result
     }
     
     @inlinable public func bounds(_ bounds: Bounds) -> Self {
-        transform({ $0.bounds = bounds })
+        var result = self
+        result.bounds = bounds
+        return result
     }
     
     @inlinable public func precision(_ precision: Precision) -> Self {
-        transform({ $0.precision = precision })
+        var result = self
+        result.precision = precision
+        return result
     }
     
     //=------------------------------------------------------------------------=
@@ -85,7 +87,7 @@ public struct NumericTextStyle<Format: NumericTextStyles.Format>: DiffableTextSt
         precision: Format.PrecisionStyle,
         separator: Format.SeparatorStyle = .automatic,
         sign: Sign.Style = .automatic) -> Format {
-        format.precision(precision).decimalSeparator(strategy: separator).sign(style: sign)
+        format.locale(region.locale).precision(precision).decimalSeparator(strategy: separator).sign(style: sign)
     }
     
     //=------------------------------------------------------------------------=

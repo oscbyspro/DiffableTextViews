@@ -8,7 +8,7 @@
 import DiffableTextViews
 import Foundation
 
-#warning("Percent showcase style is incorred.")
+#warning("Percent showcase style is incorrect.")
 
 //*============================================================================*
 // MARK: * Precision
@@ -46,7 +46,7 @@ public struct Precision<Value: Precise> {
         .integerAndFractionLength(integerLimits: Self.limits(\.integer), fractionLimits: Self.limits(\.fraction))
     }
     
-    @inlinable func editableStyleThatUses(number: Number) -> _Precision.Style{
+    @inlinable func editableStyleThatUses(number: Number) -> _Precision.Style {
         let integerUpperBound = max(_Precision.lowerBound.integer, number.integer.count)
         let integer = _Precision.lowerBound.integer...integerUpperBound
         let fractionLowerBound = max(_Precision.lowerBound.fraction, number.fraction.count)
