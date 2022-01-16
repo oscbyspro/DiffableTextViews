@@ -9,6 +9,7 @@
 // MARK: * Component
 //*============================================================================*
 
+/// The unicode value of its system representation.
 @usableFromInline protocol Component: RawRepresentable where RawValue == UInt8 { }
 
 //=----------------------------------------------------------------------------=

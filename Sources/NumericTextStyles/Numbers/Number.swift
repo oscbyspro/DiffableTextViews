@@ -27,9 +27,9 @@ import DiffableTextViews
     //=------------------------------------------------------------------------=
 
     @usableFromInline var sign = Sign.positive
-    @usableFromInline private(set) var integer = Digits()
-    @usableFromInline private(set) var separator: Separator? = nil
-    @usableFromInline private(set) var fraction = Digits()
+    @usableFromInline private(set) var integer   = Digits()
+    @usableFromInline private(set) var separator = Separator?.none
+    @usableFromInline private(set) var fraction  = Digits()
     
     //=------------------------------------------------------------------------=
     // MARK: Initializers
@@ -42,10 +42,10 @@ import DiffableTextViews
     //=------------------------------------------------------------------------=
     
     @inlinable func count() -> Count {
-        let  integer =  self.integer.count
+        let  integer = self .integer.count
         let fraction = self.fraction.count
 
-        let upper =  integer -  self.integer.prefixZerosCount()
+        let upper =  integer - self .integer.prefixZerosCount()
         var lower = fraction - self.fraction.suffixZerosCount()
         
         if upper == 0, lower != 0 {
