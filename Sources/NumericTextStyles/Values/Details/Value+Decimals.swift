@@ -14,22 +14,9 @@ import Foundation
 extension Decimal: FloatingPointValue {
 
     //=------------------------------------------------------------------------=
-    // MARK: Precision
+    // MARK: Precision, Bounds
     //=------------------------------------------------------------------------=
     
     public static let precision: Capacity = precision(38)
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Bounds
-    //=------------------------------------------------------------------------=
-
     public static let bounds: ClosedRange<Self> = bounds(limit: Self(string: String(repeating: "9", count: 38))!)
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Make
-    //=------------------------------------------------------------------------=
-    
-    @inlinable public static func make(description: String) -> Optional<Self> {
-        Self(string: description)
-    }
 }
