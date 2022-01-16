@@ -1,15 +1,15 @@
 # DiffableTextViews
 
-A framework for as-you-type formatting of text bound to appropriate data types.
+A framework for as-you-type formatting of text bound to its appropriate data type.
 
 ### Features
 
-|   | Features | Description |
-|---|----------|-------------|
-| :keyboard: | As-you-type. | Formats text input in real time. |
+|   | Feature | Description |
+|---|---------|-------------|
+| :keyboard: | As-you-type. | Formats and parses text in real time. |
 | :hammer_and_wrench: | Versatile. | Uses snapshots and attributes. |
 | :running_man: | Fast. | Uses an O(n) differentiation algorithm. |
-| :weight_lifting: | Strong. | Binds text to its approptiate data type. |
+| :magic_wand: | Automagical. | Binds text to its approptiate data type. |
 
 # Progress
 
@@ -23,8 +23,8 @@ A framework for as-you-type formatting of text bound to appropriate data types.
 
 ### Features
 
-|   | Features | Description |
-|---|----------|-------------|
+|   | Feature | Description |
+|---|---------|-------------|
 | :balance_scale: | Font | Standard font is monospaced. |
 | :sewing_needle: | Custom | Styles may provide default values. |
 
@@ -47,13 +47,13 @@ extension NumericTextStyle: UIKitTextStyle {
 
 ### Features
 
-|   | Features | Description |
-|---|----------|-------------|
+|   | Feature | Description |
+|---|---------|-------------|
 | :arrows_counterclockwise: | [Values](../main/Notes/NumericTextStyles/VALUES.md) | Decimal, Float(16-64) and (U)Int(8-64). |
-| :mag_right: | Precision | Up to 38 significant digits. |
+| :bow_and_arrow: | Precision | Up to 38 significant digits. |
 | :bricks: | Bounds | Clamps input and output to specified range. |
 | :art: | Formats | Number, currency and percent. |
-| :national_park: | Locales | All available in the Foundation framework. |
+| :national_park: | Locales | Every locale in the Foundation framework. |
 
 ### Examples
 
