@@ -180,17 +180,19 @@ public extension Precision where Value: PreciseFloatingPoint {
     //=------------------------------------------------------------------------=
     
     @inlinable static func capacity(number: Number, max: Capacity) throws -> Capacity {
-        let integer = max.integer - number.integer.count
+        let capacity = number.capacity()
+        
+        let integer = max.integer - capacity.integer
         guard integer >= 0 else {
             throw failure(excess: .integer, max: max.integer)
         }
         
-        let fraction = max.fraction - number.fraction.count
+        let fraction = max.fraction - capacity.fraction
         guard fraction >= 0 else {
             throw failure(excess: .fraction, max: max.fraction)
         }
         
-        let significant = max.significant - number.significantCount()
+        let significant = max.significant - capacity.fraction
         guard significant >= 0 else {
             throw failure(excess: .significant, max: max.significant)
         }

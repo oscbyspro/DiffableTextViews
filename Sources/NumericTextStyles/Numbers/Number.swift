@@ -38,18 +38,22 @@ import DiffableTextViews
     @inlinable init() { }
     
     //=------------------------------------------------------------------------=
-    // MARK: Count
+    // MARK: Capacity
     //=------------------------------------------------------------------------=
+    
+    #warning("Maybe accept adjustment, for percent style.")
+    @inlinable func capacity() -> Capacity {
+        let  integer =  self.integer.count
+        let fraction = self.fraction.count
+
+        let upper =  integer -  self.integer.prefixZerosCount()
+        var lower = fraction - self.fraction.suffixZerosCount()
         
-    @inlinable func significantCount() -> Int {
-        let significantIntegerCount = integer.count - integer.prefixZerosCount()
-        var significantFractionCount = fraction.count - fraction.suffixZerosCount()
-        
-        if significantIntegerCount == 0, significantFractionCount != 0 {
-            significantFractionCount = significantFractionCount - fraction.prefixZerosCount()
+        if upper == 0, lower != 0 {
+            lower = lower - self.fraction.prefixZerosCount()
         }
-        
-        return significantIntegerCount + significantFractionCount
+
+        return Capacity(integer: integer, fraction: fraction, significant: upper + lower)
     }
     
     //=------------------------------------------------------------------------=
