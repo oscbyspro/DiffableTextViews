@@ -27,8 +27,10 @@ A framework for as-you-type formatting of text bound to desired data types.
 |   | Features | Description |
 |---|----------|-------------|
 | :straight_ruler: | Font | Standard font is monospaced. |
+| :sewing_needle: | Defaults | Styles can provide default values. |
 
-### Defaults
+
+### Examples
 
 ```swift
 extension NumericTextStyle: UIKitTextStyle {    
