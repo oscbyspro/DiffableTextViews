@@ -21,19 +21,14 @@ import DiffableTextViews
     
     @usableFromInline let formatter: NumberFormatter
         
-    //
+    //=------------------------------------------------------------------------=
     // MARK: Properties - Characters
     //=------------------------------------------------------------------------=
     
-    @usableFromInline let signs: [Character: Sign]
-    @usableFromInline let signsInLocale: [Sign: Character]
-    
-    @usableFromInline let digits: [Character: Digit]
-    @usableFromInline let digitsInLocale: [Digit: Character]
-    
-    @usableFromInline let separators: [Character: Separator]
-    @usableFromInline let separatorsInLocale: [Separator: Character]
-    
+    @usableFromInline private(set) var signs = Lexicon<Sign>()
+    @usableFromInline private(set) var digits = Lexicon<Digit>()
+    @usableFromInline private(set) var separators = Lexicon<Separator>()
+
     //=------------------------------------------------------------------------=
     // MARK: Properties - Accessors
     //=------------------------------------------------------------------------=
@@ -47,80 +42,36 @@ import DiffableTextViews
     //=------------------------------------------------------------------------=
     
     @inlinable init(_ locale: Locale) {
-        
         //=--------------------------------------=
         // MARK: Formatter
         //=--------------------------------------=
-        
-        let formatter = NumberFormatter()
+        self.formatter = NumberFormatter()
         formatter.locale = locale
         formatter.numberStyle = .decimal
-        
         //=--------------------------------------=
-        // MARK: Characters - Signs
+        // MARK: Signs
         //=--------------------------------------=
-        
-        var signs = [Character: Sign]()
-        var signsLocal = [Sign: Character]()
-        
+        self.signs = Lexicon<Sign>()
         signs[Sign.positive.character] = .positive
         signs[Sign.negative.character] = .negative
-        
-        let positiveLocal = formatter .plusSign.filter({ $0.isPunctuation || $0.isMathSymbol }).first!
-        signs[positiveLocal] = .positive
-        signsLocal[.positive] = positiveLocal
-        
-        let negativeLocal = formatter.minusSign.filter({ $0.isPunctuation || $0.isMathSymbol }).first!
-        signs[negativeLocal] = .negative
-        signsLocal[.negative] = negativeLocal
-                        
+        signs.link(formatter .plusSign.filter({ $0.isPunctuation || $0.isMathSymbol }).first!, .positive)
+        signs.link(formatter.minusSign.filter({ $0.isPunctuation || $0.isMathSymbol }).first!, .negative)
         //=--------------------------------------=
-        // MARK: Characters - Digits
+        // MARK: Digits
         //=--------------------------------------=
-        
-        var digits = [Character: Digit]()
-        var digitsInLocale = [Digit: Character]()
-        
+        self.digits = Lexicon<Digit>()
         for digit in Digit.allCases {
             digits[digit.character] = digit
-            
-            let digitInLocale = formatter.string(from: digit.uInt8 as NSNumber)!.first!
-            digits[digitInLocale] = digit
-            digitsInLocale[digit] = digitInLocale
+            digits.link(formatter.string(from: digit.uInt8 as NSNumber)!.first!, digit)
         }
-        
         //=--------------------------------------=
         // MARK: Characters - Separators
         //=--------------------------------------=
-    
-        var separators = [Character: Separator]()
-        var separatorsInLocale = [Separator: Character]()
-        
+        self.separators = Lexicon<Separator>()
         separators[Separator.fraction.character] = .fraction
         separators[Separator.grouping.character] = .grouping
-        
-        let fractionInLocale = formatter.decimalSeparator.first!
-        separators[fractionInLocale] = .fraction
-        separatorsInLocale[.fraction] = fractionInLocale
-        
-        let groupingInLocale = formatter.groupingSeparator.first!
-        separators[groupingInLocale] = .grouping
-        separatorsInLocale[.grouping] = groupingInLocale
-
-        //=--------------------------------------=
-        // MARK: Done
-        //=--------------------------------------=
-        
-        self.formatter = formatter
-        
-        self.signs = signs
-        self.signsInLocale = signsLocal
-        
-        self.digits = digits
-        self.digitsInLocale = digitsInLocale
-        
-        self.separators = separators
-        self.separatorsInLocale = separatorsInLocale
+        separators.link(formatter .decimalSeparator.first!, .fraction)
+        separators.link(formatter.groupingSeparator.first!, .grouping)
     }
     
     //=------------------------------------------------------------------------=
@@ -147,31 +98,88 @@ import DiffableTextViews
         //=--------------------------------------=
         // MARK: Sign
         //=--------------------------------------=
-        signsInLocale[number.sign]!.write(to: &characters)
+        signs[number.sign]!.write(to: &characters)
         //=--------------------------------------=
         // MARK: Integer Digits
         //=--------------------------------------=
         for digit in number.integer.digits {
-            print(digit, digitsInLocale[digit]!)
-            digitsInLocale[digit]!.write(to: &characters)
+            digits[digit]!.write(to: &characters)
         }
         //=--------------------------------------=
         // MARK: Fraction Separator
         //=--------------------------------------=
         if let separator = number.separator {
-            separatorsInLocale[separator]!.write(to: &characters)
+            separators[separator]!.write(to: &characters)
             //=----------------------------------=
             // MARK: Fraction Digits
             //=----------------------------------=
-            print()
             for digit in number.fraction.digits {
-                print(digit)
-                digitsInLocale[digit]!.write(to: &characters)
+                digits[digit]!.write(to: &characters)
             }
         }
         //=--------------------------------------=
         // MARK: Done
         //=--------------------------------------=
         return characters
+    }
+    
+    //*========================================================================*
+    // MARK: * Lexicon
+    //*========================================================================*
+    
+    @usableFromInline struct Lexicon<Value: Hashable> {
+        
+        //=--------------------------------------------------------------------=
+        // MARK: Properties
+        //=--------------------------------------------------------------------=
+        
+        @usableFromInline var system: [Character: Value] = [:]
+        @usableFromInline var region: [Value: Character] = [:]
+        
+        //=--------------------------------------------------------------------=
+        // MARK: Initializers
+        //=--------------------------------------------------------------------=
+        
+        @inlinable init() { }
+        
+        //=--------------------------------------------------------------------=
+        // MARK: Subscripts
+        //=--------------------------------------------------------------------=
+        
+        @inlinable subscript(key: Character) -> Value? {
+            _read   { yield  system[key] }
+            _modify { yield &system[key] }
+        }
+        
+        @inlinable subscript(key: Value) -> Character? {
+            _read   { yield  region[key] }
+            _modify { yield &region[key] }
+        }
+        
+        //=--------------------------------------------------------------------=
+        // MARK: Transformations
+        //=--------------------------------------------------------------------=
+
+        @inlinable mutating func link(_ character: Character, _ value: Value) {
+            system[character] = value
+            region[value] = character
+        }
+        
+        @inlinable mutating func link(_ value: Value, _ character: Character) {
+            system[character] = value
+            region[value] = character
+        }
+        
+        //=--------------------------------------------------------------------=
+        // MARK: Utilities
+        //=--------------------------------------------------------------------=
+        
+        @inlinable func contains(_ key: Character) -> Bool {
+            self[key] != nil
+        }
+        
+        @inlinable func contains(_ key: Value) -> Bool {
+            self[key] != nil
+        }
     }
 }

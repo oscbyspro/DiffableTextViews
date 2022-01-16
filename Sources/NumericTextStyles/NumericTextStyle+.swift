@@ -38,8 +38,8 @@ extension NumericTextStyle {
         characters.reduce(into: Snapshot()) { snapshot, character in
             if let _ = region.digits[character] {
                 snapshot.append(Symbol(character, as: .content))
-            } else if let separator = region.separators[character], separator == .fraction {
-                snapshot.append(Symbol(character, as: .removable))
+            } else if let separator = region.separators[character] {
+                snapshot.append(Symbol(character, as: separator == .fraction ? .removable : .phantom))
             } else if let _ = region.signs[character] {
                 snapshot.append(Symbol(character, as: .phantom.subtracting(.formatting)))
             } else {
@@ -71,7 +71,7 @@ extension NumericTextStyle {
         //=--------------------------------------=
         // MARK: Number
         //=--------------------------------------=
-        var number = try number(snapshot: proposal)
+        var number = try Number(proposal, in: region, as: Value.self)
         reader.process?(&number)
         try bounds.validate(sign: number.sign)
         //=--------------------------------------=
@@ -113,21 +113,8 @@ extension NumericTextStyle {
     // MARK: Snapshot As Value
     //=------------------------------------------------------------------------=
 
-    #warning("This might be OK.")
     @inlinable public func parse(snapshot: Snapshot) throws -> Value {
-//        let number = try number(snapshot: snapshot)
-//        let characters = region.characters(in: number)
-//        return try format.parseStrategy.parse(characters)
-        
         try format.parseStrategy.parse(snapshot.characters)
-    }
-        
-    //=------------------------------------------------------------------------=
-    // MARK: Snapshot As Number
-    //=------------------------------------------------------------------------=
-    
-    @inlinable func number(snapshot: Snapshot) throws -> Number {
-        try Number(snapshot, in: region, as: Value.self)
     }
 }
 

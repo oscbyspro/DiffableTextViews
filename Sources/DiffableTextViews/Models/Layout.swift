@@ -21,11 +21,6 @@
     //=------------------------------------------------------------------------=
 
     @usableFromInline let snapshot: Snapshot
-
-    //=------------------------------------------------------------------------=
-    // MARK: Properties - Indices
-    //=------------------------------------------------------------------------=
-
     @usableFromInline let startIndex: Index
     @usableFromInline let   endIndex: Index
 
