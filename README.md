@@ -5,7 +5,7 @@ A framework for as-you-type formatting of text bound to desired data types.
 ### Features
 
 |   | Features | Description |
-|---|----------|---------|
+|---|----------|-------------|
 | :fire: | As-you-type. | Formats text input in real time. |
 | :trophy: | Useful and convenient. | Converts to and from non-text types. |
 | :running_man: | Fast and efficient. | Uses a O(n) differentiation algorithm. |
@@ -22,7 +22,11 @@ A framework for as-you-type formatting of text bound to desired data types.
 
 👷‍♂️🛠🚧🚧🧱🏗🧱🚧🚧⏳
 
-- Standard font is monospaced.
+### Features
+
+|   | Features | Description |
+|---|----------|-------------|
+| :straight_ruler: | Font | Standard font is monospaced. |
 
 # Styles
 
@@ -32,8 +36,8 @@ A framework for as-you-type formatting of text bound to desired data types.
 
 ### Features
 
-|   | Features | Details |
-|---|----------|---------|
+|   | Features | Description |
+|---|----------|-------------|
 | :arrows_counterclockwise: | [Values](../main/Notes/NumericTextStyles/VALUES.md) | Decimal, Float(16-64) and (U)Int(8-64). |
 | :straight_ruler: | Bounds | Clamps input and output to specified range. |
 | :mag_right: | Precision | Up to 38 significant digits. |
