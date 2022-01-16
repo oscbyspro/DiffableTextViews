@@ -10,7 +10,7 @@ A framework for as-you-type formatting of text bound to desired data types.
 | :trophy: | Convenient. | Converts to and from non-text types. |
 | :running_man: | Fast. | Uses an O(n) differentiation algorithm. |
 | :brain: | Smart. | Uses snapshots and attributes. |
-| :book: | Versatile. | Supports left-to-right, right-to-left, emojis. |
+| :book: | Versatile. | Supports both directions and emojis. |
 
 # Progress
 
