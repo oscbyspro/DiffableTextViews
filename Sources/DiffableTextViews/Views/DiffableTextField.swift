@@ -245,25 +245,24 @@ public struct DiffableTextField<Style: DiffableTextStyle & UIKitTextStyle>: UIVi
         
         @inlinable func synchronize() {
             //=----------------------------------=
-            // MARK: Pull
+            // MARK: Value
             //=----------------------------------=
-            let value = TransformableValue
-                .init(upstream.value.wrappedValue)
-                .transform(upstream.style.process(value:))
+            var value = upstream.value.wrappedValue
+            upstream.style.process(value: &value)
             //=----------------------------------=
             // MARK: Accept Or Discard
             //=----------------------------------=
             if cache.value != value || cache.mode != downstream.mode {
                 //=------------------------------=
+                // MARK: Snapshot
+                //=------------------------------=
+                var snapshot = upstream.style.snapshot(value: value, mode: downstream.mode)
+                upstream.style.process(snapshot: &snapshot)
+                //=------------------------------=
                 // MARK: State
                 //=------------------------------=
-                let snapshot = upstream.style
-                    .snapshot(downstream.mode, value)
-                    .transform(upstream.style.process(snapshot:))
-                
-                let state = cache.state.transform { state in
-                    state.update(snapshot: snapshot)
-                }
+                var state = cache.state
+                state.update(snapshot: snapshot)
                 //=------------------------------=
                 // MARK: Push
                 //=------------------------------=

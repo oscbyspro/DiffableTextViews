@@ -5,13 +5,11 @@
 //  Created by Oscar Byström Ericsson on 2021-09-27.
 //
 
-import Quick
-
 //*============================================================================*
 // MARK: * State
 //*============================================================================*
 
-@usableFromInline struct State<Scheme: DiffableTextViews.Scheme>: Transformable {
+@usableFromInline struct State<Scheme: DiffableTextViews.Scheme> {
     @usableFromInline typealias Layout = DiffableTextViews.Layout<Scheme>
     @usableFromInline typealias Position = DiffableTextViews.Position<Scheme>
 
