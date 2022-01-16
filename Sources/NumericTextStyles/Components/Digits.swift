@@ -60,11 +60,11 @@
     }
     
     @inlinable mutating func removeZerosPrefix() {
-        digits.removeSubrange(..<digits.prefix(while: { $0 == .zero }).endIndex)
+        digits.removeSubrange(..<digits.prefix(while: \.isZero).endIndex)
     }
     
     @inlinable mutating func removeZerosSuffix() {
-        digits.removeSubrange(digits.suffix(while: { $0 == .zero }).startIndex...)
+        digits.removeSubrange(digits.suffix(while: \.isZero).startIndex...)
     }
     
     @inlinable mutating func makeItAtLeastZero() {

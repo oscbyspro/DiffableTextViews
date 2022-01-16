@@ -5,6 +5,8 @@
 //  Created by Oscar Byström Ericsson on 2022-01-11.
 //
 
+#warning("Clean this up.")
+
 import Foundation
 
 //*============================================================================*
@@ -67,17 +69,6 @@ public enum Sign: Character, Component {
 //=----------------------------------------------------------------------------=
 
 extension Sign {
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Transformations
-    //=------------------------------------------------------------------------=
-    
-    @inlinable mutating func toggle() {
-        switch self {
-        case .positive: self = .negative
-        case .negative: self = .positive
-        }
-    }
     
     //=------------------------------------------------------------------------=
     // MARK: Write
