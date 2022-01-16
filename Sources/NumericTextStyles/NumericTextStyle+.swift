@@ -83,12 +83,11 @@ extension NumericTextStyle {
         let capacity = try precision.capacity(count: count)
         number.removeImpossibleSeparator(capacity: capacity)
         //=--------------------------------------=
-        // MARK: Regional, Value
+        // MARK: Corrected, Value
         //=--------------------------------------=
-        let regional = region.characters(in: number)
-        let value = try format.parseStrategy.parse(regional)
+        let corrected = region.characters(in: number)
+        let value = try format.parseStrategy.parse(corrected)
         try bounds.validate(value: value)
-        print(regional, value)
         //=--------------------------------------=
         // MARK: Style, Characters
         //=--------------------------------------=
