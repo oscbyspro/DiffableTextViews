@@ -61,13 +61,11 @@ extension NumericTextStyle {
     
     @inlinable public func merge(snapshot: Snapshot, with input: Input) throws -> Snapshot {
         //=--------------------------------------=
-        // MARK: Reader
+        // MARK: Reader, Proposal
         //=--------------------------------------=
         var reader = Reader(input.content)
         reader.consumeSignInput(region: region)
-        //=--------------------------------------=
-        // MARK: Proposal
-        //=--------------------------------------=
+
         var proposal = snapshot
         proposal.replaceSubrange(input.range, with: reader.content)
         //=--------------------------------------=
@@ -77,29 +75,25 @@ extension NumericTextStyle {
         reader.process?(&number)
         try bounds.validate(sign: number.sign)
         //=--------------------------------------=
-        // MARK: Number - Count
+        // MARK: Count, Capacity
         //=--------------------------------------=
         var count = number.count()
         format.process(count: &count)
-        
+
         let capacity = try precision.capacity(count: count)
         number.removeImpossibleSeparator(capacity: capacity)
         //=--------------------------------------=
-        // MARK: Localized
+        // MARK: Regional, Value
         //=--------------------------------------=
-        let localized = number.characters(in: region)
-        //=--------------------------------------=
-        // MARK: Number
-        //=--------------------------------------=
-        let value = try format.parseStrategy.parse(localized)
+        let regional = number.characters(in: region)
+        
+        let value = try format.parseStrategy.parse(regional)
         try bounds.validate(value: value)
         //=--------------------------------------=
-        // MARK: Style
+        // MARK: Style, Characters
         //=--------------------------------------=
         let style = editableStyle(number: number)
-        //=--------------------------------------=
-        // MARK: Characters
-        //=--------------------------------------=
+
         var characters = style.format(value)
         autocorrectSign(in: &characters, with: value, and: number.sign)
         //=--------------------------------------=

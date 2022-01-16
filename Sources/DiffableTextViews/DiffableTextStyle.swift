@@ -31,6 +31,7 @@ public protocol DiffableTextStyle {
     // MARK: Merge
     //=------------------------------------------------------------------------=
     
+    #warning("Maybe add an option to return a value if it is parsed regardless.")
     /// Merges the current snapshot with the input proposed by the user,
     @inlinable func merge(snapshot: Snapshot, with input: Input) throws -> Snapshot
         
