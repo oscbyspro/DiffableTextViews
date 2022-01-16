@@ -6,11 +6,10 @@ A framework for as-you-type formatting of text bound to desired data types.
 
 |   | Features | Description |
 |---|----------|-------------|
-| :fire: | As-you-type. | Formats text input in real time. |
-| :trophy: | Convenient. | Converts to and from non-text types. |
+| :keyboard: | As-you-type. | Formats text input in real time. |
 | :running_man: | Fast. | Uses an O(n) differentiation algorithm. |
-| :brain: | Smart. | Uses snapshots and attributes. |
-| :book: | Versatile. | Supports both directions and emojis. |
+| :weight_lifting: | Strong. | Converts to and from non-text types. |
+| :hammer_and_wrench: | Versatile. | Supports both directions and emojis. |
 
 # Progress
 
@@ -26,8 +25,8 @@ A framework for as-you-type formatting of text bound to desired data types.
 
 |   | Features | Description |
 |---|----------|-------------|
-| :straight_ruler: | Font | Standard font is monospaced. |
-| :sewing_needle: | Defaults | Styles can provide default values. |
+| :balance_scale: | Font | Standard font is monospaced. |
+| :sewing_needle: | Custom | Styles may provide default values. |
 
 
 ### Examples
