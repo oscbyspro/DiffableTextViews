@@ -28,6 +28,16 @@ A framework for as-you-type formatting of text bound to desired data types.
 |---|----------|-------------|
 | :straight_ruler: | Font | Standard font is monospaced. |
 
+### Defaults
+
+```swift
+extension NumericTextStyle: UIKitTextStyle {    
+    @inlinable public func setup(textField: ProxyTextField) {
+        textField.keyboard(Value.isInteger ? .numberPad : .decimalPad)
+    }
+}
+```
+
 # Styles
 
 ## NumericTextStyle 
