@@ -162,34 +162,36 @@ public struct DiffableTextField<Style: DiffableTextStyle & UIKitTextStyle>: UIVi
             //=----------------------------------=
             do {
                 //=------------------------------=
-                // MARK: Process
+                // MARK: Selection
                 //=------------------------------=
-                let selection = TransformableValue
-                    .init(Position(nsRange.lowerBound) ..< Position(nsRange.upperBound))
-                    .transform(cache.state.indices(at:))
-                
-                let input = Input(
-                    content: Snapshot(string, as: .content),
-                    range: selection.lowerBound.snapshot ..< selection.upperBound.snapshot)
+                let positions = Position(nsRange.lowerBound) ..< Position(nsRange.upperBound)
+                let selection = cache.state.indices(at: positions)
+                //=------------------------------=
+                // MARK: Input
+                //=------------------------------=
+                let content = Snapshot(string, as: .content)
+                let range = selection.lowerBound.snapshot ..< selection.upperBound.snapshot
+                let input = Input(content: content, range: range)
+                //=------------------------------=
+                // MARK: Snapshot
+                //=------------------------------=
+                var snapshot = try upstream.style.merge(snapshot: cache.snapshot, with: input)
+                upstream.style.process(snapshot: &snapshot)
+                //=------------------------------=
+                // MARK: Value
+                //=------------------------------=
+                var value = try upstream.style.parse(snapshot: snapshot)
+                upstream.style.process(value: &value)
                 //=------------------------------=
                 // MARK: State
                 //=------------------------------=
-                let snapshot = try upstream.style
-                    .merge(snapshot: cache.snapshot, with: input)
-                    .transform(upstream.style.process(snapshot:))
-                
-                let value = try snapshot
-                    .transformableValue(upstream.style.parse)
-                    .transform(upstream.style.process(value:))
-                
-                let state = cache.state.transform { state in
-                    state.selection = selection.upperBound ..< selection.upperBound
-                    state.update(snapshot: snapshot)
-                }
+                var state = cache.state
+                state.selection = selection.upperBound ..< selection.upperBound
+                state.update(snapshot: snapshot)
                 //=------------------------------=
                 // MARK: Push
                 //=------------------------------=
-                Task { @MainActor in
+                Task { @MainActor [value, state] in
                     // async to process special commands first
                     self.cache.value = value
                     self.cache.state = state

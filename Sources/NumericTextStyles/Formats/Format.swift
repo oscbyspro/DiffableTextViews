@@ -5,8 +5,6 @@
 //  Created by Oscar Byström Ericsson on 2022-01-11.
 //
 
-#warning("Fix/add defaults.")
-
 import Foundation
 
 //*============================================================================*
