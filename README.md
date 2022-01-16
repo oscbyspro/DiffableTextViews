@@ -53,7 +53,7 @@ extension NumericTextStyle: UIKitTextStyle {
 | :mag_right: | Precision | Up to 38 significant digits. |
 | :bricks: | Bounds | Clamps input and output to specified range. |
 | :art: | Formats | Number, currency and percent. |
-| :national_park: | Locales | All available in the Foundation framework. |
+| :national_park: | Locales | Every locale in the Foundation framework. |
 
 ### Examples
 
