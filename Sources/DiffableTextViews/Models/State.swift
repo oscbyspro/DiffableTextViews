@@ -42,7 +42,7 @@
         layout.snapshot
     }
     
-    @inlinable var offsets: Range<Position> {
+    @inlinable var positions: Range<Position> {
         selection.lowerBound.position ..< selection.upperBound.position
     }
     

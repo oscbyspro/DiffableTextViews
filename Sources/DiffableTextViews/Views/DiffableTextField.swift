@@ -222,19 +222,19 @@ public struct DiffableTextField<Style: DiffableTextStyle & UIKitTextStyle>: UIVi
             //=----------------------------------=
             // MARK: Selection
             //=----------------------------------=
-            let selection = downstream.selection()
+            let positions = downstream.selection()
             //=----------------------------------=
             // MARK: Corrected
             //=----------------------------------=
             var corrected = cache.state
-            corrected.update(selection: selection, intent: downstream.intent)
+            corrected.update(selection: positions, intent: downstream.intent)
             //=----------------------------------=
             // MARK: Update Downstream If Needed
             //=----------------------------------=
-            if selection != corrected.offsets {
+            if positions != corrected.positions {
                 lock.perform {
                     self.cache.state = corrected
-                    self.downstream.update(selection: corrected.offsets)
+                    self.downstream.update(selection: corrected.positions)
                 }
             }
         }
@@ -284,7 +284,7 @@ public struct DiffableTextField<Style: DiffableTextStyle & UIKitTextStyle>: UIVi
                 // changes to UITextField's text and selection both call
                 // the delegate's method: textFieldDidChangeSelection(_:)
                 self.downstream.update(text: cache.snapshot.characters)
-                self.downstream.update(selection:  cache.state.offsets)
+                self.downstream.update(selection: cache.state.positions)
                 self.cache.mode = downstream.mode
             }
             //=----------------------------------=

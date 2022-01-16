@@ -38,7 +38,7 @@
         state.snapshot
     }
     
-    @inlinable var selection: Range<Position> {
-        state.offsets
+    @inlinable var positions: Range<Position> {
+        state.positions
     }
 }
