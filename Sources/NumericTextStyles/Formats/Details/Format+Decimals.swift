@@ -11,7 +11,7 @@ import Foundation
 // MARK: * Decimal
 //*============================================================================*
 
-extension Decimal.FormatStyle: Format {
+extension Decimal.FormatStyle: NumberFormat {
 
     //=------------------------------------------------------------------------=
     // MARK: Sign
@@ -26,7 +26,7 @@ extension Decimal.FormatStyle: Format {
 // MARK: * Decimal x Currency
 //*============================================================================*
 
-extension Decimal.FormatStyle.Currency: Format {
+extension Decimal.FormatStyle.Currency: CurrencyFormat {
     
     //=------------------------------------------------------------------------=
     // MARK: Sign
@@ -41,7 +41,7 @@ extension Decimal.FormatStyle.Currency: Format {
 // MARK: * Integer x Percent
 //*============================================================================*
 
-extension Decimal.FormatStyle.Percent: Format {
+extension Decimal.FormatStyle.Percent: PercentFormat {
         
     //=------------------------------------------------------------------------=
     // MARK: Sign

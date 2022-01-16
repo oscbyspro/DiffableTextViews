@@ -15,7 +15,7 @@ extension Float16: FloatingPointValue {
     // MARK: Precision, Bounds
     //=------------------------------------------------------------------------=
     
-    public static let precision: Capacity = precision(3)
+    public static let precision: Count = precision(3)
     public static let bounds: ClosedRange<Self> = bounds(limit: 999)
 }
 
@@ -29,7 +29,7 @@ extension Float32: FloatingPointValue {
     // MARK: Precision, Bounds
     //=------------------------------------------------------------------------=
     
-    public static let precision: Capacity = precision(7)
+    public static let precision: Count = precision(7)
     public static let bounds: ClosedRange<Self> = bounds(limit: 9_999_999)
 }
 
@@ -43,6 +43,6 @@ extension Float64: FloatingPointValue {
     // MARK: Precision, Bounds
     //=------------------------------------------------------------------------=
     
-    public static let precision: Capacity = precision(15)
+    public static let precision: Count = precision(15)
     public static let bounds: ClosedRange<Self> = bounds(limit: 999_999_999_999_999)
 }

@@ -16,7 +16,7 @@ extension UInt: UnsignedIntegerValue {
     // MARK: Precision, Bounds
     //=------------------------------------------------------------------------=
     
-    public static let precision: Capacity = Limitation.precision
+    public static let precision: Count = Limitation.precision
     public static let bounds: ClosedRange<Self> = 0...Self(Limitation.bounds.upperBound)
 }
 
@@ -30,7 +30,7 @@ extension UInt8: UnsignedIntegerValue {
     // MARK: Precision, Bounds
     //=------------------------------------------------------------------------=
 
-    public static let precision: Capacity = precision(3)
+    public static let precision: Count = precision(3)
     public static let bounds: ClosedRange<Self> = bounds()
 }
 
@@ -44,7 +44,7 @@ extension UInt16: UnsignedIntegerValue {
     // MARK: Precision, Bounds
     //=------------------------------------------------------------------------=
 
-    public static let precision: Capacity = precision(5)
+    public static let precision: Count = precision(5)
     public static let bounds: ClosedRange<Self> = bounds()
 }
 
@@ -58,7 +58,7 @@ extension UInt32: UnsignedIntegerValue {
     // MARK: Precision, Bounds
     //=------------------------------------------------------------------------=
 
-    public static let precision: Capacity = precision(10)
+    public static let precision: Count = precision(10)
     public static let bounds: ClosedRange<Self> = bounds()
 }
 
@@ -73,6 +73,6 @@ extension UInt64: UnsignedIntegerValue {
     // MARK: Precision, Bounds
     //=------------------------------------------------------------------------=
 
-    public static let precision: Capacity = Limitation.precision
+    public static let precision: Count = Limitation.precision
     public static let bounds: ClosedRange<Self> = 0...Self(Limitation.bounds.upperBound)
 }

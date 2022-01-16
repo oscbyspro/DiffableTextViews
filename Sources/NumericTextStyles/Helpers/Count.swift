@@ -1,15 +1,17 @@
 //
-//  Capacity.swift
+//  Count.swift
 //  
 //
 //  Created by Oscar Byström Ericsson on 2021-12-24.
 //
 
+#warning("Rename significant as valuable.")
+
 //*============================================================================*
-// MARK: * Capacity
+// MARK: * Count
 //*============================================================================*
 
-public struct Capacity {
+public struct Count {
 
     //=------------------------------------------------------------------------=
     // MARK: Properties
@@ -27,5 +29,19 @@ public struct Capacity {
         self.integer = integer
         self.fraction = fraction
         self.significant = significant
+    }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Transformations
+    //=------------------------------------------------------------------------=
+    
+    @inlinable mutating func upshift(by amount: Int) {
+        integer  += amount
+        fraction -= max(0, amount)
+    }
+    
+    @inlinable mutating func downshift(by amount: Int) {
+        integer  -= max(0, amount)
+        fraction += amount
     }
 }

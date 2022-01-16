@@ -58,15 +58,16 @@ public struct Precision<Value: Precise> {
     // MARK: Utilities
     //=------------------------------------------------------------------------=
     
-    @inlinable func capacity(number: Number) throws -> Capacity {
-        try implementation.capacity(number: number)
+    #warning("Replace number with count.")
+    @inlinable func capacity(count: Count) throws -> Count {
+        try implementation.capacity(count: count)
     }
     
     //=------------------------------------------------------------------------=
     // MARK: Utilities - Static
     //=------------------------------------------------------------------------=
     
-    @inlinable static func limits(_ component: (Capacity) -> Int) -> ClosedRange<Int> {
+    @inlinable static func limits(_ component: (Count) -> Int) -> ClosedRange<Int> {
         component(_Precision.lowerBound)...component(Value.precision)
     }
 }
@@ -170,34 +171,32 @@ public extension Precision where Value: PreciseFloatingPoint {
     }
     
     //=------------------------------------------------------------------------=
-    // MARK: Capacity
+    // MARK: Count
     //=------------------------------------------------------------------------=
     
-    @usableFromInline static let lowerBound = Capacity(integer: 1, fraction: 0, significant: 1)
+    @usableFromInline static let lowerBound = Count(integer: 1, fraction: 0, significant: 1)
     
     //
-    // MARK: Capacity - Make
+    // MARK: Count - Make
     //=------------------------------------------------------------------------=
     
-    @inlinable static func capacity(number: Number, max: Capacity) throws -> Capacity {
-        let capacity = number.capacity()
-        
-        let integer = max.integer - capacity.integer
+    @inlinable static func capacity(count: Count, max: Count) throws -> Count {
+        let integer = max.integer - count.integer
         guard integer >= 0 else {
             throw failure(excess: .integer, max: max.integer)
         }
         
-        let fraction = max.fraction - capacity.fraction
+        let fraction = max.fraction - count.fraction
         guard fraction >= 0 else {
             throw failure(excess: .fraction, max: max.fraction)
         }
         
-        let significant = max.significant - capacity.fraction
+        let significant = max.significant - count.fraction
         guard significant >= 0 else {
             throw failure(excess: .significant, max: max.significant)
         }
         
-        return .init(integer: integer, fraction: fraction, significant: significant)
+        return Count(integer: integer, fraction: fraction, significant: significant)
     }
 
     //=------------------------------------------------------------------------=
@@ -232,10 +231,10 @@ public extension Precision where Value: PreciseFloatingPoint {
     @inlinable func showcaseStyle() -> _Precision.Style
     
     //=------------------------------------------------------------------------=
-    // MARK: Capacity
+    // MARK: Count
     //=------------------------------------------------------------------------=
     
-    @inlinable func capacity(number: Number) throws -> Capacity
+    @inlinable func capacity(count: Count) throws -> Count
 }
 
 //*============================================================================*
@@ -268,13 +267,13 @@ public extension Precision where Value: PreciseFloatingPoint {
     }
     
     //=------------------------------------------------------------------------=
-    // MARK: Capacity
+    // MARK: Count
     //=------------------------------------------------------------------------=
     
-    @inlinable func capacity(number: Number) throws -> Capacity {
+    @inlinable func capacity(count: Count) throws -> Count {
         var max = Value.precision
         max.significant = significant.upperBound
-        return try _Precision.capacity(number: number, max: max)
+        return try _Precision.capacity(count: count, max: max)
     }
 }
 
@@ -318,13 +317,13 @@ public extension Precision where Value: PreciseFloatingPoint {
     }
     
     //=------------------------------------------------------------------------=
-    // MARK: Capacity
+    // MARK: Count
     //=------------------------------------------------------------------------=
     
-    @inlinable func capacity(number: Number) throws -> Capacity {        
+    @inlinable func capacity(count: Count) throws -> Count {
         var max = Value.precision
         max.integer  =  integer.upperBound
         max.fraction = fraction.upperBound
-        return try _Precision.capacity(number: number, max: max)
+        return try _Precision.capacity(count: count, max: max)
     }
 }

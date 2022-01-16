@@ -38,11 +38,10 @@ import DiffableTextViews
     @inlinable init() { }
     
     //=------------------------------------------------------------------------=
-    // MARK: Capacity
+    // MARK: Count
     //=------------------------------------------------------------------------=
     
-    #warning("Maybe accept adjustment, for percent style.")
-    @inlinable func capacity() -> Capacity {
+    @inlinable func count() -> Count {
         let  integer =  self.integer.count
         let fraction = self.fraction.count
 
@@ -52,15 +51,15 @@ import DiffableTextViews
         if upper == 0, lower != 0 {
             lower = lower - self.fraction.prefixZerosCount()
         }
-
-        return Capacity(integer: integer, fraction: fraction, significant: upper + lower)
+        
+        return Count(integer: integer, fraction: fraction, significant: upper + lower)
     }
     
     //=------------------------------------------------------------------------=
     // MARK: Transformations
     //=------------------------------------------------------------------------=
     
-    @inlinable mutating func removeImpossibleSeparator(capacity: Capacity) {
+    @inlinable mutating func removeImpossibleSeparator(capacity: Count) {
         guard fraction.digits.isEmpty else { return }
         guard capacity.fraction <= 0 || capacity.significant <= 0 else { return }
         separator = nil

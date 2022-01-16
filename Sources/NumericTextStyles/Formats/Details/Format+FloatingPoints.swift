@@ -11,7 +11,7 @@ import Foundation
 // MARK: * Floating Point
 //*============================================================================*
 
-extension FloatingPointFormatStyle: Format {
+extension FloatingPointFormatStyle: NumberFormat {
     
     //=------------------------------------------------------------------------=
     // MARK: Sign
@@ -26,7 +26,7 @@ extension FloatingPointFormatStyle: Format {
 // MARK: * Floating Point x Currency
 //*============================================================================*
 
-extension FloatingPointFormatStyle.Currency: Format {
+extension FloatingPointFormatStyle.Currency: CurrencyFormat {
     
     //=------------------------------------------------------------------------=
     // MARK: Sign
@@ -42,7 +42,7 @@ extension FloatingPointFormatStyle.Currency: Format {
 // MARK: * Floating Point x Percent
 //*============================================================================*
 
-extension FloatingPointFormatStyle.Percent: Format {
+extension FloatingPointFormatStyle.Percent: PercentFormat {
         
     //=------------------------------------------------------------------------=
     // MARK: Sign

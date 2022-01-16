@@ -11,7 +11,7 @@ import Foundation
 // MARK: * Integer
 //*============================================================================*
 
-extension IntegerFormatStyle: Format {
+extension IntegerFormatStyle: NumberFormat {
     
     //=------------------------------------------------------------------------=
     // MARK: Sign
@@ -26,7 +26,7 @@ extension IntegerFormatStyle: Format {
 // MARK: * Integer x Currency
 //*============================================================================*
 
-extension IntegerFormatStyle.Currency: Format {
+extension IntegerFormatStyle.Currency: CurrencyFormat {
     
     //=------------------------------------------------------------------------=
     // MARK: Sign
@@ -41,7 +41,7 @@ extension IntegerFormatStyle.Currency: Format {
 // MARK: * Integer x Percent
 //*============================================================================*
 
-extension IntegerFormatStyle.Percent: Format {
+extension IntegerFormatStyle.Percent: PercentFormat {
         
     //=------------------------------------------------------------------------=
     // MARK: Sign

@@ -15,7 +15,7 @@ public protocol Precise {
     // MARK: Precision
     //=------------------------------------------------------------------------=
     
-    @inlinable static var precision: Capacity { get }
+    @inlinable static var precision: Count { get }
 }
 
 //*============================================================================*
@@ -34,7 +34,7 @@ public extension PreciseFloatingPoint {
     // MARK: Precision - Make
     //=------------------------------------------------------------------------=
 
-    @inlinable static func precision(_ max: Int) -> Capacity {
+    @inlinable static func precision(_ max: Int) -> Count {
         .init(integer: max, fraction: max, significant: max)
     }
 }
@@ -55,7 +55,7 @@ public extension PreciseInteger {
     // MARK: Precision - Make
     //=------------------------------------------------------------------------=
     
-    @inlinable static func precision(_ max: Int) -> Capacity {
+    @inlinable static func precision(_ max: Int) -> Count {
         .init(integer: max, fraction: .zero, significant: max)
     }
 }

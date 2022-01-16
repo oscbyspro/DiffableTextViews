@@ -15,7 +15,7 @@ extension Int: IntegerValue {
     // MARK: Precision, Bounds
     //=------------------------------------------------------------------------=
     
-    public static let precision: Capacity = precision(String(max).count)
+    public static let precision: Count = precision(String(max).count)
     public static let bounds: ClosedRange<Self> = bounds()
 }
 
@@ -29,7 +29,7 @@ extension Int8: IntegerValue {
     // MARK: Precision, Bounds
     //=------------------------------------------------------------------------=
     
-    public static let precision: Capacity = precision(3)
+    public static let precision: Count = precision(3)
     public static let bounds: ClosedRange<Self> = bounds()
 }
 
@@ -43,7 +43,7 @@ extension Int16: IntegerValue {
     // MARK: Precision, Bounds
     //=------------------------------------------------------------------------=
     
-    public static let precision: Capacity = precision(5)
+    public static let precision: Count = precision(5)
     public static let bounds: ClosedRange<Self> = bounds()
 }
 
@@ -57,7 +57,7 @@ extension Int32: IntegerValue {
     // MARK: Precision, Bounds
     //=------------------------------------------------------------------------=
     
-    public static let precision: Capacity = precision(10)
+    public static let precision: Count = precision(10)
     public static let bounds: ClosedRange<Self> = bounds()
 }
 
@@ -71,6 +71,6 @@ extension Int64: IntegerValue {
     // MARK: Precision, Bounds
     //=------------------------------------------------------------------------=
     
-    public static let precision: Capacity = precision(19)
+    public static let precision: Count = precision(19)
     public static let bounds: ClosedRange<Self> = bounds()
 }

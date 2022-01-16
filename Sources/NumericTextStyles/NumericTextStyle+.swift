@@ -84,6 +84,7 @@ extension NumericTextStyle {
     // MARK: Input
     //=------------------------------------------------------------------------=
     
+    #warning("Use transformable protocol to limit scope to constants.")
     @inlinable public func merge(snapshot: Snapshot, with input: Input) throws -> Snapshot {
         //=--------------------------------------=
         // MARK: Reader
@@ -102,7 +103,9 @@ extension NumericTextStyle {
         reader.process?(&number)
                 
         try bounds.validate(sign: number.sign)
-        let capacity = try precision.capacity(number: number)
+        var count = number.count()
+        format.process(count: &count)
+        let capacity = try precision.capacity(count: count)
         number.removeImpossibleSeparator(capacity: capacity)
         //=--------------------------------------=
         // MARK: Value
