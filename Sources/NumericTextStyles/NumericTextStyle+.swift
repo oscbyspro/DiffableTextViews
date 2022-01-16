@@ -181,7 +181,7 @@ extension NumericTextStyle: UIKitTextStyle {
     //=------------------------------------------------------------------------=
     
     @inlinable public func setup(textField: ProxyTextField) {
-        textField.keyboard(Value.options.contains(.integer) ? .numberPad : .decimalPad)
+        textField.keyboard(Value.isInteger ? .numberPad : .decimalPad)
     }
 }
 

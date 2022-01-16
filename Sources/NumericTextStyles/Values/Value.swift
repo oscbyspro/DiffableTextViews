@@ -18,6 +18,25 @@ public protocol Value: Boundable, Precise {
     @inlinable static var options: Options { get }
 }
 
+//=----------------------------------------------------------------------------=
+// MARK: Value - Accessors
+//=----------------------------------------------------------------------------=
+
+extension Value {
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Attributes
+    //=------------------------------------------------------------------------=
+    
+    @inlinable static var isInteger: Bool {
+        options.contains(.integer)
+    }
+    
+    @inlinable static var isUnsigned: Bool {
+        options.contains(.unsigned)
+    }
+}
+
 //*============================================================================*
 // MARK: * Value x Floating Point
 //*============================================================================*
