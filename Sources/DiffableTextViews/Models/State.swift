@@ -12,27 +12,27 @@ import Quick
 //*============================================================================*
 
 @usableFromInline struct State<Scheme: DiffableTextViews.Scheme>: Transformable {
-    @usableFromInline typealias Positions = DiffableTextViews.Positions<Scheme>
+    @usableFromInline typealias Layout = DiffableTextViews.Layout<Scheme>
     @usableFromInline typealias Position = DiffableTextViews.Position<Scheme>
 
     //=------------------------------------------------------------------------=
     // MARK: Properties
     //=------------------------------------------------------------------------=
     
-    @usableFromInline private(set) var positions: Positions
-    @usableFromInline var selection: Range<Positions.Index>
+    @usableFromInline private(set) var layout: Layout
+    @usableFromInline var selection: Range<Layout.Index>
 
     //=------------------------------------------------------------------------=
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
     @inlinable init() {
-        let positions = Positions(Snapshot())
-        self.init(positions: positions, selection: positions.startIndex ..< positions.startIndex)
+        let layout = Layout(Snapshot())
+        self.init(layout: layout, selection: layout.startIndex ..< layout.startIndex)
     }
     
-    @inlinable init(positions: Positions, selection: Range<Positions.Index>) {
-        self.positions = positions
+    @inlinable init(layout: Layout, selection: Range<Layout.Index>) {
+        self.layout = layout
         self.selection = selection
     }
     
@@ -41,7 +41,7 @@ import Quick
     //=------------------------------------------------------------------------=
     
     @inlinable var snapshot: Snapshot {
-        positions.snapshot
+        layout.snapshot
     }
     
     @inlinable var offsets: Range<Position> {
@@ -52,8 +52,8 @@ import Quick
     // MARK: Utilities
     //=------------------------------------------------------------------------=
     
-    @inlinable func indices(at destination: Range<Position>) -> Range<Positions.Index> {
-        positions.indices(start: selection, destination: destination)
+    @inlinable func indices(at destination: Range<Position>) -> Range<Layout.Index> {
+        layout.indices(start: selection, destination: destination)
     }
 }
 
@@ -69,23 +69,23 @@ extension State {
     
     @inlinable mutating func update(snapshot: Snapshot) {
         //=--------------------------------------=
-        // MARK: Positions
+        // MARK: Layout
         //=--------------------------------------=
-        let positions = Positions(snapshot)
+        let layout = Layout(snapshot)
         //=--------------------------------------=
-        // MARK: Selection - Upper Bound
+        // MARK: Selection - Upper
         //=--------------------------------------=
         let upperBound = Changes.end(
-            past: self.positions[self.selection.upperBound...],
-            next: positions).next
+            past: self.layout[self.selection.upperBound...],
+            next: layout).next
         //=--------------------------------------=
-        // MARK: Selection - Lower Bound
+        // MARK: Selection - Lower
         //=--------------------------------------=
         var lowerBound = upperBound
         if !self.selection.isEmpty {
             lowerBound = Changes.start(
-                past: self.positions[...self.selection.lowerBound],
-                next: positions).next
+                past: self.layout[...self.selection.lowerBound],
+                next: layout).next
             lowerBound = min(lowerBound, upperBound)
         }
         //=--------------------------------------=
@@ -95,7 +95,7 @@ extension State {
         //=--------------------------------------=
         // MARK: Update
         //=--------------------------------------=
-        self.positions = positions
+        self.layout = layout
         self.selection = selection
         self.autocorrect(intent: (nil, nil))
     }
@@ -111,7 +111,7 @@ extension State {
     // MARK: Transformations
     //=------------------------------------------------------------------------=
     
-    @inlinable mutating func update(selection: Range<Positions.Index>, intent: Direction?) {
+    @inlinable mutating func update(selection: Range<Layout.Index>, intent: Direction?) {
         //=--------------------------------------=
         // MARK: Reinterpret Intent As Momentum
         //=--------------------------------------=
@@ -148,17 +148,17 @@ extension State {
         //=--------------------------------------=
         // MARK: Special
         //=--------------------------------------=
-        if selection == positions.startIndex ..< positions.endIndex { return }
+        if selection == layout.startIndex ..< layout.endIndex { return }
         //=--------------------------------------=
         // MARK: Upper Bound, Single
         //=--------------------------------------=
-        let upperBound = positions.caret(start: selection.upperBound, preference: .backwards, intent: intent.upper)
+        let upperBound = layout.caret(start: selection.upperBound, preference: .backwards, intent: intent.upper)
         var lowerBound = upperBound
         //=--------------------------------------=
         // MARK: Lower Bound, Double
         //=--------------------------------------=
-        if !selection.isEmpty, upperBound != positions.startIndex {
-            lowerBound = positions.caret(start: selection.lowerBound, preference:  .forwards, intent: intent.lower)
+        if !selection.isEmpty, upperBound != layout.startIndex {
+            lowerBound = layout.caret(start: selection.lowerBound, preference:  .forwards, intent: intent.lower)
             lowerBound = min(lowerBound, upperBound)
         }
         //=--------------------------------------=

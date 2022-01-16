@@ -1,21 +1,19 @@
 //
-//  Positions.swift
+//  Layout.swift
 //
 //
 //  Created by Oscar Byström Ericsson on 2022-01-13.
 //
 
-#warning("Rename.")
-
 //*============================================================================*
-// MARK: * Positions
+// MARK: * Layout
 //*============================================================================*
 
 /// ```
 /// |$|1|2|3|,|4|5|6|.|7|8|9|_|U|S|D|~
 /// |x|o|o|o|x|o|o|o|o|o|o|o|x|x|x|x|x
 /// ```
-@usableFromInline struct Positions<Scheme: DiffableTextViews.Scheme>: BidirectionalCollection {
+@usableFromInline struct Layout<Scheme: DiffableTextViews.Scheme>: BidirectionalCollection {
     @usableFromInline typealias Position = DiffableTextViews.Position<Scheme>
 
     //=------------------------------------------------------------------------=
@@ -114,10 +112,10 @@
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: Positions - Traversal
+// MARK: Layout - Traversal
 //=----------------------------------------------------------------------------=
 
-extension Positions {
+extension Layout {
     
     //=------------------------------------------------------------------------=
     // MARK: Next - After
@@ -141,10 +139,10 @@ extension Positions {
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: Positions - Traversal
+// MARK: Layout - Traversal
 //=----------------------------------------------------------------------------=
 
-extension Positions {
+extension Layout {
     
     //=------------------------------------------------------------------------=
     // MARK: Predicate - After
@@ -178,10 +176,10 @@ extension Positions {
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: Positions - Index
+// MARK: Layout - Index
 //=----------------------------------------------------------------------------=
 
-extension Positions {
+extension Layout {
 
     //=------------------------------------------------------------------------=
     // MARK: Single
@@ -210,10 +208,10 @@ extension Positions {
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: Positions - Validation
+// MARK: Layout - Validation
 //=----------------------------------------------------------------------------=
 
-extension Positions {
+extension Layout {
     
     //=------------------------------------------------------------------------=
     // MARK: Preference - Forwards
@@ -236,10 +234,10 @@ extension Positions {
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: Positions - Caret
+// MARK: Layout - Caret
 //=----------------------------------------------------------------------------=
 
-extension Positions {
+extension Layout {
     
     //=------------------------------------------------------------------------=
     // MARK: Forwards - To
@@ -320,7 +318,7 @@ extension Positions {
 // MARK: Positions - Caret
 //=----------------------------------------------------------------------------=
 
-extension Positions {
+extension Layout {
     
     //=------------------------------------------------------------------------=
     // MARK: Caret
