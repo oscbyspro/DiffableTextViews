@@ -26,11 +26,11 @@ This package contains views and styles that use snapshots and attributes to proc
 
 |   | Features | Details |
 |---|----------|---------|
-| :national_park: | Locales | All of them (937+). |
-| :paintbrush: | Formats | Number, Currency and Percent. |
 | :arrows_counterclockwise: | [Values](../main/Notes/NumericTextStyles/VALUES.md) | Decimal, Float(16-64) and (U)Int(8-64). |
 | :straight_ruler: | Bounds | Clamps input and output to specified range. |
-| :mag_right: | Precision | Up to 38 digits. |
+| :mag_right: | Precision | Up to 38 significant digits. |
+| :paintbrush: | Formats | Number, Currency and Percent. |
+| :national_park: | Locales | All available in the Foundation framework. |
 
 ### Examples
 
