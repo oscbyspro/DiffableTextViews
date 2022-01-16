@@ -6,13 +6,14 @@
 //
 
 import DiffableTextViews
+import Quick
 
 //*============================================================================*
 // MARK: * Number
 //*============================================================================*
 
 /// A system representation of a number.
-@usableFromInline struct Number: Component {
+@usableFromInline struct Number: Component, Transformable {
     
     //=------------------------------------------------------------------------=
     // MARK: Instances
@@ -52,7 +53,7 @@ import DiffableTextViews
             lower = lower - self.fraction.prefixZerosCount()
         }
         
-        return Count(integer: integer, fraction: fraction, significant: upper + lower)
+        return Count(value: upper + lower, integer: integer, fraction: fraction)
     }
     
     //=------------------------------------------------------------------------=
@@ -61,7 +62,7 @@ import DiffableTextViews
     
     @inlinable mutating func removeImpossibleSeparator(capacity: Count) {
         guard fraction.digits.isEmpty else { return }
-        guard capacity.fraction <= 0 || capacity.significant <= 0 else { return }
+        guard capacity.fraction <= 0 || capacity.value <= 0 else { return }
         separator = nil
     }
     

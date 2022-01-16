@@ -8,6 +8,8 @@
 import DiffableTextViews
 import Foundation
 
+#warning("Percent showcase style is incorred.")
+
 //*============================================================================*
 // MARK: * Precision
 //*============================================================================*
@@ -58,7 +60,6 @@ public struct Precision<Value: Precise> {
     // MARK: Utilities
     //=------------------------------------------------------------------------=
     
-    #warning("Replace number with count.")
     @inlinable func capacity(count: Count) throws -> Count {
         try implementation.capacity(count: count)
     }
@@ -99,7 +100,7 @@ public extension Precision {
     //=------------------------------------------------------------------------=
             
     @inlinable static var standard: Self {
-        .init(SignificantDigits(limits(\.significant)))
+        .init(SignificantDigits(limits(\.value)))
     }
 }
 
@@ -174,7 +175,7 @@ public extension Precision where Value: PreciseFloatingPoint {
     // MARK: Count
     //=------------------------------------------------------------------------=
     
-    @usableFromInline static let lowerBound = Count(integer: 1, fraction: 0, significant: 1)
+    @usableFromInline static let lowerBound = Count(value: 1, integer: 1, fraction: 0)
     
     //
     // MARK: Count - Make
@@ -191,12 +192,12 @@ public extension Precision where Value: PreciseFloatingPoint {
             throw failure(excess: .fraction, max: max.fraction)
         }
         
-        let significant = max.significant - count.fraction
-        guard significant >= 0 else {
-            throw failure(excess: .significant, max: max.significant)
+        let value = max.value - count.fraction
+        guard value >= 0 else {
+            throw failure(excess: .value, max: max.value)
         }
         
-        return Count(integer: integer, fraction: fraction, significant: significant)
+        return Count(value: value, integer: integer, fraction: fraction)
     }
 
     //=------------------------------------------------------------------------=
@@ -212,9 +213,9 @@ public extension Precision where Value: PreciseFloatingPoint {
     //*========================================================================*
     
     @usableFromInline enum Component: String {
+        case value
         case integer
         case fraction
-        case significant
     }
 }
 
@@ -255,7 +256,7 @@ public extension Precision where Value: PreciseFloatingPoint {
     //=------------------------------------------------------------------------=
     
     @inlinable init<R: RangeExpression>(_ significant: R) where R.Bound == Int {
-        self.significant = _Precision.clamped(significant, to: Precision.limits(\.significant))
+        self.significant = _Precision.clamped(significant, to: Precision.limits(\.value))
     }
     
     //=------------------------------------------------------------------------=
@@ -272,7 +273,7 @@ public extension Precision where Value: PreciseFloatingPoint {
     
     @inlinable func capacity(count: Count) throws -> Count {
         var max = Value.precision
-        max.significant = significant.upperBound
+        max.value = significant.upperBound
         return try _Precision.capacity(count: count, max: max)
     }
 }

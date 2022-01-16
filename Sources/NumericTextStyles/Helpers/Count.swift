@@ -5,30 +5,31 @@
 //  Created by Oscar Byström Ericsson on 2021-12-24.
 //
 
-#warning("Rename significant as valuable.")
+import Quick
 
 //*============================================================================*
 // MARK: * Count
 //*============================================================================*
 
-public struct Count {
+/// - Value meant as shorthand for significant digits.
+public struct Count: Transformable {
 
     //=------------------------------------------------------------------------=
     // MARK: Properties
     //=------------------------------------------------------------------------=
     
+    @usableFromInline var value: Int
     @usableFromInline var integer: Int
     @usableFromInline var fraction: Int
-    @usableFromInline var significant: Int
 
     //=------------------------------------------------------------------------=
     // MARK: Initializers
     //=------------------------------------------------------------------------=
 
-    @inlinable public init(integer: Int, fraction: Int, significant: Int) {
+    @inlinable public init(value: Int, integer: Int, fraction: Int) {
+        self.value = value
         self.integer = integer
         self.fraction = fraction
-        self.significant = significant
     }
     
     //=------------------------------------------------------------------------=

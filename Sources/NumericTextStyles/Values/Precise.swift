@@ -35,7 +35,7 @@ public extension PreciseFloatingPoint {
     //=------------------------------------------------------------------------=
 
     @inlinable static func precision(_ max: Int) -> Count {
-        .init(integer: max, fraction: max, significant: max)
+        Count(value: max, integer: max, fraction: max)
     }
 }
 
@@ -56,6 +56,6 @@ public extension PreciseInteger {
     //=------------------------------------------------------------------------=
     
     @inlinable static func precision(_ max: Int) -> Count {
-        .init(integer: max, fraction: .zero, significant: max)
+        Count(value: max, integer: max, fraction: .zero)
     }
 }

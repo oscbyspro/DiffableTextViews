@@ -6,6 +6,7 @@
 //
 
 import DiffableTextViews
+import Quick
 
 //=----------------------------------------------------------------------------=
 // MARK: NumericTextStyle - Snapshot
@@ -33,6 +34,8 @@ extension NumericTextStyle {
     // MARK: Characters
     //=------------------------------------------------------------------------=
 
+    #warning("Remove prefix/suffix maybe.")
+    
     /// A snapshot of characters.
     ///
     /// - Assumes that characters contains at least one content character.
@@ -84,7 +87,6 @@ extension NumericTextStyle {
     // MARK: Input
     //=------------------------------------------------------------------------=
     
-    #warning("Use transformable protocol to limit scope to constants.")
     @inlinable public func merge(snapshot: Snapshot, with input: Input) throws -> Snapshot {
         //=--------------------------------------=
         // MARK: Reader
@@ -101,17 +103,23 @@ extension NumericTextStyle {
         //=--------------------------------------=
         var number = try number(snapshot: proposal)
         reader.process?(&number)
-                
         try bounds.validate(sign: number.sign)
+        //=--------------------------------------=
+        // MARK: Number - Count
+        //=--------------------------------------=
         var count = number.count()
         format.process(count: &count)
+        
         let capacity = try precision.capacity(count: count)
         number.removeImpossibleSeparator(capacity: capacity)
         //=--------------------------------------=
-        // MARK: Value
+        // MARK: Localized
         //=--------------------------------------=
-        let formatted = number.characters(in: region)
-        let value = try format.parseStrategy.parse(formatted)
+        let localized = number.characters(in: region)
+        //=--------------------------------------=
+        // MARK: Number
+        //=--------------------------------------=
+        let value = try format.parseStrategy.parse(localized)
         try bounds.validate(value: value)
         //=--------------------------------------=
         // MARK: Style
