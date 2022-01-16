@@ -1,6 +1,6 @@
 # DiffableTextViews
 
-A framework for as-you-type formatting of text bound to appropriate data types.
+A framework for as-you-type formatting of text bound to its appropriate data type.
 
 ### Features
 
