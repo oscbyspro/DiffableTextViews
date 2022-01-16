@@ -1,48 +1,53 @@
 //
-//  Floats.swift
+//  Format+Integers.swift
+//  
 //
-//
-//  Created by Oscar Byström Ericsson on 2021-10-25.
+//  Created by Oscar Byström Ericsson on 2022-01-16.
 //
 
+import Foundation
+
 //*============================================================================*
-// MARK: * Float16
+// MARK: * Integer
 //*============================================================================*
 
-extension Float16: FloatingPoint {
+extension IntegerFormatStyle: Format {
     
     //=------------------------------------------------------------------------=
-    // MARK: Precision, Bounds
+    // MARK: Sign
     //=------------------------------------------------------------------------=
     
-    public static let precision: Capacity = precision(3)
-    public static let bounds: ClosedRange<Self> = bounds(limit: 999)
+    @inlinable public func sign(style: Sign.Style) -> Self {
+        sign(strategy: style.standard())
+    }
 }
 
 //*============================================================================*
-// MARK: * Float32
+// MARK: * Integer x Currency
 //*============================================================================*
 
-extension Float32: FloatingPoint {
+extension IntegerFormatStyle.Currency: Format {
     
     //=------------------------------------------------------------------------=
-    // MARK: Precision, Bounds
+    // MARK: Sign
     //=------------------------------------------------------------------------=
     
-    public static let precision: Capacity = precision(7)
-    public static let bounds: ClosedRange<Self> = bounds(limit: 9_999_999)
+    @inlinable public func sign(style: Sign.Style) -> Self {
+        sign(strategy: style.currency())
+    }
 }
 
 //*============================================================================*
-// MARK: * Float64
+// MARK: * Integer x Percent
 //*============================================================================*
 
-extension Float64: FloatingPoint {
-    
+extension IntegerFormatStyle.Percent: Format {
+        
     //=------------------------------------------------------------------------=
-    // MARK: Precision, Bounds
+    // MARK: Sign
     //=------------------------------------------------------------------------=
     
-    public static let precision: Capacity = precision(15)
-    public static let bounds: ClosedRange<Self> = bounds(limit: 999_999_999_999_999)
+    @inlinable public func sign(style: Sign.Style) -> Self {
+        sign(strategy: style.standard())
+    }
 }

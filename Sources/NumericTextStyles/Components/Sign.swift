@@ -36,6 +36,8 @@ public enum Sign: Character, Component {
     //*========================================================================*
     
     public enum Style {
+        @usableFromInline typealias Standard = NumberFormatStyleConfiguration.SignDisplayStrategy
+        @usableFromInline typealias Currency = CurrencyFormatStyleConfiguration.SignDisplayStrategy
         
         //=--------------------------------------------------------------------=
         // MARK: Instance
@@ -48,14 +50,14 @@ public enum Sign: Character, Component {
         // MARK: Utilities
         //=--------------------------------------------------------------------=
         
-        @inlinable func number() -> NumberFormatStyleConfiguration.SignDisplayStrategy {
+        @inlinable func standard() -> Standard {
             switch self {
             case .always:    return .always()
             case .automatic: return .automatic
             }
         }
         
-        @inlinable func currency() -> CurrencyFormatStyleConfiguration.SignDisplayStrategy {
+        @inlinable func currency() -> Currency {
             switch self {
             case .always:    return .always()
             case .automatic: return .automatic

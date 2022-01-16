@@ -6,7 +6,7 @@ This package contains views and styles that use snapshots and attributes to proc
 
 # Progress
 
-🔵🔵🔵🔵🔵🔵🔵⚪️⚪️⚪️
+🔵🔵🔵🔵🔵🔵🔵🔵🔵⚪️
 
 # Views
 
@@ -22,8 +22,8 @@ This package contains views and styles that use snapshots and attributes to proc
 
 👷‍♂️🛠🚧🚧🧱🏗🧱🚧🚧⏳
 
-- Formats: Number, Currency.
-- Locales: Yes ...every single one (untested).
+- Formats: Number, Currency, Percent.
+- Locales: All (untested).
 - [Values](../main/Notes/NumericTextStyles/VALUES.md): Decimal, Float(16-64), (U)Int(8-64).
 
 ```swift

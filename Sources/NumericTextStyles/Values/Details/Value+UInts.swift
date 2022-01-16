@@ -1,76 +1,78 @@
 //
-//  Ints.swift
-//  
+//  Value+UInts.swift
 //
-//  Created by Oscar Byström Ericsson on 2021-12-22.
+//
+//  Created by Oscar Byström Ericsson on 2021-10-25.
 //
 
 //*============================================================================*
-// MARK: * Int
+// MARK: * UInt
 //*============================================================================*
 
-extension Int: Integer {
+extension UInt: UnsignedInteger {
+    typealias Limitation = Int
     
     //=------------------------------------------------------------------------=
     // MARK: Precision, Bounds
     //=------------------------------------------------------------------------=
     
-    public static let precision: Capacity = precision(String(max).count)
-    public static let bounds: ClosedRange<Self> = bounds()
+    public static let precision: Capacity = Limitation.precision
+    public static let bounds: ClosedRange<Self> = 0...Self(Limitation.bounds.upperBound)
 }
 
 //*============================================================================*
-// MARK: * Int8
+// MARK: * UInt8
 //*============================================================================*
 
-extension Int8: Integer {
+extension UInt8: UnsignedInteger {
     
     //=------------------------------------------------------------------------=
     // MARK: Precision, Bounds
     //=------------------------------------------------------------------------=
-    
+
     public static let precision: Capacity = precision(3)
     public static let bounds: ClosedRange<Self> = bounds()
 }
 
 //*============================================================================*
-// MARK: * Int16
+// MARK: * UInt16
 //*============================================================================*
 
-extension Int16: Integer {
+extension UInt16: UnsignedInteger {
     
     //=------------------------------------------------------------------------=
     // MARK: Precision, Bounds
     //=------------------------------------------------------------------------=
-    
+
     public static let precision: Capacity = precision(5)
     public static let bounds: ClosedRange<Self> = bounds()
 }
 
 //*============================================================================*
-// MARK: * Int32
+// MARK: * UInt32
 //*============================================================================*
 
-extension Int32: Integer {
+extension UInt32: UnsignedInteger {
     
     //=------------------------------------------------------------------------=
     // MARK: Precision, Bounds
     //=------------------------------------------------------------------------=
-    
+
     public static let precision: Capacity = precision(10)
     public static let bounds: ClosedRange<Self> = bounds()
 }
 
 //*============================================================================*
-// MARK: * Int64
+// MARK: * UInt64
 //*============================================================================*
 
-extension Int64: Integer {
+extension UInt64: UnsignedInteger {
+    typealias Limitation = Int64
     
     //=------------------------------------------------------------------------=
     // MARK: Precision, Bounds
     //=------------------------------------------------------------------------=
-    
-    public static let precision: Capacity = precision(19)
-    public static let bounds: ClosedRange<Self> = bounds()
+
+    public static let precision: Capacity = Limitation.precision
+    public static let bounds: ClosedRange<Self> = 0...Self(Limitation.bounds.upperBound)
 }
