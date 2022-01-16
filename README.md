@@ -1,8 +1,15 @@
 # DiffableTextViews
 
-👷‍♂️🛠🚧🚧🧱🏗🧱🚧🚧⏳
+A framework for as-you-type formatting of text bound to desired data types.
 
-This package contains views and styles that use snapshots and attributes to process changes to text and set caret positions. This approach makes it easy to implement and reason about as-you-type formatting.
+### Features
+
+|   | Features | Description |
+|---|----------|---------|
+| :fire: | As-you-type. | Formats text input in real time. |
+| :trophy: | Useful and convenient. | Converts to and from non-text types. |
+| :running_man: | Fast and efficient. | Uses a O(n) differentiation algorithm. |
+| :desktop_computer: | Easy to reason about. | Uses snapshots and attributes. |
 
 # Progress
 
@@ -29,7 +36,7 @@ This package contains views and styles that use snapshots and attributes to proc
 | :arrows_counterclockwise: | [Values](../main/Notes/NumericTextStyles/VALUES.md) | Decimal, Float(16-64) and (U)Int(8-64). |
 | :straight_ruler: | Bounds | Clamps input and output to specified range. |
 | :mag_right: | Precision | Up to 38 significant digits. |
-| :paintbrush: | Formats | Number, Currency and Percent. |
+| :art: | Formats | Number, Currency and Percent. |
 | :national_park: | Locales | All available in the Foundation framework. |
 
 ### Examples
