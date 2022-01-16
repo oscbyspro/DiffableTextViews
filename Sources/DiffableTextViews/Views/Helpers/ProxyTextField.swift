@@ -44,7 +44,7 @@ public final class ProxyTextField {
     }
     
     //*========================================================================*
-    // MARK: * Configuration
+    // MARK: * Transformations
     //*========================================================================*
     
     public struct Transformations {
@@ -126,7 +126,7 @@ extension ProxyTextField {
     }
     
     //=------------------------------------------------------------------------=
-    // MARK: Offsets
+    // MARK: Positions
     //=------------------------------------------------------------------------=
 
     /// - Complexity: O(1).
@@ -160,7 +160,9 @@ extension ProxyTextField {
 
 public extension ProxyTextField {
     
+    //=------------------------------------------------------------------------=
     // MARK: Resign
+    //=------------------------------------------------------------------------=
     
     @inlinable func resign() {
         wrapped.resignFirstResponder()

@@ -11,7 +11,7 @@
 
 @usableFromInline final class Cache<Value: Equatable, Scheme: DiffableTextViews.Scheme> {
     @usableFromInline typealias State = DiffableTextViews.State<Scheme>
-    @usableFromInline typealias Offset = DiffableTextViews.Position<Scheme>
+    @usableFromInline typealias Position = DiffableTextViews.Position<Scheme>
     
     //=------------------------------------------------------------------------=
     // MARK: Properties
@@ -38,7 +38,7 @@
         state.snapshot
     }
     
-    @inlinable var selection: Range<Offset> {
+    @inlinable var selection: Range<Position> {
         state.offsets
     }
 }

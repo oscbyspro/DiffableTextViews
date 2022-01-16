@@ -43,7 +43,12 @@ import DiffableTextViews
         
     @inlinable func significantCount() -> Int {
         let significantIntegerCount = integer.count - integer.prefixZerosCount()
-        let significantFractionCount = fraction.count - fraction.suffixZerosCount()
+        var significantFractionCount = fraction.count - fraction.suffixZerosCount()
+        
+        if significantIntegerCount == 0, significantFractionCount != 0 {
+            significantFractionCount = significantFractionCount - fraction.prefixZerosCount()
+        }
+        
         return significantIntegerCount + significantFractionCount
     }
     
@@ -74,6 +79,21 @@ import DiffableTextViews
         separator?.write(characters: &characters, in: region)
         fraction.write(characters: &characters, in: region)
     }    
+}
+
+//=----------------------------------------------------------------------------=
+// MARK: Number - CustomStringConvertible
+//=----------------------------------------------------------------------------=
+
+extension Number: CustomStringConvertible {
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Description
+    //=------------------------------------------------------------------------=
+    
+    @inlinable var description: String {
+        characters()
+    }
 }
 
 //=----------------------------------------------------------------------------=
@@ -167,20 +187,5 @@ extension Number {
         guard index == snapshot.endIndex else {
             throw Info(["unable to parse number in", .mark(snapshot.characters)])
         }
-    }
-}
-
-//=----------------------------------------------------------------------------=
-// MARK: Number - CustomStringConvertible
-//=----------------------------------------------------------------------------=
-
-extension Number: CustomStringConvertible {
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Description
-    //=------------------------------------------------------------------------=
-    
-    @inlinable var description: String {
-        characters()
     }
 }
