@@ -19,23 +19,18 @@ import Foundation
     //=------------------------------------------------------------------------=
     
     @usableFromInline let formatter: NumberFormatter
-        
-    //=------------------------------------------------------------------------=
-    // MARK: Properties - Characters
-    //=------------------------------------------------------------------------=
-    
     @usableFromInline private(set) var signs = Lexicon<Sign>()
     @usableFromInline private(set) var digits = Lexicon<Digit>()
     @usableFromInline private(set) var separators = Lexicon<Separator>()
 
     //=------------------------------------------------------------------------=
-    // MARK: Properties - Accessors
+    // MARK: Accessors
     //=------------------------------------------------------------------------=
     
     @inlinable var locale: Locale {
         formatter.locale
     }
-
+    
     //=------------------------------------------------------------------------=
     // MARK: Initializers
     //=------------------------------------------------------------------------=
