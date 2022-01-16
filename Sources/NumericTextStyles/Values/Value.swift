@@ -12,84 +12,69 @@
 public protocol Value: Boundable, Precise {
     
     //=------------------------------------------------------------------------=
-    // MARK: Options
+    // MARK: Properties
     //=------------------------------------------------------------------------=
     
-    @inlinable static var options: Options { get }
-}
-
-//=----------------------------------------------------------------------------=
-// MARK: Value - Accessors
-//=----------------------------------------------------------------------------=
-
-extension Value {
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Attributes
-    //=------------------------------------------------------------------------=
-    
-    @inlinable static var isInteger: Bool {
-        options.contains(.integer)
-    }
-    
-    @inlinable static var isUnsigned: Bool {
-        options.contains(.unsigned)
-    }
+    @inlinable static var isInteger:  Bool { get }
+    @inlinable static var isUnsigned: Bool { get }
 }
 
 //*============================================================================*
 // MARK: * Value x Floating Point
 //*============================================================================*
 
-@usableFromInline protocol FloatingPoint: Value, BoundableFloatingPoint, PreciseFloatingPoint { }
+@usableFromInline protocol FloatingPointValue: Value, BoundableFloatingPoint, PreciseFloatingPoint { }
 
 //=----------------------------------------------------------------------------=
 // MARK: Value x Floating Point - Implementation
 //=----------------------------------------------------------------------------=
 
-extension FloatingPoint {
+extension FloatingPointValue {
     
     //=------------------------------------------------------------------------=
-    // MARK: Options
+    // MARK: Properties
     //=------------------------------------------------------------------------=
     
-    @inlinable public static var options: Options { .floatingPoint }
+    @inlinable public static var isInteger:  Bool { false }
+    @inlinable public static var isUnsigned: Bool { false }
 }
 
 //*============================================================================*
 // MARK: * Value x Integer
 //*============================================================================*
 
-@usableFromInline protocol Integer: Value, BoundableInteger, PreciseInteger { }
+@usableFromInline protocol IntegerValue: Value, BoundableInteger, PreciseInteger { }
 
 //=----------------------------------------------------------------------------=
 // MARK: Value x Integer - Implementation
 //=----------------------------------------------------------------------------=
 
-extension Integer {
+extension IntegerValue {
     
     //=------------------------------------------------------------------------=
-    // MARK: Options
+    // MARK: Properties
     //=------------------------------------------------------------------------=
     
-    @inlinable public static var options: Options { .integer }
+    @inlinable public static var isInteger:  Bool { true  }
+    @inlinable public static var isUnsigned: Bool { false }
 }
 
 //*============================================================================*
 // MARK: * Value x Unsigned Integer
 //*============================================================================*
 
-@usableFromInline protocol UnsignedInteger: Value, BoundableInteger, PreciseInteger { }
+@usableFromInline protocol UnsignedIntegerValue: Value, BoundableInteger, PreciseInteger { }
 
 //=----------------------------------------------------------------------------=
 // MARK: Value x Unsigned Integer - Implementation
 //=----------------------------------------------------------------------------=
 
-extension UnsignedInteger {
+extension UnsignedIntegerValue {
     
     //=------------------------------------------------------------------------=
-    // MARK: Options
+    // MARK: Properties
     //=------------------------------------------------------------------------=
     
-    @inlinable public static var options: Options { .unsignedInteger }
+    @inlinable public static var isInteger:  Bool { true }
+    @inlinable public static var isUnsigned: Bool { true }
 }

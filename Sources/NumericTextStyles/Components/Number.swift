@@ -90,7 +90,7 @@ extension Number {
     ///
     /// To use this method, all formatting characters must be marked as formatting.
     ///
-    @inlinable init(_ snapshot: Snapshot, with options: Options, in region: Region) throws {
+    @inlinable init<Value: NumericTextStyles.Value>(_ snapshot: Snapshot, in region: Region, as value: Value.Type) throws {
         guard let start = snapshot.firstIndex(where: { !$0.attribute.contains(.formatting) }) else { self = .zero; return }
         
         //=--------------------------------------=
@@ -119,7 +119,7 @@ extension Number {
             // MARK: Sign
             //=----------------------------------=
 
-            if index != snapshot.endIndex, !options.contains(.unsigned), let sign = region.signs[element.character] {
+            if index != snapshot.endIndex, !Value.isUnsigned, let sign = region.signs[element.character] {
                 self.sign = sign
                 next()
             }
@@ -136,7 +136,7 @@ extension Number {
             self.integer.removeZerosPrefix()
             self.integer.makeItAtLeastZero()
             
-            guard !options.contains(.integer) else { break attempt }
+            guard !Value.isInteger else { break attempt }
             
             //=----------------------------------=
             // MARK: Separator

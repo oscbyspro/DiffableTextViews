@@ -11,13 +11,7 @@ import Foundation
 // MARK: * Decimal
 //*============================================================================*
 
-extension Decimal: FloatingPoint {
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Options
-    //=------------------------------------------------------------------------=
-    
-    public static let options: Options = .floatingPoint
+extension Decimal: FloatingPointValue {
 
     //=------------------------------------------------------------------------=
     // MARK: Precision
