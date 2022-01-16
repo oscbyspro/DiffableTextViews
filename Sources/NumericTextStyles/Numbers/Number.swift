@@ -6,14 +6,13 @@
 //
 
 import DiffableTextViews
-import Quick
 
 //*============================================================================*
 // MARK: * Number
 //*============================================================================*
 
 /// A system representation of a number.
-@usableFromInline struct Number: Component, Transformable {
+@usableFromInline struct Number: Component {
     
     //=------------------------------------------------------------------------=
     // MARK: Instances

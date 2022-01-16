@@ -8,6 +8,7 @@
 import DiffableTextViews
 import Foundation
 
+#warning("Rework.")
 #warning("Percent showcase style is incorrect.")
 
 //*============================================================================*

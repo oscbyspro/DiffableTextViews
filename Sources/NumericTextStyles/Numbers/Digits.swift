@@ -9,13 +9,13 @@
 // MARK: * Digits
 //*============================================================================*
 
-@usableFromInline struct Digits: Component, ExpressibleByArrayLiteral {
+@usableFromInline struct Digits: Component {
     
     //=------------------------------------------------------------------------=
     // MARK: Instances
     //=------------------------------------------------------------------------=
     
-    @usableFromInline static let zero: Self = [.zero]
+    @usableFromInline static let zero = Self(digits: [.zero])
     
     //=------------------------------------------------------------------------=
     // MARK: Properties
@@ -27,12 +27,8 @@
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable init() {
+    @inlinable init(digits: [Digit] = []) {
         self.digits = []
-    }
-    
-    @inlinable init(arrayLiteral digits: Digit...) {
-        self.digits = digits
     }
     
     //=------------------------------------------------------------------------=
