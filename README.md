@@ -10,6 +10,7 @@ A framework for as-you-type formatting of text bound to desired data types.
 | :trophy: | Useful and convenient. | Converts to and from non-text types. |
 | :running_man: | Fast and efficient. | Uses a O(n) differentiation algorithm. |
 | :desktop_computer: | Easy to reason about. | Uses snapshots and attributes. |
+| :book: | Versatile. | Supports left-to-right, right-to-left, emojis. |
 
 # Progress
 
@@ -49,11 +50,12 @@ import NumericTextStyles
 struct NumericTextStyleExample: View {
     @State var amount: Decimal = 0
     
-    let locale = Locale(identifier: "en_US")
+    let currencyCode = "USD"
+    let locale = Locale(identifier: "en_SE")
     
     var body: some View {
         DiffableTextField($amount) {
-            .currency(code: locale.currencyCode!).locale(locale)
+            .currency(code: currencyCode).locale(locale)
             .bounds(.values((0 as Decimal)...(1_000_000 as Decimal)))
             .precision(.digits(integer: 1..., fraction: 2))
         }
