@@ -19,7 +19,7 @@ public protocol UIKitTextStyle: DiffableTextStyle {
     // MARK: Setup
     //=------------------------------------------------------------------------=
     
-    @inlinable func setup(_ proxy: ProxyTextField)
+    @inlinable func setup(textField: ProxyTextField)
 }
 
 //=----------------------------------------------------------------------------=
@@ -32,7 +32,7 @@ public extension UIKitTextStyle {
     // MARK: Setup
     //=------------------------------------------------------------------------=
     
-    @inlinable func setup(_ proxy: ProxyTextField) { }
+    @inlinable func setup(textField: ProxyTextField) { }
 }
 
 #endif

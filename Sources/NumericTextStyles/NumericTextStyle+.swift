@@ -180,8 +180,8 @@ extension NumericTextStyle: UIKitTextStyle {
     // MARK: Keyboard
     //=------------------------------------------------------------------------=
     
-    @inlinable public func setup(_ proxy: ProxyTextField) {
-        proxy.keyboard(Value.options.contains(.integer) ? .numberPad : .decimalPad)
+    @inlinable public func setup(textField: ProxyTextField) {
+        textField.keyboard(Value.options.contains(.integer) ? .numberPad : .decimalPad)
     }
 }
 

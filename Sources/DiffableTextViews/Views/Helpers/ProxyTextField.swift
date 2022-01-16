@@ -75,9 +75,9 @@ public final class ProxyTextField {
         // MARK: Utilities
         //=--------------------------------------------------------------------=
         
-        @discardableResult @inlinable func apply(_ proxy: ProxyTextField) -> Bool {
+        @discardableResult @inlinable func apply(textField: ProxyTextField) -> Bool {
             for transformation in transformations {
-                transformation(proxy)
+                transformation(textField)
             }
             
             return !transformations.isEmpty
