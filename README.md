@@ -27,6 +27,18 @@ A framework for as-you-type formatting of text bound to desired data types.
 |   | Features | Description |
 |---|----------|-------------|
 | :straight_ruler: | Font | Standard font is monospaced. |
+| :sewing_needle: | Defaults | Styles can provide default values. |
+
+
+### Examples
+
+```swift
+extension NumericTextStyle: UIKitTextStyle {    
+    @inlinable public func setup(textField: ProxyTextField) {
+        textField.keyboard(Value.isInteger ? .numberPad : .decimalPad)
+    }
+}
+```
 
 # Styles
 
@@ -84,8 +96,8 @@ struct PatternTextStyleExample: View {
     var body: some View {
         DiffableTextField($phoneNumber) {
             .pattern("+## (###) ###-##-##", placeholder: "#")
-            .predicate(.value({ $0.allSatisfy(\.isNumber) }))
             .predicate(.character(\.isASCII))
+            .predicate(.character(\.isNumber))
         }
         .setup { textField in textField.keyboard(.phonePad) }
     }
