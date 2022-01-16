@@ -43,9 +43,7 @@ public struct Precision<Value: Precise> {
     }
     
     @inlinable func editableStyle() -> _Precision.Style {
-        .integerAndFractionLength(
-            integerLimits:  Self.limits( \.integer),
-            fractionLimits: Self.limits(\.fraction))
+        .integerAndFractionLength(integerLimits: Self.limits(\.integer), fractionLimits: Self.limits(\.fraction))
     }
     
     @inlinable func editableStyleThatUses(number: Number) -> _Precision.Style{

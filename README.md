@@ -7,9 +7,9 @@ A framework for as-you-type formatting of text bound to appropriate data types.
 |   | Features | Description |
 |---|----------|-------------|
 | :keyboard: | As-you-type. | Formats text input in real time. |
+| :hammer_and_wrench: | Versatile. | Compares snapshots with attributes. |
 | :running_man: | Fast. | Uses an O(n) differentiation algorithm. |
 | :weight_lifting: | Strong. | Converts to and from non-text types. |
-| :hammer_and_wrench: | Versatile. | Supports both directions and emojis. |
 
 # Progress
 

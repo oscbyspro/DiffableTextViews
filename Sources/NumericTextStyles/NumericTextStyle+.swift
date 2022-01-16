@@ -34,25 +34,9 @@ extension NumericTextStyle {
     // MARK: Characters
     //=------------------------------------------------------------------------=
 
-    #warning("Remove prefix/suffix maybe.")
-    
-    /// A snapshot of characters.
-    ///
-    /// - Assumes that characters contains at least one content character.
-    ///
+    /// Assumes that characters contains at least one content character.
     @inlinable func snapshot(characters: String) -> Snapshot {
-        var snapshot = Snapshot()
-        //=--------------------------------------=
-        // MARK: Prefix
-        //=--------------------------------------=
-        if !prefix.isEmpty {
-            snapshot.append(contentsOf: Snapshot(prefix, as: .phantom))
-            snapshot.append(.spacer)
-        }
-        //=--------------------------------------=
-        // MARK: Body
-        //=--------------------------------------=
-        for character in characters {
+        characters.reduce(into: Snapshot()) { snapshot, character in
             if let _ = region.digits[character] {
                 snapshot.append(Symbol(character, as: .content))
             } else if let separator = region.separators[character], separator == .fraction {
@@ -63,17 +47,6 @@ extension NumericTextStyle {
                 snapshot.append(Symbol(character, as: .phantom))
             }
         }
-        //=--------------------------------------=
-        // MARK: Suffix
-        //=--------------------------------------=
-        if !suffix.isEmpty {
-            snapshot.append(.spacer)
-            snapshot.append(contentsOf: Snapshot(suffix, as: .phantom))
-        }
-        //=--------------------------------------=
-        // MARK: Done
-        //=--------------------------------------=
-        return snapshot
     }
 }
 

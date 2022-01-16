@@ -27,8 +27,6 @@ public struct NumericTextStyle<Format: NumericTextStyles.Format>: DiffableTextSt
     @usableFromInline var region: Region
     @usableFromInline var bounds: Bounds
     @usableFromInline var precision: Precision
-    @usableFromInline var prefix: String
-    @usableFromInline var suffix: String
     
     //=------------------------------------------------------------------------=
     // MARK: Initializers
@@ -39,8 +37,6 @@ public struct NumericTextStyle<Format: NumericTextStyles.Format>: DiffableTextSt
         self.region = .reusable(locale)
         self.bounds = .standard
         self.precision = .standard
-        self.prefix = ""
-        self.suffix = ""
     }
     
     //=------------------------------------------------------------------------=
@@ -60,14 +56,6 @@ public struct NumericTextStyle<Format: NumericTextStyles.Format>: DiffableTextSt
     
     @inlinable public func precision(_ precision: Precision) -> Self {
         transform({ $0.precision = precision })
-    }
-    
-    @inlinable public func prefix(_ prefix: String?) -> Self {
-        transform({ $0.prefix = prefix ?? String() })
-    }
-    
-    @inlinable public func suffix(_ suffix: String?) -> Self {
-        transform({ $0.suffix = suffix ?? String() })
     }
     
     //=------------------------------------------------------------------------=
