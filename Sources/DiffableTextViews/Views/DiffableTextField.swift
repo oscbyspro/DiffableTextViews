@@ -220,12 +220,14 @@ public struct DiffableTextField<Style: DiffableTextStyle & UIKitTextStyle>: UIVi
         @inlinable public func textFieldDidChangeSelection(_ textField: UITextField) {
             guard !lock.isLocked else { return }
             //=----------------------------------=
-            // MARK: Correct Selection
+            // MARK: Selection
             //=----------------------------------=
             let selection = downstream.selection()
-            let corrected = cache.state.transform { corrected in
-                corrected.update(selection: selection, intent: downstream.intent)
-            }
+            //=----------------------------------=
+            // MARK: Corrected
+            //=----------------------------------=
+            var corrected = cache.state
+            corrected.update(selection: selection, intent: downstream.intent)
             //=----------------------------------=
             // MARK: Update Downstream If Needed
             //=----------------------------------=
