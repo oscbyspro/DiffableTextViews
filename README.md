@@ -4,8 +4,8 @@ A framework for as-you-type formatting of text bound to appropriate data types.
 
 ### Features
 
-|   | Features | Description |
-|---|----------|-------------|
+|   | Feature | Description |
+|---|---------|-------------|
 | :keyboard: | As-you-type. | Formats text input in real time. |
 | :hammer_and_wrench: | Versatile. | Uses snapshots and attributes. |
 | :running_man: | Fast. | Uses an O(n) differentiation algorithm. |
@@ -23,8 +23,8 @@ A framework for as-you-type formatting of text bound to appropriate data types.
 
 ### Features
 
-|   | Features | Description |
-|---|----------|-------------|
+|   | Feature | Description |
+|---|---------|-------------|
 | :balance_scale: | Font | Standard font is monospaced. |
 | :sewing_needle: | Custom | Styles may provide default values. |
 
@@ -47,8 +47,8 @@ extension NumericTextStyle: UIKitTextStyle {
 
 ### Features
 
-|   | Features | Description |
-|---|----------|-------------|
+|   | Feature | Description |
+|---|---------|-------------|
 | :arrows_counterclockwise: | [Values](../main/Notes/NumericTextStyles/VALUES.md) | Decimal, Float(16-64) and (U)Int(8-64). |
 | :mag_right: | Precision | Up to 38 significant digits. |
 | :bricks: | Bounds | Clamps input and output to specified range. |
