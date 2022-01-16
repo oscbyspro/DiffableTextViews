@@ -34,7 +34,7 @@ A framework for as-you-type formatting of text bound to desired data types.
 
 ```swift
 extension NumericTextStyle: UIKitTextStyle {    
-    @inlinable public func setup(textField: ProxyTextField) {
+    public func setup(textField: ProxyTextField) {
         textField.keyboard(Value.isInteger ? .numberPad : .decimalPad)
     }
 }
