@@ -53,7 +53,7 @@ extension NumericTextStyle: UIKitTextStyle {
 | :arrows_counterclockwise: | [Values](../main/Notes/NumericTextStyles/VALUES.md) | Decimal, Float(16-64) and (U)Int(8-64). |
 | :mag_right: | Precision | Up to 38 significant digits. |
 | :straight_ruler: | Bounds | Clamps input and output to specified range. |
-| :art: | Formats | Number, Currency and Percent. |
+| :art: | Formats | Number, currency and percent. |
 | :national_park: | Locales | All available in the Foundation framework. |
 
 ### Examples
