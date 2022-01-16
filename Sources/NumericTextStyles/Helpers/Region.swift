@@ -63,8 +63,8 @@ import DiffableTextViews
         var signs = [Character: Sign]()
         var signsLocal = [Sign: Character]()
         
-        signs[Sign.positive.rawValue] = .positive
-        signs[Sign.negative.rawValue] = .negative
+        signs[Sign.positive.character] = .positive
+        signs[Sign.negative.character] = .negative
         
         let positiveLocal = formatter .plusSign.filter({ $0.isPunctuation || $0.isMathSymbol }).first!
         signs[positiveLocal] = .positive
@@ -82,9 +82,9 @@ import DiffableTextViews
         var digitsInLocale = [Digit: Character]()
         
         for digit in Digit.allCases {
-            digits[digit.rawValue] = digit
+            digits[digit.character] = digit
             
-            let digitInLocale = formatter.string(from: UInt8(String(digit.rawValue))! as NSNumber)!.first!
+            let digitInLocale = formatter.string(from: digit.uInt8 as NSNumber)!.first!
             digits[digitInLocale] = digit
             digitsInLocale[digit] = digitInLocale
         }
@@ -96,8 +96,8 @@ import DiffableTextViews
         var separators = [Character: Separator]()
         var separatorsInLocale = [Separator: Character]()
         
-        separators[Separator.fraction.rawValue] = .fraction
-        separators[Separator.grouping.rawValue] = .grouping
+        separators[Separator.fraction.character] = .fraction
+        separators[Separator.grouping.character] = .grouping
         
         let fractionInLocale = formatter.decimalSeparator.first!
         separators[fractionInLocale] = .fraction
@@ -123,7 +123,7 @@ import DiffableTextViews
         self.separatorsInLocale = separatorsInLocale
     }
     
-    //
+    //=------------------------------------------------------------------------=
     // MARK: Initializers - Static
     //=------------------------------------------------------------------------=
     
@@ -136,5 +136,42 @@ import DiffableTextViews
             cache.setObject(instance,  forKey: key)
             return instance
         }
+    }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Number To Characters
+    //=------------------------------------------------------------------------=
+    
+    @inlinable func characters(in number: Number) -> String {
+        var characters = String()
+        //=--------------------------------------=
+        // MARK: Sign
+        //=--------------------------------------=
+        signsInLocale[number.sign]!.write(to: &characters)
+        //=--------------------------------------=
+        // MARK: Integer Digits
+        //=--------------------------------------=
+        for digit in number.integer.digits {
+            print(digit, digitsInLocale[digit]!)
+            digitsInLocale[digit]!.write(to: &characters)
+        }
+        //=--------------------------------------=
+        // MARK: Fraction Separator
+        //=--------------------------------------=
+        if let separator = number.separator {
+            separatorsInLocale[separator]!.write(to: &characters)
+            //=----------------------------------=
+            // MARK: Fraction Digits
+            //=----------------------------------=
+            print()
+            for digit in number.fraction.digits {
+                print(digit)
+                digitsInLocale[digit]!.write(to: &characters)
+            }
+        }
+        //=--------------------------------------=
+        // MARK: Done
+        //=--------------------------------------=
+        return characters
     }
 }

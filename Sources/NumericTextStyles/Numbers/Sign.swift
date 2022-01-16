@@ -5,8 +5,6 @@
 //  Created by Oscar Byström Ericsson on 2022-01-11.
 //
 
-#warning("Clean this up.")
-
 import Foundation
 
 //*============================================================================*
@@ -14,22 +12,39 @@ import Foundation
 //*============================================================================*
 
 /// A system representation of a sign.
-public enum Sign: Character, Component {
+public enum Sign: UInt8, Component {
     
     //=------------------------------------------------------------------------=
     // MARK: Instances
     //=------------------------------------------------------------------------=
     
-    case positive = "+"
-    case negative = "-"
+    case positive = 43 // "+"
+    case negative = 45 // "-"
+}
+
+//=----------------------------------------------------------------------------=
+// MARK: Sign - CustomStringConvertible
+//=----------------------------------------------------------------------------=
+
+extension Sign: CustomStringConvertible {
     
     //=------------------------------------------------------------------------=
-    // MARK: Initializers
+    // MARK: Description
     //=------------------------------------------------------------------------=
     
-    @inlinable init() {
-        self = .positive
+    @inlinable public var description: String {
+        switch self {
+        case .positive: return "positive"
+        case .negative: return "negative"
+        }
     }
+}
+
+//=----------------------------------------------------------------------------=
+// MARK: Sign - Helpers
+//=----------------------------------------------------------------------------=
+
+extension Sign {
     
     //*========================================================================*
     // MARK: * Style
@@ -62,39 +77,6 @@ public enum Sign: Character, Component {
             case .always:    return .always()
             case .automatic: return .automatic
             }
-        }
-    }
-}
-
-//=----------------------------------------------------------------------------=
-// MARK: Sign - Utilities
-//=----------------------------------------------------------------------------=
-
-extension Sign {
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Write
-    //=------------------------------------------------------------------------=
-    
-    @inlinable func write<Characters: TextOutputStream>(characters: inout Characters, in region: Region) {
-        region.signsInLocale[self]?.write(to: &characters)
-    }
-}
-
-//=----------------------------------------------------------------------------=
-// MARK: Sign - CustomStringConvertible
-//=----------------------------------------------------------------------------=
-
-extension Sign: CustomStringConvertible {
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Description
-    //=------------------------------------------------------------------------=
-    
-    @inlinable public var description: String {
-        switch self {
-        case .positive: return "positive"
-        case .negative: return "negative"
         }
     }
 }

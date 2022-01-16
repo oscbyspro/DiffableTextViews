@@ -10,28 +10,12 @@
 //*============================================================================*
 
 /// A system representation of a fraction separator.
-@usableFromInline enum Separator: Character, Component {
+@usableFromInline enum Separator: UInt8, Component {
     
     //=------------------------------------------------------------------------=
     // MARK: Instances
     //=------------------------------------------------------------------------=
     
-    case grouping = ","
-    case fraction = "."
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Initializers
-    //=------------------------------------------------------------------------=
-    
-    @inlinable init() {
-        self = .fraction
-    }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Write
-    //=------------------------------------------------------------------------=
-    
-    @inlinable func write<Characters: TextOutputStream>(characters: inout Characters, in region: Region) {
-        region.separatorsInLocale[self]?.write(to: &characters)
-    }
+    case grouping = 44 // ","
+    case fraction = 46 // "."
 }

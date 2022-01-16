@@ -44,6 +44,7 @@ public struct NumericTextStyle<Format: NumericTextStyles.Format>: DiffableTextSt
     
     @inlinable public func locale(_ locale: Locale) -> Self {
         var result = self
+        result.format = format.locale(locale)
         result.region = Region.reusable(locale)
         return result
     }
@@ -87,7 +88,7 @@ public struct NumericTextStyle<Format: NumericTextStyles.Format>: DiffableTextSt
         precision: Format.PrecisionStyle,
         separator: Format.SeparatorStyle = .automatic,
         sign: Sign.Style = .automatic) -> Format {
-        format.locale(region.locale).precision(precision).decimalSeparator(strategy: separator).sign(style: sign)
+        format.precision(precision).decimalSeparator(strategy: separator).sign(style: sign)
     }
     
     //=------------------------------------------------------------------------=

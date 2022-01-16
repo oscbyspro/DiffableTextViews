@@ -2,74 +2,34 @@
 //  Component.swift
 //  
 //
-//  Created by Oscar Byström Ericsson on 2022-01-11.
+//  Created by Oscar Byström Ericsson on 2022-01-16.
 //
-
-#warning("Clean this up.")
 
 //*============================================================================*
 // MARK: * Component
 //*============================================================================*
 
-@usableFromInline protocol Component {
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Write
-    //=------------------------------------------------------------------------=
-        
-    @inlinable func write<Characters: TextOutputStream>(characters: inout Characters)
-    @inlinable func write<Characters: TextOutputStream>(characters: inout Characters, in region: Region)
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Characters
-    //=------------------------------------------------------------------------=
-    
-    @inlinable func characters() -> String
-    @inlinable func characters(in region: Region) -> String
-}
+@usableFromInline protocol Component: RawRepresentable where RawValue == UInt8 { }
 
 //=----------------------------------------------------------------------------=
-// MARK: Component - Utilities
+// MARK: Components - Details
 //=----------------------------------------------------------------------------=
 
 extension Component {
-    
+        
     //=------------------------------------------------------------------------=
-    // MARK: Characters
-    //=------------------------------------------------------------------------=
- 
-    @inlinable func characters() -> String {
-        var characters = ""
-        write(characters: &characters)
-        return characters
-    }
-    
-    @inlinable func characters(in region: Region) -> String {
-        var characters = ""
-        write(characters: &characters, in: region)
-        return characters
-    }
-}
-
-//=----------------------------------------------------------------------------=
-// MARK: Component - RawValue == Character
-//=----------------------------------------------------------------------------=
-
-extension Component where Self: RawRepresentable, RawValue == Character {
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Write
+    // MARK: Character
     //=------------------------------------------------------------------------=
     
-    @inlinable func write<Characters: TextOutputStream>(characters: inout Characters) {
-        rawValue.write(to: &characters)
+    @inlinable var character: Character {
+        Character(unicode)
     }
     
     //=------------------------------------------------------------------------=
-    // MARK: Characters
+    // MARK: Unicode
     //=------------------------------------------------------------------------=
     
-    @inlinable func characters() -> String {
-        String(rawValue)
+    @inlinable var unicode: Unicode.Scalar {
+        Unicode.Scalar(rawValue)
     }
 }

@@ -9,13 +9,7 @@
 // MARK: * Digits
 //*============================================================================*
 
-@usableFromInline struct Digits: Component {
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Instances
-    //=------------------------------------------------------------------------=
-    
-    @usableFromInline static let zero = Self(digits: [.zero])
+@usableFromInline struct Digits: ExpressibleByArrayLiteral {
     
     //=------------------------------------------------------------------------=
     // MARK: Properties
@@ -31,6 +25,10 @@
         self.digits = []
     }
     
+    @inlinable init(arrayLiteral elements: Digit...) {
+        self.digits = elements
+    }
+    
     //=------------------------------------------------------------------------=
     // MARK: Utilities
     //=------------------------------------------------------------------------=
@@ -40,11 +38,11 @@
     }
     
     @inlinable func prefixZerosCount() -> Int {
-        digits.count(while: { $0 == .zero })
+        digits.count(while: \.isZero)
     }
     
     @inlinable func suffixZerosCount() -> Int {
-        digits.reversed().count(while: { $0 == .zero })
+        digits.reversed().count(while: \.isZero)
     }
     
     //=------------------------------------------------------------------------=
@@ -64,22 +62,6 @@
     }
     
     @inlinable mutating func makeItAtLeastZero() {
-        if digits.isEmpty { self = .zero }
-    }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Text
-    //=------------------------------------------------------------------------=
-    
-    @inlinable func write<Characters: TextOutputStream>(characters: inout Characters) {
-        for digit in digits {
-            digit.write(characters: &characters)
-        }
-    }
-    
-    @inlinable func write<Characters: TextOutputStream>(characters: inout Characters, in region: Region) {
-        for digit in digits {
-            digit.write(characters: &characters, in: region)
-        }
+        if digits.isEmpty { self = [.zero] }
     }
 }

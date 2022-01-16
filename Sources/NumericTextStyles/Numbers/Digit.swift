@@ -9,25 +9,25 @@
 // MARK: Digit
 //*============================================================================*
 
-@usableFromInline enum Digit: Character, CaseIterable, Component {
+@usableFromInline enum Digit: UInt8, CaseIterable, Component {
     
     //=------------------------------------------------------------------------=
     // MARK: Instances
     //=------------------------------------------------------------------------=
     
-    case zero  = "0"
-    case one   = "1"
-    case two   = "2"
-    case three = "3"
-    case four  = "4"
-    case five  = "5"
-    case six   = "6"
-    case seven = "7"
-    case eight = "8"
-    case nine  = "9"
+    case zero  = 48 // "0"
+    case one   = 49 // "1"
+    case two   = 50 // "2"
+    case three = 51 // "3"
+    case four  = 52 // "4"
+    case five  = 53 // "5"
+    case six   = 54 // "6"
+    case seven = 55 // "7"
+    case eight = 56 // "8"
+    case nine  = 57 // "9"
     
     //=------------------------------------------------------------------------=
-    // MARK: Attributes
+    // MARK: Checks
     //=------------------------------------------------------------------------=
     
     @inlinable var isZero: Bool {
@@ -35,10 +35,10 @@
     }
     
     //=------------------------------------------------------------------------=
-    // MARK: Write
+    // MARK: Value
     //=------------------------------------------------------------------------=
     
-    @inlinable func write<Characters: TextOutputStream>(characters: inout Characters, in region: Region) {
-        region.digitsInLocale[self]?.write(to: &characters)
+    @inlinable var uInt8: UInt8 {
+        rawValue - 48
     }
 }

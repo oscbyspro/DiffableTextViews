@@ -12,21 +12,21 @@ import DiffableTextViews
 //*============================================================================*
 
 /// A system representation of a number.
-@usableFromInline struct Number: Component {
+@usableFromInline struct Number {
     
     //=------------------------------------------------------------------------=
     // MARK: Instances
     //=------------------------------------------------------------------------=
     
     @usableFromInline static let zero: Self = {
-        var instance = Self(); instance.integer = .zero; return instance
+        var instance = Self(); instance.integer = [.zero]; return instance
     }()
     
     //=------------------------------------------------------------------------=
     // MARK: Properties
     //=------------------------------------------------------------------------=
 
-    @usableFromInline var sign = Sign()
+    @usableFromInline var sign = Sign.positive
     @usableFromInline private(set) var integer = Digits()
     @usableFromInline private(set) var separator: Separator? = nil
     @usableFromInline private(set) var fraction = Digits()
@@ -63,39 +63,6 @@ import DiffableTextViews
         guard fraction.digits.isEmpty else { return }
         guard capacity.fraction <= 0 || capacity.value <= 0 else { return }
         separator = nil
-    }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Write
-    //=------------------------------------------------------------------------=
-    
-    @inlinable func write<Stream: TextOutputStream>(characters: inout Stream) {
-        sign.write(characters: &characters)
-        integer.write(characters: &characters)
-        separator?.write(characters: &characters)
-        fraction.write(characters: &characters)
-    }
-
-    @inlinable func write<Stream: TextOutputStream>(characters: inout Stream, in region: Region) {
-        sign.write(characters: &characters, in: region)
-        integer.write(characters: &characters, in: region)
-        separator?.write(characters: &characters, in: region)
-        fraction.write(characters: &characters, in: region)
-    }    
-}
-
-//=----------------------------------------------------------------------------=
-// MARK: Number - CustomStringConvertible
-//=----------------------------------------------------------------------------=
-
-extension Number: CustomStringConvertible {
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Description
-    //=------------------------------------------------------------------------=
-    
-    @inlinable var description: String {
-        characters()
     }
 }
 
