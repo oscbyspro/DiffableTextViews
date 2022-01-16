@@ -19,7 +19,6 @@ extension FloatingPointFormatStyle: NumberFormat { }
 
 extension FloatingPointFormatStyle.Currency: CurrencyFormat { }
 
-
 //*============================================================================*
 // MARK: * Floating Point x Percent
 //*============================================================================*

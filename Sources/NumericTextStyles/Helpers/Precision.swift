@@ -36,12 +36,16 @@ public struct Precision<Value: Precise> {
     }
     
     //=------------------------------------------------------------------------=
-    // MARK: Styles
+    // MARK: Showcase
     //=------------------------------------------------------------------------=
 
     @inlinable func showcaseStyle() -> _Precision.Style {
         implementation.showcaseStyle()
     }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Editable
+    //=------------------------------------------------------------------------=
     
     @inlinable func editableStyle() -> _Precision.Style {
         .integerAndFractionLength(integerLimits: Self.limits(\.integer), fractionLimits: Self.limits(\.fraction))
@@ -176,7 +180,7 @@ public extension Precision where Value: PreciseFloatingPoint {
     
     @usableFromInline static let lowerBound = Count(value: 1, integer: 1, fraction: 0)
     
-    //
+    //=------------------------------------------------------------------------=
     // MARK: Count - Make
     //=------------------------------------------------------------------------=
     
@@ -225,7 +229,7 @@ public extension Precision where Value: PreciseFloatingPoint {
 @usableFromInline protocol PrecisionImplementation {
 
     //=------------------------------------------------------------------------=
-    // MARK: Styles
+    // MARK: Showcase
     //=------------------------------------------------------------------------=
             
     @inlinable func showcaseStyle() -> _Precision.Style
@@ -259,7 +263,7 @@ public extension Precision where Value: PreciseFloatingPoint {
     }
     
     //=------------------------------------------------------------------------=
-    // MARK: Styles
+    // MARK: Showcase
     //=------------------------------------------------------------------------=
     
     @inlinable func showcaseStyle() -> _Precision.Style {
@@ -309,7 +313,7 @@ public extension Precision where Value: PreciseFloatingPoint {
     }
     
     //=------------------------------------------------------------------------=
-    // MARK: Styles
+    // MARK: Showcase
     //=------------------------------------------------------------------------=
 
     @inlinable func showcaseStyle() -> _Precision.Style {
