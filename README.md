@@ -7,9 +7,9 @@ A framework for as-you-type formatting of text bound to desired data types.
 |   | Features | Description |
 |---|----------|-------------|
 | :fire: | As-you-type. | Formats text input in real time. |
-| :trophy: | Useful and convenient. | Converts to and from non-text types. |
-| :running_man: | Fast and efficient. | Uses a O(n) differentiation algorithm. |
-| :desktop_computer: | Easy to reason about. | Uses snapshots and attributes. |
+| :trophy: | Convenient. | Converts to and from non-text types. |
+| :running_man: | Fast. | Uses an O(n) differentiation algorithm. |
+| :brain: | Smart. | Uses snapshots and attributes. |
 | :book: | Versatile. | Supports left-to-right, right-to-left, emojis. |
 
 # Progress
