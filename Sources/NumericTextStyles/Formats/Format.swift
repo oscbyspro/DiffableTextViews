@@ -46,13 +46,29 @@ public protocol Format: ParseableFormatStyle {
 // MARK: * Format x Number
 //*============================================================================*
 
-@usableFromInline protocol NumberFormat: Format { }
+@usableFromInline protocol NumberFormat: Format {
+    typealias Configuration = NumberFormatStyleConfiguration
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Sign
+    //=------------------------------------------------------------------------=
+    
+    @inlinable func sign(strategy: Configuration.SignDisplayStrategy) -> Self
+}
 
 //=----------------------------------------------------------------------------=
 // MARK: Format x Number - Details
 //=----------------------------------------------------------------------------=
 
 extension NumberFormat {
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Sign
+    //=------------------------------------------------------------------------=
+    
+    @inlinable public func sign(style: Sign.Style) -> Self {
+        self.sign(strategy: style.standard())
+    }
     
     //=------------------------------------------------------------------------=
     // MARK: Process
@@ -65,13 +81,29 @@ extension NumberFormat {
 // MARK: * Format x Currency
 //*============================================================================*
 
-@usableFromInline protocol CurrencyFormat: Format { }
+@usableFromInline protocol CurrencyFormat: Format {
+    typealias Configuration = CurrencyFormatStyleConfiguration
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Sign
+    //=------------------------------------------------------------------------=
+    
+    @inlinable func sign(strategy: Configuration.SignDisplayStrategy) -> Self
+}
 
 //=----------------------------------------------------------------------------=
 // MARK: Format x Currency - Details
 //=----------------------------------------------------------------------------=
 
 extension CurrencyFormat {
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Sign
+    //=------------------------------------------------------------------------=
+    
+    @inlinable public func sign(style: Sign.Style) -> Self {
+        self.sign(strategy: style.currency())
+    }
     
     //=------------------------------------------------------------------------=
     // MARK: Process
@@ -84,7 +116,15 @@ extension CurrencyFormat {
 // MARK: * Format x Percent
 //*============================================================================*
 
-@usableFromInline protocol PercentFormat: Format { }
+@usableFromInline protocol PercentFormat: Format {
+    typealias Configuration = NumberFormatStyleConfiguration
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Sign
+    //=------------------------------------------------------------------------=
+    
+    @inlinable func sign(strategy: Configuration.SignDisplayStrategy) -> Self
+}
 
 //=----------------------------------------------------------------------------=
 // MARK: Format x Percent - Details
@@ -93,10 +133,17 @@ extension CurrencyFormat {
 extension PercentFormat {
     
     //=------------------------------------------------------------------------=
+    // MARK: Sign
+    //=------------------------------------------------------------------------=
+    
+    @inlinable public func sign(style: Sign.Style) -> Self {
+        self.sign(strategy: style.standard())
+    }
+    
+    //=------------------------------------------------------------------------=
     // MARK: Process
     //=------------------------------------------------------------------------=
     
-    #warning("Apply it to max capaciy.")
     @inlinable public func process(count: inout Count) {
         count.downshift(by: 2)
     }

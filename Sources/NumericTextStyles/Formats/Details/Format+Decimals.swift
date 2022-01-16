@@ -11,43 +11,16 @@ import Foundation
 // MARK: * Decimal
 //*============================================================================*
 
-extension Decimal.FormatStyle: NumberFormat {
-
-    //=------------------------------------------------------------------------=
-    // MARK: Sign
-    //=------------------------------------------------------------------------=
-    
-    @inlinable public func sign(style: Sign.Style) -> Self {
-        sign(strategy: style.standard())
-    }
-}
+extension Decimal.FormatStyle: NumberFormat { }
 
 //*============================================================================*
 // MARK: * Decimal x Currency
 //*============================================================================*
 
-extension Decimal.FormatStyle.Currency: CurrencyFormat {
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Sign
-    //=------------------------------------------------------------------------=
-    
-    @inlinable public func sign(style: Sign.Style) -> Self {
-        sign(strategy: style.currency())
-    }
-}
+extension Decimal.FormatStyle.Currency: CurrencyFormat { }
 
 //*============================================================================*
 // MARK: * Integer x Percent
 //*============================================================================*
 
-extension Decimal.FormatStyle.Percent: PercentFormat {
-        
-    //=------------------------------------------------------------------------=
-    // MARK: Sign
-    //=------------------------------------------------------------------------=
-    
-    @inlinable public func sign(style: Sign.Style) -> Self {
-        sign(strategy: style.standard())
-    }
-}
+extension Decimal.FormatStyle.Percent: PercentFormat { }
