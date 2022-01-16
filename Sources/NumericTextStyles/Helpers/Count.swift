@@ -37,12 +37,12 @@ public struct Count: Transformable {
     //=------------------------------------------------------------------------=
     
     @inlinable mutating func upshift(by amount: Int) {
-        integer  += amount
-        fraction -= max(0, amount)
+        integer  = max(0, integer  + amount)
+        fraction = max(0, fraction - amount)
     }
     
     @inlinable mutating func downshift(by amount: Int) {
-        integer  -= max(0, amount)
-        fraction += amount
+        integer  = max(0, integer  - amount)
+        fraction = max(0, fraction + amount)
     }
 }
