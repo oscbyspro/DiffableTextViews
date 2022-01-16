@@ -33,10 +33,9 @@ extension NumericTextStyle {
     // MARK: Characters
     //=------------------------------------------------------------------------=
 
-    /// Snapshots characters.
+    /// A snapshot of characters.
     ///
-    /// - Assumes: that there is at least one integer digit.
-    /// - Assumes: that there is at most one prefix integer digit zero.
+    /// - Assumes that characters contains at least one content character.
     ///
     @inlinable func snapshot(characters: String) -> Snapshot {
         var snapshot = Snapshot()
@@ -44,37 +43,29 @@ extension NumericTextStyle {
         // MARK: Prefix
         //=--------------------------------------=
         if !prefix.isEmpty {
-            snapshot.append(contentsOf: Snapshot(prefix, only: .phantom))
-            snapshot.append(Symbol(character: " ",  attribute: .phantom))
+            snapshot.append(contentsOf: Snapshot(prefix, as: .phantom))
+            snapshot.append(.spacer)
         }
         //=--------------------------------------=
         // MARK: Body
         //=--------------------------------------=
         for character in characters {
-            let attribute: Attribute
-            //=----------------------------------=
-            // MARK: Matches
-            //=----------------------------------=
             if let _ = region.digits[character] {
-                attribute = .content
+                snapshot.append(Symbol(character, as: .content))
             } else if let separator = region.separators[character], separator == .fraction {
-                attribute = .removable
+                snapshot.append(Symbol(character, as: .removable))
             } else if let _ = region.signs[character] {
-                attribute = .phantom.subtracting(.formatting)
+                snapshot.append(Symbol(character, as: .phantom.subtracting(.formatting)))
             } else {
-                attribute = .phantom
+                snapshot.append(Symbol(character, as: .phantom))
             }
-            //=----------------------------------=
-            // MARK: Insert
-            //=----------------------------------=
-            snapshot.append(Symbol(character: character, attribute: attribute))
         }
         //=--------------------------------------=
         // MARK: Suffix
         //=--------------------------------------=
         if !suffix.isEmpty {
-            snapshot.append(Symbol(character: " ",  attribute: .phantom))
-            snapshot.append(contentsOf: Snapshot(suffix, only: .phantom))
+            snapshot.append(.spacer)
+            snapshot.append(contentsOf: Snapshot(suffix, as: .phantom))
         }
         //=--------------------------------------=
         // MARK: Done

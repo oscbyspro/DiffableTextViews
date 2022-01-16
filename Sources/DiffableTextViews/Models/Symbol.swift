@@ -14,11 +14,18 @@ public struct Symbol: Equatable {
     //=------------------------------------------------------------------------=
     // MARK: Instances
     //=------------------------------------------------------------------------=
+
+    /// A standard space symbol: U+0020.
+    public static let spacer = Self(
+        character: "\u{0020}",
+        attribute: .phantom)
     
+    /// A zero-with space symbol: U+200B, that is non-passthrough.
     public static let anchor = Self(
-        character: "\u{200B}", // a zero-width space
+        character: "\u{200B}",
         attribute: .phantom.subtracting(.passthrough))
     
+        
     //=------------------------------------------------------------------------=
     // MARK: Properties
     //=------------------------------------------------------------------------=
@@ -29,22 +36,27 @@ public struct Symbol: Equatable {
     //=------------------------------------------------------------------------=
     // MARK: Initializers
     //=------------------------------------------------------------------------=
-    
+
     @inlinable public init(character: Character, attribute: Attribute) {
         self.character = character
         self.attribute = attribute
     }
-
+    
+    @inlinable public init(_ character: Character, as attribute: Attribute) {
+        self.character = character
+        self.attribute = attribute
+    }
+    
     //=------------------------------------------------------------------------=
     // MARK: Initializers - Static
     //=------------------------------------------------------------------------=
     
-    @inlinable public static func content(_ character: Character) -> Self {
-        Self(character: character, attribute: .content)
+    @inlinable public func content(_ character: Character) -> Self {
+        Self(character, as: .content)
     }
     
-    @inlinable public static func phantom(_ character: Character) -> Self {
-        Self(character: character, attribute: .phantom)
+    @inlinable public func phantom(_ character: Character) -> Self {
+        Self(character, as: .phantom)
     }
 }
 

@@ -169,7 +169,7 @@ public struct DiffableTextField<Style: DiffableTextStyle & UIKitTextStyle>: UIVi
                     .transform(cache.state.indices(at:))
                 
                 let input = Input(
-                    content: Snapshot(string, only: .content),
+                    content: Snapshot(string, as: .content),
                     range: selection.lowerBound.snapshot ..< selection.upperBound.snapshot)
                 //=------------------------------=
                 // MARK: State

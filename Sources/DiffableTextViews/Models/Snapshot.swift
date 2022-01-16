@@ -38,21 +38,9 @@ public struct Snapshot: BidirectionalCollection, RangeReplaceableCollection, Tra
         self._attributes = []
     }
 
-    @inlinable public init(_ characters: String, only attribute: Attribute) {
+    @inlinable public init(_ characters: String, as attribute: Attribute) {
         self._characters = characters
         self._attributes = Attributes(repeating: attribute, count: characters.count)
-    }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Transformations
-    //=------------------------------------------------------------------------=
-    
-    @inlinable public mutating func anchor() {
-        self.append(.anchor)
-    }
-    
-    @inlinable public mutating func anchor(at index: Index) {
-        self.insert(.anchor, at: index)
     }
     
     //*========================================================================*
@@ -102,8 +90,7 @@ public extension Snapshot {
     //=------------------------------------------------------------------------=
     
     @inlinable subscript(position: Index) -> Symbol {
-        Symbol(character: _characters[position.character],
-               attribute: _attributes[position.attribute])
+        Symbol(_characters[position.character], as: _attributes[position.attribute])
     }
     
     //=------------------------------------------------------------------------=
@@ -187,8 +174,7 @@ public extension Snapshot {
     }
     
     @discardableResult @inlinable mutating func remove(at position: Index) -> Symbol {
-        Symbol(character: _characters.remove(at: position.character),
-               attribute: _attributes.remove(at: position.attribute))
+        Symbol(_characters.remove(at: position.character), as: _attributes.remove(at: position.attribute))
     }
 }
 

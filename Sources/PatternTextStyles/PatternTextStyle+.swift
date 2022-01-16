@@ -25,12 +25,12 @@ extension PatternTextStyle {
         // MARK: Prefix Up To First Placeholder
         //=--------------------------------------=
         while patternIndex != pattern.endIndex {
-            let patternElement =  pattern[patternIndex]
-            if  patternElement == placeholder { break }
+            let patternElement = pattern[patternIndex]
+            if patternElement == placeholder { break }
             //=----------------------------------=
             // MARK: Insert
             //=----------------------------------=
-            snapshot.append(Symbol(character: patternElement, attribute: .phantom))
+            snapshot.append(Symbol(patternElement, as: .phantom))
             pattern.formIndex(after: &patternIndex)
         }
         //=--------------------------------------=
@@ -38,16 +38,16 @@ extension PatternTextStyle {
         //=--------------------------------------=
         while patternIndex != pattern.endIndex, valueIndex != value.endIndex {
             let patternElement = pattern[patternIndex]
-            pattern.formIndex(after:    &patternIndex)
+            pattern.formIndex(after: &patternIndex)
             //=----------------------------------=
             // MARK: Matches, Insert
             //=----------------------------------=
             if patternElement == placeholder {
                 let valueElement = value[valueIndex]
-                value.formIndex(after:  &valueIndex)
-                snapshot.append(Symbol(character:   valueElement, attribute: .content))
+                value.formIndex(after: &valueIndex)
+                snapshot.append(Symbol(valueElement, as: .content))
             } else {
-                snapshot.append(Symbol(character: patternElement, attribute: .phantom))
+                snapshot.append(Symbol(patternElement, as: .phantom))
             }
         }
         //=--------------------------------------=
@@ -59,14 +59,14 @@ extension PatternTextStyle {
             //=----------------------------------=
             if valueIndex == value.startIndex {
                 let endIndex = pattern.prefix(while: { $0 != placeholder }).endIndex
-                snapshot.append(contentsOf: Snapshot(String(pattern[patternIndex..<endIndex]), only: .phantom))
-                snapshot.anchor()
+                snapshot.append(contentsOf: Snapshot(String(pattern[patternIndex..<endIndex]), as: .phantom))
+                snapshot.append(.anchor)
                 patternIndex = endIndex
             }
             //=----------------------------------=
             // MARK: Tail
             //=----------------------------------=
-            snapshot.append(contentsOf: Snapshot(String(pattern[patternIndex...]), only: .phantom))
+            snapshot.append(contentsOf: Snapshot(String(pattern[patternIndex...]), as: .phantom))
         }
         //=--------------------------------------=
         // MARK: Done
