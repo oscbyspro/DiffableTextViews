@@ -56,7 +56,7 @@ import Foundation
         self.digits = Lexicon<Digit>()
         for digit in Digit.allCases {
             digits[digit.character] = digit
-            digits.link(formatter.string(from: digit.uInt8 as NSNumber)!.first!, digit)
+            digits.link(formatter.string(from: digit.number as NSNumber)!.first!, digit)
         }
         //=--------------------------------------=
         // MARK: Separators

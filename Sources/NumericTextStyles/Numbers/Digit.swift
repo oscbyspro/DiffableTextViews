@@ -38,7 +38,7 @@
     // MARK: Value
     //=------------------------------------------------------------------------=
     
-    @inlinable var uInt8: UInt8 {
-        rawValue - 48
+    @inlinable var number: UInt8 {
+        rawValue - Digit.zero.rawValue
     }
 }
