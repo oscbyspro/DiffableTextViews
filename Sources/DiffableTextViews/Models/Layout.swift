@@ -132,7 +132,7 @@ extension Layout {
     // MARK: Ahead/Behind
     //=------------------------------------------------------------------------=
     
-    @inlinable func look(_ position: Index, direction: Direction) -> Index? {
+    @inlinable func look(position: Index, direction: Direction) -> Index? {
         switch direction {
         case  .forwards: return  lookahead(position)
         case .backwards: return lookbehind(position)

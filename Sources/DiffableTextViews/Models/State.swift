@@ -162,7 +162,7 @@ extension State {
         //=--------------------------------------=
         // MARK: Validate
         //=--------------------------------------=
-        if layout.look(start, direction: preference).map(layout.nonpassthrough) == true { return start }
+        if layout.look(position: start, direction: preference).map(layout.nonpassthrough) == true { return start }
         //=--------------------------------------=
         // MARK: Direction
         //=--------------------------------------=
