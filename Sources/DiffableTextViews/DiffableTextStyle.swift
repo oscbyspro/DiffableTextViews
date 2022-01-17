@@ -5,6 +5,8 @@
 //  Created by Oscar Byström Ericsson on 2021-10-02.
 //
 
+import Foundation
+
 //*============================================================================*
 // MARK: * DiffableTextStyle
 //*============================================================================*
@@ -16,6 +18,17 @@ public protocol DiffableTextStyle {
     //=------------------------------------------------------------------------=
     
     associatedtype Value: Equatable
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Locale
+    //=------------------------------------------------------------------------=
+    
+    /// If the style allows selecting a locale, returns a copy of this style with the new locale set.
+    ///
+    /// - The locale is provided by the enironment.
+    /// - The default implementation returns an unmodified self.
+    ///
+    @inlinable func locale(_ locale: Locale) -> Self
     
     //=------------------------------------------------------------------------=
     // MARK: Process
@@ -54,6 +67,12 @@ public protocol DiffableTextStyle {
 //=----------------------------------------------------------------------------=
 
 public extension DiffableTextStyle {
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Locale
+    //=------------------------------------------------------------------------=
+    
+    @inlinable func locale(_ locale: Locale) -> Self { self }
     
     //=------------------------------------------------------------------------=
     // MARK: Process

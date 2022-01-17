@@ -42,47 +42,6 @@ public final class ProxyTextField {
         self.wrapped = wrapped
         self.font(.body.monospaced())
     }
-    
-    //*========================================================================*
-    // MARK: * Transformations
-    //*========================================================================*
-    
-    public struct Transformations {
-        
-        //=--------------------------------------------------------------------=
-        // MARK: Properties
-        //=--------------------------------------------------------------------=
-        
-        @usableFromInline var transformations: [(ProxyTextField) -> Void]
-        
-        //=--------------------------------------------------------------------=
-        // MARK: Initializers
-        //=--------------------------------------------------------------------=
-        
-        @inlinable init() {
-            self.transformations = []
-        }
-        
-        //=--------------------------------------------------------------------=
-        // MARK: Transformations
-        //=--------------------------------------------------------------------=
-        
-        @inlinable mutating func add(_ transformation: @escaping (ProxyTextField) -> Void) {
-            self.transformations.append(transformation)
-        }
-        
-        //=--------------------------------------------------------------------=
-        // MARK: Utilities
-        //=--------------------------------------------------------------------=
-        
-        @discardableResult @inlinable func apply(diffableTextField: ProxyTextField) -> Bool {
-            for transformation in transformations {
-                transformation(diffableTextField)
-            }
-            
-            return !transformations.isEmpty
-        }
-    }
 }
 
 //=----------------------------------------------------------------------------=

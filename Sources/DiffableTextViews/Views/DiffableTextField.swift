@@ -14,25 +14,25 @@ import SwiftUI
 // MARK: * DiffableTextField
 //*============================================================================*
 
-public struct DiffableTextField<Style: DiffableTextStyle & UIKitTextStyle>: UIViewRepresentable, Transformable {
+public struct DiffableTextField<Style: DiffableTextStyle & UIKitTextStyle>: UIViewRepresentable {
     public typealias Value = Style.Value
     public typealias UIViewType = BasicTextField
     public typealias Transformation = (ProxyTextField) -> Void
-    
+
     //=------------------------------------------------------------------------=
     // MARK: Properties
     //=------------------------------------------------------------------------=
     
     @usableFromInline let value: Binding<Value>
-    @usableFromInline let style: Style
+    @usableFromInline var style: Style
     
     //=------------------------------------------------------------------------=
     // MARK: Properties - Transformations
     //=------------------------------------------------------------------------=
 
-    @usableFromInline var setup  = ProxyTextField.Transformations()
-    @usableFromInline var update = ProxyTextField.Transformations()
-    @usableFromInline var submit = ProxyTextField.Transformations()
+    @usableFromInline var setup:  Transformation? = nil
+    @usableFromInline var update: Transformation? = nil
+    @usableFromInline var submit: Transformation? = nil
 
     //=------------------------------------------------------------------------=
     // MARK: Initializers
@@ -46,21 +46,27 @@ public struct DiffableTextField<Style: DiffableTextStyle & UIKitTextStyle>: UIVi
     @inlinable public init(_ value: Binding<Value>, style: () -> Style) {
         self.init(value, style: style())
     }
-    
+        
     //=------------------------------------------------------------------------=
     // MARK: Transformations
     //=------------------------------------------------------------------------=
     
-    @inlinable public func setup(_ transformation: @escaping Transformation) -> Self {
-        transform({ $0.setup.add(transformation) })
+    @inlinable public func setup(_  transformation: @escaping Transformation) -> Self {
+        var result = self
+        result.setup = transformation
+        return result
     }
     
     @inlinable public func update(_ transformation: @escaping Transformation) -> Self {
-        transform({ $0.update.add(transformation) })
+        var result = self
+        result.update = transformation
+        return result
     }
     
     @inlinable public func submit(_ transformation: @escaping Transformation) -> Self {
-        transform({ $0.submit.add(transformation) })
+        var result = self
+        result.submit = transformation
+        return result
     }
 
     //=------------------------------------------------------------------------=
@@ -88,21 +94,21 @@ public struct DiffableTextField<Style: DiffableTextStyle & UIKitTextStyle>: UIVi
         //=--------------------------------------=
         let downstream = ProxyTextField(uiView)
         style.setup(diffableTextField: downstream)
-        setup.apply(diffableTextField: downstream)
         context.coordinator.downstream = downstream
+        setup?(context.coordinator.downstream)
         //=--------------------------------------=
         // MARK: Done
         //=--------------------------------------=
         return uiView
     }
     
-    //
+    //=------------------------------------------------------------------------=
     // MARK: Life - UIView - Update
     //=------------------------------------------------------------------------=
     
     @inlinable public func updateUIView(_ uiView: UIViewType, context: Context) {
         context.coordinator.upstream = self
-        update.apply(diffableTextField: context.coordinator.downstream)
+        update?(context.coordinator.downstream)
         context.coordinator.synchronize()
     }
     
@@ -129,15 +135,15 @@ public struct DiffableTextField<Style: DiffableTextStyle & UIKitTextStyle>: UIVi
         @usableFromInline let cache = Cache()
 
         //=----------------------------------------------------------------------------=
-        // MARK: Delegate - Respond To Submit Events
+        // MARK: Respond To Submit Events
         //=----------------------------------------------------------------------------=
         
         @inlinable public func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-            !upstream.submit.apply(diffableTextField: downstream)
+            upstream.submit?(downstream) == nil
         }
         
         //=--------------------------------------------------------------------=
-        // MARK: Delegate - Respond To Mode Change Events
+        // MARK: Respond To Mode Change Events
         //=--------------------------------------------------------------------=
         
         @inlinable public func textFieldDidBeginEditing(_ textField: UITextField) {
@@ -153,12 +159,12 @@ public struct DiffableTextField<Style: DiffableTextStyle & UIKitTextStyle>: UIVi
         }
         
         //=--------------------------------------------------------------------=
-        // MARK: Delegate - Respond To Input Events
+        // MARK: Respond To Input Events
         //=--------------------------------------------------------------------=
         
         @inlinable public func textField(_ textField: UITextField, shouldChangeCharactersIn nsRange: NSRange, replacementString string: String) -> Bool {
             //=----------------------------------=
-            // MARK: Respond To Proposal
+            // MARK: Attempt
             //=----------------------------------=
             do {
                 //=------------------------------=
@@ -198,7 +204,7 @@ public struct DiffableTextField<Style: DiffableTextStyle & UIKitTextStyle>: UIVi
                     self.push()
                 }
             //=----------------------------------=
-            // MARK: Respond To Cancellation
+            // MARK: Cancellation
             //=----------------------------------=
             } catch let reason {
                 #if DEBUG
