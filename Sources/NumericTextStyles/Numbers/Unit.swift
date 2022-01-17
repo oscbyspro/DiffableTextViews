@@ -1,22 +1,22 @@
 //
-//  Component.swift
+//  Unit.swift
 //  
 //
 //  Created by Oscar Byström Ericsson on 2022-01-16.
 //
 
 //*============================================================================*
-// MARK: * Component
+// MARK: * Unit
 //*============================================================================*
 
 /// The unicode value of its system representation.
-@usableFromInline protocol Component: RawRepresentable, CustomStringConvertible where RawValue == UInt8 { }
+@usableFromInline protocol Unit: RawRepresentable, CustomStringConvertible where RawValue == UInt8 { }
 
 //=----------------------------------------------------------------------------=
 // MARK: Components - Details
 //=----------------------------------------------------------------------------=
 
-extension Component {
+extension Unit {
     
     //=------------------------------------------------------------------------=
     // MARK: Unicode

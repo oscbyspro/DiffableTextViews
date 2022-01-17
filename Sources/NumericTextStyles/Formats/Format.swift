@@ -11,13 +11,15 @@ import Foundation
 // MARK: * Format
 //*============================================================================*
 
-public protocol Format: ParseableFormatStyle {
+public protocol Format: ParseableFormatStyle where FormatInput: NumericTextStyles.Value, FormatOutput == String {
     typealias Precision = NumberFormatStyleConfiguration.Precision
     typealias Separator = NumberFormatStyleConfiguration.DecimalSeparatorDisplayStrategy
     
     //=------------------------------------------------------------------------=
     // MARK: Precision
     //=------------------------------------------------------------------------=
+    
+    @inlinable static var precision: Count { get }
     
     @inlinable func precision(_ precision: Precision) -> Self
     
@@ -32,12 +34,6 @@ public protocol Format: ParseableFormatStyle {
     //=------------------------------------------------------------------------=
     
     @inlinable func sign(style: Sign.Style) -> Self
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Process
-    //=------------------------------------------------------------------------=
-    
-    @inlinable static func process(precision: inout Count)
 }
 
 //=----------------------------------------------------------------------------=
@@ -45,13 +41,16 @@ public protocol Format: ParseableFormatStyle {
 //=----------------------------------------------------------------------------=
 
 extension Format {
+    @usableFromInline typealias Value = FormatInput
     
     //=------------------------------------------------------------------------=
-    // MARK: Process
+    // MARK: Precision
     //=------------------------------------------------------------------------=
     
-    @inlinable public static func process(precision: inout Count) { }
-    
+    @inlinable public static var precision: Count {
+        Value.precision
+    }
+
     //=------------------------------------------------------------------------=
     // MARK: Transformations
     //=------------------------------------------------------------------------=
@@ -151,8 +150,10 @@ extension PercentFormat {
     // MARK: Process
     //=------------------------------------------------------------------------=
     
-    @inlinable public static func process(precision: inout Count) {
-        precision.integer  =        precision.integer  + 2
-        precision.fraction = max(0, precision.fraction - 2)
+    @inlinable public static var precision: Count {
+        var precision = Value.precision
+        precision.integer  += 2
+        precision.fraction -= 2
+        return precision
     }
 }

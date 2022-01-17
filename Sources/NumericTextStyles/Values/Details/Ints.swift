@@ -1,78 +1,76 @@
 //
-//  Value+UInts.swift
+//  Ints.swift
+//  
 //
-//
-//  Created by Oscar Byström Ericsson on 2021-10-25.
+//  Created by Oscar Byström Ericsson on 2021-12-22.
 //
 
 //*============================================================================*
-// MARK: * UInt
+// MARK: * Int
 //*============================================================================*
 
-extension UInt: UnsignedIntegerValue {
-    typealias Limitation = Int
+extension Int: IntegerValue {
     
     //=------------------------------------------------------------------------=
     // MARK: Precision, Bounds
     //=------------------------------------------------------------------------=
     
-    public static let precision: Count = Limitation.precision
-    public static let bounds: ClosedRange<Self> = 0...Self(Limitation.bounds.upperBound)
+    public static let precision: Count = precision(String(max).count)
+    public static let bounds: ClosedRange<Self> = bounds()
 }
 
 //*============================================================================*
-// MARK: * UInt8
+// MARK: * Int8
 //*============================================================================*
 
-extension UInt8: UnsignedIntegerValue {
+extension Int8: IntegerValue {
     
     //=------------------------------------------------------------------------=
     // MARK: Precision, Bounds
     //=------------------------------------------------------------------------=
-
+    
     public static let precision: Count = precision(3)
     public static let bounds: ClosedRange<Self> = bounds()
 }
 
 //*============================================================================*
-// MARK: * UInt16
+// MARK: * Int16
 //*============================================================================*
 
-extension UInt16: UnsignedIntegerValue {
+extension Int16: IntegerValue {
     
     //=------------------------------------------------------------------------=
     // MARK: Precision, Bounds
     //=------------------------------------------------------------------------=
-
+    
     public static let precision: Count = precision(5)
     public static let bounds: ClosedRange<Self> = bounds()
 }
 
 //*============================================================================*
-// MARK: * UInt32
+// MARK: * Int32
 //*============================================================================*
 
-extension UInt32: UnsignedIntegerValue {
+extension Int32: IntegerValue {
     
     //=------------------------------------------------------------------------=
     // MARK: Precision, Bounds
     //=------------------------------------------------------------------------=
-
+    
     public static let precision: Count = precision(10)
     public static let bounds: ClosedRange<Self> = bounds()
 }
 
 //*============================================================================*
-// MARK: * UInt64
+// MARK: * Int64
 //*============================================================================*
 
-extension UInt64: UnsignedIntegerValue {
-    typealias Limitation = Int64
+extension Int64: IntegerValue {
     
     //=------------------------------------------------------------------------=
     // MARK: Precision, Bounds
     //=------------------------------------------------------------------------=
-
-    public static let precision: Count = Limitation.precision
-    public static let bounds: ClosedRange<Self> = 0...Self(Limitation.bounds.upperBound)
+    
+    public static let precision: Count = precision(19)
+    public static let bounds: ClosedRange<Self> = bounds()
 }

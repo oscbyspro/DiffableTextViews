@@ -10,7 +10,7 @@
 //*============================================================================*
 
 /// A system representation of a fraction separator.
-@usableFromInline enum Separator: UInt8, Component {
+@usableFromInline enum Separator: UInt8, Unit {
     
     //=------------------------------------------------------------------------=
     // MARK: Instances

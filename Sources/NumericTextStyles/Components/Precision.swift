@@ -12,7 +12,7 @@ import Foundation
 // MARK: * Precision
 //*============================================================================*
 
-public struct Precision<Format: NumericTextStyles.Format> where Format.FormatInput: Precise {
+public struct Precision<Format: NumericTextStyles.Format> {
     public typealias Value = Format.FormatInput
     @usableFromInline typealias Namespace = _Precision
     @usableFromInline typealias Style = _Precision.Style
@@ -34,11 +34,6 @@ public struct Precision<Format: NumericTextStyles.Format> where Format.FormatInp
         self.style = style
         self.lower = lower
         self.upper = upper
-        //=--------------------------------------=
-        // MARK: Conform To Format
-        //=--------------------------------------=
-        Format.process(precision: &self.lower)
-        Format.process(precision: &self.upper)
     }
     
     //=------------------------------------------------------------------------=
@@ -58,8 +53,8 @@ public struct Precision<Format: NumericTextStyles.Format> where Format.FormatInp
     
     @inlinable func separate() -> Configuration {
         .integerAndFractionLength(
-         integerLimits: lower .integer ... lower .integer,
-        fractionLimits: upper.fraction ... upper.fraction)
+         integerLimits: lower .integer ... upper .integer,
+        fractionLimits: lower.fraction ... upper.fraction)
     }
     
     //=------------------------------------------------------------------------=
@@ -128,7 +123,7 @@ extension Precision {
     //=------------------------------------------------------------------------=
     
     @inlinable static func limits(_ component: (Count) -> Int) -> ClosedRange<Int> {
-        component(Namespace.min)...component(Value.precision)
+        component(Namespace.min)...component(Format.precision)
     }
 }
 

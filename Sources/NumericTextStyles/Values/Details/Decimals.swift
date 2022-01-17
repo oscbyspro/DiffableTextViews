@@ -1,5 +1,5 @@
 //
-//  Value+Decimals.swift
+//  Decimals.swift
 //
 //
 //  Created by Oscar Byström Ericsson on 2021-10-18.

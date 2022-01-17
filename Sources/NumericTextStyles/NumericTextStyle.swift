@@ -12,8 +12,7 @@ import Foundation
 // MARK: * NumericTextStyle
 //*============================================================================*
 
-public struct NumericTextStyle<Format: NumericTextStyles.Format>: DiffableTextStyle
-    where Format.FormatInput: Value, Format.FormatOutput == String {
+public struct NumericTextStyle<Format: NumericTextStyles.Format>: DiffableTextStyle {
     public typealias Value = Format.FormatInput
     public typealias Bounds = NumericTextStyles.Bounds<Value>
     public typealias Precision = NumericTextStyles.Precision<Format>
