@@ -160,9 +160,9 @@ extension Precision {
     
     @inlinable public static func digits<R: RangeExpression>(_ value: R) -> Self where R.Bound == Int {
         //=--------------------------------------=
-        // MARK: Interpret
+        // MARK: Value
         //=--------------------------------------=
-        let value = Namespace.limits(value, in: limits(\.value))
+        let value = Namespace.interpret(value, in: limits(\.value))
         //=--------------------------------------=
         // MARK: Limits
         //=--------------------------------------=
@@ -223,10 +223,10 @@ extension Precision where Value: PreciseFloatingPoint {
     
     @inlinable public static func digits<R0: RangeExpression, R1: RangeExpression>(integer: R0, fraction: R1) -> Self where R0.Bound == Int, R1.Bound == Int {
         //=--------------------------------------=
-        // MARK: Interpret
+        // MARK: Integer, Fraction
         //=--------------------------------------=
-        let integer  = Namespace.limits(integer,  in: limits( \.integer))
-        let fraction = Namespace.limits(fraction, in: limits(\.fraction))
+        let integer  = Namespace.interpret(integer,  in: limits( \.integer))
+        let fraction = Namespace.interpret(fraction, in: limits(\.fraction))
         //=--------------------------------------=
         // MARK: Limits
         //=--------------------------------------=
@@ -255,7 +255,7 @@ extension Precision where Value: PreciseFloatingPoint {
     // MARK: Utilities
     //=------------------------------------------------------------------------=
     
-    @inlinable static func limits<R: RangeExpression>(_ expression: R, in limits: ClosedRange<Int>) -> ClosedRange<Int> where R.Bound == Int {
+    @inlinable static func interpret<R: RangeExpression>(_ expression: R, in limits: ClosedRange<Int>) -> ClosedRange<Int> where R.Bound == Int {
         let range: Range<Int> = expression.relative(to: limits.lowerBound ..< limits.upperBound + 1)
         return Swift.max(limits.lowerBound, range.lowerBound) ... Swift.min(range.upperBound - 1, limits.upperBound)
     }
