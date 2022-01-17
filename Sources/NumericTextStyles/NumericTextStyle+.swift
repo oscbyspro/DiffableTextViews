@@ -71,7 +71,7 @@ extension NumericTextStyle {
         //=--------------------------------------=
         // MARK: Number
         //=--------------------------------------=
-        var number = try Number(proposal, in: region, as: Value.self)
+        var number = try region.parse(proposal, as: Value.self)
         reader.process?(&number)
         try bounds.validate(sign: number.sign)
         //=--------------------------------------=
@@ -85,7 +85,7 @@ extension NumericTextStyle {
         //=--------------------------------------=
         // MARK: Corrected, Value
         //=--------------------------------------=
-        let corrected = region.characters(in: number)
+        let corrected = region.characters(number)
         let value = try parser.parse(corrected)
         try bounds.validate(value: value)
         //=--------------------------------------=

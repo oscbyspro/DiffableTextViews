@@ -68,6 +68,8 @@ import DiffableTextViews
     }
 }
 
+#warning("Move this to region.")
+
 //=----------------------------------------------------------------------------=
 // MARK: Number - Parse
 //=----------------------------------------------------------------------------=
@@ -82,7 +84,11 @@ extension Number {
     ///
     /// To use this method, all formatting characters must be marked as formatting.
     ///
-    @inlinable init<Value: NumericTextStyles.Value>(_ snapshot: Snapshot, in region: Region, as value: Value.Type) throws {
+    @inlinable init(
+        snapshot: Snapshot, integer: Bool, unsigned: Bool,
+        signs: [Character: Sign], digits: [Character: Digit], separators: [Character: Separator]
+    ) throws {
+        #warning("Make nonformatting shorter to use, maybe.")
         guard let start = snapshot.firstIndex(where: { !$0.attribute.contains(.formatting) }) else { self = .zero; return }
         
         //=--------------------------------------=
@@ -111,7 +117,7 @@ extension Number {
             // MARK: Sign
             //=----------------------------------=
 
-            if index != snapshot.endIndex, !Value.isUnsigned, let sign = region.signs[element.character] {
+            if index != snapshot.endIndex, !unsigned, let sign = signs[element.character] {
                 self.sign = sign
                 next()
             }
@@ -120,7 +126,7 @@ extension Number {
             // MARK: Digits
             //=----------------------------------=
 
-            while index != snapshot.endIndex, let digit = region.digits[element.character] {
+            while index != snapshot.endIndex, let digit = digits[element.character] {
                 self.integer.append(digit)
                 next()
             }
@@ -128,13 +134,13 @@ extension Number {
             self.integer.removeZerosPrefix()
             self.integer.makeItAtLeastZero()
             
-            guard !Value.isInteger else { break attempt }
+            guard !integer else { break attempt }
             
             //=----------------------------------=
             // MARK: Separator
             //=----------------------------------=
 
-            if index != snapshot.endIndex, let _ = region.separators[element.character] {
+            if index != snapshot.endIndex, let _ = separators[element.character] {
                 self.separator = .fraction
                 next()
             }
@@ -145,11 +151,10 @@ extension Number {
             // MARK: Fraction
             //=----------------------------------=
             
-            while index != snapshot.endIndex, let digit = region.digits[element.character] {
+            while index != snapshot.endIndex, let digit = digits[element.character] {
                 self.fraction.append(digit)
                 next()
             }
-            
         }
         
         //=--------------------------------------=

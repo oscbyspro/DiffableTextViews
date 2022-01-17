@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import DiffableTextViews
 
 //*============================================================================*
 // MARK: * Region
@@ -84,14 +85,14 @@ import Foundation
     // MARK: * Lexicon
     //*========================================================================*
     
-    @usableFromInline struct Lexicon<Value: Hashable> {
+    @usableFromInline struct Lexicon<Component: Hashable> {
         
         //=--------------------------------------------------------------------=
         // MARK: Properties
         //=--------------------------------------------------------------------=
         
-        @usableFromInline var values:     [Character: Value] = [:]
-        @usableFromInline var characters: [Value: Character] = [:]
+        @usableFromInline var components: [Character: Component] = [:]
+        @usableFromInline var characters: [Component: Character] = [:]
         
         //=--------------------------------------------------------------------=
         // MARK: Initializers
@@ -103,28 +104,28 @@ import Foundation
         // MARK: Subscripts
         //=--------------------------------------------------------------------=
         
-        @inlinable subscript(character: Character) -> Value? {
-            _read   { yield  values[character] }
-            _modify { yield &values[character] }
+        @inlinable subscript(character: Character) -> Component? {
+            _read   { yield  components[character] }
+            _modify { yield &components[character] }
         }
         
-        @inlinable subscript(value: Value) -> Character? {
-            _read   { yield  characters[value] }
-            _modify { yield &characters[value] }
+        @inlinable subscript(component: Component) -> Character? {
+            _read   { yield  characters[component] }
+            _modify { yield &characters[component] }
         }
         
         //=--------------------------------------------------------------------=
         // MARK: Transformations
         //=--------------------------------------------------------------------=
 
-        @inlinable mutating func link(_ character: Character, _ value: Value) {
-            values[character] = value
-            characters[value] = character
+        @inlinable mutating func link(_ character: Character, _ component: Component) {
+            components[character] = component
+            characters[component] = character
         }
         
-        @inlinable mutating func link(_ value: Value, _ character: Character) {
-            values[character] = value
-            characters[value] = character
+        @inlinable mutating func link(_ component: Component, _ character: Character) {
+            components[character] = component
+            characters[component] = character
         }
     }
 }
@@ -139,7 +140,7 @@ extension Region {
     // MARK: Number To Characters
     //=------------------------------------------------------------------------=
     
-    @inlinable func characters(in number: Number) -> String {
+    @inlinable func characters(_ number: Number) -> String {
         var characters = String()
         //=--------------------------------------=
         // MARK: Sign
@@ -167,5 +168,14 @@ extension Region {
         // MARK: Done
         //=--------------------------------------=
         return characters
+    }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Components To Number
+    //=------------------------------------------------------------------------=
+    
+    @inlinable func parse<T: Value>(_ snapshot: Snapshot, as value: T.Type) throws -> Number {
+        try Number(snapshot: snapshot, integer: T.isInteger, unsigned: T.isUnsigned,
+        signs: signs.components, digits: digits.components, separators: separators.components)
     }
 }
