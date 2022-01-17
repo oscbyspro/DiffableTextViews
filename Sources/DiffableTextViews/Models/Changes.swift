@@ -19,6 +19,10 @@ Next: BidirectionalCollection, Next.Element == Symbol {
     // MARK: Start
     //=------------------------------------------------------------------------=
     
+    /// Start of changes.
+    ///
+    /// Returns each caret position before the first irreconcilable mismatch.
+    ///
     @inlinable static func start(past: Past, next: Next) -> Indices {
         //=--------------------------------------=
         // MARK: Indices
@@ -41,9 +45,9 @@ Next: BidirectionalCollection, Next.Element == Symbol {
             if pastElement.character == nextElement.character {
                 past.formIndex(after: &pastIndex)
                 next.formIndex(after: &nextIndex)
-            } else if pastElement.attribute.contains( .removable) {
+            } else if pastElement.contains( .removable) {
                 past.formIndex(after: &pastIndex)
-            } else if nextElement.attribute.contains(.insertable) {
+            } else if nextElement.contains(.insertable) {
                 next.formIndex(after: &nextIndex)
             } else {
                 break

@@ -52,11 +52,11 @@ public struct Symbol: Equatable {
     // MARK: Initializers - Static
     //=------------------------------------------------------------------------=
     
-    @inlinable public func content(_ character: Character) -> Self {
+    @inlinable @inline(__always) public func content(_ character: Character) -> Self {
         Self(character, as: .content)
     }
     
-    @inlinable public func phantom(_ character: Character) -> Self {
+    @inlinable @inline(__always) public func phantom(_ character: Character) -> Self {
         Self(character, as: .phantom)
     }
     
@@ -64,11 +64,11 @@ public struct Symbol: Equatable {
     // MARK: Accessors
     //=------------------------------------------------------------------------=
     
-    @inlinable public func contains(_ character: Character) -> Bool {
+    @inlinable @inline(__always) public func contains(_ character: Character) -> Bool {
         self.character == character
     }
 
-    @inlinable public func contains(_ attribute: Attribute) -> Bool {
+    @inlinable @inline(__always) public func contains(_ attribute: Attribute) -> Bool {
         self.attribute.contains(attribute)
     }
 }
