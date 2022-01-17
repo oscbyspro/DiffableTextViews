@@ -79,7 +79,7 @@ extension NumericTextStyle {
         //=--------------------------------------=
         // MARK: Number
         //=--------------------------------------=
-        var number = try region.parse(proposal, as: Value.self)
+        var number = try region.number(in: proposal, as: Value.self)
         reader.process?(&number)
         try bounds.validate(sign: number.sign)
         //=--------------------------------------=
@@ -93,7 +93,7 @@ extension NumericTextStyle {
         //=--------------------------------------=
         // MARK: Value
         //=--------------------------------------=
-        let value = try parser.parse(region.characters(number))
+        let value = try parser.parse(region.characters(in: number))
         try bounds.validate(value: value)
         //=--------------------------------------=
         // MARK: Characters
@@ -103,6 +103,7 @@ extension NumericTextStyle {
         //=--------------------------------------=
         // MARK: Continue
         //=--------------------------------------=
+        #warning("Return value, also.")
         return self.snapshot(characters: characters)
     }
 }

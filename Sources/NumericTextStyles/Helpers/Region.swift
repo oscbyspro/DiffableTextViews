@@ -140,7 +140,7 @@ extension Region {
     // MARK: Number To Characters
     //=------------------------------------------------------------------------=
     
-    @inlinable func characters(_ number: Number) -> String {
+    @inlinable func characters(in number: Number) -> String {
         var characters = String()
         //=--------------------------------------=
         // MARK: Sign
@@ -174,7 +174,7 @@ extension Region {
     // MARK: Components To Number
     //=------------------------------------------------------------------------=
     
-    @inlinable func parse<T: Value>(_ snapshot: Snapshot, as value: T.Type) throws -> Number {
+    @inlinable func number<T: Value>(in snapshot: Snapshot, as value: T.Type) throws -> Number {
         try Number(snapshot: snapshot, integer: T.isInteger, unsigned: T.isUnsigned,
         signs: signs.components, digits: digits.components, separators: separators.components)
     }
