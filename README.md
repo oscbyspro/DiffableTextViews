@@ -9,7 +9,7 @@ A framework for as-you-type formatting of text bound to its appropriate data typ
 | :keyboard: | As-you-type. | Formats and parses text in real time. |
 | :hammer_and_wrench: | Versatile. | Uses snapshots and attributes. |
 | :running_man: | Fast. | Uses an O(n) differentiation algorithm. |
-| :magic_wand: | Automagical. | Binds text to its approptiate data type. |
+| :magic_wand: | Automagical. | Binds text to its appropriate data type. |
 
 # Progress
 
@@ -36,7 +36,7 @@ A framework for as-you-type formatting of text bound to its appropriate data typ
 ### Customization
 
 ```swift
-extension NumericTextStyle: UIKitTextStyle {    
+extension NumericTextStyle: UIKitDiffableTextStyle {    
     static func setup(diffableTextField: ProxyTextField) {
         diffableTextField.keyboard(Value.isInteger ? .numberPad : .decimalPad)
     }
