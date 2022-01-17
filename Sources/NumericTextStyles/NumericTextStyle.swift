@@ -50,10 +50,9 @@ public struct NumericTextStyle<Format: NumericTextStyles.Format>: DiffableTextSt
     //=------------------------------------------------------------------------=
     
     @inlinable public mutating func update(locale: Locale) {
-        if locale.identifier != region.identifier {
-            self.format = format.locale(locale)
-            self.region = Region.cached(locale)
-        }
+        guard locale.identifier != region.identifier else { return }
+        self.format = format.locale(locale)
+        self.region = Region.cached(locale)
     }
     
     //=------------------------------------------------------------------------=
