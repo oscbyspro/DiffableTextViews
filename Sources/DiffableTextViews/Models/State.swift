@@ -66,29 +66,18 @@ extension State {
     //=------------------------------------------------------------------------=
     
     @inlinable mutating func update(snapshot: Snapshot) {
-        //=--------------------------------------=
-        // MARK: Layout
-        //=--------------------------------------=
         let layout = Layout(snapshot)
-        //=--------------------------------------=
-        // MARK: Selection - Upper
-        //=--------------------------------------=
-        let upperBound = Changes.end(
-            past: self.layout[self.selection.upperBound...],
-            next: layout).next
-        //=--------------------------------------=
-        // MARK: Selection - Lower
-        //=--------------------------------------=
-        var lowerBound = upperBound
-        if !self.selection.isEmpty {
-            lowerBound = Changes.start(
-                past: self.layout[...self.selection.lowerBound],
-                next: layout).next
-            lowerBound = min(lowerBound, upperBound)
-        }
         //=--------------------------------------=
         // MARK: Selection
         //=--------------------------------------=
+        let upperBound = Changes  .end(past: self.layout[self.selection.upperBound...], next: layout).next
+        var lowerBound = upperBound
+        
+        if !self.selection.isEmpty {
+            lowerBound = Changes.start(past: self.layout[..<self.selection.lowerBound], next: layout).next
+            lowerBound = min(lowerBound, upperBound)
+        }
+
         let selection = lowerBound ..< upperBound
         //=--------------------------------------=
         // MARK: Update
@@ -150,18 +139,53 @@ extension State {
         //=--------------------------------------=
         // MARK: Upper Bound, Single
         //=--------------------------------------=
-        let upperBound = layout.caret(start: selection.upperBound, preference: .backwards, intent: intent.upper)
+        let upperBound = layout.position(start: selection.upperBound, preference: .backwards, intent: intent.upper)
         var lowerBound = upperBound
         //=--------------------------------------=
         // MARK: Lower Bound, Double
         //=--------------------------------------=
         if !selection.isEmpty, upperBound != layout.startIndex {
-            lowerBound = layout.caret(start: selection.lowerBound, preference:  .forwards, intent: intent.lower)
+            lowerBound = layout.position(start: selection.lowerBound, preference:  .forwards, intent: intent.lower)
             lowerBound = min(lowerBound, upperBound)
         }
         //=--------------------------------------=
         // MARK: Update
         //=--------------------------------------=
         self.selection = lowerBound ..< upperBound
+    }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Position
+    //=------------------------------------------------------------------------=
+    
+    @inlinable func position(start: Layout.Index, preference: Direction, intent: Direction?) -> Layout.Index {
+        //=--------------------------------------=
+        // MARK: Validate
+        //=--------------------------------------=
+        if validate(position: start, preference: preference) { return start }
+        //=--------------------------------------=
+        // MARK: Direction
+        //=--------------------------------------=
+        let direction = intent ?? preference
+        //=--------------------------------------=
+        // MARK: Try
+        //=--------------------------------------=
+        if let caret = layout.firstIndex(start: start, direction: direction, skip: direction != preference) { return caret }
+        //=--------------------------------------=
+        // MARK: Try In Reverse Direction
+        //=--------------------------------------=
+        if let caret = layout.firstIndex(start: start, direction: direction.reversed(), skip: false) { return caret }
+        //=--------------------------------------=
+        // MARK: Default
+        //=--------------------------------------=
+        return layout.startIndex
+    }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Validate
+    //=------------------------------------------------------------------------=
+    
+    @inlinable func validate(position: Layout.Index, preference: Direction) -> Bool {
+        layout.look(position, direction: preference).map(layout.nonpassthrough) ?? false
     }
 }

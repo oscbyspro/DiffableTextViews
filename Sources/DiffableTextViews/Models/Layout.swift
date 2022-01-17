@@ -57,18 +57,6 @@
     @inlinable subscript(position: Index) -> Symbol {
         snapshot[position.snapshot]
     }
-    
-    //=----------------------------------------------------------------------------=
-    // MARK: Look
-    //=----------------------------------------------------------------------------=
-    
-    @inlinable func lookahead(_ position: Index) -> Index? {
-        position != endIndex ? position : nil
-    }
-    
-    @inlinable func lookbehind(_ position: Index) -> Index? {
-        position != startIndex ? index(before: position) : nil
-    }
 
     //*========================================================================*
     // MARK: * Index
@@ -114,6 +102,40 @@
 
         @inlinable static func  < (lhs: Self, rhs: Self) -> Bool {
             lhs.position  < rhs.position
+        }
+    }
+}
+
+//=----------------------------------------------------------------------------=
+// MARK: Layout - Look
+//=----------------------------------------------------------------------------=
+
+extension Layout {
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Ahead
+    //=------------------------------------------------------------------------=
+    
+    @inlinable func lookahead(_ position: Index) -> Index? {
+        position != endIndex ? position : nil
+    }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Behind
+    //=------------------------------------------------------------------------=
+    
+    @inlinable func lookbehind(_ position: Index) -> Index? {
+        position != startIndex ? index(before: position) : nil
+    }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Ahead/Behind
+    //=------------------------------------------------------------------------=
+    
+    @inlinable func look(_ position: Index, direction: Direction) -> Index? {
+        switch direction {
+        case  .forwards: return  lookahead(position)
+        case .backwards: return lookbehind(position)
         }
     }
 }
@@ -307,11 +329,11 @@ extension Layout {
     // MARK: Caret -
     //=------------------------------------------------------------------------=
         
-    @inlinable func caret(start: Index, preference: Direction, intent: Direction?) -> Index {
+    @inlinable func position(start: Index, preference: Direction, intent: Direction?) -> Index {
         //=--------------------------------------=
         // MARK: Validate
         //=--------------------------------------=
-        if validate(caret: start, preference: preference) { return start }
+        if validate(position: start, preference: preference) { return start }
         //=--------------------------------------=
         // MARK: Direction
         //=--------------------------------------=
@@ -334,10 +356,10 @@ extension Layout {
     // MARK: Caret - Validation
     //=------------------------------------------------------------------------=
     
-    @inlinable func validate(caret: Index, preference: Direction) -> Bool {
+    @inlinable func validate(position: Index, preference: Direction) -> Bool {
         switch preference {
-        case  .forwards: return  lookahead(caret).map(nonpassthrough) ?? false
-        case .backwards: return lookbehind(caret).map(nonpassthrough) ?? false
+        case  .forwards: return  lookahead(position).map(nonpassthrough) ?? false
+        case .backwards: return lookbehind(position).map(nonpassthrough) ?? false
         }
     }
 }
