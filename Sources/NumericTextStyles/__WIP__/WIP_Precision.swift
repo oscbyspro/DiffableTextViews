@@ -23,13 +23,19 @@ public struct WIP_Precision<Value: Precise> {
     // MARK: Properties
     //=------------------------------------------------------------------------=
     
-    @usableFromInline let min: Count
-    @usableFromInline let max: Count
     @usableFromInline let kind: Kind
+    @usableFromInline var min: Count
+    @usableFromInline var max: Count
     
     //=------------------------------------------------------------------------=
     // MARK: Initializers
     //=------------------------------------------------------------------------=
+    
+    @inlinable init(kind: Kind, min: Count, max: Count) {
+        self.kind = kind
+        self.min  = min
+        self.max  = max
+    }
     
     //=------------------------------------------------------------------------=
     // MARK: Showcase
@@ -85,12 +91,40 @@ public struct WIP_Precision<Value: Precise> {
         
         return Count(value: value, integer: integer, fraction: fraction)
     }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Format
+    //=------------------------------------------------------------------------=
+    
+    @inlinable mutating func adapt<F: Format>(to format: F) {
+        format.process(count: &min)
+        format.process(count: &max)
+    }
+}
+
+//=----------------------------------------------------------------------------=
+// MARK: Precision - Initializers - Value
+//=----------------------------------------------------------------------------=
+
+#warning("WIP")
+extension WIP_Precision {
+    
+}
+
+//=----------------------------------------------------------------------------=
+// MARK: Precision - Initializers - Lengths
+//=----------------------------------------------------------------------------=
+
+#warning("WIP")
+extension WIP_Precision where Value: PreciseFloatingPoint {
+    
 }
 
 //*============================================================================*
 // MARK: * Precision x Namespace
 //*============================================================================*
 
+#warning("Clean this up.")
 @usableFromInline enum _WIP_Precision {
     
     //=------------------------------------------------------------------------=
