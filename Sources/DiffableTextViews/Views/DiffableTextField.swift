@@ -173,21 +173,21 @@ public struct DiffableTextField<Style: DiffableTextStyle & UIKitTextStyle>: UIVi
                 let range = selection.lowerBound.snapshot ..< selection.upperBound.snapshot
                 let input = Input(content: content, range: range)
                 //=------------------------------=
-                // MARK: Snapshot
+                // MARK: Output
                 //=------------------------------=
-                var snapshot = try upstream.style.merge(snapshot: cache.snapshot, with: input)
-                upstream.style.process(snapshot: &snapshot)
+                var output = try upstream.style.merge(snapshot: cache.snapshot, with: input)
+                upstream.style.process(snapshot: &output.snapshot)
                 //=------------------------------=
                 // MARK: Value
                 //=------------------------------=
-                var value = try upstream.style.parse(snapshot: snapshot)
+                var value = try output.value ?? upstream.style.parse(snapshot: output.snapshot)
                 upstream.style.process(value: &value)
                 //=------------------------------=
                 // MARK: State
                 //=------------------------------=
                 var state = cache.state
                 state.selection = selection.upperBound ..< selection.upperBound
-                state.update(snapshot: snapshot)
+                state.update(snapshot: output.snapshot)
                 //=------------------------------=
                 // MARK: Push
                 //=------------------------------=

@@ -10,7 +10,8 @@
 //*============================================================================*
 
 public protocol DiffableTextStyle {
-    
+    typealias Output = DiffableTextViews.Output<Value>
+
     //=------------------------------------------------------------------------=
     // MARK: Value
     //=------------------------------------------------------------------------=
@@ -31,9 +32,8 @@ public protocol DiffableTextStyle {
     // MARK: Merge
     //=------------------------------------------------------------------------=
     
-    #warning("Maybe add an option to return a value if it is parsed regardless.")
     /// Merges the current snapshot with the input proposed by the user,
-    @inlinable func merge(snapshot: Snapshot, with input: Input) throws -> Snapshot
+    @inlinable func merge(snapshot: Snapshot, with input: Input) throws -> Output
         
     //=------------------------------------------------------------------------=
     // MARK: Parse
@@ -58,7 +58,7 @@ public protocol DiffableTextStyle {
 //=----------------------------------------------------------------------------=
 
 public extension DiffableTextStyle {
-    
+
     //=------------------------------------------------------------------------=
     // MARK: Snapshot
     //=------------------------------------------------------------------------=
@@ -71,10 +71,10 @@ public extension DiffableTextStyle {
     // MARK: Merge
     //=------------------------------------------------------------------------=
     
-    @inlinable func merge(snapshot: Snapshot, with input: Input) throws -> Snapshot {
-        var proposal = snapshot
-        proposal.replaceSubrange(input.range, with: input.content)
-        return proposal
+    @inlinable func merge(snapshot: Snapshot, with input: Input) throws -> Output {
+        var result = snapshot
+        result.replaceSubrange(input.range, with: input.content)
+        return Output(result)
     }
     
     //=------------------------------------------------------------------------=

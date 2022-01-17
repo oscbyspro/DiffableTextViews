@@ -85,7 +85,7 @@ extension PatternTextStyle {
     // MARK: Input
     //=------------------------------------------------------------------------=
     
-    @inlinable public func merge(snapshot: Snapshot, with input: Input) throws -> Snapshot {
+    @inlinable public func merge(snapshot: Snapshot, with input: Input) throws -> Output<Value> {
         //=--------------------------------------=
         // MARK: Proposal
         //=--------------------------------------=
@@ -94,7 +94,7 @@ extension PatternTextStyle {
         //=--------------------------------------=
         // MARK: Value, Continue
         //=--------------------------------------=
-        return try self.snapshot(editable: parse(snapshot: proposal))
+        return try Output(self.snapshot(editable: parse(snapshot: proposal)))
     }
 }
 

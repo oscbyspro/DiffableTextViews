@@ -67,7 +67,7 @@ extension NumericTextStyle {
     // MARK: Input
     //=------------------------------------------------------------------------=
     
-    @inlinable public func merge(snapshot: Snapshot, with input: Input) throws -> Snapshot {
+    @inlinable public func merge(snapshot: Snapshot, with input: Input) throws -> Output<Value> {
         //=--------------------------------------=
         // MARK: Reader, Proposal
         //=--------------------------------------=
@@ -103,8 +103,7 @@ extension NumericTextStyle {
         //=--------------------------------------=
         // MARK: Continue
         //=--------------------------------------=
-        #warning("Return value, also.")
-        return self.snapshot(characters: characters)
+        return Output(self.snapshot(characters: characters), value: value)
     }
 }
 
