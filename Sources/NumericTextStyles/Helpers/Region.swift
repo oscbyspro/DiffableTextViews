@@ -18,19 +18,10 @@ import Foundation
     // MARK: Properties
     //=------------------------------------------------------------------------=
     
-    @usableFromInline let formatter: NumberFormatter
     @usableFromInline private(set) var signs = Lexicon<Sign>()
     @usableFromInline private(set) var digits = Lexicon<Digit>()
     @usableFromInline private(set) var separators = Lexicon<Separator>()
 
-    //=------------------------------------------------------------------------=
-    // MARK: Accessors
-    //=------------------------------------------------------------------------=
-    
-    @inlinable var locale: Locale {
-        formatter.locale
-    }
-    
     //=------------------------------------------------------------------------=
     // MARK: Initializers
     //=------------------------------------------------------------------------=
@@ -39,7 +30,7 @@ import Foundation
         //=--------------------------------------=
         // MARK: Formatter
         //=--------------------------------------=
-        self.formatter = NumberFormatter()
+        let formatter = NumberFormatter()
         formatter.locale = locale
         formatter.numberStyle = .decimal
         //=--------------------------------------=
@@ -72,49 +63,21 @@ import Foundation
     // MARK: Initializers - Static
     //=------------------------------------------------------------------------=
     
-    @inlinable static func reusable(_ locale: Locale) -> Region {
+    @inlinable static func recycle(_ locale: Locale) -> Region {
         let key = NSString(string: locale.identifier)
+        //=--------------------------------------=
+        // MARK: Search In Cache
+        //=--------------------------------------=
         if let reusable = cache.object(forKey: key) {
             return reusable
+        //=--------------------------------------=
+        // MARK: Create A New Instance
+        //=--------------------------------------=
         } else {
             let instance = Region(locale)
-            cache.setObject(instance,  forKey: key)
+            cache.setObject(instance, forKey: key)
             return instance
         }
-    }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Number To Characters
-    //=------------------------------------------------------------------------=
-    
-    @inlinable func characters(in number: Number) -> String {
-        var characters = String()
-        //=--------------------------------------=
-        // MARK: Sign
-        //=--------------------------------------=
-        signs[number.sign]!.write(to: &characters)
-        //=--------------------------------------=
-        // MARK: Integer Digits
-        //=--------------------------------------=
-        for digit in number.integer.digits {
-            digits[digit]!.write(to: &characters)
-        }
-        //=--------------------------------------=
-        // MARK: Fraction Separator
-        //=--------------------------------------=
-        if let separator = number.separator {
-            separators[separator]!.write(to: &characters)
-            //=----------------------------------=
-            // MARK: Fraction Digits
-            //=----------------------------------=
-            for digit in number.fraction.digits {
-                digits[digit]!.write(to: &characters)
-            }
-        }
-        //=--------------------------------------=
-        // MARK: Done
-        //=--------------------------------------=
-        return characters
     }
     
     //*========================================================================*
@@ -163,5 +126,46 @@ import Foundation
             values[character] = value
             characters[value] = character
         }
+    }
+}
+
+//=----------------------------------------------------------------------------=
+// MARK: Region - Number
+//=----------------------------------------------------------------------------=
+
+extension Region {
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Number To Characters
+    //=------------------------------------------------------------------------=
+    
+    @inlinable func characters(in number: Number) -> String {
+        var characters = String()
+        //=--------------------------------------=
+        // MARK: Sign
+        //=--------------------------------------=
+        signs[number.sign]!.write(to: &characters)
+        //=--------------------------------------=
+        // MARK: Integer Digits
+        //=--------------------------------------=
+        for digit in number.integer.digits {
+            digits[digit]!.write(to: &characters)
+        }
+        //=--------------------------------------=
+        // MARK: Fraction Separator
+        //=--------------------------------------=
+        if let separator = number.separator {
+            separators[separator]!.write(to: &characters)
+            //=----------------------------------=
+            // MARK: Fraction Digits
+            //=----------------------------------=
+            for digit in number.fraction.digits {
+                digits[digit]!.write(to: &characters)
+            }
+        }
+        //=--------------------------------------=
+        // MARK: Done
+        //=--------------------------------------=
+        return characters
     }
 }

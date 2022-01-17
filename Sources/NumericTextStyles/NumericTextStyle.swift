@@ -34,7 +34,7 @@ public struct NumericTextStyle<Format: NumericTextStyles.Format>: DiffableTextSt
     
     @inlinable public init(format: Format, locale: Locale = .autoupdatingCurrent) {
         self.format = format
-        self.region = .reusable(locale)
+        self.region = .recycle(locale)
         self.bounds = .standard
         self.precision = .standard
     }
@@ -54,7 +54,7 @@ public struct NumericTextStyle<Format: NumericTextStyles.Format>: DiffableTextSt
     @inlinable public func locale(_ locale: Locale) -> Self {
         var result = self
         result.format = format.locale(locale)
-        result.region = Region.reusable(locale)
+        result.region = Region.recycle(locale)
         return result
     }
     
