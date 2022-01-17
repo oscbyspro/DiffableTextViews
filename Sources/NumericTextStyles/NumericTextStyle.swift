@@ -15,7 +15,6 @@ import Foundation
 public struct NumericTextStyle<Format: NumericTextStyles.Format>: DiffableTextStyle
     where Format.FormatInput: Value, Format.FormatOutput == String {
     public typealias Value = Format.FormatInput
-    public typealias Parser = Format.Strategy
     public typealias Bounds = NumericTextStyles.Bounds<Value>
     public typealias Precision = NumericTextStyles.Precision<Value>
 
@@ -34,7 +33,7 @@ public struct NumericTextStyle<Format: NumericTextStyles.Format>: DiffableTextSt
     
     @inlinable public init(format: Format, locale: Locale = .autoupdatingCurrent) {
         self.format = format
-        self.region = .recycle(locale)
+        self.region = .cached(locale)
         self.bounds = .standard
         self.precision = .standard
     }
@@ -54,7 +53,7 @@ public struct NumericTextStyle<Format: NumericTextStyles.Format>: DiffableTextSt
     @inlinable public func locale(_ locale: Locale) -> Self {
         var result = self
         result.format = format.locale(locale)
-        result.region = Region.recycle(locale)
+        result.region = Region.cached(locale)
         return result
     }
     
@@ -83,7 +82,7 @@ public struct NumericTextStyle<Format: NumericTextStyles.Format>: DiffableTextSt
     }
     
     @inlinable func editableStyle(number: Number) -> Format {
-        let precision: Format.PrecisionStyle = precision.editableStyleThatUses(number: number)
+        let precision: Format.PrecisionStyle = precision.editableStyle(number: number)
         let separator: Format.SeparatorStyle = number.separator == .fraction ? .always : .automatic
         let sign: Sign.Style = number.sign == .negative ? .always : .automatic
         return style(precision: precision, separator: separator, sign: sign)
@@ -107,7 +106,7 @@ public struct NumericTextStyle<Format: NumericTextStyles.Format>: DiffableTextSt
     @inlinable func autocorrectSign(in characters: inout String, with value: Value, and sign: Sign) {
         guard sign == .negative && value == .zero else { return }
         guard let position = characters.firstIndex(where: region.signs.components.keys.contains) else { return }
-        guard let sign = region.signs[sign] else { return }
-        characters.replaceSubrange(position...position, with: String(sign))
+        guard let replacement = region.signs[sign] else { return }
+        characters.replaceSubrange(position...position, with: String(replacement))
     }
 }

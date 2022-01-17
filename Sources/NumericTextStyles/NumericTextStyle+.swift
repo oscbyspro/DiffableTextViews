@@ -81,7 +81,6 @@ extension NumericTextStyle {
         //=--------------------------------------=
         var number = try region.parse(proposal, as: Value.self)
         reader.process?(&number)
-        #warning("Is this validation needed?")
         try bounds.validate(sign: number.sign)
         //=--------------------------------------=
         // MARK: Count, Capacity

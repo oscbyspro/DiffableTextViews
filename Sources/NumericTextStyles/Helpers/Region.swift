@@ -64,7 +64,7 @@ import DiffableTextViews
     // MARK: Initializers - Static
     //=------------------------------------------------------------------------=
     
-    @inlinable static func recycle(_ locale: Locale) -> Region {
+    @inlinable static func cached(_ locale: Locale) -> Region {
         let key = NSString(string: locale.identifier)
         //=--------------------------------------=
         // MARK: Search In Cache
