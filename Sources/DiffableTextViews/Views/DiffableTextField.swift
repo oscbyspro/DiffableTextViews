@@ -30,7 +30,7 @@ public struct DiffableTextField<Style: UIKitDiffableTextStyle>: UIViewRepresenta
     //=------------------------------------------------------------------------=
     
     @usableFromInline let value: Binding<Value>
-    @usableFromInline var style: () -> Style
+    @usableFromInline let style: () -> Style
     
     //=------------------------------------------------------------------------=
     // MARK: Properties - Transformations
