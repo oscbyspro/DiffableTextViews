@@ -219,9 +219,9 @@ extension NumericTextStyle {
         // MARK: Style
         //=--------------------------------------=
         let style = format.style(
-            precision: precision.editableStyle(number: number),
-            separator: number.separator == .fraction ? .always : .automatic,
-            sign: number.sign == .negative ? .always : .automatic)
+        precision: precision.editableStyle(number: number),
+        separator: number.separator == .fraction ? .always : .automatic,
+        sign: number.sign == .negative ? .always : .automatic)
         //=--------------------------------------=
         // MARK: Characters
         //=--------------------------------------=
