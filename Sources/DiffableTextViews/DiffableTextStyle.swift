@@ -20,17 +20,6 @@ public protocol DiffableTextStyle {
     associatedtype Value: Equatable
     
     //=------------------------------------------------------------------------=
-    // MARK: Locale
-    //=------------------------------------------------------------------------=
-    
-    /// If the style allows selecting a locale, returns a copy of this style with the new locale set.
-    ///
-    /// - The locale is provided by the enironment.
-    /// - The default implementation returns an unmodified self.
-    ///
-    @inlinable func locale(_ locale: Locale) -> Self
-    
-    //=------------------------------------------------------------------------=
     // MARK: Process
     //=------------------------------------------------------------------------=
     
