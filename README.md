@@ -76,7 +76,7 @@ struct NumericTextStyleExample: View {
     var body: some View {
         DiffableTextField($amount) {
             .currency(code: currencyCode)
-            .bounds(.values((0 as Decimal)...(1_000_000 as Decimal)))
+            .bounds(.values((0 as Decimal)...))
             .precision(.digits(integer: 1..., fraction: 2))
         }
         .environment(\.locale, locale)
