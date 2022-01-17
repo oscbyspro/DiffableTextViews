@@ -70,37 +70,30 @@ public struct NumericTextStyle<Format: NumericTextStyles.Format>: DiffableTextSt
     }
     
     //=------------------------------------------------------------------------=
-    // MARK: Styles
+    // MARK: Formats - Showcase
     //=------------------------------------------------------------------------=
     
     @inlinable func showcaseStyle() -> Format {
-        style(precision: precision.showcaseStyle())
+        format.style(precision: precision.showcaseStyle())
     }
     
+    //=------------------------------------------------------------------------=
+    // MARK: Formats - Editable
+    //=------------------------------------------------------------------------=
+    
     @inlinable func editableStyle() -> Format {
-        style(precision: precision.editableStyle())
+        format.style(precision: precision.editableStyle())
     }
     
     @inlinable func editableStyle(number: Number) -> Format {
-        let precision: Format.PrecisionStyle = precision.editableStyle(number: number)
-        let separator: Format.SeparatorStyle = number.separator == .fraction ? .always : .automatic
+        let precision: Format.Precision = precision.editableStyle(number: number)
+        let separator: Format.Separator = number.separator == .fraction ? .always : .automatic
         let sign: Sign.Style = number.sign == .negative ? .always : .automatic
-        return style(precision: precision, separator: separator, sign: sign)
-    }
-    
-    //
-    // MARK: Styles - Helpers
-    //=------------------------------------------------------------------------=
-    
-    @inlinable func style(
-        precision: Format.PrecisionStyle,
-        separator: Format.SeparatorStyle = .automatic,
-        sign: Sign.Style = .automatic) -> Format {
-        format.precision(precision).decimalSeparator(strategy: separator).sign(style: sign)
+        return format.style(precision: precision, separator: separator, sign: sign)
     }
     
     //=------------------------------------------------------------------------=
-    // MARK: Uilities
+    // MARK: Helpers
     //=------------------------------------------------------------------------=
     
     @inlinable func autocorrectSign(in characters: inout String, with value: Value, and sign: Sign) {

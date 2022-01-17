@@ -12,20 +12,20 @@ import Foundation
 //*============================================================================*
 
 public protocol Format: ParseableFormatStyle {
-    typealias PrecisionStyle = NumberFormatStyleConfiguration.Precision
-    typealias SeparatorStyle = NumberFormatStyleConfiguration.DecimalSeparatorDisplayStrategy
+    typealias Precision = NumberFormatStyleConfiguration.Precision
+    typealias Separator = NumberFormatStyleConfiguration.DecimalSeparatorDisplayStrategy
     
     //=------------------------------------------------------------------------=
     // MARK: Precision
     //=------------------------------------------------------------------------=
     
-    @inlinable func precision(_ precision: PrecisionStyle) -> Self
+    @inlinable func precision(_ precision: Precision) -> Self
     
     //=------------------------------------------------------------------------=
     // MARK: Separator
     //=------------------------------------------------------------------------=
     
-    @inlinable func decimalSeparator(strategy: SeparatorStyle) -> Self
+    @inlinable func decimalSeparator(strategy: Separator) -> Self
     
     //=------------------------------------------------------------------------=
     // MARK: Sign
@@ -38,6 +38,21 @@ public protocol Format: ParseableFormatStyle {
     //=------------------------------------------------------------------------=
     
     @inlinable func process(count: inout Count)
+}
+
+//=----------------------------------------------------------------------------=
+// MARK: Format - Utilities
+//=----------------------------------------------------------------------------=
+
+extension Format {
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Transformations
+    //=------------------------------------------------------------------------=
+    
+    @inlinable func style(precision: Precision, separator: Separator = .automatic, sign: Sign.Style = .automatic) -> Self {
+        self.precision(precision).decimalSeparator(strategy: separator).sign(style: sign)
+    }
 }
 
 //*============================================================================*

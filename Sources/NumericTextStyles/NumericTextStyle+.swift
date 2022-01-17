@@ -91,17 +91,14 @@ extension NumericTextStyle {
         let capacity = try precision.capacity(count: count)
         number.removeImpossibleSeparator(capacity: capacity)
         //=--------------------------------------=
-        // MARK: Corrected, Value
+        // MARK: Value
         //=--------------------------------------=
-        let corrected = region.characters(number)
-        let value = try parser.parse(corrected)
+        let value = try parser.parse(region.characters(number))
         try bounds.validate(value: value)
         //=--------------------------------------=
-        // MARK: Style, Characters
+        // MARK: Characters
         //=--------------------------------------=
-        let style = editableStyle(number: number)
-
-        var characters = style.format(value)
+        var characters = editableStyle(number: number).format(value)
         autocorrectSign(in: &characters, with: value, and: number.sign)
         //=--------------------------------------=
         // MARK: Continue
