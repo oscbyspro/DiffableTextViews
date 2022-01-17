@@ -276,7 +276,13 @@ public struct DiffableTextField<Style: UIKitDiffableTextStyle>: UIViewRepresenta
             // MARK: Accept Or Discard
             //=----------------------------------=
             if cache.value != value || cache.mode != downstream.mode {
+                //=------------------------------=
+                // MARK: Style
+                //=------------------------------=
                 let style = style()
+                //=------------------------------=
+                // MARK: Value
+                //=------------------------------=
                 style.process(value: &value)
                 //=------------------------------=
                 // MARK: Snapshot
