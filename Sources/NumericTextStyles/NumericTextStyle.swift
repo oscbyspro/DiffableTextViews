@@ -144,8 +144,8 @@ extension NumericTextStyle {
     
     @inlinable public func snapshot(value: Value, mode: Mode) -> Snapshot {
         switch mode {
-        case .editable: return snapshot(characters: format.style(precision: precision.showcaseStyle()).format(value))
-        case .showcase: return snapshot(characters: format.style(precision: precision.editableStyle()).format(value))
+        case .editable: return snapshot(characters: format.style(precision: precision.editableStyle()).format(value))
+        case .showcase: return snapshot(characters: format.style(precision: precision.showcaseStyle()).format(value))
         }
     }
 
