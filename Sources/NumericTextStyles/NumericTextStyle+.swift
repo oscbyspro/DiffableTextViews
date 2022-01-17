@@ -86,7 +86,7 @@ extension NumericTextStyle {
         // MARK: Corrected, Value
         //=--------------------------------------=
         let corrected = region.characters(in: number)
-        let value = try format.parseStrategy.parse(corrected)
+        let value = try parser.parse(corrected)
         try bounds.validate(value: value)
         //=--------------------------------------=
         // MARK: Style, Characters
@@ -113,7 +113,7 @@ extension NumericTextStyle {
     //=------------------------------------------------------------------------=
 
     @inlinable public func parse(snapshot: Snapshot) throws -> Value {
-        try format.parseStrategy.parse(snapshot.characters)
+        try parser.parse(snapshot.characters)
     }
 }
 

@@ -15,6 +15,7 @@ import Foundation
 public struct NumericTextStyle<Format: NumericTextStyles.Format>: DiffableTextStyle
     where Format.FormatInput: Value, Format.FormatOutput == String {
     public typealias Value = Format.FormatInput
+    public typealias Parser = Format.Strategy
     public typealias Bounds = NumericTextStyles.Bounds<Value>
     public typealias Precision = NumericTextStyles.Precision<Value>
 
@@ -36,6 +37,14 @@ public struct NumericTextStyle<Format: NumericTextStyles.Format>: DiffableTextSt
         self.region = .reusable(locale)
         self.bounds = .standard
         self.precision = .standard
+    }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Accessors
+    //=------------------------------------------------------------------------=
+    
+    @inlinable var parser: Format.Strategy {
+        format.parseStrategy
     }
     
     //=------------------------------------------------------------------------=

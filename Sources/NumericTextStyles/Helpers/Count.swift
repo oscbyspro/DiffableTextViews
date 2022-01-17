@@ -11,7 +11,7 @@ import Quick
 // MARK: * Count
 //*============================================================================*
 
-/// - Value meant as shorthand for significant digits.
+/// - Value is shorthand for significant digits.
 public struct Count: Transformable {
 
     //=------------------------------------------------------------------------=
