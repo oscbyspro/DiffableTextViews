@@ -268,16 +268,16 @@ public struct DiffableTextField<Style: UIKitDiffableTextStyle>: UIViewRepresenta
         //=--------------------------------------------------------------------=
         
         @inlinable func synchronize() {
-            let style = style()
             //=----------------------------------=
             // MARK: Value
             //=----------------------------------=
             var value = upstream.value.wrappedValue
-            style.process(value: &value)
             //=----------------------------------=
             // MARK: Accept Or Discard
             //=----------------------------------=
             if cache.value != value || cache.mode != downstream.mode {
+                let style = style()
+                style.process(value: &value)
                 //=------------------------------=
                 // MARK: Snapshot
                 //=------------------------------=
