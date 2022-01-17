@@ -112,12 +112,9 @@ extension PatternTextStyle {
         //=--------------------------------------=
         // MARK: Value
         //=--------------------------------------=
-        let value = Value(snapshot
-            .lazy
-            .filter({ !$0.attribute.contains(.formatting) })
-            .map(\.character))
+        let value = Value(snapshot.lazy.filter({ !$0.contains(.virtual) }).map(\.character))
         //=--------------------------------------=
-        // MARK: Validation
+        // MARK: Validate
         //=--------------------------------------=
         try validate(value)
         try predicates.validate(value)

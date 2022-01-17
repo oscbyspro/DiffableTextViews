@@ -41,7 +41,7 @@ extension NumericTextStyle {
             } else if let separator = region.separators[character] {
                 snapshot.append(Symbol(character, as: separator == .fraction ? .removable : .phantom))
             } else if let _ = region.signs[character] {
-                snapshot.append(Symbol(character, as: .phantom.subtracting(.formatting)))
+                snapshot.append(Symbol(character, as: .phantom.subtracting(.virtual)))
             } else {
                 snapshot.append(Symbol(character, as: .phantom))
             }

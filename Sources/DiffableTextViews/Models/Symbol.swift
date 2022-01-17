@@ -59,6 +59,18 @@ public struct Symbol: Equatable {
     @inlinable public func phantom(_ character: Character) -> Self {
         Self(character, as: .phantom)
     }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Accessors
+    //=------------------------------------------------------------------------=
+    
+    @inlinable public func contains(_ character: Character) -> Bool {
+        self.character == character
+    }
+
+    @inlinable public func contains(_ attribute: Attribute) -> Bool {
+        self.attribute.contains(attribute)
+    }
 }
 
 //=----------------------------------------------------------------------------=

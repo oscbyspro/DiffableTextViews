@@ -68,8 +68,6 @@ import DiffableTextViews
     }
 }
 
-#warning("Move this to region.")
-
 //=----------------------------------------------------------------------------=
 // MARK: Number - Parse
 //=----------------------------------------------------------------------------=
@@ -88,79 +86,74 @@ extension Number {
         snapshot: Snapshot, integer: Bool, unsigned: Bool,
         signs: [Character: Sign], digits: [Character: Digit], separators: [Character: Separator]
     ) throws {
-        #warning("Make nonformatting shorter to use, maybe.")
-        guard let start = snapshot.firstIndex(where: { !$0.attribute.contains(.formatting) }) else { self = .zero; return }
-        
+        guard let start = snapshot.firstIndex(where: { !$0.contains(.virtual) }) else { self = .zero; return }
         //=--------------------------------------=
         // MARK: State
         //=--------------------------------------=
-        
         var index = start
-        var element = snapshot[start]
-        
+        var symbol = snapshot[start]
         //=--------------------------------------=
-        // MARK: Helpers
+        // MARK: Next
         //=--------------------------------------=
-
         func next() {
+            //=----------------------------------=
+            // MARK: Loop Past Virtual Elements
+            //=----------------------------------=
             while true {
+                //=------------------------------=
+                // MARK: Index
+                //=------------------------------=
                 snapshot.formIndex(after: &index)
                 if index == snapshot.endIndex { break }
-                element = snapshot[index]
-                if !element.attribute.contains(.formatting) { break }
+                //=------------------------------=
+                // MARK: Element
+                //=------------------------------=
+                symbol = snapshot[index]
+                if !symbol.contains(.virtual) { break }
             }
         }
-        
+        //=--------------------------------------=
+        // MARK: Attempt
+        //=--------------------------------------=
         attempt: do {
-
             //=----------------------------------=
             // MARK: Sign
             //=----------------------------------=
-
-            if index != snapshot.endIndex, !unsigned, let sign = signs[element.character] {
+            if index != snapshot.endIndex, !unsigned, let sign = signs[symbol.character] {
                 self.sign = sign
                 next()
             }
-
             //=----------------------------------=
             // MARK: Digits
             //=----------------------------------=
-
-            while index != snapshot.endIndex, let digit = digits[element.character] {
+            while index != snapshot.endIndex, let digit = digits[symbol.character] {
                 self.integer.append(digit)
                 next()
             }
-            
             self.integer.removeZerosPrefix()
             self.integer.makeItAtLeastZero()
             
             guard !integer else { break attempt }
-            
             //=----------------------------------=
             // MARK: Separator
             //=----------------------------------=
-
-            if index != snapshot.endIndex, let _ = separators[element.character] {
-                self.separator = .fraction
+            if index != snapshot.endIndex, let separator = separators[symbol.character], separator == .fraction {
+                self.separator = separator
                 next()
             }
             
-            guard self.separator == .fraction else { break attempt }
-            
+            guard self.separator != nil else { break attempt }
             //=----------------------------------=
             // MARK: Fraction
             //=----------------------------------=
-            
-            while index != snapshot.endIndex, let digit = digits[element.character] {
+            while index != snapshot.endIndex, let digit = digits[symbol.character] {
                 self.fraction.append(digit)
                 next()
             }
         }
-        
         //=--------------------------------------=
         // MARK: Validate
         //=--------------------------------------=
-        
         guard index == snapshot.endIndex else {
             throw Info(["unable to parse number in", .mark(snapshot.characters)])
         }
