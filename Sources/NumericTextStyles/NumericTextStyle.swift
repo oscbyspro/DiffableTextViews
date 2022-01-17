@@ -16,7 +16,7 @@ public struct NumericTextStyle<Format: NumericTextStyles.Format>: DiffableTextSt
     where Format.FormatInput: Value, Format.FormatOutput == String {
     public typealias Value = Format.FormatInput
     public typealias Bounds = NumericTextStyles.Bounds<Value>
-    public typealias Precision = NumericTextStyles.Precision<Value>
+    public typealias Precision = NumericTextStyles.Precision<Format>
 
     //=------------------------------------------------------------------------=
     // MARK: Properties
@@ -58,7 +58,7 @@ public struct NumericTextStyle<Format: NumericTextStyles.Format>: DiffableTextSt
     }
     
     //=------------------------------------------------------------------------=
-    // MARK: Transformations - Options
+    // MARK: Transformations - Update
     //=------------------------------------------------------------------------=
     
     @inlinable public func bounds(_ bounds: Bounds) -> Self {
@@ -148,8 +148,8 @@ extension NumericTextStyle {
     
     @inlinable public func snapshot(value: Value, mode: Mode) -> Snapshot {
         switch mode {
-        case .editable: return snapshot(characters: format.style(precision: precision.editableStyle()).format(value))
-        case .showcase: return snapshot(characters: format.style(precision: precision.showcaseStyle()).format(value))
+        case .editable: return snapshot(characters: format.style(precision: precision.editable()).format(value))
+        case .showcase: return snapshot(characters: format.style(precision: precision.showcase()).format(value))
         }
     }
     
@@ -207,12 +207,9 @@ extension NumericTextStyle {
         reader.process?(&number)
         try bounds.validate(sign: number.sign)
         //=--------------------------------------=
-        // MARK: Count, Capacity
+        // MARK: Capacity
         //=--------------------------------------=
-        var count = number.count()
-        format.process(count: &count)
-
-        let capacity = try precision.capacity(count: count)
+        let capacity = try precision.capacity(count: number.count())
         number.removeImpossibleSeparator(capacity: capacity)
         //=--------------------------------------=
         // MARK: Value
@@ -223,7 +220,7 @@ extension NumericTextStyle {
         // MARK: Style
         //=--------------------------------------=
         let style = format.style(
-        precision: precision.editableStyle(number: number),
+        precision: precision.editable(number: number),
         separator: number.separator == .fraction ? .always : .automatic,
         sign: number.sign == .negative ? .always : .automatic)
         //=--------------------------------------=

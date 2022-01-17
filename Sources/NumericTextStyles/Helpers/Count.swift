@@ -31,27 +31,13 @@ public struct Count {
     }
     
     //=------------------------------------------------------------------------=
-    // MARK: Transformations
-    //=------------------------------------------------------------------------=
-    
-    @inlinable mutating func upshift(by amount: Int) {
-        integer  = max(0, integer  + amount)
-        fraction = max(0, fraction - amount)
-    }
-    
-    @inlinable mutating func downshift(by amount: Int) {
-        integer  = max(0, integer  - amount)
-        fraction = max(0, fraction + amount)
-    }
-    
-    //=------------------------------------------------------------------------=
     // MARK: Subscripts
     //=------------------------------------------------------------------------=
     
     @inlinable subscript(component: Component) -> Int {
         switch component {
-        case .value: return value
-        case .integer: return integer
+        case .value:    return value
+        case .integer:  return integer
         case .fraction: return fraction
         }
     }

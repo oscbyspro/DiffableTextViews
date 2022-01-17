@@ -139,13 +139,13 @@ extension State {
         //=--------------------------------------=
         // MARK: Upper Bound, Single
         //=--------------------------------------=
-        let upperBound = layout.position(start: selection.upperBound, preference: .backwards, intent: intent.upper)
+        let upperBound = position(start: selection.upperBound, preference: .backwards, intent: intent.upper)
         var lowerBound = upperBound
         //=--------------------------------------=
         // MARK: Lower Bound, Double
         //=--------------------------------------=
         if !selection.isEmpty, upperBound != layout.startIndex {
-            lowerBound = layout.position(start: selection.lowerBound, preference:  .forwards, intent: intent.lower)
+            lowerBound = position(start: selection.lowerBound, preference:  .forwards, intent: intent.lower)
             lowerBound = min(lowerBound, upperBound)
         }
         //=--------------------------------------=

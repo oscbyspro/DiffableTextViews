@@ -2,159 +2,242 @@
 //  Precision.swift
 //  
 //
-//  Created by Oscar Byström Ericsson on 2021-12-21.
+//  Created by Oscar Byström Ericsson on 2022-01-17.
 //
 
 import DiffableTextViews
 import Foundation
 
-#warning("Rework.")
-#warning("Percent showcase style is incorrect.")
-
 //*============================================================================*
 // MARK: * Precision
 //*============================================================================*
 
-/// - Note: Lower bound is enforced only when the view is idle.
-public struct Precision<Value: Precise> {
-    @usableFromInline typealias Implementation = PrecisionImplementation
-    @usableFromInline typealias SignificantDigits = SignificantDigitsPrecision<Value>
-    @usableFromInline typealias IntegerAndFractionLength = IntegerAndFractionLengthPrecision<Value>
-
+public struct Precision<Format: NumericTextStyles.Format> where Format.FormatInput: Precise {
+    public typealias Value = Format.FormatInput
+    @usableFromInline typealias Namespace = _Precision
+    @usableFromInline typealias Style = _Precision.Style
+    @usableFromInline typealias Configuration = NumberFormatStyleConfiguration.Precision
+    
     //=------------------------------------------------------------------------=
     // MARK: Properties
     //=------------------------------------------------------------------------=
     
-    @usableFromInline let implementation: Implementation
+    @usableFromInline let style: Style
+    @usableFromInline var lower: Count
+    @usableFromInline var upper: Count
     
     //=------------------------------------------------------------------------=
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable init(_ implementation: Implementation) {
-        self.implementation = implementation
+    @inlinable init(style: Style, lower: Count, upper: Count) {
+        self.style = style
+        self.lower = lower
+        self.upper = upper
+        //=--------------------------------------=
+        // MARK: Conform To Format
+        //=--------------------------------------=
+        Format.process(precision: &self.lower)
+        Format.process(precision: &self.upper)
     }
     
     //=------------------------------------------------------------------------=
     // MARK: Showcase
     //=------------------------------------------------------------------------=
-
-    @inlinable func showcaseStyle() -> _Precision.Style {
-        implementation.showcaseStyle()
+    
+    @inlinable func showcase() -> Configuration {
+        switch style {
+        case .value:    return value()
+        case .separate: return separate()
+        }
+    }
+    
+    @inlinable func value() -> Configuration {
+        .significantDigits(lower.value ... upper.value)
+    }
+    
+    @inlinable func separate() -> Configuration {
+        .integerAndFractionLength(
+         integerLimits: lower .integer ... lower .integer,
+        fractionLimits: upper.fraction ... upper.fraction)
     }
     
     //=------------------------------------------------------------------------=
     // MARK: Editable
     //=------------------------------------------------------------------------=
     
-    @inlinable func editableStyle() -> _Precision.Style {
-        .integerAndFractionLength(integerLimits: Self.limits(\.integer), fractionLimits: Self.limits(\.fraction))
+    @inlinable func editable() -> Configuration {
+        let  integer = Swift.max(Namespace.min.integer,  upper .integer)
+        let fraction = Swift.max(Namespace.min.fraction, upper.fraction)
+        return .integerAndFractionLength(integer: integer, fraction: fraction)
     }
     
-    @inlinable func editableStyle(number: Number) -> _Precision.Style {
-        let integerUpperBound = max(_Precision.lowerBound.integer, number.integer.count)
-        let integer = _Precision.lowerBound.integer...integerUpperBound
-        let fractionLowerBound = max(_Precision.lowerBound.fraction, number.fraction.count)
-        let fraction = fractionLowerBound...fractionLowerBound
-        return .integerAndFractionLength(integerLimits: integer, fractionLimits: fraction)
+    @inlinable func editable(number: Number) -> Configuration {
+        let  integer = Swift.max(Namespace.min.integer,  number .integer.count)
+        let fraction = Swift.max(Namespace.min.fraction, number.fraction.count)
+        return .integerAndFractionLength(integer: integer, fraction: fraction)
     }
     
     //=------------------------------------------------------------------------=
-    // MARK: Utilities
+    // MARK: Capacity
     //=------------------------------------------------------------------------=
     
     @inlinable func capacity(count: Count) throws -> Count {
-        try implementation.capacity(count: count)
+        //=--------------------------------------=
+        // MARK: Integer
+        //=--------------------------------------=
+        let integer = upper.integer - count.integer
+        guard integer >= 0 else {
+            throw excess(.integer)
+        }
+        //=--------------------------------------=
+        // MARK: Fraction
+        //=--------------------------------------=
+        let fraction = upper.fraction - count.fraction
+        guard fraction >= 0 else {
+            throw excess(.fraction)
+        }
+        //=--------------------------------------=
+        // MARK: Value
+        //=--------------------------------------=
+        let value = upper.value - count.value
+        guard value >= 0 else {
+            throw excess(.value)
+        }
+        //=--------------------------------------=
+        // MARK: Capacity
+        //=--------------------------------------=
+        return Count(value: value, integer: integer, fraction: fraction)
     }
     
     //=------------------------------------------------------------------------=
-    // MARK: Utilities - Static
+    // MARK: Errors
+    //=------------------------------------------------------------------------=
+    
+    @inlinable func excess(_ component: Count.Component) -> Info {
+        Info([.mark(component), "digits exceed max precision", .mark(upper[component])])
+    }
+}
+
+//=----------------------------------------------------------------------------=
+// MARK: Precision - Initializers - Helpers
+//=----------------------------------------------------------------------------=
+
+extension Precision {
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Limits
     //=------------------------------------------------------------------------=
     
     @inlinable static func limits(_ component: (Count) -> Int) -> ClosedRange<Int> {
-        component(_Precision.lowerBound)...component(Value.precision)
+        component(Namespace.min)...component(Value.precision)
     }
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: Precision - Initializers - Significant Digits
+// MARK: Precision - Initializers - Value
 //=----------------------------------------------------------------------------=
 
-public extension Precision {
-
-    //=------------------------------------------------------------------------
-    // MARK: Static - Limits
-    //=------------------------------------------------------------------------=
-    
-    @inlinable static func digits<R: RangeExpression>(_ significant: R) -> Self where R.Bound == Int {
-        .init(SignificantDigits(significant))
-    }
+extension Precision {
     
     //=------------------------------------------------------------------------=
-    // MARK: Static - Length
-    //=------------------------------------------------------------------------=
-    
-    @inlinable static func digits(_ significant: Int) -> Self {
-        self.init(SignificantDigits(significant...significant))
-    }
-
-    //=------------------------------------------------------------------------=
-    // MARK: Static - Named
+    // MARK: Standard
     //=------------------------------------------------------------------------=
             
     @inlinable static var standard: Self {
-        .init(SignificantDigits(limits(\.value)))
+        digits(limits(\.value))
+    }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Length
+    //=------------------------------------------------------------------------=
+    
+    @inlinable static func digits(_ value: Int) -> Self {
+        digits(value...value)
+    }
+
+    //=------------------------------------------------------------------------=
+    // MARK: Limits
+    //=------------------------------------------------------------------------=
+    
+    @inlinable static func digits<R: RangeExpression>(_ value: R) -> Self where R.Bound == Int {
+        //=--------------------------------------=
+        // MARK: Interpret
+        //=--------------------------------------=
+        let value = Namespace.limits(value, in: limits(\.value))
+        //=--------------------------------------=
+        // MARK: Limits
+        //=--------------------------------------=
+        let lower = Count(value: value.lowerBound, integer:   Namespace.min.integer, fraction:   Namespace.min.fraction)
+        let upper = Count(value: value.upperBound, integer: Value.precision.integer, fraction: Value.precision.fraction)
+        //=--------------------------------------=
+        // MARK: Instance
+        //=--------------------------------------=
+        return Self(style: .value, lower: lower, upper: upper)
     }
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: Precision - Initializers - Integer And Fraction Length
+// MARK: Precision - Lengths
 //=----------------------------------------------------------------------------=
 
-public extension Precision where Value: PreciseFloatingPoint {
+extension Precision where Value: PreciseFloatingPoint {
     
     //=------------------------------------------------------------------------=
-    // MARK: Static - Limits
+    // MARK: Length
     //=------------------------------------------------------------------------=
-
-    @inlinable static func digits<R0: RangeExpression, R1: RangeExpression>(integer: R0, fraction: R1) -> Self where R0.Bound == Int, R1.Bound == Int {
-        .init(IntegerAndFractionLength(integer: integer, fraction: fraction))
-    }
-    
-    @inlinable static func digits<R: RangeExpression>(integer: R) -> Self where R.Bound == Int {
-        .init(IntegerAndFractionLength(integer: integer))
-    }
-    
-    @inlinable static func digits<R: RangeExpression>(fraction: R) -> Self where R.Bound == Int {
-        .init(IntegerAndFractionLength(fraction: fraction))
-    }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Static - Mixed
-    //=------------------------------------------------------------------------=
-    
-    @inlinable static func digits<R: RangeExpression>(integer: R, fraction: Int) -> Self where R.Bound == Int {
-        .init(IntegerAndFractionLength(integer: integer, fraction: fraction...fraction))
-    }
-    
-    @inlinable static func digits<R: RangeExpression>(integer: Int, fraction: R) -> Self where R.Bound == Int {
-        .init(IntegerAndFractionLength(integer: integer...integer, fraction: fraction))
-    }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Static - Length
-    //=------------------------------------------------------------------------=
-    
-    @inlinable static func digits(integer: Int, fraction: Int) -> Self {
-        .init(IntegerAndFractionLength(integer: integer...integer, fraction: fraction...fraction))
-    }
     
     @inlinable static func digits(integer: Int) -> Self {
-        .init(IntegerAndFractionLength(integer: integer...integer))
+        digits(integer: integer...integer)
     }
     
     @inlinable static func digits(fraction: Int) -> Self {
-        .init(IntegerAndFractionLength(fraction: fraction...fraction))
+        digits(fraction: fraction...fraction)
+    }
+    
+    @inlinable static func digits(integer: Int, fraction: Int) -> Self {
+        digits(integer: integer...integer, fraction: fraction...fraction)
+    }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Mixed
+    //=------------------------------------------------------------------------=
+    
+    @inlinable static func digits<R: RangeExpression>(integer: R, fraction: Int) -> Self where R.Bound == Int {
+        digits(integer: integer, fraction: fraction...fraction)
+    }
+    
+    @inlinable static func digits<R: RangeExpression>(integer: Int, fraction: R) -> Self where R.Bound == Int {
+        digits(integer: integer...integer, fraction: fraction)
+    }
+
+    //=------------------------------------------------------------------------=
+    // MARK: Limits
+    //=------------------------------------------------------------------------=
+    
+    @inlinable public static func digits<R: RangeExpression>(integer: R) -> Self where R.Bound == Int {
+        digits(integer: integer, fraction: limits(\.fraction))
+    }
+    
+    @inlinable public static func digits<R: RangeExpression>(fraction: R) -> Self where R.Bound == Int {
+        digits(integer: limits(\.integer), fraction: fraction)
+    }
+    
+    @inlinable public static func digits<R0: RangeExpression, R1: RangeExpression>(integer: R0, fraction: R1) -> Self where R0.Bound == Int, R1.Bound == Int {
+        //=--------------------------------------=
+        // MARK: Interpret
+        //=--------------------------------------=
+        let integer  = Namespace.limits(integer,  in: limits( \.integer))
+        let fraction = Namespace.limits(fraction, in: limits(\.fraction))
+        //=--------------------------------------=
+        // MARK: Limits
+        //=--------------------------------------=
+        let lower = Count(value:   Namespace.min.value, integer: integer.lowerBound, fraction: fraction.lowerBound)
+        let upper = Count(value: Value.precision.value, integer: integer.upperBound, fraction: fraction.upperBound)
+        //=--------------------------------------=
+        // MARK: Instance
+        //=--------------------------------------=
+        return Self(style: .separate, lower: lower, upper: upper)
     }
 }
 
@@ -163,171 +246,28 @@ public extension Precision where Value: PreciseFloatingPoint {
 //*============================================================================*
 
 @usableFromInline enum _Precision {
-    @usableFromInline typealias Style = NumberFormatStyleConfiguration.Precision
-
+    
     //=------------------------------------------------------------------------=
-    // MARK: Bounds
+    // MARK: Constants
     //=------------------------------------------------------------------------=
     
-    @inlinable static func clamped<R: RangeExpression>(_ expression: R, to limits: ClosedRange<Int>) -> ClosedRange<Int> where R.Bound == Int {
+    @usableFromInline static let min = Count(value: 1, integer: 1, fraction: 0)
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Utilities
+    //=------------------------------------------------------------------------=
+    
+    @inlinable static func limits<R: RangeExpression>(_ expression: R, in limits: ClosedRange<Int>) -> ClosedRange<Int> where R.Bound == Int {
         let range: Range<Int> = expression.relative(to: limits.lowerBound ..< limits.upperBound + 1)
         return Swift.max(limits.lowerBound, range.lowerBound) ... Swift.min(range.upperBound - 1, limits.upperBound)
     }
     
-    //=------------------------------------------------------------------------=
-    // MARK: Count
-    //=------------------------------------------------------------------------=
-    
-    @usableFromInline static let lowerBound = Count(value: 1, integer: 1, fraction: 0)
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Count - Make
-    //=------------------------------------------------------------------------=
-    
-    @inlinable static func capacity(count: Count, max: Count) throws -> Count {
-        let integer = max.integer - count.integer
-        guard integer >= 0 else {
-            throw failure(excess: .integer, max: max.integer)
-        }
-        
-        let fraction = max.fraction - count.fraction
-        guard fraction >= 0 else {
-            throw failure(excess: .fraction, max: max.fraction)
-        }
-        
-        let value = max.value - count.fraction
-        guard value >= 0 else {
-            throw failure(excess: .value, max: max.value)
-        }
-        
-        return Count(value: value, integer: integer, fraction: fraction)
-    }
-
-    //=------------------------------------------------------------------------=
-    // MARK: Errors
-    //=------------------------------------------------------------------------=
-    
-    @inlinable static func failure(excess component: Component, max: Int) -> Info {
-        Info([.mark(component), "digits exceed precision capacity of", .mark(max)])
-    }
-    
     //*========================================================================*
-    // MARK: * Components
+    // MARK: * Style
     //*========================================================================*
     
-    @usableFromInline enum Component: String {
+    @usableFromInline enum Style {
         case value
-        case integer
-        case fraction
-    }
-}
-
-//*============================================================================*
-// MARK: * Precision x Implementation
-//*============================================================================*
-
-@usableFromInline protocol PrecisionImplementation {
-
-    //=------------------------------------------------------------------------=
-    // MARK: Showcase
-    //=------------------------------------------------------------------------=
-            
-    @inlinable func showcaseStyle() -> _Precision.Style
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Count
-    //=------------------------------------------------------------------------=
-    
-    @inlinable func capacity(count: Count) throws -> Count
-}
-
-//*============================================================================*
-// MARK: * Precision x Significant Digits
-//*============================================================================*
-
-@usableFromInline struct SignificantDigitsPrecision<Value: Precise>: PrecisionImplementation {
-    @usableFromInline typealias Precision = NumericTextStyles.Precision<Value>
-
-    //=------------------------------------------------------------------------=
-    // MARK: Properties
-    //=------------------------------------------------------------------------=
-    
-    @usableFromInline let significant: ClosedRange<Int>
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Initializers
-    //=------------------------------------------------------------------------=
-    
-    @inlinable init<R: RangeExpression>(_ significant: R) where R.Bound == Int {
-        self.significant = _Precision.clamped(significant, to: Precision.limits(\.value))
-    }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Showcase
-    //=------------------------------------------------------------------------=
-    
-    @inlinable func showcaseStyle() -> _Precision.Style {
-        .significantDigits(significant)
-    }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Count
-    //=------------------------------------------------------------------------=
-    
-    @inlinable func capacity(count: Count) throws -> Count {
-        var max = Value.precision
-        max.value = significant.upperBound
-        return try _Precision.capacity(count: count, max: max)
-    }
-}
-
-//*============================================================================*
-// MARK: * Precision x Integer And Fraction Length
-//*============================================================================*
-
-@usableFromInline struct IntegerAndFractionLengthPrecision<Value: Precise>: PrecisionImplementation {
-    @usableFromInline typealias Precision = NumericTextStyles.Precision<Value>
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Properties
-    //=------------------------------------------------------------------------=
-    
-    @usableFromInline let integer:  ClosedRange<Int>
-    @usableFromInline let fraction: ClosedRange<Int>
-
-    //=------------------------------------------------------------------------=
-    // MARK: Initializers
-    //=------------------------------------------------------------------------=
-    
-    @inlinable init<R0: RangeExpression, R1: RangeExpression>(integer: R0, fraction: R1) where R0.Bound == Int, R1.Bound == Int {
-        self.integer  = _Precision.clamped(integer,  to: Precision.limits( \.integer))
-        self.fraction = _Precision.clamped(fraction, to: Precision.limits(\.fraction))
-    }
-    
-    @inlinable init<R: RangeExpression>(integer: R) where R.Bound == Int {
-        self.init(integer: integer, fraction: Precision.limits(\.fraction))
-    }
-    
-    @inlinable init<R: RangeExpression>(fraction: R) where R.Bound == Int {
-        self.init(integer: Precision.limits(\.integer), fraction: fraction)
-    }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Showcase
-    //=------------------------------------------------------------------------=
-
-    @inlinable func showcaseStyle() -> _Precision.Style {
-        .integerAndFractionLength(integerLimits: integer, fractionLimits: fraction)
-    }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Count
-    //=------------------------------------------------------------------------=
-    
-    @inlinable func capacity(count: Count) throws -> Count {
-        var max = Value.precision
-        max.integer  =  integer.upperBound
-        max.fraction = fraction.upperBound
-        return try _Precision.capacity(count: count, max: max)
+        case separate
     }
 }

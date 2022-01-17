@@ -37,14 +37,20 @@ public protocol Format: ParseableFormatStyle {
     // MARK: Process
     //=------------------------------------------------------------------------=
     
-    @inlinable func process(count: inout Count)
+    @inlinable static func process(precision: inout Count)
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: Format - Utilities
+// MARK: Format - Details
 //=----------------------------------------------------------------------------=
 
 extension Format {
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Process
+    //=------------------------------------------------------------------------=
+    
+    @inlinable public static func process(precision: inout Count) { }
     
     //=------------------------------------------------------------------------=
     // MARK: Transformations
@@ -82,12 +88,6 @@ extension NumberFormat {
     @inlinable public func sign(style: Sign.Style) -> Self {
         self.sign(strategy: style.standard())
     }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Process
-    //=------------------------------------------------------------------------=
-    
-    @inlinable public func process(count: inout Count) { }
 }
 
 //*============================================================================*
@@ -117,12 +117,6 @@ extension CurrencyFormat {
     @inlinable public func sign(style: Sign.Style) -> Self {
         self.sign(strategy: style.currency())
     }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Process
-    //=------------------------------------------------------------------------=
-    
-    @inlinable public func process(count: inout Count) { }
 }
 
 //*============================================================================*
@@ -157,7 +151,8 @@ extension PercentFormat {
     // MARK: Process
     //=------------------------------------------------------------------------=
     
-    @inlinable public func process(count: inout Count) {
-        count.downshift(by: 2)
+    @inlinable public static func process(precision: inout Count) {
+        precision.integer  =        precision.integer  + 2
+        precision.fraction = max(0, precision.fraction - 2)
     }
 }
