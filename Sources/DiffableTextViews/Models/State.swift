@@ -162,7 +162,7 @@ extension State {
         //=--------------------------------------=
         // MARK: Validate
         //=--------------------------------------=
-        if validate(position: start, preference: preference) { return start }
+        if layout.look(start, direction: preference).map(layout.nonpassthrough) == true { return start }
         //=--------------------------------------=
         // MARK: Direction
         //=--------------------------------------=
@@ -179,13 +179,5 @@ extension State {
         // MARK: Default
         //=--------------------------------------=
         return layout.startIndex
-    }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Validate
-    //=------------------------------------------------------------------------=
-    
-    @inlinable func validate(position: Layout.Index, preference: Direction) -> Bool {
-        layout.look(position, direction: preference).map(layout.nonpassthrough) ?? false
     }
 }
