@@ -20,6 +20,17 @@ public protocol DiffableTextStyle {
     associatedtype Value: Equatable
     
     //=------------------------------------------------------------------------=
+    // MARK: Locale
+    //=------------------------------------------------------------------------=
+    
+    /// If the style allows selecting a locale, returns a copy of this style with the new locale set.
+    ///
+    /// - The locale is set by the enironment.
+    /// - The default implementation returns an unmodified self.
+    ///
+    @inlinable mutating func update(locale: Locale)
+    
+    //=------------------------------------------------------------------------=
     // MARK: Process
     //=------------------------------------------------------------------------=
     
@@ -58,16 +69,18 @@ public protocol DiffableTextStyle {
 public extension DiffableTextStyle {
     
     //=------------------------------------------------------------------------=
+    // MARK: Locale
+    //=------------------------------------------------------------------------=
+    
+    @inlinable mutating func update(locale: Locale) { }
+
+    //=------------------------------------------------------------------------=
     // MARK: Process
     //=------------------------------------------------------------------------=
 
-    @inlinable func process(value: inout Value) {
-        // default implementation returns immediately
-    }
+    @inlinable func process(value: inout Value) { }
 
-    @inlinable func process(snapshot: inout Snapshot) {
-        // default implementation returns immediately
-    }
+    @inlinable func process(snapshot: inout Snapshot) { }
 
     //=------------------------------------------------------------------------=
     // MARK: Merge

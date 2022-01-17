@@ -14,17 +14,23 @@ import SwiftUI
 // MARK: * DiffableTextField
 //*============================================================================*
 
-public struct DiffableTextField<Style: DiffableTextStyle & UIKitTextStyle>: UIViewRepresentable {
+public struct DiffableTextField<Style: UIKitDiffableTextStyle>: UIViewRepresentable {
     public typealias Value = Style.Value
     public typealias UIViewType = BasicTextField
     public typealias Transformation = (ProxyTextField) -> Void
 
     //=------------------------------------------------------------------------=
+    // MARK: Environment
+    //=------------------------------------------------------------------------=
+    
+    @usableFromInline @Environment(\.locale) var locale: Locale
+    
+    //=------------------------------------------------------------------------=
     // MARK: Properties
     //=------------------------------------------------------------------------=
     
     @usableFromInline let value: Binding<Value>
-    @usableFromInline var style: Style
+    @usableFromInline var style: () -> Style
     
     //=------------------------------------------------------------------------=
     // MARK: Properties - Transformations
@@ -38,13 +44,14 @@ public struct DiffableTextField<Style: DiffableTextStyle & UIKitTextStyle>: UIVi
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable public init(_ value: Binding<Value>, style: Style) {
+    @inlinable public init(_ value: Binding<Value>, style: @escaping () -> Style) {
         self.value = value
         self.style = style
     }
     
-    @inlinable public init(_ value: Binding<Value>, style: () -> Style) {
-        self.init(value, style: style())
+    @inlinable public init(_ value: Binding<Value>, style: @escaping @autoclosure () -> Style) {
+        self.value = value
+        self.style = style
     }
         
     //=------------------------------------------------------------------------=
@@ -93,7 +100,7 @@ public struct DiffableTextField<Style: DiffableTextStyle & UIKitTextStyle>: UIVi
         // MARK: ProxyTextField
         //=--------------------------------------=
         let downstream = ProxyTextField(uiView)
-        style.setup(diffableTextField: downstream)
+        Style.setup(diffableTextField: downstream)
         context.coordinator.downstream = downstream
         setup?(context.coordinator.downstream)
         //=--------------------------------------=
@@ -133,6 +140,16 @@ public struct DiffableTextField<Style: DiffableTextStyle & UIKitTextStyle>: UIVi
         
         @usableFromInline let lock  = Lock()
         @usableFromInline let cache = Cache()
+        
+        //=------------------------------------------------------------------------=
+        // MARK: Accessors
+        //=------------------------------------------------------------------------=
+        
+        @inlinable func style() -> Style {
+            var style = upstream.style()
+            style.update(locale: upstream.locale)
+            return style
+        }
 
         //=----------------------------------------------------------------------------=
         // MARK: Respond To Submit Events
@@ -163,6 +180,7 @@ public struct DiffableTextField<Style: DiffableTextStyle & UIKitTextStyle>: UIVi
         //=--------------------------------------------------------------------=
         
         @inlinable public func textField(_ textField: UITextField, shouldChangeCharactersIn nsRange: NSRange, replacementString string: String) -> Bool {
+            let style = style()
             //=----------------------------------=
             // MARK: Attempt
             //=----------------------------------=
@@ -181,13 +199,13 @@ public struct DiffableTextField<Style: DiffableTextStyle & UIKitTextStyle>: UIVi
                 //=------------------------------=
                 // MARK: Output
                 //=------------------------------=
-                var output = try upstream.style.merge(snapshot: cache.snapshot, with: input)
-                upstream.style.process(snapshot: &output.snapshot)
+                var output = try style.merge(snapshot: cache.snapshot, with: input)
+                style.process(snapshot: &output.snapshot)
                 //=------------------------------=
                 // MARK: Value
                 //=------------------------------=
-                var value = try output.value ?? upstream.style.parse(snapshot: output.snapshot)
-                upstream.style.process(value: &value)
+                var value = try output.value ?? style.parse(snapshot: output.snapshot)
+                style.process(value: &value)
                 //=------------------------------=
                 // MARK: State
                 //=------------------------------=
@@ -250,11 +268,12 @@ public struct DiffableTextField<Style: DiffableTextStyle & UIKitTextStyle>: UIVi
         //=--------------------------------------------------------------------=
         
         @inlinable func synchronize() {
+            let style = style()
             //=----------------------------------=
             // MARK: Value
             //=----------------------------------=
             var value = upstream.value.wrappedValue
-            upstream.style.process(value: &value)
+            style.process(value: &value)
             //=----------------------------------=
             // MARK: Accept Or Discard
             //=----------------------------------=
@@ -262,8 +281,8 @@ public struct DiffableTextField<Style: DiffableTextStyle & UIKitTextStyle>: UIVi
                 //=------------------------------=
                 // MARK: Snapshot
                 //=------------------------------=
-                var snapshot = upstream.style.snapshot(value: value, mode: downstream.mode)
-                upstream.style.process(snapshot: &snapshot)
+                var snapshot = style.snapshot(value: value, mode: downstream.mode)
+                style.process(snapshot: &snapshot)
                 //=------------------------------=
                 // MARK: State
                 //=------------------------------=

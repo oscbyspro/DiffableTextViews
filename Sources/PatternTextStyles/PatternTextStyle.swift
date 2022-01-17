@@ -60,12 +60,12 @@ public struct PatternTextStyle<Pattern, Value>: DiffableTextStyle, Transformable
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: PatternTextStyle - UIKitTextStyle
+// MARK: PatternTextStyle - UIKitDiffableTextStyle
 //=----------------------------------------------------------------------------=
 
 #if canImport(UIKit)
 
-extension PatternTextStyle: UIKitTextStyle { }
+extension PatternTextStyle: UIKitDiffableTextStyle { }
 
 #endif
 

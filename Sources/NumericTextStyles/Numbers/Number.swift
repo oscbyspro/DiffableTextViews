@@ -78,7 +78,7 @@ extension Number {
     
     /// Parses the value represented by a snapshot.
     ///
-    /// To use this method, all formatting characters must be marked as formatting.
+    /// To use this method, all formatting characters must be marked as such.
     ///
     @inlinable init(
         snapshot: Snapshot, integer: Bool, unsigned: Bool,

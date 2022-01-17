@@ -1,5 +1,5 @@
 //
-//  UIKitTextStyle.swift
+//  UIKitDiffableTextStyle.swift
 //  
 //
 //  Created by Oscar Byström Ericsson on 2022-01-12.
@@ -10,29 +10,29 @@
 import UIKit
 
 //*============================================================================*
-// MARK: * UIKitTextStyle
+// MARK: * UIKitDiffableTextStyle
 //*============================================================================*
 
-public protocol UIKitTextStyle: DiffableTextStyle {
+public protocol UIKitDiffableTextStyle: DiffableTextStyle {
     
     //=------------------------------------------------------------------------=
     // MARK: Setup
     //=------------------------------------------------------------------------=
     
-    @inlinable func setup(diffableTextField: ProxyTextField)
+    @inlinable static func setup(diffableTextField: ProxyTextField)
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: UIKitTextStyle - Implementation
+// MARK: UIKitDiffableTextStyle - Implementation
 //=----------------------------------------------------------------------------=
 
-public extension UIKitTextStyle {
+public extension UIKitDiffableTextStyle {
     
     //=------------------------------------------------------------------------=
     // MARK: Setup
     //=------------------------------------------------------------------------=
     
-    @inlinable func setup(diffableTextField: ProxyTextField) { }
+    @inlinable static func setup(diffableTextField: ProxyTextField) { }
 }
 
 #endif

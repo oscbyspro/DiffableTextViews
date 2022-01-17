@@ -19,6 +19,7 @@ import DiffableTextViews
     // MARK: Properties
     //=------------------------------------------------------------------------=
     
+    @usableFromInline let identifier: String
     @usableFromInline private(set) var signs = Lexicon<Sign>()
     @usableFromInline private(set) var digits = Lexicon<Digit>()
     @usableFromInline private(set) var separators = Lexicon<Separator>()
@@ -28,6 +29,7 @@ import DiffableTextViews
     //=------------------------------------------------------------------------=
     
     @inlinable init(_ locale: Locale) {
+        self.identifier = locale.identifier
         //=--------------------------------------=
         // MARK: Formatter
         //=--------------------------------------=

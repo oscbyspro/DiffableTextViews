@@ -47,15 +47,19 @@ public struct NumericTextStyle<Format: NumericTextStyles.Format>: DiffableTextSt
     }
     
     //=------------------------------------------------------------------------=
-    // MARK: Transformations
+    // MARK: Transformations - Locale
     //=------------------------------------------------------------------------=
     
-    @inlinable public func locale(_ locale: Locale) -> Self {
-        var result = self
-        result.format = format.locale(locale)
-        result.region = Region.cached(locale)
-        return result
+    @inlinable public mutating func update(locale: Locale) {
+        if locale.identifier != region.identifier {
+            self.format = format.locale(locale)
+            self.region = Region.cached(locale)
+        }
     }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Transformations - Options
+    //=------------------------------------------------------------------------=
     
     @inlinable public func bounds(_ bounds: Bounds) -> Self {
         var result = self
@@ -89,13 +93,13 @@ public struct NumericTextStyle<Format: NumericTextStyles.Format>: DiffableTextSt
 
 import UIKit
 
-extension NumericTextStyle: UIKitTextStyle {
+extension NumericTextStyle: UIKitDiffableTextStyle {
     
     //=------------------------------------------------------------------------=
     // MARK: Keyboard
     //=------------------------------------------------------------------------=
     
-    @inlinable public func setup(diffableTextField: ProxyTextField) {
+    @inlinable public static func setup(diffableTextField: ProxyTextField) {
         diffableTextField.keyboard(Value.isInteger ? .numberPad : .decimalPad)
     }
 }
