@@ -17,13 +17,6 @@ A framework for as-you-type formatting of text bound to its appropriate data typ
 
 # Views
 
-### Features
-
-|   | Feature | Description |
-|---|---------|-------------|
-| :balance_scale: | Monospaced | Standard font is monospaced. |
-| :evergreen_tree: | Environment | Locales are set through the environment. |
-
 ## DiffableTextField
 
 👷‍♂️🛠🚧🚧🧱🏗🧱🚧🚧⏳
@@ -31,7 +24,9 @@ A framework for as-you-type formatting of text bound to its appropriate data typ
 |   | Feature | Description |
 |---|---------|-------------|
 | :iphone: | SwiftUI | Value, style, done. |
+| :balance_scale: | Monospaced | Standard font is monospaced. |
 | :sewing_needle: | Customizable | Styles may provide default values. |
+| :evergreen_tree: | Environment | Locales are set by the environment. |
 
 ### Customization
 
