@@ -33,7 +33,7 @@ A framework for as-you-type formatting of text bound to its appropriate data typ
 | :iphone: | SwiftUI | Value, style, done. |
 | :sewing_needle: | Customizable | Styles may provide default values. |
 
-### Examples: Customization
+### Customization
 
 ```swift
 extension NumericTextStyle: UIKitTextStyle {    
