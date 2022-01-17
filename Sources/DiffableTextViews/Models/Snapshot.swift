@@ -35,12 +35,22 @@ public struct Snapshot: BidirectionalCollection, RangeReplaceableCollection {
         self._characters = ""
         self._attributes = []
     }
-
+    
+    @inlinable public init<S: Sequence>(_ sequence: S, as attribute: Attribute) where S.Element == Character {
+        self._characters = String(sequence)
+        self._attributes = Attributes(repeating: attribute, count: _characters.count)
+    }
+    
+    @inlinable public init<C: Collection>(_ collection: C, as attribute: Attribute) where C.Element == Character {
+        self._characters = String(collection)
+        self._attributes = Attributes(repeating: attribute, count: collection.count)
+    }
+    
     @inlinable public init(_ characters: String, as attribute: Attribute) {
         self._characters = characters
         self._attributes = Attributes(repeating: attribute, count: characters.count)
     }
-    
+
     //*========================================================================*
     // MARK: * Index
     //*========================================================================*

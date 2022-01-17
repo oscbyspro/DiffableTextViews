@@ -9,7 +9,7 @@
 // MARK: * Mode
 //*============================================================================*
 
-@frozen @usableFromInline enum Mode {
+@frozen public enum Mode {
     case showcase
     case editable
 }
