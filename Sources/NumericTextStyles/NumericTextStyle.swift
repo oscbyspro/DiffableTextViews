@@ -78,7 +78,7 @@ public struct NumericTextStyle<Format: NumericTextStyles.Format>: DiffableTextSt
     //=------------------------------------------------------------------------=
     
     @inlinable func autocorrect(sign: Sign, for value: Value, in characters: inout String) {
-        guard sign == .negative && value == .zero else { return }
+        guard sign == .negative && value == .zero  else { return }
         guard let position = characters.firstIndex(where: region.signs.components.keys.contains) else { return }
         guard let replacement = region.signs[sign] else { return }
         characters.replaceSubrange(position...position, with: String(replacement))
@@ -152,7 +152,7 @@ extension NumericTextStyle {
         case .showcase: return snapshot(characters: format.style(precision: precision.showcaseStyle()).format(value))
         }
     }
-
+    
     //=------------------------------------------------------------------------=
     // MARK: Characters
     //=------------------------------------------------------------------------=
