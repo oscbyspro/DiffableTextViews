@@ -19,7 +19,6 @@ public final class BasicTextField: UITextField {
     // MARK: Properties
     //=------------------------------------------------------------------------=
     
-    #warning("Rework: Intent.")
     @usableFromInline private(set) var intent: Direction? = nil
 
     //=------------------------------------------------------------------------=
