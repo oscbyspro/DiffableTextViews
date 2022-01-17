@@ -38,7 +38,7 @@ public protocol DiffableTextStyle {
     // MARK: Snapshot
     //=------------------------------------------------------------------------=
     
-    /// A snapshot of the value.
+    /// A snapshot of the value according to the mode.
     @inlinable func snapshot(value: Value, mode: Mode) -> Snapshot // required (!)
     
     //=------------------------------------------------------------------------=
