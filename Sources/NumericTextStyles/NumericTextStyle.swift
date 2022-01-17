@@ -207,9 +207,13 @@ extension NumericTextStyle {
         reader.process?(&number)
         try bounds.validate(sign: number.sign)
         //=--------------------------------------=
+        // MARK: Count
+        //=--------------------------------------=
+        let count = number.count()
+        //=--------------------------------------=
         // MARK: Capacity
         //=--------------------------------------=
-        let capacity = try precision.capacity(count: number.count())
+        let capacity = try precision.capacity(count: count)
         number.removeImpossibleSeparator(capacity: capacity)
         //=--------------------------------------=
         // MARK: Value
@@ -220,7 +224,7 @@ extension NumericTextStyle {
         // MARK: Style
         //=--------------------------------------=
         let style = format.style(
-        precision: precision.editable(number: number),
+        precision: precision.editable(count: count),
         separator: number.separator == .fraction ? .always : .automatic,
         sign: number.sign == .negative ? .always : .automatic)
         //=--------------------------------------=

@@ -67,17 +67,15 @@ public struct Precision<Format: NumericTextStyles.Format> where Format.FormatInp
     //=------------------------------------------------------------------------=
     
     @inlinable func editable() -> Configuration {
-        let  integer = Swift.max(Namespace.min.integer,  upper .integer)
-        let fraction = Swift.max(Namespace.min.fraction, upper.fraction)
-        return .integerAndFractionLength(integer: integer, fraction: fraction)
+        editable(count: upper)
     }
     
-    @inlinable func editable(number: Number) -> Configuration {
-        let  integer = Swift.max(Namespace.min.integer,  number .integer.count)
-        let fraction = Swift.max(Namespace.min.fraction, number.fraction.count)
-        return .integerAndFractionLength(integer: integer, fraction: fraction)
+    @inlinable func editable(count: Count) -> Configuration {
+        .integerAndFractionLength(
+         integerLimits: Namespace.min.integer  ... count.integer,
+        fractionLimits: Namespace.min.fraction ... count.fraction)
     }
-    
+
     //=------------------------------------------------------------------------=
     // MARK: Capacity
     //=------------------------------------------------------------------------=
@@ -144,7 +142,7 @@ extension Precision {
     // MARK: Standard
     //=------------------------------------------------------------------------=
             
-    @inlinable static var standard: Self {
+    @inlinable public static var standard: Self {
         digits(limits(\.value))
     }
     
@@ -152,7 +150,7 @@ extension Precision {
     // MARK: Length
     //=------------------------------------------------------------------------=
     
-    @inlinable static func digits(_ value: Int) -> Self {
+    @inlinable public static func digits(_ value: Int) -> Self {
         digits(value...value)
     }
 
@@ -160,7 +158,7 @@ extension Precision {
     // MARK: Limits
     //=------------------------------------------------------------------------=
     
-    @inlinable static func digits<R: RangeExpression>(_ value: R) -> Self where R.Bound == Int {
+    @inlinable public static func digits<R: RangeExpression>(_ value: R) -> Self where R.Bound == Int {
         //=--------------------------------------=
         // MARK: Interpret
         //=--------------------------------------=
@@ -187,15 +185,15 @@ extension Precision where Value: PreciseFloatingPoint {
     // MARK: Length
     //=------------------------------------------------------------------------=
     
-    @inlinable static func digits(integer: Int) -> Self {
+    @inlinable public static func digits(integer: Int) -> Self {
         digits(integer: integer...integer)
     }
     
-    @inlinable static func digits(fraction: Int) -> Self {
+    @inlinable public static func digits(fraction: Int) -> Self {
         digits(fraction: fraction...fraction)
     }
     
-    @inlinable static func digits(integer: Int, fraction: Int) -> Self {
+    @inlinable public static func digits(integer: Int, fraction: Int) -> Self {
         digits(integer: integer...integer, fraction: fraction...fraction)
     }
     
@@ -203,11 +201,11 @@ extension Precision where Value: PreciseFloatingPoint {
     // MARK: Mixed
     //=------------------------------------------------------------------------=
     
-    @inlinable static func digits<R: RangeExpression>(integer: R, fraction: Int) -> Self where R.Bound == Int {
+    @inlinable public static func digits<R: RangeExpression>(integer: R, fraction: Int) -> Self where R.Bound == Int {
         digits(integer: integer, fraction: fraction...fraction)
     }
     
-    @inlinable static func digits<R: RangeExpression>(integer: Int, fraction: R) -> Self where R.Bound == Int {
+    @inlinable public static func digits<R: RangeExpression>(integer: Int, fraction: R) -> Self where R.Bound == Int {
         digits(integer: integer...integer, fraction: fraction)
     }
 
