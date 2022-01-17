@@ -17,18 +17,23 @@ A framework for as-you-type formatting of text bound to its appropriate data typ
 
 # Views
 
-## DiffableTextField
-
-👷‍♂️🛠🚧🚧🧱🏗🧱🚧🚧⏳
-
 ### Features
 
 |   | Feature | Description |
 |---|---------|-------------|
-| :balance_scale: | Font | Standard font is monospaced. |
-| :sewing_needle: | Custom | Styles may provide default values. |
+| :balance_scale: | Monospaced | Standard font is monospaced. |
+| :evergreen_tree: | Environment | Locales are set through the environment. |
 
-### Examples
+## DiffableTextField
+
+👷‍♂️🛠🚧🚧🧱🏗🧱🚧🚧⏳
+
+|   | Feature | Description |
+|---|---------|-------------|
+| :iphone: | SwiftUI | Value, style, done. |
+| :sewing_needle: | Customizable | Styles may provide default values. |
+
+### Examples: Customization
 
 ```swift
 extension NumericTextStyle: UIKitTextStyle {    
