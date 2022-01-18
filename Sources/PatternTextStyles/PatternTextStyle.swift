@@ -142,69 +142,68 @@ extension PatternTextStyle {
     // MARK: Value
     //=------------------------------------------------------------------------=
     
-    #warning("Rework")
     #warning("Hmm, maybe this should be throwable.")
     @inlinable public func snapshot(value: Value, mode: Mode = .editable) -> Snapshot {
         var (snapshot, phantoms) = (Snapshot(), String())
-        var (valueIndex, patternIndex) = (value.startIndex, pattern.startIndex)
-        //=--------------------------------------=
+        var (_value, _pattern) = (value.startIndex, pattern.startIndex)
+        //=--------------------------------------------------------------------=
+        // MARK: Helpers
+        //=--------------------------------------------------------------------=
+        func snapshotValue() {
+            snapshot.append(Symbol(value[_value], as: .content))
+            value.formIndex(after:      &_value)
+        }
+        //=--------------------------------------------------------------------=
         // MARK: Head
-        //=--------------------------------------=
-        head: while patternIndex != pattern.endIndex {
-            let patternElement = pattern[patternIndex]
-            pattern.formIndex(after: &patternIndex)
+        //=--------------------------------------------------------------------=
+        head: while _pattern != pattern.endIndex {
+            let character = pattern[_pattern]
+            pattern.formIndex(after: &_pattern)
             //=----------------------------------=
             // MARK: Placeholder
             //=----------------------------------=
-            if placeholders.contains(patternElement) {
-                if valueIndex == value.endIndex {
-                    snapshot.append(.anchor)
-                } else {
-                    snapshot.append(Symbol(value[valueIndex], as: .content))
-                    value.formIndex(after: &valueIndex)
-                }
-                
+            if placeholders.contains(character) {
+                _value != value.endIndex ? snapshotValue() : snapshot.append(.anchor)
                 break head
             //=----------------------------------=
             // MARK: Pattern
             //=----------------------------------=
             } else {
-                snapshot.append(Symbol(patternElement, as: .phantom))
+                snapshot.append(Symbol(character, as: .phantom))
             }
         }
-        //=--------------------------------------=
+        //=--------------------------------------------------------------------=
         // MARK: Body
-        //=--------------------------------------=
-        body: while patternIndex != pattern.endIndex {
-            let patternElement = pattern[patternIndex]
-            pattern.formIndex(after: &patternIndex)
+        //=--------------------------------------------------------------------=
+        body: while _pattern != pattern.endIndex {
+            let character = pattern[_pattern]
+            pattern.formIndex(after: &_pattern)
             //=----------------------------------=
             // MARK: Placeholder
             //=----------------------------------=
-            if placeholders.contains(patternElement) {
-                guard valueIndex != value.endIndex else { break body }
+            if placeholders.contains(character) {
+                guard _value != value.endIndex else { break body }
 
-                snapshot += Snapshot(phantoms, as: .phantom)
+                snapshot.append(contentsOf: Snapshot(phantoms, as: .phantom))
                 phantoms.removeAll(keepingCapacity: true)
 
-                snapshot.append(Symbol(value[valueIndex], as: .content))
-                value.formIndex(after: &valueIndex)
+                snapshotValue()
             //=----------------------------------=
             // MARK: Pattern
             //=----------------------------------=
             } else {
-                phantoms.append(patternElement)
+                phantoms.append(character)
             }
         }
-        //=--------------------------------------=
+        //=--------------------------------------------------------------------=
         // MARK: Tail
-        //=--------------------------------------=
+        //=--------------------------------------------------------------------=
         tail: if visible {
-            snapshot += Snapshot(pattern[patternIndex...], as: .phantom)
+            snapshot.append(contentsOf: Snapshot(pattern[_pattern...], as: .phantom))
         }
-        //=--------------------------------------=
+        //=--------------------------------------------------------------------=
         // MARK: Done
-        //=--------------------------------------=
+        //=--------------------------------------------------------------------=
         return snapshot
     }
 }
