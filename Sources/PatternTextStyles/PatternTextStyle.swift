@@ -12,7 +12,9 @@ import Support
 // MARK: * PatternTextStyle
 //*============================================================================*
 
-public struct PatternTextStyle<Pattern, Value>: DiffableTextStyle where Pattern: Collection, Pattern.Element == Character, Value: RangeReplaceableCollection, Value: Equatable, Value.Element == Character {
+public struct PatternTextStyle<Pattern, Value>: DiffableTextStyle where
+Pattern: Collection, Pattern.Element == Character,
+Value: RangeReplaceableCollection, Value: Equatable, Value.Element == Character {
     
     //=------------------------------------------------------------------------=
     // MARK: Properties
@@ -58,7 +60,7 @@ public struct PatternTextStyle<Pattern, Value>: DiffableTextStyle where Pattern:
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: PatternTextStyle - UIKitDiffableTextStyle
+// MARK: PatternTextStyle - UIKit
 //=----------------------------------------------------------------------------=
 
 #if canImport(UIKit)
@@ -79,11 +81,18 @@ extension PatternTextStyle {
     
     @inlinable public func parse(snapshot: Snapshot) throws -> Value {
         //=--------------------------------------=
+        // MARK: Characters
+        //=--------------------------------------=
+        let characters = snapshot
+            .lazy
+            .filter({ !$0.contains(.virtual) })
+            .map(\.character)
+        //=--------------------------------------=
         // MARK: Value
         //=--------------------------------------=
-        let value = Value(snapshot.lazy.filter({ !$0.contains(.virtual) }).map(\.character))
+        let value = Value(characters)
         //=--------------------------------------=
-        // MARK: Validate
+        // MARK: Validation
         //=--------------------------------------=
         try validate(value: value)
         //=--------------------------------------=
@@ -133,56 +142,65 @@ extension PatternTextStyle {
     // MARK: Value
     //=------------------------------------------------------------------------=
     
-    #warning("Should be able to throw, maybe.")
-    @inlinable public func snapshot(value: Value, mode: Mode) -> Snapshot {
-        var snapshot = Snapshot()
+    #warning("Rework")
+    #warning("Hmm, maybe this should be throwable.")
+    @inlinable public func snapshot(value: Value, mode: Mode = .editable) -> Snapshot {
+        var (snapshot, phantoms) = (Snapshot(), String())
+        var (valueIndex, patternIndex) = (value.startIndex, pattern.startIndex)
         //=--------------------------------------=
-        // MARK: Indices
+        // MARK: Head
         //=--------------------------------------=
-        var valueIndex = value.startIndex
-        var patternIndex = pattern.startIndex
-        //=--------------------------------------=
-        // MARK: Body
-        //=--------------------------------------=
-        while patternIndex != pattern.endIndex, valueIndex != value.endIndex {
-            //=----------------------------------=
-            // MARK: Element
-            //=----------------------------------=
+        head: while patternIndex != pattern.endIndex {
             let patternElement = pattern[patternIndex]
             pattern.formIndex(after: &patternIndex)
             //=----------------------------------=
-            // MARK: Match, Insert
+            // MARK: Placeholder
             //=----------------------------------=
-            if let _ = placeholders[patternElement] {
-                snapshot.append(Symbol(value[valueIndex], as: .content))
-                value.formIndex(after: &valueIndex)
+            if placeholders.contains(patternElement) {
+                if valueIndex == value.endIndex {
+                    snapshot.append(.anchor)
+                } else {
+                    snapshot.append(Symbol(value[valueIndex], as: .content))
+                    value.formIndex(after: &valueIndex)
+                }
+                
+                break head
+            //=----------------------------------=
+            // MARK: Pattern
+            //=----------------------------------=
             } else {
                 snapshot.append(Symbol(patternElement, as: .phantom))
             }
         }
         //=--------------------------------------=
-        // MARK: Remainders
+        // MARK: Body
         //=--------------------------------------=
-        if visible {
+        body: while patternIndex != pattern.endIndex {
+            let patternElement = pattern[patternIndex]
+            pattern.formIndex(after: &patternIndex)
             //=----------------------------------=
-            // MARK: Head
+            // MARK: Placeholder
             //=----------------------------------=
-            while patternIndex != pattern.endIndex {
-                let patternElement = pattern[patternIndex]
-                if let _ = placeholders[patternElement] { break }
-                snapshot.append(Symbol(patternElement, as: .phantom))
-                pattern.formIndex(after: &patternIndex)
+            if placeholders.contains(patternElement) {
+                guard valueIndex != value.endIndex else { break body }
+
+                snapshot += Snapshot(phantoms, as: .phantom)
+                phantoms.removeAll(keepingCapacity: true)
+
+                snapshot.append(Symbol(value[valueIndex], as: .content))
+                value.formIndex(after: &valueIndex)
+            //=----------------------------------=
+            // MARK: Pattern
+            //=----------------------------------=
+            } else {
+                phantoms.append(patternElement)
             }
-            //=----------------------------------=
-            // MARK: Anchor
-            //=----------------------------------=
-            if valueIndex == value.startIndex {
-                snapshot.append(.anchor)
-            }
-            //=----------------------------------=
-            // MARK: Tail
-            //=----------------------------------=
-            snapshot.append(contentsOf: Snapshot(pattern[patternIndex...], as: .phantom))
+        }
+        //=--------------------------------------=
+        // MARK: Tail
+        //=--------------------------------------=
+        tail: if visible {
+            snapshot += Snapshot(pattern[patternIndex...], as: .phantom)
         }
         //=--------------------------------------=
         // MARK: Done
@@ -214,6 +232,6 @@ extension PatternTextStyle {
         //=--------------------------------------=
         // MARK: Snapshot, Output
         //=--------------------------------------=
-        return Output<Value>(self.snapshot(value: value, mode: .editable), value: value)
+        return Output<Value>(self.snapshot(value: value), value: value)
     }
 }
