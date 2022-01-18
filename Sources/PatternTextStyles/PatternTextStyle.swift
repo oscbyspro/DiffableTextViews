@@ -6,6 +6,7 @@
 //
 
 import DiffableTextViews
+import Support
 
 //*============================================================================*
 // MARK: * PatternTextStyle
@@ -55,8 +56,7 @@ public struct PatternTextStyle<Pattern, Value>: DiffableTextStyle where Pattern:
     //=------------------------------------------------------------------------=
     
     @inlinable func validate<C: Collection>(_ characters: C) throws where C.Element == Character {
-        let capacity = pattern.reduce(into: 0) { $0 += $1 == placeholder ? 1 : 0 }
-        
+        let capacity = pattern.count(where: { $0 == placeholder })
         guard characters.count <= capacity else {
             throw Info([.mark(characters), "exceeded pattern capacity", .mark(capacity)])
         }

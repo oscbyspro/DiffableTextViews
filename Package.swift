@@ -23,7 +23,6 @@ let package = Package(
         //=--------------------------------------=
         // MARK: https://github.com/oscbyspro/
         //=--------------------------------------=
-        .package(name: "Quick", url: "https://github.com/oscbyspro/Quick", .branch("main")),
         .package(name: "QuickText", url: "https://github.com/oscbyspro/QuickText", .branch("main")),
     ],
     targets: [
@@ -32,7 +31,7 @@ let package = Package(
         //=--------------------------------------=
         .target(
             name: "DiffableTextViews",
-            dependencies: ["Quick", "QuickText"]),
+            dependencies: ["QuickText", "Support"]),
         .testTarget(
             name: "DiffableTextViewsTests",
             dependencies: ["DiffableTextViews"]),
@@ -41,7 +40,7 @@ let package = Package(
         //=--------------------------------------=
         .target(
             name: "NumericTextStyles",
-            dependencies: ["DiffableTextViews", "Quick"]),
+            dependencies: ["DiffableTextViews", "Support"]),
         .testTarget(
             name: "NumericTextStylesTests",
             dependencies: ["NumericTextStyles"]),
@@ -50,9 +49,15 @@ let package = Package(
         //=--------------------------------------=
         .target(
             name: "PatternTextStyles",
-            dependencies: ["DiffableTextViews", "Quick"]),
+            dependencies: ["DiffableTextViews", "Support"]),
         .testTarget(
             name: "PatternTextStylesTests",
             dependencies: ["PatternTextStyles"]),
+        //=--------------------------------------=
+        // MARK: Support
+        //=--------------------------------------=
+        .target(
+            name: "Support",
+            dependencies: []),
     ]
 )

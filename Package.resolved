@@ -2,15 +2,6 @@
   "object": {
     "pins": [
       {
-        "package": "Quick",
-        "repositoryURL": "https://github.com/oscbyspro/Quick",
-        "state": {
-          "branch": "main",
-          "revision": "ef39da60be55eb0817cb1c53b6e54a029458e0ce",
-          "version": null
-        }
-      },
-      {
         "package": "QuickText",
         "repositoryURL": "https://github.com/oscbyspro/QuickText",
         "state": {
