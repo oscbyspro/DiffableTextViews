@@ -85,7 +85,7 @@ extension Number {
         snapshot: Snapshot, integer: Bool, unsigned: Bool,
         signs: [Character: Sign], digits: [Character: Digit], separators: [Character: Separator]
     ) throws {
-        guard let start = snapshot.firstIndex(where: { !$0.contains(.virtual) }) else { self = .zero; return }
+        guard let start = snapshot.firstIndex(where: \.nonvirtual) else { self = .zero; return }
         //=--------------------------------------=
         // MARK: State
         //=--------------------------------------=

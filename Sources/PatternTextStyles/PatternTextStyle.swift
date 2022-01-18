@@ -84,51 +84,34 @@ extension PatternTextStyle {
     //=------------------------------------------------------------------------=
     
     @inlinable public func parse(snapshot: Snapshot) throws -> Value {
-        //=--------------------------------------=
-        // MARK: Characters
-        //=--------------------------------------=
-        let characters = snapshot
-            .lazy
-            .filter({ !$0.contains(.virtual) })
-            .map(\.character)
+        var nonvirtuals = snapshot.lazy.filter(\.nonvirtual).makeIterator()
         //=--------------------------------------=
         // MARK: Value
         //=--------------------------------------=
-        let value = Value(characters)
-        //=--------------------------------------=
-        // MARK: Validation
-        //=--------------------------------------=
-        try validate(value: value)
-        //=--------------------------------------=
-        // MARK: Done
-        //=--------------------------------------=
-        return value
-    }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Helpers
-    //=------------------------------------------------------------------------=
-    
-    @inlinable func validate(value: Value) throws {
-        var valueIterator = value.makeIterator()
+        var value = Value()
         //=--------------------------------------=
         // MARK: Pattern
         //=--------------------------------------=
-        for character in pattern {
+        loop: for character in pattern {
             //=----------------------------------=
-            // MARK: Predicate
+            // MARK: Placeholder
             //=----------------------------------=
             if let predicate = placeholders[character] {
-                guard let real = valueIterator.next() else { return }
-                try predicate.validate(real)
+                guard let real = nonvirtuals.next() else { break loop }
+                try predicate.validate(real.character)
+                value.append(real.character)
             }
         }
         //=--------------------------------------=
         // MARK: Capacity
         //=--------------------------------------=
-        guard valueIterator.next() == nil else {
+        guard nonvirtuals.next() == nil else {
             throw Info([.mark(value), "exceeded pattern capacity."])
         }
+        //=--------------------------------------=
+        // MARK: Success
+        //=--------------------------------------=
+        return value
     }
 }
 
@@ -142,7 +125,6 @@ extension PatternTextStyle {
     // MARK: Value
     //=------------------------------------------------------------------------=
     
-    #warning("Hmm, maybe this should be throwable.")
     @inlinable public func snapshot(value: Value, mode: Mode = .editable) -> Snapshot {
         var snapshot = Snapshot()
         var position = pattern.startIndex

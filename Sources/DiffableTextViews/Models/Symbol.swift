@@ -59,7 +59,7 @@ public struct Symbol: Equatable {
     @inlinable @inline(__always) public static func phantom(_ character: Character) -> Self {
         Self(character, as: .phantom)
     }
-    
+        
     //=------------------------------------------------------------------------=
     // MARK: Accessors
     //=------------------------------------------------------------------------=
@@ -70,6 +70,18 @@ public struct Symbol: Equatable {
 
     @inlinable @inline(__always) public func contains(_ attribute: Attribute) -> Bool {
         self.attribute.contains(attribute)
+    }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Accessors - Virtual
+    //=------------------------------------------------------------------------=
+    
+    @inlinable @inline(__always) public var virtual: Bool {
+        self.attribute.contains(.virtual)
+    }
+    
+    @inlinable @inline(__always) public var nonvirtual: Bool {
+        self.attribute.contains(.virtual) == false
     }
 }
 
