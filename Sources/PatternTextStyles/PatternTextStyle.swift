@@ -38,6 +38,10 @@ Value: RangeReplaceableCollection, Value: Equatable, Value.Element == Character 
     // MARK: Transformations
     //=------------------------------------------------------------------------=
     
+    /// Hides the part of the pattern that suffixes the last value.
+    ///
+    /// - If you want the entire pattern to be invisible, use spaces instead.
+    ///
     @inlinable public func hidden() -> Self {
         var result = self
         result.visible = false
@@ -171,7 +175,7 @@ extension PatternTextStyle {
             // MARK: Placeholder
             //=----------------------------------=
             if placeholders.contains(character) {
-                guard let real = value.next() else { break }
+                guard let real = value.next() else { break body }
 
                 snapshot.append(contentsOf: Snapshot(phantoms, as: .phantom))
                 phantoms.removeAll(keepingCapacity: true)
