@@ -15,6 +15,7 @@ import Support
 public struct PatternTextStyle<Pattern, Value>: DiffableTextStyle where
 Pattern: Collection, Pattern.Element == Character,
 Value: RangeReplaceableCollection, Value: Equatable, Value.Element == Character {
+    @usableFromInline typealias Predicate = (Character) -> Bool
     
     //=------------------------------------------------------------------------=
     // MARK: Properties
@@ -47,19 +48,11 @@ Value: RangeReplaceableCollection, Value: Equatable, Value.Element == Character 
         result.visible = false
         return result
     }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Transformations - Placeholder
-    //=------------------------------------------------------------------------=
-    
-    @inlinable public func placeholder(_ character: Character, where predicate: Predicate) -> Self {
+
+    @inlinable public func placeholder(_ character: Character, where predicate: @escaping (Character) -> Bool) -> Self {
         var result = self
         result.placeholders[character] = predicate
         return result
-    }
-    
-    @inlinable public func placeholder(_ character: Character, where predicate: (Character) -> Bool...) -> Self {
-        placeholder(character, where: Predicate(predicate))
     }
 }
 
@@ -98,7 +91,10 @@ extension PatternTextStyle {
             //=----------------------------------=
             if let predicate = placeholders[character] {
                 guard let real = nonvirtuals.next() else { break loop }
-                try predicate.validate(real.character)
+                guard predicate(real.character) else {
+                    throw Info([.mark(character), "is invalid."])
+                }
+                
                 value.append(real.character)
             }
         }
