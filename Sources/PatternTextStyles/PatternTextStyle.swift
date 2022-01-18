@@ -12,7 +12,6 @@ import Support
 // MARK: * PatternTextStyle
 //*============================================================================*
 
-#warning("Maybe pattern should always be a String?")
 public struct PatternTextStyle<Pattern, Value>: DiffableTextStyle where Pattern: Collection, Pattern.Element == Character, Value: RangeReplaceableCollection, Value: Equatable, Value.Element == Character {
     
     //=------------------------------------------------------------------------=
@@ -53,8 +52,8 @@ public struct PatternTextStyle<Pattern, Value>: DiffableTextStyle where Pattern:
         return result
     }
     
-    @inlinable public func placeholder(_ character: Character, where predicate: @escaping (Character) -> Bool) -> Self {
-        placeholder(character, where: Predicate([predicate]))
+    @inlinable public func placeholder(_ character: Character, where predicate: (Character) -> Bool...) -> Self {
+        placeholder(character, where: Predicate(predicate))
     }
 }
 

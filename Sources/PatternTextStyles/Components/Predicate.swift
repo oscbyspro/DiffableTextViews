@@ -35,8 +35,8 @@ public struct Predicate: ExpressibleByArrayLiteral {
         self.assertions = assertions
     }
 
-    @inlinable public init(arrayLiteral elements: ((Character) -> Bool)...) {
-        self.assertions = elements
+    @inlinable public init(arrayLiteral assertions: (Character) -> Bool...) {
+        self.assertions = assertions
     }
     
     //=------------------------------------------------------------------------=
