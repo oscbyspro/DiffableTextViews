@@ -85,7 +85,7 @@ import SwiftUI
 import DiffableTextViews
 import PatternTextStyles
 
-struct PatternTextStylePhoneExample: View {
+struct PatternTextStyleExample: View {
     @State var phone: String = ""
     
     var body: some View {
@@ -94,19 +94,6 @@ struct PatternTextStylePhoneExample: View {
             .placeholder("#", where: \.isASCII, \.isNumber)
         }
         .setup({ textField in textField.keyboard(.phonePad) })
-    }
-}
-
-struct PatternTextStyleCardExample: View {
-    @State var card: String = ""
-    
-    var body: some View {
-        DiffableTextField($card) {
-            .pattern("#### #### #### ####")
-            .placeholder("#", where: \.isASCII, \.isNumber)
-            .hidden()
-        }
-        .setup({ textField in textField.keyboard(.numberPad) })
     }
 }
 
