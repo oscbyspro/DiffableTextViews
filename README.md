@@ -18,7 +18,7 @@ A framework for as-you-type formatting of text bound to its appropriate data typ
 
 # Views
 
-## [DiffableTextField](../main/Notes/DiffableTextViews/DiffableTextField.md))
+## [DiffableTextField](../main/Notes/DiffableTextViews/DiffableTextField.md)
 
 👷‍♂️🛠🚧🚧🧱🏗🧱🚧🚧⏳
 
@@ -31,7 +31,7 @@ A framework for as-you-type formatting of text bound to its appropriate data typ
 
 # Styles
 
-## [NumericTextStyle](../main/Notes/NumericTextStyles/NumericTextStyle.md))
+## [NumericTextStyle](../main/Notes/NumericTextStyles/NumericTextStyle.md)
 
 👷‍♂️🛠🚧🚧🧱🏗🧱🚧🚧⏳
 
