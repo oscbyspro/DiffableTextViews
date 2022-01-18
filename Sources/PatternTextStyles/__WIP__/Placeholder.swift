@@ -1,39 +1,39 @@
 //
-//  Predicate.swift
+//  Placeholder.swift
 //  
 //
-//  Created by Oscar Byström Ericsson on 2022-01-10.
+//  Created by Oscar Byström Ericsson on 2022-01-18.
 //
 
 //*============================================================================*
-// MARK: * Predicate
+// MARK: * Placeholder
 //*============================================================================*
 
-public struct Predicate<Value: Collection> where Value.Element == Character {
-
+public struct Placeholder {
+    
     //=------------------------------------------------------------------------=
     // MARK: Properties
     //=------------------------------------------------------------------------=
     
-    @usableFromInline let validate: (Value) -> Bool
+    @usableFromInline let character: Character
+    @usableFromInline var predicates: Predicates
     
     //=------------------------------------------------------------------------=
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable init(validate: @escaping (Value) -> Bool) {
-        self.validate = validate
+    @inlinable init(character: Character) {
+        self.character = character
+        self.predicates = Predicates()
     }
     
     //=------------------------------------------------------------------------=
-    // MARK: Initializers - Static
+    // MARK: Transformations
     //=------------------------------------------------------------------------=
     
-    @inlinable public static func value(_ predicate: @escaping (Value) -> Bool) -> Self {
-        .init(validate: predicate)
-    }
-    
-    @inlinable public static func character(_ predicate: @escaping (Character) -> Bool) -> Self {
-        .init(validate: { characters in characters.allSatisfy(predicate) })
+    @inlinable func predicate(_ predicate: Predicates) -> Self {
+        var result = self
+        result.predicates.insert(predicate)
+        return result
     }
 }

@@ -52,11 +52,11 @@ public struct Symbol: Equatable {
     // MARK: Initializers - Static
     //=------------------------------------------------------------------------=
     
-    @inlinable @inline(__always) public func content(_ character: Character) -> Self {
+    @inlinable @inline(__always) public static func content(_ character: Character) -> Self {
         Self(character, as: .content)
     }
     
-    @inlinable @inline(__always) public func phantom(_ character: Character) -> Self {
+    @inlinable @inline(__always) public static func phantom(_ character: Character) -> Self {
         Self(character, as: .phantom)
     }
     

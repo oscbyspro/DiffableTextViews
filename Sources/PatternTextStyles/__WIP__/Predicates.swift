@@ -2,25 +2,21 @@
 //  Predicates.swift
 //  
 //
-//  Created by Oscar Byström Ericsson on 2021-12-27.
+//  Created by Oscar Byström Ericsson on 2022-01-10.
 //
-
-import DiffableTextViews
-import Support
 
 //*============================================================================*
 // MARK: * Predicates
 //*============================================================================*
 
-@usableFromInline struct Predicates<Value: Collection> where Value.Element == Character {
-    @usableFromInline typealias Predicate = PatternTextStyles.Predicate<Value>
+public struct Predicates {
     
     //=------------------------------------------------------------------------=
     // MARK: Properties
     //=------------------------------------------------------------------------=
     
-    @usableFromInline private(set) var predicates: [Predicate]
-        
+    @usableFromInline var predicates: [Predicate]
+    
     //=------------------------------------------------------------------------=
     // MARK: Initializers
     //=------------------------------------------------------------------------=
@@ -29,23 +25,35 @@ import Support
         self.predicates = []
     }
     
+    @inlinable init(predicates: [Predicate]) {
+        self.predicates = predicates
+    }
+
     //=------------------------------------------------------------------------=
     // MARK: Transformations
     //=------------------------------------------------------------------------=
     
-    @inlinable mutating func add(_ predicate: Predicate) {
-        predicates.append(predicate)
+    @inlinable mutating func insert(_ assertion: Predicate) {
+        self.predicates.append(assertion)
+    }
+    
+    @inlinable mutating func insert(_ predicates: [Predicate]) {
+        self.predicates.append(contentsOf: predicates)
+    }
+    
+    @inlinable mutating func insert(_ other: Self) {
+        self.predicates.append(contentsOf: other.predicates)
     }
     
     //=------------------------------------------------------------------------=
     // MARK: Validation
     //=------------------------------------------------------------------------=
     
-    @inlinable func validate(_ characters: Value) throws {
-        for (index, predicate) in predicates.enumerated() {
-            guard predicate.validate(characters) else {
-                throw Info([.mark(characters), "does not satisfy predicate", .mark(index)])
-            }
+    @inlinable func validate(_ character: Character) -> Bool {
+        for predicate in predicates {
+            guard predicate.assertion(character) else { return false }
         }
+        
+        return true
     }
 }

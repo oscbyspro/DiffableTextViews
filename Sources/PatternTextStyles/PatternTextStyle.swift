@@ -13,15 +13,13 @@ import Support
 //*============================================================================*
 
 public struct PatternTextStyle<Pattern, Value>: DiffableTextStyle where Pattern: Collection, Pattern.Element == Character, Value: RangeReplaceableCollection, Value: Equatable, Value.Element == Character {
-    @usableFromInline typealias Predicates = PatternTextStyles.Predicates<Value>
     
     //=------------------------------------------------------------------------=
     // MARK: Properties
     //=------------------------------------------------------------------------=
     
     @usableFromInline let pattern: Pattern
-    @usableFromInline let placeholder: Character
-    @usableFromInline var predicates: Predicates
+    @usableFromInline var placeholders: Placeholders
     @usableFromInline var visible: Bool
     
     //=------------------------------------------------------------------------=
@@ -30,8 +28,7 @@ public struct PatternTextStyle<Pattern, Value>: DiffableTextStyle where Pattern:
     
     @inlinable public init(pattern: Pattern, placeholder: Character) {
         self.pattern = pattern
-        self.placeholder = placeholder
-        self.predicates = Predicates()
+        self.placeholders = Placeholders()
         self.visible = true
     }
     
@@ -45,18 +42,18 @@ public struct PatternTextStyle<Pattern, Value>: DiffableTextStyle where Pattern:
         return result
     }
     
-    @inlinable public func predicate(_ predicate: Predicate<Value>) -> Self {
+    @inlinable public func placeholder(_ predicate: Placeholder) -> Self {
         var result = self
-        result.predicates.add(predicate)
+        result.placeholders.insert(predicate)
         return result
     }
-        
+            
     //=------------------------------------------------------------------------=
     // MARK: Validation
     //=------------------------------------------------------------------------=
     
     @inlinable func validate<C: Collection>(_ characters: C) throws where C.Element == Character {
-        let capacity = pattern.count(where: { $0 == placeholder })
+        let capacity = pattern.count(where: placeholders.contains)
         guard characters.count <= capacity else {
             throw Info([.mark(characters), "exceeded pattern capacity", .mark(capacity)])
         }
@@ -92,7 +89,7 @@ extension PatternTextStyle {
         // MARK: Validate
         //=--------------------------------------=
         try validate(value)
-        try predicates.validate(value)
+        try placeholders.validate(value)
         //=--------------------------------------=
         // MARK: Done
         //=--------------------------------------=
@@ -129,12 +126,11 @@ extension PatternTextStyle {
             //=----------------------------------=
             // MARK: Match, Insert
             //=----------------------------------=
-            if patternElement == placeholder {
-                let valueElement = value[valueIndex]
+            if let _ = placeholders[patternElement] {
+                snapshot.append(.content(value[valueIndex]))
                 value.formIndex(after: &valueIndex)
-                snapshot.append(Symbol(valueElement, as: .content))
             } else {
-                snapshot.append(Symbol(patternElement, as: .phantom))
+                snapshot.append(.phantom(patternElement))
             }
         }
         //=--------------------------------------=
@@ -144,10 +140,17 @@ extension PatternTextStyle {
             //=----------------------------------=
             // MARK: Head
             //=----------------------------------=
-            if valueIndex == value.startIndex, let anchorIndex = pattern[patternIndex...].firstIndex(where: { $0 == placeholder }) {
-                snapshot.append(contentsOf: Snapshot(pattern[patternIndex..<anchorIndex], as: .phantom))
+            while patternIndex != pattern.endIndex {
+                let patternElement = pattern[patternIndex]
+                if let _ = placeholders[patternElement] { break }
+                snapshot.append(.phantom(patternElement))
+                pattern.formIndex(after: &patternIndex)
+            }
+            //=----------------------------------=
+            // MARK: Anchor
+            //=----------------------------------=
+            if valueIndex == value.startIndex {
                 snapshot.append(.anchor)
-                patternIndex = anchorIndex
             }
             //=----------------------------------=
             // MARK: Tail
