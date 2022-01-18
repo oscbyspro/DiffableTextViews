@@ -102,7 +102,7 @@ extension PatternTextStyle {
         // MARK: Capacity
         //=--------------------------------------=
         guard nonvirtuals.next() == nil else {
-            throw Info([.mark(value), "exceeded pattern capacity."])
+            throw Info([.mark(snapshot.characters), "exceeded pattern capacity."])
         }
         //=--------------------------------------=
         // MARK: Success
