@@ -110,20 +110,23 @@ extension PatternTextStyle {
     //=------------------------------------------------------------------------=
     
     @inlinable func validate(value: Value) throws {
-        var _value = value.makeIterator()
-        loop: for character in pattern {
+        var valueIterator = value.makeIterator()
+        //=--------------------------------------=
+        // MARK: Pattern
+        //=--------------------------------------=
+        for character in pattern {
             //=----------------------------------=
             // MARK: Predicate
             //=----------------------------------=
             if let predicate = placeholders[character] {
-                guard let real = _value.next() else { return }
+                guard let real = valueIterator.next() else { return }
                 try predicate.validate(real)
             }
         }
         //=--------------------------------------=
         // MARK: Capacity
         //=--------------------------------------=
-        guard _value.next() == nil else {
+        guard valueIterator.next() == nil else {
             throw Info([.mark(value), "exceeded pattern capacity."])
         }
     }
@@ -176,7 +179,7 @@ extension PatternTextStyle {
         //=--------------------------------------=
         // MARK: Remainders
         //=--------------------------------------=
-        tail: if visible {
+        remainders: if visible {
             snapshot += Snapshot(pattern[position...], as: .phantom)
         }
         //=--------------------------------------=
