@@ -5,14 +5,13 @@
 //  Created by Oscar Byström Ericsson on 2021-12-25.
 //
 
-import Quick
 import DiffableTextViews
 
 //*============================================================================*
 // MARK: * PatternTextStyle
 //*============================================================================*
 
-public struct PatternTextStyle<Pattern, Value>: DiffableTextStyle, Transformable where Pattern: Collection, Pattern.Element == Character, Value: RangeReplaceableCollection, Value: Equatable, Value.Element == Character {
+public struct PatternTextStyle<Pattern, Value>: DiffableTextStyle where Pattern: Collection, Pattern.Element == Character, Value: RangeReplaceableCollection, Value: Equatable, Value.Element == Character {
     @usableFromInline typealias Predicates = PatternTextStyles.Predicates<Value>
     
     //=------------------------------------------------------------------------=
@@ -40,11 +39,15 @@ public struct PatternTextStyle<Pattern, Value>: DiffableTextStyle, Transformable
     //=------------------------------------------------------------------------=
     
     @inlinable public func hidden() -> Self {
-        transform({ $0.visible = false })
+        var result = self
+        result.visible = false
+        return result
     }
     
-    @inlinable public func predicate(_ predicate: Predicate<Value>) -> Self {
-        transform({ $0.predicates.add(predicate) })
+    @inlinable public func assert(_ predicate: Predicate<Value>) -> Self {
+        var result = self
+        result.predicates.add(predicate)
+        return result
     }
         
     //=------------------------------------------------------------------------=
@@ -52,7 +55,8 @@ public struct PatternTextStyle<Pattern, Value>: DiffableTextStyle, Transformable
     //=------------------------------------------------------------------------=
     
     @inlinable func validate<C: Collection>(_ characters: C) throws where C.Element == Character {
-        let capacity = pattern.count(where: { $0 == placeholder })
+        let capacity = pattern.reduce(into: 0) { $0 += $1 == placeholder ? 1 : 0 }
+        
         guard characters.count <= capacity else {
             throw Info([.mark(characters), "exceeded pattern capacity", .mark(capacity)])
         }

@@ -23,10 +23,10 @@ public protocol DiffableTextStyle {
     // MARK: Locale
     //=------------------------------------------------------------------------=
     
-    /// If the style allows selecting a locale, returns a copy of this style with the new locale set.
+    /// Updates the locale of this instance, if possible.
     ///
-    /// - The locale is set by the enironment.
-    /// - The default implementation returns an unmodified self.
+    /// - The locale is provided by the enironment.
+    /// - The default implementation does nothing.
     ///
     @inlinable mutating func update(locale: Locale)
     

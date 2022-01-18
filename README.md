@@ -96,8 +96,8 @@ struct PatternTextStyleExample: View {
     var body: some View {
         DiffableTextField($phoneNumber) {
             .pattern("+## (###) ###-##-##", placeholder: "#")
-            .predicate(.character(\.isASCII))
-            .predicate(.character(\.isNumber))
+            .assert(.character(\.isASCII))
+            .assert(.character(\.isNumber))
         }
         .setup({ textField in textField.keyboard(.phonePad) })
     }

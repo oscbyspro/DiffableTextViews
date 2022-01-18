@@ -6,13 +6,12 @@
 //
 
 import DiffableTextViews
-import Quick
 
 //*============================================================================*
 // MARK: * Reader
 //*============================================================================*
 
-@usableFromInline struct Reader: Transformable {
+@usableFromInline struct Reader {
     @usableFromInline typealias Command = (inout Number) -> Void
     
     //=------------------------------------------------------------------------=
