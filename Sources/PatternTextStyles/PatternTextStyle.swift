@@ -145,7 +145,7 @@ extension PatternTextStyle {
     #warning("Hmm, maybe this should be throwable.")
     @inlinable public func snapshot(value: Value, mode: Mode = .editable) -> Snapshot {
         var (snapshot, phantoms) = (Snapshot(), String())
-        var (_value, _pattern) = (value.startIndex, pattern.startIndex)
+        var (_value, _pattern) = (value.startIndex, pattern.makeIterator())
         //=--------------------------------------------------------------------=
         // MARK: Helpers
         //=--------------------------------------------------------------------=
@@ -156,9 +156,7 @@ extension PatternTextStyle {
         //=--------------------------------------------------------------------=
         // MARK: Head
         //=--------------------------------------------------------------------=
-        head: while _pattern != pattern.endIndex {
-            let character = pattern[_pattern]
-            pattern.formIndex(after: &_pattern)
+        head: while let character = _pattern.next() {
             //=----------------------------------=
             // MARK: Placeholder
             //=----------------------------------=
@@ -175,9 +173,7 @@ extension PatternTextStyle {
         //=--------------------------------------------------------------------=
         // MARK: Body
         //=--------------------------------------------------------------------=
-        body: while _pattern != pattern.endIndex {
-            let character = pattern[_pattern]
-            pattern.formIndex(after: &_pattern)
+        body: while let character = _pattern.next() {
             //=----------------------------------=
             // MARK: Placeholder
             //=----------------------------------=
@@ -199,7 +195,9 @@ extension PatternTextStyle {
         // MARK: Tail
         //=--------------------------------------------------------------------=
         tail: if visible {
-            snapshot.append(contentsOf: Snapshot(pattern[_pattern...], as: .phantom))
+            while let character = _pattern.next() {
+                snapshot.append(Symbol(character, as: .phantom))
+            }
         }
         //=--------------------------------------------------------------------=
         // MARK: Done
