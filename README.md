@@ -70,6 +70,15 @@ struct NumericTextStyleExample: View {
 
 👷‍♂️🛠🚧🚧🧱🏗🧱🚧🚧⏳
 
+### Features
+
+|   | Feature | Description |
+|---|---------|-------------|
+| :coin: | Pattern. | A pattern describes the layout of characters. |
+| :coin: | Placeholders. | A character may take the place of a placeholder. | 
+| :coin: | Independant. | Placeholders may use different validation rules. |
+
+
 ### Examples
 
 ```swift
