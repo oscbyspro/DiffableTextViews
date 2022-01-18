@@ -92,7 +92,7 @@ extension PatternTextStyle {
             if let predicate = placeholders[character] {
                 guard let real = nonvirtuals.next() else { break loop }
                 guard predicate(real.character) else {
-                    throw Info([.mark(character), "is invalid."])
+                    throw Info([.mark(real.character), "is invalid."])
                 }
                 
                 value.append(real.character)
