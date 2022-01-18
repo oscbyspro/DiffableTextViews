@@ -141,66 +141,47 @@ extension PatternTextStyle {
     
     #warning("Hmm, maybe this should be throwable.")
     @inlinable public func snapshot(value: Value, mode: Mode = .editable) -> Snapshot {
-        var (snapshot, phantoms) = (Snapshot(), String())
-        var (  _value, _pattern) = (value.makeIterator(), pattern.makeIterator())
-        //=--------------------------------------------------------------------=
-        // MARK: Head
-        //=--------------------------------------------------------------------=
-        head: while let character = _pattern.next() {
+        var snapshot = Snapshot()
+        var position = pattern.startIndex
+        var patternIndex = pattern.startIndex
+        var valueIterator = value.makeIterator()
+        //=--------------------------------------=
+        // MARK: Body
+        //=--------------------------------------=
+        body: while patternIndex != pattern.endIndex {
+            let character = pattern[patternIndex]
             //=----------------------------------=
             // MARK: Placeholder
             //=----------------------------------=
             if placeholders.contains(character) {
-                if let real = _value.next() {
+                if let real = valueIterator.next() {
+                    snapshot += Snapshot(pattern[position..<patternIndex], as: .phantom)
                     snapshot.append(Symbol(real, as: .content))
-                } else {
+                    pattern.formIndex(after: &patternIndex)
+                    position = patternIndex
+                    continue body
+                } else if value.isEmpty {
+                    snapshot += Snapshot(pattern[position..<patternIndex], as: .phantom)
                     snapshot.append(.anchor)
-                    phantoms.append(character)
+                    position = patternIndex
                 }
                 
-                break head
+                break body
+            }
             //=----------------------------------=
             // MARK: Pattern
             //=----------------------------------=
-            } else {
-                snapshot.append(Symbol(character, as: .phantom))
-            }
+            pattern.formIndex(after: &patternIndex)
         }
-        //=--------------------------------------------------------------------=
-        // MARK: Body
-        //=--------------------------------------------------------------------=
-        body: while let character = _pattern.next() {
-            //=----------------------------------=
-            // MARK: Placeholder
-            //=----------------------------------=
-            if placeholders.contains(character) {
-                if let real = _value.next() {
-                    snapshot += Snapshot(phantoms, as: .phantom)
-                    snapshot.append(Symbol(real,   as: .content))
-                    phantoms.removeAll(keepingCapacity: true)
-                } else {
-                    phantoms.append(character)
-                    break body
-                }
-            //=----------------------------------=
-            // MARK: Pattern
-            //=----------------------------------=
-            } else {
-                phantoms.append(character)
-            }
-        }
-        //=--------------------------------------------------------------------=
-        // MARK: Tail
-        //=--------------------------------------------------------------------=
+        //=--------------------------------------=
+        // MARK: Remainders
+        //=--------------------------------------=
         tail: if visible {
-            snapshot += Snapshot(phantoms, as: .phantom)
-            while let character = _pattern.next() {
-                snapshot.append(Symbol(character, as: .phantom))
-            }
+            snapshot += Snapshot(pattern[position...], as: .phantom)
         }
-        //=--------------------------------------------------------------------=
+        //=--------------------------------------=
         // MARK: Done
-        //=--------------------------------------------------------------------=
+        //=--------------------------------------=
         return snapshot
     }
 }
