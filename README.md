@@ -74,10 +74,9 @@ struct NumericTextStyleExample: View {
 
 |   | Feature | Description |
 |---|---------|-------------|
-| :coin: | Pattern. | A pattern describes the layout of characters. |
-| :coin: | Placeholders. | A character may take the place of a placeholder. | 
-| :coin: | Independant. | Placeholders may use different validation rules. |
-
+| :checkered_flag: | Pattern. | Characters layout is described by a pattern. | 
+| :chess_pawn: | Placeholders. | The value may contain at most one character per placeholder. | 
+| :snowflake: | Unique. | Unique placeholders may use independent validation rules. |
 
 ### Examples
 
