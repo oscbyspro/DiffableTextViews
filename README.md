@@ -75,7 +75,7 @@ struct NumericTextStyleExample: View {
 |   | Feature | Description |
 |---|---------|-------------|
 | :checkered_flag: | Pattern. | Characters are laid out as described by a pattern. | 
-| :chess_pawn: | Placeholders. | Value replaces and is limited by placeholders. |
+| :chess_pawn: | Placeholders. | The value replaces and is limited by placeholders. |
 | :snowflake: | Unique. | Placeholders may use independent validation rules. |
 
 ### Examples
