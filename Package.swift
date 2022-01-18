@@ -16,7 +16,10 @@ let package = Package(
     products: [
         .library(
             name: "DiffableTextViews",
-            targets: ["DiffableTextViews", "NumericTextStyles", "PatternTextStyles"]),
+            targets: [
+                "DiffableTextViews",
+                "NumericTextStyles",
+                "PatternTextStyles"]),
     ],
     targets: [
         //=--------------------------------------=
