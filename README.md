@@ -18,7 +18,7 @@ A framework for as-you-type formatting of text bound to its appropriate data typ
 
 # Views
 
-## DiffableTextField
+## [DiffableTextField](../main/Notes/DiffableTextViews/DiffableTextField.md))
 
 👷‍♂️🛠🚧🚧🧱🏗🧱🚧🚧⏳
 
@@ -29,19 +29,9 @@ A framework for as-you-type formatting of text bound to its appropriate data typ
 | :sewing_needle: | Customizable | Styles may provide default values. |
 | :evergreen_tree: | Environment | Locales are set by the environment. |
 
-### Customization
-
-```swift
-extension NumericTextStyle: UIKitDiffableTextStyle {    
-    static func setup(diffableTextField: ProxyTextField) {
-        diffableTextField.keyboard(Value.isInteger ? .numberPad : .decimalPad)
-    }
-}
-```
-
 # Styles
 
-## NumericTextStyle 
+## [NumericTextStyle](../main/Notes/NumericTextStyles/NumericTextStyle.md))
 
 👷‍♂️🛠🚧🚧🧱🏗🧱🚧🚧⏳
 
@@ -49,7 +39,7 @@ extension NumericTextStyle: UIKitDiffableTextStyle {
 
 |   | Feature | Description |
 |---|---------|-------------|
-| :coin: | [Values](../main/Notes/NumericTextStyles/VALUES.md) | Decimal, Float(16-64) and (U)Int(8-64). |
+| :coin: | Values | Decimal, Float(16-64) and (U)Int(8-64). |
 | :bow_and_arrow: | Precision | Up to 38 significant digits. |
 | :bricks: | Bounds | Clamps input and output to specified range. |
 | :art: | Formats | Number, currency and percent. |
@@ -97,8 +87,8 @@ struct PatternTextStyleExample: View {
     var body: some View {
         DiffableTextField($phoneNumber) {
             .pattern("+## (###) ###-##-##", placeholder: "#")
-            .assert(.character(\.isASCII))
-            .assert(.character(\.isNumber))
+            .predicate(.character(\.isASCII))
+            .predicate(.character(\.isNumber))
         }
         .setup({ textField in textField.keyboard(.phonePad) })
     }

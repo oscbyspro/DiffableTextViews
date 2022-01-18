@@ -1,3 +1,18 @@
+# NumericTextStyle
+
+A diffable text style that formats and converts text to and from number types.
+
+### Locales
+
+    - Foundation
+
+### Formats
+
+    - Number
+    - Currency
+    - Percent
+     
+
 ### Values
 
     - Decimal:
