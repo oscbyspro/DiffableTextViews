@@ -12,7 +12,5 @@ import DiffableTextViews
 //*============================================================================*
 
 public extension DiffableTextStyle where Self == PatternTextStyle<String, String> {
-    @inlinable static func pattern(_ pattern: String) -> Self {
-        Self(pattern: pattern)
-    }
+    @inlinable static func pattern(_ pattern: String) -> Self { Self(pattern) }
 }

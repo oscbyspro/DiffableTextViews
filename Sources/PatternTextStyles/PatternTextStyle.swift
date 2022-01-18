@@ -21,16 +21,16 @@ Value: RangeReplaceableCollection, Value: Equatable, Value.Element == Character 
     //=------------------------------------------------------------------------=
     
     @usableFromInline let pattern: Pattern
-    @usableFromInline var placeholders: Placeholders
+    @usableFromInline var placeholders: [Character: Predicate]
     @usableFromInline var visible: Bool
     
     //=------------------------------------------------------------------------=
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable public init(pattern: Pattern) {
+    @inlinable public init(_ pattern: Pattern) {
         self.pattern = pattern
-        self.placeholders = Placeholders()
+        self.placeholders = [:]
         self.visible = true
     }
     
@@ -54,7 +54,7 @@ Value: RangeReplaceableCollection, Value: Equatable, Value.Element == Character 
     
     @inlinable public func placeholder(_ character: Character, where predicate: Predicate) -> Self {
         var result = self
-        result.placeholders.insert(character, where: predicate)
+        result.placeholders[character] = predicate
         return result
     }
     
@@ -138,7 +138,7 @@ extension PatternTextStyle {
             //=----------------------------------=
             // MARK: Placeholder
             //=----------------------------------=
-            if placeholders.contains(character) {
+            if placeholders[character] != nil {
                 if let real = valueIterator.next() {
                     snapshot += Snapshot(pattern[position..<patternIndex], as: .phantom)
                     snapshot.append(Symbol(real, as: .content))

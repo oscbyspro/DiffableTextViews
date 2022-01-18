@@ -12,6 +12,12 @@ import Support
 //*============================================================================*
 
 public struct Predicate: ExpressibleByArrayLiteral {
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Instances
+    //=------------------------------------------------------------------------=
+    
+    public static let ASCIIDigit = Self([{ $0.isASCII && $0.isNumber }])
 
     //=------------------------------------------------------------------------=
     // MARK: Properties
@@ -26,11 +32,7 @@ public struct Predicate: ExpressibleByArrayLiteral {
     @inlinable init() {
         self.assertions = []
     }
-    
-    @inlinable init(_ assertion: @escaping (Character) -> Bool) {
-        self.assertions = [assertion]
-    }
-    
+
     @inlinable init(_ assertions: [(Character) -> Bool]) {
         self.assertions = assertions
     }
@@ -38,15 +40,15 @@ public struct Predicate: ExpressibleByArrayLiteral {
     @inlinable public init(arrayLiteral assertions: (Character) -> Bool...) {
         self.assertions = assertions
     }
-    
+
     //=------------------------------------------------------------------------=
     // MARK: Validation
     //=------------------------------------------------------------------------=
     
     @inlinable func validate(_ character: Character) throws {
-        for (index, assertion) in assertions.enumerated() {
+        for assertion in assertions {
             guard assertion(character) else {
-                throw Info([.mark(character), "does not satisfy predicate", .mark(index)])
+                throw Info([.mark(character), "is invalid."])
             }
         }
     }
