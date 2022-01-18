@@ -20,8 +20,6 @@ A framework for as-you-type formatting of text bound to its appropriate data typ
 
 ## [DiffableTextField](../main/Notes/DiffableTextViews/DiffableTextField.md)
 
-👷‍♂️🛠🚧🚧🧱🏗🧱🚧🚧⏳
-
 |   | Feature | Description |
 |---|---------|-------------|
 | :iphone: | SwiftUI | Value, style, done. |
@@ -32,8 +30,6 @@ A framework for as-you-type formatting of text bound to its appropriate data typ
 # Styles
 
 ## [NumericTextStyle](../main/Notes/NumericTextStyles/NumericTextStyle.md)
-
-👷‍♂️🛠🚧🚧🧱🏗🧱🚧🚧⏳
 
 ### Features
 
