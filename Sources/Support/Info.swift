@@ -74,7 +74,7 @@ public struct Info: CustomStringConvertible, Error {
         }
         
         @inlinable public static func mark(_ value: Any) -> Self {
-            Self(content: "« \(value) »")
+            Self(content: "« \(String(describing: value)) »")
         }
     }
 }
