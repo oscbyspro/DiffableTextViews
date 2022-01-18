@@ -43,10 +43,10 @@ final class RegionTests: XCTestCase {
                 .sign(strategy: .always())
             
             let positives = positive.formatted(style)
-            XCTAssertNotNil(positives.first(where: region.signs.keys.contains))
+            XCTAssertNotNil(positives.first(where: { region.signs[$0] != nil }))
 
             let negatives = negative.formatted(style)
-            XCTAssertNotNil(negatives.first(where: region.signs.keys.contains))
+            XCTAssertNotNil(negatives.first(where: { region.signs[$0] != nil }))
         }
     }
     
@@ -60,7 +60,7 @@ final class RegionTests: XCTestCase {
                 .grouping(.never)
             
             let numbers = number.formatted(style)
-            XCTAssert(numbers.allSatisfy(region.digits.keys.contains))
+            XCTAssert(numbers.allSatisfy({ region.digits[$0] != nil }))
         }
     }
     

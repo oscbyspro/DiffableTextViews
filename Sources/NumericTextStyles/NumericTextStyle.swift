@@ -64,7 +64,7 @@ public struct NumericTextStyle<Format: NumericTextStyles.Format>: DiffableTextSt
     @inlinable public func locale(_ locale: Locale) -> Self {
         var result = self
         
-        if locale.identifier != region.identifier {
+        if  result.region.locale != locale {
             result.format = format.locale(locale)
             result.region = Region.cached(locale)
         }

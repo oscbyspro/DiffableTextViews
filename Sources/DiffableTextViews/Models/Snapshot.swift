@@ -50,7 +50,7 @@ public struct Snapshot: BidirectionalCollection, RangeReplaceableCollection {
         self._characters = characters
         self._attributes = Attributes(repeating: attribute, count: characters.count)
     }
-
+    
     //*========================================================================*
     // MARK: * Index
     //*========================================================================*

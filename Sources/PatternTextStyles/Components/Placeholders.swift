@@ -51,19 +51,4 @@ public struct Placeholders {
     @inlinable mutating func insert(_ character: Character, where predicate: Predicate) {
         storage[character] = predicate
     }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Validation
-    //=------------------------------------------------------------------------=
-    
-    #warning("Maybe snapshot should throw instead.")
-    @inlinable func validate<S: Sequence>(_ characters: S) throws where S.Element == Character {
-        for character in characters {
-            print(storage)
-            if let predicate = storage[character] {
-                print(character)
-                try predicate.validate(character)
-            }
-        }
-    }
 }

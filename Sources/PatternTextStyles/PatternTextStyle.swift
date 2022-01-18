@@ -12,6 +12,7 @@ import Support
 // MARK: * PatternTextStyle
 //*============================================================================*
 
+#warning("Maybe pattern should always be a String?")
 public struct PatternTextStyle<Pattern, Value>: DiffableTextStyle where Pattern: Collection, Pattern.Element == Character, Value: RangeReplaceableCollection, Value: Equatable, Value.Element == Character {
     
     //=------------------------------------------------------------------------=
@@ -55,17 +56,6 @@ public struct PatternTextStyle<Pattern, Value>: DiffableTextStyle where Pattern:
     @inlinable public func placeholder(_ character: Character, where predicate: @escaping (Character) -> Bool) -> Self {
         placeholder(character, where: Predicate([predicate]))
     }
-            
-    //=------------------------------------------------------------------------=
-    // MARK: Validation
-    //=------------------------------------------------------------------------=
-    
-    @inlinable func validate<C: Collection>(_ characters: C) throws where C.Element == Character {
-        let capacity = pattern.count(where: placeholders.contains)
-        guard characters.count <= capacity else {
-            throw Info([.mark(characters), "exceeded pattern capacity", .mark(capacity)])
-        }
-    }
 }
 
 //=----------------------------------------------------------------------------=
@@ -96,13 +86,41 @@ extension PatternTextStyle {
         //=--------------------------------------=
         // MARK: Validate
         //=--------------------------------------=
-        try validate(value)
-        #warning("Should not validate value.")
-        try placeholders.validate(value)
+        try validate(value: value)
         //=--------------------------------------=
         // MARK: Done
         //=--------------------------------------=
         return value
+    }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Helpers
+    //=------------------------------------------------------------------------=
+    
+    @inlinable func validate(value: Value) throws {
+        var position = value.startIndex
+        //=--------------------------------------=
+        // MARK: Loop Through Pattern
+        //=--------------------------------------=
+        for character in pattern {
+            if let predicate = placeholders[character] {
+                //=------------------------------=
+                // MARK: Index
+                //=------------------------------=
+                if position == value.endIndex { return }
+                defer { value.formIndex(after: &position) }
+                //=------------------------------=
+                // MARK: Character
+                //=------------------------------=
+                try predicate.validate(value[position])
+            }
+        }
+        //=--------------------------------------=
+        // MARK: Capacity
+        //=--------------------------------------=
+        guard position == value.endIndex else {
+            throw Info([.mark(value), "exceeded pattern capacity."])
+        }
     }
 }
 
@@ -111,11 +129,12 @@ extension PatternTextStyle {
 //=----------------------------------------------------------------------------=
 
 extension PatternTextStyle {
-
+    
     //=------------------------------------------------------------------------=
     // MARK: Value
     //=------------------------------------------------------------------------=
     
+    #warning("Should be able to throw, maybe.")
     @inlinable public func snapshot(value: Value, mode: Mode) -> Snapshot {
         var snapshot = Snapshot()
         //=--------------------------------------=
@@ -136,10 +155,10 @@ extension PatternTextStyle {
             // MARK: Match, Insert
             //=----------------------------------=
             if let _ = placeholders[patternElement] {
-                snapshot.append(.content(value[valueIndex]))
+                snapshot.append(Symbol(value[valueIndex], as: .content))
                 value.formIndex(after: &valueIndex)
             } else {
-                snapshot.append(.phantom(patternElement))
+                snapshot.append(Symbol(patternElement, as: .phantom))
             }
         }
         //=--------------------------------------=
@@ -152,7 +171,7 @@ extension PatternTextStyle {
             while patternIndex != pattern.endIndex {
                 let patternElement = pattern[patternIndex]
                 if let _ = placeholders[patternElement] { break }
-                snapshot.append(.phantom(patternElement))
+                snapshot.append(Symbol(patternElement, as: .phantom))
                 pattern.formIndex(after: &patternIndex)
             }
             //=----------------------------------=
