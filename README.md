@@ -78,6 +78,7 @@ struct NumericTextStyleExample: View {
 | :chess_pawn: | Placeholders. | Placeholders represent not-yet-assigned values. |
 | :fist_raised: | Independance. | Placeholders may use separate validation rules. |
 | :ghost: | Invisibility. | Pattern beyond the last value can easily be hidden. |
+| :feather: | Lightweight. | ~200 lines of code. |
 
 
 ### Examples
