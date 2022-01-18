@@ -179,9 +179,7 @@ extension PatternTextStyle {
         //=--------------------------------------=
         // MARK: Remainders
         //=--------------------------------------=
-        remainders: if visible {
-            snapshot += Snapshot(pattern[position...], as: .phantom)
-        }
+        visible ? snapshot += Snapshot(pattern[position...], as: .phantom) : ()
         //=--------------------------------------=
         // MARK: Done
         //=--------------------------------------=
