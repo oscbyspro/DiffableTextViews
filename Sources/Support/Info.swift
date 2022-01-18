@@ -5,78 +5,77 @@
 //  Created by Oscar Byström Ericsson on 2022-01-05.
 //
 
-import QuickText
-
 //*============================================================================*
 // MARK: * Info
 //*============================================================================*
 
 /// An error message that is only constructed in DEBUG mode.
-public struct Info: Text {
+public struct Info: CustomStringConvertible, Error {
+    @usableFromInline static let description = "[DEBUG]"
     
     //=------------------------------------------------------------------------=
     // MARK: Properties
     //=------------------------------------------------------------------------=
     
-    public let body: DEBUG
+    #if DEBUG
+    public let description: String
+    #else
+    public var description: String { Self.description }
+    #endif
     
     //=------------------------------------------------------------------------=
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable public init(@MakeUnknown _ content: () -> Unknown) {
-        self.body = DEBUG({ content() })
+    @inlinable public init(content: () -> String) {
+        #if DEBUG
+        self.description = content()
+        #endif
     }
     
-    //
+    //=------------------------------------------------------------------------=
     // MARK: Initializers - Indirect
     //=------------------------------------------------------------------------=
     
     @inlinable public init(_ components: @autoclosure () -> [Component]) {
-        self.init({ List(components()).joined(by: .whitespace) })
+        self.init(content: { components().map(\.content).joined(separator: " ") })
     }
 
     //*========================================================================*
     // MARK: * Component
     //*========================================================================*
     
-    public struct Component: Text, ExpressibleByStringLiteral {
+    public struct Component: ExpressibleByStringLiteral {
         
         //=--------------------------------------------------------------------=
         // MARK: Properties
         //=--------------------------------------------------------------------=
         
-        public let body: Unknown
+        public let content: String
         
         //=--------------------------------------------------------------------=
         // MARK: Initializers
         //=--------------------------------------------------------------------=
         
-        @inlinable init(@MakeUnknown _ content: () -> Unknown) {
-            self.body = content()
+        @inlinable init(content: String) {
+            self.content = content
         }
         
         @inlinable public init(stringLiteral value: StringLiteralType) {
-            self = .note(value)
+            self.content = value
         }
         
-        //
+        //=--------------------------------------------------------------------=
         // MARK: Initializers - Static
         //=--------------------------------------------------------------------=
         
         @inlinable public static func note(_ value: Any) -> Self {
-            Self({ Note(value) })
+            Self(content: String(describing: value))
         }
         
         @inlinable public static func mark(_ value: Any) -> Self {
-            Self {
-                Group {
-                    Note("«")
-                    Note(value).filter({ !$0.isEmpty })
-                    Note("»")
-                }
-                .joined(by: .whitespace)
-            }
+            Self(content: "« \(value) »")
         }
     }
 }
+

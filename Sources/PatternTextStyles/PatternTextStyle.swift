@@ -45,7 +45,7 @@ public struct PatternTextStyle<Pattern, Value>: DiffableTextStyle where Pattern:
         return result
     }
     
-    @inlinable public func assert(_ predicate: Predicate<Value>) -> Self {
+    @inlinable public func predicate(_ predicate: Predicate<Value>) -> Self {
         var result = self
         result.predicates.add(predicate)
         return result

@@ -7,6 +7,7 @@
 
 import DiffableTextViews
 import Foundation
+import Support
 
 //*============================================================================*
 // MARK: * Precision

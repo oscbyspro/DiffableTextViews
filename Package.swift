@@ -7,7 +7,6 @@ import PackageDescription
 // MARK: Package
 //=----------------------------------------------------------------------------=
 
-/// TODO: Once done, use stable versions of remote packages or make local copies.
 let package = Package(
     name: "DiffableTextViews",
     platforms: [
@@ -19,19 +18,13 @@ let package = Package(
             name: "DiffableTextViews",
             targets: ["DiffableTextViews", "NumericTextStyles", "PatternTextStyles"]),
     ],
-    dependencies: [
-        //=--------------------------------------=
-        // MARK: https://github.com/oscbyspro/
-        //=--------------------------------------=
-        .package(name: "QuickText", url: "https://github.com/oscbyspro/QuickText", .branch("main")),
-    ],
     targets: [
         //=--------------------------------------=
         // MARK: DiffableTextViews
         //=--------------------------------------=
         .target(
             name: "DiffableTextViews",
-            dependencies: ["QuickText", "Support"]),
+            dependencies: ["Support"]),
         .testTarget(
             name: "DiffableTextViewsTests",
             dependencies: ["DiffableTextViews"]),
