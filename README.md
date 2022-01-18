@@ -6,10 +6,11 @@ A framework for as-you-type formatting of text bound to its appropriate data typ
 
 |   | Feature | Description |
 |---|---------|-------------|
-| :keyboard: | As-you-type. | Formats and parses text in real time. |
-| :hammer_and_wrench: | Versatile. | Uses snapshots and attributes. |
-| :running_man: | Fast. | Uses an O(n) differentiation algorithm. |
+| :keyboard: | Responsive. | Formats and parses text as you type. |
 | :magic_wand: | Automagical. | Binds text to its appropriate data type. |
+| :hammer_and_wrench: | Versatile. | Uses snapshots and attributes. |
+| :running_man: | Efficient. | Uses an O(n) differentiation algorithm. |
+| :desert_island: | Standalone. | Uses no remote dependencies. |
 
 # Progress
 
