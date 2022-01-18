@@ -26,7 +26,7 @@ public struct PatternTextStyle<Pattern, Value>: DiffableTextStyle where Pattern:
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable public init(pattern: Pattern, placeholder: Character) {
+    @inlinable public init(pattern: Pattern) {
         self.pattern = pattern
         self.placeholders = Placeholders()
         self.visible = true
@@ -42,10 +42,18 @@ public struct PatternTextStyle<Pattern, Value>: DiffableTextStyle where Pattern:
         return result
     }
     
-    @inlinable public func placeholder(_ predicate: Placeholder) -> Self {
+    //=------------------------------------------------------------------------=
+    // MARK: Transformations - Placeholder
+    //=------------------------------------------------------------------------=
+    
+    @inlinable public func placeholder(_ character: Character, where predicate: Predicate) -> Self {
         var result = self
-        result.placeholders.insert(predicate)
+        result.placeholders.insert(character, where: predicate)
         return result
+    }
+    
+    @inlinable public func placeholder(_ character: Character, where predicate: @escaping (Character) -> Bool) -> Self {
+        placeholder(character, where: Predicate([predicate]))
     }
             
     //=------------------------------------------------------------------------=
@@ -89,6 +97,7 @@ extension PatternTextStyle {
         // MARK: Validate
         //=--------------------------------------=
         try validate(value)
+        #warning("Should not validate value.")
         try placeholders.validate(value)
         //=--------------------------------------=
         // MARK: Done

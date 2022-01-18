@@ -17,23 +17,23 @@ public struct Placeholders {
     // MARK: Properties
     //=------------------------------------------------------------------------=
     
-    @usableFromInline var placeholders: [Character: Predicates]
+    @usableFromInline var storage: [Character: Predicate]
     
     //=------------------------------------------------------------------------=
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
     @inlinable init() {
-        self.placeholders = [:]
+        self.storage = [:]
     }
     
     //=------------------------------------------------------------------------=
     // MARK: Subscripts
     //=------------------------------------------------------------------------=
     
-    @inlinable subscript(character: Character) -> Predicates? {
-        _read   { yield  placeholders[character] }
-        _modify { yield &placeholders[character] }
+    @inlinable subscript(character: Character) -> Predicate? {
+        _read   { yield  storage[character] }
+        _modify { yield &storage[character] }
     }
     
     //=------------------------------------------------------------------------=
@@ -41,28 +41,29 @@ public struct Placeholders {
     //=------------------------------------------------------------------------=
     
     @inlinable func contains(_ character: Character) -> Bool {
-        placeholders[character] != nil
+        storage[character] != nil
     }
     
     //=------------------------------------------------------------------------=
     // MARK: Transformations
     //=------------------------------------------------------------------------=
     
-    @inlinable mutating func insert(_ placeholder: Placeholder) {
-        placeholders[placeholder.character] = placeholder.predicates
+    @inlinable mutating func insert(_ character: Character, where predicate: Predicate) {
+        storage[character] = predicate
     }
     
     //=------------------------------------------------------------------------=
     // MARK: Validation
     //=------------------------------------------------------------------------=
     
+    #warning("Maybe snapshot should throw instead.")
     @inlinable func validate<S: Sequence>(_ characters: S) throws where S.Element == Character {
         for character in characters {
-            if let predicates = placeholders[character] {
-                guard predicates.validate(character) else {
-                    throw Info([.mark(character), "is invalid."])
-                }
+            print(storage)
+            if let predicate = storage[character] {
+                print(character)
+                try predicate.validate(character)
             }
-        }        
+        }
     }
 }
