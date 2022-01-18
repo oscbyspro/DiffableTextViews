@@ -142,7 +142,7 @@ extension PatternTextStyle {
     #warning("Hmm, maybe this should be throwable.")
     @inlinable public func snapshot(value: Value, mode: Mode = .editable) -> Snapshot {
         var (snapshot, phantoms) = (Snapshot(), String())
-        var (_value,   _pattern) = (value.makeIterator(), pattern.makeIterator())
+        var (  _value, _pattern) = (value.makeIterator(), pattern.makeIterator())
         //=--------------------------------------------------------------------=
         // MARK: Head
         //=--------------------------------------------------------------------=
@@ -175,8 +175,8 @@ extension PatternTextStyle {
             //=----------------------------------=
             if placeholders.contains(character) {
                 if let real = _value.next() {
-                    snapshot.append(contentsOf: Snapshot(phantoms, as: .phantom))
-                    snapshot.append(Symbol(real, as: .content))
+                    snapshot += Snapshot(phantoms, as: .phantom)
+                    snapshot.append(Symbol(real,   as: .content))
                     phantoms.removeAll(keepingCapacity: true)
                 } else {
                     phantoms.append(character)
@@ -193,7 +193,7 @@ extension PatternTextStyle {
         // MARK: Tail
         //=--------------------------------------------------------------------=
         tail: if visible {
-            snapshot.append(contentsOf: Snapshot(phantoms, as: .phantom))
+            snapshot += Snapshot(phantoms, as: .phantom)
             while let character = _pattern.next() {
                 snapshot.append(Symbol(character, as: .phantom))
             }
