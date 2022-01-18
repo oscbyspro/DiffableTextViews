@@ -46,40 +46,30 @@ public struct NumericTextStyle<Format: NumericTextStyles.Format>: DiffableTextSt
     }
     
     //=------------------------------------------------------------------------=
-    // MARK: Transformations - Locale
+    // MARK: Transformations
     //=------------------------------------------------------------------------=
-    
-    @inlinable public mutating func update(locale: Locale) {
-        guard locale.identifier != region.identifier else { return }
-        self.format = format.locale(locale)
-        self.region = Region.cached(locale)
-    }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Transformations - Update
-    //=------------------------------------------------------------------------=
-    
+        
     @inlinable public func bounds(_ bounds: Bounds) -> Self {
-        var result = self
-        result.bounds = bounds
-        return result
+        var result = self; result.bounds = bounds; return result
     }
     
     @inlinable public func precision(_ precision: Precision) -> Self {
-        var result = self
-        result.precision = precision
-        return result
+        var result = self; result.precision = precision; return result
     }
     
     //=------------------------------------------------------------------------=
-    // MARK: Corrections
+    // MARK: Transformations - Locale
     //=------------------------------------------------------------------------=
     
-    @inlinable func autocorrect(sign: Sign, for value: Value, in characters: inout String) {
-        guard sign == .negative && value == .zero  else { return }
-        guard let position = characters.firstIndex(where: region.signs.components.keys.contains) else { return }
-        guard let replacement = region.signs[sign] else { return }
-        characters.replaceSubrange(position...position, with: String(replacement))
+    @inlinable public func locale(_ locale: Locale) -> Self {
+        var result = self
+        
+        if locale.identifier != region.identifier {
+            result.format = format.locale(locale)
+            result.region = Region.cached(locale)
+        }
+        
+        return result
     }
 }
 
@@ -234,5 +224,16 @@ extension NumericTextStyle {
         // MARK: Snapshot, Output
         //=--------------------------------------=
         return Output<Value>(self.snapshot(characters: characters), value: value)
+    }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Helpers
+    //=------------------------------------------------------------------------=
+    
+    @inlinable func autocorrect(sign: Sign, for value: Value, in characters: inout String) {
+        guard sign == .negative && value == .zero  else { return }
+        guard let position = characters.firstIndex(where: region.signs.components.keys.contains) else { return }
+        guard let replacement = region.signs[sign] else { return }
+        characters.replaceSubrange(position...position, with: String(replacement))
     }
 }

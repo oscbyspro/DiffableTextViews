@@ -145,9 +145,7 @@ public struct DiffableTextField<Style: UIKitDiffableTextStyle>: UIViewRepresenta
         //=------------------------------------------------------------------------=
         
         @inlinable func style() -> Style {
-            var style = upstream.style()
-            style.update(locale: upstream.locale)
-            return style
+            upstream.style().locale(upstream.locale)
         }
 
         //=----------------------------------------------------------------------------=

@@ -20,15 +20,15 @@ public protocol DiffableTextStyle {
     associatedtype Value: Equatable
     
     //=------------------------------------------------------------------------=
-    // MARK: Locale
+    // MARK: Transformations
     //=------------------------------------------------------------------------=
     
-    /// Updates the locale of this instance, if possible.
+    /// Updates the locale, if possible.
     ///
     /// - The locale is provided by the enironment.
     /// - The default implementation does nothing.
     ///
-    @inlinable mutating func update(locale: Locale)
+    @inlinable func locale(_ locale: Locale) -> Self
     
     //=------------------------------------------------------------------------=
     // MARK: Process
@@ -69,10 +69,10 @@ public protocol DiffableTextStyle {
 public extension DiffableTextStyle {
     
     //=------------------------------------------------------------------------=
-    // MARK: Locale
+    // MARK: Transformations
     //=------------------------------------------------------------------------=
     
-    @inlinable mutating func update(locale: Locale) { }
+    @inlinable func locale(_ locale: Locale) -> Self { self }
 
     //=------------------------------------------------------------------------=
     // MARK: Process
