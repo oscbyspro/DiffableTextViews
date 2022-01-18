@@ -145,23 +145,16 @@ extension PatternTextStyle {
     #warning("Hmm, maybe this should be throwable.")
     @inlinable public func snapshot(value: Value, mode: Mode = .editable) -> Snapshot {
         var (snapshot, phantoms) = (Snapshot(), String())
-        var (_value, _pattern) = (value.startIndex, pattern.makeIterator())
-        //=--------------------------------------------------------------------=
-        // MARK: Helpers
-        //=--------------------------------------------------------------------=
-        func snapshotValue() {
-            snapshot.append(Symbol(value[_value], as: .content))
-            value.formIndex(after:      &_value)
-        }
+        var (value, pattern) = (value.makeIterator(), pattern.makeIterator())
         //=--------------------------------------------------------------------=
         // MARK: Head
         //=--------------------------------------------------------------------=
-        head: while let character = _pattern.next() {
+        head: while let character = pattern.next() {
             //=----------------------------------=
             // MARK: Placeholder
             //=----------------------------------=
             if placeholders.contains(character) {
-                _value != value.endIndex ? snapshotValue() : snapshot.append(.anchor)
+                snapshot.append(value.next().map(Symbol.content) ?? .anchor)
                 break head
             //=----------------------------------=
             // MARK: Pattern
@@ -173,17 +166,17 @@ extension PatternTextStyle {
         //=--------------------------------------------------------------------=
         // MARK: Body
         //=--------------------------------------------------------------------=
-        body: while let character = _pattern.next() {
+        body: while let character = pattern.next() {
             //=----------------------------------=
             // MARK: Placeholder
             //=----------------------------------=
             if placeholders.contains(character) {
-                guard _value != value.endIndex else { break body }
+                guard let real = value.next() else { break }
 
                 snapshot.append(contentsOf: Snapshot(phantoms, as: .phantom))
                 phantoms.removeAll(keepingCapacity: true)
 
-                snapshotValue()
+                snapshot.append(Symbol(real, as: .content))
             //=----------------------------------=
             // MARK: Pattern
             //=----------------------------------=
@@ -195,7 +188,7 @@ extension PatternTextStyle {
         // MARK: Tail
         //=--------------------------------------------------------------------=
         tail: if visible {
-            while let character = _pattern.next() {
+            while let character = pattern.next() {
                 snapshot.append(Symbol(character, as: .phantom))
             }
         }
