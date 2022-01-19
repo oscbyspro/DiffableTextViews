@@ -22,4 +22,3 @@ extension NumericTextStyle: UIKitDiffableTextStyle {
     }
 }
 ```
-
