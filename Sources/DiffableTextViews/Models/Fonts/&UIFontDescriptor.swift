@@ -33,7 +33,7 @@ extension UIFontDescriptor {
     //=--------------------------------------------------------------------=
     
     /// [Inspiration](https://stackoverflow.com/questions/46642335)
-    @inlinable func monospaced(template: UIFontDescriptor) -> UIFontDescriptor {
+    @inlinable func kind(_ template: UIFontDescriptor) -> UIFontDescriptor {
         var attributes = fontAttributes
         attributes.removeValue(forKey: .family)
         attributes.removeValue(forKey: .name)

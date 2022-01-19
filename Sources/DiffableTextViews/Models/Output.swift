@@ -9,6 +9,12 @@
 // MARK: * Output
 //*============================================================================*
 
+/// A snapshot and an optional value.
+///
+/// Sometimes when a style merges snapshots, it also parses its value.
+/// In that case, the value should be returned with the snapshot so that
+/// the snapshot is not parsed twice.
+///
 public struct Output<Value> {
     
     //=------------------------------------------------------------------------=
@@ -21,13 +27,8 @@ public struct Output<Value> {
     //=------------------------------------------------------------------------=
     // MARK: Initializers
     //=------------------------------------------------------------------------=
-    
-    @inlinable public init(_ snapshot: Snapshot) {
-        self.value = nil
-        self.snapshot = snapshot
-    }
-    
-    @inlinable public init(_ snapshot: Snapshot, value: Value?) {
+
+    @inlinable public init(_ snapshot: Snapshot, value: Value? = nil) {
         self.value = value
         self.snapshot = snapshot
     }

@@ -1,22 +1,22 @@
 //
-//  Unit.swift
+//  Unicodeable.swift
 //  
 //
 //  Created by Oscar Byström Ericsson on 2022-01-16.
 //
 
 //*============================================================================*
-// MARK: * Unit
+// MARK: * Unicodeable
 //*============================================================================*
 
 /// The unicode value of its system representation.
-@usableFromInline protocol Unit: RawRepresentable, CustomStringConvertible where RawValue == UInt8 { }
+@usableFromInline protocol Unicodeable: RawRepresentable, CustomStringConvertible where RawValue == UInt8 { }
 
 //=----------------------------------------------------------------------------=
 // MARK: Components - Details
 //=----------------------------------------------------------------------------=
 
-extension Unit {
+extension Unicodeable {
     
     //=------------------------------------------------------------------------=
     // MARK: Unicode

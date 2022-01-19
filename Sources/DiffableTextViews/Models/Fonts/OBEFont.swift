@@ -67,7 +67,7 @@ public struct OBEFont {
     }
 
     @inlinable public func monospaced(_ template: MonospaceTemplate = .text) -> Self {
-        .init(descriptor.monospaced(template: template.descriptor))
+        .init(descriptor.kind(template.descriptor))
     }
 }
 

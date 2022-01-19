@@ -12,7 +12,7 @@ import Foundation
 //*============================================================================*
 
 /// A system representation of a sign.
-public enum Sign: UInt8, Unit {
+public enum Sign: UInt8, Unicodeable {
     
     //=------------------------------------------------------------------------=
     // MARK: Instances
