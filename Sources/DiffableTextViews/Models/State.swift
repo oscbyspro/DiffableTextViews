@@ -100,7 +100,7 @@ extension State {
     
     @inlinable mutating func update(selection: Range<Layout.Index>, momentum: Bool) {
         //=--------------------------------------=
-        // MARK: Reinterpret Intent As Momentum
+        // MARK: Intent
         //=--------------------------------------=
         let intent = !momentum ? (nil, nil) : (
         Direction(start: self.selection.lowerBound, end: selection.lowerBound),
