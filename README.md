@@ -1,6 +1,6 @@
 # DiffableTextViews
 
-A framework for as-you-type formatting of text inputs bound to appropriate data types.
+A framework for as-you-type formatting of text bound to appropriate data types.
 
 ### Progress
 
@@ -21,16 +21,24 @@ A framework for as-you-type formatting of text inputs bound to appropriate data 
 - iOS 15.0+
 - Swift 4.0+
 
+### Installation
+
+1. Use: Swift Package Manager.
+2. Copy/paste: https://github.com/oscbyspro/DiffableTextViews.
+3. Select a **VERSIONED** branch.
+
 # Views
 
 ## [DiffableTextField](../main/Notes/DiffableTextViews/DiffableTextField.md)
 
 A view that uses styles to format and parse text.
 
+### Features
+
 |   | Feature | Description |
 |---|---------|-------------|
 | :iphone: | SwiftUI | Value, style, done. |
-| :balance_scale: | Monospaced | Standard font is monospaced. |
+| :balance_scale: | Monospaced | The standard font is monospaced. |
 | :sewing_needle: | Customizable | Styles may provide default values. |
 | :evergreen_tree: | Environment | Locales are set by the environment. |
 
