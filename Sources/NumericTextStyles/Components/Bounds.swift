@@ -39,16 +39,9 @@ public struct Bounds<Value: Boundable> {
     @inlinable func clamp(_ value: inout Value) {
         value = Swift.max(min, Swift.min(value, max))
     }
-}
-
-//=----------------------------------------------------------------------------=
-// MARK: Bounds - Validate
-//=----------------------------------------------------------------------------=
-
-extension Bounds {
     
     //=------------------------------------------------------------------------=
-    // MARK: Value
+    // MARK: Validations
     //=------------------------------------------------------------------------=
     
     @inlinable func validate(value: Value) throws {
@@ -56,11 +49,7 @@ extension Bounds {
             throw Info([.mark(value), "is not in", .mark(self)])
         }
     }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Sign
-    //=------------------------------------------------------------------------=
-    
+
     @inlinable func validate(sign: Sign) throws {
         switch sign {
         case .positive: if max >= .zero { return }
