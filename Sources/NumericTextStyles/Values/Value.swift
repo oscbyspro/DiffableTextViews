@@ -23,74 +23,74 @@ public protocol Value: Boundable, Precise {
 // MARK: * Value x Floating Point
 //*============================================================================*
 
-@usableFromInline protocol FloatingPointValue: Value, BoundableFloatingPoint, PreciseFloatingPoint { }
+public protocol FloatingPointValue: Value, BoundableFloatingPoint, PreciseFloatingPoint { }
 
 //=----------------------------------------------------------------------------=
 // MARK: Value x Floating Point - Details
 //=----------------------------------------------------------------------------=
 
-extension FloatingPointValue {
+public extension FloatingPointValue {
     
     //=------------------------------------------------------------------------=
     // MARK: Properties
     //=------------------------------------------------------------------------=
     
-    @inlinable @inline(__always) public static var isInteger:  Bool { false }
+    @inlinable @inline(__always) static var isInteger:  Bool { false }
 }
 
 //*============================================================================*
 // MARK: * Value x Integer
 //*============================================================================*
 
-@usableFromInline protocol IntegerValue: Value, BoundableInteger, PreciseInteger { }
+public protocol IntegerValue: Value, BoundableInteger, PreciseInteger { }
 
 //=----------------------------------------------------------------------------=
 // MARK: Value x Integer - Details
 //=----------------------------------------------------------------------------=
 
-extension IntegerValue {
+public extension IntegerValue {
     
     //=------------------------------------------------------------------------=
     // MARK: Properties
     //=------------------------------------------------------------------------=
     
-    @inlinable @inline(__always) public static var isInteger: Bool { true }
+    @inlinable @inline(__always) static var isInteger: Bool { true }
 }
 
 //*============================================================================*
 // MARK: * Value x Signed
 //*============================================================================*
 
-@usableFromInline protocol SignedValue: Value { }
+public protocol SignedValue: Value { }
 
 //=----------------------------------------------------------------------------=
 // MARK: Value x Signed - Details
 //=----------------------------------------------------------------------------=
 
-extension SignedValue {
+public extension SignedValue {
     
     //=------------------------------------------------------------------------=
     // MARK: Properties
     //=------------------------------------------------------------------------=
     
-    @inlinable @inline(__always) public static var isUnsigned: Bool { false }
+    @inlinable @inline(__always) static var isUnsigned: Bool { false }
 }
 
 //*============================================================================*
 // MARK: * Value x Unsigned
 //*============================================================================*
 
-@usableFromInline protocol UnsignedValue: Value { }
+public protocol UnsignedValue: Value { }
 
 //=----------------------------------------------------------------------------=
 // MARK: Value x Unsigned - Details
 //=----------------------------------------------------------------------------=
 
-extension UnsignedValue {
+public extension UnsignedValue {
     
     //=------------------------------------------------------------------------=
     // MARK: Properties
     //=------------------------------------------------------------------------=
     
-    @inlinable @inline(__always) public static var isUnsigned: Bool { true }
+    @inlinable @inline(__always) static var isUnsigned: Bool { true }
 }
