@@ -22,18 +22,14 @@ Value: RangeReplaceableCollection, Value: Equatable, Value.Element == Character 
     //=------------------------------------------------------------------------=
     
     @usableFromInline let pattern: Pattern
-    @usableFromInline var placeholders: [Character: Predicate]
-    @usableFromInline var visible: Bool
+    @usableFromInline var placeholders: [Character: Predicate] = [:]
+    @usableFromInline var visible: Bool = true
     
     //=------------------------------------------------------------------------=
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable public init(_ pattern: Pattern) {
-        self.pattern = pattern
-        self.placeholders = [:]
-        self.visible = true
-    }
+    @inlinable public init(_ pattern: Pattern) { self.pattern = pattern }
     
     //=------------------------------------------------------------------------=
     // MARK: Transformations
