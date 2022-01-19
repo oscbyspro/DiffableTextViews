@@ -21,23 +21,22 @@
     //=------------------------------------------------------------------------=
 
     @usableFromInline let snapshot: Snapshot
-    @usableFromInline let startIndex: Index
-    @usableFromInline let   endIndex: Index
-
+    @usableFromInline let range: Range<Index>
+    
     //=------------------------------------------------------------------------=
     // MARK: Initializers
     //=------------------------------------------------------------------------=
-
-    @usableFromInline init(_ snapshot: Snapshot) {
+    
+    @inlinable init(_ snapshot: Snapshot = Snapshot()) {
         self.snapshot = snapshot
-        self.startIndex = Index(snapshot.startIndex, at: .start)
-        self  .endIndex = Index(snapshot  .endIndex, at: .end(of: snapshot.characters))
+        self.range = Index(snapshot.startIndex, at: .start) ..<
+        Index(snapshot .endIndex, at: .end(of: snapshot.characters))
     }
-
+ 
     //=------------------------------------------------------------------------=
     // MARK: Accessors
     //=------------------------------------------------------------------------=
-
+    
     @inlinable var characters: Snapshot.Characters {
         snapshot.characters
     }
@@ -49,9 +48,21 @@
     @inlinable func nonpassthrough(_ position: Index) -> Bool {
         !attributes[position.attribute].contains(.passthrough)
     }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Accessors - Indices
+    //=------------------------------------------------------------------------=
+    
+    @inlinable @inline(__always) var startIndex: Index {
+        range.lowerBound
+    }
+    
+    @inlinable @inline(__always) var endIndex: Index {
+        range.upperBound
+    }
 
     //=------------------------------------------------------------------------=
-    // MARK: Subscripts
+    // MARK: Accessors - Elements
     //=------------------------------------------------------------------------=
 
     @inlinable subscript(position: Index) -> Symbol {

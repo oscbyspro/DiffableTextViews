@@ -25,8 +25,8 @@
     //=------------------------------------------------------------------------=
     
     @inlinable init() {
-        let layout = Layout(Snapshot())
-        self.init(layout: layout, selection: layout.startIndex ..< layout.startIndex)
+        self.layout = Layout()
+        self.selection = layout.range
     }
     
     @inlinable init(layout: Layout, selection: Range<Layout.Index>) {
@@ -56,13 +56,13 @@
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: Update - Snapshot
+// MARK: State - Update
 //=----------------------------------------------------------------------------=
 
 extension State {
 
     //=------------------------------------------------------------------------=
-    // MARK: Transformations
+    // MARK: Snapshot
     //=------------------------------------------------------------------------=
     
     @inlinable mutating func update(snapshot: Snapshot) {
@@ -89,18 +89,22 @@ extension State {
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: Update - Selection
+// MARK: State - Update
 //=----------------------------------------------------------------------------=
 
 extension State {
     
     //=------------------------------------------------------------------------=
-    // MARK: Transformations
+    // MARK: Selection
     //=------------------------------------------------------------------------=
     
-    @inlinable mutating func update(selection: Range<Layout.Index>, momentum: Bool) {
+    @inlinable mutating func update(selection: Range<Position>, momentum: Bool) {
         //=--------------------------------------=
-        // MARK: Intent
+        // MARK: Parse Position As Index
+        //=--------------------------------------=
+        let selection = indices(at: selection)
+        //=--------------------------------------=
+        // MARK: Parse Momentum As Intent
         //=--------------------------------------=
         let intent = !momentum ? (nil, nil) : (
         Direction(start: self.selection.lowerBound, end: selection.lowerBound),
@@ -110,14 +114,6 @@ extension State {
         //=--------------------------------------=
         self.selection = selection
         self.autocorrect(intent: intent)
-    }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Transformations - Indirect
-    //=------------------------------------------------------------------------=
-    
-    @inlinable mutating func update(selection: Range<Position>, momentum: Bool) {
-        update(selection: indices(at: selection), momentum: momentum)
     }
 }
 
@@ -133,9 +129,9 @@ extension State {
     
     @inlinable mutating func autocorrect(intent: (lower: Direction?, upper: Direction?)) {
         //=--------------------------------------=
-        // MARK: Special
+        // MARK: Exceptions
         //=--------------------------------------=
-        if selection == layout.startIndex ..< layout.endIndex { return }
+        if selection == layout.range { return }
         //=--------------------------------------=
         // MARK: Upper Bound, Single
         //=--------------------------------------=
