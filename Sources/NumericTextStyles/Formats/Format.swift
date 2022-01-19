@@ -153,7 +153,7 @@ extension PercentFormat {
     
     @inlinable public static var precision: Count {
         assert(Value.precision.fraction >= 2,
-        "This percent format requires that fraction precision >= 2.")
+        "This format requires a fraction precision of at least 2 digits")
         //=--------------------------------------=
         // MARK: Precision
         //=--------------------------------------=
