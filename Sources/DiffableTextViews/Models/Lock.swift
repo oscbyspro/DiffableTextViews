@@ -9,6 +9,10 @@
 // MARK: * Lock
 //*============================================================================*
 
+/// A lock that allows actions to be performed inside a locked state.
+///
+/// - Note: This is NOT a thread lock.
+///
 @usableFromInline @MainActor final class Lock {
     
     //=------------------------------------------------------------------------=
