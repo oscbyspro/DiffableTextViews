@@ -139,46 +139,18 @@ extension State {
         //=--------------------------------------=
         // MARK: Upper Bound, Single
         //=--------------------------------------=
-        let upperBound = position(start: selection.upperBound, preference: .backwards, intent: intent.upper)
+        let upperBound = layout.preferredIndex(start: selection.upperBound, preference: .backwards, intent: intent.upper)
         var lowerBound = upperBound
         //=--------------------------------------=
         // MARK: Lower Bound, Double
         //=--------------------------------------=
         if !selection.isEmpty, upperBound != layout.startIndex {
-            lowerBound = position(start: selection.lowerBound, preference:  .forwards, intent: intent.lower)
+            lowerBound = layout.preferredIndex(start: selection.lowerBound, preference:  .forwards, intent: intent.lower)
             lowerBound = min(lowerBound, upperBound)
         }
         //=--------------------------------------=
         // MARK: Update
         //=--------------------------------------=
         self.selection = lowerBound ..< upperBound
-    }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Position
-    //=------------------------------------------------------------------------=
-    
-    #warning("Move this to Layout.")
-    @inlinable func position(start: Layout.Index, preference: Direction, intent: Direction?) -> Layout.Index {
-        //=--------------------------------------=
-        // MARK: Validate
-        //=--------------------------------------=
-        if layout.look(position: start, direction: preference).map(layout.nonpassthrough) == true { return start }
-        //=--------------------------------------=
-        // MARK: Direction
-        //=--------------------------------------=
-        let direction = intent ?? preference
-        //=--------------------------------------=
-        // MARK: Try
-        //=--------------------------------------=
-        if let caret = layout.firstIndex(start: start, direction: direction, skip: direction != preference) { return caret }
-        //=--------------------------------------=
-        // MARK: Try In Reverse Direction
-        //=--------------------------------------=
-        if let caret = layout.firstIndex(start: start, direction: direction.reversed(), skip: false) { return caret }
-        //=--------------------------------------=
-        // MARK: Default
-        //=--------------------------------------=
-        return layout.startIndex
     }
 }

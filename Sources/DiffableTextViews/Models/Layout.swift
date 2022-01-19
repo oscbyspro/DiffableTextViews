@@ -316,3 +316,41 @@ extension Layout {
         }
     }
 }
+
+//=----------------------------------------------------------------------------=
+// MARK: Layout - Preferred
+//=----------------------------------------------------------------------------=
+
+extension Layout {
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Index
+    //=------------------------------------------------------------------------=
+    
+    /// The preferred index according to preference, intent and attributes.
+    ///
+    /// - The default index, in case no preferred index is found, is the start index.
+    ///
+    @inlinable func preferredIndex(start: Layout.Index, preference: Direction, intent: Direction?) -> Layout.Index {
+        //=--------------------------------------=
+        // MARK: Validate
+        //=--------------------------------------=
+        if look(position: start, direction: preference).map(nonpassthrough) == true { return start }
+        //=--------------------------------------=
+        // MARK: Direction
+        //=--------------------------------------=
+        let direction = intent ?? preference
+        //=--------------------------------------=
+        // MARK: Try
+        //=--------------------------------------=
+        if let caret = firstIndex(start: start, direction: direction, skip: direction != preference) { return caret }
+        //=--------------------------------------=
+        // MARK: Try In Reverse Direction
+        //=--------------------------------------=
+        if let caret = firstIndex(start: start, direction: direction.reversed(), skip: false) { return caret }
+        //=--------------------------------------=
+        // MARK: Default
+        //=--------------------------------------=
+        return startIndex
+    }
+}
