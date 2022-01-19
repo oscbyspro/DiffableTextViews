@@ -23,9 +23,9 @@
     //=------------------------------------------------------------------------=
     
     @inlinable init?<T: Comparable>(start: T, end: T) {        
-        if      start < end { self =  .forwards }
+        if start < end { self = .forwards }
         else if start > end { self = .backwards }
-        else { return   nil }
+        else { return nil }
     }
     
     //=------------------------------------------------------------------------=
