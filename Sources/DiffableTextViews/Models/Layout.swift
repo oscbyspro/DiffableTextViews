@@ -344,23 +344,23 @@ extension Layout {
     ///
     @inlinable func preferredIndex(start: Layout.Index, preference: Direction, intent: Direction?) -> Layout.Index {
         //=--------------------------------------=
-        // MARK: Validate
+        // MARK: Inspect The Initial Position
         //=--------------------------------------=
         if look(position: start, direction: preference).map(nonpassthrough) == true { return start }
         //=--------------------------------------=
-        // MARK: Direction
+        // MARK: Pick A Direction
         //=--------------------------------------=
         let direction = intent ?? preference
         //=--------------------------------------=
-        // MARK: Try
+        // MARK: Try In This Direction
         //=--------------------------------------=
         if let caret = firstIndex(start: start, direction: direction, skip: direction != preference) { return caret }
         //=--------------------------------------=
-        // MARK: Try In Reverse Direction
+        // MARK: Try In The Other Direction
         //=--------------------------------------=
         if let caret = firstIndex(start: start, direction: direction.reversed(), skip: false) { return caret }
         //=--------------------------------------=
-        // MARK: Default
+        // MARK: Default To The Start Index
         //=--------------------------------------=
         return startIndex
     }
