@@ -9,6 +9,10 @@
 // MARK: * State
 //*============================================================================*
 
+/// A text layout and a selection in it.
+///
+/// It controls how the selection is updated when various parameters change.
+///
 @usableFromInline struct State<Scheme: DiffableTextViews.Scheme> {
     @usableFromInline typealias Layout = DiffableTextViews.Layout<Scheme>
     @usableFromInline typealias Position = DiffableTextViews.Position<Scheme>
