@@ -27,9 +27,9 @@ public struct Info: CustomStringConvertible, Error {
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable public init(content: () -> String) {
+    @inlinable public init(description: @autoclosure () -> String) {
         #if DEBUG
-        self.description = content()
+        self.description = description()
         #endif
     }
     
@@ -37,8 +37,12 @@ public struct Info: CustomStringConvertible, Error {
     // MARK: Initializers - Indirect
     //=------------------------------------------------------------------------=
     
+    @inlinable public init(_ components: () -> [Component]) {
+        self.init(description: components().map(\.content).joined(separator: " "))
+    }
+    
     @inlinable public init(_ components: @autoclosure () -> [Component]) {
-        self.init(content: { components().map(\.content).joined(separator: " ") })
+        self.init(components)
     }
 
     //*========================================================================*

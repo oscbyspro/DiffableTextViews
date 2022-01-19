@@ -19,18 +19,18 @@ public struct Bounds<Value: Boundable> {
     // MARK: Properties
     //=------------------------------------------------------------------------=
     
-    @usableFromInline let values: ClosedRange<Value>
+    @usableFromInline let limits: ClosedRange<Value>
     
     //=------------------------------------------------------------------------=
     // MARK: Properties - Accessors
     //=------------------------------------------------------------------------=
     
     @inlinable var min: Value {
-        values.lowerBound
+        limits.lowerBound
     }
     
     @inlinable var max: Value {
-        values.upperBound
+        limits.upperBound
     }
     
     //=------------------------------------------------------------------------=
@@ -38,7 +38,7 @@ public struct Bounds<Value: Boundable> {
     //=------------------------------------------------------------------------=
     
     @inlinable init(min: Value = Value.bounds.lowerBound, max: Value = Value.bounds.upperBound) {
-        self.values = min...max
+        self.limits = min...max
     }
     
     //
@@ -49,16 +49,16 @@ public struct Bounds<Value: Boundable> {
         .init()
     }
     
-    @inlinable public static func values(_ values: ClosedRange<Value>) -> Self {
-        .init(min: values.lowerBound, max: values.upperBound)
+    @inlinable public static func limits(_ limits: ClosedRange<Value>) -> Self {
+        .init(min: limits.lowerBound, max: limits.upperBound)
     }
     
-    @inlinable public static func values(_ values: PartialRangeFrom<Value>) -> Self {
-        .init(min: values.lowerBound)
+    @inlinable public static func limits(_ limits: PartialRangeFrom<Value>) -> Self {
+        .init(min: limits.lowerBound)
     }
     
-    @inlinable public static func values(_ values: PartialRangeThrough<Value>) -> Self {
-        .init(max: values.upperBound)
+    @inlinable public static func limits(_ limits: PartialRangeThrough<Value>) -> Self {
+        .init(max: limits.upperBound)
     }
     
     //=------------------------------------------------------------------------=
@@ -68,14 +68,10 @@ public struct Bounds<Value: Boundable> {
     @inlinable func clamp(_ value: inout Value) {
         value = Swift.max(min, Swift.min(value, max))
     }
-    
-    @inlinable func contains(_ value: Value) -> Bool {
-        values.contains(value)
-    }
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: Bounds - Validation
+// MARK: Bounds - Validate
 //=----------------------------------------------------------------------------=
 
 extension Bounds {
@@ -85,7 +81,7 @@ extension Bounds {
     //=------------------------------------------------------------------------=
     
     @inlinable func validate(value: Value) throws {
-        guard contains(value) else {
+        guard limits.contains(value) else {
             throw Info([.mark(value), "is not in", .mark(self)])
         }
     }
@@ -100,7 +96,7 @@ extension Bounds {
         case .negative: if min <  .zero { return }
         }
         
-        throw Info([.mark(sign), "is not permitted in", .mark(self)])
+        throw Info([.mark(sign), "is not in", .mark(self)])
     }
 }
 

@@ -5,7 +5,6 @@
 //  Created by Oscar Byström Ericsson on 2021-12-24.
 //
 
-#warning("Cleanup.")
 //*============================================================================*
 // MARK: * Count
 //*============================================================================*
@@ -29,28 +28,5 @@ public struct Count {
         self.value = value
         self.integer = integer
         self.fraction = fraction
-    }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Subscripts
-    //=------------------------------------------------------------------------=
-    
-    @inlinable subscript(component: Component) -> Int {
-        switch component {
-        case .value:    return value
-        case .integer:  return integer
-        case .fraction: return fraction
-        }
-    }
-    
-    //*========================================================================*
-    // MARK: Component
-    //*========================================================================*
-    
-    #warning("Is this necessay?")
-    @usableFromInline enum Component {
-        case value
-        case integer
-        case fraction
     }
 }

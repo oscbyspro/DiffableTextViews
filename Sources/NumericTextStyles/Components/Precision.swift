@@ -82,21 +82,21 @@ public struct Precision<Format: NumericTextStyles.Format> {
         //=--------------------------------------=
         let integer = upper.integer - count.integer
         guard integer >= 0 else {
-            throw excess(.integer)
+            throw excess(\.integer)
         }
         //=--------------------------------------=
         // MARK: Fraction
         //=--------------------------------------=
         let fraction = upper.fraction - count.fraction
         guard fraction >= 0 else {
-            throw excess(.fraction)
+            throw excess(\.fraction)
         }
         //=--------------------------------------=
         // MARK: Value
         //=--------------------------------------=
         let value = upper.value - count.value
         guard value >= 0 else {
-            throw excess(.value)
+            throw excess(\.value)
         }
         //=--------------------------------------=
         // MARK: Capacity
@@ -108,24 +108,12 @@ public struct Precision<Format: NumericTextStyles.Format> {
     // MARK: Errors
     //=------------------------------------------------------------------------=
     
-    @inlinable func excess(_ component: Count.Component) -> Info {
-        Info([.mark(component), "digits exceed max precision", .mark(upper[component])])
-    }
-}
-
-//=----------------------------------------------------------------------------=
-// MARK: Precision - Initializers - Helpers
-//=----------------------------------------------------------------------------=
-
-extension Precision {
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Limits
-    //=------------------------------------------------------------------------=
-    
-    @inlinable static func limits(_ component: (Count) -> Int) -> ClosedRange<Int> {
-        component(Namespace.min)...component(Format.precision)
-    }
+    @inlinable func excess(_ component: (Count) -> Int) -> Info { .init {
+        let template = Count(value: 0, integer: 1, fraction: 2)
+        let value = component(template); let mirror = Mirror(reflecting: template)
+        let label = mirror.children.first(where: { $0.value as? Int == value })?.label
+        return [.mark(label!), "digits exceed max precision", .mark(component(upper))]
+    } }
 }
 
 //=----------------------------------------------------------------------------=
@@ -139,26 +127,26 @@ extension Precision {
     //=------------------------------------------------------------------------=
             
     @inlinable public static var standard: Self {
-        digits(limits(\.value))
+        limits(max(\.value))
     }
     
     //=------------------------------------------------------------------------=
     // MARK: Length
     //=------------------------------------------------------------------------=
     
-    @inlinable public static func digits(_ value: Int) -> Self {
-        digits(value...value)
+    @inlinable public static func limits(_ value: Int) -> Self {
+        limits(value...value)
     }
 
     //=------------------------------------------------------------------------=
     // MARK: Limits
     //=------------------------------------------------------------------------=
     
-    @inlinable public static func digits<R: RangeExpression>(_ value: R) -> Self where R.Bound == Int {
+    @inlinable public static func limits<R: RangeExpression>(_ value: R) -> Self where R.Bound == Int {
         //=--------------------------------------=
         // MARK: Value
         //=--------------------------------------=
-        let value = Namespace.interpret(value, in: limits(\.value))
+        let value = Namespace.interpret(value, in: max(\.value))
         //=--------------------------------------=
         // MARK: Limits
         //=--------------------------------------=
@@ -181,48 +169,48 @@ extension Precision where Value: PreciseFloatingPoint {
     // MARK: Length
     //=------------------------------------------------------------------------=
     
-    @inlinable public static func digits(integer: Int) -> Self {
-        digits(integer: integer...integer)
+    @inlinable public static func limits(integer: Int) -> Self {
+        limits(integer: integer...integer)
     }
     
-    @inlinable public static func digits(fraction: Int) -> Self {
-        digits(fraction: fraction...fraction)
+    @inlinable public static func limits(fraction: Int) -> Self {
+        limits(fraction: fraction...fraction)
     }
     
-    @inlinable public static func digits(integer: Int, fraction: Int) -> Self {
-        digits(integer: integer...integer, fraction: fraction...fraction)
+    @inlinable public static func limits(integer: Int, fraction: Int) -> Self {
+        limits(integer: integer...integer, fraction: fraction...fraction)
     }
     
     //=------------------------------------------------------------------------=
     // MARK: Mixed
     //=------------------------------------------------------------------------=
     
-    @inlinable public static func digits<R: RangeExpression>(integer: R, fraction: Int) -> Self where R.Bound == Int {
-        digits(integer: integer, fraction: fraction...fraction)
+    @inlinable public static func limits<R: RangeExpression>(integer: R, fraction: Int) -> Self where R.Bound == Int {
+        limits(integer: integer, fraction: fraction...fraction)
     }
     
-    @inlinable public static func digits<R: RangeExpression>(integer: Int, fraction: R) -> Self where R.Bound == Int {
-        digits(integer: integer...integer, fraction: fraction)
+    @inlinable public static func limits<R: RangeExpression>(integer: Int, fraction: R) -> Self where R.Bound == Int {
+        limits(integer: integer...integer, fraction: fraction)
     }
 
     //=------------------------------------------------------------------------=
     // MARK: Limits
     //=------------------------------------------------------------------------=
     
-    @inlinable public static func digits<R: RangeExpression>(integer: R) -> Self where R.Bound == Int {
-        digits(integer: integer, fraction: limits(\.fraction))
+    @inlinable public static func limits<R: RangeExpression>(integer: R) -> Self where R.Bound == Int {
+        limits(integer: integer, fraction: max(\.fraction))
     }
     
-    @inlinable public static func digits<R: RangeExpression>(fraction: R) -> Self where R.Bound == Int {
-        digits(integer: limits(\.integer), fraction: fraction)
+    @inlinable public static func limits<R: RangeExpression>(fraction: R) -> Self where R.Bound == Int {
+        limits(integer: max(\.integer), fraction: fraction)
     }
     
-    @inlinable public static func digits<R0: RangeExpression, R1: RangeExpression>(integer: R0, fraction: R1) -> Self where R0.Bound == Int, R1.Bound == Int {
+    @inlinable public static func limits<R0: RangeExpression, R1: RangeExpression>(integer: R0, fraction: R1) -> Self where R0.Bound == Int, R1.Bound == Int {
         //=--------------------------------------=
         // MARK: Integer, Fraction
         //=--------------------------------------=
-        let integer  = Namespace.interpret(integer,  in: limits( \.integer))
-        let fraction = Namespace.interpret(fraction, in: limits(\.fraction))
+        let integer  = Namespace.interpret(integer,  in: max( \.integer))
+        let fraction = Namespace.interpret(fraction, in: max(\.fraction))
         //=--------------------------------------=
         // MARK: Limits
         //=--------------------------------------=
@@ -232,6 +220,21 @@ extension Precision where Value: PreciseFloatingPoint {
         // MARK: Instance
         //=--------------------------------------=
         return Self(style: .separate, lower: lower, upper: upper)
+    }
+}
+
+//=----------------------------------------------------------------------------=
+// MARK: Precision - Helpers - Static
+//=----------------------------------------------------------------------------=
+
+extension Precision {
+
+    //=------------------------------------------------------------------------=
+    // MARK: Limits
+    //=------------------------------------------------------------------------=
+    
+    @inlinable static func max(_ component: (Count) -> Int) -> ClosedRange<Int> {
+        component(Namespace.min)...component(Format.precision)
     }
 }
 
