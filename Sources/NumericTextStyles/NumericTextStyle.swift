@@ -23,8 +23,8 @@ public struct NumericTextStyle<Format: NumericTextStyles.Format>: DiffableTextSt
     
     @usableFromInline var format: Format
     @usableFromInline var region: Region
-    @usableFromInline var bounds = Bounds()
-    @usableFromInline var precision = Precision()
+    @usableFromInline var bounds: Bounds
+    @usableFromInline var precision: Precision
     
     //=------------------------------------------------------------------------=
     // MARK: Initializers
@@ -33,6 +33,8 @@ public struct NumericTextStyle<Format: NumericTextStyles.Format>: DiffableTextSt
     @inlinable public init(format: Format, locale: Locale = .autoupdatingCurrent) {
         self.format = format
         self.region = Region.cached(locale)
+        self.bounds = Bounds()
+        self.precision = Precision()
     }
     
     //=------------------------------------------------------------------------=
