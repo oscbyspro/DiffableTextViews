@@ -23,8 +23,7 @@ public struct NumericTextStyle<Format: NumericTextStyles.Format>: DiffableTextSt
     
     @usableFromInline var format: Format
     @usableFromInline var region: Region
-    
-    @usableFromInline var bounds    = Bounds()
+    @usableFromInline var bounds = Bounds()
     @usableFromInline var precision = Precision()
     
     //=------------------------------------------------------------------------=
