@@ -27,9 +27,7 @@ public struct Bounds<Value: Boundable> {
     //=------------------------------------------------------------------------=
     
     @inlinable init(min: Value = Value.bounds.lowerBound, max: Value = Value.bounds.upperBound) {
-        precondition(min <= max, "min > max")
-        self.min = min
-        self.max = max
+        precondition(min <= max, "min > max"); (self.min, self.max) = (min, max)
     }
     
     //=------------------------------------------------------------------------=

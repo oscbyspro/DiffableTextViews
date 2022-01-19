@@ -44,15 +44,11 @@ Value: RangeReplaceableCollection, Value: Equatable, Value.Element == Character 
     /// - If you want the entire pattern to be invisible, use spaces instead.
     ///
     @inlinable public func hidden() -> Self {
-        var result = self
-        result.visible = false
-        return result
+        var result = self; result.visible = false; return result
     }
 
     @inlinable public func placeholder(_ character: Character, where predicate: @escaping (Character) -> Bool) -> Self {
-        var result = self
-        result.placeholders[character] = predicate
-        return result
+        var result = self; result.placeholders[character] = predicate; return result
     }
 }
 
