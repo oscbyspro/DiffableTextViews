@@ -22,9 +22,8 @@ final class RegionTests: XCTestCase {
     // MARK: State
     //=------------------------------------------------------------------------=
     
-    lazy var regions = Locale
-        .availableIdentifiers
-        .lazy
+    lazy var regions: [Region] = Locale
+        .availableIdentifiers.lazy
         .map(Locale.init)
         .map(Region.init)
     
@@ -37,15 +36,10 @@ final class RegionTests: XCTestCase {
         let negative: Int = -1
         
         for region in regions {
-            let style = IntegerFormatStyle<Int>
-                .number
-                .locale(region.locale)
-                .sign(strategy: .always())
-            
+            let style = int(region).sign(strategy: .always())
             let positives = positive.formatted(style)
-            XCTAssertNotNil(positives.first(where: { region.signs[$0] != nil }))
-
             let negatives = negative.formatted(style)
+            XCTAssertNotNil(positives.first(where: { region.signs[$0] != nil }))
             XCTAssertNotNil(negatives.first(where: { region.signs[$0] != nil }))
         }
     }
@@ -54,11 +48,7 @@ final class RegionTests: XCTestCase {
         let number: Int = 1234567890
         
         for region in regions {
-            let style = IntegerFormatStyle<Int>
-                .number
-                .locale(region.locale)
-                .grouping(.never)
-            
+            let style = int(region).grouping(.never)
             let numbers = number.formatted(style)
             XCTAssert(numbers.allSatisfy({ region.digits[$0] != nil }))
         }
@@ -68,10 +58,7 @@ final class RegionTests: XCTestCase {
         let number: Int = 1234567890
         
         for region in regions {
-            let style = IntegerFormatStyle<Int>
-                .number
-                .locale(region.locale)
-            
+            let style = int(region).grouping(.automatic)
             let nonnumbers = number.formatted(style).filter({ !$0.isNumber })
             XCTAssertNotNil(nonnumbers.allSatisfy({ region.separators[$0] == .grouping }))
         }
@@ -81,13 +68,22 @@ final class RegionTests: XCTestCase {
         let number: Double = 0.123
         
         for region in regions {
-            let style = FloatingPointFormatStyle<Double>
-                .number
-                .locale(region.locale)
-            
+            let style = double(region).decimalSeparator(strategy: .always)
             let nonnumbers = number.formatted(style).filter({ !$0.isNumber })
             XCTAssertNotNil(nonnumbers.allSatisfy({ region.separators[$0] == .fraction }))
         }
+    }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Styles
+    //=------------------------------------------------------------------------=
+    
+    @inlinable func int(_ region: Region) -> IntegerFormatStyle<Int> {
+        .number.locale(region.locale)
+    }
+    
+    @inlinable func double(_ region: Region) -> FloatingPointFormatStyle<Double> {
+        .number.locale(region.locale)
     }
 }
 
