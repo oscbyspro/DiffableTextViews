@@ -36,7 +36,7 @@ A view that uses styles to format and parse text.
 
 ### ProxyTextField
 
-A proxy that serves as customization point for the UITextField it is based on.
+A proxy that serves as the customization point for the UITextField that DiffableTextField is based on.
 
 # Styles
 
