@@ -91,7 +91,7 @@ A style that processes characters laid out in custom patterns.
 | :chess_pawn: | Placeholders. | Placeholders represent not-yet-assigned values. |
 | :fist_raised: | Independance. | Supports multiple placeholders with different rules. |
 | :ghost: | Invisibility. | Pattern suffix can easily be \\.hidden(). |
-| :feather: | Lightweight. | ~200 lines of code. |
+| :feather: | Lightweight. | Written in less than 200 lines of [code](../main/Sources/PatternTextStyles/PatternTextStyle.swift). |
 
 
 ### Examples
