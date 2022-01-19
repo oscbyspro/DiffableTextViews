@@ -4,7 +4,7 @@ A diffable text style that formats and converts text to and from number types.
 
 ### Locales
 
-    - Every locale available in the Foundation module.
+    - Every locale available in Foundation.
     - Input and output characters are retrieved and cached at runtime.
 
 ### Formats
