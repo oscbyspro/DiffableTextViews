@@ -51,8 +51,8 @@ extension ProxyTextField {
         wrapped.isEditing ? .editable : .showcase
     }
 
-    @inlinable var intent: Direction? {
-        wrapped.intent
+    @inlinable var momentum: Bool {
+        wrapped.momentum
     }
     
     @inlinable var text: String {

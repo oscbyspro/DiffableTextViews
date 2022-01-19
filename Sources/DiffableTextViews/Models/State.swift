@@ -98,11 +98,11 @@ extension State {
     // MARK: Transformations
     //=------------------------------------------------------------------------=
     
-    @inlinable mutating func update(selection: Range<Layout.Index>, intent: Direction?) {
+    @inlinable mutating func update(selection: Range<Layout.Index>, momentum: Bool) {
         //=--------------------------------------=
         // MARK: Reinterpret Intent As Momentum
         //=--------------------------------------=
-        let intent = (intent == nil) ? (nil, nil) : (
+        let intent = !momentum ? (nil, nil) : (
         Direction(start: self.selection.lowerBound, end: selection.lowerBound),
         Direction(start: self.selection.upperBound, end: selection.upperBound))
         //=--------------------------------------=
@@ -116,8 +116,8 @@ extension State {
     // MARK: Transformations - Indirect
     //=------------------------------------------------------------------------=
     
-    @inlinable mutating func update(selection: Range<Position>, intent: Direction?) {
-        update(selection: indices(at: selection), intent: intent)
+    @inlinable mutating func update(selection: Range<Position>, momentum: Bool) {
+        update(selection: indices(at: selection), momentum: momentum)
     }
 }
 
@@ -158,6 +158,7 @@ extension State {
     // MARK: Position
     //=------------------------------------------------------------------------=
     
+    #warning("Move this to Layout.")
     @inlinable func position(start: Layout.Index, preference: Direction, intent: Direction?) -> Layout.Index {
         //=--------------------------------------=
         // MARK: Validate

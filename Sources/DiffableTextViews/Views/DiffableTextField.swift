@@ -248,7 +248,7 @@ public struct DiffableTextField<Style: UIKitDiffableTextStyle>: UIViewRepresenta
             // MARK: Corrected
             //=----------------------------------=
             var corrected = cache.state
-            corrected.update(selection: positions, intent: downstream.intent)
+            corrected.update(selection: positions, momentum: downstream.momentum)
             //=----------------------------------=
             // MARK: Update Downstream If Needed
             //=----------------------------------=
