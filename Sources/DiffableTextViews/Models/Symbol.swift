@@ -9,6 +9,7 @@
 // MARK: * Symbol
 //*============================================================================*
 
+/// A character and an attribute describing its behavior.
 public struct Symbol: Equatable {
     
     //=------------------------------------------------------------------------=
