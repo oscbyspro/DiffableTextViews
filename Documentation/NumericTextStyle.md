@@ -1,6 +1,6 @@
 # NumericTextStyle
 
-A diffable text style that formats and converts text to and from number types.
+A style that formats and converts text to and from number types.
 
 ### Locales
 

@@ -29,7 +29,7 @@ A framework for as-you-type formatting of text bound to appropriate data types.
 
 # Views
 
-## [DiffableTextField](../main/Notes/DiffableTextViews/DiffableTextField.md)
+## [DiffableTextField](../main/Documentation/DiffableTextField.md)
 
 A view that uses styles to format and parse text.
 
@@ -48,7 +48,7 @@ A customization point for the UITextField it is based on.
 
 # Styles
 
-## [NumericTextStyle](../main/Notes/NumericTextStyles/NumericTextStyle.md)
+## [NumericTextStyle](../main/Documentation/NumericTextStyle.md)
 
 A style that processes localized numbers in various formats.
 
@@ -87,7 +87,7 @@ struct NumericTextStyleExample: View {
 }
 ```
 
-## PatternTextStyle
+## [PatternTextStyle](../main/Documentation/PatternTextStyle.md)
 
 A style that processes characters laid out in custom patterns.
 
