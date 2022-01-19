@@ -74,8 +74,8 @@ struct NumericTextStyleExample: View {
 |---|---------|-------------|
 | :checkered_flag: | Pattern. | Characters are laid out as described by a pattern. | 
 | :chess_pawn: | Placeholders. | Placeholders represent not-yet-assigned values. |
-| :fist_raised: | Independance. | Placeholders may use separate validation rules. |
-| :ghost: | Invisibility. | Pattern beyond the last value can easily be hidden. |
+| :fist_raised: | Independance. | Supports multiple placeholders with different rules. |
+| :ghost: | Invisible. | Pattern suffix can easily be \\.hidden(). |
 | :feather: | Lightweight. | ~200 lines of code. |
 
 
