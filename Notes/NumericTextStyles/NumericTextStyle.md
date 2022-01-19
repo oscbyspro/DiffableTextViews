@@ -11,7 +11,7 @@ A diffable text style that formats and converts text to and from number types.
 
     - Number
     - Currency
-    - Percent
+    - Percent (requires a fraction precision of at least 2 digits)
 
 ### Values
 

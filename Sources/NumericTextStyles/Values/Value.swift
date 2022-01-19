@@ -26,7 +26,7 @@ public protocol Value: Boundable, Precise {
 @usableFromInline protocol FloatingPointValue: Value, BoundableFloatingPoint, PreciseFloatingPoint { }
 
 //=----------------------------------------------------------------------------=
-// MARK: Value x Floating Point - Implementation
+// MARK: Value x Floating Point - Details
 //=----------------------------------------------------------------------------=
 
 extension FloatingPointValue {
@@ -35,8 +35,7 @@ extension FloatingPointValue {
     // MARK: Properties
     //=------------------------------------------------------------------------=
     
-    @inlinable public static var isInteger:  Bool { false }
-    @inlinable public static var isUnsigned: Bool { false }
+    @inlinable @inline(__always) public static var isInteger:  Bool { false }
 }
 
 //*============================================================================*
@@ -46,7 +45,7 @@ extension FloatingPointValue {
 @usableFromInline protocol IntegerValue: Value, BoundableInteger, PreciseInteger { }
 
 //=----------------------------------------------------------------------------=
-// MARK: Value x Integer - Implementation
+// MARK: Value x Integer - Details
 //=----------------------------------------------------------------------------=
 
 extension IntegerValue {
@@ -55,26 +54,43 @@ extension IntegerValue {
     // MARK: Properties
     //=------------------------------------------------------------------------=
     
-    @inlinable public static var isInteger:  Bool { true  }
-    @inlinable public static var isUnsigned: Bool { false }
+    @inlinable @inline(__always) public static var isInteger: Bool { true }
 }
 
 //*============================================================================*
-// MARK: * Value x Unsigned Integer
+// MARK: * Value x Signed
 //*============================================================================*
 
-@usableFromInline protocol UnsignedIntegerValue: Value, BoundableInteger, PreciseInteger { }
+@usableFromInline protocol SignedValue: Value { }
 
 //=----------------------------------------------------------------------------=
-// MARK: Value x Unsigned Integer - Implementation
+// MARK: Value x Signed - Details
 //=----------------------------------------------------------------------------=
 
-extension UnsignedIntegerValue {
+extension SignedValue {
     
     //=------------------------------------------------------------------------=
     // MARK: Properties
     //=------------------------------------------------------------------------=
     
-    @inlinable public static var isInteger:  Bool { true }
-    @inlinable public static var isUnsigned: Bool { true }
+    @inlinable @inline(__always) public static var isUnsigned: Bool { false }
+}
+
+//*============================================================================*
+// MARK: * Value x Unsigned
+//*============================================================================*
+
+@usableFromInline protocol UnsignedValue: Value { }
+
+//=----------------------------------------------------------------------------=
+// MARK: Value x Unsigned - Details
+//=----------------------------------------------------------------------------=
+
+extension UnsignedValue {
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Properties
+    //=------------------------------------------------------------------------=
+    
+    @inlinable @inline(__always) public static var isUnsigned: Bool { true }
 }

@@ -9,7 +9,7 @@
 // MARK: * Int
 //*============================================================================*
 
-extension Int: IntegerValue {
+extension Int: IntegerValue, SignedValue {
     
     //=------------------------------------------------------------------------=
     // MARK: Precision, Bounds
@@ -23,7 +23,7 @@ extension Int: IntegerValue {
 // MARK: * Int8
 //*============================================================================*
 
-extension Int8: IntegerValue {
+extension Int8: IntegerValue, SignedValue {
     
     //=------------------------------------------------------------------------=
     // MARK: Precision, Bounds
@@ -37,7 +37,7 @@ extension Int8: IntegerValue {
 // MARK: * Int16
 //*============================================================================*
 
-extension Int16: IntegerValue {
+extension Int16: IntegerValue, SignedValue {
     
     //=------------------------------------------------------------------------=
     // MARK: Precision, Bounds
@@ -51,7 +51,7 @@ extension Int16: IntegerValue {
 // MARK: * Int32
 //*============================================================================*
 
-extension Int32: IntegerValue {
+extension Int32: IntegerValue, SignedValue {
     
     //=------------------------------------------------------------------------=
     // MARK: Precision, Bounds
@@ -65,7 +65,7 @@ extension Int32: IntegerValue {
 // MARK: * Int64
 //*============================================================================*
 
-extension Int64: IntegerValue {
+extension Int64: IntegerValue, SignedValue {
     
     //=------------------------------------------------------------------------=
     // MARK: Precision, Bounds

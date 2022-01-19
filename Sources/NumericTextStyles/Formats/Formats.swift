@@ -19,24 +19,21 @@ extension Decimal.FormatStyle.Percent: PercentFormat { }
 // MARK: * Format x Floating Point
 //*============================================================================*
 
-extension FloatingPointFormatStyle: Format       where FormatInput: NumericTextStyles.Value { }
-extension FloatingPointFormatStyle: NumberFormat where FormatInput: NumericTextStyles.Value { }
+extension FloatingPointFormatStyle: Format       where FormatInput: NumericTextStyles.FloatingPointValue { }
+extension FloatingPointFormatStyle: NumberFormat where FormatInput: NumericTextStyles.FloatingPointValue { }
 
-extension FloatingPointFormatStyle.Currency: Format         where FormatInput: NumericTextStyles.Value { }
-extension FloatingPointFormatStyle.Currency: CurrencyFormat where FormatInput: NumericTextStyles.Value { }
+extension FloatingPointFormatStyle.Currency: Format         where FormatInput: NumericTextStyles.FloatingPointValue { }
+extension FloatingPointFormatStyle.Currency: CurrencyFormat where FormatInput: NumericTextStyles.FloatingPointValue { }
 
-extension FloatingPointFormatStyle.Percent: Format        where FormatInput: NumericTextStyles.Value { }
-extension FloatingPointFormatStyle.Percent: PercentFormat where FormatInput: NumericTextStyles.Value { }
+extension FloatingPointFormatStyle.Percent: Format        where FormatInput: NumericTextStyles.FloatingPointValue { }
+extension FloatingPointFormatStyle.Percent: PercentFormat where FormatInput: NumericTextStyles.FloatingPointValue { }
 
 //*============================================================================*
-// MARK: * Format x Integer
+// MARK: * Format x Integer (Percent Is Disallowed)
 //*============================================================================*
 
-extension IntegerFormatStyle: Format       where FormatInput: NumericTextStyles.Value { }
-extension IntegerFormatStyle: NumberFormat where FormatInput: NumericTextStyles.Value { }
+extension IntegerFormatStyle: Format       where FormatInput: NumericTextStyles.IntegerValue { }
+extension IntegerFormatStyle: NumberFormat where FormatInput: NumericTextStyles.IntegerValue { }
 
-extension IntegerFormatStyle.Currency: Format         where FormatInput: NumericTextStyles.Value { }
-extension IntegerFormatStyle.Currency: CurrencyFormat where FormatInput: NumericTextStyles.Value { }
-
-extension IntegerFormatStyle.Percent: Format        where FormatInput: NumericTextStyles.Value { }
-extension IntegerFormatStyle.Percent: PercentFormat where FormatInput: NumericTextStyles.Value { }
+extension IntegerFormatStyle.Currency: Format         where FormatInput: NumericTextStyles.IntegerValue { }
+extension IntegerFormatStyle.Currency: CurrencyFormat where FormatInput: NumericTextStyles.IntegerValue { }

@@ -122,7 +122,8 @@ extension CurrencyFormat {
 // MARK: * Format x Percent
 //*============================================================================*
 
-@usableFromInline protocol PercentFormat: Format {
+/// - Note: To use this format, the value must have a fraction precision of at least 2 digits.
+@usableFromInline protocol PercentFormat: Format where FormatInput: FloatingPointValue {
     typealias Configuration = NumberFormatStyleConfiguration
     
     //=------------------------------------------------------------------------=
@@ -151,9 +152,20 @@ extension PercentFormat {
     //=------------------------------------------------------------------------=
     
     @inlinable public static var precision: Count {
+        assert(Value.precision.fraction >= 2,
+        "This percent format requires that fraction precision >= 2.")
+        //=--------------------------------------=
+        // MARK: Precision
+        //=--------------------------------------=
         var precision = Value.precision
+        //=--------------------------------------=
+        // MARK: Upshift Precision By 2 Digits
+        //=--------------------------------------=
         precision.integer  += 2
         precision.fraction -= 2
+        //=--------------------------------------=
+        // MARK: Return
+        //=--------------------------------------=
         return precision
     }
 }

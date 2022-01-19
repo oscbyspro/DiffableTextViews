@@ -9,7 +9,7 @@
 // MARK: * UInt
 //*============================================================================*
 
-extension UInt: UnsignedIntegerValue {
+extension UInt: IntegerValue, UnsignedValue {
     typealias Limitation = Int
     
     //=------------------------------------------------------------------------=
@@ -24,7 +24,7 @@ extension UInt: UnsignedIntegerValue {
 // MARK: * UInt8
 //*============================================================================*
 
-extension UInt8: UnsignedIntegerValue {
+extension UInt8: IntegerValue, UnsignedValue {
     
     //=------------------------------------------------------------------------=
     // MARK: Precision, Bounds
@@ -38,7 +38,7 @@ extension UInt8: UnsignedIntegerValue {
 // MARK: * UInt16
 //*============================================================================*
 
-extension UInt16: UnsignedIntegerValue {
+extension UInt16: IntegerValue, UnsignedValue {
     
     //=------------------------------------------------------------------------=
     // MARK: Precision, Bounds
@@ -52,7 +52,7 @@ extension UInt16: UnsignedIntegerValue {
 // MARK: * UInt32
 //*============================================================================*
 
-extension UInt32: UnsignedIntegerValue {
+extension UInt32: IntegerValue, UnsignedValue {
     
     //=------------------------------------------------------------------------=
     // MARK: Precision, Bounds
@@ -66,7 +66,7 @@ extension UInt32: UnsignedIntegerValue {
 // MARK: * UInt64
 //*============================================================================*
 
-extension UInt64: UnsignedIntegerValue {
+extension UInt64: IntegerValue, UnsignedValue {
     typealias Limitation = Int64
     
     //=------------------------------------------------------------------------=
