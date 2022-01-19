@@ -16,7 +16,7 @@ A framework for as-you-type formatting of text bound to its appropriate data typ
 | :running_man: | Efficient. | Uses an O(n) differentiation algorithm. |
 | :desert_island: | Standalone. | Uses no remote dependencies. |
 
-# Requirements
+### Requirements
 
 - iOS 15.0+
 - Swift 4.0+
