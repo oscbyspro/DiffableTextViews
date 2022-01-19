@@ -57,30 +57,18 @@ public struct Precision<Format: NumericTextStyles.Format> {
     }
     
     //=------------------------------------------------------------------------=
-    // MARK: Showcase
+    // MARK: Configurations
     //=------------------------------------------------------------------------=
     
     @inlinable func showcase() -> Configuration {
         switch style {
-        case .value:    return value()
-        case .separate: return separate()
+        case .separate: return .integerAndFractionLength(
+             integerLimits: lower .integer ... upper .integer,
+            fractionLimits: lower.fraction ... upper.fraction)
+        case .value: return .significantDigits(lower.value ... upper.value)
         }
     }
-    
-    @inlinable func value() -> Configuration {
-        .significantDigits(lower.value ... upper.value)
-    }
-    
-    @inlinable func separate() -> Configuration {
-        .integerAndFractionLength(
-         integerLimits: lower .integer ... upper .integer,
-        fractionLimits: lower.fraction ... upper.fraction)
-    }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Editable
-    //=------------------------------------------------------------------------=
-    
+
     @inlinable func editable() -> Configuration {
         editable(count: upper)
     }

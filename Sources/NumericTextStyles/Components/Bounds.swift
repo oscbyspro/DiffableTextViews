@@ -41,26 +41,6 @@ public struct Bounds<Value: Boundable> {
         self.limits = min...max
     }
     
-    //
-    // MARK: Initialiers: Static
-    //=------------------------------------------------------------------------=
-    
-    @inlinable public static var standard: Self {
-        .init()
-    }
-    
-    @inlinable public static func limits(_ limits: ClosedRange<Value>) -> Self {
-        .init(min: limits.lowerBound, max: limits.upperBound)
-    }
-    
-    @inlinable public static func limits(_ limits: PartialRangeFrom<Value>) -> Self {
-        .init(min: limits.lowerBound)
-    }
-    
-    @inlinable public static func limits(_ limits: PartialRangeThrough<Value>) -> Self {
-        .init(max: limits.upperBound)
-    }
-    
     //=------------------------------------------------------------------------=
     // MARK: Utilities
     //=------------------------------------------------------------------------=

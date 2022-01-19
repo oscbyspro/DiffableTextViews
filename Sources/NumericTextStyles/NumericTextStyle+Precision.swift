@@ -6,7 +6,7 @@
 //
 
 //=----------------------------------------------------------------------------=
-// MARK: DiffableTextStyle - Precision - Internal
+// MARK: DiffableTextStyle - Precision
 //=----------------------------------------------------------------------------=
 
 extension NumericTextStyle {
@@ -15,7 +15,7 @@ extension NumericTextStyle {
     // MARK: Transformations
     //=------------------------------------------------------------------------=
     
-    @inlinable func precision(_ precision: Precision) -> Self {
+    @inlinable @inline(__always) func precision(_ precision: Precision) -> Self {
         var result = self; result.precision = precision; return result
     }
 }
