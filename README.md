@@ -25,6 +25,8 @@ A framework for as-you-type formatting of text bound to its appropriate data typ
 
 ## [DiffableTextField](../main/Notes/DiffableTextViews/DiffableTextField.md)
 
+A view that uses styles to format and parse text.
+
 |   | Feature | Description |
 |---|---------|-------------|
 | :iphone: | SwiftUI | Value, style, done. |
@@ -32,9 +34,15 @@ A framework for as-you-type formatting of text bound to its appropriate data typ
 | :sewing_needle: | Customizable | Styles may provide default values. |
 | :evergreen_tree: | Environment | Locales are set by the environment. |
 
+### ProxyTextField
+
+A proxy that serves as customization point for the UITextField it is based on.
+
 # Styles
 
 ## [NumericTextStyle](../main/Notes/NumericTextStyles/NumericTextStyle.md)
+
+A style that processes localized numbers in various formats.
 
 ### Features
 
@@ -73,6 +81,8 @@ struct NumericTextStyleExample: View {
 
 ## PatternTextStyle
 
+A style that processes characters laid out in custom patterns.
+
 ### Features
 
 |   | Feature | Description |
@@ -102,5 +112,4 @@ struct PatternTextStyleExample: View {
         .setup({ $0.keyboard(.phonePad) })
     }
 }
-
 ```

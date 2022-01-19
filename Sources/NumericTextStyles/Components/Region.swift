@@ -5,8 +5,8 @@
 //  Created by Oscar Byström Ericsson on 2022-01-11.
 //
 
-import Foundation
 import DiffableTextViews
+import Foundation
 
 //*============================================================================*
 // MARK: * Region
