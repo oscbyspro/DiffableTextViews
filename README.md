@@ -90,7 +90,7 @@ A style that processes characters laid out in custom patterns.
 | :checkered_flag: | Pattern. | Characters are laid out as described by a pattern. | 
 | :chess_pawn: | Placeholders. | Placeholders represent not-yet-assigned values. |
 | :fist_raised: | Independance. | Supports multiple placeholders with different rules. |
-| :ghost: | Invisible. | Pattern suffix can easily be \\.hidden(). |
+| :ghost: | Invisibility. | Pattern suffix can easily be \\.hidden(). |
 | :feather: | Lightweight. | ~200 lines of code. |
 
 
