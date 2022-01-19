@@ -15,7 +15,7 @@ import Foundation
 public struct NumericTextStyle<Format: NumericTextStyles.Format>: DiffableTextStyle {
     public typealias Value = Format.FormatInput
     public typealias Bounds = NumericTextStyles.Bounds<Value>
-    public typealias Precision = NumericTextStyles.Precision<Format>
+    public typealias Precision = NumericTextStyles.Precision<Value>
 
     //=------------------------------------------------------------------------=
     // MARK: Properties

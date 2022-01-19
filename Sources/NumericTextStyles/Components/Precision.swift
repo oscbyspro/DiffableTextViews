@@ -13,8 +13,7 @@ import Support
 // MARK: * Precision
 //*============================================================================*
 
-public struct Precision<Format: NumericTextStyles.Format> {
-    public typealias Value = Format.FormatInput
+public struct Precision<Value: Precise> {
     @usableFromInline typealias Namespace = _Precision
     @usableFromInline typealias Style = _Precision.Style
     @usableFromInline typealias Configuration = NumberFormatStyleConfiguration.Precision
@@ -117,7 +116,7 @@ extension Precision {
     //=------------------------------------------------------------------------=
     
     @inlinable static func limits(_ component: (Count) -> Int) -> ClosedRange<Int> {
-        component(Namespace.min)...component(Format.precision)
+        component(Namespace.min)...component(Value.precision)
     }
 }
 

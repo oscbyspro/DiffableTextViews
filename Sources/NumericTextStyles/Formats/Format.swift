@@ -16,23 +16,13 @@ public protocol Format: ParseableFormatStyle where FormatInput: NumericTextStyle
     typealias Separator = NumberFormatStyleConfiguration.DecimalSeparatorDisplayStrategy
     
     //=------------------------------------------------------------------------=
-    // MARK: Precision
+    // MARK: Transformations
     //=------------------------------------------------------------------------=
-    
-    @inlinable static var precision: Count { get }
-    
+        
     @inlinable func precision(_ precision: Precision) -> Self
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Separator
-    //=------------------------------------------------------------------------=
-    
+
     @inlinable func decimalSeparator(strategy: Separator) -> Self
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Sign
-    //=------------------------------------------------------------------------=
-    
+
     @inlinable func sign(style: Sign.Style) -> Self
 }
 
@@ -43,14 +33,6 @@ public protocol Format: ParseableFormatStyle where FormatInput: NumericTextStyle
 extension Format {
     @usableFromInline typealias Value = FormatInput
     
-    //=------------------------------------------------------------------------=
-    // MARK: Precision
-    //=------------------------------------------------------------------------=
-    
-    @inlinable public static var precision: Count {
-        Value.precision
-    }
-
     //=------------------------------------------------------------------------=
     // MARK: Transformations
     //=------------------------------------------------------------------------=
@@ -122,7 +104,7 @@ extension CurrencyFormat {
 // MARK: * Format x Percent
 //*============================================================================*
 
-/// - Note: To use this format, the value must have a fraction precision of at least 2 digits.
+/// - Note: To use this format, the value must support a shift of at least 2 digits.
 @usableFromInline protocol PercentFormat: Format where FormatInput: FloatingPointValue {
     typealias Configuration = NumberFormatStyleConfiguration
     
@@ -145,18 +127,5 @@ extension PercentFormat {
     
     @inlinable public func sign(style: Sign.Style) -> Self {
         self.sign(strategy: style.standard())
-    }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Process
-    //=------------------------------------------------------------------------=
-    
-    @inlinable public static var precision: Count {
-        assert(Value.precision.fraction >= 2,
-        "This format requires a fraction precision of at least 2 digits")
-        //=--------------------------------------=
-        // MARK: Precision
-        //=--------------------------------------=
-        return Value.precision.upshifted(by: 2)
     }
 }

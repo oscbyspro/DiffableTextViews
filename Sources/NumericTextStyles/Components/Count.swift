@@ -41,20 +41,8 @@ public struct Count {
     // MARK: Transformations
     //=------------------------------------------------------------------------=
     
-    @inlinable func map(_ map: (SIMD3<Int>, SIMD3<Int>) -> SIMD3<Int>, _ other: Self) -> Self {
-        Self(storage: map(storage, other.storage))
-    }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Utilities
-    //=------------------------------------------------------------------------=
-    
-    @inlinable func upshifted(by amount: Int) -> Self {
-        self.map(&+, Self(value: 0, integer: amount, fraction: -amount))
-    }
-    
-    @inlinable func downshifted(by amount: Int) -> Self {
-        self.map(&-, Self(value: 0, integer: -amount, fraction: amount))
+    @inlinable func map(_ transform: (SIMD3<Int>, SIMD3<Int>) -> SIMD3<Int>, _ other: Self) -> Self {
+        Self(storage: transform(storage, other.storage))
     }
 }
 
