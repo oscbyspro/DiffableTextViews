@@ -94,7 +94,7 @@ struct PatternTextStyleExample: View {
             .pattern("+## (###) ###-##-##")
             .placeholder("#") { $0.isASCII && $0.isNumber }
         }
-        .setup({ textField in textField.keyboard(.phonePad) })
+        .setup({ $0.keyboard(.phonePad) })
     }
 }
 
