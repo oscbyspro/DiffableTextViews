@@ -13,7 +13,10 @@
 ///
 /// Plain text is empty.
 ///
-/// - Note: The easiest way to unformat text is to filter symbosl marked as virtual.
+/// - Singular: virtual, insertable, removable, passthrough.
+/// - Composites: content, phantom.
+///
+/// - Note: The easiest way to unformat text is to exclude symbols marked as virtual.
 ///
 public struct Attribute: OptionSet {
     
