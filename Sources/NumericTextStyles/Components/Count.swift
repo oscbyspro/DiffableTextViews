@@ -10,25 +10,23 @@
 /// - Lanes: | value | integer | fraction |
 ///
 public struct Count {
-    @usableFromInline typealias Storage = SIMD3<Int>
-    @usableFromInline typealias Transform = (Storage, Storage) -> Storage
 
     //=------------------------------------------------------------------------=
     // MARK: Properties
     //=------------------------------------------------------------------------=
     
-    @usableFromInline var storage: Storage
+    @usableFromInline var storage: SIMD3<Int>
 
     //=------------------------------------------------------------------------=
     // MARK: Initializers
     //=------------------------------------------------------------------------=
 
-    @inlinable init(storage: Storage) {
+    @inlinable init(storage: SIMD3<Int>) {
         self.storage = storage
     }
     
     @inlinable init(value: Int, integer: Int, fraction: Int) {
-        self.storage = Storage(value, integer, fraction)
+        self.storage = SIMD3<Int>(value, integer, fraction)
     }
     
     //=------------------------------------------------------------------------=
@@ -43,8 +41,8 @@ public struct Count {
     // MARK: Transformations
     //=------------------------------------------------------------------------=
     
-    @inlinable func map(_ transform: Transform, _ other: Self) -> Self {
-        Self(storage: transform(storage, other.storage))
+    @inlinable func map(_ map: (SIMD3<Int>, SIMD3<Int>) -> SIMD3<Int>, _ other: Self) -> Self {
+        Self(storage: map(storage, other.storage))
     }
     
     //=------------------------------------------------------------------------=
@@ -52,11 +50,11 @@ public struct Count {
     //=------------------------------------------------------------------------=
     
     @inlinable func upshifted(by amount: Int) -> Self {
-        map(&+, Self(value: 0, integer: amount, fraction: -amount))
+        self.map(&+, Self(value: 0, integer: amount, fraction: -amount))
     }
     
     @inlinable func downshifted(by amount: Int) -> Self {
-        map(&-, Self(value: 0, integer: -amount, fraction: amount))
+        self.map(&-, Self(value: 0, integer: -amount, fraction: amount))
     }
 }
 

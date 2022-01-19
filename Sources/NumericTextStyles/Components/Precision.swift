@@ -84,18 +84,15 @@ public struct Precision<Format: NumericTextStyles.Format> {
     //=------------------------------------------------------------------------=
     
     @inlinable func capacity(count: Count) throws -> Count {
-        //=--------------------------------------=
-        // MARK: Make
-        //=--------------------------------------=
         let capacity = upper.map(&-, count)
         //=--------------------------------------=
-        // MARK: Check
+        // MARK: Validate
         //=--------------------------------------=
         guard capacity.value    >= 0 else { throw excess(.value)    }
         guard capacity.integer  >= 0 else { throw excess(.integer)  }
         guard capacity.fraction >= 0 else { throw excess(.fraction) }
         //=--------------------------------------=
-        // MARK: Return
+        // MARK: Success
         //=--------------------------------------=
         return capacity
     }
@@ -140,7 +137,8 @@ extension Precision {
     // MARK: Utilities
     //=------------------------------------------------------------------------=
     
-    @inlinable static func interpret<R: RangeExpression>(_ expression: R, in limits: ClosedRange<Int>) -> ClosedRange<Int> where R.Bound == Int {
+    @inlinable static func interpret<R: RangeExpression>(_ expression: R,
+        in limits: ClosedRange<Int>) -> ClosedRange<Int> where R.Bound == Int {
         let range: Range<Int> = expression.relative(to: limits.lowerBound ..< limits.upperBound + 1)
         return Swift.max(limits.lowerBound, range.lowerBound) ... Swift.min(range.upperBound - 1, limits.upperBound)
     }
