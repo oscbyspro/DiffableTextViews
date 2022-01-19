@@ -85,30 +85,19 @@ public struct Precision<Format: NumericTextStyles.Format> {
     
     @inlinable func capacity(count: Count) throws -> Count {
         //=--------------------------------------=
-        // MARK: Integer
+        // MARK: Make
         //=--------------------------------------=
-        let integer = upper.integer - count.integer
-        guard integer >= 0 else {
-            throw excess(\.integer)
-        }
+        let capacity = upper.map(&-, count)
         //=--------------------------------------=
-        // MARK: Fraction
+        // MARK: Check
         //=--------------------------------------=
-        let fraction = upper.fraction - count.fraction
-        guard fraction >= 0 else {
-            throw excess(\.fraction)
-        }
+        guard capacity.value    >= 0 else { throw excess(.value)    }
+        guard capacity.integer  >= 0 else { throw excess(.integer)  }
+        guard capacity.fraction >= 0 else { throw excess(.fraction) }
         //=--------------------------------------=
-        // MARK: Value
+        // MARK: Return
         //=--------------------------------------=
-        let value = upper.value - count.value
-        guard value >= 0 else {
-            throw excess(\.value)
-        }
-        //=--------------------------------------=
-        // MARK: Capacity
-        //=--------------------------------------=
-        return Count(value: value, integer: integer, fraction: fraction)
+        return capacity
     }
 }
 
@@ -122,12 +111,9 @@ extension Precision {
     // MARK: Errors
     //=------------------------------------------------------------------------=
     
-    @inlinable func excess(_ component: (Count) -> Int) -> Info { .init {
-        let template = Count(value: 0, integer: 1, fraction: 2)
-        let value = component(template); let mirror = Mirror(reflecting: template)
-        let label = mirror.children.first(where: { $0.value as? Int == value })?.label
-        return [.mark(label!), "digits exceed max precision", .mark(component(upper))]
-    } }
+    @inlinable func excess(_ component: Count.Component) -> Info {
+        Info([.mark(component), "digits exceed max precision", .mark(upper[component])])
+    }
     
     //=------------------------------------------------------------------------=
     // MARK: Limits - Static

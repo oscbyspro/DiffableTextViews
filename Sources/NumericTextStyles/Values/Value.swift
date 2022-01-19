@@ -35,7 +35,7 @@ public extension FloatingPointValue {
     // MARK: Properties
     //=------------------------------------------------------------------------=
     
-    @inlinable @inline(__always) static var isInteger:  Bool { false }
+    @inlinable @inline(__always) static var isInteger: Bool { false }
 }
 
 //*============================================================================*

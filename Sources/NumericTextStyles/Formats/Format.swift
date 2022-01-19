@@ -157,15 +157,6 @@ extension PercentFormat {
         //=--------------------------------------=
         // MARK: Precision
         //=--------------------------------------=
-        var precision = Value.precision
-        //=--------------------------------------=
-        // MARK: Upshift Precision By 2 Digits
-        //=--------------------------------------=
-        precision.integer  += 2
-        precision.fraction -= 2
-        //=--------------------------------------=
-        // MARK: Return
-        //=--------------------------------------=
-        return precision
+        return Value.precision.upshifted(by: 2)
     }
 }
