@@ -19,26 +19,17 @@ public struct Bounds<Value: Boundable> {
     // MARK: Properties
     //=------------------------------------------------------------------------=
     
-    @usableFromInline let limits: ClosedRange<Value>
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Properties - Accessors
-    //=------------------------------------------------------------------------=
-    
-    @inlinable var min: Value {
-        limits.lowerBound
-    }
-    
-    @inlinable var max: Value {
-        limits.upperBound
-    }
+    @usableFromInline let min: Value
+    @usableFromInline let max: Value
     
     //=------------------------------------------------------------------------=
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
     @inlinable init(min: Value = Value.bounds.lowerBound, max: Value = Value.bounds.upperBound) {
-        self.limits = min...max
+        precondition(min <= max, "min > max")
+        self.min = min
+        self.max = max
     }
     
     //=------------------------------------------------------------------------=
@@ -61,7 +52,7 @@ extension Bounds {
     //=------------------------------------------------------------------------=
     
     @inlinable func validate(value: Value) throws {
-        guard limits.contains(value) else {
+        guard min <= value, value <= max else {
             throw Info([.mark(value), "is not in", .mark(self)])
         }
     }
