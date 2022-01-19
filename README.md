@@ -6,11 +6,6 @@ A framework for as-you-type formatting of text inputs bound to appropriate data 
 
 🔵🔵🔵🔵🔵🔵🔵🔵🔵⚪️
 
-### Requirements
-
-- iOS 15.0+
-- Swift 4.0+
-
 ### Features
 
 |   | Feature | Description |
@@ -20,6 +15,11 @@ A framework for as-you-type formatting of text inputs bound to appropriate data 
 | :hammer_and_wrench: | Versatile. | Uses snapshots and attributes. |
 | :running_man: | Efficient. | Uses an O(n) differentiation algorithm. |
 | :desert_island: | Standalone. | Uses no remote dependencies. |
+
+### Requirements
+
+- iOS 15.0+
+- Swift 4.0+
 
 # Views
 
