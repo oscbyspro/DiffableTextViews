@@ -76,7 +76,7 @@ public struct DiffableTextField<Style: UIKitDiffableTextStyle>: UIViewRepresenta
     }
 
     //=------------------------------------------------------------------------=
-    // MARK: Life - Coordinator
+    // MARK: Coordinator
     //=------------------------------------------------------------------------=
     
     @inlinable public func makeCoordinator() -> Coordinator {
@@ -84,7 +84,7 @@ public struct DiffableTextField<Style: UIKitDiffableTextStyle>: UIViewRepresenta
     }
     
     //=------------------------------------------------------------------------=
-    // MARK: Life - UIView
+    // MARK: UIView
     //=------------------------------------------------------------------------=
     
     @inlinable public func makeUIView(context: Context) -> UIViewType {
@@ -109,7 +109,7 @@ public struct DiffableTextField<Style: UIKitDiffableTextStyle>: UIViewRepresenta
     }
     
     //=------------------------------------------------------------------------=
-    // MARK: Life - UIView - Update
+    // MARK: Update
     //=------------------------------------------------------------------------=
     
     @inlinable public func updateUIView(_ uiView: UIViewType, context: Context) {
