@@ -30,11 +30,30 @@ public struct Precision<Format: NumericTextStyles.Format> {
     //=------------------------------------------------------------------------=
     // MARK: Initializers
     //=------------------------------------------------------------------------=
+
+    @inlinable init() {
+        self.init(Self.limits(\.value))
+    }
+
+    @inlinable init<R: RangeExpression>(_ value: R)  where R.Bound == Int {
+        let value = Namespace.interpret(value, in: Self.limits(\.value))
+        //=--------------------------------------=
+        // MARK: Set
+        //=--------------------------------------=
+        self.style = .value
+        self.lower = Count(value: value.lowerBound, integer:   Namespace.min.integer, fraction:   Namespace.min.fraction)
+        self.upper = Count(value: value.upperBound, integer: Value.precision.integer, fraction: Value.precision.fraction)
+    }
     
-    @inlinable init(style: Style, lower: Count, upper: Count) {
-        self.style = style
-        self.lower = lower
-        self.upper = upper
+    @inlinable init<R0: RangeExpression, R1: RangeExpression>(integer: R0, fraction: R1) where R0.Bound == Int, R1.Bound == Int {
+        let integer  = Namespace.interpret(integer,  in: Self.limits( \.integer))
+        let fraction = Namespace.interpret(fraction, in: Self.limits(\.fraction))
+        //=--------------------------------------=
+        // MARK: set
+        //=--------------------------------------=
+        self.style = .separate
+        self.lower = Count(value:   Namespace.min.value, integer: integer.lowerBound, fraction: fraction.lowerBound)
+        self.upper = Count(value: Value.precision.value, integer: integer.upperBound, fraction: fraction.upperBound)
     }
     
     //=------------------------------------------------------------------------=
@@ -103,7 +122,14 @@ public struct Precision<Format: NumericTextStyles.Format> {
         //=--------------------------------------=
         return Count(value: value, integer: integer, fraction: fraction)
     }
-    
+}
+
+//=----------------------------------------------------------------------------=
+// MARK: Precision - Helpers
+//=----------------------------------------------------------------------------=
+
+extension Precision {
+
     //=------------------------------------------------------------------------=
     // MARK: Errors
     //=------------------------------------------------------------------------=
@@ -114,126 +140,12 @@ public struct Precision<Format: NumericTextStyles.Format> {
         let label = mirror.children.first(where: { $0.value as? Int == value })?.label
         return [.mark(label!), "digits exceed max precision", .mark(component(upper))]
     } }
-}
-
-//=----------------------------------------------------------------------------=
-// MARK: Precision - Initializers - Value
-//=----------------------------------------------------------------------------=
-
-extension Precision {
     
     //=------------------------------------------------------------------------=
-    // MARK: Standard
-    //=------------------------------------------------------------------------=
-            
-    @inlinable public static var standard: Self {
-        limits(max(\.value))
-    }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Length
+    // MARK: Limits - Static
     //=------------------------------------------------------------------------=
     
-    @inlinable public static func limits(_ value: Int) -> Self {
-        limits(value...value)
-    }
-
-    //=------------------------------------------------------------------------=
-    // MARK: Limits
-    //=------------------------------------------------------------------------=
-    
-    @inlinable public static func limits<R: RangeExpression>(_ value: R) -> Self where R.Bound == Int {
-        //=--------------------------------------=
-        // MARK: Value
-        //=--------------------------------------=
-        let value = Namespace.interpret(value, in: max(\.value))
-        //=--------------------------------------=
-        // MARK: Limits
-        //=--------------------------------------=
-        let lower = Count(value: value.lowerBound, integer:   Namespace.min.integer, fraction:   Namespace.min.fraction)
-        let upper = Count(value: value.upperBound, integer: Value.precision.integer, fraction: Value.precision.fraction)
-        //=--------------------------------------=
-        // MARK: Instance
-        //=--------------------------------------=
-        return Self(style: .value, lower: lower, upper: upper)
-    }
-}
-
-//=----------------------------------------------------------------------------=
-// MARK: Precision - Lengths
-//=----------------------------------------------------------------------------=
-
-extension Precision where Value: PreciseFloatingPoint {
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Length
-    //=------------------------------------------------------------------------=
-    
-    @inlinable public static func limits(integer: Int) -> Self {
-        limits(integer: integer...integer)
-    }
-    
-    @inlinable public static func limits(fraction: Int) -> Self {
-        limits(fraction: fraction...fraction)
-    }
-    
-    @inlinable public static func limits(integer: Int, fraction: Int) -> Self {
-        limits(integer: integer...integer, fraction: fraction...fraction)
-    }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Mixed
-    //=------------------------------------------------------------------------=
-    
-    @inlinable public static func limits<R: RangeExpression>(integer: R, fraction: Int) -> Self where R.Bound == Int {
-        limits(integer: integer, fraction: fraction...fraction)
-    }
-    
-    @inlinable public static func limits<R: RangeExpression>(integer: Int, fraction: R) -> Self where R.Bound == Int {
-        limits(integer: integer...integer, fraction: fraction)
-    }
-
-    //=------------------------------------------------------------------------=
-    // MARK: Limits
-    //=------------------------------------------------------------------------=
-    
-    @inlinable public static func limits<R: RangeExpression>(integer: R) -> Self where R.Bound == Int {
-        limits(integer: integer, fraction: max(\.fraction))
-    }
-    
-    @inlinable public static func limits<R: RangeExpression>(fraction: R) -> Self where R.Bound == Int {
-        limits(integer: max(\.integer), fraction: fraction)
-    }
-    
-    @inlinable public static func limits<R0: RangeExpression, R1: RangeExpression>(integer: R0, fraction: R1) -> Self where R0.Bound == Int, R1.Bound == Int {
-        //=--------------------------------------=
-        // MARK: Integer, Fraction
-        //=--------------------------------------=
-        let integer  = Namespace.interpret(integer,  in: max( \.integer))
-        let fraction = Namespace.interpret(fraction, in: max(\.fraction))
-        //=--------------------------------------=
-        // MARK: Limits
-        //=--------------------------------------=
-        let lower = Count(value:   Namespace.min.value, integer: integer.lowerBound, fraction: fraction.lowerBound)
-        let upper = Count(value: Value.precision.value, integer: integer.upperBound, fraction: fraction.upperBound)
-        //=--------------------------------------=
-        // MARK: Instance
-        //=--------------------------------------=
-        return Self(style: .separate, lower: lower, upper: upper)
-    }
-}
-
-//=----------------------------------------------------------------------------=
-// MARK: Precision - Helpers - Static
-//=----------------------------------------------------------------------------=
-
-extension Precision {
-
-    //=------------------------------------------------------------------------=
-    // MARK: Limits
-    //=------------------------------------------------------------------------=
-    
-    @inlinable static func max(_ component: (Count) -> Int) -> ClosedRange<Int> {
+    @inlinable static func limits(_ component: (Count) -> Int) -> ClosedRange<Int> {
         component(Namespace.min)...component(Format.precision)
     }
 }

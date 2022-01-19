@@ -34,7 +34,7 @@ public struct NumericTextStyle<Format: NumericTextStyles.Format>: DiffableTextSt
         self.format = format
         self.region = .cached(locale)
         self.bounds = .standard
-        self.precision = .standard
+        self.precision = Precision()
     }
     
     //=------------------------------------------------------------------------=
@@ -53,9 +53,9 @@ public struct NumericTextStyle<Format: NumericTextStyles.Format>: DiffableTextSt
         var result = self; result.bounds = bounds; return result
     }
     
-    @inlinable public func precision(_ precision: Precision) -> Self {
-        var result = self; result.precision = precision; return result
-    }
+//    @inlinable public func precision(_ precision: Precision) -> Self {
+//        var result = self; result.precision = precision; return result
+//    }
     
     //=------------------------------------------------------------------------=
     // MARK: Transformations - Locale
