@@ -28,6 +28,18 @@ final class RegionTests: XCTestCase {
         .map(Region.init)
     
     //=------------------------------------------------------------------------=
+    // MARK: Styles
+    //=------------------------------------------------------------------------=
+    
+    @inlinable func int(_ region: Region) -> IntegerFormatStyle<Int> {
+        .number.locale(region.locale)
+    }
+    
+    @inlinable func double(_ region: Region) -> FloatingPointFormatStyle<Double> {
+        .number.locale(region.locale)
+    }
+    
+    //=------------------------------------------------------------------------=
     // MARK: Tests
     //=------------------------------------------------------------------------=
     
@@ -72,18 +84,6 @@ final class RegionTests: XCTestCase {
             let nonnumbers = number.formatted(style).filter({ !$0.isNumber })
             XCTAssertNotNil(nonnumbers.allSatisfy({ region.separators[$0] == .fraction }))
         }
-    }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Styles
-    //=------------------------------------------------------------------------=
-    
-    @inlinable func int(_ region: Region) -> IntegerFormatStyle<Int> {
-        .number.locale(region.locale)
-    }
-    
-    @inlinable func double(_ region: Region) -> FloatingPointFormatStyle<Double> {
-        .number.locale(region.locale)
     }
 }
 
