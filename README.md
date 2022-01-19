@@ -19,6 +19,7 @@ A framework for as-you-type formatting of text bound to its appropriate data typ
 # Requirements
 
 - iOS 15.0+
+- Swift 4.0+
 
 # Views
 
