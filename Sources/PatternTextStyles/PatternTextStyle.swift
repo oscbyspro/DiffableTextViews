@@ -47,7 +47,8 @@ Value: RangeReplaceableCollection, Value: Equatable, Value.Element == Character 
         var result = self; result.visible = false; return result
     }
 
-    @inlinable public func placeholder(_ character: Character, where predicate: @escaping (Character) -> Bool) -> Self {
+    @inlinable public func placeholder(_ character: Character,
+        where predicate: @escaping (Character) -> Bool = { _ in true }) -> Self {
         var result = self; result.placeholders[character] = predicate; return result
     }
 }
