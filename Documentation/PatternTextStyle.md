@@ -28,7 +28,11 @@ A collection of characters.
 A phone number bound to a String. It uses a visible pattern.
 
 ```swift
-struct PatternTextStyleExample: View {
+import SwiftUI
+import DiffableTextViews
+import PatternTextStyles
+
+struct DiffablePhoneTextField: View {
     @State var phone: String = ""
     
     var body: some View {
@@ -46,7 +50,11 @@ struct PatternTextStyleExample: View {
 A card number bound to a String. It uses an invisible pattern.
     
 ```swift
-struct PatternTextStyleExample: View {
+import SwiftUI
+import DiffableTextViews
+import PatternTextStyles
+
+struct DiffableCardTextField: View {
     @State var card: String = ""
     
     var body: some View {

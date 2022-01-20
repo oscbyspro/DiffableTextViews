@@ -20,17 +20,21 @@ The environment is used to seamlessly synchronize the view with the app state.
 ```swift
 import SwiftUI
 import DiffableTextViews
-import PatternTextStyles
+import NumericTextStyles
 
-struct PatternTextStyleExample: View {
-    @State var phone: String = ""
+struct DiffableCurrencyAmountTextField: View {
+    @State var amount: Decimal = 0
+    
+    let currencyCode = "SEK"
+    let locale = Locale(identifier: "en_SE")
     
     var body: some View {
-        DiffableTextField($phone) {
-            .pattern("+## (###) ###-##-##")
-            .placeholder("#") { $0.isASCII && $0.isNumber }
+        DiffableTextField($amount) {
+            .currency(code: currencyCode)
+            .bounds((0 as Decimal)...)
+            .precision(integer: 1..., fraction: 2)
         }
-        .setup({ $0.keyboard(.phonePad) })
+        .environment(\.locale, locale)
     }
 }
 ```
