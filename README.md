@@ -27,8 +27,6 @@ A framework for as-you-type formatting of text bound to appropriate data types.
 2. Copy/paste: https://github.com/oscbyspro/DiffableTextViews.
 3. Select a **VERSIONED** branch.
 
-### Usage
-
 ```swift
 import DiffableTextViews
 import NumericTextStyles
