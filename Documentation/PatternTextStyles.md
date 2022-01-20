@@ -23,24 +23,6 @@ A collection of characters.
 
 ## Examples
 
-### Phone
-
-A phone number bound to a String. The pattern is visible.
-
-```swift
-struct PatternTextStyleExample: View {
-    @State var phone: String = ""
-    
-    var body: some View {
-        DiffableTextField($phone) {
-            .pattern("+## (###) ###-##-##")
-            .placeholder("#") { $0.isASCII && $0.isNumber }
-        }
-        .setup({ $0.keyboard(.phonePad) })
-    }
-}
-```
-    
 ### Card
 
 A card number bound to a String. The pattern is invisible.
@@ -56,6 +38,24 @@ struct PatternTextStyleExample: View {
             .hidden()
         }
         .setup({ $0.keyboard(.numberPad) })
+    }
+}
+```
+
+### Phone
+
+A phone number bound to a String. The pattern is visible.
+
+```swift
+struct PatternTextStyleExample: View {
+    @State var phone: String = ""
+    
+    var body: some View {
+        DiffableTextField($phone) {
+            .pattern("+## (###) ###-##-##")
+            .placeholder("#") { $0.isASCII && $0.isNumber }
+        }
+        .setup({ $0.keyboard(.phonePad) })
     }
 }
 ```
