@@ -33,7 +33,7 @@ public struct Attribute: OptionSet {
     /// Signifies that the symbol should be ignored by the differentiation algorithm when it is removed.
     public static let removable = Self(rawValue: 1 << 2)
         
-    /// Signifies that the symbol has no real size.
+    /// Signifies that the symbol has effective real size and can be passed through.
     public static let passthrough = Self(rawValue: 1 << 3)
     
     //=------------------------------------------------------------------------=

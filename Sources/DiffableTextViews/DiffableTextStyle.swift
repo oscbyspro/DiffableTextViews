@@ -25,8 +25,8 @@ public protocol DiffableTextStyle {
     
     /// Updates the locale, if possible.
     ///
-    /// - The locale is provided by the enironment.
-    /// - The default implementation does nothing.
+    /// - The locale may be provided by the environment.
+    /// - The default implementation returns an unmodified instance.
     ///
     @inlinable func locale(_ locale: Locale) -> Self
     
@@ -34,10 +34,16 @@ public protocol DiffableTextStyle {
     // MARK: Process
     //=------------------------------------------------------------------------=
     
-    /// Processes the value once whenever it is called. It is used both downstream and upstream so it can be used to constrain the value.
+    /// Processes the value once whenever it is called.
+    ///
+    /// It is used both downstream and upstream so it can be used to constrain the value.
+    ///
     @inlinable func process(value: inout Value)
     
-    /// Processes the snapshot once whenever it is called. Can be used to apply transformation after other snapshot and merge functions.
+    /// Processes the snapshot once whenever it is called.
+    ///
+    /// Can be used to apply transformation after other snapshot and merge functions.
+    ///
     @inlinable func process(snapshot: inout Snapshot)
     
     //=------------------------------------------------------------------------=

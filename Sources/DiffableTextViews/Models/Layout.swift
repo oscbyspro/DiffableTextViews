@@ -41,16 +41,8 @@
     // MARK: Accessors
     //=------------------------------------------------------------------------=
     
-    @inlinable var characters: Snapshot.Characters {
-        snapshot.characters
-    }
-
-    @inlinable var attributes: Snapshot.Attributes {
-        snapshot.attributes
-    }
-    
     @inlinable func nonpassthrough(_ position: Index) -> Bool {
-        !attributes[position.attribute].contains(.passthrough)
+        !snapshot.attributes[position.attribute].contains(.passthrough)
     }
     
     //=------------------------------------------------------------------------=
@@ -166,7 +158,7 @@ extension Layout {
     //=------------------------------------------------------------------------=
 
     @inlinable func index(after index: Index) -> Index {
-        let character = characters[index.character]
+        let character = snapshot.characters[index.character]
         let after = snapshot.index(after: index.snapshot)
         return Index(after, at: index.position.after(character))
     }
@@ -177,7 +169,7 @@ extension Layout {
     
     @inlinable func index(before index: Index) -> Index {
         let before = snapshot.index(before: index.snapshot)
-        let character = characters[before.character]
+        let character = snapshot.characters[before.character]
         return Index(before, at: index.position.before(character))
     }
 }
@@ -195,10 +187,14 @@ extension Layout {
     @inlinable func index(after start: Index, while predicate: (Index) -> Bool) -> Index {
         var position = start
         //=--------------------------------------=
+        // MARK: Search
+        //=--------------------------------------=
         while position != endIndex {
             guard predicate(position) else { return position }
             formIndex(after: &position)
         }
+        //=--------------------------------------=
+        // MARK: Position == End Index
         //=--------------------------------------=
         return position
     }
@@ -210,10 +206,14 @@ extension Layout {
     @inlinable func index(before start: Index, while predicate: (Index) -> Bool) -> Index {
         var position = start
         //=--------------------------------------=
+        // MARK: Search
+        //=--------------------------------------=
         while position != startIndex {
             guard predicate(position) else { return position }
             formIndex(before: &position)
         }
+        //=--------------------------------------=
+        // MARK: Position == Start Index
         //=--------------------------------------=
         return position
     }
@@ -242,11 +242,15 @@ extension Layout {
     @inlinable func indices(start: Range<Index>, destination: Range<Position>) -> Range<Index> {
         let upperBound = index(start: start.upperBound, destination: destination.upperBound)
         var lowerBound = upperBound
-        
+        //=--------------------------------------=
+        // MARK: Double
+        //=--------------------------------------=
         if !destination.isEmpty {
             lowerBound = index(start: start.lowerBound, destination: destination.lowerBound)
         }
-        
+        //=--------------------------------------=
+        // MARK: Return
+        //=--------------------------------------=
         return lowerBound ..< upperBound
     }
 }
@@ -263,12 +267,16 @@ extension Layout {
     
     @inlinable func firstIndexForwardsTo(start: Index, where predicate: (Index) -> Bool) -> Index? {
         var position = start
-        
+        //=--------------------------------------=
+        // MARK: Search
+        //=--------------------------------------=
         while position != endIndex {
             if predicate(position) { return position }
             formIndex(after: &position)
         }
-        
+        //=--------------------------------------=
+        // MARK: Failure
+        //=--------------------------------------=
         return nil
     }
     
@@ -278,12 +286,16 @@ extension Layout {
     
     @inlinable func firstIndexForwardsThrough(start: Index, where predicate: (Index) -> Bool) -> Index? {
         var position = start
-        
+        //=--------------------------------------=
+        // MARK: Search
+        //=--------------------------------------=
         while position != endIndex {
             if predicate(position) { return index(after: position) }
             formIndex(after: &position)
         }
-        
+        //=--------------------------------------=
+        // MARK: Failure
+        //=--------------------------------------=
         return nil
     }
     
@@ -293,13 +305,17 @@ extension Layout {
     
     @inlinable func firstIndexBackwardsTo(start: Index, where predicate: (Index) -> Bool) -> Index? {
         var position = start
-
+        //=--------------------------------------=
+        // MARK: Search
+        //=--------------------------------------=
         while position != startIndex {
             let after = position
             formIndex(before: &position)
             if predicate(position) { return after }
         }
-
+        //=--------------------------------------=
+        // MARK: Failure
+        //=--------------------------------------=
         return nil
     }
     
@@ -309,12 +325,16 @@ extension Layout {
     
     @inlinable func firstIndexBackwardsThrough(start: Index, where predicate: (Index) -> Bool) -> Index? {
         var position = start
-
+        //=--------------------------------------=
+        // MARK: Search
+        //=--------------------------------------=
         while position != startIndex {
             formIndex(before: &position)
             if predicate(position) { return position }
         }
-        
+        //=--------------------------------------=
+        // MARK: Failure
+        //=--------------------------------------=
         return nil
     }
     

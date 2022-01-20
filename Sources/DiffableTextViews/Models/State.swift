@@ -72,22 +72,22 @@ extension State {
     @inlinable mutating func update(snapshot: Snapshot) {
         let layout = Layout(snapshot)
         //=--------------------------------------=
-        // MARK: Selection
+        // MARK: Selection - Single
         //=--------------------------------------=
         let upperBound = Changes  .end(past: self.layout[self.selection.upperBound...], next: layout).next
         var lowerBound = upperBound
-        
+        //=--------------------------------------=
+        // MARK: Selection - Double
+        //=--------------------------------------=
         if !self.selection.isEmpty {
             lowerBound = Changes.start(past: self.layout[..<self.selection.lowerBound], next: layout).next
             lowerBound = min(lowerBound, upperBound)
         }
-
-        let selection = lowerBound ..< upperBound
         //=--------------------------------------=
         // MARK: Update
         //=--------------------------------------=
         self.layout = layout
-        self.selection = selection
+        self.selection = lowerBound ..< upperBound
         self.autocorrect(intent: (nil, nil))
     }
 }

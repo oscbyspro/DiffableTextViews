@@ -12,7 +12,7 @@
 @usableFromInline enum Changes<Past, Next> where
 Past: BidirectionalCollection, Past.Element == Symbol,
 Next: BidirectionalCollection, Next.Element == Symbol {
-    @usableFromInline typealias Indices  = (past: Past.Index, next: Next.Index)
+    @usableFromInline typealias Indices = (past: Past.Index, next: Next.Index)
     @usableFromInline typealias Reversed = Changes<ReversedCollection<Past>, ReversedCollection<Next>>
 
     //=------------------------------------------------------------------------=

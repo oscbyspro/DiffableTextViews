@@ -55,7 +55,7 @@ public struct OBEFont {
     //=------------------------------------------------------------------------=
     
     @inlinable static func preferred(style: UIFont.TextStyle) -> Self {
-        .init(.preferredFont(forTextStyle: style))
+        Self(UIFont.preferredFont(forTextStyle: style))
     }
     
     //=------------------------------------------------------------------------=
@@ -63,11 +63,11 @@ public struct OBEFont {
     //=------------------------------------------------------------------------=
     
     @inlinable public func size(_ size: CGFloat) -> Self {
-        .init(descriptor.withSize(size))
+        Self(descriptor.withSize(size))
     }
 
     @inlinable public func monospaced(_ template: MonospaceTemplate = .text) -> Self {
-        .init(descriptor.kind(template.descriptor))
+        Self(descriptor.kind(template.descriptor))
     }
 }
 

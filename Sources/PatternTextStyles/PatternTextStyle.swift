@@ -39,10 +39,7 @@ Value: RangeReplaceableCollection, Value: Equatable, Value.Element == Character 
     // MARK: Transformations
     //=------------------------------------------------------------------------=
     
-    /// Hides the pattern characters that suffixes the last value character.
-    ///
-    /// - If you want the entire pattern to be invisible, use spaces instead.
-    ///
+    /// Hides the pattern suffix.
     @inlinable public func hidden() -> Self {
         var result = self; result.visible = false; return result
     }

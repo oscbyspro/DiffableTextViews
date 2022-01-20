@@ -28,7 +28,7 @@
     @inlinable func perform(action: () -> Void) {
         let state = isLocked
         self.isLocked = true
-
+        
         action()
         
         self.isLocked = state
