@@ -35,7 +35,7 @@ import PatternTextStyles
 
 # Views
 
-## [DiffableTextField](../main/Documentation/DiffableTextField.md)
+## [DiffableTextField](Documentation/DiffableTextField.md)
 
 A view that uses styles to format and parse text.
 
@@ -54,7 +54,7 @@ A customization point for the UITextField it is based on.
 
 # Styles
 
-## [NumericTextStyle](../main/Documentation/NumericTextStyle.md)
+## [NumericTextStyle](Documentation/NumericTextStyle.md)
 
 A style that processes localized numbers in various formats.
 
@@ -88,7 +88,7 @@ struct DiffableAmountTextField: View {
 }
 ```
 
-## [PatternTextStyle](../main/Documentation/PatternTextStyle.md)
+## [PatternTextStyle](Documentation/PatternTextStyle.md)
 
 A style that processes characters laid out in custom patterns.
 
@@ -100,7 +100,7 @@ A style that processes characters laid out in custom patterns.
 | :chess_pawn: | Placeholders | Placeholders represent not-yet-assigned values |
 | :fist_raised: | Independance | Supports multiple placeholders with different rules |
 | :ghost: | Invisibility | Pattern suffix can easily be \\.hidden() |
-| :feather: | Lightweight | Written in less than 200 lines of [code](../main/Sources/PatternTextStyles/PatternTextStyle.swift) |
+| :feather: | Lightweight | Written in less than 200 lines of [code](Sources/PatternTextStyles/PatternTextStyle.swift) |
 
 
 ### Examples
