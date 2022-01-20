@@ -33,7 +33,7 @@ A framework for as-you-type formatting of text bound to appropriate data types.
 import SwiftUI
 import DiffableTextViews
 import NumericTextStyles
-import PatternTexrStyles
+import PatternTextStyles
 ```
 
 # Views
