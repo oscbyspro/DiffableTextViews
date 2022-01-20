@@ -30,7 +30,6 @@ A framework for as-you-type formatting of text bound to appropriate data types.
 ### Usage
 
 ```swift
-import SwiftUI
 import DiffableTextViews
 import NumericTextStyles
 import PatternTextStyles
