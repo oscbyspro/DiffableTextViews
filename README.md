@@ -76,17 +76,14 @@ A style that processes localized numbers in various formats.
 ```swift
 struct DiffableAmountTextField: View {
     @State var amount: Decimal = 0
-    
-    let currencyCode = "SEK"
-    let locale = Locale(identifier: "en_SE")
-    
+
     var body: some View {
         DiffableTextField($amount) {
-            .currency(code: currencyCode)
+            .currency(code: "SEK")
             .bounds((0 as Decimal)...)
             .precision(integer: 1..., fraction: 2)
         }
-        .environment(\.locale, locale)
+        .environment(\.locale, Locale(identifier: "en_SE"))
     }
 }
 ```
