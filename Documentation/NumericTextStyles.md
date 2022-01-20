@@ -14,7 +14,7 @@ Supports every locale available in the Foundation framework.
 Uses format styles introduced in iOS 15.0.
 
 - All localization magick is performed by Apple.
-- All (most) formatting magick is preformed by Apple.
+- All (most) formatting magick is performed by Apple.
 
 ### Instances
 
@@ -26,11 +26,11 @@ Uses format styles introduced in iOS 15.0.
 
 ## Precision
 
-TODO
+Determines the input and output space in terms of digits.
 
 ## Bounds
 
-TODO
+Determines the input and output space in terms of values.
 
 ## Values
 
