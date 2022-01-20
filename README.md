@@ -48,8 +48,8 @@ A view that uses styles to format and parse text.
 |---|---------|-------------|
 | :iphone: | SwiftUI | Value, style, done |
 | :balance_scale: | Monospaced | The standard font is monospaced |
+| :evergreen_tree: | Environment | Locale is set by the environment |
 | :sewing_needle: | Customizable | Styles may provide default values |
-| :evergreen_tree: | Environment | Locales are set by the environment |
 
 ### ProxyTextField
 
