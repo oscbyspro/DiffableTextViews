@@ -48,7 +48,7 @@ A customization point for the UITextField it is based on.
 
 # Styles
 
-## [NumericTextStyle](../main/Documentation/NumericTextStyle.md)
+## [NumericTextStyle](../main/Documentation/NumericTextStyles.md)
 
 A style that processes localized numbers in various formats.
 
@@ -87,7 +87,7 @@ struct NumericTextStyleExample: View {
 }
 ```
 
-## [PatternTextStyle](../main/Documentation/PatternTextStyle.md)
+## [PatternTextStyle](../main/Documentation/PatternTextStyles.md)
 
 A style that processes characters laid out in custom patterns.
 

@@ -1,4 +1,4 @@
-# NumericTextStyle
+# NumericTextStyles
 
 A style that formats and converts text to and from number types.
 
