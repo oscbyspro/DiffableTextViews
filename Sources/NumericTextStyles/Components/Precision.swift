@@ -30,10 +30,12 @@ public struct Precision<Value: Precise> {
     // MARK: Initializers
     //=------------------------------------------------------------------------=
 
+    /// Creates an instance with style set to: .value.
     @inlinable init() {
         self.init(Self.limits(\.value))
     }
 
+    /// Creates an instance with style set to: .value.
     @inlinable init<R: RangeExpression>(_ value: R)  where R.Bound == Int {
         let value = Namespace.interpret(value, in: Self.limits(\.value))
         //=--------------------------------------=
@@ -44,6 +46,7 @@ public struct Precision<Value: Precise> {
         self.upper = Count(value: value.upperBound, integer: Value.precision.integer, fraction: Value.precision.fraction)
     }
     
+    /// Creates an instance with style set to: .separate.
     @inlinable init<R0: RangeExpression, R1: RangeExpression>(integer: R0, fraction: R1) where R0.Bound == Int, R1.Bound == Int {
         let integer  = Namespace.interpret(integer,  in: Self.limits( \.integer))
         let fraction = Namespace.interpret(fraction, in: Self.limits(\.fraction))

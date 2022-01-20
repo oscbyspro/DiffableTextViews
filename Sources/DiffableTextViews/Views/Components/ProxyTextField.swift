@@ -15,7 +15,7 @@ import UIKit
 
 /// An affordance layer wrapping a UITextField object.
 ///
-/// Makes it easier to enforce UITextField's UTF-16 layout, as well as which properties and methods may be called.
+/// Makes it easier to enforce UITextField's UTF-16 layout, as well as which properties and methods may be used.
 ///
 public final class ProxyTextField {
     @usableFromInline typealias Wrapped = BasicTextField

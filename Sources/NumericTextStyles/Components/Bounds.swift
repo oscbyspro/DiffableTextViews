@@ -53,7 +53,9 @@ public struct Bounds<Value: Boundable> {
         case .positive: if max >= .zero { return }
         case .negative: if min <  .zero { return }
         }
-        
+        //=--------------------------------------=
+        // MARK: Failure
+        //=--------------------------------------=
         throw Info([.mark(sign), "is not in", .mark(self)])
     }
 }

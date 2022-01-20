@@ -39,6 +39,6 @@
     //=------------------------------------------------------------------------=
     
     @inlinable var number: UInt8 {
-        rawValue - Digit.zero.rawValue
+        rawValue - Self.zero.rawValue
     }
 }

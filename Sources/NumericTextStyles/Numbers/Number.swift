@@ -43,16 +43,25 @@ import Support
     //=------------------------------------------------------------------------=
     
     @inlinable func count() -> Count {
+        //=--------------------------------------=
+        // MARK: Integer, Fraction
+        //=--------------------------------------=
         let  integer = self .integer.count
         let fraction = self.fraction.count
-
+        //=--------------------------------------=
+        // MARK: Value
+        //=--------------------------------------=
         let upper =  integer - self .integer.prefixZerosCount()
         var lower = fraction - self.fraction.suffixZerosCount()
-        
+        //=--------------------------------------=
+        // MARK: Value - Corrections
+        //=--------------------------------------=
         if upper == 0, lower != 0 {
             lower = lower - self.fraction.prefixZerosCount()
         }
-        
+        //=--------------------------------------=
+        // MARK: Count
+        //=--------------------------------------=
         return Count(value: upper + lower, integer: integer, fraction: fraction)
     }
     
@@ -81,10 +90,8 @@ extension Number {
     ///
     /// To use this method, all formatting characters must be marked as such.
     ///
-    @inlinable init(
-        snapshot: Snapshot, integer: Bool, unsigned: Bool,
-        signs: [Character: Sign], digits: [Character: Digit], separators: [Character: Separator]
-    ) throws {
+    @inlinable init(snapshot: Snapshot, integer: Bool, unsigned: Bool,
+        signs: [Character: Sign], digits: [Character: Digit], separators: [Character: Separator]) throws {
         guard let start = snapshot.firstIndex(where: \.nonvirtual) else { self = .zero; return }
         //=--------------------------------------=
         // MARK: State
@@ -129,6 +136,7 @@ extension Number {
                 self.integer.append(digit)
                 next()
             }
+            
             self.integer.removeZerosPrefix()
             self.integer.makeItAtLeastZero()
             

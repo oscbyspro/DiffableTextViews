@@ -20,9 +20,7 @@ public protocol Format: ParseableFormatStyle where FormatInput: NumericTextStyle
     //=------------------------------------------------------------------------=
         
     @inlinable func precision(_ precision: Precision) -> Self
-
     @inlinable func decimalSeparator(strategy: Separator) -> Self
-
     @inlinable func sign(style: Sign.Style) -> Self
 }
 

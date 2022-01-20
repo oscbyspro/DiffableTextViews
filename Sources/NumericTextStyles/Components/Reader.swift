@@ -36,11 +36,9 @@ import DiffableTextViews
     @inlinable mutating func consumeSignInput(region: Region) {
         guard content.count == 1 else { return }
         guard let sign = region.signs[content.first!.character] else { return }
-        
         //=--------------------------------------=
         // MARK: Set Sign Command Found
         //=--------------------------------------=
-        
         self.content.removeAll()
         self.process = { number in number.sign = sign }
     }
