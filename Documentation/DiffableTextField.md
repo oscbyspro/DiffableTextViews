@@ -27,6 +27,8 @@ The environment is used to seamlessly synchronize the view with the app state.
 
 ## Examples
 
+![DiffablePhoneNumberTextField.gif](../Assets/DiffablePhoneNumberTextField.gif)
+
 ```swift
 struct DiffableAmountTextField: View {
     @State var amount: Decimal = 0

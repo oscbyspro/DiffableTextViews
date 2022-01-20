@@ -2,6 +2,8 @@
 
 A styles that process characters laid out in custom patterns of formatting and placeholders.
 
+![DiffablePhoneNumberTextField.gif](../Assets/DiffablePhoneNumberTextField.gif)
+
 ## Pattern
 
 A collection of characters.
@@ -26,8 +28,6 @@ A collection of characters.
 ### Phone Number
 
 A phone number bound to a String. It uses a visible pattern.
-
-![DiffablePhoneNumberTextField.gif](../Assets/DiffablePhoneNumberTextField.gif)
 
 ```swift
 struct DiffablePhoneNumberTextField: View {
