@@ -71,6 +71,8 @@ A style that processes localized numbers in various formats.
 
 ### Examples
 
+![DiffableAmountTextField.gif](Assets/DiffableAmountTextField.gif)
+
 ```swift
 struct DiffableAmountTextField: View {
     @State var amount: Decimal = 0
@@ -102,6 +104,8 @@ A style that processes characters laid out in custom patterns.
 
 
 ### Examples
+
+![DiffablePhoneNumberTextField.gif](Assets/DiffablePhoneNumberTextField.gif)
 
 ```swift
 struct DiffablePhoneNumberTextField: View {
