@@ -93,10 +93,6 @@ Determines the input and output space in terms of values.
 ## Examples
 
 ```swift
-import SwiftUI
-import DiffableTextViews
-import NumericTextStyles
-
 struct DiffableCurrencyAmountTextField: View {
     @State var amount: Decimal = 0
     

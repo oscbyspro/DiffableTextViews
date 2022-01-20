@@ -28,11 +28,7 @@ The environment is used to seamlessly synchronize the view with the app state.
 ## Examples
 
 ```swift
-import SwiftUI
-import DiffableTextViews
-import NumericTextStyles
-
-struct DiffableCurrencyTextField: View {
+struct DiffableCurrencyAmountTextField: View {
     @State var amount: Decimal = 0
     
     let currencyCode = "SEK"

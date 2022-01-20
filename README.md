@@ -27,6 +27,15 @@ A framework for as-you-type formatting of text bound to appropriate data types.
 2. Copy/paste: https://github.com/oscbyspro/DiffableTextViews.
 3. Select a **VERSIONED** branch.
 
+### Usage
+
+```swift
+import SwiftUI
+import DiffableTextViews
+import NumericTextStyles
+import PatternTexrStyles
+```
+
 # Views
 
 ## [DiffableTextField](../main/Documentation/DiffableTextField.md)
@@ -66,11 +75,7 @@ A style that processes localized numbers in various formats.
 ### Examples
 
 ```swift
-import SwiftUI
-import DiffableTextViews
-import NumericTextStyles
-
-struct NumericTextStyleExample: View {
+struct DiffableCurrencyAmountTextField: View {
     @State var amount: Decimal = 0
     
     let currencyCode = "SEK"
@@ -105,11 +110,7 @@ A style that processes characters laid out in custom patterns.
 ### Examples
 
 ```swift
-import SwiftUI
-import DiffableTextViews
-import PatternTextStyles
-
-struct PatternTextStyleExample: View {
+struct DiffablePhoneNumberTextField: View {
     @State var phone: String = ""
     
     var body: some View {

@@ -28,11 +28,7 @@ A collection of characters.
 A phone number bound to a String. It uses a visible pattern.
 
 ```swift
-import SwiftUI
-import DiffableTextViews
-import PatternTextStyles
-
-struct DiffablePhoneTextField: View {
+struct DiffablePhoneNumberTextField: View {
     @State var phone: String = ""
     
     var body: some View {
@@ -54,7 +50,7 @@ import SwiftUI
 import DiffableTextViews
 import PatternTextStyles
 
-struct DiffableCardTextField: View {
+struct DiffableCreditCardTextField: View {
     @State var card: String = ""
     
     var body: some View {
