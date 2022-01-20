@@ -40,3 +40,20 @@ struct DiffablePhoneNumberTextField: View {
     }
 }
 ```
+
+![DiffablePhoneNumberTextField.gif](../Assets/DiffablePaymentNumberTextField.gif)
+
+```swift
+struct DiffablePaymentNumberTextField: View {
+    @State var paymentNumber: String = ""
+    
+    var body: some View {
+        DiffableTextField($paymentNumber) {
+            .pattern("#### #### #### ####")
+            .placeholder("#") { $0.isASCII && $0.isNumber }
+            .hidden()
+        }
+        .setup({ $0.keyboard(.numberPad) })
+    }
+}
+```
