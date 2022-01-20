@@ -93,7 +93,7 @@ Determines the input and output space in terms of values.
 ## Examples
 
 ```swift
-struct DiffableCurrencyAmountTextField: View {
+struct DiffableAmountTextField: View {
     @State var amount: Decimal = 0
     
     let currencyCode = "SEK"

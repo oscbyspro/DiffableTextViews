@@ -74,7 +74,7 @@ A style that processes localized numbers in various formats.
 ### Examples
 
 ```swift
-struct DiffableCurrencyAmountTextField: View {
+struct DiffableAmountTextField: View {
     @State var amount: Decimal = 0
     
     let currencyCode = "SEK"
@@ -110,10 +110,10 @@ A style that processes characters laid out in custom patterns.
 
 ```swift
 struct DiffablePhoneNumberTextField: View {
-    @State var phone: String = ""
+    @State var phoneNumber: String = ""
     
     var body: some View {
-        DiffableTextField($phone) {
+        DiffableTextField($phoneNumber) {
             .pattern("+## (###) ###-##-##")
             .placeholder("#") { $0.isASCII && $0.isNumber }
         }

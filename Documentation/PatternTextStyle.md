@@ -23,43 +23,21 @@ A collection of characters.
 
 ## Examples
 
-### Phone
+### Phone Number
 
 A phone number bound to a String. It uses a visible pattern.
 
 ```swift
 struct DiffablePhoneNumberTextField: View {
-    @State var phone: String = ""
+    @State var phoneNumber: String = ""
     
     var body: some View {
-        DiffableTextField($phone) {
+        DiffableTextField($phoneNumber) {
             .pattern("+## (###) ###-##-##")
             .placeholder("#") { $0.isASCII && $0.isNumber }
+            // .hidden()
         }
         .setup({ $0.keyboard(.phonePad) })
-    }
-}
-```
-
-### Card
-
-A card number bound to a String. It uses an invisible pattern.
-    
-```swift
-import SwiftUI
-import DiffableTextViews
-import PatternTextStyles
-
-struct DiffableCreditCardTextField: View {
-    @State var card: String = ""
-    
-    var body: some View {
-        DiffableTextField($phone) {
-            .pattern("#### #### #### ####")
-            .placeholder("#") { $0.isASCII && $0.isNumber }
-            .hidden()
-        }
-        .setup({ $0.keyboard(.numberPad) })
     }
 }
 ```
