@@ -5,6 +5,16 @@ A view that uses styles to formats and parses text as you type.
 - Available in SwiftUI.
 - Written in SwiftUI/UIKit.
 
+## Standard
+
+Some standard values have been set to enhance the uncustomized experience.
+
+### Values
+
+|   | Value | Description | Comment |
+|---|-------|-------------|---------|
+| :balance_scale: | Font | Monospaced | As-you-type formatting works best with it |
+
 ## Environment
 
 The environment is used to seamlessly synchronize the view with the app state.
@@ -22,7 +32,7 @@ import SwiftUI
 import DiffableTextViews
 import NumericTextStyles
 
-struct DiffableCurrencyAmountTextField: View {
+struct DiffableCurrencyTextField: View {
     @State var amount: Decimal = 0
     
     let currencyCode = "SEK"
