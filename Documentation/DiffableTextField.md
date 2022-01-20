@@ -1,6 +1,9 @@
 # DiffableTextField
 
-A SwiftUI view (UIViewRepresentable) that uses DiffableTextStyle(s) to format text as you type, and convert text to and from its appropriate data type.
+A view that uses styles to format text as you type, and convert it to and from its appropriate data type.
+
+- Available in SwiftUI.
+- Written in SwiftUI/UIKit as a UIViewRepresentable.
 
 ### Customization: View Life Cycle
 
