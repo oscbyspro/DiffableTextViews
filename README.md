@@ -4,6 +4,8 @@ A framework for as-you-type formatting of text bound to appropriate data types.
 
 ![DiffableAmountTextField.gif](Assets/DiffableAmountTextField.gif)
 
+![DiffablePhoneNumberTextField.gif](Assets/DiffablePhoneNumberTextField.gif)
+
 ### Features
 
 |   | Feature | Description |
