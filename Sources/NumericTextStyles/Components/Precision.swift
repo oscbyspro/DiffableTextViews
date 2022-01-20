@@ -62,20 +62,22 @@ public struct Precision<Value: Precise> {
     @inlinable func showcase() -> Configuration {
         switch style {
         case .separate: return .integerAndFractionLength(
-             integerLimits: lower .integer ... upper .integer,
+             integerLimits: lower.integer  ... upper.integer,
             fractionLimits: lower.fraction ... upper.fraction)
         case .value: return .significantDigits(lower.value ... upper.value)
         }
     }
 
     @inlinable func editable() -> Configuration {
-        editable(count: upper)
+        .integerAndFractionLength(
+         integerLimits: Namespace.min.integer  ... upper.integer,
+        fractionLimits: Namespace.min.fraction ... upper.fraction)
     }
     
     @inlinable func editable(count: Count) -> Configuration {
         .integerAndFractionLength(
-         integerLimits: Namespace.min.integer  ... count.integer,
-        fractionLimits: Namespace.min.fraction ... count.fraction)
+         integerLimits: max(Namespace.min.integer,  count.integer)  ... count.integer,
+        fractionLimits: max(Namespace.min.fraction, count.fraction) ... count.fraction)
     }
 
     //=------------------------------------------------------------------------=
