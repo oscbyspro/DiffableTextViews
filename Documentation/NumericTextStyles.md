@@ -1,12 +1,13 @@
 # NumericTextStyles
 
-A style that formats and converts text to and from number types.
+Styles that process text bound to number types.
 
 ## Locales
 
-This framework supports every locale available in Foundation as it retrieves and caches each localized character at runtime.
+Supports every locale available in the Foundation framework.
 
-TODO - Bilingual
+- It accepts localized inputs, as well as system inputs.
+- It fetches and caches each characer it uses at runtime.
 
 ## Formats
 

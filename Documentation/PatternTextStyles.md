@@ -1,6 +1,6 @@
 # PatternTextStyles
 
-Styles that processes characters laid out in custom patterns of formatting and placeholders.
+Styles that process characters laid out in custom patterns of formatting and placeholders.
 
 ## Pattern
 
