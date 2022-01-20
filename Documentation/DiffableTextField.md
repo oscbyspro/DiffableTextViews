@@ -5,9 +5,9 @@ A view that uses styles to formats and parses text as you type.
 - Available in SwiftUI.
 - Written in SwiftUI/UIKit.
 
-## Standard
+## Defaults
 
-Some standard values have been set to enhance the uncustomized experience.
+Some non-standard values have been set to enhance the uncustomized experience.
 
 ### Values
 
