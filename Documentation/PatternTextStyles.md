@@ -8,27 +8,28 @@ A style that binds values to a custom pattern with placeholder characters.
 
 ## Pattern
 
-A pattern is a collection of characters to compare value characters against.
+A collection of characters.
 
-### Hidden
-
-The suffix of the pattern is hidden with the \\.hidden() method.
+- Its suffix may be hidden with the \\.hidden() method.
 
 ## Placeholder
 
-A placeholder is a character used by the pattern to reserves a position for value characters. It has a predicate used to validate candidates for the position. To replace a placeholder, the replacement character must satisfy the predicate.
+A placeholder is a character used to reserves positions in a pattern. 
 
-### Independent
+- To replace a placeholder, the replacement character must satisfy its predicate.
+- There may be multiple placeholders and each may use independent validation rules.
 
-There may be multiple placeholder characters and each may use a different validation rules.
+## Value
 
-### Value
+A collection of characters. 
 
-A value is a collection of characters. Its size is limited to the number of placeholder characters in the pattern.
+- Its size is limited to the number of placeholders in the pattern it tries to fill.
 
 ## Examples
 
 ### Phone
+
+A phone number bound to a String. The pattern is visible.
 
 ```swift
 struct PatternTextStyleExample: View {
@@ -45,6 +46,8 @@ struct PatternTextStyleExample: View {
 ```
     
 ### Card
+
+A card number bound to a String. The pattern is *not* visible.
     
 ```swift
 struct PatternTextStyleExample: View {
