@@ -43,7 +43,7 @@ struct PatternTextStyleExample: View {
     
 ### Card
 
-A card number bound to a String. The pattern is *not* visible.
+A card number bound to a String. The pattern is invisible.
     
 ```swift
 struct PatternTextStyleExample: View {
