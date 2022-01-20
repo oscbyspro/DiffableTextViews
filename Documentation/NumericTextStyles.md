@@ -13,7 +13,7 @@ Supports every locale available in the Foundation framework.
 
 Uses format styles introduced in iOS 15.0.
 
-- All localization magick is performed by Apple.
+- All (most) localization magick is performed by Apple.
 
 |   | Format | Availability. |
 |---|--------|---------------|
