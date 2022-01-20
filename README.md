@@ -2,9 +2,7 @@
 
 A framework for as-you-type formatting of text bound to appropriate data types.
 
-### Progress
-
-🔵🔵🔵🔵🔵🔵🔵🔵🔵⚪️
+![DiffableAmountTextField.gif](Assets/DiffableAmountTextField.gif)
 
 ### Features
 
