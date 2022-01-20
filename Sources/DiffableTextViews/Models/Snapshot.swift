@@ -18,14 +18,10 @@ public struct Snapshot: BidirectionalCollection, RangeReplaceableCollection {
     //=------------------------------------------------------------------------=
 
     @usableFromInline var _characters: Characters
-    @usableFromInline var _attributes: Attributes
+    @inlinable public var  characters: Characters { _characters }
 
-    //
-    // MARK: Properties - Accessors
-    //=------------------------------------------------------------------------=
-    
-    @inlinable public var characters: Characters { _characters }
-    @inlinable public var attributes: Attributes { _attributes }
+    @usableFromInline var _attributes: Attributes
+    @inlinable public var  attributes: Attributes { _attributes }
 
     //=------------------------------------------------------------------------=
     // MARK: Initializers
@@ -81,7 +77,7 @@ public struct Snapshot: BidirectionalCollection, RangeReplaceableCollection {
             lhs.attribute == rhs.attribute
         }
         
-        @inlinable public static func < (lhs: Self, rhs: Self) -> Bool {
+        @inlinable public static func  < (lhs: Self, rhs: Self) -> Bool {
             lhs.attribute < rhs.attribute
         }
     }
@@ -154,11 +150,8 @@ public extension Snapshot {
     // MARK: Replace
     //=------------------------------------------------------------------------=
 
-    @inlinable mutating func replaceSubrange<E: Collection>(
-        _ range: Range<Index>,
-        with elements: E)
-        where E.Element == Symbol {
-        
+    @inlinable mutating func replaceSubrange<C>(_ range: Range<Index>,
+        with elements: C) where C: Collection, C.Element == Symbol {
         _characters.replaceSubrange(
             range.lowerBound.character ..< range.upperBound.character,
             with: elements.lazy.map(\.character))
@@ -166,10 +159,6 @@ public extension Snapshot {
             range.lowerBound.attribute ..< range.upperBound.attribute,
             with: elements.lazy.map(\.attribute))
     }
-    
-    //
-    // MARK: Replace - Optimizations
-    //=------------------------------------------------------------------------=
     
     @inlinable mutating func append(_ element: Symbol) {
         _characters.append(element.character)
@@ -196,29 +185,19 @@ public extension Snapshot {
     // MARK: Transformations
     //=------------------------------------------------------------------------=
     
-    @inlinable mutating func transform(
-        attributes position: Index,
-        with transformation: (inout Attribute) -> Void) {
-        
-        transformation(&_attributes[position.attribute])
+    @inlinable mutating func change(attributes position: Index,
+        with transform: (inout Attribute) -> Void) {
+        transform(&_attributes[position.attribute])
     }
     
-    @inlinable mutating func transform<S: Sequence>(
-        attributes sequence: S,
-        with transformation: (inout Attribute) -> Void)
-        where S.Element == Index {
-        
-        for position in sequence {
-            transform(attributes: position, with: transformation)
-        }
+    @inlinable mutating func change<S: Sequence>(attributes sequence: S,
+        with transform: (inout Attribute) -> Void) where S.Element == Index {
+        for position in sequence { transform(&_attributes[position.attribute]) }
     }
     
-    @inlinable mutating func transform<R: RangeExpression>(
-        attributes range: R,
-        with transformation: (inout Attribute) -> Void)
-        where R.Bound == Index {
-        
-        transform(attributes: indices[range.relative(to: self)], with: transformation)
+    @inlinable mutating func change<R: RangeExpression>(attributes range: R,
+        with transform: (inout Attribute) -> Void) where R.Bound == Index {
+        for position in indices[range.relative(to: self)] { transform(&_attributes[position.attribute]) }
     }
 }
 
