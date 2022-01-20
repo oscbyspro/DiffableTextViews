@@ -2,10 +2,6 @@
 
 Styles that processes characters laid out in custom patterns.
 
-# PatternTextStyle\<Pattern, Value\>
-
-A style that binds values to a custom pattern with placeholder characters.
-
 ## Pattern
 
 A collection of characters.
