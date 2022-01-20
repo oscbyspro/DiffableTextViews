@@ -27,7 +27,7 @@ The environment is used to seamlessly synchronize the view with the app state.
 
 ## Examples
 
-![DiffablePhoneNumberTextField.gif](../Assets/DiffablePhoneNumberTextField.gif)
+![DiffableAmountTextField.gif](../Assets/DiffableAmountTextField.gif)
 
 ```swift
 struct DiffableAmountTextField: View {
@@ -40,6 +40,22 @@ struct DiffableAmountTextField: View {
             .precision(integer: 1..., fraction: 2)
         }
         .environment(\.locale, Locale(identifier: "en_SE"))
+    }
+}
+```
+
+![DiffablePhoneNumberTextField.gif](../Assets/DiffablePhoneNumberTextField.gif)
+
+```swift
+struct DiffablePhoneNumberTextField: View {
+    @State var phoneNumber: String = ""
+    
+    var body: some View {
+        DiffableTextField($phoneNumber) {
+            .pattern("+## (###) ###-##-##")
+            .placeholder("#") { $0.isASCII && $0.isNumber }
+        }
+        .setup({ $0.keyboard(.phonePad) })
     }
 }
 ```

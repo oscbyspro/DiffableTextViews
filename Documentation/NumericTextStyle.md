@@ -94,7 +94,7 @@ Determines the input and output space in terms of values.
 
 ## Examples
 
-An amount bound to a Decimal. It uses a localized currency format.
+![DiffableAmountTextField.gif](../Assets/DiffableAmountTextField.gif)
 
 ```swift
 struct DiffableAmountTextField: View {

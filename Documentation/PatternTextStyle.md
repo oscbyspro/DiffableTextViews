@@ -25,9 +25,7 @@ A collection of characters.
 
 ## Examples
 
-### Phone Number
-
-A phone number bound to a String. It uses a visible pattern.
+![DiffablePhoneNumberTextField.gif](../Assets/DiffablePhoneNumberTextField.gif)
 
 ```swift
 struct DiffablePhoneNumberTextField: View {
