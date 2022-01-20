@@ -1,11 +1,21 @@
 # DiffableTextField
 
-A view that uses styles to format text as you type, and convert it to and from its appropriate data type.
+A view that uses styles to formats and parses text as you type.
 
 - Available in SwiftUI.
 - Written in SwiftUI/UIKit.
 
-### Examples
+## Environment
+
+The environment is used to seamlessly synchronize the view with the app state.
+
+### Values
+
+|   | Value  | Behavior |
+|---|--------|----------|
+| :national_park: | Locale | Overridden |
+
+## Examples
 
 ```swift
 import SwiftUI
