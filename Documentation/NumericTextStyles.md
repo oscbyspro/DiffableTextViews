@@ -11,17 +11,15 @@ Supports every locale available in the Foundation framework.
 
 ## Formats
 
-### Number
+Uses format styles introduced in iOS 15.0.
 
-TODO
+- All localization magick is performed by Apple.
 
-### Currency
-
-TODO
-
-### Percent
-
-TODO
+|   | Format | Availability. |
+|---|--------|---------------|
+| :hash: | Number | All |
+| :coin: | Currency | All |
+| :100: | Percent | Nonintegers |
 
 ## Precision
 
