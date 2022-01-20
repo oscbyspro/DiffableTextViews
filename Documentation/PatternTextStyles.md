@@ -25,7 +25,7 @@ A collection of characters.
 
 ### Card
 
-A card number bound to a String. The pattern is invisible.
+A card number bound to a String. It uses an invisible pattern.
     
 ```swift
 struct PatternTextStyleExample: View {
@@ -44,7 +44,7 @@ struct PatternTextStyleExample: View {
 
 ### Phone
 
-A phone number bound to a String. The pattern is visible.
+A phone number bound to a String. It uses an visible pattern.
 
 ```swift
 struct PatternTextStyleExample: View {
