@@ -15,7 +15,7 @@ An open-source framework for as-you-type formatting and conversion.
 | :hammer_and_wrench: | Versatile | Uses snapshots and attributes |
 | :running_man: | Performant | Uses O(n) differentiation algorithms |
 | :grey_question: | Agnostic | Supports varied length characters, emojis |
-| :desert_island: | Standalone | Has zero remote dependencies |
+| :desert_island: | Stand-alone | Has zero remote dependencies |
 | :window: | Open-source | Open and transparent, as it should be |
 
 ### [Algorithms](Sources/DiffableTextViews/Models/State.swift)
@@ -25,7 +25,7 @@ It uses three main algorithms to determine text selection.
 |   | Algorithm | Description | Complexity |
 |---|-----------|-------------|------------|
 | :book: | Text | Determines selection when text changes | ≤ Linear |
-| :left_right_arrow: | Positionss | Determine selection by positions/offsets | ≤ Linear |
+| :left_right_arrow: | Positions | Determine selection by positions/offsets | ≤ Linear |
 | :star: | Attributes | Determines selection based on attributes | ≤ Linaer |
 
 ### Requirements
