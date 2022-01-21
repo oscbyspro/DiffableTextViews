@@ -34,7 +34,7 @@ public extension BidirectionalCollection {
             if try !predicate(self[position]) { return after }
         }
         //=--------------------------------------=
-        // MARK: Done
+        // MARK: Position == Start Index
         //=--------------------------------------=
         return position
     }

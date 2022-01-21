@@ -150,12 +150,12 @@ extension State {
         //=--------------------------------------=
         if selection == layout.range { return }
         //=--------------------------------------=
-        // MARK: Upper Bound - Single
+        // MARK: Selection - Single
         //=--------------------------------------=
         let upperBound = layout.preferredIndex(start: selection.upperBound, preference: .backwards, intent: intent.upper)
         var lowerBound = upperBound
         //=--------------------------------------=
-        // MARK: Lower Bound - Double
+        // MARK: Selection - Double
         //=--------------------------------------=
         if !selection.isEmpty, upperBound != layout.startIndex {
             lowerBound = layout.preferredIndex(start: selection.lowerBound, preference:  .forwards, intent: intent.lower)

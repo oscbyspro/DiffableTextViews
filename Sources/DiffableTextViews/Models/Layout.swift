@@ -108,8 +108,8 @@
             lhs.position == rhs.position
         }
 
-        @inlinable static func  < (lhs: Self, rhs: Self) -> Bool {
-            lhs.position  < rhs.position
+        @inlinable static func <  (lhs: Self, rhs: Self) -> Bool {
+            lhs.position <  rhs.position
         }
     }
 }
@@ -241,10 +241,13 @@ extension Layout {
     //=------------------------------------------------------------------------=
 
     @inlinable func indices(start: Range<Index>, destination: Range<Position>) -> Range<Index> {
+        //=--------------------------------------=
+        // MARK: Indices - Single
+        //=--------------------------------------=
         let upperBound = index(start: start.upperBound, destination: destination.upperBound)
         var lowerBound = upperBound
         //=--------------------------------------=
-        // MARK: Double
+        // MARK: Indices - Double
         //=--------------------------------------=
         if !destination.isEmpty {
             lowerBound = index(start: start.lowerBound, destination: destination.lowerBound)
@@ -345,10 +348,10 @@ extension Layout {
     
     @inlinable func firstIndex(start: Index, direction: Direction, skip: Bool) -> Index? {
         switch (direction, skip) {
-        case (.forwards, false): return firstIndexForwardsTo(start: start, where: nonpassthrough)
-        case (.forwards, true): return firstIndexForwardsThrough(start: start, where: nonpassthrough)
+        case (.forwards,  false): return firstIndexForwardsTo(start: start, where: nonpassthrough)
+        case (.forwards,   true): return firstIndexForwardsThrough(start: start, where: nonpassthrough)
         case (.backwards, false): return firstIndexBackwardsTo(start: start, where: nonpassthrough)
-        case (.backwards, true): return firstIndexBackwardsThrough(start: start, where: nonpassthrough)
+        case (.backwards,  true): return firstIndexBackwardsThrough(start: start, where: nonpassthrough)
         }
     }
 }
