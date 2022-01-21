@@ -9,6 +9,7 @@
 // MARK: * Changes
 //*============================================================================*
 
+/// A namespace for the algorithm that detects changes between snapshots.
 @usableFromInline enum Changes<Past, Next> where
 Past: BidirectionalCollection, Past.Element == Symbol,
 Next: BidirectionalCollection, Next.Element == Symbol {

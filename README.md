@@ -1,6 +1,6 @@
 # DiffableTextViews
 
-An framework for as-you-type formatting of text bound to appropriate data types.
+An open-source package for as-you-type formatting and conversion of text/values.
 
 ![DiffableAmountTextField.gif](Assets/DiffableAmountTextField.gif)
 
@@ -16,7 +16,7 @@ An framework for as-you-type formatting of text bound to appropriate data types.
 | :running_man: | Performant | Uses O(n) differentiation algorithms |
 | :grey_question: | Agnostic | Supports varied length characters, emojis |
 | :desert_island: | Standalone | Has zero remote dependencies |
-| :window: | Source | Open and transparent, as it should be |
+| :window: | Open-source | Open and transparent, as it should be |
 
 ### [Algorithms](Sources/DiffableTextViews/Models/State.swift)
 
@@ -24,9 +24,9 @@ It uses three main algorithms to determine text selection.
 
 |   | Algorithm | Description | Complexity |
 |---|-----------|-------------|------------|
-| :book: | Text | Determine selection when text changes | ≤ Linear |
-| :left_right_arrow: | Positions | Determine selection by positions/offsets | ≤ Linear |
-| :star: | Attributes | Determine selection based on attributes | ≤ Linaer |
+| :book: | Text | Determines selection when text changes | ≤ Linear |
+| :left_right_arrow: | Positionss | Determine selection by positions/offsets | ≤ Linear |
+| :star: | Attributes | Determines selection based on attributes | ≤ Linaer |
 
 ### Requirements
 

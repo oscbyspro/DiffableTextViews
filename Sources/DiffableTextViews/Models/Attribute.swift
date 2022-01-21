@@ -40,10 +40,16 @@ public struct Attribute: OptionSet {
     // MARK: Instances - Composites
     //=------------------------------------------------------------------------=
     
-    /// Default behavior used to describe plain text.
+    /// The default attribute. It represents standard text.
+    ///
+    /// - Contains no attributes.
+    ///
     public static let content = Self([])
     
-    /// - Contains: .virtual, .insertable, .removable, .passthrough.
+    /// A formatting attribute. It represents redundant and/or noninteractable text.
+    ///
+    /// - Contains: virtual, insertable, removable, passthrough.
+    ///
     public static let phantom = Self([.virtual, .insertable, .removable, .passthrough])
     
     //=------------------------------------------------------------------------=

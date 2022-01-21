@@ -9,6 +9,7 @@
 // MARK: * Snapshot
 //*============================================================================*
 
+/// A collection of characters and attributes.
 public struct Snapshot: BidirectionalCollection, RangeReplaceableCollection {
     public typealias Characters = String
     public typealias Attributes = Array<Attribute>

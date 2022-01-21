@@ -11,6 +11,7 @@ import Foundation
 // MARK: * DiffableTextStyle
 //*============================================================================*
 
+/// A protocol for styles that are capable of as-you-type formatting and value conversion.
 public protocol DiffableTextStyle {
 
     //=------------------------------------------------------------------------=
