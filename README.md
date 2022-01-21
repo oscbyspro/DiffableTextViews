@@ -18,7 +18,7 @@ An open source framework for as-you-type formatting of text bound to appropriate
 
 ### [Algorithms](Sources/DiffableTextViews/Models/State.swift)
 
-It uses three main algorithms, each with a linear worstand a constant best case.
+It uses three main algorithms, each with a linear worst case and a constant best case.
 
 |   | Algorithm | Description | Complexity |
 |---|-----------|-------------|------------|
