@@ -1,6 +1,6 @@
 # DiffableTextViews
 
-An open-source package for as-you-type formatting and conversion of text/values.
+An open-source package for as-you-type formatting/conversion of text/values.
 
 ![DiffableAmountTextField.gif](Assets/DiffableAmountTextField.gif)
 
