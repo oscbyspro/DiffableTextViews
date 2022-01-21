@@ -38,11 +38,15 @@ public protocol DiffableTextStyle {
     ///
     /// It is used both downstream and upstream so it can be used to constrain the value.
     ///
+    /// - The default implementation returns immediately.
+    ///
     @inlinable func process(value: inout Value)
     
     /// Processes the snapshot once whenever it is called.
     ///
     /// Can be used to apply transformation after other snapshot and merge functions.
+    ///
+    /// - The default implementation returns immediately.
     ///
     @inlinable func process(snapshot: inout Snapshot)
     
@@ -50,7 +54,7 @@ public protocol DiffableTextStyle {
     // MARK: Parse
     //=------------------------------------------------------------------------=
     
-    /// Value represented by the snapshot.
+    /// The value represented by the snapshot.
     @inlinable func parse(snapshot: Snapshot) throws -> Value // required (!)
     
     //=------------------------------------------------------------------------=
@@ -64,7 +68,10 @@ public protocol DiffableTextStyle {
     // MARK: Merge
     //=------------------------------------------------------------------------=
     
-    /// Merges the current snapshot with the input proposed by the user,
+    /// Merges the current snapshot with the input.
+    ///
+    /// - It may also return a value, for performance reasons, if parsed by this method.
+    ///
     @inlinable func merge(snapshot: Snapshot, with input: Input) throws -> Output<Value>
 }
 

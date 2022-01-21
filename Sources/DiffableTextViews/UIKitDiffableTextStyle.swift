@@ -19,6 +19,10 @@ public protocol UIKitDiffableTextStyle: DiffableTextStyle {
     // MARK: Setup
     //=------------------------------------------------------------------------=
     
+    /// Configures the text field at setup.
+    ///
+    /// - The default implementation returns immediately.
+    ///
     @inlinable static func setup(diffableTextField: ProxyTextField)
 }
 
