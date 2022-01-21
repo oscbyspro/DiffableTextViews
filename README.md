@@ -13,8 +13,18 @@ An open source framework for as-you-type formatting of text bound to appropriate
 | :keyboard: | Responsive | Formats and parses text as you type |
 | :magic_wand: | Automagical | Binds text to its appropriate data type |
 | :hammer_and_wrench: | Versatile | Uses snapshots and attributes |
-| :running_man: | Performant | Uses an O(n) differentiation algorithm |
+| :running_man: | Performant | Uses O(n) differentiation algorithms |
 | :desert_island: | Standalone | Uses no remote dependencies |
+
+### [Algorithms](Sources/DiffableTextViews/Models/State.swift)
+
+It uses three main algorithms, each with a linear worstand a constant best case.
+
+|   | Algorithm | Description | Complexity |
+|---|-----------|-------------|------------|
+| :book: | Text | Determine selection when text changes | ≤ Linear |
+| :left_right_arrow: | Position | Determine position by change in offset | ≤ Linear |
+| :star: | Attributes | Determine selection based on attributes | ≤ Linaer |
 
 ### Requirements
 
