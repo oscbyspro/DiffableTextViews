@@ -96,7 +96,7 @@ Determines the input and output space in terms of values.
 
 Uses custom behavior to enhance the user experience.
 
-  - Thee sign is set by inserting a sign character anywhere in the text.
+  - Sign is set by inserting a sign character anywhere in the text.
 
 ## Examples
 

@@ -44,8 +44,8 @@ A view that uses styles to format and parse text.
 |   | Feature | Description |
 |---|---------|-------------|
 | :iphone: | SwiftUI | Value, style, done |
+| :mountain: | Environment | Uses environment values |
 | :balance_scale: | Monospaced | The standard font is monospaced |
-| :mountain: | Environment | Uses the environment |
 | :sewing_needle: | Customizable | Styles may provide default values |
 
 ### ProxyTextField
