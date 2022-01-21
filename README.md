@@ -23,7 +23,7 @@ It uses three main algorithms, each with a linear worst case and a constant best
 |   | Algorithm | Description | Complexity |
 |---|-----------|-------------|------------|
 | :book: | Text | Determine selection when text changes | ≤ Linear |
-| :left_right_arrow: | Position | Determine position by change in offset | ≤ Linear |
+| :left_right_arrow: | Position | Determine selection by change in offset | ≤ Linear |
 | :star: | Attributes | Determine selection based on attributes | ≤ Linaer |
 
 ### Requirements
