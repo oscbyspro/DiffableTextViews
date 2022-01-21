@@ -45,7 +45,7 @@ A view that uses styles to format and parse text.
 |---|---------|-------------|
 | :iphone: | SwiftUI | Value, style, done |
 | :balance_scale: | Monospaced | The standard font is monospaced |
-| :mountain: | Environment | Locale is set by the environment |
+| :mountain: | Environment | Uses the environment |
 | :sewing_needle: | Customizable | Styles may provide default values |
 
 ### ProxyTextField
@@ -66,7 +66,7 @@ A style that processes localized numbers in various formats.
 | :bow_and_arrow: | Precision | Up to 38 significant digits |
 | :bricks: | Bounds | Clamps input and output to specified range |
 | :art: | Formats | Number, currency and percent |
-| :national_park: | Locales | Every locale in the Foundation framework |
+| :national_park: | Locales | Supports every locale in Foundation |
 | :two: | Bilingual | Accepts both local and system characters |
 
 ### Examples

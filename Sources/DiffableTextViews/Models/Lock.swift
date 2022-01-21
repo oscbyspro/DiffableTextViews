@@ -11,6 +11,8 @@
 
 /// A lock that allows actions to be performed inside a locked state.
 ///
+/// Made to stop UITextFieldDelegate from responding to textFieldDidChangeSelection(\_:) in an invalid state.
+///
 /// - Note: This is NOT a thread lock.
 ///
 @usableFromInline @MainActor final class Lock {

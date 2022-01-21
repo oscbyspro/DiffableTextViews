@@ -5,6 +5,8 @@
 //  Created by Oscar Byström Ericsson on 2021-09-27.
 //
 
+import Foundation
+
 //*============================================================================*
 // MARK: * State
 //*============================================================================*
@@ -51,11 +53,15 @@
     }
     
     //=------------------------------------------------------------------------=
-    // MARK: Utilities
+    // MARK: Indices
     //=------------------------------------------------------------------------=
     
     @inlinable func indices(at destination: Range<Position>) -> Range<Layout.Index> {
         layout.indices(start: selection, destination: destination)
+    }
+    
+    @inlinable func indices(at destination: NSRange) -> Range<Layout.Index> {
+        indices(at: Position(destination.lowerBound) ..< Position(destination.upperBound))
     }
 }
 

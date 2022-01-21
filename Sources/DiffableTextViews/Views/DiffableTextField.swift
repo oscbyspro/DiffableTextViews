@@ -183,16 +183,10 @@ public struct DiffableTextField<Style: UIKitDiffableTextStyle>: UIViewRepresenta
             //=----------------------------------=
             do {
                 //=------------------------------=
-                // MARK: Selection
+                // MARK: Range, Input
                 //=------------------------------=
-                let positions = Position(nsRange.lowerBound) ..< Position(nsRange.upperBound)
-                let selection = cache.state.indices(at: positions)
-                //=------------------------------=
-                // MARK: Input
-                //=------------------------------=
-                let content = Snapshot(string, as: .content)
-                let range = selection.lowerBound.snapshot ..< selection.upperBound.snapshot
-                let input = Input(content: content, range: range)
+                let range = cache.state.indices(at: nsRange)
+                let input = Input(content: string, range: range)
                 //=------------------------------=
                 // MARK: Output
                 //=------------------------------=
@@ -207,7 +201,7 @@ public struct DiffableTextField<Style: UIKitDiffableTextStyle>: UIViewRepresenta
                 // MARK: State
                 //=------------------------------=
                 var state = cache.state
-                state.selection = selection.upperBound ..< selection.upperBound
+                state.selection = range.upperBound ..< range.upperBound
                 state.update(snapshot: output.snapshot)
                 //=------------------------------=
                 // MARK: Push

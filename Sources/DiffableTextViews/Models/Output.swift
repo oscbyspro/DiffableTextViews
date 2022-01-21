@@ -11,9 +11,8 @@
 
 /// A snapshot and an optional value.
 ///
-/// Sometimes when a style merges snapshots, it also parses its value.
-/// In that case, the value should be returned with the snapshot so that
-/// the snapshot is not parsed twice.
+/// Sometimes when a style merges snapshots, it also parses its value. In that case,
+/// the value may be returned with the snapshot in order to not parse it twice.
 ///
 public struct Output<Value> {
     

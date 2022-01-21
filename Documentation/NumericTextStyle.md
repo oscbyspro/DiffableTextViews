@@ -92,6 +92,12 @@ Determines the input and output space in terms of values.
         - precision: 19
         - bounds: 0 to 9,223,372,036,854,775,807 (Int64.max)
 
+## Enhanced
+
+Uses custom behavior to enhance the user experience.
+
+  - Thee sign is set by inserting a sign character anywhere in the text.
+
 ## Examples
 
 ![DiffableAmountTextField.gif](../Assets/DiffableAmountTextField.gif)

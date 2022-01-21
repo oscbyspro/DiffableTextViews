@@ -30,9 +30,7 @@ extension Character: Scheme {
     // MARK: Size
     //=------------------------------------------------------------------------=
 
-    @inlinable static func size(of character: Character) -> Int {
-        1
-    }
+    @inlinable static func size(of character: Character) -> Int { 1 }
     
     @inlinable static func size<S: StringProtocol>(of characters: S) -> Int {
         characters.count

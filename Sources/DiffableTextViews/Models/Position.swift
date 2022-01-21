@@ -71,7 +71,7 @@
         lhs.offset == rhs.offset
     }
     
-    @inlinable static func < (lhs: Self, rhs: Self) -> Bool {
+    @inlinable static func <  (lhs: Self, rhs: Self) -> Bool {
         lhs.offset <  rhs.offset
     }
 }

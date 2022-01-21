@@ -9,9 +9,9 @@
 // MARK: * Layout
 //*============================================================================*
 
-/// The text layout, as described by a snapshot.
+/// The text layout, as described by a snapshot and its attributes.
 ///
-/// This is used to traverse text from the point of view of a caret.
+/// It is used to traverse text from the point of view of one or more carets.
 ///
 /// ```
 /// |$|1|2|3|,|4|5|6|.|7|8|9|_|U|S|D|~
@@ -31,10 +31,11 @@
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
+    /// - Complexity: O(1) with the scheme set to UTF16 (maybe UTF8). O(n) otherwise.
     @inlinable init(_ snapshot: Snapshot = Snapshot()) {
         self.snapshot = snapshot
         self.range = Index(snapshot.startIndex, at: .start) ..<
-        Index(snapshot .endIndex, at: .end(of: snapshot.characters))
+        Index(snapshot .endIndex, at: .end(of: snapshot.characters)) // UTF16 is O(1)
     }
  
     //=------------------------------------------------------------------------=
@@ -275,7 +276,7 @@ extension Layout {
             formIndex(after: &position)
         }
         //=--------------------------------------=
-        // MARK: Failure
+        // MARK: Failure == None
         //=--------------------------------------=
         return nil
     }
@@ -294,7 +295,7 @@ extension Layout {
             formIndex(after: &position)
         }
         //=--------------------------------------=
-        // MARK: Failure
+        // MARK: Failure == None
         //=--------------------------------------=
         return nil
     }
@@ -314,7 +315,7 @@ extension Layout {
             if predicate(position) { return after }
         }
         //=--------------------------------------=
-        // MARK: Failure
+        // MARK: Failure == None
         //=--------------------------------------=
         return nil
     }
@@ -333,7 +334,7 @@ extension Layout {
             if predicate(position) { return position }
         }
         //=--------------------------------------=
-        // MARK: Failure
+        // MARK: Failure == None
         //=--------------------------------------=
         return nil
     }

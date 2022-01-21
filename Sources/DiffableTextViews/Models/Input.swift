@@ -22,8 +22,8 @@ public struct Input {
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable init(content: Snapshot, range: Range<Snapshot.Index>) {
-        self.content = content
-        self.range = range
+    @inlinable init<S>(content: String, range: Range<Layout<S>.Index>) where S: Scheme {
+        self.content = Snapshot(content, as: .content)
+        self.range = range.lowerBound.snapshot ..< range.upperBound.snapshot
     }
 }

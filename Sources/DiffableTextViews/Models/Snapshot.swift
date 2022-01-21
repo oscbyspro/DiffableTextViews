@@ -77,8 +77,8 @@ public struct Snapshot: BidirectionalCollection, RangeReplaceableCollection {
             lhs.attribute == rhs.attribute
         }
         
-        @inlinable public static func  < (lhs: Self, rhs: Self) -> Bool {
-            lhs.attribute < rhs.attribute
+        @inlinable public static func <  (lhs: Self, rhs: Self) -> Bool {
+            lhs.attribute <  rhs.attribute
         }
     }
 }
@@ -185,17 +185,17 @@ public extension Snapshot {
     // MARK: Transformations
     //=------------------------------------------------------------------------=
     
-    @inlinable mutating func change(attributes position: Index,
+    @inlinable mutating func update(attributes position: Index,
         with transform: (inout Attribute) -> Void) {
         transform(&_attributes[position.attribute])
     }
     
-    @inlinable mutating func change<S: Sequence>(attributes sequence: S,
+    @inlinable mutating func update<S: Sequence>(attributes sequence: S,
         with transform: (inout Attribute) -> Void) where S.Element == Index {
         for position in sequence { transform(&_attributes[position.attribute]) }
     }
     
-    @inlinable mutating func change<R: RangeExpression>(attributes range: R,
+    @inlinable mutating func update<R: RangeExpression>(attributes range: R,
         with transform: (inout Attribute) -> Void) where R.Bound == Index {
         for position in indices[range.relative(to: self)] { transform(&_attributes[position.attribute]) }
     }
