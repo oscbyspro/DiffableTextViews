@@ -25,7 +25,7 @@ It uses three main algorithms to determine text selection.
 |   | Algorithm | Description | Complexity |
 |---|-----------|-------------|------------|
 | :book: | Text | Determine selection when text changes | ≤ Linear |
-| :left_right_arrow: | Offsets | Determine selection when offsets change | ≤ Linear |
+| :left_right_arrow: | Positions | Determine selection by positions/offsets | ≤ Linear |
 | :star: | Attributes | Determine selection based on attributes | ≤ Linaer |
 
 ### Requirements
@@ -76,10 +76,10 @@ A style that processes localized numbers in various formats.
 |---|---------|-------------|
 | :coin: | Values | Decimal, Float(16-64) and (U)Int(8-64) |
 | :bow_and_arrow: | Precision | Up to 38 significant digits |
-| :bricks: | Bounds | Clamps input and output to specified range |
+| :bricks: | Bounds | Clamps input/output to specified range |
 | :art: | Formats | Number, currency and percent |
 | :national_park: | Locales | Supports every locale in Foundation |
-| :two: | Bilingual | Accepts both local and system characters |
+| :two: | Bilingual | Accepts both local and system inputs |
 
 ### Examples
 
