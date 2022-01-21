@@ -1,6 +1,6 @@
 # DiffableTextViews
 
-A framework for as-you-type formatting of text bound to appropriate data types.
+An open source framework for as-you-type formatting of text bound to appropriate data types.
 
 ![DiffableAmountTextField.gif](Assets/DiffableAmountTextField.gif)
 
@@ -13,7 +13,7 @@ A framework for as-you-type formatting of text bound to appropriate data types.
 | :keyboard: | Responsive | Formats and parses text as you type |
 | :magic_wand: | Automagical | Binds text to its appropriate data type |
 | :hammer_and_wrench: | Versatile | Uses snapshots and attributes |
-| :running_man: | Efficient | Uses an O(n) differentiation algorithm |
+| :running_man: | Performant | Uses an O(n) differentiation algorithm |
 | :desert_island: | Standalone | Uses no remote dependencies |
 
 ### Requirements
