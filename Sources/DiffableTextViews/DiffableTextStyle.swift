@@ -76,7 +76,7 @@ public protocol DiffableTextStyle {
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: DiffableTextStyle - Defaults
+// MARK: DiffableTextStyle - Details
 //=----------------------------------------------------------------------------=
 
 public extension DiffableTextStyle {

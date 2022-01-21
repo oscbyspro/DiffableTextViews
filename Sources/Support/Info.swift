@@ -9,7 +9,10 @@
 // MARK: * Info
 //*============================================================================*
 
-/// An error message that is only constructed in DEBUG mode.
+/// An error message that only contains a value in DEBUG mode.
+///
+/// - Uses conditional compilation.
+///
 public struct Info: CustomStringConvertible, Error {
     @usableFromInline static let description = "[DEBUG]"
     

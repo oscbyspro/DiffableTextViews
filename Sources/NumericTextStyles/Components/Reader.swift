@@ -12,14 +12,13 @@ import DiffableTextViews
 //*============================================================================*
 
 @usableFromInline struct Reader {
-    @usableFromInline typealias Command = (inout Number) -> Void
     
     //=------------------------------------------------------------------------=
     // MARK: Properties
     //=------------------------------------------------------------------------=
     
     @usableFromInline var content: Snapshot
-    @usableFromInline var process: Command?
+    @usableFromInline var process: ((inout Number) -> Void)?
     
     //=------------------------------------------------------------------------=
     // MARK: Initializers
@@ -33,6 +32,7 @@ import DiffableTextViews
     // MARK: Utilities
     //=------------------------------------------------------------------------=
     
+    /// Interprets a single sign character as a: set sign command.
     @inlinable mutating func consumeSignInput(region: Region) {
         guard content.count == 1 else { return }
         guard let sign = region.signs[content.first!.character] else { return }

@@ -25,13 +25,17 @@ public extension BidirectionalCollection {
     
     @inlinable internal func startOfSuffix(while predicate: (Element) throws -> Bool) rethrows -> Index {
         var position = endIndex
-        
+        //=--------------------------------------=
+        // MARK: Loop
+        //=--------------------------------------=
         while position != startIndex {
             let after = position
             formIndex(before: &position)
             if try !predicate(self[position]) { return after }
         }
-        
+        //=--------------------------------------=
+        // MARK: Done
+        //=--------------------------------------=
         return position
     }
 }

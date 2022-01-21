@@ -7,7 +7,8 @@
 
 /// A count of a number's various components.
 ///
-/// - Lanes: | value | integer | fraction |
+/// - Uses SIMD because:  ¯\\_(ツ)_/¯
+/// - Lanes: x: value, y: integer, z: fraction.
 ///
 public struct Count {
 

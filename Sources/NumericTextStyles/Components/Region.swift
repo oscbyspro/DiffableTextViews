@@ -28,6 +28,10 @@ import Foundation
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
+    /// Creates an uncached region.
+    ///
+    /// It force unwraps characters. Validity should be asserted by unit tests for all locales.
+    ///
     @inlinable init(_ locale: Locale) {
         //=--------------------------------------=
         // MARK: Locale

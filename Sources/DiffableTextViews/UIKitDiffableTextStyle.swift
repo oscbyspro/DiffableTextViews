@@ -27,7 +27,7 @@ public protocol UIKitDiffableTextStyle: DiffableTextStyle {
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: UIKitDiffableTextStyle - Implementation
+// MARK: UIKitDiffableTextStyle - Details
 //=----------------------------------------------------------------------------=
 
 public extension UIKitDiffableTextStyle {
