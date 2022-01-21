@@ -14,8 +14,9 @@ An framework for as-you-type formatting of text bound to appropriate data types.
 | :magic_wand: | Automagical | Binds text to its appropriate data type |
 | :hammer_and_wrench: | Versatile | Uses snapshots and attributes |
 | :running_man: | Performant | Uses O(n) differentiation algorithms |
-| :desert_island: | Standalone | Uses no remote dependencies |
-| :window: | Open source | Honest and transparent, as it should be |
+| :grey_question: | Agnostic | Supports varied length characters, emojis |
+| :desert_island: | Standalone | Has zero remote dependencies |
+| :window: | Source | Open and transparent, as it should be |
 
 ### [Algorithms](Sources/DiffableTextViews/Models/State.swift)
 
@@ -24,7 +25,7 @@ It uses three main algorithms to determine text selection.
 |   | Algorithm | Description | Complexity |
 |---|-----------|-------------|------------|
 | :book: | Text | Determine selection when text changes | ≤ Linear |
-| :left_right_arrow: | Position | Determine selection by change in offsets | ≤ Linear |
+| :left_right_arrow: | Offsets | Determine selection when offsets change | ≤ Linear |
 | :star: | Attributes | Determine selection based on attributes | ≤ Linaer |
 
 ### Requirements
