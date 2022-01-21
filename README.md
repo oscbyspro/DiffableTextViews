@@ -24,7 +24,7 @@ It uses three main algorithms to determine text selection.
 |   | Algorithm | Description | Complexity |
 |---|-----------|-------------|------------|
 | :book: | Text | Determine selection when text changes | ≤ Linear |
-| :left_right_arrow: | Position | Determine selection by change in offset | ≤ Linear |
+| :left_right_arrow: | Position | Determine selection by change in offsets | ≤ Linear |
 | :star: | Attributes | Determine selection based on attributes | ≤ Linaer |
 
 ### Requirements
