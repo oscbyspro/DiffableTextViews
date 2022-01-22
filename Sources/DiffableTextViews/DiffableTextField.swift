@@ -15,8 +15,6 @@ import SwiftUI
 
 public struct DiffableTextField<Style: UIKitDiffableTextStyle>: UIViewRepresentable {
     public typealias Value = Style.Value
-    public typealias UIViewType = BasicTextField
-    public typealias Transformation = (ProxyTextField) -> Void
 
     //=------------------------------------------------------------------------=
     // MARK: Environment
@@ -32,12 +30,12 @@ public struct DiffableTextField<Style: UIKitDiffableTextStyle>: UIViewRepresenta
     @usableFromInline let style: () -> Style
     
     //=------------------------------------------------------------------------=
-    // MARK: Properties - Transformations
+    // MARK: Customization
     //=------------------------------------------------------------------------=
 
-    @usableFromInline var setup:  Transformation? = nil
-    @usableFromInline var update: Transformation? = nil
-    @usableFromInline var submit: Transformation? = nil
+    @usableFromInline var setup:  ((ProxyTextField) -> Void)? = nil
+    @usableFromInline var update: ((ProxyTextField) -> Void)? = nil
+    @usableFromInline var submit: ((ProxyTextField) -> Void)? = nil
 
     //=------------------------------------------------------------------------=
     // MARK: Initializers
@@ -57,26 +55,26 @@ public struct DiffableTextField<Style: UIKitDiffableTextStyle>: UIViewRepresenta
     // MARK: Transformations
     //=------------------------------------------------------------------------=
     
-    @inlinable public func setup(_  transformation: @escaping Transformation) -> Self {
+    @inlinable public func setup(_  transformation: @escaping (ProxyTextField) -> Void) -> Self {
         var result = self
         result.setup = transformation
         return result
     }
     
-    @inlinable public func update(_ transformation: @escaping Transformation) -> Self {
+    @inlinable public func update(_ transformation: @escaping (ProxyTextField) -> Void) -> Self {
         var result = self
         result.update = transformation
         return result
     }
     
-    @inlinable public func submit(_ transformation: @escaping Transformation) -> Self {
+    @inlinable public func submit(_ transformation: @escaping (ProxyTextField) -> Void) -> Self {
         var result = self
         result.submit = transformation
         return result
     }
 
     //=------------------------------------------------------------------------=
-    // MARK: Coordinator
+    // MARK: View Life Cycle - Coordinator
     //=------------------------------------------------------------------------=
     
     @inlinable public func makeCoordinator() -> Coordinator {
@@ -84,10 +82,10 @@ public struct DiffableTextField<Style: UIKitDiffableTextStyle>: UIViewRepresenta
     }
     
     //=------------------------------------------------------------------------=
-    // MARK: UIView
+    // MARK: View Life Cycle - UIView
     //=------------------------------------------------------------------------=
     
-    @inlinable public func makeUIView(context: Context) -> UIViewType {
+    @inlinable public func makeUIView(context: Context) -> BasicTextField {
         //=--------------------------------------=
         // MARK: BasicTextField
         //=--------------------------------------=
@@ -109,7 +107,7 @@ public struct DiffableTextField<Style: UIKitDiffableTextStyle>: UIViewRepresenta
     }
     
     //=------------------------------------------------------------------------=
-    // MARK: Update
+    // MARK: View Life Cycle - Update
     //=------------------------------------------------------------------------=
     
     @inlinable public func updateUIView(_ uiView: UIViewType, context: Context) {
