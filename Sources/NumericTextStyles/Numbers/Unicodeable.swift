@@ -13,7 +13,7 @@
 @usableFromInline protocol Unicodeable: RawRepresentable, CustomStringConvertible where RawValue == UInt8 { }
 
 //=----------------------------------------------------------------------------=
-// MARK: Components - Details
+// MARK: Unicodeable - Details
 //=----------------------------------------------------------------------------=
 
 extension Unicodeable {

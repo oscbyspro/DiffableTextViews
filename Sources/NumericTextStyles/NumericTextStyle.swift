@@ -218,7 +218,7 @@ extension NumericTextStyle {
     // MARK: Helpers
     //=------------------------------------------------------------------------=
     
-    /// This method exists because Apple's format styles alway interpret zero as having a positive sign.
+    /// This method exists because Apple's format styles always interpret zero as having a positive sign.
     @inlinable func fix(sign: Sign, for value: Value, in characters: inout String) {
         guard sign == .negative && value == .zero  else { return }
         guard let position = characters.firstIndex(where: region.signs.components.keys.contains) else { return }

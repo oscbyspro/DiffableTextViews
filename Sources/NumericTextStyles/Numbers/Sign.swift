@@ -26,8 +26,6 @@ public enum Sign: UInt8, Unicodeable {
     //*========================================================================*
     
     public enum Style {
-        @usableFromInline typealias Standard = NumberFormatStyleConfiguration.SignDisplayStrategy
-        @usableFromInline typealias Currency = CurrencyFormatStyleConfiguration.SignDisplayStrategy
         
         //=--------------------------------------------------------------------=
         // MARK: Instance
@@ -40,14 +38,14 @@ public enum Sign: UInt8, Unicodeable {
         // MARK: Utilities
         //=--------------------------------------------------------------------=
         
-        @inlinable func standard() -> Standard {
+        @inlinable func standard() -> NumberFormatStyleConfiguration.SignDisplayStrategy {
             switch self {
             case .always:    return .always()
             case .automatic: return .automatic
             }
         }
         
-        @inlinable func currency() -> Currency {
+        @inlinable func currency() -> CurrencyFormatStyleConfiguration.SignDisplayStrategy {
             switch self {
             case .always:    return .always()
             case .automatic: return .automatic
