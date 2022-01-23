@@ -92,11 +92,11 @@
         // MARK: Accessors
         //=------------------------------------------------------------------------=
 
-        @inlinable var character: Snapshot.Characters.Index {
+        @inlinable var character: String.Index {
             snapshot.character
         }
 
-        @inlinable var attribute: Snapshot.Attributes.Index {
+        @inlinable var attribute: Int {
             snapshot.attribute
         }
         

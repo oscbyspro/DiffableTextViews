@@ -56,21 +56,15 @@ public struct DiffableTextField<Style: UIKitDiffableTextStyle>: UIViewRepresenta
     //=------------------------------------------------------------------------=
     
     @inlinable public func setup(_  transformation: @escaping (ProxyTextField) -> Void) -> Self {
-        var result = self
-        result.setup = transformation
-        return result
+        var result = self; result.setup  = transformation; return result
     }
     
     @inlinable public func update(_ transformation: @escaping (ProxyTextField) -> Void) -> Self {
-        var result = self
-        result.update = transformation
-        return result
+        var result = self; result.update = transformation; return result
     }
     
     @inlinable public func submit(_ transformation: @escaping (ProxyTextField) -> Void) -> Self {
-        var result = self
-        result.submit = transformation
-        return result
+        var result = self; result.submit = transformation; return result
     }
 
     //=------------------------------------------------------------------------=
@@ -206,6 +200,7 @@ public struct DiffableTextField<Style: UIKitDiffableTextStyle>: UIViewRepresenta
                 //=------------------------------=
                 Task { @MainActor [value, state] in
                     // async to process special commands first
+                    // as an example see: (option + backspace)
                     self.cache.value = value
                     self.cache.state = state
                     self.push()

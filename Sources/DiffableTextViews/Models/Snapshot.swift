@@ -11,18 +11,16 @@
 
 /// A collection of characters and attributes.
 public struct Snapshot: BidirectionalCollection, RangeReplaceableCollection {
-    public typealias Characters = String
-    public typealias Attributes = Array<Attribute>
     
     //=------------------------------------------------------------------------=
     // MARK: Properties
     //=------------------------------------------------------------------------=
 
-    @usableFromInline var _characters: Characters
-    @inlinable public var  characters: Characters { _characters }
+    @usableFromInline var _characters: String
+    @inlinable public var  characters: String { _characters }
 
-    @usableFromInline var _attributes: Attributes
-    @inlinable public var  attributes: Attributes { _attributes }
+    @usableFromInline var _attributes: [Attribute]
+    @inlinable public var  attributes: [Attribute] { _attributes }
 
     //=------------------------------------------------------------------------=
     // MARK: Initializers
@@ -35,17 +33,17 @@ public struct Snapshot: BidirectionalCollection, RangeReplaceableCollection {
     
     @inlinable public init<S: Sequence>(_ sequence: S, as attribute: Attribute) where S.Element == Character {
         self._characters = String(sequence)
-        self._attributes = Attributes(repeating: attribute, count: _characters.count)
+        self._attributes = [Attribute](repeating: attribute, count: _characters.count)
     }
     
     @inlinable public init<C: Collection>(_ collection: C, as attribute: Attribute) where C.Element == Character {
         self._characters = String(collection)
-        self._attributes = Attributes(repeating: attribute, count: collection.count)
+        self._attributes = [Attribute](repeating: attribute, count: collection.count)
     }
     
     @inlinable public init(_ characters: String, as attribute: Attribute) {
         self._characters = characters
-        self._attributes = Attributes(repeating: attribute, count: characters.count)
+        self._attributes = [Attribute](repeating: attribute, count: characters.count)
     }
     
     //*========================================================================*

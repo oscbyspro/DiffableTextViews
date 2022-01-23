@@ -5,11 +5,7 @@
 //  Created by Oscar Byström Ericsson on 2021-12-24.
 //
 
-/// A count of a number's various components.
-///
-/// - Uses SIMD because:  ¯\\_(ツ)_/¯
-/// - Lanes: x: value, y: integer, z: fraction.
-///
+/// A count of a number's components.
 public struct Count {
 
     //=------------------------------------------------------------------------=
@@ -37,6 +33,13 @@ public struct Count {
     @inlinable var value:    Int { storage.x }
     @inlinable var integer:  Int { storage.y }
     @inlinable var fraction: Int { storage.z }
+}
+
+//=----------------------------------------------------------------------------=
+// MARK: Count - SIMD
+//=----------------------------------------------------------------------------=
+
+extension Count {
 
     //=------------------------------------------------------------------------=
     // MARK: Transformations
