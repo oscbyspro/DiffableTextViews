@@ -8,12 +8,11 @@
 import Foundation
 
 #warning("Clean this up.")
-
 //*============================================================================*
 // MARK: * DiffableTextStyle
 //*============================================================================*
 
-/// A protocol for styles that are capable of as-you-type formatting and value conversion.
+/// A protocol for styles that are capable of as-you-type formatting and conversion.
 public protocol DiffableTextStyle {
 
     //=------------------------------------------------------------------------=
@@ -38,8 +37,10 @@ public protocol DiffableTextStyle {
     //=------------------------------------------------------------------------=
     
     #warning("Maybe it should throw, dunno.")
-    /// Processes the value once whenever it is accessed, downstream and upstream.
+    #warning("Throws requires a default value, in case the first value throws.")
+    /// Transforms the value.
     ///
+    /// - Source: downstream and upstream.
     /// - The default implementation returns immediately.
     ///
     @inlinable func autocorrect(value: inout Value)
@@ -49,6 +50,9 @@ public protocol DiffableTextStyle {
     //=------------------------------------------------------------------------=
     
     /// A snapshot of the value according to the mode.
+    ///
+    /// - Source: upstream.
+    ///
     @inlinable func snapshot(value: Value, mode: Mode) -> Snapshot // required (!)
     
     //=------------------------------------------------------------------------=
@@ -57,6 +61,7 @@ public protocol DiffableTextStyle {
     
     /// Merges the current snapshot with the input.
     ///
+    /// - Source: downstream.
     /// - It may also return a value, for performance reasons, if parsed by this method.
     ///
     @inlinable func merge(snapshot: Snapshot, with input: Input) throws -> Output<Value>
@@ -66,6 +71,9 @@ public protocol DiffableTextStyle {
     //=------------------------------------------------------------------------=
     
     /// The value represented by the snapshot.
+    ///
+    /// - Source: downstream.
+    ///
     @inlinable func parse(snapshot: Snapshot) throws -> Value // required (!)
 }
 

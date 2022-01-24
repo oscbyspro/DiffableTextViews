@@ -70,6 +70,7 @@ extension PatternTextStyle {
     // MARK: Value
     //=------------------------------------------------------------------------=
     
+    #warning("Delegate some of this to autocorrect(value:).")
     @inlinable public func parse(snapshot: Snapshot) throws -> Value {
         var nonvirtuals = snapshot.lazy.filter(\.nonvirtual).makeIterator()
         //=--------------------------------------=
