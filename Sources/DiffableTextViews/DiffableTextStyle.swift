@@ -28,7 +28,7 @@ public protocol DiffableTextStyle {
     /// Updates the locale, if possible.
     ///
     /// - The locale may be provided by the environment.
-    /// - The default implementation returns an unmodified instance.
+    /// - The default implementation returns an unmodified self.
     ///
     @inlinable func locale(_ locale: Locale) -> Self
     
@@ -41,7 +41,7 @@ public protocol DiffableTextStyle {
     /// Transforms the value.
     ///
     /// - Source: downstream and upstream.
-    /// - The default implementation returns immediately.
+    /// - The default implementation has no effect.
     ///
     @inlinable func autocorrect(value: inout Value)
     
@@ -62,7 +62,6 @@ public protocol DiffableTextStyle {
     /// Merges the current snapshot with the input.
     ///
     /// - Source: downstream.
-    /// - It may also return a value, for performance reasons, if parsed by this method.
     ///
     @inlinable func merge(snapshot: Snapshot, with input: Input) throws -> Output<Value>
     

@@ -9,7 +9,7 @@
 // MARK: * Info
 //*============================================================================*
 
-/// An error message that only contains a value in DEBUG mode.
+/// An error message that contains a description in DEBUG mode.
 ///
 /// - Uses conditional compilation.
 ///
@@ -30,7 +30,7 @@ public struct Info: CustomStringConvertible, Error {
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable public init(description: @autoclosure () -> String) {
+    @inlinable @inline(__always) public init(description: @autoclosure () -> String) {
         #if DEBUG
         self.description = description()
         #endif
@@ -40,11 +40,11 @@ public struct Info: CustomStringConvertible, Error {
     // MARK: Initializers - Indirect
     //=------------------------------------------------------------------------=
     
-    @inlinable public init(_ components: () -> [Component]) {
+    @inlinable @inline(__always) public init(_ components: () -> [Component]) {
         self.init(description: components().map(\.content).joined(separator: " "))
     }
     
-    @inlinable public init(_ components: @autoclosure () -> [Component]) {
+    @inlinable @inline(__always) public init(_ components: @autoclosure () -> [Component]) {
         self.init(components)
     }
 
@@ -85,4 +85,3 @@ public struct Info: CustomStringConvertible, Error {
         }
     }
 }
-
