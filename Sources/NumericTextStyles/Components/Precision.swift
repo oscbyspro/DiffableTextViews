@@ -90,7 +90,7 @@ public struct Precision<Value: Precise> {
     @inlinable func capacity(count: Count) throws -> Count {
         let capacity = upper.map(&-, count)
         //=--------------------------------------=
-        // MARK: Validate
+        // MARK: Validate Each Component
         //=--------------------------------------=
         guard capacity.value    >= 0 else { throw excess(.value)    }
         guard capacity.integer  >= 0 else { throw excess(.integer)  }
