@@ -5,9 +5,10 @@
 //  Created by Oscar Byström Ericsson on 2021-10-02.
 //
 
-import Foundation
+import struct Foundation.Locale
 
-#warning("Clean this up.")
+#warning("Rename methods, maybe.")
+
 //*============================================================================*
 // MARK: * DiffableTextStyle
 //*============================================================================*
@@ -16,7 +17,7 @@ import Foundation
 public protocol DiffableTextStyle {
 
     //=------------------------------------------------------------------------=
-    // MARK: Types
+    // MARK: Value
     //=------------------------------------------------------------------------=
     
     associatedtype Value: Equatable
@@ -33,47 +34,20 @@ public protocol DiffableTextStyle {
     @inlinable func locale(_ locale: Locale) -> Self
     
     //=------------------------------------------------------------------------=
-    // MARK: Autocorrect
+    // MARK: Upstream
     //=------------------------------------------------------------------------=
     
-    #warning("Maybe it should throw, dunno.")
-    #warning("Throws requires a default value, in case the first value throws.")
-    /// Transforms the value.
-    ///
-    /// - Source: downstream and upstream.
-    /// - The default implementation has no effect.
-    ///
-    @inlinable func autocorrect(value: inout Value)
+    #warning("Throws or not, unsure.")
+    /// Interprets the upstream value and downstream mode to produce an output.
+    @inlinable func upstream(value: Value, mode: Mode) -> Output<Value>
     
     //=------------------------------------------------------------------------=
-    // MARK: Snapshot
+    // MARK: Downstream
     //=------------------------------------------------------------------------=
     
-    /// A snapshot of the value according to the mode.
-    ///
-    /// - Source: upstream.
-    ///
-    @inlinable func snapshot(value: Value, mode: Mode) -> Snapshot // required (!)
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Merge
-    //=------------------------------------------------------------------------=
-    
-    /// Merges the current snapshot with the input.
-    ///
-    /// - Source: downstream.
-    ///
-    @inlinable func merge(snapshot: Snapshot, with input: Input) throws -> Output<Value>
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Parse
-    //=------------------------------------------------------------------------=
-    
-    /// The value represented by the snapshot.
-    ///
-    /// - Source: downstream.
-    ///
-    @inlinable func parse(snapshot: Snapshot) throws -> Value // required (!)
+    #warning("Throws or not, unsure.")
+    /// Merges the downstream snapshot and downstream input to produce an output.
+    @inlinable func downstream(snapshot: Snapshot, input: Input) -> Output<Value>
 }
 
 //=----------------------------------------------------------------------------=
@@ -87,20 +61,4 @@ public extension DiffableTextStyle {
     //=------------------------------------------------------------------------=
     
     @inlinable func locale(_ locale: Locale) -> Self { self }
-
-    //=------------------------------------------------------------------------=
-    // MARK: Autocorrect
-    //=------------------------------------------------------------------------=
-
-    @inlinable func autocorrect(value: inout Value) { }
-
-    //=------------------------------------------------------------------------=
-    // MARK: Merge
-    //=------------------------------------------------------------------------=
-    
-    @inlinable func merge(snapshot: Snapshot, with input: Input) throws -> Output<Value> {
-        var result = snapshot
-        result.replaceSubrange(input.range, with: input.content)
-        return Output(result)
-    }
 }

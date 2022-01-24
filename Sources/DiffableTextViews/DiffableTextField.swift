@@ -175,19 +175,11 @@ public struct DiffableTextField<Style: UIKitDiffableTextStyle>: UIViewRepresenta
             //=----------------------------------=
             do {
                 //=------------------------------=
-                // MARK: Range, Input
+                // MARK: Range, Input, Output
                 //=------------------------------=
                 let range = cache.state.indices(at: nsRange)
                 let input = Input(content: string, range: range)
-                //=------------------------------=
-                // MARK: Snapshot, Output
-                //=------------------------------=
-                let output = try style.merge(snapshot: cache.snapshot, with: input)
-                //=------------------------------=
-                // MARK: Value, Autocorrect
-                //=------------------------------=
-                var value = try output.value ?? style.parse(snapshot: output.snapshot)
-                style.autocorrect(value: &value)
+                let output = style.downstream(snapshot: cache.snapshot, input: input)
                 //=------------------------------=
                 // MARK: State
                 //=------------------------------=
@@ -197,11 +189,11 @@ public struct DiffableTextField<Style: UIKitDiffableTextStyle>: UIViewRepresenta
                 //=------------------------------=
                 // MARK: Push
                 //=------------------------------=
-                Task { @MainActor [value, state] in
+                Task { @MainActor [state] in
                     // async to process special commands first
                     // as an example see: (option + backspace)
-                    self.cache.value = value
                     self.cache.state = state
+                    self.cache.value = output.value
                     self.push()
                 }
             //=----------------------------------=
@@ -254,33 +246,29 @@ public struct DiffableTextField<Style: UIKitDiffableTextStyle>: UIViewRepresenta
             //=----------------------------------=
             // MARK: Pull
             //=----------------------------------=
-            var value = upstream.value.wrappedValue
+            let remote = upstream.value.wrappedValue
             //=----------------------------------=
             // MARK: Accept Or Discard
             //=----------------------------------=
-            if cache.value != value || cache.mode != downstream.mode {
+            if cache.value != remote || cache.mode != downstream.mode {
                 //=------------------------------=
                 // MARK: Style
                 //=------------------------------=
                 let style = style()
                 //=------------------------------=
-                // MARK: Value, Autocorrect
+                // MARK: Output
                 //=------------------------------=
-                style.autocorrect(value: &value)
-                //=------------------------------=
-                // MARK: Snapshot
-                //=------------------------------=
-                let snapshot = style.snapshot(value: value, mode: downstream.mode)
+                let output = style.upstream(value: remote, mode: downstream.mode)
                 //=------------------------------=
                 // MARK: State
                 //=------------------------------=
                 var state = cache.state
-                state.update(snapshot: snapshot)
+                state.update(snapshot: output.snapshot)
                 //=------------------------------=
                 // MARK: Push
                 //=------------------------------=
-                self.cache.value = value
                 self.cache.state = state
+                self.cache.value = output.value
                 self.push()
             }
         }
