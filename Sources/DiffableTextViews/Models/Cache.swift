@@ -10,7 +10,7 @@
 //*============================================================================*
 
 /// A snapshot of the upstream and downstream state.
-@usableFromInline final class Cache<Value: Equatable, Scheme: DiffableTextViews.Scheme> {
+@usableFromInline final class Cache<Scheme: DiffableTextViews.Scheme, Value: Equatable> {
     @usableFromInline typealias State = DiffableTextViews.State<Scheme>
     @usableFromInline typealias Position = DiffableTextViews.Position<Scheme>
     

@@ -7,6 +7,8 @@
 
 import Foundation
 
+#warning("Clean this up.")
+
 //*============================================================================*
 // MARK: * DiffableTextStyle
 //*============================================================================*
@@ -15,7 +17,7 @@ import Foundation
 public protocol DiffableTextStyle {
 
     //=------------------------------------------------------------------------=
-    // MARK: Value
+    // MARK: Types
     //=------------------------------------------------------------------------=
     
     associatedtype Value: Equatable
@@ -32,22 +34,15 @@ public protocol DiffableTextStyle {
     @inlinable func locale(_ locale: Locale) -> Self
     
     //=------------------------------------------------------------------------=
-    // MARK: Value
+    // MARK: Autocorrect
     //=------------------------------------------------------------------------=
     
-    #warning("Maybe it should be able to throw, dunno.")
+    #warning("Maybe it should throw, dunno.")
     /// Processes the value once whenever it is accessed, downstream and upstream.
     ///
     /// - The default implementation returns immediately.
     ///
     @inlinable func autocorrect(value: inout Value)
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Value - Parse
-    //=------------------------------------------------------------------------=
-    
-    /// The value represented by the snapshot.
-    @inlinable func parse(snapshot: Snapshot) throws -> Value // required (!)
     
     //=------------------------------------------------------------------------=
     // MARK: Snapshot
@@ -57,7 +52,7 @@ public protocol DiffableTextStyle {
     @inlinable func snapshot(value: Value, mode: Mode) -> Snapshot // required (!)
     
     //=------------------------------------------------------------------------=
-    // MARK: Snapshot - Merge
+    // MARK: Merge
     //=------------------------------------------------------------------------=
     
     /// Merges the current snapshot with the input.
@@ -65,6 +60,13 @@ public protocol DiffableTextStyle {
     /// - It may also return a value, for performance reasons, if parsed by this method.
     ///
     @inlinable func merge(snapshot: Snapshot, with input: Input) throws -> Output<Value>
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Parse
+    //=------------------------------------------------------------------------=
+    
+    /// The value represented by the snapshot.
+    @inlinable func parse(snapshot: Snapshot) throws -> Value // required (!)
 }
 
 //=----------------------------------------------------------------------------=
@@ -80,18 +82,18 @@ public extension DiffableTextStyle {
     @inlinable func locale(_ locale: Locale) -> Self { self }
 
     //=------------------------------------------------------------------------=
-    // MARK: Value
+    // MARK: Autocorrect
     //=------------------------------------------------------------------------=
 
     @inlinable func autocorrect(value: inout Value) { }
 
     //=------------------------------------------------------------------------=
-    // MARK: Snapshot
+    // MARK: Merge
     //=------------------------------------------------------------------------=
     
     @inlinable func merge(snapshot: Snapshot, with input: Input) throws -> Output<Value> {
         var result = snapshot
         result.replaceSubrange(input.range, with: input.content)
-        return Output<Value>(result)
+        return Output(result)
     }
 }

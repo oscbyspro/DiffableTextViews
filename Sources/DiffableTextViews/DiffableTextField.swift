@@ -55,16 +55,16 @@ public struct DiffableTextField<Style: UIKitDiffableTextStyle>: UIViewRepresenta
     // MARK: Transformations
     //=------------------------------------------------------------------------=
     
-    @inlinable public func setup(_  transformation: @escaping (ProxyTextField) -> Void) -> Self {
-        var result = self; result.setup  = transformation; return result
+    @inlinable public func setup(_  transform: @escaping (ProxyTextField) -> Void) -> Self {
+        var result = self; result.setup  = transform; return result
     }
     
-    @inlinable public func update(_ transformation: @escaping (ProxyTextField) -> Void) -> Self {
-        var result = self; result.update = transformation; return result
+    @inlinable public func update(_ transform: @escaping (ProxyTextField) -> Void) -> Self {
+        var result = self; result.update = transform; return result
     }
     
-    @inlinable public func submit(_ transformation: @escaping (ProxyTextField) -> Void) -> Self {
-        var result = self; result.submit = transformation; return result
+    @inlinable public func submit(_ transform: @escaping (ProxyTextField) -> Void) -> Self {
+        var result = self; result.submit = transform; return result
     }
 
     //=------------------------------------------------------------------------=
@@ -116,7 +116,7 @@ public struct DiffableTextField<Style: UIKitDiffableTextStyle>: UIViewRepresenta
     
     public final class Coordinator: NSObject, UITextFieldDelegate {
         @usableFromInline typealias Position = DiffableTextViews.Position<UTF16>
-        @usableFromInline typealias Cache = DiffableTextViews.Cache<Value, UTF16>
+        @usableFromInline typealias Cache = DiffableTextViews.Cache<UTF16, Value>
         
         //=--------------------------------------------------------------------=
         // MARK: Properties
@@ -132,17 +132,17 @@ public struct DiffableTextField<Style: UIKitDiffableTextStyle>: UIViewRepresenta
         @usableFromInline let lock  = Lock()
         @usableFromInline let cache = Cache()
         
-        //=------------------------------------------------------------------------=
+        //=--------------------------------------------------------------------=
         // MARK: Accessors
-        //=------------------------------------------------------------------------=
+        //=--------------------------------------------------------------------=
         
         @inlinable func style() -> Style {
             upstream.style().locale(upstream.locale)
         }
 
-        //=----------------------------------------------------------------------------=
+        //=--------------------------------------------------------------------=
         // MARK: Respond To Submit Events
-        //=----------------------------------------------------------------------------=
+        //=--------------------------------------------------------------------=
         
         @inlinable public func textFieldShouldReturn(_ textField: UITextField) -> Bool {
             upstream.submit?(downstream) == nil
@@ -180,7 +180,7 @@ public struct DiffableTextField<Style: UIKitDiffableTextStyle>: UIViewRepresenta
                 let range = cache.state.indices(at: nsRange)
                 let input = Input(content: string, range: range)
                 //=------------------------------=
-                // MARK: Output
+                // MARK: Snapshot, Output
                 //=------------------------------=
                 let output = try style.merge(snapshot: cache.snapshot, with: input)
                 //=------------------------------=
@@ -227,7 +227,7 @@ public struct DiffableTextField<Style: UIKitDiffableTextStyle>: UIViewRepresenta
         @inlinable public func textFieldDidChangeSelection(_ textField: UITextField) {
             guard !lock.isLocked else { return }
             //=----------------------------------=
-            // MARK: Selection
+            // MARK: Positions
             //=----------------------------------=
             let positions = downstream.selection()
             //=----------------------------------=
