@@ -8,6 +8,11 @@
 import DiffableTextViews
 import Foundation
 
+#warning("Autocorrection.")
+//extension NumericTextStyle {
+//    @inlinable public func autocorrect(value: inout Value) { bounds.clamp(&value) }
+//}
+
 //*============================================================================*
 // MARK: * NumericTextStyle
 //*============================================================================*
@@ -62,67 +67,16 @@ public struct NumericTextStyle<Format: NumericTextStyles.Format>: DiffableTextSt
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: NumericTextStyle - UIKit
-//=----------------------------------------------------------------------------=
-
-#if canImport(UIKit)
-
-import UIKit
-
-extension NumericTextStyle: UIKitDiffableTextStyle {
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Keyboard
-    //=------------------------------------------------------------------------=
-    
-    @inlinable public static func setup(diffableTextField: ProxyTextField) {
-        diffableTextField.keyboard(Value.isInteger ? .numberPad : .decimalPad)
-    }
-}
-
-#endif
-
-//=----------------------------------------------------------------------------=
-// MARK: NumericTextStyle - Autocorrect
+// MARK: NumericTextStyle - Upstream
 //=----------------------------------------------------------------------------=
 
 extension NumericTextStyle {
     
     //=------------------------------------------------------------------------=
-    // MARK: Value
-    //=------------------------------------------------------------------------=
-
-    @inlinable public func autocorrect(value: inout Value) {
-        bounds.clamp(&value)
-    }
-}
-
-//=----------------------------------------------------------------------------=
-// MARK: NumericTextStyle - Parse
-//=----------------------------------------------------------------------------=
-
-extension NumericTextStyle {
-
-    //=------------------------------------------------------------------------=
-    // MARK: Snapshot As Value
-    //=------------------------------------------------------------------------=
-
-    @inlinable public func parse(snapshot: Snapshot) throws -> Value {
-        try parser.parse(snapshot.characters)
-    }
-}
-
-//=----------------------------------------------------------------------------=
-// MARK: NumericTextStyle - Snapshot
-//=----------------------------------------------------------------------------=
-
-extension NumericTextStyle {
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Value
+    // MARK: Output
     //=------------------------------------------------------------------------=
     
-    @inlinable public func snapshot(value: Value, mode: Mode) -> Snapshot {
+    @inlinable public func upstream(value: Value, mode: Mode) -> Snapshot {
         switch mode {
         case .editable: return snapshot(characters: format.style(precision: precision.editable()).format(value))
         case .showcase: return snapshot(characters: format.style(precision: precision.showcase()).format(value))
@@ -158,16 +112,16 @@ extension NumericTextStyle {
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: NumericTextStyle - Merge
+// MARK: NumericTextStyle - Downstream
 //=----------------------------------------------------------------------------=
 
 extension NumericTextStyle {
     
     //=------------------------------------------------------------------------=
-    // MARK: Input
+    // MARK: Output
     //=------------------------------------------------------------------------=
     
-    @inlinable public func merge(snapshot: Snapshot, with input: Input) throws -> Output<Value> {
+    @inlinable public func downstream(snapshot: Snapshot, with input: Input) throws -> Output<Value> {
         //=--------------------------------------=
         // MARK: Reader, Proposal
         //=--------------------------------------=
@@ -211,7 +165,7 @@ extension NumericTextStyle {
         //=--------------------------------------=
         // MARK: Snapshot, Output
         //=--------------------------------------=
-        return Output<Value>(self.snapshot(characters: characters), value: value)
+        return Output(value, snapshot: self.snapshot(characters: characters))
     }
     
     //=------------------------------------------------------------------------=
@@ -226,3 +180,24 @@ extension NumericTextStyle {
         characters.replaceSubrange(position...position, with: String(replacement))
     }
 }
+
+//=----------------------------------------------------------------------------=
+// MARK: NumericTextStyle - UIKit
+//=----------------------------------------------------------------------------=
+
+#if canImport(UIKit)
+
+import UIKit
+
+extension NumericTextStyle: UIKitDiffableTextStyle {
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Keyboard
+    //=------------------------------------------------------------------------=
+    
+    @inlinable public static func setup(diffableTextField: ProxyTextField) {
+        diffableTextField.keyboard(Value.isInteger ? .numberPad : .decimalPad)
+    }
+}
+
+#endif

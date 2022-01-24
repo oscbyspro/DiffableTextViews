@@ -51,72 +51,16 @@ Value: RangeReplaceableCollection, Value: Equatable, Value.Element == Character 
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: PatternTextStyle - UIKit
-//=----------------------------------------------------------------------------=
-
-#if canImport(UIKit)
-
-extension PatternTextStyle: UIKitDiffableTextStyle { }
-
-#endif
-
-//=----------------------------------------------------------------------------=
-// MARK: PatternTextStyle - Parse
+// MARK: PatternTextStyle - Upstream
 //=----------------------------------------------------------------------------=
 
 extension PatternTextStyle {
     
     //=------------------------------------------------------------------------=
-    // MARK: Value
+    // MARK: Output
     //=------------------------------------------------------------------------=
     
-    #warning("Delegate some of this to autocorrect(value:).")
-    @inlinable public func parse(snapshot: Snapshot) throws -> Value {
-        var nonvirtuals = snapshot.lazy.filter(\.nonvirtual).makeIterator()
-        //=--------------------------------------=
-        // MARK: Value
-        //=--------------------------------------=
-        var value = Value()
-        //=--------------------------------------=
-        // MARK: Pattern
-        //=--------------------------------------=
-        loop: for character in pattern {
-            //=----------------------------------=
-            // MARK: Placeholder
-            //=----------------------------------=
-            if let predicate = placeholders[character] {
-                guard let real = nonvirtuals.next() else { break loop }
-                guard predicate(real.character) else {
-                    throw Info([.mark(real.character), "is invalid."])
-                }
-                
-                value.append(real.character)
-            }
-        }
-        //=--------------------------------------=
-        // MARK: Capacity
-        //=--------------------------------------=
-        guard nonvirtuals.next() == nil else {
-            throw Info([.mark(snapshot.characters), "exceeded pattern capacity."])
-        }
-        //=--------------------------------------=
-        // MARK: Success
-        //=--------------------------------------=
-        return value
-    }
-}
-
-//=----------------------------------------------------------------------------=
-// MARK: PatternTextStyle - Snapshot
-//=----------------------------------------------------------------------------=
-
-extension PatternTextStyle {
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Value
-    //=------------------------------------------------------------------------=
-    
-    @inlinable public func snapshot(value: Value, mode: Mode = .editable) -> Snapshot {
+    @inlinable public func upstream(value: Value, mode: Mode = .editable) -> Output<Value> {
         var snapshot = Snapshot()
         var position = pattern.startIndex
         var patternIndex = pattern.startIndex
@@ -156,21 +100,22 @@ extension PatternTextStyle {
         //=--------------------------------------=
         // MARK: Done
         //=--------------------------------------=
+        #warning("....")
         return snapshot
     }
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: PatternTextStyle - Merge
+// MARK: PatternTextStyle - Downstream
 //=----------------------------------------------------------------------------=
 
 extension PatternTextStyle {
         
     //=------------------------------------------------------------------------=
-    // MARK: Input
+    // MARK: Output
     //=------------------------------------------------------------------------=
     
-    @inlinable public func merge(snapshot: Snapshot, with input: Input) throws -> Output<Value> {
+    @inlinable public func downstream(snapshot: Snapshot, input: Input) throws -> Output<Value> {
         //=--------------------------------------=
         // MARK: Proposal
         //=--------------------------------------=
@@ -183,6 +128,54 @@ extension PatternTextStyle {
         //=--------------------------------------=
         // MARK: Snapshot, Output
         //=--------------------------------------=
-        return Output<Value>(self.snapshot(value: value), value: value)
+        return Output(value, snapshot: self.snapshot(value: value))
+    }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Parse
+    //=------------------------------------------------------------------------=
+    
+    @inlinable public func parse(snapshot: Snapshot) throws -> Value {
+        var nonvirtuals = snapshot.lazy.filter(\.nonvirtual).makeIterator()
+        //=--------------------------------------=
+        // MARK: Value
+        //=--------------------------------------=
+        var value = Value()
+        //=--------------------------------------=
+        // MARK: Pattern
+        //=--------------------------------------=
+        loop: for character in pattern {
+            //=----------------------------------=
+            // MARK: Placeholder
+            //=----------------------------------=
+            if let predicate = placeholders[character] {
+                guard let real = nonvirtuals.next() else { break loop }
+                guard predicate(real.character) else {
+                    throw Info([.mark(real.character), "is invalid."])
+                }
+                
+                value.append(real.character)
+            }
+        }
+        //=--------------------------------------=
+        // MARK: Capacity
+        //=--------------------------------------=
+        guard nonvirtuals.next() == nil else {
+            throw Info([.mark(snapshot.characters), "exceeded pattern capacity."])
+        }
+        //=--------------------------------------=
+        // MARK: Success
+        //=--------------------------------------=
+        return value
     }
 }
+
+//=----------------------------------------------------------------------------=
+// MARK: PatternTextStyle - UIKit
+//=----------------------------------------------------------------------------=
+
+#if canImport(UIKit)
+
+extension PatternTextStyle: UIKitDiffableTextStyle { }
+
+#endif
