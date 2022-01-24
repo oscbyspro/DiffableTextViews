@@ -32,27 +32,18 @@ public protocol DiffableTextStyle {
     @inlinable func locale(_ locale: Locale) -> Self
     
     //=------------------------------------------------------------------------=
-    // MARK: Process
+    // MARK: Value
     //=------------------------------------------------------------------------=
     
-    /// Processes the value once whenever it is called.
-    ///
-    /// It is used both downstream and upstream so it can be used to constrain the value.
+    #warning("Maybe it should be able to throw, dunno.")
+    /// Processes the value once whenever it is accessed, downstream and upstream.
     ///
     /// - The default implementation returns immediately.
     ///
-    @inlinable func process(value: inout Value)
-    
-    /// Processes the snapshot once whenever it is called.
-    ///
-    /// Can be used to apply transformation after other snapshot and merge functions.
-    ///
-    /// - The default implementation returns immediately.
-    ///
-    @inlinable func process(snapshot: inout Snapshot)
+    @inlinable func autocorrect(value: inout Value)
     
     //=------------------------------------------------------------------------=
-    // MARK: Parse
+    // MARK: Value - Parse
     //=------------------------------------------------------------------------=
     
     /// The value represented by the snapshot.
@@ -66,7 +57,7 @@ public protocol DiffableTextStyle {
     @inlinable func snapshot(value: Value, mode: Mode) -> Snapshot // required (!)
     
     //=------------------------------------------------------------------------=
-    // MARK: Merge
+    // MARK: Snapshot - Merge
     //=------------------------------------------------------------------------=
     
     /// Merges the current snapshot with the input.
@@ -89,15 +80,13 @@ public extension DiffableTextStyle {
     @inlinable func locale(_ locale: Locale) -> Self { self }
 
     //=------------------------------------------------------------------------=
-    // MARK: Process
+    // MARK: Value
     //=------------------------------------------------------------------------=
 
-    @inlinable func process(value: inout Value) { }
-
-    @inlinable func process(snapshot: inout Snapshot) { }
+    @inlinable func autocorrect(value: inout Value) { }
 
     //=------------------------------------------------------------------------=
-    // MARK: Merge
+    // MARK: Snapshot
     //=------------------------------------------------------------------------=
     
     @inlinable func merge(snapshot: Snapshot, with input: Input) throws -> Output<Value> {

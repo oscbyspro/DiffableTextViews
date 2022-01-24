@@ -83,7 +83,7 @@ extension NumericTextStyle: UIKitDiffableTextStyle {
 #endif
 
 //=----------------------------------------------------------------------------=
-// MARK: NumericTextStyle - Process
+// MARK: NumericTextStyle - Autocorrect
 //=----------------------------------------------------------------------------=
 
 extension NumericTextStyle {
@@ -92,7 +92,7 @@ extension NumericTextStyle {
     // MARK: Value
     //=------------------------------------------------------------------------=
 
-    @inlinable public func process(value: inout Value) {
+    @inlinable public func autocorrect(value: inout Value) {
         bounds.clamp(&value)
     }
 }

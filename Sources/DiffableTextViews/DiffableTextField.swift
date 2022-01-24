@@ -182,13 +182,12 @@ public struct DiffableTextField<Style: UIKitDiffableTextStyle>: UIViewRepresenta
                 //=------------------------------=
                 // MARK: Output
                 //=------------------------------=
-                var output = try style.merge(snapshot: cache.snapshot, with: input)
-                style.process(snapshot: &output.snapshot)
+                let output = try style.merge(snapshot: cache.snapshot, with: input)
                 //=------------------------------=
-                // MARK: Value
+                // MARK: Value, Autocorrect
                 //=------------------------------=
                 var value = try output.value ?? style.parse(snapshot: output.snapshot)
-                style.process(value: &value)
+                style.autocorrect(value: &value)
                 //=------------------------------=
                 // MARK: State
                 //=------------------------------=
@@ -253,7 +252,7 @@ public struct DiffableTextField<Style: UIKitDiffableTextStyle>: UIViewRepresenta
         
         @inlinable func synchronize() {
             //=----------------------------------=
-            // MARK: Value
+            // MARK: Pull
             //=----------------------------------=
             var value = upstream.value.wrappedValue
             //=----------------------------------=
@@ -265,14 +264,13 @@ public struct DiffableTextField<Style: UIKitDiffableTextStyle>: UIViewRepresenta
                 //=------------------------------=
                 let style = style()
                 //=------------------------------=
-                // MARK: Value
+                // MARK: Value, Autocorrect
                 //=------------------------------=
-                style.process(value: &value)
+                style.autocorrect(value: &value)
                 //=------------------------------=
                 // MARK: Snapshot
                 //=------------------------------=
-                var snapshot = style.snapshot(value: value, mode: downstream.mode)
-                style.process(snapshot: &snapshot)
+                let snapshot = style.snapshot(value: value, mode: downstream.mode)
                 //=------------------------------=
                 // MARK: State
                 //=------------------------------=
