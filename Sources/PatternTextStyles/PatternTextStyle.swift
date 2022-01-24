@@ -12,6 +12,7 @@ import Support
 // MARK: * PatternTextStyle
 //*============================================================================*
 
+#warning("Determine a predictable behavior for invalid values.")
 public struct PatternTextStyle<Pattern, Value>: DiffableTextStyle where
 Pattern: Collection, Pattern.Element == Character,
 Value: RangeReplaceableCollection, Value: Equatable, Value.Element == Character {
@@ -60,6 +61,7 @@ extension PatternTextStyle {
     // MARK: Output
     //=------------------------------------------------------------------------=
     
+    #warning("This method should also perform validation.")
     @inlinable public func upstream(value: Value, mode: Mode = .editable) -> Output<Value> {
         var snapshot = Snapshot()
         var position = pattern.startIndex
@@ -73,7 +75,8 @@ extension PatternTextStyle {
             //=----------------------------------=
             // MARK: Placeholder
             //=----------------------------------=
-            if placeholders[character] != nil {
+            if let _ = placeholders[character] {
+                #warning("Validation.")
                 if let real = valueIterator.next() {
                     snapshot += Snapshot(pattern[position..<patternIndex], as: .phantom)
                     snapshot.append(Symbol(real, as: .content))

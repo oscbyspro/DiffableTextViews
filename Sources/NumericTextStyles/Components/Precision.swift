@@ -61,6 +61,13 @@ public struct Precision<Value: Precise> {
     //=------------------------------------------------------------------------=
     // MARK: Configurations
     //=------------------------------------------------------------------------=
+        
+    @inlinable func make(mode: Mode) -> Configuration {
+        switch mode {
+        case .showcase: return showcase()
+        case .editable: return editable()
+        }
+    }
     
     @inlinable func showcase() -> Configuration {
         switch style {
@@ -82,7 +89,7 @@ public struct Precision<Value: Precise> {
          integerLimits: max(Namespace.min.integer,  count.integer)  ... count.integer,
         fractionLimits: max(Namespace.min.fraction, count.fraction) ... count.fraction)
     }
-
+    
     //=------------------------------------------------------------------------=
     // MARK: Capacity
     //=------------------------------------------------------------------------=

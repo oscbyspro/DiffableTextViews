@@ -76,11 +76,17 @@ extension NumericTextStyle {
     // MARK: Output
     //=------------------------------------------------------------------------=
     
+    #warning("Should clamp value to bounds and round it to precision.")
     @inlinable public func upstream(value: Value, mode: Mode) -> Snapshot {
-        switch mode {
-        case .editable: return snapshot(characters: format.style(precision: precision.editable()).format(value))
-        case .showcase: return snapshot(characters: format.style(precision: precision.showcase()).format(value))
-        }
+        //=--------------------------------------=
+        // MARK: Helpers
+        //=--------------------------------------=
+        let precision = precision.make(mode: mode)
+        let style = format.style(precision: precision)
+        //=--------------------------------------=
+        // MARK: Characters, Output
+        //=--------------------------------------=
+        return snapshot(characters: style.format(value))
     }
     
     //=------------------------------------------------------------------------=

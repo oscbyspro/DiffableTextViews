@@ -114,6 +114,7 @@ public struct DiffableTextField<Style: UIKitDiffableTextStyle>: UIViewRepresenta
     // MARK: * Coordinator
     //*========================================================================*
     
+    #warning("It should be considered that the style can change.")
     public final class Coordinator: NSObject, UITextFieldDelegate {
         @usableFromInline typealias Position = DiffableTextViews.Position<UTF16>
         @usableFromInline typealias Cache = DiffableTextViews.Cache<UTF16, Value>
