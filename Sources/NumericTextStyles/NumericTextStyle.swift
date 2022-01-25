@@ -76,7 +76,8 @@ extension NumericTextStyle {
     // MARK: Output
     //=------------------------------------------------------------------------=
     
-    #warning("Should clamp value to bounds and round it to precision.")
+    #warning("Mode == .showcase: should only format the value.")
+    #warning("Mode == .editable: should clamp value to bounds and round it to precision.")
     @inlinable public func upstream(value: Value, mode: Mode) -> Snapshot {
         //=--------------------------------------=
         // MARK: Helpers
@@ -127,7 +128,7 @@ extension NumericTextStyle {
     // MARK: Output
     //=------------------------------------------------------------------------=
     
-    @inlinable public func downstream(snapshot: Snapshot, with input: Input) throws -> Output<Value> {
+    @inlinable public func downstream(snapshot: Snapshot, input: Input) throws -> Output<Value> {
         //=--------------------------------------=
         // MARK: Reader, Proposal
         //=--------------------------------------=

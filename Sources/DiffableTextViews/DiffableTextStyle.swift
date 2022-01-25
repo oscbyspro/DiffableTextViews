@@ -37,17 +37,23 @@ public protocol DiffableTextStyle {
     // MARK: Upstream
     //=------------------------------------------------------------------------=
     
-    #warning("Throws or not, unsure.")
     /// Interprets the upstream value and downstream mode to produce an output.
+    ///
+    /// - View is inactive == should only format value.
+    /// - View is active == should autocorrect and format value.
+    ///
     @inlinable func upstream(value: Value, mode: Mode) -> Output<Value>
     
     //=------------------------------------------------------------------------=
     // MARK: Downstream
     //=------------------------------------------------------------------------=
     
-    #warning("Throws or not, unsure.")
-    /// Merges the downstream snapshot and downstream input to produce an output.
-    @inlinable func downstream(snapshot: Snapshot, input: Input) -> Output<Value>
+    /// Merges the a snapshot and user input to produce an output.
+    ///
+    /// - Thrown errors result in input cancellation.
+    /// - Thrown error descriptions are printed in DEBUG mode.
+    ///
+    @inlinable func downstream(snapshot: Snapshot, input: Input) throws -> Output<Value>
 }
 
 //=----------------------------------------------------------------------------=

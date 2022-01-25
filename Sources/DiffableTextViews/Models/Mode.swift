@@ -15,10 +15,11 @@
     //=------------------------------------------------------------------------=
     // MARK: Instances
     //=------------------------------------------------------------------------=
+
     
     /// Represents the state of a view that is idle.
     case showcase
     
-    /// Represents the state of a view that the user is currently editing.
+    /// Represents the state of a view that is active.
     case editable
 }
