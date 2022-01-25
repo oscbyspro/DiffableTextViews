@@ -67,28 +67,10 @@ public struct NumericTextStyle<Format: NumericTextStyles.Format>: DiffableTextSt
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: NumericTextStyle - Upstream
+// MARK: NumericTextStyle - Snapshot
 //=----------------------------------------------------------------------------=
 
 extension NumericTextStyle {
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Output
-    //=------------------------------------------------------------------------=
-    
-    #warning("Mode == .showcase: should only format the value.")
-    #warning("Mode == .editable: should clamp value to bounds and round it to precision.")
-    @inlinable public func upstream(value: Value, mode: Mode) -> Snapshot {
-        //=--------------------------------------=
-        // MARK: Helpers
-        //=--------------------------------------=
-        let precision = precision.make(mode: mode)
-        let style = format.style(precision: precision)
-        //=--------------------------------------=
-        // MARK: Characters, Output
-        //=--------------------------------------=
-        return snapshot(characters: style.format(value))
-    }
     
     //=------------------------------------------------------------------------=
     // MARK: Characters
@@ -119,6 +101,62 @@ extension NumericTextStyle {
 }
 
 //=----------------------------------------------------------------------------=
+// MARK: NumericTextStyle - Upstream
+//=----------------------------------------------------------------------------=
+
+extension NumericTextStyle {
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Output
+    //=------------------------------------------------------------------------=
+    
+    #warning("Mode == .showcase: should only format the value.")
+    #warning("Mode == .editable: should clamp value to bounds and round it to precision.")
+    @inlinable public func upstream(value: Value, mode: Mode) -> Snapshot {
+        //=--------------------------------------=
+        // MARK: Style
+        //=--------------------------------------=
+        let precision = precision.make(mode: mode)
+        let style = format.style(precision: precision)
+        //=--------------------------------------=
+        // MARK: Characters, Output
+        //=--------------------------------------=
+        return snapshot(characters: style.format(value))
+    }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Helpers
+    //=------------------------------------------------------------------------=
+    
+    #warning("WIP.")
+    @inlinable func showcase(value: Value) -> Snapshot {
+        //=--------------------------------------=
+        // MARK: Style
+        //=--------------------------------------=
+        let precision = precision.showcase()
+        let style = format.style(precision: precision)
+        //=--------------------------------------=
+        // MARK: Characters, Output
+        //=--------------------------------------=
+        return snapshot(characters: style.format(value))
+    }
+    
+    #warning("WIP.")
+    @inlinable func editable(value: Value) -> Snapshot {
+        var value = value
+        //=--------------------------------------=
+        // MARK: Style
+        //=--------------------------------------=
+        let precision = precision.editable()
+        let style = format.style(precision: precision)
+        //=--------------------------------------=
+        // MARK: Characters, Output
+        //=--------------------------------------=
+        return snapshot(characters: style.format(value))
+    }
+}
+
+//=----------------------------------------------------------------------------=
 // MARK: NumericTextStyle - Downstream
 //=----------------------------------------------------------------------------=
 
@@ -130,11 +168,13 @@ extension NumericTextStyle {
     
     @inlinable public func downstream(snapshot: Snapshot, input: Input) throws -> Output<Value> {
         //=--------------------------------------=
-        // MARK: Reader, Proposal
+        // MARK: Reader
         //=--------------------------------------=
         var reader = Reader(input.content)
         reader.consumeSignInput(region: region)
-
+        //=--------------------------------------=
+        // MARK: Proposal
+        //=--------------------------------------=
         var proposal = snapshot
         proposal.replaceSubrange(input.range, with: reader.content)
         //=--------------------------------------=

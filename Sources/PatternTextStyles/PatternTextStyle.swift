@@ -61,8 +61,10 @@ extension PatternTextStyle {
     // MARK: Output
     //=------------------------------------------------------------------------=
     
+    #error("Continue.")
     #warning("This method should also perform validation.")
     @inlinable public func upstream(value: Value, mode: Mode = .editable) -> Output<Value> {
+        var content = Value()
         var snapshot = Snapshot()
         var position = pattern.startIndex
         var patternIndex = pattern.startIndex
@@ -75,21 +77,28 @@ extension PatternTextStyle {
             //=----------------------------------=
             // MARK: Placeholder
             //=----------------------------------=
-            if let _ = placeholders[character] {
-                #warning("Validation.")
-                if let real = valueIterator.next() {
+            if let predicate = placeholders[character] {
+                //=------------------------------=
+                // MARK: Next
+                //=------------------------------=
+                if let next = valueIterator.next(), predicate(next) {
+                    content.append(next)
                     snapshot += Snapshot(pattern[position..<patternIndex], as: .phantom)
-                    snapshot.append(Symbol(real, as: .content))
+                    snapshot.append(Symbol(next, as: .content))
                     pattern.formIndex(after: &patternIndex)
                     position = patternIndex
-                    continue body
+                //=------------------------------=
+                // MARK: None
+                //=------------------------------=
                 } else if value.isEmpty {
                     snapshot += Snapshot(pattern[position..<patternIndex], as: .phantom)
                     snapshot.append(.anchor)
                     position = patternIndex
-                }
-                
-                break body
+                    break body
+                //=------------------------------=
+                // MARK: Last
+                //=------------------------------=
+                } else { break body }
             }
             //=----------------------------------=
             // MARK: Pattern
@@ -100,11 +109,17 @@ extension PatternTextStyle {
         // MARK: Remainders
         //=--------------------------------------=
         visible ? snapshot += Snapshot(pattern[position...], as: .phantom) : ()
+        
+        if mode == .showcase {
+            while let next = valueIterator.next() {
+                snapshot.
+            }
+        }
+        
         //=--------------------------------------=
         // MARK: Done
         //=--------------------------------------=
-        #warning("....")
-        return snapshot
+        return Output(content, snapshot: snapshot)
     }
 }
 
@@ -135,9 +150,10 @@ extension PatternTextStyle {
     }
     
     //=------------------------------------------------------------------------=
-    // MARK: Parse
+    // MARK: Helpers
     //=------------------------------------------------------------------------=
     
+    #warning("...")
     @inlinable public func parse(snapshot: Snapshot) throws -> Value {
         var nonvirtuals = snapshot.lazy.filter(\.nonvirtual).makeIterator()
         //=--------------------------------------=
