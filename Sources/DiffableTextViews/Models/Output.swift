@@ -20,14 +20,14 @@ public struct Output<Value> {
     // MARK: Properties
     //=------------------------------------------------------------------------=
     
-    @usableFromInline var value: Value
-    @usableFromInline var snapshot: Snapshot
+    public var value: Value
+    public var snapshot: Snapshot
     
     //=------------------------------------------------------------------------=
     // MARK: Initializers
     //=------------------------------------------------------------------------=
 
-    @inlinable public init(_ value: Value, snapshot: Snapshot) {
+    @inlinable public init(value: Value, snapshot: Snapshot) {
         self.value = value
         self.snapshot = snapshot
     }

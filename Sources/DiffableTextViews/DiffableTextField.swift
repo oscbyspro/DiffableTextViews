@@ -13,6 +13,7 @@ import SwiftUI
 // MARK: * DiffableTextField
 //*============================================================================*
 
+#warning("Consider performance, once done.")
 public struct DiffableTextField<Style: UIKitDiffableTextStyle>: UIViewRepresentable {
     public typealias Value = Style.Value
 
@@ -180,7 +181,7 @@ public struct DiffableTextField<Style: UIKitDiffableTextStyle>: UIViewRepresenta
                 //=------------------------------=
                 let range = cache.state.indices(at: nsRange)
                 let input = Input(content: string, range: range)
-                let output = style.downstream(snapshot: cache.snapshot, input: input)
+                let output = try style.downstream(snapshot: cache.snapshot, input: input)
                 //=------------------------------=
                 // MARK: State
                 //=------------------------------=

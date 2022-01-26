@@ -61,12 +61,13 @@ extension PatternTextStyle {
     // MARK: Output
     //=------------------------------------------------------------------------=
     
-    #error("Continue.")
-    #warning("This method should also perform validation.")
     @inlinable public func upstream(value: Value, mode: Mode = .editable) -> Output<Value> {
         var content = Value()
         var snapshot = Snapshot()
-        var position = pattern.startIndex
+        //=--------------------------------------=
+        // MARK: Indices, Iterators
+        //=--------------------------------------=
+        var queueIndex = pattern.startIndex
         var patternIndex = pattern.startIndex
         var valueIterator = value.makeIterator()
         //=--------------------------------------=
@@ -82,18 +83,19 @@ extension PatternTextStyle {
                 // MARK: Next
                 //=------------------------------=
                 if let next = valueIterator.next(), predicate(next) {
+                    #warning("Maybe DEBUG print on failure.")
                     content.append(next)
-                    snapshot += Snapshot(pattern[position..<patternIndex], as: .phantom)
+                    snapshot += Snapshot(pattern[queueIndex..<patternIndex], as: .phantom)
                     snapshot.append(Symbol(next, as: .content))
                     pattern.formIndex(after: &patternIndex)
-                    position = patternIndex
+                    queueIndex = patternIndex
                 //=------------------------------=
                 // MARK: None
                 //=------------------------------=
                 } else if value.isEmpty {
-                    snapshot += Snapshot(pattern[position..<patternIndex], as: .phantom)
+                    snapshot += Snapshot(pattern[queueIndex..<patternIndex], as: .phantom)
                     snapshot.append(.anchor)
-                    position = patternIndex
+                    queueIndex = patternIndex
                     break body
                 //=------------------------------=
                 // MARK: Last
@@ -108,18 +110,11 @@ extension PatternTextStyle {
         //=--------------------------------------=
         // MARK: Remainders
         //=--------------------------------------=
-        visible ? snapshot += Snapshot(pattern[position...], as: .phantom) : ()
-        
-        if mode == .showcase {
-            while let next = valueIterator.next() {
-                snapshot.
-            }
-        }
-        
+        visible ? snapshot += Snapshot(pattern[queueIndex...], as: .phantom) : ()
         //=--------------------------------------=
         // MARK: Done
         //=--------------------------------------=
-        return Output(content, snapshot: snapshot)
+        return Output(value: content, snapshot: snapshot)
     }
 }
 
@@ -127,6 +122,7 @@ extension PatternTextStyle {
 // MARK: PatternTextStyle - Downstream
 //=----------------------------------------------------------------------------=
 
+#error("Continue.")
 extension PatternTextStyle {
         
     //=------------------------------------------------------------------------=
@@ -146,7 +142,7 @@ extension PatternTextStyle {
         //=--------------------------------------=
         // MARK: Snapshot, Output
         //=--------------------------------------=
-        return Output(value, snapshot: self.snapshot(value: value))
+        return Output(value: value, snapshot: self.snapshot(value: value))
     }
     
     //=------------------------------------------------------------------------=
