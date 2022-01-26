@@ -65,6 +65,9 @@ extension PatternTextStyle {
     @inlinable public func upstream(value: Value, mode: Mode) -> Output<Value> {
         var content = Value()
         var snapshot = Snapshot()
+        //=--------------------------------------=
+        // MARK: Indices, Iterators
+        //=--------------------------------------=
         var queueIndex = pattern.startIndex
         var patternIndex = pattern.startIndex
         var valueIterator = value.makeIterator()
@@ -98,11 +101,12 @@ extension PatternTextStyle {
                 // MARK: Last
                 //=------------------------------=
                 } else { break body }
-            }
             //=----------------------------------=
             // MARK: Pattern
             //=----------------------------------=
-            pattern.formIndex(after: &patternIndex)
+            } else {
+                pattern.formIndex(after: &patternIndex)
+            }
         }
         //=--------------------------------------=
         // MARK: Remainders
