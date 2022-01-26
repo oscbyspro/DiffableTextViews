@@ -8,11 +8,6 @@
 import DiffableTextViews
 import Foundation
 
-#warning("Autocorrection.")
-//extension NumericTextStyle {
-//    @inlinable public func autocorrect(value: inout Value) { bounds.clamp(&value) }
-//}
-
 //*============================================================================*
 // MARK: * NumericTextStyle
 //*============================================================================*
@@ -110,48 +105,32 @@ extension NumericTextStyle {
     // MARK: Output
     //=------------------------------------------------------------------------=
     
-    #warning("FIXME.")
     @inlinable public func upstream(value: Value, mode: Mode) -> Output<Value> {
+        var autocorrectable = value
         //=--------------------------------------=
-        // MARK: Style
+        // MARK: Autocorrect
         //=--------------------------------------=
-        let precision = precision.make(mode: mode)
-        let style = format.style(precision: precision)
+        bounds.clamp(&autocorrectable)
+        #warning("The value should also be rounded according to precision.")
+        //=--------------------------------------=
+        // MARK: Style, Characters
+        //=--------------------------------------=
+        let characters = style(mode: mode).format(autocorrectable)
         //=--------------------------------------=
         // MARK: Characters, Output
         //=--------------------------------------=
-        return Output(value: value, snapshot: snapshot(characters: style.format(value)))
+        return Output(value: autocorrectable, snapshot: snapshot(characters: characters))
     }
     
     //=------------------------------------------------------------------------=
     // MARK: Helpers
     //=------------------------------------------------------------------------=
     
-    #warning("WIP.")
-    @inlinable func showcase(value: Value) -> Snapshot {
-        //=--------------------------------------=
-        // MARK: Style
-        //=--------------------------------------=
-        let precision = precision.showcase()
-        let style = format.style(precision: precision)
-        //=--------------------------------------=
-        // MARK: Characters, Output
-        //=--------------------------------------=
-        return snapshot(characters: style.format(value))
-    }
-    
-    #warning("WIP.")
-    @inlinable func editable(value: Value) -> Snapshot {
-        var value = value
-        //=--------------------------------------=
-        // MARK: Style
-        //=--------------------------------------=
-        let precision = precision.editable()
-        let style = format.style(precision: precision)
-        //=--------------------------------------=
-        // MARK: Characters, Output
-        //=--------------------------------------=
-        return snapshot(characters: style.format(value))
+    @inlinable func style(mode: Mode) -> Format {
+        switch mode {
+        case .showcase: return format.style(precision: precision.showcase())
+        case .editable: return format.style(precision: precision.editable())
+        }
     }
 }
 
