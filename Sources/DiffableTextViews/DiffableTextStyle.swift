@@ -8,6 +8,14 @@
 import struct Foundation.Locale
 
 #warning("Rename methods, maybe.")
+#warning("Maybe: showcase(Value) -> Snapshot, editable(Value) -> (Value, Snapshot)")
+/*
+ 
+ func showcase(value: Value) -> Snapshot
+ func editable(value: Value) -> Output<Value>
+ func merge(snapshot: Snapshot, input: Input) -> Output<Value>
+ 
+ */
 
 //*============================================================================*
 // MARK: * DiffableTextStyle

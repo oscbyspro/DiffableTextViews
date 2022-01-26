@@ -12,7 +12,8 @@ import Support
 // MARK: * PatternTextStyle
 //*============================================================================*
 
-#warning("Determine a predictable behavior for invalid values.")
+#warning("Untested.")
+#warning("Undocumented.")
 public struct PatternTextStyle<Pattern, Value>: DiffableTextStyle where
 Pattern: Collection, Pattern.Element == Character,
 Value: RangeReplaceableCollection, Value: Equatable, Value.Element == Character {
@@ -61,12 +62,9 @@ extension PatternTextStyle {
     // MARK: Output
     //=------------------------------------------------------------------------=
     
-    @inlinable public func upstream(value: Value, mode: Mode = .editable) -> Output<Value> {
+    @inlinable public func upstream(value: Value, mode: Mode) -> Output<Value> {
         var content = Value()
         var snapshot = Snapshot()
-        //=--------------------------------------=
-        // MARK: Indices, Iterators
-        //=--------------------------------------=
         var queueIndex = pattern.startIndex
         var patternIndex = pattern.startIndex
         var valueIterator = value.makeIterator()
@@ -83,7 +81,6 @@ extension PatternTextStyle {
                 // MARK: Next
                 //=------------------------------=
                 if let next = valueIterator.next(), predicate(next) {
-                    #warning("Maybe DEBUG print on failure.")
                     content.append(next)
                     snapshot += Snapshot(pattern[queueIndex..<patternIndex], as: .phantom)
                     snapshot.append(Symbol(next, as: .content))
@@ -122,7 +119,6 @@ extension PatternTextStyle {
 // MARK: PatternTextStyle - Downstream
 //=----------------------------------------------------------------------------=
 
-#error("Continue.")
 extension PatternTextStyle {
         
     //=------------------------------------------------------------------------=
@@ -140,16 +136,15 @@ extension PatternTextStyle {
         //=--------------------------------------=
         let value = try parse(snapshot: proposal)
         //=--------------------------------------=
-        // MARK: Snapshot, Output
+        // MARK: Output
         //=--------------------------------------=
-        return Output(value: value, snapshot: self.snapshot(value: value))
+        return upstream(value: value, mode: .editable)
     }
     
     //=------------------------------------------------------------------------=
     // MARK: Helpers
     //=------------------------------------------------------------------------=
     
-    #warning("...")
     @inlinable public func parse(snapshot: Snapshot) throws -> Value {
         var nonvirtuals = snapshot.lazy.filter(\.nonvirtual).makeIterator()
         //=--------------------------------------=

@@ -110,9 +110,8 @@ extension NumericTextStyle {
     // MARK: Output
     //=------------------------------------------------------------------------=
     
-    #warning("Mode == .showcase: should only format the value.")
-    #warning("Mode == .editable: should clamp value to bounds and round it to precision.")
-    @inlinable public func upstream(value: Value, mode: Mode) -> Snapshot {
+    #warning("FIXME.")
+    @inlinable public func upstream(value: Value, mode: Mode) -> Output<Value> {
         //=--------------------------------------=
         // MARK: Style
         //=--------------------------------------=
@@ -121,7 +120,7 @@ extension NumericTextStyle {
         //=--------------------------------------=
         // MARK: Characters, Output
         //=--------------------------------------=
-        return snapshot(characters: style.format(value))
+        return Output(value: value, snapshot: snapshot(characters: style.format(value)))
     }
     
     //=------------------------------------------------------------------------=
@@ -212,7 +211,7 @@ extension NumericTextStyle {
         //=--------------------------------------=
         // MARK: Snapshot, Output
         //=--------------------------------------=
-        return Output(value, snapshot: self.snapshot(characters: characters))
+        return Output(value: value, snapshot: self.snapshot(characters: characters))
     }
     
     //=------------------------------------------------------------------------=
