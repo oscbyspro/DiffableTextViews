@@ -13,10 +13,9 @@ import SwiftUI
 // MARK: * DiffableTextField
 //*============================================================================*
 
-#warning("Consider performance, once done.")
 public struct DiffableTextField<Style: UIKitDiffableTextStyle>: UIViewRepresentable {
     public typealias Value = Style.Value
-
+    
     //=------------------------------------------------------------------------=
     // MARK: Environment
     //=------------------------------------------------------------------------=
@@ -244,6 +243,8 @@ public struct DiffableTextField<Style: UIKitDiffableTextStyle>: UIViewRepresenta
         // MARK: Synchronize
         //=--------------------------------------------------------------------=
         
+        #warning("FIXME.")
+        #warning("Should styles be equatable?")
         @inlinable func synchronize() {
             //=----------------------------------=
             // MARK: Pull

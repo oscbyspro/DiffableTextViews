@@ -7,8 +7,6 @@
 
 import struct Foundation.Locale
 
-#warning("Rename methods, maybe.")
-
 //*============================================================================*
 // MARK: * DiffableTextStyle
 //*============================================================================*
@@ -28,7 +26,7 @@ public protocol DiffableTextStyle {
     
     /// Updates the locale, if possible.
     ///
-    /// - The locale may be provided by the environment.
+    /// - The locale may be overriden by the environment.
     /// - The default implementation returns an unmodified self.
     ///
     @inlinable func locale(_ locale: Locale) -> Self
@@ -37,23 +35,22 @@ public protocol DiffableTextStyle {
     // MARK: Upstream
     //=------------------------------------------------------------------------=
     
-    /// Interprets the upstream value and downstream mode to produce an output.
-    ///
-    /// - View is inactive == should only format value.
-    /// - View is active == should autocorrect and format value.
-    ///
-    @inlinable func upstream(value: Value, mode: Mode) -> Output<Value>
+    /// Transforms the value into formatted text when the view is idle.
+    @inlinable func showcase(value: Value) -> String
+    
+    /// Transforms the value into new output when the view is active.
+    @inlinable func editable(value: Value) -> Output<Value>
     
     //=------------------------------------------------------------------------=
     // MARK: Downstream
     //=------------------------------------------------------------------------=
     
-    /// Merges the a snapshot and user input to produce an output.
+    /// Merges the snapshot and input to produce an output.
     ///
     /// - Thrown errors result in input cancellation.
     /// - Thrown error descriptions are printed in DEBUG mode.
     ///
-    @inlinable func downstream(snapshot: Snapshot, input: Input) throws -> Output<Value>
+    @inlinable func merge(snapshot: Snapshot, input: Input) throws -> Output<Value>
 }
 
 //=----------------------------------------------------------------------------=

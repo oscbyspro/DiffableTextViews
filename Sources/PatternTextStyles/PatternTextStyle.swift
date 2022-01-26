@@ -17,14 +17,13 @@ import Support
 public struct PatternTextStyle<Pattern, Value>: DiffableTextStyle where
 Pattern: Collection, Pattern.Element == Character,
 Value: RangeReplaceableCollection, Value: Equatable, Value.Element == Character {
-    @usableFromInline typealias Predicate = (Character) -> Bool
     
     //=------------------------------------------------------------------------=
     // MARK: Properties
     //=------------------------------------------------------------------------=
     
     @usableFromInline let pattern: Pattern
-    @usableFromInline var placeholders: [Character: Predicate]
+    @usableFromInline var placeholders: [Character: (Character) -> Bool]
     @usableFromInline var visible: Bool
     
     //=------------------------------------------------------------------------=
@@ -46,8 +45,7 @@ Value: RangeReplaceableCollection, Value: Equatable, Value.Element == Character 
         var result = self; result.visible = false; return result
     }
 
-    @inlinable public func placeholder(_ character: Character,
-        where predicate: @escaping (Character) -> Bool = { _ in true }) -> Self {
+    @inlinable public func placeholder(_ character: Character, where predicate: @escaping (Character) -> Bool = { _ in true }) -> Self {
         var result = self; result.placeholders[character] = predicate; return result
     }
 }
@@ -136,13 +134,9 @@ extension PatternTextStyle {
         var proposal = snapshot
         proposal.replaceSubrange(input.range, with: input.content)
         //=--------------------------------------=
-        // MARK: Value
+        // MARK: Value, Output
         //=--------------------------------------=
-        let value = try parse(snapshot: proposal)
-        //=--------------------------------------=
-        // MARK: Output
-        //=--------------------------------------=
-        return upstream(value: value, mode: .editable)
+        return try upstream(value: parse(snapshot: proposal), mode: .editable)
     }
     
     //=------------------------------------------------------------------------=
@@ -163,12 +157,17 @@ extension PatternTextStyle {
             // MARK: Placeholder
             //=----------------------------------=
             if let predicate = placeholders[character] {
-                guard let real = nonvirtuals.next() else { break loop }
-                guard predicate(real.character) else {
-                    throw Info([.mark(real.character), "is invalid."])
+                guard let next = nonvirtuals.next() else { break loop }
+                //=------------------------------=
+                // MARK: Predicate
+                //=------------------------------=
+                guard predicate(next.character) else {
+                    throw Info([.mark(next.character), "is invalid."])
                 }
-                
-                value.append(real.character)
+                //=------------------------------=
+                // MARK: Insertion
+                //=------------------------------=
+                value.append(next.character)
             }
         }
         //=--------------------------------------=
