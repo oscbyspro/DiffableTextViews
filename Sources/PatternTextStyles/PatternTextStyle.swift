@@ -17,13 +17,14 @@ import Support
 public struct PatternTextStyle<Pattern, Value>: DiffableTextStyle where
 Pattern: Collection, Pattern.Element == Character,
 Value: RangeReplaceableCollection, Value: Equatable, Value.Element == Character {
+    @usableFromInline typealias Predicate = (Character) -> Bool
     
     //=------------------------------------------------------------------------=
     // MARK: Properties
     //=------------------------------------------------------------------------=
     
     @usableFromInline let pattern: Pattern
-    @usableFromInline var placeholders: [Character: (Character) -> Bool]
+    @usableFromInline var placeholders: [Character: Predicate]
     @usableFromInline var visible: Bool
     
     //=------------------------------------------------------------------------=
@@ -45,8 +46,9 @@ Value: RangeReplaceableCollection, Value: Equatable, Value.Element == Character 
         var result = self; result.visible = false; return result
     }
 
-    @inlinable public func placeholder(_ character: Character, where predicate: @escaping (Character) -> Bool = { _ in true }) -> Self {
-        var result = self; result.placeholders[character] = predicate; return result
+    @inlinable public func placeholder(_ placeholder: Character,
+        where predicate: @escaping (Character) -> Bool = { _ in true }) -> Self {
+        var result = self; result.placeholders[placeholder] = predicate; return result
     }
 }
 
@@ -57,10 +59,20 @@ Value: RangeReplaceableCollection, Value: Equatable, Value.Element == Character 
 extension PatternTextStyle {
     
     //=------------------------------------------------------------------------=
-    // MARK: Output
+    // MARK: Showcase
     //=------------------------------------------------------------------------=
     
-    @inlinable public func upstream(value: Value, mode: Mode) -> Output<Value> {
+    #error("...")
+    @inlinable public func showcase(value: Value) -> String {
+        fatalError()
+    }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Editable
+    //=------------------------------------------------------------------------=
+    
+    #error("...")
+    @inlinable public func editable(value: Value) -> Output<Value> {
         var content = Value()
         var snapshot = Snapshot()
         //=--------------------------------------=
@@ -127,7 +139,7 @@ extension PatternTextStyle {
     // MARK: Output
     //=------------------------------------------------------------------------=
     
-    @inlinable public func downstream(snapshot: Snapshot, input: Input) throws -> Output<Value> {
+    @inlinable public func merge(snapshot: Snapshot, input: Input) throws -> Output<Value> {
         //=--------------------------------------=
         // MARK: Proposal
         //=--------------------------------------=
@@ -136,7 +148,7 @@ extension PatternTextStyle {
         //=--------------------------------------=
         // MARK: Value, Output
         //=--------------------------------------=
-        return try upstream(value: parse(snapshot: proposal), mode: .editable)
+        return try editable(value: parse(snapshot: proposal))
     }
     
     //=------------------------------------------------------------------------=

@@ -114,7 +114,7 @@ public struct DiffableTextField<Style: UIKitDiffableTextStyle>: UIViewRepresenta
     // MARK: * Coordinator
     //*========================================================================*
     
-    #warning("It should be considered that the style can change.")
+    #error("Handle: active/idle modes.")
     public final class Coordinator: NSObject, UITextFieldDelegate {
         @usableFromInline typealias Position = DiffableTextViews.Position<UTF16>
         @usableFromInline typealias Cache = DiffableTextViews.Cache<UTF16, Value>
@@ -180,7 +180,7 @@ public struct DiffableTextField<Style: UIKitDiffableTextStyle>: UIViewRepresenta
                 //=------------------------------=
                 let range = cache.state.indices(at: nsRange)
                 let input = Input(content: string, range: range)
-                let output = try style.downstream(snapshot: cache.snapshot, input: input)
+                let output = try style.merge(snapshot: cache.snapshot, input: input)
                 //=------------------------------=
                 // MARK: State
                 //=------------------------------=
