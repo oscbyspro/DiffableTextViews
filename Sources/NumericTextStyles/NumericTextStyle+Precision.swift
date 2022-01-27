@@ -24,22 +24,22 @@ extension NumericTextStyle {
 // MARK: DiffableTextStyle - Precision - Value
 //=----------------------------------------------------------------------------=
 
-public extension NumericTextStyle {
+public extension NumericTextStyle where Value: PreciseInteger {
     
     //=------------------------------------------------------------------------=
     // MARK: Length
     //=------------------------------------------------------------------------=
     
-    @inlinable @inline(__always) func precision(_ value: Int) -> Self {
-        precision(value...value)
+    @inlinable @inline(__always) func precision(_ integer: Int) -> Self {
+        precision(integer...integer)
     }
 
     //=------------------------------------------------------------------------=
     // MARK: Limits
     //=------------------------------------------------------------------------=
     
-    @inlinable @inline(__always) func precision<R: RangeExpression>(_ value: R) -> Self where R.Bound == Int {
-        precision(Precision(value))
+    @inlinable @inline(__always) func precision<R: RangeExpression>(_ integer: R) -> Self where R.Bound == Int {
+        precision(Precision(integer: integer, fraction: Precision.limits(\.fraction)))
     }
 }
 

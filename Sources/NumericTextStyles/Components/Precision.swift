@@ -5,26 +5,20 @@
 //  Created by Oscar Byström Ericsson on 2022-01-17.
 //
 
-import DiffableTextViews
-import Foundation
-import Support
+import enum Foundation.NumberFormatStyleConfiguration
+import struct Support.Info
 
 //*============================================================================*
 // MARK: * Precision
 //*============================================================================*
 
-#error("Continue with this.")
-#warning("Maybe remove significant digits option...")
 public struct Precision<Value: Precise> {
     @usableFromInline typealias Namespace = _Precision
-    @usableFromInline typealias Style = _Precision.Style
-    @usableFromInline typealias Configuration = NumberFormatStyleConfiguration.Precision
     
     //=------------------------------------------------------------------------=
     // MARK: Properties
     //=------------------------------------------------------------------------=
     
-    @usableFromInline let style: Style
     @usableFromInline var lower: Count
     @usableFromInline var upper: Count
     
@@ -34,29 +28,17 @@ public struct Precision<Value: Precise> {
 
     /// Creates an instance with style set to: .value.
     @inlinable init() {
-        self.init(Self.limits(\.value))
+        self.init(integer: Self.limits(\.integer), fraction: Self.limits(\.fraction))
     }
 
-    /// Creates an instance with style set to: .value.
-    @inlinable init<R: RangeExpression>(_ value: R)  where R.Bound == Int {
-        let value = Namespace.interpret(value, in: Self.limits(\.value))
-        //=--------------------------------------=
-        // MARK: Set
-        //=--------------------------------------=
-        self.style = .value
-        self.lower = Count(value: value.lowerBound, integer:   Namespace.min.integer, fraction:   Namespace.min.fraction)
-        self.upper = Count(value: value.upperBound, integer: Value.precision.integer, fraction: Value.precision.fraction)
-    }
-    
     /// Creates an instance with style set to: .separate.
     @inlinable init<R0: RangeExpression, R1: RangeExpression>(integer: R0,
         fraction: R1) where R0.Bound == Int, R1.Bound == Int {
-        let integer  = Namespace.interpret(integer,  in: Self.limits( \.integer))
+        let integer  = Namespace.interpret(integer,  in: Self.limits(\.integer ))
         let fraction = Namespace.interpret(fraction, in: Self.limits(\.fraction))
         //=--------------------------------------=
         // MARK: set
         //=--------------------------------------=
-        self.style = .separate
         self.lower = Count(value:   Namespace.min.value, integer: integer.lowerBound, fraction: fraction.lowerBound)
         self.upper = Count(value: Value.precision.value, integer: integer.upperBound, fraction: fraction.upperBound)
     }
@@ -65,20 +47,19 @@ public struct Precision<Value: Precise> {
     // MARK: Configurations
     //=------------------------------------------------------------------------=
     
-    #warning("This was changed. Make sure it works as it should.")
-    @inlinable func showcase() -> Configuration {
+    @inlinable func showcase() -> NumberFormatStyleConfiguration.Precision {
         .integerAndFractionLength(
          integerLimits: lower.integer  ... Int.max,
         fractionLimits: lower.fraction ... Int.max)
     }
 
-    @inlinable func editable() -> Configuration {
+    @inlinable func editable() -> NumberFormatStyleConfiguration.Precision {
         .integerAndFractionLength(
          integerLimits: Namespace.min.integer  ... upper.integer,
         fractionLimits: Namespace.min.fraction ... upper.fraction)
     }
     
-    @inlinable func editable(count: Count) -> Configuration {
+    @inlinable func editable(count: Count) -> NumberFormatStyleConfiguration.Precision {
         .integerAndFractionLength(
          integerLimits: max(Namespace.min.integer,  count.integer)  ... count.integer,
         fractionLimits: max(Namespace.min.fraction, count.fraction) ... count.fraction)
@@ -146,14 +127,5 @@ extension Precision {
         in limits: ClosedRange<Int>) -> ClosedRange<Int> where R.Bound == Int {
         let range: Range<Int> = expression.relative(to: limits.lowerBound ..< limits.upperBound + 1)
         return Swift.max(limits.lowerBound, range.lowerBound) ... Swift.min(range.upperBound - 1, limits.upperBound)
-    }
-    
-    //*========================================================================*
-    // MARK: * Style
-    //*========================================================================*
-    
-    @usableFromInline enum Style {
-        case value
-        case separate
     }
 }
