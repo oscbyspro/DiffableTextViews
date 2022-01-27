@@ -11,6 +11,7 @@ import Foundation
 // MARK: * Format
 //*============================================================================*
 
+#warning("Cleanup subprotocol names.")
 public protocol Format: ParseableFormatStyle where FormatInput: NumericTextStyles.Value, FormatOutput == String {
     typealias Precision = NumberFormatStyleConfiguration.Precision
     typealias Separator = NumberFormatStyleConfiguration.DecimalSeparatorDisplayStrategy
@@ -37,14 +38,14 @@ extension Format {
     //=------------------------------------------------------------------------=
     
     @inlinable func style(precision: Precision, separator: Separator = .automatic, sign: Sign.Style = .automatic) -> Self {
-        self.precision(precision).decimalSeparator(strategy: separator).sign(style: sign)
+        self.precision(precision).decimalSeparator(strategy: separator).sign(style: sign).rounded(rule: .towardZero)
     }
     
     //=------------------------------------------------------------------------=
     // MARK: Utilities
     //=------------------------------------------------------------------------=
     
-    @inlinable func autocorrect(_ value: inout FormatInput) throws {
+    @inlinable func autocorrect(_ value: inout Value) throws {
         value = try parseStrategy.parse(format(value))
     }
 }

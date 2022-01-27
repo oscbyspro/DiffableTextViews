@@ -114,7 +114,7 @@ extension NumericTextStyle {
     //=------------------------------------------------------------------------=
     
     @inlinable public func editable(value: Value) -> Output<Value> {
-        let style = format.style(precision: precision.editable()).rounded(rule: .towardZero)
+        let style = format.style(precision: precision.editable())
         //=--------------------------------------=
         // MARK: Value, Autocorrect
         //=--------------------------------------=
