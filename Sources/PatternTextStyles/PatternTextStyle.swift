@@ -74,7 +74,6 @@ extension PatternTextStyle {
         //=--------------------------------------=
         loop: while patternIndex != pattern.endIndex {
             let character = pattern[patternIndex]
-            pattern.formIndex(after: &patternIndex)
             //=--------------------------------------=
             // MARK: Placeholder
             //=--------------------------------------=
@@ -88,11 +87,13 @@ extension PatternTextStyle {
             } else {
                 characters.append(character)
             }
+
+            pattern.formIndex(after: &patternIndex)
         }
         //=--------------------------------------=
         // MARK: Remainders - Pattern
         //=--------------------------------------=
-        characters.append(contentsOf: pattern[patternIndex...])
+        visible ? characters.append(contentsOf: pattern[patternIndex...]) : ()
         //=--------------------------------------=
         // MARK: Remainders - Value
         //=--------------------------------------=
