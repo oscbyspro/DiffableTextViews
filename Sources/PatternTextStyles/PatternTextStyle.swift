@@ -79,6 +79,9 @@ extension PatternTextStyle {
                 guard valueIndex != value.endIndex else { break loop }
                 let real = value[valueIndex]; guard predicate(real) else { break loop }
                 characters.append(real); value.formIndex(after: &valueIndex)
+            //=--------------------------------------=
+            // MARK: Pattern
+            //=--------------------------------------=
             } else {
                 characters.append(character)
             }
@@ -125,10 +128,10 @@ extension PatternTextStyle {
                 //=------------------------------=
                 // MARK: Next
                 //=------------------------------=
-                if let next = valueIterator.next(), predicate(next) {
-                    content.append(next)
+                if let real = valueIterator.next(), predicate(real) {
+                    content.append(real)
                     snapshot += Snapshot(pattern[queueIndex..<patternIndex], as: .phantom)
-                    snapshot.append(Symbol(next, as: .content))
+                    snapshot.append(Symbol(real, as: .content))
                     pattern.formIndex(after: &patternIndex)
                     queueIndex = patternIndex
                 //=------------------------------=
@@ -151,7 +154,7 @@ extension PatternTextStyle {
             }
         }
         //=--------------------------------------=
-        // MARK: Remainders
+        // MARK: Remainders - Pattern
         //=--------------------------------------=
         visible ? snapshot += Snapshot(pattern[queueIndex...], as: .phantom) : ()
         //=--------------------------------------=
