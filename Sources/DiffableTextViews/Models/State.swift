@@ -108,6 +108,15 @@ extension State {
         self.selection = lowerBound ..< upperBound
         self.autocorrect(intent: (nil, nil))
     }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Snapshot / Value
+    //=------------------------------------------------------------------------=
+    
+    @inlinable func update(output: Output<Value>) {
+        self.value = output.value
+        self.update(snapshot: output.snapshot)
+    }
 }
 
 //=----------------------------------------------------------------------------=

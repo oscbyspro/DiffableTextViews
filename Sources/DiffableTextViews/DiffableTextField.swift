@@ -171,6 +171,8 @@ public struct DiffableTextField<Style: UIKitDiffableTextStyle>: UIViewRepresenta
         
         @inlinable public func textField(_ textField: UITextField, shouldChangeCharactersIn nsRange: NSRange, replacementString string: String) -> Bool {
             let style = style()
+            let range = state.indices(at: nsRange)
+            let input = Input(content: string, range: range)
             //=----------------------------------=
             // MARK: Attempt
             //=----------------------------------=
@@ -178,8 +180,7 @@ public struct DiffableTextField<Style: UIKitDiffableTextStyle>: UIViewRepresenta
                 //=------------------------------=
                 // MARK: Values
                 //=------------------------------=
-                let range = state.indices(at: nsRange)
-                let input = Input(content: string, range: range)
+                let selection = range.upperBound ..< range.upperBound
                 let output = try style.merge(snapshot: state.snapshot, input: input)
                 //=------------------------------=
                 // MARK: Push
@@ -187,9 +188,8 @@ public struct DiffableTextField<Style: UIKitDiffableTextStyle>: UIViewRepresenta
                 Task { @MainActor in
                     // async to process special commands first
                     // as an example see: (option + backspace)
-                    self.state.value = output.value
-                    self.state.selection = range.upperBound ..< range.upperBound
-                    self.state.update(snapshot: output.snapshot)
+                    self.state.selection = selection
+                    self.state.update(output: output)
                     self.push()
                 }
             //=----------------------------------=
@@ -234,7 +234,7 @@ public struct DiffableTextField<Style: UIKitDiffableTextStyle>: UIViewRepresenta
         // MARK: Synchronize
         //=--------------------------------------------------------------------=
         
-        #warning("FIXME.")
+        #warning("Check unchanged, maybe.")
         @inlinable func synchronize() {
             let style = style()
             let value = upstream.value.wrappedValue
@@ -243,24 +243,20 @@ public struct DiffableTextField<Style: UIKitDiffableTextStyle>: UIViewRepresenta
             //=------------------------------=
             if downstream.active {
                 //=--------------------------=
-                // MARK: Values
-                //=--------------------------=
-                let output = style.editable(value: value)
-                //=--------------------------=
                 // MARK: Push
-                //=-------------------------b-=
-                self.state.value = output.value
-                self.state.update(snapshot: output.snapshot)
+                //=--------------------------=
+                self.state.update(output: style.editable(value: value))
                 self.push()
             //=------------------------------=
             // MARK: Showcase
             //=------------------------------=
             } else {
                 //=--------------------------=
-                // MARK: Push
+                // MARK: Display Value Text
                 //=--------------------------=
-                self.state.value = value
-                self.push(text: style.showcase(value: value))
+                lock.perform {
+                    self.downstream.update(text: style.showcase(value: value))
+                }
             }
         }
         
@@ -283,21 +279,6 @@ public struct DiffableTextField<Style: UIKitDiffableTextStyle>: UIViewRepresenta
             //=----------------------------------=
             if  self.upstream.value.wrappedValue != self.state.value {
                 self.upstream.value.wrappedValue  = self.state.value
-            }
-        }
-        
-        //=--------------------------------------------------------------------=
-        // MARK: Push - Showcase
-        //=--------------------------------------------------------------------=
-        
-        @inlinable func push(text: String) {
-            //=----------------------------------=
-            // MARK: Downstream
-            //=----------------------------------=
-            lock.perform {
-                // changes to UITextField's text and selection both call
-                // the delegate's method: textFieldDidChangeSelection(_:)
-                self.downstream.update(text: text)
             }
         }
     }
