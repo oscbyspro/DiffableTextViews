@@ -244,34 +244,32 @@ public struct DiffableTextField<Style: UIKitDiffableTextStyle>: UIViewRepresenta
         //=--------------------------------------------------------------------=
         
         #warning("FIXME.")
-        #warning("Should styles be equatable?")
         @inlinable func synchronize() {
-            //=----------------------------------=
-            // MARK: Pull
-            //=----------------------------------=
-            let remote = upstream.value.wrappedValue
-            //=----------------------------------=
-            // MARK: Accept Or Discard
-            //=----------------------------------=
-            if cache.value != remote || cache.mode != downstream.mode {
-                //=------------------------------=
-                // MARK: Style
-                //=------------------------------=
-                let style = style()
-                //=------------------------------=
-                // MARK: Output
-                //=------------------------------=
-                let output = style.upstream(value: remote, mode: downstream.mode)
-                //=------------------------------=
-                // MARK: State
-                //=------------------------------=
-                var state = cache.state
-                state.update(snapshot: output.snapshot)
-                //=------------------------------=
+            let style = style()
+            let value = upstream.value.wrappedValue
+            //=------------------------------=
+            // MARK: Editable
+            //=------------------------------=
+            if downstream.mode == .showcase {
+                //=--------------------------=
                 // MARK: Push
-                //=------------------------------=
-                self.cache.state = state
+                //=--------------------------=
+                self.cache.value = value
+                self.cache.state = State()
+                self.push(text: style.showcase(value: value))
+            //=------------------------------=
+            // MARK: Showcase
+            //=------------------------------=
+            } else {
+                //=--------------------------=
+                // MARK: Values
+                //=--------------------------=
+                let output = style.editable(value: value)
+                //=--------------------------=
+                // MARK: Push
+                //=-------------------------b-=
                 self.cache.value = output.value
+                self.cache.state.update(snapshot: output.snapshot)
                 self.push()
             }
         }
@@ -289,13 +287,27 @@ public struct DiffableTextField<Style: UIKitDiffableTextStyle>: UIViewRepresenta
                 // the delegate's method: textFieldDidChangeSelection(_:)
                 self.downstream.update(text: cache.snapshot.characters)
                 self.downstream.update(selection: cache.state.positions)
-                self.cache.mode = downstream.mode
             }
             //=----------------------------------=
             // MARK: Upstream
             //=----------------------------------=
             if  self.upstream.value.wrappedValue != self.cache.value {
                 self.upstream.value.wrappedValue  = self.cache.value
+            }
+        }
+        
+        //=--------------------------------------------------------------------=
+        // MARK: Synchronize - Push - Text
+        //=--------------------------------------------------------------------=
+        
+        @inlinable func push(text: String) {
+            //=----------------------------------=
+            // MARK: Downstream
+            //=----------------------------------=
+            lock.perform {
+                // changes to UITextField's text and selection both call
+                // the delegate's method: textFieldDidChangeSelection(_:)
+                self.downstream.update(text: text)
             }
         }
     }

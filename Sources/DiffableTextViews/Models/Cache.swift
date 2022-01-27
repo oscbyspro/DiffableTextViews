@@ -21,17 +21,7 @@
     //=------------------------------------------------------------------------=
     
     @usableFromInline var value: Value!
-    @usableFromInline var state: State
-    @usableFromInline var  mode:  Mode
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Initializers
-    //=------------------------------------------------------------------------=
-    
-    @inlinable init() {
-        self.state = State()
-        self.mode = .showcase
-    }
+    @usableFromInline var state: State = State()
     
     //=------------------------------------------------------------------------=
     // MARK: Accessors

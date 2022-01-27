@@ -69,12 +69,13 @@ extension ProxyTextField {
     
     /// - Complexity: High.
     @inlinable func update(text: String) {
-        wrapped.text = text
+        if wrapped.text != text { wrapped.text = text }
     }
         
     /// - Complexity: High.
     @inlinable func update(selection: Range<Position>) {
-        wrapped.selectedTextRange = positions(in: selection)
+        let positions = positions(in: selection)
+        if wrapped.selectedTextRange != positions { wrapped.selectedTextRange = positions }
     }
     
     //=------------------------------------------------------------------------=

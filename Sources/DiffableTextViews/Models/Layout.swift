@@ -31,8 +31,14 @@
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
+    @inlinable init() {
+        self.snapshot = Snapshot()
+        let startIndex = Index(snapshot.startIndex, at: .start)
+        self.range = startIndex ..< startIndex
+    }
+    
     /// - Complexity: O(1) with the scheme set to UTF16 (maybe UTF8). O(n) otherwise.
-    @inlinable init(_ snapshot: Snapshot = Snapshot()) {
+    @inlinable init(_ snapshot: Snapshot) {
         self.snapshot = snapshot
         self.range = Index(snapshot.startIndex, at: .start) ..<
         Index(snapshot .endIndex, at: .end(of: snapshot.characters)) // UTF16 is O(1)
