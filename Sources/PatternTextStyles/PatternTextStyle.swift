@@ -70,17 +70,17 @@ extension PatternTextStyle {
         var valueIndex = value.startIndex
         var patternIndex = pattern.startIndex
         //=--------------------------------------=
-        // MARK: Body
+        // MARK: Loop
         //=--------------------------------------=
-        body: while patternIndex != pattern.endIndex {
+        loop: while patternIndex != pattern.endIndex {
             let character = pattern[patternIndex]
             pattern.formIndex(after: &patternIndex)
             //=--------------------------------------=
             // MARK: Placeholder
             //=--------------------------------------=
             if let predicate = placeholders[character] {
-                guard valueIndex != value.endIndex else { break body }
-                let real = value[valueIndex]; guard predicate(real) else { break body }
+                guard valueIndex != value.endIndex else { break loop }
+                let real = value[valueIndex]; guard predicate(real) else { break loop }
                 characters.append(real); value.formIndex(after: &valueIndex)
             //=--------------------------------------=
             // MARK: Pattern
@@ -120,9 +120,9 @@ extension PatternTextStyle {
         var patternIndex = pattern.startIndex
         var valueIterator = value.makeIterator()
         //=--------------------------------------=
-        // MARK: Body
+        // MARK: Loop
         //=--------------------------------------=
-        body: while patternIndex != pattern.endIndex {
+        loop: while patternIndex != pattern.endIndex {
             let character = pattern[patternIndex]
             //=----------------------------------=
             // MARK: Placeholder
@@ -144,11 +144,11 @@ extension PatternTextStyle {
                     snapshot += Snapshot(pattern[queueIndex..<patternIndex], as: .phantom)
                     snapshot.append(.anchor)
                     queueIndex = patternIndex
-                    break body
+                    break loop
                 //=------------------------------=
                 // MARK: Last
                 //=------------------------------=
-                } else { break body }
+                } else { break loop }
             //=----------------------------------=
             // MARK: Pattern
             //=----------------------------------=
@@ -186,14 +186,14 @@ extension PatternTextStyle {
         var value = Value()
         var nonvirtuals = proposal.lazy.filter(\.nonvirtual).makeIterator()
         //=--------------------------------------=
-        // MARK: Body
+        // MARK: Loop
         //=--------------------------------------=
-        body: for character in pattern {
+        loop: for character in pattern {
             //=----------------------------------=
             // MARK: Placeholder
             //=----------------------------------=
             if let predicate = placeholders[character] {
-                guard let next = nonvirtuals.next() else { break body }
+                guard let next = nonvirtuals.next() else { break loop }
                 //=------------------------------=
                 // MARK: Predicate
                 //=------------------------------=
