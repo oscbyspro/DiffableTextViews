@@ -49,7 +49,7 @@ public struct Info: CustomStringConvertible, Error {
     }
     
     //=------------------------------------------------------------------------=
-    // MARK: Utilities
+    // MARK: Print
     //=------------------------------------------------------------------------=
     
     @inlinable @inline(__always) public static func print(_ description: @autoclosure () -> String) {
@@ -57,6 +57,10 @@ public struct Info: CustomStringConvertible, Error {
         Swift.print(description())
         #endif
     }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Print - Indirect
+    //=------------------------------------------------------------------------=
     
     @inlinable @inline(__always) public static func print(_ components: () -> [Component]) {
         Self.print(components().description)
