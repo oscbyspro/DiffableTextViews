@@ -62,16 +62,48 @@ extension PatternTextStyle {
     // MARK: Showcase
     //=------------------------------------------------------------------------=
     
-    #error("...")
     @inlinable public func showcase(value: Value) -> String {
-        fatalError()
+        var characters = String()
+        var valueIndex = value.startIndex
+        var patternIndex = pattern.startIndex
+        //=--------------------------------------=
+        // MARK: Body
+        //=--------------------------------------=
+        loop: while patternIndex != pattern.endIndex {
+            let character = pattern[patternIndex]
+            pattern.formIndex(after: &patternIndex)
+            //=--------------------------------------=
+            // MARK: Placeholder
+            //=--------------------------------------=
+            if let predicate = placeholders[character] {
+                guard valueIndex != value.endIndex else { break loop }
+                let real = value[valueIndex]; guard predicate(real) else { break loop }
+                characters.append(real); value.formIndex(after: &valueIndex)
+            } else {
+                characters.append(character)
+            }
+        }
+        //=--------------------------------------=
+        // MARK: Remainders - Pattern
+        //=--------------------------------------=
+        characters.append(contentsOf: pattern[patternIndex...])
+        //=--------------------------------------=
+        // MARK: Remainders - Value
+        //=--------------------------------------=
+        if valueIndex != value.endIndex {
+            characters.append("|")
+            characters.append(contentsOf: value[valueIndex...])
+        }
+        //=--------------------------------------=
+        // MARK: Done
+        //=--------------------------------------=
+        return characters
     }
     
     //=------------------------------------------------------------------------=
     // MARK: Editable
     //=------------------------------------------------------------------------=
     
-    #error("...")
     @inlinable public func editable(value: Value) -> Output<Value> {
         var content = Value()
         var snapshot = Snapshot()
@@ -84,7 +116,7 @@ extension PatternTextStyle {
         //=--------------------------------------=
         // MARK: Body
         //=--------------------------------------=
-        body: while patternIndex != pattern.endIndex {
+        loop: while patternIndex != pattern.endIndex {
             let character = pattern[patternIndex]
             //=----------------------------------=
             // MARK: Placeholder
@@ -106,11 +138,11 @@ extension PatternTextStyle {
                     snapshot += Snapshot(pattern[queueIndex..<patternIndex], as: .phantom)
                     snapshot.append(.anchor)
                     queueIndex = patternIndex
-                    break body
+                    break loop
                 //=------------------------------=
                 // MARK: Last
                 //=------------------------------=
-                } else { break body }
+                } else { break loop }
             //=----------------------------------=
             // MARK: Pattern
             //=----------------------------------=
@@ -140,27 +172,16 @@ extension PatternTextStyle {
     //=------------------------------------------------------------------------=
     
     @inlinable public func merge(snapshot: Snapshot, input: Input) throws -> Output<Value> {
+        var value = Value()
         //=--------------------------------------=
         // MARK: Proposal
         //=--------------------------------------=
         var proposal = snapshot
         proposal.replaceSubrange(input.range, with: input.content)
         //=--------------------------------------=
-        // MARK: Value, Output
+        // MARK: Attempt
         //=--------------------------------------=
-        return try editable(value: parse(snapshot: proposal))
-    }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Helpers
-    //=------------------------------------------------------------------------=
-    
-    @inlinable public func parse(snapshot: Snapshot) throws -> Value {
-        var nonvirtuals = snapshot.lazy.filter(\.nonvirtual).makeIterator()
-        //=--------------------------------------=
-        // MARK: Value
-        //=--------------------------------------=
-        var value = Value()
+        var nonvirtuals = proposal.lazy.filter(\.nonvirtual).makeIterator()
         //=--------------------------------------=
         // MARK: Pattern
         //=--------------------------------------=
@@ -189,9 +210,9 @@ extension PatternTextStyle {
             throw Info([.mark(snapshot.characters), "exceeded pattern capacity."])
         }
         //=--------------------------------------=
-        // MARK: Success
+        // MARK: Output
         //=--------------------------------------=
-        return value
+        return editable(value: value)
     }
 }
 

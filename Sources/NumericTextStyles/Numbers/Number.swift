@@ -46,12 +46,12 @@ import Support
         //=--------------------------------------=
         // MARK: Integer, Fraction
         //=--------------------------------------=
-        let integer = self.integer.count
+        let integer  = self.integer .count
         let fraction = self.fraction.count
         //=--------------------------------------=
         // MARK: Value
         //=--------------------------------------=
-        let upper = integer - self.integer.prefixZerosCount()
+        let upper = integer  - self.integer .prefixZerosCount()
         var lower = fraction - self.fraction.suffixZerosCount()
         //=--------------------------------------=
         // MARK: Value - Integer Is Zero
