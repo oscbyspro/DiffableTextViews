@@ -47,7 +47,8 @@ public struct Precision<Value: Precise> {
     }
     
     /// Creates an instance with style set to: .separate.
-    @inlinable init<R0: RangeExpression, R1: RangeExpression>(integer: R0, fraction: R1) where R0.Bound == Int, R1.Bound == Int {
+    @inlinable init<R0: RangeExpression, R1: RangeExpression>(integer: R0,
+        fraction: R1) where R0.Bound == Int, R1.Bound == Int {
         let integer  = Namespace.interpret(integer,  in: Self.limits( \.integer))
         let fraction = Namespace.interpret(fraction, in: Self.limits(\.fraction))
         //=--------------------------------------=
@@ -62,19 +63,12 @@ public struct Precision<Value: Precise> {
     // MARK: Configurations
     //=------------------------------------------------------------------------=
         
-    @inlinable func make(mode: Mode) -> Configuration {
-        switch mode {
-        case .showcase: return showcase()
-        case .editable: return editable()
-        }
-    }
-    
     @inlinable func showcase() -> Configuration {
         switch style {
         case .separate: return .integerAndFractionLength(
-             integerLimits: lower.integer  ... upper.integer,
-            fractionLimits: lower.fraction ... upper.fraction)
-        case .value: return .significantDigits(lower.value ... upper.value)
+             integerLimits: lower.integer  ... Int.max,
+            fractionLimits: lower.fraction ... Int.max)
+        case .value: return .significantDigits(lower.value ... Int.max)
         }
     }
 
