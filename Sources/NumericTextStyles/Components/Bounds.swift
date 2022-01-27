@@ -31,15 +31,7 @@ public struct Bounds<Value: Boundable> {
     }
     
     //=------------------------------------------------------------------------=
-    // MARK: Utilities
-    //=------------------------------------------------------------------------=
-    
-    @inlinable func clamp(_ value: inout Value) {
-        value = Swift.max(min, Swift.min(value, max))
-    }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Validations
+    // MARK: Validation
     //=------------------------------------------------------------------------=
     
     @inlinable func validate(value: Value) throws {
@@ -57,6 +49,14 @@ public struct Bounds<Value: Boundable> {
         // MARK: Failure
         //=--------------------------------------=
         throw Info([.mark(sign), "is not in", .mark(self)])
+    }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Utilities
+    //=------------------------------------------------------------------------=
+    
+    @inlinable func clamp(_ value: inout Value) {
+        value = Swift.max(min, Swift.min(value, max))
     }
 }
 

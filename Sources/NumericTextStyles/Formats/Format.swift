@@ -22,6 +22,7 @@ public protocol Format: ParseableFormatStyle where FormatInput: NumericTextStyle
     @inlinable func precision(_ precision: Precision) -> Self
     @inlinable func decimalSeparator(strategy: Separator) -> Self
     @inlinable func sign(style: Sign.Style) -> Self
+    @inlinable func rounded(rule: FloatingPointRoundingRule) -> Self
 }
 
 //=----------------------------------------------------------------------------=
@@ -37,6 +38,14 @@ extension Format {
     
     @inlinable func style(precision: Precision, separator: Separator = .automatic, sign: Sign.Style = .automatic) -> Self {
         self.precision(precision).decimalSeparator(strategy: separator).sign(style: sign)
+    }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Utilities
+    //=------------------------------------------------------------------------=
+    
+    @inlinable func parse(_ value: FormatOutput) throws -> FormatInput {
+        try parseStrategy.parse(value)
     }
 }
 
@@ -125,5 +134,61 @@ extension PercentFormat {
     
     @inlinable public func sign(style: Sign.Style) -> Self {
         self.sign(strategy: style.standard())
+    }
+}
+
+//*============================================================================*
+// MARK: * Format x Round (Int)
+//*============================================================================*
+
+@usableFromInline protocol IntIncrementableFormat: Format {
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Round
+    //=------------------------------------------------------------------------=
+    
+    @inlinable func rounded(rule: FloatingPointRoundingRule, increment: Int?) -> Self
+}
+
+//=----------------------------------------------------------------------------=
+// MARK: Format x Round (Int)
+//=----------------------------------------------------------------------------=
+
+extension IntIncrementableFormat {
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Round
+    //=------------------------------------------------------------------------=
+    
+    @inlinable public func rounded(rule: FloatingPointRoundingRule) -> Self {
+        rounded(rule: rule, increment: nil)
+    }
+}
+
+//*============================================================================*
+// MARK: * Format x Round (Double)
+//*============================================================================*
+
+@usableFromInline protocol DoubleIncrementableFormat: Format {
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Round
+    //=------------------------------------------------------------------------=
+    
+    @inlinable func rounded(rule: FloatingPointRoundingRule, increment: Double?) -> Self
+}
+
+//=----------------------------------------------------------------------------=
+// MARK: Format x Round (Double)
+//=----------------------------------------------------------------------------=
+
+extension DoubleIncrementableFormat {
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Round
+    //=------------------------------------------------------------------------=
+    
+    @inlinable public func rounded(rule: FloatingPointRoundingRule) -> Self {
+        rounded(rule: rule, increment: nil)
     }
 }

@@ -113,19 +113,20 @@ extension NumericTextStyle {
     // MARK: Editable
     //=------------------------------------------------------------------------=
     
-    #error("...")
     @inlinable public func editable(value: Value) -> Output<Value> {
         var autocorrectable = value
+        let style = format.style(precision: precision.editable()).rounded(rule: .towardZero)
         //=--------------------------------------=
-        // MARK: Autocorrect
+        // MARK: Autocorrect - Bounds
         //=--------------------------------------=
         bounds.clamp(&autocorrectable)
-        #warning("The value should also be rounded according to precision.")
+        //=--------------------------------------=
+        // MARK: Autocorrect - Precision
+        //=--------------------------------------=
+        autocorrectable = try! style.parse(style.format(autocorrectable))
         //=--------------------------------------=
         // MARK: Characters
         //=--------------------------------------=
-        let precision = precision.editable()
-        let style = format.style(precision: precision)
         let characters = style.format(autocorrectable)
         //=--------------------------------------=
         // MARK: Snapshot, Output

@@ -18,7 +18,7 @@ public struct Count {
     // MARK: Initializers
     //=------------------------------------------------------------------------=
 
-    @inlinable init(storage: SIMD3<Int>) {
+    @inlinable init(_ storage: SIMD3<Int>) {
         self.storage = storage
     }
     
@@ -30,24 +30,16 @@ public struct Count {
     // MARK: Accessors
     //=------------------------------------------------------------------------=
     
-    @inlinable var value: Int {
-        storage.x
-    }
-    
-    @inlinable var integer: Int {
-        storage.y
-    }
-    
-    @inlinable var fraction: Int {
-        storage.z
-    }
+    @inlinable var value:    Int { storage.x }
+    @inlinable var integer:  Int { storage.y }
+    @inlinable var fraction: Int { storage.z }
 
     //=------------------------------------------------------------------------=
     // MARK: Transformations
     //=------------------------------------------------------------------------=
     
     @inlinable func transform(_ transform: (SIMD3<Int>, SIMD3<Int>) -> SIMD3<Int>, _ other: Self) -> Self {
-        Self(storage: transform(storage, other.storage))
+        Self(transform(storage, other.storage))
     }
 }
 
