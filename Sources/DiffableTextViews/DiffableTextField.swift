@@ -176,7 +176,7 @@ public struct DiffableTextField<Style: UIKitDiffableTextStyle>: UIViewRepresenta
             //=----------------------------------=
             do {
                 //=------------------------------=
-                // MARK: Range, Input, Output
+                // MARK: Values
                 //=------------------------------=
                 let range = cache.state.indices(at: nsRange)
                 let input = Input(content: string, range: range)
@@ -266,15 +266,11 @@ public struct DiffableTextField<Style: UIKitDiffableTextStyle>: UIViewRepresenta
             //=------------------------------=
             } else {
                 //=--------------------------=
-                // MARK: Values
-                //=--------------------------=
-                let text = style.showcase(value: value)
-                //=--------------------------=
                 // MARK: Push
                 //=--------------------------=
                 self.cache.value = value
                 self.cache.state = State()
-                self.push(text: text)
+                self.push(text: style.showcase(value: value))
             }
         }
         
