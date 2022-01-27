@@ -41,27 +41,27 @@
     @inlinable init(_ snapshot: Snapshot) {
         self.snapshot = snapshot
         self.range = Index(snapshot.startIndex, at: .start) ..<
-        Index(snapshot .endIndex, at: .end(of: snapshot.characters)) // UTF16 is O(1)
+        Index(snapshot.endIndex, at: .end(of: snapshot.characters)) // UTF16 is O(1)
     }
  
     //=------------------------------------------------------------------------=
     // MARK: Accessors
     //=------------------------------------------------------------------------=
     
-    @inlinable func nonpassthrough(_ position: Index) -> Bool {
-        !snapshot.attributes[position.attribute].contains(.passthrough)
-    }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Accessors - Indices
-    //=------------------------------------------------------------------------=
-    
-    @inlinable @inline(__always) var startIndex: Index {
+    @inlinable var startIndex: Index {
         range.lowerBound
     }
     
-    @inlinable @inline(__always) var endIndex: Index {
+    @inlinable var endIndex: Index {
         range.upperBound
+    }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Accessors - Position
+    //=------------------------------------------------------------------------=
+    
+    @inlinable func nonpassthrough(_ position: Index) -> Bool {
+        !snapshot.attributes[position.attribute].contains(.passthrough)
     }
 
     //=------------------------------------------------------------------------=
@@ -78,42 +78,42 @@
 
     @usableFromInline struct Index: Comparable {
 
-        //=------------------------------------------------------------------------=
+        //=--------------------------------------------------------------------=
         // MARK: Properties
-        //=------------------------------------------------------------------------=
+        //=--------------------------------------------------------------------=
 
         @usableFromInline let snapshot: Snapshot.Index
         @usableFromInline let position: Position
 
-        //=------------------------------------------------------------------------=
+        //=--------------------------------------------------------------------=
         // MARK: Initializers
-        //=------------------------------------------------------------------------=
+        //=--------------------------------------------------------------------=
 
         @inlinable init(_ snapshot: Snapshot.Index, at position: Position) {
             self.snapshot = snapshot
             self.position = position
         }
         
-        //=------------------------------------------------------------------------=
+        //=--------------------------------------------------------------------=
         // MARK: Accessors
-        //=------------------------------------------------------------------------=
+        //=--------------------------------------------------------------------=
 
         @inlinable var character: String.Index {
             snapshot.character
         }
-
+        
         @inlinable var attribute: Int {
             snapshot.attribute
         }
         
-        //=------------------------------------------------------------------------=
+        //=--------------------------------------------------------------------=
         // MARK: Comparisons
-        //=------------------------------------------------------------------------=
+        //=--------------------------------------------------------------------=
 
         @inlinable static func == (lhs: Self, rhs: Self) -> Bool {
             lhs.position == rhs.position
         }
-
+        
         @inlinable static func <  (lhs: Self, rhs: Self) -> Bool {
             lhs.position <  rhs.position
         }
