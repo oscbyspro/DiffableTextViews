@@ -64,24 +64,12 @@ public final class BasicTextField: UITextField {
     //=------------------------------------------------------------------------=
     
     @inlinable func process(new presses: Set<UIPress>) {
-        intent = Self.intent(presses)
+        intent = .intent(presses)
     }
     
     @inlinable func process(old presses: Set<UIPress>) {
-        if intent == Self.intent(presses) { intent = nil }
+        if intent == .intent(presses) { intent = nil }
     }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Intent
-    //=------------------------------------------------------------------------=
-    
-    @inlinable static func intent(_ presses: Set<UIPress>) -> Direction? {
-        presses.first?.key.flatMap({ intents[$0.keyCode] })
-    }
-    
-    @usableFromInline static let intents: [UIKeyboardHIDUsage: Direction] = [
-        .keyboardLeftArrow: .backwards, .keyboardRightArrow: .forwards
-    ]
 }
 
 #endif

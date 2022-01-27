@@ -11,7 +11,7 @@ import struct Foundation.NSRange
 // MARK: * State
 //*============================================================================*
 
-/// A text layout and a selection in it.
+/// A representation of the view's state.
 ///
 /// It controls how the selection is updated when various parameters change.
 ///
@@ -92,7 +92,7 @@ extension State {
         //=--------------------------------------=
         // MARK: Selection - Single
         //=--------------------------------------=
-        let upperBound = Changes  .end(past: self.layout[self.selection.upperBound...], next: layout).next
+        let upperBound = Changes.end(past: self.layout[self.selection.upperBound...], next: layout).next
         var lowerBound = upperBound
         //=--------------------------------------=
         // MARK: Selection - Double
