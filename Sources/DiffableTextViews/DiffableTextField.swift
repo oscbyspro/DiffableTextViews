@@ -252,16 +252,6 @@ public struct DiffableTextField<Style: UIKitDiffableTextStyle>: UIViewRepresenta
             //=------------------------------=
             if downstream.active {
                 //=--------------------------=
-                // MARK: Push
-                //=--------------------------=
-                self.cache.value = value
-                self.cache.state = State()
-                self.push(text: style.showcase(value: value))
-            //=------------------------------=
-            // MARK: Showcase
-            //=------------------------------=
-            } else {
-                //=--------------------------=
                 // MARK: Values
                 //=--------------------------=
                 let output = style.editable(value: value)
@@ -271,6 +261,20 @@ public struct DiffableTextField<Style: UIKitDiffableTextStyle>: UIViewRepresenta
                 self.cache.value = output.value
                 self.cache.state.update(snapshot: output.snapshot)
                 self.push()
+            //=------------------------------=
+            // MARK: Showcase
+            //=------------------------------=
+            } else {
+                //=--------------------------=
+                // MARK: Values
+                //=--------------------------=
+                let text = style.showcase(value: value)
+                //=--------------------------=
+                // MARK: Push
+                //=--------------------------=
+                self.cache.value = value
+                self.cache.state = State()
+                self.push(text: text)
             }
         }
         
