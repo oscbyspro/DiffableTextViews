@@ -34,7 +34,7 @@ import DiffableTextViews
     
     /// Interprets a single sign character as a: set sign command.
     @inlinable mutating func consumeSignInput(region: Region) {
-        guard content.count == 1 else { return }
+        guard content.count == 1 else { return } // snapshot.count is O(1)
         guard let sign = region.signs[content.first!.character] else { return }
         //=--------------------------------------=
         // MARK: Set Sign Command Found

@@ -5,8 +5,8 @@
 //  Created by Oscar Byström Ericsson on 2022-01-17.
 //
 
-import enum Foundation.NumberFormatStyleConfiguration
-import struct Support.Info
+import Foundation
+import Support
 
 //*============================================================================*
 // MARK: * Precision
@@ -26,18 +26,16 @@ public struct Precision<Value: Precise> {
     // MARK: Initializers
     //=------------------------------------------------------------------------=
 
-    /// Creates an instance with style set to: .value.
     @inlinable init() {
         self.init(integer: Self.limits(\.integer), fraction: Self.limits(\.fraction))
     }
 
-    /// Creates an instance with style set to: .separate.
     @inlinable init<R0: RangeExpression, R1: RangeExpression>(integer: R0,
         fraction: R1) where R0.Bound == Int, R1.Bound == Int {
         let integer  = Namespace.interpret(integer,  in: Self.limits(\.integer ))
         let fraction = Namespace.interpret(fraction, in: Self.limits(\.fraction))
         //=--------------------------------------=
-        // MARK: set
+        // MARK: Set
         //=--------------------------------------=
         self.lower = Count(value:   Namespace.min.value, integer: integer.lowerBound, fraction: fraction.lowerBound)
         self.upper = Count(value: Value.precision.value, integer: integer.upperBound, fraction: fraction.upperBound)
@@ -70,7 +68,7 @@ public struct Precision<Value: Precise> {
     //=------------------------------------------------------------------------=
     
     @inlinable func capacity(count: Count) throws -> Count {
-        let capacity = upper.map(&-, count)
+        let capacity = upper.transform(&-, count)
         //=--------------------------------------=
         // MARK: Validate Each Component
         //=--------------------------------------=

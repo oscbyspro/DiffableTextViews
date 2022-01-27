@@ -45,7 +45,7 @@ extension Count {
     // MARK: Transformations
     //=------------------------------------------------------------------------=
     
-    @inlinable func map(_ transform: (SIMD3<Int>, SIMD3<Int>) -> SIMD3<Int>, _ other: Self) -> Self {
+    @inlinable func transform(_ transform: (SIMD3<Int>, SIMD3<Int>) -> SIMD3<Int>, _ other: Self) -> Self {
         Self(storage: transform(storage, other.storage))
     }
 }

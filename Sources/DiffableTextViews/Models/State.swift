@@ -5,7 +5,7 @@
 //  Created by Oscar Byström Ericsson on 2022-01-27.
 //
 
-import struct Foundation.NSRange
+import Foundation
 
 //*============================================================================*
 // MARK: * State

@@ -47,8 +47,7 @@
 
 #if canImport(UIKit)
 
-import class UIKit.UIPress
-import enum UIKit.UIKeyboardHIDUsage
+import UIKit
 
 extension Direction {
     

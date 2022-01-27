@@ -5,7 +5,7 @@
 //  Created by Oscar Byström Ericsson on 2021-10-02.
 //
 
-import struct Foundation.Locale
+import Foundation
 
 //*============================================================================*
 // MARK: * DiffableTextStyle

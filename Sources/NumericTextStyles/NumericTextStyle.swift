@@ -102,10 +102,19 @@ extension NumericTextStyle {
 extension NumericTextStyle {
     
     //=------------------------------------------------------------------------=
-    // MARK: Output
+    // MARK: Showcase
     //=------------------------------------------------------------------------=
     
-    @inlinable public func upstream(value: Value, mode: Mode) -> Output<Value> {
+    @inlinable public func showcase(value: Value) -> String {
+        format.style(precision: precision.showcase()).format(value)
+    }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Editable
+    //=------------------------------------------------------------------------=
+    
+    #error("...")
+    @inlinable public func editable(value: Value) -> Output<Value> {
         var autocorrectable = value
         //=--------------------------------------=
         // MARK: Autocorrect
@@ -113,24 +122,15 @@ extension NumericTextStyle {
         bounds.clamp(&autocorrectable)
         #warning("The value should also be rounded according to precision.")
         //=--------------------------------------=
-        // MARK: Style, Characters
+        // MARK: Characters
         //=--------------------------------------=
-        let characters = style(mode: mode).format(autocorrectable)
+        let precision = precision.editable()
+        let style = format.style(precision: precision)
+        let characters = style.format(autocorrectable)
         //=--------------------------------------=
-        // MARK: Characters, Output
+        // MARK: Snapshot, Output
         //=--------------------------------------=
         return Output(value: autocorrectable, snapshot: snapshot(characters: characters))
-    }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Helpers
-    //=------------------------------------------------------------------------=
-    
-    @inlinable func style(mode: Mode) -> Format {
-        switch mode {
-        case .showcase: return format.style(precision: precision.showcase())
-        case .editable: return format.style(precision: precision.editable())
-        }
     }
 }
 
@@ -144,7 +144,7 @@ extension NumericTextStyle {
     // MARK: Output
     //=------------------------------------------------------------------------=
     
-    @inlinable public func downstream(snapshot: Snapshot, input: Input) throws -> Output<Value> {
+    @inlinable public func merge(snapshot: Snapshot, input: Input) throws -> Output<Value> {
         //=--------------------------------------=
         // MARK: Reader
         //=--------------------------------------=
