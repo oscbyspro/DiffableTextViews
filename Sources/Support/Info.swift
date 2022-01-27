@@ -5,8 +5,6 @@
 //  Created by Oscar Byström Ericsson on 2022-01-05.
 //
 
-#warning("Add a static print method, maybe.")
-
 //*============================================================================*
 // MARK: * Info
 //*============================================================================*
@@ -49,7 +47,21 @@ public struct Info: CustomStringConvertible, Error {
     @inlinable @inline(__always) public init(_ components: @autoclosure () -> [Component]) {
         self.init(components)
     }
-
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Utilities - Static
+    //=------------------------------------------------------------------------=
+    
+    @inlinable @inline(__always) public static func print(_ components: () -> [Component]) {
+        #if DEBUG
+        Swift.print(Self(components))
+        #endif
+    }
+    
+    @inlinable @inline(__always) public static func print(_ components: @autoclosure () -> [Component]) {
+        Self.print(components)
+    }
+    
     //*========================================================================*
     // MARK: * Component
     //*========================================================================*
