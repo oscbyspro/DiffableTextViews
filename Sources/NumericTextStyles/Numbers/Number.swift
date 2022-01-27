@@ -100,14 +100,14 @@ extension Number {
             //=----------------------------------=
             // MARK: Sign
             //=----------------------------------=
-            if let character = next, !unsigned, let sign = signs[character] {
+            if !unsigned, let symbol = next, let sign = signs[symbol.character] {
                 self.sign = sign
                 next = nonvirtuals.next()
             }
             //=----------------------------------=
             // MARK: Digits
             //=----------------------------------=
-            while let character = next, let digit = digits[character] {
+            while let symbol = next, let digit = digits[symbol.character] {
                 self.integer.append(digit)
                 next = nonvirtuals.next()
             }
@@ -116,7 +116,7 @@ extension Number {
             //=----------------------------------=
             // MARK: Separator
             //=----------------------------------=
-            if let character = next, let separator = separators[character], separator == .fraction {
+            if let symbol = next, let separator = separators[symbol.character], separator == .fraction {
                 self.separator = separator
                 next = nonvirtuals.next()
             }
@@ -125,7 +125,7 @@ extension Number {
             //=----------------------------------=
             // MARK: Fraction
             //=----------------------------------=
-            while let character = next, let digit = digits[symbol.character] {
+            while let symbol = next, let digit = digits[symbol.character] {
                 self.fraction.append(digit)
                 next = nonvirtuals.next()
             }
