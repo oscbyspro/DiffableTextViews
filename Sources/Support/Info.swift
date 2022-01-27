@@ -49,17 +49,21 @@ public struct Info: CustomStringConvertible, Error {
     }
     
     //=------------------------------------------------------------------------=
-    // MARK: Utilities - Static
+    // MARK: Utilities
     //=------------------------------------------------------------------------=
     
-    @inlinable @inline(__always) public static func print(_ components: () -> [Component]) {
+    @inlinable @inline(__always) public static func print(_ description: @autoclosure () -> String) {
         #if DEBUG
-        Swift.print(Self(components))
+        Swift.print(description())
         #endif
     }
     
+    @inlinable @inline(__always) public static func print(_ components: () -> [Component]) {
+        Self.print(components().description)
+    }
+    
     @inlinable @inline(__always) public static func print(_ components: @autoclosure () -> [Component]) {
-        Self.print(components)
+        Self.print(components().description)
     }
     
     //*========================================================================*
