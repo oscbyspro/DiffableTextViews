@@ -72,9 +72,9 @@ public struct Precision<Value: Precise> {
         //=--------------------------------------=
         // MARK: Validate Each Component
         //=--------------------------------------=
-        guard capacity.value    >= 0 else { throw excess(.value)    }
-        guard capacity.integer  >= 0 else { throw excess(.integer)  }
-        guard capacity.fraction >= 0 else { throw excess(.fraction) }
+        if let component = capacity.first(where: { $0 < 0 }) {
+            throw Info([.mark(component), "digits exceed max precision", .mark(upper[component])])
+        }
         //=--------------------------------------=
         // MARK: Success
         //=--------------------------------------=
@@ -88,14 +88,6 @@ public struct Precision<Value: Precise> {
 
 extension Precision {
 
-    //=------------------------------------------------------------------------=
-    // MARK: Errors
-    //=------------------------------------------------------------------------=
-    
-    @inlinable func excess(_ component: Count.Component) -> Info {
-        Info([.mark(component), "digits exceed max precision", .mark(upper[component])])
-    }
-    
     //=------------------------------------------------------------------------=
     // MARK: Limits - Static
     //=------------------------------------------------------------------------=

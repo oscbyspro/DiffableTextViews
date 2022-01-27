@@ -40,7 +40,7 @@ public struct Count {
 //=----------------------------------------------------------------------------=
 
 extension Count {
-
+    
     //=------------------------------------------------------------------------=
     // MARK: Transformations
     //=------------------------------------------------------------------------=
@@ -51,21 +51,32 @@ extension Count {
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: Count - DEBUG
+// MARK: Count - Component
 //=----------------------------------------------------------------------------=
 
 extension Count {
-        
+    
     //=------------------------------------------------------------------------=
     // MARK: Accessors
     //=------------------------------------------------------------------------=
-    
+
     @inlinable subscript(component: Component) -> Int {
         switch component {
         case .value:    return value
         case .integer:  return integer
         case .fraction: return fraction
         }
+    }
+
+    //=------------------------------------------------------------------------=
+    // MARK: Utilities
+    //=------------------------------------------------------------------------=
+    
+    @inlinable func first(where predicate: (Int) -> Bool) -> Component? {
+        if predicate(value)    { return .value    }
+        if predicate(integer)  { return .integer  }
+        if predicate(fraction) { return .fraction }
+        return nil
     }
 
     //*========================================================================*
