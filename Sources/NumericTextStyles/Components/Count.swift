@@ -30,17 +30,18 @@ public struct Count {
     // MARK: Accessors
     //=------------------------------------------------------------------------=
     
-    @inlinable var value:    Int { storage.x }
-    @inlinable var integer:  Int { storage.y }
-    @inlinable var fraction: Int { storage.z }
-}
-
-//=----------------------------------------------------------------------------=
-// MARK: Count - SIMD
-//=----------------------------------------------------------------------------=
-
-extension Count {
+    @inlinable var value: Int {
+        storage.x
+    }
     
+    @inlinable var integer: Int {
+        storage.y
+    }
+    
+    @inlinable var fraction: Int {
+        storage.z
+    }
+
     //=------------------------------------------------------------------------=
     // MARK: Transformations
     //=------------------------------------------------------------------------=

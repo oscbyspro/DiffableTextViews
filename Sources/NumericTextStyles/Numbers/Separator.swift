@@ -9,7 +9,7 @@
 // MARK: * Separator
 //*============================================================================*
 
-/// A system representation of a fraction separator.
+/// A system representation of a separator.
 @usableFromInline enum Separator: UInt8, Unicodeable {
     
     //=------------------------------------------------------------------------=
