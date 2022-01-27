@@ -2,12 +2,10 @@
 //  State.swift
 //  
 //
-//  Created by Oscar Byström Ericsson on 2021-09-27.
+//  Created by Oscar Byström Ericsson on 2022-01-27.
 //
 
-import Foundation
-
-#warning("Rename, maybe.")
+import struct Foundation.NSRange
 
 //*============================================================================*
 // MARK: * State
@@ -17,7 +15,7 @@ import Foundation
 ///
 /// It controls how the selection is updated when various parameters change.
 ///
-@usableFromInline struct State<Scheme: DiffableTextViews.Scheme> {
+@usableFromInline final class State<Scheme: DiffableTextViews.Scheme, Value: Equatable> {
     @usableFromInline typealias Layout = DiffableTextViews.Layout<Scheme>
     @usableFromInline typealias Position = DiffableTextViews.Position<Scheme>
 
@@ -25,8 +23,9 @@ import Foundation
     // MARK: Properties
     //=------------------------------------------------------------------------=
     
-    @usableFromInline private(set) var layout: Layout
+    @usableFromInline var value: Value!
     @usableFromInline var selection: Range<Layout.Index>
+    @usableFromInline private(set) var layout: Layout
 
     //=------------------------------------------------------------------------=
     // MARK: Initializers
@@ -48,6 +47,10 @@ import Foundation
     
     @inlinable var snapshot: Snapshot {
         layout.snapshot
+    }
+    
+    @inlinable var characters: String {
+        layout.snapshot.characters
     }
     
     @inlinable var positions: Range<Position> {
@@ -84,7 +87,7 @@ extension State {
     // MARK: Snapshot
     //=------------------------------------------------------------------------=
     
-    @inlinable mutating func update(snapshot: Snapshot) {
+    @inlinable func update(snapshot: Snapshot) {
         let layout = Layout(snapshot)
         //=--------------------------------------=
         // MARK: Selection - Single
@@ -117,7 +120,7 @@ extension State {
     // MARK: Selection
     //=------------------------------------------------------------------------=
     
-    @inlinable mutating func update(selection: Range<Position>, momentum: Bool) {
+    @inlinable func update(selection: Range<Position>, momentum: Bool) {
         //=--------------------------------------=
         // MARK: Parse Position As Index
         //=--------------------------------------=
@@ -146,7 +149,7 @@ extension State {
     // MARK: Selection
     //=------------------------------------------------------------------------=
     
-    @inlinable mutating func autocorrect(intent: (lower: Direction?, upper: Direction?)) {
+    @inlinable func autocorrect(intent: (lower: Direction?, upper: Direction?)) {
         //=--------------------------------------=
         // MARK: Exceptions
         //=--------------------------------------=
@@ -169,3 +172,4 @@ extension State {
         self.selection = lowerBound ..< upperBound
     }
 }
+

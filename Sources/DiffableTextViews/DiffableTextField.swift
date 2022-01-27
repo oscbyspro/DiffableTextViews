@@ -117,7 +117,7 @@ public struct DiffableTextField<Style: UIKitDiffableTextStyle>: UIViewRepresenta
     
     public final class Coordinator: NSObject, UITextFieldDelegate {
         @usableFromInline typealias Position = DiffableTextViews.Position<UTF16>
-        @usableFromInline typealias Cache = DiffableTextViews.Cache<UTF16, Value>
+        @usableFromInline typealias State = DiffableTextViews.State<UTF16, Value>
         
         //=--------------------------------------------------------------------=
         // MARK: Properties
@@ -131,7 +131,7 @@ public struct DiffableTextField<Style: UIKitDiffableTextStyle>: UIViewRepresenta
         //=--------------------------------------------------------------------=
         
         @usableFromInline let lock  = Lock()
-        @usableFromInline let cache = Cache()
+        @usableFromInline let state = State()
         
         //=--------------------------------------------------------------------=
         // MARK: Accessors
@@ -178,23 +178,18 @@ public struct DiffableTextField<Style: UIKitDiffableTextStyle>: UIViewRepresenta
                 //=------------------------------=
                 // MARK: Values
                 //=------------------------------=
-                let range = cache.state.indices(at: nsRange)
+                let range = state.indices(at: nsRange)
                 let input = Input(content: string, range: range)
-                let output = try style.merge(snapshot: cache.snapshot, input: input)
-                //=------------------------------=
-                // MARK: State
-                //=------------------------------=
-                var state = cache.state
-                state.selection = range.upperBound ..< range.upperBound
-                state.update(snapshot: output.snapshot)
+                let output = try style.merge(snapshot: state.snapshot, input: input)
                 //=------------------------------=
                 // MARK: Push
                 //=------------------------------=
-                Task { @MainActor [state] in
+                Task { @MainActor in
                     // async to process special commands first
                     // as an example see: (option + backspace)
-                    self.cache.state = state
-                    self.cache.value = output.value
+                    self.state.value = output.value
+                    self.state.selection = range.upperBound ..< range.upperBound
+                    self.state.update(snapshot: output.snapshot)
                     self.push()
                 }
             //=----------------------------------=
@@ -202,9 +197,7 @@ public struct DiffableTextField<Style: UIKitDiffableTextStyle>: UIViewRepresenta
             //=----------------------------------=
             } catch let reason {
                 #if DEBUG
-                
                 print("User input cancelled: \(reason)")
-                
                 #endif
             }
             //=----------------------------------=
@@ -226,15 +219,13 @@ public struct DiffableTextField<Style: UIKitDiffableTextStyle>: UIViewRepresenta
             //=----------------------------------=
             // MARK: Corrected
             //=----------------------------------=
-            var corrected = cache.state
-            corrected.update(selection: positions, momentum: downstream.momentum)
+            self.state.update(selection: positions, momentum: downstream.momentum)
             //=----------------------------------=
             // MARK: Update Downstream If Needed
             //=----------------------------------=
-            if positions != corrected.positions {
+            if state.positions != positions {
                 lock.perform {
-                    self.cache.state = corrected
-                    self.downstream.update(selection: corrected.positions)
+                    self.downstream.update(selection: state.positions)
                 }
             }
         }
@@ -258,8 +249,8 @@ public struct DiffableTextField<Style: UIKitDiffableTextStyle>: UIViewRepresenta
                 //=--------------------------=
                 // MARK: Push
                 //=-------------------------b-=
-                self.cache.value = output.value
-                self.cache.state.update(snapshot: output.snapshot)
+                self.state.value = output.value
+                self.state.update(snapshot: output.snapshot)
                 self.push()
             //=------------------------------=
             // MARK: Showcase
@@ -268,8 +259,7 @@ public struct DiffableTextField<Style: UIKitDiffableTextStyle>: UIViewRepresenta
                 //=--------------------------=
                 // MARK: Push
                 //=--------------------------=
-                self.cache.value = value
-                self.cache.state = State()
+                self.state.value = value
                 self.push(text: style.showcase(value: value))
             }
         }
@@ -285,14 +275,14 @@ public struct DiffableTextField<Style: UIKitDiffableTextStyle>: UIViewRepresenta
             lock.perform {
                 // changes to UITextField's text and selection both call
                 // the delegate's method: textFieldDidChangeSelection(_:)
-                self.downstream.update(text: cache.snapshot.characters)
-                self.downstream.update(selection: cache.state.positions)
+                self.downstream.update(text: state.characters)
+                self.downstream.update(selection: state.positions)
             }
             //=----------------------------------=
             // MARK: Upstream
             //=----------------------------------=
-            if  self.upstream.value.wrappedValue != self.cache.value {
-                self.upstream.value.wrappedValue  = self.cache.value
+            if  self.upstream.value.wrappedValue != self.state.value {
+                self.upstream.value.wrappedValue  = self.state.value
             }
         }
         
