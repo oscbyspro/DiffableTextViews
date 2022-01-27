@@ -44,8 +44,8 @@ extension Format {
     // MARK: Utilities
     //=------------------------------------------------------------------------=
     
-    @inlinable func parse(_ value: FormatOutput) throws -> FormatInput {
-        try parseStrategy.parse(value)
+    @inlinable func autocorrect(_ value: inout FormatInput) throws {
+        value = try parseStrategy.parse(format(value))
     }
 }
 

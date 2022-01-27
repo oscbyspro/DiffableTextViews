@@ -117,13 +117,10 @@ extension NumericTextStyle {
         var autocorrectable = value
         let style = format.style(precision: precision.editable()).rounded(rule: .towardZero)
         //=--------------------------------------=
-        // MARK: Autocorrect - Bounds
+        // MARK: Autocorrect
         //=--------------------------------------=
         bounds.clamp(&autocorrectable)
-        //=--------------------------------------=
-        // MARK: Autocorrect - Precision
-        //=--------------------------------------=
-        autocorrectable = try! style.parse(style.format(autocorrectable))
+        try! style.autocorrect(&autocorrectable)
         //=--------------------------------------=
         // MARK: Characters
         //=--------------------------------------=
