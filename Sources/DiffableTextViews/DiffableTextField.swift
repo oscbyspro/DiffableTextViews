@@ -277,8 +277,8 @@ public struct DiffableTextField<Style: UIKitDiffableTextStyle>: UIViewRepresenta
             //=----------------------------------=
             // MARK: Upstream
             //=----------------------------------=
-            if  self.upstream.value.wrappedValue != self.state.value {
-                self.upstream.value.wrappedValue  = self.state.value
+            if  self.upstream.value.wrappedValue != state.value {
+                self.upstream.value.wrappedValue  = state.value
             }
         }
     }

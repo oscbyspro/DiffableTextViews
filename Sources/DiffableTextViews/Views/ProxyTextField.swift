@@ -13,10 +13,7 @@ import UIKit
 // MARK: * ProxyTextField
 //*============================================================================*
 
-/// An affordance layer wrapping a UITextField object.
-///
-/// Makes it easier to enforce UITextField's UTF-16 layout, as well as which properties and methods may be used.
-///
+/// A UITextField affordance layer.
 public final class ProxyTextField {
     @usableFromInline typealias Wrapped = BasicTextField
     @usableFromInline typealias Position = DiffableTextViews.Position<UTF16>
@@ -73,11 +70,13 @@ extension ProxyTextField {
     
     /// - Complexity: High.
     @inlinable func update(text: String) {
+        #warning("Unsure whether to check differences first or not.")
         if wrapped.text != text { wrapped.text = text }
     }
-        
+    
     /// - Complexity: High.
     @inlinable func update(selection: Range<Position>) {
+        #warning("Unsure whether to check differences first or not.")
         let positions = positions(in: selection)
         if wrapped.selectedTextRange != positions { wrapped.selectedTextRange = positions }
     }

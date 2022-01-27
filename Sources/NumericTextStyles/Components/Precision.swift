@@ -13,6 +13,8 @@ import Support
 // MARK: * Precision
 //*============================================================================*
 
+#error("Continue with this.")
+#warning("Maybe remove significant digits option...")
 public struct Precision<Value: Precise> {
     @usableFromInline typealias Namespace = _Precision
     @usableFromInline typealias Style = _Precision.Style
@@ -62,14 +64,12 @@ public struct Precision<Value: Precise> {
     //=------------------------------------------------------------------------=
     // MARK: Configurations
     //=------------------------------------------------------------------------=
-        
+    
+    #warning("This was changed. Make sure it works as it should.")
     @inlinable func showcase() -> Configuration {
-        switch style {
-        case .separate: return .integerAndFractionLength(
-             integerLimits: lower.integer  ... Int.max,
-            fractionLimits: lower.fraction ... Int.max)
-        case .value: return .significantDigits(lower.value ... Int.max)
-        }
+        .integerAndFractionLength(
+         integerLimits: lower.integer  ... Int.max,
+        fractionLimits: lower.fraction ... Int.max)
     }
 
     @inlinable func editable() -> Configuration {
