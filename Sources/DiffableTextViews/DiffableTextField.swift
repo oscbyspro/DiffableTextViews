@@ -13,6 +13,7 @@ import SwiftUI
 // MARK: * DiffableTextField
 //*============================================================================*
 
+#warning("Handle style creation.")
 public struct DiffableTextField<Style: UIKitDiffableTextStyle>: UIViewRepresentable {
     public typealias Value = Style.Value
     
@@ -114,7 +115,6 @@ public struct DiffableTextField<Style: UIKitDiffableTextStyle>: UIViewRepresenta
     // MARK: * Coordinator
     //*========================================================================*
     
-    #error("Handle: active/idle modes.")
     public final class Coordinator: NSObject, UITextFieldDelegate {
         @usableFromInline typealias Position = DiffableTextViews.Position<UTF16>
         @usableFromInline typealias Cache = DiffableTextViews.Cache<UTF16, Value>
@@ -250,7 +250,7 @@ public struct DiffableTextField<Style: UIKitDiffableTextStyle>: UIViewRepresenta
             //=------------------------------=
             // MARK: Editable
             //=------------------------------=
-            if downstream.mode == .showcase {
+            if downstream.active {
                 //=--------------------------=
                 // MARK: Push
                 //=--------------------------=
@@ -275,7 +275,7 @@ public struct DiffableTextField<Style: UIKitDiffableTextStyle>: UIViewRepresenta
         }
         
         //=--------------------------------------------------------------------=
-        // MARK: Synchronize - Push
+        // MARK: Push - Editable
         //=--------------------------------------------------------------------=
         
         @inlinable func push() {
@@ -297,7 +297,7 @@ public struct DiffableTextField<Style: UIKitDiffableTextStyle>: UIViewRepresenta
         }
         
         //=--------------------------------------------------------------------=
-        // MARK: Synchronize - Push - Text
+        // MARK: Push - Showcase
         //=--------------------------------------------------------------------=
         
         @inlinable func push(text: String) {

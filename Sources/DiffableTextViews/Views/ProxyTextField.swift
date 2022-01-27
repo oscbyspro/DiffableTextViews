@@ -47,13 +47,17 @@ extension ProxyTextField {
     // MARK: Accessors
     //=------------------------------------------------------------------------=
     
-    @inlinable var mode: Mode {
-        wrapped.isEditing ? .editable : .showcase
+    @inlinable var active: Bool {
+        wrapped.isEditing
     }
 
     @inlinable var momentum: Bool {
         wrapped.momentum
     }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Accessors - Text, Selection
+    //=------------------------------------------------------------------------=
     
     @inlinable var text: String {
         wrapped.text!
