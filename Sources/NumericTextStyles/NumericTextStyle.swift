@@ -114,21 +114,21 @@ extension NumericTextStyle {
     //=------------------------------------------------------------------------=
     
     @inlinable public func editable(value: Value) -> Output<Value> {
-        var autocorrectable = value
         let style = format.style(precision: precision.editable()).rounded(rule: .towardZero)
+        var value = value
         //=--------------------------------------=
         // MARK: Autocorrect
         //=--------------------------------------=
-        bounds.clamp(&autocorrectable)
-        try! style.autocorrect(&autocorrectable)
+        bounds.clamp(&value)
+        try! style.autocorrect(&value)
         //=--------------------------------------=
         // MARK: Characters
         //=--------------------------------------=
-        let characters = style.format(autocorrectable)
+        let characters = style.format(value)
         //=--------------------------------------=
         // MARK: Snapshot, Output
         //=--------------------------------------=
-        return Output(value: autocorrectable, snapshot: snapshot(characters: characters))
+        return Output(value: value, snapshot: snapshot(characters: characters))
     }
 }
 
