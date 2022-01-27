@@ -92,32 +92,7 @@ extension Number {
     ///
     @inlinable init(snapshot: Snapshot, integer: Bool, unsigned: Bool,
         signs: [Character: Sign], digits: [Character: Digit], separators: [Character: Separator]) throws {
-        guard let start = snapshot.firstIndex(where: \.nonvirtual) else { self = .zero; return }
-        //=--------------------------------------=
-        // MARK: State
-        //=--------------------------------------=
-        var index = start
-        var symbol = snapshot[start]
-        //=--------------------------------------=
-        // MARK: Next
-        //=--------------------------------------=
-        func next() {
-            //=----------------------------------=
-            // MARK: Loop Past Virtual Elements
-            //=----------------------------------=
-            while true {
-                //=------------------------------=
-                // MARK: Index
-                //=------------------------------=
-                snapshot.formIndex(after: &index)
-                if index == snapshot.endIndex { break }
-                //=------------------------------=
-                // MARK: Element
-                //=------------------------------=
-                symbol = snapshot[index]
-                if !symbol.contains(.virtual) { break }
-            }
-        }
+        var nonvirtuals = snapshot.lazy.filter(\.nonvirtual).makeIterator(); var next = nonvirtuals.next()
         //=--------------------------------------=
         // MARK: Attempt
         //=--------------------------------------=
@@ -125,44 +100,46 @@ extension Number {
             //=----------------------------------=
             // MARK: Sign
             //=----------------------------------=
-            if index != snapshot.endIndex, !unsigned, let sign = signs[symbol.character] {
+            if let character = next, !unsigned, let sign = signs[character] {
                 self.sign = sign
-                next()
+                next = nonvirtuals.next()
             }
             //=----------------------------------=
             // MARK: Digits
             //=----------------------------------=
-            while index != snapshot.endIndex, let digit = digits[symbol.character] {
+            while let character = next, let digit = digits[character] {
                 self.integer.append(digit)
-                next()
+                next = nonvirtuals.next()
             }
-            
-            self.integer.removeZerosPrefix()
-            self.integer.makeItAtLeastZero()
             
             guard !integer else { break attempt }
             //=----------------------------------=
             // MARK: Separator
             //=----------------------------------=
-            if index != snapshot.endIndex, let separator = separators[symbol.character], separator == .fraction {
+            if let character = next, let separator = separators[character], separator == .fraction {
                 self.separator = separator
-                next()
+                next = nonvirtuals.next()
             }
             
             guard self.separator != nil else { break attempt }
             //=----------------------------------=
             // MARK: Fraction
             //=----------------------------------=
-            while index != snapshot.endIndex, let digit = digits[symbol.character] {
+            while let character = next, let digit = digits[symbol.character] {
                 self.fraction.append(digit)
-                next()
+                next = nonvirtuals.next()
             }
         }
         //=--------------------------------------=
         // MARK: Validate
         //=--------------------------------------=
-        guard index == snapshot.endIndex else {
+        guard next == nil else {
             throw Info(["unable to parse number in", .mark(snapshot.characters)])
         }
+        //=--------------------------------------=
+        // MARK: Autocorrect
+        //=--------------------------------------=
+        self.integer.removeZerosPrefix()
+        self.integer.makeItAtLeastZero()
     }
 }
