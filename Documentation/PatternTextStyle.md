@@ -52,7 +52,7 @@ struct DiffablePaymentNumberTextField: View {
         DiffableTextField($paymentNumber) {
             .pattern("#### #### #### ####")
             .placeholder(constant: "#") { $0.isASCII && $0.isNumber }
-            .hidden()
+            .hidden().constant()
         }
         .setup({ $0.keyboard(.numberPad) })
     }

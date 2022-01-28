@@ -38,6 +38,7 @@ struct DiffableAmountTextField: View {
             .currency(code: "SEK")
             .bounds((0 as Decimal)...)
             .precision(integer: 1..., fraction: 2)
+            .constant()
         }
         .environment(\.locale, Locale(identifier: "en_SE"))
     }
@@ -54,6 +55,7 @@ struct DiffablePhoneNumberTextField: View {
         DiffableTextField($phoneNumber) {
             .pattern("+## (###) ###-##-##")
             .placeholder("#") { $0.isASCII && $0.isNumber }
+            .constant()
         }
         .setup({ $0.keyboard(.phonePad) })
     }

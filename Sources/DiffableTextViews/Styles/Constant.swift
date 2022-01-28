@@ -76,6 +76,12 @@ extension DiffableTextStyle {
     // MARK: Transformations
     //=------------------------------------------------------------------------=
     
+    /// A promise that the style will remain unchanged between view updates.
+    ///
+    /// Use this only when you know that the style is constant.
+    ///
+    /// - Note: It is a reference type, so it may be cached for further optimization.
+    ///
     @inlinable @inline(__always)
     public func constant() -> Constant<Self> { Constant(style: self) }
 }
