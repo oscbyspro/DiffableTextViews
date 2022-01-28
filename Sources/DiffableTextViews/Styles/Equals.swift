@@ -32,7 +32,9 @@ public struct Equals<Style: DiffableTextStyle, Equatable: Swift.Equatable>: Wrap
     // MARK: Comparisons
     //=------------------------------------------------------------------------=
     
-    @inlinable @inline(__always) public static func == (lhs: Self, rhs: Self) -> Bool { true }
+    @inlinable @inline(__always) public static func == (lhs: Self, rhs: Self) -> Bool {
+        lhs.equatable == rhs.equatable
+    }
 }
 
 //=----------------------------------------------------------------------------=
