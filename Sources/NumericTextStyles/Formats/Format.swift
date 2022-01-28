@@ -39,11 +39,19 @@ extension Format {
     @inlinable func style(precision: Precision, separator: Separator = .automatic, sign: Sign.Style = .automatic) -> Self {
         self.precision(precision).decimalSeparator(strategy: separator).sign(style: sign).rounded(rule: .towardZero)
     }
-    
+        
     //=------------------------------------------------------------------------=
     // MARK: Utilities
     //=------------------------------------------------------------------------=
     
+    @inlinable func parse(_ characters: String) throws -> Value {
+        try parseStrategy.parse(characters)
+    }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Autocorrections
+    //=------------------------------------------------------------------------=
+        
     @inlinable func autocorrect(_ value: inout Value) {
         value = try! parseStrategy.parse(format(value))
     }

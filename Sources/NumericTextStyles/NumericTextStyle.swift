@@ -32,17 +32,9 @@ public struct NumericTextStyle<Format: NumericTextStyles.Format>: DiffableTextSt
     
     @inlinable public init(format: Format, locale: Locale = .autoupdatingCurrent) {
         self.format = format
-        self.region = Region.cached(locale)
         self.bounds = Bounds()
         self.precision = Precision()
-    }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Accessors
-    //=------------------------------------------------------------------------=
-    
-    @inlinable var parser: Format.Strategy {
-        format.parseStrategy
+        self.region = Region.cached(locale)
     }
     
     //=------------------------------------------------------------------------=
@@ -172,7 +164,7 @@ extension NumericTextStyle {
         //=--------------------------------------=
         // MARK: Value
         //=--------------------------------------=
-        let value = try parser.parse(region.characters(in: number))
+        let value = try format.parse(region.characters(in: number))
         try bounds.validate(value: value)
         //=--------------------------------------=
         // MARK: Style
