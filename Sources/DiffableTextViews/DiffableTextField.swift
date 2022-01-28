@@ -227,7 +227,7 @@ public struct DiffableTextField<Style: UIKitDiffableTextStyle>: UIViewRepresenta
                 }
             }
         }
-
+        
         //=--------------------------------------------------------------------=
         // MARK: Synchronize
         //=--------------------------------------------------------------------=

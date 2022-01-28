@@ -29,14 +29,6 @@ public struct Equals<Style: DiffableTextStyle, Equatable: Swift.Equatable>: Wrap
     }
     
     //=------------------------------------------------------------------------=
-    // MARK: Transformations
-    //=------------------------------------------------------------------------=
-    
-    @inlinable @inline(__always) func make(style: Style) -> Self {
-        Self(style: style, equatable: equatable)
-    }
-    
-    //=------------------------------------------------------------------------=
     // MARK: Comparisons
     //=------------------------------------------------------------------------=
     
