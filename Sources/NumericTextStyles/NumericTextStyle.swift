@@ -120,7 +120,7 @@ extension NumericTextStyle {
         //=--------------------------------------=
         var autocorrectable = value
         bounds.clamp(&autocorrectable)
-        try! style.autocorrect(&autocorrectable)
+        style.autocorrect(&autocorrectable)
         //=--------------------------------------=
         // MARK: Characters, Snapshot
         //=--------------------------------------=

@@ -11,7 +11,6 @@ import Foundation
 // MARK: * Format
 //*============================================================================*
 
-#warning("Cleanup subprotocol names.")
 public protocol Format: ParseableFormatStyle where FormatInput: NumericTextStyles.Value, FormatOutput == String {
     typealias Precision = NumberFormatStyleConfiguration.Precision
     typealias Separator = NumberFormatStyleConfiguration.DecimalSeparatorDisplayStrategy
@@ -32,7 +31,7 @@ public protocol Format: ParseableFormatStyle where FormatInput: NumericTextStyle
 
 extension Format {
     @usableFromInline typealias Value = FormatInput
-    
+
     //=------------------------------------------------------------------------=
     // MARK: Transformations
     //=------------------------------------------------------------------------=
@@ -45,8 +44,8 @@ extension Format {
     // MARK: Utilities
     //=------------------------------------------------------------------------=
     
-    @inlinable func autocorrect(_ value: inout Value) throws {
-        value = try parseStrategy.parse(format(value))
+    @inlinable func autocorrect(_ value: inout Value) {
+        value = try! parseStrategy.parse(format(value))
     }
 }
 
@@ -142,7 +141,7 @@ extension PercentFormat {
 // MARK: * Format x Round (Int)
 //*============================================================================*
 
-@usableFromInline protocol IntIncrementableFormat: Format {
+@usableFromInline protocol RoundableByIntFormat: Format {
     
     //=------------------------------------------------------------------------=
     // MARK: Round
@@ -152,10 +151,10 @@ extension PercentFormat {
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: Format x Round (Int)
+// MARK: Format x Round (Int) - Details
 //=----------------------------------------------------------------------------=
 
-extension IntIncrementableFormat {
+extension RoundableByIntFormat {
     
     //=------------------------------------------------------------------------=
     // MARK: Round
@@ -170,7 +169,7 @@ extension IntIncrementableFormat {
 // MARK: * Format x Round (Double)
 //*============================================================================*
 
-@usableFromInline protocol DoubleIncrementableFormat: Format {
+@usableFromInline protocol RoundableByDoubleFormat: Format {
     
     //=------------------------------------------------------------------------=
     // MARK: Round
@@ -180,10 +179,10 @@ extension IntIncrementableFormat {
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: Format x Round (Double)
+// MARK: Format x Round (Double) - Details
 //=----------------------------------------------------------------------------=
 
-extension DoubleIncrementableFormat {
+extension RoundableByDoubleFormat {
     
     //=------------------------------------------------------------------------=
     // MARK: Round
