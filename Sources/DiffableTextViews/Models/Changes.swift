@@ -64,6 +64,10 @@ Next: BidirectionalCollection, Next.Element == Symbol {
     // MARK: End
     //=------------------------------------------------------------------------=
     
+    /// End of changes.
+    ///
+    /// Returns each caret position after the first irreconcilable mismatch.
+    ///
     @inlinable static func end(past: Past, next: Next) -> Indices {
         //=--------------------------------------=
         // MARK: Reverse

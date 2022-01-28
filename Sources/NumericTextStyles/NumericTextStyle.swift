@@ -135,17 +135,18 @@ extension NumericTextStyle {
     // MARK: Commit
     //=------------------------------------------------------------------------=
     
-    @inlinable public func merge(snapshot: Snapshot, input: Input) throws -> Commit<Value> {
+    #warning("Cleanup: reader/proposal.")
+    @inlinable public func merge(request: Request) throws -> Commit<Value> {
         //=--------------------------------------=
         // MARK: Reader
         //=--------------------------------------=
-        var reader = Reader(input.content)
+        var reader = Reader(request.replacement)
         reader.consumeSignInput(region: region)
         //=--------------------------------------=
         // MARK: Proposal
         //=--------------------------------------=
-        var proposal = snapshot
-        proposal.replaceSubrange(input.range, with: reader.content)
+        var proposal = request.snapshot
+        proposal.replaceSubrange(request.range, with: reader.content)
         //=--------------------------------------=
         // MARK: Number
         //=--------------------------------------=

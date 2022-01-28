@@ -178,14 +178,8 @@ extension PatternTextStyle {
     // MARK: Commit
     //=------------------------------------------------------------------------=
     
-    @inlinable public func merge(snapshot: Snapshot, input: Input) throws -> Commit<Value> {
-        var proposal = snapshot
-        proposal.replaceSubrange(input.range, with: input.content)
-        //=--------------------------------------=
-        // MARK: Value
-        //=--------------------------------------=
-        var value = Value()
-        var nonvirtuals = proposal.lazy.filter(\.nonvirtual).makeIterator()
+    @inlinable public func merge(request: Request) throws -> Commit<Value> {
+        var value = Value(); var nonvirtuals = request.proposal().lazy.filter(\.nonvirtual).makeIterator()
         //=--------------------------------------=
         // MARK: Loop
         //=--------------------------------------=
@@ -211,7 +205,7 @@ extension PatternTextStyle {
         // MARK: Capacity
         //=--------------------------------------=
         guard nonvirtuals.next() == nil else {
-            throw Info([.mark(snapshot.characters), "exceeded pattern capacity."])
+            throw Info([.mark(request.proposal().characters), "exceeded pattern capacity."])
         }
         //=--------------------------------------=
         // MARK: Value -> Commit

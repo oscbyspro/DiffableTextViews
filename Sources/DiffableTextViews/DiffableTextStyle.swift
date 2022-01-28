@@ -38,19 +38,19 @@ public protocol DiffableTextStyle {
     /// Transforms the value into formatted text when the view is idle.
     @inlinable func showcase(value: Value) -> String
     
-    /// Transforms the value into new output when the view is active.
+    /// Transforms the value into new commit when the view is active.
     @inlinable func editable(value: Value) -> Commit<Value>
     
     //=------------------------------------------------------------------------=
     // MARK: Downstream
     //=------------------------------------------------------------------------=
     
-    /// Merges the snapshot and input to produce an output.
+    /// Transforms a proposal into a new commit.
     ///
     /// - Thrown errors result in input cancellation.
     /// - Thrown error descriptions are printed in DEBUG mode.
     ///
-    @inlinable func merge(snapshot: Snapshot, input: Input) throws -> Commit<Value>
+    @inlinable func merge(request: Request) throws -> Commit<Value>
 }
 
 //=----------------------------------------------------------------------------=
