@@ -68,17 +68,12 @@ extension ProxyTextField {
     // MARK: Transformations
     //=------------------------------------------------------------------------=
     
-    /// - Complexity: High.
     @inlinable func update(text: String) {
-        #warning("Unsure whether to check differences first or not.")
-        if wrapped.text != text { wrapped.text = text }
+        wrapped.text = text
     }
     
-    /// - Complexity: High.
     @inlinable func update(selection: Range<Position>) {
-        #warning("Unsure whether to check differences first or not.")
-        let positions = positions(in: selection)
-        if wrapped.selectedTextRange != positions { wrapped.selectedTextRange = positions }
+        wrapped.selectedTextRange = positions(in: selection)
     }
     
     //=------------------------------------------------------------------------=

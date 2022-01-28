@@ -27,16 +27,16 @@ public struct DiffableTextField<Style: UIKitDiffableTextStyle>: UIViewRepresenta
     // MARK: Properties
     //=------------------------------------------------------------------------=
     
-    @usableFromInline let value: Binding<Value>
     @usableFromInline let style: Style
+    @usableFromInline let value: Binding<Value>
     
     //=------------------------------------------------------------------------=
     // MARK: Customization
     //=------------------------------------------------------------------------=
 
-    @usableFromInline var setup:  ((ProxyTextField) -> Void)? = nil
-    @usableFromInline var update: ((ProxyTextField) -> Void)? = nil
-    @usableFromInline var submit: ((ProxyTextField) -> Void)? = nil
+    @usableFromInline var setup:  ((ProxyTextField) -> Void) = { _ in }
+    @usableFromInline var update: ((ProxyTextField) -> Void) = { _ in }
+    @usableFromInline var submit: ((ProxyTextField) -> Void) = { _ in }
 
     //=------------------------------------------------------------------------=
     // MARK: Initializers
@@ -94,7 +94,7 @@ public struct DiffableTextField<Style: UIKitDiffableTextStyle>: UIViewRepresenta
         let downstream = ProxyTextField(uiView)
         Style.setup(diffableTextField: downstream)
         context.coordinator.downstream = downstream
-        setup?(context.coordinator.downstream)
+        setup(context.coordinator.downstream)
         //=--------------------------------------=
         // MARK: Done
         //=--------------------------------------=
@@ -107,7 +107,7 @@ public struct DiffableTextField<Style: UIKitDiffableTextStyle>: UIViewRepresenta
     
     @inlinable public func updateUIView(_ uiView: UIViewType, context: Context) {
         context.coordinator.upstream = self
-        update?(context.coordinator.downstream)
+        update(context.coordinator.downstream)
         context.coordinator.synchronize()
     }
     
@@ -136,8 +136,8 @@ public struct DiffableTextField<Style: UIKitDiffableTextStyle>: UIViewRepresenta
         //=--------------------------------------------------------------------=
         // MARK: Accessors
         //=--------------------------------------------------------------------=
-        
-        @inlinable func localized() -> Style {
+                
+        @inlinable func style() -> Style {
             upstream.style.locale(upstream.locale)
         }
 
@@ -146,7 +146,7 @@ public struct DiffableTextField<Style: UIKitDiffableTextStyle>: UIViewRepresenta
         //=--------------------------------------------------------------------=
         
         @inlinable public func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-            upstream.submit?(downstream) == nil
+            upstream.submit(downstream); return true
         }
         
         //=--------------------------------------------------------------------=
@@ -170,15 +170,17 @@ public struct DiffableTextField<Style: UIKitDiffableTextStyle>: UIViewRepresenta
         //=--------------------------------------------------------------------=
         
         @inlinable public func textField(_ textField: UITextField, shouldChangeCharactersIn nsRange: NSRange, replacementString string: String) -> Bool {
-            let style = localized()
+            let style = style()
             let range = state.indices(at: nsRange)
-            let selection = range.upperBound ..< range.upperBound
-            let request = Request(state.snapshot, change: (string, range))
             //=----------------------------------=
             // MARK: Attempt
             //=----------------------------------=
             attempt: do {
-                let commit = try style.merge(request: request)
+                //=------------------------------=
+                // MARK: Selection, Commit
+                //=------------------------------=
+                let selection = range.upperBound ..< range.upperBound
+                let commit = try style.merge(request: Request(state.snapshot, change: (string, range)))
                 //=------------------------------=
                 // MARK: Push
                 //=------------------------------=
@@ -231,10 +233,14 @@ public struct DiffableTextField<Style: UIKitDiffableTextStyle>: UIViewRepresenta
         // MARK: Synchronize
         //=--------------------------------------------------------------------=
         
-        #warning("This should only be called if the style or value has changed.")
+        #error("This should only be called if the style or value has changed.")
         @inlinable func synchronize() {
-            let style = localized()
+            let style = style()
             let value = upstream.value.wrappedValue
+            //=------------------------------=
+            // MARK: Evaluate
+            //=------------------------------=
+            #warning("......................")
             //=------------------------------=
             // MARK: Editable
             //=------------------------------=
@@ -252,7 +258,7 @@ public struct DiffableTextField<Style: UIKitDiffableTextStyle>: UIViewRepresenta
         }
         
         //=--------------------------------------------------------------------=
-        // MARK: Push - Editable
+        // MARK: Push
         //=--------------------------------------------------------------------=
         
         @inlinable func push() {
