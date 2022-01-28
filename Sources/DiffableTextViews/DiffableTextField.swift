@@ -232,7 +232,7 @@ public struct DiffableTextField<Style: UIKitDiffableTextStyle>: UIViewRepresenta
         // MARK: Synchronize
         //=--------------------------------------------------------------------=
         
-        #warning("Check.")
+        #warning("Make sure this works as intended.")
         @inlinable func synchronize() {
             let style = style()
             let value = upstream.value.wrappedValue
@@ -251,7 +251,7 @@ public struct DiffableTextField<Style: UIKitDiffableTextStyle>: UIViewRepresenta
             //=------------------------------=
             } else {
                 lock.perform {
-                    self.state.reset(style: style, value: value)
+                    self.state.showcase(style: style, value: value)
                     self.downstream.update(text: style.showcase(value: value))
                 }
             }

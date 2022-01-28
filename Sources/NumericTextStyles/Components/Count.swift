@@ -6,7 +6,7 @@
 //
 
 /// A count of a number's components.
-public struct Count {
+public struct Count: Equatable {
 
     //=------------------------------------------------------------------------=
     // MARK: Properties

@@ -13,7 +13,7 @@ import Support
 //*============================================================================*
 
 /// A model that constrains values to a closed range.
-public struct Bounds<Value: Boundable> {
+public struct Bounds<Value: Boundable>: Equatable {
 
     //=------------------------------------------------------------------------=
     // MARK: Properties

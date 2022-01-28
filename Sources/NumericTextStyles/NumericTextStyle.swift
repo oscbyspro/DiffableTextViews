@@ -43,14 +43,29 @@ public struct NumericTextStyle<Format: NumericTextStyles.Format>: DiffableTextSt
     //=------------------------------------------------------------------------=
     
     @inlinable public func locale(_ locale: Locale) -> Self {
+        guard locale != self.region.locale else { return self }
+        //=--------------------------------------=
+        // MARK: Make New Instance
+        //=--------------------------------------=
         var result = self
-        
-        if  result.region.locale != locale {
-            result.format = format.locale(locale)
-            result.region = Region.cached(locale)
-        }
-        
+        result.format = format.locale(locale)
+        result.region = Region.cached(locale)
         return result
+    }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Comparisons
+    //=------------------------------------------------------------------------=
+    
+    /// Equality comparison.
+    ///
+    /// Region does not need to be compared because it is linked to the format.
+    ///
+    @inlinable public static func == (lhs: Self, rhs: Self) -> Bool {
+        guard lhs.format    == rhs.format    else { return false }
+        guard lhs.bounds    == rhs.bounds    else { return false }
+        guard lhs.precision == rhs.precision else { return false }
+        return true
     }
 }
 
@@ -127,7 +142,6 @@ extension NumericTextStyle {
     // MARK: Editable
     //=------------------------------------------------------------------------=
     
-    #error("FIXME: This should not be called on request.")
     @inlinable public func editable(value: Value) -> Commit<Value> {
         let style = format.style(precision: precision.editable())
         //=--------------------------------------=

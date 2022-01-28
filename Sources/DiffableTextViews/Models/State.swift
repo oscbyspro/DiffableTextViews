@@ -44,10 +44,9 @@
         self.field.selection = selection ..< selection
     }
     
-    @inlinable func reset(style: Style, value: Value) {
+    @inlinable func showcase(style: Style, value: Value) {
         self.value = value
         self.style = style
         self.active = false
-        self.field = Field()
     }
 }
