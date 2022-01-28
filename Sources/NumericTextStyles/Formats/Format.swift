@@ -53,7 +53,7 @@ extension Format {
     //=------------------------------------------------------------------------=
         
     @inlinable func autocorrect(_ value: inout Value) {
-        value = try! parseStrategy.parse(format(value))
+        value = (try? parseStrategy.parse(format(value))) ?? value
     }
 }
 
