@@ -62,7 +62,17 @@ public final class Constant<Style: DiffableTextStyle>: DiffableTextStyle {
 
 #if canImport(UIKit)
 
-extension Constant: UIKitDiffableTextStyle where Style: UIKitDiffableTextStyle { }
+extension Constant: UIKitDiffableTextStyle where Style: UIKitDiffableTextStyle {
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Setup
+    //=------------------------------------------------------------------------=
+    
+    @inlinable @inline(__always)
+    public static func setup(diffableTextField: ProxyTextField) {
+        Style.setup(diffableTextField: diffableTextField)
+    }
+}
 
 #endif
 
@@ -76,7 +86,7 @@ extension DiffableTextStyle {
     // MARK: Transformations
     //=------------------------------------------------------------------------=
     
-    /// A promise that the style will remain unchanged between view updates.
+    /// A promise that the style will remain unchanged between updates.
     ///
     /// It is a reference type, so it may be cached for further optimization.
     ///
