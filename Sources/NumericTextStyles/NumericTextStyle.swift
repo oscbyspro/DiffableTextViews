@@ -8,6 +8,7 @@
 import DiffableTextViews
 import Foundation
 
+#warning("FIXME: fraction deletion with trailing zeros.")
 //*============================================================================*
 // MARK: * NumericTextStyle
 //*============================================================================*
@@ -126,6 +127,7 @@ extension NumericTextStyle {
     // MARK: Editable
     //=------------------------------------------------------------------------=
     
+    #error("FIXME: This should not be called on request.")
     @inlinable public func editable(value: Value) -> Commit<Value> {
         let style = format.style(precision: precision.editable())
         //=--------------------------------------=

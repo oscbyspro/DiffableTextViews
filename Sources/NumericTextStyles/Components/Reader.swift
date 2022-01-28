@@ -18,7 +18,7 @@ import DiffableTextViews
     // MARK: Properties
     //=------------------------------------------------------------------------=
     
-    @usableFromInline let region:  Region
+    @usableFromInline let region: Region
     @usableFromInline var request: Request
     
     //=------------------------------------------------------------------------=

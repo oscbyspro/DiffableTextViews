@@ -28,7 +28,7 @@ public struct DiffableTextField<Style: UIKitDiffableTextStyle>: UIViewRepresenta
     //=------------------------------------------------------------------------=
     
     @usableFromInline let value: Binding<Value>
-    @usableFromInline let style: () -> Style
+    @usableFromInline let style: Style
     
     //=------------------------------------------------------------------------=
     // MARK: Customization
@@ -42,14 +42,14 @@ public struct DiffableTextField<Style: UIKitDiffableTextStyle>: UIViewRepresenta
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable public init(_ value: Binding<Value>, style: @escaping () -> Style) {
+    @inlinable public init(_ value: Binding<Value>, style: Style) {
         self.value = value
         self.style = style
     }
     
-    @inlinable public init(_ value: Binding<Value>, style: @escaping @autoclosure () -> Style) {
+    @inlinable public init(_ value: Binding<Value>, style: () -> Style) {
         self.value = value
-        self.style = style
+        self.style = style()
     }
         
     //=------------------------------------------------------------------------=
@@ -137,8 +137,8 @@ public struct DiffableTextField<Style: UIKitDiffableTextStyle>: UIViewRepresenta
         // MARK: Accessors
         //=--------------------------------------------------------------------=
         
-        @inlinable func style() -> Style {
-            upstream.style().locale(upstream.locale)
+        @inlinable func localized() -> Style {
+            upstream.style.locale(upstream.locale)
         }
 
         //=--------------------------------------------------------------------=
@@ -170,7 +170,7 @@ public struct DiffableTextField<Style: UIKitDiffableTextStyle>: UIViewRepresenta
         //=--------------------------------------------------------------------=
         
         @inlinable public func textField(_ textField: UITextField, shouldChangeCharactersIn nsRange: NSRange, replacementString string: String) -> Bool {
-            let style = style()
+            let style = localized()
             let range = state.indices(at: nsRange)
             let selection = range.upperBound ..< range.upperBound
             let request = Request(state.snapshot, change: (string, range))
@@ -231,8 +231,9 @@ public struct DiffableTextField<Style: UIKitDiffableTextStyle>: UIViewRepresenta
         // MARK: Synchronize
         //=--------------------------------------------------------------------=
         
+        #warning("This should only be called if the style or value has changed.")
         @inlinable func synchronize() {
-            let style = style()
+            let style = localized()
             let value = upstream.value.wrappedValue
             //=------------------------------=
             // MARK: Editable
