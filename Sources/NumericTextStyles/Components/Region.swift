@@ -149,6 +149,10 @@ extension Region {
     // MARK: Number To Characters
     //=------------------------------------------------------------------------=
     
+    /// Converts a number to regional characters, to be parsed by a localized format style.
+    ///
+    /// - Characters do not include right-to-left markers (which are redundant for parsing).
+    ///
     @inlinable func characters(in number: Number) -> String {
         var characters = String()
         //=--------------------------------------=
