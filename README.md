@@ -94,6 +94,7 @@ struct DiffableAmountTextField: View {
             .currency(code: "SEK")
             .bounds((0 as Decimal)...)
             .precision(integer: 1..., fraction: 2)
+            .constant()
         }
         .environment(\.locale, Locale(identifier: "en_SE"))
     }
