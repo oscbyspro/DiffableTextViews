@@ -12,20 +12,22 @@ import DiffableTextViews
 //*============================================================================*
 
 @usableFromInline struct Reader {
+    @usableFromInline typealias Transform<T> = ((inout T) -> Void)
     
     //=------------------------------------------------------------------------=
     // MARK: Properties
     //=------------------------------------------------------------------------=
     
-    @usableFromInline var content: Snapshot
-    @usableFromInline var process: ((inout Number) -> Void)?
+    @usableFromInline let region:  Region
+    @usableFromInline var request: Request
     
     //=------------------------------------------------------------------------=
     // MARK: Initializers
     //=------------------------------------------------------------------------=
             
-    @inlinable init(_ content: Snapshot) {
-        self.content = content
+    @inlinable init(_ request: Request, in region: Region) {
+        self.region  = region
+        self.request = request
     }
     
     //=------------------------------------------------------------------------=
@@ -33,13 +35,13 @@ import DiffableTextViews
     //=------------------------------------------------------------------------=
     
     /// Interprets a single sign character as a: set sign command.
-    @inlinable mutating func consumeSignInput(region: Region) {
-        guard content.count == 1 else { return } // snapshot.count is O(1)
-        guard let sign = region.signs[content.first!.character] else { return }
+    @inlinable mutating func consumeSignCommand() -> Transform<Number>? {
+        guard request.replacement.count == 1 else { return nil } // snapshot.count is O(1)
+        guard let sign = region.signs[request.replacement.first!.character] else { return nil }
         //=--------------------------------------=
         // MARK: Set Sign Command Found
         //=--------------------------------------=
-        self.content.removeAll()
-        self.process = { number in number.sign = sign }
+        self.request.replacement.removeAll()
+        return { number in number.sign = sign }
     }
 }

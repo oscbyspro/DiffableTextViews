@@ -16,8 +16,8 @@ public struct Request {
     //=------------------------------------------------------------------------=
     
     public let snapshot: Snapshot
-    public let replacement: Snapshot
-    public let range: Range<Snapshot.Index>
+    public var replacement: Snapshot
+    public var range: Range<Snapshot.Index>
     
     //=------------------------------------------------------------------------=
     // MARK: Initializers
