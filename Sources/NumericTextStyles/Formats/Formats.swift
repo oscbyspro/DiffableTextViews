@@ -12,28 +12,28 @@ import Foundation
 //*============================================================================*
 
 extension Decimal.FormatStyle:
-NumberFormat, RoundableByIntFormat { }
+NumberFormat, RoundableByIncrementFormat { }
 
 extension Decimal.FormatStyle.Currency:
-CurrencyFormat, RoundableByIntFormat { }
+CurrencyFormat, RoundableByIncrementFormat { }
 
 extension Decimal.FormatStyle.Percent:
-PercentFormat, RoundableByIntFormat { }
+PercentFormat, RoundableByIncrementFormat { }
 
 //*============================================================================*
 // MARK: * Format x Floating Point
 //*============================================================================*
 
 extension FloatingPointFormatStyle:
-Format, NumberFormat, RoundableByDoubleFormat where
+Format, NumberFormat, RoundableByIncrementFormat where
 FormatInput: NumericTextStyles.FloatingPointValue { }
 
 extension FloatingPointFormatStyle.Currency:
-Format, CurrencyFormat, RoundableByDoubleFormat where
+Format, CurrencyFormat, RoundableByIncrementFormat where
 FormatInput: NumericTextStyles.FloatingPointValue { }
 
 extension FloatingPointFormatStyle.Percent:
-Format, PercentFormat, RoundableByDoubleFormat where
+Format, PercentFormat, RoundableByIncrementFormat where
 FormatInput: NumericTextStyles.FloatingPointValue { }
 
 //*============================================================================*
@@ -41,9 +41,9 @@ FormatInput: NumericTextStyles.FloatingPointValue { }
 //*============================================================================*
 
 extension IntegerFormatStyle:
-Format, NumberFormat, RoundableByIntFormat where
+Format, NumberFormat, RoundableByIncrementFormat where
 FormatInput: NumericTextStyles.IntegerValue { }
 
 extension IntegerFormatStyle.Currency:
-Format, CurrencyFormat, RoundableByIntFormat where
+Format, CurrencyFormat, RoundableByIncrementFormat where
 FormatInput: NumericTextStyles.IntegerValue { }

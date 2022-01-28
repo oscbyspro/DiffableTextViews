@@ -146,51 +146,24 @@ extension PercentFormat {
 }
 
 //*============================================================================*
-// MARK: * Format x Round (Int)
+// MARK: * Format x Roundable
 //*============================================================================*
 
-@usableFromInline protocol RoundableByIntFormat: Format {
+@usableFromInline protocol RoundableByIncrementFormat: Format {
+    associatedtype Increment
     
     //=------------------------------------------------------------------------=
     // MARK: Round
     //=------------------------------------------------------------------------=
     
-    @inlinable func rounded(rule: FloatingPointRoundingRule, increment: Int?) -> Self
+    @inlinable func rounded(rule: FloatingPointRoundingRule, increment: Increment?) -> Self
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: Format x Round (Int) - Details
+// MARK: Format x Roundable - Details
 //=----------------------------------------------------------------------------=
 
-extension RoundableByIntFormat {
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Round
-    //=------------------------------------------------------------------------=
-    
-    @inlinable public func rounded(rule: FloatingPointRoundingRule) -> Self {
-        rounded(rule: rule, increment: nil)
-    }
-}
-
-//*============================================================================*
-// MARK: * Format x Round (Double)
-//*============================================================================*
-
-@usableFromInline protocol RoundableByDoubleFormat: Format {
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Round
-    //=------------------------------------------------------------------------=
-    
-    @inlinable func rounded(rule: FloatingPointRoundingRule, increment: Double?) -> Self
-}
-
-//=----------------------------------------------------------------------------=
-// MARK: Format x Round (Double) - Details
-//=----------------------------------------------------------------------------=
-
-extension RoundableByDoubleFormat {
+extension RoundableByIncrementFormat {
     
     //=------------------------------------------------------------------------=
     // MARK: Round
