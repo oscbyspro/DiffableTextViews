@@ -16,7 +16,7 @@ public struct Constant<Style: DiffableTextStyle>: Wrapper {
     // MARK: Properties
     //=------------------------------------------------------------------------=
 
-    @usableFromInline let style: Style
+    public var style: Style
 
     //=------------------------------------------------------------------------=
     // MARK: Initializers
@@ -27,19 +27,21 @@ public struct Constant<Style: DiffableTextStyle>: Wrapper {
     }
     
     //=------------------------------------------------------------------------=
-    // MARK: Transformations
-    //=------------------------------------------------------------------------=
-    
-    @inlinable @inline(__always) func make(style: Style) -> Self {
-        Self(style: style)
-    }
-    
-    //=------------------------------------------------------------------------=
     // MARK: Comparisons
     //=------------------------------------------------------------------------=
     
     @inlinable @inline(__always) public static func == (lhs: Self, rhs: Self) -> Bool { true }
 }
+
+//=----------------------------------------------------------------------------=
+// MARK: Constant - UIKit
+//=----------------------------------------------------------------------------=
+
+#if canImport(UIKit)
+
+extension Constant: UIKitDiffableTextStyle where Style: UIKitDiffableTextStyle { }
+
+#endif
 
 //*============================================================================*
 // MARK: * DiffableTextStyle x Constant
@@ -55,3 +57,4 @@ extension DiffableTextStyle {
         Constant(style: self)
     }
 }
+

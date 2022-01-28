@@ -112,8 +112,6 @@ A style that processes characters laid out in custom patterns.
 | :chess_pawn: | Placeholders | Placeholders represent not-yet-assigned values |
 | :fist_raised: | Independance | Supports multiple placeholders with different rules |
 | :ghost: | Invisibility | Pattern suffix can easily be \\.hidden() |
-| :feather: | Lightweight | Written in one [file](Sources/PatternTextStyles/PatternTextStyle.swift) |
-
 
 ### Examples
 
@@ -126,7 +124,7 @@ struct DiffablePhoneNumberTextField: View {
     var body: some View {
         DiffableTextField($phoneNumber) {
             .pattern("+## (###) ###-##-##")
-            .placeholder("#") { $0.isASCII && $0.isNumber }
+            .placeholder(constant: "#") { $0.isASCII && $0.isNumber }
         }
         .setup({ $0.keyboard(.phonePad) })
     }

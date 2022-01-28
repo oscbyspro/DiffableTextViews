@@ -62,8 +62,8 @@ public struct NumericTextStyle<Format: NumericTextStyles.Format>: DiffableTextSt
     /// Region does not need to be compared because it is linked to the format.
     ///
     @inlinable public static func == (lhs: Self, rhs: Self) -> Bool {
-        guard lhs.format    == rhs.format    else { return false }
-        guard lhs.bounds    == rhs.bounds    else { return false }
+        guard lhs.format == rhs.format else { return false }
+        guard lhs.bounds == rhs.bounds else { return false }
         guard lhs.precision == rhs.precision else { return false }
         return true
     }

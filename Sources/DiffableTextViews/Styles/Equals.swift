@@ -16,8 +16,8 @@ public struct Equals<Style: DiffableTextStyle, Equatable: Swift.Equatable>: Wrap
     // MARK: Properties
     //=------------------------------------------------------------------------=
 
-    @usableFromInline let style: Style
-    @usableFromInline let equatable: Equatable
+    public var style: Style
+    public let equatable: Equatable
 
     //=------------------------------------------------------------------------=
     // MARK: Initializers
@@ -42,6 +42,16 @@ public struct Equals<Style: DiffableTextStyle, Equatable: Swift.Equatable>: Wrap
     
     @inlinable @inline(__always) public static func == (lhs: Self, rhs: Self) -> Bool { true }
 }
+
+//=----------------------------------------------------------------------------=
+// MARK: Equals - UIKit
+//=----------------------------------------------------------------------------=
+
+#if canImport(UIKit)
+
+extension Equals: UIKitDiffableTextStyle where Style: UIKitDiffableTextStyle { }
+
+#endif
 
 //*============================================================================*
 // MARK: * DiffableTextStyle x Equals

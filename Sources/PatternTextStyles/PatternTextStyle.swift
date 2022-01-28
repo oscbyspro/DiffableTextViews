@@ -13,9 +13,8 @@ import Support
 //*============================================================================*
 
 public struct PatternTextStyle<Pattern, Value>: DiffableTextStyle where
-Pattern: Collection, Pattern.Element == Character,
+Pattern: Collection, Pattern: Equatable, Pattern.Element == Character,
 Value: RangeReplaceableCollection, Value: Equatable, Value.Element == Character {
-    @usableFromInline typealias Predicate = (Character) -> Bool
     
     //=------------------------------------------------------------------------=
     // MARK: Properties
@@ -44,9 +43,29 @@ Value: RangeReplaceableCollection, Value: Equatable, Value.Element == Character 
         var result = self; result.visible = false; return result
     }
 
-    @inlinable public func placeholder(_ placeholder: Character,
+    //=------------------------------------------------------------------------=
+    // MARK: Transformations - Placeholder
+    //=------------------------------------------------------------------------=
+    
+    @inlinable public func placeholder(_ placeholder: Character, value: AnyHashable,
         where predicate: @escaping (Character) -> Bool = { _ in true }) -> Self {
-        var result = self; result.placeholders[placeholder] = predicate; return result
+        var result = self; result.placeholders[placeholder] = Predicate(value, predicate); return result
+    }
+    
+    @inlinable public func placeholder(constant placeholder: Character,
+        where predicate: @escaping (Character) -> Bool = { _ in true }) -> Self {
+        var result = self; result.placeholders[placeholder] = Predicate(true, predicate); return result
+    }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Comparisons
+    //=------------------------------------------------------------------------=
+    
+    @inlinable public static func == (lhs: Self, rhs: Self) -> Bool {
+        guard lhs.pattern == rhs.pattern else { return false }
+        guard lhs.placeholders == rhs.placeholders else { return false }
+        guard lhs.visible == rhs.visible else { return false }
+        return true
     }
 }
 
@@ -91,7 +110,7 @@ extension PatternTextStyle {
             // MARK: Placeholder
             //=----------------------------------=
             if let predicate = placeholders[character] {
-                guard let real = next, predicate(real) else { break loop }
+                guard let real = next, predicate.validate(real) else { break loop }
                 //=------------------------------=
                 // MARK: Insertion
                 //=------------------------------=
@@ -159,7 +178,7 @@ extension PatternTextStyle {
                 // MARK: Next
                 //=------------------------------=
                 if let real = valueIterator.next() {
-                    guard predicate(real) else { break loop }
+                    guard predicate.validate(real) else { break loop }
                     //=------------------------------=
                     // MARK: Insertion, Iteration
                     //=------------------------------=
@@ -232,7 +251,7 @@ extension PatternTextStyle {
                 //=------------------------------=
                 // MARK: Predicate
                 //=------------------------------=
-                guard predicate(real.character) else {
+                guard predicate.validate(real.character) else {
                     throw Info([.mark(real.character), "is invalid"])
                 }
                 //=------------------------------=

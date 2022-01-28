@@ -11,7 +11,7 @@ import Foundation
 // MARK: * Wrapper
 //*============================================================================*
 
-@usableFromInline protocol Wrapper: DiffableTextStyle where Value == Style.Value {
+public protocol Wrapper: DiffableTextStyle where Value == Style.Value {
     
     //=------------------------------------------------------------------------=
     // MARK: Style
@@ -19,38 +19,32 @@ import Foundation
     
     associatedtype Style: DiffableTextStyle
     
-    @inlinable var style: Style { get }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Transformations
-    //=------------------------------------------------------------------------=
-    
-    @inlinable func make(style: Style) -> Self
+    @inlinable var style: Style { get set }
 }
 
 //=----------------------------------------------------------------------------=
 // MARK: Wrapper
 //=----------------------------------------------------------------------------=
 
-extension Wrapper {
+public extension Wrapper {
     
     //=------------------------------------------------------------------------=
     // MARK: Locale
     //=------------------------------------------------------------------------=
     
-    @inlinable @inline(__always) public func locale(_ locale: Locale) -> Self {
-        make(style: style.locale(locale))
+    @inlinable @inline(__always) func locale(_ locale: Locale) -> Self {
+        var result = self; result.style = style.locale(locale); return result
     }
     
     //=------------------------------------------------------------------------=
     // MARK: Upstream
     //=------------------------------------------------------------------------=
     
-    @inlinable @inline(__always) public func showcase(value: Value) -> String {
+    @inlinable @inline(__always) func showcase(value: Value) -> String {
         style.showcase(value: value)
     }
     
-    @inlinable @inline(__always) public func editable(value: Value) -> Commit<Value> {
+    @inlinable @inline(__always) func editable(value: Value) -> Commit<Value> {
         style.editable(value: value)
     }
     
@@ -58,7 +52,26 @@ extension Wrapper {
     // MARK: Downstream
     //=------------------------------------------------------------------------=
     
-    @inlinable @inline(__always) public func merge(request: Request) throws -> Commit<Value> {
+    @inlinable @inline(__always) func merge(request: Request) throws -> Commit<Value> {
         try style.merge(request: request)
     }
 }
+
+//=----------------------------------------------------------------------------=
+// MARK: Wrapper - UIKit
+//=----------------------------------------------------------------------------=
+
+#if canImport(UIKit)
+
+extension Wrapper where Self: UIKitDiffableTextStyle, Style: UIKitDiffableTextStyle {
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Setup
+    //=------------------------------------------------------------------------=
+    
+    @inlinable @inline(__always) public static func setup(diffableTextField: ProxyTextField) {
+        Style.setup(diffableTextField: diffableTextField)
+    }
+}
+
+#endif
