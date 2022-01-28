@@ -47,7 +47,7 @@ public protocol DiffableTextStyle: Equatable {
     // MARK: Downstream
     //=------------------------------------------------------------------------=
     
-    /// Transforms a proposal into a new commit.
+    /// Transforms a merge request into a new commit.
     ///
     /// - Thrown errors result in input cancellation.
     /// - Thrown error descriptions are printed in DEBUG mode.
