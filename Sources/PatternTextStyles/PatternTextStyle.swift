@@ -12,8 +12,6 @@ import Support
 // MARK: * PatternTextStyle
 //*============================================================================*
 
-#warning("Untested.")
-#warning("Undocumented.")
 public struct PatternTextStyle<Pattern, Value>: DiffableTextStyle where
 Pattern: Collection, Pattern.Element == Character,
 Value: RangeReplaceableCollection, Value: Equatable, Value.Element == Character {
@@ -53,6 +51,16 @@ Value: RangeReplaceableCollection, Value: Equatable, Value.Element == Character 
 }
 
 //=----------------------------------------------------------------------------=
+// MARK: PatternTextStyle - UIKit
+//=----------------------------------------------------------------------------=
+
+#if canImport(UIKit)
+
+extension PatternTextStyle: UIKitDiffableTextStyle { }
+
+#endif
+
+//=----------------------------------------------------------------------------=
 // MARK: PatternTextStyle - Upstream
 //=----------------------------------------------------------------------------=
 
@@ -62,44 +70,58 @@ extension PatternTextStyle {
     // MARK: Showcase
     //=------------------------------------------------------------------------=
     
+    /// Matches the value agains the pattern into a collection of characters.
+    ///
+    /// - Format: matches + | + mismatches.
+    ///
     @inlinable public func showcase(value: Value) -> String {
         var characters = String()
         //=--------------------------------------=
-        // MARK: Indices
+        // MARK: Indices, Iterators
         //=--------------------------------------=
-        var valueIndex = value.startIndex
-        var patternIndex = pattern.startIndex
+        var index = pattern.startIndex
+        var valueIterator = value.makeIterator()
+        var next = valueIterator.next()
         //=--------------------------------------=
         // MARK: Loop
         //=--------------------------------------=
-        loop: while patternIndex != pattern.endIndex {
-            let character = pattern[patternIndex]
-            //=--------------------------------------=
+        loop: while index != pattern.endIndex {
+            let character = pattern[index]
+            //=----------------------------------=
             // MARK: Placeholder
-            //=--------------------------------------=
+            //=----------------------------------=
             if let predicate = placeholders[character] {
-                guard valueIndex != value.endIndex else { break loop }
-                let real = value[valueIndex]; guard predicate(real) else { break loop }
-                characters.append(real); value.formIndex(after: &valueIndex)
-            //=--------------------------------------=
+                guard let real = next, predicate(real) else { break loop }
+                //=------------------------------=
+                // MARK: Insertion
+                //=------------------------------=
+                characters.append(real)
+                next = valueIterator.next()
+            //=----------------------------------=
             // MARK: Pattern
-            //=--------------------------------------=
+            //=----------------------------------=
             } else {
+                //=------------------------------=
+                // MARK: Insertion
+                //=------------------------------=
                 characters.append(character)
             }
-
-            pattern.formIndex(after: &patternIndex)
+            //=----------------------------------=
+            // MARK: Iteration
+            //=----------------------------------=
+            pattern.formIndex(after: &index)
         }
         //=--------------------------------------=
         // MARK: Remainders - Pattern
         //=--------------------------------------=
-        visible ? characters.append(contentsOf: pattern[patternIndex...]) : ()
+        visible ? characters.append(contentsOf: pattern[index...]) : ()
         //=--------------------------------------=
         // MARK: Remainders - Value
         //=--------------------------------------=
-        if valueIndex != value.endIndex {
+        if let remainder = next {
             characters.append("|")
-            characters.append(contentsOf: value[valueIndex...])
+            characters.append(remainder)
+            while let real = valueIterator.next() { characters.append(real) }
         }
         //=--------------------------------------=
         // MARK: Done
@@ -111,20 +133,24 @@ extension PatternTextStyle {
     // MARK: Editable
     //=------------------------------------------------------------------------=
     
+    /// Matches the value agains the pattern into a commit.
+    ///
+    /// - Mismatches are cut.
+    ///
     @inlinable public func editable(value: Value) -> Commit<Value> {
         var content = Value()
         var snapshot = Snapshot()
         //=--------------------------------------=
         // MARK: Indices, Iterators
         //=--------------------------------------=
+        var index = pattern.startIndex
         var queueIndex = pattern.startIndex
-        var patternIndex = pattern.startIndex
         var valueIterator = value.makeIterator()
         //=--------------------------------------=
         // MARK: Loop
         //=--------------------------------------=
-        loop: while patternIndex != pattern.endIndex {
-            let character = pattern[patternIndex]
+        loop: while index != pattern.endIndex {
+            let character = pattern[index]
             //=----------------------------------=
             // MARK: Placeholder
             //=----------------------------------=
@@ -132,19 +158,26 @@ extension PatternTextStyle {
                 //=------------------------------=
                 // MARK: Next
                 //=------------------------------=
-                if let real = valueIterator.next(), predicate(real) {
+                if let real = valueIterator.next() {
+                    guard predicate(real) else { break loop }
+                    //=------------------------------=
+                    // MARK: Insertion, Iteration
+                    //=------------------------------=
                     content.append(real)
-                    snapshot += Snapshot(pattern[queueIndex..<patternIndex], as: .phantom)
+                    snapshot += Snapshot(pattern[queueIndex..<index], as: .phantom)
                     snapshot.append(Symbol(real, as: .content))
-                    pattern.formIndex(after: &patternIndex)
-                    queueIndex = patternIndex
+                    pattern.formIndex(after: &index)
+                    queueIndex = index
                 //=------------------------------=
                 // MARK: None
                 //=------------------------------=
                 } else if value.isEmpty {
-                    snapshot += Snapshot(pattern[queueIndex..<patternIndex], as: .phantom)
+                    //=------------------------------=
+                    // MARK: Insertion
+                    //=------------------------------=
+                    snapshot += Snapshot(pattern[queueIndex..<index], as: .phantom)
                     snapshot.append(.anchor)
-                    queueIndex = patternIndex
+                    queueIndex = index
                     break loop
                 //=------------------------------=
                 // MARK: Last
@@ -154,7 +187,10 @@ extension PatternTextStyle {
             // MARK: Pattern
             //=----------------------------------=
             } else {
-                pattern.formIndex(after: &patternIndex)
+                //=------------------------------=
+                // MARK: Iteration
+                //=------------------------------=
+                pattern.formIndex(after: &index)
             }
         }
         //=--------------------------------------=
@@ -178,10 +214,14 @@ extension PatternTextStyle {
     // MARK: Commit
     //=------------------------------------------------------------------------=
     
+    /// Marges, parses and matches the request into a commit.
+    ///
+    /// - Mismatches throw an error.
+    ///
     @inlinable public func merge(request: Request) throws -> Commit<Value> {
         var value = Value(); var nonvirtuals = request.proposal().lazy.filter(\.nonvirtual).makeIterator()
         //=--------------------------------------=
-        // MARK: Loop
+        // MARK: Parse
         //=--------------------------------------=
         loop: for character in pattern {
             //=----------------------------------=
@@ -193,7 +233,7 @@ extension PatternTextStyle {
                 // MARK: Predicate
                 //=------------------------------=
                 guard predicate(real.character) else {
-                    throw Info([.mark(real.character), "is invalid."])
+                    throw Info([.mark(real.character), "is invalid"])
                 }
                 //=------------------------------=
                 // MARK: Insertion
@@ -213,13 +253,3 @@ extension PatternTextStyle {
         return editable(value: value)
     }
 }
-
-//=----------------------------------------------------------------------------=
-// MARK: PatternTextStyle - UIKit
-//=----------------------------------------------------------------------------=
-
-#if canImport(UIKit)
-
-extension PatternTextStyle: UIKitDiffableTextStyle { }
-
-#endif

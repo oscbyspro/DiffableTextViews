@@ -54,6 +54,27 @@ public struct NumericTextStyle<Format: NumericTextStyles.Format>: DiffableTextSt
 }
 
 //=----------------------------------------------------------------------------=
+// MARK: NumericTextStyle - UIKit
+//=----------------------------------------------------------------------------=
+
+#if canImport(UIKit)
+
+import UIKit
+
+extension NumericTextStyle: UIKitDiffableTextStyle {
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Keyboard
+    //=------------------------------------------------------------------------=
+    
+    @inlinable public static func setup(diffableTextField: ProxyTextField) {
+        diffableTextField.keyboard(Value.isInteger ? .numberPad : .decimalPad)
+    }
+}
+
+#endif
+
+//=----------------------------------------------------------------------------=
 // MARK: NumericTextStyle - Snapshot
 //=----------------------------------------------------------------------------=
 
@@ -189,24 +210,3 @@ extension NumericTextStyle {
         characters.replaceSubrange(position...position, with: String(replacement))
     }
 }
-
-//=----------------------------------------------------------------------------=
-// MARK: NumericTextStyle - UIKit
-//=----------------------------------------------------------------------------=
-
-#if canImport(UIKit)
-
-import UIKit
-
-extension NumericTextStyle: UIKitDiffableTextStyle {
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Keyboard
-    //=------------------------------------------------------------------------=
-    
-    @inlinable public static func setup(diffableTextField: ProxyTextField) {
-        diffableTextField.keyboard(Value.isInteger ? .numberPad : .decimalPad)
-    }
-}
-
-#endif

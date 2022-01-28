@@ -76,7 +76,7 @@ public struct Precision<Value: Precise> {
             throw Info([.mark(component), "digits exceed max precision", .mark(upper[component])])
         }
         //=--------------------------------------=
-        // MARK: Success
+        // MARK: Return Capacity On Success
         //=--------------------------------------=
         return capacity
     }
