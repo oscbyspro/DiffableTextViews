@@ -105,7 +105,7 @@ extension NumericTextStyle {
     // MARK: Editable
     //=------------------------------------------------------------------------=
     
-    @inlinable public func editable(value: Value) -> Output<Value> {
+    @inlinable public func editable(value: Value) -> Commit<Value> {
         let style = format.style(precision: precision.editable())
         //=--------------------------------------=
         // MARK: Value, Autocorrect
@@ -121,7 +121,7 @@ extension NumericTextStyle {
         //=--------------------------------------=
         // MARK: Done
         //=--------------------------------------=
-        return Output(value: autocorrectable, snapshot: snapshot)
+        return Commit(value: autocorrectable, snapshot: snapshot)
     }
 }
 
@@ -132,10 +132,10 @@ extension NumericTextStyle {
 extension NumericTextStyle {
     
     //=------------------------------------------------------------------------=
-    // MARK: Output
+    // MARK: Commit
     //=------------------------------------------------------------------------=
     
-    @inlinable public func merge(snapshot: Snapshot, input: Input) throws -> Output<Value> {
+    @inlinable public func merge(snapshot: Snapshot, input: Input) throws -> Commit<Value> {
         //=--------------------------------------=
         // MARK: Reader
         //=--------------------------------------=
@@ -179,9 +179,9 @@ extension NumericTextStyle {
         var characters = style.format(value)
         fix(sign: number.sign, for: value, in: &characters)
         //=--------------------------------------=
-        // MARK: Snapshot, Output
+        // MARK: Snapshot, Commit
         //=--------------------------------------=
-        return Output(value: value, snapshot: self.snapshot(characters: characters))
+        return Commit(value: value, snapshot: self.snapshot(characters: characters))
     }
     
     //=------------------------------------------------------------------------=

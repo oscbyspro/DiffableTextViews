@@ -113,7 +113,7 @@ extension State {
     // MARK: Snapshot / Value
     //=------------------------------------------------------------------------=
     
-    @inlinable func update(output: Output<Value>) {
+    @inlinable func update(output: Commit<Value>) {
         self.value = output.value
         self.update(snapshot: output.snapshot)
     }

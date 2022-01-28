@@ -1,20 +1,16 @@
 //
-//  Output.swift
+//  Commit.swift
 //  
 //
 //  Created by Oscar Byström Ericsson on 2022-01-17.
 //
 
 //*============================================================================*
-// MARK: * Output
+// MARK: * Commit
 //*============================================================================*
 
-/// A snapshot and an optional value.
-///
-/// Sometimes when a style merges snapshots, it also parses its value. In that case,
-/// the value may be returned with the snapshot in order to not parse it twice.
-///
-public struct Output<Value> {
+/// A value and a snapshot describing it.
+public struct Commit<Value> {
     
     //=------------------------------------------------------------------------=
     // MARK: Properties

@@ -39,7 +39,7 @@ public protocol DiffableTextStyle {
     @inlinable func showcase(value: Value) -> String
     
     /// Transforms the value into new output when the view is active.
-    @inlinable func editable(value: Value) -> Output<Value>
+    @inlinable func editable(value: Value) -> Commit<Value>
     
     //=------------------------------------------------------------------------=
     // MARK: Downstream
@@ -50,7 +50,7 @@ public protocol DiffableTextStyle {
     /// - Thrown errors result in input cancellation.
     /// - Thrown error descriptions are printed in DEBUG mode.
     ///
-    @inlinable func merge(snapshot: Snapshot, input: Input) throws -> Output<Value>
+    @inlinable func merge(snapshot: Snapshot, input: Input) throws -> Commit<Value>
 }
 
 //=----------------------------------------------------------------------------=

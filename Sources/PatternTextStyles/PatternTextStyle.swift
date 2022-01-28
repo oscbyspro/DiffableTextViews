@@ -111,7 +111,7 @@ extension PatternTextStyle {
     // MARK: Editable
     //=------------------------------------------------------------------------=
     
-    @inlinable public func editable(value: Value) -> Output<Value> {
+    @inlinable public func editable(value: Value) -> Commit<Value> {
         var content = Value()
         var snapshot = Snapshot()
         //=--------------------------------------=
@@ -164,7 +164,7 @@ extension PatternTextStyle {
         //=--------------------------------------=
         // MARK: Done
         //=--------------------------------------=
-        return Output(value: content, snapshot: snapshot)
+        return Commit(value: content, snapshot: snapshot)
     }
 }
 
@@ -175,10 +175,10 @@ extension PatternTextStyle {
 extension PatternTextStyle {
         
     //=------------------------------------------------------------------------=
-    // MARK: Output
+    // MARK: Commit
     //=------------------------------------------------------------------------=
     
-    @inlinable public func merge(snapshot: Snapshot, input: Input) throws -> Output<Value> {
+    @inlinable public func merge(snapshot: Snapshot, input: Input) throws -> Commit<Value> {
         var proposal = snapshot
         proposal.replaceSubrange(input.range, with: input.content)
         //=--------------------------------------=
@@ -214,7 +214,7 @@ extension PatternTextStyle {
             throw Info([.mark(snapshot.characters), "exceeded pattern capacity."])
         }
         //=--------------------------------------=
-        // MARK: Value -> Output
+        // MARK: Value -> Commit
         //=--------------------------------------=
         return editable(value: value)
     }

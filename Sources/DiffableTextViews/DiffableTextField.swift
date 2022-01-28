@@ -170,16 +170,13 @@ public struct DiffableTextField<Style: UIKitDiffableTextStyle>: UIViewRepresenta
         //=--------------------------------------------------------------------=
         
         @inlinable public func textField(_ textField: UITextField, shouldChangeCharactersIn nsRange: NSRange, replacementString string: String) -> Bool {
-            let style = style()
-            let range = state.indices(at: nsRange)
-            let input = Input(content: string, range: range)
-            //=----------------------------------=
-            // MARK: Attempt
-            //=----------------------------------=
-            do {
+            attempt: do {
                 //=------------------------------=
                 // MARK: Values
                 //=------------------------------=
+                let style = style()
+                let range = state.indices(at: nsRange)
+                let input = Input(content: string, range: range)
                 let selection = range.upperBound ..< range.upperBound
                 let output = try style.merge(snapshot: state.snapshot, input: input)
                 //=------------------------------=
