@@ -15,7 +15,7 @@ extension NumericTextStyle {
     // MARK: Transformations
     //=------------------------------------------------------------------------=
     
-    @inlinable @inline(__always) func precision(_ precision: Precision) -> Self {
+    @inlinable func precision(_ precision: Precision) -> Self {
         var result = self; result.precision = precision; return result
     }
 }
@@ -30,7 +30,7 @@ public extension NumericTextStyle where Value: PreciseInteger {
     // MARK: Length
     //=------------------------------------------------------------------------=
     
-    @inlinable @inline(__always) func precision(_ integer: Int) -> Self {
+    @inlinable func precision(_ integer: Int) -> Self {
         precision(integer...integer)
     }
 
@@ -38,7 +38,7 @@ public extension NumericTextStyle where Value: PreciseInteger {
     // MARK: Limits
     //=------------------------------------------------------------------------=
     
-    @inlinable @inline(__always) func precision<R: RangeExpression>(_ integer: R) -> Self where R.Bound == Int {
+    @inlinable func precision<R: RangeExpression>(_ integer: R) -> Self where R.Bound == Int {
         precision(Precision(integer: integer, fraction: Precision.limits(\.fraction)))
     }
 }
@@ -53,15 +53,15 @@ public extension NumericTextStyle where Value: PreciseFloatingPoint {
     // MARK: Length
     //=------------------------------------------------------------------------=
     
-    @inlinable @inline(__always) func precision(integer: Int) -> Self {
+    @inlinable func precision(integer: Int) -> Self {
         precision(integer: integer...integer)
     }
     
-    @inlinable @inline(__always) func precision(fraction: Int) -> Self {
+    @inlinable func precision(fraction: Int) -> Self {
         precision(fraction: fraction...fraction)
     }
     
-    @inlinable @inline(__always) func precision(integer: Int, fraction: Int) -> Self {
+    @inlinable func precision(integer: Int, fraction: Int) -> Self {
         precision(integer: integer...integer, fraction: fraction...fraction)
     }
     
@@ -69,11 +69,11 @@ public extension NumericTextStyle where Value: PreciseFloatingPoint {
     // MARK: Mixed
     //=------------------------------------------------------------------------=
     
-    @inlinable @inline(__always) func precision<R: RangeExpression>(integer: R, fraction: Int) -> Self where R.Bound == Int {
+    @inlinable func precision<R: RangeExpression>(integer: R, fraction: Int) -> Self where R.Bound == Int {
         precision(integer: integer, fraction: fraction...fraction)
     }
     
-    @inlinable @inline(__always) func precision<R: RangeExpression>(integer: Int, fraction: R) -> Self where R.Bound == Int {
+    @inlinable func precision<R: RangeExpression>(integer: Int, fraction: R) -> Self where R.Bound == Int {
         precision(integer: integer...integer, fraction: fraction)
     }
 
@@ -81,15 +81,15 @@ public extension NumericTextStyle where Value: PreciseFloatingPoint {
     // MARK: Limits
     //=------------------------------------------------------------------------=
     
-    @inlinable @inline(__always) func precision<R: RangeExpression>(integer: R) -> Self where R.Bound == Int {
+    @inlinable func precision<R: RangeExpression>(integer: R) -> Self where R.Bound == Int {
         precision(integer: integer, fraction: Precision.limits(\.fraction))
     }
     
-    @inlinable @inline(__always) func precision<R: RangeExpression>(fraction: R) -> Self where R.Bound == Int {
+    @inlinable func precision<R: RangeExpression>(fraction: R) -> Self where R.Bound == Int {
         precision(integer: Precision.limits(\.integer), fraction: fraction)
     }
     
-    @inlinable @inline(__always) func precision<R0: RangeExpression, R1: RangeExpression>(integer: R0, fraction: R1) -> Self where R0.Bound == Int, R1.Bound == Int {
+    @inlinable func precision<R0: RangeExpression, R1: RangeExpression>(integer: R0, fraction: R1) -> Self where R0.Bound == Int, R1.Bound == Int {
         precision(Precision(integer: integer, fraction: fraction))
     }
 }

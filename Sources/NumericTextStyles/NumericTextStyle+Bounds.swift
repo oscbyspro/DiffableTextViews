@@ -15,7 +15,7 @@ extension NumericTextStyle {
     // MARK: Transformations
     //=------------------------------------------------------------------------=
     
-    @inlinable @inline(__always) func bounds(_ bounds: Bounds) -> Self {
+    @inlinable func bounds(_ bounds: Bounds) -> Self {
         var result = self; result.bounds = bounds; return result
     }
 }
@@ -30,15 +30,15 @@ public extension NumericTextStyle {
     // MARK: Limits
     //=------------------------------------------------------------------------=
     
-    @inlinable @inline(__always) func bounds(_ limits: ClosedRange<Value>) -> Self {
+    @inlinable func bounds(_ limits: ClosedRange<Value>) -> Self {
         bounds(Bounds(min: limits.lowerBound, max: limits.upperBound))
     }
     
-    @inlinable @inline(__always) func bounds(_ limits: PartialRangeFrom<Value>) -> Self {
+    @inlinable func bounds(_ limits: PartialRangeFrom<Value>) -> Self {
         bounds(Bounds(min: limits.lowerBound))
     }
     
-    @inlinable @inline(__always) func bounds(_ limits: PartialRangeThrough<Value>) -> Self {
+    @inlinable func bounds(_ limits: PartialRangeThrough<Value>) -> Self {
         bounds(Bounds(max: limits.upperBound))
     }
 }
