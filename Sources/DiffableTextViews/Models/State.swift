@@ -29,9 +29,9 @@
     @inlinable var snapshot: Snapshot {
         field.snapshot
     }
-
+    
     //=------------------------------------------------------------------------=
-    // MARK: Transformations
+    // MARK: Update
     //=------------------------------------------------------------------------=
     
     @inlinable func update(style: Style, commit: Commit<Value>) {
@@ -40,13 +40,17 @@
         self.field.update(snapshot: commit.snapshot)
     }
     
+    //=------------------------------------------------------------------------=
+    // MARK: Update - Set
+    //=------------------------------------------------------------------------=
+    
     @inlinable func set(selection: Field.Layout.Index) {
         self.field.selection = selection ..< selection
     }
     
-    @inlinable func showcase(style: Style, value: Value) {
-        self.value = value
-        self.style = style
-        self.active = false
+    @inlinable func set(style: Style, value: Value, active: Bool) {
+        self.value  = value
+        self.style  = style
+        self.active = active
     }
 }

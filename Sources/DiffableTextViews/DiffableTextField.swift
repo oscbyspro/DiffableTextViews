@@ -15,6 +15,7 @@ import SwiftUI
 
 public struct DiffableTextField<Style: UIKitDiffableTextStyle>: UIViewRepresentable {
     public typealias Value = Style.Value
+    public typealias Proxy = ProxyTextField
     
     //=------------------------------------------------------------------------=
     // MARK: Environment
@@ -33,9 +34,9 @@ public struct DiffableTextField<Style: UIKitDiffableTextStyle>: UIViewRepresenta
     // MARK: Customization
     //=------------------------------------------------------------------------=
 
-    @usableFromInline var setup:  ((ProxyTextField) -> Void) = { _ in }
-    @usableFromInline var update: ((ProxyTextField) -> Void) = { _ in }
-    @usableFromInline var submit: ((ProxyTextField) -> Void) = { _ in }
+    @usableFromInline var setup:  ((Proxy) -> Void) = { _ in }
+    @usableFromInline var update: ((Proxy) -> Void) = { _ in }
+    @usableFromInline var submit: ((Proxy) -> Void) = { _ in }
 
     //=------------------------------------------------------------------------=
     // MARK: Initializers
@@ -55,15 +56,15 @@ public struct DiffableTextField<Style: UIKitDiffableTextStyle>: UIViewRepresenta
     // MARK: Transformations
     //=------------------------------------------------------------------------=
     
-    @inlinable public func setup(_  transform: @escaping (ProxyTextField) -> Void) -> Self {
+    @inlinable public func setup(_  transform: @escaping (Proxy) -> Void) -> Self {
         var result = self; result.setup  = transform; return result
     }
     
-    @inlinable public func update(_ transform: @escaping (ProxyTextField) -> Void) -> Self {
+    @inlinable public func update(_ transform: @escaping (Proxy) -> Void) -> Self {
         var result = self; result.update = transform; return result
     }
     
-    @inlinable public func submit(_ transform: @escaping (ProxyTextField) -> Void) -> Self {
+    @inlinable public func submit(_ transform: @escaping (Proxy) -> Void) -> Self {
         var result = self; result.submit = transform; return result
     }
 
@@ -121,7 +122,6 @@ public struct DiffableTextField<Style: UIKitDiffableTextStyle>: UIViewRepresenta
         //=--------------------------------------------------------------------=
         // MARK: Properties
         //=--------------------------------------------------------------------=
-        
         @usableFromInline var upstream: DiffableTextField!
         @usableFromInline var downstream:  ProxyTextField!
         
@@ -135,7 +135,7 @@ public struct DiffableTextField<Style: UIKitDiffableTextStyle>: UIViewRepresenta
         //=--------------------------------------------------------------------=
         // MARK: Accessors
         //=--------------------------------------------------------------------=
-                
+
         @inlinable func style() -> Style {
             upstream.style.locale(upstream.locale)
         }
@@ -232,14 +232,13 @@ public struct DiffableTextField<Style: UIKitDiffableTextStyle>: UIViewRepresenta
         // MARK: Synchronize
         //=--------------------------------------------------------------------=
         
-        #warning("Make sure this works as intended.")
         @inlinable func synchronize() {
             let style = style()
             let value = upstream.value.wrappedValue
             //=------------------------------=
             // MARK: Evaluate
             //=------------------------------=
-            guard unique(style: style, value: value, active: downstream.active) else { return }
+            guard updatable(style: style, value: value) else { return }
             //=------------------------------=
             // MARK: Editable
             //=------------------------------=
@@ -251,7 +250,7 @@ public struct DiffableTextField<Style: UIKitDiffableTextStyle>: UIViewRepresenta
             //=------------------------------=
             } else {
                 lock.perform {
-                    self.state.showcase(style: style, value: value)
+                    self.state.set(style: style, value: value, active: false)
                     self.downstream.update(text: style.showcase(value: value))
                 }
             }
@@ -262,6 +261,7 @@ public struct DiffableTextField<Style: UIKitDiffableTextStyle>: UIViewRepresenta
         //=--------------------------------------------------------------------=
         
         @inlinable func push() {
+            self.state.active = downstream.active
             //=----------------------------------=
             // MARK: Downstream
             //=----------------------------------=
@@ -278,13 +278,13 @@ public struct DiffableTextField<Style: UIKitDiffableTextStyle>: UIViewRepresenta
                 self.upstream.value.wrappedValue  = state.value
             }
         }
-        
+                
         //=--------------------------------------------------------------------=
         // MARK: Comparisons
         //=--------------------------------------------------------------------=
         
-        @inlinable func unique(style: Style, value: Value, active: Bool) -> Bool {
-            value != state.value || active != state.active || style != state.style
+        @inlinable func updatable(style: Style, value: Value) -> Bool {
+            downstream.active != state.active || value != state.value || style != state.style
         }
     }
 }
