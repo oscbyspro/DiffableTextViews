@@ -9,28 +9,51 @@
 // MARK: * Constant
 //*============================================================================*
 
-public struct Constant<Style: DiffableTextStyle>: Wrapper {
+public final class Constant<Style: DiffableTextStyle>: DiffableTextStyle {
     public typealias Value = Style.Value
 
     //=------------------------------------------------------------------------=
     // MARK: Properties
     //=------------------------------------------------------------------------=
 
-    public var style: Style
+    @usableFromInline let style: Style
 
     //=------------------------------------------------------------------------=
     // MARK: Initializers
     //=------------------------------------------------------------------------=
 
-    @inlinable @inline(__always) init(style: Style) {
-        self.style = style
+    @inlinable @inline(__always)
+    init(style: Style) { self.style = style }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Upstream
+    //=------------------------------------------------------------------------=
+    
+    @inlinable @inline(__always)
+    public func showcase(value: Value) -> String {
+        style.showcase(value: value)
+    }
+    
+    @inlinable @inline(__always)
+    public func editable(value: Value) -> Commit<Value> {
+        style.editable(value: value)
+    }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Downstream
+    //=------------------------------------------------------------------------=
+    
+    @inlinable @inline(__always)
+    public func merge(request: Request) throws -> Commit<Value> {
+        try style.merge(request: request)
     }
     
     //=------------------------------------------------------------------------=
     // MARK: Comparisons
     //=------------------------------------------------------------------------=
     
-    @inlinable @inline(__always) public static func == (lhs: Self, rhs: Self) -> Bool { true }
+    @inlinable @inline(__always)
+    public static func == (lhs: Constant, rhs: Constant) -> Bool { true }
 }
 
 //=----------------------------------------------------------------------------=
@@ -53,8 +76,6 @@ extension DiffableTextStyle {
     // MARK: Transformations
     //=------------------------------------------------------------------------=
     
-    @inlinable public func constant() -> Constant<Self> {
-        Constant(style: self)
-    }
+    @inlinable @inline(__always)
+    public func constant() -> Constant<Self> { Constant(style: self) }
 }
-
