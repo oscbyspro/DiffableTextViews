@@ -7,12 +7,14 @@
 
 import Foundation
 
+#warning("Styles should be equatable.")
+
 //*============================================================================*
 // MARK: * DiffableTextStyle
 //*============================================================================*
 
 /// A protocol for styles that are capable of as-you-type formatting and conversion.
-public protocol DiffableTextStyle {
+public protocol DiffableTextStyle: Equatable {
 
     //=------------------------------------------------------------------------=
     // MARK: Value

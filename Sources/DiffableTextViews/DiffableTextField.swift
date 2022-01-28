@@ -13,7 +13,6 @@ import SwiftUI
 // MARK: * DiffableTextField
 //*============================================================================*
 
-#warning("Handle style creation.")
 public struct DiffableTextField<Style: UIKitDiffableTextStyle>: UIViewRepresentable {
     public typealias Value = Style.Value
     
@@ -117,7 +116,7 @@ public struct DiffableTextField<Style: UIKitDiffableTextStyle>: UIViewRepresenta
     
     public final class Coordinator: NSObject, UITextFieldDelegate {
         @usableFromInline typealias Position = DiffableTextViews.Position<UTF16>
-        @usableFromInline typealias State = DiffableTextViews.State<UTF16, Value>
+        @usableFromInline typealias State = DiffableTextViews.State<Style,UTF16>
         
         //=--------------------------------------------------------------------=
         // MARK: Properties
@@ -171,24 +170,24 @@ public struct DiffableTextField<Style: UIKitDiffableTextStyle>: UIViewRepresenta
         
         @inlinable public func textField(_ textField: UITextField, shouldChangeCharactersIn nsRange: NSRange, replacementString string: String) -> Bool {
             let style = style()
-            let range = state.indices(at: nsRange)
+            let range = state.field.indices(at: nsRange)
             //=----------------------------------=
             // MARK: Attempt
             //=----------------------------------=
             attempt: do {
                 //=------------------------------=
-                // MARK: Selection, Commit
+                // MARK: Make
                 //=------------------------------=
-                let selection = range.upperBound ..< range.upperBound
-                let commit = try style.merge(request: Request(state.snapshot, change: (string, range)))
+                let commit = try style.merge(request:
+                Request(state.snapshot, change: (string, range)))
                 //=------------------------------=
                 // MARK: Push
                 //=------------------------------=
                 Task { @MainActor in
                     // async to process special commands first
                     // as an example see: (option + backspace)
-                    self.state.selection = selection
-                    self.state.update(commit: commit)
+                    self.state.set(selection: range.upperBound)
+                    self.state.update(style: style, commit: commit)
                     self.push()
                 }
             //=----------------------------------=
@@ -218,13 +217,13 @@ public struct DiffableTextField<Style: UIKitDiffableTextStyle>: UIViewRepresenta
             //=----------------------------------=
             // MARK: Corrected
             //=----------------------------------=
-            self.state.update(selection: positions, momentum: downstream.momentum)
+            self.state.field.update(selection: positions, momentum: downstream.momentum)
             //=----------------------------------=
             // MARK: Update Downstream If Needed
             //=----------------------------------=
-            if state.positions != positions {
+            if state.field.positions != positions {
                 lock.perform {
-                    self.downstream.update(selection: state.positions)
+                    self.downstream.update(selection: state.field.positions)
                 }
             }
         }
@@ -233,25 +232,26 @@ public struct DiffableTextField<Style: UIKitDiffableTextStyle>: UIViewRepresenta
         // MARK: Synchronize
         //=--------------------------------------------------------------------=
         
-        #error("This should only be called if the style or value has changed.")
+        #warning("Check.")
         @inlinable func synchronize() {
             let style = style()
             let value = upstream.value.wrappedValue
             //=------------------------------=
             // MARK: Evaluate
             //=------------------------------=
-            #warning("......................")
+            guard unique(style: style, value: value, active: downstream.active) else { return }
             //=------------------------------=
             // MARK: Editable
             //=------------------------------=
             if downstream.active {
-                self.state.update(commit: style.editable(value: value))
+                self.state.update(style: style, commit: style.editable(value: value))
                 self.push()
             //=------------------------------=
             // MARK: Showcase
             //=------------------------------=
             } else {
                 lock.perform {
+                    self.state.reset(style: style, value: value)
                     self.downstream.update(text: style.showcase(value: value))
                 }
             }
@@ -268,8 +268,8 @@ public struct DiffableTextField<Style: UIKitDiffableTextStyle>: UIViewRepresenta
             lock.perform {
                 // changes to UITextField's text and selection both call
                 // the delegate's method: textFieldDidChangeSelection(_:)
-                self.downstream.update(text: state.characters)
-                self.downstream.update(selection: state.positions)
+                self.downstream.update(text: state.field.characters)
+                self.downstream.update(selection: state.field.positions)
             }
             //=----------------------------------=
             // MARK: Upstream
@@ -277,6 +277,14 @@ public struct DiffableTextField<Style: UIKitDiffableTextStyle>: UIViewRepresenta
             if  self.upstream.value.wrappedValue != state.value {
                 self.upstream.value.wrappedValue  = state.value
             }
+        }
+        
+        //=--------------------------------------------------------------------=
+        // MARK: Comparisons
+        //=--------------------------------------------------------------------=
+        
+        @inlinable func unique(style: Style, value: Value, active: Bool) -> Bool {
+            value != state.value || active != state.active || style != state.style
         }
     }
 }
