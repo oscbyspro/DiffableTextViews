@@ -33,6 +33,7 @@ public struct Request {
     // MARK: Utilities
     //=------------------------------------------------------------------------=
     
+    /// Merges the components of the request into a single snapshot.
     @inlinable public func proposal() -> Snapshot {
         var result = snapshot; result.replaceSubrange(range, with: replacement); return result
     }

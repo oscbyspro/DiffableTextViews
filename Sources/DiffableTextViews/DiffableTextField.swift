@@ -177,7 +177,7 @@ public struct DiffableTextField<Style: UIKitDiffableTextStyle>: UIViewRepresenta
             //=----------------------------------=
             // MARK: Attempt
             //=----------------------------------=
-            do {
+            attempt: do {
                 let commit = try style.merge(request: request)
                 //=------------------------------=
                 // MARK: Push
