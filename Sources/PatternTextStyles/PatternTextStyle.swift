@@ -141,9 +141,6 @@ extension PatternTextStyle {
             // MARK: Placeholder
             //=----------------------------------=
             if let predicate = placeholders[character] {
-                //=------------------------------=
-                // MARK: Next
-                //=------------------------------=
                 if let content = valueIterator.next() {
                     guard predicate.check(content) else { break loop }
                     contents.append(content)
@@ -151,9 +148,6 @@ extension PatternTextStyle {
                     snapshot.append(Symbol(content, as: .content))
                     pattern.formIndex(after: &patternIndex); queueIndex = patternIndex
                     continue loop
-                //=------------------------------=
-                // MARK: None
-                //=------------------------------=
                 } else if contents.isEmpty {
                     snapshot.append(contentsOf: Snapshot(pattern[queueIndex..<patternIndex], as: .phantom))
                     snapshot.append(.anchor)
