@@ -36,7 +36,7 @@ struct DiffablePhoneNumberTextField: View {
             .pattern("+## (###) ###-##-##")
             .placeholder("#") { $0.isASCII && $0.isNumber }
         }
-        .setup({ $0.keyboard(.phonePad) })
+        .diffableTextField_onSetup({ $0.keyboard(.phonePad) })
     }
 }
 ```
@@ -53,7 +53,7 @@ struct DiffablePaymentNumberTextField: View {
             .placeholder(constant: "#") { $0.isASCII && $0.isNumber }
             .hidden()
         }
-        .setup({ $0.keyboard(.numberPad) })
+        .diffableTextField_onSetup({ $0.keyboard(.numberPad) })
     }
 }
 ```

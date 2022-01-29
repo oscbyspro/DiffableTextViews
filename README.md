@@ -126,7 +126,7 @@ struct DiffablePhoneNumberTextField: View {
             .pattern("+## (###) ###-##-##")
             .placeholder(constant: "#") { $0.isASCII && $0.isNumber }
         }
-        .setup({ $0.keyboard(.phonePad) })
+        .diffableTextField_onSetup({ $0.keyboard(.phonePad) })
     }
 }
 ```

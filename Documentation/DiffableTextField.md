@@ -55,24 +55,12 @@ struct DiffablePhoneNumberTextField: View {
             .pattern("+## (###) ###-##-##")
             .placeholder(constant: "#") { $0.isASCII && $0.isNumber }
         }
-        .setup({ $0.keyboard(.phonePad) })
+        .diffableTextField_onSetup({ $0.keyboard(.phonePad) })
     }
 }
 ```
 
 ## Customization
-
-### View
-
-Closures may be set and used at specific times in the view's life cycle.
-
-```swift
-DiffableTextField($value, style: style)
-    .setup ({ (diffableTextField: ProxyTextField) in })
-    .update({ (diffableTextField: ProxyTextField) in })
-    .submit({ (diffableTextField: ProxyTextField) in })
-
-```
 
 ### Style
 
@@ -82,4 +70,16 @@ Styles may configure the view at setup, should it be deemed appropriate.
 extension Style: UIKitDiffableTextStyle {    
     static func setup(diffableTextField: ProxyTextField) { ... }
 }
+```
+
+### View
+
+Closures may be set and used at specific times in the view's life cycle.
+
+```swift
+DiffableTextField($value, style: style)
+    .diffableTextField_onSetup ({ _ in })
+    .diffableTextField_onUpdate({ _ in })
+    .diffableTextField_onSubmit({ _ in })
+
 ```
