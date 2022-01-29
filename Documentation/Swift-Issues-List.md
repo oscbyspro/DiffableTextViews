@@ -8,13 +8,13 @@ A document with issues that have been worked around.
 
 NumericTextStyles:
 When changes are made upstream, or the user starts interaction with the view, 
-the easies way to enforce its precision would be to format and parse the value once.
+the easies way to enforce its precision is to format and parse the value once.
 This does not work for all locale and currency pairs, however, which is weird.
 
 ### Example
 
 ```swift
-// MARK: Bad, Sad, Bad
+// MARK: Sad, Bad, Sad
 
 let code = "SEK"; let locale = Locale(identifier: "en_US")
 let style = IntegerFormatStyle<Int>.Currency(code: code).locale(locale)
