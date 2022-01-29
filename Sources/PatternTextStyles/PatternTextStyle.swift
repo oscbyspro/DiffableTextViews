@@ -83,10 +83,7 @@ extension PatternTextStyle {
     // MARK: Showcase
     //=------------------------------------------------------------------------=
     
-    /// Matches the value agains the pattern into a collection of characters.
-    ///
-    /// - Format: matches + | + mismatches.
-    ///
+    /// Matches the value against the pattern to form a collection of characters.
     @inlinable public func showcase(value: Value) -> String {
         var characters = String()
         //=--------------------------------------=
@@ -94,7 +91,6 @@ extension PatternTextStyle {
         //=--------------------------------------=
         var index = pattern.startIndex
         var valueIterator = value.makeIterator()
-        var next = valueIterator.next()
         //=--------------------------------------=
         // MARK: Loop
         //=--------------------------------------=
@@ -104,19 +100,12 @@ extension PatternTextStyle {
             // MARK: Placeholder
             //=----------------------------------=
             if let predicate = placeholders[character] {
-                guard let real = next, predicate.check(real) else { break loop }
-                //=------------------------------=
-                // MARK: Insertion
-                //=------------------------------=
+                guard let real = valueIterator.next(), predicate.check(real) else { break loop }
                 characters.append(real)
-                next = valueIterator.next()
             //=----------------------------------=
             // MARK: Pattern
             //=----------------------------------=
             } else {
-                //=------------------------------=
-                // MARK: Insertion
-                //=------------------------------=
                 characters.append(character)
             }
             //=----------------------------------=
@@ -128,14 +117,6 @@ extension PatternTextStyle {
         // MARK: Remainders - Pattern
         //=--------------------------------------=
         visible ? characters.append(contentsOf: pattern[index...]) : ()
-        //=--------------------------------------=
-        // MARK: Remainders - Value
-        //=--------------------------------------=
-        if let remainder = next {
-            characters.append("|")
-            characters.append(remainder)
-            while let real = valueIterator.next() { characters.append(real) }
-        }
         //=--------------------------------------=
         // MARK: Done
         //=--------------------------------------=
@@ -151,8 +132,7 @@ extension PatternTextStyle {
     /// - Mismatches are cut.
     ///
     @inlinable public func editable(value: Value) -> Commit<Value> {
-        var content = Value()
-        var snapshot = Snapshot()
+        var content = Value(); var snapshot = Snapshot()
         //=--------------------------------------=
         // MARK: Indices, Iterators
         //=--------------------------------------=
