@@ -86,19 +86,19 @@ extension PatternTextStyle {
     /// Matches the value against the pattern to form a collection of characters.
     @inlinable public func showcase(value: Value) -> String {
         var characters = String()
-        var index = pattern.startIndex
+        var patternIndex = pattern.startIndex
         var valueIterator = value.makeIterator()
         //=--------------------------------------=
         // MARK: Loop
         //=--------------------------------------=
-        loop: while index != pattern.endIndex {
-            let character = pattern[index]
+        loop: while patternIndex != pattern.endIndex {
+            let character = pattern[patternIndex]
             //=----------------------------------=
             // MARK: Placeholder
             //=----------------------------------=
             if let predicate = placeholders[character] {
-                guard let real = valueIterator.next(), predicate.check(real) else { break loop }
-                characters.append(real)
+                guard let content = valueIterator.next(), predicate.check(content) else { break loop }
+                characters.append(content)
             //=----------------------------------=
             // MARK: Pattern
             //=----------------------------------=
@@ -106,12 +106,12 @@ extension PatternTextStyle {
                 characters.append(character)
             }
             
-            pattern.formIndex(after: &index)
+            pattern.formIndex(after: &patternIndex)
         }
         //=--------------------------------------=
         // MARK: Remainders - Pattern
         //=--------------------------------------=
-        visible ? characters.append(contentsOf: pattern[index...]) : ()
+        visible ? characters.append(contentsOf: pattern[patternIndex...]) : ()
         //=--------------------------------------=
         // MARK: Done
         //=--------------------------------------=
@@ -127,16 +127,16 @@ extension PatternTextStyle {
     /// - Mismatches are cut.
     ///
     @inlinable public func editable(value: Value) -> Commit<Value> {
-        var content = Value()
+        var contents = Value()
         var snapshot = Snapshot()
-        var index = pattern.startIndex
         var queueIndex = pattern.startIndex
+        var patternIndex = pattern.startIndex
         var valueIterator = value.makeIterator()
         //=--------------------------------------=
         // MARK: Loop
         //=--------------------------------------=
-        loop: while index != pattern.endIndex {
-            let character = pattern[index]
+        loop: while patternIndex != pattern.endIndex {
+            let character = pattern[patternIndex]
             //=----------------------------------=
             // MARK: Placeholder
             //=----------------------------------=
@@ -144,31 +144,28 @@ extension PatternTextStyle {
                 //=------------------------------=
                 // MARK: Next
                 //=------------------------------=
-                if let real = valueIterator.next() {
-                    guard predicate.check(real) else { break loop }
-                    content.append(real)
-                    snapshot += Snapshot(pattern[queueIndex..<index], as: .phantom)
-                    snapshot.append(Symbol(real, as: .content))
-                    pattern.formIndex(after: &index)
-                    queueIndex = index
+                if let content = valueIterator.next() {
+                    guard predicate.check(content) else { break loop }
+                    contents.append(content)
+                    snapshot.append(contentsOf: Snapshot(pattern[queueIndex..<patternIndex], as: .phantom))
+                    snapshot.append(Symbol(content, as: .content))
+                    pattern.formIndex(after: &patternIndex); queueIndex = patternIndex
+                    continue loop
                 //=------------------------------=
                 // MARK: None
                 //=------------------------------=
-                } else if value.isEmpty {
-                    snapshot += Snapshot(pattern[queueIndex..<index], as: .phantom)
+                } else if contents.isEmpty {
+                    snapshot.append(contentsOf: Snapshot(pattern[queueIndex..<patternIndex], as: .phantom))
                     snapshot.append(.anchor)
-                    queueIndex = index
-                    break loop
-                //=------------------------------=
-                // MARK: Last
-                //=------------------------------=
-                } else { break loop }
+                    queueIndex = patternIndex
+                }
+                
+                break loop
+            }
             //=----------------------------------=
             // MARK: Pattern
             //=----------------------------------=
-            } else {
-                pattern.formIndex(after: &index)
-            }
+            pattern.formIndex(after: &patternIndex)
         }
         //=--------------------------------------=
         // MARK: Remainders - Pattern
@@ -177,7 +174,7 @@ extension PatternTextStyle {
         //=--------------------------------------=
         // MARK: Done
         //=--------------------------------------=
-        return Commit(value: content, snapshot: snapshot)
+        return Commit(value: contents, snapshot: snapshot)
     }
 }
 
@@ -198,19 +195,19 @@ extension PatternTextStyle {
     @inlinable public func merge(request: Request) throws -> Commit<Value> {
         var value = Value(); var nonvirtuals = request.proposal().lazy.filter(\.nonvirtual).makeIterator()
         //=--------------------------------------=
-        // MARK: Parse
+        // MARK: Loop
         //=--------------------------------------=
         loop: for character in pattern {
             //=----------------------------------=
             // MARK: Placeholder
             //=----------------------------------=
             if let predicate = placeholders[character] {
-                guard let real = nonvirtuals.next() else { break loop }
-                guard predicate.check(real.character) else {
-                    throw Info([.mark(real.character), "is invalid"])
+                guard let nonvirtual = nonvirtuals.next() else { break loop }
+                guard predicate.check(nonvirtual.character) else {
+                    throw Info([.mark(nonvirtual.character), "is invalid"])
                 }
 
-                value.append(real.character)
+                value.append(nonvirtual.character)
             }
         }
         //=--------------------------------------=
