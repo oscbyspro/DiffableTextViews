@@ -14,7 +14,8 @@ import Support
 
 /// A system representation of a number.
 ///
-/// - Integer digits must not be empty. It must contain at least a zero.
+/// - Integer digits must not be empty.
+/// - Integer digits must not contain prefix zeros.
 ///
 @usableFromInline struct Number {
     
@@ -40,19 +41,6 @@ import Support
     //=------------------------------------------------------------------------=
     
     @inlinable init() { }
-        
-    //=------------------------------------------------------------------------=
-    // MARK: Transformations - Separator
-    //=------------------------------------------------------------------------=
-    
-    @inlinable mutating func removeSeparatorAsSuffix() {
-        if fraction.digits.isEmpty { separator = nil }
-    }
-    
-    @inlinable mutating func removeImpossibleSeparator(capacity: Count) {
-        guard capacity.fraction <= 0 || capacity.value <= 0 else { return }
-        self.removeSeparatorAsSuffix()
-    }
     
     //=------------------------------------------------------------------------=
     // MARK: Transformations - Precision
@@ -75,6 +63,19 @@ import Support
         self.removeSeparatorAsSuffix()
         self.integer.makeItAtLeastZero()
     }
+        
+    //=------------------------------------------------------------------------=
+    // MARK: Transformations - Separator
+    //=------------------------------------------------------------------------=
+    
+    @inlinable mutating func removeSeparatorAsSuffix() {
+        if fraction.digits.isEmpty { separator = nil }
+    }
+    
+    @inlinable mutating func removeImpossibleSeparator(capacity: Count) {
+        guard capacity.fraction <= 0 || capacity.value <= 0 else { return }
+        self.removeSeparatorAsSuffix()
+    }
 }
 
 //=----------------------------------------------------------------------------=
@@ -88,8 +89,7 @@ extension Number {
     //=------------------------------------------------------------------------=
     
     @inlinable func count() -> Count {
-        let value = integer .digits.count - integer .count(prefix: \.isZero)
-                  + fraction.digits.count - fraction.count(suffix: \.isZero)
+        let value = integer.count + fraction.count - integer.count(prefix: \.isZero)
         return Count(value: value, integer: integer.count, fraction: fraction.count)
     }
 }

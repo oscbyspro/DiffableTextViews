@@ -7,7 +7,7 @@
 
 /// A count of a number's components.
 ///
-/// - Value is defined as: integer + fraction - integer prefix zeros - fraction suffix zeros.
+/// - Value is defined as: integer + fraction - integer prefix zeros.
 ///
 public struct Count: Equatable {
 
