@@ -9,6 +9,10 @@
 // MARK: * EquatableTextStyle
 //*============================================================================*
 
+/// A style that binds equals a specific value.
+///
+/// Use this style to optimize the comparison on view update.
+///
 public struct EquatableTextStyle<Style: DiffableTextStyle>: WrapperTextStyle {
     public typealias Value = Style.Value
     

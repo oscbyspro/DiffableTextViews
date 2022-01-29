@@ -11,6 +11,10 @@ import Foundation
 // MARK: * ImmutableTextStyle
 //*============================================================================*
 
+/// A style that prevents changes.
+///
+/// Use this style if you do not want its content to be overriden by the environment.
+///
 public struct ImmutableTextStyle<Style: DiffableTextStyle>: WrapperTextStyle {
     public typealias ID = AnyHashable
     public typealias Value = Style.Value
