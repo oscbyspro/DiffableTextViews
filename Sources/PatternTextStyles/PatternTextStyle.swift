@@ -86,9 +86,6 @@ extension PatternTextStyle {
     /// Matches the value against the pattern to form a collection of characters.
     @inlinable public func showcase(value: Value) -> String {
         var characters = String()
-        //=--------------------------------------=
-        // MARK: Indices, Iterators
-        //=--------------------------------------=
         var index = pattern.startIndex
         var valueIterator = value.makeIterator()
         //=--------------------------------------=
@@ -108,9 +105,7 @@ extension PatternTextStyle {
             } else {
                 characters.append(character)
             }
-            //=----------------------------------=
-            // MARK: Iteration
-            //=----------------------------------=
+            
             pattern.formIndex(after: &index)
         }
         //=--------------------------------------=
@@ -132,10 +127,8 @@ extension PatternTextStyle {
     /// - Mismatches are cut.
     ///
     @inlinable public func editable(value: Value) -> Commit<Value> {
-        var content = Value(); var snapshot = Snapshot()
-        //=--------------------------------------=
-        // MARK: Indices, Iterators
-        //=--------------------------------------=
+        var content = Value()
+        var snapshot = Snapshot()
         var index = pattern.startIndex
         var queueIndex = pattern.startIndex
         var valueIterator = value.makeIterator()
@@ -153,9 +146,6 @@ extension PatternTextStyle {
                 //=------------------------------=
                 if let real = valueIterator.next() {
                     guard predicate.check(real) else { break loop }
-                    //=------------------------------=
-                    // MARK: Insertion, Iteration
-                    //=------------------------------=
                     content.append(real)
                     snapshot += Snapshot(pattern[queueIndex..<index], as: .phantom)
                     snapshot.append(Symbol(real, as: .content))
@@ -165,9 +155,6 @@ extension PatternTextStyle {
                 // MARK: None
                 //=------------------------------=
                 } else if value.isEmpty {
-                    //=------------------------------=
-                    // MARK: Insertion
-                    //=------------------------------=
                     snapshot += Snapshot(pattern[queueIndex..<index], as: .phantom)
                     snapshot.append(.anchor)
                     queueIndex = index
@@ -180,9 +167,6 @@ extension PatternTextStyle {
             // MARK: Pattern
             //=----------------------------------=
             } else {
-                //=------------------------------=
-                // MARK: Iteration
-                //=------------------------------=
                 pattern.formIndex(after: &index)
             }
         }
@@ -222,15 +206,10 @@ extension PatternTextStyle {
             //=----------------------------------=
             if let predicate = placeholders[character] {
                 guard let real = nonvirtuals.next() else { break loop }
-                //=------------------------------=
-                // MARK: Predicate
-                //=------------------------------=
                 guard predicate.check(real.character) else {
                     throw Info([.mark(real.character), "is invalid"])
                 }
-                //=------------------------------=
-                // MARK: Insertion
-                //=------------------------------=
+
                 value.append(real.character)
             }
         }
