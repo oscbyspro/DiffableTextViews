@@ -64,12 +64,7 @@ public extension DiffableTextStyle {
     }
     
     /// Binds the style's identity to the value.
-    @inlinable func id(_ id: AnyHashable) -> Proxy<Self> {
-        Proxy(style: self, id: id)
-    }
-    
-    /// Binds the style's identity to the value.
-    @inlinable func id(_ id: AnyHashable...) -> Proxy<Self> {
+    @inlinable func id<ID: Hashable>(_ id: ID) -> Proxy<Self> {
         Proxy(style: self, id: id)
     }
 }

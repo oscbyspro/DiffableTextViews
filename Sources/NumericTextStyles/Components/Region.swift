@@ -188,7 +188,8 @@ extension Region {
     //=------------------------------------------------------------------------=
     
     @inlinable func number<T: Value>(in snapshot: Snapshot, as value: T.Type) throws -> Number {
-        try Number(snapshot: snapshot, integer: T.isInteger, unsigned: T.isUnsigned,
+        let characters = snapshot.lazy.filter(\.nonvirtual).map(\.character)
+        return try Number(characters: characters, integer: T.isInteger, unsigned: T.isUnsigned,
         signs: signs.components, digits: digits.components, separators: separators.components)
     }
 }

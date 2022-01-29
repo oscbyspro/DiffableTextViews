@@ -10,7 +10,15 @@
 //*============================================================================*
 
 /// The unicode value of its system representation.
-@usableFromInline protocol Unicodeable: RawRepresentable, CustomStringConvertible where RawValue == UInt8 { }
+@usableFromInline protocol Unicodeable:
+RawRepresentable, CaseIterable, CustomStringConvertible where RawValue == UInt8 {
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Constants
+    //=------------------------------------------------------------------------=
+    
+    @inlinable static var characters: [Character: Self] { get }
+}
 
 //=----------------------------------------------------------------------------=
 // MARK: Unicodeable - Details
@@ -40,5 +48,19 @@ extension Unicodeable {
     
     @inlinable public var description: String {
         String(character)
+    }
+    
+    #warning("WIP")
+    #warning("WIP")
+    #warning("WIP")
+    #warning("WIP")
+    #warning("WIP")
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Helpers
+    //=------------------------------------------------------------------------=
+    
+    @inlinable static func characters() -> [Character: Self] {
+        allCases.reduce(into: [:]) { result, next in result[next.character] = next }
     }
 }

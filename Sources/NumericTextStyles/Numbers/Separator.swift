@@ -18,4 +18,10 @@
     
     case grouping = 44 // ","
     case fraction = 46 // "."
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Constants
+    //=------------------------------------------------------------------------=
+    
+    @usableFromInline static let characters: [Character: Self] = characters()
 }

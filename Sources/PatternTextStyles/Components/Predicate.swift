@@ -35,14 +35,10 @@ public struct Predicate: Equatable {
         Self(value: 0, check: check)
     }
     
-    @inlinable public static func variable(value: AnyHashable, check: @escaping (Character) -> Bool) -> Self {
+    @inlinable public static func variable<ID: Hashable>(value: ID, check: @escaping (Character) -> Bool) -> Self {
         Self(value: value, check: check)
     }
     
-    @inlinable public static func variable(value: AnyHashable..., check: @escaping (Character) -> Bool) -> Self {
-        Self(value: value, check: check)
-    }
-        
     //=------------------------------------------------------------------------=
     // MARK: Comparisons
     //=------------------------------------------------------------------------=

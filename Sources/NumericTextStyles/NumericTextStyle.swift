@@ -141,21 +141,31 @@ extension NumericTextStyle {
     // MARK: Editable
     //=------------------------------------------------------------------------=
     
+    #warning("FIXME.")
     @inlinable public func editable(value: Value) -> Commit<Value> {
         let style = format.style(precision: precision.editable())
         //=--------------------------------------=
-        // MARK: Value, Autocorrect
+        // MARK: Value
         //=--------------------------------------=
         var autocorrectable = value
         bounds.clamp(&autocorrectable)
-        style.autocorrect(&autocorrectable)
+        //=--------------------------------------=
+        // MARK: Number
+        //=--------------------------------------=
+        var number = try! Number(autocorrectable)
+        precision.cut(&number)
+        //=--------------------------------------=
+        // MARK: Value
+        //=--------------------------------------=
+        let parseable = region.characters(in: number)
+        autocorrectable = try! format.parse(parseable)
         //=--------------------------------------=
         // MARK: Characters, Snapshot
         //=--------------------------------------=
         let characters = style.format(autocorrectable)
         let snapshot = snapshot(characters: characters)
         //=--------------------------------------=
-        // MARK: Done
+        // MARK: Commit
         //=--------------------------------------=
         return Commit(value: autocorrectable, snapshot: snapshot)
     }
