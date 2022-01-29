@@ -2,7 +2,7 @@
 
 A document with issues that have been worked around.
 
-## FormatStyle: UInt out of bounds crashes.
+## FormatStyle: UInt(64) > Int(64).max crashes.
 
 ### Problem
 
@@ -30,5 +30,5 @@ This does not work for all locale and currency pairs, which is unexpected and we
 ```swift
 let code = "SEK"; let locale = Locale(identifier: "en_US")
 let style = IntegerFormatStyle<Int>.Currency(code: code).locale(locale)
-let none = try? style.parseStrategy.parse(style.format(123))
+let crash = try! style.parseStrategy.parse(style.format(123))
 ```
