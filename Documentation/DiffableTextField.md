@@ -69,7 +69,7 @@ Styles may configure the view at setup, should it be deemed appropriate.
 
 ```swift
 extension Style: UIKitDiffableTextStyle {    
-    static func setup(diffableTextField: ProxyTextField) { ... }
+    static func onSetup(_ diffableTextField: ProxyTextField) { ... }
 }
 ```
 
