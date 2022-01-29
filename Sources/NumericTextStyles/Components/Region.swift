@@ -47,26 +47,24 @@ import Foundation
         // MARK: Signs
         //=--------------------------------------=
         self.signs = Lexicon<Sign>()
-        signs[Sign.positive.character] = .positive
-        signs[Sign.negative.character] = .negative
-        signs.link(formatter .plusSign.filter({ $0.isPunctuation || $0.isMathSymbol }).first!, .positive)
-        signs.link(formatter.minusSign.filter({ $0.isPunctuation || $0.isMathSymbol }).first!, .negative)
+        self.signs.merge(Sign.system)
+        self.signs.link(formatter .plusSign.filter({ $0.isPunctuation || $0.isMathSymbol }).first!, .positive)
+        self.signs.link(formatter.minusSign.filter({ $0.isPunctuation || $0.isMathSymbol }).first!, .negative)
         //=--------------------------------------=
         // MARK: Digits
         //=--------------------------------------=
         self.digits = Lexicon<Digit>()
+        self.digits.merge(Digit.system)
         for digit in Digit.allCases {
-            digits[digit.character] = digit
-            digits.link(formatter.string(from: digit.number as NSNumber)!.first!, digit)
+            self.digits.link(formatter.string(from: digit.number as NSNumber)!.first!, digit)
         }
         //=--------------------------------------=
         // MARK: Separators
         //=--------------------------------------=
         self.separators = Lexicon<Separator>()
-        separators[Separator.fraction.character] = .fraction
-        separators[Separator.grouping.character] = .grouping
-        separators.link(formatter .decimalSeparator.first!, .fraction)
-        separators.link(formatter.groupingSeparator.first!, .grouping)
+        self.separators.merge(Separator.system)
+        self.separators.link(formatter .decimalSeparator.first!, .fraction)
+        self.separators.link(formatter.groupingSeparator.first!, .grouping)
     }
     
     //=------------------------------------------------------------------------=
@@ -127,14 +125,13 @@ import Foundation
         // MARK: Transformations
         //=--------------------------------------------------------------------=
 
-        @inlinable mutating func link(_ character: Character, _ component: Component) {
-            components[character] = component
-            characters[component] = character
+        @inlinable mutating func merge(_ other: [Character: Component]) {
+            self.components.merge(other) { $1 }
         }
         
-        @inlinable mutating func link(_ component: Component, _ character: Character) {
-            components[character] = component
-            characters[component] = character
+        @inlinable mutating func link(_ character: Character, _ component: Component) {
+            self.components[character] = component
+            self.characters[component] = character
         }
     }
 }

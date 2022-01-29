@@ -169,6 +169,6 @@ extension Number {
     @inlinable init<T: Value>(_ value: T) throws {
         let characters = String(describing: value)
         try self.init(characters: characters, integer: T.isInteger, unsigned: T.isUnsigned,
-        signs: Sign.characters, digits: Digit.characters, separators: Separator.characters)
+        signs: Sign.system, digits: Digit.system, separators: Separator.system)
     }
 }

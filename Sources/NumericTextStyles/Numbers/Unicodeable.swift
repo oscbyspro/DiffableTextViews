@@ -17,7 +17,7 @@ RawRepresentable, CaseIterable, CustomStringConvertible where RawValue == UInt8 
     // MARK: Constants
     //=------------------------------------------------------------------------=
     
-    @inlinable static var characters: [Character: Self] { get }
+    @inlinable static var system: [Character: Self] { get }
 }
 
 //=----------------------------------------------------------------------------=
@@ -54,7 +54,7 @@ extension Unicodeable {
     // MARK: Helpers
     //=------------------------------------------------------------------------=
     
-    @inlinable static func characters() -> [Character: Self] {
+    @inlinable static func system() -> [Character: Self] {
         allCases.reduce(into: [:]) { result, next in result[next.character] = next }
     }
 }

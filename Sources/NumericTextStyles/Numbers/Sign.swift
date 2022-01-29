@@ -25,7 +25,7 @@ public enum Sign: UInt8, Unicodeable {
     // MARK: Constants
     //=------------------------------------------------------------------------=
     
-    @usableFromInline static let characters: [Character: Self] = characters()
+    @usableFromInline static let system: [Character: Self] = system()
     
     //*========================================================================*
     // MARK: * Style

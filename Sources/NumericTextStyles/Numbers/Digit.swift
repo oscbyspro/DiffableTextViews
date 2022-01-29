@@ -42,5 +42,5 @@
     // MARK: Constants
     //=------------------------------------------------------------------------=
     
-    @usableFromInline static let characters: [Character: Self] = characters()
+    @usableFromInline static let system: [Character: Self] = system()
 }
