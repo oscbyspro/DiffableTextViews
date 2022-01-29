@@ -9,29 +9,45 @@
 // MARK: * Predicate
 //*============================================================================*
 
-@usableFromInline struct Predicate: Equatable {
+public struct Predicate: Equatable {
     
     //=------------------------------------------------------------------------=
     // MARK: Properties
     //=------------------------------------------------------------------------=
     
     @usableFromInline let value: AnyHashable
-    @usableFromInline let validate: (Character) -> Bool
+    @usableFromInline let check: (Character) -> Bool
     
     //=------------------------------------------------------------------------=
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable init(_ value: AnyHashable, _ validate: @escaping (Character) -> Bool) {
+    @inlinable init(value: AnyHashable, check: @escaping (Character) -> Bool) {
         self.value = value
-        self.validate = validate
+        self.check = check
     }
     
+    //=------------------------------------------------------------------------=
+    // MARK: Initializers - Static
+    //=------------------------------------------------------------------------=
+    
+    @inlinable public static func constant(_ check: @escaping (Character) -> Bool = { _ in true }) -> Self {
+        Self(value: 0, check: check)
+    }
+    
+    @inlinable public static func variable(value: AnyHashable, check: @escaping (Character) -> Bool) -> Self {
+        Self(value: value, check: check)
+    }
+    
+    @inlinable public static func variable(value: AnyHashable..., check: @escaping (Character) -> Bool) -> Self {
+        Self(value: value, check: check)
+    }
+        
     //=------------------------------------------------------------------------=
     // MARK: Comparisons
     //=------------------------------------------------------------------------=
     
-    @inlinable static func == (lhs: Self, rhs: Self) -> Bool {
+    @inlinable public static func == (lhs: Self, rhs: Self) -> Bool {
         lhs.value == rhs.value
     }
 }

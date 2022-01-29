@@ -47,14 +47,8 @@ Value: RangeReplaceableCollection, Value: Equatable, Value.Element == Character 
     // MARK: Transformations - Placeholder
     //=------------------------------------------------------------------------=
     
-    @inlinable public func placeholder(_ placeholder: Character, value: AnyHashable,
-        where predicate: @escaping (Character) -> Bool = { _ in true }) -> Self {
-        var result = self; result.placeholders[placeholder] = Predicate(value, predicate); return result
-    }
-    
-    @inlinable public func placeholder(constant placeholder: Character,
-        where predicate: @escaping (Character) -> Bool = { _ in true }) -> Self {
-        var result = self; result.placeholders[placeholder] = Predicate(true, predicate); return result
+    @inlinable public func placeholder(_ placeholder: Character, where predicate: Predicate = .constant()) -> Self {
+        var result = self; result.placeholders[placeholder] = predicate; return result
     }
     
     //=------------------------------------------------------------------------=
@@ -110,7 +104,7 @@ extension PatternTextStyle {
             // MARK: Placeholder
             //=----------------------------------=
             if let predicate = placeholders[character] {
-                guard let real = next, predicate.validate(real) else { break loop }
+                guard let real = next, predicate.check(real) else { break loop }
                 //=------------------------------=
                 // MARK: Insertion
                 //=------------------------------=
@@ -178,7 +172,7 @@ extension PatternTextStyle {
                 // MARK: Next
                 //=------------------------------=
                 if let real = valueIterator.next() {
-                    guard predicate.validate(real) else { break loop }
+                    guard predicate.check(real) else { break loop }
                     //=------------------------------=
                     // MARK: Insertion, Iteration
                     //=------------------------------=
@@ -251,7 +245,7 @@ extension PatternTextStyle {
                 //=------------------------------=
                 // MARK: Predicate
                 //=------------------------------=
-                guard predicate.validate(real.character) else {
+                guard predicate.check(real.character) else {
                     throw Info([.mark(real.character), "is invalid"])
                 }
                 //=------------------------------=
