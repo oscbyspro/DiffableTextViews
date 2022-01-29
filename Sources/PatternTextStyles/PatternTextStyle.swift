@@ -84,6 +84,9 @@ extension PatternTextStyle {
     //=------------------------------------------------------------------------=
     
     /// Matches the value against the pattern to form a collection of characters.
+    ///
+    /// - Mismatches are hidden.
+    ///
     @inlinable public func showcase(value: Value) -> String {
         var characters = String()
         var patternIndex = pattern.startIndex
@@ -122,7 +125,7 @@ extension PatternTextStyle {
     // MARK: Editable
     //=------------------------------------------------------------------------=
     
-    /// Matches the value agains the pattern into a commit.
+    /// Matches the value agains the pattern to form a commit.
     ///
     /// - Mismatches are cut.
     ///
@@ -182,7 +185,7 @@ extension PatternTextStyle {
     // MARK: Commit
     //=------------------------------------------------------------------------=
     
-    /// Marges, parses and matches the request into a commit.
+    /// Marges, parses and matches the request to form a commit.
     ///
     /// - Mismatches throw an error.
     ///
