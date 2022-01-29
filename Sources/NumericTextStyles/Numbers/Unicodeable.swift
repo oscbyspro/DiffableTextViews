@@ -50,12 +50,6 @@ extension Unicodeable {
         String(character)
     }
     
-    #warning("WIP")
-    #warning("WIP")
-    #warning("WIP")
-    #warning("WIP")
-    #warning("WIP")
-    
     //=------------------------------------------------------------------------=
     // MARK: Helpers
     //=------------------------------------------------------------------------=

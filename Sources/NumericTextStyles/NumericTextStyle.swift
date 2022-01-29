@@ -141,7 +141,6 @@ extension NumericTextStyle {
     // MARK: Editable
     //=------------------------------------------------------------------------=
     
-    #warning("FIXME.")
     @inlinable public func editable(value: Value) -> Commit<Value> {
         let style = format.style(precision: precision.editable())
         //=--------------------------------------=
