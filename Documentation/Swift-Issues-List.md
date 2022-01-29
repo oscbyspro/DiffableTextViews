@@ -2,24 +2,33 @@
 
 A document with issues that have been worked around.
 
-## FormatStyle: format then parse fails.
+## FormatStyle: UInt out of bounds crashes.
+
+### Problem
+
+NumericTextStyles:
+UInt(64) cannot be formatted past Int(64).max, or it crashes.
+
+### Example
+
+```swift
+let value = UInt(Int.max) + 1
+let crash = value.formatted(.number)
+```
+
+## FormatStyle: parse(format(value)) fails.
 
 ### Problem
 
 NumericTextStyles:
 When changes are made upstream, or the user starts interaction with the view, 
-the easies way to enforce its precision is to format and parse the value once.
-This does not work for all locale and currency pairs, however, which is weird.
+the easies way to enforce precision is to format and parse the value once.
+This does not work for all locale and currency pairs, which is unexpected and weird.
 
 ### Example
 
 ```swift
-// MARK: Sad, Bad, Sad
-
 let code = "SEK"; let locale = Locale(identifier: "en_US")
 let style = IntegerFormatStyle<Int>.Currency(code: code).locale(locale)
-
-let value = 123 // 123
-let formatted = style.format(value) // SEK 123
-let unformatted = try? style.parseStrategy.parse(formatted) // nil
+let none = try? style.parseStrategy.parse(style.format(123))
 ```
