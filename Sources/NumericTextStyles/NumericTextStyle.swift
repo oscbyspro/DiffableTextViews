@@ -144,12 +144,12 @@ extension NumericTextStyle {
     @inlinable public func editable(value: Value) -> Commit<Value> {
         let style = format.style(precision: precision.editable())
         //=--------------------------------------=
-        // MARK: Value + Bounds
+        // MARK: Value, Bounds
         //=--------------------------------------=
         var autocorrectable = value
         bounds.autocorrect(&autocorrectable)
         //=--------------------------------------=
-        // MARK: Number + Precision
+        // MARK: Number, Precision
         //=--------------------------------------=
         var number = try! Number(autocorrectable)
         precision.autocorrect(&number)
@@ -159,13 +159,10 @@ extension NumericTextStyle {
         let parseable = region.characters(in: number)
         autocorrectable = try! format.parse(parseable)
         //=--------------------------------------=
-        // MARK: Characters, Snapshot
+        // MARK: Characters, Snapshot, Commit
         //=--------------------------------------=
         let characters = style.format(autocorrectable)
         let snapshot = snapshot(characters: characters)
-        //=--------------------------------------=
-        // MARK: Commit
-        //=--------------------------------------=
         return Commit(value: autocorrectable, snapshot: snapshot)
     }
 }
@@ -219,7 +216,8 @@ extension NumericTextStyle {
         //=--------------------------------------=
         // MARK: Snapshot, Commit
         //=--------------------------------------=
-        return Commit(value: value, snapshot: self.snapshot(characters: characters))
+        let snapshot = snapshot(characters: characters)
+        return Commit(value: value, snapshot: snapshot)
     }
     
     //=------------------------------------------------------------------------=
