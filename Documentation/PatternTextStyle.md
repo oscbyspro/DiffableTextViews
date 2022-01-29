@@ -34,7 +34,8 @@ struct DiffablePhoneNumberTextField: View {
     var body: some View {
         DiffableTextField($phoneNumber) {
             .pattern("+## (###) ###-##-##")
-            .placeholder("#") { $0.isASCII && $0.isNumber }
+            .placeholder("#", where: .constant({ $0.isASCII && $0.isNumber }))
+            .constant()
         }
         .diffableTextField_onSetup({ $0.keyboard(.phonePad) })
     }
@@ -51,7 +52,7 @@ struct DiffablePaymentNumberTextField: View {
         DiffableTextField($paymentNumber) {
             .pattern("#### #### #### ####")
             .placeholder("#", where: .constant({ $0.isASCII && $0.isNumber }))
-            .hidden()
+            .hidden().constant()
         }
         .diffableTextField_onSetup({ $0.keyboard(.numberPad) })
     }

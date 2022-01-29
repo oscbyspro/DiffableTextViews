@@ -1,5 +1,5 @@
 //
-//  Wrapper.swift
+//  WrapperTextStyle.swift
 //  
 //
 //  Created by Oscar Byström Ericsson on 2022-01-29.
@@ -8,10 +8,10 @@
 import Foundation
 
 //*============================================================================*
-// MARK: * Wrapper
+// MARK: * WrapperTextStyle
 //*============================================================================*
 
-@usableFromInline protocol Wrapper: DiffableTextStyle {
+@usableFromInline protocol WrapperTextStyle: DiffableTextStyle {
     
     //=------------------------------------------------------------------------=
     // MARK: Style
@@ -23,16 +23,17 @@ import Foundation
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: Wrapper - Details
+// MARK: WrapperTextStyle - Details
 //=----------------------------------------------------------------------------=
 
-extension Wrapper {
+extension WrapperTextStyle {
     
     //=------------------------------------------------------------------------=
     // MARK: Transformations
     //=------------------------------------------------------------------------=
     
-    @inlinable @inline(__always) public func locale(_ locale: Locale) -> Self {
+    @inlinable @inline(__always)
+    public func locale(_ locale: Locale) -> Self {
         var result = self; result.style = style.locale(locale); return result
     }
     
@@ -40,11 +41,13 @@ extension Wrapper {
     // MARK: Upstream
     //=------------------------------------------------------------------------=
     
-    @inlinable @inline(__always) public func showcase(value: Style.Value) -> String {
+    @inlinable @inline(__always)
+    public func showcase(value: Style.Value) -> String {
         style.showcase(value: value)
     }
     
-    @inlinable @inline(__always) public func editable(value: Style.Value) -> Commit<Style.Value> {
+    @inlinable @inline(__always)
+    public func editable(value: Style.Value) -> Commit<Style.Value> {
         style.editable(value: value)
     }
     
@@ -52,7 +55,8 @@ extension Wrapper {
     // MARK: Downstream
     //=------------------------------------------------------------------------=
     
-    @inlinable @inline(__always) public func merge(request: Request) throws -> Commit<Style.Value> {
+    @inlinable @inline(__always)
+    public func merge(request: Request) throws -> Commit<Style.Value> {
         try style.merge(request: request)
     }
     
@@ -60,13 +64,14 @@ extension Wrapper {
     // MARK: Comparisons
     //=------------------------------------------------------------------------=
     
-    @inlinable @inline(__always) public static func == (lhs: Self, rhs: Self) -> Bool {
+    @inlinable @inline(__always)
+    public static func == (lhs: Self, rhs: Self) -> Bool {
         lhs.style == rhs.style
     }
 }
 
 //*============================================================================*
-// MARK: * Wrapper x UIKit
+// MARK: * WrapperTextStyle x UIKit
 //*============================================================================*
 
 #if canImport(UIKit)
@@ -74,10 +79,10 @@ extension Wrapper {
 import UIKit
 
 @usableFromInline protocol UIKitWrapper:
-Wrapper, UIKitDiffableTextStyle where Style: UIKitDiffableTextStyle { }
+WrapperTextStyle, UIKitDiffableTextStyle where Style: UIKitDiffableTextStyle { }
 
 //=----------------------------------------------------------------------------=
-// MARK: Wrapper x UIKit - Details
+// MARK: WrapperTextStyle x UIKit - Details
 //=----------------------------------------------------------------------------=
 
 extension UIKitWrapper {
@@ -86,8 +91,9 @@ extension UIKitWrapper {
     // MARK: Setup
     //=------------------------------------------------------------------------=
     
-    @inlinable @inline(__always) public static func setup(diffableTextField: ProxyTextField) {
-        Style.setup(diffableTextField: diffableTextField)
+    @inlinable @inline(__always)
+    public static func onSetup(_ diffableTextField: ProxyTextField) {
+        Style.onSetup(diffableTextField)
     }
 }
 

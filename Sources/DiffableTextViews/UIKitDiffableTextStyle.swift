@@ -23,7 +23,7 @@ public protocol UIKitDiffableTextStyle: DiffableTextStyle {
     ///
     /// - The default implementation returns immediately.
     ///
-    @inlinable static func setup(diffableTextField: ProxyTextField)
+    @inlinable static func onSetup(_ diffableTextField: ProxyTextField)
 }
 
 //=----------------------------------------------------------------------------=
@@ -36,7 +36,7 @@ public extension UIKitDiffableTextStyle {
     // MARK: Setup
     //=------------------------------------------------------------------------=
     
-    @inlinable static func setup(diffableTextField: ProxyTextField) { }
+    @inlinable static func onSetup(_ diffableTextField: ProxyTextField) { }
 }
 
 #endif

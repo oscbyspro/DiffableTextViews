@@ -79,7 +79,7 @@ extension NumericTextStyle: UIKitDiffableTextStyle {
     // MARK: Keyboard
     //=------------------------------------------------------------------------=
     
-    @inlinable public static func setup(diffableTextField: ProxyTextField) {
+    @inlinable public static func onSetup(_ diffableTextField: ProxyTextField) {
         diffableTextField.keyboard(Value.isInteger ? .numberPad : .decimalPad)
     }
 }
@@ -141,12 +141,12 @@ extension NumericTextStyle {
     @inlinable public func editable(value: Value) -> Commit<Value> {
         let style = format.style(precision: precision.editable())
         //=--------------------------------------=
-        // MARK: Value, Bounds
+        // MARK: Value
         //=--------------------------------------=
         var autocorrectable = value
         bounds.autocorrect(&autocorrectable)
         //=--------------------------------------=
-        // MARK: Number, Precision
+        // MARK: Value -> Number
         //=--------------------------------------=
         var number = try! Number(autocorrectable)
         precision.autocorrect(&number)

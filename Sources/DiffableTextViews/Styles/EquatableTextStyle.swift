@@ -1,18 +1,15 @@
 //
-//  Constant.swift
+//  EquatableTextStyle.swift
 //  
 //
-//  Created by Oscar Byström Ericsson on 2022-01-28.
+//  Created by Oscar Byström Ericsson on 2022-01-29.
 //
 
-import Foundation
-
 //*============================================================================*
-// MARK: * Constant
+// MARK: * EquatableTextStyle
 //*============================================================================*
 
-public struct Constant<Style: DiffableTextStyle>: Wrapper {
-    public typealias ID = AnyHashable
+public struct EquatableTextStyle<Style: DiffableTextStyle>: WrapperTextStyle {
     public typealias Value = Style.Value
     
     //=------------------------------------------------------------------------=
@@ -20,32 +17,40 @@ public struct Constant<Style: DiffableTextStyle>: Wrapper {
     //=------------------------------------------------------------------------=
     
     @usableFromInline var style: Style
+    @usableFromInline let equatable: AnyHashable
     
     //=------------------------------------------------------------------------=
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable @inline(__always) init(style: Style) { self.style = style }
+    @inlinable @inline(__always)
+    init(style: Style, equatable: AnyHashable) {
+        self.style = style
+        self.equatable = equatable
+    }
     
     //=------------------------------------------------------------------------=
-    // MARK: Transformations
+    // MARK: Comparisons
     //=------------------------------------------------------------------------=
     
-    @inlinable @inline(__always) public func locale(_ locale: Locale) -> Self { self }
+    @inlinable @inline(__always)
+    public static func == (lhs: Self, rhs: Self) -> Bool {
+        lhs.equatable == rhs.equatable
+    }
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: Proxy - UIKit
+// MARK: EquatableTextStyle - UIKit
 //=----------------------------------------------------------------------------=
 
 #if canImport(UIKit)
 
-extension Constant: UIKitWrapper, UIKitDiffableTextStyle where Style: UIKitDiffableTextStyle { }
+extension EquatableTextStyle: UIKitWrapper, UIKitDiffableTextStyle where Style: UIKitDiffableTextStyle { }
 
 #endif
 
 //*============================================================================*
-// MARK: * DiffableTextStyle x Proxy
+// MARK: * DiffableTextStyle x EquatableTextStyle
 //*============================================================================*
 
 public extension DiffableTextStyle {
@@ -54,9 +59,13 @@ public extension DiffableTextStyle {
     // MARK: Transformations
     //=------------------------------------------------------------------------=
     
-    /// Prevents changes to this style, such as localization.
-    @inlinable func constant() -> Constant<Self> {
-        Constant(style: self)
+    /// Binds the style's identity to zero.
+    @inlinable func constant() -> EquatableTextStyle<Self> {
+        EquatableTextStyle(style: self, equatable: 0)
+    }
+    
+    /// Binds the style's identity to the value.
+    @inlinable func equatable<ID: Hashable>(_ value: ID) -> EquatableTextStyle<Self> {
+        EquatableTextStyle(style: self, equatable: value)
     }
 }
-

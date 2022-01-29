@@ -70,10 +70,9 @@ public struct DiffableTextField<Style: UIKitDiffableTextStyle>: UIViewRepresenta
         //=--------------------------------------=
         // MARK: ProxyTextField
         //=--------------------------------------=
-        let downstream = ProxyTextField(uiView)
-        Style.setup(diffableTextField: downstream)
-        context.coordinator.downstream = downstream
-        onSetup(context.coordinator.downstream)
+        context.coordinator.downstream = ProxyTextField(uiView)
+        Style.onSetup(context.coordinator.downstream)
+        self .onSetup(context.coordinator.downstream)
         //=--------------------------------------=
         // MARK: Done
         //=--------------------------------------=
