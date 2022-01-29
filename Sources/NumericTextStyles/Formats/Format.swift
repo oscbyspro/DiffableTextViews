@@ -110,7 +110,7 @@ extension CurrencyFormat {
 // MARK: * Format x Percent
 //*============================================================================*
 
-/// - Note: To use this format, the value must support a shift of at least 2 digits.
+/// - Note: To use this format, the value must support at least two exponent digits.
 @usableFromInline protocol PercentFormat: Format where FormatInput: FloatingPointValue {
     typealias Configuration = NumberFormatStyleConfiguration
     

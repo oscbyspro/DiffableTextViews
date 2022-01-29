@@ -6,10 +6,10 @@ A document with issues that have been worked around.
 
 ### Problem
 
-NumericTextStyles: 
-When the user starts interaction with the view (so editing changes to true), 
-the easies way to enforce the format would be to format and parse the value once.
-This does not work for all locale and currency pairs, however.
+NumericTextStyles:
+When changes are made upstream, or the user starts interaction with the view, 
+the easies way to enforce its precision would be to format and parse the value once.
+This does not work for all locale and currency pairs, however, which is weird.
 
 ### Example
 

@@ -145,17 +145,17 @@ extension NumericTextStyle {
     @inlinable public func editable(value: Value) -> Commit<Value> {
         let style = format.style(precision: precision.editable())
         //=--------------------------------------=
-        // MARK: Value
+        // MARK: Value + Bounds
         //=--------------------------------------=
         var autocorrectable = value
-        bounds.clamp(&autocorrectable)
+        bounds.autocorrect(&autocorrectable)
         //=--------------------------------------=
-        // MARK: Number
+        // MARK: Number + Precision
         //=--------------------------------------=
         var number = try! Number(autocorrectable)
-        precision.cut(&number)
+        precision.autocorrect(&number)
         //=--------------------------------------=
-        // MARK: Value
+        // MARK: Number -> Value
         //=--------------------------------------=
         let parseable = region.characters(in: number)
         autocorrectable = try! format.parse(parseable)

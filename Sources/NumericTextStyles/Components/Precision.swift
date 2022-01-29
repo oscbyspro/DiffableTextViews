@@ -82,12 +82,11 @@ public struct Precision<Value: Precise>: Equatable {
     }
     
     //=------------------------------------------------------------------------=
-    // MARK: Utilities
+    // MARK: Autocorrect
     //=------------------------------------------------------------------------=
     
-    #error("FIXME.")
-    @inlinable func cut(_ number: inout Number) {
-        fatalError()
+    @inlinable func autocorrect(_ number: inout Number) {
+        number.trim(max: upper)
     }
 }
 

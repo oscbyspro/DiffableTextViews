@@ -52,10 +52,10 @@ public struct Bounds<Value: Boundable>: Equatable {
     }
     
     //=------------------------------------------------------------------------=
-    // MARK: Utilities
+    // MARK: Autocorrect
     //=------------------------------------------------------------------------=
     
-    @inlinable func clamp(_ value: inout Value) {
+    @inlinable func autocorrect(_ value: inout Value) {
         value = Swift.max(min, Swift.min(value, max))
     }
 }

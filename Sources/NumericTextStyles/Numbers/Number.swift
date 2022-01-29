@@ -13,6 +13,9 @@ import Support
 //*============================================================================*
 
 /// A system representation of a number.
+///
+/// - Integer digits must not be empty. It must contain at least a zero.
+///
 @usableFromInline struct Number {
     
     //=------------------------------------------------------------------------=
@@ -37,42 +40,57 @@ import Support
     //=------------------------------------------------------------------------=
     
     @inlinable init() { }
-    
+        
     //=------------------------------------------------------------------------=
-    // MARK: Count
+    // MARK: Transformations - Separator
     //=------------------------------------------------------------------------=
     
-    @inlinable func count() -> Count {
-        //=--------------------------------------=
-        // MARK: Integer, Fraction
-        //=--------------------------------------=
-        let integer  = self.integer .count
-        let fraction = self.fraction.count
-        //=--------------------------------------=
-        // MARK: Value
-        //=--------------------------------------=
-        let upper = integer  - self.integer .prefixZerosCount()
-        var lower = fraction - self.fraction.suffixZerosCount()
-        //=--------------------------------------=
-        // MARK: Value - Integer Is Zero
-        //=--------------------------------------=
-        if upper == 0, lower != 0 {
-            lower = lower - self.fraction.prefixZerosCount()
-        }
-        //=--------------------------------------=
-        // MARK: Count
-        //=--------------------------------------=
-        return Count(value: upper + lower, integer: integer, fraction: fraction)
+    @inlinable mutating func removeSeparatorAsSuffix() {
+        if fraction.digits.isEmpty { separator = nil }
+    }
+    
+    @inlinable mutating func removeImpossibleSeparator(capacity: Count) {
+        guard capacity.fraction <= 0 || capacity.value <= 0 else { return }
+        self.removeSeparatorAsSuffix()
     }
     
     //=------------------------------------------------------------------------=
-    // MARK: Transformations
+    // MARK: Transformations - Precision
     //=------------------------------------------------------------------------=
     
-    @inlinable mutating func removeImpossibleSeparator(capacity: Count) {
-        guard fraction.digits.isEmpty else { return }
-        guard capacity.fraction <= 0 || capacity.value <= 0 else { return }
-        separator = nil
+    @inlinable mutating func trim(max: Count) {
+        //=--------------------------------------=
+        // MARK: Integer
+        //=--------------------------------------=
+        self.integer .suffix(maxLength: min(max.integer,  max.value))
+        self.integer .removeZerosPrefix()
+        //=--------------------------------------=
+        // MARK: Fraction
+        //=--------------------------------------=
+        self.fraction.prefix(maxLength: min(max.fraction, max.value - integer.count))
+        self.fraction.removeZerosSuffix()
+        //=--------------------------------------=
+        // MARK: Autocorrect
+        //=--------------------------------------=
+        self.removeSeparatorAsSuffix()
+        self.integer.makeItAtLeastZero()
+    }
+}
+
+//=----------------------------------------------------------------------------=
+// MARK: Number - Count
+//=----------------------------------------------------------------------------=
+
+extension Number {
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Integer, Fraction, Value
+    //=------------------------------------------------------------------------=
+    
+    @inlinable func count() -> Count {
+        let value = integer .digits.count - integer .count(prefix: \.isZero)
+                  + fraction.digits.count - fraction.count(suffix: \.isZero)
+        return Count(value: value, integer: integer.count, fraction: fraction.count)
     }
 }
 
@@ -138,39 +156,19 @@ extension Number {
             throw Info(["unable to parse number in", .mark(String(characters))])
         }
         //=--------------------------------------=
-        // MARK: Autocorrect
+        // MARK: Finalize
         //=--------------------------------------=
         self.integer.removeZerosPrefix()
         self.integer.makeItAtLeastZero()
     }
     
     //=------------------------------------------------------------------------=
-    // MARK: System
+    // MARK: Value
     //=------------------------------------------------------------------------=
     
     @inlinable init<T: Value>(_ value: T) throws {
         let characters = String(describing: value)
         try self.init(characters: characters, integer: T.isInteger, unsigned: T.isUnsigned,
         signs: Sign.characters, digits: Digit.characters, separators: Separator.characters)
-    }
-}
-
-//=----------------------------------------------------------------------------=
-// MARK: Number - CustomStringConvertible
-//=----------------------------------------------------------------------------=
-
-extension Number: CustomStringConvertible {
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Description
-    //=------------------------------------------------------------------------=
-    
-    @usableFromInline var description: String {
-        var description = String()
-        sign.character.write(to: &description)
-        description += integer.digits.map(\.character)
-        separator?.character.write(to: &description)
-        description += fraction.digits.map(\.character)
-        return description
     }
 }

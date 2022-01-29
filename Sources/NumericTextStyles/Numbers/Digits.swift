@@ -23,7 +23,7 @@ import Support
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable init(digits: [Digit] = []) {
+    @inlinable init(_ digits: [Digit] = []) {
         self.digits = []
     }
     
@@ -32,19 +32,19 @@ import Support
     }
     
     //=------------------------------------------------------------------------=
-    // MARK: Utilities
+    // MARK: Count
     //=------------------------------------------------------------------------=
     
     @inlinable var count: Int {
         digits.count
     }
     
-    @inlinable func prefixZerosCount() -> Int {
-        digits.count(while: \.isZero)
+    @inlinable func count(prefix predicate: (Digit) -> Bool) -> Int {
+        digits.count(while: predicate)
     }
     
-    @inlinable func suffixZerosCount() -> Int {
-        digits.reversed().count(while: \.isZero)
+    @inlinable func count(suffix predicate: (Digit) -> Bool) -> Int {
+        digits.reversed().count(while: predicate)
     }
     
     //=------------------------------------------------------------------------=
@@ -55,6 +55,18 @@ import Support
         digits.append(element)
     }
     
+    //=------------------------------------------------------------------------=
+    // MARK: Transformations - Replace
+    //=------------------------------------------------------------------------=
+    
+    @inlinable mutating func makeItAtLeastZero() {
+        if digits.isEmpty { self = [.zero] }
+    }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Transformations - Prefix / Suffix
+    //=------------------------------------------------------------------------=
+    
     @inlinable mutating func removeZerosPrefix() {
         digits.removeSubrange(..<digits.prefix(while: \.isZero).endIndex)
     }
@@ -63,7 +75,15 @@ import Support
         digits.removeSubrange(digits.suffix(while: \.isZero).startIndex...)
     }
     
-    @inlinable mutating func makeItAtLeastZero() {
-        if digits.isEmpty { self = [.zero] }
+    //=------------------------------------------------------------------------=
+    // MARK: Transformations - Utilities
+    //=------------------------------------------------------------------------=
+    
+    @inlinable mutating func prefix(maxLength: Int) {
+        digits = Array(digits.prefix(maxLength))
+    }
+    
+    @inlinable mutating func suffix(maxLength: Int) {
+        digits = Array(digits.suffix(maxLength))
     }
 }
