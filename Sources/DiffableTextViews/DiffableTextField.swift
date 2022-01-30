@@ -211,17 +211,17 @@ public struct DiffableTextField<Style: UIKitDiffableTextStyle>: UIViewRepresenta
             let style = style()
             let value = upstream.value.wrappedValue
             //=------------------------------=
-            // MARK: Evaluate
+            // MARK: Pull
             //=------------------------------=
             guard updatable(style: style, value: value) else { return }
             //=------------------------------=
-            // MARK: Editable
+            // MARK: Push - Active
             //=------------------------------=
             if downstream.active {
                 self.state.active(style: style, commit: style.commit(value: value))
                 self.push()
             //=------------------------------=
-            // MARK: Showcase
+            // MARK: Push - Inactive
             //=------------------------------=
             } else {
                 lock.perform {

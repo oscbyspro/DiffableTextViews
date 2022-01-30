@@ -91,13 +91,13 @@ extension Field {
         //=--------------------------------------=
         // MARK: Selection - Single
         //=--------------------------------------=
-        let upperBound = Mismatches.suffix(past: self.layout[self.selection.upperBound...], next: layout).next
+        let upperBound = Mismatches.suffix(past: self.layout[selection.upperBound...], next: layout).next
         var lowerBound = upperBound
         //=--------------------------------------=
         // MARK: Selection - Double
         //=--------------------------------------=
         if !self.selection.isEmpty {
-            lowerBound = Mismatches.prefix(past: self.layout[..<self.selection.lowerBound], next: layout).next
+            lowerBound = Mismatches.prefix(past: self.layout[..<selection.lowerBound], next: layout).next
             lowerBound = min(lowerBound, upperBound)
         }
         //=--------------------------------------=
