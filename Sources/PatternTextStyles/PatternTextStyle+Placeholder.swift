@@ -43,9 +43,9 @@ public extension PatternTextStyle {
         placeholder(character, where: Predicate(proxy: Constant(), check: predicate))
     }
     
-    /// A placeholder character and a variable predicate that is bound to a proxy value.
-    @inlinable func placeholder<Proxy: Hashable>(_ character: Character,
-        value: Proxy, where predicate: @escaping (Character) -> Bool) -> Self {
+    /// A placeholder character and a variable predicate bound to a value.
+    @inlinable func placeholder<Value: Hashable>(_ character: Character,
+        value: Value, where predicate: @escaping (Character) -> Bool) -> Self {
         placeholder(character, where: Predicate(proxy: Constant(), check: predicate))
     }
 }

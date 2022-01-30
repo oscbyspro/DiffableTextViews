@@ -1,5 +1,5 @@
 //
-//  WrapperTextStyle.swift
+//  Wrapper.swift
 //  
 //
 //  Created by Oscar Byström Ericsson on 2022-01-29.
@@ -8,10 +8,10 @@
 import Foundation
 
 //*============================================================================*
-// MARK: * WrapperTextStyle
+// MARK: * Wrapper
 //*============================================================================*
 
-@usableFromInline protocol WrapperTextStyle: DiffableTextStyle where Value == Style.Value {
+@usableFromInline protocol Wrapper: DiffableTextStyle where Value == Style.Value {
     
     //=------------------------------------------------------------------------=
     // MARK: Style
@@ -23,10 +23,10 @@ import Foundation
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: WrapperTextStyle - Details
+// MARK: Wrapper - Details
 //=----------------------------------------------------------------------------=
 
-extension WrapperTextStyle {
+extension Wrapper {
     
     //=------------------------------------------------------------------------=
     // MARK: Transformations
@@ -71,7 +71,7 @@ extension WrapperTextStyle {
 }
 
 //*============================================================================*
-// MARK: * WrapperTextStyle x UIKit
+// MARK: * Wrapper x UIKit
 //*============================================================================*
 
 #if canImport(UIKit)
@@ -79,10 +79,10 @@ extension WrapperTextStyle {
 import UIKit
 
 @usableFromInline protocol UIKitWrapper:
-WrapperTextStyle, UIKitDiffableTextStyle where Style: UIKitDiffableTextStyle { }
+Wrapper, UIKitDiffableTextStyle where Style: UIKitDiffableTextStyle { }
 
 //=----------------------------------------------------------------------------=
-// MARK: WrapperTextStyle x UIKit - Details
+// MARK: Wrapper x UIKit - Details
 //=----------------------------------------------------------------------------=
 
 extension UIKitWrapper {

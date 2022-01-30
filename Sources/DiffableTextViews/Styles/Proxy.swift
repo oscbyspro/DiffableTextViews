@@ -1,26 +1,28 @@
 //
-//  ImmutableTextStyle.swift
+//  Proxy.swift
 //  
 //
-//  Created by Oscar Byström Ericsson on 2022-01-28.
+//  Created by Oscar Byström Ericsson on 2022-01-29.
 //
 
-import Foundation
+import SwiftUI
+import Support
 
 //*============================================================================*
-// MARK: * ImmutableTextStyle
+// MARK: * Proxy
 //*============================================================================*
 
-/// A style that prevents changes.
+/// A style that binds equals a specific value.
 ///
-/// Use this style if you do not want its content to be overriden by the environment.
+/// Use this style to optimize the differentiation on view update.
 ///
-public struct ImmutableTextStyle<Style: DiffableTextStyle>: WrapperTextStyle {
+public struct Proxy<Style: DiffableTextStyle, ID: Equatable>: Wrapper {
     
     //=------------------------------------------------------------------------=
     // MARK: Properties
     //=------------------------------------------------------------------------=
     
+    @usableFromInline let value: ID
     @usableFromInline var style: Style
     
     //=------------------------------------------------------------------------=
@@ -28,14 +30,19 @@ public struct ImmutableTextStyle<Style: DiffableTextStyle>: WrapperTextStyle {
     //=------------------------------------------------------------------------=
     
     @inlinable @inline(__always)
-    init(style: Style) { self.style = style }
+    init(style: Style, value: ID) {
+        self.style = style
+        self.value = value
+    }
     
     //=------------------------------------------------------------------------=
-    // MARK: Transformations
+    // MARK: Comparisons
     //=------------------------------------------------------------------------=
     
     @inlinable @inline(__always)
-    public func locale(_ locale: Locale) -> Self { self }
+    public static func == (lhs: Self, rhs: Self) -> Bool {
+        lhs.value == rhs.value
+    }
 }
 
 //=----------------------------------------------------------------------------=
@@ -44,7 +51,7 @@ public struct ImmutableTextStyle<Style: DiffableTextStyle>: WrapperTextStyle {
 
 #if canImport(UIKit)
 
-extension ImmutableTextStyle: UIKitWrapper, UIKitDiffableTextStyle where Style: UIKitDiffableTextStyle { }
+extension Proxy: UIKitWrapper, UIKitDiffableTextStyle where Style: UIKitDiffableTextStyle { }
 
 #endif
 
@@ -58,8 +65,13 @@ public extension DiffableTextStyle {
     // MARK: Transformations
     //=------------------------------------------------------------------------=
     
-    /// Prevents changes to this style, such as localization.
-    @inlinable func immutable() -> ImmutableTextStyle<Self> {
-        ImmutableTextStyle(style: self)
+    /// Binds the style's differentiation result to a constant.
+    @inlinable func constant() -> Proxy<Self, Constant> {
+        Proxy(style: self, value: Constant())
+    }
+    
+    /// Binds the style's differentiation result to the value.
+    @inlinable func equals<Value: Equatable>(_ value: Value) -> Proxy<Self, Value> {
+        Proxy(style: self, value: value)
     }
 }
