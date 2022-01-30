@@ -11,7 +11,7 @@ import Foundation
 // MARK: * WrapperTextStyle
 //*============================================================================*
 
-@usableFromInline protocol WrapperTextStyle: DiffableTextStyle {
+@usableFromInline protocol WrapperTextStyle: DiffableTextStyle where Value == Style.Value {
     
     //=------------------------------------------------------------------------=
     // MARK: Style

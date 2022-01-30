@@ -44,14 +44,6 @@ Value: RangeReplaceableCollection, Value: Equatable, Value.Element == Character 
     }
 
     //=------------------------------------------------------------------------=
-    // MARK: Transformations - Placeholder
-    //=------------------------------------------------------------------------=
-    
-    @inlinable public func placeholder(_ placeholder: Character, where predicate: Predicate = .constant()) -> Self {
-        var result = self; result.placeholders[placeholder] = predicate; return result
-    }
-    
-    //=------------------------------------------------------------------------=
     // MARK: Comparisons
     //=------------------------------------------------------------------------=
     

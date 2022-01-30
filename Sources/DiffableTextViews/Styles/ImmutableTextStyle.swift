@@ -16,8 +16,6 @@ import Foundation
 /// Use this style if you do not want its content to be overriden by the environment.
 ///
 public struct ImmutableTextStyle<Style: DiffableTextStyle>: WrapperTextStyle {
-    public typealias ID = AnyHashable
-    public typealias Value = Style.Value
     
     //=------------------------------------------------------------------------=
     // MARK: Properties
@@ -65,4 +63,3 @@ public extension DiffableTextStyle {
         ImmutableTextStyle(style: self)
     }
 }
-

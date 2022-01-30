@@ -1,36 +1,38 @@
 //
-//  EquatableTextStyle.swift
+//  ProxyTextStyle.swift
 //  
 //
 //  Created by Oscar Byström Ericsson on 2022-01-29.
 //
 
+import SwiftUI
+import Support
+
 //*============================================================================*
-// MARK: * EquatableTextStyle
+// MARK: * ProxyTextStyle
 //*============================================================================*
 
 /// A style that binds equals a specific value.
 ///
-/// Use this style to optimize the comparison on view update.
+/// Use this style to optimize the differentiation on view update.
 ///
-public struct EquatableTextStyle<Style: DiffableTextStyle>: WrapperTextStyle {
-    public typealias Value = Style.Value
+public struct ProxyTextStyle<Style: DiffableTextStyle, Proxy: Equatable>: WrapperTextStyle {
     
     //=------------------------------------------------------------------------=
     // MARK: Properties
     //=------------------------------------------------------------------------=
     
     @usableFromInline var style: Style
-    @usableFromInline let equatable: AnyHashable
+    @usableFromInline let proxy: Proxy
     
     //=------------------------------------------------------------------------=
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
     @inlinable @inline(__always)
-    init(style: Style, equatable: AnyHashable) {
+    init(style: Style, proxy: Proxy) {
         self.style = style
-        self.equatable = equatable
+        self.proxy = proxy
     }
     
     //=------------------------------------------------------------------------=
@@ -39,22 +41,22 @@ public struct EquatableTextStyle<Style: DiffableTextStyle>: WrapperTextStyle {
     
     @inlinable @inline(__always)
     public static func == (lhs: Self, rhs: Self) -> Bool {
-        lhs.equatable == rhs.equatable
+        lhs.proxy == rhs.proxy
     }
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: EquatableTextStyle - UIKit
+// MARK: ProxyTextStyle - UIKit
 //=----------------------------------------------------------------------------=
 
 #if canImport(UIKit)
 
-extension EquatableTextStyle: UIKitWrapper, UIKitDiffableTextStyle where Style: UIKitDiffableTextStyle { }
+extension ProxyTextStyle: UIKitWrapper, UIKitDiffableTextStyle where Style: UIKitDiffableTextStyle { }
 
 #endif
 
 //*============================================================================*
-// MARK: * DiffableTextStyle x EquatableTextStyle
+// MARK: * DiffableTextStyle x ProxyTextStyle
 //*============================================================================*
 
 public extension DiffableTextStyle {
@@ -63,13 +65,13 @@ public extension DiffableTextStyle {
     // MARK: Transformations
     //=------------------------------------------------------------------------=
     
-    /// Binds the style's identity to zero.
-    @inlinable func constant() -> EquatableTextStyle<Self> {
-        EquatableTextStyle(style: self, equatable: 0)
+    /// Binds the style's differentiation result to a constant.
+    @inlinable func constant() -> ProxyTextStyle<Self, Constant> {
+        ProxyTextStyle(style: self, proxy: Constant())
     }
     
-    /// Binds the style's identity to the value.
-    @inlinable func equatable<ID: Hashable>(_ value: ID) -> EquatableTextStyle<Self> {
-        EquatableTextStyle(style: self, equatable: value)
+    /// Binds the style's differentiation result to the value.
+    @inlinable func equals<Proxy: Equatable>(_ value: Proxy) -> ProxyTextStyle<Self, Proxy> {
+        ProxyTextStyle(style: self, proxy: value)
     }
 }
