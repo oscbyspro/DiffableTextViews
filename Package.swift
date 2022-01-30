@@ -52,8 +52,6 @@ let package = Package(
         //=--------------------------------------=
         // MARK: Support
         //=--------------------------------------=
-        .target(
-            name: "Support",
-            dependencies: []),
+        .target(name: "Support", dependencies: []),
     ]
 )
