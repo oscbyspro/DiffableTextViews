@@ -55,6 +55,9 @@ extension Unicodeable {
     //=------------------------------------------------------------------------=
     
     @inlinable static func system() -> [Character: Self] {
-        allCases.reduce(into: [:]) { result, next in result[next.character] = next }
+        allCases.reduce(into: [:]) {
+            result,unicodable in
+            result[unicodable.character] = unicodable
+        }
     }
 }

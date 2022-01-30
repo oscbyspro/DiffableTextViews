@@ -131,7 +131,7 @@ extension NumericTextStyle {
     //=------------------------------------------------------------------------=
     
     @inlinable public func format(value: Value) -> String {
-        format.style(precision: precision.showcase()).format(value)
+        format.style(precision: precision.inactive()).format(value)
     }
     
     //=------------------------------------------------------------------------=
@@ -139,28 +139,28 @@ extension NumericTextStyle {
     //=------------------------------------------------------------------------=
     
     @inlinable public func commit(value: Value) -> Commit<Value> {
-        let style = format.style(precision: precision.editable())
+        let style = format.style(precision: precision.active())
         //=--------------------------------------=
         // MARK: Value
         //=--------------------------------------=
-        var autocorrectable = value
-        bounds.autocorrect(&autocorrectable)
+        var value = value
+        bounds.autocorrect(&value)
         //=--------------------------------------=
         // MARK: Value -> Number
         //=--------------------------------------=
-        var number = try! Number(autocorrectable)
+        var number = try! Number(value)
         precision.autocorrect(&number)
         //=--------------------------------------=
         // MARK: Number -> Value
         //=--------------------------------------=
         let parseable = region.characters(in: number)
-        autocorrectable = try! format.parse(parseable)
+        value = try! format.parse(parseable)
         //=--------------------------------------=
         // MARK: Characters, Snapshot, Commit
         //=--------------------------------------=
-        let characters = style.format(autocorrectable)
+        let characters = style.format(value)
         let snapshot = snapshot(characters: characters)
-        return Commit(value: autocorrectable, snapshot: snapshot)
+        return Commit(value: value, snapshot: snapshot)
     }
 }
 
@@ -202,7 +202,7 @@ extension NumericTextStyle {
         // MARK: Style
         //=--------------------------------------=
         let style = format.style(
-        precision: precision.editable(count: count),
+        precision: precision.interactive(count: count),
         separator: number.separator == .fraction ? .always : .automatic,
         sign: number.sign == .negative ? .always : .automatic)
         //=--------------------------------------=

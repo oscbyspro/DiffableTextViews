@@ -42,22 +42,22 @@ public struct Precision<Value: Precise>: Equatable {
     }
     
     //=------------------------------------------------------------------------=
-    // MARK: Configurations
+    // MARK: Modes
     //=------------------------------------------------------------------------=
     
-    @inlinable func showcase() -> NumberFormatStyleConfiguration.Precision {
+    @inlinable func inactive() -> NumberFormatStyleConfiguration.Precision {
         .integerAndFractionLength(
          integerLimits: lower.integer  ... upper.integer,
         fractionLimits: lower.fraction ... upper.fraction)
     }
 
-    @inlinable func editable() -> NumberFormatStyleConfiguration.Precision {
+    @inlinable func active() -> NumberFormatStyleConfiguration.Precision {
         .integerAndFractionLength(
          integerLimits: Namespace.min.integer  ... upper.integer,
         fractionLimits: Namespace.min.fraction ... upper.fraction)
     }
     
-    @inlinable func editable(count: Count) -> NumberFormatStyleConfiguration.Precision {
+    @inlinable func interactive(count: Count) -> NumberFormatStyleConfiguration.Precision {
         .integerAndFractionLength(
          integerLimits: max(Namespace.min.integer,  count.integer)  ... count.integer,
         fractionLimits: max(Namespace.min.fraction, count.fraction) ... count.fraction)
