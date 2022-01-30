@@ -23,7 +23,7 @@ extension PatternTextStyle {
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: PatternTextStyle - Placeholder
+// MARK: PatternTextStyle - Placeholder - Public
 //=----------------------------------------------------------------------------=
 
 public extension PatternTextStyle {
