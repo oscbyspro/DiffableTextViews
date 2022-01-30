@@ -11,6 +11,7 @@ import Support
 // MARK: * Predicate
 //*============================================================================*
 
+/// An equatable predicate model.
 @usableFromInline struct Predicate: Equatable {
     
     //=------------------------------------------------------------------------=

@@ -36,11 +36,11 @@ public protocol DiffableTextStyle: Equatable {
     //=------------------------------------------------------------------------=
     
     /// Transforms the value into formatted text when the view is idle.
-    @inlinable func showcase(value: Value) -> String
-    
+    @inlinable func format(value: Value) -> String
+
     /// Transforms the value into new commit when the view is active.
-    @inlinable func editable(value: Value) -> Commit<Value>
-    
+    @inlinable func commit(value: Value) -> Commit<Value>
+
     //=------------------------------------------------------------------------=
     // MARK: Downstream
     //=------------------------------------------------------------------------=
@@ -50,7 +50,7 @@ public protocol DiffableTextStyle: Equatable {
     /// - Thrown errors result in input cancellation.
     /// - Thrown error descriptions are printed in DEBUG mode.
     ///
-    @inlinable func merge(request: Request) throws -> Commit<Value>
+    @inlinable func merge(changes: Changes) throws -> Commit<Value>
 }
 
 //=----------------------------------------------------------------------------=

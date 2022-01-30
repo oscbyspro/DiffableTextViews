@@ -79,7 +79,7 @@ extension PatternTextStyle {
     ///
     /// - Mismatches are hidden.
     ///
-    @inlinable public func showcase(value: Value) -> String {
+    @inlinable public func format(value: Value) -> String {
         var characters = String()
         var patternIndex = pattern.startIndex
         var valueIterator = value.makeIterator()
@@ -121,7 +121,7 @@ extension PatternTextStyle {
     ///
     /// - Mismatches are cut.
     ///
-    @inlinable public func editable(value: Value) -> Commit<Value> {
+    @inlinable public func commit(value: Value) -> Commit<Value> {
         var contents = Value()
         var snapshot = Snapshot()
         var queueIndex = pattern.startIndex
@@ -181,8 +181,8 @@ extension PatternTextStyle {
     ///
     /// - Mismatches throw an error.
     ///
-    @inlinable public func merge(request: Request) throws -> Commit<Value> {
-        var value = Value(); var nonvirtuals = request.proposal().lazy.filter(\.nonvirtual).makeIterator()
+    @inlinable public func merge(changes: Changes) throws -> Commit<Value> {
+        var value = Value(); var nonvirtuals = changes.proposal().lazy.filter(\.nonvirtual).makeIterator()
         //=--------------------------------------=
         // MARK: Loop
         //=--------------------------------------=
@@ -203,11 +203,11 @@ extension PatternTextStyle {
         // MARK: Capacity
         //=--------------------------------------=
         guard nonvirtuals.next() == nil else {
-            throw Info([.mark(request.proposal().characters), "exceeded pattern capacity."])
+            throw Info([.mark(changes.proposal().characters), "exceeded pattern capacity."])
         }
         //=--------------------------------------=
         // MARK: Value -> Commit
         //=--------------------------------------=
-        return editable(value: value)
+        return commit(value: value)
     }
 }

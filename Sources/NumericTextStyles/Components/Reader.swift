@@ -18,16 +18,16 @@ import DiffableTextViews
     // MARK: Properties
     //=------------------------------------------------------------------------=
     
-    @usableFromInline let region: Region
-    @usableFromInline var request: Request
+    @usableFromInline let region:  Region
+    @usableFromInline var changes: Changes
     
     //=------------------------------------------------------------------------=
     // MARK: Initializers
     //=------------------------------------------------------------------------=
             
-    @inlinable init(_ request: Request, in region: Region) {
+    @inlinable init(_ changes: Changes, in region: Region) {
         self.region  = region
-        self.request = request
+        self.changes = changes
     }
     
     //=------------------------------------------------------------------------=
@@ -36,12 +36,12 @@ import DiffableTextViews
     
     /// Interprets a single sign character as a: set sign command.
     @inlinable mutating func consumeSignCommand() -> Transform<Number>? {
-        guard request.replacement.count == 1 else { return nil } // snapshot.count is O(1)
-        guard let sign = region.signs[request.replacement.first!.character] else { return nil }
+        guard changes.replacement.count == 1 else { return nil } // snapshot.count is O(1)
+        guard let sign = region.signs[changes.replacement.first!.character] else { return nil }
         //=--------------------------------------=
         // MARK: Set Sign Command Found
         //=--------------------------------------=
-        self.request.replacement.removeAll()
+        self.changes.replacement.removeAll()
         return { number in number.sign = sign }
     }
 }

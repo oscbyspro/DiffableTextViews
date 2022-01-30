@@ -149,20 +149,20 @@ public struct DiffableTextField<Style: UIKitDiffableTextStyle>: UIViewRepresenta
         @inlinable public func textField(_ textField: UITextField, shouldChangeCharactersIn nsRange: NSRange, replacementString string: String) -> Bool {
             let style = style()
             let range = state.field.indices(at: nsRange)
-            let change = Request(state.snapshot,  change: (string, range))
+            let changes = Changes(state.snapshot,  change: (string, range))
             //=----------------------------------=
             // MARK: Attempt
             //=----------------------------------=
             attempt: do {
-                let commit = try style.merge(request: change)
+                let commit = try style.merge(changes: changes)
                 //=------------------------------=
                 // MARK: Push
                 //=------------------------------=
                 Task { @MainActor in
                     // async to process special commands first
                     // as an example see: (option + backspace)
-                    self.state.set(selection: range.upperBound)
-                    self.state.update(style: style, commit: commit)
+                    self.state.change(selection: range.upperBound)
+                    self.state.active(style: style, commit: commit)
                     self.push()
                 }
             //=----------------------------------=
@@ -218,15 +218,15 @@ public struct DiffableTextField<Style: UIKitDiffableTextStyle>: UIViewRepresenta
             // MARK: Editable
             //=------------------------------=
             if downstream.active {
-                self.state.update(style: style, commit: style.editable(value: value))
+                self.state.active(style: style, commit: style.commit(value: value))
                 self.push()
             //=------------------------------=
             // MARK: Showcase
             //=------------------------------=
             } else {
                 lock.perform {
-                    self.state.set(style: style, value: value, active: false)
-                    self.downstream.update(text: style.showcase(value: value))
+                    self.state.inactive(style: style, value: value)
+                    self.downstream.update(text: style.format(value: value))
                 }
             }
         }

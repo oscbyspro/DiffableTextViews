@@ -42,13 +42,13 @@ extension Wrapper {
     //=------------------------------------------------------------------------=
     
     @inlinable @inline(__always)
-    public func showcase(value: Style.Value) -> String {
-        style.showcase(value: value)
+    public func format(value: Style.Value) -> String {
+        style.format(value: value)
     }
     
     @inlinable @inline(__always)
-    public func editable(value: Style.Value) -> Commit<Style.Value> {
-        style.editable(value: value)
+    public func commit(value: Style.Value) -> Commit<Style.Value> {
+        style.commit(value: value)
     }
     
     //=------------------------------------------------------------------------=
@@ -56,8 +56,8 @@ extension Wrapper {
     //=------------------------------------------------------------------------=
     
     @inlinable @inline(__always)
-    public func merge(request: Request) throws -> Commit<Style.Value> {
-        try style.merge(request: request)
+    public func merge(changes: Changes) throws -> Commit<Style.Value> {
+        try style.merge(changes: changes)
     }
     
     //=------------------------------------------------------------------------=

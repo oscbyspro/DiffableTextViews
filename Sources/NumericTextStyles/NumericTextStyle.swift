@@ -130,7 +130,7 @@ extension NumericTextStyle {
     // MARK: Showcase
     //=------------------------------------------------------------------------=
     
-    @inlinable public func showcase(value: Value) -> String {
+    @inlinable public func format(value: Value) -> String {
         format.style(precision: precision.showcase()).format(value)
     }
     
@@ -138,7 +138,7 @@ extension NumericTextStyle {
     // MARK: Editable
     //=------------------------------------------------------------------------=
     
-    @inlinable public func editable(value: Value) -> Commit<Value> {
+    @inlinable public func commit(value: Value) -> Commit<Value> {
         let style = format.style(precision: precision.editable())
         //=--------------------------------------=
         // MARK: Value
@@ -174,14 +174,14 @@ extension NumericTextStyle {
     // MARK: Commit
     //=------------------------------------------------------------------------=
     
-    @inlinable public func merge(request: Request) throws -> Commit<Value> {
-        var reader = Reader(request, in: region)
+    @inlinable public func merge(changes: Changes) throws -> Commit<Value> {
+        var reader = Reader(changes, in: region)
         let change = reader.consumeSignCommand()
         //=--------------------------------------=
         // MARK: Number
         //=--------------------------------------=
         var number = try region.number(
-        in: reader.request.proposal(),
+        in: reader.changes.proposal(),
         as: Value.self); change?(&number)
         try bounds.validate(sign: number.sign)
         //=--------------------------------------=
