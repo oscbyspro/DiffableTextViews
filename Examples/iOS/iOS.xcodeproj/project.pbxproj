@@ -7,17 +7,24 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		5589A1A427A7E3E30000F04A /* iOS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5589A1A327A7E3E30000F04A /* iOS.swift */; };
+		5589A1A427A7E3E30000F04A /* App.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5589A1A327A7E3E30000F04A /* App.swift */; };
 		5589A1A827A7E3E40000F04A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5589A1A727A7E3E40000F04A /* Assets.xcassets */; };
 		5589A1AB27A7E3E40000F04A /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5589A1AA27A7E3E40000F04A /* Preview Assets.xcassets */; };
+		55AA28BD27A7EC8C003778FE /* PatternScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55A85FF927A7E850006CCCB7 /* PatternScreen.swift */; };
+		55AA28BE27A7EC8C003778FE /* NumericScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55A85FFB27A7E850006CCCB7 /* NumericScreen.swift */; };
+		55AA28C327A7ED4F003778FE /* Screen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55A85FF627A7E850006CCCB7 /* Screen.swift */; };
+		55AA28C627A7ED79003778FE /* DiffableTextViews in Frameworks */ = {isa = PBXBuildFile; productRef = 55AA28C527A7ED79003778FE /* DiffableTextViews */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		5589A1A027A7E3E30000F04A /* iOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = iOS.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		5589A1A327A7E3E30000F04A /* iOS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = iOS.swift; sourceTree = "<group>"; };
+		5589A1A327A7E3E30000F04A /* App.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = App.swift; sourceTree = "<group>"; };
 		5589A1A727A7E3E40000F04A /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		5589A1AA27A7E3E40000F04A /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
-		55F6F58527A7E4F200BA26AB /* DiffableTextViews */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = DiffableTextViews; path = ../..; sourceTree = "<group>"; };
+		55A85FF627A7E850006CCCB7 /* Screen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Screen.swift; sourceTree = "<group>"; };
+		55A85FF927A7E850006CCCB7 /* PatternScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PatternScreen.swift; sourceTree = "<group>"; };
+		55A85FFB27A7E850006CCCB7 /* NumericScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NumericScreen.swift; sourceTree = "<group>"; };
+		55AA28C227A7ED26003778FE /* DiffableTextViews */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = DiffableTextViews; path = ../..; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -25,6 +32,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				55AA28C627A7ED79003778FE /* DiffableTextViews in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -35,8 +43,9 @@
 			isa = PBXGroup;
 			children = (
 				55F6F58427A7E4F200BA26AB /* Packages */,
-				5589A1A227A7E3E30000F04A /* iOS */,
+				5589A1A227A7E3E30000F04A /* App */,
 				5589A1A127A7E3E30000F04A /* Products */,
+				55AA28C427A7ED78003778FE /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -48,13 +57,15 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		5589A1A227A7E3E30000F04A /* iOS */ = {
+		5589A1A227A7E3E30000F04A /* App */ = {
 			isa = PBXGroup;
 			children = (
+				55A85FFC27A7E87C006CCCB7 /* Screens */,
+				55A85FF327A7E826006CCCB7 /* Views */,
 				55F6F58627A7E53300BA26AB /* Assets */,
-				5589A1A327A7E3E30000F04A /* iOS.swift */,
+				5589A1A327A7E3E30000F04A /* App.swift */,
 			);
-			path = iOS;
+			path = App;
 			sourceTree = "<group>";
 		};
 		5589A1A927A7E3E40000F04A /* Preview Content */ = {
@@ -65,10 +76,50 @@
 			path = "Preview Content";
 			sourceTree = "<group>";
 		};
+		55A85FF327A7E826006CCCB7 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				55A85FF627A7E850006CCCB7 /* Screen.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		55A85FF827A7E850006CCCB7 /* Pattern */ = {
+			isa = PBXGroup;
+			children = (
+				55A85FF927A7E850006CCCB7 /* PatternScreen.swift */,
+			);
+			path = Pattern;
+			sourceTree = "<group>";
+		};
+		55A85FFA27A7E850006CCCB7 /* Numeric */ = {
+			isa = PBXGroup;
+			children = (
+				55A85FFB27A7E850006CCCB7 /* NumericScreen.swift */,
+			);
+			path = Numeric;
+			sourceTree = "<group>";
+		};
+		55A85FFC27A7E87C006CCCB7 /* Screens */ = {
+			isa = PBXGroup;
+			children = (
+				55A85FF827A7E850006CCCB7 /* Pattern */,
+				55A85FFA27A7E850006CCCB7 /* Numeric */,
+			);
+			path = Screens;
+			sourceTree = "<group>";
+		};
+		55AA28C427A7ED78003778FE /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		55F6F58427A7E4F200BA26AB /* Packages */ = {
 			isa = PBXGroup;
 			children = (
-				55F6F58527A7E4F200BA26AB /* DiffableTextViews */,
+				55AA28C227A7ED26003778FE /* DiffableTextViews */,
 			);
 			name = Packages;
 			sourceTree = "<group>";
@@ -98,6 +149,9 @@
 			dependencies = (
 			);
 			name = iOS;
+			packageProductDependencies = (
+				55AA28C527A7ED79003778FE /* DiffableTextViews */,
+			);
 			productName = iOS;
 			productReference = 5589A1A027A7E3E30000F04A /* iOS.app */;
 			productType = "com.apple.product-type.application";
@@ -152,7 +206,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				5589A1A427A7E3E30000F04A /* iOS.swift in Sources */,
+				55AA28C327A7ED4F003778FE /* Screen.swift in Sources */,
+				55AA28BD27A7EC8C003778FE /* PatternScreen.swift in Sources */,
+				55AA28BE27A7EC8C003778FE /* NumericScreen.swift in Sources */,
+				5589A1A427A7E3E30000F04A /* App.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -282,7 +339,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_ASSET_PATHS = "\"iOS/Assets/Preview Content\"";
+				DEVELOPMENT_ASSET_PATHS = "\"App/Assets/Preview Content\"";
 				DEVELOPMENT_TEAM = 2MJ84G7XD6;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -311,7 +368,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_ASSET_PATHS = "\"iOS/Assets/Preview Content\"";
+				DEVELOPMENT_ASSET_PATHS = "\"App/Assets/Preview Content\"";
 				DEVELOPMENT_TEAM = 2MJ84G7XD6;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -355,6 +412,13 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		55AA28C527A7ED79003778FE /* DiffableTextViews */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = DiffableTextViews;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 5589A19827A7E3E30000F04A /* Project object */;
 }

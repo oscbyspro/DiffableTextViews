@@ -1,5 +1,5 @@
 //
-//  iOSApp.swift
+//  App.swift
 //  iOS
 //
 //  Created by Oscar Byström Ericsson on 2022-01-31.
@@ -8,13 +8,14 @@
 import SwiftUI
 
 //*============================================================================*
-// MARK: * iOS
+// MARK: * App
 //*============================================================================*
 
-@main struct iOS: App {
+@main struct App: SwiftUI.App {
     var body: some Scene {
         WindowGroup {
-            Text("Hello, world!")
+            NumericScreen()
+                .preferredColorScheme(.dark)
         }
     }
 }
