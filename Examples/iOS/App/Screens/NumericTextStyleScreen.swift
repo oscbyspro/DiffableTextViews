@@ -44,10 +44,7 @@ struct NumericTextStyleScreen: View {
     //=------------------------------------------------------------------------=
     
     var diffableTextStyles: some View {
-        Picker("Style", selection: $style) {
-            ForEach(Style.allCases, id: \.self, content: \.label)
-        }
-        .pickerStyle(.segmented)
+        Choices(Style.allCases, selection: $style, content: \.label)
     }
     
     var diffableTextField: some View {

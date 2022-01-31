@@ -1,5 +1,5 @@
 //
-//  DiffableTextStyleTabs.swift
+//  ContentTabs.swift
 //  iOS
 //
 //  Created by Oscar Byström Ericsson on 2022-01-31.
@@ -8,10 +8,10 @@
 import SwiftUI
 
 //*============================================================================*
-// MARK: * DiffableTextStyleTabs
+// MARK: * ContentTabs
 //*============================================================================*
 
-struct DiffableTextStyleTabs: View {
+struct ContentTabs: View {
     
     //=------------------------------------------------------------------------=
     // MARK: State
@@ -74,12 +74,12 @@ struct DiffableTextStyleTabs: View {
 }
 
 //*============================================================================*
-// MARK: * DiffableTextStyleTabs x Previews
+// MARK: * ContentTabs x Previews
 //*============================================================================*
 
 struct DiffableTextStyleTabsPreviews: PreviewProvider {
     static var previews: some View {
-        DiffableTextStyleTabs()
+        ContentTabs()
             .preferredColorScheme(.dark)
     }
 }

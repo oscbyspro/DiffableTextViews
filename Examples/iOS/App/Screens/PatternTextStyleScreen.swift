@@ -20,13 +20,15 @@ struct PatternTextStyleScreen: View {
     //=------------------------------------------------------------------------=
     
     @State private var value = String()
-    
+    @State private var style = Style.phone
+
     //=------------------------------------------------------------------------=
     // MARK: Body
     //=------------------------------------------------------------------------=
     
     var body: some View {
         Screen {
+            diffableTextStyles
             Spacer()
             Description(value)
             diffableTextField
@@ -37,6 +39,10 @@ struct PatternTextStyleScreen: View {
     // MARK: Body - Components
     //=------------------------------------------------------------------------=
     
+    var diffableTextStyles: some View {
+        Choices(Style.allCases, selection: $style, content: \.label)
+    }
+    
     var diffableTextField: some View {
         Field($value) {
             .pattern("+## (###) ###-##-##")
@@ -46,6 +52,28 @@ struct PatternTextStyleScreen: View {
         .diffableTextField_onSetup {
             proxy in
             proxy.keyboard(.phonePad)
+        }
+    }
+    
+    //*========================================================================*
+    // MARK: * Pattern
+    //*========================================================================*
+    
+    enum Style: String, CaseIterable {
+        
+        //=--------------------------------------------------------------------=
+        // MARK: Instances
+        //=--------------------------------------------------------------------=
+        
+        case phone
+        case card
+        
+        //=--------------------------------------------------------------------=
+        // MARK: Body
+        //=--------------------------------------------------------------------=
+        
+        var label: some View {
+            Text(rawValue.capitalized).tag(self)
         }
     }
 }
