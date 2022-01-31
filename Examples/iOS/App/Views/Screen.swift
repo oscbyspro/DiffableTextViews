@@ -39,7 +39,6 @@ struct Screen<Content: View>: View {
     }
 }
 
-
 //*============================================================================*
 // MARK: * Screen x Previews
 //*============================================================================*
@@ -47,7 +46,7 @@ struct Screen<Content: View>: View {
 struct ScreenPreviews: PreviewProvider {
     static var previews: some View {
         Screen {
-            Color.clear
+            Rectangle().fill(Material.regular)
         }
         .preferredColorScheme(.dark)
     }

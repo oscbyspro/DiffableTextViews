@@ -26,7 +26,8 @@ struct NumericTextStyleScreen: View {
     // MARK: State
     //=------------------------------------------------------------------------=
     
-    @State private var number = Decimal()
+    @State private var value  = Decimal()
+    @State private var style  = Style.number
     @State private var locale = Locale(identifier: "en_US")
     
     //=------------------------------------------------------------------------=
@@ -35,7 +36,12 @@ struct NumericTextStyleScreen: View {
     
     var body: some View {
         Screen {
-            diffableTextField
+            VStack {
+                picker
+                Spacer()
+                diffableTextField
+                Spacer()
+            }
         }
         .environment(\.locale, locale)
     }
@@ -44,8 +50,17 @@ struct NumericTextStyleScreen: View {
     // MARK: Body - Components
     //=------------------------------------------------------------------------=
     
+    var picker: some View {
+        Picker("Style", selection: $style) {
+            Text("A").tag(Style.number)
+            Text("B").tag(Style.currency)
+            Text("C").tag(Style.percent)
+        }
+        .pickerStyle(.segmented)
+    }
+    
     var diffableTextField: some View {
-        DiffableTextField($number) {
+        DiffableTextField($value) {
             .number
             .bounds((0 as Decimal)...)
             .precision(integer: 1..., fraction: 2...)
@@ -53,6 +68,13 @@ struct NumericTextStyleScreen: View {
         .padding()
         .background(Color(uiColor: .tertiarySystemBackground))
     }
+    
+    //*========================================================================*
+    // MARK: * Style
+    //*========================================================================*
+    
+    #warning("TODO.")
+    enum Style { case number, currency, percent }
 }
 
 //*============================================================================*

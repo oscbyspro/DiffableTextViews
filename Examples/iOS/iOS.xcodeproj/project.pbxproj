@@ -66,7 +66,7 @@
 			children = (
 				55F6F58627A7E53300BA26AB /* Assets */,
 				55AA28C927A7F1DB003778FE /* Models */,
-				55AA28CC27A7F459003778FE /* Navigators */,
+				55AA28D127A802AF003778FE /* Navigators */,
 				55A85FFC27A7E87C006CCCB7 /* Screens */,
 				55A85FF327A7E826006CCCB7 /* Views */,
 				5589A1A327A7E3E30000F04A /* App.swift */,
@@ -93,8 +93,8 @@
 		55A85FFC27A7E87C006CCCB7 /* Screens */ = {
 			isa = PBXGroup;
 			children = (
-				55A85FF927A7E850006CCCB7 /* PatternTextStyleScreen.swift */,
 				55A85FFB27A7E850006CCCB7 /* NumericTextStyleScreen.swift */,
+				55A85FF927A7E850006CCCB7 /* PatternTextStyleScreen.swift */,
 			);
 			path = Screens;
 			sourceTree = "<group>";
@@ -114,7 +114,7 @@
 			path = Models;
 			sourceTree = "<group>";
 		};
-		55AA28CC27A7F459003778FE /* Navigators */ = {
+		55AA28D127A802AF003778FE /* Navigators */ = {
 			isa = PBXGroup;
 			children = (
 				55AA28CD27A7F472003778FE /* DiffableTextStyleScreenTabs.swift */,
