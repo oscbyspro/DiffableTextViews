@@ -25,7 +25,7 @@ import SwiftUI
     
     var body: some Scene {
         WindowGroup {
-            StyleScreenTabs()
+            TextStyleScreenTabs()
                 .environmentObject(storage)
                 .preferredColorScheme(.dark)
         }

@@ -1,5 +1,5 @@
 //
-//  StyleScreenTabs.swift
+//  TextStyleScreenTabs.swift
 //  iOS
 //
 //  Created by Oscar Byström Ericsson on 2022-01-31.
@@ -8,10 +8,10 @@
 import SwiftUI
 
 //*============================================================================*
-// MARK: * StyleScreenTabs
+// MARK: * TextStyleScreenTabs
 //*============================================================================*
 
-struct StyleScreenTabs: View {
+struct TextStyleScreenTabs: View {
     
     //=------------------------------------------------------------------------=
     // MARK: State
@@ -25,8 +25,8 @@ struct StyleScreenTabs: View {
     
     var body: some View {
         TabView(selection: $tab) {
-            NumericScreen().modifier(Tab.numeric)
-            PatternScreen().modifier(Tab.pattern)
+            NumericTextStyleScreen().modifier(Tab.numeric)
+            PatternTextStyleScreen().modifier(Tab.pattern)
         }
     }
     

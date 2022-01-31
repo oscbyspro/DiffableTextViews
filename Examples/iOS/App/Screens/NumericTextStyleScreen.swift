@@ -1,25 +1,33 @@
 //
-//  PatternScreen.swift
+//  NumericTextStyleScreen.swift
 //  iOS
 //
 //  Created by Oscar Byström Ericsson on 2022-01-30.
 //
 
 import SwiftUI
+import Foundation
 import DiffableTextViews
-import PatternTextStyles
+import NumericTextStyles
 
 //*============================================================================*
-// MARK: * PatternScreen
+// MARK: * NumericTextStyleScreen
 //*============================================================================*
 
-struct PatternScreen: View {
+struct NumericTextStyleScreen: View {
 
+    //=------------------------------------------------------------------------=
+    // MARK: Environment
+    //=------------------------------------------------------------------------=
+    
+    @EnvironmentObject private var storage: Storage
+    
     //=------------------------------------------------------------------------=
     // MARK: State
     //=------------------------------------------------------------------------=
     
-    @State private var content = String()
+    @State private var number = Decimal()
+    @State private var locale = Locale(identifier: "en_US")
     
     //=------------------------------------------------------------------------=
     // MARK: Body
@@ -27,15 +35,12 @@ struct PatternScreen: View {
     
     var body: some View {
         Screen {
-            DiffableTextField($content) {
-                .pattern("+## (###) ###-##-##")
-                .placeholder("#") { $0.isASCII && $0.isNumber }
-                .constant()
+            DiffableTextField($number) {
+                .number
+                .bounds((0 as Decimal)...)
+                .precision(integer: 1..., fraction: 2...)
             }
-            .diffableTextField_onSetup {
-                proxy in
-                proxy.keyboard(.phonePad)
-            }
+            .environment(\.locale, locale)
         }
     }
 }
