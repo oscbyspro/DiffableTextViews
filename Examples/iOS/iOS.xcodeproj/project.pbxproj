@@ -15,6 +15,7 @@
 		55AA28BE27A7EC8C003778FE /* NumericTextStyleScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55A85FFB27A7E850006CCCB7 /* NumericTextStyleScreen.swift */; };
 		55AA28C327A7ED4F003778FE /* Screen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55A85FF627A7E850006CCCB7 /* Screen.swift */; };
 		55AA28CE27A7F472003778FE /* DiffableTextStyleTabs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55AA28CD27A7F472003778FE /* DiffableTextStyleTabs.swift */; };
+		55FCF71727A84D69006C0DE6 /* Description.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55FCF71627A84D69006C0DE6 /* Description.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -28,6 +29,7 @@
 		55A85FFB27A7E850006CCCB7 /* NumericTextStyleScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NumericTextStyleScreen.swift; sourceTree = "<group>"; };
 		55AA28CD27A7F472003778FE /* DiffableTextStyleTabs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiffableTextStyleTabs.swift; sourceTree = "<group>"; };
 		55FCF71227A84932006C0DE6 /* TODO.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = TODO.md; sourceTree = "<group>"; };
+		55FCF71627A84D69006C0DE6 /* Description.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Description.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -93,6 +95,7 @@
 			isa = PBXGroup;
 			children = (
 				55A85FF627A7E850006CCCB7 /* Screen.swift */,
+				55FCF71627A84D69006C0DE6 /* Description.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -208,6 +211,7 @@
 				55AA28C327A7ED4F003778FE /* Screen.swift in Sources */,
 				55AA28CE27A7F472003778FE /* DiffableTextStyleTabs.swift in Sources */,
 				55AA28BD27A7EC8C003778FE /* PatternTextStyleScreen.swift in Sources */,
+				55FCF71727A84D69006C0DE6 /* Description.swift in Sources */,
 				55AA28BE27A7EC8C003778FE /* NumericTextStyleScreen.swift in Sources */,
 				5589A1A427A7E3E30000F04A /* App.swift in Sources */,
 			);

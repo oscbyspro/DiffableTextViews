@@ -29,7 +29,7 @@ struct PatternTextStyleScreen: View {
         Screen {
             VStack {
                 Spacer()
-                valueText
+                Description(value)
                 diffableTextField
             }
         }
@@ -38,16 +38,6 @@ struct PatternTextStyleScreen: View {
     //=------------------------------------------------------------------------=
     // MARK: Body - Components
     //=------------------------------------------------------------------------=
-    
-    #warning("Duplicate.")
-    #warning("This should not be change size when empty.")
-    var valueText: some View {
-        Text(String(describing: value))
-            .frame(maxWidth: .infinity, alignment: .leading)
-            .padding()
-            .overlay(Rectangle()
-            .strokeBorder(Color(uiColor: .tertiarySystemBackground), lineWidth: 2))
-    }
     
     #warning("Duplicate: almost.")
     var diffableTextField: some View {

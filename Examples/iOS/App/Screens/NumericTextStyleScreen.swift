@@ -33,7 +33,7 @@ struct NumericTextStyleScreen: View {
             VStack {
                 diffableTextStylePicker
                 Spacer()
-                valueText
+                Description(value)
                 diffableTextField
             }
         }
@@ -51,15 +51,6 @@ struct NumericTextStyleScreen: View {
             Style.percent
         }
         .pickerStyle(.segmented)
-    }
-    
-    #warning("Duplicate.")
-    var valueText: some View {
-        Text(String(describing: value))
-            .frame(maxWidth: .infinity, alignment: .leading)
-            .padding()
-            .overlay(Rectangle()
-            .strokeBorder(Color(uiColor: .tertiarySystemBackground), lineWidth: 2))
     }
     
     #warning("Duplicate: almost.")
