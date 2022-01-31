@@ -27,11 +27,9 @@ struct PatternTextStyleScreen: View {
     
     var body: some View {
         Screen {
-            VStack {
-                Spacer()
-                Description(value)
-                diffableTextField
-            }
+            Spacer()
+            Description(value)
+            diffableTextField
         }
     }
     

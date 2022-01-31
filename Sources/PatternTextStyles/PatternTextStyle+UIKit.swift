@@ -7,12 +7,12 @@
 
 #if canImport(UIKit)
 
+import UIKit
+import DiffableTextViews
+
 //=----------------------------------------------------------------------------=
 // MARK: PatternTextStyle - UIKit
 //=----------------------------------------------------------------------------=
-
-import UIKit
-import DiffableTextViews
 
 extension PatternTextStyle: UIKitDiffableTextStyle { }
 

@@ -30,12 +30,10 @@ struct NumericTextStyleScreen: View {
     
     var body: some View {
         Screen {
-            VStack {
-                diffableTextStylePicker
-                Spacer()
-                Description(value)
-                diffableTextField
-            }
+            diffableTextStylePicker
+            Spacer()
+            Description(value)
+            diffableTextField
         }
         .environment(\.locale, locale)
     }

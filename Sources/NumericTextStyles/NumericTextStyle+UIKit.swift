@@ -7,12 +7,12 @@
 
 #if canImport(UIKit)
 
+import UIKit
+import DiffableTextViews
+
 //=----------------------------------------------------------------------------=
 // MARK: NumericTextStyle - UIKit
 //=----------------------------------------------------------------------------=
-
-import UIKit
-import DiffableTextViews
 
 extension NumericTextStyle: UIKitDiffableTextStyle {
     

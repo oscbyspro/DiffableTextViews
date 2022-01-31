@@ -26,7 +26,10 @@ struct Screen<Content: View>: View {
     var body: some View {
         ZStack {
             background
-            content().padding()
+            VStack {
+                content()
+            }
+            .padding()
         }
     }
     
