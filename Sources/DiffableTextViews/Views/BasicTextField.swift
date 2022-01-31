@@ -13,12 +13,6 @@ import UIKit
 // MARK: * BasicTextField
 //*============================================================================*
 
-/// A custom text field.
-///
-/// Intent of left and right key presses should be interpreted as a desire to continue in current direction
-/// with momentum. This is because the direction of text is based on its content, where left-to-right and
-/// right-to-left text respond to left and right keys presses in opposite fashion.
-///
 public final class BasicTextField: UITextField {
     
     //=------------------------------------------------------------------------=
@@ -31,6 +25,12 @@ public final class BasicTextField: UITextField {
     // MARK: Accessors
     //=------------------------------------------------------------------------=
     
+    /// A bool describing the intent to move in the direction of change.
+    ///
+    /// The intent of left and right key presses should be interpreted as a desire to continue in the direction
+    /// with momentum. This is because the direction of text is based on its content, where left-to-right and
+    /// right-to-left text respond to left and right keys presses in opposite ways.
+    ///
     @inlinable var momentum: Bool {
         intent != nil
     }

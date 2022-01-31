@@ -56,23 +56,13 @@ Value: RangeReplaceableCollection, Value: Equatable, Value.Element == Character 
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: PatternTextStyle - UIKit
-//=----------------------------------------------------------------------------=
-
-#if canImport(UIKit)
-
-extension PatternTextStyle: UIKitDiffableTextStyle { }
-
-#endif
-
-//=----------------------------------------------------------------------------=
-// MARK: PatternTextStyle - Upstream
+// MARK: PatternTextStyle - Format
 //=----------------------------------------------------------------------------=
 
 extension PatternTextStyle {
     
     //=------------------------------------------------------------------------=
-    // MARK: Showcase
+    // MARK: Upstream
     //=------------------------------------------------------------------------=
     
     /// Matches the value against the pattern to form a collection of characters.
@@ -112,9 +102,16 @@ extension PatternTextStyle {
         //=--------------------------------------=
         return characters
     }
-    
+}
+
+//=----------------------------------------------------------------------------=
+// MARK: PatternTextStyle - Commit
+//=----------------------------------------------------------------------------=
+
+extension PatternTextStyle {
+
     //=------------------------------------------------------------------------=
-    // MARK: Editable
+    // MARK: Upstream
     //=------------------------------------------------------------------------=
     
     /// Matches the value agains the pattern to form a commit.
@@ -168,13 +165,13 @@ extension PatternTextStyle {
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: PatternTextStyle - Downstream
+// MARK: PatternTextStyle - Merge
 //=----------------------------------------------------------------------------=
 
 extension PatternTextStyle {
         
     //=------------------------------------------------------------------------=
-    // MARK: Commit
+    // MARK: Downstream
     //=------------------------------------------------------------------------=
     
     /// Marges, parses and matches the request to form a commit.

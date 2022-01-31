@@ -66,76 +66,28 @@ public struct NumericTextStyle<Format: NumericTextStyles.Format>: DiffableTextSt
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: NumericTextStyle - UIKit
-//=----------------------------------------------------------------------------=
-
-#if canImport(UIKit)
-
-import UIKit
-
-extension NumericTextStyle: UIKitDiffableTextStyle {
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Keyboard
-    //=------------------------------------------------------------------------=
-    
-    @inlinable public static func onSetup(_ diffableTextField: ProxyTextField) {
-        diffableTextField.keyboard(Value.isInteger ? .numberPad : .decimalPad)
-    }
-}
-
-#endif
-
-//=----------------------------------------------------------------------------=
-// MARK: NumericTextStyle - Snapshot
+// MARK: NumericTextStyle - Format
 //=----------------------------------------------------------------------------=
 
 extension NumericTextStyle {
     
     //=------------------------------------------------------------------------=
-    // MARK: Characters
-    //=------------------------------------------------------------------------=
-
-    /// Assumes that characters contains at least one content character.
-    @inlinable func snapshot(characters: String) -> Snapshot {
-        characters.reduce(into: Snapshot()) { snapshot, character in
-            let attribute: Attribute
-            //=----------------------------------=
-            // MARK: Match
-            //=----------------------------------=
-            if let _ = region.digits[character] {
-                attribute = .content
-            } else if let separator = region.separators[character] {
-                attribute = separator == .fraction ? .removable : .phantom
-            } else if let _ = region.signs[character] {
-                attribute = .phantom.subtracting(.virtual)
-            } else {
-                attribute = .phantom
-            }
-            //=----------------------------------=
-            // MARK: Insert
-            //=----------------------------------=
-            snapshot.append(Symbol(character, as: attribute))
-        }
-    }
-}
-
-//=----------------------------------------------------------------------------=
-// MARK: NumericTextStyle - Upstream
-//=----------------------------------------------------------------------------=
-
-extension NumericTextStyle {
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Showcase
+    // MARK: Upstream
     //=------------------------------------------------------------------------=
     
     @inlinable public func format(value: Value) -> String {
         format.style(precision: precision.inactive()).format(value)
     }
+}
+
+//=----------------------------------------------------------------------------=
+// MARK: NumericTextStyle - Commit
+//=----------------------------------------------------------------------------=
+
+extension NumericTextStyle {
     
     //=------------------------------------------------------------------------=
-    // MARK: Editable
+    // MARK: Upstream
     //=------------------------------------------------------------------------=
     
     @inlinable public func commit(value: Value) -> Commit<Value> {
@@ -151,7 +103,7 @@ extension NumericTextStyle {
         var number = try! Number(value)
         precision.autocorrect(&number)
         //=--------------------------------------=
-        // MARK: Number -> Value
+        // MARK: Value <- Number
         //=--------------------------------------=
         let parseable = region.characters(in: number)
         value = try! format.parse(parseable)
@@ -165,13 +117,13 @@ extension NumericTextStyle {
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: NumericTextStyle - Downstream
+// MARK: NumericTextStyle - Merge
 //=----------------------------------------------------------------------------=
 
 extension NumericTextStyle {
     
     //=------------------------------------------------------------------------=
-    // MARK: Commit
+    // MARK: Downstream
     //=------------------------------------------------------------------------=
     
     @inlinable public func merge(changes: Changes) throws -> Commit<Value> {
@@ -227,5 +179,31 @@ extension NumericTextStyle {
         guard let position = characters.firstIndex(where: region.signs.components.keys.contains) else { return }
         guard let replacement = region.signs[sign] else { return }
         characters.replaceSubrange(position...position, with: String(replacement))
+    }
+}
+
+//=----------------------------------------------------------------------------=
+// MARK: NumericTextStyle - Snapshot
+//=----------------------------------------------------------------------------=
+
+extension NumericTextStyle {
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Characters
+    //=------------------------------------------------------------------------=
+
+    /// Assumes that characters contains at least one content character.
+    @inlinable func snapshot(characters: String) -> Snapshot {
+        characters.reduce(into: Snapshot()) { snapshot, character in
+            if let _ = region.digits[character] {
+                snapshot.append(Symbol(character, as: .content))
+            } else if let separator = region.separators[character] {
+                snapshot.append(Symbol(character, as: separator == .fraction ? .removable : .phantom))
+            } else if let _ = region.signs[character] {
+                snapshot.append(Symbol(character, as: .phantom.subtracting(.virtual)))
+            } else {
+                snapshot.append(Symbol(character, as: .phantom))
+            }
+        }
     }
 }

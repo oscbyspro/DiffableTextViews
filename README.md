@@ -47,7 +47,7 @@ import PatternTextStyles
 
 # Views
 
-## [DiffableTextField](Documentation/DiffableTextField.md)
+## [DiffableTextField](Notes/DiffableTextField.md)
 
 A view that uses styles to format and parse text.
 
@@ -66,7 +66,7 @@ A customization point for the UITextField it is based on.
 
 # Styles
 
-## [NumericTextStyle](Documentation/NumericTextStyle.md)
+## [NumericTextStyle](Notes/NumericTextStyle.md)
 
 A style that processes localized numbers in various formats.
 
@@ -100,7 +100,7 @@ struct DiffableAmountTextField: View {
 }
 ```
 
-## [PatternTextStyle](Documentation/PatternTextStyle.md)
+## [PatternTextStyle](Notes/PatternTextStyle.md)
 
 A style that processes characters laid out in custom patterns.
 
