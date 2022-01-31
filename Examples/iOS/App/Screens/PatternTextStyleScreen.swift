@@ -27,15 +27,36 @@ struct PatternTextStyleScreen: View {
     
     var body: some View {
         Screen {
-            DiffableTextField($content) {
-                .pattern("+## (###) ###-##-##")
-                .placeholder("#") { $0.isASCII && $0.isNumber }
-                .constant()
-            }
-            .diffableTextField_onSetup {
-                proxy in
-                proxy.keyboard(.phonePad)
-            }
+            diffableTextField
         }
+    }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Body - Components
+    //=------------------------------------------------------------------------=
+    
+    var diffableTextField: some View {
+        DiffableTextField($content) {
+            .pattern("+## (###) ###-##-##")
+            .placeholder("#" as Character) { $0.isASCII && $0.isNumber }
+            .constant()
+        }
+        .diffableTextField_onSetup {
+            proxy in
+            proxy.keyboard(.phonePad)
+        }
+        .padding()
+        .background(Color(uiColor: .tertiarySystemBackground))
+    }
+}
+
+//*============================================================================*
+// MARK: * PatternTextStyleScreen x Previews
+//*============================================================================*
+
+struct PatternTextStyleScreenPreviews: PreviewProvider {
+    static var previews: some View {
+        PatternTextStyleScreen()
+            .preferredColorScheme(.dark)
     }
 }

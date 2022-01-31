@@ -1,5 +1,5 @@
 //
-//  TextStyleScreenTabs.swift
+//  DiffableTextStyleScreenTabs.swift
 //  iOS
 //
 //  Created by Oscar Byström Ericsson on 2022-01-31.
@@ -8,10 +8,10 @@
 import SwiftUI
 
 //*============================================================================*
-// MARK: * TextStyleScreenTabs
+// MARK: * DiffableTextStyleScreenTabs
 //*============================================================================*
 
-struct TextStyleScreenTabs: View {
+struct DiffableTextStyleScreenTabs: View {
     
     //=------------------------------------------------------------------------=
     // MARK: State

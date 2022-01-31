@@ -35,12 +35,34 @@ struct NumericTextStyleScreen: View {
     
     var body: some View {
         Screen {
-            DiffableTextField($number) {
-                .number
-                .bounds((0 as Decimal)...)
-                .precision(integer: 1..., fraction: 2...)
-            }
-            .environment(\.locale, locale)
+            diffableTextField
         }
+        .environment(\.locale, locale)
+    }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Body - Components
+    //=------------------------------------------------------------------------=
+    
+    var diffableTextField: some View {
+        DiffableTextField($number) {
+            .number
+            .bounds((0 as Decimal)...)
+            .precision(integer: 1..., fraction: 2...)
+        }
+        .padding()
+        .background(Color(uiColor: .tertiarySystemBackground))
     }
 }
+
+//*============================================================================*
+// MARK: * NumericTextStyleScreen x Previews
+//*============================================================================*
+
+struct NumericTextStyleScreenPreviews: PreviewProvider {
+    static var previews: some View {
+        NumericTextStyleScreen()
+            .preferredColorScheme(.dark)
+    }
+}
+
