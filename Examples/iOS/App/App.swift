@@ -14,19 +14,12 @@ import SwiftUI
 @main struct App: SwiftUI.App {
     
     //=------------------------------------------------------------------------=
-    // MARK: State
-    //=------------------------------------------------------------------------=
-    
-    @StateObject var storage = Storage()
-    
-    //=------------------------------------------------------------------------=
     // MARK: Body
     //=------------------------------------------------------------------------=
     
     var body: some Scene {
         WindowGroup {
-            DiffableTextStyleScreenTabs()
-                .environmentObject(storage)
+            DiffableTextStyleTabs()
                 .preferredColorScheme(.dark)
         }
     }

@@ -14,8 +14,7 @@
 		55AA28BD27A7EC8C003778FE /* PatternTextStyleScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55A85FF927A7E850006CCCB7 /* PatternTextStyleScreen.swift */; };
 		55AA28BE27A7EC8C003778FE /* NumericTextStyleScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55A85FFB27A7E850006CCCB7 /* NumericTextStyleScreen.swift */; };
 		55AA28C327A7ED4F003778FE /* Screen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55A85FF627A7E850006CCCB7 /* Screen.swift */; };
-		55AA28CB27A7F1E6003778FE /* Storage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55AA28CA27A7F1E6003778FE /* Storage.swift */; };
-		55AA28CE27A7F472003778FE /* DiffableTextStyleScreenTabs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55AA28CD27A7F472003778FE /* DiffableTextStyleScreenTabs.swift */; };
+		55AA28CE27A7F472003778FE /* DiffableTextStyleTabs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55AA28CD27A7F472003778FE /* DiffableTextStyleTabs.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -27,8 +26,7 @@
 		55A85FF627A7E850006CCCB7 /* Screen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Screen.swift; sourceTree = "<group>"; };
 		55A85FF927A7E850006CCCB7 /* PatternTextStyleScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PatternTextStyleScreen.swift; sourceTree = "<group>"; };
 		55A85FFB27A7E850006CCCB7 /* NumericTextStyleScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NumericTextStyleScreen.swift; sourceTree = "<group>"; };
-		55AA28CA27A7F1E6003778FE /* Storage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Storage.swift; sourceTree = "<group>"; };
-		55AA28CD27A7F472003778FE /* DiffableTextStyleScreenTabs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiffableTextStyleScreenTabs.swift; sourceTree = "<group>"; };
+		55AA28CD27A7F472003778FE /* DiffableTextStyleTabs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiffableTextStyleTabs.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -73,8 +71,7 @@
 			isa = PBXGroup;
 			children = (
 				55F6F58627A7E53300BA26AB /* Assets */,
-				55AA28C927A7F1DB003778FE /* Models */,
-				55AA28D127A802AF003778FE /* Navigators */,
+				55AA28D127A802AF003778FE /* Routers */,
 				55A85FFC27A7E87C006CCCB7 /* Screens */,
 				55A85FF327A7E826006CCCB7 /* Views */,
 				5589A1A327A7E3E30000F04A /* App.swift */,
@@ -114,20 +111,12 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		55AA28C927A7F1DB003778FE /* Models */ = {
+		55AA28D127A802AF003778FE /* Routers */ = {
 			isa = PBXGroup;
 			children = (
-				55AA28CA27A7F1E6003778FE /* Storage.swift */,
+				55AA28CD27A7F472003778FE /* DiffableTextStyleTabs.swift */,
 			);
-			path = Models;
-			sourceTree = "<group>";
-		};
-		55AA28D127A802AF003778FE /* Navigators */ = {
-			isa = PBXGroup;
-			children = (
-				55AA28CD27A7F472003778FE /* DiffableTextStyleScreenTabs.swift */,
-			);
-			path = Navigators;
+			path = Routers;
 			sourceTree = "<group>";
 		};
 		55F6F58627A7E53300BA26AB /* Assets */ = {
@@ -215,11 +204,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				55AA28C327A7ED4F003778FE /* Screen.swift in Sources */,
-				55AA28CE27A7F472003778FE /* DiffableTextStyleScreenTabs.swift in Sources */,
+				55AA28CE27A7F472003778FE /* DiffableTextStyleTabs.swift in Sources */,
 				55AA28BD27A7EC8C003778FE /* PatternTextStyleScreen.swift in Sources */,
 				55AA28BE27A7EC8C003778FE /* NumericTextStyleScreen.swift in Sources */,
 				5589A1A427A7E3E30000F04A /* App.swift in Sources */,
-				55AA28CB27A7F1E6003778FE /* Storage.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
