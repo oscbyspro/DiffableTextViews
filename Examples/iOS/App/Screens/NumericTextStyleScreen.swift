@@ -14,13 +14,14 @@ import NumericTextStyles
 // MARK: * NumericTextStyleScreen
 //*============================================================================*
 
+#warning("Style and local choice should always be there, rest depends on style.")
 struct NumericTextStyleScreen: View {
     
     //=------------------------------------------------------------------------=
     // MARK: State
     //=------------------------------------------------------------------------=
     
-    @State private var value  = Decimal()
+    @State private var value  = Double()
     @State private var style  = Style.number
     @State private var locale = Locale(identifier: "en_US")
     
@@ -44,9 +45,7 @@ struct NumericTextStyleScreen: View {
     
     var diffableTextStyles: some View {
         Picker("Style", selection: $style) {
-            Style.number
-            Style.currency
-            Style.percent
+            ForEach(Style.allCases, id: \.self, content: \.label)
         }
         .pickerStyle(.segmented)
     }
@@ -54,7 +53,7 @@ struct NumericTextStyleScreen: View {
     var diffableTextField: some View {
         Field($value) {
             .number
-            .bounds((0 as Decimal)...)
+            .bounds((0 as Double)...)
             .precision(integer: 1..., fraction: 2...)
         }
     }
@@ -63,7 +62,7 @@ struct NumericTextStyleScreen: View {
     // MARK: * Style
     //*========================================================================*
     
-    enum Style: String, View {
+    enum Style: String, CaseIterable {
         
         //=--------------------------------------------------------------------=
         // MARK: Instances
@@ -77,7 +76,7 @@ struct NumericTextStyleScreen: View {
         // MARK: Body
         //=--------------------------------------------------------------------=
         
-        var body: some View {
+        var label: some View {
             Text(rawValue.capitalized).tag(self)
         }
     }
