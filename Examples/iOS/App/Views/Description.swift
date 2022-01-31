@@ -49,3 +49,14 @@ struct Description<Value>: View {
         Rectangle().strokeBorder(Color(uiColor: .tertiarySystemBackground), lineWidth: 2)
     }
 }
+
+//*============================================================================*
+// MARK: * Description x Previews
+//*============================================================================*
+
+struct DescriptionPreviews: PreviewProvider {
+    static var previews: some View {
+        Description(123)
+            .preferredColorScheme(.dark)
+    }
+}

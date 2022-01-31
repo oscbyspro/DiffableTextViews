@@ -72,3 +72,15 @@ struct DiffableTextStyleTabs: View {
         }
     }
 }
+
+//*============================================================================*
+// MARK: * DiffableTextStyleTabs x Previews
+//*============================================================================*
+
+struct DiffableTextStyleTabsPreviews: PreviewProvider {
+    static var previews: some View {
+        DiffableTextStyleTabs()
+            .preferredColorScheme(.dark)
+    }
+}
+

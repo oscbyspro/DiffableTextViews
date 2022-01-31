@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		557F7FBB27A81171001908D6 /* DiffableTextViews in Frameworks */ = {isa = PBXBuildFile; productRef = 557F7FBA27A81171001908D6 /* DiffableTextViews */; };
+		55893D7027A8695D004F3388 /* Field.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55893D6F27A8695D004F3388 /* Field.swift */; };
 		5589A1A427A7E3E30000F04A /* App.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5589A1A327A7E3E30000F04A /* App.swift */; };
 		5589A1A827A7E3E40000F04A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5589A1A727A7E3E40000F04A /* Assets.xcassets */; };
 		5589A1AB27A7E3E40000F04A /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5589A1AA27A7E3E40000F04A /* Preview Assets.xcassets */; };
@@ -20,6 +21,7 @@
 
 /* Begin PBXFileReference section */
 		557F7FB927A81116001908D6 /* DiffableTextViews */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = DiffableTextViews; path = ../..; sourceTree = "<group>"; };
+		55893D6F27A8695D004F3388 /* Field.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Field.swift; sourceTree = "<group>"; };
 		5589A1A027A7E3E30000F04A /* iOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = iOS.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		5589A1A327A7E3E30000F04A /* App.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = App.swift; sourceTree = "<group>"; };
 		5589A1A727A7E3E40000F04A /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -96,6 +98,7 @@
 			children = (
 				55A85FF627A7E850006CCCB7 /* Screen.swift */,
 				55FCF71627A84D69006C0DE6 /* Description.swift */,
+				55893D6F27A8695D004F3388 /* Field.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -213,6 +216,7 @@
 				55AA28BD27A7EC8C003778FE /* PatternTextStyleScreen.swift in Sources */,
 				55FCF71727A84D69006C0DE6 /* Description.swift in Sources */,
 				55AA28BE27A7EC8C003778FE /* NumericTextStyleScreen.swift in Sources */,
+				55893D7027A8695D004F3388 /* Field.swift in Sources */,
 				5589A1A427A7E3E30000F04A /* App.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

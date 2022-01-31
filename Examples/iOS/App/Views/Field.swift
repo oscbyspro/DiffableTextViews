@@ -1,62 +1,59 @@
 //
-//  PatternTextStyleScreen.swift
+//  Field.swift
 //  iOS
 //
-//  Created by Oscar Byström Ericsson on 2022-01-30.
+//  Created by Oscar Byström Ericsson on 2022-01-31.
 //
 
 import SwiftUI
 import DiffableTextViews
-import PatternTextStyles
 
 //*============================================================================*
-// MARK: * PatternTextStyleScreen
+// MARK: * Field
 //*============================================================================*
 
-struct PatternTextStyleScreen: View {
-
+struct Field<Style: UIKitDiffableTextStyle>: View {
+    typealias Value = Style.Value
+    
     //=------------------------------------------------------------------------=
-    // MARK: State
+    // MARK: Properties
     //=------------------------------------------------------------------------=
     
-    @State private var value = String()
+    let style: Style
+    let value: Binding<Value>
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Initializers
+    //=------------------------------------------------------------------------=
+    
+    init(_ value: Binding<Value>, style: Style) {
+        self.value = value
+        self.style = style
+    }
+    
+    init(_ value: Binding<Value>, style: () -> Style) {
+        self.value = value
+        self.style = style()
+    }
     
     //=------------------------------------------------------------------------=
     // MARK: Body
     //=------------------------------------------------------------------------=
     
     var body: some View {
-        Screen {
-            Spacer()
-            Description(value)
-            diffableTextField
-        }
-    }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Body - Components
-    //=------------------------------------------------------------------------=
-    
-    var diffableTextField: some View {
-        Field($value) {
-            .pattern("+## (###) ###-##-##")
-            .placeholder("#"  as Character) { $0.isASCII && $0.isNumber }
-            .constant()
-        }
-        .diffableTextField_onSetup {
-            proxy in
-            proxy.keyboard(.phonePad)
-        }
+        DiffableTextField(value, style: style)
+            .padding()
+            .background(Color(uiColor: .tertiarySystemBackground))
     }
 }
 
 //*============================================================================*
-// MARK: * PatternTextStyleScreen x Previews
+// MARK: * Field x Previews
 //*============================================================================*
 
-struct PatternTextStyleScreenPreviews: PreviewProvider {
+struct FieldPreviews: PreviewProvider {
     static var previews: some View {
-        PatternTextStyleScreen()
+        Field(.constant(123), style: .number)
             .preferredColorScheme(.dark)
     }
 }

@@ -30,7 +30,7 @@ struct NumericTextStyleScreen: View {
     
     var body: some View {
         Screen {
-            diffableTextStylePicker
+            diffableTextStyles
             Spacer()
             Description(value)
             diffableTextField
@@ -42,7 +42,7 @@ struct NumericTextStyleScreen: View {
     // MARK: Body - Components
     //=------------------------------------------------------------------------=
     
-    var diffableTextStylePicker: some View {
+    var diffableTextStyles: some View {
         Picker("Style", selection: $style) {
             Style.number
             Style.currency
@@ -51,15 +51,12 @@ struct NumericTextStyleScreen: View {
         .pickerStyle(.segmented)
     }
     
-    #warning("Duplicate: almost.")
     var diffableTextField: some View {
-        DiffableTextField($value) {
+        Field($value) {
             .number
             .bounds((0 as Decimal)...)
             .precision(integer: 1..., fraction: 2...)
         }
-        .padding()
-        .background(Color(uiColor: .tertiarySystemBackground))
     }
     
     //*========================================================================*
