@@ -38,7 +38,7 @@ struct PatternTextStyleScreen: View {
     var diffableTextField: some View {
         DiffableTextField($content) {
             .pattern("+## (###) ###-##-##")
-            .placeholder("#"  as Character) { $0.isASCII && $0.isNumber }
+            .placeholder("#" as Character) { $0.isASCII && $0.isNumber }
             .constant()
         }
         .diffableTextField_onSetup {

@@ -7,18 +7,19 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		557F7FBB27A81171001908D6 /* DiffableTextViews in Frameworks */ = {isa = PBXBuildFile; productRef = 557F7FBA27A81171001908D6 /* DiffableTextViews */; };
 		5589A1A427A7E3E30000F04A /* App.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5589A1A327A7E3E30000F04A /* App.swift */; };
 		5589A1A827A7E3E40000F04A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5589A1A727A7E3E40000F04A /* Assets.xcassets */; };
 		5589A1AB27A7E3E40000F04A /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5589A1AA27A7E3E40000F04A /* Preview Assets.xcassets */; };
 		55AA28BD27A7EC8C003778FE /* PatternTextStyleScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55A85FF927A7E850006CCCB7 /* PatternTextStyleScreen.swift */; };
 		55AA28BE27A7EC8C003778FE /* NumericTextStyleScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55A85FFB27A7E850006CCCB7 /* NumericTextStyleScreen.swift */; };
 		55AA28C327A7ED4F003778FE /* Screen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55A85FF627A7E850006CCCB7 /* Screen.swift */; };
-		55AA28C627A7ED79003778FE /* DiffableTextViews in Frameworks */ = {isa = PBXBuildFile; productRef = 55AA28C527A7ED79003778FE /* DiffableTextViews */; };
 		55AA28CB27A7F1E6003778FE /* Storage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55AA28CA27A7F1E6003778FE /* Storage.swift */; };
 		55AA28CE27A7F472003778FE /* DiffableTextStyleScreenTabs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55AA28CD27A7F472003778FE /* DiffableTextStyleScreenTabs.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		557F7FB927A81116001908D6 /* DiffableTextViews */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = DiffableTextViews; path = ../..; sourceTree = "<group>"; };
 		5589A1A027A7E3E30000F04A /* iOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = iOS.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		5589A1A327A7E3E30000F04A /* App.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = App.swift; sourceTree = "<group>"; };
 		5589A1A727A7E3E40000F04A /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -26,7 +27,6 @@
 		55A85FF627A7E850006CCCB7 /* Screen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Screen.swift; sourceTree = "<group>"; };
 		55A85FF927A7E850006CCCB7 /* PatternTextStyleScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PatternTextStyleScreen.swift; sourceTree = "<group>"; };
 		55A85FFB27A7E850006CCCB7 /* NumericTextStyleScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NumericTextStyleScreen.swift; sourceTree = "<group>"; };
-		55AA28C227A7ED26003778FE /* DiffableTextViews */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = DiffableTextViews; path = ../..; sourceTree = "<group>"; };
 		55AA28CA27A7F1E6003778FE /* Storage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Storage.swift; sourceTree = "<group>"; };
 		55AA28CD27A7F472003778FE /* DiffableTextStyleScreenTabs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiffableTextStyleScreenTabs.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -36,17 +36,25 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				55AA28C627A7ED79003778FE /* DiffableTextViews in Frameworks */,
+				557F7FBB27A81171001908D6 /* DiffableTextViews in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		557F7FB827A81116001908D6 /* Packages */ = {
+			isa = PBXGroup;
+			children = (
+				557F7FB927A81116001908D6 /* DiffableTextViews */,
+			);
+			name = Packages;
+			sourceTree = "<group>";
+		};
 		5589A19727A7E3E30000F04A = {
 			isa = PBXGroup;
 			children = (
-				55F6F58427A7E4F200BA26AB /* Packages */,
+				557F7FB827A81116001908D6 /* Packages */,
 				5589A1A227A7E3E30000F04A /* App */,
 				5589A1A127A7E3E30000F04A /* Products */,
 				55AA28C427A7ED78003778FE /* Frameworks */,
@@ -122,14 +130,6 @@
 			path = Navigators;
 			sourceTree = "<group>";
 		};
-		55F6F58427A7E4F200BA26AB /* Packages */ = {
-			isa = PBXGroup;
-			children = (
-				55AA28C227A7ED26003778FE /* DiffableTextViews */,
-			);
-			name = Packages;
-			sourceTree = "<group>";
-		};
 		55F6F58627A7E53300BA26AB /* Assets */ = {
 			isa = PBXGroup;
 			children = (
@@ -156,7 +156,7 @@
 			);
 			name = iOS;
 			packageProductDependencies = (
-				55AA28C527A7ED79003778FE /* DiffableTextViews */,
+				557F7FBA27A81171001908D6 /* DiffableTextViews */,
 			);
 			productName = iOS;
 			productReference = 5589A1A027A7E3E30000F04A /* iOS.app */;
@@ -186,6 +186,8 @@
 				Base,
 			);
 			mainGroup = 5589A19727A7E3E30000F04A;
+			packageReferences = (
+			);
 			productRefGroup = 5589A1A127A7E3E30000F04A /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -422,7 +424,7 @@
 /* End XCConfigurationList section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		55AA28C527A7ED79003778FE /* DiffableTextViews */ = {
+		557F7FBA27A81171001908D6 /* DiffableTextViews */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = DiffableTextViews;
 		};
