@@ -31,26 +31,25 @@ struct NumericTextStyleScreen: View {
     var body: some View {
         Screen {
             VStack {
-                picker
+                diffableTextStylePicker
                 Spacer()
+                valueText
                 diffableTextField
-                Spacer()
             }
         }
         .environment(\.locale, locale)
     }
-    
+     
     //=------------------------------------------------------------------------=
     // MARK: Body - Components
     //=------------------------------------------------------------------------=
     
-    var picker: some View {
-        Picker("Style", selection: $style) {
-            Text("A").tag(Style.number)
-            Text("B").tag(Style.currency)
-            Text("C").tag(Style.percent)
-        }
-        .pickerStyle(.segmented)
+    var valueText: some View {
+        Text(String(describing: value))
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .padding()
+            .overlay(Rectangle()
+            .strokeBorder(Color(uiColor: .tertiarySystemBackground), lineWidth: 2))
     }
     
     var diffableTextField: some View {
@@ -62,6 +61,16 @@ struct NumericTextStyleScreen: View {
         .padding()
         .background(Color(uiColor: .tertiarySystemBackground))
     }
+    
+    var diffableTextStylePicker: some View {
+        Picker("Style", selection: $style) {
+            Text("A").tag(Style.number)
+            Text("B").tag(Style.currency)
+            Text("C").tag(Style.percent)
+        }
+        .pickerStyle(.segmented)
+    }
+    
     
     //*========================================================================*
     // MARK: * Style

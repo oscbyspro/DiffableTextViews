@@ -19,7 +19,7 @@ struct PatternTextStyleScreen: View {
     // MARK: State
     //=------------------------------------------------------------------------=
     
-    @State private var content = String()
+    @State private var value = String()
     
     //=------------------------------------------------------------------------=
     // MARK: Body
@@ -27,7 +27,11 @@ struct PatternTextStyleScreen: View {
     
     var body: some View {
         Screen {
-            diffableTextField
+            VStack {
+                Spacer()
+                valueText
+                diffableTextField
+            }
         }
     }
     
@@ -35,10 +39,19 @@ struct PatternTextStyleScreen: View {
     // MARK: Body - Components
     //=------------------------------------------------------------------------=
     
+    #warning("This should not be change size when empty.")
+    var valueText: some View {
+        Text(String(describing: value))
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .padding()
+            .overlay(Rectangle()
+            .strokeBorder(Color(uiColor: .tertiarySystemBackground), lineWidth: 2))
+    }
+    
     var diffableTextField: some View {
-        DiffableTextField($content) {
+        DiffableTextField($value) {
             .pattern("+## (###) ###-##-##")
-            .placeholder("#" as Character) { $0.isASCII && $0.isNumber }
+            .placeholder("#"  as Character) { $0.isASCII && $0.isNumber }
             .constant()
         }
         .diffableTextField_onSetup {
