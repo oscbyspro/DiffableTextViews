@@ -17,11 +17,17 @@ import NumericTextStyles
 struct NumericScreen: View {
 
     //=------------------------------------------------------------------------=
+    // MARK: Environment
+    //=------------------------------------------------------------------------=
+    
+    @EnvironmentObject private var storage: Storage
+    
+    //=------------------------------------------------------------------------=
     // MARK: State
     //=------------------------------------------------------------------------=
     
-    @State var value = Decimal()
-    @State var locale = Locale(identifier: "en_US")
+    @State private var number = Decimal()
+    @State private var locale = Locale(identifier: "en_US")
     
     //=------------------------------------------------------------------------=
     // MARK: Body
@@ -29,7 +35,7 @@ struct NumericScreen: View {
     
     var body: some View {
         Screen {
-            DiffableTextField($value) {
+            DiffableTextField($number) {
                 .number
                 .bounds((0 as Decimal)...)
                 .precision(integer: 1..., fraction: 2...)

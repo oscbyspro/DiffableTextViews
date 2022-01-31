@@ -19,7 +19,7 @@ struct PatternScreen: View {
     // MARK: State
     //=------------------------------------------------------------------------=
     
-    @State var value = String()
+    @State private var content = String()
     
     //=------------------------------------------------------------------------=
     // MARK: Body
@@ -27,7 +27,7 @@ struct PatternScreen: View {
     
     var body: some View {
         Screen {
-            DiffableTextField($value) {
+            DiffableTextField($content) {
                 .pattern("+## (###) ###-##-##")
                 .placeholder("#") { $0.isASCII && $0.isNumber }
                 .constant()
