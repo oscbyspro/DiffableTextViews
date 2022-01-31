@@ -39,6 +39,7 @@ struct PatternTextStyleScreen: View {
     // MARK: Body - Components
     //=------------------------------------------------------------------------=
     
+    #warning("Duplicate.")
     #warning("This should not be change size when empty.")
     var valueText: some View {
         Text(String(describing: value))
@@ -48,6 +49,7 @@ struct PatternTextStyleScreen: View {
             .strokeBorder(Color(uiColor: .tertiarySystemBackground), lineWidth: 2))
     }
     
+    #warning("Duplicate: almost.")
     var diffableTextField: some View {
         DiffableTextField($value) {
             .pattern("+## (###) ###-##-##")

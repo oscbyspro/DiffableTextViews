@@ -100,8 +100,8 @@
 		55A85FFC27A7E87C006CCCB7 /* Screens */ = {
 			isa = PBXGroup;
 			children = (
-				55FCF71027A844DD006C0DE6 /* NumericTextStyle */,
-				55FCF71127A844E5006C0DE6 /* PatternTextStyle */,
+				55A85FFB27A7E850006CCCB7 /* NumericTextStyleScreen.swift */,
+				55A85FF927A7E850006CCCB7 /* PatternTextStyleScreen.swift */,
 			);
 			path = Screens;
 			sourceTree = "<group>";
@@ -128,22 +128,6 @@
 				5589A1A927A7E3E40000F04A /* Preview Content */,
 			);
 			path = Assets;
-			sourceTree = "<group>";
-		};
-		55FCF71027A844DD006C0DE6 /* NumericTextStyle */ = {
-			isa = PBXGroup;
-			children = (
-				55A85FFB27A7E850006CCCB7 /* NumericTextStyleScreen.swift */,
-			);
-			path = NumericTextStyle;
-			sourceTree = "<group>";
-		};
-		55FCF71127A844E5006C0DE6 /* PatternTextStyle */ = {
-			isa = PBXGroup;
-			children = (
-				55A85FF927A7E850006CCCB7 /* PatternTextStyleScreen.swift */,
-			);
-			path = PatternTextStyle;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */

@@ -44,6 +44,16 @@ struct NumericTextStyleScreen: View {
     // MARK: Body - Components
     //=------------------------------------------------------------------------=
     
+    var diffableTextStylePicker: some View {
+        Picker("Style", selection: $style) {
+            Style.number
+            Style.currency
+            Style.percent
+        }
+        .pickerStyle(.segmented)
+    }
+    
+    #warning("Duplicate.")
     var valueText: some View {
         Text(String(describing: value))
             .frame(maxWidth: .infinity, alignment: .leading)
@@ -52,6 +62,7 @@ struct NumericTextStyleScreen: View {
             .strokeBorder(Color(uiColor: .tertiarySystemBackground), lineWidth: 2))
     }
     
+    #warning("Duplicate: almost.")
     var diffableTextField: some View {
         DiffableTextField($value) {
             .number
@@ -62,22 +73,28 @@ struct NumericTextStyleScreen: View {
         .background(Color(uiColor: .tertiarySystemBackground))
     }
     
-    var diffableTextStylePicker: some View {
-        Picker("Style", selection: $style) {
-            Text("A").tag(Style.number)
-            Text("B").tag(Style.currency)
-            Text("C").tag(Style.percent)
-        }
-        .pickerStyle(.segmented)
-    }
-    
-    
     //*========================================================================*
     // MARK: * Style
     //*========================================================================*
     
-    #warning("TODO.")
-    enum Style { case number, currency, percent }
+    enum Style: String, View {
+        
+        //=--------------------------------------------------------------------=
+        // MARK: Instances
+        //=--------------------------------------------------------------------=
+        
+        case number
+        case currency
+        case percent
+        
+        //=--------------------------------------------------------------------=
+        // MARK: Body
+        //=--------------------------------------------------------------------=
+        
+        var body: some View {
+            Text(rawValue.capitalized).tag(self)
+        }
+    }
 }
 
 //*============================================================================*
