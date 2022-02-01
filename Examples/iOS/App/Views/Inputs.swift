@@ -16,17 +16,17 @@ struct Inputs<Style: UIKitDiffableTextStyle>: View {
     typealias Value = Style.Value
     
     //=------------------------------------------------------------------------=
-    // MARK: Upstream
+    // MARK: State
     //=------------------------------------------------------------------------=
     
-    @SwiftUI.FocusState var focused: Bool
+    @FocusState var focused: Bool
     
     //=------------------------------------------------------------------------=
     // MARK: Properties
     //=------------------------------------------------------------------------=
     
-    let value: Binding<Value>
     let style: Style
+    let value: Binding<Value>
     
     //=------------------------------------------------------------------------=
     // MARK: Initializers
