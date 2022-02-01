@@ -14,3 +14,11 @@ import DiffableTextViews
 public extension DiffableTextStyle where Self == PatternTextStyle<String> {
     @inlinable static func pattern(_ pattern: String) -> Self { Self(pattern) }
 }
+
+//*============================================================================*
+// MARK: * Array<Character>
+//*============================================================================*
+
+public extension DiffableTextStyle where Self == PatternTextStyle<[Character]> {
+    @inlinable static func pattern(_ pattern: String) -> Self { Self(pattern) }
+}

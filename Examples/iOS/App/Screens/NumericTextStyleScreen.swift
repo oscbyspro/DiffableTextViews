@@ -33,8 +33,7 @@ struct NumericTextStyleScreen: View {
         Screen {
             diffableTextStyles
             Spacer()
-            Description(value)
-            diffableTextField
+            diffableTextInputs
         }
         .environment(\.locale, locale)
     }
@@ -47,8 +46,8 @@ struct NumericTextStyleScreen: View {
         Choices(Style.allCases, selection: $style, content: \.label)
     }
     
-    var diffableTextField: some View {
-        Field($value) {
+    var diffableTextInputs: some View {
+        Inputs($value) {
             .number
             .bounds((0 as Double)...)
             .precision(integer: 1..., fraction: 2...)
