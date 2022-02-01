@@ -12,15 +12,14 @@ import Support
 // MARK: * PatternTextStyle
 //*============================================================================*
 
-public struct PatternTextStyle<Pattern, Value>: DiffableTextStyle where
-Pattern: Collection, Pattern: Equatable, Pattern.Element == Character,
+public struct PatternTextStyle<Value>: DiffableTextStyle where
 Value: RangeReplaceableCollection, Value: Equatable, Value.Element == Character {
     
     //=------------------------------------------------------------------------=
     // MARK: Properties
     //=------------------------------------------------------------------------=
     
-    @usableFromInline let pattern: Pattern
+    @usableFromInline let pattern: String
     @usableFromInline var placeholders: [Character: Predicate]
     @usableFromInline var visible: Bool
     
@@ -28,7 +27,7 @@ Value: RangeReplaceableCollection, Value: Equatable, Value.Element == Character 
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable public init(_ pattern: Pattern) {
+    @inlinable public init(_ pattern: String) {
         self.pattern = pattern
         self.placeholders = [:]
         self.visible = true

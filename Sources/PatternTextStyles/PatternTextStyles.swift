@@ -8,9 +8,9 @@
 import DiffableTextViews
 
 //*============================================================================*
-// MARK: * String / String
+// MARK: * String
 //*============================================================================*
 
-public extension DiffableTextStyle where Self == PatternTextStyle<String, String> {
+public extension DiffableTextStyle where Self == PatternTextStyle<String> {
     @inlinable static func pattern(_ pattern: String) -> Self { Self(pattern) }
 }
