@@ -25,27 +25,16 @@ struct Sliders: View {
     //=------------------------------------------------------------------------=
     
     var body: some View {
-        rail.overlay(content)
-    }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Body - Components
-    //=------------------------------------------------------------------------=
-    
-    var rail: some View {
-        Capsule()
-            .fill(.gray.opacity(0.2))
-            .frame(maxWidth: .infinity, maxHeight: thickness)
-            .frame(height: radius)
-    }
-    
-    var content: some View {
-        GeometryReader {
-            SlidersContent(self, proxy: $0)
+        ZStack {
+            SlidersTrack(thickness: thickness)
+            GeometryReader {
+                SlidersInterval(self, proxy: $0)
+            }
+            .padding(.horizontal, 0.5 * radius)
         }
-        .padding(.horizontal, 0.5 * radius)
+        .frame(maxWidth: .infinity, minHeight: radius, maxHeight: radius)
     }
-    
+
     //=------------------------------------------------------------------------=
     // MARK: Values
     //=------------------------------------------------------------------------=
@@ -132,10 +121,10 @@ extension Sliders {
 }
 
 //*============================================================================*
-// MARK: * Sliders x Content
+// MARK: * Sliders x Interval
 //*============================================================================*
 
-struct SlidersContent: View {
+struct SlidersInterval: View {
     
     //=------------------------------------------------------------------------=
     // MARK: State
@@ -161,7 +150,7 @@ struct SlidersContent: View {
     
     var body: some View {
         ZStack {
-            link
+            beam
             handle(base.values.0, at: positions.0)
             handle(base.values.1, at: positions.1)
         }
@@ -172,8 +161,8 @@ struct SlidersContent: View {
     // MARK: Body - Components
     //=------------------------------------------------------------------------=
     
-    var link: some View {
-        SlidersLink(base, between: positions)
+    var beam: some View {
+        SlidersBeam(positions, thickness: base.thickness)
     }
     
     func handle(_ value: Binding<CGFloat>, at position: CGPoint) -> some View {
@@ -183,6 +172,9 @@ struct SlidersContent: View {
     func drag(_ value: Binding<CGFloat>) -> some Gesture {
         DragGesture(coordinateSpace: .named(base.coordinates)).onChanged {
             let newValue = base.value($0.location.x, in: bounds)
+            //=----------------------------------=
+            // MARK: Set
+            //=----------------------------------=
             if value.wrappedValue != newValue {
                 withAnimation(base.animation) { value.wrappedValue = newValue }
             }
@@ -221,21 +213,21 @@ struct SlidersHandle: View {
 // MARK: * Sliders x Beam
 //*============================================================================*
 
-struct SlidersLink: View, Animatable {
+struct SlidersBeam: View, Animatable {
     
     //=------------------------------------------------------------------------=
     // MARK: State
     //=------------------------------------------------------------------------=
     
-    let base: Sliders
+    let thickness: CGFloat
     var positions: (CGPoint, CGPoint)
     
     //=------------------------------------------------------------------------=
     // MARK: Initializers
     //=------------------------------------------------------------------------=
-    
-    init(_ base: Sliders, between positions: (CGPoint, CGPoint)) {
-        self.base = base
+
+    init(_ positions: (CGPoint, CGPoint), thickness: CGFloat) {
+        self.thickness = thickness
         self.positions = positions
     }
     
@@ -248,7 +240,7 @@ struct SlidersLink: View, Animatable {
             $0.move(to:    positions.0)
             $0.addLine(to: positions.1)
         }
-        .stroke(Color.accentColor, lineWidth: base.thickness)
+        .stroke(Color.accentColor, lineWidth: thickness)
     }
     
     //=------------------------------------------------------------------------=
@@ -264,6 +256,27 @@ struct SlidersLink: View, Animatable {
             positions.0.x = newValue.first
             positions.1.x = newValue.second
         }
+    }
+}
+
+//*============================================================================*
+// MARK: * Sliders x Track
+//*============================================================================*
+
+struct SlidersTrack: View {
+    
+    //=------------------------------------------------------------------------=
+    // MARK: State
+    //=------------------------------------------------------------------------=
+    
+    let thickness: CGFloat
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Body
+    //=------------------------------------------------------------------------=
+    
+    var body: some View {
+        Capsule().fill(.gray.opacity(0.2)).frame(height: thickness)
     }
 }
 
