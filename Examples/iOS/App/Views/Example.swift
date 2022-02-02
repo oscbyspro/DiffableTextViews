@@ -1,5 +1,5 @@
 //
-//  Inputs.swift
+//  Example.swift
 //  iOS
 //
 //  Created by Oscar Byström Ericsson on 2022-02-01.
@@ -9,10 +9,10 @@ import SwiftUI
 import DiffableTextViews
 
 //*============================================================================*
-// MARK: * Field
+// MARK: * Example
 //*============================================================================*
 
-struct Inputs<Style: UIKitDiffableTextStyle>: View {
+struct Example<Style: UIKitDiffableTextStyle>: View {
     typealias Value = Style.Value
     
     //=------------------------------------------------------------------------=
@@ -96,12 +96,12 @@ struct Inputs<Style: UIKitDiffableTextStyle>: View {
 }
 
 //*============================================================================*
-// MARK: * Inputs x Previews
+// MARK: * Example x Previews
 //*============================================================================*
 
-struct InputsPreviews: PreviewProvider {
+struct ExamplePreviews: PreviewProvider {
     static var previews: some View {
-        Inputs(.constant(123), style: .number)
+        Example(.constant(123), style: .number)
             .preferredColorScheme(.dark)
     }
 }

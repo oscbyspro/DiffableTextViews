@@ -33,9 +33,9 @@ public struct Count: Equatable {
     // MARK: Accessors
     //=------------------------------------------------------------------------=
     
-    @inlinable var value:    Int { storage.x }
-    @inlinable var integer:  Int { storage.y }
-    @inlinable var fraction: Int { storage.z }
+    @inlinable public var value:    Int { storage.x }
+    @inlinable public var integer:  Int { storage.y }
+    @inlinable public var fraction: Int { storage.z }
 
     //=------------------------------------------------------------------------=
     // MARK: Transformations

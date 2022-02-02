@@ -16,12 +16,13 @@ import NumericTextStyles
 
 #warning("Style and local choice should always be there, rest depends on style.")
 struct NumericTextStyleScreen: View {
+    typealias Value = Double
     
     //=------------------------------------------------------------------------=
     // MARK: State
     //=------------------------------------------------------------------------=
     
-    @State private var value  = Double()
+    @State private var value  = Value()
     @State private var style  = Style.number
     @State private var locale = Locale(identifier: "en_US")
     
@@ -33,7 +34,7 @@ struct NumericTextStyleScreen: View {
         Screen {
             diffableTextStyles
             Spacer()
-            diffableTextInputs
+            diffableTextViewsExample
         }
         .environment(\.locale, locale)
     }
@@ -46,10 +47,23 @@ struct NumericTextStyleScreen: View {
         Choices(Style.allCases, selection: $style, content: \.label)
     }
     
-    var diffableTextInputs: some View {
-        Inputs($value) {
+    var boundsController: some View {
+        GroupBox("Bounds") {
+            Color.blue.frame(height: 2).padding(.vertical, 4)
+        }
+    }
+    
+    var precisionController: some View {
+        GroupBox("Precision") {
+            Color.blue.frame(height: 2).padding(.vertical, 4)
+            Color.blue.frame(height: 2).padding(.vertical, 4)
+        }
+    }
+    
+    var diffableTextViewsExample: some View {
+        Example($value) {
             .number
-            .bounds((0 as Double)...)
+            .bounds((0 as Value)...)
             .precision(integer: 1..., fraction: 2...)
         }
     }

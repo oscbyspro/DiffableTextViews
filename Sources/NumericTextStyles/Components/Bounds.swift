@@ -56,7 +56,7 @@ public struct Bounds<Value: Boundable>: Equatable {
     //=------------------------------------------------------------------------=
     
     @inlinable func autocorrect(_ value: inout Value) {
-        value = Swift.max(min, Swift.min(value, max))
+        value = Swift.min(Swift.max(min, value), max)
     }
 }
 

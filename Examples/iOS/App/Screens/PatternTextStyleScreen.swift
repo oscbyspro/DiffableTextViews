@@ -30,7 +30,7 @@ struct PatternTextStyleScreen: View {
         Screen {
             diffableTextStyles
             Spacer()
-            diffableTextInputs
+            diffableTextViewsExample
         }
     }
     
@@ -42,8 +42,8 @@ struct PatternTextStyleScreen: View {
         Choices(Style.allCases, selection: $style, content: \.label)
     }
     
-    var diffableTextInputs: some View {
-        Inputs($value) {
+    var diffableTextViewsExample: some View {
+        Example($value) {
             .pattern("+## (###) ###-##-##")
             .placeholder("#"  as Character) { $0.isASCII && $0.isNumber }
             .constant()
