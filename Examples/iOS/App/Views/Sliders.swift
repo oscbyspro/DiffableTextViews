@@ -181,8 +181,8 @@ struct SlidersContent: View {
     }
     
     func drag(_ value: Binding<CGFloat>) -> some Gesture {
-        DragGesture(coordinateSpace: .named(base.coordinates)).onChanged { gesture in
-            let newValue = base.value(gesture.location.x, in: bounds)
+        DragGesture(coordinateSpace: .named(base.coordinates)).onChanged {
+            let newValue = base.value($0.location.x, in: bounds)
             if value.wrappedValue != newValue {
                 withAnimation(base.animation) { value.wrappedValue = newValue }
             }
