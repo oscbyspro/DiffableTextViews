@@ -68,11 +68,14 @@ struct Sliders: View {
     
     var content: some View {
         GeometryReader { geometry in
+            let first  = position(values.wrappedValue.0, in: geometry.size)
+            let second = position(values.wrappedValue.1, in: geometry.size)
+
             ZStack {
-                slider(values.0, in: geometry.size)
-                slider(values.1, in: geometry.size)
+                Beam(start: first, end: second, thickness: thickness)
+                slider(values.0, at: first,  in: geometry.size)
+                slider(values.1, at: second, in: geometry.size)
             }
-            .modifier(Beam(in: geometry, thickness: thickness))
         }
         .coordinateSpace(name: slideable)
         .padding(.horizontal, 0.5 * radius)
@@ -82,14 +85,11 @@ struct Sliders: View {
     // MARK: Body - Subcomponents
     //=------------------------------------------------------------------------=
     
-    func slider(_ value: Binding<CGFloat>, in bounds: CGSize) -> some View {
-        Handle()
-            .highPriorityGesture(drag(value, in: bounds.width))
-            .modifier(Beam.Point())
-            .position(x: position(value.wrappedValue, in: bounds.width), y: 0.5 * bounds.height)
+    func slider(_ value: Binding<CGFloat>, at position: CGPoint, in bounds: CGSize) -> some View {
+        Handle().highPriorityGesture(drag(value, in: bounds)).position(position)
     }
     
-    func drag(_ value: Binding<CGFloat>, in bounds: CGFloat) -> some Gesture {
+    func drag(_ value: Binding<CGFloat>, in bounds: CGSize) -> some Gesture {
         DragGesture(coordinateSpace: .named(slideable)).onChanged { gesture in
             withAnimation(animation) {
                 value.wrappedValue = self.value(gesture.location.x, in: bounds)
@@ -101,16 +101,17 @@ struct Sliders: View {
     // MARK: Calculations
     //=------------------------------------------------------------------------=
         
-    func value(_ position: CGFloat, in bounds: CGFloat) -> CGFloat {
+    func value(_ position: CGFloat, in bounds: CGSize) -> CGFloat {
         let delta = limits.upperBound - limits.lowerBound
-        let position = min(max(0,  position), bounds)
-        return limits.lowerBound + position / bounds * delta
+        let position = min(max(0,  position), bounds.width)
+        return limits.lowerBound + position / bounds.width * delta
     }
     
-    func position(_ value: CGFloat, in bounds: CGFloat) -> CGFloat {
+    func position(_ value: CGFloat, in bounds: CGSize) -> CGPoint {
         let above = value - limits.lowerBound
         let delta = limits.upperBound - limits.lowerBound
-        return min(max(0, above / delta * bounds), bounds)
+        let x = min(max(0, above / delta * bounds.width), bounds.width)
+        return CGPoint(x: x, y: 0.5 * bounds.height)
     }
 }
 
@@ -178,21 +179,36 @@ struct SlidersHandle: View {
 // MARK: * Sliders x Beam
 //*============================================================================*
 
-struct SlidersBeam: ViewModifier {
+struct SlidersBeam: View, Animatable {
+    typealias Vector = AnimatablePair<CGFloat, CGFloat>
     
     //=------------------------------------------------------------------------=
     // MARK: Properties
     //=------------------------------------------------------------------------=
     
-    let geometry: GeometryProxy
+    var start: CGPoint
+    var end: CGPoint
     let thickness: CGFloat
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Animatable
+    //=------------------------------------------------------------------------=
+    
+    var animatableData: AnimatablePair<Vector, Vector> {
+        get { AnimatablePair(Vector(start.x, start.y), Vector(end.x, end.y)) }
+        set {
+            start = CGPoint(x: newValue.first.first, y: newValue.first.second)
+            end = CGPoint(x: newValue.second.first, y: newValue.second.second)
+        }
+    }
     
     //=------------------------------------------------------------------------=
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    init(in geometry: GeometryProxy, thickness: CGFloat) {
-        self.geometry = geometry
+    init(start: CGPoint, end: CGPoint, thickness: CGFloat) {
+        self.start = start
+        self.end = end
         self.thickness = thickness
     }
     
@@ -200,39 +216,12 @@ struct SlidersBeam: ViewModifier {
     // MARK: Body
     //=------------------------------------------------------------------------=
     
-    func body(content: Content) -> some View {
-        content.backgroundPreferenceValue(Point.self) { points in
-            Path { path in
-                path.move(to: geometry[points.first!])
-                path.addLine(to: geometry[points.last!])
-            }
-            .stroke(Color.accentColor, lineWidth: thickness)
+    var body: some View {
+        Path {
+            $0.move(to:  start)
+            $0.addLine(to: end)
         }
-    }
-    
-    //*========================================================================*
-    // MARK: * Point
-    //*========================================================================*
-    
-    struct Point: ViewModifier, PreferenceKey {
-        
-        //=--------------------------------------------------------------------=
-        // MARK: Body
-        //=--------------------------------------------------------------------=
-        
-        func body(content: Content) -> some View {
-            content.anchorPreference(key: Self.self, value: .center) { [$0] }
-        }
-        
-        //=--------------------------------------------------------------------=
-        // MARK: Preferences
-        //=--------------------------------------------------------------------=
-        
-        static var defaultValue: [Anchor<CGPoint>] = []
-        
-        static func reduce(value: inout [Anchor<CGPoint>], nextValue: () -> [Anchor<CGPoint>]) {
-            value += nextValue()
-        }
+        .stroke(Color.accentColor, lineWidth: thickness)
     }
 }
 
