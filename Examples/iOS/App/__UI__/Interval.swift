@@ -5,6 +5,8 @@
 //  Created by Oscar Byström Ericsson on 2022-02-02.
 //
 
+import SwiftUI
+
 //*============================================================================*
 // MARK: * Interval
 //*============================================================================*
@@ -21,9 +23,7 @@ struct Interval<Value: Comparable> {
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    init(_ values: (Value, Value)) {
-        self.values = values
-    }
+    init(_ values: (Value, Value)) { self.values = values }
     
     //=------------------------------------------------------------------------=
     // MARK: Utilities
@@ -35,5 +35,27 @@ struct Interval<Value: Comparable> {
     
     var closed: ClosedRange<Value> {
         values.0 <= values.1 ? values.0...values.1 : values.1...values.0
+    }
+}
+
+//*============================================================================*
+// MARK: * Interval x BinaryInteger
+//*============================================================================*
+
+extension Interval where Value: BinaryInteger {
+    var ui: Interval<CGFloat> {
+        get { Interval<CGFloat>((CGFloat(values.0), CGFloat(values.1))) }
+        set { values = (Value(newValue.values.0), Value(newValue.values.1)) }
+    }
+}
+
+//*============================================================================*
+// MARK: * Interval x BinaryFloatingPoint
+//*============================================================================*
+
+extension Interval where Value: BinaryFloatingPoint {
+    var ui: Interval<CGFloat> {
+        get { Interval<CGFloat>((CGFloat(values.0), CGFloat(values.1))) }
+        set { values = (Value(newValue.values.0), Value(newValue.values.1)) }
     }
 }
