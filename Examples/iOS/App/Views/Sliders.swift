@@ -35,9 +35,17 @@ struct Sliders: View {
     // MARK: Accessors
     //=------------------------------------------------------------------------=
     
-    var name:      UInt8   { 00 }
     var radius:    CGFloat { 27 }
     var thickness: CGFloat { 04 }
+    var slideable: UInt8   { 00 }
+
+    //=------------------------------------------------------------------------=
+    // MARK: Accessors - Other
+    //=------------------------------------------------------------------------=
+    
+    var animation: Animation {
+        .linear(duration: 0.125)
+    }
     
     //=------------------------------------------------------------------------=
     // MARK: Body
@@ -59,14 +67,14 @@ struct Sliders: View {
     }
     
     var content: some View {
-        GeometryReader { slideable in
+        GeometryReader { geometry in
             ZStack {
-                slider(values.0, in: slideable.size)
-                slider(values.1, in: slideable.size)
+                slider(values.0, in: geometry.size)
+                slider(values.1, in: geometry.size)
             }
-            .modifier(Beam(in: slideable, thickness: thickness))
+            .modifier(Beam(in: geometry, thickness: thickness))
         }
-        .coordinateSpace(name: name)
+        .coordinateSpace(name: slideable)
         .padding(.horizontal, 0.5 * radius)
     }
     
@@ -82,8 +90,8 @@ struct Sliders: View {
     }
     
     func drag(_ value: Binding<CGFloat>, in bounds: CGFloat) -> some Gesture {
-        DragGesture(coordinateSpace: .named(name)).onChanged { gesture in
-            withAnimation(.linear(duration: 0.125)) {
+        DragGesture(coordinateSpace: .named(slideable)).onChanged { gesture in
+            withAnimation(animation) {
                 value.wrappedValue = self.value(gesture.location.x, in: bounds)
             }
         }
