@@ -67,14 +67,14 @@ struct NumericTextStyleScreen: View {
     
     var boundsUI: some View {
         GroupBox("Bounds") {
-            IntervalSliders($bounds.values, in: Self.bounds.closed)
+            Sliders($bounds.values, in: Self.bounds.closed)
         }
     }
     
     var precisionUI: some View {
         GroupBox("Precision") {
-            IntervalSliders($integer .values, in: Self.integer .closed)
-            IntervalSliders($fraction.values, in: Self.fraction.closed)
+            Sliders($integer .values, in: Self.integer .closed)
+            Sliders($fraction.values, in: Self.fraction.closed)
         }
     }
     

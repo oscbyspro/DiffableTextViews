@@ -1,5 +1,5 @@
 //
-//  IntervalSliders.swift
+//  Sliders.swift
 //  iOS
 //
 //  Created by Oscar Byström Ericsson on 2022-02-02.
@@ -8,10 +8,10 @@
 import SwiftUI
 
 //*============================================================================*
-// MARK: * IntervalSliders
+// MARK: * Sliders
 //*============================================================================*
 
-struct IntervalSliders: View {
+struct Sliders: View {
     
     //=------------------------------------------------------------------------=
     // MARK: State
@@ -29,7 +29,7 @@ struct IntervalSliders: View {
         self.values = values
     }
     
-    init<T>(_ values: Binding<(T, T)>, in bounds: ClosedRange<T>) where T: BinaryInteger {
+    init<T: BinaryInteger>(_ values: Binding<(T, T)>, in bounds: ClosedRange<T>) {
         self.bounds = CGFloat(bounds.lowerBound)...CGFloat(bounds.upperBound)
         self.values = Binding {(
             CGFloat(values.wrappedValue.0), CGFloat(values.wrappedValue.1))
@@ -38,7 +38,7 @@ struct IntervalSliders: View {
         }
     }
     
-    init<T>(_ values: Binding<(T, T)>, in bounds: ClosedRange<T>) where T: BinaryFloatingPoint {
+    init<T: BinaryFloatingPoint>(_ values: Binding<(T, T)>, in bounds: ClosedRange<T>) {
         self.bounds = CGFloat(bounds.lowerBound)...CGFloat(bounds.upperBound)
         self.values = Binding {(
             CGFloat(values.wrappedValue.0), CGFloat(values.wrappedValue.1))
@@ -48,11 +48,12 @@ struct IntervalSliders: View {
     }
     
     //=------------------------------------------------------------------------=
-    // MARK: Measurements
+    // MARK: Accessors
     //=------------------------------------------------------------------------=
     
+    var name:      UInt8   { 00 }
     var radius:    CGFloat { 27 }
-    var thickness: CGFloat {  4 }
+    var thickness: CGFloat { 04 }
     
     //=------------------------------------------------------------------------=
     // MARK: Body
@@ -80,10 +81,10 @@ struct IntervalSliders: View {
                 slider(values.1, in: slideable.size)
             }
             .backgroundPreferenceValue(Locations.self) { locations in
-                lazer(start: slideable[locations[0]], end: slideable[locations[1]])
+                beam(slideable[locations[0]], slideable[locations[1]])
             }
         }
-        .coordinateSpace(name: Coordinates.slideable)
+        .coordinateSpace(name: name)
         .padding(.horizontal, 0.5 * radius)
     }
     
@@ -102,14 +103,14 @@ struct IntervalSliders: View {
     }
     
     func drag(_ value: Binding<CGFloat>, in slideable: CGFloat) -> some Gesture {
-        DragGesture(coordinateSpace: .named(Coordinates.slideable)).onChanged { gesture in
-            withAnimation {
+        DragGesture(coordinateSpace: .named(name)).onChanged { gesture in
+            withAnimation(.linear(duration: 0.125)) {
                 value.wrappedValue = self.value(gesture.location.x, in: slideable)
             }
         }
     }
     
-    func lazer(start: CGPoint, end: CGPoint) -> some View {
+    func beam(_ start: CGPoint, _ end: CGPoint) -> some View {
         Path {
             $0.move(to:  start)
             $0.addLine(to: end)
@@ -158,10 +159,24 @@ struct IntervalSliders: View {
 }
 
 //*============================================================================*
-// MARK: * IntervalSliders x Previews
+// MARK: * Sliders x Previews
 //*============================================================================*
 
-struct IntervalSlidersPreviews: View, PreviewProvider {
+struct SlidersPreviews: View, PreviewProvider {
+
+    //=------------------------------------------------------------------------=
+    // MARK: State
+    //=------------------------------------------------------------------------=
+    
+    @State var interval = (1, 5)
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Body
+    //=------------------------------------------------------------------------=
+    
+    var body: some View {
+        Sliders($interval, in: 0...6)
+    }
     
     //=------------------------------------------------------------------------=
     // MARK: Previews
@@ -169,19 +184,5 @@ struct IntervalSlidersPreviews: View, PreviewProvider {
     
     static var previews: some View {
         Self().preferredColorScheme(.dark)
-    }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: State
-    //=------------------------------------------------------------------------=
-    
-    @State var interval = Interval((1, 5))
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Body
-    //=------------------------------------------------------------------------=
-    
-    var body: some View {
-        IntervalSliders($interval.values, in: 0...6)
     }
 }
