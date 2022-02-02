@@ -20,7 +20,7 @@ import Foundation
     @usableFromInline typealias Position = DiffableTextViews.Position<Scheme>
     
     //=------------------------------------------------------------------------=
-    // MARK: Properties
+    // MARK: State
     //=------------------------------------------------------------------------=
     
     @usableFromInline private(set) var layout: Layout

@@ -49,7 +49,7 @@ struct ContentTabs: View {
             systemImage: "checkerboard.rectangle")
         
         //=--------------------------------------------------------------------=
-        // MARK: Properties
+        // MARK: State
         //=--------------------------------------------------------------------=
         
         let title: String

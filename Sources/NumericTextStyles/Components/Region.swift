@@ -16,7 +16,7 @@ import Foundation
     @usableFromInline static let cache = NSCache<NSString, Region>()
     
     //=------------------------------------------------------------------------=
-    // MARK: Properties
+    // MARK: State
     //=------------------------------------------------------------------------=
     
     @usableFromInline let locale: Locale
@@ -95,7 +95,7 @@ import Foundation
     @usableFromInline struct Lexicon<Component: Hashable> {
         
         //=--------------------------------------------------------------------=
-        // MARK: Properties
+        // MARK: State
         //=--------------------------------------------------------------------=
         
         @usableFromInline var components: [Character: Component] = [:]

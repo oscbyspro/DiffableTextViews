@@ -19,22 +19,17 @@ struct Example<Style: UIKitDiffableTextStyle>: View {
     // MARK: State
     //=------------------------------------------------------------------------=
     
-    @FocusState var focused: Bool
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Properties
-    //=------------------------------------------------------------------------=
-    
     let style: Style
-    let value: Binding<Value>
-    
+    @Binding var value: Value
+    @FocusState var focused: Bool
+
     //=------------------------------------------------------------------------=
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
     init(_ value: Binding<Value>, style: Style) {
-        self.value = value
         self.style = style
+        self._value = value
     }
     
     init(_ value: Binding<Value>, style: () -> Style) {
@@ -46,7 +41,7 @@ struct Example<Style: UIKitDiffableTextStyle>: View {
     //=------------------------------------------------------------------------=
     
     var description: String {
-        let description = String(describing: value.wrappedValue)
+        let description = String(describing: value)
         return !description.isEmpty ? description : "\u{200B}"
     }
     
@@ -76,7 +71,7 @@ struct Example<Style: UIKitDiffableTextStyle>: View {
     }
     
     var diffableTextField: some View {
-        DiffableTextField(value, style: style)
+        DiffableTextField($value, style: style)
             .padding()
             .background(color)
             .focused($focused)

@@ -27,7 +27,7 @@ public struct DiffableTextField<Style: UIKitDiffableTextStyle>: UIViewRepresenta
     @usableFromInline @Environment(\.diffableTextField_onSubmit) var onSubmit: (Proxy) -> Void
 
     //=------------------------------------------------------------------------=
-    // MARK: Properties
+    // MARK: State
     //=------------------------------------------------------------------------=
     
     @usableFromInline let style: Style
@@ -98,13 +98,13 @@ public struct DiffableTextField<Style: UIKitDiffableTextStyle>: UIViewRepresenta
         @usableFromInline typealias State = DiffableTextViews.State<Style,UTF16>
         
         //=--------------------------------------------------------------------=
-        // MARK: Properties
+        // MARK: State
         //=--------------------------------------------------------------------=
         @usableFromInline var upstream: DiffableTextField!
         @usableFromInline var downstream:  ProxyTextField!
         
         //=--------------------------------------------------------------------=
-        // MARK: Properties - Support
+        // MARK: State - Support
         //=--------------------------------------------------------------------=
         
         @usableFromInline let lock  = Lock()

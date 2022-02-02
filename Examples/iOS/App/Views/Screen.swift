@@ -14,7 +14,7 @@ import SwiftUI
 struct Screen<Content: View>: View {
     
     //=------------------------------------------------------------------------=
-    // MARK: Properties
+    // MARK: State
     //=------------------------------------------------------------------------=
     
     @ViewBuilder let content: () -> Content

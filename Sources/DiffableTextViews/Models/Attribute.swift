@@ -53,7 +53,7 @@ public struct Attribute: OptionSet {
     public static let phantom = Self([.virtual, .insertable, .removable, .passthrough])
     
     //=------------------------------------------------------------------------=
-    // MARK: Properties
+    // MARK: State
     //=------------------------------------------------------------------------=
     
     public let rawValue: UInt8

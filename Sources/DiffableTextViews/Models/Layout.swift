@@ -21,7 +21,7 @@
     @usableFromInline typealias Position = DiffableTextViews.Position<Scheme>
 
     //=------------------------------------------------------------------------=
-    // MARK: Properties
+    // MARK: State
     //=------------------------------------------------------------------------=
 
     @usableFromInline let snapshot: Snapshot
@@ -79,7 +79,7 @@
     @usableFromInline struct Index: Comparable {
 
         //=--------------------------------------------------------------------=
-        // MARK: Properties
+        // MARK: State
         //=--------------------------------------------------------------------=
 
         @usableFromInline let snapshot: Snapshot.Index

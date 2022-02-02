@@ -12,7 +12,7 @@
 public protocol Value: Boundable, Precise {
     
     //=------------------------------------------------------------------------=
-    // MARK: Properties
+    // MARK: State
     //=------------------------------------------------------------------------=
     
     @inlinable static var isInteger:  Bool { get }
@@ -32,7 +32,7 @@ public protocol FloatingPointValue: Value, BoundableFloatingPoint, PreciseFloati
 public extension FloatingPointValue {
     
     //=------------------------------------------------------------------------=
-    // MARK: Properties
+    // MARK: State
     //=------------------------------------------------------------------------=
     
     @inlinable @inline(__always) static var isInteger: Bool { false }
@@ -51,7 +51,7 @@ public protocol IntegerValue: Value, BoundableInteger, PreciseInteger { }
 public extension IntegerValue {
     
     //=------------------------------------------------------------------------=
-    // MARK: Properties
+    // MARK: State
     //=------------------------------------------------------------------------=
     
     @inlinable @inline(__always) static var isInteger: Bool { true }
@@ -70,7 +70,7 @@ public protocol SignedValue: Value { }
 public extension SignedValue {
     
     //=------------------------------------------------------------------------=
-    // MARK: Properties
+    // MARK: State
     //=------------------------------------------------------------------------=
     
     @inlinable @inline(__always) static var isUnsigned: Bool { false }
@@ -89,7 +89,7 @@ public protocol UnsignedValue: Value { }
 public extension UnsignedValue {
     
     //=------------------------------------------------------------------------=
-    // MARK: Properties
+    // MARK: State
     //=------------------------------------------------------------------------=
     
     @inlinable @inline(__always) static var isUnsigned: Bool { true }

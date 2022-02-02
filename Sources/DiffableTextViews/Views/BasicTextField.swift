@@ -16,7 +16,7 @@ import UIKit
 public final class BasicTextField: UITextField {
     
     //=------------------------------------------------------------------------=
-    // MARK: Properties
+    // MARK: State
     //=------------------------------------------------------------------------=
     
     @usableFromInline private(set) var intent: Direction? = nil

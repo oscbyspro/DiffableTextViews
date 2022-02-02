@@ -18,7 +18,7 @@
 @usableFromInline struct Position<Scheme: DiffableTextViews.Scheme>: Equatable, Comparable, ExpressibleByIntegerLiteral {
     
     //=------------------------------------------------------------------------=
-    // MARK: Properties
+    // MARK: State
     //=------------------------------------------------------------------------=
 
     @usableFromInline let offset: Int

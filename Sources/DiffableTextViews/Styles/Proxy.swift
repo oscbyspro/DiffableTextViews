@@ -19,7 +19,7 @@ import Support
 public struct Proxy<Style: DiffableTextStyle, ID: Equatable>: Wrapper {
     
     //=------------------------------------------------------------------------=
-    // MARK: Properties
+    // MARK: State
     //=------------------------------------------------------------------------=
     
     @usableFromInline let value: ID

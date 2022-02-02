@@ -14,7 +14,7 @@ import SwiftUI
 struct Interval<Value: Comparable> {
     
     //=------------------------------------------------------------------------=
-    // MARK: Properties
+    // MARK: State
     //=------------------------------------------------------------------------=
     
     var values: (Value, Value)

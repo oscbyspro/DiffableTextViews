@@ -15,7 +15,7 @@ import Support
 @usableFromInline struct Predicate: Equatable {
     
     //=------------------------------------------------------------------------=
-    // MARK: Properties
+    // MARK: State
     //=------------------------------------------------------------------------=
     
     @usableFromInline let proxy: AnyHashable

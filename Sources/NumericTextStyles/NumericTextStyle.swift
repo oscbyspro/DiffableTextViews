@@ -18,7 +18,7 @@ public struct NumericTextStyle<Format: NumericTextStyles.Format>: DiffableTextSt
     public typealias Precision = NumericTextStyles.Precision<Value>
 
     //=------------------------------------------------------------------------=
-    // MARK: Properties
+    // MARK: State
     //=------------------------------------------------------------------------=
     
     @usableFromInline var format: Format

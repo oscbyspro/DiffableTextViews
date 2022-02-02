@@ -17,7 +17,7 @@ public struct Info: CustomStringConvertible, Error {
     @usableFromInline static let description = "[DEBUG]"
     
     //=------------------------------------------------------------------------=
-    // MARK: Properties
+    // MARK: State
     //=------------------------------------------------------------------------=
     
     #if DEBUG
@@ -77,7 +77,7 @@ public struct Info: CustomStringConvertible, Error {
     public struct Component: ExpressibleByStringLiteral {
         
         //=--------------------------------------------------------------------=
-        // MARK: Properties
+        // MARK: State
         //=--------------------------------------------------------------------=
         
         public let content: String

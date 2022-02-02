@@ -14,7 +14,7 @@
     @usableFromInline typealias Value = Style.Value
     
     //=------------------------------------------------------------------------=
-    // MARK: Properties
+    // MARK: State
     //=------------------------------------------------------------------------=
     
     @usableFromInline var value: Value! = nil

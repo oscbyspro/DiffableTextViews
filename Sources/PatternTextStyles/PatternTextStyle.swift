@@ -16,7 +16,7 @@ public struct PatternTextStyle<Value>: DiffableTextStyle where
 Value: RangeReplaceableCollection, Value: Equatable, Value.Element == Character {
     
     //=------------------------------------------------------------------------=
-    // MARK: Properties
+    // MARK: State
     //=------------------------------------------------------------------------=
     
     @usableFromInline let pattern: String

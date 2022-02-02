@@ -15,7 +15,7 @@ struct Choices<Options: RandomAccessCollection, Content: View>: View where Optio
     typealias Selection = Options.Element
     
     //=------------------------------------------------------------------------=
-    // MARK: Properties
+    // MARK: State
     //=------------------------------------------------------------------------=
     
     let options: Options

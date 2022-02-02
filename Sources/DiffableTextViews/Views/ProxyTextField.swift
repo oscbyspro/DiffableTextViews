@@ -19,7 +19,7 @@ public final class ProxyTextField {
     @usableFromInline typealias Position = DiffableTextViews.Position<UTF16>
     
     //=------------------------------------------------------------------------=
-    // MARK: Properties
+    // MARK: State
     //=------------------------------------------------------------------------=
     
     @usableFromInline let wrapped: Wrapped

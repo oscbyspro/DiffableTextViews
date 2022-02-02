@@ -13,7 +13,7 @@
 public struct Snapshot: BidirectionalCollection, RangeReplaceableCollection {
     
     //=------------------------------------------------------------------------=
-    // MARK: Properties
+    // MARK: State
     //=------------------------------------------------------------------------=
 
     @usableFromInline var _characters: String
@@ -53,7 +53,7 @@ public struct Snapshot: BidirectionalCollection, RangeReplaceableCollection {
     public struct Index: Comparable {
         
         //=--------------------------------------------------------------------=
-        // MARK: Properties
+        // MARK: State
         //=--------------------------------------------------------------------=
         
         @usableFromInline let character: String.Index

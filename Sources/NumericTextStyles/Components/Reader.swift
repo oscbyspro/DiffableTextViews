@@ -15,7 +15,7 @@ import DiffableTextViews
     @usableFromInline typealias Transform<T> = ((inout T) -> Void)
     
     //=------------------------------------------------------------------------=
-    // MARK: Properties
+    // MARK: State
     //=------------------------------------------------------------------------=
     
     @usableFromInline let region:  Region

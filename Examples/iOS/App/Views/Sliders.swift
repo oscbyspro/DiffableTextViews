@@ -239,7 +239,7 @@ struct SlidersBeam: View, Animatable {
     typealias Data = SlidersData
     
     //=------------------------------------------------------------------------=
-    // MARK: Properties
+    // MARK: State
     //=------------------------------------------------------------------------=
     
     let data: SlidersData

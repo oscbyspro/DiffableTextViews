@@ -16,7 +16,7 @@ public struct Precision<Value: Precise>: Equatable {
     @usableFromInline typealias Namespace = _Precision
     
     //=------------------------------------------------------------------------=
-    // MARK: Properties
+    // MARK: State
     //=------------------------------------------------------------------------=
     
     @usableFromInline var lower: Count

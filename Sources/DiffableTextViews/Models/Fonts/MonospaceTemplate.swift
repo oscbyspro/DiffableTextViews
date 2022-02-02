@@ -23,7 +23,7 @@ public struct MonospaceTemplate {
     public static let digits = Self(.monospacedDigitSystemFont(ofSize: .zero, weight: .regular))
     
     //=------------------------------------------------------------------------=
-    // MARK: Properties
+    // MARK: State
     //=------------------------------------------------------------------------=
     
     @usableFromInline let descriptor: UIFontDescriptor

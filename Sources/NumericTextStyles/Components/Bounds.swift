@@ -16,7 +16,7 @@ import Support
 public struct Bounds<Value: Boundable>: Equatable {
 
     //=------------------------------------------------------------------------=
-    // MARK: Properties
+    // MARK: State
     //=------------------------------------------------------------------------=
     
     @usableFromInline let min: Value

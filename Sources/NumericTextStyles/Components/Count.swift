@@ -12,7 +12,7 @@
 public struct Count: Equatable {
 
     //=------------------------------------------------------------------------=
-    // MARK: Properties
+    // MARK: State
     //=------------------------------------------------------------------------=
     
     @usableFromInline var storage: SIMD3<Int>

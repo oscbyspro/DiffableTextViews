@@ -27,7 +27,7 @@ public struct Symbol: Equatable {
         attribute: .phantom.subtracting(.passthrough))
         
     //=------------------------------------------------------------------------=
-    // MARK: Properties
+    // MARK: State
     //=------------------------------------------------------------------------=
     
     public var character: Character

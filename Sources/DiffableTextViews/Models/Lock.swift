@@ -18,7 +18,7 @@
 @usableFromInline @MainActor final class Lock {
     
     //=------------------------------------------------------------------------=
-    // MARK: Properties
+    // MARK: State
     //=------------------------------------------------------------------------=
     
     @usableFromInline private(set) var isLocked = false

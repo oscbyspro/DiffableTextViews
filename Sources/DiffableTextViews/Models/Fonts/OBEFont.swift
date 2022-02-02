@@ -33,7 +33,7 @@ public struct OBEFont {
     public static let caption2:    Self = .preferred(style: .caption2)
     
     //=------------------------------------------------------------------------=
-    // MARK: Properties
+    // MARK: State
     //=------------------------------------------------------------------------=
     
     @usableFromInline var descriptor: UIFontDescriptor

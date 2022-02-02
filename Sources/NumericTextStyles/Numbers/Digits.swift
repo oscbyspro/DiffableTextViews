@@ -14,7 +14,7 @@ import Support
 @usableFromInline struct Digits: ExpressibleByArrayLiteral {
     
     //=------------------------------------------------------------------------=
-    // MARK: Properties
+    // MARK: State
     //=------------------------------------------------------------------------=
     
     @usableFromInline private(set) var digits: [Digit]
