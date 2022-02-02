@@ -107,19 +107,20 @@ final class SlidersData: ObservableObject {
     // MARK: Components
     //=------------------------------------------------------------------------=
     
-    var radius:    CGFloat { 27 }
-    var thickness: CGFloat { 04 }
+    var radius: CGFloat {
+        27
+    }
     
-    //=------------------------------------------------------------------------=
-    // MARK: Components - Plus
-    //=------------------------------------------------------------------------=
-
-    var animation: Animation {
-        .linear(duration: 0.125)
+    var thickness: CGFloat {
+        4
     }
     
     var coordinates: UInt8 {
-        .zero
+        33
+    }
+    
+    var animation: Animation {
+        .linear(duration: 0.125)
     }
     
     //=------------------------------------------------------------------------=
@@ -139,7 +140,8 @@ final class SlidersData: ObservableObject {
         // MARK: Single
         //=--------------------------------------=
         func position(_ value: CGFloat) -> CGPoint {
-            CGPoint(x: min(max(0, (value - limits.lowerBound) * multiple), bounds.width), y: y)
+            let extra = value - limits.lowerBound
+            return CGPoint(x: min(max(0, extra * multiple), bounds.width), y: y)
         }
         //=--------------------------------------=
         // MARK: Double
@@ -270,7 +272,7 @@ struct SlidersBeam: View, Animatable {
     
     var animatableData: AnimatablePair<CGFloat, CGFloat> {
         get {
-            AnimatableData(
+            AnimatablePair(
             positions.0.x,
             positions.1.x)
         } set {
