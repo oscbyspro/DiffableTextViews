@@ -11,6 +11,7 @@ import SwiftUI
 // MARK: * Sliders
 //*============================================================================*
 
+/// - Limits lower and upper bounds must not be equal.
 struct Sliders: View {
  
     //=------------------------------------------------------------------------=
@@ -180,9 +181,9 @@ struct SlidersContent: View {
     
     var body: some View {
         ZStack {
-            SlidersBeam(positions, with: data)
-            slider(data.values.0, at: positions.0)
-            slider(data.values.1, at: positions.1)
+            link
+            handle(data.values.0, at: positions.0)
+            handle(data.values.1, at: positions.1)
         }
         .coordinateSpace(name: data.coordinates)
     }
@@ -191,7 +192,11 @@ struct SlidersContent: View {
     // MARK: Body - Subcomponents
     //=------------------------------------------------------------------------=
     
-    func slider(_ value: Binding<CGFloat>, at position: CGPoint) -> some View {
+    var link: some View {
+        SlidersLink(between: positions, with: data)
+    }
+    
+    func handle(_ value: Binding<CGFloat>, at position: CGPoint) -> some View {
         SlidersHandle().highPriorityGesture(drag(value)).position(position)
     }
     
@@ -235,8 +240,7 @@ struct SlidersHandle: View {
 // MARK: * Sliders x Beam
 //*============================================================================*
 
-struct SlidersBeam: View, Animatable {
-    typealias Data = SlidersData
+struct SlidersLink: View, Animatable {
     
     //=------------------------------------------------------------------------=
     // MARK: State
@@ -249,7 +253,7 @@ struct SlidersBeam: View, Animatable {
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    init(_ positions: (CGPoint, CGPoint), with data: Data) {
+    init(between positions: (CGPoint, CGPoint), with data: SlidersData) {
         self.data = data
         self.positions = positions
     }
