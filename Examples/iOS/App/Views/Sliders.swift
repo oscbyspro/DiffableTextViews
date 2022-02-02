@@ -12,39 +12,23 @@ import SwiftUI
 //*============================================================================*
 
 struct Sliders: View {
+    typealias Beam = SlidersBeam
+    typealias Handle = SlidersHandle
     
     //=------------------------------------------------------------------------=
     // MARK: State
     //=------------------------------------------------------------------------=
     
-    var bounds: ClosedRange<CGFloat>
+    var limits: ClosedRange<CGFloat>
     var values: Binding<(CGFloat, CGFloat)>
         
     //=------------------------------------------------------------------------=
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    init(_ values: Binding<(CGFloat, CGFloat)>, in bounds: ClosedRange<CGFloat>) {
-        self.bounds = bounds
+    init(_ values: Binding<(CGFloat, CGFloat)>, in limits: ClosedRange<CGFloat>) {
+        self.limits = limits
         self.values = values
-    }
-    
-    init<T: BinaryInteger>(_ values: Binding<(T, T)>, in bounds: ClosedRange<T>) {
-        self.bounds = CGFloat(bounds.lowerBound)...CGFloat(bounds.upperBound)
-        self.values = Binding {(
-            CGFloat(values.wrappedValue.0), CGFloat(values.wrappedValue.1))
-        } set: { xxxxxxxxxxxxxxx in values.wrappedValue = (
-            T(xxxxxxxxxxxxxxx.0.rounded()), T(xxxxxxxxxxxxxxx.1.rounded()))
-        }
-    }
-    
-    init<T: BinaryFloatingPoint>(_ values: Binding<(T, T)>, in bounds: ClosedRange<T>) {
-        self.bounds = CGFloat(bounds.lowerBound)...CGFloat(bounds.upperBound)
-        self.values = Binding {(
-            CGFloat(values.wrappedValue.0), CGFloat(values.wrappedValue.1))
-        } set: { xxxxxxxxxxxxxxxxxxxxxxxxx in values.wrappedValue = (
-            T(xxxxxxxxxxxxxxxxxxxxxxxxx.0), T(xxxxxxxxxxxxxxxxxxxxxxxxx.1))
-        }
     }
     
     //=------------------------------------------------------------------------=
@@ -80,9 +64,7 @@ struct Sliders: View {
                 slider(values.0, in: slideable.size)
                 slider(values.1, in: slideable.size)
             }
-            .backgroundPreferenceValue(Locations.self) { locations in
-                beam(slideable[locations[0]], slideable[locations[1]])
-            }
+            .modifier(Beam(in: slideable, thickness: thickness))
         }
         .coordinateSpace(name: name)
         .padding(.horizontal, 0.5 * radius)
@@ -92,67 +74,155 @@ struct Sliders: View {
     // MARK: Body - Subcomponents
     //=------------------------------------------------------------------------=
     
-    func slider(_ value: Binding<CGFloat>, in slideable: CGSize) -> some View {
-        Circle()
-            .fill(.white)
-            .overlay(Circle().strokeBorder(.gray.opacity(0.2), lineWidth: 0.5))
-            .shadow(color: Color.black.opacity(0.15), radius: 2, x: 0, y: 2)
-            .highPriorityGesture(drag(value, in: slideable.width))
-            .anchorPreference(key: Locations.self, value: .center, transform: { [$0] })
-            .position(x: position(value.wrappedValue, in: slideable.width), y: 0.5 * slideable.height)
+    func slider(_ value: Binding<CGFloat>, in bounds: CGSize) -> some View {
+        Handle()
+            .highPriorityGesture(drag(value, in: bounds.width))
+            .modifier(Beam.Point())
+            .position(x: position(value.wrappedValue, in: bounds.width), y: 0.5 * bounds.height)
     }
     
-    func drag(_ value: Binding<CGFloat>, in slideable: CGFloat) -> some Gesture {
+    func drag(_ value: Binding<CGFloat>, in bounds: CGFloat) -> some Gesture {
         DragGesture(coordinateSpace: .named(name)).onChanged { gesture in
             withAnimation(.linear(duration: 0.125)) {
-                value.wrappedValue = self.value(gesture.location.x, in: slideable)
+                value.wrappedValue = self.value(gesture.location.x, in: bounds)
             }
         }
     }
     
-    func beam(_ start: CGPoint, _ end: CGPoint) -> some View {
-        Path {
-            $0.move(to:  start)
-            $0.addLine(to: end)
-        }
-        .stroke(Color.accentColor, lineWidth: thickness)
-    }
-        
     //=------------------------------------------------------------------------=
     // MARK: Calculations
     //=------------------------------------------------------------------------=
         
-    func value(_ position: CGFloat, in slideable: CGFloat) -> CGFloat {
-        let delta = bounds.upperBound - bounds.lowerBound
-        let position = min(max(0,  position), slideable)
-        return bounds.lowerBound + position / slideable * delta
+    func value(_ position: CGFloat, in bounds: CGFloat) -> CGFloat {
+        let delta = limits.upperBound - limits.lowerBound
+        let position = min(max(0,  position), bounds)
+        return limits.lowerBound + position / bounds * delta
     }
     
-    func position(_ value: CGFloat, in slideable: CGFloat) -> CGFloat {
-        let above = value - bounds.lowerBound
-        let delta = bounds.upperBound - bounds.lowerBound
-        return min(max(0, above / delta * slideable), slideable)
+    func position(_ value: CGFloat, in bounds: CGFloat) -> CGFloat {
+        let above = value - limits.lowerBound
+        let delta = limits.upperBound - limits.lowerBound
+        return min(max(0, above / delta * bounds), bounds)
+    }
+}
+
+//=----------------------------------------------------------------------------=
+// MARK: Sliders - Initializers
+//=----------------------------------------------------------------------------=
+
+extension Sliders {
+    
+    //=------------------------------------------------------------------------=
+    // MARK: BinaryInteger
+    //=------------------------------------------------------------------------=
+    
+    init<T>(_ values: Binding<(T, T)>, in limits: ClosedRange<T>) where T: BinaryInteger {
+        self.limits = CGFloat(limits.lowerBound)...CGFloat(limits.upperBound)
+        self.values = Binding {(
+            CGFloat(values.wrappedValue.0), CGFloat(values.wrappedValue.1))
+        } set: { xxxxxxxxxxxxxxx in values.wrappedValue = (
+            T(xxxxxxxxxxxxxxx.0.rounded()), T(xxxxxxxxxxxxxxx.1.rounded()))
+        }
+    }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: BinaryFloatingPoint
+    //=------------------------------------------------------------------------=
+    
+    init<T>(_ values: Binding<(T, T)>, in limits: ClosedRange<T>) where T: BinaryFloatingPoint {
+        self.limits = CGFloat(limits.lowerBound)...CGFloat(limits.upperBound)
+        self.values = Binding {(
+            CGFloat(values.wrappedValue.0), CGFloat(values.wrappedValue.1))
+        } set: { xxxxxxxxxxxxxxxxxxxxxxxxx in values.wrappedValue = (
+            T(xxxxxxxxxxxxxxxxxxxxxxxxx.0), T(xxxxxxxxxxxxxxxxxxxxxxxxx.1))
+        }
+    }
+}
+
+//*============================================================================*
+// MARK: * Sliders x Handle
+//*============================================================================*
+
+struct SlidersHandle: View {
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Body
+    //=------------------------------------------------------------------------=
+    
+    var body: some View {
+        shape
+            .fill(.white)
+            .overlay(shape.fill(Material.thin))
+            .overlay(shape.strokeBorder(.gray.opacity(0.2), lineWidth: 0.5))
+            .shadow(color: Color.black.opacity(0.15), radius: 2, x: 0, y: 2)
+    }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Body - Components
+    //=------------------------------------------------------------------------=
+    
+    var shape: some InsettableShape {
+        Circle()
+    }
+}
+
+//*============================================================================*
+// MARK: * Sliders x Beam
+//*============================================================================*
+
+struct SlidersBeam: ViewModifier {
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Properties
+    //=------------------------------------------------------------------------=
+    
+    let geometry: GeometryProxy
+    let thickness: CGFloat
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Initializers
+    //=------------------------------------------------------------------------=
+    
+    init(in geometry: GeometryProxy, thickness: CGFloat) {
+        self.geometry = geometry
+        self.thickness = thickness
+    }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Body
+    //=------------------------------------------------------------------------=
+    
+    func body(content: Content) -> some View {
+        content.backgroundPreferenceValue(Point.self) { points in
+            Path { path in
+                path.move(to: geometry[points.first!])
+                path.addLine(to: geometry[points.last!])
+            }
+            .stroke(Color.accentColor, lineWidth: thickness)
+        }
     }
     
     //*========================================================================*
-    // MARK: * Coordinates
+    // MARK: * Point
     //*========================================================================*
     
-    enum Coordinates { case slideable }
-    
-    //*========================================================================*
-    // MARK: * HorizontalLine
-    //*========================================================================*
-    
-    enum Locations: PreferenceKey {
+    struct Point: ViewModifier, PreferenceKey {
         
         //=--------------------------------------------------------------------=
-        // MARK: Value
+        // MARK: Body
+        //=--------------------------------------------------------------------=
+        
+        func body(content: Content) -> some View {
+            content.anchorPreference(key: Self.self, value: .center) { [$0] }
+        }
+        
+        //=--------------------------------------------------------------------=
+        // MARK: Preferences
         //=--------------------------------------------------------------------=
         
         static var defaultValue: [Anchor<CGPoint>] = []
         
-        static func reduce(value: inout Value, nextValue: () -> Value) {
+        static func reduce(value: inout [Anchor<CGPoint>], nextValue: () -> [Anchor<CGPoint>]) {
             value += nextValue()
         }
     }
