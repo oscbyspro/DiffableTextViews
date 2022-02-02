@@ -39,13 +39,24 @@ struct Interval<Value: Comparable> {
 }
 
 //*============================================================================*
+// MARK: * Interval x CGFloat
+//*============================================================================*
+
+extension Interval where Value == CGFloat {
+    var ui:   Self {
+        get { self }
+        set { self = newValue }
+    }
+}
+
+//*============================================================================*
 // MARK: * Interval x BinaryInteger
 //*============================================================================*
 
 extension Interval where Value: BinaryInteger {
-    var ui: Interval<CGFloat> {
+    var ui:   Interval<CGFloat> {
         get { Interval<CGFloat>((CGFloat(values.0), CGFloat(values.1))) }
-        set { values = (Value(newValue.values.0), Value(newValue.values.1)) }
+        set { self = Self((Value(newValue.values.0.rounded()), Value(newValue.values.1.rounded()))) }
     }
 }
 
@@ -54,8 +65,8 @@ extension Interval where Value: BinaryInteger {
 //*============================================================================*
 
 extension Interval where Value: BinaryFloatingPoint {
-    var ui: Interval<CGFloat> {
+    var ui:   Interval<CGFloat> {
         get { Interval<CGFloat>((CGFloat(values.0), CGFloat(values.1))) }
-        set { values = (Value(newValue.values.0), Value(newValue.values.1)) }
+        set { self = Self((Value(newValue.values.0), Value(newValue.values.1))) }
     }
 }
