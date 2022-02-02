@@ -19,7 +19,7 @@ struct IntervalSliders: View {
     
     var bounds: ClosedRange<CGFloat>
     var values: Binding<(CGFloat, CGFloat)>
-    
+        
     //=------------------------------------------------------------------------=
     // MARK: Initializers
     //=------------------------------------------------------------------------=
@@ -29,20 +29,22 @@ struct IntervalSliders: View {
         self.values = values
     }
     
-    init<T>(_ interval: Binding<Interval<T>>, in bounds: Interval<T>) where T: BinaryInteger {
-        self.init(interval.ui.values, in: bounds.ui.closed)
+    init<T>(_ values: Binding<(T, T)>, in bounds: ClosedRange<T>) where T: BinaryInteger {
+        self.bounds = CGFloat(bounds.lowerBound)...CGFloat(bounds.upperBound)
+        self.values = Binding {(
+            CGFloat(values.wrappedValue.0), CGFloat(values.wrappedValue.1))
+        } set: { xxxxxxxxxxxxxxx in values.wrappedValue = (
+            T(xxxxxxxxxxxxxxx.0.rounded()), T(xxxxxxxxxxxxxxx.1.rounded()))
+        }
     }
     
-    init<T>(_ interval: Binding<Interval<T>>, in bounds: Interval<T>) where T: BinaryFloatingPoint {
-        self.init(interval.ui.values, in: bounds.ui.closed)
-    }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Accessors
-    //=------------------------------------------------------------------------=
-    
-    var delta: CGFloat {
-        bounds.upperBound - bounds.lowerBound
+    init<T>(_ values: Binding<(T, T)>, in bounds: ClosedRange<T>) where T: BinaryFloatingPoint {
+        self.bounds = CGFloat(bounds.lowerBound)...CGFloat(bounds.upperBound)
+        self.values = Binding {(
+            CGFloat(values.wrappedValue.0), CGFloat(values.wrappedValue.1))
+        } set: { xxxxxxxxxxxxxxxxxxxxxxxxx in values.wrappedValue = (
+            T(xxxxxxxxxxxxxxxxxxxxxxxxx.0), T(xxxxxxxxxxxxxxxxxxxxxxxxx.1))
+        }
     }
     
     //=------------------------------------------------------------------------=
@@ -100,8 +102,10 @@ struct IntervalSliders: View {
     }
     
     func drag(_ value: Binding<CGFloat>, in slideable: CGFloat) -> some Gesture {
-        DragGesture(coordinateSpace: .named(Coordinates.slideable)).onChanged {
-            value.animation(.linear(duration: 0.15)).wrappedValue = self.value($0.location.x, in: slideable)
+        DragGesture(coordinateSpace: .named(Coordinates.slideable)).onChanged { gesture in
+            withAnimation {
+                value.wrappedValue = self.value(gesture.location.x, in: slideable)
+            }
         }
     }
     
@@ -118,12 +122,15 @@ struct IntervalSliders: View {
     //=------------------------------------------------------------------------=
         
     func value(_ position: CGFloat, in slideable: CGFloat) -> CGFloat {
+        let delta = bounds.upperBound - bounds.lowerBound
         let position = min(max(0,  position), slideable)
         return bounds.lowerBound + position / slideable * delta
     }
     
     func position(_ value: CGFloat, in slideable: CGFloat) -> CGFloat {
-        min(max(0, value / delta * slideable), slideable)
+        let above = value - bounds.lowerBound
+        let delta = bounds.upperBound - bounds.lowerBound
+        return min(max(0, above / delta * slideable), slideable)
     }
     
     //*========================================================================*
@@ -168,13 +175,13 @@ struct IntervalSlidersPreviews: View, PreviewProvider {
     // MARK: State
     //=------------------------------------------------------------------------=
     
-    @State var values = Interval((1, 5))
+    @State var interval = Interval((1, 5))
     
     //=------------------------------------------------------------------------=
     // MARK: Body
     //=------------------------------------------------------------------------=
     
     var body: some View {
-        IntervalSliders($values, in: Interval((0, 6)))
+        IntervalSliders($interval.values, in: 0...6)
     }
 }

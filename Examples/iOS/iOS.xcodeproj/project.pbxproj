@@ -49,15 +49,6 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		5527C21427AA70000098546E /* __UI__ */ = {
-			isa = PBXGroup;
-			children = (
-				5527C21227AA6C6A0098546E /* Interval.swift */,
-				5527C21527AA70270098546E /* IntervalSliders.swift */,
-			);
-			path = __UI__;
-			sourceTree = "<group>";
-		};
 		557F7FB827A81116001908D6 /* Packages */ = {
 			isa = PBXGroup;
 			children = (
@@ -87,7 +78,7 @@
 		5589A1A227A7E3E30000F04A /* App */ = {
 			isa = PBXGroup;
 			children = (
-				5527C21427AA70000098546E /* __UI__ */,
+				55B8ABAB27AAAB9E00980626 /* Models */,
 				55F6F58627A7E53300BA26AB /* Assets */,
 				55AA28D127A802AF003778FE /* Routers */,
 				55A85FFC27A7E87C006CCCB7 /* Screens */,
@@ -109,6 +100,7 @@
 			isa = PBXGroup;
 			children = (
 				55A85FF627A7E850006CCCB7 /* Screen.swift */,
+				5527C21527AA70270098546E /* IntervalSliders.swift */,
 				55DDC62B27A8D81D00B2AB4A /* Example.swift */,
 				55893D7327A8783E004F3388 /* Choices.swift */,
 			);
@@ -137,6 +129,14 @@
 				55AA28CD27A7F472003778FE /* ContentTabs.swift */,
 			);
 			path = Routers;
+			sourceTree = "<group>";
+		};
+		55B8ABAB27AAAB9E00980626 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				5527C21227AA6C6A0098546E /* Interval.swift */,
+			);
+			path = Models;
 			sourceTree = "<group>";
 		};
 		55F6F58627A7E53300BA26AB /* Assets */ = {

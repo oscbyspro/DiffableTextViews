@@ -19,6 +19,14 @@ struct NumericTextStyleScreen: View {
     typealias Value = Double
     
     //=------------------------------------------------------------------------=
+    // MARK: Static
+    //=------------------------------------------------------------------------=
+    
+    private static let bounds   = Interval((1, Value.precision.value))
+    private static let integer  = Interval((1, Value.precision.integer))
+    private static let fraction = Interval((0, Value.precision.fraction))
+    
+    //=------------------------------------------------------------------------=
     // MARK: State
     //=------------------------------------------------------------------------=
     
@@ -27,12 +35,22 @@ struct NumericTextStyleScreen: View {
     @State private var locale = Locale(identifier: "en_US")
     
     //=------------------------------------------------------------------------=
+    // MARK: State - Customization
+    //=------------------------------------------------------------------------=
+    
+    @State private var bounds   = Self.bounds
+    @State private var integer  = Self.integer
+    @State private var fraction = Self.fraction
+
+    //=------------------------------------------------------------------------=
     // MARK: Body
     //=------------------------------------------------------------------------=
     
     var body: some View {
         Screen {
             diffableTextStyles
+            boundsUI
+            precisionUI
             Spacer()
             diffableTextViewsExample
         }
@@ -47,16 +65,16 @@ struct NumericTextStyleScreen: View {
         Choices(Style.allCases, selection: $style, content: \.label)
     }
     
-    var boundsController: some View {
+    var boundsUI: some View {
         GroupBox("Bounds") {
-            Color.blue.frame(height: 2).padding(.vertical, 4)
+            IntervalSliders($bounds.values, in: Self.bounds.closed)
         }
     }
     
-    var precisionController: some View {
+    var precisionUI: some View {
         GroupBox("Precision") {
-            Color.blue.frame(height: 2).padding(.vertical, 4)
-            Color.blue.frame(height: 2).padding(.vertical, 4)
+            IntervalSliders($integer .values, in: Self.integer .closed)
+            IntervalSliders($fraction.values, in: Self.fraction.closed)
         }
     }
     
