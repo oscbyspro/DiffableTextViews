@@ -57,24 +57,29 @@ struct IntervalSliders: View {
     //=------------------------------------------------------------------------=
     
     var body: some View {
-        line.overlay(sliders)
+        rail.overlay(content)
     }
     
     //=------------------------------------------------------------------------=
     // MARK: Body - Components
     //=------------------------------------------------------------------------=
     
-    var line: some View {
+    var rail: some View {
         Capsule()
             .fill(.gray.opacity(0.2))
             .frame(maxWidth: .infinity, maxHeight: thickness)
             .frame(height: radius)
     }
     
-    var sliders: some View {
+    var content: some View {
         GeometryReader { slideable in
-            circle(values.0, in: slideable.size)
-            circle(values.1, in: slideable.size)
+            ZStack {
+                slider(values.0, in: slideable.size)
+                slider(values.1, in: slideable.size)
+            }
+            .backgroundPreferenceValue(Locations.self) { locations in
+                lazer(start: slideable[locations[0]], end: slideable[locations[1]])
+            }
         }
         .coordinateSpace(name: Coordinates.slideable)
         .padding(.horizontal, 0.5 * radius)
@@ -84,40 +89,65 @@ struct IntervalSliders: View {
     // MARK: Body - Subcomponents
     //=------------------------------------------------------------------------=
     
-    func circle(_ value: Binding<CGFloat>, in slideable: CGSize) -> some View {
+    func slider(_ value: Binding<CGFloat>, in slideable: CGSize) -> some View {
         Circle()
             .fill(.white)
             .overlay(Circle().strokeBorder(.gray.opacity(0.2), lineWidth: 0.5))
             .shadow(color: Color.black.opacity(0.15), radius: 2, x: 0, y: 2)
-            .highPriorityGesture(drag(value.animation(.linear(duration: 0.15)), in: slideable))
-            .position(x: position(value.wrappedValue, in: slideable.width), y: slideable.height/2)
+            .highPriorityGesture(drag(value, in: slideable.width))
+            .anchorPreference(key: Locations.self, value: .center, transform: { [$0] })
+            .position(x: position(value.wrappedValue, in: slideable.width), y: 0.5 * slideable.height)
     }
     
-    func drag(_ value: Binding<CGFloat>, in slideable: CGSize) -> some Gesture {
-        DragGesture(coordinateSpace: .named(Coordinates.slideable))
-            .onChanged { gesture in
-                value.wrappedValue = self.value(gesture.location.x, in: slideable)
-            }
+    func drag(_ value: Binding<CGFloat>, in slideable: CGFloat) -> some Gesture {
+        DragGesture(coordinateSpace: .named(Coordinates.slideable)).onChanged {
+            value.animation(.linear(duration: 0.15)).wrappedValue = self.value($0.location.x, in: slideable)
+        }
     }
     
+    func lazer(start: CGPoint, end: CGPoint) -> some View {
+        Path {
+            $0.move(to:  start)
+            $0.addLine(to: end)
+        }
+        .stroke(Color.accentColor, lineWidth: thickness)
+    }
+        
     //=------------------------------------------------------------------------=
     // MARK: Calculations
     //=------------------------------------------------------------------------=
-    
-    func position(_ value: CGFloat, in length: CGFloat) -> CGFloat {
-        min(max(0, value / delta * length), length)
+        
+    func value(_ position: CGFloat, in slideable: CGFloat) -> CGFloat {
+        let position = min(max(0,  position), slideable)
+        return bounds.lowerBound + position / slideable * delta
     }
     
-    func value(_ position: CGFloat, in slideable: CGSize) -> CGFloat {
-        let position = min(max(0,  position), slideable.width)
-        return bounds.lowerBound + position / slideable.width * delta
+    func position(_ value: CGFloat, in slideable: CGFloat) -> CGFloat {
+        min(max(0, value / delta * slideable), slideable)
     }
     
     //*========================================================================*
-    // MARK: * Named
+    // MARK: * Coordinates
     //*========================================================================*
     
     enum Coordinates { case slideable }
+    
+    //*========================================================================*
+    // MARK: * HorizontalLine
+    //*========================================================================*
+    
+    enum Locations: PreferenceKey {
+        
+        //=--------------------------------------------------------------------=
+        // MARK: Value
+        //=--------------------------------------------------------------------=
+        
+        static var defaultValue: [Anchor<CGPoint>] = []
+        
+        static func reduce(value: inout Value, nextValue: () -> Value) {
+            value += nextValue()
+        }
+    }
 }
 
 //*============================================================================*
