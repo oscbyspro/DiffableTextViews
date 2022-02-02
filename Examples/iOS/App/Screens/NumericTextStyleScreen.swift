@@ -41,7 +41,7 @@ struct NumericTextStyleScreen: View {
     @State private var bounds   = Self.bounds
     @State private var integer  = Self.integer
     @State private var fraction = Self.fraction
-
+    
     //=------------------------------------------------------------------------=
     // MARK: Body
     //=------------------------------------------------------------------------=

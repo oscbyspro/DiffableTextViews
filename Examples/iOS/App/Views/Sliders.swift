@@ -11,23 +11,15 @@ import SwiftUI
 // MARK: * Sliders
 //*============================================================================*
 
-/// - Limits lower and upper bounds must not be equal.
 struct Sliders: View {
  
     //=------------------------------------------------------------------------=
     // MARK: State
     //=------------------------------------------------------------------------=
     
-    let data: SlidersData
-        
-    //=------------------------------------------------------------------------=
-    // MARK: Initializers
-    //=------------------------------------------------------------------------=
+    let limits: ClosedRange<CGFloat>
+    let values: Binding<(CGFloat, CGFloat)>
     
-    init(_ values: Binding<(CGFloat, CGFloat)>, in limits: ClosedRange<CGFloat>) {
-        self.data = SlidersData(values, in: limits)
-    }
-
     //=------------------------------------------------------------------------=
     // MARK: Body
     //=------------------------------------------------------------------------=
@@ -43,82 +35,24 @@ struct Sliders: View {
     var rail: some View {
         Capsule()
             .fill(.gray.opacity(0.2))
-            .frame(maxWidth: .infinity, maxHeight: data.thickness)
-            .frame(height: data.radius)
+            .frame(maxWidth: .infinity, maxHeight: thickness)
+            .frame(height: radius)
     }
     
     var content: some View {
         GeometryReader {
-            SlidersContent(in: $0, with: data)
+            SlidersContent(self, proxy: $0)
         }
-        .padding(.horizontal, 0.5 * data.radius)
-    }
-}
-
-//=----------------------------------------------------------------------------=
-// MARK: Sliders - Initializers
-//=----------------------------------------------------------------------------=
-
-extension Sliders {
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Numbers
-    //=------------------------------------------------------------------------=
-    
-    init<T: BinaryInteger>(_ values: Binding<(T, T)>, in limits: ClosedRange<T>) {
-        self.init(Binding {(
-            CGFloat(values.wrappedValue.0), CGFloat(values.wrappedValue.1))
-        } set: { xxxxxxxxxxxxxxx in values.wrappedValue = (
-            T(xxxxxxxxxxxxxxx.0.rounded()), T(xxxxxxxxxxxxxxx.1.rounded()))
-        }, in: CGFloat(limits.lowerBound)...CGFloat(limits.upperBound))
-    }
-    
-    init<T: BinaryFloatingPoint>(_ values: Binding<(T, T)>, in limits: ClosedRange<T>) {
-        self.init(Binding {(
-            CGFloat(values.wrappedValue.0), CGFloat(values.wrappedValue.1))
-        } set: { xxxxxxxxxxxxxxxxxxxxxxxxx in values.wrappedValue = (
-            T(xxxxxxxxxxxxxxxxxxxxxxxxx.0), T(xxxxxxxxxxxxxxxxxxxxxxxxx.1))
-        }, in: CGFloat(limits.lowerBound)...CGFloat(limits.upperBound))
-    }
-}
-
-//*============================================================================*
-// MARK: * Sliders x Data
-//*============================================================================*
-
-final class SlidersData: ObservableObject {
-    
-    //=------------------------------------------------------------------------=
-    // MARK: State
-    //=------------------------------------------------------------------------=
-    
-    let limits: ClosedRange<CGFloat>
-    let values: Binding<(CGFloat, CGFloat)>
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Initializers
-    //=------------------------------------------------------------------------=
-    
-    init(_ values: Binding<(CGFloat, CGFloat)>, in limits: ClosedRange<CGFloat>) {
-        self.limits = limits
-        self.values = values
+        .padding(.horizontal, 0.5 * radius)
     }
     
     //=------------------------------------------------------------------------=
-    // MARK: Components
+    // MARK: Values
     //=------------------------------------------------------------------------=
     
-    var radius: CGFloat {
-        27
-    }
-    
-    var thickness: CGFloat {
-        4
-    }
-    
-    var coordinates: UInt8 {
-        33
-    }
+    var radius:    CGFloat { 27 }
+    var thickness: CGFloat { 04 }
+    var coordinates: UInt8 { 33 }
     
     var animation: Animation {
         .linear(duration: 0.125)
@@ -128,15 +62,19 @@ final class SlidersData: ObservableObject {
     // MARK: Calculations
     //=------------------------------------------------------------------------=
     
+    func ratio(_ dividend: CGFloat, _ divisor: CGFloat) -> CGFloat {
+        divisor == 0 ? 0 : dividend / divisor
+    }
+    
     func value(_ position: CGFloat, in bounds: CGSize) -> CGFloat {
-        let delta = limits.upperBound - limits.lowerBound
         let position = min(max(0,  position), bounds.width)
-        return limits.lowerBound + position / bounds.width * delta
+        let multiple = ratio(limits.upperBound - limits.lowerBound, bounds.width)
+        return limits.lowerBound + position * multiple
     }
     
     func positions(in bounds: CGSize) -> (CGPoint, CGPoint) {
         let y = 0.5 * bounds.height
-        let multiple = bounds.width / (limits.upperBound - limits.lowerBound)
+        let multiple = ratio(bounds.width, limits.upperBound - limits.lowerBound)
         //=--------------------------------------=
         // MARK: Single
         //=--------------------------------------=
@@ -151,6 +89,48 @@ final class SlidersData: ObservableObject {
     }
 }
 
+//=----------------------------------------------------------------------------=
+// MARK: Sliders - Initializers
+//=----------------------------------------------------------------------------=
+
+extension Sliders {
+    
+    //=------------------------------------------------------------------------=
+    // MARK: CGFloat
+    //=------------------------------------------------------------------------=
+    
+    init(_ values: Binding<(CGFloat, CGFloat)>, in limits: ClosedRange<CGFloat>) {
+        self.limits = limits
+        self.values = values
+    }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Binary - Integer
+    //=------------------------------------------------------------------------=
+    
+    init<T>(_ values: Binding<(T, T)>, in limits: ClosedRange<T>) where T: BinaryInteger {
+        self.limits = CGFloat(limits.lowerBound)...CGFloat(limits.upperBound)
+        self.values = Binding {(
+            CGFloat(values.wrappedValue.0), CGFloat(values.wrappedValue.1)
+        )} set: { xxxxxxxxxxxxxxx in values.wrappedValue = (
+            T(xxxxxxxxxxxxxxx.0.rounded()), T(xxxxxxxxxxxxxxx.1.rounded())
+        )}
+    }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Binary - Floating Point
+    //=------------------------------------------------------------------------=
+    
+    init<T>(_ values: Binding<(T, T)>, in limits: ClosedRange<T>) where T: BinaryFloatingPoint {
+        self.limits = CGFloat(limits.lowerBound)...CGFloat(limits.upperBound)
+        self.values = Binding {(
+            CGFloat(values.wrappedValue.0), CGFloat(values.wrappedValue.1)
+        )} set: { xxxxxxxxxxxxxxxxxxxxxxxxx in values.wrappedValue = (
+            T(xxxxxxxxxxxxxxxxxxxxxxxxx.0), T(xxxxxxxxxxxxxxxxxxxxxxxxx.1)
+        )}
+    }
+}
+
 //*============================================================================*
 // MARK: * Sliders x Content
 //*============================================================================*
@@ -161,18 +141,18 @@ struct SlidersContent: View {
     // MARK: State
     //=------------------------------------------------------------------------=
     
-    let data: SlidersData
+    let base: Sliders
     let bounds: CGSize
     let positions: (CGPoint, CGPoint)
-
+    
     //=------------------------------------------------------------------------=
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    init(in proxy: GeometryProxy, with data: SlidersData) {
-        self.data = data
+    init(_ base: Sliders, proxy: GeometryProxy) {
+        self.base = base
         self.bounds = proxy.size
-        self.positions = data.positions(in: bounds)
+        self.positions = base.positions(in: bounds)
     }
     
     //=------------------------------------------------------------------------=
@@ -182,10 +162,10 @@ struct SlidersContent: View {
     var body: some View {
         ZStack {
             link
-            handle(data.values.0, at: positions.0)
-            handle(data.values.1, at: positions.1)
+            handle(base.values.0, at: positions.0)
+            handle(base.values.1, at: positions.1)
         }
-        .coordinateSpace(name: data.coordinates)
+        .coordinateSpace(name: base.coordinates)
     }
     
     //=------------------------------------------------------------------------=
@@ -193,7 +173,7 @@ struct SlidersContent: View {
     //=------------------------------------------------------------------------=
     
     var link: some View {
-        SlidersLink(between: positions, with: data)
+        SlidersLink(base, between: positions)
     }
     
     func handle(_ value: Binding<CGFloat>, at position: CGPoint) -> some View {
@@ -201,9 +181,10 @@ struct SlidersContent: View {
     }
     
     func drag(_ value: Binding<CGFloat>) -> some Gesture {
-        DragGesture(coordinateSpace: .named(data.coordinates)).onChanged {
-            gesture in withAnimation(data.animation) {
-                value.wrappedValue = data.value(gesture.location.x, in: bounds)
+        DragGesture(coordinateSpace: .named(base.coordinates)).onChanged { gesture in
+            let newValue = base.value(gesture.location.x, in: bounds)
+            if value.wrappedValue != newValue {
+                withAnimation(base.animation) { value.wrappedValue = newValue }
             }
         }
     }
@@ -246,15 +227,15 @@ struct SlidersLink: View, Animatable {
     // MARK: State
     //=------------------------------------------------------------------------=
     
-    let data: SlidersData
+    let base: Sliders
     var positions: (CGPoint, CGPoint)
     
     //=------------------------------------------------------------------------=
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    init(between positions: (CGPoint, CGPoint), with data: SlidersData) {
-        self.data = data
+    init(_ base: Sliders, between positions: (CGPoint, CGPoint)) {
+        self.base = base
         self.positions = positions
     }
     
@@ -267,7 +248,7 @@ struct SlidersLink: View, Animatable {
             $0.move(to:    positions.0)
             $0.addLine(to: positions.1)
         }
-        .stroke(Color.accentColor, lineWidth: data.thickness)
+        .stroke(Color.accentColor, lineWidth: base.thickness)
     }
     
     //=------------------------------------------------------------------------=
