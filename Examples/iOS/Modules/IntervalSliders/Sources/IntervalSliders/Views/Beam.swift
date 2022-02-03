@@ -8,7 +8,7 @@
 import SwiftUI
 
 //*============================================================================*
-// MARK: * Sliders x Beam
+// MARK: * Beam
 //*============================================================================*
 
 @usableFromInline struct Beam: View, HasComposite, HasConstants {

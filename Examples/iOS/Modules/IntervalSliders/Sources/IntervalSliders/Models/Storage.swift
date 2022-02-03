@@ -11,8 +11,7 @@ import SwiftUI
 // MARK: * Storage
 //*============================================================================*
 
-@usableFromInline final class Storage: HasStorage {
-    @inlinable var storage: Storage { self }
+@usableFromInline final class Storage {
 
     //=------------------------------------------------------------------------=
     // MARK: State

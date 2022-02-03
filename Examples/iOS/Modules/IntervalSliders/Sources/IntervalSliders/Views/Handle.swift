@@ -8,10 +8,10 @@
 import SwiftUI
 
 //*============================================================================*
-// MARK: * Sliders x Handle
+// MARK: * Handle
 //*============================================================================*
 
-@usableFromInline struct Handle: View, HasComposite, HasConstants {
+@usableFromInline struct Handle: View {
     
     //=------------------------------------------------------------------------=
     // MARK: State
@@ -32,6 +32,22 @@ import SwiftUI
     }
     
     //=------------------------------------------------------------------------=
+    // MARK: Accessors
+    //=------------------------------------------------------------------------=
+    
+    @inlinable var animation: Animation {
+        Constants.animation
+    }
+    
+    @inlinable var coordinates: UInt8 {
+        Constants.coordinates
+    }
+    
+    @inlinable var center: CGFloat {
+        composite.layout.center
+    }
+    
+    //=------------------------------------------------------------------------=
     // MARK: Body
     //=------------------------------------------------------------------------=
     
@@ -42,7 +58,7 @@ import SwiftUI
             .overlay(shape.strokeBorder(.gray.opacity(0.2), lineWidth: 0.5))
             .shadow(color: Color.black.opacity(0.15), radius: 2, x: 0, y: 2)
             .highPriorityGesture(dragGesture)
-            .position(x: position, y: frame.midY)
+            .position(x: position, y: center)
     }
     
     //=------------------------------------------------------------------------=

@@ -17,16 +17,18 @@ import SwiftUI
     // MARK: State
     //=------------------------------------------------------------------------=
     
-    @usableFromInline let frame: CGRect
-    @usableFromInline let positions: (CGFloat, CGFloat)
-    
+    @usableFromInline let center: CGFloat
+    @usableFromInline let values: (CGFloat, CGFloat)
+    @usableFromInline let limits: ClosedRange<CGFloat>
+
     //=------------------------------------------------------------------------=
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
     @inlinable init(_ storage: Storage, proxy: GeometryProxy) {
-        self.frame = proxy.frame(in: .local)
-        self.positions = Algorithms.convert(
-        storage.values.wrappedValue, from: storage.limits, to: 0...proxy.size.width)
+        self.center = proxy.size.height/2
+        self.limits = 0...proxy.size.width
+        self.values = Algorithms.convert(
+        storage.values.wrappedValue, from: storage.limits, to: limits)
     }
 }

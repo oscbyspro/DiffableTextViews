@@ -8,10 +8,10 @@
 import SwiftUI
 
 //*============================================================================*
-// MARK: * Sliders x Interval
+// MARK: * Interval
 //*============================================================================*
 
-@usableFromInline struct Interval: View, HasComposite, HasConstants {
+@usableFromInline struct Interval: View {
     
     //=------------------------------------------------------------------------=
     // MARK: State
@@ -29,6 +29,22 @@ import SwiftUI
     }
     
     //=------------------------------------------------------------------------=
+    // MARK: Accessors
+    //=------------------------------------------------------------------------=
+    
+    var coordinates: UInt8 {
+        Constants.coordinates
+    }
+    
+    var positions: (CGFloat, CGFloat) {
+        composite.layout.values
+    }
+    
+    var values: Binding<(CGFloat, CGFloat)> {
+        composite.storage.values
+    }
+    
+    //=------------------------------------------------------------------------=
     // MARK: Body
     //=------------------------------------------------------------------------=
     
@@ -40,4 +56,6 @@ import SwiftUI
         }
         .coordinateSpace(name: coordinates)
     }
+    
+
 }

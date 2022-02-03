@@ -1,5 +1,5 @@
 //
-//  Sliders.swift
+//  IntervalSliders.swift
 //  iOS
 //
 //  Created by Oscar Byström Ericsson on 2022-02-02.
@@ -8,10 +8,10 @@
 import SwiftUI
 
 //*============================================================================*
-// MARK: * Sliders
+// MARK: * IntervalSliders
 //*============================================================================*
 
-public struct Sliders: View, HasStorage, HasConstants {
+public struct IntervalSliders: View {
  
     //=------------------------------------------------------------------------=
     // MARK: State
@@ -28,23 +28,11 @@ public struct Sliders: View, HasStorage, HasConstants {
     }
     
     //=------------------------------------------------------------------------=
-    // MARK: Initializers - Other Binary Numbers
+    // MARK: Accessors
     //=------------------------------------------------------------------------=
     
-    @inlinable public init<T>(_ values: Binding<(T, T)>, in limits: ClosedRange<T>) where T: BinaryInteger {
-        self.storage = Storage(Binding {(
-            CGFloat(values.wrappedValue.0), CGFloat(values.wrappedValue.1)
-        )} set: { xxxxxxxxxxxxxxx in values.wrappedValue = (
-            T(xxxxxxxxxxxxxxx.0.rounded()), T(xxxxxxxxxxxxxxx.1.rounded())
-        )}, in: CGFloat(limits.lowerBound) ... CGFloat(limits.upperBound))
-    }
-    
-    @inlinable public init<T>(_ values: Binding<(T, T)>, in limits: ClosedRange<T>) where T: BinaryFloatingPoint {
-        self.storage = Storage(Binding {(
-            CGFloat(values.wrappedValue.0), CGFloat(values.wrappedValue.1)
-        )} set: { xxxxxxxxxxxxxxxxxxxxxxxxx in values.wrappedValue = (
-            T(xxxxxxxxxxxxxxxxxxxxxxxxx.0), T(xxxxxxxxxxxxxxxxxxxxxxxxx.1)
-        )}, in: CGFloat(limits.lowerBound)...CGFloat(limits.upperBound))
+    @inlinable var radius: CGFloat {
+        Constants.radius
     }
     
     //=------------------------------------------------------------------------=
@@ -53,10 +41,10 @@ public struct Sliders: View, HasStorage, HasConstants {
     
     @inlinable public var body: some View {
         ZStack {
-            Track(storage)
+            Track()
             GeometryReader {
-                rectangle in
-                Interval(storage, proxy: rectangle)
+                geometry in
+                Interval(storage, proxy: geometry)
             }
             .padding(.horizontal, 0.5 * radius)
         }
@@ -64,8 +52,39 @@ public struct Sliders: View, HasStorage, HasConstants {
     }
 }
 
+//=----------------------------------------------------------------------------=
+// MARK: IntervalSliders x Initializers
+//=----------------------------------------------------------------------------=
+
+extension IntervalSliders {
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Binary - Integer
+    //=------------------------------------------------------------------------=
+    
+    @inlinable public init<T>(_ values: Binding<(T, T)>, in limits: ClosedRange<T>) where T: BinaryInteger {
+        self.init(Binding {(
+            CGFloat(values.wrappedValue.0), CGFloat(values.wrappedValue.1)
+        )} set: { xxxxxxxxxxxxxxx in values.wrappedValue = (
+            T(xxxxxxxxxxxxxxx.0.rounded()), T(xxxxxxxxxxxxxxx.1.rounded())
+        )}, in: CGFloat(limits.lowerBound) ... CGFloat(limits.upperBound))
+    }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Binary - Floating Point
+    //=------------------------------------------------------------------------=
+    
+    @inlinable public init<T>(_ values: Binding<(T, T)>, in limits: ClosedRange<T>) where T: BinaryFloatingPoint {
+        self.init(Binding {(
+            CGFloat(values.wrappedValue.0), CGFloat(values.wrappedValue.1)
+        )} set: { xxxxxxxxxxxxxxxxxxxxxxxxx in values.wrappedValue = (
+            T(xxxxxxxxxxxxxxxxxxxxxxxxx.0), T(xxxxxxxxxxxxxxxxxxxxxxxxx.1)
+        )}, in: CGFloat(limits.lowerBound)...CGFloat(limits.upperBound))
+    }
+}
+
 //*============================================================================*
-// MARK: * Sliders x Previews
+// MARK: * IntervalSliders x Previews
 //*============================================================================*
 
 struct SlidersPreviews: View, PreviewProvider {
@@ -81,7 +100,7 @@ struct SlidersPreviews: View, PreviewProvider {
     //=------------------------------------------------------------------------=
     
     var body: some View {
-        Sliders($interval, in: 0...6)
+        IntervalSliders($interval, in: 0...6)
     }
     
     //=------------------------------------------------------------------------=
