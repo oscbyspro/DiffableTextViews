@@ -11,7 +11,7 @@ import SwiftUI
 // MARK: * Track
 //*============================================================================*
 
-@usableFromInline struct Track: View, Constantsable {
+@usableFromInline struct Track: View {
     
     //=------------------------------------------------------------------------=
     // MARK: Initializers

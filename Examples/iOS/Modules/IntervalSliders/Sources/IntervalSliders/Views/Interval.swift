@@ -11,7 +11,7 @@ import SwiftUI
 // MARK: * Interval
 //*============================================================================*
 
-@usableFromInline struct Interval: View, Constantsable, Layoutable, Storageable {
+@usableFromInline struct Interval: View, Layoutable, Storageable {
     
     //=------------------------------------------------------------------------=
     // MARK: Environment

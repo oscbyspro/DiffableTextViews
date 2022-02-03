@@ -11,7 +11,7 @@ import SwiftUI
 // MARK: * IntervalSliders
 //*============================================================================*
 
-public struct IntervalSliders: View, Constantsable, Storageable {
+public struct IntervalSliders: View, Storageable {
  
     //=------------------------------------------------------------------------=
     // MARK: State

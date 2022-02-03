@@ -11,7 +11,7 @@ import SwiftUI
 // MARK: * Beam
 //*============================================================================*
 
-@usableFromInline struct Beam: View, Animatable, Algorithmsable, Constantsable, Layoutable, Storageable {
+@usableFromInline struct Beam: View, Animatable, Layoutable, Storageable {
     @usableFromInline typealias Start = GestureState<(CGFloat, CGFloat)?>
     @usableFromInline typealias AnimatableData = AnimatablePair<CGFloat, CGFloat>
 
@@ -61,8 +61,8 @@ import SwiftUI
             if start == nil { start = positions }
             let distance = gesture.location.x - gesture.startLocation.x
             let positions = move(start!, by: distance, in: positionsLimits)
-            let next = Self.convert(positions, from: positionsLimits, to: valuesLimits)
-            withAnimation(animation) { values.wrappedValue = next }
+            let next = convert(positions, from: positionsLimits, to: valuesLimits)
+            withAnimation(slide) { values.wrappedValue = next }
         }
     }
     

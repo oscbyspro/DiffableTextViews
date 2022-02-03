@@ -1,5 +1,5 @@
 //
-//  File.swift
+//  Layoutable.swift
 //  
 //
 //  Created by Oscar Byström Ericsson on 2022-02-03.
@@ -42,4 +42,3 @@ extension Layoutable {
         layout.positionsLimits
     }
 }
-

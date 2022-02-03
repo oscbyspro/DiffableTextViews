@@ -11,7 +11,7 @@ import SwiftUI
 // MARK: * Handle
 //*============================================================================*
 
-@usableFromInline struct Handle: View, Algorithmsable, Constantsable, Layoutable, Storageable {
+@usableFromInline struct Handle: View, Layoutable, Storageable {
     
     //=------------------------------------------------------------------------=
     // MARK: Environment
@@ -60,8 +60,8 @@ import SwiftUI
 
     @inlinable var drag: some Gesture {
         DragGesture(coordinateSpace: .named(coordinates)).onChanged { gesture in
-            withAnimation(animation) {
-                value.wrappedValue = Self.convert(gesture.location.x, from: positionsLimits, to: valuesLimits)
+            withAnimation(slide) {
+                value.wrappedValue = convert(gesture.location.x, from: positionsLimits, to: valuesLimits)
             }
         }
     }

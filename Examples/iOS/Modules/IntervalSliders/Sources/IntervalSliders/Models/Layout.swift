@@ -11,7 +11,7 @@ import SwiftUI
 // MARK: * Layout
 //*============================================================================*
 
-@usableFromInline final class Layout: ObservableObject, Algorithmsable {
+@usableFromInline final class Layout: ObservableObject {
     
     //=------------------------------------------------------------------------=
     // MARK: State
@@ -28,7 +28,7 @@ import SwiftUI
     @inlinable init(_ storage: Storage, in proxy: GeometryProxy) {
         self.frame = proxy.frame(in: .local)
         self.positionsLimits = 0...frame.width
-        self.positions = Self.convert(storage.values.wrappedValue,
+        self.positions = convert(storage.values.wrappedValue,
         from: storage.valuesLimits, to: positionsLimits)
     }
     

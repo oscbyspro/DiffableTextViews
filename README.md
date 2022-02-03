@@ -31,7 +31,7 @@ It uses three main algorithms to determine text selection.
 ### Requirements
 
 - iOS 15.0+
-- Swift 4.0+
+- Swift 5.0+
 
 ### Installation
 
