@@ -11,23 +11,30 @@ import SwiftUI
 // MARK: * Beam
 //*============================================================================*
 
-@usableFromInline struct Beam: View, Animatable, Algorithmsable, Compositeable, Constantsable {
+@usableFromInline struct Beam: View, Animatable, Algorithmsable, Constantsable, Layoutable, Storageable {
+    @usableFromInline typealias Start = GestureState<(CGFloat, CGFloat)?>
+    @usableFromInline typealias AnimatableData = AnimatablePair<CGFloat, CGFloat>
+
+    //=------------------------------------------------------------------------=
+    // MARK: Environment
+    //=------------------------------------------------------------------------=
+
+    @usableFromInline @EnvironmentObject var layout: Layout
+    @usableFromInline @EnvironmentObject var storage: Storage
     
     //=------------------------------------------------------------------------=
     // MARK: State
     //=------------------------------------------------------------------------=
     
-    @usableFromInline let composite: Composite
-    @usableFromInline var animatableData: AnimatablePair<CGFloat, CGFloat>
-    @usableFromInline var start = GestureState<(CGFloat, CGFloat)?>(initialValue: nil)
+    @usableFromInline let start = Start(initialValue: nil)
+    @usableFromInline var animatableData: AnimatableData
 
     //=------------------------------------------------------------------------=
     // MARK: Initializers
     //=------------------------------------------------------------------------=
 
-    @inlinable init(_ composite: Composite) {
-        self.composite = composite
-        self.animatableData = composite.layout.positionsVector
+    @inlinable init(_ positions: (CGFloat, CGFloat)) {
+        self.animatableData = AnimatablePair(positions.0, positions.1)
     }
     
     //=------------------------------------------------------------------------=

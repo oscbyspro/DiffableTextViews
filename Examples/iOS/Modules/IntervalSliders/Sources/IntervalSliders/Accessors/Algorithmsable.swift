@@ -22,7 +22,7 @@ extension Algorithmsable {
     //=------------------------------------------------------------------------=
     // MARK: Single
     //=------------------------------------------------------------------------=
-
+    
     @inlinable static func convert(_ value: CGFloat,
         from start: ClosedRange<CGFloat>, to end: ClosedRange<CGFloat>) -> CGFloat {
         guard start.lowerBound != start.upperBound else { return end.lowerBound }

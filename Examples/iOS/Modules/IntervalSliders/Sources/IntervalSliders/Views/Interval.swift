@@ -11,22 +11,20 @@ import SwiftUI
 // MARK: * Interval
 //*============================================================================*
 
-@usableFromInline struct Interval: View, Compositeable, Constantsable {
+@usableFromInline struct Interval: View, Constantsable, Layoutable, Storageable {
     
     //=------------------------------------------------------------------------=
-    // MARK: State
+    // MARK: Environment
     //=------------------------------------------------------------------------=
     
-    @usableFromInline let composite: Composite
+    @usableFromInline @EnvironmentObject var layout:  Layout
+    @usableFromInline @EnvironmentObject var storage: Storage
     
     //=------------------------------------------------------------------------=
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable init(_ storage: Storage, proxy: GeometryProxy) {
-        let layout = Layout(storage, proxy: proxy)
-        self.composite = Composite(storage, layout)
-    }
+    @inlinable init() { }
     
     //=------------------------------------------------------------------------=
     // MARK: Body
@@ -34,9 +32,9 @@ import SwiftUI
     
     @inlinable var body: some View {
         ZStack {
-            Beam(composite)
-            Handle(composite, value: values.projectedValue.0, position: positions.0)
-            Handle(composite, value: values.projectedValue.1, position: positions.1)
+            Beam(layout.positions)
+            Handle(values.projectedValue.0, at: positions.0)
+            Handle(values.projectedValue.1, at: positions.1)
         }
         .coordinateSpace(name: coordinates)
     }

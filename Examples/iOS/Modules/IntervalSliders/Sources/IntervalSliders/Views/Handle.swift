@@ -11,24 +11,29 @@ import SwiftUI
 // MARK: * Handle
 //*============================================================================*
 
-@usableFromInline struct Handle: View, Algorithmsable, Compositeable, Constantsable {
+@usableFromInline struct Handle: View, Algorithmsable, Constantsable, Layoutable, Storageable {
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Environment
+    //=------------------------------------------------------------------------=
+    
+    @usableFromInline @EnvironmentObject var layout: Layout
+    @usableFromInline @EnvironmentObject var storage: Storage
     
     //=------------------------------------------------------------------------=
     // MARK: State
     //=------------------------------------------------------------------------=
     
-    @usableFromInline let composite: Composite
     @usableFromInline let position: CGFloat
     @usableFromInline let value: Binding<CGFloat>
-
+    
     //=------------------------------------------------------------------------=
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable init(_ composite: Composite, value: Binding<CGFloat>, position: CGFloat) {
+    @inlinable init(_ value: Binding<CGFloat>, at position: CGFloat) {
         self.value = value
         self.position = position
-        self.composite = composite
     }
     
     //=------------------------------------------------------------------------=

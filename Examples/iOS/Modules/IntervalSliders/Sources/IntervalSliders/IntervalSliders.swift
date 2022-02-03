@@ -35,11 +35,12 @@ public struct IntervalSliders: View, Constantsable, Storageable {
         ZStack {
             Track()
             GeometryReader {
-                geometry in
-                Interval(storage, proxy: geometry)
+                Interval()
+                    .environmentObject(Layout(storage, in: $0))
             }
             .padding(.horizontal, 0.5 * radius)
         }
+        .environmentObject(storage)
         .frame(maxWidth: .infinity, minHeight: radius, maxHeight: radius)
     }
 }

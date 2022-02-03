@@ -11,7 +11,7 @@ import SwiftUI
 // MARK: * Storage
 //*============================================================================*
 
-@usableFromInline final class Storage {
+@usableFromInline final class Storage: ObservableObject {
 
     //=------------------------------------------------------------------------=
     // MARK: State
