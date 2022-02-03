@@ -78,15 +78,15 @@ import SwiftUI
         }
         .stroke(Color.accentColor, lineWidth: thickness)
         .frame(height: raidus)
-        .background(Color.white.opacity(0.001))
-        .gesture(dragGesture)
+        .contentShape(Rectangle())
+        .gesture(slide)
     }
     
     //=------------------------------------------------------------------------=
     // MARK: Body - Components
     //=------------------------------------------------------------------------=
     
-    @inlinable var dragGesture: some Gesture {
+    @inlinable var slide: some Gesture {
         DragGesture(coordinateSpace: .named(coordinates)).updating(start) { gesture, start, _ in
             if start == nil { start = composite.layout.values }
             let distance = gesture.location.x - gesture.startLocation.x
