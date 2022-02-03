@@ -17,9 +17,9 @@ import SwiftUI
     // MARK: State
     //=------------------------------------------------------------------------=
     
+    @usableFromInline let composite: Composite
     @usableFromInline let position: CGFloat
     @usableFromInline let value: Binding<CGFloat>
-    @usableFromInline let composite: Composite
 
     //=------------------------------------------------------------------------=
     // MARK: Initializers

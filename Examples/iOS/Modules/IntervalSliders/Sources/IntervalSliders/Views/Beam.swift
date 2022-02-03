@@ -11,22 +11,34 @@ import SwiftUI
 // MARK: * Beam
 //*============================================================================*
 
-@usableFromInline struct Beam: View, HasComposite, HasConstants {
+@usableFromInline struct Beam: View {
     
     //=------------------------------------------------------------------------=
     // MARK: State
     //=------------------------------------------------------------------------=
     
-    @usableFromInline let composite: Composite
+    @usableFromInline let layout: Layout
     @usableFromInline var animatableData: AnimatablePair<CGFloat, CGFloat>
     
     //=------------------------------------------------------------------------=
     // MARK: Initializers
     //=------------------------------------------------------------------------=
 
-    @inlinable init(_ composite: Composite) {
-        self.composite = composite
-        self.animatableData = AnimatablePair(composite.layout.positions.0, composite.layout.positions.1)
+    @inlinable init(_ layout: Layout) {
+        self.layout = layout
+        self.animatableData = AnimatablePair(layout.values.0, layout.values.1)
+    }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Accessors
+    //=------------------------------------------------------------------------=
+    
+    @inlinable var center: CGFloat {
+        layout.center
+    }
+    
+    @inlinable var thickness: CGFloat {
+        Constants.thickness
     }
     
     //=------------------------------------------------------------------------=
@@ -35,8 +47,8 @@ import SwiftUI
     
     @inlinable var body: some View {
         Path {
-            $0.move(to:    CGPoint(x: animatableData.first,  y: frame.midY))
-            $0.addLine(to: CGPoint(x: animatableData.second, y: frame.midY))
+            $0.move(to:    CGPoint(x: animatableData.first,  y: center))
+            $0.addLine(to: CGPoint(x: animatableData.second, y: center))
         }
         .stroke(Color.accentColor, lineWidth: thickness)
     }

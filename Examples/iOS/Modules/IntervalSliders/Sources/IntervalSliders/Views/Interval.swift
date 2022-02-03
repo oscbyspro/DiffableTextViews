@@ -32,15 +32,15 @@ import SwiftUI
     // MARK: Accessors
     //=------------------------------------------------------------------------=
     
-    var coordinates: UInt8 {
+    @inlinable var coordinates: UInt8 {
         Constants.coordinates
     }
     
-    var positions: (CGFloat, CGFloat) {
+    @inlinable var positions: (CGFloat, CGFloat) {
         composite.layout.values
     }
     
-    var values: Binding<(CGFloat, CGFloat)> {
+    @inlinable var values: Binding<(CGFloat, CGFloat)> {
         composite.storage.values
     }
     
@@ -50,12 +50,10 @@ import SwiftUI
     
     @inlinable var body: some View {
         ZStack {
-            Beam(composite)
+            Beam(composite.layout)
             Handle(composite, value: values.projectedValue.0, position: positions.0)
             Handle(composite, value: values.projectedValue.1, position: positions.1)
         }
         .coordinateSpace(name: coordinates)
-    }
-    
-
+    }    
 }
