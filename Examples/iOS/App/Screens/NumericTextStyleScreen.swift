@@ -7,7 +7,6 @@
 
 import SwiftUI
 import Foundation
-import IntervalSliders
 import DiffableTextViews
 import NumericTextStyles
 

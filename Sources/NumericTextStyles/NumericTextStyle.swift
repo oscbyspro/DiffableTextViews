@@ -128,13 +128,13 @@ extension NumericTextStyle {
     
     @inlinable public func merge(changes: Changes) throws -> Commit<Value> {
         var reader = Reader(changes, in: region)
-        let change = reader.consumeSignCommand()
+        let modify = reader.consumeSetSignInput()
         //=--------------------------------------=
         // MARK: Number
         //=--------------------------------------=
         var number = try region.number(
         in: reader.changes.proposal(),
-        as: Value.self); change?(&number)
+        as: Value.self); modify?(&number)
         try bounds.validate(sign: number.sign)
         //=--------------------------------------=
         // MARK: Count

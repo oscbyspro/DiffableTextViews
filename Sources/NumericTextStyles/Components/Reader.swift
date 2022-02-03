@@ -12,7 +12,6 @@ import DiffableTextViews
 //*============================================================================*
 
 @usableFromInline struct Reader {
-    @usableFromInline typealias Transform<T> = ((inout T) -> Void)
     
     //=------------------------------------------------------------------------=
     // MARK: State
@@ -35,7 +34,7 @@ import DiffableTextViews
     //=------------------------------------------------------------------------=
     
     /// Interprets a single sign character as a: set sign command.
-    @inlinable mutating func consumeSignCommand() -> Transform<Number>? {
+    @inlinable mutating func consumeSetSignInput() -> ((inout Number) -> Void)? {
         guard changes.replacement.count == 1 else { return nil } // snapshot.count is O(1)
         guard let sign = region.signs[changes.replacement.first!.character] else { return nil }
         //=--------------------------------------=

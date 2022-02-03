@@ -15,7 +15,7 @@ extension NumericTextStyle {
     // MARK: Transformations
     //=------------------------------------------------------------------------=
     
-    @inlinable func precision(_ precision: Precision) -> Self {
+    @inlinable func transform(_ precision: Precision) -> Self {
         var result = self; result.precision = precision; return result
     }
 }
@@ -39,7 +39,7 @@ public extension NumericTextStyle where Value: PreciseInteger {
     //=------------------------------------------------------------------------=
     
     @inlinable func precision<R: RangeExpression>(_ integer: R) -> Self where R.Bound == Int {
-        precision(Precision(integer: integer, fraction: Precision.limits(\.fraction)))
+        transform(Precision(integer: integer, fraction: Precision.limits(\.fraction)))
     }
 }
 
@@ -90,6 +90,6 @@ public extension NumericTextStyle where Value: PreciseFloatingPoint {
     }
     
     @inlinable func precision<R0: RangeExpression, R1: RangeExpression>(integer: R0, fraction: R1) -> Self where R0.Bound == Int, R1.Bound == Int {
-        precision(Precision(integer: integer, fraction: fraction))
+        transform(Precision(integer: integer, fraction: fraction))
     }
 }

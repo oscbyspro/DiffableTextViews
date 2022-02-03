@@ -1,5 +1,5 @@
 //
-//  Field.swift
+//  Selection.swift
 //  
 //
 //  Created by Oscar Byström Ericsson on 2022-01-27.
@@ -7,17 +7,15 @@
 
 import Foundation
 
-#warning("Rename, maybe.")
-
 //*============================================================================*
-// MARK: * Field
+// MARK: * Selection
 //*============================================================================*
 
 /// A representation of the view.
 ///
 /// It controls how the selection is updated when various parameters change.
 ///
-@usableFromInline struct Field<Scheme: DiffableTextViews.Scheme> {
+@usableFromInline struct Selection<Scheme: DiffableTextViews.Scheme> {
     @usableFromInline typealias Layout = DiffableTextViews.Layout<Scheme>
     @usableFromInline typealias Position = DiffableTextViews.Position<Scheme>
     
@@ -25,8 +23,8 @@ import Foundation
     // MARK: State
     //=------------------------------------------------------------------------=
     
+    @usableFromInline var range: Range<Layout.Index>
     @usableFromInline private(set) var layout: Layout
-    @usableFromInline var selection: Range<Layout.Index>
 
     //=------------------------------------------------------------------------=
     // MARK: Initializers
@@ -34,43 +32,35 @@ import Foundation
     
     @inlinable init() {
         self.layout = Layout()
-        self.selection = layout.range
+        self.range = layout.range
     }
     
-    @inlinable init(layout: Layout, selection: Range<Layout.Index>) {
+    @inlinable init(layout: Layout, range: Range<Layout.Index>) {
+        self.range = range
         self.layout = layout
-        self.selection = selection
     }
     
     //=------------------------------------------------------------------------=
     // MARK: Accessors
     //=------------------------------------------------------------------------=
-    
-    @inlinable var snapshot: Snapshot {
-        layout.snapshot
-    }
-    
-    @inlinable var characters: String {
-        layout.snapshot.characters
-    }
-    
+
     @inlinable var positions: Range<Position> {
-        selection.lowerBound.position ..< selection.upperBound.position
+        range.lowerBound.position ..< range.upperBound.position
     }
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: Field - Indices
+// MARK: Selection - Indices
 //=----------------------------------------------------------------------------=
 
-extension Field {
+extension Selection {
 
     //=------------------------------------------------------------------------=
     // MARK: Destination
     //=------------------------------------------------------------------------=
     
     @inlinable func indices(at destination: Range<Position>) -> Range<Layout.Index> {
-        layout.indices(start: selection, destination: destination)
+        layout.indices(start: range, destination: destination)
     }
     
     @inlinable func indices(at destination: NSRange) -> Range<Layout.Index> {
@@ -79,10 +69,10 @@ extension Field {
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: Field - Update
+// MARK: Selection - Update
 //=----------------------------------------------------------------------------=
 
-extension Field {
+extension Selection {
 
     //=------------------------------------------------------------------------=
     // MARK: Snapshot
@@ -93,29 +83,29 @@ extension Field {
         //=--------------------------------------=
         // MARK: Selection - Single
         //=--------------------------------------=
-        let upperBound = Mismatches.suffix(past: self.layout[selection.upperBound...], next: layout).next
+        let upperBound = Mismatches.suffix(past: self.layout[range.upperBound...], next: layout).next
         var lowerBound = upperBound
         //=--------------------------------------=
         // MARK: Selection - Double
         //=--------------------------------------=
-        if !self.selection.isEmpty {
-            lowerBound = Mismatches.prefix(past: self.layout[..<selection.lowerBound], next: layout).next
+        if !self.range.isEmpty {
+            lowerBound = Mismatches.prefix(past: self.layout[..<range.lowerBound], next: layout).next
             lowerBound = min(lowerBound, upperBound)
         }
         //=--------------------------------------=
         // MARK: Update
         //=--------------------------------------=
         self.layout = layout
-        self.selection = lowerBound ..< upperBound
+        self.range = lowerBound ..< upperBound
         self.autocorrect(intent: (nil, nil))
     }
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: Field - Update
+// MARK: Selection - Update
 //=----------------------------------------------------------------------------=
 
-extension Field {
+extension Selection {
     
     //=------------------------------------------------------------------------=
     // MARK: Selection
@@ -130,21 +120,21 @@ extension Field {
         // MARK: Parse Momentum As Intent
         //=--------------------------------------=
         let intent = !momentum ? (nil, nil) : (
-        Direction(start: self.selection.lowerBound, end: selection.lowerBound),
-        Direction(start: self.selection.upperBound, end: selection.upperBound))
+        Direction(start: self.range.lowerBound, end: selection.lowerBound),
+        Direction(start: self.range.upperBound, end: selection.upperBound))
         //=--------------------------------------=
         // MARK: Update
         //=--------------------------------------=
-        self.selection = selection
+        self.range = selection
         self.autocorrect(intent: intent)
     }
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: Field - Autocorrect
+// MARK: Selection - Autocorrect
 //=----------------------------------------------------------------------------=
 
-extension Field {
+extension Selection {
         
     //=------------------------------------------------------------------------=
     // MARK: Selection
@@ -154,23 +144,22 @@ extension Field {
         //=--------------------------------------=
         // MARK: Exceptions
         //=--------------------------------------=
-        if selection == layout.range { return }
+        if range == layout.range { return }
         //=--------------------------------------=
         // MARK: Selection - Single
         //=--------------------------------------=
-        let upperBound = layout.preferredIndex(start: selection.upperBound, preference: .backwards, intent: intent.upper)
+        let upperBound = layout.preferredIndex(start: range.upperBound, preference: .backwards, intent: intent.upper)
         var lowerBound = upperBound
         //=--------------------------------------=
         // MARK: Selection - Double
         //=--------------------------------------=
-        if !selection.isEmpty, upperBound != layout.startIndex {
-            lowerBound = layout.preferredIndex(start: selection.lowerBound, preference:  .forwards, intent: intent.lower)
+        if !range.isEmpty, upperBound != layout.startIndex {
+            lowerBound = layout.preferredIndex(start: range.lowerBound, preference:  .forwards, intent: intent.lower)
             lowerBound = min(lowerBound, upperBound)
         }
         //=--------------------------------------=
         // MARK: Update
         //=--------------------------------------=
-        self.selection = lowerBound ..< upperBound
+        self.range = lowerBound ..< upperBound
     }
 }
-

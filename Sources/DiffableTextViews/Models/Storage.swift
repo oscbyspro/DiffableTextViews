@@ -1,18 +1,16 @@
 //
-//  State.swift
+//  Storage.swift
 //  
 //
 //  Created by Oscar Byström Ericsson on 2022-01-28.
 //
 
-#warning("Rename as Cache/Data/Storage, maybe.")
-
 //*============================================================================*
-// MARK: * State
+// MARK: * Storage
 //*============================================================================*
 
-@usableFromInline final class State<Style: DiffableTextStyle, Scheme: DiffableTextViews.Scheme> {
-    @usableFromInline typealias Field = DiffableTextViews.Field<Scheme>
+@usableFromInline final class Storage<Style: DiffableTextStyle, Scheme: DiffableTextViews.Scheme> {
+    @usableFromInline typealias Selection = DiffableTextViews.Selection<Scheme>
     @usableFromInline typealias Value = Style.Value
     
     //=------------------------------------------------------------------------=
@@ -22,15 +20,13 @@
     @usableFromInline var value: Value! = nil
     @usableFromInline var style: Style! = nil
     @usableFromInline var active: Bool = false
-    @usableFromInline var field: Field = Field()
+    @usableFromInline var selection: Selection = Selection()
 
     //=------------------------------------------------------------------------=
     // MARK: Accessors
     //=------------------------------------------------------------------------=
     
-    @inlinable var snapshot: Snapshot {
-        field.snapshot
-    }
+    @inlinable var snapshot: Snapshot { selection.layout.snapshot }
     
     //=------------------------------------------------------------------------=
     // MARK: Update
@@ -45,14 +41,14 @@
     @inlinable func active(style: Style, commit: Commit<Value>) {
         self.style = style
         self.value = commit.value
-        self.field.update(snapshot: commit.snapshot)
+        self.selection.update(snapshot: commit.snapshot)
     }
     
     //=------------------------------------------------------------------------=
     // MARK: Update - Selection
     //=------------------------------------------------------------------------=
     
-    @inlinable func change(selection: Field.Layout.Index) {
-        self.field.selection = selection ..< selection
+    @inlinable func change(selection: Selection.Layout.Index) {
+        self.selection.range = selection ..< selection
     }
 }

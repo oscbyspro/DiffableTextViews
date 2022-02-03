@@ -95,20 +95,16 @@ public struct DiffableTextField<Style: UIKitDiffableTextStyle>: UIViewRepresenta
     
     public final class Coordinator: NSObject, UITextFieldDelegate {
         @usableFromInline typealias Position = DiffableTextViews.Position<UTF16>
-        @usableFromInline typealias State = DiffableTextViews.State<Style,UTF16>
+        @usableFromInline typealias Storage = DiffableTextViews.Storage<Style,UTF16>
         
         //=--------------------------------------------------------------------=
         // MARK: State
         //=--------------------------------------------------------------------=
+
+        @usableFromInline let lock = Lock()
+        @usableFromInline let storage = Storage()
         @usableFromInline var upstream: DiffableTextField!
         @usableFromInline var downstream:  ProxyTextField!
-        
-        //=--------------------------------------------------------------------=
-        // MARK: State - Support
-        //=--------------------------------------------------------------------=
-        
-        @usableFromInline let lock  = Lock()
-        @usableFromInline let state = State()
         
         //=--------------------------------------------------------------------=
         // MARK: Accessors
@@ -148,8 +144,8 @@ public struct DiffableTextField<Style: UIKitDiffableTextStyle>: UIViewRepresenta
         
         @inlinable public func textField(_ textField: UITextField, shouldChangeCharactersIn nsRange: NSRange, replacementString string: String) -> Bool {
             let style = style()
-            let range = state.field.indices(at: nsRange)
-            let changes = Changes(state.snapshot,  change: (string, range))
+            let range = storage.selection.indices(at: nsRange)
+            let changes = Changes(storage.snapshot,  change: (string, range))
             //=----------------------------------=
             // MARK: Attempt
             //=----------------------------------=
@@ -161,8 +157,8 @@ public struct DiffableTextField<Style: UIKitDiffableTextStyle>: UIViewRepresenta
                 Task { @MainActor in
                     // async to process special commands first
                     // as an example see: (option + backspace)
-                    self.state.change(selection: range.upperBound)
-                    self.state.active(style: style, commit: commit)
+                    self.storage.change(selection: range.upperBound)
+                    self.storage.active(style: style, commit: commit)
                     self.push()
                 }
             //=----------------------------------=
@@ -192,13 +188,13 @@ public struct DiffableTextField<Style: UIKitDiffableTextStyle>: UIViewRepresenta
             //=----------------------------------=
             // MARK: Corrected
             //=----------------------------------=
-            self.state.field.update(selection: positions, momentum: downstream.momentum)
+            self.storage.selection.update(selection: positions, momentum: downstream.momentum)
             //=----------------------------------=
             // MARK: Update Downstream If Needed
             //=----------------------------------=
-            if state.field.positions != positions {
+            if storage.selection.positions != positions {
                 lock.perform {
-                    self.downstream.update(selection: state.field.positions)
+                    self.downstream.update(selection: storage.selection.positions)
                 }
             }
         }
@@ -218,14 +214,14 @@ public struct DiffableTextField<Style: UIKitDiffableTextStyle>: UIViewRepresenta
             // MARK: Push - Active
             //=------------------------------=
             if downstream.active {
-                self.state.active(style: style, commit: style.commit(value: value))
+                self.storage.active(style: style, commit: style.commit(value: value))
                 self.push()
             //=------------------------------=
             // MARK: Push - Inactive
             //=------------------------------=
             } else {
                 lock.perform {
-                    self.state.inactive(style: style, value: value)
+                    self.storage.inactive(style: style, value: value)
                     self.downstream.update(text: style.format(value: value))
                 }
             }
@@ -236,21 +232,21 @@ public struct DiffableTextField<Style: UIKitDiffableTextStyle>: UIViewRepresenta
         //=--------------------------------------------------------------------=
         
         @inlinable func push() {
-            self.state.active = downstream.active
+            self.storage.active = downstream.active
             //=----------------------------------=
             // MARK: Downstream
             //=----------------------------------=
             lock.perform {
                 // changes to UITextField's text and selection both call
                 // the delegate's method: textFieldDidChangeSelection(_:)
-                self.downstream.update(text: state.field.characters)
-                self.downstream.update(selection: state.field.positions)
+                self.downstream.update(text: storage.snapshot.characters)
+                self.downstream.update(selection: storage.selection.positions)
             }
             //=----------------------------------=
             // MARK: Upstream
             //=----------------------------------=
-            if  self.upstream.value.wrappedValue != state.value {
-                self.upstream.value.wrappedValue  = state.value
+            if  self.upstream.value.wrappedValue != storage.value {
+                self.upstream.value.wrappedValue  = storage.value
             }
         }
                 
@@ -259,7 +255,7 @@ public struct DiffableTextField<Style: UIKitDiffableTextStyle>: UIViewRepresenta
         //=--------------------------------------------------------------------=
         
         @inlinable func updatable(style: Style, value: Value) -> Bool {
-            downstream.active != state.active || value != state.value || style != state.style
+            value != storage.value || downstream.active != storage.active || style != storage.style
         }
     }
 }
