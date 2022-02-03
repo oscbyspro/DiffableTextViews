@@ -11,7 +11,7 @@ import SwiftUI
 // MARK: * Sliders x Interval
 //*============================================================================*
 
-@usableFromInline struct Interval: View, Compositeable {
+@usableFromInline struct Interval: View, HasComposite, HasConstants {
     
     //=------------------------------------------------------------------------=
     // MARK: State

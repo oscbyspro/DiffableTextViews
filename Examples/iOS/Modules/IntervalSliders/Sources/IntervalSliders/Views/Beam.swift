@@ -11,7 +11,7 @@ import SwiftUI
 // MARK: * Sliders x Beam
 //*============================================================================*
 
-@usableFromInline struct Beam: View, Compositeable {
+@usableFromInline struct Beam: View, HasComposite, HasConstants {
     
     //=------------------------------------------------------------------------=
     // MARK: State

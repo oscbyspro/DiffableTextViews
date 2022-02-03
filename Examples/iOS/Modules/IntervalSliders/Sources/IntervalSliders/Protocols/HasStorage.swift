@@ -1,5 +1,5 @@
 //
-//  Compositeable.swift
+//  HasStorage.swift
 //  iOS
 //
 //  Created by Oscar Byström Ericsson on 2022-02-02.
@@ -8,33 +8,33 @@
 import SwiftUI
 
 //*============================================================================*
-// MARK: * Compositeable
+// MARK: * HasStorage
 //*============================================================================*
 
-@usableFromInline protocol Compositeable: Layoutable, Storageable {
+@usableFromInline protocol HasStorage {
     
     //=------------------------------------------------------------------------=
     // MARK: Storage
     //=------------------------------------------------------------------------=
     
-    @inlinable var composite: Composite { get }
+    @inlinable var storage: Storage { get }
 }
 
-//=------------------------------------------------------------------------=
-// MARK: Compositeable - Details
-//=------------------------------------------------------------------------=
+//=----------------------------------------------------------------------------=
+// MARK: HasStorage - Details
+//=----------------------------------------------------------------------------=
 
-extension Compositeable {
+extension HasStorage {
     
     //=------------------------------------------------------------------------=
     // MARK: Accessors
     //=------------------------------------------------------------------------=
     
-    @inlinable var layout: Layout {
-        composite.layout
+    @inlinable var limits: ClosedRange<CGFloat> {
+        storage.limits
     }
     
-    @inlinable var storage: Storage {
-        composite.storage
+    @inlinable var values: Binding<(CGFloat, CGFloat)> {
+        storage.values
     }
 }

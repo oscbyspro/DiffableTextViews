@@ -11,14 +11,42 @@ import SwiftUI
 // MARK: * Sliders
 //*============================================================================*
 
-public struct Sliders: View, Storageable {
+public struct Sliders: View, HasStorage, HasConstants {
  
     //=------------------------------------------------------------------------=
     // MARK: State
     //=------------------------------------------------------------------------=
     
     @usableFromInline let storage: Storage
-
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Initializers
+    //=------------------------------------------------------------------------=
+    
+    @inlinable public init(_ values: Binding<(CGFloat, CGFloat)>, in limits: ClosedRange<CGFloat>) {
+        self.storage = Storage(values, in: limits)
+    }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Initializers - Other Binary Numbers
+    //=------------------------------------------------------------------------=
+    
+    @inlinable public init<T>(_ values: Binding<(T, T)>, in limits: ClosedRange<T>) where T: BinaryInteger {
+        self.storage = Storage(Binding {(
+            CGFloat(values.wrappedValue.0), CGFloat(values.wrappedValue.1)
+        )} set: { xxxxxxxxxxxxxxx in values.wrappedValue = (
+            T(xxxxxxxxxxxxxxx.0.rounded()), T(xxxxxxxxxxxxxxx.1.rounded())
+        )}, in: CGFloat(limits.lowerBound) ... CGFloat(limits.upperBound))
+    }
+    
+    @inlinable public init<T>(_ values: Binding<(T, T)>, in limits: ClosedRange<T>) where T: BinaryFloatingPoint {
+        self.storage = Storage(Binding {(
+            CGFloat(values.wrappedValue.0), CGFloat(values.wrappedValue.1)
+        )} set: { xxxxxxxxxxxxxxxxxxxxxxxxx in values.wrappedValue = (
+            T(xxxxxxxxxxxxxxxxxxxxxxxxx.0), T(xxxxxxxxxxxxxxxxxxxxxxxxx.1)
+        )}, in: CGFloat(limits.lowerBound)...CGFloat(limits.upperBound))
+    }
+    
     //=------------------------------------------------------------------------=
     // MARK: Body
     //=------------------------------------------------------------------------=
@@ -33,49 +61,6 @@ public struct Sliders: View, Storageable {
             .padding(.horizontal, 0.5 * radius)
         }
         .frame(maxWidth: .infinity, minHeight: radius, maxHeight: radius)
-    }
-}
-
-//=----------------------------------------------------------------------------=
-// MARK: Sliders - Initializers
-//=----------------------------------------------------------------------------=
-
-extension Sliders {
-    
-    //=------------------------------------------------------------------------=
-    // MARK: CGFloat
-    //=------------------------------------------------------------------------=
-    
-    @inlinable public init(_ values: Binding<(CGFloat, CGFloat)>, in limits: ClosedRange<CGFloat>) {
-        self.storage = Storage(values, in: limits)
-    }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Binary - Integer
-    //=------------------------------------------------------------------------=
-    
-    @inlinable public init<T>(_ values: Binding<(T, T)>, in limits: ClosedRange<T>) where T: BinaryInteger {
-        self.storage = Storage(Binding {(
-            CGFloat(values.wrappedValue.0),
-            CGFloat(values.wrappedValue.1)
-        )} set: { xxxxxxxxxxxxxxx in values.wrappedValue = (
-            T(xxxxxxxxxxxxxxx.0.rounded()),
-            T(xxxxxxxxxxxxxxx.1.rounded())
-        )}, in: CGFloat(limits.lowerBound) ... CGFloat(limits.upperBound))
-    }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Binary - Floating Point
-    //=------------------------------------------------------------------------=
-    
-    @inlinable public init<T>(_ values: Binding<(T, T)>, in limits: ClosedRange<T>) where T: BinaryFloatingPoint {
-        self.storage = Storage(Binding {(
-            CGFloat(values.wrappedValue.0),
-            CGFloat(values.wrappedValue.1)
-        )} set: { xxxxxxxxxxxxxxxxxxxxxxxxx in values.wrappedValue = (
-            T(xxxxxxxxxxxxxxxxxxxxxxxxx.0),
-            T(xxxxxxxxxxxxxxxxxxxxxxxxx.1)
-        )}, in: CGFloat(limits.lowerBound)...CGFloat(limits.upperBound))
     }
 }
 

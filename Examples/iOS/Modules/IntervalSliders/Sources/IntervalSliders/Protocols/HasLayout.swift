@@ -1,29 +1,40 @@
 //
-//  Composite.swift
+//  HasLayout.swift
 //  iOS
 //
 //  Created by Oscar Byström Ericsson on 2022-02-03.
 //
 
+import SwiftUI
+
 //*============================================================================*
-// MARK: * Sliders x Composite
+// MARK: * HasLayout
 //*============================================================================*
 
-@usableFromInline final class Composite {
+@usableFromInline protocol HasLayout {
     
     //=------------------------------------------------------------------------=
-    // MARK: State
+    // MARK: Storage
     //=------------------------------------------------------------------------=
     
-    @usableFromInline let layout:  Layout
-    @usableFromInline let storage: Storage
+    @inlinable var layout: Layout { get }
+}
 
+//=----------------------------------------------------------------------------=
+// MARK: HasStorage - Details
+//=----------------------------------------------------------------------------=
+
+extension HasLayout {
+    
     //=------------------------------------------------------------------------=
-    // MARK: Initializers
+    // MARK: Accessors
     //=------------------------------------------------------------------------=
     
-    @inlinable init(_ storage: Storage, _ layout: Layout) {
-        self.layout  = layout
-        self.storage = storage
+    @inlinable var frame: CGRect {
+        layout.frame
+    }
+    
+    @inlinable var positions: (CGFloat, CGFloat) {
+        layout.positions
     }
 }

@@ -11,7 +11,7 @@ import SwiftUI
 // MARK: * Sliders x Track
 //*============================================================================*
 
-@usableFromInline struct Track: View, Storageable {
+@usableFromInline struct Track: View, HasStorage, HasConstants {
     
     //=------------------------------------------------------------------------=
     // MARK: State

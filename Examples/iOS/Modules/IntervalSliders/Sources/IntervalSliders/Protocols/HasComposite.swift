@@ -1,40 +1,40 @@
 //
-//  Layoutable.swift
+//  HasComposite.swift
 //  iOS
 //
-//  Created by Oscar Byström Ericsson on 2022-02-03.
+//  Created by Oscar Byström Ericsson on 2022-02-02.
 //
 
 import SwiftUI
 
 //*============================================================================*
-// MARK: * Layoutable
+// MARK: * HasComposite
 //*============================================================================*
 
-@usableFromInline protocol Layoutable {
+@usableFromInline protocol HasComposite: HasLayout, HasStorage {
     
     //=------------------------------------------------------------------------=
     // MARK: Storage
     //=------------------------------------------------------------------------=
     
-    @inlinable var layout: Layout { get }
+    @inlinable var composite: Composite { get }
 }
 
-//=----------------------------------------------------------------------------=
-// MARK: Storageable - Details
-//=----------------------------------------------------------------------------=
+//=------------------------------------------------------------------------=
+// MARK: HasComposite - Details
+//=------------------------------------------------------------------------=
 
-extension Layoutable {
+extension HasComposite {
     
     //=------------------------------------------------------------------------=
     // MARK: Accessors
     //=------------------------------------------------------------------------=
     
-    @inlinable var frame: CGRect {
-        layout.frame
+    @inlinable var layout: Layout {
+        composite.layout
     }
     
-    @inlinable var positions: (CGFloat, CGFloat) {
-        layout.positions
+    @inlinable var storage: Storage {
+        composite.storage
     }
 }
