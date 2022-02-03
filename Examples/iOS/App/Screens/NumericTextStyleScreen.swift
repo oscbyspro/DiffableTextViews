@@ -68,15 +68,15 @@ struct NumericTextStyleScreen: View {
     }
     
     var boundsIntervalSliders: some View {
-        Sliders("Bounds", values: $bounds, limits: Self.bounds.closed).disabled(true)
+        IntervalUI("Bounds", values: $bounds, limits: Self.bounds.closed).disabled(true)
     }
     
     var integerIntervalSliders: some View {
-        Sliders("Integer digits", values: $integer, limits: Self.integer.closed)
+        IntervalUI("Integer digits", values: $integer, limits: Self.integer.closed)
     }
     
     var fractionIntervalSliders: some View {
-        Sliders("Fraction digits", values: $fraction, limits: Self.fraction.closed)
+        IntervalUI("Fraction digits", values: $fraction, limits: Self.fraction.closed)
     }
     
     var diffableTextViewsExample: some View {

@@ -1,5 +1,5 @@
 //
-//  Sliders.swift
+//  IntervalUI.swift
 //  iOS
 //
 //  Created by Oscar Byström Ericsson on 2022-02-03.
@@ -9,11 +9,10 @@ import SwiftUI
 import IntervalSliders
 
 //*============================================================================*
-// MARK: * Sliders
+// MARK: * IntervalUI
 //*============================================================================*
 
-struct Sliders<Value: Comparable & BinaryInteger>: View {
-    typealias Values = Interval<Value>
+struct IntervalUI<Value: Comparable & BinaryInteger>: View {
     
     //=------------------------------------------------------------------------=
     // MARK: State
@@ -21,13 +20,13 @@ struct Sliders<Value: Comparable & BinaryInteger>: View {
     
     let title: String
     let limits: ClosedRange<Value>
-    let interval: Binding<Values>
+    let interval: Binding<Interval<Value>>
 
     //=------------------------------------------------------------------------=
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable init(_ title: String, values: Binding<Values>, limits: ClosedRange<Value>) {
+    @inlinable init(_ title: String, values: Binding<Interval<Value>>, limits: ClosedRange<Value>) {
         self.title = title
         self.limits = limits
         self.interval = values
@@ -41,18 +40,16 @@ struct Sliders<Value: Comparable & BinaryInteger>: View {
         GroupBox {
             IntervalSliders(interval.values, in: limits)
         } label: {
-            Text(description(interval.wrappedValue.closed))
-                .transaction({ $0.animation = nil })
+            description(interval.wrappedValue.closed).transaction({ $0.animation = nil })
         }
-        .frame(maxWidth: .infinity)
     }
     
     //=------------------------------------------------------------------------=
     // MARK: Components
     //=------------------------------------------------------------------------=
     
-    func description(_ values: ClosedRange<Value>) -> String {
-        "\(title): \(values.lowerBound) to \(values.upperBound)"
+    func description(_ values: ClosedRange<Value>) -> some View {
+        Text("\(title): \(String(describing: values.lowerBound.description)) to \(String(describing: values.upperBound))")
     }
 }
 
