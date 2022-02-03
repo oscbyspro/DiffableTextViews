@@ -18,7 +18,7 @@ import SwiftUI
     //=------------------------------------------------------------------------=
     
     @usableFromInline let frame: CGRect
-    @usableFromInline let positions: (CGFloat, CGFloat)
+    @usableFromInline var positions: (CGFloat, CGFloat)
     @usableFromInline let positionsLimits: ClosedRange<CGFloat>
 
     //=------------------------------------------------------------------------=
@@ -30,5 +30,13 @@ import SwiftUI
         self.positionsLimits = 0...frame.width
         self.positions = Self.convert(
         storage.values.wrappedValue, from: storage.valuesLimits, to: positionsLimits)
+    }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Utilities
+    //=------------------------------------------------------------------------=
+    
+    @inlinable var positionsVector: AnimatablePair<CGFloat, CGFloat> {
+        AnimatablePair(positions.0, positions.1)
     }
 }

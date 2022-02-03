@@ -27,8 +27,7 @@ import SwiftUI
 
     @inlinable init(_ composite: Composite) {
         self.composite = composite
-        self.animatableData = AnimatablePair(
-        composite.layout.positions.0, composite.layout.positions.1)
+        self.animatableData = composite.layout.positionsVector
     }
     
     //=------------------------------------------------------------------------=
@@ -43,20 +42,20 @@ import SwiftUI
         .stroke(Color.accentColor, lineWidth: thickness)
         .frame(height: radius)
         .contentShape(Rectangle())
-        .gesture(slide)
+        .gesture(drag)
     }
     
     //=------------------------------------------------------------------------=
     // MARK: Body - Components
     //=------------------------------------------------------------------------=
     
-    @inlinable var slide: some Gesture {
+    @inlinable var drag: some Gesture {
         DragGesture(coordinateSpace: .named(coordinates)).updating(start) { gesture, start, _ in
             if start == nil { start = positions }
             let distance = gesture.location.x - gesture.startLocation.x
             let positions = move(start!, by: distance, in: positionsLimits)
-            let values = Self.convert(positions, from: positionsLimits, to: valuesLimits)
-            withAnimation(animation) { composite.storage.values.wrappedValue = values }
+            let next = Self.convert(positions, from: positionsLimits, to: valuesLimits)
+            withAnimation(animation) { values.wrappedValue = next }
         }
     }
     

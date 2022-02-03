@@ -54,7 +54,7 @@ struct Example<Style: UIKitDiffableTextStyle>: View {
             descriptionText
             diffableTextField
         }
-        .background(Color.white.opacity(0.001))
+        .contentShape(Rectangle())
         .onTapGesture(perform: { focused.toggle() })
     }
     

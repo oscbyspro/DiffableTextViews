@@ -35,16 +35,7 @@ extension Algorithmsable {
     //=------------------------------------------------------------------------=
 
     @inlinable static func convert(_ values: (CGFloat, CGFloat),
-        from start: ClosedRange<CGFloat>, to end: ClosedRange<CGFloat>) -> (CGFloat, CGFloat) {
-        //=--------------------------------------=
-        // MARK: Single
-        //=--------------------------------------=
-        func next(_ value: CGFloat) -> CGFloat {
-            convert(value, from: start, to: end)
-        }
-        //=--------------------------------------=
-        // MARK: Double
-        //=--------------------------------------=
-        return (next(values.0), next(values.1))
-    }
+        from start: ClosedRange<CGFloat>, to end: ClosedRange<CGFloat>) -> (CGFloat, CGFloat) {(
+        convert(values.0, from: start, to: end), convert(values.1, from: start, to: end)
+    )}
 }

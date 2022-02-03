@@ -41,7 +41,7 @@ import SwiftUI
             .overlay(shape.fill(Material.thin))
             .overlay(shape.strokeBorder(.gray.opacity(0.2), lineWidth: 0.5))
             .shadow(color: Color.black.opacity(0.15), radius: 2, x: 0, y: 2)
-            .highPriorityGesture(dragGesture)
+            .highPriorityGesture(drag)
             .position(x: position, y: frame.midY)
     }
     
@@ -53,7 +53,7 @@ import SwiftUI
         Circle()
     }
 
-    @inlinable var dragGesture: some Gesture {
+    @inlinable var drag: some Gesture {
         DragGesture(coordinateSpace: .named(coordinates)).onChanged { gesture in
             withAnimation(animation) {
                 value.wrappedValue = Self.convert(gesture.location.x, from: positionsLimits, to: valuesLimits)
