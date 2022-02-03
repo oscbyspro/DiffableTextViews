@@ -12,24 +12,37 @@ import IntervalSliders
 // MARK: * Sliders
 //*============================================================================*
 
-struct Sliders<Value: BinaryInteger>: View {
-    typealias Interval = iOS.Interval<Value>
+struct Sliders<Value: Comparable & BinaryInteger>: View {
+    typealias Values = Interval<Value>
     
     //=------------------------------------------------------------------------=
     // MARK: State
     //=------------------------------------------------------------------------=
     
     let title: String
-    let interval: Binding<Interval>
-    let limits: Interval
+    let limits: ClosedRange<Value>
+    let interval: Binding<Values>
+
+    //=------------------------------------------------------------------------=
+    // MARK: Initializers
+    //=------------------------------------------------------------------------=
+    
+    @inlinable init(_ title: String, values: Binding<Values>, limits: ClosedRange<Value>) {
+        self.title = title
+        self.limits = limits
+        self.interval = values
+    }
     
     //=------------------------------------------------------------------------=
     // MARK: Body
     //=------------------------------------------------------------------------=
     
     var body: some View {
-        GroupBox(description) {
-            IntervalSliders(interval.values, in: limits.closed)
+        GroupBox {
+            IntervalSliders(interval.values, in: limits)
+        } label: {
+            Text(description(interval.wrappedValue.closed))
+                .transaction({ $0.animation = nil })
         }
         .frame(maxWidth: .infinity)
     }
@@ -38,9 +51,8 @@ struct Sliders<Value: BinaryInteger>: View {
     // MARK: Components
     //=------------------------------------------------------------------------=
     
-    var description: String {
-        let bounds = interval.wrappedValue.closed
-        return "\(title): \(bounds.lowerBound) to \(bounds.upperBound)"
+    func description(_ values: ClosedRange<Value>) -> String {
+        "\(title): \(values.lowerBound) to \(values.upperBound)"
     }
 }
 

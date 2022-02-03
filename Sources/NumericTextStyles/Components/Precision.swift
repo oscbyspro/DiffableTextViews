@@ -37,8 +37,8 @@ public struct Precision<Value: Precise>: Equatable {
         //=--------------------------------------=
         // MARK: Set
         //=--------------------------------------=
-        self.lower = Count(value:   Namespace.min.value, integer: integer.lowerBound, fraction: fraction.lowerBound)
-        self.upper = Count(value: Value.precision.value, integer: integer.upperBound, fraction: fraction.upperBound)
+        self.lower = Count(value: Namespace.minimum.value, integer: integer.lowerBound, fraction: fraction.lowerBound)
+        self.upper = Count(value:   Value.precision.value, integer: integer.upperBound, fraction: fraction.upperBound)
     }
     
     //=------------------------------------------------------------------------=
@@ -53,14 +53,14 @@ public struct Precision<Value: Precise>: Equatable {
 
     @inlinable func active() -> NumberFormatStyleConfiguration.Precision {
         .integerAndFractionLength(
-         integerLimits: Namespace.min.integer  ... upper.integer,
-        fractionLimits: Namespace.min.fraction ... upper.fraction)
+         integerLimits: Namespace.minimum.integer  ... upper.integer,
+        fractionLimits: Namespace.minimum.fraction ... upper.fraction)
     }
     
     @inlinable func interactive(count: Count) -> NumberFormatStyleConfiguration.Precision {
         .integerAndFractionLength(
-         integerLimits: max(Namespace.min.integer,  count.integer)  ... count.integer,
-        fractionLimits: max(Namespace.min.fraction, count.fraction) ... count.fraction)
+         integerLimits: max(Namespace.minimum.integer,  count.integer)  ... count.integer,
+        fractionLimits: max(Namespace.minimum.fraction, count.fraction) ... count.fraction)
     }
     
     //=------------------------------------------------------------------------=
@@ -101,7 +101,7 @@ extension Precision {
     //=------------------------------------------------------------------------=
     
     @inlinable static func limits(_ component: (Count) -> Int) -> ClosedRange<Int> {
-        component(Namespace.min)...component(Value.precision)
+        component(Namespace.minimum)...component(Value.precision)
     }
 }
 
@@ -115,7 +115,7 @@ extension Precision {
     // MARK: Constants
     //=------------------------------------------------------------------------=
     
-    @usableFromInline static let min = Count(value: 1, integer: 1, fraction: 0)
+    @usableFromInline static let minimum = Count(value: 1, integer: 1, fraction: 0)
     
     //=------------------------------------------------------------------------=
     // MARK: Utilities
@@ -123,7 +123,9 @@ extension Precision {
     
     @inlinable static func interpret<R: RangeExpression>(_ expression: R,
         in limits: ClosedRange<Int>) -> ClosedRange<Int> where R.Bound == Int {
-        let range: Range<Int> = expression.relative(to: limits.lowerBound ..< limits.upperBound + 1)
-        return Swift.max(limits.lowerBound, range.lowerBound) ... Swift.min(range.upperBound - 1, limits.upperBound)
+        let range = expression.relative(to: Int.min ..< Int.max)
+        let lower = min(max(limits.lowerBound, range.lowerBound),     limits.upperBound)
+        let upper = min(max(limits.lowerBound, range.upperBound - 1), limits.upperBound)
+        return lower...upper
     }
 }
