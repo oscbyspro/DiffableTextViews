@@ -5,8 +5,6 @@
 //  Created by Oscar Byström Ericsson on 2022-01-30.
 //
 
-#warning("Remove, maybe.")
-
 //*============================================================================*
 // MARK: * Constant
 //*============================================================================*
@@ -18,5 +16,5 @@ public struct Constant: Hashable {
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable public init() { }
+    @inlinable @inline(__always) public init() { }
 }

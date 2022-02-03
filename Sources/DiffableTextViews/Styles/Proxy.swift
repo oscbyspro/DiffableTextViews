@@ -16,7 +16,7 @@ import Support
 ///
 /// Use this style to optimize the differentiation on view update.
 ///
-public struct Proxy<Style: DiffableTextStyle, ID: Equatable>: Wrapper {
+public struct Proxy<Style: DiffableTextStyle, ID: Equatable>: DiffableTextStyle {
     
     //=------------------------------------------------------------------------=
     // MARK: State
@@ -30,9 +30,41 @@ public struct Proxy<Style: DiffableTextStyle, ID: Equatable>: Wrapper {
     //=------------------------------------------------------------------------=
     
     @inlinable @inline(__always)
-    init(style: Style, value: ID) {
+    init(style: Style, value: ID) where ID: Equatable {
         self.style = style
         self.value = value
+    }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Transformations
+    //=------------------------------------------------------------------------=
+    
+    @inlinable @inline(__always)
+    public func locale(_ locale: Locale) -> Self {
+        var result = self; result.style = style.locale(locale); return result
+    }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Upstream
+    //=------------------------------------------------------------------------=
+    
+    @inlinable @inline(__always)
+    public func format(value: Style.Value) -> String {
+        style.format(value: value)
+    }
+    
+    @inlinable @inline(__always)
+    public func commit(value: Style.Value) -> Commit<Style.Value> {
+        style.commit(value: value)
+    }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Downstream
+    //=------------------------------------------------------------------------=
+    
+    @inlinable @inline(__always)
+    public func merge(changes: Changes) throws -> Commit<Style.Value> {
+        try style.merge(changes: changes)
     }
     
     //=------------------------------------------------------------------------=
@@ -51,7 +83,7 @@ public struct Proxy<Style: DiffableTextStyle, ID: Equatable>: Wrapper {
 
 #if canImport(UIKit)
 
-extension Proxy: UIKitWrapper, UIKitDiffableTextStyle where Style: UIKitDiffableTextStyle { }
+extension Proxy: UIKitDiffableTextStyle where Style: UIKitDiffableTextStyle { }
 
 #endif
 
@@ -70,7 +102,7 @@ public extension DiffableTextStyle {
         Proxy(style: self, value: Constant())
     }
     
-    /// Binds the style's differentiation result to the value.
+    /// Binds the style's differentiation result to a value.
     @inlinable func equals<Value: Equatable>(_ value: Value) -> Proxy<Self, Value> {
         Proxy(style: self, value: value)
     }
