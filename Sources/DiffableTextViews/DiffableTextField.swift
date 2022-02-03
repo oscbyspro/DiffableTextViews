@@ -145,7 +145,7 @@ public struct DiffableTextField<Style: UIKitDiffableTextStyle>: UIViewRepresenta
         @inlinable public func textField(_ textField: UITextField, shouldChangeCharactersIn nsRange: NSRange, replacementString string: String) -> Bool {
             let style = style()
             let range = storage.selection.indices(at: nsRange)
-            let changes = Changes(storage.snapshot,  change: (string, range))
+            let changes = Changes(storage.snapshot, change: (string, range))
             //=----------------------------------=
             // MARK: Attempt
             //=----------------------------------=

@@ -11,10 +11,6 @@ import Foundation
 // MARK: * Selection
 //*============================================================================*
 
-/// A representation of the view.
-///
-/// It controls how the selection is updated when various parameters change.
-///
 @usableFromInline struct Selection<Scheme: DiffableTextViews.Scheme> {
     @usableFromInline typealias Layout = DiffableTextViews.Layout<Scheme>
     @usableFromInline typealias Position = DiffableTextViews.Position<Scheme>
