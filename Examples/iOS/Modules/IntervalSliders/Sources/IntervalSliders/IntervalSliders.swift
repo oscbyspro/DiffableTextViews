@@ -11,7 +11,7 @@ import SwiftUI
 // MARK: * IntervalSliders
 //*============================================================================*
 
-public struct IntervalSliders: View {
+public struct IntervalSliders: View, Constantsable, Storageable {
  
     //=------------------------------------------------------------------------=
     // MARK: State
@@ -25,14 +25,6 @@ public struct IntervalSliders: View {
     
     @inlinable public init(_ values: Binding<(CGFloat, CGFloat)>, in limits: ClosedRange<CGFloat>) {
         self.storage = Storage(values, in: limits)
-    }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Accessors
-    //=------------------------------------------------------------------------=
-    
-    @inlinable var radius: CGFloat {
-        Constants.radius
     }
     
     //=------------------------------------------------------------------------=

@@ -1,28 +1,38 @@
 //
-//  Composite.swift
-//  iOS
+//  Compositeable.swift
+//  
 //
 //  Created by Oscar Byström Ericsson on 2022-02-03.
 //
 
 //*============================================================================*
-// MARK: * Composite
+// MARK: * Compositeable
 //*============================================================================*
 
-@usableFromInline final class Composite {
+@usableFromInline protocol Compositeable: Layoutable, Storageable {
     
     //=------------------------------------------------------------------------=
-    // MARK: State
+    // MARK: Composite
     //=------------------------------------------------------------------------=
     
-    @usableFromInline let layout:  Layout
-    @usableFromInline let storage: Storage
+    var composite: Composite { get }
+}
 
+//=----------------------------------------------------------------------------=
+// MARK: Compositeable - Details
+//=----------------------------------------------------------------------------=
+
+extension Compositeable {
+    
     //=------------------------------------------------------------------------=
-    // MARK: Initializers
+    // MARK: Accessors
     //=------------------------------------------------------------------------=
     
-    @inlinable init(_ storage: Storage, _ layout: Layout) {
-        self.storage = storage; self.layout = layout
+    @inlinable var layout: Layout {
+        composite.layout
+    }
+    
+    @inlinable var storage: Storage {
+        composite.storage
     }
 }

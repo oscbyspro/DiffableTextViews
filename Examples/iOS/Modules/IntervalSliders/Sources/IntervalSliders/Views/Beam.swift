@@ -11,7 +11,7 @@ import SwiftUI
 // MARK: * Beam
 //*============================================================================*
 
-@usableFromInline struct Beam: View, Animatable {
+@usableFromInline struct Beam: View, Animatable, Compositeable, Constantsable {
     
     //=------------------------------------------------------------------------=
     // MARK: State
@@ -25,46 +25,11 @@ import SwiftUI
     // MARK: Initializers
     //=------------------------------------------------------------------------=
 
+    #warning("FIXME.")
     @inlinable init(_ composite: Composite) {
         self.composite = composite
         self.animatableData = AnimatablePair(
         composite.layout.values.0, composite.layout.values.1)
-    }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Accessors
-    //=------------------------------------------------------------------------=
-    
-    @inlinable var animation: Animation {
-        Constants.animation
-    }
-    
-    @inlinable var coordinates: UInt8 {
-        Constants.coordinates
-    }
-    
-    @inlinable var thickness: CGFloat {
-        Constants.thickness
-    }
-    
-    @inlinable var raidus: CGFloat {
-        Constants.radius
-    }
-
-    @inlinable var storage: Storage {
-        composite.storage
-    }
-    
-    @inlinable var layout: Layout {
-        composite.layout
-    }
-    
-    @inlinable var pointY: CGFloat {
-        composite.layout.pointY
-    }
-    
-    @inlinable var values: (CGFloat, CGFloat) {
-        composite.storage.values.wrappedValue
     }
     
     //=------------------------------------------------------------------------=
@@ -73,11 +38,11 @@ import SwiftUI
     
     @inlinable var body: some View {
         Path {
-            $0.move(to:    CGPoint(x: animatableData.first,  y: pointY))
-            $0.addLine(to: CGPoint(x: animatableData.second, y: pointY))
+            $0.move(to:    CGPoint(x: animatableData.first,  y: frame.midY))
+            $0.addLine(to: CGPoint(x: animatableData.second, y: frame.midY))
         }
         .stroke(Color.accentColor, lineWidth: thickness)
-        .frame(height: raidus)
+        .frame(height: radius)
         .contentShape(Rectangle())
         .gesture(slide)
     }
@@ -88,10 +53,10 @@ import SwiftUI
     
     @inlinable var slide: some Gesture {
         DragGesture(coordinateSpace: .named(coordinates)).updating(start) { gesture, start, _ in
-            if start == nil { start = composite.layout.values }
+            if start == nil { start = positions }
             let distance = gesture.location.x - gesture.startLocation.x
-            let positions = move(start!, by: distance, in: layout.limits)
-            let values = Algorithms.convert(positions, from: layout.limits, to: storage.limits)
+            let positions = move(start!, by: distance, in: positionsLimits)
+            let values = Algorithms.convert(positions, from: positionsLimits, to: valuesLimits)
             withAnimation(animation) { composite.storage.values.wrappedValue = values }
         }
     }

@@ -11,7 +11,7 @@ import SwiftUI
 // MARK: * Interval
 //*============================================================================*
 
-@usableFromInline struct Interval: View {
+@usableFromInline struct Interval: View, Compositeable, Constantsable {
     
     //=------------------------------------------------------------------------=
     // MARK: State
@@ -26,22 +26,6 @@ import SwiftUI
     @inlinable init(_ storage: Storage, proxy: GeometryProxy) {
         let layout = Layout(storage, proxy: proxy)
         self.composite = Composite(storage, layout)
-    }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Accessors
-    //=------------------------------------------------------------------------=
-    
-    @inlinable var coordinates: UInt8 {
-        Constants.coordinates
-    }
-    
-    @inlinable var positions: (CGFloat, CGFloat) {
-        composite.layout.values
-    }
-    
-    @inlinable var values: Binding<(CGFloat, CGFloat)> {
-        composite.storage.values
     }
     
     //=------------------------------------------------------------------------=

@@ -11,7 +11,7 @@ import SwiftUI
 // MARK: * Handle
 //*============================================================================*
 
-@usableFromInline struct Handle: View {
+@usableFromInline struct Handle: View, Compositeable, Constantsable {
     
     //=------------------------------------------------------------------------=
     // MARK: State
@@ -32,22 +32,6 @@ import SwiftUI
     }
     
     //=------------------------------------------------------------------------=
-    // MARK: Accessors
-    //=------------------------------------------------------------------------=
-    
-    @inlinable var animation: Animation {
-        Constants.animation
-    }
-    
-    @inlinable var coordinates: UInt8 {
-        Constants.coordinates
-    }
-    
-    @inlinable var pointY: CGFloat {
-        composite.layout.pointY
-    }
-    
-    //=------------------------------------------------------------------------=
     // MARK: Body
     //=------------------------------------------------------------------------=
     
@@ -58,7 +42,7 @@ import SwiftUI
             .overlay(shape.strokeBorder(.gray.opacity(0.2), lineWidth: 0.5))
             .shadow(color: Color.black.opacity(0.15), radius: 2, x: 0, y: 2)
             .highPriorityGesture(dragGesture)
-            .position(x: position, y: pointY)
+            .position(x: position, y: frame.midY)
     }
     
     //=------------------------------------------------------------------------=
@@ -69,16 +53,14 @@ import SwiftUI
         Circle()
     }
 
+    #warning("Clean this up.")
     @inlinable var dragGesture: some Gesture {
         DragGesture(coordinateSpace: .named(coordinates)).onChanged {
-            let newValue = Algorithms.convert($0.location.x,
-            from: composite.layout.limits, to: composite.storage.limits)
+            let newValue = Algorithms.convert($0.location.x, from: positionsLimits, to: valuesLimits)
             //=----------------------------------=
             // MARK: Set
             //=----------------------------------=
-            if value.wrappedValue != newValue {
-                withAnimation(animation) { value.wrappedValue = newValue }
-            }
+            withAnimation(animation) { value.wrappedValue = newValue }
         }
     }
 }

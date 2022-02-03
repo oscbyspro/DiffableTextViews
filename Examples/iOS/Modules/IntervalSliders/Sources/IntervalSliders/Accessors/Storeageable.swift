@@ -1,6 +1,6 @@
 //
-//  Layout.swift
-//  iOS
+//  Storageable.swift
+//  
 //
 //  Created by Oscar Byström Ericsson on 2022-02-03.
 //
@@ -8,27 +8,33 @@
 import SwiftUI
 
 //*============================================================================*
-// MARK: * Layout
+// MARK: * Storageable
 //*============================================================================*
 
-@usableFromInline final class Layout {
+@usableFromInline protocol Storageable {
     
     //=------------------------------------------------------------------------=
-    // MARK: State
+    // MARK: Storage
     //=------------------------------------------------------------------------=
     
-    @usableFromInline let frame: CGRect
-    @usableFromInline let positions: (CGFloat, CGFloat)
-    @usableFromInline let positionsLimits: ClosedRange<CGFloat>
+    @inlinable var storage: Storage { get }
+}
 
-    //=------------------------------------------------------------------------=
-    // MARK: Initializers
-    //=------------------------------------------------------------------------=
+//=----------------------------------------------------------------------------=
+// MARK: Storageable - Details
+//=----------------------------------------------------------------------------=
+
+extension Storageable {
     
-    @inlinable init(_ storage: Storage, proxy: GeometryProxy) {
-        self.frame = proxy.frame(in: .local)
-        self.positionsLimits = 0...frame.width
-        self.positions = Algorithms.convert(
-        storage.values.wrappedValue, from: storage.valuesLimits, to: positionsLimits)
+    //=------------------------------------------------------------------------=
+    // MARK: Accessors
+    //=------------------------------------------------------------------------=
+        
+    @inlinable var values: Binding<(CGFloat, CGFloat)> {
+        storage.values
+    }
+    
+    @inlinable var valuesLimits: ClosedRange<CGFloat> {
+        storage.valuesLimits
     }
 }

@@ -11,6 +11,7 @@ import SwiftUI
 // MARK: * Algorithms
 //*============================================================================*
 
+#warning("Turn this into a protocol.")
 @usableFromInline enum Algorithms {
     
     //=------------------------------------------------------------------------=
