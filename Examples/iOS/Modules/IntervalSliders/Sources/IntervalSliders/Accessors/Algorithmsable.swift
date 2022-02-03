@@ -1,5 +1,5 @@
 //
-//  File.swift
+//  Algorithmsable.swift
 //  
 //
 //  Created by Oscar Byström Ericsson on 2022-02-03.
@@ -8,11 +8,16 @@
 import SwiftUI
 
 //*============================================================================*
-// MARK: * Algorithms
+// MARK: * Algorithmsable
 //*============================================================================*
 
-#warning("Turn this into a protocol.")
-@usableFromInline enum Algorithms {
+@usableFromInline protocol Algorithmsable { }
+
+//=----------------------------------------------------------------------------=
+// MARK: Algorithmsable - Details
+//=----------------------------------------------------------------------------=
+
+extension Algorithmsable {
     
     //=------------------------------------------------------------------------=
     // MARK: Single
@@ -20,17 +25,8 @@ import SwiftUI
 
     @inlinable static func convert(_ value: CGFloat,
         from start: ClosedRange<CGFloat>, to end: ClosedRange<CGFloat>) -> CGFloat {
-        //=--------------------------------------=
-        // MARK: Invalid
-        //=--------------------------------------=
         guard start.lowerBound != start.upperBound else { return end.lowerBound }
-        //=--------------------------------------=
-        // MARK: Ratio
-        //=--------------------------------------=
         let ratio = (end.upperBound - end.lowerBound) / (start.upperBound - start.lowerBound)
-        //=--------------------------------------=
-        // MARK: Single
-        //=--------------------------------------=
         return min(max(end.lowerBound, end.lowerBound + ratio * (value - start.lowerBound)), end.upperBound)
     }
     

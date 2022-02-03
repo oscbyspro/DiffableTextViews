@@ -11,7 +11,7 @@ import SwiftUI
 // MARK: * Beam
 //*============================================================================*
 
-@usableFromInline struct Beam: View, Animatable, Compositeable, Constantsable {
+@usableFromInline struct Beam: View, Animatable, Algorithmsable, Compositeable, Constantsable {
     
     //=------------------------------------------------------------------------=
     // MARK: State
@@ -25,11 +25,10 @@ import SwiftUI
     // MARK: Initializers
     //=------------------------------------------------------------------------=
 
-    #warning("FIXME.")
     @inlinable init(_ composite: Composite) {
         self.composite = composite
         self.animatableData = AnimatablePair(
-        composite.layout.values.0, composite.layout.values.1)
+        composite.layout.positions.0, composite.layout.positions.1)
     }
     
     //=------------------------------------------------------------------------=
@@ -56,7 +55,7 @@ import SwiftUI
             if start == nil { start = positions }
             let distance = gesture.location.x - gesture.startLocation.x
             let positions = move(start!, by: distance, in: positionsLimits)
-            let values = Algorithms.convert(positions, from: positionsLimits, to: valuesLimits)
+            let values = Self.convert(positions, from: positionsLimits, to: valuesLimits)
             withAnimation(animation) { composite.storage.values.wrappedValue = values }
         }
     }

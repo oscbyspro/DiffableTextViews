@@ -11,7 +11,7 @@ import SwiftUI
 // MARK: * Handle
 //*============================================================================*
 
-@usableFromInline struct Handle: View, Compositeable, Constantsable {
+@usableFromInline struct Handle: View, Algorithmsable, Compositeable, Constantsable {
     
     //=------------------------------------------------------------------------=
     // MARK: State
@@ -53,14 +53,11 @@ import SwiftUI
         Circle()
     }
 
-    #warning("Clean this up.")
     @inlinable var dragGesture: some Gesture {
-        DragGesture(coordinateSpace: .named(coordinates)).onChanged {
-            let newValue = Algorithms.convert($0.location.x, from: positionsLimits, to: valuesLimits)
-            //=----------------------------------=
-            // MARK: Set
-            //=----------------------------------=
-            withAnimation(animation) { value.wrappedValue = newValue }
+        DragGesture(coordinateSpace: .named(coordinates)).onChanged { gesture in
+            withAnimation(animation) {
+                value.wrappedValue = Self.convert(gesture.location.x, from: positionsLimits, to: valuesLimits)
+            }
         }
     }
 }
