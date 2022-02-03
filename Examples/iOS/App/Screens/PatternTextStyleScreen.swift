@@ -35,7 +35,7 @@ struct PatternTextStyleScreen: View {
     }
     
     //=------------------------------------------------------------------------=
-    // MARK: Body - Components
+    // MARK: Components
     //=------------------------------------------------------------------------=
     
     var diffableTextStyles: some View {

@@ -59,7 +59,7 @@ struct Example<Style: UIKitDiffableTextStyle>: View {
     }
     
     //=------------------------------------------------------------------------=
-    // MARK: Body - Components
+    // MARK: Components
     //=------------------------------------------------------------------------=
     
     var descriptionText: some View {
@@ -78,7 +78,7 @@ struct Example<Style: UIKitDiffableTextStyle>: View {
     }
     
     //=------------------------------------------------------------------------=
-    // MARK: Body - Subcomponents
+    // MARK: Subcomponents
     //=------------------------------------------------------------------------=
     
     var color: some ShapeStyle {

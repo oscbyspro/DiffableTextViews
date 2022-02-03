@@ -51,7 +51,7 @@ import SwiftUI
     }
     
     //=------------------------------------------------------------------------=
-    // MARK: Body - Components
+    // MARK: Components
     //=------------------------------------------------------------------------=
     
     @inlinable var shape: some InsettableShape {
@@ -61,7 +61,7 @@ import SwiftUI
     @inlinable var drag: some Gesture {
         DragGesture(coordinateSpace: .named(coordinates)).onChanged { gesture in
             withAnimation(slide) {
-                value.wrappedValue = convert(gesture.location.x, from: positionsLimits, to: valuesLimits)
+                value.wrappedValue = map(gesture.location.x, from: positionsLimits, to: valuesLimits)
             }
         }
     }

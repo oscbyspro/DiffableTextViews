@@ -1,56 +1,46 @@
 //
-//  Screen.swift
+//  Sliders.swift
 //  iOS
 //
-//  Created by Oscar Byström Ericsson on 2022-01-30.
+//  Created by Oscar Byström Ericsson on 2022-02-03.
 //
 
 import SwiftUI
+import IntervalSliders
 
 //*============================================================================*
-// MARK: * Screen
+// MARK: * Sliders
 //*============================================================================*
 
-struct Screen<Content: View>: View {
+struct Sliders<Value: BinaryInteger>: View {
+    typealias Interval = iOS.Interval<Value>
     
     //=------------------------------------------------------------------------=
     // MARK: State
     //=------------------------------------------------------------------------=
     
-    @ViewBuilder let content: () -> Content
+    let title: String
+    let interval: Binding<Interval>
+    let limits: Interval
     
     //=------------------------------------------------------------------------=
     // MARK: Body
     //=------------------------------------------------------------------------=
     
     var body: some View {
-        ZStack {
-            background
-            VStack {
-                content()
-            }
-            .padding()
+        GroupBox(description) {
+            IntervalSliders(interval.values, in: limits.closed)
         }
+        .frame(maxWidth: .infinity)
     }
     
     //=------------------------------------------------------------------------=
     // MARK: Components
     //=------------------------------------------------------------------------=
     
-    var background: some View {
-        Color(uiColor: .secondarySystemBackground).ignoresSafeArea()
+    var description: String {
+        let bounds = interval.wrappedValue.closed
+        return "\(title): \(bounds.lowerBound) to \(bounds.upperBound)"
     }
 }
 
-//*============================================================================*
-// MARK: * Screen x Previews
-//*============================================================================*
-
-struct ScreenPreviews: PreviewProvider {
-    static var previews: some View {
-        Screen {
-            Rectangle().fill(Material.regular)
-        }
-        .preferredColorScheme(.dark)
-    }
-}

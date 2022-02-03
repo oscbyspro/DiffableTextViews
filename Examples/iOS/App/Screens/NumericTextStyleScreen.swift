@@ -50,8 +50,9 @@ struct NumericTextStyleScreen: View {
     var body: some View {
         Screen {
             diffableTextStyles
-            boundsUI
-            precisionUI
+            boundsIntervalSliders
+            integerIntervalSliders
+            fractionIntervalSliders
             Spacer()
             diffableTextViewsExample
         }
@@ -59,31 +60,31 @@ struct NumericTextStyleScreen: View {
     }
      
     //=------------------------------------------------------------------------=
-    // MARK: Body - Components
+    // MARK: Components
     //=------------------------------------------------------------------------=
     
     var diffableTextStyles: some View {
         Choices(Style.allCases, selection: $style, content: \.label)
     }
     
-    var boundsUI: some View {
-        GroupBox("Bounds") {
-            IntervalSliders($bounds.values, in: Self.bounds.closed)
-        }
+    var boundsIntervalSliders: some View {
+        Sliders(title: "Bounds", interval: $bounds, limits: Self.bounds).disabled(true)
     }
     
-    var precisionUI: some View {
-        GroupBox("Precision") {
-            IntervalSliders($integer .values, in: Self.integer .closed)
-            IntervalSliders($fraction.values, in: Self.fraction.closed)
-        }
+    var integerIntervalSliders: some View {
+        Sliders(title: "Integer digits", interval: $integer, limits: Self.integer)
+
+    }
+    
+    var fractionIntervalSliders: some View {
+        Sliders(title: "Fraction digits", interval: $fraction, limits: Self.fraction)
     }
     
     var diffableTextViewsExample: some View {
         Example($value) {
             .number
             .bounds((0 as Value)...)
-            .precision(integer: 1..., fraction: 2...)
+            .precision(integer: integer.closed, fraction: fraction.closed)
         }
     }
     

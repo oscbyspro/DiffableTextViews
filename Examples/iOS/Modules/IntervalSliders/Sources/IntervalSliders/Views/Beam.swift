@@ -34,7 +34,7 @@ import SwiftUI
     //=------------------------------------------------------------------------=
 
     @inlinable init(between positions: (CGFloat, CGFloat)) {
-        self.animatableData = AnimatablePair(positions.0, positions.1)
+        self.animatableData = AnimatableData(positions.0, positions.1)
     }
     
     //=------------------------------------------------------------------------=
@@ -53,7 +53,7 @@ import SwiftUI
     }
     
     //=------------------------------------------------------------------------=
-    // MARK: Body - Components
+    // MARK: Components
     //=------------------------------------------------------------------------=
     
     @inlinable var drag: some Gesture {
@@ -61,13 +61,13 @@ import SwiftUI
             if start == nil { start = positions }
             let distance = gesture.location.x - gesture.startLocation.x
             let positions = move(start!, by: distance, in: positionsLimits)
-            let next = convert(positions, from: positionsLimits, to: valuesLimits)
+            let next = map(positions, from: positionsLimits, to: valuesLimits)
             withAnimation(slide) { values.wrappedValue = next }
         }
     }
     
     //=------------------------------------------------------------------------=
-    // MARK: Helpers
+    // MARK: Calculations
     //=------------------------------------------------------------------------=
         
     @inlinable func move(_ values: (CGFloat, CGFloat),

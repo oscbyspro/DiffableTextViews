@@ -11,9 +11,8 @@ import SwiftUI
 // MARK: Convert - Single
 //=----------------------------------------------------------------------------=
 
-@inlinable func convert(_ value: CGFloat,
-    from start: ClosedRange<CGFloat>,
-    to end: ClosedRange<CGFloat>) -> CGFloat {
+@inlinable func map(_ value: CGFloat,
+    from start: ClosedRange<CGFloat>, to end: ClosedRange<CGFloat>) -> CGFloat {
     guard start.lowerBound != start.upperBound else { return end.lowerBound }
     let ratio = (end.upperBound - end.lowerBound) / (start.upperBound - start.lowerBound)
     return min(max(end.lowerBound, end.lowerBound + ratio * (value - start.lowerBound)), end.upperBound)
@@ -23,8 +22,7 @@ import SwiftUI
 // MARK:  Convert - Double
 //=----------------------------------------------------------------------------=
 
-@inlinable func convert(_ values: (CGFloat, CGFloat),
-    from start: ClosedRange<CGFloat>,
-    to end: ClosedRange<CGFloat>) -> (CGFloat, CGFloat) {(
-    convert(values.0, from: start, to: end), convert(values.1, from: start, to: end)
+@inlinable func map(_ values: (CGFloat, CGFloat),
+    from start: ClosedRange<CGFloat>, to end: ClosedRange<CGFloat>) -> (CGFloat, CGFloat) {(
+    map(values.0, from: start, to: end), map(values.1, from: start, to: end)
 )}

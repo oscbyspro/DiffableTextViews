@@ -44,7 +44,7 @@ struct Choices<Options: RandomAccessCollection, Content: View>: View where Optio
     }
     
     //=------------------------------------------------------------------------=
-    // MARK: Body - Components
+    // MARK: Components
     //=------------------------------------------------------------------------=
     
     var title: String {

@@ -28,15 +28,7 @@ import SwiftUI
     @inlinable init(_ storage: Storage, in proxy: GeometryProxy) {
         self.frame = proxy.frame(in: .local)
         self.positionsLimits = 0...frame.width
-        self.positions = convert(storage.values.wrappedValue,
+        self.positions = map(storage.values.wrappedValue,
         from: storage.valuesLimits, to: positionsLimits)
-    }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Utilities
-    //=------------------------------------------------------------------------=
-    
-    @inlinable var positionsAnimatableData: AnimatablePair<CGFloat, CGFloat> {
-        AnimatablePair(positions.0, positions.1)
     }
 }
