@@ -12,19 +12,17 @@ import SwiftUI
 //*============================================================================*
 
 @usableFromInline enum Algorithms {
-
+    
     //=------------------------------------------------------------------------=
-    // MARK: Convert
+    // MARK: Single
     //=------------------------------------------------------------------------=
 
-    @inlinable static func convert(_ values: (CGFloat, CGFloat),
-        from start: ClosedRange<CGFloat>, to end: ClosedRange<CGFloat>) -> (CGFloat, CGFloat) {
+    @inlinable static func convert(_ value: CGFloat,
+        from start: ClosedRange<CGFloat>, to end: ClosedRange<CGFloat>) -> CGFloat {
         //=--------------------------------------=
         // MARK: Invalid
         //=--------------------------------------=
-        guard start.lowerBound != start.upperBound else {
-            return (end.lowerBound, end.lowerBound)
-        }
+        guard start.lowerBound != start.upperBound else { return end.lowerBound }
         //=--------------------------------------=
         // MARK: Ratio
         //=--------------------------------------=
@@ -32,12 +30,24 @@ import SwiftUI
         //=--------------------------------------=
         // MARK: Single
         //=--------------------------------------=
-        func convert(_ value: CGFloat) -> CGFloat {
-            min(max(end.lowerBound, end.lowerBound + ratio * (value - start.lowerBound)), end.upperBound)
+        return min(max(end.lowerBound, end.lowerBound + ratio * (value - start.lowerBound)), end.upperBound)
+    }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Double
+    //=------------------------------------------------------------------------=
+
+    @inlinable static func convert(_ values: (CGFloat, CGFloat),
+        from start: ClosedRange<CGFloat>, to end: ClosedRange<CGFloat>) -> (CGFloat, CGFloat) {
+        //=--------------------------------------=
+        // MARK: Single
+        //=--------------------------------------=
+        func next(_ value: CGFloat) -> CGFloat {
+            convert(value, from: start, to: end)
         }
         //=--------------------------------------=
         // MARK: Double
         //=--------------------------------------=
-        return (convert(values.0), convert(values.1))
+        return (next(values.0), next(values.1))
     }
 }

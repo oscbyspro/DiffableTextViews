@@ -21,6 +21,7 @@ import SwiftUI
 
     @usableFromInline static let thickness: CGFloat = 4
     
+    #warning("Does it still work as CoordinateSpace?")
     @usableFromInline static let coordinates: UInt8 = 33
     
     @usableFromInline static let animation = Animation.linear(duration: 0.125)

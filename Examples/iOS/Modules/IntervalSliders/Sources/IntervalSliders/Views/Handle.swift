@@ -43,8 +43,8 @@ import SwiftUI
         Constants.coordinates
     }
     
-    @inlinable var center: CGFloat {
-        composite.layout.center
+    @inlinable var pointY: CGFloat {
+        composite.layout.pointY
     }
     
     //=------------------------------------------------------------------------=
@@ -58,7 +58,7 @@ import SwiftUI
             .overlay(shape.strokeBorder(.gray.opacity(0.2), lineWidth: 0.5))
             .shadow(color: Color.black.opacity(0.15), radius: 2, x: 0, y: 2)
             .highPriorityGesture(dragGesture)
-            .position(x: position, y: center)
+            .position(x: position, y: pointY)
     }
     
     //=------------------------------------------------------------------------=
@@ -71,7 +71,8 @@ import SwiftUI
 
     @inlinable var dragGesture: some Gesture {
         DragGesture(coordinateSpace: .named(coordinates)).onChanged {
-            let newValue = storage.value($0.location.x, in: frame.size)
+            let newValue = Algorithms.convert($0.location.x,
+            from: composite.layout.limits, to: composite.storage.limits)
             //=----------------------------------=
             // MARK: Set
             //=----------------------------------=

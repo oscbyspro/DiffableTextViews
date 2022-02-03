@@ -50,10 +50,10 @@ import SwiftUI
     
     @inlinable var body: some View {
         ZStack {
-            Beam(composite.layout)
+            Beam(composite)
             Handle(composite, value: values.projectedValue.0, position: positions.0)
             Handle(composite, value: values.projectedValue.1, position: positions.1)
         }
         .coordinateSpace(name: coordinates)
-    }    
+    }
 }
