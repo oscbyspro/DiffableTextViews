@@ -33,7 +33,7 @@ import SwiftUI
     // MARK: Initializers
     //=------------------------------------------------------------------------=
 
-    @inlinable init(_ positions: (CGFloat, CGFloat)) {
+    @inlinable init(between positions: (CGFloat, CGFloat)) {
         self.animatableData = AnimatablePair(positions.0, positions.1)
     }
     

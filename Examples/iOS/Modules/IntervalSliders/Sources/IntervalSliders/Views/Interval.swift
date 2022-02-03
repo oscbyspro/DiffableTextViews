@@ -32,7 +32,7 @@ import SwiftUI
     
     @inlinable var body: some View {
         ZStack {
-            Beam(layout.positions)
+            Beam(between: layout.positions)
             Handle(values.projectedValue.0, at: positions.0)
             Handle(values.projectedValue.1, at: positions.1)
         }
