@@ -1,5 +1,5 @@
 //
-//  SlidersLayoutable.swift
+//  Track.swift
 //  iOS
 //
 //  Created by Oscar Byström Ericsson on 2022-02-03.
@@ -8,33 +8,30 @@
 import SwiftUI
 
 //*============================================================================*
-// MARK: * SlidersLayoutable
+// MARK: * Sliders x Track
 //*============================================================================*
 
-protocol SlidersLayoutable {
+@usableFromInline struct Track: View, Storageable {
     
     //=------------------------------------------------------------------------=
-    // MARK: Storage
+    // MARK: State
     //=------------------------------------------------------------------------=
     
-    var layout: SlidersLayout { get }
-}
-
-//=----------------------------------------------------------------------------=
-// MARK: SlidersStorageable - Details
-//=----------------------------------------------------------------------------=
-
-extension SlidersLayoutable {
+    @usableFromInline let storage: Storage
     
     //=------------------------------------------------------------------------=
-    // MARK: Accessors
+    // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    var frame: CGRect {
-        layout.frame
+    @inlinable init(_ storage: Storage) {
+        self.storage = storage
     }
     
-    var positions: (CGFloat, CGFloat) {
-        layout.positions
+    //=------------------------------------------------------------------------=
+    // MARK: Body
+    //=------------------------------------------------------------------------=
+    
+    @inlinable var body: some View {
+        Capsule().fill(.gray.opacity(0.2)).frame(height: thickness)
     }
 }

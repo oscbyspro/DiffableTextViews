@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		5527C21327AA6C6A0098546E /* Interval.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5527C21227AA6C6A0098546E /* Interval.swift */; };
-		5527C21627AA70270098546E /* Sliders.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5527C21527AA70270098546E /* Sliders.swift */; };
 		557F7FBB27A81171001908D6 /* DiffableTextViews in Frameworks */ = {isa = PBXBuildFile; productRef = 557F7FBA27A81171001908D6 /* DiffableTextViews */; };
 		55893D7427A8783E004F3388 /* Choices.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55893D7327A8783E004F3388 /* Choices.swift */; };
 		5589A1A427A7E3E30000F04A /* App.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5589A1A327A7E3E30000F04A /* App.swift */; };
@@ -18,15 +17,12 @@
 		55AA28BE27A7EC8C003778FE /* NumericTextStyleScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55A85FFB27A7E850006CCCB7 /* NumericTextStyleScreen.swift */; };
 		55AA28C327A7ED4F003778FE /* Screen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55A85FF627A7E850006CCCB7 /* Screen.swift */; };
 		55AA28CE27A7F472003778FE /* ContentTabs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55AA28CD27A7F472003778FE /* ContentTabs.swift */; };
-		55D7FFAC27AB43E80059C8A9 /* SlidersStorageable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55D7FFAB27AB43E80059C8A9 /* SlidersStorageable.swift */; };
-		55D7FFAE27AB440E0059C8A9 /* SlidersCompositeable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55D7FFAD27AB440E0059C8A9 /* SlidersCompositeable.swift */; };
-		55D7FFB027AB44780059C8A9 /* SlidersLayoutable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55D7FFAF27AB44780059C8A9 /* SlidersLayoutable.swift */; };
+		55B0828027ABBAC50064EA76 /* IntervalSliders in Frameworks */ = {isa = PBXBuildFile; productRef = 55B0827F27ABBAC50064EA76 /* IntervalSliders */; };
 		55DDC62C27A8D81D00B2AB4A /* Example.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55DDC62B27A8D81D00B2AB4A /* Example.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		5527C21227AA6C6A0098546E /* Interval.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Interval.swift; sourceTree = "<group>"; };
-		5527C21527AA70270098546E /* Sliders.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sliders.swift; sourceTree = "<group>"; };
 		557F7FB927A81116001908D6 /* DiffableTextViews */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = DiffableTextViews; path = ../..; sourceTree = "<group>"; };
 		55893D7327A8783E004F3388 /* Choices.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Choices.swift; sourceTree = "<group>"; };
 		5589A1A027A7E3E30000F04A /* iOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = iOS.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -37,9 +33,7 @@
 		55A85FF927A7E850006CCCB7 /* PatternTextStyleScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PatternTextStyleScreen.swift; sourceTree = "<group>"; };
 		55A85FFB27A7E850006CCCB7 /* NumericTextStyleScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NumericTextStyleScreen.swift; sourceTree = "<group>"; };
 		55AA28CD27A7F472003778FE /* ContentTabs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentTabs.swift; sourceTree = "<group>"; };
-		55D7FFAB27AB43E80059C8A9 /* SlidersStorageable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SlidersStorageable.swift; sourceTree = "<group>"; };
-		55D7FFAD27AB440E0059C8A9 /* SlidersCompositeable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SlidersCompositeable.swift; sourceTree = "<group>"; };
-		55D7FFAF27AB44780059C8A9 /* SlidersLayoutable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SlidersLayoutable.swift; sourceTree = "<group>"; };
+		55B0827D27ABB9500064EA76 /* IntervalSliders */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = IntervalSliders; path = Modules/IntervalSliders; sourceTree = "<group>"; };
 		55DDC62B27A8D81D00B2AB4A /* Example.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Example.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -48,6 +42,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				55B0828027ABBAC50064EA76 /* IntervalSliders in Frameworks */,
 				557F7FBB27A81171001908D6 /* DiffableTextViews in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -58,6 +53,7 @@
 		557F7FB827A81116001908D6 /* Packages */ = {
 			isa = PBXGroup;
 			children = (
+				55B0827D27ABB9500064EA76 /* IntervalSliders */,
 				557F7FB927A81116001908D6 /* DiffableTextViews */,
 			);
 			name = Packages;
@@ -84,7 +80,6 @@
 		5589A1A227A7E3E30000F04A /* App */ = {
 			isa = PBXGroup;
 			children = (
-				55D7FFAA27AB43D40059C8A9 /* Sliders */,
 				55B8ABAB27AAAB9E00980626 /* Models */,
 				55F6F58627A7E53300BA26AB /* Assets */,
 				55AA28D127A802AF003778FE /* Routers */,
@@ -145,17 +140,6 @@
 			path = Models;
 			sourceTree = "<group>";
 		};
-		55D7FFAA27AB43D40059C8A9 /* Sliders */ = {
-			isa = PBXGroup;
-			children = (
-				5527C21527AA70270098546E /* Sliders.swift */,
-				55D7FFAB27AB43E80059C8A9 /* SlidersStorageable.swift */,
-				55D7FFAD27AB440E0059C8A9 /* SlidersCompositeable.swift */,
-				55D7FFAF27AB44780059C8A9 /* SlidersLayoutable.swift */,
-			);
-			path = Sliders;
-			sourceTree = "<group>";
-		};
 		55F6F58627A7E53300BA26AB /* Assets */ = {
 			isa = PBXGroup;
 			children = (
@@ -183,6 +167,7 @@
 			name = iOS;
 			packageProductDependencies = (
 				557F7FBA27A81171001908D6 /* DiffableTextViews */,
+				55B0827F27ABBAC50064EA76 /* IntervalSliders */,
 			);
 			productName = iOS;
 			productReference = 5589A1A027A7E3E30000F04A /* iOS.app */;
@@ -241,17 +226,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				55AA28C327A7ED4F003778FE /* Screen.swift in Sources */,
-				55D7FFAE27AB440E0059C8A9 /* SlidersCompositeable.swift in Sources */,
 				55AA28CE27A7F472003778FE /* ContentTabs.swift in Sources */,
 				55AA28BD27A7EC8C003778FE /* PatternTextStyleScreen.swift in Sources */,
 				55AA28BE27A7EC8C003778FE /* NumericTextStyleScreen.swift in Sources */,
-				55D7FFAC27AB43E80059C8A9 /* SlidersStorageable.swift in Sources */,
 				55DDC62C27A8D81D00B2AB4A /* Example.swift in Sources */,
 				5589A1A427A7E3E30000F04A /* App.swift in Sources */,
 				5527C21327AA6C6A0098546E /* Interval.swift in Sources */,
 				55893D7427A8783E004F3388 /* Choices.swift in Sources */,
-				55D7FFB027AB44780059C8A9 /* SlidersLayoutable.swift in Sources */,
-				5527C21627AA70270098546E /* Sliders.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -459,6 +440,10 @@
 		557F7FBA27A81171001908D6 /* DiffableTextViews */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = DiffableTextViews;
+		};
+		55B0827F27ABBAC50064EA76 /* IntervalSliders */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = IntervalSliders;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

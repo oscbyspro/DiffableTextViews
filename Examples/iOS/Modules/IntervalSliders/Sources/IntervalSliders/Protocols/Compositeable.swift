@@ -1,42 +1,40 @@
 //
-//  SlidersCompositeable.swift
+//  Compositeable.swift
 //  iOS
 //
 //  Created by Oscar Byström Ericsson on 2022-02-02.
 //
 
-
-
 import SwiftUI
 
 //*============================================================================*
-// MARK: * SlidersCompositeable
+// MARK: * Compositeable
 //*============================================================================*
 
-protocol SlidersCompositeable: SlidersLayoutable, SlidersStorageable {
+@usableFromInline protocol Compositeable: Layoutable, Storageable {
     
     //=------------------------------------------------------------------------=
     // MARK: Storage
     //=------------------------------------------------------------------------=
     
-    var composite: SlidersComposite { get }
+    @inlinable var composite: Composite { get }
 }
 
 //=------------------------------------------------------------------------=
-// MARK: SlidersCompositeable - Details
+// MARK: Compositeable - Details
 //=------------------------------------------------------------------------=
 
-extension SlidersCompositeable {
+extension Compositeable {
     
     //=------------------------------------------------------------------------=
     // MARK: Accessors
     //=------------------------------------------------------------------------=
     
-    var layout: SlidersLayout {
+    @inlinable var layout: Layout {
         composite.layout
     }
     
-    var storage: SlidersStorage {
+    @inlinable var storage: Storage {
         composite.storage
     }
 }

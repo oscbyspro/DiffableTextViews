@@ -1,5 +1,5 @@
 //
-//  SlidersStorageable.swift
+//  Storageable.swift
 //  iOS
 //
 //  Created by Oscar Byström Ericsson on 2022-02-02.
@@ -8,33 +8,33 @@
 import SwiftUI
 
 //*============================================================================*
-// MARK: * SlidersStorageable
+// MARK: * Storageable
 //*============================================================================*
 
-protocol SlidersStorageable {
+@usableFromInline protocol Storageable {
     
     //=------------------------------------------------------------------------=
     // MARK: Storage
     //=------------------------------------------------------------------------=
     
-    var storage: SlidersStorage { get }
+    @inlinable var storage: Storage { get }
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: SlidersStorageable - Details
+// MARK: Storageable - Details
 //=----------------------------------------------------------------------------=
 
-extension SlidersStorageable {
+extension Storageable {
     
     //=------------------------------------------------------------------------=
     // MARK: Accessors
     //=------------------------------------------------------------------------=
     
-    var limits: ClosedRange<CGFloat> {
+    @inlinable var limits: ClosedRange<CGFloat> {
         storage.limits
     }
     
-    var values: Binding<(CGFloat, CGFloat)> {
+    @inlinable var values: Binding<(CGFloat, CGFloat)> {
         storage.values
     }
     
@@ -42,19 +42,19 @@ extension SlidersStorageable {
     // MARK: Constants
     //=------------------------------------------------------------------------=
     
-    var radius: CGFloat {
+    @inlinable var radius: CGFloat {
         27
     }
     
-    var thickness: CGFloat {
+    @inlinable var thickness: CGFloat {
         04
     }
     
-    var coordinates: UInt8 {
+    @inlinable var coordinates: UInt8 {
         33
     }
     
-    var animation: Animation {
+    @inlinable var animation: Animation {
         Animation.linear(duration: 0.125)
     }
 }
