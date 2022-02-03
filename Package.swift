@@ -1,5 +1,12 @@
 // swift-tools-version:5.5
-// The swift-tools-version declares the minimum version of Swift required to build this package.
+//=----------------------------------------------------------------------------=
+// This source file is part of the DiffableTextViews open source project.
+//
+// Copyright (c) 2022 Oscar Byström Ericsson
+// Licensed under Apache License, Version 2.0
+//
+// See http://www.apache.org/licenses/LICENSE-2.0 for license information.
+//=----------------------------------------------------------------------------=
 
 import PackageDescription
 
@@ -14,6 +21,9 @@ let package = Package(
         .macOS(.v12),
     ],
     products: [
+        //=--------------------------------------=
+        // MARK: DiffableTextViews
+        //=--------------------------------------=
         .library(
             name: "DiffableTextViews",
             targets: [

@@ -1,9 +1,11 @@
+//=----------------------------------------------------------------------------=
+// This source file is part of the DiffableTextViews open source project.
 //
-//  PatternTextStyle+UIKit.swift
-//  
+// Copyright (c) 2022 Oscar Byström Ericsson
+// Licensed under Apache License, Version 2.0
 //
-//  Created by Oscar Byström Ericsson on 2022-01-31.
-//
+// See http://www.apache.org/licenses/LICENSE-2.0 for license information.
+//=----------------------------------------------------------------------------=
 
 #if canImport(UIKit)
 
