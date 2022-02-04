@@ -90,7 +90,7 @@ struct NumericScreen: View {
     }
     
     var localizationPickerWheel: some View {
-        Localizer($locale, in: storage.locales)
+        Selector(storage.locales, selection: $locale, id: \.identifier)        
     }
     
     var diffableTextViewsExample: some View {

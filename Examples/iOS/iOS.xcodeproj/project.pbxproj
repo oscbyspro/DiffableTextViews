@@ -8,7 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		5507BD1427AD620900F5292D /* Options.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5507BD1327AD620900F5292D /* Options.swift */; };
-		5507BD1627AD66A800F5292D /* Localizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5507BD1527AD66A800F5292D /* Localizer.swift */; };
+		5507BD1627AD66A800F5292D /* Selector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5507BD1527AD66A800F5292D /* Selector.swift */; };
 		5527C21327AA6C6A0098546E /* Interval.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5527C21227AA6C6A0098546E /* Interval.swift */; };
 		55781F2D27AD39B0003D4252 /* Scroller.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55781F2C27AD39B0003D4252 /* Scroller.swift */; };
 		55781F3127AD4500003D4252 /* Storage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55781F3027AD4500003D4252 /* Storage.swift */; };
@@ -27,7 +27,7 @@
 
 /* Begin PBXFileReference section */
 		5507BD1327AD620900F5292D /* Options.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Options.swift; sourceTree = "<group>"; };
-		5507BD1527AD66A800F5292D /* Localizer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Localizer.swift; sourceTree = "<group>"; };
+		5507BD1527AD66A800F5292D /* Selector.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Selector.swift; sourceTree = "<group>"; };
 		5527C21227AA6C6A0098546E /* Interval.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Interval.swift; sourceTree = "<group>"; };
 		55781F2C27AD39B0003D4252 /* Scroller.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Scroller.swift; sourceTree = "<group>"; };
 		55781F3027AD4500003D4252 /* Storage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Storage.swift; sourceTree = "<group>"; };
@@ -62,7 +62,7 @@
 			isa = PBXGroup;
 			children = (
 				5507BD1327AD620900F5292D /* Options.swift */,
-				5507BD1527AD66A800F5292D /* Localizer.swift */,
+				5507BD1527AD66A800F5292D /* Selector.swift */,
 			);
 			path = Pickers;
 			sourceTree = "<group>";
@@ -256,7 +256,7 @@
 				55781F2D27AD39B0003D4252 /* Scroller.swift in Sources */,
 				5527C21327AA6C6A0098546E /* Interval.swift in Sources */,
 				55E505C427AD4BA20047AF1D /* Sliders.swift in Sources */,
-				5507BD1627AD66A800F5292D /* Localizer.swift in Sources */,
+				5507BD1627AD66A800F5292D /* Selector.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

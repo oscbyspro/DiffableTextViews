@@ -10,25 +10,27 @@
 import SwiftUI
 
 //*============================================================================*
-// MARK: * Localizer
+// MARK: * Selector
 //*============================================================================*
 
-struct Localizer: View {
+struct Selector<Value: Hashable, ID: Hashable>: View {
     
     //=------------------------------------------------------------------------=
     // MARK: State
     //=------------------------------------------------------------------------=
     
-    let locales: [Locale]
-    let selection: Binding<Locale>
+    let values: [Value]
+    let selection: Binding<Value>
+    let id: KeyPath<Value, ID>
 
     //=------------------------------------------------------------------------=
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    init(_ selection: Binding<Locale>, in locales: [Locale]) {
-        self.locales = locales
+    init(_ values: [Value], selection: Binding<Value>, id: KeyPath<Value, ID>) {
+        self.values = values
         self.selection = selection
+        self.id = id
     }
     
     //=------------------------------------------------------------------------=
@@ -36,9 +38,9 @@ struct Localizer: View {
     //=------------------------------------------------------------------------=
     
     var body: some View {
-        Picker("Locale", selection: selection) {
-            ForEach(locales, id: \.identifier) {
-                Text($0.identifier).tag($0)
+        Picker(String(describing: Value.self), selection: selection) {
+            ForEach(values, id: id) {
+                Text(String(describing: $0[keyPath: id])).tag($0)
             }
         }
         .pickerStyle(.wheel)
