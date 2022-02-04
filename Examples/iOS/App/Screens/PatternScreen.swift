@@ -8,42 +8,22 @@
 //=----------------------------------------------------------------------------=
 
 import SwiftUI
-import Foundation
 import DiffableTextViews
-import NumericTextStyles
+import PatternTextStyles
 
 //*============================================================================*
-// MARK: * NumericTextStyleScreen
+// MARK: * PatternScreen
 //*============================================================================*
 
-#warning("Style and local choice should always be there, rest depends on style.")
-struct NumericTextStyleScreen: View {
-    typealias Value = Double
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Static
-    //=------------------------------------------------------------------------=
-    
-    private static let bounds   = Interval((1, Value.precision.value))
-    private static let integer  = Interval((1, Value.precision.integer))
-    private static let fraction = Interval((0, Value.precision.fraction))
-    
+struct PatternScreen: View {
+
     //=------------------------------------------------------------------------=
     // MARK: State
     //=------------------------------------------------------------------------=
     
-    @State private var value  = Value()
-    @State private var style  = Style.number
-    @State private var locale = Locale(identifier: "en_US")
-    
-    //=------------------------------------------------------------------------=
-    // MARK: State - Customization
-    //=------------------------------------------------------------------------=
-    
-    @State private var bounds   = Self.bounds
-    @State private var integer  = Self.integer
-    @State private var fraction = Self.fraction
-    
+    @State private var value = String()
+    @State private var style = Style.phone
+
     //=------------------------------------------------------------------------=
     // MARK: Body
     //=------------------------------------------------------------------------=
@@ -51,11 +31,11 @@ struct NumericTextStyleScreen: View {
     var body: some View {
         Screen {
             controls
+            Divider()
             diffableTextViewsExample
         }
-        .environment(\.locale, locale)
     }
-     
+    
     //=------------------------------------------------------------------------=
     // MARK: Components
     //=------------------------------------------------------------------------=
@@ -63,9 +43,6 @@ struct NumericTextStyleScreen: View {
     var controls: some View {
         Scroller {
             diffableTextStyles
-            boundsIntervalSliders
-            integerIntervalSliders
-            fractionIntervalSliders
             Spacer()
         }
     }
@@ -74,28 +51,20 @@ struct NumericTextStyleScreen: View {
         Choices(Style.allCases, selection: $style, content: \.label)
     }
     
-    var boundsIntervalSliders: some View {
-        Sliders("Bounds", values: $bounds, limits: Self.bounds.closed).disabled(true)
-    }
-    
-    var integerIntervalSliders: some View {
-        Sliders("Integer digits", values: $integer, limits: Self.integer.closed)
-    }
-    
-    var fractionIntervalSliders: some View {
-        Sliders("Fraction digits", values: $fraction, limits: Self.fraction.closed)
-    }
-    
     var diffableTextViewsExample: some View {
         Example($value) {
-            .number
-            .bounds((0 as Value)...)
-            .precision(integer: integer.closed, fraction: fraction.closed)
+            .pattern("+## (###) ###-##-##")
+            .placeholder("#"  as Character) { $0.isASCII && $0.isNumber }
+            .constant()
+        }
+        .diffableTextField_onSetup {
+            proxy in
+            proxy.keyboard(.phonePad)
         }
     }
     
     //*========================================================================*
-    // MARK: * Style
+    // MARK: * Pattern
     //*========================================================================*
     
     enum Style: String, CaseIterable {
@@ -104,9 +73,8 @@ struct NumericTextStyleScreen: View {
         // MARK: Instances
         //=--------------------------------------------------------------------=
         
-        case number
-        case currency
-        case percent
+        case phone
+        case card
         
         //=--------------------------------------------------------------------=
         // MARK: Body
@@ -119,13 +87,12 @@ struct NumericTextStyleScreen: View {
 }
 
 //*============================================================================*
-// MARK: * NumericTextStyleScreen x Previews
+// MARK: * PatternScreen x Previews
 //*============================================================================*
 
-struct NumericTextStyleScreenPreviews: PreviewProvider {
+struct PatternTextStyleScreenPreviews: PreviewProvider {
     static var previews: some View {
-        NumericTextStyleScreen()
+        PatternScreen()
             .preferredColorScheme(.dark)
     }
 }
-

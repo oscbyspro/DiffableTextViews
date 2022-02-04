@@ -27,9 +27,8 @@ struct Scroller<Content: View>: View {
     
     var body: some View {
         ScrollView(showsIndicators: false) {
-            content()
+            content().padding()
         }
-        .padding(.horizontal)
     }
 }
 

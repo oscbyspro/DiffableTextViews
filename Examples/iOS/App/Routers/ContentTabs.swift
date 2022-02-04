@@ -27,8 +27,8 @@ struct ContentTabs: View {
     
     var body: some View {
         TabView(selection: $tab) {
-            NumericTextStyleScreen().modifier(Tab.numeric)
-            PatternTextStyleScreen().modifier(Tab.pattern)
+            NumericScreen().modifier(Tab.numeric)
+            PatternScreen().modifier(Tab.pattern)
         }
     }
     
