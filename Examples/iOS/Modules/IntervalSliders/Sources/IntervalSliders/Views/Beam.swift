@@ -40,8 +40,8 @@ import SwiftUI
     
     @inlinable var body: some View {
         Path {
-            $0.move(to:    CGPoint(x: animatableData.first,  y: frame.midY))
-            $0.addLine(to: CGPoint(x: animatableData.second, y: frame.midY))
+            $0.move(to: center(animatableData.first))
+            $0.addLine(to: center(animatableData.second))
         }
         .stroke(Color.accentColor, lineWidth: thickness)
         .frame(height: radius)

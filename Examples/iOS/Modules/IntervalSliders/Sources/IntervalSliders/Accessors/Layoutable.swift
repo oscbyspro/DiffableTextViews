@@ -43,4 +43,12 @@ extension Layoutable {
     @inlinable var positionsLimits: ClosedRange<CGFloat> {
         layout.positionsLimits
     }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Utilities
+    //=------------------------------------------------------------------------=
+    
+    @inlinable func center(_ x: CGFloat) -> CGPoint {
+        CGPoint(x: x, y: frame.midY)
+    }
 }

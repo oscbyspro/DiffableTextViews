@@ -19,9 +19,9 @@ import SwiftUI
     // MARK: State
     //=------------------------------------------------------------------------=
     
+    @usableFromInline let storage: Storage
     @usableFromInline let position: CGFloat
     @usableFromInline let value: Binding<CGFloat>
-    @usableFromInline let storage: Storage
 
     //=------------------------------------------------------------------------=
     // MARK: Initializers
@@ -29,8 +29,8 @@ import SwiftUI
     
     @inlinable init(_ storage: Storage, value: Binding<CGFloat>, position: CGFloat) {
         self.value = value
-        self.position = position
         self.storage = storage
+        self.position = position
     }
     
     //=------------------------------------------------------------------------=
@@ -38,13 +38,12 @@ import SwiftUI
     //=------------------------------------------------------------------------=
     
     @inlinable var body: some View {
-        shape
-            .fill(.white)
+        shape.fill(.white)
             .overlay(shape.fill(Material.thin))
             .overlay(shape.strokeBorder(.gray.opacity(0.2), lineWidth: 0.5))
             .shadow(color: Color.black.opacity(0.15), radius: 2, x: 0, y: 2)
-            .gesture(drag)
-            .position(x: position, y: frame.midY)
+            .highPriorityGesture(drag)
+            .position(center(position))
     }
     
     //=------------------------------------------------------------------------=
