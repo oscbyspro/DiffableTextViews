@@ -38,6 +38,7 @@ Value.RawValue == String, Value.AllCases: RandomAccessCollection {
                 Text($0.rawValue.capitalized).tag($0)
             }
         }
+        .pickerStyle(.segmented)
     }
 }
 
