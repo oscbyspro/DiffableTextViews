@@ -7,34 +7,32 @@
 // See http://www.apache.org/licenses/LICENSE-2.0 for license information.
 //=----------------------------------------------------------------------------=
 
+import SwiftUI
+
 //*============================================================================*
-// MARK: * Storageable
+// MARK: * Context
 //*============================================================================*
 
-@usableFromInline protocol Storageable: Intervalable, Layoutable {
+final class Context: ObservableObject {
     
     //=------------------------------------------------------------------------=
-    // MARK: Storage
+    // MARK: State
     //=------------------------------------------------------------------------=
     
-    @inlinable var storage: Storage { get }
-}
-
-//=----------------------------------------------------------------------------=
-// MARK: Storageable
-//=----------------------------------------------------------------------------=
-
-extension Storageable {
+    lazy var locales: [Locale] = Locale
+        .availableIdentifiers
+        .lazy.map(Locale.init)
+        .reduce(into: Set()) { $0.insert($1) }
+        .sorted(by: { $0.identifier < $1.identifier })
+    
+    lazy var currencies: [String] = locales
+        .lazy.compactMap(\.currencyCode)
+        .reduce(into: Set()) { $0.insert($1) }
+        .sorted(by: <)
     
     //=------------------------------------------------------------------------=
-    // MARK: Accessors
+    // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable var layout: Layout {
-        storage.layout
-    }
-    
-    @inlinable var interval: Interval {
-        storage.interval
-    }
+    init() { }
 }

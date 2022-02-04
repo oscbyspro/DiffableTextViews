@@ -8,21 +8,22 @@
 //=----------------------------------------------------------------------------=
 
 //*============================================================================*
-// MARK: * Storage
+// MARK: * Context
 //*============================================================================*
 
-@usableFromInline final class Storage<Style: DiffableTextStyle, Scheme: DiffableTextViews.Scheme> {
+@usableFromInline final class Context<Style: DiffableTextStyle, Scheme: DiffableTextViews.Scheme> {
     @usableFromInline typealias Field = DiffableTextViews.Field<Scheme>
+    @usableFromInline typealias Position = DiffableTextViews.Position<Scheme>
     @usableFromInline typealias Value = Style.Value
     
     //=------------------------------------------------------------------------=
     // MARK: State
     //=------------------------------------------------------------------------=
     
-    @usableFromInline var value: Value! = nil
-    @usableFromInline var style: Style! = nil
-    @usableFromInline var active: Bool = false
-    @usableFromInline var field: Field = Field()
+    @usableFromInline private(set) var value: Value! = nil
+    @usableFromInline private(set) var style: Style! = nil
+    @usableFromInline private(set) var field: Field = Field()
+    @usableFromInline private(set) var active: Bool = false
     
     //=------------------------------------------------------------------------=
     // MARK: Update
@@ -38,13 +39,18 @@
         self.style = style
         self.value = commit.value
         self.field.update(snapshot: commit.snapshot)
+        self.active = true
     }
     
     //=------------------------------------------------------------------------=
     // MARK: Update - Selection
     //=------------------------------------------------------------------------=
     
-    @inlinable func change(selection index: Field.Layout.Index) {
-        self.field.selection = index ..< index
+    @inlinable func change(selection: Field.Layout.Index) {
+        self.field.selection = selection ..< selection
+    }
+    
+    @inlinable func update(selection: Range<Position>, momentum: Bool) {
+        self.field.update(selection: selection, momentum: momentum)
     }
 }

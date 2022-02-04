@@ -20,7 +20,7 @@ struct NumericScreenWheels: View {
     // MARK: Environment
     //=------------------------------------------------------------------------=
     
-    @EnvironmentObject private var storage: Storage
+    @EnvironmentObject private var context: Context
     
     //=------------------------------------------------------------------------=
     // MARK: State
@@ -77,11 +77,11 @@ struct NumericScreenWheels: View {
     //=------------------------------------------------------------------------=
     
     var locales: some View {
-        Selector(storage.locales, selection: locale, id: \.identifier)
+        Selector(context.locales, selection: locale, id: \.identifier)
     }
     
     var currencies: some View {
-        Selector(storage.currencies, selection: currency, id: \.self)
+        Selector(context.currencies, selection: currency, id: \.self)
     }
     
     //*========================================================================*

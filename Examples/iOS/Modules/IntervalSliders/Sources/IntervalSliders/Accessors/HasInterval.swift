@@ -10,10 +10,10 @@
 import SwiftUI
 
 //*============================================================================*
-// MARK: * Intervalable
+// MARK: * HasInterval
 //*============================================================================*
 
-@usableFromInline protocol Intervalable {
+@usableFromInline protocol HasInterval {
     
     //=------------------------------------------------------------------------=
     // MARK: Interval
@@ -23,10 +23,10 @@ import SwiftUI
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: Intervalable - Details
+// MARK: HasInterval - Details
 //=----------------------------------------------------------------------------=
 
-extension Intervalable {
+extension HasInterval {
     
     //=------------------------------------------------------------------------=
     // MARK: Accessors

@@ -24,7 +24,7 @@ Next: BidirectionalCollection, Next.Element == Symbol {
     
     /// Start of changes.
     ///
-    /// Returns each caret position before the first irreconcilable mismatch.
+    /// Returns caret positions before the first irreconcilable mismatch.
     ///
     @inlinable static func prefix(past: Past, next: Next) -> Indices {
         //=--------------------------------------=
@@ -68,7 +68,7 @@ Next: BidirectionalCollection, Next.Element == Symbol {
     
     /// End of changes.
     ///
-    /// Returns each caret position after the first irreconcilable mismatch.
+    /// Returns caret positions after the first irreconcilable mismatch.
     ///
     @inlinable static func suffix(past: Past, next: Next) -> Indices {
         //=--------------------------------------=

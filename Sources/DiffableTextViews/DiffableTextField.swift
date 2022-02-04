@@ -61,7 +61,7 @@ public struct DiffableTextField<Style: UIKitDiffableTextStyle>: UIViewRepresenta
     // MARK: View Life Cycle - UIView
     //=------------------------------------------------------------------------=
     
-    @inlinable public func makeUIView(context: Context) -> BasicTextField {
+    @inlinable public func makeUIView(context: Self.Context) -> BasicTextField {
         //=--------------------------------------=
         // MARK: BasicTextField
         //=--------------------------------------=
@@ -85,7 +85,7 @@ public struct DiffableTextField<Style: UIKitDiffableTextStyle>: UIViewRepresenta
     // MARK: View Life Cycle - Update
     //=------------------------------------------------------------------------=
     
-    @inlinable public func updateUIView(_ uiView: UIViewType, context: Context) {
+    @inlinable public func updateUIView(_ uiView: UIViewType, context: Self.Context) {
         context.coordinator.upstream = self
         onUpdate(context.coordinator.downstream)
         context.coordinator.synchronize()
@@ -97,15 +97,15 @@ public struct DiffableTextField<Style: UIKitDiffableTextStyle>: UIViewRepresenta
     
     public final class Coordinator: NSObject, UITextFieldDelegate {
         @usableFromInline typealias Position = DiffableTextViews.Position<UTF16>
-        @usableFromInline typealias Storage = DiffableTextViews.Storage<Style, UTF16>
+        @usableFromInline typealias Context = DiffableTextViews.Context<Style, UTF16>
 
         //=--------------------------------------------------------------------=
         // MARK: State
         //=--------------------------------------------------------------------=
         
         @usableFromInline let lock = Lock()
-        @usableFromInline let storage = Storage()
-        
+        @usableFromInline let context = Context()
+
         @usableFromInline var upstream: DiffableTextField!
         @usableFromInline var downstream:  ProxyTextField!
         
@@ -147,8 +147,8 @@ public struct DiffableTextField<Style: UIKitDiffableTextStyle>: UIViewRepresenta
         
         @inlinable public func textField(_ textField: UITextField, shouldChangeCharactersIn nsRange: NSRange, replacementString string: String) -> Bool {
             let style = style()
-            let range = storage.field.indices(at: nsRange)
-            let changes = Changes(storage.field.snapshot, change: (string, range))
+            let range = context.field.indices(at: nsRange)
+            let changes = Changes(context.field.snapshot, change: (string, range))
             //=----------------------------------=
             // MARK: Attempt
             //=----------------------------------=
@@ -160,8 +160,8 @@ public struct DiffableTextField<Style: UIKitDiffableTextStyle>: UIViewRepresenta
                 Task { @MainActor in
                     // async to process special commands first
                     // as an example see: (option + backspace)
-                    self.storage.change(selection: range.upperBound)
-                    self.storage.active(style: style, commit: commit)
+                    self.context.change(selection: range.upperBound)
+                    self.context.active(style: style, commit: commit)
                     self.push()
                 }
             //=----------------------------------=
@@ -191,13 +191,13 @@ public struct DiffableTextField<Style: UIKitDiffableTextStyle>: UIViewRepresenta
             //=----------------------------------=
             // MARK: Corrected
             //=----------------------------------=
-            self.storage.field.update(selection: positions, momentum: downstream.momentum)
+            self.context.update(selection: positions, momentum: downstream.momentum)
             //=----------------------------------=
             // MARK: Update Downstream If Needed
             //=----------------------------------=
-            if storage.field.positions != positions {
+            if context.field.positions != positions {
                 lock.perform {
-                    self.downstream.update(selection: storage.field.positions)
+                    self.downstream.update(selection: context.field.positions)
                 }
             }
         }
@@ -207,26 +207,23 @@ public struct DiffableTextField<Style: UIKitDiffableTextStyle>: UIViewRepresenta
         //=--------------------------------------------------------------------=
         
         @inlinable func synchronize() {
-            let style = style()
-            let value = upstream.value.wrappedValue
             //=------------------------------=
             // MARK: Pull
             //=------------------------------=
+            let (style, value) = (style(), upstream.value.wrappedValue)
             guard updatable(style: style, value: value) else { return }
             //=------------------------------=
-            // MARK: Push - Active
+            // MARK: Active
             //=------------------------------=
             if downstream.active {
-                self.storage.active(style: style, commit: style.commit(value: value))
+                self.context.active(style: style, commit: style.commit(value: value))
                 self.push()
             //=------------------------------=
-            // MARK: Push - Inactive
+            // MARK: Inactive
             //=------------------------------=
             } else {
-                lock.perform {
-                    self.storage.inactive(style: style, value: value)
-                    self.downstream.update(text: style.format(value: value))
-                }
+                self.context.inactive(style: style, value: value)
+                self.push(characters: style.format(value: value))
             }
         }
         
@@ -235,21 +232,27 @@ public struct DiffableTextField<Style: UIKitDiffableTextStyle>: UIViewRepresenta
         //=--------------------------------------------------------------------=
         
         @inlinable func push() {
-            self.storage.active = downstream.active
             //=----------------------------------=
             // MARK: Downstream
             //=----------------------------------=
             lock.perform {
-                // changes to UITextField's text and selection both call
-                // the delegate's method: textFieldDidChangeSelection(_:)
-                self.downstream.update(text: storage.field.characters)
-                self.downstream.update(selection: storage.field.positions)
+                self.downstream.update(text: context.field.characters)
+                self.downstream.update(selection: context.field.positions)
             }
             //=----------------------------------=
             // MARK: Upstream
             //=----------------------------------=
-            if  self.upstream.value.wrappedValue != storage.value {
-                self.upstream.value.wrappedValue  = storage.value
+            if  self.upstream.value.wrappedValue != context.value {
+                self.upstream.value.wrappedValue  = context.value
+            }
+        }
+        
+        @inlinable func push(characters: String) {
+            //=----------------------------------=
+            // MARK: Downstream
+            //=----------------------------------=
+            lock.perform {
+                self.downstream.update(text: characters)
             }
         }
                 
@@ -258,7 +261,7 @@ public struct DiffableTextField<Style: UIKitDiffableTextStyle>: UIViewRepresenta
         //=--------------------------------------------------------------------=
         
         @inlinable func updatable(style: Style, value: Value) -> Bool {
-            value != storage.value || downstream.active != storage.active || style != storage.style
+            value != context.value || downstream.active != context.active || style != context.style
         }
     }
 }

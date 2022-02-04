@@ -11,7 +11,7 @@
 		5507BD1627AD66A800F5292D /* Selector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5507BD1527AD66A800F5292D /* Selector.swift */; };
 		5527C21327AA6C6A0098546E /* Interval.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5527C21227AA6C6A0098546E /* Interval.swift */; };
 		55781F2D27AD39B0003D4252 /* Scroller.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55781F2C27AD39B0003D4252 /* Scroller.swift */; };
-		55781F3127AD4500003D4252 /* Storage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55781F3027AD4500003D4252 /* Storage.swift */; };
+		55781F3127AD4500003D4252 /* Context.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55781F3027AD4500003D4252 /* Context.swift */; };
 		557F7FBB27A81171001908D6 /* DiffableTextViews in Frameworks */ = {isa = PBXBuildFile; productRef = 557F7FBA27A81171001908D6 /* DiffableTextViews */; };
 		5589A1A427A7E3E30000F04A /* App.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5589A1A327A7E3E30000F04A /* App.swift */; };
 		5589A1A827A7E3E40000F04A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5589A1A727A7E3E40000F04A /* Assets.xcassets */; };
@@ -31,7 +31,7 @@
 		5507BD1527AD66A800F5292D /* Selector.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Selector.swift; sourceTree = "<group>"; };
 		5527C21227AA6C6A0098546E /* Interval.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Interval.swift; sourceTree = "<group>"; };
 		55781F2C27AD39B0003D4252 /* Scroller.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Scroller.swift; sourceTree = "<group>"; };
-		55781F3027AD4500003D4252 /* Storage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Storage.swift; sourceTree = "<group>"; };
+		55781F3027AD4500003D4252 /* Context.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Context.swift; sourceTree = "<group>"; };
 		557F7FB927A81116001908D6 /* DiffableTextViews */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = DiffableTextViews; path = ../..; sourceTree = "<group>"; };
 		5589A1A027A7E3E30000F04A /* iOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = iOS.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		5589A1A327A7E3E30000F04A /* App.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = App.swift; sourceTree = "<group>"; };
@@ -157,7 +157,7 @@
 			isa = PBXGroup;
 			children = (
 				5527C21227AA6C6A0098546E /* Interval.swift */,
-				55781F3027AD4500003D4252 /* Storage.swift */,
+				55781F3027AD4500003D4252 /* Context.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -270,7 +270,7 @@
 				55F2783927AD7C1C001400D7 /* PatternScreen.swift in Sources */,
 				5507BD1427AD620900F5292D /* Options.swift in Sources */,
 				55F2783A27AD7C1C001400D7 /* NumericScreen.swift in Sources */,
-				55781F3127AD4500003D4252 /* Storage.swift in Sources */,
+				55781F3127AD4500003D4252 /* Context.swift in Sources */,
 				5589A1A427A7E3E30000F04A /* App.swift in Sources */,
 				55781F2D27AD39B0003D4252 /* Scroller.swift in Sources */,
 				5527C21327AA6C6A0098546E /* Interval.swift in Sources */,

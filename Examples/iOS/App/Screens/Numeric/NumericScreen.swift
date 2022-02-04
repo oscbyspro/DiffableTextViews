@@ -40,7 +40,7 @@ struct NumericScreen: View {
     @State private var integer = Self.integer
     @State private var fraction = Self.fraction
 
-    @EnvironmentObject private var storage: Storage
+    @EnvironmentObject private var context: Context
     
     //=------------------------------------------------------------------------=
     // MARK: Body

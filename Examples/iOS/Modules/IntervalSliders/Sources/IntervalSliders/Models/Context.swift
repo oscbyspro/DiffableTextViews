@@ -10,45 +10,23 @@
 import SwiftUI
 
 //*============================================================================*
-// MARK: * Layoutable
+// MARK: * Context
 //*============================================================================*
 
-@usableFromInline protocol Layoutable {
+@usableFromInline final class Context {
     
     //=------------------------------------------------------------------------=
-    // MARK: Layout
+    // MARK: State
     //=------------------------------------------------------------------------=
     
-    @inlinable var layout: Layout { get }
-}
-
-//=----------------------------------------------------------------------------=
-// MARK: Layoutable - Details
-//=----------------------------------------------------------------------------=
-
-extension Layoutable {
+    @usableFromInline let layout: Layout
+    @usableFromInline let interval: Interval
     
     //=------------------------------------------------------------------------=
-    // MARK: Accessors
-    //=------------------------------------------------------------------------=
-        
-    @inlinable var frame: CGRect {
-        layout.frame
-    }
-    
-    @inlinable var positions: (CGFloat, CGFloat) {
-        layout.positions
-    }
-    
-    @inlinable var positionsLimits: ClosedRange<CGFloat> {
-        layout.positionsLimits
-    }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Utilities
+    // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable func center(_ x: CGFloat) -> CGPoint {
-        CGPoint(x: x, y: frame.midY)
+    @inlinable init(_ interval: Interval, proxy: GeometryProxy) {
+        self.interval = interval; self.layout = Layout(interval, in: proxy)
     }
 }

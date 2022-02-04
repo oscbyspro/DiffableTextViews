@@ -10,29 +10,45 @@
 import SwiftUI
 
 //*============================================================================*
-// MARK: * Storage
+// MARK: * HasLayout
 //*============================================================================*
 
-final class Storage: ObservableObject {
+@usableFromInline protocol HasLayout {
     
     //=------------------------------------------------------------------------=
-    // MARK: State
+    // MARK: Layout
     //=------------------------------------------------------------------------=
     
-    lazy var locales: [Locale] = Locale
-        .availableIdentifiers
-        .lazy.map(Locale.init)
-        .reduce(into: Set()) { $0.insert($1) }
-        .sorted(by: { $0.identifier < $1.identifier })
-    
-    lazy var currencies: [String] = locales
-        .lazy.compactMap(\.currencyCode)
-        .reduce(into: Set()) { $0.insert($1) }
-        .sorted(by: <)
+    @inlinable var layout: Layout { get }
+}
+
+//=----------------------------------------------------------------------------=
+// MARK: HasLayout - Details
+//=----------------------------------------------------------------------------=
+
+extension HasLayout {
     
     //=------------------------------------------------------------------------=
-    // MARK: Initializers
+    // MARK: Accessors
+    //=------------------------------------------------------------------------=
+        
+    @inlinable var frame: CGRect {
+        layout.frame
+    }
+    
+    @inlinable var positions: (CGFloat, CGFloat) {
+        layout.positions
+    }
+    
+    @inlinable var positionsLimits: ClosedRange<CGFloat> {
+        layout.positionsLimits
+    }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Utilities
     //=------------------------------------------------------------------------=
     
-    init() { }
+    @inlinable func center(_ x: CGFloat) -> CGPoint {
+        CGPoint(x: x, y: frame.midY)
+    }
 }

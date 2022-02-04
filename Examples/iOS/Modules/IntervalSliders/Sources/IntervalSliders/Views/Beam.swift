@@ -13,7 +13,7 @@ import SwiftUI
 // MARK: * Beam
 //*============================================================================*
 
-@usableFromInline struct Beam: View, Animatable, Storageable {
+@usableFromInline struct Beam: View, Animatable, HasContext {
     @usableFromInline typealias Start = GestureState<(CGFloat, CGFloat)?>
     @usableFromInline typealias AnimatableData = AnimatablePair<CGFloat, CGFloat>
 
@@ -21,7 +21,7 @@ import SwiftUI
     // MARK: State
     //=------------------------------------------------------------------------=
 
-    @usableFromInline let storage: Storage
+    @usableFromInline let context: Context
     @usableFromInline var animatableData: AnimatableData
     @usableFromInline let start = Start(initialValue: nil)
 
@@ -29,8 +29,8 @@ import SwiftUI
     // MARK: Initializers
     //=------------------------------------------------------------------------=
 
-    @inlinable init(_ storage: Storage, between positions: (CGFloat, CGFloat)) {
-        self.storage = storage
+    @inlinable init(_ context: Context, between positions: (CGFloat, CGFloat)) {
+        self.context = context
         self.animatableData = AnimatableData(positions.0, positions.1)
     }
     

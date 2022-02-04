@@ -13,13 +13,13 @@ import SwiftUI
 // MARK: * Handle
 //*============================================================================*
 
-@usableFromInline struct Handle: View, Storageable {
+@usableFromInline struct Handle: View, HasContext {
     
     //=------------------------------------------------------------------------=
     // MARK: State
     //=------------------------------------------------------------------------=
     
-    @usableFromInline let storage: Storage
+    @usableFromInline let context: Context
     @usableFromInline let position: CGFloat
     @usableFromInline let value: Binding<CGFloat>
 
@@ -27,9 +27,9 @@ import SwiftUI
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable init(_ storage: Storage, value: Binding<CGFloat>, position: CGFloat) {
+    @inlinable init(_ context: Context, value: Binding<CGFloat>, position: CGFloat) {
         self.value = value
-        self.storage = storage
+        self.context = context
         self.position = position
     }
     

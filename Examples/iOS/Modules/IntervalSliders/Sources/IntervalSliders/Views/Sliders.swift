@@ -13,20 +13,20 @@ import SwiftUI
 // MARK: * Sliders
 //*============================================================================*
 
-@usableFromInline struct Sliders: View, Storageable {
+@usableFromInline struct Sliders: View, HasContext {
     
     //=------------------------------------------------------------------------=
     // MARK: State
     //=------------------------------------------------------------------------=
     
-    @usableFromInline let storage: Storage
+    @usableFromInline let context: Context
     
     //=------------------------------------------------------------------------=
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
     @inlinable init(_ interval: Interval, in proxy: GeometryProxy) {
-        self.storage = Storage(interval, proxy: proxy)
+        self.context = Context(interval, proxy: proxy)
     }
     
     //=------------------------------------------------------------------------=
@@ -35,9 +35,9 @@ import SwiftUI
     
     @inlinable var body: some View {
         ZStack {
-            Beam(storage, between: layout.positions)
-            Handle(storage, value: values.projectedValue.0, position: positions.0)
-            Handle(storage, value: values.projectedValue.1, position: positions.1)
+            Beam(context, between: layout.positions)
+            Handle(context, value: values.projectedValue.0, position: positions.0)
+            Handle(context, value: values.projectedValue.1, position: positions.1)
         }
         .coordinateSpace(name: coordinates)
     }

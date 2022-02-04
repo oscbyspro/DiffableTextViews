@@ -7,26 +7,34 @@
 // See http://www.apache.org/licenses/LICENSE-2.0 for license information.
 //=----------------------------------------------------------------------------=
 
-import SwiftUI
-
 //*============================================================================*
-// MARK: * Storage
+// MARK: * HasContext
 //*============================================================================*
 
-@usableFromInline final class Storage {
+@usableFromInline protocol HasContext: HasInterval, HasLayout {
     
     //=------------------------------------------------------------------------=
-    // MARK: State
+    // MARK: Context
     //=------------------------------------------------------------------------=
     
-    @usableFromInline let layout: Layout
-    @usableFromInline let interval: Interval
+    @inlinable var context: Context { get }
+}
+
+//=----------------------------------------------------------------------------=
+// MARK: HasContext
+//=----------------------------------------------------------------------------=
+
+extension HasContext {
     
     //=------------------------------------------------------------------------=
-    // MARK: Initializers
+    // MARK: Accessors
     //=------------------------------------------------------------------------=
     
-    @inlinable init(_ interval: Interval, proxy: GeometryProxy) {
-        self.interval = interval; self.layout = Layout(interval, in: proxy)
+    @inlinable var interval: Interval {
+        context.interval
+    }
+    
+    @inlinable var layout: Layout {
+        context.layout
     }
 }

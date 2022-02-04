@@ -19,7 +19,7 @@ import SwiftUI
     // MARK: State
     //=------------------------------------------------------------------------=
     
-    @StateObject var storage = Storage()
+    @StateObject var storage = Context()
     
     //=------------------------------------------------------------------------=
     // MARK: Body

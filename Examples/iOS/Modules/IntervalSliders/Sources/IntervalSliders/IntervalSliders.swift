@@ -13,7 +13,7 @@ import SwiftUI
 // MARK: * IntervalSliders
 //*============================================================================*
 
-public struct IntervalSliders: View, Intervalable {
+public struct IntervalSliders: View, HasInterval {
  
     //=------------------------------------------------------------------------=
     // MARK: State
