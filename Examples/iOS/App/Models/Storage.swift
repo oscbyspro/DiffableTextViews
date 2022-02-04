@@ -19,12 +19,14 @@ final class Storage: ObservableObject {
     // MARK: State
     //=------------------------------------------------------------------------=
     
-    lazy var locales: [Locale] = Locale.availableIdentifiers.lazy
-        .map(Locale.init)
+    lazy var locales: [Locale] = Locale
+        .availableIdentifiers
+        .lazy.map(Locale.init)
         .reduce(into: Set()) { $0.insert($1) }
         .sorted(by: { $0.identifier < $1.identifier })
     
-    lazy var currencies: [String] = locales.compactMap(\.currencyCode)
+    lazy var currencies: [String] = locales
+        .lazy.compactMap(\.currencyCode).sorted(by: <)
     
     //=------------------------------------------------------------------------=
     // MARK: Initializers
