@@ -8,48 +8,55 @@
 //=----------------------------------------------------------------------------=
 
 import SwiftUI
-import IntervalSliders
 
 //*============================================================================*
-// MARK: * Sliders
+// MARK: * Pickers
 //*============================================================================*
 
-struct Sliders<Value: Comparable & BinaryInteger>: View {
+#warning("Selection, data, id.")
+struct Pickers: View {
     
     //=------------------------------------------------------------------------=
     // MARK: State
     //=------------------------------------------------------------------------=
     
-    let title: String
-    let limits: ClosedRange<Value>
-    let interval: Binding<Interval<Value>>
-
-    //=------------------------------------------------------------------------=
-    // MARK: Initializers
-    //=------------------------------------------------------------------------=
-    
-    @inlinable init(_ title: String, values: Binding<Interval<Value>>, limits: ClosedRange<Value>) {
-        self.title = title
-        self.limits = limits
-        self.interval = values
-    }
+    let items: [Int]
     
     //=------------------------------------------------------------------------=
     // MARK: Body
     //=------------------------------------------------------------------------=
     
     var body: some View {
-        GroupBox(label(interval.wrappedValue.closed)) {
-            IntervalSliders(interval.values, in: limits)
-        }
+        foundation.hidden().overlay(content).pickerStyle(.wheel)
     }
     
     //=------------------------------------------------------------------------=
     // MARK: Components
     //=------------------------------------------------------------------------=
     
-    func label(_ values: ClosedRange<Value>) -> String {
-        "\(title): \(String(describing: values.lowerBound.description)) to \(String(describing: values.upperBound))"
+    var foundation: some View {
+        Picker(String(), selection: .constant(0)) { }
+    }
+    
+    #warning("Needs real identifiers.")
+    var content: some View {
+        GeometryReader { proxy in
+            HStack(spacing: 0) {
+                ForEach(items, id: \.self) { item in
+                    Text("\(item)")
+                }
+                .frame(width: proxy.size.width / CGFloat(items.count))
+            }
+        }
     }
 }
 
+//*============================================================================*
+// MARK: * PickersPreviews
+//*============================================================================*
+
+struct PickersPreviews: PreviewProvider {
+    static var previews: some View {
+        Pickers(items: [1, 2, 3])
+    }
+}

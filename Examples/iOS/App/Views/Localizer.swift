@@ -13,6 +13,7 @@ import SwiftUI
 // MARK: * Localizer
 //*============================================================================*
 
+#warning("Remove and replace with generic.")
 struct Localizer: View {
     
     //=------------------------------------------------------------------------=
@@ -38,7 +39,7 @@ struct Localizer: View {
     var body: some View {
         Picker("Locales", selection: selection) {
             ForEach(locales, id: \.self) { locale in
-                Text(String(describing: locale)).tag(locale)
+                Text(locale.identifier).tag(locale)
             }
         }
         .pickerStyle(.wheel)
