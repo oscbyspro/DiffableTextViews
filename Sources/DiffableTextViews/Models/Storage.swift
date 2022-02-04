@@ -6,12 +6,13 @@
 //
 // See http://www.apache.org/licenses/LICENSE-2.0 for license information.
 //=----------------------------------------------------------------------------=
+
 //*============================================================================*
 // MARK: * Storage
 //*============================================================================*
 
 @usableFromInline final class Storage<Style: DiffableTextStyle, Scheme: DiffableTextViews.Scheme> {
-    @usableFromInline typealias Selection = DiffableTextViews.Selection<Scheme>
+    @usableFromInline typealias Field = DiffableTextViews.Field<Scheme>
     @usableFromInline typealias Value = Style.Value
     
     //=------------------------------------------------------------------------=
@@ -21,13 +22,7 @@
     @usableFromInline var value: Value! = nil
     @usableFromInline var style: Style! = nil
     @usableFromInline var active: Bool = false
-    @usableFromInline var selection: Selection = Selection()
-
-    //=------------------------------------------------------------------------=
-    // MARK: Accessors
-    //=------------------------------------------------------------------------=
-    
-    @inlinable var snapshot: Snapshot { selection.layout.snapshot }
+    @usableFromInline var field: Field = Field()
     
     //=------------------------------------------------------------------------=
     // MARK: Update
@@ -42,14 +37,14 @@
     @inlinable func active(style: Style, commit: Commit<Value>) {
         self.style = style
         self.value = commit.value
-        self.selection.update(snapshot: commit.snapshot)
+        self.field.update(snapshot: commit.snapshot)
     }
     
     //=------------------------------------------------------------------------=
     // MARK: Update - Selection
     //=------------------------------------------------------------------------=
     
-    @inlinable func change(selection: Selection.Layout.Index) {
-        self.selection.range = selection ..< selection
+    @inlinable func change(selection index: Field.Layout.Index) {
+        self.field.selection = index ..< index
     }
 }

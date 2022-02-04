@@ -18,7 +18,7 @@ An open-source framework for as-you-type formatting and conversion in iOS.
 | :desert_island: | Stand-alone | Has zero remote dependencies |
 | :window: | Open-source | Open and transparent, as it should be |
 
-### [Algorithms](Sources/DiffableTextViews/Models/Selection.swift)
+### [Algorithms](Sources/DiffableTextViews/Models/Field.swift)
 
 It uses three main algorithms to determine text selection.
 

@@ -146,8 +146,8 @@ public struct DiffableTextField<Style: UIKitDiffableTextStyle>: UIViewRepresenta
         
         @inlinable public func textField(_ textField: UITextField, shouldChangeCharactersIn nsRange: NSRange, replacementString string: String) -> Bool {
             let style = style()
-            let range = storage.selection.indices(at: nsRange)
-            let changes = Changes(storage.snapshot, change: (string, range))
+            let range = storage.field.indices(at: nsRange)
+            let changes = Changes(storage.field.snapshot, change: (string, range))
             //=----------------------------------=
             // MARK: Attempt
             //=----------------------------------=
@@ -190,13 +190,13 @@ public struct DiffableTextField<Style: UIKitDiffableTextStyle>: UIViewRepresenta
             //=----------------------------------=
             // MARK: Corrected
             //=----------------------------------=
-            self.storage.selection.update(selection: positions, momentum: downstream.momentum)
+            self.storage.field.update(selection: positions, momentum: downstream.momentum)
             //=----------------------------------=
             // MARK: Update Downstream If Needed
             //=----------------------------------=
-            if storage.selection.positions != positions {
+            if storage.field.positions != positions {
                 lock.perform {
-                    self.downstream.update(selection: storage.selection.positions)
+                    self.downstream.update(selection: storage.field.positions)
                 }
             }
         }
@@ -241,8 +241,8 @@ public struct DiffableTextField<Style: UIKitDiffableTextStyle>: UIViewRepresenta
             lock.perform {
                 // changes to UITextField's text and selection both call
                 // the delegate's method: textFieldDidChangeSelection(_:)
-                self.downstream.update(text: storage.snapshot.characters)
-                self.downstream.update(selection: storage.selection.positions)
+                self.downstream.update(text: storage.field.characters)
+                self.downstream.update(selection: storage.field.positions)
             }
             //=----------------------------------=
             // MARK: Upstream

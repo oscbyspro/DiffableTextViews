@@ -10,10 +10,10 @@
 import Foundation
 
 //*============================================================================*
-// MARK: * Selection
+// MARK: * Field
 //*============================================================================*
 
-@usableFromInline struct Selection<Scheme: DiffableTextViews.Scheme> {
+@usableFromInline struct Field<Scheme: DiffableTextViews.Scheme> {
     @usableFromInline typealias Layout = DiffableTextViews.Layout<Scheme>
     @usableFromInline typealias Position = DiffableTextViews.Position<Scheme>
     
@@ -21,8 +21,8 @@ import Foundation
     // MARK: State
     //=------------------------------------------------------------------------=
     
-    @usableFromInline var range: Range<Layout.Index>
     @usableFromInline private(set) var layout: Layout
+    @usableFromInline var selection: Range<Layout.Index>
 
     //=------------------------------------------------------------------------=
     // MARK: Initializers
@@ -30,35 +30,43 @@ import Foundation
     
     @inlinable init() {
         self.layout = Layout()
-        self.range = layout.range
+        self.selection = layout.range
     }
     
-    @inlinable init(layout: Layout, range: Range<Layout.Index>) {
-        self.range = range
+    @inlinable init(layout: Layout, selection: Range<Layout.Index>) {
         self.layout = layout
+        self.selection = selection
     }
     
     //=------------------------------------------------------------------------=
     // MARK: Accessors
     //=------------------------------------------------------------------------=
 
+    @inlinable var snapshot: Snapshot {
+        layout.snapshot
+    }
+    
+    @inlinable var characters: String {
+        layout.snapshot.characters
+    }
+    
     @inlinable var positions: Range<Position> {
-        range.lowerBound.position ..< range.upperBound.position
+        selection.lowerBound.position ..< selection.upperBound.position
     }
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: Selection - Indices
+// MARK: Field - Indices
 //=----------------------------------------------------------------------------=
 
-extension Selection {
+extension Field {
 
     //=------------------------------------------------------------------------=
     // MARK: Destination
     //=------------------------------------------------------------------------=
     
     @inlinable func indices(at destination: Range<Position>) -> Range<Layout.Index> {
-        layout.indices(start: range, destination: destination)
+        layout.indices(start: selection, destination: destination)
     }
     
     @inlinable func indices(at destination: NSRange) -> Range<Layout.Index> {
@@ -67,10 +75,10 @@ extension Selection {
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: Selection - Update
+// MARK: Field - Update
 //=----------------------------------------------------------------------------=
 
-extension Selection {
+extension Field {
 
     //=------------------------------------------------------------------------=
     // MARK: Snapshot
@@ -81,29 +89,29 @@ extension Selection {
         //=--------------------------------------=
         // MARK: Selection - Single
         //=--------------------------------------=
-        let upperBound = Mismatches.suffix(past: self.layout[range.upperBound...], next: layout).next
+        let upperBound = Mismatches.suffix(past: self.layout[selection.upperBound...], next: layout).next
         var lowerBound = upperBound
         //=--------------------------------------=
         // MARK: Selection - Double
         //=--------------------------------------=
-        if !self.range.isEmpty {
-            lowerBound = Mismatches.prefix(past: self.layout[..<range.lowerBound], next: layout).next
+        if !self.selection.isEmpty {
+            lowerBound = Mismatches.prefix(past: self.layout[..<selection.lowerBound], next: layout).next
             lowerBound = min(lowerBound, upperBound)
         }
         //=--------------------------------------=
         // MARK: Update
         //=--------------------------------------=
         self.layout = layout
-        self.range = lowerBound ..< upperBound
+        self.selection = lowerBound ..< upperBound
         self.autocorrect(intent: (nil, nil))
     }
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: Selection - Update
+// MARK: Field - Update
 //=----------------------------------------------------------------------------=
 
-extension Selection {
+extension Field {
     
     //=------------------------------------------------------------------------=
     // MARK: Selection
@@ -118,12 +126,12 @@ extension Selection {
         // MARK: Parse Momentum As Intent
         //=--------------------------------------=
         let intent = !momentum ? (nil, nil) : (
-        Direction(start: self.range.lowerBound, end: selection.lowerBound),
-        Direction(start: self.range.upperBound, end: selection.upperBound))
+        Direction(start: self.selection.lowerBound, end: selection.lowerBound),
+        Direction(start: self.selection.upperBound, end: selection.upperBound))
         //=--------------------------------------=
         // MARK: Update
         //=--------------------------------------=
-        self.range = selection
+        self.selection = selection
         self.autocorrect(intent: intent)
     }
 }
@@ -132,7 +140,7 @@ extension Selection {
 // MARK: Selection - Autocorrect
 //=----------------------------------------------------------------------------=
 
-extension Selection {
+extension Field {
         
     //=------------------------------------------------------------------------=
     // MARK: Selection
@@ -142,22 +150,22 @@ extension Selection {
         //=--------------------------------------=
         // MARK: Exceptions
         //=--------------------------------------=
-        if range == layout.range { return }
+        if selection == layout.range { return }
         //=--------------------------------------=
         // MARK: Selection - Single
         //=--------------------------------------=
-        let upperBound = layout.preferredIndex(start: range.upperBound, preference: .backwards, intent: intent.upper)
+        let upperBound = layout.preferredIndex(start: selection.upperBound, preference: .backwards, intent: intent.upper)
         var lowerBound = upperBound
         //=--------------------------------------=
         // MARK: Selection - Double
         //=--------------------------------------=
-        if !range.isEmpty, upperBound != layout.startIndex {
-            lowerBound = layout.preferredIndex(start: range.lowerBound, preference:  .forwards, intent: intent.lower)
+        if !selection.isEmpty, upperBound != layout.startIndex {
+            lowerBound = layout.preferredIndex(start: selection.lowerBound, preference:  .forwards, intent: intent.lower)
             lowerBound = min(lowerBound, upperBound)
         }
         //=--------------------------------------=
         // MARK: Update
         //=--------------------------------------=
-        self.range = lowerBound ..< upperBound
+        self.selection = lowerBound ..< upperBound
     }
 }
