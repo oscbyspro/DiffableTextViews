@@ -56,7 +56,8 @@ struct Example<Style: UIKitDiffableTextStyle>: View {
             descriptionText
             diffableTextField
         }
-        .contentShape(Rectangle())
+        .padding()
+        .background(Color(uiColor: .secondarySystemBackground))
         .onTapGesture(perform: { focused.toggle() })
     }
     
@@ -70,25 +71,26 @@ struct Example<Style: UIKitDiffableTextStyle>: View {
             .frame(maxWidth: .infinity, alignment: .leading)
             .padding()
             .background(border)
+            .background(Color(uiColor: .secondarySystemBackground))
     }
     
     var diffableTextField: some View {
         DiffableTextField($value, style: style)
-            .padding()
-            .background(color)
             .focused($focused)
+            .padding()
+            .background(tertiary)
     }
     
     //=------------------------------------------------------------------------=
     // MARK: Subcomponents
     //=------------------------------------------------------------------------=
     
-    var color: some ShapeStyle {
-        Color(uiColor: .tertiarySystemBackground)
+    var tertiary: some View {
+        Color(uiColor: .tertiarySystemBackground).ignoresSafeArea(.container, edges: [])
     }
     
     var border: some View {
-        Rectangle().strokeBorder(color, lineWidth: 2)
+        Rectangle().strokeBorder(Color(uiColor: .tertiarySystemBackground), lineWidth: 2)
     }
 }
 

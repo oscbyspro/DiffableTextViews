@@ -10,10 +10,10 @@
 import SwiftUI
 
 //*============================================================================*
-// MARK: * Screen
+// MARK: * Scroller
 //*============================================================================*
 
-struct Screen<Content: View>: View {
+struct Scroller<Content: View>: View {
     
     //=------------------------------------------------------------------------=
     // MARK: State
@@ -26,32 +26,10 @@ struct Screen<Content: View>: View {
     //=------------------------------------------------------------------------=
     
     var body: some View {
-        ZStack {
-            background
-            VStack(spacing: 0) {
-                content()
-            }
+        ScrollView(showsIndicators: false) {
+            content()
         }
-    }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Components
-    //=------------------------------------------------------------------------=
-    
-    var background: some View {
-        Color(uiColor: .secondarySystemBackground).ignoresSafeArea()
+        .padding(.horizontal)
     }
 }
 
-//*============================================================================*
-// MARK: * Screen x Previews
-//*============================================================================*
-
-struct ScreenPreviews: PreviewProvider {
-    static var previews: some View {
-        Screen {
-            Rectangle().fill(Material.regular)
-        }
-        .preferredColorScheme(.dark)
-    }
-}

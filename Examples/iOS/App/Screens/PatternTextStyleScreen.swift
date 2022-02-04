@@ -30,8 +30,7 @@ struct PatternTextStyleScreen: View {
     
     var body: some View {
         Screen {
-            diffableTextStyles
-            Spacer()
+            controls
             diffableTextViewsExample
         }
     }
@@ -39,6 +38,13 @@ struct PatternTextStyleScreen: View {
     //=------------------------------------------------------------------------=
     // MARK: Components
     //=------------------------------------------------------------------------=
+    
+    var controls: some View {
+        Scroller {
+            diffableTextStyles
+            Spacer()
+        }
+    }
     
     var diffableTextStyles: some View {
         Choices(Style.allCases, selection: $style, content: \.label)

@@ -50,11 +50,7 @@ struct NumericTextStyleScreen: View {
     
     var body: some View {
         Screen {
-            diffableTextStyles
-            boundsIntervalSliders
-            integerIntervalSliders
-            fractionIntervalSliders
-            Spacer()
+            controls
             diffableTextViewsExample
         }
         .environment(\.locale, locale)
@@ -64,20 +60,30 @@ struct NumericTextStyleScreen: View {
     // MARK: Components
     //=------------------------------------------------------------------------=
     
+    var controls: some View {
+        Scroller {
+            diffableTextStyles
+            boundsIntervalSliders
+            integerIntervalSliders
+            fractionIntervalSliders
+            Spacer()
+        }
+    }
+    
     var diffableTextStyles: some View {
         Choices(Style.allCases, selection: $style, content: \.label)
     }
     
     var boundsIntervalSliders: some View {
-        IntervalUI("Bounds", values: $bounds, limits: Self.bounds.closed).disabled(true)
+        Sliders("Bounds", values: $bounds, limits: Self.bounds.closed).disabled(true)
     }
     
     var integerIntervalSliders: some View {
-        IntervalUI("Integer digits", values: $integer, limits: Self.integer.closed)
+        Sliders("Integer digits", values: $integer, limits: Self.integer.closed)
     }
     
     var fractionIntervalSliders: some View {
-        IntervalUI("Fraction digits", values: $fraction, limits: Self.fraction.closed)
+        Sliders("Fraction digits", values: $fraction, limits: Self.fraction.closed)
     }
     
     var diffableTextViewsExample: some View {

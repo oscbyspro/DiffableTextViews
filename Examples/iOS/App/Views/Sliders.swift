@@ -11,10 +11,10 @@ import SwiftUI
 import IntervalSliders
 
 //*============================================================================*
-// MARK: * IntervalUI
+// MARK: * Sliders
 //*============================================================================*
 
-struct IntervalUI<Value: Comparable & BinaryInteger>: View {
+struct Sliders<Value: Comparable & BinaryInteger>: View {
     
     //=------------------------------------------------------------------------=
     // MARK: State
@@ -39,10 +39,8 @@ struct IntervalUI<Value: Comparable & BinaryInteger>: View {
     //=------------------------------------------------------------------------=
     
     var body: some View {
-        GroupBox {
+        GroupBox(label(interval.wrappedValue.closed)) {
             IntervalSliders(interval.values, in: limits)
-        } label: {
-            description(interval.wrappedValue.closed).transaction({ $0.animation = nil })
         }
     }
     
@@ -50,8 +48,8 @@ struct IntervalUI<Value: Comparable & BinaryInteger>: View {
     // MARK: Components
     //=------------------------------------------------------------------------=
     
-    func description(_ values: ClosedRange<Value>) -> some View {
-        Text("\(title): \(String(describing: values.lowerBound.description)) to \(String(describing: values.upperBound))")
+    func label(_ values: ClosedRange<Value>) -> String {
+        "\(title): \(String(describing: values.lowerBound.description)) to \(String(describing: values.upperBound))"
     }
 }
 
