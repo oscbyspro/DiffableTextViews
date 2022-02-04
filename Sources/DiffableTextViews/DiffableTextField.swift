@@ -97,14 +97,15 @@ public struct DiffableTextField<Style: UIKitDiffableTextStyle>: UIViewRepresenta
     
     public final class Coordinator: NSObject, UITextFieldDelegate {
         @usableFromInline typealias Position = DiffableTextViews.Position<UTF16>
-        @usableFromInline typealias Storage = DiffableTextViews.Storage<Style,UTF16>
-        
+        @usableFromInline typealias Storage = DiffableTextViews.Storage<Style, UTF16>
+
         //=--------------------------------------------------------------------=
         // MARK: State
         //=--------------------------------------------------------------------=
-
+        
         @usableFromInline let lock = Lock()
         @usableFromInline let storage = Storage()
+        
         @usableFromInline var upstream: DiffableTextField!
         @usableFromInline var downstream:  ProxyTextField!
         
