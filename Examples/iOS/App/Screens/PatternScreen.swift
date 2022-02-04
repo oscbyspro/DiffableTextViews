@@ -48,7 +48,7 @@ struct PatternScreen: View {
     }
     
     var diffableTextStyles: some View {
-        Choices(Style.allCases, selection: $style, content: \.label)
+        Options($style)
     }
     
     var diffableTextViewsExample: some View {
@@ -67,23 +67,7 @@ struct PatternScreen: View {
     // MARK: * Pattern
     //*========================================================================*
     
-    enum Style: String, CaseIterable {
-        
-        //=--------------------------------------------------------------------=
-        // MARK: Instances
-        //=--------------------------------------------------------------------=
-        
-        case phone
-        case card
-        
-        //=--------------------------------------------------------------------=
-        // MARK: Body
-        //=--------------------------------------------------------------------=
-        
-        var label: some View {
-            Text(rawValue.capitalized).tag(self)
-        }
-    }
+    enum Style: String, CaseIterable { case phone, card }
 }
 
 //*============================================================================*

@@ -74,7 +74,7 @@ struct NumericScreen: View {
     }
     
     var diffableTextStyles: some View {
-        Choices(Style.allCases, selection: $style, content: \.label)
+        Options($style)
     }
     
     var boundsIntervalSliders: some View {
@@ -106,24 +106,7 @@ struct NumericScreen: View {
     // MARK: * Style
     //*========================================================================*
     
-    enum Style: String, CaseIterable {
-        
-        //=--------------------------------------------------------------------=
-        // MARK: Instances
-        //=--------------------------------------------------------------------=
-        
-        case number
-        case currency
-        case percent
-        
-        //=--------------------------------------------------------------------=
-        // MARK: Body
-        //=--------------------------------------------------------------------=
-        
-        var label: some View {
-            Text(rawValue.capitalized).tag(self)
-        }
-    }
+    enum Style: String, CaseIterable { case number, currency, percent }
 }
 
 //*============================================================================*

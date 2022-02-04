@@ -10,53 +10,34 @@
 import SwiftUI
 
 //*============================================================================*
-// MARK: * Pickers
+// MARK: * Selector
 //*============================================================================*
 
-#warning("Selection, data, id.")
-struct Pickers: View {
+struct Options<Value: Hashable & RawRepresentable & CaseIterable>: View where
+Value.RawValue == String, Value.AllCases: RandomAccessCollection {
     
     //=------------------------------------------------------------------------=
     // MARK: State
     //=------------------------------------------------------------------------=
     
-    let items: [Int]
+    let selection: Binding<Value>
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Initializers
+    //=------------------------------------------------------------------------=
+    
+    init(_ selection: Binding<Value>) { self.selection = selection }
     
     //=------------------------------------------------------------------------=
     // MARK: Body
     //=------------------------------------------------------------------------=
     
     var body: some View {
-        foundation.hidden().overlay(content).pickerStyle(.wheel)
-    }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Components
-    //=------------------------------------------------------------------------=
-    
-    var foundation: some View {
-        Picker(String(), selection: .constant(0)) { }
-    }
-    
-    #warning("Needs real identifiers.")
-    var content: some View {
-        GeometryReader { proxy in
-            HStack(spacing: 0) {
-                ForEach(items, id: \.self) { item in
-                    Text("\(item)")
-                }
-                .frame(width: proxy.size.width / CGFloat(items.count))
+        Picker(String(describing: Value.self), selection: selection) {
+            ForEach(Value.allCases, id: \.self) {
+                Text($0.rawValue.capitalized).tag($0)
             }
         }
     }
 }
 
-//*============================================================================*
-// MARK: * PickersPreviews
-//*============================================================================*
-
-struct PickersPreviews: PreviewProvider {
-    static var previews: some View {
-        Pickers(items: [1, 2, 3])
-    }
-}

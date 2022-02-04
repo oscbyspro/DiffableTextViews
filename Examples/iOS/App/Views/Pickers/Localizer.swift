@@ -10,28 +10,25 @@
 import SwiftUI
 
 //*============================================================================*
-// MARK: * Choices
+// MARK: * Localizer
 //*============================================================================*
 
-struct Choices<Options: RandomAccessCollection, Content: View>: View where Options.Element: Hashable {
-    typealias Selection = Options.Element
+struct Localizer: View {
     
     //=------------------------------------------------------------------------=
     // MARK: State
     //=------------------------------------------------------------------------=
     
-    let options: Options
-    let selection: Binding<Selection>
-    let content: (Selection) -> Content
-    
+    let locales: [Locale]
+    let selection: Binding<Locale>
+
     //=------------------------------------------------------------------------=
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    init(_ options: Options, selection: Binding<Selection>, content: @escaping (Selection) -> Content) {
-        self.options = options
+    init(_ selection: Binding<Locale>, in locales: [Locale]) {
+        self.locales = locales
         self.selection = selection
-        self.content = content
     }
     
     //=------------------------------------------------------------------------=
@@ -39,17 +36,11 @@ struct Choices<Options: RandomAccessCollection, Content: View>: View where Optio
     //=------------------------------------------------------------------------=
     
     var body: some View {
-        Picker(title, selection: selection) {
-            ForEach(options, id: \.self, content: content)
+        Picker("Locale", selection: selection) {
+            ForEach(locales, id: \.identifier) {
+                Text($0.identifier).tag($0)
+            }
         }
-        .pickerStyle(.segmented)
-    }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Components
-    //=------------------------------------------------------------------------=
-    
-    var title: String {
-        String(describing: Selection.self)
+        .pickerStyle(.wheel)
     }
 }
