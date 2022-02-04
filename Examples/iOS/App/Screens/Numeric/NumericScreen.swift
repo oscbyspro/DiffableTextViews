@@ -64,7 +64,7 @@ struct NumericScreen: View {
     var controls: some View {
         Scroller {
             diffableTextStyles
-            localizationPickerWheel
+            customizationWheels
             boundsIntervalSliders
             integerIntervalSliders
             fractionIntervalSliders
@@ -74,6 +74,10 @@ struct NumericScreen: View {
     
     var diffableTextStyles: some View {
         Options($style)
+    }
+    
+    var customizationWheels: some View {
+        NumericCustomizationWheels(style, locale: $locale, currency: $currency)
     }
     
     var boundsIntervalSliders: some View {
@@ -86,10 +90,6 @@ struct NumericScreen: View {
     
     var fractionIntervalSliders: some View {
         Sliders("Fraction digits", values: $fraction, limits: Self.fraction.closed)
-    }
-    
-    var localizationPickerWheel: some View {
-        Selector(storage.locales, selection: $locale, id: \.identifier)        
     }
     
     var diffableTextViewsExample: some View {
