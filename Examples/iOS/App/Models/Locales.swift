@@ -10,27 +10,27 @@
 import SwiftUI
 
 //*============================================================================*
-// MARK: * App
+// MARK: * Localization
 //*============================================================================*
 
-@main struct App: SwiftUI.App {
+final class Locales: ObservableObject {
     
     //=------------------------------------------------------------------------=
     // MARK: State
     //=------------------------------------------------------------------------=
     
-    @StateObject var locales = Locales()
+    let available: [Locale]
+    @Published var current: Locale
     
     //=------------------------------------------------------------------------=
-    // MARK: Body
+    // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    var body: some Scene {
-        WindowGroup {
-            ContentTabs()
-                .preferredColorScheme(.dark)
-                .environment(\.locale, locales.current)
-                .environmentObject(locales)
-        }
+    init() {
+        self.current = Locale.autoupdatingCurrent
+        self.available = Locale.availableIdentifiers.lazy
+            .map(Locale.init)
+            .reduce(into: Set()) { $0.insert($1) }
+            .sorted(by: { $0.identifier < $1.identifier })
     }
 }

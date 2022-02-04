@@ -34,7 +34,7 @@ struct NumericScreen: View {
     
     @State private var value  = Value()
     @State private var style  = Style.number
-    @State private var locale = Locale(identifier: "en_US")
+    @EnvironmentObject var locales: Locales
     
     //=------------------------------------------------------------------------=
     // MARK: State - Customization
@@ -54,7 +54,6 @@ struct NumericScreen: View {
             Divider()
             diffableTextViewsExample
         }
-        .environment(\.locale, locale)
     }
      
     //=------------------------------------------------------------------------=
@@ -64,10 +63,10 @@ struct NumericScreen: View {
     var controls: some View {
         Scroller {
             diffableTextStyles
+            localizationPickerWheel
             boundsIntervalSliders
             integerIntervalSliders
             fractionIntervalSliders
-            localePickerWheel
             Spacer()
         }
     }
@@ -88,8 +87,8 @@ struct NumericScreen: View {
         Sliders("Fraction digits", values: $fraction, limits: Self.fraction.closed)
     }
     
-    var localePickerWheel: some View {
-        Localizer($locale)
+    var localizationPickerWheel: some View {
+        Localizer($locales.current, in: locales.available)
     }
     
     var diffableTextViewsExample: some View {

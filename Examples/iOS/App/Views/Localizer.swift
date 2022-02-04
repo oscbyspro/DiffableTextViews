@@ -16,25 +16,20 @@ import SwiftUI
 struct Localizer: View {
     
     //=------------------------------------------------------------------------=
-    // MARK: Constants
-    //=------------------------------------------------------------------------=
-    
-    static let locales: [Locale] = Locale
-        .availableIdentifiers.map(Locale.init)
-        .reduce(into: Set()) { $0.insert($1) }
-        .sorted(by: { $0.identifier < $1.identifier })
-    
-    //=------------------------------------------------------------------------=
     // MARK: State
     //=------------------------------------------------------------------------=
     
+    let locales: [Locale]
     let selection: Binding<Locale>
 
     //=------------------------------------------------------------------------=
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    init(_ selection: Binding<Locale>) { self.selection = selection }
+    init(_ selection: Binding<Locale>, in locales: [Locale]) {
+        self.locales = locales
+        self.selection = selection
+    }
     
     //=------------------------------------------------------------------------=
     // MARK: Body
@@ -42,7 +37,7 @@ struct Localizer: View {
     
     var body: some View {
         Picker("Locales", selection: selection) {
-            ForEach(Self.locales, id: \.self) { locale in
+            ForEach(locales, id: \.self) { locale in
                 Text(String(describing: locale)).tag(locale)
             }
         }
