@@ -19,7 +19,7 @@ import SwiftUI
     // MARK: State
     //=------------------------------------------------------------------------=
     
-    @StateObject var locales = Locales()
+    @StateObject var storage = Storage()
     
     //=------------------------------------------------------------------------=
     // MARK: Body
@@ -29,8 +29,7 @@ import SwiftUI
         WindowGroup {
             ContentTabs()
                 .preferredColorScheme(.dark)
-                .environment(\.locale, locales.current)
-                .environmentObject(locales)
+                .environmentObject(storage)
         }
     }
 }

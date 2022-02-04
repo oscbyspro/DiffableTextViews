@@ -13,6 +13,7 @@ import IntervalSliders
 //*============================================================================*
 // MARK: * Sliders
 //*============================================================================*
+
 struct Sliders<Value: Comparable & BinaryInteger>: View {
     
     //=------------------------------------------------------------------------=
@@ -51,3 +52,4 @@ struct Sliders<Value: Comparable & BinaryInteger>: View {
         "\(title): \(String(describing: values.lowerBound.description)) to \(String(describing: values.upperBound))"
     }
 }
+

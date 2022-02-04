@@ -10,27 +10,25 @@
 import SwiftUI
 
 //*============================================================================*
-// MARK: * Localization
+// MARK: * Storage
 //*============================================================================*
 
-final class Locales: ObservableObject {
+final class Storage: ObservableObject {
     
     //=------------------------------------------------------------------------=
     // MARK: State
     //=------------------------------------------------------------------------=
     
-    let available: [Locale]
-    @Published var current: Locale
+    lazy var locales: [Locale] = Locale.availableIdentifiers.lazy
+        .map(Locale.init)
+        .reduce(into: Set()) { $0.insert($1) }
+        .sorted(by: { $0.identifier < $1.identifier })
+    
+    lazy var currencies: [String] = locales.map(\.currencyCode!)
     
     //=------------------------------------------------------------------------=
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    init() {
-        self.current = Locale.autoupdatingCurrent
-        self.available = Locale.availableIdentifiers.lazy
-            .map(Locale.init)
-            .reduce(into: Set()) { $0.insert($1) }
-            .sorted(by: { $0.identifier < $1.identifier })
-    }
+    init() { }
 }

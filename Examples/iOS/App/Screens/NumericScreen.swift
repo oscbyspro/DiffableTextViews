@@ -16,7 +16,6 @@ import NumericTextStyles
 // MARK: * NumericScreen
 //*============================================================================*
 
-#warning("Style and local choice should always be there, rest depends on style.")
 struct NumericScreen: View {
     typealias Value = Double
     
@@ -34,7 +33,10 @@ struct NumericScreen: View {
     
     @State private var value  = Value()
     @State private var style  = Style.number
-    @EnvironmentObject var locales: Locales
+    @State private var locale = Locale(identifier: "en_US")
+    @State private var currency = "USD"
+
+    @EnvironmentObject private var storage: Storage
     
     //=------------------------------------------------------------------------=
     // MARK: State - Customization
@@ -88,7 +90,7 @@ struct NumericScreen: View {
     }
     
     var localizationPickerWheel: some View {
-        Localizer($locales.current, in: locales.available)
+        Localizer($locale, in: storage.locales)
     }
     
     var diffableTextViewsExample: some View {
@@ -97,6 +99,7 @@ struct NumericScreen: View {
             .bounds((0 as Value)...)
             .precision(integer: integer.closed, fraction: fraction.closed)
         }
+        .environment(\.locale, locale)
     }
     
     //*========================================================================*
