@@ -67,6 +67,7 @@ struct NumericScreen: View {
             boundsIntervalSliders
             integerIntervalSliders
             fractionIntervalSliders
+            localePickerWheel
             Spacer()
         }
     }
@@ -85,6 +86,10 @@ struct NumericScreen: View {
     
     var fractionIntervalSliders: some View {
         Sliders("Fraction digits", values: $fraction, limits: Self.fraction.closed)
+    }
+    
+    var localePickerWheel: some View {
+        Localizer($locale)
     }
     
     var diffableTextViewsExample: some View {

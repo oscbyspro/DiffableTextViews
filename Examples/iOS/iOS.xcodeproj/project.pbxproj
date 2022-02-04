@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		5527C21327AA6C6A0098546E /* Interval.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5527C21227AA6C6A0098546E /* Interval.swift */; };
 		55781F2D27AD39B0003D4252 /* Scroller.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55781F2C27AD39B0003D4252 /* Scroller.swift */; };
+		55781F2F27AD3FE4003D4252 /* Localizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55781F2E27AD3FE4003D4252 /* Localizer.swift */; };
 		557F7FBB27A81171001908D6 /* DiffableTextViews in Frameworks */ = {isa = PBXBuildFile; productRef = 557F7FBA27A81171001908D6 /* DiffableTextViews */; };
 		55893D7427A8783E004F3388 /* Choices.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55893D7327A8783E004F3388 /* Choices.swift */; };
 		5589A1A427A7E3E30000F04A /* App.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5589A1A327A7E3E30000F04A /* App.swift */; };
@@ -26,6 +27,7 @@
 /* Begin PBXFileReference section */
 		5527C21227AA6C6A0098546E /* Interval.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Interval.swift; sourceTree = "<group>"; };
 		55781F2C27AD39B0003D4252 /* Scroller.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Scroller.swift; sourceTree = "<group>"; };
+		55781F2E27AD3FE4003D4252 /* Localizer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Localizer.swift; sourceTree = "<group>"; };
 		557F7FB927A81116001908D6 /* DiffableTextViews */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = DiffableTextViews; path = ../..; sourceTree = "<group>"; };
 		55893D7327A8783E004F3388 /* Choices.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Choices.swift; sourceTree = "<group>"; };
 		5589A1A027A7E3E30000F04A /* iOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = iOS.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -108,6 +110,7 @@
 				55A85FF627A7E850006CCCB7 /* Screen.swift */,
 				55781F2C27AD39B0003D4252 /* Scroller.swift */,
 				55DDC62B27A8D81D00B2AB4A /* Example.swift */,
+				55781F2E27AD3FE4003D4252 /* Localizer.swift */,
 				55893D7327A8783E004F3388 /* Choices.swift */,
 				559FA0E727AC0FAA00FF1551 /* Sliders.swift */,
 			);
@@ -233,6 +236,7 @@
 			files = (
 				55AA28C327A7ED4F003778FE /* Screen.swift in Sources */,
 				559FA0E827AC0FAA00FF1551 /* Sliders.swift in Sources */,
+				55781F2F27AD3FE4003D4252 /* Localizer.swift in Sources */,
 				55AA28CE27A7F472003778FE /* ContentTabs.swift in Sources */,
 				55AA28BD27A7EC8C003778FE /* PatternScreen.swift in Sources */,
 				55AA28BE27A7EC8C003778FE /* NumericScreen.swift in Sources */,
