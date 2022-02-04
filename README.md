@@ -1,6 +1,6 @@
 # DiffableTextViews
 
-An open-source framework for as-you-type formatting and conversion in iOS.
+An open-source module for as-you-type formatting and conversion in iOS.
 
 ![DiffableAmountTextField.gif](Assets/DiffableAmountTextField.gif)
 

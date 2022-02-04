@@ -41,4 +41,3 @@ Value.RawValue == String, Value.AllCases: RandomAccessCollection {
         .pickerStyle(.segmented)
     }
 }
-

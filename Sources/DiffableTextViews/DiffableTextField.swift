@@ -264,7 +264,7 @@ public struct DiffableTextField<Style: UIKitDiffableTextStyle>: UIViewRepresenta
 }
 
 //*============================================================================*
-// MARK: * DiffableTextField x Configurations
+// MARK: * DiffableTextField x Environment
 //*============================================================================*
 
 @usableFromInline enum DiffableTextField_OnSetup:  EnvironmentKey {
@@ -280,7 +280,7 @@ public struct DiffableTextField<Style: UIKitDiffableTextStyle>: UIViewRepresenta
 }
 
 //*============================================================================*
-// MARK: * DiffableTextField x Configurations x Environment
+// MARK: * DiffableTextField x Environment x Values
 //*============================================================================*
 
 extension EnvironmentValues {
@@ -306,7 +306,7 @@ extension EnvironmentValues {
 }
 
 //*============================================================================*
-// MARK: * DiffableTextField x Configurations x View
+// MARK: * DiffableTextField x Environment x View
 //*============================================================================*
 
 public extension View {
