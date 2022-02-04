@@ -30,7 +30,7 @@ struct NumericScreen: View {
     // MARK: State
     //=------------------------------------------------------------------------=
     
-    @State private var value = Value()
+    @State private var value = 0 as Value
     @State private var style = Style.currency
     
     @State private var currency = "USD"
@@ -86,16 +86,16 @@ struct NumericScreen: View {
     }
     
     var integerIntervalSliders: some View {
-        Sliders("Integer digits", values: $integer, limits: Self.integer.closed)
+        Sliders("Integer digits length", values: $integer, limits: Self.integer.closed)
     }
     
     var fractionIntervalSliders: some View {
-        Sliders("Fraction digits", values: $fraction, limits: Self.fraction.closed)
+        Sliders("Fraction digits length", values: $fraction, limits: Self.fraction.closed)
     }
     
     var diffableTextViewsExample: some View {
         Example($value) {
-            .number
+            .currency(code: currency)
             .bounds((0 as Value)...)
             .precision(integer: integer.closed, fraction: fraction.closed)
         }
