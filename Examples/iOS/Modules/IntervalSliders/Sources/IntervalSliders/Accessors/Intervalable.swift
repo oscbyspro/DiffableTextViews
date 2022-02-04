@@ -10,33 +10,33 @@
 import SwiftUI
 
 //*============================================================================*
-// MARK: * Storageable
+// MARK: * Intervalable
 //*============================================================================*
 
-@usableFromInline protocol Storageable {
+@usableFromInline protocol Intervalable {
     
     //=------------------------------------------------------------------------=
-    // MARK: Storage
+    // MARK: Interval
     //=------------------------------------------------------------------------=
     
-    @inlinable var storage: Storage { get }
+    @inlinable var interval: Interval { get }
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: Storageable - Details
+// MARK: Intervalable - Details
 //=----------------------------------------------------------------------------=
 
-extension Storageable {
+extension Intervalable {
     
     //=------------------------------------------------------------------------=
     // MARK: Accessors
     //=------------------------------------------------------------------------=
         
     @inlinable var values: Binding<(CGFloat, CGFloat)> {
-        storage.values
+        interval.values
     }
     
     @inlinable var valuesLimits: ClosedRange<CGFloat> {
-        storage.valuesLimits
+        interval.valuesLimits
     }
 }

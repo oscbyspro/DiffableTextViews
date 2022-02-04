@@ -7,37 +7,34 @@
 // See http://www.apache.org/licenses/LICENSE-2.0 for license information.
 //=----------------------------------------------------------------------------=
 
-import SwiftUI
-
 //*============================================================================*
-// MARK: * Interval
+// MARK: * Storageable
 //*============================================================================*
 
-@usableFromInline struct Interval: View, Layoutable, Storageable {
+@usableFromInline protocol Storageable: Intervalable, Layoutable {
     
     //=------------------------------------------------------------------------=
-    // MARK: Environment
+    // MARK: Storage
     //=------------------------------------------------------------------------=
     
-    @usableFromInline @EnvironmentObject var layout:  Layout
-    @usableFromInline @EnvironmentObject var storage: Storage
+    @inlinable var storage: Storage { get }
+}
+
+//=----------------------------------------------------------------------------=
+// MARK: Storageable
+//=----------------------------------------------------------------------------=
+
+extension Storageable {
     
     //=------------------------------------------------------------------------=
-    // MARK: Initializers
+    // MARK: Accessors
     //=------------------------------------------------------------------------=
     
-    @inlinable init() { }
+    @inlinable var layout: Layout {
+        storage.layout
+    }
     
-    //=------------------------------------------------------------------------=
-    // MARK: Body
-    //=------------------------------------------------------------------------=
-    
-    @inlinable var body: some View {
-        ZStack {
-            Beam(between: layout.positions)
-            Handle(values.projectedValue.0, at: positions.0)
-            Handle(values.projectedValue.1, at: positions.1)
-        }
-        .coordinateSpace(name: coordinates)
+    @inlinable var interval: Interval {
+        storage.interval
     }
 }

@@ -16,7 +16,7 @@ import SwiftUI
 @usableFromInline protocol Layoutable {
     
     //=------------------------------------------------------------------------=
-    // MARK: Storage
+    // MARK: Layout
     //=------------------------------------------------------------------------=
     
     @inlinable var layout: Layout { get }

@@ -10,23 +10,35 @@
 import SwiftUI
 
 //*============================================================================*
-// MARK: * Storage
+// MARK: * Sliders
 //*============================================================================*
 
-@usableFromInline final class Storage {
+@usableFromInline struct Sliders: View, Storageable {
     
     //=------------------------------------------------------------------------=
     // MARK: State
     //=------------------------------------------------------------------------=
     
-    @usableFromInline let layout: Layout
-    @usableFromInline let interval: Interval
+    @usableFromInline let storage: Storage
     
     //=------------------------------------------------------------------------=
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable init(_ interval: Interval, proxy: GeometryProxy) {
-        self.interval = interval; self.layout = Layout(interval, in: proxy)
+    @inlinable init(_ interval: Interval, in proxy: GeometryProxy) {
+        self.storage = Storage(interval, proxy: proxy)
+    }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Body
+    //=------------------------------------------------------------------------=
+    
+    @inlinable var body: some View {
+        ZStack {
+            Beam(storage, between: layout.positions)
+            Handle(storage, value: values.projectedValue.0, position: positions.0)
+            Handle(storage, value: values.projectedValue.1, position: positions.1)
+        }
+        .coordinateSpace(name: coordinates)
     }
 }

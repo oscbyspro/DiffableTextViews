@@ -10,23 +10,23 @@
 import SwiftUI
 
 //*============================================================================*
-// MARK: * Storage
+// MARK: * Interval
 //*============================================================================*
 
-@usableFromInline final class Storage {
-    
+@usableFromInline final class Interval: ObservableObject {
+
     //=------------------------------------------------------------------------=
     // MARK: State
     //=------------------------------------------------------------------------=
     
-    @usableFromInline let layout: Layout
-    @usableFromInline let interval: Interval
+    @usableFromInline let values: Binding<(CGFloat, CGFloat)>
+    @usableFromInline let valuesLimits: ClosedRange<CGFloat>
     
     //=------------------------------------------------------------------------=
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable init(_ interval: Interval, proxy: GeometryProxy) {
-        self.interval = interval; self.layout = Layout(interval, in: proxy)
+    @inlinable init(_ values: Binding<(CGFloat, CGFloat)>, in valuesLimits: ClosedRange<CGFloat>) {
+        self.values = values; self.valuesLimits = valuesLimits
     }
 }

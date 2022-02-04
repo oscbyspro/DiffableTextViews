@@ -27,10 +27,10 @@ import SwiftUI
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable init(_ storage: Storage, in proxy: GeometryProxy) {
+    @inlinable init(_ interval: Interval, in proxy: GeometryProxy) {
         self.frame = proxy.frame(in: .local)
         self.positionsLimits = 0...frame.width
-        self.positions = map(storage.values.wrappedValue,
-        from: storage.valuesLimits, to: positionsLimits)
+        self.positions = map(interval.values.wrappedValue,
+        from: interval.valuesLimits, to: positionsLimits)
     }
 }

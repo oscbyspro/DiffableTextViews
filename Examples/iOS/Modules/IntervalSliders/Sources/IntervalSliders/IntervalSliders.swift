@@ -13,20 +13,20 @@ import SwiftUI
 // MARK: * IntervalSliders
 //*============================================================================*
 
-public struct IntervalSliders: View, Storageable {
+public struct IntervalSliders: View, Intervalable {
  
     //=------------------------------------------------------------------------=
     // MARK: State
     //=------------------------------------------------------------------------=
     
-    @usableFromInline let storage: Storage
+    @usableFromInline let interval: Interval
     
     //=------------------------------------------------------------------------=
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
     @inlinable public init(_ values: Binding<(CGFloat, CGFloat)>, in limits: ClosedRange<CGFloat>) {
-        self.storage = Storage(values, in: limits)
+        self.interval = Interval(values, in: limits)
     }
     
     //=------------------------------------------------------------------------=
@@ -34,16 +34,22 @@ public struct IntervalSliders: View, Storageable {
     //=------------------------------------------------------------------------=
     
     @inlinable public var body: some View {
-        ZStack {
-            Track()
-            GeometryReader {
-                Interval()
-                    .environmentObject(Layout(storage, in: $0))
-            }
-            .padding(.horizontal, 0.5 * radius)
+        foundation.overlay(sliders)
+    }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Components
+    //=------------------------------------------------------------------------=
+    
+    @inlinable var foundation: some View {
+        Track().frame(maxWidth: .infinity, minHeight: radius, maxHeight: radius)
+    }
+    
+    @inlinable var sliders: some View {
+        GeometryReader {
+            Sliders(interval, in: $0)
         }
-        .environmentObject(storage)
-        .frame(maxWidth: .infinity, minHeight: radius, maxHeight: radius)
+        .padding(.horizontal, 0.5 * radius)
     }
 }
 
