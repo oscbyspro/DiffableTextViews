@@ -38,7 +38,7 @@ struct NumericScreen: View {
     
     @State private var bounds = Self.bounds
     @State private var integer = Self.integer
-    @State private var fraction = Self.fraction
+    @State private var fraction = Interval((2, 2))
 
     @EnvironmentObject private var context: Context
     

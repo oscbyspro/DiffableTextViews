@@ -102,6 +102,7 @@ extension NumericTextStyle {
         //=--------------------------------------=
         // MARK: Value -> Number
         //=--------------------------------------=
+        #warning("This crashes when String(describing: value) returns scientific notation: 9e-8, for example.")
         var number = try! Number(value)
         precision.autocorrect(&number)
         //=--------------------------------------=

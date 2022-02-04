@@ -168,6 +168,8 @@ extension Number {
     // MARK: Value
     //=------------------------------------------------------------------------=
     
+    #warning("This crashes when String(describing: value) returns scientific notation: 9e-8, for example.")
+    /// Requires description to be a standard (non-scientific) representation of a number.
     @inlinable init<T: Value>(_ value: T) throws {
         let characters = String(describing: value)
         try self.init(characters: characters, integer: T.isInteger, unsigned: T.isUnsigned,

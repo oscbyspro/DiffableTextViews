@@ -49,8 +49,8 @@ public struct Precision<Value: Precise>: Equatable {
     
     @inlinable func inactive() -> NumberFormatStyleConfiguration.Precision {
         .integerAndFractionLength(
-         integerLimits: lower.integer  ... upper.integer,
-        fractionLimits: lower.fraction ... upper.fraction)
+         integerLimits: lower.integer  ... Int.max,
+        fractionLimits: lower.fraction ... Int.max)
     }
 
     @inlinable func active() -> NumberFormatStyleConfiguration.Precision {
