@@ -26,7 +26,9 @@ final class Storage: ObservableObject {
         .sorted(by: { $0.identifier < $1.identifier })
     
     lazy var currencies: [String] = locales
-        .lazy.compactMap(\.currencyCode).sorted(by: <)
+        .lazy.compactMap(\.currencyCode)
+        .reduce(into: Set()) { $0.insert($1) }
+        .sorted(by: <)
     
     //=------------------------------------------------------------------------=
     // MARK: Initializers
