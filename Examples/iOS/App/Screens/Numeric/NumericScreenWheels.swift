@@ -10,10 +10,10 @@
 import SwiftUI
 
 //*============================================================================*
-// MARK: * NumericStylePickers
+// MARK: * NumericScreenWheels
 //*============================================================================*
 
-struct NumericCustomizationWheels: View {
+struct NumericScreenWheels: View {
     typealias Style = NumericScreen.Style
     
     //=------------------------------------------------------------------------=
@@ -63,7 +63,7 @@ struct NumericCustomizationWheels: View {
             // MARK: Content
             //=----------------------------------=
             HStack(spacing: 0) {
-                locales.modifier(separate)
+                locales.modifier(separate).zIndex(1)
                 if style == .currency {
                     Divider()
                     currencies.modifier(separate)
@@ -84,14 +84,6 @@ struct NumericCustomizationWheels: View {
         Selector(storage.currencies, selection: currency, id: \.self)
     }
     
-    //=------------------------------------------------------------------------=
-    // MARK: Conditionals
-    //=------------------------------------------------------------------------=
-    
-    var count: CGFloat {
-        style == .currency ? 2 : 1
-    }
-    
     //*========================================================================*
     // MARK: * Separate
     //*========================================================================*
@@ -102,16 +94,14 @@ struct NumericCustomizationWheels: View {
         // MARK: State
         //=--------------------------------------------------------------------=
         
-        let style: Style
-        let proxy: GeometryProxy
+        let width: CGFloat
         
         //=--------------------------------------------------------------------=
         // MARK: Initializers
         //=--------------------------------------------------------------------=
 
         init(_ proxy: GeometryProxy, style: Style) {
-            self.style = style
-            self.proxy = proxy
+            self.width = proxy.size.width / CGFloat(style == .currency ? 2 : 1)
         }
         
         //=--------------------------------------------------------------------=
@@ -120,14 +110,6 @@ struct NumericCustomizationWheels: View {
         
         func body(content: Content) -> some View {
             content.frame(width: width).clipped()
-        }
-        
-        //=--------------------------------------------------------------------=
-        // MARK: Components
-        //=--------------------------------------------------------------------=
-        
-        var width: CGFloat {
-            proxy.size.width / CGFloat(style == .currency ? 2 : 1)
         }
     }
 }

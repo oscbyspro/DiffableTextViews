@@ -23,7 +23,7 @@
 		55E505C427AD4BA20047AF1D /* Sliders.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55E505C327AD4BA20047AF1D /* Sliders.swift */; };
 		55F2783927AD7C1C001400D7 /* PatternScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55F2783627AD7C1C001400D7 /* PatternScreen.swift */; };
 		55F2783A27AD7C1C001400D7 /* NumericScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55F2783827AD7C1C001400D7 /* NumericScreen.swift */; };
-		55F2783C27AD7C39001400D7 /* NumericCustomizationWheels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55F2783B27AD7C39001400D7 /* NumericCustomizationWheels.swift */; };
+		55F2783C27AD7C39001400D7 /* NumericScreenWheels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55F2783B27AD7C39001400D7 /* NumericScreenWheels.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -44,7 +44,7 @@
 		55E505C327AD4BA20047AF1D /* Sliders.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sliders.swift; sourceTree = "<group>"; };
 		55F2783627AD7C1C001400D7 /* PatternScreen.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PatternScreen.swift; sourceTree = "<group>"; };
 		55F2783827AD7C1C001400D7 /* NumericScreen.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NumericScreen.swift; sourceTree = "<group>"; };
-		55F2783B27AD7C39001400D7 /* NumericCustomizationWheels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NumericCustomizationWheels.swift; sourceTree = "<group>"; };
+		55F2783B27AD7C39001400D7 /* NumericScreenWheels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NumericScreenWheels.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -174,7 +174,7 @@
 			isa = PBXGroup;
 			children = (
 				55F2783827AD7C1C001400D7 /* NumericScreen.swift */,
-				55F2783B27AD7C39001400D7 /* NumericCustomizationWheels.swift */,
+				55F2783B27AD7C39001400D7 /* NumericScreenWheels.swift */,
 			);
 			path = Numeric;
 			sourceTree = "<group>";
@@ -275,7 +275,7 @@
 				55781F2D27AD39B0003D4252 /* Scroller.swift in Sources */,
 				5527C21327AA6C6A0098546E /* Interval.swift in Sources */,
 				55E505C427AD4BA20047AF1D /* Sliders.swift in Sources */,
-				55F2783C27AD7C39001400D7 /* NumericCustomizationWheels.swift in Sources */,
+				55F2783C27AD7C39001400D7 /* NumericScreenWheels.swift in Sources */,
 				5507BD1627AD66A800F5292D /* Selector.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

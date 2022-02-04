@@ -22,28 +22,25 @@ struct NumericScreen: View {
     // MARK: Static
     //=------------------------------------------------------------------------=
     
-    private static let bounds   = Interval((1, Value.precision.value))
-    private static let integer  = Interval((1, Value.precision.integer))
+    private static let bounds = Interval((1, Value.precision.value))
+    private static let integer = Interval((1, Value.precision.integer))
     private static let fraction = Interval((0, Value.precision.fraction))
     
     //=------------------------------------------------------------------------=
     // MARK: State
     //=------------------------------------------------------------------------=
     
-    @State private var value  = Value()
-    @State private var style  = Style.number
-    @State private var locale = Locale(identifier: "en_US")
+    @State private var value = Value()
+    @State private var style = Style.currency
+    
     @State private var currency = "USD"
+    @State private var locale = Locale(identifier: "en_US")
+    
+    @State private var bounds = Self.bounds
+    @State private var integer = Self.integer
+    @State private var fraction = Self.fraction
 
     @EnvironmentObject private var storage: Storage
-    
-    //=------------------------------------------------------------------------=
-    // MARK: State - Customization
-    //=------------------------------------------------------------------------=
-    
-    @State private var bounds   = Self.bounds
-    @State private var integer  = Self.integer
-    @State private var fraction = Self.fraction
     
     //=------------------------------------------------------------------------=
     // MARK: Body
@@ -72,12 +69,16 @@ struct NumericScreen: View {
         }
     }
     
+    //=------------------------------------------------------------------------=
+    // MARK: Subcomponents
+    //=------------------------------------------------------------------------=
+    
     var diffableTextStyles: some View {
         Options($style)
     }
     
     var customizationWheels: some View {
-        NumericCustomizationWheels(style, locale: $locale, currency: $currency)
+        NumericScreenWheels(style, locale: $locale, currency: $currency)
     }
     
     var boundsIntervalSliders: some View {
