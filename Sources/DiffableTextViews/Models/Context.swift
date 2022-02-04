@@ -30,16 +30,16 @@
     //=------------------------------------------------------------------------=
     
     @inlinable func inactive(style: Style, value: Value) {
+        self.active = false
         self.value  = value
         self.style  = style
-        self.active = false
     }
     
     @inlinable func active(style: Style, commit: Commit<Value>) {
+        self.active = true
         self.style = style
         self.value = commit.value
         self.field.update(snapshot: commit.snapshot)
-        self.active = true
     }
     
     //=------------------------------------------------------------------------=
