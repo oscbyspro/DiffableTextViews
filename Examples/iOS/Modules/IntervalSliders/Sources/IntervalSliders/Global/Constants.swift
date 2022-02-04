@@ -17,6 +17,6 @@ import SwiftUI
 @inlinable var radius:    CGFloat { 27 }
 @inlinable var thickness: CGFloat { 04 }
 
-@inlinable var slide: Animation {
+@inlinable var dragging: Animation {
     Animation.linear(duration: 0.125)
 }

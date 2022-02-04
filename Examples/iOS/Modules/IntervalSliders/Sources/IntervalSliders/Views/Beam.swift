@@ -59,24 +59,25 @@ import SwiftUI
             let distance = gesture.location.x - gesture.startLocation.x
             let positions = move(start!, by: distance, in: positionsLimits)
             let next = map(positions, from: positionsLimits, to: valuesLimits)
-            withAnimation(slide) { values.wrappedValue = next }
+            withAnimation(dragging) { values.wrappedValue = next }
         }
     }
     
     //=------------------------------------------------------------------------=
     // MARK: Calculations
     //=------------------------------------------------------------------------=
-        
+    
+    /// Assumes: distance between values ≤ distance between limits.
     @inlinable func move(_ values: (CGFloat, CGFloat),
         by amount: CGFloat, in limits: ClosedRange<CGFloat>) -> (CGFloat, CGFloat)  {
         var next = (values.0 + amount, values.1 + amount)
-
-        func clamp(with value: CGFloat) {
+        
+        func autocorrect(_ value: CGFloat) {
             let change = min(max(limits.lowerBound, value), limits.upperBound) - value
             next.0 += change
             next.1 += change
         }
 
-        clamp(with: next.0); clamp(with: next.1); return next
+        autocorrect(next.0); autocorrect(next.1); return next
     }
 }
