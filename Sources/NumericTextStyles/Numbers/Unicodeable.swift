@@ -11,7 +11,7 @@
 // MARK: * Unicodeable
 //*============================================================================*
 
-/// The unicode value of its system representation.
+/// An object representing an ASCII character by its UInt8 unicode scalar value.
 @usableFromInline protocol Unicodeable:
 RawRepresentable, CaseIterable, CustomStringConvertible where RawValue == UInt8 {
     

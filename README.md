@@ -79,7 +79,7 @@ A style that processes localized numbers in various formats.
 | :bricks: | Bounds | Clamps input/output to specified range |
 | :art: | Formats | Number, currency and percent |
 | :national_park: | Locales | Supports every locale in Foundation |
-| :two: | Bilingual | Accepts both local and system inputs |
+| :two: | Bilingual | Accepts both local and ASCII inputs |
 
 ### Examples
 

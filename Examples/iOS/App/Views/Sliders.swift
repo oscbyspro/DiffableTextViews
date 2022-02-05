@@ -22,7 +22,7 @@ struct Sliders<Value: Comparable & BinaryInteger>: View {
     let title: String
     let limits: ClosedRange<Value>
     let interval: Binding<Interval<Value>>
-
+    
     //=------------------------------------------------------------------------=
     // MARK: Initializers
     //=------------------------------------------------------------------------=
