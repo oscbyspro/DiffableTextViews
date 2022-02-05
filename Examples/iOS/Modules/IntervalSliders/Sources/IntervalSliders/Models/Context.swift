@@ -30,3 +30,35 @@ import SwiftUI
         self.interval = interval; self.layout = Layout(interval, in: proxy)
     }
 }
+
+//*============================================================================*
+// MARK: * Context x Access
+//*============================================================================*
+
+@usableFromInline protocol HasContext: HasInterval, HasLayout {
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Context
+    //=------------------------------------------------------------------------=
+    
+    @inlinable var context: Context { get }
+}
+
+//=----------------------------------------------------------------------------=
+// MARK: Context x Access - Details
+//=----------------------------------------------------------------------------=
+
+extension HasContext {
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Accessors
+    //=------------------------------------------------------------------------=
+    
+    @inlinable var interval: Interval {
+        context.interval
+    }
+    
+    @inlinable var layout: Layout {
+        context.layout
+    }
+}

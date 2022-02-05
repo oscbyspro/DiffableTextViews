@@ -34,3 +34,47 @@ import SwiftUI
         from: interval.valuesLimits, to: positionsLimits)
     }
 }
+
+//*============================================================================*
+// MARK: * Layout x Access
+//*============================================================================*
+
+@usableFromInline protocol HasLayout {
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Layout
+    //=------------------------------------------------------------------------=
+    
+    @inlinable var layout: Layout { get }
+}
+
+//=----------------------------------------------------------------------------=
+// MARK: Layout x Access - Details
+//=----------------------------------------------------------------------------=
+
+extension HasLayout {
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Accessors
+    //=------------------------------------------------------------------------=
+        
+    @inlinable var frame: CGRect {
+        layout.frame
+    }
+    
+    @inlinable var positions: (CGFloat, CGFloat) {
+        layout.positions
+    }
+    
+    @inlinable var positionsLimits: ClosedRange<CGFloat> {
+        layout.positionsLimits
+    }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Utilities
+    //=------------------------------------------------------------------------=
+    
+    @inlinable func center(_ x: CGFloat) -> CGPoint {
+        CGPoint(x: x, y: frame.midY)
+    }
+}

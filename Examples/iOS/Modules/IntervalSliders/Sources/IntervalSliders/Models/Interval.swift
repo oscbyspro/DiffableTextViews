@@ -30,3 +30,35 @@ import SwiftUI
         self.values = values; self.valuesLimits = valuesLimits
     }
 }
+
+//*============================================================================*
+// MARK: * Interval x Access
+//*============================================================================*
+
+@usableFromInline protocol HasInterval {
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Interval
+    //=------------------------------------------------------------------------=
+    
+    @inlinable var interval: Interval { get }
+}
+
+//=----------------------------------------------------------------------------=
+// MARK: Interval x Access - Details
+//=----------------------------------------------------------------------------=
+
+extension HasInterval {
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Accessors
+    //=------------------------------------------------------------------------=
+        
+    @inlinable var values: Binding<(CGFloat, CGFloat)> {
+        interval.values
+    }
+    
+    @inlinable var valuesLimits: ClosedRange<CGFloat> {
+        interval.valuesLimits
+    }
+}
