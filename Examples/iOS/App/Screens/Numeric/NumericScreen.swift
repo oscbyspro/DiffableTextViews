@@ -16,7 +16,7 @@ import NumericTextStyles
 //*============================================================================*
 
 struct NumericScreen: View {
-    typealias Value = Decimal
+    typealias Value = Double
     
     //=------------------------------------------------------------------------=
     // MARK: Static
@@ -30,7 +30,7 @@ struct NumericScreen: View {
     // MARK: State
     //=------------------------------------------------------------------------=
     
-    @State private var value = 1_000_000 as Value
+    @State private var value = 1_234_567.89 as Value
     @State private var style = Style.currency
     
     @State private var currency = "USD"

@@ -22,14 +22,6 @@ import Support
 @usableFromInline struct Number {
     
     //=------------------------------------------------------------------------=
-    // MARK: Instances
-    //=------------------------------------------------------------------------=
-    
-    @usableFromInline static let zero: Self = {
-        var instance = Self(); instance.integer = [.zero]; return instance
-    }()
-    
-    //=------------------------------------------------------------------------=
     // MARK: State
     //=------------------------------------------------------------------------=
 
@@ -40,70 +32,6 @@ import Support
     
     //=------------------------------------------------------------------------=
     // MARK: Initializers
-    //=------------------------------------------------------------------------=
-    
-    @inlinable init() { }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Transformations - Precision
-    //=------------------------------------------------------------------------=
-    
-    @inlinable mutating func trim(max: Count) {
-        //=--------------------------------------=
-        // MARK: Integer
-        //=--------------------------------------=
-        self.integer .suffix(maxLength: min(max.integer,  max.value))
-        self.integer .removeZerosPrefix()
-        //=--------------------------------------=
-        // MARK: Fraction
-        //=--------------------------------------=
-        self.fraction.prefix(maxLength: min(max.fraction, max.value - integer.count))
-        self.fraction.removeZerosSuffix()
-        //=--------------------------------------=
-        // MARK: Finalize
-        //=--------------------------------------=
-        self.removeSeparatorAsSuffix()
-        self.integer.makeItAtLeastZero()
-    }
-        
-    //=------------------------------------------------------------------------=
-    // MARK: Transformations - Separator
-    //=------------------------------------------------------------------------=
-    
-    @inlinable mutating func removeSeparatorAsSuffix() {
-        if fraction.digits.isEmpty { separator = nil }
-    }
-    
-    @inlinable mutating func removeImpossibleSeparator(capacity: Count) {
-        guard capacity.fraction <= 0 || capacity.value <= 0 else { return }
-        self.removeSeparatorAsSuffix()
-    }
-}
-
-//=----------------------------------------------------------------------------=
-// MARK: Number - Count
-//=----------------------------------------------------------------------------=
-
-extension Number {
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Integer, Fraction, Value
-    //=------------------------------------------------------------------------=
-    
-    @inlinable func count() -> Count {
-        let value = integer.count + fraction.count - integer.count(prefix: \.isZero)
-        return Count(value: value, integer: integer.count, fraction: fraction.count)
-    }
-}
-
-//=----------------------------------------------------------------------------=
-// MARK: Number - Parse
-//=----------------------------------------------------------------------------=
-
-extension Number {
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Sequence
     //=------------------------------------------------------------------------=
     
     /// Parses the value represented by an **unformatted** sequence.
@@ -163,15 +91,48 @@ extension Number {
         self.integer.removeZerosPrefix()
         self.integer.makeItAtLeastZero()
     }
+        
+    //=------------------------------------------------------------------------=
+    // MARK: Transformations - Precision
+    //=------------------------------------------------------------------------=
+    
+    @inlinable mutating func trim(max: Count) {
+        //=--------------------------------------=
+        // MARK: Integer
+        //=--------------------------------------=
+        self.integer .suffix(maxLength: min(max.integer,  max.value))
+        self.integer .removeZerosPrefix()
+        //=--------------------------------------=
+        // MARK: Fraction
+        //=--------------------------------------=
+        self.fraction.prefix(maxLength: min(max.fraction, max.value - integer.count))
+        self.fraction.removeZerosSuffix()
+        //=--------------------------------------=
+        // MARK: Finalize
+        //=--------------------------------------=
+        self.removeSeparatorAsSuffix()
+        self.integer.makeItAtLeastZero()
+    }
+        
+    //=------------------------------------------------------------------------=
+    // MARK: Transformations - Separator
+    //=------------------------------------------------------------------------=
+    
+    @inlinable mutating func removeSeparatorAsSuffix() {
+        if fraction.digits.isEmpty { separator = nil }
+    }
+    
+    @inlinable mutating func removeImpossibleSeparator(capacity: Count) {
+        guard capacity.fraction <= 0 || capacity.value <= 0 else { return }
+        self.removeSeparatorAsSuffix()
+    }
     
     //=------------------------------------------------------------------------=
-    // MARK: Value
+    // MARK: Utilities
     //=------------------------------------------------------------------------=
     
-    /// Requires description to be a standard (non-scientific) representation of a number.
-    @inlinable init<T: Value>(_ value: T) throws {
-        let characters = String(describing: value)
-        try self.init(characters: characters, integer: T.isInteger, unsigned: T.isUnsigned,
-        signs: Sign.system, digits: Digit.system, separators: Separator.system)
+    @inlinable func count() -> Count {
+        let value = integer.count + fraction.count - integer.count(prefix: \.isZero)
+        return Count(value: value, integer: integer.count, fraction: fraction.count)
     }
 }
