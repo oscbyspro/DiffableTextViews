@@ -14,7 +14,7 @@ import Support
 // MARK: * Proxy
 //*============================================================================*
 
-/// A style that binds equals a specific value.
+/// A style that equals a specific value.
 ///
 /// Use this style to optimize the differentiation on view update.
 ///
