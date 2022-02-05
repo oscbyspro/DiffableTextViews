@@ -15,7 +15,9 @@ import Foundation
 //*============================================================================*
 
 @usableFromInline final class Region {
-    @usableFromInline static let cache = NSCache<NSString, Region>()
+    @usableFromInline static let cache: NSCache<NSString, Region> = {
+        let cache = NSCache<NSString, Region>(); cache.countLimit = 3; return cache
+    }()
     
     //=------------------------------------------------------------------------=
     // MARK: State
@@ -74,7 +76,7 @@ import Foundation
     //=------------------------------------------------------------------------=
     
     @inlinable static func cached(_ locale: Locale) -> Region {
-        let key = NSString(string: locale.identifier)
+        let key = NSString(string: locale.identifier)        
         //=--------------------------------------=
         // MARK: Search In Cache
         //=--------------------------------------=
@@ -139,13 +141,32 @@ import Foundation
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: Region - Number
+// MARK: Region - Conversions
 //=----------------------------------------------------------------------------=
 
 extension Region {
     
     //=------------------------------------------------------------------------=
-    // MARK: Number To Characters
+    // MARK: Snapshot -> Number
+    //=------------------------------------------------------------------------=
+    
+    /// To use this method, all formatting characters must be marked as virtual.
+    @inlinable func number<V: Value>(in snapshot: Snapshot, as value: V.Type) throws -> Number {
+        let characters = snapshot.lazy.filter(\.nonvirtual).map(\.character)
+        return try .init(characters: characters, integer: V.isInteger, unsigned: V.isUnsigned,
+        signs: signs.components, digits: digits.components, separators: separators.components)
+    }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Number -> Value
+    //=------------------------------------------------------------------------=
+
+    @inlinable func value<F: Format>(in number:  Number, as format: F) throws -> F.Value {
+        let characters = characters(in: number); return try format.parse(characters)
+    }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Number -> String
     //=------------------------------------------------------------------------=
     
     /// Converts a number to regional characters, to be parsed by a localized format style.
@@ -180,15 +201,5 @@ extension Region {
         // MARK: Done
         //=--------------------------------------=
         return characters
-    }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Components To Number
-    //=------------------------------------------------------------------------=
-    
-    @inlinable func number<T: Value>(in snapshot: Snapshot, as value: T.Type) throws -> Number {
-        let characters = snapshot.lazy.filter(\.nonvirtual).map(\.character)
-        return try Number(characters: characters, integer: T.isInteger, unsigned: T.isUnsigned,
-        signs: signs.components, digits: digits.components, separators: separators.components)
     }
 }

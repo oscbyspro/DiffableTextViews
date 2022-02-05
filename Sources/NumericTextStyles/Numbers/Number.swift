@@ -60,7 +60,7 @@ import Support
         self.fraction.prefix(maxLength: min(max.fraction, max.value - integer.count))
         self.fraction.removeZerosSuffix()
         //=--------------------------------------=
-        // MARK: Autocorrect
+        // MARK: Finalize
         //=--------------------------------------=
         self.removeSeparatorAsSuffix()
         self.integer.makeItAtLeastZero()
@@ -168,7 +168,6 @@ extension Number {
     // MARK: Value
     //=------------------------------------------------------------------------=
     
-    #warning("This crashes when String(describing: value) returns scientific notation: 9e-8, for example.")
     /// Requires description to be a standard (non-scientific) representation of a number.
     @inlinable init<T: Value>(_ value: T) throws {
         let characters = String(describing: value)

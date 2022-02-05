@@ -98,18 +98,24 @@ extension NumericTextStyle {
         // MARK: Value
         //=--------------------------------------=
         var value = value
+        //=--------------------------------------=
+        // MARK: Value - Autocorrect Bounds
+        //=--------------------------------------=
         bounds.autocorrect(&value)
         //=--------------------------------------=
         // MARK: Value -> Number
         //=--------------------------------------=
-        #warning("This crashes when String(describing: value) returns scientific notation: 9e-8, for example.")
-        var number = try! Number(value)
+        let formatted = style.format(value)
+        let parseable = snapshot(characters: formatted)
+        var number = try! region.number(in: parseable, as: Value.self)
+        //=--------------------------------------=
+        // MARK: Number - Autocorrect Precision
+        //=--------------------------------------=
         precision.autocorrect(&number)
         //=--------------------------------------=
         // MARK: Value <- Number
         //=--------------------------------------=
-        let parseable = region.characters(in: number)
-        value = try! format.parse(parseable)
+        value = try! region.value(in: number, as: style)
         //=--------------------------------------=
         // MARK: Characters, Snapshot, Commit
         //=--------------------------------------=
@@ -138,6 +144,9 @@ extension NumericTextStyle {
         var number = try region.number(
         in: reader.changes.proposal(),
         as: Value.self); modify?(&number)
+        //=--------------------------------------=
+        // MARK: Number - Validate Sign
+        //=--------------------------------------=
         try bounds.validate(sign: number.sign)
         //=--------------------------------------=
         // MARK: Count
@@ -151,7 +160,10 @@ extension NumericTextStyle {
         //=--------------------------------------=
         // MARK: Value
         //=--------------------------------------=
-        let value = try format.parse(region.characters(in: number))
+        let value = try region.value(in: number, as: format)
+        //=--------------------------------------=
+        // MARK: Value - Validate
+        //=--------------------------------------=
         try bounds.validate(value: value)
         //=--------------------------------------=
         // MARK: Style
