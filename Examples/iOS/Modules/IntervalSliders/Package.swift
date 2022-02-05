@@ -24,8 +24,6 @@ let package = Package(
         //=--------------------------------------=
         // MARK: IntervalSliders
         //=--------------------------------------=
-        .target(
-            name: "IntervalSliders",
-            dependencies: []),
+        .target(name: "IntervalSliders"),
     ]
 )
