@@ -16,7 +16,7 @@ import NumericTextStyles
 //*============================================================================*
 
 struct NumericScreen: View {
-    typealias Value = Double
+    typealias Value = Decimal
     
     //=------------------------------------------------------------------------=
     // MARK: Static
@@ -30,7 +30,7 @@ struct NumericScreen: View {
     // MARK: State
     //=------------------------------------------------------------------------=
     
-    @State private var value = 1_234_567.89 as Value
+    @State private var value = Decimal(string: "1234567.89")!
     @State private var style = Style.currency
     
     @State private var currency = "USD"
@@ -52,6 +52,7 @@ struct NumericScreen: View {
             Divider()
             diffableTextViewsExample
         }
+        .environment(\.locale, locale)
     }
      
     //=------------------------------------------------------------------------=
@@ -92,14 +93,28 @@ struct NumericScreen: View {
     var fractionIntervalSliders: some View {
         Sliders("Fraction digits length", values: $fraction, limits: Self.fraction.closed)
     }
-    
-    var diffableTextViewsExample: some View {
-        Example($value) {
-            .currency(code: currency)
-            .bounds((0 as Value)...)
-            .precision(integer: integer.closed, fraction: fraction.closed)
+
+    @ViewBuilder var diffableTextViewsExample: some View {
+        switch style {
+        case .number:
+            Example($value) {
+                .number
+                .bounds((0 as Value)...)
+                .precision(integer: integer.closed, fraction: fraction.closed)
+            }
+        case .currency:
+            Example($value) {
+                .currency(code: currency)
+                .bounds((0 as Value)...)
+                .precision(integer: integer.closed, fraction: fraction.closed)
+            }
+        case .percent:
+            Example($value) {
+                .percent
+                .bounds((0 as Value)...)
+                .precision(integer: integer.closed, fraction: fraction.closed)
+            }
         }
-        .environment(\.locale, locale)
     }
     
     //*========================================================================*
@@ -115,8 +130,7 @@ struct NumericScreen: View {
 
 struct NumericTextStyleScreenPreviews: PreviewProvider {
     static var previews: some View {
-        NumericScreen()
-            .preferredColorScheme(.dark)
+        NumericScreen().preferredColorScheme(.dark)
     }
 }
 

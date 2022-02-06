@@ -142,7 +142,7 @@ extension NumericTextStyle {
         in: reader.changes.proposal(),
         as: Value.self); modify?(&number)
         //=--------------------------------------=
-        // MARK: Number - Validate Sign
+        // MARK: Validate
         //=--------------------------------------=
         try bounds.validate(sign: number.sign)
         //=--------------------------------------=

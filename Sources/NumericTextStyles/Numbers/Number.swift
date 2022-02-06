@@ -65,8 +65,10 @@ import Support
             //=----------------------------------=
             // MARK: Separator
             //=----------------------------------=
-            if let character = next, let separator = separators[character], separator == .fraction {
-                self.separator = separator
+            if let character = next, let _ = separators[character] {
+                /// The sequence is unformatted, which means that all separators may be interpreted as fraction separators.
+                /// The only time a non-fraction separators should appear is when it is merged as a result of the user's input.
+                self.separator = Separator.fraction
                 next = iterator.next()
             }
             
