@@ -36,9 +36,12 @@ import Support
     // MARK: Validate
     //=------------------------------------------------------------------------=
     
+    /// Throws an error if the replacement content exceeds one character.
+    ///
     /// This validation rule is needed because of how lenient the input is (bilingual). Otherwise, formatted text
-    /// pasted by the use may be misinterpreted. An alternative restriction to this is to require (and only parse)
-    /// localized numbers when input size exceeds one character.
+    /// pasted by the user may be misinterpreted. An alternative to this restriction is to require localized numbers
+    /// when input size exceeds one character.
+    ///
     @inlinable func validateInputSize() throws {
         guard changes.replacement.count <= 1 else {
             throw Info([.mark(changes.replacement.characters), "exceeded character size limit", .mark(1)])
