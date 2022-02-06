@@ -61,7 +61,7 @@ import Support
     // MARK: Transformations - Replace
     //=------------------------------------------------------------------------=
     
-    @inlinable mutating func makeItAtLeastZero() {
+    @inlinable mutating func makeAtLeastZero() {
         if digits.isEmpty { self = [.zero] }
     }
     
@@ -69,11 +69,11 @@ import Support
     // MARK: Transformations - Prefix / Suffix
     //=------------------------------------------------------------------------=
     
-    @inlinable mutating func removeZerosPrefix() {
+    @inlinable mutating func trimZerosPrefix() {
         digits.removeSubrange(..<digits.prefix(while: \.isZero).endIndex)
     }
     
-    @inlinable mutating func removeZerosSuffix() {
+    @inlinable mutating func trimZerosSuffix() {
         digits.removeSubrange(digits.suffix(while: \.isZero).startIndex...)
     }
     

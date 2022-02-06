@@ -26,9 +26,9 @@ import Support
     //=------------------------------------------------------------------------=
 
     @usableFromInline var sign = Sign.positive
-    @usableFromInline private(set) var integer   = Digits()
+    @usableFromInline private(set) var integer = Digits()
     @usableFromInline private(set) var separator = Separator?.none
-    @usableFromInline private(set) var fraction  = Digits()
+    @usableFromInline private(set) var fraction = Digits()
     
     //=------------------------------------------------------------------------=
     // MARK: Initializers
@@ -90,8 +90,8 @@ import Support
         //=--------------------------------------=
         // MARK: Finalize
         //=--------------------------------------=
-        self.integer.removeZerosPrefix()
-        self.integer.makeItAtLeastZero()
+        self.integer.trimZerosPrefix()
+        self.integer.makeAtLeastZero()
     }
         
     //=------------------------------------------------------------------------=
@@ -102,18 +102,18 @@ import Support
         //=--------------------------------------=
         // MARK: Integer
         //=--------------------------------------=
-        self.integer .suffix(maxLength: min(max.integer,  max.value))
-        self.integer .removeZerosPrefix()
+        self.integer.suffix(maxLength: min(max.integer,  max.value))
+        self.integer.trimZerosPrefix()
         //=--------------------------------------=
         // MARK: Fraction
         //=--------------------------------------=
         self.fraction.prefix(maxLength: min(max.fraction, max.value - integer.count))
-        self.fraction.removeZerosSuffix()
+        self.fraction.trimZerosSuffix()
         //=--------------------------------------=
         // MARK: Finalize
         //=--------------------------------------=
         self.removeSeparatorAsSuffix()
-        self.integer.makeItAtLeastZero()
+        self.integer.makeAtLeastZero()
     }
         
     //=------------------------------------------------------------------------=

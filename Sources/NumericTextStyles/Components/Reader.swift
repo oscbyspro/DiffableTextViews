@@ -32,7 +32,7 @@ import DiffableTextViews
     }
     
     //=------------------------------------------------------------------------=
-    // MARK: Utilities
+    // MARK: Commands
     //=------------------------------------------------------------------------=
     
     /// Interprets a single sign character as a: set sign command.
