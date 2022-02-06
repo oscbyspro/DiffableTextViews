@@ -8,6 +8,7 @@
 //=----------------------------------------------------------------------------=
 
 import DiffableTextViews
+import Support
 
 //*============================================================================*
 // MARK: * Reader
@@ -32,11 +33,21 @@ import DiffableTextViews
     }
     
     //=------------------------------------------------------------------------=
+    // MARK: Validate
+    //=------------------------------------------------------------------------=
+    
+    @inlinable func validateInputSizeLimit(_ limit: Int) throws {
+        guard changes.replacement.count <= limit else {
+            throw Info([.mark(changes.replacement.characters), "exceeded character size limit", .mark(limit)])
+        }
+    }
+    
+    //=------------------------------------------------------------------------=
     // MARK: Commands
     //=------------------------------------------------------------------------=
     
     /// Interprets a single sign character as a: set sign command.
-    @inlinable mutating func consumeSetSignInput() -> ((inout Number) -> Void)? {
+    @inlinable mutating func consumeSignInput() -> ((inout Number) -> Void)? {
         guard changes.replacement.count == 1 else { return nil } // snapshot.count is O(1)
         guard let sign = region.signs[changes.replacement.first!.character] else { return nil }
         //=--------------------------------------=

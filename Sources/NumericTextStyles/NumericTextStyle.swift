@@ -134,7 +134,11 @@ extension NumericTextStyle {
     
     @inlinable public func merge(changes: Changes) throws -> Commit<Value> {
         var reader = Reader(changes, in: region)
-        let modify = reader.consumeSetSignInput()
+        //=--------------------------------------=
+        // MARK: Reader - Validate, Commands
+        //=--------------------------------------=
+        try reader.validateInputSizeLimit(1)
+        let modify = reader.consumeSignInput()
         //=--------------------------------------=
         // MARK: Number
         //=--------------------------------------=
@@ -142,15 +146,15 @@ extension NumericTextStyle {
         in: reader.changes.proposal(),
         as: Value.self); modify?(&number)
         //=--------------------------------------=
-        // MARK: Validate
+        // MARK: Number - Validate
         //=--------------------------------------=
         try bounds.validate(sign: number.sign)
         //=--------------------------------------=
-        // MARK: Count
+        // MARK: Number - Count
         //=--------------------------------------=
         let count = number.count()
         //=--------------------------------------=
-        // MARK: Capacity
+        // MARK: Number - Capacity
         //=--------------------------------------=
         let capacity = try precision.capacity(count: count)
         number.removeImpossibleSeparator(capacity: capacity)
@@ -170,12 +174,12 @@ extension NumericTextStyle {
         separator: number.separator == .fraction ? .always : .automatic,
         sign: number.sign == .negative ? .always : .automatic)
         //=--------------------------------------=
-        // MARK: Characters
+        // MARK: Style - Characters
         //=--------------------------------------=
         var characters = style.format(value)
         fix(sign: number.sign, for: value, in: &characters)
         //=--------------------------------------=
-        // MARK: Snapshot, Commit
+        // MARK: Characters -> Snapshot -> Commit
         //=--------------------------------------=
         let snapshot = snapshot(characters: characters)
         return Commit(value: value, snapshot: snapshot)
