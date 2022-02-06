@@ -137,7 +137,7 @@ extension NumericTextStyle {
         //=--------------------------------------=
         // MARK: Reader - Validate, Commands
         //=--------------------------------------=
-        try reader.validateInputSizeLimit(1)
+        try reader.validateInputSize()
         let modify = reader.consumeSignInput()
         //=--------------------------------------=
         // MARK: Number

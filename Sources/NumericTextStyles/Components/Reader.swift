@@ -20,7 +20,7 @@ import Support
     // MARK: State
     //=------------------------------------------------------------------------=
     
-    @usableFromInline let region:  Region
+    @usableFromInline let region: Region
     @usableFromInline var changes: Changes
     
     //=------------------------------------------------------------------------=
@@ -28,7 +28,7 @@ import Support
     //=------------------------------------------------------------------------=
             
     @inlinable init(_ changes: Changes, in region: Region) {
-        self.region  = region
+        self.region = region
         self.changes = changes
     }
     
@@ -36,9 +36,12 @@ import Support
     // MARK: Validate
     //=------------------------------------------------------------------------=
     
-    @inlinable func validateInputSizeLimit(_ limit: Int) throws {
-        guard changes.replacement.count <= limit else {
-            throw Info([.mark(changes.replacement.characters), "exceeded character size limit", .mark(limit)])
+    /// This validation rule is needed because of how lenient the input is (bilingual). Otherwise, formatted text
+    /// pasted by the use may be misinterpreted. An alternative restriction to this is to require (and only parse)
+    /// localized numbers when input size exceeds one character.
+    @inlinable func validateInputSize() throws {
+        guard changes.replacement.count <= 1 else {
+            throw Info([.mark(changes.replacement.characters), "exceeded character size limit", .mark(1)])
         }
     }
     

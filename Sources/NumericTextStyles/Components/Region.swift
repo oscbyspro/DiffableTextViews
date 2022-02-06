@@ -141,22 +141,11 @@ import Foundation
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: Region - Conversions
+// MARK: Region - Parse
 //=----------------------------------------------------------------------------=
 
 extension Region {
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Snapshot -> Number
-    //=------------------------------------------------------------------------=
-    
-    /// To use this method, all formatting characters must be marked as virtual.
-    @inlinable func number<V: Value>(in snapshot: Snapshot, as value: V.Type) throws -> Number {
-        let characters = snapshot.lazy.filter(\.nonvirtual).map(\.character)
-        return try .init(characters: characters, integer: V.isInteger, unsigned: V.isUnsigned,
-        signs: signs.components, digits: digits.components, separators: separators.components)
-    }
-    
+
     //=------------------------------------------------------------------------=
     // MARK: Number -> Value
     //=------------------------------------------------------------------------=
@@ -201,5 +190,23 @@ extension Region {
         // MARK: Done
         //=--------------------------------------=
         return characters
+    }
+}
+
+//=----------------------------------------------------------------------------=
+// MARK: Region - Parse
+//=----------------------------------------------------------------------------=
+
+extension Region {
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Snapshot -> Number
+    //=------------------------------------------------------------------------=
+    
+    /// To use this method, all formatting characters must be marked as virtual.
+    @inlinable func number<V: Value>(in snapshot: Snapshot, as value: V.Type) throws -> Number {
+        let characters = snapshot.lazy.filter(\.nonvirtual).map(\.character)
+        return try .init(characters: characters, integer: V.isInteger, unsigned: V.isUnsigned,
+        signs: signs.components, digits: digits.components, separators: separators.components)
     }
 }
