@@ -45,13 +45,19 @@ import NumericTextStyles
 import PatternTextStyles
 ```
 
-### [Example](Examples/iOS)
+# [Examples](Examples/iOS) (work in progress)
 
-There is an example iOS project in the examples directory. It contains customization options in the form of tabs, pickers, sliders to make it as easy as possible to try out different configurations.
+The iOS example project contains quick-and-easy-to-use configuration options.
 
-It uses a custom [interval sliders view](Examples/iOS/Modules/IntervalSliders), made in entirely SwiftUI.
+<img src="Assets/iOS/iOS-numeric.png" alt="iOS Example" width="300"/>
 
-To use it, download this package and run it from its current location. It uses relative dependency paths.
+### Submodules
+
+It uses custom made [interval sliders](Examples/iOS/Modules/IntervalSliders/Sources/IntervalSliders), written in SwiftUI.
+
+### Usage
+
+To use it, download this package and run it from its current location as it uses relative dependency paths.
 
 
 # Views
