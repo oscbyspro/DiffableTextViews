@@ -45,7 +45,9 @@ import NumericTextStyles
 import PatternTextStyles
 ```
 
-# [Examples](Examples/iOS) (work in progress)
+# [Examples](Examples/iOS/App)
+
+👷‍♂️🛠🚧🚧🧱🏗🧱🚧🚧⏳
 
 The iOS example project contains quick-and-easy-to-use configuration options.
 
@@ -57,7 +59,7 @@ It uses custom made [interval sliders](Examples/iOS/Modules/IntervalSliders/Sour
 
 ### Instructions
 
-To use it, download this package and run it with Xcode from its current location.
+To use it, download this package and run the example project from its current location using Xcode.
 
 # Views
 
