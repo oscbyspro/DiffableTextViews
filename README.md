@@ -55,10 +55,9 @@ The iOS example project contains quick-and-easy-to-use configuration options.
 
 It uses custom made [interval sliders](Examples/iOS/Modules/IntervalSliders/Sources/IntervalSliders), written in SwiftUI.
 
-### Usage
+### Instructions
 
 To use it, download this package and run it from its current location as it uses relative dependency paths.
-
 
 # Views
 
