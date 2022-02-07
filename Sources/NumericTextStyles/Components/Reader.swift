@@ -14,6 +14,7 @@ import Support
 // MARK: * Reader
 //*============================================================================*
 
+/// - Snapshot/count is O(1) and may be used without performance impact.
 @usableFromInline struct Reader {
     
     //=------------------------------------------------------------------------=
@@ -36,7 +37,7 @@ import Support
     // MARK: Validate
     //=------------------------------------------------------------------------=
     
-    /// Throws an error if the replacement content exceeds one character.
+    /// Throws an when there is more than one replacement character.
     ///
     /// This validation rule is needed because of how lenient the input is (bilingual). Otherwise, formatted text
     /// pasted by the user may be misinterpreted. An alternative to this restriction is to require localized numbers

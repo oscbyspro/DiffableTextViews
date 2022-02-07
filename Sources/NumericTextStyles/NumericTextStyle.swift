@@ -135,9 +135,12 @@ extension NumericTextStyle {
     @inlinable public func merge(changes: Changes) throws -> Commit<Value> {
         var reader = Reader(changes, in: region)
         //=--------------------------------------=
-        // MARK: Reader - Validate, Commands
+        // MARK: Reader - Validate
         //=--------------------------------------=
         try reader.validateInputSize()
+        //=--------------------------------------=
+        // MARK: Reader - Commands
+        //=--------------------------------------=
         let modify = reader.consumeSignInput()
         //=--------------------------------------=
         // MARK: Number

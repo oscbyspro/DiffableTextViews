@@ -63,24 +63,25 @@ extension IntervalSliders {
     // MARK: Binary - Integer
     //=------------------------------------------------------------------------=
     
-    @inlinable public init<T>(_ values: Binding<(T, T)>, in limits: ClosedRange<T>) where T: BinaryInteger {
+    @inlinable public init<Value>(_ values: Binding<(Value, Value)>,
+        in limits: ClosedRange<Value>) where Value: BinaryInteger {
+        //=--------------------------------------=
+        // MARK: Get
+        //=--------------------------------------=
         self.init(Binding {(
-            CGFloat(values.wrappedValue.0), CGFloat(values.wrappedValue.1)
-        )} set: { xxxxxxxxxxxxxxx in values.wrappedValue = (
-            T(xxxxxxxxxxxxxxx.0.rounded()), T(xxxxxxxxxxxxxxx.1.rounded())
-        )}, in: CGFloat(limits.lowerBound) ... CGFloat(limits.upperBound))
-    }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Binary - Floating Point
-    //=------------------------------------------------------------------------=
-    
-    @inlinable public init<T>(_ values: Binding<(T, T)>, in limits: ClosedRange<T>) where T: BinaryFloatingPoint {
-        self.init(Binding {(
-            CGFloat(values.wrappedValue.0), CGFloat(values.wrappedValue.1)
-        )} set: { xxxxxxxxxxxxxxxxxxxxxxxxx in values.wrappedValue = (
-            T(xxxxxxxxxxxxxxxxxxxxxxxxx.0), T(xxxxxxxxxxxxxxxxxxxxxxxxx.1)
-        )}, in: CGFloat(limits.lowerBound)...CGFloat(limits.upperBound))
+            CGFloat(values.wrappedValue.0),
+            CGFloat(values.wrappedValue.1))
+        //=--------------------------------------=
+        // MARK: Set
+        //=--------------------------------------=
+        } set: { xxxxxxxxxxx in
+            values.wrappedValue = (
+            Value(xxxxxxxxxxx.0.rounded()),
+            Value(xxxxxxxxxxx.1.rounded()))
+        //=--------------------------------------=
+        // MARK: Limits
+        //=--------------------------------------=
+        }, in: CGFloat(limits.lowerBound)...CGFloat(limits.upperBound))
     }
 }
 

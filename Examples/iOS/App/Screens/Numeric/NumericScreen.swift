@@ -22,10 +22,11 @@ struct NumericScreen: View {
     // MARK: Static
     //=------------------------------------------------------------------------=
     
-    private static let bounds = Interval((1, Value.precision.value))
-    private static let integer = Interval((1, Value.precision.integer))
-    private static let fraction = Interval((0, Value.precision.fraction))
-    
+    private static let boundsValue = Value.precision.value
+    private static let boundsLimits = Interval((-boundsValue, boundsValue))
+    private static let integerLimits = Interval((1, Value.precision.integer))
+    private static let fractionLimits = Interval((0, Value.precision.fraction))
+
     //=------------------------------------------------------------------------=
     // MARK: State
     //=------------------------------------------------------------------------=
@@ -33,11 +34,11 @@ struct NumericScreen: View {
     @State private var value = Decimal(string: "1234567.89")!
     @State private var style = Style.currency
     
-    @State private var currency = "USD"
+    @State private var currencyCode = "USD"
     @State private var locale = Locale(identifier: "en_US")
     
-    @State private var bounds = Self.bounds
-    @State private var integer = Self.integer
+    @State private var bounds = Interval((0, Self.boundsValue))
+    @State private var integer = Self.integerLimits
     @State private var fraction = Interval((2, 2))
 
     @EnvironmentObject private var context: Context
@@ -54,7 +55,7 @@ struct NumericScreen: View {
         }
         .environment(\.locale, locale)
     }
-     
+    
     //=------------------------------------------------------------------------=
     // MARK: Components
     //=------------------------------------------------------------------------=
@@ -79,19 +80,19 @@ struct NumericScreen: View {
     }
     
     var customizationWheels: some View {
-        NumericScreenWheels(style, locale: $locale, currency: $currency)
+        NumericScreenWheels(style, locale: $locale, currency: $currencyCode)
     }
     
     var boundsIntervalSliders: some View {
-        Sliders("Bounds", values: $bounds, limits: Self.bounds.closed).disabled(true)
+        Sliders("Bounds", values: $bounds, limits: Self.boundsLimits.closed).disabled(true)
     }
     
     var integerIntervalSliders: some View {
-        Sliders("Integer digits length", values: $integer, limits: Self.integer.closed)
+        Sliders("Integer digits length", values: $integer, limits: Self.integerLimits.closed)
     }
     
     var fractionIntervalSliders: some View {
-        Sliders("Fraction digits length", values: $fraction, limits: Self.fraction.closed)
+        Sliders("Fraction digits length", values: $fraction, limits: Self.fractionLimits.closed)
     }
 
     @ViewBuilder var diffableTextViewsExample: some View {
@@ -104,7 +105,7 @@ struct NumericScreen: View {
             }
         case .currency:
             Example($value) {
-                .currency(code: currency)
+                .currency(code: currencyCode)
                 .bounds((0 as Value)...)
                 .precision(integer: integer.closed, fraction: fraction.closed)
             }
