@@ -32,14 +32,14 @@ struct PatternScreen: View {
         Screen {
             controls
             Divider()
-            diffableTextViewsExample
+            examples
         }
     }
     
     //=------------------------------------------------------------------------=
-    // MARK: Components
+    // MARK: Body - Controls
     //=------------------------------------------------------------------------=
-    
+
     var controls: some View {
         Scroller {
             diffableTextStyles
@@ -51,7 +51,11 @@ struct PatternScreen: View {
         Options($style)
     }
     
-    var diffableTextViewsExample: some View {
+    //=------------------------------------------------------------------------=
+    // MARK: Body - Examples
+    //=------------------------------------------------------------------------=
+    
+    var examples: some View {
         Example($value) {
             .pattern("+## (###) ###-##-##")
             .placeholder("#"  as Character) { $0.isASCII && $0.isNumber }
@@ -76,7 +80,6 @@ struct PatternScreen: View {
 
 struct PatternTextStyleScreenPreviews: PreviewProvider {
     static var previews: some View {
-        PatternScreen()
-            .preferredColorScheme(.dark)
+        PatternScreen().preferredColorScheme(.dark)
     }
 }

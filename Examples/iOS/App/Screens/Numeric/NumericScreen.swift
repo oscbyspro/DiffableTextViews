@@ -22,8 +22,8 @@ struct NumericScreen: View {
     // MARK: Static
     //=------------------------------------------------------------------------=
     
-    private static let boundsValue = Value.precision.value
-    private static let boundsLimits = Interval((-boundsValue, boundsValue))
+    private static let exponentsLimit = Value.precision.value
+    private static let exponentsLimits = Interval((-exponentsLimit, exponentsLimit))
     private static let integerLimits = Interval((1, Value.precision.integer))
     private static let fractionLimits = Interval((0, Value.precision.fraction))
 
@@ -31,17 +31,17 @@ struct NumericScreen: View {
     // MARK: State
     //=------------------------------------------------------------------------=
     
+    @EnvironmentObject private var context: Context
+    
     @State private var value = Decimal(string: "1234567.89")!
     @State private var style = Style.currency
     
     @State private var currencyCode = "USD"
     @State private var locale = Locale(identifier: "en_US")
     
-    @State private var bounds = Interval((0, Self.boundsValue))
     @State private var integer = Self.integerLimits
     @State private var fraction = Interval((2, 2))
-
-    @EnvironmentObject private var context: Context
+    @State private var exponents = Interval((0, Self.exponentsLimit))
     
     //=------------------------------------------------------------------------=
     // MARK: Body
@@ -51,13 +51,13 @@ struct NumericScreen: View {
         Screen {
             controls
             Divider()
-            diffableTextViewsExample
+            examples
         }
         .environment(\.locale, locale)
     }
     
     //=------------------------------------------------------------------------=
-    // MARK: Components
+    // MARK: Body - Controls
     //=------------------------------------------------------------------------=
     
     var controls: some View {
@@ -72,9 +72,9 @@ struct NumericScreen: View {
     }
     
     //=------------------------------------------------------------------------=
-    // MARK: Subcomponents
+    // MARK: Body - Controls - Components
     //=------------------------------------------------------------------------=
-    
+
     var diffableTextStyles: some View {
         Options($style)
     }
@@ -84,7 +84,7 @@ struct NumericScreen: View {
     }
     
     var boundsIntervalSliders: some View {
-        Sliders("Bounds", values: $bounds, limits: Self.boundsLimits.closed).disabled(true)
+        Sliders("Bounds exponent", values: $exponents, limits: Self.exponentsLimits.closed)
     }
     
     var integerIntervalSliders: some View {
@@ -94,28 +94,53 @@ struct NumericScreen: View {
     var fractionIntervalSliders: some View {
         Sliders("Fraction digits length", values: $fraction, limits: Self.fractionLimits.closed)
     }
-
-    @ViewBuilder var diffableTextViewsExample: some View {
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Body - Example
+    //=------------------------------------------------------------------------=
+    
+    @ViewBuilder var examples: some View {
         switch style {
         case .number:
             Example($value) {
                 .number
-                .bounds((0 as Value)...)
+                .bounds(bounds)
                 .precision(integer: integer.closed, fraction: fraction.closed)
             }
         case .currency:
             Example($value) {
                 .currency(code: currencyCode)
-                .bounds((0 as Value)...)
+                .bounds(bounds)
                 .precision(integer: integer.closed, fraction: fraction.closed)
             }
         case .percent:
             Example($value) {
                 .percent
-                .bounds((0 as Value)...)
+                .bounds(bounds)
                 .precision(integer: integer.closed, fraction: fraction.closed)
             }
         }
+    }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Body - Example - Values
+    //=------------------------------------------------------------------------=
+    
+    var bounds: ClosedRange<Decimal> {
+        let ordered = exponents.closed
+        //=--------------------------------------=
+        // MARK: Single
+        //=--------------------------------------=
+        func bound(_ exponent: Int) -> Decimal {
+            guard exponent != 0 else { return 0 }
+            var description = exponent >= 0 ? "1" : "-1"
+            description += String(repeating: "0", count: abs(exponent)-1)
+            return Decimal(string: description)!
+        }
+        //=--------------------------------------=
+        // MARK: Double
+        //=--------------------------------------=
+        return bound(ordered.lowerBound)...bound(ordered.upperBound)
     }
     
     //*========================================================================*
@@ -131,7 +156,8 @@ struct NumericScreen: View {
 
 struct NumericTextStyleScreenPreviews: PreviewProvider {
     static var previews: some View {
-        NumericScreen().preferredColorScheme(.dark)
+        NumericScreen()
+            .environmentObject(Context())
+            .preferredColorScheme(.dark)
     }
 }
-
