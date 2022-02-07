@@ -45,6 +45,15 @@ import NumericTextStyles
 import PatternTextStyles
 ```
 
+### [Example](Examples/iOS)
+
+There is an example iOS project in the examples directory. It contains customization options in the form of tabs, pickers, sliders to make it as easy as possible to try out different configurations.
+
+It uses a custom [interval sliders view](Examples/iOS/Modules/IntervalSliders), made in entirely SwiftUI.
+
+To use it, download this package and run it from its current location. It uses relative dependency paths.
+
+
 # Views
 
 ## [DiffableTextField](Notes/DiffableTextField.md)
