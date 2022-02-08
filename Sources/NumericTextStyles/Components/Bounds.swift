@@ -49,7 +49,7 @@ public struct Bounds<Value: Boundable>: Equatable {
     // MARK: * Location
     //*========================================================================*
     
-    /// A model describing whether a value maxed out or not.
+    /// A model describing whether a value is maxed out or not.
     @usableFromInline enum Location { case body, edge }
 }
 
@@ -63,7 +63,7 @@ extension Bounds {
     // MARK: Autocorrect
     //=------------------------------------------------------------------------=
     
-    @inlinable func autocorrect(_ value: inout Value) {
+    @inlinable func autocorrect(value: inout Value) {
         value = Swift.min(Swift.max(min, value), max)
     }
 
@@ -102,7 +102,7 @@ extension Bounds {
     // MARK: Autocorrect
     //=------------------------------------------------------------------------=
 
-    @inlinable func autocorrect(_ sign: inout Sign) {
+    @inlinable func autocorrect(sign: inout Sign) {
         do { try validate(sign: sign) } catch { sign.toggle() }
     }
 

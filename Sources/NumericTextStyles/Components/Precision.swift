@@ -31,6 +31,10 @@ public struct Precision<Value: Precise>: Equatable {
     @inlinable init() {
         self.init(integer: Self.limits(\.integer), fraction: Self.limits(\.fraction))
     }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Initializers - Using Range Expressions
+    //=------------------------------------------------------------------------=
 
     @inlinable init<R0: RangeExpression, R1: RangeExpression>(integer: R0,
         fraction: R1) where R0.Bound == Int, R1.Bound == Int {
@@ -87,7 +91,7 @@ public struct Precision<Value: Precise>: Equatable {
     // MARK: Autocorrect
     //=------------------------------------------------------------------------=
     
-    @inlinable func autocorrect(_ number: inout Number) {
+    @inlinable func autocorrect(number: inout Number) {
         number.trim(max: upper)
     }
 }

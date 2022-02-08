@@ -98,7 +98,7 @@ extension NumericTextStyle {
         //=--------------------------------------=
         // MARK: Autocorrect
         //=--------------------------------------=
-        bounds.autocorrect(&value)
+        bounds.autocorrect(value: &value)
         //=--------------------------------------=
         // MARK: Value -> Number
         //=--------------------------------------=
@@ -108,8 +108,8 @@ extension NumericTextStyle {
         //=--------------------------------------=
         // MARK: Autocorrect
         //=--------------------------------------=
-        precision.autocorrect(&number)
-        bounds.autocorrect(&number.sign)
+        bounds.autocorrect(sign: &number.sign)
+        precision.autocorrect(number: &number)
         //=--------------------------------------=
         // MARK: Value <- Number
         //=--------------------------------------=
