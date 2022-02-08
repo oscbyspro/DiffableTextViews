@@ -37,8 +37,8 @@ Determines the input and output space in terms of digits.
 
 ### Enforcement
 
-    - Lower bound is enforced: when the view is idle.
-    - Upper bound is enforced: when the view is active.
+    - Lower bound is enforced when the view is: idle.
+    - Upper bound is enforced when the view is: active.
 
 ## Bounds
 
@@ -51,7 +51,7 @@ Determines the input and output space in terms of values.
 
 ### Enforcement
 
-    - Lower bound and upper bound are enforced when the view is active.
+    - It is enforced when the view is active.
 
 ## Values
 
