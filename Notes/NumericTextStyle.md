@@ -51,7 +51,7 @@ Determines the input and output space in terms of values.
 
 ### Enforcement
 
-    - It is enforced when the view is active.
+    - It is enforced when the view is: active.
 
 ## Values
 
