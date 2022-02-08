@@ -108,8 +108,8 @@ extension NumericTextStyle {
         //=--------------------------------------=
         // MARK: Autocorrect
         //=--------------------------------------=
-        bounds.autocorrect(&number)
         precision.autocorrect(&number)
+        bounds.autocorrect(&number.sign)
         //=--------------------------------------=
         // MARK: Value <- Number
         //=--------------------------------------=

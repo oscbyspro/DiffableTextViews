@@ -16,7 +16,15 @@ import Support
 
 /// A model that constrains values to a closed range.
 public struct Bounds<Value: Boundable>: Equatable {
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Instances
+    //=------------------------------------------------------------------------=
 
+    @inlinable static var zero: Self {
+        Self(unchecked: (.zero, .zero))
+    }
+    
     //=------------------------------------------------------------------------=
     // MARK: State
     //=------------------------------------------------------------------------=
@@ -28,28 +36,39 @@ public struct Bounds<Value: Boundable>: Equatable {
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
+    @inlinable init(unchecked bounds: (Value, Value)) {
+        self.min = bounds.0
+        self.max = bounds.1
+    }
+    
     @inlinable init(min: Value = Value.bounds.lowerBound, max: Value = Value.bounds.upperBound) {
         precondition(min <= max, "min > max"); (self.min, self.max) = (min, max)
     }
     
+    //*========================================================================*
+    // MARK: * Location
+    //*========================================================================*
+    
+    /// A model describing whether a value maxed out or not.
+    @usableFromInline enum Location { case body, edge }
+}
+
+//=----------------------------------------------------------------------------=
+// MARK: Bounds - Value
+//=----------------------------------------------------------------------------=
+
+extension Bounds {
+    
     //=------------------------------------------------------------------------=
-    // MARK: Autocorrect - Value
+    // MARK: Autocorrect
     //=------------------------------------------------------------------------=
     
     @inlinable func autocorrect(_ value: inout Value) {
         value = Swift.min(Swift.max(min, value), max)
     }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Autocorrect - Number
-    //=------------------------------------------------------------------------=
 
-    @inlinable func autocorrect(_ number: inout Number) {
-        do { try validate(sign: number.sign) } catch { number.sign.toggle() }
-    }
-    
     //=------------------------------------------------------------------------=
-    // MARK: Validate - Value
+    // MARK: Validate
     //=------------------------------------------------------------------------=
     
     @inlinable func validate(value: Value) throws -> Location {
@@ -64,35 +83,43 @@ public struct Bounds<Value: Boundable>: Equatable {
             //=----------------------------------=
             // MARK: Special Cases About Zero
             //=----------------------------------=
-            return value != .zero || min == max ? .edge : .body
+            return value != .zero || self == .zero ? .edge : .body
         }
         //=--------------------------------------=
         // MARK: Failure
         //=--------------------------------------=
         throw Info([.mark(value), "is not in", .mark(self)])
     }
+}
+
+//=----------------------------------------------------------------------------=
+// MARK: Bounds - Number
+//=----------------------------------------------------------------------------=
+
+extension Bounds {
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Autocorrect
+    //=------------------------------------------------------------------------=
+
+    @inlinable func autocorrect(_ sign: inout Sign) {
+        do { try validate(sign: sign) } catch { sign.toggle() }
+    }
 
     //=------------------------------------------------------------------------=
-    // MARK: Validate - Sign
+    // MARK: Validate
     //=------------------------------------------------------------------------=
     
     @inlinable func validate(sign: Sign) throws {
         switch sign {
-        case .positive: if max > .zero || min == max { return }
-        case .negative: if min < .zero               { return }
+        case .positive: if max > .zero || self == .zero { return }
+        case .negative: if min < .zero                  { return }
         }
         //=--------------------------------------=
         // MARK: Failure
         //=--------------------------------------=
         throw Info([.mark(sign), "is not in", .mark(self)])
     }
-    
-    //*========================================================================*
-    // MARK: * Location
-    //*========================================================================*
-    
-    /// A model describing whether a value maxed out or not.
-    @usableFromInline enum Location { case body, edge }
 }
 
 //=----------------------------------------------------------------------------=
