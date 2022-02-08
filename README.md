@@ -13,10 +13,10 @@ An open-source module for as-you-type formatting and conversion in iOS.
 | :keyboard: | Responsive | Formats and parses text as you type |
 | :magic_wand: | Automagical | Binds text to its appropriate data type |
 | :hammer_and_wrench: | Versatile | Uses snapshots and attributes |
-| :running_man: | Performant | Uses O(n) differentiation algorithms |
-| :grey_question: | Agnostic | Supports varied length characters, emojis |
-| :desert_island: | Stand-alone | Has zero remote dependencies |
-| :window: | Open-source | Open and transparent, as it should be |
+| :running_man: | Performant | O(n) differentiation algorithms |
+| :desert_island: | Standalone | Uses no remote dependencies |
+| :window: | Open source | Transparent, as it should be |
+| :smiley: | Emojis | Naitive offsets, supports emojis |
 
 ### [Algorithms](Sources/DiffableTextViews/Models/Field.swift)
 
@@ -49,17 +49,17 @@ import PatternTextStyles
 
 👷‍♂️🛠🚧🚧🧱🏗🧱🚧🚧⏳
 
-The iOS example project contains quick-and-easy-to-use configuration options.
+The iOS example project provides quick-and-easy-to-use configuration.
 
 <img src="Assets/iOS/iOS-numeric.png" alt="iOS Example" width="300"/>
 
-### Submodules
+### Modules
 
 It uses custom made [interval sliders](Examples/iOS/Modules/IntervalSliders/Sources/IntervalSliders), written in SwiftUI.
 
 ### Instructions
 
-To use it, download this package and run the example project from its current location using Xcode.
+To try it, download this package and run the example project from its location.
 
 # Views
 
