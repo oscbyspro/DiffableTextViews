@@ -46,7 +46,6 @@ public struct Bounds<Value: Boundable>: Equatable {
 
     @inlinable func autocorrect(_ number: inout Number) {
         do { try validate(sign: number.sign) } catch { number.sign.toggle() }
-        print(number.sign)
     }
     
     //=------------------------------------------------------------------------=
