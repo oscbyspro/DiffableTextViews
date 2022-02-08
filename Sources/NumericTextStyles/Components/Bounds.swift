@@ -101,20 +101,26 @@ extension Bounds {
     //=------------------------------------------------------------------------=
     // MARK: Autocorrect
     //=------------------------------------------------------------------------=
-
+    
     @inlinable func autocorrect(sign: inout Sign) {
-        do { try validate(sign: sign) } catch { sign.toggle() }
+        switch sign {
+        case .positive: if max > .zero || self == .zero { return }
+        case .negative: if min < .zero                  { return }
+        }
+        //=--------------------------------------=
+        // MARK: Autocorrect
+        //=--------------------------------------=
+        sign.toggle()
     }
-
+    
     //=------------------------------------------------------------------------=
     // MARK: Validate
     //=------------------------------------------------------------------------=
     
     @inlinable func validate(sign: Sign) throws {
-        switch sign {
-        case .positive: if max > .zero || self == .zero { return }
-        case .negative: if min < .zero                  { return }
-        }
+        var autocorrectable = sign
+        autocorrect(sign: &autocorrectable)
+        if autocorrectable == sign { return }
         //=--------------------------------------=
         // MARK: Failure
         //=--------------------------------------=
