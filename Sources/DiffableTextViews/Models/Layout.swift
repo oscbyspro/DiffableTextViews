@@ -396,7 +396,7 @@ extension Layout {
         //=--------------------------------------=
         if let caret = firstIndex(start: start, direction: direction.reversed(), skip: false) { return caret }
         //=--------------------------------------=
-        // MARK: Default To The Start Index
+        // MARK: Default To Layout's Start Index
         //=--------------------------------------=
         return startIndex
     }

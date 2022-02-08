@@ -222,8 +222,10 @@ public struct DiffableTextField<Style: UIKitDiffableTextStyle>: UIViewRepresenta
             // MARK: Inactive
             //=------------------------------=
             } else {
-                self.context.inactive(style: style, value: value)
-                self.push(characters: style.format(value: value))
+                lock.perform {
+                    self.context.inactive(style: style, value: value)
+                    self.downstream.update(text: style.format(value: value))
+                }
             }
         }
         
@@ -244,15 +246,6 @@ public struct DiffableTextField<Style: UIKitDiffableTextStyle>: UIViewRepresenta
             //=----------------------------------=
             if  self.upstream.value.wrappedValue != context.value {
                 self.upstream.value.wrappedValue  = context.value
-            }
-        }
-        
-        @inlinable func push(characters: String) {
-            //=----------------------------------=
-            // MARK: Downstream
-            //=----------------------------------=
-            lock.perform {
-                self.downstream.update(text: characters)
             }
         }
                 
