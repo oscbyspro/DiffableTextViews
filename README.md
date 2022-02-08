@@ -16,7 +16,7 @@ An open-source module for as-you-type formatting and conversion in iOS.
 | :running_man: | Performant | O(n) differentiation algorithms |
 | :desert_island: | Standalone | Uses no remote dependencies |
 | :window: | Open source | Transparent, as it should be |
-| :smiley: | Emojis | Naitive offsets, supports emojis |
+| :smiley: | Emojis | Native offsets, supports emojis |
 
 ### [Algorithms](Sources/DiffableTextViews/Models/Field.swift)
 
