@@ -197,32 +197,6 @@ extension NumericTextStyle {
         let snapshot = snapshot(characters: characters)
         return Commit(value: value, snapshot: snapshot)
     }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Helpers - Styles
-    //=------------------------------------------------------------------------=
-    
-    /// Always show sign if the number contains a negative sign, use automatic behavior otherwise.
-    @inlinable func sign(number: Number) -> Sign.Style {
-        number.sign == .negative ? .always : .automatic
-    }
-    
-    /// Alway show style when the number contains a fraction separator and its value is not maxed out, use automatic behavior otherwise.
-    @inlinable func separator(number: Number, location: Bounds.Location) -> Format.Separator {
-        location == .edge || number.separator != .fraction ? .automatic : .always
-    }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Helpers - Fixes
-    //=------------------------------------------------------------------------=
-        
-    /// This method exists because Apple's format styles always interpret zero as having a positive sign.
-    @inlinable func fix(sign: Sign, for value: Value, in characters: inout String) {
-        guard sign == .negative, value == .zero else { return }
-        guard let position = characters.firstIndex(where: region.signs.components.keys.contains) else { return }
-        guard let replacement = region.signs[sign] else { return }
-        characters.replaceSubrange(position...position, with: String(replacement))
-    }
 }
 
 //=----------------------------------------------------------------------------=
@@ -248,5 +222,38 @@ extension NumericTextStyle {
                 snapshot.append(Symbol(character, as: .phantom))
             }
         }
+    }
+}
+
+//=----------------------------------------------------------------------------=
+// MARK: NumericTextStyle - Format
+//=----------------------------------------------------------------------------=
+
+extension NumericTextStyle {
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Component
+    //=------------------------------------------------------------------------=
+    
+    /// Always show sign if the number contains a negative sign, use automatic behavior otherwise.
+    @inlinable func sign(number: Number) -> Sign.Style {
+        number.sign == .negative ? .always : .automatic
+    }
+    
+    /// Alway show style when the number contains a fraction separator and its value is not maxed out, use automatic behavior otherwise.
+    @inlinable func separator(number: Number, location: Bounds.Location) -> Format.Separator {
+        location == .edge || number.separator != .fraction ? .automatic : .always
+    }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Fixes
+    //=------------------------------------------------------------------------=
+        
+    /// This method exists because Apple's format styles always interpret zero as having a positive sign.
+    @inlinable func fix(sign: Sign, for value: Value, in characters: inout String) {
+        guard sign == .negative, value == .zero else { return }
+        guard let position = characters.firstIndex(where: region.signs.components.keys.contains) else { return }
+        guard let replacement = region.signs[sign] else { return }
+        characters.replaceSubrange(position...position, with: String(replacement))
     }
 }
