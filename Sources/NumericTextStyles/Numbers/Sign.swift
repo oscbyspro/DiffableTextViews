@@ -24,6 +24,17 @@ public enum Sign: UInt8, Unicodeable {
     case negative = 45 // "-"
     
     //=------------------------------------------------------------------------=
+    // MARK: Transformations
+    //=------------------------------------------------------------------------=
+    
+    @inlinable mutating func toggle() {
+        switch self {
+        case .positive: self = .negative
+        case .negative: self = .positive
+        }
+    }
+    
+    //=------------------------------------------------------------------------=
     // MARK: Constants
     //=------------------------------------------------------------------------=
     

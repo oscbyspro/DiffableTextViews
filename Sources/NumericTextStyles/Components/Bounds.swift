@@ -33,7 +33,7 @@ public struct Bounds<Value: Boundable>: Equatable {
     }
     
     //=------------------------------------------------------------------------=
-    // MARK: Autocorrect
+    // MARK: Autocorrect - Value
     //=------------------------------------------------------------------------=
     
     @inlinable func autocorrect(_ value: inout Value) {
@@ -41,7 +41,16 @@ public struct Bounds<Value: Boundable>: Equatable {
     }
     
     //=------------------------------------------------------------------------=
-    // MARK: Validation
+    // MARK: Autocorrect - Number
+    //=------------------------------------------------------------------------=
+
+    @inlinable func autocorrect(_ number: inout Number) {
+        do { try validate(sign: number.sign) } catch { number.sign.toggle() }
+        print(number.sign)
+    }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Validate - Value
     //=------------------------------------------------------------------------=
     
     @inlinable func validate(value: Value) throws -> Location {
@@ -63,15 +72,15 @@ public struct Bounds<Value: Boundable>: Equatable {
         //=--------------------------------------=
         throw Info([.mark(value), "is not in", .mark(self)])
     }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Validation - Sign
-    //=------------------------------------------------------------------------=
 
+    //=------------------------------------------------------------------------=
+    // MARK: Validate - Sign
+    //=------------------------------------------------------------------------=
+    
     @inlinable func validate(sign: Sign) throws {
         switch sign {
-        case .positive: if max >= .zero { return }
-        case .negative: if min <  .zero { return }
+        case .positive: if max > .zero || min == max { return }
+        case .negative: if min < .zero               { return }
         }
         //=--------------------------------------=
         // MARK: Failure

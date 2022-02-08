@@ -93,7 +93,7 @@ extension NumericTextStyle {
     //=------------------------------------------------------------------------=
     
     @inlinable public func commit(value: Value) -> Commit<Value> {
-        let style = format.style(precision: precision.active())
+        var style = format.style(precision: precision.active())
         var value = value
         //=--------------------------------------=
         // MARK: Autocorrect
@@ -108,15 +108,25 @@ extension NumericTextStyle {
         //=--------------------------------------=
         // MARK: Autocorrect
         //=--------------------------------------=
+        bounds.autocorrect(&number)
         precision.autocorrect(&number)
         //=--------------------------------------=
         // MARK: Value <- Number
         //=--------------------------------------=
         value = try! region.value(in: number, as: style)
         //=--------------------------------------=
-        // MARK: Characters, Snapshot, Commit
+        // MARK: Style
         //=--------------------------------------=
-        let characters = style.format(value)
+        let sign = sign(number: number)
+        style = style.sign(style: sign)
+        //=--------------------------------------=
+        // MARK: Characters
+        //=--------------------------------------=
+        var characters = style.format(value)
+        fix(sign: number.sign, for: value, in: &characters)
+        //=--------------------------------------=
+        // MARK: Snapshot -> Commit
+        //=--------------------------------------=
         let snapshot = snapshot(characters: characters)
         return Commit(value: value, snapshot: snapshot)
     }
@@ -182,7 +192,7 @@ extension NumericTextStyle {
         var characters = style.format(value)
         fix(sign: number.sign, for: value, in: &characters)
         //=--------------------------------------=
-        // MARK: Characters -> Snapshot -> Commit
+        // MARK: Snapshot -> Commit
         //=--------------------------------------=
         let snapshot = snapshot(characters: characters)
         return Commit(value: value, snapshot: snapshot)
@@ -208,7 +218,7 @@ extension NumericTextStyle {
         
     /// This method exists because Apple's format styles always interpret zero as having a positive sign.
     @inlinable func fix(sign: Sign, for value: Value, in characters: inout String) {
-        guard sign == .negative && value == .zero  else { return }
+        guard sign == .negative, value == .zero else { return }
         guard let position = characters.firstIndex(where: region.signs.components.keys.contains) else { return }
         guard let replacement = region.signs[sign] else { return }
         characters.replaceSubrange(position...position, with: String(replacement))
