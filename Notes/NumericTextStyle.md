@@ -30,9 +30,28 @@ Uses format styles introduced in iOS 15.0.
 
 Determines the input and output space in terms of digits.
 
+### Behaviors
+
+    - If the value is longer than its upper bound, the value will be trimmed to that length.
+    - If the value is shorter than its lower bound, redundant zeros will be added to the value.
+
+### Enforcement
+
+    - Lower bound is enforced: when the view is idle.
+    - Upper bound is enforced: when the view is active.
+
 ## Bounds
 
 Determines the input and output space in terms of values.
+
+### Behaviors
+
+    - If the value is outside its range, the value will be rounded.
+    - If it only contains nonpositive values, a negative sign will be added.
+
+### Enforcement
+
+    - Lower bound and upper bound are enforced when the view is active.
 
 ## Values
 
