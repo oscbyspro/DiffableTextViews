@@ -113,10 +113,9 @@ Determines the input and output space in terms of values.
 
 ## Behaviors
 
-Uses custom behavior to enhance the user experience.
-
-  - Sign is set by inserting a sign character anywhere in the text.
-  - Because input is lenient, it is limited to ≤ one character per entry.
+      - Bounds take effect before precision (see enforcement sections).
+      - Sign is set by inserting a sign character anywhere in the text.
+      - Because input is lenient, it is limited to ≤ one character per entry.
 
 ## Examples
 
