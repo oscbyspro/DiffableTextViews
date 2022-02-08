@@ -11,7 +11,7 @@
 // MARK: * Changes
 //*============================================================================*
 
-/// A merge request that contains a continuous change.
+/// A snapshot, and one continuous change that has not yet been applied to it.
 public struct Changes {
     
     //=------------------------------------------------------------------------=
@@ -36,7 +36,7 @@ public struct Changes {
     // MARK: Utilities
     //=------------------------------------------------------------------------=
     
-    /// Merges the components of the request into a single snapshot.
+    /// Merges its contents to form a new snapshot.
     @inlinable public func proposal() -> Snapshot {
         var result = snapshot; result.replaceSubrange(range, with: replacement); return result
     }

@@ -84,7 +84,7 @@ struct NumericScreen: View {
     }
     
     var boundsIntervalSliders: some View {
-        Sliders("Bounds exponent", values: $exponents, limits: Self.exponentsLimits.closed)
+        Sliders("Bounds length (9s)", values: $exponents, limits: Self.exponentsLimits.closed)
     }
     
     var integerIntervalSliders: some View {
@@ -131,10 +131,10 @@ struct NumericScreen: View {
         //=--------------------------------------=
         // MARK: Single
         //=--------------------------------------=
-        func bound(_ exponent: Int) -> Decimal {
-            guard exponent != 0 else { return 0 }
-            var description = exponent >= 0 ? "1" : "-1"
-            description += String(repeating: "0", count: abs(exponent)-1)
+        func bound(_ length: Int) -> Decimal {
+            guard length != 0 else { return 0 }
+            var description = length >= 0 ? "" : "-"
+            description += String(repeating: "9", count: abs(length))
             return Decimal(string: description)!
         }
         //=--------------------------------------=

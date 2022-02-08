@@ -33,14 +33,40 @@ public struct Bounds<Value: Boundable>: Equatable {
     }
     
     //=------------------------------------------------------------------------=
+    // MARK: Autocorrect
+    //=------------------------------------------------------------------------=
+    
+    @inlinable func autocorrect(_ value: inout Value) {
+        value = Swift.min(Swift.max(min, value), max)
+    }
+    
+    //=------------------------------------------------------------------------=
     // MARK: Validation
     //=------------------------------------------------------------------------=
     
-    @inlinable func validate(value: Value) throws {
-        guard min <= value, value <= max else {
-            throw Info([.mark(value), "is not in", .mark(self)])
+    @inlinable func validate(value: Value) throws -> Location {
+        //=--------------------------------------=
+        // MARK: Body
+        //=--------------------------------------=
+        if min < value && value < max { return .body }
+        //=--------------------------------------=
+        // MARK: Edge
+        //=--------------------------------------=
+        if min == value || value == max {
+            //=----------------------------------=
+            // MARK: Special Cases About Zero
+            //=----------------------------------=
+            return value != .zero || min == max ? .edge : .body
         }
+        //=--------------------------------------=
+        // MARK: Failure
+        //=--------------------------------------=
+        throw Info([.mark(value), "is not in", .mark(self)])
     }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Validation - Sign
+    //=------------------------------------------------------------------------=
 
     @inlinable func validate(sign: Sign) throws {
         switch sign {
@@ -53,13 +79,12 @@ public struct Bounds<Value: Boundable>: Equatable {
         throw Info([.mark(sign), "is not in", .mark(self)])
     }
     
-    //=------------------------------------------------------------------------=
-    // MARK: Autocorrect
-    //=------------------------------------------------------------------------=
+    //*========================================================================*
+    // MARK: * Location
+    //*========================================================================*
     
-    @inlinable func autocorrect(_ value: inout Value) {
-        value = Swift.min(Swift.max(min, value), max)
-    }
+    /// A model describing whether a value maxed out or not.
+    @usableFromInline enum Location { case body, edge }
 }
 
 //=----------------------------------------------------------------------------=

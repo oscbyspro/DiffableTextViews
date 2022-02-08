@@ -168,14 +168,14 @@ extension NumericTextStyle {
         //=--------------------------------------=
         // MARK: Value - Validate
         //=--------------------------------------=
-        try bounds.validate(value: value)
+        let location = try bounds.validate(value: value)
         //=--------------------------------------=
         // MARK: Style
         //=--------------------------------------=
-        let style = format.style(
-        precision: precision.interactive(count: count),
-        separator: number.separator == .fraction ? .always : .automatic,
-        sign: number.sign == .negative ? .always : .automatic)
+        let sign = sign(number: number)
+        let precision = precision.interactive(count: count)
+        let separator = separator(number: number, location: location)
+        let style = format.style(precision: precision, separator: separator, sign: sign)
         //=--------------------------------------=
         // MARK: Style - Characters
         //=--------------------------------------=
@@ -189,9 +189,23 @@ extension NumericTextStyle {
     }
     
     //=------------------------------------------------------------------------=
-    // MARK: Helpers
+    // MARK: Helpers - Styles
     //=------------------------------------------------------------------------=
     
+    /// Always show sign if the number contains a negative sign, use automatic behavior otherwise.
+    @inlinable func sign(number: Number) -> Sign.Style {
+        number.sign == .negative ? .always : .automatic
+    }
+    
+    /// Alway show style when the number contains a fraction separator and its value is not maxed out, use automatic behavior otherwise.
+    @inlinable func separator(number: Number, location: Bounds.Location) -> Format.Separator {
+        location == .edge || number.separator != .fraction ? .automatic : .always
+    }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Helpers - Fixes
+    //=------------------------------------------------------------------------=
+        
     /// This method exists because Apple's format styles always interpret zero as having a positive sign.
     @inlinable func fix(sign: Sign, for value: Value, in characters: inout String) {
         guard sign == .negative && value == .zero  else { return }
