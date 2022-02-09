@@ -89,3 +89,20 @@ import Support
         digits = Array(digits.suffix(maxLength))
     }
 }
+
+//=----------------------------------------------------------------------------=
+// MARK: Digits - TextOutputStreamable
+//=----------------------------------------------------------------------------=
+
+extension Digits: TextOutputStreamable {
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Write
+    //=------------------------------------------------------------------------=
+    
+    @inlinable public func write<T: TextOutputStream>(to target: inout T) {
+        for digit in digits {
+            digit.write(to: &target)
+        }
+    }
+}

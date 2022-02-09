@@ -9,6 +9,7 @@
 
 import DiffableTextViews
 import Foundation
+import Support
 
 //*============================================================================*
 // MARK: * NumericTextStyle
@@ -142,6 +143,7 @@ extension NumericTextStyle {
     // MARK: Downstream
     //=------------------------------------------------------------------------=
     
+    #warning("Location should throw an error rather than use location.")
     @inlinable public func merge(changes: Changes) throws -> Commit<Value> {
         var reader = Reader(changes, in: region)
         //=--------------------------------------=
@@ -184,7 +186,7 @@ extension NumericTextStyle {
         //=--------------------------------------=
         let sign = sign(number: number)
         let precision = precision.interactive(count: count)
-        let separator = separator(number: number, location: location)
+        let separator = try separator(number: number, location: location)
         let style = format.style(precision: precision, separator: separator, sign: sign)
         //=--------------------------------------=
         // MARK: Style - Characters
@@ -232,7 +234,7 @@ extension NumericTextStyle {
 extension NumericTextStyle {
     
     //=------------------------------------------------------------------------=
-    // MARK: Component
+    // MARK: Sign
     //=------------------------------------------------------------------------=
     
     /// Always show sign if the number contains a negative sign, use automatic behavior otherwise.
@@ -240,9 +242,17 @@ extension NumericTextStyle {
         number.sign == .negative ? .always : .automatic
     }
     
+    //=------------------------------------------------------------------------=
+    // MARK: Separator
+    //=------------------------------------------------------------------------=
+    
     /// Alway show style when the number contains a fraction separator and its value is not maxed out, use automatic behavior otherwise.
-    @inlinable func separator(number: Number, location: Bounds.Location) -> Format.Separator {
-        location == .edge || number.separator != .fraction ? .automatic : .always
+    @inlinable func separator(number: Number, location: Bounds.Location) throws -> Format.Separator {
+        if location == .edge, number.hasSeparatorAsSuffix {
+            throw Info([.mark(number), "has reached its limit and cannot fit a fraction separator."])
+        }
+        
+        return number.separator == .fraction ? .always : .automatic
     }
     
     //=------------------------------------------------------------------------=

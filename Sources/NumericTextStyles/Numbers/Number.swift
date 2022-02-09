@@ -93,7 +93,15 @@ import Support
         self.integer.trimZerosPrefix()
         self.integer.makeAtLeastZero()
     }
-        
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Accessors
+    //=------------------------------------------------------------------------=
+
+    @inlinable var hasSeparatorAsSuffix: Bool {
+        separator != nil && fraction.digits.isEmpty
+    }
+    
     //=------------------------------------------------------------------------=
     // MARK: Transformations - Precision
     //=------------------------------------------------------------------------=
@@ -136,5 +144,23 @@ import Support
     @inlinable func count() -> Count {
         let value = integer.count + fraction.count - integer.count(prefix: \.isZero)
         return Count(value: value, integer: integer.count, fraction: fraction.count)
+    }
+}
+
+//=----------------------------------------------------------------------------=
+// MARK: Number - TextOutputStreamable
+//=----------------------------------------------------------------------------=
+
+extension Number: TextOutputStreamable {
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Write
+    //=------------------------------------------------------------------------=
+    
+    @inlinable public func write<T: TextOutputStream>(to target: inout T) {
+        sign.write(to: &target)
+        integer.write(to: &target)
+        separator?.write(to: &target)
+        fraction.write(to: &target)
     }
 }
