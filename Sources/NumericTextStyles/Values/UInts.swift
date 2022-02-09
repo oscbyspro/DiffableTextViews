@@ -11,7 +11,16 @@
 // MARK: * UInt
 //*============================================================================*
 
-extension UInt: LimitedUInt { @usableFromInline typealias Limit = Int }
+extension UInt: IntegerValue, UnsignedValue {
+    typealias Limit = UInt
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Precision, Bounds
+    //=------------------------------------------------------------------------=
+
+    public static let precision: Count = Limit.precision
+    public static let bounds: ClosedRange<Self> = 0...Limit.bounds.upperBound
+}
 
 //*============================================================================*
 // MARK: * UInt8
@@ -59,40 +68,13 @@ extension UInt32: IntegerValue, UnsignedValue {
 // MARK: * UInt64
 //*============================================================================*
 
-extension UInt64: LimitedUInt { @usableFromInline typealias Limit = Int64 }
-
-//*============================================================================*
-// MARK: * LimitedUInt
-//*============================================================================*
-
-/// No crash. Such wow. Very impress.
-///
-/// See notes on Swift issues for why this protocol is needed.
-///
-@usableFromInline protocol LimitedUInt: BinaryInteger, IntegerValue, UnsignedValue {
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Limit
-    //=------------------------------------------------------------------------=
-    
-    associatedtype Limit: BinaryInteger, IntegerValue, SignedValue
-}
-
-//=----------------------------------------------------------------------------=
-// MARK: LimitedUInt - Details
-//=----------------------------------------------------------------------------=
-
-extension LimitedUInt {
+extension UInt64: IntegerValue, UnsignedValue {
+    typealias Limit = UInt64
     
     //=------------------------------------------------------------------------=
     // MARK: Precision, Bounds
     //=------------------------------------------------------------------------=
 
-    @inlinable public static var precision: Count {
-        Limit.precision
-    }
-    
-    @inlinable public static var bounds: ClosedRange<Self> {
-        0...Self(Limit.bounds.upperBound)
-    }
+    public static let precision: Count = Limit.precision
+    public static let bounds: ClosedRange<Self> = 0...Limit.bounds.upperBound
 }
