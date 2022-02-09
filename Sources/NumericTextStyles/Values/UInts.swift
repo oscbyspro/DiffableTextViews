@@ -11,16 +11,7 @@
 // MARK: * UInt
 //*============================================================================*
 
-extension UInt: IntegerValue, UnsignedValue {
-    typealias Limitation = Int
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Precision, Bounds
-    //=------------------------------------------------------------------------=
-    
-    public static let precision: Count = Limitation.precision
-    public static let bounds: ClosedRange<Self> = 0...Self(Limitation.bounds.upperBound)
-}
+extension UInt: LimitedUInt { @usableFromInline typealias Limit = Int }
 
 //*============================================================================*
 // MARK: * UInt8
@@ -68,13 +59,40 @@ extension UInt32: IntegerValue, UnsignedValue {
 // MARK: * UInt64
 //*============================================================================*
 
-extension UInt64: IntegerValue, UnsignedValue {
-    typealias Limitation = Int64
+extension UInt64: LimitedUInt { @usableFromInline typealias Limit = Int64 }
+
+//*============================================================================*
+// MARK: * LimitedUInt
+//*============================================================================*
+
+/// See notes on Swift issues for why this protocol is needed.
+///
+/// - No crash. Such wow. Very impress.
+///
+@usableFromInline protocol LimitedUInt: BinaryInteger, IntegerValue, UnsignedValue {
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Limit
+    //=------------------------------------------------------------------------=
+    
+    associatedtype Limit: BinaryInteger, IntegerValue, SignedValue
+}
+
+//=----------------------------------------------------------------------------=
+// MARK: LimitedUInt - Details
+//=----------------------------------------------------------------------------=
+
+extension LimitedUInt {
     
     //=------------------------------------------------------------------------=
     // MARK: Precision, Bounds
     //=------------------------------------------------------------------------=
 
-    public static let precision: Count = Limitation.precision
-    public static let bounds: ClosedRange<Self> = 0...Self(Limitation.bounds.upperBound)
+    @inlinable public static var precision: Count {
+        Limit.precision
+    }
+    
+    @inlinable public static var bounds: ClosedRange<Self> {
+        0...Self(Limit.bounds.upperBound)
+    }
 }
