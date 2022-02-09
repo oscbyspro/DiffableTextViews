@@ -65,9 +65,9 @@ extension UInt64: LimitedUInt { @usableFromInline typealias Limit = Int64 }
 // MARK: * LimitedUInt
 //*============================================================================*
 
-/// See notes on Swift issues for why this protocol is needed.
+/// No crash. Such wow. Very impress.
 ///
-/// - No crash. Such wow. Very impress.
+/// See notes on Swift issues for why this protocol is needed.
 ///
 @usableFromInline protocol LimitedUInt: BinaryInteger, IntegerValue, UnsignedValue {
     

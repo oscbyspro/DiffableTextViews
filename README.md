@@ -59,7 +59,7 @@ It uses custom made [interval sliders](Examples/iOS/Modules/IntervalSliders/Sour
 
 ### Instructions
 
-To try it, download this package and run the example project from its location.
+To try it out, download this package and compile/run it with Xcode.
 
 # Views
 
