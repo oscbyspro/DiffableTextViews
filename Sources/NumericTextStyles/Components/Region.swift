@@ -60,7 +60,7 @@ import Foundation
         self.digits = Lexicon<Digit>()
         self.digits.merge(Digit.system)
         for digit in Digit.allCases {
-            self.digits.link(formatter.string(from: digit.number as NSNumber)!.first!, digit)
+            self.digits.link(formatter.string(from: digit.numericValue as NSNumber)!.first!, digit)
         }
         //=--------------------------------------=
         // MARK: Separators
@@ -69,27 +69,6 @@ import Foundation
         self.separators.merge(Separator.system)
         self.separators.link(formatter .decimalSeparator.first!, .fraction)
         self.separators.link(formatter.groupingSeparator.first!, .grouping)
-    }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Initializers - Static
-    //=------------------------------------------------------------------------=
-    
-    @inlinable static func cached(_ locale: Locale) -> Region {
-        let key = NSString(string: locale.identifier)        
-        //=--------------------------------------=
-        // MARK: Search In Cache
-        //=--------------------------------------=
-        if let reusable = cache.object(forKey: key) {
-            return reusable
-        //=--------------------------------------=
-        // MARK: Create A New Instance
-        //=--------------------------------------=
-        } else {
-            let instance = Region(locale)
-            cache.setObject(instance, forKey: key)
-            return instance
-        }
     }
     
     //*========================================================================*
@@ -136,6 +115,34 @@ import Foundation
         @inlinable mutating func link(_ character: Character, _ component: Component) {
             self.components[character] = component
             self.characters[component] = character
+        }
+    }
+}
+
+//=----------------------------------------------------------------------------=
+// MARK: Region - Cache
+//=----------------------------------------------------------------------------=
+
+extension Region {
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Initializers - Static
+    //=------------------------------------------------------------------------=
+    
+    @inlinable static func cached(_ locale: Locale) -> Region {
+        let key = NSString(string: locale.identifier)
+        //=--------------------------------------=
+        // MARK: Search In Cache
+        //=--------------------------------------=
+        if let reusable = cache.object(forKey: key) {
+            return reusable
+        //=--------------------------------------=
+        // MARK: Create A New Instance An Save It
+        //=--------------------------------------=
+        } else {
+            let instance = Region(locale)
+            cache.setObject(instance, forKey: key)
+            return instance
         }
     }
 }
