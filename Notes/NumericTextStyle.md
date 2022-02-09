@@ -33,7 +33,7 @@ Determines the input and output space in terms of values.
 ### Behaviors
 
     - If the value is outside its range, the value will be rounded.
-    - A negative sign will automatically be inserted when: min &lt; 0 and max ≤ 0.
+    - A negative sign will automatically be inserted when: min < 0 and max ≤ 0.
 
 ### Enforcement
 
