@@ -8,8 +8,8 @@ Styles that process text bound to number types.
 
 Supports every locale available in the Foundation framework.
 
-- It accepts localized inputs, as well as system inputs.
-- It fetches and caches each characer it uses at runtime.
+- It accepts both localized and ASCII inputs.
+- It fetches and caches its characters at runtime.
 
 ## Formats
 
@@ -26,6 +26,20 @@ Uses format styles introduced in iOS 15.0.
 | :coin: | Currency | All |
 | :100: | Percent | Nonintegers |
 
+## Bounds
+
+Determines the input and output space in terms of values.
+
+### Behaviors
+
+    - If the value is outside its range, the value will be rounded.
+    - A negative sign will automatically be inserted when: min &lt; 0 and max ≤ 0.
+
+### Enforcement
+
+    - Lower bound is enforced when the view is: active.
+    - Upper bound is enforced when the view is: active.
+
 ## Precision
 
 Determines the input and output space in terms of digits.
@@ -39,19 +53,6 @@ Determines the input and output space in terms of digits.
 
     - Lower bound is enforced when the view is: idle.
     - Upper bound is enforced when the view is: active.
-
-## Bounds
-
-Determines the input and output space in terms of values.
-
-### Behaviors
-
-    - If the value is outside its range, the value will be rounded.
-    - If it only contains nonpositive values, a negative sign will be added.
-
-### Enforcement
-
-    - It is enforced when the view is: active.
 
 ## Values
 

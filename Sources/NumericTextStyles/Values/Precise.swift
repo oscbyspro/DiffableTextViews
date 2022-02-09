@@ -27,13 +27,13 @@ public protocol Precise {
 public protocol PreciseFloatingPoint: Precise { }
 
 //=----------------------------------------------------------------------------=
-// MARK: Precise x Floating Point - Utilities
+// MARK: Precise x Floating Point - Details
 //=----------------------------------------------------------------------------=
 
 public extension PreciseFloatingPoint {
     
     //=------------------------------------------------------------------------=
-    // MARK: Precision - Make
+    // MARK: Helpers
     //=------------------------------------------------------------------------=
 
     @inlinable static func precision(_ max: Int) -> Count {
@@ -48,16 +48,16 @@ public extension PreciseFloatingPoint {
 public protocol PreciseInteger: Precise { }
 
 //=----------------------------------------------------------------------------=
-// MARK: Precise x Integer - Utilities
+// MARK: Precise x Integer - Details
 //=----------------------------------------------------------------------------=
 
 public extension PreciseInteger {
     
     //=------------------------------------------------------------------------
-    // MARK: Precision - Make
+    // MARK: Helpers
     //=------------------------------------------------------------------------=
     
     @inlinable static func precision(_ max: Int) -> Count {
-        Count(value: max, integer: max, fraction: .zero)
+        Count(value: max, integer: max, fraction: 0)
     }
 }

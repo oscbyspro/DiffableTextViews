@@ -39,8 +39,8 @@ import Support
     
     /// Throws an when there is more than one replacement character.
     ///
-    /// This validation rule is needed because of how lenient the input is (bilingual). Otherwise, formatted text
-    /// pasted by the user may be misinterpreted. An alternative to this restriction is to require localized numbers
+    /// This validation rule is needed because input is lenient (bilingual). Otherwise, formatted text
+    /// pasted by the user may be misinterpreted. An alternative is to require numbers to be localized
     /// when input size exceeds one character.
     ///
     @inlinable func validateInputSize() throws {
