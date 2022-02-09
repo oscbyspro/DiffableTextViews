@@ -72,18 +72,18 @@ extension Bounds {
     //=------------------------------------------------------------------------=
     
     @inlinable func validate(value: Value) throws -> Location {
-        //=--------------------------------------=
-        // MARK: Body
-        //=--------------------------------------=
         if min < value && value < max { return .body }
         //=--------------------------------------=
-        // MARK: Edge
+        // MARK: Value == Max
         //=--------------------------------------=
-        if min == value || value == max {
-            //=----------------------------------=
-            // MARK: Special Cases About Zero
-            //=----------------------------------=
-            return value != .zero || self == .zero ? .edge : .body
+        if value == max {
+            return max > .zero || value == min ? .edge : .body
+        }
+        //=--------------------------------------=
+        // MARK: Value == Min
+        //=--------------------------------------=
+        if value == min {
+            return min < .zero || value == max ? .edge : .body
         }
         //=--------------------------------------=
         // MARK: Failure
