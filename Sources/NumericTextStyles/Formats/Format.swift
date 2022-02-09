@@ -113,7 +113,7 @@ extension CurrencyFormat {
 //*============================================================================*
 
 /// - Note: To use this format, the value must support at least two exponent digits.
-@usableFromInline protocol PercentFormat: Format where FormatInput: FloatingPointValue {
+@usableFromInline protocol PercentFormat: Format where FormatInput: FloatingPoint {
     typealias Configuration = NumberFormatStyleConfiguration
     
     //=------------------------------------------------------------------------=

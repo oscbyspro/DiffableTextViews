@@ -11,22 +11,22 @@
 // MARK: * UInt
 //*============================================================================*
 
-extension UInt: IntegerValue, UnsignedValue {
-    typealias Limit = UInt
+extension UInt: Unsigned, Integer {
+    typealias Limit = Int // no crash. such wow. very impress.
     
     //=------------------------------------------------------------------------=
     // MARK: Precision, Bounds
     //=------------------------------------------------------------------------=
 
     public static let precision: Count = Limit.precision
-    public static let bounds: ClosedRange<Self> = 0...Limit.bounds.upperBound
+    public static let bounds: ClosedRange<Self> = 0...Self(Limit.bounds.upperBound)
 }
 
 //*============================================================================*
 // MARK: * UInt8
 //*============================================================================*
 
-extension UInt8: IntegerValue, UnsignedValue {
+extension UInt8: Unsigned, Integer {
     
     //=------------------------------------------------------------------------=
     // MARK: Precision, Bounds
@@ -40,7 +40,7 @@ extension UInt8: IntegerValue, UnsignedValue {
 // MARK: * UInt16
 //*============================================================================*
 
-extension UInt16: IntegerValue, UnsignedValue {
+extension UInt16: Unsigned, Integer {
     
     //=------------------------------------------------------------------------=
     // MARK: Precision, Bounds
@@ -54,7 +54,7 @@ extension UInt16: IntegerValue, UnsignedValue {
 // MARK: * UInt32
 //*============================================================================*
 
-extension UInt32: IntegerValue, UnsignedValue {
+extension UInt32: Unsigned, Integer {
     
     //=------------------------------------------------------------------------=
     // MARK: Precision, Bounds
@@ -68,13 +68,13 @@ extension UInt32: IntegerValue, UnsignedValue {
 // MARK: * UInt64
 //*============================================================================*
 
-extension UInt64: IntegerValue, UnsignedValue {
-    typealias Limit = UInt64
+extension UInt64: Unsigned, Integer {
+    typealias Limit = Int64 // no crash. such wow. very impress.
     
     //=------------------------------------------------------------------------=
     // MARK: Precision, Bounds
     //=------------------------------------------------------------------------=
 
     public static let precision: Count = Limit.precision
-    public static let bounds: ClosedRange<Self> = 0...Limit.bounds.upperBound
+    public static let bounds: ClosedRange<Self> = 0...Self(Limit.bounds.upperBound)
 }
