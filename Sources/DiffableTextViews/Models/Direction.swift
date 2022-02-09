@@ -42,28 +42,3 @@
         }
     }
 }
-
-//=----------------------------------------------------------------------------=
-// MARK: Direction - UIKit
-//=----------------------------------------------------------------------------=
-
-#if canImport(UIKit)
-
-import UIKit
-
-extension Direction {
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Intent
-    //=------------------------------------------------------------------------=
-    
-    @inlinable static func intent(_ presses: Set<UIPress>) -> Direction? {
-        presses.first?.key.flatMap({ intents[$0.keyCode] })
-    }
-    
-    @usableFromInline static let intents: [UIKeyboardHIDUsage: Direction] = [
-        .keyboardLeftArrow: .backwards, .keyboardRightArrow: .forwards
-    ]
-}
-
-#endif

@@ -66,12 +66,28 @@ public final class BasicTextField: UITextField {
     //=------------------------------------------------------------------------=
     
     @inlinable func process(new presses: Set<UIPress>) {
-        intent = .intent(presses)
+        intent = intent(behind: presses)
     }
     
     @inlinable func process(old presses: Set<UIPress>) {
-        if intent == .intent(presses) { intent = nil }
+        if intent == intent(behind: presses) { intent = nil }
     }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Intent
+    //=------------------------------------------------------------------------=
+    
+    @inlinable func intent(behind presses: Set<UIPress>) -> Direction? {
+        presses.first?.key.flatMap({ Self.intents[$0.keyCode] })
+    }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Intent - Constants
+    //=------------------------------------------------------------------------=
+    
+    @usableFromInline static let intents: [UIKeyboardHIDUsage: Direction] = [
+        .keyboardLeftArrow: .backwards, .keyboardRightArrow: .forwards
+    ]
 }
 
 #endif
