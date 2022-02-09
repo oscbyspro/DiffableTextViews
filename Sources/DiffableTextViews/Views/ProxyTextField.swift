@@ -59,11 +59,11 @@ extension ProxyTextField {
     //=------------------------------------------------------------------------=
     
     @inlinable var text: String {
-        wrapped.text!
+        wrapped.text! // force unwrap is always OK
     }
     
     @inlinable func selection() -> Range<Position> {
-        offsets(in: wrapped.selectedTextRange!)
+        offsets(in: wrapped.selectedTextRange!) // force unwrap is always OK
     }
     
     //=------------------------------------------------------------------------=
