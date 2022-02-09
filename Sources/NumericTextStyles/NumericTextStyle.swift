@@ -121,12 +121,12 @@ extension NumericTextStyle {
         let sign = sign(number: number)
         style = style.sign(style: sign)
         //=--------------------------------------=
-        // MARK: Characters
+        // MARK: Style -> Characters
         //=--------------------------------------=
         var characters = style.format(value)
         fix(sign: number.sign, for: value, in: &characters)
         //=--------------------------------------=
-        // MARK: Snapshot -> Commit
+        // MARK: Characters -> Snapshot -> Commit
         //=--------------------------------------=
         let snapshot = snapshot(characters: characters)
         return Commit(value: value, snapshot: snapshot)
@@ -165,7 +165,7 @@ extension NumericTextStyle {
         //=--------------------------------------=
         let count = number.count()
         //=--------------------------------------=
-        // MARK: Number - Capacity
+        // MARK: Number - Count -> Capacity
         //=--------------------------------------=
         let capacity = try precision.capacity(count: count)
         number.removeImpossibleSeparator(capacity: capacity)
@@ -185,12 +185,12 @@ extension NumericTextStyle {
         let separator = try separator(number: number, location: location)
         let style = format.style(precision: precision, separator: separator, sign: sign)
         //=--------------------------------------=
-        // MARK: Style - Characters
+        // MARK: Style -> Characters
         //=--------------------------------------=
         var characters = style.format(value)
         fix(sign: number.sign, for: value, in: &characters)
         //=--------------------------------------=
-        // MARK: Snapshot -> Commit
+        // MARK: Characters -> Snapshot -> Commit
         //=--------------------------------------=
         let snapshot = snapshot(characters: characters)
         return Commit(value: value, snapshot: snapshot)
