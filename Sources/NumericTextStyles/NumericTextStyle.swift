@@ -143,7 +143,6 @@ extension NumericTextStyle {
     // MARK: Downstream
     //=------------------------------------------------------------------------=
     
-    #warning("Location should throw an error rather than use location.")
     @inlinable public func merge(changes: Changes) throws -> Commit<Value> {
         var reader = Reader(changes, in: region)
         //=--------------------------------------=
