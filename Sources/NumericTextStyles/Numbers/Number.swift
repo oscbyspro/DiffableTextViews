@@ -99,7 +99,7 @@ import Support
     //=------------------------------------------------------------------------=
 
     @inlinable var hasSeparatorAsSuffix: Bool {
-        separator != nil && fraction.digits.isEmpty
+        fraction.digits.isEmpty && separator != nil
     }
     
     //=------------------------------------------------------------------------=

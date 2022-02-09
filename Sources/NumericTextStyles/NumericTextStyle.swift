@@ -146,19 +146,16 @@ extension NumericTextStyle {
     @inlinable public func merge(changes: Changes) throws -> Commit<Value> {
         var reader = Reader(changes, in: region)
         //=--------------------------------------=
-        // MARK: Reader - Validate
+        // MARK: Reader
         //=--------------------------------------=
         try reader.validateInputSize()
-        //=--------------------------------------=
-        // MARK: Reader - Commands
-        //=--------------------------------------=
-        let modify = reader.consumeSignInput()
+        let processSignInput = reader.consumeSignInput()
+        let proposal = reader.changes.proposal()
         //=--------------------------------------=
         // MARK: Number
         //=--------------------------------------=
-        var number = try region.number(
-        in: reader.changes.proposal(),
-        as: Value.self); modify?(&number)
+        var number = try region.number(in: proposal, as: Value.self)
+        processSignInput?(&number)
         //=--------------------------------------=
         // MARK: Number - Validate
         //=--------------------------------------=
@@ -248,9 +245,11 @@ extension NumericTextStyle {
     /// Alway show style when the number contains a fraction separator and its value is not maxed out, use automatic behavior otherwise.
     @inlinable func separator(number: Number, location: Bounds.Location) throws -> Format.Separator {
         if location == .edge, number.hasSeparatorAsSuffix {
-            throw Info([.mark(number), "has reached its limit and cannot fit a fraction separator."])
+            throw Info([.mark(number), "has reached its limit and does not fit a fraction separator."])
         }
-        
+        //=--------------------------------------=
+        // MARK: Show Separator That Exists
+        //=--------------------------------------=
         return number.separator == .fraction ? .always : .automatic
     }
     
