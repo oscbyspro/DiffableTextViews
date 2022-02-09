@@ -165,7 +165,7 @@ extension NumericTextStyle {
         //=--------------------------------------=
         let count = number.count()
         //=--------------------------------------=
-        // MARK: Number - Count -> Capacity
+        // MARK: Number - Capacity / Validate
         //=--------------------------------------=
         let capacity = try precision.capacity(count: count)
         number.removeImpossibleSeparator(capacity: capacity)

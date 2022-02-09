@@ -139,6 +139,6 @@ extension Bounds: CustomStringConvertible {
     //=------------------------------------------------------------------------=
     
     @inlinable public var description: String {
-        "[\(min),\(max)]"
+        "\(min) to \(max)"
     }
 }
