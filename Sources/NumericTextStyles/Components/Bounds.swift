@@ -36,9 +36,9 @@ public struct Bounds<Value: Boundable>: Equatable {
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable init(unchecked bounds: (Value, Value)) {
-        self.min = bounds.0
-        self.max = bounds.1
+    @inlinable init(unchecked: (Value, Value)) {
+        self.min = unchecked.0
+        self.max = unchecked.1
     }
     
     @inlinable init(min: Value = Value.bounds.lowerBound, max: Value = Value.bounds.upperBound) {
@@ -77,13 +77,13 @@ extension Bounds {
         // MARK: Value == Max
         //=--------------------------------------=
         if value == max {
-            return max > .zero || value == min ? .edge : .body
+            return value > .zero || min == max ? .edge : .body
         }
         //=--------------------------------------=
         // MARK: Value == Min
         //=--------------------------------------=
         if value == min {
-            return min < .zero || value == max ? .edge : .body
+            return value < .zero || min == max ? .edge : .body
         }
         //=--------------------------------------=
         // MARK: Failure
