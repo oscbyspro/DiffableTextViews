@@ -42,14 +42,14 @@ struct DiffablePhoneNumberTextField: View {
 }
 ```
 
-![DiffablePhoneNumberTextField.gif](../Assets/DiffablePaymentNumberTextField.gif)
+![DiffablePhoneNumberTextField.gif](../Assets/DiffableCardNumberTextField.gif)
 
 ```swift
-struct DiffablePaymentNumberTextField: View {
-    @State var paymentNumber: String = ""
+struct DiffableCardNumberTextField: View {
+    @State var cardNumber: String = ""
     
     var body: some View {
-        DiffableTextField($paymentNumber) {
+        DiffableTextField($cardNumber) {
             .pattern("#### #### #### ####")
             .placeholder("#") { $0.isASCII && $0.isNumber }
             .hidden().constant()
