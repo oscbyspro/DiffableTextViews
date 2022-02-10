@@ -74,7 +74,7 @@ final class RegionTests: XCTestCase {
         for region in regions {
             let style = int(region).grouping(.automatic)
             let nonnumbers = number.formatted(style).filter({ !$0.isNumber })
-            XCTAssertNotNil(nonnumbers.allSatisfy({ region.separators[$0] == .grouping }))
+            XCTAssert(nonnumbers.allSatisfy({ region.separators[$0] == .grouping }))
         }
     }
     
@@ -84,7 +84,7 @@ final class RegionTests: XCTestCase {
         for region in regions {
             let style = double(region).decimalSeparator(strategy: .always)
             let nonnumbers = number.formatted(style).filter({ !$0.isNumber })
-            XCTAssertNotNil(nonnumbers.allSatisfy({ region.separators[$0] == .fraction }))
+            XCTAssert(nonnumbers.allSatisfy({ region.separators[$0] == .fraction }))
         }
     }
 }

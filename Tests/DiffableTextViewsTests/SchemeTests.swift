@@ -26,7 +26,7 @@ final class SchemeTests: XCTestCase {
     //=------------------------------------------------------------------------=
     
     lazy var scheme     = UTF16.self
-    lazy var iterations = 1_000_000
+    lazy var iterations = 1_000
     
     lazy var content1__ = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, magna aliqua."
     lazy var content10_ = String(repeating: content1__, count: 10_)
@@ -36,24 +36,35 @@ final class SchemeTests: XCTestCase {
     // MARK: Tests
     //=------------------------------------------------------------------------=
     
-    /// UTF16: 0.202 sec.
-    /// Character: 0.578 sec.
+    
+    /// 1,000,000 iterations:
+    ///
+    /// - UTF16: 0.202 sec.
+    /// - Character: 0.578 sec.
+    ///
     func test1__() {
         measure {
             calculateSizeLoop(content1__)
         }
     }
     
-    /// UTF16: 0.204 sec.
-    /// Character: 3.970 sec.
+    
+    /// 1,000,000 iterations:
+    ///
+    /// - UTF16: 0.204 sec.
+    /// - Character: 3.970 sec.
+    ///
     func test10_() {
         measure {
             calculateSizeLoop(content10_)
         }
     }
     
-    /// UTF16: 0.206 sec.
-    /// Character: ain't nobody got time for that.
+    /// 1,000,000 iterations:
+    ///
+    /// - UTF16: 0.206 sec.
+    /// - Character: ain't nobody got time for that.
+    ///
     func test100() {
         measure {
             calculateSizeLoop(content100)
