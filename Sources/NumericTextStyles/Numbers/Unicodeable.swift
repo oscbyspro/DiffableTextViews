@@ -13,7 +13,7 @@
 
 /// An object representing an ASCII character by its UInt8 unicode scalar value.
 @usableFromInline protocol Unicodeable:
-RawRepresentable, CaseIterable, TextOutputStreamable where RawValue == UInt8 {
+RawRepresentable, Hashable, CaseIterable, TextOutputStreamable where RawValue == UInt8 {
     
     //=------------------------------------------------------------------------=
     // MARK: Constants

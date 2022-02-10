@@ -80,7 +80,9 @@ import Foundation
     // MARK: * Lexicon
     //*========================================================================*
     
-    @usableFromInline struct Lexicon<Component: Hashable> {
+    /// Requires that each component is linked to a localized character.
+    /// Other characters, such as ASCII, may also map to components.
+    @usableFromInline struct Lexicon<Component: Hashable & CaseIterable> {
         
         //=--------------------------------------------------------------------=
         // MARK: State
@@ -104,9 +106,10 @@ import Foundation
             _modify { yield &components[character] }
         }
         
-        @inlinable subscript(component: Component) -> Character? {
-            _read   { yield  characters[component] }
-            _modify { yield &characters[component] }
+        /// Existance is required for all components, so it may be force unwrapped.
+        @inlinable subscript(component: Component) -> Character {
+            _read   { yield  characters[component]! }
+            _modify { yield &characters[component]! }
         }
         
         //=--------------------------------------------------------------------=
@@ -179,23 +182,23 @@ extension Region {
         //=--------------------------------------=
         // MARK: Sign
         //=--------------------------------------=
-        signs[number.sign]!.write(to: &characters)
+        signs[number.sign].write(to: &characters)
         //=--------------------------------------=
         // MARK: Integer Digits
         //=--------------------------------------=
         for digit in number.integer.digits {
-            digits[digit]!.write(to: &characters)
+            digits[digit].write(to: &characters)
         }
         //=--------------------------------------=
         // MARK: Fraction Separator
         //=--------------------------------------=
         if let separator = number.separator {
-            separators[separator]!.write(to: &characters)
+            separators[separator].write(to: &characters)
             //=----------------------------------=
             // MARK: Fraction Digits
             //=----------------------------------=
             for digit in number.fraction.digits {
-                digits[digit]!.write(to: &characters)
+                digits[digit].write(to: &characters)
             }
         }
         //=--------------------------------------=
