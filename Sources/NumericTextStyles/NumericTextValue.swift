@@ -7,9 +7,6 @@
 // See http://www.apache.org/licenses/LICENSE-2.0 for license information.
 //=----------------------------------------------------------------------------=
 
-#warning("WIP")
-#warning("Rename make methods")
-
 //*============================================================================*
 // MARK: * Value
 //*============================================================================*
@@ -39,7 +36,7 @@ public protocol NumericTextValue: Comparable {
 public protocol NumericTextFloatingPoint: NumericTextValue { }
 
 //=----------------------------------------------------------------------------=
-// MARK: Value x Floating Point - Details
+// MARK: + Details
 //=----------------------------------------------------------------------------=
 
 extension NumericTextFloatingPoint {
@@ -60,7 +57,7 @@ extension NumericTextFloatingPoint {
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: Value x Floating Point - Signed Numeric
+// MARK: + Signed Numeric
 //=----------------------------------------------------------------------------=
 
 extension NumericTextFloatingPoint where Self: SignedNumeric {
@@ -81,28 +78,28 @@ extension NumericTextFloatingPoint where Self: SignedNumeric {
 public protocol NumericTextInteger: NumericTextValue { }
 
 //=----------------------------------------------------------------------------=
-// MARK: Value x Integer - Details
+// MARK: + Details
 //=----------------------------------------------------------------------------=
 
-public extension NumericTextInteger {
+extension NumericTextInteger {
     
     //=------------------------------------------------------------------------=
     // MARK: Meta
     //=------------------------------------------------------------------------=
     
-    @inlinable static var isInteger: Bool { true }
+    @inlinable public static var isInteger: Bool { true }
     
     //=------------------------------------------------------------------------=
     // MARK: Precision
     //=------------------------------------------------------------------------=
 
-    @inlinable static func precision(_ max: Int) -> Count {
+    @inlinable public static func precision(_ max: Int) -> Count {
         Count(value: max, integer: max, fraction: 0)
     }
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: Value x Integer - Fixed Width Integer
+// MARK: + Fixed Width Integer
 //=----------------------------------------------------------------------------=
 
 extension NumericTextInteger where Self: FixedWidthInteger {
@@ -123,16 +120,16 @@ extension NumericTextInteger where Self: FixedWidthInteger {
 public protocol NumericTextSigned: NumericTextValue { }
 
 //=----------------------------------------------------------------------------=
-// MARK: Value x Signed - Details
+// MARK: + Details
 //=----------------------------------------------------------------------------=
 
-public extension NumericTextSigned {
+extension NumericTextSigned {
     
     //=------------------------------------------------------------------------=
     // MARK: Meta
     //=------------------------------------------------------------------------=
     
-    @inlinable static var isUnsigned: Bool { false }
+    @inlinable public static var isUnsigned: Bool { false }
 }
 
 //*============================================================================*
@@ -142,14 +139,14 @@ public extension NumericTextSigned {
 public protocol NumericTextUnsigned: NumericTextValue { }
 
 //=----------------------------------------------------------------------------=
-// MARK: Value x Unsigned - Details
+// MARK: + Details
 //=----------------------------------------------------------------------------=
 
-public extension NumericTextUnsigned {
+extension NumericTextUnsigned {
     
     //=------------------------------------------------------------------------=
     // MARK: Meta
     //=------------------------------------------------------------------------=
     
-    @inlinable static var isUnsigned: Bool { true }
+    @inlinable public static var isUnsigned: Bool { true }
 }
