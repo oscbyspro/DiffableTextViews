@@ -62,7 +62,7 @@ extension NumericTextFloatingPointValue {
     //=------------------------------------------------------------------------=
 
     @inlinable internal static func precision(_ max: Int) -> Count {
-        Count(value: max, integer: max, fraction: 0)
+        Count(value: max, integer: max, fraction: max)
     }
 }
 
