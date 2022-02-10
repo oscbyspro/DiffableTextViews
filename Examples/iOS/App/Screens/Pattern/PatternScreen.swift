@@ -70,8 +70,7 @@ struct PatternScreen: View {
     static let phoneNumberStyle = PatternTextStyle<String>
         .pattern("+## (###) ###-##-##")
         .placeholder("#" as Character) { $0.isASCII && $0.isNumber }
-        .constant()
-        .storable()
+        .constant().reference()
     
     //*========================================================================*
     // MARK: * Pattern

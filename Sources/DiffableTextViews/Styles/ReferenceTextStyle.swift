@@ -10,14 +10,14 @@
 import SwiftUI
 
 //*============================================================================*
-// MARK: * DiffableTextStyle x Cache
+// MARK: * DiffableTextStyle x Reference
 //*============================================================================*
 
 /// A reference type wrapper text style.
 ///
 /// Use this style when want to store it as a reference value.
 ///
-public final class CacheTextStyle<Style: DiffableTextStyle>: WrapperTextStyle {
+public final class ReferenceTextStyle<Style: DiffableTextStyle>: WrapperTextStyle {
     
     //=------------------------------------------------------------------------=
     // MARK: State
@@ -35,15 +35,15 @@ public final class CacheTextStyle<Style: DiffableTextStyle>: WrapperTextStyle {
 #if canImport(UIKit)
 
 //*============================================================================*
-// MARK: * DiffableTextStyle x Cache x UIKit
+// MARK: * DiffableTextStyle x Reference x UIKit
 //*============================================================================*
 
-extension CacheTextStyle: UIKitWrapperTextStyle, UIKitDiffableTextStyle where Style: UIKitDiffableTextStyle { }
+extension ReferenceTextStyle: UIKitWrapperTextStyle, UIKitDiffableTextStyle where Style: UIKitDiffableTextStyle { }
 
 #endif
 
 //*============================================================================*
-// MARK: * DiffableTextStyle x Cache
+// MARK: * DiffableTextStyle x Reference
 //*============================================================================*
 
 extension DiffableTextStyle {
@@ -52,14 +52,14 @@ extension DiffableTextStyle {
     // MARK: Aliases
     //=------------------------------------------------------------------------=
     
-    public typealias Cache = CacheTextStyle<Self>
+    public typealias Reference = ReferenceTextStyle<Self>
     
     //=------------------------------------------------------------------------=
     // MARK: Transformations
     //=------------------------------------------------------------------------=
     
     /// Wraps the text style in a reference type.
-    @inlinable public func storable() -> CacheTextStyle<Self> {
-        CacheTextStyle(style: self)
+    @inlinable public func reference() -> ReferenceTextStyle<Self> {
+        ReferenceTextStyle(style: self)
     }
 }
