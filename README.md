@@ -135,15 +135,16 @@ A style that processes characters laid out in custom patterns.
 
 ```swift
 struct DiffablePhoneNumberTextField: View {
+    static let style = PatternTextStyle<String>
+        .pattern("+## (###) ###-##-##")
+        .placeholder("#" as Character) { $0.isASCII && $0.isNumber }
+        .constant().storable()
+
     @State var phoneNumber: String = ""
-    
+        
     var body: some View {
-        DiffableTextField($phoneNumber) {
-            .pattern("+## (###) ###-##-##")
-            .placeholder("#") { $0.isASCII && $0.isNumber }
-            .constant()
-        }
-        .diffableTextField_onSetup({ $0.keyboard(.phonePad) })
+        DiffableTextField($phoneNumber, style: Self.style)
+            .diffableTextField_onSetup({ $0.keyboard(.phonePad) })
     }
 }
 ```

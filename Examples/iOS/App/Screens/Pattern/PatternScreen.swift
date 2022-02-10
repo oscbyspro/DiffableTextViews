@@ -56,16 +56,22 @@ struct PatternScreen: View {
     //=------------------------------------------------------------------------=
     
     var examples: some View {
-        Example($value) {
-            .pattern("+## (###) ###-##-##")
-            .placeholder("#"  as Character) { $0.isASCII && $0.isNumber }
-            .constant()
-        }
-        .diffableTextField_onSetup {
-            proxy in
-            proxy.keyboard(.phonePad)
-        }
+        Example($value, style: Self.phoneNumberStyle)
+            .diffableTextField_onSetup {
+                proxy in
+                proxy.keyboard(.phonePad)
+            }
     }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Caches
+    //=------------------------------------------------------------------------=
+    
+    static let phoneNumberStyle = PatternTextStyle<String>
+        .pattern("+## (###) ###-##-##")
+        .placeholder("#" as Character) { $0.isASCII && $0.isNumber }
+        .constant()
+        .storable()
     
     //*========================================================================*
     // MARK: * Pattern

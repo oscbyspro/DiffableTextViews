@@ -49,6 +49,12 @@ extension CacheTextStyle: UIKitWrapperTextStyle, UIKitDiffableTextStyle where St
 extension DiffableTextStyle {
     
     //=------------------------------------------------------------------------=
+    // MARK: Aliases
+    //=------------------------------------------------------------------------=
+    
+    public typealias Cache = CacheTextStyle<Self>
+    
+    //=------------------------------------------------------------------------=
     // MARK: Transformations
     //=------------------------------------------------------------------------=
     

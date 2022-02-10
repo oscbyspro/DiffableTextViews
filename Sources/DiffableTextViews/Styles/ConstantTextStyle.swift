@@ -66,6 +66,12 @@ extension ConstantTextStyle: UIKitWrapperTextStyle, UIKitDiffableTextStyle where
 extension DiffableTextStyle {
     
     //=------------------------------------------------------------------------=
+    // MARK: Aliases
+    //=------------------------------------------------------------------------=
+    
+    public typealias Constant = ConstantTextStyle<Self>
+
+    //=------------------------------------------------------------------------=
     // MARK: Transformations
     //=------------------------------------------------------------------------=
     

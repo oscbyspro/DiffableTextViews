@@ -29,15 +29,16 @@ A collection of characters.
 
 ```swift
 struct DiffablePhoneNumberTextField: View {
+    static let style = PatternTextStyle<String>
+        .pattern("+## (###) ###-##-##")
+        .placeholder("#" as Character) { $0.isASCII && $0.isNumber }
+        .constant().storable()
+
     @State var phoneNumber: String = ""
-    
+        
     var body: some View {
-        DiffableTextField($phoneNumber) {
-            .pattern("+## (###) ###-##-##")
-            .placeholder("#") { $0.isASCII && $0.isNumber }
-            .constant()
-        }
-        .diffableTextField_onSetup({ $0.keyboard(.phonePad) })
+        DiffableTextField($phoneNumber, style: Self.style)
+            .diffableTextField_onSetup({ $0.keyboard(.phonePad) })
     }
 }
 ```
@@ -46,15 +47,16 @@ struct DiffablePhoneNumberTextField: View {
 
 ```swift
 struct DiffableCardNumberTextField: View {
+    static let style = PatternTextStyle<String>
+        .pattern("#### #### #### ####")
+        .placeholder("#" as Character) { $0.isASCII && $0.isNumber }
+        .hidden().constant().storable()
+    
     @State var cardNumber: String = ""
     
     var body: some View {
-        DiffableTextField($cardNumber) {
-            .pattern("#### #### #### ####")
-            .placeholder("#") { $0.isASCII && $0.isNumber }
-            .hidden().constant()
-        }
-        .diffableTextField_onSetup({ $0.keyboard(.numberPad) })
+        DiffableTextField($cardNumber, style: Self.style)
+            .diffableTextField_onSetup({ $0.keyboard(.numberPad) })
     }
 }
 ```

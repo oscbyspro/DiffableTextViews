@@ -63,6 +63,12 @@ extension EqualsTextStyle: UIKitWrapperTextStyle, UIKitDiffableTextStyle where S
 extension DiffableTextStyle {
     
     //=------------------------------------------------------------------------=
+    // MARK: Aliases
+    //=------------------------------------------------------------------------=
+    
+    public typealias Equals<Value: Equatable> = EqualsTextStyle<Self, Value>
+    
+    //=------------------------------------------------------------------------=
     // MARK: Transformations
     //=------------------------------------------------------------------------=
 
