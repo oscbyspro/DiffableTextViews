@@ -12,7 +12,7 @@ A collection of characters.
 
 ## Placeholder
 
-A placeholder is a character used to reserves positions in a pattern. 
+A placeholder reserves a place for another character in a pattern. 
 
 - To replace a placeholder, the replacement character must satisfy its predicate.
 - There may be multiple placeholders and each may use independent validation rules.
@@ -38,7 +38,10 @@ struct DiffablePhoneNumberTextField: View {
         
     var body: some View {
         DiffableTextField($phoneNumber, style: Self.style)
-            .diffableTextField_onSetup({ $0.keyboard(.phonePad) })
+            .diffableTextField_onSetup {
+                proxy in
+                proxy.keyboard(.phonePad)
+            }
     }
 }
 ```
@@ -56,7 +59,10 @@ struct DiffableCardNumberTextField: View {
     
     var body: some View {
         DiffableTextField($cardNumber, style: Self.style)
-            .diffableTextField_onSetup({ $0.keyboard(.numberPad) })
+            .diffableTextField_onSetup {
+                proxy in
+                proxy.keyboard(.numberPad)
+            }
     }
 }
 ```

@@ -57,7 +57,10 @@ struct DiffablePhoneNumberTextField: View {
         
     var body: some View {
         DiffableTextField($phoneNumber, style: Self.style)
-            .diffableTextField_onSetup({ $0.keyboard(.phonePad) })
+            .diffableTextField_onSetup {
+                proxy in
+                proxy.keyboard(.phonePad)
+            }
     }
 }
 ```
