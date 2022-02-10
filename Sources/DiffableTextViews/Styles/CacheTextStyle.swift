@@ -29,8 +29,7 @@ public final class CacheTextStyle<Style: DiffableTextStyle>: WrapperTextStyle {
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable @inline(__always)
-    init(style: Style) { self.style = style }
+    @inlinable @inline(__always) init(style: Style) { self.style = style }
 }
 
 #if canImport(UIKit)
@@ -47,14 +46,14 @@ extension CacheTextStyle: UIKitWrapperTextStyle, UIKitDiffableTextStyle where St
 // MARK: * DiffableTextStyle x Cache
 //*============================================================================*
 
-public extension DiffableTextStyle {
+extension DiffableTextStyle {
     
     //=------------------------------------------------------------------------=
     // MARK: Transformations
     //=------------------------------------------------------------------------=
     
     /// Wraps the text style in a reference type.
-    @inlinable func storable() -> CacheTextStyle<Self> {
+    @inlinable public func storable() -> CacheTextStyle<Self> {
         CacheTextStyle(style: self)
     }
 }

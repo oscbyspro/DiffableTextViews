@@ -17,7 +17,7 @@ import SwiftUI
 ///
 /// Use this style to optimize the differentiation on view update.
 ///
-/// - Transformation methods obtained via DiffableTextStyle return immediately.
+/// - Note: DiffableTextStyle transformation methods return immediately.
 ///
 public struct ConstantTextStyle<Style: DiffableTextStyle>: WrapperTextStyle {
     
@@ -63,14 +63,14 @@ extension ConstantTextStyle: UIKitWrapperTextStyle, UIKitDiffableTextStyle where
 // MARK: * DiffableTextStyle x Constant
 //*============================================================================*
 
-public extension DiffableTextStyle {
+extension DiffableTextStyle {
     
     //=------------------------------------------------------------------------=
     // MARK: Transformations
     //=------------------------------------------------------------------------=
     
     /// Binds the style's differentiation result to a constant.
-    @inlinable func constant() -> ConstantTextStyle<Self> {
+    @inlinable public func constant() -> ConstantTextStyle<Self> {
         ConstantTextStyle(style: self)
     }
 }

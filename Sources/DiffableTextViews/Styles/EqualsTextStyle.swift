@@ -60,14 +60,14 @@ extension EqualsTextStyle: UIKitWrapperTextStyle, UIKitDiffableTextStyle where S
 // MARK: * DiffableTextStyle x Equals
 //*============================================================================*
 
-public extension DiffableTextStyle {
+extension DiffableTextStyle {
     
     //=------------------------------------------------------------------------=
     // MARK: Transformations
     //=------------------------------------------------------------------------=
 
     /// Binds the style's differentiation result to a value.
-    @inlinable func equals<Value: Equatable>(_ value: Value) -> EqualsTextStyle<Self, Value> {
+    @inlinable public func equals<Value: Equatable>(_ value: Value) -> EqualsTextStyle<Self, Value> {
         EqualsTextStyle(style: self, value: value)
     }
 }
