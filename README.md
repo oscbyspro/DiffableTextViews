@@ -13,10 +13,10 @@ An open-source module for as-you-type formatting and conversion in iOS.
 | :keyboard: | Responsive | Formats and parses text as you type |
 | :magic_wand: | Automagical | Binds text to its appropriate data type |
 | :hammer_and_wrench: | Versatile | Uses snapshots and attributes |
-| :running_man: | Performant | O(n) differentiation algorithms |
+| :running_man: | Performant | Uses O(n) differentiation algorithms |
+| :smiley: | Emojis | Uses native offsets, supports emojis |
 | :desert_island: | Standalone | Uses no remote dependencies |
-| :window: | Open source | Transparent, as it should be |
-| :smiley: | Emojis | Native offsets, supports emojis |
+| :open_book: | Open-source | 100% transparent, as it should be |
 
 ### [Algorithms](Sources/DiffableTextViews/Models/Field.swift)
 
@@ -51,7 +51,7 @@ import PatternTextStyles
 
 The iOS example project provides quick-and-easy-to-use configuration.
 
-<img src="Assets/iOS/iOSExampleNumericScreen.png" alt="iOS Example" width="300"/>
+<img src="Assets/iOSExampleNumericScreen.png" alt="iOS Example" width="300"/>
 
 ### Modules
 
