@@ -11,14 +11,14 @@ import SwiftUI
 import Support
 
 //*============================================================================*
-// MARK: * Proxy
+// MARK: * DiffableTextStyle x Proxy
 //*============================================================================*
 
 /// A style that equals a specific value.
 ///
 /// Use this style to optimize the differentiation on view update.
 ///
-public struct Proxy<Style: DiffableTextStyle, ID: Equatable>: DiffableTextStyle {
+public struct ProxyTextStyle<Style: DiffableTextStyle, ID: Equatable>: DiffableTextStyle {
     
     //=------------------------------------------------------------------------=
     // MARK: State
@@ -85,7 +85,7 @@ public struct Proxy<Style: DiffableTextStyle, ID: Equatable>: DiffableTextStyle 
 
 #if canImport(UIKit)
 
-extension Proxy: UIKitDiffableTextStyle where Style: UIKitDiffableTextStyle { }
+extension ProxyTextStyle: UIKitDiffableTextStyle where Style: UIKitDiffableTextStyle { }
 
 #endif
 
@@ -100,12 +100,12 @@ public extension DiffableTextStyle {
     //=------------------------------------------------------------------------=
     
     /// Binds the style's differentiation result to a constant.
-    @inlinable func constant() -> Proxy<Self, Constant> {
-        Proxy(style: self, value: Constant())
+    @inlinable func constant() -> ProxyTextStyle<Self, Constant> {
+        ProxyTextStyle(style: self, value: Constant())
     }
     
     /// Binds the style's differentiation result to a value.
-    @inlinable func equals<Value: Equatable>(_ value: Value) -> Proxy<Self, Value> {
-        Proxy(style: self, value: value)
+    @inlinable func equals<Value: Equatable>(_ value: Value) -> ProxyTextStyle<Self, Value> {
+        ProxyTextStyle(style: self, value: value)
     }
 }
