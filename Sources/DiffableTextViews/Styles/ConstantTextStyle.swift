@@ -69,7 +69,7 @@ extension DiffableTextStyle {
     // MARK: Transformations
     //=------------------------------------------------------------------------=
     
-    /// Binds the style's differentiation result to a constant.
+    /// Binds the style's differentiation result to a constant and prevents changes to it.
     @inlinable public func constant() -> ConstantTextStyle<Self> {
         ConstantTextStyle(style: self)
     }
