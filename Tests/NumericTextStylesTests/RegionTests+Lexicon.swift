@@ -25,7 +25,7 @@ extension RegionTests {
     // MARK: Tests
     //=------------------------------------------------------------------------=
     
-    /// Asserts that all relevant ASCII character map to a component.
+    /// Asserts that all relevant ASCII characters are mapped to a component.
     func testASCII() {
         func test<Component: Hashable>(lexicon: Lexicon<Component>, ascii: String) {
             for character in ascii {
