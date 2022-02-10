@@ -80,8 +80,11 @@ import Foundation
     // MARK: * Lexicon
     //*========================================================================*
     
-    /// Requires that each component is linked to a localized character.
-    /// Other characters, such as ASCII, may also map to components.
+    /// A mapping model between components and characters.
+    ///
+    /// - It requires that each component is bidirectionally mapped to a character.
+    /// - To ensure an available input method, relevant ASCII must also map to a component.
+    ///
     @usableFromInline struct Lexicon<Component: Hashable & CaseIterable> {
         
         //=--------------------------------------------------------------------=
@@ -106,7 +109,7 @@ import Foundation
             _modify { yield &components[character] }
         }
         
-        /// Existance is required for all components, so it may be force unwrapped.
+        /// Bidirectional mapping is required for all components, so characters may be force unwrapped.
         @inlinable subscript(component: Component) -> Character {
             _read   { yield  characters[component]! }
             _modify { yield &characters[component]! }
