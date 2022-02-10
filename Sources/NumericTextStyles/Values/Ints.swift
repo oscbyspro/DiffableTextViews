@@ -11,7 +11,7 @@
 // MARK: * Int
 //*============================================================================*
 
-extension Int: NumericTextSigned, NumericTextInteger {
+extension Int: Signed, Integer {
     
     //=------------------------------------------------------------------------=
     // MARK: Precision, Bounds
@@ -25,7 +25,7 @@ extension Int: NumericTextSigned, NumericTextInteger {
 // MARK: * Int8
 //*============================================================================*
 
-extension Int8: NumericTextSigned, NumericTextInteger {
+extension Int8: Signed, Integer {
     
     //=------------------------------------------------------------------------=
     // MARK: Precision, Bounds
@@ -39,7 +39,7 @@ extension Int8: NumericTextSigned, NumericTextInteger {
 // MARK: * Int16
 //*============================================================================*
 
-extension Int16: NumericTextSigned, NumericTextInteger {
+extension Int16: Signed, Integer {
     
     //=------------------------------------------------------------------------=
     // MARK: Precision, Bounds
@@ -53,7 +53,7 @@ extension Int16: NumericTextSigned, NumericTextInteger {
 // MARK: * Int32
 //*============================================================================*
 
-extension Int32: NumericTextSigned, NumericTextInteger {
+extension Int32: Signed, Integer {
     
     //=------------------------------------------------------------------------=
     // MARK: Precision, Bounds
@@ -67,7 +67,7 @@ extension Int32: NumericTextSigned, NumericTextInteger {
 // MARK: * Int64
 //*============================================================================*
 
-extension Int64: NumericTextSigned, NumericTextInteger {
+extension Int64: Signed, Integer {
     
     //=------------------------------------------------------------------------=
     // MARK: Precision, Bounds

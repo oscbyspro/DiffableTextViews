@@ -11,7 +11,7 @@
 // MARK: * UInt
 //*============================================================================*
 
-extension UInt: NumericTextUnsigned, NumericTextInteger {
+extension UInt: Unsigned, Integer {
     typealias Limit = Int // no crash. such wow. very impress.
     
     //=------------------------------------------------------------------------=
@@ -26,7 +26,7 @@ extension UInt: NumericTextUnsigned, NumericTextInteger {
 // MARK: * UInt8
 //*============================================================================*
 
-extension UInt8: NumericTextUnsigned, NumericTextInteger {
+extension UInt8: Unsigned, Integer {
     
     //=------------------------------------------------------------------------=
     // MARK: Precision, Bounds
@@ -40,7 +40,7 @@ extension UInt8: NumericTextUnsigned, NumericTextInteger {
 // MARK: * UInt16
 //*============================================================================*
 
-extension UInt16: NumericTextUnsigned, NumericTextInteger {
+extension UInt16: Unsigned, Integer {
     
     //=------------------------------------------------------------------------=
     // MARK: Precision, Bounds
@@ -54,7 +54,7 @@ extension UInt16: NumericTextUnsigned, NumericTextInteger {
 // MARK: * UInt32
 //*============================================================================*
 
-extension UInt32: NumericTextUnsigned, NumericTextInteger {
+extension UInt32: Unsigned, Integer {
     
     //=------------------------------------------------------------------------=
     // MARK: Precision, Bounds
@@ -68,7 +68,7 @@ extension UInt32: NumericTextUnsigned, NumericTextInteger {
 // MARK: * UInt64
 //*============================================================================*
 
-extension UInt64: NumericTextUnsigned, NumericTextInteger {
+extension UInt64: Unsigned, Integer {
     typealias Limit = Int64 // no crash. such wow. very impress.
     
     //=------------------------------------------------------------------------=

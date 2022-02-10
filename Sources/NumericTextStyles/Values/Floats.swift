@@ -11,7 +11,7 @@
 // MARK: * Float16
 //*============================================================================*
 
-extension Float16: NumericTextSigned, NumericTextFloatingPoint {
+extension Float16: Signed, FloatingPoint {
     
     //=------------------------------------------------------------------------=
     // MARK: Precision, Bounds
@@ -25,7 +25,7 @@ extension Float16: NumericTextSigned, NumericTextFloatingPoint {
 // MARK: * Float32
 //*============================================================================*
 
-extension Float32: NumericTextSigned, NumericTextFloatingPoint {
+extension Float32: Signed, FloatingPoint {
     
     //=------------------------------------------------------------------------=
     // MARK: Precision, Bounds
@@ -39,7 +39,7 @@ extension Float32: NumericTextSigned, NumericTextFloatingPoint {
 // MARK: * Float64
 //*============================================================================*
 
-extension Float64: NumericTextSigned, NumericTextFloatingPoint {
+extension Float64: Signed, FloatingPoint {
     
     //=------------------------------------------------------------------------=
     // MARK: Precision, Bounds

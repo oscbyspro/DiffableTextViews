@@ -13,8 +13,13 @@ import Foundation
 // MARK: * Format
 //*============================================================================*
 
-#warning("Rename")
-public protocol Format: ParseableFormatStyle where FormatInput: NumericTextValue, FormatOutput == String {
+public protocol NumericTextFormat: ParseableFormatStyle where
+FormatInput: NumericTextValue, FormatOutput == String {
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Aliases
+    //=------------------------------------------------------------------------=
+    
     typealias Precision = NumberFormatStyleConfiguration.Precision
     typealias Separator = NumberFormatStyleConfiguration.DecimalSeparatorDisplayStrategy
     
@@ -28,10 +33,10 @@ public protocol Format: ParseableFormatStyle where FormatInput: NumericTextValue
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: Format - Details
+// MARK: + Details
 //=----------------------------------------------------------------------------=
 
-extension Format {
+extension NumericTextFormat {
     @usableFromInline typealias Value = FormatInput
 
     //=------------------------------------------------------------------------=
@@ -55,7 +60,7 @@ extension Format {
 // MARK: * Format x Number
 //*============================================================================*
 
-@usableFromInline protocol NumberFormat: Format {
+@usableFromInline protocol NumberNumericTextFormat: Format {
     typealias Configuration = NumberFormatStyleConfiguration
     
     //=------------------------------------------------------------------------=
@@ -66,10 +71,10 @@ extension Format {
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: Format x Number - Details
+// MARK: + Details
 //=----------------------------------------------------------------------------=
 
-extension NumberFormat {
+extension NumberNumericTextFormat {
     
     //=------------------------------------------------------------------------=
     // MARK: Sign
@@ -84,7 +89,7 @@ extension NumberFormat {
 // MARK: * Format x Currency
 //*============================================================================*
 
-@usableFromInline protocol CurrencyFormat: Format {
+@usableFromInline protocol CurrencyNumericTextFormat: Format {
     typealias Configuration = CurrencyFormatStyleConfiguration
     
     //=------------------------------------------------------------------------=
@@ -95,10 +100,10 @@ extension NumberFormat {
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: Format x Currency - Details
+// MARK: + Details
 //=----------------------------------------------------------------------------=
 
-extension CurrencyFormat {
+extension CurrencyNumericTextFormat {
     
     //=------------------------------------------------------------------------=
     // MARK: Sign
@@ -114,7 +119,7 @@ extension CurrencyFormat {
 //*============================================================================*
 
 /// - Note: To use this format, the value must support at least two exponent digits.
-@usableFromInline protocol PercentFormat: Format where FormatInput: FloatingPointNumericTextValue {
+@usableFromInline protocol PercentNumericTextFormat: Format where FormatInput: FloatingPointNumericTextValue {
     typealias Configuration = NumberFormatStyleConfiguration
     
     //=------------------------------------------------------------------------=
@@ -125,10 +130,10 @@ extension CurrencyFormat {
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: Format x Percent - Details
+// MARK: + Details
 //=----------------------------------------------------------------------------=
 
-extension PercentFormat {
+extension PercentNumericTextFormat {
     
     //=------------------------------------------------------------------------=
     // MARK: Sign
