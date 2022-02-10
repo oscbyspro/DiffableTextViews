@@ -37,7 +37,7 @@ public protocol NumericTextIntegerValue: NumericTextValue { }
 public protocol NumericTextFloatingPointValue: NumericTextValue { }
 
 //*============================================================================*
-// MARK: * Floating Point
+// MARK: * Value x Floating Point
 //*============================================================================*
 
 @usableFromInline protocol FloatingPoint: NumericTextFloatingPointValue { }
@@ -79,7 +79,7 @@ extension FloatingPoint where Self: SignedNumeric {
 }
 
 //*============================================================================*
-// MARK: * Integer
+// MARK: * Value x Integer
 //*============================================================================*
 
 @usableFromInline protocol Integer: NumericTextIntegerValue { }
@@ -121,7 +121,7 @@ extension Integer where Self: FixedWidthInteger {
 }
 
 //*============================================================================*
-// MARK: * Signed
+// MARK: * Value x Signed
 //*============================================================================*
 
 @usableFromInline protocol Signed: NumericTextValue { }
@@ -140,7 +140,7 @@ extension Signed {
 }
 
 //*============================================================================*
-// MARK: * Unsigned
+// MARK: * Value x Unsigned
 //*============================================================================*
 
 @usableFromInline protocol Unsigned: NumericTextValue { }
