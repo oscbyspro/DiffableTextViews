@@ -14,7 +14,7 @@ import Foundation
 //*============================================================================*
 
 @usableFromInline typealias Format = NumericTextFormat
-@usableFromInline typealias Plain = NumericTextNumberFormat
+@usableFromInline typealias Standard = NumericTextNumberFormat
 @usableFromInline typealias Currency = NumericTextCurrencyFormat
 @usableFromInline typealias Percent = NumericTextPercentFormat
 

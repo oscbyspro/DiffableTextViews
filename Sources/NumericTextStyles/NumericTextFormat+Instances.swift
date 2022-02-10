@@ -13,7 +13,7 @@ import Foundation
 // MARK: * Format x Decimal
 //*============================================================================*
 
-extension Decimal.FormatStyle: Plain { }
+extension Decimal.FormatStyle: Standard { }
 extension Decimal.FormatStyle.Currency: Currency { }
 extension Decimal.FormatStyle.Percent: Percent { }
 
@@ -21,7 +21,7 @@ extension Decimal.FormatStyle.Percent: Percent { }
 // MARK: * Format x Floating Point
 //*============================================================================*
 
-extension FloatingPointFormatStyle: Format, Plain where FormatInput: FloatingPoint { }
+extension FloatingPointFormatStyle: Format, Standard where FormatInput: FloatingPoint { }
 extension FloatingPointFormatStyle.Currency: Format, Currency where FormatInput: FloatingPoint { }
 extension FloatingPointFormatStyle.Percent: Format, Percent where FormatInput: FloatingPoint { }
 
@@ -29,5 +29,5 @@ extension FloatingPointFormatStyle.Percent: Format, Percent where FormatInput: F
 // MARK: * Format x Integer
 //*============================================================================*
 
-extension IntegerFormatStyle: Format, Plain where FormatInput: Integer { }
+extension IntegerFormatStyle: Format, Standard where FormatInput: Integer { }
 extension IntegerFormatStyle.Currency: Format, Currency where FormatInput: Integer { }
