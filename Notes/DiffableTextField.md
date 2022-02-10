@@ -25,46 +25,6 @@ The environment is used to seamlessly synchronize the view with the app state.
 |---|--------|----------|
 | :national_park: | Locale | Overridden |
 
-## Examples
-
-![DiffableAmountTextField.gif](../Assets/DiffableAmountTextField.gif)
-
-```swift
-struct DiffableAmountTextField: View {
-    @State var amount: Decimal = 0
-
-    var body: some View {
-        DiffableTextField($amount) {
-            .currency(code: "SEK")
-            .bounds((0 as Decimal)...)
-            .precision(integer: 1..., fraction: 2)
-        }
-        .environment(\.locale, Locale(identifier: "en_SE"))
-    }
-}
-```
-
-![DiffablePhoneNumberTextField.gif](../Assets/DiffablePhoneNumberTextField.gif)
-
-```swift
-struct DiffablePhoneNumberTextField: View {
-    static let style = PatternTextStyle<String>
-        .pattern("+## (###) ###-##-##")
-        .placeholder("#" as Character) { $0.isASCII && $0.isNumber }
-        .constant().reference()
-
-    @State var phoneNumber: String = ""
-        
-    var body: some View {
-        DiffableTextField($phoneNumber, style: Self.style)
-            .diffableTextField_onSetup {
-                proxy in
-                proxy.keyboard(.phonePad)
-            }
-    }
-}
-```
-
 ## Customization
 
 ### Style
@@ -87,4 +47,66 @@ DiffableTextField($value, style: style)
     .diffableTextField_onUpdate({ _ in })
     .diffableTextField_onSubmit({ _ in })
 
+```
+
+## Examples
+
+![DiffableAmountTextField.gif](../Assets/DiffableAmountTextField.gif)
+
+```swift
+struct DiffableAmountTextField: View {
+
+    //=------------------------------------------------------------------------=
+    // MARK: State
+    //=------------------------------------------------------------------------=
+
+    @State var amount: Decimal = 0
+
+    //=------------------------------------------------------------------------=
+    // MARK: Body
+    //=------------------------------------------------------------------------=
+
+    var body: some View {
+        DiffableTextField($amount) {
+            .currency(code: "SEK")
+            .bounds((0 as Decimal)...)
+            .precision(integer: 1..., fraction: 2)
+        }
+        .environment(\.locale, Locale(identifier: "en_SE"))
+    }
+}
+```
+
+![DiffablePhoneNumberTextField.gif](../Assets/DiffablePhoneNumberTextField.gif)
+
+```swift
+struct DiffablePhoneTextField: View {
+
+    //=------------------------------------------------------------------------=
+    // MARK: State
+    //=------------------------------------------------------------------------=
+
+    @State var number: String = ""
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Body
+    //=------------------------------------------------------------------------=
+    
+    var body: some View {
+        DiffableTextField($number, style: Self.style)
+            .diffableTextField_onSetup {
+                proxy in
+                proxy.keyboard(.phonePad)
+            }
+    }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Style
+    //=------------------------------------------------------------------------=
+    
+    static let style = PatternTextStyle<String>
+        .pattern("+## (###) ###-##-##")
+        .placeholder("#" as Character) { $0.isASCII && $0.isNumber }
+        .constant().reference()
+}
 ```

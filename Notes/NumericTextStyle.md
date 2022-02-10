@@ -124,7 +124,16 @@ Determines the input and output space in terms of digits.
 
 ```swift
 struct DiffableAmountTextField: View {
+
+    //=------------------------------------------------------------------------=
+    // MARK: State
+    //=------------------------------------------------------------------------=
+
     @State var amount: Decimal = 0
+
+    //=------------------------------------------------------------------------=
+    // MARK: Body
+    //=------------------------------------------------------------------------=
 
     var body: some View {
         DiffableTextField($amount) {

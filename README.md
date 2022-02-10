@@ -103,7 +103,16 @@ A style that processes localized numbers in various formats.
 
 ```swift
 struct DiffableAmountTextField: View {
+
+    //=------------------------------------------------------------------------=
+    // MARK: State
+    //=------------------------------------------------------------------------=
+
     @State var amount: Decimal = 0
+
+    //=------------------------------------------------------------------------=
+    // MARK: Body
+    //=------------------------------------------------------------------------=
 
     var body: some View {
         DiffableTextField($amount) {
@@ -134,20 +143,33 @@ A style that processes characters laid out in custom patterns.
 ![DiffablePhoneNumberTextField.gif](Assets/DiffablePhoneNumberTextField.gif)
 
 ```swift
-struct DiffablePhoneNumberTextField: View {
-    static let style = PatternTextStyle<String>
-        .pattern("+## (###) ###-##-##")
-        .placeholder("#" as Character) { $0.isASCII && $0.isNumber }
-        .constant().reference()
+struct DiffablePhoneTextField: View {
 
-    @State var phoneNumber: String = ""
-        
+    //=------------------------------------------------------------------------=
+    // MARK: State
+    //=------------------------------------------------------------------------=
+
+    @State var number: String = ""
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Body
+    //=------------------------------------------------------------------------=
+    
     var body: some View {
-        DiffableTextField($phoneNumber, style: Self.style)
+        DiffableTextField($number, style: Self.style)
             .diffableTextField_onSetup {
                 proxy in
                 proxy.keyboard(.phonePad)
             }
     }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Style
+    //=------------------------------------------------------------------------=
+    
+    static let style = PatternTextStyle<String>
+        .pattern("+## (###) ###-##-##")
+        .placeholder("#" as Character) { $0.isASCII && $0.isNumber }
+        .constant().reference()
 }
 ```

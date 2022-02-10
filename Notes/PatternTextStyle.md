@@ -28,41 +28,67 @@ A collection of characters.
 ![DiffablePhoneNumberTextField.gif](../Assets/DiffablePhoneNumberTextField.gif)
 
 ```swift
-struct DiffablePhoneNumberTextField: View {
-    static let style = PatternTextStyle<String>
-        .pattern("+## (###) ###-##-##")
-        .placeholder("#" as Character) { $0.isASCII && $0.isNumber }
-        .constant().reference()
+struct DiffablePhoneTextField: View {
 
-    @State var phoneNumber: String = ""
-        
+    //=------------------------------------------------------------------------=
+    // MARK: State
+    //=------------------------------------------------------------------------=
+
+    @State var number: String = ""
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Body
+    //=------------------------------------------------------------------------=
+    
     var body: some View {
-        DiffableTextField($phoneNumber, style: Self.style)
+        DiffableTextField($number, style: Self.style)
             .diffableTextField_onSetup {
                 proxy in
                 proxy.keyboard(.phonePad)
             }
     }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Style
+    //=------------------------------------------------------------------------=
+    
+    static let style = PatternTextStyle<String>
+        .pattern("+## (###) ###-##-##")
+        .placeholder("#" as Character) { $0.isASCII && $0.isNumber }
+        .constant().reference()
 }
 ```
 
 ![DiffablePhoneNumberTextField.gif](../Assets/DiffableCardNumberTextField.gif)
 
 ```swift
-struct DiffableCardNumberTextField: View {
-    static let style = PatternTextStyle<String>
-        .pattern("#### #### #### ####")
-        .placeholder("#" as Character) { $0.isASCII && $0.isNumber }
-        .hidden().constant().reference()
+struct DiffableCardTextField: View {
     
-    @State var cardNumber: String = ""
+    //=------------------------------------------------------------------------=
+    // MARK: State
+    //=------------------------------------------------------------------------=
+    
+    @State var number: String = ""
+    
+    //=------------------------------------------------------------------------=
+    // MARK: State
+    //=------------------------------------------------------------------------=
     
     var body: some View {
-        DiffableTextField($cardNumber, style: Self.style)
+        DiffableTextField($number, style: Self.style)
             .diffableTextField_onSetup {
                 proxy in
                 proxy.keyboard(.numberPad)
             }
     }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Style
+    //=------------------------------------------------------------------------=
+
+    static let style = PatternTextStyle<String>
+        .pattern("#### #### #### ####")
+        .placeholder("#" as Character) { $0.isASCII && $0.isNumber }
+        .hidden().constant().reference()
 }
 ```
