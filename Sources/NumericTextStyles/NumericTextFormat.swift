@@ -10,16 +10,19 @@
 import Foundation
 
 //*============================================================================*
+// MARK: * Table of Contents
+//*============================================================================*
+
+@usableFromInline typealias Format = NumericTextFormat
+@usableFromInline typealias Plain = NumericTextNumberFormat
+@usableFromInline typealias Currency = NumericTextCurrencyFormat
+@usableFromInline typealias Percent = NumericTextPercentFormat
+
+//*============================================================================*
 // MARK: * Format
 //*============================================================================*
 
-public protocol NumericTextFormat: ParseableFormatStyle where
-FormatInput: NumericTextValue, FormatOutput == String {
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Aliases
-    //=------------------------------------------------------------------------=
-    
+public protocol NumericTextFormat: ParseableFormatStyle where FormatInput: NumericTextValue, FormatOutput == String {
     typealias Precision = NumberFormatStyleConfiguration.Precision
     typealias Separator = NumberFormatStyleConfiguration.DecimalSeparatorDisplayStrategy
     
@@ -62,12 +65,7 @@ extension NumericTextFormat {
 // MARK: * Format x Number
 //*============================================================================*
 
-@usableFromInline protocol Standard: NumericTextFormat {
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Aliases
-    //=------------------------------------------------------------------------=
-    
+public protocol NumericTextNumberFormat: NumericTextFormat {
     typealias Configuration = NumberFormatStyleConfiguration
     
     //=------------------------------------------------------------------------=
@@ -81,7 +79,7 @@ extension NumericTextFormat {
 // MARK: + Details
 //=----------------------------------------------------------------------------=
 
-extension Standard {
+extension NumericTextNumberFormat {
     
     //=------------------------------------------------------------------------=
     // MARK: Sign
@@ -96,12 +94,7 @@ extension Standard {
 // MARK: * Format x Currency
 //*============================================================================*
 
-@usableFromInline protocol Currency: NumericTextFormat {
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Aliases
-    //=------------------------------------------------------------------------=
-    
+public protocol NumericTextCurrencyFormat: NumericTextFormat {
     typealias Configuration = CurrencyFormatStyleConfiguration
     
     //=------------------------------------------------------------------------=
@@ -115,7 +108,7 @@ extension Standard {
 // MARK: + Details
 //=----------------------------------------------------------------------------=
 
-extension Currency {
+extension NumericTextCurrencyFormat {
     
     //=------------------------------------------------------------------------=
     // MARK: Sign
@@ -131,12 +124,7 @@ extension Currency {
 //*============================================================================*
 
 /// - Note: To use this format, the value must support at least two exponent digits.
-@usableFromInline protocol Percent: NumericTextFormat where FormatInput: FloatingPoint {
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Aliases
-    //=------------------------------------------------------------------------=
-    
+public protocol NumericTextPercentFormat: NumericTextFormat where FormatInput: NumericTextFloatingPointValue {
     typealias Configuration = NumberFormatStyleConfiguration
     
     //=------------------------------------------------------------------------=
@@ -150,7 +138,7 @@ extension Currency {
 // MARK: + Details
 //=----------------------------------------------------------------------------=
 
-extension Percent {
+extension NumericTextPercentFormat {
     
     //=------------------------------------------------------------------------=
     // MARK: Sign

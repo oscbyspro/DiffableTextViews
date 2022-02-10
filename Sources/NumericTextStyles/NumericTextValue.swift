@@ -8,6 +8,16 @@
 //=----------------------------------------------------------------------------=
 
 //*============================================================================*
+// MARK: * Table of Contents
+//*============================================================================*
+
+@usableFromInline typealias Value = NumericTextValue
+@usableFromInline typealias FloatingPoint = NumericTextFloatingPointValue
+@usableFromInline typealias Integer = NumericTextIntegerValue
+@usableFromInline typealias Signed = NumericTextSignedValue
+@usableFromInline typealias Unsigned = NumericTextUnsignedValue
+
+//*============================================================================*
 // MARK: * Value
 //*============================================================================*
 
@@ -30,23 +40,16 @@ public protocol NumericTextValue: Comparable {
 }
 
 //*============================================================================*
-// MARK: * Value x Affordances
-//*============================================================================*
-
-public protocol NumericTextIntegerValue: NumericTextValue { }
-public protocol NumericTextFloatingPointValue: NumericTextValue { }
-
-//*============================================================================*
 // MARK: * Value x Floating Point
 //*============================================================================*
 
-@usableFromInline protocol FloatingPoint: NumericTextFloatingPointValue { }
+public protocol NumericTextFloatingPointValue: NumericTextValue { }
 
 //=----------------------------------------------------------------------------=
 // MARK: + Details
 //=----------------------------------------------------------------------------=
 
-extension FloatingPoint {
+extension NumericTextFloatingPointValue {
     
     //=------------------------------------------------------------------------=
     // MARK: Data
@@ -67,7 +70,7 @@ extension FloatingPoint {
 // MARK: + Signed Numeric
 //=----------------------------------------------------------------------------=
 
-extension FloatingPoint where Self: SignedNumeric {
+extension NumericTextFloatingPointValue where Self: SignedNumeric {
     
     //=------------------------------------------------------------------------=
     // MARK: Bounds
@@ -82,13 +85,13 @@ extension FloatingPoint where Self: SignedNumeric {
 // MARK: * Value x Integer
 //*============================================================================*
 
-@usableFromInline protocol Integer: NumericTextIntegerValue { }
+public protocol NumericTextIntegerValue: NumericTextValue { }
 
 //=----------------------------------------------------------------------------=
 // MARK: + Details
 //=----------------------------------------------------------------------------=
 
-extension Integer {
+extension NumericTextIntegerValue {
     
     //=------------------------------------------------------------------------=
     // MARK: Meta
@@ -109,7 +112,7 @@ extension Integer {
 // MARK: + Fixed Width
 //=----------------------------------------------------------------------------=
 
-extension Integer where Self: FixedWidthInteger {
+extension NumericTextIntegerValue where Self: FixedWidthInteger {
     
     //=------------------------------------------------------------------------=
     // MARK: Bounds
@@ -124,13 +127,13 @@ extension Integer where Self: FixedWidthInteger {
 // MARK: * Value x Signed
 //*============================================================================*
 
-@usableFromInline protocol Signed: NumericTextValue { }
+public protocol NumericTextSignedValue: NumericTextValue { }
 
 //=----------------------------------------------------------------------------=
 // MARK: + Details
 //=----------------------------------------------------------------------------=
 
-extension Signed {
+extension NumericTextSignedValue {
     
     //=------------------------------------------------------------------------=
     // MARK: Meta
@@ -143,13 +146,13 @@ extension Signed {
 // MARK: * Value x Unsigned
 //*============================================================================*
 
-@usableFromInline protocol Unsigned: NumericTextValue { }
+public protocol NumericTextUnsignedValue: NumericTextValue { }
 
 //=----------------------------------------------------------------------------=
 // MARK: + Details
 //=----------------------------------------------------------------------------=
 
-extension Unsigned {
+extension NumericTextUnsignedValue {
     
     //=------------------------------------------------------------------------=
     // MARK: Meta
