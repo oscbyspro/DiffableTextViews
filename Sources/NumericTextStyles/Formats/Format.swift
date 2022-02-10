@@ -13,7 +13,8 @@ import Foundation
 // MARK: * Format
 //*============================================================================*
 
-public protocol Format: ParseableFormatStyle where FormatInput: NumericTextStyles.Value, FormatOutput == String {
+#warning("Rename")
+public protocol Format: ParseableFormatStyle where FormatInput: NumericTextValue, FormatOutput == String {
     typealias Precision = NumberFormatStyleConfiguration.Precision
     typealias Separator = NumberFormatStyleConfiguration.DecimalSeparatorDisplayStrategy
     
@@ -113,7 +114,7 @@ extension CurrencyFormat {
 //*============================================================================*
 
 /// - Note: To use this format, the value must support at least two exponent digits.
-@usableFromInline protocol PercentFormat: Format where FormatInput: FloatingPoint {
+@usableFromInline protocol PercentFormat: Format where FormatInput: NumericTextFloatingPoint {
     typealias Configuration = NumberFormatStyleConfiguration
     
     //=------------------------------------------------------------------------=

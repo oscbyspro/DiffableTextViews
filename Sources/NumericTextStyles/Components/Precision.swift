@@ -14,7 +14,7 @@ import Support
 // MARK: * Precision
 //*============================================================================*
 
-public struct Precision<Value: Precise>: Equatable {
+public struct Precision<Value: NumericTextValue>: Equatable {
     @usableFromInline typealias Namespace = _Precision
     
     //=------------------------------------------------------------------------=

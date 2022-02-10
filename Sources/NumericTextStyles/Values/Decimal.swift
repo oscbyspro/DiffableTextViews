@@ -13,7 +13,7 @@ import Foundation
 // MARK: * Decimal
 //*============================================================================*
 
-extension Decimal: Signed, FloatingPoint {
+extension Decimal: NumericTextSigned, NumericTextFloatingPoint {
 
     //=------------------------------------------------------------------------=
     // MARK: Precision, Bounds

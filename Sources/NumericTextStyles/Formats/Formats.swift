@@ -28,15 +28,15 @@ PercentFormat { }
 
 extension FloatingPointFormatStyle:
 Format, NumberFormat where
-FormatInput: FloatingPoint { }
+FormatInput: NumericTextFloatingPoint { }
 
 extension FloatingPointFormatStyle.Currency:
 Format, CurrencyFormat where
-FormatInput: FloatingPoint { }
+FormatInput: NumericTextFloatingPoint { }
 
 extension FloatingPointFormatStyle.Percent:
 Format, PercentFormat where
-FormatInput: FloatingPoint { }
+FormatInput: NumericTextFloatingPoint { }
 
 //*============================================================================*
 // MARK: * Format x Integer
@@ -44,8 +44,8 @@ FormatInput: FloatingPoint { }
 
 extension IntegerFormatStyle:
 Format, NumberFormat where
-FormatInput: Integer { }
+FormatInput: NumericTextInteger { }
 
 extension IntegerFormatStyle.Currency:
 Format, CurrencyFormat where
-FormatInput: Integer { }
+FormatInput: NumericTextInteger { }

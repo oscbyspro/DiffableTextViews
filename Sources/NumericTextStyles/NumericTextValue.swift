@@ -7,92 +7,149 @@
 // See http://www.apache.org/licenses/LICENSE-2.0 for license information.
 //=----------------------------------------------------------------------------=
 
+#warning("WIP")
+#warning("Rename make methods")
+
 //*============================================================================*
 // MARK: * Value
 //*============================================================================*
 
-public protocol Value: Boundable, Precise {
+public protocol NumericTextValue: Comparable {
     
     //=------------------------------------------------------------------------=
-    // MARK: State
+    // MARK: Meta
     //=------------------------------------------------------------------------=
     
     @inlinable static var isInteger:  Bool { get }
     @inlinable static var isUnsigned: Bool { get }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Data
+    //=------------------------------------------------------------------------=
+
+    @inlinable static var zero: Self { get }
+    @inlinable static var precision: Count { get }
+    @inlinable static var bounds: ClosedRange<Self> { get }
 }
 
 //*============================================================================*
 // MARK: * Value x Floating Point
 //*============================================================================*
 
-@usableFromInline protocol FloatingPoint: Value, BoundableFloatingPoint, PreciseFloatingPoint { }
+public protocol NumericTextFloatingPoint: NumericTextValue { }
 
 //=----------------------------------------------------------------------------=
 // MARK: Value x Floating Point - Details
 //=----------------------------------------------------------------------------=
 
-extension FloatingPoint {
+extension NumericTextFloatingPoint {
     
     //=------------------------------------------------------------------------=
-    // MARK: State
+    // MARK: Data
     //=------------------------------------------------------------------------=
     
-    @inlinable @inline(__always) public static var isInteger: Bool { false }
+    @inlinable public static var isInteger: Bool { false }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Precision
+    //=------------------------------------------------------------------------=
+
+    @inlinable public static func precision(_ max: Int) -> Count {
+        Count(value: max, integer: max, fraction: 0)
+    }
+}
+
+//=----------------------------------------------------------------------------=
+// MARK: Value x Floating Point - Signed Numeric
+//=----------------------------------------------------------------------------=
+
+extension NumericTextFloatingPoint where Self: SignedNumeric {
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Bounds
+    //=------------------------------------------------------------------------=
+    
+    @inlinable public static func bounds(limit: Self) -> ClosedRange<Self> {
+        -limit...limit
+    }
 }
 
 //*============================================================================*
 // MARK: * Value x Integer
 //*============================================================================*
 
-@usableFromInline protocol Integer: Value, BoundableInteger, PreciseInteger { }
+public protocol NumericTextInteger: NumericTextValue { }
 
 //=----------------------------------------------------------------------------=
 // MARK: Value x Integer - Details
 //=----------------------------------------------------------------------------=
 
-extension Integer {
+public extension NumericTextInteger {
     
     //=------------------------------------------------------------------------=
-    // MARK: State
+    // MARK: Meta
     //=------------------------------------------------------------------------=
     
-    @inlinable @inline(__always) public static var isInteger: Bool { true }
+    @inlinable static var isInteger: Bool { true }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Precision
+    //=------------------------------------------------------------------------=
+
+    @inlinable static func precision(_ max: Int) -> Count {
+        Count(value: max, integer: max, fraction: 0)
+    }
+}
+
+//=----------------------------------------------------------------------------=
+// MARK: Value x Integer - Fixed Width Integer
+//=----------------------------------------------------------------------------=
+
+extension NumericTextInteger where Self: FixedWidthInteger {
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Bounds
+    //=------------------------------------------------------------------------=
+    
+    @inlinable public static func bounds() -> ClosedRange<Self> {
+        min...max
+    }
 }
 
 //*============================================================================*
 // MARK: * Value x Signed
 //*============================================================================*
 
-@usableFromInline protocol Signed: Value { }
+public protocol NumericTextSigned: NumericTextValue { }
 
 //=----------------------------------------------------------------------------=
 // MARK: Value x Signed - Details
 //=----------------------------------------------------------------------------=
 
-extension Signed {
+public extension NumericTextSigned {
     
     //=------------------------------------------------------------------------=
-    // MARK: State
+    // MARK: Meta
     //=------------------------------------------------------------------------=
     
-    @inlinable @inline(__always) public static var isUnsigned: Bool { false }
+    @inlinable static var isUnsigned: Bool { false }
 }
 
 //*============================================================================*
 // MARK: * Value x Unsigned
 //*============================================================================*
 
-@usableFromInline protocol Unsigned: Value { }
+public protocol NumericTextUnsigned: NumericTextValue { }
 
 //=----------------------------------------------------------------------------=
 // MARK: Value x Unsigned - Details
 //=----------------------------------------------------------------------------=
 
-extension Unsigned {
+public extension NumericTextUnsigned {
     
     //=------------------------------------------------------------------------=
-    // MARK: State
+    // MARK: Meta
     //=------------------------------------------------------------------------=
     
-    @inlinable @inline(__always) public static var isUnsigned: Bool { true }
+    @inlinable static var isUnsigned: Bool { true }
 }

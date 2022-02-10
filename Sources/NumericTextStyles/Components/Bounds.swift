@@ -15,7 +15,7 @@ import Support
 //*============================================================================*
 
 /// A model that constrains values to a closed range.
-public struct Bounds<Value: Boundable>: Equatable {
+public struct Bounds<Value: NumericTextValue>: Equatable {
     
     //=------------------------------------------------------------------------=
     // MARK: Instances
