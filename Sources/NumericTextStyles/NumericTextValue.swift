@@ -8,16 +8,6 @@
 //=----------------------------------------------------------------------------=
 
 //*============================================================================*
-// MARK: * Table of Contents
-//*============================================================================*
-
-@usableFromInline typealias Value = NumericTextValue
-@usableFromInline typealias FloatingPoint = FloatingPointNumericTextValue
-@usableFromInline typealias Integer = IntegerNumericTextValue
-@usableFromInline typealias Signed = SignedNumericTextValue
-@usableFromInline typealias Unsigned = UnsignedNumericTextValue
-
-//*============================================================================*
 // MARK: * Value
 //*============================================================================*
 
@@ -40,16 +30,23 @@ public protocol NumericTextValue: Comparable {
 }
 
 //*============================================================================*
+// MARK: * Value x Affordances
+//*============================================================================*
+
+public protocol NumericTextIntegerValue: NumericTextValue { }
+public protocol NumericTextFloatingPointValue: NumericTextValue { }
+
+//*============================================================================*
 // MARK: * Floating Point
 //*============================================================================*
 
-public protocol FloatingPointNumericTextValue: NumericTextValue { }
+@usableFromInline protocol FloatingPoint: NumericTextFloatingPointValue { }
 
 //=----------------------------------------------------------------------------=
 // MARK: + Details
 //=----------------------------------------------------------------------------=
 
-extension FloatingPointNumericTextValue {
+extension FloatingPoint {
     
     //=------------------------------------------------------------------------=
     // MARK: Data
@@ -61,7 +58,7 @@ extension FloatingPointNumericTextValue {
     // MARK: Precision
     //=------------------------------------------------------------------------=
 
-    @inlinable public static func precision(_ max: Int) -> Count {
+    @inlinable internal static func precision(_ max: Int) -> Count {
         Count(value: max, integer: max, fraction: 0)
     }
 }
@@ -70,13 +67,13 @@ extension FloatingPointNumericTextValue {
 // MARK: + Signed Numeric
 //=----------------------------------------------------------------------------=
 
-extension FloatingPointNumericTextValue where Self: SignedNumeric {
+extension FloatingPoint where Self: SignedNumeric {
     
     //=------------------------------------------------------------------------=
     // MARK: Bounds
     //=------------------------------------------------------------------------=
     
-    @inlinable public static func bounds(limit: Self) -> ClosedRange<Self> {
+    @inlinable internal static func bounds(limit: Self) -> ClosedRange<Self> {
         -limit...limit
     }
 }
@@ -85,13 +82,13 @@ extension FloatingPointNumericTextValue where Self: SignedNumeric {
 // MARK: * Integer
 //*============================================================================*
 
-public protocol IntegerNumericTextValue: NumericTextValue { }
+@usableFromInline protocol Integer: NumericTextIntegerValue { }
 
 //=----------------------------------------------------------------------------=
 // MARK: + Details
 //=----------------------------------------------------------------------------=
 
-extension IntegerNumericTextValue {
+extension Integer {
     
     //=------------------------------------------------------------------------=
     // MARK: Meta
@@ -103,7 +100,7 @@ extension IntegerNumericTextValue {
     // MARK: Precision
     //=------------------------------------------------------------------------=
 
-    @inlinable public static func precision(_ max: Int) -> Count {
+    @inlinable internal static func precision(_ max: Int) -> Count {
         Count(value: max, integer: max, fraction: 0)
     }
 }
@@ -112,13 +109,13 @@ extension IntegerNumericTextValue {
 // MARK: + Fixed Width
 //=----------------------------------------------------------------------------=
 
-extension IntegerNumericTextValue where Self: FixedWidthInteger {
+extension Integer where Self: FixedWidthInteger {
     
     //=------------------------------------------------------------------------=
     // MARK: Bounds
     //=------------------------------------------------------------------------=
     
-    @inlinable public static func bounds() -> ClosedRange<Self> {
+    @inlinable internal static func bounds() -> ClosedRange<Self> {
         min...max
     }
 }
@@ -127,13 +124,13 @@ extension IntegerNumericTextValue where Self: FixedWidthInteger {
 // MARK: * Signed
 //*============================================================================*
 
-public protocol SignedNumericTextValue: NumericTextValue { }
+@usableFromInline protocol Signed: NumericTextValue { }
 
 //=----------------------------------------------------------------------------=
 // MARK: + Details
 //=----------------------------------------------------------------------------=
 
-extension SignedNumericTextValue {
+extension Signed {
     
     //=------------------------------------------------------------------------=
     // MARK: Meta
@@ -146,13 +143,13 @@ extension SignedNumericTextValue {
 // MARK: * Unsigned
 //*============================================================================*
 
-public protocol UnsignedNumericTextValue: NumericTextValue { }
+@usableFromInline protocol Unsigned: NumericTextValue { }
 
 //=----------------------------------------------------------------------------=
 // MARK: + Details
 //=----------------------------------------------------------------------------=
 
-extension UnsignedNumericTextValue {
+extension Unsigned {
     
     //=------------------------------------------------------------------------=
     // MARK: Meta

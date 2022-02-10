@@ -50,17 +50,17 @@ import Support
             // MARK: Sign
             //=----------------------------------=
             if !unsigned, let character = next, let sign = signs[character] {
-                self.sign = sign
-                next = iterator.next()
+                self.sign = sign; next = iterator.next()
             }
             //=----------------------------------=
             // MARK: Digits
             //=----------------------------------=
             while let character = next, let digit = digits[character] {
-                self.integer.append(digit)
-                next = iterator.next()
+                self.integer.append(digit); next = iterator.next()
             }
-            
+            //=----------------------------------=
+            // MARK: Break - Integer
+            //=----------------------------------=
             guard !integer else { break attempt }
             //=----------------------------------=
             // MARK: Separator
@@ -68,17 +68,17 @@ import Support
             if let character = next, let _ = separators[character] {
                 /// The sequence is unformatted, which means that all separators may be interpreted as fraction separators.
                 /// The only time a non-fraction separators should appear is when it is merged as a result of the user's input.
-                self.separator = Separator.fraction
-                next = iterator.next()
+                self.separator = .fraction; next = iterator.next()
             }
-            
-            guard self.separator != nil else { break attempt }
+            //=----------------------------------=
+            // MARK: Break - Nonseparated
+            //=----------------------------------=
+            guard separator == .fraction else { break attempt }
             //=----------------------------------=
             // MARK: Fraction
             //=----------------------------------=
             while let character = next, let digit = digits[character] {
-                self.fraction.append(digit)
-                next = iterator.next()
+                self.fraction.append(digit); next = iterator.next()
             }
         }
         //=--------------------------------------=

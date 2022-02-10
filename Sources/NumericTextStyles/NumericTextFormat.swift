@@ -43,7 +43,9 @@ extension NumericTextFormat {
     // MARK: Transformations
     //=------------------------------------------------------------------------=
     
-    @inlinable func style(precision: Precision, separator: Separator = .automatic, sign: Sign.Style = .automatic) -> Self {
+    @inlinable func style(precision: Precision,
+        separator: Separator = .automatic,
+        sign: Sign.Style = .automatic) -> Self {
         self.precision(precision).decimalSeparator(strategy: separator).sign(style: sign)
     }
         
@@ -60,7 +62,12 @@ extension NumericTextFormat {
 // MARK: * Format x Number
 //*============================================================================*
 
-@usableFromInline protocol NumberNumericTextFormat: Format {
+@usableFromInline protocol Standard: NumericTextFormat {
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Aliases
+    //=------------------------------------------------------------------------=
+    
     typealias Configuration = NumberFormatStyleConfiguration
     
     //=------------------------------------------------------------------------=
@@ -74,7 +81,7 @@ extension NumericTextFormat {
 // MARK: + Details
 //=----------------------------------------------------------------------------=
 
-extension NumberNumericTextFormat {
+extension Standard {
     
     //=------------------------------------------------------------------------=
     // MARK: Sign
@@ -89,7 +96,12 @@ extension NumberNumericTextFormat {
 // MARK: * Format x Currency
 //*============================================================================*
 
-@usableFromInline protocol CurrencyNumericTextFormat: Format {
+@usableFromInline protocol Currency: NumericTextFormat {
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Aliases
+    //=------------------------------------------------------------------------=
+    
     typealias Configuration = CurrencyFormatStyleConfiguration
     
     //=------------------------------------------------------------------------=
@@ -103,7 +115,7 @@ extension NumberNumericTextFormat {
 // MARK: + Details
 //=----------------------------------------------------------------------------=
 
-extension CurrencyNumericTextFormat {
+extension Currency {
     
     //=------------------------------------------------------------------------=
     // MARK: Sign
@@ -119,7 +131,12 @@ extension CurrencyNumericTextFormat {
 //*============================================================================*
 
 /// - Note: To use this format, the value must support at least two exponent digits.
-@usableFromInline protocol PercentNumericTextFormat: Format where FormatInput: FloatingPointNumericTextValue {
+@usableFromInline protocol Percent: NumericTextFormat where FormatInput: FloatingPoint {
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Aliases
+    //=------------------------------------------------------------------------=
+    
     typealias Configuration = NumberFormatStyleConfiguration
     
     //=------------------------------------------------------------------------=
@@ -133,7 +150,7 @@ extension CurrencyNumericTextFormat {
 // MARK: + Details
 //=----------------------------------------------------------------------------=
 
-extension PercentNumericTextFormat {
+extension Percent {
     
     //=------------------------------------------------------------------------=
     // MARK: Sign

@@ -157,7 +157,7 @@ extension Region {
     // MARK: Number -> Value
     //=------------------------------------------------------------------------=
     
-    @inlinable func value<F: Format>(in number:  Number, as format: F) throws -> F.Value {
+    @inlinable func value<F: NumericTextFormat>(in number:  Number, as format: F) throws -> F.Value {
         let characters = characters(in: number); return try format.parse(characters)
     }
     

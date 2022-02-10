@@ -23,10 +23,10 @@ extension NumericTextStyle {
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: DiffableTextStyle - Precision - Integer
+// MARK: DiffableTextStyle - Integer
 //=----------------------------------------------------------------------------=
 
-public extension NumericTextStyle where Value: IntegerNumericTextValue {
+public extension NumericTextStyle where Value: NumericTextIntegerValue {
     
     //=------------------------------------------------------------------------=
     // MARK: Length
@@ -46,10 +46,10 @@ public extension NumericTextStyle where Value: IntegerNumericTextValue {
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: DiffableTextStyle - Precision - Floating Point
+// MARK: DiffableTextStyle - Floating Point
 //=----------------------------------------------------------------------------=
 
-public extension NumericTextStyle where Value: FloatingPointNumericTextValue {
+public extension NumericTextStyle where Value: NumericTextFloatingPointValue {
     
     //=------------------------------------------------------------------------=
     // MARK: Length

@@ -14,38 +14,38 @@ import Foundation
 //*============================================================================*
 
 extension Decimal.FormatStyle:
-NumberFormat { }
+Standard { }
 
 extension Decimal.FormatStyle.Currency:
-CurrencyFormat { }
+Currency { }
 
 extension Decimal.FormatStyle.Percent:
-PercentFormat { }
+Percent { }
 
 //*============================================================================*
 // MARK: * Format x Floating Point
 //*============================================================================*
 
 extension FloatingPointFormatStyle:
-Format, NumberFormat where
-FormatInput: FloatingPointNumericTextValue { }
+NumericTextFormat, Standard where
+FormatInput: FloatingPoint { }
 
 extension FloatingPointFormatStyle.Currency:
-Format, CurrencyFormat where
-FormatInput: FloatingPointNumericTextValue { }
+NumericTextFormat, Currency where
+FormatInput: FloatingPoint { }
 
 extension FloatingPointFormatStyle.Percent:
-Format, PercentFormat where
-FormatInput: FloatingPointNumericTextValue { }
+NumericTextFormat, Percent where
+FormatInput: FloatingPoint { }
 
 //*============================================================================*
 // MARK: * Format x Integer
 //*============================================================================*
 
 extension IntegerFormatStyle:
-Format, NumberFormat where
-FormatInput: IntegerNumericTextValue { }
+NumericTextFormat, Standard where
+FormatInput: Integer { }
 
 extension IntegerFormatStyle.Currency:
-Format, CurrencyFormat where
-FormatInput: IntegerNumericTextValue { }
+NumericTextFormat, Currency where
+FormatInput: Integer { }
