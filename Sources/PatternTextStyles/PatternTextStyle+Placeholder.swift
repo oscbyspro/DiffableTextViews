@@ -43,11 +43,11 @@ public extension PatternTextStyle {
     /// A placeholder character and a constant predicate.
     @inlinable func placeholder(_ placeholder: Character,
         where predicate: @escaping (Character) -> Bool) -> Self {
-        transform(placeholder, where: Predicate(proxy: Constant(), check: predicate))
+        transform(placeholder, where: Predicate(proxy: false, check: predicate))
     }
     
     /// A placeholder character and a constant predicate that always evaluates true.
     @inlinable func placeholder(_ placeholder: Character) -> Self {
-        transform(placeholder, where: Predicate(proxy: Constant(), check: { _ in true }))
+        transform(placeholder, where: Predicate(proxy: false, check: { _ in true }))
     }
 }
