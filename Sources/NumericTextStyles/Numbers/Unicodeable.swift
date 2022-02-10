@@ -23,7 +23,7 @@ RawRepresentable, CaseIterable, TextOutputStreamable where RawValue == UInt8 {
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: Unicodeable - Details
+// MARK: + Details
 //=----------------------------------------------------------------------------=
 
 extension Unicodeable {

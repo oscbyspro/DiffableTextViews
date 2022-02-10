@@ -12,7 +12,7 @@
 import UIKit
 
 //*============================================================================*
-// MARK: * UIKitDiffableTextStyle
+// MARK: * DiffableTextStyle x UIKit
 //*============================================================================*
 
 public protocol UIKitDiffableTextStyle: DiffableTextStyle {
@@ -29,7 +29,7 @@ public protocol UIKitDiffableTextStyle: DiffableTextStyle {
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: UIKitDiffableTextStyle - Details
+// MARK: + Details
 //=----------------------------------------------------------------------------=
 
 public extension UIKitDiffableTextStyle {

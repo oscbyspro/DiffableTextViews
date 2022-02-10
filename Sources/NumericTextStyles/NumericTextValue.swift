@@ -24,7 +24,7 @@
 public protocol NumericTextValue: Comparable {
     
     //=------------------------------------------------------------------------=
-    // MARK: Meta
+    // MARK: Static
     //=------------------------------------------------------------------------=
     
     @inlinable static var isInteger:  Bool { get }
@@ -94,7 +94,7 @@ public protocol NumericTextIntegerValue: NumericTextValue { }
 extension NumericTextIntegerValue {
     
     //=------------------------------------------------------------------------=
-    // MARK: Meta
+    // MARK: Static
     //=------------------------------------------------------------------------=
     
     @inlinable public static var isInteger: Bool { true }
@@ -136,7 +136,7 @@ public protocol NumericTextSignedValue: NumericTextValue { }
 extension NumericTextSignedValue {
     
     //=------------------------------------------------------------------------=
-    // MARK: Meta
+    // MARK: Static
     //=------------------------------------------------------------------------=
     
     @inlinable public static var isUnsigned: Bool { false }
@@ -155,7 +155,7 @@ public protocol NumericTextUnsignedValue: NumericTextValue { }
 extension NumericTextUnsignedValue {
     
     //=------------------------------------------------------------------------=
-    // MARK: Meta
+    // MARK: Static
     //=------------------------------------------------------------------------=
     
     @inlinable public static var isUnsigned: Bool { true }

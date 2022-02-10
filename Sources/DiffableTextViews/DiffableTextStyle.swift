@@ -56,7 +56,7 @@ public protocol DiffableTextStyle: Equatable {
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: DiffableTextStyle - Details
+// MARK: + Details
 //=----------------------------------------------------------------------------=
 
 public extension DiffableTextStyle {
