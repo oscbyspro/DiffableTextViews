@@ -112,6 +112,7 @@ struct NumericScreen: View {
                 .currency(code: currencyCode)
                 .bounds(bounds)
                 .precision(integer: integer.closed, fraction: fraction.closed)
+                .storable()
             }
         case .percent:
             Example($value) {

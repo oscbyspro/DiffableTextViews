@@ -8,23 +8,23 @@
 //=----------------------------------------------------------------------------=
 
 import SwiftUI
-import Support
 
 //*============================================================================*
-// MARK: * DiffableTextStyle x Proxy
+// MARK: * DiffableTextStyle x Constant
 //*============================================================================*
 
-/// A style that equals a specific value.
+/// A constant style that equals every other instance of its type.
 ///
 /// Use this style to optimize the differentiation on view update.
 ///
-public struct ProxyTextStyle<Style: DiffableTextStyle, ID: Equatable>: DiffableTextStyle {
+/// - Transformation methods obtained via DiffableTextStyle return immediately.
+///
+public struct ConstantTextStyle<Style: DiffableTextStyle>: WrapperTextStyle {
     
     //=------------------------------------------------------------------------=
     // MARK: State
     //=------------------------------------------------------------------------=
     
-    @usableFromInline let value: ID
     @usableFromInline var style: Style
     
     //=------------------------------------------------------------------------=
@@ -32,65 +32,35 @@ public struct ProxyTextStyle<Style: DiffableTextStyle, ID: Equatable>: DiffableT
     //=------------------------------------------------------------------------=
     
     @inlinable @inline(__always)
-    init(style: Style, value: ID) where ID: Equatable {
-        self.style = style
-        self.value = value
-    }
+    init(style: Style) { self.style = style }
     
     //=------------------------------------------------------------------------=
     // MARK: Transformations
     //=------------------------------------------------------------------------=
-    
+
     @inlinable @inline(__always)
-    public func locale(_ locale: Locale) -> Self {
-        var result = self; result.style = style.locale(locale); return result
-    }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Upstream
-    //=------------------------------------------------------------------------=
-    
-    @inlinable @inline(__always)
-    public func format(value: Style.Value) -> String {
-        style.format(value: value)
-    }
-    
-    @inlinable @inline(__always)
-    public func commit(value: Style.Value) -> Commit<Style.Value> {
-        style.commit(value: value)
-    }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Downstream
-    //=------------------------------------------------------------------------=
-    
-    @inlinable @inline(__always)
-    public func merge(changes: Changes) throws -> Commit<Style.Value> {
-        try style.merge(changes: changes)
-    }
+    public func locale(_ locale: Locale) -> Self { return self }
     
     //=------------------------------------------------------------------------=
     // MARK: Comparisons
     //=------------------------------------------------------------------------=
     
     @inlinable @inline(__always)
-    public static func == (lhs: Self, rhs: Self) -> Bool {
-        lhs.value == rhs.value
-    }
+    public static func == (lhs: Self, rhs: Self) -> Bool { true }
 }
-
-//=----------------------------------------------------------------------------=
-// MARK: Proxy - UIKit
-//=----------------------------------------------------------------------------=
 
 #if canImport(UIKit)
 
-extension ProxyTextStyle: UIKitDiffableTextStyle where Style: UIKitDiffableTextStyle { }
+//*============================================================================*
+// MARK: * DiffableTextStyle x Constant x UIKit
+//*============================================================================*
+
+extension ConstantTextStyle: UIKitWrapperTextStyle, UIKitDiffableTextStyle where Style: UIKitDiffableTextStyle { }
 
 #endif
 
 //*============================================================================*
-// MARK: * DiffableTextStyle x Proxy
+// MARK: * DiffableTextStyle x Constant
 //*============================================================================*
 
 public extension DiffableTextStyle {
@@ -100,12 +70,7 @@ public extension DiffableTextStyle {
     //=------------------------------------------------------------------------=
     
     /// Binds the style's differentiation result to a constant.
-    @inlinable func constant() -> ProxyTextStyle<Self, Constant> {
-        ProxyTextStyle(style: self, value: Constant())
-    }
-    
-    /// Binds the style's differentiation result to a value.
-    @inlinable func equals<Value: Equatable>(_ value: Value) -> ProxyTextStyle<Self, Value> {
-        ProxyTextStyle(style: self, value: value)
+    @inlinable func constant() -> ConstantTextStyle<Self> {
+        ConstantTextStyle(style: self)
     }
 }

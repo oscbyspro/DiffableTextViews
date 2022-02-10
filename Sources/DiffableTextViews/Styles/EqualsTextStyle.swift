@@ -10,19 +10,20 @@
 import SwiftUI
 
 //*============================================================================*
-// MARK: * DiffableTextStyle x Cache
+// MARK: * DiffableTextStyle x Equals
 //*============================================================================*
 
-/// A reference type wrapper text style.
+/// A style that equals a specific value.
 ///
-/// Use this style when want to store it as a reference value.
+/// Use this style to optimize the differentiation on view update.
 ///
-public final class CacheTextStyle<Style: DiffableTextStyle>: WrapperTextStyle {
+public struct EqualsTextStyle<Style: DiffableTextStyle, ID: Equatable>: WrapperTextStyle {
     
     //=------------------------------------------------------------------------=
     // MARK: State
     //=------------------------------------------------------------------------=
     
+    @usableFromInline let value: ID
     @usableFromInline var style: Style
     
     //=------------------------------------------------------------------------=
@@ -30,21 +31,33 @@ public final class CacheTextStyle<Style: DiffableTextStyle>: WrapperTextStyle {
     //=------------------------------------------------------------------------=
     
     @inlinable @inline(__always)
-    init(style: Style) { self.style = style }
+    init(style: Style, value: ID) where ID: Equatable {
+        self.style = style
+        self.value = value
+    }
+
+    //=------------------------------------------------------------------------=
+    // MARK: Comparisons
+    //=------------------------------------------------------------------------=
+    
+    @inlinable @inline(__always)
+    public static func == (lhs: Self, rhs: Self) -> Bool {
+        lhs.value == rhs.value
+    }
 }
 
 #if canImport(UIKit)
 
 //*============================================================================*
-// MARK: * DiffableTextStyle x Cache x UIKit
+// MARK: * DiffableTextStyle x Equals x UIKit
 //*============================================================================*
 
-extension CacheTextStyle: UIKitWrapperTextStyle, UIKitDiffableTextStyle where Style: UIKitDiffableTextStyle { }
+extension EqualsTextStyle: UIKitWrapperTextStyle, UIKitDiffableTextStyle where Style: UIKitDiffableTextStyle { }
 
 #endif
 
 //*============================================================================*
-// MARK: * DiffableTextStyle x Cache
+// MARK: * DiffableTextStyle x Equals
 //*============================================================================*
 
 public extension DiffableTextStyle {
@@ -52,9 +65,9 @@ public extension DiffableTextStyle {
     //=------------------------------------------------------------------------=
     // MARK: Transformations
     //=------------------------------------------------------------------------=
-    
-    /// Wraps the text style in a reference type.
-    @inlinable func storable() -> CacheTextStyle<Self> {
-        CacheTextStyle(style: self)
+
+    /// Binds the style's differentiation result to a value.
+    @inlinable func equals<Value: Equatable>(_ value: Value) -> EqualsTextStyle<Self, Value> {
+        EqualsTextStyle(style: self, value: value)
     }
 }
