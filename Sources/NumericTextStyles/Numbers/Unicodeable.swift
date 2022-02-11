@@ -19,7 +19,7 @@ RawRepresentable, Hashable, CaseIterable, TextOutputStreamable where RawValue ==
     // MARK: Constants
     //=------------------------------------------------------------------------=
     
-    @inlinable static var system: [Character: Self] { get }
+    @inlinable static var ascii: [Character: Self] { get }
 }
 
 //=----------------------------------------------------------------------------=
@@ -56,7 +56,7 @@ extension Unicodeable {
     // MARK: Helpers
     //=------------------------------------------------------------------------=
     
-    @inlinable static func system() -> [Character: Self] {
+    @inlinable static func ascii() -> [Character: Self] {
         allCases.reduce(into: [:]) {
             result,unicodeable in
             result[unicodeable.character] = unicodeable

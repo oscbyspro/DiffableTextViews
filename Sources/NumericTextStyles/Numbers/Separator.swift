@@ -25,5 +25,5 @@
     // MARK: Constants
     //=------------------------------------------------------------------------=
     
-    @usableFromInline static let system: [Character: Self] = system()
+    @usableFromInline static let ascii: [Character: Self] = ascii()
 }

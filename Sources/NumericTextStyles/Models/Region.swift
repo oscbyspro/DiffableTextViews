@@ -56,14 +56,14 @@ import Foundation
         // MARK: Signs
         //=--------------------------------------=
         self.signs = Lexicon<Sign>()
-        self.signs.merge(Sign.system)
+        self.signs.merge(Sign.ascii)
         self.signs.link(formatter .plusSign.filter({ $0.isPunctuation || $0.isMathSymbol }).first!, .positive)
         self.signs.link(formatter.minusSign.filter({ $0.isPunctuation || $0.isMathSymbol }).first!, .negative)
         //=--------------------------------------=
         // MARK: Digits
         //=--------------------------------------=
         self.digits = Lexicon<Digit>()
-        self.digits.merge(Digit.system)
+        self.digits.merge(Digit.ascii)
         for digit in Digit.allCases {
             self.digits.link(formatter.string(from: digit.numericValue as NSNumber)!.first!, digit)
         }
@@ -71,7 +71,7 @@ import Foundation
         // MARK: Separators
         //=--------------------------------------=
         self.separators = Lexicon<Separator>()
-        self.separators.merge(Separator.system)
+        self.separators.merge(Separator.ascii)
         self.separators.link(formatter .decimalSeparator.first!, .fraction)
         self.separators.link(formatter.groupingSeparator.first!, .grouping)
     }
