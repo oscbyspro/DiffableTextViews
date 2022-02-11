@@ -91,7 +91,7 @@ A style that processes localized numbers in various formats.
 |   | Feature | Description |
 |---|---------|-------------|
 | :coin: | Values | Decimal, Float(16-64) and (U)Int(8-64) |
-| :bow_and_arrow: | Precision | Up to 38 significant digits |
+| :bow_and_arrow: | Precision | Up to 38 digits precision |
 | :bricks: | Bounds | Clamps input/output to specified range |
 | :art: | Formats | Number, currency and percent |
 | :national_park: | Locales | Supports every locale in Foundation |

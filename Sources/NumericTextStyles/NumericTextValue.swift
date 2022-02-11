@@ -31,7 +31,7 @@ public protocol NumericTextValue: Comparable {
     @inlinable static var isUnsigned: Bool { get }
     
     //=------------------------------------------------------------------------=
-    // MARK: Data
+    // MARK: Precision, Bounds
     //=------------------------------------------------------------------------=
 
     @inlinable static var zero: Self { get }
@@ -52,7 +52,7 @@ public protocol NumericTextFloatingPointValue: NumericTextValue { }
 extension NumericTextFloatingPointValue {
     
     //=------------------------------------------------------------------------=
-    // MARK: Data
+    // MARK: Static
     //=------------------------------------------------------------------------=
     
     @inlinable public static var isInteger: Bool { false }
