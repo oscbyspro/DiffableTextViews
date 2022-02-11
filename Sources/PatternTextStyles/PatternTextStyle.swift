@@ -192,10 +192,12 @@ extension PatternTextStyle {
             //=----------------------------------=
             if let predicate = placeholders[character] {
                 if valueIndex != value.endIndex {
-                    let content = value[valueIndex]; value.formIndex(after: &valueIndex)
+                    let content = value[valueIndex]
                     guard predicate.check(content) else { break loop }
                     some(pattern[queueIndex..<patternIndex], content)
-                    pattern.formIndex(after: &patternIndex); queueIndex = patternIndex
+                    value.formIndex(after: &valueIndex)
+                    pattern.formIndex(after: &patternIndex)
+                    queueIndex = patternIndex
                     continue loop
                 } else if value.isEmpty {
                     none(pattern[queueIndex..<patternIndex])
