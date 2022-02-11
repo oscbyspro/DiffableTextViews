@@ -55,23 +55,20 @@ import Foundation
         //=--------------------------------------=
         // MARK: Signs
         //=--------------------------------------=
-        self.signs = Lexicon<Sign>()
-        self.signs.merge(Sign.ascii)
+        self.signs = Lexicon(ascii: Sign.self)
         self.signs.link(formatter .plusSign.filter({ $0.isPunctuation || $0.isMathSymbol }).first!, .positive)
         self.signs.link(formatter.minusSign.filter({ $0.isPunctuation || $0.isMathSymbol }).first!, .negative)
         //=--------------------------------------=
         // MARK: Digits
         //=--------------------------------------=
-        self.digits = Lexicon<Digit>()
-        self.digits.merge(Digit.ascii)
+        self.digits = Lexicon(ascii: Digit.self)
         for digit in Digit.allCases {
             self.digits.link(formatter.string(from: digit.numericValue as NSNumber)!.first!, digit)
         }
         //=--------------------------------------=
         // MARK: Separators
         //=--------------------------------------=
-        self.separators = Lexicon<Separator>()
-        self.separators.merge(Separator.ascii)
+        self.separators = Lexicon(ascii: Separator.self)
         self.separators.link(formatter .decimalSeparator.first!, .fraction)
         self.separators.link(formatter.groupingSeparator.first!, .grouping)
     }
@@ -84,21 +81,33 @@ import Foundation
     ///
     /// - It requires that each component is bidirectionally mapped to a character.
     /// - To ensure an available input method, relevant ASCII must also map to a component.
+    /// - ASCII characters should be added first, so they may be overriden by localized.
     ///
-    @usableFromInline struct Lexicon<Component: Hashable & CaseIterable> {
+    @usableFromInline struct Lexicon<Component: Hashable> {
         
         //=--------------------------------------------------------------------=
         // MARK: State
         //=--------------------------------------------------------------------=
         
-        @usableFromInline var components: [Character: Component] = [:]
-        @usableFromInline var characters: [Component: Character] = [:]
+        @usableFromInline var components: [Character: Component]
+        @usableFromInline var characters: [Component: Character]
         
         //=--------------------------------------------------------------------=
         // MARK: Initializers
         //=--------------------------------------------------------------------=
         
-        @inlinable init() { }
+        @inlinable init(components: [Character: Component] = [:], characters: [Component: Character] = [:]) {
+            self.components = components
+            self.characters = characters
+        }
+        
+        //=--------------------------------------------------------------------=
+        // MARK: Initializers - Indirect
+        //=--------------------------------------------------------------------=
+
+        @inlinable init(ascii: Component.Type) where Component: Unicodeable {
+            self.init(components: Component.ascii)
+        }
         
         //=--------------------------------------------------------------------=
         // MARK: Subscripts
@@ -118,10 +127,6 @@ import Foundation
         //=--------------------------------------------------------------------=
         // MARK: Transformations
         //=--------------------------------------------------------------------=
-
-        @inlinable mutating func merge(_ other: [Character: Component]) {
-            self.components.merge(other) { $1 }
-        }
         
         @inlinable mutating func link(_ character: Character, _ component: Component) {
             self.components[character] = component
