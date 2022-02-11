@@ -40,8 +40,8 @@ Value: RangeReplaceableCollection, Value: Equatable, Value.Element == Character 
     //=------------------------------------------------------------------------=
     
     /// Hides the pattern suffix.
-    @inlinable public func hidden() -> Self {
-        var result = self; result.visible = false; return result
+    @inlinable public func hidden(_ hidden: Bool = true) -> Self {
+        var result = self; result.visible = !hidden; return result
     }
 
     //=------------------------------------------------------------------------=
