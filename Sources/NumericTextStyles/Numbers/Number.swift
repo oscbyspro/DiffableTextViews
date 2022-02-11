@@ -18,6 +18,7 @@ import Support
 ///
 /// - Integer digits must not be empty.
 /// - Integer digits must not contain prefix zeros.
+/// - Fraction digits must be empty when there is no separator.
 ///
 @usableFromInline struct Number {
     

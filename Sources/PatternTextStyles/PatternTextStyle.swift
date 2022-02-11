@@ -62,6 +62,7 @@ Value: RangeReplaceableCollection, Value: Equatable, Value.Element == Character 
 
 extension PatternTextStyle {
     
+    #warning("Mismatches should be separated.")
     //=------------------------------------------------------------------------=
     // MARK: Upstream
     //=------------------------------------------------------------------------=

@@ -17,21 +17,13 @@ import Foundation
 @usableFromInline final class Region {
     
     //=------------------------------------------------------------------------=
-    // MARK: Cache
-    //=------------------------------------------------------------------------=
-    
-    @usableFromInline static let cache: NSCache<NSString, Region> = {
-        let cache = NSCache<NSString, Region>(); cache.countLimit = 3; return cache
-    }()
-    
-    //=------------------------------------------------------------------------=
     // MARK: State
     //=------------------------------------------------------------------------=
     
     @usableFromInline let locale: Locale
-    @usableFromInline private(set) var signs = Lexicon<Sign>()
-    @usableFromInline private(set) var digits = Lexicon<Digit>()
-    @usableFromInline private(set) var separators = Lexicon<Separator>()
+    @usableFromInline let signs: Lexicon<Sign>
+    @usableFromInline let digits: Lexicon<Digit>
+    @usableFromInline let separators: Lexicon<Separator>
     
     //=------------------------------------------------------------------------=
     // MARK: Initializers
@@ -42,35 +34,35 @@ import Foundation
     /// It force unwraps characters. Validity should be asserted by unit tests for all locales.
     ///
     @inlinable init(_ locale: Locale) {
-        //=--------------------------------------=
-        // MARK: Locale
-        //=--------------------------------------=
-        self.locale = locale
-        //=--------------------------------------=
-        // MARK: Formatter
-        //=--------------------------------------=
         let formatter = NumberFormatter()
         formatter.locale = locale
         formatter.numberStyle = .decimal
         //=--------------------------------------=
         // MARK: Signs
         //=--------------------------------------=
-        self.signs = Lexicon(ascii: Sign.self)
-        self.signs.link(formatter .plusSign.filter({ $0.isPunctuation || $0.isMathSymbol }).first!, .positive)
-        self.signs.link(formatter.minusSign.filter({ $0.isPunctuation || $0.isMathSymbol }).first!, .negative)
+        var signs = Lexicon(ascii: Sign.self)
+        signs.link(formatter .plusSign.filter({ $0.isPunctuation || $0.isMathSymbol }).first!, .positive)
+        signs.link(formatter.minusSign.filter({ $0.isPunctuation || $0.isMathSymbol }).first!, .negative)
         //=--------------------------------------=
         // MARK: Digits
         //=--------------------------------------=
-        self.digits = Lexicon(ascii: Digit.self)
+        var digits = Lexicon(ascii: Digit.self)
         for digit in Digit.allCases {
-            self.digits.link(formatter.string(from: digit.numericValue as NSNumber)!.first!, digit)
+            digits.link(formatter.string(from: digit.numericValue as NSNumber)!.first!, digit)
         }
         //=--------------------------------------=
         // MARK: Separators
         //=--------------------------------------=
-        self.separators = Lexicon(ascii: Separator.self)
-        self.separators.link(formatter .decimalSeparator.first!, .fraction)
-        self.separators.link(formatter.groupingSeparator.first!, .grouping)
+        var separators = Lexicon(ascii: Separator.self)
+        separators.link(formatter .decimalSeparator.first!, .fraction)
+        separators.link(formatter.groupingSeparator.first!, .grouping)
+        //=--------------------------------------=
+        // MARK: Set
+        //=--------------------------------------=
+        self.locale = locale
+        self.signs = signs
+        self.digits = digits
+        self.separators = separators
     }
     
     //*========================================================================*
@@ -136,13 +128,21 @@ import Foundation
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: Region - Cache
+// MARK: + Cache
 //=----------------------------------------------------------------------------=
 
 extension Region {
     
     //=------------------------------------------------------------------------=
-    // MARK: Initializers - Static
+    // MARK: Storage
+    //=------------------------------------------------------------------------=
+    
+    @usableFromInline static let cache: NSCache<NSString, Region> = {
+        let cache = NSCache<NSString, Region>(); cache.countLimit = 3; return cache
+    }()
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Search Or Make
     //=------------------------------------------------------------------------=
     
     @inlinable static func cached(_ locale: Locale) -> Region {
@@ -153,7 +153,7 @@ extension Region {
         if let reusable = cache.object(forKey: key) {
             return reusable
         //=--------------------------------------=
-        // MARK: Create A New Instance An Save It
+        // MARK: Make A New Instance And Save It
         //=--------------------------------------=
         } else {
             let instance = Region(locale)
@@ -164,21 +164,21 @@ extension Region {
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: Region - Parse
+// MARK: + Parse Number
 //=----------------------------------------------------------------------------=
 
 extension Region {
 
     //=------------------------------------------------------------------------=
-    // MARK: Number -> Value
+    // MARK: Value
     //=------------------------------------------------------------------------=
     
-    @inlinable func value<F: NumericTextFormat>(in number:  Number, as format: F) throws -> F.Value {
+    @inlinable func value<F: Format>(in number:  Number, as format: F) throws -> F.Value {
         let characters = characters(in: number); return try format.parse(characters)
     }
     
     //=------------------------------------------------------------------------=
-    // MARK: Number -> String
+    // MARK: Characters
     //=------------------------------------------------------------------------=
     
     /// Converts a number to regional characters, to be parsed by a localized format style.
@@ -217,13 +217,13 @@ extension Region {
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: Region - Parse
+// MARK: + Parse Snapshot
 //=----------------------------------------------------------------------------=
 
 extension Region {
     
     //=------------------------------------------------------------------------=
-    // MARK: Snapshot -> Number
+    // MARK: Number
     //=------------------------------------------------------------------------=
     
     /// To use this method, all formatting characters must be marked as virtual.
