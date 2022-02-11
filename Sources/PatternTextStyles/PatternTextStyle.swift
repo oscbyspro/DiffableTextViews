@@ -57,12 +57,11 @@ Value: RangeReplaceableCollection, Value: Equatable, Value.Element == Character 
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: PatternTextStyle - Format
+// MARK: + Format
 //=----------------------------------------------------------------------------=
 
 extension PatternTextStyle {
     
-    #warning("Mismatches should be separated.")
     //=------------------------------------------------------------------------=
     // MARK: Upstream
     //=------------------------------------------------------------------------=
@@ -70,32 +69,20 @@ extension PatternTextStyle {
     /// - Mismatches are separated.
     @inlinable public func format(value: Value) -> String {
         var characters = String()
-        var patternIndex = pattern.startIndex
-        var valueIterator = value.makeIterator()
         //=--------------------------------------=
         // MARK: Loop
         //=--------------------------------------=
-        loop: while patternIndex != pattern.endIndex {
-            let character = pattern[patternIndex]
-            //=----------------------------------=
-            // MARK: Placeholder
-            //=----------------------------------=
-            if let predicate = placeholders[character] {
-                guard let content = valueIterator.next(), predicate.check(content) else { break loop }
-                characters.append(content)
-            //=----------------------------------=
-            // MARK: Pattern
-            //=----------------------------------=
-            } else {
-                characters.append(character)
-            }
-            
-            pattern.formIndex(after: &patternIndex)
+        iterate(value) { queue, content in
+            characters.append(contentsOf: queue)
+            characters.append(content)
+        } none: { queue in
+            characters.append(contentsOf: queue)
+        } remainders: { queue, contents in
+            visible ? characters += queue : ()
+            guard !contents.isEmpty else { return }
+            characters.append("|")
+            characters.append(contentsOf: contents)
         }
-        //=--------------------------------------=
-        // MARK: Remainders - Pattern
-        //=--------------------------------------=
-        visible ? characters.append(contentsOf: pattern[patternIndex...]) : ()
         //=--------------------------------------=
         // MARK: Done
         //=--------------------------------------=
@@ -104,64 +91,36 @@ extension PatternTextStyle {
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: PatternTextStyle - Commit
+// MARK: + Commit
 //=----------------------------------------------------------------------------=
 
 extension PatternTextStyle {
-
-    //=------------------------------------------------------------------------=
-    // MARK: Upstream
-    //=------------------------------------------------------------------------=
     
     /// - Mismatches are cut.
     @inlinable public func commit(value: Value) -> Commit<Value> {
-        var contents = Value()
-        var snapshot = Snapshot()
-        var queueIndex = pattern.startIndex
-        var patternIndex = pattern.startIndex
-        var valueIterator = value.makeIterator()
+        var elements = Value(); var snapshot = Snapshot()
         //=--------------------------------------=
         // MARK: Loop
         //=--------------------------------------=
-        loop: while patternIndex != pattern.endIndex {
-            let character = pattern[patternIndex]
-            //=----------------------------------=
-            // MARK: Placeholder
-            //=----------------------------------=
-            if let predicate = placeholders[character] {
-                if let content = valueIterator.next() {
-                    guard predicate.check(content) else { break loop }
-                    contents.append(content)
-                    snapshot.append(contentsOf: Snapshot(pattern[queueIndex..<patternIndex], as: .phantom))
-                    snapshot.append(Symbol(content, as: .content))
-                    pattern.formIndex(after: &patternIndex); queueIndex = patternIndex
-                    continue loop
-                } else if contents.isEmpty {
-                    snapshot.append(contentsOf: Snapshot(pattern[queueIndex..<patternIndex], as: .phantom))
-                    snapshot.append(.anchor)
-                    queueIndex = patternIndex
-                }
-                
-                break loop
-            }
-            //=----------------------------------=
-            // MARK: Pattern
-            //=----------------------------------=
-            pattern.formIndex(after: &patternIndex)
+        iterate(value) { queue, content in
+            elements.append(content)
+            snapshot.append(contentsOf: Snapshot(queue, as: .phantom))
+            snapshot.append(Symbol(content, as: .content))
+        } none: { queue in
+            snapshot.append(contentsOf: Snapshot(queue, as: .phantom))
+            snapshot.append(.anchor)
+        } remainders: { queue, _ in
+            visible ? snapshot += Snapshot(queue, as: .phantom) : ()
         }
-        //=--------------------------------------=
-        // MARK: Remainders - Pattern
-        //=--------------------------------------=
-        visible ? snapshot += Snapshot(pattern[queueIndex...], as: .phantom) : ()
         //=--------------------------------------=
         // MARK: Done
         //=--------------------------------------=
-        return Commit(value: contents, snapshot: snapshot)
+        return Commit(value: elements, snapshot: snapshot)
     }
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: PatternTextStyle - Merge
+// MARK: + Merge
 //=----------------------------------------------------------------------------=
 
 extension PatternTextStyle {
@@ -182,10 +141,13 @@ extension PatternTextStyle {
             //=----------------------------------=
             if let predicate = placeholders[character] {
                 guard let nonvirtual = nonvirtuals.next() else { break loop }
+                //=------------------------------=
+                // MARK: Predicate
+                //=------------------------------=
                 guard predicate.check(nonvirtual.character) else {
                     throw Info([.mark(nonvirtual.character), "is invalid"])
                 }
-
+                
                 value.append(nonvirtual.character)
             }
         }
@@ -199,5 +161,57 @@ extension PatternTextStyle {
         // MARK: Value -> Commit
         //=--------------------------------------=
         return commit(value: value)
+    }
+}
+
+//=----------------------------------------------------------------------------=
+// MARK: + Helpers
+//=----------------------------------------------------------------------------=
+
+extension PatternTextStyle {
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Iterate
+    //=------------------------------------------------------------------------=
+    
+    @inlinable func iterate(_ value: Value, some: (Substring, Character) -> Void,
+        none: (Substring) -> Void, remainders: (Substring, Value.SubSequence) -> Void) {
+        //=--------------------------------------=
+        // MARK: Indices
+        //=--------------------------------------=
+        var valueIndex = value.startIndex
+        var patternIndex = pattern.startIndex
+        var queueIndex = patternIndex
+        //=--------------------------------------=
+        // MARK: Loop
+        //=--------------------------------------=
+        loop: while patternIndex != pattern.endIndex {
+            let character = pattern[patternIndex]
+            //=----------------------------------=
+            // MARK: Value
+            //=----------------------------------=
+            if let predicate = placeholders[character] {
+                if valueIndex != value.endIndex {
+                    let content = value[valueIndex]; value.formIndex(after: &valueIndex)
+                    guard predicate.check(content) else { break loop }
+                    some(pattern[queueIndex..<patternIndex], content)
+                    pattern.formIndex(after: &patternIndex); queueIndex = patternIndex
+                    continue loop
+                } else if value.isEmpty {
+                    none(pattern[queueIndex..<patternIndex])
+                    queueIndex = patternIndex
+                }
+                
+                break loop
+            }
+            //=----------------------------------=
+            // MARK: Pattern
+            //=----------------------------------=
+            pattern.formIndex(after: &patternIndex)
+        }
+        //=--------------------------------------=
+        // MARK: Remainders
+        //=--------------------------------------=
+        remainders(pattern[queueIndex...], value[valueIndex...])
     }
 }
