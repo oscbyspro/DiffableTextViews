@@ -67,10 +67,7 @@ extension PatternTextStyle {
     // MARK: Upstream
     //=------------------------------------------------------------------------=
     
-    /// Matches the value against the pattern to form a collection of characters.
-    ///
-    /// - Mismatches are hidden.
-    ///
+    /// - Mismatches are separated.
     @inlinable public func format(value: Value) -> String {
         var characters = String()
         var patternIndex = pattern.startIndex
@@ -116,10 +113,7 @@ extension PatternTextStyle {
     // MARK: Upstream
     //=------------------------------------------------------------------------=
     
-    /// Matches the value agains the pattern to form a commit.
-    ///
     /// - Mismatches are cut.
-    ///
     @inlinable public func commit(value: Value) -> Commit<Value> {
         var contents = Value()
         var snapshot = Snapshot()
@@ -176,10 +170,7 @@ extension PatternTextStyle {
     // MARK: Downstream
     //=------------------------------------------------------------------------=
     
-    /// Marges, parses and matches the request to form a commit.
-    ///
     /// - Mismatches throw an error.
-    ///
     @inlinable public func merge(changes: Changes) throws -> Commit<Value> {
         var value = Value(); var nonvirtuals = changes.proposal().lazy.filter(\.nonvirtual).makeIterator()
         //=--------------------------------------=
