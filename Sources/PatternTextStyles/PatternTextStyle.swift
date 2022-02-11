@@ -176,9 +176,6 @@ extension PatternTextStyle {
     
     @inlinable func iterate(_ value: Value, some: (Substring, Character) -> Void,
         none: (Substring) -> Void, remainders: (Substring, Value.SubSequence) -> Void) {
-        //=--------------------------------------=
-        // MARK: Indices
-        //=--------------------------------------=
         var valueIndex = value.startIndex
         var patternIndex = pattern.startIndex
         var queueIndex = patternIndex
@@ -191,6 +188,9 @@ extension PatternTextStyle {
             // MARK: Value
             //=----------------------------------=
             if let predicate = placeholders[character] {
+                //=------------------------------=
+                // MARK: Some
+                //=------------------------------=
                 if valueIndex != value.endIndex {
                     let content = value[valueIndex]
                     guard predicate.check(content) else { break loop }
@@ -199,6 +199,9 @@ extension PatternTextStyle {
                     pattern.formIndex(after: &patternIndex)
                     queueIndex = patternIndex
                     continue loop
+                //=------------------------------=
+                // MARK: None
+                //=------------------------------=
                 } else if value.isEmpty {
                     none(pattern[queueIndex..<patternIndex])
                     queueIndex = patternIndex
