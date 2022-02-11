@@ -164,7 +164,7 @@ extension Region {
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: + Parse Number
+// MARK: + Parse: Number
 //=----------------------------------------------------------------------------=
 
 extension Region {
@@ -181,9 +181,9 @@ extension Region {
     // MARK: Characters
     //=------------------------------------------------------------------------=
     
-    /// Converts a number to regional characters, to be parsed by a localized format style.
+    /// Converts a number to localized characters, to be parsed by a localized format style.
     ///
-    /// - Characters do not include right-to-left markers (which are redundant for parsing).
+    /// - Output does not include right-to-left markers (which are redundant for parsing).
     ///
     @inlinable func characters(in number: Number) -> String {
         var characters = String()
@@ -217,7 +217,7 @@ extension Region {
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: + Parse Snapshot
+// MARK: + Parse: Snapshot
 //=----------------------------------------------------------------------------=
 
 extension Region {

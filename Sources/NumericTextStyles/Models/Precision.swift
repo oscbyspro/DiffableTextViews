@@ -36,8 +36,8 @@ public struct Precision<Value: NumericTextValue>: Equatable {
     // MARK: Initializers - Using Range Expressions
     //=------------------------------------------------------------------------=
 
-    @inlinable init<R0: RangeExpression, R1: RangeExpression>(integer: R0,
-        fraction: R1) where R0.Bound == Int, R1.Bound == Int {
+    @inlinable init<R0, R1>(integer: R0, fraction: R1) where
+    R0: RangeExpression, R0.Bound == Int, R1: RangeExpression, R1.Bound == Int {
         let integer  = Namespace.interpret(integer,  in: Self.limits(\.integer ))
         let fraction = Namespace.interpret(fraction, in: Self.limits(\.fraction))
         //=--------------------------------------=
