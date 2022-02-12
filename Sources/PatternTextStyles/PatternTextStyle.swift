@@ -172,29 +172,31 @@ extension PatternTextStyle {
     
     /// - Mismatches throw an error.
     @inlinable public func merge(changes: Changes) throws -> Commit<Value> {
-        var value = Value(); var nonvirtuals = changes.proposal().lazy.filter(\.nonvirtual).makeIterator()
+        var value = Value()
+        let proposal = changes.proposal()
+        var contents = proposal.lazy.filter(\.nonvirtual).makeIterator()
         //=--------------------------------------=
         // MARK: Loop
         //=--------------------------------------=
         for character in pattern {
             guard let predicate = placeholders[character] else { continue }
-            guard let nonvirtual = nonvirtuals.next() else { break }
+            guard let content = contents.next() else { break }
             //=----------------------------------=
             // MARK: Check
             //=----------------------------------=
-            guard predicate.check(nonvirtual.character) else {
-                throw Info([.mark(nonvirtual.character), "is invalid"])
+            guard predicate.check(content.character) else {
+                throw Info([.mark(content.character), "is invalid"])
             }
             //=----------------------------------=
             // MARK: Value
             //=----------------------------------=
-            value.append(nonvirtual.character)
+            value.append(content.character)
         }
         //=--------------------------------------=
         // MARK: Capacity
         //=--------------------------------------=
-        guard nonvirtuals.next() == nil else {
-            throw Info([.mark(changes.proposal().characters), "exceeded pattern capacity."])
+        guard contents.next() == nil else {
+            throw Info([.mark(proposal.characters), "exceeded pattern capacity."])
         }
         //=--------------------------------------=
         // MARK: Value -> Commit
