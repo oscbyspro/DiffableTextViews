@@ -10,11 +10,33 @@
 import DiffableTextViews
 import Foundation
 
+#warning("Make new tests for changes.")
+#warning("Make a test to see that all locales map to a region.")
+#warning("Make locale initializer fallible.")
 //*============================================================================*
 // MARK: * Region
 //*============================================================================*
 
 @usableFromInline final class Region {
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Constants
+    //=------------------------------------------------------------------------=
+    
+    @usableFromInline static let cache: NSCache<NSString, Region> = {
+        let cache = NSCache<NSString, Region>(); cache.countLimit = 3; return cache
+    }()
+    
+    @usableFromInline static let ascii: Region = {
+        let identifier = "en_US"
+        let region = Region.init(
+        locale: Locale(identifier: identifier),
+        signs: Lexicon(ascii: Sign.self),
+        digits: Lexicon(ascii: Digit.self),
+        separators: Lexicon(ascii: Separator.self))
+        cache.setObject(region, forKey: NSString(string: identifier))
+        return region
+    }()
     
     //=------------------------------------------------------------------------=
     // MARK: State
@@ -29,120 +51,52 @@ import Foundation
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    /// Creates an uncached region.
-    ///
-    /// It force unwraps characters. Validity should be asserted by unit tests for all locales.
-    ///
-    @inlinable init(_ locale: Locale) {
-        let formatter = NumberFormatter()
-        formatter.locale = locale
-        formatter.numberStyle = .decimal
-        //=--------------------------------------=
-        // MARK: Signs
-        //=--------------------------------------=
-        var signs = Lexicon(ascii: Sign.self)
-        signs.link(formatter .plusSign.filter({ $0.isPunctuation || $0.isMathSymbol }).first!, .positive)
-        signs.link(formatter.minusSign.filter({ $0.isPunctuation || $0.isMathSymbol }).first!, .negative)
-        //=--------------------------------------=
-        // MARK: Digits
-        //=--------------------------------------=
-        var digits = Lexicon(ascii: Digit.self)
-        for digit in Digit.allCases {
-            digits.link(formatter.string(from: digit.numericValue as NSNumber)!.first!, digit)
-        }
-        //=--------------------------------------=
-        // MARK: Separators
-        //=--------------------------------------=
-        var separators = Lexicon(ascii: Separator.self)
-        separators.link(formatter .decimalSeparator.first!, .fraction)
-        separators.link(formatter.groupingSeparator.first!, .grouping)
-        //=--------------------------------------=
-        // MARK: Set
-        //=--------------------------------------=
+    @inlinable init(locale: Locale, signs: Lexicon<Sign>, digits: Lexicon<Digit>, separators: Lexicon<Separator>) {
         self.locale = locale
         self.signs = signs
         self.digits = digits
         self.separators = separators
     }
     
-    //*========================================================================*
-    // MARK: * Lexicon
-    //*========================================================================*
+    //=------------------------------------------------------------------------=
+    // MARK: Initializers - Locale
+    //=------------------------------------------------------------------------=
     
-    /// A mapping model between components and characters.
+    /// Creates an uncached region.
     ///
-    /// - It requires that each component is bidirectionally mapped to a character.
-    /// - To ensure an available input method, relevant ASCII must also map to a component.
-    /// - ASCII characters should be added first, so they may be overriden by localized.
+    /// It force unwraps characters, so its validity should be asserted by unit tests for all locales.
     ///
-    @usableFromInline struct Lexicon<Component: Hashable> {
-        
-        //=--------------------------------------------------------------------=
-        // MARK: State
-        //=--------------------------------------------------------------------=
-        
-        @usableFromInline var components: [Character: Component]
-        @usableFromInline var characters: [Component: Character]
-        
-        //=--------------------------------------------------------------------=
-        // MARK: Initializers
-        //=--------------------------------------------------------------------=
-        
-        @inlinable init(components: [Character: Component] = [:], characters: [Component: Character] = [:]) {
-            self.components = components
-            self.characters = characters
+    @inlinable convenience init(_ locale: Locale) {
+        let formatter = NumberFormatter()
+        formatter.locale = locale
+        formatter.numberStyle = .decimal
+        //=--------------------------------------=
+        // MARK: Signs
+        //=--------------------------------------=
+        var signs = Self.ascii.signs
+        signs.link(formatter .plusSign.filter({ $0.isPunctuation || $0.isMathSymbol }).first!, .positive)
+        signs.link(formatter.minusSign.filter({ $0.isPunctuation || $0.isMathSymbol }).first!, .negative)
+        //=--------------------------------------=
+        // MARK: Digits
+        //=--------------------------------------=
+        var digits = Self.ascii.digits
+        for digit in Digit.allCases {
+            digits.link(formatter.string(from: digit.numericValue as NSNumber)!.first!, digit)
         }
-        
-        //=--------------------------------------------------------------------=
-        // MARK: Initializers - Indirect
-        //=--------------------------------------------------------------------=
-
-        @inlinable init(ascii: Component.Type) where Component: Unicodeable {
-            self.init(components: Component.ascii)
-        }
-        
-        //=--------------------------------------------------------------------=
-        // MARK: Subscripts
-        //=--------------------------------------------------------------------=
-        
-        @inlinable subscript(character: Character) -> Component? {
-            _read   { yield  components[character] }
-            _modify { yield &components[character] }
-        }
-        
-        /// Bidirectional mapping is required for all components, so characters may be force unwrapped.
-        @inlinable subscript(component: Component) -> Character {
-            _read   { yield  characters[component]! }
-            _modify { yield &characters[component]! }
-        }
-        
-        //=--------------------------------------------------------------------=
-        // MARK: Transformations
-        //=--------------------------------------------------------------------=
-        
-        @inlinable mutating func link(_ character: Character, _ component: Component) {
-            self.components[character] = component
-            self.characters[component] = character
-        }
+        //=--------------------------------------=
+        // MARK: Separators
+        //=--------------------------------------=
+        var separators = Self.ascii.separators
+        separators.link(formatter .decimalSeparator.first!, .fraction)
+        separators.link(formatter.groupingSeparator.first!, .grouping)
+        //=--------------------------------------=
+        // MARK: Set
+        //=--------------------------------------=
+        self.init(locale: locale, signs: signs, digits: digits, separators: separators)
     }
-}
-
-//=----------------------------------------------------------------------------=
-// MARK: + Cache
-//=----------------------------------------------------------------------------=
-
-extension Region {
     
     //=------------------------------------------------------------------------=
-    // MARK: Storage
-    //=------------------------------------------------------------------------=
-    
-    @usableFromInline static let cache: NSCache<NSString, Region> = {
-        let cache = NSCache<NSString, Region>(); cache.countLimit = 3; return cache
-    }()
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Search Or Make
+    // MARK: Initializers - Cache
     //=------------------------------------------------------------------------=
     
     @inlinable static func cached(_ locale: Locale) -> Region {
@@ -174,18 +128,6 @@ extension Region {
     //=------------------------------------------------------------------------=
     
     @inlinable func value<F: Format>(in number:  Number, as format: F) throws -> F.Value {
-        let characters = characters(in: number); return try format.parse(characters)
-    }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Characters
-    //=------------------------------------------------------------------------=
-    
-    /// Converts a number to localized characters, to be parsed by a localized format style.
-    ///
-    /// - Output does not include right-to-left markers (which are redundant for parsing).
-    ///
-    @inlinable func characters(in number: Number) -> String {
         var characters = String()
         //=--------------------------------------=
         // MARK: Sign
@@ -210,9 +152,9 @@ extension Region {
             }
         }
         //=--------------------------------------=
-        // MARK: Done
+        // MARK: Characters -> Value
         //=--------------------------------------=
-        return characters
+        return try format.parse(characters)
     }
 }
 
