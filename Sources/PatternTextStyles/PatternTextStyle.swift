@@ -57,13 +57,13 @@ Value: RangeReplaceableCollection, Value: Equatable, Value.Element == Character 
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: + Format
+// MARK: + Upstream
 //=----------------------------------------------------------------------------=
 
 extension PatternTextStyle {
     
     //=------------------------------------------------------------------------=
-    // MARK: Upstream
+    // MARK: Format
     //=------------------------------------------------------------------------=
     
     /// - Mismatches are separated.
@@ -88,13 +88,10 @@ extension PatternTextStyle {
         //=--------------------------------------=
         return characters
     }
-}
 
-//=----------------------------------------------------------------------------=
-// MARK: + Commit
-//=----------------------------------------------------------------------------=
-
-extension PatternTextStyle {
+    //=------------------------------------------------------------------------=
+    // MARK: Commit
+    //=------------------------------------------------------------------------=
     
     /// - Mismatches are cut.
     @inlinable public func commit(value: Value) -> Commit<Value> {
@@ -117,61 +114,9 @@ extension PatternTextStyle {
         //=--------------------------------------=
         return Commit(value: elements, snapshot: snapshot)
     }
-}
 
-//=----------------------------------------------------------------------------=
-// MARK: + Merge
-//=----------------------------------------------------------------------------=
-
-extension PatternTextStyle {
-        
     //=------------------------------------------------------------------------=
-    // MARK: Downstream
-    //=------------------------------------------------------------------------=
-    
-    /// - Mismatches throw an error.
-    @inlinable public func merge(changes: Changes) throws -> Commit<Value> {
-        var value = Value(); var nonvirtuals = changes.proposal().lazy.filter(\.nonvirtual).makeIterator()
-        //=--------------------------------------=
-        // MARK: Loop
-        //=--------------------------------------=
-        loop: for character in pattern {
-            //=----------------------------------=
-            // MARK: Placeholder
-            //=----------------------------------=
-            if let predicate = placeholders[character] {
-                guard let nonvirtual = nonvirtuals.next() else { break loop }
-                //=------------------------------=
-                // MARK: Predicate
-                //=------------------------------=
-                guard predicate.check(nonvirtual.character) else {
-                    throw Info([.mark(nonvirtual.character), "is invalid"])
-                }
-                
-                value.append(nonvirtual.character)
-            }
-        }
-        //=--------------------------------------=
-        // MARK: Capacity
-        //=--------------------------------------=
-        guard nonvirtuals.next() == nil else {
-            throw Info([.mark(changes.proposal().characters), "exceeded pattern capacity."])
-        }
-        //=--------------------------------------=
-        // MARK: Value -> Commit
-        //=--------------------------------------=
-        return commit(value: value)
-    }
-}
-
-//=----------------------------------------------------------------------------=
-// MARK: + Helpers
-//=----------------------------------------------------------------------------=
-
-extension PatternTextStyle {
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Iterate
+    // MARK: Helpers
     //=------------------------------------------------------------------------=
     
     @inlinable func iterate(_ value: Value, some: (Substring, Character) -> Void,
@@ -218,5 +163,50 @@ extension PatternTextStyle {
         // MARK: Remainders
         //=--------------------------------------=
         remainders(pattern[queueIndex...], value[valueIndex...])
+    }
+}
+
+//=----------------------------------------------------------------------------=
+// MARK: + Downstream
+//=----------------------------------------------------------------------------=
+
+extension PatternTextStyle {
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Merge
+    //=------------------------------------------------------------------------=
+    
+    /// - Mismatches throw an error.
+    @inlinable public func merge(changes: Changes) throws -> Commit<Value> {
+        var value = Value(); var nonvirtuals = changes.proposal().lazy.filter(\.nonvirtual).makeIterator()
+        //=--------------------------------------=
+        // MARK: Loop
+        //=--------------------------------------=
+        loop: for character in pattern {
+            //=----------------------------------=
+            // MARK: Placeholder
+            //=----------------------------------=
+            if let predicate = placeholders[character] {
+                guard let nonvirtual = nonvirtuals.next() else { break loop }
+                //=------------------------------=
+                // MARK: Predicate
+                //=------------------------------=
+                guard predicate.check(nonvirtual.character) else {
+                    throw Info([.mark(nonvirtual.character), "is invalid"])
+                }
+                
+                value.append(nonvirtual.character)
+            }
+        }
+        //=--------------------------------------=
+        // MARK: Capacity
+        //=--------------------------------------=
+        guard nonvirtuals.next() == nil else {
+            throw Info([.mark(changes.proposal().characters), "exceeded pattern capacity."])
+        }
+        //=--------------------------------------=
+        // MARK: Value -> Commit
+        //=--------------------------------------=
+        return commit(value: value)
     }
 }
