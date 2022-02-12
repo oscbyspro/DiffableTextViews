@@ -133,9 +133,6 @@ extension PatternTextStyle {
             // MARK: Value
             //=----------------------------------=
             if let predicate = placeholders[character] {
-                //=------------------------------=
-                // MARK: Some
-                //=------------------------------=
                 if valueIndex != value.endIndex {
                     let content = value[valueIndex]
                     guard predicate.check(content) else { break loop }
@@ -144,9 +141,6 @@ extension PatternTextStyle {
                     pattern.formIndex(after: &patternIndex)
                     queueIndex = patternIndex
                     continue loop
-                //=------------------------------=
-                // MARK: None
-                //=------------------------------=
                 } else if value.isEmpty {
                     none(pattern[queueIndex..<patternIndex])
                     queueIndex = patternIndex
@@ -182,21 +176,19 @@ extension PatternTextStyle {
         //=--------------------------------------=
         // MARK: Loop
         //=--------------------------------------=
-        loop: for character in pattern {
+        for character in pattern {
+            guard let predicate = placeholders[character] else { continue }
+            guard let nonvirtual = nonvirtuals.next() else { break }
             //=----------------------------------=
-            // MARK: Placeholder
+            // MARK: Check
             //=----------------------------------=
-            if let predicate = placeholders[character] {
-                guard let nonvirtual = nonvirtuals.next() else { break loop }
-                //=------------------------------=
-                // MARK: Predicate
-                //=------------------------------=
-                guard predicate.check(nonvirtual.character) else {
-                    throw Info([.mark(nonvirtual.character), "is invalid"])
-                }
-                
-                value.append(nonvirtual.character)
+            guard predicate.check(nonvirtual.character) else {
+                throw Info([.mark(nonvirtual.character), "is invalid"])
             }
+            //=----------------------------------=
+            // MARK: Value
+            //=----------------------------------=
+            value.append(nonvirtual.character)
         }
         //=--------------------------------------=
         // MARK: Capacity
