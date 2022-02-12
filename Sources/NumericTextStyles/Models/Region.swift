@@ -11,7 +11,6 @@ import DiffableTextViews
 import Foundation
 import Support
 
-#warning("Rework.")
 //*============================================================================*
 // MARK: * Region
 //*============================================================================*
@@ -61,14 +60,12 @@ import Support
         self.separators = separators
     }
     
-    #warning("Remove ascii parts probably.")
     //=------------------------------------------------------------------------=
     // MARK: Initializers - Locale
     //=------------------------------------------------------------------------=
     
     /// Creates an uncached region. Unit tests assert that it always succeeds.
     @inlinable convenience init(_ locale: Locale) throws {
-        let ascii = Self.en_US
         //=--------------------------------------=
         // MARK: Formatter
         //=--------------------------------------=
@@ -78,20 +75,20 @@ import Support
         //=--------------------------------------=
         // MARK: Signs
         //=--------------------------------------=
-        var signs = ascii.signs
+        var signs = Lexicon<Sign>()
         try signs.link(Self.positive(in: formatter), .positive)
         try signs.link(Self.negative(in: formatter), .negative)
         //=--------------------------------------=
         // MARK: Digits
         //=--------------------------------------=
-        var digits = ascii.digits
+        var digits = Lexicon<Digit>()
         for digit in Digit.allCases {
             try digits.link(Self.digit(digit, in: formatter), digit)
         }
         //=--------------------------------------=
         // MARK: Separators
         //=--------------------------------------=
-        var separators = ascii.separators
+        var separators = Lexicon<Separator>()
         try separators.link(Self.fraction(in: formatter), .fraction)
         try separators.link(Self.grouping(in: formatter), .grouping)
         //=--------------------------------------=

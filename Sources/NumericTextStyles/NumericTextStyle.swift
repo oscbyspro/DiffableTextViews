@@ -148,7 +148,7 @@ extension NumericTextStyle {
         //=--------------------------------------=
         // MARK: Reader
         //=--------------------------------------=
-        try reader.validateInputSize()
+        try reader.autocorrect()
         let processSignInput = reader.consumeSignInput()
         let proposal = reader.changes.proposal()
         //=--------------------------------------=

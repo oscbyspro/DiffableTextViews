@@ -66,11 +66,8 @@ import Support
             //=----------------------------------=
             // MARK: Separator
             //=----------------------------------=
-            #warning("When region is reworked, it should require that separator == .fraction.")
-            if let character = next, let _ = separators[character] {
-                /// The sequence is unformatted, which means that all separators may be interpreted as fraction separators.
-                /// The only time a non-fraction separators should appear is when it is merged as a result of the user's input.
-                self.separator = .fraction; next = iterator.next()
+            if let character = next, let separator = separators[character], separator == .fraction {
+                self.separator = separator; next = iterator.next()
             }
             //=----------------------------------=
             // MARK: Break - Nonseparated

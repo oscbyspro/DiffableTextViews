@@ -13,8 +13,7 @@
 
 /// A mapping model between components and characters.
 ///
-/// - It requires that each component is bidirectionally mapped to a character.
-/// - To ensure at least one available input method, relevant ASCII must be mappable.
+/// - Requires that each component is bidirectionally mapped to a character.
 ///
 @usableFromInline struct Lexicon<Component: Hashable> {
     

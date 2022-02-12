@@ -10,8 +10,6 @@
 import DiffableTextViews
 import Support
 
-#warning("Needs a method to localize an ASCII character.")
-#warning("Reader needs this method because both kinds of separators should map to fraction.")
 //*============================================================================*
 // MARK: * Reader
 //*============================================================================*
@@ -36,19 +34,41 @@ import Support
     }
     
     //=------------------------------------------------------------------------=
-    // MARK: Validate
+    // MARK: Accessors
     //=------------------------------------------------------------------------=
     
-    /// Throws an when there is more than one replacement character.
-    ///
-    /// This validation rule is needed because input is lenient (bilingual). Otherwise, formatted text
-    /// pasted by the user may be misinterpreted. An alternative is to require numbers to be localized
-    /// when input size exceeds one character.
-    ///
-    @inlinable func validateInputSize() throws {
+    @inlinable var ascii: Region { .en_US }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Autocorrect
+    //=------------------------------------------------------------------------=
+    
+    /// Validates input size and localizes replacement character.
+    @inlinable mutating func autocorrect() throws {
+        //=--------------------------------------=
+        // MARK: Count
+        //=--------------------------------------=
         guard changes.replacement.count <= 1 else {
             throw Info([.mark(changes.replacement.characters), "exceeded character size limit", .mark(1)])
         }
+        //=--------------------------------------=
+        // MARK: Localize
+        //=--------------------------------------=
+        guard var symbol = changes.replacement.first else { return }
+        //=--------------------------------------=
+        // MARK: Localize - Match
+        //=--------------------------------------=
+        if let component = ascii.signs[symbol.character] {
+            symbol.character = region.signs[component]
+        } else if let component = ascii.digits[symbol.character] {
+            symbol.character = region.digits[component]
+        } else if let _ = ascii.separators[symbol.character] {
+            symbol.character = region.separators[.fraction]
+        } else { return }
+        //=--------------------------------------=
+        // MARK: Localize - Update
+        //=--------------------------------------=
+        self.changes.replacement = Snapshot([symbol])
     }
     
     //=------------------------------------------------------------------------=
