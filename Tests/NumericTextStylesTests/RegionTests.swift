@@ -30,6 +30,30 @@ final class RegionTests: XCTestCase {
     
     lazy var regions: [Region] = locales
         .compactMap({ try? Region($0) })
+    
+    lazy var currencies: [String] = locales
+        .lazy.compactMap(\.currencyCode)
+        .reduce(into: Set()) { $0.insert($1) }
+        .map({ $0 })
+}
+
+//=----------------------------------------------------------------------------=
+// MARK: + Assumptions
+//=----------------------------------------------------------------------------=
+
+extension RegionTests {
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Tests
+    //=------------------------------------------------------------------------=
+    
+    func testVirtualCharactersAreNotAlwaysUnique() {
+        let number = 1234567.89
+        let currencyCode = "PAB"
+        let locale = Locale(identifier: "rhg-Rohg_MM")
+        let formatted = number.formatted(.currency(code: currencyCode).locale(locale))
+        XCTAssertEqual(formatted, "B/. 1,234,567.89") // currency contains fraction separator
+    }
 }
 
 //=----------------------------------------------------------------------------=
@@ -39,7 +63,7 @@ final class RegionTests: XCTestCase {
 extension RegionTests {
     
     //=------------------------------------------------------------------------=
-    // MARK: Count
+    // MARK: Tests
     //=------------------------------------------------------------------------=
         
     func testEachLocaleMapsToARegion() {
@@ -48,6 +72,40 @@ extension RegionTests {
     
     func testThatThereAreManyRegions() {
         XCTAssertGreaterThanOrEqual(regions.count, 937)
+    }
+    
+    func testThatThereAreManyCurrencies() {
+        XCTAssertGreaterThanOrEqual(currencies.count, 153)
+    }
+}
+
+//=----------------------------------------------------------------------------=
+// MARK: + Lexicon
+//=----------------------------------------------------------------------------=
+
+extension RegionTests {
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Tests
+    //=------------------------------------------------------------------------=
+
+    /// Asserts that all components are bidirectionally mapped to a character.
+    func testCharacterComponentLinks() {
+        func test<Component: Hashable & CaseIterable>(lexicon: Lexicon<Component>) {
+            for component in Component.allCases {
+                let character = lexicon[component]
+                let localized = lexicon[character]
+                XCTAssertEqual(component, localized)
+            }
+        }
+        //=--------------------------------------=
+        // MARK: Regions
+        //=--------------------------------------=
+        for region in regions {
+            test(lexicon: region.signs)
+            test(lexicon: region.digits)
+            test(lexicon: region.separators)
+        }
     }
 }
 
@@ -121,36 +179,6 @@ extension RegionTests {
             let style = double(region).decimalSeparator(strategy: .always)
             let nonnumbers = number.formatted(style).filter({ !$0.isNumber })
             XCTAssert(nonnumbers.allSatisfy({ region.separators[$0] == .fraction }))
-        }
-    }
-}
-
-//=----------------------------------------------------------------------------=
-// MARK: + Lexicon
-//=----------------------------------------------------------------------------=
-
-extension RegionTests {
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Tests
-    //=------------------------------------------------------------------------=
-
-    /// Asserts that all components are bidirectionally mapped to a character.
-    func testBidirectionalMaps() {
-        func test<Component: Hashable & CaseIterable>(lexicon: Lexicon<Component>) {
-            for component in Component.allCases {
-                let character = lexicon[component]
-                let xxxxxxxxx = lexicon[character]
-                XCTAssertEqual(component, xxxxxxxxx)
-            }
-        }
-        //=--------------------------------------=
-        // MARK: Regions
-        //=--------------------------------------=
-        for region in regions {
-            test(lexicon: region.signs)
-            test(lexicon: region.digits)
-            test(lexicon: region.separators)
         }
     }
 }
