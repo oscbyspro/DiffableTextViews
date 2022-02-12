@@ -24,11 +24,39 @@ final class RegionTests: XCTestCase {
     // MARK: State
     //=------------------------------------------------------------------------=
     
-    lazy var regions: [Region] = Locale
-        .availableIdentifiers.lazy
-        .map(Locale.init)
-        .map(Region.init)
+    lazy var locales: [Locale] = Locale
+        .availableIdentifiers
+        .lazy.map(Locale.init)
     
+    lazy var regions: [Region] = locales
+        .compactMap({ try? Region($0) })
+}
+
+//=----------------------------------------------------------------------------=
+// MARK: + Instances
+//=----------------------------------------------------------------------------=
+
+extension RegionTests {
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Count
+    //=------------------------------------------------------------------------=
+        
+    func testEachLocaleMapsToARegion() {
+        XCTAssertEqual(locales.count, regions.count)
+    }
+    
+    func testThatThereAreManyRegions() {
+        XCTAssertGreaterThanOrEqual(regions.count, 937)
+    }
+}
+
+//=----------------------------------------------------------------------------=
+// MARK: + Components
+//=----------------------------------------------------------------------------=
+
+extension RegionTests {
+
     //=------------------------------------------------------------------------=
     // MARK: Styles
     //=------------------------------------------------------------------------=
@@ -48,7 +76,9 @@ final class RegionTests: XCTestCase {
     func testSigns() {
         let positive: Int = +1
         let negative: Int = -1
-        
+        //=--------------------------------------=
+        // MARK: Regions
+        //=--------------------------------------=
         for region in regions {
             let style = int(region).sign(strategy: .always())
             let positives = positive.formatted(style)
@@ -60,7 +90,9 @@ final class RegionTests: XCTestCase {
     
     func testDigits() {
         let number: Int = 1234567890
-        
+        //=--------------------------------------=
+        // MARK: Regions
+        //=--------------------------------------=
         for region in regions {
             let style = int(region).grouping(.never)
             let numbers = number.formatted(style)
@@ -70,7 +102,9 @@ final class RegionTests: XCTestCase {
     
     func testGroupingSeparators() {
         let number: Int = 1234567890
-        
+        //=--------------------------------------=
+        // MARK: Regions
+        //=--------------------------------------=
         for region in regions {
             let style = int(region).grouping(.automatic)
             let nonnumbers = number.formatted(style).filter({ !$0.isNumber })
@@ -80,11 +114,59 @@ final class RegionTests: XCTestCase {
     
     func testFractionSeparators() {
         let number: Double = 0.123
-        
+        //=--------------------------------------=
+        // MARK: Regions
+        //=--------------------------------------=
         for region in regions {
             let style = double(region).decimalSeparator(strategy: .always)
             let nonnumbers = number.formatted(style).filter({ !$0.isNumber })
             XCTAssert(nonnumbers.allSatisfy({ region.separators[$0] == .fraction }))
+        }
+    }
+}
+
+//=----------------------------------------------------------------------------=
+// MARK: + Lexicon
+//=----------------------------------------------------------------------------=
+
+extension RegionTests {
+    //=------------------------------------------------------------------------=
+    // MARK: Tests
+    //=------------------------------------------------------------------------=
+    
+    /// Asserts that all relevant ASCII characters are mapped to a component.
+    func testASCII() {
+        func test<Component: Hashable>(lexicon: Lexicon<Component>, ascii: String) {
+            for character in ascii {
+                XCTAssertNotNil(lexicon[character])
+            }
+        }
+        //=--------------------------------------=
+        // MARK: Regions
+        //=--------------------------------------=
+        for region in regions {
+            test(lexicon: region.signs,      ascii: "+-")
+            test(lexicon: region.digits,     ascii: "0123456789")
+            test(lexicon: region.separators, ascii: ".,")
+        }
+    }
+    
+    /// Asserts that all components are bidirectionally mapped to a character.
+    func testBidirectionalMaps() {
+        func test<Component: Hashable & CaseIterable>(lexicon: Lexicon<Component>) {
+            for component in Component.allCases {
+                let character = lexicon[component]
+                let xxxxxxxxx = lexicon[character]
+                XCTAssertEqual(component, xxxxxxxxx)
+            }
+        }
+        //=--------------------------------------=
+        // MARK: Regions
+        //=--------------------------------------=
+        for region in regions {
+            test(lexicon: region.signs)
+            test(lexicon: region.digits)
+            test(lexicon: region.separators)
         }
     }
 }

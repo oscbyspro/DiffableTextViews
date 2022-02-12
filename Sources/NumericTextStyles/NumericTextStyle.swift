@@ -34,10 +34,10 @@ public struct NumericTextStyle<Format: NumericTextFormat>: DiffableTextStyle {
     //=------------------------------------------------------------------------=
     
     @inlinable public init(format: Format, locale: Locale = .autoupdatingCurrent) {
-        self.format = format
         self.bounds = Bounds()
         self.precision = Precision()
         self.region = Region.cached(locale)
+        self.format = format.locale(region.locale)
     }
     
     //=------------------------------------------------------------------------=
@@ -50,8 +50,8 @@ public struct NumericTextStyle<Format: NumericTextFormat>: DiffableTextStyle {
         // MARK: Make New Instance
         //=--------------------------------------=
         var result = self
-        result.format = format.locale(locale)
         result.region = Region.cached(locale)
+        result.format = format.locale(result.region.locale)
         return result
     }
     

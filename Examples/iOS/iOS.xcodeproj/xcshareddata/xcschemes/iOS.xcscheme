@@ -28,6 +28,36 @@
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
       shouldUseLaunchSchemeArgsEnv = "YES">
       <Testables>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "DiffableTextViewsTests"
+               BuildableName = "DiffableTextViewsTests"
+               BlueprintName = "DiffableTextViewsTests"
+               ReferencedContainer = "container:../..">
+            </BuildableReference>
+         </TestableReference>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "NumericTextStylesTests"
+               BuildableName = "NumericTextStylesTests"
+               BlueprintName = "NumericTextStylesTests"
+               ReferencedContainer = "container:../..">
+            </BuildableReference>
+         </TestableReference>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "PatternTextStylesTests"
+               BuildableName = "PatternTextStylesTests"
+               BlueprintName = "PatternTextStylesTests"
+               ReferencedContainer = "container:../..">
+            </BuildableReference>
+         </TestableReference>
       </Testables>
    </TestAction>
    <LaunchAction

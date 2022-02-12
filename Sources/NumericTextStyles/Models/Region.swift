@@ -9,10 +9,8 @@
 
 import DiffableTextViews
 import Foundation
+import Support
 
-#warning("Make new tests for changes.")
-#warning("Make a test to see that all locales map to a region.")
-#warning("Make locale initializer fallible.")
 //*============================================================================*
 // MARK: * Region
 //*============================================================================*
@@ -27,9 +25,9 @@ import Foundation
         let cache = NSCache<NSString, Region>(); cache.countLimit = 3; return cache
     }()
     
-    @usableFromInline static let ascii: Region = {
+    @usableFromInline static let en_US: Region = {
         let identifier = "en_US"
-        let region = Region.init(
+        let region = Region(
         locale: Locale(identifier: identifier),
         signs: Lexicon(ascii: Sign.self),
         digits: Lexicon(ascii: Digit.self),
@@ -66,34 +64,92 @@ import Foundation
     ///
     /// It force unwraps characters, so its validity should be asserted by unit tests for all locales.
     ///
-    @inlinable convenience init(_ locale: Locale) {
+    @inlinable convenience init(_ locale: Locale) throws {
+        let ascii = Self.en_US
         let formatter = NumberFormatter()
         formatter.locale = locale
         formatter.numberStyle = .decimal
         //=--------------------------------------=
         // MARK: Signs
         //=--------------------------------------=
-        var signs = Self.ascii.signs
-        signs.link(formatter .plusSign.filter({ $0.isPunctuation || $0.isMathSymbol }).first!, .positive)
-        signs.link(formatter.minusSign.filter({ $0.isPunctuation || $0.isMathSymbol }).first!, .negative)
+        var signs = ascii.signs
+        try signs.link(Self.positive(in: formatter), .positive)
+        try signs.link(Self.negative(in: formatter), .negative)
         //=--------------------------------------=
         // MARK: Digits
         //=--------------------------------------=
-        var digits = Self.ascii.digits
+        var digits = ascii.digits
         for digit in Digit.allCases {
-            digits.link(formatter.string(from: digit.numericValue as NSNumber)!.first!, digit)
+            try digits.link(Self.digit(digit, in: formatter), digit)
         }
         //=--------------------------------------=
         // MARK: Separators
         //=--------------------------------------=
-        var separators = Self.ascii.separators
-        separators.link(formatter .decimalSeparator.first!, .fraction)
-        separators.link(formatter.groupingSeparator.first!, .grouping)
+        var separators = ascii.separators
+        try separators.link(Self.fraction(in: formatter), .fraction)
+        try separators.link(Self.grouping(in: formatter), .grouping)
         //=--------------------------------------=
         // MARK: Set
         //=--------------------------------------=
         self.init(locale: locale, signs: signs, digits: digits, separators: separators)
     }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Characters
+    //=------------------------------------------------------------------------=
+    
+    @inlinable static func positive(in formatter: NumberFormatter) throws -> Character {
+        guard let character = formatter.plusSign.filter(signable).first else {
+            throw absent(component: Sign.positive)
+        }; return character
+    }
+    
+    @inlinable static func negative(in formatter: NumberFormatter) throws -> Character {
+        guard let character = formatter.minusSign.filter(signable).first else {
+            throw absent(component: Sign.negative)
+        }; return character
+    }
+    
+    @inlinable static func digit(_ digit: Digit, in formatter: NumberFormatter) throws -> Character {
+        guard let character = formatter.string(from: digit.numericValue as NSNumber)?.first else {
+            throw absent(component: digit)
+        }; return character
+    }
+    
+    @inlinable static func fraction(in formatter: NumberFormatter) throws -> Character {
+        guard let character = formatter.decimalSeparator.first else {
+            throw absent(component: Separator.fraction)
+        }; return character
+    }
+    
+    @inlinable static func grouping(in formatter: NumberFormatter) throws -> Character {
+        guard let character = formatter.groupingSeparator.first else {
+            throw absent(component: Separator.grouping)
+        }; return character
+    }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Errors
+    //=------------------------------------------------------------------------=
+    
+    @inlinable static func absent<T: Unicodeable>(component: T) -> Info {
+        Info(["unable to fetch localized character for", .mark(component)])
+    }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Helpers
+    //=------------------------------------------------------------------------=
+    
+    @inlinable static func signable(character: Character) -> Bool {
+        character.isPunctuation || character.isMathSymbol
+    }
+}
+
+//=----------------------------------------------------------------------------=
+// MARK: + Cache
+//=----------------------------------------------------------------------------=
+
+extension Region {
     
     //=------------------------------------------------------------------------=
     // MARK: Initializers - Cache
@@ -110,24 +166,54 @@ import Foundation
         // MARK: Make A New Instance And Save It
         //=--------------------------------------=
         } else {
-            let instance = Region(locale)
+            let instance = Region.defaultable(locale)
             cache.setObject(instance, forKey: key)
             return instance
+        }
+    }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Helpers
+    //=------------------------------------------------------------------------=
+    
+    @inlinable static func defaultable(_ locale: Locale) -> Region {
+        //=--------------------------------------=
+        // MARK: Attempt
+        //=--------------------------------------=
+        attempt: do {
+            return try Region(locale)
+        //=--------------------------------------=
+        // MARK: Default To ASCII, en_US
+        //=--------------------------------------=
+        } catch let reason {
+            Info.print(["region set to en_US:", .note(reason)])
+            return Region.en_US
         }
     }
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: + Parse: Number
+// MARK: + Parse
 //=----------------------------------------------------------------------------=
 
 extension Region {
 
     //=------------------------------------------------------------------------=
+    // MARK: Number
+    //=------------------------------------------------------------------------=
+    
+    /// To use this method, all formatting characters must be marked as virtual.
+    @inlinable func number<V: Value>(in snapshot: Snapshot, as value: V.Type) throws -> Number {
+        let characters = snapshot.lazy.filter(\.nonvirtual).map(\.character)
+        return try .init(characters: characters, integer: V.isInteger, unsigned: V.isUnsigned,
+        signs: signs.components, digits: digits.components, separators: separators.components)
+    }
+
+    //=------------------------------------------------------------------------=
     // MARK: Value
     //=------------------------------------------------------------------------=
     
-    @inlinable func value<F: Format>(in number:  Number, as format: F) throws -> F.Value {
+    @inlinable func value<F: Format>(in number: Number, as format: F) throws -> F.Value {
         var characters = String()
         //=--------------------------------------=
         // MARK: Sign
@@ -155,23 +241,5 @@ extension Region {
         // MARK: Characters -> Value
         //=--------------------------------------=
         return try format.parse(characters)
-    }
-}
-
-//=----------------------------------------------------------------------------=
-// MARK: + Parse: Snapshot
-//=----------------------------------------------------------------------------=
-
-extension Region {
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Number
-    //=------------------------------------------------------------------------=
-    
-    /// To use this method, all formatting characters must be marked as virtual.
-    @inlinable func number<V: Value>(in snapshot: Snapshot, as value: V.Type) throws -> Number {
-        let characters = snapshot.lazy.filter(\.nonvirtual).map(\.character)
-        return try .init(characters: characters, integer: V.isInteger, unsigned: V.isUnsigned,
-        signs: signs.components, digits: digits.components, separators: separators.components)
     }
 }
