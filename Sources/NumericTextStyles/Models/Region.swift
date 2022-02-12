@@ -61,6 +61,7 @@ import Support
         self.separators = separators
     }
     
+    #warning("Remove ascii parts probably.")
     //=------------------------------------------------------------------------=
     // MARK: Initializers - Locale
     //=------------------------------------------------------------------------=
@@ -68,6 +69,9 @@ import Support
     /// Creates an uncached region. Unit tests assert that it always succeeds.
     @inlinable convenience init(_ locale: Locale) throws {
         let ascii = Self.en_US
+        //=--------------------------------------=
+        // MARK: Formatter
+        //=--------------------------------------=
         let formatter = NumberFormatter()
         formatter.locale = locale
         formatter.numberStyle = .decimal
@@ -91,7 +95,7 @@ import Support
         try separators.link(Self.fraction(in: formatter), .fraction)
         try separators.link(Self.grouping(in: formatter), .grouping)
         //=--------------------------------------=
-        // MARK: Set
+        // MARK: Initialize
         //=--------------------------------------=
         self.init(locale: locale, signs: signs, digits: digits, separators: separators)
     }

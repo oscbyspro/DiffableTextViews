@@ -10,6 +10,8 @@
 import DiffableTextViews
 import Support
 
+#warning("Needs a method to localize an ASCII character.")
+#warning("Reader needs this method because both kinds of separators should map to fraction.")
 //*============================================================================*
 // MARK: * Reader
 //*============================================================================*
