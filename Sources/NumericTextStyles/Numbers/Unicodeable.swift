@@ -13,14 +13,7 @@
 
 /// An object representing an ASCII character by its UInt8 unicode scalar value.
 @usableFromInline protocol Unicodeable:
-RawRepresentable, Hashable, CaseIterable, TextOutputStreamable where RawValue == UInt8 {
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Constants
-    //=------------------------------------------------------------------------=
-    
-    @inlinable static var ascii: [Character: Self] { get }
-}
+RawRepresentable, Hashable, CaseIterable, TextOutputStreamable where RawValue == UInt8 { }
 
 //=----------------------------------------------------------------------------=
 // MARK: + Details
@@ -50,16 +43,5 @@ extension Unicodeable {
     
     @inlinable public func write<T: TextOutputStream>(to target: inout T) {
         unicode.write(to: &target)
-    }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Helpers
-    //=------------------------------------------------------------------------=
-    
-    @inlinable static func ascii() -> [Character: Self] {
-        allCases.reduce(into: [:]) {
-            result,unicodeable in
-            result[unicodeable.character] = unicodeable
-        }
     }
 }

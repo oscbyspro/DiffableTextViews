@@ -14,7 +14,7 @@
 /// A mapping model between components and characters.
 ///
 /// - It requires that each component is bidirectionally mapped to a character.
-/// - To ensure an available input method, relevant ASCII must also map to a component.
+/// - To ensure at least one available input method, relevant ASCII must be mappable.
 ///
 @usableFromInline struct Lexicon<Component: Hashable> {
     
@@ -33,16 +33,15 @@
         self.components = components
         self.characters = characters
     }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Initializers - ASCII
-    //=------------------------------------------------------------------------=
-    
+
+    /// Creates a new object with bidirectional ASCII character-component links.
     @inlinable init(ascii: Component.Type) where Component: Unicodeable {
         let components = ascii.allCases; let count = components.count
         self.components = [:]; self.components.reserveCapacity(count)
         self.characters = [:]; self.characters.reserveCapacity(count)
-        
+        //=--------------------------------------=
+        // MARK: Links
+        //=--------------------------------------=
         for component in components {
             link(component.character, component)
         }

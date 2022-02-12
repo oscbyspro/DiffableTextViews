@@ -43,10 +43,4 @@
     @inlinable var numericValue: UInt8 {
         rawValue - Self.zero.rawValue
     }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Constants
-    //=------------------------------------------------------------------------=
-    
-    @usableFromInline static let ascii: [Character: Self] = ascii()
 }
