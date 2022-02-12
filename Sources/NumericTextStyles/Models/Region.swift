@@ -185,7 +185,7 @@ extension Region {
         attempt: do {
             return try Region(locale)
         //=--------------------------------------=
-        // MARK: Default To ASCII, en_US
+        // MARK: Default To Region.en_US (ASCII)
         //=--------------------------------------=
         } catch let reason {
             Info.print(["Region set to en_US:", .note(reason)])

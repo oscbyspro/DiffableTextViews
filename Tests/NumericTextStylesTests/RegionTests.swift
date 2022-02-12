@@ -43,7 +43,7 @@ extension RegionTests {
     //=------------------------------------------------------------------------=
         
     func testEachLocaleMapsToARegion() {
-        XCTAssertEqual(locales.count, regions.count)
+        XCTAssertEqual(regions.count, locales.count)
     }
     
     func testThatThereAreManyRegions() {
