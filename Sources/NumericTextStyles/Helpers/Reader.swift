@@ -63,7 +63,7 @@ import Support
         } else if let component = ascii.digits[symbol.character] {
             symbol.character = region.digits[component]
         } else if let _ = ascii.separators[symbol.character] {
-            symbol.character = region.separators[.fraction]
+            symbol.character = region.separators[Separator.fraction]
         } else { return }
         //=--------------------------------------=
         // MARK: Localize - Update
