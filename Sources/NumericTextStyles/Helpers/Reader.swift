@@ -32,13 +32,7 @@ import Support
         self.region = region
         self.changes = changes
     }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Accessors
-    //=------------------------------------------------------------------------=
-    
-    @inlinable var ascii: Region { .en_US }
-    
+
     //=------------------------------------------------------------------------=
     // MARK: Autocorrect
     //=------------------------------------------------------------------------=
@@ -54,25 +48,42 @@ import Support
         //=--------------------------------------=
         // MARK: Localize
         //=--------------------------------------=
-        guard var symbol = changes.replacement.first else { return }
-        //=--------------------------------------=
-        // MARK: Localize - Match
-        //=--------------------------------------=
-        if let component = ascii.signs[symbol.character] {
-            symbol.character = region.signs[component]
-        } else if let component = ascii.digits[symbol.character] {
-            symbol.character = region.digits[component]
-        } else if let _ = ascii.separators[symbol.character] {
-            symbol.character = region.separators[Separator.fraction]
-        } else { return }
-        //=--------------------------------------=
-        // MARK: Localize - Update
-        //=--------------------------------------=
-        self.changes.replacement = Snapshot([symbol])
+        guard let localized = changes.replacement.first.flatMap(localized) else { return }
+        self.changes.replacement = Snapshot([localized])
     }
     
     //=------------------------------------------------------------------------=
-    // MARK: Commands
+    // MARK: Helpers
+    //=------------------------------------------------------------------------=
+    
+    @inlinable func localized(input: Symbol) -> Symbol? {
+        let ascii = Region.en_US
+        var character = input.character
+        //=--------------------------------------=
+        // MARK: Match
+        //=--------------------------------------=
+        if let component = ascii.signs[character] {
+            character = region.signs[component]
+        } else if let component = ascii.digits[character] {
+            character = region.digits[component]
+        } else if let _ = ascii.separators[character] {
+            character = region.separators[Separator.fraction]
+        } else { return nil }
+        //=--------------------------------------=
+        // MARK: Return
+        //=--------------------------------------=
+        return Symbol(character, as: input.attribute)
+    }
+}
+
+//=----------------------------------------------------------------------------=
+// MARK: + Commands
+//=----------------------------------------------------------------------------=
+
+extension Reader {
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Sign
     //=------------------------------------------------------------------------=
     
     /// Interprets a single sign character as a: set sign command.
