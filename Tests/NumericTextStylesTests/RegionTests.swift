@@ -130,27 +130,11 @@ extension RegionTests {
 //=----------------------------------------------------------------------------=
 
 extension RegionTests {
+    
     //=------------------------------------------------------------------------=
     // MARK: Tests
     //=------------------------------------------------------------------------=
-    
-    /// Asserts that all relevant ASCII characters are mapped to a component.
-    func testASCII() {
-        func test<Component: Hashable>(lexicon: Lexicon<Component>, ascii: String) {
-            for character in ascii {
-                XCTAssertNotNil(lexicon[character])
-            }
-        }
-        //=--------------------------------------=
-        // MARK: Regions
-        //=--------------------------------------=
-        for region in regions {
-            test(lexicon: region.signs,      ascii: "+-")
-            test(lexicon: region.digits,     ascii: "0123456789")
-            test(lexicon: region.separators, ascii: ".,")
-        }
-    }
-    
+
     /// Asserts that all components are bidirectionally mapped to a character.
     func testBidirectionalMaps() {
         func test<Component: Hashable & CaseIterable>(lexicon: Lexicon<Component>) {
