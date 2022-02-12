@@ -18,12 +18,16 @@ import Support
 @usableFromInline final class Region {
     
     //=------------------------------------------------------------------------=
-    // MARK: Constants
+    // MARK: Cache
     //=------------------------------------------------------------------------=
     
     @usableFromInline static let cache: NSCache<NSString, Region> = {
         let cache = NSCache<NSString, Region>(); cache.countLimit = 3; return cache
     }()
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Instances
+    //=------------------------------------------------------------------------=
     
     @usableFromInline static let en_US: Region = {
         let identifier = "en_US"
@@ -60,10 +64,7 @@ import Support
     // MARK: Initializers - Locale
     //=------------------------------------------------------------------------=
     
-    /// Creates an uncached region.
-    ///
-    /// It force unwraps characters, so its validity should be asserted by unit tests for all locales.
-    ///
+    /// Creates an uncached region. Unit tests assert that it always succeeds.
     @inlinable convenience init(_ locale: Locale) throws {
         let ascii = Self.en_US
         let formatter = NumberFormatter()
@@ -127,6 +128,14 @@ import Support
             throw absent(component: Separator.grouping)
         }; return character
     }
+
+    //=------------------------------------------------------------------------=
+    // MARK: Helpers
+    //=------------------------------------------------------------------------=
+    
+    @inlinable static func signable(character: Character) -> Bool {
+        character.isPunctuation || character.isMathSymbol
+    }
     
     //=------------------------------------------------------------------------=
     // MARK: Errors
@@ -134,14 +143,6 @@ import Support
     
     @inlinable static func absent<T: Unicodeable>(component: T) -> Info {
         Info(["unable to fetch localized character for", .mark(component)])
-    }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Helpers
-    //=------------------------------------------------------------------------=
-    
-    @inlinable static func signable(character: Character) -> Bool {
-        character.isPunctuation || character.isMathSymbol
     }
 }
 
@@ -186,7 +187,7 @@ extension Region {
         // MARK: Default To ASCII, en_US
         //=--------------------------------------=
         } catch let reason {
-            Info.print(["region set to en_US:", .note(reason)])
+            Info.print(["Region set to en_US:", .note(reason)])
             return Region.en_US
         }
     }
