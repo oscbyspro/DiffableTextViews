@@ -210,15 +210,23 @@ extension NumericTextStyle {
     /// Assumes that characters contains at least one content character.
     @inlinable func snapshot(characters: String) -> Snapshot {
         characters.reduce(into: Snapshot()) { snapshot, character in
+            let attribute: Attribute
+            //=----------------------------------=
+            // MARK: Match
+            //=----------------------------------=
             if let _ = region.digits[character] {
-                snapshot.append(Symbol(character, as: .content))
+                attribute = .content
             } else if let separator = region.separators[character] {
-                snapshot.append(Symbol(character, as: separator == .fraction ? .removable : .phantom))
+                attribute = separator == .fraction ? .removable : .phantom
             } else if let _ = region.signs[character] {
-                snapshot.append(Symbol(character, as: .phantom.subtracting(.virtual)))
+                attribute = .phantom.subtracting(.virtual)
             } else {
-                snapshot.append(Symbol(character, as: .phantom))
+                attribute = .phantom
             }
+            //=----------------------------------=
+            // MARK: Insert
+            //=----------------------------------=
+            snapshot.append(Symbol(character, as: attribute))
         }
     }
 }
