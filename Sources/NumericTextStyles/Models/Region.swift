@@ -186,9 +186,7 @@ extension Region {
         //=--------------------------------------=
         // MARK: Instantiate And Cache Constants
         //=--------------------------------------=
-        let en_US = en_US
-        let en_US_key = NSString(string: en_US.locale.identifier)
-        self.cache.setObject(en_US, forKey: en_US_key)
+        self.cache.setObject(en_US, forKey: NSString(string: en_US.locale.identifier))
     }
     
     //=------------------------------------------------------------------------=
