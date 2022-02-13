@@ -27,38 +27,40 @@ import Support
     //=------------------------------------------------------------------------=
     // MARK: Initializers
     //=------------------------------------------------------------------------=
-            
+    
     @inlinable init(_ changes: Changes, in region: Region) {
         self.region = region
         self.changes = changes
     }
 
     //=------------------------------------------------------------------------=
-    // MARK: Autocorrect
+    // MARK: Accessors
     //=------------------------------------------------------------------------=
     
-    /// Validates input size and localizes replacement character.
-    @inlinable mutating func autocorrect() throws {
-        //=--------------------------------------=
-        // MARK: Count
-        //=--------------------------------------=
-        guard changes.replacement.count <= 1 else {
-            throw Info([.mark(changes.replacement.characters), "exceeded character size limit", .mark(1)])
-        }
-        //=--------------------------------------=
-        // MARK: Localize
-        //=--------------------------------------=
-        guard let localized = changes.replacement.first.flatMap(localized) else { return }
-        self.changes.replacement = Snapshot([localized])
+    @inlinable var ascii: Region { .en_US }
+}
+
+//=----------------------------------------------------------------------------=
+// MARK: + Translate
+//=----------------------------------------------------------------------------=
+
+extension Reader {
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Inputs
+    //=------------------------------------------------------------------------=
+    
+    @inlinable mutating func translateSingleCharacterInput() {
+        guard changes.replacement.count == 1 else { return }
+        self.changes.replacement = Snapshot(changes.replacement.map(translateInput))
     }
     
     //=------------------------------------------------------------------------=
-    // MARK: Helpers
+    // MARK: Symbol
     //=------------------------------------------------------------------------=
-    
-    @inlinable func localized(input: Symbol) -> Symbol? {
-        let ascii = Region.en_US
-        var character = input.character
+
+    @inlinable func translateInput(symbol: Symbol) -> Symbol {
+        var character = symbol.character
         //=--------------------------------------=
         // MARK: Match
         //=--------------------------------------=
@@ -66,34 +68,30 @@ import Support
             character = region.signs[component]
         } else if let component = ascii.digits[character] {
             character = region.digits[component]
-        } else if let _ = ascii.separators[character] {
-            character = region.separators[Separator.fraction]
-        } else { return nil }
+        } else if ascii.separators[character] != nil || region.separators[character] != nil {
+            character = region.separators[.fraction]
+        }
         //=--------------------------------------=
-        // MARK: Return
+        // MARK: Symbol
         //=--------------------------------------=
-        return Symbol(character, as: input.attribute)
+        return Symbol(character, as: symbol.attribute)
     }
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: + Commands
+// MARK: Commands
 //=----------------------------------------------------------------------------=
 
 extension Reader {
     
     //=------------------------------------------------------------------------=
-    // MARK: Sign
+    // MARK: Single Sign Input
     //=------------------------------------------------------------------------=
     
     /// Interprets a single sign character as a: set sign command.
-    @inlinable mutating func consumeSignInput() -> ((inout Number) -> Void)? {
+    @inlinable mutating func consumeSingleSignInput() -> Sign? {
         guard changes.replacement.count == 1 else { return nil } // snapshot.count is O(1)
         guard let sign = region.signs[changes.replacement.first!.character] else { return nil }
-        //=--------------------------------------=
-        // MARK: Set Sign Command Found
-        //=--------------------------------------=
-        self.changes.replacement.removeAll()
-        return { number in number.sign = sign }
+        self.changes.replacement.removeAll(); return sign
     }
 }

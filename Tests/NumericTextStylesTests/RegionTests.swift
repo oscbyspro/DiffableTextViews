@@ -38,7 +38,7 @@ final class RegionTests: XCTestCase {
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: + Assumptions
+// MARK: + Invalid Assumptions List
 //=----------------------------------------------------------------------------=
 
 extension RegionTests {

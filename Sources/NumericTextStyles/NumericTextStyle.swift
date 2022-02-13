@@ -118,8 +118,7 @@ extension NumericTextStyle {
         //=--------------------------------------=
         // MARK: Style
         //=--------------------------------------=
-        let sign = sign(number: number)
-        style = style.sign(style: sign)
+        style = style.sign(style: sign(number: number))
         //=--------------------------------------=
         // MARK: Style -> Characters
         //=--------------------------------------=
@@ -146,16 +145,16 @@ extension NumericTextStyle {
     @inlinable public func merge(changes: Changes) throws -> Commit<Value> {
         var reader = Reader(changes, in: region)
         //=--------------------------------------=
-        // MARK: Reader
+        // MARK: Commands, Proposal
         //=--------------------------------------=
-        try reader.autocorrect()
-        let processSignInput = reader.consumeSignInput()
+        reader.translateSingleCharacterInput()
+        let sign = reader.consumeSingleSignInput()
         let proposal = reader.changes.proposal()
         //=--------------------------------------=
         // MARK: Number
         //=--------------------------------------=
         var number = try region.number(in: proposal, as: Value.self)
-        processSignInput?(&number)
+        sign.map({ number.sign = $0 })
         //=--------------------------------------=
         // MARK: Number - Validate
         //=--------------------------------------=
@@ -180,10 +179,10 @@ extension NumericTextStyle {
         //=--------------------------------------=
         // MARK: Style
         //=--------------------------------------=
-        let sign = sign(number: number)
-        let precision = precision.interactive(count: count)
-        let separator = try separator(number: number, location: location)
-        let style = format.style(precision: precision, separator: separator, sign: sign)
+        let style = try format.style(
+        precision: precision.interactive(count: count),
+        separator: separator(number: number, location: location),
+        sign: self.sign(number: number))
         //=--------------------------------------=
         // MARK: Style -> Characters
         //=--------------------------------------=
