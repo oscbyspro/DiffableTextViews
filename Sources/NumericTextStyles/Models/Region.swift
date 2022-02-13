@@ -21,6 +21,8 @@ import Support
     // MARK: Cache
     //=------------------------------------------------------------------------=
     
+    @usableFromInline static private(set) var cacheHasBeenSetup = false
+
     @usableFromInline static let cache: NSCache<NSString, Region> = {
         let cache = NSCache<NSString, Region>(); cache.countLimit = 3; return cache
     }()
@@ -29,16 +31,11 @@ import Support
     // MARK: Instances
     //=------------------------------------------------------------------------=
     
-    @usableFromInline static let en_US: Region = {
-        let identifier = "en_US"
-        let region = Region(
-        locale: Locale(identifier: identifier),
+    @usableFromInline static let en_US = Region(
+        locale: Locale(identifier: "en_US"),
         signs: Lexicon(ascii: Sign.self),
         digits: Lexicon(ascii: Digit.self),
         separators: Lexicon(ascii: Separator.self))
-        cache.setObject(region, forKey: NSString(string: identifier))
-        return region
-    }()
     
     //=------------------------------------------------------------------------=
     // MARK: State
@@ -159,6 +156,10 @@ extension Region {
     //=------------------------------------------------------------------------=
     
     @inlinable static func cached(_ locale: Locale) -> Region {
+        setup()
+        //=--------------------------------------=
+        // MARK: Key
+        //=--------------------------------------=
         let key = NSString(string: locale.identifier)
         //=--------------------------------------=
         // MARK: Search In Cache
@@ -170,9 +171,24 @@ extension Region {
         //=--------------------------------------=
         } else {
             let instance = Region.defaultable(locale)
-            cache.setObject(instance, forKey: key)
+            self.cache.setObject(instance, forKey: key)
             return instance
         }
+    }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Setup
+    //=------------------------------------------------------------------------=
+    
+    @inlinable static func setup() {
+        guard !cacheHasBeenSetup else { return }
+        self.cacheHasBeenSetup = true
+        //=--------------------------------------=
+        // MARK: Instantiate And Cache Constants
+        //=--------------------------------------=
+        let en_US = en_US
+        let en_US_key = NSString(string: en_US.locale.identifier)
+        self.cache.setObject(en_US, forKey: en_US_key)
     }
     
     //=------------------------------------------------------------------------=
