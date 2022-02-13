@@ -179,9 +179,9 @@ extension NumericTextStyle {
         //=--------------------------------------=
         // MARK: Style
         //=--------------------------------------=
-        let style = try format.style(
+        let style = format.style(
         precision: precision.interactive(count: count),
-        separator: separator(number: number, location: location),
+        separator: try separator(number: number, location: location),
         sign: self.sign(number: number))
         //=--------------------------------------=
         // MARK: Style -> Characters
