@@ -62,11 +62,12 @@ struct PatternScreen: View {
             Text(visible ? "Visible" : "Hidden")
                 .bold()
                 .frame(maxWidth: .infinity)
-                .padding()
                 .contentShape(Rectangle())
+                .animation(nil, value: visible)
         }
-        .background(Color.gray.opacity(0.125))
-        .background(Material.ultraThick)
+        .tint(Color.gray.opacity(2/3))
+        .background(Rectangle().strokeBorder(.gray))
+        .animation(.default, value: visible)
         .toggleStyle(.button)
     }
     
