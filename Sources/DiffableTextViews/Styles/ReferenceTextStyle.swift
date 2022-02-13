@@ -23,7 +23,7 @@ public final class ReferenceTextStyle<Style: DiffableTextStyle>: WrapperTextStyl
     // MARK: State
     //=------------------------------------------------------------------------=
     
-    @usableFromInline var style: Style
+    public var style: Style
     
     //=------------------------------------------------------------------------=
     // MARK: Initializers

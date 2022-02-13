@@ -21,8 +21,9 @@ struct PatternScreen: View {
     // MARK: State
     //=------------------------------------------------------------------------=
     
-    @State private var value = String()
+    @State private var value = "12000345"
     @State private var style = Style.phone
+    @State private var visible: Bool = true
 
     //=------------------------------------------------------------------------=
     // MARK: Body
@@ -43,12 +44,30 @@ struct PatternScreen: View {
     var controls: some View {
         Scroller {
             diffableTextStyles
+            hiddenToggleSwitch
             Spacer()
         }
     }
     
+    //=------------------------------------------------------------------------=
+    // MARK: Body - Controls - Components
+    //=------------------------------------------------------------------------=
+    
     var diffableTextStyles: some View {
         Options($style)
+    }
+    
+    var hiddenToggleSwitch: some View {
+        Toggle(isOn: $visible) {
+            Text(visible ? "Visible" : "Hidden")
+                .bold()
+                .frame(maxWidth: .infinity)
+                .padding()
+                .contentShape(Rectangle())
+        }
+        .background(Color.gray.opacity(0.125))
+        .background(Material.ultraThick)
+        .toggleStyle(.button)
     }
     
     //=------------------------------------------------------------------------=
@@ -56,13 +75,25 @@ struct PatternScreen: View {
     //=------------------------------------------------------------------------=
     
     var examples: some View {
-        Example($value, style: Self.phoneNumberStyle)
+        Example($value, style: pattern)
             .diffableTextField_onSetup {
                 proxy in
-                proxy.keyboard(.phonePad)
+                proxy.keyboard(.numberPad)
             }
     }
     
+    var pattern: PatternTextStyle<String>.Reference.Equals<[AnyHashable]> {
+        var pattern: PatternTextStyle<String>.Reference
+        
+        switch style {
+        case .card: pattern = Self.cardNumberStyle
+        case .phone: pattern = Self.phoneNumberStyle
+        }
+        
+        pattern.style = pattern.style.hidden(!visible)
+        return pattern.equals([style, visible])
+    }
+
     //=------------------------------------------------------------------------=
     // MARK: Caches
     //=------------------------------------------------------------------------=
@@ -70,7 +101,12 @@ struct PatternScreen: View {
     static let phoneNumberStyle = PatternTextStyle<String>
         .pattern("+## (###) ###-##-##")
         .placeholder("#" as Character) { $0.isASCII && $0.isNumber }
-        .constant().reference()
+        .reference()
+    
+    static let cardNumberStyle = PatternTextStyle<String>
+        .pattern("#### #### #### ####")
+        .placeholder("#" as Character) { $0.isASCII && $0.isNumber }
+        .reference()
     
     //*========================================================================*
     // MARK: * Pattern

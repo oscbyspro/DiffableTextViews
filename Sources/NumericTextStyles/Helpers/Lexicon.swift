@@ -32,6 +32,10 @@
         self.components = components
         self.characters = characters
     }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Initializers - Unicodeable
+    //=------------------------------------------------------------------------=
 
     /// Creates a new object with bidirectional ASCII character-component links.
     @inlinable init(ascii: Component.Type) where Component: Unicodeable {

@@ -159,7 +159,7 @@ struct DiffablePhoneTextField: View {
         DiffableTextField($number, style: Self.style)
             .diffableTextField_onSetup {
                 proxy in
-                proxy.keyboard(.phonePad)
+                proxy.keyboard(.numberPad)
             }
     }
     
