@@ -94,7 +94,7 @@ extension PatternTextStyle {
     //=------------------------------------------------------------------------=
     
     /// - Mismatches are cut.
-    @inlinable public func commit(value: Value) -> Commit<Value> {
+    @inlinable public func interpret(value: Value) -> Commit<Value> {
         var elements = Value(); var snapshot = Snapshot()
         //=--------------------------------------=
         // MARK: Loop
@@ -201,6 +201,6 @@ extension PatternTextStyle {
         //=--------------------------------------=
         // MARK: Value -> Commit
         //=--------------------------------------=
-        return commit(value: value)
+        return interpret(value: value)
     }
 }

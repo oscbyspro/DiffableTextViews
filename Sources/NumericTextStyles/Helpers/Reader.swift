@@ -51,15 +51,15 @@ extension Reader {
     
     @inlinable mutating func translateSingleCharacterInput() {
         guard changes.replacement.count == 1 else { return }
-        self.changes.replacement = Snapshot(changes.replacement.map(translateInput))
+        self.changes.replacement = Snapshot(changes.replacement.map(translate))
     }
     
     //=------------------------------------------------------------------------=
     // MARK: Symbol
     //=------------------------------------------------------------------------=
 
-    @inlinable func translateInput(symbol: Symbol) -> Symbol {
-        var character = symbol.character
+    @inlinable func translate(input: Symbol) -> Symbol {
+        var character = input.character
         //=--------------------------------------=
         // MARK: Match
         //=--------------------------------------=
@@ -73,7 +73,7 @@ extension Reader {
         //=--------------------------------------=
         // MARK: Symbol
         //=--------------------------------------=
-        return Symbol(character, as: symbol.attribute)
+        return Symbol(character, as: input.attribute)
     }
 }
 

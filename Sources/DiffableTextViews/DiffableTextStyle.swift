@@ -40,8 +40,8 @@ public protocol DiffableTextStyle: Equatable {
     /// Transforms the value into formatted text when the view is idle.
     @inlinable func format(value: Value) -> String
 
-    /// Transforms the value into new commit when the view is active.
-    @inlinable func commit(value: Value) -> Commit<Value>
+    /// Transforms the value into a commit when the view is active.
+    @inlinable func interpret(value: Value) -> Commit<Value>
 
     //=------------------------------------------------------------------------=
     // MARK: Downstream

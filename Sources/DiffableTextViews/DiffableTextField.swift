@@ -216,7 +216,7 @@ public struct DiffableTextField<Style: UIKitDiffableTextStyle>: UIViewRepresenta
             // MARK: Active
             //=------------------------------=
             if downstream.active {
-                self.context.active(style: style, commit: style.commit(value: value))
+                self.context.active(style: style, commit: style.interpret(value: value))
                 self.push()
             //=------------------------------=
             // MARK: Inactive

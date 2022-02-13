@@ -93,7 +93,7 @@ extension NumericTextStyle {
     // MARK: Upstream
     //=------------------------------------------------------------------------=
     
-    @inlinable public func commit(value: Value) -> Commit<Value> {
+    @inlinable public func interpret(value: Value) -> Commit<Value> {
         var style = format.style(precision: precision.active())
         var value = value
         //=--------------------------------------=

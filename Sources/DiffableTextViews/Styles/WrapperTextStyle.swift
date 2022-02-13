@@ -53,8 +53,8 @@ extension WrapperTextStyle {
     }
     
     @inlinable @inline(__always)
-    public func commit(value: Style.Value) -> Commit<Style.Value> {
-        style.commit(value: value)
+    public func interpret(value: Style.Value) -> Commit<Style.Value> {
+        style.interpret(value: value)
     }
     
     //=------------------------------------------------------------------------=
