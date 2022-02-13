@@ -24,7 +24,7 @@
 public protocol NumericTextValue: Comparable {
     
     //=------------------------------------------------------------------------=
-    // MARK: Static
+    // MARK: Kind
     //=------------------------------------------------------------------------=
     
     @inlinable static var isInteger:  Bool { get }
@@ -52,7 +52,7 @@ public protocol NumericTextFloatingPointValue: NumericTextValue { }
 extension NumericTextFloatingPointValue {
     
     //=------------------------------------------------------------------------=
-    // MARK: Static
+    // MARK: Kind
     //=------------------------------------------------------------------------=
     
     @inlinable public static var isInteger: Bool { false }
@@ -94,7 +94,7 @@ public protocol NumericTextIntegerValue: NumericTextValue { }
 extension NumericTextIntegerValue {
     
     //=------------------------------------------------------------------------=
-    // MARK: Static
+    // MARK: Kind
     //=------------------------------------------------------------------------=
     
     @inlinable public static var isInteger: Bool { true }
@@ -136,7 +136,7 @@ public protocol NumericTextSignedValue: NumericTextValue { }
 extension NumericTextSignedValue {
     
     //=------------------------------------------------------------------------=
-    // MARK: Static
+    // MARK: Kind
     //=------------------------------------------------------------------------=
     
     @inlinable public static var isUnsigned: Bool { false }
@@ -155,7 +155,7 @@ public protocol NumericTextUnsignedValue: NumericTextValue { }
 extension NumericTextUnsignedValue {
     
     //=------------------------------------------------------------------------=
-    // MARK: Static
+    // MARK: Kind
     //=------------------------------------------------------------------------=
     
     @inlinable public static var isUnsigned: Bool { true }
