@@ -15,6 +15,7 @@ import PatternTextStyles
 // MARK: * PatternScreenExample
 //*============================================================================*
 
+/// An examples view that observes frequent changes.
 struct PatternScreenExample<Style: UIKitDiffableTextStyle>: View where Style.Value == String {
     typealias Context = PatternScreenContext
     
@@ -39,10 +40,8 @@ struct PatternScreenExample<Style: UIKitDiffableTextStyle>: View where Style.Val
     //=------------------------------------------------------------------------=
     
     var body: some View {
-        Example(value.binding, style: style)
-            .diffableTextField_onSetup {
-                proxy in
-                proxy.keyboard(.numberPad)
-            }
+        Example(value.binding, style: style).diffableTextField_onSetup {
+            proxy in proxy.keyboard(.numberPad)
+        }
     }
 }

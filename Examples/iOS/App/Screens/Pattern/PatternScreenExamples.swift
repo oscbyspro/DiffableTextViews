@@ -14,6 +14,7 @@ import PatternTextStyles
 // MARK: * PatternScreenExamples
 //*============================================================================*
 
+/// An intermediate examples view that observes infrequent changes.
 struct PatternScreenExamples: View {
     typealias Style = PatternTextStyle<String>
     typealias Context = PatternScreenContext
