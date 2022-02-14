@@ -18,15 +18,6 @@ import NumericTextStyles
 struct NumericScreen: View {
     typealias Context = NumericScreenContext
     typealias Value = Decimal
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Static
-    //=------------------------------------------------------------------------=
-    
-    private static let exponentsLimit = Value.precision.value
-    private static let exponentsLimits = Interval((-exponentsLimit, exponentsLimit))
-    private static let integerLimits = Interval((1, Value.precision.integer))
-    private static let fractionLimits = Interval((0, Value.precision.fraction))
 
     //=------------------------------------------------------------------------=
     // MARK: State
