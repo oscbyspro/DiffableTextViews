@@ -32,17 +32,27 @@ struct Action: View {
     }
     
     //=------------------------------------------------------------------------=
+    // MARK: Measurements
+    //=------------------------------------------------------------------------=
+    
+    var height: CGFloat { 24 }
+    
+    //=------------------------------------------------------------------------=
     // MARK: Body
     //=------------------------------------------------------------------------=
     
     var body: some View {
-        Button(action: action) {
-            Text(title)
-                .padding(.vertical)
-                .frame(maxWidth: .infinity)
-        }
-        .tint(Color.gray.opacity(2/3))
-        .buttonStyle(.borderedProminent)
+        Button(action: action, label: label)
+            .tint(Color.gray.opacity(2/3))
+            .buttonStyle(.borderedProminent)
+    }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Components
+    //=------------------------------------------------------------------------=
+    
+    func label() -> some View {
+        Text(title).frame(maxWidth: .infinity, minHeight: height, maxHeight: height)
     }
 }
 

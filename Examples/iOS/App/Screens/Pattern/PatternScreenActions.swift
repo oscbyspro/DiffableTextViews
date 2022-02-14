@@ -36,10 +36,10 @@ struct PatternScreenActions: View {
     
     var body: some View {
         HStack {
-            Action("Clear", action: context.clear)
-            Action("Pop", action: context.popLast)
-            Action("@", action: context.appendUppercased)
-            Action("#", action: context.appendASCIIDigit)
+            Action("clear", action: context.clear)
+            Action("pop", action: context.popLast)
+            Action("abc", action: context.appendUppercased)
+            Action("123", action: context.appendASCIIDigit)
         }
     }
 }
