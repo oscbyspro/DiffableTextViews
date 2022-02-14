@@ -14,6 +14,7 @@ import NumericTextStyles
 // MARK: * NumericScreenExample
 //*============================================================================*
 
+/// An examples view that observes frequent changes,
 struct NumericScreenExample<Format: NumericTextFormat>: View where Format.FormatInput == NumericScreenContext.Value {
     typealias Value = Format.FormatInput
     typealias Context = NumericScreenContext

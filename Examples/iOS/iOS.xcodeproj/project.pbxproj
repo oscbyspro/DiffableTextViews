@@ -194,9 +194,9 @@
 			isa = PBXGroup;
 			children = (
 				55F2783827AD7C1C001400D7 /* NumericScreen.swift */,
-				55FD23D427BA28B8008F65E1 /* NumericScreenExamples.swift */,
-				55FD23D227BA232F008F65E1 /* NumericScreenExample.swift */,
 				55FD23CE27BA1E20008F65E1 /* NumericScreenContext.swift */,
+				55FD23D227BA232F008F65E1 /* NumericScreenExample.swift */,
+				55FD23D427BA28B8008F65E1 /* NumericScreenExamples.swift */,
 				55FD23D027BA2028008F65E1 /* NumericScreenSliders.swift */,
 				55F2783B27AD7C39001400D7 /* NumericScreenWheels.swift */,
 			);

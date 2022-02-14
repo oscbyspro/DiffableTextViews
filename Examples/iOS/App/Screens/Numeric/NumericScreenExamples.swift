@@ -14,6 +14,7 @@ import NumericTextStyles
 // MARK: * NumericScreenExamples
 //*============================================================================*
 
+/// An intermediate examples view that observes infrequent changes.
 struct NumericScreenExamples: View {
     typealias Kind = NumericScreenContext.Kind
     typealias Number = Decimal.FormatStyle
