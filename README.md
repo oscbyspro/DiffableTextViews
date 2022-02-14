@@ -49,7 +49,7 @@ import PatternTextStyles
 
 👷‍♂️🛠🚧🚧🧱🏗🧱🚧🚧⏳
 
-The iOS example project provides quick-and-easy-to-use customization options.
+The iOS example project provides quick-and-easy-to-use customization.
 
 | Numeric | Pattern |
 |---------|---------|
