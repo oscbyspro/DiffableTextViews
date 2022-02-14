@@ -16,7 +16,7 @@ import NumericTextStyles
 //*============================================================================*
 
 struct NumericScreen: View {
-    typealias ScreenContext = NumericScreenContext
+    typealias Context = NumericScreenContext
     typealias Value = Decimal
     
     //=------------------------------------------------------------------------=
@@ -32,8 +32,8 @@ struct NumericScreen: View {
     // MARK: State
     //=------------------------------------------------------------------------=
     
-    @EnvironmentObject private var context: Context
-    @StateObject private var screen = NumericScreenContext()
+    @StateObject private var context = Context()
+    @EnvironmentObject private var storage: Storage
     
     //=------------------------------------------------------------------------=
     // MARK: Body
@@ -67,23 +67,23 @@ struct NumericScreen: View {
     //=------------------------------------------------------------------------=
 
     var diffableTextStyles: some View {
-        Segments(screen.kind.binding)
+        Segments(context.kind.binding)
     }
     
     var customizationWheels: some View {
-        NumericScreenWheels(screen.kind.value, locale: screen.locale.binding, currency: screen.currency.binding)
+        NumericScreenWheels(context)
     }
     
     var boundsIntervalSliders: some View {
-        NumericScreenSliders("Bounds length (9s)", values: screen.bounds, in: ScreenContext.boundsLimits)
+        NumericScreenSliders("Bounds length (9s)", values: context.bounds, in: Context.boundsLimits)
     }
     
     var integerIntervalSliders: some View {
-        NumericScreenSliders("Integer digits length", values: screen.integer, in: ScreenContext.integerLimits)
+        NumericScreenSliders("Integer digits length", values: context.integer, in: Context.integerLimits)
     }
     
     var fractionIntervalSliders: some View {
-        NumericScreenSliders("Integer digits length", values: screen.fraction, in: ScreenContext.fractionLimits)
+        NumericScreenSliders("Integer digits length", values: context.fraction, in: Context.fractionLimits)
     }
     
     //=------------------------------------------------------------------------=
@@ -91,7 +91,7 @@ struct NumericScreen: View {
     //=------------------------------------------------------------------------=
     
     var examples: some View {
-        NumericScreenExamples(screen)
+        NumericScreenExamples(context)
     }
 }
 
@@ -102,7 +102,7 @@ struct NumericScreen: View {
 struct NumericTextStyleScreenPreviews: PreviewProvider {
     static var previews: some View {
         NumericScreen()
-            .environmentObject(Context())
             .preferredColorScheme(.dark)
+            .environmentObject(Storage())
     }
 }

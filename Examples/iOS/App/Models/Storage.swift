@@ -10,10 +10,10 @@
 import SwiftUI
 
 //*============================================================================*
-// MARK: * Context
+// MARK: * Storage
 //*============================================================================*
 
-final class Context: ObservableObject {
+final class Storage: ObservableObject {
     
     //=------------------------------------------------------------------------=
     // MARK: State
@@ -29,10 +29,4 @@ final class Context: ObservableObject {
         .lazy.compactMap(\.currencyCode)
         .reduce(into: Set()) { $0.insert($1) }
         .sorted(by: <)
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Initializers
-    //=------------------------------------------------------------------------=
-    
-    init() { }
 }

@@ -19,7 +19,7 @@ import SwiftUI
     // MARK: State
     //=------------------------------------------------------------------------=
     
-    @StateObject var context = Context()
+    @StateObject var storage = Storage()
     
     //=------------------------------------------------------------------------=
     // MARK: Body
@@ -28,7 +28,7 @@ import SwiftUI
     var body: some Scene {
         WindowGroup {
             ContentTabs()
-                .environmentObject(context)
+                .environmentObject(storage)
                 .preferredColorScheme(.dark)
         }
     }

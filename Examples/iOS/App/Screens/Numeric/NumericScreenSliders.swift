@@ -20,7 +20,7 @@ struct NumericScreenSliders: View {
     // MARK: State
     //=------------------------------------------------------------------------=
     
-    let title:  String
+    let title: String
     let limits: Values
     @ObservedObject var values: Source<Values>
     
