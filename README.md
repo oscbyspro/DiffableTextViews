@@ -49,9 +49,11 @@ import PatternTextStyles
 
 👷‍♂️🛠🚧🚧🧱🏗🧱🚧🚧⏳
 
-The iOS example project provides quick-and-easy-to-use configuration.
+The iOS example project provides quick-and-easy-to-use customization options.
 
-<img src="Assets/iOSExampleNumericScreen.png" alt="iOS Example" width="300"/>
+| Numeric | Pattern |
+|---------|---------|
+<img src="Assets/iOSExampleNumericScreen.png" alt="iOS Example" width="250"/> | <img src="Assets/iOSExamplePatternScreen.png" alt="iOS Example" width="250"/>
 
 ### Modules
 
