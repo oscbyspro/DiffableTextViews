@@ -14,7 +14,7 @@ import SwiftUI
 //*============================================================================*
 
 struct NumericScreenWheels: View {
-    typealias Style = NumericScreen.Style
+    typealias Kind = NumericScreenContext.Kind
     
     //=------------------------------------------------------------------------=
     // MARK: Environment
@@ -26,7 +26,7 @@ struct NumericScreenWheels: View {
     // MARK: State
     //=------------------------------------------------------------------------=
 
-    let style: Style
+    let kind: Kind
     let locale: Binding<Locale>
     let currency: Binding<String>
     
@@ -34,8 +34,8 @@ struct NumericScreenWheels: View {
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    init(_ style: Style, locale: Binding<Locale>, currency: Binding<String>) {
-        self.style = style
+    init(_ kind: Kind, locale: Binding<Locale>, currency: Binding<String>) {
+        self.kind = kind
         self.locale = locale
         self.currency = currency
     }
@@ -58,13 +58,13 @@ struct NumericScreenWheels: View {
     
     var wheels: some View {
         GeometryReader {
-            let separate = Separate($0, style: style)
+            let separate = Separate($0, kind: kind)
             //=----------------------------------=
             // MARK: Content
             //=----------------------------------=
             HStack(spacing: 0) {
                 locales.modifier(separate).zIndex(1)
-                if style == .currency {
+                if kind == .currency {
                     Divider()
                     currencies.modifier(separate)
                 }
@@ -100,8 +100,8 @@ struct NumericScreenWheels: View {
         // MARK: Initializers
         //=--------------------------------------------------------------------=
 
-        init(_ proxy: GeometryProxy, style: Style) {
-            self.width = proxy.size.width / CGFloat(style == .currency ? 2 : 1)
+        init(_ proxy: GeometryProxy, kind: Kind) {
+            self.width = proxy.size.width / CGFloat(kind == .currency ? 2 : 1)
         }
         
         //=--------------------------------------------------------------------=

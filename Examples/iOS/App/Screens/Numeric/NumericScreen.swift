@@ -16,6 +16,7 @@ import NumericTextStyles
 //*============================================================================*
 
 struct NumericScreen: View {
+    typealias ScreenContext = NumericScreenContext
     typealias Value = Decimal
     
     //=------------------------------------------------------------------------=
@@ -32,16 +33,7 @@ struct NumericScreen: View {
     //=------------------------------------------------------------------------=
     
     @EnvironmentObject private var context: Context
-    
-    @State private var value = Decimal(string: "1234567.89")!
-    @State private var style = Style.currency
-    
-    @State private var currencyCode = "USD"
-    @State private var locale = Locale(identifier: "en_US")
-    
-    @State private var integer = Self.integerLimits
-    @State private var fraction = Interval((2, 2))
-    @State private var exponents = Interval((0, Self.exponentsLimit))
+    @StateObject private var screen = NumericScreenContext()
     
     //=------------------------------------------------------------------------=
     // MARK: Body
@@ -53,7 +45,6 @@ struct NumericScreen: View {
             Divider()
             examples
         }
-        .environment(\.locale, locale)
     }
     
     //=------------------------------------------------------------------------=
@@ -76,78 +67,32 @@ struct NumericScreen: View {
     //=------------------------------------------------------------------------=
 
     var diffableTextStyles: some View {
-        Segments($style)
+        Segments(screen.kind.binding)
     }
     
     var customizationWheels: some View {
-        NumericScreenWheels(style, locale: $locale, currency: $currencyCode)
+        NumericScreenWheels(screen.kind.value, locale: screen.locale.binding, currency: screen.currency.binding)
     }
     
     var boundsIntervalSliders: some View {
-        Sliders("Bounds length (9s)", values: $exponents, limits: Self.exponentsLimits.closed)
+        NumericScreenSliders("Bounds length (9s)", values: screen.bounds, in: ScreenContext.boundsLimits)
     }
     
     var integerIntervalSliders: some View {
-        Sliders("Integer digits length", values: $integer, limits: Self.integerLimits.closed)
+        NumericScreenSliders("Integer digits length", values: screen.integer, in: ScreenContext.integerLimits)
     }
     
     var fractionIntervalSliders: some View {
-        Sliders("Fraction digits length", values: $fraction, limits: Self.fractionLimits.closed)
+        NumericScreenSliders("Integer digits length", values: screen.fraction, in: ScreenContext.fractionLimits)
     }
     
     //=------------------------------------------------------------------------=
     // MARK: Body - Example
     //=------------------------------------------------------------------------=
     
-    @ViewBuilder var examples: some View {
-        switch style {
-        case .number:
-            Example($value) {
-                .number
-                .bounds(bounds)
-                .precision(integer: integer.closed, fraction: fraction.closed)
-            }
-        case .currency:
-            Example($value) {
-                .currency(code: currencyCode)
-                .bounds(bounds)
-                .precision(integer: integer.closed, fraction: fraction.closed)
-            }
-        case .percent:
-            Example($value) {
-                .percent
-                .bounds(bounds)
-                .precision(integer: integer.closed, fraction: fraction.closed)
-            }
-        }
+    var examples: some View {
+        NumericScreenExamples(screen)
     }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Body - Example - Values
-    //=------------------------------------------------------------------------=
-    
-    var bounds: ClosedRange<Decimal> {
-        let ordered = exponents.closed
-        //=--------------------------------------=
-        // MARK: Single
-        //=--------------------------------------=
-        func bound(_ length: Int) -> Decimal {
-            guard length != 0 else { return 0 }
-            var description = length >= 0 ? "" : "-"
-            description += String(repeating: "9", count: abs(length))
-            return Decimal(string: description)!
-        }
-        //=--------------------------------------=
-        // MARK: Double
-        //=--------------------------------------=
-        return bound(ordered.lowerBound)...bound(ordered.upperBound)
-    }
-    
-    //*========================================================================*
-    // MARK: * Style
-    //*========================================================================*
-    
-    enum Style: String, CaseIterable { case number, currency, percent }
 }
 
 //*============================================================================*
