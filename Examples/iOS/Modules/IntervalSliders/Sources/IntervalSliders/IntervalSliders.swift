@@ -74,10 +74,15 @@ extension IntervalSliders {
         //=--------------------------------------=
         // MARK: Set
         //=--------------------------------------=
-        } set: { xxxxxxxxxxx in
-            values.wrappedValue = (
+        } set: { xxxxxxxxxxx in let newValue = (
             Value(xxxxxxxxxxx.0.rounded()),
             Value(xxxxxxxxxxx.1.rounded()))
+            //=----------------------------------=
+            // MARK: Set Nonduplicate Values
+            //=----------------------------------=
+            if  values.wrappedValue != newValue {
+                values.wrappedValue  = newValue
+            }
         //=--------------------------------------=
         // MARK: Limits
         //=--------------------------------------=
