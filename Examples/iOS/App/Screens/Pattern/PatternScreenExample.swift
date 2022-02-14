@@ -8,22 +8,31 @@
 //=----------------------------------------------------------------------------=
 
 import SwiftUI
+import DiffableTextViews
 import PatternTextStyles
 
 //*============================================================================*
 // MARK: * PatternScreenExample
 //*============================================================================*
 
-struct PatternScreenExample: View {
-    typealias Pattern = PatternScreenContext.Pattern
+struct PatternScreenExample<Style: UIKitDiffableTextStyle>: View where Style.Value == String {
+    typealias Context = PatternScreenContext
     
     //=------------------------------------------------------------------------=
     // MARK: State
     //=------------------------------------------------------------------------=
     
-    @ObservedObject var value:   Source<String>
-    @ObservedObject var pattern: Source<Pattern>
-    @ObservedObject var visible: Source<Bool>
+    let style: Style
+    @ObservedObject var value: Source<String>
+
+    //=------------------------------------------------------------------------=
+    // MARK: Initializers
+    //=------------------------------------------------------------------------=
+    
+    init(_ context: Context, style: Style) {
+        self.style = style
+        self.value = context.value
+    }
     
     //=------------------------------------------------------------------------=
     // MARK: Body
@@ -36,34 +45,4 @@ struct PatternScreenExample: View {
                 proxy.keyboard(.numberPad)
             }
     }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Components
-    //=------------------------------------------------------------------------=
-    
-    var style: PatternTextStyle<String>.Reference.Equals<[AnyHashable]> {
-        var result: PatternTextStyle<String>.Reference
-        
-        switch pattern.value {
-        case .card: result = Self.cardNumberStyle
-        case .phone: result = Self.phoneNumberStyle
-        }
-        
-        result.style = result.style.hidden(!visible.value)
-        return result.equals([pattern.value, visible.value])
-    }
-
-    //=------------------------------------------------------------------------=
-    // MARK: Caches
-    //=------------------------------------------------------------------------=
-    
-    static let phoneNumberStyle = PatternTextStyle<String>
-        .pattern("+## (###) ###-##-##")
-        .placeholder("#" as Character) { $0.isASCII && $0.isNumber }
-        .reference()
-    
-    static let cardNumberStyle = PatternTextStyle<String>
-        .pattern("#### #### #### ####")
-        .placeholder("#" as Character) { $0.isASCII && $0.isNumber }
-        .reference()
 }

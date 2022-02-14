@@ -19,13 +19,13 @@ final class PatternScreenContext: ObservableObject {
     // MARK: State
     //=------------------------------------------------------------------------=
     
-    let value   = Source("12345678")
+    let value = Source("12345678")
+    let kind = Source(Kind.phone)
     let visible = Source(true)
-    let pattern = Source(Pattern.phone)
 
     //*========================================================================*
-    // MARK: * Pattern
+    // MARK: * Kind
     //*========================================================================*
     
-    enum Pattern: String, CaseIterable { case phone, card }
+    enum Kind: String, CaseIterable { case phone, card }
 }

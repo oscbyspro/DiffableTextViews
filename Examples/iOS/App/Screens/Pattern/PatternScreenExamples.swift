@@ -8,73 +8,75 @@
 //=----------------------------------------------------------------------------=
 
 import SwiftUI
-import DiffableTextViews
 import PatternTextStyles
 
 //*============================================================================*
-// MARK: * PatternScreen
+// MARK: * PatternScreenExamples
 //*============================================================================*
 
-struct PatternScreen: View {
+struct PatternScreenExamples: View {
+    typealias Style = PatternTextStyle<String>
     typealias Context = PatternScreenContext
-
+    typealias Kind = Context.Kind
+    
+    
     //=------------------------------------------------------------------------=
     // MARK: State
     //=------------------------------------------------------------------------=
     
-    @StateObject var context = Context()
-
+    let context: Context
+    @ObservedObject var kind: Source<Kind>
+    @ObservedObject var visible: Source<Bool>
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Initializers
+    //=------------------------------------------------------------------------=
+    
+    init(_ context: Context) {
+        self.context = context
+        self.kind = context.kind
+        self.visible = context.visible
+    }
+    
     //=------------------------------------------------------------------------=
     // MARK: Body
     //=------------------------------------------------------------------------=
     
     var body: some View {
-        Screen {
-            controls
-            Divider()
-            examples
+        PatternScreenExample(context, style: style)
+    }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Components
+    //=------------------------------------------------------------------------=
+    
+    var style: Style.Reference.Equals<[AnyHashable]> {
+        var reference: Style.Reference
+        //=--------------------------------------=
+        // MARK: Match
+        //=--------------------------------------=
+        switch kind.value {
+        case .card: reference = Self.card
+        case .phone: reference = Self.phone
         }
+        //=--------------------------------------=
+        // MARK: Setup
+        //=--------------------------------------=
+        reference.style = reference.style.hidden(!visible.value)
+        return reference.equals([kind.value, visible.value])
     }
     
     //=------------------------------------------------------------------------=
-    // MARK: Body - Controls
-    //=------------------------------------------------------------------------=
-
-    var controls: some View {
-        Scroller {
-            diffableTextStyles
-            hiddenToggleSwitch
-            Spacer()
-        }
-    }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Body - Controls - Components
+    // MARK: Constants
     //=------------------------------------------------------------------------=
     
-    var diffableTextStyles: some View {
-        Segments(context.kind.binding)
-    }
+    static let phone = PatternTextStyle<String>
+        .pattern("+## (###) ###-##-##")
+        .placeholder("#" as Character) { $0.isASCII && $0.isNumber }
+        .reference()
     
-    var hiddenToggleSwitch: some View {
-        PatternScreenVisibility(visible: context.visible)
-    }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Body - Examples
-    //=------------------------------------------------------------------------=
-    
-    var examples: some View {
-        PatternScreenExamples(context)
-    }
-}
-
-//*============================================================================*
-// MARK: * PatternScreen x Previews
-//*============================================================================*
-
-struct PatternTextStyleScreenPreviews: PreviewProvider {
-    static var previews: some View {
-        PatternScreen().preferredColorScheme(.dark)
-    }
+    static let card = PatternTextStyle<String>
+        .pattern("#### #### #### ####")
+        .placeholder("#" as Character) { $0.isASCII && $0.isNumber }
+        .reference()
 }
