@@ -21,12 +21,14 @@ public struct Symbol: Equatable {
     /// A standard space symbol: U+0020.
     public static let spacer = Self(
         character: "\u{0020}",
-        attribute: .phantom)
+        attribute: .phantom
+    )
     
     /// A zero-width space symbol: U+200B, that is non-passthrough.
     public static let anchor = Self(
         character: "\u{200B}",
-        attribute: .phantom.subtracting(.passthrough))
+        attribute: .phantom.subtracting(.passthrough)
+    )
         
     //=------------------------------------------------------------------------=
     // MARK: State

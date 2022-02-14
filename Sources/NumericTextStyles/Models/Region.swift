@@ -35,7 +35,8 @@ import Support
         locale: Locale(identifier: "en_US"),
         signs: Lexicon(ascii: Sign.self),
         digits: Lexicon(ascii: Digit.self),
-        separators: Lexicon(ascii: Separator.self))
+        separators: Lexicon(ascii: Separator.self)
+    )
     
     //=------------------------------------------------------------------------=
     // MARK: State
