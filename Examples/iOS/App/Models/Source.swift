@@ -14,9 +14,6 @@ import SwiftUI
 // MARK: * Source
 //*============================================================================*
 
-#warning("WIP")
-#warning("WIP")
-#warning("WIP")
 final class Source<Value>: ObservableObject {
     
     //=------------------------------------------------------------------------=
@@ -37,6 +34,7 @@ final class Source<Value>: ObservableObject {
     // MARK: Accessors
     //=------------------------------------------------------------------------=
     
+    /// Uses strong references.
     var binding: Binding<Value> {
         Binding { self.value } set: { self.value = $0 }
     }
@@ -49,4 +47,3 @@ final class Source<Value>: ObservableObject {
         objectWillChange.sink(receiveValue: publisher.send)
     }
 }
-

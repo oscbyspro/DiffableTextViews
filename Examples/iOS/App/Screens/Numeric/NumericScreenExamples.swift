@@ -17,11 +17,11 @@ import NumericTextStyles
 /// An intermediate examples view that observes infrequent changes.
 struct NumericScreenExamples: View {
     typealias Context = NumericScreenContext
-    typealias Number = Context.Value.FormatStyle
-    typealias Currency = Number.Currency
-    typealias Percent = Number.Percent
     typealias Kind = Context.Kind
     typealias Value = Context.Value
+    typealias Number = Value.FormatStyle
+    typealias Currency = Number.Currency
+    typealias Percent = Number.Percent
 
     //=------------------------------------------------------------------------=
     // MARK: State
@@ -52,7 +52,7 @@ struct NumericScreenExamples: View {
     }
     
     //=------------------------------------------------------------------------=
-    // MARK: Components
+    // MARK: Examples
     //=------------------------------------------------------------------------=
     
     @ViewBuilder var examples: some View {
@@ -62,10 +62,6 @@ struct NumericScreenExamples: View {
         case .percent:  example(.percent)
         }
     }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Subcomponents
-    //=------------------------------------------------------------------------=
     
     func example<F: NumericTextFormat>(_ base: NumericTextStyle<F>) -> some View where F.FormatInput == Value {
         NumericScreenExample(context, base: base)
