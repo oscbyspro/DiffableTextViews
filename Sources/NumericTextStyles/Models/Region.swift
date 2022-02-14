@@ -99,33 +99,23 @@ import Support
     //=------------------------------------------------------------------------=
     
     @inlinable static func positive(in formatter: NumberFormatter) throws -> Character {
-        guard let character = formatter.plusSign.filter(signable).first else {
-            throw absent(component: Sign.positive)
-        }; return character
+        try unwrap(formatter.plusSign.filter(signable).first)
     }
     
     @inlinable static func negative(in formatter: NumberFormatter) throws -> Character {
-        guard let character = formatter.minusSign.filter(signable).first else {
-            throw absent(component: Sign.negative)
-        }; return character
+        try unwrap(formatter.minusSign.filter(signable).first)
     }
     
     @inlinable static func digit(_ digit: Digit, in formatter: NumberFormatter) throws -> Character {
-        guard let character = formatter.string(from: digit.numericValue as NSNumber)?.first else {
-            throw absent(component: digit)
-        }; return character
+        try unwrap(formatter.string(from: digit.numericValue as NSNumber)?.first)
     }
     
     @inlinable static func fraction(in formatter: NumberFormatter) throws -> Character {
-        guard let character = formatter.decimalSeparator.first else {
-            throw absent(component: Separator.fraction)
-        }; return character
+        try unwrap(formatter.decimalSeparator.first)
     }
     
     @inlinable static func grouping(in formatter: NumberFormatter) throws -> Character {
-        guard let character = formatter.groupingSeparator.first else {
-            throw absent(component: Separator.grouping)
-        }; return character
+        try unwrap(formatter.groupingSeparator.first)
     }
 
     //=------------------------------------------------------------------------=
@@ -136,12 +126,9 @@ import Support
         character.isPunctuation || character.isMathSymbol
     }
     
-    //=------------------------------------------------------------------------=
-    // MARK: Errors
-    //=------------------------------------------------------------------------=
-    
-    @inlinable static func absent<T: Unicodeable>(component: T) -> Info {
-        Info(["unable to fetch localized character for", .mark(component)])
+    @inlinable static func unwrap(_ character: Character?) throws -> Character {
+        if let character = character { return character }
+        throw Info(["unable to fetch localized character for component"])
     }
 }
 
