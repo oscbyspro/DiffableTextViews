@@ -121,42 +121,49 @@ extension PatternTextStyle {
     
     @inlinable func iterate(_ value: Value, some: (Substring, Character) -> Void,
         none: (Substring) -> Void, remainders: (Substring, Value.SubSequence) -> Void) {
-        var valueIndex = value.startIndex
-        var patternIndex = pattern.startIndex
-        var queueIndex = patternIndex
+        var vIndex = value.startIndex
+        var pIndex = pattern.startIndex
+        var qIndex = pIndex // queue
         //=--------------------------------------=
         // MARK: Loop
         //=--------------------------------------=
-        loop: while patternIndex != pattern.endIndex {
-            let character = pattern[patternIndex]
+        loop: while pIndex != pattern.endIndex {
+            let character = pattern[pIndex]
             //=----------------------------------=
             // MARK: Value
             //=----------------------------------=
             if let predicate = placeholders[character] {
-                if valueIndex != value.endIndex {
-                    let content = value[valueIndex]
-                    guard predicate.check(content) else { break loop }
-                    some(pattern[queueIndex..<patternIndex], content)
-                    value.formIndex(after: &valueIndex)
-                    pattern.formIndex(after: &patternIndex)
-                    queueIndex = patternIndex
-                    continue loop
-                } else if value.isEmpty {
-                    none(pattern[queueIndex..<patternIndex])
-                    queueIndex = patternIndex
-                }
-                
-                break loop
-            }
+                guard vIndex != value.endIndex else { break loop }
+                let   content = value[vIndex]
+                guard predicate.check(content) else { break loop }
+                //=------------------------------=
+                // MARK: Some
+                //=------------------------------=
+                some(pattern[qIndex..<pIndex], content)
+                value.formIndex(after: &vIndex)
+                pattern.formIndex(after: &pIndex)
+                qIndex = pIndex
             //=----------------------------------=
             // MARK: Pattern
             //=----------------------------------=
-            pattern.formIndex(after: &patternIndex)
+            } else {
+                //=------------------------------=
+                // MARK: Iterate
+                //=------------------------------=
+                pattern.formIndex(after: &pIndex)
+            }
+        }
+        //=----------------------------------=
+        // MARK: None
+        //=----------------------------------=
+        if qIndex == pattern.startIndex {
+            none(pattern[qIndex..<pIndex])
+            qIndex = pIndex
         }
         //=--------------------------------------=
         // MARK: Remainders
         //=--------------------------------------=
-        remainders(pattern[queueIndex...], value[valueIndex...])
+        remainders(pattern[qIndex...], value[vIndex...])
     }
 }
 
