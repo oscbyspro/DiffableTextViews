@@ -146,12 +146,7 @@ extension PatternTextStyle {
             //=----------------------------------=
             // MARK: Pattern
             //=----------------------------------=
-            } else {
-                //=------------------------------=
-                // MARK: Iterate
-                //=------------------------------=
-                pattern.formIndex(after: &pIndex)
-            }
+            } else { pattern.formIndex(after: &pIndex) }
         }
         //=----------------------------------=
         // MARK: None
