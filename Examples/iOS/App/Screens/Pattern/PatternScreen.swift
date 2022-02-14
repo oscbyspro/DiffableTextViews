@@ -44,6 +44,7 @@ struct PatternScreen: View {
         Scroller {
             diffableTextStyles
             hiddenToggleSwitch
+            actions
             Spacer()
         }
     }
@@ -58,6 +59,10 @@ struct PatternScreen: View {
     
     var hiddenToggleSwitch: some View {
         PatternScreenVisibility(visible: context.visible)
+    }
+    
+    var actions: some View {
+        PatternScreenActions(context)
     }
     
     //=------------------------------------------------------------------------=

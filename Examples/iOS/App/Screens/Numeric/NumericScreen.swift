@@ -17,7 +17,6 @@ import NumericTextStyles
 
 struct NumericScreen: View {
     typealias Context = NumericScreenContext
-    typealias Value = Decimal
 
     //=------------------------------------------------------------------------=
     // MARK: State

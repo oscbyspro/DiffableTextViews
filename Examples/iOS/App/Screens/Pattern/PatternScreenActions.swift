@@ -7,52 +7,40 @@
 // See http://www.apache.org/licenses/LICENSE-2.0 for license information.
 //=----------------------------------------------------------------------------=
 
-import Combine
+import SwiftUI
 
 //*============================================================================*
-// MARK: * PatternScreenContext
+// MARK: * PatternScreenActions
 //*============================================================================*
 
-final class PatternScreenContext: ObservableObject {
+struct PatternScreenActions: View {
+    typealias Context = PatternScreenContext
     
     //=------------------------------------------------------------------------=
     // MARK: State
     //=------------------------------------------------------------------------=
     
-    let value = Source("12345678")
-    let kind = Source(Kind.phone)
-    let visible = Source(true)
+    let context: Context
     
     //=------------------------------------------------------------------------=
-    // MARK: Utilities
+    // MARK: Initializers
     //=------------------------------------------------------------------------=
-
-    func clear() {
-        value.value = String()
-    }
     
-    func popLast() {
-        _ = value.value.popLast()
-    }
-    
-    func appendASCIIDigit() {
-        Self.digits.randomElement().map({ value.value.append($0) })
-    }
-    
-    func appendUppercased() {
-        Self.uppercased.randomElement().map({ value.value.append($0) })
+    init(_ context: Context) {
+        self.context = context
     }
     
     //=------------------------------------------------------------------------=
-    // MARK: Constants
+    // MARK: Body
     //=------------------------------------------------------------------------=
     
-    static let digits: String = "0123456789"
-    static let uppercased: String = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-    
-    //*========================================================================*
-    // MARK: * Kind
-    //*========================================================================*
-    
-    enum Kind: String, CaseIterable { case phone, card }
+    var body: some View {
+        HStack {
+            Action("Clear", action: context.clear)
+            Action("Pop", action: context.popLast)
+            Action("@", action: context.appendUppercased)
+            Action("#", action: context.appendASCIIDigit)
+        }
+    }
 }
+
