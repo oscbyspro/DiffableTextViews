@@ -20,7 +20,7 @@ final class Source<Value>: ObservableObject {
     // MARK: State
     //=------------------------------------------------------------------------=
     
-    var value: Value {
+    var storage: Value {
         willSet { objectWillChange.send() }
     }
     
@@ -28,7 +28,7 @@ final class Source<Value>: ObservableObject {
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    init(_ value: Value) { self.value = value }
+    init(_ storage: Value) { self.storage = storage }
     
     //=------------------------------------------------------------------------=
     // MARK: Accessors
@@ -36,7 +36,7 @@ final class Source<Value>: ObservableObject {
     
     /// Uses strong references.
     var binding: Binding<Value> {
-        Binding { self.value } set: { self.value = $0 }
+        Binding { self.storage } set: { self.storage = $0 }
     }
     
     //=------------------------------------------------------------------------=

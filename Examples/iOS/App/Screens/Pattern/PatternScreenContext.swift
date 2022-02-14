@@ -28,19 +28,19 @@ final class PatternScreenContext: ObservableObject {
     //=------------------------------------------------------------------------=
 
     func clear() {
-        value.value = String()
+        value.storage = String()
     }
     
     func popLast() {
-        _ = value.value.popLast()
+        _ = value.storage.popLast()
     }
     
     func appendASCIIDigit() {
-        Self.digits.randomElement().map({ value.value.append($0) })
+        Self.digits.randomElement().map({ value.storage.append($0) })
     }
     
     func appendUppercased() {
-        Self.uppercased.randomElement().map({ value.value.append($0) })
+        Self.uppercased.randomElement().map({ value.storage.append($0) })
     }
     
     //=------------------------------------------------------------------------=

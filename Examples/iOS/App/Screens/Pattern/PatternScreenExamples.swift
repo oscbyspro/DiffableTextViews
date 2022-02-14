@@ -56,15 +56,15 @@ struct PatternScreenExamples: View {
         //=--------------------------------------=
         // MARK: Match
         //=--------------------------------------=
-        switch kind.value {
+        switch kind.storage {
         case .card: reference = Self.card
         case .phone: reference = Self.phone
         }
         //=--------------------------------------=
         // MARK: Setup
         //=--------------------------------------=
-        reference.style = reference.style.hidden(!visible.value)
-        return reference.equals([kind.value, visible.value])
+        reference.style = reference.style.hidden(!visible.storage)
+        return reference.equals([kind.storage, visible.storage])
     }
     
     //=------------------------------------------------------------------------=

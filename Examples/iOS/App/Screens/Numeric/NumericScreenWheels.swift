@@ -59,13 +59,13 @@ struct NumericScreenWheels: View {
     
     var wheels: some View {
         GeometryReader {
-            let separate = Separate($0, kind: kind.value)
+            let separate = Separate($0, kind: kind.storage)
             //=----------------------------------=
             // MARK: Content
             //=----------------------------------=
             HStack(spacing: 0) {
                 locales.modifier(separate).zIndex(1)
-                if kind.value == .currency {
+                if kind.storage == .currency {
                     Divider()
                     currencies.modifier(separate)
                 }

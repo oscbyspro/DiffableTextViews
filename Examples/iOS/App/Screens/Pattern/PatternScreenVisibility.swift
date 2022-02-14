@@ -29,7 +29,7 @@ struct PatternScreenVisibility: View {
         Toggle(isOn: visible.binding, label: label)
             .tint(Color.gray.opacity(2/3))
             .background(Rectangle().strokeBorder(.gray))
-            .animation(.default, value: visible.value)
+            .animation(.default, value: visible.storage)
             .toggleStyle(.button)
     }
     
@@ -38,9 +38,9 @@ struct PatternScreenVisibility: View {
     //=------------------------------------------------------------------------=
     
     func label() -> some View {
-        Text(visible.value ? "Visible" : "Hidden")
+        Text(visible.storage ? "Visible" : "Hidden")
             .frame(maxWidth: .infinity)
             .contentShape(Rectangle())
-            .animation(nil, value: visible.value)
+            .animation(nil, value: visible.storage)
     }
 }
