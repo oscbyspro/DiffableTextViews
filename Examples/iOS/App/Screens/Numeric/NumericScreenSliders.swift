@@ -42,4 +42,3 @@ struct NumericScreenSliders: View {
         Sliders(title, values: values.binding, limits: limits.closed)
     }
 }
-

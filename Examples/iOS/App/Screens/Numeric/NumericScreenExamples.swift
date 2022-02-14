@@ -16,16 +16,18 @@ import NumericTextStyles
 
 /// An intermediate examples view that observes infrequent changes.
 struct NumericScreenExamples: View {
-    typealias Kind = NumericScreenContext.Kind
-    typealias Number = Decimal.FormatStyle
+    typealias Context = NumericScreenContext
+    typealias Number = Context.Value.FormatStyle
     typealias Currency = Number.Currency
     typealias Percent = Number.Percent
+    typealias Kind = Context.Kind
+    typealias Value = Context.Value
 
     //=------------------------------------------------------------------------=
     // MARK: State
     //=------------------------------------------------------------------------=
     
-    let context: NumericScreenContext
+    let context: Context
     @ObservedObject var kind: Source<Kind>
     @ObservedObject var currency: Source<String>
     @ObservedObject var locale: Source<Locale>
@@ -34,7 +36,7 @@ struct NumericScreenExamples: View {
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable init(_ context: NumericScreenContext) {
+    @inlinable init(_ context: Context) {
         self.context = context
         self.kind = context.kind
         self.currency = context.currency
@@ -55,9 +57,17 @@ struct NumericScreenExamples: View {
     
     @ViewBuilder var examples: some View {
         switch kind.value {
-        case .number: NumericScreenExample<Number>(context, base: .number)
-        case .currency: NumericScreenExample<Currency>(context, base: .currency(code: currency.value))
-        case .percent: NumericScreenExample<Percent>(context, base: .percent)
+        case .number:   example(.number)
+        case .currency: example(.currency(code: currency.value))
+        case .percent:  example(.percent)
         }
+    }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Subcomponents
+    //=------------------------------------------------------------------------=
+    
+    func example<F: NumericTextFormat>(_ base: NumericTextStyle<F>) -> some View where F.FormatInput == Value {
+        NumericScreenExample(context, base: base)
     }
 }
