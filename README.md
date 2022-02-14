@@ -47,8 +47,6 @@ import PatternTextStyles
 
 # [Examples](Examples/iOS/App)
 
-👷‍♂️🛠🚧🚧🧱🏗🧱🚧🚧⏳
-
 The iOS example project provides quick-and-easy-to-use customization.
 
 | Numeric | Pattern |
