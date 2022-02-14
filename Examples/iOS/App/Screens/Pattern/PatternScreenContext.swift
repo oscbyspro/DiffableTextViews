@@ -26,10 +26,6 @@ final class PatternScreenContext: ObservableObject {
     //=------------------------------------------------------------------------=
     // MARK: Utilities
     //=------------------------------------------------------------------------=
-
-    func clear() {
-        value.storage = String()
-    }
     
     func popLast() {
         _ = value.storage.popLast()

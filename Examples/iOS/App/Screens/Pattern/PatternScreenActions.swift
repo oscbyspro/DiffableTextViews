@@ -36,11 +36,9 @@ struct PatternScreenActions: View {
     
     var body: some View {
         HStack {
-            Action("clear", action: context.clear)
             Action("pop", action: context.popLast)
             Action("abc", action: context.appendUppercased)
             Action("123", action: context.appendASCIIDigit)
         }
     }
 }
-
