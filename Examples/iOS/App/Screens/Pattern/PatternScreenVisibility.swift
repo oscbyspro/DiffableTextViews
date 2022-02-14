@@ -10,34 +10,37 @@
 import SwiftUI
 
 //*============================================================================*
-// MARK: * Selector
+// MARK: * PatternScreenVisibility
 //*============================================================================*
 
-struct Options<Value: Hashable & RawRepresentable & CaseIterable>: View where
-Value.RawValue == String, Value.AllCases: RandomAccessCollection {
+struct PatternScreenVisibility: View {
     
     //=------------------------------------------------------------------------=
     // MARK: State
     //=------------------------------------------------------------------------=
     
-    let selection: Binding<Value>
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Initializers
-    //=------------------------------------------------------------------------=
-    
-    init(_ selection: Binding<Value>) { self.selection = selection }
+    @ObservedObject var visible: Source<Bool>
     
     //=------------------------------------------------------------------------=
     // MARK: Body
     //=------------------------------------------------------------------------=
     
     var body: some View {
-        Picker(String(describing: Value.self), selection: selection) {
-            ForEach(Value.allCases, id: \.self) {
-                Text($0.rawValue.capitalized).tag($0)
-            }
-        }
-        .pickerStyle(.segmented)
+        Toggle(isOn: visible.binding, label: label)
+            .tint(Color.gray.opacity(2/3))
+            .background(Rectangle().strokeBorder(.gray))
+            .animation(.default, value: visible.value)
+            .toggleStyle(.button)
+    }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Components
+    //=------------------------------------------------------------------------=
+    
+    func label() -> some View {
+        Text(visible.value ? "Visible" : "Hidden")
+            .frame(maxWidth: .infinity)
+            .contentShape(Rectangle())
+            .animation(nil, value: visible.value)
     }
 }

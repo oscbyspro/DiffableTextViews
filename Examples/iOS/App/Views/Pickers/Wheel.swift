@@ -10,10 +10,10 @@
 import SwiftUI
 
 //*============================================================================*
-// MARK: * Selector
+// MARK: * Wheel
 //*============================================================================*
 
-struct Selector<Value: Hashable, ID: Hashable>: View {
+struct Wheel<Value: Hashable, ID: Hashable>: View {
     
     //=------------------------------------------------------------------------=
     // MARK: State

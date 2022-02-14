@@ -8,72 +8,62 @@
 //=----------------------------------------------------------------------------=
 
 import SwiftUI
-import DiffableTextViews
 import PatternTextStyles
 
 //*============================================================================*
-// MARK: * PatternScreen
+// MARK: * PatternScreenExample
 //*============================================================================*
 
-struct PatternScreen: View {
-
+struct PatternScreenExample: View {
+    typealias Pattern = PatternScreenContext.Pattern
+    
     //=------------------------------------------------------------------------=
     // MARK: State
     //=------------------------------------------------------------------------=
     
-    @StateObject var screen = PatternScreenContext()
-
+    @ObservedObject var value:   Source<String>
+    @ObservedObject var pattern: Source<Pattern>
+    @ObservedObject var visible: Source<Bool>
+    
     //=------------------------------------------------------------------------=
     // MARK: Body
     //=------------------------------------------------------------------------=
     
     var body: some View {
-        Screen {
-            controls
-            Divider()
-            examples
+        Example(value.binding, style: style)
+            .diffableTextField_onSetup {
+                proxy in
+                proxy.keyboard(.numberPad)
+            }
+    }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Components
+    //=------------------------------------------------------------------------=
+    
+    var style: PatternTextStyle<String>.Reference.Equals<[AnyHashable]> {
+        var result: PatternTextStyle<String>.Reference
+        
+        switch pattern.value {
+        case .card: result = Self.cardNumberStyle
+        case .phone: result = Self.phoneNumberStyle
         }
+        
+        result.style = result.style.hidden(!visible.value)
+        return result.equals([pattern.value, visible.value])
     }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Body - Controls
-    //=------------------------------------------------------------------------=
 
-    var controls: some View {
-        Scroller {
-            diffableTextStyles
-            hiddenToggleSwitch
-            Spacer()
-        }
-    }
-    
     //=------------------------------------------------------------------------=
-    // MARK: Body - Controls - Components
+    // MARK: Caches
     //=------------------------------------------------------------------------=
     
-    var diffableTextStyles: some View {
-        Segments(screen.pattern.binding)
-    }
+    static let phoneNumberStyle = PatternTextStyle<String>
+        .pattern("+## (###) ###-##-##")
+        .placeholder("#" as Character) { $0.isASCII && $0.isNumber }
+        .reference()
     
-    var hiddenToggleSwitch: some View {
-        PatternScreenVisibility(visible: screen.visible)
-    }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Body - Examples
-    //=------------------------------------------------------------------------=
-    
-    var examples: some View {
-        PatternScreenExample(value: screen.value, pattern: screen.pattern, visible: screen.visible)
-    }
-}
-
-//*============================================================================*
-// MARK: * PatternScreen x Previews
-//*============================================================================*
-
-struct PatternTextStyleScreenPreviews: PreviewProvider {
-    static var previews: some View {
-        PatternScreen().preferredColorScheme(.dark)
-    }
+    static let cardNumberStyle = PatternTextStyle<String>
+        .pattern("#### #### #### ####")
+        .placeholder("#" as Character) { $0.isASCII && $0.isNumber }
+        .reference()
 }

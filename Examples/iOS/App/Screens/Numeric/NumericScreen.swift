@@ -76,7 +76,7 @@ struct NumericScreen: View {
     //=------------------------------------------------------------------------=
 
     var diffableTextStyles: some View {
-        Options($style)
+        Segments($style)
     }
     
     var customizationWheels: some View {

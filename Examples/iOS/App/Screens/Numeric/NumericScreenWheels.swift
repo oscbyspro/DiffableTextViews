@@ -77,11 +77,11 @@ struct NumericScreenWheels: View {
     //=------------------------------------------------------------------------=
     
     var locales: some View {
-        Selector(context.locales, selection: locale, id: \.identifier)
+        Wheel(context.locales, selection: locale, id: \.identifier)
     }
     
     var currencies: some View {
-        Selector(context.currencies, selection: currency, id: \.self)
+        Wheel(context.currencies, selection: currency, id: \.self)
     }
     
     //*========================================================================*
