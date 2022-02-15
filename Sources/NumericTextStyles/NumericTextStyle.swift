@@ -237,11 +237,11 @@ extension NumericTextStyle {
     // MARK: Components
     //=------------------------------------------------------------------------=
     
-    @inlinable func sign(number: Number) -> SignStyle {
+    @inlinable func sign(number: Number) -> Format.Sign {
         number.sign == .negative ? .always : .automatic
     }
 
-    @inlinable func separator(number: Number) -> SeparatorStyle {
+    @inlinable func separator(number: Number) -> Format.Separator {
         number.separator == .fraction ? .always : .automatic
     }
     

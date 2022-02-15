@@ -10,18 +10,10 @@
 import Foundation
 
 //*============================================================================*
-// MARK: * Table of Contents
+// MARK: * NumericTextSignDisplayStrategy
 //*============================================================================*
 
-@usableFromInline typealias SignStyle = NumericTextSignDisplayStyle
-@usableFromInline typealias PrecisionStyle = NumberFormatStyleConfiguration.Precision
-@usableFromInline typealias SeparatorStyle = NumberFormatStyleConfiguration.DecimalSeparatorDisplayStrategy
-
-//*============================================================================*
-// MARK: * NumericTextSignDisplayStyle
-//*============================================================================*
-
-public enum NumericTextSignDisplayStyle {
+public enum NumericTextSignDisplayStrategy {
 
     //=------------------------------------------------------------------------=
     // MARK: Instances
@@ -32,44 +24,44 @@ public enum NumericTextSignDisplayStyle {
 }
 
 //*============================================================================*
-// MARK: * NumericTextSignDisplayStyle x Representable
+// MARK: * NumericTextSignDisplayStrategy x Representable
 //*============================================================================*
 
-public protocol NumericTextSignDisplayStyleRepresentable {
+public protocol NumericTextSignDisplayStrategyRepresentable {
     
     //=------------------------------------------------------------------------=
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable init(style: NumericTextSignDisplayStyle)
+    @inlinable init(strategy: NumericTextSignDisplayStrategy)
 }
 
 //*============================================================================*
-// MARK: * NumericTextSignDisplayStyle x Representable x Number
+// MARK: * NumericTextSignDisplayStrategy x Representable x Number
 //*============================================================================*
 
-extension NumberFormatStyleConfiguration.SignDisplayStrategy: NumericTextSignDisplayStyleRepresentable {
+extension NumberFormatStyleConfiguration.SignDisplayStrategy: NumericTextSignDisplayStrategyRepresentable {
     
     //=------------------------------------------------------------------------=
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable public init(style: NumericTextSignDisplayStyle) {
-        switch style { case .always: self = .always(); case .automatic: self = .automatic }
+    @inlinable public init(strategy: NumericTextSignDisplayStrategy) {
+        switch strategy { case .always: self = .always(); case .automatic: self = .automatic }
     }
 }
 
 //*============================================================================*
-// MARK: * NumericTextSignDisplayStyle x Representable x Currency
+// MARK: * NumericTextSignDisplayStrategy x Representable x Currency
 //*============================================================================*
 
-extension CurrencyFormatStyleConfiguration.SignDisplayStrategy: NumericTextSignDisplayStyleRepresentable {
+extension CurrencyFormatStyleConfiguration.SignDisplayStrategy: NumericTextSignDisplayStrategyRepresentable {
     
     //=------------------------------------------------------------------------=
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable public init(style: NumericTextSignDisplayStyle) {
-        switch style { case .always: self = .always(); case .automatic: self = .automatic }
+    @inlinable public init(strategy: NumericTextSignDisplayStrategy) {
+        switch strategy { case .always: self = .always(); case .automatic: self = .automatic }
     }
 }

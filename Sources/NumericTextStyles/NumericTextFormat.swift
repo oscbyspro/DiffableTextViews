@@ -23,7 +23,7 @@ import Foundation
 //*============================================================================*
 
 public protocol NumericTextFormat: ParseableFormatStyle where FormatInput: NumericTextValue, FormatOutput == String {
-    associatedtype SignDisplayStrategy: NumericTextSignDisplayStyleRepresentable
+    associatedtype SignDisplayStrategy: NumericTextSignDisplayStrategyRepresentable
 
     //=------------------------------------------------------------------------=
     // MARK: Transformations
@@ -40,6 +40,9 @@ public protocol NumericTextFormat: ParseableFormatStyle where FormatInput: Numer
 
 extension NumericTextFormat {
     @usableFromInline typealias Value = FormatInput
+    @usableFromInline typealias Precision = NumberFormatStyleConfiguration.Precision
+    @usableFromInline typealias Separator = NumberFormatStyleConfiguration.DecimalSeparatorDisplayStrategy
+    @usableFromInline typealias Sign = NumericTextSignDisplayStrategy
     
     //=------------------------------------------------------------------------=
     // MARK: Parse
@@ -53,12 +56,12 @@ extension NumericTextFormat {
     // MARK: Transformations
     //=------------------------------------------------------------------------=
     
-    @inlinable func separator(_ style: SeparatorStyle) -> Self {
-        self.decimalSeparator(strategy: style)
+    @inlinable func separator(_ strategy: Self.Separator) -> Self {
+        self.decimalSeparator(strategy: strategy)
     }
     
-    @inlinable func sign(_ style: SignStyle) -> Self {
-        self.sign(strategy: SignDisplayStrategy(style: style))
+    @inlinable func sign(_ strategy: Self.Sign) -> Self {
+        self.sign(strategy: SignDisplayStrategy(strategy: strategy))
     }
 }
 
