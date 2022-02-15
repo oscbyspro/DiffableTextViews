@@ -160,7 +160,7 @@ extension NumericTextStyle {
         //=--------------------------------------=
         try bounds.validate(sign: number.sign)
         //=--------------------------------------=
-        // MARK: Number - Count, Capacity
+        // MARK: Number - Count, Validate
         //=--------------------------------------=
         let count = number.count()
         let capacity = try precision.capacity(count: count)
@@ -170,7 +170,7 @@ extension NumericTextStyle {
         //=--------------------------------------=
         let value = try region.value(in: number, as: format)
         //=--------------------------------------=
-        // MARK: Value - Location
+        // MARK: Value - Validate
         //=--------------------------------------=
         let location = try bounds.validate(value: value)
         try bounds.validate(number: number, with: location)
@@ -180,7 +180,7 @@ extension NumericTextStyle {
         let style = format.style(
         precision: precision.interactive(count: count),
         separator: separator(number: number),
-        sign: self.sign(number: number))
+        sign:      self.sign(number: number))
         //=--------------------------------------=
         // MARK: Style -> Characters
         //=--------------------------------------=
