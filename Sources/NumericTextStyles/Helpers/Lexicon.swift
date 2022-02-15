@@ -54,11 +54,12 @@ import Support
     // MARK: Initializers - Static
     //=------------------------------------------------------------------------=
     
-    /// Creates a new object with bidirectional ASCII character-component links.
+    /// Creates a new instance with ASCII component-character links.
     @inlinable static func ascii() -> Self {
         Self(character: \.character)
     }
     
+    /// Creates a new instance with localized component-character links.
     @inlinable static func local(_ formatter: NumberFormatter) throws -> Self {
         try Self(character: { component in try component.character(formatter) })
     }
