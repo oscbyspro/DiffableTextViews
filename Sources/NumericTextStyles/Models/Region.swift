@@ -79,7 +79,16 @@ import Support
 extension Region {
     
     //=------------------------------------------------------------------------=
-    // MARK: Initializers - Cache
+    // MARK: Setup
+    //=------------------------------------------------------------------------=
+    
+    @inlinable static func setup() {
+        guard !cacheHasBeenSetup else { return }; self.cacheHasBeenSetup = true
+        self.cache.setObject(en_US, forKey: en_US.locale.identifier as NSString)
+    }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Initializers - Static
     //=------------------------------------------------------------------------=
     
     @inlinable static func cached(_ locale: Locale) -> Region {
@@ -104,18 +113,9 @@ extension Region {
     }
     
     //=------------------------------------------------------------------------=
-    // MARK: Setup
+    // MARK: Initializers - Static - Helpers
     //=------------------------------------------------------------------------=
-    
-    @inlinable static func setup() {
-        guard !cacheHasBeenSetup else { return }; self.cacheHasBeenSetup = true
-        self.cache.setObject(en_US, forKey: en_US.locale.identifier as NSString)
-    }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Helpers
-    //=------------------------------------------------------------------------=
-    
+
     @inlinable static func defaultable(_ locale: Locale) -> Region {
         instance: do { return try Region(locale)
         //=--------------------------------------=
