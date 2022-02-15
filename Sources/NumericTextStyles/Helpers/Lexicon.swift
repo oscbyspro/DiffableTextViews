@@ -31,14 +31,10 @@ import Support
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable init(capacity: Int) {
-        self.components = [:]; self.components.reserveCapacity(capacity)
-        self.characters = [:]; self.characters.reserveCapacity(capacity)
-    }
-    
-    @inlinable init(components: [Character: Component] = [:], characters: [Component: Character] = [:]) {
-        self.components = components
-        self.characters = characters
+    /// Creates an empty instance with reserved capacity, since mapping for all is reqiured..
+    @inlinable init(count: Int) {
+        self.components = [:]; self.components.reserveCapacity(count)
+        self.characters = [:]; self.characters.reserveCapacity(count)
     }
     
     //=------------------------------------------------------------------------=
@@ -46,10 +42,8 @@ import Support
     //=------------------------------------------------------------------------=
 
     @inlinable init(character: (Component) throws -> Character) rethrows where Component: Unit {
-        let components = Component.allCases; self.init(capacity: components.count)
-        //=--------------------------------------=
-        // MARK: Links
-        //=--------------------------------------=
+        let components = Component.allCases
+        self.init(count: components.count)
         for component in components {
             try link(component, character(component))
         }
