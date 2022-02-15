@@ -22,7 +22,6 @@ import Support
     //=------------------------------------------------------------------------=
     
     @usableFromInline static private(set) var cacheHasBeenSetup = false
-
     @usableFromInline static let cache: NSCache<NSString, Region> = {
         let cache = NSCache<NSString, Region>(); cache.countLimit = 3; return cache
     }()
