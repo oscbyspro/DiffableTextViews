@@ -37,7 +37,7 @@ public final class ProxyTextField {
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: ProxyTextField - Internal
+// MARK: + Internal
 //=----------------------------------------------------------------------------=
 
 extension ProxyTextField {
@@ -108,7 +108,7 @@ extension ProxyTextField {
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: ProxyTextField - Actions
+// MARK: + Actions
 //=----------------------------------------------------------------------------=
 
 public extension ProxyTextField {
@@ -123,7 +123,7 @@ public extension ProxyTextField {
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: ProxyTextField - Transformations
+// MARK: + Transformations
 //=----------------------------------------------------------------------------=
 
 public extension ProxyTextField {

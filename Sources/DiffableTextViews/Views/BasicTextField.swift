@@ -16,12 +16,13 @@ import UIKit
 //*============================================================================*
 
 public final class BasicTextField: UITextField {
+    @usableFromInline typealias Code = UIKeyboardHIDUsage
     
     //=------------------------------------------------------------------------=
     // MARK: State
     //=------------------------------------------------------------------------=
     
-    @usableFromInline private(set) var intent: Direction? = nil
+    @usableFromInline private(set) var intent: Code? = nil
     
     //=------------------------------------------------------------------------=
     // MARK: Accessors
@@ -77,17 +78,15 @@ public final class BasicTextField: UITextField {
     // MARK: Intent
     //=------------------------------------------------------------------------=
     
-    @inlinable func intent(behind presses: Set<UIPress>) -> Direction? {
-        presses.first?.key.flatMap({ Self.intents[$0.keyCode] })
+    @inlinable func intent(behind presses: Set<UIPress>) -> Code? {
+        (presses.first?.key?.keyCode).flatMap({ Self.intents.contains($0) ? $0 : nil })
     }
     
     //=------------------------------------------------------------------------=
     // MARK: Intent - Constants
     //=------------------------------------------------------------------------=
     
-    @usableFromInline static let intents: [UIKeyboardHIDUsage: Direction] = [
-        .keyboardLeftArrow: .backwards, .keyboardRightArrow: .forwards
-    ]
+    @usableFromInline static let intents = Set<Code>([.keyboardLeftArrow, .keyboardRightArrow])
 }
 
 #endif

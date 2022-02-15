@@ -97,7 +97,7 @@ public struct Precision<Value: NumericTextValue>: Equatable {
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: Precision - Helpers
+// MARK: + Helpers
 //=----------------------------------------------------------------------------=
 
 extension Precision {

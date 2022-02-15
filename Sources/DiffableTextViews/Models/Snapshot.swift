@@ -85,7 +85,7 @@ public struct Snapshot: BidirectionalCollection, RangeReplaceableCollection {
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: Snapshot - BidirectionalCollection
+// MARK: + BidirectionalCollection
 //=----------------------------------------------------------------------------=
 
 public extension Snapshot {
@@ -142,7 +142,7 @@ public extension Snapshot {
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: Snapshot - RangeReplaceableCollection
+// MARK: + RangeReplaceableCollection
 //=----------------------------------------------------------------------------=
 
 public extension Snapshot {
@@ -177,7 +177,7 @@ public extension Snapshot {
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: Snapshot - Attributes
+// MARK: + Attributes
 //=----------------------------------------------------------------------------=
 
 public extension Snapshot {
@@ -203,7 +203,7 @@ public extension Snapshot {
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: Snapshot - CustomStringConvertible
+// MARK: + CustomStringConvertible
 //=----------------------------------------------------------------------------=
 
 extension Snapshot: CustomStringConvertible {

@@ -7,6 +7,10 @@
 // See http://www.apache.org/licenses/LICENSE-2.0 for license information.
 //=----------------------------------------------------------------------------=
 
+//*============================================================================*
+// MARK: * Count
+//*============================================================================*
+
 /// A count of a number's components.
 ///
 /// - Value is defined as: integer + fraction - integer prefix zeros.
@@ -49,7 +53,7 @@ public struct Count: Equatable {
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: Count - Component
+// MARK: + Component
 //=----------------------------------------------------------------------------=
 
 extension Count {

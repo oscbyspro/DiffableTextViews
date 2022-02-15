@@ -24,8 +24,8 @@ import Support
     // MARK: State
     //=------------------------------------------------------------------------=
     
-    @usableFromInline var components: [Character: Component]
-    @usableFromInline var characters: [Component: Character]
+    @usableFromInline private(set) var components: [Character: Component]
+    @usableFromInline private(set) var characters: [Component: Character]
     
     //=------------------------------------------------------------------------=
     // MARK: Initializers

@@ -147,7 +147,7 @@ import Support
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: Number - TextOutputStreamable
+// MARK: + TextOutputStreamable
 //=----------------------------------------------------------------------------=
 
 extension Number: TextOutputStreamable {

@@ -91,7 +91,7 @@ import Support
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: Digits - TextOutputStreamable
+// MARK: + TextOutputStreamable
 //=----------------------------------------------------------------------------=
 
 extension Digits: TextOutputStreamable {

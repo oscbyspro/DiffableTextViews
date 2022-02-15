@@ -89,7 +89,7 @@ public struct Symbol: Equatable {
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: Symbol - CustomStringConvertible
+// MARK: + CustomStringConvertible
 //=----------------------------------------------------------------------------=
 
 extension Symbol: CustomStringConvertible {
