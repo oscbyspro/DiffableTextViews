@@ -11,10 +11,10 @@ import Foundation
 import XCTest
 
 //*============================================================================*
-// MARK: * StyleVsFormatterTests
+// MARK: * Comments
 //*============================================================================*
 
-final class StyleVsFormatterTests: XCTestCase {
+final class Comments: XCTestCase {
     
     //=------------------------------------------------------------------------=
     // MARK: Tests

@@ -9,14 +9,11 @@ Styles that process text bound to number types.
 Supports every locale available in the Foundation framework.
 
 - It accepts both localized and ASCII inputs.
-- It fetches and caches its characters at runtime.
+- It fetches and caches characters at runtime.
 
 ## Formats
 
 Uses format styles introduced in iOS 15.0.
-
-- All localization magick is performed by Apple.
-- All (most) formatting magick is performed by Apple.
 
 ### Instances
 
@@ -26,40 +23,19 @@ Uses format styles introduced in iOS 15.0.
 | :coin: | Currency | All |
 | :100: | Percent | Nonintegers |
 
-### Rationale
-
-```swift
-func testStyleIsMoreAccurateThanFormatter() {
-    let style = Decimal.FormatStyle.number
-    let formatter = NumberFormatter()
-    formatter.numberStyle = .decimal
-    formatter.generatesDecimalNumbers = true
-    //=--------------------------------------=
-    // MARK: Values
-    //=--------------------------------------=
-    let content = String(repeating: "9", count: 38)
-    let expectation = Decimal(string: content)!
-    //=--------------------------------------=
-    // MARK: Result
-    //=--------------------------------------=
-    XCTAssertEqual(expectation, try! style.parseStrategy.parse(content))
-    XCTAssertNotEqual(expectation, formatter.number(from: content) as! Decimal)
-}
-```
-
 ## Bounds
 
 Determines the input and output space in terms of values.
 
 ### Behavior
 
-    - If the value is outside its range, the value will be rounded.
-    - A negative sign will automatically be inserted when: min < 0 and max ≤ 0.
+- If the value is outside its range, the value will be rounded.
+- A negative sign will automatically be inserted when: min < 0 and max ≤ 0.
 
 ### Enforcement
 
-    - Lower bound is enforced when the view is: active.
-    - Upper bound is enforced when the view is: active.
+- Lower bound is enforced when the view is: active.
+- Upper bound is enforced when the view is: active.
 
 ## Precision
 
@@ -67,13 +43,13 @@ Determines the input and output space in terms of digits.
 
 ### Behavior
 
-    - If the value is longer than its upper bound, the value will be trimmed to that length.
-    - If the value is shorter than its lower bound, redundant zeros will be added to the value.
+- If the value is longer than its upper bound, the value will be trimmed to that length.
+- If the value is shorter than its lower bound, redundant zeros will be added to the value.
 
 ### Enforcement
 
-    - Lower bound is enforced when the view is: idle.
-    - Upper bound is enforced when the view is: active.
+- Lower bound is enforced when the view is: idle.
+- Upper bound is enforced when the view is: active.
 
 ## Values
 
