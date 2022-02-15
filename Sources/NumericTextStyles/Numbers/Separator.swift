@@ -28,9 +28,9 @@ import Foundation
     //=------------------------------------------------------------------------=
     
     @inlinable func character(_ formatter: NumberFormatter) -> Character? {
-        var source: String { switch self {
+        var characters: String { switch self {
         case .grouping: return formatter.groupingSeparator
         case .fraction: return formatter .decimalSeparator
-        }}; return source.first
+        }}; return characters.first
     }
 }

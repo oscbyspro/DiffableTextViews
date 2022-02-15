@@ -39,9 +39,9 @@ import Foundation
     //=------------------------------------------------------------------------=
     
     @inlinable func character(_ formatter: NumberFormatter) -> Character? {        
-        var source: String { switch self {
+        var characters: String { switch self {
         case .positive: return formatter .plusSign
         case .negative: return formatter.minusSign
-        }}; return source.filter({ $0.isPunctuation || $0.isMathSymbol }).first
+        }}; return characters.filter({ $0.isPunctuation || $0.isMathSymbol }).first
     }
 }

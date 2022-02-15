@@ -64,7 +64,7 @@ import Support
         //=--------------------------------------=
         // MARK: Initialize
         //=--------------------------------------=
-        try self.init(locale: locale, signs: .local(formatter),
+        try self.init(locale: locale,   signs: .local(formatter),
         digits: .local(formatter), separators: .local(formatter))
     }
 }
@@ -89,11 +89,7 @@ extension Region {
     //=------------------------------------------------------------------------=
     
     @inlinable static func cached(_ locale: Locale) -> Region {
-        setup()
-        //=--------------------------------------=
-        // MARK: Key
-        //=--------------------------------------=
-        let key = locale.identifier as NSString
+        setup(); let key = locale.identifier as NSString
         //=--------------------------------------=
         // MARK: Search In Cache
         //=--------------------------------------=
