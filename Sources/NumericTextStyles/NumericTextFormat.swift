@@ -50,7 +50,7 @@ extension NumericTextFormat {
     }
     
     //=------------------------------------------------------------------------=
-    // MARK: Transformations - Helpers
+    // MARK: Transformations
     //=------------------------------------------------------------------------=
     
     @inlinable func separator(_ style: SeparatorStyle) -> Self {

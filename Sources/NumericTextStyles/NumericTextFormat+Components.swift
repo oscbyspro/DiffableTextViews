@@ -32,7 +32,7 @@ public enum NumericTextSignDisplayStyle {
 }
 
 //*============================================================================*
-// MARK: * Sign x Representable
+// MARK: * NumericTextSignDisplayStyle x Representable
 //*============================================================================*
 
 public protocol NumericTextSignDisplayStyleRepresentable {
@@ -45,7 +45,7 @@ public protocol NumericTextSignDisplayStyleRepresentable {
 }
 
 //*============================================================================*
-// MARK: * Sign x Representable x Number
+// MARK: * NumericTextSignDisplayStyle x Representable x Number
 //*============================================================================*
 
 extension NumberFormatStyleConfiguration.SignDisplayStrategy: NumericTextSignDisplayStyleRepresentable {
@@ -60,7 +60,7 @@ extension NumberFormatStyleConfiguration.SignDisplayStrategy: NumericTextSignDis
 }
 
 //*============================================================================*
-// MARK: * Sign x Representable x Currency
+// MARK: * NumericTextSignDisplayStyle x Representable x Currency
 //*============================================================================*
 
 extension CurrencyFormatStyleConfiguration.SignDisplayStrategy: NumericTextSignDisplayStyleRepresentable {
