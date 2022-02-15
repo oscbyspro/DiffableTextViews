@@ -51,6 +51,11 @@ Determines the input and output space in terms of digits.
 - Lower bound is enforced when the view is: idle.
 - Upper bound is enforced when the view is: active.
 
+## Behavior
+
+  - Bounds take effect before precision (see enforcement sections).
+  - Sign is set by inserting a sign character anywhere in the text.
+
 ## Values
 
     - Decimal:
@@ -108,11 +113,6 @@ Determines the input and output space in terms of digits.
     - UInt64:
         - precision: 19
         - bounds: 0 to 9,223,372,036,854,775,807 (Int64.max)
-
-## Behavior
-
-      - Bounds take effect before precision (see enforcement sections).
-      - Sign is set by inserting a sign character anywhere in the text.
 
 ## Examples
 
