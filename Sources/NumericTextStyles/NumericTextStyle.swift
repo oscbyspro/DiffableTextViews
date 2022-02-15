@@ -160,12 +160,9 @@ extension NumericTextStyle {
         //=--------------------------------------=
         try bounds.validate(sign: number.sign)
         //=--------------------------------------=
-        // MARK: Number - Count
+        // MARK: Number - Count, Capacity
         //=--------------------------------------=
         let count = number.count()
-        //=--------------------------------------=
-        // MARK: Number - Capacity / Validate
-        //=--------------------------------------=
         let capacity = try precision.capacity(count: count)
         number.removeImpossibleSeparator(capacity: capacity)
         //=--------------------------------------=
@@ -173,15 +170,16 @@ extension NumericTextStyle {
         //=--------------------------------------=
         let value = try region.value(in: number, as: format)
         //=--------------------------------------=
-        // MARK: Value - Validate
+        // MARK: Value - Location
         //=--------------------------------------=
         let location = try bounds.validate(value: value)
+        try bounds.validate(number: number, with: location)
         //=--------------------------------------=
         // MARK: Style
         //=--------------------------------------=
         let style = format.style(
         precision: precision.interactive(count: count),
-        separator: try separator(number: number, location: location),
+        separator: separator(number: number),
         sign: self.sign(number: number))
         //=--------------------------------------=
         // MARK: Style -> Characters
@@ -249,15 +247,9 @@ extension NumericTextStyle {
     // MARK: Separator
     //=------------------------------------------------------------------------=
     
-    /// Alway show style when the number contains a fraction separator and its value is not maxed out, use automatic behavior otherwise.
-    @inlinable func separator(number: Number, location: Bounds.Location) throws -> Format.Separator {
-        if location == .edge, number.hasSeparatorAsSuffix {
-            throw Info([.mark(number), "has reached its limit and does not fit a fraction separator."])
-        }
-        //=--------------------------------------=
-        // MARK: Show Separator That Exists
-        //=--------------------------------------=
-        return number.separator == .fraction ? .always : .automatic
+    /// Always show separator style when the number contains one, use automatic behavior otherwise.
+    @inlinable func separator(number: Number) -> Format.Separator {
+        number.separator == .fraction ? .always : .automatic
     }
     
     //=------------------------------------------------------------------------=

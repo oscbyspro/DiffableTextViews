@@ -47,7 +47,7 @@ struct NumericScreenExample<Format: NumericTextFormat>: View where Format.Format
     //=------------------------------------------------------------------------=
     
     var body: some View {
-        Example(value.binding, style: base)
+        Example(value.binding, style: style)
     }
     
     //=------------------------------------------------------------------------=

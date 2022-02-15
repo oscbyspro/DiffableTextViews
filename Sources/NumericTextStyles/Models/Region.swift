@@ -49,10 +49,7 @@ import Support
     //=------------------------------------------------------------------------=
     
     @inlinable init(locale: Locale, signs: Lexicon<Sign>, digits: Lexicon<Digit>, separators: Lexicon<Separator>) {
-        self.locale = locale
-        self.signs = signs
-        self.digits = digits
-        self.separators = separators
+        self.locale = locale; self.signs = signs; self.digits = digits; self.separators = separators
     }
     
     //=------------------------------------------------------------------------=

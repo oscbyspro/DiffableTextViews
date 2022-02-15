@@ -54,7 +54,7 @@ public struct Bounds<Value: NumericTextValue>: Equatable {
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: Bounds - Value
+// MARK: + Value
 //=----------------------------------------------------------------------------=
 
 extension Bounds {
@@ -93,7 +93,7 @@ extension Bounds {
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: Bounds - Number
+// MARK: + Number
 //=----------------------------------------------------------------------------=
 
 extension Bounds {
@@ -114,7 +114,7 @@ extension Bounds {
     }
     
     //=------------------------------------------------------------------------=
-    // MARK: Validate
+    // MARK: Validate - Sign
     //=------------------------------------------------------------------------=
     
     @inlinable func validate(sign: Sign) throws {
@@ -126,10 +126,20 @@ extension Bounds {
         //=--------------------------------------=
         throw Info([.mark(sign), "is not in", .mark(self)])
     }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Validate - Location
+    //=------------------------------------------------------------------------=
+    
+    @inlinable func validate(number: Number, with location: Location) throws {
+        if location == .edge, number.hasSeparatorAsSuffix {
+            throw Info([.mark(number), "has reached its limit and does not fit a fraction separator."])
+        }
+    }
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: Bounds - CustomStringConvertible
+// MARK: + CustomStringConvertible
 //=----------------------------------------------------------------------------=
 
 extension Bounds: CustomStringConvertible {
