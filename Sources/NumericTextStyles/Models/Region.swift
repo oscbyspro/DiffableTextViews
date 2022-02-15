@@ -33,9 +33,7 @@ import Support
     
     @usableFromInline static let en_US = Region(
         locale: Locale(identifier: "en_US"),
-        signs: Lexicon(ascii: Sign.self),
-        digits: Lexicon(ascii: Digit.self),
-        separators: Lexicon(ascii: Separator.self)
+        signs: .ascii(), digits: .ascii(), separators: .ascii()
     )
     
     //=------------------------------------------------------------------------=
@@ -64,72 +62,14 @@ import Support
     
     /// Creates an uncached region. Unit tests assert that it always succeeds.
     @inlinable convenience init(_ locale: Locale) throws {
-        //=--------------------------------------=
-        // MARK: Formatter
-        //=--------------------------------------=
         let formatter = NumberFormatter()
         formatter.locale = locale
         formatter.numberStyle = .decimal
         //=--------------------------------------=
-        // MARK: Signs
-        //=--------------------------------------=
-        var signs = Lexicon<Sign>()
-        try signs.link(Self.positive(in: formatter), .positive)
-        try signs.link(Self.negative(in: formatter), .negative)
-        //=--------------------------------------=
-        // MARK: Digits
-        //=--------------------------------------=
-        var digits = Lexicon<Digit>()
-        for digit in Digit.allCases {
-            try digits.link(Self.digit(digit, in: formatter), digit)
-        }
-        //=--------------------------------------=
-        // MARK: Separators
-        //=--------------------------------------=
-        var separators = Lexicon<Separator>()
-        try separators.link(Self.fraction(in: formatter), .fraction)
-        try separators.link(Self.grouping(in: formatter), .grouping)
-        //=--------------------------------------=
         // MARK: Initialize
         //=--------------------------------------=
-        self.init(locale: locale, signs: signs, digits: digits, separators: separators)
-    }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Characters
-    //=------------------------------------------------------------------------=
-    
-    @inlinable static func positive(in formatter: NumberFormatter) throws -> Character {
-        try unwrap(formatter.plusSign.filter(signable).first)
-    }
-    
-    @inlinable static func negative(in formatter: NumberFormatter) throws -> Character {
-        try unwrap(formatter.minusSign.filter(signable).first)
-    }
-    
-    @inlinable static func digit(_ digit: Digit, in formatter: NumberFormatter) throws -> Character {
-        try unwrap(formatter.string(from: digit.numericValue as NSNumber)?.first)
-    }
-    
-    @inlinable static func fraction(in formatter: NumberFormatter) throws -> Character {
-        try unwrap(formatter.decimalSeparator.first)
-    }
-    
-    @inlinable static func grouping(in formatter: NumberFormatter) throws -> Character {
-        try unwrap(formatter.groupingSeparator.first)
-    }
-
-    //=------------------------------------------------------------------------=
-    // MARK: Helpers
-    //=------------------------------------------------------------------------=
-    
-    @inlinable static func signable(character: Character) -> Bool {
-        character.isPunctuation || character.isMathSymbol
-    }
-    
-    @inlinable static func unwrap(_ character: Character?) throws -> Character {
-        if let character = character { return character }
-        throw Info(["unable to fetch localized character for component"])
+        try self.init(locale: locale, signs: .local(formatter),
+        digits: .local(formatter), separators: .local(formatter))
     }
 }
 

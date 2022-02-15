@@ -241,7 +241,7 @@ extension NumericTextStyle {
     //=------------------------------------------------------------------------=
     
     /// Always show sign if the number contains a negative sign, use automatic behavior otherwise.
-    @inlinable func sign(number: Number) -> Sign.Style {
+    @inlinable func sign(number: Number) -> SignStyle {
         number.sign == .negative ? .always : .automatic
     }
     

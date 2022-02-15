@@ -7,6 +7,9 @@
 // See http://www.apache.org/licenses/LICENSE-2.0 for license information.
 //=----------------------------------------------------------------------------=
 
+import Foundation
+import Support
+
 //*============================================================================*
 // MARK: * Lexicon
 //*============================================================================*
@@ -15,7 +18,7 @@
 ///
 /// - Requires that each component is bidirectionally mapped to a character.
 ///
-@usableFromInline struct Lexicon<Component: Hashable> {
+@usableFromInline struct Lexicon<Component: Unit> {
     
     //=------------------------------------------------------------------------=
     // MARK: State
@@ -28,26 +31,41 @@
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
+    @inlinable init(capacity: Int) {
+        self.components = [:]; self.components.reserveCapacity(capacity)
+        self.characters = [:]; self.characters.reserveCapacity(capacity)
+    }
+    
     @inlinable init(components: [Character: Component] = [:], characters: [Component: Character] = [:]) {
         self.components = components
         self.characters = characters
     }
     
     //=------------------------------------------------------------------------=
-    // MARK: Initializers - Unicodeable
+    // MARK: Initializers - All
     //=------------------------------------------------------------------------=
 
-    /// Creates a new object with bidirectional ASCII character-component links.
-    @inlinable init(ascii: Component.Type) where Component: Unicodeable {
-        let components = ascii.allCases; let count = components.count
-        self.components = [:]; self.components.reserveCapacity(count)
-        self.characters = [:]; self.characters.reserveCapacity(count)
+    @inlinable init(character: (Component) throws -> Character) rethrows where Component: Unit {
+        let components = Component.allCases; self.init(capacity: components.count)
         //=--------------------------------------=
         // MARK: Links
         //=--------------------------------------=
         for component in components {
-            link(component.character, component)
+            try link(component, character(component))
         }
+    }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Initializers - Static
+    //=------------------------------------------------------------------------=
+    
+    /// Creates a new object with bidirectional ASCII character-component links.
+    @inlinable static func ascii() -> Self {
+        Self(character: \.character)
+    }
+    
+    @inlinable static func local(_ formatter: NumberFormatter) throws -> Self {
+        try Self(character: { component in try component.character(formatter) })
     }
     
     //=------------------------------------------------------------------------=
@@ -69,7 +87,7 @@
     // MARK: Transformations
     //=------------------------------------------------------------------------=
     
-    @inlinable mutating func link(_ character: Character, _ component: Component) {
+    @inlinable mutating func link(_ component: Component, _ character: Character) {
         self.components[character] = component
         self.characters[component] = character
     }

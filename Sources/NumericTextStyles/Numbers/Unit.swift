@@ -7,25 +7,50 @@
 // See http://www.apache.org/licenses/LICENSE-2.0 for license information.
 //=----------------------------------------------------------------------------=
 
+import Foundation
+import Support
+
 //*============================================================================*
-// MARK: * Unicodeable
+// MARK: * Unit
 //*============================================================================*
 
 /// An object representing an ASCII character by its UInt8 unicode scalar value.
-@usableFromInline protocol Unicodeable:
-RawRepresentable, Hashable, CaseIterable, TextOutputStreamable where RawValue == UInt8 { }
+@usableFromInline protocol Unit:
+RawRepresentable, Hashable, CaseIterable, TextOutputStreamable where RawValue == UInt8 {
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Localization
+    //=------------------------------------------------------------------------=
+    
+    @inlinable func character(_ formatter: NumberFormatter) -> Character?
+}
 
 //=----------------------------------------------------------------------------=
-// MARK: + Details
+// MARK: + Localizable
 //=----------------------------------------------------------------------------=
 
-extension Unicodeable {
+extension Unit {
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Localization
+    //=------------------------------------------------------------------------=
+    
+    @inlinable func character(_ formatter: NumberFormatter) throws -> Character {
+        try character(formatter) ?! Info(["unable to localize", .mark(self)])
+    }
+}
+
+//=----------------------------------------------------------------------------=
+// MARK: + Unicodeable
+//=----------------------------------------------------------------------------=
+
+extension Unit {
     
     //=------------------------------------------------------------------------=
     // MARK: Unicode
     //=------------------------------------------------------------------------=
     
-    @inlinable public var unicode: Unicode.Scalar {
+    @inlinable var unicode: Unicode.Scalar {
         Unicode.Scalar(rawValue)
     }
         
@@ -33,7 +58,7 @@ extension Unicodeable {
     // MARK: Character
     //=------------------------------------------------------------------------=
     
-    @inlinable public var character: Character {
+    @inlinable var character: Character {
         Character(unicode)
     }
     
@@ -41,7 +66,7 @@ extension Unicodeable {
     // MARK: Write
     //=------------------------------------------------------------------------=
     
-    @inlinable public func write<T: TextOutputStream>(to target: inout T) {
+    @inlinable func write<T: TextOutputStream>(to target: inout T) {
         unicode.write(to: &target)
     }
 }

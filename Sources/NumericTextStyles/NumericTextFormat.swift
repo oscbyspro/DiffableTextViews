@@ -30,7 +30,7 @@ public protocol NumericTextFormat: ParseableFormatStyle where FormatInput: Numer
     // MARK: Transformations
     //=------------------------------------------------------------------------=
         
-    @inlinable func sign(style: Sign.Style) -> Self
+    @inlinable func sign(style: NumericTextSignStyle) -> Self
     @inlinable func precision(_ precision: Precision) -> Self
     @inlinable func decimalSeparator(strategy: Separator) -> Self
 }
@@ -48,7 +48,7 @@ extension NumericTextFormat {
     
     @inlinable func style(precision: Precision,
         separator: Separator = .automatic,
-        sign: Sign.Style = .automatic) -> Self {
+        sign: SignStyle = .automatic) -> Self {
         self.precision(precision).decimalSeparator(strategy: separator).sign(style: sign)
     }
         
@@ -85,7 +85,7 @@ extension NumericTextNumberFormat {
     // MARK: Sign
     //=------------------------------------------------------------------------=
     
-    @inlinable public func sign(style: Sign.Style) -> Self {
+    @inlinable public func sign(style: NumericTextSignStyle) -> Self {
         self.sign(strategy: style.standard())
     }
 }
@@ -114,7 +114,7 @@ extension NumericTextCurrencyFormat {
     // MARK: Sign
     //=------------------------------------------------------------------------=
     
-    @inlinable public func sign(style: Sign.Style) -> Self {
+    @inlinable public func sign(style: NumericTextSignStyle) -> Self {
         self.sign(strategy: style.currency())
     }
 }
@@ -144,7 +144,7 @@ extension NumericTextPercentFormat {
     // MARK: Sign
     //=------------------------------------------------------------------------=
     
-    @inlinable public func sign(style: Sign.Style) -> Self {
+    @inlinable public func sign(style: NumericTextSignStyle) -> Self {
         self.sign(strategy: style.standard())
     }
 }

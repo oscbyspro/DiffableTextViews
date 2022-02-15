@@ -7,11 +7,13 @@
 // See http://www.apache.org/licenses/LICENSE-2.0 for license information.
 //=----------------------------------------------------------------------------=
 
+import Foundation
+
 //*============================================================================*
 // MARK: Digit
 //*============================================================================*
 
-@usableFromInline enum Digit: UInt8, Unicodeable, CaseIterable {
+@usableFromInline enum Digit: UInt8, Unit {
     
     //=------------------------------------------------------------------------=
     // MARK: Instances
@@ -42,5 +44,13 @@
 
     @inlinable var numericValue: UInt8 {
         rawValue - Self.zero.rawValue
+    }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Localization
+    //=------------------------------------------------------------------------=
+    
+    @inlinable func character(_ formatter: NumberFormatter) -> Character? {
+        formatter.string(from: numericValue as NSNumber)?.first
     }
 }

@@ -10,38 +10,39 @@
 import Foundation
 
 //*============================================================================*
-// MARK: * Sign
+// MARK: * Table of Contents
 //*============================================================================*
 
-/// A system representation of a sign.
-@usableFromInline enum Sign: UInt8, Unit {
-    
+@usableFromInline typealias SignStyle = NumericTextSignStyle
+
+//*============================================================================*
+// MARK: * NumericTextSignStyle
+//*============================================================================*
+
+public enum NumericTextSignStyle {
+
     //=------------------------------------------------------------------------=
     // MARK: Instances
     //=------------------------------------------------------------------------=
     
-    case positive = 43 // "+"
-    case negative = 45 // "-"
+    case always
+    case automatic
     
     //=------------------------------------------------------------------------=
-    // MARK: Transformations
+    // MARK: Utilities
     //=------------------------------------------------------------------------=
     
-    @inlinable mutating func toggle() {
+    @inlinable func standard() -> NumberFormatStyleConfiguration.SignDisplayStrategy {
         switch self {
-        case .positive: self = .negative
-        case .negative: self = .positive
+        case .always:    return .always()
+        case .automatic: return .automatic
         }
     }
     
-    //=------------------------------------------------------------------------=
-    // MARK: Localization
-    //=------------------------------------------------------------------------=
-    
-    @inlinable func character(_ formatter: NumberFormatter) -> Character? {        
-        var source: String { switch self {
-        case .positive: return formatter .plusSign
-        case .negative: return formatter.minusSign
-        }}; return source.filter({ $0.isPunctuation || $0.isMathSymbol }).first
+    @inlinable func currency() -> CurrencyFormatStyleConfiguration.SignDisplayStrategy {
+        switch self {
+        case .always:    return .always()
+        case .automatic: return .automatic
+        }
     }
 }
