@@ -53,10 +53,6 @@ The iOS example project provides quick-and-easy-to-use customization.
 |---------|---------|
 <img src="Assets/iOSExampleNumericScreen.png" alt="Numeric" width="250"/> | <img src="Assets/iOSExamplePatternScreen.png" alt="Pattern" width="250"/>
 
-### Modules
-
-It uses custom [interval sliders](Examples/iOS/Modules/IntervalSliders/Sources/IntervalSliders), written in SwiftUI.
-
 ### Installation
 
 Download this package and compile/run it with Xcode.
