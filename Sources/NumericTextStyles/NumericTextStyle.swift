@@ -235,19 +235,13 @@ extension NumericTextStyle {
 extension NumericTextStyle {
     
     //=------------------------------------------------------------------------=
-    // MARK: Sign
+    // MARK: Components
     //=------------------------------------------------------------------------=
     
-    /// Always show sign if the number contains a negative sign, use automatic behavior otherwise.
     @inlinable func sign(number: Number) -> SignStyle {
         number.sign == .negative ? .always : .automatic
     }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Separator
-    //=------------------------------------------------------------------------=
-    
-    /// Always show separator style when the number contains one, use automatic behavior otherwise.
+
     @inlinable func separator(number: Number) -> Format.Separator {
         number.separator == .fraction ? .always : .automatic
     }
