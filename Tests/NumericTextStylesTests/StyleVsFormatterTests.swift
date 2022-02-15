@@ -21,10 +21,10 @@ final class StyleVsFormatterTests: XCTestCase {
     //=------------------------------------------------------------------------=
     
     func testStyleIsMoreAccurateThanFormatter() {
+        let style = Decimal.FormatStyle.number
         let formatter = NumberFormatter()
         formatter.numberStyle = .decimal
         formatter.generatesDecimalNumbers = true
-        let style = Decimal.FormatStyle.number
         //=--------------------------------------=
         // MARK: Values
         //=--------------------------------------=

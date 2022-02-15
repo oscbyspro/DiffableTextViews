@@ -30,10 +30,10 @@ Uses format styles introduced in iOS 15.0.
 
 ```swift
 func testStyleIsMoreAccurateThanFormatter() {
+    let style = Decimal.FormatStyle.number
     let formatter = NumberFormatter()
     formatter.numberStyle = .decimal
     formatter.generatesDecimalNumbers = true
-    let style = Decimal.FormatStyle.number
     //=--------------------------------------=
     // MARK: Values
     //=--------------------------------------=
@@ -51,7 +51,7 @@ func testStyleIsMoreAccurateThanFormatter() {
 
 Determines the input and output space in terms of values.
 
-### Behaviors
+### Behavior
 
     - If the value is outside its range, the value will be rounded.
     - A negative sign will automatically be inserted when: min < 0 and max ≤ 0.
@@ -65,7 +65,7 @@ Determines the input and output space in terms of values.
 
 Determines the input and output space in terms of digits.
 
-### Behaviors
+### Behavior
 
     - If the value is longer than its upper bound, the value will be trimmed to that length.
     - If the value is shorter than its lower bound, redundant zeros will be added to the value.
@@ -133,7 +133,7 @@ Determines the input and output space in terms of digits.
         - precision: 19
         - bounds: 0 to 9,223,372,036,854,775,807 (Int64.max)
 
-## Behaviors
+## Behavior
 
       - Bounds take effect before precision (see enforcement sections).
       - Sign is set by inserting a sign character anywhere in the text.
