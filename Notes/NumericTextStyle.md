@@ -26,6 +26,27 @@ Uses format styles introduced in iOS 15.0.
 | :coin: | Currency | All |
 | :100: | Percent | Nonintegers |
 
+### Rationale
+
+```swift
+func testStyleIsMoreAccurateThanFormatter() {
+    let formatter = NumberFormatter()
+    formatter.numberStyle = .decimal
+    formatter.generatesDecimalNumbers = true
+    let style = Decimal.FormatStyle.number
+    //=--------------------------------------=
+    // MARK: Values
+    //=--------------------------------------=
+    let content = String(repeating: "9", count: 38)
+    let expectation = Decimal(string: content)!
+    //=--------------------------------------=
+    // MARK: Result
+    //=--------------------------------------=
+    XCTAssertEqual(expectation, try! style.parseStrategy.parse(content))
+    XCTAssertNotEqual(expectation, formatter.number(from: content) as! Decimal)
+}
+```
+
 ## Bounds
 
 Determines the input and output space in terms of values.
