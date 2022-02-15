@@ -178,8 +178,8 @@ extension NumericTextStyle {
         // MARK: Style
         //=--------------------------------------=
         let style = format.sign(self.sign(number: number))
-        .separator(separator(number: number))
-        .precision(precision.interactive(count: count))
+        .precision(self.precision.interactive(count: count))
+        .separator(self.separator(number: number))
         //=--------------------------------------=
         // MARK: Style -> Characters
         //=--------------------------------------=
