@@ -51,10 +51,11 @@ Determines the input and output space in terms of digits.
 - Lower bound is enforced when the view is: idle.
 - Upper bound is enforced when the view is: active.
 
-## Behavior
+## Comments
 
   - Bounds take effect before precision (see enforcement sections).
   - Sign is set by inserting a sign character anywhere in the text.
+  - Single character inputs are lenient, multi-character are strict.
 
 ## Values
 
