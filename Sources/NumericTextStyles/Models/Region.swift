@@ -88,7 +88,7 @@ extension Region {
         //=--------------------------------------=
         // MARK: Key
         //=--------------------------------------=
-        let key = NSString(string: locale.identifier)
+        let key = locale.identifier as NSString
         //=--------------------------------------=
         // MARK: Search In Cache
         //=--------------------------------------=
@@ -109,12 +109,8 @@ extension Region {
     //=------------------------------------------------------------------------=
     
     @inlinable static func setup() {
-        guard !cacheHasBeenSetup else { return }
-        self.cacheHasBeenSetup = true
-        //=--------------------------------------=
-        // MARK: Instantiate And Cache Constants
-        //=--------------------------------------=
-        self.cache.setObject(en_US, forKey: NSString(string: en_US.locale.identifier))
+        guard !cacheHasBeenSetup else { return }; self.cacheHasBeenSetup = true
+        self.cache.setObject(en_US, forKey: en_US.locale.identifier as NSString)
     }
     
     //=------------------------------------------------------------------------=
@@ -122,11 +118,7 @@ extension Region {
     //=------------------------------------------------------------------------=
     
     @inlinable static func defaultable(_ locale: Locale) -> Region {
-        //=--------------------------------------=
-        // MARK: Attempt
-        //=--------------------------------------=
-        attempt: do {
-            return try Region(locale)
+        instance: do { return try Region(locale)
         //=--------------------------------------=
         // MARK: Default To Region.en_US (ASCII)
         //=--------------------------------------=
