@@ -31,17 +31,18 @@ import Support
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    /// Creates an empty instance with reserved capacity, since mapping for all is reqiured..
+    /// Creates an empty instance with reserved capacity equal to count.
     @inlinable init(count: Int) {
         self.components = [:]; self.components.reserveCapacity(count)
         self.characters = [:]; self.characters.reserveCapacity(count)
     }
     
     //=------------------------------------------------------------------------=
-    // MARK: Initializers - All
+    // MARK: Initializers - Indirect
     //=------------------------------------------------------------------------=
 
-    @inlinable init(character: (Component) throws -> Character) rethrows where Component: Unit {
+    /// Creates an instance linking all components to their corresponding character.
+    @inlinable init(character: (Component) throws -> Character) rethrows {
         let components = Component.allCases
         self.init(count: components.count)
         for component in components {
