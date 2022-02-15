@@ -57,7 +57,7 @@ import Support
     }
     
     //=------------------------------------------------------------------------=
-    // MARK: Initializers - Locale
+    // MARK: Initializers - Indirect
     //=------------------------------------------------------------------------=
     
     /// Creates an uncached region. Unit tests assert that it always succeeds.
@@ -144,18 +144,7 @@ extension Region {
 extension Region {
 
     //=------------------------------------------------------------------------=
-    // MARK: Number
-    //=------------------------------------------------------------------------=
-    
-    /// To use this method, all formatting characters must be marked as virtual.
-    @inlinable func number<V: Value>(in snapshot: Snapshot, as value: V.Type) throws -> Number {
-        let characters = snapshot.lazy.filter(\.nonvirtual).map(\.character)
-        return try .init(characters: characters, integer: V.isInteger, unsigned: V.isUnsigned,
-        signs: signs.components, digits: digits.components, separators: separators.components)
-    }
-
-    //=------------------------------------------------------------------------=
-    // MARK: Value
+    // MARK: Number -> Value
     //=------------------------------------------------------------------------=
     
     @inlinable func value<F: Format>(in number: Number, as format: F) throws -> F.Value {
@@ -186,5 +175,16 @@ extension Region {
         // MARK: Characters -> Value
         //=--------------------------------------=
         return try format.parse(characters)
+    }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Snapshot -> Number
+    //=------------------------------------------------------------------------=
+    
+    /// To use this method, all formatting characters must be marked as virtual.
+    @inlinable func number<V: Value>(in snapshot: Snapshot, as value: V.Type) throws -> Number {
+        let characters = snapshot.lazy.filter(\.nonvirtual).map(\.character)
+        return try .init(characters: characters, integer: V.isInteger, unsigned: V.isUnsigned,
+        signs: signs.components, digits: digits.components, separators: separators.components)
     }
 }
