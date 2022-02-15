@@ -69,14 +69,12 @@ import Support
     //=------------------------------------------------------------------------=
     
     @inlinable subscript(character: Character) -> Component? {
-        _read   { yield  components[character] }
-        _modify { yield &components[character] }
+        _read { yield components[character]  }
     }
     
     /// Bidirectional mapping is required for all components, so characters may be force unwrapped.
     @inlinable subscript(component: Component) -> Character {
-        _read   { yield  characters[component]! }
-        _modify { yield &characters[component]! }
+        _read { yield characters[component]! }
     }
     
     //=------------------------------------------------------------------------=
