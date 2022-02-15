@@ -26,12 +26,12 @@ final class StyleVsFormatterTests: XCTestCase {
         formatter.generatesDecimalNumbers = true
         let style = Decimal.FormatStyle.number
         //=--------------------------------------=
-        // MARK: Subject
+        // MARK: Values
         //=--------------------------------------=
         let content = String(repeating: "9", count: 38)
         let expectation = Decimal(string: content)!
         //=--------------------------------------=
-        // MARK: Results
+        // MARK: Result
         //=--------------------------------------=
         XCTAssertEqual(expectation, try! style.parseStrategy.parse(content))
         XCTAssertNotEqual(expectation, formatter.number(from: content) as! Decimal)
