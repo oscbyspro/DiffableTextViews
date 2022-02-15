@@ -13,13 +13,15 @@ import Foundation
 // MARK: * Table of Contents
 //*============================================================================*
 
-@usableFromInline typealias SignStyle = NumericTextSignStyle
+@usableFromInline typealias SignStyle = NumericTextSignDisplayStyle
+@usableFromInline typealias PrecisionStyle = NumberFormatStyleConfiguration.Precision
+@usableFromInline typealias SeparatorStyle = NumberFormatStyleConfiguration.DecimalSeparatorDisplayStrategy
 
 //*============================================================================*
-// MARK: * NumericTextSignStyle
+// MARK: * NumericTextSignDisplayStyle
 //*============================================================================*
 
-public enum NumericTextSignStyle {
+public enum NumericTextSignDisplayStyle {
 
     //=------------------------------------------------------------------------=
     // MARK: Instances
@@ -27,22 +29,47 @@ public enum NumericTextSignStyle {
     
     case always
     case automatic
+}
+
+//*============================================================================*
+// MARK: * Sign x Representable
+//*============================================================================*
+
+public protocol NumericTextSignDisplayStyleRepresentable {
     
     //=------------------------------------------------------------------------=
-    // MARK: Utilities
+    // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable func standard() -> NumberFormatStyleConfiguration.SignDisplayStrategy {
-        switch self {
-        case .always:    return .always()
-        case .automatic: return .automatic
-        }
+    @inlinable init(style: NumericTextSignDisplayStyle)
+}
+
+//*============================================================================*
+// MARK: * Sign x Representable x Number
+//*============================================================================*
+
+extension NumberFormatStyleConfiguration.SignDisplayStrategy: NumericTextSignDisplayStyleRepresentable {
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Initializers
+    //=------------------------------------------------------------------------=
+    
+    @inlinable public init(style: NumericTextSignDisplayStyle) {
+        switch style { case .always: self = .always(); case .automatic: self = .automatic }
     }
+}
+
+//*============================================================================*
+// MARK: * Sign x Representable x Currency
+//*============================================================================*
+
+extension CurrencyFormatStyleConfiguration.SignDisplayStrategy: NumericTextSignDisplayStyleRepresentable {
     
-    @inlinable func currency() -> CurrencyFormatStyleConfiguration.SignDisplayStrategy {
-        switch self {
-        case .always:    return .always()
-        case .automatic: return .automatic
-        }
+    //=------------------------------------------------------------------------=
+    // MARK: Initializers
+    //=------------------------------------------------------------------------=
+    
+    @inlinable public init(style: NumericTextSignDisplayStyle) {
+        switch style { case .always: self = .always(); case .automatic: self = .automatic }
     }
 }

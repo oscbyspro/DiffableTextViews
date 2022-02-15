@@ -79,7 +79,7 @@ extension NumericTextStyle {
     //=------------------------------------------------------------------------=
     
     @inlinable public func format(value: Value) -> String {
-        format.style(precision: precision.inactive()).format(value)
+        format.precision(precision.inactive()).format(value)
     }
 }
 
@@ -94,7 +94,7 @@ extension NumericTextStyle {
     //=------------------------------------------------------------------------=
     
     @inlinable public func interpret(value: Value) -> Commit<Value> {
-        var style = format.style(precision: precision.active())
+        var style = format.precision(precision.active())
         var value = value
         //=--------------------------------------=
         // MARK: Autocorrect
@@ -118,7 +118,7 @@ extension NumericTextStyle {
         //=--------------------------------------=
         // MARK: Style
         //=--------------------------------------=
-        style = style.sign(style: sign(number: number))
+        style = style.sign(sign(number: number))
         //=--------------------------------------=
         // MARK: Style -> Characters
         //=--------------------------------------=
@@ -177,10 +177,9 @@ extension NumericTextStyle {
         //=--------------------------------------=
         // MARK: Style
         //=--------------------------------------=
-        let style = format.style(
-        precision: precision.interactive(count: count),
-        separator: separator(number: number),
-        sign:      self.sign(number: number))
+        let style = format.sign(self.sign(number: number))
+        .separator(separator(number: number))
+        .precision(precision.interactive(count: count))
         //=--------------------------------------=
         // MARK: Style -> Characters
         //=--------------------------------------=
@@ -242,7 +241,7 @@ extension NumericTextStyle {
         number.sign == .negative ? .always : .automatic
     }
 
-    @inlinable func separator(number: Number) -> Format.Separator {
+    @inlinable func separator(number: Number) -> SeparatorStyle {
         number.separator == .fraction ? .always : .automatic
     }
     

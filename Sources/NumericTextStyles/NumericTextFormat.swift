@@ -14,7 +14,7 @@ import Foundation
 //*============================================================================*
 
 @usableFromInline typealias Format = NumericTextFormat
-@usableFromInline typealias Standard = NumericTextNumberFormat
+@usableFromInline typealias Normal = NumericTextNumberFormat
 @usableFromInline typealias Currency = NumericTextCurrencyFormat
 @usableFromInline typealias Percent = NumericTextPercentFormat
 
@@ -23,16 +23,15 @@ import Foundation
 //*============================================================================*
 
 public protocol NumericTextFormat: ParseableFormatStyle where FormatInput: NumericTextValue, FormatOutput == String {
-    typealias Precision = NumberFormatStyleConfiguration.Precision
-    typealias Separator = NumberFormatStyleConfiguration.DecimalSeparatorDisplayStrategy
-    
+    associatedtype SignDisplayStrategy: NumericTextSignDisplayStyleRepresentable
+
     //=------------------------------------------------------------------------=
     // MARK: Transformations
     //=------------------------------------------------------------------------=
-        
-    @inlinable func sign(style: NumericTextSignStyle) -> Self
-    @inlinable func precision(_ precision: Precision) -> Self
-    @inlinable func decimalSeparator(strategy: Separator) -> Self
+    
+    @inlinable func sign(strategy: SignDisplayStrategy) -> Self
+    @inlinable func precision(_ precision: NumberFormatStyleConfiguration.Precision) -> Self
+    @inlinable func decimalSeparator(strategy: NumberFormatStyleConfiguration.DecimalSeparatorDisplayStrategy) -> Self
 }
 
 //=----------------------------------------------------------------------------=
@@ -41,17 +40,7 @@ public protocol NumericTextFormat: ParseableFormatStyle where FormatInput: Numer
 
 extension NumericTextFormat {
     @usableFromInline typealias Value = FormatInput
-
-    //=------------------------------------------------------------------------=
-    // MARK: Transformations
-    //=------------------------------------------------------------------------=
     
-    @inlinable func style(precision: Precision,
-        separator: Separator = .automatic,
-        sign: SignStyle = .automatic) -> Self {
-        self.precision(precision).decimalSeparator(strategy: separator).sign(style: sign)
-    }
-        
     //=------------------------------------------------------------------------=
     // MARK: Parse
     //=------------------------------------------------------------------------=
@@ -59,92 +48,40 @@ extension NumericTextFormat {
     @inlinable func parse(_ characters: String) throws -> Value {
         try parseStrategy.parse(characters)
     }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Transformations - Helpers
+    //=------------------------------------------------------------------------=
+    
+    @inlinable func separator(_ style: SeparatorStyle) -> Self {
+        self.decimalSeparator(strategy: style)
+    }
+    
+    @inlinable func sign(_ style: SignStyle) -> Self {
+        self.sign(strategy: SignDisplayStrategy(style: style))
+    }
 }
 
 //*============================================================================*
 // MARK: * Format x Number
 //*============================================================================*
 
-public protocol NumericTextNumberFormat: NumericTextFormat {
-    typealias Configuration = NumberFormatStyleConfiguration
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Sign
-    //=------------------------------------------------------------------------=
-    
-    @inlinable func sign(strategy: Configuration.SignDisplayStrategy) -> Self
-}
-
-//=----------------------------------------------------------------------------=
-// MARK: + Details
-//=----------------------------------------------------------------------------=
-
-extension NumericTextNumberFormat {
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Sign
-    //=------------------------------------------------------------------------=
-    
-    @inlinable public func sign(style: NumericTextSignStyle) -> Self {
-        self.sign(strategy: style.standard())
-    }
-}
+public protocol NumericTextNumberFormat: NumericTextFormat where
+SignDisplayStrategy == NumberFormatStyleConfiguration.SignDisplayStrategy { }
 
 //*============================================================================*
 // MARK: * Format x Currency
 //*============================================================================*
 
-public protocol NumericTextCurrencyFormat: NumericTextFormat {
-    typealias Configuration = CurrencyFormatStyleConfiguration
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Sign
-    //=------------------------------------------------------------------------=
-    
-    @inlinable func sign(strategy: Configuration.SignDisplayStrategy) -> Self
-}
+public protocol NumericTextCurrencyFormat: NumericTextFormat where
+SignDisplayStrategy == CurrencyFormatStyleConfiguration.SignDisplayStrategy { }
 
-//=----------------------------------------------------------------------------=
-// MARK: + Details
-//=----------------------------------------------------------------------------=
-
-extension NumericTextCurrencyFormat {
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Sign
-    //=------------------------------------------------------------------------=
-    
-    @inlinable public func sign(style: NumericTextSignStyle) -> Self {
-        self.sign(strategy: style.currency())
-    }
-}
 
 //*============================================================================*
 // MARK: * Format x Percent
 //*============================================================================*
 
 /// - Note: To use this format, the value must support at least two exponent digits.
-public protocol NumericTextPercentFormat: NumericTextFormat where FormatInput: NumericTextFloatingPointValue {
-    typealias Configuration = NumberFormatStyleConfiguration
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Sign
-    //=------------------------------------------------------------------------=
-    
-    @inlinable func sign(strategy: Configuration.SignDisplayStrategy) -> Self
-}
-
-//=----------------------------------------------------------------------------=
-// MARK: + Details
-//=----------------------------------------------------------------------------=
-
-extension NumericTextPercentFormat {
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Sign
-    //=------------------------------------------------------------------------=
-    
-    @inlinable public func sign(style: NumericTextSignStyle) -> Self {
-        self.sign(strategy: style.standard())
-    }
-}
+public protocol NumericTextPercentFormat: NumericTextFormat where
+FormatInput: NumericTextFloatingPointValue,
+SignDisplayStrategy == NumberFormatStyleConfiguration.SignDisplayStrategy { }
