@@ -68,7 +68,7 @@ extension PatternTextStyle {
     
     /// - Mismatches are separated.
     @inlinable public func format(value: Value) -> String {
-        Sequencer(pattern, placeholders, value).reduce(into: String()) {
+        Sequencer(pattern, placeholders, value).reduce(into: .init()) {
             characters, queue, content in
             characters.append(contentsOf: queue)
             characters.append(content)
@@ -97,7 +97,7 @@ extension PatternTextStyle {
     
     /// - Mismatches are cut.
     @inlinable public func interpret(value: Value) -> Commit<Value> {
-        Sequencer(pattern, placeholders, value).reduce(into: .none) {
+        Sequencer(pattern, placeholders, value).reduce(into: .init()) {
             commit, queue, content in
             commit.value.append(content)
             commit.snapshot.append(contentsOf: Snapshot(queue, as: .phantom))

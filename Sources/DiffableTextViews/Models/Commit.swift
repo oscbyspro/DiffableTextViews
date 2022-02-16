@@ -29,19 +29,12 @@ public struct Commit<Value> {
         self.value = value
         self.snapshot = snapshot
     }
-}
-
-//=----------------------------------------------------------------------------=
-// MARK: + RangeReplaceableCollection
-//=----------------------------------------------------------------------------=
-
-extension Commit where Value: RangeReplaceableCollection {
     
     //=------------------------------------------------------------------------=
-    // MARK: Initializers - Static
+    // MARK: Initializers - Conditional
     //=------------------------------------------------------------------------=
     
-    @inlinable public static var none: Self {
-        Self(value: Value(), snapshot: Snapshot())
+    @inlinable public init() where Value: RangeReplaceableCollection {
+        self.init(value: Value(), snapshot: Snapshot())
     }
 }
