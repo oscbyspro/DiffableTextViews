@@ -19,14 +19,14 @@ struct ContentTabs: View {
     // MARK: State
     //=------------------------------------------------------------------------=
     
-    @State private var tab = Tab.numeric
+    @StateObject private var tab = Source(Tab.numeric)
     
     //=------------------------------------------------------------------------=
     // MARK: Body
     //=------------------------------------------------------------------------=
     
     var body: some View {
-        TabView(selection: $tab) {
+        TabView(selection: tab.binding) {
             NumericScreen().modifier(Tab.numeric)
             PatternScreen().modifier(Tab.pattern)
         }
@@ -62,7 +62,7 @@ struct ContentTabs: View {
         //=--------------------------------------------------------------------=
         
         func body(content: Content) -> some View {
-            content.tag(title).tabItem(label)
+            content.tag(self).tabItem(label)
         }
         
         //=--------------------------------------------------------------------=
