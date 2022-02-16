@@ -10,7 +10,7 @@
 import Support
 
 //=----------------------------------------------------------------------------=
-// MARK: PatternTextStyle - Placeholder
+// MARK: + Placeholder
 //=----------------------------------------------------------------------------=
 
 extension PatternTextStyle {
@@ -25,7 +25,7 @@ extension PatternTextStyle {
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: PatternTextStyle - Placeholder - Public
+// MARK: + Placeholder
 //=----------------------------------------------------------------------------=
 
 public extension PatternTextStyle {

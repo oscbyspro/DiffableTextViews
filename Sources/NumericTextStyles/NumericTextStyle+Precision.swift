@@ -8,7 +8,7 @@
 //=----------------------------------------------------------------------------=
 
 //=----------------------------------------------------------------------------=
-// MARK: DiffableTextStyle - Precision
+// MARK: + Precision
 //=----------------------------------------------------------------------------=
 
 extension NumericTextStyle {
@@ -23,7 +23,7 @@ extension NumericTextStyle {
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: DiffableTextStyle - Integer
+// MARK: + Integer
 //=----------------------------------------------------------------------------=
 
 public extension NumericTextStyle where Value: NumericTextIntegerValue {
@@ -46,7 +46,7 @@ public extension NumericTextStyle where Value: NumericTextIntegerValue {
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: DiffableTextStyle - Floating Point
+// MARK: + Floating Point
 //=----------------------------------------------------------------------------=
 
 public extension NumericTextStyle where Value: NumericTextFloatingPointValue {

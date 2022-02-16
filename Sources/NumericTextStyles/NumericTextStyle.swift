@@ -69,7 +69,7 @@ public struct NumericTextStyle<Format: NumericTextFormat>: DiffableTextStyle {
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: NumericTextStyle - Format
+// MARK: + Format
 //=----------------------------------------------------------------------------=
 
 extension NumericTextStyle {
@@ -84,7 +84,7 @@ extension NumericTextStyle {
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: NumericTextStyle - Commit
+// MARK: + Interpret
 //=----------------------------------------------------------------------------=
 
 extension NumericTextStyle {
@@ -133,7 +133,7 @@ extension NumericTextStyle {
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: NumericTextStyle - Merge
+// MARK: + Merge
 //=----------------------------------------------------------------------------=
 
 extension NumericTextStyle {
@@ -194,7 +194,7 @@ extension NumericTextStyle {
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: NumericTextStyle - Snapshot
+// MARK: + Snapshot
 //=----------------------------------------------------------------------------=
 
 extension NumericTextStyle {
@@ -228,7 +228,7 @@ extension NumericTextStyle {
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: NumericTextStyle - Format
+// MARK: + Helpers
 //=----------------------------------------------------------------------------=
 
 extension NumericTextStyle {
