@@ -18,24 +18,7 @@ import XCTest
 // MARK: * RegionTests
 //*============================================================================*
 
-final class RegionTests: XCTestCase {
-    
-    //=------------------------------------------------------------------------=
-    // MARK: State
-    //=------------------------------------------------------------------------=
-    
-    lazy var locales: [Locale] = Locale
-        .availableIdentifiers
-        .lazy.map(Locale.init)
-    
-    lazy var regions: [Region] = locales
-        .compactMap({ try? Region($0) })
-    
-    lazy var currencies: [String] = locales
-        .lazy.compactMap(\.currencyCode)
-        .reduce(into: Set()) { $0.insert($1) }
-        .map({ $0 })
-}
+final class RegionTests: XCTestCase, Earthly { }
 
 //=----------------------------------------------------------------------------=
 // MARK: + Invalid Assumptions List
@@ -48,11 +31,11 @@ extension RegionTests {
     //=------------------------------------------------------------------------=
     
     func testVirtualCharactersAreNotAlwaysUnique() {
-        let number = 1234567.89
+        let number = -1234567.89
         let currencyCode = "PAB"
         let locale = Locale(identifier: "rhg-Rohg_MM")
         let formatted = number.formatted(.currency(code: currencyCode).locale(locale))
-        XCTAssertEqual(formatted, "B/. 1,234,567.89") // currency contains fraction separator
+        XCTAssertEqual(formatted, "-B/. 1,234,567.89") // currency contains fraction separator
     }
 }
 
