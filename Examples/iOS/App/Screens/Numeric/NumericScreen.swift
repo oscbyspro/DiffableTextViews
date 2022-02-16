@@ -73,7 +73,7 @@ struct NumericScreen: View {
     }
     
     var fractionIntervalSliders: some View {
-        NumericScreenSliders("Integer digits length", values: context.fraction, in: Context.fractionLimits)
+        NumericScreenSliders("Fraction digits length", values: context.fraction, in: Context.fractionLimits)
     }
     
     //=------------------------------------------------------------------------=
