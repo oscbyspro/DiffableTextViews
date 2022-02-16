@@ -68,26 +68,28 @@ extension PatternTextStyle {
     
     /// - Mismatches are separated.
     @inlinable public func format(value: Value) -> String {
-        var characters = String()
-        //=--------------------------------------=
-        // MARK: Loop
-        //=--------------------------------------=
-        iterate(value) { queue, content in
+        Sequencer(pattern, placeholders, value).reduce(into: String()) {
+            characters, queue, content in
             characters.append(contentsOf: queue)
             characters.append(content)
-        } none: { queue in
+        } none: {
+            characters, queue in
             characters.append(contentsOf: queue)
-        } remainders: { queue, contents in
+        } remainders: {
+            characters, queue, contents in
             visible ? characters += queue : ()
             guard !contents.isEmpty else { return }
             characters.append("|")
             characters.append(contentsOf: contents)
         }
-        //=--------------------------------------=
-        // MARK: Done
-        //=--------------------------------------=
-        return characters
     }
+}
+
+//=----------------------------------------------------------------------------=
+// MARK: + Commit
+//=----------------------------------------------------------------------------=
+
+extension PatternTextStyle {
 
     //=------------------------------------------------------------------------=
     // MARK: Commit
@@ -95,70 +97,19 @@ extension PatternTextStyle {
     
     /// - Mismatches are cut.
     @inlinable public func interpret(value: Value) -> Commit<Value> {
-        var elements = Value(); var snapshot = Snapshot()
-        //=--------------------------------------=
-        // MARK: Loop
-        //=--------------------------------------=
-        iterate(value) { queue, content in
-            elements.append(content)
-            snapshot.append(contentsOf: Snapshot(queue, as: .phantom))
-            snapshot.append(Symbol(content, as: .content))
-        } none: { queue in
-            snapshot.append(contentsOf: Snapshot(queue, as: .phantom))
-            snapshot.append(.anchor)
-        } remainders: { queue, _ in
-            visible ? snapshot += Snapshot(queue, as: .phantom) : ()
+        Sequencer(pattern, placeholders, value).reduce(into: .none) {
+            commit, queue, content in
+            commit.value.append(content)
+            commit.snapshot.append(contentsOf: Snapshot(queue, as: .phantom))
+            commit.snapshot.append(Symbol(content, as: .content))
+        } none: {
+            commit, queue in
+            commit.snapshot.append(contentsOf: Snapshot(queue, as: .phantom))
+            commit.snapshot.append(.anchor)
+        } remainders: {
+            commit, queue, _ in
+            visible ? commit.snapshot += Snapshot(queue, as: .phantom) : ()
         }
-        //=--------------------------------------=
-        // MARK: Done
-        //=--------------------------------------=
-        return Commit(value: elements, snapshot: snapshot)
-    }
-
-    //=------------------------------------------------------------------------=
-    // MARK: Helpers
-    //=------------------------------------------------------------------------=
-    
-    @inlinable func iterate(_ value: Value, some: (Substring, Character) -> Void,
-        none: (Substring) -> Void, remainders: (Substring, Value.SubSequence) -> Void) {
-        var vIndex = value.startIndex
-        var pIndex = pattern.startIndex
-        var qIndex = pIndex // queue
-        //=--------------------------------------=
-        // MARK: Loop
-        //=--------------------------------------=
-        loop: while pIndex != pattern.endIndex {
-            let character = pattern[pIndex]
-            //=----------------------------------=
-            // MARK: Value
-            //=----------------------------------=
-            if let predicate = placeholders[character] {
-                guard vIndex != value.endIndex else { break loop }
-                let   content = value[vIndex]
-                guard predicate.check(content) else { break loop }
-                //=------------------------------=
-                // MARK: Some
-                //=------------------------------=
-                some(pattern[qIndex..<pIndex], content)
-                value.formIndex(after: &vIndex)
-                pattern.formIndex(after: &pIndex)
-                qIndex = pIndex
-            //=----------------------------------=
-            // MARK: Pattern
-            //=----------------------------------=
-            } else { pattern.formIndex(after: &pIndex) }
-        }
-        //=----------------------------------=
-        // MARK: None
-        //=----------------------------------=
-        if qIndex == pattern.startIndex {
-            none(pattern[qIndex..<pIndex])
-            qIndex = pIndex
-        }
-        //=--------------------------------------=
-        // MARK: Remainders
-        //=--------------------------------------=
-        remainders(pattern[qIndex...], value[vIndex...])
     }
 }
 
@@ -183,14 +134,11 @@ extension PatternTextStyle {
         for character in pattern {
             guard let predicate = placeholders[character] else { continue }
             guard let content = contents.next() else { break }
-            //=----------------------------------=
-            // MARK: Check
-            //=----------------------------------=
             guard predicate.check(content.character) else {
                 throw Info([.mark(content.character), "is invalid"])
             }
             //=----------------------------------=
-            // MARK: Value
+            // MARK: Insert
             //=----------------------------------=
             value.append(content.character)
         }

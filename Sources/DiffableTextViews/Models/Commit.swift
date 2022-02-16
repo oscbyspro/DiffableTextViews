@@ -30,3 +30,18 @@ public struct Commit<Value> {
         self.snapshot = snapshot
     }
 }
+
+//=----------------------------------------------------------------------------=
+// MARK: + RangeReplaceableCollection
+//=----------------------------------------------------------------------------=
+
+extension Commit where Value: RangeReplaceableCollection {
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Initializers - Static
+    //=------------------------------------------------------------------------=
+    
+    @inlinable public static var none: Self {
+        Self(value: Value(), snapshot: Snapshot())
+    }
+}

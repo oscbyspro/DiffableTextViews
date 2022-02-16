@@ -69,13 +69,13 @@ public struct NumericTextStyle<Format: NumericTextFormat>: DiffableTextStyle {
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: + Format
+// MARK: + Upstream
 //=----------------------------------------------------------------------------=
 
 extension NumericTextStyle {
     
     //=------------------------------------------------------------------------=
-    // MARK: Upstream
+    // MARK: Format
     //=------------------------------------------------------------------------=
     
     @inlinable public func format(value: Value) -> String {
@@ -84,13 +84,13 @@ extension NumericTextStyle {
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: + Interpret
+// MARK: + Upstream
 //=----------------------------------------------------------------------------=
 
 extension NumericTextStyle {
     
     //=------------------------------------------------------------------------=
-    // MARK: Upstream
+    // MARK: Interpret
     //=------------------------------------------------------------------------=
     
     @inlinable public func interpret(value: Value) -> Commit<Value> {
@@ -133,13 +133,13 @@ extension NumericTextStyle {
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: + Merge
+// MARK: + Downstream
 //=----------------------------------------------------------------------------=
 
 extension NumericTextStyle {
     
     //=------------------------------------------------------------------------=
-    // MARK: Downstream
+    // MARK: Merge
     //=------------------------------------------------------------------------=
     
     @inlinable public func merge(changes: Changes) throws -> Commit<Value> {
