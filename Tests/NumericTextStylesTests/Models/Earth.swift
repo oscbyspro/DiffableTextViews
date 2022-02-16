@@ -32,7 +32,7 @@ enum Earth {
     static let currencies: [String] = locales
         .lazy.compactMap(\.currencyCode)
         .reduce(into: Set()) { $0.insert($1) }
-        .map({ $0 }).sorted(by: <)
+        .lazy.map({ $0 }).sorted(by: <)
 }
 
 //*============================================================================*
