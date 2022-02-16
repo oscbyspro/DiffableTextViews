@@ -8,13 +8,43 @@
 //=----------------------------------------------------------------------------=
 
 import XCTest
+import Foundation
 @testable import DiffableTextViews
 
 //*============================================================================*
 // MARK: * Region x Assumptions
 //*============================================================================*
 
-final class RegionTestsOfAssumptions: XCTestCase, Earthly { }
+final class RegionTestsOfAssumptions: XCTestCase, Earthly {
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Tests
+    //=------------------------------------------------------------------------=
+    
+    func testCurrenciesNeverContainNumbers() {
+        //=--------------------------------------=
+        // MARK: Currencies
+        //=--------------------------------------=
+        for currency in currencies {
+            let style = IntegerFormatStyle<Int>
+                .Currency(code: currency)
+                .precision(.fractionLength(0))
+            //=----------------------------------=
+            // MARK: Locales
+            //=----------------------------------=
+            for locale in locales {
+                let zero = style.locale(locale).format(0)
+                //=------------------------------=
+                // MARK: Failure
+                //=------------------------------=
+                guard zero.count(where: \.isNumber) == 1 else {
+                    XCTFail("\(zero), \(locale.identifier), \(currency).")
+                    return
+                }
+            }
+        }
+    }
+}
 
 //*============================================================================*
 // MARK: * Region x Assumptions x Impossible

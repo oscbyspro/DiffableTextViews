@@ -19,7 +19,7 @@ import Foundation
 enum Earth {
 
     //=------------------------------------------------------------------------=
-    // MARK: State
+    // MARK: Constants
     //=------------------------------------------------------------------------=
     
     static let locales: [Locale] = Locale
@@ -33,22 +33,6 @@ enum Earth {
         .lazy.compactMap(\.currencyCode)
         .reduce(into: Set()) { $0.insert($1) }
         .map({ $0 }).sorted(by: <)
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Utilities
-    //=------------------------------------------------------------------------=
-    
-    /// Iterates over all availalbe locales and currencies, which is about 144k iterations.
-    ///
-    /// Do not run XCTAssertions in this loop, lest all things crash and burn.
-    ///
-    static func iterateOverAvailableLocalesAndCurrencies(_ code: (Locale, String) -> Void) {
-        for locale in locales {
-            for currency in currencies {
-                code(locale, currency)
-            }
-        }
-    }
 }
 
 //*============================================================================*

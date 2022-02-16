@@ -31,6 +31,8 @@ final class LexiconTests: XCTestCase, Earthly {
         //=--------------------------------------=
         // MARK: Regions
         //=--------------------------------------=
-        for region in regions { test(region.signs); test(region.digits); test(region.separators) }
+        for region in regions {
+            test(region.signs); test(region.digits); test(region.separators)
+        }
     }
 }
