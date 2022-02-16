@@ -15,17 +15,18 @@ import XCTest
 
 @testable import NumericTextStyles
 
-//*============================================================================*
-// MARK: * CurrencyTests
-//*============================================================================*
+//=----------------------------------------------------------------------------=
+// MARK: + Currency
+//=----------------------------------------------------------------------------=
 
-final class CurrencyTests: XCTestCase {
+extension AssumptionsTests {
     
     //=------------------------------------------------------------------------=
-    // MARK: Assumptions - Positive
+    // MARK: Positive
     //=------------------------------------------------------------------------=
     
-    func testVirtualCurrencyCharactersDontContainNumbers() {
+    func testVirtualCurrencyCharactersDontContainNumbers() throws {
+        try skippable()
         //=--------------------------------------=
         // MARK: Currencies
         //=--------------------------------------=
@@ -50,10 +51,11 @@ final class CurrencyTests: XCTestCase {
     }
     
     //=------------------------------------------------------------------------=
-    // MARK: Assumptions - Negative
+    // MARK: Negative
     //=------------------------------------------------------------------------=
     
-    func testVirtualCurrencyCharactersAreNotAlwaysUnique() {
+    func testVirtualCurrencyCharactersAreNotAlwaysUnique() throws {
+        try skippable()
         let number = -1234567.89
         let currencyCode = "PAB"
         let locale = Locale(identifier: "rhg-Rohg_MM")
