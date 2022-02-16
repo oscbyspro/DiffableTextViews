@@ -7,6 +7,8 @@
 // See http://www.apache.org/licenses/LICENSE-2.0 for license information.
 //=----------------------------------------------------------------------------=
 
+#if DEBUG
+
 import Foundation
 import XCTest
 
@@ -37,3 +39,5 @@ final class Comments: XCTestCase {
         XCTAssertNotEqual(expectation, formatter.number(from: content) as! Decimal)
     }
 }
+
+#endif
