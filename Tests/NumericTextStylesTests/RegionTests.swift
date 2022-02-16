@@ -10,32 +10,28 @@
 #if DEBUG
 
 import XCTest
-@testable import NumericTextStyles
+@testable import DiffableTextViews
 
 //*============================================================================*
-// MARK: * LexiconTests
+// MARK: * RegionTests
 //*============================================================================*
 
-final class LexiconTests: XCTestCase {
+final class RegionTests: XCTestCase {
     
     //=------------------------------------------------------------------------=
     // MARK: Tests
     //=------------------------------------------------------------------------=
-
-    func testEachComponentIsBidirectionallyLinked() {
-        func test<Component>(_ lexicon: Lexicon<Component>) {
-            for component0 in Component.allCases {
-                let character0 = lexicon[component0]
-                let component1 = lexicon[character0]
-                XCTAssertEqual(component0, component1)
-            }
-        }
-        //=--------------------------------------=
-        // MARK: Regions
-        //=--------------------------------------=
-        for region in regions {
-            test(region.signs); test(region.digits); test(region.separators)
-        }
+        
+    func testEachLocaleMapsToARegion() {
+        XCTAssertEqual(regions.count, locales.count)
+    }
+    
+    func testThatThereAreManyRegions() {
+        XCTAssertGreaterThanOrEqual(regions.count, 937)
+    }
+    
+    func testThatThereAreManyCurrencies() {
+        XCTAssertGreaterThanOrEqual(currencies.count, 153)
     }
 }
 

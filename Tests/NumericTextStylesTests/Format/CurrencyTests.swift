@@ -7,21 +7,25 @@
 // See http://www.apache.org/licenses/LICENSE-2.0 for license information.
 //=----------------------------------------------------------------------------=
 
-import XCTest
+#if DEBUG
+
 import Foundation
-@testable import DiffableTextViews
+import Support
+import XCTest
+
+@testable import NumericTextStyles
 
 //*============================================================================*
-// MARK: * Region x Assumptions
+// MARK: * CurrencyTests
 //*============================================================================*
 
-final class RegionTestsOfAssumptions: XCTestCase, Earthly {
+final class CurrencyTests: XCTestCase {
     
     //=------------------------------------------------------------------------=
-    // MARK: Tests
+    // MARK: Assumptions - Positive
     //=------------------------------------------------------------------------=
     
-    func testCurrenciesNeverContainNumbers() {
+    func testVirtualCurrencyCharactersDontContainNumbers() {
         //=--------------------------------------=
         // MARK: Currencies
         //=--------------------------------------=
@@ -38,25 +42,18 @@ final class RegionTestsOfAssumptions: XCTestCase, Earthly {
                 // MARK: Failure
                 //=------------------------------=
                 guard zero.count(where: \.isNumber) == 1 else {
-                    XCTFail("\(zero), \(locale.identifier), \(currency)")
+                    XCTFail("\(zero), \(locale), \(currency)")
                     return
                 }
             }
         }
     }
-}
-
-//*============================================================================*
-// MARK: * Region x Assumptions x Impossible
-//*============================================================================*
-
-final class RegionTestsOfImpossibleAssumptions: XCTestCase, Earthly {
     
     //=------------------------------------------------------------------------=
-    // MARK: Tests
+    // MARK: Assumptions - Negative
     //=------------------------------------------------------------------------=
     
-    func testVirtualCharactersAreNotAlwaysUnique() {
+    func testVirtualCurrencyCharactersAreNotAlwaysUnique() {
         let number = -1234567.89
         let currencyCode = "PAB"
         let locale = Locale(identifier: "rhg-Rohg_MM")
@@ -64,3 +61,5 @@ final class RegionTestsOfImpossibleAssumptions: XCTestCase, Earthly {
         XCTAssertEqual(formatted, "-B/. 1,234,567.89") // currency contains a fraction separator
     }
 }
+
+#endif

@@ -7,28 +7,26 @@
 // See http://www.apache.org/licenses/LICENSE-2.0 for license information.
 //=----------------------------------------------------------------------------=
 
-import XCTest
-@testable import DiffableTextViews
+#if DEBUG
+
+@testable import NumericTextStyles
 
 //*============================================================================*
-// MARK: * Region x Counts
+// MARK: * Region
 //*============================================================================*
 
-final class RegionTestsOfCounts: XCTestCase, Earthly {
+extension Region {
     
     //=------------------------------------------------------------------------=
-    // MARK: Tests
+    // MARK: Predicates
     //=------------------------------------------------------------------------=
-        
-    func testEachLocaleMapsToARegion() {
-        XCTAssertEqual(regions.count, locales.count)
-    }
     
-    func testThatThereAreManyRegions() {
-        XCTAssertGreaterThanOrEqual(regions.count, 937)
-    }
-    
-    func testThatThereAreManyCurrencies() {
-        XCTAssertGreaterThanOrEqual(currencies.count, 153)
+    func nonvirtual(_ character: Character) -> Bool {
+        guard      signs[character] == nil       else { return true }
+        guard     digits[character] == nil       else { return true }
+        guard separators[character] != .fraction else { return true }
+        return false
     }
 }
+
+#endif

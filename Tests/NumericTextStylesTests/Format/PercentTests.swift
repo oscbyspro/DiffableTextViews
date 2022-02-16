@@ -9,32 +9,36 @@
 
 #if DEBUG
 
+import Foundation
+import Support
 import XCTest
+
 @testable import NumericTextStyles
 
 //*============================================================================*
-// MARK: * LexiconTests
+// MARK: * PercentTests
 //*============================================================================*
 
-final class LexiconTests: XCTestCase {
+final class PercentTests: XCTestCase {
     
     //=------------------------------------------------------------------------=
-    // MARK: Tests
+    // MARK: Assumptions - Positive
     //=------------------------------------------------------------------------=
-
-    func testEachComponentIsBidirectionallyLinked() {
-        func test<Component>(_ lexicon: Lexicon<Component>) {
-            for component0 in Component.allCases {
-                let character0 = lexicon[component0]
-                let component1 = lexicon[character0]
-                XCTAssertEqual(component0, component1)
-            }
-        }
+    
+    func testVirtualPercentCharactersAreAlwaysUnique() {
+        let style = IntegerFormatStyle<Int>.Percent()
         //=--------------------------------------=
-        // MARK: Regions
+        // MARK: Locales
         //=--------------------------------------=
         for region in regions {
-            test(region.signs); test(region.digits); test(region.separators)
+            let zero = style.locale(region.locale).format(0)
+            //=----------------------------------=
+            // MARK: Failure
+            //=----------------------------------=
+            guard zero.count(where: region.nonvirtual) == 1 else {
+                XCTFail("\(zero), \(region.locale)")
+                return
+            }
         }
     }
 }

@@ -13,26 +13,19 @@ import Foundation
 @testable import NumericTextStyles
 
 //*============================================================================*
-// MARK: * Earth
+// MARK: * Constants
 //*============================================================================*
 
-enum Earth {
+var locales: [Locale] {
+    Earth.locales
+}
 
-    //=------------------------------------------------------------------------=
-    // MARK: Constants
-    //=------------------------------------------------------------------------=
-    
-    static let locales: [Locale] = Locale
-        .availableIdentifiers.lazy.map(Locale.init)
-        .sorted(by: { $0.identifier < $1.identifier })
-    
-    static let regions: [Region] = locales
-        .compactMap({ try? Region($0) })
-    
-    static let currencies: [String] = locales
-        .lazy.compactMap(\.currencyCode)
-        .reduce(into: Set()) { $0.insert($1) }
-        .lazy.map({ $0 }).sorted(by: <)
+var regions: [Region] {
+    Earth.regions
+}
+
+var currencies: [String] {
+    Earth.currencies
 }
 
 #endif
