@@ -38,7 +38,7 @@ final class RegionTestsOfAssumptions: XCTestCase, Earthly {
                 // MARK: Failure
                 //=------------------------------=
                 guard zero.count(where: \.isNumber) == 1 else {
-                    XCTFail("\(zero), \(locale.identifier), \(currency).")
+                    XCTFail("\(zero), \(locale.identifier), \(currency)")
                     return
                 }
             }
@@ -61,6 +61,6 @@ final class RegionTestsOfImpossibleAssumptions: XCTestCase, Earthly {
         let currencyCode = "PAB"
         let locale = Locale(identifier: "rhg-Rohg_MM")
         let formatted = number.formatted(.currency(code: currencyCode).locale(locale))
-        XCTAssertEqual(formatted, "-B/. 1,234,567.89") // currency contains fraction separator
+        XCTAssertEqual(formatted, "-B/. 1,234,567.89") // currency contains a fraction separator
     }
 }
