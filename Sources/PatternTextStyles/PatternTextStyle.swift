@@ -99,9 +99,9 @@ extension PatternTextStyle {
     @inlinable public func interpret(value: Value) -> Commit<Value> {
         Sequencer(pattern, placeholders, value).reduce(into: .init()) {
             commit, queue, content in
-            commit.value.append(content)
             commit.snapshot.append(contentsOf: Snapshot(queue, as: .phantom))
             commit.snapshot.append(Symbol(content, as: .content))
+            commit.value.append(content)
         } none: {
             commit, queue in
             commit.snapshot.append(contentsOf: Snapshot(queue, as: .phantom))
@@ -125,8 +125,7 @@ extension PatternTextStyle {
     
     /// - Mismatches throw an error.
     @inlinable public func merge(changes: Changes) throws -> Commit<Value> {
-        var value = Value()
-        let proposal = changes.proposal()
+        var value = Value(); let proposal = changes.proposal()
         var contents = proposal.lazy.filter(\.nonvirtual).makeIterator()
         //=--------------------------------------=
         // MARK: Loop

@@ -74,7 +74,7 @@ extension RegionTests {
 
     /// Asserts that all components are bidirectionally mapped to a character.
     func testCharacterComponentLinks() {
-        func test<Component: Hashable & CaseIterable>(lexicon: Lexicon<Component>) {
+        func test<Component>(lexicon: Lexicon<Component>) {
             for component in Component.allCases {
                 let character = lexicon[component]
                 let localized = lexicon[character]
