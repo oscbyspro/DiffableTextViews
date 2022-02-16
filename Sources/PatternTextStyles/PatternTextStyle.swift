@@ -151,6 +151,6 @@ extension PatternTextStyle {
         //=--------------------------------------=
         // MARK: Value -> Commit
         //=--------------------------------------=
-        return interpret(value: value)
+        return self.interpret(value: value)
     }
 }
