@@ -40,7 +40,7 @@
         none: (inout Result, Substring) -> Void,
         remainders: (inout Result, Substring, Value.SubSequence) -> Void) -> Result {
         //=--------------------------------------=
-        // MARK: Indices
+        // MARK: Variables
         //=--------------------------------------=
         var result = result
         var vIndex = value.startIndex
