@@ -79,7 +79,6 @@ SignDisplayStrategy == NumberFormatStyleConfiguration.SignDisplayStrategy { }
 public protocol NumericTextCurrencyFormat: NumericTextFormat where
 SignDisplayStrategy == CurrencyFormatStyleConfiguration.SignDisplayStrategy { }
 
-
 //*============================================================================*
 // MARK: * Format x Percent
 //*============================================================================*
