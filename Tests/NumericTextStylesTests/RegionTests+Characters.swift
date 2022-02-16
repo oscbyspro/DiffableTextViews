@@ -9,94 +9,15 @@
 
 #if DEBUG
 
-import Foundation
 import XCTest
-
+import Foundation
 @testable import NumericTextStyles
 
 //*============================================================================*
-// MARK: * RegionTests
+// MARK: * RegionTests x Characters
 //*============================================================================*
 
-final class RegionTests: XCTestCase, Earthly { }
-
-//=----------------------------------------------------------------------------=
-// MARK: + Invalid Assumptions List
-//=----------------------------------------------------------------------------=
-
-extension RegionTests {
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Tests
-    //=------------------------------------------------------------------------=
-    
-    func testVirtualCharactersAreNotAlwaysUnique() {
-        let number = -1234567.89
-        let currencyCode = "PAB"
-        let locale = Locale(identifier: "rhg-Rohg_MM")
-        let formatted = number.formatted(.currency(code: currencyCode).locale(locale))
-        XCTAssertEqual(formatted, "-B/. 1,234,567.89") // currency contains fraction separator
-    }
-}
-
-//=----------------------------------------------------------------------------=
-// MARK: + Instances
-//=----------------------------------------------------------------------------=
-
-extension RegionTests {
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Tests
-    //=------------------------------------------------------------------------=
-        
-    func testEachLocaleMapsToARegion() {
-        XCTAssertEqual(regions.count, locales.count)
-    }
-    
-    func testThatThereAreManyRegions() {
-        XCTAssertGreaterThanOrEqual(regions.count, 937)
-    }
-    
-    func testThatThereAreManyCurrencies() {
-        XCTAssertGreaterThanOrEqual(currencies.count, 153)
-    }
-}
-
-//=----------------------------------------------------------------------------=
-// MARK: + Lexicon
-//=----------------------------------------------------------------------------=
-
-extension RegionTests {
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Tests
-    //=------------------------------------------------------------------------=
-
-    /// Asserts that all components are bidirectionally mapped to a character.
-    func testCharacterComponentLinks() {
-        func test<Component>(lexicon: Lexicon<Component>) {
-            for component in Component.allCases {
-                let character = lexicon[component]
-                let localized = lexicon[character]
-                XCTAssertEqual(component, localized)
-            }
-        }
-        //=--------------------------------------=
-        // MARK: Regions
-        //=--------------------------------------=
-        for region in regions {
-            test(lexicon: region.signs)
-            test(lexicon: region.digits)
-            test(lexicon: region.separators)
-        }
-    }
-}
-
-//=----------------------------------------------------------------------------=
-// MARK: + Components
-//=----------------------------------------------------------------------------=
-
-extension RegionTests {
+final class RegionTestsOfCharacters: XCTestCase, Earthly {
 
     //=------------------------------------------------------------------------=
     // MARK: Styles

@@ -10,7 +10,6 @@
 #if DEBUG
 
 import Foundation
-
 @testable import NumericTextStyles
 
 //*============================================================================*
