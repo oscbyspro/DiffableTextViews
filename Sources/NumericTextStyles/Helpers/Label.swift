@@ -78,7 +78,7 @@ extension Label {
     //=------------------------------------------------------------------------=
     
     @inlinable static func currency(code: String, in region: Region) throws -> Self {
-        let zero = IntegerFormatStyle<Int>
+        let characters = IntegerFormatStyle<Int>
             .Currency(code: code)
             .locale(region.locale)
             .precision(.fractionLength(0))
@@ -86,10 +86,12 @@ extension Label {
         //=--------------------------------------=
         // MARK: Split
         //=--------------------------------------=
-        let separator = region.digits[.zero]
-        let split = zero.split(separator: separator, omittingEmptySubsequences: false)
+        let digit = region.digits[.zero]
+        let split = characters.split(
+        separator: digit,
+        omittingEmptySubsequences: false)
         guard split.count == 2 else {
-            throw Info([.mark(separator), "is not in", .mark(zero)])
+            throw Info([.mark(digit), "is not in", .mark(characters)])
         }
         //=--------------------------------------=
         // MARK: Return
