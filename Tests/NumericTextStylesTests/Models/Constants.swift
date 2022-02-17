@@ -20,12 +20,12 @@ var locales: [Locale] {
     Earth.locales
 }
 
-var regions: [Lexicon] {
-    Earth.regions
-}
-
 var currencies: [String] {
     Earth.currencies
+}
+
+var lexicons: Lexicons {
+    Earth.lexicons
 }
 
 #endif

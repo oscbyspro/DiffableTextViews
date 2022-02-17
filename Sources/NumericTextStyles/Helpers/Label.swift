@@ -74,9 +74,9 @@ public final class Label {
         // MARK: Initializers
         //=--------------------------------------------------------------------=
         
-        @inlinable init(code: String, locale: String) {
+        @inlinable init(code: String, lexicon: Lexicon) {
             self.code = code
-            self.locale = locale
+            self.locale = lexicon.locale.identifier
         }
         
         //=--------------------------------------------------------------------=
@@ -109,7 +109,7 @@ extension Label {
     //=------------------------------------------------------------------------=
     
     @inlinable static func currency(code: String, in lexicon: Lexicon) -> Label {
-        let key = ID(code: code, locale: lexicon.locale.identifier)
+        let key = ID(code: code, lexicon: lexicon)
         //=--------------------------------------=
         // MARK: Search In Cache
         //=--------------------------------------=

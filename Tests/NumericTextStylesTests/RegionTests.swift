@@ -22,12 +22,13 @@ final class RegionTests: XCTestCase {
     // MARK: Tests
     //=------------------------------------------------------------------------=
         
-    func testEachLocaleMapsToARegion() {
-        XCTAssertEqual(regions.count, locales.count)
+    func testEachLocaleMapsToALexicon() {
+        XCTAssertEqual(locales.count, lexicons.standard.count)
+        XCTAssertEqual(locales.count, lexicons.currency.count)
     }
     
-    func testThatThereAreManyRegions() {
-        XCTAssertGreaterThanOrEqual(regions.count, 937)
+    func testThatThereAreManyLocalizations() {
+        XCTAssertGreaterThanOrEqual(lexicons.standard.count, 937)
     }
     
     func testThatThereAreManyCurrencies() {

@@ -13,28 +13,31 @@ import XCTest
 @testable import NumericTextStyles
 
 //*============================================================================*
-// MARK: * LexiconTests
+// MARK: * LinksTests
 //*============================================================================*
 
-final class LexiconTests: XCTestCase {
+final class LinksTests: XCTestCase {
     
     //=------------------------------------------------------------------------=
     // MARK: Tests
     //=------------------------------------------------------------------------=
 
     func testEachComponentIsBidirectionallyLinked() {
-        func test<Component>(_ lexicon: Links<Component>) {
-            for component0 in Component.allCases {
+        //=--------------------------------------=
+        // MARK: One
+        //=--------------------------------------=
+        func one<T>(_ lexicon: Links<T>) {
+            for component0 in T.allCases {
                 let character0 = lexicon[component0]
                 let component1 = lexicon[character0]
-                XCTAssertEqual(component0, component1)
+                XCTAssertEqual(component0, component1, String(describing: lexicon))
             }
         }
         //=--------------------------------------=
-        // MARK: Regions
+        // MARK: All
         //=--------------------------------------=
-        for region in regions {
-            test(region.signs); test(region.digits); test(region.separators)
+        lexicons.forEach { lexicon in
+            one(lexicon.signs); one(lexicon.digits); one(lexicon.separators)
         }
     }
 }

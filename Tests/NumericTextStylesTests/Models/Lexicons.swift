@@ -33,6 +33,15 @@ final class Lexicons {
         self.standard = locales.compactMap({ try? Lexicon._standard($0) })
         self.currency = locales.compactMap({ try? Lexicon._currency($0) })
     }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Utilities
+    //=------------------------------------------------------------------------=
+    
+    @inlinable func forEach(_ perform: (Lexicon) throws -> Void) rethrows {
+        try standard.forEach(perform)
+        try currency.forEach(perform)
+    }
 }
 
 #endif

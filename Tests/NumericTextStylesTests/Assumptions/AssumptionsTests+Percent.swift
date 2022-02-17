@@ -31,13 +31,13 @@ extension AssumptionsTests {
         //=--------------------------------------=
         // MARK: Locales
         //=--------------------------------------=
-        for region in regions {
-            let zero = style.locale(region.locale).format(0)
+        lexicons.forEach { lexicon in
+            let zero = style.locale(lexicon.locale).format(0)
             //=----------------------------------=
             // MARK: Failure
             //=----------------------------------=
-            guard zero.count(where: region.nonvirtual) == 1 else {
-                XCTFail("\(zero), \(region.locale)")
+            guard zero.count(where: lexicon.nonvirtual) == 1 else {
+                XCTFail("\(zero), \(lexicon.locale)")
                 return
             }
         }

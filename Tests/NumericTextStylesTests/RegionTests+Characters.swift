@@ -23,12 +23,12 @@ extension RegionTests {
     // MARK: Styles
     //=------------------------------------------------------------------------=
     
-    @inlinable func int(_ region: Lexicon) -> IntegerFormatStyle<Int> {
-        .number.locale(region.locale)
+    @inlinable func int(_ lexicon: Lexicon) -> IntegerFormatStyle<Int> {
+        .number.locale(lexicon.locale)
     }
     
-    @inlinable func double(_ region: Lexicon) -> FloatingPointFormatStyle<Double> {
-        .number.locale(region.locale)
+    @inlinable func double(_ lexicon: Lexicon) -> FloatingPointFormatStyle<Double> {
+        .number.locale(lexicon.locale)
     }
     
     //=------------------------------------------------------------------------=
@@ -41,12 +41,12 @@ extension RegionTests {
         //=--------------------------------------=
         // MARK: Regions
         //=--------------------------------------=
-        for region in regions {
-            let style = int(region).sign(strategy: .always())
+        lexicons.forEach {  lexicon in
+            let style = int(lexicon).sign(strategy: .always())
             let positives = positive.formatted(style)
             let negatives = negative.formatted(style)
-            XCTAssertNotNil(positives.first(where: { region.signs[$0] != nil }))
-            XCTAssertNotNil(negatives.first(where: { region.signs[$0] != nil }))
+            XCTAssertNotNil(positives.first(where: { lexicon.signs[$0] != nil }))
+            XCTAssertNotNil(negatives.first(where: { lexicon.signs[$0] != nil }))
         }
     }
     
@@ -55,10 +55,10 @@ extension RegionTests {
         //=--------------------------------------=
         // MARK: Regions
         //=--------------------------------------=
-        for region in regions {
-            let style = int(region).grouping(.never)
+        lexicons.forEach { lexicon in
+            let style = int(lexicon).grouping(.never)
             let numbers = number.formatted(style)
-            XCTAssert(numbers.allSatisfy({ region.digits[$0] != nil }))
+            XCTAssert(numbers.allSatisfy({ lexicon.digits[$0] != nil }))
         }
     }
     
@@ -67,10 +67,10 @@ extension RegionTests {
         //=--------------------------------------=
         // MARK: Regions
         //=--------------------------------------=
-        for region in regions {
-            let style = int(region).grouping(.automatic)
+        lexicons.forEach { lexicon in
+            let style = int(lexicon).grouping(.automatic)
             let nonnumbers = number.formatted(style).filter({ !$0.isNumber })
-            XCTAssert(nonnumbers.allSatisfy({ region.separators[$0] == .grouping }))
+            XCTAssert(nonnumbers.allSatisfy({ lexicon.separators[$0] == .grouping }))
         }
     }
     
@@ -79,10 +79,10 @@ extension RegionTests {
         //=--------------------------------------=
         // MARK: Regions
         //=--------------------------------------=
-        for region in regions {
-            let style = double(region).decimalSeparator(strategy: .always)
+        lexicons.forEach { lexicon in
+            let style = double(lexicon).decimalSeparator(strategy: .always)
             let nonnumbers = number.formatted(style).filter({ !$0.isNumber })
-            XCTAssert(nonnumbers.allSatisfy({ region.separators[$0] == .fraction }))
+            XCTAssert(nonnumbers.allSatisfy({ lexicon.separators[$0] == .fraction }))
         }
     }
 }

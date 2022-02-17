@@ -80,7 +80,7 @@ public final class Lexicon {
     @inlinable static func _currency(_ locale: Locale) throws -> Self {
         let formatter = NumberFormatter()
         formatter.locale = locale
-        formatter.numberStyle = .currency
+        formatter.numberStyle = .decimal
         //=--------------------------------------=
         // MARK: Initialize
         //=--------------------------------------=
