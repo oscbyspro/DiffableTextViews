@@ -8,6 +8,8 @@
 //=----------------------------------------------------------------------------=
 
 import DiffableTextViews
+import Foundation
+import Support
 
 #warning("Rename")
 #warning("Rename")
@@ -25,8 +27,30 @@ import DiffableTextViews
 public protocol NumericTextSpecialization {
     
     //=------------------------------------------------------------------------=
+    // MARK: Localization
+    //=------------------------------------------------------------------------=
+    
+    static func character<T: Unit>(for component: T, in formatter: NumberFormatter) -> Character?
+    
+    //=------------------------------------------------------------------------=
     // MARK: Utilities
     //=------------------------------------------------------------------------=
     
+    #warning("Maybe also make static.")
     func autocorrect(snapshot: inout Snapshot)
+}
+
+//=----------------------------------------------------------------------------=
+// MARK: + Details
+//=----------------------------------------------------------------------------=
+
+extension NumericTextSpecialization {
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Localization
+    //=------------------------------------------------------------------------=
+    
+    @inlinable func character<T: Unit>(_ component: T, in formatter: NumberFormatter) throws -> Character {
+        try character(formatter) ?! Info(["unable to localize", .mark(self)])
+    }
 }

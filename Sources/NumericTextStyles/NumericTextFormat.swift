@@ -40,7 +40,7 @@ public protocol NumericTextFormat: ParseableFormatStyle where FormatInput: Numer
     // MARK: Strategy
     //=------------------------------------------------------------------------=
     
-    associatedtype Specialization: NumericTextStyles.NumericTextSpecialization = Normal
+    associatedtype Specialization: NumericTextStyles.NumericTextSpecialization = Standard
     @inlinable static func specialization(style: NumericTextStyle) -> Specialization
 }
 
@@ -79,7 +79,7 @@ extension NumericTextFormat {
 // MARK: + None
 //=----------------------------------------------------------------------------=
 
-extension NumericTextFormat where Specialization == Normal {
+extension NumericTextFormat where Specialization == Standard {
     
     //=------------------------------------------------------------------------=
     // MARK: Strategy

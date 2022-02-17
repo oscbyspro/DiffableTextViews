@@ -9,6 +9,7 @@
 
 import Foundation
 
+#warning("Rename as Links, maybe. Then rename Region as Lexicon, maybe.")
 //*============================================================================*
 // MARK: * Lexicon
 //*============================================================================*
@@ -49,6 +50,10 @@ import Foundation
         }
     }
     
+    @inlinable init(_ formatter: NumberFormatter, character: (Component) -> (NumberFormatter) throws -> Character) throws {
+        try self.init { component in try character(component)(formatter) }
+    }
+    
     //=------------------------------------------------------------------------=
     // MARK: Initializers - Static
     //=------------------------------------------------------------------------=
@@ -58,9 +63,14 @@ import Foundation
         Self(character: \.character)
     }
     
-    /// Creates a new instance with localized component-character links.
-    @inlinable static func local(_ formatter: NumberFormatter) throws -> Self {
-        try Self(character: { component in try component.character(formatter) })
+    /// Creates a new instance with localized standard component-character links.
+    @inlinable static func standard(_ formatter: NumberFormatter) throws -> Self {
+        try Self(formatter, character: Component.standard)
+    }
+    
+    /// Creates a new instance with localized currency component-character links.
+    @inlinable static func currency(_ formatter: NumberFormatter) throws -> Self {
+        try Self(formatter, character: Component.currency)
     }
     
     //=------------------------------------------------------------------------=

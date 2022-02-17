@@ -50,7 +50,7 @@ import Foundation
     // MARK: Localization
     //=------------------------------------------------------------------------=
     
-    @inlinable func character(_ formatter: NumberFormatter) -> Character? {
+    @inlinable func standard(_ formatter: NumberFormatter) -> Character? {
         formatter.string(from: numericValue as NSNumber)?.first
     }
 }

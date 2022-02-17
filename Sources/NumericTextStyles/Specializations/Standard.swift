@@ -10,10 +10,10 @@
 import DiffableTextViews
 
 //*============================================================================*
-// MARK: * Normal
+// MARK: * Standard
 //*============================================================================*
 
-public struct Normal: Specialization {
+public struct Standard: Specialization {
     
     //=------------------------------------------------------------------------=
     // MARK: Initializers

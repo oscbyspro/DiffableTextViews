@@ -17,20 +17,27 @@ import Support
 
 #warning("Maybe have a normal cache and a currencies cache.")
 @usableFromInline final class Region {
+    @usableFromInline typealias Cache = NSCache<NSString, Region>
     
     //=------------------------------------------------------------------------=
     // MARK: Cache
     //=------------------------------------------------------------------------=
     
-    @usableFromInline static private(set) var cacheHasBeenSetup = false
-    @usableFromInline static let cache: NSCache<NSString, Region> = {
-        let cache = NSCache<NSString, Region>(); cache.countLimit = 3; return cache
+    @usableFromInline static private(set) var complete = false
+    
+    @usableFromInline static let standard: Cache = {
+        let cache = Cache(); cache.countLimit = 3; return cache
+    }()
+    
+    @usableFromInline static let currency: Cache = {
+        let cache = Cache(); cache.countLimit = 3; return cache
     }()
     
     //=------------------------------------------------------------------------=
     // MARK: Instances
     //=------------------------------------------------------------------------=
     
+    /// This instance represent the en\_US locale, maps ASCII characters.
     @usableFromInline static let en_US = Region(
         locale: Locale(identifier: "en_US"),
         signs: .ascii(), digits: .ascii(), separators: .ascii()
@@ -50,23 +57,36 @@ import Support
     //=------------------------------------------------------------------------=
     
     @inlinable init(locale: Locale, signs: Lexicon<Sign>, digits: Lexicon<Digit>, separators: Lexicon<Separator>) {
-        self.locale = locale; self.signs = signs; self.digits = digits; self.separators = separators
+        self.locale = locale
+        self.signs = signs
+        self.digits = digits
+        self.separators = separators
     }
     
     //=------------------------------------------------------------------------=
-    // MARK: Initializers - Indirect
+    // MARK: Initializers - Static
     //=------------------------------------------------------------------------=
     
-    /// Creates an uncached region. Unit tests assert that it always succeeds.
-    @inlinable convenience init(_ locale: Locale) throws {
+    @inlinable static func standard(_ locale: Locale) throws -> Self {
         let formatter = NumberFormatter()
         formatter.locale = locale
         formatter.numberStyle = .decimal
         //=--------------------------------------=
         // MARK: Initialize
         //=--------------------------------------=
-        try self.init(locale: locale,   signs: .local(formatter),
-        digits: .local(formatter), separators: .local(formatter))
+        return try Self(locale: locale,    signs: .standard(formatter),
+        digits: .standard(formatter), separators: .standard(formatter))
+    }
+    
+    @inlinable static func currency(_ locale: Locale) throws -> Self {
+        let formatter = NumberFormatter()
+        formatter.locale = locale
+        formatter.numberStyle = .currency
+        //=--------------------------------------=
+        // MARK: Initialize
+        //=--------------------------------------=
+        return try Self(locale: locale,    signs: .currency(formatter),
+        digits: .currency(formatter), separators: .currency(formatter))
     }
 }
 
@@ -81,15 +101,16 @@ extension Region {
     //=------------------------------------------------------------------------=
     
     @inlinable static func setup() {
-        guard !cacheHasBeenSetup else { return }; self.cacheHasBeenSetup = true
-        self.cache.setObject(en_US, forKey: en_US.locale.identifier as NSString)
+        guard !complete else { return }; complete = true
+        self.standard.setObject(en_US, forKey: en_US.locale.identifier as NSString)
+        self.currency.setObject(en_US, forKey: en_US.locale.identifier as NSString)
     }
     
     //=------------------------------------------------------------------------=
-    // MARK: Initializers - Static
+    // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable static func cached(_ locale: Locale) -> Region {
+    @inlinable static func search(in cache: Cache, locale: Locale, region: (Locale) throws -> Region) -> Region {
         setup(); let key = locale.identifier as NSString
         //=--------------------------------------=
         // MARK: Search In Cache
@@ -100,18 +121,18 @@ extension Region {
         // MARK: Make A New Instance And Save It
         //=--------------------------------------=
         } else {
-            let instance = Region.defaultable(locale)
+            let instance = Region.defaultable(locale, region: region)
             cache.setObject(instance, forKey: key)
             return instance
         }
     }
     
     //=------------------------------------------------------------------------=
-    // MARK: Initializers - Static - Helpers
+    // MARK: Initializers - Helpers
     //=------------------------------------------------------------------------=
-
-    @inlinable static func defaultable(_ locale: Locale) -> Region {
-        instance: do { return try Region(locale)
+    
+    @inlinable static func defaultable(_ locale: Locale, region: (Locale) throws -> Region) -> Region {
+        instance: do { return try region(locale)
         //=--------------------------------------=
         // MARK: Default To Region.en_US (ASCII)
         //=--------------------------------------=
