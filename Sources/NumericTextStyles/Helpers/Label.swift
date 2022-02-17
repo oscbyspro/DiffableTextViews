@@ -119,7 +119,7 @@ extension Label {
         // MARK: Make A New Instance And Save It
         //=--------------------------------------=
         } else {
-            let instance = Label._currency(code: code, in: lexicon)
+            let instance = Label._currency(code: code, lexicon: lexicon)
             currencies.setObject(instance, forKey: key)
             return instance
         }
@@ -129,7 +129,7 @@ extension Label {
     // MARK: Initializers - Helpers
     //=------------------------------------------------------------------------=
     
-    @inlinable static func _currency(code: String, in lexicon: Lexicon) -> Label {
+    @inlinable static func _currency(code: String, lexicon: Lexicon) -> Label {
         let digit = lexicon.digits[.zero]
         //=--------------------------------------=
         // MARK: Split

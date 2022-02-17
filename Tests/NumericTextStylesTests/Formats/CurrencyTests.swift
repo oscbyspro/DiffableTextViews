@@ -54,8 +54,9 @@ final class CurrencyTests: XCTestCase {
     }
     
     func testXXX() {
+        let code = "CVE"
         let locale = Locale(identifier: "kea")
-        let lexicon = try! Lexicon._currency(locale)
+        let lexicon = try! Lexicon._currency(code: code, locale: locale)
         print(lexicon.separators)
     }
 }

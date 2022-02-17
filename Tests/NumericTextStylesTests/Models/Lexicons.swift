@@ -22,16 +22,30 @@ final class Lexicons {
     // MARK: State
     //=------------------------------------------------------------------------=
     
-    let standard: [Lexicon]
-    let currency: [Lexicon]
+    private(set) var standard: [Lexicon] = []
+    private(set) var currency: [Lexicon] = []
     
     //=------------------------------------------------------------------------=
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
     init(_ locales: [Locale])  {
-        self.standard = locales.compactMap({ try? Lexicon._standard($0) })
-        self.currency = locales.lazy.compactMap({ try? Lexicon._currency($0) })
+        //=--------------------------------------=
+        // MARK: Standard
+        //=--------------------------------------=
+        self.standard = locales.compactMap {
+            try? Lexicon._standard(locale: $0)
+        }
+        //=--------------------------------------=
+        // MARK: Currency
+        //=--------------------------------------=
+        for locale in locales {
+            for currency in currencies {
+                if let lexicon = try? Lexicon._currency(code: currency, locale: locale) {
+                    self.currency.append(lexicon)
+                }
+            }
+        }
     }
     
     //=------------------------------------------------------------------------=

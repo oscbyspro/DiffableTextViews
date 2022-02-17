@@ -27,7 +27,7 @@ public struct Standard: Specialization {
     //=------------------------------------------------------------------------=
     
     @inlinable init(locale: Locale) {
-        self.lexicon = Lexicon.standard(locale)
+        self.lexicon = Lexicon.standard(locale: locale)
     }
     
     //=------------------------------------------------------------------------=
