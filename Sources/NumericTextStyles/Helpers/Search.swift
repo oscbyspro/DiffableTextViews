@@ -7,13 +7,15 @@
 // See http://www.apache.org/licenses/LICENSE-2.0 for license information.
 //=----------------------------------------------------------------------------=
 
+import DiffableTextViews
+
 //*============================================================================*
 // MARK: * Naive Search Algorithm
 //*============================================================================*
 
 @usableFromInline enum Search<Needle, Haystack> where
-Needle: BidirectionalCollection, Needle.Element: Equatable,
-Haystack: BidirectionalCollection, Haystack.Element == Needle.Element {
+Needle: BidirectionalCollection, Needle.Element == Character,
+Haystack: BidirectionalCollection, Haystack.Element == Symbol {
     
     //=------------------------------------------------------------------------=
     // MARK: Aliases
@@ -36,13 +38,10 @@ Haystack: BidirectionalCollection, Haystack.Element == Needle.Element {
             //=----------------------------------=
             // MARK: Needle
             //=----------------------------------=
-            for element in needle {
+            for character in needle {
                 guard position != haystack.endIndex,
-                haystack[position] == element
+                character == haystack[position].character
                 else { found = false; break }
-                //=------------------------------=
-                // MARK: Iterate
-                //=------------------------------=
                 haystack.formIndex(after: &position)
             }
             //=----------------------------------=
