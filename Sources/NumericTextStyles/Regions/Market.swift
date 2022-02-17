@@ -34,4 +34,25 @@ import Foundation
         self.labels = NSCache()
         self.labels.countLimit = 10
     }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Label
+    //=------------------------------------------------------------------------=
+    
+    @inlinable func label(code: String) -> Label {
+        let key = code as NSString
+        //=--------------------------------------=
+        // MARK: Search In Cache
+        //=--------------------------------------=
+        if let reusable = labels.object(forKey: key) {
+            return reusable
+        //=--------------------------------------=
+        // MARK: Make A New Instance And Save It
+        //=--------------------------------------=
+        } else {
+            let instance = Label.currency(code: code, in: region)
+            self.labels.setObject(instance, forKey: key)
+            return instance
+        }
+    }
 }

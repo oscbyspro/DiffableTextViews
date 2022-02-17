@@ -15,7 +15,7 @@ import Foundation
 
 /// A mapping model between components and characters.
 ///
-/// - Requires that each component is bidirectionally mapped to a character.
+/// It requires that each component is bidirectionally mapped to a character.
 ///
 @usableFromInline struct Lexicon<Component: Unit> {
     

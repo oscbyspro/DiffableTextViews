@@ -28,9 +28,17 @@ import Support
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable init(_ string: String, at location: Location) {
-        self.characters = string
+    @inlinable init<S: StringProtocol>(_ characters: S, at location: Location) {
         self.location = location
+        self.characters = String(characters)
+    }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Initializers - Indirect
+    //=------------------------------------------------------------------------=
+    
+    @inlinable convenience init() {
+        self.init(String(), at: .prefix)
     }
     
     //*========================================================================*
@@ -51,6 +59,7 @@ extension Label {
     //=------------------------------------------------------------------------=
     
     @inlinable func unformat(snapshot: inout Snapshot) {
+        guard !characters.isEmpty else { return }
         guard let range = range(in: snapshot) else { return }
         snapshot.update(attributes: range) {
             attribute in attribute.insert(.virtual)
@@ -77,27 +86,24 @@ extension Label {
     // MARK: Initializers - Static
     //=------------------------------------------------------------------------=
     
-    @inlinable static func currency(code: String, in region: Region) throws -> Self {
-        let characters = IntegerFormatStyle<Int>
-            .Currency(code: code)
-            .locale(region.locale)
-            .precision(.fractionLength(0))
-            .format(0)
+    @inlinable static func currency(code: String, in region: Region) -> Self {
+        let digit = region.digits[.zero]
         //=--------------------------------------=
         // MARK: Split
         //=--------------------------------------=
-        let digit = region.digits[.zero]
-        let split = characters.split(
-        separator: digit,
-        omittingEmptySubsequences: false)
+        let split = IntegerFormatStyle<Int>
+            .Currency(code: code).locale(region.locale)
+            .precision(.fractionLength(0)).format(0)
+            .split(separator: digit, omittingEmptySubsequences: false)
+        //=--------------------------------------=
+        // MARK: Check
+        //=--------------------------------------=
         guard split.count == 2 else {
-            throw Info([.mark(digit), "is not in", .mark(characters)])
+            fatalError(Info([.mark(digit), "is not in", .mark(split)]).description)
         }
         //=--------------------------------------=
-        // MARK: Return
+        // MARK: Instance
         //=--------------------------------------=
-        return !split[0].isEmpty
-        ? Self(String(split[0]), at: .prefix)
-        : Self(String(split[1]), at: .suffix)
+        return !split[0].isEmpty ? Self(split[0], at: .prefix) : Self(split[1], at: .suffix)
     }
 }
