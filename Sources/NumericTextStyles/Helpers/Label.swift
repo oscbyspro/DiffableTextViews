@@ -59,6 +59,7 @@ extension Label {
     // MARK: Helpers
     //=------------------------------------------------------------------------=
     
+    /// Naive search is OK because labels are close to the edge and unique from edge to end.
     @inlinable func range(in snapshot: Snapshot) -> Range<Snapshot.Index>? {
         Search.range(of: characters, in: snapshot, reversed: location == .suffix)
     }
