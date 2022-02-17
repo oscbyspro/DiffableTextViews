@@ -15,8 +15,7 @@ import Support
 // MARK: * Region
 //*============================================================================*
 
-#warning("Maybe have a normal cache and a currencies cache.")
-@usableFromInline final class Region {
+public final class Region {
     @usableFromInline typealias Cache = NSCache<NSString, Region>
     
     //=------------------------------------------------------------------------=
@@ -67,7 +66,7 @@ import Support
     // MARK: Initializers - Static
     //=------------------------------------------------------------------------=
     
-    @inlinable static func standard(_ locale: Locale) throws -> Self {
+    @inlinable static func _standard(_ locale: Locale) throws -> Self {
         let formatter = NumberFormatter()
         formatter.locale = locale
         formatter.numberStyle = .decimal
@@ -78,7 +77,7 @@ import Support
         digits: .standard(formatter), separators: .standard(formatter))
     }
     
-    @inlinable static func currency(_ locale: Locale) throws -> Self {
+    @inlinable static func _currency(_ locale: Locale) throws -> Self {
         let formatter = NumberFormatter()
         formatter.locale = locale
         formatter.numberStyle = .currency
@@ -88,6 +87,18 @@ import Support
         return try Self(locale: locale,    signs: .currency(formatter),
         digits: .currency(formatter), separators: .currency(formatter))
     }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Initializers - Static - Cache
+    //=------------------------------------------------------------------------=
+    
+    @inlinable static func standard(_ locale: Locale) -> Region {
+        self.search(in: standard, locale: locale, region: _standard)
+    }
+    
+    @inlinable static func currency(_ locale: Locale) -> Region {
+        self.search(in: currency, locale: locale, region: _currency)
+    }
 }
 
 //=----------------------------------------------------------------------------=
@@ -95,16 +106,6 @@ import Support
 //=----------------------------------------------------------------------------=
 
 extension Region {
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Setup
-    //=------------------------------------------------------------------------=
-    
-    @inlinable static func setup() {
-        guard !complete else { return }; complete = true
-        self.standard.setObject(en_US, forKey: en_US.locale.identifier as NSString)
-        self.currency.setObject(en_US, forKey: en_US.locale.identifier as NSString)
-    }
     
     //=------------------------------------------------------------------------=
     // MARK: Initializers
@@ -128,7 +129,17 @@ extension Region {
     }
     
     //=------------------------------------------------------------------------=
-    // MARK: Initializers - Helpers
+    // MARK: Initializers - Setup
+    //=------------------------------------------------------------------------=
+    
+    @inlinable static func setup() {
+        guard !complete else { return }; complete = true
+        self.standard.setObject(en_US, forKey: en_US.locale.identifier as NSString)
+        self.currency.setObject(en_US, forKey: en_US.locale.identifier as NSString)
+    }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Initializers - Error
     //=------------------------------------------------------------------------=
     
     @inlinable static func defaultable(_ locale: Locale, region: (Locale) throws -> Region) -> Region {
