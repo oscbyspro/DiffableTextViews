@@ -32,7 +32,7 @@ final class CurrencyTests: XCTestCase {
         //=--------------------------------------=
         for currency in currencies {
             let style = Style.currency(code: currency)
-            let format = Format.currency(code: currency)
+            let format = Format.currency(code: currency).precision(.fractionLength(0...))
             //=----------------------------------=
             // MARK: Locales
             //=----------------------------------=
@@ -43,14 +43,20 @@ final class CurrencyTests: XCTestCase {
                 // MARK: Check
                 //=------------------------------=
                 guard commit.value == value else {
-                    XCTFail("\(commit.value) expected: \(value) info: \((locale, currency))")
+                    XCTFail("\(commit.value) != \(value) ... \((locale, currency, characters, commit.snapshot.characters))")
                     return
                 }; guard commit.value == value, commit.snapshot.characters == characters else {
-                    XCTFail("\(commit.snapshot.characters) expected: \(characters) info: \((locale, currency))")
+                    XCTFail("\(commit.snapshot.characters) != \(characters) ... \((locale, currency))")
                     return
                 }
             }
         }
+    }
+    
+    func testXXX() {
+        let locale = Locale(identifier: "kea")
+        let lexicon = try! Lexicon._currency(locale)
+        print(lexicon.separators)
     }
 }
 

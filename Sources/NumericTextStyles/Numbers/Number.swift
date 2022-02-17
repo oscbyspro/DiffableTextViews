@@ -40,18 +40,20 @@ import Support
     /// To use this method, all formatting characters must be marked as such.
     ///
     @inlinable init<S: Sequence>(characters: S, integer: Bool, unsigned: Bool,
-        signs: [Character: Sign], digits: [Character: Digit], separators: [Character: Separator])
-        throws where S.Element == Character {
-        var iterator = characters.makeIterator(); var next = iterator.next()
+        signs: [Character: Sign], digits: [Character: Digit], separators: [Character: Separator]
+    ) throws where S.Element == Character {
+        var signable = true
+        var iterator = characters.makeIterator()
+        var next = iterator.next()
         //=--------------------------------------=
         // MARK: Attempt
         //=--------------------------------------=
         attempt: do {
             //=----------------------------------=
-            // MARK: Sign
+            // MARK: Sign - Head
             //=----------------------------------=
             if !unsigned, let character = next, let sign = signs[character] {
-                self.sign = sign; next = iterator.next()
+                self.sign = sign; next = iterator.next(); signable = false
             }
             //=----------------------------------=
             // MARK: Digits
@@ -79,6 +81,12 @@ import Support
             while let character = next, let digit = digits[character] {
                 self.fraction.append(digit); next = iterator.next()
             }
+        }
+        //=----------------------------------=
+        // MARK: Sign - Tail
+        //=----------------------------------=
+        if !unsigned, signable, let character = next, let sign = signs[character] {
+            self.sign = sign; next = iterator.next()
         }
         //=--------------------------------------=
         // MARK: Validate

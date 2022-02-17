@@ -119,7 +119,7 @@ extension Label {
         // MARK: Make A New Instance And Save It
         //=--------------------------------------=
         } else {
-            let instance = Label.currency(code: code, in: lexicon)
+            let instance = Label._currency(code: code, in: lexicon)
             currencies.setObject(instance, forKey: key)
             return instance
         }

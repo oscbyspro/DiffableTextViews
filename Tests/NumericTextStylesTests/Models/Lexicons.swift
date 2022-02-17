@@ -17,7 +17,7 @@ import Foundation
 //*============================================================================*
 
 final class Lexicons {
-    
+        
     //=------------------------------------------------------------------------=
     // MARK: State
     //=------------------------------------------------------------------------=
@@ -31,7 +31,7 @@ final class Lexicons {
     
     init(_ locales: [Locale])  {
         self.standard = locales.compactMap({ try? Lexicon._standard($0) })
-        self.currency = locales.compactMap({ try? Lexicon._currency($0) })
+        self.currency = locales.lazy.compactMap({ try? Lexicon._currency($0) })
     }
     
     //=------------------------------------------------------------------------=
