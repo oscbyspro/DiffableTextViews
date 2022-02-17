@@ -15,7 +15,7 @@ import Support
 // MARK: * Label
 //*============================================================================*
 
-public final class Currency: Unformat {
+public final class Currency: Specialization {
     
     //=------------------------------------------------------------------------=
     // MARK: Cache
@@ -98,6 +98,7 @@ extension Currency {
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
+    #warning("Double-check.")
     @inlinable convenience init(code: String, in region: Region) {
         let digit = region.digits[.zero]
         //=--------------------------------------=
@@ -116,7 +117,7 @@ extension Currency {
         //=--------------------------------------=
         // MARK: Instance
         //=--------------------------------------=
-        print(split)
+        #warning("Double-check.")
         if !split[0].filter(\.isWhitespace).isEmpty {
             self.init(split[0], at: .prefix)
         } else {

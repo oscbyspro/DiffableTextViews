@@ -24,8 +24,7 @@ import DiffableTextViews
 //*============================================================================*
 
 public protocol NumericTextFormat: ParseableFormatStyle where FormatInput: NumericTextValue, FormatOutput == String {
-    associatedtype SignDisplayStrategy:
-    NumericTextSignDisplayStrategyRepresentable =
+    associatedtype SignDisplayStrategy: NumericTextSignDisplayStrategyRepresentable =
     NumberFormatStyleConfiguration.SignDisplayStrategy
     typealias NumericTextStyle = NumericTextStyles.NumericTextStyle<Self>
     
@@ -38,11 +37,11 @@ public protocol NumericTextFormat: ParseableFormatStyle where FormatInput: Numer
     @inlinable func decimalSeparator(strategy: NumberFormatStyleConfiguration.DecimalSeparatorDisplayStrategy) -> Self
     
     //=------------------------------------------------------------------------=
-    // MARK: Unformat
+    // MARK: Strategy
     //=------------------------------------------------------------------------=
     
-    associatedtype Unformat: NumericTextUnformat = None
-    @inlinable static func unformat(style: NumericTextStyle) -> Unformat
+    associatedtype Specialization: NumericTextStyles.NumericTextSpecialization = Normal
+    @inlinable static func specialization(style: NumericTextStyle) -> Specialization
 }
 
 //=----------------------------------------------------------------------------=
@@ -80,13 +79,13 @@ extension NumericTextFormat {
 // MARK: + None
 //=----------------------------------------------------------------------------=
 
-extension NumericTextFormat where Unformat == None {
+extension NumericTextFormat where Specialization == Normal {
     
     //=------------------------------------------------------------------------=
-    // MARK: Unformat
+    // MARK: Strategy
     //=------------------------------------------------------------------------=
     
-    @inlinable public static func unformat(style: NumericTextStyle) -> Unformat {
+    @inlinable public static func specialization(style: NumericTextStyle) -> Specialization {
         .init()
     }
 }
@@ -101,7 +100,7 @@ public protocol NumericTextNumberFormat: NumericTextFormat { }
 // MARK: * Format x Currency
 //*============================================================================*
 
-public protocol NumericTextCurrencyFormat: NumericTextFormat where Unformat == Currency,
+public protocol NumericTextCurrencyFormat: NumericTextFormat where Specialization == Currency,
 SignDisplayStrategy == CurrencyFormatStyleConfiguration.SignDisplayStrategy {
     
     //=------------------------------------------------------------------------=
@@ -118,11 +117,11 @@ SignDisplayStrategy == CurrencyFormatStyleConfiguration.SignDisplayStrategy {
 extension NumericTextCurrencyFormat {
     
     //=------------------------------------------------------------------------=
-    // MARK: Unformat
+    // MARK: Strategy
     //=------------------------------------------------------------------------=
     
-    @inlinable public static func unformat(style: NumericTextStyle) -> Unformat {
-        Unformat.cached(code: style.format.currencyCode, in: style.region)
+    @inlinable public static func specialization(style: NumericTextStyle) -> Specialization {
+        .cached(code: style.format.currencyCode, in: style.region)
     }
 }
 

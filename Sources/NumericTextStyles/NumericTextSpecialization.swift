@@ -9,17 +9,20 @@
 
 import DiffableTextViews
 
+#warning("Rename")
+#warning("Rename")
+#warning("Rename")
 //=----------------------------------------------------------------------------=
 // MARK: Table of Contents
 //=----------------------------------------------------------------------------=
 
-@usableFromInline typealias Unformat = NumericTextUnformat
+@usableFromInline typealias Specialization = NumericTextSpecialization
 
 //*============================================================================*
-// MARK: * Unformat
+// MARK: * Strategy
 //*============================================================================*
 
-public protocol NumericTextUnformat {
+public protocol NumericTextSpecialization {
     
     //=------------------------------------------------------------------------=
     // MARK: Utilities

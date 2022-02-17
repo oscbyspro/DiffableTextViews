@@ -17,7 +17,7 @@ import Support
 
 public struct NumericTextStyle<Format: NumericTextFormat>: DiffableTextStyle {
     public typealias Value = Format.FormatInput
-    public typealias Unformat = Format.Unformat
+    public typealias Specialization = Format.Specialization
     public typealias Bounds = NumericTextStyles.Bounds<Value>
     public typealias Precision = NumericTextStyles.Precision<Value>
 
@@ -45,8 +45,8 @@ public struct NumericTextStyle<Format: NumericTextFormat>: DiffableTextStyle {
     // MARK: Accessors
     //=------------------------------------------------------------------------=
     
-    @inlinable var unformat: Unformat {
-        Format.unformat(style: self)
+    @inlinable var specialization: Specialization {
+        Format.specialization(style: self)
     }
     
     //=------------------------------------------------------------------------=
@@ -115,7 +115,6 @@ extension NumericTextStyle {
         //=--------------------------------------=
         let formatted = style.format(value)
         let parseable = snapshot(characters: formatted)
-        print(region.locale)
         var number = try! region.number(in: parseable, as: Value.self)
         print("number 1st:", number, formatted, parseable)
         //=--------------------------------------=
@@ -243,7 +242,7 @@ extension NumericTextStyle {
         // MARK: Autocorrect
         //=--------------------------------------=
         print("snapshot:", characters, region.locale)
-        unformat.autocorrect(snapshot: &snapshot); return snapshot
+        specialization.autocorrect(snapshot: &snapshot); return snapshot
     }
 }
 

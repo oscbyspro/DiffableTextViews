@@ -15,6 +15,7 @@ import Support
 // MARK: * Region
 //*============================================================================*
 
+#warning("Maybe have a normal cache and a currencies cache.")
 @usableFromInline final class Region {
     
     //=------------------------------------------------------------------------=
