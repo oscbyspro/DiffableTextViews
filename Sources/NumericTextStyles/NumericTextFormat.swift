@@ -72,7 +72,7 @@ extension NumericTextFormat {
     }
     
     @inlinable func sign(_ strategy: Self.Sign) -> Self {
-        self.sign(strategy: SignDisplayStrategy(strategy: strategy))
+        self.sign(strategy: .init(strategy: strategy))
     }
 }
 

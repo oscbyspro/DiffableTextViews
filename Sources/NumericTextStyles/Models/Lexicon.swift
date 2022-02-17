@@ -171,6 +171,8 @@ extension Lexicon {
     // MARK: Number -> Value
     //=------------------------------------------------------------------------=
     
+    #error("Continue.")
+    #warning("Use ascii maybe (or system init), maybe.")
     @inlinable func value<F: Format>(in number: Number, as format: F) throws -> F.Value {
         var characters = String()
         //=--------------------------------------=
@@ -198,6 +200,7 @@ extension Lexicon {
         //=--------------------------------------=
         // MARK: Characters -> Value
         //=--------------------------------------=
+        print(characters, try? format.parse(characters))
         return try format.parse(characters)
     }
     

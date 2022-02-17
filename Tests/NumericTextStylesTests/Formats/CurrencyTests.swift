@@ -54,10 +54,15 @@ final class CurrencyTests: XCTestCase {
     }
     
     func testXXX() {
+        let value = Decimal(string: "-1234567.89")!
+        
         let code = "CVE"
         let locale = Locale(identifier: "kea")
         let lexicon = try! Lexicon._currency(code: code, locale: locale)
         print(lexicon.separators)
+        
+        let commit = Style.currency(code: code).locale(locale).interpret(value: value)
+        print(commit)
     }
 }
 

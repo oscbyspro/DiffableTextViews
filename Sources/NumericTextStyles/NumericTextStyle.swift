@@ -103,7 +103,6 @@ extension NumericTextStyle {
     
     @inlinable public func interpret(value: Value) -> Commit<Value> {
         var style = format.precision(precision.active())
-        print("value IN:", value)
         var value = value
         //=--------------------------------------=
         // MARK: Autocorrect
@@ -115,7 +114,7 @@ extension NumericTextStyle {
         let formatted = style.format(value)
         let parseable = snapshot(characters: formatted)
         var number = try! lexicon.number(in: parseable, as: Value.self)
-        print("number 1st:", number, formatted, parseable)
+        print(number)
         //=--------------------------------------=
         // MARK: Autocorrect
         //=--------------------------------------=
@@ -124,8 +123,8 @@ extension NumericTextStyle {
         //=--------------------------------------=
         // MARK: Value <- Number
         //=--------------------------------------=
+        #error("lexicon should not be needed here.")
         value = try! lexicon.value(in: number, as: style)
-        print("value OUT:", value)
         //=--------------------------------------=
         // MARK: Style
         //=--------------------------------------=
@@ -134,7 +133,7 @@ extension NumericTextStyle {
         // MARK: Style -> Characters
         //=--------------------------------------=
         var characters = style.format(value)
-        print("characters:", characters)
+        print(characters)
         fix(sign: number.sign, for: value, in: &characters)
         //=--------------------------------------=
         // MARK: Characters -> Snapshot -> Commit
@@ -180,6 +179,7 @@ extension NumericTextStyle {
         //=--------------------------------------=
         // MARK: Value
         //=--------------------------------------=
+        #error("lexicon should not be needed here.")
         let value = try lexicon.value(in: number, as: format)
         //=--------------------------------------=
         // MARK: Value - Validate
@@ -235,12 +235,10 @@ extension NumericTextStyle {
             // MARK: Insert
             //=----------------------------------=
             snapshot.append(Symbol(character, as: attribute))
-            print(Symbol(character, as: attribute), lexicon.separators.characters)
         }
         //=--------------------------------------=
         // MARK: Autocorrect
         //=--------------------------------------=
-        print("snapshot:", characters, lexicon.locale)
         specialization.autocorrect(snapshot: &snapshot); return snapshot
     }
 }
