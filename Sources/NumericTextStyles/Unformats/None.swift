@@ -25,5 +25,5 @@ public struct None: Unformat {
     // MARK: Utilities
     //=------------------------------------------------------------------------=
     
-    @inlinable public func unformat(snapshot: inout Snapshot) { }
+    @inlinable public func autocorrect(snapshot: inout Snapshot) { }
 }

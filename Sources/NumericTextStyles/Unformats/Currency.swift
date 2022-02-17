@@ -153,7 +153,7 @@ extension Currency {
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: + Unformat
+// MARK: + Autocorrect
 //=----------------------------------------------------------------------------=
 
 extension Currency {
@@ -162,12 +162,10 @@ extension Currency {
     // MARK: Snapshot
     //=------------------------------------------------------------------------=
     
-    @inlinable public func unformat(snapshot: inout Snapshot) {
+    @inlinable public func autocorrect(snapshot: inout Snapshot) {
         guard !characters.isEmpty else { return }
         guard let range = range(in: snapshot) else { return }
-        snapshot.update(attributes: range) {
-            attribute in attribute.insert(.virtual)
-        }
+        snapshot.update(attributes: range) { attribute in attribute = .phantom }
     }
     
     //=------------------------------------------------------------------------=

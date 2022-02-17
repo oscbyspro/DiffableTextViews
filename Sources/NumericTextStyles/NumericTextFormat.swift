@@ -8,22 +8,25 @@
 //=----------------------------------------------------------------------------=
 
 import Foundation
+import DiffableTextViews
 
 //*============================================================================*
 // MARK: * Table of Contents
 //*============================================================================*
 
 @usableFromInline typealias Format = NumericTextFormat
-@usableFromInline typealias _Number = NumericTextNumberFormat
-@usableFromInline typealias _Currency = NumericTextCurrencyFormat
-@usableFromInline typealias _Percent = NumericTextPercentFormat
+@usableFromInline typealias NumberFormat = NumericTextNumberFormat
+@usableFromInline typealias CurrencyFormat = NumericTextCurrencyFormat
+@usableFromInline typealias PercentFormat = NumericTextPercentFormat
 
 //*============================================================================*
 // MARK: * Format
 //*============================================================================*
 
 public protocol NumericTextFormat: ParseableFormatStyle where FormatInput: NumericTextValue, FormatOutput == String {
-    associatedtype SignDisplayStrategy: NumericTextSignDisplayStrategyRepresentable
+    associatedtype SignDisplayStrategy:
+    NumericTextSignDisplayStrategyRepresentable =
+    NumberFormatStyleConfiguration.SignDisplayStrategy
     typealias NumericTextStyle = NumericTextStyles.NumericTextStyle<Self>
     
     //=------------------------------------------------------------------------=
@@ -92,8 +95,7 @@ extension NumericTextFormat where Unformat == None {
 // MARK: * Format x Number
 //*============================================================================*
 
-public protocol NumericTextNumberFormat: NumericTextFormat where
-SignDisplayStrategy == NumberFormatStyleConfiguration.SignDisplayStrategy { }
+public protocol NumericTextNumberFormat: NumericTextFormat { }
 
 //*============================================================================*
 // MARK: * Format x Currency
@@ -128,7 +130,5 @@ extension NumericTextCurrencyFormat {
 // MARK: * Format x Percent
 //*============================================================================*
 
-/// - Note: To use this format, the value must support at least two exponent digits.
-public protocol NumericTextPercentFormat: NumericTextFormat where
-FormatInput: NumericTextFloatingPointValue,
-SignDisplayStrategy == NumberFormatStyleConfiguration.SignDisplayStrategy { }
+/// To use this format, the value must support at least two exponent digits.
+public protocol NumericTextPercentFormat: NumericTextFormat where FormatInput: NumericTextFloatingPointValue { }

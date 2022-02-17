@@ -17,6 +17,7 @@ import Support
 
 public struct NumericTextStyle<Format: NumericTextFormat>: DiffableTextStyle {
     public typealias Value = Format.FormatInput
+    public typealias Unformat = Format.Unformat
     public typealias Bounds = NumericTextStyles.Bounds<Value>
     public typealias Precision = NumericTextStyles.Precision<Value>
 
@@ -24,8 +25,8 @@ public struct NumericTextStyle<Format: NumericTextFormat>: DiffableTextStyle {
     // MARK: State
     //=------------------------------------------------------------------------=
     
-    @usableFromInline var format: Format
     @usableFromInline var region: Region
+    @usableFromInline var format: Format
     @usableFromInline var bounds: Bounds
     @usableFromInline var precision: Precision
     
@@ -38,6 +39,14 @@ public struct NumericTextStyle<Format: NumericTextFormat>: DiffableTextStyle {
         self.precision = Precision()
         self.region = Region.cached(locale)
         self.format = format.locale(region.locale)
+    }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Accessors
+    //=------------------------------------------------------------------------=
+    
+    @inlinable var unformat: Unformat {
+        Format.unformat(style: self)
     }
     
     //=------------------------------------------------------------------------=
@@ -205,7 +214,7 @@ extension NumericTextStyle {
 
     /// Assumes that characters contains at least one content character.
     @inlinable func snapshot(characters: String) -> Snapshot {
-        characters.reduce(into: Snapshot()) { snapshot, character in
+        var snapshot = characters.reduce(into: Snapshot()) { snapshot, character in
             let attribute: Attribute
             //=----------------------------------=
             // MARK: Match
@@ -224,6 +233,14 @@ extension NumericTextStyle {
             //=----------------------------------=
             snapshot.append(Symbol(character, as: attribute))
         }
+        //=--------------------------------------=
+        // MARK: Autocorrect
+        //=--------------------------------------=
+        unformat.autocorrect(snapshot: &snapshot)
+        //=--------------------------------------=
+        // MARK: Done
+        //=--------------------------------------=
+        return snapshot
     }
 }
 

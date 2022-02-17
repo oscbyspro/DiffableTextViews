@@ -25,5 +25,5 @@ public protocol NumericTextUnformat {
     // MARK: Utilities
     //=------------------------------------------------------------------------=
     
-    func unformat(snapshot: inout Snapshot)
+    func autocorrect(snapshot: inout Snapshot)
 }

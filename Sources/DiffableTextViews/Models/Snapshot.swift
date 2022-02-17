@@ -148,7 +148,7 @@ public extension Snapshot {
 public extension Snapshot {
     
     //=------------------------------------------------------------------------=
-    // MARK: Replace
+    // MARK: Transformations
     //=------------------------------------------------------------------------=
 
     @inlinable mutating func replaceSubrange<C>(_ range: Range<Index>,
