@@ -14,21 +14,27 @@ import Foundation
 // MARK: * Currency
 //*============================================================================*
 
-public enum Currency: NumericTextSpecialization {
+public struct Currency: NumericTextSpecialization {
     
     //=------------------------------------------------------------------------=
-    // MARK: Localization
+    // MARK: State
     //=------------------------------------------------------------------------=
     
-    @inlinable public static func region(_ locale: Locale) -> Lexicon {
-        .currency(locale)
+    public let lexicon: Lexicon
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Initializers
+    //=------------------------------------------------------------------------=
+    
+    @inlinable init(code: Code, locale: Locale) {
+        self.lexicon = Lexicon.currency(locale)
     }
     
     //=------------------------------------------------------------------------=
     // MARK: Autocorrect
     //=------------------------------------------------------------------------=
     
-    @inlinable public static func autocorrect(snapshot: inout Snapshot) {
+    @inlinable public func autocorrect(snapshot: inout Snapshot) {
         #error("TODO")
     }
 }

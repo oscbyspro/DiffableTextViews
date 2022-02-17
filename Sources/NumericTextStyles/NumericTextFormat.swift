@@ -37,11 +37,11 @@ public protocol NumericTextFormat: ParseableFormatStyle where FormatInput: Numer
     @inlinable func decimalSeparator(strategy: NumberFormatStyleConfiguration.DecimalSeparatorDisplayStrategy) -> Self
     
     //=------------------------------------------------------------------------=
-    // MARK: Strategy
+    // MARK: Specialization
     //=------------------------------------------------------------------------=
     
-    associatedtype Specialization: NumericTextStyles.NumericTextSpecialization = Standard
-    @inlinable static func specialization(style: NumericTextStyle) -> Specialization
+    associatedtype Specialization: NumericTextSpecialization = Standard
+    @inlinable func specialization(_ locale: Locale) -> Specialization
 }
 
 //=----------------------------------------------------------------------------=
@@ -76,17 +76,17 @@ extension NumericTextFormat {
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: + None
+// MARK: + Standard
 //=----------------------------------------------------------------------------=
 
 extension NumericTextFormat where Specialization == Standard {
     
     //=------------------------------------------------------------------------=
-    // MARK: Strategy
+    // MARK: Specialization
     //=------------------------------------------------------------------------=
     
-    @inlinable public static func specialization(style: NumericTextStyle) -> Specialization {
-        .init()
+    @inlinable public func specialication(_ locale: Locale) -> Specialization {
+        Specialization(locale: locale)
     }
 }
 
@@ -110,6 +110,7 @@ SignDisplayStrategy == CurrencyFormatStyleConfiguration.SignDisplayStrategy {
     @inlinable var currencyCode: String { get }
 }
 
+
 //=----------------------------------------------------------------------------=
 // MARK: + Details
 //=----------------------------------------------------------------------------=
@@ -117,11 +118,11 @@ SignDisplayStrategy == CurrencyFormatStyleConfiguration.SignDisplayStrategy {
 extension NumericTextCurrencyFormat {
     
     //=------------------------------------------------------------------------=
-    // MARK: Strategy
+    // MARK: Specialization
     //=------------------------------------------------------------------------=
     
-    @inlinable public static func specialization(style: NumericTextStyle) -> Specialization {
-        .cached(code: style.format.currencyCode, in: style.region)
+    @inlinable public func specialication(_ locale: Locale) -> Specialization {
+        Specialization(code: currencyCode,  locale: locale)
     }
 }
 

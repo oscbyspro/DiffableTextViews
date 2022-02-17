@@ -11,6 +11,9 @@ import DiffableTextViews
 import Foundation
 import Support
 
+#warning("Rename as Strategy, maybe.")
+#warning("And be used as a stored propery.")
+#warning("Maybe it should contain lexion, plus whatever else it needs.")
 //=----------------------------------------------------------------------------=
 // MARK: Table of Contents
 //=----------------------------------------------------------------------------=
@@ -26,12 +29,25 @@ public protocol NumericTextSpecialization {
     //=------------------------------------------------------------------------=
     // MARK: Localization
     //=------------------------------------------------------------------------=
-    
-    static func lexicon(_ locale: Locale) -> Lexicon
+        
+    @inlinable var lexicon: Lexicon { get }
     
     //=------------------------------------------------------------------------=
     // MARK: Utilities
     //=------------------------------------------------------------------------=
     
-    static func autocorrect(snapshot: inout Snapshot)
+    @inlinable func autocorrect(snapshot: inout Snapshot)
+}
+
+//=----------------------------------------------------------------------------=
+// MARK: + Details
+//=----------------------------------------------------------------------------=
+
+extension NumericTextSpecialization {
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Accessors
+    //=------------------------------------------------------------------------=
+    
+    @inlinable var locale: Locale { lexicon.locale }
 }

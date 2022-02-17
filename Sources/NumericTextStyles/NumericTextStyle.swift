@@ -25,8 +25,9 @@ public struct NumericTextStyle<Format: NumericTextFormat>: DiffableTextStyle {
     // MARK: State
     //=------------------------------------------------------------------------=
     
-    @usableFromInline var lexicon: Lexicon
     @usableFromInline var format: Format
+    @usableFromInline var specialization: Specialization
+
     @usableFromInline var bounds: Bounds
     @usableFromInline var precision: Precision
     
@@ -34,17 +35,31 @@ public struct NumericTextStyle<Format: NumericTextFormat>: DiffableTextStyle {
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable public init(format: Format, locale: Locale = .autoupdatingCurrent) {
+    @inlinable init(format: Format, specialization: Specialization) {
+        self.specialization = specialization
+        self.format = format.locale(specialization.locale)
         self.bounds = Bounds()
         self.precision = Precision()
-        self.lexicon = Specialization.lexicon(locale)
-        self.format = format.locale(lexicon.locale)
     }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Initializers - Indirect
+    //=------------------------------------------------------------------------=
+    
+    @inlinable public init(format: Format, locale: Locale = .autoupdatingCurrent) where Format: NumericTextNumberFormat {
+        self.init(format: format, specialization: Standard(locale))
+    }
+    
+    @inlinable public init(format: Format, locale: Locale = .autoupdatingCurrent) where Format: NumericTextCurrencyFormat {
+        sekf,
+    }
+    
+    @inlinable public
     
     //=------------------------------------------------------------------------=
     // MARK: Accessors
     //=------------------------------------------------------------------------=
-    
+        
     @inlinable var specialization: Specialization {
         Format.specialization(style: self)
     }
@@ -59,7 +74,7 @@ public struct NumericTextStyle<Format: NumericTextFormat>: DiffableTextStyle {
         // MARK: Make New Instance
         //=--------------------------------------=
         var result = self
-        result.lexicon = Lexicon.cached(locale)
+        result.lexicon = Specialization.lexicon(locale)
         result.format = format.locale(result.lexicon.locale)
         return result
     }

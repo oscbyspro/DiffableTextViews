@@ -14,14 +14,20 @@ import Foundation
 // MARK: * Standard
 //*============================================================================*
 
-public enum Standard: Specialization {
+public struct Standard: Specialization {
     
     //=------------------------------------------------------------------------=
-    // MARK: Localization
+    // MARK: State
     //=------------------------------------------------------------------------=
     
-    @inlinable public static func region(_ locale: Locale) -> Lexicon {
-        .standard(locale)
+    public let lexicon: Lexicon
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Initializers
+    //=------------------------------------------------------------------------=
+    
+    @inlinable init(locale: Locale) {
+        self.lexicon = Lexicon.standard(locale)
     }
     
     //=------------------------------------------------------------------------=
