@@ -11,22 +11,18 @@ import Foundation
 import DiffableTextViews
 import Support
 
-#warning("...")
-#warning("...")
-#warning("Rename as label and create a new currency specialization, maybe.")
 //*============================================================================*
 // MARK: * Label
 //*============================================================================*
 
-#warning("Currenc")
+/// A collection of characters at or near the end in some formatted text.
 public final class Label {
     
     //=------------------------------------------------------------------------=
     // MARK: Cache
     //=------------------------------------------------------------------------=
     
-    #warning("Label cache should not be here.")
-    @usableFromInline static let cache: NSCache<ID, Label> = {
+    @usableFromInline static let currencies: NSCache<ID, Label> = {
         let cache = NSCache<ID, Label>(); cache.countLimit = 33; return cache
     }()
     
@@ -44,6 +40,15 @@ public final class Label {
     @inlinable init<S: StringProtocol>(_ characters: S, at location: Location) {
         self.location = location
         self.characters = String(characters)
+    }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Utilities
+    //=------------------------------------------------------------------------=
+    
+    /// Naive search is OK because labels are close to the edge and unique from edge to end.
+    @inlinable func range(in snapshot: Snapshot) -> Range<Snapshot.Index>? {
+        Search.range(of: characters, in: snapshot, reversed: location == .suffix)
     }
     
     //*========================================================================*
@@ -94,7 +99,7 @@ public final class Label {
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: + Indirect
+// MARK: + Currency
 //=----------------------------------------------------------------------------=
 
 extension Label {
@@ -103,14 +108,34 @@ extension Label {
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    #warning("Double-check.")
-    @inlinable convenience init(code: String, in region: Lexicon) {
-        let digit = region.digits[.zero]
+    @inlinable static func currency(code: String, in lexicon: Lexicon) -> Label {
+        let key = ID(code: code, locale: lexicon.locale.identifier)
+        //=--------------------------------------=
+        // MARK: Search In Cache
+        //=--------------------------------------=
+        if let reusable = currencies.object(forKey: key) {
+            return reusable
+        //=--------------------------------------=
+        // MARK: Make A New Instance And Save It
+        //=--------------------------------------=
+        } else {
+            let instance = Label.currency(code: code, in: lexicon)
+            currencies.setObject(instance, forKey: key)
+            return instance
+        }
+    }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Initializers - Helpers
+    //=------------------------------------------------------------------------=
+    
+    @inlinable static func _currency(code: String, in lexicon: Lexicon) -> Label {
+        let digit = lexicon.digits[.zero]
         //=--------------------------------------=
         // MARK: Split
         //=--------------------------------------=
         let split = IntegerFormatStyle<Int>
-            .Currency(code: code).locale(region.locale)
+            .Currency(code: code).locale(lexicon.locale)
             .precision(.fractionLength(0)).format(0)
             .split(separator: digit, omittingEmptySubsequences: false)
         //=--------------------------------------=
@@ -123,64 +148,8 @@ extension Label {
         // MARK: Instance
         //=--------------------------------------=
         #warning("Double-check.")
-        if !split[0].filter(\.isWhitespace).isEmpty {
-            self.init(split[0], at: .prefix)
-        } else {
-            self.init(split[1], at: .suffix)
-        }
-    }
-}
-
-//=----------------------------------------------------------------------------=
-// MARK: + Cache
-//=----------------------------------------------------------------------------=
-
-extension Label {
-
-    //=------------------------------------------------------------------------=
-    // MARK: Initializers
-    //=------------------------------------------------------------------------=
-    
-    @inlinable static func cached(code: String, in region: Lexicon) -> Currency {
-        let key = ID(code: code, locale: region.locale.identifier)
-        //=--------------------------------------=
-        // MARK: Search In Cache
-        //=--------------------------------------=
-        if let reusable = cache.object(forKey: key) {
-            return reusable
-        //=--------------------------------------=
-        // MARK: Make A New Instance And Save It
-        //=--------------------------------------=
-        } else {
-            let instance = Currency(code: code, in: region)
-            cache.setObject(instance, forKey: key)
-            return instance
-        }
-    }
-}
-
-//=----------------------------------------------------------------------------=
-// MARK: + Autocorrect
-//=----------------------------------------------------------------------------=
-
-extension Label {
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Snapshot
-    //=------------------------------------------------------------------------=
-    
-    @inlinable public func autocorrect(snapshot: inout Snapshot) {
-        guard !characters.isEmpty else { return }
-        guard let range = range(in: snapshot) else { return }
-        snapshot.update(attributes: range) { attribute in attribute = .phantom }
-    }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Helpers
-    //=------------------------------------------------------------------------=
-    
-    /// Naive search is OK because labels are close to the edge and unique from edge to end.
-    @inlinable func range(in snapshot: Snapshot) -> Range<Snapshot.Index>? {
-        Search.range(of: characters, in: snapshot, reversed: location == .suffix)
+        return !split[0].filter(\.isWhitespace).isEmpty
+        ? Label(split[0], at: .prefix)
+        : Label(split[1], at: .suffix)
     }
 }

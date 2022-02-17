@@ -20,14 +20,17 @@ public struct Currency: NumericTextSpecialization {
     // MARK: State
     //=------------------------------------------------------------------------=
     
+    public let label:   Label
     public let lexicon: Lexicon
     
     //=------------------------------------------------------------------------=
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
+    #warning("Make more obvious that it uses cache.")
     @inlinable init(code: String, locale: Locale) {
         self.lexicon = Lexicon.currency(locale)
+        self.label = Label.currency(code: code, in: lexicon)
     }
     
     //=------------------------------------------------------------------------=
@@ -35,6 +38,8 @@ public struct Currency: NumericTextSpecialization {
     //=------------------------------------------------------------------------=
     
     @inlinable public func autocorrect(snapshot: inout Snapshot) {
-        #error("TODO")
+        guard !label.characters.isEmpty else { return }
+        guard let range = label.range(in: snapshot) else { return }
+        snapshot.update(attributes: range) { attribute in attribute = .phantom }
     }
 }

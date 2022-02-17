@@ -34,5 +34,5 @@ public struct Standard: Specialization {
     // MARK: Autocorrect
     //=------------------------------------------------------------------------=
     
-    @inlinable public static func autocorrect(snapshot: inout Snapshot) { }
+    @inlinable public func autocorrect(snapshot: inout Snapshot) { }
 }

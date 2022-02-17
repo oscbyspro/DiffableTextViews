@@ -24,7 +24,8 @@ import DiffableTextViews
 //*============================================================================*
 
 public protocol NumericTextFormat: ParseableFormatStyle where FormatInput: NumericTextValue, FormatOutput == String {
-    associatedtype SignDisplayStrategy: NumericTextSignDisplayStrategyRepresentable =
+    associatedtype SignDisplayStrategy:
+    NumericTextSignDisplayStrategyRepresentable =
     NumberFormatStyleConfiguration.SignDisplayStrategy
     typealias NumericTextStyle = NumericTextStyles.NumericTextStyle<Self>
     
@@ -84,8 +85,8 @@ extension NumericTextFormat where Specialization == Standard {
     //=------------------------------------------------------------------------=
     // MARK: Specialization
     //=------------------------------------------------------------------------=
-    
-    @inlinable public func specialication(_ locale: Locale) -> Specialization {
+
+    @inlinable public func specialization(_ locale: Locale) -> Specialization {
         Specialization(locale: locale)
     }
 }
@@ -100,8 +101,8 @@ public protocol NumericTextNumberFormat: NumericTextFormat { }
 // MARK: * Format x Currency
 //*============================================================================*
 
-public protocol NumericTextCurrencyFormat: NumericTextFormat where Specialization == Currency,
-SignDisplayStrategy == CurrencyFormatStyleConfiguration.SignDisplayStrategy {
+public protocol NumericTextCurrencyFormat: NumericTextFormat where
+Specialization == Currency, SignDisplayStrategy == CurrencyFormatStyleConfiguration.SignDisplayStrategy {
     
     //=------------------------------------------------------------------------=
     // MARK: Requirements
@@ -121,7 +122,7 @@ extension NumericTextCurrencyFormat {
     // MARK: Specialization
     //=------------------------------------------------------------------------=
     
-    @inlinable public func specialication(_ locale: Locale) -> Specialization {
+    @inlinable public func specialization(_ locale: Locale) -> Specialization {
         Specialization(code: currencyCode,  locale: locale)
     }
 }

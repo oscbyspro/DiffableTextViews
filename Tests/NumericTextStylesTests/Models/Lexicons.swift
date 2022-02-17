@@ -13,25 +13,26 @@ import Foundation
 @testable import NumericTextStyles
 
 //*============================================================================*
-// MARK: * Earth
+// MARK: * Lexicons
 //*============================================================================*
 
-enum Earth {
-
+final class Lexicons {
+    
     //=------------------------------------------------------------------------=
-    // MARK: Locales
+    // MARK: State
     //=------------------------------------------------------------------------=
     
-    static let locales: [Locale] = Locale
-        .availableIdentifiers.lazy.map(Locale.init)
-        .sorted(by: { $0.identifier < $1.identifier })
-
-    static let currencies: [String] = locales
-        .lazy.compactMap(\.currencyCode)
-        .reduce(into: Set()) { $0.insert($1) }
-        .lazy.map({ $0 }).sorted(by: <)
- 
-    static let lexicons = Lexicons(locales)
+    let standard: [Lexicon]
+    let currency: [Lexicon]
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Initializers
+    //=------------------------------------------------------------------------=
+    
+    init(_ locales: [Locale])  {
+        self.standard = locales.compactMap({ try? Lexicon._standard($0) })
+        self.currency = locales.compactMap({ try? Lexicon._currency($0) })
+    }
 }
 
 #endif

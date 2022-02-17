@@ -93,11 +93,11 @@ public final class Lexicon {
     //=------------------------------------------------------------------------=
     
     @inlinable static func standard(_ locale: Locale) -> Lexicon {
-        self.search(in: standard, locale: locale, lexicon: _standard)
+        self.search(in: standard, locale: locale, make: _standard)
     }
     
     @inlinable static func currency(_ locale: Locale) -> Lexicon {
-        self.search(in: currency, locale: locale, lexicon: _currency)
+        self.search(in: currency, locale: locale, make: _currency)
     }
 }
 
@@ -142,6 +142,7 @@ extension Lexicon {
     // MARK: Initializers - Error
     //=------------------------------------------------------------------------=
     
+    #warning("Remove this, it only makes everything so much more confusing.")
     @inlinable static func defaultable(_ locale: Locale, make: (Locale) throws -> Lexicon) -> Lexicon {
         initialize: do { return try make(locale)
         //=--------------------------------------=
@@ -191,8 +192,6 @@ extension Lexicon {
         //=--------------------------------------=
         // MARK: Characters -> Value
         //=--------------------------------------=
-        print(characters, try? format.parse(characters))
-        print(number.sign, number.integer, number.separator, number.fraction)
         return try format.parse(characters)
     }
     
