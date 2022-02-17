@@ -100,7 +100,7 @@ extension Region {
         //=--------------------------------------=
         } else {
             let instance = Region.defaultable(locale)
-            self.cache.setObject(instance, forKey: key)
+            cache.setObject(instance, forKey: key)
             return instance
         }
     }

@@ -14,9 +14,9 @@ import Foundation
 //*============================================================================*
 
 @usableFromInline typealias Format = NumericTextFormat
-@usableFromInline typealias Normal = NumericTextNumberFormat
-@usableFromInline typealias Currency = NumericTextCurrencyFormat
-@usableFromInline typealias Percent = NumericTextPercentFormat
+@usableFromInline typealias _Number = NumericTextNumberFormat
+@usableFromInline typealias _Currency = NumericTextCurrencyFormat
+@usableFromInline typealias _Percent = NumericTextPercentFormat
 
 //*============================================================================*
 // MARK: * Format
@@ -24,7 +24,8 @@ import Foundation
 
 public protocol NumericTextFormat: ParseableFormatStyle where FormatInput: NumericTextValue, FormatOutput == String {
     associatedtype SignDisplayStrategy: NumericTextSignDisplayStrategyRepresentable
-
+    typealias NumericTextStyle = NumericTextStyles.NumericTextStyle<Self>
+    
     //=------------------------------------------------------------------------=
     // MARK: Transformations
     //=------------------------------------------------------------------------=
@@ -32,6 +33,13 @@ public protocol NumericTextFormat: ParseableFormatStyle where FormatInput: Numer
     @inlinable func sign(strategy: SignDisplayStrategy) -> Self
     @inlinable func precision(_ precision: NumberFormatStyleConfiguration.Precision) -> Self
     @inlinable func decimalSeparator(strategy: NumberFormatStyleConfiguration.DecimalSeparatorDisplayStrategy) -> Self
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Unformat
+    //=------------------------------------------------------------------------=
+    
+    associatedtype Unformat: NumericTextUnformat = None
+    @inlinable static func unformat(style: NumericTextStyle) -> Unformat
 }
 
 //=----------------------------------------------------------------------------=
@@ -65,6 +73,21 @@ extension NumericTextFormat {
     }
 }
 
+//=----------------------------------------------------------------------------=
+// MARK: + None
+//=----------------------------------------------------------------------------=
+
+extension NumericTextFormat where Unformat == None {
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Unformat
+    //=------------------------------------------------------------------------=
+    
+    @inlinable public static func unformat(style: NumericTextStyle) -> Unformat {
+        .init()
+    }
+}
+
 //*============================================================================*
 // MARK: * Format x Number
 //*============================================================================*
@@ -76,8 +99,30 @@ SignDisplayStrategy == NumberFormatStyleConfiguration.SignDisplayStrategy { }
 // MARK: * Format x Currency
 //*============================================================================*
 
-public protocol NumericTextCurrencyFormat: NumericTextFormat where
-SignDisplayStrategy == CurrencyFormatStyleConfiguration.SignDisplayStrategy { }
+public protocol NumericTextCurrencyFormat: NumericTextFormat where Unformat == Currency,
+SignDisplayStrategy == CurrencyFormatStyleConfiguration.SignDisplayStrategy {
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Requirements
+    //=------------------------------------------------------------------------=
+    
+    @inlinable var currencyCode: String { get }
+}
+
+//=----------------------------------------------------------------------------=
+// MARK: + Details
+//=----------------------------------------------------------------------------=
+
+extension NumericTextCurrencyFormat {
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Unformat
+    //=------------------------------------------------------------------------=
+    
+    @inlinable public static func unformat(style: NumericTextStyle) -> Unformat {
+        Unformat.cached(code: style.format.currencyCode, in: style.region)
+    }
+}
 
 //*============================================================================*
 // MARK: * Format x Percent
