@@ -27,7 +27,7 @@ public protocol NumericTextSpecialization {
     // MARK: Localization
     //=------------------------------------------------------------------------=
     
-    static func region(_ locale: Locale) -> Region
+    static func lexicon(_ locale: Locale) -> Lexicon
     
     //=------------------------------------------------------------------------=
     // MARK: Utilities

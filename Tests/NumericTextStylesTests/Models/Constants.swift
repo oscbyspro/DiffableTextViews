@@ -20,7 +20,7 @@ var locales: [Locale] {
     Earth.locales
 }
 
-var regions: [Region] {
+var regions: [Lexicon] {
     Earth.regions
 }
 

@@ -12,11 +12,11 @@ import Foundation
 import Support
 
 //*============================================================================*
-// MARK: * Region
+// MARK: * Lexicon
 //*============================================================================*
 
-public final class Region {
-    @usableFromInline typealias Cache = NSCache<NSString, Region>
+public final class Lexicon {
+    @usableFromInline typealias Cache = NSCache<NSString, Lexicon>
     
     //=------------------------------------------------------------------------=
     // MARK: Cache
@@ -37,7 +37,7 @@ public final class Region {
     //=------------------------------------------------------------------------=
     
     /// This instance represent the en\_US locale, maps ASCII characters.
-    @usableFromInline static let en_US = Region(
+    @usableFromInline static let en_US = Lexicon(
         locale: Locale(identifier: "en_US"),
         signs: .ascii(), digits: .ascii(), separators: .ascii()
     )
@@ -47,15 +47,15 @@ public final class Region {
     //=------------------------------------------------------------------------=
     
     @usableFromInline let locale: Locale
-    @usableFromInline let signs: Lexicon<Sign>
-    @usableFromInline let digits: Lexicon<Digit>
-    @usableFromInline let separators: Lexicon<Separator>
+    @usableFromInline let signs: Links<Sign>
+    @usableFromInline let digits: Links<Digit>
+    @usableFromInline let separators: Links<Separator>
     
     //=------------------------------------------------------------------------=
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable init(locale: Locale, signs: Lexicon<Sign>, digits: Lexicon<Digit>, separators: Lexicon<Separator>) {
+    @inlinable init(locale: Locale, signs: Links<Sign>, digits: Links<Digit>, separators: Links<Separator>) {
         self.locale = locale
         self.signs = signs
         self.digits = digits
@@ -92,12 +92,12 @@ public final class Region {
     // MARK: Initializers - Static - Cache
     //=------------------------------------------------------------------------=
     
-    @inlinable static func standard(_ locale: Locale) -> Region {
-        self.search(in: standard, locale: locale, region: _standard)
+    @inlinable static func standard(_ locale: Locale) -> Lexicon {
+        self.search(in: standard, locale: locale, lexicon: _standard)
     }
     
-    @inlinable static func currency(_ locale: Locale) -> Region {
-        self.search(in: currency, locale: locale, region: _currency)
+    @inlinable static func currency(_ locale: Locale) -> Lexicon {
+        self.search(in: currency, locale: locale, lexicon: _currency)
     }
 }
 
@@ -105,13 +105,13 @@ public final class Region {
 // MARK: + Cache
 //=----------------------------------------------------------------------------=
 
-extension Region {
+extension Lexicon {
     
     //=------------------------------------------------------------------------=
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable static func search(in cache: Cache, locale: Locale, region: (Locale) throws -> Region) -> Region {
+    @inlinable static func search(in cache: Cache, locale: Locale, make: (Locale) throws -> Lexicon) -> Lexicon {
         setup(); let key = locale.identifier as NSString
         //=--------------------------------------=
         // MARK: Search In Cache
@@ -122,7 +122,7 @@ extension Region {
         // MARK: Make A New Instance And Save It
         //=--------------------------------------=
         } else {
-            let instance = Region.defaultable(locale, region: region)
+            let instance = Lexicon.defaultable(locale, make: make)
             cache.setObject(instance, forKey: key)
             return instance
         }
@@ -142,14 +142,14 @@ extension Region {
     // MARK: Initializers - Error
     //=------------------------------------------------------------------------=
     
-    @inlinable static func defaultable(_ locale: Locale, region: (Locale) throws -> Region) -> Region {
-        instance: do { return try region(locale)
+    @inlinable static func defaultable(_ locale: Locale, make: (Locale) throws -> Lexicon) -> Lexicon {
+        initialize: do { return try make(locale)
         //=--------------------------------------=
-        // MARK: Default To Region.en_US (ASCII)
+        // MARK: Default To Lexicon.en_US (ASCII)
         //=--------------------------------------=
         } catch let reason {
-            Info.print(["Region set to en_US:", .note(reason)])
-            return Region.en_US
+            Info.print(["Lexicon set to en_US:", .note(reason)])
+            return Lexicon.en_US
         }
     }
 }
@@ -158,7 +158,7 @@ extension Region {
 // MARK: + Parse
 //=----------------------------------------------------------------------------=
 
-extension Region {
+extension Lexicon {
 
     //=------------------------------------------------------------------------=
     // MARK: Number -> Value

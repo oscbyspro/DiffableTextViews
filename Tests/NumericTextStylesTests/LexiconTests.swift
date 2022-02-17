@@ -23,7 +23,7 @@ final class LexiconTests: XCTestCase {
     //=------------------------------------------------------------------------=
 
     func testEachComponentIsBidirectionallyLinked() {
-        func test<Component>(_ lexicon: Lexicon<Component>) {
+        func test<Component>(_ lexicon: Links<Component>) {
             for component0 in Component.allCases {
                 let character0 = lexicon[component0]
                 let component1 = lexicon[character0]

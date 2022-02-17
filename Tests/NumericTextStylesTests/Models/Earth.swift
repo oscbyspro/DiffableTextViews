@@ -26,8 +26,8 @@ enum Earth {
         .availableIdentifiers.lazy.map(Locale.init)
         .sorted(by: { $0.identifier < $1.identifier })
     
-    static let regions: [Region] = locales
-        .compactMap({ try? Region($0) })
+    static let regions: [Lexicon] = locales
+        .compactMap({ try? Lexicon($0) })
     
     static let currencies: [String] = locales
         .lazy.compactMap(\.currencyCode)

@@ -20,14 +20,14 @@ import DiffableTextViews
     // MARK: State
     //=------------------------------------------------------------------------=
     
-    @usableFromInline let region: Region
+    @usableFromInline let region: Lexicon
     @usableFromInline var changes: Changes
     
     //=------------------------------------------------------------------------=
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable init(_ changes: Changes, in region: Region) {
+    @inlinable init(_ changes: Changes, in region: Lexicon) {
         self.region = region
         self.changes = changes
     }
@@ -36,7 +36,7 @@ import DiffableTextViews
     // MARK: Accessors
     //=------------------------------------------------------------------------=
     
-    @inlinable var ascii: Region { .en_US }
+    @inlinable var ascii: Lexicon { .en_US }
 }
 
 //=----------------------------------------------------------------------------=

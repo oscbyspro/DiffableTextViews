@@ -8,22 +8,25 @@
 //=----------------------------------------------------------------------------=
 
 import DiffableTextViews
+import Foundation
 
 //*============================================================================*
 // MARK: * Standard
 //*============================================================================*
 
-public struct Standard: Specialization {
+public enum Standard: Specialization {
     
     //=------------------------------------------------------------------------=
-    // MARK: Initializers
+    // MARK: Localization
     //=------------------------------------------------------------------------=
     
-    @inlinable public init() { }
+    @inlinable public static func region(_ locale: Locale) -> Lexicon {
+        .standard(locale)
+    }
     
     //=------------------------------------------------------------------------=
-    // MARK: Utilities
+    // MARK: Autocorrect
     //=------------------------------------------------------------------------=
     
-    @inlinable public func autocorrect(snapshot: inout Snapshot) { }
+    @inlinable public static func autocorrect(snapshot: inout Snapshot) { }
 }

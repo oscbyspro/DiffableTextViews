@@ -104,7 +104,7 @@ extension Label {
     //=------------------------------------------------------------------------=
     
     #warning("Double-check.")
-    @inlinable convenience init(code: String, in region: Region) {
+    @inlinable convenience init(code: String, in region: Lexicon) {
         let digit = region.digits[.zero]
         //=--------------------------------------=
         // MARK: Split
@@ -141,7 +141,7 @@ extension Label {
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable static func cached(code: String, in region: Region) -> Currency {
+    @inlinable static func cached(code: String, in region: Lexicon) -> Currency {
         let key = ID(code: code, locale: region.locale.identifier)
         //=--------------------------------------=
         // MARK: Search In Cache

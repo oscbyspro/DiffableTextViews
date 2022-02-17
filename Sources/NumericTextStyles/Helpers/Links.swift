@@ -9,16 +9,15 @@
 
 import Foundation
 
-#warning("Rename as Links, maybe. Then rename Region as Lexicon, maybe.")
 //*============================================================================*
-// MARK: * Lexicon
+// MARK: * Links
 //*============================================================================*
 
 /// A mapping model between components and characters.
 ///
-/// It requires that each component is bidirectionally mapped to a character.
+/// It ensures that each component is bidirectionally mapped to a character.
 ///
-@usableFromInline struct Lexicon<Component: Unit> {
+@usableFromInline struct Links<Component: Unit> {
     
     //=------------------------------------------------------------------------=
     // MARK: State
@@ -50,10 +49,6 @@ import Foundation
         }
     }
     
-    @inlinable init(_ formatter: NumberFormatter, character: (Component) -> (NumberFormatter) throws -> Character) throws {
-        try self.init { component in try character(component)(formatter) }
-    }
-    
     //=------------------------------------------------------------------------=
     // MARK: Initializers - Static
     //=------------------------------------------------------------------------=
@@ -65,12 +60,12 @@ import Foundation
     
     /// Creates a new instance with localized standard component-character links.
     @inlinable static func standard(_ formatter: NumberFormatter) throws -> Self {
-        try Self(formatter, character: Component.standard)
+        try .init(character: { component in try component.standard(formatter) })
     }
     
     /// Creates a new instance with localized currency component-character links.
     @inlinable static func currency(_ formatter: NumberFormatter) throws -> Self {
-        try Self(formatter, character: Component.currency)
+        try .init(character: { component in try component.currency(formatter) })
     }
     
     //=------------------------------------------------------------------------=

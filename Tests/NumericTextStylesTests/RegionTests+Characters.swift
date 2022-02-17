@@ -23,11 +23,11 @@ extension RegionTests {
     // MARK: Styles
     //=------------------------------------------------------------------------=
     
-    @inlinable func int(_ region: Region) -> IntegerFormatStyle<Int> {
+    @inlinable func int(_ region: Lexicon) -> IntegerFormatStyle<Int> {
         .number.locale(region.locale)
     }
     
-    @inlinable func double(_ region: Region) -> FloatingPointFormatStyle<Double> {
+    @inlinable func double(_ region: Lexicon) -> FloatingPointFormatStyle<Double> {
         .number.locale(region.locale)
     }
     

@@ -25,7 +25,7 @@ public struct NumericTextStyle<Format: NumericTextFormat>: DiffableTextStyle {
     // MARK: State
     //=------------------------------------------------------------------------=
     
-    @usableFromInline var region: Region
+    @usableFromInline var lexicon: Lexicon
     @usableFromInline var format: Format
     @usableFromInline var bounds: Bounds
     @usableFromInline var precision: Precision
@@ -37,8 +37,8 @@ public struct NumericTextStyle<Format: NumericTextFormat>: DiffableTextStyle {
     @inlinable public init(format: Format, locale: Locale = .autoupdatingCurrent) {
         self.bounds = Bounds()
         self.precision = Precision()
-        self.region = Region.cached(locale)
-        self.format = format.locale(region.locale)
+        self.lexicon = Specialization.lexicon(locale)
+        self.format = format.locale(lexicon.locale)
     }
     
     //=------------------------------------------------------------------------=
@@ -54,13 +54,13 @@ public struct NumericTextStyle<Format: NumericTextFormat>: DiffableTextStyle {
     //=------------------------------------------------------------------------=
     
     @inlinable public func locale(_ locale: Locale) -> Self {
-        guard locale != self.region.locale else { return self }
+        guard locale != self.lexicon.locale else { return self }
         //=--------------------------------------=
         // MARK: Make New Instance
         //=--------------------------------------=
         var result = self
-        result.region = Region.cached(locale)
-        result.format = format.locale(result.region.locale)
+        result.lexicon = Lexicon.cached(locale)
+        result.format = format.locale(result.lexicon.locale)
         return result
     }
     
@@ -115,7 +115,7 @@ extension NumericTextStyle {
         //=--------------------------------------=
         let formatted = style.format(value)
         let parseable = snapshot(characters: formatted)
-        var number = try! region.number(in: parseable, as: Value.self)
+        var number = try! lexicon.number(in: parseable, as: Value.self)
         print("number 1st:", number, formatted, parseable)
         //=--------------------------------------=
         // MARK: Autocorrect
@@ -125,7 +125,7 @@ extension NumericTextStyle {
         //=--------------------------------------=
         // MARK: Value <- Number
         //=--------------------------------------=
-        value = try! region.value(in: number, as: style)
+        value = try! lexicon.value(in: number, as: style)
         print("value OUT:", value)
         //=--------------------------------------=
         // MARK: Style
@@ -156,7 +156,7 @@ extension NumericTextStyle {
     //=------------------------------------------------------------------------=
     
     @inlinable public func merge(changes: Changes) throws -> Commit<Value> {
-        var reader = Reader(changes, in: region)
+        var reader = Reader(changes, in: lexicon)
         //=--------------------------------------=
         // MARK: Reader
         //=--------------------------------------=
@@ -166,7 +166,7 @@ extension NumericTextStyle {
         //=--------------------------------------=
         // MARK: Number
         //=--------------------------------------=
-        var number = try region.number(in: proposal, as: Value.self)
+        var number = try lexicon.number(in: proposal, as: Value.self)
         sign.map({ number.sign = $0 })
         //=--------------------------------------=
         // MARK: Number - Validate
@@ -181,7 +181,7 @@ extension NumericTextStyle {
         //=--------------------------------------=
         // MARK: Value
         //=--------------------------------------=
-        let value = try region.value(in: number, as: format)
+        let value = try lexicon.value(in: number, as: format)
         //=--------------------------------------=
         // MARK: Value - Validate
         //=--------------------------------------=
@@ -223,11 +223,11 @@ extension NumericTextStyle {
             //=----------------------------------=
             // MARK: Match
             //=----------------------------------=
-            if let _ = region.digits[character] {
+            if let _ = lexicon.digits[character] {
                 attribute = .content
-            } else if let separator = region.separators[character] {
+            } else if let separator = lexicon.separators[character] {
                 attribute = separator == .fraction ? .removable : .phantom
-            } else if let _ = region.signs[character] {
+            } else if let _ = lexicon.signs[character] {
                 attribute = .phantom.subtracting(.virtual)
             } else {
                 attribute = .phantom
@@ -236,12 +236,12 @@ extension NumericTextStyle {
             // MARK: Insert
             //=----------------------------------=
             snapshot.append(Symbol(character, as: attribute))
-            print(Symbol(character, as: attribute), region.separators.characters)
+            print(Symbol(character, as: attribute), lexicon.separators.characters)
         }
         //=--------------------------------------=
         // MARK: Autocorrect
         //=--------------------------------------=
-        print("snapshot:", characters, region.locale)
+        print("snapshot:", characters, lexicon.locale)
         specialization.autocorrect(snapshot: &snapshot); return snapshot
     }
 }
@@ -271,7 +271,7 @@ extension NumericTextStyle {
     /// This method exists because Apple's format styles always interpret zero as having a positive sign.
     @inlinable func fix(sign: Sign, for value: Value, in characters: inout String) {
         guard sign == .negative, value == .zero else { return }
-        guard let position = characters.firstIndex(where: region.signs.components.keys.contains) else { return }
-        characters.replaceSubrange(position...position, with: String(region.signs[sign]))
+        guard let position = characters.firstIndex(where: lexicon.signs.components.keys.contains) else { return }
+        characters.replaceSubrange(position...position, with: String(lexicon.signs[sign]))
     }
 }

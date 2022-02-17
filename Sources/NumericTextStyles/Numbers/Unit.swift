@@ -38,19 +38,19 @@ extension Unit {
     //=------------------------------------------------------------------------=
     
     @inlinable func standard(_ formatter: NumberFormatter) throws -> Character {
-        try unwrap(formatter, character: standard)
+        try standard(formatter) ?! nonlocalizable
     }
     
     @inlinable func currency(_ formatter: NumberFormatter) throws -> Character {
-        try unwrap(formatter, character: currency)
+        try currency(formatter) ?! nonlocalizable
     }
     
     //=------------------------------------------------------------------------=
-    // MARK: Localization - Helpers
+    // MARK: Localization - Errors
     //=------------------------------------------------------------------------=
     
-    @inlinable func unwrap(_ formatter: NumberFormatter, character: (NumberFormatter) -> Character?) throws -> Character {
-        try character(formatter) ?! Info(["unable to localize", .mark(self)])
+    @inlinable var nonlocalizable: Info {
+        Info(["unable to localize", .mark(self)])
     }
 }
 
