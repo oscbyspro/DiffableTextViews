@@ -104,6 +104,7 @@ extension NumericTextStyle {
     
     @inlinable public func interpret(value: Value) -> Commit<Value> {
         var style = format.precision(precision.active())
+        print("value IN:", value)
         var value = value
         //=--------------------------------------=
         // MARK: Autocorrect
@@ -114,7 +115,9 @@ extension NumericTextStyle {
         //=--------------------------------------=
         let formatted = style.format(value)
         let parseable = snapshot(characters: formatted)
+        print(region.locale)
         var number = try! region.number(in: parseable, as: Value.self)
+        print("number 1st:", number, formatted, parseable)
         //=--------------------------------------=
         // MARK: Autocorrect
         //=--------------------------------------=
@@ -124,6 +127,7 @@ extension NumericTextStyle {
         // MARK: Value <- Number
         //=--------------------------------------=
         value = try! region.value(in: number, as: style)
+        print("value OUT:", value)
         //=--------------------------------------=
         // MARK: Style
         //=--------------------------------------=
@@ -132,6 +136,7 @@ extension NumericTextStyle {
         // MARK: Style -> Characters
         //=--------------------------------------=
         var characters = style.format(value)
+        print("characters:", characters)
         fix(sign: number.sign, for: value, in: &characters)
         //=--------------------------------------=
         // MARK: Characters -> Snapshot -> Commit
@@ -232,15 +237,13 @@ extension NumericTextStyle {
             // MARK: Insert
             //=----------------------------------=
             snapshot.append(Symbol(character, as: attribute))
+            print(Symbol(character, as: attribute), region.separators.characters)
         }
         //=--------------------------------------=
         // MARK: Autocorrect
         //=--------------------------------------=
-        unformat.autocorrect(snapshot: &snapshot)
-        //=--------------------------------------=
-        // MARK: Done
-        //=--------------------------------------=
-        return snapshot
+        print("snapshot:", characters, region.locale)
+        unformat.autocorrect(snapshot: &snapshot); return snapshot
     }
 }
 

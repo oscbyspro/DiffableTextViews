@@ -158,6 +158,8 @@ extension Region {
         //=--------------------------------------=
         // MARK: Characters -> Value
         //=--------------------------------------=
+        print(characters, try? format.parse(characters))
+        print(number.sign, number.integer, number.separator, number.fraction)
         return try format.parse(characters)
     }
     

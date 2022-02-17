@@ -116,7 +116,8 @@ extension Currency {
         //=--------------------------------------=
         // MARK: Instance
         //=--------------------------------------=
-        if !split[0].isEmpty {
+        print(split)
+        if !split[0].filter(\.isWhitespace).isEmpty {
             self.init(split[0], at: .prefix)
         } else {
             self.init(split[1], at: .suffix)

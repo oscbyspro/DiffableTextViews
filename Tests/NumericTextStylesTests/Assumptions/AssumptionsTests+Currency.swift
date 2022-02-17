@@ -40,7 +40,7 @@ extension AssumptionsTests {
             for locale in locales {
                 let zero = style.locale(locale).format(0)
                 //=------------------------------=
-                // MARK: Failure
+                // MARK: Check
                 //=------------------------------=
                 guard zero.count(where: \.isNumber) == 1 else {
                     XCTFail("\(zero), \(locale), \(currency)")
