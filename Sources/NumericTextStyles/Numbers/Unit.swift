@@ -34,7 +34,7 @@ RawRepresentable, Hashable, CaseIterable, TextOutputStreamable where RawValue ==
 extension Unit {
     
     //=------------------------------------------------------------------------=
-    // MARK: Localization - Default
+    // MARK: Localization
     //=------------------------------------------------------------------------=
     
     @inlinable func standard(_ formatter: NumberFormatter) throws -> Character {

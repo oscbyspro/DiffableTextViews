@@ -35,34 +35,18 @@ public struct NumericTextStyle<Format: NumericTextFormat>: DiffableTextStyle {
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable init(format: Format, specialization: Specialization) {
-        self.specialization = specialization
-        self.format = format.locale(specialization.locale)
+    @inlinable init(format: Format, locale: Locale = .autoupdatingCurrent) {
+        self.specialization = format.specialization(locale)
+        self.format = format .locale(specialization.locale)
         self.bounds = Bounds()
         self.precision = Precision()
     }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Initializers - Indirect
-    //=------------------------------------------------------------------------=
-    
-    @inlinable public init(format: Format, locale: Locale = .autoupdatingCurrent) where Format: NumericTextNumberFormat {
-        self.init(format: format, specialization: Standard(locale))
-    }
-    
-    @inlinable public init(format: Format, locale: Locale = .autoupdatingCurrent) where Format: NumericTextCurrencyFormat {
-        sekf,
-    }
-    
-    @inlinable public
-    
+
     //=------------------------------------------------------------------------=
     // MARK: Accessors
     //=------------------------------------------------------------------------=
         
-    @inlinable var specialization: Specialization {
-        Format.specialization(style: self)
-    }
+    @inlinable var lexicon: Lexicon { specialization.lexicon }
     
     //=------------------------------------------------------------------------=
     // MARK: Transformations
@@ -74,8 +58,8 @@ public struct NumericTextStyle<Format: NumericTextFormat>: DiffableTextStyle {
         // MARK: Make New Instance
         //=--------------------------------------=
         var result = self
-        result.lexicon = Specialization.lexicon(locale)
-        result.format = format.locale(result.lexicon.locale)
+        result.specialization = format.specialization(locale)
+        result.format  = format.locale(result.lexicon.locale)
         return result
     }
     

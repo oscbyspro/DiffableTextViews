@@ -44,4 +44,8 @@ import Foundation
         case .negative: return formatter.minusSign
         }}; return characters.filter({ $0.isPunctuation || $0.isMathSymbol }).first
     }
+    
+    @inlinable func currency(_ formatter: NumberFormatter) -> Character? {
+        self.standard(formatter)
+    }
 }

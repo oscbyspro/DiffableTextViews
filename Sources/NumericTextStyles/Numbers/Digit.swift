@@ -53,4 +53,8 @@ import Foundation
     @inlinable func standard(_ formatter: NumberFormatter) -> Character? {
         formatter.string(from: numericValue as NSNumber)?.first
     }
+    
+    @inlinable func currency(_ formatter: NumberFormatter) -> Character? {
+        self.standard(formatter)
+    }
 }

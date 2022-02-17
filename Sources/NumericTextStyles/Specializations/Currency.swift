@@ -26,7 +26,7 @@ public struct Currency: NumericTextSpecialization {
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable init(code: Code, locale: Locale) {
+    @inlinable init(code: String, locale: Locale) {
         self.lexicon = Lexicon.currency(locale)
     }
     
