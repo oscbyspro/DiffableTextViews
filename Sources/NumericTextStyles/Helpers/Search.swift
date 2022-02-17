@@ -27,7 +27,7 @@ Haystack: BidirectionalCollection, Haystack.Element == Needle.Element {
     //=------------------------------------------------------------------------=
     
     /// A naive search, for needles known to be at or near the start of the haystack.
-    @inlinable static func forwards(find needle: Needle, in haystack: Haystack) -> Location? {
+    @inlinable static func forwards(search needle: Needle, in haystack: Haystack) -> Location? {
         //=--------------------------------------=
         // MARK: Haystack
         //=--------------------------------------=
@@ -56,15 +56,14 @@ Haystack: BidirectionalCollection, Haystack.Element == Needle.Element {
         return nil
     }
 
-    
     //=------------------------------------------------------------------------=
     // MARK: Backwards
     //=------------------------------------------------------------------------=
     
     /// A naive search, for needles known to be at or near the start of the haystack.
-    @inlinable static func backwards(find needle: Needle, in haystack: Haystack) -> Location? {
-        Reversed.forwards(find: needle.reversed(), in: haystack.reversed()).map {
-            reversed in reversed.upperBound.base  ..<  reversed.lowerBound.base
+    @inlinable static func backwards(search needle: Needle, in haystack: Haystack) -> Location? {
+        Reversed.forwards(search: needle.reversed(), in: haystack.reversed()).map { reversed in
+            reversed.upperBound.base ..< reversed.lowerBound.base
         }
     }
     
@@ -74,9 +73,6 @@ Haystack: BidirectionalCollection, Haystack.Element == Needle.Element {
     
     /// A naive search, for needles known to be at or near the start of the haystack.
     @inlinable static func range(of needle: Needle, in haystack: Haystack, reversed: Bool = false) -> Location? {
-        switch reversed {
-        case false: return  forwards(find: needle, in: haystack)
-        case  true: return backwards(find: needle, in: haystack)
-        }
+        !reversed ? forwards(search: needle, in: haystack) : backwards(search: needle, in: haystack)
     }
 }
