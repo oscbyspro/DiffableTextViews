@@ -13,7 +13,7 @@ import Foundation
 // MARK: * Decimal
 //*============================================================================*
 
-extension Decimal: Signed, FloatingPoint {
+extension Decimal: Values.Signed, Values.FloatingPoint {
 
     //=------------------------------------------------------------------------=
     // MARK: Precision, Bounds

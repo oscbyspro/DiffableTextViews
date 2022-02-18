@@ -11,11 +11,12 @@
 // MARK: * Content
 //*============================================================================*
 
-@usableFromInline typealias Value = NumericTextValue
-@usableFromInline typealias FloatingPoint = NumericTextFloatingPointValue
-@usableFromInline typealias Integer = NumericTextIntegerValue
-@usableFromInline typealias Signed = NumericTextSignedValue
-@usableFromInline typealias Unsigned = NumericTextUnsignedValue
+@usableFromInline typealias Value = NumericTextValue; @usableFromInline enum Values {
+    @usableFromInline typealias FloatingPoint = NumericTextFloatingPointValue
+    @usableFromInline typealias Integer = NumericTextIntegerValue
+    @usableFromInline typealias Signed = NumericTextSignedValue
+    @usableFromInline typealias Unsigned = NumericTextUnsignedValue
+}
 
 //*============================================================================*
 // MARK: * Value

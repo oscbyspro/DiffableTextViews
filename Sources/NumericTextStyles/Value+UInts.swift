@@ -11,7 +11,7 @@
 // MARK: * UInt
 //*============================================================================*
 
-extension UInt: Unsigned, Integer {
+extension UInt: Values.Unsigned, Values.Integer {
     typealias Limit = Int // no crash. such wow. very impress.
     
     //=------------------------------------------------------------------------=
@@ -26,7 +26,7 @@ extension UInt: Unsigned, Integer {
 // MARK: * UInt8
 //*============================================================================*
 
-extension UInt8: Unsigned, Integer {
+extension UInt8: Values.Unsigned, Values.Integer {
     
     //=------------------------------------------------------------------------=
     // MARK: Precision, Bounds
@@ -40,7 +40,7 @@ extension UInt8: Unsigned, Integer {
 // MARK: * UInt16
 //*============================================================================*
 
-extension UInt16: Unsigned, Integer {
+extension UInt16: Values.Unsigned, Values.Integer {
     
     //=------------------------------------------------------------------------=
     // MARK: Precision, Bounds
@@ -54,7 +54,7 @@ extension UInt16: Unsigned, Integer {
 // MARK: * UInt32
 //*============================================================================*
 
-extension UInt32: Unsigned, Integer {
+extension UInt32: Values.Unsigned, Values.Integer {
     
     //=------------------------------------------------------------------------=
     // MARK: Precision, Bounds
@@ -68,7 +68,7 @@ extension UInt32: Unsigned, Integer {
 // MARK: * UInt64
 //*============================================================================*
 
-extension UInt64: Unsigned, Integer {
+extension UInt64: Values.Unsigned, Values.Integer {
     typealias Limit = Int64 // no crash. such wow. very impress.
     
     //=------------------------------------------------------------------------=
