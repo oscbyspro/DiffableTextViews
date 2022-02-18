@@ -11,11 +11,11 @@ import Foundation
 import Support
 
 //*============================================================================*
-// MARK: * Unit
+// MARK: * Component
 //*============================================================================*
 
 /// An object representing an ASCII character by its UInt8 unicode scalar value.
-@usableFromInline protocol Unit:
+@usableFromInline protocol Component:
 RawRepresentable, Hashable, CaseIterable, TextOutputStreamable where RawValue == UInt8 {
     
     //=------------------------------------------------------------------------=
@@ -31,7 +31,7 @@ RawRepresentable, Hashable, CaseIterable, TextOutputStreamable where RawValue ==
 // MARK: + Unicodeable
 //=----------------------------------------------------------------------------=
 
-extension Unit {
+extension Component {
     
     //=------------------------------------------------------------------------=
     // MARK: Unicode

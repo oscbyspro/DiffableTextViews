@@ -13,7 +13,7 @@ import Foundation
 // MARK: Digit
 //*============================================================================*
 
-@usableFromInline enum Digit: UInt8, Unit {
+@usableFromInline enum Digit: UInt8, Component {
     
     //=------------------------------------------------------------------------=
     // MARK: Instances
