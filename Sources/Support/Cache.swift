@@ -39,6 +39,15 @@ public final class Cache<Key, Value> where Key: Hashable & AnyObject, Value: Any
     }
     
     //=------------------------------------------------------------------------=
+    // MARK: Accessors
+    //=------------------------------------------------------------------------=
+    
+    @inlinable public subscript(key: Key) -> Value? {
+        get { nscache.object(forKey: key) }
+        set { newValue != nil ? nscache.setObject(newValue!, forKey: key) : nscache.removeObject(forKey: key) }
+    }
+    
+    //=------------------------------------------------------------------------=
     // MARK: Utilities
     //=------------------------------------------------------------------------=
     

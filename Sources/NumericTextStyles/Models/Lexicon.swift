@@ -16,21 +16,15 @@ import Support
 //*============================================================================*
 
 public final class Lexicon {
-    @usableFromInline typealias Cache = NSCache<NSString, Lexicon>
+    @usableFromInline typealias Cache = Support.Cache<NSString, Lexicon>
     
     //=------------------------------------------------------------------------=
     // MARK: Cache
     //=------------------------------------------------------------------------=
     
-    @usableFromInline static private(set) var complete = false
-    
-    @usableFromInline static let standard: Cache = {
-        let cache = Cache(); cache.countLimit = 3; return cache
-    }()
-    
-    @usableFromInline static let currency: Cache = {
-        let cache = Cache(); cache.countLimit = 3; return cache
-    }()
+    @usableFromInline static private(set) var done = false
+    @usableFromInline static let standard = Cache(size: 3)
+    @usableFromInline static let currency = Cache(size: 3)
     
     //=------------------------------------------------------------------------=
     // MARK: Instances
@@ -113,20 +107,7 @@ extension Lexicon {
     
     @inlinable static func search(_ key: String, in cache: Cache,
     default make: @autoclosure () throws -> Lexicon) -> Lexicon {
-        setup(); let key = key as NSString
-        //=--------------------------------------=
-        // MARK: Search In Cache
-        //=--------------------------------------=
-        if let reusable = cache.object(forKey: key) {
-            return reusable
-        //=--------------------------------------=
-        // MARK: Make A New Instance And Save It
-        //=--------------------------------------=
-        } else {
-            let instance = defaultable(try make())
-            cache.setObject(instance, forKey: key)
-            return instance
-        }
+        setup(); return cache.search(key as NSString, defaultable(try make()))
     }
     
     //=------------------------------------------------------------------------=
@@ -134,9 +115,9 @@ extension Lexicon {
     //=------------------------------------------------------------------------=
     
     @inlinable static func setup() {
-        guard !complete else { return }; complete = true
-        self.standard.setObject(en_US, forKey: en_US.locale.identifier as NSString)
-        self.currency.setObject(en_US, forKey: en_US.locale.identifier as NSString)
+        guard !done else { return }; done = true
+        standard[en_US.locale.identifier as NSString] = en_US
+        currency[en_US.locale.identifier as NSString] = en_US
     }
     
     //=------------------------------------------------------------------------=
