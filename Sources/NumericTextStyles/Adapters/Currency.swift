@@ -37,7 +37,7 @@ public struct NumericTextCurrencyAdapter<Format: NumericTextCurrencyFormat>: Ada
     // MARK: Autocorrect
     //=------------------------------------------------------------------------=
     
-    @inlinable public func autocorrect(snapshot: inout Snapshot) {
+    @inlinable public func autocorrect(_ snapshot: inout Snapshot) {
         guard !label.characters.isEmpty else { return }
         guard let range = label.range(in: snapshot) else { return }
         snapshot.update(attributes: range) { attribute in attribute = .phantom }

@@ -34,5 +34,5 @@ public struct NumericTextPercentAdapter<Format: NumericTextPercentFormat>: Adapt
     // MARK: Autocorrect
     //=------------------------------------------------------------------------=
     
-    @inlinable public func autocorrect(snapshot: inout Snapshot) { }
+    @inlinable public func autocorrect(_ snapshot: inout Snapshot) { }
 }

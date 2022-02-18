@@ -222,9 +222,9 @@ extension NumericTextStyle {
             snapshot.append(Symbol(character, as: attribute))
         }
         //=--------------------------------------=
-        // MARK: Autocorrect
+        // MARK: Autocorrect -> Done
         //=--------------------------------------=
-        adapter.autocorrect(snapshot: &snapshot); return snapshot
+        adapter.autocorrect(&snapshot); return snapshot
     }
 }
 

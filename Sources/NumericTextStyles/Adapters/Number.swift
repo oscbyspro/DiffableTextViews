@@ -34,5 +34,5 @@ public struct NumericTextNumberAdapter<Format: NumericTextNumberFormat>: Adapter
     // MARK: Autocorrect
     //=------------------------------------------------------------------------=
     
-    @inlinable public func autocorrect(snapshot: inout Snapshot) { }
+    @inlinable public func autocorrect(_ snapshot: inout Snapshot) { }
 }

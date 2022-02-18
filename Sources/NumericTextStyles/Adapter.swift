@@ -41,7 +41,7 @@ public protocol NumericTextAdapter: Equatable {
     // MARK: Utilities
     //=------------------------------------------------------------------------=
     
-    @inlinable func autocorrect(snapshot: inout Snapshot)
+    @inlinable func autocorrect(_ snapshot: inout Snapshot)
 }
 
 //=----------------------------------------------------------------------------=
