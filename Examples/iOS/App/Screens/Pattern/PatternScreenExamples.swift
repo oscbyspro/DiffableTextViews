@@ -51,20 +51,11 @@ struct PatternScreenExamples: View {
     // MARK: Components
     //=------------------------------------------------------------------------=
     
-    var style: Style.Reference.Equals<[AnyHashable]> {
-        var reference: Style.Reference
-        //=--------------------------------------=
-        // MARK: Match
-        //=--------------------------------------=
-        switch kind.storage {
-        case .card: reference = Self.card
-        case .phone: reference = Self.phone
-        }
-        //=--------------------------------------=
-        // MARK: Setup
-        //=--------------------------------------=
-        reference.style = reference.style.hidden(!visible.storage)
-        return reference.equals([kind.storage, visible.storage])
+    var style: Style {
+        var base: Style { switch kind.storage {
+            case  .card: return Self .card
+            case .phone: return Self.phone
+        }}; return base.hidden(!visible.storage)
     }
     
     //=------------------------------------------------------------------------=
@@ -74,10 +65,8 @@ struct PatternScreenExamples: View {
     static let phone = PatternTextStyle<String>
         .pattern("+## (###) ###-##-##")
         .placeholder("#" as Character) { $0.isASCII && $0.isNumber }
-        .reference()
     
     static let card = PatternTextStyle<String>
         .pattern("#### #### #### ####")
         .placeholder("#" as Character) { $0.isASCII && $0.isNumber }
-        .reference()
 }
