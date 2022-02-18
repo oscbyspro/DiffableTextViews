@@ -54,21 +54,28 @@ public final class Lexicon {
         self.digits = digits
         self.separators = separators
     }
-    
+}
+
+//=----------------------------------------------------------------------------=
+// MARK: + Cache
+//=----------------------------------------------------------------------------=
+
+extension Lexicon {
+
     //=------------------------------------------------------------------------=
-    // MARK: Initializers - Static
+    // MARK: Initializers
     //=------------------------------------------------------------------------=
     
     @inlinable static func standard(locale: Locale) -> Lexicon {
-        search(locale.identifier, in: standard, default: _standard(locale: locale))
+        search(locale.identifier, cache: standard, make: _standard(locale: locale))
     }
     
     @inlinable static func currency(code: String, locale: Locale) -> Lexicon {
-        search(locale.identifier, in: currency, default: _currency(code: code, locale: locale))
+        search(locale.identifier, cache: currency, make: _currency(code: code, locale: locale))
     }
     
     //=------------------------------------------------------------------------=
-    // MARK: Initializers - Static - Helpers
+    // MARK: Helpers
     //=------------------------------------------------------------------------=
     
     @inlinable static func _standard(locale: Locale) -> Self {
@@ -93,31 +100,13 @@ public final class Lexicon {
         return  .init(locale: locale, signs:      .currency(formatter),
         digits: .currency(formatter), separators: .currency(formatter))
     }
-}
 
-//=----------------------------------------------------------------------------=
-// MARK: + Cache
-//=----------------------------------------------------------------------------=
-
-extension Lexicon {
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Search
-    //=------------------------------------------------------------------------=
-    
-    @inlinable static func search(_ key: String, in cache: Cache,
-    default make: @autoclosure () -> Lexicon) -> Lexicon {
-        setup(); return cache.search(key as NSString, make())
-    }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Setup
-    //=------------------------------------------------------------------------=
-    
-    @inlinable static func setup() {
-        guard !done else { return }; done = true
+    @inlinable static func search(_ key: String,
+    cache: Cache, make: @autoclosure () -> Lexicon) -> Lexicon {
+        setup: if !done { done = true
         standard[en_US.locale.identifier as NSString] = en_US
         currency[en_US.locale.identifier as NSString] = en_US
+        }; return cache.search(key as NSString, make)
     }
 }
 
