@@ -99,18 +99,18 @@ extension NumericTextStyle {
         //=--------------------------------------=
         // MARK: Autocorrect
         //=--------------------------------------=
-        bounds.autocorrect(value: &value)
+        bounds.autocorrect(&value)
         //=--------------------------------------=
         // MARK: Value -> Components
         //=--------------------------------------=
         let formatted = style.format(value)
-        let parseable = snapshot(characters: formatted)
+        let parseable = snapshot(formatted)
         var components = try! lexicon.components(in: parseable, as: Value.self)
         //=--------------------------------------=
         // MARK: Autocorrect
         //=--------------------------------------=
-        bounds.autocorrect(sign: &components.sign)
-        precision.autocorrect(components: &components)
+        bounds.autocorrect(&components.sign)
+        precision.autocorrect(&components)
         //=--------------------------------------=
         // MARK: Value <- Components
         //=--------------------------------------=
@@ -118,7 +118,7 @@ extension NumericTextStyle {
         //=--------------------------------------=
         // MARK: Style
         //=--------------------------------------=
-        style = style.sign(self.sign(components: components))
+        style = style.sign(self.sign(components))
         //=--------------------------------------=
         // MARK: Style -> Characters
         //=--------------------------------------=
@@ -127,8 +127,7 @@ extension NumericTextStyle {
         //=--------------------------------------=
         // MARK: Characters -> Snapshot -> Commit
         //=--------------------------------------=
-        let snapshot = snapshot(characters: characters)
-        return Commit(value: value, snapshot: snapshot)
+        return Commit(value, snapshot(characters))
     }
 }
 
@@ -154,17 +153,17 @@ extension NumericTextStyle {
         // MARK: Components
         //=--------------------------------------=
         var components = try lexicon.components(in: proposal, as: Value.self)
-        sign.map({ components.sign = $0 })
+        components.set(optional: sign)
         //=--------------------------------------=
         // MARK: Components - Validate
         //=--------------------------------------=
-        try bounds.validate(sign: components.sign)
+        try bounds.validate(components.sign)
         //=--------------------------------------=
         // MARK: Components - Count, Validate
         //=--------------------------------------=
         let count = components.count()
-        let capacity = try precision.capacity(count: count)
-        components.removeImpossibleSeparator(capacity: capacity)
+        let capacity = try precision.capacity(count)
+        components.removeSeparatorAsSuffixAtZeroCapacity(capacity)
         //=--------------------------------------=
         // MARK: Value
         //=--------------------------------------=
@@ -172,14 +171,13 @@ extension NumericTextStyle {
         //=--------------------------------------=
         // MARK: Value - Validate
         //=--------------------------------------=
-        let location = try bounds.validate(value: value)
-        try bounds.validate(components: components, with: location)
+        let location = try bounds.validate(value)
+        try bounds.validate(components, with: location)
         //=--------------------------------------=
         // MARK: Style
         //=--------------------------------------=
-        let style = format.sign(self.sign(components: components))
-        .precision(self.precision.interactive(count: count))
-        .separator(self.separator(components: components))
+        let style = format.precision(self.precision.interactive(count))
+        .separator(self.separator(components)).sign(self.sign(components))
         //=--------------------------------------=
         // MARK: Style -> Characters
         //=--------------------------------------=
@@ -188,8 +186,7 @@ extension NumericTextStyle {
         //=--------------------------------------=
         // MARK: Characters -> Snapshot -> Commit
         //=--------------------------------------=
-        let snapshot = snapshot(characters: characters)
-        return Commit(value: value, snapshot: snapshot)
+        return Commit(value, snapshot(characters))
     }
 }
 
@@ -204,7 +201,7 @@ extension NumericTextStyle {
     //=------------------------------------------------------------------------=
 
     /// Assumes that characters contains at least one content character.
-    @inlinable func snapshot(characters: String) -> Snapshot {
+    @inlinable func snapshot(_ characters: String) -> Snapshot {
         var snapshot = characters.reduce(into: Snapshot()) { snapshot, character in
             let attribute: Attribute
             //=----------------------------------=
@@ -241,11 +238,11 @@ extension NumericTextStyle {
     // MARK: Components
     //=------------------------------------------------------------------------=
     
-    @inlinable func sign(components: Components) -> Format.Sign {
+    @inlinable func sign(_ components: Components) -> Format.Sign {
         components.sign == .negative ? .always : .automatic
     }
 
-    @inlinable func separator(components: Components) -> Format.Separator {
+    @inlinable func separator(_ components: Components) -> Format.Separator {
         components.separator == .fraction ? .always : .automatic
     }
     

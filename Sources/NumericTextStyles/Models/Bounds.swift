@@ -63,7 +63,7 @@ extension Bounds {
     // MARK: Autocorrect
     //=------------------------------------------------------------------------=
     
-    @inlinable func autocorrect(value: inout Value) {
+    @inlinable func autocorrect(_ value: inout Value) {
         value = Swift.min(Swift.max(min, value), max)
     }
 
@@ -71,7 +71,7 @@ extension Bounds {
     // MARK: Validate
     //=------------------------------------------------------------------------=
     
-    @inlinable func validate(value: Value) throws -> Location {
+    @inlinable func validate(_ value: Value) throws -> Location {
         if min < value && value < max { return .body }
         //=--------------------------------------=
         // MARK: Value == Max
@@ -93,7 +93,7 @@ extension Bounds {
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: + Number
+// MARK: + Components
 //=----------------------------------------------------------------------------=
 
 extension Bounds {
@@ -102,7 +102,7 @@ extension Bounds {
     // MARK: Autocorrect
     //=------------------------------------------------------------------------=
     
-    @inlinable func autocorrect(sign: inout Sign) {
+    @inlinable func autocorrect(_ sign: inout Sign) {
         switch sign {
         case .positive: if max > .zero || self == .zero { return }
         case .negative: if min < .zero                  { return }
@@ -114,27 +114,27 @@ extension Bounds {
     }
     
     //=------------------------------------------------------------------------=
+    // MARK: Validate
+    //=------------------------------------------------------------------------=
+    
+    @inlinable func validate(_ components: Components, with location: Location) throws {
+        if location == .edge, components.hasSeparatorAsSuffix {
+            throw Info([.mark(components), "has reached its limit and does not fit a fraction separator."])
+        }
+    }
+    
+    //=------------------------------------------------------------------------=
     // MARK: Validate - Sign
     //=------------------------------------------------------------------------=
     
-    @inlinable func validate(sign: Sign) throws {
+    @inlinable func validate(_ sign: Sign) throws {
         var autocorrectable = sign
-        autocorrect(sign: &autocorrectable)
+        autocorrect(&autocorrectable)
         if autocorrectable == sign { return }
         //=--------------------------------------=
         // MARK: Failure
         //=--------------------------------------=
         throw Info([.mark(sign), "is not in", .mark(self)])
-    }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Validate - Location
-    //=------------------------------------------------------------------------=
-    
-    @inlinable func validate(components: Components, with location: Location) throws {
-        if location == .edge, components.hasSeparatorAsSuffix {
-            throw Info([.mark(components), "has reached its limit and does not fit a fraction separator."])
-        }
     }
 }
 

@@ -24,8 +24,8 @@ public struct Commit<Value> {
     //=------------------------------------------------------------------------=
     // MARK: Initializers
     //=------------------------------------------------------------------------=
-
-    @inlinable public init(value: Value, snapshot: Snapshot) {
+    
+    @inlinable public init(_ value: Value, _ snapshot: Snapshot) {
         self.value = value
         self.snapshot = snapshot
     }
@@ -35,6 +35,6 @@ public struct Commit<Value> {
     //=------------------------------------------------------------------------=
     
     @inlinable public init() where Value: RangeReplaceableCollection {
-        self.init(value: Value(), snapshot: Snapshot())
+        self.init(Value(), Snapshot())
     }
 }

@@ -117,6 +117,14 @@ import Support
     }
     
     //=------------------------------------------------------------------------=
+    // MARK: Transformations - Sign
+    //=------------------------------------------------------------------------=
+    
+    @inlinable mutating func set(optional sign: Sign?) {
+        if let sign = sign { self.sign = sign }
+    }
+    
+    //=------------------------------------------------------------------------=
     // MARK: Transformations - Separator
     //=------------------------------------------------------------------------=
     
@@ -124,11 +132,11 @@ import Support
         if fraction.digits.isEmpty { separator = nil }
     }
     
-    @inlinable mutating func removeImpossibleSeparator(capacity: Count) {
+    @inlinable mutating func removeSeparatorAsSuffixAtZeroCapacity(_ capacity: Count) {
         guard capacity.fraction <= 0 || capacity.value <= 0 else { return }
         self.removeSeparatorAsSuffix()
     }
-    
+
     //=------------------------------------------------------------------------=
     // MARK: Transformations - Precision
     //=------------------------------------------------------------------------=

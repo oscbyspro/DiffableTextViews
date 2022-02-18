@@ -63,7 +63,7 @@ public struct Precision<Value: NumericTextValue>: Equatable {
         fractionLimits: Namespace.minimum.fraction ... upper.fraction)
     }
     
-    @inlinable func interactive(count: Count) -> NumberFormatStyleConfiguration.Precision {
+    @inlinable func interactive(_ count: Count) -> NumberFormatStyleConfiguration.Precision {
         .integerAndFractionLength(
          integerLimits: max(Namespace.minimum.integer,  count.integer)  ... count.integer,
         fractionLimits: max(Namespace.minimum.fraction, count.fraction) ... count.fraction)
@@ -73,7 +73,7 @@ public struct Precision<Value: NumericTextValue>: Equatable {
     // MARK: Capacity
     //=------------------------------------------------------------------------=
     
-    @inlinable func capacity(count: Count) throws -> Count {
+    @inlinable func capacity(_ count: Count) throws -> Count {
         let capacity = upper.transform(&-, count)
         //=--------------------------------------=
         // MARK: Validate Each Component
@@ -91,7 +91,7 @@ public struct Precision<Value: NumericTextValue>: Equatable {
     // MARK: Autocorrect
     //=------------------------------------------------------------------------=
     
-    @inlinable func autocorrect(components: inout Components) {
+    @inlinable func autocorrect(_ components: inout Components) {
         components.trim(max: upper)
     }
 }
