@@ -106,7 +106,7 @@ extension Label {
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable static func currency(code: String, lexicon: Lexicon) -> Label {
+    @inlinable static func currency(code: String, in lexicon: Lexicon) -> Label {
         let key = Currency(code: code, lexicon: lexicon)
         return currencies.search(key, _currency(code: code, lexicon: lexicon))
     }

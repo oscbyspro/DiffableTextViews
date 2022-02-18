@@ -27,8 +27,7 @@ public struct Percent<Format: NumericTextPercentFormat>: Adapter {
     //=------------------------------------------------------------------------=
     
     @inlinable public init(_ format: Format) {
-        self.format = format
-        self.lexicon = Lexicon.standard(locale: format.locale)
+        self.format = format; self.lexicon = .standard(locale: format.locale)
     }
     
     //=------------------------------------------------------------------------=

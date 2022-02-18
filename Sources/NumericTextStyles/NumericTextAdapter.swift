@@ -21,7 +21,6 @@ import Support
 // MARK: * Adapter
 //*============================================================================*
 
-#warning("Could make lexicon internal, maybe.")
 public protocol NumericTextAdapter: Equatable {
     associatedtype Format: NumericTextFormat
     

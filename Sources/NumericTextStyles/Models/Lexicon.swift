@@ -71,7 +71,7 @@ extension Lexicon {
         search(locale.identifier, cache: standard, make: _standard(locale: locale))
     }
     
-    @inlinable static func currency(code: String, locale: Locale) -> Lexicon {
+    @inlinable static func currency(code: String, in locale: Locale) -> Lexicon {
         search(locale.identifier, cache: currency, make: _currency(code: code, locale: locale))
     }
     

@@ -8,7 +8,6 @@
 //=----------------------------------------------------------------------------=
 
 import DiffableTextViews
-import Foundation
 
 //*============================================================================*
 // MARK: * Currency
@@ -30,8 +29,8 @@ public struct Currency<Format: NumericTextCurrencyFormat>: NumericTextAdapter {
     
     @inlinable public init(_ format: Format) {
         self.format = format
-        self.lexicon = Lexicon.currency(code: format.currencyCode, locale: format.locale)
-        self.label = Label.currency(code: format.currencyCode, lexicon: lexicon)
+        self.lexicon = .currency(code: format.currencyCode, in: format.locale)
+        self.label   = .currency(code: format.currencyCode, in: lexicon)
     }
     
     //=------------------------------------------------------------------------=
