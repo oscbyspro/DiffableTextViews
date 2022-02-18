@@ -51,7 +51,7 @@ public final class Cache<Key, Value> where Key: Hashable & AnyObject, Value: Any
     // MARK: Search or Insert
     //=------------------------------------------------------------------------=
     
-    @inlinable public func search(_ key: Key, _ make: () throws -> Value) rethrows -> Value {
+    @inlinable public func search(_ key: Key, make: @autoclosure () throws -> Value) rethrows -> Value {
         //=--------------------------------------=
         // MARK: Search
         //=--------------------------------------=
@@ -65,9 +65,5 @@ public final class Cache<Key, Value> where Key: Hashable & AnyObject, Value: Any
             nscache.setObject(instance, forKey: key)
             return instance
         }
-    }
-    
-    @inlinable public func search(_ key: Key, _ make: @autoclosure () throws -> Value) rethrows -> Value {
-        try search(key, make)
     }
 }

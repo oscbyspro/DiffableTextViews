@@ -22,7 +22,7 @@ public final class Label {
     // MARK: Cache
     //=------------------------------------------------------------------------=
     
-    @usableFromInline static let currencies = Cache<CurrencyID, Label>(size: 10)
+    @usableFromInline static let currencies = Cache<CurrencyID, Label>(size: 33)
     
     //=------------------------------------------------------------------------=
     // MARK: State
@@ -68,7 +68,7 @@ extension Label {
     
     @inlinable static func currency(code: String, with lexicon: Lexicon) -> Label {
         let key = CurrencyID(code: code, lexicon: lexicon)
-        return currencies.search(key, _currency(code: code, with: lexicon))
+        return currencies.search(key, make: _currency(code: code, with: lexicon))
     }
     
     //=------------------------------------------------------------------------=

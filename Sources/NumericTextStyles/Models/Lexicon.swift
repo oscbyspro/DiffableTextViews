@@ -22,10 +22,10 @@ public final class Lexicon {
     // MARK: Cache
     //=------------------------------------------------------------------------=
     
-    @usableFromInline static private(set) var done = false
     @usableFromInline static let standard = Cache(size: 3)
     @usableFromInline static let currency = Cache(size: 3)
-    
+    @usableFromInline static private(set) var done = false
+
     //=------------------------------------------------------------------------=
     // MARK: Instances
     //=------------------------------------------------------------------------=
@@ -67,46 +67,44 @@ extension Lexicon {
     //=------------------------------------------------------------------------=
     
     @inlinable static func standard(in locale: Locale) -> Lexicon {
-        search(locale.identifier, cache: standard, make: _standard(locale: locale))
+        search(locale.identifier, cache: standard, make: _standard(in: locale))
     }
     
     @inlinable static func currency(code: String, in locale: Locale) -> Lexicon {
-        search(locale.identifier, cache: currency, make: _currency(code: code, locale: locale))
+        search(locale.identifier, cache: currency, make: _currency(code: code, in: locale))
     }
     
     //=------------------------------------------------------------------------=
-    // MARK: Helpers
+    // MARK: Search
     //=------------------------------------------------------------------------=
-    
-    @inlinable static func _standard(locale: Locale) -> Self {
-        let formatter = NumberFormatter()
-        formatter.locale = locale
-        formatter.numberStyle = .decimal
-        //=--------------------------------------=
-        // MARK: Initialize
-        //=--------------------------------------=
-        return  .init(locale: locale, signs:      .standard(formatter),
-        digits: .standard(formatter), separators: .standard(formatter))
-    }
-    
-    @inlinable static func _currency(code: String, locale: Locale) -> Self {
-        let formatter = NumberFormatter()
-        formatter.locale = locale
-        formatter.currencyCode = code
-        formatter.numberStyle = .decimal
-        //=--------------------------------------=
-        // MARK: Initialize
-        //=--------------------------------------=
-        return  .init(locale: locale, signs:      .currency(formatter),
-        digits: .currency(formatter), separators: .currency(formatter))
-    }
 
     @inlinable static func search(_ key: String,
     cache: Cache, make: @autoclosure () -> Lexicon) -> Lexicon {
         setup: if !done { done = true
         standard[en_US.locale.identifier as NSString] = en_US
         currency[en_US.locale.identifier as NSString] = en_US
-        }; return cache.search(key as NSString, make)
+        }; return cache.search(key as NSString, make: make())
+    }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Helpers
+    //=------------------------------------------------------------------------=
+    
+    @inlinable static func _standard(in locale: Locale) -> Self {
+        let formatter = NumberFormatter()
+        formatter.numberStyle = .decimal
+        formatter.locale = locale
+        return  .init(locale: locale, signs:      .standard(formatter),
+        digits: .standard(formatter), separators: .standard(formatter))
+    }
+    
+    @inlinable static func _currency(code: String, in locale: Locale) -> Self {
+        let formatter = NumberFormatter()
+        formatter.numberStyle = .decimal
+        formatter.locale = locale
+        formatter.currencyCode = code
+        return  .init(locale: locale, signs:      .standard(formatter),
+        digits: .standard(formatter), separators: .standard(formatter))
     }
 }
 
