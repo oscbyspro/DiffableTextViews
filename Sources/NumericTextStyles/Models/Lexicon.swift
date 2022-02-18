@@ -66,7 +66,7 @@ extension Lexicon {
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable static func standard(locale: Locale) -> Lexicon {
+    @inlinable static func standard(in locale: Locale) -> Lexicon {
         search(locale.identifier, cache: standard, make: _standard(locale: locale))
     }
     

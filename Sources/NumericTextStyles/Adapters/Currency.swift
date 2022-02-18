@@ -30,7 +30,7 @@ public struct NumericTextCurrencyAdapter<Format: NumericTextCurrencyFormat>: Ada
     @inlinable public init(_ format: Format) {
         self.format = format
         self.lexicon = .currency(code: format.currencyCode, in: format.locale)
-        self.label   = .currency(code: format.currencyCode, in: lexicon)
+        self.label = .currency(code: format.currencyCode, with: lexicon)
     }
     
     //=------------------------------------------------------------------------=
