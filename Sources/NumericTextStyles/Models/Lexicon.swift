@@ -120,6 +120,8 @@ extension Lexicon {
     // MARK: Number -> Value
     //=------------------------------------------------------------------------=
     
+    /// Relies on the fact that implemented styles can parse pure numbers.
+    /// If this changes, then it should be remade to use pure number styles.
     @inlinable func value<F: Format>(in number: Number, as format: F) throws -> F.Value {
         try format.locale(Self.en_US.locale).parse(String(describing: number))
     }
