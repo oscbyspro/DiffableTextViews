@@ -104,7 +104,7 @@ public final class Lexicon {
         // MARK: Make A New Instance And Save It
         //=--------------------------------------=
         } else {
-            let instance = Lexicon.defaultable(try ._standard(locale: locale))
+            let instance = defaultable(try _standard(locale: locale))
             standard.setObject(instance, forKey: key)
             return instance
         }
@@ -121,7 +121,7 @@ public final class Lexicon {
         // MARK: Make A New Instance And Save It
         //=--------------------------------------=
         } else {
-            let instance = Lexicon.defaultable(try ._currency(code: code, locale: locale))
+            let instance = defaultable(try _currency(code: code, locale: locale))
             currency.setObject(instance, forKey: key)
             return instance
         }
@@ -155,7 +155,6 @@ extension Lexicon {
         // MARK: Default To Lexicon.en_US (ASCII)
         //=--------------------------------------=
         } catch let reason {
-            print("DEFAULT")
             Info.print(["Lexicon set to en_US:", .note(reason)])
             return Lexicon.en_US
         }

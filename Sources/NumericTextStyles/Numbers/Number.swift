@@ -40,21 +40,30 @@ import Support
     /// To use this method, all formatting characters must be marked as such.
     ///
     @inlinable init<S: Sequence>(characters: S, integer: Bool, unsigned: Bool,
-        signs: [Character: Sign], digits: [Character: Digit], separators: [Character: Separator]
-    ) throws where S.Element == Character {
-        var signable = true
+    signs: [Character: Sign], digits: [Character: Digit], separators: [Character: Separator])
+    throws where S.Element == Character {
+        //=--------------------------------------=
+        // MARK: State
+        //=--------------------------------------=
+        var signable = !unsigned
         var iterator = characters.makeIterator()
         var next = iterator.next()
+        //=--------------------------------------=
+        // MARK: Helpers
+        //=--------------------------------------=
+        func sign() {
+            if signable, let character = next, let sign = signs[character] {
+                self.sign = sign; next = iterator.next(); signable = false
+            }
+        }
         //=--------------------------------------=
         // MARK: Attempt
         //=--------------------------------------=
         attempt: do {
             //=----------------------------------=
-            // MARK: Sign - Head
+            // MARK: Sign - Prefix
             //=----------------------------------=
-            if !unsigned, let character = next, let sign = signs[character] {
-                self.sign = sign; next = iterator.next(); signable = false
-            }
+            sign()
             //=----------------------------------=
             // MARK: Digits
             //=----------------------------------=
@@ -83,11 +92,9 @@ import Support
             }
         }
         //=----------------------------------=
-        // MARK: Sign - Tail
+        // MARK: Sign - Suffix
         //=----------------------------------=
-        if !unsigned, signable, let character = next, let sign = signs[character] {
-            self.sign = sign; next = iterator.next()
-        }
+        sign()
         //=--------------------------------------=
         // MARK: Validate
         //=--------------------------------------=
