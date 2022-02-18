@@ -52,7 +52,7 @@ public struct NumericTextStyle<Format: NumericTextFormat>: DiffableTextStyle {
     //=------------------------------------------------------------------------=
     
     @inlinable public func locale(_ locale: Locale) -> Self {
-        guard locale != self.locale else { return self }
+        guard self.locale != locale else { return self }
         var result = self; result.adapter = adapter.locale(locale); return result
     }
     
@@ -78,7 +78,7 @@ extension NumericTextStyle {
     // MARK: Format
     //=------------------------------------------------------------------------=
     
-    @inlinable public func format(value: Value) -> String {
+    @inlinable public func format(_ value: Value) -> String {
         format.precision(precision.inactive()).format(value)
     }
 }
@@ -93,7 +93,7 @@ extension NumericTextStyle {
     // MARK: Interpret
     //=------------------------------------------------------------------------=
     
-    @inlinable public func interpret(value: Value) -> Commit<Value> {
+    @inlinable public func interpret(_ value: Value) -> Commit<Value> {
         var style = format.precision(precision.active())
         var value = value
         //=--------------------------------------=
@@ -123,7 +123,7 @@ extension NumericTextStyle {
         // MARK: Style -> Characters
         //=--------------------------------------=
         var characters = style.format(value)
-        fix(sign: components.sign, for: value, in: &characters)
+        fix(components.sign, for: value, in: &characters)
         //=--------------------------------------=
         // MARK: Characters -> Snapshot -> Commit
         //=--------------------------------------=
@@ -141,7 +141,7 @@ extension NumericTextStyle {
     // MARK: Merge
     //=------------------------------------------------------------------------=
     
-    @inlinable public func merge(changes: Changes) throws -> Commit<Value> {
+    @inlinable public func merge(_ changes: Changes) throws -> Commit<Value> {
         var reader = Reader(changes, in: lexicon)
         //=--------------------------------------=
         // MARK: Reader
@@ -182,7 +182,7 @@ extension NumericTextStyle {
         // MARK: Style -> Characters
         //=--------------------------------------=
         var characters = style.format(value)
-        fix(sign: components.sign, for: value, in: &characters)
+        fix(components.sign, for: value, in: &characters)
         //=--------------------------------------=
         // MARK: Characters -> Snapshot -> Commit
         //=--------------------------------------=
@@ -251,7 +251,7 @@ extension NumericTextStyle {
     //=------------------------------------------------------------------------=
         
     /// This method exists because Apple's format styles always interpret zero as having a positive sign.
-    @inlinable func fix(sign: Sign, for value: Value, in characters: inout String) {
+    @inlinable func fix(_ sign: Sign, for value: Value, in characters: inout String) {
         guard sign == .negative, value == .zero else { return }
         guard let position = characters.firstIndex(where: lexicon.signs.components.keys.contains) else { return }
         characters.replaceSubrange(position...position, with: String(lexicon.signs[sign]))

@@ -67,7 +67,7 @@ extension PatternTextStyle {
     //=------------------------------------------------------------------------=
     
     /// - Mismatches are separated.
-    @inlinable public func format(value: Value) -> String {
+    @inlinable public func format(_ value: Value) -> String {
         Sequencer(pattern, placeholders, value).reduce(into: .init()) {
             characters, queue, content in
             characters.append(contentsOf: queue)
@@ -96,7 +96,7 @@ extension PatternTextStyle {
     //=------------------------------------------------------------------------=
     
     /// - Mismatches are cut.
-    @inlinable public func interpret(value: Value) -> Commit<Value> {
+    @inlinable public func interpret(_ value: Value) -> Commit<Value> {
         Sequencer(pattern, placeholders, value).reduce(into: .init()) {
             commit, queue, content in
             commit.snapshot.append(contentsOf: Snapshot(queue, as: .phantom))
@@ -124,7 +124,7 @@ extension PatternTextStyle {
     //=------------------------------------------------------------------------=
     
     /// - Mismatches throw an error.
-    @inlinable public func merge(changes: Changes) throws -> Commit<Value> {
+    @inlinable public func merge(_ changes: Changes) throws -> Commit<Value> {
         var value = Value(); let proposal = changes.proposal()
         var contents = proposal.lazy.filter(\.nonvirtual).makeIterator()
         //=--------------------------------------=
@@ -150,6 +150,6 @@ extension PatternTextStyle {
         //=--------------------------------------=
         // MARK: Value -> Commit
         //=--------------------------------------=
-        return self.interpret(value: value)
+        return interpret(value)
     }
 }

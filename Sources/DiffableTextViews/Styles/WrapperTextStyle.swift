@@ -48,13 +48,13 @@ extension WrapperTextStyle {
     //=------------------------------------------------------------------------=
     
     @inlinable @inline(__always)
-    public func format(value: Style.Value) -> String {
-        style.format(value: value)
+    public func format(_ value: Style.Value) -> String {
+        style.format(value)
     }
     
     @inlinable @inline(__always)
-    public func interpret(value: Style.Value) -> Commit<Style.Value> {
-        style.interpret(value: value)
+    public func interpret(_ value: Style.Value) -> Commit<Style.Value> {
+        style.interpret(value)
     }
     
     //=------------------------------------------------------------------------=
@@ -62,8 +62,8 @@ extension WrapperTextStyle {
     //=------------------------------------------------------------------------=
     
     @inlinable @inline(__always)
-    public func merge(changes: Changes) throws -> Commit<Style.Value> {
-        try style.merge(changes: changes)
+    public func merge(_ changes: Changes) throws -> Commit<Style.Value> {
+        try style.merge(changes)
     }
     
     //=------------------------------------------------------------------------=

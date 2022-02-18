@@ -153,7 +153,7 @@ public struct DiffableTextField<Style: UIKitDiffableTextStyle>: UIViewRepresenta
             // MARK: Attempt
             //=----------------------------------=
             attempt: do {
-                let commit = try style.merge(changes: changes)
+                let commit = try style.merge(changes)
                 //=------------------------------=
                 // MARK: Push
                 //=------------------------------=
@@ -216,7 +216,7 @@ public struct DiffableTextField<Style: UIKitDiffableTextStyle>: UIViewRepresenta
             // MARK: Active
             //=------------------------------=
             if downstream.active {
-                self.context.active(style: style, commit: style.interpret(value: value))
+                self.context.active(style: style, commit: style.interpret(value))
                 self.push()
             //=------------------------------=
             // MARK: Inactive
@@ -224,7 +224,7 @@ public struct DiffableTextField<Style: UIKitDiffableTextStyle>: UIViewRepresenta
             } else {
                 lock.perform {
                     self.context.inactive(style: style, value: value)
-                    self.downstream.update(text: style.format(value: value))
+                    self.downstream.update(text: style .format(value))
                 }
             }
         }

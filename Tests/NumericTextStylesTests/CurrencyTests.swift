@@ -37,7 +37,7 @@ final class CurrencyTests: XCTestCase {
             // MARK: Locales
             //=----------------------------------=
             for locale in locales {
-                let commit = style.locale(locale).interpret(value: value)
+                let commit = style.locale(locale).interpret(value)
                 let characters = expectation.locale(locale).format(value)
                 //=------------------------------=
                 // MARK: Value

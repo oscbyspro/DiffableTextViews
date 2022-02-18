@@ -36,7 +36,7 @@ final class PercentTests: XCTestCase {
             //=----------------------------------=
             // MARK: Testable
             //=----------------------------------=
-            let commit = style.interpret(value: value)
+            let commit = style.interpret(value)
             let characters = expectation.format(value)
             //=----------------------------------=
             // MARK: Value
