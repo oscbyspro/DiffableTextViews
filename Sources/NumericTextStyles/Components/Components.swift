@@ -11,16 +11,16 @@ import DiffableTextViews
 import Support
 
 //*============================================================================*
-// MARK: * Number
+// MARK: * Components
 //*============================================================================*
 
-/// A system representation of a number.
+/// A compositional model of a number.
 ///
 /// - Integer digits must not be empty.
 /// - Integer digits must not contain prefix zeros.
 /// - Fraction digits must be empty when there is no separator.
 ///
-@usableFromInline struct Number {
+@usableFromInline struct Components {
     
     //=------------------------------------------------------------------------=
     // MARK: State
@@ -117,6 +117,19 @@ import Support
     }
     
     //=------------------------------------------------------------------------=
+    // MARK: Transformations - Separator
+    //=------------------------------------------------------------------------=
+    
+    @inlinable mutating func removeSeparatorAsSuffix() {
+        if fraction.digits.isEmpty { separator = nil }
+    }
+    
+    @inlinable mutating func removeImpossibleSeparator(capacity: Count) {
+        guard capacity.fraction <= 0 || capacity.value <= 0 else { return }
+        self.removeSeparatorAsSuffix()
+    }
+    
+    //=------------------------------------------------------------------------=
     // MARK: Transformations - Precision
     //=------------------------------------------------------------------------=
     
@@ -137,19 +150,6 @@ import Support
         self.removeSeparatorAsSuffix()
         self.integer.makeAtLeastZero()
     }
-        
-    //=------------------------------------------------------------------------=
-    // MARK: Transformations - Separator
-    //=------------------------------------------------------------------------=
-    
-    @inlinable mutating func removeSeparatorAsSuffix() {
-        if fraction.digits.isEmpty { separator = nil }
-    }
-    
-    @inlinable mutating func removeImpossibleSeparator(capacity: Count) {
-        guard capacity.fraction <= 0 || capacity.value <= 0 else { return }
-        self.removeSeparatorAsSuffix()
-    }
     
     //=------------------------------------------------------------------------=
     // MARK: Utilities
@@ -165,7 +165,7 @@ import Support
 // MARK: + Conversion
 //=----------------------------------------------------------------------------=
 
-extension Number: TextOutputStreamable {
+extension Components: TextOutputStreamable {
     
     //=------------------------------------------------------------------------=
     // MARK: Write

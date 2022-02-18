@@ -131,9 +131,9 @@ extension Bounds {
     // MARK: Validate - Location
     //=------------------------------------------------------------------------=
     
-    @inlinable func validate(number: Number, with location: Location) throws {
-        if location == .edge, number.hasSeparatorAsSuffix {
-            throw Info([.mark(number), "has reached its limit and does not fit a fraction separator."])
+    @inlinable func validate(components: Components, with location: Location) throws {
+        if location == .edge, components.hasSeparatorAsSuffix {
+            throw Info([.mark(components), "has reached its limit and does not fit a fraction separator."])
         }
     }
 }

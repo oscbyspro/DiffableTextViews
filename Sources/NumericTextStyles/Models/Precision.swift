@@ -91,8 +91,8 @@ public struct Precision<Value: NumericTextValue>: Equatable {
     // MARK: Autocorrect
     //=------------------------------------------------------------------------=
     
-    @inlinable func autocorrect(number: inout Number) {
-        number.trim(max: upper)
+    @inlinable func autocorrect(components: inout Components) {
+        components.trim(max: upper)
     }
 }
 

@@ -10,7 +10,7 @@
 import DiffableTextViews
 
 //*============================================================================*
-// MARK: * Standard
+// MARK: * Number
 //*============================================================================*
 
 public struct NumericTextNumberAdapter<Format: NumericTextNumberFormat>: Adapter {

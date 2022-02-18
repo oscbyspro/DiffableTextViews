@@ -101,29 +101,29 @@ extension NumericTextStyle {
         //=--------------------------------------=
         bounds.autocorrect(value: &value)
         //=--------------------------------------=
-        // MARK: Value -> Number
+        // MARK: Value -> Components
         //=--------------------------------------=
         let formatted = style.format(value)
         let parseable = snapshot(characters: formatted)
-        var number = try! lexicon.number(in: parseable, as: Value.self)
+        var components = try! lexicon.components(in: parseable, as: Value.self)
         //=--------------------------------------=
         // MARK: Autocorrect
         //=--------------------------------------=
-        bounds.autocorrect(sign: &number.sign)
-        precision.autocorrect(number: &number)
+        bounds.autocorrect(sign: &components.sign)
+        precision.autocorrect(components: &components)
         //=--------------------------------------=
-        // MARK: Value <- Number
+        // MARK: Value <- Components
         //=--------------------------------------=
-        value = try! lexicon.value(in: number, as: style)
+        value = try! lexicon.value(in: components, as: style)
         //=--------------------------------------=
         // MARK: Style
         //=--------------------------------------=
-        style = style.sign(sign(number: number))
+        style = style.sign(sign(components: components))
         //=--------------------------------------=
         // MARK: Style -> Characters
         //=--------------------------------------=
         var characters = style.format(value)
-        fix(sign: number.sign, for: value, in: &characters)
+        fix(sign: components.sign, for: value, in: &characters)
         //=--------------------------------------=
         // MARK: Characters -> Snapshot -> Commit
         //=--------------------------------------=
@@ -151,40 +151,40 @@ extension NumericTextStyle {
         let sign = reader.consumeSingleSignInput()
         let proposal = reader.changes.proposal()
         //=--------------------------------------=
-        // MARK: Number
+        // MARK: Components
         //=--------------------------------------=
-        var number = try lexicon.number(in: proposal, as: Value.self)
-        sign.map({ number.sign = $0 })
+        var components = try lexicon.components(in: proposal, as: Value.self)
+        sign.map({ components.sign = $0 })
         //=--------------------------------------=
-        // MARK: Number - Validate
+        // MARK: Components - Validate
         //=--------------------------------------=
-        try bounds.validate(sign: number.sign)
+        try bounds.validate(sign: components.sign)
         //=--------------------------------------=
-        // MARK: Number - Count, Validate
+        // MARK: Components - Count, Validate
         //=--------------------------------------=
-        let count = number.count()
+        let count = components.count()
         let capacity = try precision.capacity(count: count)
-        number.removeImpossibleSeparator(capacity: capacity)
+        components.removeImpossibleSeparator(capacity: capacity)
         //=--------------------------------------=
         // MARK: Value
         //=--------------------------------------=
-        let value = try lexicon.value(in: number, as: format)
+        let value = try lexicon.value(in: components, as: format)
         //=--------------------------------------=
         // MARK: Value - Validate
         //=--------------------------------------=
         let location = try bounds.validate(value: value)
-        try bounds.validate(number: number, with: location)
+        try bounds.validate(components: components, with: location)
         //=--------------------------------------=
         // MARK: Style
         //=--------------------------------------=
-        let style = format.sign(self.sign(number: number))
+        let style = format.sign(self.sign(components: components))
         .precision(self.precision.interactive(count: count))
-        .separator(self.separator(number: number))
+        .separator(self.separator(components: components))
         //=--------------------------------------=
         // MARK: Style -> Characters
         //=--------------------------------------=
         var characters = style.format(value)
-        fix(sign: number.sign, for: value, in: &characters)
+        fix(sign: components.sign, for: value, in: &characters)
         //=--------------------------------------=
         // MARK: Characters -> Snapshot -> Commit
         //=--------------------------------------=
@@ -241,12 +241,12 @@ extension NumericTextStyle {
     // MARK: Components
     //=------------------------------------------------------------------------=
     
-    @inlinable func sign(number: Number) -> Format.Sign {
-        number.sign == .negative ? .always : .automatic
+    @inlinable func sign(components: Components) -> Format.Sign {
+        components.sign == .negative ? .always : .automatic
     }
 
-    @inlinable func separator(number: Number) -> Format.Separator {
-        number.separator == .fraction ? .always : .automatic
+    @inlinable func separator(components: Components) -> Format.Separator {
+        components.separator == .fraction ? .always : .automatic
     }
     
     //=------------------------------------------------------------------------=

@@ -117,21 +117,21 @@ extension Lexicon {
 extension Lexicon {
 
     //=------------------------------------------------------------------------=
-    // MARK: Number -> Value
+    // MARK: Components -> Value
     //=------------------------------------------------------------------------=
     
     /// Relies on the fact that implemented styles can parse pure numbers.
     /// If this changes, then it should be remade to use pure number styles.
-    @inlinable func value<F: Format>(in number: Number, as format: F) throws -> F.Value {
-        try format.locale(Self.en_US.locale).parse(String(describing: number))
+    @inlinable func value<F: Format>(in components: Components, as format: F) throws -> F.Value {
+        try format.locale(Self.en_US.locale).parse(String(describing: components))
     }
     
     //=------------------------------------------------------------------------=
-    // MARK: Snapshot -> Number
+    // MARK: Snapshot -> Components
     //=------------------------------------------------------------------------=
     
     /// To use this method, all formatting characters must be marked as virtual.
-    @inlinable func number<V: Value>(in snapshot: Snapshot, as value: V.Type) throws -> Number {
+    @inlinable func components<V: Value>(in snapshot: Snapshot, as value: V.Type) throws -> Components {
         let characters = snapshot.lazy.filter(\.nonvirtual).map(\.character)
         return try .init(characters: characters, integer: V.isInteger, unsigned: V.isUnsigned,
         signs: signs.components, digits: digits.components, separators: separators.components)
