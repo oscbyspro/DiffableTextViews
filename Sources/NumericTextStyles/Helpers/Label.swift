@@ -22,7 +22,7 @@ public final class Label {
     // MARK: Cache
     //=------------------------------------------------------------------------=
     
-    @usableFromInline static let currencies = Cache<Currency, Label>(size: 10)
+    @usableFromInline static let currencies = Cache<CurrencyID, Label>(size: 10)
     
     //=------------------------------------------------------------------------=
     // MARK: State
@@ -54,46 +54,6 @@ public final class Label {
     //*========================================================================*
     
     @usableFromInline enum Location { case prefix, suffix }
-    
-    //*========================================================================*
-    // MARK: * ID
-    //*========================================================================*
-    
-    @usableFromInline final class Currency: Hashable {
-        
-        //=--------------------------------------------------------------------=
-        // MARK: State
-        //=--------------------------------------------------------------------=
-        
-        @usableFromInline let code:   String
-        @usableFromInline let locale: String
-        
-        //=--------------------------------------------------------------------=
-        // MARK: Initializers
-        //=--------------------------------------------------------------------=
-        
-        @inlinable init(code: String, lexicon: Lexicon) {
-            self.code   = code
-            self.locale = lexicon.locale.identifier
-        }
-        
-        //=--------------------------------------------------------------------=
-        // MARK: Hashable
-        //=--------------------------------------------------------------------=
-        
-        @inlinable func hash(into hasher: inout Hasher) {
-            hasher.combine(code)
-            hasher.combine(locale)
-        }
-        
-        //=--------------------------------------------------------------------=
-        // MARK: Comparisons
-        //=--------------------------------------------------------------------=
-        
-        @inlinable static func == (lhs: Currency, rhs: Currency) -> Bool {
-            lhs.code == rhs.code && lhs.locale == rhs.locale
-        }
-    }
 }
 
 //=----------------------------------------------------------------------------=
@@ -107,7 +67,7 @@ extension Label {
     //=------------------------------------------------------------------------=
     
     @inlinable static func currency(code: String, in lexicon: Lexicon) -> Label {
-        let key = Currency(code: code, lexicon: lexicon)
+        let key = CurrencyID(code: code, lexicon: lexicon)
         return currencies.search(key, _currency(code: code, lexicon: lexicon))
     }
     
@@ -133,8 +93,10 @@ extension Label {
         //=--------------------------------------=
         // MARK: Instance
         //=--------------------------------------=
-        return !split[0].filter(\.isWhitespace).isEmpty
-        ? Label(split[0], at: .prefix)
-        : Label(split[1], at: .suffix)
+        if !split[0].filter(\.isWhitespace).isEmpty {
+            return Label(split[0], at: .prefix)
+        } else {
+            return Label(split[1], at: .suffix)
+        }
     }
 }

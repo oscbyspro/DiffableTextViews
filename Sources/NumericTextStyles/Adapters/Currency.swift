@@ -43,3 +43,41 @@ public struct Currency<Format: NumericTextCurrencyFormat>: NumericTextAdapter {
         snapshot.update(attributes: range) { attribute in attribute = .phantom }
     }
 }
+
+//*============================================================================*
+// MARK: * Currency x ID
+//*============================================================================*
+
+@usableFromInline final class CurrencyID: Hashable {
+    
+    //=--------------------------------------------------------------------=
+    // MARK: State
+    //=--------------------------------------------------------------------=
+    
+    @usableFromInline let code:   String
+    @usableFromInline let locale: String
+    
+    //=--------------------------------------------------------------------=
+    // MARK: Initializers
+    //=--------------------------------------------------------------------=
+    
+    @inlinable init(code: String, lexicon: Lexicon) {
+        self.code = code; self.locale = lexicon.locale.identifier
+    }
+    
+    //=--------------------------------------------------------------------=
+    // MARK: Hashable
+    //=--------------------------------------------------------------------=
+    
+    @inlinable func hash(into hasher: inout Hasher) {
+        hasher.combine(code); hasher.combine(locale)
+    }
+    
+    //=--------------------------------------------------------------------=
+    // MARK: Comparisons
+    //=--------------------------------------------------------------------=
+    
+    @inlinable static func == (lhs: CurrencyID, rhs: CurrencyID) -> Bool {
+        lhs.code == rhs.code && lhs.locale == rhs.locale
+    }
+}
