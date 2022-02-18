@@ -20,25 +20,17 @@ public struct Standard<Format: NumericTextNumberFormat>: Adapter {
     // MARK: State
     //=------------------------------------------------------------------------=
     
-    public let format:  Format
+    public let format: Format
     public let lexicon: Lexicon
     
     //=------------------------------------------------------------------------=
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable public init(format: Format) {
+    @inlinable public init(_ format: Format) {
+        self.format = format
         self.lexicon = Lexicon.standard(locale: format.locale)
     }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Transformations
-    //=------------------------------------------------------------------------=
-    
-    @inlinable public func locale(_ locale: Locale) -> Standard<Format> {
-        self.locale(<#T##locale: Locale##Locale#>)
-    }
-    
     
     //=------------------------------------------------------------------------=
     // MARK: Autocorrect

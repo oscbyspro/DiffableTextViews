@@ -28,8 +28,8 @@ public struct Currency<Format: NumericTextCurrencyFormat>: NumericTextAdapter {
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    #warning("Maybe use the autoupdating current locale for all adapters.")
-    @inlinable init(format: Format) {
+    @inlinable public init(_ format: Format) {
+        self.format = format
         self.lexicon = Lexicon.currency(code: format.currencyCode, locale: format.locale)
         self.label = Label.currency(code: format.currencyCode, lexicon: lexicon)
     }

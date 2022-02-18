@@ -25,9 +25,7 @@ public struct NumericTextStyle<Format: NumericTextFormat>: DiffableTextStyle {
     // MARK: State
     //=------------------------------------------------------------------------=
     
-    @usableFromInline var format: Format
-    @usableFromInline var specialization: Specialization
-
+    @usableFromInline var adapter: Adapter
     @usableFromInline var bounds: Bounds
     @usableFromInline var precision: Precision
     
@@ -35,10 +33,8 @@ public struct NumericTextStyle<Format: NumericTextFormat>: DiffableTextStyle {
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    #warning("Adapter should to avoid the format/specialization dance.")
-    @inlinable init(format: Format, locale: Locale = .autoupdatingCurrent) {
-        self.specialization = format.specialization(locale)
-        self.format = format .locale(specialization.locale)
+    @inlinable init(format: Format) {
+        self.adapter = Adapter(format)
         self.bounds = Bounds()
         self.precision = Precision()
     }
@@ -47,33 +43,33 @@ public struct NumericTextStyle<Format: NumericTextFormat>: DiffableTextStyle {
     // MARK: Accessors
     //=------------------------------------------------------------------------=
     
-    @inlinable var _format: Format { adapter.format }
-    @inlinable var lexicon: Lexicon { specialization.lexicon }
+    @inlinable var format: Format {
+        adapter.format
+    }
+    
+    @inlinable var lexicon: Lexicon {
+        adapter.lexicon
+    }
+    
+    @inlinable var locale: Locale {
+        adapter.locale
+    }
     
     //=------------------------------------------------------------------------=
     // MARK: Transformations
     //=------------------------------------------------------------------------=
     
-    #warning("Adapter should to avoid the format/specialization dance.")
     @inlinable public func locale(_ locale: Locale) -> Self {
-        guard locale != lexicon.locale else { return self }
-        //=--------------------------------------=
-        // MARK: Make New Instance
-        //=--------------------------------------=
-        var result = self
-        result.specialization = format.specialization(locale)
-        result.format  = format.locale(result.lexicon.locale)
-        return result
+        guard locale != self.locale else { return self }
+        var result = self; result.adapter = adapter.locale(locale); return result
     }
     
     //=------------------------------------------------------------------------=
     // MARK: Comparisons
     //=------------------------------------------------------------------------=
     
-    #warning("Adapter should to avoid the format/specialization dance.")
-    /// An equality comparison where the region is represented by the format.
     @inlinable public static func == (lhs: Self, rhs: Self) -> Bool {
-        guard lhs.format    == rhs.format    else { return false }
+        guard lhs.adapter   == rhs.adapter   else { return false }
         guard lhs.bounds    == rhs.bounds    else { return false }
         guard lhs.precision == rhs.precision else { return false }
         return true
@@ -239,7 +235,7 @@ extension NumericTextStyle {
         //=--------------------------------------=
         // MARK: Autocorrect
         //=--------------------------------------=
-        specialization.autocorrect(snapshot: &snapshot); return snapshot
+        adapter.autocorrect(snapshot: &snapshot); return snapshot
     }
 }
 

@@ -31,20 +31,14 @@ public protocol NumericTextAdapter: Equatable {
     // MARK: State
     //=------------------------------------------------------------------------=
     
-    @inlinable var format: Format { get }
+    @inlinable var format:  Format  { get }
     @inlinable var lexicon: Lexicon { get }
     
     //=------------------------------------------------------------------------=
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    init(format: Format)
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Transformations
-    //=------------------------------------------------------------------------=
-    
-    @inlinable func locale(_ locale: Locale) -> Self
+    init(_ format: Format)
     
     //=------------------------------------------------------------------------=
     // MARK: Utilities
@@ -60,23 +54,26 @@ public protocol NumericTextAdapter: Equatable {
 extension NumericTextAdapter {
     
     //=------------------------------------------------------------------------=
+    // MARK: Accessors
+    //=------------------------------------------------------------------------=
+    
+    @inlinable var locale: Locale {
+        format.locale
+    }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Transformations
+    //=------------------------------------------------------------------------=
+    
+    @inlinable func locale(_ locale: Locale) -> Self {
+        Self(format.locale(locale))
+    }
+    
+    //=------------------------------------------------------------------------=
     // MARK: Comparisons
     //=------------------------------------------------------------------------=
     
     @inlinable public static func == (lhs: Self, rhs: Self) -> Bool {
         lhs.format == rhs.format
     }
-}
-
-//=----------------------------------------------------------------------------=
-// MARK: + Details
-//=----------------------------------------------------------------------------=
-
-extension NumericTextAdapter {
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Accessors
-    //=------------------------------------------------------------------------=
-    
-    @inlinable var locale: Locale { lexicon.locale }
 }

@@ -15,6 +15,7 @@ import Support
 // MARK: * Lexicon
 //*============================================================================*
 
+#warning("Lexicon does not need to store locale.")
 public final class Lexicon {
     @usableFromInline typealias Cache = Support.Cache<NSString, Lexicon>
     

@@ -38,14 +38,14 @@ import Foundation
     // MARK: Localization
     //=------------------------------------------------------------------------=
     
-    @inlinable func standard(_ formatter: NumberFormatter) -> Character? {
+    @inlinable func standard(_ formatter: NumberFormatter) -> Character! {
         var characters: String { switch self {
         case .positive: return formatter .plusSign
         case .negative: return formatter.minusSign
         }}; return characters.filter({ $0.isPunctuation || $0.isMathSymbol }).first
     }
     
-    @inlinable func currency(_ formatter: NumberFormatter) -> Character? {
+    @inlinable func currency(_ formatter: NumberFormatter) -> Character! {
         self.standard(formatter)
     }
 }
