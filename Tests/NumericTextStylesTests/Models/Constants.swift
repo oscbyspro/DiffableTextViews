@@ -24,8 +24,8 @@ var currencies: [String] {
     Earth.currencies
 }
 
-var lexicons: Lexicons {
-    Earth.lexicons
+var standard: [Lexicon] {
+    Earth.standard
 }
 
 #endif

@@ -36,7 +36,7 @@ final class LinksTests: XCTestCase {
         //=--------------------------------------=
         // MARK: All
         //=--------------------------------------=
-        lexicons.forEach { lexicon in
+        for lexicon in standard {
             one(lexicon.signs); one(lexicon.digits); one(lexicon.separators)
         }
     }

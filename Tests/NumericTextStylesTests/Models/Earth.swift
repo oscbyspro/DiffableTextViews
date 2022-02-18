@@ -31,7 +31,8 @@ enum Earth {
         .reduce(into: Set()) { $0.insert($1) }
         .lazy.map({ $0 }).sorted(by: <)
  
-    static let lexicons = Lexicons(locales)
+    static let standard: [Lexicon] = locales
+        .compactMap({ try? Lexicon._standard(locale: $0) })
 }
 
 #endif

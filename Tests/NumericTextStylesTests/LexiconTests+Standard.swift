@@ -41,7 +41,7 @@ extension RegionTests {
         //=--------------------------------------=
         // MARK: Regions
         //=--------------------------------------=
-        lexicons.standard.forEach {  lexicon in
+        for lexicon in standard {
             let style = int(lexicon).sign(strategy: .always())
             let positives = positive.formatted(style)
             let negatives = negative.formatted(style)
@@ -55,7 +55,7 @@ extension RegionTests {
         //=--------------------------------------=
         // MARK: Regions
         //=--------------------------------------=
-        lexicons.standard.forEach { lexicon in
+        for lexicon in standard {
             let style = int(lexicon).grouping(.never)
             let numbers = number.formatted(style)
             XCTAssert(numbers.allSatisfy({ lexicon.digits[$0] != nil }))
@@ -67,7 +67,7 @@ extension RegionTests {
         //=--------------------------------------=
         // MARK: Regions
         //=--------------------------------------=
-        lexicons.standard.forEach { lexicon in
+        for lexicon in standard {
             let style = int(lexicon).grouping(.automatic)
             let nonnumbers = number.formatted(style).filter({ !$0.isNumber })
             XCTAssert(nonnumbers.allSatisfy({ lexicon.separators[$0] == .grouping }))
@@ -79,7 +79,7 @@ extension RegionTests {
         //=--------------------------------------=
         // MARK: Regions
         //=--------------------------------------=
-        lexicons.standard.forEach { lexicon in
+        for lexicon in standard {
             let style = double(lexicon).decimalSeparator(strategy: .always)
             let nonnumbers = number.formatted(style).filter({ !$0.isNumber })
             XCTAssert(nonnumbers.allSatisfy({ lexicon.separators[$0] == .fraction }))

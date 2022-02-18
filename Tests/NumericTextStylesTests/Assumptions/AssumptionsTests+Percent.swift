@@ -31,7 +31,7 @@ extension AssumptionsTests {
         //=--------------------------------------=
         // MARK: Locales
         //=--------------------------------------=
-        lexicons.forEach { lexicon in
+        for lexicon in standard {
             let zero = style.locale(lexicon.locale).format(0)
             //=----------------------------------=
             // MARK: Failure

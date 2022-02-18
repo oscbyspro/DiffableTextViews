@@ -31,19 +31,19 @@ final class CurrencyTests: XCTestCase {
         // MARK: Currencies
         //=--------------------------------------=
         for currency in currencies {
-            let testable = Style.currency(code: currency)
-            let expectable = Format.currency(code: currency).precision(.fractionLength(0...))
+            let style = Style.currency(code: currency)
+            let expectation = Format.currency(code: currency).precision(.fractionLength(0...))
             //=----------------------------------=
             // MARK: Locales
             //=----------------------------------=
             for locale in locales {
-                let commit = testable.locale(locale).interpret(value: value)
-                let characters = expectable.locale(locale).format(value)
+                let commit = style.locale(locale).interpret(value: value)
+                let characters = expectation.locale(locale).format(value)
                 //=------------------------------=
                 // MARK: Value
                 //=------------------------------=
                 guard commit.value == value else {
-                    XCTFail("... \((locale, currency, characters, commit.snapshot.characters))")
+                    XCTFail("\(commit.value) != \(value)... \((locale, currency))")
                     return
                 }
                 //=------------------------------=
