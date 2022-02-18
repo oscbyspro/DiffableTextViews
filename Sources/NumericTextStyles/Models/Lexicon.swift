@@ -155,6 +155,7 @@ extension Lexicon {
         // MARK: Default To Lexicon.en_US (ASCII)
         //=--------------------------------------=
         } catch let reason {
+            print("DEFAULT")
             Info.print(["Lexicon set to en_US:", .note(reason)])
             return Lexicon.en_US
         }
@@ -171,12 +172,8 @@ extension Lexicon {
     // MARK: Number -> Value
     //=------------------------------------------------------------------------=
     
-    #warning("WIP")
-    #warning("WIP")
-    #warning("WIP")
     @inlinable func value<F: Format>(in number: Number, as format: F) throws -> F.Value {
         var characters = String()
-        let format = format.locale(Lexicon.en_US.locale)
         //=--------------------------------------=
         // MARK: Sign
         //=--------------------------------------=
@@ -202,39 +199,9 @@ extension Lexicon {
         //=--------------------------------------=
         // MARK: Characters -> Value
         //=--------------------------------------=
-        return try format.parse(characters)
+        #warning("Use a static ascii parser for each specialization, maybe.")
+        return try format.locale(Self.en_US.locale).parse(characters)
     }
-    
-//    @inlinable func value<F: Format>(in number: Number, as format: F) throws -> F.Value {
-//        var characters = String()
-//        //=--------------------------------------=
-//        // MARK: Sign
-//        //=--------------------------------------=
-//        signs[number.sign].write(to: &characters)
-//        //=--------------------------------------=
-//        // MARK: Integer Digits
-//        //=--------------------------------------=
-//        for digit in number.integer.digits {
-//            digits[digit].write(to: &characters)
-//        }
-//        //=--------------------------------------=
-//        // MARK: Fraction Separator
-//        //=--------------------------------------=
-//        if let separator = number.separator {
-//            separators[separator].write(to: &characters)
-//            //=----------------------------------=
-//            // MARK: Fraction Digits
-//            //=----------------------------------=
-//            for digit in number.fraction.digits {
-//                digits[digit].write(to: &characters)
-//            }
-//        }
-//        //=--------------------------------------=
-//        // MARK: Characters -> Value
-//        //=--------------------------------------=
-//        print(characters, try? format.parse(characters))
-//        return try format.parse(characters)
-//    }
     
     //=------------------------------------------------------------------------=
     // MARK: Snapshot -> Number

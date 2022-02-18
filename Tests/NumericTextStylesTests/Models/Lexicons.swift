@@ -16,6 +16,7 @@ import Foundation
 // MARK: * Lexicons
 //*============================================================================*
 
+#warning("Remove currency or testing will slow down tremendously.")
 final class Lexicons {
         
     //=------------------------------------------------------------------------=
