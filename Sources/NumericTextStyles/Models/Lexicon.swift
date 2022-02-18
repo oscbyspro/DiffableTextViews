@@ -36,7 +36,6 @@ public final class Lexicon {
     // MARK: Instances
     //=------------------------------------------------------------------------=
     
-    /// This instance represent the en\_US locale, maps ASCII characters.
     @usableFromInline static let en_US = Lexicon(
         locale: Locale(identifier: "en_US"),
         signs: .ascii(), digits: .ascii(), separators: .ascii()
@@ -173,7 +172,7 @@ extension Lexicon {
     
     #warning("This does not need to be inside Lexicon, since it uses ascii.")
     @inlinable func value<F: Format>(in number: Number, as format: F) throws -> F.Value {
-        try format.locale(Self.en_US.locale).parse(number.ascii())
+        try format.locale(Self.en_US.locale).parse(number.characters())
     }
     
     //=------------------------------------------------------------------------=

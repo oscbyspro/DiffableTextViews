@@ -182,7 +182,7 @@ extension Number: TextOutputStreamable {
     // MARK: ASCII
     //=------------------------------------------------------------------------=
     
-    @inlinable func ascii() -> String {
+    @inlinable func characters() -> String {
         var result = String(); write(to: &result); return result
     }
 }
