@@ -10,17 +10,39 @@
 #if DEBUG
 
 import XCTest
-import Foundation
 @testable import NumericTextStyles
 
+//*============================================================================*
+// MARK: * RegionTests
+//*============================================================================*
+
+final class RegionTests: XCTestCase {
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Count
+    //=------------------------------------------------------------------------=
+        
+    func testEachLocaleMapsToALexicon() {
+        XCTAssertEqual(locales.count, standard.count)
+    }
+    
+    func testThatThereAreManyCurrencies() {
+        XCTAssertGreaterThanOrEqual(currencies.count, 153)
+    }
+    
+    func testThatThereAreManyLexicons() {
+        XCTAssertGreaterThanOrEqual(standard.count, 937)
+    }
+}
+
 //=----------------------------------------------------------------------------=
-// MARK: + Standard
+// MARK: + Styles
 //=----------------------------------------------------------------------------=
 
 extension RegionTests {
 
     //=------------------------------------------------------------------------=
-    // MARK: Styles
+    // MARK: Make
     //=------------------------------------------------------------------------=
     
     @inlinable func int(_ lexicon: Lexicon) -> IntegerFormatStyle<Int> {
