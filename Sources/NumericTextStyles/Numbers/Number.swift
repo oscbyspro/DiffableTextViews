@@ -162,7 +162,7 @@ import Support
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: + TextOutputStreamable
+// MARK: + Conversion
 //=----------------------------------------------------------------------------=
 
 extension Number: TextOutputStreamable {
@@ -176,5 +176,13 @@ extension Number: TextOutputStreamable {
         integer.write(to: &target)
         separator?.write(to: &target)
         fraction.write(to: &target)
+    }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: ASCII
+    //=------------------------------------------------------------------------=
+    
+    @inlinable func ascii() -> String {
+        var result = String(); write(to: &result); return result
     }
 }

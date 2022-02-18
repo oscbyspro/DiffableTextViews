@@ -171,35 +171,9 @@ extension Lexicon {
     // MARK: Number -> Value
     //=------------------------------------------------------------------------=
     
+    #warning("This does not need to be inside Lexicon, since it uses ascii.")
     @inlinable func value<F: Format>(in number: Number, as format: F) throws -> F.Value {
-        var characters = String()
-        //=--------------------------------------=
-        // MARK: Sign
-        //=--------------------------------------=
-        number.sign.write(to: &characters)
-        //=--------------------------------------=
-        // MARK: Integer Digits
-        //=--------------------------------------=
-        for digit in number.integer.digits {
-            digit.write(to: &characters)
-        }
-        //=--------------------------------------=
-        // MARK: Fraction Separator
-        //=--------------------------------------=
-        if let separator = number.separator {
-            separator.write(to: &characters)
-            //=----------------------------------=
-            // MARK: Fraction Digits
-            //=----------------------------------=
-            for digit in number.fraction.digits {
-                digit.write(to: &characters)
-            }
-        }
-        //=--------------------------------------=
-        // MARK: Characters -> Value
-        //=--------------------------------------=
-        #warning("Use a static ascii parser for each specialization, maybe.")
-        return try format.locale(Self.en_US.locale).parse(characters)
+        try format.locale(Self.en_US.locale).parse(number.ascii())
     }
     
     //=------------------------------------------------------------------------=
