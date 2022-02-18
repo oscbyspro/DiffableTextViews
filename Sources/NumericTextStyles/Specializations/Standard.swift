@@ -14,20 +14,25 @@ import Foundation
 // MARK: * Standard
 //*============================================================================*
 
-public struct Standard: Specialization {
+public struct Standard<Format: NumericTextNumberFormat>: Adapter {
+    public func locale(_ locale: Locale) -> Standard<Format> {
+        <#code#>
+    }
+    
     
     //=------------------------------------------------------------------------=
     // MARK: State
     //=------------------------------------------------------------------------=
     
+    public let format: Format
     public let lexicon: Lexicon
     
     //=------------------------------------------------------------------------=
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable init(locale: Locale) {
-        self.lexicon = Lexicon.standard(locale: locale)
+    @inlinable init(format: Format) {
+        self.lexicon = Lexicon.standard(locale: format.locale)
     }
     
     //=------------------------------------------------------------------------=

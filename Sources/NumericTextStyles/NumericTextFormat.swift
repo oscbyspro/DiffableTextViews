@@ -24,10 +24,14 @@ import DiffableTextViews
 //*============================================================================*
 
 public protocol NumericTextFormat: ParseableFormatStyle where FormatInput: NumericTextValue, FormatOutput == String {
-    associatedtype SignDisplayStrategy:
-    NumericTextSignDisplayStrategyRepresentable =
-    NumberFormatStyleConfiguration.SignDisplayStrategy
+    associatedtype SignDisplayStrategy: NumericTextSignDisplayStrategyRepresentable
     typealias NumericTextStyle = NumericTextStyles.NumericTextStyle<Self>
+    
+    //=------------------------------------------------------------------------=
+    // MARK: State
+    //=------------------------------------------------------------------------=
+    
+    @inlinable var locale: Locale { get }
     
     //=------------------------------------------------------------------------=
     // MARK: Transformations
@@ -36,13 +40,6 @@ public protocol NumericTextFormat: ParseableFormatStyle where FormatInput: Numer
     @inlinable func sign(strategy: SignDisplayStrategy) -> Self
     @inlinable func precision(_ precision: NumberFormatStyleConfiguration.Precision) -> Self
     @inlinable func decimalSeparator(strategy: NumberFormatStyleConfiguration.DecimalSeparatorDisplayStrategy) -> Self
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Specialization
-    //=------------------------------------------------------------------------=
-    
-    associatedtype Specialization: NumericTextSpecialization = Standard
-    @inlinable func specialization(_ locale: Locale) -> Specialization
 }
 
 //=----------------------------------------------------------------------------=
@@ -76,33 +73,19 @@ extension NumericTextFormat {
     }
 }
 
-//=----------------------------------------------------------------------------=
-// MARK: + Standard
-//=----------------------------------------------------------------------------=
-
-extension NumericTextFormat where Specialization == Standard {
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Specialization
-    //=------------------------------------------------------------------------=
-
-    @inlinable public func specialization(_ locale: Locale) -> Specialization {
-        Specialization(locale: locale)
-    }
-}
-
 //*============================================================================*
 // MARK: * Format x Number
 //*============================================================================*
 
-public protocol NumericTextNumberFormat: NumericTextFormat { }
+public protocol NumericTextNumberFormat: NumericTextFormat where
+SignDisplayStrategy == NumberFormatStyleConfiguration.SignDisplayStrategy { }
 
 //*============================================================================*
 // MARK: * Format x Currency
 //*============================================================================*
 
 public protocol NumericTextCurrencyFormat: NumericTextFormat where
-Specialization == Currency, SignDisplayStrategy == CurrencyFormatStyleConfiguration.SignDisplayStrategy {
+SignDisplayStrategy == CurrencyFormatStyleConfiguration.SignDisplayStrategy {
     
     //=------------------------------------------------------------------------=
     // MARK: Requirements
@@ -111,25 +94,11 @@ Specialization == Currency, SignDisplayStrategy == CurrencyFormatStyleConfigurat
     @inlinable var currencyCode: String { get }
 }
 
-
-//=----------------------------------------------------------------------------=
-// MARK: + Details
-//=----------------------------------------------------------------------------=
-
-extension NumericTextCurrencyFormat {
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Specialization
-    //=------------------------------------------------------------------------=
-    
-    @inlinable public func specialization(_ locale: Locale) -> Specialization {
-        Specialization(code: currencyCode,  locale: locale)
-    }
-}
-
 //*============================================================================*
 // MARK: * Format x Percent
 //*============================================================================*
 
 /// To use this format, the value must support at least two exponent digits.
-public protocol NumericTextPercentFormat: NumericTextFormat where FormatInput: NumericTextFloatingPointValue { }
+public protocol NumericTextPercentFormat: NumericTextFormat where
+FormatInput: NumericTextFloatingPointValue,
+SignDisplayStrategy == NumberFormatStyleConfiguration.SignDisplayStrategy { }

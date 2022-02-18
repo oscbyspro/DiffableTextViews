@@ -14,22 +14,24 @@ import Foundation
 // MARK: * Currency
 //*============================================================================*
 
-public struct Currency: NumericTextSpecialization {
+public struct Currency<Format: NumericTextCurrencyFormat>: NumericTextAdapter {
     
     //=------------------------------------------------------------------------=
     // MARK: State
     //=------------------------------------------------------------------------=
     
-    public let label:   Label
+    public let format: Format
     public let lexicon: Lexicon
-    
+    public let label: Label
+
     //=------------------------------------------------------------------------=
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable init(code: String, locale: Locale) {
-        self.lexicon = Lexicon.currency(code: code, locale: locale)
-        self.label   = Label.currency(code: code, lexicon: lexicon)
+    #warning("Maybe use the autoupdating current locale for all adapters.")
+    @inlinable init(format: Format) {
+        self.lexicon = Lexicon.currency(code: format.currencyCode, locale: format.locale)
+        self.label = Label.currency(code: format.currencyCode, lexicon: lexicon)
     }
     
     //=------------------------------------------------------------------------=

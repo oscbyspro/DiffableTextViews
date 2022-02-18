@@ -17,20 +17,35 @@ import Support
 // MARK: Table of Contents
 //=----------------------------------------------------------------------------=
 
-@usableFromInline typealias Specialization = NumericTextSpecialization
+@usableFromInline typealias Adapter = NumericTextAdapter
 
 //*============================================================================*
-// MARK: * Specialization
+// MARK: * Adapter
 //*============================================================================*
 
-public protocol NumericTextSpecialization {
+#warning("Could make lexicon internal, maybe.")
+public protocol NumericTextAdapter {
+    associatedtype Format: NumericTextFormat
     
     //=------------------------------------------------------------------------=
-    // MARK: Localization
+    // MARK: State
     //=------------------------------------------------------------------------=
     
-    #warning("Could make internal, maybe.")
+    @inlinable var format:  Format  { get }
     @inlinable var lexicon: Lexicon { get }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Initializers
+    //=------------------------------------------------------------------------=
+    
+    init(format: Format)
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Transformations
+    //=------------------------------------------------------------------------=
+    
+    #warning("Use mutating func, maybe.")
+    @inlinable func locale(_ locale: Locale) -> Self
     
     //=------------------------------------------------------------------------=
     // MARK: Utilities
@@ -43,7 +58,7 @@ public protocol NumericTextSpecialization {
 // MARK: + Details
 //=----------------------------------------------------------------------------=
 
-extension NumericTextSpecialization {
+extension NumericTextAdapter {
     
     //=------------------------------------------------------------------------=
     // MARK: Accessors
