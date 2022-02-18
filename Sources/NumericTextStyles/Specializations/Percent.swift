@@ -7,6 +7,33 @@
 // See http://www.apache.org/licenses/LICENSE-2.0 for license information.
 //=----------------------------------------------------------------------------=
 
+import DiffableTextViews
+
 //*============================================================================*
 // MARK: * Percent
 //*============================================================================*
+
+public struct Percent<Format: NumericTextPercentFormat>: Adapter {
+    
+    //=------------------------------------------------------------------------=
+    // MARK: State
+    //=------------------------------------------------------------------------=
+    
+    public let format: Format
+    public let lexicon: Lexicon
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Initializers
+    //=------------------------------------------------------------------------=
+    
+    @inlinable public init(_ format: Format) {
+        self.format = format
+        self.lexicon = Lexicon.standard(locale: format.locale)
+    }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Autocorrect
+    //=------------------------------------------------------------------------=
+    
+    @inlinable public func autocorrect(snapshot: inout Snapshot) { }
+}
