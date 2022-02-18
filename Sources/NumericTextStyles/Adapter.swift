@@ -28,7 +28,7 @@ public protocol NumericTextAdapter: Equatable {
     // MARK: State
     //=------------------------------------------------------------------------=
     
-    @inlinable var format:  Format  { get }
+    @inlinable var format: Format { get }
     @inlinable var lexicon: Lexicon { get }
     
     //=------------------------------------------------------------------------=
