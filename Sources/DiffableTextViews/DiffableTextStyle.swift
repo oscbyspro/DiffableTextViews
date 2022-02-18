@@ -37,20 +37,20 @@ public protocol DiffableTextStyle: Equatable {
     // MARK: Upstream
     //=------------------------------------------------------------------------=
     
-    /// Transforms the value into formatted text when the view is idle.
+    /// Formats the value, when the view is inactive.
     @inlinable func format(_ value: Value) -> String
 
-    /// Transforms the value into a commit when the view is active.
+    /// Transforms the value into a value and a snapshot, when view is active.
     @inlinable func interpret(_ value: Value) -> Commit<Value>
 
     //=------------------------------------------------------------------------=
     // MARK: Downstream
     //=------------------------------------------------------------------------=
     
-    /// Transforms a merge request into a new commit.
+    /// Produce a value and a snapshot, in response to user input.
     ///
     /// - Thrown errors result in input cancellation.
-    /// - Thrown error descriptions are printed in DEBUG mode.
+    /// - Thrown errors have their descriptions printed in DEBUG mode.
     ///
     @inlinable func merge(_ changes: Changes) throws -> Commit<Value>
 }
