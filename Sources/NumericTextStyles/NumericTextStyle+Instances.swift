@@ -15,15 +15,21 @@ import Foundation
 //*============================================================================*
 
 public extension DiffableTextStyle where Self == NumericTextStyle<Decimal.FormatStyle> {
-    @inlinable static var number: Self { Self(format: .number) }
+    @inlinable static var number: Self {
+        Self(.number)
+    }
 }
 
 public extension DiffableTextStyle where Self == NumericTextStyle<Decimal.FormatStyle.Currency> {
-    @inlinable static func currency(code: String) -> Self { Self(format: .currency(code: code)) }
+    @inlinable static func currency(code: String) -> Self {
+        Self(.currency(code: code))
+    }
 }
 
 public extension DiffableTextStyle where Self == NumericTextStyle<Decimal.FormatStyle.Percent> {
-    @inlinable static var percent: Self { Self(format: .percent) }
+    @inlinable static var percent: Self {
+        Self(.percent)
+    }
 }
 
 //*============================================================================*
@@ -31,15 +37,21 @@ public extension DiffableTextStyle where Self == NumericTextStyle<Decimal.Format
 //*============================================================================*
 
 public extension DiffableTextStyle where Self == NumericTextStyle<FloatingPointFormatStyle<Float16>> {
-    @inlinable static var number: Self { Self(format: .number) }
+    @inlinable static var number: Self {
+        Self(.number)
+    }
 }
 
 public extension DiffableTextStyle where Self == NumericTextStyle<FloatingPointFormatStyle<Float16>.Currency> {
-    @inlinable static func currency(code: String) -> Self { Self(format: .currency(code: code)) }
+    @inlinable static func currency(code: String) -> Self {
+        Self(.currency(code: code))
+    }
 }
 
 public extension DiffableTextStyle where Self == NumericTextStyle<FloatingPointFormatStyle<Float16>.Percent> {
-    @inlinable static var percent: Self { Self(format: .percent) }
+    @inlinable static var percent: Self {
+        Self(.percent)
+    }
 }
 
 //*============================================================================*
@@ -47,15 +59,21 @@ public extension DiffableTextStyle where Self == NumericTextStyle<FloatingPointF
 //*============================================================================*
 
 public extension DiffableTextStyle where Self == NumericTextStyle<FloatingPointFormatStyle<Float32>> {
-    @inlinable static var number: Self { Self(format: .number) }
+    @inlinable static var number: Self {
+        Self(.number)
+    }
 }
 
 public extension DiffableTextStyle where Self == NumericTextStyle<FloatingPointFormatStyle<Float32>.Currency> {
-    @inlinable static func currency(code: String) -> Self { Self(format: .currency(code: code)) }
+    @inlinable static func currency(code: String) -> Self {
+        Self(.currency(code: code))
+    }
 }
 
 public extension DiffableTextStyle where Self == NumericTextStyle<FloatingPointFormatStyle<Float32>.Percent> {
-    @inlinable static var percent: Self { Self(format: .percent) }
+    @inlinable static var percent: Self {
+        Self(.percent)
+    }
 }
 
 //*============================================================================*
@@ -63,15 +81,21 @@ public extension DiffableTextStyle where Self == NumericTextStyle<FloatingPointF
 //*============================================================================*
 
 public extension DiffableTextStyle where Self == NumericTextStyle<FloatingPointFormatStyle<Float64>> {
-    @inlinable static var number: Self { Self(format: .number) }
+    @inlinable static var number: Self {
+        Self(.number)
+    }
 }
 
 public extension DiffableTextStyle where Self == NumericTextStyle<FloatingPointFormatStyle<Float64>.Currency> {
-    @inlinable static func currency(code: String) -> Self { Self(format: .currency(code: code)) }
+    @inlinable static func currency(code: String) -> Self {
+        Self(.currency(code: code))
+    }
 }
 
 public extension DiffableTextStyle where Self == NumericTextStyle<FloatingPointFormatStyle<Float64>.Percent> {
-    @inlinable static var percent: Self { Self(format: .percent) }
+    @inlinable static var percent: Self {
+        Self(.percent)
+    }
 }
 
 //*============================================================================*
@@ -79,11 +103,15 @@ public extension DiffableTextStyle where Self == NumericTextStyle<FloatingPointF
 //*============================================================================*
 
 public extension DiffableTextStyle where Self == NumericTextStyle<IntegerFormatStyle<Int>> {
-    @inlinable static var number: Self { Self(format: .number) }
+    @inlinable static var number: Self {
+        Self(.number)
+    }
 }
 
 public extension DiffableTextStyle where Self == NumericTextStyle<IntegerFormatStyle<Int>.Currency> {
-    @inlinable static func currency(code: String) -> Self { Self(format: .currency(code: code)) }
+    @inlinable static func currency(code: String) -> Self {
+        Self(.currency(code: code))
+    }
 }
 
 //*============================================================================*
@@ -91,11 +119,15 @@ public extension DiffableTextStyle where Self == NumericTextStyle<IntegerFormatS
 //*============================================================================*
 
 public extension DiffableTextStyle where Self == NumericTextStyle<IntegerFormatStyle<Int8>> {
-    @inlinable static var number: Self { Self(format: .number) }
+    @inlinable static var number: Self {
+        Self(.number)
+    }
 }
 
 public extension DiffableTextStyle where Self == NumericTextStyle<IntegerFormatStyle<Int8>.Currency> {
-    @inlinable static func currency(code: String) -> Self { Self(format: .currency(code: code)) }
+    @inlinable static func currency(code: String) -> Self {
+        Self(.currency(code: code))
+    }
 }
 
 //*============================================================================*
@@ -103,11 +135,15 @@ public extension DiffableTextStyle where Self == NumericTextStyle<IntegerFormatS
 //*============================================================================*
 
 public extension DiffableTextStyle where Self == NumericTextStyle<IntegerFormatStyle<Int16>> {
-    @inlinable static var number: Self { Self(format: .number) }
+    @inlinable static var number: Self {
+        Self(.number)
+    }
 }
 
 public extension DiffableTextStyle where Self == NumericTextStyle<IntegerFormatStyle<Int16>.Currency> {
-    @inlinable static func currency(code: String) -> Self { Self(format: .currency(code: code)) }
+    @inlinable static func currency(code: String) -> Self {
+        Self(.currency(code: code))
+    }
 }
 
 //*============================================================================*
@@ -115,11 +151,15 @@ public extension DiffableTextStyle where Self == NumericTextStyle<IntegerFormatS
 //*============================================================================*
 
 public extension DiffableTextStyle where Self == NumericTextStyle<IntegerFormatStyle<Int32>> {
-    @inlinable static var number: Self { Self(format: .number) }
+    @inlinable static var number: Self {
+        Self(.number)
+    }
 }
 
 public extension DiffableTextStyle where Self == NumericTextStyle<IntegerFormatStyle<Int32>.Currency> {
-    @inlinable static func currency(code: String) -> Self { Self(format: .currency(code: code)) }
+    @inlinable static func currency(code: String) -> Self {
+        Self(.currency(code: code))
+    }
 }
 
 //*============================================================================*
@@ -127,11 +167,15 @@ public extension DiffableTextStyle where Self == NumericTextStyle<IntegerFormatS
 //*============================================================================*
 
 public extension DiffableTextStyle where Self == NumericTextStyle<IntegerFormatStyle<Int64>> {
-    @inlinable static var number: Self { Self(format: .number) }
+    @inlinable static var number: Self {
+        Self(.number)
+    }
 }
 
 public extension DiffableTextStyle where Self == NumericTextStyle<IntegerFormatStyle<Int64>.Currency> {
-    @inlinable static func currency(code: String) -> Self { Self(format: .currency(code: code)) }
+    @inlinable static func currency(code: String) -> Self {
+        Self(.currency(code: code))
+    }
 }
 
 //*============================================================================*
@@ -139,11 +183,15 @@ public extension DiffableTextStyle where Self == NumericTextStyle<IntegerFormatS
 //*============================================================================*
 
 public extension DiffableTextStyle where Self == NumericTextStyle<IntegerFormatStyle<UInt>> {
-    @inlinable static var number: Self { Self(format: .number) }
+    @inlinable static var number: Self {
+        Self(.number)
+    }
 }
 
 public extension DiffableTextStyle where Self == NumericTextStyle<IntegerFormatStyle<UInt>.Currency> {
-    @inlinable static func currency(code: String) -> Self { Self(format: .currency(code: code)) }
+    @inlinable static func currency(code: String) -> Self {
+        Self(.currency(code: code))
+    }
 }
 
 //*============================================================================*
@@ -151,11 +199,15 @@ public extension DiffableTextStyle where Self == NumericTextStyle<IntegerFormatS
 //*============================================================================*
 
 public extension DiffableTextStyle where Self == NumericTextStyle<IntegerFormatStyle<UInt8>> {
-    @inlinable static var number: Self { Self(format: .number) }
+    @inlinable static var number: Self {
+        Self(.number)
+    }
 }
 
 public extension DiffableTextStyle where Self == NumericTextStyle<IntegerFormatStyle<UInt8>.Currency> {
-    @inlinable static func currency(code: String) -> Self { Self(format: .currency(code: code)) }
+    @inlinable static func currency(code: String) -> Self {
+        Self(.currency(code: code))
+    }
 }
 
 //*============================================================================*
@@ -163,11 +215,15 @@ public extension DiffableTextStyle where Self == NumericTextStyle<IntegerFormatS
 //*============================================================================*
 
 public extension DiffableTextStyle where Self == NumericTextStyle<IntegerFormatStyle<UInt16>> {
-    @inlinable static var number: Self { Self(format: .number) }
+    @inlinable static var number: Self {
+        Self(.number)
+    }
 }
 
 public extension DiffableTextStyle where Self == NumericTextStyle<IntegerFormatStyle<UInt16>.Currency> {
-    @inlinable static func currency(code: String) -> Self { Self(format: .currency(code: code)) }
+    @inlinable static func currency(code: String) -> Self {
+        Self(.currency(code: code))
+    }
 }
 
 //*============================================================================*
@@ -175,11 +231,15 @@ public extension DiffableTextStyle where Self == NumericTextStyle<IntegerFormatS
 //*============================================================================*
 
 public extension DiffableTextStyle where Self == NumericTextStyle<IntegerFormatStyle<UInt32>> {
-    @inlinable static var number: Self { Self(format: .number) }
+    @inlinable static var number: Self {
+        Self(.number)
+    }
 }
 
 public extension DiffableTextStyle where Self == NumericTextStyle<IntegerFormatStyle<UInt32>.Currency> {
-    @inlinable static func currency(code: String) -> Self { Self(format: .currency(code: code)) }
+    @inlinable static func currency(code: String) -> Self {
+        Self(.currency(code: code))
+    }
 }
 
 //*============================================================================*
@@ -187,9 +247,13 @@ public extension DiffableTextStyle where Self == NumericTextStyle<IntegerFormatS
 //*============================================================================*
 
 public extension DiffableTextStyle where Self == NumericTextStyle<IntegerFormatStyle<UInt64>> {
-    @inlinable static var number: Self { Self(format: .number) }
+    @inlinable static var number: Self {
+        Self(.number)
+    }
 }
 
 public extension DiffableTextStyle where Self == NumericTextStyle<IntegerFormatStyle<UInt64>.Currency> {
-    @inlinable static func currency(code: String) -> Self { Self(format: .currency(code: code)) }
+    @inlinable static func currency(code: String) -> Self {
+        Self(.currency(code: code))
+    }
 }

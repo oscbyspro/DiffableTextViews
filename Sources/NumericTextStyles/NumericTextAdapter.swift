@@ -11,8 +11,6 @@ import DiffableTextViews
 import Foundation
 import Support
 
-#warning("Rename as Adapter, maybe.")
-#warning("Wrap a FormatStyle, maybe.")
 //=----------------------------------------------------------------------------=
 // MARK: Table of Contents
 //=----------------------------------------------------------------------------=
