@@ -94,6 +94,9 @@ extension Lexicon {
         let formatter = NumberFormatter()
         formatter.numberStyle = .decimal
         formatter.locale = locale
+        //=--------------------------------------=
+        // MARK: Initialize
+        //=--------------------------------------=
         return  .init(locale: locale, signs:      .standard(formatter),
         digits: .standard(formatter), separators: .standard(formatter))
     }
@@ -103,8 +106,11 @@ extension Lexicon {
         formatter.numberStyle = .decimal
         formatter.locale = locale
         formatter.currencyCode = code
-        return  .init(locale: locale, signs:      .standard(formatter),
-        digits: .standard(formatter), separators: .standard(formatter))
+        //=--------------------------------------=
+        // MARK: Initialize
+        //=--------------------------------------=
+        return  .init(locale: locale, signs:      .currency(formatter),
+        digits: .currency(formatter), separators: .currency(formatter))
     }
 }
 
