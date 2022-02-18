@@ -66,11 +66,11 @@ public final class Lexicon {
     //=------------------------------------------------------------------------=
     
     @inlinable static func standard(locale: Locale) -> Lexicon {
-        search(locale, in: standard, default: try _standard(locale: locale))
+        search(locale.identifier, in: standard, default: try _standard(locale: locale))
     }
     
     @inlinable static func currency(code: String, locale: Locale) -> Lexicon {
-        search(locale, in: currency, default: try _currency(code: code, locale: locale))
+        search(locale.identifier, in: currency, default: try _currency(code: code, locale: locale))
     }
     
     //=------------------------------------------------------------------------=
@@ -111,9 +111,9 @@ extension Lexicon {
     // MARK: Search
     //=------------------------------------------------------------------------=
     
-    @inlinable static func search(_ locale: Locale, in cache: Cache,
+    @inlinable static func search(_ key: String, in cache: Cache,
     default make: @autoclosure () throws -> Lexicon) -> Lexicon {
-        setup(); let key = locale.identifier as NSString
+        setup(); let key = key as NSString
         //=--------------------------------------=
         // MARK: Search In Cache
         //=--------------------------------------=

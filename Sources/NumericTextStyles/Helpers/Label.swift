@@ -22,9 +22,7 @@ public final class Label {
     // MARK: Cache
     //=------------------------------------------------------------------------=
     
-    @usableFromInline static let currencies: NSCache<ID, Label> = {
-        let cache = NSCache<ID, Label>(); cache.countLimit = 33; return cache
-    }()
+    @usableFromInline static let currencies = Cache<Currency, Label>(size: 10)
     
     //=------------------------------------------------------------------------=
     // MARK: State
@@ -61,7 +59,7 @@ public final class Label {
     // MARK: * ID
     //*========================================================================*
     
-    @usableFromInline final class ID: Hashable {
+    @usableFromInline final class Currency: Hashable {
         
         //=--------------------------------------------------------------------=
         // MARK: State
@@ -75,7 +73,7 @@ public final class Label {
         //=--------------------------------------------------------------------=
         
         @inlinable init(code: String, lexicon: Lexicon) {
-            self.code = code
+            self.code   = code
             self.locale = lexicon.locale.identifier
         }
         
@@ -92,7 +90,7 @@ public final class Label {
         // MARK: Comparisons
         //=--------------------------------------------------------------------=
         
-        @inlinable static func == (lhs: ID, rhs: ID) -> Bool {
+        @inlinable static func == (lhs: Currency, rhs: Currency) -> Bool {
             lhs.code == rhs.code && lhs.locale == rhs.locale
         }
     }
@@ -108,25 +106,13 @@ extension Label {
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable static func currency(code: String, in lexicon: Lexicon) -> Label {
-        let key = ID(code: code, lexicon: lexicon)
-        //=--------------------------------------=
-        // MARK: Search In Cache
-        //=--------------------------------------=
-        if let reusable = currencies.object(forKey: key) {
-            return reusable
-        //=--------------------------------------=
-        // MARK: Make A New Instance And Save It
-        //=--------------------------------------=
-        } else {
-            let instance = Label._currency(code: code, lexicon: lexicon)
-            currencies.setObject(instance, forKey: key)
-            return instance
-        }
+    @inlinable static func currency(code: String, lexicon: Lexicon) -> Label {
+        let key = Currency(code: code, lexicon: lexicon)
+        return currencies.search(key, _currency(code: code, lexicon: lexicon))
     }
     
     //=------------------------------------------------------------------------=
-    // MARK: Initializers - Helpers
+    // MARK: Helpers
     //=------------------------------------------------------------------------=
     
     @inlinable static func _currency(code: String, lexicon: Lexicon) -> Label {
@@ -147,7 +133,6 @@ extension Label {
         //=--------------------------------------=
         // MARK: Instance
         //=--------------------------------------=
-        #warning("Double-check.")
         return !split[0].filter(\.isWhitespace).isEmpty
         ? Label(split[0], at: .prefix)
         : Label(split[1], at: .suffix)
