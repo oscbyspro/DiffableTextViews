@@ -36,7 +36,6 @@ final class SchemeTests: XCTestCase {
     // MARK: Tests
     //=------------------------------------------------------------------------=
     
-    
     /// 1,000,000 iterations:
     ///
     /// - UTF16: 0.202 sec.
@@ -47,7 +46,6 @@ final class SchemeTests: XCTestCase {
             calculateSizeLoop(content1__)
         }
     }
-    
     
     /// 1,000,000 iterations:
     ///

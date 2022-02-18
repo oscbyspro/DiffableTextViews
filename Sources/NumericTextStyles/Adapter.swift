@@ -12,7 +12,7 @@ import Foundation
 import Support
 
 //*============================================================================*
-// MARK: * Table of Contents
+// MARK: * Content
 //*============================================================================*
 
 @usableFromInline typealias Adapter = NumericTextAdapter

@@ -16,8 +16,8 @@ import Support
 //*============================================================================*
 
 public struct NumericTextStyle<Format: NumericTextFormat>: DiffableTextStyle {
-    public typealias Adapter = Format.Adapter
     public typealias Value = Format.FormatInput
+    public typealias Adapter = Format.NumericTextAdapter
     public typealias Bounds = NumericTextStyles.Bounds<Value>
     public typealias Precision = NumericTextStyles.Precision<Value>
 

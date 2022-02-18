@@ -13,7 +13,7 @@ import DiffableTextViews
 // MARK: * Percent
 //*============================================================================*
 
-public struct Percent<Format: NumericTextPercentFormat>: Adapter {
+public struct NumericTextPercentAdapter<Format: NumericTextPercentFormat>: Adapter {
     
     //=------------------------------------------------------------------------=
     // MARK: State

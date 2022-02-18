@@ -13,7 +13,7 @@ import DiffableTextViews
 // MARK: * Currency
 //*============================================================================*
 
-public struct Currency<Format: NumericTextCurrencyFormat>: NumericTextAdapter {
+public struct NumericTextCurrencyAdapter<Format: NumericTextCurrencyFormat>: Adapter {
     
     //=------------------------------------------------------------------------=
     // MARK: State

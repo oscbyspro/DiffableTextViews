@@ -11,22 +11,22 @@ import Foundation
 import DiffableTextViews
 
 //*============================================================================*
-// MARK: * Table of Contents
+// MARK: * Content
 //*============================================================================*
 
-@usableFromInline typealias Format = NumericTextFormat
-@usableFromInline typealias NumberFormat = NumericTextNumberFormat
-@usableFromInline typealias CurrencyFormat = NumericTextCurrencyFormat
-@usableFromInline typealias PercentFormat = NumericTextPercentFormat
+@usableFromInline typealias Format = NumericTextFormat; @usableFromInline enum Formats {
+    @usableFromInline typealias Number = NumericTextNumberFormat
+    @usableFromInline typealias Currency = NumericTextCurrencyFormat
+    @usableFromInline typealias Percent = NumericTextPercentFormat
+}
 
 //*============================================================================*
 // MARK: * Format
 //*============================================================================*
 
 public protocol NumericTextFormat: ParseableFormatStyle where FormatInput: NumericTextValue, FormatOutput == String {
-    associatedtype Adapter: NumericTextAdapter where Adapter.Format == Self
+    associatedtype NumericTextAdapter: NumericTextStyles.NumericTextAdapter where NumericTextAdapter.Format == Self
     associatedtype SignDisplayStrategy: NumericTextSignDisplayStrategyRepresentable
-    typealias NumericTextStyle = NumericTextStyles.NumericTextStyle<Self>
     
     //=------------------------------------------------------------------------=
     // MARK: State
