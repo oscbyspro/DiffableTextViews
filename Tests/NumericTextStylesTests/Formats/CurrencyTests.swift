@@ -31,38 +31,30 @@ final class CurrencyTests: XCTestCase {
         // MARK: Currencies
         //=--------------------------------------=
         for currency in currencies {
-            let style = Style.currency(code: currency)
-            let format = Format.currency(code: currency).precision(.fractionLength(0...))
+            let testable = Style.currency(code: currency)
+            let expectable = Format.currency(code: currency).precision(.fractionLength(0...))
             //=----------------------------------=
             // MARK: Locales
             //=----------------------------------=
             for locale in locales {
-                let commit = style.locale(locale).interpret(value: value)
-                let characters = format.locale(locale).format(value)
+                let commit = testable.locale(locale).interpret(value: value)
+                let characters = expectable.locale(locale).format(value)
                 //=------------------------------=
-                // MARK: Check
+                // MARK: Value
                 //=------------------------------=
                 guard commit.value == value else {
-                    XCTFail("\(commit.value) != \(value) ... \((locale, currency, characters, commit.snapshot.characters))")
+                    XCTFail("... \((locale, currency, characters, commit.snapshot.characters))")
                     return
-                }; guard commit.value == value, commit.snapshot.characters == characters else {
+                }
+                //=------------------------------=
+                // MARK: Characters
+                //=------------------------------=
+                guard commit.snapshot.characters == characters else {
                     XCTFail("\(commit.snapshot.characters) != \(characters) ... \((locale, currency))")
                     return
                 }
             }
         }
-    }
-    
-    func testXXX() {
-        let value = Decimal(string: "-1234567.89")!
-        
-        let code = "CVE"
-        let locale = Locale(identifier: "kea")
-        let lexicon = try! Lexicon._currency(code: code, locale: locale)
-        print(lexicon.separators)
-        
-        let commit = Style.currency(code: code).locale(locale).interpret(value: value)
-        print(commit)
     }
 }
 

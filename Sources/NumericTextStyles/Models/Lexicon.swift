@@ -171,38 +171,70 @@ extension Lexicon {
     // MARK: Number -> Value
     //=------------------------------------------------------------------------=
     
-    #error("Continue.")
-    #warning("Use ascii maybe (or system init), maybe.")
+    #warning("WIP")
+    #warning("WIP")
+    #warning("WIP")
     @inlinable func value<F: Format>(in number: Number, as format: F) throws -> F.Value {
         var characters = String()
+        let format = format.locale(Lexicon.en_US.locale)
         //=--------------------------------------=
         // MARK: Sign
         //=--------------------------------------=
-        signs[number.sign].write(to: &characters)
+        number.sign.write(to: &characters)
         //=--------------------------------------=
         // MARK: Integer Digits
         //=--------------------------------------=
         for digit in number.integer.digits {
-            digits[digit].write(to: &characters)
+            digit.write(to: &characters)
         }
         //=--------------------------------------=
         // MARK: Fraction Separator
         //=--------------------------------------=
         if let separator = number.separator {
-            separators[separator].write(to: &characters)
+            separator.write(to: &characters)
             //=----------------------------------=
             // MARK: Fraction Digits
             //=----------------------------------=
             for digit in number.fraction.digits {
-                digits[digit].write(to: &characters)
+                digit.write(to: &characters)
             }
         }
         //=--------------------------------------=
         // MARK: Characters -> Value
         //=--------------------------------------=
-        print(characters, try? format.parse(characters))
         return try format.parse(characters)
     }
+    
+//    @inlinable func value<F: Format>(in number: Number, as format: F) throws -> F.Value {
+//        var characters = String()
+//        //=--------------------------------------=
+//        // MARK: Sign
+//        //=--------------------------------------=
+//        signs[number.sign].write(to: &characters)
+//        //=--------------------------------------=
+//        // MARK: Integer Digits
+//        //=--------------------------------------=
+//        for digit in number.integer.digits {
+//            digits[digit].write(to: &characters)
+//        }
+//        //=--------------------------------------=
+//        // MARK: Fraction Separator
+//        //=--------------------------------------=
+//        if let separator = number.separator {
+//            separators[separator].write(to: &characters)
+//            //=----------------------------------=
+//            // MARK: Fraction Digits
+//            //=----------------------------------=
+//            for digit in number.fraction.digits {
+//                digits[digit].write(to: &characters)
+//            }
+//        }
+//        //=--------------------------------------=
+//        // MARK: Characters -> Value
+//        //=--------------------------------------=
+//        print(characters, try? format.parse(characters))
+//        return try format.parse(characters)
+//    }
     
     //=------------------------------------------------------------------------=
     // MARK: Snapshot -> Number

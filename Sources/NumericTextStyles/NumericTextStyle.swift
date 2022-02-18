@@ -114,7 +114,6 @@ extension NumericTextStyle {
         let formatted = style.format(value)
         let parseable = snapshot(characters: formatted)
         var number = try! lexicon.number(in: parseable, as: Value.self)
-        print(number)
         //=--------------------------------------=
         // MARK: Autocorrect
         //=--------------------------------------=
@@ -123,7 +122,6 @@ extension NumericTextStyle {
         //=--------------------------------------=
         // MARK: Value <- Number
         //=--------------------------------------=
-        #error("lexicon should not be needed here.")
         value = try! lexicon.value(in: number, as: style)
         //=--------------------------------------=
         // MARK: Style
@@ -133,7 +131,6 @@ extension NumericTextStyle {
         // MARK: Style -> Characters
         //=--------------------------------------=
         var characters = style.format(value)
-        print(characters)
         fix(sign: number.sign, for: value, in: &characters)
         //=--------------------------------------=
         // MARK: Characters -> Snapshot -> Commit
@@ -179,7 +176,6 @@ extension NumericTextStyle {
         //=--------------------------------------=
         // MARK: Value
         //=--------------------------------------=
-        #error("lexicon should not be needed here.")
         let value = try lexicon.value(in: number, as: format)
         //=--------------------------------------=
         // MARK: Value - Validate
