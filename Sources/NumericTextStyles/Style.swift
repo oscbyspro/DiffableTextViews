@@ -118,7 +118,7 @@ extension NumericTextStyle {
         //=--------------------------------------=
         // MARK: Style
         //=--------------------------------------=
-        style = style.sign(sign(components: components))
+        style = style.sign(self.sign(components: components))
         //=--------------------------------------=
         // MARK: Style -> Characters
         //=--------------------------------------=
