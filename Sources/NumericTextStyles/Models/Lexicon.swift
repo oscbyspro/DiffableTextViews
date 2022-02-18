@@ -49,7 +49,7 @@ public final class Lexicon {
     @usableFromInline let signs: Links<Sign>
     @usableFromInline let digits: Links<Digit>
     @usableFromInline let separators: Links<Separator>
-    
+
     //=------------------------------------------------------------------------=
     // MARK: Initializers
     //=------------------------------------------------------------------------=
@@ -113,9 +113,6 @@ extension Lexicon {
     
     @inlinable static func search(_ locale: Locale, in cache: Cache,
     default make: @autoclosure () throws -> Lexicon) -> Lexicon {
-        //=--------------------------------------=
-        // MARK: Setup, Key
-        //=--------------------------------------=
         setup(); let key = locale.identifier as NSString
         //=--------------------------------------=
         // MARK: Search In Cache
@@ -147,7 +144,7 @@ extension Lexicon {
     //=------------------------------------------------------------------------=
     
     @inlinable static func defaultable(_ make: @autoclosure () throws -> Lexicon) -> Lexicon {
-        do { return try make()
+        attempt: do { return try make()
         //=--------------------------------------=
         // MARK: Default To Lexicon.en_US (ASCII)
         //=--------------------------------------=
