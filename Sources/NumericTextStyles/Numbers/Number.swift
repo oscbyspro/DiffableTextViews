@@ -177,12 +177,4 @@ extension Number: TextOutputStreamable {
         separator?.write(to: &target)
         fraction.write(to: &target)
     }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: ASCII
-    //=------------------------------------------------------------------------=
-    
-    @inlinable func characters() -> String {
-        var result = String(); write(to: &result); return result
-    }
 }

@@ -65,6 +65,18 @@ public final class Lexicon {
     // MARK: Initializers - Static
     //=------------------------------------------------------------------------=
     
+    @inlinable static func standard(locale: Locale) -> Lexicon {
+        search(locale, in: standard, default: try _standard(locale: locale))
+    }
+    
+    @inlinable static func currency(code: String, locale: Locale) -> Lexicon {
+        search(locale, in: currency, default: try _currency(code: code, locale: locale))
+    }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Initializers - Static - Helpers
+    //=------------------------------------------------------------------------=
+    
     @inlinable static func _standard(locale: Locale) throws -> Self {
         let formatter = NumberFormatter()
         formatter.locale = locale
@@ -72,7 +84,7 @@ public final class Lexicon {
         //=--------------------------------------=
         // MARK: Initialize
         //=--------------------------------------=
-        return try Self(locale: locale,    signs: .standard(formatter),
+        return   try .init(locale: locale, signs: .standard(formatter),
         digits: .standard(formatter), separators: .standard(formatter))
     }
     
@@ -84,46 +96,8 @@ public final class Lexicon {
         //=--------------------------------------=
         // MARK: Initialize
         //=--------------------------------------=
-        return try Self(locale: locale,    signs: .currency(formatter),
+        return   try .init(locale: locale, signs: .currency(formatter),
         digits: .currency(formatter), separators: .currency(formatter))
-    }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Initializers - Static - Cache
-    //=------------------------------------------------------------------------=
-    
-    @inlinable static func standard(locale: Locale) -> Lexicon {
-        setup(); let key = locale.identifier as NSString
-        //=--------------------------------------=
-        // MARK: Search In Cache
-        //=--------------------------------------=
-        if let reusable = standard.object(forKey: key) {
-            return reusable
-        //=--------------------------------------=
-        // MARK: Make A New Instance And Save It
-        //=--------------------------------------=
-        } else {
-            let instance = defaultable(try _standard(locale: locale))
-            standard.setObject(instance, forKey: key)
-            return instance
-        }
-    }
-    
-    @inlinable static func currency(code: String, locale: Locale) -> Lexicon {
-        setup(); let key = locale.identifier as NSString
-        //=--------------------------------------=
-        // MARK: Search In Cache
-        //=--------------------------------------=
-        if let reusable = currency.object(forKey: key) {
-            return reusable
-        //=--------------------------------------=
-        // MARK: Make A New Instance And Save It
-        //=--------------------------------------=
-        } else {
-            let instance = defaultable(try _currency(code: code, locale: locale))
-            currency.setObject(instance, forKey: key)
-            return instance
-        }
     }
 }
 
@@ -132,6 +106,31 @@ public final class Lexicon {
 //=----------------------------------------------------------------------------=
 
 extension Lexicon {
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Search
+    //=------------------------------------------------------------------------=
+    
+    @inlinable static func search(_ locale: Locale, in cache: Cache,
+    default make: @autoclosure () throws -> Lexicon) -> Lexicon {
+        //=--------------------------------------=
+        // MARK: Setup, Key
+        //=--------------------------------------=
+        setup(); let key = locale.identifier as NSString
+        //=--------------------------------------=
+        // MARK: Search In Cache
+        //=--------------------------------------=
+        if let reusable = cache.object(forKey: key) {
+            return reusable
+        //=--------------------------------------=
+        // MARK: Make A New Instance And Save It
+        //=--------------------------------------=
+        } else {
+            let instance = defaultable(try make())
+            cache.setObject(instance, forKey: key)
+            return instance
+        }
+    }
     
     //=------------------------------------------------------------------------=
     // MARK: Setup
@@ -147,7 +146,6 @@ extension Lexicon {
     // MARK: Error
     //=------------------------------------------------------------------------=
     
-    #warning("Remove this, it only makes everything so much more confusing.")
     @inlinable static func defaultable(_ make: @autoclosure () throws -> Lexicon) -> Lexicon {
         do { return try make()
         //=--------------------------------------=
@@ -170,9 +168,8 @@ extension Lexicon {
     // MARK: Number -> Value
     //=------------------------------------------------------------------------=
     
-    #warning("This does not need to be inside Lexicon, since it uses ascii.")
     @inlinable func value<F: Format>(in number: Number, as format: F) throws -> F.Value {
-        try format.locale(Self.en_US.locale).parse(number.characters())
+        try format.locale(Self.en_US.locale).parse(String(describing: number))
     }
     
     //=------------------------------------------------------------------------=
