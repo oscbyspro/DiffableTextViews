@@ -78,7 +78,7 @@ A customization point for the UITextField it is based on.
 
 # Styles
 
-## [NumericTextStyle](Notes/NumericTextStyle.md)
+## [NumericTextStyle](Notes/NumericTextStyle.md) ([Source](Sources/NumericTextStyles), [Tests](Tests/NumericTextStylesTests))
 
 A style that processes localized numbers in various formats.
 
@@ -121,7 +121,7 @@ struct DiffableAmountTextField: View {
 }
 ```
 
-## [PatternTextStyle](Notes/PatternTextStyle.md)
+## [PatternTextStyle](Notes/PatternTextStyle.md) ([Source](Sources/PatternTextStyles), Tests)
 
 A style that processes characters laid out in custom patterns.
 
