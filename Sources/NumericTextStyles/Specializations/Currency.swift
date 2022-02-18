@@ -27,7 +27,6 @@ public struct Currency: NumericTextSpecialization {
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    #warning("Make more obvious that it uses cache.")
     @inlinable init(code: String, locale: Locale) {
         self.lexicon = Lexicon.currency(code: code, locale: locale)
         self.label   = Label.currency(code: code, lexicon: lexicon)

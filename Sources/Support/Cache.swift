@@ -19,7 +19,7 @@ public final class Cache<Key, Value> where Key: Hashable & AnyObject, Value: Any
     // MARK: State
     //=------------------------------------------------------------------------=
     
-    public let nscache: NSCache<Key, Value>
+    @usableFromInline let nscache: NSCache<Key, Value>
     
     //=------------------------------------------------------------------------=
     // MARK: Initializers

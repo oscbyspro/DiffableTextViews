@@ -35,6 +35,7 @@ public struct NumericTextStyle<Format: NumericTextFormat>: DiffableTextStyle {
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
+    #warning("Adapter should to avoid the format/specialization dance.")
     @inlinable init(format: Format, locale: Locale = .autoupdatingCurrent) {
         self.specialization = format.specialization(locale)
         self.format = format .locale(specialization.locale)
@@ -52,8 +53,9 @@ public struct NumericTextStyle<Format: NumericTextFormat>: DiffableTextStyle {
     // MARK: Transformations
     //=------------------------------------------------------------------------=
     
+    #warning("Adapter should to avoid the format/specialization dance.")
     @inlinable public func locale(_ locale: Locale) -> Self {
-        guard locale != self.lexicon.locale else { return self }
+        guard locale != lexicon.locale else { return self }
         //=--------------------------------------=
         // MARK: Make New Instance
         //=--------------------------------------=
@@ -67,6 +69,7 @@ public struct NumericTextStyle<Format: NumericTextFormat>: DiffableTextStyle {
     // MARK: Comparisons
     //=------------------------------------------------------------------------=
     
+    #warning("Adapter should to avoid the format/specialization dance.")
     /// An equality comparison where the region is represented by the format.
     @inlinable public static func == (lhs: Self, rhs: Self) -> Bool {
         guard lhs.format    == rhs.format    else { return false }

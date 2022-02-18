@@ -11,9 +11,8 @@ import DiffableTextViews
 import Foundation
 import Support
 
-#warning("Rename as Strategy, maybe.")
-#warning("And be used as a stored propery.")
-#warning("Maybe it should contain lexion, plus whatever else it needs.")
+#warning("Rename as Adapter, maybe.")
+#warning("Wrap a FormatStyle, maybe.")
 //=----------------------------------------------------------------------------=
 // MARK: Table of Contents
 //=----------------------------------------------------------------------------=
@@ -29,7 +28,8 @@ public protocol NumericTextSpecialization {
     //=------------------------------------------------------------------------=
     // MARK: Localization
     //=------------------------------------------------------------------------=
-        
+    
+    #warning("Could make internal, maybe.")
     @inlinable var lexicon: Lexicon { get }
     
     //=------------------------------------------------------------------------=

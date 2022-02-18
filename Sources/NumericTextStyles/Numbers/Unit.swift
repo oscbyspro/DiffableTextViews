@@ -38,19 +38,11 @@ extension Unit {
     //=------------------------------------------------------------------------=
     
     @inlinable func standard(_ formatter: NumberFormatter) throws -> Character {
-        try standard(formatter) ?! nonlocalizable
+        try standard(formatter) ?! Info(["unable to standard localize", .mark(self)])
     }
     
     @inlinable func currency(_ formatter: NumberFormatter) throws -> Character {
-        try currency(formatter) ?! nonlocalizable
-    }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Localization - Errors
-    //=------------------------------------------------------------------------=
-    
-    @inlinable var nonlocalizable: Info {
-        Info(["unable to localize", .mark(self)])
+        try currency(formatter) ?! Info(["unable to currency localize", .mark(self)])
     }
 }
 
