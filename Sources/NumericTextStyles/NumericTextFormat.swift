@@ -24,6 +24,7 @@ import DiffableTextViews
 //*============================================================================*
 
 public protocol NumericTextFormat: ParseableFormatStyle where FormatInput: NumericTextValue, FormatOutput == String {
+    associatedtype Adapter: NumericTextAdapter where Adapter.Format == Self
     associatedtype SignDisplayStrategy: NumericTextSignDisplayStrategyRepresentable
     typealias NumericTextStyle = NumericTextStyles.NumericTextStyle<Self>
     
@@ -86,9 +87,9 @@ SignDisplayStrategy == NumberFormatStyleConfiguration.SignDisplayStrategy { }
 
 public protocol NumericTextCurrencyFormat: NumericTextFormat where
 SignDisplayStrategy == CurrencyFormatStyleConfiguration.SignDisplayStrategy {
-    
+        
     //=------------------------------------------------------------------------=
-    // MARK: Requirements
+    // MARK: State
     //=------------------------------------------------------------------------=
     
     @inlinable var currencyCode: String { get }

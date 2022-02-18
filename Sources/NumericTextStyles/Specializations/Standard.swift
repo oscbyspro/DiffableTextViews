@@ -15,25 +15,30 @@ import Foundation
 //*============================================================================*
 
 public struct Standard<Format: NumericTextNumberFormat>: Adapter {
-    public func locale(_ locale: Locale) -> Standard<Format> {
-        <#code#>
-    }
-    
     
     //=------------------------------------------------------------------------=
     // MARK: State
     //=------------------------------------------------------------------------=
     
-    public let format: Format
+    public let format:  Format
     public let lexicon: Lexicon
     
     //=------------------------------------------------------------------------=
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable init(format: Format) {
+    @inlinable public init(format: Format) {
         self.lexicon = Lexicon.standard(locale: format.locale)
     }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Transformations
+    //=------------------------------------------------------------------------=
+    
+    @inlinable public func locale(_ locale: Locale) -> Standard<Format> {
+        self.locale(<#T##locale: Locale##Locale#>)
+    }
+    
     
     //=------------------------------------------------------------------------=
     // MARK: Autocorrect

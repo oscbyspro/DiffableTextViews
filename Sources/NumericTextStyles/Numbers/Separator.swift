@@ -27,14 +27,14 @@ import Foundation
     // MARK: Localization
     //=------------------------------------------------------------------------=
     
-    @inlinable func standard(_ formatter: NumberFormatter) -> Character? {
+    @inlinable func standard(_ formatter: NumberFormatter) -> Character! {
         var characters: String { switch self {
         case .grouping: return formatter.groupingSeparator
         case .fraction: return formatter .decimalSeparator
         }}; return characters.first
     }
     
-    @inlinable func currency(_ formatter: NumberFormatter) -> Character? {
+    @inlinable func currency(_ formatter: NumberFormatter) -> Character! {
         var characters: String { switch self {
         case .grouping: return formatter.currencyGroupingSeparator
         case .fraction: return formatter .currencyDecimalSeparator

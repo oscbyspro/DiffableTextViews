@@ -22,28 +22,9 @@ RawRepresentable, Hashable, CaseIterable, TextOutputStreamable where RawValue ==
     // MARK: Localization
     //=------------------------------------------------------------------------=
         
-    @inlinable func standard(_ formatter: NumberFormatter) -> Character?
+    @inlinable func standard(_ formatter: NumberFormatter) -> Character!
 
-    @inlinable func currency(_ formatter: NumberFormatter) -> Character?
-}
-
-//=----------------------------------------------------------------------------=
-// MARK: + Details
-//=----------------------------------------------------------------------------=
-
-extension Unit {
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Localization
-    //=------------------------------------------------------------------------=
-    
-    @inlinable func standard(_ formatter: NumberFormatter) throws -> Character {
-        try standard(formatter) ?! Info(["unable to standard localize", .mark(self)])
-    }
-    
-    @inlinable func currency(_ formatter: NumberFormatter) throws -> Character {
-        try currency(formatter) ?! Info(["unable to currency localize", .mark(self)])
-    }
+    @inlinable func currency(_ formatter: NumberFormatter) -> Character!
 }
 
 //=----------------------------------------------------------------------------=

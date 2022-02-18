@@ -24,14 +24,14 @@ import Support
 //*============================================================================*
 
 #warning("Could make lexicon internal, maybe.")
-public protocol NumericTextAdapter {
+public protocol NumericTextAdapter: Equatable {
     associatedtype Format: NumericTextFormat
     
     //=------------------------------------------------------------------------=
     // MARK: State
     //=------------------------------------------------------------------------=
     
-    @inlinable var format:  Format  { get }
+    @inlinable var format: Format { get }
     @inlinable var lexicon: Lexicon { get }
     
     //=------------------------------------------------------------------------=
@@ -44,7 +44,6 @@ public protocol NumericTextAdapter {
     // MARK: Transformations
     //=------------------------------------------------------------------------=
     
-    #warning("Use mutating func, maybe.")
     @inlinable func locale(_ locale: Locale) -> Self
     
     //=------------------------------------------------------------------------=
@@ -52,6 +51,21 @@ public protocol NumericTextAdapter {
     //=------------------------------------------------------------------------=
     
     @inlinable func autocorrect(snapshot: inout Snapshot)
+}
+
+//=----------------------------------------------------------------------------=
+// MARK: + Details
+//=----------------------------------------------------------------------------=
+
+extension NumericTextAdapter {
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Comparisons
+    //=------------------------------------------------------------------------=
+    
+    @inlinable public static func == (lhs: Self, rhs: Self) -> Bool {
+        lhs.format == rhs.format
+    }
 }
 
 //=----------------------------------------------------------------------------=

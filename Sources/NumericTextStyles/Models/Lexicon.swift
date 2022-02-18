@@ -60,29 +60,29 @@ public final class Lexicon {
     //=------------------------------------------------------------------------=
     
     @inlinable static func standard(locale: Locale) -> Lexicon {
-        search(locale.identifier, in: standard, default: try _standard(locale: locale))
+        search(locale.identifier, in: standard, default: _standard(locale: locale))
     }
     
     @inlinable static func currency(code: String, locale: Locale) -> Lexicon {
-        search(locale.identifier, in: currency, default: try _currency(code: code, locale: locale))
+        search(locale.identifier, in: currency, default: _currency(code: code, locale: locale))
     }
     
     //=------------------------------------------------------------------------=
     // MARK: Initializers - Static - Helpers
     //=------------------------------------------------------------------------=
     
-    @inlinable static func _standard(locale: Locale) throws -> Self {
+    @inlinable static func _standard(locale: Locale) -> Self {
         let formatter = NumberFormatter()
         formatter.locale = locale
         formatter.numberStyle = .decimal
         //=--------------------------------------=
         // MARK: Initialize
         //=--------------------------------------=
-        return   try .init(locale: locale, signs: .standard(formatter),
+        return  .init(locale: locale, signs:      .standard(formatter),
         digits: .standard(formatter), separators: .standard(formatter))
     }
     
-    @inlinable static func _currency(code: String, locale: Locale) throws -> Self {
+    @inlinable static func _currency(code: String, locale: Locale) -> Self {
         let formatter = NumberFormatter()
         formatter.locale = locale
         formatter.currencyCode = code
@@ -90,7 +90,7 @@ public final class Lexicon {
         //=--------------------------------------=
         // MARK: Initialize
         //=--------------------------------------=
-        return   try .init(locale: locale, signs: .currency(formatter),
+        return  .init(locale: locale, signs:      .currency(formatter),
         digits: .currency(formatter), separators: .currency(formatter))
     }
 }
@@ -106,8 +106,8 @@ extension Lexicon {
     //=------------------------------------------------------------------------=
     
     @inlinable static func search(_ key: String, in cache: Cache,
-    default make: @autoclosure () throws -> Lexicon) -> Lexicon {
-        setup(); return cache.search(key as NSString, defaultable(try make()))
+    default make: @autoclosure () -> Lexicon) -> Lexicon {
+        setup(); return cache.search(key as NSString, make())
     }
     
     //=------------------------------------------------------------------------=
@@ -118,21 +118,6 @@ extension Lexicon {
         guard !done else { return }; done = true
         standard[en_US.locale.identifier as NSString] = en_US
         currency[en_US.locale.identifier as NSString] = en_US
-    }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Error
-    //=------------------------------------------------------------------------=
-    
-    @inlinable static func defaultable(_ make: @autoclosure () throws -> Lexicon) -> Lexicon {
-        attempt: do { return try make()
-        //=--------------------------------------=
-        // MARK: Default To Lexicon.en_US (ASCII)
-        //=--------------------------------------=
-        } catch let reason {
-            Info.print(["Lexicon set to en_US:", .note(reason)])
-            return Lexicon.en_US
-        }
     }
 }
 

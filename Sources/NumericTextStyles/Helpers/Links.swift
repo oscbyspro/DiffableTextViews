@@ -59,13 +59,13 @@ import Foundation
     }
     
     /// Creates a new instance with localized standard component-character links.
-    @inlinable static func standard(_ formatter: NumberFormatter) throws -> Self {
-        try .init(character: { component in try component.standard(formatter) })
+    @inlinable static func standard(_ formatter: NumberFormatter) -> Self {
+        Self(character: { $0.standard(formatter) })
     }
     
     /// Creates a new instance with localized currency component-character links.
-    @inlinable static func currency(_ formatter: NumberFormatter) throws -> Self {
-        try .init(character: { component in try component.currency(formatter) })
+    @inlinable static func currency(_ formatter: NumberFormatter) -> Self {
+        Self(character: { $0.currency(formatter) })
     }
     
     //=------------------------------------------------------------------------=
