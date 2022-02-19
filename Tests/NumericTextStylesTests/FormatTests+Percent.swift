@@ -13,29 +13,29 @@ import XCTest
 @testable import NumericTextStyles
 
 //*============================================================================*
-// MARK: * NumberTests
+// MARK: * FormatTests x Percent
 //*============================================================================*
 
-final class NumberTests: XCTestCase {
+final class PercentTests: XCTestCase, FormatTests {
 
     //=------------------------------------------------------------------------=
     // MARK: State
     //=------------------------------------------------------------------------=
     
     let tests = Set(Test.allCases)
-    
+
     //*========================================================================*
     // MARK: * Test
     //*========================================================================*
     
-    enum Test: CaseIterable { case decimal, double, int }
+    enum Test: CaseIterable { case decimal, double }
 }
 
 //=----------------------------------------------------------------------------=
 // MARK: + Types
 //=----------------------------------------------------------------------------=
 
-extension NumberTests {
+extension PercentTests {
     
     //=------------------------------------------------------------------------=
     // MARK: Tests
@@ -51,43 +51,39 @@ extension NumberTests {
         XCTAssertAvailableLocales(Double("-1234567.89")!)
     }
     
-    func testInt() throws {
-        try XCTSkipUnless(tests.contains(.int))
-        XCTAssertAvailableLocales(Int("-123456789")!)
+    //=------------------------------------------------------------------------=
+    // MARK: Helpers
+    //=------------------------------------------------------------------------=
+    
+    func XCTAssertAvailableLocales<T: Value.Percent>(_ value: T) {
+        XCTAssertAvailableLocales(value, format: T.Percent.init)
+    }
+}
+
+//=----------------------------------------------------------------------------=
+// MARK: + Restrictions
+//=----------------------------------------------------------------------------=
+
+extension PercentTests {
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Tests
+    //=------------------------------------------------------------------------=
+    
+    func testFloat16IsInaccurate() {
+        XCTAssert(Float16("1.23")!, result: "123.046875%")
+    }
+    
+    func testFloat32IsInaccurate() {
+        XCTAssert(Float32("1.23")!, result: "123.000002%")
     }
     
     //=------------------------------------------------------------------------=
     // MARK: Helpers
     //=------------------------------------------------------------------------=
     
-    /// Iterates about 1k times.
-    func XCTAssertAvailableLocales<T: Value.Number>(_ value: T) {
-        //=--------------------------------------=
-        // MARK: Currencies, Locales
-        //=--------------------------------------=
-        for locale in locales {
-            let style = NumericTextStyle(T.Number(locale: locale))
-            let format = style.format.precision(.fractionLength(0...))
-            //=------------------------------=
-            // MARK: Testables
-            //=------------------------------=
-            let commit = style.locale(locale).interpret(value)
-            let characters = format.locale(locale).format(value)
-            //=------------------------------=
-            // MARK: Value
-            //=------------------------------=
-            guard commit.value == value else {
-                XCTFail("\(commit.value) != \(value) ... \((locale))")
-                return
-            }
-            //=------------------------------=
-            // MARK: Characters
-            //=------------------------------=
-            guard commit.snapshot.characters == characters else {
-                XCTFail("\(commit.snapshot.characters) != \(characters) ... \((locale))")
-                return
-            }
-        }
+    func XCTAssert<T: Value.Percent>(_ value: T, result: String) {
+        XCTAssertEqual(T.Percent(locale: en_US).format(value), result)
     }
 }
 
