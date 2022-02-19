@@ -69,7 +69,7 @@ import Foundation
     }
     
     //=------------------------------------------------------------------------=
-    // MARK: Subscripts
+    // MARK: Accessors
     //=------------------------------------------------------------------------=
     
     @inlinable subscript(character: Character) -> Component? {
@@ -88,5 +88,19 @@ import Foundation
     @inlinable mutating func link(_ component: Component, _ character: Character) {
         self.components[character] = component
         self.characters[component] = character
+    }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Utilities
+    //=------------------------------------------------------------------------=
+    
+    /// This is a nonambigious statement since this object contains bidirectional links.
+    @inlinable func contains(_ character: Character) -> Bool {
+        components[character] != nil
+    }
+    
+    /// This is a nonambigious statement since this object contains bidirectional links.
+    @inlinable func contains(_ component: Component) -> Bool {
+        characters[component] != nil
     }
 }

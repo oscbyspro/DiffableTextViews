@@ -120,12 +120,12 @@ extension NumericTextStyle {
         //=--------------------------------------=
         style = style.sign(self.sign(components))
         //=--------------------------------------=
-        // MARK: Style -> Characters
+        // MARK: Characters
         //=--------------------------------------=
         var characters = style.format(value)
         fix(components.sign, for: value, in: &characters)
         //=--------------------------------------=
-        // MARK: Characters -> Snapshot -> Commit
+        // MARK: Snapshot -> Commit
         //=--------------------------------------=
         return Commit(value, snapshot(characters))
     }
@@ -159,7 +159,7 @@ extension NumericTextStyle {
         //=--------------------------------------=
         try bounds.validate(components.sign)
         //=--------------------------------------=
-        // MARK: Components - Count, Validate
+        // MARK: Components - Count, Capacity
         //=--------------------------------------=
         let count = components.count()
         let capacity = try precision.capacity(count)
@@ -179,12 +179,12 @@ extension NumericTextStyle {
         let style = format.precision(self.precision.interactive(count))
         .separator(self.separator(components)).sign(self.sign(components))
         //=--------------------------------------=
-        // MARK: Style -> Characters
+        // MARK: Characters
         //=--------------------------------------=
         var characters = style.format(value)
         fix(components.sign, for: value, in: &characters)
         //=--------------------------------------=
-        // MARK: Characters -> Snapshot -> Commit
+        // MARK: Snapshot -> Commit
         //=--------------------------------------=
         return Commit(value, snapshot(characters))
     }
@@ -235,7 +235,7 @@ extension NumericTextStyle {
 extension NumericTextStyle {
     
     //=------------------------------------------------------------------------=
-    // MARK: Components
+    // MARK: Strategies
     //=------------------------------------------------------------------------=
     
     @inlinable func sign(_ components: Components) -> Format.Sign {
@@ -247,13 +247,13 @@ extension NumericTextStyle {
     }
     
     //=------------------------------------------------------------------------=
-    // MARK: Fixes
+    // MARK: Autocorrect
     //=------------------------------------------------------------------------=
-        
+    
     /// This method exists because Apple's format styles always interpret zero as having a positive sign.
     @inlinable func fix(_ sign: Sign, for value: Value, in characters: inout String) {
         guard sign == .negative, value == .zero else { return }
-        guard let position = characters.firstIndex(where: lexicon.signs.components.keys.contains) else { return }
+        guard let position = characters.firstIndex(where: lexicon.signs.contains) else { return }
         characters.replaceSubrange(position...position, with: String(lexicon.signs[sign]))
     }
 }
