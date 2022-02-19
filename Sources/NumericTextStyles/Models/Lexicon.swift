@@ -126,7 +126,7 @@ extension Lexicon {
     
     /// Relies on the fact that implemented styles can parse pure numbers.
     /// If this changes, then it should be remade to use pure number styles.
-    @inlinable func value<F: Format>(in components: Components, as format: F) throws -> F.Value {
+    @inlinable func value<F: Format>(of components: Components, with format: F) throws -> F.Value {
         try format.locale(Self.en_US.locale).parse(String(describing: components))
     }
     

@@ -55,6 +55,13 @@ public struct NumericTextStyle<Format: NumericTextFormat>: DiffableTextStyle {
         guard self.locale != locale else { return self }
         var result = self; result.adapter = adapter.locale(locale); return result
     }
+}
+
+//=----------------------------------------------------------------------------=
+// MARK: + Equatable
+//=----------------------------------------------------------------------------=
+
+extension NumericTextStyle {
     
     //=------------------------------------------------------------------------=
     // MARK: Comparisons
@@ -105,7 +112,7 @@ extension NumericTextStyle {
         //=--------------------------------------=
         let formatted = style.format(value)
         let parseable = snapshot(formatted)
-        var components = try! lexicon.components(in: parseable, as: Value.self)
+        var components = try! components(parseable)
         //=--------------------------------------=
         // MARK: Autocorrect
         //=--------------------------------------=
@@ -114,7 +121,7 @@ extension NumericTextStyle {
         //=--------------------------------------=
         // MARK: Value <- Components
         //=--------------------------------------=
-        value = try! lexicon.value(in: components, as: style)
+        value = try! lexicon.value(of: components, with: style)
         //=--------------------------------------=
         // MARK: Style
         //=--------------------------------------=
@@ -152,7 +159,7 @@ extension NumericTextStyle {
         //=--------------------------------------=
         // MARK: Components
         //=--------------------------------------=
-        var components = try lexicon.components(in: proposal, as: Value.self)
+        var components = try components(proposal)
         components.set(optional: sign)
         //=--------------------------------------=
         // MARK: Components - Validate
@@ -167,7 +174,7 @@ extension NumericTextStyle {
         //=--------------------------------------=
         // MARK: Value
         //=--------------------------------------=
-        let value = try lexicon.value(in: components, as: format)
+        let value = try lexicon.value(of: components, with: format)
         //=--------------------------------------=
         // MARK: Value - Validate
         //=--------------------------------------=
@@ -187,73 +194,5 @@ extension NumericTextStyle {
         // MARK: Snapshot -> Commit
         //=--------------------------------------=
         return Commit(value, snapshot(characters))
-    }
-}
-
-//=----------------------------------------------------------------------------=
-// MARK: + Snapshot
-//=----------------------------------------------------------------------------=
-
-extension NumericTextStyle {
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Characters
-    //=------------------------------------------------------------------------=
-
-    /// Assumes that characters contains at least one content character.
-    @inlinable func snapshot(_ characters: String) -> Snapshot {
-        var snapshot = characters.reduce(into: Snapshot()) { snapshot, character in
-            let attribute: Attribute
-            //=----------------------------------=
-            // MARK: Match
-            //=----------------------------------=
-            if let _ = lexicon.digits[character] {
-                attribute = .content
-            } else if let separator = lexicon.separators[character] {
-                attribute = separator == .fraction ? .removable : .phantom
-            } else if let _ = lexicon.signs[character] {
-                attribute = .phantom.subtracting(.virtual)
-            } else {
-                attribute = .phantom
-            }
-            //=----------------------------------=
-            // MARK: Insert
-            //=----------------------------------=
-            snapshot.append(Symbol(character, as: attribute))
-        }
-        //=--------------------------------------=
-        // MARK: Autocorrect -> Done
-        //=--------------------------------------=
-        adapter.autocorrect(&snapshot); return snapshot
-    }
-}
-
-//=----------------------------------------------------------------------------=
-// MARK: + Helpers
-//=----------------------------------------------------------------------------=
-
-extension NumericTextStyle {
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Strategies
-    //=------------------------------------------------------------------------=
-    
-    @inlinable func sign(_ components: Components) -> Format.Sign {
-        components.sign == .negative ? .always : .automatic
-    }
-
-    @inlinable func separator(_ components: Components) -> Format.Separator {
-        components.separator == .fraction ? .always : .automatic
-    }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Autocorrect
-    //=------------------------------------------------------------------------=
-    
-    /// This method exists because Apple's format styles always interpret zero as having a positive sign.
-    @inlinable func fix(_ sign: Sign, for value: Value, in characters: inout String) {
-        guard sign == .negative, value == .zero else { return }
-        guard let position = characters.firstIndex(of: lexicon.signs[sign.toggled()]) else { return }
-        characters.replaceSubrange(position...position, with: String(lexicon.signs[sign]))
     }
 }
