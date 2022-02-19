@@ -68,13 +68,13 @@ extension Lexicon {
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable static func standard(in locale: Locale) -> Lexicon {
+    @inlinable static func standard(locale: Locale) -> Lexicon {
         let standardID = StandardID(locale: locale)
         return search(standardID, cache: standard, make: _standard(in: locale))
     }
     
-    @inlinable static func currency(code: String, in locale: Locale) -> Lexicon {
-        let currencyID = CurrencyID(code: code, locale: locale)
+    @inlinable static func currency(code: String, locale: Locale) -> Lexicon {
+        let currencyID = CurrencyID(code:   code, locale: locale)
         return search(currencyID, cache: currency, make: _currency(code: code, in: locale))
     }
     
