@@ -16,7 +16,8 @@ import XCTest
 // MARK: * CurrencyTests
 //*============================================================================*
 
-#warning("Make these cleaner.")
+/// - There are many 144k locale-currency pairs, so it will take some time.
+/// - Apple's format style cache will allocate ~100 MB per type that is tested.
 final class CurrencyTests: XCTestCase {
     
     //=------------------------------------------------------------------------=
@@ -25,23 +26,51 @@ final class CurrencyTests: XCTestCase {
     
     let options: Set<Options> = [.decimal]
     
+    //*========================================================================*
+    // MARK: * Options
+    //*========================================================================*
+    
+    enum Options { case decimal, double, int }
+}
+
+//=----------------------------------------------------------------------------=
+// MARK: + Tests
+//=----------------------------------------------------------------------------=
+
+extension CurrencyTests {
+
     //=------------------------------------------------------------------------=
-    // MARK: Tests
+    // MARK: Values
     //=------------------------------------------------------------------------=
     
     func testDecimal() throws {
         try XCTSkipUnless(options.contains(.decimal))
-        _testAllAvailableLocalesAndCurrencies(Decimal.FormatStyle.Currency.self, Decimal(string: "-1234567.89")!)
+        //=--------------------------------------=
+        // MARK: Locale, Currencies
+        //=--------------------------------------=
+        testAvailableLocaleCurrencyPairs(
+        Decimal.FormatStyle.Currency.self,
+        Decimal(string: "-1234567.89")!)
     }
         
     func testDouble() throws {
         try XCTSkipUnless(options.contains(.double))
-        _testAllAvailableLocalesAndCurrencies(FloatingPointFormatStyle<Double>.Currency.self, Double("-1234567.89")!)
+        //=--------------------------------------=
+        // MARK: Locale, Currencies
+        //=--------------------------------------=
+        testAvailableLocaleCurrencyPairs(
+        FloatingPointFormatStyle<Double>.Currency.self,
+        Double("-1234567.89")!)
     }
     
     func testInt() throws {
         try XCTSkipUnless(options.contains(.int))
-        _testAllAvailableLocalesAndCurrencies(IntegerFormatStyle<Int>.Currency.self, Int("-123456789")!)
+        //=--------------------------------------=
+        // MARK: Locale, Currencies
+        //=--------------------------------------=
+        testAvailableLocaleCurrencyPairs(
+        IntegerFormatStyle<Int>.Currency.self,
+        Int("-123456789")!)
     }
     
     //=------------------------------------------------------------------------=
@@ -49,7 +78,7 @@ final class CurrencyTests: XCTestCase {
     //=------------------------------------------------------------------------=
     
     /// Loops about 144k times.
-    func _testAllAvailableLocalesAndCurrencies<F: Formats.Currency>(_ format: F.Type, _ value: F.Value) {
+    func testAvailableLocaleCurrencyPairs<F: Formats.Currency>(_ format: F.Type, _ value: F.Value) {
         //=--------------------------------------=
         // MARK: Currencies, Locales
         //=--------------------------------------=
@@ -79,12 +108,6 @@ final class CurrencyTests: XCTestCase {
             }
         }
     }
-    
-    //*========================================================================*
-    // MARK: * Options
-    //*========================================================================*
-    
-    enum Options { case decimal, double, int }
 }
 
 #endif

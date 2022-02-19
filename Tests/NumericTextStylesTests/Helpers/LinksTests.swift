@@ -30,7 +30,7 @@ final class LinksTests: XCTestCase {
             for component0 in T.allCases {
                 let character0 = lexicon[component0]
                 let component1 = lexicon[character0]
-                XCTAssertEqual(component0, component1, String(describing: lexicon))
+                XCTAssertEqual(component0, component1)
             }
         }
         //=--------------------------------------=
