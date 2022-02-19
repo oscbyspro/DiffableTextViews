@@ -72,7 +72,7 @@ extension Reader {
         //=--------------------------------------=
         // MARK: Separator
         //=--------------------------------------=
-        } else if [ascii, lexicon].contains(where: { $0.separators.contains(character) }) {
+        } else if ascii.separators.contains(character) || lexicon.separators.contains(character) {
             // all separators result in fraction
             return lexicon.separators[.fraction]
         //=--------------------------------------=
