@@ -36,9 +36,9 @@
     //=------------------------------------------------------------------------=
     
     @inlinable func reduce<Result>(into result: Result,
-        some: (inout Result, Substring, Character) -> Void,
-        none: (inout Result, Substring) -> Void,
-        remainders: (inout Result, Substring, Value.SubSequence) -> Void) -> Result {
+    some: (inout Result, Substring, Character) -> Void,
+    none: (inout Result, Substring) -> Void,
+    done: (inout Result, Substring, Value.SubSequence) -> Void) -> Result {
         //=--------------------------------------=
         // MARK: Variables
         //=--------------------------------------=
@@ -78,12 +78,8 @@
             qIndex = pIndex
         }
         //=--------------------------------------=
-        // MARK: Remainders
-        //=--------------------------------------=
-        remainders(&result, pattern[qIndex...], value[vIndex...])
-        //=--------------------------------------=
         // MARK: Done
         //=--------------------------------------=
-        return result
+        done(&result, pattern[qIndex...], value[vIndex...]); return result
     }
 }

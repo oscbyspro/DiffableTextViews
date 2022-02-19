@@ -75,7 +75,7 @@ extension PatternTextStyle {
         } none: {
             characters, queue in
             characters.append(contentsOf: queue)
-        } remainders: {
+        } done: {
             characters, queue, contents in
             visible ? characters += queue : ()
             guard !contents.isEmpty else { return }
@@ -106,7 +106,7 @@ extension PatternTextStyle {
             commit, queue in
             commit.snapshot.append(contentsOf: Snapshot(queue, as: .phantom))
             commit.snapshot.append(.anchor)
-        } remainders: {
+        } done: {
             commit, queue, _ in
             visible ? commit.snapshot += Snapshot(queue, as: .phantom) : ()
         }

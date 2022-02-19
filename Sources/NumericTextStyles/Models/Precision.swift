@@ -128,7 +128,7 @@ extension Precision {
     //=------------------------------------------------------------------------=
     
     @inlinable static func interpret<R: RangeExpression>(_ expression: R,
-        in limits: ClosedRange<Int>) -> ClosedRange<Int> where R.Bound == Int {
+    in limits: ClosedRange<Int>) -> ClosedRange<Int> where R.Bound == Int {
         let range = expression.relative(to: Int.min ..< Int.max)
         let lower = min(max(limits.lowerBound, range.lowerBound),     limits.upperBound)
         let upper = min(max(limits.lowerBound, range.upperBound - 1), limits.upperBound)
