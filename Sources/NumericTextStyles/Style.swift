@@ -121,7 +121,7 @@ extension NumericTextStyle {
         //=--------------------------------------=
         // MARK: Value <- Components
         //=--------------------------------------=
-        value = try! lexicon.value(of: components, with: style)
+        value = try! self.value(components)
         //=--------------------------------------=
         // MARK: Style
         //=--------------------------------------=
@@ -174,7 +174,7 @@ extension NumericTextStyle {
         //=--------------------------------------=
         // MARK: Value
         //=--------------------------------------=
-        let value = try lexicon.value(of: components, with: format)
+        let value = try self.value(components)
         //=--------------------------------------=
         // MARK: Value - Validate
         //=--------------------------------------=

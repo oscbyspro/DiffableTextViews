@@ -19,6 +19,10 @@ extension NumericTextStyle {
     // MARK: Lexicon
     //=------------------------------------------------------------------------=
     
+    @inlinable func value(_ components: Components) throws -> Value {
+        try adapter.lexicon.value(of: components, with: format)
+    }
+    
     @inlinable func components(_ snapshot: Snapshot) throws -> Components {
         try adapter.lexicon.components(in: snapshot, as: Value.self)
     }
