@@ -22,13 +22,13 @@ final class PercentTests: XCTestCase {
     // MARK: State
     //=------------------------------------------------------------------------=
     
-    let options = Set<Options>(Options.allCases)
-    
+    let tests = Set(Test.allCases)
+
     //*========================================================================*
-    // MARK: * Options
+    // MARK: * Test
     //*========================================================================*
     
-    enum Options: CaseIterable { case decimal, double }
+    enum Test: CaseIterable { case decimal, double }
 }
 
 //=----------------------------------------------------------------------------=
@@ -42,12 +42,12 @@ extension PercentTests {
     //=------------------------------------------------------------------------=
     
     func testDecimal() throws {
-        try XCTSkipUnless(options.contains(.decimal))
+        try XCTSkipUnless(tests.contains(.decimal))
         XCTAssertAvailableLocales(Decimal(string: "-1234567.89")!)
     }
         
     func testDouble() throws {
-        try XCTSkipUnless(options.contains(.double))
+        try XCTSkipUnless(tests.contains(.double))
         XCTAssertAvailableLocales(Double("-1234567.89")!)
     }
     

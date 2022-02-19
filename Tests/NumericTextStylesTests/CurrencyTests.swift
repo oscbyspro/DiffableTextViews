@@ -24,13 +24,13 @@ final class CurrencyTests: XCTestCase {
     // MARK: State
     //=------------------------------------------------------------------------=
     
-    let options: Set<Options> = [.decimal]
-    
+    let tests = Set([Test.decimal])
+
     //*========================================================================*
-    // MARK: * Options
+    // MARK: * Test
     //*========================================================================*
     
-    enum Options { case decimal, double, int }
+    enum Test: CaseIterable { case decimal, double, int }
 }
 
 //=----------------------------------------------------------------------------=
@@ -44,17 +44,17 @@ extension CurrencyTests {
     //=------------------------------------------------------------------------=
     
     func testDecimal() throws {
-        try XCTSkipUnless(options.contains(.decimal))
+        try XCTSkipUnless(tests.contains(.decimal))
         XCTAssertAvailableLocaleCurrencyPairs(Decimal(string: "-1234567.89")!)
     }
         
     func testDouble() throws {
-        try XCTSkipUnless(options.contains(.double))
+        try XCTSkipUnless(tests.contains(.double))
         XCTAssertAvailableLocaleCurrencyPairs(Double("-1234567.89")!)
     }
     
     func testInt() throws {
-        try XCTSkipUnless(options.contains(.int))
+        try XCTSkipUnless(tests.contains(.int))
         XCTAssertAvailableLocaleCurrencyPairs(Int("-123456789")!)
     }
     

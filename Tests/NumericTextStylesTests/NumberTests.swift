@@ -22,13 +22,13 @@ final class NumberTests: XCTestCase {
     // MARK: State
     //=------------------------------------------------------------------------=
     
-    let options: Set<Options> = [.decimal, .double, .int]
+    let tests = Set(Test.allCases)
     
     //*========================================================================*
-    // MARK: * Options
+    // MARK: * Test
     //*========================================================================*
     
-    enum Options { case decimal, double, int }
+    enum Test: CaseIterable { case decimal, double, int }
 }
 
 //=----------------------------------------------------------------------------=
@@ -42,17 +42,17 @@ extension NumberTests {
     //=------------------------------------------------------------------------=
     
     func testDecimal() throws {
-        try XCTSkipUnless(options.contains(.decimal))
+        try XCTSkipUnless(tests.contains(.decimal))
         XCTAssertAvailableLocales(Decimal(string: "-1234567.89")!)
     }
         
     func testDouble() throws {
-        try XCTSkipUnless(options.contains(.double))
+        try XCTSkipUnless(tests.contains(.double))
         XCTAssertAvailableLocales(Double("-1234567.89")!)
     }
     
     func testInt() throws {
-        try XCTSkipUnless(options.contains(.int))
+        try XCTSkipUnless(tests.contains(.int))
         XCTAssertAvailableLocales(Int("-123456789")!)
     }
     
