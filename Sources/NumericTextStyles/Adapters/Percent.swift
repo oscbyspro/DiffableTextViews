@@ -19,7 +19,7 @@ public struct NumericTextPercentAdapter<Format: NumericTextPercentFormat>: Adapt
     // MARK: State
     //=------------------------------------------------------------------------=
     
-    public let format: Format
+    public let format:  Format
     public let lexicon: Lexicon
     
     //=------------------------------------------------------------------------=
@@ -29,10 +29,4 @@ public struct NumericTextPercentAdapter<Format: NumericTextPercentFormat>: Adapt
     @inlinable public init(_ format: Format) {
         self.format = format; self.lexicon = .standard(in: format.locale)
     }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Autocorrect
-    //=------------------------------------------------------------------------=
-    
-    @inlinable public func autocorrect(_ snapshot: inout Snapshot) { }
 }

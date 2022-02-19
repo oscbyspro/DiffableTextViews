@@ -19,9 +19,9 @@ public struct NumericTextCurrencyAdapter<Format: NumericTextCurrencyFormat>: Ada
     // MARK: State
     //=------------------------------------------------------------------------=
     
-    public let format: Format
+    public let format:  Format
     public let lexicon: Lexicon
-    public let label: Label
+    public let label:   Label
 
     //=------------------------------------------------------------------------=
     // MARK: Initializers

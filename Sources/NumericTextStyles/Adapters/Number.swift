@@ -29,10 +29,4 @@ public struct NumericTextNumberAdapter<Format: NumericTextNumberFormat>: Adapter
     @inlinable public init(_ format: Format) {
         self.format = format; self.lexicon = .standard(in: format.locale)
     }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Autocorrect
-    //=------------------------------------------------------------------------=
-    
-    @inlinable public func autocorrect(_ snapshot: inout Snapshot) { }
 }

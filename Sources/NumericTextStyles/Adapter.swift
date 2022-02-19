@@ -28,7 +28,7 @@ public protocol NumericTextAdapter: Equatable {
     // MARK: State
     //=------------------------------------------------------------------------=
     
-    @inlinable var format: Format { get }
+    @inlinable var format:  Format  { get }
     @inlinable var lexicon: Lexicon { get }
     
     //=------------------------------------------------------------------------=
@@ -65,6 +65,12 @@ extension NumericTextAdapter {
     @inlinable func locale(_ locale: Locale) -> Self {
         Self(format.locale(locale))
     }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Utilities
+    //=------------------------------------------------------------------------=
+    
+    @inlinable public func autocorrect(_ snapshot: inout Snapshot) { }
     
     //=------------------------------------------------------------------------=
     // MARK: Comparisons
