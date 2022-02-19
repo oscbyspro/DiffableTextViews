@@ -67,7 +67,7 @@ extension Label {
     //=------------------------------------------------------------------------=
     
     @inlinable static func currency(code: String, with lexicon: Lexicon) -> Label {
-        let key = CurrencyID(code: code, lexicon: lexicon)
+        let key = CurrencyID(code: code, locale: lexicon.locale)
         return currencies.search(key, make: _currency(code: code, with: lexicon))
     }
     

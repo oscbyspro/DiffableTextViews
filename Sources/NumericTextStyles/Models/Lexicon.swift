@@ -16,20 +16,22 @@ import Support
 //*============================================================================*
 
 public final class Lexicon {
-    @usableFromInline typealias Cache = Support.Cache<NSString, Lexicon>
+    @usableFromInline typealias ID = AnyObject & Hashable
+    @usableFromInline typealias Cache<Key: ID> = Support.Cache<Key, Lexicon>
     
     //=------------------------------------------------------------------------=
     // MARK: Cache
     //=------------------------------------------------------------------------=
     
-    @usableFromInline static let standard = Cache(size: 3)
-    @usableFromInline static let currency = Cache(size: 3)
     @usableFromInline static private(set) var done = false
+    @usableFromInline static let standard = Cache<StandardID>(size: 33)
+    @usableFromInline static let currency = Cache<CurrencyID>(size: 33)
 
     //=------------------------------------------------------------------------=
-    // MARK: Instances
+    // MARK: Constants
     //=------------------------------------------------------------------------=
     
+    @usableFromInline static let USD = "USD"
     @usableFromInline static let en_US = Lexicon(
         locale: Locale(identifier: "en_US"),
         signs: .ascii(), digits: .ascii(), separators: .ascii()
@@ -67,23 +69,32 @@ extension Lexicon {
     //=------------------------------------------------------------------------=
     
     @inlinable static func standard(in locale: Locale) -> Lexicon {
-        search(locale.identifier, cache: standard, make: _standard(in: locale))
+        let standardID = StandardID(locale: locale)
+        return search(standardID, cache: standard, make: _standard(in: locale))
     }
     
     @inlinable static func currency(code: String, in locale: Locale) -> Lexicon {
-        search(locale.identifier, cache: currency, make: _currency(code: code, in: locale))
+        let currencyID = CurrencyID(code: code, locale: locale)
+        return search(currencyID, cache: currency, make: _currency(code: code, in: locale))
     }
     
     //=------------------------------------------------------------------------=
     // MARK: Search
     //=------------------------------------------------------------------------=
 
-    @inlinable static func search(_ key: String,
-    cache: Cache, make: @autoclosure () -> Lexicon) -> Lexicon {
-        setup: if !done { done = true
-        standard[en_US.locale.identifier as NSString] = en_US
-        currency[en_US.locale.identifier as NSString] = en_US
-        }; return cache.search(key as NSString, make: make())
+    @inlinable static func search<Key: ID>(_ key: Key,
+    cache: Cache<Key>, make: @autoclosure () -> Lexicon) -> Lexicon {
+        setup(); return cache.search(key, make: make())
+    }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Setup
+    //=------------------------------------------------------------------------=
+    
+    @inlinable static func setup() {
+        guard !done else { return }; done = true
+        standard[StandardID(locale: en_US.locale           )] = en_US
+        currency[CurrencyID(locale: en_US.locale, code: USD)] = en_US
     }
     
     //=------------------------------------------------------------------------=

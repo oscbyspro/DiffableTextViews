@@ -31,7 +31,7 @@ extension FormatTests {
     /// Iterates about 1k times.
     func XCTAssertAvailableLocales<T: Format>(_ value: T.Value, format: (Locale) -> T) {
         for locale in locales {
-            XCTAssertCommit(format(locale), value: value, info: locale)
+            XCTAssertInterpret(value, format: format(locale), info: locale)
         }
     }
     
@@ -43,8 +43,7 @@ extension FormatTests {
     func XCTAssertAvailableLocalesXCurrencies<T: Format>(_ value: T.Value, format: (String, Locale) -> T) {
         for locale in locales {
             for currency in currencies {
-                print(currency, locale, value)
-                XCTAssertCommit(format(currency, locale), value: value, info: (locale, currency))
+                XCTAssertInterpret(value, format: format(currency, locale), info: (locale, currency))
             }
         }
     }
@@ -53,13 +52,13 @@ extension FormatTests {
     // MARK: Helpers
     //=------------------------------------------------------------------------=
     
-    func XCTAssertCommit<F: Format>(_ format: F, value: F.Value, info: @autoclosure () -> Any) {
-        let style = NumericTextStyle(format); let comparable = format.precision(.fractionLength(0...))
+    func XCTAssertInterpret<F: Format>(_ value: F.Value, format: F, info: @autoclosure () -> Any) {
+        let style = NumericTextStyle(format)
         //=------------------------------=
         // MARK: Testables
         //=------------------------------=
         let commit = style.interpret(value)
-        let characters = comparable.format(value)
+        let characters = format.precision(.fractionLength(0...)).format(value)
         //=------------------------------=
         // MARK: Value
         //=------------------------------=
