@@ -46,7 +46,7 @@ public extension NumericTextStyle where Value: NumericTextIntegerValue {
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: + Floating Point
+// MARK: + Float
 //=----------------------------------------------------------------------------=
 
 public extension NumericTextStyle where Value: NumericTextFloatValue {

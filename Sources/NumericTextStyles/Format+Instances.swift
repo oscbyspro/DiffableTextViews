@@ -26,7 +26,7 @@ extension Decimal.FormatStyle.Percent: Format.Percent {
 }
 
 //*============================================================================*
-// MARK: * Format x Floating Point
+// MARK: * Format x Float
 //*============================================================================*
 
 extension FloatingPointFormatStyle: Format, Format.Number where
