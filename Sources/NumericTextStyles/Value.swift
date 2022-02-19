@@ -187,7 +187,7 @@ extension NumericTextUnsignedValue {
     // MARK: Format
     //=------------------------------------------------------------------------=
     
-    associatedtype Number: NumericTextNumberFormat where Number.FormatInput == Self
+    associatedtype Number: Format.Number where Number.FormatInput == Self
 }
 
 //*============================================================================*
@@ -200,7 +200,7 @@ extension NumericTextUnsignedValue {
     // MARK: Format
     //=------------------------------------------------------------------------=
     
-    associatedtype Currency: NumericTextCurrencyFormat where Currency.FormatInput == Self
+    associatedtype Currency: Format.Currency where Currency.FormatInput == Self
 }
 
 //*============================================================================*
@@ -213,7 +213,7 @@ extension NumericTextUnsignedValue {
     // MARK: Format
     //=------------------------------------------------------------------------=
     
-    associatedtype Percent: NumericTextPercentFormat where Percent.FormatInput == Self
+    associatedtype Percent: Format.Percent where Percent.FormatInput == Self
 }
 
 //*============================================================================*
