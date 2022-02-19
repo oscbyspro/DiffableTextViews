@@ -22,10 +22,8 @@ protocol FormatTests: XCTestCase { }
 // MARK: + Details
 //=----------------------------------------------------------------------------=
 
-#warning("DRY")
 extension FormatTests {
     
-    #warning("DRY")
     //=------------------------------------------------------------------------=
     // MARK: Locales
     //=------------------------------------------------------------------------=
@@ -33,31 +31,10 @@ extension FormatTests {
     /// Iterates about 1k times.
     func XCTAssertAvailableLocales<T: Format>(_ value: T.Value, format: (Locale) -> T) {
         for locale in locales {
-            let style = NumericTextStyle(format(locale))
-            let format = style.format.precision(.fractionLength(0...))
-            //=------------------------------=
-            // MARK: Testables
-            //=------------------------------=
-            let commit = style.locale(locale).interpret(value)
-            let characters = format.locale(locale).format(value)
-            //=------------------------------=
-            // MARK: Value
-            //=------------------------------=
-            guard commit.value == value else {
-                XCTFail("\(commit.value) != \(value) ... \((locale))")
-                return
-            }
-            //=------------------------------=
-            // MARK: Characters
-            //=------------------------------=
-            guard commit.snapshot.characters == characters else {
-                XCTFail("\(commit.snapshot.characters) != \(characters) ... \((locale))")
-                return
-            }
+            XCTAssertCommit(format(locale), value: value, info: locale)
         }
     }
     
-    #warning("DRY")
     //=------------------------------------------------------------------------=
     // MARK: Locales, Currencies
     //=------------------------------------------------------------------------=
@@ -66,28 +43,36 @@ extension FormatTests {
     func XCTAssertAvailableLocalesXCurrencies<T: Format>(_ value: T.Value, format: (String, Locale) -> T) {
         for locale in locales {
             for currency in currencies {
-                let style = NumericTextStyle(format(currency, locale))
-                let format = style.format.precision(.fractionLength(0...))
-                //=------------------------------=
-                // MARK: Testables
-                //=------------------------------=
-                let commit = style.locale(locale).interpret(value)
-                let characters = format.locale(locale).format(value)
-                //=------------------------------=
-                // MARK: Value
-                //=------------------------------=
-                guard commit.value == value else {
-                    XCTFail("\(commit.value) != \(value) ... \((locale, currency))")
-                    return
-                }
-                //=------------------------------=
-                // MARK: Characters
-                //=------------------------------=
-                guard commit.snapshot.characters == characters else {
-                    XCTFail("\(commit.snapshot.characters) != \(characters) ... \((locale, currency))")
-                    return
-                }
+                print(currency, locale, value)
+                XCTAssertCommit(format(currency, locale), value: value, info: (locale, currency))
             }
+        }
+    }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Helpers
+    //=------------------------------------------------------------------------=
+    
+    func XCTAssertCommit<F: Format>(_ format: F, value: F.Value, info: @autoclosure () -> Any) {
+        let style = NumericTextStyle(format); let comparable = format.precision(.fractionLength(0...))
+        //=------------------------------=
+        // MARK: Testables
+        //=------------------------------=
+        let commit = style.interpret(value)
+        let characters = comparable.format(value)
+        //=------------------------------=
+        // MARK: Value
+        //=------------------------------=
+        guard commit.value == value else {
+            XCTFail("\(commit.value) != \(value) ... \((info()))")
+            return
+        }
+        //=------------------------------=
+        // MARK: Characters
+        //=------------------------------=
+        guard commit.snapshot.characters == characters else {
+            XCTFail("\(commit.snapshot.characters) != \(characters) ... \((info()))")
+            return
         }
     }
 }
