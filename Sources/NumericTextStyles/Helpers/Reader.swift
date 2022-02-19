@@ -20,7 +20,7 @@ import DiffableTextViews
     // MARK: State
     //=------------------------------------------------------------------------=
     
-    @usableFromInline let region: Lexicon
+    @usableFromInline let lexicon: Lexicon
     @usableFromInline var changes: Changes
     
     //=------------------------------------------------------------------------=
@@ -28,7 +28,7 @@ import DiffableTextViews
     //=------------------------------------------------------------------------=
     
     @inlinable init(_ changes: Changes, in region: Lexicon) {
-        self.region = region
+        self.lexicon = region
         self.changes = changes
     }
 
@@ -55,25 +55,35 @@ extension Reader {
     }
     
     //=------------------------------------------------------------------------=
-    // MARK: Symbol
+    // MARK: Helpers
     //=------------------------------------------------------------------------=
 
     @inlinable func translate(input: Symbol) -> Symbol {
-        var character = input.character
+        Symbol(translate(input: input.character), as: input.attribute)
+    }
+    
+    /// Conditional branches are ordered from most to least frequent.
+    @inlinable func translate(input character: Character) -> Character {
         //=--------------------------------------=
-        // MARK: Match
+        // MARK: Digit
         //=--------------------------------------=
-        if let component = ascii.signs[character] {
-            character = region.signs[component]
-        } else if let component = ascii.digits[character] {
-            character = region.digits[component]
-        } else if ascii.separators.contains(character) || region.separators.contains(character) {
-            character = region.separators[.fraction]
-        }
+        if let digit = ascii.digits[character] {
+            return lexicon.digits[digit]
         //=--------------------------------------=
-        // MARK: Symbol
+        // MARK: Separator
         //=--------------------------------------=
-        return Symbol(character, as: input.attribute)
+        } else if [ascii, lexicon].contains(where: { $0.separators.contains(character) }) {
+            // all separators result in fraction
+            return lexicon.separators[.fraction]
+        //=--------------------------------------=
+        // MARK: Sign
+        //=--------------------------------------=
+        } else if let sign = ascii.signs[character] {
+            return lexicon.signs[sign]
+        //=--------------------------------------=
+        // MARK: Miscellaneous
+        //=--------------------------------------=
+        } else { return character }
     }
 }
 
@@ -89,7 +99,7 @@ extension Reader {
     
     @inlinable mutating func consumeSingleSignInput() -> Sign? {
         guard changes.replacement.count == 1 else { return nil }
-        guard let sign = region.signs[changes.replacement.first!.character] else { return nil }
+        guard let sign = lexicon.signs[changes.replacement.first!.character] else { return nil }
         self.changes.replacement.removeAll(); return sign
     }
 }
