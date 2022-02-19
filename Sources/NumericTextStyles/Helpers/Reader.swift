@@ -67,7 +67,7 @@ extension Reader {
             character = region.signs[component]
         } else if let component = ascii.digits[character] {
             character = region.digits[component]
-        } else if ascii.separators[character] != nil || region.separators[character] != nil {
+        } else if ascii.separators.contains(character) || region.separators.contains(character) {
             character = region.separators[.fraction]
         }
         //=--------------------------------------=
@@ -87,9 +87,8 @@ extension Reader {
     // MARK: Single Sign Input
     //=------------------------------------------------------------------------=
     
-    /// Interprets a single sign character as a: set sign command.
     @inlinable mutating func consumeSingleSignInput() -> Sign? {
-        guard changes.replacement.count == 1 else { return nil } // snapshot.count is O(1)
+        guard changes.replacement.count == 1 else { return nil }
         guard let sign = region.signs[changes.replacement.first!.character] else { return nil }
         self.changes.replacement.removeAll(); return sign
     }
