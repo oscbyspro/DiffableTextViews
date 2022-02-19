@@ -70,7 +70,6 @@ extension PercentTests {
     
     /// Iterates about 1k times.
     func testAvailableLocales<F: Formats.Percent>(_ format: F.Type, _ value: F.Value) {
-        print(value)
         //=--------------------------------------=
         // MARK: Currencies, Locales
         //=--------------------------------------=
@@ -81,7 +80,6 @@ extension PercentTests {
             // MARK: Comparables
             //=------------------------------=
             let commit = style.locale(locale).interpret(value)
-            print(commit)
             let characters = format.locale(locale).format(value)
             //=------------------------------=
             // MARK: Value
@@ -123,6 +121,7 @@ extension PercentTests {
     // MARK: Helpers
     //=------------------------------------------------------------------------=
     
+    #warning("Needs: Value to Format alias.")
     func XCTAseertIsInaccurate<Format: Formats.Percent>(_ value: Format.Value, format: Format, result: String) {
         XCTAssertEqual(Format(locale: en_US).format(value), result)
     }
