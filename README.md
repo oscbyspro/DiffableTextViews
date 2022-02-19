@@ -74,7 +74,7 @@ A view that uses styles to format and parse text.
 
 ### ProxyTextField
 
-A customization point for the UITextField it is based on.
+A UITextField affordance layer and customization point.
 
 # Styles
 
@@ -154,8 +154,7 @@ struct DiffablePhoneTextField: View {
     var body: some View {
         DiffableTextField($number, style: Self.style)
             .diffableTextField_onSetup {
-                proxy in
-                proxy.keyboard(.numberPad)
+                $0.keyboard(.numberPad)
             }
     }
     
