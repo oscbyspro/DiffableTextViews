@@ -46,6 +46,6 @@ import Foundation
         var characters: String { switch self {
         case .positive: return formatter .plusSign
         case .negative: return formatter.minusSign
-        }}; return characters.filter({ $0.isPunctuation || $0.isMathSymbol }).first
+        }}; return characters.first { $0.isPunctuation || $0.isMathSymbol }
     }
 }
