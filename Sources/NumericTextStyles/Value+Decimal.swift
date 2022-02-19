@@ -23,5 +23,5 @@ extension Decimal: Value.Signed, Value.Float, Value.Number, Value.Currency, Valu
     //=------------------------------------------------------------------------=
     
     public static let precision: Count = precision(38)
-    public static let bounds: ClosedRange<Self> = bounds(limit: Self(string: String(repeating: "9", count: 38))!)
+    public static let bounds: ClosedRange<Self> = bounds(Self(string: String(repeating: "9", count: 38))!)
 }

@@ -92,7 +92,7 @@ extension NumericTextFloatValue where Self: SignedNumeric {
     // MARK: Bounds
     //=------------------------------------------------------------------------=
     
-    @inlinable internal static func bounds(limit: Self) -> ClosedRange<Self> {
+    @inlinable internal static func bounds(_ limit: Self) -> ClosedRange<Self> {
         -limit...limit
     }
 }

@@ -74,7 +74,7 @@ extension Lexicon {
     }
     
     @inlinable static func currency(code: String, locale: Locale) -> Lexicon {
-        let currencyID = CurrencyID(code:   code, locale: locale)
+        let currencyID = CurrencyID(code: code,   locale: locale)
         return search(currencyID, cache: currency, make: _currency(code: code, in: locale))
     }
     
