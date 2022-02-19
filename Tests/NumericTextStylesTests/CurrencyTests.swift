@@ -16,46 +16,75 @@ import XCTest
 // MARK: * CurrencyTests
 //*============================================================================*
 
+#warning("Make these cleaner.")
 final class CurrencyTests: XCTestCase {
-    typealias Format = Decimal.FormatStyle.Currency
-    typealias Style = NumericTextStyle<Format>
+    
+    //=------------------------------------------------------------------------=
+    // MARK: State
+    //=------------------------------------------------------------------------=
+    
+    let options: Set<Options> = [.decimal]
     
     //=------------------------------------------------------------------------=
     // MARK: Tests
     //=------------------------------------------------------------------------=
     
+    func testDecimal() throws {
+        try XCTSkipUnless(options.contains(.decimal))
+        _testAllAvailableLocalesAndCurrencies(Decimal.FormatStyle.Currency.self, Decimal(string: "-1234567.89")!)
+    }
+        
+    func testDouble() throws {
+        try XCTSkipUnless(options.contains(.double))
+        _testAllAvailableLocalesAndCurrencies(FloatingPointFormatStyle<Double>.Currency.self, Double("-1234567.89")!)
+    }
+    
+    func testInt() throws {
+        try XCTSkipUnless(options.contains(.int))
+        _testAllAvailableLocalesAndCurrencies(IntegerFormatStyle<Int>.Currency.self, Int("-123456789")!)
+    }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Helpers
+    //=------------------------------------------------------------------------=
+    
     /// Loops about 144k times.
-    func testAllAvailableLocalesAndCurrencies() {
-        let value = Decimal(string: "-1234567.89")!
+    func _testAllAvailableLocalesAndCurrencies<F: Formats.Currency>(_ format: F.Type, _ value: F.Value) {
         //=--------------------------------------=
-        // MARK: Currencies
+        // MARK: Currencies, Locales
         //=--------------------------------------=
-        for currency in currencies {
-            let style = Style.currency(code: currency)
-            let expectation = Format.currency(code: currency).precision(.fractionLength(0...))
-            //=----------------------------------=
-            // MARK: Locales
-            //=----------------------------------=
+        for code in currencies {
             for locale in locales {
+                let style = NumericTextStyle(F.init(code: code, locale: locale))
+                let format = style.format.precision(.fractionLength(0...))
+                //=------------------------------=
+                // MARK: Comparables
+                //=------------------------------=
                 let commit = style.locale(locale).interpret(value)
-                let characters = expectation.locale(locale).format(value)
+                let characters = format.locale(locale).format(value)
                 //=------------------------------=
                 // MARK: Value
                 //=------------------------------=
                 guard commit.value == value else {
-                    XCTFail("\(commit.value) != \(value)... \((locale, currency))")
+                    XCTFail("\(commit.value) != \(value)... \((locale, code))")
                     return
                 }
                 //=------------------------------=
                 // MARK: Characters
                 //=------------------------------=
                 guard commit.snapshot.characters == characters else {
-                    XCTFail("\(commit.snapshot.characters) != \(characters) ... \((locale, currency))")
+                    XCTFail("\(commit.snapshot.characters) != \(characters) ... \((locale, code))")
                     return
                 }
             }
         }
     }
+    
+    //*========================================================================*
+    // MARK: * Options
+    //*========================================================================*
+    
+    enum Options { case decimal, double, int }
 }
 
 #endif

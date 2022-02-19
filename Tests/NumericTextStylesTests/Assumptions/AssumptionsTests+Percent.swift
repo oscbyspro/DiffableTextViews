@@ -26,7 +26,7 @@ extension AssumptionsTests {
     //=------------------------------------------------------------------------=
     
     func testVirtualPercentCharactersAreAlwaysUnique() throws {
-        try skippable()
+        try XCTSkipUnless(enabled)
         let style = IntegerFormatStyle<Int>.Percent()
         //=--------------------------------------=
         // MARK: Locales

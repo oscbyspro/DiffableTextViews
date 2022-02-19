@@ -26,7 +26,7 @@ extension AssumptionsTests {
     //=------------------------------------------------------------------------=
     
     func testVirtualCurrencyCharactersDontContainNumbers() throws {
-        try skippable()
+        try XCTSkipUnless(enabled)
         //=--------------------------------------=
         // MARK: Currencies
         //=--------------------------------------=
@@ -55,7 +55,7 @@ extension AssumptionsTests {
     //=------------------------------------------------------------------------=
     
     func testVirtualCurrencyCharactersAreNotAlwaysUnique() throws {
-        try skippable()
+        try XCTSkipUnless(enabled)
         let number = -1234567.89
         let currencyCode = "PAB"
         let locale = Locale(identifier: "rhg-Rohg_MM")

@@ -26,14 +26,6 @@ final class AssumptionsTests: XCTestCase {
     //=------------------------------------------------------------------------=
     
     let enabled: Bool = true
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Utilities
-    //=------------------------------------------------------------------------=
-    
-    func skippable() throws {
-        guard enabled else { throw XCTSkip() }
-    }
 }
 
 #endif

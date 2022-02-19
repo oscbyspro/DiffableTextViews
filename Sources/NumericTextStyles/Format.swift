@@ -87,12 +87,18 @@ SignDisplayStrategy == NumberFormatStyleConfiguration.SignDisplayStrategy { }
 
 public protocol NumericTextCurrencyFormat: NumericTextFormat where
 SignDisplayStrategy == CurrencyFormatStyleConfiguration.SignDisplayStrategy {
-        
+    
     //=------------------------------------------------------------------------=
-    // MARK: State
+    // MARK: Accessors
     //=------------------------------------------------------------------------=
     
     @inlinable var currencyCode: String { get }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Initializers
+    //=------------------------------------------------------------------------=
+    
+    @inlinable init(code: String, locale: Locale)
 }
 
 //*============================================================================*
