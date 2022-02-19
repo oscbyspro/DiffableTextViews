@@ -7,15 +7,30 @@
 // See http://www.apache.org/licenses/LICENSE-2.0 for license information.
 //=----------------------------------------------------------------------------=
 
+import Foundation
+
 //*============================================================================*
 // MARK: * Content
 //*============================================================================*
 
-@usableFromInline typealias Value = NumericTextValue; @usableFromInline enum Values {
-    @usableFromInline typealias FloatingPoint = NumericTextFloatingPointValue
+@usableFromInline typealias Value = NumericTextValue; extension Value {
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Values
+    //=------------------------------------------------------------------------=
+    
+    @usableFromInline typealias Float = NumericTextFloatValue
     @usableFromInline typealias Integer = NumericTextIntegerValue
     @usableFromInline typealias Signed = NumericTextSignedValue
     @usableFromInline typealias Unsigned = NumericTextUnsignedValue
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Formats
+    //=------------------------------------------------------------------------=
+    
+    @usableFromInline typealias Number = NumericTextNumberValue
+    @usableFromInline typealias Currency = NumericTextCurrencyValue
+    @usableFromInline typealias Percent = NumericTextPercentValue
 }
 
 //*============================================================================*
@@ -41,16 +56,16 @@ public protocol NumericTextValue: Comparable {
 }
 
 //*============================================================================*
-// MARK: * Value x Floating Point
+// MARK: * Value x Float
 //*============================================================================*
 
-public protocol NumericTextFloatingPointValue: NumericTextValue { }
+public protocol NumericTextFloatValue: NumericTextValue { }
 
 //=----------------------------------------------------------------------------=
 // MARK: + Details
 //=----------------------------------------------------------------------------=
 
-extension NumericTextFloatingPointValue {
+extension NumericTextFloatValue {
     
     //=------------------------------------------------------------------------=
     // MARK: Kind
@@ -68,10 +83,10 @@ extension NumericTextFloatingPointValue {
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: + Signed Numeric
+// MARK: + Helpers
 //=----------------------------------------------------------------------------=
 
-extension NumericTextFloatingPointValue where Self: SignedNumeric {
+extension NumericTextFloatValue where Self: SignedNumeric {
     
     //=------------------------------------------------------------------------=
     // MARK: Bounds
@@ -110,7 +125,7 @@ extension NumericTextIntegerValue {
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: + Fixed Width
+// MARK: + Helpers
 //=----------------------------------------------------------------------------=
 
 extension NumericTextIntegerValue where Self: FixedWidthInteger {
@@ -160,4 +175,75 @@ extension NumericTextUnsignedValue {
     //=------------------------------------------------------------------------=
     
     @inlinable public static var isUnsigned: Bool { true }
+}
+
+//*============================================================================*
+// MARK: * Value x Number
+//*============================================================================*
+
+@usableFromInline protocol NumericTextNumberValue {
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Format
+    //=------------------------------------------------------------------------=
+    
+    associatedtype Number: NumericTextNumberFormat where Number.FormatInput == Self
+}
+
+//*============================================================================*
+// MARK: * Value x Currency
+//*============================================================================*
+
+@usableFromInline protocol NumericTextCurrencyValue {
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Format
+    //=------------------------------------------------------------------------=
+    
+    associatedtype Currency: NumericTextCurrencyFormat where Currency.FormatInput == Self
+}
+
+//*============================================================================*
+// MARK: * Value x Percent
+//*============================================================================*
+
+@usableFromInline protocol NumericTextPercentValue {
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Format
+    //=------------------------------------------------------------------------=
+    
+    associatedtype Percent: NumericTextPercentFormat where Percent.FormatInput == Self
+}
+
+//*============================================================================*
+// MARK: * Value x Float x Formats
+//*============================================================================*
+
+extension Value.Float where Self: Value.Number, Self: BinaryFloatingPoint {
+    @usableFromInline typealias Number = FloatingPointFormatStyle<Self>
+}
+
+extension Value.Float where Self: Value.Number, Self: BinaryFloatingPoint {
+    @usableFromInline typealias Currency = FloatingPointFormatStyle<Self>.Currency
+}
+
+extension Value.Float where Self: Value.Number, Self: BinaryFloatingPoint {
+    @usableFromInline typealias Percent = FloatingPointFormatStyle<Self>.Percent
+}
+
+//*============================================================================*
+// MARK: * Value x Integer x Formats
+//*============================================================================*
+
+extension Value.Integer where Self: Value.Number, Self: BinaryInteger {
+    @usableFromInline typealias Number = IntegerFormatStyle<Self>
+}
+
+extension Value.Integer where Self: Value.Number, Self: BinaryInteger {
+    @usableFromInline typealias Currency = IntegerFormatStyle<Self>.Currency
+}
+
+extension Value.Integer where Self: Value.Number, Self: BinaryInteger {
+    @usableFromInline typealias Percent = IntegerFormatStyle<Self>.Percent
 }

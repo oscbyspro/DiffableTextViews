@@ -45,32 +45,17 @@ extension CurrencyTests {
     
     func testDecimal() throws {
         try XCTSkipUnless(options.contains(.decimal))
-        //=--------------------------------------=
-        // MARK: Locale, Currencies
-        //=--------------------------------------=
-        testAvailableLocaleCurrencyPairs(
-        Decimal.FormatStyle.Currency.self,
-        Decimal(string: "-1234567.89")!)
+        testAvailableLocaleCurrencyPairs(Decimal(string: "-1234567.89")!)
     }
         
     func testDouble() throws {
         try XCTSkipUnless(options.contains(.double))
-        //=--------------------------------------=
-        // MARK: Locale, Currencies
-        //=--------------------------------------=
-        testAvailableLocaleCurrencyPairs(
-        FloatingPointFormatStyle<Double>.Currency.self,
-        Double("-1234567.89")!)
+        testAvailableLocaleCurrencyPairs(Double("-1234567.89")!)
     }
     
     func testInt() throws {
         try XCTSkipUnless(options.contains(.int))
-        //=--------------------------------------=
-        // MARK: Locale, Currencies
-        //=--------------------------------------=
-        testAvailableLocaleCurrencyPairs(
-        IntegerFormatStyle<Int>.Currency.self,
-        Int("-123456789")!)
+        testAvailableLocaleCurrencyPairs(Int("-123456789")!)
     }
     
     //=------------------------------------------------------------------------=
@@ -78,13 +63,13 @@ extension CurrencyTests {
     //=------------------------------------------------------------------------=
     
     /// Iterates about 144k times.
-    func testAvailableLocaleCurrencyPairs<F: Formats.Currency>(_ format: F.Type, _ value: F.Value) {
+    func testAvailableLocaleCurrencyPairs<T: Value.Currency>(_ value: T) {
         //=--------------------------------------=
         // MARK: Currencies, Locales
         //=--------------------------------------=
         for code in currencies {
             for locale in locales {
-                let style = NumericTextStyle(F.init(code: code, locale: locale))
+                let style = NumericTextStyle(T.Currency(code: code, locale: locale))
                 let format = style.format.precision(.fractionLength(0...))
                 //=------------------------------=
                 // MARK: Comparables

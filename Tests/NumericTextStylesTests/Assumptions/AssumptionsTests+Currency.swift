@@ -28,22 +28,18 @@ extension AssumptionsTests {
     func testVirtualCurrencyCharactersDontContainNumbers() throws {
         try XCTSkipUnless(enabled)
         //=--------------------------------------=
-        // MARK: Currencies
+        // MARK: Currencies, Locales
         //=--------------------------------------=
-        for currency in currencies {
-            let style = IntegerFormatStyle<Int>
-                .Currency(code: currency)
-                .precision(.fractionLength(0))
-            //=----------------------------------=
-            // MARK: Locales
-            //=----------------------------------=
+        for code in currencies {
             for locale in locales {
-                let zero = style.locale(locale).format(0)
+                let zero = IntegerFormatStyle<Int>
+                .Currency(code: code, locale: locale)
+                .precision(.fractionLength(0)).format(0)
                 //=------------------------------=
                 // MARK: Check
                 //=------------------------------=
                 guard zero.count(where: \.isNumber) == 1 else {
-                    XCTFail("\(zero), \(locale), \(currency)")
+                    XCTFail("\(zero), \(locale), \(code)")
                     return
                 }
             }

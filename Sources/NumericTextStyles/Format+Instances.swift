@@ -13,15 +13,15 @@ import Foundation
 // MARK: * Format x Decimal
 //*============================================================================*
 
-extension Decimal.FormatStyle: Formats.Number {
+extension Decimal.FormatStyle: Format.Number {
     public typealias NumericTextAdapter = NumericTextNumberAdapter<Self>
 }
 
-extension Decimal.FormatStyle.Currency: Formats.Currency {
+extension Decimal.FormatStyle.Currency: Format.Currency {
     public typealias NumericTextAdapter = NumericTextCurrencyAdapter<Self>
 }
 
-extension Decimal.FormatStyle.Percent: Formats.Percent {
+extension Decimal.FormatStyle.Percent: Format.Percent {
     public typealias NumericTextAdapter = NumericTextPercentAdapter<Self>
 }
 
@@ -29,18 +29,18 @@ extension Decimal.FormatStyle.Percent: Formats.Percent {
 // MARK: * Format x Floating Point
 //*============================================================================*
 
-extension FloatingPointFormatStyle: Format, Formats.Number where
-FormatInput: NumericTextFloatingPointValue {
+extension FloatingPointFormatStyle: Format, Format.Number where
+FormatInput: NumericTextFloatValue {
     public typealias NumericTextAdapter = NumericTextNumberAdapter<Self>
 }
 
-extension FloatingPointFormatStyle.Currency: Format, Formats.Currency where
-FormatInput: NumericTextFloatingPointValue {
+extension FloatingPointFormatStyle.Currency: Format, Format.Currency where
+FormatInput: NumericTextFloatValue {
     public typealias NumericTextAdapter = NumericTextCurrencyAdapter<Self>
 }
 
-extension FloatingPointFormatStyle.Percent: Format, Formats.Percent where
-FormatInput: NumericTextFloatingPointValue {
+extension FloatingPointFormatStyle.Percent: Format, Format.Percent where
+FormatInput: NumericTextFloatValue {
     public typealias NumericTextAdapter = NumericTextPercentAdapter<Self>
 }
 
@@ -48,12 +48,12 @@ FormatInput: NumericTextFloatingPointValue {
 // MARK: * Format x Integer
 //*============================================================================*
 
-extension IntegerFormatStyle: Format, Formats.Number where
+extension IntegerFormatStyle: Format, Format.Number where
 FormatInput: NumericTextIntegerValue {
     public typealias NumericTextAdapter = NumericTextNumberAdapter<Self>
 }
 
-extension IntegerFormatStyle.Currency: Format, Formats.Currency where
+extension IntegerFormatStyle.Currency: Format, Format.Currency where
 FormatInput: NumericTextIntegerValue {
     public typealias NumericTextAdapter = NumericTextCurrencyAdapter<Self>
 }

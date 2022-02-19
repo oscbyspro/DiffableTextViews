@@ -11,7 +11,7 @@
 // MARK: * Float16
 //*============================================================================*
 
-extension Float16: Values.Signed, Values.FloatingPoint {
+extension Float16: Value.Signed, Value.Float, Value.Number, Value.Currency, Value.Percent {
     
     //=------------------------------------------------------------------------=
     // MARK: Precision, Bounds
@@ -25,7 +25,7 @@ extension Float16: Values.Signed, Values.FloatingPoint {
 // MARK: * Float32
 //*============================================================================*
 
-extension Float32: Values.Signed, Values.FloatingPoint {
+extension Float32: Value.Signed, Value.Float, Value.Number, Value.Currency, Value.Percent {
     
     //=------------------------------------------------------------------------=
     // MARK: Precision, Bounds
@@ -39,7 +39,7 @@ extension Float32: Values.Signed, Values.FloatingPoint {
 // MARK: * Float64
 //*============================================================================*
 
-extension Float64: Values.Signed, Values.FloatingPoint {
+extension Float64: Value.Signed, Value.Float, Value.Number, Value.Currency, Value.Percent {
     
     //=------------------------------------------------------------------------=
     // MARK: Precision, Bounds

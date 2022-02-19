@@ -43,32 +43,17 @@ extension NumberTests {
     
     func testDecimal() throws {
         try XCTSkipUnless(options.contains(.decimal))
-        //=--------------------------------------=
-        // MARK: Locale, Currencies
-        //=--------------------------------------=
-        testAvailableLocales(
-        Decimal.FormatStyle.self,
-        Decimal(string: "-1234567.89")!)
+        testAvailableLocales(Decimal(string: "-1234567.89")!)
     }
         
     func testDouble() throws {
         try XCTSkipUnless(options.contains(.double))
-        //=--------------------------------------=
-        // MARK: Locale, Currencies
-        //=--------------------------------------=
-        testAvailableLocales(
-        FloatingPointFormatStyle<Double>.self,
-        Double("-1234567.89")!)
+        testAvailableLocales(Double("-1234567.89")!)
     }
     
     func testInt() throws {
         try XCTSkipUnless(options.contains(.int))
-        //=--------------------------------------=
-        // MARK: Locale, Currencies
-        //=--------------------------------------=
-        testAvailableLocales(
-        IntegerFormatStyle<Int>.self,
-        Int("-123456789")!)
+        testAvailableLocales(Int("-123456789")!)
     }
     
     //=------------------------------------------------------------------------=
@@ -76,12 +61,12 @@ extension NumberTests {
     //=------------------------------------------------------------------------=
     
     /// Iterates about 1k times.
-    func testAvailableLocales<F: Formats.Number>(_ format: F.Type, _ value: F.Value) {
+    func testAvailableLocales<T: Value.Number>(_ value: T) {
         //=--------------------------------------=
         // MARK: Currencies, Locales
         //=--------------------------------------=
         for locale in locales {
-            let style = NumericTextStyle(F.init(locale: locale))
+            let style = NumericTextStyle(T.Number(locale: locale))
             let format = style.format.precision(.fractionLength(0...))
             //=------------------------------=
             // MARK: Comparables

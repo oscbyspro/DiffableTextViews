@@ -11,7 +11,7 @@
 // MARK: * Int
 //*============================================================================*
 
-extension Int: Values.Signed, Values.Integer {
+extension Int: Value.Signed, Value.Integer, Value.Number, Value.Currency {
     
     //=------------------------------------------------------------------------=
     // MARK: Precision, Bounds
@@ -25,7 +25,7 @@ extension Int: Values.Signed, Values.Integer {
 // MARK: * Int8
 //*============================================================================*
 
-extension Int8: Values.Signed, Values.Integer {
+extension Int8: Value.Signed, Value.Integer, Value.Number, Value.Currency {
     
     //=------------------------------------------------------------------------=
     // MARK: Precision, Bounds
@@ -39,7 +39,7 @@ extension Int8: Values.Signed, Values.Integer {
 // MARK: * Int16
 //*============================================================================*
 
-extension Int16: Values.Signed, Values.Integer {
+extension Int16: Value.Signed, Value.Integer, Value.Number, Value.Currency {
     
     //=------------------------------------------------------------------------=
     // MARK: Precision, Bounds
@@ -53,7 +53,7 @@ extension Int16: Values.Signed, Values.Integer {
 // MARK: * Int32
 //*============================================================================*
 
-extension Int32: Values.Signed, Values.Integer {
+extension Int32: Value.Signed, Value.Integer, Value.Number, Value.Currency {
     
     //=------------------------------------------------------------------------=
     // MARK: Precision, Bounds
@@ -67,7 +67,7 @@ extension Int32: Values.Signed, Values.Integer {
 // MARK: * Int64
 //*============================================================================*
 
-extension Int64: Values.Signed, Values.Integer {
+extension Int64: Value.Signed, Value.Integer, Value.Number, Value.Currency {
     
     //=------------------------------------------------------------------------=
     // MARK: Precision, Bounds

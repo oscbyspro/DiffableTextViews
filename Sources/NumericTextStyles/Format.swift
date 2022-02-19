@@ -14,7 +14,7 @@ import DiffableTextViews
 // MARK: * Content
 //*============================================================================*
 
-@usableFromInline typealias Format = NumericTextFormat; @usableFromInline enum Formats {
+@usableFromInline typealias Format = NumericTextFormat; extension Format {
     @usableFromInline typealias Number = NumericTextNumberFormat
     @usableFromInline typealias Currency = NumericTextCurrencyFormat
     @usableFromInline typealias Percent = NumericTextPercentFormat
@@ -112,9 +112,7 @@ SignDisplayStrategy == CurrencyFormatStyleConfiguration.SignDisplayStrategy {
 // MARK: * Format x Percent
 //*============================================================================*
 
-/// To use this format, the value must support at least two exponent digits.
-public protocol NumericTextPercentFormat: NumericTextFormat where
-FormatInput: NumericTextFloatingPointValue,
+public protocol NumericTextPercentFormat: NumericTextFormat where FormatInput: NumericTextFloatValue,
 SignDisplayStrategy == NumberFormatStyleConfiguration.SignDisplayStrategy {
     
     //=------------------------------------------------------------------------=

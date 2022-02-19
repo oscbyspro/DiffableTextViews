@@ -13,7 +13,10 @@ import Foundation
 // MARK: * Decimal
 //*============================================================================*
 
-extension Decimal: Values.Signed, Values.FloatingPoint {
+extension Decimal: Value.Signed, Value.Float, Value.Number, Value.Currency, Value.Percent {
+    @usableFromInline typealias Number = FormatStyle
+    @usableFromInline typealias Currency = FormatStyle.Currency
+    @usableFromInline typealias Percent = FormatStyle.Percent
 
     //=------------------------------------------------------------------------=
     // MARK: Precision, Bounds

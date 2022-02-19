@@ -24,7 +24,6 @@ extension DiffableTextStyle where Self == NumericTextStyle<Decimal.FormatStyle.P
 // MARK: * Float16
 //*============================================================================*
 
-#warning("Remove, maybe.")
 extension DiffableTextStyle where Self == NumericTextStyle<FloatingPointFormatStyle<Float16>.Percent> {
     //=----------------------------------------------=
     // MARK: Internal - Inaccurate Format Style
@@ -38,7 +37,6 @@ extension DiffableTextStyle where Self == NumericTextStyle<FloatingPointFormatSt
 // MARK: * Float32
 //*============================================================================*
 
-#warning("Remove, maybe.")
 extension DiffableTextStyle where Self == NumericTextStyle<FloatingPointFormatStyle<Float32>.Percent> {
     //=----------------------------------------------=
     // MARK: Internal - Inaccurate Format Style

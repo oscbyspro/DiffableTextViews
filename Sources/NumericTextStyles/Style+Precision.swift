@@ -49,7 +49,7 @@ public extension NumericTextStyle where Value: NumericTextIntegerValue {
 // MARK: + Floating Point
 //=----------------------------------------------------------------------------=
 
-public extension NumericTextStyle where Value: NumericTextFloatingPointValue {
+public extension NumericTextStyle where Value: NumericTextFloatValue {
     
     //=------------------------------------------------------------------------=
     // MARK: Length

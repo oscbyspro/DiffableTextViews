@@ -12,9 +12,6 @@
 import XCTest
 @testable import NumericTextStyles
 
-#warning("Remove: Float16")
-#warning("Remove: Float32")
-
 //*============================================================================*
 // MARK: * PercentTests
 //*============================================================================*
@@ -46,22 +43,12 @@ extension PercentTests {
     
     func testDecimal() throws {
         try XCTSkipUnless(options.contains(.decimal))
-        //=--------------------------------------=
-        // MARK: Locale, Currencies
-        //=--------------------------------------=
-        testAvailableLocales(
-        Decimal.FormatStyle.Percent.self,
-        Decimal(string: "-1234567.89")!)
+        testAvailableLocales(Decimal(string: "-1234567.89")!)
     }
         
     func testDouble() throws {
         try XCTSkipUnless(options.contains(.double))
-        //=--------------------------------------=
-        // MARK: Locale, Currencies
-        //=--------------------------------------=
-        testAvailableLocales(
-        FloatingPointFormatStyle<Double>.Percent.self,
-        Double("-1234567.89")!)
+        testAvailableLocales(Double("-1234567.89")!)
     }
     
     //=------------------------------------------------------------------------=
@@ -69,12 +56,12 @@ extension PercentTests {
     //=------------------------------------------------------------------------=
     
     /// Iterates about 1k times.
-    func testAvailableLocales<F: Formats.Percent>(_ format: F.Type, _ value: F.Value) {
+    func testAvailableLocales<T: Value.Percent>(_ value: T) {
         //=--------------------------------------=
         // MARK: Currencies, Locales
         //=--------------------------------------=
         for locale in locales {
-            let style = NumericTextStyle(F.init(locale: locale))
+            let style = NumericTextStyle(T.Percent(locale: locale))
             let format = style.format.precision(.fractionLength(0...))
             //=------------------------------=
             // MARK: Comparables
@@ -100,7 +87,7 @@ extension PercentTests {
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: + Restricted
+// MARK: + Restrictions
 //=----------------------------------------------------------------------------=
 
 extension PercentTests {
@@ -110,20 +97,19 @@ extension PercentTests {
     //=------------------------------------------------------------------------=
     
     func testFloat16IsInaccurate() {
-        XCTAseertIsInaccurate(Float16("1.23")!, format: .percent, result: "123.046875%")
+        XCTAseertIsInaccurate(Float16("1.23")!, result: "123.046875%")
     }
     
     func testFloat32IsInaccurate() {
-        XCTAseertIsInaccurate(Float32("1.23")!, format: .percent, result: "123.000002%")
+        XCTAseertIsInaccurate(Float32("1.23")!, result: "123.000002%")
     }
     
     //=------------------------------------------------------------------------=
     // MARK: Helpers
     //=------------------------------------------------------------------------=
     
-    #warning("Needs: Value to Format alias.")
-    func XCTAseertIsInaccurate<Format: Formats.Percent>(_ value: Format.Value, format: Format, result: String) {
-        XCTAssertEqual(Format(locale: en_US).format(value), result)
+    func XCTAseertIsInaccurate<T: Value.Percent>(_ value: T, result: String) {
+        XCTAssertEqual(T.Percent(locale: en_US).format(value), result)
     }
 }
 
