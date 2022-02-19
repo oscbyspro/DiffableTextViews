@@ -79,7 +79,14 @@ extension NumericTextFormat {
 //*============================================================================*
 
 public protocol NumericTextNumberFormat: NumericTextFormat where
-SignDisplayStrategy == NumberFormatStyleConfiguration.SignDisplayStrategy { }
+SignDisplayStrategy == NumberFormatStyleConfiguration.SignDisplayStrategy {
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Initializers
+    //=------------------------------------------------------------------------=
+    
+    @inlinable init(locale: Locale)
+}
 
 //*============================================================================*
 // MARK: * Format x Currency
@@ -108,4 +115,11 @@ SignDisplayStrategy == CurrencyFormatStyleConfiguration.SignDisplayStrategy {
 /// To use this format, the value must support at least two exponent digits.
 public protocol NumericTextPercentFormat: NumericTextFormat where
 FormatInput: NumericTextFloatingPointValue,
-SignDisplayStrategy == NumberFormatStyleConfiguration.SignDisplayStrategy { }
+SignDisplayStrategy == NumberFormatStyleConfiguration.SignDisplayStrategy {
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Initializers
+    //=------------------------------------------------------------------------=
+    
+    @inlinable init(locale: Locale)
+}

@@ -16,16 +16,7 @@ import Foundation
 // MARK: * Constants
 //*============================================================================*
 
-var locales: [Locale] {
-    Earth.locales
-}
 
-var currencies: [String] {
-    Earth.currencies
-}
 
-var standard: [Lexicon] {
-    Earth.standard
-}
 
 #endif

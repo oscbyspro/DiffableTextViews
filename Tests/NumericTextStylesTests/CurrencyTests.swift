@@ -34,13 +34,13 @@ final class CurrencyTests: XCTestCase {
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: + Tests
+// MARK: + Types
 //=----------------------------------------------------------------------------=
 
 extension CurrencyTests {
 
     //=------------------------------------------------------------------------=
-    // MARK: Values
+    // MARK: Tests
     //=------------------------------------------------------------------------=
     
     func testDecimal() throws {
@@ -77,7 +77,7 @@ extension CurrencyTests {
     // MARK: Helpers
     //=------------------------------------------------------------------------=
     
-    /// Loops about 144k times.
+    /// Iterates about 144k times.
     func testAvailableLocaleCurrencyPairs<F: Formats.Currency>(_ format: F.Type, _ value: F.Value) {
         //=--------------------------------------=
         // MARK: Currencies, Locales
@@ -95,7 +95,7 @@ extension CurrencyTests {
                 // MARK: Value
                 //=------------------------------=
                 guard commit.value == value else {
-                    XCTFail("\(commit.value) != \(value)... \((locale, code))")
+                    XCTFail("\(commit.value) != \(value) ... \((locale, code))")
                     return
                 }
                 //=------------------------------=

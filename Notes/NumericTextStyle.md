@@ -21,7 +21,7 @@ Uses format styles introduced in iOS 15.0.
 |---|--------|---------------|
 | :hash: | Number | All |
 | :coin: | Currency | All |
-| :100: | Percent | Nonintegers |
+| :100: | Percent | Decimal, Double |
 
 ## Bounds
 
