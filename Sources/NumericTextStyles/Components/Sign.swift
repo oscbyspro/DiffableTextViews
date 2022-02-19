@@ -28,12 +28,16 @@ import Foundation
     //=------------------------------------------------------------------------=
     
     @inlinable mutating func toggle() {
-        switch self {
-        case .positive: self = .negative
-        case .negative: self = .positive
-        }
+        self = toggled()
     }
     
+    @inlinable func toggled() -> Self {
+        switch self {
+        case .positive: return .negative
+        case .negative: return .positive
+        }
+    }
+
     //=------------------------------------------------------------------------=
     // MARK: Localization
     //=------------------------------------------------------------------------=
@@ -43,9 +47,5 @@ import Foundation
         case .positive: return formatter .plusSign
         case .negative: return formatter.minusSign
         }}; return characters.filter({ $0.isPunctuation || $0.isMathSymbol }).first
-    }
-    
-    @inlinable func currency(_ formatter: NumberFormatter) -> Character! {
-        self.standard(formatter)
     }
 }
