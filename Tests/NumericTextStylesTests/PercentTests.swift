@@ -43,12 +43,12 @@ extension PercentTests {
     
     func testDecimal() throws {
         try XCTSkipUnless(options.contains(.decimal))
-        testAvailableLocales(Decimal(string: "-1234567.89")!)
+        XCTAssertAvailableLocales(Decimal(string: "-1234567.89")!)
     }
         
     func testDouble() throws {
         try XCTSkipUnless(options.contains(.double))
-        testAvailableLocales(Double("-1234567.89")!)
+        XCTAssertAvailableLocales(Double("-1234567.89")!)
     }
     
     //=------------------------------------------------------------------------=
@@ -56,7 +56,7 @@ extension PercentTests {
     //=------------------------------------------------------------------------=
     
     /// Iterates about 1k times.
-    func testAvailableLocales<T: Value.Percent>(_ value: T) {
+    func XCTAssertAvailableLocales<T: Value.Percent>(_ value: T) {
         //=--------------------------------------=
         // MARK: Currencies, Locales
         //=--------------------------------------=
@@ -97,18 +97,18 @@ extension PercentTests {
     //=------------------------------------------------------------------------=
     
     func testFloat16IsInaccurate() {
-        XCTAseertIsInaccurate(Float16("1.23")!, result: "123.046875%")
+        XCTAssert(Float16("1.23")!, result: "123.046875%")
     }
     
     func testFloat32IsInaccurate() {
-        XCTAseertIsInaccurate(Float32("1.23")!, result: "123.000002%")
+        XCTAssert(Float32("1.23")!, result: "123.000002%")
     }
     
     //=------------------------------------------------------------------------=
     // MARK: Helpers
     //=------------------------------------------------------------------------=
     
-    func XCTAseertIsInaccurate<T: Value.Percent>(_ value: T, result: String) {
+    func XCTAssert<T: Value.Percent>(_ value: T, result: String) {
         XCTAssertEqual(T.Percent(locale: en_US).format(value), result)
     }
 }

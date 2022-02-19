@@ -43,17 +43,17 @@ extension NumberTests {
     
     func testDecimal() throws {
         try XCTSkipUnless(options.contains(.decimal))
-        testAvailableLocales(Decimal(string: "-1234567.89")!)
+        XCTAssertAvailableLocales(Decimal(string: "-1234567.89")!)
     }
         
     func testDouble() throws {
         try XCTSkipUnless(options.contains(.double))
-        testAvailableLocales(Double("-1234567.89")!)
+        XCTAssertAvailableLocales(Double("-1234567.89")!)
     }
     
     func testInt() throws {
         try XCTSkipUnless(options.contains(.int))
-        testAvailableLocales(Int("-123456789")!)
+        XCTAssertAvailableLocales(Int("-123456789")!)
     }
     
     //=------------------------------------------------------------------------=
@@ -61,7 +61,7 @@ extension NumberTests {
     //=------------------------------------------------------------------------=
     
     /// Iterates about 1k times.
-    func testAvailableLocales<T: Value.Number>(_ value: T) {
+    func XCTAssertAvailableLocales<T: Value.Number>(_ value: T) {
         //=--------------------------------------=
         // MARK: Currencies, Locales
         //=--------------------------------------=
