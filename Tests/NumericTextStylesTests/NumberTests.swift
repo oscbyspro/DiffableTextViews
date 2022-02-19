@@ -69,7 +69,7 @@ extension NumberTests {
             let style = NumericTextStyle(T.Number(locale: locale))
             let format = style.format.precision(.fractionLength(0...))
             //=------------------------------=
-            // MARK: Comparables
+            // MARK: Testables
             //=------------------------------=
             let commit = style.locale(locale).interpret(value)
             let characters = format.locale(locale).format(value)
