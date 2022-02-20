@@ -19,7 +19,7 @@ import XCTest
 protocol FormatTests: XCTestCase { }
 
 //=----------------------------------------------------------------------------=
-// MARK: + Details
+// MARK: + Loop
 //=----------------------------------------------------------------------------=
 
 extension FormatTests {
@@ -31,7 +31,7 @@ extension FormatTests {
     /// Iterates about 1k times.
     func XCTInterpretLocales<T: Format>(_ value: T.Value, format: (Locale) -> T) {
         for locale in locales {
-            XCTInterpret(value, format: format(locale), info: locale)
+            guard XCTInterpret(value, format: format(locale), info: locale) else { return }
         }
     }
     
@@ -43,7 +43,7 @@ extension FormatTests {
     func XCTInterpretLocalesXCurrencies<T: Format>(_ value: T.Value, format: (String, Locale) -> T) {
         for locale in locales {
             for currency in currencies {
-                XCTInterpret(value, format: format(currency, locale), info: (locale, currency))
+                guard XCTInterpret(value, format: format(currency, locale), info: (locale, currency)) else { return }
             }
         }
     }
@@ -52,27 +52,46 @@ extension FormatTests {
     // MARK: Assertions
     //=------------------------------------------------------------------------=
     
-    func XCTInterpret<F: Format>(_ value: F.Value, format: F, info: @autoclosure () -> Any) {
+    func XCTInterpret<F: Format>(_ value: F.Value, format: F, info: @autoclosure () -> Any) -> Bool {
         let style = NumericTextStyle(format)
-        //=------------------------------=
+        //=--------------------------------------=
         // MARK: Testables
-        //=------------------------------=
+        //=--------------------------------------=
         let commit = style.interpret(value)
         let characters = format.precision(.fractionLength(0...)).format(value)
-        //=------------------------------=
+        //=--------------------------------------=
         // MARK: Value
-        //=------------------------------=
+        //=--------------------------------------=
         guard commit.value == value else {
             XCTFail("\(commit.value) != \(value) ... \((info()))")
-            return
+            return false
         }
-        //=------------------------------=
+        //=--------------------------------------=
         // MARK: Characters
-        //=------------------------------=
+        //=--------------------------------------=
         guard commit.snapshot.characters == characters else {
             XCTFail("\(commit.snapshot.characters) != \(characters) ... \((info()))")
-            return
+            return false
         }
+        //=--------------------------------------=
+        // MARK: Success
+        //=--------------------------------------=
+        return true
+    }
+}
+
+//=----------------------------------------------------------------------------=
+// MARK: + Inaccurate
+//=----------------------------------------------------------------------------=
+
+extension FormatTests {
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Assertions
+    //=------------------------------------------------------------------------=
+    
+    func XCTAssert<F: Format>(_ value: F.Value, format: F, result: String) {
+        XCTAssertEqual(format.precision(.fractionLength(0...)).format(value), result)
     }
 }
 

@@ -33,15 +33,19 @@ final class NumberTests: XCTestCase, FormatTests {
         XCTInterpretLocales(value, format: T.Number.init)
     }
     
+    func XCTAssert<T: Value.Number>(_ value: T, result: String) {
+         XCTAssert(value, format: T.Number(locale: en_US), result: result)
+    }
+    
     //*========================================================================*
     // MARK: * Test
     //*========================================================================*
     
     enum Test: CaseIterable {
         case decimal
-        case float,        float16, float32, float64
-        case   int,  int8,   int16,   int32,   int64
-        case  uint, uint8,  uint16,  uint32,  uint64
+        case float64
+        case  int,  int8,   int16,   int32,   int64
+        case uint, uint8,  uint16,  uint32,  uint64
     }
 }
 
@@ -71,19 +75,21 @@ extension NumberTests {
     // MARK: Tests
     //=------------------------------------------------------------------------=
 
-    func testFloat16() throws {
-        try XCTSkipUnless(tests.contains(.float16))
-        XCTInterpretLocales(Float16("-1.23")!)
-    }
-    
-    func testFloat32() throws {
-        try XCTSkipUnless(tests.contains(.float32))
-        XCTInterpretLocales(Float32("-1.23")!)
-    }
-    
     func testFloat64() throws {
         try XCTSkipUnless(tests.contains(.float64))
         XCTInterpretLocales(Float64("-1.23")!)
+    }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Inaccurate
+    //=------------------------------------------------------------------------=
+    
+    func testFloat16IsInaccurate() {
+        XCTAssert(Float16("1.23")!, result: "123.046875%")
+    }
+    
+    func testFloat32IsInaccurate() {
+        XCTAssert(Float32("1.23")!, result: "123.00000190734863%")
     }
 }
 

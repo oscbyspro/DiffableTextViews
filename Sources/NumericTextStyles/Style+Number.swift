@@ -25,7 +25,10 @@ extension DiffableTextStyle where Self == NumericTextStyle<Decimal.FormatStyle> 
 //*============================================================================*
 
 extension DiffableTextStyle where Self == NumericTextStyle<FloatingPointFormatStyle<Float16>> {
-    @inlinable public static var number: Self {
+    //=------------------------------------------=
+    // MARK: Internal - Inaccurate Format Style
+    //=------------------------------------------=
+    @inlinable internal static var number: Self {
         Self(.number)
     }
 }
@@ -35,7 +38,10 @@ extension DiffableTextStyle where Self == NumericTextStyle<FloatingPointFormatSt
 //*============================================================================*
 
 extension DiffableTextStyle where Self == NumericTextStyle<FloatingPointFormatStyle<Float32>> {
-    @inlinable public static var number: Self {
+    //=------------------------------------------=
+    // MARK: Internal - Inaccurate Format Style
+    //=------------------------------------------=
+    @inlinable internal static var number: Self {
         Self(.number)
     }
 }

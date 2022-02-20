@@ -25,7 +25,10 @@ extension DiffableTextStyle where Self == NumericTextStyle<Decimal.FormatStyle.C
 //*============================================================================*
 
 extension DiffableTextStyle where Self == NumericTextStyle<FloatingPointFormatStyle<Float16>.Currency> {
-    @inlinable public static func currency(code: String) -> Self {
+    //=------------------------------------------=
+    // MARK: Internal - Inaccurate Format Style
+    //=------------------------------------------=
+    @inlinable internal static func currency(code: String) -> Self {
         Self(.currency(code: code))
     }
 }
@@ -35,7 +38,10 @@ extension DiffableTextStyle where Self == NumericTextStyle<FloatingPointFormatSt
 //*============================================================================*
 
 extension DiffableTextStyle where Self == NumericTextStyle<FloatingPointFormatStyle<Float32>.Currency> {
-    @inlinable public static func currency(code: String) -> Self {
+    //=------------------------------------------=
+    // MARK: Internal - Inaccurate Format Style
+    //=------------------------------------------=
+    @inlinable internal static func currency(code: String) -> Self {
         Self(.currency(code: code))
     }
 }

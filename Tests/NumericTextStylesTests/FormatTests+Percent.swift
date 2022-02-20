@@ -33,7 +33,7 @@ final class PercentTests: XCTestCase, FormatTests {
     }
     
     func XCTAssert<T: Value.Percent>(_ value: T, result: String) {
-        XCTAssertEqual(T.Percent(locale: en_US).format(value), result)
+         XCTAssert(value, format: T.Percent(locale: en_US), result: result)
     }
 
     //*========================================================================*

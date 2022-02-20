@@ -66,10 +66,12 @@ Determines the input and output space in terms of digits.
     - Float16:
         - precision: 3
         - bounds: ±999
+        - status: unavailable
 
     - Float32 = Float:
         - precision: 7
         - bounds: ±9,999,999
+        - status: unavailable
 
     - Float64 = Double:
         - precision: 15
