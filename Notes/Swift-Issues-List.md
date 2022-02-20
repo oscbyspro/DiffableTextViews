@@ -22,13 +22,15 @@ let crash = try! style.parseStrategy.parse(style.format(123))
 ### Float16
 
 ```swift
-let value: Float16 = 1.23
-let inaccurate = value.formatted(.percent) // "123.046875%"
+let value = 1.23 as Float16
+let locale = Locale(identifier: "en_US")
+let inaccurate = value.formatted(.percent.locale(locale)) // "123.046875%"
 ```
 
 ### Float32
 
 ```swift
-let value: Float32 = 1.23
-let inaccurate = value.formatted(.percent) // "123.000002%"
+let value = 1.23 as Float32
+let locale = Locale(identifier: "en_US")
+let inaccurate = value.formatted(.percent.locale(locale)) // "123.000002%"
 ```
