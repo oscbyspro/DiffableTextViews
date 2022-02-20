@@ -16,7 +16,7 @@ import Support
 //*============================================================================*
 
 public final class Lexicon {
-    @usableFromInline typealias Cache<Key: AnyObject & Hashable> = Support.Cache<Key, Lexicon>
+    @usableFromInline typealias Cache<Key: Localizable> = Support.Cache<Key, Lexicon>
     
     //=------------------------------------------------------------------------=
     // MARK: Cache
@@ -55,6 +55,20 @@ public final class Lexicon {
         self.digits = digits
         self.separators = separators
     }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Initializer - Indirect
+    //=------------------------------------------------------------------------=
+    
+    @inlinable convenience init<Key: Localizable>(_ key: Key) {
+        let formatter = NumberFormatter()
+        formatter.numberStyle = .decimal; key.update(formatter)
+        //=--------------------------------------=
+        // MARK: Initialize
+        //=--------------------------------------=
+        self.init(locale: key.locale, signs:      key.links(formatter),
+        digits: key.links(formatter), separators: key.links(formatter))
+    }
 }
 
 //=----------------------------------------------------------------------------=
@@ -68,59 +82,25 @@ extension Lexicon {
     //=------------------------------------------------------------------------=
     
     @inlinable static func standard(locale: Locale) -> Lexicon {
-        let standardID = StandardID(locale: locale)
-        return search(standardID, cache: standard, make: _standard)
+        search(standard, key: StandardID(locale: locale))
     }
     
     @inlinable static func currency(code: String, locale: Locale) -> Lexicon {
-        let currencyID = CurrencyID(code: code,   locale: locale)
-        return search(currencyID, cache: currency, make: _currency)
+        search(currency, key: CurrencyID(code: code, locale: locale))
     }
     
     //=------------------------------------------------------------------------=
-    // MARK: Search
+    // MARK: Helpers
     //=------------------------------------------------------------------------=
 
-    @inlinable static func search<Key>(_ key: Key, cache: Cache<Key>,
-    make: (Key) -> Lexicon) -> Lexicon where  Key: AnyObject & Hashable {
-        setup(); return cache.search(key, make: make(key))
-    }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Setup
-    //=------------------------------------------------------------------------=
-    
     @inlinable static func setup() {
         guard !done else { return }; done = true
         standard[StandardID(locale: en_US.locale           )] = en_US
         currency[CurrencyID(locale: en_US.locale, code: USD)] = en_US
     }
     
-    //=------------------------------------------------------------------------=
-    // MARK: Helpers
-    //=------------------------------------------------------------------------=
-    
-    @inlinable static func _standard(_ id: StandardID) -> Self {
-        let formatter = NumberFormatter()
-        formatter.numberStyle = .decimal
-        formatter.locale = id.locale
-        //=--------------------------------------=
-        // MARK: Initialize
-        //=--------------------------------------=
-        return  .init(locale: id.locale,   signs: .standard(formatter),
-        digits: .standard(formatter), separators: .standard(formatter))
-    }
-    
-    @inlinable static func _currency(_ id: CurrencyID) -> Self {
-        let formatter = NumberFormatter()
-        formatter.numberStyle = .decimal
-        formatter.locale = id.locale
-        formatter.currencyCode = id.code
-        //=--------------------------------------=
-        // MARK: Initialize
-        //=--------------------------------------=
-        return  .init(locale: id.locale,   signs: .currency(formatter),
-        digits: .currency(formatter), separators: .currency(formatter))
+    @inlinable static func search<Key: Localizable>(_ cache: Cache<Key>, key: Key) -> Lexicon {
+        setup(); return cache.search(key, make: .init(key))
     }
 }
 

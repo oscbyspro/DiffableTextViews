@@ -34,6 +34,6 @@ let currencyCodes: [String] = locales
     .lazy.map({ $0 }).sorted(by: <)
 
 let standard: [Lexicon] = locales.lazy
-    .map(StandardID.init).map(Lexicon._standard)
+    .map(StandardID.init).map(Lexicon.init)
 
 #endif
