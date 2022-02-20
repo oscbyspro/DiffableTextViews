@@ -15,7 +15,7 @@ import Support
 // MARK: * Label
 //*============================================================================*
 
-/// A collection of characters at or near the end in some formatted text.
+/// A collection of characters at or near the edge of some formatted text.
 public final class Label {
     
     //=------------------------------------------------------------------------=
@@ -44,7 +44,7 @@ public final class Label {
     // MARK: Utilities
     //=------------------------------------------------------------------------=
     
-    /// Naive search is OK because labels are close to the edge and unique from edge to end.
+    /// Naive search is OK because labels are at or near to the edge.
     @inlinable func range(in snapshot: Snapshot) -> Range<Snapshot.Index>? {
         Search.range(of: characters, in: snapshot, reversed: location == .suffix)
     }
