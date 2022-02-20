@@ -44,8 +44,8 @@ final class NumberTests: XCTestCase, StyleTests {
     enum Test: CaseIterable {
         case decimal
         case float64
-        case  int,  int8,   int16,   int32,   int64
-        case uint, uint8,  uint16,  uint32,  uint64
+        case int,   int8,  int16,  int32,  int64
+        case uint, uint8, uint16, uint32, uint64
     }
 }
 
