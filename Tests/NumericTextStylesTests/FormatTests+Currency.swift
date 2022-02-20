@@ -16,8 +16,8 @@ import XCTest
 // MARK: * FormatTests x Currency
 //*============================================================================*
 
+/// - About 100 MB will be allocated per type that is tested.
 /// - There are many 144k locale-currency pairs, so it will take some time.
-/// - Apple's format style cache will allocate ~100 MB per type that is tested.
 final class CurrencyTests: XCTestCase, FormatTests {
     
     //=------------------------------------------------------------------------=
