@@ -10,14 +10,13 @@
 #if DEBUG
 
 import XCTest
-import DiffableTextViews
 @testable import PatternTextStyles
 
 //*============================================================================*
 // MARK: * StyleTests x Visible
 //*============================================================================*
 
-final class VisibleTests: XCTestCase {
+final class VisibleTests: XCTestCase, StyleTests {
     
     //=------------------------------------------------------------------------=
     // MARK: State
@@ -26,21 +25,6 @@ final class VisibleTests: XCTestCase {
     lazy var style = PatternTextStyle<String>
         .pattern("+### (###) ##-##-##")
         .placeholder("#") { $0.isASCII && $0.isNumber }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Assertions
-    //=------------------------------------------------------------------------=
-    
-    func XCTFormat___(_ input: String, format: String) {
-        let testable = style.format(input)
-        XCTAssertEqual(testable, format)
-    }
-
-    func XCTInterpret(_ input: String, format: String, value: String) {
-        let testable = style.interpret(input)
-        XCTAssertEqual(testable.value, value)
-        XCTAssertEqual(testable.snapshot.characters, format)
-    }
     
     //=------------------------------------------------------------------------=
     // MARK: Tests
@@ -61,7 +45,7 @@ final class VisibleTests: XCTestCase {
         XCTInterpret("123000456789", format: "+123 (000) 45-67-89", value: "123000456789")
     }
     
-    func testExcess() {
+    func testMore() {
         XCTFormat___("123000456789000", format: "+123 (000) 45-67-89|000")
         XCTInterpret("123000456789000", format: "+123 (000) 45-67-89", value: "123000456789")
     }
