@@ -17,20 +17,18 @@ let style = IntegerFormatStyle<Int>.Currency(code: code).locale(locale)
 let crash = try! style.parseStrategy.parse(style.format(123))
 ```
 
-## FormatStyle.Percent: is inaccurate for some types.
+## FormatStyle: Float16 and Float32 are inaccurate.
 
 ### Float16
 
 ```swift
-let value = 0.1 as Float16
-let locale = Locale(identifier: "en_US")
-let inaccurate = value.formatted(.percent.locale(locale)) // "9.997559%"
+let value = 1.23 as Float16
+let inaccurate = value.formatted(.number.precision(.fractionLength(0...))) // "1.23046875"
 ```
 
 ### Float32
 
 ```swift
-let value = 0.9 as Float32
-let locale = Locale(identifier: "en_US")
-let inaccurate = value.formatted(.percent.locale(locale)) // "89.999998%"
+let value = 1.23 as Float32
+let inaccurate = value.formatted(.number.precision(.fractionLength(0...))) // "1.2300000190734863"
 ```

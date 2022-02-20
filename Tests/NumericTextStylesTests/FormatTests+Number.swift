@@ -85,11 +85,11 @@ extension NumberTests {
     //=------------------------------------------------------------------------=
     
     func testFloat16IsInaccurate() {
-        XCTAssert(Float16("1.23")!, result: "123.046875%")
+        XCTAssert(Float16("1.23")!, result: "1.23046875")
     }
     
     func testFloat32IsInaccurate() {
-        XCTAssert(Float32("1.23")!, result: "123.00000190734863%")
+        XCTAssert(Float32("1.23")!, result: "1.2300000190734863")
     }
 }
 
