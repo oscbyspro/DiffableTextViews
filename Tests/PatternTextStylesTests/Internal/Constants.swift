@@ -6,3 +6,11 @@
 //
 // See http://www.apache.org/licenses/LICENSE-2.0 for license information.
 //=----------------------------------------------------------------------------=
+
+#if DEBUG
+
+import DiffableTextViews
+
+let anchor = Symbol.anchor.character
+
+#endif
