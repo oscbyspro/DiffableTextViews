@@ -12,10 +12,10 @@
 import XCTest
 
 //*============================================================================*
-// MARK: * CommentsTests x Earth
+// MARK: * CommentsTests x Constants
 //*============================================================================*
 
-final class CommentsTestsXEarth: XCTestCase {
+final class CommentsTestsXConstants: XCTestCase {
     
     //=------------------------------------------------------------------------=
     // MARK: Tests
