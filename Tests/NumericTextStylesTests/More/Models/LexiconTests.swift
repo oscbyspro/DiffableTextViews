@@ -23,7 +23,7 @@ final class LexiconTests: XCTestCase {
     //=------------------------------------------------------------------------=
     
     func testThatThereAreManyLocales() {
-        XCTAssertGreaterThanOrEqual(standard.count, 937)
+        XCTAssertGreaterThanOrEqual(locales.count, 937)
     }
     
     func testThatThereAreManyCurrencyCodes() {
