@@ -12,7 +12,6 @@
 import XCTest
 @testable import NumericTextStyles
 
-#warning("DRY")
 //*============================================================================*
 // MARK: * FormatTests x Currency
 //*============================================================================*
@@ -39,7 +38,7 @@ final class CurrencyTests: XCTestCase, FormatTests {
     // MARK: * Test
     //*========================================================================*
     
-    enum Test: CaseIterable {
+    enum Test {
         case decimal
         case float,        float16, float32, float64
         case   int,  int8,   int16,   int32,   int64
