@@ -66,16 +66,16 @@ extension Label {
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable static func currency(code: String, lexicon: Lexicon) -> Label {
-        let currencyID = CurrencyID(code: code, locale: lexicon.locale)
-        return currencies.search(currencyID, make: _currency(code: code, with: lexicon))
+    @inlinable static func currency(code: String,  lexicon: Lexicon) -> Label {
+        let currencyID = CurrencyID(locale: lexicon.locale,  code: code)
+        return currencies.search(currencyID, make: _currency(code: code, lexicon: lexicon))
     }
     
     //=------------------------------------------------------------------------=
     // MARK: Helpers
     //=------------------------------------------------------------------------=
     
-    @inlinable static func _currency(code: String, with lexicon: Lexicon) -> Label {
+    @inlinable static func _currency(code: String, lexicon: Lexicon) -> Label {
         let digit = lexicon.digits[.zero]
         //=--------------------------------------=
         // MARK: Split

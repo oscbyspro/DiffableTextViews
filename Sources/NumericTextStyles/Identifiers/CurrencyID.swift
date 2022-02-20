@@ -26,10 +26,6 @@ import Foundation
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable init(code: String, locale: Locale) {
-        self.code = code; self.locale = locale
-    }
-    
     @inlinable init(locale: Locale, code: String) {
         self.code = code; self.locale = locale
     }

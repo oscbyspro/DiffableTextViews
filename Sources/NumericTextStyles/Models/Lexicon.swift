@@ -82,11 +82,11 @@ extension Lexicon {
     //=------------------------------------------------------------------------=
     
     @inlinable static func standard(locale: Locale) -> Lexicon {
-        search(standard, key: StandardID(locale: locale))
+        search(standard, key: StandardID(locale:  locale))
     }
     
     @inlinable static func currency(code: String, locale: Locale) -> Lexicon {
-        search(currency, key: CurrencyID(code: code, locale: locale))
+        search(currency, key: CurrencyID(locale:  locale, code: code))
     }
     
     //=------------------------------------------------------------------------=

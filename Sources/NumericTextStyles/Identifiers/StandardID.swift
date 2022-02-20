@@ -25,7 +25,9 @@ import Foundation
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable init(locale: Locale) { self.locale = locale }
+    @inlinable init(locale: Locale) {
+        self.locale = locale
+    }
     
     //=------------------------------------------------------------------------=
     // MARK: Hashable
