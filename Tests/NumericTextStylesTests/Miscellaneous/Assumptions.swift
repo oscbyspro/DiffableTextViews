@@ -10,13 +10,22 @@
 #if DEBUG
 
 import Foundation
+import Support
+import XCTest
+
 @testable import NumericTextStyles
 
 //*============================================================================*
-// MARK: * Constants
+// MARK: * Assumptions
 //*============================================================================*
 
+final class Assumptions: XCTestCase {
 
-
+    //=------------------------------------------------------------------------=
+    // MARK: State
+    //=------------------------------------------------------------------------=
+    
+    let enabled: Bool = true
+}
 
 #endif

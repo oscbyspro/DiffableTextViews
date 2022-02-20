@@ -16,16 +16,32 @@ import XCTest
 @testable import NumericTextStyles
 
 //*============================================================================*
-// MARK: * AssumptionsTests
+// MARK: + Percent
 //*============================================================================*
 
-final class AssumptionsTests: XCTestCase {
-
+extension Assumptions {
+    
     //=------------------------------------------------------------------------=
-    // MARK: State
+    // MARK: Positive
     //=------------------------------------------------------------------------=
     
-    let enabled: Bool = true
+    func testVirtualPercentCharactersAreAlwaysUnique() throws {
+        try XCTSkipUnless(enabled)
+        let style = IntegerFormatStyle<Int>.Percent()
+        //=--------------------------------------=
+        // MARK: Locales
+        //=--------------------------------------=
+        for lexicon in standard {
+            let zero = style.locale(lexicon.locale).format(0)
+            //=----------------------------------=
+            // MARK: Failure
+            //=----------------------------------=
+            guard zero.count(where: lexicon.nonvirtual) == 1 else {
+                XCTFail("\(zero), \(lexicon.locale)")
+                return
+            }
+        }
+    }
 }
 
 #endif

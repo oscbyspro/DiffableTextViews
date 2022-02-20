@@ -19,7 +19,7 @@ import XCTest
 // MARK: + Currency
 //=----------------------------------------------------------------------------=
 
-extension AssumptionsTests {
+extension Assumptions {
     
     //=------------------------------------------------------------------------=
     // MARK: Positive

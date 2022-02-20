@@ -49,7 +49,7 @@ extension FormatTests {
     }
     
     //=------------------------------------------------------------------------=
-    // MARK: Helpers
+    // MARK: Assertions
     //=------------------------------------------------------------------------=
     
     func XCTInterpret<F: Format>(_ value: F.Value, format: F, info: @autoclosure () -> Any) {
