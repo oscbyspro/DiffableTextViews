@@ -10,7 +10,6 @@
 #if DEBUG
 
 import Foundation
-import Support
 import XCTest
 
 @testable import NumericTextStyles
@@ -26,20 +25,13 @@ extension Assumptions {
     //=------------------------------------------------------------------------=
     
     func testVirtualPercentCharactersAreAlwaysUnique() throws {
-        try XCTSkipUnless(!skippable)
-        let style = IntegerFormatStyle<Int>.Percent()
+        continueAfterFailure = false
         //=--------------------------------------=
         // MARK: Locales
         //=--------------------------------------=
         for lexicon in standard {
-            let zero = style.locale(lexicon.locale).format(0)
-            //=----------------------------------=
-            // MARK: Failure
-            //=----------------------------------=
-            guard zero.count(where: lexicon.nonvirtual) == 1 else {
-                XCTFail("\(zero), \(lexicon.locale)")
-                return
-            }
+            let zero = IntegerFormatStyle<Int>.Percent(locale: lexicon.locale).format(0)
+            XCTAssert(zero.count(where: lexicon.nonvirtual) == 1, "\(zero), \(lexicon.locale)")
         }
     }
 }

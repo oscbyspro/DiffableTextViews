@@ -58,10 +58,11 @@ extension LexiconTests {
     //=------------------------------------------------------------------------=
     
     func testSigns() {
+        continueAfterFailure = false
         let positive: Int = +1
         let negative: Int = -1
         //=--------------------------------------=
-        // MARK: Regions
+        // MARK: Lexicons
         //=--------------------------------------=
         for lexicon in standard {
             let style = int(lexicon).sign(strategy: .always())
@@ -73,9 +74,10 @@ extension LexiconTests {
     }
     
     func testDigits() {
+        continueAfterFailure = false
         let number: Int = 1234567890
         //=--------------------------------------=
-        // MARK: Regions
+        // MARK: Lexicons
         //=--------------------------------------=
         for lexicon in standard {
             let style = int(lexicon).grouping(.never)
@@ -85,9 +87,10 @@ extension LexiconTests {
     }
     
     func testGroupingSeparators() {
+        continueAfterFailure = false
         let number: Int = 1234567890
         //=--------------------------------------=
-        // MARK: Regions
+        // MARK: Lexicons
         //=--------------------------------------=
         for lexicon in standard {
             let style = int(lexicon).grouping(.automatic)
@@ -97,9 +100,10 @@ extension LexiconTests {
     }
     
     func testFractionSeparators() {
+        continueAfterFailure = false
         let number: Double = 0.123
         //=--------------------------------------=
-        // MARK: Regions
+        // MARK: Lexicons
         //=--------------------------------------=
         for lexicon in standard {
             let style = double(lexicon).decimalSeparator(strategy: .always)

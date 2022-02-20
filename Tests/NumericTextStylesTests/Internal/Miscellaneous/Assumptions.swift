@@ -9,23 +9,12 @@
 
 #if DEBUG
 
-import Foundation
-import Support
 import XCTest
-
-@testable import NumericTextStyles
 
 //*============================================================================*
 // MARK: * Assumptions
 //*============================================================================*
 
-final class Assumptions: XCTestCase {
-
-    //=------------------------------------------------------------------------=
-    // MARK: State
-    //=------------------------------------------------------------------------=
-    
-    let skippable: Bool = true
-}
+final class Assumptions: XCTestCase { }
 
 #endif

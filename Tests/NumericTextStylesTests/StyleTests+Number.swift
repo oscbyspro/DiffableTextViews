@@ -19,33 +19,15 @@ import XCTest
 final class NumberTests: XCTestCase, StyleTests {
 
     //=------------------------------------------------------------------------=
-    // MARK: State
-    //=------------------------------------------------------------------------=
-    
-    let tests = Set(Test.allCases)
-    
-    //=------------------------------------------------------------------------=
     // MARK: Assertions
     //=------------------------------------------------------------------------=
     
-    /// Iterates about 1k times.
     func XCTInterpretLocales<T: Value.Number>(_ value: T) {
-        XCTInterpretLocales(value, format: T.Number.init)
+         XCTInterpretLocales(value, format: T.Number.init)
     }
     
     func XCTAssert<T: Value.Number>(_ value: T, result: String) {
          XCTAssert(value, format: T.Number(locale: en_US), result: result)
-    }
-    
-    //*========================================================================*
-    // MARK: * Test
-    //*========================================================================*
-    
-    enum Test: CaseIterable {
-        case decimal
-        case float64
-        case int,   int8,  int16,  int32,  int64
-        case uint, uint8, uint16, uint32, uint64
     }
 }
 
@@ -60,7 +42,6 @@ extension NumberTests {
     //=------------------------------------------------------------------------=
     
     func testDecimal() throws {
-        try XCTSkipUnless(tests.contains(.decimal))
         XCTInterpretLocales(Decimal(string: "-1.23")!)
     }
 }
@@ -76,7 +57,6 @@ extension NumberTests {
     //=------------------------------------------------------------------------=
 
     func testFloat64() throws {
-        try XCTSkipUnless(tests.contains(.float64))
         XCTInterpretLocales(Float64("-1.23")!)
     }
     
@@ -104,27 +84,22 @@ extension NumberTests {
     //=------------------------------------------------------------------------=
 
     func testInt() throws {
-        try XCTSkipUnless(tests.contains(.int))
         XCTInterpretLocales(Int("-123")!)
     }
     
     func testInt8() throws {
-        try XCTSkipUnless(tests.contains(.int8))
         XCTInterpretLocales(Int8("-123")!)
     }
     
     func testInt16() throws {
-        try XCTSkipUnless(tests.contains(.int16))
         XCTInterpretLocales(Int16("-123")!)
     }
     
     func testInt32() throws {
-        try XCTSkipUnless(tests.contains(.int32))
         XCTInterpretLocales(Int32("-123")!)
     }
     
     func testInt64() throws {
-        try XCTSkipUnless(tests.contains(.int64))
         XCTInterpretLocales(Int64("-123")!)
     }
 }
@@ -140,27 +115,22 @@ extension NumberTests {
     //=------------------------------------------------------------------------=
     
     func testUInt() throws {
-        try XCTSkipUnless(tests.contains(.uint))
         XCTInterpretLocales(UInt("123")!)
     }
     
     func testUInt8() throws {
-        try XCTSkipUnless(tests.contains(.uint8))
         XCTInterpretLocales(UInt8("123")!)
     }
     
     func testUInt16() throws {
-        try XCTSkipUnless(tests.contains(.uint16))
         XCTInterpretLocales(UInt16("123")!)
     }
     
     func testUInt32() throws {
-        try XCTSkipUnless(tests.contains(.uint32))
         XCTInterpretLocales(UInt32("123")!)
     }
     
     func testUInt64() throws {
-        try XCTSkipUnless(tests.contains(.uint64))
         XCTInterpretLocales(UInt64("123")!)
     }
 }

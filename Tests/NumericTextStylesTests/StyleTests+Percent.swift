@@ -17,12 +17,6 @@ import XCTest
 //*============================================================================*
 
 final class PercentTests: XCTestCase, StyleTests {
-
-    //=------------------------------------------------------------------------=
-    // MARK: State
-    //=------------------------------------------------------------------------=
-    
-    let tests = Set(Test.allCases)
     
     //=------------------------------------------------------------------------=
     // MARK: Assertions
@@ -34,15 +28,6 @@ final class PercentTests: XCTestCase, StyleTests {
     
     func XCTAssert<T: Value.Percent>(_ value: T, result: String) {
          XCTAssert(value, format: T.Percent(locale: en_US), result: result)
-    }
-
-    //*========================================================================*
-    // MARK: * Test
-    //*========================================================================*
-    
-    enum Test: CaseIterable {
-        case decimal
-        case float64
     }
 }
 
@@ -57,7 +42,6 @@ extension PercentTests {
     //=------------------------------------------------------------------------=
     
     func testDecimal() throws {
-        try XCTSkipUnless(tests.contains(.decimal))
         XCTInterpretLocales(Decimal(string: "-1234567.89")!)
     }
 }
@@ -72,8 +56,7 @@ extension PercentTests {
     // MARK: Tests
     //=------------------------------------------------------------------------=
         
-    func testDouble() throws {
-        try XCTSkipUnless(tests.contains(.float64))
+    func testFloat64() throws {
         XCTInterpretLocales(Float64("-1234567.89")!)
     }
     

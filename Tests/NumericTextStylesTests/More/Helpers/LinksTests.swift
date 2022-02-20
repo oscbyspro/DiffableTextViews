@@ -23,6 +23,7 @@ final class LinksTests: XCTestCase {
     //=------------------------------------------------------------------------=
 
     func testEachComponentIsBidirectionallyLinked() {
+        continueAfterFailure = false
         //=--------------------------------------=
         // MARK: One
         //=--------------------------------------=

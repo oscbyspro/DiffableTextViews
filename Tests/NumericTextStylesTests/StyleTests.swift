@@ -31,6 +31,9 @@ extension StyleTests {
     /// Iterates about 1k times.
     func XCTInterpretLocales<T: Format>(_ value: T.Value, format: (Locale) -> T) {
         continueAfterFailure = false
+        //=--------------------------------------=
+        // MARK: Locales
+        //=--------------------------------------=
         for locale in locales {
             XCTInterpret(value, format: format(locale), info: locale)
         }
@@ -43,6 +46,9 @@ extension StyleTests {
     /// Iterates about 144k times.
     func XCTInterpretLocalesXCurrencies<T: Format>(_ value: T.Value, format: (String, Locale) -> T) {
         continueAfterFailure = false
+        //=--------------------------------------=
+        // MARK: Locales, Currencies
+        //=--------------------------------------=
         for locale in locales {
             for code in currencyCodes {
                 XCTInterpret(value, format: format(code, locale), info: (locale, code))

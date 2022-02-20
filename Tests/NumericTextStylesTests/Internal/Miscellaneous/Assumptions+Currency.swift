@@ -9,11 +9,7 @@
 
 #if DEBUG
 
-import Foundation
-import Support
 import XCTest
-
-@testable import NumericTextStyles
 
 //=----------------------------------------------------------------------------=
 // MARK: + Currency
@@ -26,22 +22,14 @@ extension Assumptions {
     //=------------------------------------------------------------------------=
     
     func testVirtualCurrencyCharactersDontContainNumbers() throws {
-        try XCTSkipUnless(!skippable)
+        continueAfterFailure = false
         //=--------------------------------------=
-        // MARK: Currencies, Locales
+        // MARK: Locales, Currencies
         //=--------------------------------------=
-        for code in currencyCodes {
-            for locale in locales {
-                let zero = IntegerFormatStyle<Int>
-                .Currency(code: code, locale: locale)
-                .precision(.fractionLength(0)).format(0)
-                //=------------------------------=
-                // MARK: Check
-                //=------------------------------=
-                guard zero.count(where: \.isNumber) == 1 else {
-                    XCTFail("\(zero), \(locale), \(code)")
-                    return
-                }
+        for locale in locales {
+            for code in currencyCodes {
+                let zero = 0.formatted(.currency(code: code).locale(locale).precision(.fractionLength(0)))
+                XCTAssert(zero.count(where: \.isNumber) == 1, "\(zero), \(locale), \(code)")
             }
         }
     }
@@ -51,7 +39,6 @@ extension Assumptions {
     //=------------------------------------------------------------------------=
     
     func testVirtualCurrencyCharactersAreNotAlwaysUnique() throws {
-        try XCTSkipUnless(!skippable)
         let number = -1234567.89
         let currencyCode = "PAB"
         let locale = Locale(identifier: "rhg-Rohg_MM")

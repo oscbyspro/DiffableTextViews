@@ -133,6 +133,44 @@
                BlueprintName = "NumericTextStylesTests"
                ReferencedContainer = "container:">
             </BuildableReference>
+            <SkippedTests>
+               <Test
+                  Identifier = "Assumptions">
+               </Test>
+               <Test
+                  Identifier = "CurrencyTests/testFloat64()">
+               </Test>
+               <Test
+                  Identifier = "CurrencyTests/testInt()">
+               </Test>
+               <Test
+                  Identifier = "CurrencyTests/testInt16()">
+               </Test>
+               <Test
+                  Identifier = "CurrencyTests/testInt32()">
+               </Test>
+               <Test
+                  Identifier = "CurrencyTests/testInt64()">
+               </Test>
+               <Test
+                  Identifier = "CurrencyTests/testInt8()">
+               </Test>
+               <Test
+                  Identifier = "CurrencyTests/testUInt()">
+               </Test>
+               <Test
+                  Identifier = "CurrencyTests/testUInt16()">
+               </Test>
+               <Test
+                  Identifier = "CurrencyTests/testUInt32()">
+               </Test>
+               <Test
+                  Identifier = "CurrencyTests/testUInt64()">
+               </Test>
+               <Test
+                  Identifier = "CurrencyTests/testUInt8()">
+               </Test>
+            </SkippedTests>
          </TestableReference>
          <TestableReference
             skipped = "NO"
