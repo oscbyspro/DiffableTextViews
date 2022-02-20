@@ -43,20 +43,20 @@ extension PercentTests {
     
     func testDecimal() throws {
         try XCTSkipUnless(tests.contains(.decimal))
-        XCTAssertAvailableLocales(Decimal(string: "-1234567.89")!)
+        XCTInterpretLocales(Decimal(string: "-1234567.89")!)
     }
         
     func testDouble() throws {
         try XCTSkipUnless(tests.contains(.double))
-        XCTAssertAvailableLocales(Double("-1234567.89")!)
+        XCTInterpretLocales(Double("-1234567.89")!)
     }
     
     //=------------------------------------------------------------------------=
     // MARK: Helpers
     //=------------------------------------------------------------------------=
     
-    func XCTAssertAvailableLocales<T: Value.Percent>(_ value: T) {
-        XCTAssertAvailableLocales(value, format: T.Percent.init)
+    func XCTInterpretLocales<T: Value.Percent>(_ value: T) {
+        XCTInterpretLocales(value, format: T.Percent.init)
     }
 }
 

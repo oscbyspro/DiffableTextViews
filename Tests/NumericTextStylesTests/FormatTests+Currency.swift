@@ -45,25 +45,25 @@ extension CurrencyTests {
     
     func testDecimal() throws {
         try XCTSkipUnless(tests.contains(.decimal))
-        XCTAssertAvailableLocalesXCurrencies(Decimal(string: "-1234567.89")!)
+        XCTInterpretLocalesXCurrencies(Decimal(string: "-1234567.89")!)
     }
         
     func testDouble() throws {
         try XCTSkipUnless(tests.contains(.double))
-        XCTAssertAvailableLocalesXCurrencies(Double("-1234567.89")!)
+        XCTInterpretLocalesXCurrencies(Double("-1234567.89")!)
     }
     
     func testInt() throws {
         try XCTSkipUnless(tests.contains(.int))
-        XCTAssertAvailableLocalesXCurrencies(Int("-123456789")!)
+        XCTInterpretLocalesXCurrencies(Int("-123456789")!)
     }
     
     //=------------------------------------------------------------------------=
     // MARK: Helpers
     //=------------------------------------------------------------------------=
     
-    func XCTAssertAvailableLocalesXCurrencies<T: Value.Currency>(_ value: T) {
-        XCTAssertAvailableLocalesXCurrencies(value, format: T.Currency.init)
+    func XCTInterpretLocalesXCurrencies<T: Value.Currency>(_ value: T) {
+        XCTInterpretLocalesXCurrencies(value, format: T.Currency.init)
     }
 }
 

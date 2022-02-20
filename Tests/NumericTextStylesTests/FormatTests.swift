@@ -29,9 +29,9 @@ extension FormatTests {
     //=------------------------------------------------------------------------=
     
     /// Iterates about 1k times.
-    func XCTAssertAvailableLocales<T: Format>(_ value: T.Value, format: (Locale) -> T) {
+    func XCTInterpretLocales<T: Format>(_ value: T.Value, format: (Locale) -> T) {
         for locale in locales {
-            XCTAssertInterpret(value, format: format(locale), info: locale)
+            XCTInterpret(value, format: format(locale), info: locale)
         }
     }
     
@@ -40,10 +40,10 @@ extension FormatTests {
     //=------------------------------------------------------------------------=
     
     /// Iterates about 144k times.
-    func XCTAssertAvailableLocalesXCurrencies<T: Format>(_ value: T.Value, format: (String, Locale) -> T) {
+    func XCTInterpretLocalesXCurrencies<T: Format>(_ value: T.Value, format: (String, Locale) -> T) {
         for locale in locales {
             for currency in currencies {
-                XCTAssertInterpret(value, format: format(currency, locale), info: (locale, currency))
+                XCTInterpret(value, format: format(currency, locale), info: (locale, currency))
             }
         }
     }
@@ -52,7 +52,7 @@ extension FormatTests {
     // MARK: Helpers
     //=------------------------------------------------------------------------=
     
-    func XCTAssertInterpret<F: Format>(_ value: F.Value, format: F, info: @autoclosure () -> Any) {
+    func XCTInterpret<F: Format>(_ value: F.Value, format: F, info: @autoclosure () -> Any) {
         let style = NumericTextStyle(format)
         //=------------------------------=
         // MARK: Testables
