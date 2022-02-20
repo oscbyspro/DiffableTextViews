@@ -22,8 +22,8 @@ extension Lexicon {
     //=------------------------------------------------------------------------=
     
     func nonvirtual(_ character: Character) -> Bool {
-        guard      signs[character] == nil       else { return true }
-        guard     digits[character] == nil       else { return true }
+        guard      signs[character] ==  nil      else { return true }
+        guard     digits[character] ==  nil      else { return true }
         guard separators[character] != .fraction else { return true }
         return false
     }

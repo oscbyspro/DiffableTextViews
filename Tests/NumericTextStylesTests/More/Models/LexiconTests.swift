@@ -19,18 +19,26 @@ import XCTest
 final class LexiconTests: XCTestCase {
     
     //=------------------------------------------------------------------------=
-    // MARK: Count
+    // MARK: Setup
     //=------------------------------------------------------------------------=
     
-    func testThatThereAreManyLocales() {
-        XCTAssertGreaterThanOrEqual(locales.count, 937)
+    override func setUp() {
+        super.setUp()
+        continueAfterFailure = false
     }
+}
+
+//=----------------------------------------------------------------------------=
+// MARK: + Count
+//=----------------------------------------------------------------------------=
+
+extension LexiconTests {
     
-    func testThatThereAreManyCurrencyCodes() {
-        XCTAssertGreaterThanOrEqual(currencyCodes.count, 153)
-    }
+    //=------------------------------------------------------------------------=
+    // MARK: Tests
+    //=------------------------------------------------------------------------=
     
-    func testEachLocaleMapsToALexicon() {
+    func testAllLocalesS() {
         XCTAssertEqual(locales.count, standard.count)
     }
 }
@@ -42,7 +50,7 @@ final class LexiconTests: XCTestCase {
 extension LexiconTests {
 
     //=------------------------------------------------------------------------=
-    // MARK: Make
+    // MARK: Styles
     //=------------------------------------------------------------------------=
     
     @inlinable func int(_ lexicon: Lexicon) -> IntegerFormatStyle<Int> {
@@ -58,7 +66,6 @@ extension LexiconTests {
     //=------------------------------------------------------------------------=
     
     func testSigns() {
-        continueAfterFailure = false
         let positive: Int = +1
         let negative: Int = -1
         //=--------------------------------------=
@@ -74,7 +81,6 @@ extension LexiconTests {
     }
     
     func testDigits() {
-        continueAfterFailure = false
         let number: Int = 1234567890
         //=--------------------------------------=
         // MARK: Lexicons
@@ -87,7 +93,6 @@ extension LexiconTests {
     }
     
     func testGroupingSeparators() {
-        continueAfterFailure = false
         let number: Int = 1234567890
         //=--------------------------------------=
         // MARK: Lexicons
@@ -100,7 +105,6 @@ extension LexiconTests {
     }
     
     func testFractionSeparators() {
-        continueAfterFailure = false
         let number: Double = 0.123
         //=--------------------------------------=
         // MARK: Lexicons

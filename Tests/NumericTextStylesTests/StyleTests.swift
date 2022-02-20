@@ -16,7 +16,17 @@ import XCTest
 // MARK: * StyleTests
 //*============================================================================*
 
-protocol StyleTests: XCTestCase { }
+class StyleTests: XCTestCase {
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Setup
+    //=------------------------------------------------------------------------=
+    
+    override func setUp() {
+        super.setUp()
+        continueAfterFailure = false
+    }
+}
 
 //=----------------------------------------------------------------------------=
 // MARK: + Style
@@ -30,7 +40,6 @@ extension StyleTests {
     
     /// Iterates about 1k times.
     func XCTInterpretLocales<T: Format>(_ value: T.Value, format: (Locale) -> T) {
-        continueAfterFailure = false
         //=--------------------------------------=
         // MARK: Locales
         //=--------------------------------------=
@@ -45,7 +54,6 @@ extension StyleTests {
     
     /// Iterates about 144k times.
     func XCTInterpretLocalesXCurrencies<T: Format>(_ value: T.Value, format: (String, Locale) -> T) {
-        continueAfterFailure = false
         //=--------------------------------------=
         // MARK: Locales, Currencies
         //=--------------------------------------=

@@ -19,26 +19,36 @@ import XCTest
 final class LinksTests: XCTestCase {
     
     //=------------------------------------------------------------------------=
+    // MARK: Setup
+    //=------------------------------------------------------------------------=
+    
+    override func setUp() {
+        super.setUp()
+        continueAfterFailure = false
+    }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Assertions
+    //=------------------------------------------------------------------------=
+    
+    func XCTAssertEachCaseIsBidirectionallyLinked<T>(_ links: Links<T>) {
+        for component in T.allCases {
+            XCTAssertEqual(component, links[links[component]])
+        }
+    }
+    
+    //=------------------------------------------------------------------------=
     // MARK: Tests
     //=------------------------------------------------------------------------=
 
-    func testEachComponentIsBidirectionallyLinked() {
-        continueAfterFailure = false
+    func testEachLexiconIsFullyBidirectionallyLinked() {
         //=--------------------------------------=
-        // MARK: One
-        //=--------------------------------------=
-        func one<T>(_ lexicon: Links<T>) {
-            for component0 in T.allCases {
-                let character0 = lexicon[component0]
-                let component1 = lexicon[character0]
-                XCTAssertEqual(component0, component1)
-            }
-        }
-        //=--------------------------------------=
-        // MARK: All
+        // MARK: Lexicons
         //=--------------------------------------=
         for lexicon in standard {
-            one(lexicon.signs); one(lexicon.digits); one(lexicon.separators)
+            XCTAssertEachCaseIsBidirectionallyLinked(lexicon.signs)
+            XCTAssertEachCaseIsBidirectionallyLinked(lexicon.digits)
+            XCTAssertEachCaseIsBidirectionallyLinked(lexicon.separators)
         }
     }
 }

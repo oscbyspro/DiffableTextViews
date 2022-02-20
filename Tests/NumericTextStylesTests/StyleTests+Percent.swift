@@ -16,7 +16,7 @@ import XCTest
 // MARK: * StyleTests x Percent
 //*============================================================================*
 
-final class PercentTests: XCTestCase, StyleTests {
+final class PercentTests: StyleTests {
     
     //=------------------------------------------------------------------------=
     // MARK: Assertions

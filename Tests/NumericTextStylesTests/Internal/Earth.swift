@@ -10,6 +10,8 @@
 #if DEBUG
 
 import Foundation
+import XCTest
+
 @testable import NumericTextStyles
 
 //*============================================================================*
@@ -19,7 +21,7 @@ import Foundation
 enum Earth {
     
     //=------------------------------------------------------------------------=
-    // MARK: Static - Constants
+    // MARK: Constants
     //=------------------------------------------------------------------------=
 
     static let USD = "USD"
@@ -27,7 +29,7 @@ enum Earth {
     static let en_US = Locale(identifier: "en_US")
     
     //=------------------------------------------------------------------------=
-    // MARK: Static - Collections
+    // MARK: Collections
     //=------------------------------------------------------------------------=
         
     static let locales: [Locale] = Locale
@@ -44,7 +46,26 @@ enum Earth {
 }
 
 //*============================================================================*
-// MARK: * Global
+// MARK: * Earth x Tests
+//*============================================================================*
+
+final class EarthTests: XCTestCase {
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Tests
+    //=------------------------------------------------------------------------=
+    
+    func testThatThereAreManyLocales() {
+        XCTAssertGreaterThanOrEqual(locales.count, 937)
+    }
+    
+    func testThatThereAreManyCurrencyCodes() {
+        XCTAssertGreaterThanOrEqual(currencyCodes.count, 153)
+    }
+}
+
+//*============================================================================*
+// MARK: * Earth x Global
 //*============================================================================*
 
 var USD: String {
