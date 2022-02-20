@@ -20,18 +20,18 @@ import Foundation
     //=------------------------------------------------------------------------=
     
     @usableFromInline let code:   String
-    @usableFromInline let locale: String
+    @usableFromInline let locale: Locale
     
     //=------------------------------------------------------------------------=
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
     @inlinable init(code: String, locale: Locale) {
-        self.code = code; self.locale = locale.identifier
+        self.code = code; self.locale = locale
     }
     
     @inlinable init(locale: Locale, code: String) {
-        self.code = code; self.locale = locale.identifier
+        self.code = code; self.locale = locale
     }
     
     //=------------------------------------------------------------------------=
@@ -39,7 +39,7 @@ import Foundation
     //=------------------------------------------------------------------------=
     
     @inlinable func hash(into hasher: inout Hasher) {
-        hasher.combine(code); hasher.combine(locale)
+        hasher.combine(code); hasher.combine(locale.identifier)
     }
     
     //=------------------------------------------------------------------------=
@@ -47,6 +47,6 @@ import Foundation
     //=------------------------------------------------------------------------=
     
     @inlinable static func == (lhs: CurrencyID, rhs: CurrencyID) -> Bool {
-        lhs.code == rhs.code && lhs.locale == rhs.locale
+        lhs.code == rhs.code && lhs.locale.identifier == rhs.locale.identifier
     }
 }

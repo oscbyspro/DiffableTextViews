@@ -16,8 +16,7 @@ import Support
 //*============================================================================*
 
 public final class Lexicon {
-    @usableFromInline typealias ID = AnyObject & Hashable
-    @usableFromInline typealias Cache<Key: ID> = Support.Cache<Key, Lexicon>
+    @usableFromInline typealias Cache<Key: AnyObject & Hashable> = Support.Cache<Key, Lexicon>
     
     //=------------------------------------------------------------------------=
     // MARK: Cache
@@ -70,21 +69,21 @@ extension Lexicon {
     
     @inlinable static func standard(locale: Locale) -> Lexicon {
         let standardID = StandardID(locale: locale)
-        return search(standardID, cache: standard, make: _standard(in: locale))
+        return search(standardID, cache: standard, make: _standard)
     }
     
     @inlinable static func currency(code: String, locale: Locale) -> Lexicon {
         let currencyID = CurrencyID(code: code,   locale: locale)
-        return search(currencyID, cache: currency, make: _currency(code: code, in: locale))
+        return search(currencyID, cache: currency, make: _currency)
     }
     
     //=------------------------------------------------------------------------=
     // MARK: Search
     //=------------------------------------------------------------------------=
 
-    @inlinable static func search<Key: ID>(_ key: Key,
-    cache: Cache<Key>, make: @autoclosure () -> Lexicon) -> Lexicon {
-        setup(); return cache.search(key, make: make())
+    @inlinable static func search<Key>(_ key: Key, cache: Cache<Key>,
+    make: (Key) -> Lexicon) -> Lexicon where  Key: AnyObject & Hashable {
+        setup(); return cache.search(key, make: make(key))
     }
     
     //=------------------------------------------------------------------------=
@@ -101,26 +100,26 @@ extension Lexicon {
     // MARK: Helpers
     //=------------------------------------------------------------------------=
     
-    @inlinable static func _standard(in locale: Locale) -> Self {
+    @inlinable static func _standard(_ id: StandardID) -> Self {
         let formatter = NumberFormatter()
         formatter.numberStyle = .decimal
-        formatter.locale = locale
+        formatter.locale = id.locale
         //=--------------------------------------=
         // MARK: Initialize
         //=--------------------------------------=
-        return  .init(locale: locale, signs:      .standard(formatter),
+        return  .init(locale: id.locale,   signs: .standard(formatter),
         digits: .standard(formatter), separators: .standard(formatter))
     }
     
-    @inlinable static func _currency(code: String, in locale: Locale) -> Self {
+    @inlinable static func _currency(_ id: CurrencyID) -> Self {
         let formatter = NumberFormatter()
         formatter.numberStyle = .decimal
-        formatter.locale = locale
-        formatter.currencyCode = code
+        formatter.locale = id.locale
+        formatter.currencyCode = id.code
         //=--------------------------------------=
         // MARK: Initialize
         //=--------------------------------------=
-        return  .init(locale: locale, signs:      .currency(formatter),
+        return  .init(locale: id.locale,   signs: .currency(formatter),
         digits: .currency(formatter), separators: .currency(formatter))
     }
 }
