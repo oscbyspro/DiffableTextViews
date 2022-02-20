@@ -30,7 +30,7 @@ extension Assumptions {
         //=--------------------------------------=
         // MARK: Currencies, Locales
         //=--------------------------------------=
-        for code in currencies {
+        for code in currencyCodes {
             for locale in locales {
                 let zero = IntegerFormatStyle<Int>
                 .Currency(code: code, locale: locale)

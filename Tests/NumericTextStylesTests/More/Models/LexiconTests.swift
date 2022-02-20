@@ -13,25 +13,25 @@ import XCTest
 @testable import NumericTextStyles
 
 //*============================================================================*
-// MARK: * RegionTests
+// MARK: * LexiconTests
 //*============================================================================*
 
-final class RegionTests: XCTestCase {
+final class LexiconTests: XCTestCase {
     
     //=------------------------------------------------------------------------=
     // MARK: Count
     //=------------------------------------------------------------------------=
-        
+    
+    func testThatThereAreManyLocales() {
+        XCTAssertGreaterThanOrEqual(standard.count, 937)
+    }
+    
+    func testThatThereAreManyCurrencyCodes() {
+        XCTAssertGreaterThanOrEqual(currencyCodes.count, 153)
+    }
+    
     func testEachLocaleMapsToALexicon() {
         XCTAssertEqual(locales.count, standard.count)
-    }
-    
-    func testThatThereAreManyCurrencies() {
-        XCTAssertGreaterThanOrEqual(currencies.count, 153)
-    }
-    
-    func testThatThereAreManyLexicons() {
-        XCTAssertGreaterThanOrEqual(standard.count, 937)
     }
 }
 
@@ -39,7 +39,7 @@ final class RegionTests: XCTestCase {
 // MARK: + Styles
 //=----------------------------------------------------------------------------=
 
-extension RegionTests {
+extension LexiconTests {
 
     //=------------------------------------------------------------------------=
     // MARK: Make

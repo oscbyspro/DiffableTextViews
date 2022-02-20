@@ -42,8 +42,8 @@ extension FormatTests {
     /// Iterates about 144k times.
     func XCTInterpretLocalesXCurrencies<T: Format>(_ value: T.Value, format: (String, Locale) -> T) {
         for locale in locales {
-            for currency in currencies {
-                guard XCTInterpret(value, format: format(currency, locale), info: (locale, currency)) else { return }
+            for code in currencyCodes {
+                guard XCTInterpret(value, format: format(code, locale), info: (locale, code)) else { return }
             }
         }
     }
