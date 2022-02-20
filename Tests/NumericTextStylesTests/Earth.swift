@@ -10,8 +10,6 @@
 #if DEBUG
 
 import Foundation
-import XCTest
-
 @testable import NumericTextStyles
 
 //*============================================================================*
@@ -42,7 +40,7 @@ enum Earth {
         .lazy.map({ $0 }).sorted(by: <)
  
     static let standard: [Lexicon] = locales
-        .compactMap({ Lexicon._standard(in: $0) })
+        .compactMap({ ._standard(in: $0) })
 }
 
 //*============================================================================*

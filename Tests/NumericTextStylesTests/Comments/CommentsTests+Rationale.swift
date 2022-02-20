@@ -13,10 +13,10 @@ import Foundation
 import XCTest
 
 //*============================================================================*
-// MARK: * CommentsTests
+// MARK: * CommentsTests x Rationale
 //*============================================================================*
 
-final class CommentsTests: XCTestCase {
+final class CommentsTestsXRationale: XCTestCase {
     
     //=------------------------------------------------------------------------=
     // MARK: Tests

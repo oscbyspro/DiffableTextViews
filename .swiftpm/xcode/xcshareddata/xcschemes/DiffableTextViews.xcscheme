@@ -135,9 +135,6 @@
             </BuildableReference>
             <SkippedTests>
                <Test
-                  Identifier = "Assumptions">
-               </Test>
-               <Test
                   Identifier = "AssumptionsTests">
                </Test>
                <Test
@@ -145,9 +142,6 @@
                </Test>
                <Test
                   Identifier = "AssumptionsTestsXPercent">
-               </Test>
-               <Test
-                  Identifier = "CommentsTests">
                </Test>
                <Test
                   Identifier = "CurrencyTests/testFloat64()">
