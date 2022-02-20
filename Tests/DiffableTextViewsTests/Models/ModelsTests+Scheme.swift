@@ -13,13 +13,13 @@ import XCTest
 @testable import DiffableTextViews
 
 //*============================================================================*
-// MARK: * SchemeTests
+// MARK: * ModelsTests x Scheme
 //*============================================================================*
 
 /// ```
 /// Asserts: UTF16.size(of:) is O(1).
 /// ```
-final class SchemeTests: XCTestCase {
+final class ModelsTestsXScheme: XCTestCase {
     
     //=------------------------------------------------------------------------=
     // MARK: State

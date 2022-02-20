@@ -16,7 +16,7 @@ import XCTest
 // MARK: * SymbolTests
 //*============================================================================*
 
-final class SymbolTests: XCTestCase {
+final class ModelsTestsXSymbol: XCTestCase {
     
     //=------------------------------------------------------------------------=
     // MARK: Tests
