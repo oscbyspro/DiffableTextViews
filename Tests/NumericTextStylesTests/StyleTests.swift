@@ -13,16 +13,16 @@ import XCTest
 @testable import NumericTextStyles
 
 //*============================================================================*
-// MARK: * FormatTests
+// MARK: * StyleTests
 //*============================================================================*
 
-protocol FormatTests: XCTestCase { }
+protocol StyleTests: XCTestCase { }
 
 //=----------------------------------------------------------------------------=
 // MARK: + Style
 //=----------------------------------------------------------------------------=
 
-extension FormatTests {
+extension StyleTests {
     
     //=------------------------------------------------------------------------=
     // MARK: Locales
@@ -30,8 +30,9 @@ extension FormatTests {
     
     /// Iterates about 1k times.
     func XCTInterpretLocales<T: Format>(_ value: T.Value, format: (Locale) -> T) {
+        continueAfterFailure = false
         for locale in locales {
-            guard XCTInterpret(value, format: format(locale), info: locale) else { return }
+            XCTInterpret(value, format: format(locale), info: locale)
         }
     }
     
@@ -41,9 +42,10 @@ extension FormatTests {
     
     /// Iterates about 144k times.
     func XCTInterpretLocalesXCurrencies<T: Format>(_ value: T.Value, format: (String, Locale) -> T) {
+        continueAfterFailure = false
         for locale in locales {
             for code in currencyCodes {
-                guard XCTInterpret(value, format: format(code, locale), info: (locale, code)) else { return }
+                XCTInterpret(value, format: format(code, locale), info: (locale, code))
             }
         }
     }
@@ -52,31 +54,14 @@ extension FormatTests {
     // MARK: Assertions
     //=------------------------------------------------------------------------=
     
-    func XCTInterpret<F: Format>(_ value: F.Value, format: F, info: @autoclosure () -> Any) -> Bool {
-        let style = NumericTextStyle(format)
-        //=--------------------------------------=
-        // MARK: Testables
-        //=--------------------------------------=
-        let commit = style.interpret(value)
+    func XCTInterpret<F: Format>(_ value: F.Value, format: F, info: @autoclosure () -> Any) {
+        let commit = NumericTextStyle(format).interpret(value)
         let characters = format.precision(.fractionLength(0...)).format(value)
         //=--------------------------------------=
-        // MARK: Value
+        // MARK: Assert
         //=--------------------------------------=
-        guard commit.value == value else {
-            XCTFail("\(commit.value) != \(value) ... \((info()))")
-            return false
-        }
-        //=--------------------------------------=
-        // MARK: Characters
-        //=--------------------------------------=
-        guard commit.snapshot.characters == characters else {
-            XCTFail("\(commit.snapshot.characters) != \(characters) ... \((info()))")
-            return false
-        }
-        //=--------------------------------------=
-        // MARK: Success
-        //=--------------------------------------=
-        return true
+        XCTAssertEqual(commit.value, value, String(describing: info()))
+        XCTAssertEqual(commit.snapshot.characters, characters, String(describing: info()))
     }
 }
 
@@ -84,7 +69,7 @@ extension FormatTests {
 // MARK: + Inaccurate
 //=----------------------------------------------------------------------------=
 
-extension FormatTests {
+extension StyleTests {
     
     //=------------------------------------------------------------------------=
     // MARK: Assertions

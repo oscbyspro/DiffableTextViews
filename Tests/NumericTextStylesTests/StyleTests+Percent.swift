@@ -13,10 +13,10 @@ import XCTest
 @testable import NumericTextStyles
 
 //*============================================================================*
-// MARK: * FormatTests x Percent
+// MARK: * StyleTests x Percent
 //*============================================================================*
 
-final class PercentTests: XCTestCase, FormatTests {
+final class PercentTests: XCTestCase, StyleTests {
 
     //=------------------------------------------------------------------------=
     // MARK: State

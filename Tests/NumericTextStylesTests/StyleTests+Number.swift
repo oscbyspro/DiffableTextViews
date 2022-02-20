@@ -13,36 +13,35 @@ import XCTest
 @testable import NumericTextStyles
 
 //*============================================================================*
-// MARK: * FormatTests x Currency
+// MARK: * StyleTests x Number
 //*============================================================================*
 
-/// - About 100 MB will be allocated per type that is tested.
-/// - There are many 144k locale-currency pairs, so it will take some time.
-final class CurrencyTests: XCTestCase, FormatTests {
-    
+final class NumberTests: XCTestCase, StyleTests {
+
     //=------------------------------------------------------------------------=
     // MARK: State
     //=------------------------------------------------------------------------=
     
-    let tests = Set([Test.decimal])
+    let tests = Set(Test.allCases)
     
     //=------------------------------------------------------------------------=
     // MARK: Assertions
     //=------------------------------------------------------------------------=
     
-    func XCTInterpretLocalesXCurrencies<T: Value.Currency>(_ value: T) {
-         XCTInterpretLocalesXCurrencies(value, format: T.Currency.init)
+    /// Iterates about 1k times.
+    func XCTInterpretLocales<T: Value.Number>(_ value: T) {
+        XCTInterpretLocales(value, format: T.Number.init)
     }
-
-    func XCTAssert<T: Value.Currency>(_ value: T, result: String) {
-         XCTAssert(value, format: T.Currency(code: USD, locale: en_US), result: result)        
+    
+    func XCTAssert<T: Value.Number>(_ value: T, result: String) {
+         XCTAssert(value, format: T.Number(locale: en_US), result: result)
     }
     
     //*========================================================================*
     // MARK: * Test
     //*========================================================================*
     
-    enum Test {
+    enum Test: CaseIterable {
         case decimal
         case float64
         case  int,  int8,   int16,   int32,   int64
@@ -54,7 +53,7 @@ final class CurrencyTests: XCTestCase, FormatTests {
 // MARK: + Decimal
 //=----------------------------------------------------------------------------=
 
-extension CurrencyTests {
+extension NumberTests {
 
     //=------------------------------------------------------------------------=
     // MARK: Tests
@@ -62,7 +61,7 @@ extension CurrencyTests {
     
     func testDecimal() throws {
         try XCTSkipUnless(tests.contains(.decimal))
-        XCTInterpretLocalesXCurrencies(Decimal(string: "-1.23")!)
+        XCTInterpretLocales(Decimal(string: "-1.23")!)
     }
 }
 
@@ -70,15 +69,15 @@ extension CurrencyTests {
 // MARK: + Floats
 //=----------------------------------------------------------------------------=
 
-extension CurrencyTests {
+extension NumberTests {
     
     //=------------------------------------------------------------------------=
     // MARK: Tests
     //=------------------------------------------------------------------------=
-    
+
     func testFloat64() throws {
         try XCTSkipUnless(tests.contains(.float64))
-        XCTInterpretLocalesXCurrencies(Float64("-1.23")!)
+        XCTInterpretLocales(Float64("-1.23")!)
     }
     
     //=------------------------------------------------------------------------=
@@ -86,11 +85,11 @@ extension CurrencyTests {
     //=------------------------------------------------------------------------=
     
     func testFloat16IsInaccurate() {
-        XCTAssert(Float16("1.23")!, result: "$1.23046875")
+        XCTAssert(Float16("1.23")!, result: "1.23046875")
     }
     
     func testFloat32IsInaccurate() {
-        XCTAssert(Float32("1.23")!, result: "$1.2300000190734863")
+        XCTAssert(Float32("1.23")!, result: "1.2300000190734863")
     }
 }
 
@@ -98,7 +97,7 @@ extension CurrencyTests {
 // MARK: + Ints
 //=----------------------------------------------------------------------------=
 
-extension CurrencyTests {
+extension NumberTests {
     
     //=------------------------------------------------------------------------=
     // MARK: Tests
@@ -106,27 +105,27 @@ extension CurrencyTests {
 
     func testInt() throws {
         try XCTSkipUnless(tests.contains(.int))
-        XCTInterpretLocalesXCurrencies(Int("-123")!)
+        XCTInterpretLocales(Int("-123")!)
     }
     
     func testInt8() throws {
         try XCTSkipUnless(tests.contains(.int8))
-        XCTInterpretLocalesXCurrencies(Int8("-123")!)
+        XCTInterpretLocales(Int8("-123")!)
     }
     
     func testInt16() throws {
         try XCTSkipUnless(tests.contains(.int16))
-        XCTInterpretLocalesXCurrencies(Int16("-123")!)
+        XCTInterpretLocales(Int16("-123")!)
     }
     
     func testInt32() throws {
         try XCTSkipUnless(tests.contains(.int32))
-        XCTInterpretLocalesXCurrencies(Int32("-123")!)
+        XCTInterpretLocales(Int32("-123")!)
     }
     
     func testInt64() throws {
         try XCTSkipUnless(tests.contains(.int64))
-        XCTInterpretLocalesXCurrencies(Int64("-123")!)
+        XCTInterpretLocales(Int64("-123")!)
     }
 }
 
@@ -134,7 +133,7 @@ extension CurrencyTests {
 // MARK: + UInts
 //=----------------------------------------------------------------------------=
 
-extension CurrencyTests {
+extension NumberTests {
     
     //=------------------------------------------------------------------------=
     // MARK: Tests
@@ -142,28 +141,27 @@ extension CurrencyTests {
     
     func testUInt() throws {
         try XCTSkipUnless(tests.contains(.uint))
-        XCTInterpretLocalesXCurrencies(UInt("123")!)
+        XCTInterpretLocales(UInt("123")!)
     }
     
     func testUInt8() throws {
         try XCTSkipUnless(tests.contains(.uint8))
-        XCTInterpretLocalesXCurrencies(UInt8("123")!)
+        XCTInterpretLocales(UInt8("123")!)
     }
     
     func testUInt16() throws {
         try XCTSkipUnless(tests.contains(.uint16))
-        XCTInterpretLocalesXCurrencies(UInt16("123")!)
+        XCTInterpretLocales(UInt16("123")!)
     }
     
     func testUInt32() throws {
         try XCTSkipUnless(tests.contains(.uint32))
-        XCTInterpretLocalesXCurrencies(UInt32("123")!)
+        XCTInterpretLocales(UInt32("123")!)
     }
     
     func testUInt64() throws {
         try XCTSkipUnless(tests.contains(.uint64))
-        XCTInterpretLocalesXCurrencies(UInt64("123")!)
+        XCTInterpretLocales(UInt64("123")!)
     }
 }
-
 #endif
