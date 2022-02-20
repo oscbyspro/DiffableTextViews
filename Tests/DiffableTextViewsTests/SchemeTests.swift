@@ -28,7 +28,7 @@ final class SchemeTests: XCTestCase {
     lazy var scheme     = UTF16.self
     lazy var iterations = 1_000
     
-    lazy var content1__ = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, magna aliqua."
+    lazy var content1__ = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
     lazy var content10_ = String(repeating: content1__, count: 10_)
     lazy var content100 = String(repeating: content1__, count: 100)
 
