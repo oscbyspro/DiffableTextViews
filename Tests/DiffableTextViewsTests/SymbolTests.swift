@@ -23,7 +23,7 @@ final class SymbolTests: XCTestCase {
     //=------------------------------------------------------------------------=
     
     func testAnchorHasNoWidth() {
-        XCTAssertEqual(String(repeating: Symbol.anchor.character, count: 33), "​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​")
+        XCTAssertEqual(String(repeating: Symbol.anchor.character, count: 3), "​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​")
     }
 }
 
