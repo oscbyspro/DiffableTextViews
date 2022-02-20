@@ -25,7 +25,7 @@ final class Assumptions: XCTestCase {
     // MARK: State
     //=------------------------------------------------------------------------=
     
-    let enabled: Bool = true
+    let skippable: Bool = true
 }
 
 #endif

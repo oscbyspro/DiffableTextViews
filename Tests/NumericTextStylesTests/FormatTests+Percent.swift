@@ -86,7 +86,7 @@ extension PercentTests {
     }
     
     func testFloat32IsInaccurate() {
-        XCTAssert(Float32("1.23")!, result: "123.000002%")
+        XCTAssert(Float32("1.23")!, result: "123.00000190734863%")
     }
 }
 
