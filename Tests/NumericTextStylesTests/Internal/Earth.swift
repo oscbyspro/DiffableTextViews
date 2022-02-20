@@ -19,7 +19,7 @@ import Foundation
 enum Earth {
     
     //=------------------------------------------------------------------------=
-    // MARK: Constants
+    // MARK: Static - Constants
     //=------------------------------------------------------------------------=
 
     static let USD = "USD"
@@ -27,7 +27,7 @@ enum Earth {
     static let en_US = Locale(identifier: "en_US")
     
     //=------------------------------------------------------------------------=
-    // MARK: Collections
+    // MARK: Static - Collections
     //=------------------------------------------------------------------------=
         
     static let locales: [Locale] = Locale
