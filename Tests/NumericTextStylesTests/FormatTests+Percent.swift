@@ -23,16 +23,31 @@ final class PercentTests: XCTestCase, FormatTests {
     //=------------------------------------------------------------------------=
     
     let tests = Set(Test.allCases)
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Assertions
+    //=------------------------------------------------------------------------=
+    
+    func XCTInterpretLocales<T: Value.Percent>(_ value: T) {
+         XCTInterpretLocales(value, format: T.Percent.init)
+    }
+    
+    func XCTAssert<T: Value.Percent>(_ value: T, result: String) {
+        XCTAssertEqual(T.Percent(locale: en_US).format(value), result)
+    }
 
     //*========================================================================*
     // MARK: * Test
     //*========================================================================*
     
-    enum Test: CaseIterable { case decimal, double }
+    enum Test: CaseIterable {
+        case decimal
+        case float64
+    }
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: + Types
+// MARK: + Decimal
 //=----------------------------------------------------------------------------=
 
 extension PercentTests {
@@ -45,29 +60,25 @@ extension PercentTests {
         try XCTSkipUnless(tests.contains(.decimal))
         XCTInterpretLocales(Decimal(string: "-1234567.89")!)
     }
-        
-    func testDouble() throws {
-        try XCTSkipUnless(tests.contains(.double))
-        XCTInterpretLocales(Double("-1234567.89")!)
-    }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Helpers
-    //=------------------------------------------------------------------------=
-    
-    func XCTInterpretLocales<T: Value.Percent>(_ value: T) {
-        XCTInterpretLocales(value, format: T.Percent.init)
-    }
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: + Restrictions
+// MARK: + Floats
 //=----------------------------------------------------------------------------=
 
 extension PercentTests {
     
     //=------------------------------------------------------------------------=
     // MARK: Tests
+    //=------------------------------------------------------------------------=
+        
+    func testDouble() throws {
+        try XCTSkipUnless(tests.contains(.float64))
+        XCTInterpretLocales(Float64("-1234567.89")!)
+    }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Inaccurate
     //=------------------------------------------------------------------------=
     
     func testFloat16IsInaccurate() {
@@ -76,14 +87,6 @@ extension PercentTests {
     
     func testFloat32IsInaccurate() {
         XCTAssert(Float32("1.23")!, result: "123.000002%")
-    }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Helpers
-    //=------------------------------------------------------------------------=
-    
-    func XCTAssert<T: Value.Percent>(_ value: T, result: String) {
-        XCTAssertEqual(T.Percent(locale: en_US).format(value), result)
     }
 }
 

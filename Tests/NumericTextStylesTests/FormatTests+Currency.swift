@@ -71,11 +71,6 @@ extension CurrencyTests {
     //=------------------------------------------------------------------------=
     // MARK: Tests
     //=------------------------------------------------------------------------=
-
-    func testFloat() throws {
-        try XCTSkipUnless(tests.contains(.float))
-        XCTInterpretLocalesXCurrencies(Float("-1.23")!)
-    }
     
     func testFloat16() throws {
         try XCTSkipUnless(tests.contains(.float16))
