@@ -121,7 +121,7 @@ struct DiffableAmountTextField: View {
 }
 ```
 
-## [PatternTextStyle](Notes/PatternTextStyle.md) ([Source](Sources/PatternTextStyles), Tests)
+## [PatternTextStyle](Notes/PatternTextStyle.md) ([Source](Sources/PatternTextStyles), [Tests](Tests/PatternTextStylesTests))
 
 A style that processes characters laid out in custom patterns.
 
