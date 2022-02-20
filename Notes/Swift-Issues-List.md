@@ -1,6 +1,6 @@
 # Swift Issues List
 
-A document with issues that have been worked around.
+A document with issues that have been encountered.
 
 ## FormatStyle: UInt(64) > Int(64).max crashes.
 
@@ -15,4 +15,20 @@ let crash = value.formatted(.number)
 let code = "SEK"; let locale = Locale(identifier: "en_US")
 let style = IntegerFormatStyle<Int>.Currency(code: code).locale(locale)
 let crash = try! style.parseStrategy.parse(style.format(123))
+```
+
+## FormatStyle.Percent: is inaccurate for some types.
+
+### Float16
+
+```swift
+let value: Float16 = 1.23
+let inaccurate = value.formatted(.percent) // "123.046875%"
+```
+
+### Float32
+
+```swift
+let value: Float32 = 1.23
+let inaccurate = value.formatted(.percent) // "123.000002%"
 ```
