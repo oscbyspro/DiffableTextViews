@@ -16,7 +16,7 @@ import XCTest
 // MARK: * StyleTests x Number
 //*============================================================================*
 
-final class NumberTests: StyleTests {
+final class StyleTestsXNumber: StyleTests {
 
     //=------------------------------------------------------------------------=
     // MARK: Assertions
@@ -35,7 +35,7 @@ final class NumberTests: StyleTests {
 // MARK: + Decimal
 //=----------------------------------------------------------------------------=
 
-extension NumberTests {
+extension StyleTestsXNumber {
 
     //=------------------------------------------------------------------------=
     // MARK: Tests
@@ -50,7 +50,7 @@ extension NumberTests {
 // MARK: + Floats
 //=----------------------------------------------------------------------------=
 
-extension NumberTests {
+extension StyleTestsXNumber {
     
     //=------------------------------------------------------------------------=
     // MARK: Tests
@@ -77,7 +77,7 @@ extension NumberTests {
 // MARK: + Ints
 //=----------------------------------------------------------------------------=
 
-extension NumberTests {
+extension StyleTestsXNumber {
     
     //=------------------------------------------------------------------------=
     // MARK: Tests
@@ -108,7 +108,7 @@ extension NumberTests {
 // MARK: + UInts
 //=----------------------------------------------------------------------------=
 
-extension NumberTests {
+extension StyleTestsXNumber {
     
     //=------------------------------------------------------------------------=
     // MARK: Tests

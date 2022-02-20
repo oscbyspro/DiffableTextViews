@@ -12,9 +12,22 @@
 import XCTest
 
 //*============================================================================*
-// MARK: * Assumptions
+// MARK: * EarthTests
 //*============================================================================*
 
-final class Assumptions: XCTestCase { }
+final class EarthTests: XCTestCase {
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Tests
+    //=------------------------------------------------------------------------=
+    
+    func testThatThereAreManyLocales() {
+        XCTAssertGreaterThanOrEqual(locales.count, 937)
+    }
+    
+    func testThatThereAreManyCurrencyCodes() {
+        XCTAssertGreaterThanOrEqual(currencyCodes.count, 153)
+    }
+}
 
 #endif

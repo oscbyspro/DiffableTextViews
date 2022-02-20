@@ -9,30 +9,21 @@
 
 #if DEBUG
 
-import Foundation
 import XCTest
 
-@testable import NumericTextStyles
-
 //*============================================================================*
-// MARK: + Percent
+// MARK: * AssumptionsTests
 //*============================================================================*
 
-extension Assumptions {
+class AssumptionsTests: XCTestCase {
     
     //=------------------------------------------------------------------------=
-    // MARK: Positive
+    // MARK: Setup
     //=------------------------------------------------------------------------=
     
-    func testVirtualPercentCharactersAreAlwaysUnique() throws {
+    override func setUp() {
+        super.setUp()
         continueAfterFailure = false
-        //=--------------------------------------=
-        // MARK: Locales
-        //=--------------------------------------=
-        for lexicon in standard {
-            let zero = IntegerFormatStyle<Int>.Percent(locale: lexicon.locale).format(0)
-            XCTAssert(zero.count(where: lexicon.nonvirtual) == 1, "\(zero), \(lexicon.locale)")
-        }
     }
 }
 
