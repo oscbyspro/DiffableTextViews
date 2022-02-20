@@ -59,19 +59,19 @@ extension CurrencyTests {
     //=------------------------------------------------------------------------=
     
     func testFloat64() throws {
-        XCTInterpretLocalesXCurrencies(Float64("-1.23")!)
+        XCTInterpretLocalesXCurrencies(-1.23 as Float64)
     }
     
     //=------------------------------------------------------------------------=
-    // MARK: Inaccurate
+    // MARK: Tests - Inaccurate
     //=------------------------------------------------------------------------=
     
     func testFloat16IsInaccurate() {
-        XCTAssert(Float16("1.23")!, result: "$1.23046875")
+        XCTAssert(-1.23 as Float16, result: "-$1.23046875")
     }
     
     func testFloat32IsInaccurate() {
-        XCTAssert(Float32("1.23")!, result: "$1.2300000190734863")
+        XCTAssert(-1.23 as Float32, result: "-$1.2300000190734863")
     }
 }
 
@@ -86,23 +86,23 @@ extension CurrencyTests {
     //=------------------------------------------------------------------------=
 
     func testInt() throws {
-        XCTInterpretLocalesXCurrencies(Int("-123")!)
+        XCTInterpretLocalesXCurrencies(-123 as Int)
     }
     
     func testInt8() throws {
-        XCTInterpretLocalesXCurrencies(Int8("-123")!)
+        XCTInterpretLocalesXCurrencies(-123 as Int8)
     }
     
     func testInt16() throws {
-        XCTInterpretLocalesXCurrencies(Int16("-123")!)
+        XCTInterpretLocalesXCurrencies(-123 as Int16)
     }
     
     func testInt32() throws {
-        XCTInterpretLocalesXCurrencies(Int32("-123")!)
+        XCTInterpretLocalesXCurrencies(-123 as Int32)
     }
     
     func testInt64() throws {
-        XCTInterpretLocalesXCurrencies(Int64("-123")!)
+        XCTInterpretLocalesXCurrencies(-123 as Int64)
     }
 }
 
@@ -117,23 +117,23 @@ extension CurrencyTests {
     //=------------------------------------------------------------------------=
     
     func testUInt() throws {
-        XCTInterpretLocalesXCurrencies(UInt("123")!)
+        XCTInterpretLocalesXCurrencies(123 as UInt)
     }
     
     func testUInt8() throws {
-        XCTInterpretLocalesXCurrencies(UInt8("123")!)
+        XCTInterpretLocalesXCurrencies(123 as UInt8)
     }
     
     func testUInt16() throws {
-        XCTInterpretLocalesXCurrencies(UInt16("123")!)
+        XCTInterpretLocalesXCurrencies(123 as UInt16)
     }
     
     func testUInt32() throws {
-        XCTInterpretLocalesXCurrencies(UInt32("123")!)
+        XCTInterpretLocalesXCurrencies(123 as UInt32)
     }
     
     func testUInt64() throws {
-        XCTInterpretLocalesXCurrencies(UInt64("123")!)
+        XCTInterpretLocalesXCurrencies(123 as UInt64)
     }
 }
 

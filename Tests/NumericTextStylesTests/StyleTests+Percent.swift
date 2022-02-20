@@ -42,7 +42,7 @@ extension PercentTests {
     //=------------------------------------------------------------------------=
     
     func testDecimal() throws {
-        XCTInterpretLocales(Decimal(string: "-1234567.89")!)
+        XCTInterpretLocales(Decimal(string: "-1.23")!)
     }
 }
 
@@ -57,19 +57,19 @@ extension PercentTests {
     //=------------------------------------------------------------------------=
         
     func testFloat64() throws {
-        XCTInterpretLocales(Float64("-1234567.89")!)
+        XCTInterpretLocales(-1.23 as Float64)
     }
     
     //=------------------------------------------------------------------------=
-    // MARK: Inaccurate
+    // MARK: Tests - Inaccurate
     //=------------------------------------------------------------------------=
     
     func testFloat16IsInaccurate() {
-        XCTAssert(Float16("1.23")!, result: "123.046875%")
+        XCTAssert(-1.23 as Float16, result: "-123.046875%")
     }
     
     func testFloat32IsInaccurate() {
-        XCTAssert(Float32("1.23")!, result: "123.00000190734863%")
+        XCTAssert(-1.23 as Float32, result: "-123.00000190734863%")
     }
 }
 
