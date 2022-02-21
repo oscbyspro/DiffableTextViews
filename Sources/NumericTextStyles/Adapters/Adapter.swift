@@ -24,6 +24,7 @@ import Support
 // MARK: * Adapter
 //*============================================================================*
 
+#warning("Maybe rename as specialization or something.")
 public protocol NumericTextAdapter: Equatable {
     associatedtype Format: NumericTextFormat
     

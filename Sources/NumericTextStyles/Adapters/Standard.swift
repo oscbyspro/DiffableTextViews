@@ -15,7 +15,7 @@ import Foundation
 // MARK: * Number
 //*============================================================================*
 
-final class NumericTextStandardAdapter<Format: NumericTextFormat>: Adapter {
+final class NumericTextStandardAdapter: Adapter {
     
     //=------------------------------------------------------------------------=
     // MARK: State
@@ -27,8 +27,9 @@ final class NumericTextStandardAdapter<Format: NumericTextFormat>: Adapter {
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable public init(_ format: Format) {
-        self.lexicon = .standard(locale: format.locale)
+    #warning("It should cache.")
+    @inlinable init(locale: Locale) {
+        self.lexicon = .standard(locale: locale)
     }
     
     //=------------------------------------------------------------------------=

@@ -15,7 +15,14 @@ import Support
 // MARK: * Currency
 //*============================================================================*
 
-final class NumericTextCurrencyAdapter: Adapter {
+#warning("Could probably be opaquely used.")
+@usableFromInline final class Currency: Adapter {
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Cache
+    //=------------------------------------------------------------------------=
+    
+    @usableFromInline static let cache = Cache<ID, Currency>(size: 33)
     
     //=------------------------------------------------------------------------=
     // MARK: State
@@ -28,10 +35,17 @@ final class NumericTextCurrencyAdapter: Adapter {
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    #warning("It should cache.")
-    @inlinable public init<Format: NumericTextCurrencyFormat>(_ format: Format) {
+    @inlinable init<Format: NumericTextCurrencyFormat>(_ format: Format) {
         self.lexicon = .currency(code: format.currencyCode, locale:  format.locale)
         self.label   = .currency(code: format.currencyCode, lexicon: lexicon)
+    }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Initializers - Static
+    //=------------------------------------------------------------------------=
+    
+    @inlinable static func currency<Format: NumericTextCurrencyFormat>(_ format: Format) -> Currency {
+        cache.search(ID(locale: format.locale, code: format.currencyCode), make: Self(format))
     }
     
     //=------------------------------------------------------------------------=
@@ -43,47 +57,44 @@ final class NumericTextCurrencyAdapter: Adapter {
         guard let range = label.range(in: snapshot) else { return }
         snapshot.update(attributes: range) { attribute in attribute = .phantom }
     }
-}
+    
+    //*========================================================================*
+    // MARK: * ID
+    //*========================================================================*
 
-
-#warning("WIP")
-#warning("WIP")
-#warning("WIP")
-#warning("Remove the ID part, maybe.")
-//*============================================================================*
-// MARK: * Currency x ID
-//*============================================================================*
-
-@usableFromInline final class CurrencyID: Hashable {
-    
-    //=------------------------------------------------------------------------=
-    // MARK: State
-    //=------------------------------------------------------------------------=
-    
-    @usableFromInline let code:   String
-    @usableFromInline let locale: Locale
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Initializers
-    //=------------------------------------------------------------------------=
-    
-    @inlinable init(locale: Locale, code: String) {
-        self.code = code; self.locale = locale
-    }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Hashable
-    //=------------------------------------------------------------------------=
-    
-    @inlinable func hash(into hasher: inout Hasher) {
-        hasher.combine(code); hasher.combine(locale.identifier)
-    }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Comparisons
-    //=------------------------------------------------------------------------=
-    
-    @inlinable static func == (lhs: CurrencyID, rhs: CurrencyID) -> Bool {
-        lhs.code == rhs.code && lhs.locale.identifier == rhs.locale.identifier
+    @usableFromInline final class ID: Hashable {
+        
+        //=--------------------------------------------------------------------=
+        // MARK: State
+        //=--------------------------------------------------------------------=
+        
+        @usableFromInline let code:   String
+        @usableFromInline let locale: Locale
+        
+        //=--------------------------------------------------------------------=
+        // MARK: Initializers
+        //=--------------------------------------------------------------------=
+        
+        @inlinable init(locale: Locale, code: String) {
+            self.code   = code
+            self.locale = locale
+        }
+        
+        //=--------------------------------------------------------------------=
+        // MARK: Hashable
+        //=--------------------------------------------------------------------=
+        
+        @inlinable func hash(into hasher: inout Hasher) {
+            hasher.combine(code)
+            hasher.combine(locale.identifier)
+        }
+        
+        //=--------------------------------------------------------------------=
+        // MARK: Comparisons
+        //=--------------------------------------------------------------------=
+        
+        @inlinable static func == (lhs: ID, rhs: ID) -> Bool {
+            lhs.code == rhs.code && lhs.locale.identifier == rhs.locale.identifier
+        }
     }
 }
