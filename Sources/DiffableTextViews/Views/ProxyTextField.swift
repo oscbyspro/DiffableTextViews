@@ -168,7 +168,7 @@ public extension ProxyTextField {
         wrapped.font = font
     }
         
-    @inlinable func font(_ font: OBEFont) {
+    @inlinable func font(_ font: DiffableTextFont) {
         wrapped.font = UIFont(font)
     }
     

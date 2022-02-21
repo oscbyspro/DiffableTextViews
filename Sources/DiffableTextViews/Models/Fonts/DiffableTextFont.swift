@@ -13,10 +13,10 @@ import SwiftUI
 import UIKit
 
 //*============================================================================*
-// MARK: * OBEFont
+// MARK: * DiffableTextFont
 //*============================================================================*
 
-public struct OBEFont {
+public struct DiffableTextFont {
     
     //=------------------------------------------------------------------------=
     // MARK: Instances
@@ -74,7 +74,7 @@ public struct OBEFont {
 }
 
 //*============================================================================*
-// MARK: * UIKit.UIFont x OBEFont
+// MARK: * DiffableTextFont x UIKit.UIFont
 //*============================================================================*
 
 extension UIKit.UIFont {
@@ -83,13 +83,13 @@ extension UIKit.UIFont {
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable public convenience init(_ font: OBEFont) {
+    @inlinable public convenience init(_ font: DiffableTextFont) {
         self.init(descriptor: font.descriptor, size: .zero)
     }
 }
 
 //*============================================================================*
-// MARK: * SwiftUI.Font x OBEFont
+// MARK: * DiffableTextFont x SwiftUI.Font
 //*============================================================================*
 
 extension SwiftUI.Font {
@@ -98,7 +98,7 @@ extension SwiftUI.Font {
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable public init(_ font: OBEFont) {
+    @inlinable public init(_ font: DiffableTextFont) {
         self.init(UIFont(font))
     }
 }
