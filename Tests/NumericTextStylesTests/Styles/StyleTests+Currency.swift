@@ -24,11 +24,11 @@ final class StyleTestsXCurrency: StyleTests {
     // MARK: Assertions
     //=------------------------------------------------------------------------=
     
-    func XCTInterpretLocalesXCurrencies<T: Value.Currency>(_ value: T) {
+    func XCTInterpretLocalesXCurrencies<T: Values.Currency>(_ value: T) {
          XCTInterpretLocalesXCurrencies(value, format: T.Currency.init)
     }
 
-    func XCTAssert<T: Value.Currency>(_ value: T, result: String) {
+    func XCTAssert<T: Values.Currency>(_ value: T, result: String) {
          XCTAssert(value, format: T.Currency(code: USD, locale: en_US), result: result)        
     }
 }

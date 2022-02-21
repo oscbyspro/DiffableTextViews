@@ -22,11 +22,11 @@ final class StyleTestsXNumber: StyleTests {
     // MARK: Assertions
     //=------------------------------------------------------------------------=
     
-    func XCTInterpretLocales<T: Value.Number>(_ value: T) {
+    func XCTInterpretLocales<T: Values.Number>(_ value: T) {
          XCTInterpretLocales(value, format: T.Number.init)
     }
     
-    func XCTAssert<T: Value.Number>(_ value: T, result: String) {
+    func XCTAssert<T: Values.Number>(_ value: T, result: String) {
          XCTAssert(value, format: T.Number(locale: en_US), result: result)
     }
 }

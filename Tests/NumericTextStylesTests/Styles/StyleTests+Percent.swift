@@ -22,11 +22,11 @@ final class StyleTestsXPercent: StyleTests {
     // MARK: Assertions
     //=------------------------------------------------------------------------=
     
-    func XCTInterpretLocales<T: Value.Percent>(_ value: T) {
+    func XCTInterpretLocales<T: Values.Percent>(_ value: T) {
          XCTInterpretLocales(value, format: T.Percent.init)
     }
     
-    func XCTAssert<T: Value.Percent>(_ value: T, result: String) {
+    func XCTAssert<T: Values.Percent>(_ value: T, result: String) {
          XCTAssert(value, format: T.Percent(locale: en_US), result: result)
     }
 }
