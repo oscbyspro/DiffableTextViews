@@ -14,14 +14,14 @@ import Foundation
 //*============================================================================*
 
 @usableFromInline struct Adapter<Format: NumericTextFormat>: Equatable {
-    @usableFromInline typealias Specialization = Format.Specialization
+    @usableFromInline typealias Translation = Format.Translation
     
     //=------------------------------------------------------------------------=
     // MARK: State
     //=------------------------------------------------------------------------=
     
     @usableFromInline let format: Format
-    @usableFromInline let specialization: Specialization
+    @usableFromInline let translation: Translation
     
     //=------------------------------------------------------------------------=
     // MARK: Initializers
@@ -29,8 +29,8 @@ import Foundation
     
     @inlinable init(_ format: Format) {
         self.format = format
-        self.specialization = format.specialization()
-        assert(format.locale == specialization.lexicon.locale)
+        self.translation = format.translation()
+        assert(format.locale == translation.locale)
     }
     
     //=------------------------------------------------------------------------=
@@ -42,7 +42,7 @@ import Foundation
     }
     
     @inlinable var lexicon: Lexicon {
-        specialization.lexicon
+        translation.lexicon
     }
     
     //=------------------------------------------------------------------------=

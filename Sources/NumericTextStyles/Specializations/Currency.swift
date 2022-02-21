@@ -15,7 +15,7 @@ import Support
 // MARK: * Currency
 //*============================================================================*
 
-@usableFromInline final class Currency: Specialization {
+@usableFromInline final class Currency: Translation {
     @usableFromInline static let cache = Cache<ID, Currency>(33)
     
     //=------------------------------------------------------------------------=

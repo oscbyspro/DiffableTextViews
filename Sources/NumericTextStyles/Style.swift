@@ -46,11 +46,15 @@ public struct NumericTextStyle<Format: NumericTextFormat>: DiffableTextStyle {
     @inlinable var format: Format {
         adapter.format
     }
+
+    @inlinable var translation: Translation {
+        adapter.translation
+    }
     
     @inlinable var lexicon: Lexicon {
-        adapter.lexicon
+        adapter.translation.lexicon
     }
-
+    
     //=------------------------------------------------------------------------=
     // MARK: Transformations
     //=------------------------------------------------------------------------=

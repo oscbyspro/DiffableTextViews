@@ -15,7 +15,7 @@ import Support
 // MARK: * Standard
 //*============================================================================*
 
-@usableFromInline final class Standard: Specialization {
+@usableFromInline final class Standard: Translation {
     @usableFromInline static let cache = Cache<ID, Standard>(33)
     
     //=------------------------------------------------------------------------=

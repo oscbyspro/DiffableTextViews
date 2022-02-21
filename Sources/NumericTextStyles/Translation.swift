@@ -8,18 +8,19 @@
 //=----------------------------------------------------------------------------=
 
 import DiffableTextViews
+import Foundation
 
 //*============================================================================*
 // MARK: * Content
 //*============================================================================*
 
-@usableFromInline typealias Specialization = NumericTextSpecialization
+@usableFromInline typealias Translation = NumericTextTranslation
 
 //*============================================================================*
-// MARK: * Adapter
+// MARK: * Translation
 //*============================================================================*
 
-public protocol NumericTextSpecialization {
+public protocol NumericTextTranslation {
     
     //=------------------------------------------------------------------------=
     // MARK: State
@@ -32,4 +33,19 @@ public protocol NumericTextSpecialization {
     //=------------------------------------------------------------------------=
     
     @inlinable func autocorrect(_ snapshot: inout Snapshot)
+}
+
+//=----------------------------------------------------------------------------=
+// MARK: + Details
+//=----------------------------------------------------------------------------=
+
+extension NumericTextTranslation {
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Accessors
+    //=------------------------------------------------------------------------=
+    
+    @inlinable var locale: Locale {
+        lexicon.locale
+    }
 }

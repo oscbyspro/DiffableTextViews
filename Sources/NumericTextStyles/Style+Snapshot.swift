@@ -28,7 +28,7 @@ extension NumericTextStyle {
         //=--------------------------------------=
         // MARK: Autocorrect -> Done
         //=--------------------------------------=
-        specialization.autocorrect(&snapshot); return snapshot
+        translation.autocorrect(&snapshot); return snapshot
     }
     
     //=------------------------------------------------------------------------=

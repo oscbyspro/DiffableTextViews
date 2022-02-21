@@ -14,19 +14,19 @@ import Foundation
 //*============================================================================*
 
 extension Decimal.FormatStyle: Format.Number {
-    @inlinable public func specialization() -> some NumericTextSpecialization {
+    @inlinable public func translation() -> some NumericTextTranslation {
         NumericTextStyles.Standard.cache(self)
     }
 }
 
 extension Decimal.FormatStyle.Currency: Format.Currency {
-    @inlinable public func specialization() -> some NumericTextSpecialization {
+    @inlinable public func translation() -> some NumericTextTranslation {
         NumericTextStyles.Currency.cache(self)
     }
 }
 
 extension Decimal.FormatStyle.Percent: Format.Percent {
-    @inlinable public func specialization() -> some NumericTextSpecialization {
+    @inlinable public func translation() -> some NumericTextTranslation {
         NumericTextStyles.Standard.cache(self)
     }
 }
@@ -36,19 +36,19 @@ extension Decimal.FormatStyle.Percent: Format.Percent {
 //*============================================================================*
 
 extension FloatingPointFormatStyle: Format, Format.Number where FormatInput: NumericTextFloatValue {
-    @inlinable public func specialization() -> some NumericTextSpecialization {
+    @inlinable public func translation() -> some NumericTextTranslation {
         NumericTextStyles.Standard.cache(self)
     }
 }
 
 extension FloatingPointFormatStyle.Currency: Format, Format.Currency where FormatInput: NumericTextFloatValue {
-    @inlinable public func specialization() -> some NumericTextSpecialization {
+    @inlinable public func translation() -> some NumericTextTranslation {
         NumericTextStyles.Currency.cache(self)
     }
 }
 
 extension FloatingPointFormatStyle.Percent: Format, Format.Percent where FormatInput: NumericTextFloatValue {
-    @inlinable public func specialization() -> some NumericTextSpecialization {
+    @inlinable public func translation() -> some NumericTextTranslation {
         NumericTextStyles.Standard.cache(self)
     }
 }
@@ -58,13 +58,13 @@ extension FloatingPointFormatStyle.Percent: Format, Format.Percent where FormatI
 //*============================================================================*
 
 extension IntegerFormatStyle: Format, Format.Number where FormatInput: NumericTextIntegerValue {
-    @inlinable public func specialization() -> some NumericTextSpecialization {
+    @inlinable public func translation() -> some NumericTextTranslation {
         NumericTextStyles.Standard.cache(self)
     }
 }
 
 extension IntegerFormatStyle.Currency: Format, Format.Currency where FormatInput: NumericTextIntegerValue {
-    @inlinable public func specialization() -> some NumericTextSpecialization {
+    @inlinable public func translation() -> some NumericTextTranslation {
         NumericTextStyles.Currency.cache(self)
     }
 }

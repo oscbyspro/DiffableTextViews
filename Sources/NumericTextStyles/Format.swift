@@ -26,7 +26,7 @@ import DiffableTextViews
 //*============================================================================*
 
 public protocol NumericTextFormat: ParseableFormatStyle where FormatInput: NumericTextValue, FormatOutput == String {
-    associatedtype Specialization: NumericTextSpecialization
+    associatedtype Translation: NumericTextTranslation
     associatedtype SignDisplayStrategy: NumericTextSignDisplayStrategyRepresentable
     
     //=------------------------------------------------------------------------=
@@ -44,10 +44,10 @@ public protocol NumericTextFormat: ParseableFormatStyle where FormatInput: Numer
     @inlinable func decimalSeparator(strategy: NumberFormatStyleConfiguration.DecimalSeparatorDisplayStrategy) -> Self
     
     //=------------------------------------------------------------------------=
-    // MARK: Specializations
+    // MARK: Translation
     //=------------------------------------------------------------------------=
     
-    @inlinable func specialization() -> Specialization
+    @inlinable func translation() -> Translation
 }
 
 //=----------------------------------------------------------------------------=
