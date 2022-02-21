@@ -19,7 +19,6 @@ import DiffableTextViews
 // MARK: * Adapter
 //*============================================================================*
 
-#warning("Rename as specialization, maybe.")
 public protocol NumericTextSpecialization {
     
     //=------------------------------------------------------------------------=
@@ -34,4 +33,3 @@ public protocol NumericTextSpecialization {
     
     @inlinable func autocorrect(_ snapshot: inout Snapshot)
 }
-

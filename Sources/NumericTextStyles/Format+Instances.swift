@@ -14,46 +14,57 @@ import Foundation
 //*============================================================================*
 
 extension Decimal.FormatStyle: Format.Number {
-    public typealias NumericTextAdapter = NumericTextNumberAdapter<Self>
+    @inlinable public func specialization() -> some NumericTextSpecialization {
+        NumericTextStyles.Standard.cached(self)
+    }
 }
 
 extension Decimal.FormatStyle.Currency: Format.Currency {
-    public typealias NumericTextAdapter = NumericTextCurrencyAdapter<Self>
+    @inlinable public func specialization() -> some NumericTextSpecialization {
+        NumericTextStyles.Currency.cached(self)
+    }
 }
 
 extension Decimal.FormatStyle.Percent: Format.Percent {
-    public typealias NumericTextAdapter = NumericTextPercentAdapter<Self>
+    @inlinable public func specialization() -> some NumericTextSpecialization {
+        NumericTextStyles.Standard.cached(self)
+    }
 }
 
 //*============================================================================*
 // MARK: * Format x Float
 //*============================================================================*
 
-extension FloatingPointFormatStyle: Format, Format.Number where
-FormatInput: NumericTextFloatValue {
-    public typealias NumericTextAdapter = NumericTextNumberAdapter<Self>
+extension FloatingPointFormatStyle: Format, Format.Number where FormatInput: NumericTextFloatValue {
+    @inlinable public func specialization() -> some NumericTextSpecialization {
+        NumericTextStyles.Standard.cached(self)
+    }
 }
 
-extension FloatingPointFormatStyle.Currency: Format, Format.Currency where
-FormatInput: NumericTextFloatValue {
-    public typealias NumericTextAdapter = NumericTextCurrencyAdapter<Self>
+extension FloatingPointFormatStyle.Currency: Format, Format.Currency where FormatInput: NumericTextFloatValue {
+    @inlinable public func specialization() -> some NumericTextSpecialization {
+        NumericTextStyles.Currency.cached(self)
+    }
 }
 
-extension FloatingPointFormatStyle.Percent: Format, Format.Percent where
-FormatInput: NumericTextFloatValue {
-    public typealias NumericTextAdapter = NumericTextPercentAdapter<Self>
+extension FloatingPointFormatStyle.Percent: Format, Format.Percent where FormatInput: NumericTextFloatValue {
+    @inlinable public func specialization() -> some NumericTextSpecialization {
+        NumericTextStyles.Standard.cached(self)
+    }
 }
 
 //*============================================================================*
 // MARK: * Format x Integer
 //*============================================================================*
 
-extension IntegerFormatStyle: Format, Format.Number where
-FormatInput: NumericTextIntegerValue {
-    public typealias NumericTextAdapter = NumericTextNumberAdapter<Self>
+extension IntegerFormatStyle: Format, Format.Number where FormatInput: NumericTextIntegerValue {
+    @inlinable public func specialization() -> some NumericTextSpecialization {
+        NumericTextStyles.Standard.cached(self)
+    }
 }
 
-extension IntegerFormatStyle.Currency: Format, Format.Currency where
-FormatInput: NumericTextIntegerValue {
-    public typealias NumericTextAdapter = NumericTextCurrencyAdapter<Self>
+extension IntegerFormatStyle.Currency: Format, Format.Currency where FormatInput: NumericTextIntegerValue {
+    @inlinable public func specialization() -> some NumericTextSpecialization {
+        NumericTextStyles.Currency.cached(self)
+    }
 }

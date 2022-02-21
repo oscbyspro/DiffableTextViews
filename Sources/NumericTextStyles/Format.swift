@@ -47,7 +47,7 @@ public protocol NumericTextFormat: ParseableFormatStyle where FormatInput: Numer
     // MARK: Specializations
     //=------------------------------------------------------------------------=
     
-    @inlinable static func specialization(_ instance: Self) -> Specialization
+    @inlinable func specialization() -> Specialization
 }
 
 //=----------------------------------------------------------------------------=

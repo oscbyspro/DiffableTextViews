@@ -12,10 +12,10 @@ import Foundation
 import Support
 
 //*============================================================================*
-// MARK: * Number
+// MARK: * Standard
 //*============================================================================*
 
-@usableFromInline final class Standard: Adapter {
+@usableFromInline final class Standard: Specialization {
     @usableFromInline static let cache = Cache<ID, Standard>(33)
     
     //=------------------------------------------------------------------------=
@@ -28,7 +28,6 @@ import Support
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    #warning("Clean up the standard function signature maybe.")
     @inlinable init(_ locale: Locale) {
         self.lexicon = .standard(locale)
     }
