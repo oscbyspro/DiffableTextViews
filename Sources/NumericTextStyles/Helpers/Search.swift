@@ -59,7 +59,7 @@ Haystack: BidirectionalCollection, Haystack.Element == Symbol {
     // MARK: Backwards
     //=------------------------------------------------------------------------=
     
-    /// A naive search, for needles known to be at or near the start of a haystack.
+    /// A naive search, for needles known to be at or near the end of a haystack.
     @inlinable static func backwards(search needle: Needle, in haystack: Haystack) -> Location? {
         Reversed.forwards(search: needle.reversed(), in: haystack.reversed()).map { reversed in
             reversed.upperBound.base ..< reversed.lowerBound.base
@@ -70,7 +70,7 @@ Haystack: BidirectionalCollection, Haystack.Element == Symbol {
     // MARK: Forwards / Backwards
     //=------------------------------------------------------------------------=
     
-    /// A naive search, for needles known to be at or near the start of a haystack.
+    /// A naive search, for needles known to be at or near the edge of a haystack.
     @inlinable static func range(of needle: Needle, in haystack: Haystack, reversed: Bool = false) -> Location? {
         !reversed ? forwards(search: needle, in: haystack) : backwards(search: needle, in: haystack)
     }
