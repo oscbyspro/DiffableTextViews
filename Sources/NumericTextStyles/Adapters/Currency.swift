@@ -27,6 +27,7 @@ public struct NumericTextCurrencyAdapter<Format: NumericTextCurrencyFormat>: Ada
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
+    #warning("Make it obvious that this caches.")
     @inlinable public init(_ format: Format) {
         self.format  =  format
         self.lexicon = .currency(code: format.currencyCode, locale: format.locale)

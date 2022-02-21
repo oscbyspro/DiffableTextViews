@@ -60,6 +60,7 @@ public final class Lexicon {
     // MARK: Initializer - Indirect
     //=------------------------------------------------------------------------=
     
+    #warning("Remove, maybe.")
     @inlinable convenience init<Key: Localizable>(_ key: Key) {
         let formatter = NumberFormatter()
         formatter.numberStyle = .decimal; key.update(formatter)
@@ -81,10 +82,12 @@ extension Lexicon {
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
+    #warning("Remove, maybe.")
     @inlinable static func standard(locale: Locale) -> Lexicon {
         search(standard, key: StandardID(locale:  locale))
     }
     
+    #warning("Remove, maybe.")
     @inlinable static func currency(code: String, locale: Locale) -> Lexicon {
         search(currency, key: CurrencyID(locale:  locale, code: code))
     }
