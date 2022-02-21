@@ -29,17 +29,17 @@ import Support
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable init<Format: NumericTextCurrencyFormat>(_ format: Format) {
-        self.lexicon = .currency(format.locale, code: format.currencyCode)
-        self.label   = .currency(self .lexicon, code: format.currencyCode)
+    @inlinable init(_ key: ID) {
+        self.lexicon = .currency(key.locale,   code: key.code)
+        self.label   = .currency(self.lexicon, code: key.code)
     }
     
     //=------------------------------------------------------------------------=
     // MARK: Initializers - Static
     //=------------------------------------------------------------------------=
     
-    @inlinable static func cached<Format: NumericTextCurrencyFormat>(_ format: Format) -> Currency {
-        cache.search(ID(format.locale, format.currencyCode), make: .init(format))
+    @inlinable static func cache<Format: NumericTextCurrencyFormat>(_ format: Format) -> Currency {
+        let key = ID(format.locale, format.currencyCode); return cache.search(key, make: Self(key))
     }
     
     //=------------------------------------------------------------------------=

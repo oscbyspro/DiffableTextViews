@@ -28,20 +28,20 @@ import Support
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable init(_ locale: Locale) {
-        self.lexicon = .standard(locale)
+    @inlinable init(_ key: ID) {
+        self.lexicon = .standard(key.locale)
     }
-    
+
     //=------------------------------------------------------------------------=
     // MARK: Initializers - Static
     //=------------------------------------------------------------------------=
     
-    @inlinable static func cached<T: Format.Number>(_  format: T) -> Standard {
-        cache.search(ID(format.locale), make: Self(format.locale))
+    @inlinable static func cache<T: Format.Number>(_  format: T) -> Standard {
+        let key = ID(format.locale); return cache.search(key, make: Self(key))
     }
     
-    @inlinable static func cached<T: Format.Percent>(_ format: T) -> Standard {
-        cache.search(ID(format.locale), make: Self(format.locale))
+    @inlinable static func cache<T: Format.Percent>(_ format: T) -> Standard {
+        let key = ID(format.locale); return cache.search(key, make: Self(key))
     }
     
     //=------------------------------------------------------------------------=
