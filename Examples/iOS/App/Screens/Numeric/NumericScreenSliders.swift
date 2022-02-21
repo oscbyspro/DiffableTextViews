@@ -8,30 +8,30 @@
 //=----------------------------------------------------------------------------=
 
 import SwiftUI
+import Sliders
 
 //*============================================================================*
 // MARK: * NumericScreenSliders
 //*============================================================================*
 
 struct NumericScreenSliders: View {
-    typealias Values = Interval<Int>
     
     //=------------------------------------------------------------------------=
     // MARK: State
     //=------------------------------------------------------------------------=
     
     let title: String
-    let limits: Values
-    @ObservedObject var values: Source<Values>
+    let limits: Interval<Int>
+    @ObservedObject var interval: Source<Interval<Int>>
     
     //=------------------------------------------------------------------------=
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    init(_ title: String, values: Source<Values>, in limits: Values) {
+    init(_ title: String, interval: Source<Interval<Int>>, in limits: Interval<Int>) {
         self.title  = title
-        self.values = values
         self.limits = limits
+        self.interval = interval
     }
     
     //=------------------------------------------------------------------------=
@@ -39,6 +39,16 @@ struct NumericScreenSliders: View {
     //=------------------------------------------------------------------------=
     
     var body: some View {
-        Bounds(title, values: values.binding, limits: limits.closed)
+        GroupBox(label(interval.content.closed)) {
+            Sliders($interval.content.values, in: limits.closed)
+        }
+    }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Components
+    //=------------------------------------------------------------------------=
+    
+    func label(_ values: ClosedRange<Int>) -> String {
+        "\(title): \(String(describing: values.lowerBound.description)) to \(String(describing: values.upperBound))"
     }
 }

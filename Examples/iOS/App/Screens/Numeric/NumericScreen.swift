@@ -65,15 +65,18 @@ struct NumericScreen: View {
     }
     
     var boundsIntervalSliders: some View {
-        NumericScreenSliders("Bounds length (9s)", values: context.bounds, in: Context.boundsLimits)
+        NumericScreenSliders("Bounds length (9s)",
+        interval: context.bounds, in: Context.boundsLimits)
     }
     
     var integerIntervalSliders: some View {
-        NumericScreenSliders("Integer digits length", values: context.integer, in: Context.integerLimits)
+        NumericScreenSliders("Integer digits length",
+        interval: context.integer, in: Context.integerLimits)
     }
     
     var fractionIntervalSliders: some View {
-        NumericScreenSliders("Fraction digits length", values: context.fraction, in: Context.fractionLimits)
+        NumericScreenSliders("Fraction digits length",
+        interval: context.fraction, in: Context.fractionLimits)
     }
     
     //=------------------------------------------------------------------------=
