@@ -135,21 +135,6 @@
             </BuildableReference>
             <SkippedTests>
                <Test
-                  Identifier = "AssumptionsTests">
-               </Test>
-               <Test
-                  Identifier = "AssumptionsTestsXCurrency">
-               </Test>
-               <Test
-                  Identifier = "AssumptionsTestsXPercent">
-               </Test>
-               <Test
-                  Identifier = "StyleTestsXCurrency/testFloat16IsInaccurate()">
-               </Test>
-               <Test
-                  Identifier = "StyleTestsXCurrency/testFloat32IsInaccurate()">
-               </Test>
-               <Test
                   Identifier = "StyleTestsXCurrency/testFloat64()">
                </Test>
                <Test

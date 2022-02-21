@@ -28,15 +28,15 @@ final class PatternScreenContext: ObservableObject {
     //=------------------------------------------------------------------------=
     
     func popLast() {
-        _ = value.storage.popLast()
+        _ = value.content.popLast()
     }
     
     func appendASCIIDigit() {
-        Self.digits.randomElement().map({ value.storage.append($0) })
+        Self.digits.randomElement().map({ value.content.append($0) })
     }
     
     func appendUppercased() {
-        Self.uppercased.randomElement().map({ value.storage.append($0) })
+        Self.uppercased.randomElement().map({ value.content.append($0) })
     }
     
     //=------------------------------------------------------------------------=

@@ -20,7 +20,7 @@ final class Source<Value>: ObservableObject {
     // MARK: State
     //=------------------------------------------------------------------------=
     
-    var storage: Value {
+    var content: Value {
         willSet { objectWillChange.send() }
     }
     
@@ -28,7 +28,7 @@ final class Source<Value>: ObservableObject {
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    init(_ storage: Value) { self.storage = storage }
+    init(_ storage: Value) { self.content = storage }
     
     //=------------------------------------------------------------------------=
     // MARK: Accessors
@@ -36,14 +36,6 @@ final class Source<Value>: ObservableObject {
     
     /// Uses strong references.
     var binding: Binding<Value> {
-        Binding { self.storage } set: { self.storage = $0 }
-    }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Utilities
-    //=------------------------------------------------------------------------=
-
-    func sink(_ publisher: ObservableObjectPublisher) -> AnyCancellable {
-        objectWillChange.sink(receiveValue: publisher.send)
+        Binding { self.content } set: { self.content = $0 }
     }
 }

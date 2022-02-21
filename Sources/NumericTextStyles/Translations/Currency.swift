@@ -22,8 +22,8 @@ import Support
     // MARK: State
     //=------------------------------------------------------------------------=
     
-    @usableFromInline let lexicon: Lexicon
     @usableFromInline let label:   Label
+    @usableFromInline let lexicon: Lexicon
 
     //=------------------------------------------------------------------------=
     // MARK: Initializers

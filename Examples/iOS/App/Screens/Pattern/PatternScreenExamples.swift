@@ -52,10 +52,10 @@ struct PatternScreenExamples: View {
     //=------------------------------------------------------------------------=
     
     var style: Style {
-        var base: Style { switch kind.storage {
+        var base: Style { switch kind.content {
             case  .card: return Self .card
             case .phone: return Self.phone
-        }}; return base.hidden(!visible.storage)
+        }}; return base.hidden(!visible.content)
     }
     
     //=------------------------------------------------------------------------=

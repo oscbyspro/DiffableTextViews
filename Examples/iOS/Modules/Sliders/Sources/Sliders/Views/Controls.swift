@@ -8,46 +8,37 @@
 //=----------------------------------------------------------------------------=
 
 import SwiftUI
-import Sliders
 
 //*============================================================================*
-// MARK: * Sliders
+// MARK: * Controls
 //*============================================================================*
-struct Sliders<Value: Comparable & BinaryInteger>: View {
+
+@usableFromInline struct Controls: View, HasContext {
     
     //=------------------------------------------------------------------------=
     // MARK: State
     //=------------------------------------------------------------------------=
     
-    let title: String
-    let limits: ClosedRange<Value>
-    let interval: Binding<Interval<Value>>
+    @usableFromInline let context: Context
     
     //=------------------------------------------------------------------------=
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable init(_ title: String, values: Binding<Interval<Value>>, limits: ClosedRange<Value>) {
-        self.title = title
-        self.limits = limits
-        self.interval = values
+    @inlinable init(_ interval: Interval, in proxy: GeometryProxy) {
+        self.context = Context(interval, proxy: proxy)
     }
     
     //=------------------------------------------------------------------------=
     // MARK: Body
     //=------------------------------------------------------------------------=
     
-    var body: some View {
-        GroupBox(label(interval.wrappedValue.closed)) {
-            IntervalSliders(interval.values, in: limits)
+    @inlinable var body: some View {
+        ZStack {
+            Beam(context, between: layout.positions)
+            Handle(context, value: values.projectedValue.0, position: positions.0)
+            Handle(context, value: values.projectedValue.1, position: positions.1)
         }
-    }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Components
-    //=------------------------------------------------------------------------=
-    
-    func label(_ values: ClosedRange<Value>) -> String {
-        "\(title): \(String(describing: values.lowerBound.description)) to \(String(describing: values.upperBound))"
+        .coordinateSpace(name: coordinates)
     }
 }

@@ -10,10 +10,10 @@
 import SwiftUI
 
 //*============================================================================*
-// MARK: * IntervalSliders
+// MARK: * Sliders
 //*============================================================================*
 
-public struct IntervalSliders: View, HasInterval {
+public struct Sliders: View, HasInterval {
  
     //=------------------------------------------------------------------------=
     // MARK: State
@@ -34,7 +34,7 @@ public struct IntervalSliders: View, HasInterval {
     //=------------------------------------------------------------------------=
     
     @inlinable public var body: some View {
-        foundation.overlay(sliders)
+        foundation.overlay(controls)
     }
     
     //=------------------------------------------------------------------------=
@@ -45,9 +45,9 @@ public struct IntervalSliders: View, HasInterval {
         Track().frame(maxWidth: .infinity, minHeight: radius, maxHeight: radius)
     }
     
-    @inlinable var sliders: some View {
+    @inlinable var controls: some View {
         GeometryReader {
-            Sliders(interval, in: $0)
+            Controls(interval, in: $0)
         }
         .padding(.horizontal, 0.5 * radius)
     }
@@ -57,7 +57,7 @@ public struct IntervalSliders: View, HasInterval {
 // MARK: IntervalSliders x Initializers
 //=----------------------------------------------------------------------------=
 
-extension IntervalSliders {
+extension Sliders {
     
     //=------------------------------------------------------------------------=
     // MARK: Binary - Integer
@@ -74,7 +74,7 @@ extension IntervalSliders {
         //=--------------------------------------=
         // MARK: Set
         //=--------------------------------------=
-        } set: { xxxxxxxxxxx in let newValue = (
+        } set: {  xxxxxxxxxxx in let newValue = (
             Value(xxxxxxxxxxx.0.rounded()),
             Value(xxxxxxxxxxx.1.rounded()))
             //=----------------------------------=
@@ -91,7 +91,7 @@ extension IntervalSliders {
 }
 
 //*============================================================================*
-// MARK: * IntervalSliders x Previews
+// MARK: * Sliders x Previews
 //*============================================================================*
 
 struct SlidersPreviews: View, PreviewProvider {
@@ -107,7 +107,7 @@ struct SlidersPreviews: View, PreviewProvider {
     //=------------------------------------------------------------------------=
     
     var body: some View {
-        IntervalSliders($interval, in: 0...6)
+        Sliders($interval, in: 0...6)
     }
     
     //=------------------------------------------------------------------------=

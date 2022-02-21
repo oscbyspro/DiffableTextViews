@@ -10,10 +10,10 @@
 import SwiftUI
 
 //*============================================================================*
-// MARK: * ContentTabs
+// MARK: * Tabs
 //*============================================================================*
 
-struct ContentTabs: View {
+struct Tabs: View {
     
     //=------------------------------------------------------------------------=
     // MARK: State
@@ -76,12 +76,13 @@ struct ContentTabs: View {
 }
 
 //*============================================================================*
-// MARK: * ContentTabs x Previews
+// MARK: * Tabs x Previews
 //*============================================================================*
 
 struct DiffableTextStyleTabsPreviews: PreviewProvider {
     static var previews: some View {
-        ContentTabs()
+        Tabs()
+            .environmentObject(Storage())
             .preferredColorScheme(.dark)
     }
 }

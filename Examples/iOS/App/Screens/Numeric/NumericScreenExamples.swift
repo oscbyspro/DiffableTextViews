@@ -48,7 +48,7 @@ struct NumericScreenExamples: View {
     //=------------------------------------------------------------------------=
     
     var body: some View {
-        examples.environment(\.locale, locale.storage)
+        examples.environment(\.locale, locale.content)
     }
     
     //=------------------------------------------------------------------------=
@@ -56,9 +56,9 @@ struct NumericScreenExamples: View {
     //=------------------------------------------------------------------------=
     
     @ViewBuilder var examples: some View {
-        switch kind.storage {
+        switch kind.content {
         case .number:   example(.number)
-        case .currency: example(.currency(code: currency.storage))
+        case .currency: example(.currency(code: currency.content))
         case .percent:  example(.percent)
         }
     }

@@ -16,8 +16,8 @@ import XCTest
 // MARK: * StyleTests x Currency
 //*============================================================================*
 
-/// - About 100 MB will be allocated per type that is tested.
-/// - There are about 144k locale-currency pairs, so it may take some time.
+/// - About 100 MB will be allocated by testing.
+/// - There are about 144k locale-currency pairs, so it may take a while.
 final class StyleTestsXCurrency: StyleTests {
     
     //=------------------------------------------------------------------------=

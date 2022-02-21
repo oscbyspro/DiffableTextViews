@@ -93,14 +93,3 @@ struct Example<Style: UIKitDiffableTextStyle>: View {
         Rectangle().strokeBorder(Color(uiColor: .tertiarySystemBackground), lineWidth: 2)
     }
 }
-
-//*============================================================================*
-// MARK: * Example x Previews
-//*============================================================================*
-
-struct ExamplePreviews: PreviewProvider {
-    static var previews: some View {
-        Example(.constant(123), style: .number)
-            .preferredColorScheme(.dark)
-    }
-}

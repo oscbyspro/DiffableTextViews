@@ -63,15 +63,15 @@ struct NumericScreenExample<Format: NumericTextFormat>: View where Format.Format
     //=------------------------------------------------------------------------=
     
     var integerLimits: ClosedRange<Int> {
-        integer.storage.closed
+        integer.content.closed
     }
     
     var fractionLimits: ClosedRange<Int> {
-        fraction.storage.closed
+        fraction.content.closed
     }
     
     var boundsLimits: ClosedRange<Value> {
-        let ordered = bounds.storage.closed
+        let ordered = bounds.content.closed
         //=--------------------------------------=
         // MARK: Single
         //=--------------------------------------=

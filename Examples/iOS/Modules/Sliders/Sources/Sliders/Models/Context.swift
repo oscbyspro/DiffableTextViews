@@ -19,7 +19,7 @@ import SwiftUI
     // MARK: State
     //=------------------------------------------------------------------------=
     
-    @usableFromInline let layout: Layout
+    @usableFromInline let layout:   Layout
     @usableFromInline let interval: Interval
     
     //=------------------------------------------------------------------------=

@@ -39,6 +39,6 @@ struct NumericScreenSliders: View {
     //=------------------------------------------------------------------------=
     
     var body: some View {
-        Sliders(title, values: values.binding, limits: limits.closed)
+        Bounds(title, values: values.binding, limits: limits.closed)
     }
 }

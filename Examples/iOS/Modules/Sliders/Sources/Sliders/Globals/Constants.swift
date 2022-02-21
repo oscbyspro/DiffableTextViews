@@ -13,10 +13,7 @@ import SwiftUI
 // MARK: * Constants
 //*============================================================================*
 
-@inlinable var coordinates: UInt8 { 33 }
-@inlinable var radius:    CGFloat { 27 }
-@inlinable var thickness: CGFloat { 04 }
-
-@inlinable var dragging: Animation {
-    Animation.linear(duration: 0.125)
-}
+@usableFromInline let coordinates: UInt8 = 33
+@usableFromInline let radius: CGFloat = 27
+@usableFromInline let thickness: CGFloat = 04
+@usableFromInline let dragging: Animation = .linear(duration: 0.125)
