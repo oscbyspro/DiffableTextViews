@@ -36,11 +36,11 @@ import Support
     // MARK: Initializers - Static
     //=------------------------------------------------------------------------=
     
-    @inlinable static func cache<T: Format.Number>(_  format: T) -> Standard {
+    @inlinable static func cache<T: Formats.Number>(_  format: T) -> Standard {
         let key = ID(format.locale); return cache.search(key, make: Self(key))
     }
     
-    @inlinable static func cache<T: Format.Percent>(_ format: T) -> Standard {
+    @inlinable static func cache<T: Formats.Percent>(_ format: T) -> Standard {
         let key = ID(format.locale); return cache.search(key, make: Self(key))
     }
     

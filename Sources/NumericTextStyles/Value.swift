@@ -13,21 +13,11 @@ import Foundation
 // MARK: * Content
 //*============================================================================*
 
-@usableFromInline typealias Value = NumericTextValue; extension Value {
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Values
-    //=------------------------------------------------------------------------=
-    
+@usableFromInline typealias Value = NumericTextValue; @usableFromInline enum Values {
     @usableFromInline typealias Float = NumericTextFloatValue
     @usableFromInline typealias Integer = NumericTextIntegerValue
     @usableFromInline typealias Signed = NumericTextSignedValue
     @usableFromInline typealias Unsigned = NumericTextUnsignedValue
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Formats
-    //=------------------------------------------------------------------------=
-    
     @usableFromInline typealias Number = NumericTextNumberValue
     @usableFromInline typealias Currency = NumericTextCurrencyValue
     @usableFromInline typealias Percent = NumericTextPercentValue
@@ -187,7 +177,7 @@ extension NumericTextUnsignedValue {
     // MARK: Format
     //=------------------------------------------------------------------------=
     
-    associatedtype Number: Format.Number where Number.FormatInput == Self
+    associatedtype Number: Formats.Number where Number.FormatInput == Self
 }
 
 //*============================================================================*
@@ -200,7 +190,7 @@ extension NumericTextUnsignedValue {
     // MARK: Format
     //=------------------------------------------------------------------------=
     
-    associatedtype Currency: Format.Currency where Currency.FormatInput == Self
+    associatedtype Currency: Formats.Currency where Currency.FormatInput == Self
 }
 
 //*============================================================================*
@@ -213,22 +203,22 @@ extension NumericTextUnsignedValue {
     // MARK: Format
     //=------------------------------------------------------------------------=
     
-    associatedtype Percent: Format.Percent where Percent.FormatInput == Self
+    associatedtype Percent: Formats.Percent where Percent.FormatInput == Self
 }
 
 //*============================================================================*
 // MARK: * Value x Float x Formats
 //*============================================================================*
 
-extension Value.Float where Self: Value.Number, Self: BinaryFloatingPoint {
+extension Values.Float where Self: Values.Number, Self: BinaryFloatingPoint {
     @usableFromInline typealias Number = FloatingPointFormatStyle<Self>
 }
 
-extension Value.Float where Self: Value.Number, Self: BinaryFloatingPoint {
+extension Values.Float where Self: Values.Number, Self: BinaryFloatingPoint {
     @usableFromInline typealias Currency = FloatingPointFormatStyle<Self>.Currency
 }
 
-extension Value.Float where Self: Value.Number, Self: BinaryFloatingPoint {
+extension Values.Float where Self: Values.Number, Self: BinaryFloatingPoint {
     @usableFromInline typealias Percent = FloatingPointFormatStyle<Self>.Percent
 }
 
@@ -236,14 +226,14 @@ extension Value.Float where Self: Value.Number, Self: BinaryFloatingPoint {
 // MARK: * Value x Integer x Formats
 //*============================================================================*
 
-extension Value.Integer where Self: Value.Number, Self: BinaryInteger {
+extension Values.Integer where Self: Values.Number, Self: BinaryInteger {
     @usableFromInline typealias Number = IntegerFormatStyle<Self>
 }
 
-extension Value.Integer where Self: Value.Number, Self: BinaryInteger {
+extension Values.Integer where Self: Values.Number, Self: BinaryInteger {
     @usableFromInline typealias Currency = IntegerFormatStyle<Self>.Currency
 }
 
-extension Value.Integer where Self: Value.Number, Self: BinaryInteger {
+extension Values.Integer where Self: Values.Number, Self: BinaryInteger {
     @usableFromInline typealias Percent = IntegerFormatStyle<Self>.Percent
 }

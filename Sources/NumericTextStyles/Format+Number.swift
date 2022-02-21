@@ -13,7 +13,7 @@ import Foundation
 // MARK: * Decimal
 //*============================================================================*
 
-extension Decimal.FormatStyle: Format.Number {
+extension Decimal.FormatStyle: Formats.Number {
     @inlinable public func translation() -> some NumericTextTranslation {
         NumericTextStyles.Standard.cache(self)
     }
@@ -23,7 +23,7 @@ extension Decimal.FormatStyle: Format.Number {
 // MARK: * Float
 //*============================================================================*
 
-extension FloatingPointFormatStyle: Format, Format.Number where FormatInput: NumericTextFloatValue {
+extension FloatingPointFormatStyle: Format, Formats.Number where FormatInput: NumericTextFloatValue {
     @inlinable public func translation() -> some NumericTextTranslation {
         NumericTextStyles.Standard.cache(self)
     }
@@ -33,7 +33,7 @@ extension FloatingPointFormatStyle: Format, Format.Number where FormatInput: Num
 // MARK: * Integer
 //*============================================================================*
 
-extension IntegerFormatStyle: Format, Format.Number where FormatInput: NumericTextIntegerValue {
+extension IntegerFormatStyle: Format, Formats.Number where FormatInput: NumericTextIntegerValue {
     @inlinable public func translation() -> some NumericTextTranslation {
         NumericTextStyles.Standard.cache(self)
     }

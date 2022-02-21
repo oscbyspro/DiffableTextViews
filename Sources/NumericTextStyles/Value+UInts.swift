@@ -11,7 +11,7 @@
 // MARK: * UInt
 //*============================================================================*
 
-extension UInt: Value.Unsigned, Value.Integer, Value.Number, Value.Currency {
+extension UInt: Values.Unsigned, Values.Integer, Values.Number, Values.Currency {
     typealias Limit = Int // no crash. such wow. very impress.
     
     //=------------------------------------------------------------------------=
@@ -26,7 +26,7 @@ extension UInt: Value.Unsigned, Value.Integer, Value.Number, Value.Currency {
 // MARK: * UInt8
 //*============================================================================*
 
-extension UInt8: Value.Unsigned, Value.Integer, Value.Number, Value.Currency {
+extension UInt8: Values.Unsigned, Values.Integer, Values.Number, Values.Currency {
     
     //=------------------------------------------------------------------------=
     // MARK: Precision, Bounds
@@ -40,7 +40,7 @@ extension UInt8: Value.Unsigned, Value.Integer, Value.Number, Value.Currency {
 // MARK: * UInt16
 //*============================================================================*
 
-extension UInt16: Value.Unsigned, Value.Integer, Value.Number, Value.Currency {
+extension UInt16: Values.Unsigned, Values.Integer, Values.Number, Values.Currency {
     
     //=------------------------------------------------------------------------=
     // MARK: Precision, Bounds
@@ -54,7 +54,7 @@ extension UInt16: Value.Unsigned, Value.Integer, Value.Number, Value.Currency {
 // MARK: * UInt32
 //*============================================================================*
 
-extension UInt32: Value.Unsigned, Value.Integer, Value.Number, Value.Currency {
+extension UInt32: Values.Unsigned, Values.Integer, Values.Number, Values.Currency {
     
     //=------------------------------------------------------------------------=
     // MARK: Precision, Bounds
@@ -68,7 +68,7 @@ extension UInt32: Value.Unsigned, Value.Integer, Value.Number, Value.Currency {
 // MARK: * UInt64
 //*============================================================================*
 
-extension UInt64: Value.Unsigned, Value.Integer, Value.Number, Value.Currency {
+extension UInt64: Values.Unsigned, Values.Integer, Values.Number, Values.Currency {
     typealias Limit = Int64 // no crash. such wow. very impress.
     
     //=------------------------------------------------------------------------=

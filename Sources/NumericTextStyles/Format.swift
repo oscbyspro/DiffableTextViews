@@ -14,7 +14,7 @@ import DiffableTextViews
 // MARK: * Content
 //*============================================================================*
 
-@usableFromInline typealias Format = NumericTextFormat; extension Format {
+@usableFromInline typealias Format = NumericTextFormat; @usableFromInline enum Formats {
     @usableFromInline typealias Number = NumericTextNumberFormat
     @usableFromInline typealias Currency = NumericTextCurrencyFormat
     @usableFromInline typealias Percent = NumericTextPercentFormat

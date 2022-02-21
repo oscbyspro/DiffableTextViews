@@ -38,7 +38,7 @@ import Support
     // MARK: Initializers - Static
     //=------------------------------------------------------------------------=
     
-    @inlinable static func cache<Format: NumericTextCurrencyFormat>(_ format: Format) -> Currency {
+    @inlinable static func cache<T: Formats.Currency>(_ format: T) -> Currency {
         let key = ID(format.locale, format.currencyCode); return cache.search(key, make: Self(key))
     }
     
