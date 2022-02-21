@@ -14,7 +14,7 @@ import Foundation
 //*============================================================================*
 
 @usableFromInline struct Adapter<Format: NumericTextFormat>: Equatable {
-    @usableFromInline typealias Translation = Format.Translation
+    @usableFromInline typealias Translation = Format.NumericTextTranslation
     
     //=------------------------------------------------------------------------=
     // MARK: State
@@ -38,7 +38,7 @@ import Foundation
     //=------------------------------------------------------------------------=
     
     @inlinable var locale: Locale {
-        format.locale
+        translation.locale
     }
     
     @inlinable var lexicon: Lexicon {

@@ -53,7 +53,6 @@ public final class Label {
         if !labels[0].filter(\.isWhitespace).isEmpty {
             return Label(labels[0], at: .prefix)
         } else {
-            assert(!labels[1].filter(\.isWhitespace).isEmpty)
             return Label(labels[1], at: .suffix)
         }
     }

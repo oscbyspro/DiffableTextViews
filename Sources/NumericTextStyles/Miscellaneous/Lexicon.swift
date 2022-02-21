@@ -40,7 +40,10 @@ public final class Lexicon {
     //=------------------------------------------------------------------------=
     
     @inlinable init(locale: Locale, signs: Links<Sign>, digits: Links<Digit>, separators: Links<Separator>) {
-        self.locale = locale; self.signs = signs; self.digits = digits; self.separators = separators
+        self.locale = locale
+        self.signs = signs
+        self.digits = digits
+        self.separators = separators
     }
     
     //=------------------------------------------------------------------------=

@@ -25,8 +25,8 @@ import DiffableTextViews
 //*============================================================================*
 
 public protocol NumericTextFormat: ParseableFormatStyle where FormatInput: NumericTextValue, FormatOutput == String {
-    associatedtype Translation: NumericTextTranslation
-    associatedtype _Sign: NumericTextSignDisplayStrategyRepresentable
+    associatedtype SignDisplayStrategy: NumericTextSignDisplayStrategyRepresentable
+    associatedtype NumericTextTranslation: NumericTextStyles.NumericTextTranslation
     
     //=------------------------------------------------------------------------=
     // MARK: State
@@ -38,7 +38,7 @@ public protocol NumericTextFormat: ParseableFormatStyle where FormatInput: Numer
     // MARK: Transformations
     //=------------------------------------------------------------------------=
     
-    @inlinable func sign(strategy: Self._Sign) -> Self
+    @inlinable func sign(strategy: Self.SignDisplayStrategy) -> Self
     @inlinable func precision(_ precision: NumberFormatStyleConfiguration.Precision) -> Self
     @inlinable func decimalSeparator(strategy: NumberFormatStyleConfiguration.DecimalSeparatorDisplayStrategy) -> Self
     
@@ -46,7 +46,7 @@ public protocol NumericTextFormat: ParseableFormatStyle where FormatInput: Numer
     // MARK: Translation
     //=------------------------------------------------------------------------=
     
-    @inlinable func translation() -> Translation
+    @inlinable func translation() -> NumericTextTranslation
 }
 
 //=----------------------------------------------------------------------------=
@@ -71,12 +71,12 @@ extension NumericTextFormat {
     // MARK: Transformations
     //=------------------------------------------------------------------------=
     
-    @inlinable func separator(_ strategy: Self.Separator) -> Self {
-        self.decimalSeparator(strategy: strategy)
+    @inlinable func sign(_ strategy: Self.Sign) -> Self {
+        self.sign(strategy: SignDisplayStrategy(strategy))
     }
     
-    @inlinable func sign(_ strategy: Self.Sign) -> Self {
-        self.sign(strategy: _Sign(strategy))
+    @inlinable func separator(_ strategy: Self.Separator) -> Self {
+        self.decimalSeparator(strategy: strategy)
     }
 }
 
@@ -85,7 +85,7 @@ extension NumericTextFormat {
 //*============================================================================*
 
 public protocol NumericTextNumberFormat: NumericTextFormat where
-_Sign == NumberFormatStyleConfiguration.SignDisplayStrategy {
+SignDisplayStrategy == NumberFormatStyleConfiguration.SignDisplayStrategy {
     
     //=------------------------------------------------------------------------=
     // MARK: Initializers
@@ -99,7 +99,7 @@ _Sign == NumberFormatStyleConfiguration.SignDisplayStrategy {
 //*============================================================================*
 
 public protocol NumericTextCurrencyFormat: NumericTextFormat where
-_Sign == CurrencyFormatStyleConfiguration.SignDisplayStrategy {
+SignDisplayStrategy == CurrencyFormatStyleConfiguration.SignDisplayStrategy {
     
     //=------------------------------------------------------------------------=
     // MARK: Accessors
@@ -119,7 +119,7 @@ _Sign == CurrencyFormatStyleConfiguration.SignDisplayStrategy {
 //*============================================================================*
 
 public protocol NumericTextPercentFormat: NumericTextFormat where
-_Sign == NumberFormatStyleConfiguration.SignDisplayStrategy, FormatInput: NumericTextFloatValue {
+SignDisplayStrategy == NumberFormatStyleConfiguration.SignDisplayStrategy, FormatInput: NumericTextFloatValue {
     
     //=------------------------------------------------------------------------=
     // MARK: Initializers
