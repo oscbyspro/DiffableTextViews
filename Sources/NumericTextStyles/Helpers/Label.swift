@@ -37,7 +37,7 @@ public final class Label {
     // MARK: Initializers - Static
     //=------------------------------------------------------------------------=
 
-    @inlinable static func currency(code: String, lexicon: Lexicon) -> Label {
+    @inlinable static func currency(_ lexicon: Lexicon, code: String) -> Label {
         let labels = IntegerFormatStyle<Int>
         .Currency(code: code).locale(lexicon.locale)
         .precision(.fractionLength(0)).format(0)

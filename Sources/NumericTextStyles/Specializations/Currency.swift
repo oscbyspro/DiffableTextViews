@@ -12,43 +12,45 @@ import Foundation
 import Support
 
 //*============================================================================*
-// MARK: * Number
+// MARK: * Currency
 //*============================================================================*
 
-@usableFromInline final class Standard: Adapter {
-    @usableFromInline static let cache = Cache<ID, Standard>(33)
+@usableFromInline final class Currency: Adapter {
+    @usableFromInline static let cache = Cache<ID, Currency>(33)
     
     //=------------------------------------------------------------------------=
     // MARK: State
     //=------------------------------------------------------------------------=
     
     @usableFromInline let lexicon: Lexicon
-    
+    @usableFromInline let label:   Label
+
     //=------------------------------------------------------------------------=
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable init<T: Format>(_ format: T) {
-        self.lexicon = .standard(locale: format.locale)
+    @inlinable init<Format: NumericTextCurrencyFormat>(_ format: Format) {
+        self.lexicon = .currency(format.locale, code: format.currencyCode)
+        self.label   = .currency(self .lexicon, code: format.currencyCode)
     }
     
     //=------------------------------------------------------------------------=
     // MARK: Initializers - Static
     //=------------------------------------------------------------------------=
     
-    @inlinable static func cached<T: Format.Number>(_  format: T) -> Standard {
-        cache.search(ID(format.locale), make: Self(format))
-    }
-    
-    @inlinable static func cached<T: Format.Percent>(_ format: T) -> Standard {
-        cache.search(ID(format.locale), make: Self(format))
+    @inlinable static func cached<Format: NumericTextCurrencyFormat>(_ format: Format) -> Currency {
+        cache.search(ID(format.locale, format.currencyCode), make: .init(format))
     }
     
     //=------------------------------------------------------------------------=
     // MARK: Autocorrect
     //=------------------------------------------------------------------------=
     
-    @inlinable public func autocorrect(_ snapshot: inout Snapshot) { }
+    @inlinable func autocorrect(_ snapshot: inout Snapshot) {
+        guard !label.characters.isEmpty else { return }
+        guard let range = label.range(in: snapshot) else { return }
+        snapshot.update(attributes: range) { attribute in attribute = .phantom }
+    }
     
     //*========================================================================*
     // MARK: * ID
@@ -61,13 +63,14 @@ import Support
         //=--------------------------------------------------------------------=
         
         @usableFromInline let locale: Locale
-        
+        @usableFromInline let code:   String
+
         //=--------------------------------------------------------------------=
         // MARK: Initializers
         //=--------------------------------------------------------------------=
         
-        @inlinable init(_ locale: Locale) {
-            self.locale = locale
+        @inlinable init(_ locale: Locale, _ code: String) {
+            self.locale = locale; self.code = code
         }
         
         //=--------------------------------------------------------------------=
@@ -75,7 +78,7 @@ import Support
         //=--------------------------------------------------------------------=
         
         @inlinable func hash(into hasher: inout Hasher) {
-            hasher.combine(locale.identifier)
+            hasher.combine(locale.identifier); hasher.combine(code)
         }
         
         //=--------------------------------------------------------------------=
@@ -83,7 +86,7 @@ import Support
         //=--------------------------------------------------------------------=
         
         @inlinable static func == (lhs: ID, rhs: ID) -> Bool {
-            lhs.locale.identifier == rhs.locale.identifier
+            lhs.locale.identifier == rhs.locale.identifier && lhs.code == rhs.code
         }
     }
 }

@@ -20,12 +20,13 @@ import DiffableTextViews
     @usableFromInline typealias Percent = NumericTextPercentFormat
 }
 
+#warning("Cleanup: SignDisplayStrategy, ie find a way to rename it as Sign.")
 //*============================================================================*
 // MARK: * Format
 //*============================================================================*
 
 public protocol NumericTextFormat: ParseableFormatStyle where FormatInput: NumericTextValue, FormatOutput == String {
-    associatedtype NumericTextAdapter: NumericTextStyles.NumericTextAdapter where NumericTextAdapter.Format == Self
+    associatedtype Specialization: NumericTextSpecialization
     associatedtype SignDisplayStrategy: NumericTextSignDisplayStrategyRepresentable
     
     //=------------------------------------------------------------------------=
@@ -41,6 +42,12 @@ public protocol NumericTextFormat: ParseableFormatStyle where FormatInput: Numer
     @inlinable func sign(strategy: SignDisplayStrategy) -> Self
     @inlinable func precision(_ precision: NumberFormatStyleConfiguration.Precision) -> Self
     @inlinable func decimalSeparator(strategy: NumberFormatStyleConfiguration.DecimalSeparatorDisplayStrategy) -> Self
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Specializations
+    //=------------------------------------------------------------------------=
+    
+    @inlinable static func specialization(_ instance: Self) -> Specialization
 }
 
 //=----------------------------------------------------------------------------=

@@ -47,7 +47,7 @@ public final class Lexicon {
     // MARK: Initializer - Static
     //=------------------------------------------------------------------------=
     
-    @inlinable static func standard(locale: Locale) -> Lexicon {
+    @inlinable static func standard(_ locale: Locale) -> Lexicon {
         let formatter = NumberFormatter()
         formatter.numberStyle = .decimal
         formatter.locale = locale
@@ -58,7 +58,7 @@ public final class Lexicon {
         digits: .standard(formatter), separators: .standard(formatter))
     }
     
-    @inlinable static func currency(code: String, locale: Locale) -> Lexicon {
+    @inlinable static func currency(_ locale: Locale, code: String) -> Lexicon {
         let formatter = NumberFormatter()
         formatter.numberStyle = .decimal
         formatter.locale = locale

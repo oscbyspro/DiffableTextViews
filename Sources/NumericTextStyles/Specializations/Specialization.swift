@@ -8,24 +8,19 @@
 //=----------------------------------------------------------------------------=
 
 import DiffableTextViews
-import Foundation
-import Support
 
-#warning("Rework.")
-#warning("Rework.")
-#warning("Rework.")
 //*============================================================================*
 // MARK: * Content
 //*============================================================================*
 
-@usableFromInline typealias Adapter = NumericTextAdapter
+@usableFromInline typealias Specialization = NumericTextSpecialization
 
 //*============================================================================*
 // MARK: * Adapter
 //*============================================================================*
 
 #warning("Rename as specialization, maybe.")
-public protocol NumericTextAdapter {
+public protocol NumericTextSpecialization {
     
     //=------------------------------------------------------------------------=
     // MARK: State
