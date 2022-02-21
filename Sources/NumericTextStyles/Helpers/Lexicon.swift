@@ -16,21 +16,11 @@ import Support
 //*============================================================================*
 
 public final class Lexicon {
-    @usableFromInline typealias Cache<Key: Localizable> = Support.Cache<Key, Lexicon>
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Cache
-    //=------------------------------------------------------------------------=
-    
-    @usableFromInline static private(set) var done = false
-    @usableFromInline static let standard = Cache<StandardID>(size: 33)
-    @usableFromInline static let currency = Cache<CurrencyID>(size: 33)
 
     //=------------------------------------------------------------------------=
     // MARK: Constants
     //=------------------------------------------------------------------------=
     
-    @usableFromInline static let USD = "USD"
     @usableFromInline static let en_US = Lexicon(
         locale: Locale(identifier: "en_US"),
         signs: .ascii(), digits: .ascii(), separators: .ascii()
@@ -50,68 +40,35 @@ public final class Lexicon {
     //=------------------------------------------------------------------------=
     
     @inlinable init(locale: Locale, signs: Links<Sign>, digits: Links<Digit>, separators: Links<Separator>) {
-        self.locale = locale
-        self.signs = signs
-        self.digits = digits
-        self.separators = separators
+        self.locale = locale; self.signs = signs; self.digits = digits; self.separators = separators
     }
     
     //=------------------------------------------------------------------------=
-    // MARK: Initializer - Indirect
+    // MARK: Initializer - Static
     //=------------------------------------------------------------------------=
     
-    #warning("Remove, maybe.")
-    @inlinable convenience init<Key: Localizable>(_ key: Key) {
-        let formatter = NumberFormatter()
-        formatter.numberStyle = .decimal; key.update(formatter)
-        //=--------------------------------------=
-        // MARK: Initialize
-        //=--------------------------------------=
-        self.init(locale: key.locale, signs:      key.links(formatter),
-        digits: key.links(formatter), separators: key.links(formatter))
-    }
-}
-
-//=----------------------------------------------------------------------------=
-// MARK: + Cache
-//=----------------------------------------------------------------------------=
-
-extension Lexicon {
-
-    //=------------------------------------------------------------------------=
-    // MARK: Initializers
-    //=------------------------------------------------------------------------=
-    
-    #warning("Remove, maybe.")
     @inlinable static func standard(locale: Locale) -> Lexicon {
-        search(standard, key: StandardID(locale:  locale))
+        let formatter = NumberFormatter()
+        formatter.numberStyle = .decimal
+        formatter.locale = locale
+        //=--------------------------------------=
+        // MARK: Instantiate
+        //=--------------------------------------=
+        return  .init(locale: locale, signs:      .standard(formatter),
+        digits: .standard(formatter), separators: .standard(formatter))
     }
     
-    #warning("Remove, maybe.")
     @inlinable static func currency(code: String, locale: Locale) -> Lexicon {
-        search(currency, key: CurrencyID(locale:  locale, code: code))
+        let formatter = NumberFormatter()
+        formatter.numberStyle = .decimal
+        formatter.locale = locale
+        formatter.currencyCode = code
+        //=--------------------------------------=
+        // MARK: Instantiate
+        //=--------------------------------------=
+        return  .init(locale: locale, signs:      .currency(formatter),
+        digits: .currency(formatter), separators: .currency(formatter))
     }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Helpers
-    //=------------------------------------------------------------------------=
-
-    @inlinable static func setup() {
-        guard !done else { return }; done = true
-        standard[StandardID(locale: en_US.locale           )] = en_US
-        currency[CurrencyID(locale: en_US.locale, code: USD)] = en_US
-    }
-    
-    @inlinable static func search<Key: Localizable>(_ cache: Cache<Key>, key: Key) -> Lexicon {
-        setup(); return cache.search(key, make: .init(key))
-    }
-}
-
-//=----------------------------------------------------------------------------=
-// MARK: + Parse
-//=----------------------------------------------------------------------------=
-
-extension Lexicon {
 
     //=------------------------------------------------------------------------=
     // MARK: Components -> Value

@@ -9,17 +9,17 @@
 
 import DiffableTextViews
 
+#warning("It should cache.")
 //*============================================================================*
 // MARK: * Number
 //*============================================================================*
 
-public struct NumericTextNumberAdapter<Format: NumericTextNumberFormat>: Adapter {
+final class NumericTextStandardAdapter<Format: NumericTextFormat>: Adapter {
     
     //=------------------------------------------------------------------------=
     // MARK: State
     //=------------------------------------------------------------------------=
     
-    public let format:  Format
     public let lexicon: Lexicon
     
     //=------------------------------------------------------------------------=
@@ -27,6 +27,6 @@ public struct NumericTextNumberAdapter<Format: NumericTextNumberFormat>: Adapter
     //=------------------------------------------------------------------------=
     
     @inlinable public init(_ format: Format) {
-        self.format = format; self.lexicon = .standard(locale: format.locale)
+        self.lexicon = .standard(locale: format.locale)
     }
 }

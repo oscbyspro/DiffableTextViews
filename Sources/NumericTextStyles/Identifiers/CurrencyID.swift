@@ -14,7 +14,7 @@ import Foundation
 // MARK: * Currency x ID
 //*============================================================================*
 
-@usableFromInline final class CurrencyID: Localizable {
+@usableFromInline final class CurrencyID: Hashable {
     
     //=------------------------------------------------------------------------=
     // MARK: State
@@ -45,25 +45,5 @@ import Foundation
     
     @inlinable static func == (lhs: CurrencyID, rhs: CurrencyID) -> Bool {
         lhs.code == rhs.code && lhs.locale.identifier == rhs.locale.identifier
-    }
-}
-
-//=----------------------------------------------------------------------------=
-// MARK: + Utilities
-//=----------------------------------------------------------------------------=
-
-extension CurrencyID {
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Localization
-    //=------------------------------------------------------------------------=
-    
-    @inlinable func update(_ formatter: NumberFormatter) {
-        formatter.locale = locale
-        formatter.currencyCode = code
-    }
- 
-    @inlinable func links<T: Component>(_ formatter: NumberFormatter) -> Links<T> {
-        .currency(formatter)
     }
 }

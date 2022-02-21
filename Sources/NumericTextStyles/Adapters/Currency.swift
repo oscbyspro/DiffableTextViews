@@ -8,20 +8,22 @@
 //=----------------------------------------------------------------------------=
 
 import DiffableTextViews
+import Foundation
+import Support
 
+#warning("It should cache.")
 //*============================================================================*
 // MARK: * Currency
 //*============================================================================*
 
-public struct NumericTextCurrencyAdapter<Format: NumericTextCurrencyFormat>: Adapter {
+final class NumericTextCurrencyAdapter<Format: NumericTextCurrencyFormat>: Adapter {
     
     //=------------------------------------------------------------------------=
     // MARK: State
     //=------------------------------------------------------------------------=
     
-    public let format:  Format
-    public let lexicon: Lexicon
     public let label:   Label
+    public let lexicon: Lexicon
 
     //=------------------------------------------------------------------------=
     // MARK: Initializers
@@ -29,8 +31,7 @@ public struct NumericTextCurrencyAdapter<Format: NumericTextCurrencyFormat>: Ada
     
     #warning("Make it obvious that this caches.")
     @inlinable public init(_ format: Format) {
-        self.format  =  format
-        self.lexicon = .currency(code: format.currencyCode, locale: format.locale)
+        self.lexicon = .currency(code: format.currencyCode, locale:  format.locale)
         self.label   = .currency(code: format.currencyCode, lexicon: lexicon)
     }
     
@@ -43,4 +44,68 @@ public struct NumericTextCurrencyAdapter<Format: NumericTextCurrencyFormat>: Ada
         guard let range = label.range(in: snapshot) else { return }
         snapshot.update(attributes: range) { attribute in attribute = .phantom }
     }
+}
+
+//*============================================================================*
+// MARK: * Label
+//*============================================================================*
+
+/// A collection of characters at or near the edge of some formatted text.
+public final class Label {
+    
+    //=------------------------------------------------------------------------=
+    // MARK: State
+    //=------------------------------------------------------------------------=
+    
+    @usableFromInline let characters: String
+    @usableFromInline let location: Location
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Initializers
+    //=------------------------------------------------------------------------=
+    
+    @inlinable init<S: StringProtocol>(_ characters: S, at location: Location) {
+        self.location = location
+        self.characters = String(characters)
+    }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Initializers - Static
+    //=------------------------------------------------------------------------=
+
+    @inlinable static func currency(code: String, lexicon: Lexicon) -> Label {
+        let labels = IntegerFormatStyle<Int>
+        .Currency(code: code).locale(lexicon.locale)
+        .precision(.fractionLength(0)).format(0)
+        .split(separator: lexicon.digits[.zero],
+        omittingEmptySubsequences: false)
+        //=--------------------------------------=
+        // MARK: Expectation
+        //=--------------------------------------=
+        assert(labels.count == 2)
+        //=--------------------------------------=
+        // MARK: Instantiate
+        //=--------------------------------------=
+        if !labels[0].filter(\.isWhitespace).isEmpty {
+            return Label(labels[0], at: .prefix)
+        } else {
+            assert(!labels[1].filter(\.isWhitespace).isEmpty)
+            return Label(labels[1], at: .suffix)
+        }
+    }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Utilities
+    //=------------------------------------------------------------------------=
+    
+    /// Naive search is OK because labels are at or near to the edge.
+    @inlinable func range(in snapshot: Snapshot) -> Range<Snapshot.Index>? {
+        Search.range(of: characters, in: snapshot, reversed: location == .suffix)
+    }
+    
+    //*========================================================================*
+    // MARK: * Location
+    //*========================================================================*
+    
+    @usableFromInline enum Location { case prefix, suffix }
 }

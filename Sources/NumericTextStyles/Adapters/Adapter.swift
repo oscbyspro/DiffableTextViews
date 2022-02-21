@@ -48,6 +48,7 @@ public protocol NumericTextAdapter: Equatable {
 // MARK: + Details
 //=----------------------------------------------------------------------------=
 
+#warning("Remove these maybe.")
 extension NumericTextAdapter {
     
     //=------------------------------------------------------------------------=

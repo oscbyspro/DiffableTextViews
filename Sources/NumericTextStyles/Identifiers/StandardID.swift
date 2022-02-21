@@ -8,13 +8,14 @@
 //=----------------------------------------------------------------------------=
 
 import Foundation
+import Support
 
 #warning("Remove the ID part, maybe.")
 //*============================================================================*
 // MARK: * Standard x ID
 //*============================================================================*
 
-@usableFromInline final class StandardID: Localizable {
+@usableFromInline final class StandardID: Hashable {
     
     //=------------------------------------------------------------------------=
     // MARK: State
@@ -44,24 +45,5 @@ import Foundation
     
     @inlinable static func == (lhs: StandardID, rhs: StandardID) -> Bool {
         lhs.locale.identifier == rhs.locale.identifier
-    }
-}
-
-//=----------------------------------------------------------------------------=
-// MARK: + Utilities
-//=----------------------------------------------------------------------------=
-
-extension StandardID {
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Localization
-    //=------------------------------------------------------------------------=
-    
-    @inlinable func update(_ formatter: NumberFormatter) {
-        formatter.locale = locale
-    }
- 
-    @inlinable func links<T: Component>(_ formatter: NumberFormatter) -> Links<T> {
-        .standard(formatter)
     }
 }
