@@ -72,3 +72,18 @@ extension Component {
         unicode.write(to: &target)
     }
 }
+
+//=----------------------------------------------------------------------------=
+// MARK: + Utilities
+//=----------------------------------------------------------------------------=
+
+extension Component {
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Transformations
+    //=------------------------------------------------------------------------=
+    
+    @inlinable func transform(_ transform: (inout Self) -> Void) -> Self {
+        var result = self; transform(&result); return result
+    }
+}

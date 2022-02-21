@@ -20,16 +20,16 @@ import DiffableTextViews
     // MARK: State
     //=------------------------------------------------------------------------=
     
-    @usableFromInline let lexicon: Lexicon
     @usableFromInline var changes: Changes
-    
+    @usableFromInline let lexicon: Lexicon
+
     //=------------------------------------------------------------------------=
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable init(_ changes: Changes, in region: Lexicon) {
-        self.lexicon = region
+    @inlinable init(_ changes: Changes, _ lexicon: Lexicon) {
         self.changes = changes
+        self.lexicon = lexicon
     }
 
     //=------------------------------------------------------------------------=

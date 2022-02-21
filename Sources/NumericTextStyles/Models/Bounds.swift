@@ -18,14 +18,6 @@ import Support
 public struct Bounds<Value: NumericTextValue>: Equatable {
     
     //=------------------------------------------------------------------------=
-    // MARK: Instances
-    //=------------------------------------------------------------------------=
-
-    @inlinable static var zero: Self {
-        Self(unchecked: (.zero, .zero))
-    }
-    
-    //=------------------------------------------------------------------------=
     // MARK: State
     //=------------------------------------------------------------------------=
     
@@ -35,11 +27,6 @@ public struct Bounds<Value: NumericTextValue>: Equatable {
     //=------------------------------------------------------------------------=
     // MARK: Initializers
     //=------------------------------------------------------------------------=
-    
-    @inlinable init(unchecked: (Value, Value)) {
-        self.min = unchecked.0
-        self.max = unchecked.1
-    }
     
     @inlinable init(min: Value = Value.bounds.lowerBound, max: Value = Value.bounds.upperBound) {
         precondition(min <= max, "min > max"); (self.min, self.max) = (min, max)
@@ -53,7 +40,7 @@ public struct Bounds<Value: NumericTextValue>: Equatable {
     @usableFromInline enum Location { case body, edge }
 }
 
-//=-----------------------------------------------b-----------------------------=
+//=----------------------------------------------------------------------------=
 // MARK: + Value
 //=----------------------------------------------------------------------------=
 
@@ -104,13 +91,9 @@ extension Bounds {
     
     @inlinable func autocorrect(_ sign: inout Sign) {
         switch sign {
-        case .positive: if max > .zero || self == .zero { return }
-        case .negative: if min < .zero                  { return }
+        case .positive: if max <= .zero, min != .zero { sign.toggle() }
+        case .negative: if min >= .zero               { sign.toggle() }
         }
-        //=--------------------------------------=
-        // MARK: Autocorrect
-        //=--------------------------------------=
-        sign.toggle()
     }
     
     //=------------------------------------------------------------------------=
@@ -128,13 +111,9 @@ extension Bounds {
     //=------------------------------------------------------------------------=
     
     @inlinable func validate(_ sign: Sign) throws {
-        var autocorrectable = sign
-        autocorrect(&autocorrectable)
-        if autocorrectable == sign { return }
-        //=--------------------------------------=
-        // MARK: Failure
-        //=--------------------------------------=
-        throw Info([.mark(sign), "is not in", .mark(self)])
+        guard sign == sign.transform(autocorrect) else {
+            throw Info([.mark(sign), "is not in", .mark(self)])
+        }
     }
 }
 
