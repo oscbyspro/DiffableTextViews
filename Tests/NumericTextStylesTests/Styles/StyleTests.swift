@@ -26,6 +26,21 @@ class StyleTests: XCTestCase {
         super.setUp()
         continueAfterFailure = false
     }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Assertions
+    //=------------------------------------------------------------------------=
+    
+    func XCTAssert<F: Format>(_ value: F.Value, format: F, result: String) {
+        XCTAssertEqual(format.precision(.fractionLength(0...)).format(value), result)
+    }
+    
+    func XCTInterpret<F: Format>(_ value: F.Value, format: F, info: @autoclosure () -> Any) {
+        let commit = NumericTextStyle(format).interpret(value)
+        let characters = format.precision(.fractionLength(0...)).format(value)
+        XCTAssertEqual(commit.value, value, String(describing: info()))
+        XCTAssertEqual(commit.snapshot.characters, characters, String(describing: info()))
+    }
 }
 
 //=----------------------------------------------------------------------------=
@@ -62,35 +77,6 @@ extension StyleTests {
                 XCTInterpret(value, format: format(code, locale), info: (locale, code))
             }
         }
-    }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Assertions
-    //=------------------------------------------------------------------------=
-    
-    func XCTInterpret<F: Format>(_ value: F.Value, format: F, info: @autoclosure () -> Any) {
-        let commit = NumericTextStyle(format).interpret(value)
-        let characters = format.precision(.fractionLength(0...)).format(value)
-        //=--------------------------------------=
-        // MARK: Assert
-        //=--------------------------------------=
-        XCTAssertEqual(commit.value, value, String(describing: info()))
-        XCTAssertEqual(commit.snapshot.characters, characters, String(describing: info()))
-    }
-}
-
-//=----------------------------------------------------------------------------=
-// MARK: + Inaccurate
-//=----------------------------------------------------------------------------=
-
-extension StyleTests {
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Assertions
-    //=------------------------------------------------------------------------=
-    
-    func XCTAssert<F: Format>(_ value: F.Value, format: F, result: String) {
-        XCTAssertEqual(format.precision(.fractionLength(0...)).format(value), result)
     }
 }
 
