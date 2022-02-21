@@ -160,7 +160,7 @@ extension NumericTextStyle {
         // MARK: Components
         //=--------------------------------------=
         var components = try components(proposal)
-        components.set(optional: sign)
+        components.set(sign)
         //=--------------------------------------=
         // MARK: Components - Validate
         //=--------------------------------------=

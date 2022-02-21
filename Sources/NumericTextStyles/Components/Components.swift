@@ -120,7 +120,7 @@ import Support
     // MARK: Transformations - Sign
     //=------------------------------------------------------------------------=
     
-    @inlinable mutating func set(optional sign: Sign?) {
+    @inlinable mutating func set(_ sign: Sign?) {
         if let sign = sign { self.sign = sign }
     }
     
