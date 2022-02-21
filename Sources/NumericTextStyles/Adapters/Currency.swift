@@ -11,12 +11,11 @@ import DiffableTextViews
 import Foundation
 import Support
 
-#warning("It should cache.")
 //*============================================================================*
 // MARK: * Currency
 //*============================================================================*
 
-final class NumericTextCurrencyAdapter<Format: NumericTextCurrencyFormat>: Adapter {
+final class NumericTextCurrencyAdapter: Adapter {
     
     //=------------------------------------------------------------------------=
     // MARK: State
@@ -29,8 +28,8 @@ final class NumericTextCurrencyAdapter<Format: NumericTextCurrencyFormat>: Adapt
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    #warning("Make it obvious that this caches.")
-    @inlinable public init(_ format: Format) {
+    #warning("It should cache.")
+    @inlinable public init<Format: NumericTextCurrencyFormat>(_ format: Format) {
         self.lexicon = .currency(code: format.currencyCode, locale:  format.locale)
         self.label   = .currency(code: format.currencyCode, lexicon: lexicon)
     }
@@ -46,66 +45,45 @@ final class NumericTextCurrencyAdapter<Format: NumericTextCurrencyFormat>: Adapt
     }
 }
 
+
+#warning("WIP")
+#warning("WIP")
+#warning("WIP")
+#warning("Remove the ID part, maybe.")
 //*============================================================================*
-// MARK: * Label
+// MARK: * Currency x ID
 //*============================================================================*
 
-/// A collection of characters at or near the edge of some formatted text.
-public final class Label {
+@usableFromInline final class CurrencyID: Hashable {
     
     //=------------------------------------------------------------------------=
     // MARK: State
     //=------------------------------------------------------------------------=
     
-    @usableFromInline let characters: String
-    @usableFromInline let location: Location
+    @usableFromInline let code:   String
+    @usableFromInline let locale: Locale
     
     //=------------------------------------------------------------------------=
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable init<S: StringProtocol>(_ characters: S, at location: Location) {
-        self.location = location
-        self.characters = String(characters)
+    @inlinable init(locale: Locale, code: String) {
+        self.code = code; self.locale = locale
     }
     
     //=------------------------------------------------------------------------=
-    // MARK: Initializers - Static
+    // MARK: Hashable
     //=------------------------------------------------------------------------=
-
-    @inlinable static func currency(code: String, lexicon: Lexicon) -> Label {
-        let labels = IntegerFormatStyle<Int>
-        .Currency(code: code).locale(lexicon.locale)
-        .precision(.fractionLength(0)).format(0)
-        .split(separator: lexicon.digits[.zero],
-        omittingEmptySubsequences: false)
-        //=--------------------------------------=
-        // MARK: Expectation
-        //=--------------------------------------=
-        assert(labels.count == 2)
-        //=--------------------------------------=
-        // MARK: Instantiate
-        //=--------------------------------------=
-        if !labels[0].filter(\.isWhitespace).isEmpty {
-            return Label(labels[0], at: .prefix)
-        } else {
-            assert(!labels[1].filter(\.isWhitespace).isEmpty)
-            return Label(labels[1], at: .suffix)
-        }
+    
+    @inlinable func hash(into hasher: inout Hasher) {
+        hasher.combine(code); hasher.combine(locale.identifier)
     }
     
     //=------------------------------------------------------------------------=
-    // MARK: Utilities
+    // MARK: Comparisons
     //=------------------------------------------------------------------------=
     
-    /// Naive search is OK because labels are at or near to the edge.
-    @inlinable func range(in snapshot: Snapshot) -> Range<Snapshot.Index>? {
-        Search.range(of: characters, in: snapshot, reversed: location == .suffix)
+    @inlinable static func == (lhs: CurrencyID, rhs: CurrencyID) -> Bool {
+        lhs.code == rhs.code && lhs.locale.identifier == rhs.locale.identifier
     }
-    
-    //*========================================================================*
-    // MARK: * Location
-    //*========================================================================*
-    
-    @usableFromInline enum Location { case prefix, suffix }
 }
