@@ -10,14 +10,8 @@
 import Foundation
 
 //*============================================================================*
-// MARK: * Format x Decimal
+// MARK: * Decimal
 //*============================================================================*
-
-extension Decimal.FormatStyle: Format.Number {
-    @inlinable public func translation() -> some NumericTextTranslation {
-        NumericTextStyles.Standard.cache(self)
-    }
-}
 
 extension Decimal.FormatStyle.Currency: Format.Currency {
     @inlinable public func translation() -> some NumericTextTranslation {
@@ -25,21 +19,9 @@ extension Decimal.FormatStyle.Currency: Format.Currency {
     }
 }
 
-extension Decimal.FormatStyle.Percent: Format.Percent {
-    @inlinable public func translation() -> some NumericTextTranslation {
-        NumericTextStyles.Standard.cache(self)
-    }
-}
-
 //*============================================================================*
-// MARK: * Format x Float
+// MARK: * Float
 //*============================================================================*
-
-extension FloatingPointFormatStyle: Format, Format.Number where FormatInput: NumericTextFloatValue {
-    @inlinable public func translation() -> some NumericTextTranslation {
-        NumericTextStyles.Standard.cache(self)
-    }
-}
 
 extension FloatingPointFormatStyle.Currency: Format, Format.Currency where FormatInput: NumericTextFloatValue {
     @inlinable public func translation() -> some NumericTextTranslation {
@@ -47,21 +29,9 @@ extension FloatingPointFormatStyle.Currency: Format, Format.Currency where Forma
     }
 }
 
-extension FloatingPointFormatStyle.Percent: Format, Format.Percent where FormatInput: NumericTextFloatValue {
-    @inlinable public func translation() -> some NumericTextTranslation {
-        NumericTextStyles.Standard.cache(self)
-    }
-}
-
 //*============================================================================*
-// MARK: * Format x Integer
+// MARK: * Integer
 //*============================================================================*
-
-extension IntegerFormatStyle: Format, Format.Number where FormatInput: NumericTextIntegerValue {
-    @inlinable public func translation() -> some NumericTextTranslation {
-        NumericTextStyles.Standard.cache(self)
-    }
-}
 
 extension IntegerFormatStyle.Currency: Format, Format.Currency where FormatInput: NumericTextIntegerValue {
     @inlinable public func translation() -> some NumericTextTranslation {

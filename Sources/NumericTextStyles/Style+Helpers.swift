@@ -41,7 +41,7 @@ extension NumericTextStyle {
     @inlinable func sign(_ components: Components) -> Format.Sign {
         components.sign == .negative ? .always : .automatic
     }
-
+    
     @inlinable func separator(_ components: Components) -> Format.Separator {
         components.separator == .fraction ? .always : .automatic
     }

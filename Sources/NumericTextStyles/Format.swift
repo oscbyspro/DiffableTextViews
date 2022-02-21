@@ -20,14 +20,13 @@ import DiffableTextViews
     @usableFromInline typealias Percent = NumericTextPercentFormat
 }
 
-#warning("Cleanup: SignDisplayStrategy, ie find a way to rename it as Sign.")
 //*============================================================================*
 // MARK: * Format
 //*============================================================================*
 
 public protocol NumericTextFormat: ParseableFormatStyle where FormatInput: NumericTextValue, FormatOutput == String {
     associatedtype Translation: NumericTextTranslation
-    associatedtype SignDisplayStrategy: NumericTextSignDisplayStrategyRepresentable
+    associatedtype _Sign: NumericTextSignDisplayStrategyRepresentable
     
     //=------------------------------------------------------------------------=
     // MARK: State
@@ -39,7 +38,7 @@ public protocol NumericTextFormat: ParseableFormatStyle where FormatInput: Numer
     // MARK: Transformations
     //=------------------------------------------------------------------------=
     
-    @inlinable func sign(strategy: SignDisplayStrategy) -> Self
+    @inlinable func sign(strategy: Self._Sign) -> Self
     @inlinable func precision(_ precision: NumberFormatStyleConfiguration.Precision) -> Self
     @inlinable func decimalSeparator(strategy: NumberFormatStyleConfiguration.DecimalSeparatorDisplayStrategy) -> Self
     
@@ -77,7 +76,7 @@ extension NumericTextFormat {
     }
     
     @inlinable func sign(_ strategy: Self.Sign) -> Self {
-        self.sign(strategy: .init(strategy: strategy))
+        self.sign(strategy: _Sign(strategy))
     }
 }
 
@@ -86,7 +85,7 @@ extension NumericTextFormat {
 //*============================================================================*
 
 public protocol NumericTextNumberFormat: NumericTextFormat where
-SignDisplayStrategy == NumberFormatStyleConfiguration.SignDisplayStrategy {
+_Sign == NumberFormatStyleConfiguration.SignDisplayStrategy {
     
     //=------------------------------------------------------------------------=
     // MARK: Initializers
@@ -100,7 +99,7 @@ SignDisplayStrategy == NumberFormatStyleConfiguration.SignDisplayStrategy {
 //*============================================================================*
 
 public protocol NumericTextCurrencyFormat: NumericTextFormat where
-SignDisplayStrategy == CurrencyFormatStyleConfiguration.SignDisplayStrategy {
+_Sign == CurrencyFormatStyleConfiguration.SignDisplayStrategy {
     
     //=------------------------------------------------------------------------=
     // MARK: Accessors
@@ -119,8 +118,8 @@ SignDisplayStrategy == CurrencyFormatStyleConfiguration.SignDisplayStrategy {
 // MARK: * Format x Percent
 //*============================================================================*
 
-public protocol NumericTextPercentFormat: NumericTextFormat where FormatInput: NumericTextFloatValue,
-SignDisplayStrategy == NumberFormatStyleConfiguration.SignDisplayStrategy {
+public protocol NumericTextPercentFormat: NumericTextFormat where
+_Sign == NumberFormatStyleConfiguration.SignDisplayStrategy, FormatInput: NumericTextFloatValue {
     
     //=------------------------------------------------------------------------=
     // MARK: Initializers

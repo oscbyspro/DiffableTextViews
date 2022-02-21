@@ -33,7 +33,7 @@ public protocol NumericTextSignDisplayStrategyRepresentable {
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable init(strategy: NumericTextSignDisplayStrategy)
+    @inlinable init(_ strategy: NumericTextSignDisplayStrategy)
 }
 
 //*============================================================================*
@@ -46,7 +46,7 @@ extension NumberFormatStyleConfiguration.SignDisplayStrategy: NumericTextSignDis
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable public init(strategy: NumericTextSignDisplayStrategy) {
+    @inlinable public init(_ strategy: NumericTextSignDisplayStrategy) {
         switch strategy { case .always: self = .always(); case .automatic: self = .automatic }
     }
 }
@@ -61,7 +61,7 @@ extension CurrencyFormatStyleConfiguration.SignDisplayStrategy: NumericTextSignD
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable public init(strategy: NumericTextSignDisplayStrategy) {
+    @inlinable public init(_ strategy: NumericTextSignDisplayStrategy) {
         switch strategy { case .always: self = .always(); case .automatic: self = .automatic }
     }
 }
