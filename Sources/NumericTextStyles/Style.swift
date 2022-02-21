@@ -17,17 +17,15 @@ import Support
 
 public struct NumericTextStyle<Format: NumericTextFormat>: DiffableTextStyle {
     public typealias Value = Format.FormatInput
-    public typealias Specialization = Format.Specialization
     public typealias Bounds = NumericTextStyles.Bounds<Value>
     public typealias Precision = NumericTextStyles.Precision<Value>
+    @usableFromInline typealias Adapter = NumericTextStyles.Adapter<Format>
 
     //=------------------------------------------------------------------------=
     // MARK: State
     //=------------------------------------------------------------------------=
     
-    @usableFromInline let format: Format
-    @usableFromInline var specialization: Specialization
-    
+    @usableFromInline var adapter: Adapter
     @usableFromInline var bounds: Bounds
     @usableFromInline var precision: Precision
     
@@ -36,34 +34,29 @@ public struct NumericTextStyle<Format: NumericTextFormat>: DiffableTextStyle {
     //=------------------------------------------------------------------------=
     
     @inlinable init(_ format: Format) {
-        self.format = format
-        self.specialization = Format.specialization(format)
+        self.adapter = Adapter(format)
         self.bounds = Bounds()
         self.precision = Precision()
-        #warning("Move this assertion somewhere else.")
-        assert(format.locale == specialization.lexicon.locale)
     }
 
     //=------------------------------------------------------------------------=
     // MARK: Accessors
     //=------------------------------------------------------------------------=
     
-    @inlinable var locale: Locale {
-        format.locale
+    @inlinable var format: Format {
+        adapter.format
     }
     
     @inlinable var lexicon: Lexicon {
-        specialization.lexicon
+        adapter.lexicon
     }
 
     //=------------------------------------------------------------------------=
     // MARK: Transformations
     //=------------------------------------------------------------------------=
     
-    #error("FIXME")
     @inlinable public func locale(_ locale: Locale) -> Self {
-        guard self.locale != locale else { return self }
-        var result = self; result.adapter = specialization.locale(locale); return result
+        var result = self; result.adapter.update(locale); return result
     }
 }
 
@@ -78,7 +71,7 @@ extension NumericTextStyle {
     //=------------------------------------------------------------------------=
     
     @inlinable public static func == (lhs: Self, rhs: Self) -> Bool {
-        guard lhs.format    == rhs.format   else { return false }
+        guard lhs.adapter   == rhs.adapter   else { return false }
         guard lhs.bounds    == rhs.bounds    else { return false }
         guard lhs.precision == rhs.precision else { return false }
         return true

@@ -78,7 +78,7 @@ import Support
         //=--------------------------------------------------------------------=
         
         @inlinable func hash(into hasher: inout Hasher) {
-            hasher.combine(locale.identifier); hasher.combine(code)
+            hasher.combine(locale); hasher.combine(code)
         }
         
         //=--------------------------------------------------------------------=
@@ -86,7 +86,7 @@ import Support
         //=--------------------------------------------------------------------=
         
         @inlinable static func == (lhs: ID, rhs: ID) -> Bool {
-            lhs.locale.identifier == rhs.locale.identifier && lhs.code == rhs.code
+            lhs.locale == rhs.locale && lhs.code == rhs.code
         }
     }
 }
