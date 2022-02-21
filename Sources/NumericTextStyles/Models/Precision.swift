@@ -41,7 +41,7 @@ public struct Precision<Value: NumericTextValue>: Equatable {
         let integer  = Namespace.interpret(integer,  in: Self.limits(\.integer ))
         let fraction = Namespace.interpret(fraction, in: Self.limits(\.fraction))
         //=--------------------------------------=
-        // MARK: Set
+        // MARK: Initialize
         //=--------------------------------------=
         self.lower = Count(value: Namespace.minimum.value, integer: integer.lowerBound, fraction: fraction.lowerBound)
         self.upper = Count(value:   Value.precision.value, integer: integer.upperBound, fraction: fraction.upperBound)

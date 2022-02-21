@@ -41,10 +41,6 @@ import Foundation
         translation.locale
     }
     
-    @inlinable var lexicon: Lexicon {
-        translation.lexicon
-    }
-    
     //=------------------------------------------------------------------------=
     // MARK: Transformations
     //=------------------------------------------------------------------------=
