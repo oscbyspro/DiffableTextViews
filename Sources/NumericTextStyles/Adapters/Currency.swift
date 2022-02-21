@@ -15,21 +15,15 @@ import Support
 // MARK: * Currency
 //*============================================================================*
 
-#warning("Could probably be opaquely used.")
 @usableFromInline final class Currency: Adapter {
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Cache
-    //=------------------------------------------------------------------------=
-    
-    @usableFromInline static let cache = Cache<ID, Currency>(size: 33)
+    @usableFromInline static let cache = Cache<ID, Currency>(33)
     
     //=------------------------------------------------------------------------=
     // MARK: State
     //=------------------------------------------------------------------------=
     
-    public let label:   Label
-    public let lexicon: Lexicon
+    @usableFromInline let label:   Label
+    @usableFromInline let lexicon: Lexicon
 
     //=------------------------------------------------------------------------=
     // MARK: Initializers
@@ -44,15 +38,15 @@ import Support
     // MARK: Initializers - Static
     //=------------------------------------------------------------------------=
     
-    @inlinable static func currency<Format: NumericTextCurrencyFormat>(_ format: Format) -> Currency {
-        cache.search(ID(locale: format.locale, code: format.currencyCode), make: Self(format))
+    @inlinable static func cached<Format: NumericTextCurrencyFormat>(_ format: Format) -> Currency {
+        cache.search(ID(format.locale, format.currencyCode), make: .init(format))
     }
     
     //=------------------------------------------------------------------------=
     // MARK: Autocorrect
     //=------------------------------------------------------------------------=
     
-    @inlinable public func autocorrect(_ snapshot: inout Snapshot) {
+    @inlinable func autocorrect(_ snapshot: inout Snapshot) {
         guard !label.characters.isEmpty else { return }
         guard let range = label.range(in: snapshot) else { return }
         snapshot.update(attributes: range) { attribute in attribute = .phantom }
@@ -75,9 +69,8 @@ import Support
         // MARK: Initializers
         //=--------------------------------------------------------------------=
         
-        @inlinable init(locale: Locale, code: String) {
-            self.code   = code
-            self.locale = locale
+        @inlinable init(_ locale: Locale, _ code: String) {
+            self.locale = locale; self.code = code
         }
         
         //=--------------------------------------------------------------------=
@@ -94,7 +87,7 @@ import Support
         //=--------------------------------------------------------------------=
         
         @inlinable static func == (lhs: ID, rhs: ID) -> Bool {
-            lhs.code == rhs.code && lhs.locale.identifier == rhs.locale.identifier
+            lhs.locale.identifier == rhs.locale.identifier && lhs.code == rhs.code
         }
     }
 }

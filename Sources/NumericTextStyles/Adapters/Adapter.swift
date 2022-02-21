@@ -24,64 +24,19 @@ import Support
 // MARK: * Adapter
 //*============================================================================*
 
-#warning("Maybe rename as specialization or something.")
-public protocol NumericTextAdapter: Equatable {
-    associatedtype Format: NumericTextFormat
+#warning("Rename as specialization, maybe.")
+public protocol NumericTextAdapter {
     
     //=------------------------------------------------------------------------=
     // MARK: State
     //=------------------------------------------------------------------------=
     
-    @inlinable var format:  Format  { get }
     @inlinable var lexicon: Lexicon { get }
-    
+
     //=------------------------------------------------------------------------=
-    // MARK: Initializers
-    //=------------------------------------------------------------------------=
-    
-    init(_ format: Format)
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Utilities
+    // MARK: Autocorrect
     //=------------------------------------------------------------------------=
     
     @inlinable func autocorrect(_ snapshot: inout Snapshot)
 }
 
-//=----------------------------------------------------------------------------=
-// MARK: + Details
-//=----------------------------------------------------------------------------=
-
-#warning("Remove these maybe.")
-extension NumericTextAdapter {
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Accessors
-    //=------------------------------------------------------------------------=
-    
-    @inlinable var locale: Locale {
-        format.locale
-    }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Transformations
-    //=------------------------------------------------------------------------=
-    
-    @inlinable func locale(_ locale: Locale) -> Self {
-        Self(format.locale(locale))
-    }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Utilities
-    //=------------------------------------------------------------------------=
-    
-    @inlinable public func autocorrect(_ snapshot: inout Snapshot) { }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Comparisons
-    //=------------------------------------------------------------------------=
-    
-    @inlinable public static func == (lhs: Self, rhs: Self) -> Bool {
-        lhs.format == rhs.format
-    }
-}

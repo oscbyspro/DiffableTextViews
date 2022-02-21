@@ -33,7 +33,7 @@ public final class Cache<Key, Value> where Key: Hashable & AnyObject, Value: Any
     // MARK: Initializers - Indirect
     //=------------------------------------------------------------------------=
     
-    @inlinable public convenience init(size: Int) {
+    @inlinable public convenience init(_ size: Int) {
         self.init()
         self.nscache.countLimit = size
     }

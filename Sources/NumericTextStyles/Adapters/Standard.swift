@@ -9,27 +9,39 @@
 
 import DiffableTextViews
 import Foundation
+import Support
 
-#warning("It should cache.")
 //*============================================================================*
 // MARK: * Number
 //*============================================================================*
 
-final class NumericTextStandardAdapter: Adapter {
+@usableFromInline final class Standard: Adapter {
+    @usableFromInline static let cache = Cache<ID, Standard>(33)
     
     //=------------------------------------------------------------------------=
     // MARK: State
     //=------------------------------------------------------------------------=
     
-    public let lexicon: Lexicon
+    @usableFromInline let lexicon: Lexicon
     
     //=------------------------------------------------------------------------=
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    #warning("It should cache.")
-    @inlinable init(locale: Locale) {
-        self.lexicon = .standard(locale: locale)
+    @inlinable init<T: Format>(_ format: T) {
+        self.lexicon = .standard(locale: format.locale)
+    }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Initializers - Static
+    //=------------------------------------------------------------------------=
+    
+    @inlinable static func cached<T: Format.Number>(_  format: T) -> Standard {
+        cache.search(ID(format.locale), make: Self(format))
+    }
+    
+    @inlinable static func cached<T: Format.Percent>(_ format: T) -> Standard {
+        cache.search(ID(format.locale), make: Self(format))
     }
     
     //=------------------------------------------------------------------------=
@@ -37,45 +49,41 @@ final class NumericTextStandardAdapter: Adapter {
     //=------------------------------------------------------------------------=
     
     @inlinable public func autocorrect(_ snapshot: inout Snapshot) { }
-}
+    
+    //*========================================================================*
+    // MARK: * ID
+    //*========================================================================*
 
-
-#warning("WIP")
-#warning("WIP")
-#warning("WIP")
-//*============================================================================*
-// MARK: * Standard x ID
-//*============================================================================*
-
-@usableFromInline final class StandardID: Hashable {
-    
-    //=------------------------------------------------------------------------=
-    // MARK: State
-    //=------------------------------------------------------------------------=
-    
-    @usableFromInline let locale: Locale
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Initializers
-    //=------------------------------------------------------------------------=
-    
-    @inlinable init(locale: Locale) {
-        self.locale = locale
-    }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Hashable
-    //=------------------------------------------------------------------------=
-    
-    @inlinable func hash(into hasher: inout Hasher) {
-        hasher.combine(locale.identifier)
-    }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Comparisons
-    //=------------------------------------------------------------------------=
-    
-    @inlinable static func == (lhs: StandardID, rhs: StandardID) -> Bool {
-        lhs.locale.identifier == rhs.locale.identifier
+    @usableFromInline final class ID: Hashable {
+        
+        //=--------------------------------------------------------------------=
+        // MARK: State
+        //=--------------------------------------------------------------------=
+        
+        @usableFromInline let locale: Locale
+        
+        //=--------------------------------------------------------------------=
+        // MARK: Initializers
+        //=--------------------------------------------------------------------=
+        
+        @inlinable init(_ locale: Locale) {
+            self.locale = locale
+        }
+        
+        //=--------------------------------------------------------------------=
+        // MARK: Hashable
+        //=--------------------------------------------------------------------=
+        
+        @inlinable func hash(into hasher: inout Hasher) {
+            hasher.combine(locale.identifier)
+        }
+        
+        //=--------------------------------------------------------------------=
+        // MARK: Comparisons
+        //=--------------------------------------------------------------------=
+        
+        @inlinable static func == (lhs: ID, rhs: ID) -> Bool {
+            lhs.locale.identifier == rhs.locale.identifier
+        }
     }
 }
