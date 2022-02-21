@@ -13,10 +13,10 @@ import XCTest
 @testable import NumericTextStyles
 
 //*============================================================================*
-// MARK: * MiscellaneousTests x Links
+// MARK: * HelpersTests x Links
 //*============================================================================*
 
-final class MiscellaneousTestsXLinks: XCTestCase {
+final class HelpersTestsXLinks: XCTestCase {
     
     //=------------------------------------------------------------------------=
     // MARK: Setup

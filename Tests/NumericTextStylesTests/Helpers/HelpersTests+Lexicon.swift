@@ -13,10 +13,10 @@ import XCTest
 @testable import NumericTextStyles
 
 //*============================================================================*
-// MARK: * MiscellaneousTests x Lexicon
+// MARK: * HelpersTests x Lexicon
 //*============================================================================*
 
-final class MiscellaneousTestsXLexicon: XCTestCase {
+final class HelpersTestsXLexicon: XCTestCase {
     
     //=------------------------------------------------------------------------=
     // MARK: Setup
@@ -32,7 +32,7 @@ final class MiscellaneousTestsXLexicon: XCTestCase {
 // MARK: + Count
 //=----------------------------------------------------------------------------=
 
-extension MiscellaneousTestsXLexicon {
+extension HelpersTestsXLexicon {
     
     //=------------------------------------------------------------------------=
     // MARK: Tests
@@ -47,7 +47,7 @@ extension MiscellaneousTestsXLexicon {
 // MARK: + Styles
 //=----------------------------------------------------------------------------=
 
-extension MiscellaneousTestsXLexicon {
+extension HelpersTestsXLexicon {
 
     //=------------------------------------------------------------------------=
     // MARK: Styles
