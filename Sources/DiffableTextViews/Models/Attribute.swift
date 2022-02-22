@@ -13,9 +13,10 @@
 
 /// A set of options, where each option represents a specialized behavior.
 ///
-/// Plain text is empty.
+/// Plain text has no attributes.
 ///
-/// - Singular: virtual, insertable, removable, passthrough.
+/// - Singular: virtual, insertable, removable, lookaheadable, lookbehindable.
+/// - Couples: dynamic, passthrough.
 /// - Composites: content, phantom.
 ///
 /// - Note: The easiest way to unformat text is to exclude symbols marked as virtual.
@@ -34,9 +35,22 @@ public struct Attribute: OptionSet {
     
     /// Signifies that the symbol should be ignored by the differentiation algorithm when it is removed.
     public static let removable = Self(rawValue: 1 << 2)
-        
-    /// Signifies that the symbol has no real size and may be passed through.
-    public static let passthrough = Self(rawValue: 1 << 3)
+
+    /// Signifies that the symbol can be passed through in the forwards direction.
+    public static let lookaheadable = Self(rawValue: 1 << 3)
+    
+    /// Signifies that the symbol can be passed through in the backwards direction.
+    public static let lookbehindable = Self(rawValue: 1 << 4)
+
+    //=------------------------------------------------------------------------=
+    // MARK: Instances - Couples
+    //=------------------------------------------------------------------------=
+    
+    /// A combination of insertable and removable.
+    public static let dynamic = Self([.insertable, .removable])
+    
+    /// A combination of lookaheadable and lookbehindable.
+    public static let passthrough = Self([.lookaheadable, .lookbehindable])
     
     //=------------------------------------------------------------------------=
     // MARK: Instances - Composites
@@ -50,9 +64,9 @@ public struct Attribute: OptionSet {
     
     /// A formatting attribute. It represents redundant and/or noninteractable text.
     ///
-    /// - Contains: virtual, insertable, removable, passthrough.
+    /// - Contains: virtual, insertable, removable, lookaheadable, lookbehindable.
     ///
-    public static let phantom = Self([.virtual, .insertable, .removable, .passthrough])
+    public static let phantom = Self([.virtual, .insertable, .removable, .lookaheadable, .lookbehindable])
     
     //=------------------------------------------------------------------------=
     // MARK: State
