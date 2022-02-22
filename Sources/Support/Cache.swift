@@ -34,8 +34,7 @@ public final class Cache<Key, Value> where Key: Hashable & AnyObject, Value: Any
     //=------------------------------------------------------------------------=
     
     @inlinable public convenience init(_ size: Int) {
-        self.init()
-        self.nscache.countLimit = size
+        self.init(); self.nscache.countLimit = size
     }
     
     //=------------------------------------------------------------------------=
@@ -52,9 +51,6 @@ public final class Cache<Key, Value> where Key: Hashable & AnyObject, Value: Any
     //=------------------------------------------------------------------------=
     
     @inlinable public func search(_ key: Key, make: @autoclosure () throws -> Value) rethrows -> Value {
-        //=--------------------------------------=
-        // MARK: Search
-        //=--------------------------------------=
         if let reusable = nscache.object(forKey: key) {
             return reusable
         //=--------------------------------------=
