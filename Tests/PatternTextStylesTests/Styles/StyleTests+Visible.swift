@@ -32,7 +32,7 @@ final class StyleTestsXVisible: XCTestCase, StyleTests {
     
     func testNone() {
         XCTFormat___("", format: "+### (###) ##-##-##")
-        XCTInterpret("", format: "+\(anchor)### (###) ##-##-##", value: "")
+        XCTInterpret("", format: "+### (###) ##-##-##", value: "")
     }
     
     func testSome() {
@@ -56,7 +56,7 @@ final class StyleTestsXVisible: XCTestCase, StyleTests {
     
     func testNoneMismatch() {
         XCTFormat___("ABC", format: "+### (###) ##-##-##|ABC")
-        XCTInterpret("ABC", format: "+\(anchor)### (###) ##-##-##", value: "")
+        XCTInterpret("ABC", format: "+### (###) ##-##-##", value: "")
     }
     
     func testSomeMismatch() {

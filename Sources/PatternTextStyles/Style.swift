@@ -105,7 +105,7 @@ extension PatternTextStyle {
         } none: {
             commit, queue in
             commit.snapshot.append(contentsOf: Snapshot(queue, as: .phantom))
-            commit.snapshot.append(.anchor)
+            commit.snapshot.anchor()
         } done: {
             commit, queue, _ in
             visible ? commit.snapshot += Snapshot(queue, as: .phantom) : ()

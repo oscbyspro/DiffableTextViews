@@ -138,33 +138,28 @@
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: + Peek
+// MARK: + Snapshot
 //=----------------------------------------------------------------------------=
 
 extension Layout {
     
     //=------------------------------------------------------------------------=
-    // MARK: Ahead
+    // MARK: Indices
     //=------------------------------------------------------------------------=
     
-    @inlinable func peek(ahead position: Index) -> Index? {
-        position != endIndex ? position : nil
-    }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Behind
-    //=------------------------------------------------------------------------=
-    
-    @inlinable func peek(behind position: Index) -> Index? {
-        position != startIndex ? index(before: position) : nil
-    }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Ahead / Behind
-    //=------------------------------------------------------------------------=
-    
-    @inlinable func peek(_ position: Index, direction: Direction) -> Index? {
-        direction == .forwards ? peek(ahead: position) : peek(behind: position)
+    @inlinable func indices(_ start: Range<Index>, destination: Snapshot.Index) -> Range<Index> {
+        let upper = destination.attribute - start.upperBound.attribute
+        let lower = destination.attribute - start.lowerBound.attribute
+        //=--------------------------------------=
+        // MARK: Compare
+        //=--------------------------------------=
+        let position = upper <= lower
+        ? index(start.upperBound, offsetBy: upper)
+        : index(start.lowerBound, offsetBy: lower)
+        //=--------------------------------------=
+        // MARK: Return
+        //=--------------------------------------=
+        return position ..< position
     }
 }
 
@@ -347,19 +342,46 @@ extension Layout {
 }
 
 //=----------------------------------------------------------------------------=
+// MARK: + Peek
+//=----------------------------------------------------------------------------=
+
+extension Layout {
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Ahead
+    //=------------------------------------------------------------------------=
+    
+    @inlinable func peek(ahead position: Index) -> Index? {
+        position != endIndex ? position : nil
+    }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Behind
+    //=------------------------------------------------------------------------=
+    
+    @inlinable func peek(behind position: Index) -> Index? {
+        position != startIndex ? index(before: position) : nil
+    }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Ahead / Behind
+    //=------------------------------------------------------------------------=
+    
+    @inlinable func peek(_ position: Index, direction: Direction) -> Index? {
+        direction == .forwards ? peek(ahead: position) : peek(behind: position)
+    }
+}
+
+//=----------------------------------------------------------------------------=
 // MARK: + Preference
 //=----------------------------------------------------------------------------=
 
 extension Layout {
     
     //=------------------------------------------------------------------------=
-    // MARK: Index
+    // MARK: Single
     //=------------------------------------------------------------------------=
     
-    /// The preferred index according to preference, intent and attributes.
-    ///
-    /// - The default index, in case no preferred index is found, is the start index.
-    ///
     @inlinable func preferredIndex(start: Layout.Index, preference: Direction, intent: Direction?) -> Layout.Index {
         //=--------------------------------------=
         // MARK: Inspect The Initial Position
@@ -381,5 +403,34 @@ extension Layout {
         // MARK: Return Layout Start Index
         //=--------------------------------------=
         return startIndex
+    }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Double
+    //=------------------------------------------------------------------------=
+    
+    @inlinable func preferredIndices(start: Range<Index>, intent: Intent) -> Range<Index> {
+        //=--------------------------------------=
+        // MARK: Anchor
+        //=--------------------------------------=
+        if let anchorIndex = snapshot.anchorIndex {
+            return indices(start, destination: anchorIndex)
+        }
+        //=--------------------------------------=
+        // MARK: Single
+        //=--------------------------------------=
+        let upperBound = preferredIndex(start: start.upperBound, preference: .backwards, intent: intent.upper)
+        var lowerBound = upperBound
+        //=--------------------------------------=
+        // MARK: Double
+        //=--------------------------------------=
+        if !start.isEmpty, upperBound != startIndex {
+            lowerBound = preferredIndex(start: start.lowerBound, preference:  .forwards, intent: intent.lower)
+            lowerBound = Swift.min(lowerBound, upperBound)
+        }
+        //=--------------------------------------=
+        // MARK: Return
+        //=--------------------------------------=
+        return lowerBound ..< upperBound
     }
 }

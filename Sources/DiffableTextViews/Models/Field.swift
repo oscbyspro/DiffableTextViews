@@ -103,7 +103,7 @@ extension Field {
         //=--------------------------------------=
         self.layout = layout
         self.selection = lowerBound ..< upperBound
-        self.autocorrect(intent: (nil, nil))
+        self.autocorrect(intent: .none)
     }
 }
 
@@ -125,9 +125,7 @@ extension Field {
         //=--------------------------------------=
         // MARK: Parse Momentum As Intent
         //=--------------------------------------=
-        let intent = !momentum ? (nil, nil) : (
-        Direction(start: self.selection.lowerBound, end: selection.lowerBound),
-        Direction(start: self.selection.upperBound, end: selection.upperBound))
+        let intent = momentum ? .momentum(from: self.selection, to: selection) : Intent.none
         //=--------------------------------------=
         // MARK: Update
         //=--------------------------------------=
@@ -146,26 +144,14 @@ extension Field {
     // MARK: Selection
     //=------------------------------------------------------------------------=
     
-    @inlinable mutating func autocorrect(intent: (lower: Direction?, upper: Direction?)) {
+    @inlinable mutating func autocorrect(intent: Intent) {
         //=--------------------------------------=
         // MARK: Exceptions
         //=--------------------------------------=
         if selection == layout.range { return }
         //=--------------------------------------=
-        // MARK: Selection - Single
+        // MARK: Autocorrect
         //=--------------------------------------=
-        let upperBound = layout.preferredIndex(start: selection.upperBound, preference: .backwards, intent: intent.upper)
-        var lowerBound = upperBound
-        //=--------------------------------------=
-        // MARK: Selection - Double
-        //=--------------------------------------=
-        if !selection.isEmpty, upperBound != layout.startIndex {
-            lowerBound = layout.preferredIndex(start: selection.lowerBound, preference:  .forwards, intent: intent.lower)
-            lowerBound = min(lowerBound, upperBound)
-        }
-        //=--------------------------------------=
-        // MARK: Update
-        //=--------------------------------------=
-        self.selection = lowerBound ..< upperBound
+        self.selection = layout.preferredIndices(start: selection, intent: intent)
     }
 }

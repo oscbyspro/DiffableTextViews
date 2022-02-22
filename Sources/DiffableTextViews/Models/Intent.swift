@@ -8,37 +8,44 @@
 //=----------------------------------------------------------------------------=
 
 //*============================================================================*
-// MARK: * Direction
+// MARK: * Intent
 //*============================================================================*
 
-/// A forwards/backwards model.
-@frozen @usableFromInline enum Direction {
+@usableFromInline struct Intent {
     
     //=------------------------------------------------------------------------=
     // MARK: Instances
     //=------------------------------------------------------------------------=
+
+    @usableFromInline static let none = Self(lower: nil, upper: nil)
     
-    case forwards
-    case backwards
+    //=------------------------------------------------------------------------=
+    // MARK: State
+    //=------------------------------------------------------------------------=
+    
+    @usableFromInline let upper: Direction?
+    @usableFromInline let lower: Direction?
     
     //=------------------------------------------------------------------------=
     // MARK: Initializers
     //=------------------------------------------------------------------------=
+
+    @inlinable init(lower: Direction?, upper: Direction?) {
+        self.upper = upper
+        self.lower = lower
+    }
     
-    @inlinable init?<Value: Comparable>(from start: Value, to end: Value) {
-        if start < end { self = .forwards }
-        else if start > end { self = .backwards }
-        else { return nil }
+    @inlinable init(upper: Direction?, lower: Direction?) {
+        self.upper = upper
+        self.lower = lower
     }
     
     //=------------------------------------------------------------------------=
-    // MARK: Transformations
+    // MARK: Initializers - Static
     //=------------------------------------------------------------------------=
     
-    @inlinable func reversed() -> Self {
-        switch self {
-        case .forwards: return .backwards
-        case .backwards: return .forwards
-        }
+    @inlinable static func momentum<T: Comparable>(from start: Range<T>, to end: Range<T>) -> Self {
+        Self(upper: Direction(from: start.upperBound, to: end.upperBound),
+             lower: Direction(from: start.lowerBound, to: end.lowerBound))
     }
 }

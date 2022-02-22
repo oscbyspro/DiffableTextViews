@@ -17,12 +17,15 @@ public struct Snapshot: BidirectionalCollection, RangeReplaceableCollection {
     //=------------------------------------------------------------------------=
     // MARK: State
     //=------------------------------------------------------------------------=
-
+        
     @usableFromInline var _characters: String
     @inlinable public var  characters: String { _characters }
 
     @usableFromInline var _attributes: [Attribute]
     @inlinable public var  attributes: [Attribute] { _attributes }
+    
+    @usableFromInline var _anchorIndex: Index?
+    @inlinable public var  anchorIndex: Index? { _anchorIndex }
 
     //=------------------------------------------------------------------------=
     // MARK: Initializers
@@ -142,7 +145,7 @@ public extension Snapshot {
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: + RangeReplaceableCollection
+// MARK: + Replacements
 //=----------------------------------------------------------------------------=
 
 public extension Snapshot {
@@ -168,13 +171,44 @@ public extension Snapshot {
         _attributes.append(element.attribute)
     }
     
+    @inlinable mutating func append<S: Sequence>(contentsOf elements: S) where S.Element == Symbol {
+        _characters.append(contentsOf: elements.lazy.map(\.character))
+        _attributes.append(contentsOf: elements.lazy.map(\.attribute))
+    }
+    
     @inlinable mutating func insert(_ element: Element, at position: Index) {
         _characters.insert(element.character, at: position.character)
         _attributes.insert(element.attribute, at: position.attribute)
     }
     
-    @discardableResult @inlinable mutating func remove(at position: Index) -> Symbol {
+    @inlinable mutating func insert<S: Collection>(contentsOf elements: S, at i: Index) where S.Element == Symbol {
+        _characters.insert(contentsOf: elements.lazy.map(\.character), at: i.character)
+        _attributes.insert(contentsOf: elements.lazy.map(\.attribute), at: i.attribute)
+    }
+    
+    @inlinable @discardableResult mutating func remove(at position: Index) -> Symbol {
         Symbol(_characters.remove(at: position.character), as: _attributes.remove(at: position.attribute))
+    }
+}
+
+//=----------------------------------------------------------------------------=
+// MARK: + Anchor
+//=----------------------------------------------------------------------------=
+
+public extension Snapshot {
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Transformations
+    //=------------------------------------------------------------------------=
+    
+    /// Sets the anchor to the endIndex.
+    @inlinable mutating func anchor() {
+        self._anchorIndex = endIndex
+    }
+    
+    /// Sets the anchor to the position.
+    @inlinable mutating func anchor(_ position: Index?) {
+        self._anchorIndex = position
     }
 }
 
@@ -189,18 +223,22 @@ public extension Snapshot {
     //=------------------------------------------------------------------------=
     
     @inlinable mutating func update(attributes position: Index,
-        with transform: (inout Attribute) -> Void) {
+    with transform: (inout Attribute) -> Void) {
         transform(&_attributes[position.attribute])
     }
     
     @inlinable mutating func update<S: Sequence>(attributes sequence: S,
-        with transform: (inout Attribute) -> Void) where S.Element == Index {
-        for position in sequence { transform(&_attributes[position.attribute]) }
+    with transform: (inout Attribute) -> Void) where S.Element == Index {
+        for position in sequence {
+            transform(&_attributes[position.attribute])
+        }
     }
     
     @inlinable mutating func update<R: RangeExpression>(attributes range: R,
-        with transform: (inout Attribute) -> Void) where R.Bound == Index {
-        for position in indices[range.relative(to: self)] { transform(&_attributes[position.attribute]) }
+    with transform: (inout Attribute) -> Void) where R.Bound == Index {
+        for position in indices[range.relative(to: self)] {
+            transform(&_attributes[position.attribute])
+        }
     }
 }
 
