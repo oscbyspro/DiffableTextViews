@@ -118,13 +118,13 @@ extension Bounds {
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: + CustomStringConvertible
+// MARK: + Conversions
 //=----------------------------------------------------------------------------=
 
 extension Bounds: CustomStringConvertible {
     
     //=------------------------------------------------------------------------=
-    // MARK: Descriptions
+    // MARK: Description
     //=------------------------------------------------------------------------=
     
     @inlinable public var description: String {

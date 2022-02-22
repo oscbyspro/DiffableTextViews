@@ -89,13 +89,13 @@ public struct Symbol: Equatable {
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: + CustomStringConvertible
+// MARK: + Conversions
 //=----------------------------------------------------------------------------=
 
 extension Symbol: CustomStringConvertible {
     
     //=------------------------------------------------------------------------=
-    // MARK: Descriptions
+    // MARK: Description
     //=------------------------------------------------------------------------=
     
     @inlinable public var description: String {

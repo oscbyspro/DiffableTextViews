@@ -65,7 +65,7 @@ public struct Snapshot: BidirectionalCollection, RangeReplaceableCollection {
         // MARK: Initializers
         //=--------------------------------------------------------------------=
 
-        @inlinable internal init(character: String.Index, attribute: Int) {
+        @inlinable internal init(_ character: String.Index, _ attribute: Int) {
             self.character = character
             self.attribute = attribute
         }
@@ -117,13 +117,13 @@ public extension Snapshot {
     //=------------------------------------------------------------------------=
     
     @inlinable var startIndex: Index {
-        Index(character: _characters.startIndex,
-              attribute: _attributes.startIndex)
+        Index(_characters.startIndex,
+              _attributes.startIndex)
     }
 
     @inlinable var endIndex: Index {
-        Index(character: _characters.endIndex,
-              attribute: _attributes.endIndex)
+        Index(_characters.endIndex,
+              _attributes.endIndex)
     }
     
     //=------------------------------------------------------------------------=
@@ -131,13 +131,13 @@ public extension Snapshot {
     //=------------------------------------------------------------------------=
     
     @inlinable func index(after position: Index) -> Index {
-        Index(character: _characters.index(after: position.character),
-              attribute: _attributes.index(after: position.attribute))
+        Index(_characters.index(after: position.character),
+              _attributes.index(after: position.attribute))
     }
     
     @inlinable func index(before position: Index) -> Index {
-        Index(character: _characters.index(before: position.character),
-              attribute: _attributes.index(before: position.attribute))
+        Index(_characters.index(before: position.character),
+              _attributes.index(before: position.attribute))
     }
 }
 
@@ -154,11 +154,13 @@ public extension Snapshot {
     @inlinable mutating func replaceSubrange<C>(_ range: Range<Index>,
         with elements: C) where C: Collection, C.Element == Symbol {
         _characters.replaceSubrange(
-            range.lowerBound.character ..< range.upperBound.character,
-            with: elements.lazy.map(\.character))
+        range.lowerBound.character ..<
+        range.upperBound.character,
+        with: elements.lazy.map(\.character))
         _attributes.replaceSubrange(
-            range.lowerBound.attribute ..< range.upperBound.attribute,
-            with: elements.lazy.map(\.attribute))
+        range.lowerBound.attribute ..<
+        range.upperBound.attribute,
+        with: elements.lazy.map(\.attribute))
     }
     
     @inlinable mutating func append(_ element: Symbol) {
@@ -203,7 +205,7 @@ public extension Snapshot {
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: + CustomStringConvertible
+// MARK: + Conversions
 //=----------------------------------------------------------------------------=
 
 extension Snapshot: CustomStringConvertible {

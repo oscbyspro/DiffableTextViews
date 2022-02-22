@@ -154,13 +154,13 @@ extension Field {
         //=--------------------------------------=
         // MARK: Selection - Single
         //=--------------------------------------=
-        let upperBound = layout.preferredIndex(selection.upperBound, preference: .backwards, intent: intent.upper)
+        let upperBound = layout.preferredIndex(from: selection.upperBound, preference: .backwards, intent: intent.upper)
         var lowerBound = upperBound
         //=--------------------------------------=
         // MARK: Selection - Double
         //=--------------------------------------=
         if !selection.isEmpty, upperBound != layout.startIndex {
-            lowerBound = layout.preferredIndex(selection.lowerBound, preference:  .forwards, intent: intent.lower)
+            lowerBound = layout.preferredIndex(from: selection.lowerBound, preference:  .forwards, intent: intent.lower)
             lowerBound = min(lowerBound, upperBound)
         }
         //=--------------------------------------=

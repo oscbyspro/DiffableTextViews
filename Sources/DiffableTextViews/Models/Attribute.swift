@@ -15,8 +15,7 @@
 ///
 /// Plain text has no attributes.
 ///
-/// - Singular: virtual, insertable, removable, lookaheadable, lookbehindable.
-/// - Couples: dynamic, passthrough.
+/// - Singular: virtual, insertable, removable, passthrough.
 /// - Composites: content, phantom.
 ///
 /// - Note: The easiest way to unformat text is to exclude symbols marked as virtual.
@@ -36,22 +35,9 @@ public struct Attribute: OptionSet {
     /// Signifies that the symbol should be ignored by the differentiation algorithm when it is removed.
     public static let removable = Self(rawValue: 1 << 2)
 
-    /// Signifies that the symbol can be passed through in the forwards direction.
-    public static let lookaheadable = Self(rawValue: 1 << 3)
-    
-    /// Signifies that the symbol can be passed through in the backwards direction.
-    public static let lookbehindable = Self(rawValue: 1 << 4)
+    /// Signifies that the symbol can be passed through.
+    public static let passthrough = Self(rawValue: 1 << 3)
 
-    //=------------------------------------------------------------------------=
-    // MARK: Instances - Couples
-    //=------------------------------------------------------------------------=
-    
-    /// A combination of insertable and removable.
-    public static let dynamic = Self([.insertable, .removable])
-    
-    /// A combination of lookaheadable and lookbehindable.
-    public static let passthrough = Self([.lookaheadable, .lookbehindable])
-    
     //=------------------------------------------------------------------------=
     // MARK: Instances - Composites
     //=------------------------------------------------------------------------=
@@ -66,7 +52,7 @@ public struct Attribute: OptionSet {
     ///
     /// - Contains: virtual, insertable, removable, lookaheadable, lookbehindable.
     ///
-    public static let phantom = Self([.virtual, .insertable, .removable, .lookaheadable, .lookbehindable])
+    public static let phantom = Self([.virtual, .insertable, .removable, .passthrough])
     
     //=------------------------------------------------------------------------=
     // MARK: State
@@ -84,13 +70,13 @@ public struct Attribute: OptionSet {
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: + CustomStringConvertible
+// MARK: + Conversions
 //=----------------------------------------------------------------------------=
 
 extension Attribute: CustomStringConvertible {
     
     //=------------------------------------------------------------------------=
-    // MARK: Descriptions
+    // MARK: Description
     //=------------------------------------------------------------------------=
     
     @inlinable public var description: String {
