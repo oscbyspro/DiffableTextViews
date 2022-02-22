@@ -14,12 +14,6 @@
 @usableFromInline struct Intent {
     
     //=------------------------------------------------------------------------=
-    // MARK: Instances
-    //=------------------------------------------------------------------------=
-
-    @usableFromInline static let none = Self(lower: nil, upper: nil)
-    
-    //=------------------------------------------------------------------------=
     // MARK: State
     //=------------------------------------------------------------------------=
     
@@ -30,22 +24,13 @@
     // MARK: Initializers
     //=------------------------------------------------------------------------=
 
-    @inlinable init(lower: Direction?, upper: Direction?) {
+    @inlinable init(lower: Direction? = nil, upper: Direction? = nil) {
         self.upper = upper
         self.lower = lower
     }
     
-    @inlinable init(upper: Direction?, lower: Direction?) {
-        self.upper = upper
-        self.lower = lower
-    }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Initializers - Static
-    //=------------------------------------------------------------------------=
-    
-    @inlinable static func momentum<T: Comparable>(from start: Range<T>, to end: Range<T>) -> Self {
-        Self(upper: Direction(from: start.upperBound, to: end.upperBound),
-             lower: Direction(from: start.lowerBound, to: end.lowerBound))
+    @inlinable init<T: Comparable>(_ start: Range<T>, to end: Range<T>) {
+        self.upper = Direction(from: start.upperBound, to: end.upperBound)
+        self.lower = Direction(from: start.lowerBound, to: end.lowerBound)
     }
 }

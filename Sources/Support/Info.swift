@@ -43,7 +43,7 @@ public struct Info: CustomStringConvertible, Error {
     //=------------------------------------------------------------------------=
     
     @inlinable @inline(__always) public init(_ components: () -> [Component]) {
-        self.init(description: components().map(\.content).joined(separator: " "))
+        self.init(description: components().lazy.map(\.content).joined(separator: " "))
     }
     
     @inlinable @inline(__always) public init(_ components: @autoclosure () -> [Component]) {

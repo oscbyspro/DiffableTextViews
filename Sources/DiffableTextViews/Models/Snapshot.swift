@@ -56,7 +56,8 @@ public struct Snapshot: BidirectionalCollection, RangeReplaceableCollection {
     //=------------------------------------------------------------------------=
     
     @inlinable public subscript(position: Index) -> Symbol {
-        Symbol(_characters[position.character], as: _attributes[position.attribute])
+        Symbol(character: _characters[position.character],
+               attribute: _attributes[position.attribute])
     }
     
     //=------------------------------------------------------------------------=
@@ -104,7 +105,7 @@ public struct Snapshot: BidirectionalCollection, RangeReplaceableCollection {
         // MARK: Initializers
         //=--------------------------------------------------------------------=
 
-        @inlinable internal init(_ character: String.Index, _ attribute: Int) {
+        @inlinable init(_ character: String.Index, _ attribute: Int) {
             self.character = character
             self.attribute = attribute
         }
