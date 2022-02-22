@@ -254,20 +254,7 @@ extension Layout {
 //=----------------------------------------------------------------------------=
 
 extension Layout {
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Forwards / Backwards / To / Through
-    //=------------------------------------------------------------------------=
-    
-    @inlinable func firstIndex(from start: Index, direction: Direction, through: Bool) -> Index? {
-        switch (direction, through) {
-        case (.forwards,  false): return firstIndexForwardsTo(from: start, where: nonpassthrough)
-        case (.forwards,   true): return firstIndexForwardsThrough(from: start, where: nonpassthrough)
-        case (.backwards, false): return firstIndexBackwardsTo(from: start, where: nonpassthrough)
-        case (.backwards,  true): return firstIndexBackwardsThrough(from: start, where: nonpassthrough)
-        }
-    }
-    
+
     //=------------------------------------------------------------------------=
     // MARK: Forwards To
     //=------------------------------------------------------------------------=
@@ -344,6 +331,19 @@ extension Layout {
         //=--------------------------------------=
         return nil
     }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Forwards / Backwards / To / Through
+    //=------------------------------------------------------------------------=
+    
+    @inlinable func firstIndex(start: Index, direction: Direction, through: Bool) -> Index? {
+        switch (direction, through) {
+        case (.forwards,  false): return firstIndexForwardsTo(from:       start, where: nonpassthrough)
+        case (.forwards,   true): return firstIndexForwardsThrough(from:  start, where: nonpassthrough)
+        case (.backwards, false): return firstIndexBackwardsTo(from:      start, where: nonpassthrough)
+        case (.backwards,  true): return firstIndexBackwardsThrough(from: start, where: nonpassthrough)
+        }
+    }
 }
 
 //=----------------------------------------------------------------------------=
@@ -360,7 +360,7 @@ extension Layout {
     ///
     /// - The default index, in case no preferred index is found, is the start index.
     ///
-    @inlinable func preferredIndex(from start: Layout.Index, preference: Direction, intent: Direction?) -> Layout.Index {
+    @inlinable func preferredIndex(start: Layout.Index, preference: Direction, intent: Direction?) -> Layout.Index {
         //=--------------------------------------=
         // MARK: Inspect The Initial Position
         //=--------------------------------------=
@@ -372,13 +372,13 @@ extension Layout {
         //=--------------------------------------=
         // MARK: Try In This Direction
         //=--------------------------------------=
-        if let preferred = firstIndex(from: start, direction: direction, through: direction != preference) { return preferred }
+        if let index = firstIndex(start: start, direction: direction, through: direction != preference) { return index }
         //=--------------------------------------=
         // MARK: Try In The Other Direction
         //=--------------------------------------=
-        if let preferred = firstIndex(from: start, direction: direction.reversed(), through: false) { return preferred }
+        if let index = firstIndex(start: start, direction: direction.reversed(), through: false) { return index }
         //=--------------------------------------=
-        // MARK: Default To Layout's Start Index
+        // MARK: Return Layout Start Index
         //=--------------------------------------=
         return startIndex
     }
