@@ -35,22 +35,22 @@ public struct Attribute: OptionSet {
     /// Signifies that the symbol should be ignored by the differentiation algorithm when it is removed.
     public static let removable = Self(rawValue: 1 << 2)
 
-    /// Signifies that the symbol can be passed through.
+    /// Signifies that the symbol have no effective size and be passed through.
     public static let passthrough = Self(rawValue: 1 << 3)
-
+    
     //=------------------------------------------------------------------------=
     // MARK: Instances - Composites
     //=------------------------------------------------------------------------=
     
-    /// The default attribute. It represents standard text.
+    /// A standard attribute describing standard characters.
     ///
-    /// - Contains no attributes.
+    /// - It contains no attributes.
     ///
     public static let content = Self([])
     
-    /// A formatting attribute. It represents redundant and/or noninteractable text.
+    /// A formatting attribute describing formatting characters.
     ///
-    /// - Contains: virtual, insertable, removable, lookaheadable, lookbehindable.
+    /// - It contains: virtual, insertable, removable, lookaheadable, lookbehindable.
     ///
     public static let phantom = Self([.virtual, .insertable, .removable, .passthrough])
     
