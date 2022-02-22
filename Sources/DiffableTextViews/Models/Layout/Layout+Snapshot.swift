@@ -17,18 +17,13 @@ extension Layout {
     // MARK: Indices
     //=------------------------------------------------------------------------=
     
-    @inlinable func indices(_ start: Range<Index>, destination: Snapshot.Index) -> Range<Index> {
-        let upper = destination.attribute - start.upperBound.attribute
-        let lower = destination.attribute - start.lowerBound.attribute
-        //=--------------------------------------=
-        // MARK: Compare
-        //=--------------------------------------=
-        let position = upper <= lower
-        ? index(start.upperBound, offsetBy: upper)
-        : index(start.lowerBound, offsetBy: lower)
-        //=--------------------------------------=
-        // MARK: Return
-        //=--------------------------------------=
-        return position ..< position
+    /// Should be faster than iterating considering that UTF16 characters size count is O(1).
+    @inlinable func index(at destination: Snapshot.Index) -> Index {
+        Index(destination, at: .end(of: snapshot.characters[..<destination.character]))
+    }
+    
+    /// Should be faster than iterating considering that UTF16 characters size count is O(1).
+    @inlinable func indices(at destination: Snapshot.Index) -> Range<Index> {
+        let position = index(at: destination); return position ..< position
     }
 }

@@ -21,7 +21,9 @@ extension Layout {
         //=--------------------------------------=
         // MARK: Inspect The Initial Position
         //=--------------------------------------=
-        if peek(start, direction: preference).map(nonpassthrough) == true { return start }
+        if peek(start, direction: preference).map(nonpassthrough) == true {
+            return start
+        }
         //=--------------------------------------=
         // MARK: Pick A Direction
         //=--------------------------------------=
@@ -29,11 +31,15 @@ extension Layout {
         //=--------------------------------------=
         // MARK: Try In This Direction
         //=--------------------------------------=
-        if let index = firstIndex(start, direction: direction, through: direction != preference) { return index }
+        if let position = firstIndex(start, direction: direction, through: direction != preference) {
+            return position
+        }
         //=--------------------------------------=
         // MARK: Try In The Other Direction
         //=--------------------------------------=
-        if let index = firstIndex(start, direction: direction.reversed(), through: false) { return index }
+        if let position = firstIndex(start, direction: direction.reversed(), through: false) {
+            return position
+        }
         //=--------------------------------------=
         // MARK: Return Layout Start Index
         //=--------------------------------------=
@@ -48,7 +54,9 @@ extension Layout {
         //=--------------------------------------=
         // MARK: Anchor
         //=--------------------------------------=
-        if let anchorIndex = snapshot.anchorIndex { return indices(start, destination: anchorIndex) }
+        if let anchorIndex = snapshot.anchorIndex {
+            return indices(at: anchorIndex)
+        }
         //=--------------------------------------=
         // MARK: Single
         //=--------------------------------------=

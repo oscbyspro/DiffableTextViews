@@ -18,9 +18,10 @@ extension Layout {
     //=------------------------------------------------------------------------=
     
     @inlinable func index(start: Index, destination: Position) -> Index {
-        start.position <= destination
-        ? index(after:  start, while: { $0.position < destination })
-        : index(before: start, while: { $0.position > destination })
+        switch start.position <= destination {
+        case  true: return index(after:  start, while: { $0.position < destination })
+        case false: return index(before: start, while: { $0.position > destination })
+        }
     }
     
     //=------------------------------------------------------------------------=

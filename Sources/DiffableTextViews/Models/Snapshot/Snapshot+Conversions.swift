@@ -21,4 +21,3 @@ extension Snapshot: CustomStringConvertible {
         "\(Self.self)(\"\(_characters)\", \(_attributes))"
     }
 }
-
