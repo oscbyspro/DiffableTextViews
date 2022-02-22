@@ -152,6 +152,6 @@ extension Field {
         //=--------------------------------------=
         // MARK: Autocorrect
         //=--------------------------------------=
-        self.selection = layout.preferredIndices(start: selection, intent: intent)
+        self.selection = layout.preferred(selection, intent: intent)
     }
 }
