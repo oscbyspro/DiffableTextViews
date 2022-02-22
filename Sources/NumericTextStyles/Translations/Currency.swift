@@ -15,7 +15,7 @@ import Support
 // MARK: * Currency
 //*============================================================================*
 
-@usableFromInline final class Currency: Translation {
+@usableFromInline final class Currency: Translations.Cacheable {
     @usableFromInline static let cache = Cache<ID, Currency>(33)
     
     //=------------------------------------------------------------------------=
@@ -30,8 +30,8 @@ import Support
     //=------------------------------------------------------------------------=
     
     @inlinable init(_ key: ID) {
-        self.lexicon = .currency(key.locale,   code: key.code)
-        self.label   = .currency(self.lexicon, code: key.code)
+        self.lexicon = .currency(key.locale, code: key.code)
+        self.label   = .currency(lexicon,    code: key.code)
     }
     
     //=------------------------------------------------------------------------=
@@ -39,7 +39,7 @@ import Support
     //=------------------------------------------------------------------------=
     
     @inlinable static func cache<T: Formats.Currency>(_ format: T) -> Currency {
-        let key = ID(format.locale, format.currencyCode); return cache.search(key, make: Self(key))
+        search(ID(format.locale, format.currencyCode))
     }
     
     //=------------------------------------------------------------------------=

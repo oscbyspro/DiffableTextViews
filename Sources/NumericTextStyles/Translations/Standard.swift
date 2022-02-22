@@ -15,9 +15,9 @@ import Support
 // MARK: * Standard
 //*============================================================================*
 
-@usableFromInline final class Standard: Translation {
+@usableFromInline final class Standard: Translations.Cacheable {
     @usableFromInline static let cache = Cache<ID, Standard>(33)
-    
+
     //=------------------------------------------------------------------------=
     // MARK: State
     //=------------------------------------------------------------------------=
@@ -37,11 +37,11 @@ import Support
     //=------------------------------------------------------------------------=
     
     @inlinable static func cache<T: Formats.Number>(_  format: T) -> Standard {
-        let key = ID(format.locale); return cache.search(key, make: Self(key))
+        search(ID(format.locale))
     }
     
     @inlinable static func cache<T: Formats.Percent>(_ format: T) -> Standard {
-        let key = ID(format.locale); return cache.search(key, make: Self(key))
+        search(ID(format.locale))
     }
     
     //=------------------------------------------------------------------------=

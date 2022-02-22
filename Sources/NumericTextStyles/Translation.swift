@@ -9,12 +9,15 @@
 
 import DiffableTextViews
 import Foundation
+import Support
 
 //*============================================================================*
 // MARK: * Content
 //*============================================================================*
 
-@usableFromInline typealias Translation = NumericTextTranslation
+@usableFromInline typealias Translation = NumericTextTranslation; @usableFromInline enum Translations {
+    @usableFromInline typealias Cacheable = NumericTextCacheableTranslation
+}
 
 //*============================================================================*
 // MARK: * Translation
@@ -47,5 +50,40 @@ extension NumericTextTranslation {
     
     @inlinable var locale: Locale {
         lexicon.locale
+    }
+}
+
+//*============================================================================*
+// MARK: * Translation x Cacheable
+//*============================================================================*
+
+@usableFromInline protocol NumericTextCacheableTranslation: AnyObject, Translation {
+    associatedtype ID: AnyObject & Hashable
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Initializers
+    //=------------------------------------------------------------------------=
+    
+    @inlinable init(_ key: ID)
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Cache
+    //=------------------------------------------------------------------------=
+
+    @inlinable static var cache: Cache<ID, Self> { get }
+}
+
+//=----------------------------------------------------------------------------=
+// MARK: + Details
+//=----------------------------------------------------------------------------=
+
+extension NumericTextCacheableTranslation {
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Search
+    //=------------------------------------------------------------------------=
+        
+    @inlinable static func search(_ key: ID) -> Self {
+        cache.search(key, make: Self(key))
     }
 }
