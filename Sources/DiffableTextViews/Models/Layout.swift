@@ -138,6 +138,37 @@
 }
 
 //=----------------------------------------------------------------------------=
+// MARK: + Peek
+//=----------------------------------------------------------------------------=
+
+extension Layout {
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Ahead
+    //=------------------------------------------------------------------------=
+    
+    @inlinable func peek(ahead position: Index) -> Index? {
+        position != endIndex ? position : nil
+    }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Behind
+    //=------------------------------------------------------------------------=
+    
+    @inlinable func peek(behind position: Index) -> Index? {
+        position != startIndex ? index(before: position) : nil
+    }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Ahead / Behind
+    //=------------------------------------------------------------------------=
+    
+    @inlinable func peek(_ position: Index, direction: Direction) -> Index? {
+        direction == .forwards ? peek(ahead: position) : peek(behind: position)
+    }
+}
+
+//=----------------------------------------------------------------------------=
 // MARK: + Snapshot
 //=----------------------------------------------------------------------------=
 
@@ -331,44 +362,13 @@ extension Layout {
     // MARK: Forwards / Backwards / To / Through
     //=------------------------------------------------------------------------=
     
-    @inlinable func firstIndex(start: Index, direction: Direction, through: Bool) -> Index? {
+    @inlinable func firstIndex(_ start: Index, direction: Direction, through: Bool) -> Index? {
         switch (direction, through) {
         case (.forwards,  false): return firstIndexForwardsTo(from:       start, where: nonpassthrough)
         case (.forwards,   true): return firstIndexForwardsThrough(from:  start, where: nonpassthrough)
         case (.backwards, false): return firstIndexBackwardsTo(from:      start, where: nonpassthrough)
         case (.backwards,  true): return firstIndexBackwardsThrough(from: start, where: nonpassthrough)
         }
-    }
-}
-
-//=----------------------------------------------------------------------------=
-// MARK: + Peek
-//=----------------------------------------------------------------------------=
-
-extension Layout {
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Ahead
-    //=------------------------------------------------------------------------=
-    
-    @inlinable func peek(ahead position: Index) -> Index? {
-        position != endIndex ? position : nil
-    }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Behind
-    //=------------------------------------------------------------------------=
-    
-    @inlinable func peek(behind position: Index) -> Index? {
-        position != startIndex ? index(before: position) : nil
-    }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Ahead / Behind
-    //=------------------------------------------------------------------------=
-    
-    @inlinable func peek(_ position: Index, direction: Direction) -> Index? {
-        direction == .forwards ? peek(ahead: position) : peek(behind: position)
     }
 }
 
@@ -382,7 +382,7 @@ extension Layout {
     // MARK: Single
     //=------------------------------------------------------------------------=
     
-    @inlinable func preferredIndex(start: Layout.Index, preference: Direction, intent: Direction?) -> Layout.Index {
+    @inlinable func preferredIndex(_ start: Layout.Index, preference: Direction, intent: Direction?) -> Layout.Index {
         //=--------------------------------------=
         // MARK: Inspect The Initial Position
         //=--------------------------------------=
@@ -394,11 +394,11 @@ extension Layout {
         //=--------------------------------------=
         // MARK: Try In This Direction
         //=--------------------------------------=
-        if let index = firstIndex(start: start, direction: direction, through: direction != preference) { return index }
+        if let index = firstIndex(start, direction: direction, through: direction != preference) { return index }
         //=--------------------------------------=
         // MARK: Try In The Other Direction
         //=--------------------------------------=
-        if let index = firstIndex(start: start, direction: direction.reversed(), through: false) { return index }
+        if let index = firstIndex(start, direction: direction.reversed(), through: false) { return index }
         //=--------------------------------------=
         // MARK: Return Layout Start Index
         //=--------------------------------------=
@@ -419,13 +419,13 @@ extension Layout {
         //=--------------------------------------=
         // MARK: Single
         //=--------------------------------------=
-        let upperBound = preferredIndex(start: start.upperBound, preference: .backwards, intent: intent.upper)
+        let upperBound = preferredIndex(start.upperBound, preference: .backwards, intent: intent.upper)
         var lowerBound = upperBound
         //=--------------------------------------=
         // MARK: Double
         //=--------------------------------------=
         if !start.isEmpty, upperBound != startIndex {
-            lowerBound = preferredIndex(start: start.lowerBound, preference:  .forwards, intent: intent.lower)
+            lowerBound = preferredIndex(start.lowerBound, preference:  .forwards, intent: intent.lower)
             lowerBound = Swift.min(lowerBound, upperBound)
         }
         //=--------------------------------------=
