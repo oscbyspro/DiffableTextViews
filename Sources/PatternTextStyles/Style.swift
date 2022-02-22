@@ -68,6 +68,9 @@ extension PatternTextStyle {
     
     /// - Mismatches are separated.
     @inlinable public func format(_ value: Value) -> String {
+        //=--------------------------------------=
+        // MARK: Sequencer
+        //=--------------------------------------=
         Sequencer(pattern, placeholders, value).reduce(into: .init()) {
             characters, queue, content in
             characters.append(contentsOf: queue)
@@ -98,6 +101,9 @@ extension PatternTextStyle {
     /// - Mismatches are cut.
     @inlinable public func interpret(_ value: Value) -> Commit<Value> {
         var anchorable = false
+        //=--------------------------------------=
+        // MARK: Sequencer
+        //=--------------------------------------=
         return Sequencer(pattern, placeholders, value).reduce(into: .init()) {
             commit, queue, content in
             commit.snapshot.append(contentsOf: Snapshot(queue, as: .phantom))
@@ -106,15 +112,12 @@ extension PatternTextStyle {
         } none: {
             commit, queue in
             commit.snapshot.append(contentsOf: Snapshot(queue, as: .phantom))
-            #warning("Anchor: only backwards is available here.")
             anchorable = true
-//            commit.snapshot.append(.anchor)
         } done: {
             commit, queue, _ in
-            #warning("Anchor: can be inserted here.")
-            let anchorEndIndex = anchorable ? commit.snapshot.endIndex : nil
+            let anchor = anchorable ? commit.snapshot.endIndex : nil
             visible ? commit.snapshot += Snapshot(queue, as: .phantom) : ()
-            commit.snapshot.anchor(before: anchorEndIndex)
+            commit.snapshot.anchor(anchor)
         }
     }
 }

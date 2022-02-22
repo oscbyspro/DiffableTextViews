@@ -162,12 +162,13 @@ extension Layout {
     // MARK: Dynamic
     //=------------------------------------------------------------------------=
     
+    #warning("Maybe try: while.")
     @inlinable func collision(_ start: Index, direction: Direction, through: Bool) -> Index? {
         switch (direction, through) {
-        case (.forwards,  false): return firstIndexForwardsTo(start: start, where: nonlookaheadable)
-        case (.forwards,   true): return firstIndexForwardsThrough(start: start, where: nonlookaheadable)
-        case (.backwards, false): return firstIndexBackwardsTo(start: start, where: nonlookbehindable)
-        case (.backwards,  true): return firstIndexBackwardsThrough(start: start, where: nonlookbehindable)
+        case (.forwards,  false): return firstIndexForwardsTo(from: start, where: nonlookaheadable)
+        case (.forwards,   true): return firstIndexForwardsThrough(from: start, where: nonlookaheadable)
+        case (.backwards, false): return firstIndexBackwardsTo(from: start, where: nonlookbehindable)
+        case (.backwards,  true): return firstIndexBackwardsThrough(from: start, where: nonlookbehindable)
         }
     }
 }

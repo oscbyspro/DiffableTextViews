@@ -11,13 +11,14 @@
 // MARK: + Index Look
 //=----------------------------------------------------------------------------=
 
+#warning("Has been remade as while.")
 extension Layout {
     
     //=------------------------------------------------------------------------=
     // MARK: Forwards - To
     //=------------------------------------------------------------------------=
     
-    @inlinable func firstIndexForwardsTo(start: Index, where predicate: (Index) -> Bool) -> Index? {
+    @inlinable func firstIndexForwardsTo(from start: Index, where predicate: (Index) -> Bool) -> Index? {
         var position = start
         //=--------------------------------------=
         // MARK: Search
@@ -36,7 +37,7 @@ extension Layout {
     // MARK: Forwards - Through
     //=------------------------------------------------------------------------=
     
-    @inlinable func firstIndexForwardsThrough(start: Index, where predicate: (Index) -> Bool) -> Index? {
+    @inlinable func firstIndexForwardsThrough(from start: Index, where predicate: (Index) -> Bool) -> Index? {
         var position = start
         //=--------------------------------------=
         // MARK: Search
@@ -55,7 +56,7 @@ extension Layout {
     // MARK: Backwards - To
     //=------------------------------------------------------------------------=
     
-    @inlinable func firstIndexBackwardsTo(start: Index, where predicate: (Index) -> Bool) -> Index? {
+    @inlinable func firstIndexBackwardsTo(from start: Index, where predicate: (Index) -> Bool) -> Index? {
         var position = start
         //=--------------------------------------=
         // MARK: Search
@@ -75,7 +76,7 @@ extension Layout {
     // MARK: Backwards - Through
     //=------------------------------------------------------------------------=
     
-    @inlinable func firstIndexBackwardsThrough(start: Index, where predicate: (Index) -> Bool) -> Index? {
+    @inlinable func firstIndexBackwardsThrough(from start: Index, where predicate: (Index) -> Bool) -> Index? {
         var position = start
         //=--------------------------------------=
         // MARK: Search
