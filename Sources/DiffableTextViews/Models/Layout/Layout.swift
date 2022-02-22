@@ -162,8 +162,8 @@ extension Layout {
     // MARK: Dynamic
     //=------------------------------------------------------------------------=
     
-    @inlinable func collision(_ start: Index, direction: Direction, skip: Bool) -> Index? {
-        switch (direction, skip) {
+    @inlinable func collision(_ start: Index, direction: Direction, through: Bool) -> Index? {
+        switch (direction, through) {
         case (.forwards,  false): return firstIndexForwardsTo(start: start, where: nonlookaheadable)
         case (.forwards,   true): return firstIndexForwardsThrough(start: start, where: nonlookaheadable)
         case (.backwards, false): return firstIndexBackwardsTo(start: start, where: nonlookbehindable)
@@ -191,7 +191,9 @@ extension Layout {
         // MARK: Inspect The Initial Position
         //=--------------------------------------=
         if let preferred = side(start, direction: preference),
-        nonlookable(preferred, direction: preference) == true { return start }
+        nonlookable(preferred, direction: preference) == true {
+            return start
+        }
         //=--------------------------------------=
         // MARK: Pick A Direction
         //=--------------------------------------=
@@ -199,13 +201,15 @@ extension Layout {
         //=--------------------------------------=
         // MARK: Try In This Direction
         //=--------------------------------------=
-        if let collision = collision(start,
-        direction: direction, skip: direction != preference) { return collision }
+        if let collision = collision(start, direction: direction, through: direction != preference) {
+            return collision
+        }
         //=--------------------------------------=
         // MARK: Try In The Other Direction
         //=--------------------------------------=
-        if let collision = collision(start,
-        direction: direction.reversed(), skip: false) { return collision }
+        if let collision = collision(start, direction: direction.reversed(), through: false) {
+            return collision
+        }
         //=--------------------------------------=
         // MARK: Default To Layout's Start Index
         //=--------------------------------------=

@@ -97,7 +97,8 @@ extension PatternTextStyle {
     
     /// - Mismatches are cut.
     @inlinable public func interpret(_ value: Value) -> Commit<Value> {
-        Sequencer(pattern, placeholders, value).reduce(into: .init()) {
+        var anchorable = false
+        return Sequencer(pattern, placeholders, value).reduce(into: .init()) {
             commit, queue, content in
             commit.snapshot.append(contentsOf: Snapshot(queue, as: .phantom))
             commit.snapshot.append(Symbol(content, as: .content))
@@ -105,10 +106,15 @@ extension PatternTextStyle {
         } none: {
             commit, queue in
             commit.snapshot.append(contentsOf: Snapshot(queue, as: .phantom))
-            commit.snapshot.append(.anchor)
+            #warning("Anchor: only backwards is available here.")
+            anchorable = true
+//            commit.snapshot.append(.anchor)
         } done: {
             commit, queue, _ in
+            #warning("Anchor: can be inserted here.")
+            let anchorEndIndex = anchorable ? commit.snapshot.endIndex : nil
             visible ? commit.snapshot += Snapshot(queue, as: .phantom) : ()
+            commit.snapshot.anchor(before: anchorEndIndex)
         }
     }
 }
