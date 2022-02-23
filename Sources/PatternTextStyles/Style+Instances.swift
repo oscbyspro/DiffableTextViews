@@ -20,7 +20,7 @@ public extension DiffableTextStyle where Self == PatternTextStyle<String> {
 }
 
 //*============================================================================*
-// MARK: * Array<Character>
+// MARK: * Array
 //*============================================================================*
 
 public extension DiffableTextStyle where Self == PatternTextStyle<[Character]> {
