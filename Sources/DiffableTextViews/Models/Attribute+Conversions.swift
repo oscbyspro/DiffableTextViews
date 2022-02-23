@@ -21,4 +21,3 @@ extension Attribute: CustomStringConvertible {
         String(describing: rawValue)
     }
 }
-

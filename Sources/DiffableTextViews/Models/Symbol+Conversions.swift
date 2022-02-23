@@ -21,4 +21,3 @@ extension Symbol: CustomStringConvertible {
         "(\(character), \(attribute))"
     }
 }
-

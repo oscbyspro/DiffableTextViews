@@ -122,6 +122,11 @@
                BlueprintName = "DiffableTextViewsTests"
                ReferencedContainer = "container:">
             </BuildableReference>
+            <SkippedTests>
+               <Test
+                  Identifier = "HelpersTestsXScheme">
+               </Test>
+            </SkippedTests>
          </TestableReference>
          <TestableReference
             skipped = "NO"
