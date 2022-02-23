@@ -18,8 +18,8 @@ public struct Precision<Value: NumericTextValue>: Equatable {
     // MARK: State
     //=------------------------------------------------------------------------=
     
-    @usableFromInline var lower: Count
-    @usableFromInline var upper: Count
+    @usableFromInline let lower: Count
+    @usableFromInline let upper: Count
     
     //=------------------------------------------------------------------------=
     // MARK: Initializers
