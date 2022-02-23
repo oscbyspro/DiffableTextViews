@@ -9,7 +9,7 @@
 
 #if DEBUG
 
-import Support
+import Testable
 import XCTest
 
 //*============================================================================*

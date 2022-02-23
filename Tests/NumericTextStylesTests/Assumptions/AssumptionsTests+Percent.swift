@@ -10,7 +10,7 @@
 #if DEBUG
 
 import Foundation
-import Support
+import Testable
 import XCTest
 
 @testable import NumericTextStyles

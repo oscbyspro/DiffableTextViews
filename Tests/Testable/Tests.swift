@@ -22,7 +22,7 @@ open class Tests: XCTestCase {
     // MARK: Overrides
     //=------------------------------------------------------------------------=
     
-    public override func setUp() {
+    open override func setUp() {
         super.setUp()
         continueAfterFailure = false
     }
