@@ -56,7 +56,6 @@ extension Layout {
     // MARK: Double
     //=------------------------------------------------------------------------=
     
-    #warning("...")
     @inlinable func preferredIndices(_ start: Range<Index>, intent: Intent) -> Range<Index> {
         //=--------------------------------------=
         // MARK: Single

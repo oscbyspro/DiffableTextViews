@@ -45,50 +45,6 @@
         Index(snapshot.endIndex, at: .end(of: snapshot.characters))
     }
     
-    //=------------------------------------------------------------------------=
-    // MARK: Accessors
-    //=------------------------------------------------------------------------=
- 
-    @inlinable func nonpassthrough(_ position: Index) -> Bool {
-        !snapshot.attributes[position.attribute].contains(.passthrough)
-    }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Elements
-    //=------------------------------------------------------------------------=
-    
-    @inlinable subscript(position: Index) -> Symbol {
-        snapshot[position.snapshot]
-    }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Indices
-    //=------------------------------------------------------------------------=
-    
-    @inlinable var startIndex: Index {
-        range.lowerBound
-    }
-    
-    @inlinable var endIndex: Index {
-        range.upperBound
-    }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Traversals
-    //=------------------------------------------------------------------------=
-
-    @inlinable func index(after index: Index) -> Index {
-        let character = snapshot.characters[index.character]
-        let after = snapshot.index(after: index.snapshot)
-        return Index(after, at: index.position.after(character))
-    }
-
-    @inlinable func index(before index: Index) -> Index {
-        let before = snapshot.index(before: index.snapshot)
-        let character = snapshot.characters[before.character]
-        return Index(before, at: index.position.before(character))
-    }
-    
     //*========================================================================*
     // MARK: * Index
     //*========================================================================*

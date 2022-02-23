@@ -38,6 +38,6 @@ extension Field {
         //=--------------------------------------=
         // MARK: Autocorrect
         //=--------------------------------------=
-        self.selection = layout.preferredIndex(selection, intent: intent)
+        self.selection = layout.preferredIndices(selection, intent: intent)
     }
 }
