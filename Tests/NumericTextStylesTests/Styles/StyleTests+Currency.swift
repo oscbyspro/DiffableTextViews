@@ -9,7 +9,9 @@
 
 #if DEBUG
 
+import Support
 import XCTest
+
 @testable import NumericTextStyles
 
 //*============================================================================*
@@ -18,7 +20,7 @@ import XCTest
 
 /// - About 100 MB will be allocated by testing.
 /// - There are about 144k locale-currency pairs, so it may take a while.
-final class StyleTestsXCurrency: StyleTests {
+final class StyleTestsXCurrency: Tests, StyleTests {
     
     //=------------------------------------------------------------------------=
     // MARK: Assertions

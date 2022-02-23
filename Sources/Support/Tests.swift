@@ -12,16 +12,17 @@
 import XCTest
 
 //*============================================================================*
-// MARK: * AssumptionsTests
+// MARK: * Tests
 //*============================================================================*
 
-class AssumptionsTests: XCTestCase {
+/// A convenience XCTestCase class that does not continue after failure.
+open class Tests: XCTestCase {
     
     //=------------------------------------------------------------------------=
-    // MARK: Setup
+    // MARK: Overrides
     //=------------------------------------------------------------------------=
     
-    override func setUp() {
+    public override func setUp() {
         super.setUp()
         continueAfterFailure = false
     }

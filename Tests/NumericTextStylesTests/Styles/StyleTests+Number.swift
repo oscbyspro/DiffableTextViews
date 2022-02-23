@@ -9,14 +9,16 @@
 
 #if DEBUG
 
+import Support
 import XCTest
+
 @testable import NumericTextStyles
 
 //*============================================================================*
 // MARK: * StyleTests x Number
 //*============================================================================*
 
-final class StyleTestsXNumber: StyleTests {
+final class StyleTestsXNumber: Tests, StyleTests {
 
     //=------------------------------------------------------------------------=
     // MARK: Assertions

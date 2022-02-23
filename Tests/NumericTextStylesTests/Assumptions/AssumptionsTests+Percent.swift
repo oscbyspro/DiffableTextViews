@@ -10,6 +10,7 @@
 #if DEBUG
 
 import Foundation
+import Support
 import XCTest
 
 @testable import NumericTextStyles
@@ -18,7 +19,7 @@ import XCTest
 // MARK: * AssumptionsTests x Percent
 //*============================================================================*
 
-final class AssumptionsTestsXPercent: AssumptionsTests {
+final class AssumptionsTestsXPercent: Tests {
     
     //=------------------------------------------------------------------------=
     // MARK: Positive

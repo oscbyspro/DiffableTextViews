@@ -9,14 +9,16 @@
 
 #if DEBUG
 
+import Support
 import XCTest
+
 @testable import NumericTextStyles
 
 //*============================================================================*
 // MARK: * StyleTests x Percent
 //*============================================================================*
 
-final class StyleTestsXPercent: StyleTests {
+final class StyleTestsXPercent: Tests, StyleTests {
     
     //=------------------------------------------------------------------------=
     // MARK: Assertions

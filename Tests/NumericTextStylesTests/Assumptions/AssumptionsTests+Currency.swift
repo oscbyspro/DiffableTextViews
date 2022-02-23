@@ -9,13 +9,14 @@
 
 #if DEBUG
 
+import Support
 import XCTest
 
 //*============================================================================*
 // MARK: * AssumptionsTests x Currency
 //*============================================================================*
 
-final class AssumptionsTestsXCurrency: AssumptionsTests {
+final class AssumptionsTestsXCurrency: Tests {
     
     //=------------------------------------------------------------------------=
     // MARK: Positive
