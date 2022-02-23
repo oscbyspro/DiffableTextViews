@@ -25,7 +25,7 @@
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable init?<T: Comparable>(from start: T, to end: T) {
+    @inlinable init?<T: Comparable>(_ start: T, to end: T) {
         if start < end { self = .forwards }
         else if start > end { self = .backwards }
         else { return nil }

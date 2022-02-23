@@ -62,7 +62,7 @@ extension Count {
     // MARK: Accessors
     //=------------------------------------------------------------------------=
 
-    @inlinable subscript(component: Component) -> Int {
+    @inlinable subscript(component: Self.Component) -> Int {
         switch component {
         case .value:    return value
         case .integer:  return integer
@@ -74,7 +74,7 @@ extension Count {
     // MARK: Utilities
     //=------------------------------------------------------------------------=
     
-    @inlinable func first(where predicate: (Int) -> Bool) -> Component? {
+    @inlinable func first(where predicate: (Int) -> Bool) -> Self.Component? {
         if predicate(value)    { return .value    }
         if predicate(integer)  { return .integer  }
         if predicate(fraction) { return .fraction }

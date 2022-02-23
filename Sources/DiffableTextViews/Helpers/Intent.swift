@@ -17,20 +17,20 @@
     // MARK: State
     //=------------------------------------------------------------------------=
     
-    @usableFromInline let upper: Direction?
     @usableFromInline let lower: Direction?
-    
+    @usableFromInline let upper: Direction?
+
     //=------------------------------------------------------------------------=
     // MARK: Initializers
     //=------------------------------------------------------------------------=
 
     @inlinable init(lower: Direction? = nil, upper: Direction? = nil) {
-        self.upper = upper
         self.lower = lower
+        self.upper = upper
     }
     
     @inlinable init<T: Comparable>(_ start: Range<T>, to end: Range<T>) {
-        self.upper = Direction(from: start.upperBound, to: end.upperBound)
-        self.lower = Direction(from: start.lowerBound, to: end.lowerBound)
+        self.lower = Direction(start.lowerBound, to: end.lowerBound)
+        self.upper = Direction(start.upperBound, to: end.upperBound)
     }
 }

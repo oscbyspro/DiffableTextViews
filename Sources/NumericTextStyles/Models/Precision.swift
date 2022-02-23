@@ -7,9 +7,6 @@
 // See http://www.apache.org/licenses/LICENSE-2.0 for license information.
 //=----------------------------------------------------------------------------=
 
-import Foundation
-import Support
-
 //*============================================================================*
 // MARK: * Precision
 //*============================================================================*
@@ -27,15 +24,21 @@ public struct Precision<Value: NumericTextValue>: Equatable {
     //=------------------------------------------------------------------------=
     // MARK: Initializers
     //=------------------------------------------------------------------------=
-
+    
     @inlinable init() {
         self.init(integer: Self.limits(\.integer), fraction: Self.limits(\.fraction))
     }
     
-    //=------------------------------------------------------------------------=
-    // MARK: Initializers - Using Range Expressions
-    //=------------------------------------------------------------------------=
-
+    @inlinable init<R>(integer:  R) where
+    R: RangeExpression, R.Bound == Int {
+        self.init(integer: integer, fraction: Self.limits(\.fraction))
+    }
+    
+    @inlinable init<R>(fraction: R) where
+    R: RangeExpression, R.Bound == Int {
+        self.init(integer: Self.limits(\.integer), fraction: fraction)
+    }
+    
     @inlinable init<R0, R1>(integer: R0, fraction: R1) where
     R0: RangeExpression, R0.Bound == Int, R1: RangeExpression, R1.Bound == Int {
         let integer  = Namespace.interpret(integer,  in: Self.limits(\.integer ))
@@ -43,67 +46,18 @@ public struct Precision<Value: NumericTextValue>: Equatable {
         //=--------------------------------------=
         // MARK: Initialize
         //=--------------------------------------=
-        self.lower = Count(value: Namespace.minimum.value, integer: integer.lowerBound, fraction: fraction.lowerBound)
-        self.upper = Count(value:   Value.precision.value, integer: integer.upperBound, fraction: fraction.upperBound)
+        self.lower = Count(
+        value: Namespace.minimum.value,
+        integer:   integer .lowerBound,
+        fraction:  fraction.lowerBound)
+        self.upper = Count(
+        value:   Value.precision.value,
+        integer:   integer .upperBound,
+        fraction:  fraction.upperBound)
     }
     
     //=------------------------------------------------------------------------=
-    // MARK: Modes
-    //=------------------------------------------------------------------------=
-    
-    @inlinable func inactive() -> NumberFormatStyleConfiguration.Precision {
-        .integerAndFractionLength(
-         integerLimits: lower.integer  ... Int.max,
-        fractionLimits: lower.fraction ... Int.max)
-    }
-
-    @inlinable func active() -> NumberFormatStyleConfiguration.Precision {
-        .integerAndFractionLength(
-         integerLimits: Namespace.minimum.integer  ... upper.integer,
-        fractionLimits: Namespace.minimum.fraction ... upper.fraction)
-    }
-    
-    @inlinable func interactive(_ count: Count) -> NumberFormatStyleConfiguration.Precision {
-        .integerAndFractionLength(
-         integerLimits: max(Namespace.minimum.integer,  count.integer)  ... count.integer,
-        fractionLimits: max(Namespace.minimum.fraction, count.fraction) ... count.fraction)
-    }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Capacity
-    //=------------------------------------------------------------------------=
-    
-    @inlinable func capacity(_ count: Count) throws -> Count {
-        let capacity = upper.transform(&-, count)
-        //=--------------------------------------=
-        // MARK: Validate Each Component
-        //=--------------------------------------=
-        if let component = capacity.first(where: { $0 < 0 }) {
-            throw Info([.mark(component), "digits exceed max precision", .mark(upper[component])])
-        }
-        //=--------------------------------------=
-        // MARK: Return Capacity On Success
-        //=--------------------------------------=
-        return capacity
-    }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Autocorrect
-    //=------------------------------------------------------------------------=
-    
-    @inlinable func autocorrect(_ components: inout Components) {
-        components.trim(max: upper)
-    }
-}
-
-//=----------------------------------------------------------------------------=
-// MARK: + Helpers
-//=----------------------------------------------------------------------------=
-
-extension Precision {
-
-    //=------------------------------------------------------------------------=
-    // MARK: Limits - Static
+    // MARK: Initializers - Helpers
     //=------------------------------------------------------------------------=
     
     @inlinable static func limits(_ component: (Count) -> Int) -> ClosedRange<Int> {
