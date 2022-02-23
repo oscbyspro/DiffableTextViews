@@ -36,18 +36,18 @@ public struct Snapshot: BidirectionalCollection, RangeReplaceableCollection {
         self._attributes = []
     }
     
-    @inlinable public init<S>(_ elements: S, as attribute: Attribute) where
+    @inlinable public init<S>(_ characters: S, as attribute: Attribute) where
     S: Sequence, S.Element == Character {
-        self.init(); for character in elements {
+        self.init(); for character in characters {
             self._characters.append(character)
             self._attributes.append(attribute)
         }
     }
     
-    @inlinable public init<S>(_ elements: S, as attribute: Attribute) where
+    @inlinable public init<S>(_ characters: S, as attribute: Attribute) where
     S: RandomAccessCollection, S.Element == Character {
-        self._characters = String(elements)
-        self._attributes = [Attribute](repeating: attribute, count: elements.count)
+        self._characters = String(characters)
+        self._attributes = [Attribute](repeating: attribute, count: characters.count)
     }
     
     //*========================================================================*
