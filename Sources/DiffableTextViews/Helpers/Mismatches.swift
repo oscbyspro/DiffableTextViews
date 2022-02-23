@@ -19,13 +19,10 @@ Next: BidirectionalCollection, Next.Element == Symbol {
     @usableFromInline typealias Reversed = Mismatches<ReversedCollection<Past>, ReversedCollection<Next>>
 
     //=------------------------------------------------------------------------=
-    // MARK: Start
+    // MARK: Prefix
     //=------------------------------------------------------------------------=
     
-    /// Start of changes.
-    ///
     /// Returns caret positions before the first irreconcilable mismatch.
-    ///
     @inlinable static func prefix(past: Past, next: Next) -> Indices {
         //=--------------------------------------=
         // MARK: Indices
@@ -63,16 +60,13 @@ Next: BidirectionalCollection, Next.Element == Symbol {
     }
     
     //=------------------------------------------------------------------------=
-    // MARK: End
+    // MARK: Suffix
     //=------------------------------------------------------------------------=
     
-    /// End of changes.
-    ///
     /// Returns caret positions after the first irreconcilable mismatch.
-    ///
     @inlinable static func suffix(past: Past, next: Next) -> Indices {
         //=--------------------------------------=
-        // MARK: Reverse
+        // MARK: Reversed
         //=--------------------------------------=
         let reversed = Reversed.prefix(
             past: past.reversed(),

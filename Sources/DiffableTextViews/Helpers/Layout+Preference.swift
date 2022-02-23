@@ -22,7 +22,7 @@ extension Layout {
         // MARK: Anchor
         //=--------------------------------------=
         if let anchorIndex = snapshot.anchorIndex {
-            return index(destination: anchorIndex)
+            return index(anchorIndex)
         }
         //=--------------------------------------=
         // MARK: Inspect The Initial Position
