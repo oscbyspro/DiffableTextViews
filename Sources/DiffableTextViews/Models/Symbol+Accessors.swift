@@ -7,30 +7,33 @@
 // See http://www.apache.org/licenses/LICENSE-2.0 for license information.
 //=----------------------------------------------------------------------------=
 
-//*============================================================================*
-// MARK: * Commit
-//*============================================================================*
+//=----------------------------------------------------------------------------=
+// MARK: + Accessors
+//=----------------------------------------------------------------------------=
 
-/// A value and a snapshot describing it.
-public struct Commit<Value> {
+public extension Symbol {
     
     //=------------------------------------------------------------------------=
-    // MARK: State
+    // MARK: Components
     //=------------------------------------------------------------------------=
-    
-    public var value: Value
-    public var snapshot: Snapshot
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Initializers
-    //=------------------------------------------------------------------------=
-    
-    @inlinable public init(_ value: Value, _ snapshot: Snapshot) {
-        self.value = value
-        self.snapshot = snapshot
+
+    @inlinable @inline(__always) func contains(_ character: Character) -> Bool {
+        self.character == character
     }
 
-    @inlinable public init() where Value: RangeReplaceableCollection {
-        self.init(Value(), Snapshot())
+    @inlinable @inline(__always) func contains(_ attribute: Attribute) -> Bool {
+        self.attribute.contains(attribute)
+    }
+
+    //=------------------------------------------------------------------------=
+    // MARK: Attributes
+    //=------------------------------------------------------------------------=
+
+    @inlinable @inline(__always) var virtual: Bool {
+        self.attribute.contains(.virtual)
+    }
+
+    @inlinable @inline(__always) var nonvirtual: Bool {
+        self.attribute.contains(.virtual) == false
     }
 }

@@ -68,18 +68,3 @@ public struct Attribute: OptionSet {
         self.rawValue = rawValue
     }
 }
-
-//=----------------------------------------------------------------------------=
-// MARK: + Conversions
-//=----------------------------------------------------------------------------=
-
-extension Attribute: CustomStringConvertible {
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Description
-    //=------------------------------------------------------------------------=
-    
-    @inlinable public var description: String {
-        String(describing: rawValue)
-    }
-}

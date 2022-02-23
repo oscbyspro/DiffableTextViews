@@ -33,13 +33,11 @@ public struct Symbol: Equatable {
     //=------------------------------------------------------------------------=
 
     @inlinable public init(character: Character, attribute: Attribute) {
-        self.character = character
-        self.attribute = attribute
+        self.character = character; self.attribute = attribute
     }
     
     @inlinable public init(_ character: Character, as attribute: Attribute) {
-        self.character = character
-        self.attribute = attribute
+        self.character = character; self.attribute = attribute
     }
     
     //=------------------------------------------------------------------------=
@@ -52,44 +50,5 @@ public struct Symbol: Equatable {
     
     @inlinable @inline(__always) public static func phantom(_ character: Character) -> Self {
         Self(character, as: .phantom)
-    }
-        
-    //=------------------------------------------------------------------------=
-    // MARK: Accessors
-    //=------------------------------------------------------------------------=
-    
-    @inlinable @inline(__always) public func contains(_ character: Character) -> Bool {
-        self.character == character
-    }
-
-    @inlinable @inline(__always) public func contains(_ attribute: Attribute) -> Bool {
-        self.attribute.contains(attribute)
-    }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Accessors - Virtual
-    //=------------------------------------------------------------------------=
-    
-    @inlinable @inline(__always) public var virtual: Bool {
-        self.attribute.contains(.virtual)
-    }
-    
-    @inlinable @inline(__always) public var nonvirtual: Bool {
-        self.attribute.contains(.virtual) == false
-    }
-}
-
-//=----------------------------------------------------------------------------=
-// MARK: + Conversions
-//=----------------------------------------------------------------------------=
-
-extension Symbol: CustomStringConvertible {
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Description
-    //=------------------------------------------------------------------------=
-    
-    @inlinable public var description: String {
-        "(\(character), \(attribute))"
     }
 }
