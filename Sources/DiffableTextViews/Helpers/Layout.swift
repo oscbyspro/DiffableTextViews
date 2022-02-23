@@ -21,7 +21,7 @@
 /// ```
 @usableFromInline struct Layout<Scheme: DiffableTextViews.Scheme>: BidirectionalCollection {
     @usableFromInline typealias Position = DiffableTextViews.Position<Scheme>
-
+    
     //=------------------------------------------------------------------------=
     // MARK: State
     //=------------------------------------------------------------------------=

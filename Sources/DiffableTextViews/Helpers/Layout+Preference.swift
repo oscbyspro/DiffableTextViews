@@ -17,7 +17,13 @@ extension Layout {
     // MARK: Single
     //=------------------------------------------------------------------------=
     
-    @inlinable func preferred(_ start: Layout.Index, preference: Direction, intent: Direction?) -> Layout.Index {
+    @inlinable func preferredIndex(_ start: Layout.Index, preference: Direction, intent: Direction?) -> Layout.Index {
+        //=--------------------------------------=
+        // MARK: Anchor
+        //=--------------------------------------=
+        if let anchorIndex = snapshot.anchorIndex {
+            return index(destination: anchorIndex)
+        }
         //=--------------------------------------=
         // MARK: Inspect The Initial Position
         //=--------------------------------------=
@@ -50,23 +56,18 @@ extension Layout {
     // MARK: Double
     //=------------------------------------------------------------------------=
     
-    @inlinable func preferred(_ start: Range<Index>, intent: Intent) -> Range<Index> {
-        //=--------------------------------------=
-        // MARK: Anchor
-        //=--------------------------------------=
-        if let anchorIndex = snapshot.anchorIndex {
-            return indices(at: anchorIndex)
-        }
+    #warning("...")
+    @inlinable func preferredIndices(_ start: Range<Index>, intent: Intent) -> Range<Index> {
         //=--------------------------------------=
         // MARK: Single
         //=--------------------------------------=
-        let upperBound = preferred(start.upperBound, preference: .backwards, intent: intent.upper)
+        let upperBound = preferredIndex(start.upperBound, preference: .backwards, intent: intent.upper)
         var lowerBound = upperBound
         //=--------------------------------------=
         // MARK: Double
         //=--------------------------------------=
         if !start.isEmpty, upperBound != startIndex {
-            lowerBound = preferred(start.lowerBound, preference:  .forwards, intent: intent.lower)
+            lowerBound = preferredIndex(start.lowerBound, preference:  .forwards, intent: intent.lower)
             lowerBound = Swift.min(lowerBound, upperBound)
         }
         //=--------------------------------------=

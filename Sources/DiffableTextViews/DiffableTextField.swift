@@ -160,7 +160,7 @@ public struct DiffableTextField<Style: UIKitDiffableTextStyle>: UIViewRepresenta
                 Task { @MainActor in
                     // async to process special commands first
                     // as an example see: (option + backspace)
-                    self.context.change(selection: range.upperBound)
+                    self.context.set(selection: range.upperBound)
                     self.context.active(style: style, commit: commit)
                     self.push()
                 }

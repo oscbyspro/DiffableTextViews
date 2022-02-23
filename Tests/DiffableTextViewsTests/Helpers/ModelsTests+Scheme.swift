@@ -13,13 +13,13 @@ import XCTest
 @testable import DiffableTextViews
 
 //*============================================================================*
-// MARK: * ModelsTests x Scheme
+// MARK: * HelpersTests x Scheme
 //*============================================================================*
 
 /// ```
 /// Asserts: UTF16.size(of:) is O(1).
 /// ```
-final class ModelsTestsXScheme: XCTestCase {
+final class HelpersTestsXScheme: XCTestCase {
     
     //=------------------------------------------------------------------------=
     // MARK: State
@@ -33,6 +33,23 @@ final class ModelsTestsXScheme: XCTestCase {
     lazy var content100 = String(repeating: content1__, count: 100)
 
     //=------------------------------------------------------------------------=
+    // MARK: Loop
+    //=------------------------------------------------------------------------=
+    
+    func calculateSizeLoop<S>(_ content: S) where S: StringProtocol {
+        for _ in 0 ..< iterations {
+            _ = scheme.size(of: content)
+        }
+    }
+}
+
+//=----------------------------------------------------------------------------=
+// MARK: + String
+//=----------------------------------------------------------------------------=
+
+extension HelpersTestsXScheme {
+
+    //=------------------------------------------------------------------------=
     // MARK: Tests
     //=------------------------------------------------------------------------=
     
@@ -41,7 +58,7 @@ final class ModelsTestsXScheme: XCTestCase {
     /// - UTF16: 0.202 sec.
     /// - Character: 0.578 sec.
     ///
-    func test1__() {
+    func testString1__() {
         measure {
             calculateSizeLoop(content1__)
         }
@@ -52,7 +69,7 @@ final class ModelsTestsXScheme: XCTestCase {
     /// - UTF16: 0.204 sec.
     /// - Character: 3.970 sec.
     ///
-    func test10_() {
+    func testString10_() {
         measure {
             calculateSizeLoop(content10_)
         }
@@ -63,19 +80,53 @@ final class ModelsTestsXScheme: XCTestCase {
     /// - UTF16: 0.206 sec.
     /// - Character: ain't nobody got time for that.
     ///
-    func test100() {
+    func testString100() {
         measure {
             calculateSizeLoop(content100)
         }
     }
-    
+}
+
+//=----------------------------------------------------------------------------=
+// MARK: + Substring
+//=----------------------------------------------------------------------------=
+
+extension HelpersTestsXScheme {
+
     //=------------------------------------------------------------------------=
-    // MARK: Helpers
+    // MARK: Tests
     //=------------------------------------------------------------------------=
     
-    func calculateSizeLoop(_ content: String) {
-        for _ in 0 ..< iterations {
-            _ = scheme.size(of: content)
+    /// 1,000,000 iterations:
+    ///
+    /// - UTF16: 0.202 sec.
+    /// - Character: 0.578 sec.
+    ///
+    func testSubstring1__() {
+        measure {
+            calculateSizeLoop(content1__[...])
+        }
+    }
+    
+    /// 1,000,000 iterations:
+    ///
+    /// - UTF16: 0.204 sec.
+    /// - Character: 3.970 sec.
+    ///
+    func testSubstring10_() {
+        measure {
+            calculateSizeLoop(content10_[...])
+        }
+    }
+    
+    /// 1,000,000 iterations:
+    ///
+    /// - UTF16: 0.206 sec.
+    /// - Character: ain't nobody got time for that.
+    ///
+    func testSubstring100() {
+        measure {
+            calculateSizeLoop(content100[...])
         }
     }
 }

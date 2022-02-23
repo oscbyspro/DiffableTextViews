@@ -18,12 +18,12 @@ extension Layout {
     //=------------------------------------------------------------------------=
     
     /// Should be faster than iterating considering that UTF16 characters size count is O(1).
-    @inlinable func index(at destination: Snapshot.Index) -> Index {
+    @inlinable func index(destination: Snapshot.Index) -> Index {
         Index(destination, at: .end(of: snapshot.characters[..<destination.character]))
     }
     
     /// Should be faster than iterating considering that UTF16 characters size count is O(1).
-    @inlinable func indices(at destination: Snapshot.Index) -> Range<Index> {
-        let position = index(at: destination); return position ..< position
+    @inlinable func indices(destination: Snapshot.Index) -> Range<Index> {
+        let position = index(destination: destination); return position ..< position
     }
 }

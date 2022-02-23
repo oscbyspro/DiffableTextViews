@@ -29,24 +29,25 @@
     // MARK: Update
     //=------------------------------------------------------------------------=
     
+    @inlinable func active(style: Style, commit: Commit<Value>) {
+        self.active = true
+        self.style  = style
+        self.value  = commit.value
+        self.field.update(snapshot: commit.snapshot)
+    }
+    
     @inlinable func inactive(style: Style, value: Value) {
         self.active = false
         self.value  = value
         self.style  = style
-    }
-    
-    @inlinable func active(style: Style, commit: Commit<Value>) {
-        self.active = true
-        self.style = style
-        self.value = commit.value
-        self.field.update(snapshot: commit.snapshot)
+        self.field  = Field()
     }
     
     //=------------------------------------------------------------------------=
-    // MARK: Update - Selection
+    // MARK: Selection
     //=------------------------------------------------------------------------=
     
-    @inlinable func change(selection: Field.Layout.Index) {
+    @inlinable func set(selection: Field.Layout.Index) {
         self.field.selection = selection ..< selection
     }
     
