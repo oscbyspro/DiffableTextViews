@@ -32,7 +32,8 @@ public struct Info: CustomStringConvertible, Error {
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable @inline(__always) public init(description: @autoclosure () -> String) {
+    @inlinable @inline(__always)
+    public init(description: @autoclosure () -> String) {
         #if DEBUG
         self.description = description()
         #endif
@@ -42,11 +43,13 @@ public struct Info: CustomStringConvertible, Error {
     // MARK: Initializers - Indirect
     //=------------------------------------------------------------------------=
     
-    @inlinable @inline(__always) public init(_ components: () -> [Component]) {
+    @inlinable @inline(__always)
+    public init(_ components: () -> [Component]) {
         self.init(description: components().lazy.map(\.content).joined(separator: " "))
     }
     
-    @inlinable @inline(__always) public init(_ components: @autoclosure () -> [Component]) {
+    @inlinable @inline(__always)
+    public init(_ components: @autoclosure () -> [Component]) {
         self.init(components)
     }
     
@@ -54,7 +57,8 @@ public struct Info: CustomStringConvertible, Error {
     // MARK: Print
     //=------------------------------------------------------------------------=
     
-    @inlinable @inline(__always) public static func print(_ description: @autoclosure () -> String) {
+    @inlinable @inline(__always)
+    public static func print(_ description: @autoclosure () -> String) {
         #if DEBUG
         Swift.print(description())
         #endif
@@ -64,11 +68,13 @@ public struct Info: CustomStringConvertible, Error {
     // MARK: Print - Indirect
     //=------------------------------------------------------------------------=
     
-    @inlinable @inline(__always) public static func print(_ components: () -> [Component]) {
+    @inlinable @inline(__always)
+    public static func print(_ components: () -> [Component]) {
         Self.print(components().description)
     }
     
-    @inlinable @inline(__always) public static func print(_ components: @autoclosure () -> [Component]) {
+    @inlinable @inline(__always)
+    public static func print(_ components: @autoclosure () -> [Component]) {
         Self.print(components().description)
     }
     
@@ -82,7 +88,7 @@ public struct Info: CustomStringConvertible, Error {
         // MARK: State
         //=--------------------------------------------------------------------=
         
-        public let content: String
+        @usableFromInline let content: String
         
         //=--------------------------------------------------------------------=
         // MARK: Initializers
