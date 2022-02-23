@@ -8,13 +8,50 @@
 //=----------------------------------------------------------------------------=
 
 //=----------------------------------------------------------------------------=
-// MARK: + Replacements
+// MARK: + Transformations
 //=----------------------------------------------------------------------------=
 
 public extension Snapshot {
     
     //=------------------------------------------------------------------------=
-    // MARK: Transformations
+    // MARK: Anchor
+    //=------------------------------------------------------------------------=
+    
+    /// Sets the anchor to the endIndex.
+    @inlinable mutating func anchor() {
+        self._anchorIndex = endIndex
+    }
+    
+    /// Sets the anchor to the position.
+    @inlinable mutating func anchor(_ position: Index?) {
+        self._anchorIndex = position
+    }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Attributes
+    //=------------------------------------------------------------------------=
+    
+    @inlinable mutating func update(attributes position: Index,
+    with transform: (inout Attribute) -> Void) {
+        transform(&_attributes[position.attribute])
+    }
+    
+    @inlinable mutating func update<S: Sequence>(attributes sequence: S,
+    with transform: (inout Attribute) -> Void) where S.Element == Index {
+        for position in sequence {
+            transform(&_attributes[position.attribute])
+        }
+    }
+    
+    @inlinable mutating func update<R: RangeExpression>(attributes range: R,
+    with transform: (inout Attribute) -> Void) where R.Bound == Index {
+        for position in indices[range.relative(to: self)] {
+            transform(&_attributes[position.attribute])
+        }
+    }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Replacements
     //=------------------------------------------------------------------------=
 
     @inlinable mutating func replaceSubrange<C>(_ range: Range<Index>,

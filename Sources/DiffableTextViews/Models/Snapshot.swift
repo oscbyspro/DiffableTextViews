@@ -36,56 +36,18 @@ public struct Snapshot: BidirectionalCollection, RangeReplaceableCollection {
         self._attributes = []
     }
     
-    @inlinable public init<S: Sequence>(_ sequence: S, as attribute: Attribute) where S.Element == Character {
-        self._characters = String(sequence)
-        self._attributes = [Attribute](repeating: attribute, count: _characters.count)
+    @inlinable public init<S>(_ elements: S, as attribute: Attribute) where
+    S: Sequence, S.Element == Character {
+        self.init(); for character in elements {
+            self._characters.append(character)
+            self._attributes.append(attribute)
+        }
     }
     
-    @inlinable public init<C: Collection>(_ collection: C, as attribute: Attribute) where C.Element == Character {
-        self._characters = String(collection)
-        self._attributes = [Attribute](repeating: attribute, count: collection.count)
-    }
-    
-    @inlinable public init(_ characters: String, as attribute: Attribute) {
-        self._characters = characters
-        self._attributes = [Attribute](repeating: attribute, count: characters.count)
-    }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Elements
-    //=------------------------------------------------------------------------=
-    
-    @inlinable public subscript(position: Index) -> Symbol {
-        Symbol(character: _characters[position.character],
-               attribute: _attributes[position.attribute])
-    }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Indices
-    //=------------------------------------------------------------------------=
-    
-    @inlinable public var startIndex: Index {
-        Index(_characters.startIndex,
-              _attributes.startIndex)
-    }
-
-    @inlinable public var endIndex: Index {
-        Index(_characters.endIndex,
-              _attributes.endIndex)
-    }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Traversals
-    //=------------------------------------------------------------------------=
-    
-    @inlinable public func index(after position: Index) -> Index {
-        Index(_characters.index(after: position.character),
-              _attributes.index(after: position.attribute))
-    }
-    
-    @inlinable public func index(before position: Index) -> Index {
-        Index(_characters.index(before: position.character),
-              _attributes.index(before: position.attribute))
+    @inlinable public init<S>(_ elements: S, as attribute: Attribute) where
+    S: RandomAccessCollection, S.Element == Character {
+        self._characters = String(elements)
+        self._attributes = [Attribute](repeating: attribute, count: elements.count)
     }
     
     //*========================================================================*
