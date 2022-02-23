@@ -128,18 +128,19 @@ extension PatternTextStyle {
         var value = Value(); let proposal = changes.proposal()
         var contents = proposal.lazy.filter(\.nonvirtual).makeIterator()
         //=--------------------------------------=
-        // MARK: Loop
+        // MARK: Parse
         //=--------------------------------------=
-        for character in pattern {
-            guard let predicate = placeholders[character] else { continue }
-            guard let content = contents.next() else { break }
-            guard predicate.check(content.character) else {
-                throw Info([.mark(content.character), "is invalid"])
+        parse: for character in pattern {
+            if let predicate = placeholders[character] {
+                guard let content = contents.next() else { break parse }
+                guard predicate.check(content.character) else {
+                    throw Info([.mark(content.character), "is invalid"])
+                }
+                //=------------------------------=
+                // MARK: Some
+                //=------------------------------=
+                value.append(content.character)
             }
-            //=----------------------------------=
-            // MARK: Insert
-            //=----------------------------------=
-            value.append(content.character)
         }
         //=--------------------------------------=
         // MARK: Capacity
@@ -150,6 +151,6 @@ extension PatternTextStyle {
         //=--------------------------------------=
         // MARK: Value -> Commit
         //=--------------------------------------=
-        return interpret(value)
+        return self.interpret(value)
     }
 }
