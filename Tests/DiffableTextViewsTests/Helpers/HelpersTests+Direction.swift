@@ -23,8 +23,8 @@ final class HelpersTestsXDirection: XCTestCase {
     //=------------------------------------------------------------------------=
     
     func testReversed() {
-        XCTAssertNotEqual(Direction.forwards,  Direction.forwards .reversed())
-        XCTAssertNotEqual(Direction.backwards, Direction.backwards.reversed())
+        XCTAssertEqual(Direction.forwards .reversed(), .backwards)
+        XCTAssertEqual(Direction.backwards.reversed(),  .forwards)
     }
 }
 
