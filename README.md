@@ -37,7 +37,7 @@ It uses three main algorithms to determine text selection.
 
 1. Use: Swift Package Manager.
 2. Copy/paste: https://github.com/oscbyspro/DiffableTextViews.
-3. Select a **VERSIONED** branch.
+3. Select a **VERSIONED** release.
 
 ```swift
 import DiffableTextViews
