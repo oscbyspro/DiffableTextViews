@@ -9,8 +9,8 @@
 
 #if DEBUG
 
-import Testable
 import XCTest
+import XCTestSupport
 
 //*============================================================================*
 // MARK: * AssumptionsTests x Currency

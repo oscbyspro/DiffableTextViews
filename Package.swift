@@ -40,7 +40,7 @@ let package = Package(
             dependencies: ["Support"]),
         .testTarget(
             name: "DiffableTextViewsTests",
-            dependencies: ["DiffableTextViews", "Testable"]),
+            dependencies: ["DiffableTextViews", "XCTestSupport"]),
         //=--------------------------------------=
         // MARK: NumericTextStyles
         //=--------------------------------------=
@@ -49,7 +49,7 @@ let package = Package(
             dependencies: ["DiffableTextViews", "Support"]),
         .testTarget(
             name: "NumericTextStylesTests",
-            dependencies: ["NumericTextStyles", "Testable"]),
+            dependencies: ["NumericTextStyles", "XCTestSupport"]),
         //=--------------------------------------=
         // MARK: PatternTextStyles
         //=--------------------------------------=
@@ -58,14 +58,14 @@ let package = Package(
             dependencies: ["DiffableTextViews", "Support"]),
         .testTarget(
             name: "PatternTextStylesTests",
-            dependencies: ["PatternTextStyles", "Testable"]),
+            dependencies: ["PatternTextStyles", "XCTestSupport"]),
         //=--------------------------------------=
         // MARK: Support
         //=--------------------------------------=
         .target(name: "Support"),
         //=--------------------------------------=
-        // MARK: XCTSupport
+        // MARK: XCTestSupport
         //=--------------------------------------=
-        .target(name: "Testable", path: "Tests/Testable")
+        .target(name: "XCTestSupport", path: "Tests/XCTestSupport")
     ]
 )

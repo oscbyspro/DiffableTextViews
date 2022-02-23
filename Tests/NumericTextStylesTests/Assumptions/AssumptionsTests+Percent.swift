@@ -10,8 +10,8 @@
 #if DEBUG
 
 import Foundation
-import Testable
 import XCTest
+import XCTestSupport
 
 @testable import NumericTextStyles
 
