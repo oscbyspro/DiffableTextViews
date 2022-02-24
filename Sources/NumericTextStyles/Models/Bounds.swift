@@ -11,7 +11,6 @@
 // MARK: * Bounds
 //*============================================================================*
 
-/// A model that constrains values to a closed range.
 public struct Bounds<Value: NumericTextValue>: Equatable {
     
     //=------------------------------------------------------------------------=
@@ -25,42 +24,24 @@ public struct Bounds<Value: NumericTextValue>: Equatable {
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable init(unchecked  limits: (Value, Value)) {
-        (self.min, self.max) = limits
+    @inlinable init(min: Value = Value.bounds.lowerBound, max: Value = Value.bounds.upperBound) {
+        precondition(min <= max, "min < max"); self.min = min; self.max = max
     }
     
     //=------------------------------------------------------------------------=
     // MARK: Initializers - Indirect
     //=------------------------------------------------------------------------=
     
-    @inlinable init() {
-        self = .unchecked()
-    }
-    
     @inlinable init(_ limits: PartialRangeFrom<Value>) {
-        self = .unchecked(min: Self.interpret(limits.lowerBound))
+        self.init(min: Swift.max(limits.lowerBound, Value.bounds.lowerBound))
     }
     
     @inlinable init(_ limits: PartialRangeThrough<Value>) {
-        self = .unchecked(max: Self.interpret(limits.upperBound))
+        self.init(max: Swift.min(limits.upperBound, Value.bounds.upperBound))
     }
     
     @inlinable init(_ limits: ClosedRange<Value> = Value.bounds) {
-        self = .unchecked(min: Self.interpret(limits.lowerBound),
-                          max: Self.interpret(limits.upperBound))
-    }
-
-    //=------------------------------------------------------------------------=
-    // MARK: Initializers - Helpers
-    //=------------------------------------------------------------------------=
-    
-    @inlinable static func unchecked(
-    min: Value = Value.bounds.lowerBound,
-    max: Value = Value.bounds.upperBound) -> Self {
-        Self(unchecked: (min, max))
-    }
-    
-    @inlinable static func interpret(_ value: Value) -> Value {
-        Swift.min(Swift.max(Value.bounds.lowerBound,  value), Value.bounds.upperBound)
+        self.init(min: Swift.max(limits.lowerBound, Value.bounds.lowerBound),
+                  max: Swift.min(limits.upperBound, Value.bounds.upperBound))
     }
 }
