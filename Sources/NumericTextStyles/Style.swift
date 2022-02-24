@@ -115,7 +115,7 @@ extension NumericTextStyle {
         //=--------------------------------------=
         bounds.autocorrect(&value)
         //=--------------------------------------=
-        // MARK: Components -> Value
+        // MARK: Value -> Components
         //=--------------------------------------=
         let formatted = style.format(value)
         let parseable = snapshot(formatted)
