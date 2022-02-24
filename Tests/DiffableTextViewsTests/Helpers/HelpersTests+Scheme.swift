@@ -19,7 +19,7 @@ import XCTest
 /// ```
 /// Asserts: UTF16.size(of:) is O(1).
 /// ```
-final class HelpersTestsXScheme: XCTestCase {
+final class HelpersTests_Scheme: XCTestCase {
     
     //=------------------------------------------------------------------------=
     // MARK: State
@@ -47,7 +47,7 @@ final class HelpersTestsXScheme: XCTestCase {
 // MARK: + String
 //=----------------------------------------------------------------------------=
 
-extension HelpersTestsXScheme {
+extension HelpersTests_Scheme {
 
     //=------------------------------------------------------------------------=
     // MARK: Tests
@@ -91,7 +91,7 @@ extension HelpersTestsXScheme {
 // MARK: + Substring
 //=----------------------------------------------------------------------------=
 
-extension HelpersTestsXScheme {
+extension HelpersTests_Scheme {
 
     //=------------------------------------------------------------------------=
     // MARK: Tests

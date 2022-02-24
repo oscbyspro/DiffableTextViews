@@ -16,7 +16,7 @@ import XCTest
 // MARK: * StyleTests x Visible
 //*============================================================================*
 
-final class StyleTestsXVisible: XCTestCase, StyleTests {
+final class StyleTests_Visible: XCTestCase, StyleTests {
     
     //=------------------------------------------------------------------------=
     // MARK: State

@@ -16,7 +16,7 @@ import XCTest
 // MARK: * HelpersTests x Links
 //*============================================================================*
 
-final class HelpersTestsXLinks: XCTestCase {
+final class HelpersTests_Links: XCTestCase {
     
     //=------------------------------------------------------------------------=
     // MARK: Setup

@@ -16,7 +16,7 @@ import XCTest
 // MARK: * CommentsTests x Rationale
 //*============================================================================*
 
-final class CommentsTestsXRationale: XCTestCase {
+final class CommentsTests_Rationale: XCTestCase {
     
     //=------------------------------------------------------------------------=
     // MARK: Tests

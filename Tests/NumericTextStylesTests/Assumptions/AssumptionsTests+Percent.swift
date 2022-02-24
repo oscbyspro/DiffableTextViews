@@ -19,7 +19,7 @@ import XCTestSupport
 // MARK: * AssumptionsTests x Percent
 //*============================================================================*
 
-final class AssumptionsTestsXPercent: Tests {
+final class AssumptionsTests_Percent: Tests {
     
     //=------------------------------------------------------------------------=
     // MARK: Positive

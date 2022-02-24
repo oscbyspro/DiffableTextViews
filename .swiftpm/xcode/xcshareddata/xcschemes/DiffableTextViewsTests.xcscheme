@@ -124,7 +124,7 @@
             </BuildableReference>
             <SkippedTests>
                <Test
-                  Identifier = "HelpersTestsXScheme">
+                  Identifier = "HelpersTests_Scheme">
                </Test>
             </SkippedTests>
          </TestableReference>
@@ -140,37 +140,37 @@
             </BuildableReference>
             <SkippedTests>
                <Test
-                  Identifier = "StyleTestsXCurrency/testFloat64()">
+                  Identifier = "StyleTests_Currency/testFloat64()">
                </Test>
                <Test
-                  Identifier = "StyleTestsXCurrency/testInt()">
+                  Identifier = "StyleTests_Currency/testInt()">
                </Test>
                <Test
-                  Identifier = "StyleTestsXCurrency/testInt16()">
+                  Identifier = "StyleTests_Currency/testInt16()">
                </Test>
                <Test
-                  Identifier = "StyleTestsXCurrency/testInt32()">
+                  Identifier = "StyleTests_Currency/testInt32()">
                </Test>
                <Test
-                  Identifier = "StyleTestsXCurrency/testInt64()">
+                  Identifier = "StyleTests_Currency/testInt64()">
                </Test>
                <Test
-                  Identifier = "StyleTestsXCurrency/testInt8()">
+                  Identifier = "StyleTests_Currency/testInt8()">
                </Test>
                <Test
-                  Identifier = "StyleTestsXCurrency/testUInt()">
+                  Identifier = "StyleTests_Currency/testUInt()">
                </Test>
                <Test
-                  Identifier = "StyleTestsXCurrency/testUInt16()">
+                  Identifier = "StyleTests_Currency/testUInt16()">
                </Test>
                <Test
-                  Identifier = "StyleTestsXCurrency/testUInt32()">
+                  Identifier = "StyleTests_Currency/testUInt32()">
                </Test>
                <Test
-                  Identifier = "StyleTestsXCurrency/testUInt64()">
+                  Identifier = "StyleTests_Currency/testUInt64()">
                </Test>
                <Test
-                  Identifier = "StyleTestsXCurrency/testUInt8()">
+                  Identifier = "StyleTests_Currency/testUInt8()">
                </Test>
             </SkippedTests>
          </TestableReference>

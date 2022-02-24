@@ -16,7 +16,7 @@ import XCTestSupport
 // MARK: * AssumptionsTests x Currency
 //*============================================================================*
 
-final class AssumptionsTestsXCurrency: Tests {
+final class AssumptionsTests_Currency: Tests {
     
     //=------------------------------------------------------------------------=
     // MARK: Positive

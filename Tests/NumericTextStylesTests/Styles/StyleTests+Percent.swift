@@ -18,7 +18,7 @@ import XCTestSupport
 // MARK: * StyleTests x Percent
 //*============================================================================*
 
-final class StyleTestsXPercent: Tests, StyleTests {
+final class StyleTests_Percent: Tests, StyleTests {
     
     //=------------------------------------------------------------------------=
     // MARK: Assertions
@@ -37,7 +37,7 @@ final class StyleTestsXPercent: Tests, StyleTests {
 // MARK: + Decimal
 //=----------------------------------------------------------------------------=
 
-extension StyleTestsXPercent {
+extension StyleTests_Percent {
     
     //=------------------------------------------------------------------------=
     // MARK: Tests
@@ -52,7 +52,7 @@ extension StyleTestsXPercent {
 // MARK: + Floats
 //=----------------------------------------------------------------------------=
 
-extension StyleTestsXPercent {
+extension StyleTests_Percent {
     
     //=------------------------------------------------------------------------=
     // MARK: Tests

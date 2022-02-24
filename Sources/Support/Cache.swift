@@ -38,19 +38,13 @@ public final class Cache<Key, Value> where Key: Hashable & AnyObject, Value: Any
     }
     
     //=------------------------------------------------------------------------=
-    // MARK: Accessors
-    //=------------------------------------------------------------------------=
-    
-    @inlinable public subscript(key: Key) -> Value? {
-        get { nscache.object(forKey: key) }
-        set { newValue != nil ? nscache.setObject(newValue!, forKey: key) : nscache.removeObject(forKey: key) }
-    }
-    
-    //=------------------------------------------------------------------------=
     // MARK: Search or Insert
     //=------------------------------------------------------------------------=
     
     @inlinable public func search(_ key: Key, make: @autoclosure () throws -> Value) rethrows -> Value {
+        //=--------------------------------------=
+        // MARK: Search
+        //=--------------------------------------=
         if let reusable = nscache.object(forKey: key) {
             return reusable
         //=--------------------------------------=
@@ -58,7 +52,7 @@ public final class Cache<Key, Value> where Key: Hashable & AnyObject, Value: Any
         //=--------------------------------------=
         } else {
             let instance = try make()
-            nscache.setObject(instance, forKey: key)
+            nscache.setObject(instance,  forKey: key)
             return instance
         }
     }

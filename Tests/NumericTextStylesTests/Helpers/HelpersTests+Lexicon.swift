@@ -16,7 +16,7 @@ import XCTest
 // MARK: * HelpersTests x Lexicon
 //*============================================================================*
 
-final class HelpersTestsXLexicon: XCTestCase {
+final class HelpersTests_Lexicon: XCTestCase {
     
     //=------------------------------------------------------------------------=
     // MARK: Setup
@@ -32,7 +32,7 @@ final class HelpersTestsXLexicon: XCTestCase {
 // MARK: + Count
 //=----------------------------------------------------------------------------=
 
-extension HelpersTestsXLexicon {
+extension HelpersTests_Lexicon {
     
     //=------------------------------------------------------------------------=
     // MARK: Tests
@@ -47,7 +47,7 @@ extension HelpersTestsXLexicon {
 // MARK: + Styles
 //=----------------------------------------------------------------------------=
 
-extension HelpersTestsXLexicon {
+extension HelpersTests_Lexicon {
 
     //=------------------------------------------------------------------------=
     // MARK: Styles

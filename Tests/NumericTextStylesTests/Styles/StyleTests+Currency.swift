@@ -20,7 +20,7 @@ import XCTestSupport
 
 /// - About 100 MB will be allocated by testing.
 /// - There are about 144k locale-currency pairs, so it may take a while.
-final class StyleTestsXCurrency: Tests, StyleTests {
+final class StyleTests_Currency: Tests, StyleTests {
     
     //=------------------------------------------------------------------------=
     // MARK: Assertions
@@ -39,7 +39,7 @@ final class StyleTestsXCurrency: Tests, StyleTests {
 // MARK: + Decimal
 //=----------------------------------------------------------------------------=
 
-extension StyleTestsXCurrency {
+extension StyleTests_Currency {
 
     //=------------------------------------------------------------------------=
     // MARK: Tests
@@ -54,7 +54,7 @@ extension StyleTestsXCurrency {
 // MARK: + Floats
 //=----------------------------------------------------------------------------=
 
-extension StyleTestsXCurrency {
+extension StyleTests_Currency {
     
     //=------------------------------------------------------------------------=
     // MARK: Tests
@@ -81,7 +81,7 @@ extension StyleTestsXCurrency {
 // MARK: + Ints
 //=----------------------------------------------------------------------------=
 
-extension StyleTestsXCurrency {
+extension StyleTests_Currency {
     
     //=------------------------------------------------------------------------=
     // MARK: Tests
@@ -112,7 +112,7 @@ extension StyleTestsXCurrency {
 // MARK: + UInts
 //=----------------------------------------------------------------------------=
 
-extension StyleTestsXCurrency {
+extension StyleTests_Currency {
     
     //=------------------------------------------------------------------------=
     // MARK: Tests

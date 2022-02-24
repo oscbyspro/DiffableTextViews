@@ -19,7 +19,7 @@ import XCTestSupport
 // MARK: * ModelsTests x Attribute
 //*============================================================================*
 
-final class ModelsTestsXAttribute: Tests {
+final class ModelsTests_Attribute: Tests {
     
     //=------------------------------------------------------------------------=
     // MARK: State

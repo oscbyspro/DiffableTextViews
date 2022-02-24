@@ -16,7 +16,7 @@ import XCTest
 // MARK: * HelpersTests x Direction
 //*============================================================================*
 
-final class HelpersTestsXDirection: XCTestCase {
+final class HelpersTests_Direction: XCTestCase {
     
     //=------------------------------------------------------------------------=
     // MARK: Tests

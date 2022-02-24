@@ -16,7 +16,7 @@ import XCTest
 // MARK: * ModelsTests x Bounds
 //*============================================================================*
 
-final class ModelsTestsXBounds: XCTestCase {
+final class ModelsTests_Bounds: XCTestCase {
     typealias Style<T: Format> = NumericTextStyle<T>
     
     //=------------------------------------------------------------------------=
@@ -58,7 +58,7 @@ final class ModelsTestsXBounds: XCTestCase {
 // MARK: + Style x Integer
 //=----------------------------------------------------------------------------=
 
-extension ModelsTestsXBounds {
+extension ModelsTests_Bounds {
     
     //=------------------------------------------------------------------------=
     // MARK: Limits
@@ -81,7 +81,7 @@ extension ModelsTestsXBounds {
 // MARK: + Style x Floating Point
 //=----------------------------------------------------------------------------=
 
-extension ModelsTestsXBounds {
+extension ModelsTests_Bounds {
     
     //=------------------------------------------------------------------------=
     // MARK: Limits
@@ -104,7 +104,7 @@ extension ModelsTestsXBounds {
 // MARK: + Autocorrect
 //=----------------------------------------------------------------------------=
 
-extension ModelsTestsXBounds {
+extension ModelsTests_Bounds {
 
     //=------------------------------------------------------------------------=
     // MARK: Assertions
