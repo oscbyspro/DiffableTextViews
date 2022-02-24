@@ -17,14 +17,14 @@ import XCTest
 //*============================================================================*
 
 final class ModelsTestsXBounds: XCTestCase {
-    typealias Style<T> = NumericTextStyle<T> where T: Format
+    typealias Style<T: Format> = NumericTextStyle<T>
     
     //=------------------------------------------------------------------------=
     // MARK: State
     //=------------------------------------------------------------------------=
     
-    let integer = NumericTextStyle<Int    .Number>.number
-    let decimal = NumericTextStyle<Decimal.Number>.number
+    let integer = Style<Int    .Number>.number
+    let decimal = Style<Decimal.Number>.number
     
     //=------------------------------------------------------------------------=
     // MARK: Assertions

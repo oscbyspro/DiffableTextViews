@@ -19,19 +19,20 @@ import XCTest
 //*============================================================================*
 
 final class ModelsTestsXPrecision: XCTestCase {
-    
+    typealias Style<T: Format> = NumericTextStyle<T>
+
     //=------------------------------------------------------------------------=
     // MARK: State
     //=------------------------------------------------------------------------=
     
-    let integer = NumericTextStyle<Int    .Number>.number
-    let decimal = NumericTextStyle<Decimal.Number>.number
+    let integer = Style<Int    .Number>.number
+    let decimal = Style<Decimal.Number>.number
     
     //=------------------------------------------------------------------------=
     // MARK: Assertions
     //=------------------------------------------------------------------------=
     
-    func XCTAssert<T: Format>(_ style: NumericTextStyle<T>,
+    func XCTAssert<T: Format>(_ style: Style<T>,
     integer: ClosedRange<Int>, fraction: ClosedRange<Int>) {
         XCTAssert(style.precision, integer: integer, fraction: fraction)
     }
