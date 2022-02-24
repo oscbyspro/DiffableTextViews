@@ -17,7 +17,7 @@
 /// This destinction is important because emojis are one character in size but sometimes mutlitple UTF16 units,
 /// and if this is not aknowledged you would attempt to access positions out of bounds and crash the application.
 ///
-@usableFromInline struct Position<Scheme: DiffableTextViews.Scheme>: Equatable, Comparable, ExpressibleByIntegerLiteral {
+@usableFromInline struct Position<Scheme: DiffableTextViews.Scheme>: Comparable {
     
     //=------------------------------------------------------------------------=
     // MARK: State
@@ -29,12 +29,8 @@
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable init(_ offset: Int) {
+    @inlinable init(_ offset: Int = 0) {
         self.offset = offset
-    }
-    
-    @inlinable init(integerLiteral value: Int) {
-        self.offset = value
     }
     
     //=------------------------------------------------------------------------=
@@ -42,11 +38,7 @@
     //=------------------------------------------------------------------------=
 
     @inlinable static var start: Self {
-        Self(0)
-    }
-    
-    @inlinable static func end(of character: Character) -> Self {
-        Self(Scheme.size(of: character))
+        Self()
     }
         
     @inlinable static func end<S: StringProtocol>(of characters: S) -> Self {
