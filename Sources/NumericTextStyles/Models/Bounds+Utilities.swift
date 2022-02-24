@@ -27,10 +27,8 @@ extension Bounds {
     // MARK: Validate
     //=------------------------------------------------------------------------=
     
-    @inlinable func validate(_ components: Components, _ location: Location) throws {
-        if  location == .edge, components.hasSeparatorAsSuffix {
-            throw Info([ .mark(components), "does not fit a fraction separator."])
-        }
+    @inlinable func validate(_ components: Components) throws {
+        try validate(components.sign)
     }
 }
 
@@ -59,5 +57,50 @@ extension Bounds {
         guard sign == sign.transform(autocorrect) else {
             throw Info([.mark(sign), "is not in", .mark(self)])
         }
+    }
+}
+
+//=----------------------------------------------------------------------------=
+// MARK: + Value
+//=----------------------------------------------------------------------------=
+
+extension Bounds {
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Autocorrect
+    //=------------------------------------------------------------------------=
+    
+    @inlinable func autocorrect(_ value: inout Value) {
+        value = Swift.min(Swift.max(min, value), max)
+    }
+
+    //=------------------------------------------------------------------------=
+    // MARK: Validate
+    //=------------------------------------------------------------------------=
+    
+    @inlinable func validate(_ value: Value, _ components: Components) throws {
+        if try location(value) == .edge, components.hasSeparatorAsSuffix {
+            throw Info([.mark(components), "does not fit a fraction separator."])
+        }
+    }
+    
+    @inlinable func location(_ value: Value) throws -> Location {
+        if min < value && value < max { return .body }
+        //=--------------------------------------=
+        // MARK: Value == Max
+        //=--------------------------------------=
+        if value == max {
+            return value > .zero || min == max ? .edge : .body
+        }
+        //=--------------------------------------=
+        // MARK: Value == Min
+        //=--------------------------------------=
+        if value == min {
+            return value < .zero || min == max ? .edge : .body
+        }
+        //=--------------------------------------=
+        // MARK: Failure
+        //=--------------------------------------=
+        throw Info([.mark(value), "is not in", .mark(self)])
     }
 }

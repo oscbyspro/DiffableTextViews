@@ -115,7 +115,7 @@ extension NumericTextStyle {
         //=--------------------------------------=
         bounds.autocorrect(&value)
         //=--------------------------------------=
-        // MARK: Value -> Components
+        // MARK: Components -> Value
         //=--------------------------------------=
         let formatted = style.format(value)
         let parseable = snapshot(formatted)
@@ -163,10 +163,7 @@ extension NumericTextStyle {
         //=--------------------------------------=
         var components = try components(proposal)
         sign.map({ components.sign = $0 })
-        //=--------------------------------------=
-        // MARK: Components - Validate
-        //=--------------------------------------=
-        try bounds.validate(components.sign)
+        try bounds.validate(components)
         //=--------------------------------------=
         // MARK: Components - Count, Capacity
         //=--------------------------------------=
@@ -177,11 +174,7 @@ extension NumericTextStyle {
         // MARK: Value
         //=--------------------------------------=
         let value = try self.value(components)
-        //=--------------------------------------=
-        // MARK: Value - Validate
-        //=--------------------------------------=
-        let location = try bounds.validate(value)
-        try bounds.validate(components, location)
+        try bounds.validate(value, components)
         //=--------------------------------------=
         // MARK: Style
         //=--------------------------------------=
