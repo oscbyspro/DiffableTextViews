@@ -27,6 +27,14 @@ final class ModelsTests_Bounds: XCTestCase {
     let decimal = Style<Decimal.Number>.number
     
     //=------------------------------------------------------------------------=
+    // MARK: Accessors
+    //=------------------------------------------------------------------------=
+    
+    var outside: Decimal {
+        .greatestFiniteMagnitude
+    }
+    
+    //=------------------------------------------------------------------------=
     // MARK: Assertions
     //=------------------------------------------------------------------------=
     
@@ -51,6 +59,34 @@ final class ModelsTests_Bounds: XCTestCase {
     func testDecimal() {
         XCTAssertEqual(Decimal.bounds.lowerBound, -Decimal(string: String(repeating: "9", count: 38))!)
         XCTAssertEqual(Decimal.bounds.upperBound, +Decimal(string: String(repeating: "9", count: 38))!)
+    }
+}
+
+//=----------------------------------------------------------------------------=
+// MARK: + Initializers
+//=----------------------------------------------------------------------------=
+
+extension ModelsTests_Bounds {
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Clamps To Limits
+    //=------------------------------------------------------------------------=
+    
+    func testOutside() {
+        XCTAssertLessThan(   (-outside), Decimal.bounds.lowerBound)
+        XCTAssertGreaterThan((+outside), Decimal.bounds.upperBound)
+    }
+    
+    func testOutsideClosedRange() {
+        XCTAssert(Bounds((-outside)...(+outside)), expectation: Decimal.bounds)
+    }
+    
+    func testOutsidePartialRangeFrom() {
+        XCTAssert(Bounds((-outside)...), expectation: Decimal.bounds)
+    }
+    
+    func testOutsidePartialRangeThrough() {
+        XCTAssert(Bounds(...(+outside)), expectation: Decimal.bounds)
     }
 }
 
