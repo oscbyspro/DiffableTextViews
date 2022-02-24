@@ -123,7 +123,7 @@ extension PatternTextStyle {
     // MARK: Merge
     //=------------------------------------------------------------------------=
     
-    /// - Mismatches throw an error.
+    /// - Mismatches throw an error, which results in user input cancellation.
     @inlinable public func merge(_ changes: Changes) throws -> Commit<Value> {
         var value = Value(); let proposal = changes.proposal()
         var contents = proposal.lazy.filter(\.nonvirtual).makeIterator()

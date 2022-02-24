@@ -74,7 +74,7 @@ public struct Precision<Value: NumericTextValue>: Equatable {
         integer:   integer .upperBound,
         fraction:  fraction.upperBound)
         //=--------------------------------------=
-        // MARK: Intantiate
+        // MARK: Instantiate
         //=--------------------------------------=
         return Self(lower: lower, upper: upper)
     }
