@@ -62,8 +62,8 @@ import Support
         // MARK: State
         //=--------------------------------------------------------------------=
         
-        @usableFromInline let locale: Locale
         @usableFromInline let code:   String
+        @usableFromInline let locale: Locale
 
         //=--------------------------------------------------------------------=
         // MARK: Initializers
