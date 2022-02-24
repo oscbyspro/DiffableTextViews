@@ -49,7 +49,7 @@
     // MARK: Transformations
     //=------------------------------------------------------------------------=
     
-    @inlinable func after(_ character: Character) -> Self {
+    @inlinable func  after(_ character: Character) -> Self {
         Self(offset + Scheme.size(of: character))
     }
     

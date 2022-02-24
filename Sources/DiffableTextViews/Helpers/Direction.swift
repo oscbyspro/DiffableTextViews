@@ -25,7 +25,7 @@
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable init?<T: Comparable>(_ start: T, to end: T) {
+    @inlinable init?<T>(_ start: T, to end: T) where T: Comparable {
         switch true {
         case start < end: self =  .forwards
         case start > end: self = .backwards

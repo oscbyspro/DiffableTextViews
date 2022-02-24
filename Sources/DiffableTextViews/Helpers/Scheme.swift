@@ -19,7 +19,7 @@
     
     @inlinable static func size(of character: Character) -> Int
     
-    @inlinable static func size<S: StringProtocol>(of characters: S) -> Int
+    @inlinable static func size<S>(of characters: S) -> Int where S: StringProtocol
 }
 
 //*============================================================================*
@@ -34,7 +34,7 @@ extension Character: Scheme {
 
     @inlinable static func size(of character: Character) -> Int { 1 }
     
-    @inlinable static func size<S: StringProtocol>(of characters: S) -> Int {
+    @inlinable static func size<S>(of characters: S) -> Int where S: StringProtocol {
         characters.count
     }
 }
@@ -53,7 +53,7 @@ extension UTF8: Scheme {
         character.utf8.count
     }
     
-    @inlinable static func size<S: StringProtocol>(of characters: S) -> Int {
+    @inlinable static func size<S>(of characters: S) -> Int where S: StringProtocol {
         characters.utf8.count
     }
 }
@@ -72,7 +72,7 @@ extension UTF16: Scheme {
         character.utf16.count
     }
     
-    @inlinable static func size<S: StringProtocol>(of characters: S) -> Int {
+    @inlinable static func size<S>(of characters: S) -> Int where S: StringProtocol {
         characters.utf16.count
     }
 }
@@ -91,7 +91,7 @@ extension UnicodeScalar: Scheme {
         character.unicodeScalars.count
     }
     
-    @inlinable static func size<S: StringProtocol>(of characters: S) -> Int {
+    @inlinable static func size<S>(of characters: S) -> Int where S: StringProtocol {
         characters.unicodeScalars.count
     }
 }
