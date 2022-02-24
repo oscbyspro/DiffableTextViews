@@ -33,15 +33,27 @@ public struct Bounds<Value: NumericTextValue>: Equatable {
     //=------------------------------------------------------------------------=
     
     @inlinable init(_ limits: PartialRangeFrom<Value>) {
-        self.init(min: Swift.max(limits.lowerBound, Value.bounds.lowerBound))
+        self.init(min: Self.interpret(min: limits.lowerBound))
     }
     
     @inlinable init(_ limits: PartialRangeThrough<Value>) {
-        self.init(max: Swift.min(limits.upperBound, Value.bounds.upperBound))
+        self.init(max: Self.interpret(max: limits.upperBound))
     }
     
     @inlinable init(_ limits: ClosedRange<Value> = Value.bounds) {
-        self.init(min: Swift.max(limits.lowerBound, Value.bounds.lowerBound),
-                  max: Swift.min(limits.upperBound, Value.bounds.upperBound))
+        self.init(min: Self.interpret(min: limits.lowerBound),
+                  max: Self.interpret(max: limits.upperBound))
+    }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Initializers - Helpers
+    //=------------------------------------------------------------------------=
+    
+    @inlinable static func interpret(min: Value) -> Value {
+        Swift.max(min,  Value.bounds.lowerBound)
+    }
+    
+    @inlinable static func interpret(max: Value) -> Value {
+        Swift.min(max,  Value.bounds.upperBound)
     }
 }
