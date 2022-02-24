@@ -16,11 +16,6 @@ import DiffableTextViews
 @usableFromInline enum Search<Haystack, Needle> where
 Haystack: BidirectionalCollection, Haystack.Element == Symbol,
 Needle: BidirectionalCollection, Needle.Element == Character {
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Aliases
-    //=------------------------------------------------------------------------=
-    
     @usableFromInline typealias Location = Range<Haystack.Index>
     @usableFromInline typealias Reversed = Search<ReversedCollection<Haystack>, ReversedCollection<Needle>>
 

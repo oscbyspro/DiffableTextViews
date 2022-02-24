@@ -43,7 +43,7 @@ extension Precision {
             throw Info([.mark(component), "digits exceed max precision", .mark(upper[component])])
         }
         //=--------------------------------------=
-        // MARK: Return Capacity On Success
+        // MARK: Done
         //=--------------------------------------=
         return capacity
     }

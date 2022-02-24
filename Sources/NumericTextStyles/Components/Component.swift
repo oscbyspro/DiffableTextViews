@@ -68,7 +68,7 @@ extension Component {
     // MARK: Write
     //=------------------------------------------------------------------------=
     
-    @inlinable func write<T: TextOutputStream>(to target: inout T) {
+    @inlinable func write<T>(to target: inout T) where T: TextOutputStream {
         unicode.write(to: &target)
     }
 }

@@ -39,9 +39,9 @@ import Support
     ///
     /// To use this method, all formatting characters must be marked as such.
     ///
-    @inlinable init<S: Sequence>(characters: S, integer: Bool, unsigned: Bool,
+    @inlinable init<S>(characters: S, integer: Bool, unsigned: Bool,
     signs: [Character: Sign], digits: [Character: Digit], separators: [Character: Separator])
-    throws where S.Element == Character {
+    throws where S: Sequence, S.Element == Character {
         //=--------------------------------------=
         // MARK: State
         //=--------------------------------------=
@@ -179,7 +179,7 @@ extension Components: TextOutputStreamable {
     // MARK: Write
     //=------------------------------------------------------------------------=
     
-    @inlinable public func write<T: TextOutputStream>(to target: inout T) {
+    @inlinable func write<T>(to target: inout T) where T: TextOutputStream {
         sign.write(to: &target)
         integer.write(to: &target)
         separator?.write(to: &target)

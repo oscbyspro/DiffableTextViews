@@ -65,7 +65,7 @@ public extension View {
     
     @inlinable func diffableTextField_onSetup(
         _ onSetup: @escaping (ProxyTextField) -> Void) -> some View {
-        environment(\.diffableTextField_onSetup, onSetup)
+        environment(\.diffableTextField_onSetup,  onSetup)
     }
     
     @inlinable func diffableTextField_onUpdate(

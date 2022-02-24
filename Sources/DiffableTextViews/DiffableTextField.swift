@@ -145,7 +145,8 @@ public struct DiffableTextField<Style: UIKitDiffableTextStyle>: UIViewRepresenta
         // MARK: Respond To Input Events
         //=--------------------------------------------------------------------=
         
-        @inlinable public func textField(_ textField: UITextField, shouldChangeCharactersIn nsRange: NSRange, replacementString string: String) -> Bool {
+        @inlinable public func textField(_ textField: UITextField,
+        shouldChangeCharactersIn nsRange: NSRange, replacementString string: String) -> Bool {
             let style = style()
             let range = context.field.indices(at: nsRange)
             let changes = Changes(context.field.snapshot, change: (string, range))

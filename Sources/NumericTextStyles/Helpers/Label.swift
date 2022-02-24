@@ -28,7 +28,7 @@ public final class Label {
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable init<S: StringProtocol>(_ characters: S, at location: Location) {
+    @inlinable init<S>(_ characters: S, at location: Location) where S: StringProtocol {
         self.characters = String(characters); self.location = location
     }
     

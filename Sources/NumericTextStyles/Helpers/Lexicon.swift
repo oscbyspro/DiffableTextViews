@@ -77,9 +77,8 @@ public final class Lexicon {
     // MARK: Components -> Value
     //=------------------------------------------------------------------------=
     
-    /// Relies on the fact that implemented styles can parse pure numbers.
-    /// If this changes, then it should be remade to use pure number styles.
-    @inlinable func value<T: Format>(of components: Components, as format: T) throws -> T.Value {
+    /// Relies on the fact that implemented styles can parse unformatted numbers.
+    @inlinable func value<T>(of components: Components, as format: T) throws -> T.Value where T: Format {
         try format.locale(Self.en_US.locale).parse(String(describing: components))
     }
     
@@ -88,7 +87,7 @@ public final class Lexicon {
     //=------------------------------------------------------------------------=
     
     /// To use this method, all formatting characters must be marked as virtual.
-    @inlinable func components<T: Value>(in snapshot: Snapshot, as value: T.Type) throws -> Components {
+    @inlinable func components<T>(in snapshot: Snapshot, as value: T.Type) throws -> Components where T: Value {
         let characters = snapshot.lazy.filter(\.nonvirtual).map(\.character)
         return try .init(characters: characters, integer: T.isInteger, unsigned: T.isUnsigned,
         signs: signs.components, digits: digits.components, separators: separators.components)

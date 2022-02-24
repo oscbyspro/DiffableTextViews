@@ -51,6 +51,6 @@ import Foundation
     //=------------------------------------------------------------------------=
     
     @inlinable func standard(_ formatter: NumberFormatter) -> Character! {
-        formatter.string(from: numericValue as NSNumber)?.first
+        formatter.string(from: numericValue as NSNumber)!.first
     }
 }

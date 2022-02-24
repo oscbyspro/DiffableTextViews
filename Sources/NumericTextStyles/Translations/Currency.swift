@@ -38,7 +38,7 @@ import Support
     // MARK: Initializers - Static
     //=------------------------------------------------------------------------=
     
-    @inlinable static func cache<T: Formats.Currency>(_ format: T) -> Currency {
+    @inlinable static func cache<T>(_ format: T) -> Currency where T: Formats.Currency {
         search(ID(format.locale, format.currencyCode))
     }
     

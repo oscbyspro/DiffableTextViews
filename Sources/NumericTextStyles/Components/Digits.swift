@@ -13,7 +13,7 @@ import Support
 // MARK: * Digits
 //*============================================================================*
 
-@usableFromInline struct Digits: ExpressibleByArrayLiteral {
+@usableFromInline struct Digits {
     
     //=------------------------------------------------------------------------=
     // MARK: State
@@ -25,13 +25,7 @@ import Support
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable init(_ digits: [Digit] = []) {
-        self.digits = []
-    }
-    
-    @inlinable init(arrayLiteral elements: Digit...) {
-        self.digits = elements
-    }
+    @inlinable init() { self.digits = [] }
     
     //=------------------------------------------------------------------------=
     // MARK: Count
@@ -62,7 +56,9 @@ import Support
     //=------------------------------------------------------------------------=
     
     @inlinable mutating func makeAtLeastZero() {
-        if digits.isEmpty { self = [.zero] }
+        if  digits.isEmpty {
+            digits.append(.zero)
+        }
     }
     
     //=------------------------------------------------------------------------=
@@ -78,7 +74,7 @@ import Support
     }
     
     //=------------------------------------------------------------------------=
-    // MARK: Transformations - Utilities
+    // MARK: Transformations - Prefix / Suffix
     //=------------------------------------------------------------------------=
     
     @inlinable mutating func prefix(maxLength: Int) {
@@ -100,7 +96,7 @@ extension Digits: TextOutputStreamable {
     // MARK: Write
     //=------------------------------------------------------------------------=
     
-    @inlinable public func write<T: TextOutputStream>(to target: inout T) {
+    @inlinable func write<T>(to target: inout T) where T: TextOutputStream {
         for digit in digits {
             digit.write(to: &target)
         }

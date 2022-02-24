@@ -45,7 +45,7 @@ extension Layout {
     // MARK: Indices - After / Before
     //=------------------------------------------------------------------------=
 
-    @inlinable func index(after index: Index) -> Index {
+    @inlinable func index(after  index: Index) -> Index {
         let character = snapshot.characters[index.character]
         let after = snapshot.index(after: index.snapshot)
         return Index(after, at: index.position.after(character))

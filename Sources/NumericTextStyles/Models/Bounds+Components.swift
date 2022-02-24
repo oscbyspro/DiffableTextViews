@@ -20,8 +20,8 @@ extension Bounds {
     //=------------------------------------------------------------------------=
     
     @inlinable func validate(_ components: Components, with location: Location) throws {
-        if location == .edge, components.hasSeparatorAsSuffix {
-            throw Info([.mark(components), "does not fit a fraction separator."])
+        if  location == .edge, components.hasSeparatorAsSuffix {
+            throw Info([ .mark(components), "does not fit a fraction separator."])
         }
     }
 }
