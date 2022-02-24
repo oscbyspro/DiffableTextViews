@@ -13,23 +13,23 @@ import DiffableTextViews
 // MARK: * Naive Search Algorithm
 //*============================================================================*
 
-@usableFromInline enum Search<Needle, Haystack> where
-Needle: BidirectionalCollection, Needle.Element == Character,
-Haystack: BidirectionalCollection, Haystack.Element == Symbol {
+@usableFromInline enum Search<Haystack, Needle> where
+Haystack: BidirectionalCollection, Haystack.Element == Symbol,
+Needle: BidirectionalCollection, Needle.Element == Character {
     
     //=------------------------------------------------------------------------=
     // MARK: Aliases
     //=------------------------------------------------------------------------=
     
     @usableFromInline typealias Location = Range<Haystack.Index>
-    @usableFromInline typealias Reversed = Search<ReversedCollection<Needle>, ReversedCollection<Haystack>>
+    @usableFromInline typealias Reversed = Search<ReversedCollection<Haystack>, ReversedCollection<Needle>>
 
     //=------------------------------------------------------------------------=
     // MARK: Forwards
     //=------------------------------------------------------------------------=
     
     /// A naive search, for needles known to be at or near the start of a haystack.
-    @inlinable static func forwards(search needle: Needle, in haystack: Haystack) -> Location? {
+    @inlinable static func forwards(search haystack: Haystack, match needle: Needle) -> Location? {
         //=--------------------------------------=
         // MARK: Haystack
         //=--------------------------------------=
@@ -60,8 +60,8 @@ Haystack: BidirectionalCollection, Haystack.Element == Symbol {
     //=------------------------------------------------------------------------=
     
     /// A naive search, for needles known to be at or near the end of a haystack.
-    @inlinable static func backwards(search needle: Needle, in haystack: Haystack) -> Location? {
-        Reversed.forwards(search: needle.reversed(), in: haystack.reversed()).map { reversed in
+    @inlinable static func backwards(search haystack: Haystack, match needle: Needle) -> Location? {        
+        Reversed.forwards(search: haystack.reversed(), match: needle.reversed()).map { reversed in
             reversed.upperBound.base ..< reversed.lowerBound.base
         }
     }
@@ -72,6 +72,6 @@ Haystack: BidirectionalCollection, Haystack.Element == Symbol {
     
     /// A naive search, for needles known to be at or near the edge of a haystack.
     @inlinable static func range(of needle: Needle, in haystack: Haystack, reversed: Bool = false) -> Location? {
-        !reversed ? forwards(search: needle, in: haystack) : backwards(search: needle, in: haystack)
+        !reversed ? forwards(search: haystack, match: needle) : backwards(search: haystack, match: needle)
     }
 }
