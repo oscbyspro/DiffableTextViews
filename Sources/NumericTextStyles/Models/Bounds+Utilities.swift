@@ -79,25 +79,25 @@ extension Bounds {
     //=------------------------------------------------------------------------=
     
     @inlinable func validate(_ value: Value, _ components: Components) throws {
-        if try location(value) == .edge, components.hasSeparatorAsSuffix {
+        if try edge(value), components.hasSeparatorAsSuffix {
             throw Info([.mark(components), "does not fit a fraction separator."])
         }
     }
     
-    @inlinable func location(_ value: Value) throws -> Location {
-        if min < value && value < max { return .body }
+    //=------------------------------------------------------------------------=
+    // MARK: Location
+    //=------------------------------------------------------------------------=
+    
+    @inlinable func edge(_ value: Value) throws -> Bool {
+        if min < value  && value < max { return false }
         //=--------------------------------------=
         // MARK: Value == Max
         //=--------------------------------------=
-        if value == max {
-            return value > .zero || min == max ? .edge : .body
-        }
+        if value == max { return value > .zero || min == max }
         //=--------------------------------------=
         // MARK: Value == Min
         //=--------------------------------------=
-        if value == min {
-            return value < .zero || min == max ? .edge : .body
-        }
+        if value == min { return value < .zero || min == max }
         //=--------------------------------------=
         // MARK: Failure
         //=--------------------------------------=

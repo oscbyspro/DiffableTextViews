@@ -21,7 +21,7 @@ extension Precision: CustomStringConvertible {
         //=--------------------------------------=
         // MARK: Helpers
         //=--------------------------------------=
-        func text(component: Count.Component) -> String {
+        func text(component:  Count.Component) -> String {
             "\(component): \((lower[component], upper[component]))"
         }
         //=--------------------------------------=

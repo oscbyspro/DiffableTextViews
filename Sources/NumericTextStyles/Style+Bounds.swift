@@ -33,14 +33,14 @@ public extension NumericTextStyle {
     //=------------------------------------------------------------------------=
     
     @inlinable func bounds(_ limits: ClosedRange<Value>) -> Self {
-        transform(Bounds(min: limits.lowerBound, max: limits.upperBound))
+        transform(Bounds(limits))
     }
     
     @inlinable func bounds(_ limits: PartialRangeFrom<Value>) -> Self {
-        transform(Bounds(min: limits.lowerBound))
+        transform(Bounds(limits))
     }
     
     @inlinable func bounds(_ limits: PartialRangeThrough<Value>) -> Self {
-        transform(Bounds(max: limits.upperBound))
+        transform(Bounds(limits))
     }
 }
