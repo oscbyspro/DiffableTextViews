@@ -17,7 +17,95 @@ import XCTest
 //*============================================================================*
 
 final class ModelsTestsXBounds: XCTestCase {
+    typealias Style<T> = NumericTextStyle<T> where T: Format
     
+    //=------------------------------------------------------------------------=
+    // MARK: State
+    //=------------------------------------------------------------------------=
+    
+    let integer = NumericTextStyle<Int    .Number>.number
+    let decimal = NumericTextStyle<Decimal.Number>.number
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Assertions
+    //=------------------------------------------------------------------------=
+    
+    func XCTAssert<T: Format>(_ style: Style<T>, expectation: ClosedRange<T.Value>) {
+        XCTAssert(style.bounds, expectation: expectation)
+    }
+    
+    func XCTAssert<T: Value>(_ bounds: Bounds<T>, expectation: ClosedRange<T>) {
+        XCTAssertEqual(bounds.min, expectation.lowerBound)
+        XCTAssertEqual(bounds.max, expectation.upperBound)
+    }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Tests
+    //=------------------------------------------------------------------------=
+    
+    func testInt() {
+        XCTAssertEqual(Int.bounds.lowerBound, Int.min)
+        XCTAssertEqual(Int.bounds.upperBound, Int.max)
+    }
+    
+    func testDecimal() {
+        XCTAssertEqual(Decimal.bounds.lowerBound, -Decimal(string: String(repeating: "9", count: 38))!)
+        XCTAssertEqual(Decimal.bounds.upperBound, +Decimal(string: String(repeating: "9", count: 38))!)
+    }
+}
+
+//=----------------------------------------------------------------------------=
+// MARK: + Style x Integer
+//=----------------------------------------------------------------------------=
+
+extension ModelsTestsXBounds {
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Limits
+    //=------------------------------------------------------------------------=
+    
+    func testInteger_ClosedRange() {
+        XCTAssert(integer.bounds(5...9), expectation: 5...9)
+    }
+    
+    func testInteger_PartialRangeFrom() {
+        XCTAssert(integer.bounds(5... ), expectation: 5...Int.max)
+    }
+    
+    func testInteger_PartialRangeThrough() {
+        XCTAssert(integer.bounds( ...9), expectation: Int.min...9)
+    }
+}
+
+//=----------------------------------------------------------------------------=
+// MARK: + Style x Floating Point
+//=----------------------------------------------------------------------------=
+
+extension ModelsTestsXBounds {
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Limits
+    //=------------------------------------------------------------------------=
+    
+    func testFloatingPoint_ClosedRange() {
+        XCTAssert(decimal.bounds(5...9), expectation: 5...9)
+    }
+    
+    func testFloatingPoint_PartialRangeFrom() {
+        XCTAssert(decimal.bounds(5... ), expectation: 5...Decimal.bounds.upperBound)
+    }
+    
+    func testFloatingPoint_PartialRangeThrough() {
+        XCTAssert(decimal.bounds( ...9), expectation: Decimal.bounds.lowerBound...9)
+    }
+}
+
+//=----------------------------------------------------------------------------=
+// MARK: + Autocorrect
+//=----------------------------------------------------------------------------=
+
+extension ModelsTestsXBounds {
+
     //=------------------------------------------------------------------------=
     // MARK: Assertions
     //=------------------------------------------------------------------------=
