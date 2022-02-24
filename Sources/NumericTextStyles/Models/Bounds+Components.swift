@@ -16,10 +16,18 @@ import Support
 extension Bounds {
     
     //=------------------------------------------------------------------------=
+    // MARK: Autocorrect
+    //=------------------------------------------------------------------------=
+    
+    @inlinable func autocorrect(_ components: inout Components) {
+        autocorrect(&components.sign)
+    }
+    
+    //=------------------------------------------------------------------------=
     // MARK: Validate
     //=------------------------------------------------------------------------=
     
-    @inlinable func validate(_ components: Components, with location: Location) throws {
+    @inlinable func validate(_ components: Components, _ location: Location) throws {
         if  location == .edge, components.hasSeparatorAsSuffix {
             throw Info([ .mark(components), "does not fit a fraction separator."])
         }

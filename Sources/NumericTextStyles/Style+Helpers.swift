@@ -10,57 +10,67 @@
 import DiffableTextViews
 
 //=----------------------------------------------------------------------------=
-// MARK: + Conversions
+// MARK: + Helpers
 //=----------------------------------------------------------------------------=
 
 extension NumericTextStyle {
     
     //=------------------------------------------------------------------------=
-    // MARK: Lexicon
+    // MARK: Commit
     //=------------------------------------------------------------------------=
     
-    @inlinable func value(_ components: Components) throws -> Value {
-        try lexicon.value(of: components, as: format)
+    @inlinable func commit(_ value: Value, _ components: Components, _ style: Format) -> Commit<Value> {
+        //=--------------------------------------=
+        // MARK: Characters
+        //=--------------------------------------=
+        var characters = style.format(value)
+        fix(components.sign, for: value, in: &characters)
+        //=--------------------------------------=
+        // MARK: Characters -> Snapshot -> Commit
+        //=--------------------------------------=
+        return Commit(value, snapshot(characters))
     }
     
-    @inlinable func components(_ snapshot: Snapshot) throws -> Components {
-        try lexicon.components(in: snapshot, as: Value.self)
-    }
-}
-
-//=----------------------------------------------------------------------------=
-// MARK: + Format
-//=----------------------------------------------------------------------------=
-
-extension NumericTextStyle {
-    
     //=------------------------------------------------------------------------=
-    // MARK: Strategies
+    // MARK: Characters
     //=------------------------------------------------------------------------=
-    
-    @inlinable func sign(_ components: Components) -> Format.Sign {
-        components.sign == .negative ? .always : .automatic
+
+    /// Assumes that characters contains at least one content character.
+    @inlinable func snapshot(_ characters: String) -> Snapshot {
+        var snapshot = characters.reduce(into: Snapshot()) {
+            snapshot,  character in
+            snapshot.append(Symbol(character, as: attribute(character)))
+        }
+        //=--------------------------------------=
+        // MARK: Autocorrect
+        //=--------------------------------------=
+        translation.autocorrect(&snapshot); return snapshot
     }
     
-    @inlinable func separator(_ components: Components) -> Format.Separator {
-        components.separator == .fraction ? .always : .automatic
-    }
-}
-
-//=----------------------------------------------------------------------------=
-// MARK: + Fixes
-//=----------------------------------------------------------------------------=
-
-extension NumericTextStyle {
-    
     //=------------------------------------------------------------------------=
-    // MARK: Sign
+    // MARK: Attributes
     //=------------------------------------------------------------------------=
     
-    /// This method exists because Apple's format styles always interpret zero as having a positive sign.
-    @inlinable func fix(_ sign: Sign, for value: Value, in characters: inout String) {
-        guard sign == .negative, value == .zero else { return }
-        guard let position = characters.firstIndex(of: lexicon.signs[sign.toggled()]) else { return }
-        characters.replaceSubrange(position...position, with: String(lexicon.signs[sign]))
+    /// Conditional branches are ordered from most to least frequent.
+    @inlinable func attribute(_ character: Character) -> Attribute {
+        //=--------------------------------------=
+        // MARK: Digit
+        //=--------------------------------------=
+        if lexicon.digits.contains(character) {
+            return .content
+        //=--------------------------------------=
+        // MARK: Separator
+        //=--------------------------------------=
+        } else if let separator = lexicon.separators[character] {
+            return separator == .fraction ? .removable : .phantom
+        //=--------------------------------------=
+        // MARK: Sign
+        //=--------------------------------------=
+        } else if lexicon.signs.contains(character) {
+            return .phantom.subtracting(.virtual)
+        //=--------------------------------------=
+        // MARK: Miscellaneous
+        //=--------------------------------------=
+        } else { return .phantom }
     }
 }

@@ -123,7 +123,7 @@ extension NumericTextStyle {
         //=--------------------------------------=
         // MARK: Autocorrect
         //=--------------------------------------=
-        bounds.autocorrect(&components.sign)
+        bounds.autocorrect(&components)
         precision.autocorrect(&components)
         //=--------------------------------------=
         // MARK: Value <- Components
@@ -134,14 +134,9 @@ extension NumericTextStyle {
         //=--------------------------------------=
         style = style.sign(self.sign(components))
         //=--------------------------------------=
-        // MARK: Characters
+        // MARK: Commit
         //=--------------------------------------=
-        var characters = style.format(value)
-        fix(components.sign, for: value, in: &characters)
-        //=--------------------------------------=
-        // MARK: Snapshot -> Commit
-        //=--------------------------------------=
-        return Commit(value, snapshot(characters))
+        return self.commit(value, components, style)
     }
 }
 
@@ -167,7 +162,7 @@ extension NumericTextStyle {
         // MARK: Components
         //=--------------------------------------=
         var components = try components(proposal)
-        components.set(sign)
+        sign.map({ components.sign = $0 })
         //=--------------------------------------=
         // MARK: Components - Validate
         //=--------------------------------------=
@@ -186,20 +181,15 @@ extension NumericTextStyle {
         // MARK: Value - Validate
         //=--------------------------------------=
         let location = try bounds.validate(value)
-        try bounds.validate(components, with: location)
+        try bounds.validate(components, location)
         //=--------------------------------------=
         // MARK: Style
         //=--------------------------------------=
         let style = format.precision(self.precision.interactive(count))
         .separator(self.separator(components)).sign(self.sign(components))
         //=--------------------------------------=
-        // MARK: Characters
+        // MARK: Commit
         //=--------------------------------------=
-        var characters = style.format(value)
-        fix(components.sign, for: value, in: &characters)
-        //=--------------------------------------=
-        // MARK: Snapshot -> Commit
-        //=--------------------------------------=
-        return Commit(value, snapshot(characters))
+        return self.commit(value, components, style)
     }
 }
