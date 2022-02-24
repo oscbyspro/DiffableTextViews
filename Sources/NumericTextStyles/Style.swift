@@ -162,7 +162,7 @@ extension NumericTextStyle {
         // MARK: Components
         //=--------------------------------------=
         var components = try components(proposal)
-        sign.map({ components.sign = $0 })
+        components.set(optional:  sign)
         try bounds.validate(components)
         //=--------------------------------------=
         // MARK: Components - Count, Capacity
