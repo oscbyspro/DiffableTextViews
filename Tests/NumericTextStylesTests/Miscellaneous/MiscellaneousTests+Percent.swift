@@ -16,10 +16,10 @@ import XCTestSupport
 @testable import NumericTextStyles
 
 //*============================================================================*
-// MARK: * AssumptionsTests x Percent
+// MARK: * MiscellaneousTests x Percent
 //*============================================================================*
 
-final class AssumptionsTests_Percent: Tests {
+final class MiscellaneousTests_Percent: Tests {
     
     //=------------------------------------------------------------------------=
     // MARK: Positive

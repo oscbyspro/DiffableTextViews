@@ -140,6 +140,12 @@
             </BuildableReference>
             <SkippedTests>
                <Test
+                  Identifier = "MiscellaneousTests_Comments">
+               </Test>
+               <Test
+                  Identifier = "MiscellaneousTests_Notes">
+               </Test>
+               <Test
                   Identifier = "StyleTests_Currency/testFloat64()">
                </Test>
                <Test

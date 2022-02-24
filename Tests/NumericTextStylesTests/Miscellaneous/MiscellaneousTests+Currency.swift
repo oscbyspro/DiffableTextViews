@@ -13,10 +13,10 @@ import XCTest
 import XCTestSupport
 
 //*============================================================================*
-// MARK: * AssumptionsTests x Currency
+// MARK: * MiscellaneousTests x Currency
 //*============================================================================*
 
-final class AssumptionsTests_Currency: Tests {
+final class MiscellaneousTests_Currency: Tests {
     
     //=------------------------------------------------------------------------=
     // MARK: Positive

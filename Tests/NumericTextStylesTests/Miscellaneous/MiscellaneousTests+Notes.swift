@@ -9,13 +9,14 @@
 
 #if DEBUG
 
+import Foundation
 import XCTest
 
 //*============================================================================*
-// MARK: * CommentsTests x Constants
+// MARK: * MiscellaneousTests x Notes
 //*============================================================================*
 
-final class CommentsTests_Constants: XCTestCase {
+final class MiscellaneousTests_Notes: XCTestCase {
     
     //=------------------------------------------------------------------------=
     // MARK: Tests
@@ -27,6 +28,23 @@ final class CommentsTests_Constants: XCTestCase {
     
     func testThatThereAreManyCurrencyCodes() {
         XCTAssertGreaterThanOrEqual(currencyCodes.count, 153)
+    }
+    
+    func testStyleIsMoreAccurateThanFormatter() {
+        let style = Decimal.FormatStyle.number
+        let formatter = NumberFormatter()
+        formatter.numberStyle = .decimal
+        formatter.generatesDecimalNumbers = true
+        //=--------------------------------------=
+        // MARK: Values
+        //=--------------------------------------=
+        let content = String(repeating: "9", count: 38)
+        let expectation = Decimal(string: content)!
+        //=--------------------------------------=
+        // MARK: Result
+        //=--------------------------------------=
+        XCTAssertEqual(expectation, try! style.parseStrategy.parse(content))
+        XCTAssertNotEqual(expectation, formatter.number(from: content) as! Decimal)
     }
 }
 
