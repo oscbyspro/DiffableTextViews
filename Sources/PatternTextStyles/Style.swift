@@ -49,10 +49,9 @@ Value: RangeReplaceableCollection, Value: Equatable, Value.Element == Character 
     //=------------------------------------------------------------------------=
     
     @inlinable public static func == (lhs: Self, rhs: Self) -> Bool {
-        guard lhs.pattern      == rhs.pattern      else { return false }
-        guard lhs.placeholders == rhs.placeholders else { return false }
-        guard lhs.visible      == rhs.visible      else { return false }
-        return true
+        lhs.pattern == rhs.pattern
+        && lhs.placeholders == rhs.placeholders
+        && lhs.visible == rhs.visible
     }
 }
 

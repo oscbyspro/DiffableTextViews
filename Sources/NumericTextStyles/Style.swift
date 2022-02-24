@@ -75,10 +75,9 @@ extension NumericTextStyle {
     //=------------------------------------------------------------------------=
     
     @inlinable public static func == (lhs: Self, rhs: Self) -> Bool {
-        guard lhs.adapter   == rhs.adapter   else { return false }
-        guard lhs.bounds    == rhs.bounds    else { return false }
-        guard lhs.precision == rhs.precision else { return false }
-        return true
+        lhs.adapter == rhs.adapter
+        && lhs.bounds == rhs.bounds
+        && lhs.precision == rhs.precision
     }
 }
 
