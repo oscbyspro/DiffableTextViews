@@ -26,9 +26,11 @@
     //=------------------------------------------------------------------------=
     
     @inlinable init?<T: Comparable>(_ start: T, to end: T) {
-        if start < end { self = .forwards }
-        else if start > end { self = .backwards }
-        else { return nil }
+        switch true {
+        case start < end: self =  .forwards
+        case start > end: self = .backwards
+        default: return nil
+        }
     }
     
     //=------------------------------------------------------------------------=
@@ -36,6 +38,9 @@
     //=------------------------------------------------------------------------=
     
     @inlinable func reversed() -> Self {
-        self == .forwards ? .backwards : .forwards
+        switch self {
+        case  .forwards: return .backwards
+        case .backwards: return  .forwards
+        }
     }
 }

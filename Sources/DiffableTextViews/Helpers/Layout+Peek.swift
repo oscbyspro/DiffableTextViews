@@ -34,6 +34,9 @@ extension Layout {
     //=------------------------------------------------------------------------=
     
     @inlinable func peek(_ position: Index, direction: Direction) -> Index? {
-        direction == .forwards ? peek(ahead: position) : peek(behind: position)
+        switch direction {
+        case  .forwards: return peek(ahead:  position)
+        case .backwards: return peek(behind: position)
+        }        
     }
 }
