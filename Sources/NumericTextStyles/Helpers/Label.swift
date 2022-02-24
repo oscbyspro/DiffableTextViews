@@ -29,8 +29,7 @@ public final class Label {
     //=------------------------------------------------------------------------=
     
     @inlinable init<S: StringProtocol>(_ characters: S, at location: Location) {
-        self.location = location
-        self.characters = String(characters)
+        self.characters = String(characters); self.location = location
     }
     
     //=------------------------------------------------------------------------=
@@ -50,10 +49,9 @@ public final class Label {
         //=--------------------------------------=
         // MARK: Instantiate
         //=--------------------------------------=
-        if !labels[0].filter(\.isWhitespace).isEmpty {
-            return Label(labels[0], at: .prefix)
-        } else {
-            return Label(labels[1], at: .suffix)
+        switch !labels[0].filter(\.isWhitespace).isEmpty {
+        case  true: return Label(labels[0], at: .prefix)
+        case false: return Label(labels[1], at: .suffix)
         }
     }
     
