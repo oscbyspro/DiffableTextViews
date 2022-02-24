@@ -72,7 +72,7 @@ Next: BidirectionalCollection, Next.Element == Symbol {
             past: past.reversed(),
             next: next.reversed())
         //=--------------------------------------=
-        // MARK: Finalize, Return
+        // MARK: Finalize
         //=--------------------------------------=
         return (reversed.past.base, reversed.next.base)
     }

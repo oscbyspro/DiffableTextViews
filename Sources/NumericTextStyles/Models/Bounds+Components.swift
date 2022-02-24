@@ -16,6 +16,23 @@ import Support
 extension Bounds {
     
     //=------------------------------------------------------------------------=
+    // MARK: Validate
+    //=------------------------------------------------------------------------=
+    
+    @inlinable func validate(_ components: Components, with location: Location) throws {
+        if location == .edge, components.hasSeparatorAsSuffix {
+            throw Info([.mark(components), "does not fit a fraction separator."])
+        }
+    }
+}
+
+//=----------------------------------------------------------------------------=
+// MARK: + Components x Sign
+//=----------------------------------------------------------------------------=
+    
+extension Bounds {
+
+    //=------------------------------------------------------------------------=
     // MARK: Autocorrect
     //=------------------------------------------------------------------------=
     
@@ -25,19 +42,9 @@ extension Bounds {
         case .negative: if min >= .zero               { sign.toggle() }
         }
     }
-    
+
     //=------------------------------------------------------------------------=
     // MARK: Validate
-    //=------------------------------------------------------------------------=
-    
-    @inlinable func validate(_ components: Components, with location: Location) throws {
-        if location == .edge, components.hasSeparatorAsSuffix {
-            throw Info([.mark(components), "does not fit a fraction separator."])
-        }
-    }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Validate - Sign
     //=------------------------------------------------------------------------=
     
     @inlinable func validate(_ sign: Sign) throws {

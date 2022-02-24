@@ -22,9 +22,16 @@ extension Precision {
     @inlinable func autocorrect(_ components: inout Components) {
         components.trim(max: upper)
     }
+}
+
+//=----------------------------------------------------------------------------=
+// MARK: + Components x Capacity
+//=----------------------------------------------------------------------------=
+
+extension Precision {
     
     //=------------------------------------------------------------------------=
-    // MARK: Capacity
+    // MARK: Calculate / Validate
     //=------------------------------------------------------------------------=
     
     @inlinable func capacity(_ count: Count) throws -> Count {

@@ -12,19 +12,6 @@
 //=----------------------------------------------------------------------------=
 
 extension Layout {
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Forwards / Backwards / To / Through
-    //=------------------------------------------------------------------------=
-    
-    @inlinable func firstIndex(_ start: Index, direction: Direction, through: Bool) -> Index? {
-        switch (direction, through) {
-        case (.forwards,  false): return firstIndexForwardsTo(from:       start, where: nonpassthrough)
-        case (.forwards,   true): return firstIndexForwardsThrough(from:  start, where: nonpassthrough)
-        case (.backwards, false): return firstIndexBackwardsTo(from:      start, where: nonpassthrough)
-        case (.backwards,  true): return firstIndexBackwardsThrough(from: start, where: nonpassthrough)
-        }
-    }
 
     //=------------------------------------------------------------------------=
     // MARK: Forwards To
@@ -101,5 +88,18 @@ extension Layout {
         // MARK: Failure == None
         //=--------------------------------------=
         return nil
+    }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Forwards / Backwards / To / Through
+    //=------------------------------------------------------------------------=
+    
+    @inlinable func firstIndex(_ start: Index, direction: Direction, through: Bool) -> Index? {
+        switch (direction, through) {
+        case (.forwards,  false): return firstIndexForwardsTo(from:       start, where: nonpassthrough)
+        case (.forwards,   true): return firstIndexForwardsThrough(from:  start, where: nonpassthrough)
+        case (.backwards, false): return firstIndexBackwardsTo(from:      start, where: nonpassthrough)
+        case (.backwards,  true): return firstIndexBackwardsThrough(from: start, where: nonpassthrough)
+        }
     }
 }
