@@ -151,10 +151,10 @@ extension NumericTextStyle {
     //=------------------------------------------------------------------------=
     
     @inlinable public func merge(_ changes: Changes) throws -> Commit<Value> {
-        var reader = Reader(changes, lexicon)
         //=--------------------------------------=
         // MARK: Reader
         //=--------------------------------------=
+        var reader = Reader(changes, lexicon)
         reader.translateSingleCharacterInput()
         let sign = reader.consumeSingleSignInput()
         let proposal = reader.changes.proposal()
