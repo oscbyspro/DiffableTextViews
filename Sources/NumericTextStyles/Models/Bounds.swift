@@ -38,16 +38,16 @@ public struct Bounds<Value: NumericTextValue>: Equatable {
     }
     
     @inlinable init(_ limits: PartialRangeFrom<Value>) {
-        self = .unchecked(min: Self.clamped(limits.lowerBound))
+        self = .unchecked(min: Self.interpret(limits.lowerBound))
     }
     
     @inlinable init(_ limits: PartialRangeThrough<Value>) {
-        self = .unchecked(max: Self.clamped(limits.upperBound))
+        self = .unchecked(max: Self.interpret(limits.upperBound))
     }
     
     @inlinable init(_ limits: ClosedRange<Value> = Value.bounds) {
-        self = .unchecked(min: Self.clamped(limits.lowerBound),
-                          max: Self.clamped(limits.upperBound))
+        self = .unchecked(min: Self.interpret(limits.lowerBound),
+                          max: Self.interpret(limits.upperBound))
     }
 
     //=------------------------------------------------------------------------=
@@ -60,7 +60,7 @@ public struct Bounds<Value: NumericTextValue>: Equatable {
         Self(unchecked: (min, max))
     }
     
-    @inlinable static func clamped(_ value: Value) -> Value {
+    @inlinable static func interpret(_ value: Value) -> Value {
         Swift.min(Swift.max(Value.bounds.lowerBound,  value), Value.bounds.upperBound)
     }
 }
