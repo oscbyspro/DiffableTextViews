@@ -45,7 +45,7 @@ Needle: BidirectionalCollection, Needle.Element == Character {
                 haystack.formIndex(after: &position)
             }
             //=----------------------------------=
-            // MARK: Found
+            // MARK: Needle - Found
             //=----------------------------------=
             if found { return start ..< position }
         }
@@ -60,7 +60,7 @@ Needle: BidirectionalCollection, Needle.Element == Character {
     //=------------------------------------------------------------------------=
     
     /// A naive search, for needles known to be at or near the end of a haystack.
-    @inlinable static func backwards(search haystack: Haystack, match needle: Needle) -> Location? {        
+    @inlinable static func backwards(search haystack: Haystack, match needle: Needle) -> Location? {
         Reversed.forwards(search: haystack.reversed(), match: needle.reversed()).map { reversed in
             reversed.upperBound.base ..< reversed.lowerBound.base
         }
@@ -72,6 +72,9 @@ Needle: BidirectionalCollection, Needle.Element == Character {
     
     /// A naive search, for needles known to be at or near the edge of a haystack.
     @inlinable static func range(of needle: Needle, in haystack: Haystack, reversed: Bool = false) -> Location? {
-        !reversed ? forwards(search: haystack, match: needle) : backwards(search: haystack, match: needle)
+        switch !reversed {
+        case  true: return  forwards(search: haystack, match: needle)
+        case false: return backwards(search: haystack, match: needle)
+        }
     }
 }
