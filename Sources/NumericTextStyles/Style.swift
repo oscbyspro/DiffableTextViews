@@ -143,9 +143,6 @@ extension NumericTextStyle {
     //=------------------------------------------------------------------------=
     
     @inlinable public func merge(_ changes: Changes) throws -> Commit<Value> {
-        //=--------------------------------------=
-        // MARK: Reader
-        //=--------------------------------------=
         var reader = Reader(changes, lexicon)
         reader.translateSingleCharacterInput()
         let sign = reader.consumeSingleSignInput()

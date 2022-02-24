@@ -85,5 +85,5 @@ extension Count {
     // MARK: * Component
     //*========================================================================*
     
-    @usableFromInline enum Component { case value, integer, fraction }
+    @usableFromInline enum Component: CaseIterable { case value, integer, fraction }
 }
