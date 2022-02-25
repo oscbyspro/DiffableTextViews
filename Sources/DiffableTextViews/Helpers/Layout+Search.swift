@@ -37,7 +37,7 @@ extension Layout {
     //=------------------------------------------------------------------------=
     
     @inlinable func firstIndexForwardsThrough(from start: Index, where predicate: (Index) -> Bool) -> Index? {
-        self.firstIndexForwardsTo(from: start, where: predicate).map(index(after:))
+        firstIndexForwardsTo(from: start, where: predicate).map(index(after:))
     }
     
     //=------------------------------------------------------------------------=
@@ -45,7 +45,7 @@ extension Layout {
     //=------------------------------------------------------------------------=
     
     @inlinable func firstIndexBackwardsTo(from start: Index, where predicate: (Index) -> Bool) -> Index? {
-        self.firstIndexBackwardsThrough(from: start, where: predicate).map(index(after:))
+        firstIndexBackwardsThrough(from: start, where: predicate).map(index(after:))
     }
     
     //=------------------------------------------------------------------------=
