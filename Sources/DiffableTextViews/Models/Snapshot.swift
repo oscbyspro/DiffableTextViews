@@ -50,6 +50,57 @@ public struct Snapshot: BidirectionalCollection, RangeReplaceableCollection {
         self._attributes = [Attribute](repeating: attribute, count: characters.count)
     }
     
+    //=------------------------------------------------------------------------=
+    // MARK: Count
+    //=------------------------------------------------------------------------=
+    
+    /// - Complexity: O(1).
+    @inlinable public var count: Int {
+        _attributes.count
+    }
+    
+    /// - Complexity: O(1).
+    @inlinable public var underestimatedCount: Int {
+        _attributes.underestimatedCount
+    }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Element
+    //=------------------------------------------------------------------------=
+    
+    @inlinable public subscript(position: Index) -> Symbol {
+        Symbol(character: _characters[position.character],
+               attribute: _attributes[position.attribute])
+    }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Indices
+    //=------------------------------------------------------------------------=
+    
+    @inlinable public var startIndex: Index {
+        Index(_characters.startIndex,
+              _attributes.startIndex)
+    }
+
+    @inlinable public var endIndex: Index {
+        Index(_characters.endIndex,
+              _attributes.endIndex)
+    }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: After / Before
+    //=------------------------------------------------------------------------=
+    
+    @inlinable public func index(after position: Index) -> Index {
+        Index(_characters.index(after: position.character),
+              _attributes.index(after: position.attribute))
+    }
+    
+    @inlinable public func index(before position: Index) -> Index {
+        Index(_characters.index(before: position.character),
+              _attributes.index(before: position.attribute))
+    }
+    
     //*========================================================================*
     // MARK: * Index
     //*========================================================================*
