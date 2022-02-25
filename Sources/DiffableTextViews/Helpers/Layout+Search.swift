@@ -37,18 +37,7 @@ extension Layout {
     //=------------------------------------------------------------------------=
     
     @inlinable func firstIndexForwardsThrough(from start: Index, where predicate: (Index) -> Bool) -> Index? {
-        var position = start
-        //=--------------------------------------=
-        // MARK: Search
-        //=--------------------------------------=
-        while position != endIndex {
-            if predicate(position) { return index(after: position) }
-            formIndex(after: &position)
-        }
-        //=--------------------------------------=
-        // MARK: Failure == None
-        //=--------------------------------------=
-        return nil
+        self.firstIndexForwardsTo(from: start, where: predicate).map(index(after:))
     }
     
     //=------------------------------------------------------------------------=
@@ -56,19 +45,7 @@ extension Layout {
     //=------------------------------------------------------------------------=
     
     @inlinable func firstIndexBackwardsTo(from start: Index, where predicate: (Index) -> Bool) -> Index? {
-        var position = start
-        //=--------------------------------------=
-        // MARK: Search
-        //=--------------------------------------=
-        while position != startIndex {
-            let after = position
-            formIndex(before: &position)
-            if predicate(position) { return after }
-        }
-        //=--------------------------------------=
-        // MARK: Failure == None
-        //=--------------------------------------=
-        return nil
+        self.firstIndexBackwardsThrough(from: start, where: predicate).map(index(after:))
     }
     
     //=------------------------------------------------------------------------=
