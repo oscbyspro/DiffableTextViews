@@ -25,9 +25,8 @@ public struct Precision<Value: NumericTextValue>: Equatable {
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable init(lower: Count, upper: Count) {
-        self.lower = lower
-        self.upper = upper
+    @inlinable init(unchecked: (lower: Count, upper: Count)) {
+        (self.lower, self.upper) = unchecked
     }
 
     //=------------------------------------------------------------------------=
@@ -76,7 +75,7 @@ public struct Precision<Value: NumericTextValue>: Equatable {
         //=--------------------------------------=
         // MARK: Instantiate
         //=--------------------------------------=
-        return Self(lower: lower, upper: upper)
+        return Self(unchecked: (lower, upper))
     }
     
     @inlinable static func limits(_ component: (Count) -> Int) -> ClosedRange<Int> {
