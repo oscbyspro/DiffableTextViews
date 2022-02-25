@@ -133,15 +133,23 @@
             parallelizable = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
+               BlueprintIdentifier = "PatternTextStylesTests"
+               BuildableName = "PatternTextStylesTests"
+               BlueprintName = "PatternTextStylesTests"
+               ReferencedContainer = "container:">
+            </BuildableReference>
+         </TestableReference>
+         <TestableReference
+            skipped = "NO"
+            parallelizable = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
                BlueprintIdentifier = "NumericTextStylesTests"
                BuildableName = "NumericTextStylesTests"
                BlueprintName = "NumericTextStylesTests"
                ReferencedContainer = "container:">
             </BuildableReference>
             <SkippedTests>
-               <Test
-                  Identifier = "MiscellaneousTests_Comments">
-               </Test>
                <Test
                   Identifier = "MiscellaneousTests_Notes">
                </Test>
@@ -179,17 +187,6 @@
                   Identifier = "StyleTests_Currency/testUInt8()">
                </Test>
             </SkippedTests>
-         </TestableReference>
-         <TestableReference
-            skipped = "NO"
-            parallelizable = "YES">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "PatternTextStylesTests"
-               BuildableName = "PatternTextStylesTests"
-               BlueprintName = "PatternTextStylesTests"
-               ReferencedContainer = "container:">
-            </BuildableReference>
          </TestableReference>
       </Testables>
    </TestAction>
