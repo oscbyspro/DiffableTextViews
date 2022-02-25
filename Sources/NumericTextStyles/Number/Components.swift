@@ -12,12 +12,7 @@
 //*============================================================================*
 
 /// An object representing multiple ASCII characters by their UInt8 unicode values.
-///
-/// Contains redundant text conversions to fool-proof it for future self.
-///
-/// - The characters() method it preferred for convert an instance to ASCII characters.
-///
-@usableFromInline protocol Components: TextOutputStreamable, CustomStringConvertible {
+@usableFromInline protocol Components: CustomStringConvertible, TextOutputStreamable {
     
     //=------------------------------------------------------------------------=
     // MARK: Conversions
