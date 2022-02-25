@@ -76,3 +76,18 @@ public struct Symbol: Equatable {
         self.attribute.contains(attribute)
     }
 }
+
+//=----------------------------------------------------------------------------=
+// MARK: + Conversions
+//=----------------------------------------------------------------------------=
+
+extension Symbol: CustomStringConvertible {
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Description
+    //=------------------------------------------------------------------------=
+    
+    @inlinable public var description: String {
+        "(\(character), \(attribute))"
+    }
+}
