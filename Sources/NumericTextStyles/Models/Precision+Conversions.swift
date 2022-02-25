@@ -18,14 +18,11 @@ extension Precision: CustomStringConvertible {
     //=------------------------------------------------------------------------=
     
     @inlinable public var description: String {
-        //=--------------------------------------=
-        // MARK: Helpers
-        //=--------------------------------------=
         func text(component:  Count.Component) -> String {
             "\(component): \((lower[component], upper[component]))"
         }
         //=--------------------------------------=
-        // MARK: Produce
+        // MARK: Make
         //=--------------------------------------=
         var description = "\(Self.self)("
         description += Count.Component.allCases

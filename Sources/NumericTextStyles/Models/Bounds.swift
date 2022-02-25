@@ -25,7 +25,7 @@ public struct Bounds<Value: NumericTextValue>: Equatable {
     //=------------------------------------------------------------------------=
     
     @inlinable init(unchecked: (min: Value, max: Value)) {
-        (self.min, self.max) = unchecked; precondition(min <= max, "min < max")
+        (self.min, self.max) = unchecked; precondition(min <= max)
     }
     
     //=------------------------------------------------------------------------=
