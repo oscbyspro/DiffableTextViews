@@ -12,11 +12,11 @@ import Foundation
 import Support
 
 //*============================================================================*
-// MARK: * Standard
+// MARK: * Translation x Standard
 //*============================================================================*
 
-@usableFromInline final class Standard: Translations.Cacheable {
-    @usableFromInline static let cache = Cache<ID, Standard>(33)
+@usableFromInline final class NumericTextStandardTranslation: Translations.Cacheable {
+    @usableFromInline static let cache = Cache<ID, NumericTextStandardTranslation>(33)
 
     //=------------------------------------------------------------------------=
     // MARK: State
@@ -36,11 +36,11 @@ import Support
     // MARK: Initializers - Static
     //=------------------------------------------------------------------------=
     
-    @inlinable static func cache<T>(_ format: T) -> Standard where T: Formats.Number {
+    @inlinable static func cache<T>(_ format: T) -> Self where T: Formats.Number {
         search(ID(format.locale))
     }
     
-    @inlinable static func cache<T>(_ format: T) -> Standard where T: Formats.Percent {
+    @inlinable static func cache<T>(_ format: T) -> Self where T: Formats.Percent {
         search(ID(format.locale))
     }
     

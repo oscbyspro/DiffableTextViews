@@ -13,7 +13,7 @@
 
 /// An object representing multiple ASCII characters by their UInt8 unicode values.
 ///
-/// Contains redundant text conversions to fool proof it for future self.
+/// Contains redundant text conversions to fool-proof it for future self.
 ///
 /// - The characters() method it preferred for convert an instance to ASCII characters.
 ///
@@ -38,7 +38,9 @@ extension Components {
     //=------------------------------------------------------------------------=
     
     /// Returns the ASCII representation of this instance.
-    @inlinable func characters() -> String { description }
+    @inlinable func characters() -> String {
+        description
+    }
     
     /// Returns the ASCII representation of this instance.
     @inlinable var description: String {

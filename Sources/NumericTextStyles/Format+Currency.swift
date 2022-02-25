@@ -15,7 +15,7 @@ import Foundation
 
 extension Decimal.FormatStyle.Currency: Formats.Currency {
     @inlinable public func translation() -> some NumericTextTranslation {
-        NumericTextStyles.Currency.cache(self)
+        Translations.Currency.cache(self)
     }
 }
 
@@ -25,7 +25,7 @@ extension Decimal.FormatStyle.Currency: Formats.Currency {
 
 extension FloatingPointFormatStyle.Currency: Format, Formats.Currency where FormatInput: NumericTextFloatValue {
     @inlinable public func translation() -> some NumericTextTranslation {
-        NumericTextStyles.Currency.cache(self)
+        Translations.Currency.cache(self)
     }
 }
 
@@ -35,6 +35,6 @@ extension FloatingPointFormatStyle.Currency: Format, Formats.Currency where Form
 
 extension IntegerFormatStyle.Currency: Format, Formats.Currency where FormatInput: NumericTextIntegerValue {
     @inlinable public func translation() -> some NumericTextTranslation {
-        NumericTextStyles.Currency.cache(self)
+        Translations.Currency.cache(self)
     }
 }

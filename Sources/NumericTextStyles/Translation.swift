@@ -16,6 +16,8 @@ import Support
 //*============================================================================*
 
 @usableFromInline typealias Translation = NumericTextTranslation; @usableFromInline enum Translations {
+    @usableFromInline typealias Standard = NumericTextStandardTranslation
+    @usableFromInline typealias Currency = NumericTextCurrencyTranslation
     @usableFromInline typealias Cacheable = NumericTextCacheableTranslation
 }
 

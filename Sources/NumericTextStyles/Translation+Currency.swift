@@ -12,11 +12,11 @@ import Foundation
 import Support
 
 //*============================================================================*
-// MARK: * Currency
+// MARK: * Translation x Currency
 //*============================================================================*
 
-@usableFromInline final class Currency: Translations.Cacheable {
-    @usableFromInline static let cache = Cache<ID, Currency>(33)
+@usableFromInline final class NumericTextCurrencyTranslation: Translations.Cacheable {
+    @usableFromInline static let cache = Cache<ID, NumericTextCurrencyTranslation>(33)
     
     //=------------------------------------------------------------------------=
     // MARK: State
@@ -38,7 +38,7 @@ import Support
     // MARK: Initializers - Static
     //=------------------------------------------------------------------------=
     
-    @inlinable static func cache<T>(_ format: T) -> Currency where T: Formats.Currency {
+    @inlinable static func cache<T>(_ format: T) -> Self where T: Formats.Currency {
         search(ID(format.locale, format.currencyCode))
     }
     

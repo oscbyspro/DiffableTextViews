@@ -15,7 +15,7 @@ import Foundation
 
 extension Decimal.FormatStyle.Percent: Formats.Percent {
     @inlinable public func translation() -> some NumericTextTranslation {
-        NumericTextStyles.Standard.cache(self)
+        Translations.Standard.cache(self)
     }
 }
 
@@ -25,6 +25,6 @@ extension Decimal.FormatStyle.Percent: Formats.Percent {
 
 extension FloatingPointFormatStyle.Percent: Format, Formats.Percent where FormatInput: NumericTextFloatValue {
     @inlinable public func translation() -> some NumericTextTranslation {
-        NumericTextStyles.Standard.cache(self)
+        Translations.Standard.cache(self)
     }
 }
