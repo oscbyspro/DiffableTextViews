@@ -69,3 +69,18 @@ public struct Bounds<Value: NumericTextValue>: Equatable {
         Self(unchecked: (min, max))
     }
 }
+
+//=----------------------------------------------------------------------------=
+// MARK: + Conversions
+//=----------------------------------------------------------------------------=
+
+extension Bounds: CustomStringConvertible {
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Description
+    //=------------------------------------------------------------------------=
+    
+    @inlinable public var description: String {
+        "\(min) to \(max)"
+    }
+}

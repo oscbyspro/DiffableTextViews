@@ -90,6 +90,30 @@ public struct Precision<Value: NumericTextValue>: Equatable {
     }
 }
 
+//=----------------------------------------------------------------------------=
+// MARK: + Conversions
+//=----------------------------------------------------------------------------=
+
+extension Precision: CustomStringConvertible {
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Description
+    //=------------------------------------------------------------------------=
+    
+    @inlinable public var description: String {
+        func text(component:  Count.Component) -> String {
+            "\(component): \((lower[component], upper[component]))"
+        }
+        //=--------------------------------------=
+        // MARK: Make
+        //=--------------------------------------=
+        var description = "\(Self.self)("
+        description += Count.Component.allCases
+        .lazy.map(text).joined(separator: ", ")
+        description += ")"; return description
+    }
+}
+
 //*============================================================================*
 // MARK: * Precision x Namespace
 //*============================================================================*
