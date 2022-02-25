@@ -148,20 +148,23 @@ extension NumericTextStyle {
         let sign = reader.consumeSingleSignInput()
         let proposal = reader.changes.proposal()
         //=--------------------------------------=
-        // MARK: Number
+        // MARK: Input -> Number
         //=--------------------------------------=
         var number = try number(proposal)
         sign.map({ sign in number.sign = sign })
+        //=--------------------------------------=
+        // MARK: Autovalidate
+        //=--------------------------------------=
         try bounds.autovalidate(number)
-        //=--------------------------------------=
-        // MARK: Count
-        //=--------------------------------------=
         let count = number.count()
         try precision.autovalidate(&number, count)
         //=--------------------------------------=
-        // MARK: Value
+        // MARK: Value <- Number
         //=--------------------------------------=
         let value = try self.value(number)
+        //=--------------------------------------=
+        // MARK: Autovalidate
+        //=--------------------------------------=
         try bounds.autovalidate(value, &number)
         //=--------------------------------------=
         // MARK: Style
