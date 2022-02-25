@@ -36,12 +36,12 @@ import Support
     // MARK: Initializers - Static
     //=------------------------------------------------------------------------=
     
-    @inlinable static func cache<T>(_ format: T) -> Self where T: Formats.Number {
-        search(ID(format.locale))
+    @inlinable static func reuseable<T>(_ format: T) -> Self where T: Formats.Number {
+        reuseable(ID(format.locale))
     }
     
-    @inlinable static func cache<T>(_ format: T) -> Self where T: Formats.Percent {
-        search(ID(format.locale))
+    @inlinable static func reuseable<T>(_ format: T) -> Self where T: Formats.Percent {
+        reuseable(ID(format.locale))
     }
     
     //=------------------------------------------------------------------------=

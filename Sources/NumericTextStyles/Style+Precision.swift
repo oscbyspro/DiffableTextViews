@@ -17,7 +17,7 @@ extension NumericTextStyle {
     // MARK: Transformations
     //=------------------------------------------------------------------------=
     
-    @inlinable func transform(_ precision: Precision) -> Self {
+    @inlinable func precision(_ precision: Precision) -> Self {
         var result = self; result.precision = precision; return result
     }
 }
@@ -33,7 +33,7 @@ public extension NumericTextStyle where Value: NumericTextIntegerValue {
     //=------------------------------------------------------------------------=
     
     @inlinable func precision(_ integer: Int) -> Self {
-        transform(Precision(integer: integer...integer))
+        precision(Precision(integer: integer...integer))
     }
 
     //=------------------------------------------------------------------------=
@@ -42,7 +42,7 @@ public extension NumericTextStyle where Value: NumericTextIntegerValue {
     
     @inlinable func precision<R>(_ integer: R) -> Self where
     R: RangeExpression, R.Bound == Int {
-        transform(Precision(integer: integer))
+        precision(Precision(integer: integer))
     }
 }
 
@@ -57,15 +57,15 @@ public extension NumericTextStyle where Value: NumericTextFloatValue {
     //=------------------------------------------------------------------------=
     
     @inlinable func precision(integer: Int) -> Self {
-        transform(Precision(integer: integer...integer))
+        precision(Precision(integer: integer...integer))
     }
     
     @inlinable func precision(fraction: Int) -> Self {
-        transform(Precision(fraction: fraction...fraction))
+        precision(Precision(fraction: fraction...fraction))
     }
     
     @inlinable func precision(integer: Int, fraction: Int) -> Self {
-        transform(Precision(integer: integer...integer, fraction: fraction...fraction))
+        precision(Precision(integer: integer...integer, fraction: fraction...fraction))
     }
     
     //=------------------------------------------------------------------------=
@@ -74,12 +74,12 @@ public extension NumericTextStyle where Value: NumericTextFloatValue {
     
     @inlinable func precision<R>(integer: R, fraction: Int) -> Self where
     R: RangeExpression, R.Bound == Int {
-        transform(Precision(integer: integer, fraction: fraction...fraction))
+        precision(Precision(integer: integer, fraction: fraction...fraction))
     }
     
     @inlinable func precision<R>(integer: Int, fraction: R) -> Self where
     R: RangeExpression, R.Bound == Int {
-        transform(Precision(integer: integer...integer, fraction: fraction))
+        precision(Precision(integer: integer...integer, fraction: fraction))
     }
 
     //=------------------------------------------------------------------------=
@@ -88,16 +88,16 @@ public extension NumericTextStyle where Value: NumericTextFloatValue {
     
     @inlinable func precision<R>(integer: R) -> Self where
     R: RangeExpression, R.Bound == Int {
-        transform(Precision(integer: integer))
+        precision(Precision(integer: integer))
     }
     
     @inlinable func precision<R>(fraction: R) -> Self where
     R: RangeExpression, R.Bound == Int {
-        transform(Precision(fraction: fraction))
+        precision(Precision(fraction: fraction))
     }
     
     @inlinable func precision<R0, R1>(integer: R0, fraction: R1) -> Self where
     R0: RangeExpression, R0.Bound == Int, R1: RangeExpression, R1.Bound == Int {
-        transform(Precision(integer: integer, fraction: fraction))
+        precision(Precision(integer: integer, fraction: fraction))
     }
 }

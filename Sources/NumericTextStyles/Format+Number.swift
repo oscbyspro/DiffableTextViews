@@ -15,7 +15,7 @@ import Foundation
 
 extension Decimal.FormatStyle: Formats.Number {
     @inlinable public func translation() -> some NumericTextTranslation {
-        Translations.Standard.cache(self)
+        Translations.Standard.reuseable(self)
     }
 }
 
@@ -25,7 +25,7 @@ extension Decimal.FormatStyle: Formats.Number {
 
 extension FloatingPointFormatStyle: Format, Formats.Number where FormatInput: NumericTextFloatValue {
     @inlinable public func translation() -> some NumericTextTranslation {
-        Translations.Standard.cache(self)
+        Translations.Standard.reuseable(self)
     }
 }
 
@@ -35,6 +35,6 @@ extension FloatingPointFormatStyle: Format, Formats.Number where FormatInput: Nu
 
 extension IntegerFormatStyle: Format, Formats.Number where FormatInput: NumericTextIntegerValue {
     @inlinable public func translation() -> some NumericTextTranslation {
-        Translations.Standard.cache(self)
+        Translations.Standard.reuseable(self)
     }
 }

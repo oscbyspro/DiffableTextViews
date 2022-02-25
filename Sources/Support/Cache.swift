@@ -41,12 +41,12 @@ public final class Cache<Key, Value> where Key: Hashable & AnyObject, Value: Any
     // MARK: Search or Insert
     //=------------------------------------------------------------------------=
     
-    @inlinable public func search(_ key: Key, make: @autoclosure () throws -> Value) rethrows -> Value {
+    @inlinable public func reuseable(_ key: Key, make: @autoclosure () throws -> Value) rethrows -> Value {
         //=--------------------------------------=
         // MARK: Search
         //=--------------------------------------=
-        if let reusable = nscache.object(forKey: key) {
-            return reusable
+        if let instance = nscache.object(forKey: key) {
+            return instance
         //=--------------------------------------=
         // MARK: Make A New Instance And Save It
         //=--------------------------------------=

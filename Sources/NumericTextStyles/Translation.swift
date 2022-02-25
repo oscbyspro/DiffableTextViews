@@ -85,7 +85,7 @@ extension NumericTextCacheableTranslation {
     // MARK: Search
     //=------------------------------------------------------------------------=
         
-    @inlinable static func search(_ key: ID) -> Self {
-        cache.search(key, make: Self(key))
+    @inlinable static func reuseable(_  key: ID) -> Self {
+        cache.reuseable(key, make: Self(key))
     }
 }

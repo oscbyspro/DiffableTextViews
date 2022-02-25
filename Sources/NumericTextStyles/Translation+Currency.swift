@@ -38,8 +38,8 @@ import Support
     // MARK: Initializers - Static
     //=------------------------------------------------------------------------=
     
-    @inlinable static func cache<T>(_ format: T) -> Self where T: Formats.Currency {
-        search(ID(format.locale, format.currencyCode))
+    @inlinable static func reuseable<T>(_ format: T) -> Self where T: Formats.Currency {
+        reuseable(ID(format.locale, format.currencyCode))
     }
     
     //=------------------------------------------------------------------------=
