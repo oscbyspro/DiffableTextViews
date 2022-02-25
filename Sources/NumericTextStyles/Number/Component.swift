@@ -16,7 +16,7 @@ import Support
 
 /// An object representing an ASCII character by its UInt8 unicode value.
 @usableFromInline protocol Component: RawRepresentable, Hashable, CaseIterable,
-TextOutputStreamable, CustomStringConvertible where RawValue == UInt8 {
+CustomStringConvertible, TextOutputStreamable where RawValue == UInt8 {
     
     //=------------------------------------------------------------------------=
     // MARK: Localization
