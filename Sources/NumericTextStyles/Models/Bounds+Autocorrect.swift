@@ -36,7 +36,7 @@ extension Bounds {
     }
 
     //=------------------------------------------------------------------------=
-    // MARK: Number x Sign
+    // MARK: Number - Helpers
     //=------------------------------------------------------------------------=
     
     @inlinable func autocorrect(_ sign: inout Sign) {

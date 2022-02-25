@@ -34,7 +34,7 @@ extension Precision {
     }
     
     //=------------------------------------------------------------------------=
-    // MARK: Number - Capacity
+    // MARK: Number - Helpers
     //=------------------------------------------------------------------------=
     
     @inlinable func capacity(_ count: Count) throws -> Count {
