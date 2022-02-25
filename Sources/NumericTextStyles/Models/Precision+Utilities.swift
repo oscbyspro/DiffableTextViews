@@ -19,8 +19,8 @@ extension Precision {
     // MARK: Autocorrect
     //=------------------------------------------------------------------------=
     
-    @inlinable func autocorrect(_ components: inout Components) {
-        components.trim(max: upper)
+    @inlinable func autocorrect(_ number: inout Number) {
+        number.trim(max: upper)
     }
 }
 

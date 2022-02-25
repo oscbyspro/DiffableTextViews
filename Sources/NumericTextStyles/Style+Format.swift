@@ -17,12 +17,12 @@ extension NumericTextStyle {
     // MARK: Strategies
     //=------------------------------------------------------------------------=
     
-    @inlinable func sign(_ components: Components) -> Format.Sign {
-        components.sign == .negative ? .always : .automatic
+    @inlinable func sign(_ number: Number) -> Format.Sign {
+        number.sign == .negative ? .always : .automatic
     }
     
-    @inlinable func separator(_ components: Components) -> Format.Separator {
-        components.separator == .fraction ? .always : .automatic
+    @inlinable func separator(_ number: Number) -> Format.Separator {
+        number.separator == .fraction ? .always : .automatic
     }
 
     //=------------------------------------------------------------------------=

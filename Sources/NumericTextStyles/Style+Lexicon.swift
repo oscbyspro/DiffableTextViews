@@ -19,11 +19,11 @@ extension NumericTextStyle {
     // MARK: Conversions
     //=------------------------------------------------------------------------=
     
-    @inlinable func value(_ components: Components) throws -> Value {
-        try lexicon.value(of: components, as: format)
+    @inlinable func value(_ number: Number) throws -> Value {
+        try lexicon.value(of: number, as: format)
     }
     
-    @inlinable func components(_ snapshot: Snapshot) throws -> Components {
-        try lexicon.components(in: snapshot, as: Value.self)
+    @inlinable func number(_ snapshot: Snapshot) throws -> Number {
+        try lexicon.number(in: snapshot, as: Value.self)
     }
 }

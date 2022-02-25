@@ -20,6 +20,7 @@ public struct Bounds<Value: NumericTextValue>: Equatable {
     @usableFromInline let min: Value
     @usableFromInline let max: Value
     
+    #warning("Think about it.")
     //=------------------------------------------------------------------------=
     // MARK: Initializers
     //=------------------------------------------------------------------------=
@@ -28,6 +29,7 @@ public struct Bounds<Value: NumericTextValue>: Equatable {
         precondition(min <= max, "min < max"); self.min = min; self.max = max
     }
     
+    #warning("Think about it.")
     //=------------------------------------------------------------------------=
     // MARK: Initializers - Indirect
     //=------------------------------------------------------------------------=

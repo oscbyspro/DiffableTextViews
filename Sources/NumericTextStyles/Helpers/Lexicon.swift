@@ -45,9 +45,16 @@ public final class Lexicon {
         self.digits = digits
         self.separators = separators
     }
-    
+}
+
+//=----------------------------------------------------------------------------=
+// MARK: + Specializations
+//=----------------------------------------------------------------------------=
+
+extension Lexicon {
+
     //=------------------------------------------------------------------------=
-    // MARK: Initializer - Static
+    // MARK: Initializers
     //=------------------------------------------------------------------------=
     
     @inlinable static func standard(_ locale: Locale) -> Lexicon {
@@ -72,22 +79,29 @@ public final class Lexicon {
         return  .init(locale: locale, signs:      .currency(formatter),
         digits: .currency(formatter), separators: .currency(formatter))
     }
+}
+
+//=----------------------------------------------------------------------------=
+// MARK: + Parse
+//=----------------------------------------------------------------------------=
+
+extension Lexicon {
 
     //=------------------------------------------------------------------------=
-    // MARK: Components -> Value
+    // MARK: Number -> Value
     //=------------------------------------------------------------------------=
     
     /// Relies on the fact that implemented styles can parse unformatted numbers.
-    @inlinable func value<T>(of components: Components, as format: T) throws -> T.Value where T: Format {
-        try format.locale(Self.en_US.locale).parse(String(describing: components))
+    @inlinable func value<T>(of number: Number, as format: T) throws -> T.Value where T: Format {
+        try format.locale(Self.en_US.locale).parse(number.characters())
     }
     
     //=------------------------------------------------------------------------=
-    // MARK: Snapshot -> Components
+    // MARK: Snapshot -> Number
     //=------------------------------------------------------------------------=
     
     /// To use this method, all formatting characters must be marked as virtual.
-    @inlinable func components<T>(in snapshot: Snapshot, as value: T.Type) throws -> Components where T: Value {
+    @inlinable func number<T>(in snapshot: Snapshot, as value: T.Type) throws -> Number where T: Value {
         let characters = snapshot.lazy.filter(\.nonvirtual).map(\.character)
         return try .init(characters: characters, integer: T.isInteger, unsigned: T.isUnsigned,
         signs: signs.components, digits: digits.components, separators: separators.components)

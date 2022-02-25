@@ -10,7 +10,7 @@
 import Support
 
 //=----------------------------------------------------------------------------=
-// MARK: + Components
+// MARK: + Number
 //=----------------------------------------------------------------------------=
 
 extension Bounds {
@@ -19,21 +19,21 @@ extension Bounds {
     // MARK: Autocorrect
     //=------------------------------------------------------------------------=
     
-    @inlinable func autocorrect(_ components: inout Components) {
-        autocorrect(&components.sign)
+    @inlinable func autocorrect(_ number: inout Number) {
+        autocorrect(&number.sign)
     }
     
     //=------------------------------------------------------------------------=
     // MARK: Validate
     //=------------------------------------------------------------------------=
     
-    @inlinable func validate(_ components: Components) throws {
-        try validate(components.sign)
+    @inlinable func validate(_ number: Number) throws {
+        try validate(number.sign)
     }
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: + Components x Sign
+// MARK: + Number x Sign
 //=----------------------------------------------------------------------------=
     
 extension Bounds {
@@ -78,9 +78,9 @@ extension Bounds {
     // MARK: Validate
     //=------------------------------------------------------------------------=
     
-    @inlinable func validate(_ value: Value, _ components: Components) throws {
-        if try edge(value), components.hasSeparatorAsSuffix {
-            throw Info([.mark(components), "does not fit a fraction separator."])
+    @inlinable func validate(_ value: Value, _ number: Number) throws {
+        if try edge(value), number.hasSeparatorAsSuffix {
+            throw Info([.mark(number), "does not fit a fraction separator."])
         }
     }
     

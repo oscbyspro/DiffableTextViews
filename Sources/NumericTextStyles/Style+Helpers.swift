@@ -19,12 +19,12 @@ extension NumericTextStyle {
     // MARK: Commit
     //=------------------------------------------------------------------------=
     
-    @inlinable func commit(_ value: Value, _ components: Components, _ style: Format) -> Commit<Value> {
+    @inlinable func commit(_ value: Value, _ number: Number, _ style: Format) -> Commit<Value> {
         //=--------------------------------------=
         // MARK: Characters
         //=--------------------------------------=
         var characters = style.format(value)
-        fix(components.sign, for: value, in: &characters)
+        fix(number.sign, for: value, in: &characters)
         //=--------------------------------------=
         // MARK: Characters -> Snapshot -> Commit
         //=--------------------------------------=

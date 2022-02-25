@@ -13,7 +13,7 @@ import Support
 // MARK: * Digits
 //*============================================================================*
 
-@usableFromInline struct Digits {
+@usableFromInline struct Digits: Components {
     
     //=------------------------------------------------------------------------=
     // MARK: State
@@ -87,7 +87,7 @@ import Support
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: + TextOutputStreamable
+// MARK: + Conversions
 //=----------------------------------------------------------------------------=
 
 extension Digits: TextOutputStreamable {
@@ -96,6 +96,7 @@ extension Digits: TextOutputStreamable {
     // MARK: Write
     //=------------------------------------------------------------------------=
     
+    /// Writes the ASCII representation of this instance to the target.
     @inlinable func write<T>(to target: inout T) where T: TextOutputStream {
         for digit in digits {
             digit.write(to: &target)

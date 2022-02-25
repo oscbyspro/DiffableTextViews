@@ -14,9 +14,9 @@ import Support
 // MARK: * Component
 //*============================================================================*
 
-/// An object representing an ASCII character by its UInt8 unicode scalar value.
-@usableFromInline protocol Component: RawRepresentable,
-Hashable, CaseIterable, TextOutputStreamable where RawValue == UInt8 {
+/// An object representing an ASCII character by its UInt8 unicode value.
+@usableFromInline protocol Component: RawRepresentable, Hashable, CaseIterable,
+TextOutputStreamable, CustomStringConvertible where RawValue == UInt8 {
     
     //=------------------------------------------------------------------------=
     // MARK: Localization
@@ -28,13 +28,13 @@ Hashable, CaseIterable, TextOutputStreamable where RawValue == UInt8 {
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: + Localization
+// MARK: + Details
 //=----------------------------------------------------------------------------=
 
 extension Component {
     
     //=------------------------------------------------------------------------=
-    // MARK: Defaults
+    // MARK: Localization
     //=------------------------------------------------------------------------=
     
     @inlinable func currency(_ formatter: NumberFormatter) -> Character! {
@@ -43,31 +43,31 @@ extension Component {
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: + Unicodeable
+// MARK: + Conversions
 //=----------------------------------------------------------------------------=
 
 extension Component {
     
     //=------------------------------------------------------------------------=
-    // MARK: Unicode
+    // MARK: Unicodeable
     //=------------------------------------------------------------------------=
     
+    /// Returns the ASCII representation of this instance.
     @inlinable var unicode: Unicode.Scalar {
         Unicode.Scalar(rawValue)
     }
-        
-    //=------------------------------------------------------------------------=
-    // MARK: Character
-    //=------------------------------------------------------------------------=
     
+    /// Returns the ASCII representation of this instance.
     @inlinable var character: Character {
         Character(unicode)
     }
     
-    //=------------------------------------------------------------------------=
-    // MARK: Write
-    //=------------------------------------------------------------------------=
+    /// Returns the ASCII representation of this instance.
+    @inlinable var description: String {
+        unicode.description
+    }
     
+    /// Writes the ASCII representation of this instance to the target.
     @inlinable func write<T>(to target: inout T) where T: TextOutputStream {
         unicode.write(to: &target)
     }

@@ -107,28 +107,28 @@ extension NumericTextStyle {
         //=--------------------------------------=
         bounds.autocorrect(&value)
         //=--------------------------------------=
-        // MARK: Value -> Components
+        // MARK: Value -> Number
         //=--------------------------------------=
         let formatted = style.format(value)
         let parseable = snapshot(formatted)
-        var components = try! components(parseable)
+        var number = try! number(parseable)
         //=--------------------------------------=
         // MARK: Autocorrect
         //=--------------------------------------=
-        bounds.autocorrect(&components)
-        precision.autocorrect(&components)
+        bounds.autocorrect(&number)
+        precision.autocorrect(&number)
         //=--------------------------------------=
-        // MARK: Value <- Components
+        // MARK: Value <- Number
         //=--------------------------------------=
-        value = try! self.value(components)
+        value = try! self.value(number)
         //=--------------------------------------=
         // MARK: Style
         //=--------------------------------------=
-        style = style.sign(self.sign(components))
+        style = style.sign(self.sign(number))
         //=--------------------------------------=
         // MARK: Commit
         //=--------------------------------------=
-        return self.commit(value, components, style)
+        return self.commit(value, number, style)
     }
 }
 
@@ -150,28 +150,28 @@ extension NumericTextStyle {
         //=--------------------------------------=
         // MARK: Components
         //=--------------------------------------=
-        var components = try components(proposal)
-        components.set(optional:  sign)
-        try bounds.validate(components)
+        var number = try number(proposal)
+        sign.map({ sign in number.sign = sign })
+        try bounds.validate(number)
         //=--------------------------------------=
         // MARK: Components - Count, Capacity
         //=--------------------------------------=
-        let count = components.count()
+        let count = number.count()
         let capacity = try precision.capacity(count)
-        components.removeSeparatorAsSuffixAtZeroCapacity(capacity)
+        number.removeSeparatorAsSuffixAtZeroCapacity(capacity)
         //=--------------------------------------=
         // MARK: Value
         //=--------------------------------------=
-        let value = try self.value(components)
-        try bounds.validate(value, components)
+        let value = try self.value(number)
+        try bounds.validate(value, number)
         //=--------------------------------------=
         // MARK: Style
         //=--------------------------------------=
-        let style = format.precision(self.precision.interactive(count))
-        .separator(self.separator(components)).sign(self.sign(components))
+        let style = format.precision(precision.interactive(count))
+        .separator(self.separator(number)).sign(self.sign(number))
         //=--------------------------------------=
         // MARK: Commit
         //=--------------------------------------=
-        return self.commit(value, components, style)
+        return self.commit(value, number, style)
     }
 }
