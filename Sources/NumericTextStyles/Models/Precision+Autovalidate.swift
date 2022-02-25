@@ -7,34 +7,23 @@
 // See http://www.apache.org/licenses/LICENSE-2.0 for license information.
 //=----------------------------------------------------------------------------=
 
+//=----------------------------------------------------------------------------=
+// These methods are all used in response to changes downstream (input).
+//=----------------------------------------------------------------------------=
+
 import Support
 
 //=----------------------------------------------------------------------------=
-// MARK: + Number
+// MARK: + Autovalidate
 //=----------------------------------------------------------------------------=
 
 extension Precision {
     
     //=------------------------------------------------------------------------=
-    // MARK: Autocorrect
+    // MARK: Number
     //=------------------------------------------------------------------------=
     
-    @inlinable func autocorrect(_ number: inout Number) {
-        number.trim(max: upper)
-    }
-}
-
-//=----------------------------------------------------------------------------=
-// MARK: + Number x Capacity
-//=----------------------------------------------------------------------------=
-
-extension Precision {
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Validate
-    //=------------------------------------------------------------------------=
-    
-    @inlinable func validate(_ number: inout Number, _ count: Count) throws {
+    @inlinable func autovalidate(_ number: inout Number, _ count: Count) throws {
         let capacity = try capacity(count)
         //=--------------------------------------=
         // MARK: Autocorrect
@@ -45,7 +34,7 @@ extension Precision {
     }
     
     //=------------------------------------------------------------------------=
-    // MARK: Capacity
+    // MARK: Number - Capacity
     //=------------------------------------------------------------------------=
     
     @inlinable func capacity(_ count: Count) throws -> Count {

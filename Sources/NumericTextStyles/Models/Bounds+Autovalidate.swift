@@ -7,88 +7,51 @@
 // See http://www.apache.org/licenses/LICENSE-2.0 for license information.
 //=----------------------------------------------------------------------------=
 
+//=----------------------------------------------------------------------------=
+// These methods are all used in response to changes downstream (input).
+//=----------------------------------------------------------------------------=
+
 import Support
 
 //=----------------------------------------------------------------------------=
-// MARK: + Number
+// MARK: + Autovalidate
 //=----------------------------------------------------------------------------=
 
 extension Bounds {
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Autocorrect
-    //=------------------------------------------------------------------------=
-    
-    @inlinable func autocorrect(_ number: inout Number) {
-        autocorrect(&number.sign)
-    }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Validate
-    //=------------------------------------------------------------------------=
-    
-    @inlinable func validate(_ number: Number) throws {
-        try validate(number.sign)
-    }
-}
-
-//=----------------------------------------------------------------------------=
-// MARK: + Number x Sign
-//=----------------------------------------------------------------------------=
-    
-extension Bounds {
 
     //=------------------------------------------------------------------------=
-    // MARK: Autocorrect
+    // MARK: Number
     //=------------------------------------------------------------------------=
     
-    @inlinable func autocorrect(_ sign: inout Sign) {
-        switch sign {
-        case .positive: if max <= .zero, min != .zero { sign.toggle() }
-        case .negative: if min >= .zero               { sign.toggle() }
-        }
+    @inlinable func autovalidate(_ number: Number) throws {
+        try autovalidate(number.sign)
     }
 
     //=------------------------------------------------------------------------=
-    // MARK: Validate
+    // MARK: Number - Sign
     //=------------------------------------------------------------------------=
     
-    @inlinable func validate(_ sign: Sign) throws {
+    @inlinable func autovalidate(_ sign: Sign) throws {
         guard sign == sign.transform(autocorrect) else {
             throw Info([.mark(sign), "is not in", .mark(self)])
         }
     }
-}
-
-//=----------------------------------------------------------------------------=
-// MARK: + Value
-//=----------------------------------------------------------------------------=
-
-extension Bounds {
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Autocorrect
-    //=------------------------------------------------------------------------=
-    
-    @inlinable func autocorrect(_ value: inout Value) {
-        value = Swift.min(Swift.max(min, value), max)
-    }
 
     //=------------------------------------------------------------------------=
-    // MARK: Validate
+    // MARK: Value x Number
     //=------------------------------------------------------------------------=
     
-    @inlinable func validate(_ value: Value, _ number: inout Number) throws {
+    @inlinable func autovalidate(_ value: Value, _ number: inout Number) throws {
         //=--------------------------------------=
         // MARK: Validate, Autocorrect
         //=--------------------------------------=
-        if try edge(value), number.removeSeparatorAsSuffix() {            
+        if try edge(value), number.removeSeparatorAsSuffix() {
             Info.print([.autocorrection, .mark(number), "does not fit a fraction separator"])
         }
     }
     
     //=------------------------------------------------------------------------=
-    // MARK: Location
+    // MARK: Value x Number - Location
     //=------------------------------------------------------------------------=
     
     @inlinable func edge(_ value: Value) throws -> Bool {

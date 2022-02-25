@@ -152,17 +152,17 @@ extension NumericTextStyle {
         //=--------------------------------------=
         var number = try number(proposal)
         sign.map({ sign in number.sign = sign })
-        try bounds.validate(number)
+        try bounds.autovalidate(number)
         //=--------------------------------------=
         // MARK: Count
         //=--------------------------------------=
         let count = number.count()
-        try precision.validate(&number, count)
+        try precision.autovalidate(&number, count)
         //=--------------------------------------=
         // MARK: Value
         //=--------------------------------------=
         let value = try self.value(number)
-        try bounds.validate(value,&number)
+        try bounds.autovalidate(value, &number)
         //=--------------------------------------=
         // MARK: Style
         //=--------------------------------------=
