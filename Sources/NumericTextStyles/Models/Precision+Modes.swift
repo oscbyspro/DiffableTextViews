@@ -27,13 +27,13 @@ extension Precision {
 
     @inlinable func active() -> NumberFormatStyleConfiguration.Precision {
         .integerAndFractionLength(
-         integerLimits: Namespace.minimum.integer  ... upper.integer,
-        fractionLimits: Namespace.minimum.fraction ... upper.fraction)
+         integerLimits: Namespace.lower.integer  ... upper.integer,
+        fractionLimits: Namespace.lower.fraction ... upper.fraction)
     }
     
     @inlinable func interactive(_ count: Count) -> NumberFormatStyleConfiguration.Precision {
         .integerAndFractionLength(
-         integerLimits: max(Namespace.minimum.integer,  count.integer)  ... count.integer,
-        fractionLimits: max(Namespace.minimum.fraction, count.fraction) ... count.fraction)
+         integerLimits: max(Namespace.lower.integer,  count.integer)  ... count.integer,
+        fractionLimits: max(Namespace.lower.fraction, count.fraction) ... count.fraction)
     }
 }

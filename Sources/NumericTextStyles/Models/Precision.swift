@@ -62,16 +62,16 @@ public struct Precision<Value: NumericTextValue>: Equatable {
         // MARK: Lower
         //=--------------------------------------=
         let lower = Count(
-        value: Namespace.minimum.value,
-        integer:   integer .lowerBound,
-        fraction:  fraction.lowerBound)
+        value:  Namespace.lower.value,
+        integer:  integer .lowerBound,
+        fraction: fraction.lowerBound)
         //=--------------------------------------=
         // MARK: Upper
         //=--------------------------------------=
         let upper = Count(
-        value:   Value.precision.value,
-        integer:   integer .upperBound,
-        fraction:  fraction.upperBound)
+        value:  Value.precision.value,
+        integer:  integer .upperBound,
+        fraction: fraction.upperBound)
         //=--------------------------------------=
         // MARK: Instantiate
         //=--------------------------------------=
@@ -79,36 +79,13 @@ public struct Precision<Value: NumericTextValue>: Equatable {
     }
     
     @inlinable static func limits(_ component: (Count) -> Int) -> ClosedRange<Int> {
-        component(Namespace.minimum)...component(Value.precision)
+        component(Namespace.lower) ...
+        component(Value.precision)
     }
     
     @inlinable static func interpret<R>(_ expression: R,
-    as component: (Count) -> Int) -> ClosedRange<Int> where R: RangeExpression, R.Bound == Int {
+    as component: (Count) -> Int) -> ClosedRange<Int> where
+    R: RangeExpression, R.Bound == Int {
         Namespace.interpret(expression, in: limits(component))
-    }
-}
-
-//*============================================================================*
-// MARK: * Precision x Namespace
-//*============================================================================*
-
-@usableFromInline enum _Precision {
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Constants
-    //=------------------------------------------------------------------------=
-    
-    @usableFromInline static let minimum = Count(value: 1, integer: 1, fraction: 0)
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Utilities
-    //=------------------------------------------------------------------------=
-    
-    @inlinable static func interpret<R: RangeExpression>(_ expression: R,
-    in limits: ClosedRange<Int>) -> ClosedRange<Int> where R.Bound == Int {
-        let range = expression.relative(to: Int.min ..< Int.max)
-        let lower = min(max(limits.lowerBound, range.lowerBound),     limits.upperBound)
-        let upper = min(max(limits.lowerBound, range.upperBound - 1), limits.upperBound)
-        return lower...upper
     }
 }

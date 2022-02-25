@@ -37,33 +37,35 @@ public struct Bounds<Value: NumericTextValue>: Equatable {
     }
     
     @inlinable init(_ limits: PartialRangeFrom<Value>) {
-        self = .unchecked(min: Self.interpret(min: limits.lowerBound))
+        self = .unchecked(min: Self.interpret(limits.lowerBound))
     }
     
     @inlinable init(_ limits: PartialRangeThrough<Value>) {
-        self = .unchecked(max: Self.interpret(max: limits.upperBound))
+        self = .unchecked(max: Self.interpret(limits.upperBound))
     }
     
     @inlinable init(_ limits: ClosedRange<Value> = Value.bounds) {
-        self = .unchecked(min: Self.interpret(min: limits.lowerBound),
-                          max: Self.interpret(max: limits.upperBound))
+        self = .unchecked(min: Self.interpret(limits.lowerBound),
+                          max: Self.interpret(limits.upperBound))
     }
     
     //=------------------------------------------------------------------------=
     // MARK: Initializers - Helpers
     //=------------------------------------------------------------------------=
     
-    @inlinable static func unchecked(
-    min: Value = Value.bounds.lowerBound,
-    max: Value = Value.bounds.upperBound) -> Self {
+    @inlinable static var min: Value {
+        Value.bounds.lowerBound
+    }
+    
+    @inlinable static var max: Value {
+        Value.bounds.upperBound
+    }
+    
+    @inlinable static func interpret(_ value: Value) -> Value {
+        Swift.min(Swift.max(min, value), max)
+    }
+    
+    @inlinable static func unchecked(min: Value = min, max: Value = max) -> Self {
         Self(unchecked: (min, max))
-    }
-    
-    @inlinable static func interpret(min: Value) -> Value {
-        Swift.max(min,  Value.bounds.lowerBound)
-    }
-    
-    @inlinable static func interpret(max: Value) -> Value {
-        Swift.min(max,  Value.bounds.upperBound)
     }
 }
