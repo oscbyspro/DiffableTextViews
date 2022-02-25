@@ -157,12 +157,12 @@ extension NumericTextStyle {
         // MARK: Count
         //=--------------------------------------=
         let count = number.count()
-        try precision.autovalidate(&number, count)
+        try precision.validate(&number, count)
         //=--------------------------------------=
         // MARK: Value
         //=--------------------------------------=
         let value = try self.value(number)
-        try bounds.autovalidate(&number, value)
+        try bounds.validate(value,&number)
         //=--------------------------------------=
         // MARK: Style
         //=--------------------------------------=

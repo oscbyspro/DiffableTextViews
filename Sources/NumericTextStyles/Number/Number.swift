@@ -10,7 +10,6 @@
 import DiffableTextViews
 import Support
 
-#warning("Cleanup: marks.")
 //*============================================================================*
 // MARK: * Number
 //*============================================================================*
@@ -116,17 +115,33 @@ import Support
     @inlinable var hasSeparatorAsSuffix: Bool {
         fraction.digits.isEmpty && separator != nil
     }
-
+    
     //=------------------------------------------------------------------------=
-    // MARK: Transformations - Separator
+    // MARK: Utilities
+    //=------------------------------------------------------------------------=
+    
+    @inlinable func count() -> Count {
+        let value = integer.count + fraction.count - integer.count(prefix: \.isZero)
+        return Count(value: value, integer: integer.count, fraction: fraction.count)
+    }
+}
+
+//=----------------------------------------------------------------------------=
+// MARK: + Transformations
+//=----------------------------------------------------------------------------=
+
+extension Number {
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Separator
     //=------------------------------------------------------------------------=
     
     @inlinable @discardableResult mutating func removeSeparatorAsSuffix() -> Bool {
-        guard hasSeparatorAsSuffix else { return false }; separator = nil; return true
+        if hasSeparatorAsSuffix { separator = nil; return true }; return false
     }
     
     //=------------------------------------------------------------------------=
-    // MARK: Transformations - Precision
+    // MARK: Precision
     //=------------------------------------------------------------------------=
     
     @inlinable mutating func trim(max: Count) {
@@ -145,15 +160,6 @@ import Support
         //=--------------------------------------=
         self.removeSeparatorAsSuffix()
         self.integer.makeAtLeastZero()
-    }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Utilities
-    //=------------------------------------------------------------------------=
-    
-    @inlinable func count() -> Count {
-        let value = integer.count + fraction.count - integer.count(prefix: \.isZero)
-        return Count(value: value, integer: integer.count, fraction: fraction.count)
     }
 }
 
