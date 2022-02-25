@@ -70,12 +70,12 @@ public struct Info: CustomStringConvertible, Error {
     
     @inlinable @inline(__always)
     public static func print(_ components: () -> [Component]) {
-        Self.print(components().description)
+        Self.print(String(describing: Info(components())))
     }
     
     @inlinable @inline(__always)
     public static func print(_ components: @autoclosure () -> [Component]) {
-        Self.print(components().description)
+        Self.print(String(describing: Info(components())))
     }
     
     //*========================================================================*

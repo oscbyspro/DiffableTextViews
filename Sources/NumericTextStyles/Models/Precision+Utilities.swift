@@ -31,7 +31,21 @@ extension Precision {
 extension Precision {
     
     //=------------------------------------------------------------------------=
-    // MARK: Calculate / Validate
+    // MARK: Validate
+    //=------------------------------------------------------------------------=
+    
+    @inlinable func autovalidate(_ number: inout Number, _ count: Count) throws {
+        let capacity = try capacity(count)
+        //=--------------------------------------=
+        // MARK: Autocorrect
+        //=--------------------------------------=
+        if capacity.fraction <= 0 || capacity.value <= 0, number.removeSeparatorAsSuffix() {
+            Info.print(["User input autocorrected:", .mark(number), "does not fit a fraction separator."])
+        }
+    }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Capacity
     //=------------------------------------------------------------------------=
     
     @inlinable func capacity(_ count: Count) throws -> Count {

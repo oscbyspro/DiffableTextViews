@@ -10,6 +10,7 @@
 import DiffableTextViews
 import Support
 
+#warning("Cleanup: marks.")
 //*============================================================================*
 // MARK: * Number
 //*============================================================================*
@@ -120,15 +121,10 @@ import Support
     // MARK: Transformations - Separator
     //=------------------------------------------------------------------------=
     
-    @inlinable mutating func removeSeparatorAsSuffix() {
-        if fraction.digits.isEmpty { separator = nil }
+    @inlinable @discardableResult mutating func removeSeparatorAsSuffix() -> Bool {
+        guard hasSeparatorAsSuffix else { return false }; separator = nil; return true
     }
     
-    @inlinable mutating func removeSeparatorAsSuffixAtZeroCapacity(_ capacity: Count) {
-        guard capacity.fraction <= 0 || capacity.value <= 0 else { return }
-        self.removeSeparatorAsSuffix()
-    }
-
     //=------------------------------------------------------------------------=
     // MARK: Transformations - Precision
     //=------------------------------------------------------------------------=

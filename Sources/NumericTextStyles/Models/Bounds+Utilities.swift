@@ -78,9 +78,12 @@ extension Bounds {
     // MARK: Validate
     //=------------------------------------------------------------------------=
     
-    @inlinable func validate(_ value: Value, _ number: Number) throws {
-        if try edge(value), number.hasSeparatorAsSuffix {
-            throw Info([.mark(number), "does not fit a fraction separator."])
+    @inlinable func autovalidate(_ number: inout Number, _ value: Value) throws {
+        //=--------------------------------------=
+        // MARK: Validate, Autocorrect
+        //=--------------------------------------=
+        if try edge(value), number.removeSeparatorAsSuffix() {            
+            Info.print(["User input autocorrected:", .mark(number), "does not fit a fraction separator."])
         }
     }
     
