@@ -10,6 +10,7 @@
 #if canImport(UIKit)
 
 import SwiftUI
+import Support
 
 //*============================================================================*
 // MARK: * DiffableTextField
@@ -169,9 +170,7 @@ public struct DiffableTextField<Style: UIKitDiffableTextStyle>: UIViewRepresenta
             // MARK: Cancellation
             //=----------------------------------=
             } catch let reason {
-                #if DEBUG
-                print("User input cancelled: \(reason)")
-                #endif
+                Info.print([.cancellation, .note(reason)])
             }
             //=----------------------------------=
             // MARK: Decline Automatic Insertion

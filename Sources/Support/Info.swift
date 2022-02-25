@@ -115,3 +115,22 @@ public struct Info: CustomStringConvertible, Error {
         }
     }
 }
+
+//*============================================================================*
+// MARK: * Info x Component
+//*============================================================================*
+
+extension Info.Component {
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Instances
+    //=------------------------------------------------------------------------=
+
+    @inlinable public static var cancellation: Self {
+        "User input cancelled:"
+    }
+    
+    @inlinable public static var autocorrection: Self {
+        "User input autocorrected:"
+    }
+}
