@@ -18,7 +18,7 @@ import Support
 @usableFromInline typealias Translation = NumericTextTranslation; @usableFromInline enum Translations {
     @usableFromInline typealias Standard = NumericTextStandardTranslation
     @usableFromInline typealias Currency = NumericTextCurrencyTranslation
-    @usableFromInline typealias Cacheable = NumericTextCacheableTranslation
+    @usableFromInline typealias Reuseable = NumericTextReuseableTranslation
 }
 
 //*============================================================================*
@@ -59,7 +59,7 @@ extension NumericTextTranslation {
 // MARK: * Translation x Cacheable
 //*============================================================================*
 
-@usableFromInline protocol NumericTextCacheableTranslation: AnyObject, Translation {
+@usableFromInline protocol NumericTextReuseableTranslation: AnyObject, Translation {
     associatedtype ID: AnyObject & Hashable
     
     //=------------------------------------------------------------------------=
@@ -79,7 +79,7 @@ extension NumericTextTranslation {
 // MARK: + Details
 //=----------------------------------------------------------------------------=
 
-extension NumericTextCacheableTranslation {
+extension NumericTextReuseableTranslation {
     
     //=------------------------------------------------------------------------=
     // MARK: Search

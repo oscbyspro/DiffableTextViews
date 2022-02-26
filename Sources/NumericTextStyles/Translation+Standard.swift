@@ -15,7 +15,7 @@ import Support
 // MARK: * Translation x Standard
 //*============================================================================*
 
-@usableFromInline final class NumericTextStandardTranslation: Translations.Cacheable {
+@usableFromInline final class NumericTextStandardTranslation: Translations.Reuseable {
     @usableFromInline static let cache = Cache<ID, NumericTextStandardTranslation>(33)
 
     //=------------------------------------------------------------------------=

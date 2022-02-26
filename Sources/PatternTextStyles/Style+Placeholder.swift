@@ -19,7 +19,7 @@ extension PatternTextStyle {
     // MARK: Transformations
     //=------------------------------------------------------------------------=
     
-    @inlinable func transform(_ placeholder: Character, where predicate: Predicate) -> Self {
+    @inlinable func placeholder(_ placeholder: Character, where predicate: Predicate) -> Self {
         var result = self; result.placeholders[placeholder] = predicate; return result
     }
 }
@@ -35,19 +35,19 @@ public extension PatternTextStyle {
     //=------------------------------------------------------------------------=
     
     /// A placeholder character and a variable predicate bound to a value.
-    @inlinable func placeholder<Value: Hashable>(_ placeholder: Character,
+    @inlinable func placeholder<Value: Hashable>(_ character: Character,
     value: Value, where predicate: @escaping (Character) -> Bool) -> Self {
-        transform(placeholder, where: Predicate(proxy: value, check: predicate))
+        placeholder(character, where: Predicate(proxy: value, check: predicate))
     }
     
     /// A placeholder character and a constant predicate.
-    @inlinable func placeholder(_ placeholder: Character,
+    @inlinable func placeholder(_ character: Character,
     where predicate: @escaping (Character) -> Bool) -> Self {
-        transform(placeholder, where: Predicate(proxy: false, check: predicate))
+        placeholder(character, where: Predicate(proxy: false, check: predicate))
     }
     
     /// A placeholder character and a constant predicate that always evaluates true.
-    @inlinable func placeholder(_ placeholder: Character) -> Self {
-        transform(placeholder, where: Predicate(proxy: false, check: { _ in true }))
+    @inlinable func placeholder(_ character: Character) -> Self {
+        placeholder(character, where: Predicate(proxy: false, check: { _ in true }))
     }
 }

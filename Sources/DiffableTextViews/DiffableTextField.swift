@@ -86,6 +86,7 @@ public struct DiffableTextField<Style: UIKitDiffableTextStyle>: UIViewRepresenta
     // MARK: View Life Cycle - Update
     //=------------------------------------------------------------------------=
     
+    #warning("Consider if onUpdate(_:) should be called after synchronize().")
     @inlinable public func updateUIView(_ uiView: UIViewType, context: Self.Context) {
         context.coordinator.upstream = self
         onUpdate(context.coordinator.downstream)
