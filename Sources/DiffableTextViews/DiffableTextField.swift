@@ -89,7 +89,7 @@ public struct DiffableTextField<Style: UIKitDiffableTextStyle>: UIViewRepresenta
     @inlinable public func updateUIView(_ uiView: UIViewType, context: Self.Context) {
         context.coordinator.upstream = self
         context.coordinator.synchronize()
-        context.coordinator.downstream.transform(onUpdate)
+        context.coordinator.downstream.transform(self.onUpdate)
     }
     
     //*========================================================================*
