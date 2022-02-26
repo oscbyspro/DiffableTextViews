@@ -51,13 +51,18 @@ public extension ProxyTextField {
 
 public extension ProxyTextField {
     
+    #warning("TODO")
     //=------------------------------------------------------------------------=
-    // MARK: Appearance
+    // MARK: Color
     //=------------------------------------------------------------------------=
         
-    @inlinable func tint(_ tint: UIColor) {
-        wrapped.tintColor = tint
+    @inlinable func color<ID>(_ token: Token<ID>) where ID: ColorID {
+        accept(token)
     }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Font
+    //=------------------------------------------------------------------------=
 
     @inlinable func font(_ font: UIFont) {
         wrapped.font = font
@@ -66,15 +71,7 @@ public extension ProxyTextField {
     @inlinable func font(_ font: DiffableTextFont) {
         wrapped.font = UIFont(font)
     }
-
-    //=------------------------------------------------------------------------=
-    // MARK: Input
-    //=------------------------------------------------------------------------=
-
-    @inlinable func input<ID>(_ input: Token<ID>) where ID: InputID {
-        input.update(wrapped)
-    }
-
+    
     //=------------------------------------------------------------------------=
     // MARK: Keyboard
     //=------------------------------------------------------------------------=
@@ -83,10 +80,19 @@ public extension ProxyTextField {
         wrapped.keyboardType = keyboard
     }
     
-//    @inlinable func key<Key>(_ key: Key) where Key: KeyOnKeyboard {
-//        transform(key.update)
-//    }
+    @inlinable func key<ID>(_ token: Token<ID>) where ID: KeyID {
+        accept(token)
+    }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Input
+    //=------------------------------------------------------------------------=
 
+    @inlinable func input<ID>(_ token: Token<ID>) where ID: InputID {
+        accept(token)
+    }
+
+    #warning("TODO")
     //=------------------------------------------------------------------------=
     // MARK: System / Information
     //=------------------------------------------------------------------------=

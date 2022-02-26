@@ -28,7 +28,7 @@ public enum SecureInputID: InputID {
 }
 
 extension Token where ID == SecureInputID {
-    @inlinable public static func secure(_ secure: Bool) -> Self {
+    @inlinable public static func secure(_ secure: Value) -> Self {
         Self(secure)
     }
 }
@@ -37,14 +37,14 @@ extension Token where ID == SecureInputID {
 // MARK: * Token x Input x Autocorrection
 //*============================================================================*
 
-public enum AutocorrectInputID: InputID {
+public enum AutocorrectionInputID: InputID {
     @inlinable public static func update(_ view: UITextField, with value: UITextAutocorrectionType) {
         view.autocorrectionType = value
     }
 }
 
-extension Token where ID == AutocorrectInputID {
-    @inlinable public static func autocorrection(_ autocorrection: UITextAutocorrectionType) -> Self {
+extension Token where ID == AutocorrectionInputID {
+    @inlinable public static func autocorrection(_ autocorrection: Value) -> Self {
         Self(autocorrection)
     }
 }
@@ -53,14 +53,14 @@ extension Token where ID == AutocorrectInputID {
 // MARK: * Token x Input x Autocapitalization
 //*============================================================================*
 
-public enum AutocapitalizeInputID: InputID {
+public enum AutocapitalizationInputID: InputID {
     @inlinable public static func update(_ view: UITextField, with value: UITextAutocapitalizationType) {
         view.autocapitalizationType = value
     }
 }
 
-extension Token where ID == AutocapitalizeInputID {
-    @inlinable public static func autocapitalization(_ autocapitalization: UITextAutocapitalizationType) -> Self {
+extension Token where ID == AutocapitalizationInputID {
+    @inlinable public static func autocapitalization(_ autocapitalization: Value) -> Self {
         Self(autocapitalization)
     }
 }
