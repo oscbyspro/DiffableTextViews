@@ -12,53 +12,46 @@
 import UIKit
 
 //*============================================================================*
-// MARK: * KeyOnKeyboard
+// MARK: * Token
 //*============================================================================*
 
-public protocol KeyOnKeyboard {
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Utilities
-    //=------------------------------------------------------------------------=
-    
-    func update(_ diffableTextField: ProxyTextField)
-}
-
-//*============================================================================*
-// MARK: * KeyOnKeyboard x Instances
-//*============================================================================*
-
-extension KeyOnKeyboard where Self == SubmitKeyOnKeyboard {
-    @inlinable public static func submit(_ submit: UIReturnKeyType) -> Self {
-        Self(submit)
-    }
-}
-
-//*============================================================================*
-// MARK: * KeyOnKeyboard x Submit
-//*============================================================================*
-
-public struct SubmitKeyOnKeyboard: KeyOnKeyboard {
+public struct Token<ID: TokenID> {
     
     //=------------------------------------------------------------------------=
     // MARK: State
     //=------------------------------------------------------------------------=
     
-    @usableFromInline let key: UIReturnKeyType
+    @usableFromInline let value: ID.Value
     
     //=------------------------------------------------------------------------=
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable init(_ key: UIReturnKeyType) { self.key = key }
+    @inlinable init(_ value: ID.Value) {
+        self.value = value
+    }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Value
+    //=------------------------------------------------------------------------=
+    
+    @inlinable func update(_ view: UITextField) {
+        ID.update(view, with: value)
+    }
+}
+
+//*============================================================================*
+// MARK: * Token x ID
+//*============================================================================*
+
+public protocol TokenID {
+    associatedtype Value
     
     //=------------------------------------------------------------------------=
     // MARK: Utilities
     //=------------------------------------------------------------------------=
     
-    @inlinable public func update(_ diffableTextField: ProxyTextField) {
-        diffableTextField.wrapped.returnKeyType = key
-    }
+    @inlinable static func update(_ view: UITextField, with value: Value)
 }
 
 #endif

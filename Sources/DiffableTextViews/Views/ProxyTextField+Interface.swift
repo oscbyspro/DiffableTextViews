@@ -62,7 +62,7 @@ public extension ProxyTextField {
     @inlinable func font(_ font: UIFont) {
         wrapped.font = font
     }
-        
+    
     @inlinable func font(_ font: DiffableTextFont) {
         wrapped.font = UIFont(font)
     }
@@ -71,8 +71,8 @@ public extension ProxyTextField {
     // MARK: Input
     //=------------------------------------------------------------------------=
 
-    @inlinable func input<Style>(_ input: Style) where Style: Input {
-        transform(input.update)
+    @inlinable func input<ID>(_ input: Token<ID>) where ID: InputID {
+        input.update(wrapped)
     }
 
     //=------------------------------------------------------------------------=
@@ -83,9 +83,9 @@ public extension ProxyTextField {
         wrapped.keyboardType = keyboard
     }
     
-    @inlinable func key<Key>(_ key: Key) where Key: KeyOnKeyboard {
-        transform(key.update)
-    }
+//    @inlinable func key<Key>(_ key: Key) where Key: KeyOnKeyboard {
+//        transform(key.update)
+//    }
 
     //=------------------------------------------------------------------------=
     // MARK: System / Information
