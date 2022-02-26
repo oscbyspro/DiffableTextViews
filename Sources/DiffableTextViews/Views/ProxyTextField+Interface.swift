@@ -71,17 +71,8 @@ public extension ProxyTextField {
     // MARK: Input
     //=------------------------------------------------------------------------=
 
-    #warning("WIP")
-    @inlinable func input(_ input:  Input) {
-        wrapped.isSecureTextEntry = input == .secure
-    }
-    
-    @inlinable func autocorrection(_ autocorrection: UITextAutocorrectionType) {
-        wrapped.autocorrectionType = autocorrection
-    }
-    
-    @inlinable func autocapitalization(_ autocapitalization: UITextAutocapitalizationType) {
-        wrapped.autocapitalizationType = autocapitalization
+    @inlinable func input<Style>(_ input: Style) where Style: Input {
+        transform(input.update)
     }
 
     //=------------------------------------------------------------------------=
@@ -103,19 +94,6 @@ public extension ProxyTextField {
     @inlinable func content(_ content: UITextContentType) {
         wrapped.textContentType = content
     }
-}
-
-//=----------------------------------------------------------------------------=
-// MARK: + Helpers
-//=----------------------------------------------------------------------------=
-
-public extension ProxyTextField {
-    
-    //*========================================================================*
-    // MARK: * Input
-    //*========================================================================*
-    
-    enum Input { case standard, secure }
 }
 
 #endif

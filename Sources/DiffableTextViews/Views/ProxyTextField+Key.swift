@@ -25,6 +25,16 @@ public protocol KeyOnKeyboard {
 }
 
 //*============================================================================*
+// MARK: * KeyOnKeyboard x Instances
+//*============================================================================*
+
+extension KeyOnKeyboard where Self == SubmitKeyOnKeyboard {
+    @inlinable public static func submit(_ submit: UIReturnKeyType) -> Self {
+        Self(submit)
+    }
+}
+
+//*============================================================================*
 // MARK: * KeyOnKeyboard x Submit
 //*============================================================================*
 
@@ -48,16 +58,6 @@ public struct SubmitKeyOnKeyboard: KeyOnKeyboard {
     
     @inlinable public func update(_ diffableTextField: ProxyTextField) {
         diffableTextField.wrapped.returnKeyType = key
-    }
-}
-
-//=----------------------------------------------------------------------------=
-// MARK: + Instances
-//=----------------------------------------------------------------------------=
-
-public extension KeyOnKeyboard where Self == SubmitKeyOnKeyboard {
-    @inlinable static func submit(_ submit: UIReturnKeyType) -> Self {
-        Self(submit)
     }
 }
 
