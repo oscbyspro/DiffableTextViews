@@ -34,6 +34,14 @@ public final class ProxyTextField {
         self.wrapped = wrapped
         self.font(.body.monospaced())
     }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Transformations
+    //=------------------------------------------------------------------------=
+    
+    @inlinable func transform(_ transform: (ProxyTextField) -> Void) {
+        transform(self)
+    }
 }
 
 //=----------------------------------------------------------------------------=
@@ -187,11 +195,19 @@ public extension ProxyTextField {
     @inlinable func submit(_ key: UIReturnKeyType) {
         wrapped.returnKeyType = key
     }
+}
+
+//=----------------------------------------------------------------------------=
+// MARK: + Helpers
+//=----------------------------------------------------------------------------=
+
+public extension ProxyTextField {
     
     //*========================================================================*
     // MARK: * Entry
     //*========================================================================*
     
+    /// Semantic values for UITextField's isSecureTextEntry boolean.
     enum Entry { case standard, secure }
 }
 

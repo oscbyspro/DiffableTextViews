@@ -12,10 +12,10 @@
 //*============================================================================*
 
 @usableFromInline final class Context<Style: DiffableTextStyle, Scheme: DiffableTextViews.Scheme> {
-    @usableFromInline typealias Value = Style.Value
     @usableFromInline typealias Field = DiffableTextViews.Field<Scheme>
     @usableFromInline typealias Position = DiffableTextViews.Position<Scheme>
-    @usableFromInline typealias Commit = DiffableTextViews.Commit<Value>
+    @usableFromInline typealias Commit = DiffableTextViews.Commit<Style.Value>
+    @usableFromInline typealias Value = Style.Value
 
     //=------------------------------------------------------------------------=
     // MARK: State

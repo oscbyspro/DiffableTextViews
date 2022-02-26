@@ -26,6 +26,7 @@ public struct DiffableTextField<Style: UIKitDiffableTextStyle>: UIViewRepresenta
     
     @usableFromInline @Environment(\.locale) var locale: Locale
     @usableFromInline @Environment(\.diffableTextField_onSetup ) var onSetup:  (Proxy) -> Void
+    @usableFromInline @Environment(\.diffableTextField_onUpdate) var onUpdate: (Proxy) -> Void
     @usableFromInline @Environment(\.diffableTextField_onSubmit) var onSubmit: (Proxy) -> Void
     
     //=------------------------------------------------------------------------=
@@ -73,8 +74,8 @@ public struct DiffableTextField<Style: UIKitDiffableTextStyle>: UIViewRepresenta
         // MARK: ProxyTextField
         //=--------------------------------------=
         context.coordinator.downstream = ProxyTextField(uiView)
-        Style.onSetup(context.coordinator.downstream)
-        self .onSetup(context.coordinator.downstream)
+        context.coordinator.downstream.transform(Style.onSetup)
+        context.coordinator.downstream.transform(self .onSetup)
         //=--------------------------------------=
         // MARK: Done
         //=--------------------------------------=
@@ -88,6 +89,7 @@ public struct DiffableTextField<Style: UIKitDiffableTextStyle>: UIViewRepresenta
     @inlinable public func updateUIView(_ uiView: UIViewType, context: Self.Context) {
         context.coordinator.upstream = self
         context.coordinator.synchronize()
+        context.coordinator.downstream.transform(onUpdate)
     }
     
     //*========================================================================*
@@ -102,7 +104,7 @@ public struct DiffableTextField<Style: UIKitDiffableTextStyle>: UIViewRepresenta
         // MARK: State
         //=--------------------------------------------------------------------=
         
-        @usableFromInline let lock = Lock()
+        @usableFromInline let lock    = Lock()
         @usableFromInline let context = Context()
 
         @usableFromInline var upstream: DiffableTextField!
@@ -121,7 +123,7 @@ public struct DiffableTextField<Style: UIKitDiffableTextStyle>: UIViewRepresenta
         //=--------------------------------------------------------------------=
         
         @inlinable public func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-            upstream.onSubmit(downstream); return true
+            downstream.transform(upstream.onSubmit); return true
         }
         
         //=--------------------------------------------------------------------=
@@ -265,6 +267,10 @@ public struct DiffableTextField<Style: UIKitDiffableTextStyle>: UIViewRepresenta
     @usableFromInline static let defaultValue: (ProxyTextField) -> Void = { _ in }
 }
 
+@usableFromInline enum DiffableTextField_OnUpdate: EnvironmentKey {
+    @usableFromInline static let defaultValue: (ProxyTextField) -> Void = { _ in }
+}
+
 @usableFromInline enum DiffableTextField_OnSubmit: EnvironmentKey {
     @usableFromInline static let defaultValue: (ProxyTextField) -> Void = { _ in }
 }
@@ -279,9 +285,14 @@ extension EnvironmentValues {
     // MARK: Accessors
     //=------------------------------------------------------------------------=
     
-    @inlinable var diffableTextField_onSetup: (ProxyTextField) -> Void {
-        get { self[DiffableTextField_OnSetup.self] }
-        set { self[DiffableTextField_OnSetup.self] = newValue }
+    @inlinable var diffableTextField_onSetup:  (ProxyTextField) -> Void {
+        get { self[DiffableTextField_OnSetup .self] }
+        set { self[DiffableTextField_OnSetup .self] = newValue }
+    }
+    
+    @inlinable var diffableTextField_onUpdate: (ProxyTextField) -> Void {
+        get { self[DiffableTextField_OnUpdate.self] }
+        set { self[DiffableTextField_OnUpdate.self] = newValue }
     }
 
     @inlinable var diffableTextField_onSubmit: (ProxyTextField) -> Void {
@@ -303,6 +314,11 @@ public extension View {
     @inlinable func diffableTextField_onSetup(
         _ onSetup: @escaping (ProxyTextField) -> Void) -> some View {
         environment(\.diffableTextField_onSetup,  onSetup)
+    }
+    
+    @inlinable func diffableTextField_onUpdate(
+        _ onUpdate: @escaping (ProxyTextField) -> Void) -> some View {
+        environment(\.diffableTextField_onUpdate, onUpdate)
     }
     
     @inlinable func diffableTextField_onSubmit(
