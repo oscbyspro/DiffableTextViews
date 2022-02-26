@@ -140,8 +140,8 @@ public extension ProxyTextField {
     // MARK: Color
     //=------------------------------------------------------------------------=
         
-    @inlinable func color(tint: UIColor) {
-        wrapped.tintColor = tint
+    @inlinable func tint(_ color: UIColor) {
+        wrapped.tintColor = color
     }
     
     //=------------------------------------------------------------------------=
@@ -156,8 +156,8 @@ public extension ProxyTextField {
     // MARK: Entry
     //=------------------------------------------------------------------------=
         
-    @inlinable func entry(secure: Bool) {
-        wrapped.isSecureTextEntry = secure
+    @inlinable func entry(_ entry: Entry) {
+        wrapped.isSecureTextEntry = entry == .secure
     }
     
     //=------------------------------------------------------------------------=
@@ -184,9 +184,15 @@ public extension ProxyTextField {
     // MARK: Key
     //=------------------------------------------------------------------------=
     
-    @inlinable func key(return: UIReturnKeyType) {
-        wrapped.returnKeyType = `return`
+    @inlinable func submit(_ key: UIReturnKeyType) {
+        wrapped.returnKeyType = key
     }
+    
+    //*========================================================================*
+    // MARK: * Entry
+    //*========================================================================*
+    
+    enum Entry { case standard, secure }
 }
 
 #endif

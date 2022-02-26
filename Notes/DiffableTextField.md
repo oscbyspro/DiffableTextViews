@@ -43,9 +43,8 @@ Closures may be set and used at specific times in the view's life cycle.
 
 ```swift
 DiffableTextField($value, style: style)
-    .diffableTextField_onSetup ({ _ in })
-    .diffableTextField_onUpdate({ _ in })
-    .diffableTextField_onSubmit({ _ in })
+    .diffableTextField_onSetup ({ proxy in })
+    .diffableTextField_onSubmit({ proxy in })
 
 ```
 

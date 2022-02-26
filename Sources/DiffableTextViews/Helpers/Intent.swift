@@ -29,7 +29,7 @@
         self.upper = upper
     }
     
-    @inlinable init<T: Comparable>(_ start: Range<T>, to end: Range<T>) {
+    @inlinable init<T>(_ start: Range<T>, to end: Range<T>) where T: Comparable {
         self.lower = Direction(start.lowerBound, to: end.lowerBound)
         self.upper = Direction(start.upperBound, to: end.upperBound)
     }
