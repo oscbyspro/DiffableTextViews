@@ -96,7 +96,7 @@ extension ProxyTextField {
     }
 
     //=------------------------------------------------------------------------=
-    // MARK: System
+    // MARK: System / Information
     //=------------------------------------------------------------------------=
 
     @inlinable public func content(_ content: UITextContentType) {
