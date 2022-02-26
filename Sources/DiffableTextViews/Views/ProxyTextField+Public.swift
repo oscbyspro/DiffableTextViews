@@ -71,6 +71,7 @@ public extension ProxyTextField {
     // MARK: Input
     //=------------------------------------------------------------------------=
 
+    #warning("WIP")
     @inlinable func input(_ input:  Input) {
         wrapped.isSecureTextEntry = input == .secure
     }
@@ -90,9 +91,9 @@ public extension ProxyTextField {
     @inlinable func keyboard(_ keyboard: UIKeyboardType) {
         wrapped.keyboardType = keyboard
     }
-
-    @inlinable func submission(_ submission: UIReturnKeyType) {
-        wrapped.returnKeyType = submission
+    
+    @inlinable func key<Key>(_ key: Key) where Key: KeyOnKeyboard {
+        transform(key.update)
     }
 
     //=------------------------------------------------------------------------=
