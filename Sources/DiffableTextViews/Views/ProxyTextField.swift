@@ -36,24 +36,9 @@ public final class ProxyTextField {
     }
     
     //=------------------------------------------------------------------------=
-    // MARK: Transformations
-    //=------------------------------------------------------------------------=
-    
-    @inlinable func transform(_ transform: (ProxyTextField) -> Void) {
-        transform(self)
-    }
-}
-
-//=----------------------------------------------------------------------------=
-// MARK: + Internal
-//=----------------------------------------------------------------------------=
-
-extension ProxyTextField {
-    
-    //=------------------------------------------------------------------------=
     // MARK: Accessors
     //=------------------------------------------------------------------------=
-    
+        
     @inlinable var active: Bool {
         wrapped.isEditing
     }
@@ -62,16 +47,8 @@ extension ProxyTextField {
         wrapped.momentum
     }
     
-    //=------------------------------------------------------------------------=
-    // MARK: Accessors - Text, Selection
-    //=------------------------------------------------------------------------=
-    
-    @inlinable var text: String {
-        wrapped.text! // force unwrap is always OK
-    }
-    
     @inlinable func selection() -> Range<Position> {
-        offsets(in: wrapped.selectedTextRange!) // force unwrap is always OK
+        positions(wrapped.selectedTextRange!) // force unwrapping is always OK
     }
     
     //=------------------------------------------------------------------------=
@@ -83,132 +60,43 @@ extension ProxyTextField {
     }
     
     @inlinable func update(selection: Range<Position>) {
-        wrapped.selectedTextRange = positions(in: selection)
+        wrapped.selectedTextRange = offsets(selection)
     }
     
-    //=------------------------------------------------------------------------=
-    // MARK: Positions
-    //=------------------------------------------------------------------------=
-
-    /// - Complexity: O(1).
-    @inlinable func offsets(in range: UITextRange) -> Range<Position> {
-        offset(at: range.start) ..< offset(at: range.end)
-    }
-    
-    /// - Complexity: O(1).
-    @inlinable func offset(at position: UITextPosition) -> Position {
-        Position(wrapped.offset(from: wrapped.beginningOfDocument, to: position))
-    }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Layout
-    //=------------------------------------------------------------------------=
-    
-    /// - Complexity: O(1).
-    @inlinable func position(at offset: Position) -> UITextPosition {
-        wrapped.position(from: wrapped.beginningOfDocument, offset: offset.offset)!
-    }
-    
-    /// - Complexity: O(1).
-    @inlinable func positions(in offsets: Range<Position>) -> UITextRange {
-        wrapped.textRange(from: position(at: offsets.lowerBound), to: position(at: offsets.upperBound))!
+    @inlinable func transform(_ transform: (ProxyTextField) -> Void) {
+        transform(self)
     }
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: + Actions
+// MARK: + Conversions
 //=----------------------------------------------------------------------------=
 
-public extension ProxyTextField {
+extension ProxyTextField {
     
     //=------------------------------------------------------------------------=
-    // MARK: Resign
+    // MARK: Offsets -> Positions
     //=------------------------------------------------------------------------=
-    
-    @inlinable func resign() {
-        wrapped.resignFirstResponder()
-    }
-}
 
-//=----------------------------------------------------------------------------=
-// MARK: + Transformations
-//=----------------------------------------------------------------------------=
-
-public extension ProxyTextField {
+    @inlinable func position(_ offset: UITextPosition) -> Position {
+        Position(wrapped.offset(from: wrapped.beginningOfDocument, to: offset))
+    }
     
-    //=------------------------------------------------------------------------=
-    // MARK: Autocorrect
-    //=------------------------------------------------------------------------=
-    
-    @inlinable func autocorrect(_ autocorrect: UITextAutocorrectionType) {
-        wrapped.autocorrectionType = autocorrect
+    @inlinable func positions(_ offsets: UITextRange) -> Range<Position> {
+        position(offsets.start) ..< position(offsets.end)
     }
     
     //=------------------------------------------------------------------------=
-    // MARK: Color
+    // MARK: Positions -> Offsets
     //=------------------------------------------------------------------------=
-        
-    @inlinable func tint(_ color: UIColor) {
-        wrapped.tintColor = color
+    
+    @inlinable func offset(_ position: Position) -> UITextPosition {
+        wrapped.position(from: wrapped.beginningOfDocument, offset: position.offset)!
     }
     
-    //=------------------------------------------------------------------------=
-    // MARK: Content
-    //=------------------------------------------------------------------------=
-    
-    @inlinable func content(_ content: UITextContentType) {
-        wrapped.textContentType = content
+    @inlinable func offsets(_ positions: Range<Position>) -> UITextRange {
+        wrapped.textRange(from: offset(positions.lowerBound), to: offset(positions.upperBound))!
     }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Entry
-    //=------------------------------------------------------------------------=
-        
-    @inlinable func entry(_ entry:  Entry) {
-        wrapped.isSecureTextEntry = entry == .secure
-    }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Font
-    //=------------------------------------------------------------------------=
-    
-    @inlinable func font(_ font: UIFont) {
-        wrapped.font = font
-    }
-        
-    @inlinable func font(_ font: DiffableTextFont) {
-        wrapped.font = UIFont(font)
-    }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Keyboard
-    //=------------------------------------------------------------------------=
-    
-    @inlinable func keyboard(_ keyboard: UIKeyboardType) {
-        wrapped.keyboardType = keyboard
-    }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Key
-    //=------------------------------------------------------------------------=
-    
-    @inlinable func submit(_ key: UIReturnKeyType) {
-        wrapped.returnKeyType = key
-    }
-}
-
-//=----------------------------------------------------------------------------=
-// MARK: + Helpers
-//=----------------------------------------------------------------------------=
-
-public extension ProxyTextField {
-    
-    //*========================================================================*
-    // MARK: * Entry
-    //*========================================================================*
-    
-    /// Semantic values for UITextField's isSecureTextEntry boolean.
-    enum Entry { case standard, secure }
 }
 
 #endif
