@@ -19,13 +19,13 @@ import UIKit
 // MARK: + Accessors
 //=----------------------------------------------------------------------------=
 
-extension ProxyTextField {
+public extension ProxyTextField {
     
     //=------------------------------------------------------------------------=
     // MARK: Text
     //=------------------------------------------------------------------------=
     
-    @inlinable public var text: String {
+    @inlinable var text: String {
         wrapped.text! // force unwrapping is always OK
     }
 }
@@ -34,13 +34,13 @@ extension ProxyTextField {
 // MARK: + Actions
 //=----------------------------------------------------------------------------=
 
-extension ProxyTextField {
+public extension ProxyTextField {
     
     //=------------------------------------------------------------------------=
     // MARK: Resign
     //=------------------------------------------------------------------------=
     
-    @inlinable public func resign() {
+    @inlinable func resign() {
         wrapped.resignFirstResponder()
     }
 }
@@ -49,21 +49,21 @@ extension ProxyTextField {
 // MARK: + Customization
 //=----------------------------------------------------------------------------=
 
-extension ProxyTextField {
+public extension ProxyTextField {
     
     //=------------------------------------------------------------------------=
     // MARK: Appearance
     //=------------------------------------------------------------------------=
         
-    @inlinable public func tint(_ tint: UIColor) {
+    @inlinable func tint(_ tint: UIColor) {
         wrapped.tintColor = tint
     }
 
-    @inlinable public func font(_ font: UIFont) {
+    @inlinable func font(_ font: UIFont) {
         wrapped.font = font
     }
         
-    @inlinable public func font(_ font: DiffableTextFont) {
+    @inlinable func font(_ font: DiffableTextFont) {
         wrapped.font = UIFont(font)
     }
 
@@ -71,15 +71,15 @@ extension ProxyTextField {
     // MARK: Input
     //=------------------------------------------------------------------------=
 
-    @inlinable public func input( _ input: Input) {
+    @inlinable func input(_ input:  Input) {
         wrapped.isSecureTextEntry = input == .secure
     }
     
-    @inlinable public func autocorrection(_ autocorrection: UITextAutocorrectionType) {
+    @inlinable func autocorrection(_ autocorrection: UITextAutocorrectionType) {
         wrapped.autocorrectionType = autocorrection
     }
     
-    @inlinable public func autocapitalization(_ autocapitalization: UITextAutocapitalizationType) {
+    @inlinable func autocapitalization(_ autocapitalization: UITextAutocapitalizationType) {
         wrapped.autocapitalizationType = autocapitalization
     }
 
@@ -87,11 +87,11 @@ extension ProxyTextField {
     // MARK: Keyboard
     //=------------------------------------------------------------------------=
     
-    @inlinable public func keyboard(_ keyboard: UIKeyboardType) {
+    @inlinable func keyboard(_ keyboard: UIKeyboardType) {
         wrapped.keyboardType = keyboard
     }
 
-    @inlinable public func submission(_ submission: UIReturnKeyType) {
+    @inlinable func submission(_ submission: UIReturnKeyType) {
         wrapped.returnKeyType = submission
     }
 
@@ -99,7 +99,7 @@ extension ProxyTextField {
     // MARK: System / Information
     //=------------------------------------------------------------------------=
 
-    @inlinable public func content(_ content: UITextContentType) {
+    @inlinable func content(_ content: UITextContentType) {
         wrapped.textContentType = content
     }
 }
@@ -108,13 +108,13 @@ extension ProxyTextField {
 // MARK: + Helpers
 //=----------------------------------------------------------------------------=
 
-extension ProxyTextField {
+public extension ProxyTextField {
     
     //*========================================================================*
     // MARK: * Input
     //*========================================================================*
     
-    public enum Input { case standard, secure }
+    enum Input { case standard, secure }
 }
 
 #endif
