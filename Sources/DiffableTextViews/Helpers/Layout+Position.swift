@@ -29,6 +29,9 @@ extension Layout {
     //=------------------------------------------------------------------------=
 
     @inlinable func indices(start: Range<Index>, destination: Range<Position>) -> Range<Index> {
+        //=--------------------------------------=
+        // MARK: Single
+        //=--------------------------------------=
         let upperBound = index(start: start.upperBound, destination: destination.upperBound)
         var lowerBound = upperBound
         //=--------------------------------------=

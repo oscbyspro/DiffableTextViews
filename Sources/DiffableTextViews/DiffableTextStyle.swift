@@ -47,7 +47,7 @@ public protocol DiffableTextStyle: Equatable {
     // MARK: Downstream
     //=------------------------------------------------------------------------=
     
-    /// Produce a value and a snapshot, in response to user input.
+    /// Transforms changes into a value and a snapshot, on user input.
     ///
     /// - Thrown errors result in input cancellation.
     /// - Thrown errors have their descriptions printed in DEBUG mode.

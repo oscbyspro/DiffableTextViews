@@ -20,12 +20,12 @@ extension Field {
     @inlinable mutating func update(snapshot: Snapshot) {
         let layout = Layout(snapshot)
         //=--------------------------------------=
-        // MARK: Selection - Single
+        // MARK: Single
         //=--------------------------------------=
         let upperBound = Mismatches.suffix(past: self.layout[selection.upperBound...], next: layout).next
         var lowerBound = upperBound
         //=--------------------------------------=
-        // MARK: Selection - Double
+        // MARK: Double
         //=--------------------------------------=
         if !self.selection.isEmpty {
             lowerBound = Mismatches.prefix(past: self.layout[..<selection.lowerBound], next: layout).next
