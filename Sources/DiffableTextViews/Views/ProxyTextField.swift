@@ -164,7 +164,7 @@ public extension ProxyTextField {
     // MARK: Entry
     //=------------------------------------------------------------------------=
         
-    @inlinable func entry(_ entry: Entry) {
+    @inlinable func entry(_ entry:  Entry) {
         wrapped.isSecureTextEntry = entry == .secure
     }
     
