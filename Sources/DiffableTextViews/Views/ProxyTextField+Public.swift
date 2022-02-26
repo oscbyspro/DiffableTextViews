@@ -41,7 +41,7 @@ public extension ProxyTextField {
     //=------------------------------------------------------------------------=
     
     @inlinable func resign() {
-        wrapped.resignFirstResponder()
+        Task { @MainActor in wrapped.resignFirstResponder() }
     }
 }
 
