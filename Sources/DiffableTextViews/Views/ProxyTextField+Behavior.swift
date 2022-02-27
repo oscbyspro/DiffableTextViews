@@ -41,15 +41,19 @@ public final class ProxyTextField_Behavior {
         wrapped.autocapitalizationType = autocapitalization
     }
     
-    @inlinable public func input( _ input: Input) {
-        wrapped.isSecureTextEntry = input == .secure
+    @inlinable public func content(_ content: UITextContentType) {
+        wrapped.textContentType = content
     }
     
+    @inlinable public func entry( _ entry: Entry) {
+        wrapped.isSecureTextEntry = entry == .secure
+    }
+
     //*============================================================================*
-    // MARK: * Input
+    // MARK: * Entry
     //*============================================================================*
     
-    public enum Input { case normal, secure }
+    public enum Entry { case normal, secure }
 }
 
 #endif

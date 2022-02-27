@@ -16,7 +16,7 @@ import UIKit
 //*============================================================================*
 
 public final class ProxyTextField {
-    public typealias Behavior     = ProxyTextField_Behavior
+    public typealias Behavior  = ProxyTextField_Behavior
     public typealias Keyboard  = ProxyTextField_Keyboard
     public typealias Selection = ProxyTextField_Selection
     public typealias Text      = ProxyTextField_Text
@@ -61,7 +61,7 @@ public final class ProxyTextField {
     ///
     /// SwiftUI.FocusState is the preferred focusing mechanism in most cases.
     ///
-    @inlinable public func deactivate() {
+    @inlinable public func dismiss() {
         Task { @MainActor in wrapped.resignFirstResponder() }
     }
 }
