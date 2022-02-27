@@ -16,10 +16,10 @@ import UIKit
 //*============================================================================*
 
 public final class ProxyTextField {
-    public typealias Behavior  = ProxyTextField_Behavior
-    public typealias Keyboard  = ProxyTextField_Keyboard
+    public typealias Keyboard = ProxyTextField_Keyboard
     public typealias Selection = ProxyTextField_Selection
-    public typealias Text      = ProxyTextField_Text
+    public typealias Text = ProxyTextField_Text
+    public typealias Traits = ProxyTextField_Traits
 
     //=------------------------------------------------------------------------=
     // MARK: State
@@ -37,10 +37,6 @@ public final class ProxyTextField {
     // MARK: Views
     //=------------------------------------------------------------------------=
     
-    @inlinable public var behavior: Behavior {
-        Behavior(wrapped)
-    }
-    
     @inlinable public var keyboard: Keyboard {
         Keyboard(wrapped)
     }
@@ -51,6 +47,10 @@ public final class ProxyTextField {
     
     @inlinable public var text: Text {
         Text(wrapped)
+    }
+    
+    @inlinable public var traits: Traits {
+        Traits(wrapped)
     }
     
     //=------------------------------------------------------------------------=

@@ -12,10 +12,10 @@
 import UIKit
 
 //*============================================================================*
-// MARK: * ProxyTextField x Behavior
+// MARK: * ProxyTextField x Traits
 //*============================================================================*
 
-public final class ProxyTextField_Behavior {
+public final class ProxyTextField_Traits {
     
     //=------------------------------------------------------------------------=
     // MARK: State
