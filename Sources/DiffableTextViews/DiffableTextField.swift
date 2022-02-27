@@ -70,10 +70,11 @@ public struct DiffableTextField<Style: UIKitDiffableTextStyle>: UIViewRepresenta
         uiView.delegate = context.coordinator
         uiView.setContentHuggingPriority(.defaultHigh, for: .vertical)
         uiView.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
+        uiView.font = UIFont(DiffableTextFont.body.monospaced())
         //=--------------------------------------=
         // MARK: ProxyTextField
         //=--------------------------------------=
-        context.coordinator.downstream = ProxyTextField(uiView)
+        context.coordinator.downstream = ActorTextField(uiView)
         context.coordinator.downstream.transform(Style.onSetup)
         context.coordinator.downstream.transform(self .onSetup)
         //=--------------------------------------=
@@ -104,11 +105,10 @@ public struct DiffableTextField<Style: UIKitDiffableTextStyle>: UIViewRepresenta
         // MARK: State
         //=--------------------------------------------------------------------=
         
-        @usableFromInline let lock    = Lock()
+        @usableFromInline let lock = Lock()
         @usableFromInline let context = Context()
-
         @usableFromInline var upstream: DiffableTextField!
-        @usableFromInline var downstream:  ProxyTextField!
+        @usableFromInline var downstream:  ActorTextField!
         
         //=--------------------------------------------------------------------=
         // MARK: Accessors

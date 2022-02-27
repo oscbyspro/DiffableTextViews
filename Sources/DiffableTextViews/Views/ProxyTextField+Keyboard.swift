@@ -12,22 +12,6 @@
 import UIKit
 
 //*============================================================================*
-// MARK: * Contents
-//*============================================================================*
-
-public extension ProxyTextField {
-    typealias Keyboard = ProxyTextField_Keyboard
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Accessors
-    //=------------------------------------------------------------------------=
-    
-    @inlinable var _keyboard: Keyboard {
-        .init(wrapped)
-    }
-}
-
-//*============================================================================*
 // MARK: * ProxyTextField x Keyboard
 //*============================================================================*
 
@@ -59,6 +43,14 @@ public final class ProxyTextField_Keyboard {
     
     @inlinable public func submit(_ submit: UIReturnKeyType) {
         wrapped.returnKeyType = submit
+    }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Convenience
+    //=------------------------------------------------------------------------=
+    
+    @inlinable public func callAsFunction(_ keyboard: UIKeyboardType) {
+        kind(keyboard)
     }
 }
 
