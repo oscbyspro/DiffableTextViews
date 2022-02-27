@@ -12,6 +12,22 @@
 import UIKit
 
 //*============================================================================*
+// MARK: * Contents
+//*============================================================================*
+
+public extension ProxyTextField {
+    typealias Text = ProxyTextField_Text
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Accessors
+    //=------------------------------------------------------------------------=
+    
+    @inlinable var _text: Text {
+        .init(wrapped)
+    }
+}
+
+//*============================================================================*
 // MARK: * ProxyTextField x Text
 //*============================================================================*
 
@@ -28,46 +44,28 @@ public final class ProxyTextField_Text: CustomStringConvertible {
     //=------------------------------------------------------------------------=
     
     @inlinable init(_ wrapped: BasicTextField) { self.wrapped = wrapped }
-}
 
-//=----------------------------------------------------------------------------=
-// MARK: + Getters
-//=----------------------------------------------------------------------------=
-
-public extension ProxyTextField_Text {
-    
     //=------------------------------------------------------------------------=
-    // MARK: Text
+    // MARK: Accessors
     //=------------------------------------------------------------------------=
     
-    @inlinable var description: String {
-        wrapped.text! // force unwrapping is always OK
+    @inlinable public var description: String {
+        wrapped.text! // cannot be nil
     }
-}
-
-//=----------------------------------------------------------------------------=
-// MARK: + Setters
-//=----------------------------------------------------------------------------=
-
-public extension ProxyTextField_Text {
     
     //=------------------------------------------------------------------------=
-    // MARK: Color
+    // MARK: Utilities
     //=------------------------------------------------------------------------=
-    
-    @inlinable func color(_ color: UIColor) {
+
+    @inlinable public func color(_ color: UIColor) {
         wrapped.textColor = color
     }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Font
-    //=------------------------------------------------------------------------=
 
-    @inlinable func font(_ font: UIFont) {
+    @inlinable public func font(_ font: UIFont) {
         wrapped.font = font
     }
     
-    @inlinable func font(_ font: DiffableTextFont) {
+    @inlinable public func font(_ font: DiffableTextFont) {
         wrapped.font = UIFont(font)
     }
 }

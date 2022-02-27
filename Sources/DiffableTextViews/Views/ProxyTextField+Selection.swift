@@ -12,6 +12,22 @@
 import UIKit
 
 //*============================================================================*
+// MARK: * Contents
+//*============================================================================*
+
+public extension ProxyTextField {
+    typealias Selection = ProxyTextField_Selection
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Accessors
+    //=------------------------------------------------------------------------=
+    
+    @inlinable var _selection: Selection {
+        .init(wrapped)
+    }
+}
+
+//*============================================================================*
 // MARK: * ProxyTextField x Selection
 //*============================================================================*
 
@@ -28,27 +44,20 @@ public final class ProxyTextField_Selection {
     //=------------------------------------------------------------------------=
     
     @inlinable init(_ wrapped: BasicTextField) { self.wrapped = wrapped }
-}
 
-//=----------------------------------------------------------------------------=
-// MARK: + Setters
-//=----------------------------------------------------------------------------=
-
-public extension ProxyTextField_Selection {
-    
     //=------------------------------------------------------------------------=
-    // MARK: Color
+    // MARK: Utilities
     //=------------------------------------------------------------------------=
     
-    @inlinable func color(_ color: UIColor) {
+    @inlinable public func color(_ color: UIColor) {
         wrapped.tintColor = color
     }
 
-    @inlinable func color(mode: UIView.TintAdjustmentMode) {
+    @inlinable public func color(mode: UIView.TintAdjustmentMode) {
         wrapped.tintAdjustmentMode = mode
     }
     
-    @inlinable func color(_ color: UIColor, mode: UIView.TintAdjustmentMode) {
+    @inlinable public func color(_ color: UIColor, mode: UIView.TintAdjustmentMode) {
         self.color(color); self.color(mode: mode)
     }
 }

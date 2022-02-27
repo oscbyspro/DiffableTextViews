@@ -32,7 +32,7 @@ public final class ProxyTextField {
     
     @inlinable init(_ wrapped: Wrapped) {
         self.wrapped = wrapped
-        self.font(.body.monospaced())
+        self._text.font(.body.monospaced())
     }
     
     //=------------------------------------------------------------------------=
@@ -44,7 +44,7 @@ public final class ProxyTextField {
     }
 
     @inlinable var momentum: Bool {
-        wrapped.momentum
+        wrapped.intent != nil
     }
     
     @inlinable func selection() -> Range<Position> {

@@ -23,20 +23,6 @@ public final class BasicTextField: UITextField {
     //=------------------------------------------------------------------------=
     
     @usableFromInline private(set) var intent: Code? = nil
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Accessors
-    //=------------------------------------------------------------------------=
-    
-    /// A bool describing the intent to move in the direction of change.
-    ///
-    /// The intent of left and right key presses should be interpreted as a desire to continue in the direction
-    /// with momentum. This is because the direction of text is based on its content, where left-to-right and
-    /// right-to-left text respond to left and right keys presses in opposite ways.
-    ///
-    @inlinable var momentum: Bool {
-        intent != nil
-    }
 
     //=------------------------------------------------------------------------=
     // MARK: Presses
@@ -81,11 +67,7 @@ public final class BasicTextField: UITextField {
     @inlinable func intent(behind presses: Set<UIPress>) -> Code? {
         (presses.first?.key?.keyCode).flatMap({ Self.intents.contains($0) ? $0 : nil })
     }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Intent - Constants
-    //=------------------------------------------------------------------------=
-    
+
     @usableFromInline static let intents = Set<Code>([.keyboardLeftArrow, .keyboardRightArrow])
 }
 

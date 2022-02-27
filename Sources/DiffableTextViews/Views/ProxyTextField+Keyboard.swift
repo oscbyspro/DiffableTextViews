@@ -12,6 +12,22 @@
 import UIKit
 
 //*============================================================================*
+// MARK: * Contents
+//*============================================================================*
+
+public extension ProxyTextField {
+    typealias Keyboard = ProxyTextField_Keyboard
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Accessors
+    //=------------------------------------------------------------------------=
+    
+    @inlinable var _keyboard: Keyboard {
+        .init(wrapped)
+    }
+}
+
+//*============================================================================*
 // MARK: * ProxyTextField x Keyboard
 //*============================================================================*
 
@@ -28,35 +44,20 @@ public final class ProxyTextField_Keyboard {
     //=------------------------------------------------------------------------=
     
     @inlinable init(_ wrapped: BasicTextField) { self.wrapped = wrapped }
-}
-
-//=----------------------------------------------------------------------------=
-// MARK: + Setters
-//=----------------------------------------------------------------------------=
-
-public extension ProxyTextField_Keyboard {
     
     //=------------------------------------------------------------------------=
-    // MARK: Appearance
+    // MARK: Utilities
     //=------------------------------------------------------------------------=
     
-    @inlinable func appearance(_ appearance: UIKeyboardAppearance) {
+    @inlinable public func appearance(_ appearance: UIKeyboardAppearance) {
         wrapped.keyboardAppearance = appearance
     }
 
-    //=------------------------------------------------------------------------=
-    // MARK: Kind
-    //=------------------------------------------------------------------------=
-    
-    @inlinable func kind(_ keyboard: UIKeyboardType) {
+    @inlinable public func kind(_ keyboard: UIKeyboardType) {
         wrapped.keyboardType = keyboard
     }
     
-    //=------------------------------------------------------------------------=
-    // MARK: Appearance - Keys
-    //=------------------------------------------------------------------------=
-    
-    @inlinable func submit(_ submit: UIReturnKeyType) {
+    @inlinable public func submit(_ submit: UIReturnKeyType) {
         wrapped.returnKeyType = submit
     }
 }
