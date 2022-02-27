@@ -16,7 +16,6 @@ import UIKit
 //*============================================================================*
 
 @usableFromInline final class ActorTextField {
-    @usableFromInline typealias Wrapped = BasicTextField
     @usableFromInline typealias Position = DiffableTextViews.Position<UTF16>
     
     //=------------------------------------------------------------------------=
@@ -29,7 +28,7 @@ import UIKit
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable init(_ wrapped: Wrapped) { self.wrapped = wrapped }
+    @inlinable init(_ wrapped: BasicTextField) { self.wrapped = wrapped }
     
     //=------------------------------------------------------------------------=
     // MARK: Accessors

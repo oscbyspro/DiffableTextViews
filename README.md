@@ -72,9 +72,15 @@ A view that uses styles to format and parse text.
 | :balance_scale: | Monospaced | The standard font is monospaced |
 | :sewing_needle: | Customizable | Styles may provide default values |
 
-### [ProxyTextField](Sources/DiffableTextViews/Views/ProxyTextField+Public.swift)
+### [ProxyTextField](Sources/DiffableTextViews/Views)
 
-A UITextField affordance layer and customization point.
+A UITextField customization point.
+
+```swift
+diffableTextField.text.color(.black)
+diffableTextField.text.font(.body.monospaced())
+diffableTextField.selection.color(.blue, mode: .dimmed)
+```
 
 # Styles
 
