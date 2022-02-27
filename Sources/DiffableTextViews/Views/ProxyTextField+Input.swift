@@ -12,15 +12,11 @@
 import UIKit
 
 //*============================================================================*
-// MARK: * ProxyTextField
+// MARK: * ProxyTextField x Input
 //*============================================================================*
 
-public final class ProxyTextField {
-    public typealias Input     = ProxyTextField_Input
-    public typealias Keyboard  = ProxyTextField_Keyboard
-    public typealias Selection = ProxyTextField_Selection
-    public typealias Text      = ProxyTextField_Text
-
+public final class ProxyTextField_Input {
+    
     //=------------------------------------------------------------------------=
     // MARK: State
     //=------------------------------------------------------------------------=
@@ -30,31 +26,23 @@ public final class ProxyTextField {
     //=------------------------------------------------------------------------=
     // MARK: Initializers
     //=------------------------------------------------------------------------=
-
+    
     @inlinable init(_ wrapped: BasicTextField) { self.wrapped = wrapped }
     
     //=------------------------------------------------------------------------=
-    // MARK: Accessors
+    // MARK: Utilities
     //=------------------------------------------------------------------------=
     
-    @inlinable public var text: Text {
-        .init(wrapped)
+    @inlinable public func secure(_ secure: Bool) {
+        wrapped.isSecureTextEntry = secure
+    }
+
+    @inlinable public func autocorrection(_ autocorrection: UITextAutocorrectionType) {
+        wrapped.autocorrectionType = autocorrection
     }
     
-    @inlinable public var keyboard: Keyboard {
-        .init(wrapped)
-    }
-    
-    @inlinable public var selection: Selection {
-        .init(wrapped)
-    }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Actions
-    //=------------------------------------------------------------------------=
-    
-    @inlinable func resign() {
-        Task { @MainActor in wrapped.resignFirstResponder() }
+    @inlinable public func autocapitalization(_ autocapitalization: UITextAutocapitalizationType) {
+        wrapped.autocapitalizationType = autocapitalization
     }
 }
 
