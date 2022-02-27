@@ -15,7 +15,7 @@ import UIKit
 // MARK: * ProxyTextField x Text
 //*============================================================================*
 
-public final class ProxyTextField_Text: CustomStringConvertible {
+public final class ProxyTextField_Text {
     
     //=------------------------------------------------------------------------=
     // MARK: State
@@ -33,7 +33,7 @@ public final class ProxyTextField_Text: CustomStringConvertible {
     // MARK: Accessors
     //=------------------------------------------------------------------------=
     
-    @inlinable public var description: String {
+    @inlinable public var value: String {
         wrapped.text! // force unwrapping is OK
     }
     

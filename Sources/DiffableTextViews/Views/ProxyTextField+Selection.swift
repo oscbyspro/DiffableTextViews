@@ -28,15 +28,7 @@ public final class ProxyTextField_Selection {
     //=------------------------------------------------------------------------=
     
     @inlinable init(_ wrapped: BasicTextField) { self.wrapped = wrapped }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Accessors
-    //=------------------------------------------------------------------------=
 
-    @inlinable public var text: String {
-        wrapped.text(in: wrapped.selectedTextRange!)! // force unwrapping is OK
-    }
-    
     //=------------------------------------------------------------------------=
     // MARK: Utilities
     //=------------------------------------------------------------------------=

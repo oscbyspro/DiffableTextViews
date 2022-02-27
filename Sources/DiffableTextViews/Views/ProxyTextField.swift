@@ -34,26 +34,30 @@ public final class ProxyTextField {
     @inlinable init(_ wrapped: BasicTextField) { self.wrapped = wrapped }
     
     //=------------------------------------------------------------------------=
-    // MARK: Accessors
+    // MARK: Views
     //=------------------------------------------------------------------------=
     
-    @inlinable public var text: Text {
-        .init(wrapped)
+    @inlinable public var input: Input {
+        Input(wrapped)
     }
     
     @inlinable public var keyboard: Keyboard {
-        .init(wrapped)
+        Keyboard(wrapped)
     }
     
     @inlinable public var selection: Selection {
-        .init(wrapped)
+        Selection(wrapped)
+    }
+    
+    @inlinable public var text: Text {
+        Text(wrapped)
     }
     
     //=------------------------------------------------------------------------=
     // MARK: Actions
     //=------------------------------------------------------------------------=
     
-    @inlinable func resign() {
+    @inlinable public func resign() {
         Task { @MainActor in wrapped.resignFirstResponder() }
     }
 }
