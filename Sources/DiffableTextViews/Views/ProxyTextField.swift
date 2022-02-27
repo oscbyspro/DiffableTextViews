@@ -16,7 +16,7 @@ import UIKit
 //*============================================================================*
 
 public final class ProxyTextField {
-    public typealias Input     = ProxyTextField_Input
+    public typealias Behavior     = ProxyTextField_Behavior
     public typealias Keyboard  = ProxyTextField_Keyboard
     public typealias Selection = ProxyTextField_Selection
     public typealias Text      = ProxyTextField_Text
@@ -37,8 +37,8 @@ public final class ProxyTextField {
     // MARK: Views
     //=------------------------------------------------------------------------=
     
-    @inlinable public var input: Input {
-        Input(wrapped)
+    @inlinable public var behavior: Behavior {
+        Behavior(wrapped)
     }
     
     @inlinable public var keyboard: Keyboard {
@@ -57,7 +57,11 @@ public final class ProxyTextField {
     // MARK: Actions
     //=------------------------------------------------------------------------=
     
-    @inlinable public func resign() {
+    /// Asks this object to relinquish its status as first responder in its window.
+    ///
+    /// SwiftUI.FocusState is the preferred focusing mechanism in most cases.
+    ///
+    @inlinable public func deactivate() {
         Task { @MainActor in wrapped.resignFirstResponder() }
     }
 }

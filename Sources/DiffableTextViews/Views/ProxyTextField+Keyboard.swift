@@ -36,21 +36,13 @@ public final class ProxyTextField_Keyboard {
     @inlinable public func appearance(_ appearance: UIKeyboardAppearance) {
         wrapped.keyboardAppearance = appearance
     }
-
-    @inlinable public func kind(_ keyboard: UIKeyboardType) {
-        wrapped.keyboardType = keyboard
-    }
     
     @inlinable public func submit(_ submit: UIReturnKeyType) {
         wrapped.returnKeyType = submit
     }
     
-    //=------------------------------------------------------------------------=
-    // MARK: Convenience
-    //=------------------------------------------------------------------------=
-    
-    @inlinable public func callAsFunction(_ keyboard: UIKeyboardType) {
-        kind(keyboard)
+    @inlinable public func view(_ keyboard: UIKeyboardType) {
+        wrapped.keyboardType = keyboard
     }
 }
 

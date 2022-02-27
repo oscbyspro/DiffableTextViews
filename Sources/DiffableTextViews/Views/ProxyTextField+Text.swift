@@ -38,7 +38,7 @@ public final class ProxyTextField_Text {
     }
     
     //=------------------------------------------------------------------------=
-    // MARK: Utilities
+    // MARK: Appearance
     //=------------------------------------------------------------------------=
 
     @inlinable public func color(_ color: UIColor) {
@@ -51,6 +51,14 @@ public final class ProxyTextField_Text {
     
     @inlinable public func font(_ font: DiffableTextFont) {
         wrapped.font = UIFont(font)
+    }
+
+    //=------------------------------------------------------------------------=
+    // MARK: System
+    //=------------------------------------------------------------------------=
+    
+    @inlinable public func content(_ content: UITextContentType) {
+        wrapped.textContentType = content
     }
 }
 
