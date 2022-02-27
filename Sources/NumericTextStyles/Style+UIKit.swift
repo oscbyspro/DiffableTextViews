@@ -23,7 +23,7 @@ extension NumericTextStyle: UIKitDiffableTextStyle {
     //=------------------------------------------------------------------------=
     
     @inlinable public static func onSetup(_ diffableTextField: ProxyTextField) {
-        diffableTextField.keyboard(Value.isInteger ? .numberPad : .decimalPad)
+        diffableTextField.keyboard.view(Value.isInteger ? .numberPad : .decimalPad)
     }
 }
 

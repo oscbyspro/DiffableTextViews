@@ -44,14 +44,6 @@ struct PatternScreenExample<Style: UIKitDiffableTextStyle>: View where Style.Val
             .diffableTextField_onSetup {
                 proxy in
                 proxy.keyboard.view(.numberPad)
-                
-                
-                proxy.keyboard.view(.alphabet)
-                proxy.keyboard.submit(.done)
-                proxy.behavior.secure()
-                
-                proxy.secure(true)
-                proxy.input.autocapitalization(.sentences)
             }
     }
 }

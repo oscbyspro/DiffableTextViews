@@ -32,10 +32,6 @@ public final class ProxyTextField_Behavior {
     //=------------------------------------------------------------------------=
     // MARK: Utilities
     //=------------------------------------------------------------------------=
-    
-    @inlinable public func secure(_ secure: Bool) {
-        wrapped.isSecureTextEntry = secure
-    }
 
     @inlinable public func autocorrection(_ autocorrection: UITextAutocorrectionType) {
         wrapped.autocorrectionType = autocorrection
@@ -44,6 +40,16 @@ public final class ProxyTextField_Behavior {
     @inlinable public func autocapitalization(_ autocapitalization: UITextAutocapitalizationType) {
         wrapped.autocapitalizationType = autocapitalization
     }
+    
+    @inlinable public func input( _ input: Input) {
+        wrapped.isSecureTextEntry = input == .secure
+    }
+    
+    //*============================================================================*
+    // MARK: * Input
+    //*============================================================================*
+    
+    public enum Input { case normal, secure }
 }
 
 #endif
