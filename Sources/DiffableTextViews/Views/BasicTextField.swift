@@ -49,7 +49,7 @@ public final class BasicTextField: UITextField {
     }
     
     //=------------------------------------------------------------------------=
-    // MARK: Presses - Process
+    // MARK: Presses - Intent
     //=------------------------------------------------------------------------=
     
     @inlinable func process(new presses: Set<UIPress>) {
@@ -59,11 +59,7 @@ public final class BasicTextField: UITextField {
     @inlinable func process(old presses: Set<UIPress>) {
         if intent == intent(behind: presses) { intent = nil }
     }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Intent
-    //=------------------------------------------------------------------------=
-    
+
     @inlinable func intent(behind presses: Set<UIPress>) -> Code? {
         (presses.first?.key?.keyCode).flatMap({ Self.intents.contains($0) ? $0 : nil })
     }
