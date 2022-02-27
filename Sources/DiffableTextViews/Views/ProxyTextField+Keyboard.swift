@@ -12,42 +12,49 @@
 import UIKit
 
 //*============================================================================*
-// MARK: * Token
+// MARK: * ProxyTextField x Keyboard
 //*============================================================================*
 
-public struct Token<ID: TokenID> {
-    public typealias Value = ID.Value
+public final class ProxyTextField_Keyboard {
     
     //=------------------------------------------------------------------------=
     // MARK: State
     //=------------------------------------------------------------------------=
     
-    @usableFromInline let value: Value
+    @usableFromInline let wrapped: BasicTextField
     
     //=------------------------------------------------------------------------=
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable init(_ value: Value) { self.value  = value }
+    @inlinable init(_ wrapped: BasicTextField) { self.wrapped = wrapped }
 }
 
-//*============================================================================*
-// MARK: * Token x ID
-//*============================================================================*
+//=----------------------------------------------------------------------------=
+// MARK: + Setters
+//=----------------------------------------------------------------------------=
 
-public protocol TokenID {
+public extension ProxyTextField_Keyboard {
     
     //=------------------------------------------------------------------------=
-    // MARK: Value
+    // MARK: Appearance
     //=------------------------------------------------------------------------=
     
-    associatedtype Value
-    
+    @inlinable func appearance(_ appearance: UIKeyboardAppearance) {
+        wrapped.keyboardAppearance = appearance
+    }
+
+    @inlinable func kind(_ keyboard: UIKeyboardType) {
+        wrapped.keyboardType = keyboard
+    }
+
     //=------------------------------------------------------------------------=
-    // MARK: Utilities
+    // MARK: Appearance - Keys
     //=------------------------------------------------------------------------=
     
-    @inlinable static func update(_ view: UITextField, with value: Value)
+    @inlinable func submit(_ submit: UIReturnKeyType) {
+        wrapped.returnKeyType = submit
+    }
 }
 
 #endif

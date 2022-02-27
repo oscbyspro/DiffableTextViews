@@ -66,10 +66,6 @@ public final class ProxyTextField {
     @inlinable func transform(_ transform: (ProxyTextField) -> Void) {
         transform(self)
     }
-    
-    @inlinable func accept<ID>(_ token: Token<ID>) where ID: TokenID {
-        ID.update(wrapped, with: token.value)
-    }
 }
 
 //=----------------------------------------------------------------------------=

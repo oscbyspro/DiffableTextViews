@@ -7,6 +7,9 @@
 // See http://www.apache.org/licenses/LICENSE-2.0 for license information.
 //=----------------------------------------------------------------------------=
 
+#warning("...")
+#warning("...")
+#warning("...")
 //=----------------------------------------------------------------------------=
 // This file contains ProxyTextField's public interface.
 //=----------------------------------------------------------------------------=
@@ -50,15 +53,14 @@ public extension ProxyTextField {
 //=----------------------------------------------------------------------------=
 
 public extension ProxyTextField {
-    
-    #warning("TODO")
-    //=------------------------------------------------------------------------=
-    // MARK: Color
-    //=------------------------------------------------------------------------=
-        
-    @inlinable func color<ID>(_ token: Token<ID>) where ID: ColorID {
-        accept(token)
-    }
+
+//    //=------------------------------------------------------------------------=
+//    // MARK: Color
+//    //=------------------------------------------------------------------------=
+//
+//    @inlinable func color<ID>(_ token: Token<ID>) where ID: ColorID {
+//        accept(token)
+//    }
     
     //=------------------------------------------------------------------------=
     // MARK: Font
@@ -79,27 +81,18 @@ public extension ProxyTextField {
     @inlinable func keyboard(_ keyboard: UIKeyboardType) {
         wrapped.keyboardType = keyboard
     }
-    
-    @inlinable func key<ID>(_ token: Token<ID>) where ID: KeyID {
-        accept(token)
-    }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Input
-    //=------------------------------------------------------------------------=
 
-    @inlinable func input<ID>(_ token: Token<ID>) where ID: InputID {
-        accept(token)
-    }
-
-    #warning("TODO")
-    //=------------------------------------------------------------------------=
-    // MARK: System / Information
-    //=------------------------------------------------------------------------=
-
-    @inlinable func content(_ content: UITextContentType) {
-        wrapped.textContentType = content
-    }
+//    @inlinable func key<ID>(_ token: Token<ID>) where ID: KeyID {
+//        accept(token)
+//    }
+//
+//    //=------------------------------------------------------------------------=
+//    // MARK: Input
+//    //=------------------------------------------------------------------------=
+//
+//    @inlinable func input<ID>(_ token: Token<ID>) where ID: InputID {
+//        accept(token)
+//    }
 }
 
 #endif
