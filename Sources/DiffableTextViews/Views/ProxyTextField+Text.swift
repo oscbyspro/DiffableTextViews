@@ -34,7 +34,7 @@ public final class ProxyTextField_Text: CustomStringConvertible {
     //=------------------------------------------------------------------------=
     
     @inlinable public var description: String {
-        wrapped.text!
+        wrapped.text! // force unwrapping is OK
     }
     
     //=------------------------------------------------------------------------=

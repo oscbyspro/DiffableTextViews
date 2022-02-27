@@ -195,7 +195,7 @@ public struct DiffableTextField<Style: UIKitDiffableTextStyle>: UIViewRepresenta
             //=----------------------------------=
             // MARK: Update Downstream If Needed
             //=----------------------------------=
-            if context.field.positions != positions {
+            if context.field.positions !=  positions {
                 lock.perform {
                     self.downstream.update(selection: context.field.positions)
                 }
