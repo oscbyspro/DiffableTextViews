@@ -44,10 +44,14 @@ public extension ProxyTextField_Keyboard {
         wrapped.keyboardAppearance = appearance
     }
 
+    //=------------------------------------------------------------------------=
+    // MARK: Kind
+    //=------------------------------------------------------------------------=
+    
     @inlinable func kind(_ keyboard: UIKeyboardType) {
         wrapped.keyboardType = keyboard
     }
-
+    
     //=------------------------------------------------------------------------=
     // MARK: Appearance - Keys
     //=------------------------------------------------------------------------=

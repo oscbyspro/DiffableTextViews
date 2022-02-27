@@ -12,10 +12,10 @@
 import UIKit
 
 //*============================================================================*
-// MARK: * ProxyTextField x Text
+// MARK: * ProxyTextField x Selection
 //*============================================================================*
 
-public final class ProxyTextField_Text: CustomStringConvertible {
+public final class ProxyTextField_Selection {
     
     //=------------------------------------------------------------------------=
     // MARK: State
@@ -31,44 +31,25 @@ public final class ProxyTextField_Text: CustomStringConvertible {
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: + Getters
-//=----------------------------------------------------------------------------=
-
-public extension ProxyTextField_Text {
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Text
-    //=------------------------------------------------------------------------=
-    
-    @inlinable var description: String {
-        wrapped.text! // force unwrapping is always OK
-    }
-}
-
-//=----------------------------------------------------------------------------=
 // MARK: + Setters
 //=----------------------------------------------------------------------------=
 
-public extension ProxyTextField_Text {
+public extension ProxyTextField_Selection {
     
     //=------------------------------------------------------------------------=
     // MARK: Color
     //=------------------------------------------------------------------------=
     
     @inlinable func color(_ color: UIColor) {
-        wrapped.textColor = color
+        wrapped.tintColor = color
     }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Font
-    //=------------------------------------------------------------------------=
 
-    @inlinable func font(_ font: UIFont) {
-        wrapped.font = font
+    @inlinable func color(mode: UIView.TintAdjustmentMode) {
+        wrapped.tintAdjustmentMode = mode
     }
     
-    @inlinable func font(_ font: DiffableTextFont) {
-        wrapped.font = UIFont(font)
+    @inlinable func color(_ color: UIColor, mode: UIView.TintAdjustmentMode) {
+        self.color(color); self.color(mode: mode)
     }
 }
 
