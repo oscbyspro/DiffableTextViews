@@ -7,17 +7,16 @@
 // See http://www.apache.org/licenses/LICENSE-2.0 for license information.
 //=----------------------------------------------------------------------------=
 
-#warning("Think about these.")
-//=----------------------------------------------------------------------------=
-// MARK: + While
-//=----------------------------------------------------------------------------=
+//*============================================================================*
+// MARK: * Collection - Index
+//*============================================================================*
 
-extension Layout {
+public extension Collection {
     
     //=------------------------------------------------------------------------=
     // MARK: After
     //=------------------------------------------------------------------------=
-    
+
     @inlinable func index(after start: Index, while predicate: (Index) -> Bool) -> Index {
         var position = start
         //=--------------------------------------=
@@ -28,10 +27,17 @@ extension Layout {
             formIndex(after: &position)
         }
         //=--------------------------------------=
-        // MARK: Position == Layout End Index
+        // MARK: Position == End Index
         //=--------------------------------------=
         return position
     }
+}
+
+//*============================================================================*
+// MARK: * BidirectionalCollection - Index
+//*============================================================================*
+
+public extension BidirectionalCollection {
     
     //=------------------------------------------------------------------------=
     // MARK: Before
@@ -47,9 +53,8 @@ extension Layout {
             formIndex(before: &position)
         }
         //=--------------------------------------=
-        // MARK: Position == Layout Start Index
+        // MARK: Position == Start Index
         //=--------------------------------------=
         return position
     }
 }
-
