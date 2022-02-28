@@ -17,7 +17,7 @@ extension Layout {
     // MARK: Single
     //=------------------------------------------------------------------------=
     
-    @inlinable func preferredIndex(_ start: Layout.Index, preference: Direction, intent: Direction?) -> Layout.Index {
+    @inlinable func preferred(_ start: Layout.Index, preference: Direction, intent: Direction?) -> Layout.Index {
         //=--------------------------------------=
         // MARK: Anchor
         //=--------------------------------------=
@@ -37,13 +37,13 @@ extension Layout {
         //=--------------------------------------=
         // MARK: Try In This Direction
         //=--------------------------------------=
-        if let position = firstIndex(start, direction: direction, through: direction != preference) {
+        if let position = firstCaret(start, direction: direction, through: direction != preference) {
             return position
         }
         //=--------------------------------------=
         // MARK: Try In The Other Direction
         //=--------------------------------------=
-        if let position = firstIndex(start, direction: direction.reversed(), through: false) {
+        if let position = firstCaret(start, direction: direction.reversed(), through: false) {
             return position
         }
         //=--------------------------------------=
@@ -56,17 +56,17 @@ extension Layout {
     // MARK: Double
     //=------------------------------------------------------------------------=
     
-    @inlinable func preferredIndices(_ start: Range<Index>, intent: Intent) -> Range<Index> {
+    @inlinable func preferred(_ start: Range<Index>, intent: Intent) -> Range<Index> {
         //=--------------------------------------=
         // MARK: Single
         //=--------------------------------------=
-        let upperBound = preferredIndex(start.upperBound, preference: .backwards, intent: intent.upper)
+        let upperBound = preferred(start.upperBound, preference: .backwards, intent: intent.upper)
         var lowerBound = upperBound
         //=--------------------------------------=
         // MARK: Double
         //=--------------------------------------=
         if !start.isEmpty, upperBound != startIndex {
-            lowerBound = preferredIndex(start.lowerBound, preference:  .forwards, intent: intent.lower)
+            lowerBound = preferred(start.lowerBound, preference:  .forwards, intent: intent.lower)
             lowerBound = Swift.min(lowerBound, upperBound)
         }
         //=--------------------------------------=

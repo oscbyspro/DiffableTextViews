@@ -17,7 +17,7 @@ extension Layout {
     // MARK: Forwards To
     //=------------------------------------------------------------------------=
     
-    @inlinable func firstIndexForwardsTo(from start: Index, where predicate: (Index) -> Bool) -> Index? {
+    @inlinable func firstCaretForwardsTo(from start: Index, where predicate: (Index) -> Bool) -> Index? {
         var position = start
         //=--------------------------------------=
         // MARK: Search
@@ -36,23 +36,23 @@ extension Layout {
     // MARK: Forwards Through
     //=------------------------------------------------------------------------=
     
-    @inlinable func firstIndexForwardsThrough(from start: Index, where predicate: (Index) -> Bool) -> Index? {
-        firstIndexForwardsTo(from: start, where: predicate).map(index(after:))
+    @inlinable func firstCaretForwardsThrough(from start: Index, where predicate: (Index) -> Bool) -> Index? {
+        firstCaretForwardsTo(from: start, where: predicate).map(index(after:))
     }
     
     //=------------------------------------------------------------------------=
     // MARK: Backwards To
     //=------------------------------------------------------------------------=
     
-    @inlinable func firstIndexBackwardsTo(from start: Index, where predicate: (Index) -> Bool) -> Index? {
-        firstIndexBackwardsThrough(from: start, where: predicate).map(index(after:))
+    @inlinable func firstCaretBackwardsTo(from start: Index, where predicate: (Index) -> Bool) -> Index? {
+        firstCaretBackwardsThrough(from: start, where: predicate).map(index(after:))
     }
     
     //=------------------------------------------------------------------------=
     // MARK: Backwards Through
     //=------------------------------------------------------------------------=
     
-    @inlinable func firstIndexBackwardsThrough(from start: Index, where predicate: (Index) -> Bool) -> Index? {
+    @inlinable func firstCaretBackwardsThrough(from start: Index, where predicate: (Index) -> Bool) -> Index? {
         var position = start
         //=--------------------------------------=
         // MARK: Search
@@ -71,12 +71,12 @@ extension Layout {
     // MARK: Forwards / Backwards / To / Through
     //=------------------------------------------------------------------------=
     
-    @inlinable func firstIndex(_ start: Index, direction: Direction, through: Bool) -> Index? {
+    @inlinable func firstCaret(_ start: Index, direction: Direction, through: Bool) -> Index? {
         switch (direction, through) {
-        case (.forwards,  false): return firstIndexForwardsTo(from:       start, where: nonpassthrough)
-        case (.forwards,   true): return firstIndexForwardsThrough(from:  start, where: nonpassthrough)
-        case (.backwards, false): return firstIndexBackwardsTo(from:      start, where: nonpassthrough)
-        case (.backwards,  true): return firstIndexBackwardsThrough(from: start, where: nonpassthrough)
+        case (.forwards,  false): return firstCaretForwardsTo(from:       start, where: nonpassthrough)
+        case (.forwards,   true): return firstCaretForwardsThrough(from:  start, where: nonpassthrough)
+        case (.backwards, false): return firstCaretBackwardsTo(from:      start, where: nonpassthrough)
+        case (.backwards,  true): return firstCaretBackwardsThrough(from: start, where: nonpassthrough)
         }
     }
 }
