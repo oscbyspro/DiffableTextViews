@@ -185,17 +185,13 @@ public struct DiffableTextField<Style: UIKitDiffableTextStyle>: UIViewRepresenta
         @inlinable public func textFieldDidChangeSelection(_ textField: UITextField) {
             guard !lock.isLocked else { return }
             //=----------------------------------=
-            // MARK: Positions
+            // MARK: Context
             //=----------------------------------=
-            let positions = downstream.selection()
-            //=----------------------------------=
-            // MARK: Corrected
-            //=----------------------------------=
-            self.context.update(selection: positions, momentum: downstream.momentum)
+            self.context.update(selection: downstream.selection, momentum: downstream.momentum)
             //=----------------------------------=
             // MARK: Update Downstream If Needed
             //=----------------------------------=
-            if context.field.positions !=  positions {
+            if context.field.positions !=  downstream.selection {
                 lock.perform {
                     self.downstream.update(selection: context.field.positions)
                 }

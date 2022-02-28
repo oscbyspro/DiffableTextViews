@@ -30,7 +30,7 @@ import UIKit
         wrapped.intent != nil
     }
     
-    @inlinable func selection() -> Range<Position> {
+    @inlinable var selection: Range<Position> {
         positions(wrapped.selectedTextRange!)
     }
     
