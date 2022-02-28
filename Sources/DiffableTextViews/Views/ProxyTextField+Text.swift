@@ -28,6 +28,13 @@ public final class ProxyTextField_Text {
     //=------------------------------------------------------------------------=
     
     @inlinable init(_ wrapped: BasicTextField) { self.wrapped = wrapped }
+}
+
+//=----------------------------------------------------------------------------=
+// MARK: + Utilities
+//=----------------------------------------------------------------------------=
+
+extension ProxyTextField_Text {
 
     //=------------------------------------------------------------------------=
     // MARK: Accessors
@@ -38,7 +45,7 @@ public final class ProxyTextField_Text {
     }
     
     //=------------------------------------------------------------------------=
-    // MARK: Appearance
+    // MARK: Transformations
     //=------------------------------------------------------------------------=
 
     @inlinable public func color(_ color: UIColor) {

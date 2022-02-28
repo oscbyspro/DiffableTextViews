@@ -29,8 +29,21 @@ public final class ProxyTextField_Traits {
     
     @inlinable init(_ wrapped: BasicTextField) { self.wrapped = wrapped }
     
+    //*========================================================================*
+    // MARK: * Entry
+    //*========================================================================*
+    
+    public enum Entry { case normal, secure }
+}
+
+//=----------------------------------------------------------------------------=
+// MARK: + Utilities
+//=----------------------------------------------------------------------------=
+
+extension ProxyTextField_Traits {
+
     //=------------------------------------------------------------------------=
-    // MARK: Utilities
+    // MARK: Transformations
     //=------------------------------------------------------------------------=
 
     @inlinable public func autocorrection(_ autocorrection: UITextAutocorrectionType) {
@@ -48,12 +61,6 @@ public final class ProxyTextField_Traits {
     @inlinable public func entry( _ entry: Entry) {
         wrapped.isSecureTextEntry = entry == .secure
     }
-
-    //*============================================================================*
-    // MARK: * Entry
-    //*============================================================================*
-    
-    public enum Entry { case normal, secure }
 }
 
 #endif

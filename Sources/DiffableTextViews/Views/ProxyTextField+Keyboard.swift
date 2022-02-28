@@ -28,9 +28,16 @@ public final class ProxyTextField_Keyboard {
     //=------------------------------------------------------------------------=
     
     @inlinable init(_ wrapped: BasicTextField) { self.wrapped = wrapped }
-    
+}
+
+//=----------------------------------------------------------------------------=
+// MARK: + Utilities
+//=----------------------------------------------------------------------------=
+
+extension ProxyTextField_Keyboard {
+
     //=------------------------------------------------------------------------=
-    // MARK: Utilities
+    // MARK: Transformations
     //=------------------------------------------------------------------------=
     
     @inlinable public func appearance(_ appearance: UIKeyboardAppearance) {
