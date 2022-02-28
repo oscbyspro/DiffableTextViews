@@ -10,36 +10,6 @@
 import Foundation
 
 //*============================================================================*
-// MARK: * Float16
-//*============================================================================*
-
-extension Float16: Values.Signed, Values.FloatingPoint {
-    public typealias FormatStyle = FloatingPointFormatStyle<Self>
-
-    //=------------------------------------------------------------------------=
-    // MARK: Precision, Bounds
-    //=------------------------------------------------------------------------=
-    
-    public static let precision: Count = precision(3)
-    public static let bounds: ClosedRange<Self> = bounds(999)
-}
-
-//*============================================================================*
-// MARK: * Float32
-//*============================================================================*
-
-extension Float32: Values.Signed, Values.FloatingPoint {
-    public typealias FormatStyle = FloatingPointFormatStyle<Self>
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Precision, Bounds
-    //=------------------------------------------------------------------------=
-    
-    public static let precision: Count = precision(7)
-    public static let bounds: ClosedRange<Self> = bounds(9_999_999)
-}
-
-//*============================================================================*
 // MARK: * Float64
 //*============================================================================*
 

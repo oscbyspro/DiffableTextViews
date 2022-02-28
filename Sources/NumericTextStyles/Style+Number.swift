@@ -21,36 +21,10 @@ extension DiffableTextStyle where Self == NumericTextStyle<Decimal> {
 }
 
 //*============================================================================*
-// MARK: * Float16
+// MARK: * Double
 //*============================================================================*
 
-extension DiffableTextStyle where Self == NumericTextStyle<Float16> {
-    //=------------------------------------------=
-    // MARK: Internal - Inaccurate Format Style
-    //=------------------------------------------=
-    @inlinable internal static var number: Self {
-        Self(.number)
-    }
-}
-
-//*============================================================================*
-// MARK: * Float32
-//*============================================================================*
-
-extension DiffableTextStyle where Self == NumericTextStyle<Float32> {
-    //=------------------------------------------=
-    // MARK: Internal - Inaccurate Format Style
-    //=------------------------------------------=
-    @inlinable internal static var number: Self {
-        Self(.number)
-    }
-}
-
-//*============================================================================*
-// MARK: * Float64
-//*============================================================================*
-
-extension DiffableTextStyle where Self == NumericTextStyle<Float64> {
+extension DiffableTextStyle where Self == NumericTextStyle<Double> {
     @inlinable public static var number: Self {
         Self(.number)
     }

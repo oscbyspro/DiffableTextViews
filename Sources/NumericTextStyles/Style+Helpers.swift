@@ -13,7 +13,7 @@ import DiffableTextViews
 // MARK: + Helpers
 //=----------------------------------------------------------------------------=
 
-extension _NumericTextStyle {
+extension NumericTextStyle {
     
     //=------------------------------------------------------------------------=
     // MARK: Commit

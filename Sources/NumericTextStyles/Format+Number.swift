@@ -13,7 +13,12 @@ import Foundation
 // MARK: * Decimal
 //*============================================================================*
 
-extension Decimal.FormatStyle: Formats.Number, Formats.Currencyable, Formats.Percentable {
+extension Decimal.FormatStyle: Format, Formats.Number, Formats.Currencyable, Formats.Percentable {
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Translation
+    //=------------------------------------------------------------------------=
+    
     @inlinable public func translation() -> some NumericTextTranslation {
         Translations.Standard.reuseable(self)
     }
@@ -24,7 +29,12 @@ extension Decimal.FormatStyle: Formats.Number, Formats.Currencyable, Formats.Per
 //*============================================================================*
 
 extension FloatingPointFormatStyle: Format, Formats.Number,
-Formats.Currencyable, Formats.Percentable where Value: NumericTextValue {
+Formats.Currencyable, Formats.Percentable where Value: NumericTextFloatingPointValue {
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Translation
+    //=------------------------------------------------------------------------=
+    
     @inlinable public func translation() -> some NumericTextTranslation {
         Translations.Standard.reuseable(self)
     }
@@ -35,7 +45,12 @@ Formats.Currencyable, Formats.Percentable where Value: NumericTextValue {
 //*============================================================================*
 
 extension IntegerFormatStyle: Format, Formats.Number,
-Formats.Currencyable where Value: NumericTextValue {
+Formats.Currencyable where Value: NumericTextIntegerValue {
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Translation
+    //=------------------------------------------------------------------------=
+    
     @inlinable public func translation() -> some NumericTextTranslation {
         Translations.Standard.reuseable(self)
     }

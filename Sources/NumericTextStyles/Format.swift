@@ -19,8 +19,8 @@ import Foundation
 @usableFromInline typealias Format = NumericTextFormat; @usableFromInline enum Formats {
     @usableFromInline typealias Number = NumericTextNumberFormat
     @usableFromInline typealias Currency = NumericTextCurrencyFormat
-    @usableFromInline typealias Currencyable = NumericTextCurrencyableFormat
     @usableFromInline typealias Percent = NumericTextPercentFormat
+    @usableFromInline typealias Currencyable = NumericTextCurrencyableFormat
     @usableFromInline typealias Percentable = NumericTextPercentableFormat
 }
 

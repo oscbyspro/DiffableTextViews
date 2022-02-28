@@ -16,7 +16,7 @@ import DiffableTextViews
 // MARK: * NumericTextStyle x UIKit
 //*============================================================================*
 
-extension _NumericTextStyle: UIKitDiffableTextStyle {
+extension NumericTextStyle: UIKitDiffableTextStyle {
     
     //=------------------------------------------------------------------------=
     // MARK: Keyboard
