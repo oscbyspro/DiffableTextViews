@@ -185,7 +185,7 @@ public struct DiffableTextField<Style: UIKitDiffableTextStyle>: UIViewRepresenta
         @inlinable public func textFieldDidChangeSelection(_ textField: UITextField) {
             guard !lock.isLocked else { return }
             //=----------------------------------=
-            // MARK: Context
+            // MARK: Update
             //=----------------------------------=
             self.context.update(selection: downstream.selection, momentum: downstream.momentum)
             //=----------------------------------=
