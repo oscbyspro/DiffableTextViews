@@ -33,12 +33,12 @@ public extension ProxyTextField.Traits {
         wrapped.textContentType = content
     }
     
-    @inlinable func entry( _ entry: Entry) {
+    @inlinable func entry(_ entry:  Entry) {
         wrapped.isSecureTextEntry = entry == .secure
     }
     
     //*========================================================================*
-    // MARK: * Entry
+    // MARK: * Components
     //*========================================================================*
     
     enum Entry { case normal, secure }
