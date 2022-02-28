@@ -21,12 +21,12 @@ public extension ProxyTextField.Selection {
     // MARK: Accessors
     //=------------------------------------------------------------------------=
     
-    @inlinable var value: String {
-        wrapped.text(in: wrapped.selectedTextRange!)!
-    }
-    
     @inlinable var marked: String {
         wrapped.text(in: wrapped.markedTextRange!)!
+    }
+    
+    @inlinable var value: String {
+        wrapped.text(in: wrapped.selectedTextRange!)!
     }
     
     //=------------------------------------------------------------------------=
