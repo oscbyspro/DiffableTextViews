@@ -19,8 +19,8 @@ import Foundation
 @usableFromInline typealias Format = NumericTextFormat; @usableFromInline enum Formats {
     @usableFromInline typealias Number = NumericTextNumberFormat
     @usableFromInline typealias Currency = NumericTextCurrencyFormat
-    @usableFromInline typealias Percent = NumericTextPercentFormat
     @usableFromInline typealias Currencyable = NumericTextCurrencyableFormat
+    @usableFromInline typealias Percent = NumericTextPercentFormat
     @usableFromInline typealias Percentable = NumericTextPercentableFormat
 }
 
@@ -114,8 +114,16 @@ SignDisplayStrategy == CurrencyFormatStyleConfiguration.SignDisplayStrategy {
     //=------------------------------------------------------------------------=
     // MARK: Initializers
     //=------------------------------------------------------------------------=
-    
+        
     @inlinable init(code: String, locale: Locale)
+}
+
+//*============================================================================*
+// MARK: * Format x Currencyable
+//*============================================================================*
+
+public protocol NumericTextCurrencyableFormat: NumericTextFormat {
+    associatedtype Currency: NumericTextCurrencyFormat where Currency.FormatInput == FormatInput
 }
 
 //*============================================================================*
@@ -130,14 +138,6 @@ SignDisplayStrategy == NumberFormatStyleConfiguration.SignDisplayStrategy {
     //=------------------------------------------------------------------------=
     
     @inlinable init(locale: Locale)    
-}
-
-//*============================================================================*
-// MARK: * Format x Currencyable
-//*============================================================================*
-
-public protocol NumericTextCurrencyableFormat: NumericTextFormat {
-    associatedtype Currency: NumericTextCurrencyFormat where Currency.FormatInput == FormatInput
 }
 
 //*============================================================================*

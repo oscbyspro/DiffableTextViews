@@ -10,10 +10,24 @@
 import Foundation
 
 //*============================================================================*
-// MARK: * Float64
+// MARK: * Decimal
 //*============================================================================*
 
-extension Float64: Values.Signed, Values.FloatingPoint {
+extension Decimal: Values.Signed, Values.FloatingPoint {
+
+    //=------------------------------------------------------------------------=
+    // MARK: Precision, Bounds
+    //=------------------------------------------------------------------------=
+    
+    public static let precision: Count = precision(38)
+    public static let bounds: ClosedRange<Self> = bounds(Self(string: String(repeating: "9", count: 38))!)
+}
+
+//*============================================================================*
+// MARK: * Double
+//*============================================================================*
+
+extension Double: Values.Signed, Values.FloatingPoint {
     public typealias FormatStyle = FloatingPointFormatStyle<Self>
 
     //=------------------------------------------------------------------------=

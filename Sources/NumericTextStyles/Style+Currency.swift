@@ -11,6 +11,16 @@ import DiffableTextViews
 import Foundation
 
 //*============================================================================*
+// MARK: * Style x Initializers
+//*============================================================================*
+
+extension NumericTextStyle where Format: NumericTextCurrencyFormat {
+    @inlinable public init(code: String, locale: Locale = .autoupdatingCurrent) {
+        self.init(Format(code: code, locale: locale))
+    }
+}
+
+//*============================================================================*
 // MARK: * Decimal
 //*============================================================================*
 
