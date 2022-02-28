@@ -14,13 +14,10 @@ import Foundation
 //*============================================================================*
 
 @usableFromInline typealias Value = NumericTextValue; @usableFromInline enum Values {
-    @usableFromInline typealias FloatingPoint = NumericTextFloatValue
+    @usableFromInline typealias FloatingPoint = NumericTextFloatingPointValue
     @usableFromInline typealias Integer = NumericTextIntegerValue
     @usableFromInline typealias Signed = NumericTextSignedValue
     @usableFromInline typealias Unsigned = NumericTextUnsignedValue
-    @usableFromInline typealias Number = NumericTextNumberValue
-    @usableFromInline typealias Currency = NumericTextCurrencyValue
-    @usableFromInline typealias Percent = NumericTextPercentValue
 }
 
 //*============================================================================*
@@ -28,6 +25,12 @@ import Foundation
 //*============================================================================*
 
 public protocol NumericTextValue: Comparable {
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Formattable
+    //=------------------------------------------------------------------------=
+    
+    associatedtype FormatStyle: NumericTextFormat where FormatStyle.FormatInput == Self
     
     //=------------------------------------------------------------------------=
     // MARK: Kind
@@ -49,13 +52,13 @@ public protocol NumericTextValue: Comparable {
 // MARK: * Value x Floating Point
 //*============================================================================*
 
-public protocol NumericTextFloatValue: NumericTextValue { }
+public protocol NumericTextFloatingPointValue: NumericTextValue { }
 
 //=----------------------------------------------------------------------------=
 // MARK: + Details
 //=----------------------------------------------------------------------------=
 
-extension NumericTextFloatValue {
+extension NumericTextFloatingPointValue {
     
     //=------------------------------------------------------------------------=
     // MARK: Kind
@@ -73,10 +76,10 @@ extension NumericTextFloatValue {
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: + Helpers
+// MARK: + Details - Signed Numeric
 //=----------------------------------------------------------------------------=
 
-extension NumericTextFloatValue where Self: SignedNumeric {
+extension NumericTextFloatingPointValue where Self: SignedNumeric {
     
     //=------------------------------------------------------------------------=
     // MARK: Bounds
@@ -115,7 +118,7 @@ extension NumericTextIntegerValue {
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: + Helpers
+// MARK: + Details - Fixed Width
 //=----------------------------------------------------------------------------=
 
 extension NumericTextIntegerValue where Self: FixedWidthInteger {
@@ -165,75 +168,4 @@ extension NumericTextUnsignedValue {
     //=------------------------------------------------------------------------=
     
     @inlinable public static var isUnsigned: Bool { true }
-}
-
-//*============================================================================*
-// MARK: * Value x Number
-//*============================================================================*
-
-@usableFromInline protocol NumericTextNumberValue {
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Format
-    //=------------------------------------------------------------------------=
-    
-    associatedtype Number: Formats.Number where Number.FormatInput == Self
-}
-
-//*============================================================================*
-// MARK: * Value x Currency
-//*============================================================================*
-
-@usableFromInline protocol NumericTextCurrencyValue {
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Format
-    //=------------------------------------------------------------------------=
-    
-    associatedtype Currency: Formats.Currency where Currency.FormatInput == Self
-}
-
-//*============================================================================*
-// MARK: * Value x Percent
-//*============================================================================*
-
-@usableFromInline protocol NumericTextPercentValue {
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Format
-    //=------------------------------------------------------------------------=
-    
-    associatedtype Percent: Formats.Percent where Percent.FormatInput == Self
-}
-
-//*============================================================================*
-// MARK: * Value x Floating Point x Formats
-//*============================================================================*
-
-extension Values.FloatingPoint where Self: Values.Number, Self: BinaryFloatingPoint {
-    @usableFromInline typealias Number = FloatingPointFormatStyle<Self>
-}
-
-extension Values.FloatingPoint where Self: Values.Number, Self: BinaryFloatingPoint {
-    @usableFromInline typealias Currency = FloatingPointFormatStyle<Self>.Currency
-}
-
-extension Values.FloatingPoint where Self: Values.Number, Self: BinaryFloatingPoint {
-    @usableFromInline typealias Percent = FloatingPointFormatStyle<Self>.Percent
-}
-
-//*============================================================================*
-// MARK: * Value x Integer x Formats
-//*============================================================================*
-
-extension Values.Integer where Self: Values.Number, Self: BinaryInteger {
-    @usableFromInline typealias Number = IntegerFormatStyle<Self>
-}
-
-extension Values.Integer where Self: Values.Number, Self: BinaryInteger {
-    @usableFromInline typealias Currency = IntegerFormatStyle<Self>.Currency
-}
-
-extension Values.Integer where Self: Values.Number, Self: BinaryInteger {
-    @usableFromInline typealias Percent = IntegerFormatStyle<Self>.Percent
 }

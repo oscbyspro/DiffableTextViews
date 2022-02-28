@@ -7,36 +7,26 @@
 // See http://www.apache.org/licenses/LICENSE-2.0 for license information.
 //=----------------------------------------------------------------------------=
 
-import Foundation
-
 //*============================================================================*
-// MARK: * Decimal
+// MARK: * NumericTextStyle x Aliases
 //*============================================================================*
 
-extension Decimal.FormatStyle: Formats.Number, Formats.Currencyable, Formats.Percentable {
-    @inlinable public func translation() -> some NumericTextTranslation {
-        Translations.Standard.reuseable(self)
-    }
+public typealias NumericTextStyle<Value: NumericTextValue> =
+_NumericTextStyle<Value.FormatStyle>
+
+//*============================================================================*
+// MARK: * NumericTextStyle x Aliases x Currency
+//*============================================================================*
+
+extension NumericTextStyle where Format: NumericTextCurrencyableFormat {
+    public typealias Currency = _NumericTextStyle<Format.Currency>
 }
 
 //*============================================================================*
-// MARK: * Floating Point
+// MARK: * NumericTextStyle x Aliases x Percent
 //*============================================================================*
 
-extension FloatingPointFormatStyle: Format, Formats.Number,
-Formats.Currencyable, Formats.Percentable where Value: NumericTextValue {
-    @inlinable public func translation() -> some NumericTextTranslation {
-        Translations.Standard.reuseable(self)
-    }
+extension NumericTextStyle where Format: NumericTextPercentableFormat {
+    public typealias Percent = _NumericTextStyle<Format.Percent>
 }
 
-//*============================================================================*
-// MARK: * Integer
-//*============================================================================*
-
-extension IntegerFormatStyle: Format, Formats.Number,
-Formats.Currencyable where Value: NumericTextValue {
-    @inlinable public func translation() -> some NumericTextTranslation {
-        Translations.Standard.reuseable(self)
-    }
-}

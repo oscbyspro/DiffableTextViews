@@ -35,7 +35,7 @@ extension StyleTests {
     }
     
     func XCTInterpret<F: Format>(_ value: F.Value, format: F, info: @autoclosure () -> Any) {
-        let commit = NumericTextStyle(format).interpret(value)
+        let commit = _NumericTextStyle(format).interpret(value)
         let characters = format.precision(.fractionLength(0...)).format(value)
         XCTAssertEqual(commit.value, value, String(describing: info()))
         XCTAssertEqual(commit.snapshot.characters, characters, String(describing: info()))

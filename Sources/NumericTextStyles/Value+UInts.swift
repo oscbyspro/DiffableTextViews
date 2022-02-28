@@ -7,27 +7,30 @@
 // See http://www.apache.org/licenses/LICENSE-2.0 for license information.
 //=----------------------------------------------------------------------------=
 
+import Foundation
+
 //*============================================================================*
 // MARK: * UInt
 //*============================================================================*
 
-extension UInt: Values.Unsigned, Values.Integer, Values.Number, Values.Currency {
-    typealias Limit = Int // no crash. such wow. very impress.
+extension UInt: Values.Unsigned, Values.Integer {
+    public typealias FormatStyle = IntegerFormatStyle<Self>
     
     //=------------------------------------------------------------------------=
     // MARK: Precision, Bounds
     //=------------------------------------------------------------------------=
 
-    public static let precision: Count = Limit.precision
-    public static let bounds: ClosedRange<Self> = 0...Self(Limit.bounds.upperBound)
+    public static let precision: Count = Int.precision
+    public static let bounds: ClosedRange<Self> = 0...Self(Int.bounds.upperBound)
 }
 
 //*============================================================================*
 // MARK: * UInt8
 //*============================================================================*
 
-extension UInt8: Values.Unsigned, Values.Integer, Values.Number, Values.Currency {
-    
+extension UInt8: Values.Unsigned, Values.Integer {
+    public typealias FormatStyle = IntegerFormatStyle<Self>
+
     //=------------------------------------------------------------------------=
     // MARK: Precision, Bounds
     //=------------------------------------------------------------------------=
@@ -40,8 +43,9 @@ extension UInt8: Values.Unsigned, Values.Integer, Values.Number, Values.Currency
 // MARK: * UInt16
 //*============================================================================*
 
-extension UInt16: Values.Unsigned, Values.Integer, Values.Number, Values.Currency {
-    
+extension UInt16: Values.Unsigned, Values.Integer {
+    public typealias FormatStyle = IntegerFormatStyle<Self>
+
     //=------------------------------------------------------------------------=
     // MARK: Precision, Bounds
     //=------------------------------------------------------------------------=
@@ -54,8 +58,9 @@ extension UInt16: Values.Unsigned, Values.Integer, Values.Number, Values.Currenc
 // MARK: * UInt32
 //*============================================================================*
 
-extension UInt32: Values.Unsigned, Values.Integer, Values.Number, Values.Currency {
-    
+extension UInt32: Values.Unsigned, Values.Integer {
+    public typealias FormatStyle = IntegerFormatStyle<Self>
+
     //=------------------------------------------------------------------------=
     // MARK: Precision, Bounds
     //=------------------------------------------------------------------------=
@@ -68,13 +73,13 @@ extension UInt32: Values.Unsigned, Values.Integer, Values.Number, Values.Currenc
 // MARK: * UInt64
 //*============================================================================*
 
-extension UInt64: Values.Unsigned, Values.Integer, Values.Number, Values.Currency {
-    typealias Limit = Int64 // no crash. such wow. very impress.
+extension UInt64: Values.Unsigned, Values.Integer {
+    public typealias FormatStyle = IntegerFormatStyle<Self>
     
     //=------------------------------------------------------------------------=
     // MARK: Precision, Bounds
     //=------------------------------------------------------------------------=
 
-    public static let precision: Count = Limit.precision
-    public static let bounds: ClosedRange<Self> = 0...Self(Limit.bounds.upperBound)
+    public static let precision: Count = Int64.precision
+    public static let bounds: ClosedRange<Self> = 0...Self(Int64.bounds.upperBound)
 }

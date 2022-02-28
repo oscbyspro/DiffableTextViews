@@ -23,7 +23,7 @@ extension Decimal.FormatStyle.Currency: Formats.Currency {
 // MARK: * Floating Point
 //*============================================================================*
 
-extension FloatingPointFormatStyle.Currency: Format, Formats.Currency where FormatInput: NumericTextFloatValue {
+extension FloatingPointFormatStyle.Currency: Format, Formats.Currency where Value: NumericTextValue {
     @inlinable public func translation() -> some NumericTextTranslation {
         Translations.Currency.reuseable(self)
     }
@@ -33,7 +33,7 @@ extension FloatingPointFormatStyle.Currency: Format, Formats.Currency where Form
 // MARK: * Integer
 //*============================================================================*
 
-extension IntegerFormatStyle.Currency: Format, Formats.Currency where FormatInput: NumericTextIntegerValue {
+extension IntegerFormatStyle.Currency: Format, Formats.Currency where Value: NumericTextValue {
     @inlinable public func translation() -> some NumericTextTranslation {
         Translations.Currency.reuseable(self)
     }

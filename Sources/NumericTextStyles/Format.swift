@@ -8,8 +8,10 @@
 //=----------------------------------------------------------------------------=
 
 import Foundation
-import DiffableTextViews
 
+#warning("WIP")
+#warning("WIP")
+#warning("WIP")
 //*============================================================================*
 // MARK: * Content
 //*============================================================================*
@@ -17,7 +19,9 @@ import DiffableTextViews
 @usableFromInline typealias Format = NumericTextFormat; @usableFromInline enum Formats {
     @usableFromInline typealias Number = NumericTextNumberFormat
     @usableFromInline typealias Currency = NumericTextCurrencyFormat
+    @usableFromInline typealias Currencyable = NumericTextCurrencyableFormat
     @usableFromInline typealias Percent = NumericTextPercentFormat
+    @usableFromInline typealias Percentable = NumericTextPercentableFormat
 }
 
 //*============================================================================*
@@ -119,11 +123,27 @@ SignDisplayStrategy == CurrencyFormatStyleConfiguration.SignDisplayStrategy {
 //*============================================================================*
 
 public protocol NumericTextPercentFormat: NumericTextFormat where
-SignDisplayStrategy == NumberFormatStyleConfiguration.SignDisplayStrategy, FormatInput: NumericTextFloatValue {
+SignDisplayStrategy == NumberFormatStyleConfiguration.SignDisplayStrategy {
     
     //=------------------------------------------------------------------------=
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable init(locale: Locale)
+    @inlinable init(locale: Locale)    
+}
+
+//*============================================================================*
+// MARK: * Format x Currencyable
+//*============================================================================*
+
+public protocol NumericTextCurrencyableFormat: NumericTextFormat {
+    associatedtype Currency: NumericTextCurrencyFormat where Currency.FormatInput == FormatInput
+}
+
+//*============================================================================*
+// MARK: * Formst x Percentable
+//*============================================================================*
+
+public protocol NumericTextPercentableFormat: NumericTextFormat {
+    associatedtype Percent: NumericTextPercentFormat where Percent.FormatInput == FormatInput
 }

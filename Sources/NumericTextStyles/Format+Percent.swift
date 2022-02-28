@@ -13,7 +13,7 @@ import Foundation
 // MARK: * Decimal
 //*============================================================================*
 
-extension Decimal.FormatStyle.Percent: Formats.Percent {
+extension Decimal.FormatStyle.Percent: Format, Formats.Percent {
     @inlinable public func translation() -> some NumericTextTranslation {
         Translations.Standard.reuseable(self)
     }
@@ -23,7 +23,7 @@ extension Decimal.FormatStyle.Percent: Formats.Percent {
 // MARK: * Floating Point
 //*============================================================================*
 
-extension FloatingPointFormatStyle.Percent: Format, Formats.Percent where FormatInput: NumericTextFloatValue {
+extension FloatingPointFormatStyle.Percent: Format, Formats.Percent where Value: NumericTextValue {
     @inlinable public func translation() -> some NumericTextTranslation {
         Translations.Standard.reuseable(self)
     }

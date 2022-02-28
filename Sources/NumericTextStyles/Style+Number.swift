@@ -14,7 +14,7 @@ import Foundation
 // MARK: * Decimal
 //*============================================================================*
 
-extension DiffableTextStyle where Self == NumericTextStyle<Decimal.FormatStyle> {
+extension DiffableTextStyle where Self == NumericTextStyle<Decimal> {
     @inlinable public static var number: Self {
         Self(.number)
     }
@@ -24,7 +24,7 @@ extension DiffableTextStyle where Self == NumericTextStyle<Decimal.FormatStyle> 
 // MARK: * Float16
 //*============================================================================*
 
-extension DiffableTextStyle where Self == NumericTextStyle<FloatingPointFormatStyle<Float16>> {
+extension DiffableTextStyle where Self == NumericTextStyle<Float16> {
     //=------------------------------------------=
     // MARK: Internal - Inaccurate Format Style
     //=------------------------------------------=
@@ -37,7 +37,7 @@ extension DiffableTextStyle where Self == NumericTextStyle<FloatingPointFormatSt
 // MARK: * Float32
 //*============================================================================*
 
-extension DiffableTextStyle where Self == NumericTextStyle<FloatingPointFormatStyle<Float32>> {
+extension DiffableTextStyle where Self == NumericTextStyle<Float32> {
     //=------------------------------------------=
     // MARK: Internal - Inaccurate Format Style
     //=------------------------------------------=
@@ -50,7 +50,7 @@ extension DiffableTextStyle where Self == NumericTextStyle<FloatingPointFormatSt
 // MARK: * Float64
 //*============================================================================*
 
-extension DiffableTextStyle where Self == NumericTextStyle<FloatingPointFormatStyle<Float64>> {
+extension DiffableTextStyle where Self == NumericTextStyle<Float64> {
     @inlinable public static var number: Self {
         Self(.number)
     }
@@ -60,7 +60,7 @@ extension DiffableTextStyle where Self == NumericTextStyle<FloatingPointFormatSt
 // MARK: * Int
 //*============================================================================*
 
-extension DiffableTextStyle where Self == NumericTextStyle<IntegerFormatStyle<Int>> {
+extension DiffableTextStyle where Self == NumericTextStyle<Int> {
     @inlinable public static var number: Self {
         Self(.number)
     }
@@ -70,7 +70,7 @@ extension DiffableTextStyle where Self == NumericTextStyle<IntegerFormatStyle<In
 // MARK: * Int8
 //*============================================================================*
 
-extension DiffableTextStyle where Self == NumericTextStyle<IntegerFormatStyle<Int8>> {
+extension DiffableTextStyle where Self == NumericTextStyle<Int8> {
     @inlinable public static var number: Self {
         Self(.number)
     }
@@ -80,7 +80,7 @@ extension DiffableTextStyle where Self == NumericTextStyle<IntegerFormatStyle<In
 // MARK: * Int16
 //*============================================================================*
 
-extension DiffableTextStyle where Self == NumericTextStyle<IntegerFormatStyle<Int16>> {
+extension DiffableTextStyle where Self == NumericTextStyle<Int16> {
     @inlinable public static var number: Self {
         Self(.number)
     }
@@ -90,7 +90,7 @@ extension DiffableTextStyle where Self == NumericTextStyle<IntegerFormatStyle<In
 // MARK: * Int32
 //*============================================================================*
 
-extension DiffableTextStyle where Self == NumericTextStyle<IntegerFormatStyle<Int32>> {
+extension DiffableTextStyle where Self == NumericTextStyle<Int32> {
     @inlinable public static var number: Self {
         Self(.number)
     }
@@ -100,7 +100,7 @@ extension DiffableTextStyle where Self == NumericTextStyle<IntegerFormatStyle<In
 // MARK: * Int64
 //*============================================================================*
 
-extension DiffableTextStyle where Self == NumericTextStyle<IntegerFormatStyle<Int64>> {
+extension DiffableTextStyle where Self == NumericTextStyle<Int64> {
     @inlinable public static var number: Self {
         Self(.number)
     }
@@ -110,7 +110,7 @@ extension DiffableTextStyle where Self == NumericTextStyle<IntegerFormatStyle<In
 // MARK: * UInt
 //*============================================================================*
 
-extension DiffableTextStyle where Self == NumericTextStyle<IntegerFormatStyle<UInt>> {
+extension DiffableTextStyle where Self == NumericTextStyle<UInt> {
     @inlinable public static var number: Self {
         Self(.number)
     }
@@ -120,7 +120,7 @@ extension DiffableTextStyle where Self == NumericTextStyle<IntegerFormatStyle<UI
 // MARK: * UInt8
 //*============================================================================*
 
-extension DiffableTextStyle where Self == NumericTextStyle<IntegerFormatStyle<UInt8>> {
+extension DiffableTextStyle where Self == NumericTextStyle<UInt8> {
     @inlinable public static var number: Self {
         Self(.number)
     }
@@ -130,7 +130,7 @@ extension DiffableTextStyle where Self == NumericTextStyle<IntegerFormatStyle<UI
 // MARK: * UInt16
 //*============================================================================*
 
-extension DiffableTextStyle where Self == NumericTextStyle<IntegerFormatStyle<UInt16>> {
+extension DiffableTextStyle where Self == NumericTextStyle<UInt16> {
     @inlinable public static var number: Self {
         Self(.number)
     }
@@ -140,7 +140,7 @@ extension DiffableTextStyle where Self == NumericTextStyle<IntegerFormatStyle<UI
 // MARK: * UInt32
 //*============================================================================*
 
-extension DiffableTextStyle where Self == NumericTextStyle<IntegerFormatStyle<UInt32>> {
+extension DiffableTextStyle where Self == NumericTextStyle<UInt32> {
     @inlinable public static var number: Self {
         Self(.number)
     }
@@ -150,7 +150,7 @@ extension DiffableTextStyle where Self == NumericTextStyle<IntegerFormatStyle<UI
 // MARK: * UInt64
 //*============================================================================*
 
-extension DiffableTextStyle where Self == NumericTextStyle<IntegerFormatStyle<UInt64>> {
+extension DiffableTextStyle where Self == NumericTextStyle<UInt64> {
     @inlinable public static var number: Self {
         Self(.number)
     }

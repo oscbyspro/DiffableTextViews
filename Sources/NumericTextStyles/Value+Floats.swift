@@ -7,12 +7,15 @@
 // See http://www.apache.org/licenses/LICENSE-2.0 for license information.
 //=----------------------------------------------------------------------------=
 
+import Foundation
+
 //*============================================================================*
 // MARK: * Float16
 //*============================================================================*
 
-extension Float16: Values.Signed, Values.FloatingPoint, Values.Number, Values.Currency, Values.Percent {
-    
+extension Float16: Values.Signed, Values.FloatingPoint {
+    public typealias FormatStyle = FloatingPointFormatStyle<Self>
+
     //=------------------------------------------------------------------------=
     // MARK: Precision, Bounds
     //=------------------------------------------------------------------------=
@@ -25,7 +28,8 @@ extension Float16: Values.Signed, Values.FloatingPoint, Values.Number, Values.Cu
 // MARK: * Float32
 //*============================================================================*
 
-extension Float32: Values.Signed, Values.FloatingPoint, Values.Number, Values.Currency, Values.Percent {
+extension Float32: Values.Signed, Values.FloatingPoint {
+    public typealias FormatStyle = FloatingPointFormatStyle<Self>
     
     //=------------------------------------------------------------------------=
     // MARK: Precision, Bounds
@@ -39,8 +43,9 @@ extension Float32: Values.Signed, Values.FloatingPoint, Values.Number, Values.Cu
 // MARK: * Float64
 //*============================================================================*
 
-extension Float64: Values.Signed, Values.FloatingPoint, Values.Number, Values.Currency, Values.Percent {
-    
+extension Float64: Values.Signed, Values.FloatingPoint {
+    public typealias FormatStyle = FloatingPointFormatStyle<Self>
+
     //=------------------------------------------------------------------------=
     // MARK: Precision, Bounds
     //=------------------------------------------------------------------------=

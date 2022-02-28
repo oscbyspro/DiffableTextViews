@@ -13,7 +13,7 @@ import DiffableTextViews
 // MARK: + Lexicon
 //=----------------------------------------------------------------------------=
 
-extension NumericTextStyle {
+extension _NumericTextStyle {
     
     //=------------------------------------------------------------------------=
     // MARK: Conversions

@@ -17,7 +17,7 @@ import XCTest
 //*============================================================================*
 
 final class ModelsTests_Bounds: XCTestCase {
-    typealias Style<T: Format> = NumericTextStyle<T>
+    typealias Style<T: Format> = _NumericTextStyle<T>
     
     //=------------------------------------------------------------------------=
     // MARK: State

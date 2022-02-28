@@ -11,7 +11,7 @@
 // MARK: * Style x Precision
 //*============================================================================*
 
-extension NumericTextStyle {
+extension _NumericTextStyle {
     
     //=------------------------------------------------------------------------=
     // MARK: Transformations
@@ -26,7 +26,7 @@ extension NumericTextStyle {
 // MARK: + Integer
 //=----------------------------------------------------------------------------=
 
-public extension NumericTextStyle where Value: NumericTextIntegerValue {
+public extension _NumericTextStyle where Value: NumericTextIntegerValue {
     
     //=------------------------------------------------------------------------=
     // MARK: Length
@@ -50,7 +50,7 @@ public extension NumericTextStyle where Value: NumericTextIntegerValue {
 // MARK: + Float
 //=----------------------------------------------------------------------------=
 
-public extension NumericTextStyle where Value: NumericTextFloatValue {
+public extension _NumericTextStyle where Value: NumericTextFloatingPointValue {
     
     //=------------------------------------------------------------------------=
     // MARK: Length

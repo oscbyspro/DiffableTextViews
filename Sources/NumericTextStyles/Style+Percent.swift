@@ -14,7 +14,7 @@ import Foundation
 // MARK: * Decimal
 //*============================================================================*
 
-extension DiffableTextStyle where Self == NumericTextStyle<Decimal.FormatStyle.Percent> {
+extension DiffableTextStyle where Self == NumericTextStyle<Decimal>.Percent {
     @inlinable public static var percent: Self {
         Self(.percent)
     }
@@ -24,7 +24,7 @@ extension DiffableTextStyle where Self == NumericTextStyle<Decimal.FormatStyle.P
 // MARK: * Float16
 //*============================================================================*
 
-extension DiffableTextStyle where Self == NumericTextStyle<FloatingPointFormatStyle<Float16>.Percent> {
+extension DiffableTextStyle where Self == NumericTextStyle<Float16>.Percent {
     //=------------------------------------------=
     // MARK: Internal - Inaccurate Format Style
     //=------------------------------------------=
@@ -37,7 +37,7 @@ extension DiffableTextStyle where Self == NumericTextStyle<FloatingPointFormatSt
 // MARK: * Float32
 //*============================================================================*
 
-extension DiffableTextStyle where Self == NumericTextStyle<FloatingPointFormatStyle<Float32>.Percent> {
+extension DiffableTextStyle where Self == NumericTextStyle<Float32>.Percent {
     //=------------------------------------------=
     // MARK: Internal - Inaccurate Format Style
     //=------------------------------------------=
@@ -50,7 +50,7 @@ extension DiffableTextStyle where Self == NumericTextStyle<FloatingPointFormatSt
 // MARK: * Float64
 //*============================================================================*
 
-extension DiffableTextStyle where Self == NumericTextStyle<FloatingPointFormatStyle<Float64>.Percent> {
+extension DiffableTextStyle where Self == NumericTextStyle<Float64>.Percent {
     @inlinable public static var percent: Self {
         Self(.percent)
     }
