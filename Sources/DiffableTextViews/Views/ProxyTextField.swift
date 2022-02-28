@@ -15,33 +15,14 @@ import UIKit
 // MARK: * ProxyTextField
 //*============================================================================*
 
-public final class ProxyTextField {
-    public typealias Keyboard = ProxyTextField_Keyboard
-    public typealias Selection = ProxyTextField_Selection
-    public typealias Text = ProxyTextField_Text
-    public typealias Traits = ProxyTextField_Traits
+public final class ProxyTextField: BasicTextField.View {
+    public final class Keyboard: BasicTextField.View { }
+    public final class Selection: BasicTextField.View { }
+    public final class Text: BasicTextField.View { }
+    public final class Traits: BasicTextField.View { }
 
     //=------------------------------------------------------------------------=
-    // MARK: State
-    //=------------------------------------------------------------------------=
-    
-    @usableFromInline let wrapped: BasicTextField
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Initializers
-    //=------------------------------------------------------------------------=
-
-    @inlinable init(_ wrapped: BasicTextField) { self.wrapped = wrapped }
-}
-
-//=----------------------------------------------------------------------------=
-// MARK: + Utilities
-//=----------------------------------------------------------------------------=
-
-extension ProxyTextField {
-
-    //=------------------------------------------------------------------------=
-    // MARK: Views
+    // MARK: Accessors
     //=------------------------------------------------------------------------=
     
     @inlinable public var keyboard: Keyboard {

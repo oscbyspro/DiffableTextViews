@@ -65,6 +65,25 @@ public final class BasicTextField: UITextField {
     }
 
     @usableFromInline static let intents = Set<Code>([.keyboardLeftArrow, .keyboardRightArrow])
+    
+    //*========================================================================*
+    // MARK: * View
+    //*========================================================================*
+    
+    public class View {
+        
+        //=--------------------------------------------------------------------=
+        // MARK: State
+        //=--------------------------------------------------------------------=
+                
+        @usableFromInline let wrapped: BasicTextField
+        
+        //=--------------------------------------------------------------------=
+        // MARK: Initializers
+        //=--------------------------------------------------------------------=
+        
+        @inlinable init(_ wrapped: BasicTextField) { self.wrapped = wrapped }
+    }
 }
 
 #endif

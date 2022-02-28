@@ -15,32 +15,13 @@ import UIKit
 // MARK: * ProxyTextField x Text
 //*============================================================================*
 
-public final class ProxyTextField_Text {
-    
-    //=------------------------------------------------------------------------=
-    // MARK: State
-    //=------------------------------------------------------------------------=
-    
-    @usableFromInline let wrapped: BasicTextField
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Initializers
-    //=------------------------------------------------------------------------=
-    
-    @inlinable init(_ wrapped: BasicTextField) { self.wrapped = wrapped }
-}
-
-//=----------------------------------------------------------------------------=
-// MARK: + Utilities
-//=----------------------------------------------------------------------------=
-
-extension ProxyTextField_Text {
+public extension ProxyTextField.Text {
 
     //=------------------------------------------------------------------------=
     // MARK: Accessors
     //=------------------------------------------------------------------------=
     
-    @inlinable public var value: String {
+    @inlinable var value: String {
         wrapped.text! // force unwrapping is OK
     }
     
@@ -48,15 +29,15 @@ extension ProxyTextField_Text {
     // MARK: Transformations
     //=------------------------------------------------------------------------=
 
-    @inlinable public func color(_ color: UIColor) {
+    @inlinable func color(_ color: UIColor) {
         wrapped.textColor = color
     }
 
-    @inlinable public func font(_ font: UIFont) {
+    @inlinable func font(_ font: UIFont) {
         wrapped.font = font
     }
     
-    @inlinable public func font(_ font: DiffableTextFont) {
+    @inlinable func font(_ font: DiffableTextFont) {
         wrapped.font = UIFont(font)
     }
 }

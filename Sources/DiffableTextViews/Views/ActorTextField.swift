@@ -15,20 +15,8 @@ import UIKit
 // MARK: * ActorTextField
 //*============================================================================*
 
-@usableFromInline final class ActorTextField {
+@usableFromInline final class ActorTextField: BasicTextField.View {
     @usableFromInline typealias Position = DiffableTextViews.Position<UTF16>
-    
-    //=------------------------------------------------------------------------=
-    // MARK: State
-    //=------------------------------------------------------------------------=
-    
-    @usableFromInline let wrapped: BasicTextField
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Initializers
-    //=------------------------------------------------------------------------=
-    
-    @inlinable init(_ wrapped: BasicTextField) { self.wrapped = wrapped }
     
     //=------------------------------------------------------------------------=
     // MARK: Accessors
@@ -61,13 +49,6 @@ import UIKit
     @inlinable func transform(_ transform: (ProxyTextField) -> Void) {
         transform(ProxyTextField(wrapped))
     }
-}
-
-//=----------------------------------------------------------------------------=
-// MARK: + Conversions
-//=----------------------------------------------------------------------------=
-
-extension ActorTextField {
     
     //=------------------------------------------------------------------------=
     // MARK: Offsets -> Positions

@@ -15,52 +15,33 @@ import UIKit
 // MARK: * ProxyTextField x Traits
 //*============================================================================*
 
-public final class ProxyTextField_Traits {
+public extension ProxyTextField.Traits {
     
     //=------------------------------------------------------------------------=
-    // MARK: State
+    // MARK: Transformations
     //=------------------------------------------------------------------------=
+
+    @inlinable func autocorrection(_ autocorrection: UITextAutocorrectionType) {
+        wrapped.autocorrectionType = autocorrection
+    }
     
-    @usableFromInline let wrapped: BasicTextField
+    @inlinable func autocapitalization(_ autocapitalization: UITextAutocapitalizationType) {
+        wrapped.autocapitalizationType = autocapitalization
+    }
     
-    //=------------------------------------------------------------------------=
-    // MARK: Initializers
-    //=------------------------------------------------------------------------=
+    @inlinable func content(_ content: UITextContentType) {
+        wrapped.textContentType = content
+    }
     
-    @inlinable init(_ wrapped: BasicTextField) { self.wrapped = wrapped }
+    @inlinable func entry( _ entry: Entry) {
+        wrapped.isSecureTextEntry = entry == .secure
+    }
     
     //*========================================================================*
     // MARK: * Entry
     //*========================================================================*
     
-    public enum Entry { case normal, secure }
-}
-
-//=----------------------------------------------------------------------------=
-// MARK: + Utilities
-//=----------------------------------------------------------------------------=
-
-extension ProxyTextField_Traits {
-
-    //=------------------------------------------------------------------------=
-    // MARK: Transformations
-    //=------------------------------------------------------------------------=
-
-    @inlinable public func autocorrection(_ autocorrection: UITextAutocorrectionType) {
-        wrapped.autocorrectionType = autocorrection
-    }
-    
-    @inlinable public func autocapitalization(_ autocapitalization: UITextAutocapitalizationType) {
-        wrapped.autocapitalizationType = autocapitalization
-    }
-    
-    @inlinable public func content(_ content: UITextContentType) {
-        wrapped.textContentType = content
-    }
-    
-    @inlinable public func entry( _ entry: Entry) {
-        wrapped.isSecureTextEntry = entry == .secure
-    }
+    enum Entry { case normal, secure }
 }
 
 #endif

@@ -15,32 +15,13 @@ import UIKit
 // MARK: * ProxyTextField x Selection
 //*============================================================================*
 
-public final class ProxyTextField_Selection {
+public extension ProxyTextField.Selection {
     
-    //=------------------------------------------------------------------------=
-    // MARK: State
-    //=------------------------------------------------------------------------=
-    
-    @usableFromInline let wrapped: BasicTextField
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Initializers
-    //=------------------------------------------------------------------------=
-    
-    @inlinable init(_ wrapped: BasicTextField) { self.wrapped = wrapped }
-}
-
-//=----------------------------------------------------------------------------=
-// MARK: + Utilities
-//=----------------------------------------------------------------------------=
-
-extension ProxyTextField_Selection {
-
     //=------------------------------------------------------------------------=
     // MARK: Accessors
     //=------------------------------------------------------------------------=
     
-    @inlinable public var value: String {
+    @inlinable var value: String {
         wrapped.text(in: wrapped.selectedTextRange!)! // force unwrapping is OK
     }
     
@@ -48,15 +29,15 @@ extension ProxyTextField_Selection {
     // MARK: Transformations
     //=------------------------------------------------------------------------=
     
-    @inlinable public func color(_ color: UIColor) {
+    @inlinable func color(_ color: UIColor) {
         wrapped.tintColor = color
     }
 
-    @inlinable public func color(mode: UIView.TintAdjustmentMode) {
+    @inlinable func color(mode: UIView.TintAdjustmentMode) {
         wrapped.tintAdjustmentMode = mode
     }
     
-    @inlinable public func color(_ color: UIColor, mode: UIView.TintAdjustmentMode) {
+    @inlinable func color(_ color: UIColor, mode: UIView.TintAdjustmentMode) {
         self.color(color); self.color(mode: mode)
     }
 }

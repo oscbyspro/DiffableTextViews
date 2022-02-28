@@ -15,40 +15,21 @@ import UIKit
 // MARK: * ProxyTextField x Keyboard
 //*============================================================================*
 
-public final class ProxyTextField_Keyboard {
-    
-    //=------------------------------------------------------------------------=
-    // MARK: State
-    //=------------------------------------------------------------------------=
-    
-    @usableFromInline let wrapped: BasicTextField
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Initializers
-    //=------------------------------------------------------------------------=
-    
-    @inlinable init(_ wrapped: BasicTextField) { self.wrapped = wrapped }
-}
-
-//=----------------------------------------------------------------------------=
-// MARK: + Utilities
-//=----------------------------------------------------------------------------=
-
-extension ProxyTextField_Keyboard {
+public extension ProxyTextField.Keyboard {
 
     //=------------------------------------------------------------------------=
     // MARK: Transformations
     //=------------------------------------------------------------------------=
     
-    @inlinable public func appearance(_ appearance: UIKeyboardAppearance) {
+    @inlinable func appearance(_ appearance: UIKeyboardAppearance) {
         wrapped.keyboardAppearance = appearance
     }
     
-    @inlinable public func submit(_ submit: UIReturnKeyType) {
+    @inlinable func submit(_ submit: UIReturnKeyType) {
         wrapped.returnKeyType = submit
     }
     
-    @inlinable public func view(_ keyboard: UIKeyboardType) {
+    @inlinable func view(_ keyboard: UIKeyboardType) {
         wrapped.keyboardType = keyboard
     }
 }
