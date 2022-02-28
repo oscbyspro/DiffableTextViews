@@ -14,7 +14,7 @@ import Foundation
 //*============================================================================*
 
 @usableFromInline typealias Value = NumericTextValue; @usableFromInline enum Values {
-    @usableFromInline typealias Float = NumericTextFloatValue
+    @usableFromInline typealias FloatingPoint = NumericTextFloatValue
     @usableFromInline typealias Integer = NumericTextIntegerValue
     @usableFromInline typealias Signed = NumericTextSignedValue
     @usableFromInline typealias Unsigned = NumericTextUnsignedValue
@@ -46,7 +46,7 @@ public protocol NumericTextValue: Comparable {
 }
 
 //*============================================================================*
-// MARK: * Value x Float
+// MARK: * Value x Floating Point
 //*============================================================================*
 
 public protocol NumericTextFloatValue: NumericTextValue { }
@@ -207,18 +207,18 @@ extension NumericTextUnsignedValue {
 }
 
 //*============================================================================*
-// MARK: * Value x Float x Formats
+// MARK: * Value x Floating Point x Formats
 //*============================================================================*
 
-extension Values.Float where Self: Values.Number, Self: BinaryFloatingPoint {
+extension Values.FloatingPoint where Self: Values.Number, Self: BinaryFloatingPoint {
     @usableFromInline typealias Number = FloatingPointFormatStyle<Self>
 }
 
-extension Values.Float where Self: Values.Number, Self: BinaryFloatingPoint {
+extension Values.FloatingPoint where Self: Values.Number, Self: BinaryFloatingPoint {
     @usableFromInline typealias Currency = FloatingPointFormatStyle<Self>.Currency
 }
 
-extension Values.Float where Self: Values.Number, Self: BinaryFloatingPoint {
+extension Values.FloatingPoint where Self: Values.Number, Self: BinaryFloatingPoint {
     @usableFromInline typealias Percent = FloatingPointFormatStyle<Self>.Percent
 }
 

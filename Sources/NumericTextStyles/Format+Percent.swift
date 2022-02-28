@@ -20,7 +20,7 @@ extension Decimal.FormatStyle.Percent: Formats.Percent {
 }
 
 //*============================================================================*
-// MARK: * Float
+// MARK: * Floating Point
 //*============================================================================*
 
 extension FloatingPointFormatStyle.Percent: Format, Formats.Percent where FormatInput: NumericTextFloatValue {

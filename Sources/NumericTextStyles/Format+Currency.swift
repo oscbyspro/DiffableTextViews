@@ -20,7 +20,7 @@ extension Decimal.FormatStyle.Currency: Formats.Currency {
 }
 
 //*============================================================================*
-// MARK: * Float
+// MARK: * Floating Point
 //*============================================================================*
 
 extension FloatingPointFormatStyle.Currency: Format, Formats.Currency where FormatInput: NumericTextFloatValue {
