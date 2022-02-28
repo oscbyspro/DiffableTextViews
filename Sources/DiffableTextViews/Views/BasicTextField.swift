@@ -23,6 +23,32 @@ public final class BasicTextField: UITextField {
     //=------------------------------------------------------------------------=
     
     @usableFromInline private(set) var intent: Code? = nil
+    
+    //*========================================================================*
+    // MARK: * View
+    //*========================================================================*
+    
+    public class View {
+        
+        //=--------------------------------------------------------------------=
+        // MARK: State
+        //=--------------------------------------------------------------------=
+                
+        @usableFromInline let wrapped: BasicTextField
+        
+        //=--------------------------------------------------------------------=
+        // MARK: Initializers
+        //=--------------------------------------------------------------------=
+        
+        @inlinable init(_ wrapped: BasicTextField) { self.wrapped = wrapped }
+    }
+}
+
+//=----------------------------------------------------------------------------=
+// MARK: + UIResponder
+//=----------------------------------------------------------------------------=
+
+extension BasicTextField {
 
     //=------------------------------------------------------------------------=
     // MARK: Presses
@@ -47,7 +73,7 @@ public final class BasicTextField: UITextField {
         process(old: presses)
         super.pressesCancelled(presses, with: event)
     }
-    
+
     //=------------------------------------------------------------------------=
     // MARK: Presses - Intent
     //=------------------------------------------------------------------------=
@@ -63,27 +89,8 @@ public final class BasicTextField: UITextField {
     @inlinable func intent(behind presses: Set<UIPress>) -> Code? {
         (presses.first?.key?.keyCode).flatMap({ Self.intents.contains($0) ? $0 : nil })
     }
-
-    @usableFromInline static let intents = Set<Code>([.keyboardLeftArrow, .keyboardRightArrow])
     
-    //*========================================================================*
-    // MARK: * View
-    //*========================================================================*
-    
-    public class View {
-        
-        //=--------------------------------------------------------------------=
-        // MARK: State
-        //=--------------------------------------------------------------------=
-                
-        @usableFromInline let wrapped: BasicTextField
-        
-        //=--------------------------------------------------------------------=
-        // MARK: Initializers
-        //=--------------------------------------------------------------------=
-        
-        @inlinable init(_ wrapped: BasicTextField) { self.wrapped = wrapped }
-    }
+    @usableFromInline static let intents: Set<Code> = [.keyboardLeftArrow, .keyboardRightArrow]
 }
 
 #endif
