@@ -13,7 +13,13 @@ import Foundation
 // MARK: * Decimal
 //*============================================================================*
 
-extension Decimal: Values.Signed, Values.FloatingPoint {
+extension Decimal: Values.Signed, Values.FloatingPoint,
+Values.Numberable, Values.Currencyable, Values.Percentable {
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Formats
+    //=------------------------------------------------------------------------=
+    
     public typealias NumericTextFormat_Number   = FormatStyle
     public typealias NumericTextFormat_Currency = FormatStyle.Currency
     public typealias NumericTextFormat_Percent  = FormatStyle.Percent

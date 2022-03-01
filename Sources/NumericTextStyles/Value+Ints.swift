@@ -13,10 +13,10 @@ import Foundation
 // MARK: * Int x Protocol
 //*============================================================================*
 
-@usableFromInline protocol NumericTextValue_Int: SignedInteger,
-Values.Unsigned, Values.Integer, Values.Numberable, Values.Currencyable where
-NumericTextFormat_Number   == IntegerFormatStyle<Self>,
-NumericTextFormat_Currency == IntegerFormatStyle<Self>.Currency { }
+@usableFromInline protocol NumericTextValue_Int:
+BinaryInteger, Values.Signed, Values.Integer,
+Values.Numberable, Values.Currencyable where
+FormatStyle == IntegerFormatStyle<Self> { }
 
 //*============================================================================*
 // MARK: * Int

@@ -20,6 +20,12 @@ import Foundation
     @usableFromInline typealias Number   = NumericTextFormat_Number
     @usableFromInline typealias Currency = NumericTextFormat_Currency
     @usableFromInline typealias Percent  = NumericTextFormat_Percent
+    //=------------------------------------------=
+    // MARK: Branches
+    //=------------------------------------------=
+    @usableFromInline typealias Numberable   = NumericTextFormat_Numberable
+    @usableFromInline typealias Currencyable = NumericTextFormat_Currencyable
+    @usableFromInline typealias Percentable  = NumericTextFormat_Percentable
 }
 
 //*============================================================================*
@@ -128,4 +134,28 @@ SignDisplayStrategy == NumberFormatStyleConfiguration.SignDisplayStrategy {
     //=------------------------------------------------------------------------=
     
     @inlinable init(locale: Locale)    
+}
+
+//*============================================================================*
+// MARK: * Format x Branches x Number
+//*============================================================================*
+
+public protocol NumericTextFormat_Numberable: NumericTextFormat {
+    associatedtype Number: NumericTextStyles .NumericTextFormat_Number
+}
+
+//*============================================================================*
+// MARK: * Format x Branches x Currency
+//*============================================================================*
+
+public protocol NumericTextFormat_Currencyable: NumericTextFormat {
+    associatedtype Currency: NumericTextStyles .NumericTextFormat_Currency
+}
+
+//*============================================================================*
+// MARK: * Format x Branches x Percent
+//*============================================================================*
+
+public protocol NumericTextFormat_Percentable: NumericTextFormat {
+    associatedtype Percent: NumericTextStyles .NumericTextFormat_Percent
 }

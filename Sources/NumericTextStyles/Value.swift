@@ -36,6 +36,13 @@ import Foundation
 public protocol NumericTextValue: Comparable {
     
     //=------------------------------------------------------------------------=
+    // MARK: Formattable
+    //=------------------------------------------------------------------------=
+    
+    associatedtype FormatStyle: Foundation.FormatStyle where
+    FormatStyle.FormatInput == Self, FormatStyle.FormatOutput == String
+    
+    //=------------------------------------------------------------------------=
     // MARK: Kind
     //=------------------------------------------------------------------------=
     
@@ -177,22 +184,19 @@ extension NumericTextValue_Unsigned {
 // MARK: * Value x Formattable x Number
 //*============================================================================*
 
-public protocol NumericTextValue_Numberable: NumericTextValue {
-    associatedtype NumericTextFormat_Number: NumericTextStyles.NumericTextFormat_Number
-}
+public protocol NumericTextValue_Numberable: NumericTextValue where
+FormatStyle: NumericTextStyles.NumericTextFormat_Number { }
 
 //*============================================================================*
 // MARK: * Value x Formattable x Currency
 //*============================================================================*
 
-public protocol NumericTextValue_Currencyable: NumericTextValue {
-    associatedtype NumericTextFormat_Currency: NumericTextStyles.NumericTextFormat_Currency
-}
+public protocol NumericTextValue_Currencyable: NumericTextValue where
+FormatStyle: NumericTextStyles.NumericTextFormat_Currencyable { }
 
 //*============================================================================*
 // MARK: * Value x Formattable x Percent
 //*============================================================================*
 
-public protocol NumericTextValue_Percentable: NumericTextValue {
-    associatedtype NumericTextFormat_Percent: NumericTextStyles.NumericTextFormat_Percent
-}
+public protocol NumericTextValue_Percentable: NumericTextValue where
+FormatStyle: NumericTextStyles.NumericTextFormat_Percentable { }

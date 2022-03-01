@@ -10,14 +10,20 @@
 import Foundation
 
 //*============================================================================*
+// MARK: * Float x Protocol
+//*============================================================================*
+
+@usableFromInline protocol NumericTextValue_Float:
+BinaryFloatingPoint, Values.Signed, Values.FloatingPoint,
+Values.Numberable, Values.Currencyable, Values.Percentable where
+FormatStyle == FloatingPointFormatStyle<Self> { }
+
+//*============================================================================*
 // MARK: * Double
 //*============================================================================*
 
-extension Double: Values.Signed, Values.FloatingPoint {
-    public typealias NumericTextFormat_Number   = FloatingPointFormatStyle<Self>
-    public typealias NumericTextFormat_Currency = FloatingPointFormatStyle<Self>.Currency
-    public typealias NumericTextFormat_Percent  = FloatingPointFormatStyle<Self>.Percent
-
+extension Double: NumericTextValue_Float {
+    
     //=------------------------------------------------------------------------=
     // MARK: Precision, Bounds
     //=------------------------------------------------------------------------=
