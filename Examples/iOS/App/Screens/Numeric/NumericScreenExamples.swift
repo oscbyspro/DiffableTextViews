@@ -63,7 +63,7 @@ struct NumericScreenExamples: View {
         }
     }
     
-    func example<F: NumericTextFormat>(_ base: NumericTextStyle<F>) -> some View where F.FormatInput == Value {
+    func example<F: NumericTextFormat>(_ base: _NumericTextStyle<F>) -> some View where F.FormatInput == Value {
         NumericScreenExample(context, base: base)
     }
 }

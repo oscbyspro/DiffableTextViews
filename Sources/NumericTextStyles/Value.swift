@@ -39,8 +39,7 @@ public protocol NumericTextValue: Comparable {
     // MARK: Formattable
     //=------------------------------------------------------------------------=
     
-    associatedtype FormatStyle: Foundation.FormatStyle where
-    FormatStyle.FormatInput == Self, FormatStyle.FormatOutput == String
+    associatedtype FormatStyle: NumericTextFormat where FormatStyle.FormatInput == Self
     
     //=------------------------------------------------------------------------=
     // MARK: Kind

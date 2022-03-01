@@ -24,7 +24,7 @@ struct NumericScreenExample<Format: NumericTextFormat>: View where Format.Format
     // MARK: State
     //=------------------------------------------------------------------------=
     
-    let base: NumericTextStyle<Format>
+    let base: _NumericTextStyle<Format>
     @ObservedObject var value: Source<Value>
     @ObservedObject var bounds: Source<Integers>
     @ObservedObject var integer: Source<Integers>
@@ -34,7 +34,7 @@ struct NumericScreenExample<Format: NumericTextFormat>: View where Format.Format
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    init(_ context: Context, base: NumericTextStyle<Format>) {
+    init(_ context: Context, base: _NumericTextStyle<Format>) {
         self.base = base
         self.value = context.value
         self.bounds = context.bounds
@@ -54,7 +54,7 @@ struct NumericScreenExample<Format: NumericTextFormat>: View where Format.Format
     // MARK: Components
     //=------------------------------------------------------------------------=
     
-    var style: NumericTextStyle<Format> {
+    var style: _NumericTextStyle<Format> {
         base.bounds(boundsLimits).precision(integer: integerLimits, fraction: fractionLimits)
     }
     
