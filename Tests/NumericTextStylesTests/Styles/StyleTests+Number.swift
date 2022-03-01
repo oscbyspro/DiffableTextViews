@@ -24,12 +24,8 @@ final class StyleTests_Number: Tests, StyleTests {
     // MARK: Assertions
     //=------------------------------------------------------------------------=
     
-    func XCTInterpretLocales<T: Values.Number>(_ value: T) {
-         XCTInterpretLocales(value, format: T.Number.init)
-    }
-    
-    func XCTAssert<T: Values.Number>(_ value: T, result: String) {
-         XCTAssert(value, format: T.Number(locale: en_US), result: result)
+    func XCTInterpretLocales<T: Value>(_ value: T) where T.FormatStyle: Formats.Number {
+         XCTInterpretLocales(value, format: T.FormatStyle.init)
     }
 }
 
@@ -60,18 +56,6 @@ extension StyleTests_Number {
 
     func testFloat64() throws {
         XCTInterpretLocales(-1.23 as Float64)
-    }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Tests - Inaccurate
-    //=------------------------------------------------------------------------=
-    
-    func testFloat16IsInaccurate() {
-        XCTAssert(-1.23 as Float16, result: "-1.23046875")
-    }
-    
-    func testFloat32IsInaccurate() {
-        XCTAssert(-1.23 as Float32, result: "-1.2300000190734863")
     }
 }
 

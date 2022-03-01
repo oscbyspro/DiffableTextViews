@@ -9,6 +9,7 @@
 
 import Foundation
 
+#warning("Numberable, maybe.")
 //*============================================================================*
 // MARK: * Content
 //*============================================================================*
@@ -169,3 +170,4 @@ extension NumericTextValue_Unsigned {
     
     @inlinable public static var isUnsigned: Bool { true }
 }
+

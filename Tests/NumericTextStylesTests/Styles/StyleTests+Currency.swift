@@ -26,12 +26,8 @@ final class StyleTests_Currency: Tests, StyleTests {
     // MARK: Assertions
     //=------------------------------------------------------------------------=
     
-    func XCTInterpretLocalesXCurrencies<T: Values.Currency>(_ value: T) {
-         XCTInterpretLocalesXCurrencies(value, format: T.Currency.init)
-    }
-
-    func XCTAssert<T: Values.Currency>(_ value: T, result: String) {
-         XCTAssert(value, format: T.Currency(code: USD, locale: en_US), result: result)        
+    func XCTInterpretLocalesXCurrencies<T: Value>(_ value: T) where T.FormatStyle: Formats.Currencyable {
+         XCTInterpretLocalesXCurrencies(value, format: T.FormatStyle.Currency.init)
     }
 }
 
@@ -62,18 +58,6 @@ extension StyleTests_Currency {
     
     func testFloat64() throws {
         XCTInterpretLocalesXCurrencies(-1.23 as Float64)
-    }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Tests - Inaccurate
-    //=------------------------------------------------------------------------=
-    
-    func testFloat16IsInaccurate() {
-        XCTAssert(-1.23 as Float16, result: "-$1.23046875")
-    }
-    
-    func testFloat32IsInaccurate() {
-        XCTAssert(-1.23 as Float32, result: "-$1.2300000190734863")
     }
 }
 

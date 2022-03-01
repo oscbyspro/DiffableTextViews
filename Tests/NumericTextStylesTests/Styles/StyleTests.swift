@@ -29,7 +29,7 @@ extension StyleTests {
     //=------------------------------------------------------------------------=
     // MARK: Assertions
     //=------------------------------------------------------------------------=
-    
+        
     func XCTAssert<F: Format>(_ value: F.Value, format: F, result: String) {
         XCTAssertEqual(format.precision(.fractionLength(0...)).format(value), result)
     }

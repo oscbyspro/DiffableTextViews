@@ -17,10 +17,16 @@ import Foundation
 //*============================================================================*
 
 @usableFromInline typealias Format = NumericTextFormat; @usableFromInline enum Formats {
+    //=--------------------------------------=
+    // MARK: Kinds
+    //=--------------------------------------=
     @usableFromInline typealias Number = NumericTextFormat_Number
     @usableFromInline typealias Currency = NumericTextFormat_Currency
-    @usableFromInline typealias Currencyable = NumericTextFormat_Currencyable
     @usableFromInline typealias Percent = NumericTextFormat_Percent
+    //=------------------------------------------=
+    // MARK: Branches
+    //=------------------------------------------=
+    @usableFromInline typealias Currencyable = NumericTextFormat_Currencyable
     @usableFromInline typealias Percentable = NumericTextFormat_Percentable
 }
 
@@ -119,14 +125,6 @@ SignDisplayStrategy == CurrencyFormatStyleConfiguration.SignDisplayStrategy {
 }
 
 //*============================================================================*
-// MARK: * Format x Currency x Branchable
-//*============================================================================*
-
-public protocol NumericTextFormat_Currencyable: NumericTextFormat {
-    associatedtype Currency: NumericTextFormat_Currency where Currency.FormatInput == FormatInput
-}
-
-//*============================================================================*
 // MARK: * Format x Percent
 //*============================================================================*
 
@@ -138,6 +136,14 @@ SignDisplayStrategy == NumberFormatStyleConfiguration.SignDisplayStrategy {
     //=------------------------------------------------------------------------=
     
     @inlinable init(locale: Locale)    
+}
+
+//*============================================================================*
+// MARK: * Format x Currency x Branchable
+//*============================================================================*
+
+public protocol NumericTextFormat_Currencyable: NumericTextFormat {
+    associatedtype Currency: NumericTextFormat_Currency where Currency.FormatInput == FormatInput
 }
 
 //*============================================================================*

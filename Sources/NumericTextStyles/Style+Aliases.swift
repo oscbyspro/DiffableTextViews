@@ -11,7 +11,8 @@
 // MARK: * NumericTextStyle x Aliases
 //*============================================================================*
 
-public typealias NumericTextStyle<Value: NumericTextValue> = _NumericTextStyle<Value.FormatStyle>
+public typealias NumericTextStyle<Value: NumericTextValue> =
+_NumericTextStyle<Value.FormatStyle>
 
 //*============================================================================*
 // MARK: * NumericTextStyle x Aliases x Currency

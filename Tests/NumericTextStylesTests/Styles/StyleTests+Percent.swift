@@ -24,12 +24,8 @@ final class StyleTests_Percent: Tests, StyleTests {
     // MARK: Assertions
     //=------------------------------------------------------------------------=
     
-    func XCTInterpretLocales<T: Values.Percent>(_ value: T) {
-         XCTInterpretLocales(value, format: T.Percent.init)
-    }
-    
-    func XCTAssert<T: Values.Percent>(_ value: T, result: String) {
-         XCTAssert(value, format: T.Percent(locale: en_US), result: result)
+    func XCTInterpretLocales<T: Value>(_ value: T) where T.FormatStyle: Formats.Percentable {
+        XCTInterpretLocales(value, format: T.FormatStyle.Percent.init)
     }
 }
 
@@ -60,18 +56,6 @@ extension StyleTests_Percent {
         
     func testFloat64() throws {
         XCTInterpretLocales(-1.23 as Float64)
-    }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Tests - Inaccurate
-    //=------------------------------------------------------------------------=
-    
-    func testFloat16IsInaccurate() {
-        XCTAssert(-1.23 as Float16, result: "-123.046875%")
-    }
-    
-    func testFloat32IsInaccurate() {
-        XCTAssert(-1.23 as Float32, result: "-123.00000190734863%")
     }
 }
 

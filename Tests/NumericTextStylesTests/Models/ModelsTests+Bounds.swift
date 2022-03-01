@@ -23,8 +23,8 @@ final class ModelsTests_Bounds: XCTestCase {
     // MARK: State
     //=------------------------------------------------------------------------=
     
-    let integer = Style<Int    .Number>.number
-    let decimal = Style<Decimal.Number>.number
+    let integer = Style<Int    .FormatStyle>.number
+    let decimal = Style<Decimal.FormatStyle>.number
     
     //=------------------------------------------------------------------------=
     // MARK: Accessors

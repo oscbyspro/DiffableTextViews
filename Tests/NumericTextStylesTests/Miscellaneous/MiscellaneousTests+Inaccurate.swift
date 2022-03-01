@@ -7,34 +7,36 @@
 // See http://www.apache.org/licenses/LICENSE-2.0 for license information.
 //=----------------------------------------------------------------------------=
 
-import Foundation
+#if DEBUG
+
+import XCTest
 
 //*============================================================================*
-// MARK: * Decimal
+// MARK: * MiscellaneousTests x Inaccurate
 //*============================================================================*
 
-extension Decimal: Values.Signed, Values.FloatingPoint {
-
+final class MiscellaneousTests_Inaccurate: XCTestCase {
+        
     //=------------------------------------------------------------------------=
-    // MARK: Precision, Bounds
-    //=------------------------------------------------------------------------=
-    
-    public static let precision: Count = precision(38)
-    public static let bounds: ClosedRange<Self> = bounds(Self(string: String(repeating: "9", count: 38))!)
-}
-
-//*============================================================================*
-// MARK: * Double
-//*============================================================================*
-
-extension Double: Values.Signed, Values.FloatingPoint {
-    public typealias FormatStyle = FloatingPointFormatStyle<Self>
-
-    //=------------------------------------------------------------------------=
-    // MARK: Precision, Bounds
+    // MARK: Assertions
     //=------------------------------------------------------------------------=
     
-    public static let precision: Count = precision(15)
-    public static let bounds: ClosedRange<Self> = bounds(999_999_999_999_999)
+    func XCTAssert<T: BinaryFloatingPoint>(_ value: T, result: String) {
+        let style = FloatingPointFormatStyle<T>(locale: en_US)
+        XCTAssertEqual(style.precision(.fractionLength(0...)).format(value), result)
+    }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Tests
+    //=------------------------------------------------------------------------=
+    
+    func testFloat16IsInaccurate() {
+        XCTAssert(-1.23 as Float16, result: "-1.23046875")
+    }
+    
+    func testFloat32IsInaccurate() {
+        XCTAssert(-1.23 as Float32, result: "-1.2300000190734863")
+    }
 }
 
+#endif

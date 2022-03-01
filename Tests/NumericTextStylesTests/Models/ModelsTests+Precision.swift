@@ -19,14 +19,14 @@ import XCTest
 //*============================================================================*
 
 final class ModelsTests_Precision: XCTestCase {
-    typealias Style<T: Format> = NumericTextStyle<T>
+    typealias Style<T: Format> = _NumericTextStyle<T>
 
     //=------------------------------------------------------------------------=
     // MARK: State
     //=------------------------------------------------------------------------=
     
-    let integer = Style<Int    .Number>.number
-    let decimal = Style<Decimal.Number>.number
+    let integer = Style<Int    .FormatStyle>.number
+    let decimal = Style<Decimal.FormatStyle>.number
     
     //=------------------------------------------------------------------------=
     // MARK: Assertions
