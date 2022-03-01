@@ -37,4 +37,3 @@ extension Double: Values.Signed, Values.FloatingPoint {
     public static let precision: Count = precision(15)
     public static let bounds: ClosedRange<Self> = bounds(999_999_999_999_999)
 }
-

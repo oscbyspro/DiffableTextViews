@@ -26,7 +26,7 @@ extension NumericTextStyle where Format: NumericTextFormat_Percent {
 
 extension DiffableTextStyle where Self == NumericTextStyle<Decimal>.Percent {
     @inlinable public static var percent: Self {
-        Self(.percent)
+        Self()
     }
 }
 
@@ -36,6 +36,6 @@ extension DiffableTextStyle where Self == NumericTextStyle<Decimal>.Percent {
 
 extension DiffableTextStyle where Self == NumericTextStyle<Double>.Percent {
     @inlinable public static var percent: Self {
-        Self(.percent)
+        Self()
     }
 }

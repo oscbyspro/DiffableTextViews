@@ -9,25 +9,22 @@
 
 import Foundation
 
-#warning("WIP")
-#warning("WIP")
-#warning("WIP")
 //*============================================================================*
 // MARK: * Content
 //*============================================================================*
 
 @usableFromInline typealias Format = NumericTextFormat; @usableFromInline enum Formats {
-    //=--------------------------------------=
-    // MARK: Kinds
-    //=--------------------------------------=
-    @usableFromInline typealias Number = NumericTextFormat_Number
+    //=------------------------------------------=
+    // MARK: Subtypes
+    //=------------------------------------------=
+    @usableFromInline typealias Number   = NumericTextFormat_Number
     @usableFromInline typealias Currency = NumericTextFormat_Currency
-    @usableFromInline typealias Percent = NumericTextFormat_Percent
+    @usableFromInline typealias Percent  = NumericTextFormat_Percent
     //=------------------------------------------=
     // MARK: Branches
     //=------------------------------------------=
     @usableFromInline typealias Currencyable = NumericTextFormat_Currencyable
-    @usableFromInline typealias Percentable = NumericTextFormat_Percentable
+    @usableFromInline typealias Percentable  = NumericTextFormat_Percentable
 }
 
 //*============================================================================*
@@ -96,7 +93,7 @@ extension NumericTextFormat {
 
 public protocol NumericTextFormat_Number: NumericTextFormat where
 SignDisplayStrategy == NumberFormatStyleConfiguration.SignDisplayStrategy {
-    
+
     //=------------------------------------------------------------------------=
     // MARK: Initializers
     //=------------------------------------------------------------------------=
@@ -139,17 +136,17 @@ SignDisplayStrategy == NumberFormatStyleConfiguration.SignDisplayStrategy {
 }
 
 //*============================================================================*
-// MARK: * Format x Currency x Branchable
+// MARK: * Format x Branchable x Currency
 //*============================================================================*
 
 public protocol NumericTextFormat_Currencyable: NumericTextFormat {
-    associatedtype Currency: NumericTextFormat_Currency where Currency.FormatInput == FormatInput
+    associatedtype Currency: NumericTextFormat_Currency
 }
 
 //*============================================================================*
-// MARK: * Formst x Percent x Branchable
+// MARK: * Format x Branchable x Percent
 //*============================================================================*
 
 public protocol NumericTextFormat_Percentable: NumericTextFormat {
-    associatedtype Percent: NumericTextFormat_Percent where Percent.FormatInput == FormatInput
+    associatedtype Percent: NumericTextFormat_Percent
 }

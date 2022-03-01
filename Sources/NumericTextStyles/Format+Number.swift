@@ -13,7 +13,13 @@ import Foundation
 // MARK: * Decimal
 //*============================================================================*
 
-extension Decimal.FormatStyle: Format, Formats.Number, Formats.Currencyable, Formats.Percentable {
+extension Decimal.FormatStyle: Format, Formats.Number,
+Formats.Currencyable, Formats.Percentable {
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Translations
+    //=------------------------------------------------------------------------=
+    
     @inlinable public func translation() -> some NumericTextTranslation {
         Translations.Standard.reuseable(self)
     }
@@ -24,7 +30,12 @@ extension Decimal.FormatStyle: Format, Formats.Number, Formats.Currencyable, For
 //*============================================================================*
 
 extension FloatingPointFormatStyle: Format, Formats.Number,
-Formats.Currencyable, Formats.Percentable where Value: NumericTextValue_FloatingPoint {
+Formats.Currencyable, Formats.Percentable where FormatInput: NumericTextValue {
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Translations
+    //=------------------------------------------------------------------------=
+    
     @inlinable public func translation() -> some NumericTextTranslation {
         Translations.Standard.reuseable(self)
     }
@@ -35,7 +46,12 @@ Formats.Currencyable, Formats.Percentable where Value: NumericTextValue_Floating
 //*============================================================================*
 
 extension IntegerFormatStyle: Format, Formats.Number,
-Formats.Currencyable where Value: NumericTextValue_Integer {
+Formats.Currencyable where FormatInput: NumericTextValue {
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Translations
+    //=------------------------------------------------------------------------=
+    
     @inlinable public func translation() -> some NumericTextTranslation {
         Translations.Standard.reuseable(self)
     }
