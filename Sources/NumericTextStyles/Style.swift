@@ -46,13 +46,13 @@ public struct _NumericTextStyle<Format: NumericTextFormat>: DiffableTextStyle {
     @inlinable var format: Format {
         adapter.format
     }
-    
-    @inlinable var lexicon: Lexicon {
-        adapter.scheme.lexicon
-    }
 
     @inlinable var scheme: Scheme {
         adapter.scheme
+    }
+    
+    @inlinable var lexicon: Lexicon {
+        adapter.scheme.lexicon
     }
     
     //=------------------------------------------------------------------------=
