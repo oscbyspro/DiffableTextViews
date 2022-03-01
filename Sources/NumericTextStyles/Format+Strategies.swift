@@ -13,26 +13,13 @@ import Foundation
 // MARK: * NumericTextSignDisplayStrategy
 //*============================================================================*
 
-public enum NumericTextSignDisplayStrategy {
-
-    //=------------------------------------------------------------------------=
-    // MARK: Instances
-    //=------------------------------------------------------------------------=
-    
-    case always
-    case automatic
-}
+public enum NumericTextSignDisplayStrategy { case always, automatic }
 
 //*============================================================================*
 // MARK: * NumericTextSignDisplayStrategy x Representable
 //*============================================================================*
 
 public protocol NumericTextSignDisplayStrategyRepresentable {
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Initializers
-    //=------------------------------------------------------------------------=
-    
     @inlinable init(_ strategy: NumericTextSignDisplayStrategy)
 }
 
@@ -41,11 +28,6 @@ public protocol NumericTextSignDisplayStrategyRepresentable {
 //*============================================================================*
 
 extension NumberFormatStyleConfiguration.SignDisplayStrategy: NumericTextSignDisplayStrategyRepresentable {
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Initializers
-    //=------------------------------------------------------------------------=
-    
     @inlinable public init(_ strategy: NumericTextSignDisplayStrategy) {
         switch strategy { case .always: self = .always(); case .automatic: self = .automatic }
     }
@@ -56,11 +38,6 @@ extension NumberFormatStyleConfiguration.SignDisplayStrategy: NumericTextSignDis
 //*============================================================================*
 
 extension CurrencyFormatStyleConfiguration.SignDisplayStrategy: NumericTextSignDisplayStrategyRepresentable {
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Initializers
-    //=------------------------------------------------------------------------=
-    
     @inlinable public init(_ strategy: NumericTextSignDisplayStrategy) {
         switch strategy { case .always: self = .always(); case .automatic: self = .automatic }
     }

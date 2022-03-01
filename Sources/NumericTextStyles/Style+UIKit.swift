@@ -9,7 +9,6 @@
 
 #if canImport(UIKit)
 
-import UIKit
 import DiffableTextViews
 
 //*============================================================================*

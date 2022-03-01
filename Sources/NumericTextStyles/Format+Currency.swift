@@ -14,11 +14,6 @@ import Foundation
 //*============================================================================*
 
 extension Decimal.FormatStyle.Currency: Format, Formats.Currency {
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Translation
-    //=------------------------------------------------------------------------=
-    
     @inlinable public func translation() -> some NumericTextTranslation {
         Translations.Currency.reuseable(self)
     }
@@ -29,11 +24,6 @@ extension Decimal.FormatStyle.Currency: Format, Formats.Currency {
 //*============================================================================*
 
 extension FloatingPointFormatStyle.Currency: Format, Formats.Currency where Value: NumericTextValue {
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Translation
-    //=------------------------------------------------------------------------=
-    
     @inlinable public func translation() -> some NumericTextTranslation {
         Translations.Currency.reuseable(self)
     }
@@ -44,11 +34,6 @@ extension FloatingPointFormatStyle.Currency: Format, Formats.Currency where Valu
 //*============================================================================*
 
 extension IntegerFormatStyle.Currency: Format, Formats.Currency where Value: NumericTextValue {
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Translation
-    //=------------------------------------------------------------------------=
-    
     @inlinable public func translation() -> some NumericTextTranslation {
         Translations.Currency.reuseable(self)
     }
