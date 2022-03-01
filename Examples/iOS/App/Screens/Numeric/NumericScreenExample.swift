@@ -87,4 +87,3 @@ struct NumericScreenExample<Format: NumericTextFormat>: View where Format.Format
         return bound(ordered.lowerBound)...bound(ordered.upperBound)
     }
 }
-

@@ -13,10 +13,8 @@ import Foundation
 // MARK: * Float x Protocol
 //*============================================================================*
 
-@usableFromInline protocol _Float:
-BinaryFloatingPoint, Values.Signed, Values.FloatingPoint,
-Values.Numberable, Values.Currencyable, Values.Percentable where
-FormatStyle == FloatingPointFormatStyle<Self> { }
+@usableFromInline protocol _Float: BinaryFloatingPoint, Values.Signed, Values.FloatingPoint,
+Values.Numberable, Values.Currencyable, Values.Percentable where FormatStyle == FloatingPointFormatStyle<Self> { }
 
 //*============================================================================*
 // MARK: * Double

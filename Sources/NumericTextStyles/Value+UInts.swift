@@ -13,10 +13,8 @@ import Foundation
 // MARK: * UInt x Protocol
 //*============================================================================*
 
-@usableFromInline protocol _UInt:
-BinaryInteger, Values.Unsigned, Values.Integer,
-Values.Numberable, Values.Currencyable where
-FormatStyle == IntegerFormatStyle<Self> { }
+@usableFromInline protocol _UInt: BinaryInteger, Values.Unsigned, Values.Integer,
+Values.Numberable, Values.Currencyable where FormatStyle == IntegerFormatStyle<Self> { }
 
 //*============================================================================*
 // MARK: * UInt
