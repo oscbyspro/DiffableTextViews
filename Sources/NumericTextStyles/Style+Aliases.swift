@@ -8,7 +8,7 @@
 //=----------------------------------------------------------------------------=
 
 //*============================================================================*
-// MARK: * NumericTextStyle x Aliases x Number (Standard)
+// MARK: * NumericTextStyle x Aliases
 //*============================================================================*
 
 public typealias NumericTextStyle<Value: NumericTextValue> =

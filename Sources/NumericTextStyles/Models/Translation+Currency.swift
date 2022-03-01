@@ -15,8 +15,8 @@ import Support
 // MARK: * Translation x Currency
 //*============================================================================*
 
-@usableFromInline final class NumericTextCurrencyTranslation: Translations.Reuseable {
-    @usableFromInline static let cache = Cache<ID, NumericTextCurrencyTranslation>(33)
+@usableFromInline final class NumericTextTranslation_Currency: Translations.Reuseable {
+    @usableFromInline static let cache = Cache<ID, NumericTextTranslation_Currency>(33)
     
     //=------------------------------------------------------------------------=
     // MARK: State
