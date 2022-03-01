@@ -40,7 +40,7 @@ extension WrapperTextStyle {
     
     @inlinable @inline(__always)
     public func locale(_ locale: Locale) -> Self {
-        var result = self; result.style = style.locale(locale); return result
+        var result = self; result.style = result.style.locale(locale); return result
     }
     
     //=------------------------------------------------------------------------=
