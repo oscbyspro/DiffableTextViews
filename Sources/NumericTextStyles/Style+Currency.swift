@@ -14,7 +14,7 @@ import Foundation
 // MARK: * Style x Initializers
 //*============================================================================*
 
-extension NumericTextStyle where Format: NumericTextCurrencyFormat {
+extension NumericTextStyle where Format: NumericTextFormat_Currency {
     @inlinable public init(code: String, locale: Locale = .autoupdatingCurrent) {
         self.init(Format(code: code, locale: locale))
     }

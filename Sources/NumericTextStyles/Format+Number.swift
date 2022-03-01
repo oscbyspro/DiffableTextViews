@@ -29,7 +29,7 @@ extension Decimal.FormatStyle: Format, Formats.Number, Formats.Currencyable, For
 //*============================================================================*
 
 extension FloatingPointFormatStyle: Format, Formats.Number,
-Formats.Currencyable, Formats.Percentable where Value: NumericTextFloatingPointValue {
+Formats.Currencyable, Formats.Percentable where Value: NumericTextValue_FloatingPoint {
     
     //=------------------------------------------------------------------------=
     // MARK: Translation
@@ -45,7 +45,7 @@ Formats.Currencyable, Formats.Percentable where Value: NumericTextFloatingPointV
 //*============================================================================*
 
 extension IntegerFormatStyle: Format, Formats.Number,
-Formats.Currencyable where Value: NumericTextIntegerValue {
+Formats.Currencyable where Value: NumericTextValue_Integer {
     
     //=------------------------------------------------------------------------=
     // MARK: Translation

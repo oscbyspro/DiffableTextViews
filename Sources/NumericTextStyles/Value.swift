@@ -14,10 +14,10 @@ import Foundation
 //*============================================================================*
 
 @usableFromInline typealias Value = NumericTextValue; @usableFromInline enum Values {
-    @usableFromInline typealias FloatingPoint = NumericTextFloatingPointValue
-    @usableFromInline typealias Integer = NumericTextIntegerValue
-    @usableFromInline typealias Signed = NumericTextSignedValue
-    @usableFromInline typealias Unsigned = NumericTextUnsignedValue
+    @usableFromInline typealias FloatingPoint = NumericTextValue_FloatingPoint
+    @usableFromInline typealias Integer = NumericTextValue_Integer
+    @usableFromInline typealias Signed = NumericTextValue_Signed
+    @usableFromInline typealias Unsigned = NumericTextValue_Unsigned
 }
 
 //*============================================================================*
@@ -52,13 +52,13 @@ public protocol NumericTextValue: Comparable {
 // MARK: * Value x Floating Point
 //*============================================================================*
 
-public protocol NumericTextFloatingPointValue: NumericTextValue { }
+public protocol NumericTextValue_FloatingPoint: NumericTextValue { }
 
 //=----------------------------------------------------------------------------=
 // MARK: + Details
 //=----------------------------------------------------------------------------=
 
-extension NumericTextFloatingPointValue {
+extension NumericTextValue_FloatingPoint {
     
     //=------------------------------------------------------------------------=
     // MARK: Kind
@@ -79,7 +79,7 @@ extension NumericTextFloatingPointValue {
 // MARK: + Details - Signed Numeric
 //=----------------------------------------------------------------------------=
 
-extension NumericTextFloatingPointValue where Self: SignedNumeric {
+extension NumericTextValue_FloatingPoint where Self: SignedNumeric {
     
     //=------------------------------------------------------------------------=
     // MARK: Bounds
@@ -94,13 +94,13 @@ extension NumericTextFloatingPointValue where Self: SignedNumeric {
 // MARK: * Value x Integer
 //*============================================================================*
 
-public protocol NumericTextIntegerValue: NumericTextValue { }
+public protocol NumericTextValue_Integer: NumericTextValue { }
 
 //=----------------------------------------------------------------------------=
 // MARK: + Details
 //=----------------------------------------------------------------------------=
 
-extension NumericTextIntegerValue {
+extension NumericTextValue_Integer {
     
     //=------------------------------------------------------------------------=
     // MARK: Kind
@@ -121,7 +121,7 @@ extension NumericTextIntegerValue {
 // MARK: + Details - Fixed Width
 //=----------------------------------------------------------------------------=
 
-extension NumericTextIntegerValue where Self: FixedWidthInteger {
+extension NumericTextValue_Integer where Self: FixedWidthInteger {
     
     //=------------------------------------------------------------------------=
     // MARK: Bounds
@@ -136,13 +136,13 @@ extension NumericTextIntegerValue where Self: FixedWidthInteger {
 // MARK: * Value x Signed
 //*============================================================================*
 
-public protocol NumericTextSignedValue: NumericTextValue { }
+public protocol NumericTextValue_Signed: NumericTextValue { }
 
 //=----------------------------------------------------------------------------=
 // MARK: + Details
 //=----------------------------------------------------------------------------=
 
-extension NumericTextSignedValue {
+extension NumericTextValue_Signed {
     
     //=------------------------------------------------------------------------=
     // MARK: Kind
@@ -155,13 +155,13 @@ extension NumericTextSignedValue {
 // MARK: * Value x Unsigned
 //*============================================================================*
 
-public protocol NumericTextUnsignedValue: NumericTextValue { }
+public protocol NumericTextValue_Unsigned: NumericTextValue { }
 
 //=----------------------------------------------------------------------------=
 // MARK: + Details
 //=----------------------------------------------------------------------------=
 
-extension NumericTextUnsignedValue {
+extension NumericTextValue_Unsigned {
     
     //=------------------------------------------------------------------------=
     // MARK: Kind

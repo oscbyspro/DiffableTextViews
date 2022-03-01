@@ -17,11 +17,11 @@ import Foundation
 //*============================================================================*
 
 @usableFromInline typealias Format = NumericTextFormat; @usableFromInline enum Formats {
-    @usableFromInline typealias Number = NumericTextNumberFormat
-    @usableFromInline typealias Currency = NumericTextCurrencyFormat
-    @usableFromInline typealias Currencyable = NumericTextCurrencyableFormat
-    @usableFromInline typealias Percent = NumericTextPercentFormat
-    @usableFromInline typealias Percentable = NumericTextPercentableFormat
+    @usableFromInline typealias Number = NumericTextFormat_Number
+    @usableFromInline typealias Currency = NumericTextFormat_Currency
+    @usableFromInline typealias Currencyable = NumericTextFormat_Currencyable
+    @usableFromInline typealias Percent = NumericTextFormat_Percent
+    @usableFromInline typealias Percentable = NumericTextFormat_Percentable
 }
 
 //*============================================================================*
@@ -88,7 +88,7 @@ extension NumericTextFormat {
 // MARK: * Format x Number
 //*============================================================================*
 
-public protocol NumericTextNumberFormat: NumericTextFormat where
+public protocol NumericTextFormat_Number: NumericTextFormat where
 SignDisplayStrategy == NumberFormatStyleConfiguration.SignDisplayStrategy {
     
     //=------------------------------------------------------------------------=
@@ -102,7 +102,7 @@ SignDisplayStrategy == NumberFormatStyleConfiguration.SignDisplayStrategy {
 // MARK: * Format x Currency
 //*============================================================================*
 
-public protocol NumericTextCurrencyFormat: NumericTextFormat where
+public protocol NumericTextFormat_Currency: NumericTextFormat where
 SignDisplayStrategy == CurrencyFormatStyleConfiguration.SignDisplayStrategy {
     
     //=------------------------------------------------------------------------=
@@ -119,18 +119,18 @@ SignDisplayStrategy == CurrencyFormatStyleConfiguration.SignDisplayStrategy {
 }
 
 //*============================================================================*
-// MARK: * Format x Currencyable
+// MARK: * Format x Currency x Branchable
 //*============================================================================*
 
-public protocol NumericTextCurrencyableFormat: NumericTextFormat {
-    associatedtype Currency: NumericTextCurrencyFormat where Currency.FormatInput == FormatInput
+public protocol NumericTextFormat_Currencyable: NumericTextFormat {
+    associatedtype Currency: NumericTextFormat_Currency where Currency.FormatInput == FormatInput
 }
 
 //*============================================================================*
 // MARK: * Format x Percent
 //*============================================================================*
 
-public protocol NumericTextPercentFormat: NumericTextFormat where
+public protocol NumericTextFormat_Percent: NumericTextFormat where
 SignDisplayStrategy == NumberFormatStyleConfiguration.SignDisplayStrategy {
     
     //=------------------------------------------------------------------------=
@@ -141,9 +141,9 @@ SignDisplayStrategy == NumberFormatStyleConfiguration.SignDisplayStrategy {
 }
 
 //*============================================================================*
-// MARK: * Formst x Percentable
+// MARK: * Formst x Percent x Branchable
 //*============================================================================*
 
-public protocol NumericTextPercentableFormat: NumericTextFormat {
-    associatedtype Percent: NumericTextPercentFormat where Percent.FormatInput == FormatInput
+public protocol NumericTextFormat_Percentable: NumericTextFormat {
+    associatedtype Percent: NumericTextFormat_Percent where Percent.FormatInput == FormatInput
 }

@@ -26,7 +26,7 @@ extension NumericTextStyle {
 // MARK: + Integer
 //=----------------------------------------------------------------------------=
 
-public extension NumericTextStyle where Value: NumericTextIntegerValue {
+public extension NumericTextStyle where Value: NumericTextValue_Integer {
     
     //=------------------------------------------------------------------------=
     // MARK: Length
@@ -50,7 +50,7 @@ public extension NumericTextStyle where Value: NumericTextIntegerValue {
 // MARK: + Float
 //=----------------------------------------------------------------------------=
 
-public extension NumericTextStyle where Value: NumericTextFloatingPointValue {
+public extension NumericTextStyle where Value: NumericTextValue_FloatingPoint {
     
     //=------------------------------------------------------------------------=
     // MARK: Length
