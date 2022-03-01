@@ -44,7 +44,7 @@ extension NumericTextStyle {
         //=--------------------------------------=
         // MARK: Autocorrect
         //=--------------------------------------=
-        translation.autocorrect(&snapshot); return snapshot
+        scheme.autocorrect(&snapshot); return snapshot
     }
     
     //=------------------------------------------------------------------------=

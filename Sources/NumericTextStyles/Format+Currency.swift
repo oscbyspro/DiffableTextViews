@@ -19,8 +19,8 @@ extension Decimal.FormatStyle.Currency: Format, Formats.Currency {
     // MARK: Translations
     //=------------------------------------------------------------------------=
     
-    @inlinable public func translation() -> some NumericTextTranslation {
-        Translations.Currency.reuseable(self)
+    @inlinable public func scheme() -> some NumericTextScheme {
+        Schemes.Currency.reuseable(self)
     }
 }
 
@@ -34,8 +34,8 @@ extension FloatingPointFormatStyle.Currency: Format, Formats.Currency where Valu
     // MARK: Translations
     //=------------------------------------------------------------------------=
     
-    @inlinable public func translation() -> some NumericTextTranslation {
-        Translations.Currency.reuseable(self)
+    @inlinable public func scheme() -> some NumericTextScheme {
+        Schemes.Currency.reuseable(self)
     }
 }
 
@@ -49,7 +49,7 @@ extension IntegerFormatStyle.Currency: Format, Formats.Currency where Value: Num
     // MARK: Translations
     //=------------------------------------------------------------------------=
     
-    @inlinable public func translation() -> some NumericTextTranslation {
-        Translations.Currency.reuseable(self)
+    @inlinable public func scheme() -> some NumericTextScheme {
+        Schemes.Currency.reuseable(self)
     }
 }

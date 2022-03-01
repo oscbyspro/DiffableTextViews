@@ -14,14 +14,14 @@ import Foundation
 //*============================================================================*
 
 @usableFromInline struct Adapter<Format: NumericTextFormat>: Equatable {
-    @usableFromInline typealias Translation = Format.NumericTextTranslation
+    @usableFromInline typealias Scheme = Format.NumericTextScheme
     
     //=------------------------------------------------------------------------=
     // MARK: State
     //=------------------------------------------------------------------------=
     
     @usableFromInline let format: Format
-    @usableFromInline let translation: Translation
+    @usableFromInline let scheme: Scheme
     
     //=------------------------------------------------------------------------=
     // MARK: Initializers
@@ -29,8 +29,8 @@ import Foundation
     
     @inlinable init(_ format: Format) {
         self.format = format
-        self.translation = format.translation()
-        assert(format.locale == translation.locale)
+        self.scheme = format.scheme()
+        assert(format.locale == scheme.locale)
     }
     
     //=------------------------------------------------------------------------=
@@ -38,17 +38,15 @@ import Foundation
     //=------------------------------------------------------------------------=
     
     @inlinable var locale: Locale {
-        translation.locale
+        scheme.locale
     }
     
     //=------------------------------------------------------------------------=
     // MARK: Transformations
     //=------------------------------------------------------------------------=
     
-    @inlinable mutating func update(_ locale: Locale) {
-        if  self.locale != locale {
-            self = Self(format.locale(locale))
-        }
+    @inlinable func locale(_ locale: Locale) -> Self {
+        Self(format.locale(locale))
     }
     
     //=------------------------------------------------------------------------=

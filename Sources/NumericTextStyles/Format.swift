@@ -33,8 +33,8 @@ import Foundation
 //*============================================================================*
 
 public protocol NumericTextFormat: ParseableFormatStyle where FormatInput: NumericTextValue, FormatOutput == String {
+    associatedtype NumericTextScheme: NumericTextStyles.NumericTextScheme
     associatedtype SignDisplayStrategy: NumericTextSignDisplayStrategyRepresentable
-    associatedtype NumericTextTranslation: NumericTextStyles.NumericTextTranslation
     
     //=------------------------------------------------------------------------=
     // MARK: State
@@ -54,7 +54,7 @@ public protocol NumericTextFormat: ParseableFormatStyle where FormatInput: Numer
     // MARK: Translation
     //=------------------------------------------------------------------------=
     
-    @inlinable func translation() -> NumericTextTranslation
+    @inlinable func scheme() -> NumericTextScheme    
 }
 
 //=----------------------------------------------------------------------------=

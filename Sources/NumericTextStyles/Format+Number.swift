@@ -20,8 +20,8 @@ Formats.Currencyable, Formats.Percentable {
     // MARK: Translations
     //=------------------------------------------------------------------------=
     
-    @inlinable public func translation() -> some NumericTextTranslation {
-        Translations.Standard.reuseable(self)
+    @inlinable public func scheme() -> some NumericTextScheme {
+        Schemes.Standard.reuseable(self)
     }
 }
 
@@ -36,8 +36,8 @@ Formats.Currencyable, Formats.Percentable where FormatInput: NumericTextValue {
     // MARK: Translations
     //=------------------------------------------------------------------------=
     
-    @inlinable public func translation() -> some NumericTextTranslation {
-        Translations.Standard.reuseable(self)
+    @inlinable public func scheme() -> some NumericTextScheme {
+        Schemes.Standard.reuseable(self)
     }
 }
 
@@ -52,7 +52,7 @@ Formats.Currencyable where FormatInput: NumericTextValue {
     // MARK: Translations
     //=------------------------------------------------------------------------=
     
-    @inlinable public func translation() -> some NumericTextTranslation {
-        Translations.Standard.reuseable(self)
+    @inlinable public func scheme() -> some NumericTextScheme {
+        Schemes.Standard.reuseable(self)
     }
 }

@@ -19,8 +19,8 @@ extension Decimal.FormatStyle.Percent: Format, Formats.Percent {
     // MARK: Translations
     //=------------------------------------------------------------------------=
     
-    @inlinable public func translation() -> some NumericTextTranslation {
-        Translations.Standard.reuseable(self)
+    @inlinable public func scheme() -> some NumericTextScheme {
+        Schemes.Standard.reuseable(self)
     }
 }
 
@@ -34,7 +34,7 @@ extension FloatingPointFormatStyle.Percent: Format, Formats.Percent where Value:
     // MARK: Translations
     //=------------------------------------------------------------------------=
     
-    @inlinable public func translation() -> some NumericTextTranslation {
-        Translations.Standard.reuseable(self)
+    @inlinable public func scheme() -> some NumericTextScheme {
+        Schemes.Standard.reuseable(self)
     }
 }

@@ -48,11 +48,11 @@ public struct _NumericTextStyle<Format: NumericTextFormat>: DiffableTextStyle {
     }
     
     @inlinable var lexicon: Lexicon {
-        adapter.translation.lexicon
+        adapter.scheme.lexicon
     }
 
-    @inlinable var translation: Translation {
-        adapter.translation
+    @inlinable var scheme: Scheme {
+        adapter.scheme
     }
     
     //=------------------------------------------------------------------------=
@@ -60,7 +60,7 @@ public struct _NumericTextStyle<Format: NumericTextFormat>: DiffableTextStyle {
     //=------------------------------------------------------------------------=
     
     @inlinable public func locale(_ locale: Locale) -> Self {
-        var result = self; result.adapter.update(locale); return result
+        var result = self; result.adapter = result.adapter.locale(locale); return result
     }
     
     //=------------------------------------------------------------------------=

@@ -12,11 +12,11 @@ import Foundation
 import Support
 
 //*============================================================================*
-// MARK: * Translation x Standard
+// MARK: * Scheme x Standard
 //*============================================================================*
 
-@usableFromInline final class NumericTextTranslation_Standard: Translations.Reuseable {
-    @usableFromInline static let cache = Cache<ID, NumericTextTranslation_Standard>(33)
+@usableFromInline final class NumericTextScheme_Standard: Schemes.Reuseable {
+    @usableFromInline static let cache = Cache<ID, NumericTextScheme_Standard>(33)
 
     //=------------------------------------------------------------------------=
     // MARK: State

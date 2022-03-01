@@ -15,17 +15,17 @@ import Support
 // MARK: * Content
 //*============================================================================*
 
-@usableFromInline typealias Translation = NumericTextTranslation; @usableFromInline enum Translations {
-    @usableFromInline typealias Standard  = NumericTextTranslation_Standard
-    @usableFromInline typealias Currency  = NumericTextTranslation_Currency
-    @usableFromInline typealias Reuseable = NumericTextTranslation_Reuseable
+@usableFromInline typealias Scheme = NumericTextScheme; @usableFromInline enum Schemes {
+    @usableFromInline typealias Standard  = NumericTextScheme_Standard
+    @usableFromInline typealias Currency  = NumericTextScheme_Currency
+    @usableFromInline typealias Reuseable = NumericTextScheme_Reuseable
 }
 
 //*============================================================================*
 // MARK: * Translation
 //*============================================================================*
 
-public protocol NumericTextTranslation {
+public protocol NumericTextScheme {
     
     //=------------------------------------------------------------------------=
     // MARK: State
@@ -44,7 +44,7 @@ public protocol NumericTextTranslation {
 // MARK: + Details
 //=----------------------------------------------------------------------------=
 
-extension NumericTextTranslation {
+extension NumericTextScheme {
     
     //=------------------------------------------------------------------------=
     // MARK: Accessors
@@ -56,10 +56,10 @@ extension NumericTextTranslation {
 }
 
 //*============================================================================*
-// MARK: * Translation x Reusable
+// MARK: * Scheme x Reusable
 //*============================================================================*
 
-@usableFromInline protocol NumericTextTranslation_Reuseable: AnyObject, Translation {
+@usableFromInline protocol NumericTextScheme_Reuseable: AnyObject, Scheme {
     associatedtype ID: AnyObject & Hashable
     
     //=------------------------------------------------------------------------=
@@ -79,7 +79,7 @@ extension NumericTextTranslation {
 // MARK: + Details
 //=----------------------------------------------------------------------------=
 
-extension NumericTextTranslation_Reuseable {
+extension NumericTextScheme_Reuseable {
     
     //=------------------------------------------------------------------------=
     // MARK: Search
