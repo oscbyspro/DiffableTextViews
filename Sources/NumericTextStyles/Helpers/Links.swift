@@ -73,12 +73,12 @@ import Foundation
     //=------------------------------------------------------------------------=
     
     @inlinable subscript(character: Character) -> Component? {
-        _read { yield components[character]  }
+        _read { yield components[character] }
     }
     
     /// Bidirectional mapping is required for all components, so characters may be force unwrapped.
-    @inlinable subscript(component: Component) -> Character {
-        _read { yield characters[component]! }
+    @inlinable subscript(component: Component) -> Character! {
+        _read { yield characters[component] }
     }
     
     //=------------------------------------------------------------------------=
