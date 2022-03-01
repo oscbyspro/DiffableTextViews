@@ -15,14 +15,6 @@ import Foundation
 
 extension Decimal: Values.Signed, Values.FloatingPoint,
 Values.Numberable, Values.Currencyable, Values.Percentable {
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Formats
-    //=------------------------------------------------------------------------=
-    
-    public typealias NumericTextFormat_Number   = FormatStyle
-    public typealias NumericTextFormat_Currency = FormatStyle.Currency
-    public typealias NumericTextFormat_Percent  = FormatStyle.Percent
 
     //=------------------------------------------------------------------------=
     // MARK: Precision, Bounds

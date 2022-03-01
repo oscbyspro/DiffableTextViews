@@ -21,7 +21,6 @@ Values.Numberable, Values.Currencyable where FormatStyle == IntegerFormatStyle<S
 //*============================================================================*
 
 extension Int: _Int {
-    public typealias FormatStyle = IntegerFormatStyle<Self>
     
     //=------------------------------------------------------------------------=
     // MARK: Precision, Bounds
@@ -36,7 +35,6 @@ extension Int: _Int {
 //*============================================================================*
 
 extension Int8: _Int {
-    public typealias FormatStyle = IntegerFormatStyle<Self>
 
     //=------------------------------------------------------------------------=
     // MARK: Precision, Bounds
@@ -51,7 +49,6 @@ extension Int8: _Int {
 //*============================================================================*
 
 extension Int16: _Int {
-    public typealias FormatStyle = IntegerFormatStyle<Self>
 
     //=------------------------------------------------------------------------=
     // MARK: Precision, Bounds
@@ -66,7 +63,6 @@ extension Int16: _Int {
 //*============================================================================*
 
 extension Int32: _Int {
-    public typealias FormatStyle = IntegerFormatStyle<Self>
 
     //=------------------------------------------------------------------------=
     // MARK: Precision, Bounds
@@ -81,7 +77,6 @@ extension Int32: _Int {
 //*============================================================================*
 
 extension Int64: _Int {
-    public typealias FormatStyle = IntegerFormatStyle<Self>
 
     //=------------------------------------------------------------------------=
     // MARK: Precision, Bounds
