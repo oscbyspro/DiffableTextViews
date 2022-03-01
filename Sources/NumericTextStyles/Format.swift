@@ -141,7 +141,7 @@ SignDisplayStrategy == NumberFormatStyleConfiguration.SignDisplayStrategy {
 //*============================================================================*
 
 public protocol NumericTextFormat_Numberable: NumericTextFormat {
-    associatedtype Number: NumericTextStyles .NumericTextFormat_Number
+    associatedtype Number: NumericTextFormat_Number where Number.FormatInput == FormatInput
 }
 
 //*============================================================================*
@@ -149,7 +149,7 @@ public protocol NumericTextFormat_Numberable: NumericTextFormat {
 //*============================================================================*
 
 public protocol NumericTextFormat_Currencyable: NumericTextFormat {
-    associatedtype Currency: NumericTextStyles .NumericTextFormat_Currency
+    associatedtype Currency: NumericTextFormat_Currency where Currency.FormatInput == FormatInput
 }
 
 //*============================================================================*
@@ -157,5 +157,5 @@ public protocol NumericTextFormat_Currencyable: NumericTextFormat {
 //*============================================================================*
 
 public protocol NumericTextFormat_Percentable: NumericTextFormat {
-    associatedtype Percent: NumericTextStyles .NumericTextFormat_Percent
+    associatedtype Percent: NumericTextFormat_Percent where Percent.FormatInput == FormatInput
 }

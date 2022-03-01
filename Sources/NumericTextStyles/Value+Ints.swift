@@ -13,7 +13,7 @@ import Foundation
 // MARK: * Int x Protocol
 //*============================================================================*
 
-@usableFromInline protocol NumericTextValue_Int:
+@usableFromInline protocol _Int:
 BinaryInteger, Values.Signed, Values.Integer,
 Values.Numberable, Values.Currencyable where
 FormatStyle == IntegerFormatStyle<Self> { }
@@ -22,7 +22,7 @@ FormatStyle == IntegerFormatStyle<Self> { }
 // MARK: * Int
 //*============================================================================*
 
-extension Int: NumericTextValue_Int {
+extension Int: _Int {
     public typealias FormatStyle = IntegerFormatStyle<Self>
     
     //=------------------------------------------------------------------------=
@@ -37,7 +37,7 @@ extension Int: NumericTextValue_Int {
 // MARK: * Int8
 //*============================================================================*
 
-extension Int8: NumericTextValue_Int {
+extension Int8: _Int {
     public typealias FormatStyle = IntegerFormatStyle<Self>
 
     //=------------------------------------------------------------------------=
@@ -52,7 +52,7 @@ extension Int8: NumericTextValue_Int {
 // MARK: * Int16
 //*============================================================================*
 
-extension Int16: NumericTextValue_Int {
+extension Int16: _Int {
     public typealias FormatStyle = IntegerFormatStyle<Self>
 
     //=------------------------------------------------------------------------=
@@ -67,7 +67,7 @@ extension Int16: NumericTextValue_Int {
 // MARK: * Int32
 //*============================================================================*
 
-extension Int32: NumericTextValue_Int {
+extension Int32: _Int {
     public typealias FormatStyle = IntegerFormatStyle<Self>
 
     //=------------------------------------------------------------------------=
@@ -82,7 +82,7 @@ extension Int32: NumericTextValue_Int {
 // MARK: * Int64
 //*============================================================================*
 
-extension Int64: NumericTextValue_Int {
+extension Int64: _Int {
     public typealias FormatStyle = IntegerFormatStyle<Self>
 
     //=------------------------------------------------------------------------=

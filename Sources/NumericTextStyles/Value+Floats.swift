@@ -13,7 +13,7 @@ import Foundation
 // MARK: * Float x Protocol
 //*============================================================================*
 
-@usableFromInline protocol NumericTextValue_Float:
+@usableFromInline protocol _Float:
 BinaryFloatingPoint, Values.Signed, Values.FloatingPoint,
 Values.Numberable, Values.Currencyable, Values.Percentable where
 FormatStyle == FloatingPointFormatStyle<Self> { }
@@ -22,7 +22,7 @@ FormatStyle == FloatingPointFormatStyle<Self> { }
 // MARK: * Double
 //*============================================================================*
 
-extension Double: NumericTextValue_Float {
+extension Double: _Float {
     
     //=------------------------------------------------------------------------=
     // MARK: Precision, Bounds

@@ -8,19 +8,11 @@
 //=----------------------------------------------------------------------------=
 
 //*============================================================================*
-// MARK: * NumericTextStyle x Aliases
+// MARK: * NumericTextStyle x Aliases x Number
 //*============================================================================*
 
 public typealias NumericTextStyle<Value: NumericTextValue_Numberable> =
 _NumericTextStyle<Value.FormatStyle>
-
-//*============================================================================*
-// MARK: * NumericTextStyle x Aliases x Number
-//*============================================================================*
-
-extension NumericTextStyle where Format: NumericTextFormat_Numberable {
-    public typealias Number = _NumericTextStyle<Format.Number>
-}
 
 //*============================================================================*
 // MARK: * NumericTextStyle x Aliases x Currency
@@ -37,4 +29,3 @@ extension NumericTextStyle where Format: NumericTextFormat_Currencyable {
 extension NumericTextStyle where Format: NumericTextFormat_Percentable {
     public typealias Percent = _NumericTextStyle<Format.Percent>
 }
-

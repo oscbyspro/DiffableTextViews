@@ -13,7 +13,7 @@ import Foundation
 // MARK: * UInt x Protocol
 //*============================================================================*
 
-@usableFromInline protocol NumericTextValue_UInt:
+@usableFromInline protocol _UInt:
 BinaryInteger, Values.Unsigned, Values.Integer,
 Values.Numberable, Values.Currencyable where
 FormatStyle == IntegerFormatStyle<Self> { }
@@ -22,7 +22,7 @@ FormatStyle == IntegerFormatStyle<Self> { }
 // MARK: * UInt
 //*============================================================================*
 
-extension UInt: NumericTextValue_UInt {
+extension UInt: _UInt {
     
     //=------------------------------------------------------------------------=
     // MARK: Precision, Bounds
@@ -36,7 +36,7 @@ extension UInt: NumericTextValue_UInt {
 // MARK: * UInt8
 //*============================================================================*
 
-extension UInt8: NumericTextValue_UInt {
+extension UInt8: _UInt {
 
     //=------------------------------------------------------------------------=
     // MARK: Precision, Bounds
@@ -50,7 +50,7 @@ extension UInt8: NumericTextValue_UInt {
 // MARK: * UInt16
 //*============================================================================*
 
-extension UInt16: NumericTextValue_UInt {
+extension UInt16: _UInt {
 
     //=------------------------------------------------------------------------=
     // MARK: Precision, Bounds
@@ -64,7 +64,7 @@ extension UInt16: NumericTextValue_UInt {
 // MARK: * UInt32
 //*============================================================================*
 
-extension UInt32: NumericTextValue_UInt {
+extension UInt32: _UInt {
 
     //=------------------------------------------------------------------------=
     // MARK: Precision, Bounds
@@ -78,7 +78,7 @@ extension UInt32: NumericTextValue_UInt {
 // MARK: * UInt64
 //*============================================================================*
 
-extension UInt64: NumericTextValue_UInt {
+extension UInt64: _UInt {
     
     //=------------------------------------------------------------------------=
     // MARK: Precision, Bounds

@@ -26,7 +26,7 @@ final class StyleTests_Currency: Tests, StyleTests {
     // MARK: Assertions
     //=------------------------------------------------------------------------=
     
-    func XCTInterpretLocalesXCurrencies<T: Value>(_ value: T) where T.FormatStyle: Formats.Currencyable {
+    func XCTInterpretLocalesXCurrencies<T: Values.Currencyable>(_ value: T) {
          XCTInterpretLocalesXCurrencies(value, format: T.FormatStyle.Currency.init)
     }
 }
@@ -56,7 +56,7 @@ extension StyleTests_Currency {
     // MARK: Tests
     //=------------------------------------------------------------------------=
     
-    func testFloat64() throws {
+    func testFloat64_aka_Double() throws {
         XCTInterpretLocalesXCurrencies(-1.23 as Float64)
     }
 }

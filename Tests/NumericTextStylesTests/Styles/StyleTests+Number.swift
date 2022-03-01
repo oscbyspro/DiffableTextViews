@@ -54,7 +54,7 @@ extension StyleTests_Number {
     // MARK: Tests
     //=------------------------------------------------------------------------=
 
-    func testFloat64() throws {
+    func testFloat64_aka_Double() throws {
         XCTInterpretLocales(-1.23 as Float64)
     }
 }
