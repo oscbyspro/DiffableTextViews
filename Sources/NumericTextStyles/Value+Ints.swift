@@ -10,10 +10,19 @@
 import Foundation
 
 //*============================================================================*
+// MARK: * Int x Protocol
+//*============================================================================*
+
+@usableFromInline protocol NumericTextValue_Int: SignedInteger,
+Values.Unsigned, Values.Integer, Values.Numberable, Values.Currencyable where
+NumericTextFormat_Number   == IntegerFormatStyle<Self>,
+NumericTextFormat_Currency == IntegerFormatStyle<Self>.Currency { }
+
+//*============================================================================*
 // MARK: * Int
 //*============================================================================*
 
-extension Int: Values.Signed, Values.Integer {
+extension Int: NumericTextValue_Int {
     public typealias FormatStyle = IntegerFormatStyle<Self>
     
     //=------------------------------------------------------------------------=
@@ -28,7 +37,7 @@ extension Int: Values.Signed, Values.Integer {
 // MARK: * Int8
 //*============================================================================*
 
-extension Int8: Values.Signed, Values.Integer {
+extension Int8: NumericTextValue_Int {
     public typealias FormatStyle = IntegerFormatStyle<Self>
 
     //=------------------------------------------------------------------------=
@@ -43,7 +52,7 @@ extension Int8: Values.Signed, Values.Integer {
 // MARK: * Int16
 //*============================================================================*
 
-extension Int16: Values.Signed, Values.Integer {
+extension Int16: NumericTextValue_Int {
     public typealias FormatStyle = IntegerFormatStyle<Self>
 
     //=------------------------------------------------------------------------=
@@ -58,7 +67,7 @@ extension Int16: Values.Signed, Values.Integer {
 // MARK: * Int32
 //*============================================================================*
 
-extension Int32: Values.Signed, Values.Integer {
+extension Int32: NumericTextValue_Int {
     public typealias FormatStyle = IntegerFormatStyle<Self>
 
     //=------------------------------------------------------------------------=
@@ -73,7 +82,7 @@ extension Int32: Values.Signed, Values.Integer {
 // MARK: * Int64
 //*============================================================================*
 
-extension Int64: Values.Signed, Values.Integer {
+extension Int64: NumericTextValue_Int {
     public typealias FormatStyle = IntegerFormatStyle<Self>
 
     //=------------------------------------------------------------------------=

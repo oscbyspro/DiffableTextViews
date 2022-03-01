@@ -14,10 +14,19 @@ import Foundation
 //*============================================================================*
 
 @usableFromInline typealias Value = NumericTextValue; @usableFromInline enum Values {
+    //=------------------------------------------=
+    // MARK: Types
+    //=------------------------------------------=
     @usableFromInline typealias FloatingPoint = NumericTextValue_FloatingPoint
     @usableFromInline typealias Integer = NumericTextValue_Integer
     @usableFromInline typealias Signed = NumericTextValue_Signed
     @usableFromInline typealias Unsigned = NumericTextValue_Unsigned
+    //=------------------------------------------=
+    // MARK: Formats
+    //=------------------------------------------=
+    @usableFromInline typealias Numberable = NumericTextValue_Numberable
+    @usableFromInline typealias Currencyable = NumericTextValue_Currencyable
+    @usableFromInline typealias Percentable = NumericTextValue_Percentable
 }
 
 //*============================================================================*
@@ -25,12 +34,6 @@ import Foundation
 //*============================================================================*
 
 public protocol NumericTextValue: Comparable {
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Formattable
-    //=------------------------------------------------------------------------=
-    
-    associatedtype FormatStyle: NumericTextFormat where FormatStyle.FormatInput == Self
     
     //=------------------------------------------------------------------------=
     // MARK: Kind
@@ -168,4 +171,28 @@ extension NumericTextValue_Unsigned {
     //=------------------------------------------------------------------------=
     
     @inlinable public static var isUnsigned: Bool { true }
+}
+
+//*============================================================================*
+// MARK: * Value x Formattable x Number
+//*============================================================================*
+
+public protocol NumericTextValue_Numberable: NumericTextValue {
+    associatedtype NumericTextFormat_Number: NumericTextStyles.NumericTextFormat_Number
+}
+
+//*============================================================================*
+// MARK: * Value x Formattable x Currency
+//*============================================================================*
+
+public protocol NumericTextValue_Currencyable: NumericTextValue {
+    associatedtype NumericTextFormat_Currency: NumericTextStyles.NumericTextFormat_Currency
+}
+
+//*============================================================================*
+// MARK: * Value x Formattable x Percent
+//*============================================================================*
+
+public protocol NumericTextValue_Percentable: NumericTextValue {
+    associatedtype NumericTextFormat_Percent: NumericTextStyles.NumericTextFormat_Percent
 }

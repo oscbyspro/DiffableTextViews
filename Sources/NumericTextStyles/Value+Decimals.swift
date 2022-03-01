@@ -10,18 +10,18 @@
 import Foundation
 
 //*============================================================================*
-// MARK: * Double
+// MARK: * Decimal
 //*============================================================================*
 
-extension Double: Values.Signed, Values.FloatingPoint {
-    public typealias NumericTextFormat_Number   = FloatingPointFormatStyle<Self>
-    public typealias NumericTextFormat_Currency = FloatingPointFormatStyle<Self>.Currency
-    public typealias NumericTextFormat_Percent  = FloatingPointFormatStyle<Self>.Percent
+extension Decimal: Values.Signed, Values.FloatingPoint {
+    public typealias NumericTextFormat_Number   = FormatStyle
+    public typealias NumericTextFormat_Currency = FormatStyle.Currency
+    public typealias NumericTextFormat_Percent  = FormatStyle.Percent
 
     //=------------------------------------------------------------------------=
     // MARK: Precision, Bounds
     //=------------------------------------------------------------------------=
     
-    public static let precision: Count = precision(15)
-    public static let bounds: ClosedRange<Self> = bounds(999_999_999_999_999)
+    public static let precision: Count = precision(38)
+    public static let bounds: ClosedRange<Self> = bounds(Self(string: String(repeating: "9", count: 38))!)
 }
