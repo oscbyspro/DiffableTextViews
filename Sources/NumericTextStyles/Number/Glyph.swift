@@ -11,11 +11,11 @@ import Foundation
 import Support
 
 //*============================================================================*
-// MARK: * Component
+// MARK: * Glyph
 //*============================================================================*
 
 /// An object representing an ASCII character by its UInt8 unicode value.
-@usableFromInline protocol Component: RawRepresentable, Hashable, CaseIterable,
+@usableFromInline protocol Glyph: RawRepresentable, Hashable, CaseIterable,
 CustomStringConvertible, TextOutputStreamable where RawValue == UInt8 {
     
     //=------------------------------------------------------------------------=
@@ -31,7 +31,7 @@ CustomStringConvertible, TextOutputStreamable where RawValue == UInt8 {
 // MARK: + Details
 //=----------------------------------------------------------------------------=
 
-extension Component {
+extension Glyph {
     
     //=------------------------------------------------------------------------=
     // MARK: Localization
@@ -46,7 +46,7 @@ extension Component {
 // MARK: + Conversions
 //=----------------------------------------------------------------------------=
 
-extension Component {
+extension Glyph {
     
     //=------------------------------------------------------------------------=
     // MARK: Unicodeable
@@ -77,7 +77,7 @@ extension Component {
 // MARK: + Utilities
 //=----------------------------------------------------------------------------=
 
-extension Component {
+extension Glyph {
     
     //=------------------------------------------------------------------------=
     // MARK: Transformations

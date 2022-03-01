@@ -8,11 +8,11 @@
 //=----------------------------------------------------------------------------=
 
 //*============================================================================*
-// MARK: * Components
+// MARK: * Glyphs
 //*============================================================================*
 
 /// An object representing multiple ASCII characters by their UInt8 unicode values.
-@usableFromInline protocol Components: CustomStringConvertible, TextOutputStreamable {
+@usableFromInline protocol Glyphs: CustomStringConvertible, TextOutputStreamable {
     
     //=------------------------------------------------------------------------=
     // MARK: Conversions
@@ -26,7 +26,7 @@
 // MARK: + Conversions
 //=----------------------------------------------------------------------------=
 
-extension Components {
+extension Glyphs {
     
     //=------------------------------------------------------------------------=
     // MARK: Characters / Description

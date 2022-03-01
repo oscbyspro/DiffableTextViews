@@ -13,7 +13,7 @@ import Support
 // MARK: * Digits
 //*============================================================================*
 
-@usableFromInline struct Digits: Components {
+@usableFromInline struct Digits: Glyphs {
     
     //=------------------------------------------------------------------------=
     // MARK: State

@@ -13,7 +13,7 @@ import Foundation
 // MARK: Digit
 //*============================================================================*
 
-@usableFromInline enum Digit: UInt8, Component {
+@usableFromInline enum Digit: UInt8, Glyph {
     
     //=------------------------------------------------------------------------=
     // MARK: Instances
@@ -43,7 +43,7 @@ import Foundation
     //=------------------------------------------------------------------------=
 
     @inlinable var numericValue: UInt8 {
-        rawValue - Self.zero.rawValue
+        rawValue - Digit.zero.rawValue
     }
     
     //=------------------------------------------------------------------------=

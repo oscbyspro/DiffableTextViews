@@ -14,7 +14,7 @@ import Foundation
 //*============================================================================*
 
 /// A system representation of a sign.
-@usableFromInline enum Sign: UInt8, Component {
+@usableFromInline enum Sign: UInt8, Glyph {
     
     //=------------------------------------------------------------------------=
     // MARK: Instances

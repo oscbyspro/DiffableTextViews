@@ -14,7 +14,7 @@ import Foundation
 //*============================================================================*
 
 /// A system representation of a separator.
-@usableFromInline enum Separator: UInt8, Component {
+@usableFromInline enum Separator: UInt8, Glyph {
     
     //=------------------------------------------------------------------------=
     // MARK: Instances

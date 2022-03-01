@@ -17,7 +17,7 @@ import Foundation
 ///
 /// It ensures that each component is bidirectionally mapped to a character.
 ///
-@usableFromInline struct Links<Component: NumericTextStyles.Component> {
+@usableFromInline struct Links<Component: Glyph> {
     
     //=------------------------------------------------------------------------=
     // MARK: State
