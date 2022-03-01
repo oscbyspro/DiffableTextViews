@@ -32,17 +32,17 @@ public extension NumericTextStyle where Value: NumericTextValue_Integer {
     // MARK: Length
     //=------------------------------------------------------------------------=
     
-    @inlinable func precision(_ integer: Int) -> Self {
-        precision(Precision(integer: integer...integer))
+    @inlinable func precision(_ length: Int) -> Self {
+        precision(Precision(integer: length...length))
     }
 
     //=------------------------------------------------------------------------=
     // MARK: Limits
     //=------------------------------------------------------------------------=
     
-    @inlinable func precision<R>(_ integer: R) -> Self where
+    @inlinable func precision<R>(_ limits: R) -> Self where
     R: RangeExpression, R.Bound == Int {
-        precision(Precision(integer: integer))
+        precision(Precision(integer: limits))
     }
 }
 
