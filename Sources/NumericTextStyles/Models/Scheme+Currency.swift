@@ -48,8 +48,8 @@ import Support
     
     @inlinable func autocorrect(_ snapshot: inout Snapshot) {
         guard !label.characters.isEmpty else { return }
-        guard let range = label.range(in: snapshot) else { return }
-        snapshot.update(attributes: range) { attribute in attribute = .phantom }
+        guard let indices = label.indices(in: snapshot) else { return }
+        snapshot.update(attributes: indices) { attribute in attribute = .phantom }
     }
     
     //*========================================================================*

@@ -8,6 +8,7 @@
 //=----------------------------------------------------------------------------=
 
 #if DEBUG
+#if canImport(UIKit)
 
 import UIKit
 import XCTest
@@ -39,4 +40,5 @@ final class ViewsTests_UITextField: XCTestCase {
     }
 }
 
+#endif
 #endif

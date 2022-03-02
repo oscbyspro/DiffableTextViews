@@ -61,7 +61,7 @@ public final class Label {
     //=------------------------------------------------------------------------=
     
     /// Naive search is OK because labels are at or near to the edge.
-    @inlinable func range(in snapshot: Snapshot) -> Range<Snapshot.Index>? {
+    @inlinable func indices(in snapshot: Snapshot) -> Range<Snapshot.Index>? {
         Search.range(of: characters, in: snapshot, reversed: location == .suffix)
     }
     
