@@ -136,6 +136,7 @@ extension Number {
     // MARK: Separator
     //=------------------------------------------------------------------------=
     
+    /// It returns true if a suffixing separator was removed, otherwise it returns false.
     @inlinable @discardableResult mutating func removeSeparatorAsSuffix() -> Bool {
         if hasSeparatorAsSuffix { separator = nil; return true }; return false
     }

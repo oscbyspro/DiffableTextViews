@@ -51,7 +51,7 @@ extension Reader {
     
     @inlinable mutating func translateSingleCharacterInput() {
         guard changes.replacement.count == 1 else { return }
-        self.changes.replacement = Snapshot(changes.replacement.map(translate))
+        self .changes.replacement = Snapshot(changes.replacement.map(translate))
     }
     
     //=------------------------------------------------------------------------=

@@ -8,7 +8,7 @@
 //=----------------------------------------------------------------------------=
 
 //=----------------------------------------------------------------------------=
-// These methods are all used in response to changes downstream (input).
+// This file contains methods used in response to changes downstream.
 //=----------------------------------------------------------------------------=
 
 import Support
@@ -42,9 +42,6 @@ extension Bounds {
     //=------------------------------------------------------------------------=
     
     @inlinable func autovalidate(_ value: Value, _ number: inout Number) throws {
-        //=--------------------------------------=
-        // MARK: Validate, Autocorrect
-        //=--------------------------------------=
         if try edge(value), number.removeSeparatorAsSuffix() {
             Info.print([.autocorrection, .mark(number), "does not fit a fraction separator"])
         }

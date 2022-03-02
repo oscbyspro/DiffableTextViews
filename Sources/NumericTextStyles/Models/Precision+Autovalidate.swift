@@ -8,7 +8,7 @@
 //=----------------------------------------------------------------------------=
 
 //=----------------------------------------------------------------------------=
-// These methods are all used in response to changes downstream (input).
+// This file contains methods used in response to changes downstream.
 //=----------------------------------------------------------------------------=
 
 import Support
