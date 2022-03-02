@@ -41,9 +41,8 @@ struct PatternScreenExample<Style: UIKitDiffableTextStyle>: View where Style.Val
     
     var body: some View {
         Example(value.binding, style: style)
-            .diffableTextField_onSetup {
-                proxy in
-                proxy.keyboard.view(.numberPad)
+            .onSetup(of: .diffableTextField) {
+                $0.keyboard.view(.numberPad)
             }
     }
 }

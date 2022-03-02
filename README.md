@@ -159,7 +159,7 @@ struct DiffablePhoneTextField: View {
     
     var body: some View {
         DiffableTextField($number, style: Self.style)
-            .diffableTextField_onSetup {
+            .onSetup(of: .diffableTextField) {
                 $0.keyboard.view(.numberPad)
             }
     }

@@ -43,9 +43,9 @@ Closures may be set and used at specific times in the view's life cycle.
 
 ```swift
 DiffableTextField($value, style: style)
-    .diffableTextField_onSetup ({ proxy in })
-    .diffableTextField_onSubmit({ proxy in })
-
+    .onSetup (of: .diffableTextField) { proxy in }
+    .onUpdate(of: .diffableTextField) { proxy in }
+    .onSubmit(of: .diffableTextField) { proxy in }
 ```
 
 ## Examples
@@ -93,7 +93,7 @@ struct DiffablePhoneTextField: View {
     
     var body: some View {
         DiffableTextField($number, style: Self.style)
-            .diffableTextField_onSetup {
+            .onSetup(of: .diffableTextField) {
                 $0.keyboard.view(.numberPad)
             }
     }
