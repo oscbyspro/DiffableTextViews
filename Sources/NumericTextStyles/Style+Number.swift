@@ -15,6 +15,11 @@ import Foundation
 //*============================================================================*
 
 extension NumericTextStyle where Format: NumericTextFormat_Number {
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Initializers
+    //=------------------------------------------------------------------------=
+    
     @inlinable public init(locale: Locale = .autoupdatingCurrent) {
         self.init(Format(locale: locale))
     }
@@ -25,6 +30,11 @@ extension NumericTextStyle where Format: NumericTextFormat_Number {
 //*============================================================================*
 
 extension DiffableTextStyle where Self == NumericTextStyle<Decimal> {
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Initializers
+    //=------------------------------------------------------------------------=
+    
     @inlinable public static var number: Self {
         Self()
     }
@@ -35,6 +45,11 @@ extension DiffableTextStyle where Self == NumericTextStyle<Decimal> {
 //*============================================================================*
 
 extension DiffableTextStyle where Self == NumericTextStyle<Double> {
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Initializers
+    //=------------------------------------------------------------------------=
+    
     @inlinable public static var number: Self {
         Self()
     }
@@ -45,6 +60,11 @@ extension DiffableTextStyle where Self == NumericTextStyle<Double> {
 //*============================================================================*
 
 extension DiffableTextStyle where Self == NumericTextStyle<Int> {
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Initializers
+    //=------------------------------------------------------------------------=
+    
     @inlinable public static var number: Self {
         Self()
     }
@@ -55,6 +75,11 @@ extension DiffableTextStyle where Self == NumericTextStyle<Int> {
 //*============================================================================*
 
 extension DiffableTextStyle where Self == NumericTextStyle<Int8> {
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Initializers
+    //=------------------------------------------------------------------------=
+    
     @inlinable public static var number: Self {
         Self()
     }
@@ -65,6 +90,11 @@ extension DiffableTextStyle where Self == NumericTextStyle<Int8> {
 //*============================================================================*
 
 extension DiffableTextStyle where Self == NumericTextStyle<Int16> {
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Initializers
+    //=------------------------------------------------------------------------=
+    
     @inlinable public static var number: Self {
         Self()
     }
@@ -75,6 +105,11 @@ extension DiffableTextStyle where Self == NumericTextStyle<Int16> {
 //*============================================================================*
 
 extension DiffableTextStyle where Self == NumericTextStyle<Int32> {
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Initializers
+    //=------------------------------------------------------------------------=
+    
     @inlinable public static var number: Self {
         Self()
     }
@@ -85,6 +120,11 @@ extension DiffableTextStyle where Self == NumericTextStyle<Int32> {
 //*============================================================================*
 
 extension DiffableTextStyle where Self == NumericTextStyle<Int64> {
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Initializers
+    //=------------------------------------------------------------------------=
+    
     @inlinable public static var number: Self {
         Self()
     }
@@ -95,6 +135,11 @@ extension DiffableTextStyle where Self == NumericTextStyle<Int64> {
 //*============================================================================*
 
 extension DiffableTextStyle where Self == NumericTextStyle<UInt> {
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Initializers
+    //=------------------------------------------------------------------------=
+    
     @inlinable public static var number: Self {
         Self()
     }
@@ -105,6 +150,11 @@ extension DiffableTextStyle where Self == NumericTextStyle<UInt> {
 //*============================================================================*
 
 extension DiffableTextStyle where Self == NumericTextStyle<UInt8> {
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Initializers
+    //=------------------------------------------------------------------------=
+    
     @inlinable public static var number: Self {
         Self()
     }
@@ -115,6 +165,11 @@ extension DiffableTextStyle where Self == NumericTextStyle<UInt8> {
 //*============================================================================*
 
 extension DiffableTextStyle where Self == NumericTextStyle<UInt16> {
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Initializers
+    //=------------------------------------------------------------------------=
+    
     @inlinable public static var number: Self {
         Self()
     }
@@ -125,6 +180,11 @@ extension DiffableTextStyle where Self == NumericTextStyle<UInt16> {
 //*============================================================================*
 
 extension DiffableTextStyle where Self == NumericTextStyle<UInt32> {
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Initializers
+    //=------------------------------------------------------------------------=
+    
     @inlinable public static var number: Self {
         Self()
     }
@@ -135,6 +195,11 @@ extension DiffableTextStyle where Self == NumericTextStyle<UInt32> {
 //*============================================================================*
 
 extension DiffableTextStyle where Self == NumericTextStyle<UInt64> {
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Initializers
+    //=------------------------------------------------------------------------=
+    
     @inlinable public static var number: Self {
         Self()
     }

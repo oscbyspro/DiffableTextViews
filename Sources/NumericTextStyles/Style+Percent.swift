@@ -15,6 +15,11 @@ import Foundation
 //*============================================================================*
 
 extension NumericTextStyle where Format: NumericTextFormat_Percent {
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Initializers
+    //=------------------------------------------------------------------------=
+    
     @inlinable public init(locale: Locale =  .autoupdatingCurrent) {
         self.init(Format(locale: locale))
     }
@@ -25,6 +30,11 @@ extension NumericTextStyle where Format: NumericTextFormat_Percent {
 //*============================================================================*
 
 extension DiffableTextStyle where Self == NumericTextStyle<Decimal>.Percent {
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Initializers
+    //=------------------------------------------------------------------------=
+    
     @inlinable public static var percent: Self {
         Self()
     }
@@ -35,6 +45,11 @@ extension DiffableTextStyle where Self == NumericTextStyle<Decimal>.Percent {
 //*============================================================================*
 
 extension DiffableTextStyle where Self == NumericTextStyle<Double>.Percent {
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Initializers
+    //=------------------------------------------------------------------------=
+    
     @inlinable public static var percent: Self {
         Self()
     }
