@@ -100,7 +100,7 @@ extension NumericTextStyle {
     //=------------------------------------------------------------------------=
     
     @inlinable public func interpret(_ value: Value) -> Commit<Value> {
-        var style = format.precision(precision.active())
+        let style = format.precision(precision.active())
         var value = value
         //=--------------------------------------=
         // MARK: Autocorrect
@@ -121,10 +121,6 @@ extension NumericTextStyle {
         // MARK: Value <- Number
         //=--------------------------------------=
         value = try! self.value(number)
-        //=--------------------------------------=
-        // MARK: Style
-        //=--------------------------------------=
-        style = style.sign(self.sign(number))
         //=--------------------------------------=
         // MARK: Commit
         //=--------------------------------------=
@@ -167,13 +163,9 @@ extension NumericTextStyle {
         //=--------------------------------------=
         try bounds.autovalidate(value, &number)
         //=--------------------------------------=
-        // MARK: Style
-        //=--------------------------------------=
-        let style = format.precision(precision.interactive(count))
-        .separator(self.separator(number)).sign(self.sign(number))
-        //=--------------------------------------=
         // MARK: Commit
         //=--------------------------------------=
+        let style = format.precision(precision.interactive(count))
         return self.commit(value, number, style)
     }
 }
