@@ -110,10 +110,10 @@ extension Count: TextOutputStreamable {
     // MARK: Description
     //=------------------------------------------------------------------------=
     
-    @inlinable public func write<T>(to stream: inout T) where T: TextOutputStream {
-        stream.write("\(Self.self)(")
-        Count.components.lazy.map(text).joined(separator: ", ").write(to: &stream)
-        stream.write(")")
+    @inlinable public func write<T>(to target: inout T) where T: TextOutputStream {
+        target.write("\(Self.self)(")
+        Count.components.lazy.map(text).joined(separator: ", ").write(to: &target)
+        target.write(")")
     }
     
     //=------------------------------------------------------------------------=
