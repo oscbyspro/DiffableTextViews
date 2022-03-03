@@ -265,7 +265,7 @@ public struct DiffableTextFieldID { public static let diffableTextField = Self()
 // MARK: * DiffableTextField x Environment
 //*============================================================================*
 
-@usableFromInline struct DiffableTextField_OnSetup: EnvironmentKey {
+@usableFromInline enum DiffableTextField_OnSetup:  EnvironmentKey {
     @usableFromInline static let defaultValue: (ProxyTextField) -> Void = { _ in }
 }
 
