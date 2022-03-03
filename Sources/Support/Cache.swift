@@ -29,6 +29,10 @@ public final class Cache<Key, Value> where Key: Hashable & AnyObject, Value: Any
         self.nscache = NSCache()
     }
 
+    @inlinable public convenience init(_ max: Int) {
+        self.init(); self.nscache.countLimit = max
+    }
+    
     //=------------------------------------------------------------------------=
     // MARK: Search or Insert
     //=------------------------------------------------------------------------=
