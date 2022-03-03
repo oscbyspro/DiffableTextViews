@@ -57,7 +57,7 @@ public struct Count: Equatable {
     // MARK: Indices
     //=------------------------------------------------------------------------=
     
-    @inlinable var indices: [Component] { Component.all }
+    @inlinable var components: [Component] { Component.all }
     
     //*========================================================================*
     // MARK: * Index
@@ -101,15 +101,6 @@ extension Count {
     
     @inlinable func first<T>(where predicate: ((SIMD, T) -> Mask, T)) -> Component? {
         let result = predicate.0(storage, predicate.1)
-        //=--------------------------------------=
-        // MARK: Search
-        //=--------------------------------------=
-        for component in indices where result[component.rawValue] {
-            return component
-        }
-        //=--------------------------------------=
-        // MARK: Failure == None
-        //=--------------------------------------=
-        return nil
+        return components.first{ result[$0.rawValue] }
     }
 }
