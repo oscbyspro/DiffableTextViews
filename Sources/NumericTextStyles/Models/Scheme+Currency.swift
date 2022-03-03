@@ -16,7 +16,7 @@ import Support
 //*============================================================================*
 
 @usableFromInline final class NumericTextScheme_Currency: Schemes.Reuseable {
-    @usableFromInline static let cache = Cache<ID, NumericTextScheme_Currency>(33)
+    @usableFromInline static let cache = Cache<ID, NumericTextScheme_Currency>()
     
     //=------------------------------------------------------------------------=
     // MARK: State

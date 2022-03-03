@@ -28,15 +28,7 @@ public final class Cache<Key, Value> where Key: Hashable & AnyObject, Value: Any
     @inlinable public init() {
         self.nscache = NSCache()
     }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Initializers - Indirect
-    //=------------------------------------------------------------------------=
-    
-    @inlinable public convenience init(_ size: Int) {
-        self.init(); self.nscache.countLimit = size
-    }
-    
+
     //=------------------------------------------------------------------------=
     // MARK: Search or Insert
     //=------------------------------------------------------------------------=

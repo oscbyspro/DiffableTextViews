@@ -112,7 +112,7 @@ extension Count: TextOutputStreamable {
     
     @inlinable public func write<T>(to target: inout T) where T: TextOutputStream {
         target.write("\(Self.self)(")
-        Count.components.lazy.map(text).joined(separator: ", ").write(to: &target)
+        target.write(Count.components.map(text).joined(separator: ", "))
         target.write(")")
     }
     
