@@ -188,6 +188,9 @@
                   Identifier = "StyleTests_Currency/testFloat64()">
                </Test>
                <Test
+                  Identifier = "StyleTests_Currency/testFloat64_aka_Double()">
+               </Test>
+               <Test
                   Identifier = "StyleTests_Currency/testInt()">
                </Test>
                <Test
