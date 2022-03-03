@@ -100,7 +100,7 @@ extension NumericTextStyle {
     //=------------------------------------------------------------------------=
     
     @inlinable public func interpret(_ value: Value) -> Commit<Value> {
-        let style = format.precision(precision.active())
+        let style = format.precision(precision.active()).rounded(.towardZero)
         var value = value
         //=--------------------------------------=
         // MARK: Autocorrect

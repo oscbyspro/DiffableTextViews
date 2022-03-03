@@ -35,6 +35,7 @@ import Foundation
 public protocol NumericTextFormat: ParseableFormatStyle where FormatInput: NumericTextValue, FormatOutput == String {
     associatedtype NumericTextScheme: NumericTextStyles.NumericTextScheme
     associatedtype SignDisplayStrategy: NumericTextSignDisplayStrategyRepresentable
+    associatedtype RoundingIncrement
     
     //=------------------------------------------------------------------------=
     // MARK: State
@@ -49,6 +50,7 @@ public protocol NumericTextFormat: ParseableFormatStyle where FormatInput: Numer
     @inlinable func sign(strategy: Self.SignDisplayStrategy) -> Self
     @inlinable func precision(_ precision: NumberFormatStyleConfiguration.Precision) -> Self
     @inlinable func decimalSeparator(strategy: NumberFormatStyleConfiguration.DecimalSeparatorDisplayStrategy) -> Self
+    @inlinable func rounded(rule: FloatingPointRoundingRule, increment: Self.RoundingIncrement?) -> Self
     
     //=------------------------------------------------------------------------=
     // MARK: Translation
@@ -66,6 +68,7 @@ extension NumericTextFormat {
     @usableFromInline typealias Precision = NumberFormatStyleConfiguration.Precision
     @usableFromInline typealias Separator = NumberFormatStyleConfiguration.DecimalSeparatorDisplayStrategy
     @usableFromInline typealias Sign = NumericTextSignDisplayStrategy
+    @usableFromInline typealias Rounded = FloatingPointRoundingRule
     
     //=------------------------------------------------------------------------=
     // MARK: Parse
@@ -85,6 +88,10 @@ extension NumericTextFormat {
     
     @inlinable func separator(_ strategy: Self.Separator) -> Self {
         self.decimalSeparator(strategy: strategy)
+    }
+    
+    @inlinable func rounded(_ strategy: Self.Rounded) -> Self {
+        self.rounded(rule: strategy, increment: nil)
     }
 }
 
