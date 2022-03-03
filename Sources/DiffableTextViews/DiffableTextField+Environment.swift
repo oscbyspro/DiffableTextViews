@@ -15,7 +15,7 @@ import SwiftUI
 // MARK: * DiffableTextField x ID
 //*============================================================================*
 
-public enum DiffableTextFieldID { case diffableTextField }
+public struct DiffableTextFieldID { public static let diffableTextField = Self() }
 
 //*============================================================================*
 // MARK: * DiffableTextField x Environment
