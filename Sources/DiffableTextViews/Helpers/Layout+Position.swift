@@ -31,20 +31,8 @@ extension Layout {
     //=------------------------------------------------------------------------=
 
     @inlinable func indices(start: Range<Index>, destination: Range<Position>) -> Range<Index> {
-        //=--------------------------------------=
-        // MARK: Single
-        //=--------------------------------------=
         let upperBound = index(start: start.upperBound, destination: destination.upperBound)
-        var lowerBound = upperBound
-        //=--------------------------------------=
-        // MARK: Double
-        //=--------------------------------------=
-        if !destination.isEmpty {
-            lowerBound = index(start: start.lowerBound, destination: destination.lowerBound)
-        }
-        //=--------------------------------------=
-        // MARK: Return
-        //=--------------------------------------=
-        return lowerBound ..< upperBound
+        if destination.isEmpty { return upperBound ..< upperBound }
+        return index(start: start.lowerBound, destination: destination.lowerBound) ..< upperBound
     }
 }

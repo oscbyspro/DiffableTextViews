@@ -27,7 +27,7 @@ extension Field {
         //=--------------------------------------=
         // MARK: Double
         //=--------------------------------------=
-        if !self.selection.isEmpty {
+        if !selection.isEmpty {
             lowerBound = Mismatches.prefix(past: self.layout[..<selection.lowerBound], next: layout).next
             lowerBound = min(lowerBound, upperBound)
         }

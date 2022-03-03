@@ -152,9 +152,9 @@ public struct DiffableTextField<Style: UIKitDiffableTextStyle>: UIViewRepresenta
             let range = context.field.indices(at: nsRange)
             let changes = Changes(context.field.snapshot, change: (string, range))
             //=----------------------------------=
-            // MARK: Attempt
+            // MARK: Merge
             //=----------------------------------=
-            attempt: do {
+            merge: do {
                 let commit = try style.merge(changes)
                 //=------------------------------=
                 // MARK: Push
