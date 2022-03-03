@@ -90,30 +90,6 @@ public struct Precision<Value: NumericTextValue>: Equatable {
     }
 }
 
-//=----------------------------------------------------------------------------=
-// MARK: + Conversions
-//=----------------------------------------------------------------------------=
-
-extension Precision: CustomStringConvertible {
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Description
-    //=------------------------------------------------------------------------=
-    
-    @inlinable public var description: String {
-        func text(component:  Count.Component) -> String {
-            "\(component): \((lower[component], upper[component]))"
-        }
-        //=--------------------------------------=
-        // MARK: Make
-        //=--------------------------------------=
-        var description = "\(Self.self)("
-        description += Count.Component.allCases
-        .lazy.map(text).joined(separator: ", ")
-        description += ")"; return description
-    }
-}
-
 //*============================================================================*
 // MARK: * Precision x Namespace
 //*============================================================================*
@@ -136,5 +112,31 @@ extension Precision: CustomStringConvertible {
         let lower = min(max(limits.lowerBound, range.lowerBound),     limits.upperBound)
         let upper = min(max(limits.lowerBound, range.upperBound - 1), limits.upperBound)
         return lower...upper
+    }
+}
+
+//=----------------------------------------------------------------------------=
+// MARK: + Conversions
+//=----------------------------------------------------------------------------=
+
+extension Precision: CustomStringConvertible {
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Description
+    //=------------------------------------------------------------------------=
+    
+    @inlinable public var description: String {
+        var description = "\(Self.self)("
+        description += Count.Component.all.lazy
+        .map(text(_:)).joined(separator: ", ")
+        description += ")"; return description
+    }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Helpers
+    //=------------------------------------------------------------------------=
+    
+    @inlinable func text(_ component: Count.Component) -> String {
+        "\(component): \((lower[component], upper[component]))"
     }
 }

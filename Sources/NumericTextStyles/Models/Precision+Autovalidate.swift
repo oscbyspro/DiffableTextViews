@@ -38,11 +38,11 @@ extension Precision {
     //=------------------------------------------------------------------------=
     
     @inlinable func capacity(_ count: Count) throws -> Count {
-        let capacity = upper.transform(&-, count)
+        let capacity = upper.map((&-, count))
         //=--------------------------------------=
         // MARK: Validate Each Component
         //=--------------------------------------=
-        if let component = capacity.first(where: { $0 < 0 }) {
+        if let component = capacity.first(where: (.<, 0)) {
             throw Info([.mark(component), "digits exceed max precision", .mark(upper[component])])
         }
         //=--------------------------------------=

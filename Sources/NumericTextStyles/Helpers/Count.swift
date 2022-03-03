@@ -16,18 +16,20 @@
 /// - Value is defined as: integer + fraction - integer prefix zeros.
 ///
 public struct Count: Equatable {
-
+    @usableFromInline typealias SIMD = SIMD3<Int>
+    @usableFromInline typealias Mask = SIMDMask<SIMD>
+    
     //=------------------------------------------------------------------------=
     // MARK: State
     //=------------------------------------------------------------------------=
     
-    @usableFromInline var storage: SIMD3<Int>
+    @usableFromInline var storage: SIMD
 
     //=------------------------------------------------------------------------=
     // MARK: Initializers
     //=------------------------------------------------------------------------=
 
-    @inlinable init(_ storage: SIMD3<Int>) {
+    @inlinable init(_ storage: SIMD) {
         self.storage = storage
     }
     
@@ -39,51 +41,75 @@ public struct Count: Equatable {
     // MARK: Accessors
     //=------------------------------------------------------------------------=
     
-    @inlinable public var value:    Int { storage.x }
-    @inlinable public var integer:  Int { storage.y }
-    @inlinable public var fraction: Int { storage.z }
+    @inlinable var value:    Int { storage.x }
+    @inlinable var integer:  Int { storage.y }
+    @inlinable var fraction: Int { storage.z }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Elements
+    //=------------------------------------------------------------------------=
+
+    @inlinable subscript(component: Component) -> Int {
+        storage[component.rawValue]
+    }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Indices
+    //=------------------------------------------------------------------------=
+    
+    @inlinable var indices: [Component] { Component.all }
+    
+    //*========================================================================*
+    // MARK: * Index
+    //*========================================================================*
+    
+    @usableFromInline enum Component: Int {
+        
+        //=--------------------------------------------------------------------=
+        // MARK: Instances
+        //=--------------------------------------------------------------------=
+        
+        case value    = 0
+        case integer  = 1
+        case fraction = 2
+        
+        //=--------------------------------------------------------------------=
+        // MARK: Constants
+        //=--------------------------------------------------------------------=
+        
+        @usableFromInline static let all: [Self] = [.value, .integer, .fraction]
+    }
+}
+
+//=----------------------------------------------------------------------------=
+// MARK: + Utilities
+//=----------------------------------------------------------------------------=
+
+extension Count {
 
     //=------------------------------------------------------------------------=
     // MARK: Transformations
     //=------------------------------------------------------------------------=
     
-    @inlinable func transform(_ transform: (SIMD3<Int>, SIMD3<Int>) -> SIMD3<Int>, _ other: Self) -> Self {
-        Self(transform(storage, other.storage))
+    @inlinable func map(_ transformation: ((SIMD, SIMD) -> SIMD, Self)) -> Self {
+        Self(transformation.0(storage, transformation.1.storage))
     }
-}
 
-//=----------------------------------------------------------------------------=
-// MARK: + Component
-//=----------------------------------------------------------------------------=
-
-extension Count {
+    //=------------------------------------------------------------------------=
+    // MARK: Search
+    //=------------------------------------------------------------------------=
     
-    //=------------------------------------------------------------------------=
-    // MARK: Accessors
-    //=------------------------------------------------------------------------=
-
-    @inlinable subscript(component: Self.Component) -> Int {
-        switch component {
-        case .value:    return value
-        case .integer:  return integer
-        case .fraction: return fraction
+    @inlinable func first<T>(where predicate: ((SIMD, T) -> Mask, T)) -> Component? {
+        let result = predicate.0(storage, predicate.1)
+        //=--------------------------------------=
+        // MARK: Search
+        //=--------------------------------------=
+        for component in indices where result[component.rawValue] {
+            return component
         }
-    }
-
-    //=------------------------------------------------------------------------=
-    // MARK: Utilities
-    //=------------------------------------------------------------------------=
-    
-    @inlinable func first(where predicate: (Int) -> Bool) -> Self.Component? {
-        if predicate(value)    { return .value    }
-        if predicate(integer)  { return .integer  }
-        if predicate(fraction) { return .fraction }
+        //=--------------------------------------=
+        // MARK: Failure == None
+        //=--------------------------------------=
         return nil
     }
-
-    //*========================================================================*
-    // MARK: * Component
-    //*========================================================================*
-    
-    @usableFromInline enum Component: CaseIterable { case value, integer, fraction }
 }

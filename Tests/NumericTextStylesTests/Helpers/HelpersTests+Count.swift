@@ -14,35 +14,37 @@ import XCTestSupport
 @testable import NumericTextStyles
 
 //*============================================================================*
-// MARK: * HelpersTests x Links
+// MARK: * HelpersTests x Count
 //*============================================================================*
 
-final class HelpersTests_Links: Tests {
+final class HelpersTests_Count: Tests {
     
     //=------------------------------------------------------------------------=
-    // MARK: Assertions
+    // MARK: State
     //=------------------------------------------------------------------------=
     
-    func XCTAssertEachCaseIsBidirectionallyLinked<T>(_ links: Links<T>) {
-        for component in T.allCases {
-            XCTAssertEqual(component, links[links[component]])
-        }
-    }
+    let count = Count(value: 0, integer: 1, fraction: 2)
     
     //=------------------------------------------------------------------------=
     // MARK: Tests
     //=------------------------------------------------------------------------=
-
-    func testEachLexiconIsFullyBidirectionallyLinked() {
-        //=--------------------------------------=
-        // MARK: Lexicons
-        //=--------------------------------------=
-        for lexicon in standard {
-            XCTAssertEachCaseIsBidirectionallyLinked(lexicon.signs)
-            XCTAssertEachCaseIsBidirectionallyLinked(lexicon.digits)
-            XCTAssertEachCaseIsBidirectionallyLinked(lexicon.separators)
-        }
+    
+    func testLanes() {
+        XCTAssertEqual(count, Count(SIMD3(0, 1, 2)))
+    }
+    
+    func testAccessors() {
+        XCTAssertEqual(count.value,    0)
+        XCTAssertEqual(count.integer,  1)
+        XCTAssertEqual(count.fraction, 2)
+    }
+    
+    func testComponents() {
+        XCTAssertEqual(count[.value],    0)
+        XCTAssertEqual(count[.integer],  1)
+        XCTAssertEqual(count[.fraction], 2)
     }
 }
+
 
 #endif
