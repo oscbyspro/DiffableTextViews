@@ -37,17 +37,25 @@ public protocol DiffableTextStyle: Equatable {
     // MARK: Upstream
     //=------------------------------------------------------------------------=
     
-    /// Formats the value, when the view is inactive.
+    /// Returns a formatted text.
+    ///
+    /// This method is called in response to changes upstream while view is active.
+    ///
     @inlinable func format(_ value: Value) -> String
 
-    /// Transforms the value into a value and a snapshot, when view is active.
+    /// Returns a value and a snapshot.
+    ///
+    /// This method is called in response to changes upstream while view is active.
+    ///
     @inlinable func interpret(_ value: Value) -> Commit<Value>
 
     //=------------------------------------------------------------------------=
     // MARK: Downstream
     //=------------------------------------------------------------------------=
     
-    /// Transforms changes into a value and a snapshot, on user input.
+    /// Returns a value and a snapshot.
+    ///
+    /// This method is called in response to user input.
     ///
     /// - Thrown errors result in input cancellation.
     /// - Thrown errors have their descriptions printed in DEBUG mode.
