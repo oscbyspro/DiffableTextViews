@@ -5,17 +5,11 @@ A view that uses styles to formats and parses text as you type.
 - Available in SwiftUI/iOS.
 - Written in SwiftUI/UIKit.
 
-## Defaults
-
-Some non-standard values have been set to enhance the uncustomized experience.
-
-### Values
+### Defaults
 
 |   | Value | Description | Comment |
 |---|-------|-------------|---------|
 | :balance_scale: | Font | Monospaced | As-you-type formatting works best with it |
-
-## Customization
 
 ### Locale
 
@@ -31,7 +25,7 @@ view.onUpdate(of: .diffableTextField) { proxy in }
 view.onSubmit(of: .diffableTextField) { proxy in }
 ```
 
-### [ProxyTextField](Sources/DiffableTextViews/Views)
+### [ProxyTextField](../Sources/DiffableTextViews/Views)
 
 ```swift
 proxy.text.color(.black)
@@ -39,12 +33,10 @@ proxy.text.font(.body.monospaced())
 proxy.selection.color(.blue, mode: .dimmed)
 ```
 
-### Style
+### [UIKitDiffableTextStyle](../Sources/DiffableTextViews/DiffableTextStyle+UIKit.swift)
 
 ```swift
-extension Style: UIKitDiffableTextStyle {    
-    static func onSetup(_ diffableTextField: ProxyTextField) { ... }
-}
+static func onSetup(_ diffableTextField: ProxyTextField) { ... }
 ```
 
 ## Examples
