@@ -19,15 +19,11 @@ Some non-standard values have been set to enhance the uncustomized experience.
 
 ### Locale
 
-The locale may be set through the environment.
-
 ```swift
 view.environment(\.locale, locale)
 ```
 
 ### Triggers
-
-Triggers maybe be set through the environment.
 
 ```swift
 view.onSetup (of: .diffableTextField) { proxy in }
@@ -37,8 +33,6 @@ view.onSubmit(of: .diffableTextField) { proxy in }
 
 ### [ProxyTextField](Sources/DiffableTextViews/Views)
 
-A UITextField customization point.
-
 ```swift
 proxy.text.color(.black)
 proxy.text.font(.body.monospaced())
@@ -46,8 +40,6 @@ proxy.selection.color(.blue, mode: .dimmed)
 ```
 
 ### Style
-
-Styles may configure the view at setup, should it be deemed appropriate. 
 
 ```swift
 extension Style: UIKitDiffableTextStyle {    

@@ -74,15 +74,11 @@ A view that uses styles to format and parse text.
 
 ### Locale
 
-The locale may be set through the environment.
-
 ```swift
 view.environment(\.locale, locale)
 ```
 
 ### Triggers
-
-Triggers maybe be set through the environment.
 
 ```swift
 view.onSetup (of: .diffableTextField) { proxy in }
@@ -91,8 +87,6 @@ view.onSubmit(of: .diffableTextField) { proxy in }
 ```
 
 ### [ProxyTextField](Sources/DiffableTextViews/Views)
-
-A UITextField customization point.
 
 ```swift
 proxy.text.color(.black)
