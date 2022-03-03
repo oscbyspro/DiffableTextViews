@@ -57,28 +57,23 @@ public struct Count: Equatable {
     // MARK: Indices
     //=------------------------------------------------------------------------=
     
-    @inlinable var components: [Component] { Component.all }
+    @inlinable var components: [Component] { Self.components }
     
     //*========================================================================*
-    // MARK: * Index
+    // MARK: * Component
     //*========================================================================*
-    
-    @usableFromInline enum Component: Int {
         
-        //=--------------------------------------------------------------------=
-        // MARK: Instances
-        //=--------------------------------------------------------------------=
-        
+    @usableFromInline enum Component: Int, CaseIterable {
         case value    = 0
         case integer  = 1
         case fraction = 2
-        
-        //=--------------------------------------------------------------------=
-        // MARK: Constants
-        //=--------------------------------------------------------------------=
-        
-        @usableFromInline static let all: [Self] = [.value, .integer, .fraction]
     }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Constants
+    //=------------------------------------------------------------------------=
+    
+    @usableFromInline static let components = Component.allCases
 }
 
 //=----------------------------------------------------------------------------=
@@ -100,7 +95,32 @@ extension Count {
     //=------------------------------------------------------------------------=
     
     @inlinable func first<T>(where predicate: ((SIMD, T) -> Mask, T)) -> Component? {
-        let result = predicate.0(storage, predicate.1)
-        return components.first{ result[$0.rawValue] }
+        let mask = predicate.0(storage, predicate.1)
+        return components.first{ mask[$0.rawValue] }
+    }
+}
+
+//=----------------------------------------------------------------------------=
+// MARK: + Conversions
+//=----------------------------------------------------------------------------=
+
+extension Count: TextOutputStreamable {
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Characters
+    //=------------------------------------------------------------------------=
+    
+    @inlinable public func write<T>(to stream: inout T) where T: TextOutputStream {
+        stream.write("\(Self.self)(")
+        Count.components.lazy.map(text).joined(separator: ", ").write(to: &stream)
+        stream.write(")")
+    }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Characters - Helpers
+    //=------------------------------------------------------------------------=
+    
+    @inlinable func text(_ component: Component) -> String {
+        "\(component): \(self[component])"
     }
 }
