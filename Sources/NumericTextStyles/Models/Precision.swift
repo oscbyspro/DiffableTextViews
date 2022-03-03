@@ -122,7 +122,7 @@ public struct Precision<Value: NumericTextValue>: Equatable {
 extension Precision: TextOutputStreamable {
     
     //=------------------------------------------------------------------------=
-    // MARK: Characters
+    // MARK: Description
     //=------------------------------------------------------------------------=
     
     @inlinable public func write<T>(to stream: inout T) where T: TextOutputStream {
@@ -132,7 +132,7 @@ extension Precision: TextOutputStreamable {
     }
     
     //=------------------------------------------------------------------------=
-    // MARK: Characters - Helpers
+    // MARK: Description - Helpers
     //=------------------------------------------------------------------------=
     
     @inlinable func text(_ component: Count.Component) -> String {
