@@ -18,8 +18,8 @@ import XCTestSupport
 // MARK: * StyleTests x Currency
 //*============================================================================*
 
-/// - About 100 MB will be allocated by testing.
 /// - There are about 144k locale-currency pairs, so it may take a while.
+/// - About 300 MB will be allocated by testing because each is cached.
 final class StyleTests_Currency: Tests, StyleTests {
     
     //=------------------------------------------------------------------------=
