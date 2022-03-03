@@ -17,7 +17,7 @@
 ///
 /// - Note: This is NOT a thread lock.
 ///
-@usableFromInline @MainActor final class Lock {
+@usableFromInline final class Lock {
     
     //=------------------------------------------------------------------------=
     // MARK: State
