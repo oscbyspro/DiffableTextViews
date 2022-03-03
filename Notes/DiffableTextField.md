@@ -15,17 +15,35 @@ Some non-standard values have been set to enhance the uncustomized experience.
 |---|-------|-------------|---------|
 | :balance_scale: | Font | Monospaced | As-you-type formatting works best with it |
 
-## Environment
-
-The environment is used to seamlessly synchronize the view with the app state.
-
-### Values
-
-|   | Value  | Behavior |
-|---|--------|----------|
-| :national_park: | Locale | Overridden |
-
 ## Customization
+
+### Locale
+
+The locale may be set through the environment.
+
+```swift
+view.environment(\.locale, locale)
+```
+
+### Triggers
+
+Triggers maybe be set through the environment.
+
+```swift
+view.onSetup (of: .diffableTextField) { proxy in }
+view.onUpdate(of: .diffableTextField) { proxy in }
+view.onSubmit(of: .diffableTextField) { proxy in }
+```
+
+### [ProxyTextField](Sources/DiffableTextViews/Views)
+
+A UITextField customization point.
+
+```swift
+proxy.text.color(.black)
+proxy.text.font(.body.monospaced())
+proxy.selection.color(.blue, mode: .dimmed)
+```
 
 ### Style
 
@@ -35,17 +53,6 @@ Styles may configure the view at setup, should it be deemed appropriate.
 extension Style: UIKitDiffableTextStyle {    
     static func onSetup(_ diffableTextField: ProxyTextField) { ... }
 }
-```
-
-### View
-
-Closures may be set and used at specific times in the view's life cycle.
-
-```swift
-DiffableTextField($value, style: style)
-    .onSetup (of: .diffableTextField) { proxy in }
-    .onUpdate(of: .diffableTextField) { proxy in }
-    .onSubmit(of: .diffableTextField) { proxy in }
 ```
 
 ## Examples
@@ -104,7 +111,7 @@ struct DiffablePhoneTextField: View {
     
     static let style = PatternTextStyle<String>
         .pattern("+## (###) ###-##-##")
-        .placeholder("#" as Character) { $0.isASCII && $0.isNumber }
+        .placeholder("#") { $0.isASCII && $0.isNumber }
         .constant()
 }
 ```

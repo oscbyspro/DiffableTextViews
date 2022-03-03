@@ -53,7 +53,7 @@ struct DiffablePhoneTextField: View {
     
     static let style = PatternTextStyle<String>
         .pattern("+## (###) ###-##-##")
-        .placeholder("#" as Character) { $0.isASCII && $0.isNumber }
+        .placeholder("#") { $0.isASCII && $0.isNumber }
         .constant()
 }
 ```
@@ -86,7 +86,7 @@ struct DiffableCardTextField: View {
 
     static let style = PatternTextStyle<String>
         .pattern("#### #### #### ####")
-        .placeholder("#" as Character) { $0.isASCII && $0.isNumber }
+        .placeholder("#") { $0.isASCII && $0.isNumber }
         .hidden().constant()
 }
 ```

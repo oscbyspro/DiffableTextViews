@@ -20,6 +20,7 @@ public final class ProxyTextField: BasicTextField.View {
     public final class Selection: BasicTextField.View { }
     public final class Text: BasicTextField.View { }
     public final class Traits: BasicTextField.View { }
+    public final class View: BasicTextField.View { }
 
     //=------------------------------------------------------------------------=
     // MARK: Accessors
@@ -39,6 +40,10 @@ public final class ProxyTextField: BasicTextField.View {
     
     @inlinable public var traits: Traits {
         Traits(wrapped)
+    }
+    
+    @inlinable public var view: View {
+        View(wrapped)
     }
     
     //=------------------------------------------------------------------------=

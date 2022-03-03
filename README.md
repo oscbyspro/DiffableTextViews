@@ -72,14 +72,32 @@ A view that uses styles to format and parse text.
 | :balance_scale: | Monospaced | The standard font is monospaced |
 | :sewing_needle: | Customizable | Styles may provide default values |
 
+### Locale
+
+The locale may be set through the environment.
+
+```swift
+view.environment(\.locale, locale)
+```
+
+### Triggers
+
+Triggers maybe be set through the environment.
+
+```swift
+view.onSetup (of: .diffableTextField) { proxy in }
+view.onUpdate(of: .diffableTextField) { proxy in }
+view.onSubmit(of: .diffableTextField) { proxy in }
+```
+
 ### [ProxyTextField](Sources/DiffableTextViews/Views)
 
 A UITextField customization point.
 
 ```swift
-diffableTextField.text.color(.black)
-diffableTextField.text.font(.body.monospaced())
-diffableTextField.selection.color(.blue, mode: .dimmed)
+proxy.text.color(.black)
+proxy.text.font(.body.monospaced())
+proxy.selection.color(.blue, mode: .dimmed)
 ```
 
 # Styles
@@ -159,7 +177,7 @@ struct DiffablePhoneTextField: View {
     
     var body: some View {
         DiffableTextField($number, style: Self.style)
-            .onSetup(of: .diffableTextField) {
+            .onSetup(of: .diffableTextField) { 
                 $0.keyboard.view(.numberPad)
             }
     }
@@ -170,7 +188,7 @@ struct DiffablePhoneTextField: View {
     
     static let style = PatternTextStyle<String>
         .pattern("+## (###) ###-##-##")
-        .placeholder("#" as Character) { $0.isASCII && $0.isNumber }
+        .placeholder("#") { $0.isASCII && $0.isNumber }
         .constant()
 }
 ```

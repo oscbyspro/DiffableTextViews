@@ -64,9 +64,9 @@ struct PatternScreenExamples: View {
     
     static let phone = PatternTextStyle<String>
         .pattern("+## (###) ###-##-##")
-        .placeholder("#" as Character) { $0.isASCII && $0.isNumber }
+        .placeholder("#") { $0.isASCII && $0.isNumber }
     
     static let card = PatternTextStyle<String>
         .pattern("#### #### #### ####")
-        .placeholder("#" as Character) { $0.isASCII && $0.isNumber }
+        .placeholder("#") { $0.isASCII && $0.isNumber }
 }
