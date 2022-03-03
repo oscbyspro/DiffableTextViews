@@ -15,6 +15,11 @@
 @usableFromInline enum Mismatches<Past, Next> where
 Past: BidirectionalCollection, Past.Element == Symbol,
 Next: BidirectionalCollection, Next.Element == Symbol {
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Aliases
+    //=------------------------------------------------------------------------=
+    
     @usableFromInline typealias Indices = (past: Past.Index, next: Next.Index)
     @usableFromInline typealias Reversed = Mismatches<ReversedCollection<Past>, ReversedCollection<Next>>
 
@@ -22,11 +27,8 @@ Next: BidirectionalCollection, Next.Element == Symbol {
     // MARK: Prefix
     //=------------------------------------------------------------------------=
     
-    /// Returns caret positions before the first irreconcilable mismatch.
+    /// Returns caret positions before the first irreconcilable mismatch forwards.
     @inlinable static func prefix(past: Past, next: Next) -> Indices {
-        //=--------------------------------------=
-        // MARK: Indices
-        //=--------------------------------------=
         var pastIndex = past.startIndex
         var nextIndex = next.startIndex
         //=-------------------------------------=
@@ -63,17 +65,10 @@ Next: BidirectionalCollection, Next.Element == Symbol {
     // MARK: Suffix
     //=------------------------------------------------------------------------=
     
-    /// Returns caret positions after the first irreconcilable mismatch.
+    /// Returns caret positions before the first irreconcilable mismatch backwards.
     @inlinable static func suffix(past: Past, next: Next) -> Indices {
-        //=--------------------------------------=
-        // MARK: Reversed
-        //=--------------------------------------=
         let reversed = Reversed.prefix(
-            past: past.reversed(),
-            next: next.reversed())
-        //=--------------------------------------=
-        // MARK: Finalize
-        //=--------------------------------------=
+        past: past.reversed(), next: next.reversed())
         return (reversed.past.base, reversed.next.base)
     }
 }
