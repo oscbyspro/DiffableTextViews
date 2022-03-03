@@ -44,6 +44,12 @@ final class HelpersTests_Count: Tests {
         XCTAssertEqual(count[.integer],  1)
         XCTAssertEqual(count[.fraction], 2)
     }
+    
+    func testFirstWhere() {
+        XCTAssertEqual(count.first(where: (.==, 0)), .value)
+        XCTAssertEqual(count.first(where: (.==, 1)), .integer)
+        XCTAssertEqual(count.first(where: (.==, 2)), .fraction)
+    }
 }
 
 
