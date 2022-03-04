@@ -16,13 +16,54 @@ import UIKit
 //*============================================================================*
 
 public final class BasicTextField: UITextField {
-    @usableFromInline typealias Code = UIKeyboardHIDUsage
     
     //=------------------------------------------------------------------------=
     // MARK: State
     //=------------------------------------------------------------------------=
     
-    @usableFromInline private(set) var intent: Code? = nil
+    @usableFromInline private(set) var directives = Directives()
+    
+    //*========================================================================*
+    // MARK: * Directives
+    //*========================================================================*
+    
+    @usableFromInline struct Directives {
+        @usableFromInline typealias Key = UIKeyboardHIDUsage
+        
+        //=--------------------------------------------------------------------=
+        // MARK: State
+        //=--------------------------------------------------------------------=
+        
+        @usableFromInline private(set) var latest: Key?
+        
+        //=--------------------------------------------------------------------=
+        // MARK: Accessors
+        //=--------------------------------------------------------------------=
+        
+        @inlinable var momentum: Bool { latest != nil }
+        
+        //=--------------------------------------------------------------------=
+        // MARK: Transformations
+        //=--------------------------------------------------------------------=
+        
+        @inlinable mutating func insert(_ presses: Set<UIPress>) {
+            parse(presses).map({ latest =  $0 })
+        }
+        
+        @inlinable mutating func remove(_ presses: Set<UIPress>) {
+            parse(presses).map({ latest == $0 ? latest = nil : () })
+        }
+        
+        //=--------------------------------------------------------------------=
+        // MARK: Parse
+        //=--------------------------------------------------------------------=
+        
+        @inlinable func parse(_ presses: Set<UIPress>) -> Key? {
+            if let key = presses.first?.key?.keyCode,
+            key == .keyboardLeftArrow ||
+            key == .keyboardRightArrow { return key }; return nil
+        }
+    }
     
     //*========================================================================*
     // MARK: * View
@@ -54,43 +95,21 @@ extension BasicTextField {
     // MARK: Presses
     //=------------------------------------------------------------------------=
     
-    public override func pressesBegan(_ presses: Set<UIPress>, with event: UIPressesEvent?) {
-        process(new: presses)
-        super.pressesBegan(presses, with: event)
+    public override func pressesBegan(_ presses: Set<UIPress>,  with  event: UIPressesEvent?) {
+        directives.insert(presses); super.pressesBegan(presses, with: event)
     }
     
-    public override func pressesChanged(_ presses: Set<UIPress>, with event: UIPressesEvent?) {
-        process(new: presses)
-        super.pressesChanged(presses, with: event)
+    public override func pressesChanged(_ presses: Set<UIPress>,  with  event: UIPressesEvent?) {
+        directives.insert(presses); super.pressesChanged(presses, with: event)
     }
     
-    public override func pressesEnded(_ presses: Set<UIPress>, with event: UIPressesEvent?) {
-        process(old: presses)
-        super.pressesEnded(presses, with: event)
+    public override func pressesEnded(_ presses: Set<UIPress>,  with  event: UIPressesEvent?) {
+        directives.remove(presses); super.pressesEnded(presses, with: event)
     }
     
-    public override func pressesCancelled(_ presses: Set<UIPress>, with event: UIPressesEvent?) {
-        process(old: presses)
-        super.pressesCancelled(presses, with: event)
+    public override func pressesCancelled(_ presses: Set<UIPress>,  with  event: UIPressesEvent?) {
+        directives.remove(presses); super.pressesCancelled(presses, with: event)
     }
-
-    //=------------------------------------------------------------------------=
-    // MARK: Presses - Intent
-    //=------------------------------------------------------------------------=
-    
-    @inlinable func process(new presses: Set<UIPress>) {
-        intent = intent(behind: presses)
-    }
-    
-    @inlinable func process(old presses: Set<UIPress>) {
-        if intent == intent(behind: presses) { intent = nil }
-    }
-
-    @inlinable func intent(behind presses: Set<UIPress>) -> Code? {
-        (presses.first?.key?.keyCode).flatMap({ Self.intents.contains($0) ? $0 : nil })
-    }
-    
-    @usableFromInline static let intents: Set<Code> = [.keyboardLeftArrow, .keyboardRightArrow]
 }
 
 #endif

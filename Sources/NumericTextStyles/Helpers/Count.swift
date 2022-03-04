@@ -94,7 +94,7 @@ extension Count {
     // MARK: Search
     //=------------------------------------------------------------------------=
     
-    @inlinable func first<T>(where predicate: ((SIMD, T) -> Mask, T)) -> Component? {
+    @inlinable func first(where predicate: ((SIMD, Int) -> Mask, Int)) -> Component? {
         let mask = predicate.0(storage, predicate.1)
         return components.first{ mask[$0.rawValue] }
     }

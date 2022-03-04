@@ -25,7 +25,7 @@ final class MiscellaneousTests_Percent: Tests {
     // MARK: Positive
     //=------------------------------------------------------------------------=
     
-    func testVirtualPercentCharactersAreAlwaysUnique() throws {
+    func testPercentLabelIsAlwaysVirtual() throws {
         //=--------------------------------------=
         // MARK: Locales
         //=--------------------------------------=

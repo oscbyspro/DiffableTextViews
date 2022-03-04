@@ -22,7 +22,7 @@ final class MiscellaneousTests_Currency: Tests {
     // MARK: Positive
     //=------------------------------------------------------------------------=
     
-    func testVirtualCurrencyCharactersDontContainNumbers() throws {
+    func testCurrencyLabelDoesNotContainNumbers() throws {
         //=--------------------------------------=
         // MARK: Locales, Currencies
         //=--------------------------------------=
@@ -38,7 +38,7 @@ final class MiscellaneousTests_Currency: Tests {
     // MARK: Negative
     //=------------------------------------------------------------------------=
     
-    func testVirtualCurrencyCharactersAreNotAlwaysUnique() throws {
+    func testCurrencyLabelIsSometimesReal() throws {
         let number = -1234567.89
         let currencyCode = "PAB"
         let locale = Locale(identifier: "rhg-Rohg_MM")
