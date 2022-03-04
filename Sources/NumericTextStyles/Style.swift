@@ -44,7 +44,7 @@ public struct _NumericTextStyle<Format: NumericTextFormat>: DiffableTextStyle {
     //=------------------------------------------------------------------------=
     
     @inlinable var format: Format {
-        adapter.format
+        adapter.format.rounded(.towardZero)
     }
 
     @inlinable var scheme: Scheme {
@@ -100,7 +100,7 @@ extension NumericTextStyle {
     //=------------------------------------------------------------------------=
     
     @inlinable public func interpret(_ value: Value) -> Commit<Value> {
-        let style = format.precision(precision.active()).rounded(.towardZero)
+        let style = format.precision(precision.active())
         var value = value
         //=--------------------------------------=
         // MARK: Autocorrect
