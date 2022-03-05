@@ -111,14 +111,14 @@ public struct Snapshot: BidirectionalCollection, RangeReplaceableCollection {
     // MARK: After / Before
     //=------------------------------------------------------------------------=
     
-    @inlinable public func index(after position: Index) -> Index {
-        Index(_characters.index(after: position.character),
-              _attributes.index(after: position.attribute))
+    @inlinable public func index(after  position: Index) -> Index {
+        Index(_characters .index(after: position.character),
+              _attributes .index(after: position.attribute))
     }
     
-    @inlinable public func index(before position: Index) -> Index {
-        Index(_characters.index(before: position.character),
-              _attributes.index(before: position.attribute))
+    @inlinable public func index(before  position: Index) -> Index {
+        Index(_characters .index(before: position.character),
+              _attributes .index(before: position.attribute))
     }
     
     //*========================================================================*

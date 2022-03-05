@@ -16,11 +16,11 @@ import UIKit
 //*============================================================================*
 
 public final class ProxyTextField: BasicTextField.View {
-    public final class Keyboard: BasicTextField.View { }
-    public final class Selection: BasicTextField.View { }
-    public final class Text: BasicTextField.View { }
-    public final class Traits: BasicTextField.View { }
-    public final class View: BasicTextField.View { }
+    public final class Keyboard:   BasicTextField.View { }
+    public final class Selection:  BasicTextField.View { }
+    public final class Text:       BasicTextField.View { }
+    public final class Traits:     BasicTextField.View { }
+    public final class View:       BasicTextField.View { }
 
     //=------------------------------------------------------------------------=
     // MARK: Accessors
