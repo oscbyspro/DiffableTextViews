@@ -11,7 +11,7 @@ import DiffableTextViews
 import Foundation
 
 //*============================================================================*
-// MARK: * Style x Initializers
+// MARK: * Style x Number
 //*============================================================================*
 
 extension NumericTextStyle where Format: NumericTextFormat_Number {
