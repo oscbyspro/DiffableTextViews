@@ -31,6 +31,10 @@ public struct Snapshot: BidirectionalCollection, RangeReplaceableCollection {
         self._attributes = []
     }
     
+    //=------------------------------------------------------------------------=
+    // MARK: Initializers - Characters As Attribute
+    //=------------------------------------------------------------------------=
+    
     @inlinable public init(_ characters: String, as attribute: Attribute) {
         self._characters = characters
         self._attributes = [Attribute](repeating: attribute, count: characters.count)
