@@ -19,13 +19,8 @@ public struct Snapshot: BidirectionalCollection, RangeReplaceableCollection {
     //=------------------------------------------------------------------------=
         
     @usableFromInline var _characters: String
-    @inlinable public var  characters: String { _characters }
-
     @usableFromInline var _attributes: [Attribute]
-    @inlinable public var  attributes: [Attribute] { _attributes }
-    
     @usableFromInline var _anchorIndex: Index?
-    @inlinable public var  anchorIndex: Index? { _anchorIndex }
 
     //=------------------------------------------------------------------------=
     // MARK: Initializers
@@ -36,6 +31,17 @@ public struct Snapshot: BidirectionalCollection, RangeReplaceableCollection {
         self._attributes = []
     }
     
+    @inlinable public init(_ characters: String, as attribute: Attribute) {
+        self._characters = characters
+        self._attributes = [Attribute](repeating: attribute, count: characters.count)
+    }
+    
+    @inlinable public init<S>(_ characters: S, as attribute: Attribute) where
+    S: RandomAccessCollection, S.Element == Character {
+        self._characters = String(characters)
+        self._attributes = [Attribute](repeating: attribute, count: characters.count)
+    }
+    
     @inlinable public init<S>(_ characters: S, as attribute: Attribute) where
     S: Sequence, S.Element == Character {
         self.init(); for character in characters {
@@ -44,10 +50,20 @@ public struct Snapshot: BidirectionalCollection, RangeReplaceableCollection {
         }
     }
     
-    @inlinable public init<S>(_ characters: S, as attribute: Attribute) where
-    S: RandomAccessCollection, S.Element == Character {
-        self._characters = String(characters)
-        self._attributes = [Attribute](repeating: attribute, count: characters.count)
+    //=------------------------------------------------------------------------=
+    // MARK: Accessors
+    //=------------------------------------------------------------------------=
+    
+    @inlinable public var characters: String {
+        _characters
+    }
+    
+    @inlinable public var attributes: [Attribute] {
+        _attributes
+    }
+    
+    @inlinable public var anchorIndex: Index? {
+        _anchorIndex
     }
     
     //=------------------------------------------------------------------------=
@@ -200,7 +216,7 @@ public extension Snapshot {
     //=------------------------------------------------------------------------=
 
     @inlinable mutating func replaceSubrange<C>(_ range: Range<Index>,
-        with elements: C) where C: Collection, C.Element == Symbol {
+    with elements: C) where C: Collection, C.Element == Symbol {
         _characters.replaceSubrange(
         range.lowerBound.character ..<
         range.upperBound.character,
@@ -232,6 +248,7 @@ public extension Snapshot {
     }
     
     @inlinable @discardableResult mutating func remove(at position: Index) -> Symbol {
-        Symbol(_characters.remove(at: position.character), as: _attributes.remove(at: position.attribute))
+        Symbol(character: _characters.remove(at: position.character),
+               attribute: _attributes.remove(at: position.attribute))
     }
 }
