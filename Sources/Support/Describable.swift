@@ -31,6 +31,6 @@ public extension Describable {
     //=------------------------------------------------------------------------=
     
     @inlinable var description: String {
-        "\(Self.self)(\(descriptors.map({"\($0.0): \($0.1)"}).joined(separator: ", ")))"
+        "\(Self.self)(\(descriptors.map({"\($0.key): \($0.value)"}).joined(separator: ", ")))"
     }
 }
