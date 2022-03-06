@@ -16,6 +16,7 @@ import UIKit
 // MARK: * DiffableTextFont
 //*============================================================================*
 
+/// A SwiftUI-esque system font representation compatible with UIFont.
 public struct DiffableTextFont {
     
     //=------------------------------------------------------------------------=
@@ -44,12 +45,8 @@ public struct DiffableTextFont {
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable public init(_ descriptor: UIFontDescriptor) {
+    @inlinable init(_ descriptor: UIFontDescriptor) {
         self.descriptor = descriptor
-    }
-    
-    @inlinable public init(_ font: UIFont) {
-        self.descriptor = font.fontDescriptor
     }
     
     //=------------------------------------------------------------------------=
@@ -57,45 +54,19 @@ public struct DiffableTextFont {
     //=------------------------------------------------------------------------=
     
     @inlinable static func preferred(_ style: UIFont.TextStyle) -> Self {
-        Self(UIFont.preferredFont(forTextStyle: style))
+        Self(UIFont.preferredFont(forTextStyle: style).fontDescriptor)
     }
     
     //=------------------------------------------------------------------------=
     // MARK: Transformations
     //=------------------------------------------------------------------------=
+
+    @inlinable public func monospaced() -> Self {
+        Self(descriptor.withDesign(.monospaced)!)
+    }
     
     @inlinable public func size(_ size: CGFloat) -> Self {
         Self(descriptor.withSize(size))
-    }
-
-    @inlinable public func monospaced(_ template: Monospaced = .text) -> Self {
-        Self(descriptor.kind(template.descriptor))
-    }
-    
-    //*========================================================================*
-    // MARK: * Monospaced
-    //*========================================================================*
-    
-    public struct Monospaced {
-        
-        //=--------------------------------------------------------------------=
-        // MARK: Instances
-        //=--------------------------------------------------------------------=
-        
-        public static let text   = Self(     .monospacedSystemFont(ofSize: .zero, weight: .regular))
-        public static let digits = Self(.monospacedDigitSystemFont(ofSize: .zero, weight: .regular))
-        
-        //=--------------------------------------------------------------------=
-        // MARK: State
-        //=--------------------------------------------------------------------=
-        
-        @usableFromInline let descriptor: UIFontDescriptor
-        
-        //=--------------------------------------------------------------------=
-        // MARK: Initializers
-        //=--------------------------------------------------------------------=
-        
-        @inlinable init(_ base: UIFont) { self.descriptor = base.fontDescriptor }
     }
 }
 
@@ -125,43 +96,8 @@ extension UIKit.UIFont {
     //=------------------------------------------------------------------------=
     
     @inlinable public convenience init(_ font: DiffableTextFont) {
-        self.init(descriptor: font.descriptor, size: .zero)
+        self.init(descriptor: font.descriptor, size: 0)
     }
-}
-
-//*============================================================================*
-// MARK: * UIFontDescriptor
-//*============================================================================*
-
-extension UIFontDescriptor {
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Transformations
-    //=--------------------------------------------------------------------=
-    
-    /// [Inspiration](https://stackoverflow.com/questions/46642335)
-    @inlinable func kind(_ template: UIFontDescriptor) -> UIFontDescriptor {
-        var attributes = fontAttributes
-        attributes.removeValue(forKey: .family)
-        attributes.removeValue(forKey: .name)
-        attributes.removeValue(forKey: .nsctFontUIUsage)
-        let descriptor = template.addingAttributes(attributes)
-        return descriptor.withSymbolicTraits(symbolicTraits) ?? descriptor
-    }
-}
-
-//*============================================================================*
-// MARK: * UIFontDescriptor.AttributeName
-//*============================================================================*
-
-extension UIFontDescriptor.AttributeName {
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Instances
-    //=------------------------------------------------------------------------=
-    
-    @usableFromInline static let nsctFontUIUsage =
-    UIFontDescriptor.AttributeName(rawValue: "NSCTFontUIUsageAttribute")
 }
 
 #endif
