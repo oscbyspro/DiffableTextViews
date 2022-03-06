@@ -7,6 +7,8 @@
 // See http://www.apache.org/licenses/LICENSE-2.0 for license information.
 //=----------------------------------------------------------------------------=
 
+import Support
+
 //*============================================================================*
 // MARK: * Count
 //*============================================================================*
@@ -104,13 +106,13 @@ extension Count {
 // MARK: + Conversions
 //=----------------------------------------------------------------------------=
 
-extension Count: CustomStringConvertible {
+extension Count: Describable {
     
     //=------------------------------------------------------------------------=
     // MARK: Description
     //=------------------------------------------------------------------------=
     
-    @inlinable public var description: String {
-        description(components.map({($0, storage[$0.rawValue])}))
+    @inlinable public var descriptors: [(key: Any, value: Any)] {
+        Count.components.map({($0, self.storage[$0.rawValue])})
     }
 }

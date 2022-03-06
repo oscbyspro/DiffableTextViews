@@ -7,6 +7,8 @@
 // See http://www.apache.org/licenses/LICENSE-2.0 for license information.
 //=----------------------------------------------------------------------------=
 
+import Support
+
 //*============================================================================*
 // MARK: * Precision
 //*============================================================================*
@@ -119,13 +121,13 @@ public struct Precision<Value: NumericTextValue>: Equatable {
 // MARK: + Conversions
 //=----------------------------------------------------------------------------=
 
-extension Precision: CustomStringConvertible {
+extension Precision: Describable {
     
     //=------------------------------------------------------------------------=
     // MARK: Description
     //=------------------------------------------------------------------------=
     
-    @inlinable public var description: String {
-        description(Count.components.map({($0, (lower[$0], upper[$0]))}))
+    @inlinable public var descriptors: [(key: Any, value: Any)] {
+        Count.components.map({($0, (self.lower[$0], self.upper[$0]))})
     }
 }

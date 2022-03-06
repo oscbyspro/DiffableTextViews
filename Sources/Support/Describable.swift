@@ -8,16 +8,29 @@
 //=----------------------------------------------------------------------------=
 
 //*============================================================================*
-// MARK: * CustomStringConvertible x Description
+// MARK: * Describable
 //*============================================================================*
 
-public extension CustomStringConvertible {
+public protocol Describable: CustomStringConvertible {
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Content
+    //=------------------------------------------------------------------------=
+    
+    @inlinable var descriptors: [(key: Any, value: Any)] { get }
+}
+
+//=----------------------------------------------------------------------------=
+// MARK: + Details
+//=----------------------------------------------------------------------------=
+
+public extension Describable {
     
     //=------------------------------------------------------------------------=
     // MARK: Description
     //=------------------------------------------------------------------------=
     
-    @inlinable func description(_ content: [(label: Any, value: Any)]) -> String {
-        "\(Self.self)(\(content.map({"\($0.label): \($0.value)"}).joined(separator: ", ")))"
+    @inlinable var description: String {
+        "\(Self.self)(\(descriptors.map({"\($0.0): \($0.1)"}).joined(separator: ", ")))"
     }
 }
