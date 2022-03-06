@@ -10,7 +10,7 @@
 import SwiftUI
 
 //*============================================================================*
-// MARK: * DiffableTextStyle x Wrapper
+// MARK: * Wrapper
 //*============================================================================*
 
 /// A style that equals a specific value.
@@ -79,7 +79,7 @@ extension WrapperTextStyle {
 #if canImport(UIKit)
 
 //*============================================================================*
-// MARK: DiffableTextStyle x Wrapper x UIKit
+// MARK: Wrapper x UIKit
 //*============================================================================*
 
 @usableFromInline protocol UIKitWrapperTextStyle:

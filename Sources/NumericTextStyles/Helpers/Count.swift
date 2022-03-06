@@ -104,23 +104,13 @@ extension Count {
 // MARK: + Conversions
 //=----------------------------------------------------------------------------=
 
-extension Count: TextOutputStreamable {
+extension Count: CustomStringConvertible {
     
     //=------------------------------------------------------------------------=
     // MARK: Description
     //=------------------------------------------------------------------------=
     
-    @inlinable public func write<T>(to target: inout T) where T: TextOutputStream {
-        target.write("\(Self.self)(")
-        target.write(Count.components.map(text).joined(separator: ", "))
-        target.write(")")
-    }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Description - Helpers
-    //=------------------------------------------------------------------------=
-    
-    @inlinable func text(_ component: Component) -> String {
-        "\(component): \(self[component])"
+    @inlinable public var description: String {
+        description(components.map({($0, storage[$0.rawValue])}))
     }
 }

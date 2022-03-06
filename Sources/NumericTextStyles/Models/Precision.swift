@@ -119,23 +119,13 @@ public struct Precision<Value: NumericTextValue>: Equatable {
 // MARK: + Conversions
 //=----------------------------------------------------------------------------=
 
-extension Precision: TextOutputStreamable {
+extension Precision: CustomStringConvertible {
     
     //=------------------------------------------------------------------------=
     // MARK: Description
     //=------------------------------------------------------------------------=
     
-    @inlinable public func write<T>(to target: inout T) where T: TextOutputStream {
-        target.write("\(Self.self)(")
-        target.write(Count.components.map(text).joined(separator: ", "))
-        target.write(")")
-    }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Description - Helpers
-    //=------------------------------------------------------------------------=
-    
-    @inlinable func text(_ component: Count.Component) -> String {
-        "\(component): \((lower[component], upper[component]))"
+    @inlinable public var description: String {
+        description(Count.components.map({($0, (lower[$0], upper[$0]))}))
     }
 }

@@ -38,13 +38,22 @@ final class HelpersTests_Font: Tests {
         .caption2,
     ]
     
+    lazy var designs: [UIFontDescriptor.SystemDesign] = [
+        .default, .monospaced, .rounded, .serif
+    ]
+
     //=------------------------------------------------------------------------=
     // MARK: Tests
     //=------------------------------------------------------------------------=
     
-    func testMonospacedDesignCanBeForceUnwrapped() {
+    func testDesignsCanBeForceUnwrapped() {
+        //=--------------------------------------=
+        // MARK: Fonts, Designs
+        //=--------------------------------------=
         for font in fonts {
-            XCTAssertNotNil(font.descriptor.withDesign(.monospaced))
+            for design in designs {
+                XCTAssertNotNil(font.descriptor.withDesign(design))
+            }
         }
     }
 }

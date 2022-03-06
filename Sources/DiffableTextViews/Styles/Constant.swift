@@ -10,7 +10,7 @@
 import SwiftUI
 
 //*============================================================================*
-// MARK: * DiffableTextStyle x Constant
+// MARK: * Constant
 //*============================================================================*
 
 /// A constant style that equals every other instance of its type.
@@ -52,7 +52,7 @@ public struct ConstantTextStyle<Style: DiffableTextStyle>: WrapperTextStyle {
 #if canImport(UIKit)
 
 //*============================================================================*
-// MARK: * DiffableTextStyle x Constant x UIKit
+// MARK: * Constant x UIKit
 //*============================================================================*
 
 extension ConstantTextStyle: UIKitWrapperTextStyle, UIKitDiffableTextStyle where Style: UIKitDiffableTextStyle { }
@@ -60,7 +60,7 @@ extension ConstantTextStyle: UIKitWrapperTextStyle, UIKitDiffableTextStyle where
 #endif
 
 //*============================================================================*
-// MARK: * DiffableTextStyle x Constant
+// MARK: * Constant x DiffableTextStyle
 //*============================================================================*
 
 extension DiffableTextStyle {

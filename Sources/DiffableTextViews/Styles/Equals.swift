@@ -10,7 +10,7 @@
 import SwiftUI
 
 //*============================================================================*
-// MARK: * DiffableTextStyle x Equals
+// MARK: * Equals
 //*============================================================================*
 
 /// A style that equals a specific value.
@@ -49,7 +49,7 @@ public struct EqualsTextStyle<Style: DiffableTextStyle, ID: Equatable>: WrapperT
 #if canImport(UIKit)
 
 //*============================================================================*
-// MARK: * DiffableTextStyle x Equals x UIKit
+// MARK: * Equals x UIKit
 //*============================================================================*
 
 extension EqualsTextStyle: UIKitWrapperTextStyle, UIKitDiffableTextStyle where Style: UIKitDiffableTextStyle { }
@@ -57,7 +57,7 @@ extension EqualsTextStyle: UIKitWrapperTextStyle, UIKitDiffableTextStyle where S
 #endif
 
 //*============================================================================*
-// MARK: * DiffableTextStyle x Equals
+// MARK: * Equals x DiffableTextStyle
 //*============================================================================*
 
 extension DiffableTextStyle {
