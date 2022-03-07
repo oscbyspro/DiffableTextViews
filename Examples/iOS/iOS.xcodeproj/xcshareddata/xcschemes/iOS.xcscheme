@@ -29,32 +29,78 @@
       shouldUseLaunchSchemeArgsEnv = "YES">
       <Testables>
          <TestableReference
-            skipped = "NO">
+            skipped = "NO"
+            parallelizable = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "DiffableTextViewsTests"
-               BuildableName = "DiffableTextViewsTests"
-               BlueprintName = "DiffableTextViewsTests"
+               BlueprintIdentifier = "DiffableTextKitTests"
+               BuildableName = "DiffableTextKitTests"
+               BlueprintName = "DiffableTextKitTests"
                ReferencedContainer = "container:../..">
             </BuildableReference>
          </TestableReference>
          <TestableReference
-            skipped = "NO">
+            skipped = "NO"
+            parallelizable = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "NumericTextStylesTests"
-               BuildableName = "NumericTextStylesTests"
-               BlueprintName = "NumericTextStylesTests"
+               BlueprintIdentifier = "DiffableTextStylesTestsXNumeric"
+               BuildableName = "DiffableTextStylesTestsXNumeric"
+               BlueprintName = "DiffableTextStylesTestsXNumeric"
+               ReferencedContainer = "container:../..">
+            </BuildableReference>
+            <SkippedTests>
+               <Test
+                  Identifier = "StyleTests_Currency/testInt()">
+               </Test>
+               <Test
+                  Identifier = "StyleTests_Currency/testInt16()">
+               </Test>
+               <Test
+                  Identifier = "StyleTests_Currency/testInt32()">
+               </Test>
+               <Test
+                  Identifier = "StyleTests_Currency/testInt64()">
+               </Test>
+               <Test
+                  Identifier = "StyleTests_Currency/testInt8()">
+               </Test>
+               <Test
+                  Identifier = "StyleTests_Currency/testUInt()">
+               </Test>
+               <Test
+                  Identifier = "StyleTests_Currency/testUInt16()">
+               </Test>
+               <Test
+                  Identifier = "StyleTests_Currency/testUInt32()">
+               </Test>
+               <Test
+                  Identifier = "StyleTests_Currency/testUInt64()">
+               </Test>
+               <Test
+                  Identifier = "StyleTests_Currency/testUInt8()">
+               </Test>
+            </SkippedTests>
+         </TestableReference>
+         <TestableReference
+            skipped = "NO"
+            parallelizable = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "DiffableTextStylesTestsXPattern"
+               BuildableName = "DiffableTextStylesTestsXPattern"
+               BlueprintName = "DiffableTextStylesTestsXPattern"
                ReferencedContainer = "container:../..">
             </BuildableReference>
          </TestableReference>
          <TestableReference
-            skipped = "NO">
+            skipped = "NO"
+            parallelizable = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "PatternTextStylesTests"
-               BuildableName = "PatternTextStylesTests"
-               BlueprintName = "PatternTextStylesTests"
+               BlueprintIdentifier = "DiffableTextViewsTestsXiOS"
+               BuildableName = "DiffableTextViewsTestsXiOS"
+               BlueprintName = "DiffableTextViewsTestsXiOS"
                ReferencedContainer = "container:../..">
             </BuildableReference>
          </TestableReference>

@@ -8,7 +8,7 @@
 //=----------------------------------------------------------------------------=
 
 import SwiftUI
-import PatternTextStyles
+import DiffableTextViews
 
 //*============================================================================*
 // MARK: * PatternScreenExamples

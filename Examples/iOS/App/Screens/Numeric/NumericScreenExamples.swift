@@ -8,7 +8,7 @@
 //=----------------------------------------------------------------------------=
 
 import SwiftUI
-import NumericTextStyles
+import DiffableTextViews
 
 //*============================================================================*
 // MARK: * NumericScreenExamples

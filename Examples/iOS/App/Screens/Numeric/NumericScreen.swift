@@ -9,7 +9,6 @@
 
 import SwiftUI
 import DiffableTextViews
-import NumericTextStyles
 
 //*============================================================================*
 // MARK: * NumericScreen
