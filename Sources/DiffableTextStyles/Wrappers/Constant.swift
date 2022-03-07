@@ -49,16 +49,6 @@ public struct ConstantTextStyle<Style: DiffableTextStyle>: WrapperTextStyle {
     public static func == (lhs: Self, rhs: Self) -> Bool { true }
 }
 
-#if canImport(UIKit)
-
-//*============================================================================*
-// MARK: * Constant x UIKit
-//*============================================================================*
-
-extension ConstantTextStyle: UIKitWrapperTextStyle, UIKitDiffableTextStyle where Style: UIKitDiffableTextStyle { }
-
-#endif
-
 //*============================================================================*
 // MARK: * Constant x DiffableTextStyle
 //*============================================================================*

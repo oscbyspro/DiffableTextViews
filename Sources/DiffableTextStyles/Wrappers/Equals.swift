@@ -44,18 +44,6 @@ public struct EqualsTextStyle<Style: DiffableTextStyle, ID: Equatable>: WrapperT
     }
 }
 
-
-#warning("WIP")
-#if canImport(UIKit)
-
-//*============================================================================*
-// MARK: * Equals x UIKit
-//*============================================================================*
-
-extension EqualsTextStyle: UIKitWrapperTextStyle, UIKitDiffableTextStyle where Style: UIKitDiffableTextStyle { }
-
-#endif
-
 //*============================================================================*
 // MARK: * Equals x DiffableTextStyle
 //*============================================================================*

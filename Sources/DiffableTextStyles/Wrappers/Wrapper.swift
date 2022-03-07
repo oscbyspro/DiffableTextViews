@@ -7,7 +7,7 @@
 // See http://www.apache.org/licenses/LICENSE-2.0 for license information.
 //=----------------------------------------------------------------------------=
 
-import SwiftUI
+import Foundation
 
 //*============================================================================*
 // MARK: * Wrapper
@@ -75,30 +75,3 @@ extension WrapperTextStyle {
         lhs.style == rhs.style
     }
 }
-
-#if canImport(UIKit)
-
-//*============================================================================*
-// MARK: Wrapper x UIKit
-//*============================================================================*
-
-@usableFromInline protocol UIKitWrapperTextStyle:
-WrapperTextStyle, UIKitDiffableTextStyle where Style: UIKitDiffableTextStyle { }
-
-//=----------------------------------------------------------------------------=
-// MARK: + Details
-//=----------------------------------------------------------------------------=
-
-extension UIKitWrapperTextStyle {
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Setup
-    //=------------------------------------------------------------------------=
-    
-    @inlinable @inline(__always)
-    public static func onSetup(_ diffableTextField: ProxyTextField) {
-        Style.onSetup(diffableTextField)
-    }
-}
-
-#endif

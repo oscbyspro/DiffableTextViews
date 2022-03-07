@@ -7,9 +7,13 @@
 // See http://www.apache.org/licenses/LICENSE-2.0 for license information.
 //=----------------------------------------------------------------------------=
 
+#if canImport(UIKit)
+
 //*============================================================================*
-// MARK: * Exports
+// MARK: * Equals x UIKit
 //*============================================================================*
 
-@_exported import DiffableTextStyles_Numeric
-@_exported import DiffableTextStyles_Pattern
+extension EqualsTextStyle: UIKitWrapperTextStyle,
+UIKitDiffableTextStyle where Style: UIKitDiffableTextStyle { }
+
+#endif
