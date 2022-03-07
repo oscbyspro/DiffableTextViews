@@ -28,9 +28,9 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "NumericTextStyles"
-               BuildableName = "NumericTextStyles"
-               BlueprintName = "NumericTextStyles"
+               BlueprintIdentifier = "DiffableTextStylesTestsXPattern"
+               BuildableName = "DiffableTextStylesTestsXPattern"
+               BlueprintName = "DiffableTextStylesTestsXPattern"
                ReferencedContainer = "container:">
             </BuildableReference>
          </BuildActionEntry>
@@ -42,9 +42,9 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "PatternTextStyles"
-               BuildableName = "PatternTextStyles"
-               BlueprintName = "PatternTextStyles"
+               BlueprintIdentifier = "DiffableTextViewsTestsXiOS"
+               BuildableName = "DiffableTextViewsTestsXiOS"
+               BlueprintName = "DiffableTextViewsTestsXiOS"
                ReferencedContainer = "container:">
             </BuildableReference>
          </BuildActionEntry>
@@ -56,51 +56,9 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "Support"
-               BuildableName = "Support"
-               BlueprintName = "Support"
-               ReferencedContainer = "container:">
-            </BuildableReference>
-         </BuildActionEntry>
-         <BuildActionEntry
-            buildForTesting = "YES"
-            buildForRunning = "YES"
-            buildForProfiling = "NO"
-            buildForArchiving = "NO"
-            buildForAnalyzing = "NO">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "DiffableTextViewsTests"
-               BuildableName = "DiffableTextViewsTests"
-               BlueprintName = "DiffableTextViewsTests"
-               ReferencedContainer = "container:">
-            </BuildableReference>
-         </BuildActionEntry>
-         <BuildActionEntry
-            buildForTesting = "YES"
-            buildForRunning = "YES"
-            buildForProfiling = "NO"
-            buildForArchiving = "NO"
-            buildForAnalyzing = "NO">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "NumericTextStylesTests"
-               BuildableName = "NumericTextStylesTests"
-               BlueprintName = "NumericTextStylesTests"
-               ReferencedContainer = "container:">
-            </BuildableReference>
-         </BuildActionEntry>
-         <BuildActionEntry
-            buildForTesting = "YES"
-            buildForRunning = "YES"
-            buildForProfiling = "NO"
-            buildForArchiving = "NO"
-            buildForAnalyzing = "NO">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "PatternTextStylesTests"
-               BuildableName = "PatternTextStylesTests"
-               BlueprintName = "PatternTextStylesTests"
+               BlueprintIdentifier = "DiffableTextStylesTestsXNumeric"
+               BuildableName = "DiffableTextStylesTestsXNumeric"
+               BlueprintName = "DiffableTextStylesTestsXNumeric"
                ReferencedContainer = "container:">
             </BuildableReference>
          </BuildActionEntry>
@@ -117,48 +75,12 @@
             parallelizable = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "DiffableTextViewsTests"
-               BuildableName = "DiffableTextViewsTests"
-               BlueprintName = "DiffableTextViewsTests"
+               BlueprintIdentifier = "DiffableTextStylesTestsXNumeric"
+               BuildableName = "DiffableTextStylesTestsXNumeric"
+               BlueprintName = "DiffableTextStylesTestsXNumeric"
                ReferencedContainer = "container:">
             </BuildableReference>
             <SkippedTests>
-               <Test
-                  Identifier = "HelpersTests_Scheme">
-               </Test>
-            </SkippedTests>
-         </TestableReference>
-         <TestableReference
-            skipped = "NO"
-            parallelizable = "YES">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "PatternTextStylesTests"
-               BuildableName = "PatternTextStylesTests"
-               BlueprintName = "PatternTextStylesTests"
-               ReferencedContainer = "container:">
-            </BuildableReference>
-         </TestableReference>
-         <TestableReference
-            skipped = "NO"
-            parallelizable = "YES">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "NumericTextStylesTests"
-               BuildableName = "NumericTextStylesTests"
-               BlueprintName = "NumericTextStylesTests"
-               ReferencedContainer = "container:">
-            </BuildableReference>
-            <SkippedTests>
-               <Test
-                  Identifier = "MiscellaneousTests_Notes">
-               </Test>
-               <Test
-                  Identifier = "StyleTests_Currency/testFloat64()">
-               </Test>
-               <Test
-                  Identifier = "StyleTests_Currency/testFloat64_aka_Double()">
-               </Test>
                <Test
                   Identifier = "StyleTests_Currency/testInt()">
                </Test>
@@ -190,6 +112,39 @@
                   Identifier = "StyleTests_Currency/testUInt8()">
                </Test>
             </SkippedTests>
+         </TestableReference>
+         <TestableReference
+            skipped = "NO"
+            parallelizable = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "DiffableTextStylesTestsXPattern"
+               BuildableName = "DiffableTextStylesTestsXPattern"
+               BlueprintName = "DiffableTextStylesTestsXPattern"
+               ReferencedContainer = "container:">
+            </BuildableReference>
+         </TestableReference>
+         <TestableReference
+            skipped = "NO"
+            parallelizable = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "DiffableTextViewsTestsXiOS"
+               BuildableName = "DiffableTextViewsTestsXiOS"
+               BlueprintName = "DiffableTextViewsTestsXiOS"
+               ReferencedContainer = "container:">
+            </BuildableReference>
+         </TestableReference>
+         <TestableReference
+            skipped = "NO"
+            parallelizable = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "DiffableTextKitTests"
+               BuildableName = "DiffableTextKitTests"
+               BlueprintName = "DiffableTextKitTests"
+               ReferencedContainer = "container:">
+            </BuildableReference>
          </TestableReference>
       </Testables>
    </TestAction>

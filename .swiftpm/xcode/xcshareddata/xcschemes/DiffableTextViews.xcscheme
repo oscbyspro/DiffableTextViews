@@ -216,6 +216,62 @@
                ReferencedContainer = "container:">
             </BuildableReference>
          </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "YES"
+            buildForProfiling = "YES"
+            buildForArchiving = "YES"
+            buildForAnalyzing = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "DiffableTextStylesXNumeric"
+               BuildableName = "DiffableTextStylesXNumeric"
+               BlueprintName = "DiffableTextStylesXNumeric"
+               ReferencedContainer = "container:">
+            </BuildableReference>
+         </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "YES"
+            buildForProfiling = "YES"
+            buildForArchiving = "YES"
+            buildForAnalyzing = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "DiffableTextStylesXPattern"
+               BuildableName = "DiffableTextStylesXPattern"
+               BlueprintName = "DiffableTextStylesXPattern"
+               ReferencedContainer = "container:">
+            </BuildableReference>
+         </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "YES"
+            buildForProfiling = "YES"
+            buildForArchiving = "YES"
+            buildForAnalyzing = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "DiffableTextViewsXiOS"
+               BuildableName = "DiffableTextViewsXiOS"
+               BlueprintName = "DiffableTextViewsXiOS"
+               ReferencedContainer = "container:">
+            </BuildableReference>
+         </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "YES"
+            buildForProfiling = "YES"
+            buildForArchiving = "YES"
+            buildForAnalyzing = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "DiffableTextTests"
+               BuildableName = "DiffableTextTests"
+               BlueprintName = "DiffableTextTests"
+               ReferencedContainer = "container:">
+            </BuildableReference>
+         </BuildActionEntry>
       </BuildActionEntries>
    </BuildAction>
    <TestAction
@@ -360,6 +416,46 @@
                BlueprintIdentifier = "DiffableTextViewsTests_iOS"
                BuildableName = "DiffableTextViewsTests_iOS"
                BlueprintName = "DiffableTextViewsTests_iOS"
+               ReferencedContainer = "container:">
+            </BuildableReference>
+         </TestableReference>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "DiffableTextStylesTestsXNumeric"
+               BuildableName = "DiffableTextStylesTestsXNumeric"
+               BlueprintName = "DiffableTextStylesTestsXNumeric"
+               ReferencedContainer = "container:">
+            </BuildableReference>
+         </TestableReference>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "DiffableTextStylesTestsXPattern"
+               BuildableName = "DiffableTextStylesTestsXPattern"
+               BlueprintName = "DiffableTextStylesTestsXPattern"
+               ReferencedContainer = "container:">
+            </BuildableReference>
+         </TestableReference>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "DiffableTextViewsTestsXiOS"
+               BuildableName = "DiffableTextViewsTestsXiOS"
+               BlueprintName = "DiffableTextViewsTestsXiOS"
+               ReferencedContainer = "container:">
+            </BuildableReference>
+         </TestableReference>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "DiffableTextKitTests"
+               BuildableName = "DiffableTextKitTests"
+               BlueprintName = "DiffableTextKitTests"
                ReferencedContainer = "container:">
             </BuildableReference>
          </TestableReference>

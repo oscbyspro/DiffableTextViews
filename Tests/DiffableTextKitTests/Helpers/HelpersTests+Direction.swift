@@ -7,9 +7,25 @@
 // See http://www.apache.org/licenses/LICENSE-2.0 for license information.
 //=----------------------------------------------------------------------------=
 
+#if DEBUG
+
+import XCTest
+@testable import DiffableTextKit
+
 //*============================================================================*
-// MARK: * Exports
+// MARK: * HelpersTests x Direction
 //*============================================================================*
 
-@_exported import DiffableTextStylesXNumeric
-@_exported import DiffableTextStylesXPattern
+final class HelpersTests_Direction: XCTestCase {
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Tests
+    //=------------------------------------------------------------------------=
+    
+    func testReversed() {
+        XCTAssertEqual(Direction .forwards.reversed(), .backwards)
+        XCTAssertEqual(Direction.backwards.reversed(),  .forwards)
+    }
+}
+
+#endif

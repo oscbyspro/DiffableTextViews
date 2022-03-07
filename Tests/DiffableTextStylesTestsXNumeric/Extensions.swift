@@ -7,9 +7,23 @@
 // See http://www.apache.org/licenses/LICENSE-2.0 for license information.
 //=----------------------------------------------------------------------------=
 
+#if DEBUG
+
+@testable import DiffableTextStylesXNumeric
+
 //*============================================================================*
-// MARK: * Exports
+// MARK: * Lexicon
 //*============================================================================*
 
-@_exported import DiffableTextStylesXNumeric
-@_exported import DiffableTextStylesXPattern
+extension Lexicon {
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Predicates
+    //=------------------------------------------------------------------------=
+    
+    func nonvirtual(_ character: Character) -> Bool {
+        signs.contains(character) || digits.contains(character) || separators[character] == .fraction
+    }
+}
+
+#endif

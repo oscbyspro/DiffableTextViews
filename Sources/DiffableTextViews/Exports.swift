@@ -19,6 +19,6 @@
 
 #if os(iOS)
 
-@_exported import DiffableTextViews_iOS
+@_exported import DiffableTextViewsXiOS
 
 #endif
