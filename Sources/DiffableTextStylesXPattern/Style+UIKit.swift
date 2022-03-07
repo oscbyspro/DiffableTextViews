@@ -7,15 +7,15 @@
 // See http://www.apache.org/licenses/LICENSE-2.0 for license information.
 //=----------------------------------------------------------------------------=
 
+//*============================================================================*
+// MARK: * PatternTextStyle x UIKit
+//*============================================================================*
+
 #if canImport(UIKit)
 
-import DiffableTextStyles
+import DiffableTextViewsXiOS
 
-//*============================================================================*
-// MARK: * Equals x UIKit
-//*============================================================================*
-
-extension EqualsTextStyle: UIKitWrapperTextStyle,
-UIKitDiffableTextStyle where Style: UIKitDiffableTextStyle { }
+extension PatternTextStyle: UIKitDiffableTextStyle { }
 
 #endif
+

@@ -76,3 +76,32 @@ extension WrapperTextStyle {
         lhs.style == rhs.style
     }
 }
+
+//*============================================================================*
+// MARK: Wrapper x UIKit
+//*============================================================================*
+
+#if canImport(UIKit)
+
+import DiffableTextViewsXiOS
+
+public protocol UIKitWrapperTextStyle: WrapperTextStyle, UIKitDiffableTextStyle where Style: UIKitDiffableTextStyle { }
+
+//=----------------------------------------------------------------------------=
+// MARK: + Details
+//=----------------------------------------------------------------------------=
+
+extension UIKitWrapperTextStyle {
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Setup
+    //=------------------------------------------------------------------------=
+    
+    @inlinable @inline(__always)
+    public static func onSetup(_ diffableTextField: ProxyTextField) {
+        Style.onSetup(diffableTextField)
+    }
+}
+
+#endif
+

@@ -67,3 +67,15 @@ extension DiffableTextStyle {
         EqualsTextStyle(style: self, value: value)
     }
 }
+
+//*============================================================================*
+// MARK: * Equals x UIKit
+//*============================================================================*
+
+#if canImport(UIKit)
+
+import DiffableTextViewsXiOS
+
+extension EqualsTextStyle: UIKitWrapperTextStyle, UIKitDiffableTextStyle where Style: UIKitDiffableTextStyle { }
+
+#endif

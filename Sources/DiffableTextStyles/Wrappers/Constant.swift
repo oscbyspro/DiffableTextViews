@@ -71,3 +71,16 @@ extension DiffableTextStyle {
         ConstantTextStyle(style: self)
     }
 }
+
+//*============================================================================*
+// MARK: * Constant x UIKit
+//*============================================================================*
+
+#if canImport(UIKit)
+
+import DiffableTextViewsXiOS
+
+extension ConstantTextStyle: UIKitWrapperTextStyle, UIKitDiffableTextStyle where Style: UIKitDiffableTextStyle { }
+
+#endif
+

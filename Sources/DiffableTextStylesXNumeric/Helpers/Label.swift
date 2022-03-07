@@ -15,7 +15,7 @@ import Foundation
 //*============================================================================*
 
 /// A collection of characters at or near the edge of some formatted text.
-public final class Label {
+@usableFromInline final class Label {
     
     //=------------------------------------------------------------------------=
     // MARK: State
