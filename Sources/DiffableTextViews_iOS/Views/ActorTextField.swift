@@ -9,6 +9,7 @@
 
 #if canImport(UIKit)
 
+import DiffableTextKit
 import UIKit
 
 //*============================================================================*

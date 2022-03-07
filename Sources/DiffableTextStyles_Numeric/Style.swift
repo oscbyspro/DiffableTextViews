@@ -7,19 +7,18 @@
 // See http://www.apache.org/licenses/LICENSE-2.0 for license information.
 //=----------------------------------------------------------------------------=
 
-import DiffableTextViews
+import DiffableTextKit
 import Foundation
-import Support
 
 //*============================================================================*
 // MARK: * NumericTextStyle
 //*============================================================================*
 
 public struct _NumericTextStyle<Format: NumericTextFormat>: DiffableTextStyle {
+    @usableFromInline typealias Adapter = DiffableTextStyles_Numeric.Adapter<Format>
+    public typealias Bounds = DiffableTextStyles_Numeric.Bounds<Value>
+    public typealias Precision = DiffableTextStyles_Numeric.Precision<Value>
     public typealias Value = Format.FormatInput
-    public typealias Bounds = NumericTextStyles.Bounds<Value>
-    public typealias Precision = NumericTextStyles.Precision<Value>
-    @usableFromInline typealias Adapter = NumericTextStyles.Adapter<Format>
 
     //=------------------------------------------------------------------------=
     // MARK: State

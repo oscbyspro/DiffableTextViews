@@ -42,7 +42,7 @@ let package = Package(
         //=--------------------------------------=
         .target(
             name: "DiffableTextViews_iOS",
-            dependencies: ["DiffableTextKit"]),
+            dependencies: ["DiffableTextStyles", "DiffableTextKit"]),
         .testTarget(
             name: "DiffableTextViewsTests_iOS",
             dependencies: ["DiffableTextViews_iOS", "XCTestSupport"]),

@@ -23,13 +23,13 @@ public struct Position<Scheme: DiffableTextKit.Scheme>: Comparable {
     // MARK: State
     //=------------------------------------------------------------------------=
 
-    @usableFromInline let offset: Int
+    public let offset: Int
     
     //=------------------------------------------------------------------------=
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable init(_ offset: Int = 0) {
+    @inlinable public init(_ offset: Int = 0) {
         self.offset = offset
     }
     

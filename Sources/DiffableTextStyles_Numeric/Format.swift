@@ -33,7 +33,7 @@ import Foundation
 //*============================================================================*
 
 public protocol NumericTextFormat: ParseableFormatStyle where FormatInput: NumericTextValue, FormatOutput == String {
-    associatedtype NumericTextScheme: NumericTextStyles.NumericTextScheme
+    associatedtype NumericTextScheme: DiffableTextStyles_Numeric.NumericTextScheme
     associatedtype SignDisplayStrategy: NumericTextSignDisplayStrategyRepresentable
     associatedtype RoundingIncrement
     

@@ -11,7 +11,7 @@
 // This file contains methods used in response to changes downstream.
 //=----------------------------------------------------------------------------=
 
-import Support
+import DiffableTextKit
 
 //=----------------------------------------------------------------------------=
 // MARK: + Autovalidate

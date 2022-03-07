@@ -21,10 +21,10 @@ public final class Context<Style: DiffableTextStyle, Scheme: DiffableTextKit.Sch
     // MARK: State
     //=------------------------------------------------------------------------=
         
-    public private(set) var value: Value! = nil
-    public private(set) var style: Style! = nil
-    public private(set) var field: Field = Field()
-    public private(set) var active: Bool = false
+    @usableFromInline private(set) var _value: Value! = nil
+    @usableFromInline private(set) var _style: Style! = nil
+    @usableFromInline private(set) var _field: Field = Field()
+    @usableFromInline private(set) var _active: Bool = false
     
     //=------------------------------------------------------------------------=
     // MARK: Initializers
@@ -33,32 +33,41 @@ public final class Context<Style: DiffableTextStyle, Scheme: DiffableTextKit.Sch
     @inlinable public init() { }
     
     //=------------------------------------------------------------------------=
+    // MARK: Accessors
+    //=------------------------------------------------------------------------=
+    
+    @inlinable public var value: Value! { _value  }
+    @inlinable public var style: Style! { _style  }
+    @inlinable public var field: Field  { _field  }
+    @inlinable public var active: Bool  { _active }
+    
+    //=------------------------------------------------------------------------=
     // MARK: Update
     //=------------------------------------------------------------------------=
     
-    @inlinable func active(style: Style, commit: Commit) {
-        self.active = true
-        self.style  = style
-        self.value  = commit.value
-        self.field.update(snapshot: commit.snapshot)
+    @inlinable public func active(style: Style, commit: Commit) {
+        self._active = true
+        self._style  = style
+        self._value  = commit.value
+        self._field.update(snapshot: commit.snapshot)
     }
     
-    @inlinable func inactive(style: Style, value: Value) {
-        self.active = false
-        self.value  = value
-        self.style  = style
-        self.field  = Field()
+    @inlinable public func inactive(style: Style, value: Value) {
+        self._active = false
+        self._value  = value
+        self._style  = style
+        self._field  = Field()
     }
     
     //=------------------------------------------------------------------------=
     // MARK: Selection
     //=------------------------------------------------------------------------=
     
-    @inlinable func set(selection: Field.Layout.Index) {
-        self.field.selection = selection ..< selection
+    @inlinable public func set(selection: Field.Layout.Index) {
+        self._field.selection = selection ..< selection
     }
     
-    @inlinable func update(selection: Range<Position>, momentum: Bool) {
-        self.field.update(selection: selection, momentum: momentum)
+    @inlinable public func update(selection: Range<Position>, momentum: Bool) {
+        self._field.update(selection: selection, momentum: momentum)
     }
 }

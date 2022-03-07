@@ -12,8 +12,8 @@
 //*============================================================================*
 
 public struct Field<Scheme: DiffableTextKit.Scheme> {
-    @usableFromInline typealias Layout = DiffableTextKit.Layout<Scheme>
-    @usableFromInline typealias Position = DiffableTextKit.Position<Scheme>
+    public typealias Layout = DiffableTextKit.Layout<Scheme>
+    public typealias Position = DiffableTextKit.Position<Scheme>
     
     //=------------------------------------------------------------------------=
     // MARK: State
@@ -40,15 +40,15 @@ public struct Field<Scheme: DiffableTextKit.Scheme> {
     // MARK: Accessors
     //=------------------------------------------------------------------------=
 
-    @inlinable var snapshot: Snapshot {
+    @inlinable public var snapshot: Snapshot {
         layout.snapshot
     }
     
-    @inlinable var characters: String {
+    @inlinable public var characters: String {
         layout.snapshot.characters
     }
     
-    @inlinable var positions: Range<Position> {
+    @inlinable public var positions: Range<Position> {
         selection.lowerBound.position ..< selection.upperBound.position
     }
 }
