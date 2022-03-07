@@ -9,7 +9,6 @@
 
 #if canImport(UIKit)
 
-import SwiftUI
 import UIKit
 
 //*============================================================================*
@@ -67,21 +66,6 @@ public struct DiffableTextFont {
     
     @inlinable public func size(_ size: CGFloat) -> Self {
         Self(descriptor.withSize(size))
-    }
-}
-
-//*============================================================================*
-// MARK: * DiffableTextFont x SwiftUI.Font
-//*============================================================================*
-
-extension SwiftUI.Font {
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Initializers
-    //=------------------------------------------------------------------------=
-    
-    @inlinable public init(_ font: DiffableTextFont) {
-        self.init(UIFont(font))
     }
 }
 
