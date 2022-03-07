@@ -8,47 +8,36 @@
 //=----------------------------------------------------------------------------=
 
 //*============================================================================*
-// MARK: * Field
+// MARK: * Changes
 //*============================================================================*
 
-@usableFromInline struct Field<Scheme: DiffableTextViews.Scheme> {
-    @usableFromInline typealias Layout = DiffableTextViews.Layout<Scheme>
-    @usableFromInline typealias Position = DiffableTextViews.Position<Scheme>
+/// A snapshot, and one continuous change that has not yet been applied to it.
+public struct Changes {
+    public typealias Change<S: Scheme> = (content: String, range: Range<Layout<S>.Index>)
     
     //=------------------------------------------------------------------------=
     // MARK: State
     //=------------------------------------------------------------------------=
     
-    @usableFromInline var layout: Layout
-    @usableFromInline var selection: Range<Layout.Index>
-
+    public let snapshot: Snapshot
+    public var replacement: Snapshot
+    public var range: Range<Snapshot.Index>
+    
     //=------------------------------------------------------------------------=
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable init() {
-        self.layout = Layout()
-        self.selection = layout.range
-    }
-    
-    @inlinable init(layout: Layout, selection: Range<Layout.Index>) {
-        self.layout = layout
-        self.selection = selection
+    @inlinable public init<S>(_ snapshot: Snapshot, change: Change<S>) where S: Scheme {
+        self.snapshot = snapshot; self.replacement = Snapshot(change.content, as: .content)
+        self.range = change.range.lowerBound.snapshot ..< change.range.upperBound.snapshot
     }
     
     //=------------------------------------------------------------------------=
-    // MARK: Accessors
+    // MARK: Utilities
     //=------------------------------------------------------------------------=
-
-    @inlinable var snapshot: Snapshot {
-        layout.snapshot
-    }
     
-    @inlinable var characters: String {
-        layout.snapshot.characters
-    }
-    
-    @inlinable var positions: Range<Position> {
-        selection.lowerBound.position ..< selection.upperBound.position
+    /// Merges its contents to form a new snapshot.
+    @inlinable public func proposal() -> Snapshot {
+        var result = snapshot; result.replaceSubrange(range, with: replacement); return result
     }
 }

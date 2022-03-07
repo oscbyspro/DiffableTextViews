@@ -7,8 +7,6 @@
 // See http://www.apache.org/licenses/LICENSE-2.0 for license information.
 //=----------------------------------------------------------------------------=
 
-import SwiftUI
-
 //*============================================================================*
 // MARK: * Equals
 //*============================================================================*
@@ -46,6 +44,8 @@ public struct EqualsTextStyle<Style: DiffableTextStyle, ID: Equatable>: WrapperT
     }
 }
 
+
+#warning("WIP")
 #if canImport(UIKit)
 
 //*============================================================================*

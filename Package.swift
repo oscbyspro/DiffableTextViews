@@ -26,10 +26,7 @@ let package = Package(
         //=--------------------------------------=
         .library(
             name: "DiffableTextViews",
-            targets: [
-                "DiffableTextViews",
-                "NumericTextStyles",
-                "PatternTextStyles"]),
+            targets: ["DiffableTextViews"]),
     ],
     targets: [
         //=--------------------------------------=
@@ -37,32 +34,49 @@ let package = Package(
         //=--------------------------------------=
         .target(
             name: "DiffableTextViews",
-            dependencies: ["Support"]),
-        .testTarget(
-            name: "DiffableTextViewsTests",
-            dependencies: ["DiffableTextViews", "XCTestSupport"]),
+            dependencies: [
+                "DiffableTextStyles",
+                "DiffableTextViews_iOS"]),
         //=--------------------------------------=
-        // MARK: NumericTextStyles
-        //=--------------------------------------=
-        .target(
-            name: "NumericTextStyles",
-            dependencies: ["DiffableTextViews", "Support"]),
-        .testTarget(
-            name: "NumericTextStylesTests",
-            dependencies: ["NumericTextStyles", "XCTestSupport"]),
-        //=--------------------------------------=
-        // MARK: PatternTextStyles
+        // MARK: DiffableTextViews_iOS
         //=--------------------------------------=
         .target(
-            name: "PatternTextStyles",
-            dependencies: ["DiffableTextViews", "Support"]),
+            name: "DiffableTextViews_iOS",
+            dependencies: ["DiffableTextKit"]),
         .testTarget(
-            name: "PatternTextStylesTests",
-            dependencies: ["PatternTextStyles", "XCTestSupport"]),
+            name: "DiffableTextViews_iOSTests",
+            dependencies: ["DiffableTextViews_iOS", "XCTestSupport"]),
         //=--------------------------------------=
-        // MARK: Support
+        // MARK: DiffableTextStyles
         //=--------------------------------------=
-        .target(name: "Support"),
+        .target(
+            name: "DiffableTextStyles",
+            dependencies: [
+                "DiffableTextKit",
+                "DiffableTextStyles_Numeric",
+                "DiffableTextStyles_Pattern"]),
+        //=--------------------------------------=
+        // MARK: DiffableTextStyles_Numeric
+        //=--------------------------------------=
+        .target(
+            name: "DiffableTextStyles_Numeric",
+            dependencies: ["DiffableTextKit"]),
+        .testTarget(
+            name: "DiffableTextStyles_NumericTests",
+            dependencies: ["DiffableTextStyles_Numeric", "XCTestSupport"]),
+        //=--------------------------------------=
+        // MARK: DiffableTextStyles_Pattern
+        //=--------------------------------------=
+        .target(
+            name: "DiffableTextStyles_Pattern",
+            dependencies: ["DiffableTextKit"]),
+        .testTarget(
+            name: "DiffableTextStyles_PatternTests",
+            dependencies: ["DiffableTextStyles_Pattern", "XCTestSupport"]),
+        //=--------------------------------------=
+        // MARK: DiffableTextKit
+        //=--------------------------------------=
+        .target(name: "DiffableTextKit"),
         //=--------------------------------------=
         // MARK: XCTestSupport
         //=--------------------------------------=

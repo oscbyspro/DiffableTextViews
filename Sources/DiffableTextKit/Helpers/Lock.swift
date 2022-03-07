@@ -17,24 +17,31 @@
 ///
 /// - Note: This is NOT a thread lock.
 ///
-@usableFromInline final class Lock {
+public final class Lock {
     
     //=------------------------------------------------------------------------=
     // MARK: State
     //=------------------------------------------------------------------------=
     
-    @usableFromInline private(set) var isLocked = false
+    @usableFromInline var _isLocked = false
+    @inlinable public var  isLocked: Bool { _isLocked }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Initializers
+    //=------------------------------------------------------------------------=
+    
+    @inlinable public init() { }
     
     //=------------------------------------------------------------------------=
     // MARK: Utilities
     //=------------------------------------------------------------------------=
     
-    @inlinable func perform(action: () -> Void) {
-        let state = isLocked
-        self.isLocked = true
+    @inlinable public func perform(action: () -> Void) {
+        let state = _isLocked
+        self._isLocked = true
         
         action()
         
-        self.isLocked = state
+        self._isLocked = state
     }
 }

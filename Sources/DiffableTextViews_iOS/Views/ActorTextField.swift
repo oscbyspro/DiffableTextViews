@@ -16,7 +16,7 @@ import UIKit
 //*============================================================================*
 
 @usableFromInline final class ActorTextField: BasicTextField.View {
-    @usableFromInline typealias Position = DiffableTextViews.Position<UTF16>
+    @usableFromInline typealias Position = DiffableTextKit.Position<UTF16>
     
     //=------------------------------------------------------------------------=
     // MARK: Accessors

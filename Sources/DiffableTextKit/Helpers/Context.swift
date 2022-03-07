@@ -11,20 +11,26 @@
 // MARK: * Context
 //*============================================================================*
 
-@usableFromInline final class Context<Style: DiffableTextStyle, Scheme: DiffableTextViews.Scheme> {
-    @usableFromInline typealias Field = DiffableTextViews.Field<Scheme>
-    @usableFromInline typealias Position = DiffableTextViews.Position<Scheme>
-    @usableFromInline typealias Commit = DiffableTextViews.Commit<Style.Value>
-    @usableFromInline typealias Value = Style.Value
+public final class Context<Style: DiffableTextStyle, Scheme: DiffableTextKit.Scheme> {
+    public typealias Field = DiffableTextKit.Field<Scheme>
+    public typealias Position = DiffableTextKit.Position<Scheme>
+    public typealias Commit = DiffableTextKit.Commit<Style.Value>
+    public typealias Value = Style.Value
 
     //=------------------------------------------------------------------------=
     // MARK: State
     //=------------------------------------------------------------------------=
         
-    @usableFromInline private(set) var value: Value! = nil
-    @usableFromInline private(set) var style: Style! = nil
-    @usableFromInline private(set) var field: Field = Field()
-    @usableFromInline private(set) var active: Bool = false
+    public private(set) var value: Value! = nil
+    public private(set) var style: Style! = nil
+    public private(set) var field: Field = Field()
+    public private(set) var active: Bool = false
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Initializers
+    //=------------------------------------------------------------------------=
+    
+    @inlinable public init() { }
     
     //=------------------------------------------------------------------------=
     // MARK: Update

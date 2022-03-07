@@ -19,8 +19,8 @@
 /// |$|1|2|3|,|4|5|6|.|7|8|9|_|U|S|D|~
 /// |x|o|o|o|x|o|o|o|o|o|o|o|x|x|x|x|x
 /// ```
-@usableFromInline struct Layout<Scheme: DiffableTextViews.Scheme>: BidirectionalCollection {
-    @usableFromInline typealias Position = DiffableTextViews.Position<Scheme>
+@usableFromInline struct Layout<Scheme: DiffableTextKit.Scheme>: BidirectionalCollection {
+    @usableFromInline typealias Position = DiffableTextKit.Position<Scheme>
     
     //=------------------------------------------------------------------------=
     // MARK: State

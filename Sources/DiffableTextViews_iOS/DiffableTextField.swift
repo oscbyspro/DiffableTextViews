@@ -10,7 +10,7 @@
 #if canImport(UIKit)
 
 import SwiftUI
-import Support
+import DiffableTextKit
 
 //*============================================================================*
 // MARK: * DiffableTextField
@@ -98,8 +98,8 @@ public struct DiffableTextField<Style: UIKitDiffableTextStyle>: UIViewRepresenta
     //*========================================================================*
     
     public final class Coordinator: NSObject, UITextFieldDelegate {
-        @usableFromInline typealias Position = DiffableTextViews.Position<UTF16>
-        @usableFromInline typealias Context = DiffableTextViews.Context<Style, UTF16>
+        @usableFromInline typealias Position = DiffableTextKit.Position<UTF16>
+        @usableFromInline typealias Context = DiffableTextKit.Context<Style, UTF16>
 
         //=--------------------------------------------------------------------=
         // MARK: State

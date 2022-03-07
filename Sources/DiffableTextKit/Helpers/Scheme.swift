@@ -11,7 +11,7 @@
 // MARK: * Scheme
 //*============================================================================*
 
-@usableFromInline protocol Scheme {
+public protocol Scheme {
     
     //=------------------------------------------------------------------------=
     // MARK: Size
@@ -32,9 +32,9 @@ extension Character: Scheme {
     // MARK: Size
     //=------------------------------------------------------------------------=
 
-    @inlinable static func size(of character: Character) -> Int { 1 }
+    @inlinable public static func size(of character: Character) -> Int { 1 }
     
-    @inlinable static func size<S>(of characters: S) -> Int where S: StringProtocol {
+    @inlinable public static func size<S>(of characters: S) -> Int where S: StringProtocol {
         characters.count
     }
 }
@@ -49,11 +49,11 @@ extension UTF8: Scheme {
     // MARK: Size
     //=------------------------------------------------------------------------=
 
-    @inlinable static func size(of character: Character) -> Int {
+    @inlinable public static func size(of character: Character) -> Int {
         character.utf8.count
     }
     
-    @inlinable static func size<S>(of characters: S) -> Int where S: StringProtocol {
+    @inlinable public static func size<S>(of characters: S) -> Int where S: StringProtocol {
         characters.utf8.count
     }
 }
@@ -68,11 +68,11 @@ extension UTF16: Scheme {
     // MARK: Size
     //=------------------------------------------------------------------------=
 
-    @inlinable static func size(of character: Character) -> Int {
+    @inlinable public static func size(of character: Character) -> Int {
         character.utf16.count
     }
     
-    @inlinable static func size<S>(of characters: S) -> Int where S: StringProtocol {
+    @inlinable public static func size<S>(of characters: S) -> Int where S: StringProtocol {
         characters.utf16.count
     }
 }
@@ -87,11 +87,11 @@ extension UnicodeScalar: Scheme {
     // MARK: Size
     //=------------------------------------------------------------------------=
 
-    @inlinable static func size(of character: Character) -> Int {
+    @inlinable public static func size(of character: Character) -> Int {
         character.unicodeScalars.count
     }
     
-    @inlinable static func size<S>(of characters: S) -> Int where S: StringProtocol {
+    @inlinable public static func size<S>(of characters: S) -> Int where S: StringProtocol {
         characters.unicodeScalars.count
     }
 }
