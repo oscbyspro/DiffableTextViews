@@ -47,7 +47,7 @@ final class ModelsTests_Scheme: XCTestCase {
 // MARK: + String
 //=----------------------------------------------------------------------------=
 
-extension HelpersTests_Scheme {
+extension ModelsTests_Scheme {
 
     //=------------------------------------------------------------------------=
     // MARK: Tests
@@ -91,7 +91,7 @@ extension HelpersTests_Scheme {
 // MARK: + Substring
 //=----------------------------------------------------------------------------=
 
-extension HelpersTests_Scheme {
+extension ModelsTests_Scheme {
 
     //=------------------------------------------------------------------------=
     // MARK: Tests

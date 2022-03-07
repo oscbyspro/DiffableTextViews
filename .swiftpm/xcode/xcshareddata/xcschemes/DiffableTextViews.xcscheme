@@ -285,37 +285,12 @@
             parallelizable = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "DiffableTextViewsTests"
-               BuildableName = "DiffableTextViewsTests"
-               BlueprintName = "DiffableTextViewsTests"
+               BlueprintIdentifier = "DiffableTextStylesTestsXNumeric"
+               BuildableName = "DiffableTextStylesTestsXNumeric"
+               BlueprintName = "DiffableTextStylesTestsXNumeric"
                ReferencedContainer = "container:">
             </BuildableReference>
             <SkippedTests>
-               <Test
-                  Identifier = "HelpersTests_Scheme">
-               </Test>
-            </SkippedTests>
-         </TestableReference>
-         <TestableReference
-            skipped = "NO"
-            parallelizable = "YES">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "NumericTextStylesTests"
-               BuildableName = "NumericTextStylesTests"
-               BlueprintName = "NumericTextStylesTests"
-               ReferencedContainer = "container:">
-            </BuildableReference>
-            <SkippedTests>
-               <Test
-                  Identifier = "MiscellaneousTests_Notes">
-               </Test>
-               <Test
-                  Identifier = "StyleTests_Currency/testFloat64()">
-               </Test>
-               <Test
-                  Identifier = "StyleTests_Currency/testFloat64_aka_Double()">
-               </Test>
                <Test
                   Identifier = "StyleTests_Currency/testInt()">
                </Test>
@@ -353,86 +328,6 @@
             parallelizable = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "PatternTextStylesTests"
-               BuildableName = "PatternTextStylesTests"
-               BlueprintName = "PatternTextStylesTests"
-               ReferencedContainer = "container:">
-            </BuildableReference>
-         </TestableReference>
-         <TestableReference
-            skipped = "NO">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "DiffableTextViews_iOSTests"
-               BuildableName = "DiffableTextViews_iOSTests"
-               BlueprintName = "DiffableTextViews_iOSTests"
-               ReferencedContainer = "container:">
-            </BuildableReference>
-         </TestableReference>
-         <TestableReference
-            skipped = "NO">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "DiffableTextStyles_NumericTests"
-               BuildableName = "DiffableTextStyles_NumericTests"
-               BlueprintName = "DiffableTextStyles_NumericTests"
-               ReferencedContainer = "container:">
-            </BuildableReference>
-         </TestableReference>
-         <TestableReference
-            skipped = "NO">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "DiffableTextStyles_PatternTests"
-               BuildableName = "DiffableTextStyles_PatternTests"
-               BlueprintName = "DiffableTextStyles_PatternTests"
-               ReferencedContainer = "container:">
-            </BuildableReference>
-         </TestableReference>
-         <TestableReference
-            skipped = "NO">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "DiffableTextStylesTests_Numeric"
-               BuildableName = "DiffableTextStylesTests_Numeric"
-               BlueprintName = "DiffableTextStylesTests_Numeric"
-               ReferencedContainer = "container:">
-            </BuildableReference>
-         </TestableReference>
-         <TestableReference
-            skipped = "NO">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "DiffableTextStylesTests_Pattern"
-               BuildableName = "DiffableTextStylesTests_Pattern"
-               BlueprintName = "DiffableTextStylesTests_Pattern"
-               ReferencedContainer = "container:">
-            </BuildableReference>
-         </TestableReference>
-         <TestableReference
-            skipped = "NO">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "DiffableTextViewsTests_iOS"
-               BuildableName = "DiffableTextViewsTests_iOS"
-               BlueprintName = "DiffableTextViewsTests_iOS"
-               ReferencedContainer = "container:">
-            </BuildableReference>
-         </TestableReference>
-         <TestableReference
-            skipped = "NO">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "DiffableTextStylesTestsXNumeric"
-               BuildableName = "DiffableTextStylesTestsXNumeric"
-               BlueprintName = "DiffableTextStylesTestsXNumeric"
-               ReferencedContainer = "container:">
-            </BuildableReference>
-         </TestableReference>
-         <TestableReference
-            skipped = "NO">
-            <BuildableReference
-               BuildableIdentifier = "primary"
                BlueprintIdentifier = "DiffableTextStylesTestsXPattern"
                BuildableName = "DiffableTextStylesTestsXPattern"
                BlueprintName = "DiffableTextStylesTestsXPattern"
@@ -440,7 +335,8 @@
             </BuildableReference>
          </TestableReference>
          <TestableReference
-            skipped = "NO">
+            skipped = "NO"
+            parallelizable = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "DiffableTextViewsTestsXiOS"
@@ -450,7 +346,8 @@
             </BuildableReference>
          </TestableReference>
          <TestableReference
-            skipped = "NO">
+            skipped = "NO"
+            parallelizable = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "DiffableTextKitTests"

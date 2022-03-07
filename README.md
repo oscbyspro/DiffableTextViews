@@ -86,7 +86,7 @@ view.onUpdate(of: .diffableTextField) { proxy in }
 view.onSubmit(of: .diffableTextField) { proxy in }
 ```
 
-### [ProxyTextField](Sources/DiffableTextViews/Views)
+### [ProxyTextField](Sources/DiffableTextViewsXiOS/Views)
 
 ```swift
 proxy.text.color(.black)
@@ -96,7 +96,7 @@ proxy.selection.color(.blue, mode: .dimmed)
 
 # Styles
 
-## [NumericTextStyle](Notes/NumericTextStyle.md) ([Source](Sources/NumericTextStyles), [Tests](Tests/NumericTextStylesTests))
+## [NumericTextStyle](Notes/NumericTextStyle.md) ([Source](Sources/DiffableTextStylesXNumeric), [Tests](Tests/DiffableTextStylesTestsXNumeric))
 
 A style that processes localized numbers in various formats.
 
@@ -139,7 +139,7 @@ struct DiffableAmountTextField: View {
 }
 ```
 
-## [PatternTextStyle](Notes/PatternTextStyle.md) ([Source](Sources/PatternTextStyles), [Tests](Tests/PatternTextStylesTests))
+## [PatternTextStyle](Notes/PatternTextStyle.md) ([Source](Sources/DiffableTextStylesXPattern), [Tests](Tests/DiffableTextStylesTestsXPattern))
 
 A style that processes characters laid out in custom patterns.
 
