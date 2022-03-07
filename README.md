@@ -41,8 +41,6 @@ It uses three main algorithms to determine text selection.
 
 ```swift
 import DiffableTextViews
-import NumericTextStyles
-import PatternTextStyles
 ```
 
 # [Examples](Examples/iOS/App)
