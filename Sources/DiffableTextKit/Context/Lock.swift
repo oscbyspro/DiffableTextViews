@@ -34,7 +34,7 @@ public final class Lock {
     // MARK: Utilities
     //=------------------------------------------------------------------------=
     
-    @inlinable public func perform(action: () -> Void) {
+    @inlinable public func perform(_ action: () -> Void) {
         let state = _isLocked
         self._isLocked = true
         
