@@ -18,7 +18,7 @@ import Foundation
 ///
 /// Use this style to optimize the differentiation on view update.
 ///
-public protocol WrapperTextStyle: DiffableTextStyle {
+@usableFromInline protocol WrapperTextStyle: DiffableTextStyle {
     
     //=------------------------------------------------------------------------=
     // MARK: Style
@@ -85,7 +85,7 @@ extension WrapperTextStyle {
 
 import DiffableTextViewsXiOS
 
-public protocol UIKitWrapperTextStyle: WrapperTextStyle, UIKitDiffableTextStyle where Style: UIKitDiffableTextStyle { }
+@usableFromInline protocol UIKitWrapperTextStyle: WrapperTextStyle, UIKitDiffableTextStyle where Style: UIKitDiffableTextStyle { }
 
 //=----------------------------------------------------------------------------=
 // MARK: + Details

@@ -23,8 +23,8 @@ public struct EqualsTextStyle<Style: DiffableTextStyle, ID: Equatable>: WrapperT
     // MARK: State
     //=------------------------------------------------------------------------=
     
-    public let value: ID
-    public var style: Style
+    @usableFromInline let value: ID
+    @usableFromInline var style: Style
     
     //=------------------------------------------------------------------------=
     // MARK: Initializers
