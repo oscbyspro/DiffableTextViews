@@ -9,7 +9,7 @@
 
 #if canImport(UIKit)
 
-import DiffableTextStyle
+import DiffableTextStyles
 
 //*============================================================================*
 // MARK: Wrapper x UIKit

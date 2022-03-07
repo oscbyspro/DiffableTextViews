@@ -7,7 +7,8 @@
 // See http://www.apache.org/licenses/LICENSE-2.0 for license information.
 //=----------------------------------------------------------------------------=
 
-import SwiftUI
+import DiffableTextKit
+import Foundation
 
 //*============================================================================*
 // MARK: * Constant
@@ -25,7 +26,7 @@ public struct ConstantTextStyle<Style: DiffableTextStyle>: WrapperTextStyle {
     // MARK: State
     //=------------------------------------------------------------------------=
     
-    @usableFromInline var style: Style
+    public var style: Style
     
     //=------------------------------------------------------------------------=
     // MARK: Initializers

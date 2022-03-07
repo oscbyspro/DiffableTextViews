@@ -7,6 +7,7 @@
 // See http://www.apache.org/licenses/LICENSE-2.0 for license information.
 //=----------------------------------------------------------------------------=
 
+import DiffableTextKit
 import Foundation
 
 //*============================================================================*
@@ -17,7 +18,7 @@ import Foundation
 ///
 /// Use this style to optimize the differentiation on view update.
 ///
-@usableFromInline protocol WrapperTextStyle: DiffableTextStyle {
+public protocol WrapperTextStyle: DiffableTextStyle {
     
     //=------------------------------------------------------------------------=
     // MARK: Style

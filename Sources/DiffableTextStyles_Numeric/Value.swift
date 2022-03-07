@@ -184,18 +184,18 @@ extension NumericTextValue_Unsigned {
 //*============================================================================*
 
 public protocol NumericTextValue_Numberable: NumericTextValue where
-FormatStyle: NumericTextStyles.NumericTextFormat_Number { }
+FormatStyle: NumericTextFormat_Number { }
 
 //*============================================================================*
 // MARK: * Value x Formattable x Currency
 //*============================================================================*
 
 public protocol NumericTextValue_Currencyable: NumericTextValue where
-FormatStyle: NumericTextStyles.NumericTextFormat_Currencyable { }
+FormatStyle: NumericTextFormat_Currencyable { }
 
 //*============================================================================*
 // MARK: * Value x Formattable x Percent
 //*============================================================================*
 
 public protocol NumericTextValue_Percentable: NumericTextValue where
-FormatStyle: NumericTextStyles.NumericTextFormat_Percentable { }
+FormatStyle: NumericTextFormat_Percentable { }

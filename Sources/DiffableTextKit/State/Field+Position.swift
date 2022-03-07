@@ -23,7 +23,7 @@ extension Field {
         layout.indices(start: selection, destination: destination)
     }
     
-    @inlinable func indices(at destination: NSRange) -> Range<Layout.Index> {
+    @inlinable public func indices(at destination: NSRange) -> Range<Layout.Index> {
         indices(at: Position(destination.lowerBound) ..< Position(destination.upperBound))
     }
 }

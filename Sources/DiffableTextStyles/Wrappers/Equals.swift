@@ -7,6 +7,8 @@
 // See http://www.apache.org/licenses/LICENSE-2.0 for license information.
 //=----------------------------------------------------------------------------=
 
+import DiffableTextKit
+
 //*============================================================================*
 // MARK: * Equals
 //*============================================================================*
@@ -21,8 +23,8 @@ public struct EqualsTextStyle<Style: DiffableTextStyle, ID: Equatable>: WrapperT
     // MARK: State
     //=------------------------------------------------------------------------=
     
-    @usableFromInline let value: ID
-    @usableFromInline var style: Style
+    public let value: ID
+    public var style: Style
     
     //=------------------------------------------------------------------------=
     // MARK: Initializers
