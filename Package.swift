@@ -44,7 +44,7 @@ let package = Package(
             name: "DiffableTextViews_iOS",
             dependencies: ["DiffableTextKit"]),
         .testTarget(
-            name: "DiffableTextViews_iOSTests",
+            name: "DiffableTextViewsTests_iOS",
             dependencies: ["DiffableTextViews_iOS", "XCTestSupport"]),
         //=--------------------------------------=
         // MARK: DiffableTextStyles
@@ -62,7 +62,7 @@ let package = Package(
             name: "DiffableTextStyles_Numeric",
             dependencies: ["DiffableTextKit"]),
         .testTarget(
-            name: "DiffableTextStyles_NumericTests",
+            name: "DiffableTextStylesTests_Numeric",
             dependencies: ["DiffableTextStyles_Numeric", "XCTestSupport"]),
         //=--------------------------------------=
         // MARK: DiffableTextStyles_Pattern
@@ -71,7 +71,7 @@ let package = Package(
             name: "DiffableTextStyles_Pattern",
             dependencies: ["DiffableTextKit"]),
         .testTarget(
-            name: "DiffableTextStyles_PatternTests",
+            name: "DiffableTextStylesTests_Pattern",
             dependencies: ["DiffableTextStyles_Pattern", "XCTestSupport"]),
         //=--------------------------------------=
         // MARK: DiffableTextKit

@@ -333,6 +333,36 @@
                ReferencedContainer = "container:">
             </BuildableReference>
          </TestableReference>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "DiffableTextStylesTests_Numeric"
+               BuildableName = "DiffableTextStylesTests_Numeric"
+               BlueprintName = "DiffableTextStylesTests_Numeric"
+               ReferencedContainer = "container:">
+            </BuildableReference>
+         </TestableReference>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "DiffableTextStylesTests_Pattern"
+               BuildableName = "DiffableTextStylesTests_Pattern"
+               BlueprintName = "DiffableTextStylesTests_Pattern"
+               ReferencedContainer = "container:">
+            </BuildableReference>
+         </TestableReference>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "DiffableTextViewsTests_iOS"
+               BuildableName = "DiffableTextViewsTests_iOS"
+               BlueprintName = "DiffableTextViewsTests_iOS"
+               ReferencedContainer = "container:">
+            </BuildableReference>
+         </TestableReference>
       </Testables>
    </TestAction>
    <LaunchAction

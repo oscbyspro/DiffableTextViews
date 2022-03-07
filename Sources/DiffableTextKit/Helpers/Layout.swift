@@ -19,7 +19,7 @@
 /// |$|1|2|3|,|4|5|6|.|7|8|9|_|U|S|D|~
 /// |x|o|o|o|x|o|o|o|o|o|o|o|x|x|x|x|x
 /// ```
-@usableFromInline struct Layout<Scheme: DiffableTextKit.Scheme>: BidirectionalCollection {
+public struct Layout<Scheme: DiffableTextKit.Scheme>: BidirectionalCollection {
     @usableFromInline typealias Position = DiffableTextKit.Position<Scheme>
     
     //=------------------------------------------------------------------------=
@@ -49,7 +49,7 @@
     // MARK: Element
     //=------------------------------------------------------------------------=
     
-    @inlinable subscript(position: Index) -> Symbol {
+    @inlinable public subscript(position: Index) -> Symbol {
         snapshot[position.snapshot]
     }
     
@@ -57,11 +57,11 @@
     // MARK: Indices
     //=------------------------------------------------------------------------=
     
-    @inlinable var startIndex: Index {
+    @inlinable public var startIndex: Index {
         range.lowerBound
     }
     
-    @inlinable var endIndex: Index {
+    @inlinable public var endIndex: Index {
         range.upperBound
     }
     
@@ -69,13 +69,13 @@
     // MARK: After / Before
     //=------------------------------------------------------------------------=
 
-    @inlinable func index(after  index: Index) -> Index {
+    @inlinable public func index(after  index: Index) -> Index {
         let character = snapshot.characters[index.character]
         let after = snapshot.index(after: index.snapshot)
         return Index(after, at: index.position.after(character))
     }
 
-    @inlinable func index(before index: Index) -> Index {
+    @inlinable public func index(before index: Index) -> Index {
         let before = snapshot.index(before: index.snapshot)
         let character = snapshot.characters[before.character]
         return Index(before, at: index.position.before(character))
@@ -93,7 +93,7 @@
     // MARK: * Index
     //*========================================================================*
 
-    @usableFromInline struct Index: Comparable {
+    public struct Index: Comparable {
 
         //=--------------------------------------------------------------------=
         // MARK: State
@@ -127,11 +127,11 @@
         // MARK: Comparisons
         //=--------------------------------------------------------------------=
 
-        @inlinable static func == (lhs: Self, rhs: Self) -> Bool {
+        @inlinable public static func == (lhs: Self, rhs: Self) -> Bool {
             lhs.position == rhs.position
         }
         
-        @inlinable static func <  (lhs: Self, rhs: Self) -> Bool {
+        @inlinable public static func <  (lhs: Self, rhs: Self) -> Bool {
             lhs.position <  rhs.position
         }
     }
