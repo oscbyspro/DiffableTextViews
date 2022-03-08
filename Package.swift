@@ -43,7 +43,6 @@ let package = Package(
         .target(
             name: "DiffableTextStyles",
             dependencies: [
-                "DiffableTextViewsXiOS",
                 "DiffableTextStylesXNumeric",
                 "DiffableTextStylesXPattern",
                 "DiffableTextStylesXWrapper"]),
