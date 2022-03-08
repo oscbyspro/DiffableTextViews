@@ -14,7 +14,7 @@ import Foundation
 // MARK: * Style x Currency
 //*============================================================================*
 
-extension NumericTextStyle where Format: NumericTextFormat_Currency {
+extension NumericTextStyle where Format: NumericTextFormatXCurrency {
     
     //=------------------------------------------------------------------------=
     // MARK: Initializers

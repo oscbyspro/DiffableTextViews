@@ -14,7 +14,7 @@ import Foundation
 // MARK: * Style x Percent
 //*============================================================================*
 
-extension NumericTextStyle where Format: NumericTextFormat_Percent {
+extension NumericTextStyle where Format: NumericTextFormatXPercent {
     
     //=------------------------------------------------------------------------=
     // MARK: Initializers

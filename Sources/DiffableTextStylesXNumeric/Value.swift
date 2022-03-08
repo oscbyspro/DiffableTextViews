@@ -17,16 +17,16 @@ import Foundation
     //=------------------------------------------=
     // MARK: Types
     //=------------------------------------------=
-    @usableFromInline typealias FloatingPoint = NumericTextValue_FloatingPoint
-    @usableFromInline typealias Integer = NumericTextValue_Integer
-    @usableFromInline typealias Signed = NumericTextValue_Signed
-    @usableFromInline typealias Unsigned = NumericTextValue_Unsigned
+    @usableFromInline typealias FloatingPoint = NumericTextValueXFloatingPoint
+    @usableFromInline typealias Integer       = NumericTextValueXInteger
+    @usableFromInline typealias Signed        = NumericTextValueXSigned
+    @usableFromInline typealias Unsigned      = NumericTextValueXUnsigned
     //=------------------------------------------=
     // MARK: Formats
     //=------------------------------------------=
-    @usableFromInline typealias Numberable = NumericTextValue_Numberable
-    @usableFromInline typealias Currencyable = NumericTextValue_Currencyable
-    @usableFromInline typealias Percentable = NumericTextValue_Percentable
+    @usableFromInline typealias Numberable   = NumericTextValueXNumberable
+    @usableFromInline typealias Currencyable = NumericTextValueXCurrencyable
+    @usableFromInline typealias Percentable  = NumericTextValueXPercentable
 }
 
 //*============================================================================*
@@ -61,13 +61,13 @@ public protocol NumericTextValue: Comparable {
 // MARK: * Value x Floating Point
 //*============================================================================*
 
-public protocol NumericTextValue_FloatingPoint: NumericTextValue { }
+public protocol NumericTextValueXFloatingPoint: NumericTextValue { }
 
 //=----------------------------------------------------------------------------=
 // MARK: + Details
 //=----------------------------------------------------------------------------=
 
-extension NumericTextValue_FloatingPoint {
+extension NumericTextValueXFloatingPoint {
     
     //=------------------------------------------------------------------------=
     // MARK: Kind
@@ -88,7 +88,7 @@ extension NumericTextValue_FloatingPoint {
 // MARK: + Details - Signed Numeric
 //=----------------------------------------------------------------------------=
 
-extension NumericTextValue_FloatingPoint where Self: SignedNumeric {
+extension NumericTextValueXFloatingPoint where Self: SignedNumeric {
     
     //=------------------------------------------------------------------------=
     // MARK: Bounds
@@ -103,13 +103,13 @@ extension NumericTextValue_FloatingPoint where Self: SignedNumeric {
 // MARK: * Value x Integer
 //*============================================================================*
 
-public protocol NumericTextValue_Integer: NumericTextValue { }
+public protocol NumericTextValueXInteger: NumericTextValue { }
 
 //=----------------------------------------------------------------------------=
 // MARK: + Details
 //=----------------------------------------------------------------------------=
 
-extension NumericTextValue_Integer {
+extension NumericTextValueXInteger {
     
     //=------------------------------------------------------------------------=
     // MARK: Kind
@@ -130,7 +130,7 @@ extension NumericTextValue_Integer {
 // MARK: + Details - Fixed Width
 //=----------------------------------------------------------------------------=
 
-extension NumericTextValue_Integer where Self: FixedWidthInteger {
+extension NumericTextValueXInteger where Self: FixedWidthInteger {
     
     //=------------------------------------------------------------------------=
     // MARK: Bounds
@@ -145,13 +145,13 @@ extension NumericTextValue_Integer where Self: FixedWidthInteger {
 // MARK: * Value x Signed
 //*============================================================================*
 
-public protocol NumericTextValue_Signed: NumericTextValue { }
+public protocol NumericTextValueXSigned: NumericTextValue { }
 
 //=----------------------------------------------------------------------------=
 // MARK: + Details
 //=----------------------------------------------------------------------------=
 
-extension NumericTextValue_Signed {
+extension NumericTextValueXSigned {
     
     //=------------------------------------------------------------------------=
     // MARK: Kind
@@ -164,13 +164,13 @@ extension NumericTextValue_Signed {
 // MARK: * Value x Unsigned
 //*============================================================================*
 
-public protocol NumericTextValue_Unsigned: NumericTextValue { }
+public protocol NumericTextValueXUnsigned: NumericTextValue { }
 
 //=----------------------------------------------------------------------------=
 // MARK: + Details
 //=----------------------------------------------------------------------------=
 
-extension NumericTextValue_Unsigned {
+extension NumericTextValueXUnsigned {
     
     //=------------------------------------------------------------------------=
     // MARK: Kind
@@ -183,19 +183,19 @@ extension NumericTextValue_Unsigned {
 // MARK: * Value x Formattable x Number
 //*============================================================================*
 
-public protocol NumericTextValue_Numberable: NumericTextValue where
-FormatStyle: NumericTextFormat_Number { }
+public protocol NumericTextValueXNumberable: NumericTextValue where
+FormatStyle: NumericTextFormatXNumber { }
 
 //*============================================================================*
 // MARK: * Value x Formattable x Currency
 //*============================================================================*
 
-public protocol NumericTextValue_Currencyable: NumericTextValue where
-FormatStyle: NumericTextFormat_Currencyable { }
+public protocol NumericTextValueXCurrencyable: NumericTextValue where
+FormatStyle: NumericTextFormatXCurrencyable { }
 
 //*============================================================================*
 // MARK: * Value x Formattable x Percent
 //*============================================================================*
 
-public protocol NumericTextValue_Percentable: NumericTextValue where
-FormatStyle: NumericTextFormat_Percentable { }
+public protocol NumericTextValueXPercentable: NumericTextValue where
+FormatStyle: NumericTextFormatXPercentable { }

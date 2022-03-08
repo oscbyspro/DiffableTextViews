@@ -18,7 +18,7 @@ _NumericTextStyle<Value.FormatStyle>
 // MARK: * NumericTextStyle x Aliases x Currency
 //*============================================================================*
 
-extension NumericTextStyle where Format: NumericTextFormat_Currencyable {
+extension NumericTextStyle where Format: NumericTextFormatXCurrencyable {
     public typealias Currency = _NumericTextStyle<Format.Currency>
 }
 
@@ -26,6 +26,6 @@ extension NumericTextStyle where Format: NumericTextFormat_Currencyable {
 // MARK: * NumericTextStyle x Aliases x Percent
 //*============================================================================*
 
-extension NumericTextStyle where Format: NumericTextFormat_Percentable {
+extension NumericTextStyle where Format: NumericTextFormatXPercentable {
     public typealias Percent = _NumericTextStyle<Format.Percent>
 }

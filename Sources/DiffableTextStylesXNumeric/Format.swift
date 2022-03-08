@@ -17,15 +17,15 @@ import Foundation
     //=------------------------------------------=
     // MARK: Types
     //=------------------------------------------=
-    @usableFromInline typealias Number   = NumericTextFormat_Number
-    @usableFromInline typealias Currency = NumericTextFormat_Currency
-    @usableFromInline typealias Percent  = NumericTextFormat_Percent
+    @usableFromInline typealias Number   = NumericTextFormatXNumber
+    @usableFromInline typealias Currency = NumericTextFormatXCurrency
+    @usableFromInline typealias Percent  = NumericTextFormatXPercent
     //=------------------------------------------=
     // MARK: Branches
     //=------------------------------------------=
-    @usableFromInline typealias Numberable   = NumericTextFormat_Numberable
-    @usableFromInline typealias Currencyable = NumericTextFormat_Currencyable
-    @usableFromInline typealias Percentable  = NumericTextFormat_Percentable
+    @usableFromInline typealias Numberable   = NumericTextFormatXNumberable
+    @usableFromInline typealias Currencyable = NumericTextFormatXCurrencyable
+    @usableFromInline typealias Percentable  = NumericTextFormatXPercentable
 }
 
 //*============================================================================*
@@ -99,7 +99,7 @@ extension NumericTextFormat {
 // MARK: * Format x Number
 //*============================================================================*
 
-public protocol NumericTextFormat_Number: NumericTextFormat where
+public protocol NumericTextFormatXNumber: NumericTextFormat where
 SignDisplayStrategy == NumberFormatStyleConfiguration.SignDisplayStrategy {
 
     //=------------------------------------------------------------------------=
@@ -113,7 +113,7 @@ SignDisplayStrategy == NumberFormatStyleConfiguration.SignDisplayStrategy {
 // MARK: * Format x Currency
 //*============================================================================*
 
-public protocol NumericTextFormat_Currency: NumericTextFormat where
+public protocol NumericTextFormatXCurrency: NumericTextFormat where
 SignDisplayStrategy == CurrencyFormatStyleConfiguration.SignDisplayStrategy {
     
     //=------------------------------------------------------------------------=
@@ -133,7 +133,7 @@ SignDisplayStrategy == CurrencyFormatStyleConfiguration.SignDisplayStrategy {
 // MARK: * Format x Percent
 //*============================================================================*
 
-public protocol NumericTextFormat_Percent: NumericTextFormat where
+public protocol NumericTextFormatXPercent: NumericTextFormat where
 SignDisplayStrategy == NumberFormatStyleConfiguration.SignDisplayStrategy {
     
     //=------------------------------------------------------------------------=
@@ -147,22 +147,22 @@ SignDisplayStrategy == NumberFormatStyleConfiguration.SignDisplayStrategy {
 // MARK: * Format x Branches x Number
 //*============================================================================*
 
-public protocol NumericTextFormat_Numberable: NumericTextFormat {
-    associatedtype Number: NumericTextFormat_Number where Number.FormatInput == FormatInput
+public protocol NumericTextFormatXNumberable: NumericTextFormat {
+    associatedtype Number: NumericTextFormatXNumber where Number.FormatInput == FormatInput
 }
 
 //*============================================================================*
 // MARK: * Format x Branches x Currency
 //*============================================================================*
 
-public protocol NumericTextFormat_Currencyable: NumericTextFormat {
-    associatedtype Currency: NumericTextFormat_Currency where Currency.FormatInput == FormatInput
+public protocol NumericTextFormatXCurrencyable: NumericTextFormat {
+    associatedtype Currency: NumericTextFormatXCurrency where Currency.FormatInput == FormatInput
 }
 
 //*============================================================================*
 // MARK: * Format x Branches x Percent
 //*============================================================================*
 
-public protocol NumericTextFormat_Percentable: NumericTextFormat {
-    associatedtype Percent: NumericTextFormat_Percent where Percent.FormatInput == FormatInput
+public protocol NumericTextFormatXPercentable: NumericTextFormat {
+    associatedtype Percent: NumericTextFormatXPercent where Percent.FormatInput == FormatInput
 }
