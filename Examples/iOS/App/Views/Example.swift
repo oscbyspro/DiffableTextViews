@@ -14,7 +14,7 @@ import DiffableTextViews
 // MARK: * Example
 //*============================================================================*
 
-struct Example<Style: UIKitDiffableTextStyle>: View {
+struct Example<Style: DiffableTextStyleXiOS>: View {
     typealias Value = Style.Value
     
     //=------------------------------------------------------------------------=

@@ -74,20 +74,23 @@ extension WrapperTextStyle {
 }
 
 //*============================================================================*
-// MARK: Wrapper x UIKit
+// MARK: Wrapper x iOS
 //*============================================================================*
 
 #if canImport(UIKit)
 
 import DiffableTextViewsXiOS
 
-@usableFromInline protocol UIKitWrapperTextStyle: WrapperTextStyle, UIKitDiffableTextStyle where Style: UIKitDiffableTextStyle { }
+@usableFromInline protocol WrapperTextStyleXiOS:
+WrapperTextStyle,
+DiffableTextStyleXiOS where
+Style: DiffableTextStyleXiOS { }
 
 //=----------------------------------------------------------------------------=
 // MARK: + Details
 //=----------------------------------------------------------------------------=
 
-extension UIKitWrapperTextStyle {
+extension WrapperTextStyleXiOS {
     
     //=------------------------------------------------------------------------=
     // MARK: Setup

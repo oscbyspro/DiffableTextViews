@@ -16,7 +16,7 @@ import DiffableTextKit
 // MARK: * DiffableTextField
 //*============================================================================*
 
-public struct DiffableTextField<Style: UIKitDiffableTextStyle>: UIViewRepresentable {
+public struct DiffableTextField<Style: DiffableTextStyleXiOS>: UIViewRepresentable {
     public typealias Value = Style.Value
     public typealias Proxy = ProxyTextField
     

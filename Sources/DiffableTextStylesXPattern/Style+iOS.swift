@@ -8,14 +8,14 @@
 //=----------------------------------------------------------------------------=
 
 //*============================================================================*
-// MARK: * PatternTextStyle x UIKit
+// MARK: * PatternTextStyle x iOS
 //*============================================================================*
 
 #if canImport(UIKit)
 
 import DiffableTextViewsXiOS
 
-extension PatternTextStyle: UIKitDiffableTextStyle { }
+extension PatternTextStyle: DiffableTextStyleXiOS { }
 
 #endif
 

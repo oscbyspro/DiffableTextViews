@@ -7,24 +7,35 @@
 // See http://www.apache.org/licenses/LICENSE-2.0 for license information.
 //=----------------------------------------------------------------------------=
 
-//*============================================================================*
-// MARK: * NumericTextStyle x UIKit
-//*============================================================================*
-
 #if canImport(UIKit)
 
-import DiffableTextViewsXiOS
+import DiffableTextKit
+import UIKit
 
-extension NumericTextStyle: UIKitDiffableTextStyle {
+//*============================================================================*
+// MARK: * DiffableTextStyle x iOS
+//*============================================================================*
+
+public protocol DiffableTextStyleXiOS: DiffableTextStyle {
     
     //=------------------------------------------------------------------------=
-    // MARK: Keyboard
+    // MARK: Setup
     //=------------------------------------------------------------------------=
     
-    @inlinable public static func onSetup(_ diffableTextField: ProxyTextField) {
-        diffableTextField.keyboard.view(Value.isInteger ? .numberPad : .decimalPad)
-    }
+    @inlinable static func onSetup(_ diffableTextField: ProxyTextField)
+}
+
+//=----------------------------------------------------------------------------=
+// MARK: + Details
+//=----------------------------------------------------------------------------=
+
+public extension DiffableTextStyleXiOS {
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Setup
+    //=------------------------------------------------------------------------=
+    
+    @inlinable static func onSetup(_ diffableTextField: ProxyTextField) { }
 }
 
 #endif
-

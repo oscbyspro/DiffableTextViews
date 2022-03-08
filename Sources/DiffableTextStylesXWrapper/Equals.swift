@@ -69,13 +69,16 @@ extension DiffableTextStyle {
 }
 
 //*============================================================================*
-// MARK: * Equals x UIKit
+// MARK: * Equals x iOS
 //*============================================================================*
 
 #if canImport(UIKit)
 
 import DiffableTextViewsXiOS
 
-extension EqualsTextStyle: UIKitWrapperTextStyle, UIKitDiffableTextStyle where Style: UIKitDiffableTextStyle { }
+extension EqualsTextStyle:
+WrapperTextStyleXiOS,
+DiffableTextStyleXiOS where
+Style: DiffableTextStyleXiOS { }
 
 #endif
