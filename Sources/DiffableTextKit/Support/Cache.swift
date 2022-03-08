@@ -77,7 +77,7 @@ public final class Cache<ID, Value> where ID: Hashable, Value: AnyObject {
         //=--------------------------------------------------------------------=
      
         @inlinable override var hash: Int {
-            var hasher = Hasher(); wrapped.hash(into: &hasher); return hasher.finalize()
+            wrapped.hashValue
         }
         
         @inlinable override func isEqual(_ object: Any?) -> Bool {
