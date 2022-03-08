@@ -65,6 +65,12 @@ let package = Package(
             name: "DiffableTextStylesXPatternTests",
             dependencies: ["DiffableTestKit", "DiffableTextStylesXPattern"]),
         //=--------------------------------------=
+        // MARK: 2 - DiffableTextStylesXWrapper
+        //=--------------------------------------=
+        .target(
+            name: "DiffableTextStylesXWrapper",
+            dependencies: ["DiffableTextKit", "DiffableTextViewsXiOS"]),
+        //=--------------------------------------=
         // MARK: 1 - DiffableTextViewsXiOS
         //=--------------------------------------=
         .target(
