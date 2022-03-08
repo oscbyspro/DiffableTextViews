@@ -356,6 +356,36 @@
                ReferencedContainer = "container:">
             </BuildableReference>
          </TestableReference>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "DiffableTextStylesXNumericTests"
+               BuildableName = "DiffableTextStylesXNumericTests"
+               BlueprintName = "DiffableTextStylesXNumericTests"
+               ReferencedContainer = "container:">
+            </BuildableReference>
+         </TestableReference>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "DiffableTextStylesXPatternTests"
+               BuildableName = "DiffableTextStylesXPatternTests"
+               BlueprintName = "DiffableTextStylesXPatternTests"
+               ReferencedContainer = "container:">
+            </BuildableReference>
+         </TestableReference>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "DiffableTextViewsXiOSTests"
+               BuildableName = "DiffableTextViewsXiOSTests"
+               BlueprintName = "DiffableTextViewsXiOSTests"
+               ReferencedContainer = "container:">
+            </BuildableReference>
+         </TestableReference>
       </Testables>
    </TestAction>
    <LaunchAction
