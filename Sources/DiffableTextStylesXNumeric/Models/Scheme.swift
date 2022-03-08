@@ -15,9 +15,9 @@ import Foundation
 //*============================================================================*
 
 @usableFromInline typealias Scheme = NumericTextScheme; @usableFromInline enum Schemes {
-    @usableFromInline typealias Standard  = NumericTextScheme_Standard
-    @usableFromInline typealias Currency  = NumericTextScheme_Currency
-    @usableFromInline typealias Reuseable = NumericTextScheme_Reuseable
+    @usableFromInline typealias Standard  = NumericTextSchemeXStandard
+    @usableFromInline typealias Currency  = NumericTextSchemeXCurrency
+    @usableFromInline typealias Reuseable = NumericTextSchemeXReuseable
 }
 
 //*============================================================================*
@@ -58,8 +58,8 @@ extension NumericTextScheme {
 // MARK: * Scheme x Reusable
 //*============================================================================*
 
-@usableFromInline protocol NumericTextScheme_Reuseable: AnyObject, Scheme {
-    associatedtype ID: AnyObject & Hashable
+@usableFromInline protocol NumericTextSchemeXReuseable: AnyObject, Scheme {
+    associatedtype ID: Hashable
     
     //=------------------------------------------------------------------------=
     // MARK: Initializers
@@ -78,7 +78,7 @@ extension NumericTextScheme {
 // MARK: + Details
 //=----------------------------------------------------------------------------=
 
-extension NumericTextScheme_Reuseable {
+extension NumericTextSchemeXReuseable {
     
     //=------------------------------------------------------------------------=
     // MARK: Search

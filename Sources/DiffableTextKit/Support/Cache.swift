@@ -13,7 +13,7 @@ import Foundation
 // MARK: * Cache
 //*============================================================================*
 
-public final class Cache<Key, Value> where Key: Hashable & AnyObject, Value: AnyObject {
+public final class Cache<ID, Value> where ID: Hashable, Value: AnyObject {
     
     //=------------------------------------------------------------------------=
     // MARK: State
@@ -37,7 +37,8 @@ public final class Cache<Key, Value> where Key: Hashable & AnyObject, Value: Any
     // MARK: Search or Insert
     //=------------------------------------------------------------------------=
     
-    @inlinable public func reuseable(_ key: Key, make: @autoclosure () throws -> Value) rethrows -> Value {
+    @inlinable public func reuseable(_ id: ID, make: @autoclosure () throws -> Value) rethrows -> Value {
+        let key = Key(id)
         //=--------------------------------------=
         // MARK: Search
         //=--------------------------------------=
@@ -50,6 +51,37 @@ public final class Cache<Key, Value> where Key: Hashable & AnyObject, Value: Any
             let instance = try make()
             nscache.setObject(instance,  forKey: key)
             return instance
+        }
+    }
+    
+    //*========================================================================*
+    // MARK: * Key
+    //*========================================================================*
+    
+    @usableFromInline final class Key: NSObject {
+        
+        //=--------------------------------------------------------------------=
+        // MARK: State
+        //=--------------------------------------------------------------------=
+        
+        @usableFromInline let wrapped: ID
+        
+        //=--------------------------------------------------------------------=
+        // MARK: Initializers
+        //=--------------------------------------------------------------------=
+        
+        @inlinable init(_ wrapped: ID) { self.wrapped = wrapped }
+        
+        //=--------------------------------------------------------------------=
+        // MARK: NSCache
+        //=--------------------------------------------------------------------=
+     
+        @inlinable override var hash: Int {
+            var hasher = Hasher(); wrapped.hash(into: &hasher); return hasher.finalize()
+        }
+        
+        @inlinable override func isEqual(_ object: Any?) -> Bool {
+            wrapped == (object as! Self).wrapped
         }
     }
 }

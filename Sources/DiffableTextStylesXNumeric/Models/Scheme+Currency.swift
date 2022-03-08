@@ -14,8 +14,8 @@ import Foundation
 // MARK: * Scheme x Currency
 //*============================================================================*
 
-@usableFromInline final class NumericTextScheme_Currency: Schemes.Reuseable {
-    @usableFromInline static let cache = Cache<ID, NumericTextScheme_Currency>(33)
+@usableFromInline final class NumericTextSchemeXCurrency: Schemes.Reuseable {
+    @usableFromInline static let cache = Cache<ID, NumericTextSchemeXCurrency>(33)
     
     //=------------------------------------------------------------------------=
     // MARK: State
@@ -55,7 +55,7 @@ import Foundation
     // MARK: * ID
     //*========================================================================*
 
-    @usableFromInline final class ID: Hashable {
+    @usableFromInline struct ID: Hashable {
         
         //=--------------------------------------------------------------------=
         // MARK: State
@@ -70,22 +70,6 @@ import Foundation
         
         @inlinable init(_ locale: Locale, _ code: String) {
             self.locale = locale; self.code = code
-        }
-        
-        //=--------------------------------------------------------------------=
-        // MARK: Hashable
-        //=--------------------------------------------------------------------=
-        
-        @inlinable func hash(into hasher: inout Hasher) {
-            hasher.combine(locale); hasher.combine(code)
-        }
-        
-        //=--------------------------------------------------------------------=
-        // MARK: Comparisons
-        //=--------------------------------------------------------------------=
-        
-        @inlinable static func == (lhs: ID, rhs: ID) -> Bool {
-            lhs.locale == rhs.locale && lhs.code == rhs.code
         }
     }
 }
