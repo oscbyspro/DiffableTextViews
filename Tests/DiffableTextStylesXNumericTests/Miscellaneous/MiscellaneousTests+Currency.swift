@@ -9,8 +9,7 @@
 
 #if DEBUG
 
-import XCTest
-import XCTestSupport
+import DiffableTestKit
 
 //*============================================================================*
 // MARK: * MiscellaneousTests x Currency

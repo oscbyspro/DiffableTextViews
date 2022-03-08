@@ -44,12 +44,15 @@
             parallelizable = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "DiffableTextStylesTestsXNumeric"
-               BuildableName = "DiffableTextStylesTestsXNumeric"
-               BlueprintName = "DiffableTextStylesTestsXNumeric"
+               BlueprintIdentifier = "DiffableTextStylesXNumericTests"
+               BuildableName = "DiffableTextStylesXNumericTests"
+               BlueprintName = "DiffableTextStylesXNumericTests"
                ReferencedContainer = "container:../..">
             </BuildableReference>
             <SkippedTests>
+               <Test
+                  Identifier = "StyleTests_Currency/testFloat64_aka_Double()">
+               </Test>
                <Test
                   Identifier = "StyleTests_Currency/testInt()">
                </Test>
@@ -87,9 +90,9 @@
             parallelizable = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "DiffableTextStylesTestsXPattern"
-               BuildableName = "DiffableTextStylesTestsXPattern"
-               BlueprintName = "DiffableTextStylesTestsXPattern"
+               BlueprintIdentifier = "DiffableTextStylesXPatternTests"
+               BuildableName = "DiffableTextStylesXPatternTests"
+               BlueprintName = "DiffableTextStylesXPatternTests"
                ReferencedContainer = "container:../..">
             </BuildableReference>
          </TestableReference>
@@ -98,9 +101,9 @@
             parallelizable = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "DiffableTextViewsTestsXiOS"
-               BuildableName = "DiffableTextViewsTestsXiOS"
-               BlueprintName = "DiffableTextViewsTestsXiOS"
+               BlueprintIdentifier = "DiffableTextViewsXiOSTests"
+               BuildableName = "DiffableTextViewsXiOSTests"
+               BlueprintName = "DiffableTextViewsXiOSTests"
                ReferencedContainer = "container:../..">
             </BuildableReference>
          </TestableReference>

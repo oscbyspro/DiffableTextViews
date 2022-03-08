@@ -54,7 +54,7 @@ let package = Package(
             dependencies: ["DiffableTextKit", "DiffableTextViewsXiOS"]),
         .testTarget(
             name: "DiffableTextStylesXNumericTests",
-            dependencies: ["XCTestSupport", "DiffableTextStylesXNumeric"]),
+            dependencies: ["DiffableTestKit", "DiffableTextStylesXNumeric"]),
         //=--------------------------------------=
         // MARK: 2 - DiffableTextStylesXPattern
         //=--------------------------------------=
@@ -63,7 +63,7 @@ let package = Package(
             dependencies: ["DiffableTextKit", "DiffableTextViewsXiOS"]),
         .testTarget(
             name: "DiffableTextStylesXPatternTests",
-            dependencies: ["XCTestSupport", "DiffableTextStylesXPattern"]),
+            dependencies: ["DiffableTestKit", "DiffableTextStylesXPattern"]),
         //=--------------------------------------=
         // MARK: 1 - DiffableTextViewsXiOS
         //=--------------------------------------=
@@ -72,7 +72,7 @@ let package = Package(
             dependencies: ["DiffableTextKit"]),
         .testTarget(
             name: "DiffableTextViewsXiOSTests",
-            dependencies: ["XCTestSupport", "DiffableTextViewsXiOS"]),
+            dependencies: ["DiffableTestKit", "DiffableTextViewsXiOS"]),
         //=--------------------------------------=
         // MARK: 0 - DiffableTextKit
         //=--------------------------------------=
@@ -81,10 +81,10 @@ let package = Package(
             dependencies: []),
         .testTarget(
             name: "DiffableTextKitTests",
-            dependencies: ["DiffableTextKit", "XCTestSupport"]),
+            dependencies: ["DiffableTextKit", "DiffableTestKit"]),
         //=--------------------------------------=
-        // MARK: 0 - XCTestSupport
+        // MARK: T - DiffableTestKit
         //=--------------------------------------=
-        .target(name: "XCTestSupport", path: "Tests/XCTestSupport")
+        .target(name: "DiffableTestKit", path: "Tests/DiffableTestKit")
     ]
 )

@@ -9,9 +9,8 @@
 
 #if DEBUG
 
+import DiffableTestKit
 import Foundation
-import XCTest
-import XCTestSupport
 
 @testable import DiffableTextStylesXNumeric
 

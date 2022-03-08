@@ -10,7 +10,6 @@
 #if DEBUG
 
 import XCTest
-@testable import DiffableTextViews
 
 //*============================================================================*
 // MARK: * ModelsTests x Scheme

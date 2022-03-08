@@ -7,9 +7,9 @@
 // See http://www.apache.org/licenses/LICENSE-2.0 for license information.
 //=----------------------------------------------------------------------------=
 
-#if DEBUG
+@_exported import XCTest
 
-import XCTest
+#if DEBUG
 
 //*============================================================================*
 // MARK: * Tests

@@ -9,11 +9,8 @@
 
 #if DEBUG
 
-import XCTest
-import XCTestSupport
-
+import DiffableTestKit
 import DiffableTextKit
-@testable import DiffableTextViews
 
 //*============================================================================*
 // MARK: * ModelsTests x Attribute

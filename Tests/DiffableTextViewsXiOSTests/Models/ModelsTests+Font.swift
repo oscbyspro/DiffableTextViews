@@ -9,9 +9,7 @@
 
 #if DEBUG
 
-import XCTest
-import XCTestSupport
-
+import DiffableTestKit
 @testable import DiffableTextViewsXiOS
 
 //*============================================================================*
