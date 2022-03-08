@@ -14,10 +14,6 @@ import Foundation
 // MARK: * Wrapper
 //*============================================================================*
 
-/// A style that equals a specific value.
-///
-/// Use this style to optimize the differentiation on view update.
-///
 @usableFromInline protocol WrapperTextStyle: DiffableTextStyle {
     
     //=------------------------------------------------------------------------=
