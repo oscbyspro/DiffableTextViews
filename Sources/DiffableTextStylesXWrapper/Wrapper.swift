@@ -77,7 +77,7 @@ extension WrapperTextStyle {
 // MARK: Wrapper x iOS
 //*============================================================================*
 
-#if canImport(UIKit)
+#if os(iOS)
 
 import DiffableTextViewsXiOS
 

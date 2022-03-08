@@ -13,13 +13,13 @@ import Foundation
 // MARK: * Cache
 //*============================================================================*
 
-public final class Cache<ID, Value> where ID: Hashable, Value: AnyObject {
+public final class Cache<Key, Value> where Key: Hashable, Value: AnyObject {
     
     //=------------------------------------------------------------------------=
     // MARK: State
     //=------------------------------------------------------------------------=
     
-    @usableFromInline let nscache: NSCache<Key, Value>
+    @usableFromInline let nscache: NSCache<Wrapper, Value>
     
     //=------------------------------------------------------------------------=
     // MARK: Initializers
@@ -37,8 +37,8 @@ public final class Cache<ID, Value> where ID: Hashable, Value: AnyObject {
     // MARK: Search or Insert
     //=------------------------------------------------------------------------=
     
-    @inlinable public func reuseable(_ id: ID, make: @autoclosure () throws -> Value) rethrows -> Value {
-        let key = Key(id)
+    @inlinable public func reuseable(_ key: Key, make: @autoclosure () throws -> Value) rethrows -> Value {
+        let key = Wrapper(key)
         //=--------------------------------------=
         // MARK: Search
         //=--------------------------------------=
@@ -58,19 +58,19 @@ public final class Cache<ID, Value> where ID: Hashable, Value: AnyObject {
     // MARK: * Key
     //*========================================================================*
     
-    @usableFromInline final class Key: NSObject {
+    @usableFromInline final class Wrapper: NSObject {
         
         //=--------------------------------------------------------------------=
         // MARK: State
         //=--------------------------------------------------------------------=
         
-        @usableFromInline let wrapped: ID
+        @usableFromInline let wrapped: Key
         
         //=--------------------------------------------------------------------=
         // MARK: Initializers
         //=--------------------------------------------------------------------=
         
-        @inlinable init(_ wrapped: ID) { self.wrapped = wrapped }
+        @inlinable init(_ wrapped: Key) { self.wrapped = wrapped }
         
         //=--------------------------------------------------------------------=
         // MARK: NSCache

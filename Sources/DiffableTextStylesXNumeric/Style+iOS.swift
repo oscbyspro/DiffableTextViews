@@ -11,7 +11,7 @@
 // MARK: * NumericTextStyle x iOS
 //*============================================================================*
 
-#if canImport(UIKit)
+#if os(iOS)
 
 import DiffableTextViewsXiOS
 

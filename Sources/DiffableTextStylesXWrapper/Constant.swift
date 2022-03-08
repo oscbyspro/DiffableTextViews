@@ -76,7 +76,7 @@ extension DiffableTextStyle {
 // MARK: * Constant x iOS
 //*============================================================================*
 
-#if canImport(UIKit)
+#if os(iOS)
 
 import DiffableTextViewsXiOS
 
