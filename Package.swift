@@ -45,7 +45,8 @@ let package = Package(
             dependencies: [
                 "DiffableTextViewsXiOS",
                 "DiffableTextStylesXNumeric",
-                "DiffableTextStylesXPattern"]),
+                "DiffableTextStylesXPattern",
+                "DiffableTextStylesXWrapper"]),
         //=--------------------------------------=
         // MARK: 2 - DiffableTextStylesXNumeric
         //=--------------------------------------=

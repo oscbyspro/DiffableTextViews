@@ -13,3 +13,4 @@
 
 @_exported import DiffableTextStylesXNumeric
 @_exported import DiffableTextStylesXPattern
+@_exported import DiffableTextStylesXWrapper
