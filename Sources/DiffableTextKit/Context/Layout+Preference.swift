@@ -17,7 +17,7 @@ extension Layout {
     // MARK: Single
     //=------------------------------------------------------------------------=
     
-    @inlinable func preferred(_ start: Layout.Index, preference: Direction, intent: Direction?) -> Layout.Index {
+    @inlinable func preferred(_ start: Layout.Index, preference: Direction, momentum: Direction?) -> Layout.Index {
         //=--------------------------------------=
         // MARK: Anchor
         //=--------------------------------------=
@@ -33,7 +33,7 @@ extension Layout {
         //=--------------------------------------=
         // MARK: Pick A Direction
         //=--------------------------------------=
-        let direction = intent ?? preference
+        let direction = momentum ?? preference
         //=--------------------------------------=
         // MARK: Try In This Direction
         //=--------------------------------------=
@@ -56,17 +56,17 @@ extension Layout {
     // MARK: Double
     //=------------------------------------------------------------------------=
     
-    @inlinable func preferred(_ start: Range<Index>, intent: Intent) -> Range<Index> {
+    @inlinable func preferred(_ start: Range<Index>, momentum: Momentum) -> Range<Index> {
         //=--------------------------------------=
         // MARK: Single
         //=--------------------------------------=
-        let upperBound = preferred(start.upperBound, preference: .backwards, intent: intent.upper)
+        let upperBound = preferred(start.upperBound, preference: .backwards, momentum: momentum.upper)
         var lowerBound = upperBound
         //=--------------------------------------=
         // MARK: Double
         //=--------------------------------------=
         if !start.isEmpty, upperBound != startIndex {
-            lowerBound = preferred(start.lowerBound, preference:  .forwards, intent: intent.lower)
+            lowerBound = preferred(start.lowerBound, preference:  .forwards, momentum: momentum.lower)
             lowerBound = Swift.min(lowerBound, upperBound)
         }
         //=--------------------------------------=

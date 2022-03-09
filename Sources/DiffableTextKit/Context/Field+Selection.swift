@@ -22,14 +22,14 @@ extension Field {
         //=--------------------------------------=
         // MARK: Parse Mementum As Intent
         //=--------------------------------------=
-        let intent = momentum ? Intent(self.selection, to: selection) : Intent()
+        let momentum = momentum ? Momentum(self.selection, to: selection) : Momentum()
         //=--------------------------------------=
         // MARK: Update
         //=--------------------------------------=
-        self.update(selection: selection, intent: intent)
+        self.update(selection: selection, momentum: momentum)
     }
     
-    @inlinable mutating func update(selection: Range<Layout.Index>, intent: Intent = Intent()) {
+    @inlinable mutating func update(selection: Range<Layout.Index>, momentum: Momentum = Momentum()) {
         self.selection = selection
         //=--------------------------------------=
         // MARK: Exceptions
@@ -38,6 +38,6 @@ extension Field {
         //=--------------------------------------=
         // MARK: Autocorrect
         //=--------------------------------------=
-        self.selection = layout.preferred(selection, intent: intent)
+        self.selection = layout.preferred(selection, momentum: momentum)
     }
 }
