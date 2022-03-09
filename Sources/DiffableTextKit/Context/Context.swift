@@ -13,8 +13,9 @@
 
 public final class Context<Style: DiffableTextStyle, Scheme: DiffableTextKit.Scheme> {
     public typealias Field = DiffableTextKit.Field<Scheme>
+    public typealias Layout = DiffableTextKit.Layout<Scheme>
     public typealias Position = DiffableTextKit.Position<Scheme>
-    public typealias Commit = DiffableTextKit.Commit<Style.Value>
+    public typealias Commit = DiffableTextKit.Commit<Value>
     public typealias Value = Style.Value
 
     //=------------------------------------------------------------------------=
@@ -63,7 +64,7 @@ public final class Context<Style: DiffableTextStyle, Scheme: DiffableTextKit.Sch
     // MARK: Selection
     //=------------------------------------------------------------------------=
     
-    @inlinable public func set(selection: Field.Layout.Index) {
+    @inlinable public func set(selection: Layout.Index) {
         self._field.selection = selection ..< selection
     }
     
