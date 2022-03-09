@@ -37,19 +37,19 @@ public final class Cache<Key, Value> where Key: Hashable, Value: AnyObject {
     // MARK: Utilities
     //=------------------------------------------------------------------------=
     
-    @inlinable public func access(key: Key) -> Value? {
+    @inlinable public func access(_ key: Key) -> Value? {
         nscache.object(forKey: Wrapper(key))
     }
     
-    @inlinable public func insert(_ value: Value, key: Key) {
+    @inlinable public func insert(_ value: Value, for key: Key) {
         nscache.setObject(value, forKey: Wrapper(key))
     }
     
-    @inlinable public func remove(key: Key) {
+    @inlinable public func remove(_ key: Key) {
         nscache.removeObject(forKey: Wrapper(key))
     }
 
-    @inlinable public func reuseable(_ key: Key, make: @autoclosure () throws -> Value) rethrows -> Value {
+    @inlinable public func reuse(_ key: Key, make: @autoclosure () throws -> Value) rethrows -> Value {
         let key = Wrapper(key)
         //=--------------------------------------=
         // MARK: Search
