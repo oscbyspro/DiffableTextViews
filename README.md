@@ -94,7 +94,7 @@ proxy.selection.color(.blue, mode: .dimmed)
 
 # Styles
 
-## [NumericTextStyle](Notes/NumericTextStyle.md) ([Source](Sources/DiffableTextStylesXNumeric), [Tests](Tests/DiffableTextStylesTestsXNumeric))
+## [NumericTextStyle](Notes/NumericTextStyle.md) ([Source](Sources/DiffableTextStylesXNumeric), [Tests](Tests/DiffableTextStylesXNumericTests))
 
 A style that processes localized numbers in various formats.
 
@@ -137,7 +137,7 @@ struct DiffableAmountTextField: View {
 }
 ```
 
-## [PatternTextStyle](Notes/PatternTextStyle.md) ([Source](Sources/DiffableTextStylesXPattern), [Tests](Tests/DiffableTextStylesTestsXPattern))
+## [PatternTextStyle](Notes/PatternTextStyle.md) ([Source](Sources/DiffableTextStylesXPattern), [Tests](Tests/DiffableTextStylesXPatternTests))
 
 A style that processes characters laid out in custom patterns.
 

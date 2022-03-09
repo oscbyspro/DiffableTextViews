@@ -10,7 +10,6 @@
 #if canImport(UIKit)
 
 import DiffableTextKit
-import UIKit
 
 //*============================================================================*
 // MARK: * DiffableTextStyle x iOS

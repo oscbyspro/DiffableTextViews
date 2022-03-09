@@ -13,8 +13,6 @@
 
 /// The text layout, as described by a snapshot and its attributes.
 ///
-/// It is used to traverse text from the point of view of one or more carets.
-///
 /// ```
 /// |$|1|2|3|,|4|5|6|.|7|8|9|_|U|S|D|~
 /// |x|o|o|o|x|o|o|o|o|o|o|o|x|x|x|x|x
