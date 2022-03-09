@@ -2,7 +2,7 @@
 
 A styles that process characters laid out in custom patterns of formatting and placeholders.
 
-![DiffablePhoneNumberTextField.gif](../Assets/DiffablePhoneNumberTextField.gif)
+![DiffableTextFieldXPhone.gif](../Assets/DiffableTextFieldXPhone.gif)
 
 ## Pattern
 
@@ -25,10 +25,10 @@ A collection of characters.
 
 ## Examples
 
-![DiffablePhoneNumberTextField.gif](../Assets/DiffablePhoneNumberTextField.gif)
+![DiffableTextFieldXPhone.gif](../Assets/DiffableTextFieldXPhone.gif)
 
 ```swift
-struct DiffablePhoneTextField: View {
+struct DiffableTextFieldXPhone: View {
 
     //=------------------------------------------------------------------------=
     // MARK: State
@@ -58,10 +58,10 @@ struct DiffablePhoneTextField: View {
 }
 ```
 
-![DiffablePhoneNumberTextField.gif](../Assets/DiffableCardNumberTextField.gif)
+![DiffableTextFieldXCard.gif](../Assets/DiffableTextFieldXCard.gif)
 
 ```swift
-struct DiffableCardTextField: View {
+struct DiffableTextFieldXCard: View {
     
     //=------------------------------------------------------------------------=
     // MARK: State

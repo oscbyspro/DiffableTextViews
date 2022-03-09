@@ -2,7 +2,7 @@
 
 Styles that process text bound to number types.
 
-![DiffableAmountTextField.gif](../Assets/DiffableAmountTextField.gif)
+![DiffableTextFieldXAmount.gif](../Assets/DiffableTextFieldXAmount.gif)
 
 ## Locales
 
@@ -119,10 +119,10 @@ Determines the input and output space in terms of digits.
 
 ## Examples
 
-![DiffableAmountTextField.gif](../Assets/DiffableAmountTextField.gif)
+![DiffableTextFieldXAmount.gif](../Assets/DiffableTextFieldXAmount.gif)
 
 ```swift
-struct DiffableAmountTextField: View {
+struct DiffableTextFieldXAmount: View {
 
     //=------------------------------------------------------------------------=
     // MARK: State

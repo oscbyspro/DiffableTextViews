@@ -41,10 +41,10 @@ static func onSetup(_ diffableTextField: ProxyTextField) { ... }
 
 ## Examples
 
-![DiffableAmountTextField.gif](../Assets/DiffableAmountTextField.gif)
+![DiffableTextFieldXAmount.gif](../Assets/DiffableTextFieldXAmount.gif)
 
 ```swift
-struct DiffableAmountTextField: View {
+struct DiffableTextFieldXAmount: View {
 
     //=------------------------------------------------------------------------=
     // MARK: State
@@ -67,10 +67,10 @@ struct DiffableAmountTextField: View {
 }
 ```
 
-![DiffablePhoneNumberTextField.gif](../Assets/DiffablePhoneNumberTextField.gif)
+![DiffableTextFieldXPhone.gif](../Assets/DiffableTextFieldXPhone.gif)
 
 ```swift
-struct DiffablePhoneTextField: View {
+struct DiffableTextFieldXPhone: View {
 
     //=------------------------------------------------------------------------=
     // MARK: State

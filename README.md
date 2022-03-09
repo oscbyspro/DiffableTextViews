@@ -2,9 +2,9 @@
 
 An open-source module for as-you-type formatting and conversion in iOS.
 
-![DiffableAmountTextField.gif](Assets/DiffableAmountTextField.gif)
+![DiffableTextFieldXAmount.gif](Assets/DiffableTextFieldXAmount.gif)
 
-![DiffablePhoneNumberTextField.gif](Assets/DiffablePhoneNumberTextField.gif)
+![DiffableTextFieldXPhone.gif](Assets/DiffableTextFieldXPhone.gif)
 
 ### Features
 
@@ -111,10 +111,10 @@ A style that processes localized numbers in various formats.
 
 ### Examples
 
-![DiffableAmountTextField.gif](Assets/DiffableAmountTextField.gif)
+![DiffableTextFieldXAmount.gif](Assets/DiffableTextFieldXAmount.gif)
 
 ```swift
-struct DiffableAmountTextField: View {
+struct DiffableTextFieldXAmount: View {
 
     //=------------------------------------------------------------------------=
     // MARK: State
@@ -152,10 +152,10 @@ A style that processes characters laid out in custom patterns.
 
 ### Examples
 
-![DiffablePhoneNumberTextField.gif](Assets/DiffablePhoneNumberTextField.gif)
+![DiffableTextFieldXPhone.gif](Assets/DiffableTextFieldXPhone.gif)
 
 ```swift
-struct DiffablePhoneTextField: View {
+struct DiffableTextFieldXPhone: View {
 
     //=------------------------------------------------------------------------=
     // MARK: State
