@@ -15,7 +15,7 @@ import DiffableTestKit
 // MARK: * MiscellaneousTests x Currency
 //*============================================================================*
 
-final class MiscellaneousTests_Currency: Tests {
+final class MiscellaneousTestsXCurrency: Tests {
     
     //=------------------------------------------------------------------------=
     // MARK: Positive

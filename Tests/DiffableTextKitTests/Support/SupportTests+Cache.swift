@@ -16,7 +16,7 @@ import DiffableTestKit
 // MARK: * HelpersTests x Direction
 //*============================================================================*
 
-final class SupportTests_Cache: XCTestCase {
+final class SupportTestsXCache: XCTestCase {
     
     //=------------------------------------------------------------------------=
     // MARK: Tests

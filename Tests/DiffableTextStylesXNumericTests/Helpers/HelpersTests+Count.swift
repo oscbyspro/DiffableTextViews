@@ -16,7 +16,7 @@ import DiffableTestKit
 // MARK: * HelpersTests x Count
 //*============================================================================*
 
-final class HelpersTests_Count: Tests {
+final class HelpersTestsXCount: Tests {
     
     //=------------------------------------------------------------------------=
     // MARK: State

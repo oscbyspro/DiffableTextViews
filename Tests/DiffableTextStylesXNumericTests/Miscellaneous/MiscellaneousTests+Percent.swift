@@ -18,7 +18,7 @@ import Foundation
 // MARK: * MiscellaneousTests x Percent
 //*============================================================================*
 
-final class MiscellaneousTests_Percent: Tests {
+final class MiscellaneousTestsXPercent: Tests {
     
     //=------------------------------------------------------------------------=
     // MARK: Positive

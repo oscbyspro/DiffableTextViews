@@ -16,7 +16,7 @@ import DiffableTestKit
 // MARK: * HelpersTests x Lexicon
 //*============================================================================*
 
-final class HelpersTests_Lexicon: Tests {
+final class HelpersTestsXLexicon: Tests {
     
     //=------------------------------------------------------------------------=
     // MARK: Styles

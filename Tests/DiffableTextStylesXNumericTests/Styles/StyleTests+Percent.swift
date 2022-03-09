@@ -16,7 +16,7 @@ import DiffableTestKit
 // MARK: * StyleTests x Percent
 //*============================================================================*
 
-final class StyleTests_Percent: Tests, StyleTests {
+final class StyleTestsXPercent: Tests, StyleTests {
     
     //=------------------------------------------------------------------------=
     // MARK: Assertions
@@ -31,7 +31,7 @@ final class StyleTests_Percent: Tests, StyleTests {
 // MARK: + Decimal
 //=----------------------------------------------------------------------------=
 
-extension StyleTests_Percent {
+extension StyleTestsXPercent {
     
     //=------------------------------------------------------------------------=
     // MARK: Tests
@@ -46,7 +46,7 @@ extension StyleTests_Percent {
 // MARK: + Floats
 //=----------------------------------------------------------------------------=
 
-extension StyleTests_Percent {
+extension StyleTestsXPercent {
     
     //=------------------------------------------------------------------------=
     // MARK: Tests

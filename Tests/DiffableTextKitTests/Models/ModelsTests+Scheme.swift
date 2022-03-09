@@ -18,7 +18,7 @@ import XCTest
 /// ```
 /// Asserts: UTF16.size(of:) is O(1).
 /// ```
-final class ModelsTests_Scheme: XCTestCase {
+final class ModelsTestsXScheme: XCTestCase {
     
     //=------------------------------------------------------------------------=
     // MARK: State
@@ -46,7 +46,7 @@ final class ModelsTests_Scheme: XCTestCase {
 // MARK: + String
 //=----------------------------------------------------------------------------=
 
-extension ModelsTests_Scheme {
+extension ModelsTestsXScheme {
 
     //=------------------------------------------------------------------------=
     // MARK: Tests
@@ -90,7 +90,7 @@ extension ModelsTests_Scheme {
 // MARK: + Substring
 //=----------------------------------------------------------------------------=
 
-extension ModelsTests_Scheme {
+extension ModelsTestsXScheme {
 
     //=------------------------------------------------------------------------=
     // MARK: Tests

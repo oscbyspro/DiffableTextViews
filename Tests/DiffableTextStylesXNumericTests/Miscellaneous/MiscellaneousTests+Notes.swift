@@ -16,7 +16,7 @@ import XCTest
 // MARK: * MiscellaneousTests x Notes
 //*============================================================================*
 
-final class MiscellaneousTests_Notes: XCTestCase {
+final class MiscellaneousTestsXNotes: XCTestCase {
     
     //=------------------------------------------------------------------------=
     // MARK: Tests

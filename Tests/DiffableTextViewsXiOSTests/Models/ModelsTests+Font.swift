@@ -16,7 +16,7 @@ import DiffableTestKit
 // MARK: * ModelsTests x Font
 //*============================================================================*
 
-final class ModelsTests_Font: Tests {
+final class ModelsTestsXFont: Tests {
     
     //=------------------------------------------------------------------------=
     // MARK: State

@@ -17,7 +17,7 @@ import DiffableTestKit
 //*============================================================================*
 
 /// - There are about 144k locale-currency pairs, so it may take a while.
-final class StyleTests_Currency: Tests, StyleTests {
+final class StyleTestsXCurrency: Tests, StyleTests {
     
     //=------------------------------------------------------------------------=
     // MARK: Assertions
@@ -32,7 +32,7 @@ final class StyleTests_Currency: Tests, StyleTests {
 // MARK: + Decimal
 //=----------------------------------------------------------------------------=
 
-extension StyleTests_Currency {
+extension StyleTestsXCurrency {
 
     //=------------------------------------------------------------------------=
     // MARK: Tests
@@ -47,7 +47,7 @@ extension StyleTests_Currency {
 // MARK: + Floats
 //=----------------------------------------------------------------------------=
 
-extension StyleTests_Currency {
+extension StyleTestsXCurrency {
     
     //=------------------------------------------------------------------------=
     // MARK: Tests
@@ -62,7 +62,7 @@ extension StyleTests_Currency {
 // MARK: + Ints
 //=----------------------------------------------------------------------------=
 
-extension StyleTests_Currency {
+extension StyleTestsXCurrency {
     
     //=------------------------------------------------------------------------=
     // MARK: Tests
@@ -93,7 +93,7 @@ extension StyleTests_Currency {
 // MARK: + UInts
 //=----------------------------------------------------------------------------=
 
-extension StyleTests_Currency {
+extension StyleTestsXCurrency {
     
     //=------------------------------------------------------------------------=
     // MARK: Tests

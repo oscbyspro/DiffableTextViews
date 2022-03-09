@@ -16,7 +16,7 @@ import DiffableTestKit
 // MARK: * HelpersTests x Direction
 //*============================================================================*
 
-final class HelpersTests_Direction: XCTestCase {
+final class HelpersTestsXDirection: XCTestCase {
     
     //=------------------------------------------------------------------------=
     // MARK: Tests

@@ -16,7 +16,7 @@ import DiffableTestKit
 // MARK: * StyleTests x Number
 //*============================================================================*
 
-final class StyleTests_Number: Tests, StyleTests {
+final class StyleTestsXNumber: Tests, StyleTests {
 
     //=------------------------------------------------------------------------=
     // MARK: Assertions
@@ -31,7 +31,7 @@ final class StyleTests_Number: Tests, StyleTests {
 // MARK: + Decimal
 //=----------------------------------------------------------------------------=
 
-extension StyleTests_Number {
+extension StyleTestsXNumber {
 
     //=------------------------------------------------------------------------=
     // MARK: Tests
@@ -46,7 +46,7 @@ extension StyleTests_Number {
 // MARK: + Floats
 //=----------------------------------------------------------------------------=
 
-extension StyleTests_Number {
+extension StyleTestsXNumber {
     
     //=------------------------------------------------------------------------=
     // MARK: Tests
@@ -61,7 +61,7 @@ extension StyleTests_Number {
 // MARK: + Ints
 //=----------------------------------------------------------------------------=
 
-extension StyleTests_Number {
+extension StyleTestsXNumber {
     
     //=------------------------------------------------------------------------=
     // MARK: Tests
@@ -92,7 +92,7 @@ extension StyleTests_Number {
 // MARK: + UInts
 //=----------------------------------------------------------------------------=
 
-extension StyleTests_Number {
+extension StyleTestsXNumber {
     
     //=------------------------------------------------------------------------=
     // MARK: Tests

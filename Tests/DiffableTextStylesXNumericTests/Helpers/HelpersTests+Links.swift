@@ -16,7 +16,7 @@ import DiffableTestKit
 // MARK: * HelpersTests x Links
 //*============================================================================*
 
-final class HelpersTests_Links: Tests {
+final class HelpersTestsXLinks: Tests {
     
     //=------------------------------------------------------------------------=
     // MARK: Assertions

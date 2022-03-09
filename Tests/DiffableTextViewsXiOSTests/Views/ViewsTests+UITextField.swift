@@ -17,7 +17,7 @@ import XCTest
 // MARK: * ViewsTests x UITextField
 //*============================================================================*
 
-final class ViewsTests_UITextField: XCTestCase {
+final class ViewsTestsXUITextField: XCTestCase {
     
     //=------------------------------------------------------------------------=
     // MARK: State

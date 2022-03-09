@@ -18,7 +18,7 @@ import XCTest
 // MARK: * ModelsTests x Precision
 //*============================================================================*
 
-final class ModelsTests_Precision: XCTestCase {
+final class ModelsTestsXPrecision: XCTestCase {
     typealias Style<T: Format> = _NumericTextStyle<T>
 
     //=------------------------------------------------------------------------=
@@ -58,7 +58,7 @@ final class ModelsTests_Precision: XCTestCase {
 // MARK: + Instances
 //=----------------------------------------------------------------------------=
 
-extension ModelsTests_Precision {
+extension ModelsTestsXPrecision {
     
     //=------------------------------------------------------------------------=
     // MARK: Tests
@@ -96,7 +96,7 @@ extension ModelsTests_Precision {
 // MARK: + Style x Integer
 //=----------------------------------------------------------------------------=
 
-extension ModelsTests_Precision {
+extension ModelsTestsXPrecision {
     
     //=------------------------------------------------------------------------=
     // MARK: Length
@@ -119,7 +119,7 @@ extension ModelsTests_Precision {
 // MARK: + Style x Floating Point
 //=----------------------------------------------------------------------------=
 
-extension ModelsTests_Precision {
+extension ModelsTestsXPrecision {
     
     //=------------------------------------------------------------------------=
     // MARK: Length

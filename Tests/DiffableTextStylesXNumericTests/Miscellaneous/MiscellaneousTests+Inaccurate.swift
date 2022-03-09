@@ -15,7 +15,7 @@ import XCTest
 // MARK: * MiscellaneousTests x Inaccurate
 //*============================================================================*
 
-final class MiscellaneousTests_Inaccurate: XCTestCase {
+final class MiscellaneousTestsXInaccurate: XCTestCase {
         
     //=------------------------------------------------------------------------=
     // MARK: Assertions

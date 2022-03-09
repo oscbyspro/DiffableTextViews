@@ -16,7 +16,7 @@ import DiffableTextKit
 // MARK: * ModelsTests x Attribute
 //*============================================================================*
 
-final class ModelsTests_Attribute: Tests {
+final class ModelsTestsXAttribute: Tests {
     
     //=------------------------------------------------------------------------=
     // MARK: State
