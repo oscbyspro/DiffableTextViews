@@ -41,7 +41,7 @@ public final class Cache<Key, Value> where Key: Hashable, Value: AnyObject {
         nscache.object(forKey: Wrapper(key))
     }
     
-    @inlinable public func insert(_ value: Value, for key: Key) {
+    @inlinable public func insert(_ value: Value, as key: Key) {
         nscache.setObject(value, forKey: Wrapper(key))
     }
     

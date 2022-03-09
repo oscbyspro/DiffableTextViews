@@ -24,8 +24,8 @@ final class SupportTestsXCache: XCTestCase {
     
     func testObjectForKey() {
         let storage = Cache<Int, Value>()
-        storage.insert(Value("ABC"), key: 123)
-        XCTAssertEqual(Value("ABC"), storage.access(key: 123))
+        storage.insert(Value("ABC"), as: 123)
+        XCTAssertEqual(Value("ABC"), storage.access(123))
     }
     
     //*========================================================================*
