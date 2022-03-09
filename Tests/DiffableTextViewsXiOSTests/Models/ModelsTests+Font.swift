@@ -8,6 +8,7 @@
 //=----------------------------------------------------------------------------=
 
 #if DEBUG
+#if canImport(UIKit)
 
 import DiffableTestKit
 @testable import DiffableTextViewsXiOS
@@ -56,4 +57,5 @@ final class ModelsTestsXFont: Tests {
     }
 }
 
+#endif
 #endif
