@@ -49,7 +49,7 @@ The iOS example project provides quick-and-easy-to-use customization.
 
 | Numeric | Pattern |
 |---------|---------|
-<img src="Assets/iOSExampleNumericScreen.png" alt="Numeric" width="250"/> | <img src="Assets/iOSExamplePatternScreen.png" alt="Pattern" width="250"/>
+<img src="Assets/iOSExampleXNumeric.png" alt="Numeric" width="250"/> | <img src="Assets/iOSExampleXPattern.png" alt="Pattern" width="250"/>
 
 ### Installation
 
