@@ -34,7 +34,7 @@ public protocol DiffableTextStyle: Equatable {
     @inlinable func locale(_ locale: Locale) -> Self
     
     //=------------------------------------------------------------------------=
-    // MARK: Upstream | Inactive
+    // MARK: Upstream - Inactive
     //=------------------------------------------------------------------------=
     
     /// Returns formatted text.
@@ -44,7 +44,7 @@ public protocol DiffableTextStyle: Equatable {
     @inlinable func format(_ value: Value) -> String
     
     //=------------------------------------------------------------------------=
-    // MARK: Upstream | Active
+    // MARK: Upstream - Active
     //=------------------------------------------------------------------------=
 
     /// Returns a value and a snapshot.
@@ -54,7 +54,7 @@ public protocol DiffableTextStyle: Equatable {
     @inlinable func interpret(_ value: Value) -> Commit<Value>
 
     //=------------------------------------------------------------------------=
-    // MARK: Downstream | Interactive
+    // MARK: Downstream - Interactive
     //=------------------------------------------------------------------------=
     
     /// Returns a value and a snapshot.

@@ -74,7 +74,7 @@ public struct _NumericTextStyle<Format: NumericTextFormat>: DiffableTextStyle {
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: + Upstream | Inactive
+// MARK: + Upstream - Inactive
 //=----------------------------------------------------------------------------=
 
 extension NumericTextStyle {
@@ -89,7 +89,7 @@ extension NumericTextStyle {
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: + Upstream | Active
+// MARK: + Upstream - Active
 //=----------------------------------------------------------------------------=
 
 extension NumericTextStyle {
@@ -128,7 +128,7 @@ extension NumericTextStyle {
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: + Downstream | Interactive
+// MARK: + Downstream - Interactive
 //=----------------------------------------------------------------------------=
 
 extension NumericTextStyle {

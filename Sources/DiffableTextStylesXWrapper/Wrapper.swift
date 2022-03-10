@@ -41,7 +41,7 @@ extension WrapperTextStyle {
     }
     
     //=------------------------------------------------------------------------=
-    // MARK: Upstream | Inactive
+    // MARK: Upstream - Inactive
     //=------------------------------------------------------------------------=
     
     @inlinable @inline(__always)
@@ -50,7 +50,7 @@ extension WrapperTextStyle {
     }
     
     //=------------------------------------------------------------------------=
-    // MARK: Upstream | Active
+    // MARK: Upstream - Active
     //=------------------------------------------------------------------------=
     
     @inlinable @inline(__always)
@@ -59,7 +59,7 @@ extension WrapperTextStyle {
     }
     
     //=------------------------------------------------------------------------=
-    // MARK: Downstream | Interactive
+    // MARK: Downstream - Interactive
     //=------------------------------------------------------------------------=
     
     @inlinable @inline(__always)
