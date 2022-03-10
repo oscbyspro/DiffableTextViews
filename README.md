@@ -1,6 +1,6 @@
 # DiffableTextViews
 
-An open-source module for as-you-type formatting and conversion in iOS.
+An open source package for as-you-type formatting in SwiftUI.
 
 ![DiffableTextFieldXAmount.gif](Assets/DiffableTextFieldXAmount.gif)
 
@@ -16,7 +16,7 @@ An open-source module for as-you-type formatting and conversion in iOS.
 | :running_man: | Performant | Uses O(n) differentiation algorithms |
 | :smiley: | Emojis | Uses native offsets, supports emojis |
 | :desert_island: | Standalone | Uses no remote dependencies |
-| :open_book: | Open-source | 100% transparent, as it should be |
+| :open_book: | Open source | 100% transparent, as it should be |
 
 ### Algorithms
 
