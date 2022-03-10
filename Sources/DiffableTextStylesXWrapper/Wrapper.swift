@@ -41,7 +41,7 @@ extension WrapperTextStyle {
     }
     
     //=------------------------------------------------------------------------=
-    // MARK: Upstream
+    // MARK: Upstream | Inactive
     //=------------------------------------------------------------------------=
     
     @inlinable @inline(__always)
@@ -49,13 +49,17 @@ extension WrapperTextStyle {
         style.format(value)
     }
     
+    //=------------------------------------------------------------------------=
+    // MARK: Upstream | Active
+    //=------------------------------------------------------------------------=
+    
     @inlinable @inline(__always)
     public func interpret(_ value: Style.Value) -> Commit<Style.Value> {
         style.interpret(value)
     }
     
     //=------------------------------------------------------------------------=
-    // MARK: Downstream
+    // MARK: Downstream | Interactive
     //=------------------------------------------------------------------------=
     
     @inlinable @inline(__always)

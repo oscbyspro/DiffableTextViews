@@ -55,7 +55,7 @@ Value: RangeReplaceableCollection, Value: Equatable, Value.Element == Character 
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: + Upstream
+// MARK: + Upstream | Inactive
 //=----------------------------------------------------------------------------=
 
 extension PatternTextStyle {
@@ -84,7 +84,7 @@ extension PatternTextStyle {
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: + Upstream
+// MARK: + Upstream | Active
 //=----------------------------------------------------------------------------=
 
 extension PatternTextStyle {
@@ -112,7 +112,7 @@ extension PatternTextStyle {
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: + Downstream
+// MARK: + Downstream | Interactive
 //=----------------------------------------------------------------------------=
 
 extension PatternTextStyle {
