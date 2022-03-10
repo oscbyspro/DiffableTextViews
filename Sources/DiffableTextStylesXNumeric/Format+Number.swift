@@ -17,7 +17,7 @@ extension Decimal.FormatStyle: Format, Formats.Number,
 Formats.Currencyable, Formats.Percentable {
     
     //=------------------------------------------------------------------------=
-    // MARK: Translations
+    // MARK: Scheme
     //=------------------------------------------------------------------------=
     
     @inlinable public func scheme() -> some NumericTextScheme {
@@ -33,7 +33,7 @@ extension FloatingPointFormatStyle: Format, Formats.Number,
 Formats.Currencyable, Formats.Percentable where FormatInput: NumericTextValue {
     
     //=------------------------------------------------------------------------=
-    // MARK: Translations
+    // MARK: Scheme
     //=------------------------------------------------------------------------=
     
     @inlinable public func scheme() -> some NumericTextScheme {
@@ -49,7 +49,7 @@ extension IntegerFormatStyle: Format, Formats.Number,
 Formats.Currencyable where FormatInput: NumericTextValue {
     
     //=------------------------------------------------------------------------=
-    // MARK: Translations
+    // MARK: Scheme
     //=------------------------------------------------------------------------=
     
     @inlinable public func scheme() -> some NumericTextScheme {

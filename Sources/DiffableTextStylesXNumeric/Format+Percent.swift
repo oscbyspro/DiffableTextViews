@@ -16,7 +16,7 @@ import Foundation
 extension Decimal.FormatStyle.Percent: Format, Formats.Percent {
     
     //=------------------------------------------------------------------------=
-    // MARK: Translations
+    // MARK: Scheme
     //=------------------------------------------------------------------------=
     
     @inlinable public func scheme() -> some NumericTextScheme {
@@ -31,7 +31,7 @@ extension Decimal.FormatStyle.Percent: Format, Formats.Percent {
 extension FloatingPointFormatStyle.Percent: Format, Formats.Percent where Value: NumericTextValue {
     
     //=------------------------------------------------------------------------=
-    // MARK: Translations
+    // MARK: Scheme
     //=------------------------------------------------------------------------=
     
     @inlinable public func scheme() -> some NumericTextScheme {

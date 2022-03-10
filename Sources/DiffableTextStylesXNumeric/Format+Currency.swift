@@ -16,7 +16,7 @@ import Foundation
 extension Decimal.FormatStyle.Currency: Format, Formats.Currency {
     
     //=------------------------------------------------------------------------=
-    // MARK: Translations
+    // MARK: Scheme
     //=------------------------------------------------------------------------=
     
     @inlinable public func scheme() -> some NumericTextScheme {
@@ -31,7 +31,7 @@ extension Decimal.FormatStyle.Currency: Format, Formats.Currency {
 extension FloatingPointFormatStyle.Currency: Format, Formats.Currency where Value: NumericTextValue {
     
     //=------------------------------------------------------------------------=
-    // MARK: Translations
+    // MARK: Scheme
     //=------------------------------------------------------------------------=
     
     @inlinable public func scheme() -> some NumericTextScheme {
@@ -46,7 +46,7 @@ extension FloatingPointFormatStyle.Currency: Format, Formats.Currency where Valu
 extension IntegerFormatStyle.Currency: Format, Formats.Currency where Value: NumericTextValue {
     
     //=------------------------------------------------------------------------=
-    // MARK: Translations
+    // MARK: Scheme
     //=------------------------------------------------------------------------=
     
     @inlinable public func scheme() -> some NumericTextScheme {
