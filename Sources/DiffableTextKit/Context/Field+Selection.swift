@@ -20,7 +20,7 @@ extension Field {
     @inlinable mutating func update(selection: Range<Position>, momentum: Bool) {
         let selection = indices(at: selection)
         //=--------------------------------------=
-        // MARK: Parse Mementum As Intent
+        // MARK: Parse Boolean As Momentum
         //=--------------------------------------=
         let momentum = momentum ? Momentum(self.selection, to: selection) : Momentum()
         //=--------------------------------------=
