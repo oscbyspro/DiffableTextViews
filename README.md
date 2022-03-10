@@ -45,7 +45,7 @@ import DiffableTextViews
 
 # [Examples](Examples/iOS/App)
 
-The iOS example project provides quick-and-easy-to-use customization.
+The iOS example provides quick-and-easy-to-use customization tools.
 
 | Numeric | Pattern |
 |---------|---------|
@@ -59,7 +59,7 @@ Download this package and compile/run it with Xcode.
 
 ## [DiffableTextField](Notes/DiffableTextField.md)
 
-A view that uses styles to format and parse text.
+A text field that binds values and formats them as you type.
 
 ### Features
 
@@ -74,7 +74,7 @@ A view that uses styles to format and parse text.
 
 ## [NumericTextStyle](Notes/NumericTextStyle.md) ([Source](Sources/DiffableTextStylesXNumeric), [Tests](Tests/DiffableTextStylesXNumericTests))
 
-A style that processes localized numbers in various formats.
+A style that binds localized numbers using various formats.
 
 ### Features
 
@@ -82,7 +82,7 @@ A style that processes localized numbers in various formats.
 |---|---------|-------------|
 | :coin: | Values | Decimal, Double and (U)Int(8-64) |
 | :bow_and_arrow: | Precision | Up to 38 digits of precision |
-| :bricks: | Bounds | Clamps input/output to specified range |
+| :bricks: | Bounds | Clamps values to a closed range  |
 | :art: | Formats | Number, currency and percent |
 | :national_park: | Locales | Supports every locale in Foundation |
 | :two: | Bilingual | Accepts both local and ASCII inputs |
