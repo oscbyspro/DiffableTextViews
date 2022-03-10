@@ -11,12 +11,9 @@
 // MARK: * Attribute
 //*============================================================================*
 
-/// A set of options, where each option represents a specialized behavior.
+/// A set of behavioral options.
 ///
 /// Plain text has no attributes.
-///
-/// - Singular: virtual, insertable, removable, passthrough.
-/// - Composites: content, phantom.
 ///
 /// - Note: The easiest way to unformat text is to exclude symbols marked as virtual.
 ///
@@ -26,7 +23,7 @@ public struct Attribute: OptionSet {
     // MARK: Singular
     //=------------------------------------------------------------------------=
 
-    /// Signifies that the symbol is not real and should be ignored when parsed.
+    /// Signifies that the symbol is not real and should not be parsed.
     public static let virtual = Self(rawValue: 1 << 0)
     
     /// Signifies that the symbol should be ignored when it is inserted.
@@ -35,7 +32,7 @@ public struct Attribute: OptionSet {
     /// Signifies that the symbol should be ignored when it is removed.
     public static let removable = Self(rawValue: 1 << 2)
 
-    /// Signifies that the symbol has no effective size and be passed through.
+    /// Signifies that the symbol has no interactive size and should be passed through.
     public static let passthrough = Self(rawValue: 1 << 3)
     
     //=------------------------------------------------------------------------=

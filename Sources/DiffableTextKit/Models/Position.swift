@@ -11,12 +11,7 @@
 // MARK: * Position
 //*============================================================================*
 
-/// A model that represents the position in text, according to its text scheme.
-///
-/// Text views are not usually based on characters. UITextField counts its positions in UTF16 units, for example.
-/// This destinction is important because emojis are one character in size but sometimes mutlitple UTF16 units,
-/// and if this is not aknowledged you may try to access positions out of bounds and crash the application.
-///
+/// A model representing a position in text.
 public struct Position<Scheme: DiffableTextKit.Scheme>: Comparable {
     
     //=------------------------------------------------------------------------=
