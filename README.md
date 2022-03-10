@@ -70,28 +70,6 @@ A view that uses styles to format and parse text.
 | :balance_scale: | Monospaced | The standard font is monospaced |
 | :sewing_needle: | Customizable | Styles may provide default values |
 
-### Locale
-
-```swift
-view.environment(\.locale, locale)
-```
-
-### Triggers
-
-```swift
-view.onSetup (of: .diffableTextField) { proxy in }
-view.onUpdate(of: .diffableTextField) { proxy in }
-view.onSubmit(of: .diffableTextField) { proxy in }
-```
-
-### [ProxyTextField](Sources/DiffableTextViewsXiOS/Views)
-
-```swift
-proxy.text.color(.black)
-proxy.text.font(.body.monospaced())
-proxy.selection.color(.blue, mode: .dimmed)
-```
-
 # Styles
 
 ## [NumericTextStyle](Notes/NumericTextStyle.md) ([Source](Sources/DiffableTextStylesXNumeric), [Tests](Tests/DiffableTextStylesXNumericTests))

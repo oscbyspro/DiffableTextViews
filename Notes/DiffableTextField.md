@@ -25,7 +25,7 @@ view.onUpdate(of: .diffableTextField) { proxy in }
 view.onSubmit(of: .diffableTextField) { proxy in }
 ```
 
-### [ProxyTextField](../Sources/DiffableTextViews/Views)
+### [ProxyTextField](../Sources/DiffableTextViewsXiOS/Views)
 
 ```swift
 proxy.text.color(.black)
@@ -33,7 +33,7 @@ proxy.text.font(.body.monospaced())
 proxy.selection.color(.blue, mode: .dimmed)
 ```
 
-### [UIKitDiffableTextStyle](../Sources/DiffableTextViews/DiffableTextStyle+UIKit.swift)
+### [DiffableTextStyleXiOS](../Sources/DiffableTextViewsXiOS/DiffableTextStyle+iOS.swift)
 
 ```swift
 static func onSetup(_ diffableTextField: ProxyTextField) { ... }
