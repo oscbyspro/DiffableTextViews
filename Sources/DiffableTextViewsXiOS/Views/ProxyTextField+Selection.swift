@@ -20,9 +20,15 @@ public extension ProxyTextField.Selection {
     //=------------------------------------------------------------------------=
     // MARK: Accessors
     //=------------------------------------------------------------------------=
-        
+    
     @inlinable var value: String {
+        // UITextField.selectedTextRange is never nil
         wrapped.text(in: wrapped.selectedTextRange!)!
+    }
+    
+    @inlinable var marked: String {
+        // UITextField.markedTextRange is sometimes nil
+        wrapped.markedTextRange.map(wrapped.text(in:))! ?? String()
     }
     
     //=------------------------------------------------------------------------=

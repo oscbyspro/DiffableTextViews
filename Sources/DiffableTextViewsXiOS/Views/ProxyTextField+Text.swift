@@ -22,7 +22,7 @@ public extension ProxyTextField.Text {
     //=------------------------------------------------------------------------=
     
     @inlinable var value: String {
-        wrapped.text!
+        wrapped.text! // UITextField.text is never nil
     }
     
     //=------------------------------------------------------------------------=
