@@ -28,7 +28,7 @@ public extension ProxyTextField.Selection {
     
     @inlinable var marked: String {
         // UITextField.markedTextRange is sometimes nil
-        wrapped.markedTextRange.map(wrapped.text(in:))! ?? String()
+        wrapped.markedTextRange.flatMap(wrapped.text(in:)) ?? String()
     }
     
     //=------------------------------------------------------------------------=
