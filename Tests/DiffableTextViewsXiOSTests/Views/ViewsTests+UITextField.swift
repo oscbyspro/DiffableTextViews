@@ -34,12 +34,12 @@ final class ViewsTestsXUITextField: XCTestCase {
         XCTAssertNotNil(uiTextField.text)
     }
     
-    func testForceUnwrappingSelectionIsOK() {
+    func testForceUnwrappingSelectedTextRangeIsOK() {
         uiTextField.selectedTextRange = nil
         XCTAssertNotNil(uiTextField.selectedTextRange)
     }
     
-    func testForceUnwrappingMarkedTextRangeIsDisallowed() {
+    func testForceUnwrappingMarkedTextRangeIsBad() {
         XCTAssertNil(uiTextField.markedTextRange)
     }
 }

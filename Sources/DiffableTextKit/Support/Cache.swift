@@ -19,7 +19,7 @@ public final class Cache<Key, Value> where Key: Hashable, Value: AnyObject {
     // MARK: State
     //=------------------------------------------------------------------------=
     
-    @usableFromInline let nscache: NSCache<Wrapper, Value>
+    @usableFromInline let nscache: NSCache<NSKey, Value>
     
     //=------------------------------------------------------------------------=
     // MARK: Initializers
@@ -38,19 +38,19 @@ public final class Cache<Key, Value> where Key: Hashable, Value: AnyObject {
     //=------------------------------------------------------------------------=
     
     @inlinable public func access(_ key: Key) -> Value? {
-        nscache.object(forKey: Wrapper(key))
+        nscache.object(forKey: NSKey(key))
     }
     
     @inlinable public func insert(_ value: Value, as key: Key) {
-        nscache.setObject(value, forKey: Wrapper(key))
+        nscache.setObject(value, forKey: NSKey(key))
     }
     
     @inlinable public func remove(_ key: Key) {
-        nscache.removeObject(forKey: Wrapper(key))
+        nscache.removeObject(forKey: NSKey(key))
     }
 
     @inlinable public func reuse(_ key: Key, make: @autoclosure () throws -> Value) rethrows -> Value {
-        let key = Wrapper(key)
+        let key = NSKey(key)
         //=--------------------------------------=
         // MARK: Search
         //=--------------------------------------=
@@ -67,10 +67,10 @@ public final class Cache<Key, Value> where Key: Hashable, Value: AnyObject {
     }
     
     //*========================================================================*
-    // MARK: * Key
+    // MARK: * NSKey
     //*========================================================================*
     
-    @usableFromInline final class Wrapper: NSObject {
+    @usableFromInline final class NSKey: NSObject {
         
         //=--------------------------------------------------------------------=
         // MARK: State
