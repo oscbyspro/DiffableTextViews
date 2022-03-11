@@ -13,11 +13,11 @@
 
 @_exported import DiffableTextStyles
 
+#if os(iOS)
+
 //*============================================================================*
 // MARK: * Exports x Views x iOS
 //*============================================================================*
-
-#if os(iOS)
 
 @_exported import DiffableTextViewsXiOS
 
