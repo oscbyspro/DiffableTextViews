@@ -35,9 +35,6 @@ import DiffableTextKit
     //=------------------------------------------------------------------------=
     
     /// Parses the value represented by an **unformatted** sequence.
-    ///
-    /// To use this method, all formatting characters must be marked as such.
-    ///
     @inlinable init<S>(characters: S, integer: Bool, unsigned: Bool,
     signs: [Character: Sign], digits: [Character: Digit], separators: [Character: Separator])
     throws where S: Sequence, S.Element == Character {
@@ -135,7 +132,7 @@ extension Number {
     // MARK: Separator
     //=------------------------------------------------------------------------=
     
-    /// It returns true if a suffixing separator was removed, otherwise it returns false.
+    /// Returns true if a suffixing separator was removed, returns false otherwise.
     @inlinable @discardableResult mutating func removeSeparatorAsSuffix() -> Bool {
         if hasSeparatorAsSuffix { separator = nil; return true }; return false
     }
@@ -148,7 +145,7 @@ extension Number {
         //=--------------------------------------=
         // MARK: Integer
         //=--------------------------------------=
-        self.integer.suffix(maxLength: min(max.integer,  max.value))
+        self.integer.suffix(maxLength: min(max.integer, max.value))
         self.integer.trimZerosPrefix()
         //=--------------------------------------=
         // MARK: Fraction
