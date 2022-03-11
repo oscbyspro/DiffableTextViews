@@ -75,10 +75,19 @@ extension PatternTextStyle {
             characters.append(contentsOf: queue)
         } done: {
             characters, queue, contents in
-            visible ? characters += queue : ()
-            guard !contents.isEmpty else { return }
-            characters.append("|")
-            characters.append(contentsOf: contents)
+            //=----------------------------------=
+            // MARK: Pattern
+            //=----------------------------------=
+            if visible {
+                characters.append(contentsOf: queue)
+            }
+            //=----------------------------------=
+            // MARK: Mismatches
+            //=----------------------------------=
+            if !contents.isEmpty {
+                characters.append("|")
+                characters.append(contentsOf: contents)
+            }
         }
     }
 }
@@ -106,7 +115,12 @@ extension PatternTextStyle {
             commit.snapshot.anchor()
         } done: {
             commit, queue, _ in
-            visible ? commit.snapshot += Snapshot(queue, as: .phantom) : ()
+            //=----------------------------------=
+            // MARK: Pattern
+            //=----------------------------------=
+            if visible {
+                commit.snapshot.append(contentsOf: Snapshot(queue, as: .phantom))
+            }
         }
     }
 }
