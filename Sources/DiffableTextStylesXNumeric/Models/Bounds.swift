@@ -27,9 +27,16 @@ public struct Bounds<Value: NumericTextValue>: Equatable {
     @inlinable init(unchecked: (min: Value, max: Value)) {
         (self.min, self.max) = unchecked; precondition(min <= max)
     }
+}
+
+//=----------------------------------------------------------------------------=
+// MARK: + Initializers
+//=----------------------------------------------------------------------------=
+
+extension Bounds {
     
     //=------------------------------------------------------------------------=
-    // MARK: Initializers - Indirect
+    // MARK: Indirect
     //=------------------------------------------------------------------------=
     
     @inlinable init() {
@@ -50,7 +57,7 @@ public struct Bounds<Value: NumericTextValue>: Equatable {
     }
     
     //=------------------------------------------------------------------------=
-    // MARK: Initializers - Helpers
+    // MARK: Helpers
     //=------------------------------------------------------------------------=
     
     @inlinable static func unchecked(

@@ -8,6 +8,7 @@
 //=----------------------------------------------------------------------------=
 
 import DiffableTextKit
+import Foundation
 
 //*============================================================================*
 // MARK: * Precision
@@ -30,9 +31,38 @@ public struct Precision<Value: NumericTextValue>: Equatable {
     @inlinable init(unchecked: (lower: Count, upper: Count)) {
         (self.lower, self.upper) = unchecked
     }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Modes
+    //=------------------------------------------------------------------------=
+    
+    @inlinable func inactive() -> NumberFormatStyleConfiguration.Precision {
+        .integerAndFractionLength(
+         integerLimits: lower.integer  ... Int.max,
+        fractionLimits: lower.fraction ... Int.max)
+    }
+
+    @inlinable func active() -> NumberFormatStyleConfiguration.Precision {
+        .integerAndFractionLength(
+         integerLimits: Namespace.lower.integer  ... upper.integer,
+        fractionLimits: Namespace.lower.fraction ... upper.fraction)
+    }
+    
+    @inlinable func interactive(_ count: Count) -> NumberFormatStyleConfiguration.Precision {
+        .integerAndFractionLength(
+         integerLimits: max(Namespace.lower.integer,  count.integer)  ... count.integer,
+        fractionLimits: max(Namespace.lower.fraction, count.fraction) ... count.fraction)
+    }
+}
+
+//=----------------------------------------------------------------------------=
+// MARK: + Initializers
+//=----------------------------------------------------------------------------=
+
+extension Precision {
 
     //=------------------------------------------------------------------------=
-    // MARK: Initializers - Indirect
+    // MARK: Indirect
     //=------------------------------------------------------------------------=
     
     @inlinable init() {
@@ -54,7 +84,7 @@ public struct Precision<Value: NumericTextValue>: Equatable {
     }
     
     //=------------------------------------------------------------------------=
-    // MARK: Initializers - Helpers
+    // MARK: Helpers
     //=------------------------------------------------------------------------=
     
     @inlinable static func unchecked(
@@ -92,6 +122,21 @@ public struct Precision<Value: NumericTextValue>: Equatable {
     }
 }
 
+//=----------------------------------------------------------------------------=
+// MARK: + Conversions
+//=----------------------------------------------------------------------------=
+
+extension Precision: Brrr {
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Description
+    //=------------------------------------------------------------------------=
+    
+    @inlinable public var descriptors: [(key: Any, value: Any)] {
+        Count.components.map({($0, (self.lower[$0], self.upper[$0]))})
+    }
+}
+
 //*============================================================================*
 // MARK: * Precision x Namespace
 //*============================================================================*
@@ -114,20 +159,5 @@ public struct Precision<Value: NumericTextValue>: Equatable {
         let lower = min(max(limits.lowerBound, range.lowerBound),     limits.upperBound)
         let upper = min(max(limits.lowerBound, range.upperBound - 1), limits.upperBound)
         return lower...upper
-    }
-}
-
-//=----------------------------------------------------------------------------=
-// MARK: + Conversions
-//=----------------------------------------------------------------------------=
-
-extension Precision: Brrr {
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Description
-    //=------------------------------------------------------------------------=
-    
-    @inlinable public var descriptors: [(key: Any, value: Any)] {
-        Count.components.map({($0, (self.lower[$0], self.upper[$0]))})
     }
 }
