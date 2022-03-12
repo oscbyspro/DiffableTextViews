@@ -10,17 +10,27 @@
 import Foundation
 
 //*============================================================================*
-// MARK: * Float x Protocol
+// MARK: * Decimal
 //*============================================================================*
 
-private protocol _Float: BinaryFloatingPoint, Values.Signed, Values.FloatingPoint,
-Values.Numberable, Values.Currencyable, Values.Percentable where FormatStyle == FloatingPointFormatStyle<Self> { }
+extension Decimal: Values.Signed, Values.FloatingPoint,
+Values.Numberable, Values.Currencyable, Values.Percentable {
+
+    //=------------------------------------------------------------------------=
+    // MARK: Precision, Bounds
+    //=------------------------------------------------------------------------=
+    
+    public static let precision: Count = precision(38)
+    public static let bounds: ClosedRange<Self> = bounds(Self(string: String(repeating: "9", count: 38))!)
+}
 
 //*============================================================================*
 // MARK: * Double
 //*============================================================================*
 
-extension Double: _Float {
+extension Double: Values.Signed, Values.FloatingPoint,
+Values.Numberable, Values.Currencyable, Values.Percentable {
+    public typealias FormatStyle = FloatingPointFormatStyle<Self>
     
     //=------------------------------------------------------------------------=
     // MARK: Precision, Bounds
