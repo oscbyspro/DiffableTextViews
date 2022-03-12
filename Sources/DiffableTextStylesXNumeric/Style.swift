@@ -168,3 +168,24 @@ extension NumericTextStyle {
         return self.commit(value, number, style)
     }
 }
+
+#if os(iOS)
+
+import DiffableTextViewsXiOS
+
+//*============================================================================*
+// MARK: * NumericTextStyle x iOS
+//*============================================================================*
+
+extension NumericTextStyle: DiffableTextStyleXiOS {
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Keyboard
+    //=------------------------------------------------------------------------=
+    
+    @inlinable public static func onSetup(_ diffableTextField: ProxyTextField) {
+        diffableTextField.keyboard.view(Value.isInteger ? .numberPad : .decimalPad)
+    }
+}
+
+#endif

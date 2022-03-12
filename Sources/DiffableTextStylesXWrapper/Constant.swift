@@ -50,6 +50,21 @@ public struct ConstantTextStyle<Style: DiffableTextStyle>: WrapperTextStyle {
     public static func == (lhs: Self, rhs: Self) -> Bool { true }
 }
 
+#if os(iOS)
+
+import DiffableTextViewsXiOS
+
+//*============================================================================*
+// MARK: * Constant x iOS
+//*============================================================================*
+
+extension ConstantTextStyle:
+WrapperTextStyleXiOS,
+DiffableTextStyleXiOS where
+Style: DiffableTextStyleXiOS { }
+
+#endif
+
 //*============================================================================*
 // MARK: * Constant x DiffableTextStyle
 //*============================================================================*
@@ -71,18 +86,3 @@ extension DiffableTextStyle {
         ConstantTextStyle(style: self)
     }
 }
-
-#if os(iOS)
-
-import DiffableTextViewsXiOS
-
-//*============================================================================*
-// MARK: * Constant x iOS
-//*============================================================================*
-
-extension ConstantTextStyle:
-WrapperTextStyleXiOS,
-DiffableTextStyleXiOS where
-Style: DiffableTextStyleXiOS { }
-
-#endif
