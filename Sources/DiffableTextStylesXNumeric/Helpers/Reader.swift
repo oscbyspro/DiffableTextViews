@@ -57,38 +57,39 @@ extension Reader {
     //=------------------------------------------------------------------------=
     // MARK: Helpers
     //=------------------------------------------------------------------------=
-
-    @inlinable func translate(input: Symbol) -> Symbol {
-        Symbol(translate(input: input.character), as: input.attribute)
-    }
     
-    /// Conditional branches are ordered from most to least frequent.
-    @inlinable func translate(input: Character) -> Character {
+    @inlinable func translate(input: Symbol) -> Symbol {
+        let character: Character
         //=--------------------------------------=
         // MARK: Digit
         //=--------------------------------------=
-        if let digit = ascii.digits[input] {
-            return lexicon.digits[digit]
+        if let digit = ascii.digits[input.character] {
+            character = lexicon.digits[digit]
         //=--------------------------------------=
         // MARK: Separator
         //=--------------------------------------=
-        } else if ascii.separators.contains(input) || lexicon.separators.contains(input) {
-            // all separators result in fraction
-            return lexicon.separators[.fraction]
+        } else if ascii  .separators.contains(input.character) ||
+                  lexicon.separators.contains(input.character) {
+            // all separators translated as fraction
+            character = lexicon.separators[.fraction]
         //=--------------------------------------=
         // MARK: Sign
         //=--------------------------------------=
-        } else if let sign = ascii.signs[input] {
-            return lexicon.signs[sign]
+        } else if let sign = ascii.signs[input.character] {
+            character = lexicon.signs[sign]
         //=--------------------------------------=
         // MARK: Miscellaneous
         //=--------------------------------------=
-        } else { return input }
+        } else { character = input.character }
+        //=--------------------------------------=
+        // MARK: Done
+        //=--------------------------------------=
+        return Symbol(character, as: input.attribute)
     }
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: Commands
+// MARK: + Commands
 //=----------------------------------------------------------------------------=
 
 extension Reader {
