@@ -39,7 +39,7 @@ public protocol DiffableTextStyle: Equatable {
     
     /// Returns formatted text.
     ///
-    /// This method is called in response to changes upstream while view is active.
+    /// This method is called in response to changes upstream while the view is active.
     ///
     @inlinable func format(_ value: Value) -> String
     
@@ -49,7 +49,7 @@ public protocol DiffableTextStyle: Equatable {
 
     /// Returns a value and a snapshot.
     ///
-    /// This method is called in response to changes upstream while view is active.
+    /// This method is called in response to changes upstream while the view is active.
     ///
     @inlinable func interpret(_ value: Value) -> Commit<Value>
 
