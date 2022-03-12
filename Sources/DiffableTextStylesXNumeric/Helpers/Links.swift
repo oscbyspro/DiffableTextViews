@@ -76,7 +76,7 @@ import Foundation
         _read { yield components[character] }
     }
     
-    /// Bidirectional mapping is required for all components, so characters may be force unwrapped.
+    /// Bidirectional mapping is required for all components, so force unwrapping characters is OK.
     @inlinable subscript(component: Component) -> Character! {
         _read { yield characters[component] }
     }
