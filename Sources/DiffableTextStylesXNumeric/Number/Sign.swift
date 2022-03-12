@@ -13,7 +13,6 @@ import Foundation
 // MARK: * Sign
 //*============================================================================*
 
-/// A system representation of a sign.
 @usableFromInline enum Sign: UInt8, Glyph {
     
     //=------------------------------------------------------------------------=

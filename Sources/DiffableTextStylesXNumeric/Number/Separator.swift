@@ -13,7 +13,6 @@ import Foundation
 // MARK: * Separator
 //*============================================================================*
 
-/// A system representation of a separator.
 @usableFromInline enum Separator: UInt8, Glyph {
     
     //=------------------------------------------------------------------------=
