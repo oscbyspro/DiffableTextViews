@@ -53,14 +53,14 @@ public struct Bounds<Value: NumericTextValue>: Equatable {
     // MARK: Initializers - Helpers
     //=------------------------------------------------------------------------=
     
-    @inlinable static func interpret(_ value: Value) -> Value {
-        Swift.min(Swift.max(Value.bounds.lowerBound, value), Value.bounds.upperBound)
-    }
-    
     @inlinable static func unchecked(
     min: Value = Value.bounds.lowerBound,
     max: Value = Value.bounds.upperBound) -> Self {
         Self(unchecked: (min, max))
+    }
+    
+    @inlinable static func interpret(_ value: Value) -> Value {
+        Swift.min(Swift.max(Value.bounds.lowerBound, value), Value.bounds.upperBound)
     }
 }
 

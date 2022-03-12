@@ -80,15 +80,15 @@ public struct Precision<Value: NumericTextValue>: Equatable {
         return Self(unchecked: (lower, upper))
     }
     
-    @inlinable static func limits(_ component: (Count) -> Int) -> ClosedRange<Int> {
-        component(Namespace.lower) ...
-        component(Value.precision)
-    }
-    
     @inlinable static func interpret<R>(_ expression: R,
     as component: (Count) -> Int) -> ClosedRange<Int> where
     R: RangeExpression, R.Bound == Int {
         Namespace.interpret(expression, in: limits(component))
+    }
+    
+    @inlinable static func limits(_ component: (Count) -> Int) -> ClosedRange<Int> {
+        component(Namespace.lower) ...
+        component(Value.precision)
     }
 }
 
