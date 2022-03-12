@@ -9,7 +9,6 @@
 
 import DiffableTextKit
 
-#warning("A separate file is excessive for a single method.")
 //=----------------------------------------------------------------------------=
 // MARK: + Snapshot
 //=----------------------------------------------------------------------------=
@@ -17,7 +16,7 @@ import DiffableTextKit
 extension NumericTextStyle {
 
     //=------------------------------------------------------------------------=
-    // MARK: Characters -> Snapshot
+    // MARK: Characters
     //=------------------------------------------------------------------------=
     
     /// Assumes that characters contains at least one content character.
@@ -52,5 +51,59 @@ extension NumericTextStyle {
         // MARK: Autocorrect
         //=--------------------------------------=
         scheme.autocorrect(&snapshot); return snapshot
+    }
+}
+
+//=----------------------------------------------------------------------------=
+// MARK: + Commit
+//=----------------------------------------------------------------------------=
+
+extension NumericTextStyle {
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Value, Number
+    //=------------------------------------------------------------------------=
+    
+    @inlinable func commit(_ value: Value, _ number: Number, _ style: Format) -> Commit<Value> {
+        var characters = style.sign(sign(number)).separator(separator(number)).format(value)
+        fix(number.sign, for: value, in: &characters); return Commit(value, snapshot(characters))
+    }
+        
+    //=------------------------------------------------------------------------=
+    // MARK: Fixes
+    //=------------------------------------------------------------------------=
+    
+    @inlinable func sign(_ number: Number) -> Format.Sign {
+        number.sign == .negative ? .always : .automatic
+    }
+    
+    @inlinable func separator(_ number: Number) -> Format.Separator {
+        number.separator == .fraction ? .always : .automatic
+    }
+    
+    /// This method exists because Apple's format styles always interpret zero as having a positive sign.
+    @inlinable func fix(_ sign: Sign, for value: Value, in characters: inout String) {
+        guard sign == .negative, value == .zero else { return }
+        guard let position = characters.firstIndex(of: lexicon.signs[sign.toggled()]) else { return }
+        characters.replaceSubrange(position...position, with: String(lexicon.signs[sign]))
+    }
+}
+
+//=----------------------------------------------------------------------------=
+// MARK: + Lexicon
+//=----------------------------------------------------------------------------=
+
+extension NumericTextStyle {
+
+    //=------------------------------------------------------------------------=
+    // MARK: Conversions
+    //=------------------------------------------------------------------------=
+    
+    @inlinable func value(_ number: Number) throws -> Value {
+        try lexicon.value(of: number, as: format)
+    }
+    
+    @inlinable func number(_ snapshot: Snapshot) throws -> Number {
+        try lexicon.number(in: snapshot, as: Value.self)
     }
 }

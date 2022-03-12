@@ -147,11 +147,11 @@ extension NumericTextStyle {
         //=--------------------------------------=
         var number = try number(proposal)
         sign.map({ sign in number.sign = sign })
+        let count = number.count()
         //=--------------------------------------=
         // MARK: Autovalidate
         //=--------------------------------------=
         try bounds.autovalidate(number)
-        let count = number.count()
         try precision.autovalidate(&number, count)
         //=--------------------------------------=
         // MARK: Value <- Number
