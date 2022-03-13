@@ -24,8 +24,8 @@ public final class Context<Style: DiffableTextStyle, Scheme: DiffableTextKit.Sch
         
     @usableFromInline private(set) var _value: Value! = nil
     @usableFromInline private(set) var _style: Style! = nil
-    @usableFromInline private(set) var _field: Field = Field()
-    @usableFromInline private(set) var _active: Bool = false
+    @usableFromInline private(set) var _field: Field  = Field()
+    @usableFromInline private(set) var _active: Bool  = false
     
     //=------------------------------------------------------------------------=
     // MARK: Initializers

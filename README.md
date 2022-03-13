@@ -18,7 +18,7 @@ An open source package for as-you-type formatting in SwiftUI.
 | :desert_island: | Standalone | Uses no remote dependencies |
 | :open_book: | Open source | 100% transparent, as it should be |
 
-### [Algorithms](Sources/DiffableTextKit/Context)
+### [Algorithms](Sources/DiffableTextKit/Models)
 
 It uses three main algorithms to determine text selection.
 
