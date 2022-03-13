@@ -75,6 +75,11 @@ public struct Snapshot: BidirectionalCollection, RangeReplaceableCollection {
     //=------------------------------------------------------------------------=
     
     /// - Complexity: O(1).
+    @inlinable public var isEmpty: Bool {
+        _attributes.isEmpty
+    }
+    
+    /// - Complexity: O(1).
     @inlinable public var count: Int {
         _attributes.count
     }
