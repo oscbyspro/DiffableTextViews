@@ -27,8 +27,14 @@ import Foundation
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable init(_ key: ID) {
-        self.lexicon = .standard(key.locale)
+    @inlinable init(_ identifier: ID) {
+        let formatter = NumberFormatter()
+        formatter.numberStyle = .decimal
+        formatter.locale = identifier.locale
+        //=--------------------------------------=
+        // MARK: Instantiate
+        //=--------------------------------------=
+        self.lexicon = .standard(formatter)
     }
 
     //=------------------------------------------------------------------------=

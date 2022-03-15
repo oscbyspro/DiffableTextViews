@@ -36,7 +36,7 @@ import DiffableTextKit
     // MARK: Accessors
     //=------------------------------------------------------------------------=
     
-    @inlinable var ascii: Lexicon { .en_US }
+    @inlinable var ascii: Lexicon { .ascii }
 }
 
 //=----------------------------------------------------------------------------=

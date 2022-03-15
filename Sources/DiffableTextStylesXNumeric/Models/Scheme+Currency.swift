@@ -21,16 +21,25 @@ import Foundation
     // MARK: State
     //=------------------------------------------------------------------------=
     
-    @usableFromInline let label:   Label
-    @usableFromInline let lexicon: Lexicon
-
+    @usableFromInline let label:    Label
+    @usableFromInline let lexicon:  Lexicon
+    @usableFromInline let defaults: Defaults
+    
     //=------------------------------------------------------------------------=
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
     @inlinable init(_ key: ID) {
-        self.lexicon = .currency(key.locale, code: key.code)
-        self.label   = .currency(lexicon,    code: key.code)
+        let formatter = NumberFormatter()
+        formatter.numberStyle = .currency
+        formatter.locale = key.locale
+        formatter.currencyCode = key.code
+        //=--------------------------------------=
+        // MARK: Instantiate
+        //=--------------------------------------=
+        self.lexicon  = .currency(formatter)
+        self.label    = .currency(key.locale, code: key.code, lexicon: lexicon)
+        self.defaults = .init(formatter)
     }
     
     //=------------------------------------------------------------------------=
@@ -71,5 +80,29 @@ import Foundation
         @inlinable init(_ locale: Locale, _ code: String) {
             self.locale = locale; self.code = code
         }
+    }
+    
+    //*========================================================================*
+    // MARK: * Defaults
+    //*========================================================================*
+    
+    @usableFromInline struct Defaults {
+        
+        //=--------------------------------------------------------------------=
+        // MARK: State
+        //=--------------------------------------------------------------------=
+        
+        @usableFromInline let fractionLimits: ClosedRange<Int>
+        
+        //=--------------------------------------------------------------------=
+        // MARK: Initializers
+        //=--------------------------------------------------------------------=
+        
+        @inlinable init(_ formatter: NumberFormatter) {
+            self.fractionLimits =
+            formatter.minimumFractionDigits ...
+            formatter.maximumFractionDigits
+        }
+        
     }
 }

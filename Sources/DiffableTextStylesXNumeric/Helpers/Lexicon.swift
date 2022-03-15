@@ -20,25 +20,24 @@ public final class Lexicon {
     // MARK: Constants
     //=------------------------------------------------------------------------=
     
-    @usableFromInline static let en_US: Lexicon = .ascii()
+    @usableFromInline static let en_US = Locale(identifier: "en_US")
+    @usableFromInline static let ascii = Lexicon(
+    signs: .ascii(), digits: .ascii(), separators: .ascii())
     
     //=------------------------------------------------------------------------=
     // MARK: State
     //=------------------------------------------------------------------------=
     
-    @usableFromInline let locale: Locale
-    @usableFromInline let signs: Links<Sign>
-    @usableFromInline let digits: Links<Digit>
+    @usableFromInline let signs:      Links<Sign>
+    @usableFromInline let digits:     Links<Digit>
     @usableFromInline let separators: Links<Separator>
 
     //=------------------------------------------------------------------------=
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable init(locale: Locale, signs: Links<Sign>,
-    digits: Links<Digit>, separators: Links<Separator>) {
-        self.locale = locale; self.signs = signs
-        self.digits = digits; self.separators = separators
+    @inlinable init(signs: Links<Sign>, digits: Links<Digit>, separators: Links<Separator>) {
+        self.signs = signs; self.digits = digits; self.separators = separators
     }
 }
 
@@ -52,38 +51,12 @@ extension Lexicon {
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable static func ascii() -> Lexicon {
-        let formatter = NumberFormatter()
-        formatter.numberStyle = .decimal
-        formatter.locale = Locale(identifier: "en_US")
-        //=--------------------------------------=
-        // MARK: Instantiate
-        //=--------------------------------------=
-        return .init(locale: formatter.locale,
-        signs: .ascii(), digits: .ascii(), separators: .ascii())
+    @inlinable static func standard(_ formatter: NumberFormatter) -> Lexicon {
+        Lexicon(signs: .standard(formatter), digits: .standard(formatter), separators: .standard(formatter))
     }
     
-    @inlinable static func standard(_ locale: Locale) -> Lexicon {
-        let formatter = NumberFormatter()
-        formatter.numberStyle = .decimal
-        formatter.locale = locale
-        //=--------------------------------------=
-        // MARK: Instantiate
-        //=--------------------------------------=
-        return  .init(locale: locale, signs:      .standard(formatter),
-        digits: .standard(formatter), separators: .standard(formatter))
-    }
-    
-    @inlinable static func currency(_ locale: Locale, code: String) -> Lexicon {
-        let formatter = NumberFormatter()
-        formatter.numberStyle = .decimal
-        formatter.locale = locale
-        formatter.currencyCode = code
-        //=--------------------------------------=
-        // MARK: Instantiate
-        //=--------------------------------------=
-        return  .init(locale: locale, signs:      .currency(formatter),
-        digits: .currency(formatter), separators: .currency(formatter))
+    @inlinable static func currency(_ formatter: NumberFormatter) -> Lexicon {
+        Lexicon(signs: .currency(formatter), digits: .currency(formatter), separators: .currency(formatter))
     }
 }
 
@@ -99,7 +72,7 @@ extension Lexicon {
     
     /// Relies on the fact that implemented styles can parse unformatted numbers.
     @inlinable func value<T>(of number: Number, as format: T) throws -> T.Value where T: Format {
-        try format.locale(Self.en_US.locale).parse(number.characters())
+        try format.locale(Self.en_US).parse(number.characters())
     }
     
     //=------------------------------------------------------------------------=

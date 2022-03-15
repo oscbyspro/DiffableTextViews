@@ -32,11 +32,10 @@ public struct _NumericTextStyle<Format: NumericTextFormat>: DiffableTextStyle {
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    #warning("...")
     @inlinable init(_ format: Format) {
         self.adapter = Adapter(format)
-        self.bounds = Bounds()
-        self.precision = Precision()
+        self.bounds = adapter.bounds()
+        self.precision = adapter.precision()
     }
 
     //=------------------------------------------------------------------------=

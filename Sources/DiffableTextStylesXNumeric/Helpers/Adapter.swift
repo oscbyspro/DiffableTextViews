@@ -15,6 +15,7 @@ import Foundation
 
 @usableFromInline struct Adapter<Format: NumericTextFormat>: Equatable {
     @usableFromInline typealias Scheme = Format.NumericTextScheme
+    @usableFromInline typealias Value  = Format.FormatInput
     
     //=------------------------------------------------------------------------=
     // MARK: State
@@ -30,7 +31,6 @@ import Foundation
     @inlinable init(_ format: Format) {
         self.format = format
         self.scheme = format.scheme()
-        assert(format.locale == scheme.locale)
     }
     
     //=------------------------------------------------------------------------=
@@ -38,7 +38,19 @@ import Foundation
     //=------------------------------------------------------------------------=
     
     @inlinable var locale: Locale {
-        scheme.locale
+        format.locale
+    }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Defaults
+    //=------------------------------------------------------------------------=
+    
+    @inlinable func bounds() -> Bounds<Value> {
+        scheme.bounds(Value.self)
+    }
+    
+    @inlinable func precision() -> Precision<Value> {
+        scheme.precision(Value.self)
     }
     
     //=------------------------------------------------------------------------=

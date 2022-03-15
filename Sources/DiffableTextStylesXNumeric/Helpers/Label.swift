@@ -37,9 +37,9 @@ import Foundation
     //=------------------------------------------------------------------------=
 
     /// Correctness is assert by tests parsing currency formats for all locale-currency pairs.
-    @inlinable static func currency(_ lexicon: Lexicon, code: String) -> Label {
+    @inlinable static func currency(_ locale: Locale, code: String, lexicon: Lexicon) -> Label {
         let labels = IntegerFormatStyle<Int>
-        .Currency(code: code).locale(lexicon.locale)
+        .Currency(code: code).locale(locale)
         .precision(.fractionLength(0)).format(0)
         .split(separator: lexicon.digits[.zero],
         omittingEmptySubsequences: false)
