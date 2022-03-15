@@ -20,7 +20,7 @@ extension Decimal.FormatStyle.Currency: Format, Formats.Currency {
     //=------------------------------------------------------------------------=
     
     @inlinable public func scheme() -> some NumericTextScheme {
-        Schemes.Currency.reuseable(self)
+        Schemes.Currency.reuse(self)
     }
 }
 
@@ -35,7 +35,7 @@ extension FloatingPointFormatStyle.Currency: Format, Formats.Currency where Valu
     //=------------------------------------------------------------------------=
     
     @inlinable public func scheme() -> some NumericTextScheme {
-        Schemes.Currency.reuseable(self)
+        Schemes.Currency.reuse(self)
     }
 }
 
@@ -50,6 +50,6 @@ extension IntegerFormatStyle.Currency: Format, Formats.Currency where Value: Num
     //=------------------------------------------------------------------------=
     
     @inlinable public func scheme() -> some NumericTextScheme {
-        Schemes.Currency.reuseable(self)
+        Schemes.Currency.reuse(self)
     }
 }

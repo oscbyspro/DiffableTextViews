@@ -21,7 +21,7 @@ Formats.Currencyable, Formats.Percentable {
     //=------------------------------------------------------------------------=
     
     @inlinable public func scheme() -> some NumericTextScheme {
-        Schemes.Standard.reuseable(self)
+        Schemes.Standard.reuse(self)
     }
 }
 
@@ -37,7 +37,7 @@ Formats.Currencyable, Formats.Percentable where FormatInput: NumericTextValue {
     //=------------------------------------------------------------------------=
     
     @inlinable public func scheme() -> some NumericTextScheme {
-        Schemes.Standard.reuseable(self)
+        Schemes.Standard.reuse(self)
     }
 }
 
@@ -53,6 +53,6 @@ Formats.Currencyable where FormatInput: NumericTextValue {
     //=------------------------------------------------------------------------=
     
     @inlinable public func scheme() -> some NumericTextScheme {
-        Schemes.Standard.reuseable(self)
+        Schemes.Standard.reuse(self)
     }
 }

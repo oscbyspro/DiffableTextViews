@@ -20,7 +20,7 @@ extension Decimal.FormatStyle.Percent: Format, Formats.Percent {
     //=------------------------------------------------------------------------=
     
     @inlinable public func scheme() -> some NumericTextScheme {
-        Schemes.Standard.reuseable(self)
+        Schemes.Standard.reuse(self)
     }
 }
 
@@ -35,6 +35,6 @@ extension FloatingPointFormatStyle.Percent: Format, Formats.Percent where Value:
     //=------------------------------------------------------------------------=
     
     @inlinable public func scheme() -> some NumericTextScheme {
-        Schemes.Standard.reuseable(self)
+        Schemes.Standard.reuse(self)
     }
 }

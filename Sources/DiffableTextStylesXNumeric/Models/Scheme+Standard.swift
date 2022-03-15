@@ -21,21 +21,21 @@ import Foundation
     // MARK: State
     //=------------------------------------------------------------------------=
     
-    @usableFromInline let identifier: ID
+    @usableFromInline let id: ID
     @usableFromInline let lexicon: Lexicon
 
     //=------------------------------------------------------------------------=
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable init(_ identifier: ID) {
+    @inlinable init(_ id: ID) {
         let formatter = NumberFormatter()
-        formatter.locale = identifier.locale
+        formatter.locale = id.locale
         assert(formatter.numberStyle == .none)
         //=--------------------------------------=
         // MARK: Instantiate
         //=--------------------------------------=
-        self.identifier = identifier
+        self.id = id
         //=--------------------------------------=
         // MARK: Instantiate: Style == None
         //=--------------------------------------=
@@ -46,12 +46,12 @@ import Foundation
     // MARK: Initializers - Static
     //=------------------------------------------------------------------------=
     
-    @inlinable static func reuseable<T>(_ format: T) -> Self where T: Formats.Number {
-        reuseable(ID(format.locale))
+    @inlinable static func reuse<T>(_ format: T) -> Self where T: Formats.Number {
+        reuse(ID(format.locale))
     }
     
-    @inlinable static func reuseable<T>(_ format: T) -> Self where T: Formats.Percent {
-        reuseable(ID(format.locale))
+    @inlinable static func reuse<T>(_ format: T) -> Self where T: Formats.Percent {
+        reuse(ID(format.locale))
     }
     
     //=------------------------------------------------------------------------=
@@ -59,7 +59,7 @@ import Foundation
     //=------------------------------------------------------------------------=
     
     @inlinable var locale: Locale {
-        identifier.locale
+        id.locale
     }
     
     //=------------------------------------------------------------------------=

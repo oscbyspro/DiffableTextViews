@@ -21,7 +21,7 @@ import Foundation
     // MARK: State
     //=------------------------------------------------------------------------=
     
-    @usableFromInline let identifier: ID
+    @usableFromInline let id: ID
     @usableFromInline let label: Label
     @usableFromInline let lexicon: Lexicon
     @usableFromInline let preferences: Preferences
@@ -30,21 +30,20 @@ import Foundation
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable init(_ identifier: ID) {
+    @inlinable init(_ id: ID) {
         let formatter = NumberFormatter()
-        formatter.locale = identifier.locale
-        formatter.currencyCode = identifier.code
+        formatter.locale = id.locale
+        formatter.currencyCode = id.code
         assert(formatter.numberStyle == .none)
         //=--------------------------------------=
         // MARK: Instantiate
         //=--------------------------------------=
-        self.identifier = identifier
+        self.id = id
         //=--------------------------------------=
         // MARK: Instantiate: Style == None
         //=--------------------------------------=
         self.lexicon = .currency(formatter)
-        self.label   = .currency(identifier.locale,
-        code: identifier.code, lexicon: lexicon)
+        self.label   = .currency(id.locale, code: id.code, lexicon: lexicon)
         //=--------------------------------------=
         // MARK: Instantiate: Style == Currency
         //=--------------------------------------=
@@ -56,8 +55,8 @@ import Foundation
     // MARK: Initializers - Static
     //=------------------------------------------------------------------------=
     
-    @inlinable static func reuseable<T>(_ format: T) -> Self where T: Formats.Currency {
-        reuseable(ID(format.locale, format.currencyCode))
+    @inlinable static func reuse<T>(_ format: T) -> Self where T: Formats.Currency {
+        reuse(ID(format.locale, format.currencyCode))
     }
     
     //=------------------------------------------------------------------------=
@@ -65,11 +64,11 @@ import Foundation
     //=------------------------------------------------------------------------=
     
     @inlinable var code: String {
-        identifier.code
+        id.code
     }
     
     @inlinable var locale: Locale {
-        identifier.locale
+        id.locale
     }
     
     //*========================================================================*
@@ -111,7 +110,9 @@ import Foundation
         //=--------------------------------------------------------------------=
         
         @inlinable init(_ formatter: NumberFormatter) {
-            self.fraction = formatter.minimumFractionDigits...formatter.maximumFractionDigits
+            self.fraction =
+            formatter.minimumFractionDigits ...
+            formatter.maximumFractionDigits
         }
     }
 }

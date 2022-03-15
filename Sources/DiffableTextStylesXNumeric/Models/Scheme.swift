@@ -24,8 +24,7 @@ import Foundation
 // MARK: * Translation
 //*============================================================================*
 
-public protocol NumericTextScheme {
-    associatedtype ID: Hashable
+public protocol NumericTextScheme: Identifiable {
 
     //=------------------------------------------------------------------------=
     // MARK: State
@@ -77,7 +76,7 @@ extension NumericTextScheme {
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable init(_ identifier: ID)
+    @inlinable init(_ id: ID)
     
     //=------------------------------------------------------------------------=
     // MARK: Cache
@@ -96,7 +95,7 @@ extension NumericTextSchemeXReuseable {
     // MARK: Search
     //=------------------------------------------------------------------------=
         
-    @inlinable static func reuseable(_ identifier: ID) -> Self {
-        cache.reuse(identifier, make: Self(identifier))
+    @inlinable static func reuse(_ id: ID) -> Self {
+        cache.reuse(id, make: Self(id))
     }
 }
