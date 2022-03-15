@@ -53,7 +53,7 @@ Determines the input and output space in terms of digits.
 
 ### Formats
 
-- Currency: uses appropriate default fraction limits based on currency.
+- Currency: appropriate fraction limits are set by default.
 
 ## Comments
 
