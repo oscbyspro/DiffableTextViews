@@ -21,10 +21,10 @@ import Foundation
     // MARK: State
     //=------------------------------------------------------------------------=
     
-    @usableFromInline let label: Label
-    @usableFromInline let lexicon: Lexicon
-    @usableFromInline let defaults: Defaults
     @usableFromInline let identifier: ID
+    @usableFromInline let lexicon: Lexicon
+    @usableFromInline let label: Label
+    @usableFromInline let defaults: Defaults
 
     //=------------------------------------------------------------------------=
     // MARK: Initializers
@@ -32,15 +32,15 @@ import Foundation
     
     @inlinable init(_ identifier: ID) {
         let formatter = NumberFormatter()
-        formatter.numberStyle = .decimal
         formatter.locale = identifier.locale
         formatter.currencyCode = identifier.code
+        assert(formatter.numberStyle == .none)
         //=--------------------------------------=
         // MARK: Instantiate
         //=--------------------------------------=
         self.identifier = identifier
         //=--------------------------------------=
-        // MARK: Instantiate: Style == Decimal
+        // MARK: Instantiate: Style == None
         //=--------------------------------------=
         self.lexicon = .currency(formatter)
         self.label   = .currency(identifier.locale,

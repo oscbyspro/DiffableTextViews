@@ -50,7 +50,9 @@ import Foundation
     // MARK: Localization
     //=------------------------------------------------------------------------=
     
+    /// Requires that formatter.numberStyle == .none.
     @inlinable func standard(_ formatter: NumberFormatter) -> Character! {
-        formatter.string(from: numericValue as NSNumber)!.first
+        assert(formatter.numberStyle == .none)
+        return formatter.string(from: numericValue as NSNumber)!.first
     }
 }

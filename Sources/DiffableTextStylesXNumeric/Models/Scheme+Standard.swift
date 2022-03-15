@@ -23,21 +23,21 @@ import Foundation
     
     @usableFromInline let identifier: ID
     @usableFromInline let lexicon: Lexicon
-    
+
     //=------------------------------------------------------------------------=
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
     @inlinable init(_ identifier: ID) {
         let formatter = NumberFormatter()
-        formatter.numberStyle = .decimal
         formatter.locale = identifier.locale
+        assert(formatter.numberStyle == .none)
         //=--------------------------------------=
         // MARK: Instantiate
         //=--------------------------------------=
         self.identifier = identifier
         //=--------------------------------------=
-        // MARK: Instantiate: Style == Decimal
+        // MARK: Instantiate: Style == None
         //=--------------------------------------=
         self.lexicon = .standard(formatter)
     }
