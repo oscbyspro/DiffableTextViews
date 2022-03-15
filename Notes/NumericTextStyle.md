@@ -51,6 +51,10 @@ Determines the input and output space in terms of digits.
 - Lower bound is enforced when the view is: idle.
 - Upper bound is enforced when the view is: active.
 
+### Formats
+
+- Currency: uses appropriate default fraction limits based on currency.
+
 ## Comments
 
   - Bounds take effect before precision (see enforcement sections).
