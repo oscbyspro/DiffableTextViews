@@ -24,7 +24,7 @@ import Foundation
 // MARK: * Translation
 //*============================================================================*
 
-public protocol NumericTextScheme: Identifiable {
+@dynamicMemberLookup public protocol NumericTextScheme: Identifiable {
 
     //=------------------------------------------------------------------------=
     // MARK: State
@@ -52,6 +52,14 @@ public protocol NumericTextScheme: Identifiable {
 //=----------------------------------------------------------------------------=
 
 extension NumericTextScheme {
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Accessors
+    //=------------------------------------------------------------------------=
+    
+    @inlinable subscript<T>(dynamicMember keyPath: KeyPath<ID, T>) -> T {
+        id[keyPath: keyPath]
+    }
     
     //=------------------------------------------------------------------------=
     // MARK: Preferences
