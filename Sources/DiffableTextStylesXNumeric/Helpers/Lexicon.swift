@@ -20,10 +20,7 @@ public final class Lexicon {
     // MARK: Constants
     //=------------------------------------------------------------------------=
     
-    @usableFromInline static let en_US = Lexicon(
-        locale: Locale(identifier: "en_US"),
-        signs: .ascii(), digits: .ascii(), separators: .ascii()
-    )
+    @usableFromInline static let en_US: Lexicon = .ascii()
     
     //=------------------------------------------------------------------------=
     // MARK: State
@@ -38,7 +35,8 @@ public final class Lexicon {
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable init(locale: Locale, signs: Links<Sign>, digits: Links<Digit>, separators: Links<Separator>) {
+    @inlinable init(locale: Locale, signs: Links<Sign>,
+    digits: Links<Digit>, separators: Links<Separator>) {
         self.locale = locale; self.signs = signs
         self.digits = digits; self.separators = separators
     }
@@ -53,6 +51,17 @@ extension Lexicon {
     //=------------------------------------------------------------------------=
     // MARK: Initializers
     //=------------------------------------------------------------------------=
+    
+    @inlinable static func ascii() -> Lexicon {
+        let formatter = NumberFormatter()
+        formatter.numberStyle = .decimal
+        formatter.locale = Locale(identifier: "en_US")
+        //=--------------------------------------=
+        // MARK: Instantiate
+        //=--------------------------------------=
+        return .init(locale: formatter.locale,
+        signs: .ascii(), digits: .ascii(), separators: .ascii())
+    }
     
     @inlinable static func standard(_ locale: Locale) -> Lexicon {
         let formatter = NumberFormatter()

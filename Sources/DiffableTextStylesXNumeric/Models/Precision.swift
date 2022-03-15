@@ -69,7 +69,7 @@ extension Precision {
         self = .unchecked()
     }
     
-    @inlinable init<R>(integer:  R) where R: RangeExpression, R.Bound == Int {
+    @inlinable init<R>(integer: R)  where R: RangeExpression, R.Bound == Int {
         self = .unchecked(integer:  Self.interpret(integer,  as: \.integer ))
     }
     
