@@ -34,8 +34,8 @@ public struct _NumericTextStyle<Format: NumericTextFormat>: DiffableTextStyle {
     //=------------------------------------------------------------------------=
     
     @inlinable init(_ format: Format) {
-        self.adapter   = Adapter(format)
-        self.bounds    = adapter.bounds()
+        self.adapter = Adapter(format)
+        self.bounds = adapter.bounds()
         self.precision = adapter.precision()
     }
 
@@ -163,7 +163,7 @@ extension NumericTextStyle {
         //=--------------------------------------=
         try bounds.autovalidate(value, &number)
         //=--------------------------------------=
-        // MARK: Commit
+        // MARK: Style, Commit
         //=--------------------------------------=
         let style = format.precision(precision.interactive(count))
         return self.commit(value, number, style)
@@ -181,7 +181,7 @@ import DiffableTextViewsXiOS
 extension NumericTextStyle: DiffableTextStyleXiOS {
     
     //=------------------------------------------------------------------------=
-    // MARK: Keyboard
+    // MARK: Setup
     //=------------------------------------------------------------------------=
     
     @inlinable public static func onSetup(_ diffableTextField: ProxyTextField) {

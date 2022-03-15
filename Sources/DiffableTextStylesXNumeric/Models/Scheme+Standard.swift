@@ -37,7 +37,7 @@ import Foundation
         //=--------------------------------------=
         self.id = id
         //=--------------------------------------=
-        // MARK: Instantiate: Style == None
+        // MARK: Instantiate - None
         //=--------------------------------------=
         self.lexicon = .standard(formatter)
     }

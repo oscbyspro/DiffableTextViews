@@ -40,12 +40,12 @@ import Foundation
         //=--------------------------------------=
         self.id = id
         //=--------------------------------------=
-        // MARK: Instantiate: Style == None
+        // MARK: Instantiate - None
         //=--------------------------------------=
         self.lexicon = .currency(formatter)
-        self.label   = .currency(id.locale, code: id.code, lexicon: lexicon)
+        self.label = .currency(id, lexicon)
         //=--------------------------------------=
-        // MARK: Instantiate: Style == Currency
+        // MARK: Instantiate - Currency
         //=--------------------------------------=
         formatter.numberStyle = .currency
         self.preferences = Preferences(formatter)
