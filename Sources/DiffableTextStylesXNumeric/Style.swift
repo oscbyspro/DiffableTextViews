@@ -18,11 +18,6 @@ public struct _NumericTextStyle<Format: NumericTextFormat>: DiffableTextStyle {
     public typealias Value = Format.FormatInput
     public typealias Bounds = DiffableTextStylesXNumeric.Bounds<Value>
     public typealias Precision = DiffableTextStylesXNumeric.Precision<Value>
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Aliases
-    //=------------------------------------------------------------------------=
-    
     @usableFromInline typealias Scheme = Format.NumericTextScheme
     @usableFromInline typealias Adapter = DiffableTextStylesXNumeric.Adapter<Format>
 
@@ -39,8 +34,8 @@ public struct _NumericTextStyle<Format: NumericTextFormat>: DiffableTextStyle {
     //=------------------------------------------------------------------------=
     
     @inlinable init(_ format: Format) {
-        self.adapter = Adapter(format)
-        self.bounds = adapter.bounds()
+        self.adapter   = Adapter(format)
+        self.bounds    = adapter.bounds()
         self.precision = adapter.precision()
     }
 
@@ -52,7 +47,7 @@ public struct _NumericTextStyle<Format: NumericTextFormat>: DiffableTextStyle {
         adapter.format.rounded(.towardZero)
     }
 
-    @inlinable var scheme: Scheme {
+    @inlinable var scheme: Format.NumericTextScheme {
         adapter.scheme
     }
     

@@ -20,10 +20,10 @@ public final class Lexicon {
     // MARK: Constants
     //=------------------------------------------------------------------------=
     
-    @usableFromInline static let en_US = Locale(identifier: "en_US")
     @usableFromInline static let ascii = Lexicon(
     signs: .ascii(), digits: .ascii(), separators: .ascii())
-    
+    @usableFromInline static let en_US = Locale(identifier: "en_US")
+
     //=------------------------------------------------------------------------=
     // MARK: State
     //=------------------------------------------------------------------------=
