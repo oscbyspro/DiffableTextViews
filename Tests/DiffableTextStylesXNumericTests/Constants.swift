@@ -33,6 +33,7 @@ let currencyCodes: [String] = locales
     .reduce(into: Set()) { $0.insert($1) }
     .lazy.map({ $0 }).sorted(by: <)
 
-let standard: [Lexicon] = locales.map(Lexicon.standard)
+let standards: [Schemes.Standard] = locales.lazy
+    .map(Schemes.Standard.ID.init).map(Schemes.Standard.init)
 
 #endif

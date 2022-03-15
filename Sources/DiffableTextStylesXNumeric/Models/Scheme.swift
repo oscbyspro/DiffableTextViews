@@ -25,7 +25,8 @@ import Foundation
 //*============================================================================*
 
 public protocol NumericTextScheme {
-    
+    associatedtype ID: Hashable
+
     //=------------------------------------------------------------------------=
     // MARK: State
     //=------------------------------------------------------------------------=
@@ -33,12 +34,12 @@ public protocol NumericTextScheme {
     @inlinable var lexicon: Lexicon { get }
     
     //=------------------------------------------------------------------------=
-    // MARK: Defaults
+    // MARK: Preferences
     //=------------------------------------------------------------------------=
     
-    @inlinable func bounds<Value>(_ value: Value.Type) -> Bounds<Value>
+    @inlinable func bounds<T>(_ value: T.Type) -> Bounds<T>
     
-    @inlinable func precision<Value>(_ value: Value.Type) -> Precision<Value>
+    @inlinable func precision<T>(_ value: T.Type) -> Precision<T>
     
     //=------------------------------------------------------------------------=
     // MARK: Autocorrect
@@ -47,18 +48,36 @@ public protocol NumericTextScheme {
     @inlinable func autocorrect(_ snapshot: inout Snapshot)
 }
 
+//=----------------------------------------------------------------------------=
+// MARK: + Details
+//=----------------------------------------------------------------------------=
+
+extension NumericTextScheme {
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Preferences
+    //=------------------------------------------------------------------------=
+    
+    @inlinable func bounds<T>(_ value: T.Type) -> Bounds<T> where T: Value {
+        Bounds()
+    }
+    
+    @inlinable func precision<T>(_ value: T.Type) -> Precision<T> where T: Value {
+        Precision()
+    }
+}
+
 //*============================================================================*
 // MARK: * Scheme x Reusable
 //*============================================================================*
 
 @usableFromInline protocol NumericTextSchemeXReuseable: AnyObject, Scheme {
-    associatedtype ID: Hashable
     
     //=------------------------------------------------------------------------=
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable init(_ key: ID)
+    @inlinable init(_ identifier: ID)
     
     //=------------------------------------------------------------------------=
     // MARK: Cache

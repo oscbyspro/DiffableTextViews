@@ -21,25 +21,28 @@ import Foundation
     // MARK: State
     //=------------------------------------------------------------------------=
     
-    @usableFromInline let label:    Label
-    @usableFromInline let lexicon:  Lexicon
+    @usableFromInline let label: Label
+    @usableFromInline let lexicon: Lexicon
     @usableFromInline let defaults: Defaults
-    
+    @usableFromInline let identifier: ID
+
     //=------------------------------------------------------------------------=
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable init(_ key: ID) {
+    @inlinable init(_ identifier: ID) {
         let formatter = NumberFormatter()
-        formatter.numberStyle = .currency
-        formatter.locale = key.locale
-        formatter.currencyCode = key.code
+        formatter.numberStyle = .decimal
+        formatter.locale = identifier.locale
+        formatter.currencyCode = identifier.code
         //=--------------------------------------=
         // MARK: Instantiate
         //=--------------------------------------=
-        self.lexicon  = .currency(formatter)
-        self.label    = .currency(key.locale, code: key.code, lexicon: lexicon)
+        self.identifier = identifier
         self.defaults = .init(formatter)
+        self.lexicon = .currency(formatter)
+        self.label = .currency(identifier.locale,
+        code: identifier.code, lexicon: lexicon)
     }
     
     //=------------------------------------------------------------------------=
@@ -51,13 +54,15 @@ import Foundation
     }
     
     //=------------------------------------------------------------------------=
-    // MARK: Autocorrect
+    // MARK: Accessors
     //=------------------------------------------------------------------------=
     
-    @inlinable func autocorrect(_ snapshot: inout Snapshot) {
-        guard !label.characters.isEmpty else { return }
-        guard let indices = label.indices(in: snapshot) else { return }
-        snapshot.update(attributes: indices) { attribute in attribute = .phantom }
+    @inlinable var code: String {
+        identifier.code
+    }
+    
+    @inlinable var locale: Locale {
+        identifier.locale
     }
     
     //*========================================================================*
@@ -103,6 +108,30 @@ import Foundation
             formatter.minimumFractionDigits ...
             formatter.maximumFractionDigits
         }
-        
+    }
+}
+
+//=----------------------------------------------------------------------------=
+// MARK: + Specialization
+//=----------------------------------------------------------------------------=
+
+extension NumericTextSchemeXCurrency {
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Preferences
+    //=------------------------------------------------------------------------=
+    
+    @inlinable func precision<T>(_ value: T.Type) -> Precision<T> where T: Value {
+        Precision(fraction: defaults.fractionLimits)
+    }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Autocorrect
+    //=------------------------------------------------------------------------=
+    
+    @inlinable func autocorrect(_ snapshot: inout Snapshot) {
+        guard !label.characters.isEmpty else { return }
+        guard let indices = label.indices(in: snapshot) else { return }
+        snapshot.update(attributes: indices) { attribute in attribute = .phantom }
     }
 }

@@ -36,7 +36,7 @@ final class HelpersTestsXLinks: Tests {
         //=--------------------------------------=
         // MARK: Lexicons
         //=--------------------------------------=
-        for lexicon in standard {
+        for lexicon in standards.lazy.map(\.lexicon) {
             XCTAssertEachCaseIsBidirectionallyLinked(lexicon.signs)
             XCTAssertEachCaseIsBidirectionallyLinked(lexicon.digits)
             XCTAssertEachCaseIsBidirectionallyLinked(lexicon.separators)

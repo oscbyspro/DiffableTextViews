@@ -28,9 +28,9 @@ final class MiscellaneousTestsXPercent: Tests {
         //=--------------------------------------=
         // MARK: Locales
         //=--------------------------------------=
-        for lexicon in standard {
-            let zero = IntegerFormatStyle<Int>.Percent(locale: lexicon.locale).format(0)
-            XCTAssert(zero.count(where: lexicon.nonvirtual) == 1, "\(zero), \(lexicon.locale)")
+        for scheme in standards {
+            let zero = IntegerFormatStyle<Int>.Percent(locale: scheme.locale).format(0)
+            XCTAssert(zero.count(where: scheme.lexicon.nonvirtual) == 1, "\(zero), \(scheme.locale)")
         }
     }
 }

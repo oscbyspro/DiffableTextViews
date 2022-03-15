@@ -15,10 +15,16 @@ import Foundation
 //*============================================================================*
 
 public struct _NumericTextStyle<Format: NumericTextFormat>: DiffableTextStyle {
-    @usableFromInline typealias Adapter = DiffableTextStylesXNumeric.Adapter<Format>
+    public typealias Value = Format.FormatInput
     public typealias Bounds = DiffableTextStylesXNumeric.Bounds<Value>
     public typealias Precision = DiffableTextStylesXNumeric.Precision<Value>
-    public typealias Value = Format.FormatInput
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Aliases
+    //=------------------------------------------------------------------------=
+    
+    @usableFromInline typealias Scheme = Format.NumericTextScheme
+    @usableFromInline typealias Adapter = DiffableTextStylesXNumeric.Adapter<Format>
 
     //=------------------------------------------------------------------------=
     // MARK: State

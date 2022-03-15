@@ -22,12 +22,12 @@ final class HelpersTestsXLexicon: Tests {
     // MARK: Styles
     //=------------------------------------------------------------------------=
     
-    @inlinable func int(_ lexicon: Lexicon) -> IntegerFormatStyle<Int> {
-        .number.locale(lexicon.locale)
+    @inlinable func int(_ scheme: Schemes.Standard) -> IntegerFormatStyle<Int> {
+        .number.locale(scheme.locale)
     }
     
-    @inlinable func double(_ lexicon: Lexicon) -> FloatingPointFormatStyle<Double> {
-        .number.locale(lexicon.locale)
+    @inlinable func double(_ scheme: Schemes.Standard) -> FloatingPointFormatStyle<Double> {
+        .number.locale(scheme.locale)
     }
     
     //=------------------------------------------------------------------------=
@@ -40,12 +40,12 @@ final class HelpersTestsXLexicon: Tests {
         //=--------------------------------------=
         // MARK: Lexicons
         //=--------------------------------------=
-        for lexicon in standard {
-            let style = int(lexicon).sign(strategy: .always())
+        for scheme in standards {
+            let style = int(scheme).sign(strategy: .always())
             let positives = positive.formatted(style)
             let negatives = negative.formatted(style)
-            XCTAssertNotNil(positives.first(where: { lexicon.signs[$0] != nil }))
-            XCTAssertNotNil(negatives.first(where: { lexicon.signs[$0] != nil }))
+            XCTAssertNotNil(positives.first(where: { scheme.lexicon.signs[$0] != nil }))
+            XCTAssertNotNil(negatives.first(where: { scheme.lexicon.signs[$0] != nil }))
         }
     }
     
@@ -54,10 +54,10 @@ final class HelpersTestsXLexicon: Tests {
         //=--------------------------------------=
         // MARK: Lexicons
         //=--------------------------------------=
-        for lexicon in standard {
-            let style = int(lexicon).grouping(.never)
+        for scheme in standards {
+            let style = int(scheme).grouping(.never)
             let numbers = number.formatted(style)
-            XCTAssert(numbers.allSatisfy({ lexicon.digits[$0] != nil }))
+            XCTAssert(numbers.allSatisfy({ scheme.lexicon.digits[$0] != nil }))
         }
     }
     
@@ -66,10 +66,10 @@ final class HelpersTestsXLexicon: Tests {
         //=--------------------------------------=
         // MARK: Lexicons
         //=--------------------------------------=
-        for lexicon in standard {
-            let style = int(lexicon).grouping(.automatic)
+        for scheme in standards {
+            let style = int(scheme).grouping(.automatic)
             let nonnumbers = number.formatted(style).filter({ !$0.isNumber })
-            XCTAssert(nonnumbers.allSatisfy({ lexicon.separators[$0] == .grouping }))
+            XCTAssert(nonnumbers.allSatisfy({ scheme.lexicon.separators[$0] == .grouping }))
         }
     }
     
@@ -78,10 +78,10 @@ final class HelpersTestsXLexicon: Tests {
         //=--------------------------------------=
         // MARK: Lexicons
         //=--------------------------------------=
-        for lexicon in standard {
-            let style = double(lexicon).decimalSeparator(strategy: .always)
+        for scheme in standards {
+            let style = double(scheme).decimalSeparator(strategy: .always)
             let nonnumbers = number.formatted(style).filter({ !$0.isNumber })
-            XCTAssert(nonnumbers.allSatisfy({ lexicon.separators[$0] == .fraction }))
+            XCTAssert(nonnumbers.allSatisfy({ scheme.lexicon.separators[$0] == .fraction }))
         }
     }
 }

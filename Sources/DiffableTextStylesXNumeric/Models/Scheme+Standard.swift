@@ -21,6 +21,7 @@ import Foundation
     // MARK: State
     //=------------------------------------------------------------------------=
     
+    @usableFromInline let identifier: ID
     @usableFromInline let lexicon: Lexicon
     
     //=------------------------------------------------------------------------=
@@ -34,6 +35,7 @@ import Foundation
         //=--------------------------------------=
         // MARK: Instantiate
         //=--------------------------------------=
+        self.identifier = identifier
         self.lexicon = .standard(formatter)
     }
 
@@ -47,6 +49,14 @@ import Foundation
     
     @inlinable static func reuseable<T>(_ format: T) -> Self where T: Formats.Percent {
         reuseable(ID(format.locale))
+    }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Accessors
+    //=------------------------------------------------------------------------=
+    
+    @inlinable var locale: Locale {
+        identifier.locale
     }
     
     //=------------------------------------------------------------------------=
