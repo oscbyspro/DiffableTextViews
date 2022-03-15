@@ -68,8 +68,8 @@ extension Reader {
         //=--------------------------------------=
         // MARK: Separator
         //=--------------------------------------=
-        } else if ascii  .separators.contains(input.character) ||
-                  lexicon.separators.contains(input.character) {
+        } else if ascii.separators.contains(input.character) ||
+        lexicon.separators.contains(input.character) {
             // all separators translated as fraction
             character = lexicon.separators[.fraction]
         //=--------------------------------------=
