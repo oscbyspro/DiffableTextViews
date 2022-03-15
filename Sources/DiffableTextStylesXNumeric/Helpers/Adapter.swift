@@ -14,8 +14,8 @@ import Foundation
 //*============================================================================*
 
 @usableFromInline struct Adapter<Format: NumericTextFormat>: Equatable {
-    @usableFromInline typealias Scheme = Format.NumericTextScheme
     @usableFromInline typealias Value  = Format.FormatInput
+    @usableFromInline typealias Scheme = Format.NumericTextScheme
     
     //=------------------------------------------------------------------------=
     // MARK: State
