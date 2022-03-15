@@ -27,11 +27,9 @@ final class StyleTestsXCurrency: Tests, StyleTests {
          XCTInterpretLocalesXCurrencies(value, format: T.FormatStyle.Currency.init)
     }
     
-    func XCTAssertDefaultFractionLimitsIsSameAs(_ formatter: NumberFormatter) {
-        let style = NumericTextStyle<Decimal>.Currency(code: formatter.currencyCode, locale: formatter.locale)
-        let lhs = style.precision.lower.fraction  ... style.precision.upper.fraction
-        let rhs = formatter.minimumFractionDigits ... formatter.minimumFractionDigits
-        XCTAssertEqual(lhs, rhs)
+    func XCTAssertDefaultFractionLimits(_ limits: ClosedRange<Int>, locale: Locale, code: String) {
+        let style = NumericTextStyle<Decimal>.Currency(code: code, locale: locale)
+        XCTAssertEqual(style.precision.lower.fraction ... style.precision.upper.fraction, limits)
     }
 }
 
@@ -45,6 +43,10 @@ extension StyleTestsXCurrency {
     // MARK: Tests
     //=------------------------------------------------------------------------=
     
+    func testDefaultFractionLimitsUSD() {
+        XCTAssertDefaultFractionLimits(2...2, locale: Locale(identifier: "en_US"), code: "USD")
+    }
+    
     func testDefaultFractionLimitsIsSameAsCurrencyFormatter() {
         let formatter = NumberFormatter()
         formatter.numberStyle = .currency
@@ -55,7 +57,8 @@ extension StyleTestsXCurrency {
             formatter.locale = locale
             for currencyCode in currencyCodes {
                 formatter.currencyCode = currencyCode
-                XCTAssertDefaultFractionLimitsIsSameAs(formatter)
+                let limits = formatter.minimumFractionDigits...formatter.maximumFractionDigits
+                XCTAssertDefaultFractionLimits(limits, locale: locale, code: currencyCode)
             }
         }
     }
