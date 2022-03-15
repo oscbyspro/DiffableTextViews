@@ -22,9 +22,9 @@ import Foundation
     //=------------------------------------------------------------------------=
     
     @usableFromInline let identifier: ID
-    @usableFromInline let lexicon: Lexicon
     @usableFromInline let label: Label
-    @usableFromInline let defaults: Defaults
+    @usableFromInline let lexicon: Lexicon
+    @usableFromInline let preferences: Preferences
 
     //=------------------------------------------------------------------------=
     // MARK: Initializers
@@ -49,7 +49,7 @@ import Foundation
         // MARK: Instantiate: Style == Currency
         //=--------------------------------------=
         formatter.numberStyle = .currency
-        self.defaults = Defaults(formatter)
+        self.preferences = Preferences(formatter)
     }
     
     //=------------------------------------------------------------------------=
@@ -95,25 +95,23 @@ import Foundation
     }
     
     //*========================================================================*
-    // MARK: * Defaults
+    // MARK: * Preferences
     //*========================================================================*
     
-    @usableFromInline struct Defaults {
+    @usableFromInline struct Preferences {
         
         //=--------------------------------------------------------------------=
         // MARK: State
         //=--------------------------------------------------------------------=
         
-        @usableFromInline let fractionLimits: ClosedRange<Int>
+        @usableFromInline let fraction: ClosedRange<Int>
         
         //=--------------------------------------------------------------------=
         // MARK: Initializers
         //=--------------------------------------------------------------------=
         
         @inlinable init(_ formatter: NumberFormatter) {
-            self.fractionLimits =
-            formatter.minimumFractionDigits ...
-            formatter.maximumFractionDigits
+            self.fraction = formatter.minimumFractionDigits...formatter.maximumFractionDigits
         }
     }
 }
@@ -129,7 +127,7 @@ extension NumericTextSchemeXCurrency {
     //=------------------------------------------------------------------------=
     
     @inlinable func precision<T>(_ value: T.Type) -> Precision<T> where T: Value {
-        Precision(fraction: defaults.fractionLimits)
+        Precision(fraction: preferences.fraction)
     }
     
     //=------------------------------------------------------------------------=

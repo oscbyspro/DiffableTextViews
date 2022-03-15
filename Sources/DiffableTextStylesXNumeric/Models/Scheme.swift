@@ -96,7 +96,7 @@ extension NumericTextSchemeXReuseable {
     // MARK: Search
     //=------------------------------------------------------------------------=
         
-    @inlinable static func reuseable(_ key: ID) -> Self {
-        cache.reuse(key, make: Self(key))
+    @inlinable static func reuseable(_ identifier: ID) -> Self {
+        cache.reuse(identifier, make: Self(identifier))
     }
 }
