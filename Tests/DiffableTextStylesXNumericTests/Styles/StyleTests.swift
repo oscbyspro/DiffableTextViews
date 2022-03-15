@@ -32,9 +32,10 @@ extension StyleTests {
         XCTAssertEqual(format.precision(.fractionLength(0...)).format(value), result)
     }
     
+    /// Fraction limits is set to max because a style's default precision depends on context.
     func XCTInterpret<F: Format>(_ value: F.Value, format: F, info: @autoclosure () -> Any) {
-        let commit = _NumericTextStyle(format).interpret(value)
         let characters = format.precision(.fractionLength(0...)).format(value)
+        let commit = _NumericTextStyle(format).precision(Precision(fraction: 0...)).interpret(value)
         XCTAssertEqual(commit.value, value, String(describing: info()))
         XCTAssertEqual(commit.snapshot.characters, characters, String(describing: info()))
     }

@@ -39,10 +39,17 @@ import Foundation
         // MARK: Instantiate
         //=--------------------------------------=
         self.identifier = identifier
-        self.defaults = .init(formatter)
+        //=--------------------------------------=
+        // MARK: Instantiate: Style == Decimal
+        //=--------------------------------------=
         self.lexicon = .currency(formatter)
-        self.label = .currency(identifier.locale,
+        self.label   = .currency(identifier.locale,
         code: identifier.code, lexicon: lexicon)
+        //=--------------------------------------=
+        // MARK: Instantiate: Style == Currency
+        //=--------------------------------------=
+        formatter.numberStyle = .currency
+        self.defaults = Defaults(formatter)
     }
     
     //=------------------------------------------------------------------------=

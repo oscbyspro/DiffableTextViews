@@ -51,10 +51,12 @@ extension Lexicon {
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
+    /// Requires that formatter.numberStyle == .decimal.
     @inlinable static func standard(_ formatter: NumberFormatter) -> Lexicon {
         Lexicon(signs: .standard(formatter), digits: .standard(formatter), separators: .standard(formatter))
     }
     
+    /// Requires that formatter.numberStyle == .decimal.
     @inlinable static func currency(_ formatter: NumberFormatter) -> Lexicon {
         Lexicon(signs: .currency(formatter), digits: .currency(formatter), separators: .currency(formatter))
     }

@@ -36,6 +36,9 @@ import Foundation
         // MARK: Instantiate
         //=--------------------------------------=
         self.identifier = identifier
+        //=--------------------------------------=
+        // MARK: Instantiate: Style == Decimal
+        //=--------------------------------------=
         self.lexicon = .standard(formatter)
     }
 

@@ -26,6 +26,39 @@ final class StyleTestsXCurrency: Tests, StyleTests {
     func XCTInterpretLocalesXCurrencies<T: Values.Currencyable>(_ value: T) {
          XCTInterpretLocalesXCurrencies(value, format: T.FormatStyle.Currency.init)
     }
+    
+    func XCTAssertDefaultFractionLimitsIsSameAs(_ formatter: NumberFormatter) {
+        let style = NumericTextStyle<Decimal>.Currency(code: formatter.currencyCode, locale: formatter.locale)
+        let lhs = style.precision.lower.fraction  ... style.precision.upper.fraction
+        let rhs = formatter.minimumFractionDigits ... formatter.minimumFractionDigits
+        XCTAssertEqual(lhs, rhs)
+    }
+}
+
+//=----------------------------------------------------------------------------=
+// MARK: + Defaults
+//=----------------------------------------------------------------------------=
+
+extension StyleTestsXCurrency {
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Tests
+    //=------------------------------------------------------------------------=
+    
+    func testDefaultFractionLimitsIsSameAsCurrencyFormatter() {
+        let formatter = NumberFormatter()
+        formatter.numberStyle = .currency
+        //=--------------------------------------=
+        // MARK: Locales, Currencies
+        //=--------------------------------------=
+        for locale in locales {
+            formatter.locale = locale
+            for currencyCode in currencyCodes {
+                formatter.currencyCode = currencyCode
+                XCTAssertDefaultFractionLimitsIsSameAs(formatter)
+            }
+        }
+    }
 }
 
 //=----------------------------------------------------------------------------=
