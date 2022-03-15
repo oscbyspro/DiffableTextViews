@@ -66,29 +66,35 @@ extension ModelsTestsXPrecision {
     
     func testDecimal() {
         XCTAssert(Precision<Decimal>(),
-        integer: 01...38, fraction: 00...38)
-        XCTAssert(Precision<Decimal>(integer: ( 07)...(07), fraction: ( 07)...(07)),
-        integer: 07...07, fraction: 07...07)
-        XCTAssert(Precision<Decimal>(integer: (-99)...(99), fraction: (-99)...(99)),
-        integer: 01...38, fraction: 00...38)
+        integer: ( 01)...(38), fraction: ( 00)...(38))
+        XCTAssert(Precision<Decimal>(
+        integer: ( 07)...(07), fraction: ( 07)...(07)),
+        integer: ( 07)...(07), fraction: ( 07)...(07))
+        XCTAssert(Precision<Decimal>(
+        integer: (-99)...(99), fraction: (-99)...(99)),
+        integer: ( 01)...(38), fraction: ( 00)...(38))
     }
     
     func testDouble() {
         XCTAssert(Precision<Double>(),
-        integer: 01...15, fraction: 00...15)
-        XCTAssert(Precision<Double>(integer: ( 07)...(07), fraction: ( 07)...(07)),
-        integer: 07...07, fraction: 07...07)
-        XCTAssert(Precision<Double>(integer: (-99)...(99), fraction: (-99)...(99)),
-        integer: 01...15, fraction: 00...15)
+        integer: ( 01)...(15), fraction: ( 00)...(15))
+        XCTAssert(Precision<Double>(
+        integer: ( 07)...(07), fraction: ( 07)...(07)),
+        integer: ( 07)...(07), fraction: ( 07)...(07))
+        XCTAssert(Precision<Double>(
+        integer: (-99)...(99), fraction: (-99)...(99)),
+        integer: ( 01)...(15), fraction: ( 00)...(15))
     }
     
     func testInt() {
         XCTAssert(Precision<Int>(),
-        integer: 01...19, fraction: 00...00)
-        XCTAssert(Precision<Int>(integer: ( 07)...(07)),
-        integer: 07...07, fraction: 00...00)
-        XCTAssert(Precision<Int>(integer: (-99)...(99)),
-        integer: 01...19, fraction: 00...00)
+        integer: ( 01)...(19), fraction: ( 00)...(00))
+        XCTAssert(Precision<Int>(
+        integer: ( 07)...(07), fraction: ( 07)...(07)),
+        integer: ( 07)...(07), fraction: ( 00)...(00))
+        XCTAssert(Precision<Int>(
+        integer: (-99)...(99), fraction: (-99)...(99)),
+        integer: ( 01)...(19), fraction: ( 00)...(00))
     }
 }
 
