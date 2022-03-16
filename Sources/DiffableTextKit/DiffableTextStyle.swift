@@ -39,7 +39,7 @@ public protocol DiffableTextStyle: Equatable {
     
     /// Returns formatted text.
     ///
-    /// This method is called in response to changes upstream while the view is active.
+    /// This method is called in response to changes upstream while the view is inactive.
     ///
     @inlinable func format(_ value: Value) -> String
     
