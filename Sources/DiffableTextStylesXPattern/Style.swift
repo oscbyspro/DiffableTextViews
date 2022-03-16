@@ -158,7 +158,7 @@ extension PatternTextStyle {
         // MARK: Capacity
         //=--------------------------------------=
         guard contents.next() == nil else {
-            throw Info([.mark(proposal.characters), "exceeded pattern capacity."])
+            throw Info([.mark(proposal.characters), "exceeded pattern capacity", .mark(value.count)])
         }
         //=--------------------------------------=
         // MARK: Value -> Commit
