@@ -70,6 +70,11 @@ public final class Cache<Key, Value> where Key: Hashable, Value: AnyObject {
     // MARK: * NSKey
     //*========================================================================*
     
+    /// A key compatible with NSCache.
+    ///
+    /// NSCache keys do not use Swift's Hashable protocol, instead,
+    /// they must subclass NSObject and override hash and isEqual(\_:).
+    ///
     @usableFromInline final class NSKey: NSObject {
         
         //=--------------------------------------------------------------------=
