@@ -24,9 +24,6 @@ final class ModelsTestsXScheme: XCTestCase {
     // MARK: State
     //=------------------------------------------------------------------------=
     
-    lazy var scheme     = UTF16.self
-    lazy var iterations = 1_000
-    
     lazy var content1__ = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
     lazy var content10_ = String(repeating: content1__, count: 10_)
     lazy var content100 = String(repeating: content1__, count: 100)
@@ -36,8 +33,8 @@ final class ModelsTestsXScheme: XCTestCase {
     //=------------------------------------------------------------------------=
     
     func calculateSizeLoop<S>(_ content: S) where S: StringProtocol {
-        for _ in 0 ..< iterations {
-            _ = scheme.size(of: content)
+        for _ in 0 ..< 1_000 {
+            _ = UTF16.size(of: content)
         }
     }
 }

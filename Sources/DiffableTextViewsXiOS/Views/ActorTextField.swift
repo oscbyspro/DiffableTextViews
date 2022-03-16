@@ -16,6 +16,11 @@ import UIKit
 // MARK: * ActorTextField
 //*============================================================================*
 
+/// A UITextField affordance layer.
+///
+/// Its UITextPositions contain the absolute position measured in UTF16.
+/// The offset from one position to another is therefore measured in constant time.
+///
 @usableFromInline final class ActorTextField: BasicTextField.View {
     @usableFromInline typealias Position = DiffableTextKit.Position<UTF16>
     
@@ -55,10 +60,12 @@ import UIKit
     // MARK: Offsets -> Positions
     //=------------------------------------------------------------------------=
 
+    /// - Complexity: O(1).
     @inlinable func position(_ offset: UITextPosition) -> Position {
         Position(wrapped.offset(from: wrapped.beginningOfDocument, to: offset))
     }
     
+    /// - Complexity: O(1).
     @inlinable func positions(_ offsets: UITextRange) -> Range<Position> {
         position(offsets.start) ..< position(offsets.end)
     }
@@ -67,10 +74,12 @@ import UIKit
     // MARK: Positions -> Offsets
     //=------------------------------------------------------------------------=
     
+    /// - Complexity: O(1).
     @inlinable func offset(_ position: Position) -> UITextPosition {
         wrapped.position(from: wrapped.beginningOfDocument, offset: position.offset)!
     }
     
+    /// - Complexity: O(1).
     @inlinable func offsets(_ positions: Range<Position>) -> UITextRange {
         wrapped.textRange(from: offset(positions.lowerBound), to: offset(positions.upperBound))!
     }
