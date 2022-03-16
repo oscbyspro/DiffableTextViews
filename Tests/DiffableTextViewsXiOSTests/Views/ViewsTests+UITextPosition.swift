@@ -13,8 +13,6 @@
 import UIKit
 import XCTest
 
-@testable import DiffableTextViewsXiOS
-
 //*============================================================================*
 // MARK: * ViewsTests x UITextPosition
 //*============================================================================*
@@ -25,11 +23,47 @@ final class ViewsTestsXUITextPosition: XCTestCase {
     // MARK: State
     //=------------------------------------------------------------------------=
     
-    lazy var view = UITextField()
+    lazy var wrapped = UITextField()
     
     lazy var content1__ = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
     lazy var content10_ = String(repeating: content1__, count: 10_)
     lazy var content100 = String(repeating: content1__, count: 100)
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Setup
+    //=------------------------------------------------------------------------=
+    
+    override func setUp() {
+        wrapped.text = nil
+    }
+}
+
+//=----------------------------------------------------------------------------=
+// MARK: + Scheme
+//=----------------------------------------------------------------------------=
+
+extension ViewsTestsXUITextPosition {
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Tests
+    //=------------------------------------------------------------------------=
+    
+    func testUsesUTF16() {
+        wrapped.text = "🇸🇪"
+        //=--------------------------------------=
+        // MARK: Assert
+        //=--------------------------------------=
+        XCTAssertEqual(8, wrapped.text!.utf8 .count)
+        XCTAssertEqual(4, wrapped.text!.utf16.count)
+        XCTAssertEqual(4, wrapped.offset(from: wrapped.beginningOfDocument, to: wrapped.endOfDocument))
+    }
+}
+
+//=----------------------------------------------------------------------------=
+// MARK: + Measurements
+//=----------------------------------------------------------------------------=
+
+extension ViewsTestsXUITextPosition {
     
     //=------------------------------------------------------------------------=
     // MARK: Loop
@@ -37,10 +71,10 @@ final class ViewsTestsXUITextPosition: XCTestCase {
     
     func calculateSizeLoop() {
         for _ in 0 ..< 1_000 {
-            _ = view.offset(from: view.beginningOfDocument, to: view.endOfDocument)
+            _ = wrapped.offset(from: wrapped.beginningOfDocument, to: wrapped.endOfDocument)
         }
     }
-    
+
     //=------------------------------------------------------------------------=
     // MARK: Tests
     //=------------------------------------------------------------------------=
@@ -49,8 +83,8 @@ final class ViewsTestsXUITextPosition: XCTestCase {
     ///
     /// - 0.909 sec.
     ///
-    func test1__() {
-        view.text = content1__
+    func testMeasure1__() {
+        wrapped.text = content1__
         
         measure {
             calculateSizeLoop()
@@ -61,8 +95,8 @@ final class ViewsTestsXUITextPosition: XCTestCase {
     ///
     /// - 0.914 sec.
     ///
-    func test10_() {
-        view.text = content10_
+    func testMeasure10_() {
+        wrapped.text = content10_
 
         measure {
             calculateSizeLoop()
@@ -73,8 +107,8 @@ final class ViewsTestsXUITextPosition: XCTestCase {
     ///
     /// - 0.917 sec.
     ///
-    func test100() {
-        view.text = content100
+    func testMeasure100() {
+        wrapped.text = content100
 
         measure {
             calculateSizeLoop()
