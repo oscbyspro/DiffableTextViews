@@ -13,7 +13,7 @@
 
 /// An error message that contains a description in DEBUG mode.
 ///
-/// - Uses conditional compilation.
+/// It uses conditional compilation such that it has no performance cost in RELEASE mode.
 ///
 public struct Info: CustomStringConvertible, Error {
     @usableFromInline static let description = "[DEBUG]"
@@ -44,13 +44,8 @@ public struct Info: CustomStringConvertible, Error {
     //=------------------------------------------------------------------------=
     
     @inlinable @inline(__always)
-    public init(_ components: () -> [Component]) {
-        self.init(description: components().lazy.map(\.content).joined(separator: " "))
-    }
-    
-    @inlinable @inline(__always)
     public init(_ components: @autoclosure () -> [Component]) {
-        self.init(components)
+        self.init(description: components().map(\.content).joined(separator: " "))
     }
     
     //=------------------------------------------------------------------------=
@@ -69,13 +64,8 @@ public struct Info: CustomStringConvertible, Error {
     //=------------------------------------------------------------------------=
     
     @inlinable @inline(__always)
-    public static func print(_ components: () -> [Component]) {
-        Self.print(String(describing: Info(components())))
-    }
-    
-    @inlinable @inline(__always)
     public static func print(_ components: @autoclosure () -> [Component]) {
-        Self.print(String(describing: Info(components())))
+        self.print(String(describing: Info(components())))
     }
     
     //*========================================================================*
@@ -98,8 +88,8 @@ public struct Info: CustomStringConvertible, Error {
             self.content = content
         }
         
-        @inlinable public init(stringLiteral value: StringLiteralType) {
-            self.content = value
+        @inlinable public init(stringLiteral content: StringLiteralType) {
+            self.content = content
         }
         
         //=--------------------------------------------------------------------=
@@ -111,7 +101,7 @@ public struct Info: CustomStringConvertible, Error {
         }
         
         @inlinable public static func mark(_ value: Any) -> Self {
-            Self(content: "« \(String(describing: value)) »")
+            Self(content: "« \(value) »")
         }
     }
 }
