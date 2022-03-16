@@ -56,11 +56,12 @@ struct DiffableTextFieldXAmount: View {
     // MARK: Body
     //=------------------------------------------------------------------------=
 
+    /// default precision is chosen based on currency
     var body: some View {
         DiffableTextField($amount) {
             .currency(code: "SEK")
             .bounds((0 as Decimal)...)
-            // .precision(integer: 1..., fraction: 2) (currency based default)
+            // .precision(integer: 1..., fraction: 2)
         }
         .environment(\.locale, Locale(identifier: "en_SE"))
     }
