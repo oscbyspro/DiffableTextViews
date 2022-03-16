@@ -142,7 +142,7 @@ struct DiffableTextFieldXAmount: View {
         DiffableTextField($amount) {
             .currency(code: "SEK")
             .bounds((0 as Decimal)...)
-            .precision(integer: 1..., fraction: 2)
+            // .precision(integer: 1..., fraction: 2) (currency based default)
         }
         .environment(\.locale, Locale(identifier: "en_SE"))
     }
