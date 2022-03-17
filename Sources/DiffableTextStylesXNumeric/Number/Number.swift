@@ -16,8 +16,8 @@ import DiffableTextKit
 /// A compositional model of a number.
 ///
 /// - Its integer digits MUST contain at least one digit.
-/// - Its integer digits MUST contain no redundant prefix zeros.
-/// - It MUST contain no fraction digits when it contains no separator.
+/// - Its integer digits MUST NOT contain redundant prefix zeros.
+/// - It MUST NOT contain fraction digits without containing a fraction separator.
 ///
 @usableFromInline struct Number: Glyphs {
     

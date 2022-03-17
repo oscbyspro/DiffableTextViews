@@ -43,8 +43,11 @@ extension StyleTestsXCurrency {
     // MARK: Tests
     //=------------------------------------------------------------------------=
     
-    func testDefaultFractionLimitsUSD() {
-        XCTAssertDefaultFractionLimits(2...2, locale: Locale(identifier: "en_US"), code: "USD")
+    func testDefaultFractionLimits_JPY_USD_BHD() {
+        let locale = Locale(identifier: "en_US")
+        XCTAssertDefaultFractionLimits(0...0, locale: locale, code: "JPY")
+        XCTAssertDefaultFractionLimits(2...2, locale: locale, code: "USD")
+        XCTAssertDefaultFractionLimits(3...3, locale: locale, code: "BHD")
     }
     
     func testDefaultFractionLimitsIsSameAsCurrencyFormatter() {

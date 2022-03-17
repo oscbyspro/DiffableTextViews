@@ -36,8 +36,16 @@ import Foundation
     // MARK: Preferences
     //=------------------------------------------------------------------------=
     
+    /// The bounds preferred by this instance.
+    ///
+    /// - The return value of this method MUST NOT depend on locale (v3.1.0).
+    ///
     @inlinable func bounds<T>(_ value: T.Type) -> Bounds<T>
     
+    /// The precision preferred by this instance.
+    ///
+    /// - The return value of this method MUST NOT depend on locale (v3.1.0).
+    ///
     @inlinable func precision<T>(_ value: T.Type) -> Precision<T>
     
     //=------------------------------------------------------------------------=

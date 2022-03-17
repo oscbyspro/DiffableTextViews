@@ -47,7 +47,7 @@ public struct _NumericTextStyle<Format: NumericTextFormat>: DiffableTextStyle {
         adapter.format.rounded(.towardZero)
     }
 
-    @inlinable var scheme: Format.NumericTextScheme {
+    @inlinable var scheme: Scheme {
         adapter.scheme
     }
     
