@@ -9,7 +9,7 @@
 
 #if DEBUG
 
-import XCTest
+import DiffableTestKit
 
 //*============================================================================*
 // MARK: * ModelsTests x Scheme
@@ -21,20 +21,12 @@ import XCTest
 final class ModelsTestsXScheme: XCTestCase {
     
     //=------------------------------------------------------------------------=
-    // MARK: State
-    //=------------------------------------------------------------------------=
-    
-    lazy var content1__ = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-    lazy var content10_ = String(repeating: content1__, count: 10_)
-    lazy var content100 = String(repeating: content1__, count: 100)
-
-    //=------------------------------------------------------------------------=
     // MARK: Loop
     //=------------------------------------------------------------------------=
     
-    func calculateSizeLoop<S>(_ content: S) where S: StringProtocol {
+    func sizeLoop<S>(_ alphabet: S) where S: StringProtocol {
         for _ in 0 ..< 1_000 {
-            _ = UTF16.size(of: content)
+            _ = UTF16.size(of: alphabet)
         }
     }
 }
@@ -56,7 +48,7 @@ extension ModelsTestsXScheme {
     ///
     func testString1__() {
         measure {
-            calculateSizeLoop(content1__)
+            sizeLoop(alphabet1__)
         }
     }
     
@@ -67,7 +59,7 @@ extension ModelsTestsXScheme {
     ///
     func testString10_() {
         measure {
-            calculateSizeLoop(content10_)
+            sizeLoop(alphabet10_)
         }
     }
     
@@ -78,7 +70,7 @@ extension ModelsTestsXScheme {
     ///
     func testString100() {
         measure {
-            calculateSizeLoop(content100)
+            sizeLoop(alphabet100)
         }
     }
 }
@@ -100,7 +92,7 @@ extension ModelsTestsXScheme {
     ///
     func testSubstring1__() {
         measure {
-            calculateSizeLoop(content1__[...])
+            sizeLoop(alphabet1__[...])
         }
     }
     
@@ -111,7 +103,7 @@ extension ModelsTestsXScheme {
     ///
     func testSubstring10_() {
         measure {
-            calculateSizeLoop(content10_[...])
+            sizeLoop(alphabet10_[...])
         }
     }
     
@@ -122,7 +114,7 @@ extension ModelsTestsXScheme {
     ///
     func testSubstring100() {
         measure {
-            calculateSizeLoop(content100[...])
+            sizeLoop(alphabet100[...])
         }
     }
 }

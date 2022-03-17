@@ -11,12 +11,15 @@
 #if canImport(UIKit)
 
 import UIKit
-import XCTest
+import DiffableTestKit
 
 //*============================================================================*
 // MARK: * ViewsTests x UITextPosition
 //*============================================================================*
 
+/// ```
+/// Asserts: UITextField/offset(from:to:) is O(1).
+/// ```
 final class ViewsTestsXUITextPosition: XCTestCase {
     
     //=------------------------------------------------------------------------=
@@ -25,16 +28,12 @@ final class ViewsTestsXUITextPosition: XCTestCase {
     
     lazy var wrapped = UITextField()
     
-    lazy var content1__ = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-    lazy var content10_ = String(repeating: content1__, count: 10_)
-    lazy var content100 = String(repeating: content1__, count: 100)
-    
     //=------------------------------------------------------------------------=
     // MARK: Setup
     //=------------------------------------------------------------------------=
     
     override func setUp() {
-        wrapped.text = nil
+        super.setUp(); wrapped.text = nil
     }
 }
 
@@ -48,7 +47,7 @@ extension ViewsTestsXUITextPosition {
     // MARK: Tests
     //=------------------------------------------------------------------------=
     
-    func testUsesUTF16() {
+    func testUITextFieldUsesUTF16() {
         wrapped.text = "🇸🇪"
         //=--------------------------------------=
         // MARK: Assert
@@ -69,7 +68,7 @@ extension ViewsTestsXUITextPosition {
     // MARK: Loop
     //=------------------------------------------------------------------------=
     
-    func calculateSizeLoop() {
+    func offsetLoop() {
         for _ in 0 ..< 1_000 {
             _ = wrapped.offset(from: wrapped.beginningOfDocument, to: wrapped.endOfDocument)
         }
@@ -84,11 +83,8 @@ extension ViewsTestsXUITextPosition {
     /// - 0.909 sec.
     ///
     func testMeasure1__() {
-        wrapped.text = content1__
-        
-        measure {
-            calculateSizeLoop()
-        }
+        wrapped.text = alphabet1__
+        measure(offsetLoop)
     }
     
     /// 1,000,000 iterations:
@@ -96,11 +92,8 @@ extension ViewsTestsXUITextPosition {
     /// - 0.914 sec.
     ///
     func testMeasure10_() {
-        wrapped.text = content10_
-
-        measure {
-            calculateSizeLoop()
-        }
+        wrapped.text = alphabet10_
+        measure(offsetLoop)
     }
     
     /// 1,000,000 iterations:
@@ -108,11 +101,8 @@ extension ViewsTestsXUITextPosition {
     /// - 0.917 sec.
     ///
     func testMeasure100() {
-        wrapped.text = content100
-
-        measure {
-            calculateSizeLoop()
-        }
+        wrapped.text = alphabet100
+        measure(offsetLoop)
     }
 }
 
