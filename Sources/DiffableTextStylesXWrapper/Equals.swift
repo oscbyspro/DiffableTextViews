@@ -54,10 +54,8 @@ import DiffableTextViewsXiOS
 // MARK: * Equals x iOS
 //*============================================================================*
 
-extension EqualsTextStyle:
-WrapperTextStyleXiOS,
-DiffableTextStyleXiOS where
-Style: DiffableTextStyleXiOS { }
+extension EqualsTextStyle: WrapperTextStyleXiOS,
+DiffableTextStyleXiOS where Style: DiffableTextStyleXiOS { }
 
 #endif
 

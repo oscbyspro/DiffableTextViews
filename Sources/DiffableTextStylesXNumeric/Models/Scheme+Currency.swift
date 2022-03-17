@@ -97,10 +97,9 @@ import Foundation
         // MARK: Initializers
         //=--------------------------------------------------------------------=
         
-        @inlinable init(_ formatter: NumberFormatter) {
-            self.fraction =
-            formatter.minimumFractionDigits ...
-            formatter.maximumFractionDigits
+        @inlinable init(_   formatter: NumberFormatter) {
+            self.fraction = formatter.minimumFractionDigits ...
+                            formatter.maximumFractionDigits
         }
     }
 }

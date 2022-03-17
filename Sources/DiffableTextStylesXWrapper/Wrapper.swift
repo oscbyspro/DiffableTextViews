@@ -86,9 +86,7 @@ import DiffableTextViewsXiOS
 //*============================================================================*
 
 @usableFromInline protocol WrapperTextStyleXiOS:
-WrapperTextStyle,
-DiffableTextStyleXiOS where
-Style: DiffableTextStyleXiOS { }
+WrapperTextStyle, DiffableTextStyleXiOS where Style: DiffableTextStyleXiOS { }
 
 //=----------------------------------------------------------------------------=
 // MARK: + Details

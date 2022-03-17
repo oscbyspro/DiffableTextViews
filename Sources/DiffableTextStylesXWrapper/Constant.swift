@@ -58,10 +58,8 @@ import DiffableTextViewsXiOS
 // MARK: * Constant x iOS
 //*============================================================================*
 
-extension ConstantTextStyle:
-WrapperTextStyleXiOS,
-DiffableTextStyleXiOS where
-Style: DiffableTextStyleXiOS { }
+extension ConstantTextStyle: WrapperTextStyleXiOS,
+DiffableTextStyleXiOS where Style: DiffableTextStyleXiOS { }
 
 #endif
 
