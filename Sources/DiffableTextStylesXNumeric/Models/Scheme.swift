@@ -52,6 +52,10 @@ import Foundation
     // MARK: Autocorrect
     //=------------------------------------------------------------------------=
     
+    /// Autocorrects a snapshot in ways specific to this instance.
+    ///
+    /// - It may mark currency expressions as virtual, for example.
+    ///
     @inlinable func autocorrect(_ snapshot: inout Snapshot)
 }
 
