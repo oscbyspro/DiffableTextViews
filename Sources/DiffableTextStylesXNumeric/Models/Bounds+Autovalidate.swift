@@ -32,7 +32,7 @@ extension Bounds {
     //=------------------------------------------------------------------------=
     
     @inlinable func autovalidate(_ sign: Sign) throws {
-        guard sign == sign.transform(autocorrect) else {
+        guard sign == sign.transformed(autocorrect) else {
             throw Info([.mark(sign), "is not in", .mark(self)])
         }
     }

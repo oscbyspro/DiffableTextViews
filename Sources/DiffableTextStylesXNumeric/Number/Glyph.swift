@@ -82,7 +82,11 @@ extension Glyph {
     // MARK: Transformations
     //=------------------------------------------------------------------------=
     
-    @inlinable func transform(_ transform: (inout Self) -> Void) -> Self {
+    @inlinable mutating func transform(_ transform: (inout Self) -> Void) {
+        transform(&self)
+    }
+    
+    @inlinable func transformed(_ transform: (inout Self) -> Void) -> Self {
         var result = self; transform(&result); return result
     }
 }
