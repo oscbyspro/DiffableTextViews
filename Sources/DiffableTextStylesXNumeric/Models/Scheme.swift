@@ -118,7 +118,7 @@ extension NumericTextScheme {
 extension NumericTextSchemeXReuseable {
     
     //=------------------------------------------------------------------------=
-    // MARK: Search
+    // MARK: Initializers
     //=------------------------------------------------------------------------=
         
     @inlinable static func reuse(_ id: ID) -> Self {
