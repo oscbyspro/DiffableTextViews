@@ -16,37 +16,34 @@ import XCTest
 @testable import DiffableTextViewsXiOS
 
 //*============================================================================*
-// MARK: * ViewsTests x UITextField
+// MARK: * ViewsTests x ProxyTextField
 //*============================================================================*
 
-final class ViewsTestsXUITextField: XCTestCase {
+final class ViewsTestsXProxyTextField: XCTestCase {
     
     //=------------------------------------------------------------------------=
     // MARK: State
     //=------------------------------------------------------------------------=
     
-    lazy var wrapped = BasicTextField()
-    lazy var proxy = ProxyTextField(wrapped)
+    lazy var view = ProxyTextField(BasicTextField())
     
     //=------------------------------------------------------------------------=
     // MARK: Tests
     //=------------------------------------------------------------------------=
     
     func testForceUnwrappingTextIsOK() {
-        wrapped.text = nil
-        XCTAssertNotNil(wrapped.text)
-        XCTAssertEqual(proxy.text.value, String())
+        view.wrapped.text = nil
+        XCTAssertEqual(view.text.value, String())
     }
     
     func testForceUnwrappingSelectedTextRangeIsOK() {
-        wrapped.selectedTextRange = nil
-        XCTAssertNotNil(wrapped.selectedTextRange)
-        XCTAssertEqual(proxy.selection.value, String())
+        view.wrapped.selectedTextRange = nil
+        XCTAssertEqual(view.selection.value, String())
     }
     
     func testForceUnwrappingMarkedTextRangeIsBad() {
-        XCTAssertNil(wrapped.markedTextRange)
-        XCTAssertEqual(proxy.selection.marked, String())
+        XCTAssertNil(view.wrapped.markedTextRange)
+        XCTAssertEqual(view.selection.marked, String())
     }
 }
 

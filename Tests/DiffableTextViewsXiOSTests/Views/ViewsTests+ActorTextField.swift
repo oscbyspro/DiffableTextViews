@@ -13,48 +13,50 @@
 import UIKit
 import DiffableTestKit
 
+@testable import DiffableTextViewsXiOS
+
 //*============================================================================*
-// MARK: * ViewsTests x UITextPosition
+// MARK: * ViewsTests x ActorTextField
 //*============================================================================*
 
 /// ```
 /// Asserts: UITextField/offset(from:to:) is O(1).
 /// ```
-final class ViewsTestsXUITextPosition: XCTestCase {
+final class ViewsTestsXActorTextField: XCTestCase {
     
     //=------------------------------------------------------------------------=
     // MARK: State
     //=------------------------------------------------------------------------=
     
-    lazy var wrapped = UITextField()
+    lazy var view = ActorTextField(BasicTextField())
     
     //=------------------------------------------------------------------------=
     // MARK: Setup
     //=------------------------------------------------------------------------=
     
     override func setUp() {
-        super.setUp(); wrapped.text = nil
+        super.setUp(); view.wrapped.text = nil
     }
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: + Scheme
+// MARK: + Position
 //=----------------------------------------------------------------------------=
 
-extension ViewsTestsXUITextPosition {
+extension ViewsTestsXActorTextField {
     
     //=------------------------------------------------------------------------=
     // MARK: Tests
     //=------------------------------------------------------------------------=
     
-    func testUITextFieldUsesUTF16() {
-        wrapped.text = "🇸🇪"
+    func testPositionsAreMeasuredInUTF16() {
+        view.wrapped.text = "🇸🇪"
         //=--------------------------------------=
         // MARK: Assert
         //=--------------------------------------=
-        XCTAssertEqual(8, wrapped.text!.utf8 .count)
-        XCTAssertEqual(4, wrapped.text!.utf16.count)
-        XCTAssertEqual(4, wrapped.offset(from: wrapped.beginningOfDocument, to: wrapped.endOfDocument))
+        XCTAssertEqual(8, view.wrapped.text!.utf8 .count)
+        XCTAssertEqual(4, view.wrapped.text!.utf16.count)
+        XCTAssertEqual(4, view.size)
     }
 }
 
@@ -62,15 +64,15 @@ extension ViewsTestsXUITextPosition {
 // MARK: + Measurements
 //=----------------------------------------------------------------------------=
 
-extension ViewsTestsXUITextPosition {
+extension ViewsTestsXActorTextField {
     
     //=------------------------------------------------------------------------=
     // MARK: Loop
     //=------------------------------------------------------------------------=
     
     func offsetLoop() {
-        for _ in 0 ..< 1_000 {
-            _ = wrapped.offset(from: wrapped.beginningOfDocument, to: wrapped.endOfDocument)
+        for _ in 0 ..< 1_000_000 {
+            _ = view.size
         }
     }
 
@@ -83,7 +85,7 @@ extension ViewsTestsXUITextPosition {
     /// - 0.909 sec.
     ///
     func testMeasure1__() {
-        wrapped.text = alphabet1__
+        view.wrapped.text = alphabet1__
         measure(offsetLoop)
     }
     
@@ -92,7 +94,7 @@ extension ViewsTestsXUITextPosition {
     /// - 0.914 sec.
     ///
     func testMeasure10_() {
-        wrapped.text = alphabet10_
+        view.wrapped.text = alphabet10_
         measure(offsetLoop)
     }
     
@@ -101,7 +103,7 @@ extension ViewsTestsXUITextPosition {
     /// - 0.917 sec.
     ///
     func testMeasure100() {
-        wrapped.text = alphabet100
+        view.wrapped.text = alphabet100
         measure(offsetLoop)
     }
 }

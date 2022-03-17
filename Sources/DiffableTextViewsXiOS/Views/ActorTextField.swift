@@ -40,6 +40,10 @@ import UIKit
         positions(wrapped.selectedTextRange!)
     }
     
+    @inlinable var size: Position {
+        position(wrapped.endOfDocument)
+    }
+    
     //=------------------------------------------------------------------------=
     // MARK: Transformations
     //=------------------------------------------------------------------------=

@@ -12,7 +12,7 @@
 //*============================================================================*
 
 /// A model representing a position in text.
-public struct Position<Scheme: DiffableTextKit.Scheme>: Comparable {
+public struct Position<Scheme: DiffableTextKit.Scheme>: Comparable, ExpressibleByIntegerLiteral {
     
     //=------------------------------------------------------------------------=
     // MARK: State
@@ -25,6 +25,10 @@ public struct Position<Scheme: DiffableTextKit.Scheme>: Comparable {
     //=------------------------------------------------------------------------=
     
     @inlinable public init(_ offset: Int = 0) {
+        self.offset = offset
+    }
+    
+    @inlinable public init(integerLiteral offset: IntegerLiteralType) {
         self.offset = offset
     }
     
