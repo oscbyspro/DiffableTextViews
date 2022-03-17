@@ -30,7 +30,6 @@ import Foundation
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    /// Creates an empty instance with reserved capacity equal to count.
     @inlinable init(count: Int) {
         self.components = [:]; self.components.reserveCapacity(count)
         self.characters = [:]; self.characters.reserveCapacity(count)
@@ -53,17 +52,14 @@ import Foundation
     // MARK: Initializers - Static
     //=------------------------------------------------------------------------=
     
-    /// Creates a new instance with ASCII component-character links.
     @inlinable static func ascii() -> Self {
         Self(character: \.character)
     }
     
-    /// Creates a new instance with localized standard component-character links.
     @inlinable static func standard(_ formatter: NumberFormatter) -> Self {
         Self(character: { $0.standard(formatter) })
     }
     
-    /// Creates a new instance with localized currency component-character links.
     @inlinable static func currency(_ formatter: NumberFormatter) -> Self {
         Self(character: { $0.currency(formatter) })
     }
@@ -94,12 +90,10 @@ import Foundation
     // MARK: Utilities
     //=------------------------------------------------------------------------=
     
-    /// This is a nonambigious statement since this object contains bidirectional links.
     @inlinable func contains(_ character: Character) -> Bool {
         components[character] != nil
     }
     
-    /// This is a nonambigious statement since this object contains bidirectional links.
     @inlinable func contains(_ component: Component) -> Bool {
         characters[component] != nil
     }

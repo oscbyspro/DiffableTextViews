@@ -5,8 +5,8 @@ A document with issues that have been encountered.
 ## FormatStyle: UInt(64) > Int(64).max crashes.
 
 ```swift
-let value = UInt(Int.max) + 1
-let crash = value.formatted(.number)
+let works = UInt(Int.max).advanced(by: 0).formatted(.number)
+let crash = UInt(Int.max).advanced(by: 1).formatted(.number)
 ```
 
 ## FormatStyle: parse(format(value)) fails.
