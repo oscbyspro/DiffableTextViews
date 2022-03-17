@@ -38,7 +38,7 @@ extension Bounds {
     }
 
     //=------------------------------------------------------------------------=
-    // MARK: Value x Number
+    // MARK: Value
     //=------------------------------------------------------------------------=
     
     @inlinable func autovalidate(_ value: Value, _ number: inout Number) throws {
@@ -48,7 +48,7 @@ extension Bounds {
     }
     
     //=------------------------------------------------------------------------=
-    // MARK: Value x Number - Helpers
+    // MARK: Value - Helpers
     //=------------------------------------------------------------------------=
     
     @inlinable func edge(_ value: Value) throws -> Bool {

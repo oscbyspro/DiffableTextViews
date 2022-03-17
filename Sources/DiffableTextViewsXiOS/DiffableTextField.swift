@@ -68,9 +68,9 @@ public struct DiffableTextField<Style: DiffableTextStyleXiOS>: UIViewRepresentab
         //=--------------------------------------=
         let uiView = BasicTextField()
         uiView.delegate = context.coordinator
+        uiView.font = UIFont(DiffableTextFont.body.monospaced())
         uiView.setContentHuggingPriority(.defaultHigh, for: .vertical)
         uiView.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
-        uiView.font = UIFont(DiffableTextFont.body.monospaced())
         //=--------------------------------------=
         // MARK: ProxyTextField
         //=--------------------------------------=
@@ -184,14 +184,15 @@ public struct DiffableTextField<Style: DiffableTextStyleXiOS>: UIViewRepresentab
         
         @inlinable public func textFieldDidChangeSelection(_ textField: UITextField) {
             guard !lock.isLocked else { return }
+            let selection = downstream.selection
             //=----------------------------------=
             // MARK: Update
             //=----------------------------------=
-            self.context.update(selection: downstream.selection, momentum: downstream.momentum)
+            self.context.update(selection: selection, momentum: downstream.momentum)
             //=----------------------------------=
             // MARK: Update Downstream If Needed
             //=----------------------------------=
-            if context.field.positions !=  downstream.selection {
+            if selection != context.field.positions {
                 lock.perform {
                     self.downstream.update(selection: context.field.positions)
                 }

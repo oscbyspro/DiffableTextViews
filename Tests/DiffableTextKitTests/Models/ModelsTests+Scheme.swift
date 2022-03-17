@@ -48,7 +48,7 @@ extension ModelsTestsXScheme {
     ///
     func testString1__() {
         measure {
-            sizeLoop(alphabet1__)
+            sizeLoop(alphabet)
         }
     }
     
@@ -59,7 +59,7 @@ extension ModelsTestsXScheme {
     ///
     func testString10_() {
         measure {
-            sizeLoop(alphabet10_)
+            sizeLoop(alphabet10)
         }
     }
     
@@ -92,7 +92,7 @@ extension ModelsTestsXScheme {
     ///
     func testSubstring1__() {
         measure {
-            sizeLoop(alphabet1__[...])
+            sizeLoop(alphabet[...])
         }
     }
     
@@ -103,7 +103,7 @@ extension ModelsTestsXScheme {
     ///
     func testSubstring10_() {
         measure {
-            sizeLoop(alphabet10_[...])
+            sizeLoop(alphabet10[...])
         }
     }
     

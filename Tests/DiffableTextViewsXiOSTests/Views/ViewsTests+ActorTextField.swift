@@ -85,7 +85,7 @@ extension ViewsTestsXActorTextField {
     /// - 0.909 sec.
     ///
     func testMeasure1__() {
-        view.wrapped.text = alphabet1__
+        view.wrapped.text = alphabet
         measure(sizeLoop)
     }
     
@@ -94,7 +94,7 @@ extension ViewsTestsXActorTextField {
     /// - 0.914 sec.
     ///
     func testMeasure10_() {
-        view.wrapped.text = alphabet10_
+        view.wrapped.text = alphabet10
         measure(sizeLoop)
     }
     

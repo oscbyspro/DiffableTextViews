@@ -11,6 +11,6 @@
 // MARK: * Constants
 //*============================================================================*
 
-public let alphabet1__ = "ABCDEFGHIJJKLMNOPQRSTUVWXYZ"
-public let alphabet10_ = String(repeating: alphabet1__, count: 10_)
-public let alphabet100 = String(repeating: alphabet1__, count: 100)
+public let alphabet    = "ABCDEFGHIJJKLMNOPQRSTUVWXYZ"
+public let alphabet10  = String(repeating: alphabet, count: 10)
+public let alphabet100 = String(repeating: alphabet, count: 100)
