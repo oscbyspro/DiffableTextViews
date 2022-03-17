@@ -60,7 +60,7 @@ extension Bounds {
         //=--------------------------------------=
         // MARK: Value == Min
         //=--------------------------------------=
-        if value == min { return value < .zero || min == max }
+        if value == min { return value < .zero }
         //=--------------------------------------=
         // MARK: Failure
         //=--------------------------------------=
