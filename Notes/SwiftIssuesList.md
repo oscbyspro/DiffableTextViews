@@ -13,7 +13,7 @@ let crash = UInt(Int.max).advanced(by: 1).formatted(.number)
 
 ```swift
 let code = "SEK"; let locale = Locale(identifier: "en_US")
-let style = IntegerFormatStyle<Int>.Currency(code: code).locale(locale)
+let style = IntegerFormatStyle<Int>.Currency(code: code, locale: locale)
 let crash = try! style.parseStrategy.parse(style.format(123))
 ```
 

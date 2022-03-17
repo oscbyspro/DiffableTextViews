@@ -84,6 +84,12 @@ extension NumericTextScheme {
     @inlinable func precision<T>(_ value: T.Type) -> Precision<T> where T: Value {
         Precision()
     }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Autocorrect
+    //=------------------------------------------------------------------------=
+    
+    @inlinable func autocorrect(_ snapshot: inout Snapshot) { }
 }
 
 //*============================================================================*
