@@ -70,7 +70,7 @@ extension ViewsTestsXActorTextField {
     // MARK: Loop
     //=------------------------------------------------------------------------=
     
-    func offsetLoop() {
+    func sizeLoop() {
         for _ in 0 ..< 1_000_000 {
             _ = view.size
         }
@@ -86,7 +86,7 @@ extension ViewsTestsXActorTextField {
     ///
     func testMeasure1__() {
         view.wrapped.text = alphabet1__
-        measure(offsetLoop)
+        measure(sizeLoop)
     }
     
     /// 1,000,000 iterations:
@@ -95,7 +95,7 @@ extension ViewsTestsXActorTextField {
     ///
     func testMeasure10_() {
         view.wrapped.text = alphabet10_
-        measure(offsetLoop)
+        measure(sizeLoop)
     }
     
     /// 1,000,000 iterations:
@@ -104,7 +104,7 @@ extension ViewsTestsXActorTextField {
     ///
     func testMeasure100() {
         view.wrapped.text = alphabet100
-        measure(offsetLoop)
+        measure(sizeLoop)
     }
 }
 
