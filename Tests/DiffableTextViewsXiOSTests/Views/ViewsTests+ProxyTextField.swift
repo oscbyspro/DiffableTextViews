@@ -33,11 +33,13 @@ final class ViewsTestsXProxyTextField: XCTestCase {
     
     func testForceUnwrappingTextIsOK() {
         view.wrapped.text = nil
+        XCTAssertNotNil(view.wrapped.text)
         XCTAssertEqual(view.text.value, String())
     }
     
     func testForceUnwrappingSelectedTextRangeIsOK() {
         view.wrapped.selectedTextRange = nil
+        XCTAssertNotNil(view.wrapped.selectedTextRange)
         XCTAssertEqual(view.selection.value, String())
     }
     
