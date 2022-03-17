@@ -67,7 +67,7 @@ A text field that binds values and formats them as you type.
 |---|---------|-------------|
 | :iphone: | SwiftUI | Value, style, done |
 | :mountain: | Environment | Uses environment values |
-| :balance_scale: | Monospaced | The standard font is monospaced |
+| :balance_scale: | Monospaced | Standard font is monospaced |
 | :sewing_needle: | Customizable | Customized using [ProxyTextField](Sources/DiffableTextViewsXiOS/Views) |
 | :bulb: | Smart | Styles may provide sensible defaults |
 

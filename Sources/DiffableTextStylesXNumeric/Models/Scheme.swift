@@ -24,7 +24,7 @@ import Foundation
 // MARK: * Translation
 //*============================================================================*
 
-@dynamicMemberLookup public protocol NumericTextScheme: Identifiable {
+public protocol NumericTextScheme {
 
     //=------------------------------------------------------------------------=
     // MARK: State
@@ -66,14 +66,6 @@ import Foundation
 extension NumericTextScheme {
     
     //=------------------------------------------------------------------------=
-    // MARK: Accessors
-    //=------------------------------------------------------------------------=
-    
-    @inlinable subscript<T>(dynamicMember keyPath: KeyPath<ID, T>) -> T {
-        id[keyPath: keyPath]
-    }
-    
-    //=------------------------------------------------------------------------=
     // MARK: Preferences
     //=------------------------------------------------------------------------=
     
@@ -96,7 +88,8 @@ extension NumericTextScheme {
 // MARK: * Scheme x Reusable
 //*============================================================================*
 
-@usableFromInline protocol NumericTextSchemeXReuseable: AnyObject, Scheme {
+@dynamicMemberLookup @usableFromInline
+protocol NumericTextSchemeXReuseable: AnyObject, Identifiable, Scheme {
     
     //=------------------------------------------------------------------------=
     // MARK: Initializers
@@ -123,5 +116,13 @@ extension NumericTextSchemeXReuseable {
         
     @inlinable static func reuse(_ id: ID) -> Self {
         cache.reuse(id, make: Self(id))
+    }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Accessors
+    //=------------------------------------------------------------------------=
+    
+    @inlinable subscript<T>(dynamicMember keyPath: KeyPath<ID, T>) -> T {
+        id[keyPath: keyPath]
     }
 }
