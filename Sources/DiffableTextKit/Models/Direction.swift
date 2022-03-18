@@ -12,7 +12,7 @@
 //*============================================================================*
 
 /// A forwards/backwards model.
-@frozen @usableFromInline enum Direction {
+@frozen public enum Direction {
     
     //=------------------------------------------------------------------------=
     // MARK: Instances
@@ -25,19 +25,17 @@
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable init?<T>(_ start: T, to end: T) where T: Comparable {
-        switch true {
-        case start < end: self =  .forwards
-        case start > end: self = .backwards
-        default: return nil
-        }
+    @inlinable public init?<T>(_ start: T, to end: T) where T: Comparable {
+        if      start < end { self =  .forwards }
+        else if start > end { self = .backwards }
+        else { return   nil }
     }
     
     //=------------------------------------------------------------------------=
     // MARK: Transformations
     //=------------------------------------------------------------------------=
     
-    @inlinable func reversed() -> Self {
+    @inlinable public func reversed() -> Self {
         switch self {
         case  .forwards: return .backwards
         case .backwards: return  .forwards

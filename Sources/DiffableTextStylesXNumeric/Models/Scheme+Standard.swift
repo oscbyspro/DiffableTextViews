@@ -33,12 +33,9 @@ import Foundation
         formatter.locale = id.locale
         assert(formatter.numberStyle == .none)
         //=--------------------------------------=
-        // MARK: Instantiate
-        //=--------------------------------------=
-        self.id = id
-        //=--------------------------------------=
         // MARK: Instantiate - None
         //=--------------------------------------=
+        self.id = id
         self.lexicon = .standard(formatter)
     }
 

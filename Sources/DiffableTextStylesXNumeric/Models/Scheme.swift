@@ -33,6 +33,16 @@ public protocol NumericTextScheme {
     @inlinable var lexicon: Lexicon { get }
     
     //=------------------------------------------------------------------------=
+    // MARK: Autocorrect
+    //=------------------------------------------------------------------------=
+    
+    /// Autocorrects a snapshot in ways specific to this instance.
+    ///
+    /// - It may mark currency expressions as virtual, for example.
+    ///
+    @inlinable func autocorrect(_ snapshot: inout Snapshot)
+    
+    //=------------------------------------------------------------------------=
     // MARK: Preferences
     //=------------------------------------------------------------------------=
     
@@ -47,16 +57,6 @@ public protocol NumericTextScheme {
     /// - The return value of this method MUST NOT depend on locale (v3.1.0).
     ///
     @inlinable func precision<T>(_ value: T.Type) -> Precision<T>
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Autocorrect
-    //=------------------------------------------------------------------------=
-    
-    /// Autocorrects a snapshot in ways specific to this instance.
-    ///
-    /// - It may mark currency expressions as virtual, for example.
-    ///
-    @inlinable func autocorrect(_ snapshot: inout Snapshot)
 }
 
 //=----------------------------------------------------------------------------=
@@ -64,6 +64,12 @@ public protocol NumericTextScheme {
 //=----------------------------------------------------------------------------=
 
 extension NumericTextScheme {
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Autocorrect
+    //=------------------------------------------------------------------------=
+    
+    @inlinable func autocorrect(_ snapshot: inout Snapshot) { }
     
     //=------------------------------------------------------------------------=
     // MARK: Preferences
@@ -76,12 +82,6 @@ extension NumericTextScheme {
     @inlinable func precision<T>(_ value: T.Type) -> Precision<T> where T: Value {
         Precision()
     }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Autocorrect
-    //=------------------------------------------------------------------------=
-    
-    @inlinable func autocorrect(_ snapshot: inout Snapshot) { }
 }
 
 //*============================================================================*

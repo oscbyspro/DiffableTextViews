@@ -68,13 +68,13 @@ import Foundation
     // MARK: Accessors
     //=------------------------------------------------------------------------=
     
-    @inlinable subscript(character: Character) -> Component? {
-        _read { yield components[character] }
+    /// All components are mapped, so force unwrapping characters is OK.
+    @inlinable subscript(component: Component) -> Character {
+        characters[component]!
     }
     
-    /// Bidirectional mapping is required for all components, so force unwrapping characters is OK.
-    @inlinable subscript(component: Component) -> Character! {
-        _read { yield characters[component] }
+    @inlinable subscript(character: Character) -> Component? {
+        components[character]
     }
     
     //=------------------------------------------------------------------------=
