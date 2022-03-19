@@ -62,7 +62,7 @@ extension Bounds {
         //=--------------------------------------=
         if value == min { return value < .zero }
         //=--------------------------------------=
-        // MARK: Failure
+        // MARK: Value Is Out Of Bounds
         //=--------------------------------------=
         throw Info([.mark(value), "is not in", .mark(self)])
     }

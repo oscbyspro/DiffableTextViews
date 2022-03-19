@@ -106,8 +106,8 @@ import Foundation
 
     /// A model for marking currency labels as virtual.
     ///
-    /// The characters used to express currencies are usually disjoint
-    /// from the characters used to express their amounts, but sometimes they include fraction separators.
+    /// Characters used to express currencies are usually disjoint
+    /// from characters used to express amounts, but sometimes they overlap.
     /// This instruction is used to efficiently mark faux fraction separators, when they exist.
     ///
     @usableFromInline struct Instruction {

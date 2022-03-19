@@ -53,7 +53,7 @@ public protocol NumericTextFormat: ParseableFormatStyle where FormatInput: Numer
     @inlinable func rounded(rule: FloatingPointRoundingRule, increment: Self.RoundingIncrement?) -> Self
     
     //=------------------------------------------------------------------------=
-    // MARK: Translation
+    // MARK: Scheme
     //=------------------------------------------------------------------------=
     
     @inlinable func scheme() -> NumericTextScheme    

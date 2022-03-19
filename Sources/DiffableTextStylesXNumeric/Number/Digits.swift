@@ -96,7 +96,6 @@ extension Digits: TextOutputStreamable {
     // MARK: Write
     //=------------------------------------------------------------------------=
     
-    /// Writes the ASCII representation of this instance to the target.
     @inlinable func write<T>(to target: inout T) where T: TextOutputStream {
         for digit in digits {
             digit.write(to: &target)

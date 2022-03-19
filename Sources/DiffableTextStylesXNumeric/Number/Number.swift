@@ -170,7 +170,6 @@ extension Number {
     // MARK: Write
     //=------------------------------------------------------------------------=
     
-    /// Writes the ASCII representation of this instance to the target.
     @inlinable func write<T>(to target: inout T) where T: TextOutputStream {
         sign.write(to: &target)
         integer.write(to: &target)
