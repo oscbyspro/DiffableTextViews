@@ -40,7 +40,7 @@ public struct Position<Scheme: DiffableTextKit.Scheme>: Comparable, ExpressibleB
         Self()
     }
         
-    @inlinable static func end<S: StringProtocol>(of characters: S) -> Self {
+    @inlinable static func end<S>(of characters: S) -> Self where S: StringProtocol {
         Self(Scheme.size(of: characters))
     }
     

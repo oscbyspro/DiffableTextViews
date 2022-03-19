@@ -155,8 +155,8 @@ extension Number {
         //=--------------------------------------=
         // MARK: Finalize
         //=--------------------------------------=
-        self.removeSeparatorAsSuffix()
         self.integer.makeAtLeastZero()
+        self.removeSeparatorAsSuffix()
     }
 }
 

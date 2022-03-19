@@ -47,8 +47,8 @@ public struct Snapshot: BidirectionalCollection, RangeReplaceableCollection {
     }
     
     @inlinable public init<S>(_ characters: S, as attribute: Attribute) where
-    S: Sequence, S.Element == Character {
-        self.init(); for character in characters {
+    S: Sequence, S.Element == Character { self.init()
+        for character in characters {
             self._characters.append(character)
             self._attributes.append(attribute)
         }

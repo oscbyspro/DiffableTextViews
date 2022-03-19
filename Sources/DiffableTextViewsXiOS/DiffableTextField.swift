@@ -9,8 +9,8 @@
 
 #if canImport(UIKit)
 
-import SwiftUI
 import DiffableTextKit
+import SwiftUI
 
 //*============================================================================*
 // MARK: * DiffableTextField
