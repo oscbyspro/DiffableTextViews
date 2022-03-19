@@ -314,9 +314,9 @@ public extension View {
     // MARK: Transformations
     //=------------------------------------------------------------------------=
     
-    @inlinable func onSetup(of view: DiffableTextFieldID,
+    @inlinable func onSetup(of  view: DiffableTextFieldID,
     _ action: @escaping (ProxyTextField) -> Void) -> some View {
-        environment(\.diffableTextField_onSetup, action)
+        environment(\.diffableTextField_onSetup,  action)
     }
     
     @inlinable func onUpdate(of view: DiffableTextFieldID,

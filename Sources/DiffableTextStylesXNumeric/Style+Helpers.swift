@@ -19,7 +19,7 @@ extension NumericTextStyle {
     // MARK: Characters
     //=------------------------------------------------------------------------=
     
-    /// Assumes that characters contains at least one content character.
+    /// Assumes characters contain at least one content character.
     @inlinable func snapshot(_ characters: String) -> Snapshot {
         var snapshot = characters.reduce(into: Snapshot()) { snapshot, character in
             let attribute: Attribute

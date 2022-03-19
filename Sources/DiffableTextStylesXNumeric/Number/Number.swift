@@ -145,7 +145,7 @@ extension Number {
         //=--------------------------------------=
         // MARK: Integer
         //=--------------------------------------=
-        self.integer.suffix(maxLength: min(max.integer, max.value))
+        self.integer.suffix(maxLength:  min(max.integer, max.value))
         self.integer.trimZerosPrefix()
         //=--------------------------------------=
         // MARK: Fraction

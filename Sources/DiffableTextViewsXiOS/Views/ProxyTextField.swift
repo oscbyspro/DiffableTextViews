@@ -50,7 +50,7 @@ public final class ProxyTextField: BasicTextField.View {
     // MARK: Actions
     //=------------------------------------------------------------------------=
     
-    /// Asks this object to relinquish its status as first responder in its window.
+    /// Asks the view to relinquish its status as first responder in its window.
     ///
     /// SwiftUI.FocusState is the preferred focusing mechanism in most cases.
     ///
