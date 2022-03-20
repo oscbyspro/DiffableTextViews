@@ -45,6 +45,7 @@ import Foundation
         //=--------------------------------------=
         formatter.numberStyle = .currency
         self.preferences = Preferences(formatter)
+        formatter.maximumFractionDigits = .zero
         self.instruction = Instruction(formatter, lexicon)
     }
     
@@ -94,6 +95,9 @@ import Foundation
         // MARK: Initializers
         //=--------------------------------------------------------------------=
         
+        /// - Requires that formatter.numberStyle == .currency.
+        /// - Requires that formatter.maximumFractionDigits == default.
+        ///
         @inlinable init(_   formatter: NumberFormatter) {
             self.fraction = formatter.minimumFractionDigits ...
                             formatter.maximumFractionDigits
@@ -123,30 +127,30 @@ import Foundation
         // MARK: Initializers
         //=--------------------------------------------------------------------=
         
-        /// Requires that formatter.numberStyle == .currency
+        /// Returns an instance if it is needed, returns nil otherwise.
         ///
         /// Correctness is assert by tests parsing currency formats for all locale-currency pairs.
+        ///
+        /// - Requires that formatter.numberStyle == .currency.
+        /// - Requires that formatter.maximumFractionDigits == .zero.
         ///
         @inlinable init?(_ formatter: NumberFormatter, _ lexicon: Lexicon) {
             self.label = formatter.currencySymbol
             //=----------------------------------=
-            // MARK: Check Instruction Is Needed
+            // MARK: Necessity
             //=----------------------------------=
             guard label.contains(lexicon.separators[.fraction]) else { return nil }
             //=----------------------------------=
             // MARK: Formatted
             //=----------------------------------=
-            let sides = IntegerFormatStyle<Int>
-            .Currency(code: formatter.currencyCode, locale: formatter.locale)
-            .precision(.fractionLength(0)).format(0)
-            .split(separator: lexicon.digits[.zero], omittingEmptySubsequences: false)
+            let sides = formatter.string(from: 0)!.split(
+            separator: lexicon.digits[.zero], omittingEmptySubsequences: false)
             //=----------------------------------=
             // MARK: Direction
             //=----------------------------------=
-            if sides[0].contains(label) {
-                self.direction =  .forwards
-            } else {
-                self.direction = .backwards; assert(sides[1].contains(label))
+            switch sides[0].contains(label) {
+            case  true: self.direction =  .forwards
+            case false: self.direction = .backwards; assert(sides[1].contains(label))
             }
         }
         
