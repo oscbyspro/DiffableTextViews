@@ -45,7 +45,7 @@ import Foundation
         //=--------------------------------------=
         formatter.numberStyle = .currency
         self.preferences = Preferences(formatter)
-        self.instruction = Instruction(id, lexicon)
+        self.instruction = Instruction(formatter, lexicon)
     }
     
     //=------------------------------------------------------------------------=
@@ -108,7 +108,7 @@ import Foundation
     ///
     /// Characters used to express currencies are usually disjoint
     /// from characters used to express amounts, but sometimes they overlap.
-    /// This instruction is used to efficiently mark faux fraction separators, when they exist.
+    /// This instruction is used to efficiently mark currency labels when needed.
     ///
     @usableFromInline struct Instruction {
         
@@ -116,41 +116,38 @@ import Foundation
         // MARK: State
         //=--------------------------------------------------------------------=
         
-        @usableFromInline let occurances: Int
-        @usableFromInline let character: Character
+        @usableFromInline let label: String
         @usableFromInline let direction: Direction
 
         //=--------------------------------------------------------------------=
         // MARK: Initializers
         //=--------------------------------------------------------------------=
         
-        @inlinable init?<S>(_ label: S, _ character: Character,
-        _ direction: Direction) where S: Sequence, S.Element == Character {
-            self.occurances = label.count(where: { $0 == character })
-            //=--------------------------------------=
-            // MARK: Validate
-            //=--------------------------------------=
-            guard occurances > 0 else { return nil }
-            //=--------------------------------------=
-            // MARK: Instantiate
-            //=--------------------------------------=
-            self.character = character
-            self.direction = direction
-        }
-        
-        @inlinable init?(_ id: ID, _ lexicon: Lexicon) {
-            let separator = lexicon.separators[.fraction]
-            let labels = IntegerFormatStyle<Int>
-            .Currency(code: id.code, locale: id.locale)
-            .precision(.fractionLength(0)).format(0).split(
-            separator: lexicon.digits[.zero],
-            omittingEmptySubsequences: false)
+        /// Requires that formatter.numberStyle == .currency
+        ///
+        /// Correctness is assert by tests parsing currency formats for all locale-currency pairs.
+        ///
+        @inlinable init?(_ formatter: NumberFormatter, _ lexicon: Lexicon) {
+            self.label = formatter.currencySymbol
             //=----------------------------------=
-            // MARK: Instantiate
+            // MARK: Check Instruction Is Needed
             //=----------------------------------=
-            if      let instance = Self(labels[0], separator,  .forwards) { self = instance }
-            else if let instance = Self(labels[1], separator, .backwards) { self = instance }
-            else { return nil }
+            guard label.contains(lexicon.separators[.fraction]) else { return nil }
+            //=----------------------------------=
+            // MARK: Formatted
+            //=----------------------------------=
+            let sides = IntegerFormatStyle<Int>
+            .Currency(code: formatter.currencyCode, locale: formatter.locale)
+            .precision(.fractionLength(0)).format(0)
+            .split(separator: lexicon.digits[.zero], omittingEmptySubsequences: false)
+            //=----------------------------------=
+            // MARK: Direction
+            //=----------------------------------=
+            if sides[0].contains(label) {
+                self.direction =  .forwards
+            } else {
+                self.direction = .backwards; assert(sides[1].contains(label))
+            }
         }
         
         //=------------------------------------------------------------------------=
@@ -158,18 +155,8 @@ import Foundation
         //=------------------------------------------------------------------------=
         
         @inlinable func autocorrect(_ snapshot: inout Snapshot) {
-            switch direction {
-            case  .forwards: autocorrect(&snapshot, indices: snapshot.indices)
-            case .backwards: autocorrect(&snapshot, indices: snapshot.indices.reversed())
-            }
-        }
-        
-        @inlinable func autocorrect<S>(_ snapshot: inout Snapshot,
-        indices: S) where S: Sequence, S.Element == Snapshot.Index {
-            var count = 0; for index in indices where
-            snapshot[index].character == character {
-                snapshot.update(attributes: index) { $0 = .phantom }
-                count += 1; guard count < occurances else { return }
+            if let range = Search.range(of: label, in: snapshot, direction: direction) {
+                snapshot.update(attributes: range) { attribute in attribute = .phantom }
             }
         }
     }
