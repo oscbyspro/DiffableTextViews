@@ -137,6 +137,60 @@ extension Precision: Brrr {
     }
 }
 
+//=----------------------------------------------------------------------------=
+// MARK: + Upstream - Autocorrect
+//=----------------------------------------------------------------------------=
+
+extension Precision {
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Number
+    //=------------------------------------------------------------------------=
+    
+    @inlinable func autocorrect(_ number: inout Number) {
+        number.trim(max: upper)
+    }
+}
+
+//=----------------------------------------------------------------------------=
+// MARK: + Downstream - Autovalidate
+//=----------------------------------------------------------------------------=
+
+extension Precision {
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Number
+    //=------------------------------------------------------------------------=
+    
+    @inlinable func autovalidate(_ number: inout Number, _ count: Count) throws {
+        let capacity = try capacity(count)
+        //=--------------------------------------=
+        // MARK: Autocorrect
+        //=--------------------------------------=
+        if capacity.fraction <= 0 || capacity.value <= 0, number.removeSeparatorAsSuffix() {
+            Info.print([.autocorrection, .mark(number), "does not fit a fraction separator"])
+        }
+    }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Number - Helpers
+    //=------------------------------------------------------------------------=
+    
+    @inlinable func capacity(_ count: Count) throws -> Count {
+        let capacity = upper.map((&-, count))
+        //=--------------------------------------=
+        // MARK: Validate Each Component
+        //=--------------------------------------=
+        if let component = capacity.first(where: (.<, 0)) {
+            throw Info([.mark(component), "digits exceed max precision", .mark(upper[component])])
+        }
+        //=--------------------------------------=
+        // MARK: Done
+        //=--------------------------------------=
+        return capacity
+    }
+}
+
 //*============================================================================*
 // MARK: * Precision x Namespace
 //*============================================================================*
