@@ -66,8 +66,7 @@ public struct DiffableTextField<Style: DiffableTextStyleXiOS>: UIViewRepresentab
         //=--------------------------------------=
         context.coordinator.downstream = ActorTextField(uiView)
         context.coordinator.downstream.transform(Style.onSetup)
-        context.coordinator.downstream.transform(
-        context.environment.diffableTextField_onSetup)
+        context.coordinator.downstream.transform(context.environment.diffableTextField_onSetup)
         //=--------------------------------------=
         // MARK: Done
         //=--------------------------------------=
@@ -117,8 +116,7 @@ public struct DiffableTextField<Style: DiffableTextStyleXiOS>: UIViewRepresentab
             self.upstream = upstream
             self.environment = environment
             self.synchronize()
-            self.downstream.transform(
-            environment.diffableTextField_onUpdate)
+            self.downstream.transform(environment.diffableTextField_onUpdate)
         }
         
         //=--------------------------------------------------------------------=

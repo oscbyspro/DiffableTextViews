@@ -14,9 +14,6 @@ import Foundation
 //*============================================================================*
 
 /// A mapping model between components and characters.
-///
-/// It ensures that each component is bidirectionally mapped to a character.
-///
 @usableFromInline struct Links<Component: Glyph> {
     
     //=------------------------------------------------------------------------=
@@ -39,7 +36,7 @@ import Foundation
     // MARK: Initializers - Indirect
     //=------------------------------------------------------------------------=
 
-    /// Creates an instance linking all components to their corresponding character.
+    /// Creates an instance linking all components to a character.
     @inlinable init(character: (Component) throws -> Character) rethrows {
         let components = Component.allCases
         self.init(count: components.count)
@@ -68,7 +65,7 @@ import Foundation
     // MARK: Accessors
     //=------------------------------------------------------------------------=
     
-    /// All components are mapped, so force unwrapping characters is OK.
+    /// All components map to a character, so force unwrapping characters is OK.
     @inlinable subscript(component: Component) -> Character {
         characters[component]!
     }
