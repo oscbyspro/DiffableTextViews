@@ -11,7 +11,7 @@
 // MARK: * Changes
 //*============================================================================*
 
-/// A snapshot and one continuous change not yet been applied to it.
+/// A snapshot and one continuous change not yet applied to it.
 public struct Changes {
     public typealias Change<S: Scheme> = (content: String, range: Range<Layout<S>.Index>)
     
