@@ -18,16 +18,6 @@ import SwiftUI
 
 public struct DiffableTextField<Style: DiffableTextStyleXiOS>: UIViewRepresentable {
     public typealias Value = Style.Value
-    public typealias Proxy = ProxyTextField
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Environment
-    //=------------------------------------------------------------------------=
-    
-    @usableFromInline @Environment(\.locale) var locale: Locale
-    @usableFromInline @Environment(\.diffableTextField_onSetup ) var onSetup:  (Proxy) -> Void
-    @usableFromInline @Environment(\.diffableTextField_onUpdate) var onUpdate: (Proxy) -> Void
-    @usableFromInline @Environment(\.diffableTextField_onSubmit) var onSubmit: (Proxy) -> Void
     
     //=------------------------------------------------------------------------=
     // MARK: State
@@ -72,11 +62,12 @@ public struct DiffableTextField<Style: DiffableTextStyleXiOS>: UIViewRepresentab
         uiView.setContentHuggingPriority(.defaultHigh, for: .vertical)
         uiView.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
         //=--------------------------------------=
-        // MARK: ProxyTextField
+        // MARK: ActorTextField
         //=--------------------------------------=
         context.coordinator.downstream = ActorTextField(uiView)
         context.coordinator.downstream.transform(Style.onSetup)
-        context.coordinator.downstream.transform(self .onSetup)
+        context.coordinator.downstream.transform(
+        context.environment.diffableTextField_onSetup)
         //=--------------------------------------=
         // MARK: Done
         //=--------------------------------------=
@@ -88,9 +79,7 @@ public struct DiffableTextField<Style: DiffableTextStyleXiOS>: UIViewRepresentab
     //=------------------------------------------------------------------------=
     
     @inlinable public func updateUIView(_ uiView: UIViewType, context: Self.Context) {
-        context.coordinator.upstream = self
-        context.coordinator.synchronize()
-        context.coordinator.downstream.transform(self.onUpdate)
+        context.coordinator.update(self, context.environment)
     }
     
     //*========================================================================*
@@ -107,23 +96,37 @@ public struct DiffableTextField<Style: DiffableTextStyleXiOS>: UIViewRepresentab
         
         @usableFromInline let lock = Lock()
         @usableFromInline let context = Context()
+        
         @usableFromInline var upstream: DiffableTextField!
         @usableFromInline var downstream:  ActorTextField!
+        @usableFromInline var environment: EnvironmentValues!
         
         //=--------------------------------------------------------------------=
         // MARK: Accessors
         //=--------------------------------------------------------------------=
 
         @inlinable func style() -> Style {
-            upstream.style.locale(upstream.locale)
+            upstream.style.locale(environment.locale)
         }
 
+        //=--------------------------------------------------------------------=
+        // MARK: Update
+        //=--------------------------------------------------------------------=
+        
+        @inlinable func update(_ upstream: DiffableTextField, _ environment: EnvironmentValues) {
+            self.upstream = upstream
+            self.environment = environment
+            self.synchronize()
+            self.downstream.transform(
+            environment.diffableTextField_onUpdate)
+        }
+        
         //=--------------------------------------------------------------------=
         // MARK: Respond To Submit Events
         //=--------------------------------------------------------------------=
         
         @inlinable public func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-            downstream.transform(upstream.onSubmit); return true
+            downstream.transform(environment.diffableTextField_onSubmit); return  true
         }
         
         //=--------------------------------------------------------------------=
