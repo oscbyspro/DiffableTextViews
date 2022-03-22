@@ -13,6 +13,7 @@ import Foundation
 // MARK: * Field
 //*============================================================================*
 
+/// A model describing a snapshot's layout and the selection in it.
 public struct Field<Scheme: DiffableTextKit.Scheme> {
     public typealias Layout = DiffableTextKit.Layout<Scheme>
     public typealias Position = DiffableTextKit.Position<Scheme>

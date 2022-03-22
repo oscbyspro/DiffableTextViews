@@ -113,8 +113,7 @@ public struct DiffableTextField<Style: DiffableTextStyleXiOS>: UIViewRepresentab
         //=--------------------------------------------------------------------=
         
         @inlinable func update(_ upstream: DiffableTextField, _ environment: EnvironmentValues) {
-            self.upstream = upstream
-            self.environment = environment
+            self.upstream = upstream; self.environment = environment
             self.synchronize()
             self.downstream.transform(environment.diffableTextField_onUpdate)
         }
@@ -148,9 +147,8 @@ public struct DiffableTextField<Style: DiffableTextStyleXiOS>: UIViewRepresentab
         //=--------------------------------------------------------------------=
         
         @inlinable public func textField(_ textField: UITextField,
-        shouldChangeCharactersIn nsRange: NSRange, replacementString string: String) -> Bool {
-            let style = style()
-            let range = context.field.indices(at: nsRange)
+        shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+            let style = style(); let range = context.field.indices(at: range)
             let changes = Changes(context.field.snapshot, change: (string, range))
             //=----------------------------------=
             // MARK: Merge

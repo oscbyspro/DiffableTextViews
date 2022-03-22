@@ -11,7 +11,7 @@
 // MARK: * Changes
 //*============================================================================*
 
-/// A snapshot and one continuous change that has not yet been applied to it.
+/// A snapshot and one continuous change not yet been applied to it.
 public struct Changes {
     public typealias Change<S: Scheme> = (content: String, range: Range<Layout<S>.Index>)
     
@@ -36,7 +36,7 @@ public struct Changes {
     // MARK: Utilities
     //=------------------------------------------------------------------------=
     
-    /// Returns a new snapshot where the proposed change has been applied.
+    /// Returns a new snapshot with the proposed change applied to it.
     @inlinable public func proposal() -> Snapshot {
         var result = snapshot; result.replaceSubrange(range, with: replacement); return result
     }
