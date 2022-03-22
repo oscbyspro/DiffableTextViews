@@ -13,7 +13,7 @@
 
 /// A snapshot and one continuous change not yet applied to it.
 public struct Changes {
-    public typealias Change<S: Scheme> = (content: String, range: Range<Layout<S>.Index>)
+    public typealias Change<S: Scheme> = (range: Range<Layout<S>.Index>, content: String)
     
     //=------------------------------------------------------------------------=
     // MARK: State
