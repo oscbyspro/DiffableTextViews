@@ -76,7 +76,7 @@ public final class Context<Style: DiffableTextStyle, Scheme: DiffableTextKit.Sch
     // MARK: Comparisons
     //=------------------------------------------------------------------------=
     
-    @inlinable public func contains(_ style: Style, _ value: Value, _ mode: Mode) -> Bool {
+    @inlinable public func contains(style: Style, value: Value, mode: Mode) -> Bool {
         self.value == value && self.mode == mode && self.style == style
     }
 }

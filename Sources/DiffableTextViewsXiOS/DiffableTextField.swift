@@ -202,20 +202,27 @@ public struct DiffableTextField<Style: DiffableTextStyleXiOS>: UIViewRepresentab
         //=--------------------------------------------------------------------=
         
         @inlinable func synchronize() {
-            //=------------------------------=
+            //=----------------------------------=
             // MARK: Pull
-            //=------------------------------=
-            let style = localized(); let value = upstream.value.wrappedValue
-            guard !context.contains(style, value, downstream.mode) else { return }
-            //=------------------------------=
+            //=----------------------------------=
+            let style = localized()
+            let value = upstream.value.wrappedValue
+            //=----------------------------------=
+            // MARK: Compare
+            //=----------------------------------=
+            guard !context.contains(
+            style: style,
+            value: value,
+            mode: downstream.mode) else { return }
+            //=----------------------------------=
             // MARK: Push - Active
-            //=------------------------------=
+            //=----------------------------------=
             if downstream.mode == .active {
                 self.context.active(style: style, commit: style.interpret(value))
                 self.push()
-            //=------------------------------=
+            //=----------------------------------=
             // MARK: Push - Inactive
-            //=------------------------------=
+            //=----------------------------------=
             } else {
                 lock.perform {
                     self.context.inactive(style: style, value: value )
