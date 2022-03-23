@@ -205,7 +205,7 @@ public struct DiffableTextField<Style: DiffableTextStyleXiOS>: UIViewRepresentab
             //=------------------------------=
             // MARK: Pull
             //=------------------------------=
-            let (style, value) = (localized(), upstream.value.wrappedValue)
+            let style = localized(); let value = upstream.value.wrappedValue
             guard !context.contains(style, value, downstream.mode) else { return }
             //=------------------------------=
             // MARK: Push - Active
@@ -218,8 +218,8 @@ public struct DiffableTextField<Style: DiffableTextStyleXiOS>: UIViewRepresentab
             //=------------------------------=
             } else {
                 lock.perform {
-                    self.context.inactive(style: style, value: value)
-                    self.downstream.update(text: style .format(value))
+                    self.context.inactive(style: style, value: value )
+                    self.downstream.update(text: style.format( value))
                 }
             }
         }
