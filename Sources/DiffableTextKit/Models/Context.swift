@@ -15,16 +15,16 @@ public final class Context<Style: DiffableTextStyle, Scheme: DiffableTextKit.Sch
     public typealias Field = DiffableTextKit.Field<Scheme>
     public typealias Layout = DiffableTextKit.Layout<Scheme>
     public typealias Position = DiffableTextKit.Position<Scheme>
-    public typealias Commit = DiffableTextKit.Commit<Value>
+    public typealias Commit = DiffableTextKit.Commit<Style.Value>
     public typealias Value = Style.Value
 
     //=------------------------------------------------------------------------=
     // MARK: State
     //=------------------------------------------------------------------------=
         
+    @usableFromInline private(set) var _mode:  Mode   = Mode()
     @usableFromInline private(set) var _style: Style! = nil
     @usableFromInline private(set) var _value: Value! = nil
-    @usableFromInline private(set) var _mode:  Mode   = Mode()
     @usableFromInline private(set) var _field: Field  = Field()
     
     //=------------------------------------------------------------------------=
@@ -76,7 +76,10 @@ public final class Context<Style: DiffableTextStyle, Scheme: DiffableTextKit.Sch
     // MARK: Comparisons
     //=------------------------------------------------------------------------=
     
+    /// Use this method to determine the need for upstream/downstream synchronization.
     @inlinable public func contains(style: Style, value: Value, mode: Mode) -> Bool {
-        self.value == value && self.mode == mode && self.style == style
+        self.value == value
+        && self.mode == mode
+        && self.style == style
     }
 }
