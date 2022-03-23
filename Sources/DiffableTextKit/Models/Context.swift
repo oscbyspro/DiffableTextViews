@@ -22,10 +22,10 @@ public final class Context<Style: DiffableTextStyle, Scheme: DiffableTextKit.Sch
     // MARK: State
     //=------------------------------------------------------------------------=
         
-    @usableFromInline private(set) var _value: Value! = nil
     @usableFromInline private(set) var _style: Style! = nil
+    @usableFromInline private(set) var _value: Value! = nil
+    @usableFromInline private(set) var _mode:  Mode   = Mode()
     @usableFromInline private(set) var _field: Field  = Field()
-    @usableFromInline private(set) var _active: Bool  = false
     
     //=------------------------------------------------------------------------=
     // MARK: Initializers
@@ -37,27 +37,27 @@ public final class Context<Style: DiffableTextStyle, Scheme: DiffableTextKit.Sch
     // MARK: Accessors
     //=------------------------------------------------------------------------=
     
-    @inlinable public var value: Value! { _value  }
-    @inlinable public var style: Style! { _style  }
-    @inlinable public var field: Field  { _field  }
-    @inlinable public var active: Bool  { _active }
+    @inlinable public var mode:  Mode   { _mode  }
+    @inlinable public var style: Style! { _style }
+    @inlinable public var value: Value! { _value }
+    @inlinable public var field: Field  { _field }
     
     //=------------------------------------------------------------------------=
     // MARK: Update
     //=------------------------------------------------------------------------=
     
     @inlinable public func active(style: Style, commit: Commit) {
-        self._active = true
-        self._style  = style
-        self._value  = commit.value
+        self._mode  = .active
+        self._style =  style
+        self._value =  commit.value
         self._field.update(snapshot: commit.snapshot)
     }
     
     @inlinable public func inactive(style: Style, value: Value) {
-        self._active = false
-        self._value  = value
-        self._style  = style
-        self._field  = Field()
+        self._mode  = .inactive
+        self._value =  value
+        self._style =  style
+        self._field =  Field()
     }
     
     //=------------------------------------------------------------------------=
@@ -70,5 +70,13 @@ public final class Context<Style: DiffableTextStyle, Scheme: DiffableTextKit.Sch
     
     @inlinable public func update(selection: Range<Position>, momentum: Bool) {
         self._field.update(selection: selection, momentum: momentum)
+    }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Comparisons
+    //=------------------------------------------------------------------------=
+    
+    @inlinable public func contains(_ style: Style, _ value: Value, _ mode: Mode) -> Bool {
+        self.value == value && self.mode == mode && self.style == style
     }
 }

@@ -28,8 +28,8 @@ import UIKit
     // MARK: Accessors
     //=------------------------------------------------------------------------=
     
-    @inlinable var active: Bool {
-        wrapped.isEditing
+    @inlinable var mode: Mode {
+        wrapped.isEditing ? .active : .inactive        
     }
 
     @inlinable var momentum: Bool {

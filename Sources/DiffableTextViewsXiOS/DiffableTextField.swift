@@ -101,10 +101,10 @@ public struct DiffableTextField<Style: DiffableTextStyleXiOS>: UIViewRepresentab
         @usableFromInline var environment: EnvironmentValues!
         
         //=--------------------------------------------------------------------=
-        // MARK: Accessors
+        // MARK: Localization
         //=--------------------------------------------------------------------=
         
-        @inlinable func style() -> Style {
+        @inlinable func localized() -> Style {
             upstream.style.locale(environment.locale)
         }
 
@@ -147,7 +147,7 @@ public struct DiffableTextField<Style: DiffableTextStyleXiOS>: UIViewRepresentab
         
         @inlinable public func textField(_ textField: UITextField,
         shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
-            let style = style(); let range = context.field.indices(at: range)
+            let style = localized(); let range = context.field.indices(at: range)
             let changes = Changes(context.field.snapshot, change: (range, string))
             //=----------------------------------=
             // MARK: Merge
@@ -205,12 +205,12 @@ public struct DiffableTextField<Style: DiffableTextStyleXiOS>: UIViewRepresentab
             //=------------------------------=
             // MARK: Pull
             //=------------------------------=
-            let (style, value) = (style(), upstream.value.wrappedValue)
-            guard updatable(style: style, value: value) else { return }
+            let (style, value) = (localized(), upstream.value.wrappedValue)
+            guard !context.contains(style, value, downstream.mode) else { return }
             //=------------------------------=
             // MARK: Push - Active
             //=------------------------------=
-            if downstream.active {
+            if downstream.mode == .active {
                 self.context.active(style: style, commit: style.interpret(value))
                 self.push()
             //=------------------------------=
@@ -242,14 +242,6 @@ public struct DiffableTextField<Style: DiffableTextStyleXiOS>: UIViewRepresentab
             if  self.upstream.value.wrappedValue != context.value {
                 self.upstream.value.wrappedValue  = context.value
             }
-        }
-                
-        //=--------------------------------------------------------------------=
-        // MARK: Comparisons
-        //=--------------------------------------------------------------------=
-        
-        @inlinable func updatable(style: Style, value: Value) -> Bool {
-            value != context.value || downstream.active != context.active || style != context.style
         }
     }
 }
