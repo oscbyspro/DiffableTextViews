@@ -112,8 +112,9 @@ public struct DiffableTextField<Style: DiffableTextStyleXiOS>: UIViewRepresentab
         //=--------------------------------------------------------------------=
         
         @inlinable func update(_ upstream: DiffableTextField, _ environment: EnvironmentValues) {
-            self.upstream = upstream; self.environment =  environment
-            self.synchronize(); self.downstream.transform(environment.diffableTextField_onUpdate)
+            self.upstream = upstream; self.environment = environment
+            self.synchronize() // on update is same as on did update
+            self.downstream.transform(environment.diffableTextField_onUpdate)
         }
         
         //=--------------------------------------------------------------------=
