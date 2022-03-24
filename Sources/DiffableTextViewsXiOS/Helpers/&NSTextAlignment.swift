@@ -13,24 +13,20 @@ import SwiftUI
 import UIKit
 
 //*============================================================================*
-// MARK: * UITextField x Alignment
+// MARK: * NSTextAlignment
 //*============================================================================*
 
-extension UITextField {
+extension NSTextAlignment {
     
     //=------------------------------------------------------------------------=
-    // MARK: Transformations
+    // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable func setTextAlignment(_ environment: EnvironmentValues) {
-        self.setTextAlignment(environment.multilineTextAlignment)
-    }
-    
-    @inlinable func setTextAlignment(_ newValue: TextAlignment) {
-        switch newValue {
-        case  .leading: textAlignment = (userInterfaceLayoutDirection == .leftToRight) ?  .left : .right
-        case .trailing: textAlignment = (userInterfaceLayoutDirection == .leftToRight) ? .right :  .left
-        case   .center: textAlignment = .center
+    @inlinable init(_ alignment: TextAlignment, for layout: UIUserInterfaceLayoutDirection) {
+        switch alignment {
+        case  .leading: self = (layout == .leftToRight) ?  .left : .right
+        case .trailing: self = (layout == .leftToRight) ? .right :  .left
+        case   .center: self = .center
         }
     }
 }
