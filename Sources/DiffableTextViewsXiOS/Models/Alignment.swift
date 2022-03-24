@@ -13,37 +13,25 @@ import SwiftUI
 import UIKit
 
 //*============================================================================*
-// MARK: * ProxyTextField x Text
+// MARK: * UITextField x Alignment
 //*============================================================================*
 
-public extension ProxyTextField.Text {
-
-    //=------------------------------------------------------------------------=
-    // MARK: Accessors
-    //=------------------------------------------------------------------------=
-    
-    @inlinable var value: String {
-        wrapped.text! // UITextField.text is never nil
-    }
+extension UITextField {
     
     //=------------------------------------------------------------------------=
     // MARK: Transformations
     //=------------------------------------------------------------------------=
-
-    @inlinable func alignment(_  alignment: TextAlignment) {
-        wrapped.setTextAlignment(alignment)
+    
+    @inlinable func setTextAlignment(_ environment: EnvironmentValues) {
+        self.setTextAlignment(environment.multilineTextAlignment)
     }
     
-    @inlinable func color(_ color: UIColor) {
-        wrapped.textColor = color
-    }
-
-    @inlinable func font(_ font: UIFont) {
-        wrapped.font = font
-    }
-    
-    @inlinable func font(_ font: DiffableTextFont) {
-        wrapped.font = UIFont(font)
+    @inlinable func setTextAlignment(_ newValue: TextAlignment) {
+        switch newValue {
+        case  .leading: textAlignment = (userInterfaceLayoutDirection == .leftToRight) ?  .left : .right
+        case .trailing: textAlignment = (userInterfaceLayoutDirection == .leftToRight) ? .right :  .left
+        case   .center: textAlignment = .center
+        }
     }
 }
 
