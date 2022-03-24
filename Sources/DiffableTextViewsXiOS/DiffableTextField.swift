@@ -59,7 +59,7 @@ public struct DiffableTextField<Style: DiffableTextStyleXiOS>: UIViewRepresentab
         let uiView = BasicTextField()
         uiView.delegate = context.coordinator
         uiView.font = UIFont(DiffableTextFont.body.monospaced())
-        uiView.setTextAlignment(context.environment)
+        uiView.setTextAlignment(context.environment.multilineTextAlignment)
         uiView.setContentHuggingPriority(.defaultHigh, for: .vertical)
         uiView.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
         //=--------------------------------------=

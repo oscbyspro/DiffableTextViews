@@ -22,12 +22,8 @@ extension UITextField {
     // MARK: Transformations
     //=------------------------------------------------------------------------=
     
-    @inlinable func setTextAlignment(_ environment: EnvironmentValues) {
-        self.setTextAlignment(environment.multilineTextAlignment)
-    }
-    
-    @inlinable func setTextAlignment(_ newValue: TextAlignment) {
-        self.textAlignment = NSTextAlignment(newValue, for: userInterfaceLayoutDirection)
+    @inlinable func setTextAlignment(_ alignment: TextAlignment) {
+        self.textAlignment = NSTextAlignment(alignment, for: userInterfaceLayoutDirection)
     }
 }
 
