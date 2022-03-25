@@ -67,9 +67,9 @@ extension NumericTextFormat {
     @usableFromInline typealias Value = FormatInput
     @usableFromInline typealias Precision = NumberFormatStyleConfiguration.Precision
     @usableFromInline typealias Separator = NumberFormatStyleConfiguration.DecimalSeparatorDisplayStrategy
-    @usableFromInline typealias Sign = NumericTextSignDisplayStrategy
     @usableFromInline typealias Rounded = FloatingPointRoundingRule
-    
+    @usableFromInline typealias Sign = NumericTextSignDisplayStrategy
+
     //=------------------------------------------------------------------------=
     // MARK: Parse
     //=------------------------------------------------------------------------=

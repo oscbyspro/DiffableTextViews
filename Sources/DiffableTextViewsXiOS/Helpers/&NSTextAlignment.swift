@@ -31,7 +31,7 @@ extension NSTextAlignment {
     }
     
     //=------------------------------------------------------------------------=
-    // MARK: Initializers - Helpers
+    // MARK: Initializers - Static
     //=------------------------------------------------------------------------=
     
     @inlinable static func leading(for  layout: UIUserInterfaceLayoutDirection) -> Self {
