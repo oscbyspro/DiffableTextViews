@@ -29,7 +29,7 @@ extension NumericTextStyle where Format: NumericTextFormatXCurrency {
     //=------------------------------------------------------------------------=
     
     @inlinable public var currencyCode: String {
-        self.adapter.currencyCode
+        format.currencyCode
     }
 }
 

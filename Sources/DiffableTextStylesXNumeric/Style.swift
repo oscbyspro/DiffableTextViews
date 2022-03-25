@@ -44,7 +44,7 @@ public struct _NumericTextStyle<Format: NumericTextFormat>: DiffableTextStyle {
     //=------------------------------------------------------------------------=
     
     @inlinable var format: Format {
-        adapter.format.rounded(.towardZero)
+        adapter.format
     }
 
     @inlinable var scheme: Scheme {
@@ -60,7 +60,7 @@ public struct _NumericTextStyle<Format: NumericTextFormat>: DiffableTextStyle {
     //=------------------------------------------------------------------------=
     
     @inlinable public var locale: Locale {
-        adapter.locale
+        format.locale
     }
     
     @inlinable public func locale(_ locale: Locale) -> Self {

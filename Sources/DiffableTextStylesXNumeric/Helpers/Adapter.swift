@@ -29,16 +29,8 @@ import Foundation
     //=------------------------------------------------------------------------=
     
     @inlinable init(_ format: Format) {
-        self.format = format
-        self.scheme = format.scheme()
-    }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Accessors
-    //=------------------------------------------------------------------------=
-    
-    @inlinable var locale: Locale {
-        format.locale
+        self.format = format.autocorrect()
+        self.scheme = self.format.scheme()
     }
     
     //=------------------------------------------------------------------------=
@@ -67,20 +59,5 @@ import Foundation
     
     @inlinable static func == (lhs: Self, rhs: Self) -> Bool {
         lhs.format == rhs.format
-    }
-}
-
-//=----------------------------------------------------------------------------=
-// MARK: + Currency
-//=----------------------------------------------------------------------------=
-
-extension Adapter where Format: Formats.Currency {
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Accessors
-    //=------------------------------------------------------------------------=
-    
-    @inlinable var currencyCode: String {
-        format.currencyCode
     }
 }
