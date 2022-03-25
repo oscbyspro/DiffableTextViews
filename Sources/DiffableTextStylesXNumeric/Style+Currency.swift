@@ -23,6 +23,14 @@ extension NumericTextStyle where Format: NumericTextFormatXCurrency {
     @inlinable public init(code: String, locale: Locale = .autoupdatingCurrent) {
         self.init(Format(code: code, locale: locale))
     }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Accessors
+    //=------------------------------------------------------------------------=
+    
+    @inlinable public var currencyCode: String {
+        adapter.format.currencyCode
+    }
 }
 
 //*============================================================================*

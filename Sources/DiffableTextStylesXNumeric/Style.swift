@@ -14,7 +14,7 @@ import Foundation
 // MARK: * NumericTextStyle
 //*============================================================================*
 
-@dynamicMemberLookup public struct _NumericTextStyle<Format: NumericTextFormat>: DiffableTextStyle {
+public struct _NumericTextStyle<Format: NumericTextFormat>: DiffableTextStyle {
     public typealias Value = Format.FormatInput
     public typealias Bounds = DiffableTextStylesXNumeric.Bounds<Value>
     public typealias Precision = DiffableTextStylesXNumeric.Precision<Value>
@@ -56,20 +56,12 @@ import Foundation
     }
     
     //=------------------------------------------------------------------------=
-    // MARK: Accessors - Lookup
+    // MARK: Locale
     //=------------------------------------------------------------------------=
-    
-    @inlinable public subscript<T>(dynamicMember keyPath: KeyPath<Format, T>) -> T {
-        adapter.format[keyPath: keyPath]
-    }
     
     @inlinable public var locale: Locale {
-        adapter.format.locale // dynamic member lookup has lower precedence than methods
+        adapter.format.locale
     }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Transformations
-    //=------------------------------------------------------------------------=
 
     @inlinable public func locale(_ locale: Locale) -> Self {
         var result = self; result.adapter = result.adapter.locale(locale); return result
