@@ -34,6 +34,14 @@ import Foundation
     }
     
     //=------------------------------------------------------------------------=
+    // MARK: Accessors
+    //=------------------------------------------------------------------------=
+    
+    @inlinable var locale: Locale {
+        format.locale
+    }
+    
+    //=------------------------------------------------------------------------=
     // MARK: Preferences
     //=------------------------------------------------------------------------=
     
@@ -49,8 +57,8 @@ import Foundation
     // MARK: Transformations
     //=------------------------------------------------------------------------=
     
-    @inlinable func locale(_ locale: Locale) -> Self {
-        Self(format.locale(locale))
+    @inlinable mutating func update(_ locale: Locale) {
+        self = Self(format.locale(locale))
     }
     
     //=------------------------------------------------------------------------=
@@ -59,5 +67,16 @@ import Foundation
     
     @inlinable static func == (lhs: Self, rhs: Self) -> Bool {
         lhs.format == rhs.format
+    }
+}
+
+extension Adapter where Format: Formats.Currency {
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Accessors
+    //=------------------------------------------------------------------------=
+    
+    @inlinable var currencyCode: String {
+        format.currencyCode
     }
 }

@@ -57,13 +57,21 @@ struct NumericScreenExamples: View {
     
     @ViewBuilder var examples: some View {
         switch kind.content {
-        case .number:   example(.number)
-        case .currency: example(.currency(code: currency.content))
-        case .percent:  example(.percent)
+        case .currency: currencyExample
+        case   .number:   numberExample
+        case  .percent:  percentExample
         }
     }
     
-    func example<F: NumericTextFormat>(_ base: _NumericTextStyle<F>) -> some View where F.FormatInput == Value {
-        NumericScreenExample(context, base: base)
+    @inlinable var currencyExample: some View {
+        NumericScreenExample(context, base: _NumericTextStyle<Currency>(code: currency.content, locale: locale.content))
+    }
+    
+    @inlinable var numberExample: some View {
+        NumericScreenExample(context, base: _NumericTextStyle<Number>(locale: locale.content))
+    }
+    
+    @inlinable var percentExample: some View {
+        NumericScreenExample(context, base: _NumericTextStyle<Percent>(locale: locale.content))
     }
 }

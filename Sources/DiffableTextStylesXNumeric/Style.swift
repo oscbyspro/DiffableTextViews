@@ -60,11 +60,12 @@ public struct _NumericTextStyle<Format: NumericTextFormat>: DiffableTextStyle {
     //=------------------------------------------------------------------------=
     
     @inlinable public var locale: Locale {
-        adapter.format.locale
+        adapter.locale
     }
-
+    
     @inlinable public func locale(_ locale: Locale) -> Self {
-        var result = self; result.adapter = result.adapter.locale(locale); return result
+        guard self.locale != locale else { return self }
+        var result = self; result.adapter.update(locale); return result
     }
     
     //=------------------------------------------------------------------------=
