@@ -37,13 +37,13 @@ public struct Snapshot: BidirectionalCollection, RangeReplaceableCollection {
     
     @inlinable public init(_ characters: String, as attribute: Attribute) {
         self._characters = characters
-        self._attributes = [Attribute](repeating: attribute, count: characters.count)
+        self._attributes = Array(repeating: attribute, count: characters.count)
     }
     
-    @inlinable public init<S>(_ characters: S, as attribute: Attribute) where
-    S: RandomAccessCollection, S.Element == Character {
+    @inlinable public init<C>(_ characters: C, as attribute: Attribute) where
+    C: RandomAccessCollection, C.Element == Character {
         self._characters = String(characters)
-        self._attributes = [Attribute](repeating: attribute, count: characters.count)
+        self._attributes = Array(repeating: attribute, count: characters.count)
     }
     
     @inlinable public init<S>(_ characters: S, as attribute: Attribute) where
@@ -224,8 +224,8 @@ public extension Snapshot {
     // MARK: Replacements
     //=------------------------------------------------------------------------=
 
-    @inlinable mutating func replaceSubrange<C>(_ range: Range<Index>,
-    with elements: C) where C: Collection, C.Element == Symbol {
+    @inlinable mutating func replaceSubrange<C: Collection>(
+    _ range: Range<Index>, with elements: C) where C.Element == Symbol {
         _characters.replaceSubrange(
         range.lowerBound.character ..<
         range.upperBound.character,
@@ -241,7 +241,8 @@ public extension Snapshot {
         _attributes.append(element.attribute)
     }
     
-    @inlinable mutating func append<S: Sequence>(contentsOf elements: S) where S.Element == Symbol {
+    @inlinable mutating func append<S: Sequence>(
+    contentsOf elements: S) where S.Element == Symbol {
         _characters.append(contentsOf: elements.lazy.map(\.character))
         _attributes.append(contentsOf: elements.lazy.map(\.attribute))
     }
@@ -251,9 +252,10 @@ public extension Snapshot {
         _attributes.insert(element.attribute, at: position.attribute)
     }
     
-    @inlinable mutating func insert<S: Collection>(contentsOf elements: S, at i: Index) where S.Element == Symbol {
-        _characters.insert(contentsOf: elements.lazy.map(\.character), at: i.character)
-        _attributes.insert(contentsOf: elements.lazy.map(\.attribute), at: i.attribute)
+    @inlinable mutating func insert<C: Collection>(
+    contentsOf elements: C, at position: Index) where C.Element == Symbol {
+        _characters.insert(contentsOf: elements.lazy.map(\.character), at: position.character)
+        _attributes.insert(contentsOf: elements.lazy.map(\.attribute), at: position.attribute)
     }
     
     @inlinable @discardableResult mutating func remove(at position: Index) -> Symbol {
