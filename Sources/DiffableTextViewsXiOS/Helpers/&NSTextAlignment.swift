@@ -24,9 +24,29 @@ extension NSTextAlignment {
     
     @inlinable init(_ alignment: TextAlignment, for layout: UIUserInterfaceLayoutDirection) {
         switch alignment {
-        case  .leading: self = (layout == .leftToRight) ?  .left : .right
-        case .trailing: self = (layout == .leftToRight) ? .right :  .left
-        case   .center: self = .center
+        case  .leading: self =  .leading(for: layout)
+        case .trailing: self = .trailing(for: layout)
+        case   .center: self =   .center
+        }
+    }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Initializers - Helpers
+    //=------------------------------------------------------------------------=
+    
+    @inlinable static func leading(for  layout: UIUserInterfaceLayoutDirection) -> Self {
+        switch layout {
+        case .leftToRight: return  .left
+        case .rightToLeft: return .right
+        @unknown  default: return  .left
+        }
+    }
+    
+    @inlinable static func trailing(for layout: UIUserInterfaceLayoutDirection) -> Self {
+        switch layout {
+        case .leftToRight: return .right
+        case .rightToLeft: return  .left
+        @unknown  default: return .right
         }
     }
 }
