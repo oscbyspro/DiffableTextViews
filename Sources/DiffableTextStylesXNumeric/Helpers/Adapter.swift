@@ -28,9 +28,13 @@ import Foundation
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable init(_ format: Format) {
-        self.format = format.autocorrect()
-        self.scheme = self.format.scheme()
+    @inlinable init(unchecked: Format) {
+        self.format = unchecked
+        self.scheme = unchecked.scheme()
+    }
+
+    @inlinable @inline(__always) init(_ format: Format) {
+        self.init(unchecked: format.rounded(.towardZero))
     }
     
     //=------------------------------------------------------------------------=
@@ -50,7 +54,7 @@ import Foundation
     //=------------------------------------------------------------------------=
     
     @inlinable mutating func update(_ locale: Locale) {
-        self = Self(format.locale(locale))
+        self = Self(unchecked: format.locale(locale))
     }
     
     //=------------------------------------------------------------------------=
