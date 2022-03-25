@@ -63,13 +63,13 @@ import Foundation
         adapter.format[keyPath: keyPath]
     }
     
-    //=------------------------------------------------------------------------=
-    // MARK: Localization
-    //=------------------------------------------------------------------------=
-    
     @inlinable public var locale: Locale {
         adapter.format.locale // dynamic member lookup has lower precedence than methods
     }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Transformations
+    //=------------------------------------------------------------------------=
 
     @inlinable public func locale(_ locale: Locale) -> Self {
         var result = self; result.adapter = result.adapter.locale(locale); return result
