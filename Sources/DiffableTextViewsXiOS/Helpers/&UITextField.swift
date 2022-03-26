@@ -13,7 +13,7 @@ import SwiftUI
 import UIKit
 
 //*============================================================================*
-// MARK: * UITextField x Alignment
+// MARK: * UITextField
 //*============================================================================*
 
 extension UITextField {
