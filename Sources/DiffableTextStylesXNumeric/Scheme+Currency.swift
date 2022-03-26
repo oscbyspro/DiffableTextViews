@@ -15,7 +15,7 @@ import Foundation
 //*============================================================================*
 
 @usableFromInline final class NumericTextSchemeXCurrency: Schemes.Reuseable {
-    @usableFromInline static let cache = Cache<ID, NumericTextSchemeXCurrency>(33)
+    @usableFromInline static let cache = Cache<ID, NumericTextSchemeXCurrency>(32)
     
     //=------------------------------------------------------------------------=
     // MARK: State
@@ -24,7 +24,7 @@ import Foundation
     @usableFromInline let id: ID
     @usableFromInline let lexicon: Lexicon
     @usableFromInline let preferences: Preferences
-    @usableFromInline let instruction: Instruction?
+    @usableFromInline let adjustments: Adjustments?
     
     //=------------------------------------------------------------------------=
     // MARK: Initializers
@@ -46,7 +46,7 @@ import Foundation
         formatter.numberStyle = .currency
         self.preferences = Preferences(formatter)
         formatter.maximumFractionDigits = .zero
-        self.instruction = Instruction(formatter, lexicon)
+        self.adjustments = Adjustments(formatter, lexicon)
     }
     
     //=------------------------------------------------------------------------=
@@ -105,16 +105,16 @@ import Foundation
     }
     
     //*========================================================================*
-    // MARK: * Instruction
+    // MARK: * Adjustments
     //*========================================================================*
 
     /// A model for marking currency labels as virtual.
     ///
     /// Characters used to express currencies are usually disjoint
     /// from characters used to express amounts, but sometimes they overlap.
-    /// This instruction is used to efficiently mark currency labels when needed.
+    /// This model is used to mark currency labels as virtual when needed.
     ///
-    @usableFromInline struct Instruction {
+    @usableFromInline struct Adjustments {
         
         //=--------------------------------------------------------------------=
         // MARK: State
@@ -177,7 +177,7 @@ extension NumericTextSchemeXCurrency {
     //=------------------------------------------------------------------------=
     
     @inlinable func autocorrect(_ snapshot: inout Snapshot) {
-        instruction?.autocorrect(&snapshot)
+        adjustments?.autocorrect(&snapshot)
     }
     
     //=------------------------------------------------------------------------=

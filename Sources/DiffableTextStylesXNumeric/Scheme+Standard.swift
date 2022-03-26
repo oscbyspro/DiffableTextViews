@@ -15,7 +15,7 @@ import Foundation
 //*============================================================================*
 
 @usableFromInline final class NumericTextSchemeXStandard: Schemes.Reuseable {
-    @usableFromInline static let cache = Cache<ID, NumericTextSchemeXStandard>(33)
+    @usableFromInline static let cache = Cache<ID, NumericTextSchemeXStandard>(32)
 
     //=------------------------------------------------------------------------=
     // MARK: State
