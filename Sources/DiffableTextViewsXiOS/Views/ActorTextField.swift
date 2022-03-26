@@ -16,11 +16,6 @@ import UIKit
 // MARK: * ActorTextField
 //*============================================================================*
 
-/// A UITextField affordance layer.
-///
-/// UITextField's UITextPosition stores its absolute UTF16 offset.
-/// The offset from one position to another is therefore measured in constant time.
-///
 @usableFromInline final class ActorTextField: BasicTextField.View {
     @usableFromInline typealias Position = DiffableTextKit.Position<UTF16>
     
