@@ -22,8 +22,6 @@ import Foundation
     @usableFromInline static let grouping = Self(.grouping)
     @usableFromInline static let fraction = Self(.fraction)
     
-    @usableFromInline static let all = [grouping, fraction]
-    
     //=------------------------------------------------------------------------=
     // MARK: State
     //=------------------------------------------------------------------------=
