@@ -22,7 +22,7 @@
     // MARK: Conversions
     //=------------------------------------------------------------------------=
         
-    @inlinable func bytes() -> [UInt8]
+    @inlinable var bytes: [UInt8] { get }
 }
 
 //=----------------------------------------------------------------------------=
@@ -37,6 +37,6 @@ extension Glyphs {
 
     /// Returns the ASCII representation of this instance.
     @inlinable var description: String {
-        String(bytes: bytes(), encoding: .utf8)!
+        String(bytes: bytes, encoding: .utf8)!
     }
 }

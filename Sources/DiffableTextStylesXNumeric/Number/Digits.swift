@@ -25,7 +25,9 @@ import DiffableTextKit
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable init() { self.digits = [] }
+    @inlinable init(digits: [Digit] = []) {
+        self.digits = digits
+    }
     
     //=------------------------------------------------------------------------=
     // MARK: Count
@@ -96,7 +98,7 @@ extension Digits {
     // MARK: ASCII
     //=------------------------------------------------------------------------=
     
-    @inlinable func bytes() -> [UInt8] {
+    @inlinable var bytes: [UInt8] {
         unsafeBitCast(digits, to: [UInt8].self)
     }
 }

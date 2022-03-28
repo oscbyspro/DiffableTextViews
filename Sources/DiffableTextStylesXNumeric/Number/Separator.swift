@@ -43,14 +43,14 @@ import Foundation
     //=------------------------------------------------------------------------=
     
     @inlinable func standard(_ formatter: NumberFormatter) -> Character! {
-        var characters: String { switch Enumeration(rawValue: rawValue)! {
+        var characters: String { switch enumeration {
         case .grouping: return formatter.groupingSeparator
         case .fraction: return formatter .decimalSeparator
         }}; return characters.first
     }
     
     @inlinable func currency(_ formatter: NumberFormatter) -> Character! {
-        var characters: String { switch Enumeration(rawValue: rawValue)! {
+        var characters: String { switch enumeration {
         case .grouping: return formatter.currencyGroupingSeparator
         case .fraction: return formatter .currencyDecimalSeparator
         }}; return characters.first

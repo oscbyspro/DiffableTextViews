@@ -49,7 +49,7 @@ import Foundation
     //=------------------------------------------------------------------------=
     
     @inlinable var isZero: Bool {
-        self == .zero
+        self == Digit.zero
     }
     
     @inlinable var numericValue: UInt8 {
