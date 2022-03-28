@@ -11,11 +11,7 @@
 // MARK: * Glyphs
 //*============================================================================*
 
-/// An object representing multiple ASCII characters by their UInt8 unicode values.
-///
-/// - The conforming object MUST be a struct.
-/// - The conforming object SHOULD implement a single private init method.
-///
+/// An object representing multiple ASCII characters by their UTF8 values.
 @usableFromInline protocol Glyphs: CustomStringConvertible {
     
     //=------------------------------------------------------------------------=

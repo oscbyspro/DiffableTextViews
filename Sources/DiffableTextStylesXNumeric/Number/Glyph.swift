@@ -13,7 +13,10 @@ import Foundation
 // MARK: * Glyph
 //*============================================================================*
 
-/// An object representing an ASCII character by its UInt8 unicode value.
+/// An object representing an ASCII character by its UTF8 value.
+///
+/// - The conforming object MUST be a struct.
+///
 @usableFromInline protocol Glyph: Hashable, CaseIterable, CustomStringConvertible {
     associatedtype Enumeration: CaseIterable, RawRepresentable where Enumeration.RawValue == UInt8
     
