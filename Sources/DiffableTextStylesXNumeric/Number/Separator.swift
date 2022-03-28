@@ -13,30 +13,55 @@ import Foundation
 // MARK: * Separator
 //*============================================================================*
 
-@usableFromInline enum Separator: UInt8, Glyph {
+@usableFromInline struct Separator: Glyph {
     
     //=------------------------------------------------------------------------=
     // MARK: Instances
     //=------------------------------------------------------------------------=
     
-    case grouping = 44 // ","
-    case fraction = 46 // "."
+    @usableFromInline static let grouping = Self(.grouping)
+    @usableFromInline static let fraction = Self(.fraction)
+    
+    @usableFromInline static let all = [grouping, fraction]
+    
+    //=------------------------------------------------------------------------=
+    // MARK: State
+    //=------------------------------------------------------------------------=
+    
+    @usableFromInline let rawValue: UInt8
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Initializers
+    //=------------------------------------------------------------------------=
+    
+    @inlinable init(_ enumeration: Enumeration) {
+        self.rawValue = enumeration.rawValue
+    }
     
     //=------------------------------------------------------------------------=
     // MARK: Localization
     //=------------------------------------------------------------------------=
     
     @inlinable func standard(_ formatter: NumberFormatter) -> Character! {
-        var characters: String { switch self {
+        var characters: String { switch Enumeration(rawValue: rawValue)! {
         case .grouping: return formatter.groupingSeparator
         case .fraction: return formatter .decimalSeparator
         }}; return characters.first
     }
     
     @inlinable func currency(_ formatter: NumberFormatter) -> Character! {
-        var characters: String { switch self {
+        var characters: String { switch Enumeration(rawValue: rawValue)! {
         case .grouping: return formatter.currencyGroupingSeparator
         case .fraction: return formatter .currencyDecimalSeparator
         }}; return characters.first
+    }
+    
+    //*========================================================================*
+    // MARK: * Enumeration
+    //*========================================================================*
+    
+    @usableFromInline enum Enumeration: UInt8, CaseIterable {
+        case grouping = 44 // ","
+        case fraction = 46 // "."
     }
 }

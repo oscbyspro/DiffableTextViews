@@ -115,7 +115,7 @@ extension Bounds {
     //=------------------------------------------------------------------------=
     
     @inlinable func autocorrect(_ sign: inout Sign) {
-        switch sign {
+        switch sign.enumeration {
         case .positive: if max <= .zero, min != .zero { sign.toggle() }
         case .negative: if min >= .zero               { sign.toggle() }
         }

@@ -90,15 +90,13 @@ import DiffableTextKit
 // MARK: + Conversions
 //=----------------------------------------------------------------------------=
 
-extension Digits: TextOutputStreamable {
+extension Digits {
     
     //=------------------------------------------------------------------------=
-    // MARK: Write
+    // MARK: ASCII
     //=------------------------------------------------------------------------=
     
-    @inlinable func write<T>(to target: inout T) where T: TextOutputStream {
-        for digit in digits {
-            digit.write(to: &target)
-        }
+    @inlinable func bytes() -> [UInt8] {
+        unsafeBitCast(digits, to: [UInt8].self)
     }
 }

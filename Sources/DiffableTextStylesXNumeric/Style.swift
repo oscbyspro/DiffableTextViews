@@ -43,6 +43,10 @@ public struct _NumericTextStyle<Format: NumericTextFormat>: DiffableTextStyle {
     // MARK: Accessors
     //=------------------------------------------------------------------------=
     
+    @inlinable public var locale: Locale {
+        format.locale
+    }
+    
     @inlinable var format: Format {
         adapter.format
     }
@@ -54,14 +58,10 @@ public struct _NumericTextStyle<Format: NumericTextFormat>: DiffableTextStyle {
     @inlinable var lexicon: Lexicon {
         scheme.lexicon
     }
-    
+
     //=------------------------------------------------------------------------=
-    // MARK: Locale
+    // MARK: Transformations
     //=------------------------------------------------------------------------=
-    
-    @inlinable public var locale: Locale {
-        format.locale
-    }
     
     @inlinable public func locale(_ locale: Locale) -> Self {
         guard self.locale != locale else { return self }

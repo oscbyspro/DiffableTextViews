@@ -14,8 +14,20 @@ import Foundation
 //*============================================================================*
 
 /// An object representing an ASCII character by its UInt8 unicode value.
-@usableFromInline protocol Glyph: RawRepresentable, Hashable, CaseIterable,
-CustomStringConvertible, TextOutputStreamable where RawValue == UInt8 {
+@usableFromInline protocol Glyph: Hashable, CaseIterable, CustomStringConvertible {
+    associatedtype Enumeration: CaseIterable, RawRepresentable where Enumeration.RawValue == UInt8
+    
+    //=------------------------------------------------------------------------=
+    // MARK: State
+    //=------------------------------------------------------------------------=
+    
+    @inlinable var rawValue: UInt8 { get }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Initializers
+    //=------------------------------------------------------------------------=
+    
+    @inlinable init(_ enumeration: Enumeration)
     
     //=------------------------------------------------------------------------=
     // MARK: Localization
@@ -33,6 +45,26 @@ CustomStringConvertible, TextOutputStreamable where RawValue == UInt8 {
 extension Glyph {
     
     //=------------------------------------------------------------------------=
+    // MARK: ASCII
+    //=------------------------------------------------------------------------=
+    
+    @inlinable @inline(__always) func write(into bytes: inout [UInt8]) {
+        bytes.append(rawValue)
+    }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Enumeration
+    //=------------------------------------------------------------------------=
+    
+    @inlinable var enumeration: Enumeration {
+        Enumeration(rawValue: rawValue)!
+    }
+    
+    @inlinable static var allCases: [Self] {
+        Enumeration.allCases.map(Self.init)
+    }
+    
+    //=------------------------------------------------------------------------=
     // MARK: Localization
     //=------------------------------------------------------------------------=
     
@@ -48,7 +80,7 @@ extension Glyph {
 extension Glyph {
     
     //=------------------------------------------------------------------------=
-    // MARK: Unicodeable
+    // MARK: ASCII
     //=------------------------------------------------------------------------=
     
     /// Returns the ASCII representation of this instance.
@@ -64,11 +96,6 @@ extension Glyph {
     /// Returns the ASCII representation of this instance.
     @inlinable var description: String {
         unicode.description
-    }
-    
-    /// Writes the ASCII representation of this instance to the target.
-    @inlinable func write<T>(to target: inout T) where T: TextOutputStream {
-        unicode.write(to: &target)
     }
 }
 

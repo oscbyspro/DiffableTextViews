@@ -74,7 +74,7 @@ extension Lexicon {
     
     /// Relies on the fact that implemented styles can parse unformatted numbers.
     @inlinable func value<T>(of number: Number, as format: T) throws -> T.Value where T: Format {
-        try format.locale(Self.en_US).parse(number.characters())
+        try format.locale(Self.en_US).parse(number.description) // description returns ASCII
     }
     
     //=------------------------------------------------------------------------=

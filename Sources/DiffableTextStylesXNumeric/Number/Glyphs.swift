@@ -12,14 +12,17 @@
 //*============================================================================*
 
 /// An object representing multiple ASCII characters by their UInt8 unicode values.
-@usableFromInline protocol Glyphs: CustomStringConvertible, TextOutputStreamable {
+///
+/// - The conforming object MUST be a struct.
+/// - The conforming object SHOULD implement a single private init method.
+///
+@usableFromInline protocol Glyphs: CustomStringConvertible {
     
     //=------------------------------------------------------------------------=
     // MARK: Conversions
     //=------------------------------------------------------------------------=
-    
-    /// Writes the ASCII representation of this instance to the target.
-    @inlinable func write<T>(to target: inout T) where T: TextOutputStream
+        
+    @inlinable func bytes() -> [UInt8]
 }
 
 //=----------------------------------------------------------------------------=
@@ -31,14 +34,9 @@ extension Glyphs {
     //=------------------------------------------------------------------------=
     // MARK: Characters / Description
     //=------------------------------------------------------------------------=
-    
-    /// Returns the ASCII representation of this instance.
-    @inlinable func characters() -> String {
-        description
-    }
-    
+
     /// Returns the ASCII representation of this instance.
     @inlinable var description: String {
-        var characters = String(); write(to: &characters); return characters
+        String(bytes: bytes(), encoding: .utf8)!
     }
 }

@@ -167,13 +167,31 @@ extension Number {
 extension Number {
     
     //=------------------------------------------------------------------------=
-    // MARK: Write
+    // MARK: ASCII
     //=------------------------------------------------------------------------=
     
-    @inlinable func write<T>(to target: inout T) where T: TextOutputStream {
-        sign.write(to: &target)
-        integer.write(to: &target)
-        separator?.write(to: &target)
-        fraction.write(to: &target)
+    @inlinable var capacity: Int {
+        integer.count + fraction.count + (separator != nil ? 2 : 1)
+    }
+    
+    @inlinable func bytes() -> [UInt8] {
+        var bytes = [UInt8]()
+        bytes.reserveCapacity(capacity)
+        //=--------------------------------------=
+        // MARK: Integer
+        //=--------------------------------------=
+        bytes.append(sign.rawValue)
+        bytes.append(contentsOf: integer.bytes())
+        //=--------------------------------------=
+        // MARK: Floating Point
+        //=--------------------------------------=
+        if let separator = separator {
+            bytes.append(separator.rawValue)
+            bytes.append(contentsOf: fraction.bytes())
+        }
+        //=--------------------------------------=
+        // MARK: Bytes
+        //=--------------------------------------=
+        return bytes
     }
 }
