@@ -21,8 +21,9 @@
     //=------------------------------------------------------------------------=
     // MARK: Conversions
     //=------------------------------------------------------------------------=
-        
-    @inlinable var bytes: [UInt8] { get }
+    
+    /// Returns the ASCII representation of this instance as UTF8 encoded bytes.
+    @inlinable var rawValue: [UInt8] { get }
 }
 
 //=----------------------------------------------------------------------------=
@@ -35,8 +36,8 @@ extension Glyphs {
     // MARK: Characters / Description
     //=------------------------------------------------------------------------=
 
-    /// Returns the ASCII representation of this instance.
+    /// Returns the ASCII representation of this instance as a String.
     @inlinable var description: String {
-        String(bytes: bytes, encoding: .utf8)!
+        String(bytes: rawValue, encoding: .utf8)!
     }
 }

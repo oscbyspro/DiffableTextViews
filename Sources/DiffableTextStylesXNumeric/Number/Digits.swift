@@ -98,7 +98,7 @@ extension Digits {
     // MARK: ASCII
     //=------------------------------------------------------------------------=
     
-    @inlinable var bytes: [UInt8] {
+    @inlinable var rawValue: [UInt8] {
         unsafeBitCast(digits, to: [UInt8].self)
     }
 }

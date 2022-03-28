@@ -174,20 +174,20 @@ extension Number {
         integer.count + fraction.count + (separator != nil ? 2 : 1)
     }
     
-    @inlinable var bytes: [UInt8] {
+    @inlinable var rawValue: [UInt8] {
         var bytes = [UInt8]()
         bytes.reserveCapacity(capacity)
         //=--------------------------------------=
         // MARK: Integer
         //=--------------------------------------=
         bytes.append(sign.rawValue)
-        bytes.append(contentsOf: integer.bytes)
+        bytes.append(contentsOf: integer.rawValue)
         //=--------------------------------------=
         // MARK: Floating Point
         //=--------------------------------------=
         if let separator = separator {
             bytes.append(separator.rawValue)
-            bytes.append(contentsOf: fraction.bytes)
+            bytes.append(contentsOf: fraction.rawValue)
         }
         //=--------------------------------------=
         // MARK: Bytes
