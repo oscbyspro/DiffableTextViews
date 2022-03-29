@@ -32,14 +32,14 @@ final class NumberTestsXGlyph: Tests {
     /// 10,000 digits and 10,000 iterations: 10.137 seconds.
     func test_Digits_ForEachUnicodeScalar_String() {
         measure {
-            var accumulator = String()
-            accumulator.reserveCapacity(digits.count * iterations)
+            var string = String()
+            string.reserveCapacity(digits.count * iterations)
             //=--------------------------------------=
-            // MARK: Append
+            // MARK: Insert
             //=--------------------------------------=
             for _ in 0 ..< iterations {
                 for digit in digits {
-                    digit.unicode.write(to: &accumulator)
+                    digit.unicode.write(to: &string)
                 }
             }
         }
@@ -48,18 +48,18 @@ final class NumberTestsXGlyph: Tests {
     /// 10,000 digits and 10,000 iterations: 0.030 seconds.
     func test_Digits_UnsafeBitCastToBytes_String() {
         measure {
-            var accumulator = [UInt8]()
-            accumulator.reserveCapacity(digits.count * iterations)
+            var bytes = [UInt8]()
+            bytes.reserveCapacity(digits.count * iterations)
             //=--------------------------------------=
-            // MARK: Append
+            // MARK: Insert
             //=--------------------------------------=
             for _ in 0 ..< iterations {
-                accumulator.append(contentsOf: unsafeBitCast(digits, to: [UInt8].self))
+                bytes.append(contentsOf: unsafeBitCast(digits, to: [UInt8].self))
             }
             //=----------------------------------=
             // MARK: Result
             //=----------------------------------=
-            let _ = String(bytes: accumulator, encoding: .utf8)
+            let _ = String(bytes: bytes, encoding: .utf8)
         }
     }
 }
