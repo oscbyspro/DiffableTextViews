@@ -176,9 +176,7 @@ extension Number {
         // MARK: Size
         //=--------------------------------------=
         rawValue.reserveCapacity(
-        (integer .count) +
-        (fraction.count) +
-        (separator == nil ? 1 : 2))
+        integer.count + fraction.count + 2)
         //=--------------------------------------=
         // MARK: Reduce - Sign, Integer
         //=--------------------------------------=
