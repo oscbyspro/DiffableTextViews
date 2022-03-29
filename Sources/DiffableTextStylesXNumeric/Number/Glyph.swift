@@ -13,7 +13,7 @@ import Foundation
 // MARK: * Glyph
 //*============================================================================*
 
-/// An object representing an UTF-8 encoded ASCII character.
+/// An object representing a UTF-8 encoded ASCII character.
 ///
 /// - The conforming object MUST be a struct (have a bit pattern equal to its rawValue).
 ///
@@ -78,17 +78,14 @@ extension Glyph {
     // MARK: ASCII
     //=------------------------------------------------------------------------=
     
-    /// Returns the ASCII representation of this instance.
     @inlinable var unicode: Unicode.Scalar {
         Unicode.Scalar(rawValue)
     }
     
-    /// Returns the ASCII representation of this instance.
     @inlinable var character: Character {
         Character(unicode)
     }
     
-    /// Returns the ASCII representation of this instance.
     @inlinable var description: String {
         unicode.description
     }

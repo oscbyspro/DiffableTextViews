@@ -18,7 +18,6 @@
     // MARK: Conversions
     //=------------------------------------------------------------------------=
     
-    /// Returns its UTF-8 encoded ASCII representation.
     @inlinable var rawValue: [UInt8] { get }
 }
 
@@ -32,7 +31,6 @@ extension Glyphs {
     // MARK: Characters / Description
     //=------------------------------------------------------------------------=
 
-    /// Returns its ASCII representation.
     @inlinable var description: String {
         String(bytes: rawValue, encoding: .utf8)!
     }

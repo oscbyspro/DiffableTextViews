@@ -171,29 +171,29 @@ extension Number {
     //=------------------------------------------------------------------------=
     
     @inlinable var rawValue: [UInt8] {
-        var bytes = [UInt8]()
+        var rawValue = [UInt8]()
         //=--------------------------------------=
-        // MARK: Capacity
+        // MARK: Size
         //=--------------------------------------=
-        bytes.reserveCapacity(
+        rawValue.reserveCapacity(
         (integer .count) +
         (fraction.count) +
         (separator == nil ? 1 : 2))
         //=--------------------------------------=
-        // MARK: Integer
+        // MARK: Reduce - Sign, Integer
         //=--------------------------------------=
-        bytes.append(sign.rawValue)
-        bytes.append(contentsOf: integer.rawValue)
+        rawValue.append(sign.rawValue)
+        rawValue.append(contentsOf: integer.rawValue)
         //=--------------------------------------=
-        // MARK: Floating Point
+        // MARK: Reduce - Separator, Fraction
         //=--------------------------------------=
         if let separator = separator {
-            bytes.append(separator.rawValue)
-            bytes.append(contentsOf: fraction.rawValue)
+            rawValue.append(separator.rawValue)
+            rawValue.append(contentsOf: fraction.rawValue)
         }
         //=--------------------------------------=
-        // MARK: Complete
+        // MARK: Done
         //=--------------------------------------=
-        return bytes
+        return rawValue
     }
 }
