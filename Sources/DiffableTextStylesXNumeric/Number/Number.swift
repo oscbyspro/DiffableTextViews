@@ -170,13 +170,15 @@ extension Number {
     // MARK: ASCII
     //=------------------------------------------------------------------------=
     
-    @inlinable var capacity: Int {
-        integer.count + fraction.count + (separator != nil ? 2 : 1)
-    }
-    
     @inlinable var rawValue: [UInt8] {
         var bytes = [UInt8]()
-        bytes.reserveCapacity(capacity)
+        //=--------------------------------------=
+        // MARK: Capacity
+        //=--------------------------------------=
+        bytes.reserveCapacity(
+        (integer .count) +
+        (fraction.count) +
+        (separator == nil ? 1 : 2))
         //=--------------------------------------=
         // MARK: Integer
         //=--------------------------------------=
@@ -190,7 +192,7 @@ extension Number {
             bytes.append(contentsOf: fraction.rawValue)
         }
         //=--------------------------------------=
-        // MARK: Bytes
+        // MARK: Complete
         //=--------------------------------------=
         return bytes
     }
