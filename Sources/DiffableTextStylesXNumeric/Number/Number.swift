@@ -20,6 +20,7 @@ import DiffableTextKit
 /// - It MUST NOT contain fraction digits without containing a fraction separator.
 ///
 @usableFromInline struct Number: Glyphs {
+    @usableFromInline typealias Map<Component> = [Character: Component]
     
     //=------------------------------------------------------------------------=
     // MARK: State
@@ -36,7 +37,7 @@ import DiffableTextKit
     
     /// Parses the value represented by an **unformatted** sequence.
     @inlinable init<S>(characters: S, integer: Bool, unsigned: Bool,
-    signs: [Character: Sign], digits: [Character: Digit], separators: [Character: Separator])
+    signs: Map<Sign>, digits: Map<Digit>, separators: Map<Separator>)
     throws where S: Sequence, S.Element == Character {
         //=--------------------------------------=
         // MARK: State
@@ -61,13 +62,13 @@ import DiffableTextKit
         //=--------------------------------------=
         body: do {
             //=----------------------------------=
-            // MARK: Digits
+            // MARK: Integer
             //=----------------------------------=
             while let character = next, let digit = digits[character] {
                 self.integer.append(digit); next = iterator.next()
             }
             //=----------------------------------=
-            // MARK: Break - Integer
+            // MARK: Break
             //=----------------------------------=
             guard !integer else { break body }
             //=----------------------------------=
@@ -77,9 +78,9 @@ import DiffableTextKit
                 self.separator = separator; next = iterator.next()
             }
             //=----------------------------------=
-            // MARK: Break - Nonseparated
+            // MARK: Break
             //=----------------------------------=
-            guard separator == .fraction else { break body }
+            guard separator != nil else { break body }
             //=----------------------------------=
             // MARK: Fraction
             //=----------------------------------=
@@ -178,12 +179,12 @@ extension Number {
         rawValue.reserveCapacity(
         integer.count + fraction.count + 2)
         //=--------------------------------------=
-        // MARK: Reduce - Sign, Integer
+        // MARK: Sign, Integer
         //=--------------------------------------=
         rawValue.append(sign.rawValue)
         rawValue.append(contentsOf: integer.rawValue)
         //=--------------------------------------=
-        // MARK: Reduce - Separator, Fraction
+        // MARK: Separator, Fraction
         //=--------------------------------------=
         if let separator = separator {
             rawValue.append(separator.rawValue)
