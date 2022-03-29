@@ -32,7 +32,7 @@ extension NumericTextStyle {
             // MARK: Separator
             //=----------------------------------=
             } else if let separator = lexicon.separators[character] {
-                attribute = separator == .fraction ? .removable : .phantom
+                attribute = (separator == .fraction) ? .removable : .phantom
             //=----------------------------------=
             // MARK: Sign
             //=----------------------------------=

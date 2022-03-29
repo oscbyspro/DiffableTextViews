@@ -99,6 +99,6 @@ extension Digits {
     //=------------------------------------------------------------------------=
     
     @inlinable var rawValue: [UInt8] {
-        unsafeBitCast(digits, to: [UInt8].self)
+        Swift.unsafeBitCast(digits, to: [UInt8].self)
     }
 }
