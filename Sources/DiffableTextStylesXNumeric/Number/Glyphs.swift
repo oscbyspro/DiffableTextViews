@@ -11,14 +11,14 @@
 // MARK: * Glyphs
 //*============================================================================*
 
-/// An object representing multiple ASCII characters by their UTF8 values.
+/// An object representing multiple UTF-8 encoded ASCII characters.
 @usableFromInline protocol Glyphs: CustomStringConvertible {
     
     //=------------------------------------------------------------------------=
     // MARK: Conversions
     //=------------------------------------------------------------------------=
     
-    /// Returns the ASCII representation of this instance as UTF8 encoded bytes.
+    /// Returns its UTF-8 encoded ASCII representation.
     @inlinable var rawValue: [UInt8] { get }
 }
 
@@ -32,7 +32,7 @@ extension Glyphs {
     // MARK: Characters / Description
     //=------------------------------------------------------------------------=
 
-    /// Returns the ASCII representation of this instance as a String.
+    /// Returns its ASCII representation.
     @inlinable var description: String {
         String(bytes: rawValue, encoding: .utf8)!
     }
