@@ -32,6 +32,89 @@ import DiffableTextKit
     @usableFromInline private(set) var fraction = Digits()
     
     //=------------------------------------------------------------------------=
+    // MARK: Accessors
+    //=------------------------------------------------------------------------=
+
+    @inlinable var hasSeparatorAsSuffix: Bool {
+        fraction.digits.isEmpty && separator != nil
+    }
+    
+    @inlinable func count() -> Count {
+        let value = integer.count + fraction.count - integer.count(prefix: \.isZero)
+        return Count(value: value, integer: integer.count, fraction: fraction.count)
+    }
+
+    //=------------------------------------------------------------------------=
+    // MARK: Transformations
+    //=------------------------------------------------------------------------=
+    
+    @inlinable mutating func trim(max: Count) {
+        //=--------------------------------------=
+        // MARK: Integer
+        //=--------------------------------------=
+        self.integer.suffix(maxLength:  min(max.integer, max.value))
+        self.integer.trimZerosPrefix()
+        //=--------------------------------------=
+        // MARK: Fraction
+        //=--------------------------------------=
+        self.fraction.prefix(maxLength: min(max.fraction, max.value - integer.count))
+        self.fraction.trimZerosSuffix()
+        //=--------------------------------------=
+        // MARK: Finalize
+        //=--------------------------------------=
+        self.integer.makeAtLeastZero()
+        self.removeSeparatorAsSuffix()
+    }
+    
+    /// Returns true if a suffixing separator was removed, returns false otherwise.
+    @inlinable @discardableResult mutating func removeSeparatorAsSuffix() -> Bool {
+        if hasSeparatorAsSuffix { separator = nil; return true }; return false
+    }
+}
+
+//=----------------------------------------------------------------------------=
+// MARK: + Conversions
+//=----------------------------------------------------------------------------=
+
+extension Number {
+    
+    //=------------------------------------------------------------------------=
+    // MARK: ASCII
+    //=------------------------------------------------------------------------=
+    
+    @inlinable var rawValue: [UInt8] {
+        var rawValue = [UInt8]()
+        //=--------------------------------------=
+        // MARK: Size
+        //=--------------------------------------=
+        rawValue.reserveCapacity(
+        integer.count + fraction.count + 2)
+        //=--------------------------------------=
+        // MARK: Sign, Integer
+        //=--------------------------------------=
+        rawValue.append(sign.rawValue)
+        rawValue.append(contentsOf: integer.rawValue)
+        //=--------------------------------------=
+        // MARK: Separator, Fraction
+        //=--------------------------------------=
+        if let separator = separator {
+            rawValue.append(separator.rawValue)
+            rawValue.append(contentsOf: fraction.rawValue)
+        }
+        //=--------------------------------------=
+        // MARK: Done
+        //=--------------------------------------=
+        return rawValue
+    }
+}
+
+//=----------------------------------------------------------------------------=
+// MARK: + Parse
+//=----------------------------------------------------------------------------=
+
+extension Number {
+    
+    //=------------------------------------------------------------------------=
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
@@ -103,96 +186,5 @@ import DiffableTextKit
         //=--------------------------------------=
         self.integer.trimZerosPrefix()
         self.integer.makeAtLeastZero()
-    }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Accessors
-    //=------------------------------------------------------------------------=
-
-    @inlinable var hasSeparatorAsSuffix: Bool {
-        fraction.digits.isEmpty && separator != nil
-    }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Utilities
-    //=------------------------------------------------------------------------=
-    
-    @inlinable func count() -> Count {
-        let value = integer.count + fraction.count - integer.count(prefix: \.isZero)
-        return Count(value: value, integer: integer.count, fraction: fraction.count)
-    }
-}
-
-//=----------------------------------------------------------------------------=
-// MARK: + Transformations
-//=----------------------------------------------------------------------------=
-
-extension Number {
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Separator
-    //=------------------------------------------------------------------------=
-    
-    /// Returns true if a suffixing separator was removed, returns false otherwise.
-    @inlinable @discardableResult mutating func removeSeparatorAsSuffix() -> Bool {
-        if hasSeparatorAsSuffix { separator = nil; return true }; return false
-    }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Precision
-    //=------------------------------------------------------------------------=
-    
-    @inlinable mutating func trim(max: Count) {
-        //=--------------------------------------=
-        // MARK: Integer
-        //=--------------------------------------=
-        self.integer.suffix(maxLength:  min(max.integer, max.value))
-        self.integer.trimZerosPrefix()
-        //=--------------------------------------=
-        // MARK: Fraction
-        //=--------------------------------------=
-        self.fraction.prefix(maxLength: min(max.fraction, max.value - integer.count))
-        self.fraction.trimZerosSuffix()
-        //=--------------------------------------=
-        // MARK: Finalize
-        //=--------------------------------------=
-        self.integer.makeAtLeastZero()
-        self.removeSeparatorAsSuffix()
-    }
-}
-
-//=----------------------------------------------------------------------------=
-// MARK: + Conversions
-//=----------------------------------------------------------------------------=
-
-extension Number {
-    
-    //=------------------------------------------------------------------------=
-    // MARK: ASCII
-    //=------------------------------------------------------------------------=
-    
-    @inlinable var rawValue: [UInt8] {
-        var rawValue = [UInt8]()
-        //=--------------------------------------=
-        // MARK: Size
-        //=--------------------------------------=
-        rawValue.reserveCapacity(
-        integer.count + fraction.count + 2)
-        //=--------------------------------------=
-        // MARK: Sign, Integer
-        //=--------------------------------------=
-        rawValue.append(sign.rawValue)
-        rawValue.append(contentsOf: integer.rawValue)
-        //=--------------------------------------=
-        // MARK: Separator, Fraction
-        //=--------------------------------------=
-        if let separator = separator {
-            rawValue.append(separator.rawValue)
-            rawValue.append(contentsOf: fraction.rawValue)
-        }
-        //=--------------------------------------=
-        // MARK: Done
-        //=--------------------------------------=
-        return rawValue
     }
 }
