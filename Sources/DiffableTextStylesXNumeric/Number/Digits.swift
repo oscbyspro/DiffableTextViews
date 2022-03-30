@@ -53,31 +53,17 @@ import DiffableTextKit
         digits.append(element)
     }
     
-    //=------------------------------------------------------------------------=
-    // MARK: Transformations - Replace
-    //=------------------------------------------------------------------------=
-    
     @inlinable mutating func makeAtLeastZero() {
-        if  digits.isEmpty {
-            digits.append(.zero)
-        }
+        if digits.isEmpty { digits.append(.zero) }
     }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Transformations - Prefix / Suffix
-    //=------------------------------------------------------------------------=
-    
-    @inlinable mutating func trimZerosPrefix() {
+
+    @inlinable mutating func removeZerosAsPrefix() {
         digits.removeSubrange(..<digits.prefix(while: \.isZero).endIndex)
     }
     
-    @inlinable mutating func trimZerosSuffix() {
+    @inlinable mutating func removeZerosAsSuffix() {
         digits.removeSubrange(digits.suffix(while: \.isZero).startIndex...)
     }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Transformations - Prefix / Suffix
-    //=------------------------------------------------------------------------=
     
     @inlinable mutating func prefix(maxLength: Int) {
         digits = Array(digits.prefix(maxLength))
@@ -98,6 +84,7 @@ extension Digits {
     // MARK: ASCII
     //=------------------------------------------------------------------------=
     
+    /// Requires that digits is of type [Digit].
     @inlinable var rawValue: [UInt8] {
         Swift.unsafeBitCast(digits, to: [UInt8].self)
     }

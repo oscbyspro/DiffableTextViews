@@ -52,13 +52,13 @@ import DiffableTextKit
         //=--------------------------------------=
         // MARK: Integer
         //=--------------------------------------=
-        self.integer.suffix(maxLength:  min(max.integer, max.value))
-        self.integer.trimZerosPrefix()
+        self.integer.suffix(maxLength: min(max.integer, max.value))
+        self.integer.removeZerosAsPrefix()
         //=--------------------------------------=
         // MARK: Fraction
         //=--------------------------------------=
         self.fraction.prefix(maxLength: min(max.fraction, max.value - integer.count))
-        self.fraction.trimZerosSuffix()
+        self.fraction.removeZerosAsSuffix()
         //=--------------------------------------=
         // MARK: Finalize
         //=--------------------------------------=
@@ -184,7 +184,6 @@ extension Number {
         //=--------------------------------------=
         // MARK: Finalize
         //=--------------------------------------=
-        self.integer.trimZerosPrefix()
-        self.integer.makeAtLeastZero()
+        self.integer.removeZerosAsPrefix(); self.integer.makeAtLeastZero()
     }
 }
