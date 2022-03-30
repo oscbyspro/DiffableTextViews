@@ -37,21 +37,20 @@ import DiffableTextKit
     //=------------------------------------------------------------------------=
     
     @inlinable var ascii: Lexicon { .ascii }
-}
 
-//=----------------------------------------------------------------------------=
-// MARK: + Translate
-//=----------------------------------------------------------------------------=
-
-extension Reader {
-    
     //=------------------------------------------------------------------------=
-    // MARK: Single Character Input
+    // MARK: Transformations
     //=------------------------------------------------------------------------=
     
     @inlinable mutating func translateSingleCharacterInput() {
         guard changes.replacement.count == 1 else { return }
         self .changes.replacement = Snapshot(changes.replacement.map(translate))
+    }
+    
+    @inlinable mutating func consumeSingleSignInput() -> Sign? {
+        guard changes.replacement.count == 1 else { return nil }
+        guard let sign = lexicon.signs[changes.replacement.first!.character] else { return nil }
+        self.changes.replacement.removeAll(); return sign
     }
     
     //=------------------------------------------------------------------------=
@@ -85,22 +84,5 @@ extension Reader {
         // MARK: Done
         //=--------------------------------------=
         return Symbol(character, as: input.attribute)
-    }
-}
-
-//=----------------------------------------------------------------------------=
-// MARK: + Commands
-//=----------------------------------------------------------------------------=
-
-extension Reader {
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Single Sign Input
-    //=------------------------------------------------------------------------=
-    
-    @inlinable mutating func consumeSingleSignInput() -> Sign? {
-        guard changes.replacement.count == 1 else { return nil }
-        guard let sign = lexicon.signs[changes.replacement.first!.character] else { return nil }
-        self.changes.replacement.removeAll(); return sign
     }
 }

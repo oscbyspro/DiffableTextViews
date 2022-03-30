@@ -39,16 +39,9 @@ public final class Lexicon {
     @inlinable init(signs: Links<Sign>, digits: Links<Digit>, separators: Links<Separator>) {
         self.signs = signs; self.digits = digits; self.separators = separators
     }
-}
-
-//=----------------------------------------------------------------------------=
-// MARK: + Kinds
-//=----------------------------------------------------------------------------=
-
-extension Lexicon {
 
     //=------------------------------------------------------------------------=
-    // MARK: Initializers
+    // MARK: Initializers - Static
     //=------------------------------------------------------------------------=
     
     /// Requires that formatter.numberStyle == .none.

@@ -47,20 +47,6 @@ public struct Count: Equatable {
     @inlinable public var integer:  Int { storage.y }
     @inlinable public var fraction: Int { storage.z }
     
-    //=------------------------------------------------------------------------=
-    // MARK: Elements
-    //=------------------------------------------------------------------------=
-
-    @inlinable subscript(component: Component) -> Int {
-        storage[component.rawValue]
-    }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Indices
-    //=------------------------------------------------------------------------=
-    
-    @inlinable var components: [Component] { Self.components }
-    
     //*========================================================================*
     // MARK: * Component
     //*========================================================================*
@@ -69,6 +55,18 @@ public struct Count: Equatable {
         case value    = 0
         case integer  = 1
         case fraction = 2
+    }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Accessors
+    //=------------------------------------------------------------------------=
+    
+    @inlinable var components: [Component] {
+        Self.components
+    }
+    
+    @inlinable subscript(component: Component) -> Int {
+        storage[component.rawValue]
     }
     
     //=------------------------------------------------------------------------=

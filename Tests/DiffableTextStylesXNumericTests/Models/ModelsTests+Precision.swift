@@ -19,26 +19,25 @@ import XCTest
 //*============================================================================*
 
 final class ModelsTestsXPrecision: XCTestCase {
+    typealias Range = ClosedRange<Int>
     typealias Style<T: Format> = _NumericTextStyle<T>
 
     //=------------------------------------------------------------------------=
     // MARK: State
     //=------------------------------------------------------------------------=
     
-    let integer = Style<Int    .FormatStyle>.number
-    let decimal = Style<Decimal.FormatStyle>.number
+    let integer = NumericTextStyle<Int>.number
+    let decimal = NumericTextStyle<Decimal>.number
     
     //=------------------------------------------------------------------------=
     // MARK: Assertions
     //=------------------------------------------------------------------------=
     
-    func XCTAssert<T: Format>(_ style: Style<T>,
-    integer: ClosedRange<Int>, fraction: ClosedRange<Int>) {
-        XCTAssert(style.precision, integer: integer, fraction: fraction)
+    func XCTAssert<T: Format>(_ style: Style<T>, integer: Range, fraction: Range) {
+         XCTAssert(style.precision, integer: integer, fraction: fraction)
     }
     
-    func XCTAssert<T: Value>(_ precision: Precision<T>,
-    integer: ClosedRange<Int>, fraction: ClosedRange<Int>) {
+    func XCTAssert<T: Value>(_ precision: Precision<T>, integer: Range, fraction: Range) {
         //=--------------------------------------=
         // MARK: Integer
         //=--------------------------------------=

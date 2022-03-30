@@ -29,7 +29,7 @@ extension StyleTests {
     //=------------------------------------------------------------------------=
         
     func XCTAssert<F: Format>(_ value: F.Value, format: F, result: String) {
-        XCTAssertEqual(format.precision(.fractionLength(0...)).format(value), result)
+         XCTAssertEqual(format.precision(.fractionLength(0...)).format(value), result)
     }
     
     /// Fraction limits is set to max because a style's default precision depends on context.

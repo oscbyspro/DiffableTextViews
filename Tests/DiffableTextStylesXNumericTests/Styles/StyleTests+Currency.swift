@@ -78,7 +78,7 @@ extension StyleTestsXCurrency {
     //=------------------------------------------------------------------------=
     
     func testDecimal() throws {
-        XCTInterpretLocalesXCurrencies(Decimal(string: "-1.23")!)
+        XCTInterpretLocalesXCurrencies(-1.23 as Decimal)
     }
 }
 

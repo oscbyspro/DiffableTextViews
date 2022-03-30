@@ -23,7 +23,7 @@ final class NumberTestsXSign: Tests {
     //=------------------------------------------------------------------------=
     
     func XCTAssertASCII(_ sign: Sign, _ character: Character) {
-        XCTAssertEqual(sign.character, character)
+         XCTAssertEqual(sign.character, character)
     }
     
     //=------------------------------------------------------------------------=

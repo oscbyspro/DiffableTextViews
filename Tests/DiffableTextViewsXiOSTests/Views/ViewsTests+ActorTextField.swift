@@ -71,7 +71,7 @@ extension ViewsTestsXActorTextField {
     //=------------------------------------------------------------------------=
     
     func sizeLoop() {
-        for _ in 0 ..< 1_000 {
+        for _ in 0 ..< 1 {
             _ = view.size
         }
     }

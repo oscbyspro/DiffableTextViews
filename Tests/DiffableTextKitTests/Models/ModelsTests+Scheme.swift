@@ -25,7 +25,7 @@ final class ModelsTestsXScheme: XCTestCase {
     //=------------------------------------------------------------------------=
     
     func sizeLoop<S>(_ alphabet: S) where S: StringProtocol {
-        for _ in 0 ..< 1_000 {
+        for _ in 0 ..< 1 {
             _ = UTF16.size(of: alphabet)
         }
     }

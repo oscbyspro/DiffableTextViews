@@ -23,7 +23,7 @@ final class StyleTestsXPercent: Tests, StyleTests {
     //=------------------------------------------------------------------------=
     
     func XCTInterpretLocales<T: Value>(_ value: T) where T.FormatStyle: Formats.Percentable {
-        XCTInterpretLocales(value, format: T.FormatStyle.Percent.init)
+         XCTInterpretLocales(value, format: T.FormatStyle.Percent.init)
     }
 }
 
@@ -38,7 +38,7 @@ extension StyleTestsXPercent {
     //=------------------------------------------------------------------------=
     
     func testDecimal() throws {
-        XCTInterpretLocales(Decimal(string: "-1.23")!)
+        XCTInterpretLocales(-1.23 as Decimal)
     }
 }
 
