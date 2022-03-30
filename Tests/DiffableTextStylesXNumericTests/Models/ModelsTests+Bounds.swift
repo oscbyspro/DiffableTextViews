@@ -39,12 +39,12 @@ final class ModelsTestsXBounds: XCTestCase {
     //=------------------------------------------------------------------------=
     
     func XCTAssert<T: Format>(_ style: Style<T>, expectation: ClosedRange<T.Value>) {
-        XCTAssert(style.bounds, expectation: expectation)
+         XCTAssert(style.bounds, expectation: expectation)
     }
     
     func XCTAssert<T: Value>(_ bounds: Bounds<T>, expectation: ClosedRange<T>) {
-        XCTAssertEqual(bounds.min, expectation.lowerBound)
-        XCTAssertEqual(bounds.max, expectation.upperBound)
+         XCTAssertEqual(bounds.min, expectation.lowerBound)
+         XCTAssertEqual(bounds.max, expectation.upperBound)
     }
     
     //=------------------------------------------------------------------------=

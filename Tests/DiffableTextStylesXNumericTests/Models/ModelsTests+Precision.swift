@@ -131,7 +131,7 @@ extension ModelsTestsXPrecision {
     //=------------------------------------------------------------------------=
     
     func testFloatingPoint_IntegerLength() {
-        XCTAssert(decimal.precision(integer:  7), integer: 7...7, fraction: 0...38)
+        XCTAssert(decimal.precision(integer: 7), integer: 7...7, fraction: 0...38)
     }
     
     func testFloatingPoint_FractionLength() {
@@ -139,7 +139,7 @@ extension ModelsTestsXPrecision {
     }
     
     func testFloatingPoint_IntegerAndFractionLength() {
-        XCTAssert(decimal.precision(integer:  5, fraction: 9), integer: 5...5, fraction: 9...9)
+        XCTAssert(decimal.precision(integer: 5, fraction: 9), integer: 5...5, fraction: 9...9)
     }
     
     //=------------------------------------------------------------------------=
@@ -147,11 +147,11 @@ extension ModelsTestsXPrecision {
     //=------------------------------------------------------------------------=
     
     func testFloatingPoint_IntegerLimitsAndFractionLength() {
-        XCTAssert(decimal.precision(integer:  5...6, fraction: 9), integer: 5...6, fraction: 9...9)
+        XCTAssert(decimal.precision(integer: 5...6, fraction: 9), integer: 5...6, fraction: 9...9)
     }
     
     func testFloatingPoint_IntegerLengthAndFractionLimits() {
-        XCTAssert(decimal.precision(integer:  5, fraction: 8...9), integer: 5...5, fraction: 8...9)
+        XCTAssert(decimal.precision(integer: 5, fraction: 8...9), integer: 5...5, fraction: 8...9)
     }
     
     //=------------------------------------------------------------------------=
@@ -159,7 +159,7 @@ extension ModelsTestsXPrecision {
     //=------------------------------------------------------------------------=
     
     func testFloatingPoint_IntegerLimits() {
-        XCTAssert(decimal.precision(integer:  5...6), integer: 5...6, fraction: 0...38)
+        XCTAssert(decimal.precision(integer: 5...6), integer: 5...6, fraction: 0...38)
     }
     
     func testFloatingPoint_FractionLimits() {
@@ -167,7 +167,7 @@ extension ModelsTestsXPrecision {
     }
     
     func testFloatingPoint_IntegerLimitsAndFractionLimits() {
-        XCTAssert(decimal.precision(integer:  5...6, fraction: 8...9), integer: 5...6, fraction: 8...9)
+        XCTAssert(decimal.precision(integer: 5...6, fraction: 8...9), integer: 5...6, fraction: 8...9)
     }
 }
 

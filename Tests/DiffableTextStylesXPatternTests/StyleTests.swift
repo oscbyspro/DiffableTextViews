@@ -52,7 +52,7 @@ extension StyleTests {
     //=------------------------------------------------------------------------=
     
     func XCTFormat___(_ input: String, format: String) {
-        XCTAssertEqual(style.format(input), format)
+         XCTAssertEqual(style.format(input),   format)
     }
     
     func XCTInterpret(_ input: String, format: String, value: String) {

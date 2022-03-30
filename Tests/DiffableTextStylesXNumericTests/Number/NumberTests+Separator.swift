@@ -23,7 +23,7 @@ final class NumberTestsXSeparator: Tests {
     //=------------------------------------------------------------------------=
     
     func XCTAssertASCII(_ separator: Separator, _ character: Character) {
-        XCTAssertEqual(separator.character, character)
+         XCTAssertEqual(separator.character, character)
     }
     
     //=------------------------------------------------------------------------=
