@@ -30,8 +30,12 @@ import DiffableTextKit
     }
     
     //=------------------------------------------------------------------------=
-    // MARK: Count
+    // MARK: Accessors
     //=------------------------------------------------------------------------=
+    
+    @inlinable var rawValue: [UInt8] {
+        Swift.unsafeBitCast(digits, to: [UInt8].self)
+    }
     
     @inlinable var count: Int {
         digits.count
@@ -71,21 +75,5 @@ import DiffableTextKit
 
     @inlinable mutating func resize(suffix: Int) {
         digits.removeSubrange(..<digits.suffix(suffix).startIndex)
-    }
-}
-
-//=----------------------------------------------------------------------------=
-// MARK: + Conversions
-//=----------------------------------------------------------------------------=
-
-extension Digits {
-    
-    //=------------------------------------------------------------------------=
-    // MARK: ASCII
-    //=------------------------------------------------------------------------=
-    
-    /// Requires that digits is of type [Digit].
-    @inlinable var rawValue: [UInt8] {
-        Swift.unsafeBitCast(digits, to: [UInt8].self)
     }
 }
