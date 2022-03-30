@@ -65,12 +65,12 @@ import DiffableTextKit
         digits.removeSubrange(digits.suffix(while: \.isZero).startIndex...)
     }
     
-    @inlinable mutating func prefix(maxLength: Int) {
-        digits = Array(digits.prefix(maxLength))
+    @inlinable mutating func resize(prefix: Int) {
+        digits.removeSubrange(digits.prefix(prefix).endIndex...)
     }
-    
-    @inlinable mutating func suffix(maxLength: Int) {
-        digits = Array(digits.suffix(maxLength))
+
+    @inlinable mutating func resize(suffix: Int) {
+        digits.removeSubrange(..<digits.suffix(suffix).startIndex)
     }
 }
 

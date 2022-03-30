@@ -52,12 +52,12 @@ import DiffableTextKit
         //=--------------------------------------=
         // MARK: Integer
         //=--------------------------------------=
-        self.integer.suffix(maxLength: min(max.integer, max.value))
+        self.integer.resize(suffix: min(max.integer, max.value))
         self.integer.removeZerosAsPrefix()
         //=--------------------------------------=
         // MARK: Fraction
         //=--------------------------------------=
-        self.fraction.prefix(maxLength: min(max.fraction, max.value - integer.count))
+        self.fraction.resize(prefix: min(max.fraction, max.value - integer.count))
         self.fraction.removeZerosAsSuffix()
         //=--------------------------------------=
         // MARK: Finalize
@@ -115,7 +115,7 @@ extension Number {
 extension Number {
     
     //=------------------------------------------------------------------------=
-    // MARK: Initializers
+    // MARK: Characters
     //=------------------------------------------------------------------------=
     
     /// Parses the value represented by an **unformatted** sequence.
