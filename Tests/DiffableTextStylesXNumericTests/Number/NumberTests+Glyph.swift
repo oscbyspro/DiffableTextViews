@@ -22,7 +22,7 @@ final class NumberTestsXGlyph: Tests {
     // MARK: Assertions
     //=------------------------------------------------------------------------=
     
-    func XCTAssertEachBitPatternIsSameAsItsRawValue<T>(_ type: T.Type) where T: Glyph {
+    func XCTAssertEachBitPatternIsSameAsRawValue<T>(_ type: T.Type) where T: Glyph {
         for glyph in T.allCases {
             XCTAssertEqual(glyph.rawValue, Swift.unsafeBitCast(glyph, to: UInt8.self))
         }
@@ -32,10 +32,10 @@ final class NumberTestsXGlyph: Tests {
     // MARK: Tests
     //=------------------------------------------------------------------------=
     
-    func testEachGlyphsBitPatternIsSameAsItsRawValue() {
-        XCTAssertEachBitPatternIsSameAsItsRawValue(Sign.self)
-        XCTAssertEachBitPatternIsSameAsItsRawValue(Digit.self)
-        XCTAssertEachBitPatternIsSameAsItsRawValue(Separator.self)
+    func testEachBitPatternIsSameAsRawValue() {
+        XCTAssertEachBitPatternIsSameAsRawValue(Sign.self)
+        XCTAssertEachBitPatternIsSameAsRawValue(Digit.self)
+        XCTAssertEachBitPatternIsSameAsRawValue(Separator.self)
     }
 }
 
