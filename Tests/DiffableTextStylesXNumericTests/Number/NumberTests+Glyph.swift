@@ -37,13 +37,13 @@ final class NumberTestsXGlyph: Tests {
     // MARK: Tests
     //=------------------------------------------------------------------------=
     
-    /// 1 digits and 1,000,000 iterations: 0.343 seconds.
-    /// 10 digits and  100,000 iterations: 0.128 seconds.
-    /// 100 digits and  10,000 iterations: 0.106 seconds.
-    /// 1,000 digits and 1,000 iterations: 0.103 seconds.
-    /// 10,000 digits and  100 iterations: 0.102 seconds.
-    /// 100,000 digits and  10 iterations: 0.103 seconds.
-    /// 1,000,000 digits and 1 iterations: 0.103 seconds.
+    /// - 1 digits and 1,000,000 iterations: 0.343 seconds.
+    /// - 10 digits and  100,000 iterations: 0.128 seconds.
+    /// - 100 digits and  10,000 iterations: 0.106 seconds.
+    /// - 1,000 digits and 1,000 iterations: 0.103 seconds.
+    /// - 10,000 digits and  100 iterations: 0.102 seconds.
+    /// - 100,000 digits and  10 iterations: 0.103 seconds.
+    /// - 1,000,000 digits and 1 iterations: 0.103 seconds.
     func test_Digits_ForEachUnicodeScalar_String() {
         measure {
             var string: String = collection()
@@ -58,13 +58,13 @@ final class NumberTestsXGlyph: Tests {
         }
     }
     
-    /// 1 digits and 1,000,000 iterations: 0.318 seconds.
-    /// 10 digits and  100,000 iterations: 0.105 seconds.
-    /// 100 digits and  10,000 iterations: 0.082 seconds.
-    /// 1,000 digits and 1,000 iterations: 0.081 seconds.
-    /// 10,000 digits and  100 iterations: 0.080 seconds.
-    /// 100,000 digits and  10 iterations: 0.080 seconds.
-    /// 1,000,000 digits and 1 iterations: 0.081 seconds.
+    /// - 1 digits and 1,000,000 iterations: 0.318 seconds.
+    /// - 10 digits and  100,000 iterations: 0.105 seconds.
+    /// - 100 digits and  10,000 iterations: 0.082 seconds.
+    /// - 1,000 digits and 1,000 iterations: 0.081 seconds.
+    /// - 10,000 digits and  100 iterations: 0.080 seconds.
+    /// - 100,000 digits and  10 iterations: 0.080 seconds.
+    /// - 1,000,000 digits and 1 iterations: 0.081 seconds.
     func test_Digits_ForEachUInt8RawValue_String() {
         measure {
             var bytes: [UInt8] = collection()
@@ -83,13 +83,13 @@ final class NumberTestsXGlyph: Tests {
         }
     }
     
-    /// 1 digits and 1,000,000 iterations: 0.272 seconds.
-    /// 10 digits and  100,000 iterations: 0.032 seconds.
-    /// 100 digits and  10,000 iterations: 0.006 seconds.
-    /// 1,000 digits and 1,000 iterations: 0.001 seconds.
-    /// 10,000 digits and  100 iterations: 0.000 seconds.
-    /// 100,000 digits and  10 iterations: 0.000 seconds.
-    /// 1,000,000 digits and 1 iterations: 0.000 seconds.
+    /// - 1 digits and 1,000,000 iterations: 0.272 seconds.
+    /// - 10 digits and  100,000 iterations: 0.032 seconds.
+    /// - 100 digits and  10,000 iterations: 0.006 seconds.
+    /// - 1,000 digits and 1,000 iterations: 0.001 seconds.
+    /// - 10,000 digits and  100 iterations: 0.000 seconds.
+    /// - 100,000 digits and  10 iterations: 0.000 seconds.
+    /// - 1,000,000 digits and 1 iterations: 0.000 seconds.
     func test_Digits_UnsafeBitCastToBytes_String() {
         measure {
             var bytes: [UInt8] = collection()
