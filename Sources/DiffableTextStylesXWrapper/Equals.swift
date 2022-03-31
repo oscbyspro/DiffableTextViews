@@ -23,15 +23,15 @@ public struct EqualsTextStyle<Style: DiffableTextStyle, Proxy: Equatable>: Wrapp
     // MARK: State
     //=------------------------------------------------------------------------=
     
-    @usableFromInline let proxy: Proxy
     @usableFromInline var style: Style
-    
+    @usableFromInline let proxy: Proxy
+
     //=------------------------------------------------------------------------=
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
     @inlinable @inline(__always)
-    init(style: Style, proxy: Proxy) where Proxy: Equatable {
+    init(_ style: Style, proxy: Proxy) where Proxy: Equatable {
         self.style = style
         self.proxy = proxy
     }
@@ -77,12 +77,12 @@ extension DiffableTextStyle {
     /// Binds the style's comparison result to the proxy value.
     @inlinable @inline(__always)
     public func equals(_ proxy: Void) -> Equals<_Void> {
-        Equals(style: self, proxy: _Void())
+        Equals(self, proxy: _Void())
     }
     
     /// Binds the style's comparison result to the proxy value.
     @inlinable @inline(__always)
     public func equals<Proxy>(_ proxy: Proxy) -> Equals<Proxy> {
-        Equals(style: self, proxy: proxy)
+        Equals(self, proxy: proxy)
     }
 }
