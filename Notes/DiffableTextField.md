@@ -97,6 +97,7 @@ struct DiffableTextFieldXPhone: View {
     static let style = PatternTextStyle<String>
         .pattern("+## (###) ###-##-##")
         .placeholder("#") { $0.isASCII && $0.isNumber }
+        .equals(())
         .constant()
 }
 ```

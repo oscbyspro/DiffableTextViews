@@ -7,6 +7,8 @@
 // See http://www.apache.org/licenses/LICENSE-2.0 for license information.
 //=----------------------------------------------------------------------------=
 
+import DiffableTextKit
+
 //=----------------------------------------------------------------------------=
 // MARK: + Placeholder
 //=----------------------------------------------------------------------------=
@@ -41,11 +43,11 @@ public extension PatternTextStyle {
     /// A placeholder character and a constant predicate.
     @inlinable func placeholder(_ character: Character,
     where predicate: @escaping (Character) -> Bool) -> Self {
-        placeholder(character, where: Predicate(proxy: false, check: predicate))
+        placeholder(character, where: Predicate(proxy: _Void(), check: predicate))
     }
     
     /// A placeholder character and a constant predicate that always evaluates true.
     @inlinable func placeholder(_ character: Character) -> Self {
-        placeholder(character, where: Predicate(proxy: false, check: { _ in true }))
+        placeholder(character, where: Predicate(proxy: _Void(), check: { _ in true }))
     }
 }

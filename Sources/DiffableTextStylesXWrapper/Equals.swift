@@ -13,17 +13,17 @@ import DiffableTextKit
 // MARK: * Equals
 //*============================================================================*
 
-/// A style that equals a specific value.
+/// A style that equals a proxy value.
 ///
-/// Use this style to optimize the differentiation on view update.
+/// Use this style to optimize the comparison on view update.
 ///
-public struct EqualsTextStyle<Style: DiffableTextStyle, ID: Equatable>: WrapperTextStyle {
+public struct EqualsTextStyle<Style: DiffableTextStyle, Proxy: Equatable>: WrapperTextStyle {
     
     //=------------------------------------------------------------------------=
     // MARK: State
     //=------------------------------------------------------------------------=
     
-    @usableFromInline let value: ID
+    @usableFromInline let proxy: Proxy
     @usableFromInline var style: Style
     
     //=------------------------------------------------------------------------=
@@ -31,9 +31,9 @@ public struct EqualsTextStyle<Style: DiffableTextStyle, ID: Equatable>: WrapperT
     //=------------------------------------------------------------------------=
     
     @inlinable @inline(__always)
-    init(style: Style, value: ID) where ID: Equatable {
+    init(style: Style, proxy: Proxy) where Proxy: Equatable {
         self.style = style
-        self.value = value
+        self.proxy = proxy
     }
 
     //=------------------------------------------------------------------------=
@@ -42,7 +42,7 @@ public struct EqualsTextStyle<Style: DiffableTextStyle, ID: Equatable>: WrapperT
     
     @inlinable @inline(__always)
     public static func == (lhs: Self, rhs: Self) -> Bool {
-        lhs.value == rhs.value
+        lhs.proxy == rhs.proxy
     }
 }
 
@@ -54,8 +54,7 @@ import DiffableTextViewsXiOS
 // MARK: * Equals x iOS
 //*============================================================================*
 
-extension EqualsTextStyle: WrapperTextStyleXiOS,
-DiffableTextStyleXiOS where Style: DiffableTextStyleXiOS { }
+extension EqualsTextStyle: WrapperTextStyleXiOS, DiffableTextStyleXiOS where Style: DiffableTextStyleXiOS { }
 
 #endif
 
@@ -74,9 +73,16 @@ extension DiffableTextStyle {
     //=------------------------------------------------------------------------=
     // MARK: Transformations
     //=------------------------------------------------------------------------=
-
-    /// Binds the style's differentiation result to a value.
-    @inlinable public func equals<Value: Equatable>(_ value: Value) -> EqualsTextStyle<Self, Value> {
-        EqualsTextStyle(style: self, value: value)
+    
+    /// Binds the style's comparison result to the proxy value.
+    @inlinable @inline(__always)
+    public func equals(_ proxy: Void) -> Equals<_Void> {
+        Equals(style: self, proxy: _Void())
+    }
+    
+    /// Binds the style's comparison result to the proxy value.
+    @inlinable @inline(__always)
+    public func equals<Proxy>(_ proxy: Proxy) -> Equals<Proxy> {
+        Equals(style: self, proxy: proxy)
     }
 }

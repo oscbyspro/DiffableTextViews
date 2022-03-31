@@ -14,11 +14,10 @@ import Foundation
 // MARK: * Constant
 //*============================================================================*
 
-/// A constant style that equals every other instance of its type.
+
+/// A style that where standard transformation methods return an unmodified self.
 ///
-/// Use this style to optimize the differentiation on view update.
-///
-/// - Note: DiffableTextStyle transformation methods return immediately.
+/// This style may be used to block changes through the environment, for example.
 ///
 public struct ConstantTextStyle<Style: DiffableTextStyle>: WrapperTextStyle {
     
@@ -41,13 +40,6 @@ public struct ConstantTextStyle<Style: DiffableTextStyle>: WrapperTextStyle {
 
     @inlinable @inline(__always)
     public func locale(_ locale: Locale) -> Self { return self }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Comparisons
-    //=------------------------------------------------------------------------=
-    
-    @inlinable @inline(__always)
-    public static func == (lhs: Self, rhs: Self) -> Bool { true }
 }
 
 #if os(iOS)
@@ -58,8 +50,7 @@ import DiffableTextViewsXiOS
 // MARK: * Constant x iOS
 //*============================================================================*
 
-extension ConstantTextStyle: WrapperTextStyleXiOS,
-DiffableTextStyleXiOS where Style: DiffableTextStyleXiOS { }
+extension ConstantTextStyle: WrapperTextStyleXiOS, DiffableTextStyleXiOS where Style: DiffableTextStyleXiOS { }
 
 #endif
 
@@ -79,8 +70,12 @@ extension DiffableTextStyle {
     // MARK: Transformations
     //=------------------------------------------------------------------------=
     
-    /// Binds the style's differentiation result to a constant and prevents changes to it.
-    @inlinable public func constant() -> ConstantTextStyle<Self> {
-        ConstantTextStyle(style: self)
+    /// A style that where standard transformation methods return an unmodified self.
+    ///
+    /// This style may be used to block changes through the environment, for example.
+    ///
+    @inlinable @inline(__always)
+    public func constant() -> Constant {
+        Constant(style: self)
     }
 }
