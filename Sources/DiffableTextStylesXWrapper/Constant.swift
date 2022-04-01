@@ -14,7 +14,6 @@ import Foundation
 // MARK: * Constant
 //*============================================================================*
 
-
 /// A style that returns an unmodified self for standard transformations.
 ///
 /// Use this style to prevent changes via the environment, for example.
