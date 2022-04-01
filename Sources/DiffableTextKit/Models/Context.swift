@@ -7,6 +7,9 @@
 // See http://www.apache.org/licenses/LICENSE-2.0 for license information.
 //=----------------------------------------------------------------------------=
 
+#warning("WIP")
+#warning("WIP")
+#warning("WIP")
 //*============================================================================*
 // MARK: * Context
 //*============================================================================*
@@ -43,22 +46,19 @@ public final class Context<Style: DiffableTextStyle, Scheme: DiffableTextKit.Sch
     @inlinable public var field: Field  { _field }
     
     //=------------------------------------------------------------------------=
-    // MARK: Update
+    // MARK: Utilities
     //=------------------------------------------------------------------------=
     
-    @inlinable public func active(style: Style, commit: Commit) {
-        self._focus = true
-        self._style = style
-        self._value = commit.value
-        self._field.update(snapshot: commit.snapshot)
+    @inlinable public func formatted() -> String {
+        style.format(value)
     }
-    
-    @inlinable public func inactive(style: Style, value: Value) {
-        self._focus = false
-        self._value = value
-        self._style = style
-        self._field = Field()
-    }
+}
+
+//=------------------------------------------------------------------------=
+// MARK: Update
+//=------------------------------------------------------------------------=
+
+extension Context {
     
     //=------------------------------------------------------------------------=
     // MARK: Selection
@@ -71,15 +71,59 @@ public final class Context<Style: DiffableTextStyle, Scheme: DiffableTextKit.Sch
     @inlinable public func update(selection: Range<Position>, momentum: Bool) {
         self._field.update(selection: selection, momentum: momentum)
     }
+}
+
+//=----------------------------------------------------------------------------=
+// MARK: + Update
+//=----------------------------------------------------------------------------=
+
+extension Context {
     
     //=------------------------------------------------------------------------=
-    // MARK: Comparisons
+    // MARK: Unfocused / Focused / Dynamic
     //=------------------------------------------------------------------------=
     
-    /// Use this method to determine the need for upstream/downstream synchronization.
-    @inlinable public func contains(style: Style, value: Value, focus: Focus) -> Bool {
-           self.value == value
-        && self.focus == focus
-        && self.style == style
+    @inlinable public func unfocused(style: Style, value: Value) {
+        self._focus = false
+        self._value = value
+        self._style = style
+        self._field = Field()
+    }
+    
+    @inlinable public func focused(style: Style, commit: Commit) {
+        self._focus = true
+        self._style = style
+        self._value = commit.value
+        self._field.update(snapshot: commit.snapshot)
+    }
+
+    @inlinable public func dynamic(style: Style, value: Value, focus: Focus) {
+        switch focus.value {
+        case false: self.unfocused(style: style,  value: value)
+        case  true: self  .focused(style: style, commit: style.interpret(value))
+        }
+    }
+}
+
+//=----------------------------------------------------------------------------=
+// MARK: + Update
+//=----------------------------------------------------------------------------=
+
+extension Context {
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Pull
+    //=------------------------------------------------------------------------=
+    
+    @inlinable public func pull(style: Style, value: Value, focus: Focus) -> Bool {
+        let changeInStyle = _style == style
+        let changeInValue = _value == value
+        let changeInFocus = _focus == focus
+        //=--------------------------------------=
+        // MARK: At Least One Has To Change
+        //=--------------------------------------=
+        guard changeInStyle || changeInValue || changeInFocus else { return false }
+        dynamic(style: changeInStyle ? style : _style, value: value, focus: focus )
+        return true
     }
 }

@@ -96,28 +96,63 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
         //=--------------------------------------------------------------------=
         
         @usableFromInline let lock = Lock()
-        @usableFromInline let context = Context()
+        @usableFromInline var context = Context()
         
         @usableFromInline var upstream: Upstream!
         @usableFromInline var downstream: Downstream!
         @usableFromInline var environment: EnvironmentValues!
-        
-        //=--------------------------------------------------------------------=
-        // MARK: Localization
-        //=--------------------------------------------------------------------=
-        
-        @inlinable func localized() -> Style {
-            upstream.style.locale(environment.locale)
-        }
 
         //=--------------------------------------------------------------------=
-        // MARK: Update
+        // MARK: Upstream
         //=--------------------------------------------------------------------=
-        
+                
         @inlinable func update(_ upstream: Upstream, _ environment: EnvironmentValues) {
             self.upstream = upstream; self.environment = environment
             self.synchronize() // on update is same as on did update
             self.downstream.transform(environment.diffableTextField_onUpdate)
+        }
+        
+        //=--------------------------------------------------------------------=
+        // MARK: Synchronize
+        //=--------------------------------------------------------------------=
+        
+        @inlinable func synchronize() {
+            //=----------------------------------=
+            // MARK: Pull
+            //=----------------------------------=
+            guard  context.pull(
+            style: upstream.style.locale(environment.locale),
+            value: upstream.value.wrappedValue,
+            focus: downstream.focus) else { return }
+            //=----------------------------------=
+            // MARK: Push
+            //=----------------------------------=
+            context.focus.value ? self.push() : self.write()
+        }
+
+        @inlinable func push() {
+            //=----------------------------------=
+            // MARK: Downstream
+            //=----------------------------------=
+            lock.perform {
+                self.downstream.update(text: context.field.characters)
+                self.downstream.update(selection: context.field.positions)
+            }
+            //=----------------------------------=
+            // MARK: Upstream
+            //=----------------------------------=
+            if  self.upstream.value.wrappedValue != context.value {
+                self.upstream.value.wrappedValue  = context.value
+            }
+        }
+
+        @inlinable func write() {
+            //=----------------------------------=
+            // MARK: Downstream
+            //=----------------------------------=
+            lock.perform {
+                self.downstream.update(text: context.formatted())
+            }
         }
         
         //=--------------------------------------------------------------------=
@@ -150,7 +185,8 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
         
         @inlinable public func textField(_ textField: UITextField,
         shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
-            let style = localized(); let range = context.field.indices(at: range )
+            let style = context.style!
+            let range = context.field.indices(at: range)
             let changes = Changes(context.field.snapshot, change: (range, string))
             //=----------------------------------=
             // MARK: Merge
@@ -164,7 +200,7 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
                     // async to process special commands first
                     // as an example see: (option + backspace)
                     self.context.set(selection: range.upperBound)
-                    self.context.active(style: style, commit: commit)
+                    self.context.focused(style: style, commit: commit)
                     self.push()
                 }
             //=----------------------------------=
@@ -197,60 +233,6 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
                 lock.perform {
                     self.downstream.update(selection: context.field.positions)
                 }
-            }
-        }
-        
-        //=--------------------------------------------------------------------=
-        // MARK: Synchronize
-        //=--------------------------------------------------------------------=
-        
-        @inlinable func synchronize() {
-            //=----------------------------------=
-            // MARK: Pull
-            //=----------------------------------=
-            let style = localized()
-            let value = upstream.value.wrappedValue
-            //=----------------------------------=
-            // MARK: Compare
-            //=----------------------------------=
-            guard !context.contains(
-            style: style,
-            value: value,
-            focus: downstream.focus) else { return }
-            //=----------------------------------=
-            // MARK: Push - View Is In Focus
-            //=----------------------------------=
-            if downstream.focus.value {
-                self.context.active(style: style, commit: style.interpret(value))
-                self.push()
-            //=----------------------------------=
-            // MARK: Push - View Is Not In Focus
-            //=----------------------------------=
-            } else {
-                lock.perform {
-                    self.context.inactive(style: style, value: value )
-                    self.downstream.update(text: style.format( value))
-                }
-            }
-        }
-        
-        //=--------------------------------------------------------------------=
-        // MARK: Push
-        //=--------------------------------------------------------------------=
-        
-        @inlinable func push() {
-            //=----------------------------------=
-            // MARK: Downstream
-            //=----------------------------------=
-            lock.perform {
-                self.downstream.update(text: context.field.characters)
-                self.downstream.update(selection: context.field.positions)
-            }
-            //=----------------------------------=
-            // MARK: Upstream
-            //=----------------------------------=
-            if  self.upstream.value.wrappedValue != context.value {
-                self.upstream.value.wrappedValue  = context.value
             }
         }
     }
