@@ -19,7 +19,7 @@ import Foundation
 ///
 /// This style may be used to prevent changes through the environment, for example.
 ///
-public struct ConstantTextStyle<Style: DiffableTextStyle>: WrapperTextStyle {
+public struct ConstantTextStyle<Style: _DiffableTextStyle>: _WrapperTextStyle {
     
     //=------------------------------------------------------------------------=
     // MARK: State
@@ -50,7 +50,7 @@ import DiffableTextViewsXiOS
 // MARK: * Constant x iOS
 //*============================================================================*
 
-extension ConstantTextStyle: WrapperTextStyleXiOS, DiffableTextStyleXiOS where Style: DiffableTextStyleXiOS { }
+extension ConstantTextStyle: WrapperTextStyle, DiffableTextStyle where Style: DiffableTextStyle { }
 
 #endif
 
@@ -58,7 +58,7 @@ extension ConstantTextStyle: WrapperTextStyleXiOS, DiffableTextStyleXiOS where S
 // MARK: * Constant x DiffableTextStyle
 //*============================================================================*
 
-extension DiffableTextStyle {
+extension _DiffableTextStyle {
     
     //=------------------------------------------------------------------------=
     // MARK: Aliases

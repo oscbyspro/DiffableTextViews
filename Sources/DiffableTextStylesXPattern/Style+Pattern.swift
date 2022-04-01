@@ -13,7 +13,7 @@ import DiffableTextKit
 // MARK: * String
 //*============================================================================*
 
-public extension DiffableTextStyle where Self == PatternTextStyle<String> {
+public extension _DiffableTextStyle where Self == PatternTextStyle<String> {
     
     //=------------------------------------------------------------------------=
     // MARK: Initializers
@@ -28,7 +28,7 @@ public extension DiffableTextStyle where Self == PatternTextStyle<String> {
 // MARK: * Array
 //*============================================================================*
 
-public extension DiffableTextStyle where Self == PatternTextStyle<[Character]> {
+public extension _DiffableTextStyle where Self == PatternTextStyle<[Character]> {
     
     //=------------------------------------------------------------------------=
     // MARK: Initializers

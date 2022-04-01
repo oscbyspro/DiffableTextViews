@@ -16,7 +16,7 @@ import SwiftUI
 // MARK: * DiffableTextField
 //*============================================================================*
 
-public struct DiffableTextField<Style: DiffableTextStyleXiOS>: UIViewRepresentable {
+public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
     public typealias Value = Style.Value
     
     //=------------------------------------------------------------------------=

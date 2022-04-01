@@ -15,7 +15,7 @@ import DiffableTextKit
 // MARK: * DiffableTextStyle x iOS
 //*============================================================================*
 
-public protocol DiffableTextStyleXiOS: DiffableTextStyle {
+public protocol DiffableTextStyle: _DiffableTextStyle {
     
     //=------------------------------------------------------------------------=
     // MARK: Setup
@@ -28,7 +28,7 @@ public protocol DiffableTextStyleXiOS: DiffableTextStyle {
 // MARK: + Details
 //=----------------------------------------------------------------------------=
 
-public extension DiffableTextStyleXiOS {
+public extension DiffableTextStyle {
     
     //=------------------------------------------------------------------------=
     // MARK: Setup

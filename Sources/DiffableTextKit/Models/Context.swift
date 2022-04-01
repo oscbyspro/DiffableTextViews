@@ -11,7 +11,7 @@
 // MARK: * Context
 //*============================================================================*
 
-public final class Context<Style: DiffableTextStyle, Scheme: DiffableTextKit.Scheme> {
+public final class Context<Style: _DiffableTextStyle, Scheme: DiffableTextKit.Scheme> {
     public typealias Value    = Style.Value
     public typealias Commit   = DiffableTextKit.Commit<Value>
     public typealias Field    = DiffableTextKit.Field<Scheme>

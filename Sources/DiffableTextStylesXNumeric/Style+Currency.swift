@@ -37,7 +37,7 @@ extension NumericTextStyle where Format: NumericTextFormatXCurrency {
 // MARK: * Decimal
 //*============================================================================*
 
-extension DiffableTextStyle where Self == NumericTextStyle<Decimal>.Currency {
+extension _DiffableTextStyle where Self == NumericTextStyle<Decimal>.Currency {
     
     //=------------------------------------------------------------------------=
     // MARK: Initializers
@@ -52,7 +52,7 @@ extension DiffableTextStyle where Self == NumericTextStyle<Decimal>.Currency {
 // MARK: * Double
 //*============================================================================*
 
-extension DiffableTextStyle where Self == NumericTextStyle<Double>.Currency {
+extension _DiffableTextStyle where Self == NumericTextStyle<Double>.Currency {
     
     //=------------------------------------------------------------------------=
     // MARK: Initializers
@@ -67,7 +67,7 @@ extension DiffableTextStyle where Self == NumericTextStyle<Double>.Currency {
 // MARK: * Int
 //*============================================================================*
 
-extension DiffableTextStyle where Self == NumericTextStyle<Int>.Currency {
+extension _DiffableTextStyle where Self == NumericTextStyle<Int>.Currency {
     
     //=------------------------------------------------------------------------=
     // MARK: Initializers
@@ -82,7 +82,7 @@ extension DiffableTextStyle where Self == NumericTextStyle<Int>.Currency {
 // MARK: * Int8
 //*============================================================================*
 
-extension DiffableTextStyle where Self == NumericTextStyle<Int8>.Currency {
+extension _DiffableTextStyle where Self == NumericTextStyle<Int8>.Currency {
     
     //=------------------------------------------------------------------------=
     // MARK: Initializers
@@ -97,7 +97,7 @@ extension DiffableTextStyle where Self == NumericTextStyle<Int8>.Currency {
 // MARK: * Int16
 //*============================================================================*
 
-extension DiffableTextStyle where Self == NumericTextStyle<Int16>.Currency {
+extension _DiffableTextStyle where Self == NumericTextStyle<Int16>.Currency {
     
     //=------------------------------------------------------------------------=
     // MARK: Initializers
@@ -112,7 +112,7 @@ extension DiffableTextStyle where Self == NumericTextStyle<Int16>.Currency {
 // MARK: * Int32
 //*============================================================================*
 
-extension DiffableTextStyle where Self == NumericTextStyle<Int32>.Currency {
+extension _DiffableTextStyle where Self == NumericTextStyle<Int32>.Currency {
     
     //=------------------------------------------------------------------------=
     // MARK: Initializers
@@ -127,7 +127,7 @@ extension DiffableTextStyle where Self == NumericTextStyle<Int32>.Currency {
 // MARK: * Int64
 //*============================================================================*
 
-extension DiffableTextStyle where Self == NumericTextStyle<Int64>.Currency {
+extension _DiffableTextStyle where Self == NumericTextStyle<Int64>.Currency {
     
     //=------------------------------------------------------------------------=
     // MARK: Initializers
@@ -142,7 +142,7 @@ extension DiffableTextStyle where Self == NumericTextStyle<Int64>.Currency {
 // MARK: * UInt
 //*============================================================================*
 
-extension DiffableTextStyle where Self == NumericTextStyle<UInt>.Currency {
+extension _DiffableTextStyle where Self == NumericTextStyle<UInt>.Currency {
     
     //=------------------------------------------------------------------------=
     // MARK: Initializers
@@ -157,7 +157,7 @@ extension DiffableTextStyle where Self == NumericTextStyle<UInt>.Currency {
 // MARK: * UInt8
 //*============================================================================*
 
-extension DiffableTextStyle where Self == NumericTextStyle<UInt8>.Currency {
+extension _DiffableTextStyle where Self == NumericTextStyle<UInt8>.Currency {
     
     //=------------------------------------------------------------------------=
     // MARK: Initializers
@@ -172,7 +172,7 @@ extension DiffableTextStyle where Self == NumericTextStyle<UInt8>.Currency {
 // MARK: * UInt16
 //*============================================================================*
 
-extension DiffableTextStyle where Self == NumericTextStyle<UInt16>.Currency {
+extension _DiffableTextStyle where Self == NumericTextStyle<UInt16>.Currency {
     
     //=------------------------------------------------------------------------=
     // MARK: Initializers
@@ -187,7 +187,7 @@ extension DiffableTextStyle where Self == NumericTextStyle<UInt16>.Currency {
 // MARK: * UInt32
 //*============================================================================*
 
-extension DiffableTextStyle where Self == NumericTextStyle<UInt32>.Currency {
+extension _DiffableTextStyle where Self == NumericTextStyle<UInt32>.Currency {
     
     //=------------------------------------------------------------------------=
     // MARK: Initializers
@@ -202,7 +202,7 @@ extension DiffableTextStyle where Self == NumericTextStyle<UInt32>.Currency {
 // MARK: * UInt64
 //*============================================================================*
 
-extension DiffableTextStyle where Self == NumericTextStyle<UInt64>.Currency {
+extension _DiffableTextStyle where Self == NumericTextStyle<UInt64>.Currency {
     
     //=------------------------------------------------------------------------=
     // MARK: Initializers

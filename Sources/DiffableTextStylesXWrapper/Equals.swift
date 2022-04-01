@@ -17,7 +17,7 @@ import DiffableTextKit
 ///
 /// Use this style to optimize the comparison on view update.
 ///
-public struct EqualsTextStyle<Style: DiffableTextStyle, Proxy: Equatable>: WrapperTextStyle {
+public struct EqualsTextStyle<Style: _DiffableTextStyle, Proxy: Equatable>: _WrapperTextStyle {
     
     //=------------------------------------------------------------------------=
     // MARK: State
@@ -54,7 +54,7 @@ import DiffableTextViewsXiOS
 // MARK: * Equals x iOS
 //*============================================================================*
 
-extension EqualsTextStyle: WrapperTextStyleXiOS, DiffableTextStyleXiOS where Style: DiffableTextStyleXiOS { }
+extension EqualsTextStyle: WrapperTextStyle, DiffableTextStyle where Style: DiffableTextStyle { }
 
 #endif
 
@@ -62,7 +62,7 @@ extension EqualsTextStyle: WrapperTextStyleXiOS, DiffableTextStyleXiOS where Sty
 // MARK: * Equals x DiffableTextStyle
 //*============================================================================*
 
-extension DiffableTextStyle {
+extension _DiffableTextStyle {
     
     //=------------------------------------------------------------------------=
     // MARK: Aliases

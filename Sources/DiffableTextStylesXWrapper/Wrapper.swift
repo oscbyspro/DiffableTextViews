@@ -14,13 +14,13 @@ import Foundation
 // MARK: * Wrapper
 //*============================================================================*
 
-@usableFromInline protocol WrapperTextStyle: DiffableTextStyle {
+@usableFromInline protocol _WrapperTextStyle: _DiffableTextStyle {
     
     //=------------------------------------------------------------------------=
     // MARK: Style
     //=------------------------------------------------------------------------=
     
-    associatedtype Style: DiffableTextStyle
+    associatedtype Style: _DiffableTextStyle
 
     @inlinable var style: Style { get set }
 }
@@ -29,7 +29,7 @@ import Foundation
 // MARK: + Details
 //=----------------------------------------------------------------------------=
 
-extension WrapperTextStyle {
+extension _WrapperTextStyle {
 
     //=------------------------------------------------------------------------=
     // MARK: Transformations
@@ -37,7 +37,9 @@ extension WrapperTextStyle {
     
     @inlinable @inline(__always)
     public func locale(_ locale: Locale) -> Self {
-        var result = self; result.style = result.style.locale(locale); return result
+        var result = self
+        result.style = result.style.locale(locale)
+        return result
     }
     
     //=------------------------------------------------------------------------=
@@ -85,14 +87,13 @@ import DiffableTextViewsXiOS
 // MARK: Wrapper x iOS
 //*============================================================================*
 
-@usableFromInline protocol WrapperTextStyleXiOS:
-WrapperTextStyle, DiffableTextStyleXiOS where Style: DiffableTextStyleXiOS { }
+@usableFromInline protocol WrapperTextStyle: _WrapperTextStyle, DiffableTextStyle where Style: DiffableTextStyle { }
 
 //=----------------------------------------------------------------------------=
 // MARK: + Details
 //=----------------------------------------------------------------------------=
 
-extension WrapperTextStyleXiOS {
+extension WrapperTextStyle {
     
     //=------------------------------------------------------------------------=
     // MARK: Setup

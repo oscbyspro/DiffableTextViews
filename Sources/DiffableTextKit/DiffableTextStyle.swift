@@ -13,8 +13,11 @@ import Foundation
 // MARK: * DiffableTextStyle
 //*============================================================================*
 
-/// A protocol for styles that are capable of as-you-type formatting and conversion.
-public protocol DiffableTextStyle: Equatable {
+/// A protocol for styles capable of as-you-type formatting.
+///
+/// It a base protocol for all platform specific versions of it.
+///
+public protocol _DiffableTextStyle: Equatable {
 
     //=------------------------------------------------------------------------=
     // MARK: Value
@@ -71,7 +74,7 @@ public protocol DiffableTextStyle: Equatable {
 // MARK: + Details
 //=----------------------------------------------------------------------------=
 
-public extension DiffableTextStyle {
+public extension _DiffableTextStyle {
     
     //=------------------------------------------------------------------------=
     // MARK: Transformations
