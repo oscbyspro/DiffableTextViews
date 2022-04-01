@@ -48,7 +48,7 @@ Determines the input and output space in terms of digits.
 
 ### Enforcement
 
-- Lower bound is enforced when the view is: unfocused.
+- Lower bound is enforced when the view is: idle.
 - Upper bound is enforced when the view is: focused.
 
 ### Formats
