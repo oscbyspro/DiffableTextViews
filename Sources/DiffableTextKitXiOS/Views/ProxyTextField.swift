@@ -94,12 +94,12 @@ public extension ProxyTextField.Selection {
     //=------------------------------------------------------------------------=
     
     @inlinable var value: String {
-        // UITextField.selectedTextRange is never nil
+        // UITextField/selectedTextRange is never nil
         wrapped.text(in: wrapped.selectedTextRange!)!
     }
     
     @inlinable var marked: String {
-        // UITextField.markedTextRange is sometimes nil
+        // UITextField/markedTextRange is sometimes nil
         wrapped.markedTextRange.flatMap(wrapped.text(in:)) ?? String()
     }
     
@@ -131,7 +131,7 @@ public extension ProxyTextField.Text {
     //=------------------------------------------------------------------------=
     
     @inlinable var value: String {
-        wrapped.text! // UITextField.text is never nil
+        wrapped.text! // UITextField/text is never nil
     }
     
     //=------------------------------------------------------------------------=
