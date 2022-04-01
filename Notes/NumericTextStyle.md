@@ -145,7 +145,7 @@ struct DiffableTextFieldXAmount: View {
             .bounds((0 as Decimal)...)
             // .precision(integer: 1..., fraction: 2)
         }
-        .environment(\.locale, Locale(identifier: "en_SE"))
+        .environment(\.locale, Locale(identifier: "sv_SE"))
     }
 }
 ```

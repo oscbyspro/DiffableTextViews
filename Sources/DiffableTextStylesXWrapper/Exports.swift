@@ -8,16 +8,7 @@
 //=----------------------------------------------------------------------------=
 
 //*============================================================================*
-// MARK: * Locales
+// MARK: * Kit
 //*============================================================================*
 
-public let en_US = Locale(identifier: "en_US")
-public let sv_SE = Locale(identifier: "sv_SE")
-
-//*============================================================================*
-// MARK: * Strings
-//*============================================================================*
-
-public let alphabet    = "ABCDEFGHIJJKLMNOPQRSTUVWXYZ"
-public let alphabet10  = String(repeating: alphabet, count: 10)
-public let alphabet100 = String(repeating: alphabet, count: 100)
+@_exported import protocol DiffableTextKit.DiffableTextStyle

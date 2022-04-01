@@ -70,6 +70,9 @@ let package = Package(
         .target(
             name: "DiffableTextStylesXWrapper",
             dependencies: ["DiffableTextKit", "DiffableTextViewsXiOS"]),
+        .testTarget(
+            name: "DiffableTextStylesXWrapperTests",
+            dependencies: ["DiffableTestKit", "DiffableTextStylesXWrapper"]),
         //=--------------------------------------=
         // MARK: 2 - DiffableTextViewsXiOS
         //=--------------------------------------=
@@ -87,7 +90,7 @@ let package = Package(
             dependencies: ["DiffableTextKitXiOS"]),
         .testTarget(
             name: "DiffableTextKitTests",
-            dependencies: ["DiffableTextKit", "DiffableTestKit"]),
+            dependencies: ["DiffableTestKit", "DiffableTextKit"]),
         //=--------------------------------------=
         // MARK: 0 - DiffableTextKitXiOS
         //=--------------------------------------=
@@ -96,7 +99,7 @@ let package = Package(
             dependencies: []),
         .testTarget(
             name: "DiffableTextKitXiOSTests",
-            dependencies: ["DiffableTestKit"]),
+            dependencies: ["DiffableTestKit", "DiffableTextKitXiOS"]),
         //=--------------------------------------=
         // MARK: T - DiffableTestKit
         //=--------------------------------------=
