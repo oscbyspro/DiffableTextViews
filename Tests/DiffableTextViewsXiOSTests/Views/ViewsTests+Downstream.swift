@@ -23,13 +23,13 @@ import DiffableTestKit
 /// ```
 /// Asserts: UITextField/offset(from:to:) is O(1).
 /// ```
-final class ViewsTestsXActorTextField: XCTestCase {
+final class ViewsTestsXDownstream: XCTestCase {
     
     //=------------------------------------------------------------------------=
     // MARK: State
     //=------------------------------------------------------------------------=
     
-    lazy var view = Downstream(BasicTextField())
+    lazy var downstream = Downstream(BasicTextField())
     
     //=------------------------------------------------------------------------=
     // MARK: Setup
@@ -37,7 +37,7 @@ final class ViewsTestsXActorTextField: XCTestCase {
     
     override func setUp() {
         super.setUp()
-        view.wrapped.text = nil
+        downstream.wrapped.text = nil
     }
 }
 
@@ -45,20 +45,20 @@ final class ViewsTestsXActorTextField: XCTestCase {
 // MARK: + Position
 //=----------------------------------------------------------------------------=
 
-extension ViewsTestsXActorTextField {
+extension ViewsTestsXDownstream {
     
     //=------------------------------------------------------------------------=
     // MARK: Tests
     //=------------------------------------------------------------------------=
     
     func testPositionsAreMeasuredInUTF16() {
-        view.wrapped.text = "🇸🇪"
+        downstream.wrapped.text = "🇸🇪"
         //=--------------------------------------=
         // MARK: Assert
         //=--------------------------------------=
-        XCTAssertEqual(8, view.wrapped.text!.utf8 .count)
-        XCTAssertEqual(4, view.wrapped.text!.utf16.count)
-        XCTAssertEqual(4, view.size)
+        XCTAssertEqual(8, downstream.wrapped.text!.utf8 .count)
+        XCTAssertEqual(4, downstream.wrapped.text!.utf16.count)
+        XCTAssertEqual(4, downstream.size)
     }
 }
 
@@ -66,15 +66,15 @@ extension ViewsTestsXActorTextField {
 // MARK: + Measurements
 //=----------------------------------------------------------------------------=
 
-extension ViewsTestsXActorTextField {
+extension ViewsTestsXDownstream {
     
     //=------------------------------------------------------------------------=
     // MARK: Loop
     //=------------------------------------------------------------------------=
     
-    func sizeLoop() {
+    func size() {
         for _ in 0 ..< 1 {
-            _ = view.size
+            _ = downstream.size
         }
     }
 
@@ -87,8 +87,8 @@ extension ViewsTestsXActorTextField {
     /// - 0.909 sec.
     ///
     func testMeasure1__() {
-        view.wrapped.text = alphabet
-        measure(sizeLoop)
+        downstream.wrapped.text = alphabet
+        measure(size)
     }
     
     /// 1,000,000 iterations:
@@ -96,8 +96,8 @@ extension ViewsTestsXActorTextField {
     /// - 0.914 sec.
     ///
     func testMeasure10_() {
-        view.wrapped.text = alphabet10
-        measure(sizeLoop)
+        downstream.wrapped.text = alphabet10
+        measure(size)
     }
     
     /// 1,000,000 iterations:
@@ -105,8 +105,8 @@ extension ViewsTestsXActorTextField {
     /// - 0.917 sec.
     ///
     func testMeasure100() {
-        view.wrapped.text = alphabet100
-        measure(sizeLoop)
+        downstream.wrapped.text = alphabet100
+        measure(size)
     }
 }
 

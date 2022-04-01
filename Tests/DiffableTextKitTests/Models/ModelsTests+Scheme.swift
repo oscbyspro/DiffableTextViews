@@ -24,7 +24,7 @@ final class ModelsTestsXScheme: XCTestCase {
     // MARK: Loop
     //=------------------------------------------------------------------------=
     
-    func sizeLoop<S>(_ alphabet: S) where S: StringProtocol {
+    func size<S>(_ alphabet: S) where S: StringProtocol {
         for _ in 0 ..< 1 {
             _ = UTF16.size(of: alphabet)
         }
@@ -48,7 +48,7 @@ extension ModelsTestsXScheme {
     ///
     func testString1__() {
         measure {
-            sizeLoop(alphabet)
+            size(alphabet)
         }
     }
     
@@ -59,7 +59,7 @@ extension ModelsTestsXScheme {
     ///
     func testString10_() {
         measure {
-            sizeLoop(alphabet10)
+            size(alphabet10)
         }
     }
     
@@ -70,7 +70,7 @@ extension ModelsTestsXScheme {
     ///
     func testString100() {
         measure {
-            sizeLoop(alphabet100)
+            size(alphabet100)
         }
     }
 }
@@ -92,7 +92,7 @@ extension ModelsTestsXScheme {
     ///
     func testSubstring1__() {
         measure {
-            sizeLoop(alphabet[...])
+            size(alphabet[...])
         }
     }
     
@@ -103,7 +103,7 @@ extension ModelsTestsXScheme {
     ///
     func testSubstring10_() {
         measure {
-            sizeLoop(alphabet10[...])
+            size(alphabet10[...])
         }
     }
     
@@ -114,7 +114,7 @@ extension ModelsTestsXScheme {
     ///
     func testSubstring100() {
         measure {
-            sizeLoop(alphabet100[...])
+            size(alphabet100[...])
         }
     }
 }

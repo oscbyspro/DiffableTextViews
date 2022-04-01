@@ -23,18 +23,6 @@ public final class BasicTextField: UITextField {
     
     public private(set) var directives = Directives()
     
-    //=------------------------------------------------------------------------=
-    // MARK: Initializers
-    //=------------------------------------------------------------------------=
-    
-    public init() {
-        super.init(frame: .zero)
-    }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
     //*========================================================================*
     // MARK: * Directives
     //*========================================================================*
