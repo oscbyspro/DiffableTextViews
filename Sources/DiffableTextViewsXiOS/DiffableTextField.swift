@@ -216,15 +216,15 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
             guard !context.contains(
             style: style,
             value: value,
-            mode: downstream.mode) else { return }
+            focus: downstream.focus) else { return }
             //=----------------------------------=
-            // MARK: Push - Active
+            // MARK: Push - View Is In Focus
             //=----------------------------------=
-            if downstream.mode == .active {
+            if downstream.focus.value {
                 self.context.active(style: style, commit: style.interpret(value))
                 self.push()
             //=----------------------------------=
-            // MARK: Push - Inactive
+            // MARK: Push - View Is Not In Focus
             //=----------------------------------=
             } else {
                 lock.perform {

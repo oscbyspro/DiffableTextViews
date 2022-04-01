@@ -8,22 +8,26 @@
 //=----------------------------------------------------------------------------=
 
 //*============================================================================*
-// MARK: * Mode
+// MARK: * Focus
 //*============================================================================*
 
-/// An active/inactive model.
-@frozen public enum Mode {
+@frozen public struct Focus: Equatable, ExpressibleByBooleanLiteral {
     
     //=------------------------------------------------------------------------=
-    // MARK: Instances
+    // MARK: State
     //=------------------------------------------------------------------------=
     
-    case active
-    case inactive
+    public let value: Bool
     
     //=------------------------------------------------------------------------=
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable public init() { self = .inactive }
+    @inlinable public init(_ value: Bool) {
+        self.value = value
+    }
+    
+    @inlinable public init(booleanLiteral value: Bool) {
+        self.value = value
+    }
 }

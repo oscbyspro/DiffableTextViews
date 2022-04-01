@@ -34,8 +34,8 @@ Determines the input and output space in terms of values.
 
 ### Enforcement
 
-- Lower bound is enforced when the view is: active.
-- Upper bound is enforced when the view is: active.
+- Lower bound is enforced when the view is: focused.
+- Upper bound is enforced when the view is: focused.
 
 ## Precision
 
@@ -48,8 +48,8 @@ Determines the input and output space in terms of digits.
 
 ### Enforcement
 
-- Lower bound is enforced when the view is: idle.
-- Upper bound is enforced when the view is: active.
+- Lower bound is enforced when the view is: unfocused.
+- Upper bound is enforced when the view is: focused.
 
 ### Formats
 

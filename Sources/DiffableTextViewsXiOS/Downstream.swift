@@ -35,8 +35,8 @@ import UIKit
     // MARK: Accessors
     //=------------------------------------------------------------------------=
     
-    @inlinable var mode: Mode {
-        wrapped.isEditing ? .active : .inactive        
+    @inlinable var focus: Focus {
+        Focus(wrapped.isEditing)
     }
 
     @inlinable var momentum: Bool {

@@ -21,10 +21,10 @@ public final class Context<Style: DiffableTextStyle, Scheme: DiffableTextKit.Sch
     //=------------------------------------------------------------------------=
     // MARK: State
     //=------------------------------------------------------------------------=
-        
-    @usableFromInline private(set) var _mode:  Mode   = Mode()
+    
     @usableFromInline private(set) var _style: Style! = nil
     @usableFromInline private(set) var _value: Value! = nil
+    @usableFromInline private(set) var _focus: Focus  = false
     @usableFromInline private(set) var _field: Field  = Field()
     
     //=------------------------------------------------------------------------=
@@ -37,9 +37,9 @@ public final class Context<Style: DiffableTextStyle, Scheme: DiffableTextKit.Sch
     // MARK: Accessors
     //=------------------------------------------------------------------------=
     
-    @inlinable public var mode:  Mode   { _mode  }
     @inlinable public var style: Style! { _style }
     @inlinable public var value: Value! { _value }
+    @inlinable public var focus: Focus  { _focus }
     @inlinable public var field: Field  { _field }
     
     //=------------------------------------------------------------------------=
@@ -47,17 +47,17 @@ public final class Context<Style: DiffableTextStyle, Scheme: DiffableTextKit.Sch
     //=------------------------------------------------------------------------=
     
     @inlinable public func active(style: Style, commit: Commit) {
-        self._mode  = .active
-        self._style =  style
-        self._value =  commit.value
+        self._focus = true
+        self._style = style
+        self._value = commit.value
         self._field.update(snapshot: commit.snapshot)
     }
     
     @inlinable public func inactive(style: Style, value: Value) {
-        self._mode  = .inactive
-        self._value =  value
-        self._style =  style
-        self._field =  Field()
+        self._focus = false
+        self._value = value
+        self._style = style
+        self._field = Field()
     }
     
     //=------------------------------------------------------------------------=
@@ -77,9 +77,9 @@ public final class Context<Style: DiffableTextStyle, Scheme: DiffableTextKit.Sch
     //=------------------------------------------------------------------------=
     
     /// Use this method to determine the need for upstream/downstream synchronization.
-    @inlinable public func contains(style: Style, value: Value, mode: Mode) -> Bool {
-        self.value == value
-        && self.mode == mode
+    @inlinable public func contains(style: Style, value: Value, focus: Focus) -> Bool {
+           self.value == value
+        && self.focus == focus
         && self.style == style
     }
 }
