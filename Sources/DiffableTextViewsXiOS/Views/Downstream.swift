@@ -23,15 +23,13 @@ import UIKit
     // MARK: State
     //=------------------------------------------------------------------------=
     
-    @usableFromInline var wrapped: BasicTextField
+    @usableFromInline var wrapped = BasicTextField()
     
     //=------------------------------------------------------------------------=
     // MARK: Initializers
     //=------------------------------------------------------------------------=
    
-    @inlinable init( _ wrapped: BasicTextField) {
-        self.wrapped = wrapped
-    }
+    @inlinable init() { }
     
     //=------------------------------------------------------------------------=
     // MARK: Accessors

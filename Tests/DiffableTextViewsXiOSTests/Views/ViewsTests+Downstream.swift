@@ -13,7 +13,6 @@
 import UIKit
 import DiffableTestKit
 
-@testable import DiffableTextKitXiOS
 @testable import DiffableTextViewsXiOS
 
 //*============================================================================*
@@ -29,7 +28,7 @@ final class ViewsTestsXDownstream: XCTestCase {
     // MARK: State
     //=------------------------------------------------------------------------=
     
-    lazy var downstream = Downstream(BasicTextField())
+    lazy var downstream = Downstream()
     
     //=------------------------------------------------------------------------=
     // MARK: Setup
