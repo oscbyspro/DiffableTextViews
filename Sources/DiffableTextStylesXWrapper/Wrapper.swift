@@ -43,27 +43,19 @@ extension _WrapperTextStyle {
     }
     
     //=------------------------------------------------------------------------=
-    // MARK: Upstream - Inactive
+    // MARK: Utilities
     //=------------------------------------------------------------------------=
     
     @inlinable @inline(__always)
     public func format(_ value: Style.Value) -> String {
         style.format(value)
     }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Upstream - Active
-    //=------------------------------------------------------------------------=
-    
+
     @inlinable @inline(__always)
     public func interpret(_ value: Style.Value) -> Commit<Style.Value> {
         style.interpret(value)
     }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Downstream - Interactive
-    //=------------------------------------------------------------------------=
-    
+
     @inlinable @inline(__always)
     public func merge(_ changes: Changes) throws -> Commit<Style.Value> {
         try style.merge(changes)
