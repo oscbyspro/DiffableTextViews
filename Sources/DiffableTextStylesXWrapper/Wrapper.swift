@@ -14,7 +14,7 @@ import Foundation
 // MARK: * Wrapper
 //*============================================================================*
 
-@usableFromInline protocol _WrapperTextStyle: DiffableTextStyle {
+@usableFromInline protocol WrapperTextStyle: DiffableTextStyle {
     
     //=------------------------------------------------------------------------=
     // MARK: Style
@@ -22,14 +22,14 @@ import Foundation
     
     associatedtype Style: DiffableTextStyle
 
-    @inlinable var style:  Style { get set }
+    @inlinable var style: Style { get set }
 }
 
 //=----------------------------------------------------------------------------=
 // MARK: + Details
 //=----------------------------------------------------------------------------=
 
-extension _WrapperTextStyle {
+extension WrapperTextStyle {
 
     //=------------------------------------------------------------------------=
     // MARK: Transformations
@@ -69,25 +69,13 @@ extension _WrapperTextStyle {
     public static func == (lhs: Self, rhs: Self) -> Bool {
         lhs.style == rhs.style
     }
-}
-
-#if os(iOS)
-
-import DiffableTextViewsXiOS
-
-//*============================================================================*
-// MARK: Wrapper x iOS
-//*============================================================================*
-
-@usableFromInline protocol WrapperTextStyle: _WrapperTextStyle,
-DiffableTextStyle where Style: DiffableTextStyle { }
-
-//=----------------------------------------------------------------------------=
-// MARK: + Details
-//=----------------------------------------------------------------------------=
-
-extension WrapperTextStyle {
     
+    //*========================================================================*
+    // MARK: * iOS
+    //*========================================================================*
+    
+    #if os(iOS)
+
     //=------------------------------------------------------------------------=
     // MARK: Setup
     //=------------------------------------------------------------------------=
@@ -96,6 +84,6 @@ extension WrapperTextStyle {
     public static func onSetup(_ diffableTextField: ProxyTextField) {
         Style.onSetup(diffableTextField)
     }
-}
 
-#endif
+    #endif
+}

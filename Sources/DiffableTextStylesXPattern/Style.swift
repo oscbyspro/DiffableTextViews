@@ -166,15 +166,3 @@ extension PatternTextStyle {
         return self.interpret(value)
     }
 }
-
-#if os(iOS)
-
-import DiffableTextViewsXiOS
-
-//*============================================================================*
-// MARK: * PatternTextStyle x iOS
-//*============================================================================*
-
-extension PatternTextStyle: DiffableTextStyle { }
-
-#endif

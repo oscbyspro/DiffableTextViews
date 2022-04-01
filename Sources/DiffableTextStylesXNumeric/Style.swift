@@ -77,6 +77,22 @@ public struct _NumericTextStyle<Format: NumericTextFormat>: DiffableTextStyle {
         && lhs.bounds == rhs.bounds
         && lhs.precision == rhs.precision
     }
+    
+    //*========================================================================*
+    // MARK: * iOS
+    //*========================================================================*
+    
+    #if os(iOS)
+
+    //=------------------------------------------------------------------------=
+    // MARK: Setup
+    //=------------------------------------------------------------------------=
+
+    @inlinable public static func onSetup(_ diffableTextField: ProxyTextField) {
+        diffableTextField.keyboard.view(Value.isInteger ? .numberPad : .decimalPad)
+    }
+
+    #endif
 }
 
 //=----------------------------------------------------------------------------=
@@ -174,24 +190,3 @@ extension NumericTextStyle {
         return self.commit(value, number, style)
     }
 }
-
-#if os(iOS)
-
-import DiffableTextViewsXiOS
-
-//*============================================================================*
-// MARK: * NumericTextStyle x iOS
-//*============================================================================*
-
-extension NumericTextStyle: DiffableTextStyle {
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Setup
-    //=------------------------------------------------------------------------=
-    
-    @inlinable public static func onSetup(_ diffableTextField: ProxyTextField) {
-        diffableTextField.keyboard.view(Value.isInteger ? .numberPad : .decimalPad)
-    }
-}
-
-#endif

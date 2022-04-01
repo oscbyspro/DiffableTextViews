@@ -18,7 +18,7 @@ import Foundation
 ///
 /// Use this style to prevent changes via the environment, for example.
 ///
-public struct ConstantTextStyle<Style: DiffableTextStyle>: _WrapperTextStyle {
+public struct ConstantTextStyle<Style: DiffableTextStyle>: WrapperTextStyle {
     
     //=------------------------------------------------------------------------=
     // MARK: State
@@ -66,15 +66,3 @@ extension DiffableTextStyle {
         Constant(self)
     }
 }
-
-#if os(iOS)
-
-import DiffableTextViewsXiOS
-
-//*============================================================================*
-// MARK: * Constant x iOS
-//*============================================================================*
-
-extension ConstantTextStyle: WrapperTextStyle, DiffableTextStyle where Style: DiffableTextStyle { }
-
-#endif
