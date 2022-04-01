@@ -13,9 +13,13 @@ import DiffableTextKit
 // MARK: * Equals
 //*============================================================================*
 
-/// A style that equals a proxy value.
+/// A style that binds its comparison to a proxy value.
 ///
-/// Use this style to optimize the comparison on view update.
+/// Use this wrapper to optimize the comparison on view update.
+///
+/// - Note: Use it only when you are know that the proxy value represents the state of the style,
+/// otherwise the user may lock themselves in state where all or some input is invalid. A state like this
+/// corrects itself only when the value or the editing mode changes.
 ///
 public struct EqualsTextStyle<Style: DiffableTextStyle, Proxy: Equatable>: WrapperTextStyle {
     
@@ -63,13 +67,27 @@ extension DiffableTextStyle {
     // MARK: Transformations
     //=------------------------------------------------------------------------=
     
-    /// Binds the style's comparison result to the proxy value.
+    /// Binds the style's comparison to a proxy value.
+    ///
+    /// Use this wrapper to optimize the comparison on view update.
+    ///
+    /// - Note: Use it only when you are know that the proxy value represents the state of the style,
+    /// otherwise the user may lock themselves in state where all or some input is invalid. A state like this
+    /// corrects itself only when the value or the editing mode changes.
+    ///
     @inlinable @inline(__always)
     public func equals(_ proxy: Void) -> EqualsVoid {
         Equals(self, proxy: _Void())
     }
     
-    /// Binds the style's comparison result to the proxy value.
+    /// Binds the style's comparison to a proxy value.
+    ///
+    /// Use this wrapper to optimize the comparison on view update.
+    ///
+    /// - Note: Use it only when you are know that the proxy value represents the state of the style,
+    /// otherwise the user may lock themselves in state where all or some input is invalid. A state like this
+    /// corrects itself only when the value or the editing mode changes.
+    ///
     @inlinable @inline(__always)
     public func equals<Proxy>(_ proxy: Proxy) -> Equals<Proxy> {
         Equals(self, proxy: proxy)
