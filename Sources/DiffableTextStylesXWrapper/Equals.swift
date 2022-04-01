@@ -56,6 +56,7 @@ extension DiffableTextStyle {
     // MARK: Aliases
     //=------------------------------------------------------------------------=
     
+    public typealias EqualsVoid = EqualsTextStyle<Self, _Void>
     public typealias Equals<Proxy: Equatable> = EqualsTextStyle<Self, Proxy>
     
     //=------------------------------------------------------------------------=
@@ -64,7 +65,7 @@ extension DiffableTextStyle {
     
     /// Binds the style's comparison result to the proxy value.
     @inlinable @inline(__always)
-    public func equals(_ proxy: Void) -> Equals<_Void> {
+    public func equals(_ proxy: Void) -> EqualsVoid {
         Equals(self, proxy: _Void())
     }
     
