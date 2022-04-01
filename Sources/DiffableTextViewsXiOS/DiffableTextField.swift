@@ -66,7 +66,7 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
         //=--------------------------------------=
         // MARK: Done
         //=--------------------------------------=
-        context.coordinator.setup(self, downstream, context.environment); return view
+        context.coordinator.setup(self,  context.environment, downstream); return view
     }
     
     @inlinable public func updateUIView(_ uiView: UIViewType, context: Self.Context) {
@@ -86,30 +86,19 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
         //=--------------------------------------------------------------------=
         
         @usableFromInline let lock = Lock()
-        @usableFromInline var context: Context!
-        @usableFromInline var upstream: Upstream!
-        @usableFromInline var downstream: Downstream!
-        @usableFromInline var environment: EnvironmentValues!
-        
-        //=--------------------------------------------------------------------=
-        // MARK: Accessors
-        //=--------------------------------------------------------------------=
-
-        @inlinable var _style: Style {
-            upstream.style.locale(environment.locale)
-        }
-        
-        @inlinable var _value: Value {
-            upstream.value.wrappedValue
-        }
+        @usableFromInline private(set) var context: Context!
+        @usableFromInline private(set) var upstream: Upstream!
+        @usableFromInline private(set) var downstream: Downstream!
+        @usableFromInline private(set) var environment: EnvironmentValues!
         
         //=--------------------------------------------------------------------=
         // MARK: View Life Cycle
         //=--------------------------------------------------------------------=
         
-        @inlinable func setup(_ upstream: Upstream, _ downstream: Downstream, _ environment: EnvironmentValues) {
+        @inlinable func setup(_ upstream: Upstream, _ environment: EnvironmentValues, _ downstream: Downstream) {
             self.upstream = upstream; self.environment = environment; self.downstream = downstream
-            downstream.wrapped.delegate = self; self.context = Context(_style, _value); self.write()
+            self.context = Context(upstream.style.locale(environment.locale), upstream.value.wrappedValue)
+            self.downstream.wrapped.delegate = self; self.write()
         }
         
         @inlinable func update(_ upstream: Upstream, _ environment: EnvironmentValues) {
