@@ -56,7 +56,7 @@ extension DiffableTextStyle {
     // MARK: Aliases
     //=------------------------------------------------------------------------=
     
-    public typealias Equals<Value: Equatable> = EqualsTextStyle<Self, Value>
+    public typealias Equals<Proxy: Equatable> = EqualsTextStyle<Self, Proxy>
     
     //=------------------------------------------------------------------------=
     // MARK: Transformations

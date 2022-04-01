@@ -162,6 +162,5 @@ struct DiffableTextFieldXPhone: View {
         .pattern("+## (###) ###-##-##")
         .placeholder("#") { $0.isASCII && $0.isNumber }
         .equals(())
-        .constant()
 }
 ```
