@@ -15,9 +15,9 @@ import Foundation
 //*============================================================================*
 
 
-/// A style that where standard transformation methods return an unmodified self.
+/// A style that returns an unmodified self for standard transformations.
 ///
-/// This style may be used to prevent changes through the environment, for example.
+/// Use this style to prevent changes via the environment, for example.
 ///
 public struct ConstantTextStyle<Style: _DiffableTextStyle>: _WrapperTextStyle {
     
@@ -70,9 +70,9 @@ extension _DiffableTextStyle {
     // MARK: Transformations
     //=------------------------------------------------------------------------=
     
-    /// A style that where standard transformation methods return an unmodified self.
+    /// A style that returns an unmodified self for standard transformations.
     ///
-    /// This style may be used to prevent changes through the environment, for example.
+    /// Use this style to prevent changes via the environment, for example.
     ///
     @inlinable @inline(__always)
     public func constant() -> Constant {

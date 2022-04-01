@@ -22,7 +22,7 @@ import Foundation
     
     associatedtype Style: _DiffableTextStyle
 
-    @inlinable var style: Style { get set }
+    @inlinable var style:  Style { get set }
 }
 
 //=----------------------------------------------------------------------------=
@@ -87,7 +87,8 @@ import DiffableTextViewsXiOS
 // MARK: Wrapper x iOS
 //*============================================================================*
 
-@usableFromInline protocol WrapperTextStyle: _WrapperTextStyle, DiffableTextStyle where Style: DiffableTextStyle { }
+@usableFromInline protocol WrapperTextStyle: _WrapperTextStyle,
+DiffableTextStyle where Style: DiffableTextStyle { }
 
 //=----------------------------------------------------------------------------=
 // MARK: + Details
