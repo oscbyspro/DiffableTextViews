@@ -22,9 +22,9 @@ public final class Context<Style: DiffableTextStyle, Scheme: DiffableTextKit.Sch
     // MARK: State
     //=------------------------------------------------------------------------=
     
+    @usableFromInline private(set) var _focus: Focus
     @usableFromInline private(set) var _style: Style
     @usableFromInline private(set) var _value: Value
-    @usableFromInline private(set) var _focus: Focus
     @usableFromInline private(set) var _field: Field
     
     //=------------------------------------------------------------------------=
@@ -32,9 +32,9 @@ public final class Context<Style: DiffableTextStyle, Scheme: DiffableTextKit.Sch
     //=------------------------------------------------------------------------=
     
     @inlinable public init(_ style: Style, _ value: Value) {
+        self._focus = false
         self._style = style
         self._value = value
-        self._focus = false
         self._field = Field()
     }
     
@@ -86,9 +86,9 @@ extension Context {
     //=------------------------------------------------------------------------=
     
     @inlinable public func unfocused(style: Style, value: Value) {
-        self._value = value
-        self._style = style
         self._focus = false
+        self._style = style
+        self._value = value
         self._field = Field()
     }
     
