@@ -41,27 +41,23 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
     }
 
     //=------------------------------------------------------------------------=
-    // MARK: View Life Cycle - Coordinator
+    // MARK: View Life Cycle
     //=------------------------------------------------------------------------=
     
     @inlinable public func makeCoordinator() -> Coordinator {
         Coordinator()
     }
     
-    //=------------------------------------------------------------------------=
-    // MARK: View Life Cycle - UIView
-    //=------------------------------------------------------------------------=
-    
     @inlinable public func makeUIView(context: Self.Context) -> BasicTextField {
         let downstream = Downstream()
-        let wrapped = downstream.wrapped
+        let view = downstream.wrapped
         //=--------------------------------------=
         // MARK: View
         //=--------------------------------------=
-        wrapped.font = UIFont(DiffableTextFont.body.monospaced())
-        wrapped.setTextAlignment(context.environment.multilineTextAlignment)
-        wrapped.setContentHuggingPriority(.defaultHigh, for: .vertical)
-        wrapped.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
+        view.font = UIFont(DiffableTextFont.body.monospaced())
+        view.setTextAlignment(context.environment.multilineTextAlignment)
+        view.setContentHuggingPriority(.defaultHigh, for: .vertical)
+        view.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
         //=--------------------------------------=
         // MARK: Downstream
         //=--------------------------------------=
@@ -70,14 +66,8 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
         //=--------------------------------------=
         // MARK: Done
         //=--------------------------------------=
-        wrapped.delegate = context.coordinator
-        context.coordinator.downstream = downstream
-        return wrapped
+        context.coordinator.setup(self, downstream, context.environment); return view
     }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: View Life Cycle - Update
-    //=------------------------------------------------------------------------=
     
     @inlinable public func updateUIView(_ uiView: UIViewType, context: Self.Context) {
         context.coordinator.update(self, context.environment)
@@ -96,16 +86,32 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
         //=--------------------------------------------------------------------=
         
         @usableFromInline let lock = Lock()
-        @usableFromInline var context = Context()
-        
+        @usableFromInline var context: Context!
         @usableFromInline var upstream: Upstream!
         @usableFromInline var downstream: Downstream!
         @usableFromInline var environment: EnvironmentValues!
+        
+        //=--------------------------------------------------------------------=
+        // MARK: Accessors
+        //=--------------------------------------------------------------------=
 
+        @inlinable var _style: Style {
+            upstream.style.locale(environment.locale)
+        }
+        
+        @inlinable var _value: Value {
+            upstream.value.wrappedValue
+        }
+        
         //=--------------------------------------------------------------------=
-        // MARK: Upstream
+        // MARK: View Life Cycle
         //=--------------------------------------------------------------------=
-                
+        
+        @inlinable func setup(_ upstream: Upstream, _ downstream: Downstream, _ environment: EnvironmentValues) {
+            self.upstream = upstream; self.environment = environment; self.downstream = downstream
+            downstream.wrapped.delegate = self; self.context = Context(_style, _value); self.write()
+        }
+        
         @inlinable func update(_ upstream: Upstream, _ environment: EnvironmentValues) {
             self.upstream = upstream; self.environment = environment
             self.synchronize() // on update is same as on did update
@@ -185,8 +191,8 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
         
         @inlinable public func textField(_ textField: UITextField,
         shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
-            let style = context.style!
-            let range = context.field.indices(at: range)
+            let style   = context.style
+            let range   = context.field.indices(at: range)
             let changes = Changes(context.field.snapshot, change: (range, string))
             //=----------------------------------=
             // MARK: Merge

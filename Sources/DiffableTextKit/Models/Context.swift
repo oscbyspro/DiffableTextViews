@@ -25,25 +25,30 @@ public final class Context<Style: DiffableTextStyle, Scheme: DiffableTextKit.Sch
     // MARK: State
     //=------------------------------------------------------------------------=
     
-    @usableFromInline private(set) var _style: Style! = nil
-    @usableFromInline private(set) var _value: Value! = nil
-    @usableFromInline private(set) var _focus: Focus  = false
-    @usableFromInline private(set) var _field: Field  = Field()
+    @usableFromInline private(set) var _style: Style
+    @usableFromInline private(set) var _value: Value
+    @usableFromInline private(set) var _focus: Focus
+    @usableFromInline private(set) var _field: Field
     
     //=------------------------------------------------------------------------=
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable public init() { }
+    @inlinable public init(_ style: Style, _ value: Value) {
+        self._style = style
+        self._value = value
+        self._focus = false
+        self._field = Field()
+    }
     
     //=------------------------------------------------------------------------=
     // MARK: Accessors
     //=------------------------------------------------------------------------=
     
-    @inlinable public var style: Style! { _style }
-    @inlinable public var value: Value! { _value }
-    @inlinable public var focus: Focus  { _focus }
-    @inlinable public var field: Field  { _field }
+    @inlinable public var style: Style { _style }
+    @inlinable public var value: Value { _value }
+    @inlinable public var focus: Focus { _focus }
+    @inlinable public var field: Field { _field }
     
     //=------------------------------------------------------------------------=
     // MARK: Utilities
@@ -84,9 +89,9 @@ extension Context {
     //=------------------------------------------------------------------------=
     
     @inlinable public func unfocused(style: Style, value: Value) {
-        self._focus = false
         self._value = value
         self._style = style
+        self._focus = false
         self._field = Field()
     }
     
@@ -99,8 +104,8 @@ extension Context {
 
     @inlinable public func dynamic(style: Style, value: Value, focus: Focus) {
         switch focus.value {
-        case false: self.unfocused(style: style,  value: value)
-        case  true: self  .focused(style: style, commit: style.interpret(value))
+        case false: self.unfocused(style: style, value: value)
+        case  true: self  .focused(style: style,commit: style.interpret(value))
         }
     }
 }
@@ -116,9 +121,9 @@ extension Context {
     //=------------------------------------------------------------------------=
     
     @inlinable public func pull(style: Style, value: Value, focus: Focus) -> Bool {
-        let changeInStyle = _style == style
-        let changeInValue = _value == value
-        let changeInFocus = _focus == focus
+        let changeInStyle = self.style != style
+        let changeInValue = self.value != value
+        let changeInFocus = self.focus != focus
         //=--------------------------------------=
         // MARK: At Least One Has To Change
         //=--------------------------------------=

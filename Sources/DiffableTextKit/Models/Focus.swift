@@ -11,7 +11,7 @@
 // MARK: * Focus
 //*============================================================================*
 
-@frozen public struct Focus: Equatable, ExpressibleByBooleanLiteral {
+@frozen public struct Focus: Equatable, ExpressibleByBooleanLiteral, CustomStringConvertible {
     
     //=------------------------------------------------------------------------=
     // MARK: State
@@ -29,5 +29,13 @@
     
     @inlinable public init(booleanLiteral value: Bool) {
         self.value = value
+    }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Conversions
+    //=------------------------------------------------------------------------=
+    
+    @inlinable public var description: String {
+        value.description
     }
 }
