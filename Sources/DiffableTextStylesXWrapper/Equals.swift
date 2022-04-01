@@ -17,10 +17,6 @@ import DiffableTextKit
 ///
 /// Use this wrapper to optimize the comparison on view update.
 ///
-/// - Note: Use it only when you know that the proxy value represents the state of the style.
-/// Otherwise, the user may lock themselves in a state where all or some input is invalid. Such
-/// a state corrects itself only when the value or the editing mode changes.
-///
 public struct EqualsTextStyle<Style: DiffableTextStyle, Proxy: Equatable>: WrapperTextStyle {
     
     //=------------------------------------------------------------------------=
@@ -71,10 +67,6 @@ extension DiffableTextStyle {
     ///
     /// Use this wrapper to optimize the comparison on view update.
     ///
-    /// - Note: Use it only when you know that the proxy value represents the state of the style.
-    /// Otherwise, the user may lock themselves in a state where all or some input is invalid. Such
-    /// a state corrects itself only when the value or the editing mode changes.
-    ///
     @inlinable @inline(__always)
     public func equals(_ proxy: Void) -> EqualsVoid {
         Equals(self, proxy: _Void())
@@ -83,10 +75,6 @@ extension DiffableTextStyle {
     /// Binds the style's comparison to a proxy value.
     ///
     /// Use this wrapper to optimize the comparison on view update.
-    ///
-    /// - Note: Use it only when you know that the proxy value represents the state of the style.
-    /// Otherwise, the user may lock themselves in a state where all or some input is invalid. Such
-    /// a state corrects itself only when the value or the editing mode changes.
     ///
     @inlinable @inline(__always)
     public func equals<Proxy>(_ proxy: Proxy) -> Equals<Proxy> {
