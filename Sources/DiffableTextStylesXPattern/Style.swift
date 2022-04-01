@@ -13,7 +13,7 @@ import DiffableTextKit
 // MARK: * PatternTextStyle
 //*============================================================================*
 
-public struct PatternTextStyle<Value>: _DiffableTextStyle where
+public struct PatternTextStyle<Value>: DiffableTextStyle where
 Value: RangeReplaceableCollection, Value: Equatable, Value.Element == Character {
     
     //=------------------------------------------------------------------------=

@@ -29,7 +29,7 @@ extension NumericTextStyle where Format: NumericTextFormatXPercent {
 // MARK: * Decimal
 //*============================================================================*
 
-extension _DiffableTextStyle where Self == NumericTextStyle<Decimal>.Percent {
+extension DiffableTextStyle where Self == NumericTextStyle<Decimal>.Percent {
     
     //=------------------------------------------------------------------------=
     // MARK: Initializers
@@ -44,7 +44,7 @@ extension _DiffableTextStyle where Self == NumericTextStyle<Decimal>.Percent {
 // MARK: * Double
 //*============================================================================*
 
-extension _DiffableTextStyle where Self == NumericTextStyle<Double>.Percent {
+extension DiffableTextStyle where Self == NumericTextStyle<Double>.Percent {
     
     //=------------------------------------------------------------------------=
     // MARK: Initializers

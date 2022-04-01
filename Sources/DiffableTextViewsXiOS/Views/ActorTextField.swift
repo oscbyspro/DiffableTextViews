@@ -12,12 +12,27 @@
 import DiffableTextKit
 import UIKit
 
+#warning("Rename.")
+#warning("Rename.")
+#warning("Rename.")
 //*============================================================================*
 // MARK: * ActorTextField
 //*============================================================================*
 
-@usableFromInline final class ActorTextField: BasicTextField.View {
+@usableFromInline final class ActorTextField {
     @usableFromInline typealias Position = DiffableTextKit.Position<UTF16>
+    
+    //=------------------------------------------------------------------------=
+    // MARK: State
+    //=------------------------------------------------------------------------=
+    
+    @usableFromInline var wrapped: BasicTextField
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Initializers
+    //=------------------------------------------------------------------------=
+   
+    @inlinable init(_ wrapped: BasicTextField) { self.wrapped = wrapped }
     
     //=------------------------------------------------------------------------=
     // MARK: Accessors

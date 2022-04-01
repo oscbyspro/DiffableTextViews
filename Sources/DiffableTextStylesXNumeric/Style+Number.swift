@@ -29,7 +29,7 @@ extension NumericTextStyle where Format: NumericTextFormatXNumber {
 // MARK: * Decimal
 //*============================================================================*
 
-extension _DiffableTextStyle where Self == NumericTextStyle<Decimal> {
+extension DiffableTextStyle where Self == NumericTextStyle<Decimal> {
     
     //=------------------------------------------------------------------------=
     // MARK: Initializers
@@ -44,7 +44,7 @@ extension _DiffableTextStyle where Self == NumericTextStyle<Decimal> {
 // MARK: * Double
 //*============================================================================*
 
-extension _DiffableTextStyle where Self == NumericTextStyle<Double> {
+extension DiffableTextStyle where Self == NumericTextStyle<Double> {
     
     //=------------------------------------------------------------------------=
     // MARK: Initializers
@@ -59,7 +59,7 @@ extension _DiffableTextStyle where Self == NumericTextStyle<Double> {
 // MARK: * Int
 //*============================================================================*
 
-extension _DiffableTextStyle where Self == NumericTextStyle<Int> {
+extension DiffableTextStyle where Self == NumericTextStyle<Int> {
     
     //=------------------------------------------------------------------------=
     // MARK: Initializers
@@ -74,7 +74,7 @@ extension _DiffableTextStyle where Self == NumericTextStyle<Int> {
 // MARK: * Int8
 //*============================================================================*
 
-extension _DiffableTextStyle where Self == NumericTextStyle<Int8> {
+extension DiffableTextStyle where Self == NumericTextStyle<Int8> {
     
     //=------------------------------------------------------------------------=
     // MARK: Initializers
@@ -89,7 +89,7 @@ extension _DiffableTextStyle where Self == NumericTextStyle<Int8> {
 // MARK: * Int16
 //*============================================================================*
 
-extension _DiffableTextStyle where Self == NumericTextStyle<Int16> {
+extension DiffableTextStyle where Self == NumericTextStyle<Int16> {
     
     //=------------------------------------------------------------------------=
     // MARK: Initializers
@@ -104,7 +104,7 @@ extension _DiffableTextStyle where Self == NumericTextStyle<Int16> {
 // MARK: * Int32
 //*============================================================================*
 
-extension _DiffableTextStyle where Self == NumericTextStyle<Int32> {
+extension DiffableTextStyle where Self == NumericTextStyle<Int32> {
     
     //=------------------------------------------------------------------------=
     // MARK: Initializers
@@ -119,7 +119,7 @@ extension _DiffableTextStyle where Self == NumericTextStyle<Int32> {
 // MARK: * Int64
 //*============================================================================*
 
-extension _DiffableTextStyle where Self == NumericTextStyle<Int64> {
+extension DiffableTextStyle where Self == NumericTextStyle<Int64> {
     
     //=------------------------------------------------------------------------=
     // MARK: Initializers
@@ -134,7 +134,7 @@ extension _DiffableTextStyle where Self == NumericTextStyle<Int64> {
 // MARK: * UInt
 //*============================================================================*
 
-extension _DiffableTextStyle where Self == NumericTextStyle<UInt> {
+extension DiffableTextStyle where Self == NumericTextStyle<UInt> {
     
     //=------------------------------------------------------------------------=
     // MARK: Initializers
@@ -149,7 +149,7 @@ extension _DiffableTextStyle where Self == NumericTextStyle<UInt> {
 // MARK: * UInt8
 //*============================================================================*
 
-extension _DiffableTextStyle where Self == NumericTextStyle<UInt8> {
+extension DiffableTextStyle where Self == NumericTextStyle<UInt8> {
     
     //=------------------------------------------------------------------------=
     // MARK: Initializers
@@ -164,7 +164,7 @@ extension _DiffableTextStyle where Self == NumericTextStyle<UInt8> {
 // MARK: * UInt16
 //*============================================================================*
 
-extension _DiffableTextStyle where Self == NumericTextStyle<UInt16> {
+extension DiffableTextStyle where Self == NumericTextStyle<UInt16> {
     
     //=------------------------------------------------------------------------=
     // MARK: Initializers
@@ -179,7 +179,7 @@ extension _DiffableTextStyle where Self == NumericTextStyle<UInt16> {
 // MARK: * UInt32
 //*============================================================================*
 
-extension _DiffableTextStyle where Self == NumericTextStyle<UInt32> {
+extension DiffableTextStyle where Self == NumericTextStyle<UInt32> {
     
     //=------------------------------------------------------------------------=
     // MARK: Initializers
@@ -194,7 +194,7 @@ extension _DiffableTextStyle where Self == NumericTextStyle<UInt32> {
 // MARK: * UInt64
 //*============================================================================*
 
-extension _DiffableTextStyle where Self == NumericTextStyle<UInt64> {
+extension DiffableTextStyle where Self == NumericTextStyle<UInt64> {
     
     //=------------------------------------------------------------------------=
     // MARK: Initializers

@@ -16,7 +16,7 @@ import UIKit
 // MARK: * UITextField
 //*============================================================================*
 
-extension UITextField {
+public extension UITextField {
     
     //=------------------------------------------------------------------------=
     // MARK: Transformations

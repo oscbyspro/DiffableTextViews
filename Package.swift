@@ -30,7 +30,7 @@ let package = Package(
     ],
     targets: [
         //=--------------------------------------=
-        // MARK: 4 - DiffableTextViews
+        // MARK: 5 - DiffableTextViews
         //=--------------------------------------=
         .target(
             name: "DiffableTextViews",
@@ -38,7 +38,7 @@ let package = Package(
                 "DiffableTextStyles",
                 "DiffableTextViewsXiOS"]),
         //=--------------------------------------=
-        // MARK: 3 - DiffableTextStyles
+        // MARK: 4 - DiffableTextStyles
         //=--------------------------------------=
         .target(
             name: "DiffableTextStyles",
@@ -47,7 +47,7 @@ let package = Package(
                 "DiffableTextStylesXPattern",
                 "DiffableTextStylesXWrapper"]),
         //=--------------------------------------=
-        // MARK: 2 - DiffableTextStylesXNumeric
+        // MARK: 3 - DiffableTextStylesXNumeric
         //=--------------------------------------=
         .target(
             name: "DiffableTextStylesXNumeric",
@@ -56,7 +56,7 @@ let package = Package(
             name: "DiffableTextStylesXNumericTests",
             dependencies: ["DiffableTestKit", "DiffableTextStylesXNumeric"]),
         //=--------------------------------------=
-        // MARK: 2 - DiffableTextStylesXPattern
+        // MARK: 3 - DiffableTextStylesXPattern
         //=--------------------------------------=
         .target(
             name: "DiffableTextStylesXPattern",
@@ -65,13 +65,13 @@ let package = Package(
             name: "DiffableTextStylesXPatternTests",
             dependencies: ["DiffableTestKit", "DiffableTextStylesXPattern"]),
         //=--------------------------------------=
-        // MARK: 2 - DiffableTextStylesXWrapper
+        // MARK: 3 - DiffableTextStylesXWrapper
         //=--------------------------------------=
         .target(
             name: "DiffableTextStylesXWrapper",
             dependencies: ["DiffableTextKit", "DiffableTextViewsXiOS"]),
         //=--------------------------------------=
-        // MARK: 1 - DiffableTextViewsXiOS
+        // MARK: 2 - DiffableTextViewsXiOS
         //=--------------------------------------=
         .target(
             name: "DiffableTextViewsXiOS",
@@ -80,14 +80,23 @@ let package = Package(
             name: "DiffableTextViewsXiOSTests",
             dependencies: ["DiffableTestKit", "DiffableTextViewsXiOS"]),
         //=--------------------------------------=
-        // MARK: 0 - DiffableTextKit
+        // MARK: 1 - DiffableTextKit
         //=--------------------------------------=
         .target(
             name: "DiffableTextKit",
-            dependencies: []),
+            dependencies: ["DiffableTextKitXiOS"]),
         .testTarget(
             name: "DiffableTextKitTests",
             dependencies: ["DiffableTextKit", "DiffableTestKit"]),
+        //=--------------------------------------=
+        // MARK: 0 - DiffableTextKitXiOS
+        //=--------------------------------------=
+        .target(
+            name: "DiffableTextKitXiOS",
+            dependencies: []),
+        .testTarget(
+            name: "DiffableTextKitXiOSTests",
+            dependencies: ["DiffableTestKit"]),
         //=--------------------------------------=
         // MARK: T - DiffableTestKit
         //=--------------------------------------=

@@ -18,7 +18,7 @@ import Foundation
 ///
 /// Use this style to prevent changes via the environment, for example.
 ///
-public struct ConstantTextStyle<Style: _DiffableTextStyle>: _WrapperTextStyle {
+public struct ConstantTextStyle<Style: DiffableTextStyle>: _WrapperTextStyle {
     
     //=------------------------------------------------------------------------=
     // MARK: State
@@ -45,7 +45,7 @@ public struct ConstantTextStyle<Style: _DiffableTextStyle>: _WrapperTextStyle {
 // MARK: * Constant x DiffableTextStyle
 //*============================================================================*
 
-extension _DiffableTextStyle {
+extension DiffableTextStyle {
     
     //=------------------------------------------------------------------------=
     // MARK: Aliases

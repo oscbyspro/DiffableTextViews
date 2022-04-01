@@ -14,13 +14,13 @@ import Foundation
 // MARK: * Wrapper
 //*============================================================================*
 
-@usableFromInline protocol _WrapperTextStyle: _DiffableTextStyle {
+@usableFromInline protocol _WrapperTextStyle: DiffableTextStyle {
     
     //=------------------------------------------------------------------------=
     // MARK: Style
     //=------------------------------------------------------------------------=
     
-    associatedtype Style: _DiffableTextStyle
+    associatedtype Style: DiffableTextStyle
 
     @inlinable var style:  Style { get set }
 }

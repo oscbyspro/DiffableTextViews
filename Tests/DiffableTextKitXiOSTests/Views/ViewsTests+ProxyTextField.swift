@@ -7,34 +7,47 @@
 // See http://www.apache.org/licenses/LICENSE-2.0 for license information.
 //=----------------------------------------------------------------------------=
 
+#if DEBUG
 #if canImport(UIKit)
 
-import DiffableTextKit
+import UIKit
+import XCTest
+
+@testable import DiffableTextKitXiOS
 
 //*============================================================================*
-// MARK: * DiffableTextStyle x iOS
+// MARK: * ViewsTests x ProxyTextField
 //*============================================================================*
 
-public protocol DiffableTextStyle: _DiffableTextStyle {
+final class ViewsTestsXProxyTextField: XCTestCase {
     
     //=------------------------------------------------------------------------=
-    // MARK: Setup
+    // MARK: State
     //=------------------------------------------------------------------------=
     
-    @inlinable static func onSetup(_ diffableTextField: ProxyTextField)
+    lazy var view = ProxyTextField(BasicTextField())
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Tests
+    //=------------------------------------------------------------------------=
+    
+    func testForceUnwrappingTextIsOK() {
+        view.wrapped.text = nil
+        XCTAssertNotNil(view.wrapped.text)
+        XCTAssertEqual(view.text.value, String())
+    }
+    
+    func testForceUnwrappingSelectedTextRangeIsOK() {
+        view.wrapped.selectedTextRange = nil
+        XCTAssertNotNil(view.wrapped.selectedTextRange)
+        XCTAssertEqual(view.selection.value, String())
+    }
+    
+    func testForceUnwrappingMarkedTextRangeIsBad() {
+        XCTAssertNil(view.wrapped.markedTextRange)
+        XCTAssertEqual(view.selection.marked, String())
+    }
 }
 
-//=----------------------------------------------------------------------------=
-// MARK: + Details
-//=----------------------------------------------------------------------------=
-
-public extension DiffableTextStyle {
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Setup
-    //=------------------------------------------------------------------------=
-    
-    @inlinable static func onSetup(_ diffableTextField: ProxyTextField) { }
-}
-
+#endif
 #endif

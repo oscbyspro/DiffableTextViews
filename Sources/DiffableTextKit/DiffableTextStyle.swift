@@ -17,7 +17,7 @@ import Foundation
 ///
 /// It a base protocol for all platform specific versions of it.
 ///
-public protocol _DiffableTextStyle: Equatable {
+public protocol DiffableTextStyle: Equatable {
 
     //=------------------------------------------------------------------------=
     // MARK: Value
@@ -60,17 +60,47 @@ public protocol _DiffableTextStyle: Equatable {
     /// - Thrown errors have their descriptions printed in DEBUG mode.
     ///
     @inlinable func merge(_ changes: Changes) throws -> Commit<Value>
+    
+    //*========================================================================*
+    // MARK: * iOS
+    //*========================================================================*
+    
+    #if os(iOS)
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Setup
+    //=------------------------------------------------------------------------=
+    
+    #warning("TODO")
+    @inlinable static func onSetup(_ diffableTextField: ProxyTextField)
+    
+    #endif
 }
 
 //=----------------------------------------------------------------------------=
 // MARK: + Details
 //=----------------------------------------------------------------------------=
 
-public extension _DiffableTextStyle {
+public extension DiffableTextStyle {
     
     //=------------------------------------------------------------------------=
     // MARK: Transformations
     //=------------------------------------------------------------------------=
     
     @inlinable func locale(_ locale: Locale) -> Self { self }
+    
+    //*========================================================================*
+    // MARK: * iOS
+    //*========================================================================*
+    
+    #if os(iOS)
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Setup
+    //=------------------------------------------------------------------------=
+    
+    #warning("TODO")
+    @inlinable static func onSetup(_ diffableTextField: ProxyTextField) { }
+    
+    #endif
 }

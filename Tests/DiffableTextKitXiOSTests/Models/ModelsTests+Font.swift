@@ -10,42 +10,50 @@
 #if DEBUG
 #if canImport(UIKit)
 
-import UIKit
-import XCTest
-
-@testable import DiffableTextViewsXiOS
+import DiffableTestKit
+@testable import DiffableTextKitXiOS
 
 //*============================================================================*
-// MARK: * ViewsTests x ProxyTextField
+// MARK: * ModelsTests x Font
 //*============================================================================*
 
-final class ViewsTestsXProxyTextField: XCTestCase {
+final class ModelsTestsXFont: Tests {
     
     //=------------------------------------------------------------------------=
     // MARK: State
     //=------------------------------------------------------------------------=
     
-    lazy var view = ProxyTextField(BasicTextField())
+    let fonts: [DiffableTextFont] = [
+        .largeTitle,
+        .title1,
+        .title2,
+        .title3,
+        .headline,
+        .subheadline,
+        .body,
+        .callout,
+        .footnote,
+        .caption1,
+        .caption2,
+    ]
     
+    lazy var designs: [UIFontDescriptor.SystemDesign] = [
+        .default, .monospaced, .rounded, .serif
+    ]
+
     //=------------------------------------------------------------------------=
     // MARK: Tests
     //=------------------------------------------------------------------------=
     
-    func testForceUnwrappingTextIsOK() {
-        view.wrapped.text = nil
-        XCTAssertNotNil(view.wrapped.text)
-        XCTAssertEqual(view.text.value, String())
-    }
-    
-    func testForceUnwrappingSelectedTextRangeIsOK() {
-        view.wrapped.selectedTextRange = nil
-        XCTAssertNotNil(view.wrapped.selectedTextRange)
-        XCTAssertEqual(view.selection.value, String())
-    }
-    
-    func testForceUnwrappingMarkedTextRangeIsBad() {
-        XCTAssertNil(view.wrapped.markedTextRange)
-        XCTAssertEqual(view.selection.marked, String())
+    func testDesignsCanBeForceUnwrapped() {
+        //=--------------------------------------=
+        // MARK: Fonts, Designs
+        //=--------------------------------------=
+        for font in fonts {
+            for design in designs {
+                XCTAssertNotNil(font.descriptor.withDesign(design))
+            }
+        }
     }
 }
 

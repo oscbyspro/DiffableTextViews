@@ -21,13 +21,25 @@ public final class BasicTextField: UITextField {
     // MARK: State
     //=------------------------------------------------------------------------=
     
-    @usableFromInline private(set) var directives = Directives()
+    public private(set) var directives = Directives()
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Initializers
+    //=------------------------------------------------------------------------=
+    
+    public init() {
+        super.init(frame: .zero)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     //*========================================================================*
     // MARK: * Directives
     //*========================================================================*
     
-    @usableFromInline struct Directives {
+    public struct Directives {
         @usableFromInline typealias Key = UIKeyboardHIDUsage
         
         //=--------------------------------------------------------------------=
@@ -40,7 +52,7 @@ public final class BasicTextField: UITextField {
         // MARK: Accessors
         //=--------------------------------------------------------------------=
         
-        @inlinable var momentum: Bool { latest != nil }
+        @inlinable public var momentum: Bool { latest != nil }
         
         //=--------------------------------------------------------------------=
         // MARK: Transformations
@@ -81,7 +93,7 @@ public final class BasicTextField: UITextField {
         // MARK: Initializers
         //=--------------------------------------------------------------------=
         
-        @inlinable init(_ wrapped: BasicTextField) { self.wrapped = wrapped }
+        @inlinable public init(_ wrapped: BasicTextField) { self.wrapped = wrapped }
     }
 }
 
