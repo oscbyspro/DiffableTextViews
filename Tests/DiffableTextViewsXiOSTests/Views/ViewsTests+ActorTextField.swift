@@ -16,7 +16,7 @@ import DiffableTestKit
 @testable import DiffableTextViewsXiOS
 
 //*============================================================================*
-// MARK: * ViewsTests x ActorTextField
+// MARK: * ViewsTests x Downstream
 //*============================================================================*
 
 /// ```
@@ -28,7 +28,7 @@ final class ViewsTestsXActorTextField: XCTestCase {
     // MARK: State
     //=------------------------------------------------------------------------=
     
-    lazy var view = ActorTextField(BasicTextField())
+    lazy var view = Downstream(BasicTextField())
     
     //=------------------------------------------------------------------------=
     // MARK: Setup

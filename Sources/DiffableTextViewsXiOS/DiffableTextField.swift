@@ -54,7 +54,7 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
     
     @inlinable public func makeUIView(context: Self.Context) -> BasicTextField {
         //=--------------------------------------=
-        // MARK: BasicTextField
+        // MARK: UIView
         //=--------------------------------------=
         let uiView = BasicTextField()
         uiView.delegate = context.coordinator
@@ -63,9 +63,9 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
         uiView.setContentHuggingPriority(.defaultHigh, for: .vertical)
         uiView.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
         //=--------------------------------------=
-        // MARK: ActorTextField
+        // MARK: Downstream
         //=--------------------------------------=
-        context.coordinator.downstream = ActorTextField(uiView)
+        context.coordinator.downstream = Downstream(uiView)
         context.coordinator.downstream.transform(Style.onSetup)
         context.coordinator.downstream.transform(context.environment.diffableTextField_onSetup)
         //=--------------------------------------=
@@ -87,6 +87,7 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
     //*========================================================================*
     
     public final class Coordinator: NSObject, UITextFieldDelegate {
+        @usableFromInline typealias Upstream = DiffableTextField
         @usableFromInline typealias Context = DiffableTextKit.Context<Style, UTF16>
 
         //=--------------------------------------------------------------------=
@@ -96,8 +97,8 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
         @usableFromInline let lock = Lock()
         @usableFromInline let context = Context()
         
-        @usableFromInline var upstream: DiffableTextField!
-        @usableFromInline var downstream:  ActorTextField!
+        @usableFromInline var upstream: Upstream!
+        @usableFromInline var downstream: Downstream!
         @usableFromInline var environment: EnvironmentValues!
         
         //=--------------------------------------------------------------------=
@@ -112,7 +113,7 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
         // MARK: Update
         //=--------------------------------------------------------------------=
         
-        @inlinable func update(_ upstream: DiffableTextField, _ environment: EnvironmentValues) {
+        @inlinable func update(_ upstream: Upstream, _ environment: EnvironmentValues) {
             self.upstream = upstream; self.environment = environment
             self.synchronize() // on update is same as on did update
             self.downstream.transform(environment.diffableTextField_onUpdate)

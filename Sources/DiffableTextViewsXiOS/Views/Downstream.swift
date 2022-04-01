@@ -12,14 +12,11 @@
 import DiffableTextKit
 import UIKit
 
-#warning("Rename.")
-#warning("Rename.")
-#warning("Rename.")
 //*============================================================================*
-// MARK: * ActorTextField
+// MARK: * Downstream
 //*============================================================================*
 
-@usableFromInline final class ActorTextField {
+@usableFromInline final class Downstream {
     @usableFromInline typealias Position = DiffableTextKit.Position<UTF16>
     
     //=------------------------------------------------------------------------=
