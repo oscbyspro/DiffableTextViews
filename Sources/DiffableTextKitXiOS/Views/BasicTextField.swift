@@ -9,6 +9,7 @@
 
 #if canImport(UIKit)
 
+import SwiftUI
 import UIKit
 
 //*============================================================================*
@@ -89,26 +90,41 @@ public final class BasicTextField: UITextField {
 // MARK: + UIResponder
 //=----------------------------------------------------------------------------=
 
-extension BasicTextField {
+public extension BasicTextField {
 
     //=------------------------------------------------------------------------=
     // MARK: Presses
     //=------------------------------------------------------------------------=
     
-    public override func pressesBegan(_ presses: Set<UIPress>,  with  event: UIPressesEvent?) {
+    override func pressesBegan(_ presses: Set<UIPress>,  with  event: UIPressesEvent?) {
         directives.insert(presses); super.pressesBegan(presses, with: event)
     }
     
-    public override func pressesChanged(_ presses: Set<UIPress>,  with  event: UIPressesEvent?) {
+    override func pressesChanged(_ presses: Set<UIPress>,  with  event: UIPressesEvent?) {
         directives.insert(presses); super.pressesChanged(presses, with: event)
     }
     
-    public override func pressesEnded(_ presses: Set<UIPress>,  with  event: UIPressesEvent?) {
+    override func pressesEnded(_ presses: Set<UIPress>,  with  event: UIPressesEvent?) {
         directives.remove(presses); super.pressesEnded(presses, with: event)
     }
     
-    public override func pressesCancelled(_ presses: Set<UIPress>,  with  event: UIPressesEvent?) {
+    override func pressesCancelled(_ presses: Set<UIPress>,  with  event: UIPressesEvent?) {
         directives.remove(presses); super.pressesCancelled(presses, with: event)
+    }
+}
+
+//=----------------------------------------------------------------------------=
+// MARK: + Customization
+//=----------------------------------------------------------------------------=
+
+public extension BasicTextField {
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Transformations
+    //=------------------------------------------------------------------------=
+    
+    @inlinable func setTextAlignment(_ alignment: TextAlignment) {
+        self.textAlignment = NSTextAlignment(alignment, for: userInterfaceLayoutDirection)
     }
 }
 
