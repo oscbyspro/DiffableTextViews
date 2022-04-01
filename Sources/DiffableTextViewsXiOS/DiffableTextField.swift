@@ -54,14 +54,14 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
     
     @inlinable public func makeUIView(context: Self.Context) -> BasicTextField {
         let downstream = Downstream()
-        let view = downstream.wrapped
+        let wrapped = downstream.wrapped
         //=--------------------------------------=
         // MARK: View
         //=--------------------------------------=
-        view.font = UIFont(DiffableTextFont.body.monospaced())
-        view.setTextAlignment(context.environment.multilineTextAlignment)
-        view.setContentHuggingPriority(.defaultHigh, for: .vertical)
-        view.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
+        wrapped.font = UIFont(DiffableTextFont.body.monospaced())
+        wrapped.setTextAlignment(context.environment.multilineTextAlignment)
+        wrapped.setContentHuggingPriority(.defaultHigh, for: .vertical)
+        wrapped.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
         //=--------------------------------------=
         // MARK: Downstream
         //=--------------------------------------=
@@ -70,9 +70,9 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
         //=--------------------------------------=
         // MARK: Done
         //=--------------------------------------=
-        view.delegate = context.coordinator
+        wrapped.delegate = context.coordinator
         context.coordinator.downstream = downstream
-        return view
+        return wrapped
     }
     
     //=------------------------------------------------------------------------=
