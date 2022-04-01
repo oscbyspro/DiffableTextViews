@@ -35,8 +35,7 @@ extension NSTextAlignment {
     //=------------------------------------------------------------------------=
     
     @inlinable static func adaptive(_ layout: UIUserInterfaceLayoutDirection,
-    leftToRight: @autoclosure () -> Self,
-    rightToLeft: @autoclosure () -> Self) -> Self {
+    leftToRight: @autoclosure () -> Self, rightToLeft: @autoclosure () -> Self) -> Self {
         switch layout {
         case .rightToLeft: return rightToLeft()
         case .leftToRight: return leftToRight()
