@@ -96,32 +96,32 @@ public struct _NumericTextStyle<Format: NumericTextFormat>: DiffableTextStyle {
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: + Inactive
+// MARK: + Utilities
 //=----------------------------------------------------------------------------=
 
 extension NumericTextStyle {
     
     //=------------------------------------------------------------------------=
-    // MARK: Utilities
+    // MARK: Unfocused
     //=------------------------------------------------------------------------=
     
     @inlinable public func format(_ value: Value) -> String {
-        format.precision(precision.inactive()).format(value)
+        format.precision(precision.unfocused()).format(value)
     }
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: + Active
+// MARK: + Utilities
 //=----------------------------------------------------------------------------=
 
 extension NumericTextStyle {
     
     //=------------------------------------------------------------------------=
-    // MARK: Utilities
+    // MARK: Focused
     //=------------------------------------------------------------------------=
     
     @inlinable public func interpret(_ value: Value) -> Commit<Value> {
-        let style = format.precision(precision.active())
+        let style = format.precision(precision.focused())
         var value = value
         //=--------------------------------------=
         // MARK: Autocorrect
@@ -150,13 +150,13 @@ extension NumericTextStyle {
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: + Interactive
+// MARK: + Utilities
 //=----------------------------------------------------------------------------=
 
 extension NumericTextStyle {
     
     //=------------------------------------------------------------------------=
-    // MARK: Utilities
+    // MARK: Interactive
     //=------------------------------------------------------------------------=
     
     @inlinable public func merge(_ changes: Changes) throws -> Commit<Value> {
@@ -184,9 +184,10 @@ extension NumericTextStyle {
         //=--------------------------------------=
         try bounds.autovalidate(value, &number)
         //=--------------------------------------=
-        // MARK: Style, Commit
+        // MARK: Commit
         //=--------------------------------------=
-        let style = format.precision(precision.interactive(count))
+        let style = format.precision(
+        precision.interactive(count))
         return self.commit(value, number, style)
     }
 }

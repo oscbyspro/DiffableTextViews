@@ -36,13 +36,13 @@ public struct Precision<Value: NumericTextValue>: Equatable {
     // MARK: Modes
     //=------------------------------------------------------------------------=
     
-    @inlinable func inactive() -> NumberFormatStyleConfiguration.Precision {
+    @inlinable func unfocused() -> NumberFormatStyleConfiguration.Precision {
         .integerAndFractionLength(
          integerLimits: lower.integer  ... Int.max,
         fractionLimits: lower.fraction ... Int.max)
     }
 
-    @inlinable func active() -> NumberFormatStyleConfiguration.Precision {
+    @inlinable func focused() -> NumberFormatStyleConfiguration.Precision {
         .integerAndFractionLength(
          integerLimits: Namespace.lower.integer  ... upper.integer,
         fractionLimits: Namespace.lower.fraction ... upper.fraction)
