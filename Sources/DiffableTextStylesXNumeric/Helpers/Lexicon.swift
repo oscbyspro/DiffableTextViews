@@ -81,3 +81,21 @@ extension Lexicon {
         signs: signs.components, digits: digits.components, separators: separators.components)
     }
 }
+
+//=----------------------------------------------------------------------------=
+// MARK: + Support
+//=----------------------------------------------------------------------------=
+
+extension Lexicon {
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Predicates
+    //=------------------------------------------------------------------------=
+    
+    /// Used by unit tests.
+    @inlinable func nonvirtual(_ character: Character) -> Bool {
+        signs[character] != nil
+        || digits[character] != nil
+        || separators[character] == .fraction
+    }
+}

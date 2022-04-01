@@ -21,7 +21,7 @@ import Foundation
 final class MiscellaneousTestsXPercent: Tests {
     
     //=------------------------------------------------------------------------=
-    // MARK: Positive
+    // MARK: Tests
     //=------------------------------------------------------------------------=
     
     func testPercentLabelIsAlwaysVirtual() throws {

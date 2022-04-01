@@ -18,10 +18,18 @@ import DiffableTestKit
 final class MiscellaneousTestsXCurrency: Tests {
     
     //=------------------------------------------------------------------------=
-    // MARK: Positive
+    // MARK: Tests
     //=------------------------------------------------------------------------=
     
-    func testCurrencyLabelDoesNotContainNumbers() throws {
+    func testCurrencyLabelsAreSometimesReal() throws {
+        let number = -1234567.89
+        let currencyCode = "PAB"
+        let locale = Locale(identifier: "rhg-Rohg_MM")
+        let formatted = number.formatted(.currency(code: currencyCode).locale(locale))
+        XCTAssertEqual(formatted, "-B/. 1,234,567.89") // currency contains a fraction separator
+    }
+    
+    func testCurrencyLabelsDoNotContainNumbers() throws {
         //=--------------------------------------=
         // MARK: Locales, Currencies
         //=--------------------------------------=
@@ -31,18 +39,6 @@ final class MiscellaneousTestsXCurrency: Tests {
                 XCTAssert(zero.count(where: \.isNumber) == 1, "\(zero), \(locale), \(code)")
             }
         }
-    }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Negative
-    //=------------------------------------------------------------------------=
-    
-    func testCurrencyLabelIsSometimesReal() throws {
-        let number = -1234567.89
-        let currencyCode = "PAB"
-        let locale = Locale(identifier: "rhg-Rohg_MM")
-        let formatted = number.formatted(.currency(code: currencyCode).locale(locale))
-        XCTAssertEqual(formatted, "-B/. 1,234,567.89") // currency contains a fraction separator
     }
 }
 
