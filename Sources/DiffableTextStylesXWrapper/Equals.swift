@@ -46,18 +46,6 @@ public struct EqualsTextStyle<Style: _DiffableTextStyle, Proxy: Equatable>: _Wra
     }
 }
 
-#if os(iOS)
-
-import DiffableTextViewsXiOS
-
-//*============================================================================*
-// MARK: * Equals x iOS
-//*============================================================================*
-
-extension EqualsTextStyle: WrapperTextStyle, DiffableTextStyle where Style: DiffableTextStyle { }
-
-#endif
-
 //*============================================================================*
 // MARK: * Equals x DiffableTextStyle
 //*============================================================================*
@@ -86,3 +74,15 @@ extension _DiffableTextStyle {
         Equals(self, proxy: proxy)
     }
 }
+
+#if os(iOS)
+
+import DiffableTextViewsXiOS
+
+//*============================================================================*
+// MARK: * Equals x iOS
+//*============================================================================*
+
+extension EqualsTextStyle: WrapperTextStyle, DiffableTextStyle where Style: DiffableTextStyle { }
+
+#endif

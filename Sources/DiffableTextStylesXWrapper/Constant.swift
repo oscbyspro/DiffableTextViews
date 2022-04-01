@@ -42,18 +42,6 @@ public struct ConstantTextStyle<Style: _DiffableTextStyle>: _WrapperTextStyle {
     public func locale(_ locale: Locale) -> Self { return self }
 }
 
-#if os(iOS)
-
-import DiffableTextViewsXiOS
-
-//*============================================================================*
-// MARK: * Constant x iOS
-//*============================================================================*
-
-extension ConstantTextStyle: WrapperTextStyle, DiffableTextStyle where Style: DiffableTextStyle { }
-
-#endif
-
 //*============================================================================*
 // MARK: * Constant x DiffableTextStyle
 //*============================================================================*
@@ -79,3 +67,15 @@ extension _DiffableTextStyle {
         Constant(self)
     }
 }
+
+#if os(iOS)
+
+import DiffableTextViewsXiOS
+
+//*============================================================================*
+// MARK: * Constant x iOS
+//*============================================================================*
+
+extension ConstantTextStyle: WrapperTextStyle, DiffableTextStyle where Style: DiffableTextStyle { }
+
+#endif
