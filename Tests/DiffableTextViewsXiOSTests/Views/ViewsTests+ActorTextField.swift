@@ -13,6 +13,7 @@
 import UIKit
 import DiffableTestKit
 
+@testable import DiffableTextKitXiOS
 @testable import DiffableTextViewsXiOS
 
 //*============================================================================*
@@ -35,7 +36,8 @@ final class ViewsTestsXActorTextField: XCTestCase {
     //=------------------------------------------------------------------------=
     
     override func setUp() {
-        super.setUp(); view.wrapped.text = nil
+        super.setUp()
+        view.wrapped.text = nil
     }
 }
 

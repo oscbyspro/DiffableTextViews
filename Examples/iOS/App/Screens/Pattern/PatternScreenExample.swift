@@ -15,7 +15,7 @@ import DiffableTextViews
 //*============================================================================*
 
 /// An examples view that observes frequent changes.
-struct PatternScreenExample<Style: DiffableTextStyleXiOS>: View where Style.Value == String {
+struct PatternScreenExample<Style: DiffableTextStyle>: View where Style.Value == String {
     typealias Context = PatternScreenContext
     
     //=------------------------------------------------------------------------=

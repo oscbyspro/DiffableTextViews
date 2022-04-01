@@ -29,7 +29,9 @@ import UIKit
     // MARK: Initializers
     //=------------------------------------------------------------------------=
    
-    @inlinable init(_ wrapped: BasicTextField) { self.wrapped = wrapped }
+    @inlinable init( _ wrapped: BasicTextField) {
+        self.wrapped = wrapped
+    }
     
     //=------------------------------------------------------------------------=
     // MARK: Accessors
