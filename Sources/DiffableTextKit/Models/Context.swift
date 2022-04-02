@@ -58,7 +58,7 @@ public final class Context<Style: DiffableTextStyle, Scheme: DiffableTextKit.Sch
 }
 
 //=------------------------------------------------------------------------=
-// MARK: Update
+// MARK: + Update
 //=------------------------------------------------------------------------=
 
 extension Context {
@@ -83,7 +83,7 @@ extension Context {
 extension Context {
     
     //=------------------------------------------------------------------------=
-    // MARK: Unfocused / Focused / Dynamic
+    // MARK: Focus
     //=------------------------------------------------------------------------=
     
     @inlinable public func unfocused(style: Style, value: Value) {
@@ -123,7 +123,7 @@ extension Context {
         let changeInValue = self.value != update.value
         let changeInFocus = self.focus != update.focus
         //=--------------------------------------=
-        // MARK: At Least One Has To Change
+        // MARK: At Least One Must Change
         //=--------------------------------------=
         guard changeInStyle || changeInValue || changeInFocus else { return false }
         dynamic(style: changeInStyle ? update.style : style, value: update.value, focus: update.focus)
