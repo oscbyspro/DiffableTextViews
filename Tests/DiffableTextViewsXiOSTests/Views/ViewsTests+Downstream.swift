@@ -10,9 +10,7 @@
 #if DEBUG
 #if canImport(UIKit)
 
-import UIKit
 import DiffableTestKit
-
 @testable import DiffableTextViewsXiOS
 
 //*============================================================================*

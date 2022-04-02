@@ -14,10 +14,10 @@
 @_exported import DiffableTextStyles
 
 //*============================================================================*
-// MARK: * iOS
+// MARK: * UIKit
 //*============================================================================*
 
-#if os(iOS)
+#if canImport(UIKit)
 
 @_exported import DiffableTextViewsXiOS
 
