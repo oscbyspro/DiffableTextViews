@@ -93,16 +93,6 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
         @usableFromInline private(set) var environment: EnvironmentValues!
         
         //=--------------------------------------------------------------------=
-        // MARK: Accessors
-        //=--------------------------------------------------------------------=
-        
-        @inlinable func pull() -> Update {
-            Update(focus: downstream.focus,
-            value: upstream.value.wrappedValue,
-            style: upstream.style.locale(environment.locale))
-        }
-        
-        //=--------------------------------------------------------------------=
         // MARK: View Life Cycle
         //=--------------------------------------------------------------------=
         
@@ -130,6 +120,15 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
             // MARK: Push
             //=----------------------------------=
             context.focus.value ? self.push() : self.write()
+        }
+        
+        @inlinable func pull() -> Update {
+            //=----------------------------------=
+            // MARK: Upstream, Downstream
+            //=----------------------------------=
+            Update(focus: downstream.focus,
+            value: upstream.value.wrappedValue,
+            style: upstream.style.locale(environment.locale))
         }
 
         @inlinable func push() {
