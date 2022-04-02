@@ -43,7 +43,7 @@ It uses three main algorithms to determine text selection.
 import DiffableTextViews
 ```
 
-# [Examples](Examples/iOS/App)
+# [Examples](Examples/AppXUIKit/App)
 
 The iOS example provides quick-and-easy-to-use customization tools.
 
