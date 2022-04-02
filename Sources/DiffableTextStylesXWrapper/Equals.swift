@@ -17,7 +17,7 @@ import DiffableTextKit
 ///
 /// Use this wrapper to optimize the comparison on view update.
 ///
-/// - Note: DiffableTextView updates its style only when the proposed style is inequal.
+/// - Note: DiffableTextView updates its style only when the proposed style is unequal.
 ///
 public struct EqualsTextStyle<Style: DiffableTextStyle, Proxy: Equatable>: WrapperTextStyle {
     
@@ -69,7 +69,7 @@ extension DiffableTextStyle {
     ///
     /// Use this wrapper to optimize the comparison on view update.
     ///
-    /// - Note: DiffableTextView updates its style only when the proposed style is inequal.
+    /// - Note: DiffableTextView updates its style only when the proposed style is unequal.
     ///
     @inlinable @inline(__always)
     public func equals(_ proxy: Void) -> EqualsVoid {
@@ -80,7 +80,7 @@ extension DiffableTextStyle {
     ///
     /// Use this wrapper to optimize the comparison on view update.
     ///
-    /// - Note: DiffableTextView updates its style only when the proposed style is inequal.
+    /// - Note: DiffableTextView updates its style only when the proposed style is unequal.
     ///
     @inlinable @inline(__always)
     public func equals<Proxy>(_ proxy: Proxy) -> Equals<Proxy> {
