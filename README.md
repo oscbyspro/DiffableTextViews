@@ -43,13 +43,13 @@ It uses three main algorithms to determine text selection.
 import DiffableTextViews
 ```
 
-# [Examples](Examples/AppXUIKit/App)
+# [Examples](Examples/DiffableTextAppXUIKit/App)
 
-The iOS example provides quick-and-easy-to-use customization tools.
+The example app provides quick-and-easy-to-use customization tools.
 
 | Numeric | Pattern |
 |---------|---------|
-<img src="Assets/iOSExampleXNumeric.png" alt="Numeric" width="250"/> | <img src="Assets/iOSExampleXPattern.png" alt="Pattern" width="250"/>
+<img src="Assets/DiffableTextAppXUIKitXNumeric.png" alt="Numeric" width="250"/> | <img src="Assets/DiffableTextAppXUIKitXPattern.png" alt="Pattern" width="250"/>
 
 ### Installation
 

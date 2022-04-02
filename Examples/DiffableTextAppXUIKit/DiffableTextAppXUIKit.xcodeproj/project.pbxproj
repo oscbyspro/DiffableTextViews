@@ -46,7 +46,7 @@
 		557DAF2027BA493200D9F0E5 /* Action.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Action.swift; sourceTree = "<group>"; };
 		557DAF2227BA4AE600D9F0E5 /* PatternScreenActions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PatternScreenActions.swift; sourceTree = "<group>"; };
 		557F7FB927A81116001908D6 /* DiffableTextViews */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = DiffableTextViews; path = ../..; sourceTree = "<group>"; };
-		5589A1A027A7E3E30000F04A /* AppXUIKit.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AppXUIKit.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		5589A1A027A7E3E30000F04A /* DiffableTextAppXUIKit.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DiffableTextAppXUIKit.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		5589A1A327A7E3E30000F04A /* App.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = App.swift; sourceTree = "<group>"; };
 		5589A1A727A7E3E40000F04A /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		5589A1AA27A7E3E40000F04A /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
@@ -111,7 +111,7 @@
 		5589A1A127A7E3E30000F04A /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				5589A1A027A7E3E30000F04A /* AppXUIKit.app */,
+				5589A1A027A7E3E30000F04A /* DiffableTextAppXUIKit.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -221,9 +221,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		5589A19F27A7E3E30000F04A /* AppXUIKit */ = {
+		5589A19F27A7E3E30000F04A /* DiffableTextAppXUIKit */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 5589A1AE27A7E3E40000F04A /* Build configuration list for PBXNativeTarget "AppXUIKit" */;
+			buildConfigurationList = 5589A1AE27A7E3E40000F04A /* Build configuration list for PBXNativeTarget "DiffableTextAppXUIKit" */;
 			buildPhases = (
 				5589A19C27A7E3E30000F04A /* Sources */,
 				5589A19D27A7E3E30000F04A /* Frameworks */,
@@ -233,13 +233,13 @@
 			);
 			dependencies = (
 			);
-			name = AppXUIKit;
+			name = DiffableTextAppXUIKit;
 			packageProductDependencies = (
 				557F7FBA27A81171001908D6 /* DiffableTextViews */,
 				55FBD48927C3E6010080F43E /* Sliders */,
 			);
 			productName = iOS;
-			productReference = 5589A1A027A7E3E30000F04A /* AppXUIKit.app */;
+			productReference = 5589A1A027A7E3E30000F04A /* DiffableTextAppXUIKit.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -257,7 +257,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 5589A19B27A7E3E30000F04A /* Build configuration list for PBXProject "AppXUIKit" */;
+			buildConfigurationList = 5589A19B27A7E3E30000F04A /* Build configuration list for PBXProject "DiffableTextAppXUIKit" */;
 			compatibilityVersion = "Xcode 13.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -272,7 +272,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				5589A19F27A7E3E30000F04A /* AppXUIKit */,
+				5589A19F27A7E3E30000F04A /* DiffableTextAppXUIKit */,
 			);
 		};
 /* End PBXProject section */
@@ -500,7 +500,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		5589A19B27A7E3E30000F04A /* Build configuration list for PBXProject "AppXUIKit" */ = {
+		5589A19B27A7E3E30000F04A /* Build configuration list for PBXProject "DiffableTextAppXUIKit" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				5589A1AC27A7E3E40000F04A /* Debug */,
@@ -509,7 +509,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		5589A1AE27A7E3E40000F04A /* Build configuration list for PBXNativeTarget "AppXUIKit" */ = {
+		5589A1AE27A7E3E40000F04A /* Build configuration list for PBXNativeTarget "DiffableTextAppXUIKit" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				5589A1AF27A7E3E40000F04A /* Debug */,

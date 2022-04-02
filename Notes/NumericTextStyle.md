@@ -13,10 +13,6 @@ Supports every locale available in the Foundation framework.
 
 ## Formats
 
-Uses format styles introduced in iOS 15.0.
-
-### Instances
-
 |   | Format | Availability. |
 |---|--------|---------------|
 | :hash: | Number | All |
