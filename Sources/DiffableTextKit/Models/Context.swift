@@ -119,14 +119,22 @@ extension Context {
     //=------------------------------------------------------------------------=
     
     @inlinable public func merge(_ update: Update) -> Bool {
-        let changeInStyle = style != update.style
-        let changeInValue = value != update.value
-        let changeInFocus = focus != update.focus
+        let changeInStyle = update.style != style
+        let changeInValue = update.value != value
+        let changeInFocus = update.focus != focus
         //=--------------------------------------=
-        // MARK: At Least One Must Change
+        // MARK: At Least One Value Must Change
         //=--------------------------------------=
-        guard changeInStyle || changeInValue || changeInFocus else { return false }
-        dynamic(style: changeInStyle ? update.style : style, value: update.value, focus: update.focus)
+        guard changeInStyle
+           || changeInValue
+           || changeInFocus else { return false }
+        //=--------------------------------------=
+        // MARK: Yes
+        //=--------------------------------------=
+        self.dynamic(
+        style: changeInStyle ? update.style : style,
+        value: changeInValue ? update.value : value,
+        focus: changeInFocus ? update.focus : focus)
         return true
     }
 }
