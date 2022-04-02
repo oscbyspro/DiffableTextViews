@@ -79,6 +79,7 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
     
     public final class Coordinator: NSObject, UITextFieldDelegate {
         @usableFromInline typealias Upstream = DiffableTextField
+        @usableFromInline typealias Update = DiffableTextKit.Update<Style>
         @usableFromInline typealias Context = DiffableTextKit.Context<Style, UTF16>
 
         //=--------------------------------------------------------------------=
@@ -92,13 +93,22 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
         @usableFromInline private(set) var environment: EnvironmentValues!
         
         //=--------------------------------------------------------------------=
+        // MARK: Accessors
+        //=--------------------------------------------------------------------=
+        
+        @inlinable func pull() -> Update {
+            Update(focus: downstream.focus,
+            value: upstream.value.wrappedValue,
+            style: upstream.style.locale(environment.locale))
+        }
+        
+        //=--------------------------------------------------------------------=
         // MARK: View Life Cycle
         //=--------------------------------------------------------------------=
         
         @inlinable func setup(_ upstream: Upstream, _ environment: EnvironmentValues, _ downstream: Downstream) {
             self.upstream = upstream; self.environment = environment; self.downstream = downstream
-            self.context = Context(upstream.style.locale(environment.locale), upstream.value.wrappedValue)
-            self.downstream.wrapped.delegate = self; self.write()
+            self.context = Context(pull()); self.downstream.wrapped.delegate = self;  self.write()
         }
         
         @inlinable func update(_ upstream: Upstream, _ environment: EnvironmentValues) {
@@ -115,10 +125,7 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
             //=----------------------------------=
             // MARK: Pull
             //=----------------------------------=
-            guard  context.pull(
-            style: upstream.style.locale(environment.locale),
-            value: upstream.value.wrappedValue,
-            focus: downstream.focus) else { return }
+            guard context.merge(self.pull()) else { return }
             //=----------------------------------=
             // MARK: Push
             //=----------------------------------=

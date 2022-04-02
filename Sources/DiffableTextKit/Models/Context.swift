@@ -12,29 +12,30 @@
 //*============================================================================*
 
 public final class Context<Style: DiffableTextStyle, Scheme: DiffableTextKit.Scheme> {
-    public typealias Value    = Style.Value
+    public typealias Update   = DiffableTextKit.Update<Style>
     public typealias Commit   = DiffableTextKit.Commit<Value>
     public typealias Field    = DiffableTextKit.Field<Scheme>
     public typealias Layout   = DiffableTextKit.Layout<Scheme>
     public typealias Position = DiffableTextKit.Position<Scheme>
+    public typealias Value    = Style.Value
 
     //=------------------------------------------------------------------------=
     // MARK: State
     //=------------------------------------------------------------------------=
     
-    @usableFromInline private(set) var _focus: Focus
     @usableFromInline private(set) var _style: Style
     @usableFromInline private(set) var _value: Value
+    @usableFromInline private(set) var _focus: Focus
     @usableFromInline private(set) var _field: Field
     
     //=------------------------------------------------------------------------=
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable public init(_ style: Style, _ value: Value) {
-        self._focus = false
-        self._style = style
-        self._value = value
+    @inlinable public init(_ update: Update) {
+        self._style = update.style
+        self._value = update.value
+        self._focus = update.focus
         self._field = Field()
     }
     
@@ -114,18 +115,18 @@ extension Context {
 extension Context {
     
     //=------------------------------------------------------------------------=
-    // MARK: Pull
+    // MARK: Merge
     //=------------------------------------------------------------------------=
     
-    @inlinable public func pull(style: Style, value: Value, focus: Focus) -> Bool {
-        let changeInStyle = self.style != style
-        let changeInValue = self.value != value
-        let changeInFocus = self.focus != focus
+    @inlinable public func merge(_ update: Update) -> Bool {
+        let changeInStyle = self.style != update.style
+        let changeInValue = self.value != update.value
+        let changeInFocus = self.focus != update.focus
         //=--------------------------------------=
         // MARK: At Least One Has To Change
         //=--------------------------------------=
         guard changeInStyle || changeInValue || changeInFocus else { return false }
-        dynamic(style: changeInStyle ? style : _style, value: value, focus: focus )
+        dynamic(style: changeInStyle ? update.style : style, value: update.value, focus: update.focus)
         return true
     }
 }
