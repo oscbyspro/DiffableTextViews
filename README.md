@@ -28,12 +28,7 @@ It uses three main algorithms to determine text selection.
 | :left_right_arrow: | Positions | Determines selection by positions/offsets | ≤ Linear |
 | :star: | Attributes | Determines selection based on attributes | ≤ Linaer |
 
-### Requirements
-
-- iOS 15.0+
-- Swift 5.0+
-
-### Installation
+# Installation
 
 1. Use: Swift Package Manager.
 2. Copy/paste: https://github.com/oscbyspro/DiffableTextViews.
@@ -42,6 +37,12 @@ It uses three main algorithms to determine text selection.
 ```swift
 import DiffableTextViews
 ```
+
+### Requirements
+
+| Swift | iOS   | iPadOS | Mac Catalyst | tvOS  |
+|:-----:|:-----:|:------:|:------------:|:-----:|
+| 5.0+  | 15.0+ | 15.0+  | 15.0+        | 15.0+ |
 
 # [Examples](Examples/DiffableTextAppXUIKit/App)
 
