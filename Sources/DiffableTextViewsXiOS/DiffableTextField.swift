@@ -228,11 +228,12 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
             //=----------------------------------=
             self.context.update(selection: selection, momentum: downstream.momentum)
             //=----------------------------------=
-            // MARK: Update Downstream If Needed
+            // MARK: Update Downstream As Needed
             //=----------------------------------=
-            if selection != context.field.positions {
+            let positions = context.field.positions
+            if selection != positions {
                 lock.perform {
-                    self.downstream.update(selection: context.field.positions)
+                    self.downstream.update(selection: positions)
                 }
             }
         }
