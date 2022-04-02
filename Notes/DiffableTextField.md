@@ -2,9 +2,6 @@
 
 A view that uses styles to formats and parses text as you type.
 
-- Available in SwiftUI/iOS.
-- Written in SwiftUI/UIKit.
-
 ### Defaults
 
 |   | Value | Description | Comment |
