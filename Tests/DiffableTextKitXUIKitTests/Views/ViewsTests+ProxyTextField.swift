@@ -10,16 +10,14 @@
 #if DEBUG
 #if canImport(UIKit)
 
-import UIKit
-import XCTest
-
-@testable import DiffableTextKitXiOS
+import DiffableTestKit
+@testable import DiffableTextKitXUIKit
 
 //*============================================================================*
 // MARK: * ViewsTests x ProxyTextField
 //*============================================================================*
 
-final class ViewsTestsXProxyTextField: XCTestCase {
+final class ViewsTestsXProxyTextField: Tests {
     
     //=------------------------------------------------------------------------=
     // MARK: State

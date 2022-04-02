@@ -25,7 +25,7 @@ view.onUpdate(of: .diffableTextField) { proxy in }
 view.onSubmit(of: .diffableTextField) { proxy in }
 ```
 
-### [ProxyTextField](../Sources/DiffableTextKitXiOS/Views/ProxyTextField.swift)
+### [ProxyTextField](../Sources/DiffableTextKitXUIKit/Views/ProxyTextField.swift)
 
 ```swift
 proxy.text.color(.black)

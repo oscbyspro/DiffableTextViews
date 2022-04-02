@@ -11,7 +11,7 @@
 #if canImport(UIKit)
 
 import DiffableTestKit
-@testable import DiffableTextViewsXiOS
+@testable import DiffableTextViewsXUIKit
 
 //*============================================================================*
 // MARK: * ViewsTests x Downstream

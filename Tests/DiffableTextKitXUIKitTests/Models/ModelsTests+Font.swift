@@ -11,7 +11,7 @@
 #if canImport(UIKit)
 
 import DiffableTestKit
-@testable import DiffableTextKitXiOS
+@testable import DiffableTextKitXUIKit
 
 //*============================================================================*
 // MARK: * ModelsTests x Font

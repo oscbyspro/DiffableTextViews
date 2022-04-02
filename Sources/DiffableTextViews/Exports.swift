@@ -19,6 +19,6 @@
 
 #if canImport(UIKit)
 
-@_exported import DiffableTextViewsXiOS
+@_exported import DiffableTextViewsXUIKit
 
 #endif

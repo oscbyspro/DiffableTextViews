@@ -13,6 +13,6 @@
 
 #if canImport(UIKit)
 
-@_exported import DiffableTextKitXiOS
+@_exported import DiffableTextKitXUIKit
 
 #endif
