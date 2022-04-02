@@ -119,9 +119,9 @@ extension Context {
     //=------------------------------------------------------------------------=
     
     @inlinable public func merge(_ update: Update) -> Bool {
-        let changeInStyle = self.style != update.style
-        let changeInValue = self.value != update.value
-        let changeInFocus = self.focus != update.focus
+        let changeInStyle = style != update.style
+        let changeInValue = value != update.value
+        let changeInFocus = focus != update.focus
         //=--------------------------------------=
         // MARK: At Least One Must Change
         //=--------------------------------------=
