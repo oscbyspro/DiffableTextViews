@@ -12,7 +12,7 @@ An open source package for as-you-type formatting in SwiftUI.
 |---|---------|-------------|
 | :keyboard: | Responsive | Formats text as you type |
 | :magic_wand: | Automagical | Binds text to a chosen data type |
-| :bulb: | Smart | Validates and autocorrects input |
+| :star: | Proper | Validates and autocorrects input |
 | :hammer_and_wrench: | Versatile | Uses snapshots and attributes |
 | :running_man: | Performant | Uses O(n) differentiation algorithms |
 | :desert_island: | Standalone | Uses no remote dependencies |
@@ -75,7 +75,7 @@ A text field that binds values and formats them as you type.
 | :mountain: | Environment | Uses environment values |
 | :mag_right: | Focusable | Supports use of @FocusState |
 | :sewing_needle: | Customizable | Exposes [ProxyTextField](Sources/DiffableTextKitXUIKit/Views/ProxyTextField.swift) |
-| :zzz: | Convenient | Styles provide sensible defaults |
+| :zzz: | Convenient | Styles have sensible defaults |
 | :balance_scale: | Monospaced | Standard font is monospaced |
 | :smiley: | Emojis | Uses native offsets |
 
