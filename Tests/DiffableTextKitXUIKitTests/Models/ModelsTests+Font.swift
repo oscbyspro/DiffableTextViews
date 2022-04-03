@@ -23,6 +23,20 @@ final class ModelsTestsXFont: Tests {
     // MARK: State
     //=------------------------------------------------------------------------=
     
+    #if os(tvOS)
+    let fonts: [DiffableTextFont] = [
+        .title1,
+        .title2,
+        .title3,
+        .headline,
+        .subheadline,
+        .body,
+        .callout,
+        .footnote,
+        .caption1,
+        .caption2,
+    ]
+    #else
     let fonts: [DiffableTextFont] = [
         .largeTitle,
         .title1,
@@ -36,6 +50,7 @@ final class ModelsTestsXFont: Tests {
         .caption1,
         .caption2,
     ]
+    #endif
     
     lazy var designs: [UIFontDescriptor.SystemDesign] = [
         .default, .monospaced, .rounded, .serif
