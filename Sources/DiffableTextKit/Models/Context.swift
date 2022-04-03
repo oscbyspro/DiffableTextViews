@@ -12,12 +12,12 @@
 //*============================================================================*
 
 public final class Context<Style: DiffableTextStyle, Scheme: DiffableTextKit.Scheme> {
-    public typealias Commit   = DiffableTextKit.Commit<Value>
-    public typealias Remote   = DiffableTextKit.Remote<Style>
-    public typealias Field    = DiffableTextKit.Field<Scheme>
-    public typealias Layout   = DiffableTextKit.Layout<Scheme>
+    public typealias Commit = DiffableTextKit.Commit<Value>
+    public typealias Remote = DiffableTextKit.Remote<Style>
+    public typealias Field = DiffableTextKit.Field<Scheme>
+    public typealias Layout = DiffableTextKit.Layout<Scheme>
     public typealias Position = DiffableTextKit.Position<Scheme>
-    public typealias Value    = Style.Value
+    public typealias Value = Style.Value
 
     //=------------------------------------------------------------------------=
     // MARK: State
