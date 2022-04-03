@@ -13,7 +13,7 @@ import DiffableTextKit
 // MARK: * Equals
 //*============================================================================*
 
-/// Binds the style's comparison to a proxy value.
+/// Binds the style's equality to a proxy value.
 ///
 /// Use this wrapper to optimize the comparison on view update.
 ///
@@ -76,7 +76,7 @@ extension DiffableTextStyle {
         Equals(self, proxy: _Void())
     }
     
-    /// Binds the style's comparison to a proxy value.
+    /// Binds the style's equality to a proxy value.
     ///
     /// Use this wrapper to optimize the comparison on view update.
     ///

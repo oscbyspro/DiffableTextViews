@@ -187,7 +187,7 @@ style.constant()
 
 ## Equals
 
-Binds a style's comparison to a proxy value.
+Binds the style's equality to a proxy value.
 
 ```swift
 style.equals(())
