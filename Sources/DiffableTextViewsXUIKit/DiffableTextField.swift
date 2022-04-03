@@ -79,8 +79,9 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
     
     public final class Coordinator: NSObject, UITextFieldDelegate {
         @usableFromInline typealias Upstream = DiffableTextField
-        @usableFromInline typealias Context = DiffableTextKit.Context<Style, UTF16>
+        @usableFromInline typealias Environment = EnvironmentValues
         @usableFromInline typealias Remote = DiffableTextKit.Remote<Style>
+        @usableFromInline typealias Context = DiffableTextKit.Context<Style, UTF16>
 
         //=--------------------------------------------------------------------=
         // MARK: State
@@ -90,18 +91,18 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
         @usableFromInline private(set) var context: Context!
         @usableFromInline private(set) var upstream: Upstream!
         @usableFromInline private(set) var downstream: Downstream!
-        @usableFromInline private(set) var environment: EnvironmentValues!
+        @usableFromInline private(set) var environment: Environment!
         
         //=--------------------------------------------------------------------=
         // MARK: View Life Cycle
         //=--------------------------------------------------------------------=
         
-        @inlinable func setup(_ upstream: Upstream, _ environment: EnvironmentValues, _ downstream: Downstream) {
+        @inlinable func setup(_ upstream: Upstream, _ environment: Environment, _ downstream: Downstream) {
             self.upstream = upstream; self.environment = environment; self.downstream = downstream
             self.context = Context(pull()); self.downstream.wrapped.delegate = self;  self.write()
         }
         
-        @inlinable func update(_ upstream: Upstream, _ environment: EnvironmentValues) {
+        @inlinable func update(_ upstream: Upstream, _ environment: Environment) {
             self.upstream = upstream; self.environment = environment
             self.synchronize() // on update is same as on did update
             self.downstream.transform(environment.diffableTextField_onUpdate)
