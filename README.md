@@ -179,7 +179,7 @@ Styles wrapping other styles to modify their behavior.
 
 ## Constant 
 
-Makes it so transformation methods return an unmodified self.
+Blocks the effect of transformation methods.
 
 ```swift
 style.constant()
