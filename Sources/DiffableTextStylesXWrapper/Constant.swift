@@ -14,7 +14,7 @@ import Foundation
 // MARK: * Constant
 //*============================================================================*
 
-/// A style that returns an unmodified self for standard transformations.
+/// Makes it so transformation methods return an unmodified self.
 ///
 /// Use this style to prevent changes via the environment, for example.
 ///
@@ -57,7 +57,7 @@ extension DiffableTextStyle {
     // MARK: Transformations
     //=------------------------------------------------------------------------=
     
-    /// A style that returns an unmodified self for standard transformations.
+    /// Makes it so transformation methods return an unmodified self.
     ///
     /// Use this style to prevent changes via the environment, for example.
     ///

@@ -13,7 +13,7 @@ import DiffableTextKit
 // MARK: * Equals
 //*============================================================================*
 
-/// A style that binds its comparison to a proxy value.
+/// Binds the style's comparison to a proxy value.
 ///
 /// Use this wrapper to optimize the comparison on view update.
 ///
