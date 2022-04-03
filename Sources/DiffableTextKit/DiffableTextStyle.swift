@@ -14,9 +14,6 @@ import Foundation
 //*============================================================================*
 
 /// A protocol for styles capable of as-you-type formatting.
-///
-/// It a base protocol for all platform specific versions of it.
-///
 public protocol DiffableTextStyle: Equatable {
 
     //=------------------------------------------------------------------------=

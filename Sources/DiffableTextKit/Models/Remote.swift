@@ -32,10 +32,4 @@ public struct Remote<Style: DiffableTextStyle> {
         self.value = value
         self.focus = focus
     }
-    
-    @inlinable public init(focus: Focus, value: Value, style: Style) {
-        self.style = style
-        self.value = value
-        self.focus = focus
-    }
 }

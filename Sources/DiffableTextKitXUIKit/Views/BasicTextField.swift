@@ -22,13 +22,13 @@ public final class BasicTextField: UITextField {
     // MARK: State
     //=------------------------------------------------------------------------=
     
-    public private(set) var directives = Directives()
+    public private(set) var intent = Intent()
     
     //*========================================================================*
-    // MARK: * Directives
+    // MARK: * Intent
     //*========================================================================*
     
-    public struct Directives {
+    public struct Intent {
         @usableFromInline typealias Key = UIKeyboardHIDUsage
         
         //=--------------------------------------------------------------------=
@@ -96,20 +96,20 @@ public extension BasicTextField {
     // MARK: Presses
     //=------------------------------------------------------------------------=
     
-    override func pressesBegan(_ presses: Set<UIPress>,  with  event: UIPressesEvent?) {
-        directives.insert(presses); super.pressesBegan(presses, with: event)
+    override func pressesBegan(_ presses: Set<UIPress>, with event: UIPressesEvent?) {
+        intent.insert(presses); super.pressesBegan(presses, with: event)
     }
     
-    override func pressesChanged(_ presses: Set<UIPress>,  with  event: UIPressesEvent?) {
-        directives.insert(presses); super.pressesChanged(presses, with: event)
+    override func pressesChanged(_ presses: Set<UIPress>, with event: UIPressesEvent?) {
+        intent.insert(presses); super.pressesChanged(presses, with: event)
     }
     
-    override func pressesEnded(_ presses: Set<UIPress>,  with  event: UIPressesEvent?) {
-        directives.remove(presses); super.pressesEnded(presses, with: event)
+    override func pressesEnded(_ presses: Set<UIPress>, with event: UIPressesEvent?) {
+        intent.remove(presses); super.pressesEnded(presses, with: event)
     }
     
-    override func pressesCancelled(_ presses: Set<UIPress>,  with  event: UIPressesEvent?) {
-        directives.remove(presses); super.pressesCancelled(presses, with: event)
+    override func pressesCancelled(_ presses: Set<UIPress>, with event: UIPressesEvent?) {
+        intent.remove(presses); super.pressesCancelled(presses, with: event)
     }
 }
 

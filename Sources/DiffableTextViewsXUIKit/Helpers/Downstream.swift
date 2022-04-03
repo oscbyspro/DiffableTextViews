@@ -40,7 +40,7 @@ import UIKit
     }
 
     @inlinable var momentum: Bool {
-        wrapped.directives.momentum
+        wrapped.intent.momentum
     }
     
     @inlinable var selection: Range<Position> {

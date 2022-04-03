@@ -127,9 +127,8 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
             //=----------------------------------=
             // MARK: Upstream, Downstream
             //=----------------------------------=
-            Remote(focus: downstream.focus,
-            value: upstream.value.wrappedValue,
-            style: upstream.style.locale(environment.locale))
+            Remote(style: self.upstream.style.locale(environment.locale),
+            value: upstream.value.wrappedValue, focus: downstream.focus)
         }
 
         @inlinable func push() {

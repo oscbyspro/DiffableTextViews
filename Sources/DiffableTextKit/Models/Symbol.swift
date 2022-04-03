@@ -15,13 +15,6 @@
 public struct Symbol: Equatable {
     
     //=------------------------------------------------------------------------=
-    // MARK: Instances
-    //=------------------------------------------------------------------------=
-
-    /// A phantom space symbol: U+0020.
-    public static let spacer = Self(character: "\u{0020}", attribute: .phantom)
-    
-    //=------------------------------------------------------------------------=
     // MARK: State
     //=------------------------------------------------------------------------=
     
@@ -53,7 +46,7 @@ public struct Symbol: Equatable {
     }
     
     //=------------------------------------------------------------------------=
-    // MARK: Attributes
+    // MARK: Accessors
     //=------------------------------------------------------------------------=
 
     @inlinable @inline(__always) public var virtual: Bool {
@@ -64,10 +57,6 @@ public struct Symbol: Equatable {
         self.attribute.contains(.virtual) == false
     }
     
-    //=------------------------------------------------------------------------=
-    // MARK: Inspection
-    //=------------------------------------------------------------------------=
-
     @inlinable @inline(__always) public func contains(_ character: Character) -> Bool {
         self.character == character
     }
