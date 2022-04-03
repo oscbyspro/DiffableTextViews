@@ -205,4 +205,4 @@ The first style is accepted, subsequent styles are discarded without comparison.
 style.equals(value)
 ```
 
-The first style is accepted, subsequent styles are discarded unless the their proxies are dissimilar.
+The first style is accepted, subsequent styles are discarded unless the their proxies are different.
