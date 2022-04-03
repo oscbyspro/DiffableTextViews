@@ -79,8 +79,8 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
     
     public final class Coordinator: NSObject, UITextFieldDelegate {
         @usableFromInline typealias Upstream = DiffableTextField
-        @usableFromInline typealias Update = DiffableTextKit.Update<Style>
         @usableFromInline typealias Context = DiffableTextKit.Context<Style, UTF16>
+        @usableFromInline typealias Remote = DiffableTextKit.Remote<Style>
 
         //=--------------------------------------------------------------------=
         // MARK: State
@@ -122,11 +122,11 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
             context.focus.value ? self.push() : self.write()
         }
         
-        @inlinable func pull() -> Update {
+        @inlinable func pull() -> Remote {
             //=----------------------------------=
             // MARK: Upstream, Downstream
             //=----------------------------------=
-            Update(focus: downstream.focus,
+            Remote(focus: downstream.focus,
             value: upstream.value.wrappedValue,
             style: upstream.style.locale(environment.locale))
         }

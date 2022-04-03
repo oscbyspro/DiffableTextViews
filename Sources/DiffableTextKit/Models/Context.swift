@@ -12,8 +12,8 @@
 //*============================================================================*
 
 public final class Context<Style: DiffableTextStyle, Scheme: DiffableTextKit.Scheme> {
-    public typealias Update   = DiffableTextKit.Update<Style>
     public typealias Commit   = DiffableTextKit.Commit<Value>
+    public typealias Remote   = DiffableTextKit.Remote<Style>
     public typealias Field    = DiffableTextKit.Field<Scheme>
     public typealias Layout   = DiffableTextKit.Layout<Scheme>
     public typealias Position = DiffableTextKit.Position<Scheme>
@@ -32,10 +32,10 @@ public final class Context<Style: DiffableTextStyle, Scheme: DiffableTextKit.Sch
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable public init(_ update: Update) {
-        self._style = update.style
-        self._value = update.value
-        self._focus = update.focus
+    @inlinable public init(_ remote: Remote) {
+        self._style = remote.style
+        self._value = remote.value
+        self._focus = remote.focus
         self._field = Field()
     }
     
@@ -118,10 +118,10 @@ extension Context {
     // MARK: Merge
     //=------------------------------------------------------------------------=
     
-    @inlinable public func merge(_ update: Update) -> Bool {
-        let changeInStyle = update.style != style
-        let changeInValue = update.value != value
-        let changeInFocus = update.focus != focus
+    @inlinable public func merge(_ remote: Remote) -> Bool {
+        let changeInStyle = remote.style != style
+        let changeInValue = remote.value != value
+        let changeInFocus = remote.focus != focus
         //=--------------------------------------=
         // MARK: At Least One Value Must Change
         //=--------------------------------------=
@@ -132,9 +132,9 @@ extension Context {
         // MARK: Yes
         //=--------------------------------------=
         self.dynamic(
-        style: changeInStyle ? update.style : style,
-        value: changeInValue ? update.value : value,
-        focus: changeInFocus ? update.focus : focus)
+        style: changeInStyle ? remote.style : style,
+        value: changeInValue ? remote.value : value,
+        focus: changeInFocus ? remote.focus : focus)
         return true
     }
 }
