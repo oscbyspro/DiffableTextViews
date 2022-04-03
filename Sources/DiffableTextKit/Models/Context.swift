@@ -55,13 +55,6 @@ public final class Context<Style: DiffableTextStyle, Scheme: DiffableTextKit.Sch
     @inlinable public func formatted() -> String {
         style.format(value)
     }
-}
-
-//=------------------------------------------------------------------------=
-// MARK: + Update
-//=------------------------------------------------------------------------=
-
-extension Context {
     
     //=------------------------------------------------------------------------=
     // MARK: Selection
@@ -74,13 +67,6 @@ extension Context {
     @inlinable public func update(selection: Range<Position>, momentum: Bool) {
         self._field.update(selection: selection, momentum: momentum)
     }
-}
-
-//=----------------------------------------------------------------------------=
-// MARK: + Update
-//=----------------------------------------------------------------------------=
-
-extension Context {
     
     //=------------------------------------------------------------------------=
     // MARK: Focus
@@ -106,16 +92,9 @@ extension Context {
         case  true: self  .focused(style: style,commit: style.interpret(value))
         }
     }
-}
-
-//=----------------------------------------------------------------------------=
-// MARK: + Update
-//=----------------------------------------------------------------------------=
-
-extension Context {
     
     //=------------------------------------------------------------------------=
-    // MARK: Merge
+    // MARK: Remote
     //=------------------------------------------------------------------------=
     
     @inlinable public func merge(_ remote: Remote) -> Bool {

@@ -11,6 +11,7 @@
 // MARK: * Remote
 //*===========================================================================
 
+/// A model used to collect upstream and downstream values.
 public struct Remote<Style: DiffableTextStyle> {
     public typealias Value = Style.Value
     
