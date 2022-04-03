@@ -1,6 +1,6 @@
 # WrapperTextStyle(s)
 
-Styles wrapping other styles to modify their behavior.
+Modifies the behavior of its content.
 
 ## Constant 
 
