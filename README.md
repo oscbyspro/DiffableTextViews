@@ -187,22 +187,13 @@ Makes it so transformation methods return an unmodified self.
 style.constant()
 ```
 
-The style's locale may no longer be overriden by the environment.
-
 ## Equals
 
-Binds a style's comparison to a proxy value.
+Binds a style's comparison to a proxy value. Style proposals are discarded unless they are unequal. 
 
 ### Examples 
 
 ```swift
 style.equals(())
-```
-
-The first style is accepted, subsequent styles are discarded without comparison.
-
-```swift
 style.equals(value)
 ```
-
-The first style is accepted, subsequent styles are discarded unless the their proxies are different.
