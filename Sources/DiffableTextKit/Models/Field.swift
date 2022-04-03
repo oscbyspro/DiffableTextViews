@@ -63,7 +63,7 @@ public struct Field<Scheme: DiffableTextKit.Scheme> {
 extension Field {
 
     //=------------------------------------------------------------------------=
-    // MARK: Indices At Destination
+    // MARK: Indices
     //=------------------------------------------------------------------------=
     
     @inlinable func indices(at destination: Range<Position>) -> Range<Layout.Index> {

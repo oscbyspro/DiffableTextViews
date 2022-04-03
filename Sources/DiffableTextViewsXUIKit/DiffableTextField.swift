@@ -201,7 +201,7 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
                     // async to process special commands first
                     // as an example see: (option + backspace)
                     self.context.set(selection: range.upperBound)
-                    self.context.focused(style: style, commit: commit)
+                    self.context.focus(style: style, commit: commit)
                     self.push()
                 }
             //=----------------------------------=

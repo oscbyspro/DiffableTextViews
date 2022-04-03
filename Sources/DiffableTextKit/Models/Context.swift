@@ -7,7 +7,6 @@
 // See http://www.apache.org/licenses/LICENSE-2.0 for license information.
 //=----------------------------------------------------------------------------=
 
-#warning("Cleanup marks and function signatures.")
 //*============================================================================*
 // MARK: * Context
 //*============================================================================*
@@ -65,7 +64,7 @@ public final class Context<Style: DiffableTextStyle, Scheme: DiffableTextKit.Sch
 extension Context {
 
     //=------------------------------------------------------------------------=
-    // MARK: Field
+    // MARK: Selection
     //=------------------------------------------------------------------------=
     
     @inlinable public func set(selection: Layout.Index) {
@@ -77,32 +76,32 @@ extension Context {
     }
     
     //=------------------------------------------------------------------------=
-    // MARK: Style, Value, Focus, Field
+    // MARK: Style, Value, Focus
     //=------------------------------------------------------------------------=
     
-    @inlinable public func unfocused(style: Style, value: Value) {
-        self._focus = false
-        self._style = style
-        self._value = value
-        self._field = Field()
-    }
-    
-    @inlinable public func focused(style: Style, commit: Commit) {
+    @inlinable public func focus(style: Style, commit: Commit) {
         self._focus = true
         self._style = style
         self._value = commit.value
         self._field.update(snapshot: commit.snapshot)
     }
+    
+    @inlinable public func unfocus(style: Style, value: Value) {
+        self._focus = false
+        self._style = style
+        self._value = value
+        self._field = Field()
+    }
 
-    @inlinable public func dynamic(style: Style, value: Value, focus: Focus) {
+    @inlinable public func accept(style: Style, value: Value, focus: Focus) {
         switch focus.value {
-        case false: self.unfocused(style: style, value: value)
-        case  true: self  .focused(style: style,commit: style.interpret(value))
+        case   true: self  .focus(style: style,commit: style.interpret(value))
+        case  false: self.unfocus(style: style, value: value)
         }
     }
     
     //=------------------------------------------------------------------------=
-    // MARK: Style, Value, Focus, Field
+    // MARK: Remote
     //=------------------------------------------------------------------------=
     
     @inlinable public func merge(_ remote: Remote) -> Bool {
@@ -118,7 +117,7 @@ extension Context {
         //=--------------------------------------=
         // MARK: Yes
         //=--------------------------------------=
-        self.dynamic(
+        self.accept(
         style: changeInStyle ? remote.style : style,
         value: changeInValue ? remote.value : value,
         focus: changeInFocus ? remote.focus : focus)
