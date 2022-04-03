@@ -10,11 +10,11 @@ An open source package for as-you-type formatting in SwiftUI.
 
 |   | Feature | Description |
 |---|---------|-------------|
-| :keyboard: | Responsive | Formats and parses text as you type |
-| :magic_wand: | Automagical | Binds text to its appropriate data type |
+| :keyboard: | Responsive | Formats text as you type |
+| :magic_wand: | Automagical | Binds text to a chosen data type |
+| :bulb: | Smart | Validates and autocorrects input |
 | :hammer_and_wrench: | Versatile | Uses snapshots and attributes |
 | :running_man: | Performant | Uses O(n) differentiation algorithms |
-| :smiley: | Emojis | Uses native offsets, supports emojis |
 | :desert_island: | Standalone | Uses no remote dependencies |
 | :open_book: | Open source | 100% transparent, as it should be |
 
@@ -73,9 +73,11 @@ A text field that binds values and formats them as you type.
 |---|---------|-------------|
 | :iphone: | SwiftUI | Value, style, done |
 | :mountain: | Environment | Uses environment values |
+| :mag_right: | Focusable | Supports use of @FocusState |
+| :sewing_needle: | Customizable | Exposes [ProxyTextField](Sources/DiffableTextKitXUIKit/Views/ProxyTextField.swift) |
+| :zzz: | Convenient | Styles provide sensible defaults |
 | :balance_scale: | Monospaced | Standard font is monospaced |
-| :sewing_needle: | Customizable | Customized using [ProxyTextField](Sources/DiffableTextKitXUIKit/Views/ProxyTextField.swift) |
-| :bulb: | Smart | Styles may provide sensible defaults |
+| :smiley: | Emojis | Uses native offsets |
 
 # Styles
 
