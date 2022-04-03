@@ -173,7 +173,7 @@ struct DiffableTextFieldXPhone: View {
 }
 ```
 
-## WrapperTextStyle(s) ([Source](Sources/DiffableTextStylesXWrapper/), [Tests](Tests/DiffableTextStylesXWrapperTests))
+## [WrapperTextStyle(s)](Notes/WrapperTextStyle.md) ([Source](Sources/DiffableTextStylesXWrapper/), [Tests](Tests/DiffableTextStylesXWrapperTests))
 
 Styles wrapping other styles to modify their behavior.
 
@@ -185,8 +185,6 @@ Makes it so transformation methods return an unmodified self.
 style.constant()
 ```
 
-The wrapped style's locale may no longer be overridden by the environment, for example.
-
 ## Equals
 
 Binds a style's comparison to a proxy value.
@@ -195,5 +193,3 @@ Binds a style's comparison to a proxy value.
 style.equals(())
 style.equals(value)
 ```
-
-Style proposals are discarded unless they are unequal. Use it to optimize the comparison on view update.
