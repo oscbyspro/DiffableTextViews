@@ -30,9 +30,14 @@ It uses three main algorithms to determine text selection.
 
 # Installation
 
-1. Use: Swift Package Manager.
-2. Copy/paste: https://github.com/oscbyspro/DiffableTextViews.
-3. Select a **VERSIONED** release.
+Simple instructions on how to install this package.
+
+### Swift Package Manager
+
+1. Select: https://github.com/oscbyspro/DiffableTextViews.
+2. Select a **VERSIONED** release.
+
+### Imports
 
 ```swift
 import DiffableTextViews

@@ -15,7 +15,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "5589A19F27A7E3E30000F04A"
-               BuildableName = "AppXUIKit.app"
+               BuildableName = "DiffableTextAppXUIKit.app"
                BlueprintName = "DiffableTextAppXUIKit"
                ReferencedContainer = "container:DiffableTextAppXUIKit.xcodeproj">
             </BuildableReference>
@@ -178,7 +178,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "5589A19F27A7E3E30000F04A"
-            BuildableName = "AppXUIKit.app"
+            BuildableName = "DiffableTextAppXUIKit.app"
             BlueprintName = "DiffableTextAppXUIKit"
             ReferencedContainer = "container:DiffableTextAppXUIKit.xcodeproj">
          </BuildableReference>
@@ -195,7 +195,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "5589A19F27A7E3E30000F04A"
-            BuildableName = "AppXUIKit.app"
+            BuildableName = "DiffableTextAppXUIKit.app"
             BlueprintName = "DiffableTextAppXUIKit"
             ReferencedContainer = "container:DiffableTextAppXUIKit.xcodeproj">
          </BuildableReference>
