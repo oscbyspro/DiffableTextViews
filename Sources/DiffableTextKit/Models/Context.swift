@@ -7,6 +7,7 @@
 // See http://www.apache.org/licenses/LICENSE-2.0 for license information.
 //=----------------------------------------------------------------------------=
 
+#warning("Cleanup marks and function signatures.")
 //*============================================================================*
 // MARK: * Context
 //*============================================================================*
@@ -55,9 +56,16 @@ public final class Context<Style: DiffableTextStyle, Scheme: DiffableTextKit.Sch
     @inlinable public func formatted() -> String {
         style.format(value)
     }
-    
+}
+
+//=----------------------------------------------------------------------------=
+// MARK: + Transformations
+//=----------------------------------------------------------------------------=
+
+extension Context {
+
     //=------------------------------------------------------------------------=
-    // MARK: Selection
+    // MARK: Field
     //=------------------------------------------------------------------------=
     
     @inlinable public func set(selection: Layout.Index) {
@@ -69,7 +77,7 @@ public final class Context<Style: DiffableTextStyle, Scheme: DiffableTextKit.Sch
     }
     
     //=------------------------------------------------------------------------=
-    // MARK: Focus
+    // MARK: Style, Value, Focus, Field
     //=------------------------------------------------------------------------=
     
     @inlinable public func unfocused(style: Style, value: Value) {
@@ -94,7 +102,7 @@ public final class Context<Style: DiffableTextStyle, Scheme: DiffableTextKit.Sch
     }
     
     //=------------------------------------------------------------------------=
-    // MARK: Remote
+    // MARK: Style, Value, Focus, Field
     //=------------------------------------------------------------------------=
     
     @inlinable public func merge(_ remote: Remote) -> Bool {

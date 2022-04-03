@@ -37,7 +37,7 @@ Simple instructions on how to install this package.
 1. Select: https://github.com/oscbyspro/DiffableTextViews.
 2. Select a **VERSIONED** release.
 
-### Imports
+### Import
 
 ```swift
 import DiffableTextViews
