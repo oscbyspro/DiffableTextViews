@@ -12,7 +12,7 @@ An open source package for as-you-type formatting in SwiftUI.
 |---|---------|-------------|
 | :keyboard: | Responsive | Formats text as you type |
 | :magic_wand: | Automagical | Binds text to a chosen data type |
-| :star: | Proper | Validates and autocorrects input |
+| :heavy_check_mark: | Proper | Validates and autocorrects input |
 | :hammer_and_wrench: | Versatile | Uses snapshots and attributes |
 | :running_man: | Performant | Uses O(n) differentiation algorithms |
 | :desert_island: | Standalone | Uses no remote dependencies |
