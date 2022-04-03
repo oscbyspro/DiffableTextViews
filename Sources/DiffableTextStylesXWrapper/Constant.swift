@@ -14,7 +14,7 @@ import Foundation
 // MARK: * Constant
 //*============================================================================*
 
-/// Blocks the effect of transformation methods.
+/// Prevents style transformations.
 ///
 /// Use this style to prevent changes via the environment, for example.
 ///
@@ -57,7 +57,7 @@ extension DiffableTextStyle {
     // MARK: Transformations
     //=------------------------------------------------------------------------=
     
-    /// Blocks the effect of transformation methods.
+    /// Prevents style transformations.
     ///
     /// Use this style to prevent changes via the environment, for example.
     ///

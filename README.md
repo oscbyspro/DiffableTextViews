@@ -179,7 +179,7 @@ Modifies the behavior of its content.
 
 ## Constant 
 
-Blocks the effect of transformation methods.
+Prevents style transformations.
 
 ```swift
 style.constant()
