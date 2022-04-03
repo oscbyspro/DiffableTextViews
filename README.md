@@ -175,34 +175,25 @@ struct DiffableTextFieldXPhone: View {
 
 ## WrapperTextStyle(s) ([Source](Sources/DiffableTextStylesXWrapper/), [Tests](Tests/DiffableTextStylesXWrapperTests))
 
-Styles wrapping other styles and modifying their behavior.
+Styles wrapping other styles to modify their behavior.
 
 ## Constant 
 
 Makes it so transformation methods return an unmodified self.
 
-### Examples 
-
 ```swift
 style.constant()
 ```
 
-The style's locale may no longer be overriden by the environment.
+The wrapped style's locale may no longer be overridden by the environment, for example.
 
 ## Equals
 
 Binds a style's comparison to a proxy value.
 
-### Examples 
-
 ```swift
 style.equals(())
-```
-
-The first style is accepted, subsequent styles are discarded without comparison.
-
-```swift
 style.equals(value)
 ```
 
-The first style is accepted, subsequent styles are discarded unless the their proxies are different.
+Style proposals are discarded unless they are unequal. Use it to optimize the comparison on view update.
