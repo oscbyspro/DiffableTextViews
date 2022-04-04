@@ -34,7 +34,7 @@ Simple instructions on how to install this package.
 
 ### Swift Package Manager
 
-1. Select: https://github.com/oscbyspro/DiffableTextViews.
+1. Select https://github.com/oscbyspro/DiffableTextViews.
 2. Select a **VERSIONED** release.
 
 ### Import
@@ -75,7 +75,7 @@ A text field that binds values and formats them as you type.
 | :mountain: | Environment | Uses environment values |
 | :mag_right: | Focusable | Supports use of @FocusState |
 | :sewing_needle: | Customizable | Exposes [ProxyTextField](Sources/DiffableTextKitXUIKit/Views/ProxyTextField.swift) |
-| :zzz: | Convenient | Styles have sensible defaults |
+| :zzz: | Convenient | Styles use sensible defaults |
 | :balance_scale: | Monospaced | Standard font is monospaced |
 | :smiley: | Emojis | Uses native offsets |
 
