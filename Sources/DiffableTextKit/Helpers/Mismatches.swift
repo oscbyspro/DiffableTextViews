@@ -27,7 +27,10 @@ Next: BidirectionalCollection, Next.Element == Symbol {
     // MARK: Prefix
     //=------------------------------------------------------------------------=
     
-    /// Returns caret positions before the first irreconcilable mismatch forwards.
+    @inlinable static func prefix(next: Next, prev: Prev) -> Indices {
+        prefix(prev: prev, next:  next)
+    }
+    
     @inlinable static func prefix(prev: Prev, next: Next) -> Indices {
         var prevIndex = prev.startIndex
         var nextIndex = next.startIndex
@@ -61,22 +64,21 @@ Next: BidirectionalCollection, Next.Element == Symbol {
         return (prevIndex, nextIndex)
     }
     
-    @inlinable static func prefix(next: Next, prev: Prev) -> Indices {
-        prefix(prev: prev, next: next)
-    }
-    
     //=------------------------------------------------------------------------=
     // MARK: Suffix
     //=------------------------------------------------------------------------=
     
-    /// Returns caret positions before the first irreconcilable mismatch backwards.
-    @inlinable static func suffix(prev: Prev, next: Next) -> Indices {
-        let reversed = Reversed.prefix(
-        prev: prev.reversed(), next: next.reversed())
-        return (reversed.prev.base, reversed.next.base)
+    @inlinable static func suffix(next: Next, prev: Prev) -> Indices {
+        suffix(prev: prev, next:  next)
     }
     
-    @inlinable static func suffix(next: Next, prev: Prev) -> Indices {
-        suffix(prev: prev, next: next)
+    @inlinable static func suffix(prev: Prev, next: Next) -> Indices {
+        let reversed = Reversed.prefix(
+        prev: prev.reversed(),
+        next: next.reversed())
+        //=--------------------------------------=
+        // MARK: Return
+        //=--------------------------------------=
+        return (reversed.prev.base, reversed.next.base)
     }
 }
