@@ -50,8 +50,8 @@ public struct Position<Scheme: DiffableTextKit.Scheme>: Comparable, ExpressibleB
     // MARK: Transformations
     //=------------------------------------------------------------------------=
     
-    @inlinable func after(_ character: Character) -> Self {
-        Self(offset + Scheme.size(of: character))
+    @inlinable func  after(_ character: Character) -> Self {
+        Self(offset + Scheme.size(of:  character))
     }
     
     @inlinable func before(_ character: Character) -> Self {

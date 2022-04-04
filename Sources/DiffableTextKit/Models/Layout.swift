@@ -154,7 +154,7 @@ extension Layout {
     // MARK: Position
     //=------------------------------------------------------------------------=
     
-    @inlinable func index(at position: Position, start: Index) -> Index {
+    @inlinable func index(at position: Position, from start: Index) -> Index {
         switch start.position <= position {
         case  true: return index(after:  start, while: { $0.position < position })
         case false: return index(before: start, while: { $0.position > position })

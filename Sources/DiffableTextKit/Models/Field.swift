@@ -68,13 +68,13 @@ extension Field {
         //=--------------------------------------=
         // MARK: Single
         //=--------------------------------------=
-        let upperBound = layout.index(at: destination.upperBound, start: selection.upperBound)
+        let upperBound = layout.index(at: destination.upperBound, from: selection.upperBound)
         var lowerBound = upperBound
         //=--------------------------------------=
         // MARK: Double
         //=--------------------------------------=
         if !destination.isEmpty {
-            lowerBound = layout.index(at: destination.lowerBound, start: selection.lowerBound)
+            lowerBound = layout.index(at: destination.lowerBound, from: selection.lowerBound)
         }
         //=--------------------------------------=
         // MARK: Return
