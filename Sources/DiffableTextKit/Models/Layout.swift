@@ -67,7 +67,7 @@ public struct Layout<Scheme: DiffableTextKit.Scheme>: BidirectionalCollection {
     // MARK: After / Before
     //=------------------------------------------------------------------------=
 
-    @inlinable public func index(after  index: Index) -> Index {
+    @inlinable public func index(after index: Index) -> Index {
         let character = snapshot.characters[index.character]
         let after = snapshot.index(after: index.snapshot)
         return Index(after, at: index.position.after(character))
@@ -172,7 +172,7 @@ extension Layout {
     // MARK: Direction
     //=------------------------------------------------------------------------=
     
-    @inlinable func peek(_ position: Index, direction: Direction) -> Index? {
+    @inlinable func peek(towards direction: Direction, from position: Index) -> Index? {
         direction == .forwards ? peek(ahead: position) : peek(behind: position)
     }
     
@@ -213,7 +213,7 @@ extension Layout {
         //=--------------------------------------=
         // MARK: Inspect The Initial Position
         //=--------------------------------------=
-        if peek(start, direction: preference).map(nonpassthrough) == true {
+        if peek(towards: preference, from: start).map(nonpassthrough) == true {
             return start
         }
         //=--------------------------------------=
