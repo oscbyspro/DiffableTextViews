@@ -7,12 +7,14 @@
 // See http://www.apache.org/licenses/LICENSE-2.0 for license information.
 //=----------------------------------------------------------------------------=
 
+import Foundation
+
 //*============================================================================*
 // MARK: * Position
 //*============================================================================*
 
 /// A model representing a position in text.
-public struct Position<Scheme: DiffableTextKit.Scheme>: Comparable, ExpressibleByIntegerLiteral {
+public struct Position<Scheme: DiffableTextKit.Scheme>: Comparable {
     
     //=------------------------------------------------------------------------=
     // MARK: State
@@ -27,11 +29,7 @@ public struct Position<Scheme: DiffableTextKit.Scheme>: Comparable, ExpressibleB
     @inlinable public init(_ offset: Int = 0) {
         self.offset = offset
     }
-    
-    @inlinable public init(integerLiteral offset: IntegerLiteralType) {
-        self.offset = offset
-    }
-    
+
     //=------------------------------------------------------------------------=
     // MARK: Initializers - Static
     //=------------------------------------------------------------------------=
@@ -39,7 +37,7 @@ public struct Position<Scheme: DiffableTextKit.Scheme>: Comparable, ExpressibleB
     @inlinable static var start: Self {
         Self()
     }
-        
+    
     @inlinable static func end<S>(of characters: S) -> Self where S: StringProtocol {
         Self(Scheme.size(of: characters))
     }
@@ -66,5 +64,20 @@ public struct Position<Scheme: DiffableTextKit.Scheme>: Comparable, ExpressibleB
     
     @inlinable public static func <  (lhs: Self, rhs: Self) -> Bool {
         lhs.offset <  rhs.offset
+    }
+}
+
+//=----------------------------------------------------------------------------=
+// MARK: + Utilities
+//=----------------------------------------------------------------------------=
+
+extension Position {
+
+    //=------------------------------------------------------------------------=
+    // MARK: Range
+    //=------------------------------------------------------------------------=
+    
+    @inlinable public static func range(_ range: NSRange) -> Range<Self> {
+        Self(range.lowerBound) ..< Self(range.upperBound)
     }
 }

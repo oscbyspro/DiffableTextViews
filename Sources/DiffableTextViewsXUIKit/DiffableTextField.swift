@@ -82,6 +82,7 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
         @usableFromInline typealias Environment = EnvironmentValues
         @usableFromInline typealias Remote = DiffableTextKit.Remote<Style>
         @usableFromInline typealias Context = DiffableTextKit.Context<Style, UTF16>
+        @usableFromInline typealias Position = DiffableTextKit.Position<UTF16>
 
         //=--------------------------------------------------------------------=
         // MARK: State
@@ -186,8 +187,8 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
         
         @inlinable public func textField(_ textField: UITextField,
         shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
-            let style = context.style
-            let range = context.field.indices(at: range)
+            let style   = context.style
+            let range   = context.field.indices(at: Position.range(range))
             let changes = Changes(context.field.snapshot, change: (range, string))
             //=----------------------------------=
             // MARK: Merge

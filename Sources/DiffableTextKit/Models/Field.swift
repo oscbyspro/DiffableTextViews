@@ -7,8 +7,6 @@
 // See http://www.apache.org/licenses/LICENSE-2.0 for license information.
 //=----------------------------------------------------------------------------=
 
-import Foundation
-
 //*============================================================================*
 // MARK: * Field
 //*============================================================================*
@@ -65,12 +63,8 @@ extension Field {
     //=------------------------------------------------------------------------=
     // MARK: Indices
     //=------------------------------------------------------------------------=
-        
-    @inlinable public func indices(at destination: NSRange) -> Range<Layout.Index> {
-        indices(at: Position(destination.lowerBound) ..< Position(destination.upperBound))
-    }
     
-    @inlinable func indices(at destination: Range<Position>) -> Range<Layout.Index> {
+    @inlinable public func indices(at destination: Range<Position>) -> Range<Layout.Index> {
         //=--------------------------------------=
         // MARK: Single
         //=--------------------------------------=
