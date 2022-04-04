@@ -114,7 +114,7 @@ extension Field {
         //=--------------------------------------=
         if !selection.isEmpty, upperBound != layout.startIndex {
             lowerBound = layout.preferredCaret(selection.lowerBound, preference:  .forwards, momentum: momentum.lowerBound)
-            lowerBound = Swift.min(lowerBound, upperBound)
+            lowerBound = min(lowerBound, upperBound)
         }
         //=--------------------------------------=
         // MARK: Update
