@@ -156,7 +156,6 @@ extension Layout {
     }
 }
 
-
 //=----------------------------------------------------------------------------=
 // MARK: + Peek
 //=----------------------------------------------------------------------------=
@@ -164,30 +163,19 @@ extension Layout {
 extension Layout {
     
     //=------------------------------------------------------------------------=
-    // MARK: Ahead
+    // MARK: Ahead / Behind / Direction
     //=------------------------------------------------------------------------=
     
     @inlinable func peek(ahead position: Index) -> Index? {
         position != endIndex ? position : nil
     }
     
-    //=------------------------------------------------------------------------=
-    // MARK: Behind
-    //=------------------------------------------------------------------------=
-    
     @inlinable func peek(behind position: Index) -> Index? {
         position != startIndex ? index(before: position) : nil
     }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Ahead / Behind
-    //=------------------------------------------------------------------------=
-    
+
     @inlinable func peek(_ position: Index, direction: Direction) -> Index? {
-        switch direction {
-        case  .forwards: return peek(ahead:  position)
-        case .backwards: return peek(behind: position)
-        }
+        direction == .forwards ? peek(ahead: position) : peek(behind: position)
     }
 }
 
@@ -198,7 +186,7 @@ extension Layout {
 extension Layout {
     
     //=------------------------------------------------------------------------=
-    // MARK: Single
+    // MARK: Single / Double
     //=------------------------------------------------------------------------=
     
     @inlinable func index(start: Index, destination: Position) -> Index {
@@ -207,20 +195,10 @@ extension Layout {
         case false: return index(before: start, while: { $0.position > destination })
         }
     }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Double
-    //=------------------------------------------------------------------------=
 
     @inlinable func indices(start: Range<Index>, destination: Range<Position>) -> Range<Index> {
         let upperBound = index(start: start.upperBound, destination: destination.upperBound)
-        //=--------------------------------------=
-        // MARK: Single
-        //=--------------------------------------=
-        if destination.isEmpty { return upperBound ..< upperBound }
-        //=--------------------------------------=
-        // MARK: Double
-        //=--------------------------------------=
+        if destination.isEmpty { return upperBound ..< upperBound } // unary destination position
         return index(start: start.lowerBound, destination: destination.lowerBound) ..< upperBound
     }
 }
@@ -232,7 +210,7 @@ extension Layout {
 extension Layout {
     
     //=------------------------------------------------------------------------=
-    // MARK: Single
+    // MARK: Single / Double
     //=------------------------------------------------------------------------=
     
     @inlinable func preferred(_ start: Layout.Index, preference: Direction, momentum: Direction?) -> Layout.Index {
@@ -270,10 +248,6 @@ extension Layout {
         return startIndex
     }
     
-    //=------------------------------------------------------------------------=
-    // MARK: Double
-    //=------------------------------------------------------------------------=
-    
     @inlinable func preferred(_ start: Range<Index>, momentum: Momentum) -> Range<Index> {
         //=--------------------------------------=
         // MARK: Single
@@ -301,7 +275,7 @@ extension Layout {
 extension Layout {
 
     //=------------------------------------------------------------------------=
-    // MARK: Forwards To
+    // MARK: Forwards / Backwards / To / Through
     //=------------------------------------------------------------------------=
     
     @inlinable func firstCaretForwardsTo(from start: Index, where predicate: (Index) -> Bool) -> Index? {
@@ -319,26 +293,14 @@ extension Layout {
         return nil
     }
     
-    //=------------------------------------------------------------------------=
-    // MARK: Forwards Through
-    //=------------------------------------------------------------------------=
-    
     @inlinable func firstCaretForwardsThrough(from start: Index, where predicate: (Index) -> Bool) -> Index? {
         firstCaretForwardsTo(from: start, where: predicate).map(index(after:))
     }
     
-    //=------------------------------------------------------------------------=
-    // MARK: Backwards To
-    //=------------------------------------------------------------------------=
-    
     @inlinable func firstCaretBackwardsTo(from start: Index, where predicate: (Index) -> Bool) -> Index? {
         firstCaretBackwardsThrough(from: start, where: predicate).map(index(after:))
     }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Backwards Through
-    //=------------------------------------------------------------------------=
-    
+
     @inlinable func firstCaretBackwardsThrough(from start: Index, where predicate: (Index) -> Bool) -> Index? {
         var position = start
         //=--------------------------------------=
@@ -353,10 +315,6 @@ extension Layout {
         //=--------------------------------------=
         return nil
     }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Forwards / Backwards / To / Through
-    //=------------------------------------------------------------------------=
     
     @inlinable func firstCaret(_ start: Index, direction: Direction, through: Bool) -> Index? {
         switch (direction, through) {
