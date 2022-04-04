@@ -90,23 +90,36 @@ extension Field {
         //=--------------------------------------=
         // MARK: Parse Boolean As Momentum
         //=--------------------------------------=
-        let momentum = momentum ? Momentum(self.selection, to: selection) : Momentum()
+        let momentum = momentum ? Momentum(self.selection, to: selection) : .none
         //=--------------------------------------=
         // MARK: Update
         //=--------------------------------------=
         self.update(selection: selection, momentum: momentum)
     }
     
-    @inlinable mutating func update(selection: Range<Layout.Index>, momentum: Momentum = Momentum()) {
-        self.selection = selection
+    @inlinable mutating func update(selection: Range<Layout.Index>, momentum: Momentum = .none) {
         //=--------------------------------------=
-        // MARK: Exceptions
+        // MARK: Accept Max Selection
         //=--------------------------------------=
-        if selection == layout.range { return }
+        if selection == layout.range {
+            self.selection = selection; return
+        }
         //=--------------------------------------=
-        // MARK: Autocorrect
+        // MARK: Single
         //=--------------------------------------=
-        self.selection = layout.preferred(selection, momentum: momentum)
+        let upperBound = layout.preferredCaret(selection.upperBound, preference: .backwards, momentum: momentum.upperBound)
+        var lowerBound = upperBound
+        //=--------------------------------------=
+        // MARK: Double
+        //=--------------------------------------=
+        if !selection.isEmpty, upperBound != layout.startIndex {
+            lowerBound = layout.preferredCaret(selection.lowerBound, preference:  .forwards, momentum: momentum.lowerBound)
+            lowerBound = Swift.min(lowerBound, upperBound)
+        }
+        //=--------------------------------------=
+        // MARK: Update
+        //=--------------------------------------=
+        self.selection = lowerBound ..< upperBound
     }
 }
 

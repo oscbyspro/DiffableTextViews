@@ -14,23 +14,29 @@
 @usableFromInline struct Momentum {
     
     //=------------------------------------------------------------------------=
+    // MARK: Instances
+    //=------------------------------------------------------------------------=
+    
+    @usableFromInline static let none = Self()
+    
+    //=------------------------------------------------------------------------=
     // MARK: State
     //=------------------------------------------------------------------------=
     
-    @usableFromInline let lower: Direction?
-    @usableFromInline let upper: Direction?
+    @usableFromInline let lowerBound: Direction?
+    @usableFromInline let upperBound: Direction?
 
     //=------------------------------------------------------------------------=
     // MARK: Initializers
     //=------------------------------------------------------------------------=
 
-    @inlinable init(lower: Direction? = nil, upper: Direction? = nil) {
-        self.lower = lower
-        self.upper = upper
+    @inlinable init(lowerBound: Direction? = nil, upperBound: Direction? = nil) {
+        self.lowerBound = lowerBound
+        self.upperBound = upperBound
     }
     
     @inlinable init<T>(_ start: Range<T>, to end: Range<T>) where T: Comparable {
-        self.lower = Direction(start.lowerBound, to: end.lowerBound)
-        self.upper = Direction(start.upperBound, to: end.upperBound)
+        self.lowerBound = Direction(start.lowerBound, to: end.lowerBound)
+        self.upperBound = Direction(start.upperBound, to: end.upperBound)
     }
 }
