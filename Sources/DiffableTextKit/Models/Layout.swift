@@ -222,19 +222,19 @@ extension Layout {
         //=--------------------------------------=
         let direction = direction ?? preference
         //=--------------------------------------=
-        // MARK: Try In This Direction
+        // MARK: Search In This Direction
         //=--------------------------------------=
         if let position = caret(from: start, towards: direction, through: direction != preference) {
             return position
         }
         //=--------------------------------------=
-        // MARK: Try In The Other Direction
+        // MARK: Search In The Opposite Direction
         //=--------------------------------------=
         if let position = caret(from: start, towards: direction.reversed(), through: false) {
             return position
         }
         //=--------------------------------------=
-        // MARK: Return Instance Start Index
+        // MARK: Return Layout Start Index
         //=--------------------------------------=
         return self.startIndex
     }
@@ -266,7 +266,7 @@ extension Layout {
             formIndex(after: &position)
         }
         //=--------------------------------------=
-        // MARK: Failure == None
+        // MARK: Absent
         //=--------------------------------------=
         return nil
     }
@@ -293,7 +293,7 @@ extension Layout {
             if predicate(position) { return position }
         }
         //=--------------------------------------=
-        // MARK: Failure == None
+        // MARK: Absent
         //=--------------------------------------=
         return nil
     }

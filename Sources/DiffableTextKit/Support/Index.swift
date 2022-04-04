@@ -27,7 +27,7 @@ public extension Collection {
             formIndex(after: &position)
         }
         //=--------------------------------------=
-        // MARK: Position == End Index
+        // MARK: Return End Index
         //=--------------------------------------=
         return position
     }
@@ -53,7 +53,7 @@ public extension BidirectionalCollection {
             formIndex(before: &position)
         }
         //=--------------------------------------=
-        // MARK: Position == Start Index
+        // MARK: Return Start Index
         //=--------------------------------------=
         return position
     }
