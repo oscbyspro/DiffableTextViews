@@ -115,16 +115,16 @@ extension Field {
         //=--------------------------------------=
         // MARK: Single
         //=--------------------------------------=
-        let upperBound = layout.caret(start: selection.upperBound,
-            preference: .backwards, momentum: momentum.upperBound)
+        let upperBound = layout.caret(from: selection.upperBound,
+            towards: momentum.upperBound, preferring: .backwards)
         var lowerBound = upperBound
         //=--------------------------------------=
         // MARK: Double
         //=--------------------------------------=
         if !selection.isEmpty, upperBound != layout.startIndex {
-            lowerBound = layout.caret(start: selection.lowerBound,
-            preference:  .forwards, momentum: momentum.lowerBound)
-            lowerBound = min(lowerBound, upperBound)
+            lowerBound = layout.caret(from: selection.lowerBound,
+            towards: momentum.lowerBound, preferring:  .forwards)
+            lowerBound = Swift.min(lowerBound, upperBound)
         }
         //=--------------------------------------=
         // MARK: Update
@@ -157,7 +157,7 @@ extension Field {
         if !selection.isEmpty {
             lowerBound = Mismatches.prefix(next: layout,
             prev: self.layout[..<selection.lowerBound]).next
-            lowerBound = min(lowerBound, upperBound)
+            lowerBound = Swift.min(lowerBound, upperBound)
         }
         //=--------------------------------------=
         // MARK: Update

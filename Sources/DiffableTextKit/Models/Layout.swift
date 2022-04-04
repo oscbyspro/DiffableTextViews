@@ -203,7 +203,8 @@ extension Layout {
     // MARK: Preferred
     //=------------------------------------------------------------------------=
     
-    @inlinable func caret(start: Layout.Index, preference: Direction, momentum: Direction?) -> Layout.Index {
+    @inlinable func caret(from start: Layout.Index, towards direction: Direction?,
+    preferring preference: Direction) -> Layout.Index {
         //=--------------------------------------=
         // MARK: Anchor
         //=--------------------------------------=
@@ -219,17 +220,17 @@ extension Layout {
         //=--------------------------------------=
         // MARK: Pick A Direction
         //=--------------------------------------=
-        let direction = momentum ?? preference
+        let direction = direction ?? preference
         //=--------------------------------------=
         // MARK: Try In This Direction
         //=--------------------------------------=
-        if let position = caret(start: start, direction: direction, through: direction != preference) {
+        if let position = caret(from: start, towards: direction, through: direction != preference) {
             return position
         }
         //=--------------------------------------=
         // MARK: Try In The Other Direction
         //=--------------------------------------=
-        if let position = caret(start: start, direction: direction.reversed(), through: false) {
+        if let position = caret(from: start, towards: direction.reversed(), through: false) {
             return position
         }
         //=--------------------------------------=
@@ -242,7 +243,7 @@ extension Layout {
     // MARK: Direction
     //=--------------------------------------------------------------------=
     
-    @inlinable func caret(start: Index, direction: Direction, through: Bool) -> Index? {
+    @inlinable func caret(from start: Index, towards direction: Direction, through: Bool) -> Index? {
         switch (direction, through) {
         case (.forwards,  false): return caret(from: start, forwardsTo:       nonpassthrough)
         case (.forwards,   true): return caret(from: start, forwardsThrough:  nonpassthrough)
