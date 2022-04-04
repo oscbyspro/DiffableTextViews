@@ -234,9 +234,9 @@ extension Layout {
             return position
         }
         //=--------------------------------------=
-        // MARK: Return Layout Start Index
+        // MARK: Return Instance Start Index
         //=--------------------------------------=
-        return startIndex
+        return self.startIndex
     }
     
     //=--------------------------------------------------------------------=
