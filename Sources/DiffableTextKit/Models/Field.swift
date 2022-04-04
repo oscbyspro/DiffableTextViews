@@ -65,13 +65,27 @@ extension Field {
     //=------------------------------------------------------------------------=
     // MARK: Indices
     //=------------------------------------------------------------------------=
-    
-    @inlinable func indices(at destination: Range<Position>) -> Range<Layout.Index> {
-        layout.indices(start: selection, destination: destination)
-    }
-    
+        
     @inlinable public func indices(at destination: NSRange) -> Range<Layout.Index> {
         indices(at: Position(destination.lowerBound) ..< Position(destination.upperBound))
+    }
+    
+    @inlinable func indices(at destination: Range<Position>) -> Range<Layout.Index> {
+        //=--------------------------------------=
+        // MARK: Single
+        //=--------------------------------------=
+        let upperBound = layout.index(at: destination.upperBound, start: selection.upperBound)
+        var lowerBound = upperBound
+        //=--------------------------------------=
+        // MARK: Double
+        //=--------------------------------------=
+        if !destination.isEmpty {
+            lowerBound = layout.index(at: destination.lowerBound, start: selection.lowerBound)
+        }
+        //=--------------------------------------=
+        // MARK: Return
+        //=--------------------------------------=
+        return lowerBound ..< upperBound
     }
 }
 
@@ -107,13 +121,15 @@ extension Field {
         //=--------------------------------------=
         // MARK: Single
         //=--------------------------------------=
-        let upperBound = layout.preferredCaret(selection.upperBound, preference: .backwards, momentum: momentum.upperBound)
+        let upperBound = layout.caret(start: selection.upperBound,
+            preference: .backwards, momentum: momentum.upperBound)
         var lowerBound = upperBound
         //=--------------------------------------=
         // MARK: Double
         //=--------------------------------------=
         if !selection.isEmpty, upperBound != layout.startIndex {
-            lowerBound = layout.preferredCaret(selection.lowerBound, preference:  .forwards, momentum: momentum.lowerBound)
+            lowerBound = layout.caret(start: selection.lowerBound,
+            preference:  .forwards, momentum: momentum.lowerBound)
             lowerBound = min(lowerBound, upperBound)
         }
         //=--------------------------------------=
@@ -138,13 +154,15 @@ extension Field {
         //=--------------------------------------=
         // MARK: Single
         //=--------------------------------------=
-        let upperBound = Mismatches.suffix(past: self.layout[selection.upperBound...], next: layout).next
+        let upperBound = Mismatches.suffix(next: layout,
+        prev: self.layout[selection.upperBound...]).next
         var lowerBound = upperBound
         //=--------------------------------------=
         // MARK: Double
         //=--------------------------------------=
         if !selection.isEmpty {
-            lowerBound = Mismatches.prefix(past: self.layout[..<selection.lowerBound], next: layout).next
+            lowerBound = Mismatches.prefix(next: layout,
+            prev: self.layout[..<selection.lowerBound]).next
             lowerBound = min(lowerBound, upperBound)
         }
         //=--------------------------------------=

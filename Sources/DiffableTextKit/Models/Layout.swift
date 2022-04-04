@@ -142,17 +142,23 @@ public struct Layout<Scheme: DiffableTextKit.Scheme>: BidirectionalCollection {
 extension Layout {
     
     //=------------------------------------------------------------------------=
-    // MARK: Snapshot
+    // MARK: Subindex
     //=------------------------------------------------------------------------=
     
     /// Should be faster than iterating considering that UTF16 characters size count is O(1).
-    @inlinable func index(_ destination: Snapshot.Index) -> Index {
-        Index(destination, at: .end(of: snapshot.characters[..<destination.character]))
+    @inlinable func index(of subindex: Snapshot.Index) -> Index {
+        Index(subindex, at: .end(of: snapshot.characters[..<subindex.character]))
     }
     
-    /// Should be faster than iterating considering that UTF16 characters size count is O(1).
-    @inlinable func indices(_ destination: Snapshot.Index) -> Range<Index> {
-        let position = index(destination); return position ..< position
+    //=------------------------------------------------------------------------=
+    // MARK: Position
+    //=------------------------------------------------------------------------=
+    
+    @inlinable func index(at position: Position, start: Index) -> Index {
+        switch start.position <= position {
+        case  true: return index(after:  start, while: { $0.position < position })
+        case false: return index(before: start, while: { $0.position > position })
+        }
     }
 }
 
@@ -161,6 +167,14 @@ extension Layout {
 //=----------------------------------------------------------------------------=
 
 extension Layout {
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Direction
+    //=------------------------------------------------------------------------=
+    
+    @inlinable func peek(_ position: Index, direction: Direction) -> Index? {
+        direction == .forwards ? peek(ahead: position) : peek(behind: position)
+    }
     
     //=------------------------------------------------------------------------=
     // MARK: Forwards
@@ -177,126 +191,24 @@ extension Layout {
     @inlinable func peek(behind position: Index) -> Index? {
         position != startIndex ? index(before: position) : nil
     }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Direction
-    //=------------------------------------------------------------------------=
-    
-    @inlinable func peek(_ position: Index, direction: Direction) -> Index? {
-        direction == .forwards ? peek(ahead: position) : peek(behind: position)
-    }
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: + Position
+// MARK: + Caret
 //=----------------------------------------------------------------------------=
 
 extension Layout {
     
     //=------------------------------------------------------------------------=
-    // MARK: Single
+    // MARK: Preferred
     //=------------------------------------------------------------------------=
     
-    @inlinable func index(start: Index, destination: Position) -> Index {
-        switch start.position <= destination {
-        case  true: return index(after:  start, while: { $0.position < destination })
-        case false: return index(before: start, while: { $0.position > destination })
-        }
-    }
-    
-    //=--------------------------------------------------------------------=
-    // MARK: Double
-    //=--------------------------------------------------------------------=
-
-    @inlinable func indices(start: Range<Index>, destination: Range<Position>) -> Range<Index> {
-        let upperBound = index(start: start.upperBound, destination: destination.upperBound)
-        if destination.isEmpty { return upperBound ..< upperBound } // unary destination position
-        return index(start: start.lowerBound, destination: destination.lowerBound) ..< upperBound
-    }
-}
-
-//=----------------------------------------------------------------------------=
-// MARK: + Search
-//=----------------------------------------------------------------------------=
-
-extension Layout {
-
-    //=------------------------------------------------------------------------=
-    // MARK: Forwards
-    //=------------------------------------------------------------------------=
-    
-    @inlinable func firstCaretForwardsTo(from start: Index, where predicate: (Index) -> Bool) -> Index? {
-        var position = start
-        //=--------------------------------------=
-        // MARK: Search
-        //=--------------------------------------=
-        while position != endIndex {
-            if predicate(position) { return position }
-            formIndex(after: &position)
-        }
-        //=--------------------------------------=
-        // MARK: Failure == None
-        //=--------------------------------------=
-        return nil
-    }
-    
-    @inlinable func firstCaretForwardsThrough(from start: Index, where predicate: (Index) -> Bool) -> Index? {
-        firstCaretForwardsTo(from: start, where: predicate).map(index(after:))
-    }
-    
-    //=--------------------------------------------------------------------=
-    // MARK: Backwards
-    //=--------------------------------------------------------------------=
-    
-    @inlinable func firstCaretBackwardsTo(from start: Index, where predicate: (Index) -> Bool) -> Index? {
-        firstCaretBackwardsThrough(from: start, where: predicate).map(index(after:))
-    }
-    
-    @inlinable func firstCaretBackwardsThrough(from start: Index, where predicate: (Index) -> Bool) -> Index? {
-        var position = start
-        //=--------------------------------------=
-        // MARK: Search
-        //=--------------------------------------=
-        while position != startIndex {
-            formIndex(before: &position)
-            if predicate(position) { return position }
-        }
-        //=--------------------------------------=
-        // MARK: Failure == None
-        //=--------------------------------------=
-        return nil
-    }
-    
-    //=--------------------------------------------------------------------=
-    // MARK: Direction
-    //=--------------------------------------------------------------------=
-    
-    @inlinable func firstCaret(_ start: Index, direction: Direction, through: Bool) -> Index? {
-        switch (direction, through) {
-        case (.forwards,  false): return firstCaretForwardsTo(from:       start, where: nonpassthrough)
-        case (.forwards,   true): return firstCaretForwardsThrough(from:  start, where: nonpassthrough)
-        case (.backwards, false): return firstCaretBackwardsTo(from:      start, where: nonpassthrough)
-        case (.backwards,  true): return firstCaretBackwardsThrough(from: start, where: nonpassthrough)
-        }
-    }
-}
-
-//=----------------------------------------------------------------------------=
-// MARK: + Preference
-//=----------------------------------------------------------------------------=
-
-extension Layout {
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Caret
-    //=------------------------------------------------------------------------=
-    
-    @inlinable func preferredCaret(_ start: Layout.Index, preference: Direction, momentum: Direction?) -> Layout.Index {
+    @inlinable func caret(start: Layout.Index, preference: Direction, momentum: Direction?) -> Layout.Index {
         //=--------------------------------------=
         // MARK: Anchor
         //=--------------------------------------=
         if let anchorIndex = snapshot.anchorIndex {
-            return index(anchorIndex)
+            return index(of: anchorIndex)
         }
         //=--------------------------------------=
         // MARK: Inspect The Initial Position
@@ -311,18 +223,77 @@ extension Layout {
         //=--------------------------------------=
         // MARK: Try In This Direction
         //=--------------------------------------=
-        if let position = firstCaret(start, direction: direction, through: direction != preference) {
+        if let position = caret(start: start, direction: direction, through: direction != preference) {
             return position
         }
         //=--------------------------------------=
         // MARK: Try In The Other Direction
         //=--------------------------------------=
-        if let position = firstCaret(start, direction: direction.reversed(), through: false) {
+        if let position = caret(start: start, direction: direction.reversed(), through: false) {
             return position
         }
         //=--------------------------------------=
         // MARK: Return Layout Start Index
         //=--------------------------------------=
         return startIndex
+    }
+    
+    //=--------------------------------------------------------------------=
+    // MARK: Direction
+    //=--------------------------------------------------------------------=
+    
+    @inlinable func caret(start: Index, direction: Direction, through: Bool) -> Index? {
+        switch (direction, through) {
+        case (.forwards,  false): return caret(from: start, forwardsTo:       nonpassthrough)
+        case (.forwards,   true): return caret(from: start, forwardsThrough:  nonpassthrough)
+        case (.backwards, false): return caret(from: start, backwardsTo:      nonpassthrough)
+        case (.backwards,  true): return caret(from: start, backwardsThrough: nonpassthrough)
+        }
+    }
+
+    //=------------------------------------------------------------------------=
+    // MARK: Forwards
+    //=------------------------------------------------------------------------=
+    
+    @inlinable func caret(from start: Index, forwardsTo predicate: (Index) -> Bool) -> Index? {
+        var position = start
+        //=--------------------------------------=
+        // MARK: Search
+        //=--------------------------------------=
+        while position != endIndex {
+            if predicate(position) { return position }
+            formIndex(after: &position)
+        }
+        //=--------------------------------------=
+        // MARK: Failure == None
+        //=--------------------------------------=
+        return nil
+    }
+    
+    @inlinable func caret(from start: Index, forwardsThrough predicate: (Index) -> Bool) -> Index? {
+        caret(from: start, forwardsTo: predicate).map(index(after:))
+    }
+    
+    //=--------------------------------------------------------------------=
+    // MARK: Backwards
+    //=--------------------------------------------------------------------=
+    
+    @inlinable func caret(from start: Index, backwardsTo predicate: (Index) -> Bool) -> Index? {
+        caret(from: start, backwardsThrough: predicate).map(index(after:))
+    }
+    
+    @inlinable func caret(from start: Index, backwardsThrough predicate: (Index) -> Bool) -> Index? {
+        var position = start
+        //=--------------------------------------=
+        // MARK: Search
+        //=--------------------------------------=
+        while position != startIndex {
+            formIndex(before: &position)
+            if predicate(position) { return position }
+        }
+        //=--------------------------------------=
+        // MARK: Failure == None
+        //=--------------------------------------=
+        return nil
     }
 }

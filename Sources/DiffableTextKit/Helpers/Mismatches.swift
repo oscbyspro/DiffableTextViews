@@ -12,43 +12,43 @@
 //*============================================================================*
 
 /// A namespace for the algorithm that detects changes between snapshots.
-@usableFromInline enum Mismatches<Past, Next> where
-Past: BidirectionalCollection, Past.Element == Symbol,
+@usableFromInline enum Mismatches<Prev, Next> where
+Prev: BidirectionalCollection, Prev.Element == Symbol,
 Next: BidirectionalCollection, Next.Element == Symbol {
     
     //=------------------------------------------------------------------------=
     // MARK: Aliases
     //=------------------------------------------------------------------------=
     
-    @usableFromInline typealias Indices = (past: Past.Index, next: Next.Index)
-    @usableFromInline typealias Reversed = Mismatches<ReversedCollection<Past>, ReversedCollection<Next>>
+    @usableFromInline typealias Indices = (prev: Prev.Index, next: Next.Index)
+    @usableFromInline typealias Reversed = Mismatches<ReversedCollection<Prev>, ReversedCollection<Next>>
 
     //=------------------------------------------------------------------------=
     // MARK: Prefix
     //=------------------------------------------------------------------------=
     
     /// Returns caret positions before the first irreconcilable mismatch forwards.
-    @inlinable static func prefix(past: Past, next: Next) -> Indices {
-        var pastIndex = past.startIndex
+    @inlinable static func prefix(prev: Prev, next: Next) -> Indices {
+        var prevIndex = prev.startIndex
         var nextIndex = next.startIndex
         //=-------------------------------------=
         // MARK: Loop
         //=-------------------------------------=
-        while pastIndex != past.endIndex,
+        while prevIndex != prev.endIndex,
               nextIndex != next.endIndex {
             //=---------------------------------=
             // MARK: Elements
             //=---------------------------------=
-            let pastElement = past[pastIndex]
+            let pastElement = prev[prevIndex]
             let nextElement = next[nextIndex]
             //=---------------------------------=
             // MARK: Indices
             //=---------------------------------=
             if pastElement.character == nextElement.character {
-                past.formIndex(after: &pastIndex)
+                prev.formIndex(after: &prevIndex)
                 next.formIndex(after: &nextIndex)
             } else if pastElement.contains(.removable) {
-                past.formIndex(after: &pastIndex)
+                prev.formIndex(after: &prevIndex)
             } else if nextElement.contains(.insertable) {
                 next.formIndex(after: &nextIndex)
             } else {
@@ -58,7 +58,11 @@ Next: BidirectionalCollection, Next.Element == Symbol {
         //=--------------------------------------=
         // MARK: Return
         //=--------------------------------------=
-        return (pastIndex, nextIndex)
+        return (prevIndex, nextIndex)
+    }
+    
+    @inlinable static func prefix(next: Next, prev: Prev) -> Indices {
+        prefix(prev: prev, next: next)
     }
     
     //=------------------------------------------------------------------------=
@@ -66,9 +70,13 @@ Next: BidirectionalCollection, Next.Element == Symbol {
     //=------------------------------------------------------------------------=
     
     /// Returns caret positions before the first irreconcilable mismatch backwards.
-    @inlinable static func suffix(past: Past, next: Next) -> Indices {
+    @inlinable static func suffix(prev: Prev, next: Next) -> Indices {
         let reversed = Reversed.prefix(
-        past: past.reversed(), next: next.reversed())
-        return (reversed.past.base, reversed.next.base)
+        prev: prev.reversed(), next: next.reversed())
+        return (reversed.prev.base, reversed.next.base)
+    }
+    
+    @inlinable static func suffix(next: Next, prev: Prev) -> Indices {
+        suffix(prev: prev, next: next)
     }
 }
