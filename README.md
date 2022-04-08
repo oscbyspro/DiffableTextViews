@@ -175,21 +175,9 @@ struct DiffableTextFieldXPhone: View {
 
 ## [WrapperTextStyle(s)](Notes/WrapperTextStyle.md) ([Source](Sources/DiffableTextStylesXWrapper/), [Tests](Tests/DiffableTextStylesXWrapperTests))
 
-Modifies the behavior of its content.
+Decorative styles that modify the behavior of their content.
 
-## Constant 
-
-Prevents style transformations.
-
-```swift
-style.constant()
-```
-
-## Equals
-
-Binds the style's equality to a proxy value.
-
-```swift
-style.equals(())
-style.equals(value)
-```
+| Style | Description | Example |
+|-------|-------------|---------|
+| Constant | Prevents style transformations | .contant() |
+| Equals | Binds the style's equality to a proxy value | .equals(value) |

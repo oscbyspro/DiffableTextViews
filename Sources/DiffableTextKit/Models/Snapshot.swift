@@ -11,7 +11,7 @@
 // MARK: * Snapshot
 //*============================================================================*
 
-/// A collection of characters and attributes.
+/// A collection of characters, attributes and an optional anchor.
 public struct Snapshot: BidirectionalCollection, RangeReplaceableCollection {
     
     //=------------------------------------------------------------------------=

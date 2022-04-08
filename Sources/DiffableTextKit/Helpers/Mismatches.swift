@@ -74,11 +74,7 @@ Next: BidirectionalCollection, Next.Element == Symbol {
     
     @inlinable static func suffix(prev: Prev, next: Next) -> Indices {
         let reversed = Reversed.prefix(
-        prev: prev.reversed(),
-        next: next.reversed())
-        //=--------------------------------------=
-        // MARK: Return
-        //=--------------------------------------=
+        prev: prev.reversed(), next: next.reversed())
         return (reversed.prev.base, reversed.next.base)
     }
 }

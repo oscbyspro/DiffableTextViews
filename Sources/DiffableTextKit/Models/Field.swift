@@ -116,7 +116,7 @@ extension Field {
         // MARK: Single
         //=--------------------------------------=
         let upperBound = layout.caret(from: selection.upperBound,
-            towards: momentum.upperBound, preferring: .backwards)
+        /**/towards: momentum.upperBound, preferring: .backwards)
         var lowerBound = upperBound
         //=--------------------------------------=
         // MARK: Double

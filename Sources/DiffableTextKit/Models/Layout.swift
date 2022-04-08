@@ -224,13 +224,14 @@ extension Layout {
         //=--------------------------------------=
         // MARK: Search In This Direction
         //=--------------------------------------=
-        if let position = caret(from: start, towards: direction, through: direction != preference) {
+        if let position = caret(from: start, towards: direction,
+        jumping: direction == preference ? Jump.to : .through) {
             return position
         }
         //=--------------------------------------=
         // MARK: Search In The Opposite Direction
         //=--------------------------------------=
-        if let position = caret(from: start, towards: direction.reversed(), through: false) {
+        if let position = caret(from: start, towards: direction.reversed(), jumping: Jump.to) {
             return position
         }
         //=--------------------------------------=
@@ -243,12 +244,12 @@ extension Layout {
     // MARK: Direction
     //=--------------------------------------------------------------------=
     
-    @inlinable func caret(from start: Index, towards direction: Direction, through: Bool) -> Index? {
-        switch (direction, through) {
-        case (.forwards,  false): return caret(from: start, forwardsTo:       nonpassthrough)
-        case (.forwards,   true): return caret(from: start, forwardsThrough:  nonpassthrough)
-        case (.backwards, false): return caret(from: start, backwardsTo:      nonpassthrough)
-        case (.backwards,  true): return caret(from: start, backwardsThrough: nonpassthrough)
+    @inlinable func caret(from start: Index, towards direction: Direction, jumping jump: Jump) -> Index? {
+        switch (direction, jump) {
+        case (.forwards,  .to     ): return caret(from: start, forwardsTo:       nonpassthrough)
+        case (.forwards,  .through): return caret(from: start, forwardsThrough:  nonpassthrough)
+        case (.backwards, .to     ): return caret(from: start, backwardsTo:      nonpassthrough)
+        case (.backwards, .through): return caret(from: start, backwardsThrough: nonpassthrough)
         }
     }
 
