@@ -11,12 +11,17 @@
 // MARK: * Layout
 //*============================================================================*
 
-/// The text layout, as described by a snapshot and its attributes.
+/// The text's layout, as described by a snapshot and its attributes.
+///
+/// It may be used to obtain caret positions.
+/// A caret shares its index with the character that appears behind it.
+/// This makes forwards and backwards caret searches asymmetric.
 ///
 /// ```
 /// |$|1|2|3|,|4|5|6|.|7|8|9|_|U|S|D|~
 /// |x|o|o|o|x|o|o|o|o|o|o|o|x|x|x|x|~
 /// ```
+///
 public struct Layout<Scheme: DiffableTextKit.Scheme>: BidirectionalCollection {
     @usableFromInline typealias Position = DiffableTextKit.Position<Scheme>
     
@@ -189,30 +194,34 @@ extension Layout {
         //=--------------------------------------=
         // MARK: Anchor
         //=--------------------------------------=
-        if let anchor = snapshot.anchor.map(index) {
-        return anchor }
+        if let anchor = snapshot.anchor.map(
+        index) { return anchor }
         //=--------------------------------------=
         // MARK: Inspect The Initial Position
         //=--------------------------------------=
         if peek(from: position, towards: preference).map(
         nonpassthrough) == true { return position }
         //=--------------------------------------=
-        // MARK: Pick A Direction
+        // MARK: Direction
         //=--------------------------------------=
         let direction = direction ?? preference
         //=--------------------------------------=
-        // MARK: Search In This Direction
+        // MARK: Search In The Direction
         //=--------------------------------------=
         if let caret = caret(from: position,
         towards: direction,
         jumping: direction == preference ? .to : .through,
         targeting: nonpassthrough) { return caret }
         //=--------------------------------------=
-        // MARK: Search In The Opposite Direction
+        // MARK: Search In The Other Direction
         //=--------------------------------------=
+        // NOTE: direction.reversed() != preference uses Jump.to.
+        // This is because there were no nonpassthrough positions
+        // in the preferred direction and the correct behavior is
+        // therefore: jump to the nearest nonpassthrough position
         if let caret = caret(from: position,
         towards: direction.reversed(),
-        jumping: Jump.to, // use Jump.to on each direction
+        jumping: Jump.to, // see the above comment
         targeting: nonpassthrough) { return caret }
         //=--------------------------------------=
         // MARK: Return Layout Start Index
@@ -256,6 +265,9 @@ extension Layout {
     
     @inlinable func caret(from position: Index,
     forwardsThrough target: (Index) -> Bool) -> Index? {
+        //=--------------------------------------=
+        // MARK: One After Caret Forwards To
+        //=--------------------------------------=
         caret(from: position, forwardsTo: target).map(index(after:))
     }
     
@@ -265,6 +277,9 @@ extension Layout {
     
     @inlinable func caret(from position: Index,
     backwardsTo target: (Index) -> Bool) -> Index? {
+        //=--------------------------------------=
+        // MARK: One After Caret Backwards Through
+        //=--------------------------------------=
         caret(from: position, backwardsThrough: target).map(index(after:))
     }
     
