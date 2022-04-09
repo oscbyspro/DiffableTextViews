@@ -112,7 +112,7 @@ extension PatternTextStyle {
         } none: {
             commit, queue in
             commit.snapshot.append(contentsOf: Snapshot(queue, as: .phantom))
-            commit.snapshot.anchor()
+            commit.snapshot.anchorAtEndIndex()
         } done: {
             commit, queue, _ in
             //=----------------------------------=

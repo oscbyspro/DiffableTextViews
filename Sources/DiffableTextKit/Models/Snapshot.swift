@@ -20,7 +20,7 @@ public struct Snapshot: BidirectionalCollection, RangeReplaceableCollection {
         
     @usableFromInline var _characters: String
     @usableFromInline var _attributes: [Attribute]
-    @usableFromInline var _anchorIndex: Index?
+    @usableFromInline var _anchor: Index?
 
     //=------------------------------------------------------------------------=
     // MARK: Initializers
@@ -66,8 +66,8 @@ public struct Snapshot: BidirectionalCollection, RangeReplaceableCollection {
         _attributes
     }
     
-    @inlinable public var anchorIndex: Index? {
-        _anchorIndex
+    @inlinable public var anchor: Index? {
+        _anchor
     }
     
     //=------------------------------------------------------------------------=
@@ -187,14 +187,12 @@ public extension Snapshot {
     // MARK: Anchor
     //=------------------------------------------------------------------------=
     
-    /// Sets the anchor to the endIndex.
-    @inlinable mutating func anchor() {
-        self._anchorIndex = endIndex
+    @inlinable mutating func anchorAtEndIndex() {
+        self._anchor = endIndex
     }
     
-    /// Sets the anchor to the position.
-    @inlinable mutating func anchor(_ position: Index?) {
-        self._anchorIndex = position
+    @inlinable mutating func anchor(at position: Index?) {
+        self._anchor = position
     }
     
     //=------------------------------------------------------------------------=

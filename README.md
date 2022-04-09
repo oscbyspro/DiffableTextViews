@@ -177,7 +177,7 @@ struct DiffableTextFieldXPhone: View {
 
 Decorative styles that modify the behavior of their content.
 
-| Style | Description | Example |
+| Style | Description | Creation |
 |-------|-------------|---------|
-| Constant | Prevents style transformations | .contant() |
-| Equals | Binds the style's equality to a proxy value | .equals(value) |
+| Constant | Prevents style transformations | constant() |
+| Equals | Binds the style's equality to a proxy value | equals(\_:) |
