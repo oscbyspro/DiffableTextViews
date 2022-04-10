@@ -35,20 +35,20 @@ Needle: BidirectionalCollection, Needle.Element == Character {
         // MARK: Haystack
         //=--------------------------------------=
         for start in haystack.indices {
-            var position = start; var found = true
+            var index = start; var found = true
             //=----------------------------------=
             // MARK: Needle
             //=----------------------------------=
             for character in needle {
-                guard position != haystack.endIndex,
-                character == haystack[position].character
+                guard index != haystack.endIndex,
+                character == haystack[index].character
                 else { found = false; break }
-                haystack.formIndex(after: &position)
+                haystack.formIndex(after: &index)
             }
             //=----------------------------------=
             // MARK: Success
             //=----------------------------------=
-            if found { return start ..< position }
+            if found { return start ..< index }
         }
         //=--------------------------------------=
         // MARK: Failure

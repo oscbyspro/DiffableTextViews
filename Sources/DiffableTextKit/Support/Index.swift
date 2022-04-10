@@ -18,20 +18,20 @@ public extension Collection {
     //=------------------------------------------------------------------------=
 
     /// Increments the index while the predicate is true, up to endIndex.
-    @inlinable func index(after position: Index,
+    @inlinable func index(after index: Index,
     while predicate: (Index) throws -> Bool) rethrows -> Index {
-        var position = position
+        var index = index
         //=--------------------------------------=
         // MARK: Search
         //=--------------------------------------=
-        while position != endIndex {
-            if try !predicate(position) { return position }
-            formIndex(after: &position)
+        while index != endIndex {
+            if try !predicate(index) { return index }
+            formIndex(after: &index)
         }
         //=--------------------------------------=
         // MARK: Return End Index
         //=--------------------------------------=
-        return position
+        return index
     }
 }
 
@@ -46,19 +46,19 @@ public extension BidirectionalCollection {
     //=------------------------------------------------------------------------=
 
     /// Decrements the index while the predicate is true, down to startIndex.
-    @inlinable func index(before position: Index,
+    @inlinable func index(before index: Index,
     while predicate: (Index) throws -> Bool) rethrows -> Index {
-        var position = position
+        var index = index
         //=--------------------------------------=
         // MARK: Search
         //=--------------------------------------=
-        while position != startIndex {
-            if try !predicate( position) { return position }
-            formIndex(before: &position)
+        while index != startIndex {
+            if try !predicate( index) { return index }
+            formIndex(before: &index)
         }
         //=--------------------------------------=
         // MARK: Return Start Index
         //=--------------------------------------=
-        return position        
+        return index
     }
 }

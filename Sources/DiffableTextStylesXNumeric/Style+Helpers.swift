@@ -84,8 +84,8 @@ extension NumericTextStyle {
     /// This method exists because Apple's format styles always interpret zero as having a positive sign.
     @inlinable func fix(_ sign: Sign, for value: Value, in characters: inout String) {
         guard sign == .negative, value == .zero else { return }
-        guard let position = characters.firstIndex(of: lexicon.signs[sign.toggled()]) else { return }
-        characters.replaceSubrange(position...position, with: String(lexicon.signs[sign]))
+        guard let index = characters.firstIndex(of: lexicon.signs[sign.toggled()]) else { return }
+        characters.replaceSubrange(index...index, with: String(lexicon.signs[sign]))
     }
 }
 

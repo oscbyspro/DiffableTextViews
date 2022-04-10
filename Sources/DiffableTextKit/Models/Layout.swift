@@ -11,14 +11,14 @@
 // MARK: * Layout
 //*============================================================================*
 
-/// The text's layout, used to obtain caret positions.
+/// The text's layout, used to obtain carets.
 ///
 /// ```
 /// |$|1|2|3|,|4|5|6|.|7|8|9|_|U|S|D|~
 /// |x|o|o|o|x|o|o|o|o|o|o|o|x|x|x|x|~
 /// ```
 ///
-/// A caret shares its index with the character that appears behind it.
+/// A caret shares index with the character that appears behind it.
 /// This makes forwards traversal and backwards traversal asymmetric.
 ///
 public struct Layout<Scheme: DiffableTextKit.Scheme>: BidirectionalCollection {
@@ -55,8 +55,8 @@ public struct Layout<Scheme: DiffableTextKit.Scheme>: BidirectionalCollection {
     // MARK: Element
     //=------------------------------------------------------------------------=
     
-    @inlinable public subscript(position: Index) -> Symbol {
-        snapshot[position.subindex]
+    @inlinable public subscript(index: Index) -> Symbol {
+        snapshot[index.subindex]
     }
     
     //=------------------------------------------------------------------------=
@@ -145,24 +145,24 @@ extension Layout {
     // MARK: Attributes
     //=------------------------------------------------------------------------=
  
-    @inlinable func nonpassthrough(_ position: Index) -> Bool {
-        !snapshot.attributes[position.attribute].contains(.passthrough)
+    @inlinable func nonpassthrough(at index: Index) -> Bool {
+        !snapshot.attributes[index.attribute].contains(.passthrough)
     }
     
     //=------------------------------------------------------------------------=
     // MARK: Peek
     //=------------------------------------------------------------------------=
 
-    @inlinable func peek(from position: Index, towards direction: Direction) -> Index? {
-        direction == .forwards ? peek(ahead: position) : peek(behind: position)
+    @inlinable func peek(from index: Index, towards direction: Direction) -> Index? {
+        direction == .forwards ? peek(ahead: index) : peek(behind: index)
     }
     
-    @inlinable func peek(ahead position: Index) -> Index? {
-        position != endIndex ? position : nil
+    @inlinable func peek(ahead index: Index) -> Index? {
+        index != endIndex ? index : nil
     }
 
-    @inlinable func peek(behind position: Index) -> Index? {
-        position != startIndex ? index(before: position) : nil
+    @inlinable func peek(behind index: Index) -> Index? {
+        index != startIndex ? self.index(before: index) : nil
     }
     
     //=------------------------------------------------------------------------=
@@ -173,10 +173,10 @@ extension Layout {
         Index(subindex, at: .end(of: snapshot.characters[..<subindex.character]))
     }
 
-    @inlinable func index(at position: Position, from start: Index) -> Index {
-        switch start.position <= position {
-        case  true: return index(after:  start, while: { $0.position < position })
-        case false: return index(before: start, while: { $0.position > position })
+    @inlinable func index(at position: Position, from index: Index) -> Index {
+        switch index.position <= position {
+        case  true: return self.index(after:  index) { $0.position < position }
+        case false: return self.index(before: index) { $0.position > position }
         }
     }
 }
@@ -191,18 +191,18 @@ extension Layout {
     // MARK: Preferred
     //=------------------------------------------------------------------------=
     
-    @inlinable func caret(from position: Index, towards direction: Direction?,
+    @inlinable func caret(from index: Index, towards direction: Direction?,
     preferring preference: Direction) -> Index {
         //=--------------------------------------=
         // MARK: Anchor
         //=--------------------------------------=
         if let anchor = snapshot.anchor.map(
-        index) { return anchor }
+        self.index(of:)) { return anchor }
         //=--------------------------------------=
-        // MARK: Inspect The Initial Position
+        // MARK: Inspect Initial Index
         //=--------------------------------------=
-        if peek(from: position, towards: preference).map(
-        nonpassthrough) == true { return position }
+        if peek(from: index, towards: preference).map(
+        nonpassthrough) == true { return index }
         //=--------------------------------------=
         // MARK: Direction
         //=--------------------------------------=
@@ -210,20 +210,16 @@ extension Layout {
         //=--------------------------------------=
         // MARK: Search In The Direction
         //=--------------------------------------=
-        if let caret = caret(from: position,
+        if let caret = caret(from: index,
         towards: direction,
         jumping: direction == preference ? .to : .through,
         targeting: nonpassthrough) { return caret }
         //=--------------------------------------=
         // MARK: Search In The Other Direction
         //=--------------------------------------=
-        // NOTE: direction.reversed() != preference uses Jump.to.
-        // This is because there were no nonpassthrough positions
-        // in the preferred direction and the correct behavior is
-        // therefore: jump to the nearest nonpassthrough position
-        if let caret = caret(from: position,
+        if let caret = caret(from: index,
         towards: direction.reversed(),
-        jumping: Jump.to, // read the above comment
+        jumping: Jump.to, // use Jump.to on each direction
         targeting: nonpassthrough) { return caret }
         //=--------------------------------------=
         // MARK: Return Layout Start Index
@@ -235,29 +231,29 @@ extension Layout {
     // MARK: Forwards / Backwards / To / Through
     //=--------------------------------------------------------------------=
     
-    @inlinable func caret(from position: Index, towards direction: Direction,
+    @inlinable func caret(from index: Index, towards direction: Direction,
     jumping distance: Jump, targeting target: Target) -> Index? {
         switch (direction, distance) {
-        case (.forwards,  .to     ): return caret(from: position, forwardsTo:       target)
-        case (.forwards,  .through): return caret(from: position, forwardsThrough:  target)
-        case (.backwards, .to     ): return caret(from: position, backwardsTo:      target)
-        case (.backwards, .through): return caret(from: position, backwardsThrough: target)
+        case (.forwards,  .to     ): return caret(from: index, forwardsTo:       target)
+        case (.forwards,  .through): return caret(from: index, forwardsThrough:  target)
+        case (.backwards, .to     ): return caret(from: index, backwardsTo:      target)
+        case (.backwards, .through): return caret(from: index, backwardsThrough: target)
         }
     }
 
-    @inlinable func caret(from position: Index, forwardsTo target: Target) -> Index? {
-        indices[position...].first(where: target)
+    @inlinable func caret(from index: Index, forwardsTo target: Target) -> Index? {
+        indices[index...].first(where: target)
     }
     
-    @inlinable func caret(from position: Index, forwardsThrough target: Target) -> Index? {
-        caret(from: position, forwardsTo: target).map(index(after:))
+    @inlinable func caret(from index: Index, forwardsThrough target: Target) -> Index? {
+        caret(from: index, forwardsTo: target).map(index(after:))
     }
 
-    @inlinable func caret(from position: Index, backwardsTo target: Target) -> Index? {
-        caret(from: position, backwardsThrough: target).map(index(after:))
+    @inlinable func caret(from index: Index, backwardsTo target: Target) -> Index? {
+        caret(from: index, backwardsThrough: target).map(index(after:))
     }
     
-    @inlinable func caret(from position: Index, backwardsThrough target: Target) -> Index? {
-        indices[..<position].last(where: target)
+    @inlinable func caret(from index: Index, backwardsThrough target: Target) -> Index? {
+        indices[..<index].last(where: target)
     }
 }

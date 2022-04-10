@@ -99,9 +99,9 @@ public struct Snapshot: BidirectionalCollection, RangeReplaceableCollection {
     // MARK: Element
     //=------------------------------------------------------------------------=
     
-    @inlinable public subscript(position: Index) -> Symbol {
-        Symbol(character: _characters[position.character],
-               attribute: _attributes[position.attribute])
+    @inlinable public subscript(index: Index) -> Symbol {
+        Symbol(character: _characters[index.character],
+               attribute: _attributes[index.attribute])
     }
     
     //=------------------------------------------------------------------------=
@@ -122,14 +122,14 @@ public struct Snapshot: BidirectionalCollection, RangeReplaceableCollection {
     // MARK: After / Before
     //=------------------------------------------------------------------------=
     
-    @inlinable public func index(after  position: Index) -> Index {
-        Index(_characters .index(after: position.character),
-              _attributes .index(after: position.attribute))
+    @inlinable public func index(after  index: Index) -> Index {
+        Index(_characters .index(after: index.character),
+              _attributes .index(after: index.attribute))
     }
     
-    @inlinable public func index(before  position: Index) -> Index {
-        Index(_characters .index(before: position.character),
-              _attributes .index(before: position.attribute))
+    @inlinable public func index(before  index: Index) -> Index {
+        Index(_characters .index(before: index.character),
+              _attributes .index(before: index.attribute))
     }
     
     //*========================================================================*
@@ -197,30 +197,30 @@ public extension Snapshot {
         self._anchor = endIndex
     }
     
-    @inlinable mutating func anchor(at position: Index?) {
-        self._anchor = position
+    @inlinable mutating func anchor(at index: Index?) {
+        self._anchor = index
     }
     
     //=------------------------------------------------------------------------=
     // MARK: Attributes
     //=------------------------------------------------------------------------=
     
-    @inlinable mutating func update(attributes position: Index,
+    @inlinable mutating func update(attributes index: Index,
     with transform: (inout Attribute) -> Void) {
-        transform(&_attributes[position.attribute])
+        transform(&_attributes[index.attribute])
     }
     
-    @inlinable mutating func update<S: Sequence>(attributes sequence: S,
+    @inlinable mutating func update<S: Sequence>(attributes indices: S,
     with transform: (inout Attribute) -> Void) where S.Element == Index {
-        for position in sequence {
-            transform(&_attributes[position.attribute])
+        for index in indices {
+            transform(&_attributes[index.attribute])
         }
     }
     
-    @inlinable mutating func update<R: RangeExpression>(attributes range: R,
+    @inlinable mutating func update<R: RangeExpression>(attributes indices: R,
     with transform: (inout Attribute) -> Void) where R.Bound == Index {
-        for position in indices[range.relative(to: self)] {
-            transform(&_attributes[position.attribute])
+        for index in self.indices[indices.relative(to: self)] {
+            transform(&_attributes[index.attribute])
         }
     }
     
@@ -229,14 +229,14 @@ public extension Snapshot {
     //=------------------------------------------------------------------------=
 
     @inlinable mutating func replaceSubrange<C: Collection>(
-    _ range: Range<Index>, with elements: C) where C.Element == Symbol {
+    _ indices: Range<Index>, with elements: C) where C.Element == Symbol {
         _characters.replaceSubrange(
-        range.lowerBound.character ..<
-        range.upperBound.character,
+        indices.lowerBound.character ..<
+        indices.upperBound.character,
         with: elements.lazy.map(\.character))
         _attributes.replaceSubrange(
-        range.lowerBound.attribute ..<
-        range.upperBound.attribute,
+        indices.lowerBound.attribute ..<
+        indices.upperBound.attribute,
         with: elements.lazy.map(\.attribute))
     }
     
@@ -251,19 +251,19 @@ public extension Snapshot {
         _attributes.append(contentsOf: elements.lazy.map(\.attribute))
     }
     
-    @inlinable mutating func insert(_ element: Element, at position: Index) {
-        _characters.insert(element.character, at: position.character)
-        _attributes.insert(element.attribute, at: position.attribute)
+    @inlinable mutating func insert(_ element: Element, at index: Index) {
+        _characters.insert(element.character, at: index.character)
+        _attributes.insert(element.attribute, at: index.attribute)
     }
     
     @inlinable mutating func insert<C: Collection>(
-    contentsOf elements: C, at position: Index) where C.Element == Symbol {
-        _characters.insert(contentsOf: elements.lazy.map(\.character), at: position.character)
-        _attributes.insert(contentsOf: elements.lazy.map(\.attribute), at: position.attribute)
+    contentsOf elements: C, at index: Index) where C.Element == Symbol {
+        _characters.insert(contentsOf: elements.lazy.map(\.character), at: index.character)
+        _attributes.insert(contentsOf: elements.lazy.map(\.attribute), at: index.attribute)
     }
     
-    @inlinable @discardableResult mutating func remove(at position: Index) -> Symbol {
-        Symbol(character: _characters.remove(at: position.character),
-               attribute: _attributes.remove(at: position.attribute))
+    @inlinable @discardableResult mutating func remove(at index: Index) -> Symbol {
+        Symbol(character: _characters.remove(at: index.character),
+               attribute: _attributes.remove(at: index.attribute))
     }
 }
