@@ -197,12 +197,12 @@ extension Layout {
         // MARK: Anchor
         //=--------------------------------------=
         if let anchor = snapshot.anchor.map(
-        self.index(of:)) { return anchor }
+        index(of:)) { return anchor }
         //=--------------------------------------=
         // MARK: Inspect Initial Index
         //=--------------------------------------=
         if peek(from: index, towards: preference).map(
-        nonpassthrough) == true { return index }
+        nonpassthrough(at:)) == true { return index }
         //=--------------------------------------=
         // MARK: Direction
         //=--------------------------------------=
@@ -213,14 +213,14 @@ extension Layout {
         if let caret = caret(from: index,
         towards: direction,
         jumping: direction == preference ? .to : .through,
-        targeting: nonpassthrough) { return caret }
+        targeting: nonpassthrough(at:)) { return caret }
         //=--------------------------------------=
         // MARK: Search In The Other Direction
         //=--------------------------------------=
         if let caret = caret(from: index,
         towards: direction.reversed(),
         jumping: Jump.to, // use Jump.to on each direction
-        targeting: nonpassthrough) { return caret }
+        targeting: nonpassthrough(at:)) { return caret }
         //=--------------------------------------=
         // MARK: Return Layout Start Index
         //=--------------------------------------=
