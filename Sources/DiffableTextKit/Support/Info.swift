@@ -33,19 +33,10 @@ public struct Info: CustomStringConvertible, Error {
     //=------------------------------------------------------------------------=
     
     @inlinable @inline(__always)
-    public init(description: @autoclosure () -> String) {
+    public init(_ description: @autoclosure () -> String) {
         #if DEBUG
         self.description = description()
         #endif
-    }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Initializers - Indirect
-    //=------------------------------------------------------------------------=
-    
-    @inlinable @inline(__always)
-    public init(_ components: @autoclosure () -> [Component]) {
-        self.init(description: components().map(\.content).joined(separator: " "))
     }
     
     //=------------------------------------------------------------------------=
@@ -57,15 +48,6 @@ public struct Info: CustomStringConvertible, Error {
         #if DEBUG
         Swift.print(description())
         #endif
-    }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Print - Indirect
-    //=------------------------------------------------------------------------=
-    
-    @inlinable @inline(__always)
-    public static func print(_ components: @autoclosure () -> [Component]) {
-        self.print(String(describing: Info(components())))
     }
     
     //*========================================================================*
@@ -84,7 +66,7 @@ public struct Info: CustomStringConvertible, Error {
         // MARK: Initializers
         //=--------------------------------------------------------------------=
         
-        @inlinable init(content: String) {
+        @inlinable init( _ content: String) {
             self.content = content
         }
         
@@ -97,30 +79,53 @@ public struct Info: CustomStringConvertible, Error {
         //=--------------------------------------------------------------------=
         
         @inlinable public static func note(_ value: Any) -> Self {
-            Self(content: String(describing: value))
+            Self(String(describing: value))
         }
         
         @inlinable public static func mark(_ value: Any) -> Self {
-            Self(content: "« \(value) »")
+            Self("« \(value) »")
         }
     }
 }
 
-//*============================================================================*
-// MARK: * Info x Component
-//*============================================================================*
+//=----------------------------------------------------------------------------=
+// MARK: + Initializers
+//=----------------------------------------------------------------------------=
 
-extension Info.Component {
+public extension Info {
     
     //=------------------------------------------------------------------------=
-    // MARK: Instances
+    // MARK: Indirect
     //=------------------------------------------------------------------------=
+    
+    @inlinable @inline(__always)
+    init(_ components: @autoclosure () -> [Component]) {
+        self.init(components().map(\.content).joined(separator: " "))
+    }
+}
 
-    @inlinable public static var cancellation: Self {
-        "User input cancelled:"
+//=----------------------------------------------------------------------------=
+// MARK: + Print
+//=----------------------------------------------------------------------------=
+
+public extension Info {
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Indirect
+    //=------------------------------------------------------------------------=
+    
+    @inlinable @inline(__always)
+    static func print(_ components: @autoclosure () -> [Component]) {
+        self.print(String(describing: Info(components())))
     }
     
-    @inlinable public static var autocorrection: Self {
-        "User input autocorrected:"
+    @inlinable @inline(__always)
+    static func print(cancellation components: @autoclosure () -> [Component]) {
+        self.print(["User input cancelled:"] + components())
+    }
+    
+    @inlinable @inline(__always)
+    static func print(autocorrection components: @autoclosure () -> [Component]) {
+        self.print(["User input autocorrected:"] + components())
     }
 }

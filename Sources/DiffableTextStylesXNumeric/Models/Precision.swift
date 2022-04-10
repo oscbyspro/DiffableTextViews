@@ -168,7 +168,7 @@ extension Precision {
         // MARK: Autocorrect
         //=--------------------------------------=
         if capacity.fraction <= 0 || capacity.value <= 0, number.removeSeparatorAsSuffix() {
-            Info.print([.autocorrection, .mark(number), "does not fit a fraction separator"])
+            Info.print(autocorrection: [.mark(number), "does not fit a fraction separator"])
         }
     }
     

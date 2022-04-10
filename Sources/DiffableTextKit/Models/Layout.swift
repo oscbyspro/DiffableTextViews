@@ -162,7 +162,7 @@ extension Layout {
     }
     
     //=------------------------------------------------------------------------=
-    // MARK: Interoperabilities
+    // MARK: Indices
     //=------------------------------------------------------------------------=
     
     /// Should be faster than iterating considering that UTF16 characters size count is O(1).

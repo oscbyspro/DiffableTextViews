@@ -17,15 +17,16 @@
 /// - Autocorrects selection on selection changes.
 ///
 public struct Field<Scheme: DiffableTextKit.Scheme> {
-    public typealias Layout = DiffableTextKit.Layout<Scheme>
     public typealias Position = DiffableTextKit.Position<Scheme>
+    public typealias Layout = DiffableTextKit.Layout<Scheme>
+    public typealias Index = DiffableTextKit.Layout<Scheme>.Index
     
     //=------------------------------------------------------------------------=
     // MARK: State
     //=------------------------------------------------------------------------=
     
     @usableFromInline var layout: Layout
-    @usableFromInline var selection: Range<Layout.Index>
+    @usableFromInline var selection: Range<Index>
 
     //=------------------------------------------------------------------------=
     // MARK: Initializers
@@ -36,7 +37,7 @@ public struct Field<Scheme: DiffableTextKit.Scheme> {
         self.selection = layout.range
     }
     
-    @inlinable init(layout: Layout, selection: Range<Layout.Index>) {
+    @inlinable init(layout: Layout, selection: Range<Index>) {
         self.layout = layout
         self.selection = selection
     }
@@ -55,6 +56,16 @@ public struct Field<Scheme: DiffableTextKit.Scheme> {
     
     @inlinable public var positions: Range<Position> {
         selection.lowerBound.position ..< selection.upperBound.position
+    }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Utilities
+    //=------------------------------------------------------------------------=
+    
+    @inlinable public func indices(at positions: Range<Position>) -> Range<Index> {
+        let upperBound = layout.index(at: positions.upperBound, from: selection.upperBound)
+        if positions.isEmpty { return upperBound ..< upperBound }
+        return layout.index(at: positions.lowerBound, from: selection.lowerBound) ..< upperBound
     }
 }
 
@@ -107,7 +118,7 @@ extension Field {
         self.update(selection: selection, momentum: momentum)
     }
     
-    @inlinable mutating func update(selection: Range<Layout.Index>, momentum: Momentum = .none) {
+    @inlinable mutating func update(selection: Range<Index>, momentum: Momentum = .none) {
         //=--------------------------------------=
         // MARK: Accept Max Selection
         //=--------------------------------------=
@@ -132,34 +143,5 @@ extension Field {
         // MARK: Update
         //=--------------------------------------=
         self.selection = lowerBound ..< upperBound
-    }
-}
-
-//=----------------------------------------------------------------------------=
-// MARK: + Utilities
-//=----------------------------------------------------------------------------=
-
-extension Field {
-
-    //=------------------------------------------------------------------------=
-    // MARK: Interoperabilities
-    //=------------------------------------------------------------------------=
-    
-    @inlinable public func indices(at positions: Range<Position>) -> Range<Layout.Index> {
-        //=--------------------------------------=
-        // MARK: Single
-        //=--------------------------------------=
-        let upperBound = layout.index(at: positions.upperBound, from: selection.upperBound)
-        var lowerBound = upperBound
-        //=--------------------------------------=
-        // MARK: Double
-        //=--------------------------------------=
-        if !positions.isEmpty {
-            lowerBound = layout.index(at: positions.lowerBound, from: selection.lowerBound)
-        }
-        //=--------------------------------------=
-        // MARK: Return
-        //=--------------------------------------=
-        return lowerBound ..< upperBound
     }
 }
