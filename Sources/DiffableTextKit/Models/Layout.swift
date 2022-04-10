@@ -22,8 +22,10 @@
 /// This makes forwards traversal and backwards traversal asymmetric.
 ///
 public struct Layout<Scheme: DiffableTextKit.Scheme>: BidirectionalCollection {
+    @usableFromInline typealias Target = (Index) -> Bool
+    @usableFromInline typealias Subindex = Snapshot.Index
     @usableFromInline typealias Position = DiffableTextKit.Position<Scheme>
-    
+
     //=------------------------------------------------------------------------=
     // MARK: State
     //=------------------------------------------------------------------------=
@@ -43,6 +45,7 @@ public struct Layout<Scheme: DiffableTextKit.Scheme>: BidirectionalCollection {
     
     @inlinable init(_ snapshot: Snapshot) {
         self.snapshot = snapshot
+        // Scheme.end(of:) is O(1) for UTF16 according to tests
         self.range = Index(snapshot.startIndex, at: .start) ..<
         Index(snapshot.endIndex, at: .end(of: snapshot.characters))
     }
@@ -52,7 +55,7 @@ public struct Layout<Scheme: DiffableTextKit.Scheme>: BidirectionalCollection {
     //=------------------------------------------------------------------------=
     
     @inlinable public subscript(position: Index) -> Symbol {
-        snapshot[position.snapshot]
+        snapshot[position.subindex]
     }
     
     //=------------------------------------------------------------------------=
@@ -73,12 +76,12 @@ public struct Layout<Scheme: DiffableTextKit.Scheme>: BidirectionalCollection {
 
     @inlinable public func index(after index: Index) -> Index {
         let character = snapshot.characters[index.character]
-        let after = snapshot.index(after: index.snapshot)
+        let after = snapshot.index(after: index.subindex)
         return Index(after, at: index.position.after(character))
     }
 
     @inlinable public func index(before index: Index) -> Index {
-        let before = snapshot.index(before: index.snapshot)
+        let before = snapshot.index(before: index.subindex)
         let character = snapshot.characters[before.character]
         return Index(before, at: index.position.before(character))
     }
@@ -93,15 +96,15 @@ public struct Layout<Scheme: DiffableTextKit.Scheme>: BidirectionalCollection {
         // MARK: State
         //=--------------------------------------------------------------------=
 
-        @usableFromInline let snapshot: Snapshot.Index
+        @usableFromInline let subindex: Subindex
         @usableFromInline let position: Position
 
         //=--------------------------------------------------------------------=
         // MARK: Initializers
         //=--------------------------------------------------------------------=
 
-        @inlinable init(_ snapshot: Snapshot.Index, at position: Position) {
-            self.snapshot = snapshot
+        @inlinable init(_ subindex: Subindex, at position: Position) {
+            self.subindex = subindex
             self.position = position
         }
         
@@ -110,11 +113,11 @@ public struct Layout<Scheme: DiffableTextKit.Scheme>: BidirectionalCollection {
         //=--------------------------------------------------------------------=
 
         @inlinable var character: String.Index {
-            snapshot.character
+            subindex.character
         }
         
         @inlinable var attribute: Int {
-            snapshot.attribute
+            subindex.attribute
         }
         
         //=--------------------------------------------------------------------=
@@ -166,7 +169,7 @@ extension Layout {
     //=------------------------------------------------------------------------=
     
     /// Should be faster than iterating considering that UTF16 characters size count is O(1).
-    @inlinable func index(of subindex: Snapshot.Index) -> Index {
+    @inlinable func index(of subindex: Subindex) -> Index {
         Index(subindex, at: .end(of: snapshot.characters[..<subindex.character]))
     }
 
@@ -188,8 +191,8 @@ extension Layout {
     // MARK: Preferred
     //=------------------------------------------------------------------------=
     
-    @inlinable func caret(from position: Layout.Index, towards direction: Direction?,
-    preferring preference: Direction) -> Layout.Index {
+    @inlinable func caret(from position: Index, towards direction: Direction?,
+    preferring preference: Direction) -> Index {
         //=--------------------------------------=
         // MARK: Anchor
         //=--------------------------------------=
@@ -229,11 +232,11 @@ extension Layout {
     }
     
     //=--------------------------------------------------------------------=
-    // MARK: Adaptive
+    // MARK: Forwards / Backwards / To / Through
     //=--------------------------------------------------------------------=
     
     @inlinable func caret(from position: Index, towards direction: Direction,
-    jumping distance: Jump, targeting target: (Index) -> Bool) -> Index? {
+    jumping distance: Jump, targeting target: Target) -> Index? {
         switch (direction, distance) {
         case (.forwards,  .to     ): return caret(from: position, forwardsTo:       target)
         case (.forwards,  .through): return caret(from: position, forwardsThrough:  target)
@@ -242,59 +245,19 @@ extension Layout {
         }
     }
 
-    //=------------------------------------------------------------------------=
-    // MARK: Forwards
-    //=------------------------------------------------------------------------=
-    
-    @inlinable func caret(from position: Index,
-    forwardsTo target: (Index) -> Bool) -> Index? {
-        var position = position
-        //=--------------------------------------=
-        // MARK: Search
-        //=--------------------------------------=
-        while position != endIndex {
-            if target(position) { return position }
-            formIndex(after: &position)
-        }
-        //=--------------------------------------=
-        // MARK: Absent
-        //=--------------------------------------=
-        return nil
+    @inlinable func caret(from position: Index, forwardsTo target: Target) -> Index? {
+        indices[position...].first(where: target)
     }
     
-    @inlinable func caret(from position: Index,
-    forwardsThrough target: (Index) -> Bool) -> Index? {
-        //=--------------------------------------=
-        // MARK: One After Caret Forwards To
-        //=--------------------------------------=
+    @inlinable func caret(from position: Index, forwardsThrough target: Target) -> Index? {
         caret(from: position, forwardsTo: target).map(index(after:))
     }
-    
-    //=--------------------------------------------------------------------=
-    // MARK: Backwards
-    //=--------------------------------------------------------------------=
-    
-    @inlinable func caret(from position: Index,
-    backwardsTo target: (Index) -> Bool) -> Index? {
-        //=--------------------------------------=
-        // MARK: One After Caret Backwards Through
-        //=--------------------------------------=
+
+    @inlinable func caret(from position: Index, backwardsTo target: Target) -> Index? {
         caret(from: position, backwardsThrough: target).map(index(after:))
     }
     
-    @inlinable func caret(from position: Index,
-    backwardsThrough target: (Index) -> Bool) -> Index? {
-        var position = position
-        //=--------------------------------------=
-        // MARK: Search
-        //=--------------------------------------=
-        while position != startIndex {
-            formIndex(before: &position)
-            if target(position) { return position }
-        }
-        //=--------------------------------------=
-        // MARK: Absent
-        //=--------------------------------------=
-        return nil
+    @inlinable func caret(from position: Index, backwardsThrough target: Target) -> Index? {
+        indices[..<position].last(where: target)
     }
 }

@@ -38,7 +38,7 @@ public struct ConstantTextStyle<Style: DiffableTextStyle>: WrapperTextStyle {
     //=------------------------------------------------------------------------=
 
     @inlinable @inline(__always)
-    public func locale(_ locale: Locale) -> Self { return self }
+    public func locale(_ locale: Locale) -> Self { self }
 }
 
 //*============================================================================*

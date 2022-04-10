@@ -19,7 +19,7 @@ public struct Changes {
     // MARK: State
     //=------------------------------------------------------------------------=
     
-    public let snapshot: Snapshot
+    public let snapshot:    Snapshot
     public var replacement: Snapshot
     public var range: Range<Snapshot.Index>
     
@@ -29,7 +29,7 @@ public struct Changes {
     
     @inlinable public init<S>(_ snapshot: Snapshot, change: Change<S>) where S: Scheme {
         self.snapshot = snapshot; self.replacement = Snapshot(change.content, as: .content)
-        self.range = change.range.lowerBound.snapshot ..< change.range.upperBound.snapshot
+        self.range = change.range.lowerBound.subindex ..< change.range.upperBound.subindex
     }
     
     //=------------------------------------------------------------------------=

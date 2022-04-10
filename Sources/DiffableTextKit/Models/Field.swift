@@ -17,10 +17,10 @@
 /// - Autocorrects selection on selection changes.
 ///
 public struct Field<Scheme: DiffableTextKit.Scheme> {
-    public typealias Position = DiffableTextKit.Position<Scheme>
     public typealias Layout = DiffableTextKit.Layout<Scheme>
     public typealias Index = DiffableTextKit.Layout<Scheme>.Index
-    
+    public typealias Position = DiffableTextKit.Position<Scheme>
+
     //=------------------------------------------------------------------------=
     // MARK: State
     //=------------------------------------------------------------------------=
