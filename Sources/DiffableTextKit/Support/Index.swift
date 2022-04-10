@@ -17,13 +17,15 @@ public extension Collection {
     // MARK: After
     //=------------------------------------------------------------------------=
 
-    @inlinable func index(after start: Index, while predicate: (Index) -> Bool) -> Index {
-        var position = start
+    /// Increments the index while the predicate is true, up to endIndex.
+    @inlinable func index(after position: Index,
+    while predicate: (Index) throws -> Bool) rethrows -> Index {
+        var position = position
         //=--------------------------------------=
         // MARK: Search
         //=--------------------------------------=
         while position != endIndex {
-            guard predicate(position) else { return position }
+            if try !predicate(position) { return position }
             formIndex(after: &position)
         }
         //=--------------------------------------=
@@ -43,18 +45,20 @@ public extension BidirectionalCollection {
     // MARK: Before
     //=------------------------------------------------------------------------=
 
-    @inlinable func index(before start: Index, while predicate: (Index) -> Bool) -> Index {
-        var position = start
+    /// Decrements the index while the predicate is true, down to startIndex.
+    @inlinable func index(before position: Index,
+    while predicate: (Index) throws -> Bool) rethrows -> Index {
+        var position = position
         //=--------------------------------------=
         // MARK: Search
         //=--------------------------------------=
         while position != startIndex {
-            guard predicate(position) else { return position }
+            if try !predicate( position) { return position }
             formIndex(before: &position)
         }
         //=--------------------------------------=
         // MARK: Return Start Index
         //=--------------------------------------=
-        return position
+        return position        
     }
 }

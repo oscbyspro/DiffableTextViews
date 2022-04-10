@@ -16,7 +16,10 @@ import DiffableTestKit
 //*============================================================================*
 
 /// ```
-/// Asserts: UTF16.size(of:) is O(1).
+/// UTF8         .size(of:) is O(1).
+/// UTF16        .size(of:) is O(1).
+/// Character    .size(of:) is O(n).
+/// UnicodeScalar.size(of:) is O(n).
 /// ```
 final class ModelsTestsXScheme: XCTestCase {
     
@@ -24,9 +27,9 @@ final class ModelsTestsXScheme: XCTestCase {
     // MARK: Loop
     //=------------------------------------------------------------------------=
     
-    func size<S>(_ alphabet: S) where S: StringProtocol {
+    func size<S>(of characters: S) where S: StringProtocol {
         for _ in 0 ..< 1 {
-            _ = UTF16.size(of: alphabet)
+            _ = UTF16.size(of: characters)
         }
     }
 }
@@ -48,7 +51,7 @@ extension ModelsTestsXScheme {
     ///
     func testString1__() {
         measure {
-            size(alphabet)
+            size(of: alphabet)
         }
     }
     
@@ -59,7 +62,7 @@ extension ModelsTestsXScheme {
     ///
     func testString10_() {
         measure {
-            size(alphabet10)
+            size(of: alphabet10)
         }
     }
     
@@ -70,7 +73,7 @@ extension ModelsTestsXScheme {
     ///
     func testString100() {
         measure {
-            size(alphabet100)
+            size(of: alphabet100)
         }
     }
 }
@@ -92,7 +95,7 @@ extension ModelsTestsXScheme {
     ///
     func testSubstring1__() {
         measure {
-            size(alphabet[...])
+            size(of: alphabet[...])
         }
     }
     
@@ -103,7 +106,7 @@ extension ModelsTestsXScheme {
     ///
     func testSubstring10_() {
         measure {
-            size(alphabet10[...])
+            size(of: alphabet10[...])
         }
     }
     
@@ -114,7 +117,7 @@ extension ModelsTestsXScheme {
     ///
     func testSubstring100() {
         measure {
-            size(alphabet100[...])
+            size(of: alphabet100[...])
         }
     }
 }

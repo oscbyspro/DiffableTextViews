@@ -45,7 +45,8 @@ public struct Layout<Scheme: DiffableTextKit.Scheme>: BidirectionalCollection {
     
     @inlinable init(_ snapshot: Snapshot) {
         self.snapshot = snapshot
-        // Scheme.end(of:) is O(1) for UTF16 according to tests
+        // UTF8 .size(of:) is O(1) according to unit tests
+        // UTF16.size(of:) is O(1) according to unit tests
         self.range = Index(snapshot.startIndex, at: .start) ..<
         Index(snapshot.endIndex, at: .end(of: snapshot.characters))
     }
@@ -168,7 +169,6 @@ extension Layout {
     // MARK: Indices
     //=------------------------------------------------------------------------=
     
-    /// Should be faster than iterating considering that UTF16 characters size count is O(1).
     @inlinable func index(of subindex: Subindex) -> Index {
         Index(subindex, at: .end(of: snapshot.characters[..<subindex.character]))
     }
