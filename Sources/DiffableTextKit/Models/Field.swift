@@ -57,16 +57,6 @@ public struct Field<Scheme: DiffableTextKit.Scheme> {
     @inlinable public var positions: Range<Position> {
         selection.lowerBound.position ..< selection.upperBound.position
     }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Utilities
-    //=------------------------------------------------------------------------=
-    
-    @inlinable public func indices(at positions: Range<Position>) -> Range<Index> {
-        let upperBound = layout.index(at: positions.upperBound, from: selection.upperBound)
-        if positions.isEmpty { return upperBound ..< upperBound }
-        return layout.index(at: positions.lowerBound, from: selection.lowerBound) ..< upperBound
-    }
 }
 
 //=----------------------------------------------------------------------------=
@@ -101,6 +91,13 @@ extension Field {
         self.layout = layout
         self.update(selection: lowerBound ..< upperBound)
     }
+}
+
+//=------------------------------------------------------------------------=
+// MARK: + Transformations
+//=------------------------------------------------------------------------=
+
+extension Field {
 
     //=------------------------------------------------------------------------=
     // MARK: Selection
@@ -143,5 +140,34 @@ extension Field {
         // MARK: Update
         //=--------------------------------------=
         self.selection = lowerBound ..< upperBound
+    }
+}
+
+//=----------------------------------------------------------------------------=
+// MARK: + Utilities
+//=----------------------------------------------------------------------------=
+
+public extension Field {
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Indices
+    //=------------------------------------------------------------------------=
+    
+    @inlinable func indices(at positions: Range<Position>) -> Range<Index> {
+        //=--------------------------------------=
+        // MARK: Single
+        //=--------------------------------------=
+        let upperBound = layout.index(at: positions.upperBound, from: selection.upperBound)
+        var lowerBound = upperBound
+        //=--------------------------------------=
+        // MARK: Double
+        //=--------------------------------------=
+        if !positions.isEmpty {
+            lowerBound = layout.index(at: positions.lowerBound, from: selection.lowerBound)
+        }
+        //=--------------------------------------=
+        // MARK: Return
+        //=--------------------------------------=
+        return lowerBound ..< upperBound
     }
 }
