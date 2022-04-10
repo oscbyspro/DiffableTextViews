@@ -13,10 +13,10 @@
 
 /// A collection of characters, attributes and an optional anchor.
 ///
-/// Set the anchor to unconditionally select the caret represented by that index. This is
-/// required when the snapshot contains only formatting characters, and you want the user's
-/// caret to appear at a specific location. As an example, an empty pattern style may
-/// set the anchor at the first placeholder character, wherever it may be inside the pattern.
+/// Set the anchor to unconditionally select the caret represented by its index. This is required
+/// when the snapshot contains only formatting characters, and you want the user's caret to appear
+/// at a specific location. As an example, a pattern text style with an empty value may anchor at the
+/// index of the first placeholder character.
 ///
 public struct Snapshot: BidirectionalCollection, RangeReplaceableCollection {
     

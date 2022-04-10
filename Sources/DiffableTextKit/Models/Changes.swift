@@ -36,7 +36,7 @@ public struct Changes {
     // MARK: Utilities
     //=------------------------------------------------------------------------=
     
-    /// Returns a new snapshot with the proposed change applied to it.
+    /// Returns a new snapshot with proposed changes applied to it.
     @inlinable public func proposal() -> Snapshot {
         var result = snapshot; result.replaceSubrange(range, with: replacement); return result
     }

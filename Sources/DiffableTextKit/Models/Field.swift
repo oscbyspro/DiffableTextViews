@@ -12,6 +12,10 @@
 //*============================================================================*
 
 /// A model describing a snapshot's layout and a selection in it.
+///
+/// - Autocorrects selection on layout changes.
+/// - Autocorrects selection on selection changes.
+///
 public struct Field<Scheme: DiffableTextKit.Scheme> {
     public typealias Layout = DiffableTextKit.Layout<Scheme>
     public typealias Position = DiffableTextKit.Position<Scheme>
@@ -55,40 +59,38 @@ public struct Field<Scheme: DiffableTextKit.Scheme> {
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: + Accessors
-//=----------------------------------------------------------------------------=
-
-extension Field {
-
-    //=------------------------------------------------------------------------=
-    // MARK: Indices
-    //=------------------------------------------------------------------------=
-    
-    @inlinable public func indices(at destination: Range<Position>) -> Range<Layout.Index> {
-        //=--------------------------------------=
-        // MARK: Single
-        //=--------------------------------------=
-        let upperBound = layout.index(at: destination.upperBound, from: selection.upperBound)
-        var lowerBound = upperBound
-        //=--------------------------------------=
-        // MARK: Double
-        //=--------------------------------------=
-        if !destination.isEmpty {
-            lowerBound = layout.index(at: destination.lowerBound, from: selection.lowerBound)
-        }
-        //=--------------------------------------=
-        // MARK: Return
-        //=--------------------------------------=
-        return lowerBound ..< upperBound
-    }
-}
-
-//=----------------------------------------------------------------------------=
 // MARK: + Transformations
 //=----------------------------------------------------------------------------=
 
 extension Field {
     
+    //=------------------------------------------------------------------------=
+    // MARK: Snapshot
+    //=------------------------------------------------------------------------=
+    
+    @inlinable mutating func update(snapshot: Snapshot) {
+        let layout = Layout(snapshot)
+        //=--------------------------------------=
+        // MARK: Single
+        //=--------------------------------------=
+        let upperBound = Mismatches.suffix(next: layout,
+        prev: self.layout[selection.upperBound...]).next
+        var lowerBound = upperBound
+        //=--------------------------------------=
+        // MARK: Double
+        //=--------------------------------------=
+        if !selection.isEmpty {
+            lowerBound = Mismatches.prefix(next: layout,
+            prev: self.layout[..<selection.lowerBound]).next
+            lowerBound = Swift.min(lowerBound, upperBound)
+        }
+        //=--------------------------------------=
+        // MARK: Update
+        //=--------------------------------------=
+        self.layout = layout
+        self.update(selection: lowerBound ..< upperBound)
+    }
+
     //=------------------------------------------------------------------------=
     // MARK: Selection
     //=------------------------------------------------------------------------=
@@ -134,35 +136,30 @@ extension Field {
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: + Transformations
+// MARK: + Utilities
 //=----------------------------------------------------------------------------=
 
 extension Field {
 
     //=------------------------------------------------------------------------=
-    // MARK: Snapshot
+    // MARK: Interoperabilities
     //=------------------------------------------------------------------------=
     
-    @inlinable mutating func update(snapshot: Snapshot) {
-        let layout = Layout(snapshot)
+    @inlinable public func indices(at positions: Range<Position>) -> Range<Layout.Index> {
         //=--------------------------------------=
         // MARK: Single
         //=--------------------------------------=
-        let upperBound = Mismatches.suffix(next: layout,
-        prev: self.layout[selection.upperBound...]).next
+        let upperBound = layout.index(at: positions.upperBound, from: selection.upperBound)
         var lowerBound = upperBound
         //=--------------------------------------=
         // MARK: Double
         //=--------------------------------------=
-        if !selection.isEmpty {
-            lowerBound = Mismatches.prefix(next: layout,
-            prev: self.layout[..<selection.lowerBound]).next
-            lowerBound = Swift.min(lowerBound, upperBound)
+        if !positions.isEmpty {
+            lowerBound = layout.index(at: positions.lowerBound, from: selection.lowerBound)
         }
         //=--------------------------------------=
-        // MARK: Update
+        // MARK: Return
         //=--------------------------------------=
-        self.layout = layout
-        self.update(selection: lowerBound ..< upperBound)
+        return lowerBound ..< upperBound
     }
 }

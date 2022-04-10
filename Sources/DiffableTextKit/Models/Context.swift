@@ -12,11 +12,11 @@
 //*============================================================================*
 
 public final class Context<Style: DiffableTextStyle, Scheme: DiffableTextKit.Scheme> {
-    public typealias Commit = DiffableTextKit.Commit<Value>
-    public typealias Remote = DiffableTextKit.Remote<Style>
     public typealias Field = DiffableTextKit.Field<Scheme>
     public typealias Layout = DiffableTextKit.Layout<Scheme>
     public typealias Position = DiffableTextKit.Position<Scheme>
+    public typealias Remote = DiffableTextKit.Remote<Style>
+    public typealias Commit = DiffableTextKit.Commit<Value>
     public typealias Value = Style.Value
 
     //=------------------------------------------------------------------------=
@@ -37,6 +37,10 @@ public final class Context<Style: DiffableTextStyle, Scheme: DiffableTextKit.Sch
         self._value = remote.value
         self._focus = remote.focus
         self._field = Field()
+        //=--------------------------------------=
+        // MARK: Autocorrect
+        //=--------------------------------------=
+        self.merge(unchecked: remote)
     }
     
     //=------------------------------------------------------------------------=
@@ -76,28 +80,21 @@ extension Context {
     }
     
     //=------------------------------------------------------------------------=
-    // MARK: Style, Value, Focus
+    // MARK: Update
     //=------------------------------------------------------------------------=
     
-    @inlinable public func focus(style: Style, commit: Commit) {
-        self._focus = true
-        self._style = style
-        self._value = commit.value
-        self._field.update(snapshot: commit.snapshot)
-    }
-    
-    @inlinable public func unfocus(style: Style, value: Value) {
+    @inlinable public func update(unfocused: (style: Style, value: Value)) {
         self._focus = false
-        self._style = style
-        self._value = value
+        self._style = unfocused.style
+        self._value = unfocused.value
         self._field = Field()
     }
-
-    @inlinable public func accept(style: Style, value: Value, focus: Focus) {
-        switch focus.value {
-        case   true: self  .focus(style: style,commit: style.interpret(value))
-        case  false: self.unfocus(style: style, value: value)
-        }
+    
+    @inlinable public func update(focused: (style: Style, commit: Commit)) {
+        self._focus = true
+        self._style = focused.style
+        self._value = focused.commit.value
+        self._field.update(snapshot: focused.commit.snapshot)
     }
     
     //=------------------------------------------------------------------------=
@@ -117,10 +114,17 @@ extension Context {
         //=--------------------------------------=
         // MARK: Yes
         //=--------------------------------------=
-        self.accept(
+        self.merge(unchecked:  Remote(
         style: changeInStyle ? remote.style : style,
         value: changeInValue ? remote.value : value,
-        focus: changeInFocus ? remote.focus : focus)
+        focus: changeInFocus ? remote.focus : focus))
         return true
+    }
+    
+    @inlinable func merge(unchecked remote: Remote) {
+        switch remote.focus.value {
+        case false: self.update(unfocused: (remote.style, remote.value))
+        case  true: self.update(  focused: (remote.style, remote.style.interpret(value)))
+        }
     }
 }

@@ -11,16 +11,15 @@
 // MARK: * Layout
 //*============================================================================*
 
-/// The text's layout, as described by a snapshot and its attributes.
-///
-/// It may be used to obtain caret positions.
-/// A caret shares its index with the character that appears behind it.
-/// This makes forwards and backwards caret searches asymmetric.
+/// The text's layout, used to obtain caret positions.
 ///
 /// ```
 /// |$|1|2|3|,|4|5|6|.|7|8|9|_|U|S|D|~
 /// |x|o|o|o|x|o|o|o|o|o|o|o|x|x|x|x|~
 /// ```
+///
+/// A caret shares its index with the character that appears behind it.
+/// This makes forwards traversal and backwards traversal asymmetric.
 ///
 public struct Layout<Scheme: DiffableTextKit.Scheme>: BidirectionalCollection {
     @usableFromInline typealias Position = DiffableTextKit.Position<Scheme>
@@ -221,7 +220,7 @@ extension Layout {
         // therefore: jump to the nearest nonpassthrough position
         if let caret = caret(from: position,
         towards: direction.reversed(),
-        jumping: Jump.to, // see the above comment
+        jumping: Jump.to, // read the above comment
         targeting: nonpassthrough) { return caret }
         //=--------------------------------------=
         // MARK: Return Layout Start Index
