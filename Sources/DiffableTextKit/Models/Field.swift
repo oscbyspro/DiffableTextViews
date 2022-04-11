@@ -20,7 +20,7 @@ public struct Field<Scheme: DiffableTextKit.Scheme> {
     public typealias Layout = DiffableTextKit.Layout<Scheme>
     public typealias Index = DiffableTextKit.Layout<Scheme>.Index
     public typealias Position = DiffableTextKit.Position<Scheme>
-
+    
     //=------------------------------------------------------------------------=
     // MARK: State
     //=------------------------------------------------------------------------=
@@ -32,30 +32,31 @@ public struct Field<Scheme: DiffableTextKit.Scheme> {
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable init() {
-        self.layout = Layout()
-        self.selection = layout.range
-    }
-    
-    @inlinable init(layout: Layout, selection: Range<Index>) {
-        self.layout = layout
-        self.selection = selection
+    @inlinable init(_ layout: Layout = Layout()) {
+        self.layout = layout; self.selection = Range.init(
+        uncheckedBounds: (layout.endIndex, layout.endIndex))
     }
     
     //=------------------------------------------------------------------------=
-    // MARK: Accessors
+    // MARK: Utilities
     //=------------------------------------------------------------------------=
-
-    @inlinable public var snapshot: Snapshot {
-        layout.snapshot
-    }
     
-    @inlinable public var characters: String {
-        layout.snapshot.characters
-    }
-    
-    @inlinable public var positions: Range<Position> {
-        selection.lowerBound.position ..< selection.upperBound.position
+    @inlinable public func indices(at positions: Range<Position>) -> Range<Index> {
+        //=--------------------------------------=
+        // MARK: Single
+        //=--------------------------------------=
+        let upperBound = layout.index(at: positions.upperBound, from: selection.upperBound)
+        var lowerBound = upperBound
+        //=--------------------------------------=
+        // MARK: Double
+        //=--------------------------------------=
+        if !positions.isEmpty {
+            lowerBound = layout.index(at: positions.lowerBound, from: selection.lowerBound)
+        }
+        //=--------------------------------------=
+        // MARK: Return
+        //=--------------------------------------=
+        return lowerBound ..< upperBound
     }
 }
 
@@ -66,11 +67,10 @@ public struct Field<Scheme: DiffableTextKit.Scheme> {
 extension Field {
     
     //=------------------------------------------------------------------------=
-    // MARK: Snapshot
+    // MARK: Layout
     //=------------------------------------------------------------------------=
     
-    @inlinable mutating func update(snapshot: Snapshot) {
-        let layout = Layout(snapshot)
+    @inlinable mutating func update(layout: Layout) {
         //=--------------------------------------=
         // MARK: Single
         //=--------------------------------------=
@@ -91,13 +91,6 @@ extension Field {
         self.layout = layout
         self.update(selection: lowerBound ..< upperBound)
     }
-}
-
-//=------------------------------------------------------------------------=
-// MARK: + Transformations
-//=------------------------------------------------------------------------=
-
-extension Field {
 
     //=------------------------------------------------------------------------=
     // MARK: Selection
@@ -120,7 +113,8 @@ extension Field {
         // MARK: Accept Max Selection
         //=--------------------------------------=
         if selection == layout.range {
-            self.selection = selection; return
+            self.selection = selection
+            return
         }
         //=--------------------------------------=
         // MARK: Single
@@ -131,7 +125,7 @@ extension Field {
         //=--------------------------------------=
         // MARK: Double
         //=--------------------------------------=
-        if !selection.isEmpty, upperBound != layout.startIndex {
+        if !selection.isEmpty {
             lowerBound = layout.caret(from: selection.lowerBound,
             towards: momentum.lowerBound, preferring:  .forwards)
             lowerBound = Swift.min(lowerBound, upperBound)
@@ -140,34 +134,5 @@ extension Field {
         // MARK: Update
         //=--------------------------------------=
         self.selection = lowerBound ..< upperBound
-    }
-}
-
-//=----------------------------------------------------------------------------=
-// MARK: + Utilities
-//=----------------------------------------------------------------------------=
-
-public extension Field {
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Indices
-    //=------------------------------------------------------------------------=
-    
-    @inlinable func indices(at positions: Range<Position>) -> Range<Index> {
-        //=--------------------------------------=
-        // MARK: Single
-        //=--------------------------------------=
-        let upperBound = layout.index(at: positions.upperBound, from: selection.upperBound)
-        var lowerBound = upperBound
-        //=--------------------------------------=
-        // MARK: Double
-        //=--------------------------------------=
-        if !positions.isEmpty {
-            lowerBound = layout.index(at: positions.lowerBound, from: selection.lowerBound)
-        }
-        //=--------------------------------------=
-        // MARK: Return
-        //=--------------------------------------=
-        return lowerBound ..< upperBound
     }
 }

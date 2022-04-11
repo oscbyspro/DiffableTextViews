@@ -13,7 +13,6 @@
 
 /// A snapshot and one continuous change not yet applied to it.
 public struct Changes {
-    public typealias Change<S: Scheme> = (range: Range<Layout<S>.Index>, content: String)
     
     //=------------------------------------------------------------------------=
     // MARK: State
@@ -27,9 +26,8 @@ public struct Changes {
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable public init<S>(_ snapshot: Snapshot, change: Change<S>) where S: Scheme {
-        self.snapshot = snapshot; self.replacement = Snapshot(change.content, as: .content)
-        self.range = change.range.lowerBound.subindex ..< change.range.upperBound.subindex
+    @inlinable public init(to snapshot: Snapshot, with replacement: String, in range: Range<Snapshot.Index>) {
+        self.snapshot = snapshot; self.replacement = Snapshot(replacement, as: .content); self.range = range
     }
     
     //=------------------------------------------------------------------------=

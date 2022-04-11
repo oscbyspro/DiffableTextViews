@@ -37,18 +37,11 @@ public struct Layout<Scheme: DiffableTextKit.Scheme>: BidirectionalCollection {
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable init() {
-        self.snapshot = Snapshot()
-        let startIndex = Index(snapshot.startIndex, at: .start)
-        self.range = startIndex ..< startIndex
-    }
-    
-    @inlinable init(_ snapshot: Snapshot) {
+    @inlinable init(_ snapshot: Snapshot = Snapshot()) {
         self.snapshot = snapshot
-        // UTF8 .size(of:) is O(1) according to unit tests
-        // UTF16.size(of:) is O(1) according to unit tests
-        self.range = Index(snapshot.startIndex, at: .start) ..<
-        Index(snapshot.endIndex, at: .end(of: snapshot.characters))
+        self.range = Range.init(uncheckedBounds:(
+        Index(snapshot.startIndex, at: Position.start),
+        Index(snapshot  .endIndex, at: Position.end(of: snapshot.characters))))
     }
     
     //=------------------------------------------------------------------------=
@@ -191,6 +184,7 @@ extension Layout {
     // MARK: Preferred
     //=------------------------------------------------------------------------=
     
+    /// Returns the preferred caret, or endIndex if no preferred caret was found.
     @inlinable func caret(from index: Index, towards direction: Direction?,
     preferring preference: Direction) -> Index {
         //=--------------------------------------=
@@ -222,9 +216,9 @@ extension Layout {
         jumping: Jump.to, // use Jump.to on each direction
         targeting: nonpassthrough(at:)) { return caret }
         //=--------------------------------------=
-        // MARK: Return Layout Start Index
+        // MARK: Default To Instance End Index
         //=--------------------------------------=
-        return self.startIndex
+        return self.endIndex
     }
     
     //=--------------------------------------------------------------------=

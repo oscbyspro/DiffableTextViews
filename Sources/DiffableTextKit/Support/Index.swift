@@ -8,7 +8,7 @@
 //=----------------------------------------------------------------------------=
 
 //*============================================================================*
-// MARK: * Collection - Index
+// MARK: * Collection x Index
 //*============================================================================*
 
 public extension Collection {
@@ -17,26 +17,23 @@ public extension Collection {
     // MARK: After
     //=------------------------------------------------------------------------=
 
-    /// Increments the index while the predicate is true, up to endIndex.
-    @inlinable func index(after index: Index,
-    while predicate: (Index) throws -> Bool) rethrows -> Index {
+    @inlinable func index(after index: Index, while predicate: (Index) throws -> Bool) rethrows -> Index {
         var index = index
         //=--------------------------------------=
         // MARK: Search
         //=--------------------------------------=
-        while index != endIndex {
-            if try !predicate(index) { return index }
+        while try predicate(  index) {
             formIndex(after: &index)
         }
         //=--------------------------------------=
-        // MARK: Return End Index
+        // MARK: Return
         //=--------------------------------------=
         return index
     }
 }
 
 //*============================================================================*
-// MARK: * BidirectionalCollection - Index
+// MARK: * BidirectionalCollection x Index
 //*============================================================================*
 
 public extension BidirectionalCollection {
@@ -45,19 +42,16 @@ public extension BidirectionalCollection {
     // MARK: Before
     //=------------------------------------------------------------------------=
 
-    /// Decrements the index while the predicate is true, down to startIndex.
-    @inlinable func index(before index: Index,
-    while predicate: (Index) throws -> Bool) rethrows -> Index {
+    @inlinable func index(before index: Index, while predicate: (Index) throws -> Bool) rethrows -> Index {
         var index = index
         //=--------------------------------------=
         // MARK: Search
         //=--------------------------------------=
-        while index != startIndex {
-            if try !predicate( index) { return index }
+        while try predicate(   index) {
             formIndex(before: &index)
         }
         //=--------------------------------------=
-        // MARK: Return Start Index
+        // MARK: Return
         //=--------------------------------------=
         return index
     }

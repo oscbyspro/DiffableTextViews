@@ -26,7 +26,7 @@ public struct Snapshot: BidirectionalCollection, RangeReplaceableCollection {
         
     @usableFromInline var _characters: String
     @usableFromInline var _attributes: [Attribute]
-    @usableFromInline var _anchor: Index?
+    @usableFromInline var _anchor: Self.Index?
 
     //=------------------------------------------------------------------------=
     // MARK: Initializers

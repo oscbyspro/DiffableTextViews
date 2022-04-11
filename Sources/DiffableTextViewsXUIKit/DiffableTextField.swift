@@ -88,12 +88,13 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
         // MARK: State
         //=--------------------------------------------------------------------=
         
-        @usableFromInline let lock = Lock()
         @usableFromInline private(set) var context: Context!
         @usableFromInline private(set) var upstream: Upstream!
         @usableFromInline private(set) var downstream: Downstream!
         @usableFromInline private(set) var environment: Environment!
         
+        @usableFromInline let lock = Lock()
+
         //=--------------------------------------------------------------------=
         // MARK: View Life Cycle
         //=--------------------------------------------------------------------=
@@ -107,6 +108,66 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
             self.upstream = upstream; self.environment = environment
             self.synchronize() // on update is same as on did update
             self.downstream.transform(environment.diffableTextField_onUpdate)
+        }
+        
+        //=--------------------------------------------------------------------=
+        // MARK: Events
+        //=--------------------------------------------------------------------=
+
+        @inlinable public func textFieldDidBeginEditing(_ textField: UITextField) {
+            synchronize()
+        }
+        
+        @inlinable public func textFieldDidEndEditing(_ textField: UITextField) {
+            synchronize()
+        }
+        
+        @inlinable public func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+            downstream.transform(environment.diffableTextField_onSubmit); return  true
+        }
+        
+        @inlinable public func textField(_ textField: UITextField,
+        shouldChangeCharactersIn range: NSRange, replacementString input: String) -> Bool {
+            //=----------------------------------=
+            // MARK: Merge
+            //=----------------------------------=
+            attempt: do {
+                let context = try context.merged(
+                input, in: Position.range(range))
+                //=------------------------------=
+                // MARK: Push
+                //=------------------------------=
+                Task { @MainActor in
+                    // async to process special commands first
+                    // as an example see: (option + backspace)
+                    self.context = context
+                    self.push()
+                }
+            //=----------------------------------=
+            // MARK: Cancellation
+            //=----------------------------------=
+            } catch let reason {
+                Info.print(cancellation: [.note(reason)])
+            }
+            //=----------------------------------=
+            // MARK: Decline Automatic Insertion
+            //=----------------------------------=
+            return false
+        }
+        
+        @inlinable public func textFieldDidChangeSelection(_ textField: UITextField) {
+            guard !lock.isLocked else { return }
+            let selection = downstream.selection
+            //=----------------------------------=
+            // MARK: Update
+            //=----------------------------------=
+            self.context.update(selection: selection, momentum: downstream.momentum)
+            //=----------------------------------=
+            // MARK: Update Downstream As Needed
+            //=----------------------------------=
+            if  selection != context.selection {
+                lock.perform { self.downstream.update(selection:  context.selection) }
+            }
         }
         
         //=--------------------------------------------------------------------=
@@ -137,8 +198,8 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
             // MARK: Downstream
             //=----------------------------------=
             lock.perform {
-                self.downstream.update(text: context.field.characters)
-                self.downstream.update(selection: context.field.positions)
+                self.downstream.update(text: context.text)
+                self.downstream.update(selection: context.selection)
             }
             //=----------------------------------=
             // MARK: Upstream
@@ -153,89 +214,7 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
             // MARK: Downstream
             //=----------------------------------=
             lock.perform {
-                self.downstream.update(text: context.formatted())
-            }
-        }
-        
-        //=--------------------------------------------------------------------=
-        // MARK: Respond To Submit Events
-        //=--------------------------------------------------------------------=
-        
-        @inlinable public func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-            downstream.transform(environment.diffableTextField_onSubmit); return  true
-        }
-        
-        //=--------------------------------------------------------------------=
-        // MARK: Respond To Mode Change Events
-        //=--------------------------------------------------------------------=
-        
-        @inlinable public func textFieldDidBeginEditing(_ textField: UITextField) {
-            synchronize()
-        }
-        
-        @inlinable public func textFieldDidEndEditing(_ textField: UITextField) {
-            synchronize()
-        }
-        
-        @inlinable public func textFieldDidEndEditing(_ textField: UITextField, reason: UITextField.DidEndEditingReason) {
-            synchronize()
-        }
-        
-        //=--------------------------------------------------------------------=
-        // MARK: Respond To Input Events
-        //=--------------------------------------------------------------------=
-        
-        @inlinable public func textField(_ textField: UITextField,
-        shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
-            let style   = context.style
-            let range   = context.field.indices(at: Position.range(range))
-            let changes = Changes(context.field.snapshot, change: (range, string))
-            //=----------------------------------=
-            // MARK: Merge
-            //=----------------------------------=
-            merge: do {
-                let commit = try style.merge(changes)
-                //=------------------------------=
-                // MARK: Push
-                //=------------------------------=
-                Task { @MainActor in
-                    // async to process special commands first
-                    // as an example see: (option + backspace)
-                    self.context.set(selection: range.upperBound)
-                    self.context.update(focused: (style, commit))
-                    self.push()
-                }
-            //=----------------------------------=
-            // MARK: Cancellation
-            //=----------------------------------=
-            } catch let reason {
-                Info.print(cancellation: [.note(reason)])
-            }
-            //=----------------------------------=
-            // MARK: Decline Automatic Insertion
-            //=----------------------------------=
-            return false
-        }
-        
-        //=--------------------------------------------------------------------=
-        // MARK: Respond To Selection Change Events
-        //=--------------------------------------------------------------------=
-        
-        @inlinable public func textFieldDidChangeSelection(_ textField: UITextField) {
-            guard !lock.isLocked else { return }
-            let selection = downstream.selection
-            //=----------------------------------=
-            // MARK: Update
-            //=----------------------------------=
-            self.context.update(selection: selection, momentum: downstream.momentum)
-            //=----------------------------------=
-            // MARK: Update Downstream As Needed
-            //=----------------------------------=
-            let positions  = context.field.positions
-            if  positions != selection {
-                lock.perform {
-                    self.downstream.update(selection: positions)
-                }
+                self.downstream.update(text: context.text)
             }
         }
     }

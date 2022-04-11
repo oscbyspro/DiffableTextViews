@@ -8,7 +8,7 @@
 //=----------------------------------------------------------------------------=
 
 //*============================================================================*
-// MARK: * BidirectionalCollection - Suffix
+// MARK: * BidirectionalCollection x Suffix
 //*============================================================================*
 
 extension BidirectionalCollection {
@@ -32,7 +32,7 @@ extension BidirectionalCollection {
             if try !predicate(self[index]) { return after }
         }
         //=--------------------------------------=
-        // MARK: Return Start Index
+        // MARK: Return
         //=--------------------------------------=
         return index
     }

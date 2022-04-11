@@ -19,17 +19,23 @@ public struct Remote<Style: DiffableTextStyle> {
     // MARK: State
     //=------------------------------------------------------------------------=
     
+    public let focus: Focus
     public let style: Style
     public let value: Value
-    public let focus: Focus
-    
+
     //=------------------------------------------------------------------------=
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable public init(style: Style, value: Value, focus: Focus) {
+    @inlinable public init(focus: Focus, style: Style, value: Value) {
+        self.focus = focus
         self.style = style
         self.value = value
+    }
+    
+    @inlinable public init(style: Style, value: Value, focus: Focus) {
         self.focus = focus
+        self.style = style
+        self.value = value
     }
 }

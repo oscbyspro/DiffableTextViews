@@ -11,7 +11,7 @@
 // MARK: * Context
 //*============================================================================*
 
-public final class Context<Style: DiffableTextStyle, Scheme: DiffableTextKit.Scheme> {
+public struct Context<Style: DiffableTextStyle, Scheme: DiffableTextKit.Scheme> {
     public typealias Field = DiffableTextKit.Field<Scheme>
     public typealias Layout = DiffableTextKit.Layout<Scheme>
     public typealias Position = DiffableTextKit.Position<Scheme>
@@ -23,41 +23,88 @@ public final class Context<Style: DiffableTextStyle, Scheme: DiffableTextKit.Sch
     // MARK: State
     //=------------------------------------------------------------------------=
     
+    @usableFromInline private(set) var _focus: Focus
     @usableFromInline private(set) var _style: Style
     @usableFromInline private(set) var _value: Value
-    @usableFromInline private(set) var _focus: Focus
     @usableFromInline private(set) var _field: Field
     
     //=------------------------------------------------------------------------=
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable public init(_ remote: Remote) {
-        self._style = remote.style
-        self._value = remote.value
-        self._focus = remote.focus
-        self._field = Field()
-        //=--------------------------------------=
-        // MARK: Autocorrect
-        //=--------------------------------------=
-        self.merge(unchecked: remote)
+    @inlinable init(_ focus: Focus, _ style: Style, _ value: Value, _ snapshot: Snapshot) {
+        self._focus = focus; self._style = style
+        self._value = value; self._field = Field(Layout(snapshot))
     }
     
     //=------------------------------------------------------------------------=
     // MARK: Accessors
     //=------------------------------------------------------------------------=
     
-    @inlinable public var style: Style { _style }
-    @inlinable public var value: Value { _value }
-    @inlinable public var focus: Focus { _focus }
-    @inlinable public var field: Field { _field }
+    @inlinable public var style: Style {
+        _style
+    }
+    
+    @inlinable public var value: Value {
+        _value
+    }
+    
+    @inlinable public var focus: Focus {
+        _focus
+    }
+    
+    @inlinable public var field: Field {
+        _field
+    }
     
     //=------------------------------------------------------------------------=
-    // MARK: Utilities
+    // MARK: Accessors
     //=------------------------------------------------------------------------=
     
-    @inlinable public func formatted() -> String {
-        style.format(value)
+    @inlinable public var layout: Layout {
+        _field.layout
+    }
+    
+    @inlinable public var text: String {
+        _field.layout.snapshot.characters
+    }
+    
+    @inlinable public var selection: Range<Position> {
+        _field.selection.lowerBound.position ..< _field.selection.upperBound.position
+    }
+}
+
+//=----------------------------------------------------------------------------=
+// MARK: + Initializers
+//=----------------------------------------------------------------------------=
+
+public extension Context {
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Remote
+    //=------------------------------------------------------------------------=
+
+    @inlinable init(_ remote: Remote) {
+        switch remote.focus.value {
+        case  true: self =   .focused(remote.style, remote.value)
+        case false: self = .unfocused(remote.style, remote.value)
+        }
+    }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Style / Value
+    //=------------------------------------------------------------------------=
+    
+    @inlinable static func focused(_ style: Style, _ value: Value) -> Self {
+        Self.focused(style, style.interpret(value))
+    }
+    
+    @inlinable static func focused(_ style: Style, _ commit: Commit) -> Self {
+        Self(true, style, commit.value, commit.snapshot)
+    }
+ 
+    @inlinable static func unfocused(_ style: Style, _ value: Value) -> Self {
+        Self(false, style, value, Snapshot(style.format(value), as: .phantom))
     }
 }
 
@@ -65,43 +112,32 @@ public final class Context<Style: DiffableTextStyle, Scheme: DiffableTextKit.Sch
 // MARK: + Transformations
 //=----------------------------------------------------------------------------=
 
-extension Context {
+public extension Context {
 
     //=------------------------------------------------------------------------=
-    // MARK: Selection
+    // MARK: Other
     //=------------------------------------------------------------------------=
     
-    @inlinable public func set(selection: Layout.Index) {
-        self._field.selection = selection ..< selection
-    }
-    
-    @inlinable public func update(selection: Range<Position>, momentum: Bool) {
-        self._field.update(selection: selection, momentum: momentum)
-    }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Update
-    //=------------------------------------------------------------------------=
-    
-    @inlinable public func update(unfocused: (style: Style, value: Value)) {
-        self._focus = false
-        self._style = unfocused.style
-        self._value = unfocused.value
-        self._field = Field()
-    }
-    
-    @inlinable public func update(focused: (style: Style, commit: Commit)) {
-        self._focus = true
-        self._style = focused.style
-        self._value = focused.commit.value
-        self._field.update(snapshot: focused.commit.snapshot)
+    @inlinable mutating func merge(_ other: Self) {
+        //=--------------------------------------=
+        // MARK: Focused
+        //=--------------------------------------=
+        if other._focus.value {
+            self._focus = other._focus
+            self._style = other._style
+            self._value = other._value
+            self._field.update(layout: other._field.layout)
+        //=--------------------------------------=
+        // MARK: Unfocused
+        //=--------------------------------------=
+        } else { self = other }
     }
     
     //=------------------------------------------------------------------------=
     // MARK: Remote
     //=------------------------------------------------------------------------=
     
-    @inlinable public func merge(_ remote: Remote) -> Bool {
+    @inlinable mutating func merge(_ remote: Remote) -> Bool {
         let changeInStyle = remote.style != style
         let changeInValue = remote.value != value
         let changeInFocus = remote.focus != focus
@@ -114,17 +150,44 @@ extension Context {
         //=--------------------------------------=
         // MARK: Yes
         //=--------------------------------------=
-        self.merge(unchecked:  Remote(
+        self.merge(Self(Remote(
+        focus: changeInFocus ? remote.focus : focus,
         style: changeInStyle ? remote.style : style,
-        value: changeInValue ? remote.value : value,
-        focus: changeInFocus ? remote.focus : focus))
+        value: changeInValue ? remote.value : value)))
         return true
     }
     
-    @inlinable func merge(unchecked remote: Remote) {
-        switch remote.focus.value {
-        case false: self.update(unfocused: (remote.style, remote.value))
-        case  true: self.update(  focused: (remote.style, remote.style.interpret(value)))
-        }
+    //=------------------------------------------------------------------------=
+    // MARK: Selection
+    //=------------------------------------------------------------------------=
+    
+    @inlinable mutating func set(selection: Layout.Index) {
+        self._field.selection = Range(uncheckedBounds: (selection, selection))
+    }
+    
+    @inlinable mutating func update(selection: Range<Position>, momentum: Bool) {
+        self._field.update(selection: selection, momentum: momentum)
+    }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Input
+    //=------------------------------------------------------------------------=
+    
+    @inlinable func merged(_ input: String, in range: Range<Position>) throws -> Self {
+        var result = self; try result.merge(input, in: range); return result
+    }
+    
+    @inlinable mutating func merge(_ input: String, in range: Range<Position>) throws {
+        //=--------------------------------------=
+        // MARK: Values
+        //=--------------------------------------=
+        let indices = field.indices(at: range)
+        let range = Range(uncheckedBounds: (indices.lowerBound.subindex, indices.upperBound.subindex))
+        let commit = try style.merge(Changes(to: layout.snapshot, with: input, in: range))
+        //=--------------------------------------=
+        // MARK: Update
+        //=--------------------------------------=
+        self.set(selection: indices.upperBound)
+        self.merge(Self.focused(style, commit))
     }
 }
