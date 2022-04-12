@@ -11,6 +11,7 @@
 // MARK: * Context
 //*============================================================================*
 
+/// Values describing the state of a diffable text view.
 public struct Context<Style: DiffableTextStyle, Scheme: DiffableTextKit.Scheme> {
     public typealias Value = Style.Value
     public typealias Remote = DiffableTextKit.Remote<Style>
@@ -22,19 +23,72 @@ public struct Context<Style: DiffableTextStyle, Scheme: DiffableTextKit.Scheme> 
     //=------------------------------------------------------------------------=
     // MARK: State
     //=------------------------------------------------------------------------=
-    
-    @usableFromInline private(set) var _focus: Focus
-    @usableFromInline private(set) var _style: Style
-    @usableFromInline private(set) var _value: Value
-    @usableFromInline private(set) var _field: Field
+
+    /// A reference based storage model.
+    ///
+    /// Transform its values using transform(\_:).
+    ///
+    @usableFromInline private(set) var _storage: Storage
     
     //=------------------------------------------------------------------------=
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable init(_ focus: Focus, _ style: Style, _ value: Value, _ snapshot: Snapshot) {
-        self._focus = focus; self._style = style
-        self._value = value; self._field = Field(Layout(snapshot))
+    @inlinable init(  _ storage: Storage) {
+        self._storage = storage
+    }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Transformation
+    //=------------------------------------------------------------------------=
+    
+    /// Transforms this instance with copy-on-write behavior.
+    ///
+    /// - Note: All other transformation methods MUST call this method when writing to storage.
+    ///
+    @inlinable mutating func transform(_ transform: (Storage) -> Void) {
+        //=--------------------------------------=
+        // MARK: Unique
+        //=--------------------------------------=
+        if !isKnownUniquelyReferenced(&_storage) {
+            self._storage = self._storage.copy()
+        }
+        //=--------------------------------------=
+        // MARK: Update
+        //=--------------------------------------=
+        transform(self._storage)
+    }
+    
+    //*========================================================================*
+    // MARK: * Storage
+    //*========================================================================*
+    
+    @usableFromInline final class Storage {
+        
+        //=--------------------------------------------------------------------=
+        // MARK: State
+        //=--------------------------------------------------------------------=
+        
+        @usableFromInline var focus: Focus
+        @usableFromInline var style: Style
+        @usableFromInline var value: Value
+        @usableFromInline var field: Field
+        
+        //=--------------------------------------------------------------------=
+        // MARK: Initializers
+        //=--------------------------------------------------------------------=
+        
+        @inlinable init(_ focus: Focus, _ style: Style, _ value: Value, _ field: Field) {
+            self.focus = focus; self.style = style; self.value = value; self.field = field
+        }
+        
+        //=--------------------------------------------------------------------=
+        // MARK: Utilities
+        //=--------------------------------------------------------------------=
+        
+        @inlinable func copy() -> Self {
+            Self(focus, style, value, field)
+        }
     }
 }
 
@@ -49,15 +103,19 @@ public extension Context {
     //=------------------------------------------------------------------------=
     
     @inlinable var style: Style {
-        _style
+        _storage.style
     }
     
     @inlinable var value: Value {
-        _value
+        _storage.value
     }
     
     @inlinable var focus: Focus {
-        _focus
+        _storage.focus
+    }
+    
+    @inlinable internal var field: Field {
+        _storage.field
     }
     
     //=------------------------------------------------------------------------=
@@ -65,16 +123,16 @@ public extension Context {
     //=------------------------------------------------------------------------=
 
     @inlinable var snapshot: Snapshot {
-        _field.layout.snapshot
+        field.layout.snapshot
     }
     
     @inlinable var text: String {
-        _field.layout.snapshot.characters
+        field.layout.snapshot.characters
     }
     
     @inlinable var selection: Range<Position> {
-        _field.selection.lowerBound.position ..<
-        _field.selection.upperBound.position
+        field.selection.lowerBound.position ..<
+        field.selection.upperBound.position
     }
 }
 
@@ -104,11 +162,11 @@ public extension Context {
     }
     
     @inlinable static func focused(_ style: Style, _ commit: Commit) -> Self {
-        Self(true, style, commit.value, commit.snapshot)
+        Self(Storage(true, style, commit.value, Field(Layout(commit.snapshot))))
     }
  
     @inlinable static func unfocused(_ style: Style, _ value: Value) -> Self {
-        Self(false, style, value, Snapshot(style.format(value), as: .phantom))
+        Self(Storage(false, style, value, Field(Layout(Snapshot(style.format(value), as: .phantom)))))
     }
 }
 
@@ -126,11 +184,13 @@ public extension Context {
         //=--------------------------------------=
         // MARK: Focused
         //=--------------------------------------=
-        if other._focus.value {
-            self._focus = other._focus
-            self._style = other._style
-            self._value = other._value
-            self._field.update(layout: other._field.layout)
+        if other.focus.value {
+            self.transform {
+                $0.focus = other.focus
+                $0.style = other.style
+                $0.value = other.value
+                $0.field.update(layout: other.field.layout)
+            }
         //=--------------------------------------=
         // MARK: Unfocused
         //=--------------------------------------=
@@ -172,7 +232,7 @@ public extension Context {
         //=--------------------------------------=
         // MARK: Values
         //=--------------------------------------=
-        let indices = _field.indices(at: range)
+        let indices = field.indices(at: range)
         let range = Range.init(uncheckedBounds:(
         indices.lowerBound.subindex,
         indices.upperBound.subindex))
@@ -200,10 +260,10 @@ public extension Context {
     //=------------------------------------------------------------------------=
     
     @inlinable internal mutating func set(selection: Layout.Index) {
-        self._field.selection = Range(uncheckedBounds: (selection, selection))
+        self.transform { $0.field.selection = Range(uncheckedBounds: (selection, selection)) }
     }
     
     @inlinable mutating func update(selection: Range<Position>, momentum: Bool) {
-        self._field.update(selection: selection, momentum: momentum)
+        self.transform { $0.field.update(selection: selection, momentum: momentum) }
     }
 }
