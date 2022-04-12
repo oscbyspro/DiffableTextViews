@@ -88,7 +88,7 @@ public struct _NumericTextStyle<Format: NumericTextFormat>: DiffableTextStyle {
     // MARK: Setup
     //=------------------------------------------------------------------------=
 
-    @inlinable public static func onSetup(_ diffableTextField: ProxyTextField) {
+    @inlinable public static func onSetup(of diffableTextField: ProxyTextField) {
         diffableTextField.keyboard.view(Value.isInteger ? .numberPad : .decimalPad)
     }
 

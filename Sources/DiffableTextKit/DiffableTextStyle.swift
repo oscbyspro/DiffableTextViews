@@ -68,7 +68,7 @@ public protocol DiffableTextStyle: Equatable {
     // MARK: Setup
     //=------------------------------------------------------------------------=
     
-    @inlinable static func onSetup(_ diffableTextField: ProxyTextField)
+    @inlinable static func onSetup(of diffableTextField: ProxyTextField)
     
     #endif
 }
@@ -95,7 +95,7 @@ public extension DiffableTextStyle {
     // MARK: Setup
     //=------------------------------------------------------------------------=
     
-    @inlinable static func onSetup(_ diffableTextField: ProxyTextField) { }
+    @inlinable static func onSetup(of diffableTextField: ProxyTextField) { }
     
     #endif
 }

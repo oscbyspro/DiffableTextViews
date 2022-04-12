@@ -11,18 +11,14 @@
 // MARK: * Lock
 //*============================================================================*
 
-/// A lock that allows actions to be performed inside a locked state.
-///
-/// - Note: This is NOT a thread lock.
-///
+/// A lock that allows actions to be performed inside of a locked state.
 public final class Lock {
     
     //=------------------------------------------------------------------------=
     // MARK: State
     //=------------------------------------------------------------------------=
     
-    @usableFromInline var _isLocked = false
-    @inlinable public var  isLocked: Bool { _isLocked }
+    @usableFromInline private(set) var _isLocked = false
     
     //=------------------------------------------------------------------------=
     // MARK: Initializers
@@ -31,15 +27,23 @@ public final class Lock {
     @inlinable public init() { }
     
     //=------------------------------------------------------------------------=
+    // MARK: Accessors
+    //=------------------------------------------------------------------------=
+    
+    @inlinable public var isLocked: Bool {
+        _isLocked
+    }
+    
+    //=------------------------------------------------------------------------=
     // MARK: Utilities
     //=------------------------------------------------------------------------=
     
-    @inlinable public func perform(_ action: () -> Void) {
+    @inlinable public func perform(action: () -> Void) {
         let state = _isLocked
         self._isLocked = true
-        
+
         action()
-        
+
         self._isLocked = state
     }
 }

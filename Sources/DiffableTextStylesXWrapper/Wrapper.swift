@@ -81,8 +81,8 @@ extension WrapperTextStyle {
     //=------------------------------------------------------------------------=
     
     @inlinable @inline(__always)
-    public static func onSetup(_ diffableTextField: ProxyTextField) {
-        Style.onSetup(diffableTextField)
+    public static func onSetup(of diffableTextField: ProxyTextField) {
+        Style.onSetup(of: diffableTextField)
     }
 
     #endif

@@ -167,7 +167,9 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
             // MARK: Update Downstream As Needed
             //=----------------------------------=
             if  selection != context.selection {
-                lock.perform { self.downstream.update(selection:  context.selection) }
+                lock.perform {
+                    self.downstream.update(selection: context.selection)
+                }
             }
         }
         
