@@ -27,11 +27,11 @@ Next: BidirectionalCollection, Next.Element == Symbol {
     // MARK: Prefix
     //=------------------------------------------------------------------------=
     
-    @inlinable static func prefix(next: Next, prev: Prev) -> Indices {
-        prefix(prev: prev, next:  next)
+    @inlinable static func forwards(to next: Next, from prev: Prev) -> Indices {
+        forwards(from: prev, to:  next)
     }
     
-    @inlinable static func prefix(prev: Prev, next: Next) -> Indices {
+    @inlinable static func forwards(from prev: Prev, to next: Next) -> Indices {
         var prevIndex = prev.startIndex
         var nextIndex = next.startIndex
         //=-------------------------------------=
@@ -68,13 +68,12 @@ Next: BidirectionalCollection, Next.Element == Symbol {
     // MARK: Suffix
     //=------------------------------------------------------------------------=
     
-    @inlinable static func suffix(next: Next, prev: Prev) -> Indices {
-        suffix(prev: prev, next:  next)
+    @inlinable static func backwards(to next: Next, from prev: Prev) -> Indices {
+        backwards(from: prev, to:  next)
     }
     
-    @inlinable static func suffix(prev: Prev, next: Next) -> Indices {
-        let reversed = Reversed.prefix(
-        prev: prev.reversed(), next: next.reversed())
+    @inlinable static func backwards(from prev: Prev, to next: Next) -> Indices {
+        let reversed = Reversed.forwards(from: prev.reversed(), to: next.reversed())
         return (reversed.prev.base, reversed.next.base)
     }
 }

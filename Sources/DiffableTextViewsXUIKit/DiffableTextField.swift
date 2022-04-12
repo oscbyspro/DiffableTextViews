@@ -66,11 +66,12 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
         //=--------------------------------------=
         // MARK: Done
         //=--------------------------------------=
-        context.coordinator.setup(self,  context.environment, downstream); return view
+        context.coordinator.setup((self,  context.environment, downstream))
+        return view
     }
     
     @inlinable public func updateUIView(_ uiView: UIViewType, context: Self.Context) {
-        context.coordinator.update(self, context.environment)
+        context.coordinator.update((self, context.environment))
     }
     
     //*========================================================================*
@@ -99,14 +100,14 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
         // MARK: View Life Cycle
         //=--------------------------------------------------------------------=
         
-        @inlinable func setup(_ upstream: Upstream, _ environment: Environment, _ downstream: Downstream) {
-            self.upstream = upstream; self.environment = environment; self.downstream = downstream
-            self.context = Context(pull()); self.downstream.wrapped.delegate = self;  self.write()
+        @inlinable func setup(_ values: (Upstream, Environment, Downstream)) {
+            (upstream, environment, downstream) = values
+            self.downstream.wrapped.delegate = self
+            self.context = Context(pull()); self.write()
         }
         
-        @inlinable func update(_ upstream: Upstream, _ environment: Environment) {
-            self.upstream = upstream; self.environment = environment
-            self.synchronize() // on update is same as on did update
+        @inlinable func update(_ values: (Upstream, Environment)) {
+            (upstream, environment) = values; self.synchronize()
             self.downstream.transform(environment.diffableTextField_onUpdate)
         }
         
@@ -132,12 +133,12 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
             // MARK: Merge
             //=----------------------------------=
             attempt: do {
-                let context = try context.merged(
-                input, in: Position.range(range))
+                var context = context!
+                try context.merge(input, in: Position.range(range))
                 //=------------------------------=
                 // MARK: Push
                 //=------------------------------=
-                Task { @MainActor in
+                Task { @MainActor [context] in
                     // async to process special commands first
                     // as an example see: (option + backspace)
                     self.context = context

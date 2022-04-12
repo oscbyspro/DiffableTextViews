@@ -11,7 +11,7 @@
 // MARK: * Changes
 //*============================================================================*
 
-/// A snapshot and one continuous change not yet applied to it.
+/// A snapshot and one continuous change that has not yet been applied to it.
 public struct Changes {
     
     //=------------------------------------------------------------------------=
@@ -26,7 +26,7 @@ public struct Changes {
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable public init(to snapshot: Snapshot, with replacement: String, in range: Range<Snapshot.Index>) {
+    @inlinable public init(to snapshot: Snapshot, as replacement: String, in range: Range<Snapshot.Index>) {
         self.snapshot = snapshot; self.replacement = Snapshot(replacement, as: .content); self.range = range
     }
     
@@ -34,7 +34,7 @@ public struct Changes {
     // MARK: Utilities
     //=------------------------------------------------------------------------=
     
-    /// Returns a new snapshot with proposed changes applied to it.
+    /// Returns a new snapshot with the proposed change applied to it.
     @inlinable public func proposal() -> Snapshot {
         var result = snapshot; result.replaceSubrange(range, with: replacement); return result
     }

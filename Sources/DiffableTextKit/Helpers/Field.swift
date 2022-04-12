@@ -16,7 +16,7 @@
 /// - Autocorrects selection on layout changes.
 /// - Autocorrects selection on selection changes.
 ///
-public struct Field<Scheme: DiffableTextKit.Scheme> {
+@usableFromInline struct Field<Scheme: DiffableTextKit.Scheme> {
     public typealias Layout = DiffableTextKit.Layout<Scheme>
     public typealias Index = DiffableTextKit.Layout<Scheme>.Index
     public typealias Position = DiffableTextKit.Position<Scheme>
@@ -36,28 +36,6 @@ public struct Field<Scheme: DiffableTextKit.Scheme> {
         self.layout = layout; self.selection = Range.init(
         uncheckedBounds: (layout.endIndex, layout.endIndex))
     }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Utilities
-    //=------------------------------------------------------------------------=
-    
-    @inlinable public func indices(at positions: Range<Position>) -> Range<Index> {
-        //=--------------------------------------=
-        // MARK: Single
-        //=--------------------------------------=
-        let upperBound = layout.index(at: positions.upperBound, from: selection.upperBound)
-        var lowerBound = upperBound
-        //=--------------------------------------=
-        // MARK: Double
-        //=--------------------------------------=
-        if !positions.isEmpty {
-            lowerBound = layout.index(at: positions.lowerBound, from: selection.lowerBound)
-        }
-        //=--------------------------------------=
-        // MARK: Return
-        //=--------------------------------------=
-        return lowerBound ..< upperBound
-    }
 }
 
 //=----------------------------------------------------------------------------=
@@ -74,15 +52,15 @@ extension Field {
         //=--------------------------------------=
         // MARK: Single
         //=--------------------------------------=
-        let upperBound = Mismatches.suffix(next: layout,
-        prev: self.layout[selection.upperBound...]).next
+        let upperBound = Mismatches.backwards(to: layout,
+        from: self.layout[selection.upperBound...]).next
         var lowerBound = upperBound
         //=--------------------------------------=
         // MARK: Double
         //=--------------------------------------=
         if !selection.isEmpty {
-            lowerBound = Mismatches.prefix(next: layout,
-            prev: self.layout[..<selection.lowerBound]).next
+            lowerBound = Mismatches.forwards(to: layout,
+            from: self.layout[..<selection.lowerBound]).next
             lowerBound = Swift.min(lowerBound, upperBound)
         }
         //=--------------------------------------=
@@ -91,16 +69,23 @@ extension Field {
         self.layout = layout
         self.update(selection: lowerBound ..< upperBound)
     }
+}
+
+//=----------------------------------------------------------------------------=
+// MARK: + Transformations
+//=----------------------------------------------------------------------------=
+
+extension Field {
 
     //=------------------------------------------------------------------------=
     // MARK: Selection
     //=------------------------------------------------------------------------=
     
     @inlinable mutating func update(selection: Range<Position>, momentum: Bool) {
+        //=--------------------------------------=
+        // MARK: Values
+        //=--------------------------------------=
         let selection = indices(at: selection)
-        //=--------------------------------------=
-        // MARK: Parse Boolean As Momentum
-        //=--------------------------------------=
         let momentum = momentum ? Momentum(self.selection, to: selection) : .none
         //=--------------------------------------=
         // MARK: Update
@@ -134,5 +119,34 @@ extension Field {
         // MARK: Update
         //=--------------------------------------=
         self.selection = lowerBound ..< upperBound
+    }
+}
+
+//=----------------------------------------------------------------------------=
+// MARK: + Indices
+//=----------------------------------------------------------------------------=
+
+extension Field {
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Indices
+    //=------------------------------------------------------------------------=
+    
+    @inlinable func indices(at positions: Range<Position>) -> Range<Index> {
+        //=--------------------------------------=
+        // MARK: Single
+        //=--------------------------------------=
+        let upperBound = layout.index(at: positions.upperBound, from: selection.upperBound)
+        var lowerBound = upperBound
+        //=--------------------------------------=
+        // MARK: Double
+        //=--------------------------------------=
+        if !positions.isEmpty {
+            lowerBound = layout.index(at: positions.lowerBound, from: selection.lowerBound)
+        }
+        //=--------------------------------------=
+        // MARK: Return
+        //=--------------------------------------=
+        return lowerBound ..< upperBound
     }
 }

@@ -18,10 +18,10 @@
 /// |x|o|o|o|x|o|o|o|o|o|o|o|x|x|x|x|~
 /// ```
 ///
-/// A caret shares index with the character that appears behind it.
-/// This makes forwards traversal and backwards traversal asymmetric.
+/// A caret shares its index with the character that appears behind it.
+/// This makes forwards and backwards traversal and searches asymmetric.
 ///
-public struct Layout<Scheme: DiffableTextKit.Scheme>: BidirectionalCollection {
+@usableFromInline struct Layout<Scheme: DiffableTextKit.Scheme>: BidirectionalCollection {
     @usableFromInline typealias Target = (Index) -> Bool
     @usableFromInline typealias Subindex = Snapshot.Index
     @usableFromInline typealias Position = DiffableTextKit.Position<Scheme>
@@ -48,7 +48,7 @@ public struct Layout<Scheme: DiffableTextKit.Scheme>: BidirectionalCollection {
     // MARK: Element
     //=------------------------------------------------------------------------=
     
-    @inlinable public subscript(index: Index) -> Symbol {
+    @inlinable subscript(index: Index) -> Symbol {
         snapshot[index.subindex]
     }
     
@@ -56,11 +56,11 @@ public struct Layout<Scheme: DiffableTextKit.Scheme>: BidirectionalCollection {
     // MARK: Indices
     //=------------------------------------------------------------------------=
     
-    @inlinable public var startIndex: Index {
+    @inlinable var startIndex: Index {
         range.lowerBound
     }
     
-    @inlinable public var endIndex: Index {
+    @inlinable var endIndex: Index {
         range.upperBound
     }
     
@@ -68,13 +68,13 @@ public struct Layout<Scheme: DiffableTextKit.Scheme>: BidirectionalCollection {
     // MARK: After / Before
     //=------------------------------------------------------------------------=
 
-    @inlinable public func index(after index: Index) -> Index {
+    @inlinable func index(after index: Index) -> Index {
         let character = snapshot.characters[index.character]
         let after = snapshot.index(after: index.subindex)
         return Index(after, at: index.position.after(character))
     }
 
-    @inlinable public func index(before index: Index) -> Index {
+    @inlinable func index(before index: Index) -> Index {
         let before = snapshot.index(before: index.subindex)
         let character = snapshot.characters[before.character]
         return Index(before, at: index.position.before(character))
@@ -84,7 +84,7 @@ public struct Layout<Scheme: DiffableTextKit.Scheme>: BidirectionalCollection {
     // MARK: * Index
     //*========================================================================*
 
-    public struct Index: Comparable {
+    @usableFromInline struct Index: Comparable {
 
         //=--------------------------------------------------------------------=
         // MARK: State
@@ -118,11 +118,11 @@ public struct Layout<Scheme: DiffableTextKit.Scheme>: BidirectionalCollection {
         // MARK: Comparisons
         //=--------------------------------------------------------------------=
 
-        @inlinable public static func == (lhs: Self, rhs: Self) -> Bool {
+        @inlinable static func == (lhs: Self, rhs: Self) -> Bool {
             lhs.position == rhs.position
         }
         
-        @inlinable public static func <  (lhs: Self, rhs: Self) -> Bool {
+        @inlinable static func <  (lhs: Self, rhs: Self) -> Bool {
             lhs.position <  rhs.position
         }
     }

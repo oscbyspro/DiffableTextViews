@@ -12,12 +12,12 @@
 //*============================================================================*
 
 public struct Context<Style: DiffableTextStyle, Scheme: DiffableTextKit.Scheme> {
-    public typealias Field = DiffableTextKit.Field<Scheme>
-    public typealias Layout = DiffableTextKit.Layout<Scheme>
-    public typealias Position = DiffableTextKit.Position<Scheme>
+    public typealias Value = Style.Value
     public typealias Remote = DiffableTextKit.Remote<Style>
     public typealias Commit = DiffableTextKit.Commit<Value>
-    public typealias Value = Style.Value
+    public typealias Position = DiffableTextKit.Position<Scheme>
+    @usableFromInline typealias Field = DiffableTextKit.Field<Scheme>
+    @usableFromInline typealias Layout = DiffableTextKit.Layout<Scheme>
 
     //=------------------------------------------------------------------------=
     // MARK: State
@@ -36,41 +36,45 @@ public struct Context<Style: DiffableTextStyle, Scheme: DiffableTextKit.Scheme> 
         self._focus = focus; self._style = style
         self._value = value; self._field = Field(Layout(snapshot))
     }
-    
+}
+
+//=----------------------------------------------------------------------------=
+// MARK: + Accessors
+//=----------------------------------------------------------------------------=
+
+public extension Context {
+
     //=------------------------------------------------------------------------=
-    // MARK: Accessors
+    // MARK: 1st
     //=------------------------------------------------------------------------=
     
-    @inlinable public var style: Style {
+    @inlinable var style: Style {
         _style
     }
     
-    @inlinable public var value: Value {
+    @inlinable var value: Value {
         _value
     }
     
-    @inlinable public var focus: Focus {
+    @inlinable var focus: Focus {
         _focus
     }
     
-    @inlinable public var field: Field {
-        _field
+    //=------------------------------------------------------------------------=
+    // MARK: 2nd
+    //=------------------------------------------------------------------------=
+
+    @inlinable var snapshot: Snapshot {
+        _field.layout.snapshot
     }
     
-    //=------------------------------------------------------------------------=
-    // MARK: Accessors
-    //=------------------------------------------------------------------------=
-    
-    @inlinable public var layout: Layout {
-        _field.layout
-    }
-    
-    @inlinable public var text: String {
+    @inlinable var text: String {
         _field.layout.snapshot.characters
     }
     
-    @inlinable public var selection: Range<Position> {
-        _field.selection.lowerBound.position ..< _field.selection.upperBound.position
+    @inlinable var selection: Range<Position> {
+        _field.selection.lowerBound.position ..<
+        _field.selection.upperBound.position
     }
 }
 
@@ -81,7 +85,7 @@ public struct Context<Style: DiffableTextStyle, Scheme: DiffableTextKit.Scheme> 
 public extension Context {
     
     //=------------------------------------------------------------------------=
-    // MARK: Remote
+    // MARK: Direct
     //=------------------------------------------------------------------------=
 
     @inlinable init(_ remote: Remote) {
@@ -92,7 +96,7 @@ public extension Context {
     }
     
     //=------------------------------------------------------------------------=
-    // MARK: Style / Value
+    // MARK: Static
     //=------------------------------------------------------------------------=
     
     @inlinable static func focused(_ style: Style, _ value: Value) -> Self {
@@ -138,6 +142,9 @@ public extension Context {
     //=------------------------------------------------------------------------=
     
     @inlinable mutating func merge(_ remote: Remote) -> Bool {
+        //=--------------------------------------=
+        // MARK: Comparisons
+        //=--------------------------------------=
         let changeInStyle = remote.style != style
         let changeInValue = remote.value != value
         let changeInFocus = remote.focus != focus
@@ -158,36 +165,45 @@ public extension Context {
     }
     
     //=------------------------------------------------------------------------=
-    // MARK: Selection
+    // MARK: Replacement
     //=------------------------------------------------------------------------=
-    
-    @inlinable mutating func set(selection: Layout.Index) {
-        self._field.selection = Range(uncheckedBounds: (selection, selection))
-    }
-    
-    @inlinable mutating func update(selection: Range<Position>, momentum: Bool) {
-        self._field.update(selection: selection, momentum: momentum)
-    }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Input
-    //=------------------------------------------------------------------------=
-    
-    @inlinable func merged(_ input: String, in range: Range<Position>) throws -> Self {
-        var result = self; try result.merge(input, in: range); return result
-    }
-    
-    @inlinable mutating func merge(_ input: String, in range: Range<Position>) throws {
+        
+    @inlinable mutating func merge(_ replacement: String, in range: Range<Position>) throws {
         //=--------------------------------------=
         // MARK: Values
         //=--------------------------------------=
-        let indices = field.indices(at: range)
-        let range = Range(uncheckedBounds: (indices.lowerBound.subindex, indices.upperBound.subindex))
-        let commit = try style.merge(Changes(to: layout.snapshot, with: input, in: range))
+        let indices = _field.indices(at: range)
+        let range = Range.init(uncheckedBounds:(
+        indices.lowerBound.subindex,
+        indices.upperBound.subindex))
+        //=--------------------------------------=
+        // MARK: Commit
+        //=--------------------------------------=
+        let commit = try style.merge(Changes(
+        to: snapshot, as: replacement, in: range))
         //=--------------------------------------=
         // MARK: Update
         //=--------------------------------------=
         self.set(selection: indices.upperBound)
         self.merge(Self.focused(style, commit))
+    }
+}
+
+//=----------------------------------------------------------------------------=
+// MARK: + Transformations
+//=----------------------------------------------------------------------------=
+
+public extension Context {
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Selection
+    //=------------------------------------------------------------------------=
+    
+    @inlinable internal mutating func set(selection: Layout.Index) {
+        self._field.selection = Range(uncheckedBounds: (selection, selection))
+    }
+    
+    @inlinable mutating func update(selection: Range<Position>, momentum: Bool) {
+        self._field.update(selection: selection, momentum: momentum)
     }
 }
