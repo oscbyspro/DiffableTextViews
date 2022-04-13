@@ -8,35 +8,39 @@
 //=----------------------------------------------------------------------------=
 
 //*============================================================================*
-// MARK: * Momentum
+// MARK: * Range
 //*============================================================================*
 
-@usableFromInline struct Momentum {
+extension Range {
     
-    //=------------------------------------------------------------------------=
-    // MARK: Instances
-    //=------------------------------------------------------------------------=
-    
-    @usableFromInline static let none = Self()
-    
-    //=------------------------------------------------------------------------=
-    // MARK: State
-    //=------------------------------------------------------------------------=
-    
-    @usableFromInline let lowerBound: Direction?
-    @usableFromInline let upperBound: Direction?
-
     //=------------------------------------------------------------------------=
     // MARK: Initializers
     //=------------------------------------------------------------------------=
-
-    @inlinable init(lowerBound: Direction? = nil, upperBound: Direction? = nil) {
-        self.lowerBound = lowerBound
-        self.upperBound = upperBound
+    
+    @inlinable static func empty(_ location: Bound) -> Self {
+        Self(uncheckedBounds: (location, location))
     }
     
-    @inlinable init<T>(_ start: Range<T>, to end: Range<T>) where T: Comparable {
-        self.lowerBound = Direction(start.lowerBound, to: end.lowerBound)
-        self.upperBound = Direction(start.upperBound, to: end.upperBound)
+    @inlinable static func unchecked(_ bounds: (lower: Bound, upper: Bound)) -> Self {
+        Self(uncheckedBounds: bounds)
+    }
+}
+
+//=----------------------------------------------------------------------------=
+// MARK: + Index
+//=----------------------------------------------------------------------------=
+
+extension Range where Bound: _Index {
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Accessors
+    //=------------------------------------------------------------------------=
+    
+    @inlinable var positions: Range<Bound.Position> {
+        .unchecked((lowerBound.position, upperBound.position))
+    }
+    
+    @inlinable var subindices: Range<Bound.Subindex> {
+        .unchecked((lowerBound.subindex, upperBound.subindex))
     }
 }

@@ -13,7 +13,6 @@ import Foundation
 // MARK: * Position
 //*============================================================================*
 
-/// A model representing a position in text.
 public struct Position<Scheme: DiffableTextKit.Scheme>: Comparable, ExpressibleByIntegerLiteral {
     
     //=------------------------------------------------------------------------=

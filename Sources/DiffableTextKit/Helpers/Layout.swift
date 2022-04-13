@@ -21,15 +21,15 @@
 /// A caret shares its index with the character that appears behind it.
 /// This makes forwards and backwards traversal and searches asymmetric.
 ///
-@usableFromInline struct Layout<Scheme: DiffableTextKit.Scheme>: BidirectionalCollection {
+@usableFromInline struct Layout<Scheme: _Scheme>: BidirectionalCollection {
+    @usableFromInline typealias Index = Scheme.Index
+    @usableFromInline typealias Position = Scheme.Position
     @usableFromInline typealias Target = (Index) -> Bool
-    @usableFromInline typealias Subindex = Snapshot.Index
-    @usableFromInline typealias Position = DiffableTextKit.Position<Scheme>
 
     //=------------------------------------------------------------------------=
     // MARK: State
     //=------------------------------------------------------------------------=
-
+    
     @usableFromInline let snapshot: Snapshot
     @usableFromInline let range: Range<Index>
     
@@ -79,53 +79,6 @@
         let character = snapshot.characters[before.character]
         return Index(before, at: index.position.before(character))
     }
-    
-    //*========================================================================*
-    // MARK: * Index
-    //*========================================================================*
-
-    @usableFromInline struct Index: Comparable {
-
-        //=--------------------------------------------------------------------=
-        // MARK: State
-        //=--------------------------------------------------------------------=
-
-        @usableFromInline let subindex: Subindex
-        @usableFromInline let position: Position
-
-        //=--------------------------------------------------------------------=
-        // MARK: Initializers
-        //=--------------------------------------------------------------------=
-
-        @inlinable init(_ subindex: Subindex, at position: Position) {
-            self.subindex = subindex
-            self.position = position
-        }
-        
-        //=--------------------------------------------------------------------=
-        // MARK: Accessors
-        //=--------------------------------------------------------------------=
-
-        @inlinable var character: String.Index {
-            subindex.character
-        }
-        
-        @inlinable var attribute: Int {
-            subindex.attribute
-        }
-        
-        //=--------------------------------------------------------------------=
-        // MARK: Comparisons
-        //=--------------------------------------------------------------------=
-
-        @inlinable static func == (lhs: Self, rhs: Self) -> Bool {
-            lhs.position == rhs.position
-        }
-        
-        @inlinable static func <  (lhs: Self, rhs: Self) -> Bool {
-            lhs.position <  rhs.position
-        }
-    }
 }
 
 //=----------------------------------------------------------------------------=
@@ -162,7 +115,7 @@ extension Layout {
     // MARK: Indices
     //=------------------------------------------------------------------------=
     
-    @inlinable func index(of subindex: Subindex) -> Index {
+    @inlinable func index(of subindex: Snapshot.Index) -> Index {
         Index(subindex, at: .end(of: snapshot.characters[..<subindex.character]))
     }
 

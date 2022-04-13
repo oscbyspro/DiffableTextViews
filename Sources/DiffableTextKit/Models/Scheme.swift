@@ -11,7 +11,7 @@
 // MARK: * Scheme
 //*============================================================================*
 
-public protocol Scheme {
+@usableFromInline typealias _Scheme = Scheme; public protocol Scheme {
     
     //=------------------------------------------------------------------------=
     // MARK: Size
@@ -20,6 +20,22 @@ public protocol Scheme {
     @inlinable static func size(of character: Character) -> Int
     
     @inlinable static func size<S>(of characters: S) -> Int where S: StringProtocol
+}
+
+//=----------------------------------------------------------------------------=
+// MARK: + Details
+//=----------------------------------------------------------------------------=
+
+extension Scheme {
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Aliases
+    //=------------------------------------------------------------------------=
+    
+    public typealias Position = DiffableTextKit.Position<Self>
+    @usableFromInline typealias Field = DiffableTextKit.Field<Self>
+    @usableFromInline typealias Index = DiffableTextKit.Index<Self>
+    @usableFromInline typealias Layout = DiffableTextKit.Layout<Self>
 }
 
 //*============================================================================*
@@ -34,6 +50,7 @@ extension Character: Scheme {
 
     @inlinable public static func size(of character: Character) -> Int { 1 }
     
+    /// - Complexity: O(n).
     @inlinable public static func size<S>(of characters: S) -> Int where S: StringProtocol {
         characters.count
     }
@@ -53,6 +70,7 @@ extension UTF8: Scheme {
         character.utf8.count
     }
     
+    /// - Complexity: O(1).
     @inlinable public static func size<S>(of characters: S) -> Int where S: StringProtocol {
         characters.utf8.count
     }
@@ -72,6 +90,7 @@ extension UTF16: Scheme {
         character.utf16.count
     }
     
+    /// - Complexity: O(1).
     @inlinable public static func size<S>(of characters: S) -> Int where S: StringProtocol {
         characters.utf16.count
     }
@@ -91,6 +110,7 @@ extension UnicodeScalar: Scheme {
         character.unicodeScalars.count
     }
     
+    /// - Complexity: O(n).
     @inlinable public static func size<S>(of characters: S) -> Int where S: StringProtocol {
         characters.unicodeScalars.count
     }

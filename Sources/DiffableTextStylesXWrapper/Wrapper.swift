@@ -20,7 +20,7 @@ import Foundation
     // MARK: Style
     //=------------------------------------------------------------------------=
     
-    associatedtype Style: DiffableTextStyle
+    associatedtype Style: DiffableTextStyle where Style.Value == Value
 
     @inlinable var style: Style { get set }
 }
@@ -52,12 +52,12 @@ extension WrapperTextStyle {
     }
 
     @inlinable @inline(__always)
-    public func interpret(_ value: Style.Value) -> Commit<Style.Value> {
+    public func interpret(_ value: Style.Value) -> Commit {
         style.interpret(value)
     }
 
     @inlinable @inline(__always)
-    public func merge(_ changes: Changes) throws -> Commit<Style.Value> {
+    public func merge(_ changes: Changes) throws -> Commit {
         try style.merge(changes)
     }
     

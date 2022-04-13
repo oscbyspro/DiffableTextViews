@@ -79,23 +79,23 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
     //*========================================================================*
     
     public final class Coordinator: NSObject, UITextFieldDelegate {
+        @usableFromInline typealias Scheme = Unicode.UTF16
         @usableFromInline typealias Upstream = DiffableTextField
         @usableFromInline typealias Environment = EnvironmentValues
-        @usableFromInline typealias Remote = DiffableTextKit.Remote<Style>
-        @usableFromInline typealias Context = DiffableTextKit.Context<Style, UTF16>
-        @usableFromInline typealias Position = DiffableTextKit.Position<UTF16>
+        @usableFromInline typealias Remote = Style.Remote
+        @usableFromInline typealias Position = Scheme.Position
+        @usableFromInline typealias Context = DiffableTextKit.Context<Style, Scheme>
 
         //=--------------------------------------------------------------------=
         // MARK: State
         //=--------------------------------------------------------------------=
         
-        @usableFromInline private(set) var context: Context!
-        @usableFromInline private(set) var upstream: Upstream!
-        @usableFromInline private(set) var downstream: Downstream!
-        @usableFromInline private(set) var environment: Environment!
-        
         @usableFromInline let lock = Lock()
-
+        @usableFromInline var context: Context!
+        @usableFromInline var upstream: Upstream!
+        @usableFromInline var downstream: Downstream!
+        @usableFromInline var environment: Environment!
+        
         //=--------------------------------------------------------------------=
         // MARK: View Life Cycle
         //=--------------------------------------------------------------------=

@@ -17,10 +17,17 @@ import Foundation
 public protocol DiffableTextStyle: Equatable {
 
     //=------------------------------------------------------------------------=
-    // MARK: Value
+    // MARK: Types
     //=------------------------------------------------------------------------=
     
     associatedtype Value: Equatable
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Aliases
+    //=------------------------------------------------------------------------=
+    
+    typealias Remote = DiffableTextKit.Remote<Self>
+    typealias Commit = DiffableTextKit.Commit<Value>
     
     //=------------------------------------------------------------------------=
     // MARK: Transformations
@@ -47,7 +54,7 @@ public protocol DiffableTextStyle: Equatable {
     ///
     /// This method is called in response to changes upstream while the view is focused.
     ///
-    @inlinable func interpret(_ value: Value) -> Commit<Value>
+    @inlinable func interpret(_ value: Value) -> Commit
     
     /// Returns a value and a snapshot.
     ///
@@ -56,7 +63,7 @@ public protocol DiffableTextStyle: Equatable {
     /// - Thrown errors result in input cancellation.
     /// - Thrown errors have their descriptions printed in DEBUG mode.
     ///
-    @inlinable func merge(_ changes: Changes) throws -> Commit<Value>
+    @inlinable func merge(_ changes: Changes) throws -> Commit
     
     //*========================================================================*
     // MARK: * UIKit

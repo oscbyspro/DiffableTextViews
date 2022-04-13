@@ -8,7 +8,7 @@
 //=----------------------------------------------------------------------------=
 
 //*============================================================================*
-// MARK: * Collection x Index
+// MARK: * Collection x Iterate
 //*============================================================================*
 
 public extension Collection {
@@ -33,7 +33,7 @@ public extension Collection {
 }
 
 //*============================================================================*
-// MARK: * BidirectionalCollection x Index
+// MARK: * BidirectionalCollection x Iterate
 //*============================================================================*
 
 public extension BidirectionalCollection {

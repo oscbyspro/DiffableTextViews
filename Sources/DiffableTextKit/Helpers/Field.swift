@@ -16,11 +16,11 @@
 /// - Autocorrects selection on layout changes.
 /// - Autocorrects selection on selection changes.
 ///
-@usableFromInline struct Field<Scheme: DiffableTextKit.Scheme> {
-    public typealias Layout = DiffableTextKit.Layout<Scheme>
-    public typealias Index = DiffableTextKit.Layout<Scheme>.Index
-    public typealias Position = DiffableTextKit.Position<Scheme>
-    
+@usableFromInline struct Field<Scheme: _Scheme> {
+    @usableFromInline typealias Index = Scheme.Index
+    @usableFromInline typealias Layout = Scheme.Layout
+    @usableFromInline typealias Position = Scheme.Position
+
     //=------------------------------------------------------------------------=
     // MARK: State
     //=------------------------------------------------------------------------=
@@ -33,8 +33,7 @@
     //=------------------------------------------------------------------------=
     
     @inlinable init(_ layout: Layout = Layout()) {
-        self.layout = layout; self.selection = Range.init(
-        uncheckedBounds: (layout.endIndex, layout.endIndex))
+        self.layout = layout; self.selection = .empty(layout.endIndex)
     }
 }
 
@@ -67,7 +66,7 @@ extension Field {
         // MARK: Update
         //=--------------------------------------=
         self.layout = layout
-        self.update(selection: lowerBound ..< upperBound)
+        self.update(selection: .unchecked((lowerBound, upperBound)))
     }
 }
 
@@ -86,14 +85,14 @@ extension Field {
         // MARK: Values
         //=--------------------------------------=
         let selection = indices(at: selection)
-        let momentum = momentum ? Momentum(self.selection, to: selection) : .none
+        let momentum = momentum ? Directions(from: self.selection, to: selection) : .none
         //=--------------------------------------=
         // MARK: Update
         //=--------------------------------------=
         self.update(selection: selection, momentum: momentum)
     }
     
-    @inlinable mutating func update(selection: Range<Index>, momentum: Momentum = .none) {
+    @inlinable mutating func update(selection: Range<Index>, momentum: Directions = .none) {
         //=--------------------------------------=
         // MARK: Accept Max Selection
         //=--------------------------------------=
@@ -118,7 +117,7 @@ extension Field {
         //=--------------------------------------=
         // MARK: Update
         //=--------------------------------------=
-        self.selection = lowerBound ..< upperBound
+        self.selection = .unchecked((lowerBound, upperBound))
     }
 }
 

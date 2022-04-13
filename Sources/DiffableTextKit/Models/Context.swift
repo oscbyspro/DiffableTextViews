@@ -14,27 +14,24 @@
 /// Values describing the state of a diffable text view.
 public struct Context<Style: DiffableTextStyle, Scheme: DiffableTextKit.Scheme> {
     public typealias Value = Style.Value
-    public typealias Remote = DiffableTextKit.Remote<Style>
-    public typealias Commit = DiffableTextKit.Commit<Value>
-    public typealias Position = DiffableTextKit.Position<Scheme>
-    @usableFromInline typealias Field = DiffableTextKit.Field<Scheme>
-    @usableFromInline typealias Layout = DiffableTextKit.Layout<Scheme>
+    public typealias Commit = Style.Commit
+    public typealias Remote = Style.Remote
+    public typealias Position = Scheme.Position
+    @usableFromInline typealias Field = Scheme.Field
+    @usableFromInline typealias Index = Scheme.Index
+    @usableFromInline typealias Layout = Scheme.Layout
 
     //=------------------------------------------------------------------------=
     // MARK: State
     //=------------------------------------------------------------------------=
 
-    /// A reference based storage model.
-    ///
-    /// Transform its values using transform(\_:).
-    ///
     @usableFromInline private(set) var _storage: Storage
     
     //=------------------------------------------------------------------------=
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable init(  _ storage: Storage) {
+    @inlinable init(_ storage: Storage) {
         self._storage = storage
     }
     
@@ -43,10 +40,7 @@ public struct Context<Style: DiffableTextStyle, Scheme: DiffableTextKit.Scheme> 
     //=------------------------------------------------------------------------=
     
     /// Transforms this instance with copy-on-write behavior.
-    ///
-    /// - Note: All other transformation methods MUST call this method when writing to storage.
-    ///
-    @inlinable mutating func transform(_ transform: (Storage) -> Void) {
+    @inlinable mutating func write(_ write: (Storage) -> Void) {
         //=--------------------------------------=
         // MARK: Unique
         //=--------------------------------------=
@@ -56,7 +50,7 @@ public struct Context<Style: DiffableTextStyle, Scheme: DiffableTextKit.Scheme> 
         //=--------------------------------------=
         // MARK: Update
         //=--------------------------------------=
-        transform(self._storage)
+        write(self._storage)
     }
     
     //*========================================================================*
@@ -102,6 +96,10 @@ public extension Context {
     // MARK: 1st
     //=------------------------------------------------------------------------=
     
+    @inlinable var focus: Focus {
+        _storage.focus
+    }
+    
     @inlinable var style: Style {
         _storage.style
     }
@@ -110,18 +108,14 @@ public extension Context {
         _storage.value
     }
     
-    @inlinable var focus: Focus {
-        _storage.focus
-    }
-    
-    @inlinable internal var field: Field {
-        _storage.field
-    }
-    
     //=------------------------------------------------------------------------=
     // MARK: 2nd
     //=------------------------------------------------------------------------=
 
+    @inlinable internal var field: Field {
+        _storage.field
+    }
+    
     @inlinable var snapshot: Snapshot {
         field.layout.snapshot
     }
@@ -143,7 +137,7 @@ public extension Context {
 public extension Context {
     
     //=------------------------------------------------------------------------=
-    // MARK: Direct
+    // MARK: Remote
     //=------------------------------------------------------------------------=
 
     @inlinable init(_ remote: Remote) {
@@ -185,7 +179,7 @@ public extension Context {
         // MARK: Focused
         //=--------------------------------------=
         if other.focus.value {
-            self.transform {
+            self.write {
                 $0.focus = other.focus
                 $0.style = other.style
                 $0.value = other.value
@@ -228,19 +222,14 @@ public extension Context {
     // MARK: Replacement
     //=------------------------------------------------------------------------=
         
-    @inlinable mutating func merge(_ replacement: String, in range: Range<Position>) throws {
+    @inlinable mutating func merge(_ replacement: String,
+    in range: Range<Position>) throws {
         //=--------------------------------------=
         // MARK: Values
         //=--------------------------------------=
         let indices = field.indices(at: range)
-        let range = Range.init(uncheckedBounds:(
-        indices.lowerBound.subindex,
-        indices.upperBound.subindex))
-        //=--------------------------------------=
-        // MARK: Commit
-        //=--------------------------------------=
         let commit = try style.merge(Changes(
-        to: snapshot, as: replacement, in: range))
+        to: snapshot, as: replacement, in: indices.subindices))
         //=--------------------------------------=
         // MARK: Update
         //=--------------------------------------=
@@ -259,11 +248,11 @@ public extension Context {
     // MARK: Selection
     //=------------------------------------------------------------------------=
     
-    @inlinable internal mutating func set(selection: Layout.Index) {
-        self.transform { $0.field.selection = Range(uncheckedBounds: (selection, selection)) }
+    @inlinable internal mutating func set(selection: Index) {
+        self.write { $0.field.selection = .empty(selection) }
     }
     
     @inlinable mutating func update(selection: Range<Position>, momentum: Bool) {
-        self.transform { $0.field.update(selection: selection, momentum: momentum) }
+        self.write { $0.field.update(selection: selection, momentum: momentum) }
     }
 }
