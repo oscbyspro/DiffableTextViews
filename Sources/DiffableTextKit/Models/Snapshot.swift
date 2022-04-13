@@ -13,7 +13,12 @@
 
 /// A collection of characters, attributes and an optional anchor.
 ///
-/// Set the anchor to unconditionally select the caret represented by its index. This is required
+/// ```
+/// |$|1|2|3|,|4|5|6|.|7|8|9|_|U|S|D|~
+/// |x|o|o|o|x|o|o|o|o|o|o|o|x|x|x|x|~
+/// ```
+///
+/// Set the anchor to force selection of the caret represented by its index. This is required
 /// when the snapshot contains only formatting characters, and you want the user's caret to appear
 /// at a specific location. As an example, a pattern text style with an empty value may anchor at the
 /// index of the first placeholder character.
@@ -235,17 +240,52 @@ public extension Snapshot {
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: + Layout
+// MARK: + Accessors
 //=----------------------------------------------------------------------------=
 
-/// ```
-/// |$|1|2|3|,|4|5|6|.|7|8|9|_|U|S|D|~
-/// |x|o|o|o|x|o|o|o|o|o|o|o|x|x|x|x|~
-/// ```
-internal extension Snapshot {
+extension Snapshot {
     
     //=------------------------------------------------------------------------=
-    // MARK: Caret
+    // MARK: Range
+    //=------------------------------------------------------------------------=
+    
+    @inlinable var range: Range<Index> {
+        Range.unchecked((startIndex, endIndex))
+    }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Index
+    //=------------------------------------------------------------------------=
+    
+    @inlinable func index<T>(at position: T.Position) -> Index where T: Offset {
+        T.index(at: position, in: characters)
+    }
+    
+    @inlinable func indices<T>(at positions: Range<T.Position>) -> Range<Index> where T: Offset {
+        Range.from(positions, map: index(at:))
+    }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Position
+    //=------------------------------------------------------------------------=
+    
+    @inlinable func position<T>(at index: Index) -> T.Position where T: Offset {
+        T.position(at: index, in: characters)
+    }
+
+    @inlinable func positions<T>(at indices: Range<Index>) -> Range<T.Position> where T: Offset {
+        Range.from(indices, map: position(at:))
+    }
+}
+
+//=----------------------------------------------------------------------------=
+// MARK: + Caret
+//=----------------------------------------------------------------------------=
+
+extension Snapshot {
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Preference
     //=------------------------------------------------------------------------=
     
     /// Returns the preferred caret, or endIndex if no preferred caret was found.
@@ -333,43 +373,8 @@ internal extension Snapshot {
     //=------------------------------------------------------------------------=
     // MARK: Accessors
     //=------------------------------------------------------------------------=
- 
-    @inlinable var range: Range<Index> {
-        .unchecked((startIndex, endIndex))
-    }
     
     @inlinable func nonpassthrough(at index: Index) -> Bool {
         !attributes[index.attribute].contains(.passthrough)
-    }
-}
-
-//=----------------------------------------------------------------------------=
-// MARK: + Position
-//=----------------------------------------------------------------------------=
-
-extension Snapshot {
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Single
-    //=------------------------------------------------------------------------=
-    
-    @inlinable func index<T>(at position: T.Position) -> Index where T: Offset {
-        T.index(at: position, in: characters)
-    }
-    
-    @inlinable func position<T>(at index: Index) -> T.Position where T: Offset {
-        T.position(at: index, in: characters)
-    }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Double
-    //=------------------------------------------------------------------------=
-    
-    @inlinable func indices<T>(at positions: Range<T.Position>) -> Range<Index> where T: Offset {
-        Range.from(positions, map: index(at:))
-    }
-
-    @inlinable func positions<T>(at indices: Range<Index>) -> Range<T.Position> where T: Offset {
-        Range.from(indices, map: position(at:))
     }
 }
