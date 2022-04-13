@@ -25,22 +25,3 @@ extension Range {
         Self(uncheckedBounds: bounds)
     }
 }
-
-//=----------------------------------------------------------------------------=
-// MARK: + Index
-//=----------------------------------------------------------------------------=
-
-extension Range where Bound: _Index {
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Accessors
-    //=------------------------------------------------------------------------=
-    
-    @inlinable var positions: Range<Bound.Position> {
-        .unchecked((lowerBound.position, upperBound.position))
-    }
-    
-    @inlinable var subindices: Range<Bound.Subindex> {
-        .unchecked((lowerBound.subindex, upperBound.subindex))
-    }
-}

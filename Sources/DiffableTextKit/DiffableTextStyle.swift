@@ -26,9 +26,10 @@ public protocol DiffableTextStyle: Equatable {
     // MARK: Aliases
     //=------------------------------------------------------------------------=
     
-    typealias Remote = DiffableTextKit.Remote<Self>
     typealias Commit = DiffableTextKit.Commit<Value>
-    
+    typealias Context = DiffableTextKit.Context<Self>
+    typealias Remote = DiffableTextKit.Remote<Self>
+
     //=------------------------------------------------------------------------=
     // MARK: Transformations
     //=------------------------------------------------------------------------=

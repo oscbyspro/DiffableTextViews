@@ -7,75 +7,37 @@
 // See http://www.apache.org/licenses/LICENSE-2.0 for license information.
 //=----------------------------------------------------------------------------=
 
-//*============================================================================*
+//*========================================================================*
 // MARK: * Index
-//*============================================================================*
+//*========================================================================*
 
-/// A snapshot location that knows its encoded offset.
-@usableFromInline struct Index<Scheme: _Scheme>: _Index {
-    @usableFromInline typealias Position = Scheme.Position
-    @usableFromInline typealias Subindex = Snapshot.Index
-
-    //=------------------------------------------------------------------------=
+public struct Index: Comparable {
+    
+    //=--------------------------------------------------------------------=
     // MARK: State
-    //=------------------------------------------------------------------------=
+    //=--------------------------------------------------------------------=
+    
+    @usableFromInline let character: String.Index
+    @usableFromInline let attribute: Int
 
-    @usableFromInline let position: Position
-    @usableFromInline let subindex: Subindex
-
-    //=------------------------------------------------------------------------=
+    //=--------------------------------------------------------------------=
     // MARK: Initializers
-    //=------------------------------------------------------------------------=
+    //=--------------------------------------------------------------------=
 
-    @inlinable init(_ subindex: Subindex, at position: Position) {
-        self.subindex = subindex
-        self.position = position
+    @inlinable init(_ character: String.Index, _ attribute: Int) {
+        self.character = character
+        self.attribute = attribute
     }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Accessors
-    //=------------------------------------------------------------------------=
 
-    @inlinable var character: String.Index {
-        subindex.character
-    }
-    
-    @inlinable var attribute: Int {
-        subindex.attribute
-    }
-    
-    //=------------------------------------------------------------------------=
+    //=--------------------------------------------------------------------=
     // MARK: Comparisons
-    //=------------------------------------------------------------------------=
-
-    @inlinable static func == (lhs: Self, rhs: Self) -> Bool {
-        lhs.position == rhs.position
+    //=--------------------------------------------------------------------=
+    
+    @inlinable public static func == (lhs: Self, rhs: Self) -> Bool {
+        lhs.attribute == rhs.attribute
     }
     
-    @inlinable static func <  (lhs: Self, rhs: Self) -> Bool {
-        lhs.position <  rhs.position
+    @inlinable public static func <  (lhs: Self, rhs: Self) -> Bool {
+        lhs.attribute <  rhs.attribute
     }
-}
-
-//*============================================================================*
-// MARK: * Index x Protocol
-//*============================================================================*
-
-/// This exists because generic extensions are not yet possible.
-@usableFromInline protocol _Index: Comparable {
-    associatedtype Scheme: _Scheme
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Aliases
-    //=------------------------------------------------------------------------=
-    
-    typealias Position = Scheme.Position
-    typealias Subindex = Snapshot.Index
-
-    //=------------------------------------------------------------------------=
-    // MARK: State
-    //=------------------------------------------------------------------------=
-    
-    @inlinable var position: Position { get }
-    @inlinable var subindex: Subindex { get }
 }

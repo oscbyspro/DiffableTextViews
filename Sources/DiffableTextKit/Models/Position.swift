@@ -13,7 +13,8 @@ import Foundation
 // MARK: * Position
 //*============================================================================*
 
-public struct Position<Scheme: DiffableTextKit.Scheme>: Comparable, ExpressibleByIntegerLiteral {
+public struct Position<Offset: DiffableTextKit.Offset>: Comparable {
+    @inlinable public static var offset: Offset.Type { Offset.self }
     
     //=------------------------------------------------------------------------=
     // MARK: State
@@ -27,34 +28,6 @@ public struct Position<Scheme: DiffableTextKit.Scheme>: Comparable, ExpressibleB
     
     @inlinable public init(_ offset: Int = 0) {
         self.offset = offset
-    }
-    
-    @inlinable public init(integerLiteral offset: IntegerLiteralType) {
-        self.offset = offset
-    }
-
-    //=------------------------------------------------------------------------=
-    // MARK: Initializers - Static
-    //=------------------------------------------------------------------------=
-
-    @inlinable static var start: Self {
-        Self()
-    }
-    
-    @inlinable static func end<S>(of characters: S) -> Self where S: StringProtocol {
-        Self(Scheme.size(of: characters))
-    }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Transformations
-    //=------------------------------------------------------------------------=
-    
-    @inlinable func  after(_ character: Character) -> Self {
-        Self(offset + Scheme.size(of:  character))
-    }
-    
-    @inlinable func before(_ character: Character) -> Self {
-        Self(offset - Scheme.size(of:  character))
     }
     
     //=------------------------------------------------------------------------=

@@ -11,29 +11,26 @@
 // MARK: * Field
 //*============================================================================*
 
-/// A model describing a snapshot's layout and a selection in it.
+/// A model describing a snapshot's snapshot and a selection in it.
 ///
-/// - Autocorrects selection on layout changes.
+/// - Autocorrects selection on snapshot changes.
 /// - Autocorrects selection on selection changes.
 ///
-@usableFromInline struct Field<Scheme: _Scheme> {
-    @usableFromInline typealias Index = Scheme.Index
-    @usableFromInline typealias Layout = Scheme.Layout
-    @usableFromInline typealias Position = Scheme.Position
+@usableFromInline struct Field {
 
     //=------------------------------------------------------------------------=
     // MARK: State
     //=------------------------------------------------------------------------=
     
-    @usableFromInline var layout: Layout
+    @usableFromInline var snapshot: Snapshot
     @usableFromInline var selection: Range<Index>
 
     //=------------------------------------------------------------------------=
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable init(_ layout: Layout = Layout()) {
-        self.layout = layout; self.selection = .empty(layout.endIndex)
+    @inlinable init(_ snapshot: Snapshot = Snapshot()) {
+        self.snapshot = snapshot; self.selection = .empty(snapshot.endIndex)
     }
 }
 
@@ -42,30 +39,30 @@
 //=----------------------------------------------------------------------------=
 
 extension Field {
-    
+
     //=------------------------------------------------------------------------=
-    // MARK: Layout
+    // MARK: Snapshot
     //=------------------------------------------------------------------------=
     
-    @inlinable mutating func update(layout: Layout) {
+    @inlinable mutating func update(snapshot: Snapshot) {
         //=--------------------------------------=
         // MARK: Single
         //=--------------------------------------=
-        let upperBound = Mismatches.backwards(to: layout,
-        from: self.layout[selection.upperBound...]).next
+        let upperBound = Mismatches.backwards(to: snapshot,
+        from: self.snapshot[selection.upperBound...]).next
         var lowerBound = upperBound
         //=--------------------------------------=
         // MARK: Double
         //=--------------------------------------=
         if !selection.isEmpty {
-            lowerBound = Mismatches.forwards(to: layout,
-            from: self.layout[..<selection.lowerBound]).next
+            lowerBound = Mismatches.forwards(to: snapshot,
+            from: self.snapshot[..<selection.lowerBound]).next
             lowerBound = Swift.min(lowerBound, upperBound)
         }
         //=--------------------------------------=
         // MARK: Update
         //=--------------------------------------=
-        self.layout = layout
+        self.snapshot = snapshot
         self.update(selection: .unchecked((lowerBound, upperBound)))
     }
 }
@@ -75,12 +72,12 @@ extension Field {
 //=----------------------------------------------------------------------------=
 
 extension Field {
-
+    
     //=------------------------------------------------------------------------=
     // MARK: Selection
     //=------------------------------------------------------------------------=
     
-    @inlinable mutating func update(selection: Range<Position>, momentum: Bool) {
+    @inlinable mutating func update<T>(selection: Range<T.Position>, momentum: Bool) where T: Offset {
         //=--------------------------------------=
         // MARK: Values
         //=--------------------------------------=
@@ -96,21 +93,21 @@ extension Field {
         //=--------------------------------------=
         // MARK: Accept Max Selection
         //=--------------------------------------=
-        if selection == layout.range {
+        if selection == snapshot.range {
             self.selection = selection
             return
         }
         //=--------------------------------------=
         // MARK: Single
         //=--------------------------------------=
-        let upperBound = layout.caret(from: selection.upperBound,
+        let upperBound = snapshot.caret(from: selection.upperBound,
         /**/towards: momentum.upperBound, preferring: .backwards)
         var lowerBound = upperBound
         //=--------------------------------------=
         // MARK: Double
         //=--------------------------------------=
         if !selection.isEmpty {
-            lowerBound = layout.caret(from: selection.lowerBound,
+            lowerBound = snapshot.caret(from: selection.lowerBound,
             towards: momentum.lowerBound, preferring:  .forwards)
             lowerBound = Swift.min(lowerBound, upperBound)
         }
@@ -128,24 +125,33 @@ extension Field {
 extension Field {
     
     //=------------------------------------------------------------------------=
-    // MARK: Indices
+    // MARK: Ranges
     //=------------------------------------------------------------------------=
     
-    @inlinable func indices(at positions: Range<Position>) -> Range<Index> {
+    @inlinable func indices<T>(at positions: Range<T.Position>) -> Range<Index> where T: Offset {
+        range(at: positions, map: snapshot.index(at:))
+    }
+
+    @inlinable func positions<T>(at indices: Range<Index>) -> Range<T.Position> where T: Offset {
+        range(at: indices, map: snapshot.position(at:))
+    }
+    
+    @inlinable func range<Input, Output>(at range: Range<Input>,
+    map bound: (Input) -> Output) -> Range<Output> {
         //=--------------------------------------=
         // MARK: Single
         //=--------------------------------------=
-        let upperBound = layout.index(at: positions.upperBound, from: selection.upperBound)
+        let upperBound = bound(range.upperBound)
         var lowerBound = upperBound
         //=--------------------------------------=
         // MARK: Double
         //=--------------------------------------=
-        if !positions.isEmpty {
-            lowerBound = layout.index(at: positions.lowerBound, from: selection.lowerBound)
+        if !range.isEmpty {
+            lowerBound = bound(range.lowerBound)
         }
         //=--------------------------------------=
         // MARK: Return
         //=--------------------------------------=
-        return lowerBound ..< upperBound
+        return .unchecked((lowerBound, upperBound))
     }
 }

@@ -12,14 +12,13 @@
 //*============================================================================*
 
 /// Values describing the state of a diffable text view.
-public struct Context<Style: DiffableTextStyle, Scheme: DiffableTextKit.Scheme> {
-    public typealias Value = Style.Value
+///
+/// - It is copy-on-write.
+///
+public struct Context<Style: DiffableTextStyle> {
+    public typealias Value  = Style.Value
     public typealias Commit = Style.Commit
     public typealias Remote = Style.Remote
-    public typealias Position = Scheme.Position
-    @usableFromInline typealias Field = Scheme.Field
-    @usableFromInline typealias Index = Scheme.Index
-    @usableFromInline typealias Layout = Scheme.Layout
 
     //=------------------------------------------------------------------------=
     // MARK: State
@@ -117,16 +116,15 @@ public extension Context {
     }
     
     @inlinable var snapshot: Snapshot {
-        field.layout.snapshot
+        field.snapshot
     }
     
     @inlinable var text: String {
-        field.layout.snapshot.characters
+        field.snapshot.characters
     }
     
-    @inlinable var selection: Range<Position> {
-        field.selection.lowerBound.position ..<
-        field.selection.upperBound.position
+    @inlinable func selection<T>(as scheme: T.Type = T.self) -> Range<T.Position> where T: Offset {
+        field.positions(at: field.selection)
     }
 }
 
@@ -137,30 +135,26 @@ public extension Context {
 public extension Context {
     
     //=------------------------------------------------------------------------=
-    // MARK: Remote
-    //=------------------------------------------------------------------------=
-
-    @inlinable init(_ remote: Remote) {
-        switch remote.focus.value {
-        case  true: self =   .focused(remote.style, remote.value)
-        case false: self = .unfocused(remote.style, remote.value)
-        }
-    }
-    
-    //=------------------------------------------------------------------------=
     // MARK: Static
     //=------------------------------------------------------------------------=
-    
+
     @inlinable static func focused(_ style: Style, _ value: Value) -> Self {
         Self.focused(style, style.interpret(value))
     }
     
     @inlinable static func focused(_ style: Style, _ commit: Commit) -> Self {
-        Self(Storage(true, style, commit.value, Field(Layout(commit.snapshot))))
+        Self(Storage(true, style, commit.value, Field((commit.snapshot))))
     }
  
     @inlinable static func unfocused(_ style: Style, _ value: Value) -> Self {
-        Self(Storage(false, style, value, Field(Layout(Snapshot(style.format(value), as: .phantom)))))
+        Self(Storage(false, style, value, Field(Snapshot(style.format(value), as: .phantom))))
+    }
+    
+    @inlinable static func remote(_ remote: Remote) -> Self {
+        switch remote.focus.value {
+        case  true: return   .focused(remote.style, remote.value)
+        case false: return .unfocused(remote.style, remote.value)
+        }
     }
 }
 
@@ -183,7 +177,7 @@ public extension Context {
                 $0.focus = other.focus
                 $0.style = other.style
                 $0.value = other.value
-                $0.field.update(layout: other.field.layout)
+                $0.field.update(snapshot: other.snapshot)
             }
         //=--------------------------------------=
         // MARK: Unfocused
@@ -211,7 +205,7 @@ public extension Context {
         //=--------------------------------------=
         // MARK: Yes
         //=--------------------------------------=
-        self.merge(Self(Remote(
+        self.merge(Self.remote(Remote(
         focus: changeInFocus ? remote.focus : focus,
         style: changeInStyle ? remote.style : style,
         value: changeInValue ? remote.value : value)))
@@ -222,14 +216,14 @@ public extension Context {
     // MARK: Replacement
     //=------------------------------------------------------------------------=
         
-    @inlinable mutating func merge(_ replacement: String,
-    in range: Range<Position>) throws {
+    @inlinable mutating func merge<T>(_ replacement: String,
+    in range: Range<T.Position>) throws where T: Offset {
         //=--------------------------------------=
         // MARK: Values
         //=--------------------------------------=
         let indices = field.indices(at: range)
         let commit = try style.merge(Changes(
-        to: snapshot, as: replacement, in: indices.subindices))
+        to: snapshot, as: replacement, in: indices))
         //=--------------------------------------=
         // MARK: Update
         //=--------------------------------------=
@@ -252,7 +246,7 @@ public extension Context {
         self.write { $0.field.selection = .empty(selection) }
     }
     
-    @inlinable mutating func update(selection: Range<Position>, momentum: Bool) {
+    @inlinable mutating func update<T>(selection: Range<T.Position>, momentum: Bool) where T: Offset {
         self.write { $0.field.update(selection: selection, momentum: momentum) }
     }
 }

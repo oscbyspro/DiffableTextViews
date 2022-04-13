@@ -79,23 +79,20 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
     //*========================================================================*
     
     public final class Coordinator: NSObject, UITextFieldDelegate {
-        @usableFromInline typealias Scheme = Unicode.UTF16
         @usableFromInline typealias Upstream = DiffableTextField
         @usableFromInline typealias Environment = EnvironmentValues
-        @usableFromInline typealias Remote = Style.Remote
-        @usableFromInline typealias Position = Scheme.Position
-        @usableFromInline typealias Context = DiffableTextKit.Context<Style, Scheme>
+        @usableFromInline typealias Position = Unicode.UTF16.Position
 
         //=--------------------------------------------------------------------=
         // MARK: State
         //=--------------------------------------------------------------------=
         
         @usableFromInline let lock = Lock()
-        @usableFromInline var context: Context!
         @usableFromInline var upstream: Upstream!
         @usableFromInline var downstream: Downstream!
         @usableFromInline var environment: Environment!
-        
+        @usableFromInline var context: Style.Context!
+
         //=--------------------------------------------------------------------=
         // MARK: View Life Cycle
         //=--------------------------------------------------------------------=
@@ -103,7 +100,7 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
         @inlinable func setup(_ values: (Upstream, Environment, Downstream)) {
             (upstream, environment, downstream) = values
             self.downstream.wrapped.delegate = self
-            self.context = Context(pull()); self.write()
+            self.context = .remote(pull()); self.write()
         }
         
         @inlinable func update(_ values: (Upstream, Environment)) {
@@ -163,12 +160,13 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
             // MARK: Update
             //=----------------------------------=
             self.context.update(selection: selection, momentum: downstream.momentum)
+            let autocorrected = context.selection(as: Position.offset)
             //=----------------------------------=
             // MARK: Update Downstream As Needed
             //=----------------------------------=
-            if  selection != context.selection {
+            if  selection != autocorrected {
                 lock.perform {
-                    self.downstream.update(selection: context.selection)
+                    self.downstream.update(selection: autocorrected)
                 }
             }
         }
@@ -188,7 +186,7 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
             context.focus.value ? self.push() : self.write()
         }
         
-        @inlinable func pull() -> Remote {
+        @inlinable func pull() -> Style.Remote {
             //=----------------------------------=
             // MARK: Upstream, Downstream
             //=----------------------------------=
@@ -202,7 +200,7 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
             //=----------------------------------=
             lock.perform {
                 self.downstream.update(text: context.text)
-                self.downstream.update(selection: context.selection)
+                self.downstream.update(selection: context.selection())
             }
             //=----------------------------------=
             // MARK: Upstream

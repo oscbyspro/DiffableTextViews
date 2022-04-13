@@ -19,7 +19,8 @@
 /// index of the first placeholder character.
 ///
 public struct Snapshot: BidirectionalCollection, RangeReplaceableCollection {
-    
+    @usableFromInline typealias Target = (Index) -> Bool
+
     //=------------------------------------------------------------------------=
     // MARK: State
     //=------------------------------------------------------------------------=
@@ -131,41 +132,6 @@ public struct Snapshot: BidirectionalCollection, RangeReplaceableCollection {
         Index(_characters .index(before: index.character),
               _attributes .index(before: index.attribute))
     }
-    
-    //*========================================================================*
-    // MARK: * Index
-    //*========================================================================*
-
-    public struct Index: Comparable {
-        
-        //=--------------------------------------------------------------------=
-        // MARK: State
-        //=--------------------------------------------------------------------=
-        
-        @usableFromInline let character: String.Index
-        @usableFromInline let attribute: Int
-
-        //=--------------------------------------------------------------------=
-        // MARK: Initializers
-        //=--------------------------------------------------------------------=
-
-        @inlinable init(_ character: String.Index, _ attribute: Int) {
-            self.character = character
-            self.attribute = attribute
-        }
-
-        //=--------------------------------------------------------------------=
-        // MARK: Comparisons
-        //=--------------------------------------------------------------------=
-        
-        @inlinable public static func == (lhs: Self, rhs: Self) -> Bool {
-            lhs.attribute == rhs.attribute
-        }
-        
-        @inlinable public static func <  (lhs: Self, rhs: Self) -> Bool {
-            lhs.attribute <  rhs.attribute
-        }
-    }
 }
 
 //=----------------------------------------------------------------------------=
@@ -265,5 +231,126 @@ public extension Snapshot {
     @inlinable @discardableResult mutating func remove(at index: Index) -> Symbol {
         Symbol(character: _characters.remove(at: index.character),
                attribute: _attributes.remove(at: index.attribute))
+    }
+}
+
+//=----------------------------------------------------------------------------=
+// MARK: + Layout
+//=----------------------------------------------------------------------------=
+
+/// ```
+/// |$|1|2|3|,|4|5|6|.|7|8|9|_|U|S|D|~
+/// |x|o|o|o|x|o|o|o|o|o|o|o|x|x|x|x|~
+/// ```
+internal extension Snapshot {
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Caret
+    //=------------------------------------------------------------------------=
+    
+    /// Returns the preferred caret, or endIndex if no preferred caret was found.
+    @inlinable func caret(from index: Index, towards direction: Direction?,
+    preferring preference: Direction) -> Index {
+        //=--------------------------------------=
+        // MARK: Anchor
+        //=--------------------------------------=
+        if let anchor = anchor { return anchor }
+        //=--------------------------------------=
+        // MARK: Inspect Initial Index
+        //=--------------------------------------=
+        if peek(from: index, towards: preference).map(
+        nonpassthrough(at:)) == true { return index }
+        //=--------------------------------------=
+        // MARK: Direction
+        //=--------------------------------------=
+        let direction = direction ?? preference
+        //=--------------------------------------=
+        // MARK: Search In The Direction
+        //=--------------------------------------=
+        if let caret = caret(from: index,
+        towards: direction,
+        jumping: direction == preference ? .to : .through,
+        targeting: nonpassthrough(at:)) { return caret }
+        //=--------------------------------------=
+        // MARK: Search In The Other Direction
+        //=--------------------------------------=
+        if let caret = caret(from: index,
+        towards: direction.reversed(),
+        jumping: Jump.to, // use Jump.to on each direction
+        targeting: nonpassthrough(at:)) { return caret }
+        //=--------------------------------------=
+        // MARK: Default To Instance End Index
+        //=--------------------------------------=
+        return self.endIndex
+    }
+    
+    //=--------------------------------------------------------------------=
+    // MARK: Forwards / Backwards / To / Through
+    //=--------------------------------------------------------------------=
+
+    @inlinable func caret(from index: Index, forwardsTo target: Target) -> Index? {
+        indices[index...].first(where: target)
+    }
+    
+    @inlinable func caret(from index: Index, forwardsThrough target: Target) -> Index? {
+        caret(from: index, forwardsTo: target).map(index(after:))
+    }
+
+    @inlinable func caret(from index: Index, backwardsTo target: Target) -> Index? {
+        caret(from: index, backwardsThrough: target).map(index(after:))
+    }
+    
+    @inlinable func caret(from index: Index, backwardsThrough target: Target) -> Index? {
+        indices[..<index].last(where: target)
+    }
+    
+    @inlinable func caret(from index: Index, towards direction: Direction,
+    jumping distance: Jump, targeting target: Target) -> Index? {
+        switch (direction, distance) {
+        case (.forwards,  .to     ): return caret(from: index, forwardsTo:       target)
+        case (.forwards,  .through): return caret(from: index, forwardsThrough:  target)
+        case (.backwards, .to     ): return caret(from: index, backwardsTo:      target)
+        case (.backwards, .through): return caret(from: index, backwardsThrough: target)
+        }
+    }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Peek
+    //=------------------------------------------------------------------------=
+
+    @inlinable func peek(from index: Index, towards direction: Direction) -> Index? {
+        direction == .forwards ? peek(ahead: index) : peek(behind: index)
+    }
+    
+    @inlinable func peek(ahead index: Index) -> Index? {
+        index != endIndex ? index : nil
+    }
+
+    @inlinable func peek(behind index: Index) -> Index? {
+        index != startIndex ? self.index(before: index) : nil
+    }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Accessors
+    //=------------------------------------------------------------------------=
+ 
+    @inlinable var range: Range<Index> {
+        .unchecked((startIndex, endIndex))
+    }
+    
+    @inlinable func nonpassthrough(at index: Index) -> Bool {
+        !attributes[index.attribute].contains(.passthrough)
+    }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Positions
+    //=------------------------------------------------------------------------=
+    
+    @inlinable func index<T>(at position: T.Position) -> Index where T: Offset {
+        T.index(at: position, in: characters)
+    }
+    
+    @inlinable func position<T>(at index: Index) -> T.Position where T: Offset {
+        T.position(at: index, in: characters)
     }
 }

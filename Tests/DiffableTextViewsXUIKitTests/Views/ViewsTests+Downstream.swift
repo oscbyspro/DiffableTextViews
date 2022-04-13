@@ -55,7 +55,7 @@ extension ViewsTestsXDownstream {
         //=--------------------------------------=
         XCTAssertEqual(8, downstream.wrapped.text!.utf8 .count)
         XCTAssertEqual(4, downstream.wrapped.text!.utf16.count)
-        XCTAssertEqual(4, downstream.size)
+        XCTAssertEqual(4, downstream.size.offset)
     }
 }
 
