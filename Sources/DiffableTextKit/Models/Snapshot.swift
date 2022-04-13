@@ -341,9 +341,16 @@ internal extension Snapshot {
     @inlinable func nonpassthrough(at index: Index) -> Bool {
         !attributes[index.attribute].contains(.passthrough)
     }
+}
+
+//=----------------------------------------------------------------------------=
+// MARK: + Position
+//=----------------------------------------------------------------------------=
+
+extension Snapshot {
     
     //=------------------------------------------------------------------------=
-    // MARK: Positions
+    // MARK: Single
     //=------------------------------------------------------------------------=
     
     @inlinable func index<T>(at position: T.Position) -> Index where T: Offset {
@@ -352,5 +359,17 @@ internal extension Snapshot {
     
     @inlinable func position<T>(at index: Index) -> T.Position where T: Offset {
         T.position(at: index, in: characters)
+    }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Double
+    //=------------------------------------------------------------------------=
+    
+    @inlinable func indices<T>(at positions: Range<T.Position>) -> Range<Index> where T: Offset {
+        Range.from(positions, map: index(at:))
+    }
+
+    @inlinable func positions<T>(at indices: Range<Index>) -> Range<T.Position> where T: Offset {
+        Range.from(indices, map: position(at:))
     }
 }

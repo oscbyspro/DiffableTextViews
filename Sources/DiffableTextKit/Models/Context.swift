@@ -13,7 +13,7 @@
 
 /// Values describing the state of a diffable text view.
 ///
-/// - It is copy-on-write.
+/// - Copy-on-write.
 ///
 public struct Context<Style: DiffableTextStyle> {
     public typealias Value  = Style.Value
@@ -107,14 +107,14 @@ public extension Context {
         _storage.value
     }
     
-    //=------------------------------------------------------------------------=
-    // MARK: 2nd
-    //=------------------------------------------------------------------------=
-
     @inlinable internal var field: Field {
         _storage.field
     }
     
+    //=------------------------------------------------------------------------=
+    // MARK: 2nd
+    //=------------------------------------------------------------------------=
+
     @inlinable var snapshot: Snapshot {
         field.snapshot
     }
@@ -123,8 +123,8 @@ public extension Context {
         field.snapshot.characters
     }
     
-    @inlinable func selection<T>(as scheme: T.Type = T.self) -> Range<T.Position> where T: Offset {
-        field.positions(at: field.selection)
+    @inlinable func selection<T>(as offset: T.Type = T.self) -> Range<T.Position> where T: Offset {
+        field.positions(as: offset)
     }
 }
 
@@ -216,14 +216,14 @@ public extension Context {
     // MARK: Replacement
     //=------------------------------------------------------------------------=
         
-    @inlinable mutating func merge<T>(_ replacement: String,
+    @inlinable mutating func merge<T>(_ input: String,
     in range: Range<T.Position>) throws where T: Offset {
         //=--------------------------------------=
         // MARK: Values
         //=--------------------------------------=
-        let indices = field.indices(at: range)
+        let indices = snapshot.indices(at: range)
         let commit = try style.merge(Changes(
-        to: snapshot, as: replacement, in: indices))
+        to: snapshot, as: input, in: indices))
         //=--------------------------------------=
         // MARK: Update
         //=--------------------------------------=

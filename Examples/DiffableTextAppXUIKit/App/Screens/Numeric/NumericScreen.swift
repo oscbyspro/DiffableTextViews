@@ -65,7 +65,7 @@ struct NumericScreen: View {
     
     var boundsIntervalSliders: some View {
         NumericScreenSliders("Bounds (9s)",
-        interval: context.bounds, in: Context.boundsLimits)
+        interval: context.bounds.interval, in: Context.boundsLimits)
     }
     
     var integerIntervalSliders: some View {

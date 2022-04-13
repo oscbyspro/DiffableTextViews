@@ -7,7 +7,9 @@
 // See http://www.apache.org/licenses/LICENSE-2.0 for license information.
 //=----------------------------------------------------------------------------=
 
+import Combine
 import Foundation
+import SwiftUI
 
 //*============================================================================*
 // MARK: * NumericScreenContext
@@ -27,7 +29,7 @@ final class NumericScreenContext: ObservableObject {
     let currency = Source("USD")
     let locale = Source(Locale(identifier: "en_US"))
     
-    let bounds = Source(Interval((0, This.boundsLimit)))
+    let bounds = SourceOfBounds(Interval((0, This.boundsLimit)))
     let integer = Source(This.integerLimits)
     let fraction = Source(Interval((2, 2)))
     

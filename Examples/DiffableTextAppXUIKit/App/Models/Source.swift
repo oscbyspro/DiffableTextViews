@@ -20,9 +20,7 @@ final class Source<Value>: ObservableObject {
     // MARK: State
     //=------------------------------------------------------------------------=
     
-    var content: Value {
-        willSet { objectWillChange.send() }
-    }
+    @Published var content: Value
     
     //=------------------------------------------------------------------------=
     // MARK: Initializers
@@ -37,5 +35,53 @@ final class Source<Value>: ObservableObject {
     /// Uses strong references.
     var binding: Binding<Value> {
         Binding { self.content } set: { self.content = $0 }
+    }
+}
+
+//*============================================================================*
+// MARK: * Source x Bounds
+//*============================================================================*
+
+final class SourceOfBounds: ObservableObject {
+    typealias Integers = Interval<Int>
+
+    //=------------------------------------------------------------------------=
+    // MARK: State
+    //=------------------------------------------------------------------------=
+    
+    let interval: Source<Integers>
+    private var subscription: AnyCancellable!
+    @Published var values: ClosedRange<Decimal>!
+
+    //=------------------------------------------------------------------------=
+    // MARK: Initializers
+    //=------------------------------------------------------------------------=
+    
+    init(_ integers: Integers) {
+        self.interval = Source(integers)
+        self.subscription = self.interval.$content.sink {
+            [unowned self] in self.values = Self.values($0)
+        }
+    }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Accessors
+    //=------------------------------------------------------------------------=
+    
+    static func values(_ interval: Integers) -> ClosedRange<Decimal> {
+        let ordered = interval.closed
+        //=--------------------------------------=
+        // MARK: Single
+        //=--------------------------------------=
+        func bound(_ length: Int) -> Decimal {
+            guard length != 0 else { return 0 }
+            var description = length >= 0 ? "" : "-"
+            description += String(repeating: "9", count: abs(length))
+            return Decimal(string: description)!
+        }
+        //=--------------------------------------=
+        // MARK: Double
+        //=--------------------------------------=
+        return bound(ordered.lowerBound)...bound(ordered.upperBound)
     }
 }

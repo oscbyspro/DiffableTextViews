@@ -172,7 +172,7 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
         }
         
         //=--------------------------------------------------------------------=
-        // MARK: Synchronize
+        // MARK: Synchronization
         //=--------------------------------------------------------------------=
         
         @inlinable func synchronize() {

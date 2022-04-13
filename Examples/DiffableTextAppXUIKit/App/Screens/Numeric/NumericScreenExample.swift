@@ -26,7 +26,7 @@ struct NumericScreenExample<Format: NumericTextFormat>: View where Format.Format
     
     let base: _NumericTextStyle<Format>
     @ObservedObject var value: Source<Value>
-    @ObservedObject var bounds: Source<Integers>
+    @ObservedObject var bounds: SourceOfBounds
     @ObservedObject var integer: Source<Integers>
     @ObservedObject var fraction: Source<Integers>
 
@@ -55,7 +55,7 @@ struct NumericScreenExample<Format: NumericTextFormat>: View where Format.Format
     //=------------------------------------------------------------------------=
     
     var style: _NumericTextStyle<Format> {
-        base.bounds(boundsLimits).precision(integer: integerLimits, fraction: fractionLimits)
+        base.bounds(bounds.values).precision(integer: integerLimits, fraction: fractionLimits)
     }
     
     //=------------------------------------------------------------------------=
@@ -68,22 +68,5 @@ struct NumericScreenExample<Format: NumericTextFormat>: View where Format.Format
     
     var fractionLimits: ClosedRange<Int> {
         fraction.content.closed
-    }
-    
-    var boundsLimits: ClosedRange<Value> {
-        let ordered = bounds.content.closed
-        //=--------------------------------------=
-        // MARK: Single
-        //=--------------------------------------=
-        func bound(_ length: Int) -> Decimal {
-            guard length != 0 else { return 0 }
-            var description = length >= 0 ? "" : "-"
-            description += String(repeating: "9", count: abs(length))
-            return Value(string: description)!
-        }
-        //=--------------------------------------=
-        // MARK: Double
-        //=--------------------------------------=
-        return bound(ordered.lowerBound)...bound(ordered.upperBound)
     }
 }
