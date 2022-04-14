@@ -136,26 +136,30 @@ public extension Context {
 public extension Context {
     
     //=------------------------------------------------------------------------=
-    // MARK: Static
+    // MARK: Remote
     //=------------------------------------------------------------------------=
 
-    @inlinable static func focused(_ style: Style, _ value: Value) -> Self {
+    @inlinable init(_ remote: Remote) {
+        switch remote.focus.value {
+        case  true: self =   .focused(remote.style, remote.value)
+        case false: self = .unfocused(remote.style, remote.value)
+        }
+    }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Primitives
+    //=------------------------------------------------------------------------=
+    
+    @inlinable internal static func focused(_ style: Style, _ value: Value) -> Self {
         Self.focused(style, style.interpret(value))
     }
     
-    @inlinable static func focused(_ style: Style, _ commit: Commit) -> Self {
+    @inlinable internal static func focused(_ style: Style, _ commit: Commit) -> Self {
         Self(Storage(true, style, commit.value, Field((commit.snapshot))))
     }
  
-    @inlinable static func unfocused(_ style: Style, _ value: Value) -> Self {
+    @inlinable internal static func unfocused(_ style: Style, _ value: Value) -> Self {
         Self(Storage(false, style, value, Field(Snapshot(style.format(value), as: .phantom))))
-    }
-    
-    @inlinable static func remote(_ remote: Remote) -> Self {
-        switch remote.focus.value {
-        case  true: return   .focused(remote.style, remote.value)
-        case false: return .unfocused(remote.style, remote.value)
-        }
     }
 }
 
@@ -164,53 +168,26 @@ public extension Context {
 //=----------------------------------------------------------------------------=
 
 public extension Context {
-
-    //=------------------------------------------------------------------------=
-    // MARK: Other
-    //=------------------------------------------------------------------------=
     
-    @inlinable mutating func merge(_ other: Self) {
+    //=------------------------------------------------------------------------=
+    // MARK: Context
+    //=------------------------------------------------------------------------=
+        
+    @inlinable internal mutating func merge(_ context: Self) {
         //=--------------------------------------=
         // MARK: Focused
         //=--------------------------------------=
-        if other.focus.value {
+        if context.focus.value {
             self.write {
-                $0.focus = other.focus
-                $0.style = other.style
-                $0.value = other.value
-                $0.field.update(snapshot: other.snapshot)
+                $0.focus = context.focus
+                $0.style = context.style
+                $0.value = context.value
+                $0.field.update(snapshot: context.snapshot)
             }
         //=--------------------------------------=
         // MARK: Unfocused
         //=--------------------------------------=
-        } else { self = other }
-    }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Remote
-    //=------------------------------------------------------------------------=
-    
-    @inlinable mutating func merge(_ remote: Remote) -> Bool {
-        //=--------------------------------------=
-        // MARK: Comparisons
-        //=--------------------------------------=
-        let changeInStyle = remote.style != style
-        let changeInValue = remote.value != value
-        let changeInFocus = remote.focus != focus
-        //=--------------------------------------=
-        // MARK: At Least One Value Must Change
-        //=--------------------------------------=
-        guard changeInStyle
-           || changeInValue
-           || changeInFocus else { return false }
-        //=--------------------------------------=
-        // MARK: Yes
-        //=--------------------------------------=
-        self.merge(Self.remote(Remote(
-        focus: changeInFocus ? remote.focus : focus,
-        style: changeInStyle ? remote.style : style,
-        value: changeInValue ? remote.value : value)))
-        return true
+        } else { self = context }
     }
     
     //=------------------------------------------------------------------------=
@@ -231,16 +208,43 @@ public extension Context {
         self.set(selection: range.upperBound)
         self.merge(Self.focused(style, commit))
     }
+
+    //=------------------------------------------------------------------------=
+    // MARK: Remote
+    //=------------------------------------------------------------------------=
+    
+    @inlinable mutating func merge(_ remote: Remote) -> Bool {
+        //=--------------------------------------=
+        // MARK: Values
+        //=--------------------------------------=
+        let changeInStyle = remote.style != style
+        let changeInValue = remote.value != value
+        let changeInFocus = remote.focus != focus
+        //=--------------------------------------=
+        // MARK: At Least One Must Have Changed
+        //=--------------------------------------=
+        guard changeInStyle
+           || changeInValue
+           || changeInFocus else { return false }
+        //=--------------------------------------=
+        // MARK: Update
+        //=--------------------------------------=
+        self.merge(Self(Remote(
+        focus: changeInFocus ? remote.focus : focus,
+        style: changeInStyle ? remote.style : style,
+        value: changeInValue ? remote.value : value)))
+        return true
+    }
     
     //=------------------------------------------------------------------------=
     // MARK: Selection
     //=------------------------------------------------------------------------=
     
     @inlinable internal mutating func set(selection: Index) {
-        self.write { $0.field.selection = .empty(selection) }
+        self.write({ $0.field.selection = .empty(selection) })
     }
     
     @inlinable mutating func update<T>(selection: Range<T.Position>, momentum: Bool) where T: Offset {
-        self.write { $0.field.update(selection: selection, momentum: momentum) }
+        self.write({ $0.field.update(selection: selection, momentum: momentum) })
     }
 }

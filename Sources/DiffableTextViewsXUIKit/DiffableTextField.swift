@@ -100,7 +100,7 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
         @inlinable func setup(_ values: (Upstream, Environment, Downstream)) {
             (upstream, environment, downstream) = values
             self.downstream.wrapped.delegate = self
-            self.context = .remote(pull()); self.write()
+            self.context = .init(self.pull()); self.write()
         }
         
         @inlinable func update(_ values: (Upstream, Environment)) {
