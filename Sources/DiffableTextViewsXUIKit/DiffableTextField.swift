@@ -91,7 +91,7 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
         @usableFromInline var upstream: Upstream!
         @usableFromInline var downstream: Downstream!
         @usableFromInline var environment: Environment!
-        @usableFromInline var context: Style.Context!
+        @usableFromInline var context: Context<Style>!
 
         //=--------------------------------------------------------------------=
         // MARK: View Life Cycle
@@ -124,14 +124,21 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
             downstream.transform(environment.diffableTextField_onSubmit); return  true
         }
         
+        //=--------------------------------------------------------------------=
+        // MARK: Events
+        //=--------------------------------------------------------------------=
+        
         @inlinable public func textField(_ textField: UITextField,
-        shouldChangeCharactersIn range: NSRange, replacementString input: String) -> Bool {
+        shouldChangeCharactersIn nsrange: NSRange,
+        replacementString characters: String) -> Bool {
             //=----------------------------------=
             // MARK: Merge
             //=----------------------------------=
             attempt: do {
                 var context = context!
-                try context.merge(input, in: Position.range(range))
+                try context.merge(characters, in:
+                Position(nsrange.lowerBound) ..<
+                Position(nsrange.upperBound))
                 //=------------------------------=
                 // MARK: Push
                 //=------------------------------=
@@ -160,7 +167,7 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
             // MARK: Update
             //=----------------------------------=
             self.context.update(selection: selection, momentum: downstream.momentum)
-            let autocorrected = context.selection(as: Position.offset)
+            let autocorrected = context.selection(as: Position.self)
             //=----------------------------------=
             // MARK: Update Downstream As Needed
             //=----------------------------------=
@@ -186,7 +193,7 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
             context.focus.value ? self.push() : self.write()
         }
         
-        @inlinable func pull() -> Style.Remote {
+        @inlinable func pull() -> Remote<Style> {
             //=----------------------------------=
             // MARK: Upstream, Downstream
             //=----------------------------------=

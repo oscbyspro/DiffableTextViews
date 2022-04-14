@@ -23,7 +23,7 @@ final class NumberTestsXDigit: Tests {
     //=------------------------------------------------------------------------=
     
     func XCTAssertASCII(_ digit: Digit, _ value: UInt8) {
-         XCTAssertEqual(digit.numericValue, value)
+         XCTAssertEqual(digit.number, value)
          XCTAssertEqual(digit.character, Character(String(value)))
     }
     

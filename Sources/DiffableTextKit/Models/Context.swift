@@ -16,9 +16,9 @@
 /// - Copy-on-write.
 ///
 public struct Context<Style: DiffableTextStyle> {
+    public typealias Commit = DiffableTextKit.Commit<Value>
+    public typealias Remote = DiffableTextKit.Remote<Style>
     public typealias Value  = Style.Value
-    public typealias Commit = Style.Commit
-    public typealias Remote = Style.Remote
 
     //=------------------------------------------------------------------------=
     // MARK: State
@@ -92,7 +92,7 @@ public struct Context<Style: DiffableTextStyle> {
 public extension Context {
 
     //=------------------------------------------------------------------------=
-    // MARK: 1st
+    // MARK: Primary
     //=------------------------------------------------------------------------=
     
     @inlinable var focus: Focus {
@@ -112,7 +112,7 @@ public extension Context {
     }
     
     //=------------------------------------------------------------------------=
-    // MARK: 2nd
+    // MARK: Secondary
     //=------------------------------------------------------------------------=
 
     @inlinable var snapshot: Snapshot {
@@ -123,8 +123,9 @@ public extension Context {
         field.snapshot.characters
     }
     
-    @inlinable func selection<T>(as offset: T.Type = T.self) -> Range<T.Position> where T: Offset {
-        field.positions(as: offset)
+    @inlinable func selection<T>(as type: Position<T>.Type =
+    Position<T>.self) -> Range<T.Position> where T: Offset {
+        field.positions(as: type)
     }
 }
 
@@ -213,30 +214,23 @@ public extension Context {
     }
     
     //=------------------------------------------------------------------------=
-    // MARK: Replacement
+    // MARK: Characters
     //=------------------------------------------------------------------------=
         
-    @inlinable mutating func merge<T>(_ input: String,
+    @inlinable mutating func merge<T>(_ characters: String,
     in range: Range<T.Position>) throws where T: Offset {
         //=--------------------------------------=
         // MARK: Values
         //=--------------------------------------=
         let indices = snapshot.indices(at: range)
         let commit = try style.merge(Changes(
-        to: snapshot, as: input, in: indices))
+        snapshot, with: characters, at: indices))
         //=--------------------------------------=
         // MARK: Update
         //=--------------------------------------=
         self.set(selection: indices.upperBound)
         self.merge(Self.focused(style, commit))
     }
-}
-
-//=----------------------------------------------------------------------------=
-// MARK: + Transformations
-//=----------------------------------------------------------------------------=
-
-public extension Context {
     
     //=------------------------------------------------------------------------=
     // MARK: Selection

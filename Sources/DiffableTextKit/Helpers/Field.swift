@@ -37,12 +37,20 @@
     // MARK: Accessors
     //=------------------------------------------------------------------------=
     
-    @inlinable func positions<T>(as offset: T.Type = T.self) -> Range<T.Position> where T: Offset {
+    @inlinable func positions<T>(as type: Position<T>.Type =
+    Position<T>.self) -> Range<T.Position> where T: Offset {
         snapshot.positions(at: selection)
-    }
-    
+    }    
+}
+
+//=----------------------------------------------------------------------------=
+// MARK: + Transformations
+//=----------------------------------------------------------------------------=
+
+extension Field {
+
     //=------------------------------------------------------------------------=
-    // MARK: Transformations
+    // MARK: Snapshot
     //=------------------------------------------------------------------------=
     
     @inlinable mutating func update(snapshot: Snapshot) {
@@ -51,9 +59,13 @@
         upper: { Mismatches.backwards(from: self.snapshot[$0...], to: snapshot).next })
         self.snapshot = snapshot; self.update(selection: selection)
     }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Selection
+    //=------------------------------------------------------------------------=
 
     @inlinable mutating func update<T>(selection: Range<T.Position>, momentum: Bool) where T: Offset {
-        let selection = snapshot.indices(at: selection) // translate positions
+        let selection = snapshot.indices(at: selection) // translate positions as indices
         let momentum = momentum ? Directions(from: self.selection, to: selection) : .none
         self.update(selection: selection, momentum: momentum)
     }

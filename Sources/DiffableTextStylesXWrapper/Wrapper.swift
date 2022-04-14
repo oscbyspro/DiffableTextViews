@@ -47,17 +47,17 @@ extension WrapperTextStyle {
     //=------------------------------------------------------------------------=
     
     @inlinable @inline(__always)
-    public func format(_ value: Style.Value) -> String {
+    public func format(_ value: Value) -> String {
         style.format(value)
     }
 
     @inlinable @inline(__always)
-    public func interpret(_ value: Style.Value) -> Commit {
+    public func interpret(_ value: Value) -> Commit<Value> {
         style.interpret(value)
     }
 
     @inlinable @inline(__always)
-    public func merge(_ changes: Changes) throws -> Commit {
+    public func merge(_ changes: Changes) throws -> Commit<Value> {
         try style.merge(changes)
     }
     

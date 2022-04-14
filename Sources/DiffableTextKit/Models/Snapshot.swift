@@ -140,21 +140,6 @@ public struct Snapshot: BidirectionalCollection, RangeReplaceableCollection {
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: + Conversions
-//=----------------------------------------------------------------------------=
-
-extension Snapshot: CustomStringConvertible {
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Description
-    //=------------------------------------------------------------------------=
-    
-    @inlinable public var description: String {
-        "\(Self.self)(\"\(_characters)\", \(_attributes))"
-    }
-}
-
-//=----------------------------------------------------------------------------=
 // MARK: + Transformations
 //=----------------------------------------------------------------------------=
 
@@ -240,7 +225,24 @@ public extension Snapshot {
 }
 
 //=----------------------------------------------------------------------------=
+// MARK: + Conversions
+//=----------------------------------------------------------------------------=
+
+extension Snapshot: CustomStringConvertible {
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Description
+    //=------------------------------------------------------------------------=
+    
+    @inlinable public var description: String {
+        "\(Self.self)(\"\(_characters)\", \(_attributes))"
+    }
+}
+
+//=----------------------------------------------------------------------------=
 // MARK: + Accessors
+//=----------------------------------------------------------------------------=
+// All extensions below this line are internal implementation details.
 //=----------------------------------------------------------------------------=
 
 extension Snapshot {
@@ -328,6 +330,17 @@ extension Snapshot {
     // MARK: Forwards / Backwards / To / Through
     //=--------------------------------------------------------------------=
 
+    
+    @inlinable func caret(from index: Index, towards direction: Direction,
+    jumping distance: Jump, targeting target: Target) -> Index? {
+        switch (direction, distance) {
+        case (.forwards,  .to     ): return caret(from: index, forwardsTo:       target)
+        case (.forwards,  .through): return caret(from: index, forwardsThrough:  target)
+        case (.backwards, .to     ): return caret(from: index, backwardsTo:      target)
+        case (.backwards, .through): return caret(from: index, backwardsThrough: target)
+        }
+    }
+    
     @inlinable func caret(from index: Index, forwardsTo target: Target) -> Index? {
         indices[index...].first(where: target)
     }
@@ -342,16 +355,6 @@ extension Snapshot {
     
     @inlinable func caret(from index: Index, backwardsThrough target: Target) -> Index? {
         indices[..<index].last(where: target)
-    }
-    
-    @inlinable func caret(from index: Index, towards direction: Direction,
-    jumping distance: Jump, targeting target: Target) -> Index? {
-        switch (direction, distance) {
-        case (.forwards,  .to     ): return caret(from: index, forwardsTo:       target)
-        case (.forwards,  .through): return caret(from: index, forwardsThrough:  target)
-        case (.backwards, .to     ): return caret(from: index, backwardsTo:      target)
-        case (.backwards, .through): return caret(from: index, backwardsThrough: target)
-        }
     }
     
     //=------------------------------------------------------------------------=
@@ -371,7 +374,7 @@ extension Snapshot {
     }
     
     //=------------------------------------------------------------------------=
-    // MARK: Accessors
+    // MARK: Passthrough
     //=------------------------------------------------------------------------=
     
     @inlinable func nonpassthrough(at index: Index) -> Bool {

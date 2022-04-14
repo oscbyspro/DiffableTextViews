@@ -36,12 +36,12 @@ import Foundation
         formatter.currencyCode = id.code
         assert(formatter.numberStyle == .none)
         //=--------------------------------------=
-        // MARK: Instantiate - None
+        // MARK: None
         //=--------------------------------------=
         self.id = id
         self.lexicon = .currency(formatter)
         //=--------------------------------------=
-        // MARK: Instantiate - Currency
+        // MARK: Currency
         //=--------------------------------------=
         formatter.numberStyle = .currency
         self.preferences = Preferences(formatter)
@@ -50,7 +50,7 @@ import Foundation
     }
     
     //=------------------------------------------------------------------------=
-    // MARK: Initializers - Static
+    // MARK: Initializers
     //=------------------------------------------------------------------------=
     
     @inlinable static func reuse<T>(_ format: T) -> Self where T: Formats.Currency {

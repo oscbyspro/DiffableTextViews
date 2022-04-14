@@ -13,6 +13,7 @@ import Foundation
 // MARK: * Position
 //*============================================================================*
 
+/// A text offset measured in code units.
 public struct Position<Offset: DiffableTextKit.Offset>: Comparable {
     @inlinable public static var offset: Offset.Type { Offset.self }
     
@@ -40,20 +41,5 @@ public struct Position<Offset: DiffableTextKit.Offset>: Comparable {
     
     @inlinable public static func <  (lhs: Self, rhs: Self) -> Bool {
         lhs.offset <  rhs.offset
-    }
-}
-
-//=----------------------------------------------------------------------------=
-// MARK: + Utilities
-//=----------------------------------------------------------------------------=
-
-extension Position {
-
-    //=------------------------------------------------------------------------=
-    // MARK: Range
-    //=------------------------------------------------------------------------=
-    
-    @inlinable public static func range(_ range: NSRange) -> Range<Self> {
-        Self(range.lowerBound) ..< Self(range.upperBound)
     }
 }

@@ -15,11 +15,10 @@ import DiffableTextKit
 
 /// Binds the style's equality to a proxy value.
 ///
-/// Use this wrapper to optimize the comparison on view update.
-///
-/// - Note: DiffableTextViews update their styles only when proposed styles are unequal.
+/// Use this style to optimize the comparison on view update, for example.
 ///
 public struct EqualsTextStyle<Style: DiffableTextStyle, Proxy: Equatable>: WrapperTextStyle {
+    public typealias Value = Style.Value
     
     //=------------------------------------------------------------------------=
     // MARK: State
@@ -67,9 +66,7 @@ extension DiffableTextStyle {
     
     /// Binds the style's comparison to a proxy value.
     ///
-    /// Use this wrapper to optimize the comparison on view update.
-    ///
-    /// - Note: DiffableTextViews update their styles only when proposed styles are unequal.
+    /// Use this style to optimize the comparison on view update, for example.
     ///
     @inlinable @inline(__always)
     public func equals(_ proxy: Void) -> EqualsVoid {
@@ -78,9 +75,7 @@ extension DiffableTextStyle {
     
     /// Binds the style's equality to a proxy value.
     ///
-    /// Use this wrapper to optimize the comparison on view update.
-    ///
-    /// - Note: DiffableTextViews update their styles only when proposed styles are unequal.
+    /// Use this style to optimize the comparison on view update, for example.
     ///
     @inlinable @inline(__always)
     public func equals<Proxy>(_ proxy: Proxy) -> Equals<Proxy> {

@@ -65,7 +65,7 @@ import DiffableTextKit
     }
     
     @inlinable func count() -> Count {
-        let value = integer.count + fraction.count - integer.count(prefix: \.isZero)
+        let value = integer.count + fraction.count - integer.count(prefix:   \.zero)
         return Count(value: value, integer: integer.count, fraction: fraction.count)
     }
     

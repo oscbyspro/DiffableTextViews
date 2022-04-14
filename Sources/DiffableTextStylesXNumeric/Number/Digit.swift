@@ -48,11 +48,15 @@ import Foundation
     // MARK: Accessors
     //=------------------------------------------------------------------------=
     
-    @inlinable var isZero: Bool {
+    @inlinable var zero: Bool {
         self == Digit.zero
     }
     
-    @inlinable var numericValue: UInt8 {
+    @inlinable var nonzero: Bool {
+        self != Digit.zero
+    }
+    
+    @inlinable var number: UInt8 {
         rawValue - Digit.zero.rawValue
     }
     
@@ -63,7 +67,7 @@ import Foundation
     /// Requires that formatter.numberStyle == .none.
     @inlinable func standard(_ formatter: NumberFormatter) -> Character! {
         assert(formatter.numberStyle == .none)
-        return formatter.string(from: numericValue as NSNumber)!.first
+        return formatter.string(from: number as NSNumber)!.first
     }
     
     //*========================================================================*

@@ -33,7 +33,7 @@ import Foundation
         formatter.locale = id.locale
         assert(formatter.numberStyle == .none)
         //=--------------------------------------=
-        // MARK: Instantiate - None
+        // MARK: None
         //=--------------------------------------=
         self.id = id
         self.lexicon = .standard(formatter)

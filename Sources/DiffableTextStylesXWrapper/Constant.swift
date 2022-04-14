@@ -19,7 +19,8 @@ import Foundation
 /// Use this style to prevent changes via the environment, for example.
 ///
 public struct ConstantTextStyle<Style: DiffableTextStyle>: WrapperTextStyle {
-    
+    public typealias Value = Style.Value
+
     //=------------------------------------------------------------------------=
     // MARK: State
     //=------------------------------------------------------------------------=

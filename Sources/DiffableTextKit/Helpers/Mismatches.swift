@@ -24,7 +24,7 @@ Next: BidirectionalCollection, Next.Element == Symbol {
     @usableFromInline typealias Reversed = Mismatches<ReversedCollection<Prev>, ReversedCollection<Next>>
 
     //=------------------------------------------------------------------------=
-    // MARK: Prefix
+    // MARK: Forwards
     //=------------------------------------------------------------------------=
     
     @inlinable static func forwards(to next: Next, from prev: Prev) -> Indices {
@@ -65,7 +65,7 @@ Next: BidirectionalCollection, Next.Element == Symbol {
     }
     
     //=------------------------------------------------------------------------=
-    // MARK: Suffix
+    // MARK: Backwards
     //=------------------------------------------------------------------------=
     
     @inlinable static func backwards(to next: Next, from prev: Prev) -> Indices {
@@ -77,3 +77,4 @@ Next: BidirectionalCollection, Next.Element == Symbol {
         return (reversed.prev.base, reversed.next.base)
     }
 }
+

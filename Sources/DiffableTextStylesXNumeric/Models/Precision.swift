@@ -105,7 +105,7 @@ extension Precision {
         integer:  integer .upperBound,
         fraction: fraction.upperBound)
         //=--------------------------------------=
-        // MARK: Instantiate
+        // MARK: Return
         //=--------------------------------------=
         return Self(unchecked: (lower, upper))
     }

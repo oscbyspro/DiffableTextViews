@@ -62,11 +62,11 @@ import DiffableTextKit
     }
 
     @inlinable mutating func removeZerosAsPrefix() {
-        digits.removeSubrange(..<digits.prefix(while: \.isZero).endIndex)
+        digits.removeSubrange(..<digits.prefix(while: \.zero).endIndex)
     }
     
     @inlinable mutating func removeZerosAsSuffix() {
-        digits.removeSubrange(digits.suffix(while: \.isZero).startIndex...)
+        digits.removeSubrange(digits.suffix(while: \.zero).startIndex...)
     }
     
     @inlinable mutating func resize(prefix: Int) {

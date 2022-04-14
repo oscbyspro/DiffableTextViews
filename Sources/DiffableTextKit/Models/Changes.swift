@@ -18,24 +18,25 @@ public struct Changes {
     // MARK: State
     //=------------------------------------------------------------------------=
     
-    public let snapshot:    Snapshot
+    public let snapshot: Snapshot
     public var replacement: Snapshot
-    public var range: Range<Snapshot.Index>
+    public var indices: Range<Index>
     
     //=------------------------------------------------------------------------=
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable public init(to snapshot: Snapshot, as replacement: String, in range: Range<Snapshot.Index>) {
-        self.snapshot = snapshot; self.replacement = Snapshot(replacement, as: .content); self.range = range
+    @inlinable init(_ snapshot: Snapshot, with characters: String, at indices: Range<Index>) {
+        self.snapshot = snapshot; self.indices = indices
+        self.replacement = Snapshot(characters, as: .content)
     }
     
     //=------------------------------------------------------------------------=
-    // MARK: Utilities
+    // MARK: Transformations
     //=------------------------------------------------------------------------=
     
     /// Returns a new snapshot with the proposed change applied to it.
     @inlinable public func proposal() -> Snapshot {
-        var result = snapshot; result.replaceSubrange(range, with: replacement); return result
+        var result = snapshot; result.replaceSubrange(indices, with: replacement); return result
     }
 }
