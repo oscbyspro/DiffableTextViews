@@ -34,7 +34,7 @@ extension Range {
         //=--------------------------------------=
         // MARK: Return
         //=--------------------------------------=
-        from(source, lower: bound, upper: bound)
+        Self.from(source, lower: bound, upper: bound)
     }
     
     @inlinable static func from<T>(_ source: Range<T>,
@@ -54,6 +54,6 @@ extension Range {
         //=--------------------------------------=
         // MARK: Return
         //=--------------------------------------=
-        return .unchecked((lowerBound, upperBound))
+        return Self(uncheckedBounds: (lowerBound, upperBound))
     }
 }

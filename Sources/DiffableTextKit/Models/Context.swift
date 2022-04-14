@@ -11,9 +11,9 @@
 // MARK: * Context
 //*============================================================================*
 
-/// Values describing the state of a diffable text view.
+/// A set of values describing the state of a diffable text view.
 ///
-/// - Copy-on-write.
+/// - Uses copy-on-write.
 ///
 public struct Context<Style: DiffableTextStyle> {
     public typealias Commit = DiffableTextKit.Commit<Value>
@@ -222,13 +222,13 @@ public extension Context {
         //=--------------------------------------=
         // MARK: Values
         //=--------------------------------------=
-        let indices = snapshot.indices(at: range)
+        let range = snapshot.indices(at: range)
         let commit = try style.merge(Changes(
-        snapshot, with: characters, at: indices))
+        snapshot, with: characters, in: range))
         //=--------------------------------------=
         // MARK: Update
         //=--------------------------------------=
-        self.set(selection: indices.upperBound)
+        self.set(selection: range.upperBound)
         self.merge(Self.focused(style, commit))
     }
     

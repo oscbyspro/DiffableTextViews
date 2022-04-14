@@ -20,15 +20,16 @@ public struct Changes {
     
     public let snapshot: Snapshot
     public var replacement: Snapshot
-    public var indices: Range<Index>
+    public var range: Range<Index>
     
     //=------------------------------------------------------------------------=
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable init(_ snapshot: Snapshot, with characters: String, at indices: Range<Index>) {
-        self.snapshot = snapshot; self.indices = indices
+    @inlinable init(_ snapshot: Snapshot, with characters: String, in range: Range<Index>) {
+        self.snapshot = snapshot
         self.replacement = Snapshot(characters, as: .content)
+        self.range = range
     }
     
     //=------------------------------------------------------------------------=
@@ -37,6 +38,8 @@ public struct Changes {
     
     /// Returns a new snapshot with the proposed change applied to it.
     @inlinable public func proposal() -> Snapshot {
-        var result = snapshot; result.replaceSubrange(indices, with: replacement); return result
+        var proposal = snapshot
+        proposal.replaceSubrange(range, with: replacement)
+        return proposal
     }
 }
