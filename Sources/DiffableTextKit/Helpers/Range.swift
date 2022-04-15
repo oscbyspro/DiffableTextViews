@@ -14,30 +14,34 @@
 extension Range {
     
     //=------------------------------------------------------------------------=
-    // MARK: Convenient
+    // MARK: Convenience
     //=------------------------------------------------------------------------=
     
+    /// Creates an empty instance with its lower and upper bound set at the location.
     @inlinable static func empty(_ location: Bound) -> Self {
         Self(uncheckedBounds: (location, location))
     }
     
+    /// Creates an instance with the given bounds.
     @inlinable static func unchecked(_ bounds: (lower: Bound, upper: Bound)) -> Self {
         Self(uncheckedBounds: bounds)
     }
     
     //=------------------------------------------------------------------------=
-    // MARK: Transformative
+    // MARK: Map
     //=------------------------------------------------------------------------=
     
-    @inlinable static func from<T>(_ source: Range<T>,
-    map bound: (T) -> Bound) -> Range<Bound> {
+    /// Maps the bounds of another instance.
+    @inlinable static func map<T>(_ source: Range<T>,
+    bound: (T) -> Bound) -> Range<Bound> {
         //=--------------------------------------=
         // MARK: Return
         //=--------------------------------------=
-        Self.from(source, lower: bound, upper: bound)
+        Self.map(source, lower: bound, upper: bound)
     }
     
-    @inlinable static func from<T>(_ source: Range<T>,
+    /// Maps the bounds of another instance. It maps the upper bound when it is empty.
+    @inlinable static func map<T>(_ source: Range<T>,
     lower: (T) -> Bound, upper: (T) -> Bound) -> Range<Bound> {
         //=--------------------------------------=
         // MARK: Single

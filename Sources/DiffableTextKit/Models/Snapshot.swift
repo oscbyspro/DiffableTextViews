@@ -19,9 +19,9 @@
 /// ```
 ///
 /// Set the anchor to force selection of the caret represented by its index. This is required
-/// when the snapshot contains only formatting characters, and you want the user's caret to appear
-/// at a specific location. As an example, a pattern text style with an empty value may anchor at the
-/// index of the first placeholder character.
+/// when a snapshot contains only formatting characters, and you want the caret to appear
+/// at a location. As an example, a pattern style bound to an enmpty value may want to set
+/// the anchor at the index of the first placeholder character.
 ///
 public struct Snapshot: BidirectionalCollection, RangeReplaceableCollection {
     @usableFromInline typealias Target = (Index) -> Bool
@@ -158,7 +158,7 @@ public extension Snapshot {
     }
     
     //=------------------------------------------------------------------------=
-    // MARK: Attributes
+    // MARK: Update
     //=------------------------------------------------------------------------=
     
     @inlinable mutating func update(attributes index: Index,
@@ -181,7 +181,7 @@ public extension Snapshot {
     }
     
     //=------------------------------------------------------------------------=
-    // MARK: Replacements
+    // MARK: Replace
     //=------------------------------------------------------------------------=
 
     @inlinable mutating func replaceSubrange<C: Collection>(
@@ -240,9 +240,40 @@ extension Snapshot: CustomStringConvertible {
 }
 
 //=----------------------------------------------------------------------------=
+// All extensions below this line are internal implementation details.
+//=----------------------------------------------------------------------------=
 // MARK: + Accessors
 //=----------------------------------------------------------------------------=
-// All extensions below this line are internal implementation details.
+
+extension Snapshot {
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Attributes
+    //=------------------------------------------------------------------------=
+    
+    @inlinable func nonpassthrough(at index: Index) -> Bool {
+        !attributes[index.attribute].contains(.passthrough)
+    }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Peek
+    //=------------------------------------------------------------------------=
+
+    @inlinable func peek(from index: Index, towards direction: Direction) -> Index? {
+        direction == .forwards ? peek(ahead: index) : peek(behind: index)
+    }
+    
+    @inlinable func peek(ahead index: Index) -> Index? {
+        index != endIndex ? index : nil
+    }
+
+    @inlinable func peek(behind index: Index) -> Index? {
+        index != startIndex ? self.index(before: index) : nil
+    }
+}
+
+//=----------------------------------------------------------------------------=
+// MARK: + Positions
 //=----------------------------------------------------------------------------=
 
 extension Snapshot {
@@ -256,27 +287,27 @@ extension Snapshot {
     }
     
     //=------------------------------------------------------------------------=
-    // MARK: Index
+    // MARK: Single
     //=------------------------------------------------------------------------=
     
     @inlinable func index<T>(at position: T.Position) -> Index where T: Offset {
         T.index(at: position, in: characters)
     }
     
-    @inlinable func indices<T>(at positions: Range<T.Position>) -> Range<Index> where T: Offset {
-        Range.from(positions, map: index(at:))
-    }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Position
-    //=------------------------------------------------------------------------=
-    
     @inlinable func position<T>(at index: Index) -> T.Position where T: Offset {
         T.position(at: index, in: characters)
     }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Double
+    //=------------------------------------------------------------------------=
+
+    @inlinable func indices<T>(at positions: Range<T.Position>) -> Range<Index> where T: Offset {
+        Range.map(positions, bound: index(at:))
+    }
 
     @inlinable func positions<T>(at indices: Range<Index>) -> Range<T.Position> where T: Offset {
-        Range.from(indices, map: position(at:))
+        Range.map(indices, bound: position(at:))
     }
 }
 
@@ -307,21 +338,21 @@ extension Snapshot {
         //=--------------------------------------=
         let direction = direction ?? preference
         //=--------------------------------------=
-        // MARK: Search In The Direction
+        // MARK: Search In Direction
         //=--------------------------------------=
         if let caret = caret(from: index,
         towards: direction,
         jumping: direction == preference ? .to : .through,
         targeting: nonpassthrough(at:)) { return caret }
         //=--------------------------------------=
-        // MARK: Search In The Other Direction
+        // MARK: Search In Other Direction
         //=--------------------------------------=
         if let caret = caret(from: index,
         towards: direction.reversed(),
         jumping: Jump.to, // use Jump.to on each direction
         targeting: nonpassthrough(at:)) { return caret }
         //=--------------------------------------=
-        // MARK: Default To Instance End Index
+        // MARK: Default To Instance's End Index
         //=--------------------------------------=
         return self.endIndex
     }
@@ -329,7 +360,6 @@ extension Snapshot {
     //=--------------------------------------------------------------------=
     // MARK: Forwards / Backwards / To / Through
     //=--------------------------------------------------------------------=
-
     
     @inlinable func caret(from index: Index, towards direction: Direction,
     jumping distance: Jump, targeting target: Target) -> Index? {
@@ -355,29 +385,5 @@ extension Snapshot {
     
     @inlinable func caret(from index: Index, backwardsThrough target: Target) -> Index? {
         indices[..<index].last(where: target)
-    }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Peek
-    //=------------------------------------------------------------------------=
-
-    @inlinable func peek(from index: Index, towards direction: Direction) -> Index? {
-        direction == .forwards ? peek(ahead: index) : peek(behind: index)
-    }
-    
-    @inlinable func peek(ahead index: Index) -> Index? {
-        index != endIndex ? index : nil
-    }
-
-    @inlinable func peek(behind index: Index) -> Index? {
-        index != startIndex ? self.index(before: index) : nil
-    }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Passthrough
-    //=------------------------------------------------------------------------=
-    
-    @inlinable func nonpassthrough(at index: Index) -> Bool {
-        !attributes[index.attribute].contains(.passthrough)
     }
 }

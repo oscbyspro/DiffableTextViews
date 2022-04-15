@@ -54,7 +54,7 @@ extension Field {
     //=------------------------------------------------------------------------=
     
     @inlinable mutating func update(snapshot: Snapshot) {
-        let selection = Range.from(selection, // proposed selection calculated first
+        let selection = Range.map(selection, // proposed selection is calculated first
         lower: { Mismatches .forwards(from: self.snapshot[..<$0], to: snapshot).next },
         upper: { Mismatches.backwards(from: self.snapshot[$0...], to: snapshot).next })
         self.snapshot = snapshot; self.update(selection: selection)
@@ -71,8 +71,8 @@ extension Field {
     }
     
     @inlinable mutating func update(selection: Range<Index>, momentum: Directions = .none) {
-        if selection == snapshot.range { return self.selection = selection } // accept max
-        self.selection = Range.from(selection, // set preferred carets based on attributes
+        if selection == snapshot.range { return self.selection = selection } // accept max value
+        self.selection = Range.map(selection, // set preferred carets based on snapshot attributes
         lower: { snapshot.caret(from: $0, towards: momentum.lowerBound, preferring:  .forwards) },
         upper: { snapshot.caret(from: $0, towards: momentum.upperBound, preferring: .backwards) })
     }
