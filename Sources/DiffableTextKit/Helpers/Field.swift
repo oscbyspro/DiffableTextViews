@@ -23,24 +23,27 @@
     //=------------------------------------------------------------------------=
     
     @usableFromInline var snapshot: Snapshot
-    @usableFromInline var selection: Range<Index>
+    @usableFromInline var selection: Carets<Index>
 
     //=------------------------------------------------------------------------=
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
     @inlinable init(_ snapshot: Snapshot = Snapshot()) {
-        self.snapshot = snapshot; self.selection = .empty(snapshot.endIndex)
+        self.snapshot = snapshot; self.selection = .caret(at: snapshot.endIndex)
     }
     
     //=------------------------------------------------------------------------=
     // MARK: Accessors
     //=------------------------------------------------------------------------=
     
-    @inlinable func positions<T>(as type: Position<T>.Type =
-    Position<T>.self) -> Range<T.Position> where T: Offset {
-        snapshot.positions(at: selection)
-    }    
+    @inlinable func indices<T>(at positions: Carets<T.Position>) -> Carets<Index> where T: Offset {
+        positions.map(caret: snapshot.index(at:))
+    }
+
+    @inlinable func positions<T>(at indices: Carets<Index>) -> Carets<T.Position> where T: Offset {
+        indices.map(caret: snapshot.position(at:))
+    }
 }
 
 //=----------------------------------------------------------------------------=
@@ -70,11 +73,11 @@ extension Field {
     // MARK: Selection
     //=------------------------------------------------------------------------=
 
-    @inlinable mutating func update<T>(selection: Range<T.Position>, momentum: Bool) where T: Offset {
+    @inlinable mutating func update<T>(selection: Carets<T.Position>, momentum: Bool) where T: Offset {
         //=--------------------------------------=
         // MARK: Values
         //=--------------------------------------=
-        let selection = snapshot.indices(at: selection) // translate positions as indices
+        let selection = indices(at: selection)
         let momentum = momentum ? Directions(from: self.selection, to: selection) : .none
         //=--------------------------------------=
         // MARK: Update
@@ -82,11 +85,13 @@ extension Field {
         self.update(selection: selection, momentum: momentum)
     }
     
-    @inlinable mutating func update(selection: Range<Index>, momentum: Directions = .none) {
+    @inlinable mutating func update(selection: Carets<Index>, momentum: Directions = .none) {
         //=--------------------------------------=
         // MARK: Accept Max Value
         //=--------------------------------------=
-        if selection == snapshot.range { return self.selection = selection }
+        if selection == Carets.unchecked((snapshot.startIndex, snapshot.endIndex)) {
+            return self.selection = selection
+        }
         //=--------------------------------------=
         // MARK: Update
         //=--------------------------------------=

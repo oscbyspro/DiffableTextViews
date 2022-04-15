@@ -248,7 +248,7 @@ extension Snapshot: CustomStringConvertible {
 extension Snapshot {
     
     //=------------------------------------------------------------------------=
-    // MARK: Attributes
+    // MARK: Passthrough
     //=------------------------------------------------------------------------=
     
     @inlinable func nonpassthrough(at index: Index) -> Bool {
@@ -270,24 +270,9 @@ extension Snapshot {
     @inlinable func peek(behind index: Index) -> Index? {
         index != startIndex ? self.index(before: index) : nil
     }
-}
-
-//=----------------------------------------------------------------------------=
-// MARK: + Positions
-//=----------------------------------------------------------------------------=
-
-extension Snapshot {
     
     //=------------------------------------------------------------------------=
-    // MARK: Range
-    //=------------------------------------------------------------------------=
-    
-    @inlinable var range: Range<Index> {
-        Range.unchecked((startIndex, endIndex))
-    }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Single
+    // MARK: Position
     //=------------------------------------------------------------------------=
     
     @inlinable func index<T>(at position: T.Position) -> Index where T: Offset {
@@ -296,18 +281,6 @@ extension Snapshot {
     
     @inlinable func position<T>(at index: Index) -> T.Position where T: Offset {
         T.position(at: index, in: characters)
-    }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Double
-    //=------------------------------------------------------------------------=
-
-    @inlinable func indices<T>(at positions: Range<T.Position>) -> Range<Index> where T: Offset {
-        positions.map(bound: index(at:))
-    }
-
-    @inlinable func positions<T>(at indices: Range<Index>) -> Range<T.Position> where T: Offset {
-        indices.map(bound: position(at:))
     }
 }
 

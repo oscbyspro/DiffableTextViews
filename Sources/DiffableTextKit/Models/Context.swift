@@ -125,7 +125,7 @@ public extension Context {
     
     @inlinable func selection<T>(as type: Position<T>.Type =
     Position<T>.self) -> Range<T.Position> where T: Offset {
-        field.positions(as: type)
+        field.positions(at: field.selection).bounds
     }
 }
 
@@ -199,13 +199,13 @@ public extension Context {
         //=--------------------------------------=
         // MARK: Values
         //=--------------------------------------=
-        let range = snapshot.indices(at: range)
-        let commit = try style.merge(Changes(
-        snapshot, with: characters, in: range))
+        let carets = field.indices(at: Carets(range))
+        let commit = try style.merge(Changes.init(
+        snapshot, with: characters, in: carets.bounds))
         //=--------------------------------------=
         // MARK: Update
         //=--------------------------------------=
-        self.set(selection: range.upperBound)
+        self.set(selection: carets.upperBound)
         self.merge(Self.focused(style, commit))
     }
 
@@ -241,10 +241,10 @@ public extension Context {
     //=------------------------------------------------------------------------=
     
     @inlinable internal mutating func set(selection: Index) {
-        self.write({ $0.field.selection = .empty(selection) })
+        self.write({ $0.field.selection = .caret(at: selection) })
     }
     
     @inlinable mutating func update<T>(selection: Range<T.Position>, momentum: Bool) where T: Offset {
-        self.write({ $0.field.update(selection: selection, momentum: momentum) })
+        self.write({ $0.field.update(selection: Carets(selection), momentum: momentum) })
     }
 }

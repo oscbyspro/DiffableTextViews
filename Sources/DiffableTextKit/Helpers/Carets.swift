@@ -8,46 +8,70 @@
 //=----------------------------------------------------------------------------=
 
 //*============================================================================*
-// MARK: * Range
+// MARK: * Carets
 //*============================================================================*
 
-extension Range {
+/// A lower and upper caret represented by a lower and upper bound.
+///
+/// It differs from a normal range in that equal bounds represent a single upper caret,
+/// rather than two carets at a shared location, which is observable by methods such
+/// as map(lower:upper:).
+///
+@usableFromInline struct Carets<Bound: Comparable>: Equatable {
+    
+    //=------------------------------------------------------------------------=
+    // MARK: State
+    //=------------------------------------------------------------------------=
+    
+    @usableFromInline let bounds: Range<Bound>
     
     //=------------------------------------------------------------------------=
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    /// Creates an empty instance with its lower and upper bound set at the location.
-    @inlinable static func empty(_ location: Bound) -> Self {
-        Self(uncheckedBounds: (location, location))
+    @inlinable init(_ bounds: Range<Bound>) {
+        self.bounds = bounds
     }
     
-    /// Creates an instance with the given bounds.
+    @inlinable static func caret(at location: Bound) -> Self {
+        Self(Range(uncheckedBounds: (location, location)))
+    }
+    
     @inlinable static func unchecked(_ bounds: (lower: Bound, upper: Bound)) -> Self {
-        Self(uncheckedBounds: bounds)
+        Self(Range(uncheckedBounds: bounds))
     }
 
+    //=------------------------------------------------------------------------=
+    // MARK: Accessors
+    //=------------------------------------------------------------------------=
+    
+    @inlinable var lowerBound: Bound {
+        bounds.lowerBound
+    }
+    
+    @inlinable var upperBound: Bound {
+        bounds.upperBound
+    }
+    
     //=------------------------------------------------------------------------=
     // MARK: Transformations
     //=------------------------------------------------------------------------=
     
-    /// Maps the bounds of this instance.
-    @inlinable func map<T>(bound: (Bound) -> T) -> Range<T> {
-        self.map(lower: bound, upper: bound)
+    @inlinable func map<T>(caret: (Bound) -> T) -> Carets<T> {
+        self.map(lower: caret, upper: caret)
     }
     
-    /// Maps the bounds of this instance. It only maps the upper bound when it is empty.
-    @inlinable func map<T>(lower: (Bound) -> T, upper: (Bound) -> T) -> Range<T> {
+    @inlinable func map<T>(lower: (Bound) -> T, upper: (Bound) -> T) -> Carets<T> {
         //=--------------------------------------=
         // MARK: Single
         //=--------------------------------------=
-        let upperBound = upper(self.upperBound)
+        let upperBound = upper(bounds.upperBound)
         var lowerBound = upperBound
         //=--------------------------------------=
         // MARK: Double
         //=--------------------------------------=
-        if !isEmpty {
-            lowerBound = lower(self.lowerBound)
+        if !bounds.isEmpty {
+            lowerBound = lower(bounds.lowerBound)
             lowerBound = Swift.min(lowerBound, upperBound)
         }
         //=--------------------------------------=
