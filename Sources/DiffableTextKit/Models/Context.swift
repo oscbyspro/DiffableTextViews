@@ -241,10 +241,10 @@ public extension Context {
     //=------------------------------------------------------------------------=
     
     @inlinable internal mutating func set(selection: Index) {
-        self.write({ $0.field.selection = .caret(at: selection) })
+        self.write({ $0.field.selection = Carets(selection) })
     }
     
     @inlinable mutating func update<T>(selection: Range<T.Position>, momentum: Bool) where T: Offset {
-        self.write({ $0.field.update(selection: Carets(selection), momentum: momentum) })
+        self.write({ $0.field  .update(selection: Carets(selection), momentum: momentum) })
     }
 }

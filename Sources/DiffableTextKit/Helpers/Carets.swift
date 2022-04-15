@@ -33,12 +33,12 @@
         self.bounds = bounds
     }
     
-    @inlinable static func caret(at location: Bound) -> Self {
-        Self(Range(uncheckedBounds: (location, location)))
+    @inlinable init(_ bound: Bound) {
+        self.init(Range(uncheckedBounds: (bound, bound)))
     }
     
     @inlinable static func unchecked(_ bounds: (lower: Bound, upper: Bound)) -> Self {
-        Self(Range(uncheckedBounds: bounds))
+        Self.init(Range(uncheckedBounds: bounds))
     }
 
     //=------------------------------------------------------------------------=
