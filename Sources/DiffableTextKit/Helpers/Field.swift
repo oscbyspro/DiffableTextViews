@@ -54,9 +54,15 @@ extension Field {
     //=------------------------------------------------------------------------=
     
     @inlinable mutating func update(snapshot: Snapshot) {
-        let selection = Range.map(selection, // proposed selection is calculated first
+        //=--------------------------------------=
+        // MARK: Values
+        //=--------------------------------------=
+        let selection = selection.map( // the proposed selection is calculated first
         lower: { Mismatches .forwards(from: self.snapshot[..<$0], to: snapshot).next },
         upper: { Mismatches.backwards(from: self.snapshot[$0...], to: snapshot).next })
+        //=--------------------------------------=
+        // MARK: Update
+        //=--------------------------------------=
         self.snapshot = snapshot; self.update(selection: selection)
     }
     
@@ -65,14 +71,26 @@ extension Field {
     //=------------------------------------------------------------------------=
 
     @inlinable mutating func update<T>(selection: Range<T.Position>, momentum: Bool) where T: Offset {
+        //=--------------------------------------=
+        // MARK: Values
+        //=--------------------------------------=
         let selection = snapshot.indices(at: selection) // translate positions as indices
         let momentum = momentum ? Directions(from: self.selection, to: selection) : .none
+        //=--------------------------------------=
+        // MARK: Update
+        //=--------------------------------------=
         self.update(selection: selection, momentum: momentum)
     }
     
     @inlinable mutating func update(selection: Range<Index>, momentum: Directions = .none) {
-        if selection == snapshot.range { return self.selection = selection } // accept max value
-        self.selection = Range.map(selection, // set preferred carets based on snapshot attributes
+        //=--------------------------------------=
+        // MARK: Accept Max Value
+        //=--------------------------------------=
+        if selection == snapshot.range { return self.selection = selection }
+        //=--------------------------------------=
+        // MARK: Update
+        //=--------------------------------------=
+        self.selection = selection.map(
         lower: { snapshot.caret(from: $0, towards: momentum.lowerBound, preferring:  .forwards) },
         upper: { snapshot.caret(from: $0, towards: momentum.upperBound, preferring: .backwards) })
     }

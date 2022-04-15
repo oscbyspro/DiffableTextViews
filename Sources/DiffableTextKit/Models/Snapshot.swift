@@ -303,11 +303,11 @@ extension Snapshot {
     //=------------------------------------------------------------------------=
 
     @inlinable func indices<T>(at positions: Range<T.Position>) -> Range<Index> where T: Offset {
-        Range.map(positions, bound: index(at:))
+        positions.map(bound: index(at:))
     }
 
     @inlinable func positions<T>(at indices: Range<Index>) -> Range<T.Position> where T: Offset {
-        Range.map(indices, bound: position(at:))
+        indices.map(bound: position(at:))
     }
 }
 

@@ -73,8 +73,8 @@ Next: BidirectionalCollection, Next.Element == Symbol {
     }
     
     @inlinable static func backwards(from prev: Prev, to next: Next) -> Indices {
-        let reversed = Reversed.forwards(from: prev.reversed(), to: next.reversed())
+        let reversed = Reversed.forwards(
+        from: prev.reversed(), to: next.reversed())
         return (reversed.prev.base, reversed.next.base)
     }
 }
-

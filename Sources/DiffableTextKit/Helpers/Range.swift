@@ -7,14 +7,14 @@
 // See http://www.apache.org/licenses/LICENSE-2.0 for license information.
 //=----------------------------------------------------------------------------=
 
-//=----------------------------------------------------------------------------=
-// MARK: + Initializers
-//=----------------------------------------------------------------------------=
+//*============================================================================*
+// MARK: * Range
+//*============================================================================*
 
 extension Range {
     
     //=------------------------------------------------------------------------=
-    // MARK: Convenience
+    // MARK: Initializers
     //=------------------------------------------------------------------------=
     
     /// Creates an empty instance with its lower and upper bound set at the location.
@@ -26,38 +26,33 @@ extension Range {
     @inlinable static func unchecked(_ bounds: (lower: Bound, upper: Bound)) -> Self {
         Self(uncheckedBounds: bounds)
     }
-    
+
     //=------------------------------------------------------------------------=
-    // MARK: Map
+    // MARK: Transformations
     //=------------------------------------------------------------------------=
     
-    /// Maps the bounds of another instance.
-    @inlinable static func map<T>(_ source: Range<T>,
-    bound: (T) -> Bound) -> Range<Bound> {
-        //=--------------------------------------=
-        // MARK: Return
-        //=--------------------------------------=
-        Self.map(source, lower: bound, upper: bound)
+    /// Maps the bounds of this instance.
+    @inlinable func map<T>(bound: (Bound) -> T) -> Range<T> {
+        self.map(lower: bound, upper: bound)
     }
     
-    /// Maps the bounds of another instance. It maps the upper bound when it is empty.
-    @inlinable static func map<T>(_ source: Range<T>,
-    lower: (T) -> Bound, upper: (T) -> Bound) -> Range<Bound> {
+    /// Maps the bounds of this instance. It only maps the upper bound when it is empty.
+    @inlinable func map<T>(lower: (Bound) -> T, upper: (Bound) -> T) -> Range<T> {
         //=--------------------------------------=
         // MARK: Single
         //=--------------------------------------=
-        let upperBound = upper(source.upperBound)
+        let upperBound = upper(self.upperBound)
         var lowerBound = upperBound
         //=--------------------------------------=
         // MARK: Double
         //=--------------------------------------=
-        if !source.isEmpty {
-            lowerBound = lower(source.lowerBound)
+        if !isEmpty {
+            lowerBound = lower(self.lowerBound)
             lowerBound = Swift.min(lowerBound, upperBound)
         }
         //=--------------------------------------=
         // MARK: Return
         //=--------------------------------------=
-        return Self(uncheckedBounds: (lowerBound, upperBound))
+        return .unchecked((lowerBound, upperBound))
     }
 }
