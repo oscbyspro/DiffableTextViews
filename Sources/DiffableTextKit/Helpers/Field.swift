@@ -77,7 +77,7 @@ extension Field {
         //=--------------------------------------=
         // MARK: Values
         //=--------------------------------------=
-        let selection = indices(at: selection)
+        let selection = indices(at: selection) // translate positions to indices
         let momentum = momentum ? Directions(from: self.selection, to: selection) : .none
         //=--------------------------------------=
         // MARK: Update
@@ -86,17 +86,17 @@ extension Field {
     }
     
     @inlinable mutating func update(selection: Carets<Index>, momentum: Directions = .none) {
+        switch selection {
         //=--------------------------------------=
         // MARK: Accept Max Value
         //=--------------------------------------=
-        if selection == Carets.unchecked((snapshot.startIndex, snapshot.endIndex)) {
-            return self.selection = selection
-        }
+        case .unchecked((snapshot.startIndex, snapshot.endIndex)): self.selection = selection
         //=--------------------------------------=
         // MARK: Update
         //=--------------------------------------=
-        self.selection = selection.map(
+        default: self.selection = selection.map(
         lower: { snapshot.caret(from: $0, towards: momentum.lowerBound, preferring:  .forwards) },
         upper: { snapshot.caret(from: $0, towards: momentum.upperBound, preferring: .backwards) })
+        }
     }
 }
