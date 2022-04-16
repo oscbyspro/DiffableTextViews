@@ -11,11 +11,10 @@
 // MARK: * Carets
 //*============================================================================*
 
-/// A lower and upper caret represented by a lower and upper bound.
+/// Up to two carets represented by a lower and upper bound.
 ///
-/// It differs from a normal range in that equal bounds represent a single upper caret,
-/// rather than two carets at a shared location, which is observable by methods such
-/// as map(lower:upper:).
+/// When its bounds are equal, it represents a single upper caret.
+/// This distinction matters to transformations such as map(lower:upper:).
 ///
 @usableFromInline struct Carets<Bound: Comparable>: Equatable {
     

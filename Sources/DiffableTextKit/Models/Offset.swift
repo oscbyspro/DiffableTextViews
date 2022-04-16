@@ -35,8 +35,7 @@ extension Character: Offset {
     //=------------------------------------------------------------------------=
     
     @inlinable public static func index(at position: Self.Position, in characters: String) -> Index {
-        let character = characters.index(characters.startIndex, offsetBy: position.offset)
-        return Index(character, position.offset)
+        Index(characters.index(characters.startIndex, offsetBy:  position.offset), position.offset)
     }
     
     @inlinable public static func position(at index: Index, in characters: String) -> Self.Position {
@@ -55,8 +54,7 @@ extension UTF16: Offset {
     //=------------------------------------------------------------------------=
 
     @inlinable public static func index(at position: Self.Position, in characters: String) -> Index {
-        let character = String.Index(utf16Offset: position.offset, in: characters)
-        return Index(character, characters[..<character].count)
+        Index(String.Index(utf16Offset: position.offset, in: characters), in:  characters)
     }
     
     @inlinable public static func position(at index: Index, in characters: String) -> Self.Position {
