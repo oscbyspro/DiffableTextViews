@@ -39,7 +39,7 @@ public struct Index: Comparable {
     /// Creates an instance describing a character's location.
     ///
     /// - Parameters:
-    ///   - character: The character encoded index.
+    ///   - character:  The character encoded index.
     ///   - characters: The collection of characters that contains the index.
     ///
     @inlinable init(_ character: String.Index, in characters: String) {

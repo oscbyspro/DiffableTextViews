@@ -14,7 +14,7 @@
 /// Up to two carets represented by a lower and upper bound.
 ///
 /// When its bounds are equal, it represents a single upper caret.
-/// This distinction matters to transformations such as map(lower:upper:).
+/// This distinction matters for transformations such as map(lower:upper:).
 ///
 @usableFromInline struct Carets<Bound: Comparable>: Equatable {
     

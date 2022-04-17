@@ -13,7 +13,7 @@
 
 /// A set of values describing the state of a diffable text view.
 ///
-/// - Uses copy-on-write.
+/// - Uses copy-on-write semantics.
 ///
 public struct Context<Style: DiffableTextStyle> {
     public typealias Commit = DiffableTextKit.Commit<Value>

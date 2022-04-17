@@ -43,13 +43,13 @@ public protocol DiffableTextStyle: Equatable {
     ///
     @inlinable func format(_ value: Value) -> String
     
-    /// Returns a value and a snapshot.
+    /// Returns a value and a snapshot describing it.
     ///
     /// This method is called in response to changes upstream while the view is focused.
     ///
     @inlinable func interpret(_ value: Value) -> Commit<Value>
     
-    /// Returns a value and a snapshot.
+    /// Returns a value and a snapshot describing it.
     ///
     /// This method is called in response to user input.
     ///
