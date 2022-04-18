@@ -75,7 +75,7 @@ public struct Info: CustomStringConvertible, Error {
         }
         
         //=--------------------------------------------------------------------=
-        // MARK: Initializers - Static
+        // MARK: Initializers
         //=--------------------------------------------------------------------=
         
         @inlinable public static func note(_ value: Any) -> Self {

@@ -40,7 +40,7 @@ import Foundation
     }
 
     //=------------------------------------------------------------------------=
-    // MARK: Initializers - Static
+    // MARK: Initializers
     //=------------------------------------------------------------------------=
     
     @inlinable static func reuse<T>(_ format: T) -> Self where T: Formats.Number {

@@ -71,11 +71,10 @@ A text field that binds values and formats them as you type.
 |---|---------|-------------|
 | :iphone: | SwiftUI | Value, style, done |
 | :mountain: | Environment | Uses environment values |
-| :mag_right: | Focusable | Supports use of @FocusState |
+| :mag_right: | Focusable | Supports SwiftUI.FocusState |
 | :sewing_needle: | Customizable | Exposes [ProxyTextField](Sources/DiffableTextKitXUIKit/Views/ProxyTextField.swift) |
 | :zzz: | Convenient | Styles use sensible defaults |
 | :balance_scale: | Monospaced | Standard font is monospaced |
-| :smiley: | Emojis | Uses native offsets |
 
 # Styles
 

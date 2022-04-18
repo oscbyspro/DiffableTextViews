@@ -41,7 +41,7 @@ public final class Lexicon {
     }
 
     //=------------------------------------------------------------------------=
-    // MARK: Initializers - Static
+    // MARK: Initializers
     //=------------------------------------------------------------------------=
     
     /// Requires that formatter.numberStyle == .none.

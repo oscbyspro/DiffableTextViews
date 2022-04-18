@@ -51,7 +51,7 @@ public struct DiffableTextFont {
     }
     
     //=------------------------------------------------------------------------=
-    // MARK: Initializers - Static
+    // MARK: Initializers
     //=------------------------------------------------------------------------=
     
     @inlinable static func preferred(_ style: UIFont.TextStyle) -> Self {

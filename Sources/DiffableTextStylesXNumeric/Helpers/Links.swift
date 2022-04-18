@@ -46,7 +46,7 @@ import Foundation
     }
     
     //=------------------------------------------------------------------------=
-    // MARK: Initializers - Static
+    // MARK: Initializers
     //=------------------------------------------------------------------------=
     
     @inlinable static func ascii() -> Self {

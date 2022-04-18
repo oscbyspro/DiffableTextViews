@@ -34,7 +34,7 @@ public struct Symbol: Equatable {
     }
     
     //=------------------------------------------------------------------------=
-    // MARK: Initializers - Static
+    // MARK: Initializers
     //=------------------------------------------------------------------------=
     
     @inlinable @inline(__always) public static func content(_ character: Character) -> Self {

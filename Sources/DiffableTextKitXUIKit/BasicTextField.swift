@@ -16,6 +16,13 @@ import UIKit
 // MARK: * BasicTextField
 //*============================================================================*
 
+/// An as-you-type formatting compatible UITextField.
+///
+/// UITextField has two selection methods: drag and drop and keyboard inputs.
+///
+///  - Use static selection for drag and drop.
+///  - Use momentum selection for keyboard inputs.
+///
 public final class BasicTextField: UITextField {
     
     //=------------------------------------------------------------------------=
