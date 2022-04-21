@@ -290,11 +290,19 @@ public extension View {
     // MARK: Setup
     //=------------------------------------------------------------------------=
     
+    /// Adds an action to perform when this view is set up.
+    ///
+    /// DiffableTextField will trigger this action once throughout its life cycle.
+    ///
     @inlinable func onSetup(of view: DiffableTextFieldID,
     _ action: @escaping (ProxyTextField) -> Void) -> some View {
         environment(\.diffableTextField_onSetup, Trigger(action))
     }
     
+    /// Prevents this view from invoking actions from above this view in the view hierarchy.
+    ///
+    /// It is similar to SwiftUI.View/submitScope(\_:).
+    ///
     @inlinable func onSetupScope(of view: DiffableTextFieldID) -> some View {
         environment(\.diffableTextField_onSetup, nil)
     }
@@ -303,11 +311,19 @@ public extension View {
     // MARK: Update
     //=------------------------------------------------------------------------=
     
+    /// Adds an action to perform when this view is updated.
+    ///
+    /// DiffableTextField may trigger this action multiple times throughout its life cycle.
+    ///
     @inlinable func onUpdate(of view: DiffableTextFieldID,
     _ action: @escaping (ProxyTextField) -> Void) -> some View {
         environment(\.diffableTextField_onUpdate, Trigger(action))
     }
     
+    /// Prevents this view from invoking actions from above this view in the view hierarchy.
+    ///
+    /// It is similar to SwiftUI.View/submitScope(\_:).
+    ///
     @inlinable func onUpdateScope(of view: DiffableTextFieldID) -> some View {
         environment(\.diffableTextField_onUpdate, nil)
     }
@@ -316,11 +332,19 @@ public extension View {
     // MARK: Submit
     //=------------------------------------------------------------------------=
     
+    /// Adds an action to perform when the user submits a value to this view.
+    ///
+    /// DiffableTextField will trigger this action when the user hits the return key.
+    ///
     @inlinable func onSubmit(of view: DiffableTextFieldID,
     _ action: @escaping (ProxyTextField) -> Void) -> some View {
         environment(\.diffableTextField_onSubmit, Trigger(action))
     }
     
+    /// Prevents this view from invoking actions from above this view in the view hierarchy.
+    ///
+    /// It is similar to SwiftUI.View/submitScope(\_:).
+    ///
     @inlinable func onSubmitScope(of view: DiffableTextFieldID) -> some View {
         environment(\.diffableTextField_onSubmit, nil)
     }
