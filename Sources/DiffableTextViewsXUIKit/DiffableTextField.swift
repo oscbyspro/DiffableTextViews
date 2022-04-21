@@ -299,9 +299,9 @@ public extension View {
         environment(\.diffableTextField_onSetup, Trigger(action))
     }
     
-    /// Prevents this view from invoking actions from above this view in the view hierarchy.
+    /// Prevents this view from invoking actions from above it in the view hierarchy.
     ///
-    /// It is similar to SwiftUI.View/submitScope(\_:).
+    /// It is similar to SwiftUI.View/submitScope().
     ///
     @inlinable func onSetupScope(of view: DiffableTextFieldID) -> some View {
         environment(\.diffableTextField_onSetup, nil)
@@ -320,9 +320,9 @@ public extension View {
         environment(\.diffableTextField_onUpdate, Trigger(action))
     }
     
-    /// Prevents this view from invoking actions from above this view in the view hierarchy.
+    /// Prevents this view from invoking actions from above it in the view hierarchy.
     ///
-    /// It is similar to SwiftUI.View/submitScope(\_:).
+    /// It is similar to SwiftUI.View/submitScope().
     ///
     @inlinable func onUpdateScope(of view: DiffableTextFieldID) -> some View {
         environment(\.diffableTextField_onUpdate, nil)
@@ -341,9 +341,9 @@ public extension View {
         environment(\.diffableTextField_onSubmit, Trigger(action))
     }
     
-    /// Prevents this view from invoking actions from above this view in the view hierarchy.
+    /// Prevents this view from invoking actions from above it in the view hierarchy.
     ///
-    /// It is similar to SwiftUI.View/submitScope(\_:).
+    /// It is similar to SwiftUI.View/submitScope().
     ///
     @inlinable func onSubmitScope(of view: DiffableTextFieldID) -> some View {
         environment(\.diffableTextField_onSubmit, nil)
