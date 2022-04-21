@@ -11,7 +11,7 @@
 // MARK: * Trigger
 //*============================================================================*
 
-/// A resettable closure stack.
+/// A resettable action stack.
 public struct Trigger<Context>: ExpressibleByNilLiteral {
     public typealias Action = (Context) -> Void
     
@@ -25,7 +25,7 @@ public struct Trigger<Context>: ExpressibleByNilLiteral {
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable public init(_ action: Action?) {
+    @inlinable public init(_ action: @escaping Action) {
         self.action = action
     }
     
@@ -67,7 +67,7 @@ public struct Trigger<Context>: ExpressibleByNilLiteral {
     }
     
     /// Appends the trigger if it exists, resets this instance otherwise.
-    @inlinable public static func += (lhs: inout Self, rhs: Self) {
+    @inlinable public static func &+= (lhs: inout Self, rhs: Self) {
         lhs.merge(rhs)
     }
 }

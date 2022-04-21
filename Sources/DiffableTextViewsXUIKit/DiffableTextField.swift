@@ -266,17 +266,17 @@ extension EnvironmentValues {
     
     @inlinable var diffableTextField_onSetup: Trigger<ProxyTextField> {
         get { self[DiffableTextField_OnSetup.self] }
-        set { self[DiffableTextField_OnSetup.self] += newValue }
+        set { self[DiffableTextField_OnSetup.self] &+= newValue }
     }
     
     @inlinable var diffableTextField_onUpdate: Trigger<ProxyTextField> {
         get { self[DiffableTextField_OnUpdate.self] }
-        set { self[DiffableTextField_OnUpdate.self] += newValue }
+        set { self[DiffableTextField_OnUpdate.self] &+= newValue }
     }
 
     @inlinable var diffableTextField_onSubmit: Trigger<ProxyTextField> {
         get { self[DiffableTextField_OnSubmit.self] }
-        set { self[DiffableTextField_OnSubmit.self] += newValue }
+        set { self[DiffableTextField_OnSubmit.self] &+= newValue }
     }
 }
 
