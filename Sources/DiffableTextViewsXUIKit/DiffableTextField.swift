@@ -243,15 +243,15 @@ public struct DiffableTextFieldID {
 //*============================================================================*
 
 @usableFromInline enum DiffableTextField_OnSetup: EnvironmentKey {
-    @usableFromInline static let defaultValue = Trigger<ProxyTextField>()
+    @usableFromInline static let defaultValue: Trigger<ProxyTextField> = nil
 }
 
 @usableFromInline enum DiffableTextField_OnUpdate: EnvironmentKey {
-    @usableFromInline static let defaultValue = Trigger<ProxyTextField>()
+    @usableFromInline static let defaultValue: Trigger<ProxyTextField> = nil
 }
 
 @usableFromInline enum DiffableTextField_OnSubmit: EnvironmentKey {
-    @usableFromInline static let defaultValue = Trigger<ProxyTextField>()
+    @usableFromInline static let defaultValue: Trigger<ProxyTextField> = nil
 }
 
 //*============================================================================*
@@ -287,7 +287,7 @@ extension EnvironmentValues {
 public extension View {
     
     //=------------------------------------------------------------------------=
-    // MARK: Transformations
+    // MARK: Setup
     //=------------------------------------------------------------------------=
     
     @inlinable func onSetup(of view: DiffableTextFieldID,
@@ -295,14 +295,34 @@ public extension View {
         environment(\.diffableTextField_onSetup, Trigger(action))
     }
     
+    @inlinable func onSetupScope(of view: DiffableTextFieldID) -> some View {
+        environment(\.diffableTextField_onSetup, nil)
+    }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Update
+    //=------------------------------------------------------------------------=
+    
     @inlinable func onUpdate(of view: DiffableTextFieldID,
     _ action: @escaping (ProxyTextField) -> Void) -> some View {
         environment(\.diffableTextField_onUpdate, Trigger(action))
     }
     
+    @inlinable func onUpdateScope(of view: DiffableTextFieldID) -> some View {
+        environment(\.diffableTextField_onUpdate, nil)
+    }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Submit
+    //=------------------------------------------------------------------------=
+    
     @inlinable func onSubmit(of view: DiffableTextFieldID,
     _ action: @escaping (ProxyTextField) -> Void) -> some View {
         environment(\.diffableTextField_onSubmit, Trigger(action))
+    }
+    
+    @inlinable func onSubmitScope(of view: DiffableTextFieldID) -> some View {
+        environment(\.diffableTextField_onSubmit, nil)
     }
 }
 

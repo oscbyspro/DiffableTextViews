@@ -11,20 +11,26 @@
 // MARK: * Trigger
 //*============================================================================*
 
-public struct Trigger<Context> {
+/// A resettable closure stack.
+public struct Trigger<Context>: ExpressibleByNilLiteral {
+    public typealias Action = (Context) -> Void
     
     //=------------------------------------------------------------------------=
     // MARK: State
     //=------------------------------------------------------------------------=
     
-    @usableFromInline var action: (Context) -> Void
+    @usableFromInline var action: Action?
     
     //=------------------------------------------------------------------------=
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable public init(_ action: @escaping (Context) -> Void = { _ in }) {
+    @inlinable public init(_ action: Action?) {
         self.action = action
+    }
+    
+    @inlinable public init(nilLiteral: Void) {
+        self.action = nil
     }
     
     //=------------------------------------------------------------------------=
@@ -32,24 +38,36 @@ public struct Trigger<Context> {
     //=------------------------------------------------------------------------=
     
     @inlinable public func callAsFunction(_ context: Context) {
-        self.action(context)
+        self.action?(context)
     }
     
     //=------------------------------------------------------------------------=
     // MARK: Transformations
     //=------------------------------------------------------------------------=
     
-    @inlinable public mutating func append(_ other: Self) {
-        self.action = { [self] context in
+    /// Appends the trigger if it exists, resets this instance otherwise.
+    @inlinable public mutating func merge(_ other: Self) {
+        if let other = other.action {
             //=----------------------------------=
-            // MARK: Call This Then Other
+            // MARK: Append
             //=----------------------------------=
-            self .action(context)
-            other.action(context)
-        }
+            if let this = self.action {
+                self.action = {
+                    this ($0)
+                    other($0)
+                }
+            //=----------------------------------=
+            // MARK: Replace
+            //=----------------------------------=
+            } else { self.action = other }
+        //=--------------------------------------=
+        // MARK: Reset
+        //=--------------------------------------=
+        } else { self.action = nil }
     }
     
+    /// Appends the trigger if it exists, resets this instance otherwise.
     @inlinable public static func += (lhs: inout Self, rhs: Self) {
-        lhs.append(rhs)
+        lhs.merge(rhs)
     }
 }
