@@ -18,12 +18,14 @@ import UIKit
 
 @usableFromInline final class Downstream {
     @usableFromInline typealias Position = DiffableTextKit.Position<UTF16>
-    
+    @usableFromInline typealias Proxy = DiffableTextKitXUIKit.ProxyTextField
+    @usableFromInline typealias Wrapped = DiffableTextKitXUIKit.BasicTextField
+
     //=------------------------------------------------------------------------=
     // MARK: State
     //=------------------------------------------------------------------------=
     
-    @usableFromInline var wrapped = BasicTextField()
+    @usableFromInline var wrapped = Wrapped()
     
     //=------------------------------------------------------------------------=
     // MARK: Initializers
@@ -63,8 +65,12 @@ import UIKit
         wrapped.selectedTextRange = offsets(selection)
     }
         
-    @inlinable func transform(_ transform: (ProxyTextField) -> Void) {
-        transform(ProxyTextField(wrapped))
+    @inlinable func transform(_ transform: Trigger<Proxy>) {
+        transform(Proxy(wrapped))
+    }
+    
+    @inlinable func transform(_ transform: (Proxy) -> Void) {
+        transform(Proxy(wrapped))
     }
     
     //=------------------------------------------------------------------------=

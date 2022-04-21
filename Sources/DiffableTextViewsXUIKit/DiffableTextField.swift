@@ -111,22 +111,6 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
         //=--------------------------------------------------------------------=
         // MARK: Events
         //=--------------------------------------------------------------------=
-
-        @inlinable public func textFieldDidBeginEditing(_ textField: UITextField) {
-            synchronize()
-        }
-        
-        @inlinable public func textFieldDidEndEditing(_ textField: UITextField) {
-            synchronize()
-        }
-        
-        @inlinable public func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-            downstream.transform(environment.diffableTextField_onSubmit); return  true
-        }
-        
-        //=--------------------------------------------------------------------=
-        // MARK: Events
-        //=--------------------------------------------------------------------=
         
         @inlinable public func textField(_ textField: UITextField,
         shouldChangeCharactersIn nsrange: NSRange,
@@ -176,6 +160,24 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
                     self.downstream.update(selection: autocorrected)
                 }
             }
+        }
+        
+        //=--------------------------------------------------------------------=
+        // MARK: Events
+        //=--------------------------------------------------------------------=
+
+        @inlinable public func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+            downstream.transform(environment.diffableTextField_onSubmit)
+            downstream.wrapped.resignFirstResponder()
+            return true
+        }
+        
+        @inlinable public func textFieldDidBeginEditing(_ textField: UITextField) {
+            synchronize()
+        }
+        
+        @inlinable public func textFieldDidEndEditing(_ textField: UITextField) {
+            synchronize()
         }
         
         //=--------------------------------------------------------------------=
@@ -232,22 +234,24 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
 // MARK: * DiffableTextField x ID
 //*============================================================================*
 
-public struct DiffableTextFieldID { public static let diffableTextField = Self() }
+public struct DiffableTextFieldID {
+    public static let diffableTextField = Self()
+}
 
 //*============================================================================*
 // MARK: * DiffableTextField x Environment
 //*============================================================================*
 
-@usableFromInline enum DiffableTextField_OnSetup:  EnvironmentKey {
-    @usableFromInline static let defaultValue: (ProxyTextField) -> Void = { _ in }
+@usableFromInline enum DiffableTextField_OnSetup: EnvironmentKey {
+    @usableFromInline static let defaultValue = Trigger<ProxyTextField>()
 }
 
 @usableFromInline enum DiffableTextField_OnUpdate: EnvironmentKey {
-    @usableFromInline static let defaultValue: (ProxyTextField) -> Void = { _ in }
+    @usableFromInline static let defaultValue = Trigger<ProxyTextField>()
 }
 
 @usableFromInline enum DiffableTextField_OnSubmit: EnvironmentKey {
-    @usableFromInline static let defaultValue: (ProxyTextField) -> Void = { _ in }
+    @usableFromInline static let defaultValue = Trigger<ProxyTextField>()
 }
 
 //*============================================================================*
@@ -260,19 +264,19 @@ extension EnvironmentValues {
     // MARK: Accessors
     //=------------------------------------------------------------------------=
     
-    @inlinable var diffableTextField_onSetup:  (ProxyTextField) -> Void {
-        get { self[DiffableTextField_OnSetup .self] }
-        set { self[DiffableTextField_OnSetup .self] = newValue }
+    @inlinable var diffableTextField_onSetup: Trigger<ProxyTextField> {
+        get { self[DiffableTextField_OnSetup.self] }
+        set { self[DiffableTextField_OnSetup.self] += newValue }
     }
     
-    @inlinable var diffableTextField_onUpdate: (ProxyTextField) -> Void {
+    @inlinable var diffableTextField_onUpdate: Trigger<ProxyTextField> {
         get { self[DiffableTextField_OnUpdate.self] }
-        set { self[DiffableTextField_OnUpdate.self] = newValue }
+        set { self[DiffableTextField_OnUpdate.self] += newValue }
     }
 
-    @inlinable var diffableTextField_onSubmit: (ProxyTextField) -> Void {
+    @inlinable var diffableTextField_onSubmit: Trigger<ProxyTextField> {
         get { self[DiffableTextField_OnSubmit.self] }
-        set { self[DiffableTextField_OnSubmit.self] = newValue }
+        set { self[DiffableTextField_OnSubmit.self] += newValue }
     }
 }
 
@@ -286,19 +290,19 @@ public extension View {
     // MARK: Transformations
     //=------------------------------------------------------------------------=
     
-    @inlinable func onSetup(of  view: DiffableTextFieldID,
+    @inlinable func onSetup(of view: DiffableTextFieldID,
     _ action: @escaping (ProxyTextField) -> Void) -> some View {
-        environment(\.diffableTextField_onSetup,  action)
+        environment(\.diffableTextField_onSetup, Trigger(action))
     }
     
     @inlinable func onUpdate(of view: DiffableTextFieldID,
     _ action: @escaping (ProxyTextField) -> Void) -> some View {
-        environment(\.diffableTextField_onUpdate, action)
+        environment(\.diffableTextField_onUpdate, Trigger(action))
     }
     
     @inlinable func onSubmit(of view: DiffableTextFieldID,
     _ action: @escaping (ProxyTextField) -> Void) -> some View {
-        environment(\.diffableTextField_onSubmit, action)
+        environment(\.diffableTextField_onSubmit, Trigger(action))
     }
 }
 
