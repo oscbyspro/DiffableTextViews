@@ -12,7 +12,7 @@
 import DiffableTestKit
 
 //*============================================================================*
-// MARK: * StyleTests x Mock
+// MARK: Declaration
 //*============================================================================*
 
 final class StyleTestsXMock: Tests {
@@ -23,12 +23,12 @@ final class StyleTestsXMock: Tests {
 
     func test() {
         //=--------------------------------------=
-        // MARK: Setup
+        // Setup
         //=--------------------------------------=
         let mock0 = Mock(locale: en_US)
         let mock1 = mock0.locale(sv_SE)
         //=--------------------------------------=
-        // MARK: Assert
+        // Assert
         //=--------------------------------------=
         XCTAssertNotEqual(mock0, mock1)
     }

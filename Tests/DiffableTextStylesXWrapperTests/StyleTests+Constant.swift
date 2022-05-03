@@ -13,7 +13,7 @@ import DiffableTestKit
 @testable import DiffableTextStylesXWrapper
 
 //*============================================================================*
-// MARK: * StyleTests x Constant
+// MARK: Declaration
 //*============================================================================*
 
 final class StyleTestsXConstant: Tests {

@@ -11,7 +11,7 @@ import DiffableTextKit
 import Foundation
 
 //*============================================================================*
-// MARK: * Wrapper
+// MARK: Declaration
 //*============================================================================*
 
 @usableFromInline protocol WrapperTextStyle: DiffableTextStyle {
@@ -26,7 +26,7 @@ import Foundation
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: + Details
+// MARK: Details
 //=----------------------------------------------------------------------------=
 
 extension WrapperTextStyle {
@@ -62,7 +62,7 @@ extension WrapperTextStyle {
     }
     
     //=------------------------------------------------------------------------=
-    // MARK: Comparisons
+    // MARK: Utilities
     //=------------------------------------------------------------------------=
     
     @inlinable @inline(__always)
@@ -71,7 +71,7 @@ extension WrapperTextStyle {
     }
     
     //*========================================================================*
-    // MARK: * UIKit
+    // MARK: UIKit
     //*========================================================================*
     
     #if canImport(UIKit)

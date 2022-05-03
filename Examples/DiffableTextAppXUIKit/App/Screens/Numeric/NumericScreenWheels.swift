@@ -10,7 +10,7 @@
 import SwiftUI
 
 //*============================================================================*
-// MARK: * NumericScreenWheels
+// MARK: Declaration
 //*============================================================================*
 
 struct NumericScreenWheels: View {
@@ -50,9 +50,9 @@ struct NumericScreenWheels: View {
     }
     
     //=------------------------------------------------------------------------=
-    // MARK: Components
+    // MARK: Body
     //=------------------------------------------------------------------------=
-    
+
     var foundation: some View {
         Picker(String(), selection: .constant(false)) { }.pickerStyle(.wheel)
     }
@@ -61,7 +61,7 @@ struct NumericScreenWheels: View {
         GeometryReader {
             let separate = Separate($0, kind: kind.content)
             //=----------------------------------=
-            // MARK: Content
+            // Content
             //=----------------------------------=
             HStack(spacing: 0) {
                 locales.modifier(separate).zIndex(1)
@@ -74,7 +74,7 @@ struct NumericScreenWheels: View {
     }
     
     //=------------------------------------------------------------------------=
-    // MARK: Subcomponents
+    // MARK: Body
     //=------------------------------------------------------------------------=
     
     var locales: some View {
@@ -86,7 +86,7 @@ struct NumericScreenWheels: View {
     }
     
     //*========================================================================*
-    // MARK: * Separate
+    // MARK: Separate
     //*========================================================================*
     
     struct Separate: ViewModifier {

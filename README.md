@@ -78,7 +78,7 @@ A text field that binds values and formats them as you type.
 
 # Styles
 
-## [NumericTextStyle](Notes/NumericTextStyle.md) ([Source](Sources/DiffableTextStylesXNumeric), [Tests](Tests/DiffableTextStylesXNumericTests))
+## [NumericTextStyle](Notes/NumericTextStyle.md) ([Source](Sources/DiffableTextStylesXNumber), [Tests](Tests/DiffableTextStylesXNumberTests))
 
 A style that binds localized numbers using various formats.
 

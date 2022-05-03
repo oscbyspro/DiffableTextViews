@@ -11,7 +11,7 @@
 import PackageDescription
 
 //*============================================================================*
-// MARK: * DiffableTextViews
+// MARK: DiffableTextViews
 //*============================================================================*
 
 let package = Package(
@@ -24,7 +24,7 @@ let package = Package(
     ],
     products: [
         //=--------------------------------------=
-        // MARK: DiffableTextViews
+        // DiffableTextViews
         //=--------------------------------------=
         .library(
             name: "DiffableTextViews",
@@ -32,7 +32,7 @@ let package = Package(
     ],
     targets: [
         //=--------------------------------------=
-        // MARK: 5 - DiffableTextViews
+        // 5 - DiffableTextViews
         //=--------------------------------------=
         .target(
             name: "DiffableTextViews",
@@ -40,25 +40,25 @@ let package = Package(
                 "DiffableTextStyles",
                 "DiffableTextViewsXUIKit"]),
         //=--------------------------------------=
-        // MARK: 4 - DiffableTextStyles
+        // 4 - DiffableTextStyles
         //=--------------------------------------=
         .target(
             name: "DiffableTextStyles",
             dependencies: [
-                "DiffableTextStylesXNumeric",
+                "DiffableTextStylesXNumber",
                 "DiffableTextStylesXPattern",
                 "DiffableTextStylesXWrapper"]),
         //=--------------------------------------=
-        // MARK: 3 - DiffableTextStylesXNumeric
+        // 3 - DiffableTextStylesXNumber
         //=--------------------------------------=
         .target(
-            name: "DiffableTextStylesXNumeric",
+            name: "DiffableTextStylesXNumber",
             dependencies: ["DiffableTextKit", "DiffableTextViewsXUIKit"]),
         .testTarget(
-            name: "DiffableTextStylesXNumericTests",
-            dependencies: ["DiffableTestKit", "DiffableTextStylesXNumeric"]),
+            name: "DiffableTextStylesXNumberTests",
+            dependencies: ["DiffableTestKit", "DiffableTextStylesXNumber"]),
         //=--------------------------------------=
-        // MARK: 3 - DiffableTextStylesXPattern
+        // 3 - DiffableTextStylesXPattern
         //=--------------------------------------=
         .target(
             name: "DiffableTextStylesXPattern",
@@ -67,7 +67,7 @@ let package = Package(
             name: "DiffableTextStylesXPatternTests",
             dependencies: ["DiffableTestKit", "DiffableTextStylesXPattern"]),
         //=--------------------------------------=
-        // MARK: 3 - DiffableTextStylesXWrapper
+        // 3 - DiffableTextStylesXWrapper
         //=--------------------------------------=
         .target(
             name: "DiffableTextStylesXWrapper",
@@ -76,7 +76,7 @@ let package = Package(
             name: "DiffableTextStylesXWrapperTests",
             dependencies: ["DiffableTestKit", "DiffableTextStylesXWrapper"]),
         //=--------------------------------------=
-        // MARK: 2 - DiffableTextViewsXUIKit
+        // 2 - DiffableTextViewsXUIKit
         //=--------------------------------------=
         .target(
             name: "DiffableTextViewsXUIKit",
@@ -85,7 +85,7 @@ let package = Package(
             name: "DiffableTextViewsXUIKitTests",
             dependencies: ["DiffableTestKit", "DiffableTextViewsXUIKit"]),
         //=--------------------------------------=
-        // MARK: 1 - DiffableTextKit
+        // 1 - DiffableTextKit
         //=--------------------------------------=
         .target(
             name: "DiffableTextKit",
@@ -94,7 +94,7 @@ let package = Package(
             name: "DiffableTextKitTests",
             dependencies: ["DiffableTestKit", "DiffableTextKit"]),
         //=--------------------------------------=
-        // MARK: 0 - DiffableTextKitXUIKit
+        // 0 - DiffableTextKitXUIKit
         //=--------------------------------------=
         .target(
             name: "DiffableTextKitXUIKit",
@@ -103,7 +103,7 @@ let package = Package(
             name: "DiffableTextKitXUIKitTests",
             dependencies: ["DiffableTestKit", "DiffableTextKitXUIKit"]),
         //=--------------------------------------=
-        // MARK: T - DiffableTestKit
+        // T - DiffableTestKit
         //=--------------------------------------=
         .target(name: "DiffableTestKit", path: "Tests/DiffableTestKit")
     ]

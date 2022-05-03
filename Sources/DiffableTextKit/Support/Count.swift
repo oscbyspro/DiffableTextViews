@@ -8,7 +8,7 @@
 //=----------------------------------------------------------------------------=
 
 //*============================================================================*
-// MARK: * Sequence x Count
+// MARK: Extension
 //*============================================================================*
 
 public extension Sequence {
@@ -20,14 +20,14 @@ public extension Sequence {
     @inlinable func count(while predicate: (Element) throws -> Bool) rethrows -> Int {
         var count = 0
         //=--------------------------------------=
-        // MARK: Loop
+        // Loop
         //=--------------------------------------=
         for element in self {
             guard try predicate(element) else { break }
             count += 1
         }
         //=--------------------------------------=
-        // MARK: Done
+        // Done
         //=--------------------------------------=
         return count
     }
@@ -39,13 +39,13 @@ public extension Sequence {
     @inlinable func count(where predicate: (Element) throws -> Bool) rethrows -> Int {
         var count = 0
         //=--------------------------------------=
-        // MARK: Loop
+        // Loop
         //=--------------------------------------=
         for element in self where try predicate(element) {
             count += 1
         }
         //=--------------------------------------=
-        // MARK: Done
+        // Done
         //=--------------------------------------=
         return count
     }

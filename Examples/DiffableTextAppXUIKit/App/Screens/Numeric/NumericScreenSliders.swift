@@ -11,7 +11,7 @@ import SwiftUI
 import Sliders
 
 //*============================================================================*
-// MARK: * NumericScreenSliders
+// MARK: Declaration
 //*============================================================================*
 
 struct NumericScreenSliders: View {
@@ -44,11 +44,7 @@ struct NumericScreenSliders: View {
         }
     }
     
-    //=------------------------------------------------------------------------=
-    // MARK: Components
-    //=------------------------------------------------------------------------=
-    
     func label(_ values: ClosedRange<Int>) -> String {
-        "\(title): \(String(describing: values.lowerBound.description)) to \(String(describing: values.upperBound))"
+        "\(title): \(values.lowerBound) to \(values.upperBound)"
     }
 }

@@ -10,7 +10,7 @@
 import Combine
 
 //*============================================================================*
-// MARK: * PatternScreenContext
+// MARK: Declaration
 //*============================================================================*
 
 final class PatternScreenContext: ObservableObject {
@@ -47,7 +47,7 @@ final class PatternScreenContext: ObservableObject {
     static let uppercased: String = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
     
     //*========================================================================*
-    // MARK: * Kind
+    // MARK: Kind
     //*========================================================================*
     
     enum Kind: String, CaseIterable { case phone, card }

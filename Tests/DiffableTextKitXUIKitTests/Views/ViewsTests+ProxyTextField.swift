@@ -14,7 +14,7 @@ import DiffableTestKit
 @testable import DiffableTextKitXUIKit
 
 //*============================================================================*
-// MARK: * ViewsTests x ProxyTextField
+// MARK: Declaration
 //*============================================================================*
 
 final class ViewsTestsXProxyTextField: Tests {

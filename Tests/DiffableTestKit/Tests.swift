@@ -12,7 +12,7 @@
 #if DEBUG
 
 //*============================================================================*
-// MARK: * Tests
+// MARK: Declaration
 //*============================================================================*
 
 /// A convenience XCTestCase class that does not continue after failure.

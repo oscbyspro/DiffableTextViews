@@ -13,7 +13,7 @@ import XCTest
 @testable import DiffableTextStylesXPattern
 
 //*============================================================================*
-// MARK: * StyleTests x Hidden
+// MARK: Declaration
 //*============================================================================*
 
 final class StyleTestsXHidden: XCTestCase, StyleTests {

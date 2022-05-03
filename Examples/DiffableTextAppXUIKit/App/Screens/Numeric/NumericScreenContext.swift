@@ -12,7 +12,7 @@ import Foundation
 import SwiftUI
 
 //*============================================================================*
-// MARK: * NumericScreenContext
+// MARK: Declaration
 //*============================================================================*
 
 final class NumericScreenContext: ObservableObject {
@@ -37,13 +37,13 @@ final class NumericScreenContext: ObservableObject {
     // MARK: Constants
     //=------------------------------------------------------------------------=
     
-    static let boundsLimit = Value.precision.value
+    static let boundsLimit = Value.precision
     static let boundsLimits = Interval((-boundsLimit, boundsLimit))
-    static let integerLimits = Interval((1, Value.precision.integer))
-    static let fractionLimits = Interval((0, Value.precision.fraction))
+    static let integerLimits = Interval((1, Value.precision))
+    static let fractionLimits = Interval((0, Value.precision))
     
     //*========================================================================*
-    // MARK: * Kind
+    // MARK: Kind
     //*========================================================================*
     
     enum Kind: String, CaseIterable { case number, currency, percent }

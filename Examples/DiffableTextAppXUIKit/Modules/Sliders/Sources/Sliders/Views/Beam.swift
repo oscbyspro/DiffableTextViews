@@ -10,7 +10,7 @@
 import SwiftUI
 
 //*============================================================================*
-// MARK: * Beam
+// MARK: Declaration
 //*============================================================================*
 
 @usableFromInline struct Beam: View, Animatable, HasContext {
@@ -46,14 +46,14 @@ import SwiftUI
         .stroke(Color.accentColor, lineWidth: thickness)
         .frame(height: radius)
         .contentShape(Rectangle())
-        .gesture(drag)
+        .gesture(dragGesture)
     }
     
     //=------------------------------------------------------------------------=
-    // MARK: Components
+    // MARK: Body
     //=------------------------------------------------------------------------=
     
-    @inlinable var drag: some Gesture {
+    @inlinable var dragGesture: some Gesture {
         DragGesture(coordinateSpace: .named(coordinates)).updating(start) { gesture, start, _ in
             if start == nil { start = positions }
             let distance = gesture.location.x - gesture.startLocation.x
@@ -64,7 +64,7 @@ import SwiftUI
     }
     
     //=------------------------------------------------------------------------=
-    // MARK: Calculations
+    // MARK: Utilities
     //=------------------------------------------------------------------------=
     
     /// Assumes: distance between values ≤ distance between limits.

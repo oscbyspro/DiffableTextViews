@@ -8,7 +8,7 @@
 //=----------------------------------------------------------------------------=
 
 //*============================================================================*
-// MARK: * Snapshot
+// MARK: Declaration
 //*============================================================================*
 
 /// A collection of characters, attributes and an optional anchor.
@@ -44,7 +44,7 @@ public struct Snapshot: BidirectionalCollection, RangeReplaceableCollection {
     }
     
     //=------------------------------------------------------------------------=
-    // MARK: Initializers - Characters As Attribute
+    // MARK: Initializers: Attribute
     //=------------------------------------------------------------------------=
     
     @inlinable public init(_ characters: String, as attribute: Attribute) {
@@ -140,7 +140,7 @@ public struct Snapshot: BidirectionalCollection, RangeReplaceableCollection {
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: + Transformations
+// MARK: Transformations
 //=----------------------------------------------------------------------------=
 
 public extension Snapshot {
@@ -225,7 +225,7 @@ public extension Snapshot {
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: + Conversions
+// MARK: Utilities
 //=----------------------------------------------------------------------------=
 
 extension Snapshot: CustomStringConvertible {
@@ -242,7 +242,7 @@ extension Snapshot: CustomStringConvertible {
 //=----------------------------------------------------------------------------=
 // All extensions below this line are internal implementation details.
 //=----------------------------------------------------------------------------=
-// MARK: + Accessors
+// MARK: Accessors
 //=----------------------------------------------------------------------------=
 
 extension Snapshot {
@@ -285,7 +285,7 @@ extension Snapshot {
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: + Caret
+// MARK: Caret
 //=----------------------------------------------------------------------------=
 
 extension Snapshot {
@@ -298,34 +298,34 @@ extension Snapshot {
     @inlinable func caret(from index: Index, towards direction: Direction?,
     preferring preference: Direction) -> Index {
         //=--------------------------------------=
-        // MARK: Anchor
+        // Anchor
         //=--------------------------------------=
         if let anchor = anchor { return anchor }
         //=--------------------------------------=
-        // MARK: Inspect Initial Index
+        // Inspect Initial Index
         //=--------------------------------------=
         if peek(from: index, towards: preference).map(
         nonpassthrough(at:)) == true { return index }
         //=--------------------------------------=
-        // MARK: Direction
+        // Direction
         //=--------------------------------------=
         let direction = direction ?? preference
         //=--------------------------------------=
-        // MARK: Search In Direction
+        // Search In Direction
         //=--------------------------------------=
         if let caret = caret(from: index,
         towards: direction,
         jumping: direction == preference ? .to : .through,
         targeting: nonpassthrough(at:)) { return caret }
         //=--------------------------------------=
-        // MARK: Search In Other Direction
+        // Search In Other Direction
         //=--------------------------------------=
         if let caret = caret(from: index,
         towards: direction.reversed(),
         jumping: Jump.to, // use Jump.to on each direction
         targeting: nonpassthrough(at:)) { return caret }
         //=--------------------------------------=
-        // MARK: Default To Instance's End Index
+        // Default To Instance's End Index
         //=--------------------------------------=
         return self.endIndex
     }

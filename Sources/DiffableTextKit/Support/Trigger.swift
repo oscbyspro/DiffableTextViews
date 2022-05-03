@@ -8,7 +8,7 @@
 //=----------------------------------------------------------------------------=
 
 //*============================================================================*
-// MARK: * Trigger
+// MARK: Declaration
 //*============================================================================*
 
 /// A resettable action stack.
@@ -49,7 +49,7 @@ public struct Trigger<Context>: ExpressibleByNilLiteral {
     @inlinable public mutating func merge(_ other: Self) {
         if let other = other.action {
             //=----------------------------------=
-            // MARK: Append
+            // Append
             //=----------------------------------=
             if let this = self.action {
                 self.action = {
@@ -57,11 +57,11 @@ public struct Trigger<Context>: ExpressibleByNilLiteral {
                     other($0)
                 }
             //=----------------------------------=
-            // MARK: Replace
+            // Replace
             //=----------------------------------=
             } else { self.action = other }
         //=--------------------------------------=
-        // MARK: Reset
+        // Reset
         //=--------------------------------------=
         } else { self.action = nil }
     }

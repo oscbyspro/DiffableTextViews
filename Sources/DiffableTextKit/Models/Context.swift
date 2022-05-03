@@ -8,7 +8,7 @@
 //=----------------------------------------------------------------------------=
 
 //*============================================================================*
-// MARK: * Context
+// MARK: Declaration
 //*============================================================================*
 
 /// A set of values describing the state of a diffable text view.
@@ -41,19 +41,19 @@ public struct Context<Style: DiffableTextStyle> {
     /// Transforms this instance with copy-on-write behavior.
     @inlinable mutating func write(_ write: (Storage) -> Void) {
         //=--------------------------------------=
-        // MARK: Unique
+        // Unique
         //=--------------------------------------=
         if !isKnownUniquelyReferenced(&_storage) {
             self._storage = self._storage.copy()
         }
         //=--------------------------------------=
-        // MARK: Update
+        // Update
         //=--------------------------------------=
         write(self._storage)
     }
     
     //*========================================================================*
-    // MARK: * Storage
+    // MARK: Declaration
     //*========================================================================*
     
     @usableFromInline final class Storage {
@@ -86,7 +86,7 @@ public struct Context<Style: DiffableTextStyle> {
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: + Accessors
+// MARK: Accessors
 //=----------------------------------------------------------------------------=
 
 public extension Context {
@@ -130,7 +130,7 @@ public extension Context {
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: + Initializers
+// MARK: Initializers
 //=----------------------------------------------------------------------------=
 
 public extension Context {
@@ -164,7 +164,7 @@ public extension Context {
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: + Transformations
+// MARK: Transformations
 //=----------------------------------------------------------------------------=
 
 public extension Context {
@@ -175,7 +175,7 @@ public extension Context {
         
     @inlinable internal mutating func merge(_ context: Self) {
         //=--------------------------------------=
-        // MARK: Focused
+        // Focused
         //=--------------------------------------=
         if context.focus.value {
             self.write {
@@ -185,7 +185,7 @@ public extension Context {
                 $0.field.update(snapshot: context.snapshot)
             }
         //=--------------------------------------=
-        // MARK: Unfocused
+        // Unfocused
         //=--------------------------------------=
         } else { self = context }
     }
@@ -197,13 +197,13 @@ public extension Context {
     @inlinable mutating func merge<T>(_ characters: String,
     in range: Range<T.Position>) throws where T: Offset {
         //=--------------------------------------=
-        // MARK: Values
+        // Values
         //=--------------------------------------=
         let carets = field.indices(at: Carets(range))
         let commit = try style.merge(Changes.init(
         snapshot, with: characters, in: carets.bounds))
         //=--------------------------------------=
-        // MARK: Update
+        // Update
         //=--------------------------------------=
         self.set(selection: carets.upperBound)
         self.merge(Self.focused(style, commit))
@@ -215,19 +215,19 @@ public extension Context {
     
     @inlinable mutating func merge(_ remote: Remote) -> Bool {
         //=--------------------------------------=
-        // MARK: Values
+        // Values
         //=--------------------------------------=
         let changeInStyle = remote.style != style
         let changeInValue = remote.value != value
         let changeInFocus = remote.focus != focus
         //=--------------------------------------=
-        // MARK: At Least One Must Have Changed
+        // At Least One Must Have Changed
         //=--------------------------------------=
         guard changeInStyle
            || changeInValue
            || changeInFocus else { return false }
         //=--------------------------------------=
-        // MARK: Update
+        // Update
         //=--------------------------------------=
         self.merge(Self(Remote(
         focus: changeInFocus ? remote.focus : focus,

@@ -11,7 +11,7 @@ import SwiftUI
 import DiffableTextViews
 
 //*============================================================================*
-// MARK: * PatternScreenExample
+// MARK: Declaration
 //*============================================================================*
 
 /// An examples view that observes frequent changes.

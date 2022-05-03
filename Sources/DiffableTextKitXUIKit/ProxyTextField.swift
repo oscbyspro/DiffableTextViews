@@ -13,7 +13,7 @@ import SwiftUI
 import UIKit
 
 //*============================================================================*
-// MARK: * ProxyTextField
+// MARK: Declaration
 //*============================================================================*
 
 public final class ProxyTextField: BasicTextField.View {
@@ -61,7 +61,7 @@ public final class ProxyTextField: BasicTextField.View {
 }
 
 //*============================================================================*
-// MARK: * Keyboard
+// MARK: Keyboard
 //*============================================================================*
 
 public extension ProxyTextField.Keyboard {
@@ -84,7 +84,7 @@ public extension ProxyTextField.Keyboard {
 }
 
 //*============================================================================*
-// MARK: * Selection
+// MARK: Selection
 //*============================================================================*
 
 public extension ProxyTextField.Selection {
@@ -121,7 +121,7 @@ public extension ProxyTextField.Selection {
 }
 
 //*============================================================================*
-// MARK: * Text
+// MARK: Text
 //*============================================================================*
 
 public extension ProxyTextField.Text {
@@ -156,7 +156,7 @@ public extension ProxyTextField.Text {
 }
 
 //*============================================================================*
-// MARK: * Traits
+// MARK: Traits
 //*============================================================================*
 
 public extension ProxyTextField.Traits {
@@ -182,14 +182,14 @@ public extension ProxyTextField.Traits {
     }
     
     //*========================================================================*
-    // MARK: * Components
+    // MARK: Declaration
     //*========================================================================*
     
     enum Entry { case normal, secure }
 }
 
 //*============================================================================*
-// MARK: * View
+// MARK: View
 //*============================================================================*
 
 public extension ProxyTextField.View {

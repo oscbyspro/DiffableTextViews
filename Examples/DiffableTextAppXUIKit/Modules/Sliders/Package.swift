@@ -11,7 +11,7 @@
 import PackageDescription
 
 //*============================================================================*
-// MARK: * Sliders
+// MARK: Sliders
 //*============================================================================*
 
 let package = Package(
@@ -21,7 +21,7 @@ let package = Package(
     ],
     products: [
         //=--------------------------------------=
-        // MARK: Sliders
+        // Sliders
         //=--------------------------------------=
         .library(
             name: "Sliders",
@@ -29,7 +29,7 @@ let package = Package(
     ],
     targets: [
         //=--------------------------------------=
-        // MARK: Sliders
+        // Sliders
         //=--------------------------------------=
         .target(name: "Sliders"),
     ]

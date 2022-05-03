@@ -8,7 +8,7 @@
 //=----------------------------------------------------------------------------=
 
 //*============================================================================*
-// MARK: * Sequencer
+// MARK: Declaration
 //*============================================================================*
 
 @usableFromInline struct Sequencer<Value: Collection> where Value.Element == Character {
@@ -40,45 +40,45 @@
     none: (inout Result, Substring) -> Void,
     done: (inout Result, Substring, Value.SubSequence) -> Void) -> Result {
         //=--------------------------------------=
-        // MARK: Variables
+        // Variables
         //=--------------------------------------=
         var result = result
         var vIndex = value.startIndex
         var pIndex = pattern.startIndex
         var qIndex = pIndex // queue
         //=--------------------------------------=
-        // MARK: Loop
+        // Loop
         //=--------------------------------------=
         loop: while pIndex != pattern.endIndex {
             let character = pattern[pIndex]
             //=----------------------------------=
-            // MARK: Value
+            // Value
             //=----------------------------------=
             if let predicate = placeholders[character] {
                 guard vIndex != value.endIndex else { break loop }
                 let   content = value[vIndex]
                 guard predicate.check(content) else { break loop }
                 //=------------------------------=
-                // MARK: Some
+                // Some
                 //=------------------------------=
                 some(&result, pattern[qIndex..<pIndex], content)
                 value.formIndex(after: &vIndex)
                 pattern.formIndex(after: &pIndex)
                 qIndex = pIndex
             //=----------------------------------=
-            // MARK: Pattern
+            // Pattern
             //=----------------------------------=
             } else { pattern.formIndex(after: &pIndex) }
         }
         //=----------------------------------=
-        // MARK: None
+        // None
         //=----------------------------------=
         if qIndex == pattern.startIndex {
             none(&result, pattern[qIndex..<pIndex])
             qIndex = pIndex
         }
         //=--------------------------------------=
-        // MARK: Done
+        // Done
         //=--------------------------------------=
         done(&result, pattern[qIndex...], value[vIndex...]); return result
     }

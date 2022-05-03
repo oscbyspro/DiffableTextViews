@@ -8,15 +8,11 @@
 //=----------------------------------------------------------------------------=
 
 //*============================================================================*
-// MARK: * DiffableTextStyle
+// MARK: Exports
 //*============================================================================*
 
-@_exported import protocol DiffableTextKit.DiffableTextStyle
-
-//*============================================================================*
-// MARK: * Styles
-//*============================================================================*
-
-@_exported import DiffableTextStylesXNumeric
+@_exported import DiffableTextStylesXNumber
 @_exported import DiffableTextStylesXPattern
 @_exported import DiffableTextStylesXWrapper
+
+@_exported import protocol DiffableTextKit.DiffableTextStyle

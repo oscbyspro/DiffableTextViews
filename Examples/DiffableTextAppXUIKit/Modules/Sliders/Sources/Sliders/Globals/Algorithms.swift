@@ -9,9 +9,9 @@
 
 import SwiftUI
 
-//=----------------------------------------------------------------------------=
-// MARK: Map - Single
-//=----------------------------------------------------------------------------=
+//*============================================================================*
+// MARK: Utilities
+//*============================================================================*
 
 @inlinable func map(_ value: CGFloat,
 from start: ClosedRange<CGFloat>, to end: ClosedRange<CGFloat>) -> CGFloat {
@@ -19,10 +19,6 @@ from start: ClosedRange<CGFloat>, to end: ClosedRange<CGFloat>) -> CGFloat {
     let ratio = (end.upperBound - end.lowerBound) / (start.upperBound - start.lowerBound)
     return min(max(end.lowerBound, end.lowerBound + ratio * (value - start.lowerBound)), end.upperBound)
 }
-
-//=----------------------------------------------------------------------------=
-// MARK:  Map - Double
-//=----------------------------------------------------------------------------=
 
 @inlinable func map(_ values: (CGFloat, CGFloat),
 from start: ClosedRange<CGFloat>, to end: ClosedRange<CGFloat>) -> (CGFloat, CGFloat) {(

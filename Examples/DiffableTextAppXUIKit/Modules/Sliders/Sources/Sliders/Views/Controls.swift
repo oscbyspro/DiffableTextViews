@@ -10,7 +10,7 @@
 import SwiftUI
 
 //*============================================================================*
-// MARK: * Controls
+// MARK: Declaration
 //*============================================================================*
 
 @usableFromInline struct Controls: View, HasContext {

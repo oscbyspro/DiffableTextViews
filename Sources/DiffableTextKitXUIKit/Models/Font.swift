@@ -12,7 +12,7 @@
 import UIKit
 
 //*============================================================================*
-// MARK: * DiffableTextFont
+// MARK: Declaration
 //*============================================================================*
 
 /// A SwiftUI-esque system font representation compatible with UIFont.
@@ -72,7 +72,7 @@ public struct DiffableTextFont {
 }
 
 //*============================================================================*
-// MARK: * DiffableTextFont x UIKit.UIFont
+// MARK: UIKit
 //*============================================================================*
 
 extension UIKit.UIFont {

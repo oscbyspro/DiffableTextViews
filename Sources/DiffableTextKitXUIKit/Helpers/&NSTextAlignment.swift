@@ -13,7 +13,7 @@ import SwiftUI
 import UIKit
 
 //*============================================================================*
-// MARK: * NSTextAlignment
+// MARK: Extension
 //*============================================================================*
 
 extension NSTextAlignment {

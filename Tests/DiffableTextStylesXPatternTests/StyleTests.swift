@@ -13,7 +13,7 @@ import XCTest
 @testable import DiffableTextStylesXPattern
 
 //*============================================================================*
-// MARK: * StyleTests
+// MARK: Declaration
 //*============================================================================*
 
 protocol StyleTests: XCTestCase {
@@ -42,7 +42,7 @@ protocol StyleTests: XCTestCase {
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: + Style
+// MARK: Style
 //=----------------------------------------------------------------------------=
     
 extension StyleTests {

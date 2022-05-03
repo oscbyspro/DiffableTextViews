@@ -11,7 +11,7 @@ import SwiftUI
 import DiffableTextViews
 
 //*============================================================================*
-// MARK: * NumericScreen
+// MARK: Declaration
 //*============================================================================*
 
 struct NumericScreen: View {
@@ -32,63 +32,36 @@ struct NumericScreen: View {
         Screen {
             controls
             Divider()
-            examples
+            NumericScreenExamples(context)
         }
     }
     
     //=------------------------------------------------------------------------=
-    // MARK: Body - Controls
+    // MARK: Body
     //=------------------------------------------------------------------------=
     
     var controls: some View {
         Scroller {
-            diffableTextStyles
-            customizationWheels
-            boundsIntervalSliders
-            integerIntervalSliders
-            fractionIntervalSliders
+            Segments(context.kind.binding)
+            
+            NumericScreenWheels(context)
+            
+            NumericScreenSliders("Bounds (9s)",
+            interval: context.bounds.interval, in: Context.boundsLimits)
+            
+            NumericScreenSliders("Integer digits",
+            interval: context.integer, in: Context.integerLimits)
+            
+            NumericScreenSliders("Fraction digits",
+            interval: context.fraction, in: Context.fractionLimits)
+            
             Spacer()
         }
-    }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Body - Controls - Components
-    //=------------------------------------------------------------------------=
-
-    var diffableTextStyles: some View {
-        Segments(context.kind.binding)
-    }
-    
-    var customizationWheels: some View {
-        NumericScreenWheels(context)
-    }
-    
-    var boundsIntervalSliders: some View {
-        NumericScreenSliders("Bounds (9s)",
-        interval: context.bounds.interval, in: Context.boundsLimits)
-    }
-    
-    var integerIntervalSliders: some View {
-        NumericScreenSliders("Integer digits",
-        interval: context.integer, in: Context.integerLimits)
-    }
-    
-    var fractionIntervalSliders: some View {
-        NumericScreenSliders("Fraction digits",
-        interval: context.fraction, in: Context.fractionLimits)
-    }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Body - Example
-    //=------------------------------------------------------------------------=
-    
-    var examples: some View {
-        NumericScreenExamples(context)
     }
 }
 
 //*============================================================================*
-// MARK: * NumericScreen x Previews
+// MARK: Previews
 //*============================================================================*
 
 struct NumericTextStyleScreenPreviews: PreviewProvider {

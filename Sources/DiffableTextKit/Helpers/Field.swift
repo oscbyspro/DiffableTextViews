@@ -8,7 +8,7 @@
 //=----------------------------------------------------------------------------=
 
 //*============================================================================*
-// MARK: * Field
+// MARK: Declaration
 //*============================================================================*
 
 /// A model describing a snapshot and a selection in it.
@@ -47,7 +47,7 @@
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: + Transformations
+// MARK: Transformations
 //=----------------------------------------------------------------------------=
 
 extension Field {
@@ -58,13 +58,13 @@ extension Field {
     
     @inlinable mutating func update(snapshot: Snapshot) {
         //=--------------------------------------=
-        // MARK: Values
+        // Values
         //=--------------------------------------=
-        let selection = selection.map( // the proposed selection is calculated first
+        let selection = selection.map(
         lower: { Mismatches .forwards(from: self.snapshot[..<$0], to: snapshot).next },
         upper: { Mismatches.backwards(from: self.snapshot[$0...], to: snapshot).next })
         //=--------------------------------------=
-        // MARK: Update
+        // Update
         //=--------------------------------------=
         self.snapshot = snapshot; self.update(selection: selection)
     }
@@ -75,12 +75,12 @@ extension Field {
 
     @inlinable mutating func update<T>(selection: Carets<T.Position>, momentum: Bool) where T: Offset {
         //=--------------------------------------=
-        // MARK: Values
+        // Values
         //=--------------------------------------=
         let selection = indices(at: selection) // translate positions to indices
         let momentum = momentum ? Directions(from: self.selection, to: selection) : .none
         //=--------------------------------------=
-        // MARK: Update
+        // Update
         //=--------------------------------------=
         self.update(selection: selection, momentum: momentum)
     }
@@ -88,11 +88,11 @@ extension Field {
     @inlinable mutating func update(selection: Carets<Index>, momentum: Directions = .none) {
         switch selection {
         //=--------------------------------------=
-        // MARK: Accept Max Value
+        // Accept Max Value
         //=--------------------------------------=
         case .unchecked((snapshot.startIndex, snapshot.endIndex)): self.selection = selection
         //=--------------------------------------=
-        // MARK: Update
+        // Update
         //=--------------------------------------=
         default: self.selection = selection.map(
         lower: { snapshot.caret(from: $0, towards: momentum.lowerBound, preferring:  .forwards) },

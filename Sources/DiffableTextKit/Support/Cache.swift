@@ -10,7 +10,7 @@
 import Foundation
 
 //*============================================================================*
-// MARK: * Cache
+// MARK: Declaration
 //*============================================================================*
 
 public final class Cache<Key, Value> where Key: Hashable, Value: AnyObject {
@@ -67,7 +67,7 @@ public final class Cache<Key, Value> where Key: Hashable, Value: AnyObject {
     }
     
     //*========================================================================*
-    // MARK: * NSKey
+    // MARK: NSKey
     //*========================================================================*
     
     /// A key compatible with NSCache.

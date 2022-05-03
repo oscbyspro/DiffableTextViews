@@ -14,7 +14,7 @@ import DiffableTestKit
 @testable import DiffableTextKitXUIKit
 
 //*============================================================================*
-// MARK: * ModelsTests x Font
+// MARK: Declaration
 //*============================================================================*
 
 final class ModelsTestsXFont: Tests {

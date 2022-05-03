@@ -8,7 +8,7 @@
 //=----------------------------------------------------------------------------=
 
 //*============================================================================*
-// MARK: * Mismatches
+// MARK: Declaration
 //*============================================================================*
 
 /// A namespace for the algorithm that detects changes between snapshots.
@@ -35,17 +35,17 @@ Next: BidirectionalCollection, Next.Element == Symbol {
         var prevIndex = prev.startIndex
         var nextIndex = next.startIndex
         //=-------------------------------------=
-        // MARK: Loop
+        // Loop
         //=-------------------------------------=
         while prevIndex != prev.endIndex,
               nextIndex != next.endIndex {
             //=---------------------------------=
-            // MARK: Elements
+            // Elements
             //=---------------------------------=
             let pastElement = prev[prevIndex]
             let nextElement = next[nextIndex]
             //=---------------------------------=
-            // MARK: Indices
+            // Indices
             //=---------------------------------=
             if pastElement.character == nextElement.character {
                 prev.formIndex(after: &prevIndex)
@@ -59,7 +59,7 @@ Next: BidirectionalCollection, Next.Element == Symbol {
             }
         }
         //=--------------------------------------=
-        // MARK: Return
+        // Return
         //=--------------------------------------=
         return (prevIndex, nextIndex)
     }

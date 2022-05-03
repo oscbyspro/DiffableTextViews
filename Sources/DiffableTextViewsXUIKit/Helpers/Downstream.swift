@@ -13,7 +13,7 @@ import DiffableTextKit
 import UIKit
 
 //*============================================================================*
-// MARK: * Downstream
+// MARK: Declaration
 //*============================================================================*
 
 @usableFromInline final class Downstream {

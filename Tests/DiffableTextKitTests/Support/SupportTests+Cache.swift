@@ -13,7 +13,7 @@ import DiffableTestKit
 @testable import DiffableTextKit
 
 //*============================================================================*
-// MARK: * HelpersTests x Direction
+// MARK: Declaration
 //*============================================================================*
 
 final class SupportTestsXCache: XCTestCase {
@@ -29,7 +29,7 @@ final class SupportTestsXCache: XCTestCase {
     }
     
     //*========================================================================*
-    // MARK: * Value
+    // MARK: Value
     //*========================================================================*
     
     final class Value: Equatable {
@@ -47,7 +47,7 @@ final class SupportTestsXCache: XCTestCase {
         init(_ content: String) { self.content = content }
         
         //=------------------------------------------------------------------------=
-        // MARK: Comparisons
+        // MARK: Utilities
         //=------------------------------------------------------------------------=
         
         static func == (lhs: Value, rhs: Value) -> Bool {

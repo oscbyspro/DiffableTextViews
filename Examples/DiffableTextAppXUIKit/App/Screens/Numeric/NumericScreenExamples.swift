@@ -11,7 +11,7 @@ import SwiftUI
 import DiffableTextViews
 
 //*============================================================================*
-// MARK: * NumericScreenExamples
+// MARK: Declaration
 //*============================================================================*
 
 /// An intermediate examples view that observes infrequent changes.
@@ -48,30 +48,31 @@ struct NumericScreenExamples: View {
     //=------------------------------------------------------------------------=
     
     var body: some View {
-        examples.environment(\.locale, locale.content)
-    }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Examples
-    //=------------------------------------------------------------------------=
-    
-    @ViewBuilder var examples: some View {
-        switch kind.content {
-        case .currency: currencyExample
-        case   .number:   numberExample
-        case  .percent:  percentExample
+        Group {
+            switch kind.content {
+            case   .number:   numberExample
+            case .currency: currencyExample
+            case  .percent:  percentExample
+            }
         }
+        .environment(\.locale, locale.content)
     }
     
     @inlinable var currencyExample: some View {
-        NumericScreenExample(context, base: _NumericTextStyle<Currency>(code: currency.content, locale: locale.content))
+        NumericScreenExample(context,
+        base: _NumberTextStyle<Currency>(
+        code: currency.content, locale: locale.content))
     }
     
     @inlinable var numberExample: some View {
-        NumericScreenExample(context, base: _NumericTextStyle<Number>(locale: locale.content))
+        NumericScreenExample(context,
+        base: _NumberTextStyle<Number>(
+        locale: locale.content))
     }
     
     @inlinable var percentExample: some View {
-        NumericScreenExample(context, base: _NumericTextStyle<Percent>(locale: locale.content))
+        NumericScreenExample(context,
+        base: _NumberTextStyle<Percent>(
+        locale: locale.content))
     }
 }

@@ -13,7 +13,7 @@ import DiffableTestKit
 import DiffableTextKit
 
 //*============================================================================*
-// MARK: * ModelsTests x Attribute
+// MARK: Declaration
 //*============================================================================*
 
 final class ModelsTestsXAttribute: Tests {

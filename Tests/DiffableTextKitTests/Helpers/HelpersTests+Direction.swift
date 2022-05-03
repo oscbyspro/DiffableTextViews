@@ -13,7 +13,7 @@ import DiffableTestKit
 @testable import DiffableTextKit
 
 //*============================================================================*
-// MARK: * HelpersTests x Direction
+// MARK: Declaration
 //*============================================================================*
 
 final class HelpersTestsXDirection: XCTestCase {

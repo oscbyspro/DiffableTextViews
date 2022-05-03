@@ -10,7 +10,7 @@
 import DiffableTextKit
 
 //*============================================================================*
-// MARK: * Equals
+// MARK: Declaration
 //*============================================================================*
 
 /// Binds the style's equality to a proxy value.
@@ -38,7 +38,7 @@ public struct EqualsTextStyle<Style: DiffableTextStyle, Proxy: Equatable>: Wrapp
     }
 
     //=------------------------------------------------------------------------=
-    // MARK: Comparisons
+    // MARK: Utilities
     //=------------------------------------------------------------------------=
     
     @inlinable @inline(__always)
@@ -48,7 +48,7 @@ public struct EqualsTextStyle<Style: DiffableTextStyle, Proxy: Equatable>: Wrapp
 }
 
 //*============================================================================*
-// MARK: * Equals x DiffableTextStyle
+// MARK: Extension
 //*============================================================================*
 
 extension DiffableTextStyle {

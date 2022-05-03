@@ -10,7 +10,7 @@
 import Foundation
 
 //*============================================================================*
-// MARK: * Position
+// MARK: Declaration
 //*============================================================================*
 
 /// A text offset measured in code units.
@@ -32,7 +32,7 @@ public struct Position<Offset: DiffableTextKit.Offset>: Comparable {
     }
     
     //=------------------------------------------------------------------------=
-    // MARK: Comparisons
+    // MARK: Utilities
     //=------------------------------------------------------------------------=
 
     @inlinable public static func == (lhs: Self, rhs: Self) -> Bool {

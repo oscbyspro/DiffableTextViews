@@ -10,7 +10,7 @@
 import Foundation
 
 //*============================================================================*
-// MARK: * DiffableTextStyle
+// MARK: Declaration
 //*============================================================================*
 
 /// A protocol for styles capable of as-you-type formatting.
@@ -59,22 +59,18 @@ public protocol DiffableTextStyle: Equatable {
     @inlinable func merge(_ changes: Changes) throws -> Commit<Value>
     
     //*========================================================================*
-    // MARK: * UIKit
+    // MARK: UIKit
     //*========================================================================*
     
     #if canImport(UIKit)
 
-    //=------------------------------------------------------------------------=
-    // MARK: Setup
-    //=------------------------------------------------------------------------=
-    
     @inlinable static func onSetup(of diffableTextField: ProxyTextField)
     
     #endif
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: + Details
+// MARK: Details
 //=----------------------------------------------------------------------------=
 
 public extension DiffableTextStyle {
@@ -86,15 +82,11 @@ public extension DiffableTextStyle {
     @inlinable func locale(_ locale: Locale) -> Self { self }
     
     //*========================================================================*
-    // MARK: * UIKit
+    // MARK: UIKit
     //*========================================================================*
     
     #if canImport(UIKit)
 
-    //=------------------------------------------------------------------------=
-    // MARK: Setup
-    //=------------------------------------------------------------------------=
-    
     @inlinable static func onSetup(of diffableTextField: ProxyTextField) { }
     
     #endif

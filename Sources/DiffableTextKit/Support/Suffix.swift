@@ -8,23 +8,23 @@
 //=----------------------------------------------------------------------------=
 
 //*============================================================================*
-// MARK: * BidirectionalCollection x Suffix
+// MARK: Extension
 //*============================================================================*
 
-extension BidirectionalCollection {
+public extension BidirectionalCollection {
     
     //=------------------------------------------------------------------------=
     // MARK: While
     //=------------------------------------------------------------------------=
     
-    @inlinable public func suffix(while predicate: (Element) throws -> Bool) rethrows -> SubSequence {
+    @inlinable func suffix(while predicate: (Element) throws -> Bool) rethrows -> SubSequence {
         try self[startOfSuffix(while: predicate)...]
     }
       
-    @inlinable func startOfSuffix(while predicate: (Element) throws -> Bool) rethrows -> Index {
+    @inlinable internal func startOfSuffix(while predicate: (Element) throws -> Bool) rethrows -> Index {
         var index = endIndex
         //=--------------------------------------=
-        // MARK: Search
+        // Search
         //=--------------------------------------=
         while index != startIndex {
             let after = index
@@ -32,7 +32,7 @@ extension BidirectionalCollection {
             if try !predicate(self[index]) { return after }
         }
         //=--------------------------------------=
-        // MARK: Return
+        // Return
         //=--------------------------------------=
         return index
     }

@@ -10,7 +10,7 @@
 import SwiftUI
 
 //*============================================================================*
-// MARK: * PatternScreenActions
+// MARK: Declaration
 //*============================================================================*
 
 struct PatternScreenActions: View {

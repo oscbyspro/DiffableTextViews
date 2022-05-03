@@ -10,7 +10,7 @@
 import SwiftUI
 
 //*============================================================================*
-// MARK: * Wheel
+// MARK: Declaration
 //*============================================================================*
 
 struct Segments<Value: Hashable & RawRepresentable & CaseIterable>: View where

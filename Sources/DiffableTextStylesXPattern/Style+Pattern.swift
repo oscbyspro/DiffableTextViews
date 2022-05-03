@@ -10,7 +10,7 @@
 import DiffableTextKit
 
 //*============================================================================*
-// MARK: * String
+// MARK: String
 //*============================================================================*
 
 public extension DiffableTextStyle where Self == PatternTextStyle<String> {
@@ -25,7 +25,7 @@ public extension DiffableTextStyle where Self == PatternTextStyle<String> {
 }
 
 //*============================================================================*
-// MARK: * Array
+// MARK: Array
 //*============================================================================*
 
 public extension DiffableTextStyle where Self == PatternTextStyle<[Character]> {

@@ -10,7 +10,7 @@
 import DiffableTextKit
 
 //*============================================================================*
-// MARK: * PatternTextStyle
+// MARK: Declaration
 //*============================================================================*
 
 public struct PatternTextStyle<Value>: DiffableTextStyle where
@@ -44,7 +44,7 @@ Value: RangeReplaceableCollection, Value: Equatable, Value.Element == Character 
     }
 
     //=------------------------------------------------------------------------=
-    // MARK: Comparisons
+    // MARK: Utilities
     //=------------------------------------------------------------------------=
     
     @inlinable public static func == (lhs: Self, rhs: Self) -> Bool {
@@ -55,13 +55,13 @@ Value: RangeReplaceableCollection, Value: Equatable, Value.Element == Character 
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: + Utilities
+// MARK: Utilities
 //=----------------------------------------------------------------------------=
 
 extension PatternTextStyle {
     
     //=------------------------------------------------------------------------=
-    // MARK: Unfocused
+    // MARK: Inactive
     //=------------------------------------------------------------------------=
     
     /// - Mismatches are separated.
@@ -76,13 +76,13 @@ extension PatternTextStyle {
         } done: {
             characters, queue, contents in
             //=----------------------------------=
-            // MARK: Pattern
+            // Pattern
             //=----------------------------------=
             if visible {
                 characters.append(contentsOf: queue)
             }
             //=----------------------------------=
-            // MARK: Mismatches
+            // Mismatches
             //=----------------------------------=
             if !contents.isEmpty {
                 characters.append("|")
@@ -90,16 +90,9 @@ extension PatternTextStyle {
             }
         }
     }
-}
-
-//=----------------------------------------------------------------------------=
-// MARK: + Utilities
-//=----------------------------------------------------------------------------=
-
-extension PatternTextStyle {
 
     //=------------------------------------------------------------------------=
-    // MARK: Focused
+    // MARK: Active
     //=------------------------------------------------------------------------=
     
     /// - Mismatches are cut.
@@ -116,20 +109,13 @@ extension PatternTextStyle {
         } done: {
             commit, queue, _ in
             //=----------------------------------=
-            // MARK: Pattern
+            // Pattern
             //=----------------------------------=
             if visible {
                 commit.snapshot.append(contentsOf: Snapshot(queue, as: .phantom))
             }
         }
     }
-}
-
-//=----------------------------------------------------------------------------=
-// MARK: + Utilities
-//=----------------------------------------------------------------------------=
-
-extension PatternTextStyle {
     
     //=------------------------------------------------------------------------=
     // MARK: Interactive
@@ -140,7 +126,7 @@ extension PatternTextStyle {
         var value = Value(); let proposal = changes.proposal()
         var contents = proposal.lazy.filter(\.nonvirtual).makeIterator()
         //=--------------------------------------=
-        // MARK: Parse
+        // Parse
         //=--------------------------------------=
         parse: for character in pattern {
             if let predicate = placeholders[character] {
@@ -149,20 +135,20 @@ extension PatternTextStyle {
                     throw Info([.mark(content.character), "is invalid"])
                 }
                 //=------------------------------=
-                // MARK: Some
+                // Some
                 //=------------------------------=
                 value.append(content.character)
             }
         }
         //=--------------------------------------=
-        // MARK: Capacity
+        // Capacity
         //=--------------------------------------=
         guard contents.next() == nil else {
             throw Info([.mark(proposal.characters), "exceeded pattern capacity", .mark(value.count)])
         }
         //=--------------------------------------=
-        // MARK: Value -> Commit
+        // Value -> Commit
         //=--------------------------------------=
-        return self.interpret(value)
+        return interpret(value)
     }
 }

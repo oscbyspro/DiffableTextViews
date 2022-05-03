@@ -11,7 +11,7 @@ import SwiftUI
 import DiffableTextViews
 
 //*============================================================================*
-// MARK: * Example
+// MARK: Declaration
 //*============================================================================*
 
 struct Example<Style: DiffableTextStyle>: View {
@@ -62,7 +62,7 @@ struct Example<Style: DiffableTextStyle>: View {
     }
     
     //=------------------------------------------------------------------------=
-    // MARK: Components
+    // MARK: Body
     //=------------------------------------------------------------------------=
     
     var descriptionText: some View {
@@ -82,7 +82,7 @@ struct Example<Style: DiffableTextStyle>: View {
     }
     
     //=------------------------------------------------------------------------=
-    // MARK: Subcomponents
+    // MARK: Body
     //=------------------------------------------------------------------------=
     
     var tertiary: some View {

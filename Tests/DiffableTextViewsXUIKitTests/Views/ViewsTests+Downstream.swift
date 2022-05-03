@@ -14,7 +14,7 @@ import DiffableTestKit
 @testable import DiffableTextViewsXUIKit
 
 //*============================================================================*
-// MARK: * ViewsTests x Downstream
+// MARK: Declaration
 //*============================================================================*
 
 /// ```
@@ -39,7 +39,7 @@ final class ViewsTestsXDownstream: XCTestCase {
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: + Position
+// MARK: Position
 //=----------------------------------------------------------------------------=
 
 extension ViewsTestsXDownstream {
@@ -51,7 +51,7 @@ extension ViewsTestsXDownstream {
     func testPositionsAreMeasuredInUTF16() {
         downstream.wrapped.text = "🇸🇪"
         //=--------------------------------------=
-        // MARK: Assert
+        // Assert
         //=--------------------------------------=
         XCTAssertEqual(8, downstream.wrapped.text!.utf8 .count)
         XCTAssertEqual(4, downstream.wrapped.text!.utf16.count)
@@ -60,7 +60,7 @@ extension ViewsTestsXDownstream {
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: + Measurements
+// MARK: Measurements
 //=----------------------------------------------------------------------------=
 
 extension ViewsTestsXDownstream {

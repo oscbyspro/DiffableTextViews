@@ -13,7 +13,7 @@ import SwiftUI
 import UIKit
 
 //*============================================================================*
-// MARK: * BasicTextField
+// MARK: Declaration
 //*============================================================================*
 
 /// An as-you-type formatting compatible UITextField.
@@ -32,7 +32,7 @@ public final class BasicTextField: UITextField {
     public private(set) var intent = Intent()
     
     //*========================================================================*
-    // MARK: * Intent
+    // MARK: Intent
     //*========================================================================*
     
     public struct Intent {
@@ -74,7 +74,7 @@ public final class BasicTextField: UITextField {
     }
     
     //*========================================================================*
-    // MARK: * View
+    // MARK: View
     //*========================================================================*
     
     public class View {
@@ -94,7 +94,7 @@ public final class BasicTextField: UITextField {
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: + UIResponder
+// MARK: UIResponder
 //=----------------------------------------------------------------------------=
 
 public extension BasicTextField {
@@ -121,7 +121,7 @@ public extension BasicTextField {
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: + Customization
+// MARK: Customization
 //=----------------------------------------------------------------------------=
 
 public extension BasicTextField {

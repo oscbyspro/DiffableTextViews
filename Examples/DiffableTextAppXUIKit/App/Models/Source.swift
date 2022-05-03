@@ -11,7 +11,7 @@ import Combine
 import SwiftUI
 
 //*============================================================================*
-// MARK: * Source
+// MARK: Declaration
 //*============================================================================*
 
 final class Source<Value>: ObservableObject {
@@ -39,7 +39,7 @@ final class Source<Value>: ObservableObject {
 }
 
 //*============================================================================*
-// MARK: * Source x Bounds
+// MARK: Declaration
 //*============================================================================*
 
 final class SourceOfBounds: ObservableObject {
@@ -71,7 +71,7 @@ final class SourceOfBounds: ObservableObject {
     static func values(_ interval: Integers) -> ClosedRange<Decimal> {
         let ordered = interval.closed
         //=--------------------------------------=
-        // MARK: Single
+        // Single
         //=--------------------------------------=
         func bound(_ length: Int) -> Decimal {
             guard length != 0 else { return 0 }
@@ -80,7 +80,7 @@ final class SourceOfBounds: ObservableObject {
             return Decimal(string: description)!
         }
         //=--------------------------------------=
-        // MARK: Double
+        // Double
         //=--------------------------------------=
         return bound(ordered.lowerBound)...bound(ordered.upperBound)
     }

@@ -11,7 +11,7 @@ import DiffableTextKit
 import Foundation
 
 //*============================================================================*
-// MARK: * Mock
+// MARK: Declaration
 //*============================================================================*
 
 struct Mock: DiffableTextStyle {

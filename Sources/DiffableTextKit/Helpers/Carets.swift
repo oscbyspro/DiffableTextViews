@@ -8,7 +8,7 @@
 //=----------------------------------------------------------------------------=
 
 //*============================================================================*
-// MARK: * Carets
+// MARK: Declaration
 //*============================================================================*
 
 /// Up to two carets represented by a lower and upper bound.
@@ -58,26 +58,26 @@
     
     @inlinable func map<T>(caret: (Bound) -> T) -> Carets<T> {
         //=--------------------------------------=
-        // MARK: Return
+        // Return
         //=--------------------------------------=
         self.map(lower: caret, upper: caret)
     }
     
     @inlinable func map<T>(lower: (Bound) -> T, upper: (Bound) -> T) -> Carets<T> {
         //=--------------------------------------=
-        // MARK: Single
+        // Single
         //=--------------------------------------=
         let upperBound = upper(bounds.upperBound)
         var lowerBound = upperBound
         //=--------------------------------------=
-        // MARK: Double
+        // Double
         //=--------------------------------------=
         if !bounds.isEmpty {
             lowerBound = lower(bounds.lowerBound)
             lowerBound = Swift.min(lowerBound, upperBound)
         }
         //=--------------------------------------=
-        // MARK: Return
+        // Return
         //=--------------------------------------=
         return .unchecked((lowerBound, upperBound))
     }

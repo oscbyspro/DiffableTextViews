@@ -11,7 +11,7 @@ import SwiftUI
 import DiffableTextViews
 
 //*============================================================================*
-// MARK: * PatternScreenExamples
+// MARK: Declaration
 //*============================================================================*
 
 /// An intermediate examples view that observes infrequent changes.
@@ -40,15 +40,7 @@ struct PatternScreenExamples: View {
     }
     
     //=------------------------------------------------------------------------=
-    // MARK: Body
-    //=------------------------------------------------------------------------=
-    
-    var body: some View {
-        PatternScreenExample(context, style: style)
-    }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Components
+    // MARK: Accessors
     //=------------------------------------------------------------------------=
     
     var style: Style {
@@ -56,6 +48,14 @@ struct PatternScreenExamples: View {
             case  .card: return Self .card
             case .phone: return Self.phone
         }}; return base.hidden(!visible.content)
+    }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Body
+    //=------------------------------------------------------------------------=
+    
+    var body: some View {
+        PatternScreenExample(context, style: style)
     }
     
     //=------------------------------------------------------------------------=

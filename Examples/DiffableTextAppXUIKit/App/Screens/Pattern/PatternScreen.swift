@@ -11,7 +11,7 @@ import SwiftUI
 import DiffableTextViews
 
 //*============================================================================*
-// MARK: * PatternScreen
+// MARK: Declaration
 //*============================================================================*
 
 struct PatternScreen: View {
@@ -29,52 +29,28 @@ struct PatternScreen: View {
     
     var body: some View {
         Screen {
-            controls
+            scroller
             Divider()
-            examples
+            PatternScreenExamples(context)
         }
     }
     
     //=------------------------------------------------------------------------=
-    // MARK: Body - Controls
+    // MARK: Body
     //=------------------------------------------------------------------------=
-
-    var controls: some View {
+    
+    var scroller: some View {
         Scroller {
-            diffableTextStyles
-            hiddenToggleSwitch
-            actions
+            Segments(context.kind.binding)
+            PatternScreenVisibility(visible: context.visible)
+            PatternScreenActions(context)
             Spacer()
         }
-    }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Body - Controls - Components
-    //=------------------------------------------------------------------------=
-    
-    var diffableTextStyles: some View {
-        Segments(context.kind.binding)
-    }
-    
-    var hiddenToggleSwitch: some View {
-        PatternScreenVisibility(visible: context.visible)
-    }
-    
-    var actions: some View {
-        PatternScreenActions(context)
-    }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Body - Examples
-    //=------------------------------------------------------------------------=
-    
-    var examples: some View {
-        PatternScreenExamples(context)
     }
 }
 
 //*============================================================================*
-// MARK: * PatternScreen x Previews
+// MARK: Previews
 //*============================================================================*
 
 struct PatternTextStyleScreenPreviews: PreviewProvider {

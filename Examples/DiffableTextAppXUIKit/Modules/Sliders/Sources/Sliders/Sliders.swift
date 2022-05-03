@@ -10,7 +10,7 @@
 import SwiftUI
 
 //*============================================================================*
-// MARK: * Sliders
+// MARK: Declaration
 //*============================================================================*
 
 public struct Sliders: View, HasInterval {
@@ -54,13 +54,13 @@ public struct Sliders: View, HasInterval {
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: IntervalSliders x Initializers
+// MARK: Initializers
 //=----------------------------------------------------------------------------=
 
 extension Sliders {
     
     //=------------------------------------------------------------------------=
-    // MARK: Binary - Integer
+    // MARK: Integer
     //=------------------------------------------------------------------------=
     
     @inlinable public init<Value>(_ values: Binding<(Value, Value)>,
@@ -91,10 +91,10 @@ extension Sliders {
 }
 
 //*============================================================================*
-// MARK: * Sliders x Previews
+// MARK: Previews
 //*============================================================================*
 
-struct SlidersPreviews: View, PreviewProvider {
+struct Sliders_Previews: View, PreviewProvider {
 
     //=------------------------------------------------------------------------=
     // MARK: State

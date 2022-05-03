@@ -11,7 +11,7 @@ import DiffableTextKit
 import Foundation
 
 //*============================================================================*
-// MARK: * Constant
+// MARK: Declaration
 //*============================================================================*
 
 /// Prevents style transformations.
@@ -43,7 +43,7 @@ public struct ConstantTextStyle<Style: DiffableTextStyle>: WrapperTextStyle {
 }
 
 //*============================================================================*
-// MARK: * Constant x DiffableTextStyle
+// MARK: Extension
 //*============================================================================*
 
 extension DiffableTextStyle {

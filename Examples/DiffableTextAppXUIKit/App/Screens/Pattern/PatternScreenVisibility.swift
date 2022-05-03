@@ -10,7 +10,7 @@
 import SwiftUI
 
 //*============================================================================*
-// MARK: * PatternScreenVisibility
+// MARK: Declaration
 //*============================================================================*
 
 struct PatternScreenVisibility: View {
