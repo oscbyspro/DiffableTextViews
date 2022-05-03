@@ -15,13 +15,9 @@ import Foundation
 
 public protocol NumberTextFormat: ParseableFormatStyle where FormatOutput == String,
 FormatInput: DiffableTextStylesXNumber.NumberTextValue {
-    associatedtype NumberTextScheme: DiffableTextStylesXNumber.NumberTextScheme
-    associatedtype NumberTextSign: NumberTextFormatXSignRepresentable
     associatedtype NumberTextRoundingIncrement
-    
-    typealias NumberTextRounding  = FloatingPointRoundingRule
-    typealias NumberTextPrecision = NumberFormatStyleConfiguration.Precision
-    typealias NumberTextSeparator = NumberFormatStyleConfiguration.DecimalSeparatorDisplayStrategy
+    associatedtype NumberTextSign: NumberTextFormatXSignRepresentable
+    associatedtype NumberTextScheme: DiffableTextStylesXNumber.NumberTextScheme
     
     //=------------------------------------------------------------------------=
     // MARK: State
@@ -34,9 +30,14 @@ FormatInput: DiffableTextStylesXNumber.NumberTextValue {
     //=------------------------------------------------------------------------=
     
     @inlinable func sign(strategy: NumberTextSign) -> Self
-    @inlinable func precision(_ precision: NumberTextPrecision) -> Self
-    @inlinable func decimalSeparator(strategy: NumberTextSeparator) -> Self
-    @inlinable func rounded(rule: NumberTextRounding, increment: Self.NumberTextRoundingIncrement?) -> Self
+    
+    @inlinable func precision(_ precision: NFSC.Precision) -> Self
+    
+    @inlinable func decimalSeparator(
+    strategy: NFSC.DecimalSeparatorDisplayStrategy) -> Self
+    
+    @inlinable func rounded(rule: FloatingPointRoundingRule,
+    increment: Self.NumberTextRoundingIncrement?) -> Self
     
     //=------------------------------------------------------------------------=
     // MARK: Utilities
@@ -54,8 +55,7 @@ extension NumberTextFormat {
     @usableFromInline typealias Sign = NumberTextFormat_Sign
     @usableFromInline typealias Precision = NFSC.Precision
     @usableFromInline typealias Separator = NFSC.DecimalSeparatorDisplayStrategy
-    @usableFromInline typealias NFSC =   NumberFormatStyleConfiguration
-    @usableFromInline typealias CFSC = CurrencyFormatStyleConfiguration
+    @usableFromInline typealias Rounding = FloatingPointRoundingRule
     
     //=------------------------------------------------------------------------=
     // MARK: Transformations
@@ -69,7 +69,7 @@ extension NumberTextFormat {
         self.decimalSeparator(strategy: strategy)
     }
     
-    @inlinable func rounded(_ strategy: NumberTextRounding) -> Self {
+    @inlinable func rounded(_ strategy: Rounding) -> Self {
         self.rounded(rule: strategy, increment: nil)
     }
     
@@ -87,7 +87,7 @@ extension NumberTextFormat {
 //*============================================================================*
 
 public protocol NumberTextFormatXNumber: NumberTextFormat where
-NumberTextSign == NumberFormatStyleConfiguration.SignDisplayStrategy {
+NumberTextSign == NFSC.SignDisplayStrategy {
 
     //=------------------------------------------------------------------------=
     // MARK: Initializers
@@ -101,7 +101,7 @@ NumberTextSign == NumberFormatStyleConfiguration.SignDisplayStrategy {
 //*============================================================================*
 
 public protocol NumberTextFormatXCurrency: NumberTextFormat where
-NumberTextSign == CurrencyFormatStyleConfiguration.SignDisplayStrategy {
+NumberTextSign == CFSC.SignDisplayStrategy {
     
     //=------------------------------------------------------------------------=
     // MARK: Accessors
@@ -121,7 +121,7 @@ NumberTextSign == CurrencyFormatStyleConfiguration.SignDisplayStrategy {
 //*============================================================================*
 
 public protocol NumberTextFormatXPercent: NumberTextFormat where
-NumberTextSign == NumberFormatStyleConfiguration.SignDisplayStrategy {
+NumberTextSign == NFSC.SignDisplayStrategy {
     
     //=------------------------------------------------------------------------=
     // MARK: Initializers

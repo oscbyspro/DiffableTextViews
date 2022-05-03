@@ -17,7 +17,6 @@ import Foundation
 public struct NumberTextPrecision<Value: NumberTextValue>: Equatable {
     @usableFromInline typealias Namespace = _Precision
     @usableFromInline typealias Limits = ClosedRange<Int>
-    @usableFromInline typealias NFTC = NumberFormatStyleConfiguration
     
     //=------------------------------------------------------------------------=
     // MARK: State
@@ -54,19 +53,19 @@ public struct NumberTextPrecision<Value: NumberTextValue>: Equatable {
     // MARK: Modes
     //=------------------------------------------------------------------------=
     
-    @inlinable func inactive() -> NFTC.Precision {
+    @inlinable func inactive() -> NFSC.Precision {
         .integerAndFractionLength(
          integerLimits:  integer.lowerBound ... Int.max,
         fractionLimits: fraction.lowerBound ... Int.max)
     }
 
-    @inlinable func active() -> NFTC.Precision {
+    @inlinable func active() -> NFSC.Precision {
         .integerAndFractionLength(
          integerLimits: Namespace.lower.integer  ...  integer.upperBound,
         fractionLimits: Namespace.lower.fraction ... fraction.upperBound)
     }
     
-    @inlinable func interactive(_ count: Count) -> NFTC.Precision {
+    @inlinable func interactive(_ count: Count) -> NFSC.Precision {
         .integerAndFractionLength(
          integerLimits: max(Namespace.lower.integer,  count.integer)  ... count.integer,
         fractionLimits: max(Namespace.lower.fraction, count.fraction) ... count.fraction)
