@@ -56,7 +56,7 @@ public protocol DiffableTextStyle: Equatable {
     /// - Thrown errors result in input cancellation.
     /// - Thrown errors have their descriptions printed in DEBUG mode.
     ///
-    @inlinable func merge(_ changes: Changes) throws -> Commit<Value>
+    @inlinable func merge(_ proposal: Proposal) throws -> Commit<Value>
     
     //*========================================================================*
     // MARK: UIKit

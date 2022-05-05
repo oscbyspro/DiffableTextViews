@@ -57,8 +57,8 @@ extension WrapperTextStyle {
     }
 
     @inlinable @inline(__always)
-    public func merge(_ changes: Changes) throws -> Commit<Value> {
-        try style.merge(changes)
+    public func merge(_ proposal: Proposal) throws -> Commit<Value> {
+        try style.merge(proposal)
     }
     
     //=------------------------------------------------------------------------=

@@ -45,7 +45,7 @@ struct Mock: DiffableTextStyle {
         fatalError()
     }
     
-    func merge(_ changes: Changes) throws -> Commit<Value> {
+    func merge(_ proposal: Proposal) throws -> Commit<Value> {
         fatalError()
     }
 }

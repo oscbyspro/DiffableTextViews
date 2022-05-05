@@ -122,8 +122,8 @@ extension PatternTextStyle {
     //=------------------------------------------------------------------------=
     
     /// - Mismatches throw an error, which results in user input cancellation.
-    @inlinable public func merge(_ changes: Changes) throws -> Commit<Value> {
-        var value = Value(); let proposal = changes.proposal()
+    @inlinable public func merge(_ proposal: Proposal) throws -> Commit<Value> {
+        var value = Value(); let proposal = proposal()
         var contents = proposal.lazy.filter(\.nonvirtual).makeIterator()
         //=--------------------------------------=
         // Parse

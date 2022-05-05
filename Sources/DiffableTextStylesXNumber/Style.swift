@@ -147,11 +147,11 @@ public extension NumberTextStyle {
     // MARK: Interactive
     //=------------------------------------------------------------------------=
     
-    @inlinable func merge(_ changes: Changes) throws -> Commit<Value> {
+    @inlinable func merge(_ proposal: Proposal) throws -> Commit<Value> {
         //=--------------------------------------=
         // Number
         //=--------------------------------------=
-        var number = try number(changes)
+        var number = try number(proposal)
         let count = number.count()
         //=--------------------------------------=
         // Autovalidate
@@ -196,30 +196,8 @@ internal extension NumberTextStyle {
         try lexicon.number(in: snapshot, as: Value.self)
     }
 
-    @inlinable func number(_ changes: Changes) throws -> Number {
-        try Reader(lexicon).number(changes, as: Value.self)
-    }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Commit
-    //=------------------------------------------------------------------------=
-    
-    @inlinable func commit(_ value: Value, _ number: Number, _ style: Format) -> Commit<Value> {
-        //=--------------------------------------=
-        // Style
-        //=--------------------------------------=
-        let sign = (number.sign == .negative) ? Format.Sign.always : .automatic
-        let separator = (number.separator == .fraction) ? Format.Separator.always : .automatic
-        let style = style.sign(sign).separator(separator)
-        //=--------------------------------------=
-        // Characters
-        //=--------------------------------------=
-        var characters = style.format(value)
-        fix(number.sign, for: value, in: &characters)
-        //=--------------------------------------=
-        // Commit
-        //=--------------------------------------=
-        return Commit(value, snapshot(characters))
+    @inlinable func number(_ proposal: Proposal) throws -> Number {
+        try Reader(lexicon).number(proposal, as: Value.self)
     }
     
     //=------------------------------------------------------------------------=
@@ -228,6 +206,9 @@ internal extension NumberTextStyle {
     
     /// Assumes characters contain at least one content character.
     @inlinable func snapshot(_ characters: String) -> Snapshot {
+        //=--------------------------------------=
+        // Snapshot
+        //=--------------------------------------=
         var snapshot = characters.reduce(into: Snapshot()) { snapshot, character in
             let attribute: Attribute
             //=----------------------------------=
@@ -259,21 +240,39 @@ internal extension NumberTextStyle {
         //=--------------------------------------=
         scheme.autocorrect(&snapshot); return snapshot
     }
-}
-
-//=----------------------------------------------------------------------------=
-// MARK: Helpers
-//=----------------------------------------------------------------------------=
-
-internal extension NumberTextStyle {
     
     //=------------------------------------------------------------------------=
-    // MARK: Fixes
+    // MARK: Commit
     //=------------------------------------------------------------------------=
+    
+    @inlinable func commit(_ value: Value, _ number: Number, _ style: Format) -> Commit<Value> {
+        //=--------------------------------------=
+        // Style
+        //=--------------------------------------=
+        let sign = (number.sign == .negative) ? Format.Sign.always : .automatic
+        let separator = (number.separator == .fraction) ? Format.Separator.always : .automatic
+        let style = style.sign(sign).separator(separator)
+        //=--------------------------------------=
+        // Characters
+        //=--------------------------------------=
+        var characters = style.format(value)
+        fix(number.sign, for: value, in: &characters)
+        //=--------------------------------------=
+        // Commit
+        //=--------------------------------------=
+        return Commit(value, snapshot(characters))
+    }
+    
     
     /// This method exists because Apple always interpret zero as being positive.
     @inlinable func fix(_ sign: Sign, for value: Value, in characters: inout String)  {
+        //=--------------------------------------=
+        // Condition
+        //=--------------------------------------=
         guard sign == .negative, value == .zero else { return }
+        //=--------------------------------------=
+        // Toggle Sign To Negative
+        //=--------------------------------------=
         guard let index = characters.firstIndex(of: lexicon.signs[sign.toggled()]) else { return }
         characters.replaceSubrange(index...index, with: String(lexicon.signs[sign]))
     }

@@ -200,7 +200,7 @@ public extension Context {
         // Values
         //=--------------------------------------=
         let carets = field.indices(at: Carets(range))
-        let commit = try style.merge(Changes.init(
+        let commit = try style.merge(Proposal(
         snapshot, with: characters, in: carets.bounds))
         //=--------------------------------------=
         // Update

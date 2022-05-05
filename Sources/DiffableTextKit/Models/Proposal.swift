@@ -12,7 +12,7 @@
 //*============================================================================*
 
 /// A snapshot and one continuous change that has not yet been applied to it.
-public struct Changes {
+public struct Proposal {
     
     //=------------------------------------------------------------------------=
     // MARK: State
@@ -37,7 +37,7 @@ public struct Changes {
     //=------------------------------------------------------------------------=
     
     /// Returns a new snapshot with the proposed change applied to it.
-    @inlinable public func proposal() -> Snapshot {
+    @inlinable public func callAsFunction() -> Snapshot {
         var proposal = snapshot
         proposal.replaceSubrange(range, with: replacement)
         return proposal

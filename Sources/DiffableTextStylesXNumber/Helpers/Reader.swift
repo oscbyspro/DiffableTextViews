@@ -40,23 +40,19 @@ import DiffableTextKit
     // MARK: Utilities
     //=------------------------------------------------------------------------=
  
-    @inlinable func number<T>(_ changes: Changes, as value: T.Type)
+    @inlinable func number<T>(_ proposal: Proposal, as value: T.Type)
     throws -> Number where T: NumberTextValue {
-        var changes = changes
         //=--------------------------------------=
-        // Parse
+        // Proposal
         //=--------------------------------------=
-        translateSingleCharacterInput(&changes)
-        let sign = consumeSingleSignInput(&changes)
-        let proposal = changes.proposal()
+        var proposal = proposal
+        translateSingleCharacterInput(&proposal)
+        let sign = consumeSingleSignInput(&proposal)
         //=--------------------------------------=
         // Number
         //=--------------------------------------=
-        var number = try lexicon.number(in: proposal, as: T.self)
+        var number = try lexicon.number(in: proposal(), as: T.self)
         if let sign = sign { number.sign = sign }
-        //=--------------------------------------=
-        // Return
-        //=--------------------------------------=
         return number
     }
 }
@@ -71,9 +67,9 @@ extension Reader {
     // MARK: Translations
     //=------------------------------------------------------------------------=
     
-    @inlinable func translateSingleCharacterInput(_ changes: inout Changes) {
-        guard changes.replacement.count == 1 else { return }
-        changes.replacement = Snapshot(changes.replacement.map(translate))
+    @inlinable func translateSingleCharacterInput(_ proposal: inout Proposal) {
+        guard proposal.replacement.count == 1 else { return }
+        proposal.replacement = Snapshot(proposal.replacement.map(translate))
     }
         
     @inlinable func translate(_ input: Symbol) -> Symbol {
@@ -109,9 +105,9 @@ extension Reader {
     // MARK: Commands
     //=------------------------------------------------------------------------=
     
-    @inlinable func consumeSingleSignInput(_ changes: inout Changes) -> Sign? {
-        guard changes.replacement.count == 1 else { return nil }
-        guard let sign = lexicon.signs[changes.replacement.first!.character] else { return nil }
-        changes.replacement.removeAll(); return sign
+    @inlinable func consumeSingleSignInput(_ proposal: inout Proposal) -> Sign? {
+        guard proposal.replacement.count == 1 else { return nil }
+        guard let sign = lexicon.signs[proposal.replacement.first!.character] else { return nil }
+        proposal.replacement.removeAll(); return sign
     }
 }
