@@ -36,28 +36,13 @@ import DiffableTextKit
     //=------------------------------------------------------------------------=
 
     @inlinable var rawValue: [UInt8] {
-        var rawValue = [UInt8]()
-        //=--------------------------------------=
-        // Size
-        //=--------------------------------------=
-        rawValue.reserveCapacity(
-        integer.count + fraction.count + 2)
-        //=--------------------------------------=
-        // Sign, Integer
-        //=--------------------------------------=
-        rawValue.append(sign.rawValue)
-        rawValue.append(contentsOf: integer.rawValue)
-        //=--------------------------------------=
-        // Separator, Fraction
-        //=--------------------------------------=
-        if let separator = separator {
-            rawValue.append(separator.rawValue)
-            rawValue.append(contentsOf: fraction.rawValue)
+        Array(capacity: integer.count + fraction.count + 2) {
+            $0.append(sign.rawValue)
+            $0.append(contentsOf: integer.rawValue)
+            guard let separator = separator else { return }
+            $0.append(separator.rawValue)
+            $0.append(contentsOf: fraction.rawValue)
         }
-        //=--------------------------------------=
-        // Done
-        //=--------------------------------------=
-        return rawValue
     }
     
     @inlinable var hasSeparatorAsSuffix: Bool {
@@ -73,27 +58,27 @@ import DiffableTextKit
     // MARK: Transformations
     //=------------------------------------------------------------------------=
     
-    @inlinable mutating func trim(max: Count) {
+    /// Returns true if a suffixing separator was removed, returns false otherwise.
+    @inlinable @discardableResult mutating func removeSeparatorAsSuffix() -> Bool {
+        if hasSeparatorAsSuffix { separator = nil; return true }; return false
+    }
+    
+    @inlinable mutating func trimToFit(_ precision: Count) {
         //=--------------------------------------=
         // Integer
         //=--------------------------------------=
-        self.integer.resize(suffix: min(max.integer, max.value))
+        self.integer.resize(suffix: min(precision.integer, precision.value))
         self.integer.removeZerosAsPrefix()
         //=--------------------------------------=
         // Fraction
         //=--------------------------------------=
-        self.fraction.resize(prefix: min(max.fraction, max.value - integer.count))
+        self.fraction.resize(prefix: min(precision.fraction, precision.value - integer.count))
         self.fraction.removeZerosAsSuffix()
         //=--------------------------------------=
         // Finalize
         //=--------------------------------------=
         self.integer.makeAtLeastZero()
         self.removeSeparatorAsSuffix()
-    }
-    
-    /// Returns true if a suffixing separator was removed, returns false otherwise.
-    @inlinable @discardableResult mutating func removeSeparatorAsSuffix() -> Bool {
-        if hasSeparatorAsSuffix { separator = nil; return true }; return false
     }
 }
 
@@ -107,7 +92,7 @@ extension Number {
     // MARK: Characters
     //=------------------------------------------------------------------------=
     
-    @inlinable init<S>(unformatted: S, integer: Bool, unsigned: Bool,
+    @inlinable init<S>(unformatted: S, unsigned: Bool, integer: Bool,
     signs: Map<Sign>, digits: Map<Digit>, separators: Map<Separator>)
     throws where S: Sequence, S.Element == Character {
         //=--------------------------------------=
@@ -139,7 +124,7 @@ extension Number {
                 self.integer.append(digit); next = iterator.next()
             }
             //=----------------------------------=
-            // Break When It Is Not An Integer
+            // Integer: Break
             //=----------------------------------=
             guard !integer else { break body }
             //=----------------------------------=
@@ -149,7 +134,7 @@ extension Number {
                 self.separator = separator; next = iterator.next()
             }
             //=----------------------------------=
-            // Break When It Has No Separator
+            // Separator: Break
             //=----------------------------------=
             guard separator != nil else { break body }
             //=----------------------------------=

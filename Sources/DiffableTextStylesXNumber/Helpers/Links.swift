@@ -28,15 +28,15 @@ import Foundation
     //=------------------------------------------------------------------------=
     
     @inlinable init(count: Int) {
-        self.components = [:]; self.components.reserveCapacity(count)
-        self.characters = [:]; self.characters.reserveCapacity(count)
+        self.components = .init(minimumCapacity: count)
+        self.characters = .init(minimumCapacity: count)
     }
     
     //=------------------------------------------------------------------------=
     // MARK: Initializers: Indirect
     //=------------------------------------------------------------------------=
 
-    /// Creates an instance linking all components to a character.
+    /// Creates an instance by linking each components to a character.
     @inlinable init(character: (Component) throws -> Character) rethrows {
         let components = Component.allCases
         self.init(count: components.count)

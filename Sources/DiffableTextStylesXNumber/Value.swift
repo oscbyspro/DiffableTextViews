@@ -47,8 +47,8 @@ public extension NumberTextValueXFloatingPoint {
     // MARK: Helpers
     //=------------------------------------------------------------------------=
     
-    @inlinable internal static func bounds(max: Self) -> ClosedRange<Self>
-    where Self: SignedNumeric { -max ... max }
+    @inlinable internal static func bounds(abs: Self) -> ClosedRange<Self>
+    where Self: SignedNumeric { -abs ... abs }
 }
 
 //*============================================================================*

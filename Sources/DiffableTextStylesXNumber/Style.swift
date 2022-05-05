@@ -113,6 +113,9 @@ public extension NumberTextStyle {
     //=------------------------------------------------------------------------=
     
     @inlinable func interpret(_ value: Value) -> Commit<Value> {
+        //=--------------------------------------=
+        // Style
+        //=--------------------------------------=
         let style = format.precision(precision.active())
         var value = value
         //=--------------------------------------=
@@ -120,7 +123,7 @@ public extension NumberTextStyle {
         //=--------------------------------------=
         bounds.autocorrect(&value)
         //=--------------------------------------=
-        // Value -> Number
+        // Number
         //=--------------------------------------=
         let formatted = style.format(value)
         let parseable = snapshot(formatted)
@@ -131,13 +134,13 @@ public extension NumberTextStyle {
         bounds.autocorrect(&number)
         precision.autocorrect(&number)
         //=--------------------------------------=
-        // Value <- Number
+        // Value
         //=--------------------------------------=
         value = try! self.value(number)
         //=--------------------------------------=
         // Commit
         //=--------------------------------------=
-        return self.commit(value, number, style)
+        return commit(value, number, style)
     }
     
     //=------------------------------------------------------------------------=
@@ -146,17 +149,9 @@ public extension NumberTextStyle {
     
     @inlinable func merge(_ changes: Changes) throws -> Commit<Value> {
         //=--------------------------------------=
-        // Reader
+        // Number
         //=--------------------------------------=
-        var reader = Reader(changes, lexicon)
-        reader.translateSingleCharacterInput()
-        let sign = reader.consumeSingleSignInput()
-        let proposal = reader.changes.proposal()
-        //=--------------------------------------=
-        // Input -> Number
-        //=--------------------------------------=
-        var number = try number(proposal)
-        sign.map({ sign in number.sign = sign })
+        var number = try number(changes)
         let count = number.count()
         //=--------------------------------------=
         // Autovalidate
@@ -164,9 +159,9 @@ public extension NumberTextStyle {
         try bounds.autovalidate(number)
         try precision.autovalidate(&number, count)
         //=--------------------------------------=
-        // Value <- Number
+        // Value
         //=--------------------------------------=
-        let value = try self.value(number)
+        let value = try value(number)
         //=--------------------------------------=
         // Autovalidate
         //=--------------------------------------=
@@ -179,7 +174,7 @@ public extension NumberTextStyle {
         //=--------------------------------------=
         // Commit
         //=--------------------------------------=
-        return self.commit(value, number, style)
+        return commit(value, number, style)
     }
 }
 
@@ -201,6 +196,10 @@ internal extension NumberTextStyle {
         try lexicon.number(in: snapshot, as: Value.self)
     }
 
+    @inlinable func number(_ changes: Changes) throws -> Number {
+        try Reader(lexicon).number(changes, as: Value.self)
+    }
+    
     //=------------------------------------------------------------------------=
     // MARK: Commit
     //=------------------------------------------------------------------------=
@@ -209,14 +208,17 @@ internal extension NumberTextStyle {
         //=--------------------------------------=
         // Style
         //=--------------------------------------=
-        let sign: Format.Sign = (number.sign == .negative) ? .always : .automatic
-        let separator: Format.Separator = (number.separator == .fraction) ? .always : .automatic
+        let sign = (number.sign == .negative) ? Format.Sign.always : .automatic
+        let separator = (number.separator == .fraction) ? Format.Separator.always : .automatic
         let style = style.sign(sign).separator(separator)
         //=--------------------------------------=
-        // Characters, Commit
+        // Characters
         //=--------------------------------------=
         var characters = style.format(value)
         fix(number.sign, for: value, in: &characters)
+        //=--------------------------------------=
+        // Commit
+        //=--------------------------------------=
         return Commit(value, snapshot(characters))
     }
     

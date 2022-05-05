@@ -49,12 +49,18 @@ public final class Lexicon {
     
     /// Requires that formatter.numberStyle == .none.
     @inlinable static func standard(_ formatter: NumberFormatter) -> Lexicon {
-        Lexicon(signs: .standard(formatter), digits: .standard(formatter), separators: .standard(formatter))
+        assert(formatter.numberStyle == .none); return .init(
+        signs:      .standard(formatter),
+        digits:     .standard(formatter),
+        separators: .standard(formatter))
     }
     
     /// Requires that formatter.numberStyle == .none.
     @inlinable static func currency(_ formatter: NumberFormatter) -> Lexicon {
-        Lexicon(signs: .currency(formatter), digits: .currency(formatter), separators: .currency(formatter))
+        assert(formatter.numberStyle == .none); return .init(
+        signs:      .currency(formatter),
+        digits:     .currency(formatter),
+        separators: .currency(formatter))
     }
 }
 
@@ -80,7 +86,7 @@ extension Lexicon {
     /// To use this method, all formatting characters must be marked as virtual.
     @inlinable func number<T>(in snapshot: Snapshot, as value: T.Type) throws -> Number where T: NumberTextValue {
         let sequence = snapshot.lazy.filter(\.nonvirtual).map(\.character)
-        return try Number(unformatted: sequence, integer: T.isInteger, unsigned: T.isUnsigned,
+        return try Number(unformatted: sequence, unsigned: T.isUnsigned, integer: T.isInteger,
         signs: signs.components, digits: digits.components, separators: separators.components)
     }
 }

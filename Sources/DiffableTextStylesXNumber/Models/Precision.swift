@@ -140,7 +140,7 @@ extension NumberTextPrecision {
     //=------------------------------------------------------------------------=
     
     @inlinable func autocorrect(_ number: inout Number) {
-        number.trim(max: upper)
+        number.trimToFit(upper)
     }
 }
 

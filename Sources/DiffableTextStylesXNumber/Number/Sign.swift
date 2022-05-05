@@ -63,7 +63,7 @@ import Foundation
     }
     
     //*========================================================================*
-    // MARK: Enumeration
+    // MARK: Declaration
     //*========================================================================*
     
     @usableFromInline enum Enumeration: UInt8, CaseIterable {

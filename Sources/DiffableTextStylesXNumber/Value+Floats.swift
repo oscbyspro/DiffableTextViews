@@ -32,7 +32,7 @@ extension Decimal: _Value {
     
     public static let precision: Int = 38
     public static let bounds: ClosedRange<Self> = Self.bounds(
-    max: Self(string: String(repeating: "9", count: precision))!)
+    abs: Self(string: String(repeating: "9", count: precision))!)
 }
 
 //*============================================================================*
@@ -47,5 +47,5 @@ extension Double: _Value {
     //=------------------------------------------------------------------------=
     
     public static let precision: Int = 15
-    public static let bounds: ClosedRange<Self> = Self.bounds(max: 999_999_999_999_999)
+    public static let bounds: ClosedRange<Self> = Self.bounds(abs: 999_999_999_999_999)
 }

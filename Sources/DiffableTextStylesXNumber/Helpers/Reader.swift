@@ -13,22 +13,20 @@ import DiffableTextKit
 // MARK: Declaration
 //*============================================================================*
 
-/// - Snapshot/count is O(1) and may be used without performance impact.
+/// - Snapshot/count is O(1).
 @usableFromInline struct Reader {
     
     //=------------------------------------------------------------------------=
     // MARK: State
     //=------------------------------------------------------------------------=
     
-    @usableFromInline var changes: Changes
     @usableFromInline let lexicon: Lexicon
 
     //=------------------------------------------------------------------------=
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable init(_ changes: Changes, _ lexicon: Lexicon) {
-        self.changes = changes
+    @inlinable init(_ lexicon: Lexicon) {
         self.lexicon = lexicon
     }
 
@@ -37,27 +35,48 @@ import DiffableTextKit
     //=------------------------------------------------------------------------=
     
     @inlinable var ascii: Lexicon { .ascii }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Utilities
+    //=------------------------------------------------------------------------=
+ 
+    @inlinable func number<T>(_ changes: Changes, as value: T.Type)
+    throws -> Number where T: NumberTextValue {
+        var changes = changes
+        //=--------------------------------------=
+        // Parse
+        //=--------------------------------------=
+        translateSingleCharacterInput(&changes)
+        let sign = consumeSingleSignInput(&changes)
+        let proposal = changes.proposal()
+        //=--------------------------------------=
+        // Number
+        //=--------------------------------------=
+        var number = try lexicon.number(in: proposal, as: T.self)
+        if let sign = sign { number.sign = sign }
+        //=--------------------------------------=
+        // Return
+        //=--------------------------------------=
+        return number
+    }
+}
 
+//=----------------------------------------------------------------------------=
+// MARK: Helpers
+//=----------------------------------------------------------------------------=
+
+extension Reader {
+    
     //=------------------------------------------------------------------------=
-    // MARK: Transformations
+    // MARK: Translations
     //=------------------------------------------------------------------------=
     
-    @inlinable mutating func translateSingleCharacterInput() {
+    @inlinable func translateSingleCharacterInput(_ changes: inout Changes) {
         guard changes.replacement.count == 1 else { return }
-        self .changes.replacement = Snapshot(changes.replacement.map(translate))
+        changes.replacement = Snapshot(changes.replacement.map(translate))
     }
-    
-    @inlinable mutating func consumeSingleSignInput() -> Sign? {
-        guard changes.replacement.count == 1 else { return nil }
-        guard let sign = lexicon.signs[changes.replacement.first!.character] else { return nil }
-        self.changes.replacement.removeAll(); return sign
-    }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Helpers
-    //=------------------------------------------------------------------------=
-    
-    @inlinable func translate(input: Symbol) -> Symbol {
+        
+    @inlinable func translate(_ input: Symbol) -> Symbol {
         let character: Character
         //=--------------------------------------=
         // Digit
@@ -69,7 +88,7 @@ import DiffableTextKit
         //=--------------------------------------=
         } else if ascii.separators.contains(input.character) ||
         lexicon.separators.contains(input.character) {
-            // all separators translated as fraction
+            // all separators translates to fraction
             character = lexicon.separators[.fraction]
         //=--------------------------------------=
         // Sign
@@ -84,5 +103,15 @@ import DiffableTextKit
         // Done
         //=--------------------------------------=
         return Symbol(character, as: input.attribute)
+    }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Commands
+    //=------------------------------------------------------------------------=
+    
+    @inlinable func consumeSingleSignInput(_ changes: inout Changes) -> Sign? {
+        guard changes.replacement.count == 1 else { return nil }
+        guard let sign = lexicon.signs[changes.replacement.first!.character] else { return nil }
+        changes.replacement.removeAll(); return sign
     }
 }
