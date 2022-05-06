@@ -14,19 +14,16 @@ import Foundation
 // MARK: Declaration
 //*============================================================================*
 
-public struct _NumberTextStyle<Format: NumberTextFormat>: DiffableTextStyle {
+public struct _NumberTextStyle<Format: NumberTextFormat>: NumberTextStyleProtocol {
     public typealias Value = Format.FormatInput
-    public typealias Bounds = DiffableTextStylesXNumber.NumberTextBounds<Value>
-    public typealias Precision = DiffableTextStylesXNumber.NumberTextPrecision<Value>
-    @usableFromInline typealias Adapter = DiffableTextStylesXNumber.Adapter<Format>
 
     //=------------------------------------------------------------------------=
     // MARK: State
     //=------------------------------------------------------------------------=
     
-    @usableFromInline var adapter: Adapter
-    @usableFromInline var bounds: Bounds
-    @usableFromInline var precision: Precision
+    public var adapter: Adapter
+    public var bounds: Bounds
+    public var precision: Precision
     
     //=------------------------------------------------------------------------=
     // MARK: Initializers
@@ -34,36 +31,27 @@ public struct _NumberTextStyle<Format: NumberTextFormat>: DiffableTextStyle {
     
     @inlinable init(_ format: Format) {
         self.adapter = Adapter(format)
-        self.bounds = adapter.bounds()
-        self.precision = adapter.precision()
+        self.bounds = adapter.preferred()
+        self.precision = adapter.preferred()
     }
  
     //=------------------------------------------------------------------------=
     // MARK: Accessors
     //=------------------------------------------------------------------------=
     
-    @inlinable public var locale: Locale {
-        format.locale
-    }
-    
     @inlinable var format: Format {
         adapter.format
     }
-
-    @inlinable var scheme: Format.NumberTextScheme {
-        adapter.scheme
-    }
     
     @inlinable var lexicon: Lexicon {
-        scheme.lexicon
+        adapter.lexicon
     }
-
+    
     //=------------------------------------------------------------------------=
     // MARK: Transformations
     //=------------------------------------------------------------------------=
     
     @inlinable public func locale(_ locale: Locale) -> Self {
-        guard self.locale != locale else { return self }
         var result = self; result.adapter.update(locale); return result
     }
     
@@ -127,7 +115,7 @@ public extension NumberTextStyle {
         //=--------------------------------------=
         let formatted = style.format(value)
         let parseable = snapshot(formatted)
-        var number = try! number(parseable)
+        var number = try! adapter.number(parseable)
         //=--------------------------------------=
         // Autocorrect
         //=--------------------------------------=
@@ -136,7 +124,7 @@ public extension NumberTextStyle {
         //=--------------------------------------=
         // Value
         //=--------------------------------------=
-        value = try! self.value(number)
+        value = try! adapter.value(number)
         //=--------------------------------------=
         // Commit
         //=--------------------------------------=
@@ -148,20 +136,21 @@ public extension NumberTextStyle {
     //=------------------------------------------------------------------------=
     
     @inlinable func merge(_ proposal: Proposal) throws -> Commit<Value> {
-        //=--------------------------------------=
-        // Number
-        //=--------------------------------------=
-        var number = try number(proposal)
+        try merge(number(proposal)!)
+    }
+    
+    @inlinable internal func merge(_ number: Number) throws -> Commit<Value> {
+        var number = number
         let count = number.count()
         //=--------------------------------------=
         // Autovalidate
         //=--------------------------------------=
-        try bounds.autovalidate(number)
+        try bounds.autovalidate(&number)
         try precision.autovalidate(&number, count)
         //=--------------------------------------=
         // Value
         //=--------------------------------------=
-        let value = try value(number)
+        let value = try adapter.value(number)
         //=--------------------------------------=
         // Autovalidate
         //=--------------------------------------=
@@ -185,22 +174,6 @@ public extension NumberTextStyle {
 internal extension NumberTextStyle {
     
     //=------------------------------------------------------------------------=
-    // MARK: Conversions
-    //=------------------------------------------------------------------------=
-    
-    @inlinable func value(_ number: Number) throws -> Value {
-        try lexicon.value(of: number, as: format)
-    }
-    
-    @inlinable func number(_ snapshot: Snapshot) throws -> Number {
-        try lexicon.number(in: snapshot, as: Value.self)
-    }
-
-    @inlinable func number(_ proposal: Proposal) throws -> Number {
-        try Reader(lexicon).number(proposal, as: Value.self)
-    }
-    
-    //=------------------------------------------------------------------------=
     // MARK: Snapshot
     //=------------------------------------------------------------------------=
     
@@ -209,36 +182,41 @@ internal extension NumberTextStyle {
         //=--------------------------------------=
         // Snapshot
         //=--------------------------------------=
-        var snapshot = characters.reduce(into: Snapshot()) { snapshot, character in
-            let attribute: Attribute
-            //=----------------------------------=
-            // Digit
-            //=----------------------------------=
-            if lexicon.digits.contains(character) {
-                attribute = .content
-            //=----------------------------------=
-            // Separator
-            //=----------------------------------=
-            } else if let separator = lexicon.separators[character] {
-                attribute = (separator == .fraction) ? .removable : .phantom
-            //=----------------------------------=
-            // Sign
-            //=----------------------------------=
-            } else if lexicon.signs.contains(character) {
-                attribute = .phantom.subtracting(.virtual)
-            //=----------------------------------=
-            // Miscellaneous
-            //=----------------------------------=
-            } else { attribute = .phantom }
-            //=----------------------------------=
-            // Insert
-            //=----------------------------------=
-            snapshot.append(Symbol(character, as: attribute))
+        var snapshot = characters.reduce(into: Snapshot()) {
+            snapshot,  character in
+            snapshot.append(symbol(character))
         }
         //=--------------------------------------=
         // Autocorrect
         //=--------------------------------------=
-        scheme.autocorrect(&snapshot); return snapshot
+        adapter.autocorrect(&snapshot); return snapshot
+    }
+    
+    @inlinable func symbol(_ character: Character) -> Symbol {
+        let attribute: Attribute
+        //=--------------------------------------=
+        // Digit
+        //=--------------------------------------=
+        if lexicon.digits.contains(character) {
+            attribute = .content
+        //=--------------------------------------=
+        // Separator
+        //=--------------------------------------=
+        } else if let separator = lexicon.separators[character] {
+            attribute = (separator == .fraction) ? .removable : .phantom
+        //=--------------------------------------=
+        // Sign
+        //=--------------------------------------=
+        } else if lexicon.signs.contains(character) {
+            attribute = .phantom.subtracting(.virtual)
+        //=--------------------------------------=
+        // Miscellaneous
+        //=--------------------------------------=
+        } else { attribute = .phantom }
+        //=--------------------------------------=
+        // Return
+        //=--------------------------------------=
+        return Symbol(character, as: attribute)
     }
     
     //=------------------------------------------------------------------------=
@@ -271,7 +249,7 @@ internal extension NumberTextStyle {
         //=--------------------------------------=
         guard sign == .negative, value == .zero else { return }
         //=--------------------------------------=
-        // Toggle Sign To Negative
+        // Toggle Positive Zero Sign To Negative
         //=--------------------------------------=
         guard let index = characters.firstIndex(of: lexicon.signs[sign.toggled()]) else { return }
         characters.replaceSubrange(index...index, with: String(lexicon.signs[sign]))

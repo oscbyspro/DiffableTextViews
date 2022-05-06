@@ -16,3 +16,4 @@
 @_exported import DiffableTextStylesXWrapper
 
 @_exported import protocol DiffableTextKit.DiffableTextStyle
+@_exported import protocol DiffableTextKit.WrapperTextStyle

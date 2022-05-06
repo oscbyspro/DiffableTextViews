@@ -7,14 +7,15 @@
 // See http://www.apache.org/licenses/LICENSE-2.0 for license information.
 //=----------------------------------------------------------------------------=
 
+import DiffableTextKit
 import Foundation
 
 //*============================================================================*
 // MARK: Declaration
 //*============================================================================*
 
-@usableFromInline struct Adapter<Format: NumberTextFormat>: Equatable {
-    @usableFromInline typealias Value  = Format.Value
+public struct NumberTextAdapter<Format: NumberTextFormat>: Equatable {
+    @usableFromInline typealias Value  = Format.FormatInput
     @usableFromInline typealias Scheme = Format.NumberTextScheme
     
     //=------------------------------------------------------------------------=
@@ -41,12 +42,20 @@ import Foundation
     // MARK: Accessors
     //=------------------------------------------------------------------------=
     
-    @inlinable func bounds() -> NumberTextBounds<Value> {
-        scheme.bounds(Value.self)
+    @inlinable var lexicon: Lexicon {
+        scheme.lexicon
     }
     
-    @inlinable func precision() -> NumberTextPrecision<Value> {
-        scheme.precision(Value.self)
+    //=------------------------------------------------------------------------=
+    // MARK: Preferences
+    //=------------------------------------------------------------------------=
+    
+    @inlinable func preferred() -> NumberTextBounds<Value> {
+        scheme.preferred(Value.self)
+    }
+    
+    @inlinable func preferred() -> NumberTextPrecision<Value> {
+        scheme.preferred(Value.self)
     }
     
     //=------------------------------------------------------------------------=
@@ -54,6 +63,7 @@ import Foundation
     //=------------------------------------------------------------------------=
     
     @inlinable mutating func update(_ locale: Locale) {
+        guard format.locale != locale else { return }
         self = Self(unchecked: format.locale(locale))
     }
     
@@ -61,7 +71,23 @@ import Foundation
     // MARK: Utilities
     //=------------------------------------------------------------------------=
     
-    @inlinable static func == (lhs: Self, rhs: Self) -> Bool {
+    @inlinable func autocorrect(_ snapshot: inout Snapshot) {
+        scheme.autocorrect(&snapshot)
+    }
+
+    @inlinable func number(_ snapshot: Snapshot) throws -> Number {
+        try Number(parse: snapshot, with: scheme.lexicon, as: Value.self)!
+    }
+    
+    @inlinable func value(_ number: Number) throws -> Value {
+        try format.locale(Constants.en_US).parseStrategy.parse(number.description)
+    }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Utilities
+    //=------------------------------------------------------------------------=
+    
+    @inlinable public static func == (lhs: Self, rhs: Self) -> Bool {
         lhs.format == rhs.format
     }
 }

@@ -8,7 +8,8 @@
 //=----------------------------------------------------------------------------=
 
 //*============================================================================*
-// MARK: Declaration
+// MARK: Exports
 //*============================================================================*
 
 @_exported import protocol DiffableTextKit.DiffableTextStyle
+@_exported import protocol DiffableTextKit.WrapperTextStyle

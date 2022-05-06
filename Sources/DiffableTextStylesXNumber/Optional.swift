@@ -14,76 +14,75 @@ import Foundation
 // MARK: Declaration
 //*============================================================================*
 
-@usableFromInline protocol WrapperTextStyle: DiffableTextStyle {
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Style
-    //=------------------------------------------------------------------------=
-    
-    associatedtype Style: DiffableTextStyle where Style.Value == Value
+public struct _OptionalNumberTextStyle<Format: NumberTextFormat>: NumberTextStyleProtocol, WrapperTextStyle {
+    public typealias Style = _NumberTextStyle<Format>
+    public typealias Value = Optional<Format.FormatInput>
 
-    @inlinable var style: Style { get set }
+    //=------------------------------------------------------------------------=
+    // MARK: State
+    //=------------------------------------------------------------------------=
+    
+    public var style: Style
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Initializers
+    //=------------------------------------------------------------------------=
+    
+    @inlinable @inline(__always)
+    init(_ format: Format) {
+        self.style = Style(format)
+    }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Accessors
+    //=------------------------------------------------------------------------=
+
+    @inlinable @inline(__always)
+    public var adapter: Adapter {
+        get { style.adapter }
+        set { style.adapter = newValue }
+    }
+    
+    @inlinable @inline(__always)
+    public var bounds: Bounds {
+        get { style.bounds }
+        set { style.bounds = newValue }
+    }
+    
+    @inlinable @inline(__always)
+    public var precision: Precision {
+        get { style.precision }
+        set { style.precision = newValue }
+    }
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: Details
+// MARK: Utilities
 //=----------------------------------------------------------------------------=
 
-extension WrapperTextStyle {
-
+public extension _OptionalNumberTextStyle {
+    
     //=------------------------------------------------------------------------=
-    // MARK: Transformations
+    // MARK: Inactive
     //=------------------------------------------------------------------------=
     
-    @inlinable @inline(__always)
-    public func locale(_ locale: Locale) -> Self {
-        var result = self
-        result.style = result.style.locale(locale)
-        return result
+    @inlinable func format(_ value: Value) -> String {
+        value.map(style.format) ?? String()
     }
     
     //=------------------------------------------------------------------------=
-    // MARK: Utilities
+    // MARK: Active
     //=------------------------------------------------------------------------=
     
-    @inlinable @inline(__always)
-    public func format(_ value: Value) -> String {
-        style.format(value)
-    }
-
-    @inlinable @inline(__always)
-    public func interpret(_ value: Value) -> Commit<Value> {
-        style.interpret(value)
-    }
-
-    @inlinable @inline(__always)
-    public func merge(_ proposal: Proposal) throws -> Commit<Value> {
-        try style.merge(proposal)
+    @inlinable func interpret(_ value: Value) -> Commit<Value> {
+        value.map(style.interpret).map(Commit .init) ?? Commit()
     }
     
     //=------------------------------------------------------------------------=
-    // MARK: Utilities
+    // MARK: Interactive
     //=------------------------------------------------------------------------=
     
-    @inlinable @inline(__always)
-    public static func == (lhs: Self, rhs: Self) -> Bool {
-        lhs.style == rhs.style
+    @inlinable func merge(_ proposal: Proposal) throws  -> Commit<Value> {
+        try number(proposal).map(style.merge).map(Commit.init) ?? Commit()
     }
-    
-    //*========================================================================*
-    // MARK: UIKit
-    //*========================================================================*
-    
-    #if canImport(UIKit)
-
-    //=------------------------------------------------------------------------=
-    // MARK: Setup
-    //=------------------------------------------------------------------------=
-    
-    @inlinable @inline(__always)
-    public static func onSetup(of diffableTextField: ProxyTextField) {
-        Style.onSetup(of: diffableTextField)
-    }
-
-    #endif
 }

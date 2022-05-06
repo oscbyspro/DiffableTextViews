@@ -29,7 +29,7 @@ final class StyleTestsXCurrency: Tests, StyleTests {
     
     func XCTAssertDefaultFractionLimits(_ limits: ClosedRange<Int>, locale: Locale, code: String) {
         let style = NumberTextStyle<Decimal>.Currency(code: code, locale: locale)
-        XCTAssertEqual(style.precision.lower.fraction ... style.precision.upper.fraction, limits)
+        XCTAssertEqual(style.precision.fraction, limits)
     }
 }
 

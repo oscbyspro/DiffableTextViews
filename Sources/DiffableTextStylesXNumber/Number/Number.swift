@@ -89,10 +89,28 @@ import DiffableTextKit
 extension Number {
     
     //=------------------------------------------------------------------------=
+    // MARK: Snapshot
+    //=------------------------------------------------------------------------=
+    
+    /// To use this method, all formatting characters must be marked as virtual.
+    @inlinable init?<T>(parse snapshot: Snapshot, with lexicon: Lexicon, as kind: T.Type)
+    throws where T: NumberTextKind {
+        let sequence = snapshot.lazy.filter(\.nonvirtual).map(\.character)
+        try self.init(unformatted: sequence,
+        optional: kind.isOptional,
+        unsigned: kind.isUnsigned,
+        integer:  kind.isInteger,
+        signs: lexicon.signs.components,
+        digits: lexicon.digits.components,
+        separators: lexicon.separators.components)
+    }
+    
+    //=------------------------------------------------------------------------=
     // MARK: Characters
     //=------------------------------------------------------------------------=
     
-    @inlinable init<S>(unformatted: S, unsigned: Bool, integer: Bool,
+    @usableFromInline init?<S>(unformatted: S,
+    optional: Bool, unsigned: Bool, integer: Bool,
     signs: Map<Sign>, digits: Map<Digit>, separators: Map<Separator>)
     throws where S: Sequence, S.Element == Character {
         //=--------------------------------------=
@@ -153,6 +171,15 @@ extension Number {
         //=--------------------------------------=
         guard next == nil else {
             throw Info(["unable to parse number in", .mark(String(unformatted))])
+        }
+        //=--------------------------------------=
+        // Optional
+        //=--------------------------------------=
+        if optional,
+        self.integer.digits.isEmpty,
+        self.separator == nil,
+        self.fraction.digits.isEmpty {
+            return nil
         }
         //=--------------------------------------=
         // Finalize

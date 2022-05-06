@@ -91,3 +91,84 @@ public extension DiffableTextStyle {
     
     #endif
 }
+
+//*============================================================================*
+// MARK: Declaration
+//*============================================================================*
+
+public protocol WrapperTextStyle: DiffableTextStyle {
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Style
+    //=------------------------------------------------------------------------=
+    
+    associatedtype Style: DiffableTextStyle
+
+    @inlinable var style: Style { get set }
+}
+
+//=----------------------------------------------------------------------------=
+// MARK: Details
+//=----------------------------------------------------------------------------=
+
+extension WrapperTextStyle {
+
+    //=------------------------------------------------------------------------=
+    // MARK: Transformations
+    //=------------------------------------------------------------------------=
+    
+    @inlinable @inline(__always)
+    public func locale(_ locale: Locale) -> Self {
+        var result = self
+        result.style = result.style.locale(locale)
+        return result
+    }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Utilities
+    //=------------------------------------------------------------------------=
+    
+    @inlinable @inline(__always)
+    public func format(_ value: Value) -> String
+    where Style.Value == Value {
+        style.format(value)
+    }
+
+    @inlinable @inline(__always)
+    public func interpret(_ value: Value) -> Commit<Value>
+    where Style.Value == Value {
+        style.interpret(value)
+    }
+
+    @inlinable @inline(__always)
+    public func merge(_ proposal: Proposal) throws -> Commit<Value>
+    where Style.Value == Value {
+        try style.merge(proposal)
+    }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Utilities
+    //=------------------------------------------------------------------------=
+    
+    @inlinable @inline(__always)
+    public static func == (lhs: Self, rhs: Self) -> Bool {
+        lhs.style == rhs.style
+    }
+    
+    //*========================================================================*
+    // MARK: UIKit
+    //*========================================================================*
+    
+    #if canImport(UIKit)
+
+    //=------------------------------------------------------------------------=
+    // MARK: Setup
+    //=------------------------------------------------------------------------=
+    
+    @inlinable @inline(__always)
+    public static func onSetup(of diffableTextField: ProxyTextField) {
+        Style.onSetup(of: diffableTextField)
+    }
+
+    #endif
+}

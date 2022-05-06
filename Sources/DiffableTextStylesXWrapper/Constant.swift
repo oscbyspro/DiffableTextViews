@@ -25,7 +25,7 @@ public struct ConstantTextStyle<Style: DiffableTextStyle>: WrapperTextStyle {
     // MARK: State
     //=------------------------------------------------------------------------=
     
-    @usableFromInline var style: Style
+    public var style: Style
     
     //=------------------------------------------------------------------------=
     // MARK: Initializers

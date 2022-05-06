@@ -123,7 +123,7 @@ extension PatternTextStyle {
     
     /// - Mismatches throw an error, which results in user input cancellation.
     @inlinable public func merge(_ proposal: Proposal) throws -> Commit<Value> {
-        var value = Value(); let proposal = proposal()
+        var value = Value(); let proposal = proposal.result()
         var contents = proposal.lazy.filter(\.nonvirtual).makeIterator()
         //=--------------------------------------=
         // Parse

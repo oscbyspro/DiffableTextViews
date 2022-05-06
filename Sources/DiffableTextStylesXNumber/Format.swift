@@ -52,7 +52,7 @@ FormatInput: DiffableTextStylesXNumber.NumberTextValue {
 
 extension NumberTextFormat {
     @usableFromInline typealias Value = FormatInput
-    @usableFromInline typealias Sign = NumberTextFormat_Sign
+    @usableFromInline typealias Sign = NumberTextFormatXSign
     @usableFromInline typealias Precision = NFSC.Precision
     @usableFromInline typealias Separator = NFSC.DecimalSeparatorDisplayStrategy
     @usableFromInline typealias Rounding = FloatingPointRoundingRule
@@ -71,14 +71,6 @@ extension NumberTextFormat {
     
     @inlinable func rounded(_ strategy: Rounding) -> Self {
         self.rounded(rule: strategy, increment: nil)
-    }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Utilities
-    //=------------------------------------------------------------------------=
-    
-    @inlinable func parse(_ characters: String) throws -> Value {
-        try parseStrategy.parse(characters)
     }
 }
 

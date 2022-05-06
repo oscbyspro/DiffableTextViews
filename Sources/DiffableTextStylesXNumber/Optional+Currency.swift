@@ -11,17 +11,17 @@ import DiffableTextKit
 import Foundation
 
 //*============================================================================*
-// MARK: Number
+// MARK: Currency
 //*============================================================================*
 
-extension NumberTextStyle where Format: NumberTextFormatXNumber {
+extension OptionalNumberTextStyle where Format: NumberTextFormatXCurrency {
     
     //=------------------------------------------------------------------------=
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable public init(locale: Locale = .autoupdatingCurrent) {
-        self.init(Format(locale: locale))
+    @inlinable public init(code: String, locale: Locale = .autoupdatingCurrent) {
+        self.init(Format(code: code, locale: locale))
     }
 }
 
@@ -29,14 +29,14 @@ extension NumberTextStyle where Format: NumberTextFormatXNumber {
 // MARK: Decimal
 //=----------------------------------------------------------------------------=
 
-extension DiffableTextStyle where Self == NumberTextStyle<Decimal> {
+extension DiffableTextStyle where Self == OptionalNumberTextStyle<Decimal>.Currency {
     
     //=------------------------------------------------------------------------=
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable public static var number: Self {
-        Self()
+    @inlinable public static func currency(code: String) -> Self {
+        Self(code: code)
     }
 }
 
@@ -44,14 +44,14 @@ extension DiffableTextStyle where Self == NumberTextStyle<Decimal> {
 // MARK: Double
 //=----------------------------------------------------------------------------=
 
-extension DiffableTextStyle where Self == NumberTextStyle<Double> {
+extension DiffableTextStyle where Self == OptionalNumberTextStyle<Double>.Currency {
     
     //=------------------------------------------------------------------------=
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable public static var number: Self {
-        Self()
+    @inlinable public static func currency(code: String) -> Self {
+        Self(code: code)
     }
 }
 
@@ -59,14 +59,14 @@ extension DiffableTextStyle where Self == NumberTextStyle<Double> {
 // MARK: Int
 //=----------------------------------------------------------------------------=
 
-extension DiffableTextStyle where Self == NumberTextStyle<Int> {
+extension DiffableTextStyle where Self == OptionalNumberTextStyle<Int>.Currency {
     
     //=------------------------------------------------------------------------=
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable public static var number: Self {
-        Self()
+    @inlinable public static func currency(code: String) -> Self {
+        Self(code: code)
     }
 }
 
@@ -74,14 +74,14 @@ extension DiffableTextStyle where Self == NumberTextStyle<Int> {
 // MARK: Int8
 //=----------------------------------------------------------------------------=
 
-extension DiffableTextStyle where Self == NumberTextStyle<Int8> {
+extension DiffableTextStyle where Self == OptionalNumberTextStyle<Int8>.Currency {
     
     //=------------------------------------------------------------------------=
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable public static var number: Self {
-        Self()
+    @inlinable public static func currency(code: String) -> Self {
+        Self(code: code)
     }
 }
 
@@ -89,14 +89,14 @@ extension DiffableTextStyle where Self == NumberTextStyle<Int8> {
 // MARK: Int16
 //=----------------------------------------------------------------------------=
 
-extension DiffableTextStyle where Self == NumberTextStyle<Int16> {
+extension DiffableTextStyle where Self == OptionalNumberTextStyle<Int16>.Currency {
     
     //=------------------------------------------------------------------------=
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable public static var number: Self {
-        Self()
+    @inlinable public static func currency(code: String) -> Self {
+        Self(code: code)
     }
 }
 
@@ -104,14 +104,14 @@ extension DiffableTextStyle where Self == NumberTextStyle<Int16> {
 // MARK: Int32
 //=----------------------------------------------------------------------------=
 
-extension DiffableTextStyle where Self == NumberTextStyle<Int32> {
+extension DiffableTextStyle where Self == OptionalNumberTextStyle<Int32>.Currency {
     
     //=------------------------------------------------------------------------=
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable public static var number: Self {
-        Self()
+    @inlinable public static func currency(code: String) -> Self {
+        Self(code: code)
     }
 }
 
@@ -119,14 +119,14 @@ extension DiffableTextStyle where Self == NumberTextStyle<Int32> {
 // MARK: Int64
 //=----------------------------------------------------------------------------=
 
-extension DiffableTextStyle where Self == NumberTextStyle<Int64> {
+extension DiffableTextStyle where Self == OptionalNumberTextStyle<Int64>.Currency {
     
     //=------------------------------------------------------------------------=
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable public static var number: Self {
-        Self()
+    @inlinable public static func currency(code: String) -> Self {
+        Self(code: code)
     }
 }
 
@@ -134,14 +134,14 @@ extension DiffableTextStyle where Self == NumberTextStyle<Int64> {
 // MARK: UInt
 //=----------------------------------------------------------------------------=
 
-extension DiffableTextStyle where Self == NumberTextStyle<UInt> {
+extension DiffableTextStyle where Self == OptionalNumberTextStyle<UInt>.Currency {
     
     //=------------------------------------------------------------------------=
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable public static var number: Self {
-        Self()
+    @inlinable public static func currency(code: String) -> Self {
+        Self(code: code)
     }
 }
 
@@ -149,14 +149,14 @@ extension DiffableTextStyle where Self == NumberTextStyle<UInt> {
 // MARK: UInt8
 //=----------------------------------------------------------------------------=
 
-extension DiffableTextStyle where Self == NumberTextStyle<UInt8> {
+extension DiffableTextStyle where Self == OptionalNumberTextStyle<UInt8>.Currency {
     
     //=------------------------------------------------------------------------=
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable public static var number: Self {
-        Self()
+    @inlinable public static func currency(code: String) -> Self {
+        Self(code: code)
     }
 }
 
@@ -164,14 +164,14 @@ extension DiffableTextStyle where Self == NumberTextStyle<UInt8> {
 // MARK: UInt16
 //=----------------------------------------------------------------------------=
 
-extension DiffableTextStyle where Self == NumberTextStyle<UInt16> {
+extension DiffableTextStyle where Self == OptionalNumberTextStyle<UInt16>.Currency {
     
     //=------------------------------------------------------------------------=
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable public static var number: Self {
-        Self()
+    @inlinable public static func currency(code: String) -> Self {
+        Self(code: code)
     }
 }
 
@@ -179,14 +179,14 @@ extension DiffableTextStyle where Self == NumberTextStyle<UInt16> {
 // MARK: UInt32
 //=----------------------------------------------------------------------------=
 
-extension DiffableTextStyle where Self == NumberTextStyle<UInt32> {
+extension DiffableTextStyle where Self == OptionalNumberTextStyle<UInt32>.Currency {
     
     //=------------------------------------------------------------------------=
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable public static var number: Self {
-        Self()
+    @inlinable public static func currency(code: String) -> Self {
+        Self(code: code)
     }
 }
 
@@ -194,13 +194,13 @@ extension DiffableTextStyle where Self == NumberTextStyle<UInt32> {
 // MARK: UInt64
 //=----------------------------------------------------------------------------=
 
-extension DiffableTextStyle where Self == NumberTextStyle<UInt64> {
+extension DiffableTextStyle where Self == OptionalNumberTextStyle<UInt64>.Currency {
     
     //=------------------------------------------------------------------------=
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable public static var number: Self {
-        Self()
+    @inlinable public static func currency(code: String) -> Self {
+        Self(code: code)
     }
 }

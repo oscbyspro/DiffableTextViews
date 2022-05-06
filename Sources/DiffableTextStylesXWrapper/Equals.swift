@@ -24,8 +24,8 @@ public struct EqualsTextStyle<Style: DiffableTextStyle, Proxy: Equatable>: Wrapp
     // MARK: State
     //=------------------------------------------------------------------------=
     
-    @usableFromInline var style: Style
-    @usableFromInline let proxy: Proxy
+    public var style: Style
+    public let proxy: Proxy
 
     //=------------------------------------------------------------------------=
     // MARK: Initializers

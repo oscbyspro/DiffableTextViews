@@ -11,46 +11,63 @@ import DiffableTextKit
 import Foundation
 
 //*============================================================================*
-// MARK: Percent
+// MARK: Declaration
 //*============================================================================*
 
-extension NumberTextStyle where Format: NumberTextFormatXPercent {
+public protocol NumberTextStyleProtocol: DiffableTextStyle where Value: NumberTextKind {
     
     //=------------------------------------------------------------------------=
-    // MARK: Initializers
+    // MARK: Types
     //=------------------------------------------------------------------------=
     
-    @inlinable public init(locale: Locale =  .autoupdatingCurrent) {
-        self.init(Format(locale: locale))
+    associatedtype Format: NumberTextFormat
+    typealias Adapter = NumberTextAdapter<Format>
+    typealias Bounds = NumberTextBounds<Format.FormatInput>
+    typealias Precision = NumberTextPrecision<Format.FormatInput>
+    
+    //=------------------------------------------------------------------------=
+    // MARK: State
+    //=------------------------------------------------------------------------=
+    
+    @inlinable var adapter:   Adapter   { get set }
+    @inlinable var bounds:    Bounds    { get set }
+    @inlinable var precision: Precision { get set }
+}
+
+//=----------------------------------------------------------------------------=
+// MARK: Details
+//=----------------------------------------------------------------------------=
+
+extension NumberTextStyleProtocol {
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Accessors
+    //=------------------------------------------------------------------------=
+    
+    @inlinable public var locale: Locale {
+        adapter.format.locale
+    }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Utilities
+    //=------------------------------------------------------------------------=
+    
+    @inlinable func number(_ proposal: Proposal) throws -> Number? {
+        try Reader(adapter.lexicon).number(proposal, as: Value.self)
     }
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: Decimal
+// MARK: Details
 //=----------------------------------------------------------------------------=
 
-extension DiffableTextStyle where Self == NumberTextStyle<Decimal>.Percent {
+extension NumberTextStyleProtocol where Format: NumberTextFormatXCurrency {
     
     //=------------------------------------------------------------------------=
-    // MARK: Initializers
+    // MARK: Accessors
     //=------------------------------------------------------------------------=
     
-    @inlinable public static var percent: Self {
-        Self()
-    }
-}
-
-//=----------------------------------------------------------------------------=
-// MARK: Double
-//=----------------------------------------------------------------------------=
-
-extension DiffableTextStyle where Self == NumberTextStyle<Double>.Percent {
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Initializers
-    //=------------------------------------------------------------------------=
-    
-    @inlinable public static var percent: Self {
-        Self()
+    @inlinable public var currencyCode: String {
+        adapter.format.currencyCode
     }
 }

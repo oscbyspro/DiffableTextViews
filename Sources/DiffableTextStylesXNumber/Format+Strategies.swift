@@ -13,7 +13,7 @@ import Foundation
 // MARK: Declaration
 //*============================================================================*
 
-public enum NumberTextFormat_Sign {
+public enum NumberTextFormatXSign {
     
     //=------------------------------------------------------------------------=
     // MARK: Instances
@@ -33,7 +33,7 @@ public protocol NumberTextFormatXSignRepresentable {
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable init(_ strategy: NumberTextFormat_Sign)
+    @inlinable init(_ strategy: NumberTextFormatXSign)
 }
 
 //*============================================================================*
@@ -46,7 +46,7 @@ extension NumberFormatStyleConfiguration.SignDisplayStrategy: NumberTextFormatXS
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable public init(_ other: NumberTextFormat_Sign) {
+    @inlinable public init(_ other: NumberTextFormatXSign) {
         switch other {
         case .always:    self = .always()
         case .automatic: self = .automatic
@@ -64,7 +64,7 @@ extension CurrencyFormatStyleConfiguration.SignDisplayStrategy: NumberTextFormat
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable public init(_ other: NumberTextFormat_Sign) {
+    @inlinable public init(_ other: NumberTextFormatXSign) {
         switch other {
         case .always:    self = .always()
         case .automatic: self = .automatic

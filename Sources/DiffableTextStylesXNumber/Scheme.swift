@@ -40,13 +40,13 @@ public protocol NumberTextScheme {
     ///
     /// - The return value of this method MUST NOT depend on locale (v3.1.0).
     ///
-    @inlinable func bounds<T>(_ value: T.Type) -> NumberTextBounds<T>
+    @inlinable func preferred<T>(_ value: T.Type) -> NumberTextBounds<T>
     
     /// The precision preferred by this instance.
     ///
     /// - The return value of this method MUST NOT depend on locale (v3.1.0).
     ///
-    @inlinable func precision<T>(_ value: T.Type) -> NumberTextPrecision<T>
+    @inlinable func preferred<T>(_ value: T.Type) -> NumberTextPrecision<T>
 }
 
 //=----------------------------------------------------------------------------=
@@ -65,13 +65,11 @@ extension NumberTextScheme {
     // MARK: Preferences
     //=------------------------------------------------------------------------=
     
-    @inlinable func bounds<T>(_ value: T.Type) -> NumberTextBounds<T> where T: NumberTextValue {
-        NumberTextBounds()
-    }
+    @inlinable func preferred<T>(_ value: T.Type) -> NumberTextBounds<T>
+    where T: NumberTextValue { NumberTextBounds() }
     
-    @inlinable func precision<T>(_ value: T.Type) -> NumberTextPrecision<T> where T: NumberTextValue {
-        NumberTextPrecision()
-    }
+    @inlinable func preferred<T>(_ value: T.Type) -> NumberTextPrecision<T>
+    where T: NumberTextValue { NumberTextPrecision() }
 }
 
 //*============================================================================*

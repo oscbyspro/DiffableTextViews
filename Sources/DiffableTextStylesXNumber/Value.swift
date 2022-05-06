@@ -13,21 +13,61 @@ import Foundation
 // MARK: Declaration
 //*============================================================================*
 
-public protocol NumberTextValue: Comparable {
+public protocol NumberTextKind {
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Kind
+    //=------------------------------------------------------------------------=
+    
+    @inlinable static var isOptional: Bool { get }
+    @inlinable static var isUnsigned: Bool { get }
+    @inlinable static var isInteger:  Bool { get }
+}
+
+//*============================================================================*
+// MARK: Declaration
+//*============================================================================*
+
+public protocol NumberTextValue: Comparable, NumberTextKind {
     associatedtype NumberTextFormat:
     DiffableTextStylesXNumber.NumberTextFormat
     where NumberTextFormat.FormatInput == Self
     
     //=------------------------------------------------------------------------=
-    // MARK: Requirements
+    // MARK: Zero, Precision, Bounds
     //=------------------------------------------------------------------------=
-    
-    @inlinable static var isInteger:  Bool { get }
-    @inlinable static var isUnsigned: Bool { get }
     
     @inlinable static var zero: Self { get }
     @inlinable static var precision: Int { get }
     @inlinable static var bounds: ClosedRange<Self> { get }
+}
+
+//*============================================================================*
+// MARK: x Nonoptional
+//*============================================================================*
+
+public protocol  NumberTextValueXNonoptional: NumberTextValue { }
+public extension NumberTextValueXNonoptional {
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Kind
+    //=------------------------------------------------------------------------=
+    
+    @inlinable static var isOptional: Bool { false }
+}
+
+//*============================================================================*
+// MARK: x Optional
+//*============================================================================*
+
+public protocol  NumberTextValueXOptional: NumberTextValue { }
+public extension NumberTextValueXOptional {
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Kind
+    //=------------------------------------------------------------------------=
+    
+    @inlinable static var isOptional: Bool { true }
 }
 
 //*============================================================================*
@@ -38,7 +78,7 @@ public protocol  NumberTextValueXFloatingPoint: NumberTextValue { }
 public extension NumberTextValueXFloatingPoint {
     
     //=------------------------------------------------------------------------=
-    // MARK: Requirements
+    // MARK: Kind
     //=------------------------------------------------------------------------=
     
     @inlinable static var isInteger: Bool { false }
@@ -59,7 +99,7 @@ public protocol  NumberTextValueXInteger: NumberTextValue { }
 public extension NumberTextValueXInteger {
     
     //=------------------------------------------------------------------------=
-    // MARK: Requirements
+    // MARK: Kind
     //=------------------------------------------------------------------------=
     
     @inlinable static var isInteger: Bool { true }
@@ -80,7 +120,7 @@ public protocol  NumberTextValueXSigned: NumberTextValue { }
 public extension NumberTextValueXSigned {
     
     //=------------------------------------------------------------------------=
-    // MARK: Requirements
+    // MARK: Kind
     //=------------------------------------------------------------------------=
     
     @inlinable static var isUnsigned: Bool { false }
@@ -94,7 +134,7 @@ public protocol  NumberTextValueXUnsigned: NumberTextValue { }
 public extension NumberTextValueXUnsigned {
     
     //=------------------------------------------------------------------------=
-    // MARK: Requirements
+    // MARK: Kind
     //=------------------------------------------------------------------------=
     
     @inlinable static var isUnsigned: Bool { true }

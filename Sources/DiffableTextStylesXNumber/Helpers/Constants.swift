@@ -10,8 +10,14 @@
 import Foundation
 
 //*============================================================================*
-// MARK: Aliases
+// MARK: Declaration
 //*============================================================================*
 
-public typealias NFSC =   NumberFormatStyleConfiguration
-public typealias CFSC = CurrencyFormatStyleConfiguration
+@usableFromInline enum Constants {
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Constants
+    //=------------------------------------------------------------------------=
+    
+    @usableFromInline static let en_US = Locale(identifier: "en_US")
+}

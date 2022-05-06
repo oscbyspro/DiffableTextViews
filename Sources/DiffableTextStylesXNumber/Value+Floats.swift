@@ -13,7 +13,9 @@ import Foundation
 // MARK: Declaration
 //*============================================================================*
 
-private protocol _Value: NumberTextValueXSigned,
+private protocol _Value:
+NumberTextValueXNonoptional,
+NumberTextValueXSigned,
 NumberTextValueXFloatingPoint,
 NumberTextValueXNumberable,
 NumberTextValueXCurrencyable,

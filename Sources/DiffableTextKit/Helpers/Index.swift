@@ -35,16 +35,6 @@ public struct Index: Comparable {
         self.character = character
         self.attribute = attribute
     }
-    
-    /// Creates an instance describing a character's location.
-    ///
-    /// - Parameters:
-    ///   - character:  The character encoded index.
-    ///   - characters: The collection of characters that contains the index.
-    ///
-    @inlinable init(_ character: String.Index, in characters: String) {
-        self.init(character, characters[..<character].count)
-    }
 
     //=--------------------------------------------------------------------=
     // MARK: Utilities

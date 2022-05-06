@@ -31,7 +31,7 @@ public protocol Offset {
 extension Character: Offset {
 
     //=------------------------------------------------------------------------=
-    // MARK: Requirements
+    // MARK: Index, Position
     //=------------------------------------------------------------------------=
     
     @inlinable public static func index(at position: Self.Position, in characters: String) -> Index {
@@ -50,11 +50,13 @@ extension Character: Offset {
 extension UTF16: Offset {
     
     //=------------------------------------------------------------------------=
-    // MARK: Requirements
+    // MARK: Index, Position
     //=------------------------------------------------------------------------=
-
+    
     @inlinable public static func index(at position: Self.Position, in characters: String) -> Index {
-        Index(String.Index(utf16Offset: position.offset, in: characters), in:  characters)
+        let view = characters.utf16; let character = min(String.Index(
+        utf16Offset: position.offset, in: characters),  view.endIndex)
+        return Index(character, characters[..<character].count)
     }
     
     @inlinable public static func position(at index: Index, in characters: String) -> Self.Position {

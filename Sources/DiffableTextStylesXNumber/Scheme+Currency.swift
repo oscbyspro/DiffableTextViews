@@ -188,7 +188,7 @@ extension NumberTextSchemeXCurrency {
     // MARK: Preferences
     //=------------------------------------------------------------------------=
     
-    @inlinable func precision<T>(_ value: T.Type) -> NumberTextPrecision<T> where T: NumberTextValue {
+    @inlinable func preferred<T>(_ value: T.Type) -> NumberTextPrecision<T> where T: NumberTextValue {
         NumberTextPrecision(fraction: preferences.fraction)
     }
 }

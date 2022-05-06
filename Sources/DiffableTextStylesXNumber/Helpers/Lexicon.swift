@@ -20,13 +20,12 @@ public final class Lexicon {
     @usableFromInline typealias Separators = Links<Separator>
 
     //=------------------------------------------------------------------------=
-    // MARK: Constants
+    // MARK: Instances
     //=------------------------------------------------------------------------=
     
     @usableFromInline static let ascii = Lexicon(
     signs: .ascii(), digits: .ascii(), separators: .ascii())
-    @usableFromInline static let en_US = Locale(identifier: "en_US")
-
+    
     //=------------------------------------------------------------------------=
     // MARK: State
     //=------------------------------------------------------------------------=
@@ -61,32 +60,5 @@ public final class Lexicon {
         signs:      .currency(formatter),
         digits:     .currency(formatter),
         separators: .currency(formatter))
-    }
-}
-
-//=----------------------------------------------------------------------------=
-// MARK: Parse
-//=----------------------------------------------------------------------------=
-
-extension Lexicon {
-
-    //=------------------------------------------------------------------------=
-    // MARK: Number -> Value
-    //=------------------------------------------------------------------------=
-    
-    /// Relies on the fact that implemented styles can parse unformatted numbers.
-    @inlinable func value<T>(of number: Number, as format: T) throws -> T.Value where T: NumberTextFormat {
-        try format.locale(Self.en_US).parse(number.description)
-    }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Snapshot -> Number
-    //=------------------------------------------------------------------------=
-    
-    /// To use this method, all formatting characters must be marked as virtual.
-    @inlinable func number<T>(in snapshot: Snapshot, as value: T.Type) throws -> Number where T: NumberTextValue {
-        let sequence = snapshot.lazy.filter(\.nonvirtual).map(\.character)
-        return try Number(unformatted: sequence, unsigned: T.isUnsigned, integer: T.isInteger,
-        signs: signs.components, digits: digits.components, separators: separators.components)
     }
 }

@@ -13,7 +13,8 @@ import Foundation
 // MARK: Extension
 //*============================================================================*
 
-extension Decimal.FormatStyle.Percent: NumberTextFormat,
+extension Decimal.FormatStyle.Percent:
+NumberTextFormat,
 NumberTextFormatXPercent {
     
     //=------------------------------------------------------------------------=
@@ -29,8 +30,10 @@ NumberTextFormatXPercent {
 // MARK: Extension
 //*============================================================================*
 
-extension FloatingPointFormatStyle.Percent: NumberTextFormat,
-NumberTextFormatXPercent where Value: NumberTextValue {
+extension FloatingPointFormatStyle.Percent:
+NumberTextFormat,
+NumberTextFormatXPercent
+where Value: NumberTextValue {
     
     //=------------------------------------------------------------------------=
     // MARK: Utilities

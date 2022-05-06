@@ -7,11 +7,11 @@
 // See http://www.apache.org/licenses/LICENSE-2.0 for license information.
 //=----------------------------------------------------------------------------=
 
-//*============================================================================*
+//=----------------------------------------------------------------------------=
 // MARK: Precision
-//*============================================================================*
+//=----------------------------------------------------------------------------=
 
-internal extension NumberTextStyle {
+internal extension NumberTextStyleProtocol {
     
     //=------------------------------------------------------------------------=
     // MARK: Transformations
@@ -26,7 +26,7 @@ internal extension NumberTextStyle {
 // MARK: Integer
 //=----------------------------------------------------------------------------=
 
-public extension NumberTextStyle where Value: NumberTextValueXInteger {
+public extension NumberTextStyleProtocol where Format.FormatInput: NumberTextValueXInteger {
     
     //=------------------------------------------------------------------------=
     // MARK: Length
@@ -50,7 +50,7 @@ public extension NumberTextStyle where Value: NumberTextValueXInteger {
 // MARK: Floating Point
 //=----------------------------------------------------------------------------=
 
-public extension NumberTextStyle where Value: NumberTextValueXFloatingPoint {
+public extension NumberTextStyleProtocol where Format.FormatInput: NumberTextValueXFloatingPoint {
     
     //=------------------------------------------------------------------------=
     // MARK: Length

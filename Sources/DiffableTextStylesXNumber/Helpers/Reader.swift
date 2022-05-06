@@ -41,17 +41,23 @@ import DiffableTextKit
     //=------------------------------------------------------------------------=
  
     @inlinable func number<T>(_ proposal: Proposal, as value: T.Type)
-    throws -> Number where T: NumberTextValue {
+    throws -> Number? where T: NumberTextKind {
         //=--------------------------------------=
         // Proposal
         //=--------------------------------------=
         var proposal = proposal
         translateSingleCharacterInput(&proposal)
         let sign = consumeSingleSignInput(&proposal)
+        let parseable = proposal.result()
         //=--------------------------------------=
-        // Number
+        // None
         //=--------------------------------------=
-        var number = try lexicon.number(in: proposal(), as: T.self)
+        guard var number = try Number(
+        parse: parseable, with: lexicon,
+        as: value) else { return nil }
+        //=--------------------------------------=
+        // Some
+        //=--------------------------------------=
         if let sign = sign { number.sign = sign }
         return number
     }
@@ -69,10 +75,10 @@ extension Reader {
     
     @inlinable func translateSingleCharacterInput(_ proposal: inout Proposal) {
         guard proposal.replacement.count == 1 else { return }
-        proposal.replacement = Snapshot(proposal.replacement.map(translate))
+        proposal.replacement = Snapshot(proposal.replacement.map(translated))
     }
         
-    @inlinable func translate(_ input: Symbol) -> Symbol {
+    @inlinable func translated(_ input: Symbol) -> Symbol {
         let character: Character
         //=--------------------------------------=
         // Digit
@@ -106,8 +112,8 @@ extension Reader {
     //=------------------------------------------------------------------------=
     
     @inlinable func consumeSingleSignInput(_ proposal: inout Proposal) -> Sign? {
-        guard proposal.replacement.count == 1 else { return nil }
-        guard let sign = lexicon.signs[proposal.replacement.first!.character] else { return nil }
+        guard proposal.replacement.count == 1,
+        let sign = lexicon.signs[proposal.replacement.first!.character] else { return nil }
         proposal.replacement.removeAll(); return sign
     }
 }

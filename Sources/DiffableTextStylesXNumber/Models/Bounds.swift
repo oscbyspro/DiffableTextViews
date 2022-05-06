@@ -110,11 +110,10 @@ extension NumberTextBounds {
         autocorrect(&number.sign)
     }
     
+    /// Toggles the sign if the opposite sign is the only sign allowed.
     @inlinable func autocorrect(_ sign: inout Sign) {
-        switch sign.enumeration {
-        case .positive: if max <= .zero, min != .zero { sign.toggle() }
-        case .negative: if min >= .zero               { sign.toggle() }
-        }
+        if (sign == .positive && max <= .zero && min != .zero  )
+        || (sign == .negative && min >= .zero) { sign.toggle() }
     }
 }
 
@@ -128,13 +127,15 @@ extension NumberTextBounds {
     // MARK: Number
     //=------------------------------------------------------------------------=
     
-    @inlinable func autovalidate(_ number: Number) throws {
-        try autovalidate(number.sign)
+    @inlinable func autovalidate(_ number: inout Number) throws {
+        try autovalidate(&number.sign)
     }
 
-    @inlinable func autovalidate(_ sign: Sign) throws {
-        guard sign == sign.transformed(autocorrect) else {
-            throw Info([.mark(sign), "is not in", .mark(self)])
+    @inlinable func autovalidate(_ sign: inout Sign) throws {
+        let autocorrected  = sign.transformed(autocorrect)
+        if  autocorrected != sign {
+            Info.print(autocorrection: [.mark(sign), "is not in", .mark(self)])
+            sign  = autocorrected
         }
     }
 

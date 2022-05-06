@@ -37,9 +37,9 @@ public struct Proposal {
     //=------------------------------------------------------------------------=
     
     /// Returns a new snapshot with the proposed change applied to it.
-    @inlinable public func callAsFunction() -> Snapshot {
-        var proposal = snapshot
-        proposal.replaceSubrange(range, with: replacement)
-        return proposal
+    @inlinable public func result() -> Snapshot {
+        var result = snapshot
+        result.replaceSubrange(range, with: replacement)
+        return result
     }
 }

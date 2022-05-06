@@ -7,47 +7,50 @@
 // See http://www.apache.org/licenses/LICENSE-2.0 for license information.
 //=----------------------------------------------------------------------------=
 
-import SwiftUI
-import DiffableTextViews
+import DiffableTextKit
+import Foundation
 
 //*============================================================================*
-// MARK: Declaration
+// MARK: Percent
 //*============================================================================*
 
-/// An examples view that observes frequent changes.
-struct NumericScreenExample<Format: NumberTextFormat>: View where Format.FormatInput == NumericScreenContext.Value {
-    typealias Context = NumericScreenContext
-    typealias Integers = Interval<Int>
-    typealias Value = Decimal
+extension OptionalNumberTextStyle where Format: NumberTextFormatXPercent {
     
-    //=------------------------------------------------------------------------=
-    // MARK: State
-    //=------------------------------------------------------------------------=
-    
-    let base: _NumberTextStyle<Format>
-    @ObservedObject var value: Source<Value>
-    @ObservedObject var bounds: SourceOfBounds
-    @ObservedObject var integer: Source<Integers>
-    @ObservedObject var fraction: Source<Integers>
-
     //=------------------------------------------------------------------------=
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    init(_ context: Context, base: _NumberTextStyle<Format>) {
-        self.base = base
-        self.value = context.value
-        self.bounds = context.bounds
-        self.integer = context.integer
-        self.fraction = context.fraction
+    @inlinable public init(locale: Locale =  .autoupdatingCurrent) {
+        self.init(Format(locale: locale))
     }
+}
+
+//=----------------------------------------------------------------------------=
+// MARK: Decimal
+//=----------------------------------------------------------------------------=
+
+extension DiffableTextStyle where Self == OptionalNumberTextStyle<Decimal>.Percent {
     
     //=------------------------------------------------------------------------=
-    // MARK: Body
+    // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    var body: some View {
-        Example(value.binding, style: base.bounds(bounds.values).precision(
-        integer: integer.content.closed, fraction: fraction.content.closed))
+    @inlinable public static var percent: Self {
+        Self()
+    }
+}
+
+//=----------------------------------------------------------------------------=
+// MARK: Double
+//=----------------------------------------------------------------------------=
+
+extension DiffableTextStyle where Self == OptionalNumberTextStyle<Double>.Percent {
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Initializers
+    //=------------------------------------------------------------------------=
+    
+    @inlinable public static var percent: Self {
+        Self()
     }
 }

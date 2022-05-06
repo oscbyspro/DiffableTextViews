@@ -7,11 +7,11 @@
 // See http://www.apache.org/licenses/LICENSE-2.0 for license information.
 //=----------------------------------------------------------------------------=
 
-//*============================================================================*
-// MARK: Extension
-//*============================================================================*
+//=----------------------------------------------------------------------------=
+// MARK: Details
+//=----------------------------------------------------------------------------=
 
-internal extension NumberTextStyle {
+internal extension NumberTextStyleProtocol {
     
     //=------------------------------------------------------------------------=
     // MARK: Transformations
@@ -26,21 +26,21 @@ internal extension NumberTextStyle {
 // MARK: Bounds
 //=----------------------------------------------------------------------------=
 
-public extension NumberTextStyle {
+public extension NumberTextStyleProtocol {
     
     //=------------------------------------------------------------------------=
     // MARK: Limits
     //=------------------------------------------------------------------------=
     
-    @inlinable func bounds(_ limits: ClosedRange<Value>) -> Self {
+    @inlinable func bounds(_ limits: ClosedRange<Format.FormatInput>) -> Self {
         bounds(Bounds(limits))
     }
     
-    @inlinable func bounds(_ limits: PartialRangeFrom<Value>) -> Self {
+    @inlinable func bounds(_ limits: PartialRangeFrom<Format.FormatInput>) -> Self {
         bounds(Bounds(limits))
     }
     
-    @inlinable func bounds(_ limits: PartialRangeThrough<Value>) -> Self {
+    @inlinable func bounds(_ limits: PartialRangeThrough<Format.FormatInput>) -> Self {
         bounds(Bounds(limits))
     }
 }

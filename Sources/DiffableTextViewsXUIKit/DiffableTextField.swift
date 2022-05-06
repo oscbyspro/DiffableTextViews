@@ -148,6 +148,15 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
         }
         
         @inlinable public func textFieldDidChangeSelection(_ textField: UITextField) {
+            //=----------------------------------=
+            // Disable Marked Text
+            //=----------------------------------=
+            guard textField.markedTextRange == nil else {
+                return self.write()
+            }
+            //=----------------------------------=
+            // Locked
+            //=----------------------------------=
             guard !lock.isLocked else { return }
             let selection = downstream.selection
             //=----------------------------------=
@@ -210,10 +219,7 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
             //=----------------------------------=
             // Downstream
             //=----------------------------------=
-            lock.perform {
-                self.downstream.update(text: context.text)
-                self.downstream.update(selection: context.selection())
-            }
+            self.write()
             //=----------------------------------=
             // Upstream
             //=----------------------------------=
@@ -228,6 +234,8 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
             //=----------------------------------=
             lock.perform {
                 self.downstream.update(text: context.text)
+                guard downstream.focus.value else { return }
+                self.downstream.update(selection: context.selection())
             }
         }
     }

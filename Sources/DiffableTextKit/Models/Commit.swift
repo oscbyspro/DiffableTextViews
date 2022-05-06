@@ -29,8 +29,24 @@ public struct Commit<Value> {
         self.value = value
         self.snapshot = snapshot
     }
-
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Initializers
+    //=------------------------------------------------------------------------=
+    
     @inlinable public init() where Value: RangeReplaceableCollection {
         self.init(Value(), Snapshot())
     }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Initializers
+    //=------------------------------------------------------------------------=
+        
+    @inlinable public init() where Value: ExpressibleByNilLiteral {
+        self.init(nil, Snapshot())
+    }
+    
+    @inlinable public init<T>(_ commit: Commit<T>) where Value == Optional<T> {
+        self.init(commit.value, commit.snapshot)
+    }    
 }

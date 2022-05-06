@@ -8,16 +8,16 @@
 //=----------------------------------------------------------------------------=
 
 //*============================================================================*
-// MARK: Aliases
+// MARK: Extension
 //*============================================================================*
 
-public typealias NumberTextStyle<Value: NumberTextValue> =
-_NumberTextStyle<Value.NumberTextFormat>
-
-extension NumberTextStyle where Format: NumberTextFormatXCurrencyable {
-    public typealias Currency = _NumberTextStyle<Format.Currency>
-}
-
-extension NumberTextStyle where Format: NumberTextFormatXPercentable {
-    public typealias Percent = _NumberTextStyle<Format.Percent>
+extension Optional: NumberTextKind where Wrapped: NumberTextValue {
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Requirements
+    //=------------------------------------------------------------------------=
+    
+    @inlinable public static var isOptional: Bool { true }
+    @inlinable public static var isUnsigned: Bool { Wrapped.isUnsigned }
+    @inlinable public static var isInteger:  Bool { Wrapped.isInteger  }
 }

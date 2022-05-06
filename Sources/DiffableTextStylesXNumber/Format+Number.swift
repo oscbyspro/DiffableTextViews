@@ -13,7 +13,8 @@ import Foundation
 // MARK: Extension
 //*============================================================================*
 
-extension Decimal.FormatStyle: NumberTextFormat,
+extension Decimal.FormatStyle:
+NumberTextFormat,
 NumberTextFormatXNumber,
 NumberTextFormatXCurrencyable,
 NumberTextFormatXPercentable {
@@ -31,7 +32,8 @@ NumberTextFormatXPercentable {
 // MARK: Extension
 //*============================================================================*
 
-extension FloatingPointFormatStyle: NumberTextFormat,
+extension FloatingPointFormatStyle:
+NumberTextFormat,
 NumberTextFormatXNumber,
 NumberTextFormatXCurrencyable,
 NumberTextFormatXPercentable
@@ -50,7 +52,8 @@ where FormatInput: NumberTextValue {
 // MARK: Extension
 //*============================================================================*
 
-extension IntegerFormatStyle: NumberTextFormat,
+extension IntegerFormatStyle:
+NumberTextFormat,
 NumberTextFormatXNumber,
 NumberTextFormatXCurrencyable
 where FormatInput: NumberTextValue {
