@@ -76,7 +76,7 @@ public extension _OptionalNumberTextStyle {
     //=------------------------------------------------------------------------=
     
     @inlinable func interpret(_ value: Value) -> Commit<Value> {
-        value.map(style.interpret).map(Commit .init) ?? Commit()
+        value.map({ Commit(style.interpret($0)) }) ?? Commit()
     }
     
     //=------------------------------------------------------------------------=
@@ -84,6 +84,6 @@ public extension _OptionalNumberTextStyle {
     //=------------------------------------------------------------------------=
     
     @inlinable func merge(_ proposal: Proposal) throws  -> Commit<Value> {
-        try number(proposal).map(style.merge).map(Commit.init) ?? Commit()
+        try number(proposal).map({ try Commit(style.merge($0)) }) ?? Commit()
     }
 }
