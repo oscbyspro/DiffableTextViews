@@ -14,7 +14,6 @@ import Foundation
 //*============================================================================*
 
 private protocol _Int: BinaryInteger,
-NumberTextValueXNonoptional,
 NumberTextValueXSigned,
 NumberTextValueXInteger,
 NumberTextValueXNumberable,

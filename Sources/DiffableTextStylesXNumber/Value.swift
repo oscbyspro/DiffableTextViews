@@ -47,32 +47,17 @@ public protocol NumberTextValue: Comparable, NumberTextKind {
     @inlinable static var bounds: ClosedRange<Self> { get }
 }
 
-//*============================================================================*
-// MARK: x Nonoptional
-//*============================================================================*
+//=----------------------------------------------------------------------------=
+// MARK: Details
+//=----------------------------------------------------------------------------=
 
-public protocol  NumberTextValueXNonoptional: NumberTextValue { }
-public extension NumberTextValueXNonoptional {
+public extension NumberTextValue {
     
     //=------------------------------------------------------------------------=
     // MARK: Kind
     //=------------------------------------------------------------------------=
     
     @inlinable static var isOptional: Bool { false }
-}
-
-//*============================================================================*
-// MARK: x Optional
-//*============================================================================*
-
-public protocol  NumberTextValueXOptional: NumberTextValue { }
-public extension NumberTextValueXOptional {
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Kind
-    //=------------------------------------------------------------------------=
-    
-    @inlinable static var isOptional: Bool { true }
 }
 
 //*============================================================================*

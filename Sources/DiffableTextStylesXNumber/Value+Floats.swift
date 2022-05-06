@@ -14,7 +14,6 @@ import Foundation
 //*============================================================================*
 
 private protocol _Value:
-NumberTextValueXNonoptional,
 NumberTextValueXSigned,
 NumberTextValueXFloatingPoint,
 NumberTextValueXNumberable,
