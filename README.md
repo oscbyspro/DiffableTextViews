@@ -87,8 +87,9 @@ A style that binds localized numbers using various formats.
 |   | Feature | Description |
 |---|---------|-------------|
 | :coin: | Values | Decimal, Double and (U)Int(8-64) |
+| :grey_question: | Optionals | Optional and non-optional values |
 | :bow_and_arrow: | Precision | Up to 38 digits of precision |
-| :bricks: | Bounds | Clamps values to a closed range  |
+| :bricks: | Bounds | Values are clamped to bounds  |
 | :art: | Formats | Number, currency and percent |
 | :national_park: | Locales | Supports every Foundation.Locale |
 | :two: | Bilingual | Accepts both local and ASCII inputs |
