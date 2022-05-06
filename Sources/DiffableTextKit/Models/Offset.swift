@@ -54,8 +54,8 @@ extension UTF16: Offset {
     //=------------------------------------------------------------------------=
     
     @inlinable public static func index(at position: Self.Position, in characters: String) -> Index {
-        let view = characters.utf16; let character = min(String.Index(
-        utf16Offset: position.offset, in: characters),  view.endIndex)
+        var character = String.Index(utf16Offset: position.offset, in: characters)
+        character = Swift.min(character,   characters.endIndex)
         return Index(character, characters[..<character].count)
     }
     
