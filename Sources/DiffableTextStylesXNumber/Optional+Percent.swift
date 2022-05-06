@@ -14,7 +14,7 @@ import Foundation
 // MARK: Percent
 //*============================================================================*
 
-extension OptionalNumberTextStyle where Format: NumberTextFormatXPercent {
+extension _OptionalNumberTextStyle where Format: NumberTextFormatXPercent {
     
     //=------------------------------------------------------------------------=
     // MARK: Initializers
@@ -29,7 +29,7 @@ extension OptionalNumberTextStyle where Format: NumberTextFormatXPercent {
 // MARK: Decimal
 //=----------------------------------------------------------------------------=
 
-extension DiffableTextStyle where Self == OptionalNumberTextStyle<Decimal>.Percent {
+extension DiffableTextStyle where Self == NumberTextStyle<Decimal?>.Percent {
     
     //=------------------------------------------------------------------------=
     // MARK: Initializers
@@ -44,7 +44,7 @@ extension DiffableTextStyle where Self == OptionalNumberTextStyle<Decimal>.Perce
 // MARK: Double
 //=----------------------------------------------------------------------------=
 
-extension DiffableTextStyle where Self == OptionalNumberTextStyle<Double>.Percent {
+extension DiffableTextStyle where Self == NumberTextStyle<Double?>.Percent {
     
     //=------------------------------------------------------------------------=
     // MARK: Initializers

@@ -14,7 +14,7 @@ import Foundation
 // MARK: Number
 //*============================================================================*
 
-extension NumberTextStyle where Format: NumberTextFormatXNumber {
+extension _NumberTextStyle where Format: NumberTextFormatXNumber {
     
     //=------------------------------------------------------------------------=
     // MARK: Initializers

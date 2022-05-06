@@ -16,6 +16,7 @@ import Foundation
 
 public struct _NumberTextStyle<Format: NumberTextFormat>: NumberTextStyleProtocol {
     public typealias Value = Format.FormatInput
+    public typealias Adapter = NumberTextAdapter<Format>
 
     //=------------------------------------------------------------------------=
     // MARK: State
@@ -86,7 +87,7 @@ public struct _NumberTextStyle<Format: NumberTextFormat>: NumberTextStyleProtoco
 // MARK: Utilities
 //=----------------------------------------------------------------------------=
 
-public extension NumberTextStyle {
+public extension _NumberTextStyle {
     
     //=------------------------------------------------------------------------=
     // MARK: Inactive
@@ -171,7 +172,7 @@ public extension NumberTextStyle {
 // MARK: Helpers
 //=----------------------------------------------------------------------------=
 
-internal extension NumberTextStyle {
+internal extension _NumberTextStyle {
     
     //=------------------------------------------------------------------------=
     // MARK: Snapshot

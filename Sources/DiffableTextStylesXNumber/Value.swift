@@ -16,6 +16,14 @@ import Foundation
 public protocol NumberTextKind {
     
     //=------------------------------------------------------------------------=
+    // MARK: Style
+    //=------------------------------------------------------------------------=
+    
+    associatedtype NumberTextStyle: NumberTextStyleProtocol
+    typealias NumberTextFormat = NumberTextStyle.Format
+    typealias NumberTextValue = NumberTextFormat.FormatInput
+    
+    //=------------------------------------------------------------------------=
     // MARK: Kind
     //=------------------------------------------------------------------------=
     
@@ -29,9 +37,6 @@ public protocol NumberTextKind {
 //*============================================================================*
 
 public protocol NumberTextValue: Comparable, NumberTextKind {
-    associatedtype NumberTextFormat:
-    DiffableTextStylesXNumber.NumberTextFormat
-    where NumberTextFormat.FormatInput == Self
     
     //=------------------------------------------------------------------------=
     // MARK: Zero, Precision, Bounds

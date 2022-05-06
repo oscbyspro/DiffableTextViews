@@ -26,7 +26,7 @@ NumberTextValueXPercentable { }
 //*============================================================================*
 
 extension Decimal: _Value {
-    public typealias NumberTextFormat = FormatStyle
+    public typealias NumberTextStyle = _NumberTextStyle<FormatStyle>
 
     //=------------------------------------------------------------------------=
     // MARK: Precision, Bounds
@@ -42,7 +42,7 @@ extension Decimal: _Value {
 //*============================================================================*
 
 extension Double: _Value {
-    public typealias NumberTextFormat = FloatingPointFormatStyle<Self>
+    public typealias NumberTextStyle = _NumberTextStyle<FloatingPointFormatStyle<Self>>
     
     //=------------------------------------------------------------------------=
     // MARK: Precision, Bounds

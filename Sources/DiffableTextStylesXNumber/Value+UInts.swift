@@ -19,7 +19,7 @@ NumberTextValueXUnsigned,
 NumberTextValueXInteger,
 NumberTextValueXNumberable,
 NumberTextValueXCurrencyable
-where NumberTextFormat == IntegerFormatStyle<Self> { }
+where NumberTextStyle == _NumberTextStyle<IntegerFormatStyle<Self>> { }
 
 //*============================================================================*
 // MARK: UInt

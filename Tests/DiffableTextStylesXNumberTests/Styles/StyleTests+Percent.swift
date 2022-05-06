@@ -22,7 +22,8 @@ final class StyleTestsXPercent: Tests, StyleTests {
     // MARK: Assertions
     //=------------------------------------------------------------------------=
     
-    func XCTInterpretLocales<T: NumberTextValueXPercentable>(_ value: T) {
+    func XCTInterpretLocales<T>(_ value: T) where
+    T: NumberTextValueXPercentable, T == T.NumberTextValue {
          XCTInterpretLocales(value, format: T.NumberTextFormat.Percent.init)
     }
 }

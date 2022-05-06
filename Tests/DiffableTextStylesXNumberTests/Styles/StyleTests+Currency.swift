@@ -23,7 +23,8 @@ final class StyleTestsXCurrency: Tests, StyleTests {
     // MARK: Assertions
     //=------------------------------------------------------------------------=
     
-    func XCTInterpretLocalesXCurrencies<T: NumberTextValueXCurrencyable>(_ value: T) {
+    func XCTInterpretLocalesXCurrencies<T>(_ value: T) where
+    T: NumberTextValueXCurrencyable, T == T.NumberTextValue {
          XCTInterpretLocalesXCurrencies(value, format: T.NumberTextFormat.Currency.init)
     }
     

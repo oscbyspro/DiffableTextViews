@@ -22,7 +22,8 @@ final class StyleTestsXNumber: Tests, StyleTests {
     // MARK: Assertions
     //=------------------------------------------------------------------------=
     
-    func XCTInterpretLocales<T: NumberTextValueXNumberable>(_ value: T) {
+    func XCTInterpretLocales<T>(_ value: T) where
+    T: NumberTextValueXNumberable, T == T.NumberTextValue {
          XCTInterpretLocales(value, format: T.NumberTextFormat.init)
     }
 }

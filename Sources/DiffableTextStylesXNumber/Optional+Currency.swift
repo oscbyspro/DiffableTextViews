@@ -14,7 +14,7 @@ import Foundation
 // MARK: Currency
 //*============================================================================*
 
-extension OptionalNumberTextStyle where Format: NumberTextFormatXCurrency {
+extension _OptionalNumberTextStyle where Format: NumberTextFormatXCurrency {
     
     //=------------------------------------------------------------------------=
     // MARK: Initializers
@@ -29,7 +29,7 @@ extension OptionalNumberTextStyle where Format: NumberTextFormatXCurrency {
 // MARK: Decimal
 //=----------------------------------------------------------------------------=
 
-extension DiffableTextStyle where Self == OptionalNumberTextStyle<Decimal>.Currency {
+extension DiffableTextStyle where Self == NumberTextStyle<Decimal?>.Currency {
     
     //=------------------------------------------------------------------------=
     // MARK: Initializers
@@ -44,7 +44,7 @@ extension DiffableTextStyle where Self == OptionalNumberTextStyle<Decimal>.Curre
 // MARK: Double
 //=----------------------------------------------------------------------------=
 
-extension DiffableTextStyle where Self == OptionalNumberTextStyle<Double>.Currency {
+extension DiffableTextStyle where Self == NumberTextStyle<Double?>.Currency {
     
     //=------------------------------------------------------------------------=
     // MARK: Initializers
@@ -59,7 +59,7 @@ extension DiffableTextStyle where Self == OptionalNumberTextStyle<Double>.Curren
 // MARK: Int
 //=----------------------------------------------------------------------------=
 
-extension DiffableTextStyle where Self == OptionalNumberTextStyle<Int>.Currency {
+extension DiffableTextStyle where Self == NumberTextStyle<Int?>.Currency {
     
     //=------------------------------------------------------------------------=
     // MARK: Initializers
@@ -74,7 +74,7 @@ extension DiffableTextStyle where Self == OptionalNumberTextStyle<Int>.Currency 
 // MARK: Int8
 //=----------------------------------------------------------------------------=
 
-extension DiffableTextStyle where Self == OptionalNumberTextStyle<Int8>.Currency {
+extension DiffableTextStyle where Self == NumberTextStyle<Int8?>.Currency {
     
     //=------------------------------------------------------------------------=
     // MARK: Initializers
@@ -89,7 +89,7 @@ extension DiffableTextStyle where Self == OptionalNumberTextStyle<Int8>.Currency
 // MARK: Int16
 //=----------------------------------------------------------------------------=
 
-extension DiffableTextStyle where Self == OptionalNumberTextStyle<Int16>.Currency {
+extension DiffableTextStyle where Self == NumberTextStyle<Int16?>.Currency {
     
     //=------------------------------------------------------------------------=
     // MARK: Initializers
@@ -104,7 +104,7 @@ extension DiffableTextStyle where Self == OptionalNumberTextStyle<Int16>.Currenc
 // MARK: Int32
 //=----------------------------------------------------------------------------=
 
-extension DiffableTextStyle where Self == OptionalNumberTextStyle<Int32>.Currency {
+extension DiffableTextStyle where Self == NumberTextStyle<Int32?>.Currency {
     
     //=------------------------------------------------------------------------=
     // MARK: Initializers
@@ -119,7 +119,7 @@ extension DiffableTextStyle where Self == OptionalNumberTextStyle<Int32>.Currenc
 // MARK: Int64
 //=----------------------------------------------------------------------------=
 
-extension DiffableTextStyle where Self == OptionalNumberTextStyle<Int64>.Currency {
+extension DiffableTextStyle where Self == NumberTextStyle<Int64?>.Currency {
     
     //=------------------------------------------------------------------------=
     // MARK: Initializers
@@ -134,7 +134,7 @@ extension DiffableTextStyle where Self == OptionalNumberTextStyle<Int64>.Currenc
 // MARK: UInt
 //=----------------------------------------------------------------------------=
 
-extension DiffableTextStyle where Self == OptionalNumberTextStyle<UInt>.Currency {
+extension DiffableTextStyle where Self == NumberTextStyle<UInt?>.Currency {
     
     //=------------------------------------------------------------------------=
     // MARK: Initializers
@@ -149,7 +149,7 @@ extension DiffableTextStyle where Self == OptionalNumberTextStyle<UInt>.Currency
 // MARK: UInt8
 //=----------------------------------------------------------------------------=
 
-extension DiffableTextStyle where Self == OptionalNumberTextStyle<UInt8>.Currency {
+extension DiffableTextStyle where Self == NumberTextStyle<UInt8?>.Currency {
     
     //=------------------------------------------------------------------------=
     // MARK: Initializers
@@ -164,7 +164,7 @@ extension DiffableTextStyle where Self == OptionalNumberTextStyle<UInt8>.Currenc
 // MARK: UInt16
 //=----------------------------------------------------------------------------=
 
-extension DiffableTextStyle where Self == OptionalNumberTextStyle<UInt16>.Currency {
+extension DiffableTextStyle where Self == NumberTextStyle<UInt16?>.Currency {
     
     //=------------------------------------------------------------------------=
     // MARK: Initializers
@@ -179,7 +179,7 @@ extension DiffableTextStyle where Self == OptionalNumberTextStyle<UInt16>.Curren
 // MARK: UInt32
 //=----------------------------------------------------------------------------=
 
-extension DiffableTextStyle where Self == OptionalNumberTextStyle<UInt32>.Currency {
+extension DiffableTextStyle where Self == NumberTextStyle<UInt32?>.Currency {
     
     //=------------------------------------------------------------------------=
     // MARK: Initializers
@@ -194,7 +194,7 @@ extension DiffableTextStyle where Self == OptionalNumberTextStyle<UInt32>.Curren
 // MARK: UInt64
 //=----------------------------------------------------------------------------=
 
-extension DiffableTextStyle where Self == OptionalNumberTextStyle<UInt64>.Currency {
+extension DiffableTextStyle where Self == NumberTextStyle<UInt64?>.Currency {
     
     //=------------------------------------------------------------------------=
     // MARK: Initializers
