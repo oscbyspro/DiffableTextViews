@@ -12,17 +12,22 @@
 import DiffableTextKit
 import SwiftUI
 
+#warning("TODO: set placeholder.")
+#warning("TODO: set environment values.")
 //*============================================================================*
 // MARK: Declaration
 //*============================================================================*
 
+/// An as-you-type formatting compatible text field.
 public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
+    public typealias UIViewType = UITextField
     public typealias Value = Style.Value
     
     //=------------------------------------------------------------------------=
     // MARK: State
     //=------------------------------------------------------------------------=
     
+    @usableFromInline let title: String
     @usableFromInline let style: Style
     @usableFromInline let value: Binding<Value>
 
@@ -30,16 +35,26 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable public init(_ value: Binding<Value>, style: Style) {
+    @inlinable public init(_ title: String, value: Binding<Value>, style: Style) {
+        self.title = title
         self.value = value
         self.style = style
     }
     
-    @inlinable public init(_ value: Binding<Value>, style: () -> Style) {
+    @inlinable public init(_ title: String, value: Binding<Value>, style: () -> Style) {
+        self.title = title
         self.value = value
         self.style = style()
     }
-
+ 
+    //=------------------------------------------------------------------------=
+    // MARK: Transformations
+    //=------------------------------------------------------------------------=
+    
+    @inlinable @inline(__always) func locale(_ locale: Locale) -> Self {
+        Self(title, value: value, style: style.locale(locale))
+    }
+    
     //=------------------------------------------------------------------------=
     // MARK: View Life Cycle
     //=------------------------------------------------------------------------=
@@ -48,33 +63,22 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
         Coordinator()
     }
     
-    @inlinable public func makeUIView(context: Self.Context) -> BasicTextField {
+    @inlinable public func makeUIView(context: Self.Context) -> UIViewType {
         let downstream = Downstream()
         let view = downstream.wrapped
         //=--------------------------------------=
         // View
         //=--------------------------------------=
-        view.font = UIFont(DiffableTextFont.body.monospaced())
-        view.setTextAlignment(context.environment.multilineTextAlignment)
         view.setContentHuggingPriority(.defaultHigh, for: .vertical)
         view.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
         //=--------------------------------------=
-        // Downstream
-        //=--------------------------------------=
-        downstream.transform(Style.onSetup)
-        downstream.transform(context.environment.diffableTextField_onSetup)
-        //=--------------------------------------=
         // Coordinator
         //=--------------------------------------=
-        context.coordinator.setup((self,  context.environment, downstream))
-        //=--------------------------------------=
-        // Done
-        //=--------------------------------------=
-        return view
+        context.coordinator.setup(self,  context.environment, downstream); return view
     }
     
-    @inlinable public func updateUIView(_ uiView: UIViewType, context: Self.Context) {
-        context.coordinator.update((self, context.environment))
+    @inlinable public func updateUIView(_ wrapped: UIViewType, context: Self.Context) {
+        context.coordinator.update(self, context.environment)
     }
     
     //*========================================================================*
@@ -85,30 +89,64 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
         @usableFromInline typealias Upstream = DiffableTextField
         @usableFromInline typealias Environment = EnvironmentValues
         @usableFromInline typealias Position = Unicode.UTF16.Position
+        @usableFromInline typealias Context = DiffableTextKit.Context<Style>
 
         //=--------------------------------------------------------------------=
         // MARK: State
         //=--------------------------------------------------------------------=
         
         @usableFromInline let lock = Lock()
+        @usableFromInline var context: Context!
         @usableFromInline var upstream: Upstream!
         @usableFromInline var downstream: Downstream!
-        @usableFromInline var environment: Environment!
-        @usableFromInline var context: Context<Style>!
-
+        @usableFromInline var onSubmit = Trigger(nil)
+        
         //=--------------------------------------------------------------------=
         // MARK: View Life Cycle
         //=--------------------------------------------------------------------=
         
-        @inlinable func setup(_ values: (Upstream, Environment, Downstream)) {
-            (upstream, environment, downstream) = values
+        @inlinable func setup(_ upstream: Upstream, _ environment: Environment, _ downstream: Downstream) {
+            //=----------------------------------=
+            // Upstream
+            //=----------------------------------=
+            self.upstream = upstream.locale(environment.locale)
+            //=----------------------------------=
+            // Downstream
+            //=----------------------------------=
+            self.downstream = downstream
             self.downstream.wrapped.delegate = self
-            self.context = .init(self.pull()); self.write()
+            self.downstream.setTextFeldStyle(environment)
+            self.downstream.setSensibleValues(Style.self)
+            //=----------------------------------=
+            // Synchronize
+            //=----------------------------------=
+            self.context = Context(pull()); self.write()
         }
         
-        @inlinable func update(_ values: (Upstream, Environment)) {
-            (upstream, environment) = values; self.synchronize()
-            self.downstream.transform(environment.diffableTextField_onUpdate)
+        @inlinable func update(_ upstream: Upstream, _ environment: Environment) {
+            //=----------------------------------=
+            // Upstream
+            //=----------------------------------=
+            self.upstream = upstream.locale(environment.locale)
+            //=----------------------------------=
+            // Downstream
+            //=----------------------------------=
+            self.downstream.setTitle(upstream.title)
+            self.downstream.setDisableAutocorrection(environment)
+            self.downstream.setFont(environment)
+            self.downstream.setForegroundColor(environment)
+            self.downstream.setKeyboardType(environment)
+            self.downstream.setSubmitLabel(environment)
+            self.downstream.setTextContentType(environment)
+            self.downstream.setTextInputAutocapitalization(environment)
+            //=----------------------------------=
+            // Miscellaneous
+            //=----------------------------------=
+            self.onSubmit = environment.diffableTextViews_onSubmit
+            //=----------------------------------=
+            // Synchronize
+            //=----------------------------------=
+            self.synchronize()
         }
         
         //=--------------------------------------------------------------------=
@@ -179,9 +217,7 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
         //=--------------------------------------------------------------------=
 
         @inlinable public func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-            downstream.transform(environment.diffableTextField_onSubmit)
-            downstream.wrapped.resignFirstResponder()
-            return true
+            textField.resignFirstResponder(); onSubmit(); return true
         }
         
         @inlinable public func textFieldDidBeginEditing(_ textField: UITextField) {
@@ -211,8 +247,9 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
             //=----------------------------------=
             // Upstream, Downstream
             //=----------------------------------=
-            Remote(style: self.upstream.style.locale(environment.locale),
-            value: upstream.value.wrappedValue, focus: downstream.focus)
+            Remote(style: upstream.style,
+            value: upstream.value.wrappedValue,
+            focus: downstream.focus)
         }
 
         @inlinable func push() {
@@ -238,126 +275,6 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
                 self.downstream.update(selection: context.selection())
             }
         }
-    }
-}
-
-//*============================================================================*
-// MARK: ID
-//*============================================================================*
-
-public struct DiffableTextFieldID {
-    public static let diffableTextField = Self()
-}
-
-//*============================================================================*
-// MARK: Environment
-//*============================================================================*
-
-@usableFromInline enum DiffableTextField_OnSetup: EnvironmentKey {
-    @usableFromInline static let defaultValue: Trigger<ProxyTextField> = nil
-}
-
-@usableFromInline enum DiffableTextField_OnUpdate: EnvironmentKey {
-    @usableFromInline static let defaultValue: Trigger<ProxyTextField> = nil
-}
-
-@usableFromInline enum DiffableTextField_OnSubmit: EnvironmentKey {
-    @usableFromInline static let defaultValue: Trigger<ProxyTextField> = nil
-}
-
-//*============================================================================*
-// MARK: Environment x Values
-//*============================================================================*
-
-extension EnvironmentValues {
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Accessors
-    //=------------------------------------------------------------------------=
-    
-    @inlinable var diffableTextField_onSetup: Trigger<ProxyTextField> {
-        get { self[DiffableTextField_OnSetup.self] }
-        set { self[DiffableTextField_OnSetup.self] &+= newValue }
-    }
-    
-    @inlinable var diffableTextField_onUpdate: Trigger<ProxyTextField> {
-        get { self[DiffableTextField_OnUpdate.self] }
-        set { self[DiffableTextField_OnUpdate.self] &+= newValue }
-    }
-
-    @inlinable var diffableTextField_onSubmit: Trigger<ProxyTextField> {
-        get { self[DiffableTextField_OnSubmit.self] }
-        set { self[DiffableTextField_OnSubmit.self] &+= newValue }
-    }
-}
-
-//*============================================================================*
-// MARK: View
-//*============================================================================*
-
-public extension View {
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Setup
-    //=------------------------------------------------------------------------=
-    
-    /// Adds an action to perform when this view is set up.
-    ///
-    /// DiffableTextField will trigger this action once throughout its life cycle.
-    ///
-    @inlinable func onSetup(of view: DiffableTextFieldID,
-    _ action: @escaping (ProxyTextField) -> Void) -> some View {
-        environment(\.diffableTextField_onSetup, Trigger(action))
-    }
-    
-    /// Prevents this view from invoking actions from above it in the view hierarchy.
-    ///
-    /// It is similar to SwiftUI.View/submitScope().
-    ///
-    @inlinable func onSetupScope(of view: DiffableTextFieldID) -> some View {
-        environment(\.diffableTextField_onSetup, nil)
-    }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Update
-    //=------------------------------------------------------------------------=
-    
-    /// Adds an action to perform when this view is updated.
-    ///
-    /// DiffableTextField may trigger this action multiple times throughout its life cycle.
-    ///
-    @inlinable func onUpdate(of view: DiffableTextFieldID,
-    _ action: @escaping (ProxyTextField) -> Void) -> some View {
-        environment(\.diffableTextField_onUpdate, Trigger(action))
-    }
-    
-    /// Prevents this view from invoking actions from above it in the view hierarchy.
-    ///
-    /// It is similar to SwiftUI.View/submitScope().
-    ///
-    @inlinable func onUpdateScope(of view: DiffableTextFieldID) -> some View {
-        environment(\.diffableTextField_onUpdate, nil)
-    }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Submit
-    //=------------------------------------------------------------------------=
-    
-    /// Adds an action to perform when the user submits a value to this view.
-    ///
-    /// DiffableTextField will trigger this action when the user hits the return key.
-    ///
-    @inlinable func onSubmit(of view: DiffableTextFieldID,
-    _ action: @escaping (ProxyTextField) -> Void) -> some View {
-        environment(\.diffableTextField_onSubmit, Trigger(action))
-    }
-    
-    /// Prevents this view from invoking actions from above it in the view hierarchy.
-    ///
-    /// It is similar to SwiftUI.View/submitScope().
-    ///
-    @inlinable func onSubmitScope(of view: DiffableTextFieldID) -> some View {
-        environment(\.diffableTextField_onSubmit, nil)
     }
 }
 

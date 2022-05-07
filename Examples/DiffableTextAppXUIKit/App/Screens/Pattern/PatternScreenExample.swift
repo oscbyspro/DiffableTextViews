@@ -38,10 +38,9 @@ struct PatternScreenExample<Style: DiffableTextStyle>: View where Style.Value ==
     // MARK: Body
     //=------------------------------------------------------------------------=
     
+    #warning(".........")
     var body: some View {
         Example(value.binding, style: style)
-            .onSetup(of: .diffableTextField) {
-                $0.keyboard.view(.numberPad)
-            }
+            .diffableTextViews_keyboardType(.numberPad)
     }
 }

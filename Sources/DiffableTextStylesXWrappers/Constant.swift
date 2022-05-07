@@ -8,43 +8,38 @@
 //=----------------------------------------------------------------------------=
 
 import DiffableTextKit
+import Foundation
 
 //*============================================================================*
 // MARK: Declaration
 //*============================================================================*
 
-/// Binds the style's equality to a proxy value.
+/// Prevents style transformations.
 ///
-/// Use this style to optimize the comparison on view update, for example.
+/// Use this style to prevent changes via the environment, for example.
 ///
-public struct EqualsTextStyle<Style: DiffableTextStyle, Proxy: Equatable>: WrapperTextStyle {
+public struct ConstantTextStyle<Style: DiffableTextStyle>: DiffableTextStyleWrapper {
     public typealias Value = Style.Value
-    
+
     //=------------------------------------------------------------------------=
     // MARK: State
     //=------------------------------------------------------------------------=
     
     public var style: Style
-    public let proxy: Proxy
-
+    
     //=------------------------------------------------------------------------=
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
     @inlinable @inline(__always)
-    init(_ style: Style, proxy: Proxy) where Proxy: Equatable {
-        self.style = style
-        self.proxy = proxy
-    }
-
-    //=------------------------------------------------------------------------=
-    // MARK: Utilities
-    //=------------------------------------------------------------------------=
+    init(_ style: Style) { self.style = style }
     
+    //=------------------------------------------------------------------------=
+    // MARK: Transformations
+    //=------------------------------------------------------------------------=
+
     @inlinable @inline(__always)
-    public static func == (lhs: Self, rhs: Self) -> Bool {
-        lhs.proxy == rhs.proxy
-    }
+    public func locale(_ locale: Locale) -> Self { self }
 }
 
 //*============================================================================*
@@ -57,28 +52,18 @@ extension DiffableTextStyle {
     // MARK: Aliases
     //=------------------------------------------------------------------------=
     
-    public typealias EqualsVoid = EqualsTextStyle<Self, _Void>
-    public typealias Equals<Proxy: Equatable> = EqualsTextStyle<Self, Proxy>
-    
+    public typealias Constant = ConstantTextStyle<Self>
+
     //=------------------------------------------------------------------------=
     // MARK: Transformations
     //=------------------------------------------------------------------------=
     
-    /// Binds the style's comparison to a proxy value.
+    /// Prevents style transformations.
     ///
-    /// Use this style to optimize the comparison on view update, for example.
-    ///
-    @inlinable @inline(__always)
-    public func equals(_ proxy: Void) -> EqualsVoid {
-        Equals(self, proxy: _Void())
-    }
-    
-    /// Binds the style's equality to a proxy value.
-    ///
-    /// Use this style to optimize the comparison on view update, for example.
+    /// Use this style to prevent changes via the environment, for example.
     ///
     @inlinable @inline(__always)
-    public func equals<Proxy>(_ proxy: Proxy) -> Equals<Proxy> {
-        Equals(self, proxy: proxy)
+    public func constant() -> Constant {
+        Constant(self)
     }
 }

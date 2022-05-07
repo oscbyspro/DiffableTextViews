@@ -23,7 +23,7 @@ final class ViewsTestsXProxyTextField: Tests {
     // MARK: State
     //=------------------------------------------------------------------------=
     
-    lazy var view = ProxyTextField(BasicTextField())
+    lazy var view = ProxyTextField(Base())
     
     //=------------------------------------------------------------------------=
     // MARK: Tests

@@ -7,63 +7,64 @@
 // See http://www.apache.org/licenses/LICENSE-2.0 for license information.
 //=----------------------------------------------------------------------------=
 
-import DiffableTextKit
-import Foundation
-
 //*============================================================================*
 // MARK: Declaration
 //*============================================================================*
 
-/// Prevents style transformations.
-///
-/// Use this style to prevent changes via the environment, for example.
-///
-public struct ConstantTextStyle<Style: DiffableTextStyle>: WrapperTextStyle {
-    public typealias Value = Style.Value
-
+/// A resettable action stack.
+public struct Trigger: ExpressibleByNilLiteral {
+    public typealias Action = () -> Void
+    
     //=------------------------------------------------------------------------=
     // MARK: State
     //=------------------------------------------------------------------------=
     
-    public var style: Style
+    @usableFromInline var action: Action?
     
     //=------------------------------------------------------------------------=
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable @inline(__always)
-    init(_ style: Style) { self.style = style }
+    @inlinable public init(_ action: Action?) {
+        self.action = action
+    }
+    
+    @inlinable public init(nilLiteral: Void) {
+        self.action = nil
+    }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Utilities
+    //=------------------------------------------------------------------------=
+    
+    @inlinable public func callAsFunction() {
+        self.action?()
+    }
     
     //=------------------------------------------------------------------------=
     // MARK: Transformations
     //=------------------------------------------------------------------------=
-
-    @inlinable @inline(__always)
-    public func locale(_ locale: Locale) -> Self { self }
-}
-
-//*============================================================================*
-// MARK: Extension
-//*============================================================================*
-
-extension DiffableTextStyle {
     
-    //=------------------------------------------------------------------------=
-    // MARK: Aliases
-    //=------------------------------------------------------------------------=
+    /// Appends the trigger if it exists, resets this instance otherwise.
+    @inlinable public mutating func merge(_ other: Self) {
+        if let other = other.action {
+            //=----------------------------------=
+            // Append
+            //=----------------------------------=
+            if let this = self.action {
+                self.action = { this(); other() }
+            //=----------------------------------=
+            // Replace
+            //=----------------------------------=
+            } else { self.action = other }
+        //=--------------------------------------=
+        // Reset
+        //=--------------------------------------=
+        } else { self.action = nil }
+    }
     
-    public typealias Constant = ConstantTextStyle<Self>
-
-    //=------------------------------------------------------------------------=
-    // MARK: Transformations
-    //=------------------------------------------------------------------------=
-    
-    /// Prevents style transformations.
-    ///
-    /// Use this style to prevent changes via the environment, for example.
-    ///
-    @inlinable @inline(__always)
-    public func constant() -> Constant {
-        Constant(self)
+    /// Appends the trigger if it exists, resets this instance otherwise.
+    @inlinable public static func &+= (lhs: inout Self, rhs: Self) {
+        lhs.merge(rhs)
     }
 }

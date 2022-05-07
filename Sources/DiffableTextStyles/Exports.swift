@@ -13,7 +13,7 @@
 
 @_exported import DiffableTextStylesXNumber
 @_exported import DiffableTextStylesXPattern
-@_exported import DiffableTextStylesXWrapper
+@_exported import DiffableTextStylesXWrappers
 
 @_exported import protocol DiffableTextKit.DiffableTextStyle
-@_exported import protocol DiffableTextKit.WrapperTextStyle
+@_exported import protocol DiffableTextKit.DiffableTextStyleWrapper

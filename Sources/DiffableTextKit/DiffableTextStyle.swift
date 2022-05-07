@@ -9,6 +9,12 @@
 
 import Foundation
 
+#if canImport(UIKit)
+
+import UIKit
+
+#endif
+
 //*============================================================================*
 // MARK: Declaration
 //*============================================================================*
@@ -64,7 +70,7 @@ public protocol DiffableTextStyle: Equatable {
     
     #if canImport(UIKit)
 
-    @inlinable static func onSetup(of diffableTextField: ProxyTextField)
+    @inlinable static func setup(_ view: UITextField)
     
     #endif
 }
@@ -87,7 +93,7 @@ public extension DiffableTextStyle {
     
     #if canImport(UIKit)
 
-    @inlinable static func onSetup(of diffableTextField: ProxyTextField) { }
+    @inlinable static func setup(_ view: UITextField) { }
     
     #endif
 }
@@ -96,7 +102,7 @@ public extension DiffableTextStyle {
 // MARK: Declaration
 //*============================================================================*
 
-public protocol WrapperTextStyle: DiffableTextStyle {
+public protocol DiffableTextStyleWrapper: DiffableTextStyle {
     
     //=------------------------------------------------------------------------=
     // MARK: Style
@@ -111,7 +117,7 @@ public protocol WrapperTextStyle: DiffableTextStyle {
 // MARK: Details
 //=----------------------------------------------------------------------------=
 
-extension WrapperTextStyle {
+extension DiffableTextStyleWrapper {
 
     //=------------------------------------------------------------------------=
     // MARK: Transformations
@@ -166,8 +172,8 @@ extension WrapperTextStyle {
     //=------------------------------------------------------------------------=
     
     @inlinable @inline(__always)
-    public static func onSetup(of diffableTextField: ProxyTextField) {
-        Style.onSetup(of: diffableTextField)
+    public static func setup(_ view: UITextField) {
+        Style.setup(view)
     }
 
     #endif

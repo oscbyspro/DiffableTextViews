@@ -23,19 +23,19 @@ import UIKit
 ///  - Use static selection for drag and drop.
 ///  - Use momentum selection for keyboard inputs.
 ///
-public final class BasicTextField: UITextField {
+@usableFromInline final class Base: UITextField {
     
     //=------------------------------------------------------------------------=
     // MARK: State
     //=------------------------------------------------------------------------=
     
-    public private(set) var intent = Intent()
+    @usableFromInline private(set) var intent = Intent()
     
     //*========================================================================*
     // MARK: Intent
     //*========================================================================*
     
-    public struct Intent {
+    @usableFromInline struct Intent {
         @usableFromInline typealias Key = UIKeyboardHIDUsage
         
         //=--------------------------------------------------------------------=
@@ -72,32 +72,13 @@ public final class BasicTextField: UITextField {
             key == .keyboardRightArrow { return key }; return nil
         }
     }
-    
-    //*========================================================================*
-    // MARK: View
-    //*========================================================================*
-    
-    public class View {
-        
-        //=--------------------------------------------------------------------=
-        // MARK: State
-        //=--------------------------------------------------------------------=
-                
-        @usableFromInline let wrapped: BasicTextField
-        
-        //=--------------------------------------------------------------------=
-        // MARK: Initializers
-        //=--------------------------------------------------------------------=
-        
-        @inlinable public init(_ wrapped: BasicTextField) { self.wrapped = wrapped }
-    }
 }
 
 //=----------------------------------------------------------------------------=
 // MARK: UIResponder
 //=----------------------------------------------------------------------------=
 
-public extension BasicTextField {
+extension Base {
 
     //=------------------------------------------------------------------------=
     // MARK: Presses
@@ -117,21 +98,6 @@ public extension BasicTextField {
     
     override func pressesCancelled(_ presses: Set<UIPress>, with event: UIPressesEvent?) {
         intent.remove(presses); super.pressesCancelled(presses, with: event)
-    }
-}
-
-//=----------------------------------------------------------------------------=
-// MARK: Customization
-//=----------------------------------------------------------------------------=
-
-public extension BasicTextField {
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Transformations
-    //=------------------------------------------------------------------------=
-    
-    @inlinable func setTextAlignment(_ alignment: TextAlignment) {
-        self.textAlignment = NSTextAlignment(alignment, for: userInterfaceLayoutDirection)
     }
 }
 

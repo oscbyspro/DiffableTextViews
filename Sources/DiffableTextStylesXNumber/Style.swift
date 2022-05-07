@@ -10,6 +10,12 @@
 import DiffableTextKit
 import Foundation
 
+#if canImport(UIKit)
+
+import UIKit
+
+#endif
+
 //*============================================================================*
 // MARK: Declaration
 //*============================================================================*
@@ -76,8 +82,8 @@ public struct _NumberTextStyle<Format: NumberTextFormat>: NumberTextStyleProtoco
     // MARK: Setup
     //=------------------------------------------------------------------------=
 
-    @inlinable public static func onSetup(of diffableTextField: ProxyTextField) {
-        diffableTextField.keyboard.view(Value.isInteger ? .numberPad : .decimalPad)
+    @inlinable public static func setup(_ view: UITextField) {
+        view.keyboardType = Value.isInteger ? .numberPad : .decimalPad
     }
 
     #endif

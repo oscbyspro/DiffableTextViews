@@ -12,3 +12,4 @@
 //*============================================================================*
 
 @_exported import protocol DiffableTextKit.DiffableTextStyle
+@_exported import protocol DiffableTextKit.DiffableTextStyleWrapper
