@@ -15,7 +15,7 @@ import DiffableTextViews
 //*============================================================================*
 
 /// An intermediate examples view that observes infrequent changes.
-struct PatternScreenExamples: View {
+struct PatternScreenExample: View {
     typealias Style = PatternTextStyle<String>
     typealias Context = PatternScreenContext
     typealias Kind = Context.Kind
@@ -44,10 +44,10 @@ struct PatternScreenExamples: View {
     //=------------------------------------------------------------------------=
     
     var style: Style {
-        var base: Style { switch kind.wrapped {
-            case  .card: return Self .card
-            case .phone: return Self.phone
-        }}; return base.hidden(!visible.wrapped)
+        switch kind.wrapped {
+        case  .card: return Self .card
+        case .phone: return Self.phone
+        }
     }
     
     //=------------------------------------------------------------------------=
@@ -55,7 +55,7 @@ struct PatternScreenExamples: View {
     //=------------------------------------------------------------------------=
     
     var body: some View {
-        PatternScreenExample(context, style: style)
+        PatternScreenExampleX(context, style: style.hidden(!visible.wrapped))
     }
     
     //=------------------------------------------------------------------------=
@@ -69,4 +69,37 @@ struct PatternScreenExamples: View {
     static let card = PatternTextStyle<String>
         .pattern("#### #### #### ####")
         .placeholder("#") { $0.isASCII && $0.isNumber }
+}
+
+//*============================================================================*
+// MARK: Declaration
+//*============================================================================*
+
+/// An examples view that observes frequent changes.
+struct PatternScreenExampleX<Style: DiffableTextStyle>: View where Style.Value == String {
+    typealias Context = PatternScreenContext
+    
+    //=------------------------------------------------------------------------=
+    // MARK: State
+    //=------------------------------------------------------------------------=
+    
+    let style: Style
+    @ObservedObject var value: Observable<String>
+
+    //=------------------------------------------------------------------------=
+    // MARK: Initializers
+    //=------------------------------------------------------------------------=
+    
+    init(_ context: Context, style: Style) {
+        self.style = style
+        self.value = context.value
+    }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Body
+    //=------------------------------------------------------------------------=
+    
+    var body: some View {
+        Example(value.xwrapped, style: style).diffableTextViews_keyboardType(.numberPad)
+    }
 }

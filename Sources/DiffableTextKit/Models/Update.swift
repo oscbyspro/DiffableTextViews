@@ -36,18 +36,4 @@ public struct Update: OptionSet {
     @inlinable public init(rawValue: UInt8 = 0) {
         self.rawValue = rawValue
     }
-
-    @inlinable init?<S>(_ lhs: Remote<S>, _ rhs: Remote<S>) {
-        self.init()
-        //=--------------------------------------=
-        // Compare
-        //=--------------------------------------=
-        if lhs.style != rhs.style { insert(.style) }
-        if lhs.value != rhs.value { insert(.value) }
-        if lhs.focus != rhs.focus { insert(.focus) }
-        //=--------------------------------------=
-        // At Least One Must Have Changed
-        //=--------------------------------------=
-        guard contains(.style) || contains(.value) || contains(.focus) else { return nil }
-    }
 }

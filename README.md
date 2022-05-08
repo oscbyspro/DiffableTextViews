@@ -51,9 +51,9 @@ import DiffableTextViews
 
 The example app provides quick-and-easy-to-use customization tools.
 
-| Numeric | Pattern |
+| Number | Pattern |
 |---------|---------|
-<img src="Assets/DiffableTextAppXUIKitXNumeric.png" alt="Numeric" width="250"/> | <img src="Assets/DiffableTextAppXUIKitXPattern.png" alt="Pattern" width="250"/>
+<img src="Assets/DiffableTextAppXUIKitXNumber.png" alt="Number" width="250"/> | <img src="Assets/DiffableTextAppXUIKitXPattern.png" alt="Pattern" width="250"/>
 
 ### Installation
 
@@ -94,7 +94,7 @@ diffableTextViews_tint(_:)
 
 # Styles
 
-## [NumericTextStyle](Notes/NumericTextStyle.md) ([Source](Sources/DiffableTextStylesXNumber), [Tests](Tests/DiffableTextStylesXNumberTests))
+## [NumberTextStyle](Notes/NumberTextStyle.md) ([Source](Sources/DiffableTextStylesXNumber), [Tests](Tests/DiffableTextStylesXNumberTests))
 
 A style that binds localized numbers using various formats.
 

@@ -1,4 +1,4 @@
-# NumericTextStyle
+# NumberTextStyle
 
 Styles that process text bound to number types.
 

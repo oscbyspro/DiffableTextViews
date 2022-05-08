@@ -134,7 +134,7 @@ extension Downstream {
     @inlinable @inline(__always)
     func setFont(_ environment: EnvironmentValues) {
         let font = environment.diffableTextViews_font
-        self.view.font = UIFont(font ?? .body.monospaced())
+        self.view.font = UIFont(font ?? .standard)
     }
     
     @inlinable @inline(__always)

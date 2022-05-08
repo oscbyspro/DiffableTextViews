@@ -13,7 +13,7 @@ import SwiftUI
 // MARK: Declaration
 //*============================================================================*
 
-struct PatternScreenVisibility: View {
+struct PatternScreenVisibilityToggle: View {
     
     //=------------------------------------------------------------------------=
     // MARK: State

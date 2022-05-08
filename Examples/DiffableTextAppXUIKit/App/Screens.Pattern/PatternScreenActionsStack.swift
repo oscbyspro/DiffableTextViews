@@ -8,30 +8,26 @@
 //=----------------------------------------------------------------------------=
 
 import SwiftUI
-import DiffableTextViews
 
 //*============================================================================*
 // MARK: Declaration
 //*============================================================================*
 
-/// An examples view that observes frequent changes.
-struct PatternScreenExample<Style: DiffableTextStyle>: View where Style.Value == String {
+struct PatternScreenActionsStack: View {
     typealias Context = PatternScreenContext
     
     //=------------------------------------------------------------------------=
     // MARK: State
     //=------------------------------------------------------------------------=
     
-    let style: Style
-    @ObservedObject var value: Observable<String>
-
+    let context: Context
+    
     //=------------------------------------------------------------------------=
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    init(_ context: Context, style: Style) {
-        self.style = style
-        self.value = context.value
+    init(_ context: Context) {
+        self.context = context
     }
     
     //=------------------------------------------------------------------------=
@@ -39,6 +35,10 @@ struct PatternScreenExample<Style: DiffableTextStyle>: View where Style.Value ==
     //=------------------------------------------------------------------------=
     
     var body: some View {
-        Example(value.xwrapped, style: style).diffableTextViews_keyboardType(.numberPad)
+        HStack {
+            Action("pop", action: context.popLast)
+            Action("abc", action: context.appendUppercased)
+            Action("123", action: context.appendASCIIDigit)
+        }
     }
 }

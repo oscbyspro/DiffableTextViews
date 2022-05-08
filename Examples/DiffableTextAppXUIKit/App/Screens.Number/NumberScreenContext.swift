@@ -27,13 +27,13 @@ final class NumberScreenContext: ObservableObject {
     let locale = Observable(Locale(identifier: "en_US"))
     let currency = Observable("USD")
     
-    let bounds = ObservableDecimalBounds(Interval((0, Decimal.precision)))
+    let bounds = ObservableIntegerIntervalAsBounds.decimal9s(Interval((0, Decimal.precision)))
     let boundsLimits = -Decimal.precision ... Decimal.precision
 
     let integer = Observable(Interval((1, Decimal.precision)))
     let integerLimits = 1 ... Decimal.precision
     
-    let fraction = Observable(Interval((0, Decimal.precision)))
+    let fraction = Observable(Interval((2, 2)))
     let fractionLimits = 0 ... Decimal.precision
     
     //*========================================================================*

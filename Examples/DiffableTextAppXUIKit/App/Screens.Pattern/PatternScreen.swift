@@ -29,22 +29,19 @@ struct PatternScreen: View {
     
     var body: some View {
         Screen {
-            scroller
+            Scroller {
+                Segments(context.kind.xwrapped)
+                
+                PatternScreenVisibilityToggle(visible: context.visible)
+                
+                PatternScreenActionsStack(context)
+                
+                Spacer()
+            }
+            
             Divider()
-            PatternScreenExamples(context)
-        }
-    }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Body
-    //=------------------------------------------------------------------------=
-    
-    var scroller: some View {
-        Scroller {
-            Segments(context.kind.xwrapped)
-            PatternScreenVisibility(visible: context.visible)
-            PatternScreenActions(context)
-            Spacer()
+            
+            PatternScreenExample(context)
         }
     }
 }

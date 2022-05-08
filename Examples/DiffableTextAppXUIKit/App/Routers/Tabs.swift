@@ -43,7 +43,7 @@ struct Tabs: View {
         //=--------------------------------------------------------------------=
         
         static let numeric = Self(
-            title: "Numeric",
+            title: "Number",
             systemImage: "123.rectangle.fill")
         
         static let pattern = Self(

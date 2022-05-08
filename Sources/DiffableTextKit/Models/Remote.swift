@@ -38,13 +38,35 @@ public struct Remote<Style: DiffableTextStyle> {
     //=------------------------------------------------------------------------=
     
     @inlinable public mutating func merge(_ other: Self) -> Update? {
-        guard let update = Update(self, other) else { return nil }
+        let update = (self .== other)
+        //=--------------------------------------=
+        // At Least One Value Must Be Different
+        //=--------------------------------------=
+        guard !update.isEmpty else { return nil }
         //=--------------------------------------=
         // Update
         //=--------------------------------------=
         if update.contains(.style) { self.style = other.style }
         if update.contains(.value) { self.value = other.value }
         if update.contains(.focus) { self.focus = other.focus }
+        //=--------------------------------------=
+        // Return
+        //=--------------------------------------=
+        return update
+    }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Utilities
+    //=------------------------------------------------------------------------=
+    
+    @inlinable static func .== (lhs: Self, rhs: Self) -> Update {
+        var update = Update()
+        //=--------------------------------------=
+        // Compare
+        //=--------------------------------------=
+        if lhs.style != rhs.style { update.formUnion(.style) }
+        if lhs.value != rhs.value { update.formUnion(.value) }
+        if lhs.focus != rhs.focus { update.formUnion(.focus) }
         //=--------------------------------------=
         // Return
         //=--------------------------------------=

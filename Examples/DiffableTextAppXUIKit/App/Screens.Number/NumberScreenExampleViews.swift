@@ -104,24 +104,24 @@ struct NumberScreenExampleX<Style: NumberTextStyleProtocol>: View
 where Style.Format.FormatInput == Decimal {
     typealias Value = Style.Value
     typealias Context = NumberScreenContext
-
+    
     //=------------------------------------------------------------------------=
     // MARK: State
     //=------------------------------------------------------------------------=
 
     let base: Style
-    let value: Binding<Value>
     let context: Context
-    
-    @ObservedObject var bounds: ObservableDecimalBounds
+    let value: Binding<Value>
+
+    @ObservedObject var bounds: ObservableIntegerIntervalAsBounds<Decimal>
     @ObservedObject var integer: Observable<Interval<Int>>
     @ObservedObject var fraction: Observable<Interval<Int>>
-
+    
     //=------------------------------------------------------------------------=
     // MARK: Initializers
     //=------------------------------------------------------------------------=
 
-    init(_ context: Context, _ value: Binding<Value>, _ base: Style) {
+    init(_ context: NumberScreenContext, _ value: Binding<Value>, _ base: Style) {
         self.base = base
         self.value = value
         self.context = context
@@ -163,16 +163,14 @@ struct NumberScreenExampleY<Style: DiffableTextStyle>: View {
 
     let style: Style
     let value: Binding<Value>
-    @ObservedObject var twins: ObservableTwinValues<Decimal>
+    @ObservedObject var values: ObservableTwinValues<Decimal>
 
     //=------------------------------------------------------------------------=
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
     init(_ context: Context, value: Binding<Value>, style: Style) {
-        self.value = value
-        self.style = style
-        self.twins = context.decimals
+        self.value = value; self.style = style; self.values = context.decimals
     }
     
     //=------------------------------------------------------------------------=

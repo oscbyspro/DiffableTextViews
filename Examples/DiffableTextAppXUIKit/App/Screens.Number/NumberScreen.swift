@@ -28,34 +28,28 @@ struct NumberScreen: View {
     
     var body: some View {
         Screen {
-            controls
+            Scroller {
+                Segments(context.format.xwrapped)
+                
+                NumberScreenOptionalToggle(context.optional)
+                
+                NumberScreenOptionsWheel(context)
+                
+                NumberScreenIntegerInterval("Bounds (9s)",
+                interval: context.bounds.interval, in: context.boundsLimits)
+
+                NumberScreenIntegerInterval("Integer digits",
+                interval: context.integer, in: context.integerLimits)
+
+                NumberScreenIntegerInterval("Fraction digits",
+                interval: context.fraction, in: context.fractionLimits)
+                
+                Spacer()
+            }
+            
             Divider()
+            
             NumberScreenExample(context)
-        }
-    }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Body
-    //=------------------------------------------------------------------------=
-    
-    var controls: some View {
-        Scroller {
-            NumberScreenOptionalToggle(context.optional)
-            
-            Segments(context.format.xwrapped)
-            
-            NumberScreenOptionsWheel(context)
-            
-            NumberScreenIntegerInterval("Bounds (9s)",
-            interval: context.bounds.interval, in: context.boundsLimits)
-
-            NumberScreenIntegerInterval("Integer digits",
-            interval: context.integer, in: context.integerLimits)
-
-            NumberScreenIntegerInterval("Fraction digits",
-            interval: context.fraction, in: context.fractionLimits)
-            
-            Spacer()
         }
     }
 }

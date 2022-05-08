@@ -7,38 +7,32 @@
 // See http://www.apache.org/licenses/LICENSE-2.0 for license information.
 //=----------------------------------------------------------------------------=
 
+import Combine
 import SwiftUI
 
 //*============================================================================*
 // MARK: Declaration
 //*============================================================================*
 
-struct PatternScreenActions: View {
-    typealias Context = PatternScreenContext
+final class Observable<Value>: ObservableObject {
     
     //=------------------------------------------------------------------------=
     // MARK: State
     //=------------------------------------------------------------------------=
     
-    let context: Context
+    @Published var wrapped: Value
     
     //=------------------------------------------------------------------------=
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    init(_ context: Context) {
-        self.context = context
-    }
+    init(_ wrapped: Value) { self.wrapped = wrapped }
     
     //=------------------------------------------------------------------------=
-    // MARK: Body
+    // MARK: Accessors
     //=------------------------------------------------------------------------=
     
-    var body: some View {
-        HStack {
-            Action("pop", action: context.popLast)
-            Action("abc", action: context.appendUppercased)
-            Action("123", action: context.appendASCIIDigit)
-        }
+    var xwrapped: Binding<Value> {
+        Binding { self.wrapped } set: { self.wrapped = $0 }
     }
 }

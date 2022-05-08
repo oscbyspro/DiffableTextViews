@@ -22,7 +22,8 @@ struct Example<Style: DiffableTextStyle>: View {
     //=------------------------------------------------------------------------=
     
     let style: Style
-    @Binding var value: Value
+    let value: Binding<Value>
+    let description: String
     @FocusState var focus: Bool
 
     //=------------------------------------------------------------------------=
@@ -31,20 +32,8 @@ struct Example<Style: DiffableTextStyle>: View {
     
     init(_ value: Binding<Value>, style: Style) {
         self.style = style
-        self._value = value
-    }
-    
-    init(_ value: Binding<Value>, style: () -> Style) {
-        self.init(value, style: style())
-    }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Accessors
-    //=------------------------------------------------------------------------=
-    
-    var description: String {
-        let description = String(describing: value)
-        return !description.isEmpty ? description : "\u{200B}"
+        self.value = value
+        self.description = String(describing: value.wrappedValue)
     }
     
     //=------------------------------------------------------------------------=
@@ -66,30 +55,15 @@ struct Example<Style: DiffableTextStyle>: View {
     //=------------------------------------------------------------------------=
     
     var descriptionText: some View {
-        Text(description)
-            .lineLimit(1)
-            .frame(maxWidth: .infinity, alignment: .leading)
-            .padding()
-            .background(border)
+        Text(!description.isEmpty ? description : " ")
+            .lineLimit(1).frame(maxWidth: .infinity, alignment: .leading).padding()
+            .background(Rectangle().strokeBorder(Color(uiColor: .tertiarySystemBackground), lineWidth: 2))
             .background(Color(uiColor: .secondarySystemBackground))
     }
     
     var diffableTextField: some View {
-        DiffableTextField("Like, comment, and subscribe.", value: $value, style: style)
-            .focused($focus)
-            .padding()
-            .background(tertiary)
-    }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Body
-    //=------------------------------------------------------------------------=
-    
-    var tertiary: some View {
-        Color(uiColor: .tertiarySystemBackground).ignoresSafeArea(.container, edges: [])
-    }
-    
-    var border: some View {
-        Rectangle().strokeBorder(Color(uiColor: .tertiarySystemBackground), lineWidth: 2)
+        DiffableTextField("Much wow. Very empty.", value: value, style: style)
+            .focused($focus).padding()
+            .background(Color(uiColor: .tertiarySystemBackground).ignoresSafeArea(.container, edges: []))
     }
 }
