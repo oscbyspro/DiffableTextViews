@@ -12,15 +12,12 @@
 import DiffableTextKit
 import SwiftUI
 
-#warning("TODO: set placeholder.")
-#warning("TODO: set environment values.")
 //*============================================================================*
 // MARK: Declaration
 //*============================================================================*
 
 /// An as-you-type formatting compatible text field.
 public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
-    public typealias UIViewType = UITextField
     public typealias Value = Style.Value
     
     //=------------------------------------------------------------------------=
@@ -35,13 +32,15 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable public init(_ title: String, value: Binding<Value>, style: Style) {
+    @inlinable public init(_ title: String = "",
+    value: Binding<Value>, style: Style) {
         self.title = title
         self.value = value
         self.style = style
     }
     
-    @inlinable public init(_ title: String, value: Binding<Value>, style: () -> Style) {
+    @inlinable public init(_ title: String = "",
+    value: Binding<Value>, style: () -> Style) {
         self.title = title
         self.value = value
         self.style = style()
@@ -63,21 +62,13 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
         Coordinator()
     }
     
-    @inlinable public func makeUIView(context: Self.Context) -> UIViewType {
+    @inlinable public func makeUIView(context: Self.Context) -> UITextField {
         let downstream = Downstream()
-        let view = downstream.wrapped
-        //=--------------------------------------=
-        // View
-        //=--------------------------------------=
-        view.setContentHuggingPriority(.defaultHigh, for: .vertical)
-        view.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
-        //=--------------------------------------=
-        // Coordinator
-        //=--------------------------------------=
-        context.coordinator.setup(self,  context.environment, downstream); return view
+        context.coordinator.setup(self, downstream, context.environment)
+        return downstream.view
     }
     
-    @inlinable public func updateUIView(_ wrapped: UIViewType, context: Self.Context) {
+    @inlinable public func updateUIView(_ uiView: UITextField, context: Self.Context) {
         context.coordinator.update(self, context.environment)
     }
     
@@ -89,6 +80,7 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
         @usableFromInline typealias Upstream = DiffableTextField
         @usableFromInline typealias Environment = EnvironmentValues
         @usableFromInline typealias Position = Unicode.UTF16.Position
+        @usableFromInline typealias Remote = DiffableTextKit.Remote<Style>
         @usableFromInline typealias Context = DiffableTextKit.Context<Style>
 
         //=--------------------------------------------------------------------=
@@ -105,7 +97,10 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
         // MARK: View Life Cycle
         //=--------------------------------------------------------------------=
         
-        @inlinable func setup(_ upstream: Upstream, _ environment: Environment, _ downstream: Downstream) {
+        @inlinable @inline(never) func setup(
+        _ upstream:    Upstream,
+        _ downstream:  Downstream,
+        _ environment: Environment) {
             //=----------------------------------=
             // Upstream
             //=----------------------------------=
@@ -114,7 +109,7 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
             // Downstream
             //=----------------------------------=
             self.downstream = downstream
-            self.downstream.wrapped.delegate = self
+            self.downstream.view.delegate = self
             self.downstream.setTextFeldStyle(environment)
             self.downstream.setSensibleValues(Style.self)
             //=----------------------------------=
@@ -123,7 +118,9 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
             self.context = Context(pull()); self.write()
         }
         
-        @inlinable func update(_ upstream: Upstream, _ environment: Environment) {
+        @inlinable @inline(never) func update(
+        _ upstream:    Upstream,
+        _ environment: Environment) {
             //=----------------------------------=
             // Upstream
             //=----------------------------------=
@@ -153,7 +150,8 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
         // MARK: Events
         //=--------------------------------------------------------------------=
         
-        @inlinable public func textField(_ textField: UITextField,
+        @inlinable @inline(never)
+        public func textField(_ textField: UITextField,
         shouldChangeCharactersIn nsrange: NSRange,
         replacementString characters: String) -> Bool {
             //=----------------------------------=
@@ -185,7 +183,8 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
             return false
         }
         
-        @inlinable public func textFieldDidChangeSelection(_ textField: UITextField) {
+        @inlinable @inline(never)
+        public func textFieldDidChangeSelection(_ textField: UITextField) {
             //=----------------------------------=
             // Disable Marked Text
             //=----------------------------------=
@@ -243,7 +242,7 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
             context.focus.value ? self.push() : self.write()
         }
         
-        @inlinable func pull() -> Remote<Style> {
+        @inlinable func pull() -> Remote {
             //=----------------------------------=
             // Upstream, Downstream
             //=----------------------------------=

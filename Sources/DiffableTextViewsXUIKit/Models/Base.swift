@@ -31,6 +31,20 @@ import UIKit
     
     @usableFromInline private(set) var intent = Intent()
     
+    //=------------------------------------------------------------------------=
+    // MARK: Initializers
+    //=------------------------------------------------------------------------=
+    
+    @usableFromInline init() {
+        super.init(frame: .zero)
+        self.setContentHuggingPriority(.defaultHigh, for: .vertical)
+        self.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     //*========================================================================*
     // MARK: Intent
     //*========================================================================*

@@ -16,7 +16,7 @@ import SwiftUI
 //*============================================================================*
 
 @usableFromInline enum DiffableTextViews_TextFieldStyle: EnvironmentKey {
-    @usableFromInline static let defaultValue: UITextField.BorderStyle = .none
+    @usableFromInline static let defaultValue: UITextField.BorderStyle = .none // enum
 }
 
 //*============================================================================*

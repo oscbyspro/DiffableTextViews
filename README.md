@@ -113,7 +113,7 @@ struct DiffableTextFieldXAmount: View {
 
     /// default precision is chosen based on currency
     var body: some View {
-        DiffableTextField($amount) {
+        DiffableTextField(value: $amount) {
             .currency(code: "SEK")
             .bounds((0 as Decimal)...)
             // .precision(integer: 1..., fraction: 2)
@@ -148,26 +148,19 @@ struct DiffableTextFieldXPhone: View {
     //=------------------------------------------------------------------------=
 
     @State var number: String = ""
+    let style = PatternTextStyle<String>
+        .pattern("+## (###) ###-##-##")
+        .placeholder("#") { $0.isASCII && $0.isNumber }
+        .equals(())
     
     //=------------------------------------------------------------------------=
     // MARK: Body
     //=------------------------------------------------------------------------=
     
     var body: some View {
-        DiffableTextField($number, style: Self.style)
-            .onSetup(of: .diffableTextField) { 
-                $0.keyboard.view(.numberPad)
-            }
+        DiffableTextField(value: $number, style: style)
+            .diffableTextViews_keyboardType(.numberPad)
     }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Style
-    //=------------------------------------------------------------------------=
-    
-    static let style = PatternTextStyle<String>
-        .pattern("+## (###) ###-##-##")
-        .placeholder("#") { $0.isASCII && $0.isNumber }
-        .equals(())
 }
 ```
 

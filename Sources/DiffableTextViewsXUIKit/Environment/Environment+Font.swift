@@ -29,7 +29,7 @@ extension EnvironmentValues {
     // MARK: Accessors
     //=------------------------------------------------------------------------=
 
-    @inlinable var diffableTextViews_font: DiffableTextViews_Font.Value {
+    @inlinable var diffableTextViews_font: DiffableTextFont? {
         get { self[DiffableTextViews_Font.self] }
         set { self[DiffableTextViews_Font.self] = newValue }
     }

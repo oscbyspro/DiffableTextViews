@@ -16,7 +16,7 @@ import SwiftUI
 //*============================================================================*
 
 @usableFromInline enum DiffableTextViews_TextInputAutocapitalization: EnvironmentKey {
-    @usableFromInline static let defaultValue: UITextAutocapitalizationType? = nil
+    @usableFromInline static let defaultValue: UITextAutocapitalizationType? = nil // enum
 }
 
 //*============================================================================*

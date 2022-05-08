@@ -25,7 +25,7 @@ import SwiftUI
     // MARK: State
     //=------------------------------------------------------------------------=
     
-    @usableFromInline var wrapped = Base()
+    @usableFromInline var view = Base()
     
     //=------------------------------------------------------------------------=
     // MARK: Initializers
@@ -38,19 +38,19 @@ import SwiftUI
     //=------------------------------------------------------------------------=
     
     @inlinable var focus: Focus {
-        Focus(wrapped.isEditing)
+        Focus(view.isEditing)
     }
 
     @inlinable var momentum: Bool {
-        wrapped.intent.momentum
+        view.intent.momentum
     }
     
     @inlinable var selection: Range<Position> {
-        positions(wrapped.selectedTextRange!)
+        positions(view.selectedTextRange!)
     }
     
     @inlinable var size: Position {
-        position(wrapped.endOfDocument)
+        position(view.endOfDocument)
     }
     
     //=------------------------------------------------------------------------=
@@ -58,11 +58,11 @@ import SwiftUI
     //=------------------------------------------------------------------------=
     
     @inlinable func update(text: String) {
-        wrapped.text = text
+        view.text = text
     }
     
     @inlinable func update(selection: Range<Position>) {
-        wrapped.selectedTextRange = offsets(selection)
+        view.selectedTextRange = offsets(selection)
     }
 }
 
@@ -78,7 +78,7 @@ extension Downstream {
 
     /// - Complexity: O(1).
     @inlinable func position(_ offset: UITextPosition) -> Position {
-        Position(wrapped.offset(from: wrapped.beginningOfDocument, to: offset))
+        Position(view.offset(from: view.beginningOfDocument, to: offset))
     }
     
     /// - Complexity: O(1).
@@ -92,12 +92,12 @@ extension Downstream {
     
     /// - Complexity: O(1).
     @inlinable func offset(_ position: Position) -> UITextPosition {
-        wrapped.position(from: wrapped.beginningOfDocument, offset: position.offset)!
+        view.position(from: view.beginningOfDocument, offset: position.offset)!
     }
     
     /// - Complexity: O(1).
     @inlinable func offsets(_ positions: Range<Position>) -> UITextRange {
-        wrapped.textRange(from: offset(positions.lowerBound), to: offset(positions.upperBound))!
+        view.textRange(from: offset(positions.lowerBound), to: offset(positions.upperBound))!
     }
 }
 
@@ -108,17 +108,17 @@ extension Downstream {
 extension Downstream {
     
     //=------------------------------------------------------------------------=
-    // MARK: Style
+    // MARK: Upstream
     //=------------------------------------------------------------------------=
     
     @inlinable @inline(__always)
-    func setSensibleValues<T>(_ style: T.Type) where T: DiffableTextStyle {
-        style.setup(self.wrapped)
+    func setTitle(_ title: String) {
+        self.view.placeholder = title
     }
     
     @inlinable @inline(__always)
-    func setTitle(_ title: String) {
-        self.wrapped.placeholder = title
+    func setSensibleValues<T>(_ style: T.Type) where T: DiffableTextStyle {
+        style.setup(self.view)
     }
     
     //=------------------------------------------------------------------------=
@@ -128,57 +128,59 @@ extension Downstream {
     @inlinable @inline(__always)
     func setDisableAutocorrection(_ environment: EnvironmentValues) {
         let disable = environment.diffableTextViews_disableAutocorrection ?? false
-        self.wrapped.autocorrectionType = disable ? .no : .default
+        self.view.autocorrectionType = disable ? .no : .default
     }
     
     @inlinable @inline(__always)
     func setFont(_ environment: EnvironmentValues) {
-        self.wrapped.font = UIFont(environment.diffableTextViews_font ?? .body.monospaced())
+        let font = environment.diffableTextViews_font ?? .body.monospaced()
+        self.view.font = UIFont(font)
     }
     
     @inlinable @inline(__always)
     func setForegroundColor(_ environment: EnvironmentValues) {
-        self.wrapped.textColor = UIColor(environment.diffableTextViews_foregroundColor ?? .primary)
+        let color = environment.diffableTextViews_foregroundColor ?? .primary
+        self.view.textColor = UIColor(color)
     }
     
     @inlinable @inline(__always)
     func setKeyboardType(_ environment: EnvironmentValues) {
-        self.wrapped.keyboardType = environment.diffableTextViews_keyboardType
+        self.view.keyboardType = environment.diffableTextViews_keyboardType
     }
     
     @inlinable @inline(__always)
     func setMultilineTextAlignment(_ environment: EnvironmentValues) {
-        self.wrapped.textAlignment = NSTextAlignment(
+        self.view.textAlignment = NSTextAlignment(
         environment.multilineTextAlignment,
         relativeTo: UIUserInterfaceLayoutDirection(environment.layoutDirection))
     }
 
     @inlinable @inline(__always)
     func setSubmitLabel(_ environment: EnvironmentValues) {
-        self.wrapped.returnKeyType = environment.diffableTextViews_submitLabel
+        self.view.returnKeyType = environment.diffableTextViews_submitLabel
     }
     
     @inlinable @inline(__always)
     func setTextContentType(_ environment: EnvironmentValues) {
-        self.wrapped.textContentType = environment.diffableTextViews_textContentType
+        self.view.textContentType = environment.diffableTextViews_textContentType
     }
         
     @inlinable @inline(__always)
     func setTextFeldStyle(_ environment: EnvironmentValues) {
-        self.wrapped.borderStyle = environment.diffableTextViews_textFieldStyle
+        self.view.borderStyle = environment.diffableTextViews_textFieldStyle
     }
     
     @inlinable @inline(__always)
     func setTextInputAutocapitalization(_ environment: EnvironmentValues) {
         let autocapitalization = environment.diffableTextViews_textInputAutocapitalization
-        self.wrapped.autocapitalizationType = autocapitalization ?? .sentences
+        self.view.autocapitalizationType = autocapitalization ?? .sentences
     }
 
     @inlinable @inline(__always)
     func setTint(_ environment: EnvironmentValues) {
-        self.wrapped.tintColor = UIColor(environment.diffableTextViews_tint ?? .accentColor)
+        let color = environment.diffableTextViews_tint ?? .accentColor
+        self.view.tintColor = UIColor(color)
     }
 }
-
 
 #endif

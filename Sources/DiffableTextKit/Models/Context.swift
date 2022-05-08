@@ -34,6 +34,30 @@ public struct Context<Style: DiffableTextStyle> {
         self._storage = storage
     }
     
+    @inlinable init(_ style: Style, _ value: Value, _ focus: Focus) {
+        self = focus.value ? .focused(style, value) : .unfocused(style, value)
+    }
+    
+    @inlinable public init(_ remote: Remote) {
+        self.init(remote.style, remote.value, remote.focus)
+    }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Initializers
+    //=------------------------------------------------------------------------=
+    
+    @inlinable static func focused(_ style: Style, _ value: Value) -> Self {
+        Self.focused(style, style.interpret(value))
+    }
+    
+    @inlinable static func focused(_ style: Style, _ commit: Commit) -> Self {
+        Self(Storage(style, commit.value, true, Field((commit.snapshot))))
+    }
+ 
+    @inlinable static func unfocused(_ style: Style, _ value: Value) -> Self {
+        Self(Storage(style, value, false, Field(Snapshot(style.format(value), as: .phantom))))
+    }
+    
     //=------------------------------------------------------------------------=
     // MARK: Transformation
     //=------------------------------------------------------------------------=
@@ -62,17 +86,20 @@ public struct Context<Style: DiffableTextStyle> {
         // MARK: State
         //=--------------------------------------------------------------------=
         
-        @usableFromInline var focus: Focus
         @usableFromInline var style: Style
         @usableFromInline var value: Value
+        @usableFromInline var focus: Focus
         @usableFromInline var field: Field
         
         //=--------------------------------------------------------------------=
         // MARK: Initializers
         //=--------------------------------------------------------------------=
         
-        @inlinable init(_ focus: Focus, _ style: Style, _ value: Value, _ field: Field) {
-            self.focus = focus; self.style = style; self.value = value; self.field = field
+        @inlinable init(_ style: Style, _ value: Value, _ focus: Focus, _ field: Field) {
+            self.style = style
+            self.value = value
+            self.focus = focus
+            self.field = field
         }
         
         //=--------------------------------------------------------------------=
@@ -80,7 +107,7 @@ public struct Context<Style: DiffableTextStyle> {
         //=--------------------------------------------------------------------=
         
         @inlinable func copy() -> Self {
-            Self(focus, style, value, field)
+            Self(style, value, focus, field)
         }
     }
 }
@@ -94,17 +121,17 @@ public extension Context {
     //=------------------------------------------------------------------------=
     // MARK: Primary
     //=------------------------------------------------------------------------=
-    
-    @inlinable var focus: Focus {
-        _storage.focus
-    }
-    
+        
     @inlinable var style: Style {
         _storage.style
     }
     
     @inlinable var value: Value {
         _storage.value
+    }
+    
+    @inlinable var focus: Focus {
+        _storage.focus
     }
     
     @inlinable internal var field: Field {
@@ -130,40 +157,6 @@ public extension Context {
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: Initializers
-//=----------------------------------------------------------------------------=
-
-public extension Context {
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Remote
-    //=------------------------------------------------------------------------=
-
-    @inlinable init(_ remote: Remote) {
-        switch remote.focus.value {
-        case  true: self =   .focused(remote.style, remote.value)
-        case false: self = .unfocused(remote.style, remote.value)
-        }
-    }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Primitives
-    //=------------------------------------------------------------------------=
-    
-    @inlinable internal static func focused(_ style: Style, _ value: Value) -> Self {
-        Self.focused(style, style.interpret(value))
-    }
-    
-    @inlinable internal static func focused(_ style: Style, _ commit: Commit) -> Self {
-        Self(Storage(true, style, commit.value, Field((commit.snapshot))))
-    }
- 
-    @inlinable internal static func unfocused(_ style: Style, _ value: Value) -> Self {
-        Self(Storage(false, style, value, Field(Snapshot(style.format(value), as: .phantom))))
-    }
-}
-
-//=----------------------------------------------------------------------------=
 // MARK: Transformations
 //=----------------------------------------------------------------------------=
 
@@ -179,9 +172,9 @@ public extension Context {
         //=--------------------------------------=
         if context.focus.value {
             self.write {
-                $0.focus = context.focus
                 $0.style = context.style
                 $0.value = context.value
+                $0.focus = context.focus
                 $0.field.update(snapshot: context.snapshot)
             }
         //=--------------------------------------=
@@ -229,10 +222,10 @@ public extension Context {
         //=--------------------------------------=
         // Update
         //=--------------------------------------=
-        self.merge(Self(Remote(
-        focus: changeInFocus ? remote.focus : focus,
-        style: changeInStyle ? remote.style : style,
-        value: changeInValue ? remote.value : value)))
+        self.merge(Self(
+        changeInStyle ? remote.style : style,
+        changeInValue ? remote.value : value,
+        changeInFocus ? remote.focus : focus))
         return true
     }
     
