@@ -122,13 +122,21 @@ Determines the input and output space in terms of digits.
 ![DiffableTextFieldXAmount.gif](../Assets/DiffableTextFieldXAmount.gif)
 
 ```swift
+import DiffableTextViews
+import SwiftUI
+
+//*============================================================================*
+// MARK: View
+//*============================================================================*
+
 struct DiffableTextFieldXAmount: View {
 
     //=------------------------------------------------------------------------=
     // MARK: State
     //=------------------------------------------------------------------------=
 
-    @State var amount: Decimal = 0
+    @State var amount = 0 as Decimal
+    @State var locale = Locale(identifier: "sv_SE")
 
     //=------------------------------------------------------------------------=
     // MARK: Body
@@ -136,12 +144,12 @@ struct DiffableTextFieldXAmount: View {
 
     /// default precision is chosen based on currency
     var body: some View {
-        DiffableTextField($amount) {
+        DiffableTextField(value: $amount) {
             .currency(code: "SEK")
             .bounds((0 as Decimal)...)
             // .precision(integer: 1..., fraction: 2)
         }
-        .environment(\.locale, Locale(identifier: "sv_SE"))
+        .environment(\.locale, locale)
     }
 }
 ```

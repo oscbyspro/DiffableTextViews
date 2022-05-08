@@ -30,13 +30,21 @@ diffableTextViews_tint(_:)
 ![DiffableTextFieldXAmount.gif](../Assets/DiffableTextFieldXAmount.gif)
 
 ```swift
+import DiffableTextViews
+import SwiftUI
+
+//*============================================================================*
+// MARK: View
+//*============================================================================*
+
 struct DiffableTextFieldXAmount: View {
 
     //=------------------------------------------------------------------------=
     // MARK: State
     //=------------------------------------------------------------------------=
 
-    @State var amount: Decimal = 0
+    @State var amount = 0 as Decimal
+    @State var locale = Locale(identifier: "sv_SE")
 
     //=------------------------------------------------------------------------=
     // MARK: Body
@@ -49,7 +57,7 @@ struct DiffableTextFieldXAmount: View {
             .bounds((0 as Decimal)...)
             // .precision(integer: 1..., fraction: 2)
         }
-        .environment(\.locale, Locale(identifier: "sv_SE"))
+        .environment(\.locale, locale)
     }
 }
 ```
@@ -57,6 +65,13 @@ struct DiffableTextFieldXAmount: View {
 ![DiffableTextFieldXPhone.gif](../Assets/DiffableTextFieldXPhone.gif)
 
 ```swift
+import DiffableTextViews
+import SwiftUI
+
+//*============================================================================*
+// MARK: View
+//*============================================================================*
+
 struct DiffableTextFieldXPhone: View {
 
     //=------------------------------------------------------------------------=
@@ -64,7 +79,7 @@ struct DiffableTextFieldXPhone: View {
     //=------------------------------------------------------------------------=
 
     @State var number: String = ""
-    let style = PatternTextStyle<String>
+    @State var style = PatternTextStyle<String>
         .pattern("+## (###) ###-##-##")
         .placeholder("#") { $0.isASCII && $0.isNumber }
         .equals(())

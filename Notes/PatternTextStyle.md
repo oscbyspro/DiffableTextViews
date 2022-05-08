@@ -28,6 +28,13 @@ A collection of characters.
 ![DiffableTextFieldXPhone.gif](../Assets/DiffableTextFieldXPhone.gif)
 
 ```swift
+import DiffableTextViews
+import SwiftUI
+
+//*============================================================================*
+// MARK: View
+//*============================================================================*
+
 struct DiffableTextFieldXPhone: View {
 
     //=------------------------------------------------------------------------=
@@ -35,11 +42,11 @@ struct DiffableTextFieldXPhone: View {
     //=------------------------------------------------------------------------=
 
     @State var number: String = ""
-    let style = PatternTextStyle<String>
+    @State var style = PatternTextStyle<String>
         .pattern("+## (###) ###-##-##")
         .placeholder("#") { $0.isASCII && $0.isNumber }
         .equals(())
-        
+    
     //=------------------------------------------------------------------------=
     // MARK: Body
     //=------------------------------------------------------------------------=
@@ -54,6 +61,13 @@ struct DiffableTextFieldXPhone: View {
 ![DiffableTextFieldXCard.gif](../Assets/DiffableTextFieldXCard.gif)
 
 ```swift
+import DiffableTextViews
+import SwiftUI
+
+//*============================================================================*
+// MARK: View
+//*============================================================================*
+
 struct DiffableTextFieldXCard: View {
     
     //=------------------------------------------------------------------------=
@@ -61,7 +75,7 @@ struct DiffableTextFieldXCard: View {
     //=------------------------------------------------------------------------=
     
     @State var number: String = ""
-    let style = PatternTextStyle<String>
+    @State var style = PatternTextStyle<String>
         .pattern("#### #### #### ####")
         .placeholder("#") { $0.isASCII && $0.isNumber }
         .hidden().equals(())
