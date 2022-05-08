@@ -8,10 +8,21 @@ A view that uses styles to formats and parses text as you type.
 |---|-------|-------------|---------|
 | :balance_scale: | Font | Monospaced | As-you-type formatting works best with it |
 
-### Locale
+### Environment
 
 ```swift
-view.environment(\.locale, locale)
+environment(\.locale, _:)
+environment(\.layoutDirection, _:)
+diffableTextViews_disableAutocorrection(_:)
+diffableTextViews_font(_:)
+diffableTextViews_foregroundColor(_:)
+diffableTextViews_multilineTextAlignment(_:)
+diffableTextViews_onSubmit(_:)
+diffableTextViews_submitLabel(_:)
+diffableTextViews_textContentType(_:)
+diffableTextViews_textFieldStyle(_:)
+diffableTextViews_textInputAutocapitalization(_:)
+diffableTextViews_tint(_:)
 ```
 
 ## Examples
