@@ -11,39 +11,36 @@
 #if canImport(UIKit)
 
 import DiffableTestKit
-@testable import DiffableTextKitXUIKit
+@testable import DiffableTextViewsXUIKit
 
 //*============================================================================*
 // MARK: Declaration
 //*============================================================================*
 
-final class ViewsTestsXProxyTextField: Tests {
+final class ViewsTestsXBase: Tests {
     
     //=------------------------------------------------------------------------=
     // MARK: State
     //=------------------------------------------------------------------------=
     
-    lazy var view = ProxyTextField(Base())
+    lazy var view = Base()
     
     //=------------------------------------------------------------------------=
     // MARK: Tests
     //=------------------------------------------------------------------------=
     
     func testForceUnwrappingTextIsOK() {
-        view.wrapped.text = nil
-        XCTAssertNotNil(view.wrapped.text)
-        XCTAssertEqual(view.text.value, String())
+        view.text = nil
+        XCTAssertNotNil(view.text)
     }
     
     func testForceUnwrappingSelectedTextRangeIsOK() {
-        view.wrapped.selectedTextRange = nil
-        XCTAssertNotNil(view.wrapped.selectedTextRange)
-        XCTAssertEqual(view.selection.value, String())
+        view.selectedTextRange = nil
+        XCTAssertNotNil(view.selectedTextRange)
     }
     
     func testForceUnwrappingMarkedTextRangeIsBad() {
-        XCTAssertNil(view.wrapped.markedTextRange)
-        XCTAssertEqual(view.selection.marked, String())
+        XCTAssertNil(view.markedTextRange)
     }
 }
 

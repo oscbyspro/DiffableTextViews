@@ -11,7 +11,7 @@
 #if canImport(UIKit)
 
 import DiffableTestKit
-@testable import DiffableTextKitXUIKit
+@testable import DiffableTextViewsXUIKit
 
 //*============================================================================*
 // MARK: Declaration

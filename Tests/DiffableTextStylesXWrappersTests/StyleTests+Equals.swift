@@ -10,7 +10,7 @@
 #if DEBUG
 
 import DiffableTestKit
-@testable import DiffableTextStylesXWrapper
+@testable import DiffableTextStylesXWrappers
 
 //*============================================================================*
 // MARK: Declaration

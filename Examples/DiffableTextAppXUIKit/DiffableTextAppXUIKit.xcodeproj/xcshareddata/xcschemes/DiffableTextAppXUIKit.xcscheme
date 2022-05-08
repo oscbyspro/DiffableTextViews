@@ -69,28 +69,6 @@
             parallelizable = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "DiffableTextKitXUIKitTests"
-               BuildableName = "DiffableTextKitXUIKitTests"
-               BlueprintName = "DiffableTextKitXUIKitTests"
-               ReferencedContainer = "container:../..">
-            </BuildableReference>
-         </TestableReference>
-         <TestableReference
-            skipped = "NO"
-            parallelizable = "YES">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "DiffableTextStylesXWrapperTests"
-               BuildableName = "DiffableTextStylesXWrapperTests"
-               BlueprintName = "DiffableTextStylesXWrapperTests"
-               ReferencedContainer = "container:../..">
-            </BuildableReference>
-         </TestableReference>
-         <TestableReference
-            skipped = "NO"
-            parallelizable = "YES">
-            <BuildableReference
-               BuildableIdentifier = "primary"
                BlueprintIdentifier = "DiffableTextViewsXUIKitTests"
                BuildableName = "DiffableTextViewsXUIKitTests"
                BlueprintName = "DiffableTextViewsXUIKitTests"
@@ -138,6 +116,17 @@
                   Identifier = "StyleTestsXCurrency/testUInt8()">
                </Test>
             </SkippedTests>
+         </TestableReference>
+         <TestableReference
+            skipped = "NO"
+            parallelizable = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "DiffableTextStylesXWrappersTests"
+               BuildableName = "DiffableTextStylesXWrappersTests"
+               BlueprintName = "DiffableTextStylesXWrappersTests"
+               ReferencedContainer = "container:../..">
+            </BuildableReference>
          </TestableReference>
       </Testables>
    </TestAction>

@@ -34,7 +34,7 @@ final class ViewsTestsXDownstream: XCTestCase {
     
     override func setUp() {
         super.setUp()
-        downstream.wrapped.text = nil
+        downstream.view.text = nil
     }
 }
 
@@ -49,12 +49,12 @@ extension ViewsTestsXDownstream {
     //=------------------------------------------------------------------------=
     
     func testPositionsAreMeasuredInUTF16() {
-        downstream.wrapped.text = "🇸🇪"
+        downstream.view.text = "🇸🇪"
         //=--------------------------------------=
         // Assert
         //=--------------------------------------=
-        XCTAssertEqual(8, downstream.wrapped.text!.utf8 .count)
-        XCTAssertEqual(4, downstream.wrapped.text!.utf16.count)
+        XCTAssertEqual(8, downstream.view.text!.utf8 .count)
+        XCTAssertEqual(4, downstream.view.text!.utf16.count)
         XCTAssertEqual(4, downstream.size.offset)
     }
 }
@@ -84,7 +84,7 @@ extension ViewsTestsXDownstream {
     /// - 0.909 sec.
     ///
     func testMeasure1__() {
-        downstream.wrapped.text = alphabet
+        downstream.view.text = alphabet
         measure(size)
     }
     
@@ -93,7 +93,7 @@ extension ViewsTestsXDownstream {
     /// - 0.914 sec.
     ///
     func testMeasure10_() {
-        downstream.wrapped.text = alphabet10
+        downstream.view.text = alphabet10
         measure(size)
     }
     
@@ -102,7 +102,7 @@ extension ViewsTestsXDownstream {
     /// - 0.917 sec.
     ///
     func testMeasure100() {
-        downstream.wrapped.text = alphabet100
+        downstream.view.text = alphabet100
         measure(size)
     }
 }
