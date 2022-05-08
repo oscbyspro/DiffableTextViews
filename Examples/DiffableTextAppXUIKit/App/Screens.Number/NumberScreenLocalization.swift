@@ -13,30 +13,24 @@ import SwiftUI
 // MARK: Declaration
 //*============================================================================*
 
-struct NumericScreenWheels: View {
-    typealias Context = NumericScreenContext
-    typealias Kind = Context.Kind
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Environment
-    //=------------------------------------------------------------------------=
-    
-    @EnvironmentObject var storage: Storage
+struct NumberScreenLocalization: View {
+    typealias Context = NumberScreenContext
+    typealias FormatID = Context.FormatID
     
     //=------------------------------------------------------------------------=
     // MARK: State
     //=------------------------------------------------------------------------=
 
-    @ObservedObject var kind: Source<Kind>
-    @ObservedObject var locale: Source<Locale>
-    @ObservedObject var currency: Source<String>
+    @ObservedObject var format: Observable<FormatID>
+    @ObservedObject var locale: Observable<Locale>
+    @ObservedObject var currency: Observable<String>
     
     //=------------------------------------------------------------------------=
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
     init(_ context: Context) {
-        self.kind = context.kind
+        self.format = context.format
         self.locale = context.locale
         self.currency = context.currency
     }
@@ -59,13 +53,13 @@ struct NumericScreenWheels: View {
     
     var wheels: some View {
         GeometryReader {
-            let separate = Separate($0, kind: kind.content)
+            let separate = Separate($0, kind: format.wrapped)
             //=----------------------------------=
             // Content
             //=----------------------------------=
             HStack(spacing: 0) {
                 locales.modifier(separate).zIndex(1)
-                if kind.content == .currency {
+                if format.wrapped == .currency {
                     Divider()
                     currencies.modifier(separate)
                 }
@@ -78,11 +72,11 @@ struct NumericScreenWheels: View {
     //=------------------------------------------------------------------------=
     
     var locales: some View {
-        Wheel(storage.locales, selection: locale.binding, id: \.identifier)
+        Wheel(Constants.locales, selection: locale.xwrapped, id: \.identifier)
     }
     
     var currencies: some View {
-        Wheel(storage.currencies, selection: currency.binding, id: \.self)
+        Wheel(Constants.currencies, selection: currency.xwrapped, id: \.self)
     }
     
     //*========================================================================*
@@ -101,7 +95,7 @@ struct NumericScreenWheels: View {
         // MARK: Initializers
         //=--------------------------------------------------------------------=
 
-        init(_ proxy: GeometryProxy, kind: Kind) {
+        init(_ proxy: GeometryProxy, kind: FormatID) {
             self.width = proxy.size.width / CGFloat(kind == .currency ? 2 : 1)
         }
         

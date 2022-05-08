@@ -8,53 +8,42 @@
 //=----------------------------------------------------------------------------=
 
 import SwiftUI
-import DiffableTextViews
 
 //*============================================================================*
 // MARK: Declaration
 //*============================================================================*
 
-struct PatternScreen: View {
-    typealias Context = PatternScreenContext
-
+struct Toggler: View {
+    
     //=------------------------------------------------------------------------=
     // MARK: State
     //=------------------------------------------------------------------------=
     
-    @StateObject var context = Context()
+    let title: String
+    let isOn: Observable<Bool>
+
+    //=------------------------------------------------------------------------=
+    // MARK: Initializers
+    //=------------------------------------------------------------------------=
+    
+    init(_ title: String, isOn: Observable<Bool>) {
+        self.title = title; self.isOn = isOn
+    }
 
     //=------------------------------------------------------------------------=
     // MARK: Body
     //=------------------------------------------------------------------------=
     
     var body: some View {
-        Screen {
-            scroller
-            Divider()
-            PatternScreenExamples(context)
+        Toggle(isOn: isOn.xwrapped) {
+            Text(title)
+                .frame(maxWidth: .infinity)
+                .contentShape(Rectangle())
+                .animation(nil, value: isOn.wrapped)
         }
-    }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Body
-    //=------------------------------------------------------------------------=
-    
-    var scroller: some View {
-        Scroller {
-            Segments(context.kind.binding)
-            PatternScreenVisibility(visible: context.visible)
-            PatternScreenActions(context)
-            Spacer()
-        }
-    }
-}
-
-//*============================================================================*
-// MARK: Previews
-//*============================================================================*
-
-struct PatternTextStyleScreenPreviews: PreviewProvider {
-    static var previews: some View {
-        PatternScreen().preferredColorScheme(.dark)
+        .tint(Color.gray.opacity(2/3))
+        .background(Rectangle().strokeBorder(.gray))
+        .animation(.default, value: isOn.wrapped)
+        .toggleStyle(.button)
     }
 }

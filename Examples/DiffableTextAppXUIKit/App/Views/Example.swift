@@ -23,7 +23,7 @@ struct Example<Style: DiffableTextStyle>: View {
     
     let style: Style
     @Binding var value: Value
-    @FocusState var focused: Bool
+    @FocusState var focus: Bool
 
     //=------------------------------------------------------------------------=
     // MARK: Initializers
@@ -58,7 +58,7 @@ struct Example<Style: DiffableTextStyle>: View {
         }
         .padding()
         .background(Color(uiColor: .secondarySystemBackground))
-        .onTapGesture(perform: { focused.toggle() })
+        .onTapGesture { focus.toggle() }
     }
     
     //=------------------------------------------------------------------------=
@@ -76,7 +76,7 @@ struct Example<Style: DiffableTextStyle>: View {
     
     var diffableTextField: some View {
         DiffableTextField(value: $value, style: style)
-            .focused($focused)
+            .focused($focus)
             .padding()
             .background(tertiary)
     }

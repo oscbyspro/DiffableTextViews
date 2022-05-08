@@ -210,11 +210,11 @@ public extension Context {
     @inlinable mutating func merge(_ remote: State) -> Update? {
         var state = self.state
         //=--------------------------------------=
-        // Merged
+        // Update
         //=--------------------------------------=
         guard let update = state.merge(remote) else { return nil }
         //=--------------------------------------=
-        // Update
+        // Insert
         //=--------------------------------------=
         self.merge(Self(state)); return update
     }

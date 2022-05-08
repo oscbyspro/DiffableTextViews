@@ -15,32 +15,39 @@ import DiffableTextViews
 //*============================================================================*
 
 /// An intermediate examples view that observes infrequent changes.
-struct NumericScreenExamples: View {
-    typealias Context = NumericScreenContext
+struct PatternScreenExamples: View {
+    typealias Style = PatternTextStyle<String>
+    typealias Context = PatternScreenContext
     typealias Kind = Context.Kind
-    typealias Value = Context.Value
-    typealias Number = Value.FormatStyle
-    typealias Currency = Number.Currency
-    typealias Percent = Number.Percent
-
+    
+    
     //=------------------------------------------------------------------------=
     // MARK: State
     //=------------------------------------------------------------------------=
     
     let context: Context
-    @ObservedObject var kind: Source<Kind>
-    @ObservedObject var currency: Source<String>
-    @ObservedObject var locale: Source<Locale>
-
+    @ObservedObject var kind: Observable<Kind>
+    @ObservedObject var visible: Observable<Bool>
+    
     //=------------------------------------------------------------------------=
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable init(_ context: Context) {
+    init(_ context: Context) {
         self.context = context
         self.kind = context.kind
-        self.currency = context.currency
-        self.locale = context.locale
+        self.visible = context.visible
+    }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Accessors
+    //=------------------------------------------------------------------------=
+    
+    var style: Style {
+        var base: Style { switch kind.wrapped {
+            case  .card: return Self .card
+            case .phone: return Self.phone
+        }}; return base.hidden(!visible.wrapped)
     }
     
     //=------------------------------------------------------------------------=
@@ -48,31 +55,18 @@ struct NumericScreenExamples: View {
     //=------------------------------------------------------------------------=
     
     var body: some View {
-        Group {
-            switch kind.content {
-            case   .number:   numberExample
-            case .currency: currencyExample
-            case  .percent:  percentExample
-            }
-        }
-        .environment(\.locale, locale.content)
+        PatternScreenExample(context, style: style)
     }
     
-    @inlinable var currencyExample: some View {
-        NumericScreenExample(context,
-        base: _NumberTextStyle<Currency>(
-        code: currency.content, locale: locale.content))
-    }
+    //=------------------------------------------------------------------------=
+    // MARK: Constants
+    //=------------------------------------------------------------------------=
     
-    @inlinable var numberExample: some View {
-        NumericScreenExample(context,
-        base: _NumberTextStyle<Number>(
-        locale: locale.content))
-    }
+    static let phone = PatternTextStyle<String>
+        .pattern("+## (###) ###-##-##")
+        .placeholder("#") { $0.isASCII && $0.isNumber }
     
-    @inlinable var percentExample: some View {
-        NumericScreenExample(context,
-        base: _NumberTextStyle<Percent>(
-        locale: locale.content))
-    }
+    static let card = PatternTextStyle<String>
+        .pattern("#### #### #### ####")
+        .placeholder("#") { $0.isASCII && $0.isNumber }
 }

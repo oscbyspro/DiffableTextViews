@@ -8,43 +8,24 @@
 //=----------------------------------------------------------------------------=
 
 import SwiftUI
-import Sliders
 
 //*============================================================================*
 // MARK: Declaration
 //*============================================================================*
 
-struct NumericScreenSliders: View {
+struct PatternScreenVisibility: View {
     
     //=------------------------------------------------------------------------=
     // MARK: State
     //=------------------------------------------------------------------------=
     
-    let title: String
-    let limits: Interval<Int>
-    @ObservedObject var interval: Source<Interval<Int>>
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Initializers
-    //=------------------------------------------------------------------------=
-    
-    init(_ title: String, interval: Source<Interval<Int>>, in limits: Interval<Int>) {
-        self.title  = title
-        self.limits = limits
-        self.interval = interval
-    }
+    @ObservedObject var visible: Observable<Bool>
     
     //=------------------------------------------------------------------------=
     // MARK: Body
     //=------------------------------------------------------------------------=
     
     var body: some View {
-        GroupBox(label(interval.content.closed)) {
-            Sliders($interval.content.values, in: limits.closed)
-        }
-    }
-    
-    func label(_ values: ClosedRange<Int>) -> String {
-        "\(title): \(values.lowerBound) to \(values.upperBound)"
+        Toggler(visible.wrapped ? "Visible" : "Hidden", isOn: visible)
     }
 }

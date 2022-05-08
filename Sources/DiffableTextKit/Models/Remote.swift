@@ -42,9 +42,9 @@ public struct Remote<Style: DiffableTextStyle> {
         //=--------------------------------------=
         // Update
         //=--------------------------------------=
-        if update.style { self.style = other.style }
-        if update.value { self.value = other.value }
-        if update.focus { self.focus = other.focus }
+        if update.contains(.style) { self.style = other.style }
+        if update.contains(.value) { self.value = other.value }
+        if update.contains(.focus) { self.focus = other.focus }
         //=--------------------------------------=
         // Return
         //=--------------------------------------=

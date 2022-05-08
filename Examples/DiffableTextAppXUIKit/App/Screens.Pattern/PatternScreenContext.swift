@@ -7,47 +7,48 @@
 // See http://www.apache.org/licenses/LICENSE-2.0 for license information.
 //=----------------------------------------------------------------------------=
 
-import SwiftUI
-import DiffableTextViews
+import Combine
 
 //*============================================================================*
 // MARK: Declaration
 //*============================================================================*
 
-/// An examples view that observes frequent changes.
-struct NumericScreenExample<Format: NumberTextFormat>: View where Format.FormatInput == NumericScreenContext.Value {
-    typealias Context = NumericScreenContext
-    typealias Integers = Interval<Int>
-    typealias Value = Decimal
+final class PatternScreenContext: ObservableObject {
     
     //=------------------------------------------------------------------------=
     // MARK: State
     //=------------------------------------------------------------------------=
     
-    let base: _NumberTextStyle<Format>
-    @ObservedObject var value: Source<Value>
-    @ObservedObject var bounds: SourceOfBounds
-    @ObservedObject var integer: Source<Integers>
-    @ObservedObject var fraction: Source<Integers>
-
+    let value = Observable("12345678")
+    let kind = Observable(Kind.phone)
+    let visible = Observable(true)
+    
     //=------------------------------------------------------------------------=
-    // MARK: Initializers
+    // MARK: Utilities
     //=------------------------------------------------------------------------=
     
-    init(_ context: Context, base: _NumberTextStyle<Format>) {
-        self.base = base
-        self.value = context.value
-        self.bounds = context.bounds
-        self.integer = context.integer
-        self.fraction = context.fraction
+    func popLast() {
+        _ = value.wrapped.popLast()
+    }
+    
+    func appendASCIIDigit() {
+        Self.digits.randomElement().map({ value.wrapped.append($0) })
+    }
+    
+    func appendUppercased() {
+        Self.uppercased.randomElement().map({ value.wrapped.append($0) })
     }
     
     //=------------------------------------------------------------------------=
-    // MARK: Body
+    // MARK: Constants
     //=------------------------------------------------------------------------=
     
-    var body: some View {
-        Example(value.binding, style: base.bounds(bounds.values).precision(
-        integer: integer.content.closed, fraction: fraction.content.closed))
-    }
+    static let digits: String = "0123456789"
+    static let uppercased: String = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+    
+    //*========================================================================*
+    // MARK: Kind
+    //*========================================================================*
+    
+    enum Kind: String, CaseIterable { case phone, card }
 }

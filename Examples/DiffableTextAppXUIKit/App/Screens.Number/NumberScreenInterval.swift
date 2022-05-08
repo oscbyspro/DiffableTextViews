@@ -7,47 +7,49 @@
 // See http://www.apache.org/licenses/LICENSE-2.0 for license information.
 //=----------------------------------------------------------------------------=
 
+import SwiftUI
+import Sliders
+
 //*============================================================================*
 // MARK: Declaration
 //*============================================================================*
 
-/// Used to cache state differentiation results in order to avoid multiple comparisons.
-public struct Update: OptionSet {
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Instances
-    //=------------------------------------------------------------------------=
-    
-    public static let style = Self(rawValue: 1 << 0)
-    public static let value = Self(rawValue: 1 << 1)
-    public static let focus = Self(rawValue: 1 << 2)
-    public static let all = Self([style, value, focus])
+struct NumberScreenIntegerInterval: View {
     
     //=------------------------------------------------------------------------=
     // MARK: State
     //=------------------------------------------------------------------------=
     
-    public var rawValue: UInt8
+    let title: String
+    let limits: ClosedRange<Int>
+    @ObservedObject var interval: Observable<Interval<Int>>
     
     //=------------------------------------------------------------------------=
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable public init(rawValue: UInt8 = 0) {
-        self.rawValue = rawValue
+    init(_ title: String, interval: Observable<Interval<Int>>, in limits: ClosedRange<Int>) {
+        self.title  = title
+        self.limits = limits
+        self.interval = interval
     }
-
-    @inlinable init?<S>(_ lhs: Remote<S>, _ rhs: Remote<S>) {
-        self.init()
-        //=--------------------------------------=
-        // Compare
-        //=--------------------------------------=
-        if lhs.style != rhs.style { insert(.style) }
-        if lhs.value != rhs.value { insert(.value) }
-        if lhs.focus != rhs.focus { insert(.focus) }
-        //=--------------------------------------=
-        // At Least One Must Have Changed
-        //=--------------------------------------=
-        guard contains(.style) || contains(.value) || contains(.focus) else { return nil }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Accessors
+    //=------------------------------------------------------------------------=
+    
+    var description: String {
+        let interval = interval.wrapped.closed
+        return "\(title): \(interval.lowerBound) to \(interval.upperBound)"
+    }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Body
+    //=------------------------------------------------------------------------=
+    
+    var body: some View {
+        GroupBox(description) {
+            Sliders($interval.wrapped.values, in: limits)
+        }
     }
 }

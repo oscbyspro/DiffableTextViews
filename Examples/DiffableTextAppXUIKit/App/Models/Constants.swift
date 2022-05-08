@@ -9,24 +9,23 @@
 
 import SwiftUI
 
-#warning("Make this a constant.")
 //*============================================================================*
 // MARK: Declaration
 //*============================================================================*
 
-final class Storage: ObservableObject {
+enum Constants {
     
     //=------------------------------------------------------------------------=
     // MARK: State
     //=------------------------------------------------------------------------=
     
-    lazy var locales: [Locale] = Locale
+    static let locales: [Locale] = Locale
         .availableIdentifiers
         .lazy.map(Locale.init)
         .reduce(into: Set()) { $0.insert($1) }
         .sorted(by: { $0.identifier < $1.identifier })
     
-    lazy var currencies: [String] = locales
+    static let currencies: [String] = locales
         .lazy.compactMap(\.currencyCode)
         .reduce(into: Set()) { $0.insert($1) }
         .sorted(by: <)

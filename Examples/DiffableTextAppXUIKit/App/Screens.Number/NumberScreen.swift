@@ -7,66 +7,70 @@
 // See http://www.apache.org/licenses/LICENSE-2.0 for license information.
 //=----------------------------------------------------------------------------=
 
-import SwiftUI
 import DiffableTextViews
+import SwiftUI
 
 //*============================================================================*
 // MARK: Declaration
 //*============================================================================*
 
-/// An intermediate examples view that observes infrequent changes.
-struct PatternScreenExamples: View {
-    typealias Style = PatternTextStyle<String>
-    typealias Context = PatternScreenContext
-    typealias Kind = Context.Kind
-    
-    
+struct NumberScreen: View {
+
     //=------------------------------------------------------------------------=
     // MARK: State
     //=------------------------------------------------------------------------=
     
-    let context: Context
-    @ObservedObject var kind: Source<Kind>
-    @ObservedObject var visible: Source<Bool>
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Initializers
-    //=------------------------------------------------------------------------=
-    
-    init(_ context: Context) {
-        self.context = context
-        self.kind = context.kind
-        self.visible = context.visible
-    }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Accessors
-    //=------------------------------------------------------------------------=
-    
-    var style: Style {
-        var base: Style { switch kind.content {
-            case  .card: return Self .card
-            case .phone: return Self.phone
-        }}; return base.hidden(!visible.content)
-    }
+    @StateObject private var context = NumberScreenContext()
     
     //=------------------------------------------------------------------------=
     // MARK: Body
     //=------------------------------------------------------------------------=
     
     var body: some View {
-        PatternScreenExample(context, style: style)
+        Screen {
+            controls
+            Divider()
+            NumberScreenExample(context)
+        }
     }
     
     //=------------------------------------------------------------------------=
-    // MARK: Constants
+    // MARK: Body
     //=------------------------------------------------------------------------=
     
-    static let phone = PatternTextStyle<String>
-        .pattern("+## (###) ###-##-##")
-        .placeholder("#") { $0.isASCII && $0.isNumber }
+    var controls: some View {
+        Scroller {
+            NumberScreenOptionality(context.optional)
+            
+            Segments(context.format.xwrapped)
+            
+            NumberScreenLocalization(context)
+            
+            NumberScreenIntegerInterval("Bounds (9s)",
+            interval: context.bounds.interval, in: context.boundsLimits)
+
+            NumberScreenIntegerInterval("Integer digits",
+            interval: context.integer, in: context.integerLimits)
+
+            NumberScreenIntegerInterval("Fraction digits",
+            interval: context.fraction, in: context.fractionLimits)
+            
+            Spacer()
+        }
+    }
+}
+
+//*============================================================================*
+// MARK: Declaration
+//*============================================================================*
+
+struct NumberScreen_Previews: PreviewProvider {
     
-    static let card = PatternTextStyle<String>
-        .pattern("#### #### #### ####")
-        .placeholder("#") { $0.isASCII && $0.isNumber }
+    //=------------------------------------------------------------------------=
+    // MARK: Previews
+    //=------------------------------------------------------------------------=
+    
+    static var previews: some View {
+        NumberScreen().preferredColorScheme(.dark)
+    }
 }

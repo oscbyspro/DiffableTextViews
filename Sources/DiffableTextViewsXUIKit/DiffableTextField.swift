@@ -103,13 +103,9 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
         //=--------------------------------------------------------------------=
         
         @usableFromInline let lock = Lock()
-        
-        @usableFromInline var update = Update()
         @usableFromInline var context: Context!
-        
         @usableFromInline var upstream: Upstream!
         @usableFromInline let downstream = Downstream()
-        
         @usableFromInline var onSubmit = Trigger(nil)
         
         //=--------------------------------------------------------------------=
@@ -252,13 +248,11 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
             //=----------------------------------=
             // Pull
             //=----------------------------------=
-            if let update = context.merge(self.pull()) {
-                //=------------------------------=
-                // Push
-                //=------------------------------=
-                self.update = update
-                self.context.focus.wrapped ? self.push() : self.write()
-            }
+            guard let update = context.merge(self.pull()) else { return }
+            //=----------------------------------=
+            // Push
+            //=----------------------------------=
+            self.context.focus.wrapped ? self.push(update) : self.write()
         }
         
         @inlinable func pull() -> Remote {
@@ -268,7 +262,7 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
             Remote(upstream.style, upstream.value.wrappedValue, downstream.focus)
         }
 
-        @inlinable func push() {
+        @inlinable func push(_ update: Update = .all) {
             //=----------------------------------=
             // Downstream
             //=----------------------------------=
@@ -276,7 +270,7 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
             //=----------------------------------=
             // Upstream
             //=----------------------------------=
-            guard update.value else { return }
+            guard update.contains(.value) else { return }
             self.upstream.value.wrappedValue = context.value
         }
         

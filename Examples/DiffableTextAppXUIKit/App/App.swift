@@ -16,20 +16,12 @@ import SwiftUI
 @main struct App: SwiftUI.App {
     
     //=------------------------------------------------------------------------=
-    // MARK: State
-    //=------------------------------------------------------------------------=
-    
-    @StateObject var storage = Storage()
-    
-    //=------------------------------------------------------------------------=
     // MARK: Body
     //=------------------------------------------------------------------------=
     
     var body: some Scene {
         WindowGroup {
-            Tabs()
-                .environmentObject(storage)
-                .preferredColorScheme(.dark)
+            Tabs().preferredColorScheme(.dark)
         }
     }
 }

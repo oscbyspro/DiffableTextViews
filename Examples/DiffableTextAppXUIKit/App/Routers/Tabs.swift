@@ -19,15 +19,15 @@ struct Tabs: View {
     // MARK: State
     //=------------------------------------------------------------------------=
     
-    @StateObject private var tab = Source(Tab.numeric)
+    @StateObject private var tab = Observable(Tab.numeric)
     
     //=------------------------------------------------------------------------=
     // MARK: Body
     //=------------------------------------------------------------------------=
     
     var body: some View {
-        TabView(selection: tab.binding) {
-            NumericScreen().modifier(Tab.numeric)
+        TabView(selection: tab.xwrapped) {
+            NumberScreen() .modifier(Tab.numeric)
             PatternScreen().modifier(Tab.pattern)
         }
     }
@@ -81,8 +81,6 @@ struct Tabs: View {
 
 struct DiffableTextStyleTabsPreviews: PreviewProvider {
     static var previews: some View {
-        Tabs()
-            .environmentObject(Storage())
-            .preferredColorScheme(.dark)
+        Tabs().preferredColorScheme(.dark)
     }
 }

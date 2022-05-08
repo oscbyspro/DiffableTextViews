@@ -23,7 +23,7 @@ struct PatternScreenExample<Style: DiffableTextStyle>: View where Style.Value ==
     //=------------------------------------------------------------------------=
     
     let style: Style
-    @ObservedObject var value: Source<String>
+    @ObservedObject var value: Observable<String>
 
     //=------------------------------------------------------------------------=
     // MARK: Initializers
@@ -39,6 +39,6 @@ struct PatternScreenExample<Style: DiffableTextStyle>: View where Style.Value ==
     //=------------------------------------------------------------------------=
     
     var body: some View {
-        Example(value.binding, style: style).diffableTextViews_keyboardType(.numberPad)
+        Example(value.xwrapped, style: style).diffableTextViews_keyboardType(.numberPad)
     }
 }

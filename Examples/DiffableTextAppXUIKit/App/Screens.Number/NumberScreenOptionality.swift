@@ -7,48 +7,34 @@
 // See http://www.apache.org/licenses/LICENSE-2.0 for license information.
 //=----------------------------------------------------------------------------=
 
-import Combine
+import SwiftUI
 
 //*============================================================================*
 // MARK: Declaration
 //*============================================================================*
 
-final class PatternScreenContext: ObservableObject {
+struct NumberScreenOptionality: View {
+    typealias Context = NumberScreenContext
     
     //=------------------------------------------------------------------------=
     // MARK: State
     //=------------------------------------------------------------------------=
     
-    let value = Source("12345678")
-    let kind = Source(Kind.phone)
-    let visible = Source(true)
+    @ObservedObject var optional: Observable<Bool>
     
     //=------------------------------------------------------------------------=
-    // MARK: Utilities
+    // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    func popLast() {
-        _ = value.content.popLast()
-    }
-    
-    func appendASCIIDigit() {
-        Self.digits.randomElement().map({ value.content.append($0) })
-    }
-    
-    func appendUppercased() {
-        Self.uppercased.randomElement().map({ value.content.append($0) })
+    init(_ optional: Observable<Bool>) {
+        self.optional = optional
     }
     
     //=------------------------------------------------------------------------=
-    // MARK: Constants
+    // MARK: Body
     //=------------------------------------------------------------------------=
     
-    static let digits: String = "0123456789"
-    static let uppercased: String = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-    
-    //*========================================================================*
-    // MARK: Kind
-    //*========================================================================*
-    
-    enum Kind: String, CaseIterable { case phone, card }
+    var body: some View {
+        Toggler(optional.wrapped ? "Optional" : "Standard", isOn: optional)
+    }
 }
