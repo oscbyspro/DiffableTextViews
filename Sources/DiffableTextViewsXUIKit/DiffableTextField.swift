@@ -63,12 +63,11 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
     }
     
     @inlinable public func makeUIView(context: Self.Context) -> UITextField {
-        let downstream = Downstream()
-        context.coordinator.setup(self, downstream, context.environment)
-        return downstream.view
+        context.coordinator.setup(self, context.environment)
+        return context.coordinator.downstream.view
     }
     
-    @inlinable public func updateUIView(_ uiView: UITextField, context: Self.Context) {
+    @inlinable public func updateUIView(_ view:  UITextField, context: Self.Context) {
         context.coordinator.update(self, context.environment)
     }
     
@@ -88,9 +87,13 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
         //=--------------------------------------------------------------------=
         
         @usableFromInline let lock = Lock()
+        
+        @usableFromInline var update = Update()
         @usableFromInline var context: Context!
+        
         @usableFromInline var upstream: Upstream!
-        @usableFromInline var downstream: Downstream!
+        @usableFromInline let downstream = Downstream()
+        
         @usableFromInline var onSubmit = Trigger(nil)
         
         //=--------------------------------------------------------------------=
@@ -98,9 +101,7 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
         //=--------------------------------------------------------------------=
         
         @inlinable @inline(never) func setup(
-        _ upstream:    Upstream,
-        _ downstream:  Downstream,
-        _ environment: Environment) {
+        _ upstream: Upstream, _ environment: Environment) {
             //=----------------------------------=
             // Upstream
             //=----------------------------------=
@@ -108,19 +109,18 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
             //=----------------------------------=
             // Downstream
             //=----------------------------------=
-            self.downstream = downstream
             self.downstream.view.delegate = self
             self.downstream.setTextFeldStyle(environment)
             self.downstream.setSensibleValues(Style.self)
             //=----------------------------------=
             // Synchronize
             //=----------------------------------=
-            self.context = Context(pull()); self.write()
+            self.context = Context(self.pull())
+            self.write()
         }
         
         @inlinable @inline(never) func update(
-        _ upstream:    Upstream,
-        _ environment: Environment) {
+        _ upstream: Upstream, _ environment: Environment) {
             //=----------------------------------=
             // Upstream
             //=----------------------------------=
@@ -235,20 +235,20 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
             //=----------------------------------=
             // Pull
             //=----------------------------------=
-            guard context.merge(self.pull()) else { return }
-            //=----------------------------------=
-            // Push
-            //=----------------------------------=
-            context.focus.value ? self.push() : self.write()
+            if let update = context.merge(self.pull()) {
+                //=------------------------------=
+                // Push
+                //=------------------------------=
+                self.update = update
+                self.context.focus.wrapped ? self.push() : self.write()
+            }
         }
         
         @inlinable func pull() -> Remote {
             //=----------------------------------=
             // Upstream, Downstream
             //=----------------------------------=
-            Remote(style: upstream.style,
-            value: upstream.value.wrappedValue,
-            focus: downstream.focus)
+            Remote(upstream.style, upstream.value.wrappedValue, downstream.focus)
         }
 
         @inlinable func push() {
@@ -259,18 +259,17 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
             //=----------------------------------=
             // Upstream
             //=----------------------------------=
-            if  self.upstream.value.wrappedValue != context.value {
-                self.upstream.value.wrappedValue  = context.value
-            }
+            guard update.value else { return }
+            self.upstream.value.wrappedValue = context.value
         }
-
+        
         @inlinable func write() {
             //=----------------------------------=
             // Downstream
             //=----------------------------------=
             lock.perform {
                 self.downstream.update(text: context.text)
-                guard downstream.focus.value else { return }
+                guard downstream.focus.wrapped else { return }
                 self.downstream.update(selection: context.selection())
             }
         }

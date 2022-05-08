@@ -11,24 +11,37 @@
 // MARK: Declaration
 //*============================================================================*
 
-/// A focused/unfocused model.
-@frozen public struct Focus: Equatable, ExpressibleByBooleanLiteral {
+/// Used to cache state differentiation results in order to avoid multiple comparisons.
+public struct Update {
     
     //=------------------------------------------------------------------------=
     // MARK: State
     //=------------------------------------------------------------------------=
     
-    public let wrapped: Bool
+    public let style: Bool
+    public let value: Bool
+    public let focus: Bool
     
     //=------------------------------------------------------------------------=
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable public init(_ wrapped: Bool) {
-        self.wrapped = wrapped
+    public init() {
+        self.style = true
+        self.value = true
+        self.focus = true
     }
-    
-    @inlinable public init(booleanLiteral wrapped: Bool) {
-        self.wrapped = wrapped
+
+    @inlinable init?<S>(_ lhs: Remote<S>, _ rhs: Remote<S>) {
+        //=--------------------------------------=
+        // Compare
+        //=--------------------------------------=
+        self.style = lhs.style != rhs.style
+        self.value = lhs.value != rhs.value
+        self.focus = lhs.focus != rhs.focus
+        //=--------------------------------------=
+        // At Least One Must Have Changed
+        //=--------------------------------------=
+        guard style || value || focus else { return nil }
     }
 }

@@ -19,17 +19,35 @@ public struct Remote<Style: DiffableTextStyle> {
     // MARK: State
     //=------------------------------------------------------------------------=
     
-    public let style: Style
-    public let value: Value
-    public let focus: Focus
+    public var style: Style
+    public var value: Value
+    public var focus: Focus
 
     //=------------------------------------------------------------------------=
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable public init(style: Style, value: Value, focus: Focus) {
+    @inlinable public init(_ style: Style, _ value: Value, _ focus: Focus) {
         self.style = style
         self.value = value
         self.focus = focus
+    }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Transformations
+    //=------------------------------------------------------------------------=
+    
+    @inlinable public mutating func merge(_ other: Self) -> Update? {
+        guard let update = Update(self, other) else { return nil }
+        //=--------------------------------------=
+        // Update
+        //=--------------------------------------=
+        if update.style { self.style = other.style }
+        if update.value { self.value = other.value }
+        if update.focus { self.focus = other.focus }
+        //=--------------------------------------=
+        // Return
+        //=--------------------------------------=
+        return update
     }
 }

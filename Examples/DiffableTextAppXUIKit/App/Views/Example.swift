@@ -75,7 +75,7 @@ struct Example<Style: DiffableTextStyle>: View {
     }
     
     var diffableTextField: some View {
-        DiffableTextField("", value: $value, style: style)
+        DiffableTextField(value: $value, style: style)
             .focused($focused)
             .padding()
             .background(tertiary)

@@ -16,9 +16,9 @@
 /// - Uses copy-on-write semantics.
 ///
 public struct Context<Style: DiffableTextStyle> {
-    public typealias Commit = DiffableTextKit.Commit<Value>
-    public typealias Remote = DiffableTextKit.Remote<Style>
     public typealias Value  = Style.Value
+    public typealias State  = DiffableTextKit.Remote<Style>
+    public typealias Commit = DiffableTextKit.Commit<Value>
 
     //=------------------------------------------------------------------------=
     // MARK: State
@@ -30,16 +30,15 @@ public struct Context<Style: DiffableTextStyle> {
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable init(_ storage: Storage) {
-        self._storage = storage
+    @inlinable init(_ state: State, _ field: Field) {
+        self._storage = Storage(state, field)
     }
     
-    @inlinable init(_ style: Style, _ value: Value, _ focus: Focus) {
-        self = focus.value ? .focused(style, value) : .unfocused(style, value)
-    }
-    
-    @inlinable public init(_ remote: Remote) {
-        self.init(remote.style, remote.value, remote.focus)
+    @inlinable public init(_ state: State) {
+        switch state.focus.wrapped {
+        case  true: self =   .focused(state.style, state.value)
+        case false: self = .unfocused(state.style, state.value)
+        }
     }
     
     //=------------------------------------------------------------------------=
@@ -51,11 +50,11 @@ public struct Context<Style: DiffableTextStyle> {
     }
     
     @inlinable static func focused(_ style: Style, _ commit: Commit) -> Self {
-        Self(Storage(style, commit.value, true, Field((commit.snapshot))))
+        Self(State(style, commit.value, true), Field((commit.snapshot)))
     }
  
     @inlinable static func unfocused(_ style: Style, _ value: Value) -> Self {
-        Self(Storage(style, value, false, Field(Snapshot(style.format(value), as: .phantom))))
+        Self(State(style, value, false), Field(Snapshot(style.format(value), as: .phantom)))
     }
     
     //=------------------------------------------------------------------------=
@@ -86,19 +85,15 @@ public struct Context<Style: DiffableTextStyle> {
         // MARK: State
         //=--------------------------------------------------------------------=
         
-        @usableFromInline var style: Style
-        @usableFromInline var value: Value
-        @usableFromInline var focus: Focus
+        @usableFromInline var state: State
         @usableFromInline var field: Field
         
         //=--------------------------------------------------------------------=
         // MARK: Initializers
         //=--------------------------------------------------------------------=
         
-        @inlinable init(_ style: Style, _ value: Value, _ focus: Focus, _ field: Field) {
-            self.style = style
-            self.value = value
-            self.focus = focus
+        @inlinable init(_ state: State, _ field: Field) {
+            self.state = state
             self.field = field
         }
         
@@ -107,7 +102,7 @@ public struct Context<Style: DiffableTextStyle> {
         //=--------------------------------------------------------------------=
         
         @inlinable func copy() -> Self {
-            Self(style, value, focus, field)
+            Self(state, field)
         }
     }
 }
@@ -119,19 +114,11 @@ public struct Context<Style: DiffableTextStyle> {
 public extension Context {
 
     //=------------------------------------------------------------------------=
-    // MARK: Primary
+    // MARK: 1st
     //=------------------------------------------------------------------------=
         
-    @inlinable var style: Style {
-        _storage.style
-    }
-    
-    @inlinable var value: Value {
-        _storage.value
-    }
-    
-    @inlinable var focus: Focus {
-        _storage.focus
+    @inlinable internal var state: State {
+        _storage.state
     }
     
     @inlinable internal var field: Field {
@@ -139,7 +126,23 @@ public extension Context {
     }
     
     //=------------------------------------------------------------------------=
-    // MARK: Secondary
+    // MARK: 2nd
+    //=------------------------------------------------------------------------=
+    
+    @inlinable var style: Style {
+        state.style
+    }
+    
+    @inlinable var value: Value {
+        state.value
+    }
+    
+    @inlinable var focus: Focus {
+        state.focus
+    }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: 3rd
     //=------------------------------------------------------------------------=
 
     @inlinable var snapshot: Snapshot {
@@ -166,21 +169,19 @@ public extension Context {
     // MARK: Context
     //=------------------------------------------------------------------------=
         
-    @inlinable internal mutating func merge(_ context: Self) {
+    @inlinable internal mutating func merge(_ other: Self) {
         //=--------------------------------------=
         // Focused
         //=--------------------------------------=
-        if context.focus.value {
+        if other.focus.wrapped {
             self.write {
-                $0.style = context.style
-                $0.value = context.value
-                $0.focus = context.focus
-                $0.field.update(snapshot: context.snapshot)
+                $0.state = other.state
+                $0.field.update(snapshot: other.snapshot)
             }
         //=--------------------------------------=
         // Unfocused
         //=--------------------------------------=
-        } else { self = context }
+        } else { self = other }
     }
     
     //=------------------------------------------------------------------------=
@@ -206,27 +207,16 @@ public extension Context {
     // MARK: Remote
     //=------------------------------------------------------------------------=
     
-    @inlinable mutating func merge(_ remote: Remote) -> Bool {
+    @inlinable mutating func merge(_ remote: State) -> Update? {
+        var state = self.state
         //=--------------------------------------=
-        // Values
+        // Merged
         //=--------------------------------------=
-        let changeInStyle = remote.style != style
-        let changeInValue = remote.value != value
-        let changeInFocus = remote.focus != focus
-        //=--------------------------------------=
-        // At Least One Must Have Changed
-        //=--------------------------------------=
-        guard changeInStyle
-           || changeInValue
-           || changeInFocus else { return false }
+        guard let update = state.merge(remote) else { return nil }
         //=--------------------------------------=
         // Update
         //=--------------------------------------=
-        self.merge(Self(
-        changeInStyle ? remote.style : style,
-        changeInValue ? remote.value : value,
-        changeInFocus ? remote.focus : focus))
-        return true
+        self.merge(Self(state)); return update
     }
     
     //=------------------------------------------------------------------------=
