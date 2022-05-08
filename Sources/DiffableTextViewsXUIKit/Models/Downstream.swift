@@ -127,20 +127,20 @@ extension Downstream {
     
     @inlinable @inline(__always)
     func setDisableAutocorrection(_ environment: EnvironmentValues) {
-        let disable = environment.diffableTextViews_disableAutocorrection ?? false
-        self.view.autocorrectionType = disable ? .no : .default
+        let disable = environment.diffableTextViews_disableAutocorrection
+        self.view.autocorrectionType = (disable ?? false) ? .no : .default
     }
     
     @inlinable @inline(__always)
     func setFont(_ environment: EnvironmentValues) {
-        let font = environment.diffableTextViews_font ?? .body.monospaced()
-        self.view.font = UIFont(font)
+        let font = environment.diffableTextViews_font
+        self.view.font = UIFont(font ?? .body.monospaced())
     }
     
     @inlinable @inline(__always)
     func setForegroundColor(_ environment: EnvironmentValues) {
-        let color = environment.diffableTextViews_foregroundColor ?? .primary
-        self.view.textColor = UIColor(color)
+        let color = environment.diffableTextViews_foregroundColor
+        self.view.textColor = UIColor(color ?? .primary)
     }
     
     @inlinable @inline(__always)
@@ -178,8 +178,8 @@ extension Downstream {
 
     @inlinable @inline(__always)
     func setTint(_ environment: EnvironmentValues) {
-        let color = environment.diffableTextViews_tint ?? .accentColor
-        self.view.tintColor = UIColor(color)
+        let color = environment.diffableTextViews_tint
+        self.view.tintColor = UIColor(color ?? .accentColor)
     }
 }
 

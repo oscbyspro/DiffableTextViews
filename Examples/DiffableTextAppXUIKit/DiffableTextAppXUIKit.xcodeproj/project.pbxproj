@@ -24,9 +24,9 @@
 		55B38EE72827CA4C005159F4 /* NumberScreenContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55B38EE62827CA4C005159F4 /* NumberScreenContext.swift */; };
 		55B38EE92827CD46005159F4 /* NumberScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55B38EE82827CD46005159F4 /* NumberScreen.swift */; };
 		55B38EEF2827D51D005159F4 /* NumberScreenExample.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55B38EEE2827D51D005159F4 /* NumberScreenExample.swift */; };
-		55B38EF52827FAE6005159F4 /* NumberScreenInterval.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55B38EF42827FAE6005159F4 /* NumberScreenInterval.swift */; };
-		55B38EF72827FBB9005159F4 /* NumberScreenLocalization.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55B38EF62827FBB9005159F4 /* NumberScreenLocalization.swift */; };
-		55B38EF92827FD81005159F4 /* NumberScreenOptionality.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55B38EF82827FD81005159F4 /* NumberScreenOptionality.swift */; };
+		55B38EF52827FAE6005159F4 /* NumberScreenIntegerInterval.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55B38EF42827FAE6005159F4 /* NumberScreenIntegerInterval.swift */; };
+		55B38EF72827FBB9005159F4 /* NumberScreenOptionsWheel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55B38EF62827FBB9005159F4 /* NumberScreenOptionsWheel.swift */; };
+		55B38EF92827FD81005159F4 /* NumberScreenOptionalToggle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55B38EF82827FD81005159F4 /* NumberScreenOptionalToggle.swift */; };
 		55B38EFB28280F0F005159F4 /* Toggler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55B38EFA28280F0F005159F4 /* Toggler.swift */; };
 		55C9EC4D27F9996A00DA6CEB /* Sliders in Frameworks */ = {isa = PBXBuildFile; productRef = 55C9EC4C27F9996A00DA6CEB /* Sliders */; };
 		55DDC62C27A8D81D00B2AB4A /* Example.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55DDC62B27A8D81D00B2AB4A /* Example.swift */; };
@@ -58,9 +58,9 @@
 		55B38EE62827CA4C005159F4 /* NumberScreenContext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NumberScreenContext.swift; sourceTree = "<group>"; };
 		55B38EE82827CD46005159F4 /* NumberScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NumberScreen.swift; sourceTree = "<group>"; };
 		55B38EEE2827D51D005159F4 /* NumberScreenExample.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NumberScreenExample.swift; sourceTree = "<group>"; };
-		55B38EF42827FAE6005159F4 /* NumberScreenInterval.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NumberScreenInterval.swift; sourceTree = "<group>"; };
-		55B38EF62827FBB9005159F4 /* NumberScreenLocalization.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NumberScreenLocalization.swift; sourceTree = "<group>"; };
-		55B38EF82827FD81005159F4 /* NumberScreenOptionality.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NumberScreenOptionality.swift; sourceTree = "<group>"; };
+		55B38EF42827FAE6005159F4 /* NumberScreenIntegerInterval.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NumberScreenIntegerInterval.swift; sourceTree = "<group>"; };
+		55B38EF62827FBB9005159F4 /* NumberScreenOptionsWheel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NumberScreenOptionsWheel.swift; sourceTree = "<group>"; };
+		55B38EF82827FD81005159F4 /* NumberScreenOptionalToggle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NumberScreenOptionalToggle.swift; sourceTree = "<group>"; };
 		55B38EFA28280F0F005159F4 /* Toggler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Toggler.swift; sourceTree = "<group>"; };
 		55DDC62B27A8D81D00B2AB4A /* Example.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Example.swift; sourceTree = "<group>"; };
 		55F2783627AD7C1C001400D7 /* PatternScreen.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PatternScreen.swift; sourceTree = "<group>"; };
@@ -188,10 +188,10 @@
 			children = (
 				55B38EE62827CA4C005159F4 /* NumberScreenContext.swift */,
 				55B38EE82827CD46005159F4 /* NumberScreen.swift */,
-				55B38EF42827FAE6005159F4 /* NumberScreenInterval.swift */,
+				55B38EF42827FAE6005159F4 /* NumberScreenIntegerInterval.swift */,
 				55B38EEE2827D51D005159F4 /* NumberScreenExample.swift */,
-				55B38EF62827FBB9005159F4 /* NumberScreenLocalization.swift */,
-				55B38EF82827FD81005159F4 /* NumberScreenOptionality.swift */,
+				55B38EF62827FBB9005159F4 /* NumberScreenOptionsWheel.swift */,
+				55B38EF82827FD81005159F4 /* NumberScreenOptionalToggle.swift */,
 			);
 			path = Screens.Number;
 			sourceTree = "<group>";
@@ -296,10 +296,10 @@
 				557DAF1D27BA415500D9F0E5 /* PatternScreenExamples.swift in Sources */,
 				55AA28CE27A7F472003778FE /* Tabs.swift in Sources */,
 				55DDC62C27A8D81D00B2AB4A /* Example.swift in Sources */,
-				55B38EF72827FBB9005159F4 /* NumberScreenLocalization.swift in Sources */,
+				55B38EF72827FBB9005159F4 /* NumberScreenOptionsWheel.swift in Sources */,
 				55B38EE72827CA4C005159F4 /* NumberScreenContext.swift in Sources */,
 				557DAF2327BA4AE600D9F0E5 /* PatternScreenActions.swift in Sources */,
-				55B38EF52827FAE6005159F4 /* NumberScreenInterval.swift in Sources */,
+				55B38EF52827FAE6005159F4 /* NumberScreenIntegerInterval.swift in Sources */,
 				55FD23CB27BA17C7008F65E1 /* PatternScreenExample.swift in Sources */,
 				55F2783927AD7C1C001400D7 /* PatternScreen.swift in Sources */,
 				557DAF2127BA493200D9F0E5 /* Action.swift in Sources */,
@@ -314,7 +314,7 @@
 				55B38EE92827CD46005159F4 /* NumberScreen.swift in Sources */,
 				5527C21327AA6C6A0098546E /* Interval.swift in Sources */,
 				5507BD1627AD66A800F5292D /* Wheel.swift in Sources */,
-				55B38EF92827FD81005159F4 /* NumberScreenOptionality.swift in Sources */,
+				55B38EF92827FD81005159F4 /* NumberScreenOptionalToggle.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

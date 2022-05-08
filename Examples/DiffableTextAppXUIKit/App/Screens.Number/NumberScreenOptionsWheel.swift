@@ -13,7 +13,7 @@ import SwiftUI
 // MARK: Declaration
 //*============================================================================*
 
-struct NumberScreenLocalization: View {
+struct NumberScreenOptionsWheel: View {
     typealias Context = NumberScreenContext
     typealias FormatID = Context.FormatID
     

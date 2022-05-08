@@ -49,7 +49,7 @@ struct NumberScreenIntegerInterval: View {
     
     var body: some View {
         VStack(alignment: .leading) {
-            Text(description).font(.headline.bold())
+            Text(description).font(.subheadline.weight(.light))
             Sliders($interval.wrapped.values, in: limits)
         }
     }

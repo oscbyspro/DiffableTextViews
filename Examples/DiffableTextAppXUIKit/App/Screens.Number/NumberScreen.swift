@@ -40,11 +40,11 @@ struct NumberScreen: View {
     
     var controls: some View {
         Scroller {
-            NumberScreenOptionality(context.optional)
+            NumberScreenOptionalToggle(context.optional)
             
             Segments(context.format.xwrapped)
             
-            NumberScreenLocalization(context)
+            NumberScreenOptionsWheel(context)
             
             NumberScreenIntegerInterval("Bounds (9s)",
             interval: context.bounds.interval, in: context.boundsLimits)

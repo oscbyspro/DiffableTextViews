@@ -13,7 +13,7 @@ import SwiftUI
 // MARK: Declaration
 //*============================================================================*
 
-struct NumberScreenOptionality: View {
+struct NumberScreenOptionalToggle: View {
     typealias Context = NumberScreenContext
     
     //=------------------------------------------------------------------------=
