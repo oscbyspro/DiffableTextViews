@@ -30,29 +30,19 @@ struct Action: View {
         self.title = title
         self.action = action
     }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Measurements
-    //=------------------------------------------------------------------------=
-    
-    var height: CGFloat { 24 }
-    
+
     //=------------------------------------------------------------------------=
     // MARK: Body
     //=------------------------------------------------------------------------=
     
     var body: some View {
-        Button(action: action, label: label)
-            .tint(Color.gray.opacity(2/3))
-            .buttonStyle(.borderedProminent)
-    }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Body
-    //=------------------------------------------------------------------------=
-    
-    func label() -> some View {
-        Text(title).frame(maxWidth: .infinity, minHeight: height, maxHeight: height)
+        Button(action: action) {
+            Text(title)
+                .font(.subheadline)
+                .frame(height:  16)
+                .frame(maxWidth: .infinity)
+        }
+        .tint(Color.gray.opacity(2/3))
+        .buttonStyle(.borderedProminent)
     }
 }
-

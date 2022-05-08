@@ -18,6 +18,7 @@ import DiffableTextViews
 struct NumberScreenExample: View {
     typealias Context = NumberScreenContext
     typealias FormatID = Context.FormatID
+    typealias OptionalityID = Context.OptionalityID
 
     //=------------------------------------------------------------------------=
     // MARK: State
@@ -25,21 +26,21 @@ struct NumberScreenExample: View {
     
     let context: Context
     
-    @ObservedObject var optional: Observable<Bool>
-    @ObservedObject var format: Observable<FormatID>
     @ObservedObject var locale: Observable<Locale>
     @ObservedObject var currency: Observable<String>
+    @ObservedObject var format: Observable<FormatID>
+    @ObservedObject var optionality: Observable<OptionalityID>
 
     //=------------------------------------------------------------------------=
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable init(  _ context: Context) {
-        self.context  = context
-        self.optional = context.optional
-        self.format   = context.format
-        self.locale   = context.locale
+    @inlinable init( _ context: Context) {
+        self.context = context
+        self.locale = context.locale
         self.currency = context.currency
+        self.format = context.format
+        self.optionality = context.optionality
     }
     
     //=------------------------------------------------------------------------=
@@ -47,13 +48,13 @@ struct NumberScreenExample: View {
     //=------------------------------------------------------------------------=
     
     var body: some View {
-        switch (optional.wrapped, format.wrapped) {
-        case (false,   .number): decimalStandardNumberView
-        case (false, .currency): decimalStandardCurrencyView
-        case (false,  .percent): decimalStandardPercentView
-        case (true,    .number): decimalOptionalNumberView
-        case (true,  .currency): decimalOptionalCurrencyView
-        case (true,   .percent): decimalOptionalPercentView
+        switch (optionality.wrapped, format.wrapped) {
+        case (.standard,    .number): decimalStandardNumberView
+        case (.standard,  .currency): decimalStandardCurrencyView
+        case (.standard,   .percent): decimalStandardPercentView
+        case (.optional,   .number): decimalOptionalNumberView
+        case (.optional, .currency): decimalOptionalCurrencyView
+        case (.optional,  .percent): decimalOptionalPercentView
         }
     }
     

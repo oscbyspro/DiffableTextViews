@@ -19,9 +19,9 @@ final class PatternScreenContext: ObservableObject {
     // MARK: State
     //=------------------------------------------------------------------------=
     
-    let value = Observable("12345678")
-    let kind = Observable(Kind.phone)
-    let visible = Observable(true)
+    let value = Observable("123456789")
+    let pattern = Observable(PatternID.phone)
+    let visibility = Observable(VisibilityID.visible)
     
     //=------------------------------------------------------------------------=
     // MARK: Utilities
@@ -50,5 +50,11 @@ final class PatternScreenContext: ObservableObject {
     // MARK: Kind
     //*========================================================================*
     
-    enum Kind: String, CaseIterable { case phone, card }
+    enum PatternID: String, CaseIterable {
+        case phone, card
+    }
+    
+    enum VisibilityID: String, CaseIterable {
+        case visible, hidden
+    }
 }

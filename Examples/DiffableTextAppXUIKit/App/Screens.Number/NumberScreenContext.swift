@@ -20,8 +20,8 @@ final class NumberScreenContext: ObservableObject {
     // MARK: State
     //=------------------------------------------------------------------------=
     
-    let decimals = ObservableTwinValues(Decimal(string: "1234567.89")!)
-    let optional = Observable(false)
+    let decimals = ObservableTwinValues(Decimal(string: "1234567.89")!)    
+    let optionality = Observable(OptionalityID.standard)
 
     let format = Observable(FormatID.currency)
     let locale = Observable(Locale(identifier: "en_US"))
@@ -40,5 +40,11 @@ final class NumberScreenContext: ObservableObject {
     // MARK: Declaration
     //*========================================================================*
     
-    enum FormatID: String, CaseIterable { case number, currency, percent }
+    enum FormatID: String, CaseIterable {
+        case number, currency, percent
+    }
+    
+    enum OptionalityID: String, CaseIterable {
+        case standard, optional
+    }
 }

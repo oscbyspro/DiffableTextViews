@@ -29,9 +29,9 @@ struct NumberScreen: View {
     var body: some View {
         Screen {
             Scroller {
-                Segments(context.format.xwrapped)
+                Segments(context.optionality.xwrapped)
                 
-                NumberScreenOptionalToggle(context.optional)
+                Segments(context.format.xwrapped)
                 
                 NumberScreenOptionsWheel(context)
                 

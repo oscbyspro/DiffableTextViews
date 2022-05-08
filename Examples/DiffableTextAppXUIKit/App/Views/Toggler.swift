@@ -37,11 +37,12 @@ struct Toggler: View {
     var body: some View {
         Toggle(isOn: isOn.xwrapped) {
             Text(title)
+                .font(.subheadline)
                 .frame(maxWidth: .infinity)
                 .contentShape(Rectangle())
                 .animation(nil, value: isOn.wrapped)
         }
-        .tint(Color.gray.opacity(2/3))
+        .tint(Color.gray.opacity(0.6))
         .background(Rectangle().strokeBorder(.gray))
         .animation(.default, value: isOn.wrapped)
         .toggleStyle(.button)

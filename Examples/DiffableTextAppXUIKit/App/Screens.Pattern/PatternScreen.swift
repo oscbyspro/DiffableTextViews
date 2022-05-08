@@ -30,9 +30,9 @@ struct PatternScreen: View {
     var body: some View {
         Screen {
             Scroller {
-                Segments(context.kind.xwrapped)
+                Segments(context.pattern.xwrapped)
                 
-                PatternScreenVisibilityToggle(visible: context.visible)
+                Segments(context.visibility.xwrapped)                
                 
                 PatternScreenActionsStack(context)
                 

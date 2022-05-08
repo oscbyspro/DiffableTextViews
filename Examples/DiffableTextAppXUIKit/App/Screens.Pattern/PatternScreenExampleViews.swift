@@ -18,7 +18,8 @@ import DiffableTextViews
 struct PatternScreenExample: View {
     typealias Style = PatternTextStyle<String>
     typealias Context = PatternScreenContext
-    typealias Kind = Context.Kind
+    typealias Pattern = Context.PatternID
+    typealias Visibility = Context.VisibilityID
     
     
     //=------------------------------------------------------------------------=
@@ -26,8 +27,8 @@ struct PatternScreenExample: View {
     //=------------------------------------------------------------------------=
     
     let context: Context
-    @ObservedObject var kind: Observable<Kind>
-    @ObservedObject var visible: Observable<Bool>
+    @ObservedObject var pattern: Observable<Pattern>
+    @ObservedObject var visibility: Observable<Visibility>
     
     //=------------------------------------------------------------------------=
     // MARK: Initializers
@@ -35,8 +36,8 @@ struct PatternScreenExample: View {
     
     init(_ context: Context) {
         self.context = context
-        self.kind = context.kind
-        self.visible = context.visible
+        self.pattern = context.pattern
+        self.visibility = context.visibility
     }
     
     //=------------------------------------------------------------------------=
@@ -44,9 +45,16 @@ struct PatternScreenExample: View {
     //=------------------------------------------------------------------------=
     
     var style: Style {
-        switch kind.wrapped {
+        switch pattern.wrapped {
         case  .card: return Self .card
         case .phone: return Self.phone
+        }
+    }
+    
+    var visible: Bool {
+        switch visibility.wrapped {
+        case .visible: return  true
+        case  .hidden: return false
         }
     }
     
@@ -55,7 +63,7 @@ struct PatternScreenExample: View {
     //=------------------------------------------------------------------------=
     
     var body: some View {
-        PatternScreenExampleX(context, style: style.hidden(!visible.wrapped))
+        PatternScreenExampleX(context, style: style.hidden(!visible))
     }
     
     //=------------------------------------------------------------------------=
