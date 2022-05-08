@@ -48,7 +48,8 @@ struct NumberScreenIntegerInterval: View {
     //=------------------------------------------------------------------------=
     
     var body: some View {
-        GroupBox(description) {
+        VStack(alignment: .leading) {
+            Text(description).font(.headline.bold())
             Sliders($interval.wrapped.values, in: limits)
         }
     }
