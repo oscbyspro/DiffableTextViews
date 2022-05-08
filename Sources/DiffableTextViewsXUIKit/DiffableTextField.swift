@@ -17,6 +17,22 @@ import SwiftUI
 //*============================================================================*
 
 /// An as-you-type formatting compatible text field.
+///
+/// List of all supported modifiers:
+///
+/// - environment(\.locale, \_:)
+/// - environment(\.layoutDirection, \_:)
+/// - diffableTextViews_disableAutocorrection(\_:)
+/// - diffableTextViews_font(\_:)
+/// - diffableTextViews_foregroundColor(\_:)
+/// - diffableTextViews_multilineTextAlignment(\_:)
+/// - diffableTextViews_onSubmit(\_:)
+/// - diffableTextViews_submitLabel(\_:)
+/// - diffableTextViews_textContentType(\_:)
+/// - diffableTextViews_textFieldStyle(\_:)
+/// - diffableTextViews_textInputAutocapitalization(\_:)
+/// - diffableTextViews_tint(\_:)
+///
 public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
     public typealias Value = Style.Value
     
@@ -133,6 +149,7 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
             self.downstream.setFont(environment)
             self.downstream.setForegroundColor(environment)
             self.downstream.setKeyboardType(environment)
+            self.downstream.setMultilineTextAlignment(environment)
             self.downstream.setSubmitLabel(environment)
             self.downstream.setTextContentType(environment)
             self.downstream.setTextInputAutocapitalization(environment)
