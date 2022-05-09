@@ -52,7 +52,7 @@ public struct Context<Style: DiffableTextStyle> {
     @inlinable static func focused(_ style: Style, _ commit: Commit) -> Self {
         Self(State(style, commit.value, true), Field((commit.snapshot)))
     }
- 
+    
     @inlinable static func unfocused(_ style: Style, _ value: Value) -> Self {
         Self(State(style, value, false), Field(Snapshot(style.format(value), as: .phantom)))
     }
@@ -185,6 +185,25 @@ public extension Context {
     }
     
     //=------------------------------------------------------------------------=
+    // MARK: Remote
+    //=------------------------------------------------------------------------=
+    
+    @inlinable mutating func merge(_ remote: State) -> Bool {
+        //=--------------------------------------=
+        // Update
+        //=--------------------------------------=
+        let (result, update) = self.state + remote
+        //=--------------------------------------=
+        // At Least On Value Must Be Unique
+        //=--------------------------------------=
+        guard !update.isEmpty else { return false }
+        //=--------------------------------------=
+        // Insert
+        //=--------------------------------------=
+        self.merge(Self(result)); return true
+    }
+    
+    //=------------------------------------------------------------------------=
     // MARK: Characters
     //=------------------------------------------------------------------------=
         
@@ -201,22 +220,6 @@ public extension Context {
         //=--------------------------------------=
         self.set(selection: carets.upperBound)
         self.merge(Self.focused(style, commit))
-    }
-
-    //=------------------------------------------------------------------------=
-    // MARK: Remote
-    //=------------------------------------------------------------------------=
-    
-    @inlinable mutating func merge(_ remote: State) -> Update? {
-        var state = self.state
-        //=--------------------------------------=
-        // Update
-        //=--------------------------------------=
-        guard let update = state.merge(remote) else { return nil }
-        //=--------------------------------------=
-        // Insert
-        //=--------------------------------------=
-        self.merge(Self(state)); return update
     }
     
     //=------------------------------------------------------------------------=

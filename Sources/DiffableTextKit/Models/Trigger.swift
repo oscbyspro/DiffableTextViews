@@ -64,7 +64,7 @@ public struct Trigger: ExpressibleByNilLiteral {
     }
     
     /// Appends the trigger if it exists, resets this instance otherwise.
-    @inlinable public static func &+= (lhs: inout Self, rhs: Self) {
-        lhs.merge(rhs)
+    @inlinable public static func &+= (this: inout Self, other: Self) {
+        this.merge(other)
     }
 }

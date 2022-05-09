@@ -30,44 +30,8 @@ import SwiftUI
     @inlinable init(_ interval: Interval, in proxy: GeometryProxy) {
         self.frame = proxy.frame(in: .local)
         self.positionsLimits = 0...frame.width
-        self.positions = map(interval.values.wrappedValue,
+        self.positions = Utilities.map(interval.values.wrappedValue,
         from: interval.valuesLimits, to: positionsLimits)
-    }
-}
-
-//*============================================================================*
-// MARK: Declaration
-//*============================================================================*
-
-@usableFromInline protocol HasLayout {
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Layout
-    //=------------------------------------------------------------------------=
-    
-    @inlinable var layout: Layout { get }
-}
-
-//=----------------------------------------------------------------------------=
-// MARK: Details
-//=----------------------------------------------------------------------------=
-
-extension HasLayout {
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Accessors
-    //=------------------------------------------------------------------------=
-        
-    @inlinable var frame: CGRect {
-        layout.frame
-    }
-    
-    @inlinable var positions: (CGFloat, CGFloat) {
-        layout.positions
-    }
-    
-    @inlinable var positionsLimits: ClosedRange<CGFloat> {
-        layout.positionsLimits
     }
     
     //=------------------------------------------------------------------------=

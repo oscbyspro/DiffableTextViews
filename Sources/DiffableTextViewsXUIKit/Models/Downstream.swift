@@ -152,7 +152,7 @@ extension Downstream {
     func setMultilineTextAlignment(_ environment: EnvironmentValues) {
         self.view.textAlignment = NSTextAlignment(
         environment.diffableTextViews_multilineTextAlignment,
-        relativeTo: UIUserInterfaceLayoutDirection(environment.layoutDirection))
+        relativeTo: environment.layoutDirection)
     }
 
     @inlinable @inline(__always)

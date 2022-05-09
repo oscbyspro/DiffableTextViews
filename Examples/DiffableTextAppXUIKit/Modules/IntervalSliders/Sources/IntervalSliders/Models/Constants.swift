@@ -13,19 +13,14 @@ import SwiftUI
 // MARK: Declaration
 //*============================================================================*
 
-@usableFromInline struct Track: View {
+@usableFromInline enum Constants {
     
     //=------------------------------------------------------------------------=
-    // MARK: Initializers
+    // MARK: State
     //=------------------------------------------------------------------------=
     
-    @inlinable init() { }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Body
-    //=------------------------------------------------------------------------=
-    
-    @inlinable var body: some View {
-        Capsule().fill(.gray.opacity(0.2)).frame(height: thickness)
-    }
+    @usableFromInline static let coordinates: UInt8 = 33
+    @usableFromInline static let radius: CGFloat = 27
+    @usableFromInline static let thickness: CGFloat = 04
+    @usableFromInline static let dragging: Animation = .linear(duration: 0.125)
 }

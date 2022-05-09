@@ -13,7 +13,7 @@ import SwiftUI
 // MARK: Declaration
 //*============================================================================*
 
-public struct Sliders: View, HasInterval {
+public struct IntervalSlider: View {
  
     //=------------------------------------------------------------------------=
     // MARK: State
@@ -25,31 +25,31 @@ public struct Sliders: View, HasInterval {
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable public init(_ values: Binding<(CGFloat, CGFloat)>, in limits: ClosedRange<CGFloat>) {
+    @inlinable public init(_ values: Binding<(CGFloat, CGFloat)>,
+    in limits: ClosedRange<CGFloat>) {
         self.interval = Interval(values, in: limits)
     }
     
     //=------------------------------------------------------------------------=
     // MARK: Body
     //=------------------------------------------------------------------------=
-    
+
     @inlinable public var body: some View {
-        foundation.overlay(controls)
-    }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Components
-    //=------------------------------------------------------------------------=
-    
-    @inlinable var foundation: some View {
-        Track().frame(maxWidth: .infinity, minHeight: radius, maxHeight: radius)
-    }
-    
-    @inlinable var controls: some View {
-        GeometryReader {
-            Controls(interval, in: $0)
+        ZStack {
+            //=----------------------------------=
+            // Track
+            //=----------------------------------=
+            Track()
+            //=----------------------------------=
+            // Controls
+            //=----------------------------------=
+            GeometryReader { geometry in
+                Controls(interval, in: geometry)
+            }
+            .padding(.horizontal, 0.5 * Constants.radius)
         }
-        .padding(.horizontal, 0.5 * radius)
+        .frame(maxWidth: .infinity)
+        .frame(height: Constants.radius)
     }
 }
 
@@ -57,28 +57,29 @@ public struct Sliders: View, HasInterval {
 // MARK: Initializers
 //=----------------------------------------------------------------------------=
 
-extension Sliders {
+extension IntervalSlider {
     
     //=------------------------------------------------------------------------=
     // MARK: Integer
     //=------------------------------------------------------------------------=
     
-    @inlinable public init<Value>(_ values: Binding<(Value, Value)>,
-        in limits: ClosedRange<Value>) where Value: BinaryInteger {
+    @inlinable public init<T>(_ values: Binding<(T, T)>,
+    in limits: ClosedRange<T>) where T: BinaryInteger {
         //=--------------------------------------=
-        // MARK: Get
+        // Get
         //=--------------------------------------=
         self.init(Binding {(
             CGFloat(values.wrappedValue.0),
             CGFloat(values.wrappedValue.1))
         //=--------------------------------------=
-        // MARK: Set
+        // Set
         //=--------------------------------------=
-        } set: {  xxxxxxxxxxx in let newValue = (
-            Value(xxxxxxxxxxx.0.rounded()),
-            Value(xxxxxxxxxxx.1.rounded()))
+        } set: {
+            let newValue = (
+            T($0.0.rounded()),
+            T($0.1.rounded()))
             //=----------------------------------=
-            // MARK: Set Nonduplicate Values
+            // Must Be Unique
             //=----------------------------------=
             if  values.wrappedValue != newValue {
                 values.wrappedValue  = newValue
@@ -107,7 +108,7 @@ struct Sliders_Previews: View, PreviewProvider {
     //=------------------------------------------------------------------------=
     
     var body: some View {
-        Sliders($interval, in: 0...6)
+        IntervalSlider($interval, in: 0...6)
     }
     
     //=------------------------------------------------------------------------=

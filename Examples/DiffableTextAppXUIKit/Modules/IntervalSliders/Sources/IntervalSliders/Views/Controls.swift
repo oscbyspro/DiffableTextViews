@@ -13,24 +13,20 @@ import SwiftUI
 // MARK: Declaration
 //*============================================================================*
 
-@usableFromInline struct Handle: View, HasContext {
+@usableFromInline struct Controls: View {
     
     //=------------------------------------------------------------------------=
     // MARK: State
     //=------------------------------------------------------------------------=
     
     @usableFromInline let context: Context
-    @usableFromInline let position: CGFloat
-    @usableFromInline let value: Binding<CGFloat>
-
+    
     //=------------------------------------------------------------------------=
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable init(_ context: Context, value: Binding<CGFloat>, position: CGFloat) {
-        self.value = value
-        self.context = context
-        self.position = position
+    @inlinable init(_ interval: Interval, in proxy: GeometryProxy) {
+        self.context = Context(interval, proxy: proxy)
     }
     
     //=------------------------------------------------------------------------=
@@ -38,27 +34,11 @@ import SwiftUI
     //=------------------------------------------------------------------------=
     
     @inlinable var body: some View {
-        shape.fill(.white)
-            .overlay(shape.fill(Material.thin))
-            .overlay(shape.strokeBorder(.gray.opacity(0.2), lineWidth: 0.5))
-            .shadow(color: Color.black.opacity(0.15), radius: 2, x: 0, y: 2)
-            .highPriorityGesture(drag)
-            .position(center(position))
-    }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Components
-    //=------------------------------------------------------------------------=
-    
-    @inlinable var shape: some InsettableShape {
-        Circle()
-    }
-
-    @inlinable var drag: some Gesture {
-        DragGesture(coordinateSpace: .named(coordinates)).onChanged { gesture in
-            withAnimation(dragging) {
-                value.wrappedValue = map(gesture.location.x, from: positionsLimits, to: valuesLimits)
-            }
+        ZStack {
+            Beam(context, between: context.positions)
+            Handle(context, value: context.values.projectedValue.0, position: context.positions.0)
+            Handle(context, value: context.values.projectedValue.1, position: context.positions.1)
         }
+        .coordinateSpace(name: Constants.coordinates)
     }
 }

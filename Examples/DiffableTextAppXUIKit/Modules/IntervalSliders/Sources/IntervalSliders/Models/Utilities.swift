@@ -7,27 +7,28 @@
 // See http://www.apache.org/licenses/LICENSE-2.0 for license information.
 //=----------------------------------------------------------------------------=
 
-#if canImport(UIKit)
-
 import SwiftUI
 
 //*============================================================================*
-// MARK: Extension
+// MARK: Declaration
 //*============================================================================*
 
-extension UIUserInterfaceLayoutDirection {
+@usableFromInline enum Utilities {
     
     //=------------------------------------------------------------------------=
-    // MARK: Initializers
+    // MARK: Utilities
     //=------------------------------------------------------------------------=
     
-    @inlinable init(_ direction: LayoutDirection) {
-        switch direction {
-        case .rightToLeft: self = .rightToLeft
-        case .leftToRight: self = .leftToRight
-        @unknown  default: self = .leftToRight
-        }
+    @inlinable static func map(_ value: CGFloat,
+    from start: ClosedRange<CGFloat>, to end: ClosedRange<CGFloat>) -> CGFloat {
+        guard start.lowerBound != start.upperBound else { return end.lowerBound }
+        let ratio = (end.upperBound - end.lowerBound) / (start.upperBound - start.lowerBound)
+        return min(max(end.lowerBound, end.lowerBound + ratio * (value - start.lowerBound)), end.upperBound)
     }
-}
 
-#endif
+    @inlinable static func map(_ values: (CGFloat, CGFloat),
+    from start: ClosedRange<CGFloat>, to end: ClosedRange<CGFloat>) -> (CGFloat, CGFloat) {(
+        map(values.0, from: start, to: end),
+        map(values.1, from: start, to: end)
+    )}    
+}

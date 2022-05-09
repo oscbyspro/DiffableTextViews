@@ -13,52 +13,32 @@ import SwiftUI
 // MARK: Declaration
 //*============================================================================*
 
-@usableFromInline final class Interval: ObservableObject {
-
+@dynamicMemberLookup @usableFromInline final class Context {
+    
     //=------------------------------------------------------------------------=
     // MARK: State
     //=------------------------------------------------------------------------=
     
-    @usableFromInline let values: Binding<(CGFloat, CGFloat)>
-    @usableFromInline let valuesLimits: ClosedRange<CGFloat>
+    @usableFromInline let layout:   Layout
+    @usableFromInline let interval: Interval
     
     //=------------------------------------------------------------------------=
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable init(_ values: Binding<(CGFloat, CGFloat)>, in valuesLimits: ClosedRange<CGFloat>) {
-        self.values = values; self.valuesLimits = valuesLimits
+    @inlinable init(_ interval: Interval, proxy: GeometryProxy) {
+        self.interval = interval; self.layout = Layout(interval, in: proxy)
     }
-}
-
-//*============================================================================*
-// MARK: Declaration
-//*============================================================================*
-
-@usableFromInline protocol HasInterval {
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Interval
-    //=------------------------------------------------------------------------=
-    
-    @inlinable var interval: Interval { get }
-}
-
-//=----------------------------------------------------------------------------=
-// MARK: Details
-//=----------------------------------------------------------------------------=
-
-extension HasInterval {
     
     //=------------------------------------------------------------------------=
     // MARK: Accessors
     //=------------------------------------------------------------------------=
-        
-    @inlinable var values: Binding<(CGFloat, CGFloat)> {
-        interval.values
+    
+    @inlinable subscript<T>(dynamicMember keyPath: KeyPath<Layout, T>) -> T {
+        layout[keyPath: keyPath]
     }
     
-    @inlinable var valuesLimits: ClosedRange<CGFloat> {
-        interval.valuesLimits
+    @inlinable subscript<T>(dynamicMember keyPath: KeyPath<Interval, T>) -> T {
+        interval[keyPath: keyPath]
     }
 }

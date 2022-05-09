@@ -8,7 +8,7 @@
 //=----------------------------------------------------------------------------=
 
 import SwiftUI
-import Sliders
+import IntervalSliders
 
 //*============================================================================*
 // MARK: Declaration
@@ -50,7 +50,7 @@ struct NumberScreenIntegerInterval: View {
     var body: some View {
         VStack(alignment: .leading) {
             Text(description).font(.subheadline.weight(.light))
-            Sliders($interval.wrapped.values, in: limits)
+            IntervalSlider($interval.wrapped.values, in: limits)
         }
     }
 }

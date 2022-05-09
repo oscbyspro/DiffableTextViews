@@ -7,32 +7,26 @@
 // See http://www.apache.org/licenses/LICENSE-2.0 for license information.
 //=----------------------------------------------------------------------------=
 
+import SwiftUI
+
 //*============================================================================*
 // MARK: Declaration
 //*============================================================================*
 
-/// Used to store state comparison results in order to avoid multiple comparisons.
-public struct Update: OptionSet {
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Instances
-    //=------------------------------------------------------------------------=
-    
-    public static let style = Self(rawValue: 1 << 0)
-    public static let value = Self(rawValue: 1 << 1)
-    public static let focus = Self(rawValue: 1 << 2)
-    
+@usableFromInline final class Interval: ObservableObject {
+
     //=------------------------------------------------------------------------=
     // MARK: State
     //=------------------------------------------------------------------------=
     
-    public var rawValue: UInt8
+    @usableFromInline let values: Binding<(CGFloat, CGFloat)>
+    @usableFromInline let valuesLimits: ClosedRange<CGFloat>
     
     //=------------------------------------------------------------------------=
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable public init(rawValue: UInt8 = 0) {
-        self.rawValue = rawValue
+    @inlinable init(_ values: Binding<(CGFloat, CGFloat)>, in valuesLimits: ClosedRange<CGFloat>) {
+        self.values = values; self.valuesLimits = valuesLimits
     }
 }

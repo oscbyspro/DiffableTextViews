@@ -11,26 +11,24 @@
 import PackageDescription
 
 //*============================================================================*
-// MARK: Sliders
+// MARK: IntervalSliders
 //*============================================================================*
 
 let package = Package(
-    name: "Sliders",
+    name: "IntervalSliders",
     platforms: [
         .iOS(.v15),
     ],
     products: [
         //=--------------------------------------=
-        // Sliders
+        // IntervalSliders
         //=--------------------------------------=
-        .library(
-            name: "Sliders",
-            targets: ["Sliders"])
+        .library(name: "IntervalSliders", targets: ["IntervalSliders"])
     ],
     targets: [
         //=--------------------------------------=
-        // Sliders
+        // IntervalSliders
         //=--------------------------------------=
-        .target(name: "Sliders"),
+        .target(name: "IntervalSliders"),
     ]
 )

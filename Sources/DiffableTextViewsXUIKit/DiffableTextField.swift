@@ -18,7 +18,7 @@ import SwiftUI
 
 /// An as-you-type formatting compatible text field.
 ///
-/// List of all supported modifiers:
+/// List of all available modifiers:
 ///
 /// - environment(\.locale, \_:)
 /// - environment(\.layoutDirection, \_:)
@@ -248,12 +248,16 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
             //=----------------------------------=
             // Pull
             //=----------------------------------=
-            guard let update = context.merge(self.pull()) else { return }
+            guard context.merge(self.pull()) else { return }
             //=----------------------------------=
             // Push
             //=----------------------------------=
-            self.context.focus.wrapped ? self.push(update) : self.write()
+            self.context.focus.wrapped ? self.push() : self.write()
         }
+        
+        //=--------------------------------------------------------------------=
+        // MARK: Synchronization
+        //=--------------------------------------------------------------------=
         
         @inlinable func pull() -> Remote {
             //=----------------------------------=
@@ -262,7 +266,7 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
             Remote(upstream.style, upstream.value.wrappedValue, downstream.focus)
         }
 
-        @inlinable func push(_ update: Update = .all) {
+        @inlinable func push() {
             //=----------------------------------=
             // Downstream
             //=----------------------------------=
@@ -270,18 +274,37 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
             //=----------------------------------=
             // Upstream
             //=----------------------------------=
-            guard update.contains(.value) else { return }
-            self.upstream.value.wrappedValue = context.value
+            self.relay()
         }
+        
+        //=--------------------------------------------------------------------=
+        // MARK: Synchronization
+        //=--------------------------------------------------------------------=
         
         @inlinable func write() {
             //=----------------------------------=
             // Downstream
             //=----------------------------------=
             lock.perform {
+                //=------------------------------=
+                // Text
+                //=------------------------------=
                 self.downstream.update(text: context.text)
-                guard downstream.focus.wrapped else { return }
-                self.downstream.update(selection: context.selection())
+                //=------------------------------=
+                // Selection
+                //=------------------------------=
+                if  self.downstream.focus.wrapped {
+                    self.downstream.update(selection: context.selection())
+                }
+            }
+        }
+        
+        @inlinable func relay() {
+            //=--------------------------------------=
+            // Upstream
+            //=--------------------------------------=
+            if  self.upstream.value.wrappedValue != context.value {
+                self.upstream.value.wrappedValue  = context.value
             }
         }
     }

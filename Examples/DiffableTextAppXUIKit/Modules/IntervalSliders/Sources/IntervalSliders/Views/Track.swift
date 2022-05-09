@@ -7,23 +7,25 @@
 // See http://www.apache.org/licenses/LICENSE-2.0 for license information.
 //=----------------------------------------------------------------------------=
 
-#if canImport(UIKit)
-
-import UIKit
+import SwiftUI
 
 //*============================================================================*
-// MARK: Extension
+// MARK: Declaration
 //*============================================================================*
 
-extension UIView {
+@usableFromInline struct Track: View {
     
     //=------------------------------------------------------------------------=
-    // MARK: Accessors
+    // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable var userInterfaceLayoutDirection: UIUserInterfaceLayoutDirection {
-        UIView.userInterfaceLayoutDirection(for: semanticContentAttribute)
+    @inlinable init() { }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Body
+    //=------------------------------------------------------------------------=
+    
+    @inlinable var body: some View {
+        Capsule().fill(.gray.opacity(0.2)).frame(height: Constants.thickness)
     }
 }
-
-#endif

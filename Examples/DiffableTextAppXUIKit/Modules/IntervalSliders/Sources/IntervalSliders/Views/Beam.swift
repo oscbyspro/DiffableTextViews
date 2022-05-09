@@ -13,7 +13,7 @@ import SwiftUI
 // MARK: Declaration
 //*============================================================================*
 
-@usableFromInline struct Beam: View, Animatable, HasContext {
+@usableFromInline struct Beam: View, Animatable {
     @usableFromInline typealias Start = GestureState<(CGFloat, CGFloat)?>
     @usableFromInline typealias AnimatableData = AnimatablePair<CGFloat, CGFloat>
 
@@ -30,8 +30,7 @@ import SwiftUI
     //=------------------------------------------------------------------------=
 
     @inlinable init(_ context: Context, between positions: (CGFloat, CGFloat)) {
-        self.context = context
-        self.animatableData = AnimatableData(positions.0, positions.1)
+        self.context = context; self.animatableData = AnimatableData(positions.0, positions.1)
     }
     
     //=------------------------------------------------------------------------=
@@ -40,11 +39,11 @@ import SwiftUI
     
     @inlinable var body: some View {
         Path {
-            $0.move(to: center(animatableData.first))
-            $0.addLine(to: center(animatableData.second))
+            $0.move(to: context.layout.center(animatableData.first))
+            $0.addLine(to: context.layout.center(animatableData.second))
         }
-        .stroke(Color.accentColor, lineWidth: thickness)
-        .frame(height: radius)
+        .stroke(Color.accentColor, lineWidth: Constants.thickness)
+        .frame(height: Constants.radius)
         .contentShape(Rectangle())
         .gesture(dragGesture)
     }
@@ -54,12 +53,12 @@ import SwiftUI
     //=------------------------------------------------------------------------=
     
     @inlinable var dragGesture: some Gesture {
-        DragGesture(coordinateSpace: .named(coordinates)).updating(start) { gesture, start, _ in
-            if start == nil { start = positions }
+        DragGesture(coordinateSpace: .named(Constants.coordinates)).updating(start) { gesture, start, _ in
+            if start == nil { start = context.positions }
             let distance = gesture.location.x - gesture.startLocation.x
-            let positions = move(start!, by: distance, in: positionsLimits)
-            let next = map(positions, from: positionsLimits, to: valuesLimits)
-            withAnimation(dragging) { values.wrappedValue = next }
+            let positions = move(start!, by: distance, in: context.positionsLimits)
+            let next = Utilities.map(positions, from: context.positionsLimits, to: context.valuesLimits)
+            withAnimation(Constants.dragging) { context.values.wrappedValue = next }
         }
     }
     
@@ -71,13 +70,17 @@ import SwiftUI
     @inlinable func move(_ values: (CGFloat, CGFloat),
         by amount: CGFloat, in limits: ClosedRange<CGFloat>) -> (CGFloat, CGFloat)  {
         var next = (values.0 + amount, values.1 + amount)
-        
+        //=--------------------------------------=
+        // Utilities
+        //=--------------------------------------=
         func autocorrect(_ value: CGFloat) {
             let change = min(max(limits.lowerBound, value), limits.upperBound) - value
             next.0 += change
             next.1 += change
         }
-
+        //=--------------------------------------=
+        // Autocorrect
+        //=--------------------------------------=
         autocorrect(next.0); autocorrect(next.1); return next
     }
 }

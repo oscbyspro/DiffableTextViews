@@ -37,12 +37,8 @@ public struct Remote<Style: DiffableTextStyle> {
     // MARK: Transformations
     //=------------------------------------------------------------------------=
     
-    @inlinable public mutating func merge(_ other: Self) -> Update? {
-        let update = (self .== other)
-        //=--------------------------------------=
-        // At Least One Value Must Be Different
-        //=--------------------------------------=
-        guard !update.isEmpty else { return nil }
+    @inlinable public mutating func merge(_ other: Self) -> Update {
+        let update = (self .!= other)
         //=--------------------------------------=
         // Update
         //=--------------------------------------=
@@ -54,12 +50,12 @@ public struct Remote<Style: DiffableTextStyle> {
         //=--------------------------------------=
         return update
     }
-    
+
     //=------------------------------------------------------------------------=
     // MARK: Utilities
     //=------------------------------------------------------------------------=
     
-    @inlinable static func .== (lhs: Self, rhs: Self) -> Update {
+    @inlinable static func .!= (lhs: Self, rhs: Self) -> Update {
         var update = Update()
         //=--------------------------------------=
         // Compare
@@ -71,5 +67,9 @@ public struct Remote<Style: DiffableTextStyle> {
         // Return
         //=--------------------------------------=
         return update
+    }
+    
+    @inlinable static func + (lhs: Self, rhs: Self) -> (Self, Update) {
+        var result = lhs; let update = result.merge(rhs); return (result, update)
     }
 }
