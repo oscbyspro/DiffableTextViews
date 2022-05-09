@@ -12,7 +12,7 @@
 //*===========================================================================
 
 /// A model used to collect upstream and downstream values.
-public struct Remote<Style: DiffableTextStyle> {
+public struct Status<Style: DiffableTextStyle> {
     public typealias Value = Style.Value
     
     //=------------------------------------------------------------------------=

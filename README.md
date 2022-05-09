@@ -195,7 +195,7 @@ struct DiffableTextFieldXPhone: View {
 }
 ```
 
-## [WrapperTextStyle(s)](Notes/WrapperTextStyle.md) ([Source](Sources/DiffableTextStylesXWrapper/), [Tests](Tests/DiffableTextStylesXWrapperTests))
+## [WrapperTextStyle(s)](Notes/WrapperTextStyle.md) ([Source](Sources/DiffableTextStylesXWrappers/), [Tests](Tests/DiffableTextStylesXWrappersTests))
 
 Decorative styles that modify the behavior of their content.
 

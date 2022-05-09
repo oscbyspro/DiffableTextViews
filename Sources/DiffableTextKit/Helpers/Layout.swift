@@ -16,7 +16,7 @@
 /// - Autocorrects selection when the snapshot changes.
 /// - Autocorrects selection when the selection changes.
 ///
-@usableFromInline struct Field {
+@usableFromInline struct Layout {
 
     //=------------------------------------------------------------------------=
     // MARK: State
@@ -50,7 +50,7 @@
 // MARK: Transformations
 //=----------------------------------------------------------------------------=
 
-extension Field {
+extension Layout {
 
     //=------------------------------------------------------------------------=
     // MARK: Snapshot

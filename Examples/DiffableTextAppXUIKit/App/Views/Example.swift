@@ -62,7 +62,7 @@ struct Example<Style: DiffableTextStyle>: View {
     }
     
     var diffableTextField: some View {
-        DiffableTextField("Much wow. Very empty.", value: value, style: style)
+        DiffableTextField("Much wow. Such empty.", value: value, style: style)
             .focused($focus).padding()
             .background(Color(uiColor: .tertiarySystemBackground).ignoresSafeArea(.container, edges: []))
     }

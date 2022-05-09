@@ -13,7 +13,7 @@ import SwiftUI
 // MARK: Declaration
 //*============================================================================*
 
-@dynamicMemberLookup @usableFromInline final class Context {
+@usableFromInline @dynamicMemberLookup final class Context {
     
     //=------------------------------------------------------------------------=
     // MARK: State

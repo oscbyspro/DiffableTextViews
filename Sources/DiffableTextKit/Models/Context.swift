@@ -17,7 +17,7 @@
 ///
 public struct Context<Style: DiffableTextStyle> {
     public typealias Value  = Style.Value
-    public typealias State  = DiffableTextKit.Remote<Style>
+    public typealias Status = DiffableTextKit.Status<Style>
     public typealias Commit = DiffableTextKit.Commit<Value>
 
     //=------------------------------------------------------------------------=
@@ -30,14 +30,14 @@ public struct Context<Style: DiffableTextStyle> {
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable init(_ state: State, _ field: Field) {
-        self._storage = Storage(state, field)
+    @inlinable init(_ status: Status, _ layout: Layout) {
+        self._storage = Storage(status, layout)
     }
     
-    @inlinable public init(_ state: State) {
-        switch state.focus.wrapped {
-        case  true: self =   .focused(state.style, state.value)
-        case false: self = .unfocused(state.style, state.value)
+    @inlinable public init(_ status: Status) {
+        switch status.focus.wrapped {
+        case  true: self =   .focused(status.style, status.value)
+        case false: self = .unfocused(status.style, status.value)
         }
     }
     
@@ -50,11 +50,11 @@ public struct Context<Style: DiffableTextStyle> {
     }
     
     @inlinable static func focused(_ style: Style, _ commit: Commit) -> Self {
-        Self(State(style, commit.value, true), Field((commit.snapshot)))
+        Self(Status(style, commit.value, true), Layout((commit.snapshot)))
     }
     
     @inlinable static func unfocused(_ style: Style, _ value: Value) -> Self {
-        Self(State(style, value, false), Field(Snapshot(style.format(value), as: .phantom)))
+        Self(Status(style, value, false), Layout(Snapshot(style.format(value), as: .phantom)))
     }
     
     //=------------------------------------------------------------------------=
@@ -85,16 +85,16 @@ public struct Context<Style: DiffableTextStyle> {
         // MARK: State
         //=--------------------------------------------------------------------=
         
-        @usableFromInline var state: State
-        @usableFromInline var field: Field
+        @usableFromInline var status: Status
+        @usableFromInline var layout: Layout
         
         //=--------------------------------------------------------------------=
         // MARK: Initializers
         //=--------------------------------------------------------------------=
         
-        @inlinable init(_ state: State, _ field: Field) {
-            self.state = state
-            self.field = field
+        @inlinable init(_ status: Status, _ layout: Layout) {
+            self.status = status
+            self.layout = layout
         }
         
         //=--------------------------------------------------------------------=
@@ -102,7 +102,7 @@ public struct Context<Style: DiffableTextStyle> {
         //=--------------------------------------------------------------------=
         
         @inlinable func copy() -> Self {
-            Self(state, field)
+            Self(status, layout)
         }
     }
 }
@@ -117,12 +117,12 @@ public extension Context {
     // MARK: 1st
     //=------------------------------------------------------------------------=
         
-    @inlinable internal var state: State {
-        _storage.state
+    @inlinable internal var status: Status {
+        _storage.status
     }
     
-    @inlinable internal var field: Field {
-        _storage.field
+    @inlinable internal var layout: Layout {
+        _storage.layout
     }
     
     //=------------------------------------------------------------------------=
@@ -130,15 +130,15 @@ public extension Context {
     //=------------------------------------------------------------------------=
     
     @inlinable var style: Style {
-        state.style
+        status.style
     }
     
     @inlinable var value: Value {
-        state.value
+        status.value
     }
     
     @inlinable var focus: Focus {
-        state.focus
+        status.focus
     }
     
     //=------------------------------------------------------------------------=
@@ -146,16 +146,16 @@ public extension Context {
     //=------------------------------------------------------------------------=
 
     @inlinable var snapshot: Snapshot {
-        field.snapshot
+        layout.snapshot
     }
     
     @inlinable var text: String {
-        field.snapshot.characters
+        layout.snapshot.characters
     }
     
     @inlinable func selection<T>(as type: Position<T>.Type =
     Position<T>.self) -> Range<T.Position> where T: Offset {
-        field.positions(at: field.selection).bounds
+        layout.positions(at: layout.selection).bounds
     }
 }
 
@@ -175,8 +175,8 @@ public extension Context {
         //=--------------------------------------=
         if other.focus.wrapped {
             self.write {
-                $0.state = other.state
-                $0.field.update(snapshot: other.snapshot)
+                $0.status = other.status
+                $0.layout.update(snapshot: other.snapshot)
             }
         //=--------------------------------------=
         // Unfocused
@@ -185,22 +185,20 @@ public extension Context {
     }
     
     //=------------------------------------------------------------------------=
-    // MARK: Remote
+    // MARK: Status
     //=------------------------------------------------------------------------=
     
-    @inlinable mutating func merge(_ remote: State) -> Bool {
+    @inlinable mutating func merge(_ status: Status) -> Bool {
         //=--------------------------------------=
         // Update
         //=--------------------------------------=
-        let (result, update) = self.state + remote
+        let (result, update) = self.status + status
         //=--------------------------------------=
-        // At Least On Value Must Be Unique
+        // At Least One Must Be Different
         //=--------------------------------------=
-        guard !update.isEmpty else { return false }
-        //=--------------------------------------=
-        // Insert
-        //=--------------------------------------=
-        self.merge(Self(result)); return true
+        return (!update.isEmpty).on(true) {
+            self.merge(Self.init(result))
+        }
     }
     
     //=------------------------------------------------------------------------=
@@ -212,7 +210,7 @@ public extension Context {
         //=--------------------------------------=
         // Values
         //=--------------------------------------=
-        let carets = field.indices(at: Carets(range))
+        let carets = layout.indices(at: Carets(range))
         let commit = try style.merge(Proposal(
         snapshot, with: characters, in: carets.bounds))
         //=--------------------------------------=
@@ -227,10 +225,10 @@ public extension Context {
     //=------------------------------------------------------------------------=
     
     @inlinable internal mutating func set(selection: Index) {
-        self.write({ $0.field.selection = Carets(selection) })
+        self.write({ $0.layout.selection = Carets(selection) })
     }
     
     @inlinable mutating func update<T>(selection: Range<T.Position>, momentum: Bool) where T: Offset {
-        self.write({ $0.field  .update(selection: Carets(selection), momentum: momentum) })
+        self.write({ $0.layout .update(selection: Carets(selection), momentum: momentum) })
     }
 }

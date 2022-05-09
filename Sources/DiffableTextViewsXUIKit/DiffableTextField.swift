@@ -35,7 +35,7 @@ import SwiftUI
 ///
 public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
     public typealias Value = Style.Value
-    
+
     //=------------------------------------------------------------------------=
     // MARK: State
     //=------------------------------------------------------------------------=
@@ -69,7 +69,7 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
     @inlinable @inline(__always) func locale(_ locale: Locale) -> Self {
         Self(title, value: value, style: style.locale(locale))
     }
-    
+
     //=------------------------------------------------------------------------=
     // MARK: View Life Cycle
     //=------------------------------------------------------------------------=
@@ -86,7 +86,7 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
     @inlinable public func updateUIView(_ view:  UITextField, context: Self.Context) {
         context.coordinator.update(self, context.environment)
     }
-    
+        
     //*========================================================================*
     // MARK: Coordinator
     //*========================================================================*
@@ -95,7 +95,7 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
         @usableFromInline typealias Upstream = DiffableTextField
         @usableFromInline typealias Environment = EnvironmentValues
         @usableFromInline typealias Position = Unicode.UTF16.Position
-        @usableFromInline typealias Remote = DiffableTextKit.Remote<Style>
+        @usableFromInline typealias Status = DiffableTextKit.Status<Style>
         @usableFromInline typealias Context = DiffableTextKit.Context<Style>
 
         //=--------------------------------------------------------------------=
@@ -150,7 +150,7 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
             self.downstream.setTextContentType(environment)
             self.downstream.setTextInputAutocapitalization(environment)
             //=----------------------------------=
-            // Miscellaneous
+            // Coordinator
             //=----------------------------------=
             self.onSubmit = environment.diffableTextViews_onSubmit
             //=----------------------------------=
@@ -259,11 +259,11 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
         // MARK: Synchronization
         //=--------------------------------------------------------------------=
         
-        @inlinable func pull() -> Remote {
+        @inlinable func pull() -> Status {
             //=----------------------------------=
             // Upstream, Downstream
             //=----------------------------------=
-            Remote(upstream.style, upstream.value.wrappedValue, downstream.focus)
+            Status(upstream.style, upstream.value.wrappedValue, downstream.focus)
         }
 
         @inlinable func push() {
