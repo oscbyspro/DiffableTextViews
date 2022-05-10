@@ -88,7 +88,7 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
     }
         
     //*========================================================================*
-    // MARK: Coordinator
+    // MARK: Declaration
     //*========================================================================*
     
     public final class Coordinator: NSObject, UITextFieldDelegate {
@@ -103,8 +103,9 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
         //=--------------------------------------------------------------------=
         
         @usableFromInline let lock = Lock()
+        
         @usableFromInline var context: Context!
-        @usableFromInline var onSubmit = Trigger(nil)
+        @usableFromInline var actions = Actions()
         
         @usableFromInline var upstream: Upstream!
         @usableFromInline let downstream = Downstream()
@@ -153,7 +154,7 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
             //=----------------------------------=
             // Coordinator
             //=----------------------------------=
-            self.onSubmit = environment.diffableTextViews_onSubmit
+            self.actions = Actions(environment)
             //=----------------------------------=
             // Synchronize
             //=----------------------------------=
@@ -231,7 +232,7 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
         //=--------------------------------------------------------------------=
 
         @inlinable public func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-            textField.resignFirstResponder(); onSubmit(); return true
+            textField.resignFirstResponder(); actions.onSubmit(); return true
         }
         
         @inlinable public func textFieldDidBeginEditing(_ textField: UITextField) {
