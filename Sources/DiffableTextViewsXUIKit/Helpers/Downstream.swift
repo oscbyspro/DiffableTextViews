@@ -109,8 +109,8 @@ extension Downstream {
     }
     
     @inlinable @inline(__always)
-    func setSensibleValues<T>(_ style: T.Type) where T: DiffableTextStyle {
-        style.setup(self.view)
+    func setStyleValues<T>(_ style: T.Type) where T: DiffableTextStyle {
+        style.onSetup(view)
     }
     
     //=------------------------------------------------------------------------=

@@ -124,8 +124,8 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
             // Downstream
             //=----------------------------------=
             self.downstream.view.delegate = self
+            self.downstream.setStyleValues(Style.self)
             self.downstream.setTextFeldStyle(environment)
-            self.downstream.setSensibleValues(Style.self)
             //=----------------------------------=
             // Synchronize
             //=----------------------------------=
@@ -256,9 +256,7 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
             //=----------------------------------=
             // Upstream, Downstream
             //=----------------------------------=
-            Status(upstream.style,
-            upstream.value.wrappedValue,
-            downstream.focus)
+            Status(upstream.style, upstream.value.wrappedValue, downstream.focus)
         }
         
         @inlinable func push(_ update: Update) {

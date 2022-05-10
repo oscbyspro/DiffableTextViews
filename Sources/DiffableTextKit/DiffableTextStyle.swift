@@ -70,7 +70,7 @@ public protocol DiffableTextStyle: Equatable {
     
     #if canImport(UIKit)
 
-    @inlinable static func setup(_ view: UITextField)
+    @inlinable static func onSetup(_ view: UITextField)
     
     #endif
 }
@@ -93,7 +93,7 @@ public extension DiffableTextStyle {
     
     #if canImport(UIKit)
 
-    @inlinable static func setup(_ view: UITextField) { }
+    @inlinable static func onSetup(_ view: UITextField) { }
     
     #endif
 }
@@ -172,8 +172,8 @@ extension DiffableTextStyleWrapper {
     //=------------------------------------------------------------------------=
     
     @inlinable @inline(__always)
-    public static func setup(_ view: UITextField) {
-        Style.setup(view)
+    public static func onSetup(_ view: UITextField) {
+        Style.onSetup(view)
     }
 
     #endif

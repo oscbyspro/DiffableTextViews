@@ -82,7 +82,7 @@ public struct _NumberTextStyle<Format: NumberTextFormat>: NumberTextStyleProtoco
     // MARK: Setup
     //=------------------------------------------------------------------------=
 
-    @inlinable public static func setup(_ view: UITextField) {
+    @inlinable public static func onSetup(_ view: UITextField) {
         view.keyboardType = Value.isInteger ? .numberPad : .decimalPad
     }
 
