@@ -114,8 +114,8 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
         // MARK: View Life Cycle
         //=--------------------------------------------------------------------=
         
-        @inlinable @inline(never) func setup(
-        _ upstream: Upstream, _ environment: Environment) {
+        @inlinable @inline(never)
+        func setup(_ upstream: Upstream, _ environment: Environment) {
             //=----------------------------------=
             // Upstream
             //=----------------------------------=
@@ -129,12 +129,11 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
             //=----------------------------------=
             // Synchronize
             //=----------------------------------=
-            self.context = Context(self.pull())
-            self.write()
+            self.context = Context(self.pull()); self.push(.text)
         }
         
-        @inlinable @inline(never) func update(
-        _ upstream: Upstream, _ environment: Environment) {
+        @inlinable @inline(never)
+        func update(_ upstream: Upstream, _ environment: Environment) {
             //=----------------------------------=
             // Upstream
             //=----------------------------------=
@@ -174,7 +173,7 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
             //=----------------------------------=
             attempt: do {
                 var context = context!
-                try context.merge(characters, in:
+                let update  = try context.merge(characters, in:
                 Position(nsrange.lowerBound) ..<
                 Position(nsrange.upperBound))
                 //=------------------------------=
@@ -183,8 +182,7 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
                 Task { @MainActor [context] in
                     // async to process special commands first
                     // as an example see: (option + backspace)
-                    self.context = context
-                    self.push()
+                    self.context = context;  self.push(update)
                 }
             //=----------------------------------=
             // Cancellation
@@ -205,26 +203,21 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
             //=----------------------------------=
             guard textField.markedTextRange == nil else {
                 Info.print(cancellation: ["marked text is disallowed"])
-                return self.write()
+                return push([.text, .selection])
             }
             //=----------------------------------=
             // Locked
             //=----------------------------------=
             guard !lock.isLocked else { return }
-            let selection = downstream.selection
             //=----------------------------------=
             // Update
             //=----------------------------------=
-            self.context.update(selection: selection, momentum: downstream.momentum)
-            let autocorrected = context.selection(as: Position.self)
+            let update = self.context.update(
+            selection: downstream.selection, momentum: downstream.momentum)
             //=----------------------------------=
-            // Update Downstream As Needed
+            // Push
             //=----------------------------------=
-            if  selection != autocorrected {
-                lock.perform {
-                    self.downstream.selection = autocorrected
-                }
-            }
+            self.push(update)
         }
         
         //=--------------------------------------------------------------------=
@@ -236,11 +229,11 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
         }
         
         @inlinable public func textFieldDidBeginEditing(_ textField: UITextField) {
-            synchronize()
+            self.synchronize()
         }
         
         @inlinable public func textFieldDidEndEditing(_ textField: UITextField) {
-            synchronize()
+            self.synchronize()
         }
         
         //=--------------------------------------------------------------------=
@@ -251,16 +244,13 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
             //=----------------------------------=
             // Pull
             //=----------------------------------=
-            guard context.merge(self.pull()) else { return }
+            let status = self.pull()
+            let update = self.context.merge(status)
             //=----------------------------------=
             // Push
             //=----------------------------------=
-            self.context.focus.wrapped ? self.push() : self.write()
+            self.push(update)
         }
-        
-        //=--------------------------------------------------------------------=
-        // MARK: Synchronization
-        //=--------------------------------------------------------------------=
         
         @inlinable func pull() -> Status {
             //=----------------------------------=
@@ -270,43 +260,30 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
             upstream.value.wrappedValue,
             downstream.focus)
         }
-
-        @inlinable func push() {
-            //=----------------------------------=
-            // Downstream, Upstream
-            //=----------------------------------=
-            self.write()
-            self.relay()
-        }
         
-        //=--------------------------------------------------------------------=
-        // MARK: Synchronization
-        //=--------------------------------------------------------------------=
-        
-        @inlinable func write() {
+        @inlinable func push(_ update: Update) {
             //=----------------------------------=
-            // Downstream
+            // Upstream, Downstream
             //=----------------------------------=
             lock.perform {
                 //=------------------------------=
                 // Text
                 //=------------------------------=
-                self.downstream.text = context.text
+                if update.contains(.text) {
+                    self.downstream.text = context.text
+                }
                 //=------------------------------=
                 // Selection
                 //=------------------------------=
-                if  self.downstream.focus.wrapped {
+                if update.contains(.selection) {
                     self.downstream.selection = context.selection()
                 }
-            }
-        }
-        
-        @inlinable func relay() {
-            //=--------------------------------------=
-            // Upstream
-            //=--------------------------------------=
-            if  self.upstream.value.wrappedValue != context.value {
-                self.upstream.value.wrappedValue  = context.value
+                //=------------------------------=
+                // Value
+                //=------------------------------=
+                if update.contains(.value) {
+                    self.upstream.value.wrappedValue = context.value
+                }
             }
         }
     }

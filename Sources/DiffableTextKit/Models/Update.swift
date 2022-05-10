@@ -11,22 +11,21 @@
 // MARK: Declaration
 //*============================================================================*
 
-/// Used to store state comparison results in order to avoid multiple comparisons.
-public struct Changes: OptionSet {
+public struct Update: OptionSet {
     
     //=------------------------------------------------------------------------=
     // MARK: Instances
     //=------------------------------------------------------------------------=
     
-    public static let style = Self(rawValue: 1 << 0)
-    public static let value = Self(rawValue: 1 << 1)
-    public static let focus = Self(rawValue: 1 << 2)
+    public static let value     = Self(rawValue: 1 << 0)
+    public static let text      = Self(rawValue: 1 << 1)
+    public static let selection = Self(rawValue: 1 << 2)
     
     //=------------------------------------------------------------------------=
     // MARK: State
     //=------------------------------------------------------------------------=
     
-    public var rawValue: UInt8
+    public let rawValue: UInt8
     
     //=------------------------------------------------------------------------=
     // MARK: Initializers
@@ -35,5 +34,24 @@ public struct Changes: OptionSet {
     @inlinable @inline(__always)
     public init(rawValue: UInt8 = 0) {
         self.rawValue = rawValue
+    }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Initializers
+    //=------------------------------------------------------------------------=
+    
+    @inlinable @inline(__always)
+    public static func value(_ condition: Bool) -> Self {
+        !condition ? .init() : .value
+    }
+    
+    @inlinable @inline(__always)
+    public static func text(_ condition: Bool) -> Self {
+        !condition ? .init() : .text
+    }
+    
+    @inlinable @inline(__always)
+    public static func selection(_ condition: Bool) -> Self {
+        !condition ? .init() : .selection
     }
 }

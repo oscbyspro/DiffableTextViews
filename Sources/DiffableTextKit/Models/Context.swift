@@ -188,7 +188,7 @@ public extension Context {
     // MARK: Status
     //=------------------------------------------------------------------------=
     
-    @inlinable mutating func merge(_ status: Status) -> Bool {
+    @inlinable mutating func merge(_ status: Status) -> Update {
         //=--------------------------------------=
         // Update
         //=--------------------------------------=
@@ -197,14 +197,15 @@ public extension Context {
         //=--------------------------------------=
         // At Least One Value Must Be Different
         //=--------------------------------------=
-        let update = !changes.isEmpty
-        if  update {
-            self.merge(Self.init(next))
-        }
+        guard !changes.isEmpty else { return [] }
+        //=--------------------------------------=
+        // Update
+        //=--------------------------------------=
+        self.merge(Self.init(next))
         //=--------------------------------------=
         // Return
         //=--------------------------------------=
-        return update
+        return [.text, .selection(focus.wrapped), .value(status.value != value)]
     }
     
     //=------------------------------------------------------------------------=
@@ -212,7 +213,8 @@ public extension Context {
     //=------------------------------------------------------------------------=
         
     @inlinable mutating func merge<T>(_ characters: String,
-    in range: Range<T.Position>) throws where T: Offset {
+    in range: Range<T.Position>) throws -> Update where T: Offset {
+        let previous = self
         //=--------------------------------------=
         // Values
         //=--------------------------------------=
@@ -224,6 +226,10 @@ public extension Context {
         //=--------------------------------------=
         self.set(selection: carets.upperBound)
         self.merge(Self.focused(style, commit))
+        //=--------------------------------------=
+        // Return
+        //=--------------------------------------=
+        return [.text, .selection, .value(previous.value != value)]
     }
     
     //=------------------------------------------------------------------------=
@@ -234,7 +240,8 @@ public extension Context {
         self.write({ $0.layout.selection = Carets(selection) })
     }
     
-    @inlinable mutating func update<T>(selection: Range<T.Position>, momentum: Bool) where T: Offset {
+    @inlinable mutating func update<T>(selection: Range<T.Position>, momentum: Bool) -> Update where T: Offset {
         self.write({ $0.layout .update(selection: Carets(selection), momentum: momentum) })
+        return Update.selection(selection != self.selection())
     }
 }
