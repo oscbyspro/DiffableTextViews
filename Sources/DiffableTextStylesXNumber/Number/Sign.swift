@@ -37,6 +37,16 @@ import Foundation
     }
     
     //=------------------------------------------------------------------------=
+    // MARK: Initializers
+    //=------------------------------------------------------------------------=
+    
+    @inlinable init?<T>(of bounds: ClosedRange<T>) where T: NumberTextValue {
+        if      bounds.lowerBound >= .zero { self = .positive }
+        else if bounds.upperBound <= .zero && bounds.lowerBound != .zero { self = .negative }
+        else { return nil }
+    }
+    
+    //=------------------------------------------------------------------------=
     // MARK: Transformations
     //=------------------------------------------------------------------------=
     
@@ -50,7 +60,7 @@ import Foundation
         case .negative: return .positive
         }
     }
-
+    
     //=------------------------------------------------------------------------=
     // MARK: Localization
     //=------------------------------------------------------------------------=

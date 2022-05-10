@@ -192,13 +192,19 @@ public extension Context {
         //=--------------------------------------=
         // Update
         //=--------------------------------------=
-        let (result, update) = self.status + status
+        var next    = self.status
+        let changes = next.merge(status)
         //=--------------------------------------=
         // At Least One Must Be Different
         //=--------------------------------------=
-        return (!update.isEmpty).on(true) {
-            self.merge(Self.init(result))
+        let update = !changes.isEmpty
+        if  update {
+            self.merge(Self.init(next))
         }
+        //=--------------------------------------=
+        // Return
+        //=--------------------------------------=
+        return update
     }
     
     //=------------------------------------------------------------------------=

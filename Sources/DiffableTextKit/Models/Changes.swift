@@ -12,7 +12,7 @@
 //*============================================================================*
 
 /// Used to store state comparison results in order to avoid multiple comparisons.
-public struct Update: OptionSet {
+public struct Changes: OptionSet {
     
     //=------------------------------------------------------------------------=
     // MARK: Instances

@@ -12,7 +12,7 @@
 //*============================================================================*
 
 /// An object representing multiple UTF-8 encoded ASCII characters.
-@usableFromInline protocol Glyphs {
+@usableFromInline protocol Glyphs: CustomStringConvertible {
     
     //=------------------------------------------------------------------------=
     // MARK: State

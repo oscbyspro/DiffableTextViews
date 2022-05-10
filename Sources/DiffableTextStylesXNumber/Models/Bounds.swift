@@ -19,15 +19,69 @@ public struct NumberTextBounds<Value: NumberTextValue>: Equatable {
     // MARK: State
     //=------------------------------------------------------------------------=
     
-    @usableFromInline let min: Value
-    @usableFromInline let max: Value
-    
+    @usableFromInline var bounds: ClosedRange<Value>
+ 
     //=------------------------------------------------------------------------=
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable init(unchecked: (min: Value, max: Value)) {
-        (self.min, self.max) = unchecked; precondition(min <= max)
+    @inlinable init(unchecked: (lower: Value, upper: Value)) {
+        self.bounds = ClosedRange(uncheckedBounds: unchecked)
+    }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Accessors
+    //=------------------------------------------------------------------------=
+    
+    @inlinable var min: Value {
+        bounds.lowerBound
+    }
+    
+    @inlinable var max: Value {
+        bounds.upperBound
+    }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Utilities
+    //=------------------------------------------------------------------------=
+    
+    @inlinable func location(of value: Value) -> Location? {
+        //=--------------------------------------=
+        // Value Is Not Maxed Out
+        //=--------------------------------------=
+        if min < value && value < max { return .body }
+        //=--------------------------------------=
+        // Value == Max
+        //=--------------------------------------=
+        if value == max { return Location(edge: value > .zero || min == max) }
+        //=--------------------------------------=
+        // Value == Min
+        //=--------------------------------------=
+        if value == min { return Location(edge: value < .zero) }
+        //=--------------------------------------=
+        // Value Is Out Of Bounds
+        //=--------------------------------------=
+        return nil
+    }
+    
+    //*========================================================================*
+    // MARK: Declaration
+    //*========================================================================*
+    
+    @usableFromInline enum Location {
+        
+        //=--------------------------------------------------------------------=
+        // MARK: Instances
+        //=--------------------------------------------------------------------=
+        
+        case body
+        case edge
+        
+        //=--------------------------------------------------------------------=
+        // MARK: Initializers
+        //=--------------------------------------------------------------------=
+        
+        @inlinable init(edge: Bool) { self = edge ? .edge : .body }
     }
 }
 
@@ -99,21 +153,28 @@ extension NumberTextBounds {
     //=------------------------------------------------------------------------=
     
     @inlinable func autocorrect(_ value: inout Value) {
-        value = Swift.min(Swift.max(min, value), max)
+        //=--------------------------------------=
+        // Lower Bound
+        //=--------------------------------------=
+        if  value < min {
+            Info.print(autocorrection: [.mark(value), "<", .note(min)])
+            value = min; return
+        }
+        //=--------------------------------------=
+        // Upper Bound
+        //=--------------------------------------=
+        if  value > max {
+            Info.print(autocorrection: [.mark(value), ">", .note(max)])
+            value = max; return
+        }
     }
     
     //=------------------------------------------------------------------------=
     // MARK: Number
     //=------------------------------------------------------------------------=
     
-    @inlinable func autocorrect(_ number: inout Number) {
-        autocorrect(&number.sign)
-    }
-    
-    /// Toggles the sign if the opposite sign is the only sign allowed.
-    @inlinable func autocorrect(_ sign: inout Sign) {
-        if (sign == .positive && max <= .zero && min != .zero  )
-        || (sign == .negative && min >= .zero) { sign.toggle() }
+    @inlinable func autocorrect(_  number: inout Number) {
+        autocorrectSignOnUnambigiousBounds(&number.sign)
     }
 }
 
@@ -128,15 +189,7 @@ extension NumberTextBounds {
     //=------------------------------------------------------------------------=
     
     @inlinable func autovalidate(_ number: inout Number) throws {
-        try autovalidate(&number.sign)
-    }
-
-    @inlinable func autovalidate(_ sign: inout Sign) throws {
-        let autocorrected  = sign.transformed(autocorrect)
-        if  autocorrected != sign {
-            Info.print(autocorrection: [.mark(sign), "is not in", .mark(self)])
-            sign  = autocorrected
-        }
+        autocorrectSignOnUnambigiousBounds(&number.sign)
     }
 
     //=------------------------------------------------------------------------=
@@ -144,24 +197,34 @@ extension NumberTextBounds {
     //=------------------------------------------------------------------------=
     
     @inlinable func autovalidate(_ value: Value, _ number: inout Number) throws {
-        if try edge(value), number.removeSeparatorAsSuffix() {
+        //=--------------------------------------=
+        // Location
+        //=--------------------------------------=
+        guard let location = location(of: value) else {
+            throw Info([.mark(value), "is not in", .note(self)])
+        }
+        //=--------------------------------------=
+        // Remove Separator On Value Is Maxed Out
+        //=--------------------------------------=
+        if location == .edge, number.removeSeparatorAsSuffix() {
             Info.print(autocorrection: [.mark(number), "does not fit a fraction separator"])
         }
     }
+}
 
-    @inlinable func edge(_ value: Value) throws -> Bool {
-        if min < value && value < max { return false }
-        //=--------------------------------------=
-        // Value == Max
-        //=--------------------------------------=
-        if value == max { return value > .zero || min == max }
-        //=--------------------------------------=
-        // Value == Min
-        //=--------------------------------------=
-        if value == min { return value < .zero }
-        //=--------------------------------------=
-        // Value Is Out Of Bounds
-        //=--------------------------------------=
-        throw Info([.mark(value), "is not in", .mark(self)])
+//=----------------------------------------------------------------------------=
+// MARK: Upstream, Downstream
+//=----------------------------------------------------------------------------=
+
+extension NumberTextBounds {
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Number
+    //=------------------------------------------------------------------------=
+    
+    @inlinable func autocorrectSignOnUnambigiousBounds(_ sign: inout  Sign) {
+        guard let correct = Sign(of: bounds), sign != correct else { return }
+        Info.print(autocorrection: [.mark(sign),  "is not in",  .note(self)])
+        sign = correct
     }
 }

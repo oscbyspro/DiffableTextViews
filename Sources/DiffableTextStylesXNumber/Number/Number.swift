@@ -93,8 +93,8 @@ extension Number {
     //=------------------------------------------------------------------------=
     
     /// To use this method, all formatting characters must be marked as virtual.
-    @inlinable init?<T>(parse snapshot: Snapshot, with lexicon: Lexicon, as kind: T.Type)
-    throws where T: NumberTextKind {
+    @inlinable init?<T>(parse snapshot: Snapshot,
+    with lexicon: Lexicon, as kind: T.Type) throws where T: NumberTextKind {
         let sequence = snapshot.lazy.filter(\.nonvirtual).map(\.character)
         try self.init(unformatted: sequence,
         optional: kind.isOptional,
@@ -184,6 +184,6 @@ extension Number {
         //=--------------------------------------=
         // Finalize
         //=--------------------------------------=
-        self.integer.removeZerosAsPrefix(); self.integer.makeAtLeastZero()
+        self.integer.removeZerosAsPrefix(); self.integer.makeAtLeastZero()        
     }
 }

@@ -202,6 +202,7 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
             // Disable Marked Text
             //=----------------------------------=
             guard textField.markedTextRange == nil else {
+                Info.print(cancellation: ["marked text is disallowed"])
                 return self.write()
             }
             //=----------------------------------=
@@ -256,29 +257,28 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
         }
         
         //=--------------------------------------------------------------------=
-        // MARK: Synchronization
+        // MARK: Synchronization - Pull, Push
         //=--------------------------------------------------------------------=
         
         @inlinable func pull() -> Status {
             //=----------------------------------=
             // Upstream, Downstream
             //=----------------------------------=
-            Status(upstream.style, upstream.value.wrappedValue, downstream.focus)
+            Status(upstream.style,
+            upstream.value.wrappedValue,
+            downstream.focus)
         }
 
         @inlinable func push() {
             //=----------------------------------=
-            // Downstream
+            // Downstream, Upstream
             //=----------------------------------=
             self.write()
-            //=----------------------------------=
-            // Upstream
-            //=----------------------------------=
             self.relay()
         }
         
         //=--------------------------------------------------------------------=
-        // MARK: Synchronization
+        // MARK: Synchronization - Write, Relay
         //=--------------------------------------------------------------------=
         
         @inlinable func write() {

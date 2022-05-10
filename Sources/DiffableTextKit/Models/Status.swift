@@ -37,7 +37,7 @@ public struct Status<Style: DiffableTextStyle> {
     // MARK: Transformations
     //=------------------------------------------------------------------------=
     
-    @inlinable public mutating func merge(_ other: Self) -> Update {
+    @inlinable public mutating func merge(_ other: Self) -> Changes {
         let update = (self .!= other)
         //=--------------------------------------=
         // Update
@@ -50,13 +50,13 @@ public struct Status<Style: DiffableTextStyle> {
         //=--------------------------------------=
         return update
     }
-
+    
     //=------------------------------------------------------------------------=
     // MARK: Utilities
     //=------------------------------------------------------------------------=
     
-    @inlinable static func .!= (lhs: Self, rhs: Self) -> Update {
-        var update = Update()
+    @inlinable static func .!= (lhs: Self, rhs: Self) -> Changes {
+        var update = Changes()
         //=--------------------------------------=
         // Compare
         //=--------------------------------------=
@@ -67,9 +67,5 @@ public struct Status<Style: DiffableTextStyle> {
         // Return
         //=--------------------------------------=
         return update
-    }
-    
-    @inlinable static func + (lhs: Self, rhs: Self) -> (Self, Update) {
-        var result = lhs; let update = result.merge(rhs); return (result, update)
     }
 }

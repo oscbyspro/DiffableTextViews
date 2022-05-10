@@ -148,8 +148,9 @@ extension ModelsTestsXBounds {
     
     func XCTAutocorrectSign(_ bounds: (Int, Int), positive: Sign, negative: Sign) {
         let bounds = NumberTextBounds(unchecked: bounds)
-        XCTAssertEqual(positive, Sign.positive.transformed(bounds.autocorrect))
-        XCTAssertEqual(negative, Sign.negative.transformed(bounds.autocorrect))
+        let autocorrect = bounds.autocorrectSignOnUnambigiousBounds(_:)
+        XCTAssertEqual(positive, Sign.positive.transformed(autocorrect))
+        XCTAssertEqual(negative, Sign.negative.transformed(autocorrect))
     }
     
     //=------------------------------------------------------------------------=
