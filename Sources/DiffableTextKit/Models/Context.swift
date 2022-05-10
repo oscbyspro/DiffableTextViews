@@ -35,7 +35,7 @@ public struct Context<Style: DiffableTextStyle> {
     }
     
     @inlinable public init(_ status: Status) {
-        switch status.focus.wrapped {
+        switch status.focus == true {
         case  true: self =   .focused(status.style, status.value)
         case false: self = .unfocused(status.style, status.value)
         }
@@ -173,7 +173,7 @@ public extension Context {
         //=--------------------------------------=
         // Focused
         //=--------------------------------------=
-        if other.focus.wrapped {
+        if other.focus == true {
             self.write {
                 $0.status = other.status
                 $0.layout.update(snapshot: other.snapshot)
@@ -205,7 +205,7 @@ public extension Context {
         //=--------------------------------------=
         // Return
         //=--------------------------------------=
-        return [.text, .selection(focus.wrapped), .value(status.value != value)]
+        return [.text, .selection(focus == true), .value(status.value != value)]
     }
     
     //=------------------------------------------------------------------------=
