@@ -20,8 +20,8 @@ import SwiftUI
 ///
 /// List of all available modifiers:
 ///
-/// - environment(\.locale, \_:)
-/// - environment(\.layoutDirection, \_:)
+/// - environment(\\.locale, \_:)
+/// - environment(\\.layoutDirection, \_:)
 /// - diffableTextViews_disableAutocorrection(\_:)
 /// - diffableTextViews_font(\_:)
 /// - diffableTextViews_foregroundColor(\_:)
@@ -104,10 +104,11 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
         
         @usableFromInline let lock = Lock()
         @usableFromInline var context: Context!
-        @usableFromInline var upstream: Upstream!
-        @usableFromInline let downstream = Downstream()
         @usableFromInline var onSubmit = Trigger(nil)
         
+        @usableFromInline var upstream: Upstream!
+        @usableFromInline let downstream = Downstream()
+
         //=--------------------------------------------------------------------=
         // MARK: View Life Cycle
         //=--------------------------------------------------------------------=
@@ -220,7 +221,7 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
             //=----------------------------------=
             if  selection != autocorrected {
                 lock.perform {
-                    self.downstream.update(selection: autocorrected)
+                    self.downstream.selection = autocorrected
                 }
             }
         }
@@ -257,7 +258,7 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
         }
         
         //=--------------------------------------------------------------------=
-        // MARK: Synchronization - Pull, Push
+        // MARK: Synchronization
         //=--------------------------------------------------------------------=
         
         @inlinable func pull() -> Status {
@@ -278,7 +279,7 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
         }
         
         //=--------------------------------------------------------------------=
-        // MARK: Synchronization - Write, Relay
+        // MARK: Synchronization
         //=--------------------------------------------------------------------=
         
         @inlinable func write() {
@@ -289,12 +290,12 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
                 //=------------------------------=
                 // Text
                 //=------------------------------=
-                self.downstream.update(text: context.text)
+                self.downstream.text = context.text
                 //=------------------------------=
                 // Selection
                 //=------------------------------=
                 if  self.downstream.focus.wrapped {
-                    self.downstream.update(selection: context.selection())
+                    self.downstream.selection = context.selection()
                 }
             }
         }

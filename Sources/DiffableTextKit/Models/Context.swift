@@ -195,7 +195,7 @@ public extension Context {
         var next    = self.status
         let changes = next.merge(status)
         //=--------------------------------------=
-        // At Least One Must Be Different
+        // At Least One Value Must Be Different
         //=--------------------------------------=
         let update = !changes.isEmpty
         if  update {

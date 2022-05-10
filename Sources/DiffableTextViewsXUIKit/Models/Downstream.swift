@@ -10,14 +10,13 @@
 #if canImport(UIKit)
 
 import DiffableTextKit
-import UIKit
 import SwiftUI
+import UIKit
 
 //*============================================================================*
 // MARK: Declaration
 //*============================================================================*
 
-/// A UITextField affordance layer.
 @usableFromInline final class Downstream {
     @usableFromInline typealias Position = DiffableTextKit.Position<UTF16>
 
@@ -31,7 +30,24 @@ import SwiftUI
     // MARK: Initializers
     //=------------------------------------------------------------------------=
    
-    @inlinable init() { }
+    @inlinable init() {
+        self.view.setContentHuggingPriority(.defaultHigh, for: .vertical)
+        self.view.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
+    }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Accessors
+    //=------------------------------------------------------------------------=
+    
+    @inlinable var text: String {
+        get { view.text! }
+        set { view.text  = newValue }
+    }
+    
+    @inlinable var selection: Range<Position> {
+        get { positions(view.selectedTextRange!) }
+        set { view.selectedTextRange = uipositions(newValue) }
+    }
     
     //=------------------------------------------------------------------------=
     // MARK: Accessors
@@ -45,59 +61,35 @@ import SwiftUI
         view.intent.momentum
     }
     
-    @inlinable var selection: Range<Position> {
-        positions(view.selectedTextRange!)
-    }
-    
     @inlinable var size: Position {
         position(view.endOfDocument)
-    }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Transformations
-    //=------------------------------------------------------------------------=
-    
-    @inlinable func update(text: String) {
-        view.text = text
-    }
-    
-    @inlinable func update(selection: Range<Position>) {
-        view.selectedTextRange = offsets(selection)
     }
 }
 
 //=----------------------------------------------------------------------------=
 // MARK: Utilities
 //=----------------------------------------------------------------------------=
-    
+
 extension Downstream {
 
     //=------------------------------------------------------------------------=
-    // MARK: Offsets -> Positions
+    // MARK: Conversions
     //=------------------------------------------------------------------------=
 
-    /// - Complexity: O(1).
-    @inlinable func position(_ offset: UITextPosition) -> Position {
-        Position(view.offset(from: view.beginningOfDocument, to: offset))
+    @inlinable func position(_ uiposition: UITextPosition) -> Position {
+        Position(view.offset(from: view.beginningOfDocument, to: uiposition))
     }
     
-    /// - Complexity: O(1).
-    @inlinable func positions(_ offsets: UITextRange) -> Range<Position> {
-        position(offsets.start) ..< position(offsets.end)
+    @inlinable func positions(_ uipositions: UITextRange) -> Range<Position> {
+        position(uipositions.start) ..< position(uipositions.end)
     }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Positions -> Offsets
-    //=------------------------------------------------------------------------=
-    
-    /// - Complexity: O(1).
-    @inlinable func offset(_ position: Position) -> UITextPosition {
+
+    @inlinable func uiposition(_ position: Position) -> UITextPosition {
         view.position(from: view.beginningOfDocument, offset: position.offset)!
     }
     
-    /// - Complexity: O(1).
-    @inlinable func offsets(_ positions: Range<Position>) -> UITextRange {
-        view.textRange(from: offset(positions.lowerBound), to: offset(positions.upperBound))!
+    @inlinable func uipositions(_ positions: Range<Position>) -> UITextRange {
+        view.textRange(from: uiposition(positions.lowerBound), to: uiposition(positions.upperBound))!
     }
 }
 
