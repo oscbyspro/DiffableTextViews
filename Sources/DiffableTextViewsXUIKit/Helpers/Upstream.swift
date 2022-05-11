@@ -12,26 +12,29 @@
 import DiffableTextKit
 import SwiftUI
 
-//*========================================================================*
+//*============================================================================*
 // MARK: Declaration
-//*========================================================================*
-    
-@usableFromInline struct Actions {
-    
-    //=------------------------------------------------------------------------=
-    // MARK: State
-    //=------------------------------------------------------------------------=
-    
-    @usableFromInline var onSubmit: Trigger?
+//*============================================================================*
+
+@usableFromInline struct Upstream<Style: DiffableTextStyle> {
+    @usableFromInline typealias Value = Style.Value
     
     //=------------------------------------------------------------------------=
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable init() { }
+    @usableFromInline let style: Style
+    @usableFromInline let value: Binding<Value>
     
-    @inlinable @inline(__always) init(_ environment: EnvironmentValues) {
-        self.onSubmit = environment.diffableTextViews_onSubmit
+    //=------------------------------------------------------------------------=
+    // MARK: Initializers
+    //=------------------------------------------------------------------------=
+ 
+    @inlinable @inline(__always) init(
+    _ parent: DiffableTextField<Style>,
+    _ environment: EnvironmentValues) {
+        self.style = parent.style.locale(environment.locale)
+        self.value = parent.value
     }
 }
 

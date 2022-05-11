@@ -17,7 +17,7 @@ import SwiftUI
 //*============================================================================*
 
 @usableFromInline enum DiffableTextViews_OnSubmit: EnvironmentKey {
-    @usableFromInline static let defaultValue: Trigger = nil
+    @usableFromInline static let defaultValue: Trigger? = nil
 }
 
 //*============================================================================*
@@ -30,7 +30,7 @@ extension EnvironmentValues {
     // MARK: Accessors
     //=------------------------------------------------------------------------=
 
-    @inlinable var diffableTextViews_onSubmit: Trigger {
+    @inlinable var diffableTextViews_onSubmit: Trigger? {
         get { self[DiffableTextViews_OnSubmit.self] }
         set { self[DiffableTextViews_OnSubmit.self] &+= newValue }
     }
@@ -50,8 +50,8 @@ public extension View {
     ///
     /// DiffableTextViews trigger this action when the user hits the return key.
     ///
-    @inlinable func diffableTextViews_onSubmit(_ action: (() -> Void)?) -> some View {
-        environment(\.diffableTextViews_onSubmit, Trigger.init(action))
+    @inlinable func diffableTextViews_onSubmit(_  action: (() -> Void)?) -> some View {
+        environment(\.diffableTextViews_onSubmit, action.map(Trigger.init))
     }
 }
 

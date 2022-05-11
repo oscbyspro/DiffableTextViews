@@ -10,12 +10,6 @@
 import DiffableTextKit
 import Foundation
 
-#if canImport(UIKit)
-
-import UIKit
-
-#endif
-
 //*============================================================================*
 // MARK: Declaration
 //*============================================================================*
@@ -71,22 +65,6 @@ public struct _NumberTextStyle<Format: NumberTextFormat>: NumberTextStyleProtoco
         && lhs.bounds == rhs.bounds
         && lhs.precision == rhs.precision
     }
-    
-    //*========================================================================*
-    // MARK: UIKit
-    //*========================================================================*
-    
-    #if canImport(UIKit)
-
-    //=------------------------------------------------------------------------=
-    // MARK: Setup
-    //=------------------------------------------------------------------------=
-
-    @inlinable public static func onSetup(_ view: UITextField) {
-        view.keyboardType = Value.isInteger ? .numberPad : .decimalPad
-    }
-
-    #endif
 }
 
 //=----------------------------------------------------------------------------=
@@ -189,8 +167,7 @@ internal extension _NumberTextStyle {
         //=--------------------------------------=
         // Snapshot
         //=--------------------------------------=
-        var snapshot = characters.reduce(into: Snapshot()) {
-            snapshot,  character in
+        var snapshot = characters.reduce(into: Snapshot()) { snapshot, character in
             snapshot.append(symbol(character))
         }
         //=--------------------------------------=

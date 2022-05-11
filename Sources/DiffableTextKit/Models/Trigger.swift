@@ -11,60 +11,50 @@
 // MARK: Declaration
 //*============================================================================*
 
-/// A resettable action stack.
-public struct Trigger: ExpressibleByNilLiteral {
-    public typealias Action = () -> Void
+public struct Trigger {
     
     //=------------------------------------------------------------------------=
     // MARK: State
     //=------------------------------------------------------------------------=
     
-    @usableFromInline var action: Action?
+    @usableFromInline var action: () -> Void
     
     //=------------------------------------------------------------------------=
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable public init(_ action: Action?) {
+    @inlinable public init(_ action: @escaping () -> Void) {
         self.action = action
     }
-    
-    @inlinable public init(nilLiteral: Void) {
-        self.action = nil
-    }
-    
+
     //=------------------------------------------------------------------------=
     // MARK: Utilities
     //=------------------------------------------------------------------------=
     
     @inlinable public func callAsFunction() {
-        self.action?()
+        self.action()
     }
     
     //=------------------------------------------------------------------------=
     // MARK: Transformations
     //=------------------------------------------------------------------------=
     
-    /// Appends the trigger if it exists, resets this instance otherwise.
-    @inlinable public mutating func merge(_ other: Self) {
-        if let other = other.action {
-            //=----------------------------------=
-            // Append
-            //=----------------------------------=
-            if let this = self.action {
-                self.action = { this(); other() }
-            //=----------------------------------=
-            // Replace
-            //=----------------------------------=
-            } else { self.action = other }
-        //=--------------------------------------=
-        // Reset
-        //=--------------------------------------=
-        } else { self.action = nil }
+    @inlinable public static func += (lhs: inout Self, rhs: Self) {
+        lhs.action = { [lhs] in lhs(); rhs() }
     }
+}
+
+//*============================================================================*
+// MARK: Declaration
+//*============================================================================*
+
+extension Optional where Wrapped == Trigger {
     
-    /// Appends the trigger if it exists, resets this instance otherwise.
-    @inlinable public static func &+= (this: inout Self, other: Self) {
-        this.merge(other)
+    //=------------------------------------------------------------------------=
+    // MARK: Transformations
+    //=------------------------------------------------------------------------=
+
+    @inlinable public static func &+= (lhs: inout Self, rhs: Self) {
+        guard let rhs = rhs else { return lhs = nil }; (lhs? += rhs) ?? (lhs = rhs)
     }
 }

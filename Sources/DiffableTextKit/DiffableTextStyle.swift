@@ -9,12 +9,6 @@
 
 import Foundation
 
-#if canImport(UIKit)
-
-import UIKit
-
-#endif
-
 //*============================================================================*
 // MARK: Declaration
 //*============================================================================*
@@ -63,16 +57,6 @@ public protocol DiffableTextStyle: Equatable {
     /// - Thrown errors have their descriptions printed in DEBUG mode.
     ///
     @inlinable func merge(_ proposal: Proposal) throws -> Commit<Value>
-    
-    //*========================================================================*
-    // MARK: UIKit
-    //*========================================================================*
-    
-    #if canImport(UIKit)
-
-    @inlinable static func onSetup(_ view: UITextField)
-    
-    #endif
 }
 
 //=----------------------------------------------------------------------------=
@@ -86,16 +70,6 @@ public extension DiffableTextStyle {
     //=------------------------------------------------------------------------=
     
     @inlinable func locale(_ locale: Locale) -> Self { self }
-    
-    //*========================================================================*
-    // MARK: UIKit
-    //*========================================================================*
-    
-    #if canImport(UIKit)
-
-    @inlinable static func onSetup(_ view: UITextField) { }
-    
-    #endif
 }
 
 //*============================================================================*
@@ -160,21 +134,4 @@ extension DiffableTextStyleWrapper {
     public static func == (lhs: Self, rhs: Self) -> Bool {
         lhs.style == rhs.style
     }
-    
-    //*========================================================================*
-    // MARK: UIKit
-    //*========================================================================*
-    
-    #if canImport(UIKit)
-
-    //=------------------------------------------------------------------------=
-    // MARK: Setup
-    //=------------------------------------------------------------------------=
-    
-    @inlinable @inline(__always)
-    public static func onSetup(_ view: UITextField) {
-        Style.onSetup(view)
-    }
-
-    #endif
 }

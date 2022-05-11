@@ -49,12 +49,12 @@ struct NumberScreenExample: View {
     
     var body: some View {
         switch (optionality.wrapped, format.wrapped) {
-        case (.standard,    .number): decimalStandardNumberView
-        case (.standard,  .currency): decimalStandardCurrencyView
-        case (.standard,   .percent): decimalStandardPercentView
-        case (.optional,   .number): decimalOptionalNumberView
-        case (.optional, .currency): decimalOptionalCurrencyView
-        case (.optional,  .percent): decimalOptionalPercentView
+        case (.standard,   .number): decimalStandardNumber
+        case (.standard, .currency): decimalStandardCurrency
+        case (.standard,  .percent): decimalStandardPercent
+        case (.optional,   .number): decimalOptionalNumber
+        case (.optional, .currency): decimalOptionalCurrency
+        case (.optional,  .percent): decimalOptionalPercent
         }
     }
     
@@ -62,17 +62,17 @@ struct NumberScreenExample: View {
     // MARK: Standard
     //=------------------------------------------------------------------------=
     
-    var decimalStandardNumberView: some View {
+    var decimalStandardNumber: some View {
         NumberScreenExampleX(context, context.decimals.xstandard,
         NumberTextStyle<Decimal>(locale: locale.wrapped))
     }
     
-    var decimalStandardCurrencyView: some View {
+    var decimalStandardCurrency: some View {
         NumberScreenExampleX(context, context.decimals.xstandard,
         NumberTextStyle<Decimal>.Currency(code: currency.wrapped, locale: locale.wrapped))
     }
     
-    var decimalStandardPercentView: some View {
+    var decimalStandardPercent: some View {
         NumberScreenExampleX(context, context.decimals.xstandard,
         NumberTextStyle<Decimal>.Percent(locale: locale.wrapped))
     }
@@ -81,17 +81,17 @@ struct NumberScreenExample: View {
     // MARK: Optional
     //=------------------------------------------------------------------------=
  
-    var decimalOptionalNumberView: some View {
+    var decimalOptionalNumber: some View {
         NumberScreenExampleX(context, context.decimals.xoptional,
         NumberTextStyle<Decimal?>(locale: locale.wrapped))
     }
     
-    var decimalOptionalCurrencyView: some View {
+    var decimalOptionalCurrency: some View {
         NumberScreenExampleX(context, context.decimals.xoptional,
         NumberTextStyle<Decimal?>.Currency(code: currency.wrapped, locale: locale.wrapped))
     }
     
-    var decimalOptionalPercentView: some View {
+    var decimalOptionalPercent: some View {
         NumberScreenExampleX(context, context.decimals.xoptional,
         NumberTextStyle<Decimal?>.Percent(locale: locale.wrapped))
     }
@@ -101,9 +101,10 @@ struct NumberScreenExample: View {
 // MARK: Declaration
 //*============================================================================*
 
-struct NumberScreenExampleX<Style: NumberTextStyleProtocol>: View
-where Style.Format.FormatInput == Decimal {
-    typealias Value = Style.Value
+struct NumberScreenExampleX<Style>: View where
+Style: NumberTextStyleProtocol,
+Style.Format.FormatInput == Decimal {
+    typealias Value   = Style.Value
     typealias Context = NumberScreenContext
     
     //=------------------------------------------------------------------------=
@@ -147,6 +148,7 @@ where Style.Format.FormatInput == Decimal {
 
     var body: some View {
         NumberScreenExampleY(context, value: value, style: style.constant())
+            .diffableTextViews_keyboardType(Value.isInteger ? .numberPad : .decimalPad)
     }
 }
 

@@ -58,6 +58,7 @@ struct DiffableTextFieldXAmount: View {
             // .precision(integer: 1..., fraction: 2)
         }
         .environment(\.locale, locale)
+        .diffableTextViews_keyboardType(.decimalPad)
     }
 }
 ```

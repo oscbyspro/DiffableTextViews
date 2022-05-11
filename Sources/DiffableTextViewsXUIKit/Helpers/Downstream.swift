@@ -45,8 +45,8 @@ import UIKit
     }
     
     @inlinable var selection: Range<Position> {
-        get { positions(view.selectedTextRange!) }
-        set { view.selectedTextRange = uipositions(newValue) }
+        get { range(view.selectedTextRange!) }
+        set { view.selectedTextRange = uirange(newValue) }
     }
     
     //=------------------------------------------------------------------------=
@@ -80,16 +80,16 @@ extension Downstream {
         Position(view.offset(from: view.beginningOfDocument, to: uiposition))
     }
     
-    @inlinable func positions(_ uipositions: UITextRange) -> Range<Position> {
-        position(uipositions.start) ..< position(uipositions.end)
+    @inlinable func range(_ uirange: UITextRange) -> Range<Position> {
+        position(uirange.start) ..< position(uirange.end)
     }
 
     @inlinable func uiposition(_ position: Position) -> UITextPosition {
         view.position(from: view.beginningOfDocument, offset: position.offset)!
     }
     
-    @inlinable func uipositions(_ positions: Range<Position>) -> UITextRange {
-        view.textRange(from: uiposition(positions.lowerBound), to: uiposition(positions.upperBound))!
+    @inlinable func uirange(_ range: Range<Position>) -> UITextRange {
+        view.textRange(from: uiposition(range.lowerBound), to: uiposition(range.upperBound))!
     }
 }
 
@@ -107,12 +107,7 @@ extension Downstream {
     func setTitle(_ title: String) {
         self.view.placeholder = title
     }
-    
-    @inlinable @inline(__always)
-    func setStyleValues<T>(_ style: T.Type) where T: DiffableTextStyle {
-        style.onSetup(view)
-    }
-    
+
     //=------------------------------------------------------------------------=
     // MARK: Environment
     //=------------------------------------------------------------------------=

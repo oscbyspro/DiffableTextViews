@@ -71,9 +71,7 @@ A text field that binds values and formats them as you type.
 |---|---------|-------------|
 | :iphone: | SwiftUI | Value, style, done |
 | :mountain: | Environment | Uses environment values |
-| :mag_right: | Focusable | Supports SwiftUI.FocusState |
-| :zzz: | Convenient | Styles use sensible defaults |
-| :balance_scale: | Monospaced | Standard font is monospaced |
+| :mag_right: | Focus | Supports SwiftUI.FocusState |
 
 ### Environment
 
@@ -143,6 +141,7 @@ struct DiffableTextFieldXAmount: View {
             // .precision(integer: 1..., fraction: 2)
         }
         .environment(\.locale, locale)
+        .diffableTextViews_keyboardType(.decimalPad)
     }
 }
 ```

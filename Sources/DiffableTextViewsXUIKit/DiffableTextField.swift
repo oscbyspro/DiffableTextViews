@@ -40,9 +40,9 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
     // MARK: State
     //=------------------------------------------------------------------------=
     
-    @usableFromInline let title: String
     @usableFromInline let style: Style
     @usableFromInline let value: Binding<Value>
+    @usableFromInline let title: String
 
     //=------------------------------------------------------------------------=
     // MARK: Initializers
@@ -50,24 +50,16 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
     
     @inlinable public init(_ title: String = "",
     value: Binding<Value>, style: Style) {
-        self.title = title
-        self.value = value
         self.style = style
+        self.value = value
+        self.title = title
     }
     
     @inlinable public init(_ title: String = "",
     value: Binding<Value>, style: () -> Style) {
-        self.title = title
-        self.value = value
         self.style = style()
-    }
- 
-    //=------------------------------------------------------------------------=
-    // MARK: Transformations
-    //=------------------------------------------------------------------------=
-    
-    @inlinable @inline(__always) func locale(_ locale: Locale) -> Self {
-        Self(title, value: value, style: style.locale(locale))
+        self.value = value
+        self.title = title
     }
 
     //=------------------------------------------------------------------------=
@@ -92,11 +84,10 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
     //*========================================================================*
     
     public final class Coordinator: NSObject, UITextFieldDelegate {
-        @usableFromInline typealias Upstream = DiffableTextField
-        @usableFromInline typealias Environment = EnvironmentValues
         @usableFromInline typealias Position = Unicode.UTF16.Position
         @usableFromInline typealias Status = DiffableTextKit.Status<Style>
         @usableFromInline typealias Context = DiffableTextKit.Context<Style>
+        @usableFromInline typealias Upstream = DiffableTextViewsXUIKit.Upstream<Style>
 
         //=--------------------------------------------------------------------=
         // MARK: State
@@ -115,16 +106,15 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
         //=--------------------------------------------------------------------=
         
         @inlinable @inline(never)
-        func setup(_ upstream: Upstream, _ environment: Environment) {
+        func setup(_ parent: DiffableTextField, _ environment: EnvironmentValues) {
             //=----------------------------------=
             // Upstream
             //=----------------------------------=
-            self.upstream = upstream.locale(environment.locale)
+            self.upstream = Upstream(parent, environment)
             //=----------------------------------=
             // Downstream
             //=----------------------------------=
             self.downstream.view.delegate = self
-            self.downstream.setStyleValues(Style.self)
             self.downstream.setTextFeldStyle(environment)
             //=----------------------------------=
             // Synchronize
@@ -133,15 +123,15 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
         }
         
         @inlinable @inline(never)
-        func update(_ upstream: Upstream, _ environment: Environment) {
+        func update(_ parent: DiffableTextField, _ environment: EnvironmentValues) {
             //=----------------------------------=
             // Upstream
             //=----------------------------------=
-            self.upstream = upstream.locale(environment.locale)
+            self.upstream = Upstream(parent, environment)
             //=----------------------------------=
             // Downstream
             //=----------------------------------=
-            self.downstream.setTitle(upstream.title)
+            self.downstream.setTitle(parent.title)
             self.downstream.setDisableAutocorrection(environment)
             self.downstream.setFont(environment)
             self.downstream.setForegroundColor(environment)
@@ -225,7 +215,7 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
         //=--------------------------------------------------------------------=
 
         @inlinable public func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-            textField.resignFirstResponder(); actions.onSubmit(); return true
+            textField.resignFirstResponder(); actions.onSubmit?(); return true
         }
         
         @inlinable public func textFieldDidBeginEditing(_ textField: UITextField) {
