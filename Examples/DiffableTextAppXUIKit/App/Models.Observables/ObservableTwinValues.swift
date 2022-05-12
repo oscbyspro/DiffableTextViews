@@ -9,19 +9,20 @@
 
 import Combine
 import SwiftUI
+import DiffableTextViews
 
 //*============================================================================*
 // MARK: Declaration
 //*============================================================================*
 
-final class ObservableTwinValues<T>: ObservableObject where T: Numeric {
+final class ObservableTwinValues<T>: ObservableObject where T: NumberTextValue {
     
     //=------------------------------------------------------------------------=
     // MARK: State
     //=------------------------------------------------------------------------=
     
-    private var _standard: T  = 0
-    private var _optional: T? = 0
+    private var _standard: T  = .zero
+    private var _optional: T? = .zero
     
     //=------------------------------------------------------------------------=
     // MARK: Publishers
@@ -44,7 +45,7 @@ final class ObservableTwinValues<T>: ObservableObject where T: Numeric {
     private lazy var ___optional = __optional.sink {
         [unowned self] in
         self.objectWillChange.send()
-        self._standard = $0 ?? 0
+        self._standard = $0 ?? .zero
         self._optional = $0
     }
     

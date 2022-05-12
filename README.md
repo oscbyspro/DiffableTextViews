@@ -18,14 +18,6 @@ An open source package for as-you-type formatting in SwiftUI.
 | :desert_island: | Standalone | Uses no remote dependencies |
 | :open_book: | Open source | 100% transparent, as it should be |
 
-### [Algorithms](Sources/DiffableTextKit)
-
-|   | Algorithm | Description | Complexity |
-|---|-----------|-------------|------------|
-| :book: | ∆Text | Determines selection when text changes | ≤ Linear |
-| :left_right_arrow: | ∆Selection | Determines selection when selection changes | ≤ Linear |
-| :star: | Attributes | Determines selection based on attributes | ≤ Linaer |
-
 # Installation
 
 Simple instructions on how to install this package.
@@ -61,7 +53,7 @@ Download this package and compile/run it with Xcode.
 
 # Views
 
-## [DiffableTextField](Notes/DiffableTextField.md)
+## DiffableTextField
 
 A text field that binds values and formats them as you type.
 
@@ -92,7 +84,7 @@ diffableTextViews_tint(_:)
 
 # Styles
 
-## [NumberTextStyle](Notes/NumberTextStyle.md) ([Source](Sources/DiffableTextStylesXNumber), [Tests](Tests/DiffableTextStylesXNumberTests))
+## NumberTextStyle ([Source](Sources/DiffableTextStylesXNumber), [Tests](Tests/DiffableTextStylesXNumberTests))
 
 A style that binds localized numbers using various formats.
 
@@ -146,7 +138,7 @@ struct DiffableTextFieldXAmount: View {
 }
 ```
 
-## [PatternTextStyle](Notes/PatternTextStyle.md) ([Source](Sources/DiffableTextStylesXPattern), [Tests](Tests/DiffableTextStylesXPatternTests))
+## PatternTextStyle ([Source](Sources/DiffableTextStylesXPattern), [Tests](Tests/DiffableTextStylesXPatternTests))
 
 A style that processes characters laid out in custom patterns.
 
@@ -194,7 +186,7 @@ struct DiffableTextFieldXPhone: View {
 }
 ```
 
-## [WrapperTextStyle(s)](Notes/WrapperTextStyle.md) ([Source](Sources/DiffableTextStylesXWrappers/), [Tests](Tests/DiffableTextStylesXWrappersTests))
+## WrapperTextStyle(s) ([Source](Sources/DiffableTextStylesXWrappers/), [Tests](Tests/DiffableTextStylesXWrappersTests))
 
 Decorative styles that modify the behavior of their content.
 
