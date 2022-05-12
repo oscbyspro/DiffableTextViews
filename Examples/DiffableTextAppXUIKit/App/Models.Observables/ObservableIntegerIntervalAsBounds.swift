@@ -28,29 +28,27 @@ final class ObservableIntegerIntervalAsBounds<Value: Comparable>: ObservableObje
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    init(_ interval: Interval<Int>, map: @escaping (Interval<Int>) -> ClosedRange<Value>) {
-        self.interval = Observable(interval)
-        self.subscription = self.interval.$wrapped.sink {
-            [unowned self]
-            in values = map($0)
+    convenience init(_ interval: Interval<Int>) where Value == Decimal {
+        self.init(interval) {
+            Decimal(string: String.number(nines: $0))!
         }
     }
     
-    @inlinable static func decimal9s(_ interval: Interval<Int>) -> Self where Value == Decimal {
-        Self.init(interval) { let ordered = $0.closed
-            //=--------------------------------------=
-            // Single
-            //=--------------------------------------=
-            func bound(_ length: Int) -> Decimal {
-                guard length != 0 else { return 0 }
-                var description = length >= 0 ? "" : "-"
-                description += String(repeating: "9", count: abs(length))
-                return Decimal(string: description)!
-            }
-            //=--------------------------------------=
-            // Double
-            //=--------------------------------------=
-            return bound(ordered.lowerBound)...bound(ordered.upperBound)
+    //=------------------------------------------------------------------------=
+    // MARK: Initializers
+    //=------------------------------------------------------------------------=
+    
+    private init(_ interval: Interval<Int>, map: @escaping (Int) -> Value) {
+        //=--------------------------------------=
+        // Interval
+        //=--------------------------------------=
+        self.interval = Observable(interval)
+        //=--------------------------------------=
+        // Converter
+        //=--------------------------------------=
+        self.subscription = self.interval.$wrapped.sink {
+            [unowned self] interval in let closed = interval.closed
+            values = map(closed.lowerBound)...map(closed.upperBound)
         }
     }
 }

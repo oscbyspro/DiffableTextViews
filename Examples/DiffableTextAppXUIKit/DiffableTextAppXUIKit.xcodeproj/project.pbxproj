@@ -19,6 +19,7 @@
 		5589A1A427A7E3E30000F04A /* App.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5589A1A327A7E3E30000F04A /* App.swift */; };
 		5589A1A827A7E3E40000F04A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5589A1A727A7E3E40000F04A /* Assets.xcassets */; };
 		5589A1AB27A7E3E40000F04A /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5589A1AA27A7E3E40000F04A /* Preview Assets.xcassets */; };
+		5589FE38282D0E8A002BE32E /* String.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5589FE37282D0E8A002BE32E /* String.swift */; };
 		559CA92D2828684A00E6F369 /* Observable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 559CA92C2828684A00E6F369 /* Observable.swift */; };
 		559CA92F2828685A00E6F369 /* ObservableIntegerIntervalAsBounds.swift in Sources */ = {isa = PBXBuildFile; fileRef = 559CA92E2828685A00E6F369 /* ObservableIntegerIntervalAsBounds.swift */; };
 		559CA9312828687700E6F369 /* ObservableTwinValues.swift in Sources */ = {isa = PBXBuildFile; fileRef = 559CA9302828687700E6F369 /* ObservableTwinValues.swift */; };
@@ -51,6 +52,7 @@
 		5589A1A327A7E3E30000F04A /* App.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = App.swift; sourceTree = "<group>"; };
 		5589A1A727A7E3E40000F04A /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		5589A1AA27A7E3E40000F04A /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		5589FE37282D0E8A002BE32E /* String.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = String.swift; sourceTree = "<group>"; };
 		559CA92C2828684A00E6F369 /* Observable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Observable.swift; sourceTree = "<group>"; };
 		559CA92E2828685A00E6F369 /* ObservableIntegerIntervalAsBounds.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservableIntegerIntervalAsBounds.swift; sourceTree = "<group>"; };
 		559CA9302828687700E6F369 /* ObservableTwinValues.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservableTwinValues.swift; sourceTree = "<group>"; };
@@ -119,6 +121,7 @@
 				559CA93228286CB400E6F369 /* Views.Pickers */,
 				55AA28D127A802AF003778FE /* Views.Routers */,
 				55B8ABAB27AAAB9E00980626 /* Models */,
+				5589FE36282D0E71002BE32E /* Models.Helpers */,
 				559CA92B2828683800E6F369 /* Models.Observables */,
 				5589A1A327A7E3E30000F04A /* App.swift */,
 			);
@@ -131,6 +134,15 @@
 				5589A1AA27A7E3E40000F04A /* Preview Assets.xcassets */,
 			);
 			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+		5589FE36282D0E71002BE32E /* Models.Helpers */ = {
+			isa = PBXGroup;
+			children = (
+				5589FE37282D0E8A002BE32E /* String.swift */,
+				5527C21227AA6C6A0098546E /* Interval.swift */,
+			);
+			path = Models.Helpers;
 			sourceTree = "<group>";
 		};
 		559CA92B2828683800E6F369 /* Models.Observables */ = {
@@ -205,7 +217,6 @@
 		55B8ABAB27AAAB9E00980626 /* Models */ = {
 			isa = PBXGroup;
 			children = (
-				5527C21227AA6C6A0098546E /* Interval.swift */,
 				55781F3027AD4500003D4252 /* Constants.swift */,
 			);
 			path = Models;
@@ -317,6 +328,7 @@
 				5589A1A427A7E3E30000F04A /* App.swift in Sources */,
 				55781F2D27AD39B0003D4252 /* Scroller.swift in Sources */,
 				55B38EE92827CD46005159F4 /* NumberScreen.swift in Sources */,
+				5589FE38282D0E8A002BE32E /* String.swift in Sources */,
 				5527C21327AA6C6A0098546E /* Interval.swift in Sources */,
 				5507BD1627AD66A800F5292D /* Wheel.swift in Sources */,
 			);
