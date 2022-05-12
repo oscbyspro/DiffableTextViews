@@ -30,10 +30,6 @@ public struct Context<Style: DiffableTextStyle> {
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable init(_ status: Status, _ layout: Layout) {
-        self._storage = Storage(status, layout)
-    }
-    
     @inlinable public init(_ status: Status) {
         switch status.focus == true {
         case  true: self =   .focused(status.style, status.value)
@@ -45,12 +41,16 @@ public struct Context<Style: DiffableTextStyle> {
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
+    @inlinable init(_ status: Status, _ layout: Layout) {
+        self._storage = Storage(status, layout)
+    }
+    
     @inlinable static func focused(_ style: Style, _ value: Value) -> Self {
         Self.focused(style, style.interpret(value))
     }
     
     @inlinable static func focused(_ style: Style, _ commit: Commit) -> Self {
-        Self(Status(style, commit.value, true), Layout((commit.snapshot)))
+        Self(Status(style, commit.value, true), Layout(commit.snapshot))
     }
     
     @inlinable static func unfocused(_ style: Style, _ value: Value) -> Self {
@@ -155,7 +155,7 @@ public extension Context {
     
     @inlinable func selection<T>(as type: Position<T>.Type =
     Position<T>.self) -> Range<T.Position> where T: Offset {
-        layout.positions(at: layout.selection).bounds
+        layout.selection()
     }
 }
 
@@ -176,7 +176,7 @@ public extension Context {
         if other.focus == true {
             self.write {
                 $0.status = other.status
-                $0.layout.update(snapshot: other.snapshot)
+                $0.layout.merge(snapshot: other.snapshot)
             }
         //=--------------------------------------=
         // Unfocused
@@ -211,7 +211,7 @@ public extension Context {
     //=------------------------------------------------------------------------=
     // MARK: Characters
     //=------------------------------------------------------------------------=
-        
+    
     @inlinable mutating func merge<T>(_ characters: String,
     in range: Range<T.Position>) throws -> Update where T: Offset {
         let previous = self
@@ -240,8 +240,8 @@ public extension Context {
         self.write({ $0.layout.selection = Carets(selection) })
     }
     
-    @inlinable mutating func update<T>(selection: Range<T.Position>, momentum: Bool) -> Update where T: Offset {
-        self.write({ $0.layout .update(selection: Carets(selection), momentum: momentum) })
+    @inlinable mutating func merge<T>(selection: Range<T.Position>, momentum: Bool) -> Update where T: Offset {
+        self.write({ $0.layout .merge(selection: Carets(selection), momentum: momentum) })
         return Update.selection(selection != self.selection())
     }
 }

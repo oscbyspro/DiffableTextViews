@@ -131,7 +131,7 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
             //=----------------------------------=
             // Downstream
             //=----------------------------------=
-            self.downstream.setTitle(parent.title)
+            self.downstream.setPlaceholder(parent.title)
             self.downstream.setDisableAutocorrection(environment)
             self.downstream.setFont(environment)
             self.downstream.setForegroundColor(environment)
@@ -193,7 +193,7 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
             //=----------------------------------=
             guard textField.markedTextRange == nil else {
                 Info.print(cancellation: ["marked text is disallowed"])
-                return push([.text, .selection])
+                return self.push([.text, .selection])
             }
             //=----------------------------------=
             // Locked
@@ -202,7 +202,7 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
             //=----------------------------------=
             // Update
             //=----------------------------------=
-            let update = self.context.update(
+            let update = self.context.merge(
             selection: downstream.selection, momentum: downstream.momentum)
             //=----------------------------------=
             // Push

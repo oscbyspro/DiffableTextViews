@@ -12,9 +12,9 @@
 import DiffableTextKit
 import SwiftUI
 
-//*========================================================================*
+//*============================================================================*
 // MARK: Declaration
-//*========================================================================*
+//*============================================================================*
     
 @usableFromInline struct Actions {
     
@@ -23,12 +23,12 @@ import SwiftUI
     //=------------------------------------------------------------------------=
     
     @usableFromInline var onSubmit: Trigger?
-    
+
     //=------------------------------------------------------------------------=
     // MARK: Initializers
     //=------------------------------------------------------------------------=
-    
-    @inlinable init() { }
+     
+    @inlinable @inline(__always) init() { }
     
     @inlinable @inline(__always) init(_ environment: EnvironmentValues) {
         self.onSubmit = environment.diffableTextViews_onSubmit

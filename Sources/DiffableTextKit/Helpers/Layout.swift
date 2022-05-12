@@ -37,6 +37,15 @@
     // MARK: Accessors
     //=------------------------------------------------------------------------=
     
+    @inlinable func selection<T>(as type: Position<T>.Type =
+    Position<T>.self) -> Range<T.Position> where T: Offset {
+        positions(at: selection).bounds
+    }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Accessors
+    //=------------------------------------------------------------------------=
+    
     @inlinable func indices<T>(at positions: Carets<T.Position>) -> Carets<Index> where T: Offset {
         positions.map(caret: snapshot.index(at:))
     }
@@ -56,7 +65,7 @@ extension Layout {
     // MARK: Snapshot
     //=------------------------------------------------------------------------=
     
-    @inlinable mutating func update(snapshot: Snapshot) {
+    @inlinable mutating func merge(snapshot: Snapshot) {
         //=--------------------------------------=
         // Values
         //=--------------------------------------=
@@ -66,14 +75,14 @@ extension Layout {
         //=--------------------------------------=
         // Update
         //=--------------------------------------=
-        self.snapshot = snapshot; self.update(selection: selection)
+        self.snapshot = snapshot; self.merge(selection: selection)
     }
     
     //=------------------------------------------------------------------------=
     // MARK: Selection
     //=------------------------------------------------------------------------=
 
-    @inlinable mutating func update<T>(selection: Carets<T.Position>, momentum: Bool) where T: Offset {
+    @inlinable mutating func merge<T>(selection: Carets<T.Position>, momentum: Bool) where T: Offset {
         //=--------------------------------------=
         // Values
         //=--------------------------------------=
@@ -82,10 +91,10 @@ extension Layout {
         //=--------------------------------------=
         // Update
         //=--------------------------------------=
-        self.update(selection: selection, momentum: momentum)
+        self.merge(selection: selection, momentum: momentum)
     }
     
-    @inlinable mutating func update(selection: Carets<Index>, momentum: Directions = .none) {
+    @inlinable mutating func merge(selection: Carets<Index>, momentum: Directions = .none) {
         switch selection {
         //=--------------------------------------=
         // Accept Max Value

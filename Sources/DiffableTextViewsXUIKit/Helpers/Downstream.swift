@@ -27,15 +27,6 @@ import UIKit
     @usableFromInline var view = Base()
     
     //=------------------------------------------------------------------------=
-    // MARK: Initializers
-    //=------------------------------------------------------------------------=
-   
-    @inlinable init() {
-        self.view.setContentHuggingPriority(.defaultHigh, for: .vertical)
-        self.view.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
-    }
-    
-    //=------------------------------------------------------------------------=
     // MARK: Accessors
     //=------------------------------------------------------------------------=
     
@@ -100,12 +91,12 @@ extension Downstream {
 extension Downstream {
     
     //=------------------------------------------------------------------------=
-    // MARK: Upstream
+    // MARK: Direct
     //=------------------------------------------------------------------------=
     
     @inlinable @inline(__always)
-    func setTitle(_ title: String) {
-        self.view.placeholder = title
+    func setPlaceholder(_ placeholder: String) {
+        self.view.placeholder = placeholder
     }
 
     //=------------------------------------------------------------------------=

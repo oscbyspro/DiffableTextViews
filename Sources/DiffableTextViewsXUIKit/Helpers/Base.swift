@@ -31,54 +31,19 @@ import UIKit
     
     @usableFromInline private(set) var intent = Intent()
     
-    //*========================================================================*
-    // MARK: Intent
-    //*========================================================================*
+    //=------------------------------------------------------------------------=
+    // MARK: Initializers
+    //=------------------------------------------------------------------------=
     
-    @usableFromInline struct Intent {
-        @usableFromInline typealias Key = UIKeyboardHIDUsage
-        
-        //=--------------------------------------------------------------------=
-        // MARK: State
-        //=--------------------------------------------------------------------=
-        
-        @usableFromInline private(set) var latest: Key?
-        
-        //=--------------------------------------------------------------------=
-        // MARK: Accessors
-        //=--------------------------------------------------------------------=
-        
-        @inlinable public var momentum: Bool { latest != nil }
-        
-        //=--------------------------------------------------------------------=
-        // MARK: Transformations
-        //=--------------------------------------------------------------------=
-        
-        @inlinable mutating func insert(_ presses: Set<UIPress>) {
-            parse(presses).map({ latest =  $0 })
-        }
-        
-        @inlinable mutating func remove(_ presses: Set<UIPress>) {
-            parse(presses).map({ latest == $0 ? latest = nil : () })
-        }
-        
-        //=--------------------------------------------------------------------=
-        // MARK: Parse
-        //=--------------------------------------------------------------------=
-        
-        @inlinable func parse(_ presses: Set<UIPress>) -> Key? {
-            if let key = presses.first?.key?.keyCode,
-            key == .keyboardLeftArrow ||
-            key == .keyboardRightArrow { return key }; return nil
-        }
+    init() {
+        super.init(frame: .zero)
+        self.setContentHuggingPriority(.defaultHigh, for: .vertical)
+        self.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
     }
-}
-
-//=----------------------------------------------------------------------------=
-// MARK: UIResponder
-//=----------------------------------------------------------------------------=
-
-extension Base {
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
 
     //=------------------------------------------------------------------------=
     // MARK: Presses
