@@ -163,7 +163,7 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
             //=----------------------------------=
             attempt: do {
                 var context = context!
-                let update  = try context.merge(characters, in:
+                let update = try context.merge(characters, in:
                 Position(nsrange.lowerBound) ..<
                 Position(nsrange.upperBound))
                 //=------------------------------=
@@ -188,19 +188,16 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
         
         @inlinable @inline(never)
         public func textFieldDidChangeSelection(_ textField: UITextField) {
+            guard !lock.isLocked else { return }
             //=----------------------------------=
-            // Disable Marked Text
+            // Discard Marked Text
             //=----------------------------------=
             guard textField.markedTextRange == nil else {
                 Info.print(cancellation: ["marked text is disallowed"])
                 return self.push([.text, .selection])
             }
             //=----------------------------------=
-            // Locked
-            //=----------------------------------=
-            guard !lock.isLocked else { return }
-            //=----------------------------------=
-            // Update
+            // Autocorrect
             //=----------------------------------=
             let update = self.context.merge(
             selection: downstream.selection, momentum: downstream.momentum)

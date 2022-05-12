@@ -144,7 +144,7 @@ extension Number {
             //=----------------------------------=
             // Integer: Break
             //=----------------------------------=
-            guard !integer else { break body }
+            if integer { break body }
             //=----------------------------------=
             // Separator
             //=----------------------------------=
@@ -154,7 +154,7 @@ extension Number {
             //=----------------------------------=
             // Separator: Break
             //=----------------------------------=
-            guard separator != nil else { break body }
+            if separator == nil { break body }
             //=----------------------------------=
             // Fraction
             //=----------------------------------=
