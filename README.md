@@ -39,7 +39,7 @@ import DiffableTextViews
 |:-----:|:-----:|:------:|:------------:|:-----:|
 | 5.0+  | 15.0+ | 15.0+  | 15.0+        | 15.0+ |
 
-# [Examples](Examples/DiffableTextAppXUIKit/App)
+# Examples
 
 The example app provides quick-and-easy-to-use customization tools.
 
