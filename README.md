@@ -11,12 +11,12 @@ An open source package for as-you-type formatting in SwiftUI.
 |   | Feature | Description |
 |---|---------|-------------|
 | :keyboard: | Responsive | Formats text as you type |
-| :magic_wand: | Automagical | Binds text to a chosen data type |
+| :magic_wand: | Automagical | Binds text to appropriate types |
 | :heavy_check_mark: | Proper | Validates and autocorrects input |
 | :hammer_and_wrench: | Versatile | Uses snapshots and attributes |
-| :running_man: | Performant | Uses O(n) differentiation algorithms |
+| :running_man: | Performant | O(n) differentiation algorithms |
 | :desert_island: | Standalone | Uses no remote dependencies |
-| :open_book: | Open source | 100% transparent, as it should be |
+| :open_book: | Open | 100% transparent, as it should be |
 
 # Installation
 
@@ -44,7 +44,7 @@ import DiffableTextViews
 The example app provides quick-and-easy-to-use customization tools.
 
 | Number | Pattern |
-|---------|---------|
+|--------|---------|
 <img src="Assets/DiffableTextAppXUIKitXNumber.png" alt="Number" width="250"/> | <img src="Assets/DiffableTextAppXUIKitXPattern.png" alt="Pattern" width="250"/>
 
 ### Installation
@@ -93,11 +93,11 @@ A style that binds localized numbers using various formats.
 |   | Feature | Description |
 |---|---------|-------------|
 | :coin: | Values | Decimal, Double and (U)Int(8-64) |
-| :grey_question: | Optionals | Optional and non-optional values |
-| :bow_and_arrow: | Precision | Up to 38 digits of precision |
-| :bricks: | Bounds | Values are clamped to bounds  |
+| :grey_question: | Optional | Optional and non-optional values |
 | :art: | Formats | Number, currency and percent |
-| :national_park: | Locales | Supports every Foundation.Locale |
+| :bricks: | Bounds | Clamps values to bounds  |
+| :bow_and_arrow: | Precision | Up to 38 digits of precision |
+| :national_park: | Locales | Supports all locale in Foundation |
 | :two: | Bilingual | Accepts both local and ASCII inputs |
 
 ### Examples
