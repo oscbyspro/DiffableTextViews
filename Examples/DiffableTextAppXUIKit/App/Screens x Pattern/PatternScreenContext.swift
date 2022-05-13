@@ -8,31 +8,49 @@
 //=----------------------------------------------------------------------------=
 
 import Combine
-import SwiftUI
 
 //*============================================================================*
 // MARK: Declaration
 //*============================================================================*
 
-final class Observable<Value>: ObservableObject {
+final class PatternScreenContext: ObservableObject {
     
     //=------------------------------------------------------------------------=
     // MARK: State
     //=------------------------------------------------------------------------=
     
-    @Published var wrapped: Value
+    @Observable var value = "123456789"
+    @Observable var pattern = PatternID.phone
+    @Observable var visibility = VisibilityID.visible
+    
+    let digits:  String = "0123456789"
+    let letters: String = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
     
     //=------------------------------------------------------------------------=
-    // MARK: Initializers
+    // MARK: Utilities
     //=------------------------------------------------------------------------=
     
-    init(_ wrapped: Value) { self.wrapped = wrapped }
+    func popLast() {
+        _ = value.popLast()
+    }
     
-    //=------------------------------------------------------------------------=
-    // MARK: Accessors
-    //=------------------------------------------------------------------------=
+    func appendASCIIDigit() {
+        value.append(digits.randomElement()!)
+    }
     
-    var xwrapped: Binding<Value> {
-        Binding { self.wrapped } set: { self.wrapped = $0 }
+    func appendLetter() {
+        value.append(letters.randomElement()!)
+    }
+
+    //*========================================================================*
+    // MARK: Kind
+    //*========================================================================*
+    
+    enum PatternID: String, CaseIterable {
+        case phone, card
+    }
+    
+    enum VisibilityID: String, CaseIterable {
+        case visible, hidden
     }
 }

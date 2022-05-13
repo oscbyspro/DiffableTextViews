@@ -30,9 +30,9 @@ struct NumberScreenOptionsWheel: View {
     //=------------------------------------------------------------------------=
     
     init(_ context: Context) {
-        self.format = context.format
-        self.locale = context.locale
-        self.currency = context.currency
+        self.format = context.$format
+        self.locale = context.$locale
+        self.currency = context.$currency
     }
     
     //=------------------------------------------------------------------------=
@@ -53,13 +53,13 @@ struct NumberScreenOptionsWheel: View {
     
     var wheels: some View {
         GeometryReader {
-            let separate = Separate($0, kind: format.wrapped)
+            let separate = Separate($0, kind: format.storage)
             //=----------------------------------=
             // Content
             //=----------------------------------=
             HStack(spacing: 0) {
                 locales.modifier(separate).zIndex(1)
-                if format.wrapped == .currency {
+                if format.storage == .currency {
                     Divider()
                     currencies.modifier(separate)
                 }
@@ -72,11 +72,11 @@ struct NumberScreenOptionsWheel: View {
     //=------------------------------------------------------------------------=
     
     var locales: some View {
-        Wheel(Constants.locales, selection: locale.xwrapped, id: \.identifier)
+        Wheel(Constants.locales, selection: locale.xstorage, id: \.identifier)
     }
     
     var currencies: some View {
-        Wheel(Constants.currencies, selection: currency.xwrapped, id: \.self)
+        Wheel(Constants.currencies, selection: currency.xstorage, id: \.self)
     }
     
     //*========================================================================*

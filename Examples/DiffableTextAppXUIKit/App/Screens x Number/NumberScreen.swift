@@ -7,22 +7,21 @@
 // See http://www.apache.org/licenses/LICENSE-2.0 for license information.
 //=----------------------------------------------------------------------------=
 
-import SwiftUI
 import DiffableTextViews
+import SwiftUI
 
 //*============================================================================*
 // MARK: Declaration
 //*============================================================================*
 
-struct PatternScreen: View {
-    typealias Context = PatternScreenContext
+struct NumberScreen: View {
 
     //=------------------------------------------------------------------------=
     // MARK: State
     //=------------------------------------------------------------------------=
     
-    @StateObject var context = Context()
-
+    @StateObject private var context = NumberScreenContext()
+    
     //=------------------------------------------------------------------------=
     // MARK: Body
     //=------------------------------------------------------------------------=
@@ -30,28 +29,44 @@ struct PatternScreen: View {
     var body: some View {
         Screen {
             Scroller {
-                Segments(context.pattern.xwrapped)
+                Segments($context.optionality)
                 
-                Segments(context.visibility.xwrapped)                
+                Segments($context.format)
                 
-                PatternScreenActionsStack(context)
+                NumberScreenOptionsWheel(context)
+                
+                VStack(spacing: 16) {
+                    NumberScreenIntegerInterval("Bounds (9s)",
+                    interval: context.bounds.$interval, in: context.boundsLimits)
+
+                    NumberScreenIntegerInterval("Integer digits",
+                    interval: context.$integer, in: context.integerLimits)
+
+                    NumberScreenIntegerInterval("Fraction digits",
+                    interval: context.$fraction, in: context.fractionLimits)
+                }
                 
                 Spacer()
             }
             
             Divider()
             
-            PatternScreenExample(context)
+            NumberScreenExample(context)
         }
     }
 }
 
 //*============================================================================*
-// MARK: Previews
+// MARK: Declaration
 //*============================================================================*
 
-struct PatternTextStyleScreenPreviews: PreviewProvider {
+struct NumberScreen_Previews: PreviewProvider {
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Previews
+    //=------------------------------------------------------------------------=
+    
     static var previews: some View {
-        PatternScreen().preferredColorScheme(.dark)
+        NumberScreen().preferredColorScheme(.dark)
     }
 }

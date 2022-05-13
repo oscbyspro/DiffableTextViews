@@ -29,9 +29,8 @@ struct Layout {
     
     init(_ values: Values, in bounds: CGRect) {
         self.bounds = bounds
-        self.limits = 0...bounds.width
-        self.positions = Context.map(
-        values.remote.wrappedValue, from: values.limits, to: limits)
+        self.limits = ClosedRange(uncheckedBounds: (0, bounds.maxX))
+        self.positions = Context.map(values.remote, from: values.limits, to: limits)
     }
     
     //=------------------------------------------------------------------------=

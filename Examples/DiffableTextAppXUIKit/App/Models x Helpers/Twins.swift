@@ -7,38 +7,41 @@
 // See http://www.apache.org/licenses/LICENSE-2.0 for license information.
 //=----------------------------------------------------------------------------=
 
-import SwiftUI
+import DiffableTextViews
 
 //*============================================================================*
 // MARK: Declaration
 //*============================================================================*
 
-struct PatternScreenActionsStack: View {
-    typealias Context = PatternScreenContext
+struct Twins<T: NumberTextValue> {
     
     //=------------------------------------------------------------------------=
     // MARK: State
     //=------------------------------------------------------------------------=
     
-    let context: Context
+    private var _standard: T
+    private var _optional: T?
     
     //=------------------------------------------------------------------------=
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    init(_ context: Context) {
-        self.context = context
+    init(_ standard: T = .zero) {
+        self._standard = standard
+        self._optional = standard
     }
     
     //=------------------------------------------------------------------------=
-    // MARK: Body
+    // MARK: Accessors
     //=------------------------------------------------------------------------=
     
-    var body: some View {
-        HStack {
-            Action("pop", action: context.popLast)
-            Action("abc", action: context.appendUppercased)
-            Action("123", action: context.appendASCIIDigit)
-        }
+    var standard: T {
+        get { _standard }
+        set { _standard = newValue; _optional = newValue }
+    }
+    
+    var optional: T? {
+        get { _optional }
+        set { _optional = newValue; _standard = newValue ?? .zero }
     }
 }

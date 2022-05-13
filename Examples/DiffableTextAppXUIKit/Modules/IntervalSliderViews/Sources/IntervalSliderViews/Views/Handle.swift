@@ -20,10 +20,7 @@ struct _Handle: View {
     //=------------------------------------------------------------------------=
     
     var body: some View {
-        shape
-            .fill(Color.gray)
-            .overlay(shape.strokeBorder(Color.gray.opacity(0.15), lineWidth: 0.5))
-            .shadow(color: Color.black.opacity(0.15), radius: 2, x: 0, y: 2)
+        shape.fill(.gray).overlay(border).shadow(color: .black.opacity(0.15), radius: 2, y: 2)
     }
     
     //=------------------------------------------------------------------------=
@@ -32,6 +29,10 @@ struct _Handle: View {
     
     var shape: some InsettableShape {
         Circle()
+    }
+    
+    var border: some View {
+        shape.strokeBorder(Color.gray.opacity(0.15), lineWidth: 0.5)
     }
 }
 
@@ -83,7 +84,7 @@ struct Handle: View {
             // Update
             //=----------------------------------=
             withAnimation(context.animation) {
-                context.values.remote.wrappedValue[keyPath: item] = Context.map(
+                context.values.remote[keyPath: item] = Context.map(
                 gesture.location.x, from: context.layout.limits, to: context.values.limits)
             }
         }

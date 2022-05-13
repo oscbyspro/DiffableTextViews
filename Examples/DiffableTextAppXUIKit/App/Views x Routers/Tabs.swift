@@ -26,7 +26,7 @@ struct Tabs: View {
     //=------------------------------------------------------------------------=
     
     var body: some View {
-        TabView(selection: tab.xwrapped) {
+        TabView(selection: tab.xstorage) {
             NumberScreen() .modifier(Tab.numeric)
             PatternScreen().modifier(Tab.pattern)
         }
@@ -76,10 +76,15 @@ struct Tabs: View {
 }
 
 //*============================================================================*
-// MARK: Previews
+// MARK: Declaration
 //*============================================================================*
 
 struct DiffableTextStyleTabsPreviews: PreviewProvider {
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Previews
+    //=------------------------------------------------------------------------=
+    
     static var previews: some View {
         Tabs().preferredColorScheme(.dark)
     }

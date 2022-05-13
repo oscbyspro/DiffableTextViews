@@ -19,15 +19,14 @@ struct Values {
     // MARK: State
     //=------------------------------------------------------------------------=
     
-    let remote: Binding<(CGFloat, CGFloat)>
     let limits: ClosedRange<CGFloat>
+    @Binding var remote: (CGFloat, CGFloat)
 
     //=------------------------------------------------------------------------=
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
     init(_ remote: Binding<(CGFloat, CGFloat)>, in limits: ClosedRange<CGFloat>) {
-        self.remote = remote
-        self.limits = limits
+        self.limits = limits; self._remote = remote
     }
 }

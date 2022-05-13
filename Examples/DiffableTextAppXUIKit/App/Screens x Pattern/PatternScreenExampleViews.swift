@@ -36,8 +36,8 @@ struct PatternScreenExample: View {
     
     init(_ context: Context) {
         self.context = context
-        self.pattern = context.pattern
-        self.visibility = context.visibility
+        self.pattern = context.$pattern
+        self.visibility = context.$visibility
     }
     
     //=------------------------------------------------------------------------=
@@ -45,14 +45,14 @@ struct PatternScreenExample: View {
     //=------------------------------------------------------------------------=
     
     var style: Style {
-        switch pattern.wrapped {
+        switch pattern.storage {
         case  .card: return Self .card
         case .phone: return Self.phone
         }
     }
     
     var visible: Bool {
-        switch visibility.wrapped {
+        switch visibility.storage {
         case .visible: return  true
         case  .hidden: return false
         }
@@ -100,7 +100,7 @@ struct PatternScreenExampleX<Style: DiffableTextStyle>: View where Style.Value =
     
     init(_ context: Context, style: Style) {
         self.style = style
-        self.value = context.value
+        self.value = context.$value
     }
     
     //=------------------------------------------------------------------------=
@@ -108,6 +108,6 @@ struct PatternScreenExampleX<Style: DiffableTextStyle>: View where Style.Value =
     //=------------------------------------------------------------------------=
     
     var body: some View {
-        Example(value.xwrapped, style: style).diffableTextViews_keyboardType(.numberPad)
+        Example(value.xstorage, style: style).diffableTextViews_keyboardType(.numberPad)
     }
 }

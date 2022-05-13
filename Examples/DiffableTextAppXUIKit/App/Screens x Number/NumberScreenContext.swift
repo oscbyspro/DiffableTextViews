@@ -20,20 +20,20 @@ final class NumberScreenContext: ObservableObject {
     // MARK: State
     //=------------------------------------------------------------------------=
     
-    let decimals = ObservableTwinValues(Decimal(string: "1234567.89")!)    
-    let optionality = Observable(OptionalityID.standard)
+    @Observable var decimals = Twins(Decimal(string: "1234567.89")!)
+    @Observable var optionality = OptionalityID.standard
 
-    let format = Observable(FormatID.currency)
-    let locale = Observable(Locale(identifier: "en_US"))
-    let currency = Observable("USD")
+    @Observable var format = FormatID.currency
+    @Observable var locale = Locale(identifier: "en_US")
+    @Observable var currency = "USD"
     
-    let bounds = ObservableIntegerIntervalAsBounds(Interval((0, Decimal.precision)))
+    let bounds = ObservableIntegersAsBounds(Interval((0, Decimal.precision)))
     let boundsLimits = -Decimal.precision ... Decimal.precision
 
-    let integer = Observable(Interval((1, Decimal.precision)))
+    @Observable var integer = Interval((1, Decimal.precision))
     let integerLimits = 1 ... Decimal.precision
     
-    let fraction = Observable(Interval((2, 2)))
+    @Observable var fraction = Interval((2, 2))
     let fractionLimits = 0 ... Decimal.precision
     
     //*========================================================================*

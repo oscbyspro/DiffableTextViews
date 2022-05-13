@@ -14,6 +14,7 @@ import SwiftUI
 //*============================================================================*
 
 final class Context {
+    typealias Tuple  = (CGFloat, CGFloat)
     typealias Limits = ClosedRange<CGFloat>
     
     //=------------------------------------------------------------------------=
@@ -46,14 +47,15 @@ final class Context {
     // MARK: Utilities
     //=------------------------------------------------------------------------=
     
-    static func map(_ value: CGFloat, from start: Limits, to end: Limits) -> CGFloat {
-        if start.lowerBound == start.upperBound { return end.lowerBound }
+    static func map(_ value: CGFloat, from start: Limits,  to end: Limits) -> CGFloat {
+        if  start.lowerBound == start.upperBound { return  end.lowerBound }
         let ratio = (end.upperBound - end.lowerBound) / (start.upperBound - start.lowerBound)
-        return min(max(end.lowerBound, end.lowerBound + ratio * (value - start.lowerBound)), end.upperBound)
+        let proposal = end.lowerBound + ratio * (value - start.lowerBound)
+        return min(max(end.lowerBound, proposal), end.upperBound)
     }
 
-    static func map(_ value: (CGFloat, CGFloat), from start: Limits, to end: Limits) -> (CGFloat, CGFloat) {(
-        Self.map(value.0, from: start, to: end),
-        Self.map(value.1, from: start, to: end)
+    static func map(_ value: Tuple, from start: Limits, to end: Limits) -> Tuple {(
+        self.map(value.0, from: start, to: end),
+        self.map(value.1, from: start, to: end)
     )}
 }

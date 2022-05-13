@@ -7,44 +7,48 @@
 // See http://www.apache.org/licenses/LICENSE-2.0 for license information.
 //=----------------------------------------------------------------------------=
 
+import Combine
 import SwiftUI
 
 //*============================================================================*
 // MARK: Declaration
 //*============================================================================*
 
-struct Toggler: View {
-    
+final class ObservableIntegersAsBounds<Value: Comparable>: ObservableObject {
+
     //=------------------------------------------------------------------------=
     // MARK: State
     //=------------------------------------------------------------------------=
     
-    let title: String
-    let isOn: Observable<Bool>
-
+    @Published  var values: ClosedRange<Value>!
+    @Observable var interval: Interval<Int>
+    private var subscription: AnyCancellable!
+    
     //=------------------------------------------------------------------------=
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    init(_ title: String, isOn: Observable<Bool>) {
-        self.title = title; self.isOn = isOn
+    convenience init(_ interval: Interval<Int>) where Value == Decimal {
+        self.init(interval) {
+            Decimal(string: String.number(nines: $0))!
+        }
     }
-
+    
     //=------------------------------------------------------------------------=
-    // MARK: Body
+    // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    var body: some View {
-        Toggle(isOn: isOn.xwrapped) {
-            Text(title)
-                .font(.subheadline)
-                .frame(maxWidth: .infinity)
-                .contentShape(Rectangle())
-                .animation(nil, value: isOn.wrapped)
+    private init(_ interval: Interval<Int>, map: @escaping (Int) -> Value) {
+        //=--------------------------------------=
+        // Interval
+        //=--------------------------------------=
+        self._interval = Observable(interval)
+        //=--------------------------------------=
+        // Converter
+        //=--------------------------------------=
+        self.subscription = self._interval.$storage.sink {
+            [unowned self] interval in let closed = interval.closed
+            values = map(closed.lowerBound)...map(closed.upperBound)
         }
-        .tint(Color.gray.opacity(0.6))
-        .background(Rectangle().strokeBorder(.gray))
-        .animation(.default, value: isOn.wrapped)
-        .toggleStyle(.button)
     }
 }

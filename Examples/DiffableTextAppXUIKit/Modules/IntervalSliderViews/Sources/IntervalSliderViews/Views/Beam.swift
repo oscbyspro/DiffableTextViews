@@ -21,7 +21,7 @@ struct _Beam: View, Animatable {
     
     let center: CGFloat
     var positions: (CGFloat, CGFloat)
-    var color: Color = .gray.opacity(0.2)
+    var color: Color
     
     //=------------------------------------------------------------------------=
     // MARK: Initializers
@@ -98,7 +98,7 @@ struct Beam: View {
     //=------------------------------------------------------------------------=
     
     let context: Context
-    let start = GestureState<(CGFloat, CGFloat)?>(initialValue: nil)
+    @GestureState var start: (CGFloat, CGFloat)?
 
     //=------------------------------------------------------------------------=
     // MARK: Body
@@ -113,8 +113,8 @@ struct Beam: View {
     //=------------------------------------------------------------------------=
     
     var drag: some Gesture {
-        DragGesture(coordinateSpace: .named(context.coordinates)).updating(start) { gesture, start, _ in
-            if start == nil { start = context.layout.positions }
+        DragGesture(coordinateSpace: .named(context.coordinates)).updating($start) { gesture, start, _ in
+            if  start == nil { start = context.layout.positions }
             //=----------------------------------=
             // Values
             //=----------------------------------=
@@ -124,7 +124,7 @@ struct Beam: View {
             // Update
             //=----------------------------------=
             withAnimation(context.animation) {
-                context.values.remote.wrappedValue = Context.map(
+                context.values.remote = Context.map(
                 positions, from: context.layout.limits, to: context.values.limits)
             }
         }
@@ -134,9 +134,9 @@ struct Beam: View {
     // MARK: Utilities
     //=------------------------------------------------------------------------=
     
-    func move(_ values: (CGFloat, CGFloat), by amount: CGFloat,
+    func move(_ positions: (CGFloat, CGFloat), by amount: CGFloat,
     in limits: ClosedRange<CGFloat>) -> (CGFloat, CGFloat)  {
-        var next = (values.0 + amount,  values.1 + amount)
+        var next = (positions.0 + amount,  positions.1 + amount)
         //=--------------------------------------=
         // Utilities
         //=--------------------------------------=

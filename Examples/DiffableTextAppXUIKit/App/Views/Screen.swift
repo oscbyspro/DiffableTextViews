@@ -44,10 +44,15 @@ struct Screen<Content: View>: View {
 }
 
 //*============================================================================*
-// MARK: Previews
+// MARK: Declaration
 //*============================================================================*
 
 struct ScreenPreviews: PreviewProvider {
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Previews
+    //=------------------------------------------------------------------------=
+    
     static var previews: some View {
         Screen {
             Rectangle().fill(Material.regular)

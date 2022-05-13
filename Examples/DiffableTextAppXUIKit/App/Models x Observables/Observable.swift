@@ -8,53 +8,50 @@
 //=----------------------------------------------------------------------------=
 
 import Combine
+import SwiftUI
 
 //*============================================================================*
 // MARK: Declaration
 //*============================================================================*
 
-final class PatternScreenContext: ObservableObject {
+@propertyWrapper final class Observable<Value>: ObservableObject {
     
     //=------------------------------------------------------------------------=
     // MARK: State
     //=------------------------------------------------------------------------=
     
-    let value = Observable("123456789")
-    let pattern = Observable(PatternID.phone)
-    let visibility = Observable(VisibilityID.visible)
+    @Published var storage: Value
     
     //=------------------------------------------------------------------------=
-    // MARK: Utilities
+    // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    func popLast() {
-        _ = value.wrapped.popLast()
+    init(_ storage: Value) {
+        self.storage = storage
     }
     
-    func appendASCIIDigit() {
-        Self.digits.randomElement().map({ value.wrapped.append($0) })
-    }
-    
-    func appendUppercased() {
-        Self.uppercased.randomElement().map({ value.wrapped.append($0) })
+    init(wrappedValue: Value) {
+        self.storage = wrappedValue
     }
     
     //=------------------------------------------------------------------------=
-    // MARK: Constants
+    // MARK: Accessors
     //=------------------------------------------------------------------------=
     
-    static let digits: String = "0123456789"
-    static let uppercased: String = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-    
-    //*========================================================================*
-    // MARK: Kind
-    //*========================================================================*
-    
-    enum PatternID: String, CaseIterable {
-        case phone, card
+    var xstorage: Binding<Value> {
+        Binding { self.storage } set: { self.storage = $0 }
     }
     
-    enum VisibilityID: String, CaseIterable {
-        case visible, hidden
+    //=------------------------------------------------------------------------=
+    // MARK: Accessors
+    //=------------------------------------------------------------------------=
+    
+    var projectedValue: Observable {
+        self
+    }
+    
+    var wrappedValue: Value {
+        get { storage }
+        set { storage = newValue }
     }
 }

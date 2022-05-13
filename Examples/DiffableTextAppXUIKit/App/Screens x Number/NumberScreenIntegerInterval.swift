@@ -7,48 +7,50 @@
 // See http://www.apache.org/licenses/LICENSE-2.0 for license information.
 //=----------------------------------------------------------------------------=
 
-import Combine
 import SwiftUI
+import IntervalSliderViews
 
 //*============================================================================*
 // MARK: Declaration
 //*============================================================================*
 
-final class ObservableIntegerIntervalAsBounds<Value: Comparable>: ObservableObject {
-
+struct NumberScreenIntegerInterval: View {
+    
     //=------------------------------------------------------------------------=
     // MARK: State
     //=------------------------------------------------------------------------=
     
-    @Published var values: ClosedRange<Value>!
-    let interval: Observable<Interval<Int>>
-    private var subscription: AnyCancellable!
+    let title: String
+    let limits: ClosedRange<Int>
+    @ObservedObject var interval: Observable<Interval<Int>>
     
     //=------------------------------------------------------------------------=
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    convenience init(_ interval: Interval<Int>) where Value == Decimal {
-        self.init(interval) {
-            Decimal(string: String.number(nines: $0))!
-        }
+    init(_ title: String, interval: Observable<Interval<Int>>, in limits: ClosedRange<Int>) {
+        self.title  = title
+        self.limits = limits
+        self.interval = interval
     }
     
     //=------------------------------------------------------------------------=
-    // MARK: Initializers
+    // MARK: Accessors
     //=------------------------------------------------------------------------=
     
-    private init(_ interval: Interval<Int>, map: @escaping (Int) -> Value) {
-        //=--------------------------------------=
-        // Interval
-        //=--------------------------------------=
-        self.interval = Observable(interval)
-        //=--------------------------------------=
-        // Converter
-        //=--------------------------------------=
-        self.subscription = self.interval.$wrapped.sink {
-            [unowned self] interval in let closed = interval.closed
-            values = map(closed.lowerBound)...map(closed.upperBound)
+    var description: String {
+        let interval = interval.storage.closed
+        return "\(title): \(interval.lowerBound) to \(interval.upperBound)"
+    }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Body
+    //=------------------------------------------------------------------------=
+    
+    var body: some View {
+        VStack(alignment: .leading) {
+            Text(description).font(.subheadline.weight(.light))
+            IntervalSlider(interval.xstorage.values, in: limits)
         }
     }
 }

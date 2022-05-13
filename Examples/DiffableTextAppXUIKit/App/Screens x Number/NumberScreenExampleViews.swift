@@ -37,10 +37,10 @@ struct NumberScreenExample: View {
     
     @inlinable init( _ context: Context) {
         self.context = context
-        self.locale = context.locale
-        self.currency = context.currency
-        self.format = context.format
-        self.optionality = context.optionality
+        self.locale = context.$locale
+        self.currency = context.$currency
+        self.format = context.$format
+        self.optionality = context.$optionality
     }
     
     //=------------------------------------------------------------------------=
@@ -48,7 +48,7 @@ struct NumberScreenExample: View {
     //=------------------------------------------------------------------------=
     
     var body: some View {
-        switch (optionality.wrapped, format.wrapped) {
+        switch (optionality.storage, format.storage) {
         case (.standard,   .number): decimalStandardNumber
         case (.standard, .currency): decimalStandardCurrency
         case (.standard,  .percent): decimalStandardPercent
@@ -63,18 +63,18 @@ struct NumberScreenExample: View {
     //=------------------------------------------------------------------------=
     
     var decimalStandardNumber: some View {
-        NumberScreenExampleX(context, context.decimals.xstandard,
-        NumberTextStyle<Decimal>(locale: locale.wrapped))
+        NumberScreenExampleX(context, context.$decimals.xstorage.standard,
+        NumberTextStyle<Decimal>(locale: locale.storage))
     }
     
     var decimalStandardCurrency: some View {
-        NumberScreenExampleX(context, context.decimals.xstandard,
-        NumberTextStyle<Decimal>.Currency(code: currency.wrapped, locale: locale.wrapped))
+        NumberScreenExampleX(context, context.$decimals.xstorage.standard,
+        NumberTextStyle<Decimal>.Currency(code: currency.storage, locale: locale.storage))
     }
     
     var decimalStandardPercent: some View {
-        NumberScreenExampleX(context, context.decimals.xstandard,
-        NumberTextStyle<Decimal>.Percent(locale: locale.wrapped))
+        NumberScreenExampleX(context, context.$decimals.xstorage.standard,
+        NumberTextStyle<Decimal>.Percent(locale: locale.storage))
     }
     
     //=------------------------------------------------------------------------=
@@ -82,18 +82,18 @@ struct NumberScreenExample: View {
     //=------------------------------------------------------------------------=
  
     var decimalOptionalNumber: some View {
-        NumberScreenExampleX(context, context.decimals.xoptional,
-        NumberTextStyle<Decimal?>(locale: locale.wrapped))
+        NumberScreenExampleX(context, context.$decimals.xstorage.optional,
+        NumberTextStyle<Decimal?>(locale: locale.storage))
     }
     
     var decimalOptionalCurrency: some View {
-        NumberScreenExampleX(context, context.decimals.xoptional,
-        NumberTextStyle<Decimal?>.Currency(code: currency.wrapped, locale: locale.wrapped))
+        NumberScreenExampleX(context, context.$decimals.xstorage.optional,
+        NumberTextStyle<Decimal?>.Currency(code: currency.storage, locale: locale.storage))
     }
     
     var decimalOptionalPercent: some View {
-        NumberScreenExampleX(context, context.decimals.xoptional,
-        NumberTextStyle<Decimal?>.Percent(locale: locale.wrapped))
+        NumberScreenExampleX(context, context.$decimals.xstorage.optional,
+        NumberTextStyle<Decimal?>.Percent(locale: locale.storage))
     }
 }
 
@@ -115,7 +115,7 @@ Style.Format.FormatInput == Decimal {
     let context: Context
     let value: Binding<Value>
 
-    @ObservedObject var bounds: ObservableIntegerIntervalAsBounds<Decimal>
+    @ObservedObject var bounds: ObservableIntegersAsBounds<Decimal>
     @ObservedObject var integer: Observable<Interval<Int>>
     @ObservedObject var fraction: Observable<Interval<Int>>
     
@@ -128,8 +128,8 @@ Style.Format.FormatInput == Decimal {
         self.value = value
         self.context = context
         self.bounds = context.bounds
-        self.integer = context.integer
-        self.fraction = context.fraction
+        self.integer = context.$integer
+        self.fraction = context.$fraction
     }
     
     //=------------------------------------------------------------------------=
@@ -138,8 +138,8 @@ Style.Format.FormatInput == Decimal {
 
     var style: Style {
         base.bounds(bounds.values).precision(
-        integer:  integer .wrapped.closed,
-        fraction: fraction.wrapped.closed)
+        integer:  integer .storage.closed,
+        fraction: fraction.storage.closed)
     }
     
     //=------------------------------------------------------------------------=
@@ -166,14 +166,14 @@ struct NumberScreenExampleY<Style: DiffableTextStyle>: View {
 
     let style: Style
     let value: Binding<Value>
-    @ObservedObject var values: ObservableTwinValues<Decimal>
+    @ObservedObject var values: Observable<Twins<Decimal>>
 
     //=------------------------------------------------------------------------=
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
     init(_ context: Context, value: Binding<Value>, style: Style) {
-        self.value = value; self.style = style; self.values = context.decimals
+        self.value = value; self.style = style; self.values = context.$decimals
     }
     
     //=------------------------------------------------------------------------=

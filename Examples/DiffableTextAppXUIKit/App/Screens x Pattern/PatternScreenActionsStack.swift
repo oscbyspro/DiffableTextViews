@@ -8,39 +8,26 @@
 //=----------------------------------------------------------------------------=
 
 import SwiftUI
-import IntervalSliderViews
 
 //*============================================================================*
 // MARK: Declaration
 //*============================================================================*
 
-struct NumberScreenIntegerInterval: View {
+struct PatternScreenActionsStack: View {
+    typealias Context = PatternScreenContext
     
     //=------------------------------------------------------------------------=
     // MARK: State
     //=------------------------------------------------------------------------=
     
-    let title: String
-    let limits: ClosedRange<Int>
-    @ObservedObject var interval: Observable<Interval<Int>>
+    let context: Context
     
     //=------------------------------------------------------------------------=
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    init(_ title: String, interval: Observable<Interval<Int>>, in limits: ClosedRange<Int>) {
-        self.title  = title
-        self.limits = limits
-        self.interval = interval
-    }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Accessors
-    //=------------------------------------------------------------------------=
-    
-    var description: String {
-        let interval = interval.wrapped.closed
-        return "\(title): \(interval.lowerBound) to \(interval.upperBound)"
+    init(_ context: Context) {
+        self.context = context
     }
     
     //=------------------------------------------------------------------------=
@@ -48,9 +35,10 @@ struct NumberScreenIntegerInterval: View {
     //=------------------------------------------------------------------------=
     
     var body: some View {
-        VStack(alignment: .leading) {
-            Text(description).font(.subheadline.weight(.light))
-            IntervalSlider($interval.wrapped.values, in: limits)
+        HStack {
+            Action("pop", action: context.popLast)
+            Action("abc", action: context.appendLetter)
+            Action("123", action: context.appendASCIIDigit)
         }
     }
 }
