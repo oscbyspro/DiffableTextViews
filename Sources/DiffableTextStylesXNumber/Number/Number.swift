@@ -95,29 +95,25 @@ extension Number {
     /// To use this method, all formatting characters must be marked as virtual.
     @inlinable init?<T>(parse snapshot: Snapshot,
     with lexicon: Lexicon, as kind: T.Type) throws where T: NumberTextKind {
-        let sequence = snapshot.lazy.filter(\.nonvirtual).map(\.character)
-        try self.init(unformatted: sequence,
-        optional: kind.isOptional,
-        unsigned: kind.isUnsigned,
-        integer:  kind.isInteger,
-        signs: lexicon.signs.components,
-        digits: lexicon.digits.components,
-        separators: lexicon.separators.components)
+        let unformatted = snapshot.lazy.filter(\.nonvirtual).map(\.character)
+        try self.init(unformatted: unformatted, signs: lexicon.signs.components,
+        digits: lexicon.digits.components, separators: lexicon.separators.components,
+        optional: kind.isOptional, unsigned: kind.isUnsigned, integer: kind.isInteger)
     }
     
     //=------------------------------------------------------------------------=
     // MARK: Characters
     //=------------------------------------------------------------------------=
     
-    @usableFromInline init?<S>(unformatted: S,
-    optional: Bool, unsigned: Bool, integer: Bool,
-    signs: Map<Sign>, digits: Map<Digit>, separators: Map<Separator>)
+    @usableFromInline init?<S>(unformatted sequence: S,
+    signs: Map<Sign>, digits: Map<Digit>, separators: Map<Separator>,
+    optional: Bool, unsigned: Bool, integer: Bool)
     throws where S: Sequence, S.Element == Character {
         //=--------------------------------------=
         // State
         //=--------------------------------------=
         var signable = !unsigned
-        var iterator = unformatted.makeIterator()
+        var iterator = sequence.makeIterator()
         var next = iterator.next()
         //=--------------------------------------=
         // Utilities
@@ -142,7 +138,7 @@ extension Number {
                 self.integer.append(digit); next = iterator.next()
             }
             //=----------------------------------=
-            // Integer: Break
+            // Integer
             //=----------------------------------=
             if integer { break body }
             //=----------------------------------=
@@ -152,7 +148,7 @@ extension Number {
                 self.separator = separator; next = iterator.next()
             }
             //=----------------------------------=
-            // Separator: Break
+            // Separator
             //=----------------------------------=
             if separator == nil { break body }
             //=----------------------------------=
@@ -170,7 +166,7 @@ extension Number {
         // Validate
         //=--------------------------------------=
         guard next == nil else {
-            throw Info(["unable to parse number in", .mark(String(unformatted))])
+            throw Info(["unable to parse number in", .mark(String(sequence))])
         }
         //=--------------------------------------=
         // Optional

@@ -161,19 +161,19 @@ public extension Snapshot {
     // MARK: Update
     //=------------------------------------------------------------------------=
     
-    @inlinable mutating func update(attributes index: Index,
+    @inlinable mutating func transform(attributes index: Index,
     with transform: (inout Attribute) -> Void) {
         transform(&_attributes[index.attribute])
     }
     
-    @inlinable mutating func update<S: Sequence>(attributes indices: S,
+    @inlinable mutating func transform<S: Sequence>(attributes indices: S,
     with transform: (inout Attribute) -> Void) where S.Element == Index {
         for index in indices {
             transform(&_attributes[index.attribute])
         }
     }
     
-    @inlinable mutating func update<R: RangeExpression>(attributes indices: R,
+    @inlinable mutating func transform<R: RangeExpression>(attributes indices: R,
     with transform: (inout Attribute) -> Void) where R.Bound == Index {
         for index in self.indices[indices.relative(to: self)] {
             transform(&_attributes[index.attribute])

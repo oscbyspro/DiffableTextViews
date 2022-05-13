@@ -13,32 +13,32 @@ import SwiftUI
 // MARK: Declaration
 //*============================================================================*
 
-@usableFromInline final class Layout: ObservableObject {
+struct Layout {
     
     //=------------------------------------------------------------------------=
     // MARK: State
     //=------------------------------------------------------------------------=
     
-    @usableFromInline let frame: CGRect
-    @usableFromInline var positions: (CGFloat, CGFloat)
-    @usableFromInline let positionsLimits: ClosedRange<CGFloat>
+    let bounds: CGRect
+    let limits: ClosedRange<CGFloat>
+    var positions: (CGFloat, CGFloat)
 
     //=------------------------------------------------------------------------=
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable init(_ interval: Interval, in proxy: GeometryProxy) {
-        self.frame = proxy.frame(in: .local)
-        self.positionsLimits = 0...frame.width
-        self.positions = Utilities.map(interval.values.wrappedValue,
-        from: interval.valuesLimits, to: positionsLimits)
+    init(_ values: Values, in bounds: CGRect) {
+        self.bounds = bounds
+        self.limits = 0...bounds.width
+        self.positions = Context.map(
+        values.remote.wrappedValue, from: values.limits, to: limits)
     }
     
     //=------------------------------------------------------------------------=
-    // MARK: Utilities
+    // MARK: Accessors
     //=------------------------------------------------------------------------=
     
-    @inlinable func center(_ x: CGFloat) -> CGPoint {
-        CGPoint(x: x, y: frame.midY)
+    func position(_ item: WritableKeyPath<(CGFloat, CGFloat), CGFloat>) -> CGPoint {
+        CGPoint(x: positions[keyPath: item], y: bounds.midY)
     }
 }

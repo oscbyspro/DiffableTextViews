@@ -13,53 +13,47 @@ import SwiftUI
 // MARK: Declaration
 //*============================================================================*
 
-@usableFromInline struct Handle: View {
+final class Context {
+    typealias Limits = ClosedRange<CGFloat>
     
     //=------------------------------------------------------------------------=
     // MARK: State
     //=------------------------------------------------------------------------=
     
-    @usableFromInline let context: Context
-    @usableFromInline let position: CGFloat
-    @usableFromInline let value: Binding<CGFloat>
-
+    let values: Values
+    let layout: Layout
+    
     //=------------------------------------------------------------------------=
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable init(_ context: Context, value: Binding<CGFloat>, position: CGFloat) {
-        self.value = value
-        self.context = context
-        self.position = position
+    init(_ values: Values, _ layout: Layout) {
+        self.values = values
+        self.layout = layout
     }
     
     //=------------------------------------------------------------------------=
-    // MARK: Body
+    // MARK: Accessors
     //=------------------------------------------------------------------------=
     
-    @inlinable var body: some View {
-        shape.fill(.white)
-            .overlay(shape.fill(Material.thin))
-            .overlay(shape.strokeBorder(.gray.opacity(0.2), lineWidth: 0.5))
-            .shadow(color: Color.black.opacity(0.15), radius: 2, x: 0, y: 2)
-            .highPriorityGesture(drag)
-            .position(context.layout.center(position))
+    var coordinates: UInt8 { 0 }
+        
+    var animation: Animation {
+        .linear(duration: 0.125)
     }
     
     //=------------------------------------------------------------------------=
-    // MARK: Components
+    // MARK: Utilities
     //=------------------------------------------------------------------------=
     
-    @inlinable var shape: some InsettableShape {
-        Circle()
+    static func map(_ value: CGFloat, from start: Limits, to end: Limits) -> CGFloat {
+        if start.lowerBound == start.upperBound { return end.lowerBound }
+        let ratio = (end.upperBound - end.lowerBound) / (start.upperBound - start.lowerBound)
+        return min(max(end.lowerBound, end.lowerBound + ratio * (value - start.lowerBound)), end.upperBound)
     }
 
-    @inlinable var drag: some Gesture {
-        DragGesture(coordinateSpace: .named(Constants.coordinates)).onChanged { gesture in
-            withAnimation(Constants.dragging) {
-                value.wrappedValue = Utilities.map(gesture.location.x,
-                from: context.positionsLimits, to: context.valuesLimits)
-            }
-        }
-    }
+    static func map(_ value: (CGFloat, CGFloat), from start: Limits, to end: Limits) -> (CGFloat, CGFloat) {(
+        Self.map(value.0, from: start, to: end),
+        Self.map(value.1, from: start, to: end)
+    )}
 }

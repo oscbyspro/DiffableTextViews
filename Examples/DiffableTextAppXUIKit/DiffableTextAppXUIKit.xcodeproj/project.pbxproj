@@ -11,7 +11,7 @@
 		5507BD1627AD66A800F5292D /* Wheel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5507BD1527AD66A800F5292D /* Wheel.swift */; };
 		5527C21327AA6C6A0098546E /* Interval.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5527C21227AA6C6A0098546E /* Interval.swift */; };
 		553F2412282BBB4900C4B6DD /* DiffableTextViews in Frameworks */ = {isa = PBXBuildFile; productRef = 553F2411282BBB4900C4B6DD /* DiffableTextViews */; };
-		555E9DE02828DF5500613FD3 /* IntervalSliders in Frameworks */ = {isa = PBXBuildFile; productRef = 555E9DDF2828DF5500613FD3 /* IntervalSliders */; };
+		55434964282E2D0E00EDD541 /* IntervalSliderViews in Frameworks */ = {isa = PBXBuildFile; productRef = 55434963282E2D0E00EDD541 /* IntervalSliderViews */; };
 		55781F2D27AD39B0003D4252 /* Scroller.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55781F2C27AD39B0003D4252 /* Scroller.swift */; };
 		55781F3127AD4500003D4252 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55781F3027AD4500003D4252 /* Constants.swift */; };
 		557DAF2127BA493200D9F0E5 /* Action.swift in Sources */ = {isa = PBXBuildFile; fileRef = 557DAF2027BA493200D9F0E5 /* Action.swift */; };
@@ -41,7 +41,7 @@
 		5507BD1327AD620900F5292D /* Segments.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Segments.swift; sourceTree = "<group>"; };
 		5507BD1527AD66A800F5292D /* Wheel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Wheel.swift; sourceTree = "<group>"; };
 		5527C21227AA6C6A0098546E /* Interval.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Interval.swift; sourceTree = "<group>"; };
-		555E9DDE2828DF4900613FD3 /* IntervalSliders */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = IntervalSliders; path = Modules/IntervalSliders; sourceTree = "<group>"; };
+		55434962282E2CDE00EDD541 /* IntervalSliderViews */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = IntervalSliderViews; path = Modules/IntervalSliderViews; sourceTree = "<group>"; };
 		55781F2C27AD39B0003D4252 /* Scroller.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Scroller.swift; sourceTree = "<group>"; };
 		55781F3027AD4500003D4252 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		557D9AB427F98C14008C317B /* Entitlements.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Entitlements.entitlements; sourceTree = "<group>"; };
@@ -75,8 +75,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				555E9DE02828DF5500613FD3 /* IntervalSliders in Frameworks */,
 				553F2412282BBB4900C4B6DD /* DiffableTextViews in Frameworks */,
+				55434964282E2D0E00EDD541 /* IntervalSliderViews in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -87,7 +87,7 @@
 			isa = PBXGroup;
 			children = (
 				557F7FB927A81116001908D6 /* DiffableTextViews */,
-				555E9DDE2828DF4900613FD3 /* IntervalSliders */,
+				55434962282E2CDE00EDD541 /* IntervalSliderViews */,
 			);
 			name = Packages;
 			sourceTree = "<group>";
@@ -248,8 +248,8 @@
 			);
 			name = DiffableTextAppXUIKit;
 			packageProductDependencies = (
-				555E9DDF2828DF5500613FD3 /* IntervalSliders */,
 				553F2411282BBB4900C4B6DD /* DiffableTextViews */,
+				55434963282E2D0E00EDD541 /* IntervalSliderViews */,
 			);
 			productName = iOS;
 			productReference = 5589A1A027A7E3E30000F04A /* DiffableTextAppXUIKit.app */;
@@ -545,9 +545,9 @@
 			isa = XCSwiftPackageProductDependency;
 			productName = DiffableTextViews;
 		};
-		555E9DDF2828DF5500613FD3 /* IntervalSliders */ = {
+		55434963282E2D0E00EDD541 /* IntervalSliderViews */ = {
 			isa = XCSwiftPackageProductDependency;
-			productName = IntervalSliders;
+			productName = IntervalSliderViews;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

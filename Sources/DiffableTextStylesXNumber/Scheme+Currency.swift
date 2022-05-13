@@ -158,13 +158,15 @@ import Foundation
             }
         }
         
-        //=------------------------------------------------------------------------=
+        //=--------------------------------------------------------------------=
         // MARK: Utilities
-        //=------------------------------------------------------------------------=
+        //=--------------------------------------------------------------------=
         
         @inlinable func autocorrect(_ snapshot: inout Snapshot) {
-            if let range = Search.range(of: label, in: snapshot, direction: direction) {
-                snapshot.update(attributes: range) { attribute in attribute = .phantom }
+            if let range = Search.range(of: label, in: snapshot, towards: direction) {
+                snapshot.transform(attributes: range) {
+                    attribute in attribute = .phantom
+                }
             }
         }
     }

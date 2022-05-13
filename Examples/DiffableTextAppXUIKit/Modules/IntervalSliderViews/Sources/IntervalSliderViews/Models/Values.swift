@@ -13,14 +13,21 @@ import SwiftUI
 // MARK: Declaration
 //*============================================================================*
 
-@usableFromInline enum Constants {
-    
+struct Values {
+
     //=------------------------------------------------------------------------=
     // MARK: State
     //=------------------------------------------------------------------------=
     
-    @usableFromInline static let coordinates: UInt8 = 33
-    @usableFromInline static let radius: CGFloat = 27
-    @usableFromInline static let thickness: CGFloat = 04
-    @usableFromInline static let dragging: Animation = .linear(duration: 0.125)
+    let remote: Binding<(CGFloat, CGFloat)>
+    let limits: ClosedRange<CGFloat>
+
+    //=------------------------------------------------------------------------=
+    // MARK: Initializers
+    //=------------------------------------------------------------------------=
+    
+    init(_ remote: Binding<(CGFloat, CGFloat)>, in limits: ClosedRange<CGFloat>) {
+        self.remote = remote
+        self.limits = limits
+    }
 }

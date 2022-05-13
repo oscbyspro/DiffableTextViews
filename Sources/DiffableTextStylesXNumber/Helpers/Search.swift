@@ -72,7 +72,9 @@ Needle: BidirectionalCollection, Needle.Element == Character {
     //=------------------------------------------------------------------------=
     
     /// A naive search, for needles known to be at or near the edge of a haystack.
-    @inlinable static func range(of needle: Needle, in haystack: Haystack, direction: Direction) -> Location? {
+    @inlinable static func range(
+    of needle: Needle, in haystack:  Haystack,
+    towards direction: Direction) -> Location? {
         switch direction {
         case  .forwards: return  forwards(search: haystack, match: needle)
         case .backwards: return backwards(search: haystack, match: needle)
