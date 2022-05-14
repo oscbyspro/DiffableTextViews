@@ -7,35 +7,44 @@
 // See http://www.apache.org/licenses/LICENSE-2.0 for license information.
 //=----------------------------------------------------------------------------=
 
-import SwiftUI
+import DiffableTextViews
 
 //*============================================================================*
 // MARK: Declaration
 //*============================================================================*
 
-struct Interval<Value: Comparable> {
+struct Twins<T: NumberTextValue> {
     
     //=------------------------------------------------------------------------=
     // MARK: State
     //=------------------------------------------------------------------------=
     
-    var values: (Value, Value)
+    private var _standard: T
+    private var _optional: T?
     
     //=------------------------------------------------------------------------=
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    init(_ values: (Value, Value)) { self.values = values }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Utilities
-    //=------------------------------------------------------------------------=
-    
-    var semiopen: Range<Value> {
-        values.0 <= values.1 ? values.0..<values.1 : values.1..<values.0
+    init(_ standard: T = .zero) {
+        self._standard = standard
+        self._optional = standard
     }
     
-    var closed: ClosedRange<Value> {
-        values.0 <= values.1 ? values.0...values.1 : values.1...values.0
+    init(_ optional: T? = .zero) {
+        self._standard  = optional ?? .zero
+        self._optional  = optional
+    }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Accessors
+    //=------------------------------------------------------------------------=
+    
+    var standard: T {
+        get { _standard } set { self = Self(newValue) }
+    }
+    
+    var optional: T? {
+        get { _optional } set { self = Self(newValue) }
     }
 }

@@ -8,19 +8,32 @@
 //=----------------------------------------------------------------------------=
 
 //*============================================================================*
-// MARK: Extension
+// MARK: Declaration
 //*============================================================================*
 
-extension String {
+struct Interval<Value: Comparable> {
+    
+    //=------------------------------------------------------------------------=
+    // MARK: State
+    //=------------------------------------------------------------------------=
+    
+    var values: (Value, Value)
     
     //=------------------------------------------------------------------------=
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    static func number(nines: Int) -> Self {
-        guard nines != 0 else { return "0" }
-        var description = nines  < 0 ? "-" : ""
-        description += String(repeating: "9", count: abs(nines))
-        return description
+    init(_ values: (Value, Value)) { self.values = values }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Utilities
+    //=------------------------------------------------------------------------=
+    
+    var semiopen: Range<Value> {
+        values.0 <= values.1 ? values.0..<values.1 : values.1..<values.0
+    }
+    
+    var closed: ClosedRange<Value> {
+        values.0 <= values.1 ? values.0...values.1 : values.1...values.0
     }
 }

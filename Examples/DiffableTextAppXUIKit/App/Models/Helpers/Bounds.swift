@@ -7,37 +7,51 @@
 // See http://www.apache.org/licenses/LICENSE-2.0 for license information.
 //=----------------------------------------------------------------------------=
 
-import SwiftUI
+import Foundation
 
 //*============================================================================*
 // MARK: Declaration
 //*============================================================================*
 
-struct Segments<Value: Hashable & RawRepresentable & CaseIterable>: View where
-Value.RawValue == String, Value.AllCases: RandomAccessCollection {
+struct Bounds {
     
     //=------------------------------------------------------------------------=
     // MARK: State
     //=------------------------------------------------------------------------=
-    
-    let selection: Binding<Value>
+        
+    private var _integers: Interval<Int>
+    private var _values: ClosedRange<Decimal>
     
     //=------------------------------------------------------------------------=
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    init(_ selection: Binding<Value>) { self.selection = selection }
+    init(_ integers: Interval<Int>) {
+        self._integers = integers; let closed = integers.closed; self._values =
+        Decimal(string:  Self.number(nines: closed.lowerBound))! ...
+        Decimal(string:  Self.number(nines: closed.upperBound))!
+    }
     
     //=------------------------------------------------------------------------=
-    // MARK: Body
+    // MARK: Accessors
+    //=------------------------------------------------------------------------=
+            
+    var values: ClosedRange<Decimal> {
+        get { _values   }
+    }
+    
+    var integers: Interval<Int> {
+        get { _integers } set { self = Self(newValue) }
+    }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Utilities
     //=------------------------------------------------------------------------=
     
-    var body: some View {
-        Picker(String(describing: Value.self), selection: selection) {
-            ForEach(Value.allCases, id: \.self) {
-                Text($0.rawValue.capitalized).tag($0)
-            }
-        }
-        .pickerStyle(.segmented)
+    private static func number(nines: Int) -> String {
+        guard nines != 0 else { return "0" }
+        var description = nines  < 0 ? "-" : ""
+        description += String(repeating: "9", count: abs(nines))
+        return description
     }
 }

@@ -48,11 +48,11 @@ struct NumberScreenWheels: View {
     //=------------------------------------------------------------------------=
     
     var body: some View {
-        foundation.hidden().overlay(wheels)
+        foundation.hidden().overlay(wheels).pickerStyle(.wheel)
     }
     
     var foundation: some View {
-        Picker("", selection: .constant(false)) { }.pickerStyle(.wheel)
+        Picker("", selection: .constant(false)) { }
     }
     
     var wheels: some View {
@@ -80,11 +80,11 @@ struct NumberScreenWheels: View {
     //=------------------------------------------------------------------------=
     
     var locales: some View {
-        Wheel(Constants.locales, selection: locale.xstorage, id: \.identifier)
+        Selector(Constants.locales, selection: locale.xstorage, id: \.identifier)
     }
     
     var currencies: some View {
-        Wheel(Constants.currencies, selection: currency.xstorage, id: \.self)
+        Selector(Constants.currencies, selection: currency.xstorage, id: \.self)
     }
     
     //*========================================================================*

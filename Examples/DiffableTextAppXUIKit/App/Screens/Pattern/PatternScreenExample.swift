@@ -14,7 +14,6 @@ import DiffableTextViews
 // MARK: Declaration
 //*============================================================================*
 
-/// An intermediate examples view that observes infrequent changes.
 struct PatternScreenExample: View {
     typealias Style = PatternTextStyle<String>
     typealias Context = PatternScreenContext

@@ -7,9 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		5507BD1427AD620900F5292D /* Segments.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5507BD1327AD620900F5292D /* Segments.swift */; };
-		5507BD1627AD66A800F5292D /* Wheel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5507BD1527AD66A800F5292D /* Wheel.swift */; };
 		5527C21327AA6C6A0098546E /* Interval.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5527C21227AA6C6A0098546E /* Interval.swift */; };
+		552A1445282FB4BF0042E903 /* Selector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 552A1444282FB4BF0042E903 /* Selector.swift */; };
 		552ED3F9282E9B6800D93120 /* Twins.swift in Sources */ = {isa = PBXBuildFile; fileRef = 552ED3F8282E9B6800D93120 /* Twins.swift */; };
 		553F2412282BBB4900C4B6DD /* DiffableTextViews in Frameworks */ = {isa = PBXBuildFile; productRef = 553F2411282BBB4900C4B6DD /* DiffableTextViews */; };
 		55434964282E2D0E00EDD541 /* IntervalSliderViews in Frameworks */ = {isa = PBXBuildFile; productRef = 55434963282E2D0E00EDD541 /* IntervalSliderViews */; };
@@ -20,7 +19,6 @@
 		5589A1A427A7E3E30000F04A /* App.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5589A1A327A7E3E30000F04A /* App.swift */; };
 		5589A1A827A7E3E40000F04A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5589A1A727A7E3E40000F04A /* Assets.xcassets */; };
 		5589A1AB27A7E3E40000F04A /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5589A1AA27A7E3E40000F04A /* Preview Assets.xcassets */; };
-		5589FE38282D0E8A002BE32E /* String.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5589FE37282D0E8A002BE32E /* String.swift */; };
 		559CA92D2828684A00E6F369 /* Observable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 559CA92C2828684A00E6F369 /* Observable.swift */; };
 		55AA28C327A7ED4F003778FE /* Screen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55A85FF627A7E850006CCCB7 /* Screen.swift */; };
 		55AA28CE27A7F472003778FE /* Tabs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55AA28CD27A7F472003778FE /* Tabs.swift */; };
@@ -37,9 +35,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		5507BD1327AD620900F5292D /* Segments.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Segments.swift; sourceTree = "<group>"; };
-		5507BD1527AD66A800F5292D /* Wheel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Wheel.swift; sourceTree = "<group>"; };
 		5527C21227AA6C6A0098546E /* Interval.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Interval.swift; sourceTree = "<group>"; };
+		552A1444282FB4BF0042E903 /* Selector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Selector.swift; sourceTree = "<group>"; };
 		552ED3F8282E9B6800D93120 /* Twins.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Twins.swift; sourceTree = "<group>"; };
 		55434962282E2CDE00EDD541 /* IntervalSliderViews */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = IntervalSliderViews; path = Modules/IntervalSliderViews; sourceTree = "<group>"; };
 		55781F2C27AD39B0003D4252 /* Scroller.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Scroller.swift; sourceTree = "<group>"; };
@@ -52,7 +49,6 @@
 		5589A1A327A7E3E30000F04A /* App.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = App.swift; sourceTree = "<group>"; };
 		5589A1A727A7E3E40000F04A /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		5589A1AA27A7E3E40000F04A /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
-		5589FE37282D0E8A002BE32E /* String.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = String.swift; sourceTree = "<group>"; };
 		559CA92C2828684A00E6F369 /* Observable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Observable.swift; sourceTree = "<group>"; };
 		55A85FF627A7E850006CCCB7 /* Screen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Screen.swift; sourceTree = "<group>"; };
 		55AA28CD27A7F472003778FE /* Tabs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tabs.swift; sourceTree = "<group>"; };
@@ -81,6 +77,24 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		552A1442282FB2940042E903 /* Support */ = {
+			isa = PBXGroup;
+			children = (
+				559CA92C2828684A00E6F369 /* Observable.swift */,
+			);
+			path = Support;
+			sourceTree = "<group>";
+		};
+		552A1443282FB2EE0042E903 /* Screens */ = {
+			isa = PBXGroup;
+			children = (
+				55B38EE42827C90D005159F4 /* Number */,
+				55A85FFC27A7E87C006CCCB7 /* Pattern */,
+				55AA28CD27A7F472003778FE /* Tabs.swift */,
+			);
+			path = Screens;
+			sourceTree = "<group>";
+		};
 		557F7FB827A81116001908D6 /* Packages */ = {
 			isa = PBXGroup;
 			children = (
@@ -113,13 +127,10 @@
 			isa = PBXGroup;
 			children = (
 				55F6F58627A7E53300BA26AB /* Assets */,
-				55B38EE42827C90D005159F4 /* Screens x Number */,
-				55A85FFC27A7E87C006CCCB7 /* Screens x Pattern */,
-				55A85FF327A7E826006CCCB7 /* Views */,
-				559CA93228286CB400E6F369 /* Views x Pickers */,
-				55AA28D127A802AF003778FE /* Views x Routers */,
 				55B8ABAB27AAAB9E00980626 /* Models */,
-				5589FE36282D0E71002BE32E /* Models x Helpers */,
+				552A1443282FB2EE0042E903 /* Screens */,
+				552A1442282FB2940042E903 /* Support */,
+				55A85FF327A7E826006CCCB7 /* Views */,
 				5589A1A327A7E3E30000F04A /* App.swift */,
 			);
 			path = App;
@@ -133,25 +144,14 @@
 			path = "Preview Content";
 			sourceTree = "<group>";
 		};
-		5589FE36282D0E71002BE32E /* Models x Helpers */ = {
+		5589FE36282D0E71002BE32E /* Helpers */ = {
 			isa = PBXGroup;
 			children = (
 				55C36CFC282EB16000227BD4 /* Bounds.swift */,
 				5527C21227AA6C6A0098546E /* Interval.swift */,
-				559CA92C2828684A00E6F369 /* Observable.swift */,
-				5589FE37282D0E8A002BE32E /* String.swift */,
 				552ED3F8282E9B6800D93120 /* Twins.swift */,
 			);
-			path = "Models x Helpers";
-			sourceTree = "<group>";
-		};
-		559CA93228286CB400E6F369 /* Views x Pickers */ = {
-			isa = PBXGroup;
-			children = (
-				5507BD1327AD620900F5292D /* Segments.swift */,
-				5507BD1527AD66A800F5292D /* Wheel.swift */,
-			);
-			path = "Views x Pickers";
+			path = Helpers;
 			sourceTree = "<group>";
 		};
 		55A85FF327A7E826006CCCB7 /* Views */ = {
@@ -161,11 +161,12 @@
 				55DDC62B27A8D81D00B2AB4A /* Example.swift */,
 				55A85FF627A7E850006CCCB7 /* Screen.swift */,
 				55781F2C27AD39B0003D4252 /* Scroller.swift */,
+				552A1444282FB4BF0042E903 /* Selector.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
 		};
-		55A85FFC27A7E87C006CCCB7 /* Screens x Pattern */ = {
+		55A85FFC27A7E87C006CCCB7 /* Pattern */ = {
 			isa = PBXGroup;
 			children = (
 				55F2783627AD7C1C001400D7 /* PatternScreen.swift */,
@@ -173,7 +174,7 @@
 				557DAF2227BA4AE600D9F0E5 /* PatternScreenActions.swift */,
 				55FD23CA27BA17C7008F65E1 /* PatternScreenExample.swift */,
 			);
-			path = "Screens x Pattern";
+			path = Pattern;
 			sourceTree = "<group>";
 		};
 		55AA28C427A7ED78003778FE /* Frameworks */ = {
@@ -183,15 +184,7 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		55AA28D127A802AF003778FE /* Views x Routers */ = {
-			isa = PBXGroup;
-			children = (
-				55AA28CD27A7F472003778FE /* Tabs.swift */,
-			);
-			path = "Views x Routers";
-			sourceTree = "<group>";
-		};
-		55B38EE42827C90D005159F4 /* Screens x Number */ = {
+		55B38EE42827C90D005159F4 /* Number */ = {
 			isa = PBXGroup;
 			children = (
 				55B38EE82827CD46005159F4 /* NumberScreen.swift */,
@@ -200,12 +193,13 @@
 				55B38EEE2827D51D005159F4 /* NumberScreenExample.swift */,
 				55B38EF62827FBB9005159F4 /* NumberScreenWheels.swift */,
 			);
-			path = "Screens x Number";
+			path = Number;
 			sourceTree = "<group>";
 		};
 		55B8ABAB27AAAB9E00980626 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				5589FE36282D0E71002BE32E /* Helpers */,
 				55781F3027AD4500003D4252 /* Constants.swift */,
 			);
 			path = Models;
@@ -298,6 +292,7 @@
 			files = (
 				55AA28C327A7ED4F003778FE /* Screen.swift in Sources */,
 				55B38EEF2827D51D005159F4 /* NumberScreenExample.swift in Sources */,
+				552A1445282FB4BF0042E903 /* Selector.swift in Sources */,
 				55AA28CE27A7F472003778FE /* Tabs.swift in Sources */,
 				55DDC62C27A8D81D00B2AB4A /* Example.swift in Sources */,
 				55B38EF72827FBB9005159F4 /* NumberScreenWheels.swift in Sources */,
@@ -309,16 +304,13 @@
 				557DAF2127BA493200D9F0E5 /* Action.swift in Sources */,
 				552ED3F9282E9B6800D93120 /* Twins.swift in Sources */,
 				55FD23C727BA0335008F65E1 /* PatternScreenContext.swift in Sources */,
-				5507BD1427AD620900F5292D /* Segments.swift in Sources */,
 				55781F3127AD4500003D4252 /* Constants.swift in Sources */,
 				559CA92D2828684A00E6F369 /* Observable.swift in Sources */,
 				55C36CFD282EB16000227BD4 /* Bounds.swift in Sources */,
 				5589A1A427A7E3E30000F04A /* App.swift in Sources */,
 				55781F2D27AD39B0003D4252 /* Scroller.swift in Sources */,
 				55B38EE92827CD46005159F4 /* NumberScreen.swift in Sources */,
-				5589FE38282D0E8A002BE32E /* String.swift in Sources */,
 				5527C21327AA6C6A0098546E /* Interval.swift in Sources */,
-				5507BD1627AD66A800F5292D /* Wheel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -8,21 +8,19 @@
 //=----------------------------------------------------------------------------=
 
 import SwiftUI
-import DiffableTextViews
 
 //*============================================================================*
 // MARK: Declaration
 //*============================================================================*
 
-struct PatternScreen: View {
-    typealias Context = PatternScreenContext
+struct NumberScreen: View {
 
     //=------------------------------------------------------------------------=
     // MARK: State
     //=------------------------------------------------------------------------=
     
-    @StateObject var context = Context()
-
+    @StateObject private var context = NumberScreenContext()
+    
     //=------------------------------------------------------------------------=
     // MARK: Body
     //=------------------------------------------------------------------------=
@@ -30,18 +28,46 @@ struct PatternScreen: View {
     var body: some View {
         Screen {
             Scroller {
-                Segments($context.pattern)
+                //=------------------------------=
+                // Pickers
+                //=------------------------------=
+                Selector(selection: $context.optionality)
+                    .pickerStyle(.segmented)
                 
-                Segments($context.visibility)
+                Selector(selection: $context.format)
+                    .pickerStyle(.segmented)
+
+                NumberScreenWheels(context)
+                //=------------------------------=
+                // Intervals
+                //=------------------------------=
+                Observer(context.$bounds) {
+                    NumberScreenInterval("Bounds (9s)",
+                    interval: $0.integers, in: context.boundsLimits)
+                }
+
+                Spacer(minLength: 16).fixedSize()
                 
-                PatternScreenActions(context)
+                Observer(context.$integer) {
+                    NumberScreenInterval("Integer digits",
+                    interval: $0, in: context.integerLimits)
+                }
+                
+                Spacer(minLength: 16).fixedSize()
+
+                Observer(context.$fraction) {
+                    NumberScreenInterval("Fraction digits",
+                    interval: $0, in: context.fractionLimits)
+                }
                 
                 Spacer()
             }
             
             Divider()
-            
-            PatternScreenExample(context)
+            //=----------------------------------=
+            // Example
+            //=----------------------------------=
+            NumberScreenExample(context)
         }
     }
 }
@@ -50,13 +76,13 @@ struct PatternScreen: View {
 // MARK: Declaration
 //*============================================================================*
 
-struct PatternTextStyleScreen_Previews: PreviewProvider {
+struct NumberScreen_Previews: PreviewProvider {
     
     //=------------------------------------------------------------------------=
     // MARK: Previews
     //=------------------------------------------------------------------------=
     
     static var previews: some View {
-        PatternScreen().preferredColorScheme(.dark)
+        NumberScreen().preferredColorScheme(.dark)
     }
 }

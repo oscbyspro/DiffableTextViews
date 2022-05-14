@@ -8,7 +8,6 @@
 //=----------------------------------------------------------------------------=
 
 import Foundation
-import DiffableTextViews
 
 //*============================================================================*
 // MARK: Declaration
@@ -27,14 +26,14 @@ final class NumberScreenContext: ObservableObject {
     @Observable var locale = Locale(identifier: "en_US")
     @Observable var currency = "USD"
     
-    @Observable var bounds = Bounds(Interval((0, Decimal.precision)))
     let boundsLimits = -Decimal.precision ... Decimal.precision
+    @Observable var bounds = Bounds(Interval((0, Decimal.precision)))
     
-    @Observable var integer = Interval((1, Decimal.precision))
     let integerLimits = 1 ... Decimal.precision
+    @Observable var integer = Interval((1, Decimal.precision))
     
-    @Observable var fraction = Interval((2, 2))
     let fractionLimits = 0 ... Decimal.precision
+    @Observable var fraction = Interval((2, 2))
     
     //*========================================================================*
     // MARK: Enumerations

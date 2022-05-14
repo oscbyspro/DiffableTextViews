@@ -7,41 +7,49 @@
 // See http://www.apache.org/licenses/LICENSE-2.0 for license information.
 //=----------------------------------------------------------------------------=
 
-import DiffableTextViews
+import SwiftUI
 
 //*============================================================================*
 // MARK: Declaration
 //*============================================================================*
 
-struct Twins<T: NumberTextValue> {
+struct Selector<Value: Hashable, ID: Hashable>: View {
     
     //=------------------------------------------------------------------------=
     // MARK: State
     //=------------------------------------------------------------------------=
     
-    private var _standard: T
-    private var _optional: T?
-    
+    let values: [Value]
+    let selection: Binding<Value>
+    let id: KeyPath<Value, ID>
+    let label: (Value) -> String
+
     //=------------------------------------------------------------------------=
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    init(_ standard: T = .zero) {
-        self._standard = standard
-        self._optional = standard
+    init(_ values: [Value], selection: Binding<Value>, id: KeyPath<Value, ID>) {
+        self.values = values; self.selection = selection; self.id = id
+        self.label = { value  in String(describing: value[keyPath: id]) }
+    }
+    
+    init(selection: Binding<Value>) where ID == String,
+    Value: RawRepresentable, Value.RawValue == ID,
+    Value: CaseIterable, Value.AllCases == [Value] {
+        self.values = Value.allCases; self.selection = selection
+        self.id = \.rawValue; self.label = \.rawValue.capitalized
     }
     
     //=------------------------------------------------------------------------=
-    // MARK: Accessors
+    // MARK: Body
     //=------------------------------------------------------------------------=
     
-    var standard: T {
-        get { _standard }
-        set { _standard = newValue; _optional = newValue }
-    }
-    
-    var optional: T? {
-        get { _optional }
-        set { _optional = newValue; _standard = newValue ?? .zero }
+    var body: some View {
+        Picker(String(describing: Value.self), selection: selection) {
+            ForEach(values, id: id) {
+                Text(label($0)).tag($0)
+            }
+        }
     }
 }
+
