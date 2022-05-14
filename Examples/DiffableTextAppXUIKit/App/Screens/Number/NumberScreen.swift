@@ -13,13 +13,13 @@ import SwiftUI
 // MARK: Declaration
 //*============================================================================*
 
-struct NumberScreen: View {
+struct NumberScreen: NumberScreenView {
 
     //=------------------------------------------------------------------------=
     // MARK: State
     //=------------------------------------------------------------------------=
     
-    @StateObject private var context = NumberScreenContext()
+    @StateObject private var context = Context()
     
     //=------------------------------------------------------------------------=
     // MARK: Body
@@ -31,10 +31,10 @@ struct NumberScreen: View {
                 //=------------------------------=
                 // Pickers
                 //=------------------------------=
-                Selector(selection: $context.optionality)
+                Selector.each(selection: $context.optionality)
                     .pickerStyle(.segmented)
-                
-                Selector(selection: $context.format)
+
+                Selector.each(selection: $context.format)
                     .pickerStyle(.segmented)
 
                 NumberScreenWheels(context)

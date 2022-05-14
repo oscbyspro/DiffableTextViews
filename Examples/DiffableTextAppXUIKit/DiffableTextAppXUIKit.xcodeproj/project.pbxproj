@@ -25,8 +25,10 @@
 		55B38EE72827CA4C005159F4 /* NumberScreenContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55B38EE62827CA4C005159F4 /* NumberScreenContext.swift */; };
 		55B38EE92827CD46005159F4 /* NumberScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55B38EE82827CD46005159F4 /* NumberScreen.swift */; };
 		55B38EEF2827D51D005159F4 /* NumberScreenExample.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55B38EEE2827D51D005159F4 /* NumberScreenExample.swift */; };
-		55B38EF52827FAE6005159F4 /* NumberScreenIntervals.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55B38EF42827FAE6005159F4 /* NumberScreenIntervals.swift */; };
+		55B38EF52827FAE6005159F4 /* NumberScreenInterval.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55B38EF42827FAE6005159F4 /* NumberScreenInterval.swift */; };
 		55B38EF72827FBB9005159F4 /* NumberScreenWheels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55B38EF62827FBB9005159F4 /* NumberScreenWheels.swift */; };
+		55B9EF9A282FF65C003994CD /* NumberScreenView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55B9EF99282FF65C003994CD /* NumberScreenView.swift */; };
+		55B9EF9C282FF699003994CD /* PatternScreenView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55B9EF9B282FF699003994CD /* PatternScreenView.swift */; };
 		55C36CFD282EB16000227BD4 /* Bounds.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55C36CFC282EB16000227BD4 /* Bounds.swift */; };
 		55DDC62C27A8D81D00B2AB4A /* Example.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55DDC62B27A8D81D00B2AB4A /* Example.swift */; };
 		55F2783927AD7C1C001400D7 /* PatternScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55F2783627AD7C1C001400D7 /* PatternScreen.swift */; };
@@ -55,8 +57,10 @@
 		55B38EE62827CA4C005159F4 /* NumberScreenContext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NumberScreenContext.swift; sourceTree = "<group>"; };
 		55B38EE82827CD46005159F4 /* NumberScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NumberScreen.swift; sourceTree = "<group>"; };
 		55B38EEE2827D51D005159F4 /* NumberScreenExample.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NumberScreenExample.swift; sourceTree = "<group>"; };
-		55B38EF42827FAE6005159F4 /* NumberScreenIntervals.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NumberScreenIntervals.swift; sourceTree = "<group>"; };
+		55B38EF42827FAE6005159F4 /* NumberScreenInterval.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NumberScreenInterval.swift; sourceTree = "<group>"; };
 		55B38EF62827FBB9005159F4 /* NumberScreenWheels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NumberScreenWheels.swift; sourceTree = "<group>"; };
+		55B9EF99282FF65C003994CD /* NumberScreenView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NumberScreenView.swift; sourceTree = "<group>"; };
+		55B9EF9B282FF699003994CD /* PatternScreenView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PatternScreenView.swift; sourceTree = "<group>"; };
 		55C36CFC282EB16000227BD4 /* Bounds.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Bounds.swift; sourceTree = "<group>"; };
 		55DDC62B27A8D81D00B2AB4A /* Example.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Example.swift; sourceTree = "<group>"; };
 		55F2783627AD7C1C001400D7 /* PatternScreen.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PatternScreen.swift; sourceTree = "<group>"; };
@@ -170,6 +174,7 @@
 			isa = PBXGroup;
 			children = (
 				55F2783627AD7C1C001400D7 /* PatternScreen.swift */,
+				55B9EF9B282FF699003994CD /* PatternScreenView.swift */,
 				55FD23C627BA0335008F65E1 /* PatternScreenContext.swift */,
 				557DAF2227BA4AE600D9F0E5 /* PatternScreenActions.swift */,
 				55FD23CA27BA17C7008F65E1 /* PatternScreenExample.swift */,
@@ -188,8 +193,9 @@
 			isa = PBXGroup;
 			children = (
 				55B38EE82827CD46005159F4 /* NumberScreen.swift */,
+				55B9EF99282FF65C003994CD /* NumberScreenView.swift */,
 				55B38EE62827CA4C005159F4 /* NumberScreenContext.swift */,
-				55B38EF42827FAE6005159F4 /* NumberScreenIntervals.swift */,
+				55B38EF42827FAE6005159F4 /* NumberScreenInterval.swift */,
 				55B38EEE2827D51D005159F4 /* NumberScreenExample.swift */,
 				55B38EF62827FBB9005159F4 /* NumberScreenWheels.swift */,
 			);
@@ -296,11 +302,13 @@
 				55AA28CE27A7F472003778FE /* Tabs.swift in Sources */,
 				55DDC62C27A8D81D00B2AB4A /* Example.swift in Sources */,
 				55B38EF72827FBB9005159F4 /* NumberScreenWheels.swift in Sources */,
+				55B9EF9C282FF699003994CD /* PatternScreenView.swift in Sources */,
 				55B38EE72827CA4C005159F4 /* NumberScreenContext.swift in Sources */,
 				557DAF2327BA4AE600D9F0E5 /* PatternScreenActions.swift in Sources */,
-				55B38EF52827FAE6005159F4 /* NumberScreenIntervals.swift in Sources */,
+				55B38EF52827FAE6005159F4 /* NumberScreenInterval.swift in Sources */,
 				55FD23CB27BA17C7008F65E1 /* PatternScreenExample.swift in Sources */,
 				55F2783927AD7C1C001400D7 /* PatternScreen.swift in Sources */,
+				55B9EF9A282FF65C003994CD /* NumberScreenView.swift in Sources */,
 				557DAF2127BA493200D9F0E5 /* Action.swift in Sources */,
 				552ED3F9282E9B6800D93120 /* Twins.swift in Sources */,
 				55FD23C727BA0335008F65E1 /* PatternScreenContext.swift in Sources */,

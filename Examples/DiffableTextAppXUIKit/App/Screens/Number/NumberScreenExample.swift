@@ -14,17 +14,13 @@ import DiffableTextViews
 // MARK: Declaration
 //*============================================================================*
 
-struct NumberScreenExample: View {
-    typealias Context = NumberScreenContext
-    typealias FormatID = Context.FormatID
-    typealias OptionalityID = Context.OptionalityID
+struct NumberScreenExample: NumberScreenView {
 
     //=------------------------------------------------------------------------=
     // MARK: State
     //=------------------------------------------------------------------------=
     
     let context: Context
-    
     @ObservedObject var locale: Observable<Locale>
     @ObservedObject var currency: Observable<String>
     @ObservedObject var format: Observable<FormatID>
@@ -100,7 +96,7 @@ struct NumberScreenExample: View {
 // MARK: Declaration
 //*============================================================================*
 
-struct NumberScreenExampleX<Style>: View
+struct NumberScreenExampleX<Style>: NumberScreenView
 where Style: NumberTextStyleProtocol,
 Style.Format.FormatInput == Decimal {
     typealias Value  = Style.Value
@@ -123,9 +119,12 @@ Style.Format.FormatInput == Decimal {
     // MARK: Initializers
     //=------------------------------------------------------------------------=
 
-    init(_ context: NumberScreenContext, _ source: Source, _ target: Target, _ base: Style) {
-        self.base = base; self.source = source; self.target = target
-        self.bounds = context.$bounds; self.integer = context.$integer
+    init(_ context: Context, _ source: Source, _ target: Target, _ base: Style) {
+        self.base = base
+        self.source = source
+        self.target = target
+        self.bounds = context.$bounds
+        self.integer = context.$integer
         self.fraction = context.$fraction
     }
     

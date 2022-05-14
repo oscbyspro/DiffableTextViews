@@ -14,19 +14,16 @@ import DiffableTextViews
 // MARK: Declaration
 //*============================================================================*
 
-struct PatternScreenExample: View {
+struct PatternScreenExample: PatternScreenView {
     typealias Style = PatternTextStyle<String>
-    typealias Context = PatternScreenContext
-    typealias Pattern = Context.PatternID
-    typealias Visibility = Context.VisibilityID
     
     //=------------------------------------------------------------------------=
     // MARK: State
     //=------------------------------------------------------------------------=
     
     let context: Context
-    @ObservedObject var pattern: Observable<Pattern>
-    @ObservedObject var visibility: Observable<Visibility>
+    @ObservedObject var pattern: Observable<PatternID>
+    @ObservedObject var visibility: Observable<VisibilityID>
     
     //=------------------------------------------------------------------------=
     // MARK: Initializers

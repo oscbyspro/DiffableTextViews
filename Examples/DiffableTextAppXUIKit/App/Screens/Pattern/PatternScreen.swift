@@ -14,8 +14,7 @@ import DiffableTextViews
 // MARK: Declaration
 //*============================================================================*
 
-struct PatternScreen: View {
-    typealias Context = PatternScreenContext
+struct PatternScreen: PatternScreenView {
     
     //=------------------------------------------------------------------------=
     // MARK: State
@@ -30,12 +29,12 @@ struct PatternScreen: View {
     var body: some View {
         Screen {
             Scroller {
-                Selector(selection: $context.pattern)
+                Selector.each(selection: $context.pattern)
                     .pickerStyle(.segmented)
                 
-                Selector(selection: $context.visibility)
+                Selector.each(selection: $context.visibility)
                     .pickerStyle(.segmented)
-                
+                            
                 PatternScreenActions(context)
                 
                 Spacer()
@@ -52,7 +51,7 @@ struct PatternScreen: View {
 // MARK: Declaration
 //*============================================================================*
 
-struct PatternTextStyleScreen_Previews: PreviewProvider {
+struct PatternScreen_Previews: PreviewProvider {
     
     //=------------------------------------------------------------------------=
     // MARK: Previews

@@ -13,31 +13,54 @@ import SwiftUI
 // MARK: Declaration
 //*============================================================================*
 
-struct Selector<Value: Hashable, ID: Hashable>: View {
+struct Selector<Data, ID, Label>: View where
+Data: RandomAccessCollection, Data.Element: Hashable,
+ID: Hashable, Label: View {
+    typealias Value = Data.Element
     
     //=------------------------------------------------------------------------=
     // MARK: State
     //=------------------------------------------------------------------------=
     
-    let values: [Value]
+    let data: Data
     let selection: Binding<Value>
     let id: KeyPath<Value, ID>
-    let label: (Value) -> String
+    let label: (Value) -> Label
 
     //=------------------------------------------------------------------------=
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    init(_ values: [Value], selection: Binding<Value>, id: KeyPath<Value, ID>) {
-        self.values = values; self.selection = selection; self.id = id
-        self.label = { value  in String(describing: value[keyPath: id]) }
+    init(_ data: Data,
+    selection: Binding<Value>,
+    id: KeyPath<Value, ID>,
+    label: @escaping (Value) -> Label) {
+        self.data = data
+        self.selection = selection
+        self.id = id
+        self.label = label
     }
     
-    init(selection: Binding<Value>) where ID == String,
-    Value: RawRepresentable, Value.RawValue == ID,
-    Value: CaseIterable, Value.AllCases == [Value] {
-        self.values = Value.allCases; self.selection = selection
-        self.id = \.rawValue; self.label = \.rawValue.capitalized
+    init(_ data: Data,
+    selection: Binding<Value>,
+    label: @escaping (Value) -> String)
+    where ID == Value, Label == Text {
+        self.data = data
+        self.selection = selection
+        self.id = \.self
+        self.label = { Text(label($0)) }
+    }
+
+    //=------------------------------------------------------------------------=
+    // MARK: Initializers
+    //=------------------------------------------------------------------------=
+    
+    static func each(selection: Binding<ID>) -> Self where
+    Value == ID, Value: CaseIterable, Data == ID.AllCases,
+    Value: RawRepresentable, Value.RawValue == String, Label == Text {
+        Self(ID.allCases, selection: selection, id: \.self) {
+            Text($0.rawValue.capitalized)
+        }
     }
     
     //=------------------------------------------------------------------------=
@@ -46,9 +69,7 @@ struct Selector<Value: Hashable, ID: Hashable>: View {
     
     var body: some View {
         Picker(String(describing: Value.self), selection: selection) {
-            ForEach(values, id: id) {
-                Text(label($0)).tag($0)
-            }
+            ForEach(data, id: id, content: label)
         }
     }
 }

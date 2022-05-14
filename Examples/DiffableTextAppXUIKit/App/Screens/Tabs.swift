@@ -79,7 +79,7 @@ struct Tabs: View {
 // MARK: Declaration
 //*============================================================================*
 
-struct DiffableTextStyleTabsPreviews: PreviewProvider {
+struct Tabs_Previews: PreviewProvider {
     
     //=------------------------------------------------------------------------=
     // MARK: Previews
