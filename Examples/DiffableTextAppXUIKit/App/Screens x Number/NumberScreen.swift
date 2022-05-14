@@ -33,18 +33,9 @@ struct NumberScreen: View {
                 
                 Segments($context.format)
                 
-                NumberScreenOptionsWheel(context)
+                NumberScreenWheels(context)
                 
-                VStack(spacing: 16) {
-                    NumberScreenIntegerInterval("Bounds (9s)",
-                    interval: context.bounds.$interval, in: context.boundsLimits)
-
-                    NumberScreenIntegerInterval("Integer digits",
-                    interval: context.$integer, in: context.integerLimits)
-
-                    NumberScreenIntegerInterval("Fraction digits",
-                    interval: context.$fraction, in: context.fractionLimits)
-                }
+                NumberScreenIntervals(context)
                 
                 Spacer()
             }

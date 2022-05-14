@@ -34,7 +34,7 @@ struct PatternScreen: View {
                 
                 Segments($context.visibility)
                 
-                PatternScreenActionsStack(context)
+                PatternScreenActions(context)
                 
                 Spacer()
             }

@@ -7,51 +7,49 @@
 // See http://www.apache.org/licenses/LICENSE-2.0 for license information.
 //=----------------------------------------------------------------------------=
 
-import Combine
-import SwiftUI
+import Foundation
 
 //*============================================================================*
 // MARK: Declaration
 //*============================================================================*
 
-@propertyWrapper final class Observable<Value>: ObservableObject {
+struct Bounds {
+    typealias Value = Decimal
     
     //=------------------------------------------------------------------------=
     // MARK: State
     //=------------------------------------------------------------------------=
-    
-    @Published var storage: Value
+        
+    private var _integers: Interval<Int>
+    private var _values: ClosedRange<Value>
     
     //=------------------------------------------------------------------------=
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    init(_ storage: Value) {
-        self.storage = storage
-    }
-    
-    init(wrappedValue: Value) {
-        self.storage = wrappedValue
+    init(_ integers: Interval<Int>) {
+        self._integers = integers
+        self._values = Self.map(integers)
     }
     
     //=------------------------------------------------------------------------=
     // MARK: Accessors
     //=------------------------------------------------------------------------=
-    
-    var xstorage: Binding<Value> {
-        Binding { self.storage } set: { self.storage = $0 }
+        
+    var integers: Interval<Int> {
+        get { _integers }
+        set { _integers = newValue; _values = Self.map(newValue) }
     }
     
+    var values: ClosedRange<Value> { _values }
+    
     //=------------------------------------------------------------------------=
-    // MARK: Accessors
+    // MARK: Utilities
     //=------------------------------------------------------------------------=
     
-    var projectedValue: Observable {
-        self
-    }
-    
-    var wrappedValue: Value {
-        get { storage }
-        set { storage = newValue }
+    private static func map(_ integers: Interval<Int>) -> ClosedRange<Value> {
+        let closed = integers.closed; return
+        Value(string: String.number(nines: closed.lowerBound))! ...
+        Value(string: String.number(nines: closed.upperBound))!
     }
 }

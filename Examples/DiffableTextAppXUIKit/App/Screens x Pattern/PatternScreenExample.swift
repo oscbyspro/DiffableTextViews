@@ -21,7 +21,6 @@ struct PatternScreenExample: View {
     typealias Pattern = Context.PatternID
     typealias Visibility = Context.VisibilityID
     
-    
     //=------------------------------------------------------------------------=
     // MARK: State
     //=------------------------------------------------------------------------=
@@ -63,7 +62,10 @@ struct PatternScreenExample: View {
     //=------------------------------------------------------------------------=
     
     var body: some View {
-        PatternScreenExampleX(context, style: style.hidden(!visible))
+        Observer(context.$value, cache: style.hidden(!visible)) { value, style in
+            Example(value:value, style: style)
+        }
+        .diffableTextViews_keyboardType(.numberPad)
     }
     
     //=------------------------------------------------------------------------=
@@ -77,37 +79,4 @@ struct PatternScreenExample: View {
     static let card = PatternTextStyle<String>
         .pattern("#### #### #### ####")
         .placeholder("#") { $0.isASCII && $0.isNumber }
-}
-
-//*============================================================================*
-// MARK: Declaration
-//*============================================================================*
-
-/// An examples view that observes frequent changes.
-struct PatternScreenExampleX<Style: DiffableTextStyle>: View where Style.Value == String {
-    typealias Context = PatternScreenContext
-    
-    //=------------------------------------------------------------------------=
-    // MARK: State
-    //=------------------------------------------------------------------------=
-    
-    let style: Style
-    @ObservedObject var value: Observable<String>
-
-    //=------------------------------------------------------------------------=
-    // MARK: Initializers
-    //=------------------------------------------------------------------------=
-    
-    init(_ context: Context, style: Style) {
-        self.style = style
-        self.value = context.$value
-    }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Body
-    //=------------------------------------------------------------------------=
-    
-    var body: some View {
-        Example(value.xstorage, style: style).diffableTextViews_keyboardType(.numberPad)
-    }
 }

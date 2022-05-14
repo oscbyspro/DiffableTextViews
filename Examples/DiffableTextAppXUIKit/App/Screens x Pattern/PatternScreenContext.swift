@@ -43,7 +43,7 @@ final class PatternScreenContext: ObservableObject {
     }
 
     //*========================================================================*
-    // MARK: Kind
+    // MARK: Enumerations
     //*========================================================================*
     
     enum PatternID: String, CaseIterable {

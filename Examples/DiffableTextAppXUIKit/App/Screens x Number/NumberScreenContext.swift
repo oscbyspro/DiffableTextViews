@@ -22,14 +22,14 @@ final class NumberScreenContext: ObservableObject {
     
     @Observable var decimals = Twins(Decimal(string: "1234567.89")!)
     @Observable var optionality = OptionalityID.standard
-
+    
     @Observable var format = FormatID.currency
     @Observable var locale = Locale(identifier: "en_US")
     @Observable var currency = "USD"
     
-    let bounds = ObservableIntegersAsBounds(Interval((0, Decimal.precision)))
+    @Observable var bounds = Bounds(Interval((0, Decimal.precision)))
     let boundsLimits = -Decimal.precision ... Decimal.precision
-
+    
     @Observable var integer = Interval((1, Decimal.precision))
     let integerLimits = 1 ... Decimal.precision
     
@@ -37,7 +37,7 @@ final class NumberScreenContext: ObservableObject {
     let fractionLimits = 0 ... Decimal.precision
     
     //*========================================================================*
-    // MARK: Declaration
+    // MARK: Enumerations
     //*========================================================================*
     
     enum FormatID: String, CaseIterable {

@@ -157,14 +157,14 @@ extension NumberTextBounds {
         // Lower Bound
         //=--------------------------------------=
         if  value < min {
-            Info.print(autocorrection: [.mark(value), "<", .note(min)])
+            Info.print(autocorrection: [.mark(value), "is less than", .note(min)])
             value = min; return
         }
         //=--------------------------------------=
         // Upper Bound
         //=--------------------------------------=
         if  value > max {
-            Info.print(autocorrection: [.mark(value), ">", .note(max)])
+            Info.print(autocorrection: [.mark(value), "is more than", .note(max)])
             value = max; return
         }
     }

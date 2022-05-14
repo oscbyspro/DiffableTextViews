@@ -13,7 +13,7 @@ import SwiftUI
 // MARK: Declaration
 //*============================================================================*
 
-struct NumberScreenOptionsWheel: View {
+struct NumberScreenWheels: View {
     typealias Context = NumberScreenContext
     typealias FormatID = Context.FormatID
     
@@ -21,8 +21,8 @@ struct NumberScreenOptionsWheel: View {
     // MARK: State
     //=------------------------------------------------------------------------=
 
-    @ObservedObject var format: Observable<FormatID>
-    @ObservedObject var locale: Observable<Locale>
+    @ObservedObject var format:   Observable<FormatID>
+    @ObservedObject var locale:   Observable<Locale>
     @ObservedObject var currency: Observable<String>
     
     //=------------------------------------------------------------------------=
@@ -36,6 +36,14 @@ struct NumberScreenOptionsWheel: View {
     }
     
     //=------------------------------------------------------------------------=
+    // MARK: Accessors
+    //=------------------------------------------------------------------------=
+    
+    var count: Int {
+        format.storage == .currency ? 2 : 1
+    }
+    
+    //=------------------------------------------------------------------------=
     // MARK: Body
     //=------------------------------------------------------------------------=
     
@@ -43,25 +51,25 @@ struct NumberScreenOptionsWheel: View {
         foundation.hidden().overlay(wheels)
     }
     
-    //=------------------------------------------------------------------------=
-    // MARK: Body
-    //=------------------------------------------------------------------------=
-
     var foundation: some View {
-        Picker(String(), selection: .constant(false)) { }.pickerStyle(.wheel)
+        Picker("", selection: .constant(false)) { }.pickerStyle(.wheel)
     }
     
     var wheels: some View {
         GeometryReader {
-            let separate = Separate($0, kind: format.storage)
-            //=----------------------------------=
-            // Content
-            //=----------------------------------=
+            let sized = Sized($0, count: count)
+            
             HStack(spacing: 0) {
-                locales.modifier(separate).zIndex(1)
+                //=------------------------------=
+                // Locales
+                //=------------------------------=
+                locales.modifier(sized).zIndex(1)
+                //=------------------------------=
+                // Currencies
+                //=------------------------------=
                 if format.storage == .currency {
                     Divider()
-                    currencies.modifier(separate)
+                    currencies.modifier(sized)
                 }
             }
         }
@@ -80,10 +88,10 @@ struct NumberScreenOptionsWheel: View {
     }
     
     //*========================================================================*
-    // MARK: Separate
+    // MARK: Declaration
     //*========================================================================*
     
-    struct Separate: ViewModifier {
+    struct Sized: ViewModifier {
         
         //=--------------------------------------------------------------------=
         // MARK: State
@@ -95,8 +103,8 @@ struct NumberScreenOptionsWheel: View {
         // MARK: Initializers
         //=--------------------------------------------------------------------=
 
-        init(_ proxy: GeometryProxy, kind: FormatID) {
-            self.width = proxy.size.width / CGFloat(kind == .currency ? 2 : 1)
+        init(_ proxy: GeometryProxy, count: Int) {
+            self.width = proxy.size.width / CGFloat(count)
         }
         
         //=--------------------------------------------------------------------=

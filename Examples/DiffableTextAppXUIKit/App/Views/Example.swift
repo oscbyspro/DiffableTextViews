@@ -30,12 +30,12 @@ struct Example<Style: DiffableTextStyle>: View {
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    init(_ value: Binding<Value>, style: Style) {
+    init(value: Binding<Value>, style: Style) {
         self.style = style
         self.value = value
         self.description = String(describing: value.wrappedValue)
     }
-    
+
     //=------------------------------------------------------------------------=
     // MARK: Body
     //=------------------------------------------------------------------------=
@@ -62,8 +62,7 @@ struct Example<Style: DiffableTextStyle>: View {
     }
     
     var diffableTextField: some View {
-        DiffableTextField("Much wow. Such empty.", value: value, style: style)
-            .focused($focus).padding()
+        DiffableTextField("Much wow. Such empty.", value: value, style: style).focused($focus).padding()
             .background(Color(uiColor: .tertiarySystemBackground).ignoresSafeArea(.container, edges: []))
     }
 }

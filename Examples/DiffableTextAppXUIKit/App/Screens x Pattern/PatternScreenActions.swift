@@ -13,7 +13,7 @@ import SwiftUI
 // MARK: Declaration
 //*============================================================================*
 
-struct PatternScreenActionsStack: View {
+struct PatternScreenActions: View {
     typealias Context = PatternScreenContext
     
     //=------------------------------------------------------------------------=
