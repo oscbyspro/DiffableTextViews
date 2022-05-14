@@ -14,7 +14,8 @@ import DiffableTextViews
 // MARK: Declaration
 //*============================================================================*
 
-struct PatternScreen: PatternScreenView {
+struct PatternScreen: View {
+    typealias Context = PatternScreenContext
     
     //=------------------------------------------------------------------------=
     // MARK: State
@@ -29,13 +30,24 @@ struct PatternScreen: PatternScreenView {
     var body: some View {
         Screen {
             Scroller {
+                //=------------------------------=
+                // Pickers
+                //=------------------------------=
                 Selector.each(selection: $context.pattern)
                     .pickerStyle(.segmented)
                 
                 Selector.each(selection: $context.visibility)
                     .pickerStyle(.segmented)
-                            
-                PatternScreenActions(context)
+                //=------------------------------=
+                // Actions
+                //=------------------------------=
+                HStack {
+                    Action("pop", action: context.popLast)
+                    
+                    Action("abc", action: context.appendLetter)
+                    
+                    Action("123", action: context.appendASCIIDigit)
+                }
                 
                 Spacer()
             }

@@ -14,8 +14,11 @@ import DiffableTextViews
 // MARK: Declaration
 //*============================================================================*
 
-struct PatternScreenExample: PatternScreenView {
+struct PatternScreenExample: View {
     typealias Style = PatternTextStyle<String>
+    typealias Context = PatternScreenContext
+    typealias PatternID = Context.PatternID
+    typealias VisibilityID = Context.VisibilityID
     
     //=------------------------------------------------------------------------=
     // MARK: State
@@ -40,14 +43,14 @@ struct PatternScreenExample: PatternScreenView {
     //=------------------------------------------------------------------------=
     
     var style: Style {
-        switch pattern.storage {
+        switch pattern.value {
         case  .card: return Self .card
         case .phone: return Self.phone
         }
     }
     
     var visible: Bool {
-        switch visibility.storage {
+        switch visibility.value {
         case .visible: return  true
         case  .hidden: return false
         }

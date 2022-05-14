@@ -35,7 +35,19 @@ struct Example<Style: DiffableTextStyle>: View {
         self.value = value
         self.description = String(describing: value.wrappedValue)
     }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Accessors
+    //=------------------------------------------------------------------------=
+    
+    var secondary: Color {
+        Color(uiColor: .secondarySystemBackground)
+    }
 
+    var tertiary: Color {
+        Color(uiColor:  .tertiarySystemBackground)
+    }
+    
     //=------------------------------------------------------------------------=
     // MARK: Body
     //=------------------------------------------------------------------------=
@@ -45,8 +57,7 @@ struct Example<Style: DiffableTextStyle>: View {
             descriptionText
             diffableTextField
         }
-        .padding()
-        .background(Color(uiColor: .secondarySystemBackground))
+        .padding().background(secondary)
         .onTapGesture { focus.toggle() }
     }
     
@@ -55,14 +66,13 @@ struct Example<Style: DiffableTextStyle>: View {
     //=------------------------------------------------------------------------=
     
     var descriptionText: some View {
-        Text(!description.isEmpty ? description : " ")
-            .lineLimit(1).frame(maxWidth: .infinity, alignment: .leading).padding()
-            .background(Rectangle().strokeBorder(Color(uiColor: .tertiarySystemBackground), lineWidth: 2))
-            .background(Color(uiColor: .secondarySystemBackground))
+        Text(!description.isEmpty ? description : " ").lineLimit(1)
+            .frame(maxWidth: .infinity, alignment: .leading).padding()
+            .border(tertiary, width: 2).background(secondary)
     }
     
     var diffableTextField: some View {
-        DiffableTextField("Much wow. Such empty.", value: value, style: style).focused($focus).padding()
-            .background(Color(uiColor: .tertiarySystemBackground).ignoresSafeArea(.container, edges: []))
+        DiffableTextField("Much wow. Such empty.", value: value, style: style)
+            .focused($focus).padding().background(tertiary)
     }
 }

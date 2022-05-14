@@ -27,23 +27,21 @@ struct _Beam: View, Animatable {
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    init(_ bounds: CGRect) {
-        self.center = bounds.midY
-        self.positions = (bounds.minX, bounds.maxX)
-        self.color = .gray.opacity(0.2)
+    static func track(in bounds: CGRect) -> Self {
+        Self(center: bounds.midY,
+        positions: (bounds.minX, bounds.maxX),
+        color: Color.gray.opacity(0.2))
     }
     
-    init(_ bounds: CGRect, positions: (CGFloat, CGFloat)) {
-        self.center = bounds.midY
-        self.positions = positions
-        self.color = .accentColor
+    static func color(in bounds: CGRect, at positions: (CGFloat, CGFloat)) -> Self {
+        Self(center: bounds.midY,
+        positions: positions,
+        color: Color.accentColor)
     }
     
     //=------------------------------------------------------------------------=
     // MARK: Accessors
     //=------------------------------------------------------------------------=
-    
-    var thickness: CGFloat { 4 }
     
     var animatableData: AnimatablePair<CGFloat, CGFloat> {
         get { AnimatablePair(self.positions.0, self.positions.1) }
@@ -55,12 +53,11 @@ struct _Beam: View, Animatable {
     //=------------------------------------------------------------------------=
     
     var body: some View {
-        Path {
-            $0.move(to:    CGPoint(x: positions.0, y: center))
-            $0.addLine(to: CGPoint(x: positions.1, y: center))
+        let thickness = 4.0; let inset = 0.5 * thickness; return Path {
+            $0.move(to:    CGPoint(x: positions.0 + inset, y: center))
+            $0.addLine(to: CGPoint(x: positions.1 - inset, y: center))
         }
-        .stroke(color, style: StrokeStyle.init(lineWidth: thickness, lineCap: .round))
-        .padding(.horizontal, 0.5 * thickness)
+        .stroke(color, style: StrokeStyle(lineWidth: thickness, lineCap: .round))
     }
 }
 
@@ -79,8 +76,8 @@ struct Beam_Previews: PreviewProvider {
             let bounds = geometry.frame(in: .local)
             
             ZStack {
-                _Beam(bounds)
-                _Beam(bounds, positions: (bounds.midX, bounds.maxX))
+                _Beam.track(in: bounds)
+                _Beam.color(in: bounds, at: (bounds.midX, bounds.maxX))
             }
         }
         .padding().preferredColorScheme(.dark)
@@ -105,7 +102,7 @@ struct Beam: View {
     //=------------------------------------------------------------------------=
     
     var body: some View {
-        _Beam(context.layout.bounds, positions: context.layout.positions).gesture(drag)
+        _Beam.color(in: context.layout.bounds, at: context.layout.positions).gesture(drag)
     }
     
     //=------------------------------------------------------------------------=

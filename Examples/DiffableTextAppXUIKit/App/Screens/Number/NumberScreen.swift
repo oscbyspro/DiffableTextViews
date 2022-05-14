@@ -13,7 +13,8 @@ import SwiftUI
 // MARK: Declaration
 //*============================================================================*
 
-struct NumberScreen: NumberScreenView {
+struct NumberScreen: View {
+    typealias Context = NumberScreenContext
 
     //=------------------------------------------------------------------------=
     // MARK: State
@@ -39,25 +40,18 @@ struct NumberScreen: NumberScreenView {
 
                 NumberScreenWheels(context)
                 //=------------------------------=
-                // Intervals
+                // Sliders
                 //=------------------------------=
-                Observer(context.$bounds) {
-                    NumberScreenInterval("Bounds (9s)",
-                    interval: $0.integers, in: context.boundsLimits)
-                }
-
-                Spacer(minLength: 16).fixedSize()
-                
-                Observer(context.$integer) {
-                    NumberScreenInterval("Integer digits",
-                    interval: $0, in: context.integerLimits)
+                Observer(context.$bounds, cache: context.boundsLimits) {
+                    Intervalizer("Bounds (9s)", interval: $0.integers, in: $1)
                 }
                 
-                Spacer(minLength: 16).fixedSize()
-
-                Observer(context.$fraction) {
-                    NumberScreenInterval("Fraction digits",
-                    interval: $0, in: context.fractionLimits)
+                Observer(context.$integer, cache: context.integerLimits) {
+                    Intervalizer("Integer digits", interval: $0, in: $1)
+                }
+                
+                Observer(context.$fraction, cache: context.fractionLimits) {
+                    Intervalizer("Fraction digits",  interval: $0, in: $1)
                 }
                 
                 Spacer()

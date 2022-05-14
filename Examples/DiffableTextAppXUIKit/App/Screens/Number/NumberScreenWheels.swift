@@ -13,7 +13,9 @@ import SwiftUI
 // MARK: Declaration
 //*============================================================================*
 
-struct NumberScreenWheels: NumberScreenView {
+struct NumberScreenWheels: View {
+    typealias Context = NumberScreenContext
+    typealias FormatID = Context.FormatID
     
     //=------------------------------------------------------------------------=
     // MARK: State
@@ -38,7 +40,7 @@ struct NumberScreenWheels: NumberScreenView {
     //=------------------------------------------------------------------------=
     
     func size(_ proxy: GeometryProxy) -> Size {
-        Size(width: proxy.size.width / CGFloat(format.storage == .currency ? 2 : 1))
+        Size(width: proxy.size.width / CGFloat(format.value == .currency ? 2 : 1))
     }
     
     //=------------------------------------------------------------------------=
@@ -64,7 +66,7 @@ struct NumberScreenWheels: NumberScreenView {
                 //=------------------------------=
                 // Currencies
                 //=------------------------------=
-                if format.storage == .currency {
+                if format.value == .currency {
                     Divider()
                     currencies.modifier(size)
                 }
@@ -77,11 +79,11 @@ struct NumberScreenWheels: NumberScreenView {
     //=------------------------------------------------------------------------=
     
     var locales: some View {
-        Selector(Constants.locales, selection: locale.xstorage, label: \.identifier)
+        Selector(Constants.locales, selection: $locale.value, label: \.identifier)
     }
     
     var currencies: some View {
-        Selector(Constants.currencies, selection: currency.xstorage, label: { $0 })
+        Selector(Constants.currencies, selection: $currency.value, label: { $0 })
     }
     
     //*========================================================================*

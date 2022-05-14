@@ -20,74 +20,60 @@ import SwiftUI
     // MARK: State
     //=------------------------------------------------------------------------=
     
-    @Published var storage: Value
+    @Published var value: Value
     
     //=------------------------------------------------------------------------=
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    init(_ storage: Value) {
-        self.storage = storage
+    init(_ value: Value) {
+        self.value = value
     }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Wrapper
+    //=------------------------------------------------------------------------=
     
     init(wrappedValue: Value) {
-        self.storage = wrappedValue
-    }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Accessors
-    //=------------------------------------------------------------------------=
-    
-    var xstorage: Binding<Value> {
-        Binding { self.storage } set: { self.storage = $0 }
-    }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Accessors
-    //=------------------------------------------------------------------------=
-    
-    var projectedValue: Observable {
-        self
+        self.value = wrappedValue
     }
     
     var wrappedValue: Value {
-        get { storage }
-        set { storage = newValue }
-    }    
+        get { value }
+        set { value = newValue }
+    }
+    
+    var projectedValue: Observable {
+        get { self }
+    }
 }
 
 //*============================================================================*
 // MARK: Declaration
 //*============================================================================*
 
-struct Observer<Value, Cache, Output: View>: View {
-    typealias Upstream = Binding<Value>
-
+struct Observer<Value, Content: View>: View {
+    
     //=------------------------------------------------------------------------=
     // MARK: State
     //=------------------------------------------------------------------------=
     
-    let cache: Cache
-    let content: (Upstream, Cache) -> Output
+    let content: (Binding<Value>) -> Content
     @ObservedObject var observable: Observable<Value>
 
     //=------------------------------------------------------------------------=
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    init(_ observable: Observable<Value>,
-    @ViewBuilder content: @escaping (Upstream) -> Output)
-    where Cache == Void {
-        self.cache = ()
-        self.observable = observable
-        self.content = { value, _ in content(value) }
+    
+    init(_ observable: Observable<Value>, @ViewBuilder
+    content: @escaping (Binding<Value>) -> Content) {
+        self.observable = observable; self.content = content
     }
     
-    init(_ observable: Observable<Value>, cache: Cache,
-    @ViewBuilder content: @escaping (Upstream, Cache) -> Output) {
-        self.cache = cache
-        self.observable = observable
-        self.content = content
+    init<T>(_ observable: Observable<Value>, cache:  T,
+    @ViewBuilder content: @escaping (Binding<Value>, T) -> Content) {
+        self.observable = observable; self.content = { content($0, cache) }
     }
     
     //=------------------------------------------------------------------------=
@@ -95,6 +81,6 @@ struct Observer<Value, Cache, Output: View>: View {
     //=------------------------------------------------------------------------=
     
     var body: some View {
-        content(observable.xstorage, cache)
+        content($observable.value)
     }
 }

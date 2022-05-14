@@ -8,25 +8,28 @@
 //=----------------------------------------------------------------------------=
 
 import SwiftUI
+import IntervalSliderViews
 
 //*============================================================================*
 // MARK: Declaration
 //*============================================================================*
 
-struct PatternScreenActions: PatternScreenView {
+struct Intervalizer: View {
     
     //=------------------------------------------------------------------------=
     // MARK: State
     //=------------------------------------------------------------------------=
     
-    let context: Context
+    let title: String
+    let limits: ClosedRange<Int>
+    @Binding var interval: Interval<Int>
     
     //=------------------------------------------------------------------------=
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    init(_ context: Context) {
-        self.context = context
+    init(_ title: String, interval: Binding<Interval<Int>>, in limits: ClosedRange<Int>) {
+        self.title = title; self._interval = interval; self.limits = limits
     }
     
     //=------------------------------------------------------------------------=
@@ -34,10 +37,15 @@ struct PatternScreenActions: PatternScreenView {
     //=------------------------------------------------------------------------=
     
     var body: some View {
-        HStack {
-            Action("pop", action: context.popLast)
-            Action("abc", action: context.appendLetter)
-            Action("123", action: context.appendASCIIDigit)
+        VStack(alignment: .leading) {
+            text(interval.closed)
+            IntervalSlider($interval.values, in: limits)
+            Spacer(minLength: 16).fixedSize()
         }
+    }
+    
+    func text(_ interval: ClosedRange<Int>) -> Text {
+        Text("\(title): \(interval.lowerBound) to \(interval.upperBound)")
+            .font(.subheadline.weight(.light))
     }
 }

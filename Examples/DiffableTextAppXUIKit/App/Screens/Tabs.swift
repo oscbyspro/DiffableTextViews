@@ -26,7 +26,7 @@ struct Tabs: View {
     //=------------------------------------------------------------------------=
     
     var body: some View {
-        TabView(selection: tab.xstorage) {
+        TabView(selection: $tab.value) {
             NumberScreen() .modifier(Tab.numeric)
             PatternScreen().modifier(Tab.pattern)
         }
@@ -64,11 +64,7 @@ struct Tabs: View {
         func body(content: Content) -> some View {
             content.tag(self).tabItem(label)
         }
-        
-        //=--------------------------------------------------------------------=
-        // MARK: Body
-        //=--------------------------------------------------------------------=
-        
+
         func label() -> some View {
             Label(title, systemImage: systemImage)
         }

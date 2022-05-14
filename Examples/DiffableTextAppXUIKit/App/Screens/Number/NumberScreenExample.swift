@@ -14,8 +14,11 @@ import DiffableTextViews
 // MARK: Declaration
 //*============================================================================*
 
-struct NumberScreenExample: NumberScreenView {
-
+struct NumberScreenExample: View {
+    typealias Context = NumberScreenContext
+    typealias FormatID = Context.FormatID
+    typealias OptionalityID = Context.OptionalityID
+    
     //=------------------------------------------------------------------------=
     // MARK: State
     //=------------------------------------------------------------------------=
@@ -43,7 +46,7 @@ struct NumberScreenExample: NumberScreenView {
     //=------------------------------------------------------------------------=
     
     var body: some View {
-        switch (optionality.storage, format.storage) {
+        switch (optionality.value, format.value) {
         case (.standard,   .number): decimalStandardNumber
         case (.standard, .currency): decimalStandardCurrency
         case (.standard,  .percent): decimalStandardPercent
@@ -58,18 +61,22 @@ struct NumberScreenExample: NumberScreenView {
     //=------------------------------------------------------------------------=
     
     var decimalStandardNumber: some View {
-        NumberScreenExampleX(context, context.$decimals, \.standard,
-        NumberTextStyle<Decimal>(locale: locale.storage))
+        NumberScreenExampleX(context,
+        context.$decimals,\.standard,
+        NumberTextStyle<Decimal>(locale: locale.value))
     }
     
     var decimalStandardCurrency: some View {
-        NumberScreenExampleX(context, context.$decimals, \.standard,
-        NumberTextStyle<Decimal>.Currency(code: currency.storage, locale: locale.storage))
+        NumberScreenExampleX(context,
+        context.$decimals,\.standard,
+        NumberTextStyle<Decimal>.Currency(
+        code: currency.value, locale: locale.value))
     }
     
     var decimalStandardPercent: some View {
-        NumberScreenExampleX(context, context.$decimals, \.standard,
-        NumberTextStyle<Decimal>.Percent(locale: locale.storage))
+        NumberScreenExampleX(context,
+        context.$decimals,\.standard,
+        NumberTextStyle<Decimal>.Percent(locale: locale.value))
     }
     
     //=------------------------------------------------------------------------=
@@ -77,18 +84,22 @@ struct NumberScreenExample: NumberScreenView {
     //=------------------------------------------------------------------------=
  
     var decimalOptionalNumber: some View {
-        NumberScreenExampleX(context, context.$decimals, \.optional,
-        NumberTextStyle<Decimal?>(locale: locale.storage))
+        NumberScreenExampleX(context,
+        context.$decimals,\.optional,
+        NumberTextStyle<Decimal?>(locale: locale.value))
     }
     
     var decimalOptionalCurrency: some View {
-        NumberScreenExampleX(context, context.$decimals, \.optional,
-        NumberTextStyle<Decimal?>.Currency(code: currency.storage, locale: locale.storage))
+        NumberScreenExampleX(context,
+        context.$decimals,\.optional,
+        NumberTextStyle<Decimal?>.Currency(
+        code: currency.value, locale: locale.value))
     }
     
     var decimalOptionalPercent: some View {
-        NumberScreenExampleX(context, context.$decimals, \.optional,
-        NumberTextStyle<Decimal?>.Percent(locale: locale.storage))
+        NumberScreenExampleX(context,
+        context.$decimals,\.optional,
+        NumberTextStyle<Decimal?>.Percent(locale: locale.value))
     }
 }
 
@@ -96,12 +107,13 @@ struct NumberScreenExample: NumberScreenView {
 // MARK: Declaration
 //*============================================================================*
 
-struct NumberScreenExampleX<Style>: NumberScreenView
+struct NumberScreenExampleX<Style>: View
 where Style: NumberTextStyleProtocol,
 Style.Format.FormatInput == Decimal {
     typealias Value  = Style.Value
     typealias Source = Observable<Twins<Decimal>>
     typealias Target = Source.Subbinding<Value>
+    typealias Context = NumberScreenContext
     
     //=------------------------------------------------------------------------=
     // MARK: State
@@ -133,9 +145,9 @@ Style.Format.FormatInput == Decimal {
     //=------------------------------------------------------------------------=
 
     var style: Style.Constant {
-        base.bounds(bounds.storage.values).precision(
-        integer:  integer .storage.closed,
-        fraction: fraction.storage.closed).constant()
+        base.bounds(bounds.value.values).precision(
+        integer:  integer .value.closed,
+        fraction: fraction.value.closed).constant()
     }
     
     //=------------------------------------------------------------------------=
@@ -143,8 +155,8 @@ Style.Format.FormatInput == Decimal {
     //=------------------------------------------------------------------------=
 
     var body: some View {
-        Observer(source, cache: style) { source, style in
-            Example(value: source[keyPath: target], style: style)
+        Observer(source, cache: style) {
+            Example(value: $0[keyPath: target], style: $1)
         }
         .diffableTextViews_keyboardType(Value.isInteger ? .numberPad : .decimalPad)
     }
