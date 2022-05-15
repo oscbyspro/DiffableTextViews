@@ -15,41 +15,42 @@ import DiffableTextViews
 //*============================================================================*
 
 final class PatternScreenContext: ObservableObject {
-    typealias Style = PatternTextStyle<String>
 
     //=------------------------------------------------------------------------=
     // MARK: State
     //=------------------------------------------------------------------------=
     
-    @Observable var value = "123456789"
     @Observable var pattern = PatternID.phone
     @Observable var visibility = VisibilityID.visible
+    @Observable var value = "123456789"
     
-    let digits:  String = "0123456789"
-    let letters: String = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-    
-    let phone = Style.pattern("+## (###) ###-##-##")
-        .placeholder("#") { $0.isASCII && $0.isNumber }
-    
-    let card  = Style.pattern("#### #### #### ####")
-        .placeholder("#") { $0.isASCII && $0.isNumber }
+    let phone = pattern("+## (###) ###-##-##")
+    let card  = pattern("#### #### #### ####")
     
     //=------------------------------------------------------------------------=
-    // MARK: Utilities
+    // MARK: Transformations
     //=------------------------------------------------------------------------=
     
     func popLast() {
         _ = value.popLast()
     }
     
-    func appendASCIIDigit() {
-        value.append(digits.randomElement()!)
+    func appendDigit() {
+        value.append(Character.random(in: "0" ... "9")!)
     }
     
     func appendLetter() {
-        value.append(letters.randomElement()!)
+        value.append(Character.random(in: "A" ... "Z")!)
     }
-
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Utilities
+    //=------------------------------------------------------------------------=
+    
+    static func pattern(_ pattern: String) -> PatternTextStyle<String> {
+        .pattern(pattern).placeholder("#") { $0.isASCII && $0.isNumber }
+    }
+    
     //*========================================================================*
     // MARK: Enumerations
     //*========================================================================*

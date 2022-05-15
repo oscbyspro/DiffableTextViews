@@ -45,7 +45,7 @@ struct PatternScreen: View {
                     
                     Action("abc", action: context.appendLetter)
                     
-                    Action("123", action: context.appendASCIIDigit)
+                    Action("123", action: context.appendDigit)
                 }
                 
                 Spacer()

@@ -16,8 +16,8 @@ import DiffableTextViews
 
 struct NumberScreenExample: View {
     typealias Context = NumberScreenContext
+    typealias KindID = Context.KindID
     typealias FormatID = Context.FormatID
-    typealias OptionalityID = Context.OptionalityID
     
     //=------------------------------------------------------------------------=
     // MARK: State
@@ -25,21 +25,21 @@ struct NumberScreenExample: View {
     
     let context: Context
     
+    @ObservedObject var kind: Observable<KindID>
+    @ObservedObject var format: Observable<FormatID>
     @ObservedObject var locale: Observable<Locale>
     @ObservedObject var currency: Observable<String>
-    @ObservedObject var format: Observable<FormatID>
-    @ObservedObject var optionality: Observable<OptionalityID>
-
+    
     //=------------------------------------------------------------------------=
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
     init(_ context: Context) {
         self.context = context
+        self.kind = context.$kind
+        self.format = context.$format
         self.locale = context.$locale
         self.currency = context.$currency
-        self.format = context.$format
-        self.optionality = context.$optionality
     }
     
     //=------------------------------------------------------------------------=
@@ -47,7 +47,7 @@ struct NumberScreenExample: View {
     //=------------------------------------------------------------------------=
     
     var body: some View {
-        switch (optionality.value, format.value) {
+        switch (kind.value, format.value) {
         case (.standard,   .number): decimalStandardNumber
         case (.standard, .currency): decimalStandardCurrency
         case (.standard,  .percent): decimalStandardPercent
@@ -124,7 +124,7 @@ Style.Format.FormatInput == Decimal {
     let base:   Style
     let source: Source
     let member: Member
-
+    
     @ObservedObject var bounds:   Observable<Bounds>
     @ObservedObject var integer:  Observable<(Int, Int)>
     @ObservedObject var fraction: Observable<(Int, Int)>

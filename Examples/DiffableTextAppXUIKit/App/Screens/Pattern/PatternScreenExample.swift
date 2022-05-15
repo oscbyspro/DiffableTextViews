@@ -8,6 +8,7 @@
 //=----------------------------------------------------------------------------=
 
 import SwiftUI
+import DiffableTextViews
 
 //*============================================================================*
 // MARK: Declaration
@@ -17,7 +18,6 @@ struct PatternScreenExample: View {
     typealias Context = PatternScreenContext
     typealias PatternID = Context.PatternID
     typealias VisibilityID = Context.VisibilityID
-    typealias Style = Context.Style
 
     //=------------------------------------------------------------------------=
     // MARK: State
@@ -42,7 +42,7 @@ struct PatternScreenExample: View {
     // MARK: Accessors
     //=------------------------------------------------------------------------=
     
-    var style: Style {
+    var style: PatternTextStyle<String> {
         let base   = (pattern == .phone) ? context.phone : context.card
         let hidden = (visibility == .hidden); return base.hidden(hidden)
     }

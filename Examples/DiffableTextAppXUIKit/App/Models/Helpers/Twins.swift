@@ -13,7 +13,7 @@ import DiffableTextViews
 // MARK: Declaration
 //*============================================================================*
 
-struct Twins<T: NumberTextValue> {
+struct Twins<T: Numeric> {
     
     //=------------------------------------------------------------------------=
     // MARK: State

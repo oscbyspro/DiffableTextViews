@@ -31,7 +31,7 @@ struct NumberScreen: View {
                 //=------------------------------=
                 // Pickers
                 //=------------------------------=
-                Selector.each(selection: $context.optionality)
+                Selector.each(selection: $context.kind)
                     .pickerStyle(.segmented)
 
                 Selector.each(selection: $context.format)

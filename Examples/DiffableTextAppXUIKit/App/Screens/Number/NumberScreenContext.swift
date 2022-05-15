@@ -19,9 +19,7 @@ final class NumberScreenContext: ObservableObject {
     // MARK: State
     //=------------------------------------------------------------------------=
     
-    @Observable var decimals = Twins(Decimal(string: "1234567.89")!)
-    @Observable var optionality = OptionalityID.standard
-    
+    @Observable var kind = KindID.standard
     @Observable var format = FormatID.currency
     @Observable var locale = Locale(identifier: "en_US")
     @Observable var currency = "USD"
@@ -30,6 +28,8 @@ final class NumberScreenContext: ObservableObject {
     @Observable var integer  = (1, p)
     @Observable var fraction = (2, 2)
     
+    @Observable var decimals = Twins(Decimal(string: "1234567.89")!)
+        
     let boundsLimits   = -p ... p
     let integerLimits  =  1 ... p
     let fractionLimits =  0 ... p
@@ -44,11 +44,11 @@ final class NumberScreenContext: ObservableObject {
     // MARK: Enumerations
     //*========================================================================*
     
-    enum FormatID: String, CaseIterable {
-        case number, currency, percent
+    enum KindID: String, CaseIterable {
+        case standard, optional
     }
     
-    enum OptionalityID: String, CaseIterable {
-        case standard, optional
+    enum FormatID: String, CaseIterable {
+        case number, currency, percent
     }
 }

@@ -22,7 +22,7 @@ struct Observer<Observable: ObservableObject, Content: View>: View {
     
     let content: (Wrapper) -> Content
     @ObservedObject var observable: Observable
-
+    
     //=------------------------------------------------------------------------=
     // MARK: Initializers
     //=------------------------------------------------------------------------=
