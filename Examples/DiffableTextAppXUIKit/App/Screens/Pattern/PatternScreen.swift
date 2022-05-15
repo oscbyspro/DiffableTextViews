@@ -15,13 +15,12 @@ import DiffableTextViews
 //*============================================================================*
 
 struct PatternScreen: View {
-    typealias Context = PatternScreenContext
     
     //=------------------------------------------------------------------------=
     // MARK: State
     //=------------------------------------------------------------------------=
     
-    @StateObject var context = Context()
+    @StateObject var context = PatternScreenContext()
 
     //=------------------------------------------------------------------------=
     // MARK: Body
@@ -53,7 +52,9 @@ struct PatternScreen: View {
             }
             
             Divider()
-            
+            //=----------------------------------=
+            // Example
+            //=----------------------------------=
             PatternScreenExample(context)
         }
     }

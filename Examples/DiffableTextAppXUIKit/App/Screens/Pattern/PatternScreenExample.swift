@@ -8,23 +8,23 @@
 //=----------------------------------------------------------------------------=
 
 import SwiftUI
-import DiffableTextViews
 
 //*============================================================================*
 // MARK: Declaration
 //*============================================================================*
 
 struct PatternScreenExample: View {
-    typealias Style = PatternTextStyle<String>
     typealias Context = PatternScreenContext
     typealias PatternID = Context.PatternID
     typealias VisibilityID = Context.VisibilityID
-    
+    typealias Style = Context.Style
+
     //=------------------------------------------------------------------------=
     // MARK: State
     //=------------------------------------------------------------------------=
     
     let context: Context
+
     @ObservedObject var pattern: Observable<PatternID>
     @ObservedObject var visibility: Observable<VisibilityID>
     
@@ -43,17 +43,8 @@ struct PatternScreenExample: View {
     //=------------------------------------------------------------------------=
     
     var style: Style {
-        switch pattern.value {
-        case  .card: return Self .card
-        case .phone: return Self.phone
-        }
-    }
-    
-    var visible: Bool {
-        switch visibility.value {
-        case .visible: return  true
-        case  .hidden: return false
-        }
+        let base   = (pattern == .phone) ? context.phone : context.card
+        let hidden = (visibility == .hidden); return base.hidden(hidden)
     }
     
     //=------------------------------------------------------------------------=
@@ -61,21 +52,9 @@ struct PatternScreenExample: View {
     //=------------------------------------------------------------------------=
     
     var body: some View {
-        Observer(context.$value, cache: style.hidden(!visible)) {
+        Observer(context.$value, cache:  style) {
             Example(value: $0.value, style: $1)
         }
         .diffableTextViews_keyboardType(.numberPad)
     }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Constants
-    //=------------------------------------------------------------------------=
-    
-    static let phone = PatternTextStyle<String>
-        .pattern("+## (###) ###-##-##")
-        .placeholder("#") { $0.isASCII && $0.isNumber }
-    
-    static let card = PatternTextStyle<String>
-        .pattern("#### #### #### ####")
-        .placeholder("#") { $0.isASCII && $0.isNumber }
 }

@@ -40,7 +40,7 @@ struct NumberScreenWheels: View {
     //=------------------------------------------------------------------------=
     
     func size(_ proxy: GeometryProxy) -> Size {
-        Size(width: proxy.size.width / CGFloat(format.value == .currency ? 2 : 1))
+        Size(width: proxy.size.width / CGFloat(format == .currency ? 2 : 1))
     }
     
     //=------------------------------------------------------------------------=
@@ -52,7 +52,7 @@ struct NumberScreenWheels: View {
     }
     
     var foundation: some View {
-        Picker("", selection: .constant(false)) { }
+        Picker("", selection: .constant(0)) { }
     }
     
     var pickers: some View {
@@ -66,7 +66,7 @@ struct NumberScreenWheels: View {
                 //=------------------------------=
                 // Currencies
                 //=------------------------------=
-                if format.value == .currency {
+                if format == .currency {
                     Divider()
                     currencies.modifier(size)
                 }

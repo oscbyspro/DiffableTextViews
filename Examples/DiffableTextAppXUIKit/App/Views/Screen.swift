@@ -27,19 +27,9 @@ struct Screen<Content: View>: View {
     
     var body: some View {
         ZStack {
-            background
-            VStack(spacing: 0) {
-                content()
-            }
+            Color(uiColor: .secondarySystemBackground).ignoresSafeArea()
+            VStack(spacing: 0, content: content)
         }
-    }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Body
-    //=------------------------------------------------------------------------=
-    
-    var background: some View {
-        Color(uiColor: .secondarySystemBackground).ignoresSafeArea()
     }
 }
 

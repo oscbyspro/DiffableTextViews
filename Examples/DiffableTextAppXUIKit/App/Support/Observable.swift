@@ -44,4 +44,16 @@ import SwiftUI
     }
     
     var projectedValue: Observable { self }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Utilities
+    //=------------------------------------------------------------------------=
+    
+    static func == (lhs: Observable, rhs: Value) -> Bool where Value: Equatable {
+        lhs.value == rhs
+    }
+    
+    static func == (lhs: Value, rhs: Observable) -> Bool where Value: Equatable {
+        lhs == rhs.value
+    }
 }

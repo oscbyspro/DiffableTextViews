@@ -14,13 +14,12 @@ import SwiftUI
 //*============================================================================*
 
 struct NumberScreen: View {
-    typealias Context = NumberScreenContext
 
     //=------------------------------------------------------------------------=
     // MARK: State
     //=------------------------------------------------------------------------=
     
-    @StateObject private var context = Context()
+    @StateObject private var context = NumberScreenContext()
     
     //=------------------------------------------------------------------------=
     // MARK: Body

@@ -8,13 +8,15 @@
 //=----------------------------------------------------------------------------=
 
 import SwiftUI
+import DiffableTextViews
 
 //*============================================================================*
 // MARK: Declaration
 //*============================================================================*
 
 final class PatternScreenContext: ObservableObject {
-    
+    typealias Style = PatternTextStyle<String>
+
     //=------------------------------------------------------------------------=
     // MARK: State
     //=------------------------------------------------------------------------=
@@ -25,6 +27,12 @@ final class PatternScreenContext: ObservableObject {
     
     let digits:  String = "0123456789"
     let letters: String = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+    
+    let phone = Style.pattern("+## (###) ###-##-##")
+        .placeholder("#") { $0.isASCII && $0.isNumber }
+    
+    let card  = Style.pattern("#### #### #### ####")
+        .placeholder("#") { $0.isASCII && $0.isNumber }
     
     //=------------------------------------------------------------------------=
     // MARK: Utilities
