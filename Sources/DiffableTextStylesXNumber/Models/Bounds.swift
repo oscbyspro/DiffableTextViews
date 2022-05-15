@@ -77,16 +77,23 @@ public struct NumberTextBounds<Value: NumberTextValue>: Equatable {
     // MARK: Utilities
     //=------------------------------------------------------------------------=
     
-    @inlinable public var description: String {
-        "\(min) to \(max)"
-    }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Utilities
-    //=------------------------------------------------------------------------=
-    
     @inlinable static func clamping(_ value:  Value) -> Value {
         Swift.min(Swift.max(Self.min, value), Self.max)
+    }
+}
+
+//=----------------------------------------------------------------------------=
+// MARK: Description
+//=----------------------------------------------------------------------------=
+
+extension NumberTextBounds: CustomStringConvertible {
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Accessors
+    //=------------------------------------------------------------------------=
+    
+    @inlinable public var description: String {
+        "\(min) to \(max)"
     }
 }
 

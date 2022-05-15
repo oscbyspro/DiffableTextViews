@@ -81,13 +81,13 @@ public extension Attribute {
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: Utilities
+// MARK: Description
 //=----------------------------------------------------------------------------=
 
 extension Attribute: CustomStringConvertible {
     
     //=------------------------------------------------------------------------=
-    // MARK: Description
+    // MARK: Accessors
     //=------------------------------------------------------------------------=
     
     @inlinable public var description: String {

@@ -225,13 +225,13 @@ public extension Snapshot {
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: Utilities
+// MARK: Description
 //=----------------------------------------------------------------------------=
 
 extension Snapshot: CustomStringConvertible {
     
     //=------------------------------------------------------------------------=
-    // MARK: Description
+    // MARK: Accessors
     //=------------------------------------------------------------------------=
     
     @inlinable public var description: String {
