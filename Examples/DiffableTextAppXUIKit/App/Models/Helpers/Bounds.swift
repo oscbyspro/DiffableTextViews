@@ -19,29 +19,25 @@ struct Bounds {
     // MARK: State
     //=------------------------------------------------------------------------=
         
-    private var _integers: Interval<Int>
-    private var _values: ClosedRange<Decimal>
+    private var  _unordered: (Int, Int)
+    private(set) var closed: ClosedRange<Decimal>
     
     //=------------------------------------------------------------------------=
     // MARK: Initializers
     //=------------------------------------------------------------------------=
-    
-    init(_ integers: Interval<Int>) {
-        self._integers = integers; let closed = integers.closed; self._values =
-        Decimal(string:  Self.number(nines: closed.lowerBound))! ...
-        Decimal(string:  Self.number(nines: closed.upperBound))!
+
+    init(_ unordered: (Int, Int)) {
+        let closed = ClosedRange(unordered); self._unordered = unordered; self.closed =
+        Decimal(string: Self.number(nines: closed.lowerBound))! ...
+        Decimal(string: Self.number(nines: closed.upperBound))!
     }
     
     //=------------------------------------------------------------------------=
     // MARK: Accessors
     //=------------------------------------------------------------------------=
-            
-    var values: ClosedRange<Decimal> {
-        get { _values   }
-    }
     
-    var integers: Interval<Int> {
-        get { _integers } set { self = Self(newValue) }
+    var unordered: (Int, Int) {
+        get { _unordered } set { self = Self(newValue) }
     }
     
     //=------------------------------------------------------------------------=

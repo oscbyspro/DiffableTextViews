@@ -11,7 +11,7 @@
 // MARK: Precision
 //=----------------------------------------------------------------------------=
 
-internal extension NumberTextStyleProtocol {
+public extension NumberTextStyleProtocol {
     
     //=------------------------------------------------------------------------=
     // MARK: Transformations
@@ -40,8 +40,8 @@ public extension NumberTextStyleProtocol where Format.FormatInput: NumberTextVal
     // MARK: Limits
     //=------------------------------------------------------------------------=
     
-    @inlinable func precision<R>(_ limits: R) -> Self where
-    R: RangeExpression, R.Bound == Int {
+    @inlinable func precision<I>(_ limits: I) -> Self
+    where I: RangeExpression, I.Bound == Int {
         precision(Precision(integer: limits))
     }
 }
@@ -72,13 +72,13 @@ public extension NumberTextStyleProtocol where Format.FormatInput: NumberTextVal
     // MARK: Mixed
     //=------------------------------------------------------------------------=
     
-    @inlinable func precision<R>(integer: R, fraction: Int) -> Self where
-    R: RangeExpression, R.Bound == Int {
+    @inlinable func precision<I>(integer: I, fraction: Int) -> Self
+    where I: RangeExpression, I.Bound == Int {
         precision(Precision(integer: integer, fraction: fraction...fraction))
     }
     
-    @inlinable func precision<R>(integer: Int, fraction: R) -> Self where
-    R: RangeExpression, R.Bound == Int {
+    @inlinable func precision<F>(integer: Int, fraction: F) -> Self
+    where F: RangeExpression, F.Bound == Int {
         precision(Precision(integer: integer...integer, fraction: fraction))
     }
 
@@ -86,18 +86,18 @@ public extension NumberTextStyleProtocol where Format.FormatInput: NumberTextVal
     // MARK: Limits
     //=------------------------------------------------------------------------=
     
-    @inlinable func precision<R>(integer: R) -> Self where
-    R: RangeExpression, R.Bound == Int {
+    @inlinable func precision<I>(integer: I) -> Self
+    where I: RangeExpression, I.Bound == Int {
         precision(Precision(integer: integer))
     }
     
-    @inlinable func precision<R>(fraction: R) -> Self where
-    R: RangeExpression, R.Bound == Int {
+    @inlinable func precision<F>(fraction: F) -> Self
+    where F: RangeExpression, F.Bound == Int {
         precision(Precision(fraction: fraction))
     }
     
-    @inlinable func precision<R0, R1>(integer: R0, fraction: R1) -> Self where
-    R0: RangeExpression, R0.Bound == Int, R1: RangeExpression, R1.Bound == Int {
+    @inlinable func precision<I, F>(integer: I, fraction: F) -> Self
+    where I: RangeExpression, I.Bound == Int, F: RangeExpression, F.Bound == Int {
         precision(Precision(integer: integer, fraction: fraction))
     }
 }

@@ -8,47 +8,44 @@
 //=----------------------------------------------------------------------------=
 
 import SwiftUI
+import IntervalSliderViews
 
 //*============================================================================*
 // MARK: Declaration
 //*============================================================================*
 
-final class NumberScreenContext: ObservableObject {
+struct Interval: View {
     
     //=------------------------------------------------------------------------=
     // MARK: State
     //=------------------------------------------------------------------------=
     
-    @Observable var decimals = Twins(Decimal(string: "1234567.89")!)
-    @Observable var optionality = OptionalityID.standard
-    
-    @Observable var format = FormatID.currency
-    @Observable var locale = Locale(identifier: "en_US")
-    @Observable var currency = "USD"
-    
-    @Observable var bounds   = Bounds((0, p))
-    @Observable var integer  = (1, p)
-    @Observable var fraction = (2, 2)
-    
-    let boundsLimits   = -p ... p
-    let integerLimits  =  1 ... p
-    let fractionLimits =  0 ... p
+    let title: String
+    let limits: ClosedRange<Int>
+    @Binding var unordered: (Int, Int)
     
     //=------------------------------------------------------------------------=
-    // MARK: Accessors
+    // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    static var p: Int { Decimal.precision }
-    
-    //*========================================================================*
-    // MARK: Enumerations
-    //*========================================================================*
-    
-    enum FormatID: String, CaseIterable {
-        case number, currency, percent
+    init(_ title: String, unordered: Binding<(Int, Int)>, in limits: ClosedRange<Int>) {
+        self.title = title; self._unordered = unordered; self.limits = limits
     }
     
-    enum OptionalityID: String, CaseIterable {
-        case standard, optional
+    //=------------------------------------------------------------------------=
+    // MARK: Body
+    //=------------------------------------------------------------------------=
+    
+    var body: some View {
+        VStack(alignment: .leading) {
+            text(ClosedRange(unordered))
+            IntervalSlider($unordered, in: limits)
+            Spacer(minLength: 16).fixedSize()
+        }
+    }
+    
+    func text(_ interval: ClosedRange<Int>) -> Text {
+        Text("\(title): \(interval.lowerBound) to \(interval.upperBound)")
+            .font(.subheadline.weight(.light))
     }
 }

@@ -15,30 +15,50 @@ import Foundation
 //*============================================================================*
 
 public struct NumberTextPrecision<Value: NumberTextValue>: Equatable {
-    @usableFromInline typealias Namespace = _Precision
-    @usableFromInline typealias Limits = ClosedRange<Int>
+    @usableFromInline typealias Name = _Precision
     
     //=------------------------------------------------------------------------=
     // MARK: State
     //=------------------------------------------------------------------------=
     
-    @usableFromInline let integer:  Limits
-    @usableFromInline let fraction: Limits
+    @usableFromInline let integer:  ClosedRange<Int>
+    @usableFromInline let fraction: ClosedRange<Int>
     
     //=------------------------------------------------------------------------=
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable init(unchecked: (integer: Limits, fraction: Limits)) {
+    @inlinable init(unchecked: (integer: ClosedRange<Int>, fraction: ClosedRange<Int>)) {
         (self.integer, self.fraction) = unchecked
     }
+
+    //=------------------------------------------------------------------------=
+    // MARK: Initializers
+    //=------------------------------------------------------------------------=
     
+    @inlinable public init() {
+        self.init(unchecked: (Self.integer, Self.fraction))
+    }
+    
+    @inlinable public init<I>(integer:  I) where I: RangeExpression, I.Bound == Int {
+        self.init(unchecked: (Self.integer(integer), Self.fraction))
+    }
+    
+    @inlinable public init<F>(fraction: F) where F: RangeExpression, F.Bound == Int {
+        self.init(unchecked: (Self.integer, Self.fraction(fraction)))
+    }
+    
+    @inlinable public init<I, F>(integer: I, fraction: F) where
+    I: RangeExpression, I.Bound == Int, F: RangeExpression, F.Bound == Int {
+        self.init(unchecked: (Self.integer(integer), Self.fraction(fraction)))
+    }
+
     //=------------------------------------------------------------------------=
     // MARK: Accessors
     //=------------------------------------------------------------------------=
     
     @inlinable var lower: Count {
-        Count(value: Namespace.lower.value,
+        Count(value: Name.lower.value,
         integer:  integer .lowerBound,
         fraction: fraction.lowerBound)
     }
@@ -50,7 +70,21 @@ public struct NumberTextPrecision<Value: NumberTextValue>: Equatable {
     }
     
     //=------------------------------------------------------------------------=
-    // MARK: Modes
+    // MARK: Accessors
+    //=------------------------------------------------------------------------=
+    
+    @inlinable static var integer: ClosedRange<Int> {
+        ClosedRange(uncheckedBounds: (Name.lower.integer, Value.precision))
+    }
+    
+    @inlinable static var fraction: ClosedRange<Int> {
+        let min = Name.lower.fraction
+        let max = Value.isInteger ? min : Value.precision
+        return ClosedRange(uncheckedBounds: (min, max))
+    }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Utilities
     //=------------------------------------------------------------------------=
     
     @inlinable func inactive() -> NFSC.Precision {
@@ -61,71 +95,28 @@ public struct NumberTextPrecision<Value: NumberTextValue>: Equatable {
 
     @inlinable func active() -> NFSC.Precision {
         .integerAndFractionLength(
-         integerLimits: Namespace.lower.integer  ...  integer.upperBound,
-        fractionLimits: Namespace.lower.fraction ... fraction.upperBound)
+         integerLimits: Name.lower.integer  ...  integer.upperBound,
+        fractionLimits: Name.lower.fraction ... fraction.upperBound)
     }
     
     @inlinable func interactive(_ count: Count) -> NFSC.Precision {
         .integerAndFractionLength(
-         integerLimits: max(Namespace.lower.integer,  count.integer)  ... count.integer,
-        fractionLimits: max(Namespace.lower.fraction, count.fraction) ... count.fraction)
-    }
-}
-
-//=----------------------------------------------------------------------------=
-// MARK: Initializers
-//=----------------------------------------------------------------------------=
-
-internal extension NumberTextPrecision {
-
-    //=------------------------------------------------------------------------=
-    // MARK: Indirect
-    //=------------------------------------------------------------------------=
-    
-    @inlinable init() {
-        self = .unchecked()
-    }
-    
-    @inlinable init<R>(integer: R)  where R: RangeExpression, R.Bound == Int {
-        self = .unchecked(integer:  Self .integer( integer))
-    }
-    
-    @inlinable init<R>(fraction: R) where R: RangeExpression, R.Bound == Int {
-        self = .unchecked(fraction: Self.fraction(fraction))
-    }
-    
-    @inlinable init<R0, R1>(integer: R0, fraction: R1) where
-    R0: RangeExpression, R0.Bound == Int, R1: RangeExpression, R1.Bound == Int {
-        self = .unchecked(integer:  Self .integer( integer),
-                          fraction: Self.fraction(fraction))
+         integerLimits: max(Name.lower.integer,  count.integer)  ... count.integer,
+        fractionLimits: max(Name.lower.fraction, count.fraction) ... count.fraction)
     }
     
     //=------------------------------------------------------------------------=
-    // MARK: Helpers
+    // MARK: Utilities
     //=------------------------------------------------------------------------=
     
-    @inlinable static func unchecked(
-    integer:  ClosedRange<Int> =  integer,
-    fraction: ClosedRange<Int> = fraction) -> Self {
-        Self(unchecked: (integer, fraction))
-    }
-
-    @inlinable static var integer: ClosedRange<Int> {
-        Namespace.lower.integer ... Value.precision
+    @inlinable static func integer<I>(_ limits: I) -> ClosedRange<Int>
+    where I: RangeExpression, I.Bound == Int {
+        Name.clamping(limits, to: integer)
     }
     
-    @inlinable static var fraction: ClosedRange<Int> {
-        Namespace.lower.fraction ... (Value.isInteger ? 0 : Value.precision)
-    }
-    
-    @inlinable static func integer<R>(_ limits: R) -> ClosedRange<Int>
-    where R: RangeExpression, R.Bound == Int {
-        Namespace.interpret(limits, in: integer)
-    }
-    
-    @inlinable static func fraction<R>(_ limits: R) -> ClosedRange<Int>
-    where R: RangeExpression, R.Bound == Int {
-        Namespace.interpret(limits, in: fraction)
+    @inlinable static func fraction<F>(_ limits: F) -> ClosedRange<Int>
+    where F: RangeExpression, F.Bound == Int {
+        Name.clamping(limits, to: fraction)
     }
 }
 
@@ -195,8 +186,8 @@ extension NumberTextPrecision {
     // MARK: Utilities
     //=------------------------------------------------------------------------=
     
-    @inlinable static func interpret<R: RangeExpression>(_ expression: R,
-    in limits: ClosedRange<Int>) -> ClosedRange<Int> where R.Bound == Int {
+    @inlinable static func clamping<R: RangeExpression>(_ expression: R,
+    to limits: ClosedRange<Int>) -> ClosedRange<Int> where R.Bound == Int {
         let range = expression.relative(to: Int.min ..< Int.max)
         let lower = min(max(limits.lowerBound, range.lowerBound),     limits.upperBound)
         let upper = min(max(limits.lowerBound, range.upperBound - 1), limits.upperBound)

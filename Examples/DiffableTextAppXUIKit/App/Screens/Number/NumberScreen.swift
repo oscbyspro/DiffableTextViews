@@ -43,15 +43,15 @@ struct NumberScreen: View {
                 // Sliders
                 //=------------------------------=
                 Observer(context.$bounds, cache: context.boundsLimits) {
-                    Intervalizer("Bounds (9s)", interval: $0.integers, in: $1)
+                    Interval("Bounds (9s)", unordered: $0.value.unordered, in: $1)
                 }
                 
                 Observer(context.$integer, cache: context.integerLimits) {
-                    Intervalizer("Integer digits", interval: $0, in: $1)
+                    Interval("Integer digits", unordered: $0.value, in: $1)
                 }
                 
                 Observer(context.$fraction, cache: context.fractionLimits) {
-                    Intervalizer("Fraction digits",  interval: $0, in: $1)
+                    Interval("Fraction digits", unordered: $0.value, in: $1)
                 }
                 
                 Spacer()

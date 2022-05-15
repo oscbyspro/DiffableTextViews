@@ -8,32 +8,19 @@
 //=----------------------------------------------------------------------------=
 
 //*============================================================================*
-// MARK: Declaration
+// MARK: Extension
 //*============================================================================*
 
-struct Interval<Value: Comparable> {
-    
-    //=------------------------------------------------------------------------=
-    // MARK: State
-    //=------------------------------------------------------------------------=
-    
-    var values: (Value, Value)
+extension ClosedRange where Bound: Comparable {
     
     //=------------------------------------------------------------------------=
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    init(_ values: (Value, Value)) { self.values = values }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Utilities
-    //=------------------------------------------------------------------------=
-    
-    var semiopen: Range<Value> {
-        values.0 <= values.1 ? values.0..<values.1 : values.1..<values.0
-    }
-    
-    var closed: ClosedRange<Value> {
-        values.0 <= values.1 ? values.0...values.1 : values.1...values.0
+    init(_ unordered: (Bound, Bound)) {
+        switch unordered.0 <= unordered.1 {
+        case  true: self.init(uncheckedBounds: (unordered.0, unordered.1))
+        case false: self.init(uncheckedBounds: (unordered.1, unordered.0))
+        }
     }
 }

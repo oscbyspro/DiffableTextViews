@@ -61,8 +61,8 @@ struct PatternScreenExample: View {
     //=------------------------------------------------------------------------=
     
     var body: some View {
-        Observer(context.$value, cache: style.hidden(!visible)) { value, style in
-            Example(value:value, style: style)
+        Observer(context.$value, cache: style.hidden(!visible)) {
+            Example(value: $0.value, style: $1)
         }
         .diffableTextViews_keyboardType(.numberPad)
     }

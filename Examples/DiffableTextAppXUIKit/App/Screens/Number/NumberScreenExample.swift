@@ -62,20 +62,20 @@ struct NumberScreenExample: View {
     
     var decimalStandardNumber: some View {
         NumberScreenExampleX(context,
-        context.$decimals,\.standard,
+        context.$decimals, \.value.standard,
         NumberTextStyle<Decimal>(locale: locale.value))
     }
     
     var decimalStandardCurrency: some View {
         NumberScreenExampleX(context,
-        context.$decimals,\.standard,
+        context.$decimals, \.value.standard,
         NumberTextStyle<Decimal>.Currency(
         code: currency.value, locale: locale.value))
     }
     
     var decimalStandardPercent: some View {
         NumberScreenExampleX(context,
-        context.$decimals,\.standard,
+        context.$decimals, \.value.standard,
         NumberTextStyle<Decimal>.Percent(locale: locale.value))
     }
     
@@ -85,20 +85,20 @@ struct NumberScreenExample: View {
  
     var decimalOptionalNumber: some View {
         NumberScreenExampleX(context,
-        context.$decimals,\.optional,
+        context.$decimals, \.value.optional,
         NumberTextStyle<Decimal?>(locale: locale.value))
     }
     
     var decimalOptionalCurrency: some View {
         NumberScreenExampleX(context,
-        context.$decimals,\.optional,
+        context.$decimals, \.value.optional,
         NumberTextStyle<Decimal?>.Currency(
         code: currency.value, locale: locale.value))
     }
     
     var decimalOptionalPercent: some View {
         NumberScreenExampleX(context,
-        context.$decimals,\.optional,
+        context.$decimals, \.value.optional,
         NumberTextStyle<Decimal?>.Percent(locale: locale.value))
     }
 }
@@ -110,33 +110,35 @@ struct NumberScreenExample: View {
 struct NumberScreenExampleX<Style>: View
 where Style: NumberTextStyleProtocol,
 Style.Format.FormatInput == Decimal {
-    typealias Value  = Style.Value
-    typealias Source = Observable<Twins<Decimal>>
-    typealias Target = Source.Subbinding<Value>
+    typealias Value = Style.Value
+    typealias Input = Style.Format.FormatInput
+    typealias Source = Observable<Twins<Input>>
+    typealias Target = Source.KeyPath<Value>
     typealias Context = NumberScreenContext
     
     //=------------------------------------------------------------------------=
     // MARK: State
     //=------------------------------------------------------------------------=
-
-    let base:   Style
+    
+    let style:  Style
     let source: Source
     let target: Target
 
-    @ObservedObject var bounds: Observable<Bounds>
-    @ObservedObject var integer: Observable<Interval<Int>>
-    @ObservedObject var fraction: Observable<Interval<Int>>
+    @ObservedObject var bounds:   Observable<Bounds>
+    @ObservedObject var integer:  Observable<(Int, Int)>
+    @ObservedObject var fraction: Observable<(Int, Int)>
     
     //=------------------------------------------------------------------------=
     // MARK: Initializers
     //=------------------------------------------------------------------------=
 
-    init(_ context: Context, _ source: Source, _ target: Target, _ base: Style) {
-        self.base = base
+    init(_ context: Context, _ source: Source, _ target: Target, _ style: Style) {
+        self.style  = style
         self.source = source
         self.target = target
-        self.bounds = context.$bounds
-        self.integer = context.$integer
+        
+        self.bounds   = context.$bounds
+        self.integer  = context.$integer
         self.fraction = context.$fraction
     }
     
@@ -144,10 +146,18 @@ Style.Format.FormatInput == Decimal {
     // MARK: Accessors
     //=------------------------------------------------------------------------=
 
-    var style: Style.Constant {
-        base.bounds(bounds.value.values).precision(
-        integer:  integer .value.closed,
-        fraction: fraction.value.closed).constant()
+    var xbounds: NumberTextBounds<Input> {
+        NumberTextBounds(bounds.value.closed)
+    }
+    
+    var xprecision: NumberTextPrecision<Input> {
+        let integer  = ClosedRange(integer .value)
+        let fraction = ClosedRange(fraction.value)
+        return NumberTextPrecision(integer: integer, fraction: fraction)
+    }
+    
+    var xstyle: Style.Constant {
+        style.bounds(xbounds).precision(xprecision).constant()
     }
     
     //=------------------------------------------------------------------------=
@@ -155,8 +165,8 @@ Style.Format.FormatInput == Decimal {
     //=------------------------------------------------------------------------=
 
     var body: some View {
-        Observer(source, cache: style) {
-            Example(value: $0[keyPath: target], style: $1)
+        Observer(source, cache: xstyle) {
+            Example(value: $0[dynamicMember: target], style: $1)
         }
         .diffableTextViews_keyboardType(Value.isInteger ? .numberPad : .decimalPad)
     }

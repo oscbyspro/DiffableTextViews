@@ -11,7 +11,7 @@
 // MARK: Details
 //=----------------------------------------------------------------------------=
 
-internal extension NumberTextStyleProtocol {
+public extension NumberTextStyleProtocol {
     
     //=------------------------------------------------------------------------=
     // MARK: Transformations

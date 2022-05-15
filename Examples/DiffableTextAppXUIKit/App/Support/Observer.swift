@@ -8,28 +8,33 @@
 //=----------------------------------------------------------------------------=
 
 import SwiftUI
-import IntervalSliderViews
 
 //*============================================================================*
 // MARK: Declaration
 //*============================================================================*
 
-struct Intervalizer: View {
+struct Observer<Observable: ObservableObject, Content: View>: View {
+    typealias Wrapper = ObservedObject<Observable>.Wrapper
     
     //=------------------------------------------------------------------------=
     // MARK: State
     //=------------------------------------------------------------------------=
     
-    let title: String
-    let limits: ClosedRange<Int>
-    @Binding var interval: Interval<Int>
-    
+    let content: (Wrapper) -> Content
+    @ObservedObject var observable: Observable
+
     //=------------------------------------------------------------------------=
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    init(_ title: String, interval: Binding<Interval<Int>>, in limits: ClosedRange<Int>) {
-        self.title = title; self._interval = interval; self.limits = limits
+    init(_    observable: Observable,
+    @ViewBuilder content: @escaping (Wrapper) -> Content) {
+        self.observable = observable; self.content = content
+    }
+    
+    init<T>(_ observable: Observable, cache:  T,
+    @ViewBuilder content: @escaping (Wrapper, T) -> Content) {
+        self.observable = observable; self.content = { content($0, cache) }
     }
     
     //=------------------------------------------------------------------------=
@@ -37,15 +42,7 @@ struct Intervalizer: View {
     //=------------------------------------------------------------------------=
     
     var body: some View {
-        VStack(alignment: .leading) {
-            text(interval.closed)
-            IntervalSlider($interval.values, in: limits)
-            Spacer(minLength: 16).fixedSize()
-        }
-    }
-    
-    func text(_ interval: ClosedRange<Int>) -> Text {
-        Text("\(title): \(interval.lowerBound) to \(interval.upperBound)")
-            .font(.subheadline.weight(.light))
+        content($observable)
     }
 }
+

@@ -25,8 +25,28 @@ public struct NumberTextBounds<Value: NumberTextValue>: Equatable {
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable init(unchecked: (lower: Value, upper: Value)) {
+    @inlinable internal init(unchecked: (lower: Value, upper: Value)) {
         self.bounds = ClosedRange(uncheckedBounds: unchecked)
+    }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Initializers
+    //=------------------------------------------------------------------------=
+    
+    @inlinable public init() {
+        self.init(unchecked: (Self.min, Self.max))
+    }
+    
+    @inlinable public init(_ limits: PartialRangeFrom<Value>) {
+        self.init(unchecked: (Self.clamping(limits.lowerBound), Self.max))
+    }
+    
+    @inlinable public init(_ limits: PartialRangeThrough<Value>) {
+        self.init(unchecked: (Self.min, Self.clamping(limits.upperBound)))
+    }
+    
+    @inlinable public init(_ limits: ClosedRange<Value>) {
+        self.init(unchecked: (Self.clamping(limits.lowerBound), Self.clamping(limits.upperBound)))
     }
     
     //=------------------------------------------------------------------------=
@@ -40,6 +60,41 @@ public struct NumberTextBounds<Value: NumberTextValue>: Equatable {
     @inlinable var max: Value {
         bounds.upperBound
     }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Accessors
+    //=------------------------------------------------------------------------=
+    
+    @inlinable static var min: Value {
+        Value.bounds.lowerBound
+    }
+    
+    @inlinable static var max: Value {
+        Value.bounds.upperBound
+    }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Utilities
+    //=------------------------------------------------------------------------=
+    
+    @inlinable public var description: String {
+        "\(min) to \(max)"
+    }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Utilities
+    //=------------------------------------------------------------------------=
+    
+    @inlinable static func clamping(_ value:  Value) -> Value {
+        Swift.min(Swift.max(Self.min, value), Self.max)
+    }
+}
+
+//=----------------------------------------------------------------------------=
+// MARK: Location
+//=----------------------------------------------------------------------------=
+
+extension NumberTextBounds {
     
     //=------------------------------------------------------------------------=
     // MARK: Utilities
@@ -82,63 +137,6 @@ public struct NumberTextBounds<Value: NumberTextValue>: Equatable {
         //=--------------------------------------------------------------------=
         
         @inlinable init(edge: Bool) { self = edge ? .edge : .body }
-    }
-}
-
-//=----------------------------------------------------------------------------=
-// MARK: Initializers
-//=----------------------------------------------------------------------------=
-
-extension NumberTextBounds {
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Indirect
-    //=------------------------------------------------------------------------=
-    
-    @inlinable init() {
-        self = .unchecked()
-    }
-    
-    @inlinable init(_ limits: PartialRangeFrom<Value>) {
-        self = .unchecked(min: Self.interpret(limits.lowerBound))
-    }
-    
-    @inlinable init(_ limits: PartialRangeThrough<Value>) {
-        self = .unchecked(max: Self.interpret(limits.upperBound))
-    }
-    
-    @inlinable init(_ limits: ClosedRange<Value> = Value.bounds) {
-        self = .unchecked(min: Self.interpret(limits.lowerBound),
-                          max: Self.interpret(limits.upperBound))
-    }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Helpers
-    //=------------------------------------------------------------------------=
-    
-    @inlinable static func unchecked(
-    min: Value = Value.bounds.lowerBound,
-    max: Value = Value.bounds.upperBound) -> Self {
-        Self(unchecked: (min, max))
-    }
-    
-    @inlinable static func interpret(_ value: Value) -> Value {
-        Swift.min(Swift.max(Value.bounds.lowerBound, value), Value.bounds.upperBound)
-    }
-}
-
-//=----------------------------------------------------------------------------=
-// MARK: Utilities
-//=----------------------------------------------------------------------------=
-
-extension NumberTextBounds: CustomStringConvertible {
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Description
-    //=------------------------------------------------------------------------=
-    
-    @inlinable public var description: String {
-        "\(min) to \(max)"
     }
 }
 
