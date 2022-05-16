@@ -78,12 +78,12 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
     @inlinable public func updateUIView(_ view:  UITextField, context: Self.Context) {
         context.coordinator.update(self, context.environment)
     }
-        
+    
     //*========================================================================*
     // MARK: Declaration
     //*========================================================================*
     
-    public final class Coordinator: NSObject, UITextFieldDelegate {
+    @MainActor public final class Coordinator: NSObject, UITextFieldDelegate {
         @usableFromInline typealias Position = Unicode.UTF16.Position
         @usableFromInline typealias Status = DiffableTextKit.Status<Style>
         @usableFromInline typealias Context = DiffableTextKit.Context<Style>
@@ -100,7 +100,7 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
         
         @usableFromInline var upstream: Upstream!
         @usableFromInline let downstream = Downstream()
-
+        
         //=--------------------------------------------------------------------=
         // MARK: View Life Cycle
         //=--------------------------------------------------------------------=
@@ -114,7 +114,7 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
             //=----------------------------------=
             // Downstream
             //=----------------------------------=
-            self.downstream.view.delegate = self
+            self.downstream.delegate = self
             self.downstream.setTextFeldStyle(environment)
             //=----------------------------------=
             // Synchronize
@@ -159,21 +159,21 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
         shouldChangeCharactersIn nsrange: NSRange,
         replacementString characters: String) -> Bool {
             //=----------------------------------=
-            // Merge
+            // Lock
+            //=----------------------------------=
+            if lock.isLocked { return false }
+            //=----------------------------------=
+            // Pull
             //=----------------------------------=
             attempt: do {
-                var context = context!
-                let update = try context.merge(characters, in:
+                let update = try self.context.merge(characters, in:
                 Position(nsrange.lowerBound) ..<
                 Position(nsrange.upperBound))
                 //=------------------------------=
                 // Push
                 //=------------------------------=
-                Task { @MainActor [context] in
-                    // async to process special commands first
-                    // as an example see: (option + backspace)
-                    self.context = context;  self.push(update)
-                }
+                self.lock.task{ }
+                self.push(update)
             //=----------------------------------=
             // Cancellation
             //=----------------------------------=
@@ -188,19 +188,28 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
         
         @inlinable @inline(never)
         public func textFieldDidChangeSelection(_ textField: UITextField) {
-            guard !lock.isLocked else { return }
             //=----------------------------------=
-            // Discard Marked Text
+            // Reset On Marked Text
             //=----------------------------------=
-            guard textField.markedTextRange == nil else {
-                Info.print(cancellation: ["marked text is disallowed"])
+            if let S0 = downstream.marked {
+                Info.print(cancellation:[
+                "marked text", .mark(S0),
+                "sessions are disabled"])
+                // reset previous text and selection
                 return self.push([.text, .selection])
+            //=----------------------------------=
+            // Lock
+            //=----------------------------------=
+            } else if lock.isLocked {
+                // reset previous selection
+                return self.push(.selection)
             }
             //=----------------------------------=
-            // Autocorrect
+            // Pull
             //=----------------------------------=
             let update = self.context.merge(
-            selection: downstream.selection, momentum: downstream.momentum)
+            selection: downstream.selection,
+            momentums: downstream.momentums)
             //=----------------------------------=
             // Push
             //=----------------------------------=
@@ -248,27 +257,27 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
         
         @inlinable func push(_ update: Update) {
             //=----------------------------------=
-            // Upstream, Downstream
+            // Disable Delegate Notifications
             //=----------------------------------=
-            lock.perform {
-                //=------------------------------=
-                // Text
-                //=------------------------------=
-                if update.contains(.text) {
-                    self.downstream.text = context.text
-                }
-                //=------------------------------=
-                // Selection
-                //=------------------------------=
-                if update.contains(.selection) {
-                    self.downstream.selection = context.selection()
-                }
-                //=------------------------------=
-                // Value
-                //=------------------------------=
-                if update.contains(.value) {
-                    self.upstream.value.wrappedValue = context.value
-                }
+            do    { self.downstream.delegate = nil  }
+            defer { self.downstream.delegate = self }
+            //=----------------------------------=
+            // Text
+            //=----------------------------------=
+            if update.contains(.text) {
+                self.downstream.text = context.text
+            }
+            //=----------------------------------=
+            // Selection
+            //=----------------------------------=
+            if update.contains(.selection) {
+                self.downstream.selection = context.selection()
+            }
+            //=----------------------------------=
+            // Value
+            //=----------------------------------=
+            if update.contains(.value) {
+                self.upstream.value.wrappedValue = context.value
             }
         }
     }

@@ -40,6 +40,11 @@ import UIKit
         set { view.selectedTextRange = uirange(newValue) }
     }
     
+    @inlinable var delegate: UITextFieldDelegate? {
+        get { view.delegate }
+        set { view.delegate = newValue }
+    }
+    
     //=------------------------------------------------------------------------=
     // MARK: Accessors
     //=------------------------------------------------------------------------=
@@ -48,12 +53,24 @@ import UIKit
         Focus(view.isEditing)
     }
 
-    @inlinable var momentum: Bool {
-        view.intent.momentum
+    @inlinable var momentums: Bool {
+        view.intent.latest != nil
     }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Accessors
+    //=------------------------------------------------------------------------=
     
     @inlinable var size: Position {
         position(view.endOfDocument)
+    }
+    
+    @inlinable var selected: String {
+        view.text(in: view.selectedTextRange!)!
+    }
+    
+    @inlinable var marked: String? {
+        view.markedTextRange.flatMap(view.text)
     }
 }
 
@@ -62,7 +79,7 @@ import UIKit
 //=----------------------------------------------------------------------------=
 
 extension Downstream {
-
+    
     //=------------------------------------------------------------------------=
     // MARK: Conversions
     //=------------------------------------------------------------------------=

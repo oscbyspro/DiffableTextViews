@@ -32,26 +32,16 @@ public struct Update: OptionSet {
     //=------------------------------------------------------------------------=
     
     @inlinable @inline(__always)
-    public init(rawValue: UInt8 = 0) {
+    public init(rawValue: UInt8) {
         self.rawValue = rawValue
     }
     
     //=------------------------------------------------------------------------=
-    // MARK: Initializers
+    // MARK: Transformations
     //=------------------------------------------------------------------------=
     
     @inlinable @inline(__always)
-    public static func value(_ condition: Bool) -> Self {
-        !condition ? .init() : .value
-    }
-    
-    @inlinable @inline(__always)
-    public static func text(_ condition: Bool) -> Self {
-        !condition ? .init() : .text
-    }
-    
-    @inlinable @inline(__always)
-    public static func selection(_ condition: Bool) -> Self {
-        !condition ? .init() : .selection
+    public func callAsFunction(_ use: Bool) -> Self {
+        use ? self : []
     }
 }

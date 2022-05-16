@@ -48,7 +48,7 @@ import DiffableTextKit
         var proposal = proposal
         translateSingleCharacterInput(&proposal)
         let sign = consumeSingleSignInput(&proposal)
-        let parseable = proposal.result()
+        let parseable = proposal.merged()
         //=--------------------------------------=
         // None
         //=--------------------------------------=

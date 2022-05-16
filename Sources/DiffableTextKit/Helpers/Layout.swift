@@ -38,8 +38,8 @@
     //=------------------------------------------------------------------------=
     
     @inlinable func selection<T>(as type: Position<T>.Type =
-    Position<T>.self) -> Range<T.Position> where T: Offset {
-        positions(at: selection).bounds
+    Position<T>.self) -> Carets<T.Position> where T: Offset {
+        positions(at: selection)
     }
     
     //=------------------------------------------------------------------------=
@@ -82,30 +82,30 @@ extension Layout {
     // MARK: Selection
     //=------------------------------------------------------------------------=
 
-    @inlinable mutating func merge<T>(selection: Carets<T.Position>, momentum: Bool) where T: Offset {
+    @inlinable mutating func merge<T>(selection: Carets<T.Position>, momentums: Bool) where T: Offset {
         //=--------------------------------------=
         // Values
         //=--------------------------------------=
-        let selection = indices(at: selection) // translate positions to indices
-        let momentum = momentum ? Directions(from: self.selection, to: selection) : .none
+        let selection = indices(at: selection)
+        let momentums = momentums ? Momentums(from: self.selection, to: selection) : .none
         //=--------------------------------------=
         // Update
         //=--------------------------------------=
-        self.merge(selection: selection, momentum: momentum)
+        self.merge(selection: selection, momentums: momentums)
     }
     
-    @inlinable mutating func merge(selection: Carets<Index>, momentum: Directions = .none) {
+    @inlinable mutating func merge(selection: Carets<Index>, momentums: Momentums = .none) {
         switch selection {
         //=--------------------------------------=
-        // Accept Max Value
+        // Accept Max Selection
         //=--------------------------------------=
         case .unchecked((snapshot.startIndex, snapshot.endIndex)): self.selection = selection
         //=--------------------------------------=
         // Update
         //=--------------------------------------=
         default: self.selection = selection.map(
-        lower: { snapshot.caret(from: $0, towards: momentum.lowerBound, preferring:  .forwards) },
-        upper: { snapshot.caret(from: $0, towards: momentum.upperBound, preferring: .backwards) })
+        lower: { snapshot.caret(from: $0, towards: momentums.lower, preferring:  .forwards) },
+        upper: { snapshot.caret(from: $0, towards: momentums.upper, preferring: .backwards) })
         }
     }
 }

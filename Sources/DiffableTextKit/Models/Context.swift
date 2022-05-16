@@ -155,7 +155,7 @@ public extension Context {
     
     @inlinable func selection<T>(as type: Position<T>.Type =
     Position<T>.self) -> Range<T.Position> where T: Offset {
-        layout.selection()
+        layout.selection().range
     }
 }
 
@@ -220,7 +220,7 @@ public extension Context {
         //=--------------------------------------=
         let carets = layout.indices(at: Carets(range))
         let commit = try style.merge(Proposal(
-        snapshot, with: characters, in: carets.bounds))
+        snapshot, with: characters, in: carets.range))
         //=--------------------------------------=
         // Update
         //=--------------------------------------=
@@ -240,8 +240,8 @@ public extension Context {
         self.write({ $0.layout.selection = Carets(selection) })
     }
     
-    @inlinable mutating func merge<T>(selection: Range<T.Position>, momentum: Bool) -> Update where T: Offset {
-        self.write({ $0.layout .merge(selection: Carets(selection), momentum: momentum) })
+    @inlinable mutating func merge<T>(selection: Range<T.Position>, momentums: Bool) -> Update where T: Offset {
+        self.write({ $0.layout .merge(selection: Carets(selection), momentums: momentums) })
         return Update.selection(selection != self.selection())
     }
 }

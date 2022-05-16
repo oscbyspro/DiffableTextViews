@@ -294,7 +294,7 @@ extension Snapshot {
     // MARK: Preference
     //=------------------------------------------------------------------------=
     
-    /// Returns the preferred caret, or endIndex if no preferred caret was found.
+    /// Returns the preferred caret if it exists, returns endIndex otherwise.
     @inlinable func caret(from index: Index, towards direction: Direction?,
     preferring preference: Direction) -> Index {
         //=--------------------------------------=

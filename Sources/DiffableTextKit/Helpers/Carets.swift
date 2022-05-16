@@ -11,9 +11,9 @@
 // MARK: Declaration
 //*============================================================================*
 
-/// Up to two carets represented by a lower and upper bound.
+/// Up to two carets represented by the bounds in a range.
 ///
-/// When its bounds are equal, it represents a single upper caret.
+/// An instance with equal bounds represents a single upper caret.
 /// This distinction matters for transformations such as map(lower:upper:).
 ///
 @usableFromInline struct Carets<Bound: Comparable>: Equatable {
@@ -22,14 +22,14 @@
     // MARK: State
     //=------------------------------------------------------------------------=
     
-    @usableFromInline let bounds: Range<Bound>
+    @usableFromInline let range: Range<Bound>
     
     //=------------------------------------------------------------------------=
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable init(_ bounds: Range<Bound>) {
-        self.bounds = bounds
+    @inlinable init(_ range: Range<Bound>) {
+        self.range  = range
     }
     
     @inlinable init(_ bound: Bound) {
@@ -45,11 +45,11 @@
     //=------------------------------------------------------------------------=
     
     @inlinable var lowerBound: Bound {
-        bounds.lowerBound
+        range.lowerBound
     }
     
     @inlinable var upperBound: Bound {
-        bounds.upperBound
+        range.upperBound
     }
     
     //=------------------------------------------------------------------------=
@@ -67,13 +67,13 @@
         //=--------------------------------------=
         // Single
         //=--------------------------------------=
-        let upperBound = upper(bounds.upperBound)
+        let upperBound = upper(range.upperBound)
         var lowerBound = upperBound
         //=--------------------------------------=
         // Double
         //=--------------------------------------=
-        if !bounds.isEmpty {
-            lowerBound = lower(bounds.lowerBound)
+        if !range.isEmpty {
+            lowerBound = lower(range.lowerBound)
             lowerBound = Swift.min(lowerBound, upperBound)
         }
         //=--------------------------------------=

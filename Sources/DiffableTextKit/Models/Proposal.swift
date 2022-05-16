@@ -37,7 +37,7 @@ public struct Proposal {
     //=------------------------------------------------------------------------=
     
     /// Returns a new snapshot with the proposed change applied to it.
-    @inlinable public func result() -> Snapshot {
+    @inlinable public func merged() -> Snapshot {
         var result = snapshot
         result.replaceSubrange(range, with: replacement)
         return result

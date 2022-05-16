@@ -11,14 +11,13 @@
 // MARK: Declaration
 //*============================================================================*
 
-/// A lock that allows actions to be performed inside of a locked state.
-public final class Lock {
+@MainActor public final class Lock {
     
     //=------------------------------------------------------------------------=
     // MARK: State
     //=------------------------------------------------------------------------=
     
-    @usableFromInline private(set) var _isLocked = false
+    @usableFromInline private(set) var count: UInt = 0
     
     //=------------------------------------------------------------------------=
     // MARK: Initializers
@@ -30,20 +29,31 @@ public final class Lock {
     // MARK: Accessors
     //=------------------------------------------------------------------------=
     
-    @inlinable public var isLocked: Bool {
-        self._isLocked
+    @inlinable @inline(__always) public var isLocked: Bool {
+        self.count != 0
+    }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Transformations
+    //=------------------------------------------------------------------------=
+    
+    @inlinable @inline(__always) func lock() {
+        self.count += 1
+    }
+    
+    @inlinable @inline(__always) func open() {
+        self.count -= 1
     }
     
     //=------------------------------------------------------------------------=
     // MARK: Utilities
     //=------------------------------------------------------------------------=
     
-    @inlinable public func perform(action: () -> Void) {
-        let state = _isLocked
-        self._isLocked = true
-
-        action()
-
-        self._isLocked = state
+    @inlinable public func perform(action: () throws -> Void) rethrows {
+        self.lock(); try action(); self.open()
+    }
+    
+    @inlinable public func task(action: @escaping @Sendable () async throws -> Void) {
+        self.lock(); Task { try? await action(); self.open() }
     }
 }

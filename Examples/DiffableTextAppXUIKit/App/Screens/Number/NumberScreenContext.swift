@@ -29,7 +29,7 @@ final class NumberScreenContext: ObservableObject {
     @Observable var fraction = (2, 2)
     
     @Observable var decimals = Twins(Decimal(string: "1234567.89")!)
-        
+    
     let boundsLimits   = -p ... p
     let integerLimits  =  1 ... p
     let fractionLimits =  0 ... p
