@@ -205,7 +205,7 @@ public extension Context {
         //=--------------------------------------=
         // Return
         //=--------------------------------------=
-        return [.text, .selection(focus == true), .value(status.value != value)]
+        return [.text, .selection(focus == true), .value(value != status.value)]
     }
     
     //=------------------------------------------------------------------------=
@@ -214,7 +214,7 @@ public extension Context {
     
     @inlinable mutating func merge<T>(_ characters: String,
     in range: Range<T.Position>) throws -> Update where T: Offset {
-        let previous = self
+        let previous = value
         //=--------------------------------------=
         // Values
         //=--------------------------------------=
@@ -229,7 +229,7 @@ public extension Context {
         //=--------------------------------------=
         // Return
         //=--------------------------------------=
-        return [.text, .selection, .value(previous.value != value)]
+        return [.text, .selection, .value(value != previous)]
     }
     
     //=------------------------------------------------------------------------=
