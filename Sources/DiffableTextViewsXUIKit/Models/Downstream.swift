@@ -29,15 +29,23 @@ import UIKit
     //=------------------------------------------------------------------------=
     // MARK: Accessors
     //=------------------------------------------------------------------------=
-    
+            
     @inlinable var text: String {
         get { view.text! }
         set { view.text  = newValue }
     }
     
     @inlinable var selection: Range<Position> {
-        get { range(view.selectedTextRange!) }
-        set { view.selectedTextRange = uirange(newValue) }
+        get { view.range(view.selectedTextRange!) }
+        set { view.selectedTextRange = view.uirange(newValue) }
+    }
+    
+    @inlinable var focus: Focus {
+        Focus(view.isEditing)
+    }
+
+    @inlinable var momentums: Bool {
+        view.intent.latest != nil
     }
     
     @inlinable var delegate: UITextFieldDelegate? {
@@ -49,20 +57,8 @@ import UIKit
     // MARK: Accessors
     //=------------------------------------------------------------------------=
     
-    @inlinable var focus: Focus {
-        Focus(view.isEditing)
-    }
-
-    @inlinable var momentums: Bool {
-        view.intent.latest != nil
-    }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Accessors
-    //=------------------------------------------------------------------------=
-    
     @inlinable var size: Position {
-        position(view.endOfDocument)
+        view.position(view.endOfDocument)
     }
     
     @inlinable var selected: String {
@@ -71,33 +67,6 @@ import UIKit
     
     @inlinable var marked: String? {
         view.markedTextRange.flatMap(view.text)
-    }
-}
-
-//=----------------------------------------------------------------------------=
-// MARK: Utilities
-//=----------------------------------------------------------------------------=
-
-extension Downstream {
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Conversions
-    //=------------------------------------------------------------------------=
-
-    @inlinable func position(_ uiposition: UITextPosition) -> Position {
-        Position(view.offset(from: view.beginningOfDocument, to: uiposition))
-    }
-    
-    @inlinable func range(_ uirange: UITextRange) -> Range<Position> {
-        position(uirange.start) ..< position(uirange.end)
-    }
-
-    @inlinable func uiposition(_ position: Position) -> UITextPosition {
-        view.position(from: view.beginningOfDocument, offset: position.offset)!
-    }
-    
-    @inlinable func uirange(_ range: Range<Position>) -> UITextRange {
-        view.textRange(from: uiposition(range.lowerBound), to: uiposition(range.upperBound))!
     }
 }
 
@@ -115,7 +84,7 @@ extension Downstream {
     func setPlaceholder(_ placeholder: String) {
         self.view.placeholder = placeholder
     }
-
+    
     //=------------------------------------------------------------------------=
     // MARK: Environment
     //=------------------------------------------------------------------------=

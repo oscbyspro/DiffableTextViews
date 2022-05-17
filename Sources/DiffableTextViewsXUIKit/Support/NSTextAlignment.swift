@@ -22,11 +22,11 @@ extension NSTextAlignment {
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable init(_ alignment: TextAlignment, relativeTo direction: LayoutDirection) {
+    @inlinable init(_ alignment: TextAlignment, relativeTo layout: LayoutDirection) {
         switch alignment {
-        case   .leading: self = .adaptive(direction, leftToRight:  .left, rightToLeft: .right)
-        case  .trailing: self = .adaptive(direction, leftToRight: .right, rightToLeft:  .left)
-        case    .center: self = .center
+        case  .leading: self.init(layout, leftToRight:  .left, rightToLeft: .right)
+        case .trailing: self.init(layout, leftToRight: .right, rightToLeft:  .left)
+        case   .center: self = .center
         }
     }
     
@@ -34,13 +34,15 @@ extension NSTextAlignment {
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable static func adaptive(_ direction: LayoutDirection,
-    leftToRight: @autoclosure () -> Self, rightToLeft: @autoclosure () -> Self) -> Self {
-        switch direction {
-        case .rightToLeft: return rightToLeft()
-        case .leftToRight: return leftToRight()
-        @unknown  default: return leftToRight()
+    @inlinable init(_ layout: LayoutDirection,
+    leftToRight: @autoclosure () -> Self,
+    rightToLeft: @autoclosure () -> Self) {
+        switch layout {
+        case .rightToLeft: self = rightToLeft()
+        case .leftToRight: self = leftToRight()
+        @unknown  default: self = leftToRight()
         }
     }
+    
 }
 #endif

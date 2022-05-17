@@ -87,14 +87,14 @@ extension Layout {
         // Values
         //=--------------------------------------=
         let selection = indices(at: selection)
-        let momentums = momentums ? Momentums(from: self.selection, to: selection) : .none
+        let momentums = momentums ? Directions(from: self.selection, to: selection) : .none
         //=--------------------------------------=
         // Update
         //=--------------------------------------=
         self.merge(selection: selection, momentums: momentums)
     }
     
-    @inlinable mutating func merge(selection: Carets<Index>, momentums: Momentums = .none) {
+    @inlinable mutating func merge(selection: Carets<Index>, momentums: Directions = .none) {
         switch selection {
         //=--------------------------------------=
         // Accept Max Selection

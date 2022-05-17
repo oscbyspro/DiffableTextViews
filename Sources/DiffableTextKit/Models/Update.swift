@@ -41,7 +41,7 @@ public struct Update: OptionSet {
     //=------------------------------------------------------------------------=
     
     @inlinable @inline(__always)
-    public func callAsFunction(_ use: Bool) -> Self {
-        use ? self : []
+    public func callAsFunction(_ mask: Bool) -> Self {
+        mask ? self : []
     }
 }

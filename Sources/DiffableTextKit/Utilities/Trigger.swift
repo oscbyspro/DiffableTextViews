@@ -11,49 +11,50 @@
 // MARK: Declaration
 //*============================================================================*
 
-@MainActor public final class Lock {
+public struct Trigger {
     
     //=------------------------------------------------------------------------=
     // MARK: State
     //=------------------------------------------------------------------------=
     
-    @usableFromInline private(set) var count: UInt = 0
+    @usableFromInline var action: () -> Void
     
     //=------------------------------------------------------------------------=
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable public init() { }
-    
+    @inlinable public init(_ action: @escaping () -> Void) {
+        self.action = action
+    }
+
     //=------------------------------------------------------------------------=
-    // MARK: Accessors
+    // MARK: Utilities
     //=------------------------------------------------------------------------=
     
-    @inlinable @inline(__always) public var isLocked: Bool {
-        self.count != 0
+    @inlinable public func callAsFunction() {
+        self.action()
     }
     
     //=------------------------------------------------------------------------=
     // MARK: Transformations
     //=------------------------------------------------------------------------=
     
-    @inlinable @inline(__always) func lock() {
-        self.count += 1
+    @inlinable public static func += (lhs: inout Self, rhs: Self) {
+        lhs.action = { [lhs] in lhs(); rhs() }
     }
-    
-    @inlinable @inline(__always) func open() {
-        self.count -= 1
-    }
+}
+
+//*============================================================================*
+// MARK: Optional
+//*============================================================================*
+
+extension Optional where Wrapped == Trigger {
     
     //=------------------------------------------------------------------------=
-    // MARK: Utilities
+    // MARK: Transformations
     //=------------------------------------------------------------------------=
-    
-    @inlinable public func perform(action: () throws -> Void) rethrows {
-        self.lock(); try action(); self.open()
-    }
-    
-    @inlinable public func task(action: @escaping @Sendable () async throws -> Void) {
-        self.lock(); Task { try? await action(); self.open() }
+
+    @inlinable public static func &+= (lhs: inout Self, rhs: Self) {
+        guard let rhs = rhs else { return lhs = nil }; (lhs? += rhs) ?? (lhs = rhs)
     }
 }

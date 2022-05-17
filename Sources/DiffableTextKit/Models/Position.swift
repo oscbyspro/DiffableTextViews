@@ -43,3 +43,22 @@ public struct Position<Offset: DiffableTextKit.Offset>: Comparable {
         lhs.offset <  rhs.offset
     }
 }
+
+//*============================================================================*
+// MARK: Range
+//*============================================================================*
+
+public extension Range {
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Initializers
+    //=------------------------------------------------------------------------=
+    
+    @inlinable init<T>(nsrange: NSRange,
+    as position: Position<T>.Type = Position<T>.self)
+    where T: Offset, Bound == Position<T> {
+        self.init(uncheckedBounds: (
+        Position(nsrange.lowerBound),
+        Position(nsrange.upperBound)))
+    }
+}

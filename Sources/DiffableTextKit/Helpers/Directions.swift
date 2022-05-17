@@ -11,7 +11,7 @@
 // MARK: Declaration
 //*============================================================================*
 
-@usableFromInline struct Momentums {
+@usableFromInline struct Directions {
     
     //=------------------------------------------------------------------------=
     // MARK: Instances
