@@ -195,7 +195,7 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
             //=----------------------------------=
             if let _ = textField.markedTextRange {
                 //=------------------------------=
-                // Reset
+                // Push
                 //=------------------------------=
                 return self.push([.text, .selection])
             //=----------------------------------=
@@ -222,7 +222,7 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
         //=--------------------------------------------------------------------=
         // MARK: Events
         //=--------------------------------------------------------------------=
-
+        
         @inlinable public func textFieldShouldReturn(_ textField: UITextField) -> Bool {
             textField.resignFirstResponder(); actions.onSubmit?(); return true
         }
@@ -259,6 +259,9 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
         }
         
         @inlinable func push(_ update: Update) {
+            //=----------------------------------=
+            // Lock
+            //=----------------------------------=
             self.lock.perform {
                 //=------------------------------=
                 // Text

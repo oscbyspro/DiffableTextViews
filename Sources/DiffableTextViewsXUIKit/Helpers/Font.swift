@@ -29,18 +29,18 @@ public struct DiffableTextFont {
     //=------------------------------------------------------------------------=
 
     #if !os(tvOS)
-    public static let largeTitle:  Self = .preferred(.largeTitle)
+    public static let largeTitle  = Self.preferred(.largeTitle)
     #endif
-    public static let title1:      Self = .preferred(.title1)
-    public static let title2:      Self = .preferred(.title2)
-    public static let title3:      Self = .preferred(.title3)
-    public static let headline:    Self = .preferred(.headline)
-    public static let subheadline: Self = .preferred(.subheadline)
-    public static let body:        Self = .preferred(.body)
-    public static let callout:     Self = .preferred(.callout)
-    public static let footnote:    Self = .preferred(.footnote)
-    public static let caption1:    Self = .preferred(.caption1)
-    public static let caption2:    Self = .preferred(.caption2)
+    public static let title1      = Self.preferred(.title1)
+    public static let title2      = Self.preferred(.title2)
+    public static let title3      = Self.preferred(.title3)
+    public static let headline    = Self.preferred(.headline)
+    public static let subheadline = Self.preferred(.subheadline)
+    public static let body        = Self.preferred(.body)
+    public static let callout     = Self.preferred(.callout)
+    public static let footnote    = Self.preferred(.footnote)
+    public static let caption1    = Self.preferred(.caption1)
+    public static let caption2    = Self.preferred(.caption2)
     
     //=------------------------------------------------------------------------=
     // MARK: State

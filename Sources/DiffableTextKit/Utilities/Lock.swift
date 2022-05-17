@@ -11,7 +11,7 @@
 // MARK: Declaration
 //*============================================================================*
 
-@MainActor public final class Lock {
+public final class Lock {
     
     //=------------------------------------------------------------------------=
     // MARK: State
@@ -49,8 +49,8 @@
     // MARK: Utilities
     //=------------------------------------------------------------------------=
     
-    @inlinable public func perform(action: () throws -> Void) rethrows {
-        self.lock(); try action(); self.open()
+    @inlinable public func perform(action: () throws -> Void) {
+        self.lock(); try? action(); self.open()
     }
     
     @inlinable public func task(operation: @escaping @Sendable () async throws -> Void) {

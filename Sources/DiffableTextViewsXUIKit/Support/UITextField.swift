@@ -18,11 +18,11 @@ import UIKit
 
 extension UITextField {
     @usableFromInline typealias Position = DiffableTextKit.Position<UTF16>
-
+    
     //=------------------------------------------------------------------------=
-    // MARK: Conversions
+    // MARK: Utilities
     //=------------------------------------------------------------------------=
-
+    
     @inlinable func position(_ uiposition: UITextPosition) -> Position {
         Position(offset(from: self.beginningOfDocument, to: uiposition))
     }
@@ -37,7 +37,7 @@ extension UITextField {
     
     @inlinable func uirange(_ range: Range<Position>) -> UITextRange {
         self.textRange(from: uiposition(range.lowerBound), to: uiposition(range.upperBound))!
-    }    
+    }
 }
 
 #endif
