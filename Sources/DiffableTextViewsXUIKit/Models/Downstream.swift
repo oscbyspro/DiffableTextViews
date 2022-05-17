@@ -60,14 +60,6 @@ import UIKit
     @inlinable var size: Position {
         view.position(view.endOfDocument)
     }
-    
-    @inlinable var selected: String {
-        view.text(in: view.selectedTextRange!)!
-    }
-    
-    @inlinable var marked: String? {
-        view.markedTextRange.flatMap(view.text)
-    }
 }
 
 //=----------------------------------------------------------------------------=

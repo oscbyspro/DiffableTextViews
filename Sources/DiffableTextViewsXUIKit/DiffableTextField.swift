@@ -193,14 +193,7 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
             //=----------------------------------=
             // Marked
             //=----------------------------------=
-            if let S0 = textField.markedTextRange {
-                //=------------------------------=
-                // Print
-                //=------------------------------=
-                Info.print(cancellation:[
-                "marked text",
-                .mark(textField.text(in: S0)!),
-                "sessions have been disabled"])
+            if let _ = textField.markedTextRange {
                 //=------------------------------=
                 // Reset
                 //=------------------------------=
