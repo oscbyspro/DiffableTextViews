@@ -166,8 +166,9 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
             // Pull
             //=----------------------------------=
             attempt: do {
-                let update = try self.context.merge(characters,
-                in: Range(nsrange: nsrange, as: Position.self))
+                let update = try self.context.merge(characters, in:
+                Position(nsrange.lowerBound) ..<
+                Position(nsrange.upperBound))
                 //=------------------------------=
                 // Push
                 //=------------------------------=

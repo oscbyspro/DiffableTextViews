@@ -26,10 +26,8 @@ public struct Proposal {
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable init(_ snapshot: Snapshot, with characters: String, in range: Range<Index>) {
-        self.snapshot = snapshot
-        self.replacement = Snapshot(characters, as: .content)
-        self.range = range
+    @inlinable init(update snapshot: Snapshot, with characters: String, in range: Range<Index>) {
+        self.snapshot = snapshot; self.replacement = Snapshot(characters); self.range = range
     }
     
     //=------------------------------------------------------------------------=
@@ -38,8 +36,6 @@ public struct Proposal {
     
     /// Returns a new snapshot with the proposed change applied to it.
     @inlinable public func merged() -> Snapshot {
-        var result = snapshot
-        result.replaceSubrange(range, with: replacement)
-        return result
+        var result = snapshot; result.replaceSubrange(range, with: replacement); return result
     }
 }

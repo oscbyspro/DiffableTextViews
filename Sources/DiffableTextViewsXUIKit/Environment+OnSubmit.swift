@@ -32,7 +32,7 @@ extension EnvironmentValues {
 
     @inlinable var diffableTextViews_onSubmit: Trigger? {
         get { self[DiffableTextViews_OnSubmit.self] }
-        set { self[DiffableTextViews_OnSubmit.self] &+= newValue }
+        set { self[DiffableTextViews_OnSubmit.self] += newValue }
     }
 }
 

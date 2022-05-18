@@ -83,7 +83,7 @@ public extension _OptionalNumberTextStyle {
     // MARK: Interactive
     //=------------------------------------------------------------------------=
     
-    @inlinable func merge(_ proposal: Proposal) throws  -> Commit<Value> {
-        try number(proposal).map({ try Commit(style.merge($0)) }) ?? Commit()
+    @inlinable func resolve(_ proposal: Proposal) throws  -> Commit<Value> {
+        try number(proposal).map({ try Commit(style.resolve($0)) }) ?? Commit()
     }
 }

@@ -54,7 +54,7 @@ extension Optional where Wrapped == Trigger {
     // MARK: Transformations
     //=------------------------------------------------------------------------=
 
-    @inlinable public static func &+= (lhs: inout Self, rhs: Self) {
-        guard let rhs = rhs else { return lhs = nil }; (lhs? += rhs) ?? (lhs = rhs)
+    @inlinable public static func += (lhs: inout Self, rhs: Self) {
+        (rhs != nil && lhs != nil) ? (lhs! += rhs!) : (lhs = rhs)
     }
 }

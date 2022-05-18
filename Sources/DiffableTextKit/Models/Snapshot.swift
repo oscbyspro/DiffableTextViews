@@ -18,10 +18,9 @@
 /// |x|o|o|o|x|o|o|o|o|o|o|o|x|x|x|x|~
 /// ```
 ///
-/// Set the anchor to force selection of the caret represented by its index. This is required
-/// when a snapshot contains only formatting characters, and you want the caret to appear
-/// at a location. As an example, a pattern style bound to an enmpty value may want to set
-/// the anchor at the index of the first placeholder character.
+/// Set the anchor to select the caret represented by its index. This may be done
+/// on snapshots containing only formatting characters. As an example, a pattern text style
+/// that is bound to an empty value may anchor at the first placeholder character.
 ///
 public struct Snapshot: BidirectionalCollection, RangeReplaceableCollection {
     @usableFromInline typealias Target = (Index) -> Bool
@@ -47,19 +46,19 @@ public struct Snapshot: BidirectionalCollection, RangeReplaceableCollection {
     // MARK: Initializers: Attribute
     //=------------------------------------------------------------------------=
     
-    @inlinable public init(_ characters: String, as attribute: Attribute) {
+    @inlinable public init(_ characters: String, as attribute: Attribute = []) {
         self._characters = characters
         self._attributes = Array(repeating: attribute, count: characters.count)
     }
     
-    @inlinable public init<C>(_ characters: C, as attribute: Attribute) where
-    C: RandomAccessCollection, C.Element == Character {
+    @inlinable public init<C>(_ characters: C, as attribute: Attribute = [])
+    where C: RandomAccessCollection, C.Element == Character {
         self._characters = String(characters)
         self._attributes = Array(repeating: attribute, count: characters.count)
     }
     
-    @inlinable public init<S>(_ characters: S, as attribute: Attribute) where
-    S: Sequence, S.Element == Character { self.init()
+    @inlinable public init<S>(_ characters: S, as attribute: Attribute = [])
+    where S: Sequence, S.Element == Character { self.init()
         for character in characters {
             self._characters.append(character)
             self._attributes.append(attribute)

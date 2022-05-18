@@ -163,15 +163,15 @@ public extension Context {
 // MARK: Transformations
 //=----------------------------------------------------------------------------=
 
-public extension Context {
+extension Context {
     
     //=------------------------------------------------------------------------=
     // MARK: Context
     //=------------------------------------------------------------------------=
         
-    @inlinable internal mutating func merge(_ other: Self) {
+    @inlinable mutating func merge(_ other: Self) {
         //=--------------------------------------=
-        // Focused
+        // Active
         //=--------------------------------------=
         if other.focus == true {
             self.write {
@@ -179,10 +179,25 @@ public extension Context {
                 $0.layout.merge(snapshot: other.snapshot)
             }
         //=--------------------------------------=
-        // Unfocused
+        // Inactive
         //=--------------------------------------=
         } else { self = other }
     }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Selection
+    //=------------------------------------------------------------------------=
+    
+    @inlinable mutating func collapse() {
+        self.write({ $0.layout.selection.collapse() })
+    }
+}
+
+//=----------------------------------------------------------------------------=
+// MARK: Transformations
+//=----------------------------------------------------------------------------=
+
+public extension Context {
     
     //=------------------------------------------------------------------------=
     // MARK: Status
@@ -201,7 +216,7 @@ public extension Context {
         //=--------------------------------------=
         // Update
         //=--------------------------------------=
-        self.merge(Self.init(next))
+        self.merge(Self(next))
         //=--------------------------------------=
         // Return
         //=--------------------------------------=
@@ -218,13 +233,13 @@ public extension Context {
         //=--------------------------------------=
         // Values
         //=--------------------------------------=
-        let carets = layout.indices(at: Carets(range))
-        let commit = try style.merge(Proposal(
-        snapshot, with: characters, in: carets.range))
+        let commit = try style.resolve(Proposal(
+        update:  snapshot, with: characters, in:
+        layout.indices(at: Carets(range)).range))
         //=--------------------------------------=
         // Update
         //=--------------------------------------=
-        self.set(selection: carets.upperBound)
+        self.collapse()
         self.merge(Self.focused(style, commit))
         //=--------------------------------------=
         // Return
@@ -236,12 +251,20 @@ public extension Context {
     // MARK: Selection
     //=------------------------------------------------------------------------=
     
-    @inlinable internal mutating func set(selection: Index) {
-        self.write({ $0.layout.selection = Carets(selection) })
-    }
-    
-    @inlinable mutating func merge<T>(selection: Range<T.Position>, momentums: Bool) -> Update where T: Offset {
-        self.write({ $0.layout .merge(selection: Carets(selection), momentums: momentums) })
-        return Update.selection(selection != self.selection())
+    @inlinable mutating func merge<T>(
+    selection: Range<T.Position>,
+    momentums: Bool) -> Update where T: Offset {
+        //=--------------------------------------=
+        // Update
+        //=--------------------------------------=
+        self.write {
+            $0.layout.merge(
+            selection: Carets(selection),
+            momentums: momentums)
+        }
+        //=--------------------------------------=
+        // Return
+        //=--------------------------------------=
+        return .selection(selection != self.selection())
     }
 }

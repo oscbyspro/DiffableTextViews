@@ -16,27 +16,27 @@
 /// An instance with equal bounds represents a single upper caret.
 /// This distinction matters for transformations such as map(lower:upper:).
 ///
-@usableFromInline struct Carets<Bound: Comparable>: Equatable {
+@usableFromInline struct Carets<Caret: Comparable>: Equatable {
     
     //=------------------------------------------------------------------------=
     // MARK: State
     //=------------------------------------------------------------------------=
     
-    @usableFromInline let range: Range<Bound>
+    @usableFromInline let range: Range<Caret>
     
     //=------------------------------------------------------------------------=
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable init(_ range: Range<Bound>) {
+    @inlinable init(_ range: Range<Caret>) {
         self.range  = range
     }
     
-    @inlinable init(_ bound: Bound) {
+    @inlinable init(_ bound: Caret) {
         self.init(Range(uncheckedBounds: (bound, bound)))
     }
     
-    @inlinable static func unchecked(_ bounds: (lower: Bound, upper: Bound)) -> Self {
+    @inlinable static func unchecked(_ bounds: (Caret, Caret)) -> Self {
         Self.init(Range(uncheckedBounds: bounds))
     }
 
@@ -44,11 +44,11 @@
     // MARK: Accessors
     //=------------------------------------------------------------------------=
     
-    @inlinable var lowerBound: Bound {
+    @inlinable var lower: Caret {
         range.lowerBound
     }
     
-    @inlinable var upperBound: Bound {
+    @inlinable var upper: Caret {
         range.upperBound
     }
     
@@ -56,29 +56,35 @@
     // MARK: Transformations
     //=------------------------------------------------------------------------=
     
-    @inlinable func map<T>(caret: (Bound) -> T) -> Carets<T> {
+    @inlinable mutating func collapse() {
+        self = Self(upper)
+    }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Transformations
+    //=------------------------------------------------------------------------=
+    
+    @inlinable func map<T>(caret: (Caret) -> T) -> Carets<T> {
         //=--------------------------------------=
         // Return
         //=--------------------------------------=
         self.map(lower: caret, upper: caret)
     }
     
-    @inlinable func map<T>(lower: (Bound) -> T, upper: (Bound) -> T) -> Carets<T> {
+    @inlinable func map<T>(lower: (Caret) -> T, upper: (Caret) -> T) -> Carets<T> {
         //=--------------------------------------=
         // Single
         //=--------------------------------------=
-        let upperBound = upper(range.upperBound)
-        var lowerBound = upperBound
+        let max = upper(self.upper); var min = max
         //=--------------------------------------=
         // Double
         //=--------------------------------------=
         if !range.isEmpty {
-            lowerBound = lower(range.lowerBound)
-            lowerBound = Swift.min(lowerBound, upperBound)
+            min = Swift.min(lower(self.lower), max)
         }
         //=--------------------------------------=
         // Return
         //=--------------------------------------=
-        return .unchecked((lowerBound, upperBound))
+        return .unchecked((min, max))
     }
 }

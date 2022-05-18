@@ -29,13 +29,14 @@ Needle: BidirectionalCollection, Needle.Element == Character {
     // MARK: Forwards
     //=------------------------------------------------------------------------=
     
-    /// A naive search, for needles known to be at or near the start of a haystack.
+    /// A naive search, for needles at or near the start of a haystack.
     @inlinable static func forwards(search haystack: Haystack, match needle: Needle) -> Location? {
         //=--------------------------------------=
         // Haystack
         //=--------------------------------------=
         for start in haystack.indices {
-            var index = start; var found = true
+            var index = start
+            var found = true
             //=----------------------------------=
             // Needle
             //=----------------------------------=
@@ -43,6 +44,7 @@ Needle: BidirectionalCollection, Needle.Element == Character {
                 guard index != haystack.endIndex,
                 character == haystack[index].character
                 else { found = false; break }
+                
                 haystack.formIndex(after: &index)
             }
             //=----------------------------------=
@@ -60,7 +62,7 @@ Needle: BidirectionalCollection, Needle.Element == Character {
     // MARK: Backwards
     //=------------------------------------------------------------------------=
     
-    /// A naive search, for needles known to be at or near the end of a haystack.
+    /// A naive search, for needles at or near the end of a haystack.
     @inlinable static func backwards(search haystack: Haystack, match needle: Needle) -> Location? {
         Reversed.forwards(search: haystack.reversed(), match: needle.reversed()).map { reversed in
             reversed.upperBound.base ..< reversed.lowerBound.base
@@ -71,7 +73,7 @@ Needle: BidirectionalCollection, Needle.Element == Character {
     // MARK: Forwards / Backwards
     //=------------------------------------------------------------------------=
     
-    /// A naive search, for needles known to be at or near the edge of a haystack.
+    /// A naive search, for needles at or near a known edge of a haystack.
     @inlinable static func range(
     of needle: Needle, in haystack:  Haystack,
     towards direction: Direction) -> Location? {

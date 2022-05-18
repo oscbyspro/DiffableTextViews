@@ -28,9 +28,7 @@ struct Mock: DiffableTextStyle {
     //=------------------------------------------------------------------------=
     
     func locale(_ locale: Locale) -> Self {
-        var result = self
-        result.locale = locale
-        return result
+        var result = self; result.locale = locale; return result
     }
     
     //=------------------------------------------------------------------------=
@@ -45,8 +43,7 @@ struct Mock: DiffableTextStyle {
         fatalError()
     }
     
-    func merge(_ proposal: Proposal) throws -> Commit<Value> {
+    func resolve(_ proposal: Proposal) throws -> Commit<Value> {
         fatalError()
     }
 }
-

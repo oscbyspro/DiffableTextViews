@@ -38,17 +38,17 @@ public struct Status<Style: DiffableTextStyle> {
     //=------------------------------------------------------------------------=
     
     @inlinable public mutating func merge(_ other: Self) -> Changes {
-        let update = (self .!= other)
+        let changes = (self .!= other)
         //=--------------------------------------=
         // Update
         //=--------------------------------------=
-        if update.contains(.style) { self.style = other.style }
-        if update.contains(.value) { self.value = other.value }
-        if update.contains(.focus) { self.focus = other.focus }
+        if changes.contains(.style) { self.style = other.style }
+        if changes.contains(.value) { self.value = other.value }
+        if changes.contains(.focus) { self.focus = other.focus }
         //=--------------------------------------=
         // Return
         //=--------------------------------------=
-        return update
+        return changes
     }
     
     //=------------------------------------------------------------------------=
@@ -56,16 +56,16 @@ public struct Status<Style: DiffableTextStyle> {
     //=------------------------------------------------------------------------=
     
     @inlinable static func .!= (lhs: Self, rhs: Self) -> Changes {
-        var update = Changes()
+        var changes = Changes()
         //=--------------------------------------=
         // Compare
         //=--------------------------------------=
-        if lhs.style != rhs.style { update.formUnion(.style) }
-        if lhs.value != rhs.value { update.formUnion(.value) }
-        if lhs.focus != rhs.focus { update.formUnion(.focus) }
+        if lhs.style != rhs.style { changes.formUnion(.style) }
+        if lhs.value != rhs.value { changes.formUnion(.value) }
+        if lhs.focus != rhs.focus { changes.formUnion(.focus) }
         //=--------------------------------------=
         // Return
         //=--------------------------------------=
-        return update
+        return changes
     }
 }

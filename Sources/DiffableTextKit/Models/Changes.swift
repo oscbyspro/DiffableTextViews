@@ -11,7 +11,7 @@
 // MARK: Declaration
 //*============================================================================*
 
-/// Used to store state comparison results in order to avoid multiple comparisons.
+/// A model used to capture comparison results.
 public struct Changes: OptionSet {
     
     //=------------------------------------------------------------------------=

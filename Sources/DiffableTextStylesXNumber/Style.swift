@@ -120,11 +120,11 @@ public extension _NumberTextStyle {
     // MARK: Interactive
     //=------------------------------------------------------------------------=
     
-    @inlinable func merge(_ proposal: Proposal) throws -> Commit<Value> {
-        try merge(number(proposal)!)
+    @inlinable func resolve(_ proposal: Proposal) throws -> Commit<Value> {
+        try resolve(number(proposal)!)
     }
     
-    @inlinable internal func merge(_ number: Number) throws -> Commit<Value> {
+    @inlinable internal func resolve(_ number: Number) throws -> Commit<Value> {
         var number = number
         let count = number.count()
         //=--------------------------------------=

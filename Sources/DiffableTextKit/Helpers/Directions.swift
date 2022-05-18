@@ -36,7 +36,7 @@
     }
     
     @inlinable init<T>(from start: Carets<T>, to end: Carets<T>) {
-        self.lower = Direction(start.lowerBound, to: end.lowerBound)
-        self.upper = Direction(start.upperBound, to: end.upperBound)
+        self.lower = Direction(from: start.lower, to: end.lower)
+        self.upper = Direction(from: start.upper, to: end.upper)
     }
 }

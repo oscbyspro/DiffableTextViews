@@ -56,7 +56,7 @@ public protocol DiffableTextStyle: Equatable {
     /// - Thrown errors result in input cancellation.
     /// - Thrown errors have their descriptions printed in DEBUG mode.
     ///
-    @inlinable func merge(_ proposal: Proposal) throws -> Commit<Value>
+    @inlinable func resolve(_ proposal: Proposal) throws -> Commit<Value>
 }
 
 //=----------------------------------------------------------------------------=
@@ -110,20 +110,20 @@ extension DiffableTextStyleWrapper {
     
     @inlinable @inline(__always)
     public func format(_ value: Value) -> String
-    where Style.Value == Value {
+    where Value == Style.Value {
         style.format(value)
     }
 
     @inlinable @inline(__always)
     public func interpret(_ value: Value) -> Commit<Value>
-    where Style.Value == Value {
+    where Value == Style.Value {
         style.interpret(value)
     }
 
     @inlinable @inline(__always)
-    public func merge(_ proposal: Proposal) throws -> Commit<Value>
-    where Style.Value == Value {
-        try style.merge(proposal)
+    public func resolve(_ proposal: Proposal) throws -> Commit<Value>
+    where Value == Style.Value {
+        try style.resolve(proposal)
     }
     
     //=------------------------------------------------------------------------=
