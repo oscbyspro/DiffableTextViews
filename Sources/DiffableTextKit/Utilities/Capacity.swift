@@ -8,15 +8,16 @@
 //=----------------------------------------------------------------------------=
 
 //*============================================================================*
-// MARK: Declaration
+// MARK: Extension
 //*============================================================================*
 
-@usableFromInline enum Jump {
+public extension RangeReplaceableCollection {
     
     //=------------------------------------------------------------------------=
-    // MARK: Instances
+    // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    case to
-    case through
+    @inlinable init(capacity: Int, transform: (inout Self) -> Void) {
+        self.init(); self.reserveCapacity(capacity); transform(&self)
+    }
 }

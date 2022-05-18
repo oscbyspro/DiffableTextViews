@@ -20,7 +20,7 @@
 ///
 /// Set the anchor to select the caret represented by its index. This may be done
 /// on snapshots containing only formatting characters. As an example, a pattern text style
-/// that is bound to an empty value may anchor at the first placeholder character.
+/// bound to an empty value may anchor at the pattern's first placeholder character.
 ///
 public struct Snapshot: BidirectionalCollection, RangeReplaceableCollection {
     @usableFromInline typealias Target = (Index) -> Bool
@@ -301,7 +301,7 @@ extension Snapshot {
         //=--------------------------------------=
         if let anchor = anchor { return anchor }
         //=--------------------------------------=
-        // Inspect Initial Index
+        // Inspect The Initial Index
         //=--------------------------------------=
         if peek(from: index, towards: preference).map(
         nonpassthrough(at:)) == true { return index }
@@ -310,21 +310,21 @@ extension Snapshot {
         //=--------------------------------------=
         let direction = direction ?? preference
         //=--------------------------------------=
-        // Search In Direction
+        // Search In The Direction
         //=--------------------------------------=
         if let caret = caret(from: index,
         towards: direction,
         jumping: direction == preference ? .to : .through,
         targeting: nonpassthrough(at:)) { return caret }
         //=--------------------------------------=
-        // Search In Other Direction
+        // Search In The Other Direction
         //=--------------------------------------=
         if let caret = caret(from: index,
         towards: direction.reversed(),
         jumping: Jump.to, // use Jump.to on each direction
         targeting: nonpassthrough(at:)) { return caret }
         //=--------------------------------------=
-        // Default To Instance's End Index
+        // Return End Index
         //=--------------------------------------=
         return self.endIndex
     }
@@ -357,5 +357,19 @@ extension Snapshot {
     
     @inlinable func caret(from index: Index, backwardsThrough target: Target) -> Index? {
         indices[..<index].last(where: target)
+    }
+    
+    //*========================================================================*
+    // MARK: Declaration
+    //*========================================================================*
+
+    @usableFromInline enum Jump {
+        
+        //=--------------------------------------------------------------------=
+        // MARK: Instances
+        //=--------------------------------------------------------------------=
+        
+        case to
+        case through
     }
 }

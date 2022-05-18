@@ -48,17 +48,16 @@ import DiffableTextKit
         var proposal = proposal
         translateSingleCharacterInput(&proposal)
         let sign = consumeSingleSignInput(&proposal)
-        let parseable = proposal.merged()
         //=--------------------------------------=
-        // None
+        // Number
         //=--------------------------------------=
-        guard var number = try Number(
-        parse: parseable, with: lexicon,
-        as: value) else { return nil }
-        //=--------------------------------------=
-        // Some
-        //=--------------------------------------=
+        guard var number = try Number(in: proposal.merged(),
+        using: self.lexicon, as: value) else { return nil }
+        
         if let sign = sign { number.sign = sign }
+        //=--------------------------------------=
+        // Return
+        //=--------------------------------------=
         return number
     }
 }
@@ -77,7 +76,7 @@ extension Reader {
         guard proposal.replacement.count == 1 else { return }
         proposal.replacement = Snapshot(proposal.replacement.map(translated))
     }
-        
+    
     @inlinable func translated(_ input: Symbol) -> Symbol {
         let character: Character
         //=--------------------------------------=

@@ -11,10 +11,9 @@
 // MARK: Declaration
 //*============================================================================*
 
-/// Up to two carets represented by the bounds in a range.
+/// One or two carets, represented by a range.
 ///
-/// An instance with equal bounds represents a single upper caret.
-/// This distinction matters for transformations such as map(lower:upper:).
+/// An empty range represents a single upper caret.
 ///
 @usableFromInline struct Carets<Caret: Comparable>: Equatable {
     

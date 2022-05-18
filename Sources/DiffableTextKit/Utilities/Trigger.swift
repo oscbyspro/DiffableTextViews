@@ -55,6 +55,6 @@ extension Optional where Wrapped == Trigger {
     //=------------------------------------------------------------------------=
 
     @inlinable public static func += (lhs: inout Self, rhs: Self) {
-        (rhs != nil && lhs != nil) ? (lhs! += rhs!) : (lhs = rhs)
+        (lhs != nil && rhs != nil) ? (lhs! += rhs!) : (lhs = rhs)
     }
 }

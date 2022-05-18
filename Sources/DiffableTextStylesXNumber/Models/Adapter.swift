@@ -76,7 +76,7 @@ public struct NumberTextAdapter<Format: NumberTextFormat>: Equatable {
     }
 
     @inlinable func number(_ snapshot: Snapshot) throws -> Number {
-        try Number(parse: snapshot, with: scheme.lexicon, as: Value.self)!
+        try Number(in: snapshot, using: scheme.lexicon, as: Value.self)!
     }
     
     @inlinable func value(_ number: Number) throws -> Value {

@@ -53,16 +53,9 @@
     @inlinable func positions<T>(at indices: Carets<Index>) -> Carets<T.Position> where T: Offset {
         indices.map(caret: snapshot.position(at:))
     }
-}
-
-//=----------------------------------------------------------------------------=
-// MARK: Transformations
-//=----------------------------------------------------------------------------=
-
-extension Layout {
 
     //=------------------------------------------------------------------------=
-    // MARK: Snapshot
+    // MARK: Transformations
     //=------------------------------------------------------------------------=
     
     @inlinable mutating func merge(snapshot: Snapshot) {
@@ -79,9 +72,9 @@ extension Layout {
     }
     
     //=------------------------------------------------------------------------=
-    // MARK: Selection
+    // MARK: Transformations
     //=------------------------------------------------------------------------=
-
+    
     @inlinable mutating func merge<T>(selection: Carets<T.Position>, momentums: Bool) where T: Offset {
         //=--------------------------------------=
         // Values

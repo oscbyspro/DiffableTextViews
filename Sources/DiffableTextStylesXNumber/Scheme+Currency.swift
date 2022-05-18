@@ -114,9 +114,9 @@ import Foundation
 
     /// A model for marking currency labels as virtual.
     ///
-    /// Characters used to express currencies are usually disjoint
-    /// from characters used to express amounts, but sometimes they overlap.
-    /// This model is used to mark currency labels as virtual when needed.
+    /// Characters used in a format's currency symbols are usually disjoint
+    /// from the characters used in the format's numbers, but sometimes they overlap.
+    /// This model is used to mark currency symbols as virtual when needed.
     ///
     @usableFromInline struct Adjustments {
         

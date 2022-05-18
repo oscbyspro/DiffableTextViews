@@ -48,7 +48,7 @@ public final class Lexicon {
     
     /// Requires that formatter.numberStyle == .none.
     @inlinable static func standard(_ formatter: NumberFormatter) -> Lexicon {
-        assert(formatter.numberStyle == .none); return .init(
+        assert(formatter.numberStyle == .none); return Self.init(
         signs:      .standard(formatter),
         digits:     .standard(formatter),
         separators: .standard(formatter))
@@ -56,7 +56,7 @@ public final class Lexicon {
     
     /// Requires that formatter.numberStyle == .none.
     @inlinable static func currency(_ formatter: NumberFormatter) -> Lexicon {
-        assert(formatter.numberStyle == .none); return .init(
+        assert(formatter.numberStyle == .none); return Self.init(
         signs:      .currency(formatter),
         digits:     .currency(formatter),
         separators: .currency(formatter))

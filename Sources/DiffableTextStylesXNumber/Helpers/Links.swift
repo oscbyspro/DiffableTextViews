@@ -78,7 +78,7 @@ import Foundation
     // MARK: Transformations
     //=------------------------------------------------------------------------=
     
-    @inlinable mutating func link(_ component: Component, _ character: Character) {
+    @inlinable mutating func link( _ component: Component, _ character: Character) {
         self.components[character] = component
         self.characters[component] = character
     }
