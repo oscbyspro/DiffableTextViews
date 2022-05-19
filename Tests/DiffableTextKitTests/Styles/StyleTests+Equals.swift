@@ -19,25 +19,18 @@ import XCTest
 final class StyleTestsXEquals: XCTestCase {
     
     //=------------------------------------------------------------------------=
-    // MARK: State
-    //=------------------------------------------------------------------------=
-    
-    let en_US = Locale(identifier: "en_US")
-    let sv_SE = Locale(identifier: "sv_SE")
-    
-    //=------------------------------------------------------------------------=
     // MARK: Tests
     //=------------------------------------------------------------------------=
 
     func test() {
         //=--------------------------------------=
-        // MARK: Setup
+        // Setup
         //=--------------------------------------=
         let mock0 = Mock(locale: en_US).equals(0)
         let mock1 = Mock(locale: sv_SE).equals(0)
         let mock2 = Mock(locale: en_US).equals(1)
         //=--------------------------------------=
-        // MARK: Assert
+        // Assert
         //=--------------------------------------=
         XCTAssertEqual(   mock0, mock1)
         XCTAssertNotEqual(mock0, mock2)

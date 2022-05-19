@@ -112,12 +112,7 @@ import Foundation
     // MARK: Adjustments
     //*========================================================================*
 
-    /// A model for marking currency labels as virtual.
-    ///
-    /// Characters used in a format's currency symbols are usually disjoint
-    /// from the characters used in the format's numbers, but sometimes they overlap.
-    /// This model is used to mark currency symbols as virtual when needed.
-    ///
+    /// A model for marking currency symbols as virtual when necessary.
     @usableFromInline struct Adjustments {
         
         //=--------------------------------------------------------------------=

@@ -39,13 +39,13 @@ final class ModelsTestsXPrecision: XCTestCase {
     
     func XCTAssert<T: NumberTextValue>(_ precision: NumberTextPrecision<T>, integer: Range, fraction: Range) {
         //=--------------------------------------=
-        // MARK: Integer
+        // Integer
         //=--------------------------------------=
         XCTAssertEqual(precision.lower.value, 1)
         XCTAssertEqual(precision.lower.integer, integer.lowerBound)
         XCTAssertEqual(precision.upper.integer, integer.upperBound)
         //=--------------------------------------=
-        // MARK: Fraction
+        // Fraction
         //=--------------------------------------=
         XCTAssertEqual(precision.upper.value, T.precision)
         XCTAssertEqual(precision.lower.fraction, fraction.lowerBound)

@@ -48,7 +48,7 @@ final class NumberTestsXGlyphXString: XCTestCase {
     //=------------------------------------------------------------------------=
     // MARK: State
     //=------------------------------------------------------------------------=
-
+    
     let digits = [Digit](repeating: .seven, count: 1)
     let iterations = 1
 
@@ -75,7 +75,7 @@ final class NumberTestsXGlyphXString: XCTestCase {
         measure {
             var string: String = collection()
             //=--------------------------------------=
-            // MARK: Insert
+            // Insert
             //=--------------------------------------=
             for _ in 0 ..< iterations {
                 for digit in digits {
@@ -95,16 +95,16 @@ final class NumberTestsXGlyphXString: XCTestCase {
     func test_Digits_ForEachRawValueUInt8_String() {
         measure {
             var bytes: [UInt8] = collection()
-            //=--------------------------------------=
-            // MARK: Insert
-            //=--------------------------------------=
+            //=----------------------------------=
+            // Insert
+            //=----------------------------------=
             for _ in 0 ..< iterations {
                 for digit in digits {
                     bytes.append(digit.rawValue)
                 }
             }
             //=----------------------------------=
-            // MARK: Result
+            // Result
             //=----------------------------------=
             let _ = String(bytes: bytes, encoding: .utf8)
         }
@@ -120,14 +120,14 @@ final class NumberTestsXGlyphXString: XCTestCase {
     func test_Digits_UnsafeBitCastToBytes_String() {
         measure {
             var bytes: [UInt8] = collection()
-            //=--------------------------------------=
-            // MARK: Insert
-            //=--------------------------------------=
+            //=----------------------------------=
+            // Insert
+            //=----------------------------------=
             for _ in 0 ..< iterations {
                 bytes.append(contentsOf: unsafeBitCast(digits, to: [UInt8].self))
             }
             //=----------------------------------=
-            // MARK: Result
+            // Result
             //=----------------------------------=
             let _ = String(bytes: bytes, encoding: .utf8)
         }

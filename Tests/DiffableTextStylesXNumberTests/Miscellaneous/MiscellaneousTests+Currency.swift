@@ -31,7 +31,7 @@ final class MiscellaneousTestsXCurrency: XCTestCase {
     
     func testCurrencyLabelsDoNotContainNumbers() throws {
         //=--------------------------------------=
-        // MARK: Locales, Currencies
+        // Locales, Currencies
         //=--------------------------------------=
         for locale in locales {
             for code in currencyCodes {

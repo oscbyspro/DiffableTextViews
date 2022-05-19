@@ -52,7 +52,7 @@ final class StyleTestsXHidden: XCTestCase, StyleTests {
     }
     
     //=------------------------------------------------------------------------=
-    // MARK: Tests - Mismatches
+    // MARK: Tests
     //=------------------------------------------------------------------------=
     
     func testNoneMismatch() {

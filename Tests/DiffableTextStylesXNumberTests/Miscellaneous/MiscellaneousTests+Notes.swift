@@ -36,12 +36,12 @@ final class MiscellaneousTestsXNotes: XCTestCase {
         formatter.numberStyle = .decimal
         formatter.generatesDecimalNumbers = true
         //=--------------------------------------=
-        // MARK: Values
+        // Values
         //=--------------------------------------=
         let content = String(repeating: "9", count: 38)
         let expectation = Decimal(string: content)!
         //=--------------------------------------=
-        // MARK: Result
+        // Result
         //=--------------------------------------=
         XCTAssertEqual(expectation, try! style.parseStrategy.parse(content))
         XCTAssertNotEqual(expectation, formatter.number(from: content) as! Decimal)

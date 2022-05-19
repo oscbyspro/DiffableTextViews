@@ -43,7 +43,6 @@ fileprivate extension Lexicon {
     // MARK: Utilities
     //=------------------------------------------------------------------------=
     
-    /// Used by unit tests.
     func nonvirtual(_ character: Character) -> Bool {
         signs[character] != nil
         || digits[character] != nil

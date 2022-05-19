@@ -34,7 +34,7 @@ protocol StyleTests: XCTestCase {
     func testMore()
         
     //=------------------------------------------------------------------------=
-    // MARK: Tests - Mismatches
+    // MARK: Tests
     //=------------------------------------------------------------------------=
     
     func testNoneMismatch()

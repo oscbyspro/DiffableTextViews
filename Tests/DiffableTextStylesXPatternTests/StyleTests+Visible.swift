@@ -51,7 +51,7 @@ final class StyleTestsXVisible: XCTestCase, StyleTests {
     }
     
     //=------------------------------------------------------------------------=
-    // MARK: Tests - Mismatches
+    // MARK: Tests
     //=------------------------------------------------------------------------=
     
     func testNoneMismatch() {

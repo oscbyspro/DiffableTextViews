@@ -7,41 +7,27 @@
 // See http://www.apache.org/licenses/LICENSE-2.0 for license information.
 //=----------------------------------------------------------------------------=
 
-#if DEBUG
-
-import XCTest
-@testable import DiffableTextStylesXNumber
-
 //*============================================================================*
 // MARK: Declaration
 //*============================================================================*
 
-final class HelpersTestsXLinks: XCTestCase {
+final class Box<Value: Equatable>: Equatable {
     
     //=------------------------------------------------------------------------=
-    // MARK: Assertions
+    // MARK: State
     //=------------------------------------------------------------------------=
     
-    func XCTAssertEachCaseIsBidirectionallyLinked<T>(_ links: Links<T>) {
-        for component in T.allCases {
-            XCTAssertEqual(component, links[links[component]])
-        }
-    }
+    let value: Value
     
     //=------------------------------------------------------------------------=
-    // MARK: Tests
+    // MARK: Initializers
     //=------------------------------------------------------------------------=
-
-    func testEachLexiconIsFullyBidirectionallyLinked() {
-        //=--------------------------------------=
-        // Lexicons
-        //=--------------------------------------=
-        for lexicon in standards.lazy.map(\.lexicon) {
-            XCTAssertEachCaseIsBidirectionallyLinked(lexicon.signs)
-            XCTAssertEachCaseIsBidirectionallyLinked(lexicon.digits)
-            XCTAssertEachCaseIsBidirectionallyLinked(lexicon.separators)
-        }
-    }
+    
+    init(_ value: Value ) { self.value = value }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Utilities
+    //=------------------------------------------------------------------------=
+    
+    static func == (lhs: Box, rhs: Box) -> Bool { lhs.value == rhs.value }
 }
-
-#endif

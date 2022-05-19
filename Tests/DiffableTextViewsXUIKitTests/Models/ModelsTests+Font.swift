@@ -50,7 +50,7 @@ final class ModelsTestsXFont: XCTestCase {
     
     func testDesignsCanBeForceUnwrapped() {
         //=--------------------------------------=
-        // MARK: Fonts, Designs
+        // Fonts, Designs
         //=--------------------------------------=
         for font in fonts {
             for design in designs {
