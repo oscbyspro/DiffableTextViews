@@ -46,8 +46,7 @@ let package = Package(
             name: "DiffableTextStyles",
             dependencies: [
                 "DiffableTextStylesXNumber",
-                "DiffableTextStylesXPattern",
-                "DiffableTextStylesXWrappers"]),
+                "DiffableTextStylesXPattern"]),
         //=--------------------------------------=
         // 2 - DiffableTextStylesXNumber
         //=--------------------------------------=
@@ -66,15 +65,6 @@ let package = Package(
         .testTarget(
             name: "DiffableTextStylesXPatternTests",
             dependencies: ["DiffableTestKit", "DiffableTextStylesXPattern"]),
-        //=--------------------------------------=
-        // 2 - DiffableTextStylesXWrappers
-        //=--------------------------------------=
-        .target(
-            name: "DiffableTextStylesXWrappers",
-            dependencies: ["DiffableTextKit", "DiffableTextViewsXUIKit"]),
-        .testTarget(
-            name: "DiffableTextStylesXWrappersTests",
-            dependencies: ["DiffableTestKit", "DiffableTextStylesXWrappers"]),
         //=--------------------------------------=
         // 1 - DiffableTextViewsXUIKit
         //=--------------------------------------=

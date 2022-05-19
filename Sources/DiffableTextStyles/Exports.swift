@@ -13,7 +13,9 @@
 
 @_exported import DiffableTextStylesXNumber
 @_exported import DiffableTextStylesXPattern
-@_exported import DiffableTextStylesXWrappers
+
+@_exported import struct DiffableTextKit.ConstantTextStyle
+@_exported import struct DiffableTextKit.EqualsTextStyle
 
 @_exported import protocol DiffableTextKit.DiffableTextStyle
-@_exported import protocol DiffableTextKit.DiffableTextStyleWrapper
+@_exported import protocol DiffableTextKit.WrapperTextStyle

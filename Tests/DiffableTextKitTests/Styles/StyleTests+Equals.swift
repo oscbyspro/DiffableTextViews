@@ -10,29 +10,31 @@
 #if DEBUG
 
 import DiffableTestKit
-@testable import DiffableTextStylesXWrappers
+@testable import DiffableTextKit
 
 //*============================================================================*
 // MARK: Declaration
 //*============================================================================*
 
-final class StyleTestsXConstant: Tests {
+final class StyleTestsXEquals: Tests {
     
     //=------------------------------------------------------------------------=
     // MARK: Tests
     //=------------------------------------------------------------------------=
-    
+
     func test() {
         //=--------------------------------------=
         // MARK: Setup
         //=--------------------------------------=
-        let mock0 = Mock(locale: en_US).constant()
-        let mock1 = mock0.locale(sv_SE)
+        let mock0 = Mock(locale: en_US).equals(0)
+        let mock1 = Mock(locale: sv_SE).equals(0)
+        let mock2 = Mock(locale: en_US).equals(1)
         //=--------------------------------------=
         // MARK: Assert
         //=--------------------------------------=
-        XCTAssertEqual(mock0, mock1)
-        XCTAssertEqual(mock0.style.locale, mock1.style.locale)
+        XCTAssertEqual(   mock0, mock1)
+        XCTAssertNotEqual(mock0, mock2)
+        XCTAssertNotEqual(mock1, mock2)
     }
 }
 

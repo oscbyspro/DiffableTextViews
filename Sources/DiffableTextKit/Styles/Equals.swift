@@ -7,8 +7,6 @@
 // See http://www.apache.org/licenses/LICENSE-2.0 for license information.
 //=----------------------------------------------------------------------------=
 
-import DiffableTextKit
-
 //*============================================================================*
 // MARK: Declaration
 //*============================================================================*
@@ -17,7 +15,7 @@ import DiffableTextKit
 ///
 /// Use this style to optimize the comparison on view update, for example.
 ///
-public struct EqualsTextStyle<Style: DiffableTextStyle, Proxy: Equatable>: DiffableTextStyleWrapper {
+public struct EqualsTextStyle<Style: DiffableTextStyle, Proxy: Equatable>: WrapperTextStyle {
     public typealias Value = Style.Value
     
     //=------------------------------------------------------------------------=

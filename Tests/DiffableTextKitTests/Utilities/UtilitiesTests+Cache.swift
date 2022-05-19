@@ -16,13 +16,13 @@ import DiffableTestKit
 // MARK: Declaration
 //*============================================================================*
 
-final class SupportTestsXCache: XCTestCase {
+final class UtilitiesTestsXCache: XCTestCase {
     
     //=------------------------------------------------------------------------=
     // MARK: Tests
     //=------------------------------------------------------------------------=
     
-    func testObjectForKey() {
+    func testObjectForCustomKey() {
         let storage = Cache<Int, Value>()
         storage.insert(Value("ABC"), as: 123)
         XCTAssertEqual(Value("ABC"), storage.access(123))
@@ -50,9 +50,7 @@ final class SupportTestsXCache: XCTestCase {
         // MARK: Utilities
         //=------------------------------------------------------------------------=
         
-        static func == (lhs: Value, rhs: Value) -> Bool {
-            lhs.content == rhs.content
-        }
+        static func == (lhs: Value, rhs: Value) -> Bool { lhs.content == rhs.content }
     }
 }
 

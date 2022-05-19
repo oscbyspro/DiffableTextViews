@@ -33,9 +33,7 @@ final class ModelsTestsXAttribute: Tests {
     }
     
     func testEachAttributeIsUnique() {
-        for attribute in attributes {
-            XCTAssertEqual(attributes.count(where: { $0 == attribute }), 1)
-        }
+        XCTAssertEqual(Set(attributes.map(\.rawValue)).count, attributes.count)
     }
 }
 

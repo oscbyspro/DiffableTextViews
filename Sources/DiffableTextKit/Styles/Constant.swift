@@ -7,7 +7,6 @@
 // See http://www.apache.org/licenses/LICENSE-2.0 for license information.
 //=----------------------------------------------------------------------------=
 
-import DiffableTextKit
 import Foundation
 
 //*============================================================================*
@@ -18,7 +17,7 @@ import Foundation
 ///
 /// Use this style to prevent changes via the environment, for example.
 ///
-public struct ConstantTextStyle<Style: DiffableTextStyle>: DiffableTextStyleWrapper {
+public struct ConstantTextStyle<Style: DiffableTextStyle>: WrapperTextStyle {
     public typealias Value = Style.Value
 
     //=------------------------------------------------------------------------=

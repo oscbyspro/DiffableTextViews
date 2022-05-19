@@ -14,7 +14,7 @@ import Foundation
 // MARK: Declaration
 //*============================================================================*
 
-public struct _OptionalNumberTextStyle<Format: NumberTextFormat>: NumberTextStyleProtocol, DiffableTextStyleWrapper {
+public struct _OptionalNumberTextStyle<Format: NumberTextFormat>: NumberTextStyleProtocol, WrapperTextStyle {
     public typealias Style = _NumberTextStyle<Format>
     public typealias Adapter = NumberTextAdapter<Format>
     public typealias Value = Optional<Format.FormatInput>
