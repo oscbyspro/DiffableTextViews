@@ -9,16 +9,14 @@
 
 #if DEBUG
 
-import DiffableTestKit
-import Foundation
-
+import XCTest
 @testable import DiffableTextStylesXNumber
 
 //*============================================================================*
 // MARK: Declaration
 //*============================================================================*
 
-final class MiscellaneousTestsXPercent: Tests {
+final class MiscellaneousTestsXPercent: XCTestCase {
     
     //=------------------------------------------------------------------------=
     // MARK: Tests

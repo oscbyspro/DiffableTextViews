@@ -9,7 +9,7 @@
 
 #if DEBUG
 
-import DiffableTestKit
+import XCTest
 @testable import DiffableTextStylesXNumber
 
 //*============================================================================*
@@ -17,7 +17,7 @@ import DiffableTestKit
 //*============================================================================*
 
 /// - There are about 144k locale-currency pairs, so it may take a while.
-final class StyleTestsXCurrency: Tests, StyleTests {
+final class StyleTestsXCurrency: StyleTests {
     
     //=------------------------------------------------------------------------=
     // MARK: Assertions

@@ -10,14 +10,14 @@
 #if DEBUG
 #if canImport(UIKit)
 
-import DiffableTestKit
+import XCTest
 @testable import DiffableTextViewsXUIKit
 
 //*============================================================================*
 // MARK: Declaration
 //*============================================================================*
 
-final class ModelsTestsXFont: Tests {
+final class ModelsTestsXFont: XCTestCase {
     
     //=------------------------------------------------------------------------=
     // MARK: State

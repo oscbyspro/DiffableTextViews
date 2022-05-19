@@ -9,20 +9,23 @@
 
 #if DEBUG
 
-import DiffableTestKit
+import XCTest
 @testable import DiffableTextStylesXNumber
 
 //*============================================================================*
 // MARK: Declaration
 //*============================================================================*
 
-protocol StyleTests: Tests { }
-
-//=----------------------------------------------------------------------------=
-// MARK: Details
-//=----------------------------------------------------------------------------=
-
-extension StyleTests {
+class StyleTests: XCTestCase {
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Overrides
+    //=------------------------------------------------------------------------=
+    
+    override func setUp() {
+        super.setUp()
+        self.continueAfterFailure = false
+    }
     
     //=------------------------------------------------------------------------=
     // MARK: Assertions
@@ -39,20 +42,14 @@ extension StyleTests {
         XCTAssertEqual(commit.value, value, String(describing: info()))
         XCTAssertEqual(commit.snapshot.characters, characters, String(describing: info()))
     }
-}
 
-//=----------------------------------------------------------------------------=
-// MARK: Style
-//=----------------------------------------------------------------------------=
-
-extension StyleTests {
-    
     //=------------------------------------------------------------------------=
     // MARK: Locales
     //=------------------------------------------------------------------------=
     
     /// Iterates about 1k times.
-    func XCTInterpretLocales<T: NumberTextFormat>(_ value: T.FormatInput, format: (Locale) -> T) {
+    func XCTInterpretLocales<T>(_ value: T.FormatInput,
+    format: (Locale) -> T) where T: NumberTextFormat {
         //=--------------------------------------=
         // Locales
         //=--------------------------------------=
@@ -66,7 +63,8 @@ extension StyleTests {
     //=------------------------------------------------------------------------=
     
     /// Iterates about 144k times.
-    func XCTInterpretLocalesXCurrencies<T: NumberTextFormat>(_ value: T.FormatInput, format: (String, Locale) -> T) {
+    func XCTInterpretLocalesXCurrencies<T>(_ value: T.FormatInput,
+    format: (String, Locale) -> T) where T: NumberTextFormat {
         //=--------------------------------------=
         // Locales, Currencies
         //=--------------------------------------=

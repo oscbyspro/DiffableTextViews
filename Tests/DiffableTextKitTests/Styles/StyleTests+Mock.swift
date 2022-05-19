@@ -9,13 +9,20 @@
 
 #if DEBUG
 
-import DiffableTestKit
+import XCTest
 
 //*============================================================================*
 // MARK: Declaration
 //*============================================================================*
 
-final class StyleTestsXMock: Tests {
+final class StyleTestsXMock: XCTestCase {
+    
+    //=------------------------------------------------------------------------=
+    // MARK: State
+    //=------------------------------------------------------------------------=
+    
+    let en_US = Locale(identifier: "en_US")
+    let sv_SE = Locale(identifier: "sv_SE")
     
     //=------------------------------------------------------------------------=
     // MARK: Tests

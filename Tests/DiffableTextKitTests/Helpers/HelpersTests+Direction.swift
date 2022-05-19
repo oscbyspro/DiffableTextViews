@@ -9,7 +9,7 @@
 
 #if DEBUG
 
-import DiffableTestKit
+import XCTest
 @testable import DiffableTextKit
 
 //*============================================================================*

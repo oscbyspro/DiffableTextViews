@@ -9,14 +9,21 @@
 
 #if DEBUG
 
-import DiffableTestKit
+import XCTest
 @testable import DiffableTextKit
 
 //*============================================================================*
 // MARK: Declaration
 //*============================================================================*
 
-final class StyleTestsXEquals: Tests {
+final class StyleTestsXEquals: XCTestCase {
+    
+    //=------------------------------------------------------------------------=
+    // MARK: State
+    //=------------------------------------------------------------------------=
+    
+    let en_US = Locale(identifier: "en_US")
+    let sv_SE = Locale(identifier: "sv_SE")
     
     //=------------------------------------------------------------------------=
     // MARK: Tests

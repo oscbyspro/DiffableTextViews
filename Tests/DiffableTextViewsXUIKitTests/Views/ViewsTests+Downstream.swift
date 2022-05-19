@@ -10,7 +10,7 @@
 #if DEBUG
 #if canImport(UIKit)
 
-import DiffableTestKit
+import XCTest
 @testable import DiffableTextViewsXUIKit
 
 //*============================================================================*
@@ -26,7 +26,15 @@ final class ViewsTestsXDownstream: XCTestCase {
     // MARK: State
     //=------------------------------------------------------------------------=
     
-    lazy var downstream = Downstream()
+    let downstream = Downstream()
+    
+    //=------------------------------------------------------------------------=
+    // MARK: State
+    //=------------------------------------------------------------------------=
+
+    lazy var alphabet    = "ABCDEFGHIJJKLMNOPQRSTUVWXYZ"
+    lazy var alphabet10  = String(repeating: alphabet, count: 10)
+    lazy var alphabet100 = String(repeating: alphabet, count: 100)
     
     //=------------------------------------------------------------------------=
     // MARK: Setup

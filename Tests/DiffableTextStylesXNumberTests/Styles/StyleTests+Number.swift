@@ -9,14 +9,14 @@
 
 #if DEBUG
 
-import DiffableTestKit
+import XCTest
 @testable import DiffableTextStylesXNumber
 
 //*============================================================================*
 // MARK: Declaration
 //*============================================================================*
 
-final class StyleTestsXNumber: Tests, StyleTests {
+final class StyleTestsXNumber: StyleTests {
 
     //=------------------------------------------------------------------------=
     // MARK: Assertions

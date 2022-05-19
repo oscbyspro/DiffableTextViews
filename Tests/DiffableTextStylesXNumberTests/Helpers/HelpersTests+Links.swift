@@ -9,14 +9,14 @@
 
 #if DEBUG
 
-import DiffableTestKit
+import XCTest
 @testable import DiffableTextStylesXNumber
 
 //*============================================================================*
 // MARK: Declaration
 //*============================================================================*
 
-final class HelpersTestsXLinks: Tests {
+final class HelpersTestsXLinks: XCTestCase {
     
     //=------------------------------------------------------------------------=
     // MARK: Assertions

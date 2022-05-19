@@ -52,19 +52,23 @@ let package = Package(
         //=--------------------------------------=
         .target(
             name: "DiffableTextStylesXNumber",
-            dependencies: ["DiffableTextKit", "DiffableTextViewsXUIKit"]),
+            dependencies: [
+                "DiffableTextKit",
+                "DiffableTextViewsXUIKit"]),
         .testTarget(
             name: "DiffableTextStylesXNumberTests",
-            dependencies: ["DiffableTestKit", "DiffableTextStylesXNumber"]),
+            dependencies: ["DiffableTextStylesXNumber"]),
         //=--------------------------------------=
         // 2 - DiffableTextStylesXPattern
         //=--------------------------------------=
         .target(
             name: "DiffableTextStylesXPattern",
-            dependencies: ["DiffableTextKit", "DiffableTextViewsXUIKit"]),
+            dependencies: [
+                "DiffableTextKit",
+                "DiffableTextViewsXUIKit"]),
         .testTarget(
             name: "DiffableTextStylesXPatternTests",
-            dependencies: ["DiffableTestKit", "DiffableTextStylesXPattern"]),
+            dependencies: ["DiffableTextStylesXPattern"]),
         //=--------------------------------------=
         // 1 - DiffableTextViewsXUIKit
         //=--------------------------------------=
@@ -73,7 +77,7 @@ let package = Package(
             dependencies: ["DiffableTextKit"]),
         .testTarget(
             name: "DiffableTextViewsXUIKitTests",
-            dependencies: ["DiffableTestKit", "DiffableTextViewsXUIKit"]),
+            dependencies: ["DiffableTextViewsXUIKit"]),
         //=--------------------------------------=
         // 0 - DiffableTextKit
         //=--------------------------------------=
@@ -82,10 +86,6 @@ let package = Package(
             dependencies: []),
         .testTarget(
             name: "DiffableTextKitTests",
-            dependencies: ["DiffableTestKit", "DiffableTextKit"]),
-        //=--------------------------------------=
-        // T - DiffableTestKit
-        //=--------------------------------------=
-        .target(name: "DiffableTestKit", path: "Tests/DiffableTestKit")
+            dependencies: ["DiffableTextKit"]),
     ]
 )

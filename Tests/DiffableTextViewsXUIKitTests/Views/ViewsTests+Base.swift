@@ -10,14 +10,14 @@
 #if DEBUG
 #if canImport(UIKit)
 
-import DiffableTestKit
+import XCTest
 @testable import DiffableTextViewsXUIKit
 
 //*============================================================================*
 // MARK: Declaration
 //*============================================================================*
 
-final class ViewsTestsXBase: Tests {
+final class ViewsTestsXBase: XCTestCase {
     
     //=------------------------------------------------------------------------=
     // MARK: State

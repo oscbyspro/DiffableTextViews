@@ -9,24 +9,25 @@
 
 #if DEBUG
 
-import DiffableTestKit
+import XCTest
 @testable import DiffableTextStylesXNumber
 
 //*============================================================================*
 // MARK: Declaration
 //*============================================================================*
 
-final class HelpersTestsXLexicon: Tests {
+final class HelpersTestsXLexicon: XCTestCase {
+    typealias Standard = NumberTextSchemeXStandard
     
     //=------------------------------------------------------------------------=
     // MARK: Styles
     //=------------------------------------------------------------------------=
     
-    @inlinable func int(_ scheme: NumberTextSchemeXStandard) -> IntegerFormatStyle<Int> {
+    @inlinable func int(_ scheme: Standard) -> IntegerFormatStyle<Int> {
         .number.locale(scheme.id.locale)
     }
     
-    @inlinable func double(_ scheme: NumberTextSchemeXStandard) -> FloatingPointFormatStyle<Double> {
+    @inlinable func double(_ scheme: Standard) -> FloatingPointFormatStyle<Double> {
         .number.locale(scheme.id.locale)
     }
     

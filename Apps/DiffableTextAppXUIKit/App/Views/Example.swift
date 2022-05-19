@@ -40,6 +40,10 @@ struct Example<Style: DiffableTextStyle>: View {
     // MARK: Accessors
     //=------------------------------------------------------------------------=
     
+    var placeholder: String {
+        "Much wow. Such empty."
+    }
+    
     var secondary: Color {
         Color(uiColor: .secondarySystemBackground)
     }
@@ -72,7 +76,7 @@ struct Example<Style: DiffableTextStyle>: View {
     }
     
     var diffableTextField: some View {
-        DiffableTextField("Much wow. Such empty.", value: value, style: style)
+        DiffableTextField(placeholder, value: value, style: style)
             .focused($focus).padding().background(tertiary)
     }
 }

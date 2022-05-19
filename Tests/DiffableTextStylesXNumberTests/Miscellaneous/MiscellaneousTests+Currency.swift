@@ -9,13 +9,13 @@
 
 #if DEBUG
 
-import DiffableTestKit
+import XCTest
 
 //*============================================================================*
 // MARK: Declaration
 //*============================================================================*
 
-final class MiscellaneousTestsXCurrency: Tests {
+final class MiscellaneousTestsXCurrency: XCTestCase {
     
     //=------------------------------------------------------------------------=
     // MARK: Tests

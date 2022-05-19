@@ -9,14 +9,14 @@
 
 #if DEBUG
 
-import DiffableTestKit
 import DiffableTextKit
+import XCTest
 
 //*============================================================================*
 // MARK: Declaration
 //*============================================================================*
 
-final class ModelsTestsXAttribute: Tests {
+final class ModelsTestsXAttribute: XCTestCase {
     
     //=------------------------------------------------------------------------=
     // MARK: State
@@ -32,7 +32,7 @@ final class ModelsTestsXAttribute: Tests {
         XCTAssert(Attribute.content.isEmpty)
     }
     
-    func testEachAttributeIsUnique() {
+    func testAttributesAreUnique() {
         XCTAssertEqual(Set(attributes.map(\.rawValue)).count, attributes.count)
     }
 }
