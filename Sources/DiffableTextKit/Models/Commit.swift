@@ -26,8 +26,7 @@ public struct Commit<Value> {
     //=------------------------------------------------------------------------=
     
     @inlinable public init(_ value: Value, _ snapshot: Snapshot) {
-        self.value = value
-        self.snapshot = snapshot
+        self.value = value;  self.snapshot = snapshot
     }
     
     //=------------------------------------------------------------------------=

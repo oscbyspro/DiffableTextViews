@@ -27,7 +27,7 @@ public struct Position<Offset: DiffableTextKit.Offset>: Comparable {
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable public init(_ offset: Int = 0) {
+    @inlinable public init(_ offset: Int) {
         self.offset = offset
     }
     

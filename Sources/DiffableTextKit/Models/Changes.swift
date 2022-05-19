@@ -33,7 +33,7 @@ public struct Changes: OptionSet {
     //=------------------------------------------------------------------------=
     
     @inlinable @inline(__always)
-    public init(rawValue: UInt8 = 0) {
+    public init(rawValue: UInt8) {
         self.rawValue = rawValue
     }
 }

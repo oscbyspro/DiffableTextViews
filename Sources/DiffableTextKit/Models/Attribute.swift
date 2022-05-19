@@ -18,6 +18,38 @@
 /// - Note: The easiest way to unformat text is to exclude symbols marked as virtual.
 ///
 public struct Attribute: OptionSet {
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Instances
+    //=------------------------------------------------------------------------=
+
+    /// Signifies that the symbol is not real and should not be parsed.
+    public static let virtual = Self(rawValue: 1 << 0)
+    
+    /// Signifies that the symbol should be ignored when it is inserted.
+    public static let insertable = Self(rawValue: 1 << 1)
+    
+    /// Signifies that the symbol should be ignored when it is removed.
+    public static let removable = Self(rawValue: 1 << 2)
+
+    /// Signifies that the symbol has no interactive size and should be passed through.
+    public static let passthrough = Self(rawValue: 1 << 3)
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Instances
+    //=------------------------------------------------------------------------=
+    
+    /// A standard attribute describing standard characters.
+    ///
+    /// It contains no attributes.
+    ///
+    public static let content = Self([])
+    
+    /// A formatting attribute describing formatting characters.
+    ///
+    /// It contains: virtual, insertable, removable, passthrough.
+    ///
+    public static let phantom = Self([.virtual, .insertable, .removable, .passthrough])
 
     //=------------------------------------------------------------------------=
     // MARK: State
@@ -32,52 +64,6 @@ public struct Attribute: OptionSet {
     @inlinable public init(rawValue: UInt8) {
         self.rawValue = rawValue
     }
-}
-
-//=----------------------------------------------------------------------------=
-// MARK: Singular
-//=----------------------------------------------------------------------------=
-
-public extension Attribute {
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Instances
-    //=------------------------------------------------------------------------=
-
-    /// Signifies that the symbol is not real and should not be parsed.
-    static let virtual = Self(rawValue: 1 << 0)
-    
-    /// Signifies that the symbol should be ignored when it is inserted.
-    static let insertable = Self(rawValue: 1 << 1)
-    
-    /// Signifies that the symbol should be ignored when it is removed.
-    static let removable = Self(rawValue: 1 << 2)
-
-    /// Signifies that the symbol has no interactive size and should be passed through.
-    static let passthrough = Self(rawValue: 1 << 3)
-}
-
-//=----------------------------------------------------------------------------=
-// MARK: Composites
-//=----------------------------------------------------------------------------=
-
-public extension Attribute {
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Instances
-    //=------------------------------------------------------------------------=
-    
-    /// A standard attribute describing standard characters.
-    ///
-    /// It contains no attributes.
-    ///
-    static let content = Self([])
-    
-    /// A formatting attribute describing formatting characters.
-    ///
-    /// It contains: virtual, insertable, removable, passthrough.
-    ///
-    static let phantom = Self([.virtual, .insertable, .removable, .passthrough])
 }
 
 //=----------------------------------------------------------------------------=
