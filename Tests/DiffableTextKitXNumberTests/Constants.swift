@@ -7,24 +7,29 @@
 // See http://www.apache.org/licenses/LICENSE-2.0 for license information.
 //=----------------------------------------------------------------------------=
 
+#if DEBUG
+
+import Foundation
+@testable import DiffableTextKitXNumber
+
 //*============================================================================*
-// MARK: Exports
+// MARK: Constants
 //*============================================================================*
 
-@_exported import DiffableTextKitXNumber
-@_exported import DiffableTextKitXPattern
+let USD: String = "USD"
 
-@_exported import struct DiffableTextKit.ConstantTextStyle
-@_exported import struct DiffableTextKit.EqualsTextStyle
+let en_US = Locale(identifier: "en_US")
 
-@_exported import protocol DiffableTextKit.DiffableTextStyle
+let locales: [Locale] = Locale
+    .availableIdentifiers.lazy.map(Locale.init)
+    .sorted(by: { $0.identifier < $1.identifier })
 
-//=----------------------------------------------------------------------------=
-// MARK: UIKit
-//=----------------------------------------------------------------------------=
+let currencyCodes: [String] = locales
+    .lazy.compactMap(\.currencyCode)
+    .reduce(into: Set()) { $0.insert($1) }
+    .lazy.map({ $0 }).sorted(by: <)
 
-#if canImport(UIKit)
-
-@_exported import DiffableTextKitXUIKit
+let standards: [NumberTextSchemeXStandard] = locales.lazy
+    .map(NumberTextSchemeXStandard.ID.init).map(NumberTextSchemeXStandard.init)
 
 #endif

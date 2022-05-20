@@ -2,9 +2,8 @@
 
 An open source package for as-you-type formatting in SwiftUI.
 
-![DiffableTextFieldXAmount.gif](Assets/DiffableTextFieldXAmount.gif)
-
-![DiffableTextFieldXPhone.gif](Assets/DiffableTextFieldXPhone.gif)
+![Currency](Assets/ViewXCurrency.gif)
+![Phone](Assets/ViewXPhone.gif)
 
 ### Features
 
@@ -45,7 +44,7 @@ The example app provides quick-and-easy-to-use customization tools.
 
 | Number | Pattern |
 |--------|---------|
-<img src="Assets/DiffableTextAppXUIKitXNumber.png" alt="Number" width="250"/> | <img src="Assets/DiffableTextAppXUIKitXPattern.png" alt="Pattern" width="250"/>
+<img src="Assets/AppXNumber.png" alt="Number" width="250"/> | <img src="Assets/AppXPattern.png" alt="Pattern" width="250"/>
 
 ### Installation
 
@@ -84,7 +83,7 @@ diffableTextViews_tint(_:)
 
 # Styles
 
-## NumberTextStyle ([Source](Sources/DiffableTextStylesXNumber), [Tests](Tests/DiffableTextStylesXNumberTests))
+## NumberTextStyle ([Source](Sources/DiffableTextKitXNumber), [Tests](Tests/DiffableTextKitXNumberTests))
 
 A style that binds localized numbers using various formats.
 
@@ -102,7 +101,7 @@ A style that binds localized numbers using various formats.
 
 ### Examples
 
-![DiffableTextFieldXAmount.gif](Assets/DiffableTextFieldXAmount.gif)
+![Currency](Assets/ViewXCurrency.gif)
 
 ```swift
 import DiffableTextViews
@@ -112,7 +111,7 @@ import SwiftUI
 // MARK: View
 //*============================================================================*
 
-struct DiffableTextFieldXAmount: View {
+struct DiffableTextFieldXCurrency: View {
 
     //=------------------------------------------------------------------------=
     // MARK: State
@@ -120,7 +119,7 @@ struct DiffableTextFieldXAmount: View {
 
     @State var amount = 0 as Decimal
     @State var locale = Locale(identifier: "sv_SE")
-
+    
     //=------------------------------------------------------------------------=
     // MARK: Body
     //=------------------------------------------------------------------------=
@@ -138,7 +137,7 @@ struct DiffableTextFieldXAmount: View {
 }
 ```
 
-## PatternTextStyle ([Source](Sources/DiffableTextStylesXPattern), [Tests](Tests/DiffableTextStylesXPatternTests))
+## PatternTextStyle ([Source](Sources/DiffableTextKitXPattern), [Tests](Tests/DiffableTextKitXPatternTests))
 
 A style that processes characters laid out in custom patterns.
 
@@ -153,7 +152,7 @@ A style that processes characters laid out in custom patterns.
 
 ### Examples
 
-![DiffableTextFieldXPhone.gif](Assets/DiffableTextFieldXPhone.gif)
+![Phone](Assets/ViewXPhone.gif)
 
 ```swift
 import DiffableTextViews

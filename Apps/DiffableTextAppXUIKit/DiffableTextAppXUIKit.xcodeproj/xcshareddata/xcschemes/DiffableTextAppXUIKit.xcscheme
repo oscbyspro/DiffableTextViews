@@ -54,37 +54,18 @@
             </BuildableReference>
          </TestableReference>
          <TestableReference
-            skipped = "NO"
-            parallelizable = "YES">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "DiffableTextStylesXPatternTests"
-               BuildableName = "DiffableTextStylesXPatternTests"
-               BlueprintName = "DiffableTextStylesXPatternTests"
-               ReferencedContainer = "container:../..">
-            </BuildableReference>
-         </TestableReference>
-         <TestableReference
-            skipped = "NO"
-            parallelizable = "YES">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "DiffableTextViewsXUIKitTests"
-               BuildableName = "DiffableTextViewsXUIKitTests"
-               BlueprintName = "DiffableTextViewsXUIKitTests"
-               ReferencedContainer = "container:../..">
-            </BuildableReference>
-         </TestableReference>
-         <TestableReference
             skipped = "NO">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "DiffableTextStylesXNumberTests"
-               BuildableName = "DiffableTextStylesXNumberTests"
-               BlueprintName = "DiffableTextStylesXNumberTests"
+               BlueprintIdentifier = "DiffableTextKitXNumberTests"
+               BuildableName = "DiffableTextKitXNumberTests"
+               BlueprintName = "DiffableTextKitXNumberTests"
                ReferencedContainer = "container:../..">
             </BuildableReference>
             <SkippedTests>
+               <Test
+                  Identifier = "StyleTestsXCurrency/testFloat64_aka_Double()">
+               </Test>
                <Test
                   Identifier = "StyleTestsXCurrency/testInt()">
                </Test>
@@ -122,9 +103,20 @@
             parallelizable = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "DiffableTextStylesXWrappersTests"
-               BuildableName = "DiffableTextStylesXWrappersTests"
-               BlueprintName = "DiffableTextStylesXWrappersTests"
+               BlueprintIdentifier = "DiffableTextKitXPatternTests"
+               BuildableName = "DiffableTextKitXPatternTests"
+               BlueprintName = "DiffableTextKitXPatternTests"
+               ReferencedContainer = "container:../..">
+            </BuildableReference>
+         </TestableReference>
+         <TestableReference
+            skipped = "NO"
+            parallelizable = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "DiffableTextKitXUIKitTests"
+               BuildableName = "DiffableTextKitXUIKitTests"
+               BlueprintName = "DiffableTextKitXUIKitTests"
                ReferencedContainer = "container:../..">
             </BuildableReference>
          </TestableReference>

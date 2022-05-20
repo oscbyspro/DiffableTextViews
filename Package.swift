@@ -32,52 +32,45 @@ let package = Package(
     ],
     targets: [
         //=--------------------------------------=
-        // 4 - DiffableTextViews
+        // X - DiffableTextViews
         //=--------------------------------------=
         .target(
             name: "DiffableTextViews",
             dependencies: [
-                "DiffableTextStyles",
-                "DiffableTextViewsXUIKit"]),
+                "DiffableTextKitXUIKit",
+                "DiffableTextKitXNumber",
+                "DiffableTextKitXPattern"]),
         //=--------------------------------------=
-        // 3 - DiffableTextStyles
-        //=--------------------------------------=
-        .target(
-            name: "DiffableTextStyles",
-            dependencies: [
-                "DiffableTextStylesXNumber",
-                "DiffableTextStylesXPattern"]),
-        //=--------------------------------------=
-        // 2 - DiffableTextStylesXNumber
+        // 2 - DiffableTextKitXNumber
         //=--------------------------------------=
         .target(
-            name: "DiffableTextStylesXNumber",
+            name: "DiffableTextKitXNumber",
             dependencies: [
                 "DiffableTextKit",
-                "DiffableTextViewsXUIKit"]),
+                "DiffableTextKitXUIKit"]),
         .testTarget(
-            name: "DiffableTextStylesXNumberTests",
-            dependencies: ["DiffableTextStylesXNumber"]),
+            name: "DiffableTextKitXNumberTests",
+            dependencies: ["DiffableTextKitXNumber"]),
         //=--------------------------------------=
-        // 2 - DiffableTextStylesXPattern
+        // 2 - DiffableTextKitXPattern
         //=--------------------------------------=
         .target(
-            name: "DiffableTextStylesXPattern",
+            name: "DiffableTextKitXPattern",
             dependencies: [
                 "DiffableTextKit",
-                "DiffableTextViewsXUIKit"]),
+                "DiffableTextKitXUIKit"]),
         .testTarget(
-            name: "DiffableTextStylesXPatternTests",
-            dependencies: ["DiffableTextStylesXPattern"]),
+            name: "DiffableTextKitXPatternTests",
+            dependencies: ["DiffableTextKitXPattern"]),
         //=--------------------------------------=
-        // 1 - DiffableTextViewsXUIKit
+        // 1 - DiffableTextKitXUIKit
         //=--------------------------------------=
         .target(
-            name: "DiffableTextViewsXUIKit",
+            name: "DiffableTextKitXUIKit",
             dependencies: ["DiffableTextKit"]),
         .testTarget(
-            name: "DiffableTextViewsXUIKitTests",
-            dependencies: ["DiffableTextViewsXUIKit"]),
+            name: "DiffableTextKitXUIKitTests",
+            dependencies: ["DiffableTextKitXUIKit"]),
         //=--------------------------------------=
         // 0 - DiffableTextKit
         //=--------------------------------------=
