@@ -2,8 +2,8 @@
 
 An open source package for as-you-type formatting in SwiftUI.
 
-![Currency](Assets/ViewXCurrency.gif)
-![Phone](Assets/ViewXPhone.gif)
+![Number](Assets/ViewXNumber.gif)
+![Pattern](Assets/ViewXPattern.gif)
 
 ### Features
 
@@ -101,7 +101,7 @@ A style that binds localized numbers using various formats.
 
 ### Examples
 
-![Currency](Assets/ViewXCurrency.gif)
+![Number](Assets/ViewXNumber.gif)
 
 ```swift
 import DiffableTextViews
@@ -111,7 +111,7 @@ import SwiftUI
 // MARK: View
 //*============================================================================*
 
-struct DiffableTextFieldXCurrency: View {
+struct DiffableTextFieldXNumber: View {
 
     //=------------------------------------------------------------------------=
     // MARK: State
@@ -152,7 +152,7 @@ A style that processes characters laid out in custom patterns.
 
 ### Examples
 
-![Phone](Assets/ViewXPhone.gif)
+![Pattern](Assets/ViewXPattern.gif)
 
 ```swift
 import DiffableTextViews
@@ -162,7 +162,7 @@ import SwiftUI
 // MARK: View
 //*============================================================================*
 
-struct DiffableTextFieldXPhone: View {
+struct DiffableTextFieldXPattern: View {
 
     //=------------------------------------------------------------------------=
     // MARK: State
