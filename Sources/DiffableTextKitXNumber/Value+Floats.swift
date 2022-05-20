@@ -13,7 +13,7 @@ import Foundation
 // MARK: Declaration
 //*============================================================================*
 
-private protocol _Value:
+private protocol _Float:
 NumberTextValueXSigned,
 NumberTextValueXFloatingPoint,
 NumberTextValueXNumberable,
@@ -24,7 +24,7 @@ NumberTextValueXPercentable { }
 // MARK: Decimal
 //*============================================================================*
 
-extension Decimal: _Value {
+extension Decimal: _Float {
     public typealias NumberTextStyle = _NumberTextStyle<FormatStyle>
 
     //=------------------------------------------------------------------------=
@@ -40,7 +40,7 @@ extension Decimal: _Value {
 // MARK: Double
 //*============================================================================*
 
-extension Double: _Value {
+extension Double: _Float {
     public typealias NumberTextStyle = _NumberTextStyle<FloatingPointFormatStyle<Self>>
     
     //=------------------------------------------------------------------------=

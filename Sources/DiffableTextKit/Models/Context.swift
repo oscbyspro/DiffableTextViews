@@ -61,7 +61,7 @@ public struct Context<Style: DiffableTextStyle> {
     // MARK: Transformation
     //=------------------------------------------------------------------------=
     
-    /// Transforms this instance with copy-on-write behavior.
+    /// Writes to storage with copy-on-write behavior.
     @inlinable mutating func write(_ write: (Storage) -> Void) {
         //=--------------------------------------=
         // Unique
@@ -111,17 +111,19 @@ public struct Context<Style: DiffableTextStyle> {
 // MARK: Accessors
 //=----------------------------------------------------------------------------=
 
-public extension Context {
+extension Context {
 
     //=------------------------------------------------------------------------=
     // MARK: 1st
     //=------------------------------------------------------------------------=
         
-    @inlinable internal var status: Status {
+    @inlinable @inline(__always)
+    var status: Status {
         _storage.status
     }
     
-    @inlinable internal var layout: Layout {
+    @inlinable @inline(__always)
+    var layout: Layout {
         _storage.layout
     }
     
@@ -129,15 +131,18 @@ public extension Context {
     // MARK: 2nd
     //=------------------------------------------------------------------------=
     
-    @inlinable var style: Style {
+    @inlinable @inline(__always)
+    public var style: Style {
         status.style
     }
     
-    @inlinable var value: Value {
+    @inlinable @inline(__always)
+    public var value: Value {
         status.value
     }
     
-    @inlinable var focus: Focus {
+    @inlinable @inline(__always)
+    public var focus: Focus {
         status.focus
     }
     
@@ -145,15 +150,18 @@ public extension Context {
     // MARK: 3rd
     //=------------------------------------------------------------------------=
 
-    @inlinable var snapshot: Snapshot {
+    @inlinable @inline(__always)
+    public var snapshot: Snapshot {
         layout.snapshot
     }
     
-    @inlinable var text: String {
+    @inlinable @inline(__always)
+    public var text: String {
         layout.snapshot.characters
     }
     
-    @inlinable func selection<T>(as type: Position<T>.Type =
+    @inlinable @inline(__always)
+    public func selection<T>(as position: Position<T>.Type =
     Position<T>.self) -> Range<T.Position> where T: Offset {
         layout.selection().range
     }
@@ -197,13 +205,13 @@ extension Context {
 // MARK: Transformations
 //=----------------------------------------------------------------------------=
 
-public extension Context {
+extension Context {
     
     //=------------------------------------------------------------------------=
     // MARK: Status
     //=------------------------------------------------------------------------=
     
-    @inlinable mutating func merge(_ status: Status) -> Update {
+    @inlinable public mutating func merge(_ status: Status) -> Update {
         //=--------------------------------------=
         // Update
         //=--------------------------------------=
@@ -227,7 +235,7 @@ public extension Context {
     // MARK: Characters
     //=------------------------------------------------------------------------=
     
-    @inlinable mutating func merge<T>(_ characters: String,
+    @inlinable public mutating func merge<T>(_ characters: String,
     in range: Range<T.Position>) throws -> Update where T: Offset {
         let previous = value
         //=--------------------------------------=
@@ -251,7 +259,7 @@ public extension Context {
     // MARK: Selection
     //=------------------------------------------------------------------------=
     
-    @inlinable mutating func merge<T>(
+    @inlinable public mutating func merge<T>(
     selection: Range<T.Position>,
     momentums: Bool) -> Update where T: Offset {
         //=--------------------------------------=

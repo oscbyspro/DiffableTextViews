@@ -38,10 +38,3 @@ extension _OptionalNumberTextStyle where Format: NumberTextFormatXCurrencyable {
 extension _OptionalNumberTextStyle where Format: NumberTextFormatXPercentable {
     public typealias Percent = _OptionalNumberTextStyle<Format.Percent>
 }
-
-//*============================================================================*
-// MARK: Helpers
-//*============================================================================*
-
-public typealias NFSC =   NumberFormatStyleConfiguration
-public typealias CFSC = CurrencyFormatStyleConfiguration

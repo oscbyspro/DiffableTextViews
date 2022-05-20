@@ -18,6 +18,9 @@ FormatInput: DiffableTextKitXNumber.NumberTextValue {
     associatedtype NumberTextRoundingIncrement
     associatedtype NumberTextSign: NumberTextFormatXSignRepresentable
     associatedtype NumberTextScheme: DiffableTextKitXNumber.NumberTextScheme
+
+    typealias NFSC = NumberFormatStyleConfiguration
+    typealias CFSC = CurrencyFormatStyleConfiguration
     
     //=------------------------------------------------------------------------=
     // MARK: State
