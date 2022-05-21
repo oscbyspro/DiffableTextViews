@@ -8,7 +8,7 @@
 //=----------------------------------------------------------------------------=
 
 //*============================================================================*
-// MARK: Declaration
+// MARK: * Snapshot
 //*============================================================================*
 
 /// A collection of characters, attributes and an optional anchor.
@@ -124,7 +124,7 @@ public struct Snapshot: BidirectionalCollection, RangeReplaceableCollection {
     }
     
     //=------------------------------------------------------------------------=
-    // MARK: After / Before
+    // MARK: After, Before
     //=------------------------------------------------------------------------=
     
     @inlinable public func index(after  index: Index) -> Index {
@@ -139,7 +139,7 @@ public struct Snapshot: BidirectionalCollection, RangeReplaceableCollection {
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: Transformations
+// MARK: + Transformations
 //=----------------------------------------------------------------------------=
 
 public extension Snapshot {
@@ -224,7 +224,7 @@ public extension Snapshot {
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: Description
+// MARK: + Description
 //=----------------------------------------------------------------------------=
 
 extension Snapshot: CustomStringConvertible {
@@ -241,7 +241,7 @@ extension Snapshot: CustomStringConvertible {
 //=----------------------------------------------------------------------------=
 // All extensions below this line are internal implementation details.
 //=----------------------------------------------------------------------------=
-// MARK: Accessors
+// MARK: + Accessors
 //=----------------------------------------------------------------------------=
 
 extension Snapshot {
@@ -284,7 +284,7 @@ extension Snapshot {
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: Caret
+// MARK: + Caret
 //=----------------------------------------------------------------------------=
 
 extension Snapshot {
@@ -330,7 +330,7 @@ extension Snapshot {
     }
     
     //=--------------------------------------------------------------------=
-    // MARK: Forwards / Backwards / To / Through
+    // MARK: Forwards, Backwards, To, Through
     //=--------------------------------------------------------------------=
     
     @inlinable func caret(from index: Index, towards direction: Direction,
@@ -360,7 +360,7 @@ extension Snapshot {
     }
     
     //*========================================================================*
-    // MARK: Declaration
+    // MARK: * Jump
     //*========================================================================*
 
     @usableFromInline enum Jump {

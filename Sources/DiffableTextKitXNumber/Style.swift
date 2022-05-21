@@ -11,7 +11,7 @@ import DiffableTextKit
 import Foundation
 
 //*============================================================================*
-// MARK: Declaration
+// MARK: * Style
 //*============================================================================*
 
 public struct _NumberTextStyle<Format: NumberTextFormat>: NumberTextStyleProtocol {
@@ -68,7 +68,7 @@ public struct _NumberTextStyle<Format: NumberTextFormat>: NumberTextStyleProtoco
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: Utilities
+// MARK: + Utilities
 //=----------------------------------------------------------------------------=
 
 public extension _NumberTextStyle {
@@ -153,7 +153,7 @@ public extension _NumberTextStyle {
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: Helpers
+// MARK: + Helpers
 //=----------------------------------------------------------------------------=
 
 internal extension _NumberTextStyle {

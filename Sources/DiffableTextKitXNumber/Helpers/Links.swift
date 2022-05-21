@@ -10,7 +10,7 @@
 import Foundation
 
 //*============================================================================*
-// MARK: Declaration
+// MARK: * Links
 //*============================================================================*
 
 /// A mapping model between components and characters.

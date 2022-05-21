@@ -10,13 +10,10 @@
 import Foundation
 
 //*============================================================================*
-// MARK: Declaration
+// MARK: * Glyph
 //*============================================================================*
 
 /// An object representing a UTF-8 encoded ASCII character.
-///
-/// - The conforming object MUST be a struct (have a bit pattern equal to its rawValue).
-///
 @usableFromInline protocol Glyph: Hashable, CaseIterable, CustomStringConvertible {
     associatedtype Enumeration: CaseIterable, RawRepresentable where Enumeration.RawValue == UInt8
 
@@ -33,7 +30,7 @@ import Foundation
     @inlinable init(_ enumeration: Enumeration)
     
     //=------------------------------------------------------------------------=
-    // MARK: Localization
+    // MARK: Utilities
     //=------------------------------------------------------------------------=
         
     @inlinable func standard(_ formatter: NumberFormatter) -> Character!
@@ -42,18 +39,10 @@ import Foundation
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: Details
+// MARK: + Details
 //=----------------------------------------------------------------------------=
 
 extension Glyph {
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Localization
-    //=------------------------------------------------------------------------=
-    
-    @inlinable func currency(_ formatter: NumberFormatter) -> Character! {
-        standard(formatter)
-    }
     
     //=------------------------------------------------------------------------=
     // MARK: Enumeration
@@ -93,5 +82,42 @@ extension Glyph {
     
     @inlinable func transformed(_ transform: (inout Self) -> Void) -> Self {
         var result = self; transform(&result); return result
+    }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Utilities
+    //=------------------------------------------------------------------------=
+    
+    @inlinable func currency(_ formatter: NumberFormatter) -> Character! {
+        standard(formatter)
+    }
+}
+
+//*============================================================================*
+// MARK: * Glyphs
+//*============================================================================*
+
+/// An object representing multiple UTF-8 encoded ASCII characters.
+@usableFromInline protocol Glyphs: CustomStringConvertible {
+    
+    //=------------------------------------------------------------------------=
+    // MARK: State
+    //=------------------------------------------------------------------------=
+    
+    @inlinable var rawValue: [UInt8] { get }
+}
+
+//=----------------------------------------------------------------------------=
+// MARK: + Details
+//=----------------------------------------------------------------------------=
+
+extension Glyphs {
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Accessors
+    //=------------------------------------------------------------------------=
+    
+    @inlinable var description: String {
+        String(bytes: rawValue, encoding: .utf8)!
     }
 }

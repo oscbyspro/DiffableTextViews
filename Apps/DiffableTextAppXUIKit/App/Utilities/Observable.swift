@@ -10,7 +10,7 @@
 import SwiftUI
 
 //*============================================================================*
-// MARK: Declaration
+// MARK: * Observable
 //*============================================================================*
 
 @propertyWrapper final class Observable<Value>: ObservableObject {

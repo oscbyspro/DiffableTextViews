@@ -11,7 +11,7 @@ import DiffableTextKit
 import Foundation
 
 //*============================================================================*
-// MARK: Declaration
+// MARK: * Scheme x Standard
 //*============================================================================*
 
 @usableFromInline final class NumberTextSchemeXStandard: NumberTextSchemeXReuseable {

@@ -10,7 +10,7 @@
 import Foundation
 
 //*============================================================================*
-// MARK: Declaration
+// MARK: * Digit
 //*============================================================================*
 
 @usableFromInline struct Digit: Glyph {
@@ -57,7 +57,7 @@ import Foundation
     }
     
     //=------------------------------------------------------------------------=
-    // MARK: Localization
+    // MARK: Utilities
     //=------------------------------------------------------------------------=
     
     /// Requires that formatter.numberStyle == .none.
@@ -67,7 +67,7 @@ import Foundation
     }
     
     //*========================================================================*
-    // MARK: Declaration
+    // MARK: * Enumeration
     //*========================================================================*
     
     @usableFromInline enum Enumeration: UInt8, CaseIterable {

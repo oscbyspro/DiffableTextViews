@@ -9,11 +9,12 @@
 
 #if DEBUG
 
-import XCTest
 @testable import DiffableTextKit
 
+import XCTest
+
 //*============================================================================*
-// MARK: Declaration
+// MARK: * Style x Equals
 //*============================================================================*
 
 final class StyleTestsXEquals: XCTestCase {

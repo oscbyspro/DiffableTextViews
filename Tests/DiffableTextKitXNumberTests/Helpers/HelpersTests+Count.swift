@@ -9,11 +9,12 @@
 
 #if DEBUG
 
-import XCTest
 @testable import DiffableTextKitXNumber
 
+import XCTest
+
 //*============================================================================*
-// MARK: Declaration
+// MARK: * Helpers x Count
 //*============================================================================*
 
 final class HelpersTestsXCount: XCTestCase {

@@ -10,8 +10,10 @@
 import Foundation
 
 //*============================================================================*
-// MARK: Decimal
+// MARK: * Format x Currency
 //*============================================================================*
+// MARK: + Decimal
+//=----------------------------------------------------------------------------=
 
 extension Decimal.FormatStyle.Currency: NumberTextFormat,
 NumberTextFormatXCurrency {
@@ -25,9 +27,9 @@ NumberTextFormatXCurrency {
     }
 }
 
-//*============================================================================*
-// MARK: Floating Point
-//*============================================================================*
+//=----------------------------------------------------------------------------=
+// MARK: + Floating Point
+//=----------------------------------------------------------------------------=
 
 extension FloatingPointFormatStyle.Currency: NumberTextFormat,
 NumberTextFormatXCurrency where Value: NumberTextValue {
@@ -41,9 +43,9 @@ NumberTextFormatXCurrency where Value: NumberTextValue {
     }
 }
 
-//*============================================================================*
-// MARK: Integer
-//*============================================================================*
+//=----------------------------------------------------------------------------=
+// MARK: + Integer
+//=----------------------------------------------------------------------------=
 
 extension IntegerFormatStyle.Currency: NumberTextFormat,
 NumberTextFormatXCurrency where Value: NumberTextValue {

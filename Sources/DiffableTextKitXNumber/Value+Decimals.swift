@@ -7,31 +7,31 @@
 // See http://www.apache.org/licenses/LICENSE-2.0 for license information.
 //=----------------------------------------------------------------------------=
 
+import Foundation
+
 //*============================================================================*
-// MARK: Declaration
+// MARK: * Value x Decimal(s)
 //*============================================================================*
 
-/// An object representing multiple UTF-8 encoded ASCII characters.
-@usableFromInline protocol Glyphs: CustomStringConvertible {
-    
-    //=------------------------------------------------------------------------=
-    // MARK: State
-    //=------------------------------------------------------------------------=
-    
-    @inlinable var rawValue: [UInt8] { get }
-}
+private protocol _Decimal:
+NumberTextValueXSigned,
+NumberTextValueXFloatingPoint,
+NumberTextValueXNumberable,
+NumberTextValueXCurrencyable,
+NumberTextValueXPercentable
+where NumberTextStyle == _NumberTextStyle<Decimal.FormatStyle> { }
 
 //=----------------------------------------------------------------------------=
-// MARK: Details
+// MARK: + Decimal
 //=----------------------------------------------------------------------------=
 
-extension Glyphs {
-    
+extension Decimal: _Decimal {
+
     //=------------------------------------------------------------------------=
-    // MARK: Accessors
+    // MARK: Precision, Bounds
     //=------------------------------------------------------------------------=
     
-    @inlinable var description: String {
-        String(bytes: rawValue, encoding: .utf8)!
-    }
+    public static let precision: Int = 38
+    public static let bounds: ClosedRange<Self> = Self.bounds(
+    abs: Self(string: String(repeating: "9", count: precision))!)
 }

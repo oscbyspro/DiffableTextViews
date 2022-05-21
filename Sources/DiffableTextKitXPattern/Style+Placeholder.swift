@@ -9,45 +9,38 @@
 
 import DiffableTextKit
 
-//=----------------------------------------------------------------------------=
-// MARK: Placeholder
-//=----------------------------------------------------------------------------=
+//*============================================================================*
+// MARK: * Style + Placeholder + Transformations
+//*============================================================================*
 
 extension PatternTextStyle {
     
     //=------------------------------------------------------------------------=
-    // MARK: Transformations
+    // MARK: Character, Predicate
     //=------------------------------------------------------------------------=
     
-    @inlinable func placeholder(_ placeholder: Character, where predicate: Predicate) -> Self {
-        var result = self; result.placeholders[placeholder] = predicate; return result
+    @inlinable func placeholder(_ character: Character, where predicate: Predicate) -> Self {
+        var result = self; result.placeholders[character] = predicate; return result
     }
-}
-
-//=----------------------------------------------------------------------------=
-// MARK: Placeholder
-//=----------------------------------------------------------------------------=
-
-public extension PatternTextStyle {
 
     //=------------------------------------------------------------------------=
-    // MARK: Transformations
+    // MARK: Character, Closure, Proxy
     //=------------------------------------------------------------------------=
     
     /// A placeholder character and a variable predicate bound to a value.
-    @inlinable func placeholder<Value: Hashable>(_ character: Character,
+    @inlinable public func placeholder<Value: Hashable>(_ character: Character,
     value: Value, where predicate: @escaping (Character) -> Bool) -> Self {
         placeholder(character, where: Predicate(proxy: value, check: predicate))
     }
     
     /// A placeholder character and a constant predicate.
-    @inlinable func placeholder(_ character: Character,
+    @inlinable public func placeholder(_ character: Character,
     where predicate: @escaping (Character) -> Bool) -> Self {
         placeholder(character, where: Predicate(proxy: _Void(), check: predicate))
     }
     
     /// A placeholder character and a constant predicate that always evaluates true.
-    @inlinable func placeholder(_ character: Character) -> Self {
+    @inlinable public func placeholder(_ character: Character) -> Self {
         placeholder(character, where: Predicate(proxy: _Void(), check: { _ in true }))
     }
 }

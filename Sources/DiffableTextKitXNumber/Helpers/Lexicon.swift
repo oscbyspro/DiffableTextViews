@@ -11,7 +11,7 @@ import DiffableTextKit
 import Foundation
 
 //*============================================================================*
-// MARK: Declaration
+// MARK: * Lexicon
 //*============================================================================*
 
 public final class Lexicon {

@@ -9,11 +9,12 @@
 
 #if DEBUG
 
-import XCTest
 @testable import DiffableTextKitXNumber
 
+import XCTest
+
 //*============================================================================*
-// MARK: Declaration
+// MARK: * Style x Currency
 //*============================================================================*
 
 /// - There are about 144k locale-currency pairs, so it may take a while.
@@ -35,7 +36,7 @@ final class StyleTestsXCurrency: StyleTests {
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: Defaults
+// MARK: + Defaults
 //=----------------------------------------------------------------------------=
 
 extension StyleTestsXCurrency {
@@ -69,7 +70,7 @@ extension StyleTestsXCurrency {
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: Decimal
+// MARK: + Decimal
 //=----------------------------------------------------------------------------=
 
 extension StyleTestsXCurrency {
@@ -84,7 +85,7 @@ extension StyleTestsXCurrency {
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: Floats
+// MARK: + Floats
 //=----------------------------------------------------------------------------=
 
 extension StyleTestsXCurrency {
@@ -99,7 +100,7 @@ extension StyleTestsXCurrency {
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: Ints
+// MARK: + Ints
 //=----------------------------------------------------------------------------=
 
 extension StyleTestsXCurrency {
@@ -130,7 +131,7 @@ extension StyleTestsXCurrency {
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: UInts
+// MARK: + UInts
 //=----------------------------------------------------------------------------=
 
 extension StyleTestsXCurrency {

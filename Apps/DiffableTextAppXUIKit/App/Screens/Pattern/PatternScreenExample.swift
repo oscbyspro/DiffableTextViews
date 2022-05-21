@@ -11,7 +11,7 @@ import SwiftUI
 import DiffableTextViews
 
 //*============================================================================*
-// MARK: Declaration
+// MARK: * Screen x Pattern x Example
 //*============================================================================*
 
 struct PatternScreenExample: View {

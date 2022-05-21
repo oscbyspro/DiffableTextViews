@@ -7,27 +7,38 @@
 // See http://www.apache.org/licenses/LICENSE-2.0 for license information.
 //=----------------------------------------------------------------------------=
 
+import DiffableTextKit
+
 //*============================================================================*
-// MARK: * Box
+// MARK: * Scheme x Reuseable
 //*============================================================================*
 
-final class Box<Value: Equatable>: Equatable {
-    
-    //=------------------------------------------------------------------------=
-    // MARK: State
-    //=------------------------------------------------------------------------=
-    
-    let value: Value
+@usableFromInline protocol NumberTextSchemeXReuseable: AnyObject, Identifiable, NumberTextScheme {
     
     //=------------------------------------------------------------------------=
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    init(_ value: Value ) { self.value = value }
+    @inlinable init(_ id: ID)
     
     //=------------------------------------------------------------------------=
-    // MARK: Utilities
+    // MARK: Cache
     //=------------------------------------------------------------------------=
+
+    @inlinable static var cache: Cache<ID, Self> { get }
+}
+
+//=----------------------------------------------------------------------------=
+// MARK: + Details
+//=----------------------------------------------------------------------------=
+
+extension NumberTextSchemeXReuseable {
     
-    static func == (lhs: Box, rhs: Box) -> Bool { lhs.value == rhs.value }
+    //=------------------------------------------------------------------------=
+    // MARK: Initializers
+    //=------------------------------------------------------------------------=
+        
+    @inlinable static func reuse(_ id: ID) -> Self {
+        cache.reuse(id, make: Self(id))
+    }
 }

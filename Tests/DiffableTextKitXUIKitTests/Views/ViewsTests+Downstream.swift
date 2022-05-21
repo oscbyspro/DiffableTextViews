@@ -10,11 +10,12 @@
 #if DEBUG
 #if canImport(UIKit)
 
-import XCTest
 @testable import DiffableTextKitXUIKit
 
+import XCTest
+
 //*============================================================================*
-// MARK: Declaration
+// MARK: * Views x Downstream
 //*============================================================================*
 
 /// ```
@@ -47,7 +48,7 @@ final class ViewsTestsXDownstream: XCTestCase {
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: Position
+// MARK: + Position
 //=----------------------------------------------------------------------------=
 
 extension ViewsTestsXDownstream {
@@ -68,13 +69,13 @@ extension ViewsTestsXDownstream {
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: Measurements
+// MARK: + Measurements
 //=----------------------------------------------------------------------------=
 
 extension ViewsTestsXDownstream {
     
     //=------------------------------------------------------------------------=
-    // MARK: Loop
+    // MARK: Utilities
     //=------------------------------------------------------------------------=
     
     func sizeLoop() {

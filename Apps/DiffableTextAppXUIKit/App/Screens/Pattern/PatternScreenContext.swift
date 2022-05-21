@@ -11,7 +11,7 @@ import SwiftUI
 import DiffableTextViews
 
 //*============================================================================*
-// MARK: Declaration
+// MARK: * Screen x Pattern x Context
 //*============================================================================*
 
 final class PatternScreenContext: ObservableObject {
@@ -52,7 +52,7 @@ final class PatternScreenContext: ObservableObject {
     }
     
     //*========================================================================*
-    // MARK: Enumerations
+    // MARK: * ID(s)
     //*========================================================================*
     
     enum PatternID: String, CaseIterable {

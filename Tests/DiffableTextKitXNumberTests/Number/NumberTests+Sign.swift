@@ -9,11 +9,12 @@
 
 #if DEBUG
 
-import XCTest
 @testable import DiffableTextKitXNumber
 
+import XCTest
+
 //*============================================================================*
-// MARK: Declaration
+// MARK: * Number x Sign
 //*============================================================================*
 
 final class NumberTestsXSign: XCTestCase {

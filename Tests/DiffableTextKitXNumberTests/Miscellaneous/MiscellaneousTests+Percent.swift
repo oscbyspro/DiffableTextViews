@@ -9,11 +9,12 @@
 
 #if DEBUG
 
-import XCTest
 @testable import DiffableTextKitXNumber
 
+import XCTest
+
 //*============================================================================*
-// MARK: Declaration
+// MARK: * Miscellaneous x Percent
 //*============================================================================*
 
 final class MiscellaneousTestsXPercent: XCTestCase {
@@ -33,9 +34,9 @@ final class MiscellaneousTestsXPercent: XCTestCase {
     }
 }
 
-//=----------------------------------------------------------------------------=
-// MARK: Lexicon
-//=----------------------------------------------------------------------------=
+//*============================================================================*
+// MARK: * Lexicon
+//*============================================================================*
 
 fileprivate extension Lexicon {
         

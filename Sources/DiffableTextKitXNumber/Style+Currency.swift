@@ -11,7 +11,7 @@ import DiffableTextKit
 import Foundation
 
 //*============================================================================*
-// MARK: Currency
+// MARK: * Currency
 //*============================================================================*
 
 extension _NumberTextStyle where Format: NumberTextFormatXCurrency {
@@ -26,7 +26,7 @@ extension _NumberTextStyle where Format: NumberTextFormatXCurrency {
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: Decimal
+// MARK: + Decimal
 //=----------------------------------------------------------------------------=
 
 extension DiffableTextStyle where Self == NumberTextStyle<Decimal>.Currency {
@@ -41,7 +41,7 @@ extension DiffableTextStyle where Self == NumberTextStyle<Decimal>.Currency {
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: Double
+// MARK: + Double
 //=----------------------------------------------------------------------------=
 
 extension DiffableTextStyle where Self == NumberTextStyle<Double>.Currency {
@@ -56,7 +56,7 @@ extension DiffableTextStyle where Self == NumberTextStyle<Double>.Currency {
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: Int
+// MARK: + Int
 //=----------------------------------------------------------------------------=
 
 extension DiffableTextStyle where Self == NumberTextStyle<Int>.Currency {
@@ -71,7 +71,7 @@ extension DiffableTextStyle where Self == NumberTextStyle<Int>.Currency {
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: Int8
+// MARK: + Int8
 //=----------------------------------------------------------------------------=
 
 extension DiffableTextStyle where Self == NumberTextStyle<Int8>.Currency {
@@ -86,7 +86,7 @@ extension DiffableTextStyle where Self == NumberTextStyle<Int8>.Currency {
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: Int16
+// MARK: + Int16
 //=----------------------------------------------------------------------------=
 
 extension DiffableTextStyle where Self == NumberTextStyle<Int16>.Currency {
@@ -101,7 +101,7 @@ extension DiffableTextStyle where Self == NumberTextStyle<Int16>.Currency {
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: Int32
+// MARK: + Int32
 //=----------------------------------------------------------------------------=
 
 extension DiffableTextStyle where Self == NumberTextStyle<Int32>.Currency {
@@ -116,7 +116,7 @@ extension DiffableTextStyle where Self == NumberTextStyle<Int32>.Currency {
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: Int64
+// MARK: + Int64
 //=----------------------------------------------------------------------------=
 
 extension DiffableTextStyle where Self == NumberTextStyle<Int64>.Currency {
@@ -131,7 +131,7 @@ extension DiffableTextStyle where Self == NumberTextStyle<Int64>.Currency {
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: UInt
+// MARK: + UInt
 //=----------------------------------------------------------------------------=
 
 extension DiffableTextStyle where Self == NumberTextStyle<UInt>.Currency {
@@ -146,7 +146,7 @@ extension DiffableTextStyle where Self == NumberTextStyle<UInt>.Currency {
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: UInt8
+// MARK: + UInt8
 //=----------------------------------------------------------------------------=
 
 extension DiffableTextStyle where Self == NumberTextStyle<UInt8>.Currency {
@@ -161,7 +161,7 @@ extension DiffableTextStyle where Self == NumberTextStyle<UInt8>.Currency {
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: UInt16
+// MARK: + UInt16
 //=----------------------------------------------------------------------------=
 
 extension DiffableTextStyle where Self == NumberTextStyle<UInt16>.Currency {
@@ -176,7 +176,7 @@ extension DiffableTextStyle where Self == NumberTextStyle<UInt16>.Currency {
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: UInt32
+// MARK: + UInt32
 //=----------------------------------------------------------------------------=
 
 extension DiffableTextStyle where Self == NumberTextStyle<UInt32>.Currency {
@@ -191,7 +191,7 @@ extension DiffableTextStyle where Self == NumberTextStyle<UInt32>.Currency {
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: UInt64
+// MARK: + UInt64
 //=----------------------------------------------------------------------------=
 
 extension DiffableTextStyle where Self == NumberTextStyle<UInt64>.Currency {

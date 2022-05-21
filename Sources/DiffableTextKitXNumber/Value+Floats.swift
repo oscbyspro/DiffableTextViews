@@ -10,38 +10,22 @@
 import Foundation
 
 //*============================================================================*
-// MARK: Declaration
+// MARK: * Value x Float(s)
 //*============================================================================*
 
-private protocol _Float:
+private protocol _Float: BinaryFloatingPoint,
 NumberTextValueXSigned,
 NumberTextValueXFloatingPoint,
 NumberTextValueXNumberable,
 NumberTextValueXCurrencyable,
-NumberTextValueXPercentable { }
+NumberTextValueXPercentable where
+NumberTextStyle == _NumberTextStyle<FloatingPointFormatStyle<Self>> { }
 
-//*============================================================================*
-// MARK: Decimal
-//*============================================================================*
-
-extension Decimal: _Float {
-    public typealias NumberTextStyle = _NumberTextStyle<FormatStyle>
-
-    //=------------------------------------------------------------------------=
-    // MARK: Precision, Bounds
-    //=------------------------------------------------------------------------=
-    
-    public static let precision: Int = 38
-    public static let bounds: ClosedRange<Self> = Self.bounds(
-    abs: Self(string: String(repeating: "9", count: precision))!)
-}
-
-//*============================================================================*
-// MARK: Double
-//*============================================================================*
+//=----------------------------------------------------------------------------=
+// MARK: + Double
+//=----------------------------------------------------------------------------=
 
 extension Double: _Float {
-    public typealias NumberTextStyle = _NumberTextStyle<FloatingPointFormatStyle<Self>>
     
     //=------------------------------------------------------------------------=
     // MARK: Precision, Bounds

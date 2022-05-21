@@ -10,7 +10,7 @@
 import Foundation
 
 //*============================================================================*
-// MARK: Declaration
+// MARK: * Kind
 //*============================================================================*
 
 public protocol NumberTextKind {
@@ -24,7 +24,7 @@ public protocol NumberTextKind {
     typealias NumberTextValue = NumberTextFormat.FormatInput
     
     //=------------------------------------------------------------------------=
-    // MARK: Kind
+    // MARK: Attributes
     //=------------------------------------------------------------------------=
     
     @inlinable static var isOptional: Bool { get }
@@ -33,7 +33,7 @@ public protocol NumberTextKind {
 }
 
 //*============================================================================*
-// MARK: Declaration
+// MARK: * Value
 //*============================================================================*
 
 public protocol NumberTextValue: Comparable, NumberTextKind {
@@ -48,27 +48,27 @@ public protocol NumberTextValue: Comparable, NumberTextKind {
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: Details
+// MARK: + Details
 //=----------------------------------------------------------------------------=
 
 public extension NumberTextValue {
     
     //=------------------------------------------------------------------------=
-    // MARK: Kind
+    // MARK: Attributes
     //=------------------------------------------------------------------------=
     
     @inlinable static var isOptional: Bool { false }
 }
 
 //*============================================================================*
-// MARK: x Floating Point
+// MARK: * Value x Floating Point
 //*============================================================================*
 
 public protocol  NumberTextValueXFloatingPoint: NumberTextValue { }
 public extension NumberTextValueXFloatingPoint {
     
     //=------------------------------------------------------------------------=
-    // MARK: Kind
+    // MARK: Attributes
     //=------------------------------------------------------------------------=
     
     @inlinable static var isInteger: Bool { false }
@@ -82,14 +82,14 @@ public extension NumberTextValueXFloatingPoint {
 }
 
 //*============================================================================*
-// MARK: x Integer
+// MARK: * Value x Integer
 //*============================================================================*
 
 public protocol  NumberTextValueXInteger: NumberTextValue { }
 public extension NumberTextValueXInteger {
     
     //=------------------------------------------------------------------------=
-    // MARK: Kind
+    // MARK: Attributes
     //=------------------------------------------------------------------------=
     
     @inlinable static var isInteger: Bool { true }
@@ -103,35 +103,35 @@ public extension NumberTextValueXInteger {
 }
 
 //*============================================================================*
-// MARK: x Signed
+// MARK: * Value x Signed
 //*============================================================================*
 
 public protocol  NumberTextValueXSigned: NumberTextValue { }
 public extension NumberTextValueXSigned {
     
     //=------------------------------------------------------------------------=
-    // MARK: Kind
+    // MARK: Attributes
     //=------------------------------------------------------------------------=
     
     @inlinable static var isUnsigned: Bool { false }
 }
 
 //*============================================================================*
-// MARK: x Unsigned
+// MARK: * Value x Unsigned
 //*============================================================================*
 
 public protocol  NumberTextValueXUnsigned: NumberTextValue { }
 public extension NumberTextValueXUnsigned {
     
     //=------------------------------------------------------------------------=
-    // MARK: Kind
+    // MARK: Attributes
     //=------------------------------------------------------------------------=
     
     @inlinable static var isUnsigned: Bool { true }
 }
 
 //*============================================================================*
-// MARK: x Branchables
+// MARK: * Value x Branchable(s)
 //*============================================================================*
 
 public protocol NumberTextValueXNumberable: NumberTextValue

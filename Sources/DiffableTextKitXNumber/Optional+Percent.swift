@@ -11,7 +11,7 @@ import DiffableTextKit
 import Foundation
 
 //*============================================================================*
-// MARK: Percent
+// MARK: * Optional x Percent
 //*============================================================================*
 
 extension _OptionalNumberTextStyle where Format: NumberTextFormatXPercent {
@@ -26,7 +26,7 @@ extension _OptionalNumberTextStyle where Format: NumberTextFormatXPercent {
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: Decimal
+// MARK: + Decimal
 //=----------------------------------------------------------------------------=
 
 extension DiffableTextStyle where Self == NumberTextStyle<Decimal?>.Percent {
@@ -41,7 +41,7 @@ extension DiffableTextStyle where Self == NumberTextStyle<Decimal?>.Percent {
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: Double
+// MARK: + Double
 //=----------------------------------------------------------------------------=
 
 extension DiffableTextStyle where Self == NumberTextStyle<Double?>.Percent {

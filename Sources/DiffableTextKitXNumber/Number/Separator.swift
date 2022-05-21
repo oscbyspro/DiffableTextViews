@@ -10,7 +10,7 @@
 import Foundation
 
 //*============================================================================*
-// MARK: Declaration
+// MARK: * Separator
 //*============================================================================*
 
 @usableFromInline struct Separator: Glyph {
@@ -37,7 +37,7 @@ import Foundation
     }
     
     //=------------------------------------------------------------------------=
-    // MARK: Localization
+    // MARK: Utilities
     //=------------------------------------------------------------------------=
     
     @inlinable func standard(_ formatter: NumberFormatter) -> Character! {
@@ -55,7 +55,7 @@ import Foundation
     }
     
     //*========================================================================*
-    // MARK: Declaration
+    // MARK: * Enumeration
     //*========================================================================*
     
     @usableFromInline enum Enumeration: UInt8, CaseIterable {

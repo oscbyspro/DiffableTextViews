@@ -10,7 +10,7 @@
 import DiffableTextKit
 
 //*============================================================================*
-// MARK: Declaration
+// MARK: * Count
 //*============================================================================*
 
 /// A count of a number's components.
@@ -47,15 +47,26 @@ import DiffableTextKit
     @inlinable public var integer:  Int { storage.y }
     @inlinable public var fraction: Int { storage.z }
     
-    //*========================================================================*
-    // MARK: Component
-    //*========================================================================*
-        
-    @usableFromInline enum Component: Int, CaseIterable {
-        case value    = 0
-        case integer  = 1
-        case fraction = 2
+    //=------------------------------------------------------------------------=
+    // MARK: Transformations
+    //=------------------------------------------------------------------------=
+    
+    @inlinable func map(_ transformation: ((SIMD, SIMD) -> SIMD, Self)) -> Self {
+        Self(transformation.0(storage, transformation.1.storage))
     }
+}
+
+//=----------------------------------------------------------------------------=
+// MARK: + Component
+//=----------------------------------------------------------------------------=
+
+extension Count {
+    
+    //=------------------------------------------------------------------------=
+    // MARK: State
+    //=------------------------------------------------------------------------=
+    
+    @usableFromInline static let components = Component.allCases
     
     //=------------------------------------------------------------------------=
     // MARK: Accessors
@@ -70,32 +81,21 @@ import DiffableTextKit
     }
     
     //=------------------------------------------------------------------------=
-    // MARK: Constants
-    //=------------------------------------------------------------------------=
-    
-    @usableFromInline static let components = Component.allCases
-}
-
-//=----------------------------------------------------------------------------=
-// MARK: Utilities
-//=----------------------------------------------------------------------------=
-
-extension Count {
-
-    //=------------------------------------------------------------------------=
-    // MARK: Transformations
-    //=------------------------------------------------------------------------=
-    
-    @inlinable func map(_ transformation: ((SIMD, SIMD) -> SIMD, Self)) -> Self {
-        Self(transformation.0(storage, transformation.1.storage))
-    }
-
-    //=------------------------------------------------------------------------=
-    // MARK: Search
+    // MARK: Utilities
     //=------------------------------------------------------------------------=
     
     @inlinable func first(where predicate: ((SIMD, Int) -> Mask, Int)) -> Component? {
         let mask = predicate.0(storage, predicate.1)
         return components.first{ mask[$0.rawValue] }
+    }
+        
+    //*========================================================================*
+    // MARK: * Component
+    //*========================================================================*
+    
+    @usableFromInline enum Component: Int, CaseIterable {
+        case value    = 0
+        case integer  = 1
+        case fraction = 2
     }
 }

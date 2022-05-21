@@ -7,14 +7,14 @@
 // See http://www.apache.org/licenses/LICENSE-2.0 for license information.
 //=----------------------------------------------------------------------------=
 
-//=----------------------------------------------------------------------------=
-// MARK: Precision
-//=----------------------------------------------------------------------------=
+//*============================================================================*
+// MARK: * Protocol + Precision + Transformations
+//*============================================================================*
 
 public extension NumberTextStyleProtocol {
     
     //=------------------------------------------------------------------------=
-    // MARK: Transformations
+    // MARK: Instance
     //=------------------------------------------------------------------------=
     
     @inlinable func precision(_ precision: Precision) -> Self {
@@ -23,10 +23,11 @@ public extension NumberTextStyleProtocol {
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: Integer
+// MARK: + Integer
 //=----------------------------------------------------------------------------=
 
-public extension NumberTextStyleProtocol where Format.FormatInput: NumberTextValueXInteger {
+public extension NumberTextStyleProtocol
+where Format.FormatInput: NumberTextValueXInteger {
     
     //=------------------------------------------------------------------------=
     // MARK: Length
@@ -47,10 +48,11 @@ public extension NumberTextStyleProtocol where Format.FormatInput: NumberTextVal
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: Floating Point
+// MARK: + Floating Point
 //=----------------------------------------------------------------------------=
 
-public extension NumberTextStyleProtocol where Format.FormatInput: NumberTextValueXFloatingPoint {
+public extension NumberTextStyleProtocol
+where Format.FormatInput: NumberTextValueXFloatingPoint {
     
     //=------------------------------------------------------------------------=
     // MARK: Length

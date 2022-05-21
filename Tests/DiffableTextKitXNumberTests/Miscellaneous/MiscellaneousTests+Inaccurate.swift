@@ -12,7 +12,7 @@
 import XCTest
 
 //*============================================================================*
-// MARK: Declaration
+// MARK: * Miscellaneous x Inaccurate
 //*============================================================================*
 
 final class MiscellaneousTestsXInaccurate: XCTestCase {

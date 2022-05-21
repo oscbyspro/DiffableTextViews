@@ -10,7 +10,7 @@
 import DiffableTextKit
 
 //*============================================================================*
-// MARK: Declaration
+// MARK: * Style
 //*============================================================================*
 
 public struct PatternTextStyle<Value>: DiffableTextStyle where
@@ -55,7 +55,7 @@ Value: RangeReplaceableCollection, Value: Equatable, Value.Element == Character 
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: Utilities
+// MARK: + Utilities
 //=----------------------------------------------------------------------------=
 
 extension PatternTextStyle {

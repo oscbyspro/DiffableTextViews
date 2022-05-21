@@ -10,14 +10,14 @@
 import Foundation
 
 //*============================================================================*
-// MARK: Declaration
+// MARK: * Style x Aliases
 //*============================================================================*
 
 public typealias NumberTextStyle<Kind: NumberTextKind> = Kind.NumberTextStyle
 
-//*============================================================================*
-// MARK: Standard
-//*============================================================================*
+//=----------------------------------------------------------------------------=
+// MARK: + Standard
+//=----------------------------------------------------------------------------=
 
 extension _NumberTextStyle where Format: NumberTextFormatXCurrencyable {
     public typealias Currency = _NumberTextStyle<Format.Currency>
@@ -27,9 +27,9 @@ extension _NumberTextStyle where Format: NumberTextFormatXPercentable {
     public typealias Percent = _NumberTextStyle<Format.Percent>
 }
 
-//*============================================================================*
-// MARK: Optional
-//*============================================================================*
+//=----------------------------------------------------------------------------=
+// MARK: + Optional
+//=----------------------------------------------------------------------------=
 
 extension _OptionalNumberTextStyle where Format: NumberTextFormatXCurrencyable {
     public typealias Currency = _OptionalNumberTextStyle<Format.Currency>

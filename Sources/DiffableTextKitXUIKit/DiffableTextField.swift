@@ -13,7 +13,7 @@ import DiffableTextKit
 import SwiftUI
 
 //*============================================================================*
-// MARK: Declaration
+// MARK: * DiffableTextField
 //*============================================================================*
 
 /// An as-you-type formatting compatible text field.
@@ -80,7 +80,7 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
     }
     
     //*========================================================================*
-    // MARK: Declaration
+    // MARK: * Coordinator
     //*========================================================================*
     
     @MainActor public final class Coordinator: NSObject, UITextFieldDelegate {
@@ -115,7 +115,7 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
             // Downstream
             //=----------------------------------=
             self.downstream.delegate = self
-            self.downstream.setTextFeldStyle(environment)
+            self.downstream.textFeldStyle(environment)
             //=----------------------------------=
             // Synchronize
             //=----------------------------------=
@@ -131,15 +131,15 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
             //=----------------------------------=
             // Downstream
             //=----------------------------------=
-            self.downstream.setPlaceholder(parent.title)
-            self.downstream.setDisableAutocorrection(environment)
-            self.downstream.setFont(environment)
-            self.downstream.setForegroundColor(environment)
-            self.downstream.setKeyboardType(environment)
-            self.downstream.setMultilineTextAlignment(environment)
-            self.downstream.setSubmitLabel(environment)
-            self.downstream.setTextContentType(environment)
-            self.downstream.setTextInputAutocapitalization(environment)
+            self.downstream.placeholder(parent.title)
+            self.downstream.disableAutocorrection(environment)
+            self.downstream.font(environment)
+            self.downstream.foregroundColor(environment)
+            self.downstream.keyboardType(environment)
+            self.downstream.multilineTextAlignment(environment)
+            self.downstream.submitLabel(environment)
+            self.downstream.textContentType(environment)
+            self.downstream.textInputAutocapitalization(environment)
             //=----------------------------------=
             // Coordinator
             //=----------------------------------=
@@ -198,7 +198,7 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
                 //=------------------------------=
                 // Push
                 //=------------------------------=
-                return self.push([.text, .selection])
+                self.push([.text, .selection])
             //=----------------------------------=
             // Normal
             //=----------------------------------=

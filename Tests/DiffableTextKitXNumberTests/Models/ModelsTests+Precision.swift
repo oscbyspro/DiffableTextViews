@@ -9,13 +9,12 @@
 
 #if DEBUG
 
-import Foundation
-import XCTest
-
 @testable import DiffableTextKitXNumber
 
+import XCTest
+
 //*============================================================================*
-// MARK: Declaration
+// MARK: * Models x Precision
 //*============================================================================*
 
 final class ModelsTestsXPrecision: XCTestCase {
@@ -54,7 +53,7 @@ final class ModelsTestsXPrecision: XCTestCase {
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: Instances
+// MARK: + Instances
 //=----------------------------------------------------------------------------=
 
 extension ModelsTestsXPrecision {
@@ -98,7 +97,7 @@ extension ModelsTestsXPrecision {
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: Integer
+// MARK: + Integer
 //=----------------------------------------------------------------------------=
 
 extension ModelsTestsXPrecision {
@@ -121,7 +120,7 @@ extension ModelsTestsXPrecision {
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: Floating Point
+// MARK: + Floating Point
 //=----------------------------------------------------------------------------=
 
 extension ModelsTestsXPrecision {

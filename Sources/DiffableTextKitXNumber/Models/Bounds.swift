@@ -10,7 +10,7 @@
 import DiffableTextKit
 
 //*============================================================================*
-// MARK: Declaration
+// MARK: * Bounds
 //*============================================================================*
 
 public struct NumberTextBounds<Value: NumberTextValue>: Equatable {
@@ -83,7 +83,7 @@ public struct NumberTextBounds<Value: NumberTextValue>: Equatable {
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: Description
+// MARK: + Description
 //=----------------------------------------------------------------------------=
 
 extension NumberTextBounds: CustomStringConvertible {
@@ -98,7 +98,7 @@ extension NumberTextBounds: CustomStringConvertible {
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: Location
+// MARK: + Location
 //=----------------------------------------------------------------------------=
 
 extension NumberTextBounds {
@@ -127,7 +127,7 @@ extension NumberTextBounds {
     }
     
     //*========================================================================*
-    // MARK: Declaration
+    // MARK: * Location
     //*========================================================================*
     
     @usableFromInline enum Location {
@@ -148,7 +148,7 @@ extension NumberTextBounds {
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: Upstream
+// MARK: + Upstream
 //=----------------------------------------------------------------------------=
 
 extension NumberTextBounds {
@@ -184,7 +184,7 @@ extension NumberTextBounds {
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: Downstream
+// MARK: + Downstream
 //=----------------------------------------------------------------------------=
 
 extension NumberTextBounds {
@@ -218,7 +218,7 @@ extension NumberTextBounds {
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: Upstream, Downstream
+// MARK: + Upstream, Downstream
 //=----------------------------------------------------------------------------=
 
 extension NumberTextBounds {

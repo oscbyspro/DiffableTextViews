@@ -10,7 +10,7 @@
 import SwiftUI
 
 //*============================================================================*
-// MARK: Declaration
+// MARK: * Observer
 //*============================================================================*
 
 struct Observer<Observable: ObservableObject, Content: View>: View {

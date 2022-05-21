@@ -11,7 +11,7 @@ import SwiftUI
 import DiffableTextViews
 
 //*============================================================================*
-// MARK: Declaration
+// MARK: * Example
 //*============================================================================*
 
 struct Example<Style: DiffableTextStyle>: View {

@@ -9,14 +9,13 @@
 
 #if DEBUG
 
-import Foundation
 import XCTest
 
 //*============================================================================*
-// MARK: Declaration
+// MARK: * Miscellaneous x Comments
 //*============================================================================*
 
-final class MiscellaneousTestsXNotes: XCTestCase {
+final class MiscellaneousTestsXComments: XCTestCase {
     
     //=------------------------------------------------------------------------=
     // MARK: Tests

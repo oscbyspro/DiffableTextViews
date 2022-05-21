@@ -10,7 +10,7 @@
 import Foundation
 
 //*============================================================================*
-// MARK: Declaration
+// MARK: * Format
 //*============================================================================*
 
 public protocol NumberTextFormat: ParseableFormatStyle where FormatOutput == String,
@@ -50,7 +50,7 @@ FormatInput: DiffableTextKitXNumber.NumberTextValue {
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: Details
+// MARK: + Details
 //=----------------------------------------------------------------------------=
 
 extension NumberTextFormat {
@@ -78,7 +78,7 @@ extension NumberTextFormat {
 }
 
 //*============================================================================*
-// MARK: x Number
+// MARK: * Format x Number
 //*============================================================================*
 
 public protocol NumberTextFormatXNumber: NumberTextFormat where
@@ -92,7 +92,7 @@ NumberTextSign == NFSC.SignDisplayStrategy {
 }
 
 //*============================================================================*
-// MARK: x Currency
+// MARK: * Format x Currency
 //*============================================================================*
 
 public protocol NumberTextFormatXCurrency: NumberTextFormat where
@@ -112,7 +112,7 @@ NumberTextSign == CFSC.SignDisplayStrategy {
 }
 
 //*============================================================================*
-// MARK: x Percent
+// MARK: * Format x Percent
 //*============================================================================*
 
 public protocol NumberTextFormatXPercent: NumberTextFormat where
@@ -126,7 +126,7 @@ NumberTextSign == NFSC.SignDisplayStrategy {
 }
 
 //*============================================================================*
-// MARK: x Branchables
+// MARK: * Format x Branchable(s)
 //*============================================================================*
 
 public protocol NumberTextFormatXNumberable: NumberTextFormat {

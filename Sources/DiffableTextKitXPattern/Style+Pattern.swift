@@ -10,8 +10,10 @@
 import DiffableTextKit
 
 //*============================================================================*
-// MARK: String
+// MARK: * Style x Pattern
 //*============================================================================*
+// MARK: + String
+//=----------------------------------------------------------------------------=
 
 public extension DiffableTextStyle where Self == PatternTextStyle<String> {
     
@@ -24,9 +26,9 @@ public extension DiffableTextStyle where Self == PatternTextStyle<String> {
     }
 }
 
-//*============================================================================*
-// MARK: Array
-//*============================================================================*
+//=----------------------------------------------------------------------------=
+// MARK: + Array<Character>
+//=----------------------------------------------------------------------------=
 
 public extension DiffableTextStyle where Self == PatternTextStyle<[Character]> {
     

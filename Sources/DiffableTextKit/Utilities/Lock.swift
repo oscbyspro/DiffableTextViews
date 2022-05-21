@@ -8,7 +8,7 @@
 //=----------------------------------------------------------------------------=
 
 //*============================================================================*
-// MARK: Declaration
+// MARK: * Lock
 //*============================================================================*
 
 public final class Lock {
@@ -29,7 +29,8 @@ public final class Lock {
     // MARK: Accessors
     //=------------------------------------------------------------------------=
     
-    @inlinable @inline(__always) public var isLocked: Bool {
+    @inlinable @inline(__always)
+    public var isLocked: Bool {
         self.count != 0
     }
     

@@ -38,7 +38,7 @@ import DiffableTextViews
 |:-----:|:-----:|:------:|:------------:|:-----:|
 | 5.0+  | 15.0+ | 15.0+  | 15.0+        | 15.0+ |
 
-# Examples
+# Apps
 
 The example app provides quick-and-easy-to-use customization tools.
 
@@ -108,28 +108,29 @@ import DiffableTextViews
 import SwiftUI
 
 //*============================================================================*
-// MARK: View
+// MARK: * Number
 //*============================================================================*
 
-struct DiffableTextFieldXNumber: View {
+struct ContentView: View {
 
     //=------------------------------------------------------------------------=
     // MARK: State
     //=------------------------------------------------------------------------=
-
+    
     @State var amount = 0 as Decimal
     @State var locale = Locale(identifier: "sv_SE")
     
     //=------------------------------------------------------------------------=
     // MARK: Body
     //=------------------------------------------------------------------------=
-
-    /// default precision is chosen based on currency
+    
     var body: some View {
         DiffableTextField(value: $amount) {
             .currency(code: "SEK")
             .bounds((0 as Decimal)...)
             // .precision(integer: 1..., fraction: 2)
+            //  default precision depends on currency
+            // .constant() // ignores the environment
         }
         .environment(\.locale, locale)
         .diffableTextViews_keyboardType(.decimalPad)
@@ -159,20 +160,20 @@ import DiffableTextViews
 import SwiftUI
 
 //*============================================================================*
-// MARK: View
+// MARK: * Pattern
 //*============================================================================*
 
-struct DiffableTextFieldXPattern: View {
-
+struct ContentView: View {
+    
     //=------------------------------------------------------------------------=
     // MARK: State
     //=------------------------------------------------------------------------=
-
+    
     @State var number: String = ""
     @State var style = PatternTextStyle<String>
         .pattern("+## (###) ###-##-##")
         .placeholder("#") { $0.isASCII && $0.isNumber }
-        .equals(())
+        .equals(()) // skips comparisons and discards changes
     
     //=------------------------------------------------------------------------=
     // MARK: Body

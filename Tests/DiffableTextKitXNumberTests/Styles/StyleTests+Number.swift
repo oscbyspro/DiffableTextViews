@@ -9,11 +9,12 @@
 
 #if DEBUG
 
-import XCTest
 @testable import DiffableTextKitXNumber
 
+import XCTest
+
 //*============================================================================*
-// MARK: Declaration
+// MARK: * Style x Number
 //*============================================================================*
 
 final class StyleTestsXNumber: StyleTests {
@@ -29,7 +30,7 @@ final class StyleTestsXNumber: StyleTests {
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: Decimal
+// MARK: + Decimal
 //=----------------------------------------------------------------------------=
 
 extension StyleTestsXNumber {
@@ -44,7 +45,7 @@ extension StyleTestsXNumber {
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: Floats
+// MARK: + Floats
 //=----------------------------------------------------------------------------=
 
 extension StyleTestsXNumber {
@@ -59,7 +60,7 @@ extension StyleTestsXNumber {
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: Ints
+// MARK: + Ints
 //=----------------------------------------------------------------------------=
 
 extension StyleTestsXNumber {
@@ -90,7 +91,7 @@ extension StyleTestsXNumber {
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: UInts
+// MARK: + UInts
 //=----------------------------------------------------------------------------=
 
 extension StyleTestsXNumber {
@@ -119,4 +120,5 @@ extension StyleTestsXNumber {
         XCTInterpretLocales(123 as UInt64)
     }
 }
+
 #endif

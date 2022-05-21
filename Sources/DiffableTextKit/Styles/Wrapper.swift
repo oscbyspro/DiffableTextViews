@@ -10,7 +10,7 @@
 import Foundation
 
 //*============================================================================*
-// MARK: Declaration
+// MARK: * Wrapper
 //*============================================================================*
 
 public protocol WrapperTextStyle: DiffableTextStyle {
@@ -25,7 +25,7 @@ public protocol WrapperTextStyle: DiffableTextStyle {
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: Details
+// MARK: + Details
 //=----------------------------------------------------------------------------=
 
 extension WrapperTextStyle {

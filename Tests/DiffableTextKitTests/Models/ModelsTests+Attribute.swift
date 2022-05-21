@@ -9,11 +9,12 @@
 
 #if DEBUG
 
-import DiffableTextKit
+@testable import DiffableTextKit
+
 import XCTest
 
 //*============================================================================*
-// MARK: Declaration
+// MARK: * Models x Attribute
 //*============================================================================*
 
 final class ModelsTestsXAttribute: XCTestCase {

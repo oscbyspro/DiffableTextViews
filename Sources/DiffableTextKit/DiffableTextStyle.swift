@@ -10,7 +10,7 @@
 import Foundation
 
 //*============================================================================*
-// MARK: Declaration
+// MARK: * DiffableTextStyle
 //*============================================================================*
 
 /// A protocol for styles capable of as-you-type formatting.
@@ -39,7 +39,7 @@ public protocol DiffableTextStyle: Equatable {
     
     /// Returns formatted text.
     ///
-    /// This method is called in response to changes upstream while the view is unfocused.
+    /// This method is called in response to changes upstream while the view is idle.
     ///
     @inlinable func format(_ value: Value) -> String
     
@@ -60,7 +60,7 @@ public protocol DiffableTextStyle: Equatable {
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: Details
+// MARK: + Details
 //=----------------------------------------------------------------------------=
 
 public extension DiffableTextStyle {

@@ -9,11 +9,12 @@
 
 #if DEBUG
 
-import XCTest
 @testable import DiffableTextKitXPattern
 
+import XCTest
+
 //*============================================================================*
-// MARK: Declaration
+// MARK: * Style
 //*============================================================================*
 
 protocol StyleTests: XCTestCase {
@@ -42,7 +43,7 @@ protocol StyleTests: XCTestCase {
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: Style
+// MARK: + Details
 //=----------------------------------------------------------------------------=
     
 extension StyleTests {

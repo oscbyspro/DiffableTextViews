@@ -10,7 +10,7 @@
 import SwiftUI
 
 //*============================================================================*
-// MARK: Declaration
+// MARK: * Screen x Number x Context
 //*============================================================================*
 
 final class NumberScreenContext: ObservableObject {
@@ -41,7 +41,7 @@ final class NumberScreenContext: ObservableObject {
     static var p: Int { Decimal.precision }
     
     //*========================================================================*
-    // MARK: Enumerations
+    // MARK: * ID(s)
     //*========================================================================*
     
     enum KindID: String, CaseIterable {

@@ -13,7 +13,7 @@ import SwiftUI
 import UIKit
 
 //*============================================================================*
-// MARK: Declaration
+// MARK: * Base
 //*============================================================================*
 
 /// An as-you-type formatting compatible UITextField.

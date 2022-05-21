@@ -10,7 +10,7 @@
 import Foundation
 
 //*============================================================================*
-// MARK: Declaration
+// MARK: * Cache
 //*============================================================================*
 
 public final class Cache<Key, Value> where Key: Hashable, Value: AnyObject {
@@ -67,7 +67,7 @@ public final class Cache<Key, Value> where Key: Hashable, Value: AnyObject {
     }
     
     //*========================================================================*
-    // MARK: NSKey
+    // MARK: * NSKey
     //*========================================================================*
     
     /// A key compatible with NSCache.
@@ -90,7 +90,7 @@ public final class Cache<Key, Value> where Key: Hashable, Value: AnyObject {
         @inlinable init(_ wrapped: Key) { self.wrapped = wrapped }
         
         //=--------------------------------------------------------------------=
-        // MARK: NSCache
+        // MARK: Utilities
         //=--------------------------------------------------------------------=
      
         @inlinable override var hash: Int {

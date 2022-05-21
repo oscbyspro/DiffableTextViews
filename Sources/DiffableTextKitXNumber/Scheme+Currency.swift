@@ -11,7 +11,7 @@ import DiffableTextKit
 import Foundation
 
 //*============================================================================*
-// MARK: Declaration
+// MARK: * Scheme x Currency
 //*============================================================================*
 
 @usableFromInline final class NumberTextSchemeXCurrency: NumberTextSchemeXReuseable {
@@ -168,7 +168,7 @@ import Foundation
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: Utilities
+// MARK: + Utilities
 //=----------------------------------------------------------------------------=
 
 extension NumberTextSchemeXCurrency {

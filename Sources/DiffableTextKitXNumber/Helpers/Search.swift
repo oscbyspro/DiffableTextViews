@@ -10,7 +10,7 @@
 import DiffableTextKit
 
 //*============================================================================*
-// MARK: Declaration
+// MARK: * Search
 //*============================================================================*
 
 /// Naive search is OK for matching currencies.
@@ -70,7 +70,7 @@ Needle: BidirectionalCollection, Needle.Element == Character {
     }
     
     //=------------------------------------------------------------------------=
-    // MARK: Forwards / Backwards
+    // MARK: Forwards, Backwards
     //=------------------------------------------------------------------------=
     
     /// A naive search, for needles at or near a known edge of a haystack.

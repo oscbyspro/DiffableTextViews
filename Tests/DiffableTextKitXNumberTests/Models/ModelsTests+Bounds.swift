@@ -9,11 +9,12 @@
 
 #if DEBUG
 
-import XCTest
 @testable import DiffableTextKitXNumber
 
+import XCTest
+
 //*============================================================================*
-// MARK: Declaration
+// MARK: * Models x Bounds
 //*============================================================================*
 
 final class ModelsTestsXBounds: XCTestCase {
@@ -63,7 +64,7 @@ final class ModelsTestsXBounds: XCTestCase {
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: Initializers
+// MARK: + Initializers
 //=----------------------------------------------------------------------------=
 
 extension ModelsTestsXBounds {
@@ -91,7 +92,7 @@ extension ModelsTestsXBounds {
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: Integer
+// MARK: + Integer
 //=----------------------------------------------------------------------------=
 
 extension ModelsTestsXBounds {
@@ -114,7 +115,7 @@ extension ModelsTestsXBounds {
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: Floating Point
+// MARK: + Floating Point
 //=----------------------------------------------------------------------------=
 
 extension ModelsTestsXBounds {
@@ -137,7 +138,7 @@ extension ModelsTestsXBounds {
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: Autocorrect
+// MARK: + Autocorrect
 //=----------------------------------------------------------------------------=
 
 extension ModelsTestsXBounds {

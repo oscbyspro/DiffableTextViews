@@ -11,7 +11,7 @@ import SwiftUI
 import DiffableTextViews
 
 //*============================================================================*
-// MARK: Declaration
+// MARK: * Screen x Number x Example
 //*============================================================================*
 
 struct NumberScreenExample: View {
@@ -105,7 +105,7 @@ struct NumberScreenExample: View {
 }
 
 //*============================================================================*
-// MARK: Declaration
+// MARK: * Screen x Number x Example X
 //*============================================================================*
 
 struct NumberScreenExampleX<Style>: View

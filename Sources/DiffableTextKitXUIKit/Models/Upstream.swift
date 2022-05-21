@@ -13,7 +13,7 @@ import DiffableTextKit
 import SwiftUI
 
 //*============================================================================*
-// MARK: Declaration
+// MARK: * Upstream
 //*============================================================================*
 
 @usableFromInline struct Upstream<Style: DiffableTextStyle> {

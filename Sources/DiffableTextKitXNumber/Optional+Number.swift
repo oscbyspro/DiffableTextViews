@@ -11,7 +11,7 @@ import DiffableTextKit
 import Foundation
 
 //*============================================================================*
-// MARK: Number
+// MARK: * Optional x Number
 //*============================================================================*
 
 extension _OptionalNumberTextStyle where Format: NumberTextFormatXNumber {
@@ -26,7 +26,7 @@ extension _OptionalNumberTextStyle where Format: NumberTextFormatXNumber {
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: Decimal
+// MARK: + Decimal
 //=----------------------------------------------------------------------------=
 
 extension DiffableTextStyle where Self == NumberTextStyle<Decimal?> {
@@ -41,7 +41,7 @@ extension DiffableTextStyle where Self == NumberTextStyle<Decimal?> {
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: Double
+// MARK: + Double
 //=----------------------------------------------------------------------------=
 
 extension DiffableTextStyle where Self == NumberTextStyle<Double?> {
@@ -56,7 +56,7 @@ extension DiffableTextStyle where Self == NumberTextStyle<Double?> {
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: Int
+// MARK: + Int
 //=----------------------------------------------------------------------------=
 
 extension DiffableTextStyle where Self == NumberTextStyle<Int?> {
@@ -71,7 +71,7 @@ extension DiffableTextStyle where Self == NumberTextStyle<Int?> {
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: Int8
+// MARK: + Int8
 //=----------------------------------------------------------------------------=
 
 extension DiffableTextStyle where Self == NumberTextStyle<Int8?> {
@@ -86,7 +86,7 @@ extension DiffableTextStyle where Self == NumberTextStyle<Int8?> {
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: Int16
+// MARK: + Int16
 //=----------------------------------------------------------------------------=
 
 extension DiffableTextStyle where Self == NumberTextStyle<Int16?> {
@@ -101,7 +101,7 @@ extension DiffableTextStyle where Self == NumberTextStyle<Int16?> {
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: Int32
+// MARK: + Int32
 //=----------------------------------------------------------------------------=
 
 extension DiffableTextStyle where Self == NumberTextStyle<Int32?> {
@@ -116,7 +116,7 @@ extension DiffableTextStyle where Self == NumberTextStyle<Int32?> {
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: Int64
+// MARK: + Int64
 //=----------------------------------------------------------------------------=
 
 extension DiffableTextStyle where Self == NumberTextStyle<Int64?> {
@@ -131,7 +131,7 @@ extension DiffableTextStyle where Self == NumberTextStyle<Int64?> {
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: UInt
+// MARK: + UInt
 //=----------------------------------------------------------------------------=
 
 extension DiffableTextStyle where Self == NumberTextStyle<UInt?> {
@@ -146,7 +146,7 @@ extension DiffableTextStyle where Self == NumberTextStyle<UInt?> {
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: UInt8
+// MARK: + UInt8
 //=----------------------------------------------------------------------------=
 
 extension DiffableTextStyle where Self == NumberTextStyle<UInt8?> {
@@ -161,7 +161,7 @@ extension DiffableTextStyle where Self == NumberTextStyle<UInt8?> {
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: UInt16
+// MARK: + UInt16
 //=----------------------------------------------------------------------------=
 
 extension DiffableTextStyle where Self == NumberTextStyle<UInt16?> {
@@ -176,7 +176,7 @@ extension DiffableTextStyle where Self == NumberTextStyle<UInt16?> {
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: UInt32
+// MARK: + UInt32
 //=----------------------------------------------------------------------------=
 
 extension DiffableTextStyle where Self == NumberTextStyle<UInt32?> {
@@ -191,7 +191,7 @@ extension DiffableTextStyle where Self == NumberTextStyle<UInt32?> {
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: UInt64
+// MARK: + UInt64
 //=----------------------------------------------------------------------------=
 
 extension DiffableTextStyle where Self == NumberTextStyle<UInt64?> {

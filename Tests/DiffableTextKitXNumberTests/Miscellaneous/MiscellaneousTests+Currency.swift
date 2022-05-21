@@ -12,7 +12,7 @@
 import XCTest
 
 //*============================================================================*
-// MARK: Declaration
+// MARK: * Miscellaneous x Currency
 //*============================================================================*
 
 final class MiscellaneousTestsXCurrency: XCTestCase {

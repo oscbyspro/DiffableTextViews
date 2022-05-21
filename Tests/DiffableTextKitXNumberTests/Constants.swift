@@ -9,11 +9,12 @@
 
 #if DEBUG
 
-import Foundation
 @testable import DiffableTextKitXNumber
 
+import Foundation
+
 //*============================================================================*
-// MARK: Constants
+// MARK: * Constants
 //*============================================================================*
 
 let USD: String = "USD"

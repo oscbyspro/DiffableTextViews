@@ -11,7 +11,7 @@ import DiffableTextKit
 import Foundation
 
 //*============================================================================*
-// MARK: Declaration
+// MARK: * Protocol
 //*============================================================================*
 
 public protocol NumberTextStyleProtocol: DiffableTextStyle where Value: NumberTextKind {
@@ -35,7 +35,7 @@ public protocol NumberTextStyleProtocol: DiffableTextStyle where Value: NumberTe
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: Details
+// MARK: + Details
 //=----------------------------------------------------------------------------=
 
 extension NumberTextStyleProtocol {
@@ -58,7 +58,7 @@ extension NumberTextStyleProtocol {
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: Details
+// MARK: + Details
 //=----------------------------------------------------------------------------=
 
 extension NumberTextStyleProtocol where Format: NumberTextFormatXCurrency {

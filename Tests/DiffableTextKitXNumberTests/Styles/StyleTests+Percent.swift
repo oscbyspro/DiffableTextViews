@@ -9,11 +9,12 @@
 
 #if DEBUG
 
-import XCTest
 @testable import DiffableTextKitXNumber
 
+import XCTest
+
 //*============================================================================*
-// MARK: Declaration
+// MARK: * Style x Percent
 //*============================================================================*
 
 final class StyleTestsXPercent: StyleTests {
@@ -29,7 +30,7 @@ final class StyleTestsXPercent: StyleTests {
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: Decimal
+// MARK: + Decimal
 //=----------------------------------------------------------------------------=
 
 extension StyleTestsXPercent {
@@ -44,7 +45,7 @@ extension StyleTestsXPercent {
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: Floats
+// MARK: + Floats
 //=----------------------------------------------------------------------------=
 
 extension StyleTestsXPercent {

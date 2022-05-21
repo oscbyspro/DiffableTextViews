@@ -11,7 +11,7 @@ import DiffableTextKit
 import Foundation
 
 //*============================================================================*
-// MARK: Declaration
+// MARK: * Adapter
 //*============================================================================*
 
 public struct NumberTextAdapter<Format: NumberTextFormat>: Equatable {

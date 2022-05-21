@@ -11,11 +11,11 @@ import DiffableTextKit
 import Foundation
 
 //*============================================================================*
-// MARK: Declaration
+// MARK: * Precision
 //*============================================================================*
 
 public struct NumberTextPrecision<Value: NumberTextValue>: Equatable {
-    @usableFromInline typealias Name = _Precision
+    @usableFromInline typealias Namespace = _Precision
     @usableFromInline typealias Mode = NumberFormatStyleConfiguration.Precision
     
     //=------------------------------------------------------------------------=
@@ -59,7 +59,7 @@ public struct NumberTextPrecision<Value: NumberTextValue>: Equatable {
     //=------------------------------------------------------------------------=
     
     @inlinable var lower: Count {
-        Count(value: Name.lower.value,
+        Count(value: Namespace.lower.value,
         integer:  integer .lowerBound,
         fraction: fraction.lowerBound)
     }
@@ -75,11 +75,11 @@ public struct NumberTextPrecision<Value: NumberTextValue>: Equatable {
     //=------------------------------------------------------------------------=
     
     @inlinable static var integer: ClosedRange<Int> {
-        ClosedRange(uncheckedBounds: (Name.lower.integer, Value.precision))
+        ClosedRange(uncheckedBounds: (Namespace.lower.integer, Value.precision))
     }
     
     @inlinable static var fraction: ClosedRange<Int> {
-        let min = Name.lower.fraction
+        let min = Namespace.lower.fraction
         let max = Value.isInteger ? min : Value.precision
         return ClosedRange(uncheckedBounds: (min, max))
     }
@@ -96,14 +96,14 @@ public struct NumberTextPrecision<Value: NumberTextValue>: Equatable {
 
     @inlinable func active() -> Mode {
         .integerAndFractionLength(
-         integerLimits: Name.lower.integer  ...  integer.upperBound,
-        fractionLimits: Name.lower.fraction ... fraction.upperBound)
+         integerLimits: Namespace.lower.integer  ...  integer.upperBound,
+        fractionLimits: Namespace.lower.fraction ... fraction.upperBound)
     }
     
     @inlinable func interactive(_ count: Count) -> Mode {
         .integerAndFractionLength(
-         integerLimits: max(Name.lower.integer,  count.integer)  ... count.integer,
-        fractionLimits: max(Name.lower.fraction, count.fraction) ... count.fraction)
+         integerLimits: max(Namespace.lower.integer,  count.integer)  ... count.integer,
+        fractionLimits: max(Namespace.lower.fraction, count.fraction) ... count.fraction)
     }
     
     //=------------------------------------------------------------------------=
@@ -112,17 +112,17 @@ public struct NumberTextPrecision<Value: NumberTextValue>: Equatable {
     
     @inlinable static func integer<I>(_ limits: I) -> ClosedRange<Int>
     where I: RangeExpression, I.Bound == Int {
-        Name.clamping(limits, to: integer)
+        Namespace.clamping(limits, to: integer)
     }
     
     @inlinable static func fraction<F>(_ limits: F) -> ClosedRange<Int>
     where F: RangeExpression, F.Bound == Int {
-        Name.clamping(limits, to: fraction)
+        Namespace.clamping(limits, to: fraction)
     }
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: Upstream
+// MARK: + Upstream
 //=----------------------------------------------------------------------------=
 
 extension NumberTextPrecision {
@@ -137,7 +137,7 @@ extension NumberTextPrecision {
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: Downstream
+// MARK: + Downstream
 //=----------------------------------------------------------------------------=
 
 extension NumberTextPrecision {
@@ -172,7 +172,7 @@ extension NumberTextPrecision {
 }
 
 //*============================================================================*
-// MARK: Namespace
+// MARK: * Precision x Namespace
 //*============================================================================*
 
 @usableFromInline enum _Precision {

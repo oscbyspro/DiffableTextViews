@@ -9,11 +9,12 @@
 
 #if DEBUG
 
-import XCTest
 @testable import DiffableTextKit
 
+import XCTest
+
 //*============================================================================*
-// MARK: Declaration
+// MARK: * Utilities x Cache
 //*============================================================================*
 
 final class UtilitiesTestsXCache: XCTestCase {

@@ -8,14 +8,14 @@
 //=----------------------------------------------------------------------------=
 
 //*============================================================================*
-// MARK: Optional
+// MARK: * Value x Optional
 //*============================================================================*
 
 extension Optional: NumberTextKind where Wrapped: NumberTextValue {
     public typealias NumberTextStyle = _OptionalNumberTextStyle<Wrapped.NumberTextFormat>
     
     //=------------------------------------------------------------------------=
-    // MARK: Kind
+    // MARK: Attributes
     //=------------------------------------------------------------------------=
     
     @inlinable public static var isOptional: Bool { true }

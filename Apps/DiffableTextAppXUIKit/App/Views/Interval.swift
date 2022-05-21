@@ -11,7 +11,7 @@ import SwiftUI
 import IntervalSliderViews
 
 //*============================================================================*
-// MARK: Declaration
+// MARK: * Interval
 //*============================================================================*
 
 struct Interval: View {

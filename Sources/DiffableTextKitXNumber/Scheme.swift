@@ -8,10 +8,9 @@
 //=----------------------------------------------------------------------------=
 
 import DiffableTextKit
-import Foundation
 
 //*============================================================================*
-// MARK: Declaration
+// MARK: * Scheme
 //*============================================================================*
 
 public protocol NumberTextScheme {
@@ -50,7 +49,7 @@ public protocol NumberTextScheme {
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: Details
+// MARK: + Details
 //=----------------------------------------------------------------------------=
 
 extension NumberTextScheme {
@@ -70,38 +69,4 @@ extension NumberTextScheme {
     
     @inlinable func preferred<T>(_ value: T.Type) -> NumberTextPrecision<T>
     where T: NumberTextValue { NumberTextPrecision() }
-}
-
-//*============================================================================*
-// MARK: x Reuseable
-//*============================================================================*
-
-@usableFromInline protocol NumberTextSchemeXReuseable: AnyObject, Identifiable, NumberTextScheme {
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Initializers
-    //=------------------------------------------------------------------------=
-    
-    @inlinable init(_ id: ID)
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Cache
-    //=------------------------------------------------------------------------=
-
-    @inlinable static var cache: Cache<ID, Self> { get }
-}
-
-//=----------------------------------------------------------------------------=
-// MARK: Details
-//=----------------------------------------------------------------------------=
-
-extension NumberTextSchemeXReuseable {
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Initializers
-    //=------------------------------------------------------------------------=
-        
-    @inlinable static func reuse(_ id: ID) -> Self {
-        cache.reuse(id, make: Self(id))
-    }
 }

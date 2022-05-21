@@ -10,7 +10,7 @@
 import Foundation
 
 //*============================================================================*
-// MARK: Declaration
+// MARK: * Format x Sign
 //*============================================================================*
 
 public enum NumberTextFormatXSign {
@@ -24,7 +24,7 @@ public enum NumberTextFormatXSign {
 }
 
 //*============================================================================*
-// MARK: Declaration
+// MARK: * Format x Sign x Representable
 //*============================================================================*
 
 public protocol NumberTextFormatXSignRepresentable {
@@ -36,9 +36,9 @@ public protocol NumberTextFormatXSignRepresentable {
     @inlinable init(_ strategy: NumberTextFormatXSign)
 }
 
-//*============================================================================*
-// MARK: x Number
-//*============================================================================*
+//=----------------------------------------------------------------------------=
+// MARK: + Number
+//=----------------------------------------------------------------------------=
 
 extension NumberFormatStyleConfiguration.SignDisplayStrategy: NumberTextFormatXSignRepresentable {
     
@@ -54,9 +54,9 @@ extension NumberFormatStyleConfiguration.SignDisplayStrategy: NumberTextFormatXS
     }
 }
 
-//*============================================================================*
-// MARK: x Currency
-//*============================================================================*
+//=----------------------------------------------------------------------------=
+// MARK: + Currency
+//=----------------------------------------------------------------------------=
 
 extension CurrencyFormatStyleConfiguration.SignDisplayStrategy: NumberTextFormatXSignRepresentable {
     
