@@ -63,17 +63,11 @@ import DiffableTextKit
 extension Count {
     
     //=------------------------------------------------------------------------=
-    // MARK: State
-    //=------------------------------------------------------------------------=
-    
-    @usableFromInline static let components = Component.allCases
-    
-    //=------------------------------------------------------------------------=
     // MARK: Accessors
     //=------------------------------------------------------------------------=
     
     @inlinable var components: [Component] {
-        Self.components
+        Component.allCases
     }
     
     @inlinable subscript(component: Component) -> Int {
@@ -88,14 +82,25 @@ extension Count {
         let mask = predicate.0(storage, predicate.1)
         return components.first{ mask[$0.rawValue] }
     }
-        
+    
     //*========================================================================*
     // MARK: * Component
     //*========================================================================*
     
     @usableFromInline enum Component: Int, CaseIterable {
+        
+        //=--------------------------------------------------------------------=
+        // MARK: Instances
+        //=--------------------------------------------------------------------=
+        
         case value    = 0
         case integer  = 1
         case fraction = 2
+        
+        //=--------------------------------------------------------------------=
+        // MARK: Instances
+        //=--------------------------------------------------------------------=
+        
+        @usableFromInline static let allCases = [value, integer, fraction]
     }
 }

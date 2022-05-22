@@ -64,9 +64,11 @@ extension NumberTextScheme {
     // MARK: Preferences
     //=------------------------------------------------------------------------=
     
-    @inlinable func preferred<T>(_ value: T.Type) -> NumberTextBounds<T>
-    where T: NumberTextValue { NumberTextBounds() }
+    @inlinable func preferred<T>(_ value: T.Type) -> NumberTextBounds<T> {
+        NumberTextBounds()
+    }
     
-    @inlinable func preferred<T>(_ value: T.Type) -> NumberTextPrecision<T>
-    where T: NumberTextValue { NumberTextPrecision() }
+    @inlinable func preferred<T>(_ value: T.Type) -> NumberTextPrecision<T> {
+        NumberTextPrecision()
+    }
 }

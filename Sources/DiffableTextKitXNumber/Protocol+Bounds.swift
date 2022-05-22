@@ -14,7 +14,7 @@
 public extension NumberTextStyleProtocol {
     
     //=------------------------------------------------------------------------=
-    // MARK: Instance
+    // MARK: Bounds
     //=------------------------------------------------------------------------=
     
     @inlinable func bounds(_ bounds: Bounds) -> Self {

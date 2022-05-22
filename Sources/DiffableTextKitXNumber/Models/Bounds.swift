@@ -83,7 +83,7 @@ public struct NumberTextBounds<Value: NumberTextValue>: Equatable {
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: + Description
+// MARK: + Descriptions
 //=----------------------------------------------------------------------------=
 
 extension NumberTextBounds: CustomStringConvertible {

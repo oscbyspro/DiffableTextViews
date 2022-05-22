@@ -15,7 +15,6 @@ import Foundation
 
 /// A text offset measured in code units.
 public struct Position<Offset: DiffableTextKit.Offset>: Comparable {
-    @inlinable public static var offset: Offset.Type { Offset.self }
     
     //=------------------------------------------------------------------------=
     // MARK: State

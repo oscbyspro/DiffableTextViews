@@ -143,7 +143,8 @@ import Foundation
             // Formatted
             //=----------------------------------=
             let sides = formatter.string(from: 0)!.split(
-            separator: lexicon.digits[.zero], omittingEmptySubsequences: false)
+            separator: lexicon.digits[.zero],
+            omittingEmptySubsequences: false)
             //=----------------------------------=
             // Direction
             //=----------------------------------=
@@ -159,9 +160,7 @@ import Foundation
         
         @inlinable func autocorrect(_ snapshot: inout Snapshot) {
             if let range = Search.range(of: label, in: snapshot, towards: direction) {
-                snapshot.transform(attributes: range) {
-                    attribute in attribute = .phantom
-                }
+                snapshot.transform(attributes: range) { $0 = .phantom }
             }
         }
     }
@@ -185,7 +184,7 @@ extension NumberTextSchemeXCurrency {
     // MARK: Preferences
     //=------------------------------------------------------------------------=
     
-    @inlinable func preferred<T>(_ value: T.Type) -> NumberTextPrecision<T> where T: NumberTextValue {
+    @inlinable func preferred<T>(_ value: T.Type) -> NumberTextPrecision<T> {
         NumberTextPrecision(fraction: preferences.fraction)
     }
 }

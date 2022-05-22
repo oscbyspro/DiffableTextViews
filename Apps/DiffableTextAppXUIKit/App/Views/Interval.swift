@@ -7,8 +7,8 @@
 // See http://www.apache.org/licenses/LICENSE-2.0 for license information.
 //=----------------------------------------------------------------------------=
 
-import SwiftUI
 import IntervalSliderViews
+import SwiftUI
 
 //*============================================================================*
 // MARK: * Interval

@@ -67,7 +67,7 @@ public struct Attribute: OptionSet {
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: + Description
+// MARK: + Descriptions
 //=----------------------------------------------------------------------------=
 
 extension Attribute: CustomStringConvertible {

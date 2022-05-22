@@ -18,7 +18,7 @@
 /// |x|o|o|o|x|o|o|o|o|o|o|o|x|x|x|x|~
 /// ```
 ///
-/// Set the anchor to select the caret represented by its index. This may be done
+/// Set the anchor to select the caret represented by its index. It may be desirable
 /// on snapshots containing only formatting characters. As an example, a pattern text style
 /// bound to an empty value may anchor at the pattern's first placeholder character.
 ///
@@ -43,7 +43,7 @@ public struct Snapshot: BidirectionalCollection, RangeReplaceableCollection {
     }
     
     //=------------------------------------------------------------------------=
-    // MARK: Initializers: Attribute
+    // MARK: Initializers
     //=------------------------------------------------------------------------=
     
     @inlinable public init(_ characters: String, as attribute: Attribute = []) {
@@ -160,21 +160,34 @@ public extension Snapshot {
     // MARK: Update
     //=------------------------------------------------------------------------=
     
-    @inlinable mutating func transform(attributes index: Index,
+    @inlinable mutating func transform(
+    attributes index: Index,
     with transform: (inout Attribute) -> Void) {
+        //=--------------------------------------=
+        // Index
+        //=--------------------------------------=
         transform(&_attributes[index.attribute])
     }
     
-    @inlinable mutating func transform<S: Sequence>(attributes indices: S,
-    with transform: (inout Attribute) -> Void) where S.Element == Index {
-        for index in indices {
+    @inlinable mutating func transform<S>(
+    attributes sequence: S,
+    with transform: (inout Attribute) -> Void)
+    where S: Sequence, S.Element == Index {
+        //=--------------------------------------=
+        // Sequence
+        //=--------------------------------------=
+        for index in sequence {
             transform(&_attributes[index.attribute])
         }
     }
     
-    @inlinable mutating func transform<R: RangeExpression>(attributes indices: R,
-    with transform: (inout Attribute) -> Void) where R.Bound == Index {
-        for index in self.indices[indices.relative(to: self)] {
+    @inlinable mutating func transform<R>(attributes expression: R,
+    with transform: (inout Attribute) -> Void)
+    where R: RangeExpression, R.Bound == Index {
+        //=--------------------------------------=
+        // Range
+        //=--------------------------------------=
+        for index in indices[expression.relative(to: self)] {
             transform(&_attributes[index.attribute])
         }
     }
@@ -185,10 +198,16 @@ public extension Snapshot {
 
     @inlinable mutating func replaceSubrange<C: Collection>(
     _ indices: Range<Index>, with elements: C) where C.Element == Symbol {
+        //=--------------------------------------=
+        // Characters
+        //=--------------------------------------=
         _characters.replaceSubrange(
         indices.lowerBound.character ..<
         indices.upperBound.character,
         with: elements.lazy.map(\.character))
+        //=--------------------------------------=
+        // Attributes
+        //=--------------------------------------=
         _attributes.replaceSubrange(
         indices.lowerBound.attribute ..<
         indices.upperBound.attribute,
@@ -224,7 +243,7 @@ public extension Snapshot {
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: + Description
+// MARK: + Descriptions
 //=----------------------------------------------------------------------------=
 
 extension Snapshot: CustomStringConvertible {
@@ -301,7 +320,7 @@ extension Snapshot {
         //=--------------------------------------=
         if let anchor = anchor { return anchor }
         //=--------------------------------------=
-        // Inspect The Initial Index
+        // Inspect Initial Index
         //=--------------------------------------=
         if peek(from: index, towards: preference).map(
         nonpassthrough(at:)) == true { return index }
@@ -310,21 +329,21 @@ extension Snapshot {
         //=--------------------------------------=
         let direction = direction ?? preference
         //=--------------------------------------=
-        // Search In The Direction
+        // Search In Direction
         //=--------------------------------------=
         if let caret = caret(from: index,
         towards: direction,
         jumping: direction == preference ? .to : .through,
         targeting: nonpassthrough(at:)) { return caret }
         //=--------------------------------------=
-        // Search In The Other Direction
+        // Search In Other Direction
         //=--------------------------------------=
         if let caret = caret(from: index,
         towards: direction.reversed(),
         jumping: Jump.to, // use Jump.to on each direction
         targeting: nonpassthrough(at:)) { return caret }
         //=--------------------------------------=
-        // Return End Index
+        // Return End Index On Caret Not Found
         //=--------------------------------------=
         return self.endIndex
     }
@@ -363,13 +382,5 @@ extension Snapshot {
     // MARK: * Jump
     //*========================================================================*
 
-    @usableFromInline enum Jump {
-        
-        //=--------------------------------------------------------------------=
-        // MARK: Instances
-        //=--------------------------------------------------------------------=
-        
-        case to
-        case through
-    }
+    @usableFromInline enum Jump { case to, through }
 }

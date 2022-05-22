@@ -15,8 +15,8 @@ import Foundation
 //*============================================================================*
 
 public struct _NumberTextStyle<Format: NumberTextFormat>: NumberTextStyleProtocol {
-    public typealias Value = Format.FormatInput
     public typealias Adapter = NumberTextAdapter<Format>
+    public typealias Value = Format.FormatInput
 
     //=------------------------------------------------------------------------=
     // MARK: State
@@ -229,11 +229,11 @@ internal extension _NumberTextStyle {
     /// This method exists because Apple always interpret zero as being positive.
     @inlinable func fix(_ sign: Sign, for value: Value, in characters: inout String)  {
         //=--------------------------------------=
-        // Condition
+        // Sign In Characters Needs Correction
         //=--------------------------------------=
         guard sign == .negative, value == .zero else { return }
         //=--------------------------------------=
-        // Toggle Positive Zero Sign To Negative
+        // Swap Positive Zero To Negative Zero
         //=--------------------------------------=
         guard let index = characters.firstIndex(of: lexicon.signs[sign.toggled()]) else { return }
         characters.replaceSubrange(index...index, with: String(lexicon.signs[sign]))

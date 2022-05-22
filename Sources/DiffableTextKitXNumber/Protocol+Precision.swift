@@ -14,7 +14,7 @@
 public extension NumberTextStyleProtocol {
     
     //=------------------------------------------------------------------------=
-    // MARK: Instance
+    // MARK: Precision
     //=------------------------------------------------------------------------=
     
     @inlinable func precision(_ precision: Precision) -> Self {

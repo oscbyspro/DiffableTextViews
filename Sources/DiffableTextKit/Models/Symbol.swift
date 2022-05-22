@@ -73,7 +73,7 @@ public struct Symbol: Equatable {
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: + Description
+// MARK: + Descriptions
 //=----------------------------------------------------------------------------=
 
 extension Symbol: CustomStringConvertible {

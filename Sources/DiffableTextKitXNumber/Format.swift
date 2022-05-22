@@ -81,8 +81,8 @@ extension NumberTextFormat {
 // MARK: * Format x Number
 //*============================================================================*
 
-public protocol NumberTextFormatXNumber: NumberTextFormat where
-NumberTextSign == NFSC.SignDisplayStrategy {
+public protocol NumberTextFormatXNumber: NumberTextFormat
+where NumberTextSign == NFSC.SignDisplayStrategy {
 
     //=------------------------------------------------------------------------=
     // MARK: Initializers
@@ -95,8 +95,8 @@ NumberTextSign == NFSC.SignDisplayStrategy {
 // MARK: * Format x Currency
 //*============================================================================*
 
-public protocol NumberTextFormatXCurrency: NumberTextFormat where
-NumberTextSign == CFSC.SignDisplayStrategy {
+public protocol NumberTextFormatXCurrency: NumberTextFormat
+where NumberTextSign == CFSC.SignDisplayStrategy {
     
     //=------------------------------------------------------------------------=
     // MARK: Accessors
@@ -115,8 +115,8 @@ NumberTextSign == CFSC.SignDisplayStrategy {
 // MARK: * Format x Percent
 //*============================================================================*
 
-public protocol NumberTextFormatXPercent: NumberTextFormat where
-NumberTextSign == NFSC.SignDisplayStrategy {
+public protocol NumberTextFormatXPercent: NumberTextFormat
+where NumberTextSign == NFSC.SignDisplayStrategy {
     
     //=------------------------------------------------------------------------=
     // MARK: Initializers

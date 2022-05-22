@@ -101,7 +101,7 @@ extension Reader {
         //=--------------------------------------=
         } else { character = input.character }
         //=--------------------------------------=
-        // Done
+        // Return
         //=--------------------------------------=
         return Symbol(character, as: input.attribute)
     }
