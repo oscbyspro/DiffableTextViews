@@ -112,12 +112,14 @@ import SwiftUI
 //*============================================================================*
 
 struct ContentView: View {
+    typealias Amount = Decimal // Decimal, Double, (U)Int(8-64), Optional<T>
 
     //=------------------------------------------------------------------------=
     // MARK: State
     //=------------------------------------------------------------------------=
     
-    @State var amount = 0 as Decimal
+    @State var amount = 0 as Amount
+    @State var currencyCode = "SEK"
     @State var locale = Locale(identifier: "sv_SE")
     
     //=------------------------------------------------------------------------=
@@ -126,10 +128,9 @@ struct ContentView: View {
     
     var body: some View {
         DiffableTextField(value: $amount) {
-            .currency(code: "SEK")
-            .bounds((0 as Decimal)...)
+            .currency(code: currencyCode)
+            // .bounds((0 as Amount)...)
             // .precision(integer: 1..., fraction: 2)
-            //  default precision depends on currency
             // .constant() // ignores the environment
         }
         .environment(\.locale, locale)
@@ -169,7 +170,7 @@ struct ContentView: View {
     // MARK: State
     //=------------------------------------------------------------------------=
     
-    @State var number: String = ""
+    @State var number = "123456789"
     @State var style = PatternTextStyle<String>
         .pattern("+## (###) ###-##-##")
         .placeholder("#") { $0.isASCII && $0.isNumber }
