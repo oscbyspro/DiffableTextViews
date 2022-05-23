@@ -56,8 +56,8 @@ public struct Status<Style: DiffableTextStyle> {
     //=------------------------------------------------------------------------=
     
     @inlinable static func .!= (lhs: Self, rhs: Self) -> Changes {[
-        .value(lhs.value != rhs.value),
         .style(lhs.style != rhs.style),
+        .value(lhs.value != rhs.value),
         .focus(lhs.focus != rhs.focus),
     ]}
 }
