@@ -62,7 +62,7 @@
                 //=------------------------------=
                 guard predicate.check(content) else { break body }
                 //=------------------------------=
-                // Some: (!)
+                // (!) Some
                 //=------------------------------=
                 some(&result, pattern[qIndex..<pIndex], content)
                 value  .formIndex(after: &vIndex)
@@ -76,14 +76,14 @@
             }
         }
         //=--------------------------------------=
-        // None: (!)
+        // (!) None
         //=--------------------------------------=
         if qIndex == pattern.startIndex {
             none(&result, pattern[qIndex..<pIndex])
             qIndex = pIndex
         }
         //=--------------------------------------=
-        // Done: (!)
+        // (!) Done
         //=--------------------------------------=
         done(&result, pattern[qIndex...], value[vIndex...]); return result
     }

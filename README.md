@@ -126,7 +126,7 @@ struct ContentView: View {
     // MARK: Accessors
     //=------------------------------------------------------------------------=
     
-    var en_US: Locale { 
+    var en_US: Locale {
         Locale(identifier: "en_US")
     }
     
@@ -136,8 +136,8 @@ struct ContentView: View {
     
     var body: some View {
         DiffableTextField(value: $amount) {
-            .currency(code: currencyCode) // NumberTextStyle<Amount>.Currency
-            // .bounds((0 as Amount)...) // bounds == min..., ...max, min...max
+            .currency(code: currencyCode)
+            // .bounds((0 as Amount)...) // autocorrects while view is in focus
             // .precision(integer: 1..., fraction: 2) // default is appropriate
             // .locale(en_US).constant() // prevents changes by the environment
         }
@@ -179,19 +179,19 @@ struct ContentView: View {
     //=------------------------------------------------------------------------=
     
     @State var number = "123456789"
-    @State var style = PatternTextStyle<String>
-        .pattern("+## (###) ###-##-##")
-        .placeholder("#") { $0.isASCII && $0.isNumber }
-        // .hidden(true) // hides pattern beyond last real value
-        // .equals(()) // skips comparisons and discards changes
     
     //=------------------------------------------------------------------------=
     // MARK: Body
     //=------------------------------------------------------------------------=
     
     var body: some View {
-        DiffableTextField(value: $number, style: style)
-            .diffableTextViews_keyboardType(.numberPad)
+        DiffableTextField(value: $number) {
+            .pattern("+## (###) ###-##-##")
+            .placeholder("#") { $0.isASCII && $0.isNumber }
+            // .hidden(true) // hides pattern beyond last real value
+            // .equals(()) // skips comparisons and discards changes
+        }
+        .diffableTextViews_keyboardType(.numberPad)
     }
 }
 ```

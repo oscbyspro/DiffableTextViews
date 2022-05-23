@@ -15,10 +15,10 @@
 import XCTest
 
 //*============================================================================*
-// MARK: * Views x Base
+// MARK: * Helpers x Base
 //*============================================================================*
 
-final class ViewsTestsXBase: XCTestCase {
+final class HelpersTestsXBase: XCTestCase {
     
     //=------------------------------------------------------------------------=
     // MARK: State

@@ -15,10 +15,10 @@
 import XCTest
 
 //*============================================================================*
-// MARK: * Models x Font
+// MARK: * Utilities x Font
 //*============================================================================*
 
-final class ModelsTestsXFont: XCTestCase {
+final class UtilitiesTestsXFont: XCTestCase {
     
     //=------------------------------------------------------------------------=
     // MARK: State
