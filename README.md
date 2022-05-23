@@ -113,7 +113,7 @@ import SwiftUI
 
 struct ContentView: View {
     typealias Amount = Decimal // Decimal, Double, (U)Int(8-64), Optional<T>
-
+    
     //=------------------------------------------------------------------------=
     // MARK: State
     //=------------------------------------------------------------------------=
@@ -123,15 +123,23 @@ struct ContentView: View {
     @State var locale = Locale(identifier: "sv_SE")
     
     //=------------------------------------------------------------------------=
+    // MARK: Accessors
+    //=------------------------------------------------------------------------=
+    
+    var en_US: Locale { 
+        Locale(identifier: "en_US")
+    }
+    
+    //=------------------------------------------------------------------------=
     // MARK: Body
     //=------------------------------------------------------------------------=
     
     var body: some View {
         DiffableTextField(value: $amount) {
-            .currency(code: currencyCode)
-            // .bounds((0 as Amount)...)
-            // .precision(integer: 1..., fraction: 2)
-            // .constant() // ignores the environment
+            .currency(code: currencyCode) // NumberTextStyle<Amount>.Currency
+            // .bounds((0 as Amount)...) // bounds == min..., ...max, min...max
+            // .precision(integer: 1..., fraction: 2) // default is appropriate
+            // .locale(en_US).constant() // prevents changes by the environment
         }
         .environment(\.locale, locale)
         .diffableTextViews_keyboardType(.decimalPad)
@@ -174,7 +182,8 @@ struct ContentView: View {
     @State var style = PatternTextStyle<String>
         .pattern("+## (###) ###-##-##")
         .placeholder("#") { $0.isASCII && $0.isNumber }
-        .equals(()) // skips comparisons and discards changes
+        // .hidden(true) // hides pattern beyond last real value
+        // .equals(()) // skips comparisons and discards changes
     
     //=------------------------------------------------------------------------=
     // MARK: Body
