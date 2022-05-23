@@ -42,15 +42,15 @@ Next: BidirectionalCollection, Next.Element == Symbol {
             //=---------------------------------=
             // Elements
             //=---------------------------------=
-            let pastElement = prev[prevIndex]
+            let prevElement = prev[prevIndex]
             let nextElement = next[nextIndex]
             //=---------------------------------=
             // Indices
             //=---------------------------------=
-            if pastElement.character == nextElement.character {
+            if prevElement.character == nextElement.character {
                 prev.formIndex(after: &prevIndex)
                 next.formIndex(after: &nextIndex)
-            } else if pastElement.contains(.removable) {
+            } else if prevElement.contains(.removable ) {
                 prev.formIndex(after: &prevIndex)
             } else if nextElement.contains(.insertable) {
                 next.formIndex(after: &nextIndex)

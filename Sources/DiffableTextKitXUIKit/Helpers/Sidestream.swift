@@ -13,10 +13,10 @@ import DiffableTextKit
 import SwiftUI
 
 //*============================================================================*
-// MARK: * Actions
+// MARK: * Sidestream
 //*============================================================================*
     
-@usableFromInline struct Actions {
+@usableFromInline struct Sidestream {
     
     //=------------------------------------------------------------------------=
     // MARK: State

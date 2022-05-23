@@ -100,8 +100,8 @@ extension PatternTextStyle {
         Sequencer(pattern, placeholders, value).reduce(into: .init()) {
             commit, queue, content in
             commit.snapshot.append(contentsOf: Snapshot(queue, as: .phantom))
-            commit.snapshot.append(Symbol(content, as: .content))
-            commit.value.append(content)
+            commit.snapshot.append(Symbol(content))
+            commit.value   .append(content)
         } none: {
             commit, queue in
             commit.snapshot.append(contentsOf: Snapshot(queue, as: .phantom))
@@ -121,7 +121,7 @@ extension PatternTextStyle {
     // MARK: Interactive
     //=------------------------------------------------------------------------=
     
-    /// - Mismatches throw an error, which results in user input cancellation.
+    /// - Mismatches throw an error.
     @inlinable public func resolve(_ proposal: Proposal) throws -> Commit<Value> {
         var value = Value(); let proposal = proposal.merged()
         var contents = proposal.lazy.filter(\.nonvirtual).makeIterator()
@@ -131,11 +131,14 @@ extension PatternTextStyle {
         parse: for character in pattern {
             if let predicate = placeholders[character] {
                 guard let content = contents.next() else { break parse }
+                //=------------------------------=
+                // Predicate
+                //=------------------------------=
                 guard predicate.check(content.character) else {
                     throw Info([.mark(content.character), "is invalid"])
                 }
                 //=------------------------------=
-                // Some
+                // Insertion
                 //=------------------------------=
                 value.append(content.character)
             }

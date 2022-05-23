@@ -39,13 +39,13 @@ public struct Attribute: OptionSet {
     // MARK: Instances
     //=------------------------------------------------------------------------=
     
-    /// A standard attribute describing standard characters.
+    /// An attribute describing standard characters.
     ///
-    /// It contains no attributes.
+    /// It is empty.
     ///
     public static let content = Self([])
     
-    /// A formatting attribute describing formatting characters.
+    /// An attribute describing formatting characters.
     ///
     /// It contains: virtual, insertable, removable, passthrough.
     ///

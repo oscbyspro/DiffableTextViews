@@ -40,45 +40,50 @@
     none: (inout Result, Substring) -> Void,
     done: (inout Result, Substring, Value.SubSequence) -> Void) -> Result {
         //=--------------------------------------=
-        // Variables
+        // State
         //=--------------------------------------=
         var result = result
-        var vIndex = value.startIndex
+        var vIndex = value  .startIndex
         var pIndex = pattern.startIndex
         var qIndex = pIndex // queue
         //=--------------------------------------=
-        // Loop
+        // Pattern
         //=--------------------------------------=
-        loop: while pIndex != pattern.endIndex {
-            let character = pattern[pIndex]
+        body: while pIndex != pattern.endIndex {
+            let character   = pattern[pIndex]
             //=----------------------------------=
-            // Value
+            // Placeholder
             //=----------------------------------=
-            if let predicate = placeholders[character] {
-                guard vIndex != value.endIndex else { break loop }
+            if let predicate  = placeholders[character] {
+                guard vIndex != value.endIndex else { break body }
                 let   content = value[vIndex]
-                guard predicate.check(content) else { break loop }
                 //=------------------------------=
-                // Some
+                // Predicate
+                //=------------------------------=
+                guard predicate.check(content) else { break body }
+                //=------------------------------=
+                // Some: (!)
                 //=------------------------------=
                 some(&result, pattern[qIndex..<pIndex], content)
-                value.formIndex(after: &vIndex)
+                value  .formIndex(after: &vIndex)
                 pattern.formIndex(after: &pIndex)
                 qIndex = pIndex
             //=----------------------------------=
-            // Pattern
+            // Miscellaneous
             //=----------------------------------=
-            } else { pattern.formIndex(after: &pIndex) }
+            } else {
+                pattern.formIndex(after: &pIndex)
+            }
         }
-        //=----------------------------------=
-        // None
-        //=----------------------------------=
+        //=--------------------------------------=
+        // None: (!)
+        //=--------------------------------------=
         if qIndex == pattern.startIndex {
             none(&result, pattern[qIndex..<pIndex])
             qIndex = pIndex
         }
         //=--------------------------------------=
-        // Done
+        // Done: (!)
         //=--------------------------------------=
         done(&result, pattern[qIndex...], value[vIndex...]); return result
     }

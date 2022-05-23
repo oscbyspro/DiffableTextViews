@@ -24,38 +24,21 @@ public struct Symbol: Equatable {
     //=------------------------------------------------------------------------=
     // MARK: Initializers
     //=------------------------------------------------------------------------=
-
-    @inlinable public init(character: Character, attribute: Attribute) {
-        self.character = character; self.attribute = attribute
-    }
     
-    @inlinable public init(_ character: Character, as attribute: Attribute) {
-        self.character = character; self.attribute = attribute
-    }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Initializers
-    //=------------------------------------------------------------------------=
-    
-    @inlinable @inline(__always)
-    public static func content(_ character: Character) -> Self {
-        Self(character, as: .content)
-    }
-    
-    @inlinable @inline(__always)
-    public static func phantom(_ character: Character) -> Self {
-        Self(character, as: .phantom)
+    @inlinable public init(_ character: Character, as attribute: Attribute = .content) {
+        self.character = character
+        self.attribute = attribute
     }
     
     //=------------------------------------------------------------------------=
     // MARK: Accessors
     //=------------------------------------------------------------------------=
-
+    
     @inlinable @inline(__always)
     public var virtual: Bool {
         self.attribute.contains(.virtual)
     }
-
+    
     @inlinable @inline(__always)
     public var nonvirtual: Bool {
         self.attribute.contains(.virtual) == false
@@ -65,7 +48,7 @@ public struct Symbol: Equatable {
     public func contains(_ character: Character) -> Bool {
         self.character == character
     }
-
+    
     @inlinable @inline(__always)
     public func contains(_ attribute: Attribute) -> Bool {
         self.attribute.contains(attribute)

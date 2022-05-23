@@ -35,7 +35,7 @@ import SwiftUI
 ///
 public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
     public typealias Value = Style.Value
-
+    
     //=------------------------------------------------------------------------=
     // MARK: State
     //=------------------------------------------------------------------------=
@@ -43,7 +43,7 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
     @usableFromInline let style: Style
     @usableFromInline let value: Binding<Value>
     @usableFromInline let title: String
-
+    
     //=------------------------------------------------------------------------=
     // MARK: Initializers
     //=------------------------------------------------------------------------=
@@ -61,9 +61,9 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
         self.value = value
         self.title = title
     }
-
+    
     //=------------------------------------------------------------------------=
-    // MARK: View Life Cycle
+    // MARK: Cycle
     //=------------------------------------------------------------------------=
     
     @inlinable public func makeCoordinator() -> Coordinator {
@@ -84,29 +84,28 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
     //*========================================================================*
     
     @MainActor public final class Coordinator: NSObject, UITextFieldDelegate {
-        @usableFromInline typealias Position = Unicode.UTF16.Position
-        @usableFromInline typealias Status = DiffableTextKit.Status<Style>
-        @usableFromInline typealias Context = DiffableTextKit.Context<Style>
+        @usableFromInline typealias Status   = DiffableTextKit.Status<Style>
+        @usableFromInline typealias Context  = DiffableTextKit.Context<Style>
+        @usableFromInline typealias Position = DiffableTextKit.Position<UTF16>
         @usableFromInline typealias Upstream = DiffableTextKitXUIKit.Upstream<Style>
-
+        
         //=--------------------------------------------------------------------=
         // MARK: State
         //=--------------------------------------------------------------------=
         
-        @usableFromInline let lock = Lock()
-        
+        @usableFromInline let lock   = Lock()
         @usableFromInline var context: Context!
-        @usableFromInline var actions = Actions()
         
-        @usableFromInline var upstream: Upstream!
+        @usableFromInline var upstream:    Upstream!
         @usableFromInline let downstream = Downstream()
+        @usableFromInline var sidestream = Sidestream()
         
         //=--------------------------------------------------------------------=
-        // MARK: View Life Cycle
+        // MARK: Cycle
         //=--------------------------------------------------------------------=
         
         @inlinable @inline(never)
-        func setup(_ parent: DiffableTextField, _ environment: EnvironmentValues) {
+        func setup(_ parent: DiffableTextField,  _ environment: EnvironmentValues) {
             //=----------------------------------=
             // Upstream
             //=----------------------------------=
@@ -141,9 +140,9 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
             self.downstream.textContentType(environment)
             self.downstream.textInputAutocapitalization(environment)
             //=----------------------------------=
-            // Coordinator
+            // Sidestream
             //=----------------------------------=
-            self.actions = Actions(environment)
+            self.sidestream = Sidestream(environment)
             //=----------------------------------=
             // Synchronize
             //=----------------------------------=
@@ -225,7 +224,7 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
         //=--------------------------------------------------------------------=
         
         @inlinable public func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-            textField.resignFirstResponder(); actions.onSubmit?(); return true
+            textField.resignFirstResponder(); self.sidestream.onSubmit?(); return true
         }
         
         @inlinable public func textFieldDidBeginEditing(_ textField: UITextField) {

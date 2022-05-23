@@ -31,7 +31,7 @@ public struct Index: Comparable {
     ///   - character: The character encoded index.
     ///   - attribute: The character encoded offset.
     ///
-    @inlinable init(_ character: String.Index, _ attribute: Int) {
+    @inlinable init(_ character: String.Index, as attribute: Int) {
         self.character = character
         self.attribute = attribute
     }

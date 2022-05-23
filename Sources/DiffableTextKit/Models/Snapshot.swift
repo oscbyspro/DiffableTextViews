@@ -46,18 +46,18 @@ public struct Snapshot: BidirectionalCollection, RangeReplaceableCollection {
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable public init(_ characters: String, as attribute: Attribute = []) {
+    @inlinable public init(_ characters: String, as attribute: Attribute = .content) {
         self._characters = characters
         self._attributes = Array(repeating: attribute, count: characters.count)
     }
     
-    @inlinable public init<C>(_ characters: C, as attribute: Attribute = [])
+    @inlinable public init<C>(_ characters: C, as attribute: Attribute = .content)
     where C: RandomAccessCollection, C.Element == Character {
         self._characters = String(characters)
         self._attributes = Array(repeating: attribute, count: characters.count)
     }
     
-    @inlinable public init<S>(_ characters: S, as attribute: Attribute = [])
+    @inlinable public init<S>(_ characters: S, as attribute: Attribute = .content)
     where S: Sequence, S.Element == Character { self.init()
         for character in characters {
             self._characters.append(character)
@@ -105,8 +105,8 @@ public struct Snapshot: BidirectionalCollection, RangeReplaceableCollection {
     //=------------------------------------------------------------------------=
     
     @inlinable public subscript(index: Index) -> Symbol {
-        Symbol(character: _characters[index.character],
-               attribute: _attributes[index.attribute])
+        Symbol(_characters[index.character],
+        as:    _attributes[index.attribute])
     }
     
     //=------------------------------------------------------------------------=
@@ -115,12 +115,12 @@ public struct Snapshot: BidirectionalCollection, RangeReplaceableCollection {
     
     @inlinable public var startIndex: Index {
         Index(_characters.startIndex,
-              _attributes.startIndex)
+        as:   _attributes.startIndex)
     }
 
     @inlinable public var endIndex: Index {
         Index(_characters.endIndex,
-              _attributes.endIndex)
+        as:   _attributes.endIndex)
     }
     
     //=------------------------------------------------------------------------=
@@ -129,12 +129,12 @@ public struct Snapshot: BidirectionalCollection, RangeReplaceableCollection {
     
     @inlinable public func index(after  index: Index) -> Index {
         Index(_characters .index(after: index.character),
-              _attributes .index(after: index.attribute))
+        as:   _attributes .index(after: index.attribute))
     }
     
     @inlinable public func index(before  index: Index) -> Index {
         Index(_characters .index(before: index.character),
-              _attributes .index(before: index.attribute))
+        as:   _attributes .index(before: index.attribute))
     }
 }
 
@@ -160,8 +160,7 @@ public extension Snapshot {
     // MARK: Update
     //=------------------------------------------------------------------------=
     
-    @inlinable mutating func transform(
-    attributes index: Index,
+    @inlinable mutating func transform(attributes index: Index,
     with transform: (inout Attribute) -> Void) {
         //=--------------------------------------=
         // Index
@@ -169,25 +168,24 @@ public extension Snapshot {
         transform(&_attributes[index.attribute])
     }
     
-    @inlinable mutating func transform<S>(
-    attributes sequence: S,
+    @inlinable mutating func transform<S>(attributes indices: S,
     with transform: (inout Attribute) -> Void)
     where S: Sequence, S.Element == Index {
         //=--------------------------------------=
         // Sequence
         //=--------------------------------------=
-        for index in sequence {
+        for index in indices {
             transform(&_attributes[index.attribute])
         }
     }
     
-    @inlinable mutating func transform<R>(attributes expression: R,
+    @inlinable mutating func transform<R>(attributes indices: R,
     with transform: (inout Attribute) -> Void)
     where R: RangeExpression, R.Bound == Index {
         //=--------------------------------------=
         // Range
         //=--------------------------------------=
-        for index in indices[expression.relative(to: self)] {
+        for index in self.indices[indices.relative(to: self)] {
             transform(&_attributes[index.attribute])
         }
     }
@@ -196,8 +194,8 @@ public extension Snapshot {
     // MARK: Replace
     //=------------------------------------------------------------------------=
 
-    @inlinable mutating func replaceSubrange<C: Collection>(
-    _ indices: Range<Index>, with elements: C) where C.Element == Symbol {
+    @inlinable mutating func replaceSubrange<C>(_ indices: Range<Index>,
+    with elements: C) where C: Collection, C.Element == Symbol {
         //=--------------------------------------=
         // Characters
         //=--------------------------------------=
@@ -237,8 +235,8 @@ public extension Snapshot {
     }
     
     @inlinable @discardableResult mutating func remove(at index: Index) -> Symbol {
-        Symbol(character: _characters.remove(at: index.character),
-               attribute: _attributes.remove(at: index.attribute))
+        Symbol(_characters.remove(at: index.character),
+        as:    _attributes.remove(at: index.attribute))
     }
 }
 

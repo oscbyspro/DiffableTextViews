@@ -13,7 +13,7 @@
 
 /// One or two carets, represented by a range.
 ///
-/// An empty range represents a single upper caret.
+/// An empty range represents an upper caret.
 ///
 @usableFromInline struct Carets<Caret: Comparable>: Equatable {
     
