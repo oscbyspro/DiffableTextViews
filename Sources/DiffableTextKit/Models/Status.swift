@@ -55,17 +55,9 @@ public struct Status<Style: DiffableTextStyle> {
     // MARK: Utilities
     //=------------------------------------------------------------------------=
     
-    @inlinable static func .!= (lhs: Self, rhs: Self) -> Changes {
-        var changes = Changes()
-        //=--------------------------------------=
-        // Compare
-        //=--------------------------------------=
-        if lhs.style != rhs.style { changes.formUnion(.style) }
-        if lhs.value != rhs.value { changes.formUnion(.value) }
-        if lhs.focus != rhs.focus { changes.formUnion(.focus) }
-        //=--------------------------------------=
-        // Return
-        //=--------------------------------------=
-        return changes
-    }
+    @inlinable static func .!= (lhs: Self, rhs: Self) -> Changes {[
+        .value(lhs.value != rhs.value),
+        .style(lhs.style != rhs.style),
+        .focus(lhs.focus != rhs.focus),
+    ]}
 }

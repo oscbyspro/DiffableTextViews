@@ -35,13 +35,4 @@ public struct Update: OptionSet {
     public init(rawValue: UInt8) {
         self.rawValue = rawValue
     }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Transformations
-    //=------------------------------------------------------------------------=
-    
-    @inlinable @inline(__always)
-    public func callAsFunction(_ mask: Bool) -> Self {
-        mask ? self : []
-    }
 }
