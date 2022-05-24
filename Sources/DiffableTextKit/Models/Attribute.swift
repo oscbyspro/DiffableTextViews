@@ -39,7 +39,7 @@ public struct Attribute: OptionSet {
     // MARK: Instances
     //=------------------------------------------------------------------------=
     
-    /// An attribute describing standard characters.
+    /// An attribute describing normal characters.
     ///
     /// It is empty.
     ///
@@ -49,7 +49,7 @@ public struct Attribute: OptionSet {
     ///
     /// It contains: virtual, insertable, removable, passthrough.
     ///
-    public static let phantom = Self([.virtual, .insertable, .removable, .passthrough])
+    public static let phantom = Self([virtual, insertable, removable, passthrough])
 
     //=------------------------------------------------------------------------=
     // MARK: State

@@ -11,6 +11,7 @@
 // MARK: * Update
 //*============================================================================*
 
+/// A message describing which remote properties need to be updated.
 public struct Update: OptionSet {
     
     //=------------------------------------------------------------------------=

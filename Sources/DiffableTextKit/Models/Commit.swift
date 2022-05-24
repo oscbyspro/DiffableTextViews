@@ -41,11 +41,11 @@ public struct Commit<Value> {
     // MARK: Initializers
     //=------------------------------------------------------------------------=
         
-    @inlinable public init() where Value: ExpressibleByNilLiteral {
+    @inlinable public init<T>() where Value == Optional<T> {
         self.init(nil, Snapshot())
     }
     
     @inlinable public init<T>(_ commit: Commit<T>) where Value == Optional<T> {
         self.init(commit.value, commit.snapshot)
-    }    
+    }
 }

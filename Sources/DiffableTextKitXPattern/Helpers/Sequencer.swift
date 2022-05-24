@@ -12,23 +12,22 @@
 //*============================================================================*
 
 @usableFromInline struct Sequencer<Value: Collection> where Value.Element == Character {
+    @usableFromInline typealias Placeholders = [Character: Predicate]
     
     //=------------------------------------------------------------------------=
     // MARK: State
     //=------------------------------------------------------------------------=
     
     @usableFromInline let pattern: String
-    @usableFromInline let placeholders: [Character: Predicate]
+    @usableFromInline let placeholders: Placeholders
     @usableFromInline let value: Value
     
     //=------------------------------------------------------------------------=
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable init(_ pattern: String, _ placeholders: [Character: Predicate], _ value: Value) {
-        self.pattern = pattern
-        self.placeholders = placeholders
-        self.value = value
+    @inlinable init(_ pattern: String, _ placeholders: Placeholders, _ value: Value) {
+        self.pattern = pattern; self.placeholders = placeholders; self.value = value
     }
     
     //=------------------------------------------------------------------------=

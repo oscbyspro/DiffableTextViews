@@ -27,19 +27,17 @@ import Foundation
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable init(count: Int) {
+    /// Links each components to a character returned by a closure.
+    @inlinable init(character: (Component) throws -> Character) rethrows {
+        let components = Component.allCases; let count = components.count
+        //=--------------------------------------=
+        // Count
+        //=--------------------------------------=
         self.components = .init(minimumCapacity: count)
         self.characters = .init(minimumCapacity: count)
-    }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Initializers: Indirect
-    //=------------------------------------------------------------------------=
-
-    /// Creates an instance by linking each components to a character.
-    @inlinable init(character: (Component) throws -> Character) rethrows {
-        let components = Component.allCases
-        self.init(count: components.count)
+        //=--------------------------------------=
+        // Links
+        //=--------------------------------------=
         for component in components {
             try link(component, character(component))
         }

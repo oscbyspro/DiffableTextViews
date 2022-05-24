@@ -200,7 +200,7 @@ struct ContentView: View {
 
 Decorative styles that modify the behavior of their content.
 
-| Style | Description | Method |
-|-------|-------------|--------|
+| Style | Description | Modifier |
+|-------|-------------|----------|
 | [Constant](Sources/DiffableTextKit/Styles/Constant.swift) | Prevents style transformations | constant() |
 | [Equals](Sources/DiffableTextKit/Styles/Equals.swift)  | Binds the style's equality to a proxy value | equals(\_:) |

@@ -15,13 +15,14 @@ import DiffableTextKit
 
 public struct PatternTextStyle<Value>: DiffableTextStyle where
 Value: RangeReplaceableCollection, Value: Equatable, Value.Element == Character {
-    
+    @usableFromInline typealias Placeholders = [Character: Predicate]
+
     //=------------------------------------------------------------------------=
     // MARK: State
     //=------------------------------------------------------------------------=
     
     @usableFromInline let pattern: String
-    @usableFromInline var placeholders: [Character: Predicate]
+    @usableFromInline var placeholders: Placeholders
     @usableFromInline var visible: Bool
     
     //=------------------------------------------------------------------------=
