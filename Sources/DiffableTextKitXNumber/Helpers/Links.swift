@@ -27,7 +27,7 @@ import Foundation
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    /// Links each components to a character returned by a closure.
+    /// Links each component to a character.
     @inlinable init(character: (Component) throws -> Character) rethrows {
         let components = Component.allCases; let count = components.count
         //=--------------------------------------=

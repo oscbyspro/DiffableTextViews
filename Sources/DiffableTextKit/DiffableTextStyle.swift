@@ -45,7 +45,7 @@ public protocol DiffableTextStyle: Equatable {
     
     /// Returns a value and a snapshot describing it.
     ///
-    /// This method is called in response to changes upstream while the view is focused.
+    /// This method is called in response to changes upstream while the view is in focus.
     ///
     @inlinable func interpret(_ value: Value) -> Commit<Value>
     

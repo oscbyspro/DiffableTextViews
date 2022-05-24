@@ -96,7 +96,7 @@ A style that binds localized numbers using various formats.
 | :art: | Formats | Number, currency and percent |
 | :bricks: | Bounds | Clamps values to bounds  |
 | :bow_and_arrow: | Precision | Up to 38 digits of precision |
-| :national_park: | Locales | Supports all locales in Foundation |
+| :national_park: | Locales | Supports every locale in Foundation |
 | :two: | Bilingual | Accepts both local and ASCII inputs |
 
 ### Examples

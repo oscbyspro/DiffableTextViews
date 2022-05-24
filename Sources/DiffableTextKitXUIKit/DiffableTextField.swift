@@ -173,8 +173,8 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
                 //=------------------------------=
                 self.push(update)
                 self.lock.task {
-                    // see [option + backspace]
-                    await self.push(.selection)
+                    // option + backspace
+                    self.push(.selection)
                 }
             //=----------------------------------=
             // Cancellation

@@ -18,7 +18,7 @@
     // MARK: Instances
     //=------------------------------------------------------------------------=
     
-    case forwards
+    case  forwards
     case backwards
     
     //=------------------------------------------------------------------------=
@@ -36,9 +36,6 @@
     //=------------------------------------------------------------------------=
     
     @inlinable public func reversed() -> Self {
-        switch self {
-        case  .forwards: return .backwards
-        case .backwards: return  .forwards
-        }
+        self == .forwards ? .backwards : .forwards
     }
 }

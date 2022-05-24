@@ -54,7 +54,7 @@ public final class Lock {
         self.lock(); try? action(); self.open()
     }
     
-    @inlinable public func task(operation: @escaping @Sendable () async throws -> Void) {
+    @inlinable public func task(operation: @escaping () async throws -> Void) {
         self.lock(); Task { try? await operation(); self.open() }
     }
 }
