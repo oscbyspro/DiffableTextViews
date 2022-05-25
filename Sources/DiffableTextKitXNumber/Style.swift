@@ -16,8 +16,7 @@ import Foundation
 
 public struct _NumberTextStyle<Format: NumberTextFormat>: NumberTextStyleProtocol {
     public typealias Adapter = NumberTextAdapter<Format>
-    public typealias Value = Format.FormatInput
-
+    
     //=------------------------------------------------------------------------=
     // MARK: State
     //=------------------------------------------------------------------------=
@@ -35,7 +34,7 @@ public struct _NumberTextStyle<Format: NumberTextFormat>: NumberTextStyleProtoco
         self.bounds = adapter.preferred()
         self.precision = adapter.preferred()
     }
- 
+    
     //=------------------------------------------------------------------------=
     // MARK: Accessors
     //=------------------------------------------------------------------------=
@@ -71,13 +70,13 @@ public struct _NumberTextStyle<Format: NumberTextFormat>: NumberTextStyleProtoco
 // MARK: + Utilities
 //=----------------------------------------------------------------------------=
 
-public extension _NumberTextStyle {
+extension _NumberTextStyle {
     
     //=------------------------------------------------------------------------=
     // MARK: Inactive
     //=------------------------------------------------------------------------=
     
-    @inlinable func format(_ value: Value) -> String {
+    @inlinable public func format(_ value: Value) -> String {
         format.precision(precision.inactive()).format(value)
     }
     
@@ -85,7 +84,7 @@ public extension _NumberTextStyle {
     // MARK: Active
     //=------------------------------------------------------------------------=
     
-    @inlinable func interpret(_ value: Value) -> Commit<Value> {
+    @inlinable public func interpret(_ value: Value) -> Commit<Value> {
         //=--------------------------------------=
         // Style
         //=--------------------------------------=
@@ -120,11 +119,11 @@ public extension _NumberTextStyle {
     // MARK: Interactive
     //=------------------------------------------------------------------------=
     
-    @inlinable func resolve(_ proposal: Proposal) throws -> Commit<Value> {
+    @inlinable public func resolve(_ proposal: Proposal) throws -> Commit<Value> {
         try resolve(number(proposal)!)
     }
     
-    @inlinable internal func resolve(_ number: Number) throws -> Commit<Value> {
+    @inlinable func resolve(_ number: Number) throws -> Commit<Value> {
         var number = number
         let count = number.count()
         //=--------------------------------------=
@@ -156,7 +155,7 @@ public extension _NumberTextStyle {
 // MARK: + Helpers
 //=----------------------------------------------------------------------------=
 
-internal extension _NumberTextStyle {
+extension _NumberTextStyle {
     
     //=------------------------------------------------------------------------=
     // MARK: Snapshot
@@ -211,29 +210,25 @@ internal extension _NumberTextStyle {
         //=--------------------------------------=
         // Style
         //=--------------------------------------=
-        let sign = (number.sign == .negative) ? Format.Sign.always : .automatic
-        let separator = (number.separator == .fraction) ? Format.Separator.always : .automatic
-        let style = style.sign(sign).separator(separator)
+        let style = style.sign(number.sign).separator(number.separator)
         //=--------------------------------------=
         // Characters
         //=--------------------------------------=
-        var characters = style.format(value)
-        fix(number.sign, for: value, in: &characters)
+        var characters = style.format(value); self.fix(number.sign, for: value, in: &characters)
         //=--------------------------------------=
         // Commit
         //=--------------------------------------=
         return Commit(value, snapshot(characters))
     }
     
-    
     /// This method exists because Apple always interpret zero as being positive.
     @inlinable func fix(_ sign: Sign, for value: Value, in characters: inout String)  {
         //=--------------------------------------=
-        // Sign In Characters Needs Correction
+        // Sign Needs Autocorrection
         //=--------------------------------------=
         guard sign == .negative, value == .zero else { return }
         //=--------------------------------------=
-        // Swap Positive Zero To Negative Zero
+        // Toggle Sign From Positive To Negative
         //=--------------------------------------=
         guard let index = characters.firstIndex(of: lexicon.signs[sign.toggled()]) else { return }
         characters.replaceSubrange(index...index, with: String(lexicon.signs[sign]))

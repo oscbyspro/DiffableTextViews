@@ -21,6 +21,12 @@ public protocol NumberTextStyleProtocol: DiffableTextStyle where Value: NumberTe
     //=------------------------------------------------------------------------=
     
     associatedtype Format: NumberTextFormat
+    associatedtype Value = Format.FormatInput
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Types
+    //=------------------------------------------------------------------------=
+    
     typealias Adapter = NumberTextAdapter<Format>
     typealias Bounds = NumberTextBounds<Format.FormatInput>
     typealias Precision = NumberTextPrecision<Format.FormatInput>

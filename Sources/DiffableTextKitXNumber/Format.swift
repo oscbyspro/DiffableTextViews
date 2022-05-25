@@ -54,26 +54,21 @@ FormatInput: DiffableTextKitXNumber.NumberTextValue {
 //=----------------------------------------------------------------------------=
 
 extension NumberTextFormat {
-    @usableFromInline typealias Value = FormatInput
-    @usableFromInline typealias Sign = NumberTextFormatXSign
-    @usableFromInline typealias Precision = NFSC.Precision
-    @usableFromInline typealias Separator = NFSC.DecimalSeparatorDisplayStrategy
-    @usableFromInline typealias Rounding = FloatingPointRoundingRule
     
     //=------------------------------------------------------------------------=
     // MARK: Transformations
     //=------------------------------------------------------------------------=
     
-    @inlinable func sign(_ strategy: Sign) -> Self {
-        self.sign(strategy: .init(strategy))
+    @inlinable func sign(_ sign: Sign) -> Self {
+        self.sign(strategy: .init(sign == .negative ? .always : .automatic))
     }
     
-    @inlinable func separator(_ strategy: Separator) -> Self {
-        self.decimalSeparator(strategy: strategy)
+    @inlinable func separator(_ separator: Separator?) -> Self {
+        self.decimalSeparator(strategy: separator != nil ? .always : .automatic)
     }
     
-    @inlinable func rounded(_ strategy: Rounding) -> Self {
-        self.rounded(rule: strategy, increment: nil)
+    @inlinable func rounded(_ rule: FloatingPointRoundingRule) -> Self {
+        self.rounded(rule: rule, increment: nil)
     }
 }
 

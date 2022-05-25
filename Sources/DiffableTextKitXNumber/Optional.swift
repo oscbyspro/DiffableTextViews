@@ -61,13 +61,13 @@ public struct _OptionalNumberTextStyle<Format: NumberTextFormat>: NumberTextStyl
 // MARK: + Utilities
 //=----------------------------------------------------------------------------=
 
-public extension _OptionalNumberTextStyle {
+extension _OptionalNumberTextStyle {
     
     //=------------------------------------------------------------------------=
     // MARK: Inactive
     //=------------------------------------------------------------------------=
     
-    @inlinable func format(_ value: Value) -> String {
+    @inlinable public func format(_ value: Value) -> String {
         value.map(style.format) ?? String()
     }
     
@@ -75,15 +75,15 @@ public extension _OptionalNumberTextStyle {
     // MARK: Active
     //=------------------------------------------------------------------------=
     
-    @inlinable func interpret(_ value: Value) -> Commit<Value> {
-        value.map({ Commit(style.interpret($0)) }) ?? Commit()
+    @inlinable public func interpret(_ value: Value) -> Commit<Value> {
+        value.map({ Commit.init(style.interpret($0)) }) ?? Commit()
     }
     
     //=------------------------------------------------------------------------=
     // MARK: Interactive
     //=------------------------------------------------------------------------=
     
-    @inlinable func resolve(_ proposal: Proposal) throws  -> Commit<Value> {
+    @inlinable public func resolve(_ proposal: Proposal) throws  -> Commit<Value> {
         try number(proposal).map({ try Commit(style.resolve($0)) }) ?? Commit()
     }
 }

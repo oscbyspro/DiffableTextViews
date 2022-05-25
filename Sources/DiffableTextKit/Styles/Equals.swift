@@ -16,7 +16,6 @@
 /// Use this style to optimize the comparison on view update, for example.
 ///
 public struct EqualsTextStyle<Style: DiffableTextStyle, Proxy: Equatable>: WrapperTextStyle {
-    public typealias Value = Style.Value
     
     //=------------------------------------------------------------------------=
     // MARK: State
@@ -30,7 +29,7 @@ public struct EqualsTextStyle<Style: DiffableTextStyle, Proxy: Equatable>: Wrapp
     //=------------------------------------------------------------------------=
     
     @inlinable @inline(__always)
-    init(_ style: Style, proxy: Proxy) where Proxy: Equatable {
+    init(_ style: Style, proxy: Proxy) {
         self.style = style
         self.proxy = proxy
     }

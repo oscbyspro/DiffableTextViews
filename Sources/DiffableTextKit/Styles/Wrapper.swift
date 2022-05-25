@@ -16,10 +16,15 @@ import Foundation
 public protocol WrapperTextStyle: DiffableTextStyle {
     
     //=------------------------------------------------------------------------=
-    // MARK: Style
+    // MARK: Types
     //=------------------------------------------------------------------------=
     
     associatedtype Style: DiffableTextStyle
+    associatedtype Value = Self.Style.Value
+    
+    //=------------------------------------------------------------------------=
+    // MARK: State
+    //=------------------------------------------------------------------------=
 
     @inlinable var style: Style { get set }
 }
