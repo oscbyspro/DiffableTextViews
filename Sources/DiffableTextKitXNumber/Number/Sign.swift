@@ -43,7 +43,7 @@ import Foundation
     @inlinable init?<T>(of bounds: ClosedRange<T>) where T: NumberTextValue {
         if      bounds.lowerBound >= .zero { self = .positive }
         else if bounds.upperBound <= .zero && bounds.lowerBound != .zero { self = .negative }
-        else { return nil }
+        else {  return nil }
     }
     
     //=------------------------------------------------------------------------=
@@ -55,10 +55,7 @@ import Foundation
     }
     
     @inlinable func toggled() -> Self {
-        switch enumeration {
-        case .positive: return .negative
-        case .negative: return .positive
-        }
+        self == .positive ? .negative : .positive
     }
     
     //=------------------------------------------------------------------------=

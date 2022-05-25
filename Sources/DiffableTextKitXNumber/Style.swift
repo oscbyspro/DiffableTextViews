@@ -224,13 +224,13 @@ extension _NumberTextStyle {
     /// This method exists because Apple always interpret zero as being positive.
     @inlinable func fix(_ sign: Sign, for value: Value, in characters: inout String)  {
         //=--------------------------------------=
-        // Sign Needs Autocorrection
+        // Correctable
         //=--------------------------------------=
-        guard sign == .negative, value == .zero else { return }
+        guard sign == .negative, value == .zero, let index = characters.firstIndex(
+        of: lexicon.signs[sign.toggled()]) else { return }
         //=--------------------------------------=
-        // Toggle Sign From Positive To Negative
+        // Autocorrect
         //=--------------------------------------=
-        guard let index = characters.firstIndex(of: lexicon.signs[sign.toggled()]) else { return }
         characters.replaceSubrange(index...index, with: String(lexicon.signs[sign]))
     }
 }
