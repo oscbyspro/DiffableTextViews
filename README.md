@@ -8,14 +8,14 @@ An open source package for as-you-type formatting in SwiftUI.
 ### Features
 
 |   | Feature | Description |
-|---|---------|-------------|
+|---|:--------|:------------|
 | :keyboard: | Responsive | Formats text as you type |
 | :magic_wand: | Automagical | Binds text to appropriate types |
-| :heavy_check_mark: | Proper | Validates and autocorrects input |
+| :heavy_check_mark: | Proper | Validates n' autocorrects input |
 | :hammer_and_wrench: | Versatile | Uses snapshots and attributes |
 | :running_man: | Performant | O(n) differentiation algorithms |
 | :desert_island: | Standalone | Uses no remote dependencies |
-| :open_book: | Open | 100% transparent, as it should be |
+| :open_book: | Open | 100% transparent |
 
 # Installation
 
@@ -59,7 +59,7 @@ A text field that binds values and formats them as you type.
 ### Features
 
 |   | Feature | Description |
-|---|---------|-------------|
+|---|:--------|:------------|
 | :iphone: | SwiftUI | Value, style, done |
 | :mountain: | Environment | Uses environment values |
 | :mag_right: | Focus | Supports SwiftUI.FocusState |
@@ -92,12 +92,12 @@ A style that binds localized numbers using various formats.
 |   | Feature | Description |
 |---|---------|-------------|
 | :coin: | Values | Decimal, Double and (U)Int(8-64) |
-| :grey_question: | Optional | Optional and non-optional values |
+| :grey_question: | Optional | Standard and optional values |
 | :art: | Formats | Number, currency and percent |
-| :bricks: | Bounds | Clamps values to bounds  |
+| :bricks: | Bounds | Clamps values to bounds |
 | :bow_and_arrow: | Precision | Up to 38 digits of precision |
-| :national_park: | Locales | Supports every locale in Foundation |
-| :two: | Bilingual | Accepts both local and ASCII inputs |
+| :national_park: | Locales | Supports Foundation.Locale |
+| :two: | Bilingual | Accepts local and ASCII inputs |
 
 ### Examples
 
@@ -200,7 +200,7 @@ struct ContentView: View {
 
 Decorative styles that modify the behavior of their content.
 
-| Style | Description | Modifier |
-|-------|-------------|----------|
-| [Constant](Sources/DiffableTextKit/Styles/Constant.swift) | Prevents style transformations | constant() |
-| [Equals](Sources/DiffableTextKit/Styles/Equals.swift)  | Binds the style's equality to a proxy value | equals(\_:) |
+| Style | Description |
+|:------|:------------|
+| [constant()](Sources/DiffableTextKit/Styles/Constant.swift) | Prevents style transformations |
+| [equals(\_:)](Sources/DiffableTextKit/Styles/Equals.swift) | Binds the style's equality to a proxy value |
