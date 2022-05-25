@@ -154,7 +154,7 @@ A style that processes characters laid out in custom patterns.
 ### Features
 
 |   | Feature | Description |
-|---|---------|-------------|
+|---|:--------|:------------|
 | :checkered_flag: | Pattern | Characters are laid out as described by a pattern | 
 | :chess_pawn: | Placeholders | Placeholders represent not-yet-assigned values |
 | :fist_raised: | Independance | Supports multiple placeholders with different rules |
