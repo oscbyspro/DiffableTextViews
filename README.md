@@ -90,7 +90,7 @@ A style that binds localized numbers using various formats.
 ### Features
 
 |   | Feature | Description |
-|---|---------|-------------|
+|---|:--------|:------------|
 | :coin: | Values | Decimal, Double and (U)Int(8-64) |
 | :grey_question: | Optional | Standard and optional values |
 | :art: | Formats | Number, currency and percent |
