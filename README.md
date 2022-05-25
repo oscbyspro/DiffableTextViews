@@ -11,7 +11,7 @@ An open source package for as-you-type formatting in SwiftUI.
 |---|:--------|:------------|
 | :keyboard: | Responsive | Formats text as you type |
 | :magic_wand: | Automagical | Binds text to appropriate types |
-| :heavy_check_mark: | Proper | Validates n' autocorrects input |
+| :heavy_check_mark: | Proper | Validates and autocorrects |
 | :hammer_and_wrench: | Versatile | Uses snapshots and attributes |
 | :running_man: | Performant | O(n) differentiation algorithms |
 | :desert_island: | Standalone | Uses no remote dependencies |
@@ -91,7 +91,7 @@ A style that binds localized numbers using various formats.
 
 |   | Feature | Description |
 |---|:--------|:------------|
-| :coin: | Values | Decimal, Double and (U)Int(8-64) |
+| :coin: | Values | Decimal, Double, (U)Int(8-64) |
 | :grey_question: | Optional | Standard and optional values |
 | :art: | Formats | Number, currency and percent |
 | :bricks: | Bounds | Clamps values to bounds |

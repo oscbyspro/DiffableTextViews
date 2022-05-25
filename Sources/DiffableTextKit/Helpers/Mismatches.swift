@@ -17,7 +17,7 @@ Prev: BidirectionalCollection, Prev.Element == Symbol,
 Next: BidirectionalCollection, Next.Element == Symbol {
     
     //=------------------------------------------------------------------------=
-    // MARK: Aliases
+    // MARK: Types
     //=------------------------------------------------------------------------=
     
     @usableFromInline typealias Indices = (prev: Prev.Index, next: Next.Index)

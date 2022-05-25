@@ -85,11 +85,11 @@ extension _NumberTextStyle {
     //=------------------------------------------------------------------------=
     
     @inlinable public func interpret(_ value: Value) -> Commit<Value> {
+        var value = value
         //=--------------------------------------=
         // Style
         //=--------------------------------------=
         let style = format.precision(precision.active())
-        var value = value
         //=--------------------------------------=
         // Autocorrect
         //=--------------------------------------=
@@ -124,8 +124,7 @@ extension _NumberTextStyle {
     }
     
     @inlinable func resolve(_ number: Number) throws -> Commit<Value> {
-        var number = number
-        let count = number.count()
+        var number = number; let count = number.count()
         //=--------------------------------------=
         // Autovalidate
         //=--------------------------------------=

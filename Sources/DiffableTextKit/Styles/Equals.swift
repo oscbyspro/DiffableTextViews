@@ -51,7 +51,7 @@ public struct EqualsTextStyle<Style: DiffableTextStyle, Proxy: Equatable>: Wrapp
 extension DiffableTextStyle {
     
     //=------------------------------------------------------------------------=
-    // MARK: Aliases
+    // MARK: Types
     //=------------------------------------------------------------------------=
     
     public typealias EqualsVoid = EqualsTextStyle<Self, _Void>

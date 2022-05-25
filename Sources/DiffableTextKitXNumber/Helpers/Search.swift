@@ -19,7 +19,7 @@ Haystack: BidirectionalCollection, Haystack.Element == Symbol,
 Needle: BidirectionalCollection, Needle.Element == Character {
     
     //=------------------------------------------------------------------------=
-    // MARK: Aliases
+    // MARK: Types
     //=------------------------------------------------------------------------=
     
     @usableFromInline typealias Location = Range<Haystack.Index>

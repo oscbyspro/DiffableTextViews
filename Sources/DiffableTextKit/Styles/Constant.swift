@@ -49,7 +49,7 @@ public struct ConstantTextStyle<Style: DiffableTextStyle>: WrapperTextStyle {
 extension DiffableTextStyle {
     
     //=------------------------------------------------------------------------=
-    // MARK: Aliases
+    // MARK: Types
     //=------------------------------------------------------------------------=
     
     public typealias Constant = ConstantTextStyle<Self>
