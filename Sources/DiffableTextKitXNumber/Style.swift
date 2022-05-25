@@ -220,7 +220,7 @@ extension _NumberTextStyle {
         return Commit(value, snapshot(characters))
     }
     
-    /// This method exists because Apple always interpret zero as being positive.
+    /// This method exists because formatting zero always yields a positive sign.
     @inlinable func fix(_ sign: Sign, for value: Value, in characters: inout String)  {
         //=--------------------------------------=
         // Correctable

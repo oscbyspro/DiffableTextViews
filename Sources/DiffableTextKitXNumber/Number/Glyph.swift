@@ -13,7 +13,7 @@ import Foundation
 // MARK: * Glyph
 //*============================================================================*
 
-/// An object representing a UTF-8 encoded ASCII character.
+/// A UTF-8 encoded ASCII character.
 @usableFromInline protocol Glyph: Hashable, CaseIterable, CustomStringConvertible {
     associatedtype Enumeration: CaseIterable, RawRepresentable where Enumeration.RawValue == UInt8
 
@@ -97,7 +97,7 @@ extension Glyph {
 // MARK: * Glyphs
 //*============================================================================*
 
-/// An object representing multiple UTF-8 encoded ASCII characters.
+/// Multiple UTF-8 encoded ASCII characters.
 @usableFromInline protocol Glyphs: CustomStringConvertible {
     
     //=------------------------------------------------------------------------=
