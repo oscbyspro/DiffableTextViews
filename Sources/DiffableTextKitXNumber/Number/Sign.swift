@@ -81,7 +81,7 @@ extension Sign {
     
     @inlinable init?<T>(of bounds: ClosedRange<T>) where T: NumberTextValue {
         if      bounds.lowerBound >= .zero { self = .positive }
-        else if bounds.upperBound <= .zero && bounds.lowerBound != .zero { self = .negative }
+        else if bounds.upperBound <= .zero { self = .negative }
         else {  return nil }
     }
 }
