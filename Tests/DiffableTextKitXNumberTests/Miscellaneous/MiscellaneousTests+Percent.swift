@@ -28,17 +28,18 @@ final class MiscellaneousTestsXPercent: XCTestCase {
         // Locales
         //=--------------------------------------=
         for scheme in standards {
+            let components = scheme.reader.components
             let zero = IntegerFormatStyle<Int>.Percent(locale: scheme.id.locale).format(0)
-            XCTAssert(zero.count(where: scheme.lexicon.nonvirtual) == 1, "\(zero), \(scheme.id.locale)")
+            XCTAssert(zero.count(where: components.nonvirtual) == 1, "\(zero), \(scheme.id.locale)")
         }
     }
 }
 
 //*============================================================================*
-// MARK: * Lexicon
+// MARK: * Components
 //*============================================================================*
 
-fileprivate extension Lexicon {
+fileprivate extension Components {
         
     //=------------------------------------------------------------------------=
     // MARK: Utilities

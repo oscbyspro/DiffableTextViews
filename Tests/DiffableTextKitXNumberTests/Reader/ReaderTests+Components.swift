@@ -14,10 +14,10 @@
 import XCTest
 
 //*============================================================================*
-// MARK: * Helpers x Lexicon
+// MARK: * Reader x Components
 //*============================================================================*
 
-final class HelpersTestsXLexicon: XCTestCase {
+final class ReaderTestsXComponents: XCTestCase {
     typealias Standard = NumberTextSchemeXStandard
     
     //=------------------------------------------------------------------------=
@@ -43,11 +43,12 @@ final class HelpersTestsXLexicon: XCTestCase {
         // Lexicons
         //=--------------------------------------=
         for scheme in standards {
+            let signs = scheme.reader.components.signs
             let style = int(scheme).sign(strategy: .always())
             let positives = positive.formatted(style)
             let negatives = negative.formatted(style)
-            XCTAssertNotNil(positives.first(where: { scheme.lexicon.signs[$0] != nil }))
-            XCTAssertNotNil(negatives.first(where: { scheme.lexicon.signs[$0] != nil }))
+            XCTAssertNotNil(positives.first(where: { signs[$0] != nil }))
+            XCTAssertNotNil(negatives.first(where: { signs[$0] != nil }))
         }
     }
     
@@ -57,9 +58,10 @@ final class HelpersTestsXLexicon: XCTestCase {
         // Lexicons
         //=--------------------------------------=
         for scheme in standards {
+            let digits = scheme.reader.components.digits
             let style = int(scheme).grouping(.never)
             let numbers = number.formatted(style)
-            XCTAssert(numbers.allSatisfy({ scheme.lexicon.digits[$0] != nil }))
+            XCTAssert(numbers.allSatisfy({ digits[$0] != nil }))
         }
     }
     
@@ -69,9 +71,10 @@ final class HelpersTestsXLexicon: XCTestCase {
         // Lexicons
         //=--------------------------------------=
         for scheme in standards {
+            let separators = scheme.reader.components.separators
             let style = int(scheme).grouping(.automatic)
             let nonnumbers = number.formatted(style).filter({ !$0.isNumber })
-            XCTAssert(nonnumbers.allSatisfy({ scheme.lexicon.separators[$0] == .grouping }))
+            XCTAssert(nonnumbers.allSatisfy({ separators[$0] == .grouping }))
         }
     }
     
@@ -81,9 +84,10 @@ final class HelpersTestsXLexicon: XCTestCase {
         // Lexicons
         //=--------------------------------------=
         for scheme in standards {
+            let separators = scheme.reader.components.separators
             let style = double(scheme).decimalSeparator(strategy: .always)
             let nonnumbers = number.formatted(style).filter({ !$0.isNumber })
-            XCTAssert(nonnumbers.allSatisfy({ scheme.lexicon.separators[$0] == .fraction }))
+            XCTAssert(nonnumbers.allSatisfy({ separators[$0] == .fraction }))
         }
     }
 }

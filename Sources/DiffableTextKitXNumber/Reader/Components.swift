@@ -11,10 +11,10 @@ import DiffableTextKit
 import Foundation
 
 //*============================================================================*
-// MARK: * Lexicon
+// MARK: * Components
 //*============================================================================*
 
-public final class Lexicon {
+@usableFromInline struct Components {
     @usableFromInline typealias Signs = Links<Sign>
     @usableFromInline typealias Digits = Links<Digit>
     @usableFromInline typealias Separators = Links<Separator>
@@ -23,7 +23,7 @@ public final class Lexicon {
     // MARK: Instances
     //=------------------------------------------------------------------------=
     
-    @usableFromInline static let ascii = Lexicon(
+    @usableFromInline static let ascii = Self(
     signs: .ascii(), digits: .ascii(), separators: .ascii())
     
     //=------------------------------------------------------------------------=
@@ -47,7 +47,7 @@ public final class Lexicon {
     //=------------------------------------------------------------------------=
     
     /// Requires that formatter.numberStyle == .none.
-    @inlinable static func standard(_ formatter: NumberFormatter) -> Lexicon {
+    @inlinable static func standard(_ formatter: NumberFormatter) -> Self {
         assert(formatter.numberStyle == .none); return Self.init(
         signs:      .standard(formatter),
         digits:     .standard(formatter),
@@ -55,10 +55,20 @@ public final class Lexicon {
     }
     
     /// Requires that formatter.numberStyle == .none.
-    @inlinable static func currency(_ formatter: NumberFormatter) -> Lexicon {
+    @inlinable static func currency(_ formatter: NumberFormatter) -> Self {
         assert(formatter.numberStyle == .none); return Self.init(
         signs:      .currency(formatter),
         digits:     .currency(formatter),
         separators: .currency(formatter))
+    }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Utilities
+    //=------------------------------------------------------------------------=
+    
+    @inlinable func consumeSingleSign(in proposal: inout Proposal) -> Sign? {
+        guard proposal.replacement.count == 1, let sign =
+        signs[proposal.replacement.first!.character] else { return nil }
+        proposal.replacement.removeAll(); return sign
     }
 }

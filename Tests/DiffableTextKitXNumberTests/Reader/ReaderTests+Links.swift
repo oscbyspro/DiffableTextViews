@@ -14,16 +14,16 @@
 import XCTest
 
 //*============================================================================*
-// MARK: * Helpers x Links
+// MARK: * Reader x Links
 //*============================================================================*
 
-final class HelpersTestsXLinks: XCTestCase {
+final class ReaderTestsXLinks: XCTestCase {
     
     //=------------------------------------------------------------------------=
     // MARK: Assertions
     //=------------------------------------------------------------------------=
     
-    func XCTAssertEachCaseIsBidirectionallyLinked<T>(_ links: Links<T>) {
+    func XCTAssertEachIsBidirectionallyLinked<T>(_ links: Links<T>) {
         for component in T.allCases {
             XCTAssertEqual(component, links[links[component]])
         }
@@ -33,14 +33,14 @@ final class HelpersTestsXLinks: XCTestCase {
     // MARK: Tests
     //=------------------------------------------------------------------------=
 
-    func testEachLexiconIsFullyBidirectionallyLinked() {
+    func testEachIsBidirectionallyLinked() {
         //=--------------------------------------=
-        // Lexicons
+        // Components
         //=--------------------------------------=
-        for lexicon in standards.lazy.map(\.lexicon) {
-            XCTAssertEachCaseIsBidirectionallyLinked(lexicon.signs)
-            XCTAssertEachCaseIsBidirectionallyLinked(lexicon.digits)
-            XCTAssertEachCaseIsBidirectionallyLinked(lexicon.separators)
+        for components in standards.lazy.map(\.reader.components) {
+            XCTAssertEachIsBidirectionallyLinked(components.signs)
+            XCTAssertEachIsBidirectionallyLinked(components.digits)
+            XCTAssertEachIsBidirectionallyLinked(components.separators)
         }
     }
 }

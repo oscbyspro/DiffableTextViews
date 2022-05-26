@@ -94,13 +94,13 @@ extension Number {
     
     /// Requires that all formatting characters are marked as virtual.
     @inlinable init?<T>(in snapshot: Snapshot,
-    using lexicon: Lexicon, as kind: T.Type)
+    using components: Components, as kind: T.Type)
     throws where T: NumberTextKind {
         let unformatted = snapshot.lazy.filter(\.nonvirtual).map(\.character)
         try self.init(unformatted: unformatted,
-        signs: lexicon.signs.components,
-        digits: lexicon.digits.components,
-        separators: lexicon.separators.components,
+        signs: components.signs.components,
+        digits: components.digits.components,
+        separators: components.separators.components,
         optional: kind.isOptional,
         unsigned: kind.isUnsigned,
         integer:  kind.isInteger )

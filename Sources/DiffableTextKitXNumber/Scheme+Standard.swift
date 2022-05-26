@@ -22,7 +22,7 @@ import Foundation
     //=------------------------------------------------------------------------=
     
     @usableFromInline let id: ID
-    @usableFromInline let lexicon: Lexicon
+    @usableFromInline let reader: Reader
 
     //=------------------------------------------------------------------------=
     // MARK: Initializers
@@ -39,7 +39,7 @@ import Foundation
         // Formatter: None
         //=--------------------------------------=
         self.id = id
-        self.lexicon = .standard(formatter)
+        self.reader = Reader(.standard(formatter))
     }
 
     //=------------------------------------------------------------------------=

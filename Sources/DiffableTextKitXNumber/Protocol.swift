@@ -51,7 +51,19 @@ extension NumberTextStyleProtocol {
     //=------------------------------------------------------------------------=
     
     @inlinable public var locale: Locale {
-        adapter.format.locale
+        format.locale
+    }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Accessors
+    //=------------------------------------------------------------------------=
+    
+    @inlinable var format: Format {
+        adapter.format
+    }
+    
+    @inlinable var reader: Reader {
+        adapter.reader
     }
     
     //=------------------------------------------------------------------------=
@@ -59,7 +71,7 @@ extension NumberTextStyleProtocol {
     //=------------------------------------------------------------------------=
     
     @inlinable func number(_ proposal: Proposal) throws -> Number? {
-        try Reader(adapter.lexicon).number(proposal, as: Value.self)
+        try reader.number(proposal, as: Value.self)
     }
 }
 

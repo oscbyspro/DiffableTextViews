@@ -36,18 +36,6 @@ public struct _NumberTextStyle<Format: NumberTextFormat>: NumberTextStyleProtoco
     }
     
     //=------------------------------------------------------------------------=
-    // MARK: Accessors
-    //=------------------------------------------------------------------------=
-    
-    @inlinable var format: Format {
-        adapter.format
-    }
-    
-    @inlinable var lexicon: Lexicon {
-        adapter.lexicon
-    }
-    
-    //=------------------------------------------------------------------------=
     // MARK: Transformations
     //=------------------------------------------------------------------------=
     
@@ -166,39 +154,12 @@ extension _NumberTextStyle {
         // Snapshot
         //=--------------------------------------=
         var snapshot = characters.reduce(into: Snapshot()) { snapshot, character in
-            snapshot.append(symbol(character))
+            snapshot.append(reader.attributes[character])
         }
         //=--------------------------------------=
         // Autocorrect
         //=--------------------------------------=
         adapter.autocorrect(&snapshot); return snapshot
-    }
-    
-    @inlinable func symbol(_ character: Character) -> Symbol {
-        let attribute: Attribute
-        //=--------------------------------------=
-        // Digit
-        //=--------------------------------------=
-        if lexicon.digits.contains(character) {
-            attribute = .content
-        //=--------------------------------------=
-        // Separator
-        //=--------------------------------------=
-        } else if let separator = lexicon.separators[character] {
-            attribute = (separator == .fraction) ? .removable : .phantom
-        //=--------------------------------------=
-        // Sign
-        //=--------------------------------------=
-        } else if lexicon.signs.contains(character) {
-            attribute = .phantom.subtracting(.virtual)
-        //=--------------------------------------=
-        // Miscellaneous
-        //=--------------------------------------=
-        } else { attribute = .phantom }
-        //=--------------------------------------=
-        // Return
-        //=--------------------------------------=
-        return Symbol(character, as: attribute)
     }
     
     //=------------------------------------------------------------------------=
@@ -226,10 +187,10 @@ extension _NumberTextStyle {
         // Correctable
         //=--------------------------------------=
         guard sign == .negative, value == .zero, let index = characters.firstIndex(
-        of: lexicon.signs[sign.toggled()]) else { return }
+        of: reader.components.signs[sign.toggled()]) else { return }
         //=--------------------------------------=
         // Autocorrect
         //=--------------------------------------=
-        characters.replaceSubrange(index...index, with: String(lexicon.signs[sign]))
+        characters.replaceSubrange(index...index, with: String(reader.components.signs[sign]))
     }
 }

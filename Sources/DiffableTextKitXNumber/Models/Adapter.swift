@@ -42,8 +42,8 @@ public struct NumberTextAdapter<Format: NumberTextFormat>: Equatable {
     // MARK: Accessors
     //=------------------------------------------------------------------------=
     
-    @inlinable var lexicon: Lexicon {
-        scheme.lexicon
+    @inlinable var reader: Reader {
+        scheme.reader
     }
     
     //=------------------------------------------------------------------------=
@@ -74,13 +74,13 @@ public struct NumberTextAdapter<Format: NumberTextFormat>: Equatable {
     @inlinable func autocorrect(_ snapshot: inout Snapshot) {
         scheme.autocorrect(&snapshot)
     }
-
-    @inlinable func number(_ snapshot: Snapshot) throws -> Number {
-        try Number(in: snapshot, using: scheme.lexicon, as: Value.self)!
-    }
     
     @inlinable func value(_ number: Number) throws -> Value {
         try format.locale(Constants.en_US).parseStrategy.parse(number.description)
+    }
+    
+    @inlinable func number(_ snapshot: Snapshot) throws -> Number {
+        try Number(in: snapshot, using: reader.components, as: Value.self)!
     }
     
     //=------------------------------------------------------------------------=

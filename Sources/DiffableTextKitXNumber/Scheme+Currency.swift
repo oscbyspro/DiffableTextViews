@@ -22,7 +22,7 @@ import Foundation
     //=------------------------------------------------------------------------=
     
     @usableFromInline let id: ID
-    @usableFromInline let lexicon: Lexicon
+    @usableFromInline let reader: Reader
     @usableFromInline let preferences: Preferences
     @usableFromInline let adjustments: Adjustments?
     
@@ -42,14 +42,14 @@ import Foundation
         // Formatter: None
         //=--------------------------------------=
         self.id = id
-        self.lexicon = .currency(formatter)
+        self.reader = Reader(.currency(formatter))
         //=--------------------------------------=
         // Formatter: Currency
         //=--------------------------------------=
         formatter.numberStyle = .currency
         self.preferences = Preferences(formatter)
         formatter.maximumFractionDigits = .zero
-        self.adjustments = Adjustments(formatter, lexicon)
+        self.adjustments = Adjustments(formatter, reader.components)
     }
     
     //=------------------------------------------------------------------------=
@@ -133,18 +133,18 @@ import Foundation
         /// - Requires that formatter.numberStyle == .currency.
         /// - Requires that formatter.maximumFractionDigits == .zero.
         ///
-        @inlinable init?(_ formatter: NumberFormatter, _ lexicon: Lexicon) {
+        @inlinable init?(_ formatter: NumberFormatter, _ components: Components) {
             self.label = formatter.currencySymbol
             //=----------------------------------=
             // Necessity
             //=----------------------------------=
-            guard label.contains(lexicon.separators[.fraction]) else { return nil }
+            guard label.contains(components.separators[.fraction]) else { return nil }
             //=----------------------------------=
             // Formatted
             //=----------------------------------=
             let sides = formatter.string(from: 0)!.split(
-            separator: lexicon.digits[.zero],
-            omittingEmptySubsequences: false)
+            separator: components.digits[.zero],
+            omittingEmptySubsequences:   false)
             //=----------------------------------=
             // Direction
             //=----------------------------------=
