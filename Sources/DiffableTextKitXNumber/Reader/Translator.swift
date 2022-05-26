@@ -27,10 +27,10 @@ import DiffableTextKit
     //=------------------------------------------------------------------------=
     
     @inlinable init(_ local: Components) {
-        Self.reduce(into: &self.map, from: .ascii, to: local, all: \.digits,     as: { $0 })
-        Self.reduce(into: &self.map, from: .ascii, to: local, all: \.separators, as: { _ in .fraction })
-        Self.reduce(into: &self.map, from:  local, to: local, all: \.separators, as: { _ in .fraction })
-        Self.reduce(into: &self.map, from: .ascii, to: local, all: \.signs,      as: { $0 })
+        self.insert(from: .ascii, to: local, all: \.digits,     as: { $0 })
+        self.insert(from: .ascii, to: local, all: \.separators, as: { _ in .fraction })
+        self.insert(from:  local, to: local, all: \.separators, as: { _ in .fraction })
+        self.insert(from: .ascii, to: local, all: \.signs,      as: { $0 })
     }
     
     //=------------------------------------------------------------------------=
@@ -58,7 +58,7 @@ import DiffableTextKit
     // MARK: Helpers
     //=------------------------------------------------------------------------=
     
-    @inlinable static func reduce<T>(into map: inout Map,
+    @inlinable mutating func insert<T>(
     from  source:  Components, to destination: Components,
     all elements: (Components) -> Links<T>, as key: (T) -> T) {
         //=--------------------------------------=
