@@ -14,23 +14,22 @@ import DiffableTextKit
 //*============================================================================*
 
 @usableFromInline struct Translator {
-    @usableFromInline typealias Map = [Character: Character]
     
     //=------------------------------------------------------------------------=
     // MARK: State
     //=------------------------------------------------------------------------=
     
-    @usableFromInline private(set) var map = Map()
+    @usableFromInline private(set) var map = [Character: Character]()
     
     //=------------------------------------------------------------------------=
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
     @inlinable init(_ local: Components) {
-        self.insert(from: .ascii, to: local, all: \.digits,     as: { $0 })
-        self.insert(from: .ascii, to: local, all: \.separators, as: { _ in .fraction })
-        self.insert(from:  local, to: local, all: \.separators, as: { _ in .fraction })
-        self.insert(from: .ascii, to: local, all: \.signs,      as: { $0 })
+        self.insert(\.digits,     from: .ascii, to: local, as: { $0 })
+        self.insert(\.separators, from: .ascii, to: local, as: { _ in .fraction })
+        self.insert(\.separators, from:  local, to: local, as: { _ in .fraction })
+        self.insert(\.signs,      from: .ascii, to: local, as: { $0 })
     }
     
     //=------------------------------------------------------------------------=
@@ -58,9 +57,8 @@ import DiffableTextKit
     // MARK: Helpers
     //=------------------------------------------------------------------------=
     
-    @inlinable mutating func insert<T>(
-    from  source:  Components, to destination: Components,
-    all elements: (Components) -> Links<T>, as key: (T) -> T) {
+    @inlinable mutating func insert<T>(_ elements: (Components) -> Links<T>,
+    from source: Components, to destination: Components, as key: (T) -> T) {
         //=--------------------------------------=
         // Values
         //=--------------------------------------=

@@ -14,13 +14,12 @@ import DiffableTextKit
 //*============================================================================*
 
 @usableFromInline struct Attributes {
-    @usableFromInline typealias Map = [Character: Attribute]
     
     //=------------------------------------------------------------------------=
     // MARK: State
     //=------------------------------------------------------------------------=
     
-    @usableFromInline private(set) var map = Map(minimumCapacity: 13)
+    @usableFromInline private(set) var map = [Character: Attribute](minimumCapacity: 13)
     
     //=------------------------------------------------------------------------=
     // MARK: Initializers
