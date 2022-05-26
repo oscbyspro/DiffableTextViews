@@ -40,13 +40,13 @@ public final class Reader {
     @inlinable func number<T>(_ proposal: Proposal, as kind: T.Type)
     throws -> Number? where T: NumberTextKind {
         //=--------------------------------------=
-        // Proposal
+        // Edit
         //=--------------------------------------=
         var proposal = proposal
         translator.translateSingleSymbol(in: &proposal)
         let sign = components.consumeSingleSign(in: &proposal)
         //=--------------------------------------=
-        // Number
+        // Read
         //=--------------------------------------=
         guard var number = try Number(
         in: proposal.merged(),

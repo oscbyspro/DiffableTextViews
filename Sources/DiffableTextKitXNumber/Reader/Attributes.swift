@@ -20,34 +20,29 @@ import DiffableTextKit
     // MARK: State
     //=------------------------------------------------------------------------=
     
-    @usableFromInline let map: Map
+    @usableFromInline private(set) var map = Map(minimumCapacity: 13)
     
     //=------------------------------------------------------------------------=
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
     @inlinable init(_ local: Components) {
-        var map = Map(minimumCapacity: 13)
         //=--------------------------------------=
         // (10) Digits
         //=--------------------------------------=
         for component in Digit.allCases {
-            map[local.digits[component]] = .content
+            self.map[local.digits[component]] = .content
         }
         //=--------------------------------------=
         // (1) Separators
         //=--------------------------------------=
-        map[local.separators[.fraction]] = .removable
+        self.map[local.separators[.fraction]] = .removable
         //=--------------------------------------=
         // (2) Signs
         //=--------------------------------------=
         for component in Sign.allCases {
-            map[local.signs[component]] = .phantom.subtracting(.virtual)
+            self.map[local.signs[component]] = .phantom.subtracting(.virtual)
         }
-        //=--------------------------------------=
-        // Return
-        //=--------------------------------------=
-        self.map = map
     }
     
     //=------------------------------------------------------------------------=

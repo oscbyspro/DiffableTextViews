@@ -20,25 +20,17 @@ import DiffableTextKit
     // MARK: State
     //=------------------------------------------------------------------------=
     
-    @usableFromInline let map: Map
+    @usableFromInline private(set) var map = Map()
     
     //=------------------------------------------------------------------------=
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
     @inlinable init(_ local: Components) {
-        var map = Map()
-        //=--------------------------------------=
-        // Reduce
-        //=--------------------------------------=
-        Self.reduce(into: &map, from: .ascii, to: local, all: \.digits,     as: { $0 })
-        Self.reduce(into: &map, from: .ascii, to: local, all: \.separators, as: { _ in .fraction })
-        Self.reduce(into: &map, from:  local, to: local, all: \.separators, as: { _ in .fraction })
-        Self.reduce(into: &map, from: .ascii, to: local, all: \.signs,      as: { $0 })
-        //=--------------------------------------=
-        // Return
-        //=--------------------------------------=
-        self.map = map
+        Self.reduce(into: &self.map, from: .ascii, to: local, all: \.digits,     as: { $0 })
+        Self.reduce(into: &self.map, from: .ascii, to: local, all: \.separators, as: { _ in .fraction })
+        Self.reduce(into: &self.map, from:  local, to: local, all: \.separators, as: { _ in .fraction })
+        Self.reduce(into: &self.map, from: .ascii, to: local, all: \.signs,      as: { $0 })
     }
     
     //=------------------------------------------------------------------------=
