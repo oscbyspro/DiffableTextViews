@@ -10,14 +10,14 @@
 import Foundation
 
 //*============================================================================*
-// MARK: * Constants
+// MARK: * Locale
 //*============================================================================*
 
-@usableFromInline enum Constants {
+public extension Locale {
     
     //=------------------------------------------------------------------------=
-    // MARK: Constants
+    // MARK: Instances
     //=------------------------------------------------------------------------=
     
-    @usableFromInline static let en_US_POSIX = Locale(identifier: "en_US_POSIX")
+    static let en_US_POSIX = Locale(identifier: "en_US_POSIX")
 }

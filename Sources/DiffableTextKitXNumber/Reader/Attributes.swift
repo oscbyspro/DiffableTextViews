@@ -29,8 +29,8 @@ import DiffableTextKit
         //=--------------------------------------=
         // (10) Digits
         //=--------------------------------------=
-        for component in Digit.allCases {
-            self.map[local.digits[component]] = .content
+        for digit in Digit.allCases {
+            self.map[local.digits[digit]] = .content
         }
         //=--------------------------------------=
         // (1) Separators
@@ -39,8 +39,8 @@ import DiffableTextKit
         //=--------------------------------------=
         // (2) Signs
         //=--------------------------------------=
-        for component in Sign.allCases {
-            self.map[local.signs[component]] = .phantom.subtracting(.virtual)
+        for sign in Sign.allCases {
+            self.map[local.signs[sign]] = .phantom.subtracting(.virtual)
         }
     }
     

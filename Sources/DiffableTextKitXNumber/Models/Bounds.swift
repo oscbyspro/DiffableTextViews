@@ -159,14 +159,14 @@ extension NumberTextBounds {
     
     @inlinable func autocorrect(_ value: inout Value) {
         //=--------------------------------------=
-        // Lower Bound
+        // Lower
         //=--------------------------------------=
         if  value < min {
             Info.print(autocorrection: [.mark(value), "is less than", .note(min)])
             value = min; return
         }
         //=--------------------------------------=
-        // Upper Bound
+        // Upper
         //=--------------------------------------=
         if  value > max {
             Info.print(autocorrection: [.mark(value), "is more than", .note(max)])
