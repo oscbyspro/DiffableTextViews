@@ -19,5 +19,5 @@ import Foundation
     // MARK: Constants
     //=------------------------------------------------------------------------=
     
-    @usableFromInline static let en_US = Locale(identifier: "en_US")
+    @usableFromInline static let en_US_POSIX = Locale(identifier: "en_US_POSIX")
 }

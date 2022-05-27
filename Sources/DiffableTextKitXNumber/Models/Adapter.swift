@@ -76,7 +76,7 @@ public struct NumberTextAdapter<Format: NumberTextFormat>: Equatable {
     }
     
     @inlinable func value(_ number: Number) throws -> Value {
-        try format.locale(Constants.en_US).parseStrategy.parse(number.description)
+        try format.locale(Constants.en_US_POSIX).parseStrategy.parse(number.description)
     }
     
     @inlinable func number(_ snapshot: Snapshot) throws -> Number {
