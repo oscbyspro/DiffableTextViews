@@ -143,11 +143,12 @@ extension _NumberTextStyle {
     
     /// Assumes characters contain at least one content character.
     @inlinable func snapshot(_ characters: String) -> Snapshot {
+        var snapshot = Snapshot()
         //=--------------------------------------=
-        // Snapshot
+        // Characters
         //=--------------------------------------=
-        var snapshot = characters.reduce(into: Snapshot()) { snapshot, character in
-            snapshot.append(reader.attributes[character])
+        for character in characters {
+            snapshot.append(Symbol(character, as: reader.attributes[character]))
         }
         //=--------------------------------------=
         // Autocorrect

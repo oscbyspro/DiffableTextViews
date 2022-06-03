@@ -7,8 +7,6 @@
 // See http://www.apache.org/licenses/LICENSE-2.0 for license information.
 //=----------------------------------------------------------------------------=
 
-import DiffableTextKit
-
 //*============================================================================*
 // MARK: * Translator
 //*============================================================================*
@@ -40,21 +38,8 @@ import DiffableTextKit
         map[character] ?? character
     }
     
-    @inlinable subscript(symbol: Symbol) -> Symbol {
-        Symbol(self[symbol.character], as: symbol.attribute)
-    }
-    
     //=------------------------------------------------------------------------=
-    // MARK: Utilities
-    //=------------------------------------------------------------------------=
-    
-    @inlinable func translateSingleSymbol(in proposal: inout Proposal) {
-        guard proposal.replacement.count == 1 else { return }
-        proposal.replacement = Snapshot(proposal.replacement.map({ self[$0] }))
-    }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Helpers
+    // MARK: Transformations
     //=------------------------------------------------------------------------=
     
     @inlinable mutating func insert<T>(_ elements: (Components) -> Links<T>,

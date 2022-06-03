@@ -19,28 +19,28 @@ import DiffableTextKit
     // MARK: State
     //=------------------------------------------------------------------------=
     
-    @usableFromInline private(set) var map = [Character: Attribute](minimumCapacity: 13)
+    @usableFromInline private(set) var map = [Character: Attribute]()
     
     //=------------------------------------------------------------------------=
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable init(_ local: Components) {
+    @inlinable init(_ components: Components) {
         //=--------------------------------------=
-        // (10) Digits
+        // Digits
         //=--------------------------------------=
         for digit in Digit.allCases {
-            self.map[local.digits[digit]] = .content
+            self.map[components.digits[digit]] = .content
         }
         //=--------------------------------------=
-        // (1) Separators
+        // Separators
         //=--------------------------------------=
-        self.map[local.separators[.fraction]] = .removable
+        self.map[components.separators[.fraction]] = .removable
         //=--------------------------------------=
-        // (2) Signs
+        // Signs
         //=--------------------------------------=
         for sign in Sign.allCases {
-            self.map[local.signs[sign]] = .phantom.subtracting(.virtual)
+            self.map[components.signs[sign]] = .phantom.subtracting(.virtual)
         }
     }
     
@@ -48,7 +48,7 @@ import DiffableTextKit
     // MARK: Accessors
     //=------------------------------------------------------------------------=
     
-    @inlinable subscript(character: Character) -> Symbol {
-        Symbol(character, as: map[character] ?? .phantom)
+    @inlinable subscript(character: Character) -> Attribute {
+        map[character] ?? .phantom
     }
 }
