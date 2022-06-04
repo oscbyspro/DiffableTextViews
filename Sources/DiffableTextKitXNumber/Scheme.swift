@@ -19,7 +19,7 @@ public protocol NumberTextScheme {
     // MARK: State
     //=------------------------------------------------------------------------=
     
-    @inlinable var reader: Reader { get }
+    @inlinable var reader: NumberTextReader { get }
     
     //=------------------------------------------------------------------------=
     // MARK: Autocorrect

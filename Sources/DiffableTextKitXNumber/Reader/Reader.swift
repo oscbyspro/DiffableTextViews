@@ -13,7 +13,7 @@ import DiffableTextKit
 // MARK: * Reader
 //*============================================================================*
 
-public final class Reader {
+public final class NumberTextReader {
     
     //=------------------------------------------------------------------------=
     // MARK: State

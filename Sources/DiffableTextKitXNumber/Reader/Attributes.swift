@@ -27,6 +27,12 @@ import DiffableTextKit
     
     @inlinable init(_ components: Components) {
         //=--------------------------------------=
+        // Signs
+        //=--------------------------------------=
+        for sign in Sign.allCases {
+            self.map[components.signs[sign]] = .phantom.subtracting(.virtual)
+        }
+        //=--------------------------------------=
         // Digits
         //=--------------------------------------=
         for digit in Digit.allCases {
@@ -36,12 +42,6 @@ import DiffableTextKit
         // Separators
         //=--------------------------------------=
         self.map[components.separators[.fraction]] = .removable
-        //=--------------------------------------=
-        // Signs
-        //=--------------------------------------=
-        for sign in Sign.allCases {
-            self.map[components.signs[sign]] = .phantom.subtracting(.virtual)
-        }
     }
     
     //=------------------------------------------------------------------------=

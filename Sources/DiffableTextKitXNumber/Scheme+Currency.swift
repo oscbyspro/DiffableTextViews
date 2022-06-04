@@ -22,7 +22,7 @@ import Foundation
     //=------------------------------------------------------------------------=
     
     @usableFromInline let id: ID
-    @usableFromInline let reader: Reader
+    @usableFromInline let reader: NumberTextReader
     @usableFromInline let preferences: Preferences
     @usableFromInline let adjustments: Adjustments?
     
@@ -39,15 +39,16 @@ import Foundation
         formatter.currencyCode = id.code
         assert(formatter.numberStyle == .none)
         //=--------------------------------------=
-        // Formatter: None
+        // Formatter - None
         //=--------------------------------------=
         self.id = id
-        self.reader = Reader(.currency(formatter))
+        self.reader = NumberTextReader(.currency(formatter))
         //=--------------------------------------=
-        // Formatter: Currency
+        // Formatter - Currency
         //=--------------------------------------=
         formatter.numberStyle = .currency
         self.preferences = Preferences(formatter)
+        
         formatter.maximumFractionDigits = .zero
         self.adjustments = Adjustments(formatter, reader.components)
     }

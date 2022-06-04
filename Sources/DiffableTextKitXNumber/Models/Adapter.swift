@@ -42,7 +42,7 @@ public struct NumberTextAdapter<Format: NumberTextFormat>: Equatable {
     // MARK: Accessors
     //=------------------------------------------------------------------------=
     
-    @inlinable var reader: Reader {
+    @inlinable var reader: NumberTextReader {
         scheme.reader
     }
     

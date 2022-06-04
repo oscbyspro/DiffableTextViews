@@ -62,7 +62,7 @@ extension NumberTextStyleProtocol {
         adapter.format
     }
     
-    @inlinable var reader: Reader {
+    @inlinable var reader: NumberTextReader {
         adapter.reader
     }
     

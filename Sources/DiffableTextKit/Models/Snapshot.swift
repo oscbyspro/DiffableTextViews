@@ -22,6 +22,10 @@
 /// on snapshots containing only formatting characters. As an example, a pattern text style
 /// bound to an empty value may anchor at the pattern's first placeholder character.
 ///
+/// On another note, the number of attributes in the snapshot must always equal
+/// the number of characters in its storage string. This is usually a trivial invariant
+/// to maintain, but failure to maintain it will lead to unexpected behavior.
+///
 public struct Snapshot: BidirectionalCollection, RangeReplaceableCollection {
     @usableFromInline typealias Target = (Index) -> Bool
 

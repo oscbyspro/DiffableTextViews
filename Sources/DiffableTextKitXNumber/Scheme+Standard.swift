@@ -22,7 +22,7 @@ import Foundation
     //=------------------------------------------------------------------------=
     
     @usableFromInline let id: ID
-    @usableFromInline let reader: Reader
+    @usableFromInline let reader: NumberTextReader
 
     //=------------------------------------------------------------------------=
     // MARK: Initializers
@@ -36,10 +36,10 @@ import Foundation
         formatter.locale = id.locale
         assert(formatter.numberStyle == .none)
         //=--------------------------------------=
-        // Formatter: None
+        // Formatter - None
         //=--------------------------------------=
         self.id = id
-        self.reader = Reader(.standard(formatter))
+        self.reader = NumberTextReader(.standard(formatter))
     }
 
     //=------------------------------------------------------------------------=

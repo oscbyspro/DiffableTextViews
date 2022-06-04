@@ -24,10 +24,10 @@
     //=------------------------------------------------------------------------=
     
     @inlinable init(_ local: Components) {
+        self.insert(\.signs,      from: .ascii, to: local, as: { $0 })
         self.insert(\.digits,     from: .ascii, to: local, as: { $0 })
         self.insert(\.separators, from: .ascii, to: local, as: { _ in .fraction })
         self.insert(\.separators, from:  local, to: local, as: { _ in .fraction })
-        self.insert(\.signs,      from: .ascii, to: local, as: { $0 })
     }
     
     //=------------------------------------------------------------------------=
