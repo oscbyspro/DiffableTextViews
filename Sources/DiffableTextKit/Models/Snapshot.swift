@@ -47,7 +47,42 @@ public struct Snapshot: BidirectionalCollection, RangeReplaceableCollection {
     }
     
     //=------------------------------------------------------------------------=
-    // MARK: Initializers
+    // MARK: Accessors
+    //=------------------------------------------------------------------------=
+    
+    @inlinable public var characters: String {
+        _characters
+    }
+    
+    @inlinable public var attributes: [Attribute] {
+        _attributes
+    }
+    
+    @inlinable public var anchor: Index? {
+        _anchor
+    }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Transformations
+    //=------------------------------------------------------------------------=
+    
+    @inlinable public mutating func anchorAtEndIndex() {
+        self._anchor = endIndex
+    }
+    
+    @inlinable public mutating func anchor(at index: Index?) {
+        self._anchor = index
+    }
+}
+
+//=----------------------------------------------------------------------------=
+// MARK: + Initializers
+//=----------------------------------------------------------------------------=
+
+extension Snapshot {
+        
+    //=------------------------------------------------------------------------=
+    // MARK: Characters
     //=------------------------------------------------------------------------=
     
     @inlinable public init(_ characters: String, as attribute: Attribute = .content) {
@@ -70,39 +105,24 @@ public struct Snapshot: BidirectionalCollection, RangeReplaceableCollection {
     }
     
     //=------------------------------------------------------------------------=
-    // MARK: Accessors
+    // MARK: Characters
     //=------------------------------------------------------------------------=
     
-    @inlinable public var characters: String {
-        _characters
+    @inlinable public init(_ characters: String, as attribute: (Character) -> Attribute) {
+        self._characters = characters
+        self._attributes = []
+        
+        for character in characters {
+            self._attributes.append(attribute(character))
+        }
     }
-    
-    @inlinable public var attributes: [Attribute] {
-        _attributes
-    }
-    
-    @inlinable public var anchor: Index? {
-        _anchor
-    }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Count
-    //=------------------------------------------------------------------------=
-    
-    /// - Complexity: O(1).
-    @inlinable public var isEmpty: Bool {
-        _attributes.isEmpty
-    }
-    
-    /// - Complexity: O(1).
-    @inlinable public var count: Int {
-        _attributes.count
-    }
-    
-    /// - Complexity: O(1).
-    @inlinable public var underestimatedCount: Int {
-        _attributes.underestimatedCount
-    }
+}
+
+//=----------------------------------------------------------------------------=
+// MARK: + Accessors
+//=----------------------------------------------------------------------------=
+
+extension Snapshot {
     
     //=------------------------------------------------------------------------=
     // MARK: Element
@@ -140,31 +160,38 @@ public struct Snapshot: BidirectionalCollection, RangeReplaceableCollection {
         Index(_characters .index(before: index.character),
         as:   _attributes .index(before: index.attribute))
     }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Count
+    //=------------------------------------------------------------------------=
+    
+    /// - Complexity: O(1).
+    @inlinable public var isEmpty: Bool {
+        _attributes.isEmpty
+    }
+    
+    /// - Complexity: O(1).
+    @inlinable public var count: Int {
+        _attributes.count
+    }
+    
+    /// - Complexity: O(1).
+    @inlinable public var underestimatedCount: Int {
+        _attributes.underestimatedCount
+    }
 }
 
 //=----------------------------------------------------------------------------=
 // MARK: + Transformations
 //=----------------------------------------------------------------------------=
 
-public extension Snapshot {
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Anchor
-    //=------------------------------------------------------------------------=
-    
-    @inlinable mutating func anchorAtEndIndex() {
-        self._anchor = endIndex
-    }
-    
-    @inlinable mutating func anchor(at index: Index?) {
-        self._anchor = index
-    }
+extension Snapshot {
     
     //=------------------------------------------------------------------------=
     // MARK: Update
     //=------------------------------------------------------------------------=
     
-    @inlinable mutating func transform(attributes index: Index,
+    @inlinable public mutating func transform(attributes index: Index,
     with transform: (inout Attribute) -> Void) {
         //=--------------------------------------=
         // Index
@@ -172,7 +199,7 @@ public extension Snapshot {
         transform(&_attributes[index.attribute])
     }
     
-    @inlinable mutating func transform<S>(attributes indices: S,
+    @inlinable public mutating func transform<S>(attributes indices: S,
     with transform: (inout Attribute) -> Void)
     where S: Sequence, S.Element == Index {
         //=--------------------------------------=
@@ -183,7 +210,7 @@ public extension Snapshot {
         }
     }
     
-    @inlinable mutating func transform<R>(attributes indices: R,
+    @inlinable public mutating func transform<R>(attributes indices: R,
     with transform: (inout Attribute) -> Void)
     where R: RangeExpression, R.Bound == Index {
         //=--------------------------------------=
@@ -198,7 +225,7 @@ public extension Snapshot {
     // MARK: Replace
     //=------------------------------------------------------------------------=
 
-    @inlinable mutating func replaceSubrange<C>(_ indices: Range<Index>,
+    @inlinable public mutating func replaceSubrange<C>(_ indices: Range<Index>,
     with elements: C) where C: Collection, C.Element == Symbol {
         //=--------------------------------------=
         // Characters
@@ -216,29 +243,29 @@ public extension Snapshot {
         with: elements.lazy.map(\.attribute))
     }
     
-    @inlinable mutating func append(_ element: Symbol) {
+    @inlinable public mutating func append(_ element: Symbol) {
         _characters.append(element.character)
         _attributes.append(element.attribute)
     }
     
-    @inlinable mutating func append<S: Sequence>(
+    @inlinable public mutating func append<S: Sequence>(
     contentsOf elements: S) where S.Element == Symbol {
         _characters.append(contentsOf: elements.lazy.map(\.character))
         _attributes.append(contentsOf: elements.lazy.map(\.attribute))
     }
     
-    @inlinable mutating func insert(_ element: Element, at index: Index) {
+    @inlinable public mutating func insert(_ element: Element, at index: Index) {
         _characters.insert(element.character, at: index.character)
         _attributes.insert(element.attribute, at: index.attribute)
     }
     
-    @inlinable mutating func insert<C: Collection>(
+    @inlinable public mutating func insert<C: Collection>(
     contentsOf elements: C, at index: Index) where C.Element == Symbol {
         _characters.insert(contentsOf: elements.lazy.map(\.character), at: index.character)
         _attributes.insert(contentsOf: elements.lazy.map(\.attribute), at: index.attribute)
     }
     
-    @inlinable @discardableResult mutating func remove(at index: Index) -> Symbol {
+    @inlinable @discardableResult public mutating func remove(at index: Index) -> Symbol {
         Symbol(_characters.remove(at: index.character),
         as:    _attributes.remove(at: index.attribute))
     }
