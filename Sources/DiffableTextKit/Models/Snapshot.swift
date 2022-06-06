@@ -86,22 +86,12 @@ extension Snapshot {
     //=------------------------------------------------------------------------=
     
     @inlinable public init(_ characters: String, as attribute: Attribute = .content) {
-        self._characters = characters
-        self._attributes = Array(repeating: attribute, count: characters.count)
-    }
-    
-    @inlinable public init<C>(_ characters: C, as attribute: Attribute = .content)
-    where C: RandomAccessCollection, C.Element == Character {
-        self._characters = String(characters)
-        self._attributes = Array(repeating: attribute, count: characters.count)
+        self.init(characters, as: { _ in attribute })
     }
     
     @inlinable public init<S>(_ characters: S, as attribute: Attribute = .content)
-    where S: Sequence, S.Element == Character { self.init()
-        for character in characters {
-            self._characters.append(character)
-            self._attributes.append(attribute)
-        }
+    where S: Sequence, S.Element == Character {
+        self.init(characters, as: { _ in attribute })
     }
     
     //=------------------------------------------------------------------------=
@@ -113,6 +103,16 @@ extension Snapshot {
         self._attributes = []
         
         for character in characters {
+            self._attributes.append(attribute(character))
+        }
+    }
+    
+    @inlinable public init<S>(_ characters: S, as attribute: (Character) -> Attribute)
+    where S: Sequence, S.Element == Character {
+        self.init()
+        
+        for character in characters {
+            self._characters.append(character)
             self._attributes.append(attribute(character))
         }
     }
