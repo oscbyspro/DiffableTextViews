@@ -191,17 +191,11 @@ extension Snapshot {
     
     @inlinable public mutating func transform(attributes index: Index,
     with transform: (inout Attribute) -> Void) {
-        //=--------------------------------------=
-        // Index
-        //=--------------------------------------=
         transform(&_attributes[index.attribute])
     }
     
     @inlinable public mutating func transform(attributes indices: some Sequence<Index>,
     with transform: (inout Attribute) -> Void) {
-        //=--------------------------------------=
-        // Sequence
-        //=--------------------------------------=
         for index in indices {
             transform(&_attributes[index.attribute])
         }
@@ -210,9 +204,6 @@ extension Snapshot {
     @inlinable public mutating func transform<R>(attributes indices: R,
     with transform: (inout Attribute) -> Void)
     where R: RangeExpression, R.Bound == Index {
-        //=--------------------------------------=
-        // Range
-        //=--------------------------------------=
         for index in self.indices[indices.relative(to: self)] {
             transform(&_attributes[index.attribute])
         }
@@ -224,16 +215,11 @@ extension Snapshot {
 
     @inlinable public mutating func replaceSubrange(_ indices: Range<Index>,
     with elements: some Collection<Symbol>) {
-        //=--------------------------------------=
-        // Characters
-        //=--------------------------------------=
         _characters.replaceSubrange(
         indices.lowerBound.character ..<
         indices.upperBound.character,
         with: elements.lazy.map(\.character))
-        //=--------------------------------------=
-        // Attributes
-        //=--------------------------------------=
+        
         _attributes.replaceSubrange(
         indices.lowerBound.attribute ..<
         indices.upperBound.attribute,

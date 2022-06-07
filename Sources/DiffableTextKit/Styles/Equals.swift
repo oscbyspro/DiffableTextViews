@@ -68,7 +68,7 @@ extension DiffableTextStyle {
     /// Use this style to optimize the comparison on view update, for example.
     ///
     @inlinable @inline(__always)
-    public func equals<T>(_ proxy: T) -> some DiffableTextStyle<Value> where T: Equatable {
+    public func equals(_ proxy: some Equatable) -> some DiffableTextStyle<Value> {
         EqualsTextStyle(self, proxy: proxy)
     }
 }

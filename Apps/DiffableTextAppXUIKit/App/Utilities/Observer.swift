@@ -27,13 +27,11 @@ struct Observer<Observable: ObservableObject, Content: View>: View {
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    init(_    observable: Observable,
-    @ViewBuilder content: @escaping (Wrapper) -> Content) {
+    init(_ observable: Observable, @ViewBuilder content: @escaping (Wrapper) -> Content) {
         self.observable = observable; self.content = content
     }
     
-    init<T>(_ observable: Observable, cache:  T,
-    @ViewBuilder content: @escaping (Wrapper, T) -> Content) {
+    init<T>(_ observable: Observable, cache: T, @ViewBuilder content: @escaping (Wrapper, T) -> Content) {
         self.observable = observable; self.content = { content($0, cache) }
     }
     
