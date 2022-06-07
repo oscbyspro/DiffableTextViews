@@ -33,7 +33,6 @@ final class StyleTestsXConstant: XCTestCase {
         // Assert
         //=--------------------------------------=
         XCTAssertEqual(mock0, mock1)
-        XCTAssertEqual(mock0.style.locale, mock1.style.locale)
     }
 }
 

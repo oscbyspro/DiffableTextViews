@@ -93,9 +93,8 @@ extension Number {
     //=------------------------------------------------------------------------=
     
     /// Requires that all formatting characters are marked as virtual.
-    @inlinable init?<T>(in snapshot: Snapshot,
-    using components: Components, as kind: T.Type)
-    throws where T: NumberTextKind {
+    @inlinable init?(in snapshot: Snapshot, using components: Components,
+    as kind: (some NumberTextKind).Type) throws {
         let unformatted = snapshot.lazy.filter(\.nonvirtual).map(\.character)
         try self.init(unformatted: unformatted,
         signs: components.signs.components,
@@ -110,10 +109,9 @@ extension Number {
     // MARK: Characters
     //=------------------------------------------------------------------------=
     
-    @usableFromInline init?<S>(unformatted sequence: S,
+    @usableFromInline init?(unformatted sequence: some Sequence<Character>,
     signs: Map<Sign>, digits: Map<Digit>, separators: Map<Separator>,
-    optional: Bool, unsigned: Bool, integer: Bool)
-    throws where S: Sequence, S.Element == Character {
+    optional: Bool, unsigned: Bool, integer: Bool) throws {
         //=--------------------------------------=
         // State
         //=--------------------------------------=

@@ -227,7 +227,7 @@ extension NumberTextBounds {
     // MARK: Number
     //=------------------------------------------------------------------------=
     
-    @inlinable func autocorrectSignOnUnambigiousBounds(_ sign: inout  Sign) {
+    @inlinable func autocorrectSignOnUnambigiousBounds(_ sign: inout Sign) {
         guard let correct = Sign(of: bounds), sign != correct else { return }
         Info.print(autocorrection: [.mark(sign),  "is not in",  .note(self)])
         sign = correct

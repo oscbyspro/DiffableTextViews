@@ -80,7 +80,7 @@ public struct Snapshot: BidirectionalCollection, RangeReplaceableCollection {
 //=----------------------------------------------------------------------------=
 
 extension Snapshot {
-        
+    
     //=------------------------------------------------------------------------=
     // MARK: Characters
     //=------------------------------------------------------------------------=
@@ -89,8 +89,7 @@ extension Snapshot {
         self.init(characters, as: { _ in attribute })
     }
     
-    @inlinable public init<S>(_ characters: S, as attribute: Attribute = .content)
-    where S: Sequence, S.Element == Character {
+    @inlinable public init(_ characters: some Sequence<Character>, as attribute: Attribute = .content) {
         self.init(characters, as: { _ in attribute })
     }
     
@@ -107,8 +106,7 @@ extension Snapshot {
         }
     }
     
-    @inlinable public init<S>(_ characters: S, as attribute: (Character) -> Attribute)
-    where S: Sequence, S.Element == Character {
+    @inlinable public init(_ characters: some Sequence<Character>, as attribute: (Character) -> Attribute) {
         self.init()
         
         for character in characters {
@@ -199,9 +197,8 @@ extension Snapshot {
         transform(&_attributes[index.attribute])
     }
     
-    @inlinable public mutating func transform<S>(attributes indices: S,
-    with transform: (inout Attribute) -> Void)
-    where S: Sequence, S.Element == Index {
+    @inlinable public mutating func transform(attributes indices: some Sequence<Index>,
+    with transform: (inout Attribute) -> Void) {
         //=--------------------------------------=
         // Sequence
         //=--------------------------------------=
@@ -225,8 +222,8 @@ extension Snapshot {
     // MARK: Replace
     //=------------------------------------------------------------------------=
 
-    @inlinable public mutating func replaceSubrange<C>(_ indices: Range<Index>,
-    with elements: C) where C: Collection, C.Element == Symbol {
+    @inlinable public mutating func replaceSubrange(_ indices: Range<Index>,
+    with elements: some Collection<Symbol>) {
         //=--------------------------------------=
         // Characters
         //=--------------------------------------=
@@ -248,8 +245,7 @@ extension Snapshot {
         _attributes.append(element.attribute)
     }
     
-    @inlinable public mutating func append<S: Sequence>(
-    contentsOf elements: S) where S.Element == Symbol {
+    @inlinable public mutating func append(contentsOf elements: some Sequence<Symbol>) {
         _characters.append(contentsOf: elements.lazy.map(\.character))
         _attributes.append(contentsOf: elements.lazy.map(\.attribute))
     }
@@ -259,8 +255,7 @@ extension Snapshot {
         _attributes.insert(element.attribute, at: index.attribute)
     }
     
-    @inlinable public mutating func insert<C: Collection>(
-    contentsOf elements: C, at index: Index) where C.Element == Symbol {
+    @inlinable public mutating func insert(contentsOf elements: some Collection<Symbol>, at index: Index) {
         _characters.insert(contentsOf: elements.lazy.map(\.character), at: index.character)
         _attributes.insert(contentsOf: elements.lazy.map(\.attribute), at: index.attribute)
     }

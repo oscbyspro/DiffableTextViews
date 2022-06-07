@@ -57,8 +57,7 @@ import Foundation
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable static func reuse<T>(_ format: T) -> Self
-    where T: NumberTextFormatXCurrency {
+    @inlinable static func reuse(_ format: some NumberTextFormatXCurrency) -> Self {
         reuse(ID(format.locale, format.currencyCode))
     }
     

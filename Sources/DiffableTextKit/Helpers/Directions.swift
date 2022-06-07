@@ -17,7 +17,7 @@
     // MARK: Instances
     //=------------------------------------------------------------------------=
     
-    @usableFromInline static let none = Self()
+    @usableFromInline static let none = Self(lower: nil, upper: nil)
     
     //=------------------------------------------------------------------------=
     // MARK: State
@@ -30,7 +30,7 @@
     // MARK: Initializers
     //=------------------------------------------------------------------------=
 
-    @inlinable init(lower: Direction? = nil, upper: Direction? = nil) {
+    @inlinable init(lower: Direction?, upper: Direction?) {
         self.lower = lower
         self.upper = upper
     }

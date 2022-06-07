@@ -37,8 +37,7 @@ public final class NumberTextReader {
     // MARK: Utilities
     //=------------------------------------------------------------------------=
     
-    @inlinable func number<T>(_ proposal: Proposal, as kind: T.Type)
-    throws -> Number? where T: NumberTextKind {
+    @inlinable func number(_ proposal: Proposal, as kind: (some NumberTextKind).Type) throws -> Number? {
         var proposal = proposal
         //=--------------------------------------=
         // Edit
