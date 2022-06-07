@@ -56,8 +56,8 @@ ID: Hashable, Label: View {
     //=------------------------------------------------------------------------=
     
     static func each(selection: Binding<ID>) -> Self
-    where Value == ID, Value: CaseIterable, Data == ID.AllCases,
-    Value: RawRepresentable, Value.RawValue == String, Label == Text {
+    where ID: CaseIterable, Data == ID.AllCases, Label == Text,
+    Value: RawRepresentable, Value.RawValue == String {
         Self(ID.allCases, selection: selection, id: \.self) {
             Text($0.rawValue.capitalized)
         }

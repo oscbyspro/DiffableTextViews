@@ -14,9 +14,6 @@
 @_exported import DiffableTextKitXNumber
 @_exported import DiffableTextKitXPattern
 
-@_exported import struct DiffableTextKit.ConstantTextStyle
-@_exported import struct DiffableTextKit.EqualsTextStyle
-
 @_exported import protocol DiffableTextKit.DiffableTextStyle
 
 //=----------------------------------------------------------------------------=

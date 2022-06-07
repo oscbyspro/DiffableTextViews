@@ -15,7 +15,7 @@
 ///
 /// Use this style to optimize the comparison on view update, for example.
 ///
-public struct EqualsTextStyle<Style: DiffableTextStyle, Proxy: Equatable>: WrapperTextStyle {
+@usableFromInline struct EqualsTextStyle<Style: DiffableTextStyle, Proxy: Equatable>: WrapperTextStyle {
     
     //=------------------------------------------------------------------------=
     // MARK: State
@@ -51,13 +51,6 @@ public struct EqualsTextStyle<Style: DiffableTextStyle, Proxy: Equatable>: Wrapp
 extension DiffableTextStyle {
     
     //=------------------------------------------------------------------------=
-    // MARK: Types
-    //=------------------------------------------------------------------------=
-    
-    public typealias EqualsVoid = EqualsTextStyle<Self, _Void>
-    public typealias Equals<Proxy: Equatable> = EqualsTextStyle<Self, Proxy>
-    
-    //=------------------------------------------------------------------------=
     // MARK: Transformations
     //=------------------------------------------------------------------------=
     
@@ -66,8 +59,8 @@ extension DiffableTextStyle {
     /// Use this style to optimize the comparison on view update, for example.
     ///
     @inlinable @inline(__always)
-    public func equals(_ proxy: Void) -> EqualsVoid {
-        Equals(self, proxy: _Void())
+    public func equals(_ proxy: Void) -> some DiffableTextStyle<Value> {
+        EqualsTextStyle(self, proxy: _Void())
     }
     
     /// Binds the style's equality to a proxy value.
@@ -75,7 +68,7 @@ extension DiffableTextStyle {
     /// Use this style to optimize the comparison on view update, for example.
     ///
     @inlinable @inline(__always)
-    public func equals<Proxy>(_ proxy: Proxy) -> Equals<Proxy> {
-        Equals(self, proxy: proxy)
+    public func equals<T>(_ proxy: T) -> some DiffableTextStyle<Value> where T: Equatable {
+        EqualsTextStyle(self, proxy: proxy)
     }
 }

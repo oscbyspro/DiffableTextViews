@@ -147,7 +147,7 @@ Style.Format.FormatInput == Decimal {
     // MARK: Accessors
     //=------------------------------------------------------------------------=
 
-    var style: Style.Constant {
+    var style: some DiffableTextStyle<Value> {
         let bounds = NumberTextBounds<Input>(bounds.value.closed)
         let precision = NumberTextPrecision<Input>(
         integer:  ClosedRange(integer .value),
