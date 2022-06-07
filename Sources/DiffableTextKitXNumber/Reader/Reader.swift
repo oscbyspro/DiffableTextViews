@@ -50,7 +50,7 @@ public final class NumberTextReader {
         guard var number = try Number(in: proposal.merged(),
         using: components, as: kind) else { return nil }
 
-        if let sign = sign { number.sign = sign }
+        if let sign { number.sign = sign }
         //=--------------------------------------=
         // Return
         //=--------------------------------------=

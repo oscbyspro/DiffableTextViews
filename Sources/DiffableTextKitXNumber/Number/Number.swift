@@ -39,7 +39,7 @@ import DiffableTextKit
         Array(capacity: integer.count + fraction.count + 2) {
             $0.append(sign.rawValue)
             $0.append(contentsOf: integer.rawValue)
-            guard let separator = separator else { return }
+            guard let separator else { return }
             $0.append(separator.rawValue)
             $0.append(contentsOf: fraction.rawValue)
         }

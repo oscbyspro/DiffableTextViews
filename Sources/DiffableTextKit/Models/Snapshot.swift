@@ -328,7 +328,7 @@ extension Snapshot {
         //=--------------------------------------=
         // Anchor
         //=--------------------------------------=
-        if let anchor = anchor { return anchor }
+        if let anchor { return anchor }
         //=--------------------------------------=
         // Inspect Initial Index
         //=--------------------------------------=
