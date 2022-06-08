@@ -143,8 +143,7 @@ import Foundation
             // Formatted
             //=----------------------------------=
             let sides = formatter.string(from: 0)!.split(
-            separator: components.digits[.zero],
-            omittingEmptySubsequences:   false)
+            separator: components.digits[.zero], omittingEmptySubsequences: false)
             //=----------------------------------=
             // Direction
             //=----------------------------------=
