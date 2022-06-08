@@ -32,29 +32,9 @@ public struct Context<Style: DiffableTextStyle> {
     
     @inlinable public init(_ status: Status) {
         switch status.focus == true {
-        case  true: self =   .focused(status.style, status.value)
-        case false: self = .unfocused(status.style, status.value)
+        case  true: self =   .active(status.style, status.value)
+        case false: self = .inactive(status.style, status.value)
         }
-    }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Initializers
-    //=------------------------------------------------------------------------=
-    
-    @inlinable init(_ status: Status, _ layout: Layout) {
-        self._storage = Storage(status, layout)
-    }
-    
-    @inlinable static func focused(_ style: Style, _ value: Value) -> Self {
-        Self.focused(style, style.interpret(value))
-    }
-    
-    @inlinable static func focused(_ style: Style, _ commit: Commit) -> Self {
-        Self(Status(style, commit.value, true), Layout(commit.snapshot))
-    }
-    
-    @inlinable static func unfocused(_ style: Style, _ value: Value) -> Self {
-        Self(Status(style, value, false), Layout(Snapshot(style.format(value), as: .phantom)))
     }
     
     //=------------------------------------------------------------------------=
@@ -108,6 +88,33 @@ public struct Context<Style: DiffableTextStyle> {
 }
 
 //=----------------------------------------------------------------------------=
+// MARK: + Initializers
+//=----------------------------------------------------------------------------=
+
+extension Context {
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Internal
+    //=------------------------------------------------------------------------=
+    
+    @inlinable init(_ status: Status, _ layout: Layout) {
+        self._storage = Storage(status, layout)
+    }
+    
+    @inlinable static func active(_ style: Style, _ value: Value) -> Self {
+        Self.active(style, style.interpret(value))
+    }
+    
+    @inlinable static func active(_ style: Style, _ commit: Commit) -> Self {
+        Self(Status(style, commit.value, true), Layout(commit.snapshot))
+    }
+    
+    @inlinable static func inactive(_ style: Style, _ value: Value) -> Self {
+        Self(Status(style, value, false), Layout(Snapshot(style.format(value), as: .phantom)))
+    }
+}
+
+//=----------------------------------------------------------------------------=
 // MARK: + Accessors
 //=----------------------------------------------------------------------------=
 
@@ -149,11 +156,6 @@ extension Context {
     //=------------------------------------------------------------------------=
     // MARK: 3rd
     //=------------------------------------------------------------------------=
-
-    @inlinable @inline(__always)
-    public var snapshot: Snapshot {
-        layout.snapshot
-    }
     
     @inlinable @inline(__always)
     public var text: String {
@@ -184,7 +186,7 @@ extension Context {
         if other.focus == true {
             self.write {
                 $0.status = other.status
-                $0.layout.merge(snapshot: other.snapshot)
+                $0.layout.merge(snapshot: other.layout.snapshot)
             }
         //=--------------------------------------=
         // Inactive
@@ -218,7 +220,7 @@ extension Context {
         var next    = self.status
         let changes = next.merge(status)
         //=--------------------------------------=
-        // At Least One Value Must Be Different
+        // At Least One Value Must Have Changed
         //=--------------------------------------=
         guard !changes.isEmpty else { return [] }
         //=--------------------------------------=
@@ -242,13 +244,13 @@ extension Context {
         // Values
         //=--------------------------------------=
         let commit = try style.resolve(Proposal(
-        update:  snapshot, with: characters, in:
-        layout.indices(at: Carets(range)).range))
+        update: layout.snapshot, with: characters,
+        in: layout.indices(at: Carets(range)).range))
         //=--------------------------------------=
         // Update
         //=--------------------------------------=
         self.collapse()
-        self.merge(Self.focused(style, commit))
+        self.merge(Self.active(style, commit))
         //=--------------------------------------=
         // Return
         //=--------------------------------------=
@@ -259,16 +261,13 @@ extension Context {
     // MARK: Selection
     //=------------------------------------------------------------------------=
     
-    @inlinable public mutating func merge<T>(
-    selection: Range<T.Position>,
+    @inlinable public mutating func merge<T>(selection: Range<T.Position>,
     momentums: Bool) -> Update where T: Offset {
         //=--------------------------------------=
         // Update
         //=--------------------------------------=
         self.write {
-            $0.layout.merge(
-            selection: Carets(selection),
-            momentums: momentums)
+            $0.layout.merge(selection: Carets(selection), momentums: momentums)
         }
         //=--------------------------------------=
         // Return
