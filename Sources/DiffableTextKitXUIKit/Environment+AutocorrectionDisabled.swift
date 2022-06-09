@@ -52,7 +52,7 @@ public extension View {
     // MARK: Transformations
     //=------------------------------------------------------------------------=
     
-    @inlinable func diffableTextViews_autocorrectionDisabled(_  disabled: Bool) -> some View {
+    @inlinable func diffableTextViews_autocorrectionDisabled(_  disabled: Bool = true) -> some View {
         environment(\.diffableTextViews_autocorrectionDisabled, disabled)
     }
 }
