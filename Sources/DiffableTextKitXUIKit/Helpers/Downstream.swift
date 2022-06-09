@@ -82,15 +82,15 @@ extension Downstream {
     //=------------------------------------------------------------------------=
     
     @inlinable @inline(__always)
-    func disableAutocorrection(_ environment: EnvironmentValues) {
-        let disable = environment.diffableTextViews_disableAutocorrection
-        self.view.autocorrectionType = (disable ?? false) ? .no : .default
+    func autocorrectionDisabled(_ environment: EnvironmentValues) {
+        let disabled = environment.diffableTextViews_autocorrectionDisabled
+        self.view.autocorrectionType = disabled ? .no : .default
     }
     
     @inlinable @inline(__always)
     func font(_ environment: EnvironmentValues) {
         let font = environment.diffableTextViews_font
-        self.view.font = UIFont(font ?? .standard)
+        self.view.font = UIFont(font ?? .body)
     }
     
     @inlinable @inline(__always)

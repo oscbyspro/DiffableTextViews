@@ -21,12 +21,6 @@ public struct DiffableTextFont {
     //=------------------------------------------------------------------------=
     // MARK: Instances
     //=------------------------------------------------------------------------=
-    
-    @usableFromInline static let standard: Self = .body.monospaced()
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Instances
-    //=------------------------------------------------------------------------=
 
     #if !os(tvOS)
     public static let largeTitle  = Self.preferred(.largeTitle)

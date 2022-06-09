@@ -12,18 +12,18 @@
 import SwiftUI
 
 //*============================================================================*
-// MARK: * Environment x Disable Autocorrection
+// MARK: * Environment x Autocorrection Disabled
 //*============================================================================*
 // MARK: + Key
 //=----------------------------------------------------------------------------=
 
-@usableFromInline enum DiffableTextViews_DisableAutocorrection: EnvironmentKey {
+@usableFromInline enum DiffableTextViews_AutocorrectionDisabled: EnvironmentKey {
     
     //=------------------------------------------------------------------------=
     // MARK: Defaults
     //=------------------------------------------------------------------------=
     
-    @usableFromInline static let defaultValue: Bool? = nil
+    @usableFromInline static let defaultValue: Bool = false
 }
 
 //=----------------------------------------------------------------------------=
@@ -36,9 +36,9 @@ extension EnvironmentValues {
     // MARK: Accessors
     //=------------------------------------------------------------------------=
 
-    @inlinable var diffableTextViews_disableAutocorrection: Bool? {
-        get { self[DiffableTextViews_DisableAutocorrection.self] }
-        set { self[DiffableTextViews_DisableAutocorrection.self] = newValue }
+    @inlinable var diffableTextViews_autocorrectionDisabled: Bool {
+        get { self[DiffableTextViews_AutocorrectionDisabled.self] }
+        set { self[DiffableTextViews_AutocorrectionDisabled.self] = newValue }
     }
 }
 
@@ -52,8 +52,8 @@ public extension View {
     // MARK: Transformations
     //=------------------------------------------------------------------------=
     
-    @inlinable func diffableTextViews_disableAutocorrection(_  disable: Bool?) -> some View {
-        environment(\.diffableTextViews_disableAutocorrection, disable)
+    @inlinable func diffableTextViews_autocorrectionDisabled(_  disabled: Bool) -> some View {
+        environment(\.diffableTextViews_autocorrectionDisabled, disabled)
     }
 }
 

@@ -131,7 +131,7 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
             // Downstream
             //=----------------------------------=
             self.downstream.placeholder(parent.title)
-            self.downstream.disableAutocorrection(environment)
+            self.downstream.autocorrectionDisabled(environment)
             self.downstream.font(environment)
             self.downstream.foregroundColor(environment)
             self.downstream.keyboardType(environment)

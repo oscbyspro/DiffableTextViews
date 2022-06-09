@@ -61,8 +61,9 @@ struct Example<Style: DiffableTextStyle>: View {
             descriptionText
             diffableTextField
         }
-        .padding().background(secondary)
-        .onTapGesture { focus.toggle() }
+        .padding()
+        .background(secondary)
+        .onTapGesture{ focus.toggle() }
     }
     
     //=------------------------------------------------------------------------=
@@ -70,13 +71,19 @@ struct Example<Style: DiffableTextStyle>: View {
     //=------------------------------------------------------------------------=
     
     var descriptionText: some View {
-        Text(!description.isEmpty ? description : " ").lineLimit(1)
-            .frame(maxWidth: .infinity, alignment: .leading).padding()
-            .border(tertiary, width: 2).background(secondary)
+        Text(!description.isEmpty ? description : " ")
+            .lineLimit(1)
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .padding()
+            .border(tertiary, width: 2)
+            .background(secondary)
     }
     
     var diffableTextField: some View {
         DiffableTextField(placeholder, value: value, style: style)
-            .focused($focus).padding().background(tertiary)
+            .focused($focus)
+            .padding()
+            .background(tertiary)
+            .diffableTextViews_font(.body.monospaced())
     }
 }
