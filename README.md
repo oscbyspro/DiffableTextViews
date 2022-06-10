@@ -69,7 +69,7 @@ A text field that binds values and formats them as you type.
 ```swift
 environment(\.locale, _:)
 environment(\.layoutDirection, _:)
-diffableTextViews_disableAutocorrection(_:)
+diffableTextViews_autocorrectionDisabled(_:)
 diffableTextViews_font(_:)
 diffableTextViews_foregroundColor(_:)
 diffableTextViews_multilineTextAlignment(_:)
@@ -142,6 +142,7 @@ struct ContentView: View {
             // .locale(en_US).constant() // prevents changes by the environment
         }
         .environment(\.locale, locale)
+        .diffableTextViews_font(.body.monospaced())
         .diffableTextViews_keyboardType(.decimalPad)
     }
 }
@@ -191,6 +192,7 @@ struct ContentView: View {
             // .hidden(true) // hides pattern beyond last real value
             // .equals(()) // skips comparisons and discards changes
         }
+        .diffableTextViews_font(.body.monospaced())
         .diffableTextViews_keyboardType(.numberPad)
     }
 }

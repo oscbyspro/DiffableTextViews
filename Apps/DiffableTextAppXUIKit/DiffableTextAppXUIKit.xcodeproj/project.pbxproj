@@ -111,8 +111,8 @@
 			isa = PBXGroup;
 			children = (
 				557D9AB427F98C14008C317B /* Entitlements.entitlements */,
-				557F7FB827A81116001908D6 /* Packages */,
 				5589A1A227A7E3E30000F04A /* App */,
+				557F7FB827A81116001908D6 /* Packages */,
 				5589A1A127A7E3E30000F04A /* Products */,
 				55AA28C427A7ED78003778FE /* Frameworks */,
 			);
