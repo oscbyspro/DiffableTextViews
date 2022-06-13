@@ -37,8 +37,7 @@
     // MARK: Accessors
     //=------------------------------------------------------------------------=
     
-    @inlinable func selection<T>(as type: Position<T>.Type =
-    Position<T>.self) -> Carets<T.Position> where T: Encoding {
+    @inlinable func selection<T>(as type: Position<T>.Type = Position<T>.self) -> Carets<Position<T>> {
         positions(at: selection)
     }
     
@@ -46,11 +45,11 @@
     // MARK: Accessors
     //=------------------------------------------------------------------------=
     
-    @inlinable func indices<T>(at positions: Carets<T.Position>) -> Carets<Index> where T: Encoding {
+    @inlinable func indices<T>(at positions: Carets<Position<T>>) -> Carets<Index> {
         positions.map(caret: snapshot.index(at:))
     }
 
-    @inlinable func positions<T>(at indices: Carets<Index>) -> Carets<T.Position> where T: Encoding {
+    @inlinable func positions<T>(at indices: Carets<Index>) -> Carets<Position<T>> {
         indices.map(caret: snapshot.position(at:))
     }
 
@@ -75,7 +74,7 @@
     // MARK: Transformations
     //=------------------------------------------------------------------------=
     
-    @inlinable mutating func merge<T>(selection: Carets<T.Position>, momentums: Bool) where T: Encoding {
+    @inlinable mutating func merge<T>(selection: Carets<Position<T>>, momentums: Bool) {
         //=--------------------------------------=
         // Values
         //=--------------------------------------=

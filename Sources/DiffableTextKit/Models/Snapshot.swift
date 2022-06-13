@@ -303,11 +303,11 @@ extension Snapshot {
     // MARK: Position
     //=------------------------------------------------------------------------=
     
-    @inlinable func index<T>(at position: T.Position) -> Index where T: Encoding {
+    @inlinable func index<T>(at position: Position<T>) -> Index {
         T.index(at: position, in: characters)
     }
     
-    @inlinable func position<T>(at index: Index) -> T.Position where T: Encoding {
+    @inlinable func position<T>(at index: Index) -> Position<T> {
         T.position(at: index, in: characters)
     }
 }
