@@ -7,14 +7,11 @@
 // See http://www.apache.org/licenses/LICENSE-2.0 for license information.
 //=----------------------------------------------------------------------------=
 
-import Foundation
-
 //*============================================================================*
 // MARK: * Position
 //*============================================================================*
 
-/// A text offset measured in code units.
-public struct Position<Offset: DiffableTextKit.Offset>: Comparable {
+public struct Position<Encoding: DiffableTextKit.Encoding>: Comparable {
     
     //=------------------------------------------------------------------------=
     // MARK: State

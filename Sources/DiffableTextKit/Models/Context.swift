@@ -164,7 +164,7 @@ extension Context {
     
     @inlinable @inline(__always)
     public func selection<T>(as position: Position<T>.Type =
-    Position<T>.self) -> Range<T.Position> where T: Offset {
+    Position<T>.self) -> Range<T.Position> where T: Encoding {
         layout.selection().range
     }
 }
@@ -238,7 +238,7 @@ extension Context {
     //=------------------------------------------------------------------------=
     
     @inlinable public mutating func merge<T>(_ characters: String,
-    in range: Range<T.Position>) throws -> Update where T: Offset {
+    in range: Range<T.Position>) throws -> Update where T: Encoding {
         let previous = value
         //=--------------------------------------=
         // Values
@@ -262,7 +262,7 @@ extension Context {
     //=------------------------------------------------------------------------=
     
     @inlinable public mutating func merge<T>(selection: Range<T.Position>,
-    momentums: Bool) -> Update where T: Offset {
+    momentums: Bool) -> Update where T: Encoding {
         //=--------------------------------------=
         // Update
         //=--------------------------------------=
