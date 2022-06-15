@@ -123,14 +123,6 @@ struct ContentView: View {
     @State var locale = Locale(identifier: "sv_SE")
     
     //=------------------------------------------------------------------------=
-    // MARK: Accessors
-    //=------------------------------------------------------------------------=
-    
-    var en_US: Locale {
-        Locale(identifier: "en_US")
-    }
-    
-    //=------------------------------------------------------------------------=
     // MARK: Body
     //=------------------------------------------------------------------------=
     
@@ -139,7 +131,7 @@ struct ContentView: View {
             .currency(code: currencyCode)
             // .bounds((0 as Amount)...) // autocorrects while view is in focus
             // .precision(integer: 1..., fraction: 2) // default is appropriate
-            // .locale(en_US).constant() // prevents changes by the environment
+            // .locale(Locale(identifier: "en_US")).constant() // ignores sv_SE
         }
         .environment(\.locale, locale)
         .diffableTextViews_font(.body.monospaced())
