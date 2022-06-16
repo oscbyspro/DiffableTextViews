@@ -197,7 +197,7 @@ extension PatternTextStyle {
                 //=------------------------------=
                 // (!) Some
                 //=------------------------------=
-                some(&result, pattern[qIndex..<pIndex], content)
+                some(&result, pattern[qIndex ..< pIndex], content)
                 value  .formIndex(after: &vIndex)
                 pattern.formIndex(after: &pIndex)
                 qIndex = pIndex
@@ -212,7 +212,7 @@ extension PatternTextStyle {
         // (!) None
         //=--------------------------------------=
         if qIndex == pattern.startIndex {
-            none(&result, pattern[qIndex..<pIndex])
+            none(&result, pattern[qIndex ..< pIndex])
             qIndex = pIndex
         }
         //=--------------------------------------=

@@ -266,15 +266,9 @@ extension Snapshot {
 
     @inlinable public mutating func replaceSubrange(_ indices: Range<Index>,
     with elements: some Collection<Symbol>) {
-        self._characters.replaceSubrange(
-        indices.lowerBound.character ..<
-        indices.upperBound.character,
-        with: elements.lazy.map(\.character))
-        
-        self._attributes.replaceSubrange(
-        indices.lowerBound.attribute ..<
-        indices.upperBound.attribute,
-        with: elements.lazy.map(\.attribute))
+        self.replaceSubrange(indices,
+        characters: elements.lazy.map(\.character),
+        attributes: elements.lazy.map(\.attribute))
     }
     
     @inlinable public mutating func replaceSubrange(_ indices: Range<Index>,
@@ -284,15 +278,25 @@ extension Snapshot {
     
     @inlinable public mutating func replaceSubrange(_ indices: Range<Index>,
     with characters: some Collection<Character>, as attribute: (Character) -> Attribute) {
+        self.replaceSubrange(indices,
+        characters: characters,
+        attributes: characters.lazy.map(attribute))
+    }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Helpers
+    //=------------------------------------------------------------------------=
+    
+    @inlinable mutating func replaceSubrange(_ indices: Range<Index>,
+    characters: some Collection<Character>,
+    attributes: some Collection<Attribute>) {
         self._characters.replaceSubrange(
         indices.lowerBound.character ..<
-        indices.upperBound.character,
-        with: characters)
+        indices.upperBound.character, with: characters)
         
         self._attributes.replaceSubrange(
         indices.lowerBound.attribute ..<
-        indices.upperBound.attribute,
-        with: characters.lazy.map(attribute))
+        indices.upperBound.attribute, with: attributes)
     }
 }
 

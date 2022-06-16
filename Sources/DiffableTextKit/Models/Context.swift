@@ -94,7 +94,7 @@ public struct Context<Style: DiffableTextStyle> {
 extension Context {
     
     //=------------------------------------------------------------------------=
-    // MARK: Internal
+    // MARK: Helpers
     //=------------------------------------------------------------------------=
     
     @inlinable init(_ status: Status, _ layout: Layout) {
