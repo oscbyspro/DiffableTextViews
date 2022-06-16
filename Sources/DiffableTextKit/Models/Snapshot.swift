@@ -278,7 +278,7 @@ extension Snapshot {
     }
     
     @inlinable public mutating func replaceSubrange(_ indices: Range<Index>,
-    with characters: some Collection<Character>, as attribute: Attribute) {
+    with characters: some Collection<Character>, as attribute: Attribute = .content) {
         self.replaceSubrange(indices, with: characters, as: { _ in attribute })
     }
     
