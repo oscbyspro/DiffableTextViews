@@ -11,44 +11,48 @@
 // MARK: * Carets
 //*============================================================================*
 
-/// One or two carets, represented by a range.
-///
-/// An empty range represents an upper caret.
-///
-@usableFromInline struct Carets<Caret: Comparable>: Equatable {
+@usableFromInline struct Carets<Caret> {
     
     //=------------------------------------------------------------------------=
     // MARK: State
     //=------------------------------------------------------------------------=
     
-    @usableFromInline let range: Range<Caret>
+    @usableFromInline let lower: Caret
+    @usableFromInline let upper: Caret
     
     //=------------------------------------------------------------------------=
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable init(_ range: Range<Caret>) {
-        self.range  = range
+    @inlinable init(unchecked: (lower: Caret, upper: Caret)) {
+        (self.lower, self.upper) = unchecked
     }
-    
-    @inlinable init(_ bound: Caret) {
-        self.init(Range(uncheckedBounds: (bound, bound)))
-    }
-    
-    @inlinable static func unchecked(_ bounds: (Caret, Caret)) -> Self {
-        Self.init(Range(uncheckedBounds: bounds))
-    }
+}
 
+//=----------------------------------------------------------------------------=
+// MARK: + Comparable
+//=----------------------------------------------------------------------------=
+
+extension Carets: Equatable where Caret: Comparable {
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Initializers
+    //=------------------------------------------------------------------------=
+    
+    @inlinable init(_ caret: Caret) {
+        self.init(unchecked: (caret, caret))
+    }
+    
+    @inlinable init(_ range: Range<Caret>) {
+        self.init(unchecked: (range.lowerBound, range.upperBound))
+    }
+    
     //=------------------------------------------------------------------------=
     // MARK: Accessors
     //=------------------------------------------------------------------------=
     
-    @inlinable var lower: Caret {
-        range.lowerBound
-    }
-    
-    @inlinable var upper: Caret {
-        range.upperBound
+    @inlinable var range: Range<Caret> {
+        Range(uncheckedBounds: (lower, upper))
     }
     
     //=------------------------------------------------------------------------=
@@ -63,14 +67,14 @@
     // MARK: Transformations
     //=------------------------------------------------------------------------=
     
-    @inlinable func map<T>(caret: (Caret) -> T) -> Carets<T> {
+    @inlinable func map<T>(caret: (Caret) -> T) -> Carets<T> where T: Comparable {
         //=--------------------------------------=
         // Return
         //=--------------------------------------=
         self.map(lower: caret, upper: caret)
     }
     
-    @inlinable func map<T>(lower: (Caret) -> T, upper: (Caret) -> T) -> Carets<T> {
+    @inlinable func map<T>(lower: (Caret) -> T, upper: (Caret) -> T) -> Carets<T> where T: Comparable {
         //=--------------------------------------=
         // Single
         //=--------------------------------------=
@@ -78,12 +82,35 @@
         //=--------------------------------------=
         // Double
         //=--------------------------------------=
-        if !range.isEmpty {
+        if  self.lower != self.upper {
             min = Swift.min(lower(self.lower), max)
         }
         //=--------------------------------------=
         // Return
         //=--------------------------------------=
-        return .unchecked((min, max))
+        return Carets<T>(unchecked: (min, max))
+    }
+}
+
+//=----------------------------------------------------------------------------=
+// MARK: + Direction
+//=----------------------------------------------------------------------------=
+
+extension Carets where Caret == Optional<Direction> {
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Instances
+    //=------------------------------------------------------------------------=
+    
+    @usableFromInline static let none = Self(unchecked: (nil, nil))
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Initializers
+    //=------------------------------------------------------------------------=
+    
+    @inlinable static func directions<T>(from start: Carets<T>, to end: Carets<T>) -> Self where T: Comparable {
+        let lower = Direction(from: start.lower, to: end.lower)
+        let upper = Direction(from: start.upper, to: end.upper)
+        return Self(unchecked: (lower, upper))
     }
 }

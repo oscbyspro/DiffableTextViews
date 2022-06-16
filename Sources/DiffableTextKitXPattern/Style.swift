@@ -123,7 +123,7 @@ extension PatternTextStyle {
     //=------------------------------------------------------------------------=
     
     /// - Mismatches throw an error.
-    @inlinable public func resolve(_ proposal: Proposal) throws -> Commit<Value> {
+    @inlinable @inline(never) public func resolve(_ proposal: Proposal) throws -> Commit<Value> {
         var value = Value(); let proposal = proposal.merged()
         var nonvirtuals = proposal.lazy.filter(\.nonvirtual).makeIterator()
         //=--------------------------------------=
@@ -167,7 +167,8 @@ extension PatternTextStyle {
     // MARK: Reduce
     //=------------------------------------------------------------------------=
     
-    @inlinable func reduce<Result>(_ value: Value, into result: Result,
+    @inlinable @inline(never) func reduce<Result>(_ value: Value,
+    into result: Result,
     some: (inout Result, Substring, Character) -> Void,
     none: (inout Result, Substring) -> Void,
     done: (inout Result, Substring, Value.SubSequence) -> Void) -> Result {

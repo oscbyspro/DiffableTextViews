@@ -13,10 +13,10 @@
 
 /// An error message that contains a description in DEBUG mode.
 ///
-/// It uses conditional compilation such that it has no performance cost in RELEASE mode.
+/// It uses conditional compilation such that it has no size in RELEASE mode.
 ///
 public struct Info: CustomStringConvertible, Error {
-    @usableFromInline static let description = "[DEBUG]"
+    @usableFromInline static let none = "[REDACTED]"
     
     //=------------------------------------------------------------------------=
     // MARK: State
@@ -25,7 +25,7 @@ public struct Info: CustomStringConvertible, Error {
     #if DEBUG
     public let description: String
     #else
-    public var description: String { Self.description }
+    public var description: String { Self.none }
     #endif
     
     //=------------------------------------------------------------------------=
