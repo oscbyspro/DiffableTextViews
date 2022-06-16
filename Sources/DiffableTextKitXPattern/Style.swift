@@ -67,7 +67,7 @@ extension PatternTextStyle {
     
     /// - Mismatches are separated.
     @inlinable public func format(_ value: Value) -> String {
-        Sequencer(pattern, placeholders, value).reduce(into: .init()) {
+        reduce(value, into: String()) {
             characters, queue, content in
             characters.append(contentsOf: queue)
             characters.append(content)
@@ -98,7 +98,7 @@ extension PatternTextStyle {
     
     /// - Mismatches are cut.
     @inlinable public func interpret(_ value: Value) -> Commit<Value> {
-        Sequencer(pattern, placeholders, value).reduce(into: .init()) {
+        reduce(value, into: Commit()) {
             commit, queue, content in
             commit.snapshot.append(contentsOf: queue, as: .phantom)
             commit.snapshot.append(Symbol(content))
@@ -154,5 +154,69 @@ extension PatternTextStyle {
         // Value -> Commit
         //=--------------------------------------=
         return interpret(value)
+    }
+}
+
+//=----------------------------------------------------------------------------=
+// MARK: + Helpers
+//=----------------------------------------------------------------------------=
+
+extension PatternTextStyle {
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Reduce
+    //=------------------------------------------------------------------------=
+    
+    @inlinable func reduce<Result>(_ value: Value, into result: Result,
+    some: (inout Result, Substring, Character) -> Void,
+    none: (inout Result, Substring) -> Void,
+    done: (inout Result, Substring, Value.SubSequence) -> Void) -> Result {
+        //=--------------------------------------=
+        // State
+        //=--------------------------------------=
+        var result = result
+        var vIndex = value  .startIndex
+        var pIndex = pattern.startIndex
+        var qIndex = pIndex // queue
+        //=--------------------------------------=
+        // Pattern
+        //=--------------------------------------=
+        body: while pIndex != pattern.endIndex {
+            let character   = pattern[pIndex]
+            //=----------------------------------=
+            // Placeholder
+            //=----------------------------------=
+            if let predicate  = placeholders[character] {
+                guard vIndex != value.endIndex else { break body }
+                let   content = value[vIndex]
+                //=------------------------------=
+                // Predicate
+                //=------------------------------=
+                guard predicate.check(content) else { break body }
+                //=------------------------------=
+                // (!) Some
+                //=------------------------------=
+                some(&result, pattern[qIndex..<pIndex], content)
+                value  .formIndex(after: &vIndex)
+                pattern.formIndex(after: &pIndex)
+                qIndex = pIndex
+            //=----------------------------------=
+            // Miscellaneous
+            //=----------------------------------=
+            } else {
+                pattern.formIndex(after: &pIndex)
+            }
+        }
+        //=--------------------------------------=
+        // (!) None
+        //=--------------------------------------=
+        if qIndex == pattern.startIndex {
+            none(&result, pattern[qIndex..<pIndex])
+            qIndex = pIndex
+        }
+        //=--------------------------------------=
+        // (!) Done
+        //=--------------------------------------=
+        done(&result, pattern[qIndex...], value[vIndex...]); return result
     }
 }
