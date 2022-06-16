@@ -37,20 +37,16 @@
     // MARK: Accessors
     //=------------------------------------------------------------------------=
     
-    @inlinable func selection<T>(as type: Position<T>.Type = Position<T>.self) -> Carets<Position<T>> {
-        positions(at: selection)
-    }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Accessors
-    //=------------------------------------------------------------------------=
-    
     @inlinable func indices<T>(at positions: Carets<Position<T>>) -> Carets<Index> {
         positions.map(caret: snapshot.index(at:))
     }
 
     @inlinable func positions<T>(at indices: Carets<Index>) -> Carets<Position<T>> {
         indices.map(caret: snapshot.position(at:))
+    }
+    
+    @inlinable func selection<T>(as type: Position<T>.Type = Position<T>.self) -> Carets<Position<T>> {
+        positions(at: selection)
     }
 
     //=------------------------------------------------------------------------=
@@ -91,7 +87,7 @@
         //=--------------------------------------=
         // Accept Max Selection
         //=--------------------------------------=
-        case .init(unchecked: (snapshot.startIndex, snapshot.endIndex)): self.selection = selection
+        case Carets(unchecked: (snapshot.startIndex, snapshot.endIndex)): self.selection = selection
         //=--------------------------------------=
         // Update
         //=--------------------------------------=

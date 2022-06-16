@@ -20,7 +20,7 @@ public extension BidirectionalCollection {
     @inlinable func suffix(while predicate: (Element) throws -> Bool) rethrows -> SubSequence {
         try self[startOfSuffix(while: predicate)...]
     }
-      
+    
     @inlinable internal func startOfSuffix(while predicate: (Element) throws -> Bool) rethrows -> Index {
         var index = endIndex
         //=--------------------------------------=
