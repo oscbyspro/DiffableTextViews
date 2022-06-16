@@ -91,7 +91,7 @@ extension PatternTextStyle {
             }
         }
     }
-
+    
     //=------------------------------------------------------------------------=
     // MARK: Active
     //=------------------------------------------------------------------------=
@@ -100,12 +100,12 @@ extension PatternTextStyle {
     @inlinable public func interpret(_ value: Value) -> Commit<Value> {
         Sequencer(pattern, placeholders, value).reduce(into: .init()) {
             commit, queue, content in
-            commit.snapshot.append(contentsOf: Snapshot(queue, as: .phantom))
+            commit.snapshot.append(contentsOf: queue, as: .phantom)
             commit.snapshot.append(Symbol(content))
             commit.value   .append(content)
         } none: {
             commit, queue in
-            commit.snapshot.append(contentsOf: Snapshot(queue, as: .phantom))
+            commit.snapshot.append(contentsOf: queue, as: .phantom)
             commit.snapshot.anchorAtEndIndex()
         } done: {
             commit, queue, _ in
@@ -113,7 +113,7 @@ extension PatternTextStyle {
             // Pattern
             //=----------------------------------=
             if visible {
-                commit.snapshot.append(contentsOf: Snapshot(queue, as: .phantom))
+                commit.snapshot.append(contentsOf: queue, as: .phantom)
             }
         }
     }
@@ -125,29 +125,29 @@ extension PatternTextStyle {
     /// - Mismatches throw an error.
     @inlinable public func resolve(_ proposal: Proposal) throws -> Commit<Value> {
         var value = Value(); let proposal = proposal.merged()
-        var contents = proposal.lazy.filter(\.nonvirtual).makeIterator()
+        var nonvirtuals = proposal.lazy.filter(\.nonvirtual).makeIterator()
         //=--------------------------------------=
         // Parse
         //=--------------------------------------=
         parse: for character in pattern {
             if let predicate = placeholders[character] {
-                guard let content = contents.next() else { break parse }
+                guard let nonvirtual = nonvirtuals.next() else { break parse }
                 //=------------------------------=
                 // Predicate
                 //=------------------------------=
-                guard predicate.check(content.character) else {
-                    throw Info([.mark(content.character), "is invalid"])
+                guard predicate.check(nonvirtual.character) else {
+                    throw Info([.mark(nonvirtual.character), "is invalid"])
                 }
                 //=------------------------------=
                 // Insertion
                 //=------------------------------=
-                value.append(content.character)
+                value.append(nonvirtual.character)
             }
         }
         //=--------------------------------------=
         // Capacity
         //=--------------------------------------=
-        guard contents.next() == nil else {
+        guard nonvirtuals.next() == nil else {
             throw Info([.mark(proposal.characters), "exceeded pattern capacity", .note(value.count)])
         }
         //=--------------------------------------=

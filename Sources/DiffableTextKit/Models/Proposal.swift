@@ -34,7 +34,7 @@ public struct Proposal {
     // MARK: Utilities
     //=------------------------------------------------------------------------=
     
-    /// Returns a new snapshot with the proposed change applied to it.
+    /// Returns a new snapshot with the changes applied to it.
     @inlinable public func merged() -> Snapshot {
         var result = snapshot; result.replaceSubrange(range, with: replacement); return result
     }

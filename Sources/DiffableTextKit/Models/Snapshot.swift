@@ -28,7 +28,7 @@
 ///
 public struct Snapshot: BidirectionalCollection, RangeReplaceableCollection {
     @usableFromInline typealias Target = (Index) -> Bool
-
+    
     //=------------------------------------------------------------------------=
     // MARK: State
     //=------------------------------------------------------------------------=
@@ -82,22 +82,16 @@ public struct Snapshot: BidirectionalCollection, RangeReplaceableCollection {
 extension Snapshot {
     
     //=------------------------------------------------------------------------=
-    // MARK: Characters
+    // MARK: String
     //=------------------------------------------------------------------------=
     
-    @inlinable public init(_ characters: String, as attribute: Attribute = .content) {
+    @inlinable public init(_ characters: String,
+    as attribute: Attribute = .content) {
         self.init(characters, as: { _ in attribute })
     }
     
-    @inlinable public init(_ characters: some Sequence<Character>, as attribute: Attribute = .content) {
-        self.init(characters, as: { _ in attribute })
-    }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Characters
-    //=------------------------------------------------------------------------=
-    
-    @inlinable public init(_ characters: String, as attribute: (Character) -> Attribute) {
+    @inlinable public init(_ characters: String,
+    as attribute: (Character) -> Attribute) {
         self._characters = characters
         self._attributes = []
         
@@ -106,13 +100,18 @@ extension Snapshot {
         }
     }
     
-    @inlinable public init(_ characters: some Sequence<Character>, as attribute: (Character) -> Attribute) {
-        self.init()
-        
-        for character in characters {
-            self._characters.append(character)
-            self._attributes.append(attribute(character))
-        }
+    //=------------------------------------------------------------------------=
+    // MARK: some Sequence<Character>
+    //=------------------------------------------------------------------------=
+    
+    @inlinable public init(_ characters: some Sequence<Character>,
+    as attribute: Attribute = .content) {
+        self.init(characters, as: { _ in attribute })
+    }
+    
+    @inlinable public init(_ characters: some Sequence<Character>,
+    as attribute: (Character) -> Attribute) {
+        self.init(); self.append(contentsOf: characters, as: attribute)
     }
 }
 
@@ -186,18 +185,18 @@ extension Snapshot {
 extension Snapshot {
     
     //=------------------------------------------------------------------------=
-    // MARK: Update
+    // MARK: Attributes
     //=------------------------------------------------------------------------=
     
     @inlinable public mutating func transform(attributes index: Index,
     with transform: (inout Attribute) -> Void) {
-        transform(&_attributes[index.attribute])
+        transform(&self._attributes[index.attribute])
     }
     
     @inlinable public mutating func transform(attributes indices: some Sequence<Index>,
     with transform: (inout Attribute) -> Void) {
         for index in indices {
-            transform(&_attributes[index.attribute])
+            transform(&self._attributes[index.attribute])
         }
     }
     
@@ -210,45 +209,90 @@ extension Snapshot {
     }
     
     //=------------------------------------------------------------------------=
+    // MARK: Append
+    //=------------------------------------------------------------------------=
+    
+    @inlinable public mutating func append(_ element: Symbol) {
+        self._characters.append(element.character)
+        self._attributes.append(element.attribute)
+    }
+    
+    @inlinable public mutating func append(
+    contentsOf characters: some Sequence<Character>,
+    as attribute: Attribute = .content) {
+        self.append(contentsOf: characters, as: { _ in attribute })
+    }
+    
+    @inlinable public mutating func append(
+    contentsOf characters: some Sequence<Character>,
+    as attribute: (Character) -> Attribute) {
+        for character in characters {
+            self._characters.append(character)
+            self._attributes.append(attribute(character))
+        }
+    }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Insert
+    //=------------------------------------------------------------------------=
+    
+    @inlinable public mutating func insert(_ element: Element, at index: Index) {
+        self._characters.insert(element.character, at: index.character)
+        self._attributes.insert(element.attribute, at: index.attribute)
+    }
+    
+    @inlinable public mutating func insert(contentsOf characters: some Collection<Character>,
+    at index: Index, as attribute: Attribute = .content) {
+        self.insert(contentsOf: characters, at: index, as: { _ in attribute })
+    }
+    
+    @inlinable public mutating func insert(contentsOf characters: some Collection<Character>,
+    at index: Index, as attribute: (Character) -> Attribute) {
+        self.replaceSubrange(index..<index, with: characters, as: attribute)
+    }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Remove
+    //=------------------------------------------------------------------------=
+    
+    @inlinable @discardableResult public mutating func remove(at index: Index) -> Symbol {
+        Symbol(self._characters.remove(at: index.character),
+        as:    self._attributes.remove(at: index.attribute))
+    }
+    
+    //=------------------------------------------------------------------------=
     // MARK: Replace
     //=------------------------------------------------------------------------=
 
     @inlinable public mutating func replaceSubrange(_ indices: Range<Index>,
     with elements: some Collection<Symbol>) {
-        _characters.replaceSubrange(
+        self._characters.replaceSubrange(
         indices.lowerBound.character ..<
         indices.upperBound.character,
         with: elements.lazy.map(\.character))
         
-        _attributes.replaceSubrange(
+        self._attributes.replaceSubrange(
         indices.lowerBound.attribute ..<
         indices.upperBound.attribute,
         with: elements.lazy.map(\.attribute))
     }
     
-    @inlinable public mutating func append(_ element: Symbol) {
-        _characters.append(element.character)
-        _attributes.append(element.attribute)
+    @inlinable public mutating func replaceSubrange(_ indices: Range<Index>,
+    with characters: some Collection<Character>, as attribute: Attribute) {
+        self.replaceSubrange(indices, with: characters, as: { _ in attribute })
     }
     
-    @inlinable public mutating func append(contentsOf elements: some Sequence<Symbol>) {
-        _characters.append(contentsOf: elements.lazy.map(\.character))
-        _attributes.append(contentsOf: elements.lazy.map(\.attribute))
-    }
-    
-    @inlinable public mutating func insert(_ element: Element, at index: Index) {
-        _characters.insert(element.character, at: index.character)
-        _attributes.insert(element.attribute, at: index.attribute)
-    }
-    
-    @inlinable public mutating func insert(contentsOf elements: some Collection<Symbol>, at index: Index) {
-        _characters.insert(contentsOf: elements.lazy.map(\.character), at: index.character)
-        _attributes.insert(contentsOf: elements.lazy.map(\.attribute), at: index.attribute)
-    }
-    
-    @inlinable @discardableResult public mutating func remove(at index: Index) -> Symbol {
-        Symbol(_characters.remove(at: index.character),
-        as:    _attributes.remove(at: index.attribute))
+    @inlinable public mutating func replaceSubrange(_ indices: Range<Index>,
+    with characters: some Collection<Character>, as attribute: (Character) -> Attribute) {
+        self._characters.replaceSubrange(
+        indices.lowerBound.character ..<
+        indices.upperBound.character,
+        with: characters)
+        
+        self._attributes.replaceSubrange(
+        indices.lowerBound.attribute ..<
+        indices.upperBound.attribute,
+        with: characters.lazy.map(attribute))
     }
 }
 
@@ -268,9 +312,7 @@ extension Snapshot: CustomStringConvertible {
 }
 
 //=----------------------------------------------------------------------------=
-// All extensions below this line are internal implementation details.
-//=----------------------------------------------------------------------------=
-// MARK: + Accessors
+// MARK: + Helpers
 //=----------------------------------------------------------------------------=
 
 extension Snapshot {
@@ -286,7 +328,7 @@ extension Snapshot {
     //=------------------------------------------------------------------------=
     // MARK: Peek
     //=------------------------------------------------------------------------=
-
+    
     @inlinable func peek(from index: Index, towards direction: Direction) -> Index? {
         direction == .forwards ? peek(ahead: index) : peek(behind: index)
     }
