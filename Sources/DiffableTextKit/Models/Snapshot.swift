@@ -27,7 +27,6 @@
 /// to maintain, but failure to maintain it will lead to unexpected behavior.
 ///
 public struct Snapshot: BidirectionalCollection, RangeReplaceableCollection {
-    @usableFromInline typealias Target = (Index) -> Bool
     
     //=------------------------------------------------------------------------=
     // MARK: State
@@ -435,8 +434,10 @@ extension Snapshot {
     }
     
     //*========================================================================*
-    // MARK: * Jump
+    // MARK: * Types(s)
     //*========================================================================*
 
     @usableFromInline enum Jump { case to, through }
+    
+    @usableFromInline typealias Target = (Index) -> Bool
 }

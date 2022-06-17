@@ -63,7 +63,7 @@
         //=--------------------------------------=
         // Update
         //=--------------------------------------=
-        self.snapshot = snapshot; self.merge(selection: selection)
+        self.snapshot = snapshot; self.merge(selection: selection, momentums: Momentums())
     }
     
     //=------------------------------------------------------------------------=
@@ -75,14 +75,14 @@
         // Values
         //=--------------------------------------=
         let selection = indices(at: selection)
-        let momentums = momentums ? Carets.directions(from: self.selection, to: selection) : .none
+        let momentums = momentums ? Momentums(from: self.selection, to: selection) : Momentums()
         //=--------------------------------------=
         // Update
         //=--------------------------------------=
         self.merge(selection: selection, momentums: momentums)
     }
     
-    @inlinable mutating func merge(selection: Carets<Index>, momentums: Carets<Direction?> = .none) {
+    @inlinable mutating func merge(selection: Carets<Index>, momentums: Momentums) {
         switch selection {
         //=--------------------------------------=
         // Accept Max Selection

@@ -14,14 +14,20 @@
 import XCTest
 
 //*============================================================================*
-// MARK: * Helpers x Direction
+// MARK: * Direction x Tests
 //*============================================================================*
 
-final class HelpersTestsXDirection: XCTestCase {
+final class DirectionTests: XCTestCase {
     
     //=------------------------------------------------------------------------=
     // MARK: Tests
     //=------------------------------------------------------------------------=
+    
+    func testInit() {
+        XCTAssertEqual(Direction(from: 0, to: 0), .none)
+        XCTAssertEqual(Direction(from: 0, to: 1), .forwards)
+        XCTAssertEqual(Direction(from: 1, to: 0), .backwards)
+    }
     
     func testReversed() {
         XCTAssertEqual(Direction .forwards.reversed(), .backwards)

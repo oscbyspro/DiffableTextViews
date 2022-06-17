@@ -7,35 +7,30 @@
 // See http://www.apache.org/licenses/LICENSE-2.0 for license information.
 //=----------------------------------------------------------------------------=
 
-#if DEBUG
-
-@testable import DiffableTextKit
-
-import XCTest
-
 //*============================================================================*
-// MARK: * Models x Attribute
+// MARK: * Momentums
 //*============================================================================*
 
-final class ModelsTestsXAttribute: XCTestCase {
+@usableFromInline struct Momentums {
     
     //=------------------------------------------------------------------------=
     // MARK: State
     //=------------------------------------------------------------------------=
     
-    let attributes: [Attribute] = [.virtual, .insertable, .removable, .passthrough]
+    @usableFromInline let lower: Direction?
+    @usableFromInline let upper: Direction?
 
     //=------------------------------------------------------------------------=
-    // MARK: Tests
+    // MARK: Initializers
     //=------------------------------------------------------------------------=
-    
-    func testContentIsEmpty() {
-        XCTAssert(Attribute.content.isEmpty)
+
+    @inlinable init(lower: Direction? = nil, upper: Direction? = nil) {
+        self.lower = lower
+        self.upper = upper
     }
     
-    func testAttributesAreUnique() {
-        XCTAssertEqual(Set(attributes.map(\.rawValue)).count, attributes.count)
+    @inlinable init<T>(from start: Carets<T>, to end: Carets<T>) {
+        self.lower = Direction(from: start.lower, to: end.lower)
+        self.upper = Direction(from: start.upper, to: end.upper)
     }
 }
-
-#endif

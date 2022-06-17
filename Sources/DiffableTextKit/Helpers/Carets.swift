@@ -11,7 +11,11 @@
 // MARK: * Carets
 //*============================================================================*
 
-@usableFromInline struct Carets<Caret> {
+/// One or two carets.
+///
+/// Equal carets represents an upper caret.
+///
+@usableFromInline struct Carets<Caret: Comparable>: Equatable {
     
     //=------------------------------------------------------------------------=
     // MARK: State
@@ -19,7 +23,7 @@
     
     @usableFromInline let lower: Caret
     @usableFromInline let upper: Caret
-    
+        
     //=------------------------------------------------------------------------=
     // MARK: Initializers
     //=------------------------------------------------------------------------=
@@ -27,17 +31,6 @@
     @inlinable init(unchecked: (lower: Caret, upper: Caret)) {
         (self.lower, self.upper) = unchecked
     }
-}
-
-//=----------------------------------------------------------------------------=
-// MARK: + Comparable
-//=----------------------------------------------------------------------------=
-
-extension Carets: Equatable where Caret: Comparable {
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Initializers
-    //=------------------------------------------------------------------------=
     
     @inlinable init(_ caret: Caret) {
         self.init(unchecked: (caret, caret))
@@ -67,14 +60,14 @@ extension Carets: Equatable where Caret: Comparable {
     // MARK: Transformations
     //=------------------------------------------------------------------------=
     
-    @inlinable func map<T>(caret: (Caret) -> T) -> Carets<T> where T: Comparable {
+    @inlinable func map<T>(caret: (Caret) -> T) -> Carets<T> {
         //=--------------------------------------=
         // Return
         //=--------------------------------------=
         self.map(lower: caret, upper: caret)
     }
     
-    @inlinable func map<T>(lower: (Caret) -> T, upper: (Caret) -> T) -> Carets<T> where T: Comparable {
+    @inlinable func map<T>(lower: (Caret) -> T, upper: (Caret) -> T) -> Carets<T> {
         //=--------------------------------------=
         // Single
         //=--------------------------------------=
@@ -89,28 +82,5 @@ extension Carets: Equatable where Caret: Comparable {
         // Return
         //=--------------------------------------=
         return Carets<T>(unchecked: (min, max))
-    }
-}
-
-//=----------------------------------------------------------------------------=
-// MARK: + Direction
-//=----------------------------------------------------------------------------=
-
-extension Carets where Caret == Optional<Direction> {
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Instances
-    //=------------------------------------------------------------------------=
-    
-    @usableFromInline static let none = Self(unchecked: (nil, nil))
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Initializers
-    //=------------------------------------------------------------------------=
-    
-    @inlinable static func directions<T>(from start: Carets<T>, to end: Carets<T>) -> Self where T: Comparable {
-        let lower = Direction(from: start.lower, to: end.lower)
-        let upper = Direction(from: start.upper, to: end.upper)
-        return Self(unchecked: (lower, upper))
     }
 }
