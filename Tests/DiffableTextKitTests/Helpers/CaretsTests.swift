@@ -29,7 +29,7 @@ final class CaretsTests: XCTestCase {
     }
     
     //=------------------------------------------------------------------------=
-    // MARK: Initializers
+    // MARK: Tests x Initializers
     //=------------------------------------------------------------------------=
     
     func testInitUncheckedIsUnchecked() {
@@ -45,7 +45,7 @@ final class CaretsTests: XCTestCase {
     }
     
     //=------------------------------------------------------------------------=
-    // MARK: Transformations
+    // MARK: Tests x Transformations
     //=------------------------------------------------------------------------=
     
     func testCollapseSetsBothCaretsToUpper() {
@@ -57,7 +57,7 @@ final class CaretsTests: XCTestCase {
     }
     
     //=------------------------------------------------------------------------=
-    // MARK: Utilities
+    // MARK: Tests x Utilities
     //=------------------------------------------------------------------------=
     
     func testRangeEqualsLowerToUpper() {

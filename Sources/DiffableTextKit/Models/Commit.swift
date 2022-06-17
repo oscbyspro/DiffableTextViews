@@ -40,7 +40,7 @@ public struct Commit<Value> {
     //=------------------------------------------------------------------------=
     // MARK: Initializers
     //=------------------------------------------------------------------------=
-        
+    
     @inlinable public init<T>() where Value == Optional<T> {
         self.init(nil, Snapshot())
     }

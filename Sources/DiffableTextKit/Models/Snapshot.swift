@@ -26,7 +26,8 @@
 /// the number of characters in its storage string. This is usually a trivial invariant
 /// to maintain, but failure to maintain it will lead to unexpected behavior.
 ///
-public struct Snapshot: BidirectionalCollection, RangeReplaceableCollection {
+public struct Snapshot: BidirectionalCollection, Equatable,
+ExpressibleByArrayLiteral, RangeReplaceableCollection {
     
     //=------------------------------------------------------------------------=
     // MARK: State
@@ -43,6 +44,10 @@ public struct Snapshot: BidirectionalCollection, RangeReplaceableCollection {
     @inlinable public init() {
         self._characters = ""
         self._attributes = []
+    }
+    
+    @inlinable public init(arrayLiteral elements: Symbol...) {
+        self.init(); self.append(contentsOf: elements)
     }
     
     //=------------------------------------------------------------------------=

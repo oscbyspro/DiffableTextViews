@@ -14,29 +14,20 @@
 import XCTest
 
 //*============================================================================*
-// MARK: * Attribute x Tests
+// MARK: * Changes x Tests
 //*============================================================================*
 
-final class AttributeTests: XCTestCase {
+final class ChangesTests: XCTestCase {
     
     //=------------------------------------------------------------------------=
     // MARK: State
     //=------------------------------------------------------------------------=
     
-    let all: [Attribute] = [.virtual, .insertable, .removable, .passthrough]
+    let all: [Changes] = [.style, .value, .focus]
 
     //=------------------------------------------------------------------------=
     // MARK: Tests x Instances
     //=------------------------------------------------------------------------=
-    
-    func testContentIsEmpty() {
-        XCTAssert(Attribute.content.isEmpty)
-        XCTAssertEqual(Attribute.content,[])
-    }
-    
-    func testPhantomIsFull() {
-        XCTAssertEqual(Attribute.phantom, Attribute(all))
-    }
     
     func testRawValuesAreUnique() {
         XCTAssertEqual(Set(all.map(\.rawValue)).count, all.count)
