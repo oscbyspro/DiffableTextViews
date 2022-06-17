@@ -32,6 +32,14 @@ final class SnapshotTests: XCTestCase {
     }
     
     //=------------------------------------------------------------------------=
+    // MARK: Tests x State
+    //=------------------------------------------------------------------------=
+    
+    func testAnchorIsNilByDefault() {
+        XCTAssertEqual(Snapshot("ABC").anchor, nil)
+    }
+    
+    //=------------------------------------------------------------------------=
     // MARK: Tests x Initializers
     //=------------------------------------------------------------------------=
     
@@ -45,6 +53,30 @@ final class SnapshotTests: XCTestCase {
     
     func testInitArrayLiteral() {
         XCTAssertEqual(Snapshot("ABC"), [Symbol("A"), Symbol("B"), Symbol("C")])
+    }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Tests x Transformations x Anchor
+    //=------------------------------------------------------------------------=
+        
+    func testAnchorAtIndex() {
+        var snapshot = Snapshot("ABC")
+        let index = index(1, in: snapshot)
+        
+        snapshot.anchor(at: index)
+        XCTAssertEqual(snapshot.anchor, index)
+        
+        snapshot.anchor(at: nil)
+        XCTAssertEqual(snapshot.anchor, nil)
+    }
+    
+    func testAnchorAtEndIndex() {
+        var snapshot = Snapshot()
+        snapshot.append(Symbol("A"))
+        snapshot.anchorAtEndIndex()
+        snapshot.append(Symbol("B"))
+        snapshot.append(Symbol("C"))
+        XCTAssertEqual(snapshot.anchor, index(1, in: snapshot))
     }
     
     //=------------------------------------------------------------------------=
@@ -98,13 +130,13 @@ final class SnapshotTests: XCTestCase {
     //=------------------------------------------------------------------------=
     
     func testReplaceSubrange() {
-        var snapshot = Snapshot("AXXXE")
+        var snapshot = Snapshot("AxxxE")
         snapshot.replaceSubrange(indices(1 ..< 4, in: snapshot), with: Snapshot("BCD"))
         XCTAssertEqual(snapshot, Snapshot("ABCDE"))
     }
     
     func testReplaceSubrangeWithCharactersDefaultAttributeIsContent() {
-        var snapshot = Snapshot("AXXXE")
+        var snapshot = Snapshot("AxxxE")
         snapshot.replaceSubrange(indices(1 ..< 4, in: snapshot), with: "BCD")
         XCTAssert(snapshot.attributes.allSatisfy({ $0 == .content }))
     }
