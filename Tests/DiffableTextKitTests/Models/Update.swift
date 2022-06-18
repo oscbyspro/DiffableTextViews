@@ -7,35 +7,31 @@
 // See http://www.apache.org/licenses/LICENSE-2.0 for license information.
 //=----------------------------------------------------------------------------=
 
+#if DEBUG
+
+@testable import DiffableTextKit
+
+import XCTest
+
 //*============================================================================*
-// MARK: * Proposal
+// MARK: * Update x Tests
 //*============================================================================*
 
-/// A snapshot and one continuous change that has not yet been applied to it.
-public struct Proposal {
+final class UpdateTests: XCTestCase {
     
     //=------------------------------------------------------------------------=
     // MARK: State
     //=------------------------------------------------------------------------=
     
-    public let snapshot: Snapshot
-    public var replacement: Snapshot
-    public var range: Range<Index>
-    
+    let all: [Update] = [.value, .text, .selection]
+
     //=------------------------------------------------------------------------=
-    // MARK: Initializers
+    // MARK: Tests x Instances
     //=------------------------------------------------------------------------=
     
-    @inlinable init(update snapshot: Snapshot, with  replacement: Snapshot, in range: Range<Index>) {
-        self.snapshot = snapshot; self.replacement = replacement; self.range = range
-    }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Utilities
-    //=------------------------------------------------------------------------=
-    
-    /// Returns a new snapshot with the changes applied to it.
-    @inlinable public func merged() -> Snapshot {
-        var result = snapshot; result.replaceSubrange(range, with: replacement); return result
+    func testRawValuesAreUnique() {
+        XCTAssertEqual(Set(all.map(\.rawValue)).count, all.count)
     }
 }
+
+#endif

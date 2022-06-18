@@ -84,9 +84,9 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
     //*========================================================================*
     
     @MainActor public final class Coordinator: NSObject, UITextFieldDelegate {
-        @usableFromInline typealias Status   = DiffableTextKit.Status<Style>
         @usableFromInline typealias Context  = DiffableTextKit.Context<Style>
-        @usableFromInline typealias Position = DiffableTextKit.Position<UTF16>
+        @usableFromInline typealias Offset   = DiffableTextKit.Offset<UTF16>
+        @usableFromInline typealias Status   = DiffableTextKit.Status<Style>
         @usableFromInline typealias Upstream = DiffableTextKitXUIKit.Upstream<Style>
         
         //=--------------------------------------------------------------------=
@@ -166,8 +166,8 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
             //=----------------------------------=
             attempt: do {
                 let update = try self.context.merge(characters, in:
-                Position(nsrange.lowerBound) ..<
-                Position(nsrange.upperBound))
+                Offset(nsrange.lowerBound) ..<
+                Offset(nsrange.upperBound))
                 //=------------------------------=
                 // Push
                 //=------------------------------=

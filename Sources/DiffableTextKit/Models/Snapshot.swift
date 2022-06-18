@@ -350,15 +350,27 @@ extension Snapshot {
     }
     
     //=------------------------------------------------------------------------=
-    // MARK: Position
+    // MARK: Offset
     //=------------------------------------------------------------------------=
     
-    @inlinable func index<T>(at position: Position<T>) -> Index {
-        T.index(at: position, in: characters)
+    @inlinable func index<T>(at offset: Offset<T>) -> Index {
+        T.index(at: offset, from: startIndex, in: characters)
     }
     
-    @inlinable func position<T>(at index: Index) -> Position<T> {
-        T.position(at: index, in: characters)
+    @inlinable func indices<T>(at offsets: Range<Offset<T>>) -> Range<Index> {
+        let delta = offsets.upperBound - offsets.lowerBound
+        let lower = T.index(at: offsets.lowerBound, from: startIndex, in: characters)
+        return lower ..< T.index(at: delta,         from: lower,      in: characters)
+    }
+    
+    @inlinable func offset<T>(at index: Index) -> Offset<T> {
+        T.distance(from: startIndex, to: index, in: characters)
+    }
+    
+    @inlinable func offsets<T>(at indices: Range<Index>) -> Range<Offset<T>> {
+        let lower = T.distance(from: startIndex,         to: indices.lowerBound, in: characters)
+        let delta = T.distance(from: indices.lowerBound, to: indices.upperBound, in: characters)
+        return lower ..< lower + delta
     }
 }
 

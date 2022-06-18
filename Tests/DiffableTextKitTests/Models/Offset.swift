@@ -7,35 +7,45 @@
 // See http://www.apache.org/licenses/LICENSE-2.0 for license information.
 //=----------------------------------------------------------------------------=
 
+#if DEBUG
+
+@testable import DiffableTextKit
+
+import XCTest
+
 //*============================================================================*
-// MARK: * Position
+// MARK: * Offset x Tests
 //*============================================================================*
 
-public struct Position<Encoding: DiffableTextKit.Encoding>: Comparable {
+final class OffsetTests: XCTestCase {
+    typealias T = Offset<Character>
     
     //=------------------------------------------------------------------------=
-    // MARK: State
-    //=------------------------------------------------------------------------=
-
-    public let offset: Int
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Initializers
+    // MARK: Tests x Utilities
     //=------------------------------------------------------------------------=
     
-    @inlinable public init(_ offset: Int) {
-        self.offset = offset
+    func testEqual() {
+        XCTAssertEqual(   T(3), T(3))
+        XCTAssertNotEqual(T(3), T(7))
+    }
+    
+    func testCompare() {
+        XCTAssertLessThan(   T(3), T(7))
+        XCTAssertGreaterThan(T(7), T(3))
     }
     
     //=------------------------------------------------------------------------=
-    // MARK: Utilities
+    // MARK: Tests x Utilities
     //=------------------------------------------------------------------------=
-
-    @inlinable public static func == (lhs: Self, rhs: Self) -> Bool {
-        lhs.offset == rhs.offset
+    
+    func testAddition() {
+        XCTAssertEqual(T(1) + T(2), T(3))
     }
     
-    @inlinable public static func <  (lhs: Self, rhs: Self) -> Bool {
-        lhs.offset <  rhs.offset
+    func testSubtraction() {
+        XCTAssertEqual(T(3) - T(2), T(1))
     }
 }
+
+#endif
+

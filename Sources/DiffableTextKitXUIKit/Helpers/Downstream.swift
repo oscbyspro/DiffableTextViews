@@ -18,7 +18,7 @@ import UIKit
 //*============================================================================*
 
 @usableFromInline final class Downstream {
-    @usableFromInline typealias Position = DiffableTextKit.Position<UTF16>
+    @usableFromInline typealias Offset = DiffableTextKit.Offset<UTF16>
 
     //=------------------------------------------------------------------------=
     // MARK: State
@@ -35,9 +35,9 @@ import UIKit
         set { view.text  = newValue }
     }
     
-    @inlinable var selection: Range<Position> {
-        get { view.range(view.selectedTextRange!) }
-        set { view.selectedTextRange = view.uirange(newValue) }
+    @inlinable var selection: Range<Offset> {
+        get { view.offsets(at: view.selectedTextRange!) }
+        set { view.selectedTextRange = view.positions(at: newValue) }
     }
     
     @inlinable var focus: Focus {
@@ -51,14 +51,6 @@ import UIKit
     @inlinable var delegate: UITextFieldDelegate? {
         get { view.delegate }
         set { view.delegate = newValue }
-    }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Accessors
-    //=------------------------------------------------------------------------=
-    
-    @inlinable var size: Position {
-        view.position(view.endOfDocument)
     }
 }
 

@@ -12,7 +12,7 @@
 //*===========================================================================
 
 /// A model used to collect upstream and downstream values.
-public struct Status<Style: DiffableTextStyle> {
+public struct Status<Style: DiffableTextStyle>: Equatable {
     public typealias Value = Style.Value
     
     //=------------------------------------------------------------------------=
@@ -37,6 +37,7 @@ public struct Status<Style: DiffableTextStyle> {
     // MARK: Transformations
     //=------------------------------------------------------------------------=
     
+    /// Merges member-wise inequalities.
     @inlinable public mutating func merge(_ other: Self) -> Changes {
         let changes = (self .!= other)
         //=--------------------------------------=

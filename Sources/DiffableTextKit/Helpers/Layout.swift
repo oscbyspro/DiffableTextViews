@@ -37,16 +37,16 @@
     // MARK: Accessors
     //=------------------------------------------------------------------------=
     
-    @inlinable func indices<T>(at positions: Carets<Position<T>>) -> Carets<Index> {
-        positions.map(caret: snapshot.index(at:))
+    @inlinable func indices<T>(at offsets: Carets<Offset<T>>) -> Carets<Index> {
+        Carets(snapshot.indices(at: offsets.range))
     }
 
-    @inlinable func positions<T>(at indices: Carets<Index>) -> Carets<Position<T>> {
-        indices.map(caret: snapshot.position(at:))
+    @inlinable func offsets<T>(at indices: Carets<Index>) -> Carets<Offset<T>> {
+        Carets(snapshot.offsets(at: indices.range))        
     }
     
-    @inlinable func selection<T>(as type: Position<T>.Type = Position<T>.self) -> Carets<Position<T>> {
-        positions(at: selection)
+    @inlinable func selection<T>(as type: Offset<T>.Type = Offset<T>.self) -> Carets<Offset<T>> {
+        offsets(at: selection)
     }
 
     //=------------------------------------------------------------------------=
@@ -70,7 +70,7 @@
     // MARK: Transformations
     //=------------------------------------------------------------------------=
     
-    @inlinable mutating func merge<T>(selection: Carets<Position<T>>, momentums: Bool) {
+    @inlinable mutating func merge<T>(selection: Carets<Offset<T>>, momentums: Bool) {
         //=--------------------------------------=
         // Values
         //=--------------------------------------=

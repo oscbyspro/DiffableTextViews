@@ -12,52 +12,68 @@
 //*============================================================================*
 
 public protocol Encoding {
-    
+        
     //=------------------------------------------------------------------------=
-    // MARK: Requirements
+    // MARK: Utilities
     //=------------------------------------------------------------------------=
-            
-    @inlinable static func index(at position: Position<Self>, in characters: String) -> Index
     
-    @inlinable static func position(at index: Index, in characters: String) -> Position<Self>
+    @inlinable static func index(
+    at distance: Offset<Self>, from start: Index,
+    in characters: some StringProtocol) -> Index
+    
+    @inlinable static func distance(
+    from start: Index, to end: Index,
+    in characters: some StringProtocol) -> Offset<Self>
 }
 
-//=----------------------------------------------------------------------------=
-// MARK: + Character
-//=----------------------------------------------------------------------------=
+//*============================================================================*
+// MARK: * Encoding x Character
+//*============================================================================*
 
 extension Character: Encoding {
-
+    
     //=------------------------------------------------------------------------=
-    // MARK: Index, Position
+    // MARK: Utilities
     //=------------------------------------------------------------------------=
     
-    @inlinable public static func index(at position: Position<Self>, in characters: String) -> Index {
-        Index(characters.index(characters.startIndex, offsetBy: position.offset), as: position.offset)
+    @inlinable public static func index(
+    at distance: Offset<Self>, from start: Index,
+    in characters: some StringProtocol) -> Index {
+        let count = Int(distance)
+        let character = characters.index(start.character, offsetBy: count)
+        return Index(character, as: start.attribute + count)
     }
     
-    @inlinable public static func position(at index: Index, in characters: String) -> Position<Self> {
-        Position(index.attribute)
+    @inlinable public static func distance(
+    from start: Index,  to end: Index,
+    in characters: some StringProtocol) -> Offset<Self> {
+        return Offset(end.attribute - start.attribute)
     }
 }
 
-//=----------------------------------------------------------------------------=
-// MARK: + UTF16
-//=----------------------------------------------------------------------------=
+//*============================================================================*
+// MARK: * Encoding x UTF16
+//*============================================================================*
 
 extension UTF16: Encoding {
     
     //=------------------------------------------------------------------------=
-    // MARK: Index, Position
+    // MARK: Utilities
     //=------------------------------------------------------------------------=
     
-    @inlinable public static func index(at position: Position<Self>, in characters: String) -> Index {
-        let character = Swift.min(characters.endIndex,
-        String.Index(utf16Offset: position.offset, in: characters))
-        return Index(character, as: characters[..<character].count)
+    @inlinable public static func index(
+    at distance: Offset<Self>, from start: Index,
+    in characters: some StringProtocol) -> Index {
+        let character = min(
+        characters.endIndex, // because Character ≤ UTF16 ≤ Character + 1
+        characters.utf16.index(start.character, offsetBy: Int(distance)))
+        let count = characters.distance(from: start.character, to: character)
+        return Index(character, as: start.attribute + count)
     }
     
-    @inlinable public static func position(at index: Index, in characters: String) -> Position<Self> {
-        Position(characters[..<index.character].utf16.count)
+    @inlinable public static func distance(
+    from start: Index,  to end: Index,
+    in characters: some StringProtocol) -> Offset<Self> {
+        return Offset(characters.utf16.distance(from: start.character, to: end.character))
     }
 }

@@ -7,122 +7,92 @@
 // See http://www.apache.org/licenses/LICENSE-2.0 for license information.
 //=----------------------------------------------------------------------------=
 
-#if DEBUG
-#if canImport(UIKit)
-
-@testable import DiffableTextKitXUIKit
-
-import XCTest
-
 //*============================================================================*
-// MARK: * Helpers x Downstream
+// MARK: * Offset
 //*============================================================================*
 
-/// ```
-/// Asserts: UITextField/offset(from:to:) is O(1).
-/// ```
-final class HelpersTestsXDownstream: XCTestCase {
+public struct Offset<Encoding: DiffableTextKit.Encoding>: Comparable, ExpressibleByIntegerLiteral {
     
     //=------------------------------------------------------------------------=
     // MARK: State
     //=------------------------------------------------------------------------=
     
-    let downstream = Downstream()
+    @usableFromInline let distance: Int
     
     //=------------------------------------------------------------------------=
-    // MARK: State
-    //=------------------------------------------------------------------------=
-
-    lazy var alphabet    = "ABCDEFGHIJJKLMNOPQRSTUVWXYZ"
-    lazy var alphabet10  = String(repeating: alphabet, count: 10)
-    lazy var alphabet100 = String(repeating: alphabet, count: 100)
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Setup
+    // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    override func setUp() {
-        super.setUp()
-        downstream.text = String()
+    @inlinable public init(_ distance: Int) {
+        self.distance = distance
+    }
+    
+    @inlinable public init(integerLiteral distance: Int) {
+        self.distance = distance
     }
     
     //=------------------------------------------------------------------------=
     // MARK: Utilities
     //=------------------------------------------------------------------------=
     
-    func size() -> Int {
-        Int(downstream.view.offset(at: downstream.view.endOfDocument))
+    @inlinable public static func < (lhs: Self, rhs: Self) -> Bool {
+        lhs.distance < rhs.distance
     }
-}
-
-//=----------------------------------------------------------------------------=
-// MARK: + Position
-//=----------------------------------------------------------------------------=
-
-extension HelpersTestsXDownstream {
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Tests
-    //=------------------------------------------------------------------------=
-    
-    func testPositionsAreMeasuredInUTF16() {
-        downstream.text = "🇸🇪"
-        //=--------------------------------------=
-        // Assert
-        //=--------------------------------------=
-        XCTAssertEqual(8, downstream.text.utf8 .count)
-        XCTAssertEqual(4, downstream.text.utf16.count)
-        XCTAssertEqual(4, size())
-    }
-}
-
-//=----------------------------------------------------------------------------=
-// MARK: + Measurements
-//=----------------------------------------------------------------------------=
-
-extension HelpersTestsXDownstream {
     
     //=------------------------------------------------------------------------=
     // MARK: Utilities
     //=------------------------------------------------------------------------=
     
-    func loopOverSize() {
-        for _ in 0 ..< 1 {
-            _ = size()
-        }
-    }
-
-    //=------------------------------------------------------------------------=
-    // MARK: Tests
-    //=------------------------------------------------------------------------=
-    
-    /// 1,000,000 iterations:
-    ///
-    /// - 0.909 sec.
-    ///
-    func testMeasure1__() {
-        downstream.view.text = alphabet
-        measure(loopOverSize)
+    @inlinable public static func + (lhs: Self, rhs: Self) -> Self {
+        Self(lhs.distance + rhs.distance)
     }
     
-    /// 1,000,000 iterations:
-    ///
-    /// - 0.914 sec.
-    ///
-    func testMeasure10_() {
-        downstream.view.text = alphabet10
-        measure(loopOverSize)
-    }
-    
-    /// 1,000,000 iterations:
-    ///
-    /// - 0.917 sec.
-    ///
-    func testMeasure100() {
-        downstream.view.text = alphabet100
-        measure(loopOverSize)
+    @inlinable public static func - (lhs: Self, rhs: Self) -> Self {
+        Self(lhs.distance - rhs.distance)
     }
 }
 
-#endif
-#endif
+//=----------------------------------------------------------------------------=
+// MARK: + Character
+//=----------------------------------------------------------------------------=
+
+extension Offset where Encoding == Character {
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Initializers
+    //=------------------------------------------------------------------------=
+    
+    @inlinable public static func character(_ distance: Int) -> Self {
+        Self(distance)
+    }
+}
+
+//=----------------------------------------------------------------------------=
+// MARK: + UTF16
+//=----------------------------------------------------------------------------=
+
+extension Offset where Encoding == UTF16 {
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Initializers
+    //=------------------------------------------------------------------------=
+    
+    @inlinable public static func utf16(_ distance: Int) -> Self {
+        Self(distance)
+    }
+}
+
+//*============================================================================*
+// MARK: * Offset x Int
+//*============================================================================*
+
+extension Int {
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Initializers
+    //=------------------------------------------------------------------------=
+    
+    @inlinable @inline(__always) public init<T>(_ offset: Offset<T>) {
+        self = offset.distance
+    }
+}

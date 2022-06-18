@@ -163,7 +163,7 @@ extension Context {
     }
     
     @inlinable @inline(__always)
-    public func selection<T>(as position: Position<T>.Type = Position<T>.self) -> Range<Position<T>> {
+    public func selection<T>(as type: Offset<T>.Type = Offset<T>.self) -> Range<Offset<T>> {
         layout.selection().range
     }
 }
@@ -237,13 +237,13 @@ extension Context {
     //=------------------------------------------------------------------------=
     
     @inlinable public mutating func merge<T>(_ characters: String,
-    in range: Range<Position<T>>) throws -> Update {
+    in range: Range<Offset<T>>) throws -> Update {
         let previous = value
         //=--------------------------------------=
         // Values
         //=--------------------------------------=
         let commit = try style.resolve(Proposal(
-        update: layout.snapshot, with: characters,
+        update: layout.snapshot, with: Snapshot(characters),
         in: layout.indices(at: Carets(range)).range))
         //=--------------------------------------=
         // Update
@@ -261,7 +261,7 @@ extension Context {
     //=------------------------------------------------------------------------=
     
     @inlinable public mutating func merge<T>(
-    selection: Range<Position<T>>, momentums: Bool) -> Update {
+    selection: Range<Offset<T>>, momentums: Bool) -> Update {
         //=--------------------------------------=
         // Update
         //=--------------------------------------=
