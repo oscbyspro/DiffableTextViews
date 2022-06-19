@@ -12,7 +12,7 @@
 //*============================================================================*
 
 /// A character and an attribute describing its behavior.
-public struct Symbol: Equatable {
+public struct Symbol: Equatable, ExpressibleByExtendedGraphemeClusterLiteral {
     
     //=------------------------------------------------------------------------=
     // MARK: State
@@ -28,6 +28,10 @@ public struct Symbol: Equatable {
     @inlinable public init(_ character: Character, as attribute: Attribute = .content) {
         self.character = character
         self.attribute = attribute
+    }
+    
+    @inlinable public init(extendedGraphemeClusterLiteral character: Character) {
+        self.init(character)
     }
     
     //=------------------------------------------------------------------------=

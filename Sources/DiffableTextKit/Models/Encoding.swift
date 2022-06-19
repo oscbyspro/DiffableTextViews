@@ -17,13 +17,13 @@ public protocol Encoding {
     // MARK: Utilities
     //=------------------------------------------------------------------------=
     
-    @inlinable static func index(
-    at distance: Offset<Self>, from start: Index,
-    in characters: some StringProtocol) -> Index
-    
     @inlinable static func distance(
     from start: Index, to end: Index,
-    in characters: some StringProtocol) -> Offset<Self>
+    in snapshot: Snapshot) -> Offset<Self>
+    
+    @inlinable static func index(
+    at distance: Offset<Self>, from start: Index,
+    in snapshot: Snapshot) -> Index
 }
 
 //*============================================================================*
@@ -36,18 +36,16 @@ extension Character: Encoding {
     // MARK: Utilities
     //=------------------------------------------------------------------------=
     
-    @inlinable public static func index(
-    at distance: Offset<Self>, from start: Index,
-    in characters: some StringProtocol) -> Index {
-        let count = Int(distance)
-        let character = characters.index(start.character, offsetBy: count)
-        return Index(character, as: start.attribute + count)
+    @inlinable public static func distance(
+    from start: Index,to end: Index,
+    in snapshot: Snapshot) -> Offset<Self> {
+        .character(end.attribute - start.attribute)
     }
     
-    @inlinable public static func distance(
-    from start: Index,  to end: Index,
-    in characters: some StringProtocol) -> Offset<Self> {
-        return Offset(end.attribute - start.attribute)
+    @inlinable public static func index(
+    at distance: Offset<Self>, from start: Index,
+    in snapshot: Snapshot) -> Index {
+        snapshot.index(start, offsetBy: Int(distance))
     }
 }
 
@@ -61,19 +59,61 @@ extension UTF16: Encoding {
     // MARK: Utilities
     //=------------------------------------------------------------------------=
     
-    @inlinable public static func index(
-    at distance: Offset<Self>, from start: Index,
-    in characters: some StringProtocol) -> Index {
-        let character = min(
-        characters.endIndex, // because Character ≤ UTF16 ≤ Character + 1
-        characters.utf16.index(start.character, offsetBy: Int(distance)))
-        let count = characters.distance(from: start.character, to: character)
-        return Index(character, as: start.attribute + count)
-    }
-    
     @inlinable public static func distance(
     from start: Index,  to end: Index,
-    in characters: some StringProtocol) -> Offset<Self> {
-        return Offset(characters.utf16.distance(from: start.character, to: end.character))
+    in snapshot: Snapshot) -> Offset<Self> {
+        .utf16(snapshot.characters.utf16.distance(
+        from: start.character, to: end.character))
+    }
+    
+    @inlinable public static func index(
+    at distance: Offset<Self>, from start: Index,
+    in snapshot: Snapshot) -> Index {
+        //=--------------------------------------=
+        // State
+        //=--------------------------------------=
+        var index = start
+        var distance = distance
+        //=--------------------------------------=
+        // Forwards
+        //=--------------------------------------=
+        if distance > 0 {
+            forwards: while true {
+                distance -= .utf16(snapshot.characters[index.character].utf16.count)
+                //=------------------------------=
+                // None
+                //=------------------------------=
+                if distance > 0 {
+                    snapshot.formIndex(after: &index)
+                    continue forwards
+                }
+                //=------------------------------=
+                // Some
+                //=------------------------------=
+                if distance == 0 {
+                    snapshot.formIndex(after: &index)
+                }
+                //=------------------------------=
+                // Some
+                //=------------------------------=
+                return index
+            }
+        //=--------------------------------------=
+        // Backwards
+        //=--------------------------------------=
+        } else if distance < 0 {
+            backwards: while true {
+                snapshot.formIndex(before: &index)
+                distance += .utf16(snapshot.characters[index.character].utf16.count)
+                //=------------------------------=
+                // Some
+                //=------------------------------=
+                if distance >= 0 { return index }
+            }
+        }
+        //=--------------------------------------=
+        // Index
+        //=--------------------------------------=
+        return index
     }
 }

@@ -15,7 +15,7 @@
 ///
 /// It uses conditional compilation such that it has no size in RELEASE mode.
 ///
-public struct Info: CustomStringConvertible, Error {
+public struct Info: Error, Equatable, CustomStringConvertible {
     @usableFromInline static let none = "[REDACTED]"
     
     //=------------------------------------------------------------------------=

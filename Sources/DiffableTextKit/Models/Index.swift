@@ -35,7 +35,7 @@ public struct Index: Comparable {
         self.character = character
         self.attribute = attribute
     }
-
+    
     //=--------------------------------------------------------------------=
     // MARK: Utilities
     //=--------------------------------------------------------------------=

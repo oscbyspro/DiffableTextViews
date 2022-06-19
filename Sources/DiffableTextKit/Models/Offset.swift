@@ -17,17 +17,24 @@ public struct Offset<Encoding: DiffableTextKit.Encoding>: Comparable, Expressibl
     // MARK: State
     //=------------------------------------------------------------------------=
     
-    @usableFromInline let distance: Int
+    @usableFromInline var distance: Int
     
     //=------------------------------------------------------------------------=
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable public init(_ distance: Int) {
+    @inlinable @inline(__always)
+    public init(_ distance: Int) {
         self.distance = distance
     }
     
-    @inlinable public init(integerLiteral distance: Int) {
+    @inlinable @inline(__always)
+    public init(_ distance: Int, as encoding: Encoding.Type) {
+        self.distance = distance
+    }
+    
+    @inlinable @inline(__always)
+    public init(integerLiteral distance: Int) {
         self.distance = distance
     }
     
@@ -35,20 +42,29 @@ public struct Offset<Encoding: DiffableTextKit.Encoding>: Comparable, Expressibl
     // MARK: Utilities
     //=------------------------------------------------------------------------=
     
-    @inlinable public static func < (lhs: Self, rhs: Self) -> Bool {
+    @inlinable @inline(__always)
+    public static func < (lhs: Self, rhs: Self) -> Bool {
         lhs.distance < rhs.distance
     }
     
-    //=------------------------------------------------------------------------=
-    // MARK: Utilities
-    //=------------------------------------------------------------------------=
-    
-    @inlinable public static func + (lhs: Self, rhs: Self) -> Self {
+    @inlinable @inline(__always)
+    public static func + (lhs: Self, rhs: Self) -> Self {
         Self(lhs.distance + rhs.distance)
     }
     
-    @inlinable public static func - (lhs: Self, rhs: Self) -> Self {
+    @inlinable @inline(__always)
+    public static func - (lhs: Self, rhs: Self) -> Self {
         Self(lhs.distance - rhs.distance)
+    }
+    
+    @inlinable @inline(__always)
+    public static func += (lhs: inout Self, rhs: Self) {
+        lhs = lhs + rhs
+    }
+    
+    @inlinable @inline(__always)
+    public static func -= (lhs: inout Self, rhs: Self) {
+        lhs = lhs - rhs
     }
 }
 
@@ -62,7 +78,8 @@ extension Offset where Encoding == Character {
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable public static func character(_ distance: Int) -> Self {
+    @inlinable @inline(__always)
+    public static func character(_ distance: Int) -> Self {
         Self(distance)
     }
 }
@@ -77,7 +94,8 @@ extension Offset where Encoding == UTF16 {
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable public static func utf16(_ distance: Int) -> Self {
+    @inlinable @inline(__always)
+    public static func utf16(_ distance: Int) -> Self {
         Self(distance)
     }
 }
@@ -92,7 +110,8 @@ extension Int {
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable @inline(__always) public init<T>(_ offset: Offset<T>) {
+    @inlinable @inline(__always)
+    public init<T>(_ offset: Offset<T>) {
         self = offset.distance
     }
 }

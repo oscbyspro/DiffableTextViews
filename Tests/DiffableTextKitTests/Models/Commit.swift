@@ -23,20 +23,20 @@ final class CommitTests: XCTestCase {
     // MARK: Tests x Initializers
     //=------------------------------------------------------------------------=
     
-    func testInitOptionalIsNil() {
+    func testInitOptionalWithoutArgumentsIsNilAndEmpty() {
         let commit = Commit<Int?>()
-        XCTAssertEqual(commit.value,  nil)
+        XCTAssertNil(commit.value)
         XCTAssert(commit.snapshot.isEmpty)
     }
     
-    func testInitOptionalIsEqualToNonoptionalArgument() {
-        let nonoptional = Commit<Int>(3, Snapshot("3"))
+    func testInitOptionalIsWithNonoptionalArgumentEqualsArgument() {
+        let nonoptional = Commit<Int>(3, "3")
         let optional = Commit<Optional<Int>>(nonoptional)
         XCTAssertEqual(optional.value, nonoptional.value)
         XCTAssertEqual(optional.snapshot, nonoptional.snapshot)
     }
 
-    func testInitRangeReplaceableCollectionIsEmpty() {
+    func testInitRangeReplaceableCollectionWithoutArgumentsIsEmpty() {
         let commit = Commit<[Int]>()
         XCTAssert(commit.value.isEmpty)
         XCTAssert(commit.snapshot.isEmpty)

@@ -14,33 +14,46 @@
 import XCTest
 
 //*============================================================================*
-// MARK: * Attribute x Tests
+// MARK: * Symbol x Tests
 //*============================================================================*
 
-final class AttributeTests: XCTestCase {
+final class SymbolTests: XCTestCase {
+    typealias T = Offset<Character>
     
     //=------------------------------------------------------------------------=
-    // MARK: State
+    // MARK: Tests x Initializers
     //=------------------------------------------------------------------------=
     
-    let all: [Attribute] = [.virtual, .insertable, .removable, .passthrough]
-
-    //=------------------------------------------------------------------------=
-    // MARK: Tests x Instances
-    //=------------------------------------------------------------------------=
-    
-    func testContentInstanceIsEmpty() {
-        XCTAssert(Attribute.content.isEmpty)
-        XCTAssertEqual(Attribute.content,[])
+    func testInitDefaultAttributeIsContent() {
+        XCTAssertEqual(Symbol("X").attribute, .content)
     }
     
-    func testPhantomInstanceIsFull() {
-        XCTAssertEqual(Attribute.phantom, Attribute(all))
+    func testInitAsExtendedGraphemeClusterLiteral() {
+        XCTAssertEqual("3", Symbol("3"))
     }
     
-    func testRawValuesAreUnique() {
-        XCTAssertEqual(Set(all.map(\.rawValue)).count, all.count)
+    //=------------------------------------------------------------------------=
+    // MARK: Tests x Accessors
+    //=------------------------------------------------------------------------=
+    
+    func testVirtual() {
+        XCTAssert(Symbol("X", as: .phantom).virtual)
+    }
+    
+    func testNonvirtual() {
+        XCTAssert(Symbol("X", as: .content).nonvirtual)
+    }
+    
+    func testContainsCharacter() {
+        XCTAssert(     Symbol("X").contains("X"))
+        XCTAssertFalse(Symbol("X").contains("Y"))
+    }
+    
+    func testContainsAttribute() {
+        XCTAssert(     Symbol("X", as: .insertable).contains(.insertable))
+        XCTAssertFalse(Symbol("X", as: .insertable).contains(.removable ))
     }
 }
 
 #endif
+

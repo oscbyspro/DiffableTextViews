@@ -28,9 +28,9 @@ extension UITextField {
     }
     
     @inlinable func offsets(at positions: UITextRange) -> Range<Offset> {
-        let lower = self.offset(from: self.beginningOfDocument, to: positions.start)
-        let delta = self.offset(from: positions.start,          to: positions  .end)
-        return Offset(lower) ..< Offset(lower + delta)
+        let lower = self.offset(at:   positions.start)
+        let count = self.offset(from: positions.start, to: positions.end)
+        return lower ..< lower + Offset(count)
     }
     
     @inlinable func position(at offset: Offset) -> UITextPosition {
@@ -38,8 +38,9 @@ extension UITextField {
     }
     
     @inlinable func positions(at offsets: Range<Offset>) -> UITextRange {
-        let lower = self.position(from: self.beginningOfDocument, offset: Int(offsets.lowerBound))!
-        let upper = self.position(from: lower, offset: Int(offsets.upperBound-offsets.lowerBound))!
+        let lower = self.position(at: offsets.lowerBound)
+        let count = Int(offsets.upperBound-offsets.lowerBound)
+        let upper = self.position(from: lower, offset: count)!
         return self.textRange(from: lower, to: upper)!
     }
 }

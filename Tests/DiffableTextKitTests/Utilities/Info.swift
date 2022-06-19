@@ -7,66 +7,59 @@
 // See http://www.apache.org/licenses/LICENSE-2.0 for license information.
 //=----------------------------------------------------------------------------=
 
-#if DEBUG
-
-@testable import DiffableTextKit
+import DiffableTextKit
 
 import XCTest
 
 //*============================================================================*
-// MARK: * Offset x Tests
+// MARK: * Info x Tests
 //*============================================================================*
 
-final class OffsetTests: XCTestCase {
-    typealias T = Offset<Character>
+final class InfoTests: XCTestCase {
     
     //=------------------------------------------------------------------------=
-    // MARK: Tests x Utilities
+    // MARK: Helpers
     //=------------------------------------------------------------------------=
     
-    func testEqual() {
-        XCTAssertEqual(   T(3), T(3))
-        XCTAssertNotEqual(T(3), T(7))
+    func DEBUG() throws {
+        #if !DEBUG
+        throw XCTSkip()
+        #endif
     }
     
-    func testCompare() {
-        XCTAssertLessThan(   T(3), T(7))
-        XCTAssertGreaterThan(T(7), T(3))
-    }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Tests x Utilities
-    //=------------------------------------------------------------------------=
-    
-    func testAddition() {
-        XCTAssertEqual(T(1) + T(2), T(3))
-    }
-    
-    func testAdditionInout() {
-        var offset = T(1)
-        offset    += T(2)
-        XCTAssertEqual(offset, T(3))
-    }
-    
-    func testSubtraction() {
-        XCTAssertEqual(T(3) - T(2), T(1))
-    }
-    
-    func testSubtractionInout() {
-        var offset = T(3)
-        offset    -= T(2)
-        XCTAssertEqual(offset, T(1))
+    func RELEASE() throws {
+        #if DEBUG
+        throw XCTSkip()
+        #endif
     }
     
     //=------------------------------------------------------------------------=
-    // MARK: Tests x Int
+    // MARK: Tests x DEBUG
     //=------------------------------------------------------------------------=
     
-    func testIntInit() {
-        let offset = T(3)
-        XCTAssertEqual(Int(offset), offset.distance)
+    func testHasSomeSizeInDEBUG() throws {
+        try DEBUG()
+        XCTAssertGreaterThan(MemoryLayout<Info>.size, 0)
+    }
+    
+    func testIsTransparentInDEBUG() throws {
+        try DEBUG()
+        XCTAssertEqual(   Info("Secret"), Info("Secret"))
+        XCTAssertNotEqual(Info("Secret"), Info("xxxxxx"))
+    }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Tests x RELEASE
+    //=------------------------------------------------------------------------=
+    
+    func testHasZeroSizeInRELEASE() throws {
+        try RELEASE()
+        XCTAssertEqual(MemoryLayout<Info>.size, 0)
+    }
+    
+    func testIsOpaqueInRELEASE() throws {
+        try RELEASE()
+        XCTAssertEqual(Info("Secret"), Info("ABC"))
+        XCTAssertEqual(Info("Secret"), Info("XYZ"))
     }
 }
-
-#endif
-

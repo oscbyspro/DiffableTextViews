@@ -14,32 +14,19 @@
 import XCTest
 
 //*============================================================================*
-// MARK: * Attribute x Tests
+// MARK: * Void x Tests
 //*============================================================================*
 
-final class AttributeTests: XCTestCase {
+final class _VoidTests: XCTestCase {
     
     //=------------------------------------------------------------------------=
-    // MARK: State
+    // MARK: Tests
     //=------------------------------------------------------------------------=
     
-    let all: [Attribute] = [.virtual, .insertable, .removable, .passthrough]
-
-    //=------------------------------------------------------------------------=
-    // MARK: Tests x Instances
-    //=------------------------------------------------------------------------=
-    
-    func testContentInstanceIsEmpty() {
-        XCTAssert(Attribute.content.isEmpty)
-        XCTAssertEqual(Attribute.content,[])
-    }
-    
-    func testPhantomInstanceIsFull() {
-        XCTAssertEqual(Attribute.phantom, Attribute(all))
-    }
-    
-    func testRawValuesAreUnique() {
-        XCTAssertEqual(Set(all.map(\.rawValue)).count, all.count)
+    func testIsSimilarToVoid() {
+        XCTAssertEqual(MemoryLayout<_Void>.size,      MemoryLayout<Void>.size)
+        XCTAssertEqual(MemoryLayout<_Void>.stride,    MemoryLayout<Void>.stride)
+        XCTAssertEqual(MemoryLayout<_Void>.alignment, MemoryLayout<Void>.alignment)
     }
 }
 

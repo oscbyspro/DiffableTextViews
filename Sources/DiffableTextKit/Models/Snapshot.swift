@@ -26,8 +26,11 @@
 /// the number of characters in its storage string. This is usually a trivial invariant
 /// to maintain, but failure to maintain it will lead to unexpected behavior.
 ///
-public struct Snapshot: BidirectionalCollection, Equatable,
-ExpressibleByArrayLiteral, RangeReplaceableCollection {
+public struct Snapshot: Equatable,
+BidirectionalCollection,
+RangeReplaceableCollection,
+ExpressibleByArrayLiteral,
+ExpressibleByStringLiteral {
     
     //=------------------------------------------------------------------------=
     // MARK: State
@@ -36,18 +39,22 @@ ExpressibleByArrayLiteral, RangeReplaceableCollection {
     @usableFromInline var _characters: String
     @usableFromInline var _attributes: [Attribute]
     @usableFromInline var _anchor: Self.Index?
-
+    
     //=------------------------------------------------------------------------=
     // MARK: Initializers
     //=------------------------------------------------------------------------=
-
+    
     @inlinable public init() {
         self._characters = ""
         self._attributes = []
     }
     
     @inlinable public init(arrayLiteral elements: Symbol...) {
-        self.init(); self.append(contentsOf: elements)
+        self.init(elements)
+    }
+    
+    @inlinable public init(stringLiteral characters: String) {
+        self.init(characters)
     }
     
     //=------------------------------------------------------------------------=
@@ -267,7 +274,7 @@ extension Snapshot {
     //=------------------------------------------------------------------------=
     // MARK: Replace
     //=------------------------------------------------------------------------=
-
+    
     @inlinable public mutating func replaceSubrange(_ indices: Range<Index>,
     with elements: some Collection<Symbol>) {
         self.replaceSubrange(indices,
@@ -344,33 +351,52 @@ extension Snapshot {
     @inlinable func peek(ahead index: Index) -> Index? {
         index != endIndex ? index : nil
     }
-
+    
     @inlinable func peek(behind index: Index) -> Index? {
         index != startIndex ? self.index(before: index) : nil
     }
+}
+
+//=----------------------------------------------------------------------------=
+// MARK: + Offset
+//=----------------------------------------------------------------------------=
+
+extension Snapshot {
     
     //=------------------------------------------------------------------------=
-    // MARK: Offset
+    // MARK: Utilities
     //=------------------------------------------------------------------------=
+        
+    @inlinable func offset<T>(from start: Index, to end: Index, as type: T.Type = T.self) -> Offset<T> {
+        T.distance(from: start, to: end, in: self)
+    }
+        
+    @inlinable func offset<T>(at index: Index, as type: T.Type = T.self) -> Offset<T> {
+        T.distance(from: self.startIndex, to: index, in: self)
+    }
+    
+    @inlinable func offsets<T>(at indices: Range<Index>, as type: T.Type = T.self) -> Range<Offset<T>> {
+        let lower = T.distance(from: self.startIndex,    to: indices.lowerBound, in: self)
+        let count = T.distance(from: indices.lowerBound, to: indices.upperBound, in: self)
+        return lower ..< lower + count
+    }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Utilities
+    //=------------------------------------------------------------------------=
+    
+    @inlinable func index<T>(at offset: Offset<T>, from start: Index) -> Index {
+        T.index(at: offset, from: start, in: self)
+    }
     
     @inlinable func index<T>(at offset: Offset<T>) -> Index {
-        T.index(at: offset, from: startIndex, in: characters)
+        T.index(at: offset, from: self.startIndex, in: self)
     }
     
     @inlinable func indices<T>(at offsets: Range<Offset<T>>) -> Range<Index> {
-        let delta = offsets.upperBound - offsets.lowerBound
-        let lower = T.index(at: offsets.lowerBound, from: startIndex, in: characters)
-        return lower ..< T.index(at: delta,         from: lower,      in: characters)
-    }
-    
-    @inlinable func offset<T>(at index: Index) -> Offset<T> {
-        T.distance(from: startIndex, to: index, in: characters)
-    }
-    
-    @inlinable func offsets<T>(at indices: Range<Index>) -> Range<Offset<T>> {
-        let lower = T.distance(from: startIndex,         to: indices.lowerBound, in: characters)
-        let delta = T.distance(from: indices.lowerBound, to: indices.upperBound, in: characters)
-        return lower ..< lower + delta
+        let count = offsets.upperBound - offsets.lowerBound
+        let lower = T.index(at: offsets.lowerBound, from: self.startIndex, in: self)
+        return lower ..< T.index(at: count, from: lower, in: self)
     }
 }
 
@@ -441,7 +467,7 @@ extension Snapshot {
     @inlinable func caret(from index: Index, forwardsThrough target: Target) -> Index? {
         caret(from: index, forwardsTo: target).map(index(after:))
     }
-
+    
     @inlinable func caret(from index: Index, backwardsTo target: Target) -> Index? {
         caret(from: index, backwardsThrough: target).map(index(after:))
     }
