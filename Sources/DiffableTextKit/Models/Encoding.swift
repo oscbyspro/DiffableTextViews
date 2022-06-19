@@ -69,23 +69,19 @@ extension UTF16: Encoding {
     @inlinable public static func index(
     at distance: Offset<Self>, from start: Index,
     in snapshot: Snapshot) -> Index {
-        //=--------------------------------------=
-        // State
-        //=--------------------------------------=
-        var index = start
-        var distance = distance
+        var index = start; var distance = distance
         //=--------------------------------------=
         // Forwards
         //=--------------------------------------=
         if distance > 0 {
-            forwards: while true {
+            while true {
                 distance -= .utf16(snapshot.characters[index.character].utf16.count)
                 //=------------------------------=
                 // None
                 //=------------------------------=
                 if distance > 0 {
                     snapshot.formIndex(after: &index)
-                    continue forwards
+                    continue
                 }
                 //=------------------------------=
                 // Some
@@ -93,27 +89,25 @@ extension UTF16: Encoding {
                 if distance == 0 {
                     snapshot.formIndex(after: &index)
                 }
-                //=------------------------------=
-                // Some
-                //=------------------------------=
+
                 return index
             }
+        }
         //=--------------------------------------=
         // Backwards
         //=--------------------------------------=
-        } else if distance < 0 {
-            backwards: while true {
+        else if distance < 0 {
+            while true {
                 snapshot.formIndex(before: &index)
                 distance += .utf16(snapshot.characters[index.character].utf16.count)
                 //=------------------------------=
                 // Some
                 //=------------------------------=
-                if distance >= 0 { return index }
+                if distance >= 0 { return  index }
             }
-        }
         //=--------------------------------------=
-        // Index
+        // Return Start Because Distance Is Zero
         //=--------------------------------------=
-        return index
+        } else { return start }
     }
 }
