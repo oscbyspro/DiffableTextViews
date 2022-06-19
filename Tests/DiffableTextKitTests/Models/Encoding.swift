@@ -24,79 +24,78 @@ final class EncodingTests: XCTestCase {
     //=------------------------------------------------------------------------=
     
     lazy var emojis = Snapshot("🇸🇪🇺🇸")
-    lazy var start = emojis.startIndex
-    lazy var end = emojis.endIndex
+    lazy var start  = emojis.startIndex
+    lazy var middle = emojis.index(start, offsetBy: 1)
+    lazy var end    = emojis.endIndex
     
     //=------------------------------------------------------------------------=
     // MARK: Assertions
     //=------------------------------------------------------------------------=
+
+    func Assert<T>(_ encoding: T.Type, distances: (Offset<T>, Offset<T>, Offset<T>)) {
+        XCTAssertEqual(T.distance(from:  start, to:  start, in: emojis),  distances.0)
+        XCTAssertEqual(T.distance(from: middle, to: middle, in: emojis),  distances.0)
+        XCTAssertEqual(T.distance(from:    end, to:    end, in: emojis),  distances.0)
+  
+        XCTAssertEqual(T.distance(from:  start, to: middle, in: emojis), +distances.1)
+        XCTAssertEqual(T.distance(from: middle, to:  start, in: emojis), -distances.1)
+
+        XCTAssertEqual(T.distance(from: middle, to:    end, in: emojis), +distances.1)
+        XCTAssertEqual(T.distance(from:    end, to: middle, in: emojis), -distances.1)
+
+        XCTAssertEqual(T.distance(from:  start, to:    end, in: emojis), +distances.2)
+        XCTAssertEqual(T.distance(from:    end, to:  start, in: emojis), -distances.2)
+    }
     
-    func AssertSizeOf<T>(_ snapshot: Snapshot, _ size: Offset<T>) {
-        XCTAssertEqual(T.distance(from: start, to: end, in: snapshot), size)
+    func AssertIndexWorksAsExpected(_ encoding: (some Encoding).Type) {
+        let max = encoding.distance(from: start, to:    end, in: emojis)
+        let mid = encoding.distance(from: start, to: middle, in: emojis)
+        let i = {
+            encoding.index(at: $1, from: $0, in: self.emojis)
+        }
+        //=--------------------------------------=
+        // Forwards, Backwards x SE
+        //=--------------------------------------=
+        for distance in 0 ..< mid {
+            XCTAssertEqual(emojis[i(start, distance      )], "🇸🇪")
+            XCTAssertEqual(emojis[i(end,   distance - max)], "🇸🇪")
+        }
+        //=--------------------------------------=
+        // Forwards, Backwards x US
+        //=--------------------------------------=
+        for distance in mid ..< max {
+            XCTAssertEqual(emojis[i(start, distance      )], "🇺🇸")
+            XCTAssertEqual(emojis[i(end,   distance - max)], "🇺🇸")
+        }
+        //=--------------------------------------=
+        // Forwards, Backwards x End To End
+        //=--------------------------------------=
+        XCTAssertEqual(i(start, +max),   end)
+        XCTAssertEqual(i(end,   -max), start)
     }
     
     //=------------------------------------------------------------------------=
     // MARK: Tests x Character
     //=------------------------------------------------------------------------=
     
-    func testCharacterDistanceWorks() {
-        AssertSizeOf(emojis, .character(2))
+    func testCharacterDistance() {
+        Assert(Character.self, distances: (0, 1, 2))
     }
     
-    func testCharacterIndexWorks() {
-        let i = {
-            Character.index(at: $0, from: $1, in: self.emojis)
-        }
-        //=--------------------------------------=
-        // Forwards
-        //=--------------------------------------=
-        XCTAssertEqual(emojis[i(0, start)], "🇸🇪")
-        XCTAssertEqual(emojis[i(1, start)], "🇺🇸")
-        XCTAssertEqual(i(2, start),  end)
-        //=--------------------------------------=
-        // Backwards
-        //=--------------------------------------=
-        XCTAssertEqual(emojis[i(-2, end)], "🇸🇪")
-        XCTAssertEqual(emojis[i(-1, end)], "🇺🇸")
-        XCTAssertEqual(i(0, end),   end)
+    func testCharacterIndex() {
+        AssertIndexWorksAsExpected(Character.self)
     }
     
     //=------------------------------------------------------------------------=
     // MARK: Tests x UTF16
     //=------------------------------------------------------------------------=
     
-    func testUTF16DistanceWorks() {
-        AssertSizeOf(emojis, .utf16(8))
+    func testUTF16Distance() {
+        Assert(UTF16.self, distances: (0, 4, 8))
     }
     
-    func testUTF16IndexWorks() {
-        let i = {
-            UTF16.index(at: $0, from: $1, in: self.emojis)
-        }
-        //=--------------------------------------=
-        // Forwards
-        //=--------------------------------------=
-        XCTAssertEqual(emojis[i(0, start)], "🇸🇪")
-        XCTAssertEqual(emojis[i(1, start)], "🇸🇪")
-        XCTAssertEqual(emojis[i(2, start)], "🇸🇪")
-        XCTAssertEqual(emojis[i(3, start)], "🇸🇪")
-        XCTAssertEqual(emojis[i(4, start)], "🇺🇸")
-        XCTAssertEqual(emojis[i(5, start)], "🇺🇸")
-        XCTAssertEqual(emojis[i(6, start)], "🇺🇸")
-        XCTAssertEqual(emojis[i(7, start)], "🇺🇸")
-        XCTAssertEqual(i(8, start),  end)
-        //=--------------------------------------=
-        // Backwards
-        //=--------------------------------------=
-        XCTAssertEqual(emojis[i(-8, end)], "🇸🇪")
-        XCTAssertEqual(emojis[i(-7, end)], "🇸🇪")
-        XCTAssertEqual(emojis[i(-6, end)], "🇸🇪")
-        XCTAssertEqual(emojis[i(-5, end)], "🇸🇪")
-        XCTAssertEqual(emojis[i(-4, end)], "🇺🇸")
-        XCTAssertEqual(emojis[i(-3, end)], "🇺🇸")
-        XCTAssertEqual(emojis[i(-2, end)], "🇺🇸")
-        XCTAssertEqual(emojis[i(-1, end)], "🇺🇸")
-        XCTAssertEqual(i(0, end),   end)
+    func testUTF16Index() {
+        AssertIndexWorksAsExpected(UTF16.self)
     }
     
     func testUTF16IndexClampsToStartOfCharacter() {
@@ -115,13 +114,14 @@ final class EncodingTests: XCTestCase {
         // Backwards
         //=--------------------------------------=
         var index = end
-        XCTAssertEqual(index, emojis.index(start, offsetBy: 2))
+        XCTAssertEqual(index, emojis.index(end, offsetBy: -0))
         
         index = i(-1,  index)
-        XCTAssertEqual(index, emojis.index(start, offsetBy: 1))
+        XCTAssertEqual(index, emojis.index(end, offsetBy: -1))
         
         index = i(-1,  index)
-        XCTAssertEqual(index, emojis.index(start, offsetBy: 0))
+        XCTAssertEqual(index, emojis.index(end, offsetBy: -2))
+        XCTAssertEqual(index, start)
     }
 }
 

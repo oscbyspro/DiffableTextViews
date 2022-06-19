@@ -11,8 +11,9 @@
 // MARK: * Offset
 //*============================================================================*
 
-public struct Offset<Encoding: DiffableTextKit.Encoding>: Comparable, ExpressibleByIntegerLiteral {
-    
+public struct Offset<Encoding: DiffableTextKit.Encoding>: Strideable,
+ExpressibleByIntegerLiteral, AdditiveArithmetic {
+        
     //=------------------------------------------------------------------------=
     // MARK: State
     //=------------------------------------------------------------------------=
@@ -39,12 +40,35 @@ public struct Offset<Encoding: DiffableTextKit.Encoding>: Comparable, Expressibl
     }
     
     //=------------------------------------------------------------------------=
-    // MARK: Utilities
+    // MARK: Utilities x Strideable
+    //=------------------------------------------------------------------------=
+    
+    @inlinable @inline(__always)
+    public func advanced(by units: Int) -> Self {
+        Self(distance + units)
+    }
+    
+    @inlinable @inline(__always)
+    public func distance(to other: Self) -> Int {
+        other.distance - distance
+    }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Utilities x Comparable
     //=------------------------------------------------------------------------=
     
     @inlinable @inline(__always)
     public static func < (lhs: Self, rhs: Self) -> Bool {
         lhs.distance < rhs.distance
+    }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Utilities x Arithmetic
+    //=------------------------------------------------------------------------=
+    
+    @inlinable @inline(__always)
+    public static prefix func - (instance: Self) -> Self {
+        Self(-instance.distance)
     }
     
     @inlinable @inline(__always)
