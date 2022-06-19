@@ -21,7 +21,7 @@ final class OffsetTests: XCTestCase {
     typealias T = Offset<Character>
     
     //=------------------------------------------------------------------------=
-    // MARK: Tests x Utilities
+    // MARK: Tests x Utilities x Comparable
     //=------------------------------------------------------------------------=
     
     func testEqual() {
@@ -35,8 +35,12 @@ final class OffsetTests: XCTestCase {
     }
     
     //=------------------------------------------------------------------------=
-    // MARK: Tests x Utilities
+    // MARK: Tests x Utilities x Arithmetic
     //=------------------------------------------------------------------------=
+    
+    func testNegation() {
+        XCTAssertEqual(-T(3), T(-3))
+    }
     
     func testAddition() {
         XCTAssertEqual(T(1) + T(2), T(3))
@@ -63,8 +67,7 @@ final class OffsetTests: XCTestCase {
     //=------------------------------------------------------------------------=
     
     func testIntInit() {
-        let offset = T(3)
-        XCTAssertEqual(Int(offset), offset.distance)
+        XCTAssertEqual(Int(T(3)), 3)
     }
 }
 

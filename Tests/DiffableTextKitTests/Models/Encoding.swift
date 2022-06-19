@@ -81,6 +81,32 @@ final class EncodingTests: XCTestCase {
         AssertIndexSubcomponentsAreEqual(i(end,   -max), start)
     }
     
+    func AssertIndexClampsToStartOfCharacter<T>(_ encoding: T.Type) where T: Encoding {
+        let i = {
+            T.index(at: $0, from: $1, in: self.emojis)
+        }
+        //=--------------------------------------=
+        // Forwards
+        //=--------------------------------------=
+        let one = T.distance(from: start, to: middle, in: emojis)
+        AssertIndexSubcomponentsAreEqual(i(one, start),   middle)
+        for distance in 0 ..< one {
+            AssertIndexSubcomponentsAreEqual(i(distance, start), start)
+        }
+        //=--------------------------------------=
+        // Backwards
+        //=--------------------------------------=
+        var index = end
+        AssertIndexSubcomponentsAreEqual(index, emojis.index(end, offsetBy: -0))
+        
+        index = i(-1, index)
+        AssertIndexSubcomponentsAreEqual(index, emojis.index(end, offsetBy: -1))
+        
+        index = i(-1, index)
+        AssertIndexSubcomponentsAreEqual(index, emojis.index(end, offsetBy: -2))
+        AssertIndexSubcomponentsAreEqual(index, start)
+    }
+    
     //=------------------------------------------------------------------------=
     // MARK: Tests x Character
     //=------------------------------------------------------------------------=
@@ -91,6 +117,42 @@ final class EncodingTests: XCTestCase {
     
     func testCharacterIndex() {
         AssertIndexWorksAsExpected(Character.self)
+    }
+    
+    func testCharacterIndexClampsToStartOfCharacter() {
+        AssertIndexClampsToStartOfCharacter(Character.self)
+    }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Tests x Unicode.Scaler
+    //=------------------------------------------------------------------------=
+    
+    func testUnicodeScalarDistance() {
+        Assert(Unicode.Scalar.self, distances: (0, 2, 4))
+    }
+    
+    func testUnicodeScalarIndex() {
+        AssertIndexWorksAsExpected(Unicode.Scalar.self)
+    }
+    
+    func testUnicodeScalarIndexClampsToStartOfCharacter() {
+        AssertIndexClampsToStartOfCharacter(Unicode.Scalar.self)
+    }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Tests x UTF8
+    //=------------------------------------------------------------------------=
+    
+    func testUTF8Distance() {
+        Assert(UTF8.self, distances: (0, 8, 16))
+    }
+    
+    func testUTF8Index() {
+        AssertIndexWorksAsExpected(UTF8.self)
+    }
+    
+    func testUTF8IndexClampsToStartOfCharacter() {
+        AssertIndexClampsToStartOfCharacter(UTF8.self)
     }
     
     //=------------------------------------------------------------------------=
@@ -106,29 +168,7 @@ final class EncodingTests: XCTestCase {
     }
     
     func testUTF16IndexClampsToStartOfCharacter() {
-        let i = {
-            UTF16.index(at: $0, from: $1, in: self.emojis)
-        }
-        //=--------------------------------------=
-        // Forwards
-        //=--------------------------------------=
-        AssertIndexSubcomponentsAreEqual(i(0, start), start)
-        AssertIndexSubcomponentsAreEqual(i(1, start), start)
-        AssertIndexSubcomponentsAreEqual(i(2, start), start)
-        AssertIndexSubcomponentsAreEqual(i(3, start), start)
-        AssertIndexSubcomponentsAreEqual(i(4, start), emojis.index(after: start))
-        //=--------------------------------------=
-        // Backwards
-        //=--------------------------------------=
-        var index = end
-        AssertIndexSubcomponentsAreEqual(index, emojis.index(end, offsetBy: -0))
-        
-        index = i(-1,  index)
-        AssertIndexSubcomponentsAreEqual(index, emojis.index(end, offsetBy: -1))
-        
-        index = i(-1,  index)
-        AssertIndexSubcomponentsAreEqual(index, emojis.index(end, offsetBy: -2))
-        AssertIndexSubcomponentsAreEqual(index, start)
+        AssertIndexClampsToStartOfCharacter(UTF16.self)
     }
 }
 
