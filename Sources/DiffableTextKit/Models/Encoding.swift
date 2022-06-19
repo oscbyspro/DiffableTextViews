@@ -66,14 +66,14 @@ extension Encoding {
             // None
             //=----------------------------------=
             if distance > 0 {
-                snapshot.formIndex(after: &index)
+                index = after
                 continue
             }
             //=----------------------------------=
             // Some
             //=----------------------------------=
             if distance == 0 {
-                snapshot.formIndex(after: &index)
+                index = after
             }
 
             return index
