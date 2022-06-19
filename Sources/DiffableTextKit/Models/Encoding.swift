@@ -69,12 +69,11 @@ extension UTF16: Encoding {
     @inlinable public static func index(
     at distance: Offset<Self>, from start: Index,
     in snapshot: Snapshot) -> Index {
-        var index = start; var distance = distance
         //=--------------------------------------=
         // Forwards
         //=--------------------------------------=
         if distance > 0 {
-            while true {
+            var index = start; var distance = distance; while true {
                 distance -= .utf16(snapshot.characters[index.character].utf16.count)
                 //=------------------------------=
                 // None
@@ -97,13 +96,13 @@ extension UTF16: Encoding {
         // Backwards
         //=--------------------------------------=
         else if distance < 0 {
-            while true {
+            var index = start; var distance = distance; while true {
                 snapshot.formIndex(before: &index)
                 distance += .utf16(snapshot.characters[index.character].utf16.count)
                 //=------------------------------=
                 // Some
                 //=------------------------------=
-                if distance >= 0 { return  index }
+                if distance >= 0 { return index }
             }
         //=--------------------------------------=
         // Return Start Because Distance Is Zero
