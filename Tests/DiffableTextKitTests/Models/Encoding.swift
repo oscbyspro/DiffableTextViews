@@ -31,7 +31,7 @@ final class EncodingTests: XCTestCase {
     //=------------------------------------------------------------------------=
     // MARK: Assertions
     //=------------------------------------------------------------------------=
-
+    
     func Assert<T>(_ encoding: T.Type, distances: (Offset<T>, Offset<T>, Offset<T>)) {
         XCTAssertEqual(T.distance(from:  start, to:  start, in: emojis),  distances.0)
         XCTAssertEqual(T.distance(from: middle, to: middle, in: emojis),  distances.0)
@@ -45,6 +45,13 @@ final class EncodingTests: XCTestCase {
 
         XCTAssertEqual(T.distance(from:  start, to:    end, in: emojis), +distances.2)
         XCTAssertEqual(T.distance(from:    end, to:  start, in: emojis), -distances.2)
+    }
+    
+    /// Index may use only its attribute member to determine equality.
+    /// In this case, however, it is important to also check its String.Index.
+    func AssertIndexSubcomponentsAreEqual(_ lhs: Index, _ rhs: Index) {
+        XCTAssertEqual(lhs.character, rhs.character)
+        XCTAssertEqual(lhs.attribute, rhs.attribute)
     }
     
     func AssertIndexWorksAsExpected(_ encoding: (some Encoding).Type) {
@@ -70,8 +77,8 @@ final class EncodingTests: XCTestCase {
         //=--------------------------------------=
         // Forwards, Backwards x End To End
         //=--------------------------------------=
-        XCTAssertEqual(i(start, +max),   end)
-        XCTAssertEqual(i(end,   -max), start)
+        AssertIndexSubcomponentsAreEqual(i(start, +max),   end)
+        AssertIndexSubcomponentsAreEqual(i(end,   -max), start)
     }
     
     //=------------------------------------------------------------------------=
@@ -105,23 +112,23 @@ final class EncodingTests: XCTestCase {
         //=--------------------------------------=
         // Forwards
         //=--------------------------------------=
-        XCTAssertEqual(i(0, start), start)
-        XCTAssertEqual(i(1, start), start)
-        XCTAssertEqual(i(2, start), start)
-        XCTAssertEqual(i(3, start), start)
-        XCTAssertEqual(i(4, start), emojis.index(after: start))
+        AssertIndexSubcomponentsAreEqual(i(0, start), start)
+        AssertIndexSubcomponentsAreEqual(i(1, start), start)
+        AssertIndexSubcomponentsAreEqual(i(2, start), start)
+        AssertIndexSubcomponentsAreEqual(i(3, start), start)
+        AssertIndexSubcomponentsAreEqual(i(4, start), emojis.index(after: start))
         //=--------------------------------------=
         // Backwards
         //=--------------------------------------=
         var index = end
-        XCTAssertEqual(index, emojis.index(end, offsetBy: -0))
+        AssertIndexSubcomponentsAreEqual(index, emojis.index(end, offsetBy: -0))
         
         index = i(-1,  index)
-        XCTAssertEqual(index, emojis.index(end, offsetBy: -1))
+        AssertIndexSubcomponentsAreEqual(index, emojis.index(end, offsetBy: -1))
         
         index = i(-1,  index)
-        XCTAssertEqual(index, emojis.index(end, offsetBy: -2))
-        XCTAssertEqual(index, start)
+        AssertIndexSubcomponentsAreEqual(index, emojis.index(end, offsetBy: -2))
+        AssertIndexSubcomponentsAreEqual(index, start)
     }
 }
 
