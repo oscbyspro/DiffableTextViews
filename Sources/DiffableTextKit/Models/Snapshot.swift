@@ -376,7 +376,7 @@ extension Snapshot {
     }
     
     @inlinable func offsets<T>(at indices: Range<Index>, as type: T.Type = T.self) -> Range<Offset<T>> {
-        let lower = T.distance(from: self.startIndex,    to: indices.lowerBound, in: self)
+        let lower = T.distance(from:    self.startIndex, to: indices.lowerBound, in: self)
         let count = T.distance(from: indices.lowerBound, to: indices.upperBound, in: self)
         return lower ..< lower + count
     }
@@ -394,9 +394,8 @@ extension Snapshot {
     }
     
     @inlinable func indices<T>(at offsets: Range<Offset<T>>) -> Range<Index> {
-        let count = offsets.upperBound - offsets.lowerBound
         let lower = T.index(at: offsets.lowerBound, from: self.startIndex, in: self)
-        return lower ..< T.index(at: count, from: lower, in: self)
+        return lower ..< T.index(at: Offset(offsets.count), from:   lower, in: self)
     }
 }
 
@@ -421,7 +420,7 @@ extension Snapshot {
         // Inspect Initial Index
         //=--------------------------------------=
         if peek(from: index, towards: preference).map(
-        nonpassthrough(at:)) == true { return index }
+        nonpassthrough) == true { return index }
         //=--------------------------------------=
         // Direction
         //=--------------------------------------=
@@ -432,14 +431,14 @@ extension Snapshot {
         if let caret = caret(from: index,
         towards: direction,
         jumping: direction == preference ? .to : .through,
-        targeting: nonpassthrough(at:)) { return caret }
+        targeting: nonpassthrough) { return caret }
         //=--------------------------------------=
         // Search In Other Direction
         //=--------------------------------------=
         if let caret = caret(from: index,
         towards: direction.reversed(),
         jumping: Jump.to, // use Jump.to on each direction
-        targeting: nonpassthrough(at:)) { return caret }
+        targeting: nonpassthrough) { return caret }
         //=--------------------------------------=
         // Return End Index On Caret Not Found
         //=--------------------------------------=

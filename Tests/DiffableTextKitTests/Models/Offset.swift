@@ -69,7 +69,14 @@ final class OffsetTests: XCTestCase {
     func testIntInit() {
         XCTAssertEqual(Int(T(3)), 3)
     }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Tests x Range
+    //=------------------------------------------------------------------------=
+    
+    func testRangeIsRandomAccessCollection() {
+        XCTAssert(T(0) ..< T(1) is any RandomAccessCollection)
+    }
 }
 
 #endif
-

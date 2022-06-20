@@ -28,7 +28,7 @@ Next: BidirectionalCollection, Next.Element == Symbol {
     //=------------------------------------------------------------------------=
     
     @inlinable static func forwards(to next: Next, from prev: Prev) -> Indices {
-        forwards(from: prev, to:  next)
+        forwards(from: prev, to: next)
     }
     
     @inlinable static func forwards(from prev: Prev, to next: Next) -> Indices {
@@ -40,19 +40,19 @@ Next: BidirectionalCollection, Next.Element == Symbol {
         while prevIndex != prev.endIndex,
               nextIndex != next.endIndex {
             //=---------------------------------=
-            // Elements
+            // Symbols
             //=---------------------------------=
-            let prevElement = prev[prevIndex]
-            let nextElement = next[nextIndex]
+            let prevSymbol = prev[prevIndex]
+            let nextSymbol = next[nextIndex]
             //=---------------------------------=
             // Indices
             //=---------------------------------=
-            if prevElement.character == nextElement.character {
+            if prevSymbol.character == nextSymbol.character {
                 prev.formIndex(after: &prevIndex)
                 next.formIndex(after: &nextIndex)
-            } else if prevElement.attribute.contains(.removable ) {
+            } else if prevSymbol.attribute.contains( .removable) {
                 prev.formIndex(after: &prevIndex)
-            } else if nextElement.attribute.contains(.insertable) {
+            } else if nextSymbol.attribute.contains(.insertable) {
                 next.formIndex(after: &nextIndex)
             } else {
                 break
@@ -69,12 +69,11 @@ Next: BidirectionalCollection, Next.Element == Symbol {
     //=------------------------------------------------------------------------=
     
     @inlinable static func backwards(to next: Next, from prev: Prev) -> Indices {
-        backwards(from: prev, to:  next)
+        backwards(from: prev, to: next)
     }
     
     @inlinable static func backwards(from prev: Prev, to next: Next) -> Indices {
-        let reversed = Reversed.forwards(
-        from: prev.reversed(), to: next.reversed())
+        let reversed = Reversed.forwards(from: prev.reversed(), to: next.reversed())
         return (reversed.prev.base, reversed.next.base)
     }
 }

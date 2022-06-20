@@ -66,17 +66,12 @@ extension Encoding {
             // None
             //=----------------------------------=
             if distance > 0 {
-                index = after
-                continue
+                index = after; continue forwards
             }
             //=----------------------------------=
             // Some
             //=----------------------------------=
-            if distance == 0 {
-                index = after
-            }
-
-            return index
+            return distance == 0 ? after : index
         }
     }
     
@@ -87,8 +82,7 @@ extension Encoding {
         // Backwards
         //=--------------------------------------=
         backwards: while true {
-            let after = index
-            snapshot.formIndex(before: &index)
+            let after = index; snapshot.formIndex(before: &index)
             distance += self.distance(from: index, to: after, in: snapshot)
             //=----------------------------------=
             // Some

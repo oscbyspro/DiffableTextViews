@@ -63,11 +63,6 @@ final class CaretsTests: XCTestCase {
     func testRangeEqualsLowerToUpper() {
         XCTAssertEqual(Carets(3 ..< 7).range, 3 ..< 7)
     }
-
-    func testMapCaretMapsBoth() {
-        let carets = Carets(0 ..< 7).map(caret: { $0 + 1 })
-        AssertEqual(carets, lower: 1, upper: 8)
-    }
     
     func testbMapUpperLowerMapsBothWhenUnequal() {
         let carets = Carets(3 ..< 7).map(lower: { $0 + 1 }, upper: { $0 - 1 })

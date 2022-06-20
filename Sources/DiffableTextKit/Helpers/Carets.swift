@@ -60,13 +60,6 @@
     // MARK: Transformations
     //=------------------------------------------------------------------------=
     
-    @inlinable func map<T>(caret: (Caret) -> T) -> Carets<T> {
-        //=--------------------------------------=
-        // Return
-        //=--------------------------------------=
-        self.map(lower: caret, upper: caret)
-    }
-    
     @inlinable func map<T>(lower: (Caret) -> T, upper: (Caret) -> T) -> Carets<T> {
         //=--------------------------------------=
         // Single

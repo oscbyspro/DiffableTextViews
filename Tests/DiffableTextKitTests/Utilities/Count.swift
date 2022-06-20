@@ -7,35 +7,37 @@
 // See http://www.apache.org/licenses/LICENSE-2.0 for license information.
 //=----------------------------------------------------------------------------=
 
+#if DEBUG
+
+@testable import DiffableTextKit
+
+import XCTest
+
 //*============================================================================*
-// MARK: * Proposal
+// MARK: * Count x Tests
 //*============================================================================*
 
-/// A snapshot and one continuous change that has not yet been applied to it.
-public struct Proposal {
+final class CountTests: XCTestCase {
     
     //=------------------------------------------------------------------------=
-    // MARK: State
+    // MARK: Tests x Where
     //=------------------------------------------------------------------------=
     
-    public let snapshot: Snapshot
-    public var replacement: Snapshot
-    public var range: Range<Index>
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Initializers
-    //=------------------------------------------------------------------------=
-    
-    @inlinable init(update snapshot: Snapshot, with  replacement: Snapshot, in range: Range<Index>) {
-        self.snapshot = snapshot; self.replacement = replacement; self.range = range
+    func testCountWhere() {
+        let numbers = "22122"
+        XCTAssertEqual(numbers.count(where: { $0 == "1" }), 1)
+        XCTAssertEqual(numbers.count(where: { $0 == "2" }), 4)
     }
     
     //=------------------------------------------------------------------------=
-    // MARK: Utilities
+    // MARK: Tests x While
     //=------------------------------------------------------------------------=
     
-    /// Returns a new snapshot with the proposed changes applied to it.
-    @inlinable public func merged() -> Snapshot {
-        var result = snapshot; result.replaceSubrange(range, with: replacement); return result
+    func testCountWhile() {
+        let numbers = "22122"
+        XCTAssertEqual(numbers.count(while: { $0 == "1" }), 0)
+        XCTAssertEqual(numbers.count(while: { $0 == "2" }), 2)
     }
 }
+
+#endif

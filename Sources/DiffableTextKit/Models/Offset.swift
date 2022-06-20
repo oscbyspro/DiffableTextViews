@@ -12,7 +12,7 @@
 //*============================================================================*
 
 public struct Offset<Encoding: DiffableTextKit.Encoding>: Strideable,
-ExpressibleByIntegerLiteral, AdditiveArithmetic {
+AdditiveArithmetic, ExpressibleByIntegerLiteral {
         
     //=------------------------------------------------------------------------=
     // MARK: State

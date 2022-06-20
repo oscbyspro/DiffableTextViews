@@ -98,7 +98,7 @@ public final class Cache<Key, Value> where Key: Hashable, Value: AnyObject {
         }
         
         @inlinable override func isEqual(_ object: Any?) -> Bool {
-            wrapped == (object as! Self).wrapped
+            wrapped == (object as? Self)?.wrapped
         }
     }
 }
