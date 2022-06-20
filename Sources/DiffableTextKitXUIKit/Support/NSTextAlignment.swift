@@ -34,15 +34,12 @@ extension NSTextAlignment {
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable init(_ layout: LayoutDirection,
-    leftToRight: @autoclosure () -> Self,
-    rightToLeft: @autoclosure () -> Self) {
+    @inlinable init(_ layout: LayoutDirection, leftToRight: Self, rightToLeft: Self) {
         switch layout {
-        case .rightToLeft: self = rightToLeft()
-        case .leftToRight: self = leftToRight()
-        @unknown  default: self = leftToRight()
+        case .rightToLeft: self = rightToLeft
+        case .leftToRight: self = leftToRight
+        @unknown  default: self = leftToRight
         }
     }
-    
 }
 #endif

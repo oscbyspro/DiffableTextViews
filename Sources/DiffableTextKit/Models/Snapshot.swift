@@ -327,6 +327,48 @@ extension Snapshot: CustomStringConvertible {
 }
 
 //=----------------------------------------------------------------------------=
+// MARK: + Encoding
+//=----------------------------------------------------------------------------=
+
+extension Snapshot {
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Distance
+    //=------------------------------------------------------------------------=
+        
+    @inlinable func offset<T>(from start: Index, to end: Index, as type: T.Type = T.self) -> Offset<T> {
+        T.distance(from: start, to: end, in: self)
+    }
+        
+    @inlinable func offset<T>(at index: Index, as type: T.Type = T.self) -> Offset<T> {
+        T.distance(from: self.startIndex, to: index, in: self)
+    }
+    
+    @inlinable func offsets<T>(at indices: Range<Index>, as type: T.Type = T.self) -> Range<Offset<T>> {
+        let lower = T.distance(from:    self.startIndex, to: indices.lowerBound, in: self)
+        let count = T.distance(from: indices.lowerBound, to: indices.upperBound, in: self)
+        return lower ..< lower + count
+    }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Index
+    //=------------------------------------------------------------------------=
+    
+    @inlinable func index<T>(at offset: Offset<T>, from start: Index) -> Index {
+        T.index(at: offset, from: start, in: self)
+    }
+    
+    @inlinable func index<T>(at offset: Offset<T>) -> Index {
+        T.index(at: offset, from: self.startIndex, in: self)
+    }
+    
+    @inlinable func indices<T>(at offsets: Range<Offset<T>>) -> Range<Index> {
+        let lower = T.index(at: offsets.lowerBound, from: self.startIndex, in: self)
+        return lower ..< T.index(at: Offset(offsets.count), from:   lower, in: self)
+    }
+}
+
+//=----------------------------------------------------------------------------=
 // MARK: + Helpers
 //=----------------------------------------------------------------------------=
 
@@ -354,48 +396,6 @@ extension Snapshot {
     
     @inlinable func peek(behind index: Index) -> Index? {
         index != startIndex ? self.index(before: index) : nil
-    }
-}
-
-//=----------------------------------------------------------------------------=
-// MARK: + Offset
-//=----------------------------------------------------------------------------=
-
-extension Snapshot {
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Utilities
-    //=------------------------------------------------------------------------=
-        
-    @inlinable func offset<T>(from start: Index, to end: Index, as type: T.Type = T.self) -> Offset<T> {
-        T.distance(from: start, to: end, in: self)
-    }
-        
-    @inlinable func offset<T>(at index: Index, as type: T.Type = T.self) -> Offset<T> {
-        T.distance(from: self.startIndex, to: index, in: self)
-    }
-    
-    @inlinable func offsets<T>(at indices: Range<Index>, as type: T.Type = T.self) -> Range<Offset<T>> {
-        let lower = T.distance(from:    self.startIndex, to: indices.lowerBound, in: self)
-        let count = T.distance(from: indices.lowerBound, to: indices.upperBound, in: self)
-        return lower ..< lower + count
-    }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Utilities
-    //=------------------------------------------------------------------------=
-    
-    @inlinable func index<T>(at offset: Offset<T>, from start: Index) -> Index {
-        T.index(at: offset, from: start, in: self)
-    }
-    
-    @inlinable func index<T>(at offset: Offset<T>) -> Index {
-        T.index(at: offset, from: self.startIndex, in: self)
-    }
-    
-    @inlinable func indices<T>(at offsets: Range<Offset<T>>) -> Range<Index> {
-        let lower = T.index(at: offsets.lowerBound, from: self.startIndex, in: self)
-        return lower ..< T.index(at: Offset(offsets.count), from:   lower, in: self)
     }
 }
 

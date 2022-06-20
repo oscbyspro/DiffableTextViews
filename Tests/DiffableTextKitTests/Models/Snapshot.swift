@@ -50,7 +50,7 @@ final class SnapshotTests: XCTestCase {
     //=------------------------------------------------------------------------=
     // MARK: Tests x Transformations x Anchor
     //=------------------------------------------------------------------------=
-        
+    
     func testAnchorAtIndex() {
         var snapshot = Snapshot("ABC")
         let index = snapshot.index(at: .character(1))

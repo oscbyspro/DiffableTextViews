@@ -7,67 +7,96 @@
 // See http://www.apache.org/licenses/LICENSE-2.0 for license information.
 //=----------------------------------------------------------------------------=
 
+#if DEBUG
+
+@testable import DiffableTextKit
+
+import XCTest
+
 //*============================================================================*
-// MARK: * Lock
+// MARK: * Lock x Tests
 //*============================================================================*
 
-public final class Lock {
+@MainActor final class LockTests: XCTestCase {
     
     //=------------------------------------------------------------------------=
     // MARK: State
     //=------------------------------------------------------------------------=
     
-    @usableFromInline private(set) var count: UInt = 0
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Initializers
-    //=------------------------------------------------------------------------=
-    
-    @inlinable public init() { }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Accessors
-    //=------------------------------------------------------------------------=
-    
-    @inlinable @inline(__always)
-    public var isLocked: Bool {
-        self.count != 0
-    }
+    var lock = Lock()
     
     //=------------------------------------------------------------------------=
     // MARK: Transformations
     //=------------------------------------------------------------------------=
     
-    @inlinable @inline(__always) func lock() {
-        self.count += 1
+    override func setUp() {
+        lock = Lock()
     }
     
-    @inlinable @inline(__always) func open() {
-        self.count -= 1
+    //=------------------------------------------------------------------------=
+    // MARK: Tests x State
+    //=------------------------------------------------------------------------=
+    
+    func testIsNotLockedByDefault() {
+        XCTAssertFalse(lock.isLocked)
+    }
+    
+    func testIsLockedIsSameAsCountIsZero() {
+        XCTAssertFalse(lock.isLocked)
+        XCTAssertEqual(lock.count, 0)
+        
+        lock.lock()
+        XCTAssert(lock.isLocked)
+        XCTAssertEqual(lock.count, 1)
+    }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Tests x Transformations
+    //=------------------------------------------------------------------------=
+    
+    func testLockIncrementsCountOpenDecrementsCount() {
+        XCTAssertEqual(lock.count, 0)
+
+        lock.lock()
+        lock.lock()
+        lock.lock()
+
+        XCTAssertEqual(lock.count, 3)
+        
+        lock.open()
+        lock.open()
+        lock.open()
+
+        XCTAssertEqual(lock.count, 0)
     }
     
     //=------------------------------------------------------------------------=
     // MARK: Utilities x Synchronous
     //=------------------------------------------------------------------------=
     
-    @inlinable public func perform(action: () throws -> Void) {
-        self.lock(); try? action(); self.open()
+    func testSynchronousActionLocksUntilCompletion() {
+        XCTAssertFalse(lock.isLocked)
+        
+        lock.perform {
+            XCTAssert(self.lock.isLocked)
+        }
+        
+        XCTAssertFalse(lock.isLocked)
     }
     
     //=------------------------------------------------------------------------=
     // MARK: Utilities x Asynchronous
     //=------------------------------------------------------------------------=
     
-    @inlinable public func task(operation: @escaping () async throws -> Void) {
-        asynchronous(operation: operation)
-    }
-    
-    @inlinable public func task(operation: @escaping () async throws -> Void) async {
-        await asynchronous(operation: operation).value
-    }
-    
-    @inlinable @inline(__always) @discardableResult func asynchronous(
-    operation: @escaping () async throws -> Void) -> Task<Void, Never> {
-        self.lock(); return Task { try? await operation(); self.open() }
+    func testAsynchronousOperationLocksUntilCompletion() async {
+        XCTAssertFalse(lock.isLocked)
+        
+        await lock.task {
+            XCTAssert(self.lock.isLocked)
+        }
+        
+        XCTAssertFalse(lock.isLocked)
     }
 }
+
+#endif

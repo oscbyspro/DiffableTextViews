@@ -18,6 +18,7 @@ import XCTest
 //*============================================================================*
 
 final class EncodingTests: XCTestCase {
+    typealias Distances<T> = (Offset<T>, Offset<T>, Offset<T>) where T: Encoding
     
     //=------------------------------------------------------------------------=
     // MARK: State
@@ -47,8 +48,6 @@ final class EncodingTests: XCTestCase {
         XCTAssertEqual(T.distance(from:    end, to:  start, in: emojis), -distances.2)
     }
     
-    /// Index may use only its attribute member to determine equality.
-    /// In this case, however, it is important to also check its String.Index.
     func AssertIndexSubcomponentsAreEqual(_ lhs: Index, _ rhs: Index) {
         XCTAssertEqual(lhs.character, rhs.character)
         XCTAssertEqual(lhs.attribute, rhs.attribute)
@@ -81,28 +80,35 @@ final class EncodingTests: XCTestCase {
         AssertIndexSubcomponentsAreEqual(i(end,   -max), start)
     }
     
-    func AssertIndexClampsToStartOfCharacter<T>(_ encoding: T.Type) where T: Encoding {
+    func AssertIndexClampsToStartOfCharacter(_ encoding: (some Encoding).Type) {
         let i = {
-            T.index(at: $0, from: $1, in: self.emojis)
+            encoding.index(at: $1,    from: $0, in: self.emojis)
+        }
+        let d = {
+            encoding.distance(from: $0, to: $1, in: self.emojis)
         }
         //=--------------------------------------=
         // Forwards
         //=--------------------------------------=
-        let one = T.distance(from: start, to: middle, in: emojis)
-        AssertIndexSubcomponentsAreEqual(i(one, start),   middle)
-        for distance in 0 ..< one {
-            AssertIndexSubcomponentsAreEqual(i(distance, start), start)
+        for distance in 0 ..< d(start, middle) {
+            AssertIndexSubcomponentsAreEqual(i(start, distance),  start)
         }
+                
+        for distance in d(start, middle) ..< d(middle, end) {
+            AssertIndexSubcomponentsAreEqual(i(start, distance), middle)
+        }
+        
+        AssertIndexSubcomponentsAreEqual(i(start, d(start, end)),   end)
         //=--------------------------------------=
         // Backwards
         //=--------------------------------------=
         var index = end
         AssertIndexSubcomponentsAreEqual(index, emojis.index(end, offsetBy: -0))
         
-        index = i(-1, index)
+        index = i(index, -1)
         AssertIndexSubcomponentsAreEqual(index, emojis.index(end, offsetBy: -1))
         
-        index = i(-1, index)
+        index = i(index, -1)
         AssertIndexSubcomponentsAreEqual(index, emojis.index(end, offsetBy: -2))
         AssertIndexSubcomponentsAreEqual(index, start)
     }
@@ -140,22 +146,6 @@ final class EncodingTests: XCTestCase {
     }
     
     //=------------------------------------------------------------------------=
-    // MARK: Tests x UTF8
-    //=------------------------------------------------------------------------=
-    
-    func testUTF8Distance() {
-        Assert(UTF8.self, distances: (0, 8, 16))
-    }
-    
-    func testUTF8Index() {
-        AssertIndexWorksAsExpected(UTF8.self)
-    }
-    
-    func testUTF8IndexClampsToStartOfCharacter() {
-        AssertIndexClampsToStartOfCharacter(UTF8.self)
-    }
-    
-    //=------------------------------------------------------------------------=
     // MARK: Tests x UTF16
     //=------------------------------------------------------------------------=
     
@@ -169,6 +159,22 @@ final class EncodingTests: XCTestCase {
     
     func testUTF16IndexClampsToStartOfCharacter() {
         AssertIndexClampsToStartOfCharacter(UTF16.self)
+    }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Tests x UTF8
+    //=------------------------------------------------------------------------=
+    
+    func testUTF8Distance() {
+        Assert(UTF8.self, distances: (0, 8, 16))
+    }
+    
+    func testUTF8Index() {
+        AssertIndexWorksAsExpected(UTF8.self)
+    }
+    
+    func testUTF8IndexClampsToStartOfCharacter() {
+        AssertIndexClampsToStartOfCharacter(UTF8.self)
     }
 }
 

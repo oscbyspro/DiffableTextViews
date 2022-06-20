@@ -162,7 +162,7 @@ extension NumberTextPrecision {
         // Validate Each Component
         //=--------------------------------------=
         if let component = capacity.first(where: (.<, 0)) {
-            throw Info([.mark(component), "digits exceed max precision", .note(upper[component])])
+            throw Info([.mark(component), "digits exceeded max precision", .note(upper[component])])
         }
         //=--------------------------------------=
         // Return

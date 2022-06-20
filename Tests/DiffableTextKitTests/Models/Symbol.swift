@@ -25,7 +25,7 @@ final class SymbolTests: XCTestCase {
     //=------------------------------------------------------------------------=
     
     func testInitDefaultAttributeIsContent() {
-        XCTAssertEqual(Symbol("X").attribute, .content)
+        XCTAssertEqual(Symbol("3").attribute, .content)
     }
     
     func testInitAsExtendedGraphemeClusterLiteral() {
@@ -37,21 +37,21 @@ final class SymbolTests: XCTestCase {
     //=------------------------------------------------------------------------=
     
     func testVirtual() {
-        XCTAssert(Symbol("X", as: .phantom).virtual)
+        XCTAssert(Symbol("3", as: .phantom).virtual)
     }
     
     func testNonvirtual() {
-        XCTAssert(Symbol("X", as: .content).nonvirtual)
+        XCTAssert(Symbol("3", as: .content).nonvirtual)
     }
     
     func testContainsCharacter() {
-        XCTAssert(     Symbol("X").contains("X"))
-        XCTAssertFalse(Symbol("X").contains("Y"))
+        XCTAssert(     Symbol("3").contains("3"))
+        XCTAssertFalse(Symbol("3").contains("_"))
     }
     
     func testContainsAttribute() {
-        XCTAssert(     Symbol("X", as: .insertable).contains(.insertable))
-        XCTAssertFalse(Symbol("X", as: .insertable).contains(.removable ))
+        XCTAssert(     Symbol("3", as: .insertable).contains(.insertable))
+        XCTAssertFalse(Symbol("3", as: .insertable).contains( .removable))
     }
 }
 

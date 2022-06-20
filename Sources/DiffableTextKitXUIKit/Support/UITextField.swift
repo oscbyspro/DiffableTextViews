@@ -39,8 +39,7 @@ extension UITextField {
     
     @inlinable func positions(at offsets: Range<Offset>) -> UITextRange {
         let lower = self.position(at: offsets.lowerBound)
-        let count = Int(offsets.upperBound-offsets.lowerBound)
-        let upper = self.position(from: lower, offset: count)!
+        let upper = self.position(from: lower, offset: offsets.count)!
         return self.textRange(from: lower, to: upper)!
     }
 }

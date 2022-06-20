@@ -24,7 +24,7 @@ final class SuffixTests: XCTestCase {
     //=------------------------------------------------------------------------=
     
     func testSuffixWhile() {
-        XCTAssert("0123456789".suffix(while: { $0 > "4" }).elementsEqual("56789"))
+        XCTAssert("0123456789".suffix(while: { "4" < $0 }).elementsEqual("56789"))
     }
 }
 

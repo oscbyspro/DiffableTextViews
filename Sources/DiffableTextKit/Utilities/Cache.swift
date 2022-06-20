@@ -14,6 +14,7 @@ import Foundation
 //*============================================================================*
 
 public final class Cache<Key, Value> where Key: Hashable, Value: AnyObject {
+    @usableFromInline typealias NSKey = DiffableTextKit.NSKey<Key>
     
     //=------------------------------------------------------------------------=
     // MARK: State
@@ -52,12 +53,12 @@ public final class Cache<Key, Value> where Key: Hashable, Value: AnyObject {
     @inlinable public func reuse(_ key: Key, make: @autoclosure () throws -> Value) rethrows -> Value {
         let key = NSKey(key)
         //=--------------------------------------=
-        // MARK: Search
+        // Search
         //=--------------------------------------=
         if let instance = nscache.object(forKey: key) {
             return instance
         //=--------------------------------------=
-        // MARK: Make A New Instance And Save It
+        // Make A New Instance And Save It
         //=--------------------------------------=
         } else {
             let instance = try make()
@@ -65,40 +66,42 @@ public final class Cache<Key, Value> where Key: Hashable, Value: AnyObject {
             return instance
         }
     }
+}
+
+//*============================================================================*
+// MARK: * Cache x NSKey
+//*============================================================================*
+
+/// A key compatible with NSCache.
+///
+/// NSCache keys do not use Swift's Hashable protocol, instead,
+/// they must subclass NSObject and override hash and isEqual(\_:).
+///
+@usableFromInline final class NSKey<Wrapped: Hashable>: NSObject {
     
-    //*========================================================================*
-    // MARK: * NSKey
-    //*========================================================================*
+    //=------------------------------------------------------------------------=
+    // MARK: State
+    //=------------------------------------------------------------------------=
     
-    /// A key compatible with NSCache.
-    ///
-    /// NSCache keys do not use Swift's Hashable protocol, instead,
-    /// they must subclass NSObject and override hash and isEqual(\_:).
-    ///
-    @usableFromInline final class NSKey: NSObject {
-        
-        //=--------------------------------------------------------------------=
-        // MARK: State
-        //=--------------------------------------------------------------------=
-        
-        @usableFromInline let wrapped: Key
-        
-        //=--------------------------------------------------------------------=
-        // MARK: Initializers
-        //=--------------------------------------------------------------------=
-        
-        @inlinable init(_ wrapped: Key) { self.wrapped = wrapped }
-        
-        //=--------------------------------------------------------------------=
-        // MARK: Utilities
-        //=--------------------------------------------------------------------=
-     
-        @inlinable override var hash: Int {
-            wrapped.hashValue
-        }
-        
-        @inlinable override func isEqual(_ object: Any?) -> Bool {
-            wrapped == (object as? Self)?.wrapped
-        }
+    @usableFromInline let wrapped: Wrapped
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Initializers
+    //=------------------------------------------------------------------------=
+    
+    @inlinable init( _ wrapped: Wrapped) {
+        self.wrapped = wrapped
+    }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Utilities
+    //=------------------------------------------------------------------------=
+ 
+    @inlinable override var hash: Int {
+        wrapped.hashValue
+    }
+    
+    @inlinable override func isEqual(_ object: Any?) -> Bool {
+        wrapped == (object as? Self)?.wrapped
     }
 }

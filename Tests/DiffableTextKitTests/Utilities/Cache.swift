@@ -14,20 +14,42 @@
 import XCTest
 
 //*============================================================================*
-// MARK: * Utilities x Cache
+// MARK: * Cache x Tests
 //*============================================================================*
 
-final class UtilitiesTestsXCache: XCTestCase {
+final class CacheTests: XCTestCase {
     typealias Value = Box<String>
     
     //=------------------------------------------------------------------------=
-    // MARK: Tests
+    // MARK: Tests x Utilities
     //=------------------------------------------------------------------------=
     
     func testObjectForCustomKey() {
         let storage = Cache<Int, Value>()
         storage.insert(Value("ABC"), as: 123)
         XCTAssertEqual(Value("ABC"), storage.access(123))
+    }
+}
+
+//*============================================================================*
+// MARK: * Cache x NSKey x Tests
+//*============================================================================*
+
+final class NSKeyTests: XCTestCase {
+    typealias T = NSKey<Int>
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Tests x Utilities
+    //=------------------------------------------------------------------------=
+    
+    func testHash() {
+        XCTAssertEqual(T(3).hash, 3.hashValue)
+    }
+    
+    func testIsEqual() {
+        XCTAssert(     T(3).isEqual(T(3)))
+        XCTAssertFalse(T(3).isEqual(T(0)))
+        XCTAssertFalse(T(3).isEqual([33]))
     }
 }
 

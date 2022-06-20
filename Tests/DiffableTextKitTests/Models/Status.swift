@@ -33,9 +33,10 @@ final class StatusTests: XCTestCase {
     func testMergeReplacesInequalValues() {
         var status  = Status(en_US, 0, false)
         let changes = status.merge(Status(sv_SE, 1, true))
+        let result  = Status(sv_SE, 1,  true)
         
-        XCTAssertEqual(status,  Status(sv_SE, 1, true))
-        XCTAssertEqual(changes, Changes([.style, .value, .focus]))
+        XCTAssertEqual(status,  result)
+        XCTAssertEqual(changes, [.style, .value, .focus])
     }
     
     func testMergeDiscardsEqualValues() {
@@ -56,22 +57,25 @@ final class StatusTests: XCTestCase {
     //=------------------------------------------------------------------------=
     
     func testMemberWiseInequal() {
-        var changes: Changes
+        XCTAssertEqual(
+        Status(en_US, 0, false) .!=
+        Status(en_US, 0, false), [])
         
-        changes = Status(en_US, 0, false) .!= Status(en_US, 0, false)
-        XCTAssertEqual(changes, [])
-
-        changes = Status(en_US, 0, false) .!= Status(sv_SE, 0, false)
-        XCTAssertEqual(changes, [.style])
+        XCTAssertEqual(
+        Status(en_US, 0, false) .!=
+        Status(sv_SE, 0, false), [.style])
         
-        changes = Status(en_US, 0, false) .!= Status(en_US, 1, false)
-        XCTAssertEqual(changes, [.value])
+        XCTAssertEqual(
+        Status(en_US, 0, false) .!=
+        Status(en_US, 1, false), [.value])
         
-        changes = Status(en_US, 0, false) .!= Status(en_US, 0,  true)
-        XCTAssertEqual(changes, [.focus])
+        XCTAssertEqual(
+        Status(en_US, 0, false) .!=
+        Status(en_US, 0,  true), [.focus])
         
-        changes = Status(en_US, 0, false) .!= Status(sv_SE, 1,  true)
-        XCTAssertEqual(changes, [.style, .value, .focus])
+        XCTAssertEqual(
+        Status(en_US, 0, false) .!=
+        Status(sv_SE, 1,  true), [.style, .value, .focus])
         
     }
 }
