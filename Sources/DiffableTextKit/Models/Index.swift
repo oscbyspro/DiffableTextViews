@@ -20,7 +20,7 @@ public struct Index: Comparable {
     
     @usableFromInline let character: String.Index
     @usableFromInline let attribute: Int
-
+    
     //=--------------------------------------------------------------------=
     // MARK: Initializers
     //=--------------------------------------------------------------------=

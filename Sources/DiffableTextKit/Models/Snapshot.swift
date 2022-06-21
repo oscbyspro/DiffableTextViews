@@ -26,10 +26,10 @@
 ///
 /// - **Attributes & Characters**
 ///
-/// The number of attributes must match the number of joint characters.
-/// Inability to maintain this invariant will result in unexpected behavior. Usually,
-/// it's a trivial constraint because the easiest way to assign attributes is to loop
-/// over the characters in some pre-made sequence of formatted text.
+/// The number of attributes must match the number of joint characters. An
+/// inability to maintain this invariant will result in unexpected behavior. In most cases
+/// it's a trivial constraint because the easiest way to create a snapshot is to loop over
+/// each characters in some alerady joined sequence or collection.
 ///
 public struct Snapshot: Equatable,
 BidirectionalCollection,
@@ -380,7 +380,7 @@ extension Snapshot {
 extension Snapshot {
     
     //=------------------------------------------------------------------------=
-    // MARK: Passthrough
+    // MARK: Attributes
     //=------------------------------------------------------------------------=
     
     @inlinable func nonpassthrough(at index: Index) -> Bool {
@@ -411,7 +411,7 @@ extension Snapshot {
 extension Snapshot {
     
     //=------------------------------------------------------------------------=
-    // MARK: Preference
+    // MARK: Search
     //=------------------------------------------------------------------------=
     
     /// Returns the preferred caret if it exists, returns endIndex otherwise.
@@ -425,7 +425,7 @@ extension Snapshot {
         // Inspect Initial Index
         //=--------------------------------------=
         if peek(from: index, towards: preference).map(
-        nonpassthrough) == true { return index }
+        nonpassthrough) == true { return index  }
         //=--------------------------------------=
         // Direction
         //=--------------------------------------=
@@ -450,9 +450,9 @@ extension Snapshot {
         return self.endIndex
     }
     
-    //=--------------------------------------------------------------------=
+    //=------------------------------------------------------------------------=
     // MARK: Forwards, Backwards, To, Through
-    //=--------------------------------------------------------------------=
+    //=------------------------------------------------------------------------=
     
     @inlinable func caret(from index: Index, towards direction: Direction,
     jumping distance: Jump, targeting target: Target) -> Index? {
@@ -469,11 +469,11 @@ extension Snapshot {
     }
     
     @inlinable func caret(from index: Index, forwardsThrough target: Target) -> Index? {
-        caret(from: index, forwardsTo: target).map(index(after:))
+        caret(from: index, forwardsTo: target).map(self.index(after:))
     }
     
     @inlinable func caret(from index: Index, backwardsTo target: Target) -> Index? {
-        caret(from: index, backwardsThrough: target).map(index(after:))
+        caret(from: index, backwardsThrough: target).map(self.index(after:))
     }
     
     @inlinable func caret(from index: Index, backwardsThrough target: Target) -> Index? {
