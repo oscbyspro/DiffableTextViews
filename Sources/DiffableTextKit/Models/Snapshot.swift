@@ -27,8 +27,9 @@
 /// - **Attributes & Characters**
 ///
 /// The number of attributes must match the number of joint characters.
-/// This is a trivial invariant to maintain, in most cases, but failure to maintain it will
-/// result in unexpected behavior.
+/// Inability to maintain this invariant will result in unexpected behavior. Usually,
+/// it's a trivial constraint because the easiest way to assign attributes is to loop
+/// over the characters in some pre-made sequence of formatted text.
 ///
 public struct Snapshot: Equatable,
 BidirectionalCollection,
