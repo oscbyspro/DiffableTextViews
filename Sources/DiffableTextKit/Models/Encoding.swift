@@ -63,13 +63,13 @@ extension Encoding {
             let after = snapshot.index(after: index)
             distance -= self.distance(from: index, to: after, in: snapshot)
             //=----------------------------------=
-            // None
+            // Next
             //=----------------------------------=
             if distance > 0 {
                 index = after; continue forwards
             }
             //=----------------------------------=
-            // Some
+            // Done
             //=----------------------------------=
             return distance == 0 ? after : index
         }
@@ -85,13 +85,13 @@ extension Encoding {
             let after = index; snapshot.formIndex(before: &index)
             distance += self.distance(from: index, to: after, in: snapshot)
             //=----------------------------------=
-            // None
+            // Next
             //=----------------------------------=
             if distance < 0 {
                 continue backwards
             }
             //=----------------------------------=
-            // Some
+            // Done
             //=----------------------------------=
             return index
         }

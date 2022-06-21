@@ -18,13 +18,17 @@
 /// |x|o|o|o|x|o|o|o|o|o|o|o|x|x|x|x|~
 /// ```
 ///
+/// - **Anchor**
+///
 /// Set the anchor to select the caret represented by its index. It may be desirable
 /// on snapshots containing only formatting characters. As an example, a pattern text style
 /// bound to an empty value may anchor at the pattern's first placeholder character.
 ///
-/// On another note, the number of attributes in the snapshot must always equal
-/// the number of characters in its storage string. This is usually a trivial invariant
-/// to maintain, but failure to maintain it will lead to unexpected behavior.
+/// - **Attributes & Characters**
+///
+/// The number of attributes must match the number of joint characters.
+/// This is a trivial invariant to maintain, in most cases, but failure to maintain it will
+/// result in unexpected behavior.
 ///
 public struct Snapshot: Equatable,
 BidirectionalCollection,
@@ -93,7 +97,7 @@ ExpressibleByStringLiteral {
 extension Snapshot {
     
     //=------------------------------------------------------------------------=
-    // MARK: String
+    // MARK: String (Optimization)
     //=------------------------------------------------------------------------=
     
     @inlinable public init(_ characters: String,
@@ -215,7 +219,7 @@ extension Snapshot {
     with transform: (inout Attribute) -> Void)
     where R: RangeExpression, R.Bound == Index {
         for index in self.indices[indices.relative(to: self)] {
-            transform(&_attributes[index.attribute])
+            transform(&self._attributes[index.attribute])
         }
     }
     

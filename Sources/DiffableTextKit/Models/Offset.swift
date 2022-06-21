@@ -103,7 +103,7 @@ extension Offset where Encoding == Character {
     //=------------------------------------------------------------------------=
     
     @inlinable @inline(__always)
-    public static func character(_ distance: Int) -> Self {
+    public static func characters(_ distance: Int) -> Self {
         Self(distance)
     }
 }
@@ -119,7 +119,7 @@ extension Offset where Encoding == Unicode.Scalar {
     //=------------------------------------------------------------------------=
     
     @inlinable @inline(__always)
-    public static func unicodeScalar(_ distance: Int) -> Self {
+    public static func unicodeScalars(_ distance: Int) -> Self {
         Self(distance)
     }
 }
