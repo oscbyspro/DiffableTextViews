@@ -26,10 +26,11 @@
 ///
 /// - **Attributes & Characters**
 ///
-/// The number of attributes must match the number of joint characters. An
-/// inability to maintain this invariant will result in unexpected behavior. In most cases
-/// it's a trivial constraint because the easiest way to create a snapshot is to loop over
-/// each characters in some alerady joined sequence or collection.
+/// The number of attributes must always equal the number of joint characters in the
+/// snapshot. A failure to maintain this invariant will result in an invalid state
+/// and may crash your application. In most cases, this is a trivial constraint as
+/// the easiest and most straight forward way to create a snapshot is to loop over each
+/// characters in an already joined sequence of characters.
 ///
 public struct Snapshot: Equatable,
 BidirectionalCollection,
@@ -54,8 +55,8 @@ ExpressibleByStringLiteral {
         self._attributes = []
     }
     
-    @inlinable public init(arrayLiteral elements: Symbol...) {
-        self.init(elements)
+    @inlinable public init(arrayLiteral symbols: Symbol...) {
+        self.init(symbols)
     }
     
     @inlinable public init(stringLiteral characters: String) {
@@ -98,7 +99,7 @@ ExpressibleByStringLiteral {
 extension Snapshot {
     
     //=------------------------------------------------------------------------=
-    // MARK: String (Optimization)
+    // MARK: String
     //=------------------------------------------------------------------------=
     
     @inlinable public init(_ characters: String,
@@ -117,7 +118,7 @@ extension Snapshot {
     }
     
     //=------------------------------------------------------------------------=
-    // MARK: some Sequence<Character>
+    // MARK: Sequence
     //=------------------------------------------------------------------------=
     
     @inlinable public init(_ characters: some Sequence<Character>,
@@ -228,10 +229,19 @@ extension Snapshot {
     // MARK: Append
     //=------------------------------------------------------------------------=
     
-    @inlinable public mutating func append(_ element: Symbol) {
-        self._characters.append(element.character)
-        self._attributes.append(element.attribute)
+    @inlinable public mutating func append(_ symbol: Symbol) {
+        self._characters.append(symbol.character)
+        self._attributes.append(symbol.attribute)
     }
+    
+    @inlinable public mutating func append(_ character: Character,
+    as attribute: Attribute = .content) {
+        self.append(Symbol(character, as: attribute))
+    }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Append x Sequence
+    //=------------------------------------------------------------------------=
     
     @inlinable public mutating func append(
     contentsOf characters: some Sequence<Character>,
@@ -252,10 +262,19 @@ extension Snapshot {
     // MARK: Insert
     //=------------------------------------------------------------------------=
     
-    @inlinable public mutating func insert(_ element: Element, at index: Index) {
-        self._characters.insert(element.character, at: index.character)
-        self._attributes.insert(element.attribute, at: index.attribute)
+    @inlinable public mutating func insert(_ symbol: Symbol, at index: Index) {
+        self._characters.insert(symbol.character, at: index.character)
+        self._attributes.insert(symbol.attribute, at: index.attribute)
     }
+        
+    @inlinable public mutating func insert(_ character: Character,
+    at index: Index, as attribute: Attribute = .content) {
+        self.insert(Symbol(character, as: attribute), at: index)
+    }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Insert x Collection
+    //=------------------------------------------------------------------------=
     
     @inlinable public mutating func insert(contentsOf characters: some Collection<Character>,
     at index: Index, as attribute: Attribute = .content) {
@@ -281,10 +300,10 @@ extension Snapshot {
     //=------------------------------------------------------------------------=
     
     @inlinable public mutating func replaceSubrange(_ indices: Range<Index>,
-    with elements: some Collection<Symbol>) {
+    with symbols: some Collection<Symbol>) {
         self.replaceSubrange(indices,
-        characters: elements.lazy.map(\.character),
-        attributes: elements.lazy.map(\.attribute))
+        characters: symbols.lazy.map(\.character),
+        attributes: symbols.lazy.map(\.attribute))
     }
     
     @inlinable public mutating func replaceSubrange(_ indices: Range<Index>,

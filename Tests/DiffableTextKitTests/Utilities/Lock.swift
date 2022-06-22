@@ -26,7 +26,7 @@ import XCTest
     var lock = Lock()
     
     //=------------------------------------------------------------------------=
-    // MARK: Transformations
+    // MARK: State x Setup
     //=------------------------------------------------------------------------=
     
     override func setUp() {
@@ -76,11 +76,15 @@ import XCTest
     
     func testSynchronousActionLocksUntilCompletion() {
         XCTAssertFalse(lock.isLocked)
-        
+        //=--------------------------------------=
+        // Start
+        //=--------------------------------------=
         lock.perform {
             XCTAssert(self.lock.isLocked)
         }
-        
+        //=--------------------------------------=
+        // End
+        //=--------------------------------------=
         XCTAssertFalse(lock.isLocked)
     }
     
@@ -90,11 +94,17 @@ import XCTest
     
     func testAsynchronousOperationLocksUntilCompletion() async {
         XCTAssertFalse(lock.isLocked)
+        //=--------------------------------------=
+        // Start
+        //=--------------------------------------=
+        let task = lock.asynchronous {
+            XCTAssert(self.lock.isLocked) // 2nd
+        };  XCTAssert(self.lock.isLocked) // 1st
         
-        await lock.task {
-            XCTAssert(self.lock.isLocked)
-        }
-        
+        await task.value
+        //=--------------------------------------=
+        // End
+        //=--------------------------------------=
         XCTAssertFalse(lock.isLocked)
     }
 }

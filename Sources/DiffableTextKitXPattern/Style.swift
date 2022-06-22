@@ -101,7 +101,7 @@ extension PatternTextStyle {
         reduce(value, into: Commit()) {
             commit, queue, content in
             commit.snapshot.append(contentsOf: queue, as: .phantom)
-            commit.snapshot.append(Symbol(content))
+            commit.snapshot.append(content)
             commit.value   .append(content)
         } none: {
             commit, queue in

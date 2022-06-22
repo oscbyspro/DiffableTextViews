@@ -20,31 +20,60 @@ import XCTest
 final class SnapshotTests: XCTestCase {
     
     //=------------------------------------------------------------------------=
+    // MARK: State
+    //=------------------------------------------------------------------------=
+    
+    var snapshot = Snapshot()
+    
+    //=------------------------------------------------------------------------=
+    // MARK: State x Setup
+    //=------------------------------------------------------------------------=
+    
+    override func setUp() {
+        snapshot = Snapshot()
+    }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Assertions
+    //=------------------------------------------------------------------------=
+    
+    func Assert(_ characters: String, _ attributes: [Attribute]) {
+        XCTAssertEqual(snapshot.characters, characters)
+        XCTAssertEqual(snapshot.attributes, attributes)
+    }
+    
+    //=------------------------------------------------------------------------=
     // MARK: Tests x State
     //=------------------------------------------------------------------------=
     
     func testAnchorIsNilByDefault() {
-        XCTAssertEqual(Snapshot("ABC").anchor, nil)
+        XCTAssertEqual(snapshot.anchor, nil)
     }
     
     //=------------------------------------------------------------------------=
     // MARK: Tests x Initializers
     //=------------------------------------------------------------------------=
     
-    func testInitWithoutArgumentsIsEmpty() {
-        XCTAssert(Snapshot().isEmpty)
+    func testInit() {
+        Assert("", [])
     }
     
-    func testInitCharactersDefaultAttributeIsContent() {
-        XCTAssert(Snapshot("ABC").attributes.allSatisfy({ $0 == .content }))
+    func testInitWithCharacters() {
+        snapshot = Snapshot("AB")
+        
+        Assert("AB", [.content, .content])
     }
     
     func testInitAsArrayLiteral() {
-        XCTAssertEqual(Snapshot("ABC"), [Symbol("A"), Symbol("B"), Symbol("C")])
+        snapshot = [Symbol("A"), Symbol("B", as: .phantom)]
+        
+        Assert("AB", [.content, .phantom])
     }
     
     func testInitAsStringLiteral() {
-        XCTAssertEqual(Snapshot("ABC"), "ABC")
+        snapshot = "AB" as Snapshot
+        
+        Assert("AB", [.content, .content])
     }
     
     //=------------------------------------------------------------------------=
@@ -52,7 +81,7 @@ final class SnapshotTests: XCTestCase {
     //=------------------------------------------------------------------------=
     
     func testAnchorAtIndex() {
-        var snapshot = Snapshot("ABC")
+        snapshot = Snapshot("ABC")
         let index = snapshot.index(at: .characters(1))
         
         snapshot.anchor(at: index)
@@ -63,11 +92,10 @@ final class SnapshotTests: XCTestCase {
     }
     
     func testAnchorAtEndIndex() {
-        var snapshot = Snapshot()
-        snapshot.append("A")
+        snapshot.append(Symbol(" "))
         snapshot.anchorAtEndIndex()
-        snapshot.append("B")
-        snapshot.append("C")
+        snapshot.append(Symbol(" "))
+        
         XCTAssertEqual(snapshot.anchor, snapshot.index(at: .characters(1)))
     }
     
@@ -75,62 +103,104 @@ final class SnapshotTests: XCTestCase {
     // MARK: Tests x Transformations x Append
     //=------------------------------------------------------------------------=
     
-    func testAppend() {
-        var snapshot = Snapshot()
-        snapshot.append("A")
-        snapshot.append("B")
-        snapshot.append("C")
-        XCTAssertEqual(snapshot, "ABC")
+    func testAppendSymbol() {
+        snapshot.append(Symbol("A"))
+        snapshot.append(Symbol("B", as: .phantom))
+        
+        Assert("AB", [.content, .phantom])
     }
     
-    func testAppendContentsOf() {
-        var snapshot = Snapshot("AB")
-        snapshot.append(contentsOf: "CDE")
-        XCTAssertEqual(snapshot, "ABCDE")
+    func testAppendCharacter() {
+        snapshot.append(Character("A"))
+        snapshot.append(Character("B"), as: .phantom)
+        
+        Assert("AB", [.content, .phantom])
     }
     
-    func testAppendContentsOfCharactersDefaultAttributeIsContent() {
-        var snapshot = Snapshot()
-        snapshot.append(contentsOf: "ABC")
-        XCTAssert(snapshot.attributes.allSatisfy({ $0 == .content }))
+    //=------------------------------------------------------------------------=
+    // MARK: Tests x Transformations x Append x Sequence
+    //=------------------------------------------------------------------------=
+    
+    func testAppendContentsOfSymbols() {
+        snapshot.append(contentsOf: Snapshot("A", as: .content))
+        snapshot.append(contentsOf: Snapshot("B", as: .phantom))
+        
+        Assert("AB", [.content, .phantom])
+    }
+    
+    func testAppendContentsOfCharacters() {
+        snapshot.append(contentsOf: String("A"))
+        snapshot.append(contentsOf: String("B"), as: .phantom)
+        
+        Assert("AB", [.content, .phantom])
     }
     
     //=------------------------------------------------------------------------=
     // MARK: Tests x Transformations x Insert
     //=------------------------------------------------------------------------=
     
-    func testInsert() {
-        var snapshot = Snapshot("AC")
-        snapshot.insert("B", at: snapshot.index(at: .characters(1)))
-        XCTAssertEqual(snapshot, "ABC")
+    func testInsertSymbol() {
+        snapshot.insert(Symbol("B", as: .phantom), at: snapshot.startIndex)
+        snapshot.insert(Symbol("A", as: .content), at: snapshot.startIndex)
+        
+        Assert("AB", [.content, .phantom])
     }
     
-    func testInsertContentsOf() {
-        var snapshot = Snapshot("AE")
-        snapshot.insert(contentsOf: "BCD", at: snapshot.index(at: .characters(1)))
-        XCTAssertEqual(snapshot, "ABCDE")
+    func testInsertCharacter() {
+        snapshot.insert(Character("B"), at: snapshot.startIndex, as: .phantom)
+        snapshot.insert(Character("A"), at: snapshot.startIndex)
+        
+        Assert("AB", [.content, .phantom])
     }
     
-    func testInsertContentsOfCharactersDefaultAttributeIsContent() {
-        var snapshot = Snapshot("AE")
-        snapshot.insert(contentsOf: "BCD", at: snapshot.index(at: .characters(1)))
-        XCTAssert(snapshot.attributes.allSatisfy({ $0 == .content }))
+    //=------------------------------------------------------------------------=
+    // MARK: Tests x Transformations x Insert x Collection
+    //=------------------------------------------------------------------------=
+    
+    func testInsertContentsOfSymbols() {
+        snapshot.insert(contentsOf: Snapshot("B", as: .phantom), at: snapshot.startIndex)
+        snapshot.insert(contentsOf: Snapshot("A", as: .content), at: snapshot.startIndex)
+        
+        Assert("AB", [.content, .phantom])
+    }
+    
+    func testInsertContentsOfCharacters() {
+        snapshot.insert(contentsOf: String("B"), at: snapshot.startIndex, as: .phantom)
+        snapshot.insert(contentsOf: String("A"), at: snapshot.startIndex)
+        
+        Assert("AB", [.content, .phantom])
     }
     
     //=------------------------------------------------------------------------=
     // MARK: Tests x Transformations x Replace
     //=------------------------------------------------------------------------=
     
-    func testReplaceSubrange() {
-        var snapshot = Snapshot("AxxxE")
-        snapshot.replaceSubrange(snapshot.indices(at: .characters(1) ..< 4), with: "BCD")
-        XCTAssertEqual(snapshot, "ABCDE")
+    func testReplaceSubrangeWithSymbols() {
+        snapshot = Snapshot(repeating: " ", count: 4)
+        snapshot.replaceSubrange(snapshot.indices(at: .characters(0) ..< 2), with: Snapshot("AA", as: .content))
+        snapshot.replaceSubrange(snapshot.indices(at: .characters(2) ..< 4), with: Snapshot("BB", as: .phantom))
+        
+        Assert("AABB", [.content, .content, .phantom, .phantom])
     }
     
-    func testReplaceSubrangeWithCharactersDefaultAttributeIsContent() {
-        var snapshot = Snapshot("AxxxE")
-        snapshot.replaceSubrange(snapshot.indices(at: .characters(1) ..< 4), with: "BCD")
-        XCTAssert(snapshot.attributes.allSatisfy({ $0 == .content }))
+    func testReplaceSubrangeWithCharacters() {
+        snapshot = Snapshot(repeating: " ", count: 4)
+        snapshot.replaceSubrange(snapshot.indices(at: .characters(0) ..< 2), with: Snapshot("AA", as: .content))
+        snapshot.replaceSubrange(snapshot.indices(at: .characters(2) ..< 4), with: Snapshot("BB", as: .phantom))
+        
+        Assert("AABB", [.content, .content, .phantom, .phantom])
+    }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Tests x Invariant
+    //=------------------------------------------------------------------------=
+    
+    func testNumberOfAttributesMustEqualNumberOfJointCharacters() {
+        snapshot = Snapshot("🇸🇪🇺🇸".unicodeScalars.map(Character.init))
+        
+        XCTAssertEqual(snapshot.count,            4)
+        XCTAssertEqual(snapshot.attributes.count, 4)
+        XCTAssertEqual(snapshot.characters.count, 2)
     }
 }
 

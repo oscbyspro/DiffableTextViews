@@ -27,18 +27,14 @@ final class HelpersTestsXDownstream: XCTestCase {
     // MARK: State
     //=------------------------------------------------------------------------=
     
-    let downstream = Downstream()
+    lazy var downstream  = Downstream()
     
-    //=------------------------------------------------------------------------=
-    // MARK: State
-    //=------------------------------------------------------------------------=
-
     lazy var alphabet    = "ABCDEFGHIJJKLMNOPQRSTUVWXYZ"
     lazy var alphabet10  = String(repeating: alphabet, count: 10)
     lazy var alphabet100 = String(repeating: alphabet, count: 100)
     
     //=------------------------------------------------------------------------=
-    // MARK: Setup
+    // MARK: State x Setup
     //=------------------------------------------------------------------------=
     
     override func setUp() {
