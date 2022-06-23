@@ -125,7 +125,7 @@ extension PatternTextStyle {
     /// - Mismatches throw an error.
     @inlinable @inline(never) public func resolve(_ proposal: Proposal) throws -> Commit<Value> {
         var value = Value(); let proposal = proposal.merged()
-        var nonvirtuals = proposal.lazy.filter(\.nonvirtual).makeIterator()
+        var nonvirtuals = proposal.nonvirtuals.makeIterator()
         //=--------------------------------------=
         // Parse
         //=--------------------------------------=
@@ -135,13 +135,13 @@ extension PatternTextStyle {
                 //=------------------------------=
                 // Predicate
                 //=------------------------------=
-                guard predicate.check(nonvirtual.character) else {
-                    throw Info([.mark(nonvirtual.character), "is invalid"])
+                guard predicate.check(nonvirtual) else {
+                    throw Info([.mark(nonvirtual), "is invalid"])
                 }
                 //=------------------------------=
                 // Insertion
                 //=------------------------------=
-                value.append(nonvirtual.character)
+                value.append(nonvirtual)
             }
         }
         //=--------------------------------------=

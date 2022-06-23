@@ -64,9 +64,6 @@ import DiffableTextKit
     }
     
     @inlinable mutating func trim(to precision: Count) -> Bool {
-        //=--------------------------------------=
-        // Trim
-        //=--------------------------------------=
         let  integerWasTrimmed = self.integer .resize(
         suffix: min(precision.integer,  precision.value))
         
@@ -101,20 +98,18 @@ extension Number {
     // MARK: Snapshot
     //=------------------------------------------------------------------------=
     
-    /// Requires that all formatting characters are marked as virtual.
-    @inlinable init?(in snapshot: Snapshot, using components: Components,
+    /// Requires that formatting characters are marked as virtual.
+    @inlinable init?(in snapshot: Snapshot,
+    using components: Components,
     as kind: (some NumberTextKind).Type) throws {
-        //=--------------------------------------=
-        // Instantiate
-        //=--------------------------------------=
         try self.init(
-        unformatted: snapshot.lazy.filter(\.nonvirtual).map(\.character),
+        unformatted: snapshot.nonvirtuals,
         signs: components.signs.components,
         digits: components.digits.components,
         separators: components.separators.components,
         optional: kind.isOptional,
         unsigned: kind.isUnsigned,
-        integer:  kind.isInteger)
+        integer:  kind .isInteger)
     }
     
     //=------------------------------------------------------------------------=
