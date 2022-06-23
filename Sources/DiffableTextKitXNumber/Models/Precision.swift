@@ -15,8 +15,7 @@ import Foundation
 //*============================================================================*
 
 public struct NumberTextPrecision<Value: NumberTextValue>: Equatable {
-    @usableFromInline typealias Namespace = _Precision
-    @usableFromInline typealias Mode = NumberFormatStyleConfiguration.Precision
+    @usableFromInline typealias Name = _NumberTextPrecision
     
     //=------------------------------------------------------------------------=
     // MARK: State
@@ -59,7 +58,7 @@ public struct NumberTextPrecision<Value: NumberTextValue>: Equatable {
     //=------------------------------------------------------------------------=
     
     @inlinable var lower: Count {
-        Count(value: Namespace.lower.value,
+        Count(value: Name.lower.value,
         integer:  integer .lowerBound,
         fraction: fraction.lowerBound)
     }
@@ -75,11 +74,11 @@ public struct NumberTextPrecision<Value: NumberTextValue>: Equatable {
     //=------------------------------------------------------------------------=
     
     @inlinable static var integer: ClosedRange<Int> {
-        ClosedRange(uncheckedBounds: (Namespace.lower.integer, Value.precision))
+        ClosedRange(uncheckedBounds: (Name.lower.integer, Value.precision))
     }
     
     @inlinable static var fraction: ClosedRange<Int> {
-        let min = Namespace.lower.fraction
+        let min = Name.lower.fraction
         let max = Value.isInteger ? min : Value.precision
         return ClosedRange(uncheckedBounds: (min, max))
     }
@@ -88,22 +87,22 @@ public struct NumberTextPrecision<Value: NumberTextValue>: Equatable {
     // MARK: Utilities
     //=------------------------------------------------------------------------=
     
-    @inlinable func inactive() -> Mode {
+    @inlinable func inactive() -> Name.Mode {
         .integerAndFractionLength(
          integerLimits:  integer.lowerBound ... Int.max,
         fractionLimits: fraction.lowerBound ... Int.max)
     }
-
-    @inlinable func active() -> Mode {
+    
+    @inlinable func active() -> Name.Mode {
         .integerAndFractionLength(
-         integerLimits: Namespace.lower.integer  ...  integer.upperBound,
-        fractionLimits: Namespace.lower.fraction ... fraction.upperBound)
+         integerLimits: Name.lower.integer  ... Int.max,
+        fractionLimits: Name.lower.fraction ... Int.max)
     }
     
-    @inlinable func interactive(_ count: Count) -> Mode {
+    @inlinable func interactive(_ count: Count) -> Name.Mode {
         .integerAndFractionLength(
-         integerLimits: max(Namespace.lower.integer,  count.integer)  ... count.integer,
-        fractionLimits: max(Namespace.lower.fraction, count.fraction) ... count.fraction)
+         integerLimits: max(Name.lower.integer,  count.integer ) ... Int.max,
+        fractionLimits: max(Name.lower.fraction, count.fraction) ... Int.max)
     }
     
     //=------------------------------------------------------------------------=
@@ -112,12 +111,12 @@ public struct NumberTextPrecision<Value: NumberTextValue>: Equatable {
     
     @inlinable static func integer<I>(_ limits: I) -> ClosedRange<Int>
     where I: RangeExpression, I.Bound == Int {
-        Namespace.clamping(limits, to: integer)
+        Name.clamping(limits, to: integer)
     }
     
     @inlinable static func fraction<F>(_ limits: F) -> ClosedRange<Int>
     where F: RangeExpression, F.Bound == Int {
-        Namespace.clamping(limits, to: fraction)
+        Name.clamping(limits, to: fraction)
     }
 }
 
@@ -132,7 +131,9 @@ extension NumberTextPrecision {
     //=------------------------------------------------------------------------=
     
     @inlinable func autocorrect(_ number: inout Number) {
-        number.trimToFit(upper)
+        if number.trim(to: upper) {
+            Info.print(autocorrection: [.mark("number"), "exceeded precision", .note(upper)])
+        }
     }
 }
 
@@ -151,7 +152,7 @@ extension NumberTextPrecision {
         //=--------------------------------------=
         // MARK: Autocorrect
         //=--------------------------------------=
-        if capacity.fraction <= 0 || capacity.value <= 0, number.removeSeparatorAsSuffix() {
+        if capacity.fraction <= 0 || capacity.value <= 0, number.removeSeparatorAsLastElement() {
             Info.print(autocorrection: [.mark(number), "does not fit a fraction separator"])
         }
     }
@@ -175,7 +176,8 @@ extension NumberTextPrecision {
 // MARK: * Precision x Namespace
 //*============================================================================*
 
-@usableFromInline enum _Precision {
+@usableFromInline enum _NumberTextPrecision {
+    @usableFromInline typealias Mode = NumberFormatStyleConfiguration.Precision
     
     //=------------------------------------------------------------------------=
     // MARK: Constants
@@ -184,7 +186,7 @@ extension NumberTextPrecision {
     @usableFromInline static let lower = Count(value: 1, integer: 1, fraction: 0)
     
     //=------------------------------------------------------------------------=
-    // MARK: Utilities
+    // MARK: Helpers
     //=------------------------------------------------------------------------=
     
     @inlinable static func clamping<R: RangeExpression>(_ expression: R,

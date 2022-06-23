@@ -25,7 +25,7 @@ import DiffableTextKit
     //=------------------------------------------------------------------------=
     // MARK: State
     //=------------------------------------------------------------------------=
-
+    
     @usableFromInline var sign = Sign.positive
     @usableFromInline private(set) var integer = Digits()
     @usableFromInline private(set) var separator = Separator?.none
@@ -34,18 +34,18 @@ import DiffableTextKit
     //=------------------------------------------------------------------------=
     // MARK: Accessors
     //=------------------------------------------------------------------------=
-
+    
     @inlinable var rawValue: [UInt8] {
-        Array(capacity: integer.count + fraction.count + 2) {
-            $0.append(sign.rawValue)
-            $0.append(contentsOf: integer.rawValue)
-            guard let separator else { return }
-            $0.append(separator.rawValue)
-            $0.append(contentsOf: fraction.rawValue)
-        }
+        let size = integer.count+fraction.count+2
+        return Array<UInt8>.init(capacity: size){
+        $0.append(sign.rawValue)
+        $0.append(contentsOf: integer.rawValue)
+        guard let separator else { return }
+        $0.append(separator.rawValue)
+        $0.append(contentsOf: fraction.rawValue)}
     }
     
-    @inlinable var hasSeparatorAsSuffix: Bool {
+    @inlinable var separatorIsLastElement: Bool {
         fraction.digits.isEmpty && separator != nil
     }
     
@@ -59,26 +59,35 @@ import DiffableTextKit
     //=------------------------------------------------------------------------=
     
     /// Returns true if a suffixing separator was removed, returns false otherwise.
-    @inlinable @discardableResult mutating func removeSeparatorAsSuffix() -> Bool {
-        if hasSeparatorAsSuffix { separator = nil; return true }; return false
+    @inlinable @discardableResult mutating func removeSeparatorAsLastElement() -> Bool {
+        let remove = separatorIsLastElement; if remove { separator = nil }; return remove
     }
     
-    @inlinable mutating func trimToFit(_ precision: Count) {
+    @inlinable mutating func trim(to precision: Count) -> Bool {
         //=--------------------------------------=
-        // Integer
+        // Trim
         //=--------------------------------------=
-        self.integer.resize(suffix: min(precision.integer, precision.value))
-        self.integer.removeZerosAsPrefix()
+        let  integerWasTrimmed = self.integer .resize(
+        suffix: min(precision.integer,  precision.value))
+        
+        let fractionWasTrimmed = self.fraction.resize(
+        prefix: min(precision.fraction, precision.value - integer.count))
         //=--------------------------------------=
-        // Fraction
+        // Autocorrect
         //=--------------------------------------=
-        self.fraction.resize(prefix: min(precision.fraction, precision.value - integer.count))
-        self.fraction.removeZerosAsSuffix()
+        if  integerWasTrimmed {
+            self.integer.trim(prefix: \.isZero)
+            self.integer.replaceEmptyWithZero()
+        }
+        
+        if  fractionWasTrimmed {
+            self.fraction.trim(suffix:\.isZero)
+            self.removeSeparatorAsLastElement()
+        }
         //=--------------------------------------=
-        // Finalize
+        // Done
         //=--------------------------------------=
-        self.integer.makeAtLeastZero()
-        self.removeSeparatorAsSuffix()
+        return integerWasTrimmed || fractionWasTrimmed
     }
 }
 
@@ -95,28 +104,31 @@ extension Number {
     /// Requires that all formatting characters are marked as virtual.
     @inlinable init?(in snapshot: Snapshot, using components: Components,
     as kind: (some NumberTextKind).Type) throws {
-        let unformatted = snapshot.lazy.filter(\.nonvirtual).map(\.character)
-        try self.init(unformatted: unformatted,
+        //=--------------------------------------=
+        // Instantiate
+        //=--------------------------------------=
+        try self.init(
+        unformatted: snapshot.lazy.filter(\.nonvirtual).map(\.character),
         signs: components.signs.components,
         digits: components.digits.components,
         separators: components.separators.components,
         optional: kind.isOptional,
         unsigned: kind.isUnsigned,
-        integer:  kind.isInteger )
+        integer:  kind.isInteger)
     }
     
     //=------------------------------------------------------------------------=
     // MARK: Characters
     //=------------------------------------------------------------------------=
     
-    @usableFromInline init?(unformatted sequence: some Sequence<Character>,
+    @usableFromInline init?(unformatted: some Sequence<Character>,
     signs: Map<Sign>, digits: Map<Digit>, separators: Map<Separator>,
     optional: Bool, unsigned: Bool, integer: Bool) throws {
         //=--------------------------------------=
         // State
         //=--------------------------------------=
         var signable = !unsigned
-        var iterator = sequence.makeIterator()
+        var iterator = unformatted.makeIterator()
         var next = iterator.next()
         //=--------------------------------------=
         // Utilities
@@ -127,7 +139,7 @@ extension Number {
             }
         }
         //=--------------------------------------=
-        // Sign: Prefix
+        // Sign As Prefix
         //=--------------------------------------=
         sign()
         //=--------------------------------------=
@@ -162,14 +174,14 @@ extension Number {
             }
         }
         //=--------------------------------------=
-        // Sign: Suffix
+        // Sign As Suffix
         //=--------------------------------------=
         sign()
         //=--------------------------------------=
         // Validate
         //=--------------------------------------=
         guard next == nil else {
-            throw Info(["unable to parse number in", .mark(String(sequence))])
+            throw Info(["unable to parse number in", .mark(String(unformatted))])
         }
         //=--------------------------------------=
         // Optional
@@ -181,8 +193,9 @@ extension Number {
             return nil
         }
         //=--------------------------------------=
-        // Finalize
+        // Autocorrect
         //=--------------------------------------=
-        self.integer.removeZerosAsPrefix(); self.integer.makeAtLeastZero()        
+        self.integer.trim(prefix: \.isZero)
+        self.integer.replaceEmptyWithZero()
     }
 }

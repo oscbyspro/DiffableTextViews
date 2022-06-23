@@ -211,7 +211,7 @@ extension NumberTextBounds {
         //=--------------------------------------=
         // Remove Separator On Value Is Maxed Out
         //=--------------------------------------=
-        if location == .edge, number.removeSeparatorAsSuffix() {
+        if location == .edge, number.removeSeparatorAsLastElement() {
             Info.print(autocorrection: [.mark(number), "does not fit a fraction separator"])
         }
     }

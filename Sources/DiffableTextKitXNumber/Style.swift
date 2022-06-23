@@ -73,7 +73,8 @@ extension _NumberTextStyle {
     //=------------------------------------------------------------------------=
     
     @inlinable public func interpret(_ value: Value) -> Commit<Value> {
-        var value = value; let style = format.precision(precision.active())
+        let style = format.precision(precision.active())
+        var value = value
         //=--------------------------------------=
         // Autocorrect
         //=--------------------------------------=
@@ -87,7 +88,7 @@ extension _NumberTextStyle {
         //=--------------------------------------=
         // Autocorrect
         //=--------------------------------------=
-        bounds.autocorrect(&number)
+        bounds   .autocorrect(&number)
         precision.autocorrect(&number)
         //=--------------------------------------=
         // Value
@@ -109,11 +110,12 @@ extension _NumberTextStyle {
     
     /// The resolve method body, also used by styles such as: optional.
     @inlinable func resolve(_ number: Number) throws -> Commit<Value> {
-        var number = number; let count = number.count()
+        let count  = number.count()
+        var number = number
         //=--------------------------------------=
         // Autovalidate
         //=--------------------------------------=
-        try bounds.autovalidate(&number)
+        try bounds   .autovalidate(&number)
         try precision.autovalidate(&number, count)
         //=--------------------------------------=
         // Value
@@ -126,8 +128,7 @@ extension _NumberTextStyle {
         //=--------------------------------------=
         // Commit
         //=--------------------------------------=
-        let style = format.precision(precision.interactive(count))
-        return commit(value, number, style)
+        return commit(value, number, format.precision(precision.interactive(count)))
     }
 }
 

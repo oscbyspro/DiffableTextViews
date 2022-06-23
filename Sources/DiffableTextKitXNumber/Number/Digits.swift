@@ -56,24 +56,29 @@ import DiffableTextKit
     @inlinable mutating func append(_ element: Digit) {
         digits.append(element)
     }
+        
+    @inlinable mutating func replaceEmptyWithZero() {
+        guard digits.isEmpty else { return }
+        digits.append(.zero)
+    }
     
-    @inlinable mutating func makeAtLeastZero() {
-        if digits.isEmpty { digits.append(.zero) }
+    @inlinable mutating func resize(prefix length: Int) -> Bool {
+        guard length < count else { return false }
+        digits.removeSubrange(digits.prefix(length).endIndex...)
+        return true
+    }
+    
+    @inlinable mutating func resize(suffix length: Int) -> Bool {
+        guard length < count else { return false }
+        digits.removeSubrange(..<digits.suffix(length).startIndex)
+        return true
     }
 
-    @inlinable mutating func removeZerosAsPrefix() {
-        digits.removeSubrange(..<digits.prefix(while: \.isZero).endIndex)
+    @inlinable mutating func trim(prefix predicate: (Digit) -> Bool) {
+        digits.removeSubrange(..<digits.prefix(while: predicate).endIndex)
     }
-    
-    @inlinable mutating func removeZerosAsSuffix() {
+
+    @inlinable mutating func trim(suffix predicate: (Digit) -> Bool) {
         digits.removeSubrange(digits.suffix(while: \.isZero).startIndex...)
-    }
-    
-    @inlinable mutating func resize(prefix: Int) {
-        digits.removeSubrange(digits.prefix(prefix).endIndex...)
-    }
-
-    @inlinable mutating func resize(suffix: Int) {
-        digits.removeSubrange(..<digits.suffix(suffix).startIndex)
     }
 }
