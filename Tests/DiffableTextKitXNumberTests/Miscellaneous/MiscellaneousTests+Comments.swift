@@ -26,7 +26,7 @@ final class MiscellaneousTestsXComments: XCTestCase {
     }
     
     func testThatThereAreManyCurrencyCodes() {
-        XCTAssertGreaterThanOrEqual(currencyCodes.count, 153)
+        XCTAssertGreaterThanOrEqual(currencyCodes.count, 304)
     }
     
     func testStyleIsMoreAccurateThanFormatter() {

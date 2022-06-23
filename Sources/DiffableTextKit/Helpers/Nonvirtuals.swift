@@ -84,12 +84,12 @@
                     continue search
                 }
                 //=------------------------------=
-                // Done
+                // Some
                 //=------------------------------=
                 return snapshot.characters[position.character]
             }
             //=----------------------------------=
-            // None
+            // Done
             //=----------------------------------=
             return nil
         }

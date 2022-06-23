@@ -79,6 +79,6 @@ import DiffableTextKit
     }
 
     @inlinable mutating func trim(suffix predicate: (Digit) -> Bool) {
-        digits.removeSubrange(digits.suffix(while: \.isZero).startIndex...)
+        digits.removeSubrange(digits.suffix(while: predicate).startIndex...)
     }
 }

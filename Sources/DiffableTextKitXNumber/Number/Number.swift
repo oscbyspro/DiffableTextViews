@@ -45,7 +45,7 @@ import DiffableTextKit
         $0.append(contentsOf: fraction.rawValue)}
     }
     
-    @inlinable var separatorIsLastElement: Bool {
+    @inlinable var hasSeparatorAsSuffix: Bool {
         fraction.digits.isEmpty && separator != nil
     }
     
@@ -58,33 +58,36 @@ import DiffableTextKit
     // MARK: Transformations
     //=------------------------------------------------------------------------=
     
-    /// Returns true if a suffixing separator was removed, returns false otherwise.
-    @inlinable @discardableResult mutating func removeSeparatorAsLastElement() -> Bool {
-        let remove = separatorIsLastElement; if remove { separator = nil }; return remove
+    @inlinable @discardableResult mutating func removeSeparatorAsSuffix() -> Bool {
+        let remove = hasSeparatorAsSuffix; if remove { separator = nil }; return remove
     }
     
     @inlinable mutating func trim(to precision: Count) -> Bool {
-        let  integerWasTrimmed = self.integer .resize(
+        let trimmed: (integer: Bool,  fraction:  Bool)
+        //=--------------------------------------=
+        // Trim
+        //=--------------------------------------=
+        trimmed.integer = self.integer.resize(
         suffix: min(precision.integer,  precision.value))
         
-        let fractionWasTrimmed = self.fraction.resize(
+        trimmed.fraction = self.fraction.resize(
         prefix: min(precision.fraction, precision.value - integer.count))
         //=--------------------------------------=
         // Autocorrect
         //=--------------------------------------=
-        if  integerWasTrimmed {
+        if  trimmed.integer {
             self.integer.trim(prefix: \.isZero)
             self.integer.replaceEmptyWithZero()
         }
         
-        if  fractionWasTrimmed {
+        if  trimmed.fraction {
             self.fraction.trim(suffix:\.isZero)
-            self.removeSeparatorAsLastElement()
+            self.removeSeparatorAsSuffix()
         }
         //=--------------------------------------=
         // Done
         //=--------------------------------------=
-        return integerWasTrimmed || fractionWasTrimmed
+        return trimmed.integer || trimmed.fraction
     }
 }
 

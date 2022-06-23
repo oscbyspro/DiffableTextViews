@@ -152,7 +152,7 @@ extension NumberTextPrecision {
         //=--------------------------------------=
         // MARK: Autocorrect
         //=--------------------------------------=
-        if capacity.fraction <= 0 || capacity.value <= 0, number.removeSeparatorAsLastElement() {
+        if capacity.fraction <= 0 || capacity.value <= 0, number.removeSeparatorAsSuffix() {
             Info.print(autocorrection: [.mark(number), "does not fit a fraction separator"])
         }
     }

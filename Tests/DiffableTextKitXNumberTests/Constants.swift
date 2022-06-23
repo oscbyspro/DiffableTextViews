@@ -19,18 +19,17 @@ import Foundation
 
 let USD: String = "USD"
 
-let en_US = Locale(identifier: "en_US")
+let en_US: Locale = Locale(identifier: "en_US")
+
+let currencyCodes: [String] = Locale
+    .isoCurrencyCodes
 
 let locales: [Locale] = Locale
     .availableIdentifiers.lazy.map(Locale.init)
     .sorted(by: { $0.identifier < $1.identifier })
 
-let currencyCodes: [String] = locales
-    .lazy.compactMap(\.currencyCode)
-    .reduce(into: Set()) { $0.insert($1) }
-    .lazy.map({ $0 }).sorted(by: <)
-
 let standards: [NumberTextSchemeXStandard] = locales.lazy
-    .map(NumberTextSchemeXStandard.ID.init).map(NumberTextSchemeXStandard.init)
+    .map(NumberTextSchemeXStandard.ID.init)
+    .map(NumberTextSchemeXStandard   .init)
 
 #endif

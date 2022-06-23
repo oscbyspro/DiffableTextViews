@@ -19,14 +19,12 @@ enum Constants {
     // MARK: State
     //=------------------------------------------------------------------------=
     
+    static let currencies: [String] = Locale
+        .isoCurrencyCodes
+    
     static let locales: [Locale] = Locale
         .availableIdentifiers
         .lazy.map(Locale.init)
         .reduce(into: Set()) { $0.insert($1) }
         .sorted(by: { $0.identifier < $1.identifier })
-    
-    static let currencies: [String] = locales
-        .lazy.compactMap(\.currencyCode)
-        .reduce(into: Set()) { $0.insert($1) }
-        .sorted(by: <)
 }
