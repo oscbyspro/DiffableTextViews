@@ -11,21 +11,17 @@
 // MARK: * Info
 //*============================================================================*
 
-/// An error message that contains a description in DEBUG mode.
-///
-/// It uses conditional compilation such that it has no size in RELEASE mode.
-///
-public struct Info: Error, Equatable, CustomStringConvertible {
-    @usableFromInline static let none = "[REDACTED]"
+@resultBuilder public struct Info: Error, Equatable, CustomStringConvertible,
+ExpressibleByStringLiteral, ExpressibleByStringInterpolation  {
+    public static let unknown = "[REDACTED]"
+    public static let separator = "\u{0020}"
     
     //=------------------------------------------------------------------------=
     // MARK: State
     //=------------------------------------------------------------------------=
     
     #if DEBUG
-    public let description: String
-    #else
-    public var description: String { Self.none }
+    @usableFromInline internal var content: [String]
     #endif
     
     //=------------------------------------------------------------------------=
@@ -33,99 +29,174 @@ public struct Info: Error, Equatable, CustomStringConvertible {
     //=------------------------------------------------------------------------=
     
     @inlinable @inline(__always)
-    public init(_ description: @autoclosure () -> String) {
+    internal init(_ content: @autoclosure () -> [String] = []) {
         #if DEBUG
-        self.description = description()
+        self.content = content()
         #endif
     }
     
     //=------------------------------------------------------------------------=
-    // MARK: Print
+    // MARK: Initializers
     //=------------------------------------------------------------------------=
     
     @inlinable @inline(__always)
-    public static func print(_ description: @autoclosure () -> String) {
+    public init(stringLiteral content: String) {
+        self.init([content])
+    }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Initializers
+    //=------------------------------------------------------------------------=
+    
+    @inlinable @inline(__always)
+    public init(_  info: @autoclosure () -> Self) {
+        self.init([info().description])
+    }
+    
+    @inlinable @inline(__always)
+    public init(@Info _ info: () -> Self) {
+        self.init(info())
+    }
+    
+    @inlinable @inline(__always)
+    public init(_ transform: (inout Self) -> Void) {
+        self.init({ var info = Self(); transform(&info); return info }())
+    }
+    
+    @inlinable @inline(__always)
+    public init(_ many: @autoclosure () -> [Self]) {
+        self.init(many().map(\.description))
+    }
+    
+    @inlinable @inline(__always)
+    public init(_ error: @autoclosure () -> any Error) {
+        self.init([String(describing: error())])
+    }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Initializers
+    //=------------------------------------------------------------------------=
+    
+    @inlinable @inline(__always)
+    public static func note(_ item: @autoclosure () -> Any) -> Self {
+        self.init([String(describing: item())])
+    }
+    
+    @inlinable @inline(__always)
+    public static func mark(_ item: @autoclosure () -> Any) -> Self {
+        Self(["« \(item()) »"])
+    }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Accessors
+    //=------------------------------------------------------------------------=
+    
+    @inlinable @inline(__always)
+    public var description: String {
         #if DEBUG
-        Swift.print(description())
+        self.content.joined(separator: Self.separator)
+        #else
+        Self.unknown
         #endif
     }
     
-    //*========================================================================*
-    // MARK: * Component
-    //*========================================================================*
+    //=------------------------------------------------------------------------=
+    // MARK: Transformations
+    //=------------------------------------------------------------------------=
     
-    public struct Component: ExpressibleByStringLiteral {
-        
-        //=--------------------------------------------------------------------=
-        // MARK: State
-        //=--------------------------------------------------------------------=
-        
-        @usableFromInline let content: String
-        
-        //=--------------------------------------------------------------------=
-        // MARK: Initializers
-        //=--------------------------------------------------------------------=
-        
-        @inlinable init( _ content: String) {
-            self.content = content
-        }
-        
-        @inlinable public init(stringLiteral content: StringLiteralType) {
-            self.content = content
-        }
-        
-        //=--------------------------------------------------------------------=
-        // MARK: Initializers
-        //=--------------------------------------------------------------------=
-        
-        @inlinable public static func note(_ value: Any) -> Self {
-            Self(String(describing: value))
-        }
-        
-        @inlinable public static func mark(_ value: Any) -> Self {
-            Self("« \(value) »")
-        }
+    @inlinable @inline(__always)
+    internal mutating func transform(_ transform: (inout [String]) -> Void) {
+        #if DEBUG
+        transform(&self.content)
+        #endif
+    }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Transformations
+    //=------------------------------------------------------------------------=
+    
+    @inlinable @inline(__always)
+    public mutating func join(separator: @autoclosure () -> String = Self.separator) {
+        self.transform({ $0 = [$0.joined(separator: separator())] })
+    }
+    
+    @inlinable @inline(__always)
+    public func joined(separator: @autoclosure () -> String = Self.separator) -> Self {
+        Self({ $0.join(separator: separator()) })
+    }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Utilities
+    //=------------------------------------------------------------------------=
+    
+    @inlinable @inline(__always)
+    public static func += (info: inout Self, other: @autoclosure () -> Self) {
+        info.transform({ $0.append(other().description) })
+    }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Utilities
+    //=------------------------------------------------------------------------=
+    
+    @inlinable @inline(__always)
+    public static func buildBlock(_ many: Self...) -> Self {
+        Self(many)
     }
 }
 
-//=----------------------------------------------------------------------------=
-// MARK: + Initializers
-//=----------------------------------------------------------------------------=
+//*============================================================================*
+// MARK: * Info x Brrr
+//*============================================================================*
 
-public extension Info {
+public struct Brrr: Equatable, CustomStringConvertible {
     
     //=------------------------------------------------------------------------=
-    // MARK: Indirect
+    // MARK: Instances
+    //=------------------------------------------------------------------------=
+    
+    public static let cancellation   = Self("User input cancelled:")
+    public static let autocorrection = Self("User input autocorrected:")
+    
+    //=------------------------------------------------------------------------=
+    // MARK: State
+    //=------------------------------------------------------------------------=
+    
+    #if DEBUG
+    @usableFromInline internal var context: String
+    #endif
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Initializers
     //=------------------------------------------------------------------------=
     
     @inlinable @inline(__always)
-    init(_ components: @autoclosure () -> [Component]) {
-        self.init(components().map(\.content).joined(separator: " "))
-    }
-}
-
-//=----------------------------------------------------------------------------=
-// MARK: + Print
-//=----------------------------------------------------------------------------=
-
-public extension Info {
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Indirect
-    //=------------------------------------------------------------------------=
-    
-    @inlinable @inline(__always)
-    static func print(_ components: @autoclosure () -> [Component]) {
-        self.print(String(describing: Info(components())))
-    }
-    
-    @inlinable @inline(__always)
-    static func print(cancellation components: @autoclosure () -> [Component]) {
-        self.print(["User input cancelled:"] + components())
+    public init(_ context: @autoclosure () -> String) {
+        #if DEBUG
+        self.context = context()
+        #endif
     }
     
+    //=------------------------------------------------------------------------=
+    // MARK: Accessors
+    //=------------------------------------------------------------------------=
+    
     @inlinable @inline(__always)
-    static func print(autocorrection components: @autoclosure () -> [Component]) {
-        self.print(["User input autocorrected:"] + components())
+    public var description: String {
+        #if DEBUG
+        self.context
+        #else
+        Info.unknown
+        #endif
+    }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Utilities
+    //=------------------------------------------------------------------------=
+    
+    @inlinable @inline(__always)
+    public static func << (brrr: Self, info: @autoclosure () -> Info) {
+        #if DEBUG
+        Swift.print(brrr, info())
+        #endif
     }
 }

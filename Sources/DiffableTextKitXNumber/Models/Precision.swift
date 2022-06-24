@@ -132,7 +132,7 @@ extension NumberTextPrecision {
     
     @inlinable func autocorrect(_ number: inout Number) {
         if number.trim(to: upper) {
-            Info.print(autocorrection: [.mark("number"), "exceeded precision", .note(upper)])
+            Brrr.autocorrection << Info([.mark("number"), "exceeded precision \(upper)"])
         }
     }
 }
@@ -153,7 +153,7 @@ extension NumberTextPrecision {
         // MARK: Autocorrect
         //=--------------------------------------=
         if capacity.fraction <= 0 || capacity.value <= 0, number.removeSeparatorAsSuffix() {
-            Info.print(autocorrection: [.mark(number), "does not fit a fraction separator"])
+            Brrr.autocorrection << Info([.mark(number), "does not fit a fraction separator"])
         }
     }
     
@@ -163,7 +163,7 @@ extension NumberTextPrecision {
         // Validate Each Component
         //=--------------------------------------=
         if let component = capacity.first(where: (.<, 0)) {
-            throw Info([.mark(component), "digits exceeded max precision", .note(upper[component])])
+            throw Info([.mark(component), "digits exceeded max precision \(upper[component])"])
         }
         //=--------------------------------------=
         // Return

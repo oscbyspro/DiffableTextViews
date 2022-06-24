@@ -162,14 +162,14 @@ extension NumberTextBounds {
         // Lower
         //=--------------------------------------=
         if  value < min {
-            Info.print(autocorrection: [.mark(value), "is less than", .note(min)])
+            Brrr.autocorrection << Info([.mark(value), "is less than \(min)"])
             value = min; return
         }
         //=--------------------------------------=
         // Upper
         //=--------------------------------------=
         if  value > max {
-            Info.print(autocorrection: [.mark(value), "is more than", .note(max)])
+            Brrr.autocorrection << Info([.mark(value), "is more than \(max)"])
             value = max; return
         }
     }
@@ -206,13 +206,13 @@ extension NumberTextBounds {
         // Location
         //=--------------------------------------=
         guard let location = location(of: value) else {
-            throw Info([.mark(value), "is not in", .note(self)])
+            throw Info([.mark(value), "is not in \(self)"])
         }
         //=--------------------------------------=
         // Remove Separator On Value Is Maxed Out
         //=--------------------------------------=
         if location == .edge, number.removeSeparatorAsSuffix() {
-            Info.print(autocorrection: [.mark(number), "does not fit a fraction separator"])
+            Brrr.autocorrection << Info([.mark(number), "does not fit a fraction separator"])
         }
     }
 }
@@ -229,7 +229,7 @@ extension NumberTextBounds {
     
     @inlinable func autocorrectSignOnUnambigiousBounds(_ sign: inout Sign) {
         guard let correct = Sign(of: bounds), sign != correct else { return }
-        Info.print(autocorrection: [.mark(sign),  "is not in",  .note(self)])
+        Brrr.autocorrection << Info([.mark(sign), "is not in \(self)"])
         sign = correct
     }
 }

@@ -108,12 +108,18 @@ extension PatternTextStyle {
             commit.snapshot.append(contentsOf: queue, as: .phantom)
             commit.snapshot.anchorAtEndIndex()
         } done: {
-            commit, queue, _ in
+            commit, queue, mismatches in
             //=----------------------------------=
             // Pattern
             //=----------------------------------=
             if visible {
                 commit.snapshot.append(contentsOf: queue, as: .phantom)
+            }
+            //=----------------------------------=
+            // Mismatches
+            //=----------------------------------=
+            if !mismatches.isEmpty {
+                Brrr.autocorrection << Info([.mark(value), "has invalid suffix \(mismatches)"])
             }
         }
     }
@@ -148,7 +154,7 @@ extension PatternTextStyle {
         // Capacity
         //=--------------------------------------=
         guard nonvirtuals.next() == nil else {
-            throw Info([.mark(proposal.characters), "exceeded pattern capacity", .note(value.count)])
+            throw Info([.mark(proposal.characters), "exceeded pattern capacity \(value.count)"])
         }
         //=--------------------------------------=
         // Value -> Commit

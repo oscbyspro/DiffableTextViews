@@ -39,13 +39,19 @@ final class InfoTests: XCTestCase {
     
     func testHasSomeSizeInDEBUG() throws {
         try DEBUG()
+        
         XCTAssertGreaterThan(MemoryLayout<Info>.size, 0)
+        XCTAssertGreaterThan(MemoryLayout<Brrr>.size, 0)
     }
     
     func testIsTransparentInDEBUG() throws {
         try DEBUG()
+        
         XCTAssertEqual(   Info("Secret"), Info("Secret"))
         XCTAssertNotEqual(Info("Secret"), Info("xxxxxx"))
+        
+        XCTAssertEqual(   Brrr("Secret"), Brrr("Secret"))
+        XCTAssertNotEqual(Brrr("Secret"), Brrr("xxxxxx"))
     }
     
     //=------------------------------------------------------------------------=
@@ -54,12 +60,18 @@ final class InfoTests: XCTestCase {
     
     func testHasZeroSizeInRELEASE() throws {
         try RELEASE()
+        
         XCTAssertEqual(MemoryLayout<Info>.size, 0)
+        XCTAssertEqual(MemoryLayout<Brrr>.size, 0)
     }
     
     func testIsOpaqueInRELEASE() throws {
         try RELEASE()
+        
         XCTAssertEqual(Info("Secret"), Info("ABC"))
         XCTAssertEqual(Info("Secret"), Info("XYZ"))
+        
+        XCTAssertEqual(Brrr("Secret"), Brrr("ABC"))
+        XCTAssertEqual(Brrr("Secret"), Brrr("XYZ"))
     }
 }

@@ -119,7 +119,7 @@ extension Number {
     // MARK: Characters
     //=------------------------------------------------------------------------=
     
-    @usableFromInline init?(unformatted: some Sequence<Character>,
+    @inlinable @inline(never) init?(unformatted: some Sequence<Character>,
     signs: Map<Sign>, digits: Map<Digit>, separators: Map<Separator>,
     optional: Bool, unsigned: Bool, integer: Bool) throws {
         //=--------------------------------------=

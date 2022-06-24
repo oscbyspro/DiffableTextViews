@@ -180,7 +180,7 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
             // Cancellation
             //=----------------------------------=
             } catch let reason {
-                Info.print(cancellation: [.note(reason)])
+                Brrr.cancellation << Info(reason)
             }
             //=----------------------------------=
             // Decline Automatic Insertion
