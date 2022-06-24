@@ -37,7 +37,7 @@ final class NonvirtualsTests: XCTestCase {
     // MARK: Tests
     //=------------------------------------------------------------------------=
     
-    func testItWorks() {
+    func testSequenceContainsNoVirtualCharacters() {
         snapshot = [
         Symbol("v", as: [.virtual]),
         Symbol("v", as: [.virtual]),

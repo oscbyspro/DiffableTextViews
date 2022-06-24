@@ -75,7 +75,7 @@ extension PatternTextStyle {
             characters, queue in
             characters.append(contentsOf: queue)
         } done: {
-            characters, queue, contents in
+            characters, queue, mismatches in
             //=----------------------------------=
             // Pattern
             //=----------------------------------=
@@ -85,9 +85,9 @@ extension PatternTextStyle {
             //=----------------------------------=
             // Mismatches
             //=----------------------------------=
-            if !contents.isEmpty {
+            if !mismatches.isEmpty {
                 characters.append("|")
-                characters.append(contentsOf: contents)
+                characters.append(contentsOf: mismatches)
             }
         }
     }

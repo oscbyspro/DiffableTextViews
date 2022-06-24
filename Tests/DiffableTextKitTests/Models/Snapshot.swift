@@ -197,10 +197,7 @@ final class SnapshotTests: XCTestCase {
     
     func testNumberOfAttributesMustEqualNumberOfJointCharacters() {
         snapshot = Snapshot("🇸🇪🇺🇸".unicodeScalars.map(Character.init))
-        
-        XCTAssertEqual(snapshot.count,            4)
-        XCTAssertEqual(snapshot.attributes.count, 4)
-        XCTAssertEqual(snapshot.characters.count, 2)
+        Assert("🇸🇪🇺🇸", [.content, .content, .content, .content])
     }
 }
 
