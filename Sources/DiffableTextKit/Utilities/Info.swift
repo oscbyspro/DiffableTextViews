@@ -11,6 +11,10 @@
 // MARK: * Info
 //*============================================================================*
 
+/// An error message that contains a description in DEBUG mode.
+///
+/// It uses conditional compilation such that it has no size and no cost in RELEASE mode.
+///
 @resultBuilder public struct Info: Error, Equatable, CustomStringConvertible,
 ExpressibleByStringLiteral, ExpressibleByStringInterpolation  {
     public static let unknown = "[REDACTED]"
@@ -148,6 +152,10 @@ ExpressibleByStringLiteral, ExpressibleByStringInterpolation  {
 // MARK: * Info x Brrr
 //*============================================================================*
 
+/// A model that that can print messages in DEBUG mode.
+///
+/// It uses conditional compilation such that it has no size and no cost in RELEASE mode.
+///
 public struct Brrr: Equatable, CustomStringConvertible {
     
     //=------------------------------------------------------------------------=

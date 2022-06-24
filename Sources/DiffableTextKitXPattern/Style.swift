@@ -157,7 +157,7 @@ extension PatternTextStyle {
             throw Info([.mark(proposal.characters), "exceeded pattern capacity \(value.count)"])
         }
         //=--------------------------------------=
-        // Value -> Commit
+        // Interpret
         //=--------------------------------------=
         return interpret(value)
     }
@@ -186,20 +186,20 @@ extension PatternTextStyle {
         var pIndex = pattern.startIndex
         var qIndex = pIndex // queue
         //=--------------------------------------=
-        // Pattern
+        // Loop
         //=--------------------------------------=
-        body: while pIndex != pattern.endIndex {
+        loop: while pIndex != pattern.endIndex {
             let character   = pattern[pIndex]
             //=----------------------------------=
             // Placeholder
             //=----------------------------------=
             if let predicate  = placeholders[character] {
-                guard vIndex != value.endIndex else { break body }
+                guard vIndex != value.endIndex else { break loop }
                 let   content = value[vIndex]
                 //=------------------------------=
                 // Predicate
                 //=------------------------------=
-                guard predicate.check(content) else { break body }
+                guard predicate.check(content) else { break loop }
                 //=------------------------------=
                 // (!) Some
                 //=------------------------------=
