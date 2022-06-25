@@ -150,7 +150,7 @@ extension NumberTextPrecision {
     @inlinable func autovalidate(_ number: inout Number, _ count: Count) throws {
         let capacity = try capacity(count)
         //=--------------------------------------=
-        // MARK: Autocorrect
+        // Autocorrect
         //=--------------------------------------=
         if capacity.fraction <= 0 || capacity.value <= 0, number.removeSeparatorAsSuffix() {
             Brrr.autocorrection << Info([.mark(number), "does not fit a fraction separator"])

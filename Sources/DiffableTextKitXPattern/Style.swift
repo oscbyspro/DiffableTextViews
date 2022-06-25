@@ -13,8 +13,8 @@ import DiffableTextKit
 // MARK: * Style
 //*============================================================================*
 
-public struct PatternTextStyle<Value>: DiffableTextStyle where
-Value: RangeReplaceableCollection, Value: Equatable, Value.Element == Character {
+public struct PatternTextStyle<Value>: DiffableTextStyle where Value: Equatable,
+Value: RangeReplaceableCollection, Value.Element == Character {
     @usableFromInline typealias Placeholders = [Character: Predicate]
 
     //=------------------------------------------------------------------------=
@@ -23,7 +23,7 @@ Value: RangeReplaceableCollection, Value: Equatable, Value.Element == Character 
     
     @usableFromInline let pattern: String
     @usableFromInline var placeholders: Placeholders
-    @usableFromInline var visible: Bool
+    @usableFromInline var hidden: Bool
     
     //=------------------------------------------------------------------------=
     // MARK: Initializers
@@ -32,7 +32,7 @@ Value: RangeReplaceableCollection, Value: Equatable, Value.Element == Character 
     @inlinable public init(_ pattern: String) {
         self.pattern = pattern
         self.placeholders = [:]
-        self.visible = true
+        self.hidden = false
     }
     
     //=------------------------------------------------------------------------=
@@ -41,17 +41,7 @@ Value: RangeReplaceableCollection, Value: Equatable, Value.Element == Character 
     
     /// Hides the pattern suffix.
     @inlinable public func hidden(_ hidden: Bool = true) -> Self {
-        var result = self; result.visible = !hidden; return result
-    }
-
-    //=------------------------------------------------------------------------=
-    // MARK: Utilities
-    //=------------------------------------------------------------------------=
-    
-    @inlinable public static func == (lhs: Self, rhs: Self) -> Bool {
-        lhs.pattern == rhs.pattern
-        && lhs.placeholders == rhs.placeholders
-        && lhs.visible == rhs.visible
+        var result = self; result.hidden = hidden; return result
     }
 }
 
@@ -79,7 +69,7 @@ extension PatternTextStyle {
             //=----------------------------------=
             // Pattern
             //=----------------------------------=
-            if visible {
+            if !hidden {
                 characters.append(contentsOf: queue)
             }
             //=----------------------------------=
@@ -96,7 +86,7 @@ extension PatternTextStyle {
     // MARK: Active
     //=------------------------------------------------------------------------=
     
-    /// - Mismatches are cut.
+    /// - Mismatches are removed.
     @inlinable public func interpret(_ value: Value) -> Commit<Value> {
         reduce(value, into: Commit()) {
             commit, queue, content in
@@ -112,7 +102,7 @@ extension PatternTextStyle {
             //=----------------------------------=
             // Pattern
             //=----------------------------------=
-            if visible {
+            if !hidden {
                 commit.snapshot.append(contentsOf: queue, as: .phantom)
             }
             //=----------------------------------=

@@ -13,7 +13,7 @@
 
 /// An error message that contains a description in DEBUG mode.
 ///
-/// It uses conditional compilation such that it has no size and no cost in RELEASE mode.
+/// It uses conditional compilation such that it has no size or cost in RELEASE mode.
 ///
 @resultBuilder public struct Info: Error, Equatable, CustomStringConvertible,
 ExpressibleByStringLiteral, ExpressibleByStringInterpolation  {
@@ -25,7 +25,7 @@ ExpressibleByStringLiteral, ExpressibleByStringInterpolation  {
     //=------------------------------------------------------------------------=
     
     #if DEBUG
-    @usableFromInline internal var content: [String]
+    @usableFromInline var content: [String]
     #endif
     
     //=------------------------------------------------------------------------=
@@ -33,7 +33,7 @@ ExpressibleByStringLiteral, ExpressibleByStringInterpolation  {
     //=------------------------------------------------------------------------=
     
     @inlinable @inline(__always)
-    internal init(_ content: @autoclosure () -> [String] = []) {
+    init(_ content: @autoclosure () -> [String] = []) {
         #if DEBUG
         self.content = content()
         #endif
@@ -109,7 +109,7 @@ ExpressibleByStringLiteral, ExpressibleByStringInterpolation  {
     //=------------------------------------------------------------------------=
     
     @inlinable @inline(__always)
-    internal mutating func transform(_ transform: (inout [String]) -> Void) {
+    mutating func transform(_ transform: (inout [String]) -> Void) {
         #if DEBUG
         transform(&self.content)
         #endif
@@ -152,9 +152,9 @@ ExpressibleByStringLiteral, ExpressibleByStringInterpolation  {
 // MARK: * Info x Brrr
 //*============================================================================*
 
-/// A model that that can print messages in DEBUG mode.
+/// A model that can print messages in DEBUG mode.
 ///
-/// It uses conditional compilation such that it has no size and no cost in RELEASE mode.
+/// It uses conditional compilation such that it has no size or cost in RELEASE mode.
 ///
 public struct Brrr: Equatable, CustomStringConvertible {
     
@@ -170,7 +170,7 @@ public struct Brrr: Equatable, CustomStringConvertible {
     //=------------------------------------------------------------------------=
     
     #if DEBUG
-    @usableFromInline internal var context: String
+    @usableFromInline let context: String
     #endif
     
     //=------------------------------------------------------------------------=
@@ -202,9 +202,23 @@ public struct Brrr: Equatable, CustomStringConvertible {
     //=------------------------------------------------------------------------=
     
     @inlinable @inline(__always)
-    public static func << (brrr: Self, info: @autoclosure () -> Info) {
+    func print(_ message: @autoclosure () -> Info) {
         #if DEBUG
-        Swift.print(brrr, info())
+        Swift.print(self, message())
         #endif
+    }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Utilities
+    //=------------------------------------------------------------------------=
+    
+    @inlinable @inline(__always)
+    public static func << (brrr: Self, info: @autoclosure () -> Info) {
+        brrr.print(info())
+    }
+    
+    @inlinable @inline(__always)
+    public static func >> (info: @autoclosure () -> Info, brrr: Self) {
+        brrr.print(info())
     }
 }
