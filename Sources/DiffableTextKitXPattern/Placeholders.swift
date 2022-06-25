@@ -13,22 +13,20 @@
 
 /// - It does not compare predicates on equals.
 @usableFromInline enum Placeholders: Equatable {
-    @usableFromInline typealias Predicate = (Character) -> Bool
-    @usableFromInline typealias Lookup = (Character) -> Predicate?
     
     //=------------------------------------------------------------------------=
     // MARK: Instances
     //=------------------------------------------------------------------------=
     
-    case one ((Character, Predicate))
-    case many([Character: Predicate])
+    case one ((Character, (Character) -> Bool))
+    case many([Character: (Character) -> Bool])
     case none
     
     //=------------------------------------------------------------------------=
     // MARK: Accessors
     //=------------------------------------------------------------------------=
     
-    @inlinable subscript(character: Character) -> Predicate? {
+    @inlinable subscript(character: Character) -> ((Character) -> Bool)? {
         switch self {
         case .one (let element ): return element.0 == character ? element.1 : nil
         case .many(let elements): return elements[character]
