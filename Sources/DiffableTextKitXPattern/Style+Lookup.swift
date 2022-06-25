@@ -7,33 +7,36 @@
 // See http://www.apache.org/licenses/LICENSE-2.0 for license information.
 //=----------------------------------------------------------------------------=
 
-//*============================================================================*
-// MARK: * Predicate
-//*============================================================================*
+import DiffableTextKit
 
-@usableFromInline struct Predicate: Equatable {
-    
-    //=------------------------------------------------------------------------=
-    // MARK: State
-    //=------------------------------------------------------------------------=
-    
-    @usableFromInline let proxy: AnyHashable
-    @usableFromInline let check: (Character) -> Bool
+//*============================================================================*
+// MARK: * Style x Lookup
+//*============================================================================*
+// MARK: + String
+//=----------------------------------------------------------------------------=
+
+public extension DiffableTextStyle where Self == PatternTextStyle<String> {
     
     //=------------------------------------------------------------------------=
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable init(proxy: AnyHashable, check: @escaping (Character) -> Bool) {
-        self.proxy = proxy
-        self.check = check
+    @inlinable static func pattern(_ pattern: String) -> Self {
+        Self(pattern)
     }
+}
+
+//=----------------------------------------------------------------------------=
+// MARK: + Array<Character>
+//=----------------------------------------------------------------------------=
+
+public extension DiffableTextStyle where Self == PatternTextStyle<[Character]> {
     
     //=------------------------------------------------------------------------=
-    // MARK: Utilities
+    // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable public static func == (lhs: Self, rhs: Self) -> Bool {
-        lhs.proxy == rhs.proxy
+    @inlinable static func pattern(_ pattern: String) -> Self {
+        Self(pattern)
     }
 }

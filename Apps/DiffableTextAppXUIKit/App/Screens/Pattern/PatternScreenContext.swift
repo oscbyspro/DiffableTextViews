@@ -47,8 +47,8 @@ final class PatternScreenContext: ObservableObject {
     // MARK: Utilities
     //=------------------------------------------------------------------------=
     
-    static func pattern(_ pattern: String) -> PatternTextStyle<String> {
-        .pattern(pattern).placeholder("#") { $0.isASCII && $0.isNumber }
+    static func pattern(_ pattern:  String) -> PatternTextStyle<String> {
+        .pattern(pattern).placeholders("#") { $0.isASCII && $0.isNumber }
     }
     
     //*========================================================================*

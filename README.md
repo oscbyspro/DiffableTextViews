@@ -180,7 +180,7 @@ struct ContentView: View {
     var body: some View {
         DiffableTextField(value: $number) {
             .pattern("+## (###) ###-##-##")
-            .placeholder("#") { $0.isASCII && $0.isNumber }
+            .placeholders("#") { $0.isASCII && $0.isNumber }
             // .hidden(true) // hides pattern beyond last real value
             // .equals(()) // skips comparisons and discards changes
         }

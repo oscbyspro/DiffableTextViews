@@ -15,24 +15,34 @@ import DiffableTextKit
 
 public struct PatternTextStyle<Value>: DiffableTextStyle where Value: Equatable,
 Value: RangeReplaceableCollection, Value.Element == Character {
-    @usableFromInline typealias Placeholders = [Character: Predicate]
-
+    
     //=------------------------------------------------------------------------=
     // MARK: State
     //=------------------------------------------------------------------------=
     
     @usableFromInline let pattern: String
     @usableFromInline var placeholders: Placeholders
-    @usableFromInline var hidden: Bool
+    @usableFromInline var hidden: Bool = false
     
     //=------------------------------------------------------------------------=
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
     @inlinable public init(_ pattern: String) {
-        self.pattern = pattern
-        self.placeholders = [:]
-        self.hidden = false
+        self.pattern = pattern; self.placeholders = .none
+    }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Transformations
+    //=------------------------------------------------------------------------=
+    
+    @inlinable public func placeholders(_ placeholder: Character,
+    where predicate: @escaping (Character) -> Bool) -> Self {
+        var result = self; result.placeholders = .one((placeholder, predicate)); return result
+    }
+    
+    @inlinable public func placeholders(_ placeholders: [Character: (Character) -> Bool]) -> Self {
+        var result = self; result.placeholders = .many(placeholders); return result
     }
     
     //=------------------------------------------------------------------------=
@@ -131,7 +141,7 @@ extension PatternTextStyle {
                 //=------------------------------=
                 // Predicate
                 //=------------------------------=
-                guard predicate.check(nonvirtual) else {
+                guard predicate(nonvirtual) else {
                     throw Info([.mark(nonvirtual), "is invalid"])
                 }
                 //=------------------------------=
@@ -179,7 +189,7 @@ extension PatternTextStyle {
         // Loop
         //=--------------------------------------=
         loop: while pIndex != pattern.endIndex {
-            let character   = pattern[pIndex]
+            let  character  = pattern[pIndex]
             //=----------------------------------=
             // Placeholder
             //=----------------------------------=
@@ -189,7 +199,7 @@ extension PatternTextStyle {
                 //=------------------------------=
                 // Predicate
                 //=------------------------------=
-                guard predicate.check(content) else { break loop }
+                guard predicate(content) /*+*/ else { break loop }
                 //=------------------------------=
                 // (!) Some
                 //=------------------------------=

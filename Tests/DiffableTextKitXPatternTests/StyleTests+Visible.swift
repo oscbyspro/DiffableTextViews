@@ -23,9 +23,10 @@ final class StyleTestsXVisible: XCTestCase, StyleTests {
     // MARK: State
     //=------------------------------------------------------------------------=
     
-    lazy var style = PatternTextStyle<String>
+    let style = PatternTextStyle<String>
         .pattern("+### (###) ##-##-##")
-        .placeholder("#") { $0.isASCII && $0.isNumber }
+        .placeholders("#") { $0.isASCII && $0.isNumber }
+        .hidden(false)
     
     //=------------------------------------------------------------------------=
     // MARK: Tests
