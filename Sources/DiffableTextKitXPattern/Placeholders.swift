@@ -12,38 +12,126 @@
 //*============================================================================*
 
 /// - It does not compare predicates on equals.
-@usableFromInline enum Placeholders: Equatable {
+@usableFromInline struct Placeholders: Equatable {
+    @usableFromInline typealias Predicate = (Character) -> Bool
+    @usableFromInline typealias Element   = (Character, Predicate)
+    @usableFromInline typealias Elements  = [Character: Predicate]
     
     //=------------------------------------------------------------------------=
     // MARK: Instances
     //=------------------------------------------------------------------------=
     
-    case one ((Character, (Character) -> Bool))
-    case many([Character: (Character) -> Bool])
-    case none
+    @usableFromInline let storage: Storage
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Initializers
+    //=------------------------------------------------------------------------=
+    
+    @inlinable @inline(__always) init() {
+        self.storage = .none
+    }
+    
+    @inlinable @inline(__always) init(_ element:  Element) {
+        self.storage = .some(Some(element))
+    }
+    
+    @inlinable @inline(__always) init(_ elements: Elements) {
+        self.storage = .many(Many(elements))
+    }
     
     //=------------------------------------------------------------------------=
     // MARK: Accessors
     //=------------------------------------------------------------------------=
     
-    @inlinable subscript(character: Character) -> ((Character) -> Bool)? {
-        switch self {
-        case .one (let element ): return element.0 == character ? element.1 : nil
-        case .many(let elements): return elements[character]
-        case .none:               return nil
+    @inlinable subscript(character: Character) -> Predicate? {
+        switch self.storage {
+        case .some(let some): return some[character]
+        case .many(let many): return many[character]
+        case .none:           return nil
         }
     }
     
-    //=------------------------------------------------------------------------=
-    // MARK: Utilities
-    //=------------------------------------------------------------------------=
+    //*========================================================================*
+    // MARK: * Storage
+    //*========================================================================*
     
-    @inlinable static func == (lhs: Self, rhs: Self) -> Bool {
-        switch (lhs, rhs) {
-        case (.one (let a), .one (let b)): return a.0    == b.0
-        case (.many(let a), .many(let b)): return a.keys == b.keys
-        case (.none,        .none       ): return true
-        default:                           return false
+    @usableFromInline enum Storage: Equatable {
+        case none
+        case some(Some)
+        case many(Many)
+    }
+    
+    //*========================================================================*
+    // MARK: * Some
+    //*========================================================================*
+    
+    @usableFromInline struct Some: Equatable {
+        
+        //=--------------------------------------------------------------------=
+        // MARK: State
+        //=--------------------------------------------------------------------=
+        
+        @usableFromInline let element: Element
+        
+        //=--------------------------------------------------------------------=
+        // MARK: Initializers
+        //=--------------------------------------------------------------------=
+        
+        @inlinable @inline(__always) init(_ element: Element) {
+            self.element = element
+        }
+        
+        //=--------------------------------------------------------------------=
+        // MARK: Accessors
+        //=--------------------------------------------------------------------=
+        
+        @inlinable @inline(__always) subscript(character: Character) -> Predicate? {
+            self.element.0 == character ? element.1 : nil
+        }
+        
+        //=--------------------------------------------------------------------=
+        // MARK: Utilities
+        //=--------------------------------------------------------------------=
+        
+        @inlinable @inline(__always) static func == (lhs: Self, rhs: Self) -> Bool {
+            lhs.element.0 == rhs.element.0
+        }
+    }
+    
+    //*========================================================================*
+    // MARK: * Many
+    //*========================================================================*
+    
+    @usableFromInline struct Many: Equatable {
+        
+        //=--------------------------------------------------------------------=
+        // MARK: State
+        //=--------------------------------------------------------------------=
+        
+        @usableFromInline let elements: [Character: Predicate]
+        
+        //=--------------------------------------------------------------------=
+        // MARK: Initializers
+        //=--------------------------------------------------------------------=
+        
+        @inlinable @inline(__always) init(_ elements: Elements) {
+            self.elements = elements
+        }
+        
+        //=--------------------------------------------------------------------=
+        // MARK: Accessors
+        //=--------------------------------------------------------------------=
+        
+        @inlinable @inline(__always) subscript(character: Character) -> Predicate? {
+            self.elements[character]
+        }
+        
+        //=--------------------------------------------------------------------=
+        // MARK: Utilities
+        //=--------------------------------------------------------------------=
+        
+        @inlinable @inline(__always) static func == (lhs: Self, rhs: Self) -> Bool {
+            lhs.elements.keys == rhs.elements.keys
         }
     }
 }

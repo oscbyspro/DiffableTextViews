@@ -21,8 +21,8 @@ Value: RangeReplaceableCollection, Value.Element == Character {
     //=------------------------------------------------------------------------=
     
     @usableFromInline let pattern: String
-    @usableFromInline var placeholders: Placeholders = .none
-    @usableFromInline var hidden: Bool = false
+    @usableFromInline var placeholders = Placeholders()
+    @usableFromInline var hidden = false
     
     //=------------------------------------------------------------------------=
     // MARK: Initializers
@@ -38,11 +38,11 @@ Value: RangeReplaceableCollection, Value.Element == Character {
     
     @inlinable public func placeholders(_ character: Character,
     where predicate: @escaping (Character) -> Bool) -> Self {
-        var result = self; result.placeholders = .one((character, predicate)); return result
+        var result = self; result.placeholders = .init((character, predicate)); return result
     }
     
     @inlinable public func placeholders(_ placeholders: [Character: (Character) -> Bool]) -> Self {
-        var result = self; result.placeholders = .many(placeholders); return result
+        var result = self; result.placeholders = .init(placeholders); return result
     }
     
     //=------------------------------------------------------------------------=
