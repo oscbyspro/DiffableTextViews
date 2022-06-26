@@ -11,11 +11,8 @@
 // MARK: * Placeholders
 //*============================================================================*
 
-/// - It does not compare predicates on equals.
 @usableFromInline struct Placeholders: Equatable {
     @usableFromInline typealias Predicate = (Character) -> Bool
-    @usableFromInline typealias Element   = (Character, Predicate)
-    @usableFromInline typealias Elements  = [Character: Predicate]
     
     //=------------------------------------------------------------------------=
     // MARK: Instances
@@ -31,11 +28,11 @@
         self.storage = .none
     }
     
-    @inlinable @inline(__always) init(_ element:  Element) {
-        self.storage = .some(Some(element))
+    @inlinable @inline(__always) init(_ elements: Some.Elements) {
+        self.storage = .some(Some(elements))
     }
     
-    @inlinable @inline(__always) init(_ elements: Elements) {
+    @inlinable @inline(__always) init(_ elements: Many.Elements) {
         self.storage = .many(Many(elements))
     }
     
@@ -66,19 +63,20 @@
     //*========================================================================*
     
     @usableFromInline struct Some: Equatable {
-        
+        @usableFromInline typealias Elements = (Character, Predicate)
+
         //=--------------------------------------------------------------------=
         // MARK: State
         //=--------------------------------------------------------------------=
         
-        @usableFromInline let element: Element
+        @usableFromInline let elements: Elements
         
         //=--------------------------------------------------------------------=
         // MARK: Initializers
         //=--------------------------------------------------------------------=
         
-        @inlinable @inline(__always) init(_ element: Element) {
-            self.element = element
+        @inlinable @inline(__always) init(_ elements: Elements) {
+            self.elements = elements
         }
         
         //=--------------------------------------------------------------------=
@@ -86,7 +84,7 @@
         //=--------------------------------------------------------------------=
         
         @inlinable @inline(__always) subscript(character: Character) -> Predicate? {
-            self.element.0 == character ? element.1 : nil
+            self.elements.0 == character ? self.elements.1 : nil
         }
         
         //=--------------------------------------------------------------------=
@@ -94,7 +92,7 @@
         //=--------------------------------------------------------------------=
         
         @inlinable @inline(__always) static func == (lhs: Self, rhs: Self) -> Bool {
-            lhs.element.0 == rhs.element.0
+            lhs.elements.0 == rhs.elements.0
         }
     }
     
@@ -103,12 +101,13 @@
     //*========================================================================*
     
     @usableFromInline struct Many: Equatable {
+        @usableFromInline typealias Elements = [Character: Predicate]
         
         //=--------------------------------------------------------------------=
         // MARK: State
         //=--------------------------------------------------------------------=
         
-        @usableFromInline let elements: [Character: Predicate]
+        @usableFromInline let elements: Elements
         
         //=--------------------------------------------------------------------=
         // MARK: Initializers
