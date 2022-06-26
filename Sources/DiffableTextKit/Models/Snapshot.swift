@@ -86,6 +86,15 @@ ExpressibleByStringLiteral {
     }
     
     //=------------------------------------------------------------------------=
+    // MARK: Accessors
+    //=------------------------------------------------------------------------=
+    
+    /// A lazy sequence of nonvirtual characters.
+    @inlinable public var nonvirtuals: some BidirectionalCollection<Character> {
+        self.lazy.filter({!$0.attribute.contains(.virtual)}).map({$0.character})
+    }
+    
+    //=------------------------------------------------------------------------=
     // MARK: Transformations
     //=------------------------------------------------------------------------=
     
