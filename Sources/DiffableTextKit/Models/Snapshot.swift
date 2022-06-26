@@ -50,16 +50,19 @@ ExpressibleByStringLiteral {
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable public init() {
+    @inlinable @inline(__always)
+    public init() {
         self._characters = ""
         self._attributes = []
     }
     
-    @inlinable public init(arrayLiteral symbols: Symbol...) {
+    @inlinable @inline(__always)
+    public init(arrayLiteral symbols: Symbol...) {
         self.init(symbols)
     }
     
-    @inlinable public init(stringLiteral characters: String) {
+    @inlinable @inline(__always)
+    public init(stringLiteral characters: String) {
         self.init(characters)
     }
     
@@ -67,15 +70,18 @@ ExpressibleByStringLiteral {
     // MARK: Accessors
     //=------------------------------------------------------------------------=
     
-    @inlinable public var characters: String {
+    @inlinable @inline(__always)
+    public var characters: String {
         _characters
     }
     
-    @inlinable public var attributes: [Attribute] {
+    @inlinable @inline(__always)
+    public var attributes: [Attribute] {
         _attributes
     }
     
-    @inlinable public var anchor: Index? {
+    @inlinable @inline(__always)
+    public var anchor: Index? {
         _anchor
     }
     
@@ -83,11 +89,13 @@ ExpressibleByStringLiteral {
     // MARK: Transformations
     //=------------------------------------------------------------------------=
     
-    @inlinable public mutating func anchorAtEndIndex() {
+    @inlinable @inline(__always)
+    public mutating func anchorAtEndIndex() {
         self._anchor = endIndex
     }
     
-    @inlinable public mutating func anchor(at index: Index?) {
+    @inlinable @inline(__always)
+    public mutating func anchor(at index: Index?) {
         self._anchor = index
     }
 }
@@ -102,13 +110,13 @@ extension Snapshot {
     // MARK: String
     //=------------------------------------------------------------------------=
     
-    @inlinable public init(_ characters: String,
-    as attribute: Attribute = .content) {
+    @inlinable @inline(__always)
+    public init(_ characters: String, as attribute: Attribute = .content) {
         self.init(characters, as: { _ in attribute })
     }
     
-    @inlinable public init(_ characters: String,
-    as attribute: (Character) -> Attribute) {
+    @inlinable @inline(__always)
+    public init(_ characters: String, as attribute: (Character) -> Attribute) {
         self._characters = characters
         self._attributes = []
         
@@ -121,13 +129,13 @@ extension Snapshot {
     // MARK: Sequence
     //=------------------------------------------------------------------------=
     
-    @inlinable public init(_ characters: some Sequence<Character>,
-    as attribute: Attribute = .content) {
+    @inlinable @inline(__always)
+    public init(_ characters: some Sequence<Character>, as attribute: Attribute = .content) {
         self.init(characters, as: { _ in attribute })
     }
     
-    @inlinable public init(_ characters: some Sequence<Character>,
-    as attribute: (Character) -> Attribute) {
+    @inlinable @inline(__always)
+    public init(_ characters: some Sequence<Character>, as attribute: (Character) -> Attribute) {
         self.init(); self.append(contentsOf: characters, as: attribute)
     }
 }
@@ -142,7 +150,8 @@ extension Snapshot {
     // MARK: Element
     //=------------------------------------------------------------------------=
     
-    @inlinable public subscript(index: Index) -> Symbol {
+    @inlinable @inline(__always)
+    public subscript(index: Index) -> Symbol {
         Symbol(_characters[index.character],
         as:    _attributes[index.attribute])
     }
@@ -151,28 +160,39 @@ extension Snapshot {
     // MARK: Indices
     //=------------------------------------------------------------------------=
     
-    @inlinable public var startIndex: Index {
+    @inlinable @inline(__always)
+    public var startIndex: Index {
         Index(_characters.startIndex,
         as:   _attributes.startIndex)
     }
 
-    @inlinable public var endIndex: Index {
+    @inlinable @inline(__always)
+    public var endIndex: Index {
         Index(_characters.endIndex,
         as:   _attributes.endIndex)
     }
     
     //=------------------------------------------------------------------------=
-    // MARK: After, Before
+    // MARK: After, Before, Distance
     //=------------------------------------------------------------------------=
     
-    @inlinable public func index(after  index: Index) -> Index {
-        Index(_characters .index(after: index.character),
-        as:   _attributes .index(after: index.attribute))
+    @inlinable @inline(__always)
+    public func index(after index: Index) -> Index {
+        Index(_characters.index(after: index.character),
+        as:   _attributes.index(after: index.attribute))
     }
     
-    @inlinable public func index(before  index: Index) -> Index {
-        Index(_characters .index(before: index.character),
-        as:   _attributes .index(before: index.attribute))
+    @inlinable @inline(__always)
+    public func index(before index: Index) -> Index {
+        Index(_characters.index(before: index.character),
+        as:   _attributes.index(before: index.attribute))
+    }
+    
+    @inlinable @inline(__always)
+    public func index(_ index: Index, offsetBy distance: Int) -> Index {
+        let character = _characters.index(index.character, offsetBy: distance)
+        let attribute = _attributes.index(index.attribute, offsetBy: distance)
+        return Index(character, as: attribute)
     }
     
     //=------------------------------------------------------------------------=
@@ -180,17 +200,20 @@ extension Snapshot {
     //=------------------------------------------------------------------------=
     
     /// - Complexity: O(1).
-    @inlinable public var isEmpty: Bool {
+    @inlinable @inline(__always)
+    public var isEmpty: Bool {
         _attributes.isEmpty
     }
     
     /// - Complexity: O(1).
-    @inlinable public var count: Int {
+    @inlinable @inline(__always)
+    public var count: Int {
         _attributes.count
     }
     
     /// - Complexity: O(1).
-    @inlinable public var underestimatedCount: Int {
+    @inlinable @inline(__always)
+    public var underestimatedCount: Int {
         _attributes.underestimatedCount
     }
 }
@@ -205,19 +228,22 @@ extension Snapshot {
     // MARK: Attributes
     //=------------------------------------------------------------------------=
     
-    @inlinable public mutating func transform(attributes index: Index,
+    @inlinable @inline(__always)
+    public mutating func transform(attributes index: Index,
     with transform: (inout Attribute) -> Void) {
         transform(&self._attributes[index.attribute])
     }
     
-    @inlinable public mutating func transform(attributes indices: some Sequence<Index>,
+    @inlinable @inline(__always)
+    public mutating func transform(attributes indices: some Sequence<Index>,
     with transform: (inout Attribute) -> Void) {
         for index in indices {
             transform(&self._attributes[index.attribute])
         }
     }
     
-    @inlinable public mutating func transform<R>(attributes indices: R,
+    @inlinable @inline(__always)
+    public mutating func transform<R>(attributes indices: R,
     with transform: (inout Attribute) -> Void)
     where R: RangeExpression, R.Bound == Index {
         for index in self.indices[indices.relative(to: self)] {
@@ -229,12 +255,14 @@ extension Snapshot {
     // MARK: Append
     //=------------------------------------------------------------------------=
     
-    @inlinable public mutating func append(_ symbol: Symbol) {
+    @inlinable @inline(__always)
+    public mutating func append(_ symbol: Symbol) {
         self._characters.append(symbol.character)
         self._attributes.append(symbol.attribute)
     }
     
-    @inlinable public mutating func append(_ character: Character,
+    @inlinable @inline(__always)
+    public mutating func append(_ character: Character,
     as attribute: Attribute = .content) {
         self.append(Symbol(character, as: attribute))
     }
@@ -243,13 +271,15 @@ extension Snapshot {
     // MARK: Append x Sequence
     //=------------------------------------------------------------------------=
     
-    @inlinable public mutating func append(
+    @inlinable @inline(__always)
+    public mutating func append(
     contentsOf characters: some Sequence<Character>,
     as attribute: Attribute = .content) {
         self.append(contentsOf: characters, as: { _ in attribute })
     }
     
-    @inlinable public mutating func append(
+    @inlinable @inline(__always)
+    public mutating func append(
     contentsOf characters: some Sequence<Character>,
     as attribute: (Character) -> Attribute) {
         for character in characters {
@@ -262,12 +292,14 @@ extension Snapshot {
     // MARK: Insert
     //=------------------------------------------------------------------------=
     
-    @inlinable public mutating func insert(_ symbol: Symbol, at index: Index) {
+    @inlinable @inline(__always)
+    public mutating func insert(_ symbol: Symbol, at  index: Index) {
         self._characters.insert(symbol.character, at: index.character)
         self._attributes.insert(symbol.attribute, at: index.attribute)
     }
         
-    @inlinable public mutating func insert(_ character: Character,
+    @inlinable @inline(__always)
+    public mutating func insert(_ character: Character,
     at index: Index, as attribute: Attribute = .content) {
         self.insert(Symbol(character, as: attribute), at: index)
     }
@@ -276,12 +308,14 @@ extension Snapshot {
     // MARK: Insert x Collection
     //=------------------------------------------------------------------------=
     
-    @inlinable public mutating func insert(contentsOf characters: some Collection<Character>,
+    @inlinable @inline(__always)
+    public mutating func insert(contentsOf characters: some Collection<Character>,
     at index: Index, as attribute: Attribute = .content) {
         self.insert(contentsOf: characters, at: index, as: { _ in attribute })
     }
     
-    @inlinable public mutating func insert(contentsOf characters: some Collection<Character>,
+    @inlinable @inline(__always)
+    public mutating func insert(contentsOf characters: some Collection<Character>,
     at index: Index, as attribute: (Character) -> Attribute) {
         self.replaceSubrange(index..<index, with: characters, as: attribute)
     }
@@ -290,7 +324,8 @@ extension Snapshot {
     // MARK: Remove
     //=------------------------------------------------------------------------=
     
-    @inlinable @discardableResult public mutating func remove(at index: Index) -> Symbol {
+    @inlinable @inline(__always) @discardableResult
+    public mutating func remove(at index: Index) -> Symbol {
         Symbol(self._characters.remove(at: index.character),
         as:    self._attributes.remove(at: index.attribute))
     }
@@ -299,19 +334,22 @@ extension Snapshot {
     // MARK: Replace
     //=------------------------------------------------------------------------=
     
-    @inlinable public mutating func replaceSubrange(_ indices: Range<Index>,
+    @inlinable @inline(__always)
+    public mutating func replaceSubrange(_ indices: Range<Index>,
     with symbols: some Collection<Symbol>) {
         self.replaceSubrange(indices,
         characters: symbols.lazy.map(\.character),
         attributes: symbols.lazy.map(\.attribute))
     }
     
-    @inlinable public mutating func replaceSubrange(_ indices: Range<Index>,
+    @inlinable @inline(__always)
+    public mutating func replaceSubrange(_ indices: Range<Index>,
     with characters: some Collection<Character>, as attribute: Attribute = .content) {
         self.replaceSubrange(indices, with: characters, as: { _ in attribute })
     }
     
-    @inlinable public mutating func replaceSubrange(_ indices: Range<Index>,
+    @inlinable @inline(__always)
+    public mutating func replaceSubrange(_ indices: Range<Index>,
     with characters: some Collection<Character>, as attribute: (Character) -> Attribute) {
         self.replaceSubrange(indices,
         characters: characters,
@@ -322,7 +360,8 @@ extension Snapshot {
     // MARK: Helpers
     //=------------------------------------------------------------------------=
     
-    @inlinable mutating func replaceSubrange(_ indices: Range<Index>,
+    @inlinable @inline(__always)
+    mutating func replaceSubrange(_ indices: Range<Index>,
     characters: some Collection<Character>,
     attributes: some Collection<Attribute>) {
         self._characters.replaceSubrange(
@@ -345,7 +384,7 @@ extension Snapshot: CustomStringConvertible {
     // MARK: Accessors
     //=------------------------------------------------------------------------=
     
-    @inlinable public var description: String {
+    public var description: String {
         "\(Self.self)(\"\(_characters)\", \(_attributes))"
     }
 }
@@ -360,15 +399,18 @@ extension Snapshot {
     // MARK: Distance
     //=------------------------------------------------------------------------=
         
-    @inlinable func offset<T>(from start: Index, to end: Index, as type: T.Type = T.self) -> Offset<T> {
+    @inlinable @inline(__always)
+    func offset<T>(from start: Index, to end: Index, as type: T.Type = T.self) -> Offset<T> {
         T.distance(from: start, to: end, in: self)
     }
-        
-    @inlinable func offset<T>(at index: Index, as type: T.Type = T.self) -> Offset<T> {
+    
+    @inlinable @inline(__always)
+    func offset<T>(at index: Index, as type: T.Type = T.self) -> Offset<T> {
         T.distance(from: self.startIndex, to: index, in: self)
     }
     
-    @inlinable func offsets<T>(at indices: Range<Index>, as type: T.Type = T.self) -> Range<Offset<T>> {
+    @inlinable @inline(__always)
+    func offsets<T>(at indices: Range<Index>, as type: T.Type = T.self) -> Range<Offset<T>> {
         let lower = T.distance(from:    self.startIndex, to: indices.lowerBound, in: self)
         let count = T.distance(from: indices.lowerBound, to: indices.upperBound, in: self)
         return lower ..< lower + count
@@ -378,15 +420,18 @@ extension Snapshot {
     // MARK: Index
     //=------------------------------------------------------------------------=
     
-    @inlinable func index<T>(at offset: Offset<T>, from start: Index) -> Index {
+    @inlinable @inline(__always)
+    func index<T>(at offset: Offset<T>, from start: Index) -> Index {
         T.index(at: offset, from: start, in: self)
     }
     
-    @inlinable func index<T>(at offset: Offset<T>) -> Index {
+    @inlinable @inline(__always)
+    func index<T>(at offset: Offset<T>) -> Index {
         T.index(at: offset, from: self.startIndex, in: self)
     }
     
-    @inlinable func indices<T>(at offsets: Range<Offset<T>>) -> Range<Index> {
+    @inlinable @inline(__always)
+    func indices<T>(at offsets: Range<Offset<T>>) -> Range<Index> {
         let lower = T.index(at: offsets.lowerBound, from: self.startIndex, in: self)
         return lower ..< T.index(at: Offset(offsets.count), from:   lower, in: self)
     }
@@ -402,7 +447,8 @@ extension Snapshot {
     // MARK: Attributes
     //=------------------------------------------------------------------------=
     
-    @inlinable func nonpassthrough(at index: Index) -> Bool {
+    @inlinable @inline(__always)
+    func nonpassthrough(at index: Index) -> Bool {
         !attributes[index.attribute].contains(.passthrough)
     }
     
@@ -410,15 +456,18 @@ extension Snapshot {
     // MARK: Peek
     //=------------------------------------------------------------------------=
     
-    @inlinable func peek(from index: Index, towards direction: Direction) -> Index? {
+    @inlinable @inline(__always)
+    func peek(from index: Index, towards direction: Direction) ->  Index? {
         direction == .forwards ? peek(ahead: index) : peek(behind: index)
     }
     
-    @inlinable func peek(ahead index: Index) -> Index? {
-        index != endIndex ? index : nil
+    @inlinable @inline(__always)
+    func peek(ahead index: Index) -> Index? {
+        index != endIndex ? index  : nil
     }
     
-    @inlinable func peek(behind index: Index) -> Index? {
+    @inlinable @inline(__always)
+    func peek(behind index: Index) -> Index? {
         index != startIndex ? self.index(before: index) : nil
     }
 }
@@ -483,19 +532,23 @@ extension Snapshot {
         }
     }
     
-    @inlinable func caret(from index: Index, forwardsTo target: Target) -> Index? {
+    @inlinable @inline(__always)
+    func caret(from index: Index, forwardsTo target: Target) -> Index? {
         indices[index...].first(where: target)
     }
     
-    @inlinable func caret(from index: Index, forwardsThrough target: Target) -> Index? {
+    @inlinable @inline(__always)
+    func caret(from index: Index, forwardsThrough target: Target) -> Index? {
         caret(from: index, forwardsTo: target).map(self.index(after:))
     }
     
-    @inlinable func caret(from index: Index, backwardsTo target: Target) -> Index? {
+    @inlinable @inline(__always)
+    func caret(from index: Index, backwardsTo target: Target) -> Index? {
         caret(from: index, backwardsThrough: target).map(self.index(after:))
     }
     
-    @inlinable func caret(from index: Index, backwardsThrough target: Target) -> Index? {
+    @inlinable @inline(__always)
+    func caret(from index: Index, backwardsThrough target: Target) -> Index? {
         indices[..<index].last(where: target)
     }
     

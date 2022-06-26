@@ -20,6 +20,13 @@ public protocol Encoding {
     @inlinable static func distance(from start: String.Index,
     to end: String.Index, in characters: some StringProtocol) -> Offset<Self>
     
+    @inlinable static func index(at distance: Offset<Self>,
+    from index: String.Index, in characters: some StringProtocol) -> String.Index
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Utilities
+    //=------------------------------------------------------------------------=
+    
     @inlinable static func distance(from start: Index,
     to end: Index, in snapshot: Snapshot) -> Offset<Self>
     
@@ -37,64 +44,21 @@ extension Encoding {
     // MARK: Utilities
     //=------------------------------------------------------------------------=
     
-    @inlinable public static func distance(from start: Index,
+    @inlinable @inline(__always) public static func distance(from start: Index,
     to end: Index, in snapshot: Snapshot) -> Offset<Self> {
-        distance(from: start.character, to: end.character, in: snapshot.characters)
+        self.distance(from: start.character, to: end.character, in: snapshot.characters)
     }
     
     @inlinable public static func index(at distance: Offset<Self>,
     from index: Index, in snapshot: Snapshot) -> Index {
-        if  distance > 0 { return positive(distance, from: index, in: snapshot) }
-        if  distance < 0 { return negative(distance, from: index, in: snapshot) }
-        return index
-    }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Helpers x Index
-    //=------------------------------------------------------------------------=
-    
-    @inlinable static func positive(_ distance: Offset<Self>,
-    from index: Index, in snapshot: Snapshot) -> Index {
-        var index = index; var distance = distance
-        //=--------------------------------------=
-        // Forwards
-        //=--------------------------------------=
-        forwards: while true {
-            let after = snapshot.index(after: index)
-            distance -= self.distance(from: index, to: after, in: snapshot)
-            //=----------------------------------=
-            // Next
-            //=----------------------------------=
-            if distance > 0 {
-                index = after; continue forwards
-            }
-            //=----------------------------------=
-            // Done
-            //=----------------------------------=
-            return distance == 0 ? after : index
+        var character  = self.index(at: distance, from: index.character, in: snapshot.characters)
+        if  character != snapshot.characters.endIndex {
+            character  = snapshot.characters.rangeOfComposedCharacterSequence(at: character).lowerBound
         }
-    }
-    
-    @inlinable static func negative(_ distance: Offset<Self>,
-    from index: Index, in snapshot: Snapshot) -> Index {
-        var index = index; var distance = distance
-        //=--------------------------------------=
-        // Backwards
-        //=--------------------------------------=
-        backwards: while true {
-            let after = index; snapshot.formIndex(before: &index)
-            distance += self.distance(from: index, to: after, in: snapshot)
-            //=----------------------------------=
-            // Next
-            //=----------------------------------=
-            if distance < 0 {
-                continue backwards
-            }
-            //=----------------------------------=
-            // Done
-            //=----------------------------------=
-            return index
-        }
+        
+        let traversal  = snapshot.characters.distance(from: index.character,  to: character)
+        let attribute  = snapshot.attributes.index(index.attribute,     offsetBy: traversal)
+        return Index(character,as:attribute)
     }
 }
 
@@ -108,17 +72,26 @@ extension Character: Encoding {
     // MARK: Utilities
     //=------------------------------------------------------------------------=
     
-    @inlinable public static func distance(from start: String.Index,
+    @inlinable @inline(__always) public static func distance(from start: String.Index,
     to end: String.Index, in characters: some StringProtocol) -> Offset<Self> {
         Offset(characters.distance(from: start, to: end))
     }
     
-    @inlinable public static func distance(from start: Index,
+    @inlinable @inline(__always) public static func index(at distance: Offset<Self>,
+    from index: String.Index, in characters: some StringProtocol) -> String.Index {
+        characters.index(index, offsetBy: Int(distance))
+    }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Utilities
+    //=------------------------------------------------------------------------=
+    
+    @inlinable @inline(__always) public static func distance(from start: Index,
     to end: Index, in snapshot: Snapshot) -> Offset<Self> {
         Offset(end.attribute - start.attribute)
     }
     
-    @inlinable public static func index(at distance: Offset<Self>,
+    @inlinable @inline(__always) public static func index(at distance: Offset<Self>,
     from index: Index, in snapshot: Snapshot) -> Index {
         snapshot.index(index, offsetBy: Int(distance))
     }
@@ -129,14 +102,19 @@ extension Character: Encoding {
 //*============================================================================*
 
 extension Unicode.Scalar: Encoding {
-    
+
     //=------------------------------------------------------------------------=
     // MARK: Utilities
     //=------------------------------------------------------------------------=
-    
-    @inlinable public static func distance(from start: String.Index,
+
+    @inlinable @inline(__always) public static func distance(from start: String.Index,
     to end: String.Index, in characters: some StringProtocol) -> Offset<Self> {
         Offset(characters.unicodeScalars.distance(from: start, to: end))
+    }
+
+    @inlinable @inline(__always) public static func index(at distance: Offset<Self>,
+    from index: String.Index, in characters: some StringProtocol) -> String.Index {
+        characters.unicodeScalars.index(index, offsetBy: Int(distance))
     }
 }
 
@@ -149,10 +127,15 @@ extension UTF16: Encoding {
     //=------------------------------------------------------------------------=
     // MARK: Utilities
     //=------------------------------------------------------------------------=
-    
-    @inlinable public static func distance(from start: String.Index,
+
+    @inlinable @inline(__always) public static func distance(from start: String.Index,
     to end: String.Index, in characters: some StringProtocol) -> Offset<Self> {
         Offset(characters.utf16.distance(from: start, to: end))
+    }
+    
+    @inlinable @inline(__always) public static func index(at distance: Offset<Self>,
+    from index: String.Index, in characters: some StringProtocol) -> String.Index {
+        characters.utf16.index(index, offsetBy: Int(distance))
     }
 }
 
@@ -165,9 +148,14 @@ extension UTF8: Encoding {
     //=------------------------------------------------------------------------=
     // MARK: Utilities
     //=------------------------------------------------------------------------=
-    
-    @inlinable public static func distance(from start: String.Index,
+
+    @inlinable @inline(__always) public static func distance(from start: String.Index,
     to end: String.Index, in characters: some StringProtocol) -> Offset<Self> {
         Offset(characters.utf8.distance(from: start, to: end))
+    }
+
+    @inlinable @inline(__always) public static func index(at distance: Offset<Self>,
+    from index: String.Index, in characters: some StringProtocol) -> String.Index {
+        characters.utf8.index(index, offsetBy: Int(distance))
     }
 }

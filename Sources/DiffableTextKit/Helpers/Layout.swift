@@ -42,10 +42,10 @@
     }
 
     @inlinable func offsets<T>(at indices: Carets<Index>) -> Carets<Offset<T>> {
-        Carets(snapshot.offsets(at: indices.range))        
+        Carets(snapshot.offsets(at: indices.range))
     }
     
-    @inlinable func selection<T>(as type: Offset<T>.Type = Offset<T>.self) -> Carets<Offset<T>> {
+    @inlinable func selection<T>(as encoding: Offset<T>.Type = Offset<T>.self) -> Carets<Offset<T>> {
         offsets(at: selection)
     }
 

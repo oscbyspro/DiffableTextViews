@@ -163,7 +163,7 @@ extension Context {
     }
     
     @inlinable @inline(__always)
-    public func selection<T>(as type: Offset<T>.Type = Offset<T>.self) -> Range<Offset<T>> {
+    public func selection<T>(as encoding: T.Type = T.self) -> Range<Offset<T>> {
         layout.selection().range
     }
 }
