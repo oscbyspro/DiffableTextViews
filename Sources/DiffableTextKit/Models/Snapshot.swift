@@ -30,7 +30,7 @@
 /// snapshot. A failure to maintain this invariant will result in an invalid state
 /// and may crash your application. In most cases, this is a trivial constraint as
 /// the easiest and most straight forward way to create a snapshot is to loop over each
-/// characters in an already joined sequence of characters.
+/// characters in an already joined sequence.
 ///
 public struct Snapshot: Equatable,
 BidirectionalCollection,
@@ -393,7 +393,7 @@ extension Snapshot: CustomStringConvertible {
     // MARK: Accessors
     //=------------------------------------------------------------------------=
     
-    public var description: String {
+    @inlinable public var description: String {
         "\(Self.self)(\"\(_characters)\", \(_attributes))"
     }
 }
@@ -409,18 +409,18 @@ extension Snapshot {
     //=------------------------------------------------------------------------=
         
     @inlinable @inline(__always)
-    func offset<T>(from start: Index, to end: Index, as type: T.Type = T.self) -> Offset<T> {
+    func offset<T>(from  start: Index, to end: Index, as encoding: T.Type = T.self) -> Offset<T> {
         T.distance(from: start, to: end, in: self)
     }
     
     @inlinable @inline(__always)
-    func offset<T>(at index: Index, as type: T.Type = T.self) -> Offset<T> {
-        T.distance(from: self.startIndex, to: index, in: self)
+    func offset<T>(at index:  Index, as encoding: T.Type = T.self) -> Offset<T> {
+        T.distance(from: startIndex, to: index, in: self)
     }
     
     @inlinable @inline(__always)
-    func offsets<T>(at indices: Range<Index>, as type: T.Type = T.self) -> Range<Offset<T>> {
-        let lower = T.distance(from:    self.startIndex, to: indices.lowerBound, in: self)
+    func offsets<T>(at indices: Range<Index>, as encoding: T.Type = T.self) -> Range<Offset<T>> {
+        let lower = T.distance(from:         startIndex, to: indices.lowerBound, in: self)
         let count = T.distance(from: indices.lowerBound, to: indices.upperBound, in: self)
         return lower ..< lower + count
     }
@@ -431,18 +431,18 @@ extension Snapshot {
     
     @inlinable @inline(__always)
     func index<T>(at offset: Offset<T>, from start: Index) -> Index {
-        T.index(at: offset, from: start, in: self)
+        T.index(at:  offset, from: start, in: self)
     }
     
     @inlinable @inline(__always)
     func index<T>(at offset: Offset<T>) -> Index {
-        T.index(at: offset, from: self.startIndex, in: self)
+        T.index(at:  offset, from: self.startIndex, in: self)
     }
     
     @inlinable @inline(__always)
     func indices<T>(at offsets: Range<Offset<T>>) -> Range<Index> {
-        let lower = T.index(at: offsets.lowerBound, from: self.startIndex, in: self)
-        return lower ..< T.index(at: Offset(offsets.count), from:   lower, in: self)
+        let lower = T.index(at: offsets.lowerBound, from:   startIndex, in: self)
+        return lower ..< T.index(at: Offset(offsets.count), from:lower, in: self)
     }
 }
 
@@ -465,8 +465,7 @@ extension Snapshot {
     // MARK: Peek
     //=------------------------------------------------------------------------=
     
-    @inlinable @inline(__always)
-    func peek(from index: Index, towards direction: Direction) ->  Index? {
+    @inlinable func peek(from index: Index, towards direction: Direction) ->  Index? {
         direction == .forwards ? peek(ahead: index) : peek(behind: index)
     }
     
@@ -515,11 +514,11 @@ extension Snapshot {
         jumping: direction == preference ? .to : .through,
         targeting: nonpassthrough) { return caret }
         //=--------------------------------------=
-        // Search In Other Direction
+        // Search In Opposite Direction
         //=--------------------------------------=
         if let caret = caret(from: index,
-        towards: direction.reversed(),
-        jumping: Jump.to, // use Jump.to on each direction
+        towards: direction.opposite,
+        jumping: Jump.to,
         targeting: nonpassthrough) { return caret }
         //=--------------------------------------=
         // Return End Index On Caret Not Found

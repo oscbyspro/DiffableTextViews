@@ -41,7 +41,7 @@
     //=------------------------------------------------------------------------=
     
     @inlinable subscript(character: Character) -> Predicate? {
-        switch self.storage {
+        switch storage {
         case .some(let some): return some[character]
         case .many(let many): return many[character]
         case .none:           return nil

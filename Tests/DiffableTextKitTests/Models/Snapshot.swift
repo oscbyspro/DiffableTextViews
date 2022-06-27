@@ -81,7 +81,7 @@ final class SnapshotTests: XCTestCase {
     //=------------------------------------------------------------------------=
     
     func testNonvirtualsIgnoresVirtualSymbols() {
-        snapshot = ["A", Symbol("_", as: [.virtual]), "B"]
+        snapshot = ["A", Symbol("_", as:  .virtual),  "B"]
         XCTAssertEqual(String(snapshot.nonvirtuals), "AB")
     }
     

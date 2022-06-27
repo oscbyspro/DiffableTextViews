@@ -56,9 +56,9 @@ extension Encoding {
             character  = snapshot.characters.rangeOfComposedCharacterSequence(at: character).lowerBound
         }
         
-        let traversal  = snapshot.characters.distance(from: index.character,  to: character)
-        let attribute  = snapshot.attributes.index(index.attribute,     offsetBy: traversal)
-        return Index(character,as:attribute)
+        let stride = snapshot.characters.distance(from: index.character, to: character)
+        let attribute = snapshot.attributes.index(index.attribute, offsetBy:    stride)
+        return Index(character, as: attribute)
     }
 }
 

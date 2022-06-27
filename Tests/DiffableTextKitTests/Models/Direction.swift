@@ -30,12 +30,12 @@ final class DirectionTests: XCTestCase {
     }
     
     //=------------------------------------------------------------------------=
-    // MARK: Tests x Transformations
+    // MARK: Tests x Accessors
     //=------------------------------------------------------------------------=
     
-    func testReversed() {
-        XCTAssertEqual(Direction .forwards.reversed(), .backwards)
-        XCTAssertEqual(Direction.backwards.reversed(),  .forwards)
+    func testOpposite() {
+        XCTAssertEqual(Direction .forwards.opposite, .backwards)
+        XCTAssertEqual(Direction.backwards.opposite,  .forwards)
     }
 }
 

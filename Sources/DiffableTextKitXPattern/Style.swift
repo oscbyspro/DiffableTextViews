@@ -99,10 +99,10 @@ extension PatternTextStyle {
     /// - Mismatches are removed.
     @inlinable public func interpret(_ value: Value) -> Commit<Value> {
         reduce(value, into: Commit()) {
-            commit, queue, content in
+            commit, queue, nonvirtual in
             commit.snapshot.append(contentsOf: queue, as: .phantom)
-            commit.snapshot.append(content)
-            commit.value   .append(content)
+            commit.snapshot.append(nonvirtual)
+            commit.value   .append(nonvirtual)
         } none: {
             commit, queue in
             commit.snapshot.append(contentsOf: queue, as: .phantom)
@@ -186,24 +186,20 @@ extension PatternTextStyle {
         var pIndex = pattern.startIndex
         var qIndex = pIndex // queue
         //=--------------------------------------=
-        // Loop
+        // Matches
         //=--------------------------------------=
-        loop: while pIndex != pattern.endIndex {
-            let  character  = pattern[pIndex]
+        matches: while pIndex != pattern.endIndex {
             //=----------------------------------=
             // Placeholder
             //=----------------------------------=
-            if let predicate  = placeholders[character] {
-                guard vIndex != value.endIndex else { break loop }
-                let   content = value[vIndex]
-                //=------------------------------=
-                // Predicate
-                //=------------------------------=
-                guard predicate(content) /*+*/ else { break loop }
+            if let predicate = placeholders[pattern[pIndex]] {
+                guard vIndex != value.endIndex else { break matches }
+                let nonvirtual = value[vIndex]
+                guard    predicate(nonvirtual) else { break matches }
                 //=------------------------------=
                 // (!) Some
                 //=------------------------------=
-                some(&result, pattern[qIndex ..< pIndex], content)
+                some(&result, pattern[qIndex ..< pIndex], nonvirtual)
                 value  .formIndex(after: &vIndex)
                 pattern.formIndex(after: &pIndex)
                 qIndex = pIndex
@@ -217,7 +213,7 @@ extension PatternTextStyle {
         //=--------------------------------------=
         // (!) None
         //=--------------------------------------=
-        if qIndex == pattern.startIndex {
+        if  qIndex == pattern.startIndex {
             none(&result, pattern[qIndex ..< pIndex])
             qIndex = pIndex
         }
