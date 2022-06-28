@@ -66,13 +66,10 @@
     @inlinable init(_ status: Status, _ proposal: Proposal, _ cache: inout Cache) throws {
         status.style.update(&cache)
         //=--------------------------------------=
-        // Values
+        // Interactive
         //=--------------------------------------=
         let commit = try status.style.resolve(proposal, with: &cache)
         let status = Status(status.style, commit.value, status.focus)
-        //=--------------------------------------=
-        // Instantiate
-        //=--------------------------------------=
         self.init(status, Layout(commit.snapshot))
     }
     
