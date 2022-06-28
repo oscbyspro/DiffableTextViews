@@ -21,6 +21,7 @@ public protocol WrapperTextStyle: DiffableTextStyle {
     
     associatedtype Style: DiffableTextStyle
     associatedtype Value = Self.Style.Value
+    associatedtype Cache = Self.Style.Cache
     
     //=------------------------------------------------------------------------=
     // MARK: State
@@ -51,21 +52,37 @@ extension WrapperTextStyle {
     //=------------------------------------------------------------------------=
     
     @inlinable @inline(__always)
-    public func format(_ value: Value) -> String
-    where Value == Style.Value {
-        style.format(value)
+    public func cache() -> Cache
+    where Cache == Style.Cache {
+        style.cache()
+    }
+    
+    @inlinable @inline(__always)
+    public func update(_ cache: inout Cache)
+    where Cache == Style.Cache {
+        style.update(&cache)
+    }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Utilities
+    //=------------------------------------------------------------------------=
+    
+    @inlinable @inline(__always)
+    public func format(_ value: Value, with cache: inout Cache) -> String
+    where Cache == Style.Cache, Value == Style.Value {
+        style.format(value, with: &cache)
     }
 
     @inlinable @inline(__always)
-    public func interpret(_ value: Value) -> Commit<Value>
-    where Value == Style.Value {
-        style.interpret(value)
+    public func interpret(_ value: Value, with cache: inout Cache) -> Commit<Value>
+    where Cache == Style.Cache, Value == Style.Value {
+        style.interpret(value, with: &cache)
     }
 
     @inlinable @inline(__always)
-    public func resolve(_ proposal: Proposal) throws -> Commit<Value>
-    where Value == Style.Value {
-        try style.resolve(proposal)
+    public func resolve(_ proposal: Proposal, with cache: inout Cache) throws -> Commit<Value>
+    where Cache == Style.Cache, Value == Style.Value {
+        try style.resolve(proposal, with: &cache)
     }
     
     //=------------------------------------------------------------------------=

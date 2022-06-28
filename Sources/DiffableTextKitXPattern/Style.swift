@@ -66,7 +66,7 @@ extension PatternTextStyle {
     //=------------------------------------------------------------------------=
     
     /// - Mismatches are separated.
-    @inlinable public func format(_ value: Value) -> String {
+    @inlinable public func format(_ value: Value, with cache: inout Void) -> String {
         reduce(value, into: String()) {
             characters, virtuals, nonvirtual in
             characters.append(contentsOf: virtuals)
@@ -97,7 +97,7 @@ extension PatternTextStyle {
     //=------------------------------------------------------------------------=
     
     /// - Mismatches are removed.
-    @inlinable public func interpret(_ value: Value) -> Commit<Value> {
+    @inlinable public func interpret(_ value: Value, with cache: inout Void) -> Commit<Value> {
         reduce(value, into: Commit()) {
             commit, virtuals, nonvirtual in
             commit.snapshot.append(contentsOf: virtuals, as: .phantom)
@@ -129,7 +129,8 @@ extension PatternTextStyle {
     //=------------------------------------------------------------------------=
     
     /// - Mismatches throw an error.
-    @inlinable @inline(never) public func resolve(_ proposal: Proposal) throws -> Commit<Value> {
+    @inlinable @inline(never) public func resolve(_ proposal:
+    Proposal, with cache: inout Void) throws -> Commit<Value> {
         var value = Value(); let proposal = proposal.merged()
         var nonvirtuals = proposal.nonvirtuals.makeIterator()
         //=--------------------------------------=

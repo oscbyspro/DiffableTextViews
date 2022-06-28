@@ -16,7 +16,8 @@ import Foundation
 
 public struct _NumberTextStyle<Format: NumberTextFormat>: NumberTextStyleProtocol {
     public typealias Adapter = NumberTextAdapter<Format>
-    
+    public typealias Cache = Void
+
     //=------------------------------------------------------------------------=
     // MARK: State
     //=------------------------------------------------------------------------=
@@ -64,7 +65,7 @@ extension _NumberTextStyle {
     // MARK: Inactive
     //=------------------------------------------------------------------------=
     
-    @inlinable public func format(_ value: Value) -> String {
+    @inlinable public func format(_ value: Value, with cache: inout Cache) -> String {
         format.precision(precision.inactive()).format(value)
     }
     
@@ -72,7 +73,7 @@ extension _NumberTextStyle {
     // MARK: Active
     //=------------------------------------------------------------------------=
     
-    @inlinable public func interpret(_ value: Value) -> Commit<Value> {
+    @inlinable public func interpret(_ value: Value, with cache: inout Cache) -> Commit<Value> {
         let style = format.precision(precision.active())
         var value = value
         //=--------------------------------------=
@@ -104,7 +105,7 @@ extension _NumberTextStyle {
     // MARK: Interactive
     //=------------------------------------------------------------------------=
     
-    @inlinable public func resolve(_ proposal: Proposal) throws -> Commit<Value> {
+    @inlinable public func resolve(_ proposal: Proposal, with cache: inout Cache) throws -> Commit<Value> {
         try resolve(number(proposal)!)
     }
     

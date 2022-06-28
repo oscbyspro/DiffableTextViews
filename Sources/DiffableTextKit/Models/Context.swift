@@ -15,102 +15,29 @@
 ///
 /// - Uses copy-on-write semantics.
 ///
-public struct Context<Style: DiffableTextStyle> {
+public final class Context<Style: DiffableTextStyle> {
+    @usableFromInline typealias State = DiffableTextKit.State<Style>
+
+    public typealias Cache  = Style.Cache
     public typealias Value  = Style.Value
+    
     public typealias Status = DiffableTextKit.Status<Style>
     public typealias Commit = DiffableTextKit.Commit<Value>
-
-    //=------------------------------------------------------------------------=
+    
+    //=--------------------------------------------------------------------=
     // MARK: State
-    //=------------------------------------------------------------------------=
-
-    @usableFromInline private(set) var _storage: Storage
+    //=--------------------------------------------------------------------=
+    
+    @usableFromInline private(set) var cache: Cache
+    @usableFromInline private(set) var state: State
     
     //=------------------------------------------------------------------------=
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
     @inlinable public init(_ status: Status) {
-        switch status.focus == true {
-        case  true: self =   .active(status.style, status.value)
-        case false: self = .inactive(status.style, status.value)
-        }
-    }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Transformation
-    //=------------------------------------------------------------------------=
-    
-    /// Writes to storage with copy-on-write behavior.
-    @inlinable mutating func write(_ write: (Storage) -> Void) {
-        //=--------------------------------------=
-        // Unique
-        //=--------------------------------------=
-        if !isKnownUniquelyReferenced(&_storage) {
-            self._storage = self._storage.copy()
-        }
-        //=--------------------------------------=
-        // Update
-        //=--------------------------------------=
-        write(self._storage)
-    }
-    
-    //*========================================================================*
-    // MARK: * Storage
-    //*========================================================================*
-    
-    @usableFromInline final class Storage {
-        
-        //=--------------------------------------------------------------------=
-        // MARK: State
-        //=--------------------------------------------------------------------=
-        
-        @usableFromInline var status: Status
-        @usableFromInline var layout: Layout
-        
-        //=--------------------------------------------------------------------=
-        // MARK: Initializers
-        //=--------------------------------------------------------------------=
-        
-        @inlinable init(_ status: Status, _ layout: Layout) {
-            self.status = status
-            self.layout = layout
-        }
-        
-        //=--------------------------------------------------------------------=
-        // MARK: Utilities
-        //=--------------------------------------------------------------------=
-        
-        @inlinable func copy() -> Self {
-            Self(status, layout)
-        }
-    }
-}
-
-//=----------------------------------------------------------------------------=
-// MARK: + Initializers
-//=----------------------------------------------------------------------------=
-
-extension Context {
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Helpers
-    //=------------------------------------------------------------------------=
-    
-    @inlinable init(_ status: Status, _ layout: Layout) {
-        self._storage = Storage(status, layout)
-    }
-    
-    @inlinable static func active(_ style: Style, _ value: Value) -> Self {
-        Self.active(style, style.interpret(value))
-    }
-    
-    @inlinable static func active(_ style: Style, _ commit: Commit) -> Self {
-        Self(Status(style, commit.value, true), Layout(commit.snapshot))
-    }
-    
-    @inlinable static func inactive(_ style: Style, _ value: Value) -> Self {
-        Self(Status(style, value, false), Layout(Snapshot(style.format(value), as: .phantom)))
+        self.cache = status.style.cache()
+        self.state = State(status,&cache)
     }
 }
 
@@ -119,23 +46,23 @@ extension Context {
 //=----------------------------------------------------------------------------=
 
 extension Context {
+    
+    //=------------------------------------------------------------------------=
+    // MARK: State
+    //=------------------------------------------------------------------------=
+    
+    @inlinable @inline(__always)
+    internal var status: Status {
+        state.status
+    }
+    
+    @inlinable @inline(__always)
+    internal var layout: Layout {
+        state.layout
+    }
 
     //=------------------------------------------------------------------------=
-    // MARK: 1st
-    //=------------------------------------------------------------------------=
-        
-    @inlinable @inline(__always)
-    var status: Status {
-        _storage.status
-    }
-    
-    @inlinable @inline(__always)
-    var layout: Layout {
-        _storage.layout
-    }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: 2nd
+    // MARK: Status
     //=------------------------------------------------------------------------=
     
     @inlinable @inline(__always)
@@ -154,8 +81,13 @@ extension Context {
     }
     
     //=------------------------------------------------------------------------=
-    // MARK: 3rd
+    // MARK: Layout
     //=------------------------------------------------------------------------=
+    
+    @inlinable @inline(__always)
+    internal var snapshot: Snapshot {
+        layout.snapshot
+    }
     
     @inlinable @inline(__always)
     public var text: String {
@@ -175,48 +107,14 @@ extension Context {
 extension Context {
     
     //=------------------------------------------------------------------------=
-    // MARK: Context
-    //=------------------------------------------------------------------------=
-        
-    @inlinable mutating func merge(_ other: Self) {
-        //=--------------------------------------=
-        // Active
-        //=--------------------------------------=
-        if other.focus == true {
-            self.write {
-                $0.status = other.status
-                $0.layout.merge(snapshot: other.layout.snapshot)
-            }
-        //=--------------------------------------=
-        // Inactive
-        //=--------------------------------------=
-        } else { self = other }
-    }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Selection
-    //=------------------------------------------------------------------------=
-    
-    @inlinable mutating func collapse() {
-        self.write({ $0.layout.selection.collapse() })
-    }
-}
-
-//=----------------------------------------------------------------------------=
-// MARK: + Transformations
-//=----------------------------------------------------------------------------=
-
-extension Context {
-    
-    //=------------------------------------------------------------------------=
     // MARK: Status
     //=------------------------------------------------------------------------=
     
-    @inlinable public mutating func merge(_ status: Status) -> Update {
+    @inlinable public func merge(_ status: Status) -> Update {
         //=--------------------------------------=
-        // Update
+        // Values
         //=--------------------------------------=
-        var next    = self.status
+        var next    = self.state.status
         let changes = next.merge(status)
         //=--------------------------------------=
         // At Least One Value Must Have Changed
@@ -225,52 +123,53 @@ extension Context {
         //=--------------------------------------=
         // Update
         //=--------------------------------------=
-        self.merge(Self(next))
+        self.state.merge(State(status, &cache))
         //=--------------------------------------=
         // Return
         //=--------------------------------------=
-        return [.text, .selection(focus == true), .value(value != status.value)]
+        return Update([.text, .selection(focus == true), .value(value != status.value)])
     }
     
     //=------------------------------------------------------------------------=
     // MARK: Characters
     //=------------------------------------------------------------------------=
     
-    @inlinable public mutating func merge<T>(_ characters: String,
+    @inlinable public func merge<T>(_ characters: String,
     in range: Range<Offset<T>>) throws -> Update {
         let previous = value
         //=--------------------------------------=
         // Values
         //=--------------------------------------=
-        let commit = try style.resolve(Proposal(
-        update: layout.snapshot, with: Snapshot(characters),
-        in: layout.indices(at: Carets(range)).range))
+        let proposal = Proposal(update: layout.snapshot,
+        with: Snapshot(characters), in: layout.indices(at: Carets(range)).range)
+        let next = try State(status, proposal, &self.cache)
         //=--------------------------------------=
         // Update
         //=--------------------------------------=
-        self.collapse()
-        self.merge(Self.active(style, commit))
+        self.state.collapse()
+        self.state.merge(next)
         //=--------------------------------------=
         // Return
         //=--------------------------------------=
-        return [.text, .selection, .value(value != previous)]
+        return Update([.text, .selection, .value(value != previous)])
     }
     
     //=------------------------------------------------------------------------=
     // MARK: Selection
     //=------------------------------------------------------------------------=
     
-    @inlinable public mutating func merge<T>(
-    selection: Range<Offset<T>>, momentums: Bool) -> Update {
+    @inlinable public func merge<T>(
+    selection: Range<Offset<T>>,
+    momentums: Bool) -> Update {
         //=--------------------------------------=
         // Update
         //=--------------------------------------=
-        self.write {
-            $0.layout.merge(selection: Carets(selection), momentums: momentums)
-        }
+        self.state.merge(
+        selection: Carets(selection),
+        momentums: momentums)
         //=--------------------------------------=
         // Return
         //=--------------------------------------=
-        return .selection(selection != self.selection())
+        return Update.selection(selection != self.selection())
     }
 }

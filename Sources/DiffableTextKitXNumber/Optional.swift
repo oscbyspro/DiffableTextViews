@@ -67,7 +67,7 @@ extension _OptionalNumberTextStyle {
     // MARK: Inactive
     //=------------------------------------------------------------------------=
     
-    @inlinable public func format(_ value: Value) -> String {
+    @inlinable public func format(_ value: Value, with cache: inout Cache) -> String {
         value.map(style.format) ?? String()
     }
     
@@ -75,7 +75,7 @@ extension _OptionalNumberTextStyle {
     // MARK: Active
     //=------------------------------------------------------------------------=
     
-    @inlinable public func interpret(_ value: Value) -> Commit<Value> {
+    @inlinable public func interpret(_ value: Value, with cache: inout Cache) -> Commit<Value> {
         value.map({ Commit.init(style.interpret($0)) }) ?? Commit()
     }
     
@@ -83,7 +83,7 @@ extension _OptionalNumberTextStyle {
     // MARK: Interactive
     //=------------------------------------------------------------------------=
     
-    @inlinable public func resolve(_ proposal: Proposal) throws  -> Commit<Value> {
+    @inlinable public func resolve(_ proposal: Proposal, with cache: inout Cache) throws -> Commit<Value> {
         try number(proposal).map({ try Commit(style.resolve($0)) }) ?? Commit()
     }
 }
