@@ -16,6 +16,8 @@
 /// Use it to take manual ownership of a style's cache.
 ///
 @usableFromInline struct Isolated<Style: DiffableTextStyle>: WrapperTextStyle {
+    public typealias Value = Style.Value
+    public typealias Cache = Void
     
     //=------------------------------------------------------------------------=
     // MARK: State
@@ -39,17 +41,29 @@
     
     @inlinable @inline(__always)
     public func format(_ value: Value, with cache: inout Void) -> String {
-        style.update(&self.shared.cache); return style.format(value, with: &self.shared.cache)
+        style.update(&self.shared.cache)
+        //=--------------------------------------=
+        // Cache Has Been Updated
+        //=--------------------------------------=
+        return style.format(value, with: &self.shared.cache)
     }
     
     @inlinable @inline(__always)
     public func interpret(_ value: Value, with cache: inout Void) -> Commit<Style.Value> {
-        style.update(&self.shared.cache); return style.interpret(value, with: &self.shared.cache)
+        style.update(&self.shared.cache)
+        //=--------------------------------------=
+        // Cache Has Been Updated
+        //=--------------------------------------=
+        return style.interpret(value, with: &self.shared.cache)
     }
     
     @inlinable @inline(__always)
     public func resolve(_ proposal: Proposal, with cache: inout Void) throws -> Commit<Style.Value> {
-        style.update(&self.shared.cache); return try style.resolve(proposal, with: &self.shared.cache)
+        style.update(&self.shared.cache)
+        //=--------------------------------------=
+        // Cache Has Been Updated
+        //=--------------------------------------=
+        return try style.resolve(proposal, with: &self.shared.cache)
     }
     
     //*========================================================================*

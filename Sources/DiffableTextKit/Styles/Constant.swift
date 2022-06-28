@@ -18,6 +18,8 @@ import Foundation
 /// Use this style to prevent changes via the environment, for example.
 ///
 @usableFromInline struct Constant<Style: DiffableTextStyle>: WrapperTextStyle {
+    public typealias Value = Style.Value
+    public typealias Cache = Style.Cache
     
     //=------------------------------------------------------------------------=
     // MARK: State

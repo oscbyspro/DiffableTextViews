@@ -16,6 +16,8 @@
 /// Use this style to optimize the comparison on view update, for example.
 ///
 @usableFromInline struct Equals<Style: DiffableTextStyle, Proxy: Equatable>: WrapperTextStyle {
+    public typealias Value = Style.Value
+    public typealias Cache = Style.Cache
     
     //=------------------------------------------------------------------------=
     // MARK: State

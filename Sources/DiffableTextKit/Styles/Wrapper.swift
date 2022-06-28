@@ -20,8 +20,6 @@ public protocol WrapperTextStyle: DiffableTextStyle {
     //=------------------------------------------------------------------------=
     
     associatedtype Style: DiffableTextStyle
-    associatedtype Value = Self.Style.Value
-    associatedtype Cache = Self.Style.Cache
     
     //=------------------------------------------------------------------------=
     // MARK: State

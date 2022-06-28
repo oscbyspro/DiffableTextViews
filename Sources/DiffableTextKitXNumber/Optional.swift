@@ -18,6 +18,7 @@ public struct _OptionalNumberTextStyle<Format: NumberTextFormat>: NumberTextStyl
     public typealias Style = _NumberTextStyle<Format>
     public typealias Adapter = NumberTextAdapter<Format>
     public typealias Value = Optional<Format.FormatInput>
+    public typealias Cache = Style.Cache
 
     //=------------------------------------------------------------------------=
     // MARK: State
