@@ -38,16 +38,15 @@ public protocol DiffableTextStyle<Value>: Equatable {
     // MARK: Utilities
     //=------------------------------------------------------------------------=
     
-    /// Creates and initializes a cache.
+    /// Returns a cache.
     ///
-    /// - This mehotd is called on setup of a diffable text view.
+    /// - This method is called on setup of a diffable text view.
     ///
     @inlinable func cache() -> Cache
     
-    /// Updates the cache when before style .
+    /// Updates the cache.
     ///
-    /// - This method is called before a diffable text view calls the style's main methods.
-    /// - The default implementation recreates the cache by calling the cache() method.
+    /// - The default implementation recreates the cache with the cache() method.
     ///
     @inlinable func update(_ cache: inout Cache)
     
@@ -111,10 +110,7 @@ extension DiffableTextStyle where Cache == Void {
     //=------------------------------------------------------------------------=
     
     @inlinable @inline(__always)
-    public func cache() -> Void { () }
-    
-    @inlinable @inline(__always)
-    public func update(_ cache: inout Void) { () }
+    public func cache() -> Void { }
     
     //=------------------------------------------------------------------------=
     // MARK: Utilities
