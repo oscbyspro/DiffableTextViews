@@ -22,7 +22,7 @@
     //=------------------------------------------------------------------------=
     
     public var style: Style
-    @usableFromInline private(set) var storage: Storage
+    @usableFromInline private(set) var shared: Storage
     
     //=------------------------------------------------------------------------=
     // MARK: Initializers
@@ -30,8 +30,7 @@
     
     @inlinable @inline(__always)
     init(_ style: Style) {
-        self.style = style
-        self.storage = Storage(style.cache())
+        self.style = style; self.shared = Storage(style.cache())
     }
     
     //=------------------------------------------------------------------------=
@@ -40,20 +39,17 @@
     
     @inlinable @inline(__always)
     public func format(_ value: Value, with cache: inout Void) -> String {
-        style.update(&self.storage.cache)
-        return style.format(value, with: &self.storage.cache)
+        style.update(&self.shared.cache); return style.format(value, with: &self.shared.cache)
     }
     
     @inlinable @inline(__always)
     public func interpret(_ value: Value, with cache: inout Void) -> Commit<Style.Value> {
-        style.update(&self.storage.cache)
-        return style.interpret(value, with: &self.storage.cache)
+        style.update(&self.shared.cache); return style.interpret(value, with: &self.shared.cache)
     }
     
     @inlinable @inline(__always)
     public func resolve(_ proposal: Proposal, with cache: inout Void) throws -> Commit<Style.Value> {
-        style.update(&self.storage.cache)
-        return try style.resolve(proposal, with: &self.storage.cache)
+        style.update(&self.shared.cache); return try style.resolve(proposal, with: &self.shared.cache)
     }
     
     //*========================================================================*
