@@ -41,27 +41,36 @@
     
     @inlinable @inline(__always)
     public func format(_ value: Value, with cache: inout Void) -> String {
+        //=--------------------------------------=
+        // Update
+        //=--------------------------------------=
         style.update(&self.shared.cache)
         //=--------------------------------------=
-        // Cache Has Been Updated
+        // Return
         //=--------------------------------------=
         return style.format(value, with: &self.shared.cache)
     }
     
     @inlinable @inline(__always)
     public func interpret(_ value: Value, with cache: inout Void) -> Commit<Style.Value> {
+        //=--------------------------------------=
+        // Update
+        //=--------------------------------------=
         style.update(&self.shared.cache)
         //=--------------------------------------=
-        // Cache Has Been Updated
+        // Return
         //=--------------------------------------=
         return style.interpret(value, with: &self.shared.cache)
     }
     
     @inlinable @inline(__always)
     public func resolve(_ proposal: Proposal, with cache: inout Void) throws -> Commit<Style.Value> {
+        //=--------------------------------------=
+        // Update
+        //=--------------------------------------=
         style.update(&self.shared.cache)
         //=--------------------------------------=
-        // Cache Has Been Updated
+        // Return
         //=--------------------------------------=
         return try style.resolve(proposal, with: &self.shared.cache)
     }
