@@ -70,7 +70,7 @@ extension WrapperTextStyle {
     where Cache == Style.Cache, Value == Style.Value {
         style.format(value, with: &cache)
     }
-
+    
     @inlinable @inline(__always)
     public func interpret(_ value: Value, with cache: inout Cache) -> Commit<Value>
     where Cache == Style.Cache, Value == Style.Value {

@@ -29,10 +29,14 @@
     @usableFromInline private(set) var storage: Storage
     
     //=------------------------------------------------------------------------=
-    // MARK: Initializers x Upstream
+    // MARK: Initializers
     //=------------------------------------------------------------------------=
     
+    /// Use this on view update.
     @inlinable init(_ status: Status, _ cache: inout Cache) {
+        //=--------------------------------------=
+        // Update
+        //=--------------------------------------=
         status.style.update(&cache)
         //=--------------------------------------=
         // Active
@@ -51,11 +55,11 @@
         }
     }
     
-    //=------------------------------------------------------------------------=
-    // MARK: Initializers x Downstream
-    //=------------------------------------------------------------------------=
-    
+    /// Use this on changes to text.
     @inlinable init(_ status: Status, _ proposal: Proposal, _ cache: inout Cache) throws {
+        //=--------------------------------------=
+        // Update
+        //=--------------------------------------=
         status.style.update(&cache)
         //=--------------------------------------=
         // Interactive

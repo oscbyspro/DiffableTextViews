@@ -40,7 +40,7 @@
     //=------------------------------------------------------------------------=
     
     @inlinable @inline(__always)
-    public func format(_ value: Value, with cache: inout Void) -> String {
+    public func format(_ value: Value, with cache: inout Cache) -> String {
         //=--------------------------------------=
         // Update
         //=--------------------------------------=
@@ -52,7 +52,7 @@
     }
     
     @inlinable @inline(__always)
-    public func interpret(_ value: Value, with cache: inout Void) -> Commit<Style.Value> {
+    public func interpret(_ value: Value, with cache: inout Cache) -> Commit<Value> {
         //=--------------------------------------=
         // Update
         //=--------------------------------------=
@@ -64,7 +64,7 @@
     }
     
     @inlinable @inline(__always)
-    public func resolve(_ proposal: Proposal, with cache: inout Void) throws -> Commit<Style.Value> {
+    public func resolve(_ proposal: Proposal, with cache: inout Cache) throws -> Commit<Value> {
         //=--------------------------------------=
         // Update
         //=--------------------------------------=
