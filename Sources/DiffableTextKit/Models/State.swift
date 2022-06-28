@@ -29,14 +29,6 @@
     @usableFromInline private(set) var storage: Storage
     
     //=------------------------------------------------------------------------=
-    // MARK: Initializers
-    //=------------------------------------------------------------------------=
-    
-    @inlinable init(_ status: Status, _ layout: Layout) {
-        self.storage = Storage(status,  layout)
-    }
-    
-    //=------------------------------------------------------------------------=
     // MARK: Initializers x Upstream
     //=------------------------------------------------------------------------=
     
@@ -48,14 +40,14 @@
         if status.focus == true {
             let commit = status.style.interpret(status.value, with: &cache)
             let status = Status(status.style,   commit.value, status.focus)
-            self.init(status, Layout(commit.snapshot))
+            self.storage = Storage(status, Layout(commit.snapshot))
         //=--------------------------------------=
         // Inactive
         //=--------------------------------------=
         } else {
             let text = status.style.format(status.value, with: &cache)
             let layout = Layout(Snapshot(text, as: Attribute.phantom))
-            self.init(status, layout)
+            self.storage = Storage(status, layout)
         }
     }
     
@@ -70,7 +62,7 @@
         //=--------------------------------------=
         let commit = try status.style.resolve(proposal, with: &cache)
         let status = Status(status.style, commit.value, status.focus)
-        self.init(status, Layout(commit.snapshot))
+        self.storage = Storage(status, Layout(commit.snapshot))
     }
     
     //=------------------------------------------------------------------------=
@@ -97,7 +89,7 @@
         // Unique
         //=--------------------------------------=
         if !isKnownUniquelyReferenced(&storage) {
-            self.storage = Storage(status, layout)
+            self.storage = Storage(status,layout)
         }
         //=--------------------------------------=
         // Update

@@ -11,10 +11,6 @@
 // MARK: * Context
 //*============================================================================*
 
-/// A set of values describing the state of a diffable text view.
-///
-/// - Uses copy-on-write semantics.
-///
 public final class Context<Style: DiffableTextStyle> {
     @usableFromInline typealias State = DiffableTextKit.State<Style>
 
@@ -39,16 +35,9 @@ public final class Context<Style: DiffableTextStyle> {
         self.cache = status.style.cache()
         self.state = State(status,&cache)
     }
-}
-
-//=----------------------------------------------------------------------------=
-// MARK: + Accessors
-//=----------------------------------------------------------------------------=
-
-extension Context {
     
     //=------------------------------------------------------------------------=
-    // MARK: State
+    // MARK: Accessors
     //=------------------------------------------------------------------------=
     
     @inlinable @inline(__always)
@@ -60,10 +49,6 @@ extension Context {
     internal var layout: Layout {
         state.layout
     }
-
-    //=------------------------------------------------------------------------=
-    // MARK: Status
-    //=------------------------------------------------------------------------=
     
     @inlinable @inline(__always)
     public var style: Style {
@@ -80,15 +65,6 @@ extension Context {
         status.focus
     }
     
-    //=------------------------------------------------------------------------=
-    // MARK: Layout
-    //=------------------------------------------------------------------------=
-    
-    @inlinable @inline(__always)
-    internal var snapshot: Snapshot {
-        layout.snapshot
-    }
-    
     @inlinable @inline(__always)
     public var text: String {
         layout.snapshot.characters
@@ -98,24 +74,15 @@ extension Context {
     public func selection<T>(as encoding: T.Type = T.self) -> Range<Offset<T>> {
         layout.selection().range
     }
-}
-
-//=----------------------------------------------------------------------------=
-// MARK: + Transformations
-//=----------------------------------------------------------------------------=
-
-extension Context {
     
     //=------------------------------------------------------------------------=
-    // MARK: Status
+    // MARK: Transformations
     //=------------------------------------------------------------------------=
     
-    @inlinable public func merge(_ status: Status) -> Update {
-        //=--------------------------------------=
-        // Values
-        //=--------------------------------------=
+    /// Call this on view update.
+    @inlinable public func merge(_ remote: Status) -> Update {
         var next    = self.state.status
-        let changes = next.merge(status)
+        let changes = next.merge(remote)
         //=--------------------------------------=
         // At Least One Value Must Have Changed
         //=--------------------------------------=
@@ -123,26 +90,20 @@ extension Context {
         //=--------------------------------------=
         // Update
         //=--------------------------------------=
-        self.state.merge(State(status, &cache))
+        self.state.merge(State(next,&self.cache))
         //=--------------------------------------=
         // Return
         //=--------------------------------------=
-        return Update([.text, .selection(focus == true), .value(value != status.value)])
+        return Update([.text, .selection(focus == true), .value(value != remote.value)])
     }
     
-    //=------------------------------------------------------------------------=
-    // MARK: Characters
-    //=------------------------------------------------------------------------=
-    
+    /// Call this on changes to text.
     @inlinable public func merge<T>(_ characters: String,
     in range: Range<Offset<T>>) throws -> Update {
-        let previous = value
-        //=--------------------------------------=
-        // Values
-        //=--------------------------------------=
         let proposal = Proposal(update: layout.snapshot,
         with: Snapshot(characters), in: layout.indices(at: Carets(range)).range)
         let next = try State(status, proposal, &self.cache)
+        let previous = (value)
         //=--------------------------------------=
         // Update
         //=--------------------------------------=
@@ -154,10 +115,7 @@ extension Context {
         return Update([.text, .selection, .value(value != previous)])
     }
     
-    //=------------------------------------------------------------------------=
-    // MARK: Selection
-    //=------------------------------------------------------------------------=
-    
+    /// Call this on changes to selection.
     @inlinable public func merge<T>(
     selection: Range<Offset<T>>,
     momentums: Bool) -> Update {
