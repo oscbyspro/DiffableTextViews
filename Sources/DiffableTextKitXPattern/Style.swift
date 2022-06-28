@@ -68,19 +68,19 @@ extension PatternTextStyle {
     /// - Mismatches are separated.
     @inlinable public func format(_ value: Value) -> String {
         reduce(value, into: String()) {
-            characters, queue, content in
-            characters.append(contentsOf: queue)
-            characters.append(content)
+            characters, virtuals, nonvirtual in
+            characters.append(contentsOf: virtuals)
+            characters.append(nonvirtual)
         } none: {
-            characters, queue in
-            characters.append(contentsOf: queue)
+            characters, virtuals in
+            characters.append(contentsOf: virtuals)
         } done: {
-            characters, queue, mismatches in
+            characters, virtuals, mismatches in
             //=----------------------------------=
             // Pattern
             //=----------------------------------=
             if !hidden {
-                characters.append(contentsOf: queue)
+                characters.append(contentsOf: virtuals)
             }
             //=----------------------------------=
             // Mismatches
@@ -99,21 +99,21 @@ extension PatternTextStyle {
     /// - Mismatches are removed.
     @inlinable public func interpret(_ value: Value) -> Commit<Value> {
         reduce(value, into: Commit()) {
-            commit, queue, nonvirtual in
-            commit.snapshot.append(contentsOf: queue, as: .phantom)
+            commit, virtuals, nonvirtual in
+            commit.snapshot.append(contentsOf: virtuals, as: .phantom)
             commit.snapshot.append(nonvirtual)
             commit.value   .append(nonvirtual)
         } none: {
-            commit, queue in
-            commit.snapshot.append(contentsOf: queue, as: .phantom)
+            commit, virtuals in
+            commit.snapshot.append(contentsOf: virtuals, as: .phantom)
             commit.snapshot.anchorAtEndIndex()
         } done: {
-            commit, queue, mismatches in
+            commit, virtuals, mismatches in
             //=----------------------------------=
             // Pattern
             //=----------------------------------=
             if !hidden {
-                commit.snapshot.append(contentsOf: queue, as: .phantom)
+                commit.snapshot.append(contentsOf: virtuals, as: .phantom)
             }
             //=----------------------------------=
             // Mismatches
@@ -184,42 +184,42 @@ extension PatternTextStyle {
         var result = result
         var vIndex = value  .startIndex
         var pIndex = pattern.startIndex
-        var qIndex = pIndex // queue
+        var qIndex = pIndex // position
         //=--------------------------------------=
         // Matches
         //=--------------------------------------=
-        matches: while pIndex != pattern.endIndex {
+        matches: while qIndex != pattern.endIndex {
             //=----------------------------------=
             // Placeholder
             //=----------------------------------=
-            if let predicate = placeholders[pattern[pIndex]] {
+            if let predicate = placeholders[pattern[qIndex]] {
                 guard vIndex != value.endIndex else { break matches }
                 let nonvirtual = value[vIndex]
                 guard    predicate(nonvirtual) else { break matches }
                 //=------------------------------=
                 // (!) Some
                 //=------------------------------=
-                some(&result, pattern[qIndex ..< pIndex], nonvirtual)
+                some(&result, pattern[pIndex ..< qIndex], nonvirtual)
                 value  .formIndex(after: &vIndex)
-                pattern.formIndex(after: &pIndex)
-                qIndex = pIndex
+                pattern.formIndex(after: &qIndex)
+                pIndex = qIndex
             //=----------------------------------=
             // Miscellaneous
             //=----------------------------------=
             } else {
-                pattern.formIndex(after: &pIndex)
+                pattern.formIndex(after: &qIndex)
             }
         }
         //=--------------------------------------=
         // (!) None
         //=--------------------------------------=
-        if  qIndex == pattern.startIndex {
-            none(&result, pattern[qIndex ..< pIndex])
-            qIndex = pIndex
+        if  pIndex == pattern.startIndex {
+            none(&result, pattern[pIndex ..< qIndex])
+            pIndex = qIndex
         }
         //=--------------------------------------=
         // (!) Done
         //=--------------------------------------=
-        done(&result, pattern[qIndex...], value[vIndex...]); return result
+        done(&result, pattern[pIndex...], value[vIndex...]); return result
     }
 }
