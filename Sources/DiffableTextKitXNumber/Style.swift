@@ -43,16 +43,6 @@ public struct _NumberTextStyle<Format: NumberTextFormat>: NumberTextStyleProtoco
     @inlinable public func locale(_ locale: Locale) -> Self {
         var result = self; result.adapter.update(locale); return result
     }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Utilities
-    //=------------------------------------------------------------------------=
-    
-    @inlinable public static func == (lhs: Self, rhs: Self) -> Bool {
-        lhs.adapter == rhs.adapter
-        && lhs.bounds == rhs.bounds
-        && lhs.precision == rhs.precision
-    }
 }
 
 //=----------------------------------------------------------------------------=

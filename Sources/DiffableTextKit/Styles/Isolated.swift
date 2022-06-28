@@ -17,7 +17,6 @@
 ///
 @usableFromInline struct Isolated<Style: DiffableTextStyle>: WrapperTextStyle {
     public typealias Value = Style.Value
-    public typealias Cache = Void
     
     //=------------------------------------------------------------------------=
     // MARK: State
@@ -40,7 +39,7 @@
     //=------------------------------------------------------------------------=
     
     @inlinable @inline(__always)
-    public func format(_ value: Value, with cache: inout Cache) -> String {
+    public func format(_ value: Value, with cache: inout Void) -> String {
         //=--------------------------------------=
         // Update
         //=--------------------------------------=
@@ -52,7 +51,7 @@
     }
     
     @inlinable @inline(__always)
-    public func interpret(_ value: Value, with cache: inout Cache) -> Commit<Value> {
+    public func interpret(_ value: Value, with cache: inout Void) -> Commit<Value> {
         //=--------------------------------------=
         // Update
         //=--------------------------------------=
@@ -64,7 +63,7 @@
     }
     
     @inlinable @inline(__always)
-    public func resolve(_ proposal: Proposal, with cache: inout Cache) throws -> Commit<Value> {
+    public func resolve(_ proposal: Proposal, with cache: inout Void) throws -> Commit<Value> {
         //=--------------------------------------=
         // Update
         //=--------------------------------------=

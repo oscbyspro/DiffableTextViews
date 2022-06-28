@@ -76,7 +76,7 @@ extension WrapperTextStyle {
     where Cache == Style.Cache, Value == Style.Value {
         style.interpret(value, with: &cache)
     }
-
+    
     @inlinable @inline(__always)
     public func resolve(_ proposal: Proposal, with cache: inout Cache) throws -> Commit<Value>
     where Cache == Style.Cache, Value == Style.Value {
