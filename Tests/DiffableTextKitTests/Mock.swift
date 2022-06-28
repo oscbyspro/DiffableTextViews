@@ -35,15 +35,15 @@ struct Mock: DiffableTextStyle {
     // MARK: Utilities
     //=------------------------------------------------------------------------=
     
-    func format(_ value: Value) -> String {
+    func format(_ value: Value, with cache: inout Void) -> String {
         fatalError()
     }
     
-    func interpret(_ value: Value) -> Commit<Value> {
+    func interpret(_ value: Value, with cache: inout Void) -> Commit<Value> {
         fatalError()
     }
     
-    func resolve(_ proposal: Proposal) throws -> Commit<Value> {
+    func resolve(_ proposal: Proposal, with cache: inout Void) throws -> Commit<Value> {
         fatalError()
     }
 }
