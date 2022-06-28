@@ -15,7 +15,7 @@
 ///
 /// Use this style to optimize the comparison on view update, for example.
 ///
-@usableFromInline struct EqualsTextStyle<Style: DiffableTextStyle, Proxy: Equatable>: WrapperTextStyle {
+@usableFromInline struct Equals<Style: DiffableTextStyle, Proxy: Equatable>: WrapperTextStyle {
     
     //=------------------------------------------------------------------------=
     // MARK: State
@@ -60,7 +60,7 @@ extension DiffableTextStyle {
     ///
     @inlinable @inline(__always)
     public func equals(_ proxy: Void) -> some DiffableTextStyle<Value> {
-        EqualsTextStyle(self, proxy: _Void())
+        Equals(self, proxy: _Void())
     }
     
     /// Binds the style's equality to a proxy value.
@@ -69,6 +69,6 @@ extension DiffableTextStyle {
     ///
     @inlinable @inline(__always)
     public func equals(_ proxy: some Equatable) -> some DiffableTextStyle<Value> {
-        EqualsTextStyle(self, proxy: proxy)
+        Equals(self, proxy: proxy)
     }
 }

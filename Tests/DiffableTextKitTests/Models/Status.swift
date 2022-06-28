@@ -40,8 +40,8 @@ final class StatusTests: XCTestCase {
     }
     
     func testMergeDiscardsEqualValues() {
-        let en_US = EqualsTextStyle(en_US, proxy: _Void())
-        let sv_SE = EqualsTextStyle(sv_SE, proxy: _Void())
+        let en_US = Equals(en_US, proxy: _Void())
+        let sv_SE = Equals(sv_SE, proxy: _Void())
         
         var status0 = Status(en_US, 0, false)
         let status1 = Status(sv_SE, 1,  true)

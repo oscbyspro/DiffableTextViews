@@ -17,7 +17,7 @@ import Foundation
 ///
 /// Use this style to prevent changes via the environment, for example.
 ///
-@usableFromInline struct ConstantTextStyle<Style: DiffableTextStyle>: WrapperTextStyle {
+@usableFromInline struct Constant<Style: DiffableTextStyle>: WrapperTextStyle {
     
     //=------------------------------------------------------------------------=
     // MARK: State
@@ -58,6 +58,6 @@ extension DiffableTextStyle {
     ///
     @inlinable @inline(__always)
     public func constant() -> some DiffableTextStyle<Value> {
-        ConstantTextStyle(self)
+        Constant(self)
     }
 }
