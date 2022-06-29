@@ -61,6 +61,22 @@ import Foundation
         reuse(ID(format.locale, format.currencyCode))
     }
     
+    //=------------------------------------------------------------------------=
+    // MARK: Accessors
+    //=------------------------------------------------------------------------=
+    
+    @inlinable func preferred<T>(_ value: T.Type) -> NumberTextPrecision<T> {
+        NumberTextPrecision(fraction: preferences.fraction)
+    }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Utilities
+    //=------------------------------------------------------------------------=
+    
+    @inlinable func autocorrect(_ snapshot: inout Snapshot) {
+        adjustments?.autocorrect(&snapshot)
+    }
+    
     //*========================================================================*
     // MARK: ID
     //*========================================================================*
@@ -162,28 +178,5 @@ import Foundation
                 snapshot.transform(attributes: range) { $0 = .phantom }
             }
         }
-    }
-}
-
-//=----------------------------------------------------------------------------=
-// MARK: + Utilities
-//=----------------------------------------------------------------------------=
-
-extension NumberTextSchemeXCurrency {
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Autocorrect
-    //=------------------------------------------------------------------------=
-    
-    @inlinable func autocorrect(_ snapshot: inout Snapshot) {
-        adjustments?.autocorrect(&snapshot)
-    }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Preferences
-    //=------------------------------------------------------------------------=
-    
-    @inlinable func preferred<T>(_ value: T.Type) -> NumberTextPrecision<T> {
-        NumberTextPrecision(fraction: preferences.fraction)
     }
 }

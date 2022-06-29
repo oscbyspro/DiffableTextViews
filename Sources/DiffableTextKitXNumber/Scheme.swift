@@ -22,17 +22,7 @@ public protocol NumberTextScheme {
     @inlinable var reader: NumberTextReader { get }
     
     //=------------------------------------------------------------------------=
-    // MARK: Autocorrect
-    //=------------------------------------------------------------------------=
-    
-    /// Autocorrects a snapshot in ways specific to this instance.
-    ///
-    /// - It may mark currency expressions as virtual, for example.
-    ///
-    @inlinable func autocorrect(_ snapshot: inout Snapshot)
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Preferences
+    // MARK: Accessors
     //=------------------------------------------------------------------------=
     
     /// The bounds preferred by this instance.
@@ -46,6 +36,16 @@ public protocol NumberTextScheme {
     /// - The return value of this method MUST NOT depend on locale (v3.1.0).
     ///
     @inlinable func preferred<T>(_ value: T.Type) -> NumberTextPrecision<T>
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Utilities
+    //=------------------------------------------------------------------------=
+    
+    /// Autocorrects a snapshot in ways specific to this instance.
+    ///
+    /// - It may mark currency expressions as virtual, for example.
+    ///
+    @inlinable func autocorrect(_ snapshot: inout Snapshot)
 }
 
 //=----------------------------------------------------------------------------=
@@ -55,13 +55,7 @@ public protocol NumberTextScheme {
 extension NumberTextScheme {
     
     //=------------------------------------------------------------------------=
-    // MARK: Autocorrect
-    //=------------------------------------------------------------------------=
-    
-    @inlinable func autocorrect(_ snapshot: inout Snapshot) { }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Preferences
+    // MARK: Accessors
     //=------------------------------------------------------------------------=
     
     @inlinable func preferred<T>(_ value: T.Type) -> NumberTextBounds<T> {
@@ -71,4 +65,10 @@ extension NumberTextScheme {
     @inlinable func preferred<T>(_ value: T.Type) -> NumberTextPrecision<T> {
         NumberTextPrecision()
     }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Utilities
+    //=------------------------------------------------------------------------=
+    
+    @inlinable func autocorrect(_ snapshot: inout Snapshot) { }
 }

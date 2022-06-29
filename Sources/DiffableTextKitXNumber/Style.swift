@@ -130,6 +130,31 @@ extension _NumberTextStyle {
 extension _NumberTextStyle {
     
     //=------------------------------------------------------------------------=
+    // MARK: Commit
+    //=------------------------------------------------------------------------=
+    
+    @inlinable func commit(_ value: Value, _ number: Number, _ style: Format) -> Commit<Value> {
+        var characters = style.sign(number.sign)
+        .separator(number.separator).format(value)
+        //=--------------------------------------=
+        // Autocorrect
+        //=--------------------------------------=
+        if  number.sign == .negative, value == .zero,
+        let index = characters.firstIndex(of:
+        reader.components.signs[.positive]) {
+            //=----------------------------------=
+            // Make Positive Zero Negative
+            //=----------------------------------=
+            let replacement = String(reader.components.signs[number.sign])
+            characters.replaceSubrange(index ... index, with: replacement)
+        }
+        //=--------------------------------------=
+        // Autocorrect
+        //=--------------------------------------=
+        return Commit(value, snapshot(characters))
+    }
+    
+    //=------------------------------------------------------------------------=
     // MARK: Snapshot
     //=------------------------------------------------------------------------=
     
@@ -138,42 +163,10 @@ extension _NumberTextStyle {
         //=--------------------------------------=
         // Characters, Attributes
         //=--------------------------------------=
-        var snapshot = Snapshot(characters) { reader.attributes[$0] }
+        var snapshot = Snapshot(characters, as: { reader.attributes[$0] })
         //=--------------------------------------=
         // Autocorrect
         //=--------------------------------------=
         adapter.autocorrect(&snapshot); return snapshot
-    }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Commit
-    //=------------------------------------------------------------------------=
-    
-    @inlinable func commit(_ value: Value, _ number: Number, _ style: Format) -> Commit<Value> {
-        //=--------------------------------------=
-        // Style
-        //=--------------------------------------=
-        let style = style.sign(number.sign).separator(number.separator)
-        //=--------------------------------------=
-        // Characters
-        //=--------------------------------------=
-        var characters = style.format(value); self.fix(number.sign, for: value, in: &characters)
-        //=--------------------------------------=
-        // Commit
-        //=--------------------------------------=
-        return Commit(value, snapshot(characters))
-    }
-    
-    /// This method exists because formatting zero always yields a positive sign.
-    @inlinable func fix(_ sign: Sign, for value: Value, in characters: inout String)  {
-        //=--------------------------------------=
-        // Correctable
-        //=--------------------------------------=
-        guard sign == .negative, value == .zero, let index = characters.firstIndex(
-        of: reader.components.signs[sign.toggled()]) else { return }
-        //=--------------------------------------=
-        // Autocorrect
-        //=--------------------------------------=
-        characters.replaceSubrange(index...index, with: String(reader.components.signs[sign]))
     }
 }
