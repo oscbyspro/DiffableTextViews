@@ -98,24 +98,6 @@ import DiffableTextKit
 extension Number {
     
     //=------------------------------------------------------------------------=
-    // MARK: Snapshot
-    //=------------------------------------------------------------------------=
-    
-    /// Requires that formatting characters are marked as virtual.
-    @inlinable init?(in snapshot: Snapshot,
-    using components: Components,
-    as kind: (some NumberTextKind).Type) throws {
-        try self.init(
-        unformatted: snapshot.nonvirtuals,
-        signs: components.signs.components,
-        digits: components.digits.components,
-        separators: components.separators.components,
-        optional: kind.isOptional,
-        unsigned: kind.isUnsigned,
-        integer:  kind .isInteger)
-    }
-    
-    //=------------------------------------------------------------------------=
     // MARK: Characters
     //=------------------------------------------------------------------------=
     

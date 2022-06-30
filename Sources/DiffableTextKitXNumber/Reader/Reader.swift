@@ -40,20 +40,18 @@ public final class NumberTextReader {
     @inlinable func number(_ proposal: Proposal, as kind: (some NumberTextKind).Type) throws -> Number? {
         var proposal = proposal
         //=--------------------------------------=
-        // Edit
+        // Process
         //=--------------------------------------=
-        translator.translateSingleSymbol(in: &proposal)
-        let sign = components.consumeSingleSign(in: &proposal)
+        translator.translateSingleSymbol(in: &proposal.replacement)
+        let sign = components.consumeSingleSign(in: &proposal.replacement)
         //=--------------------------------------=
-        // Read
+        // Parse
         //=--------------------------------------=
-        guard var number = try Number(in: proposal.merged(),
-        using: components, as: kind) else { return nil }
-
-        if let sign { number.sign = sign }
+        guard var number = try components.number(in:
+        proposal.merged(), as: kind) else { return nil }
         //=--------------------------------------=
-        // Return
+        // Commands
         //=--------------------------------------=
-        return number
+        if let sign { number.sign = sign }; return number
     }
 }

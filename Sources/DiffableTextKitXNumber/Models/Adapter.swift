@@ -80,7 +80,7 @@ public struct NumberTextAdapter<Format: NumberTextFormat>: Equatable {
     }
     
     @inlinable func number(_ snapshot: Snapshot, as kind: (some NumberTextKind).Type) throws -> Number? {
-        try Number(in: snapshot, using: reader.components, as: kind)
+        try reader.components.number(in: snapshot, as: kind)
     }
     
     @inlinable func number(_ proposal: Proposal, as kind: (some NumberTextKind).Type) throws -> Number? {

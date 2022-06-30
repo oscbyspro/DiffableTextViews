@@ -80,16 +80,4 @@ import Foundation
         self.components[character] = component
         self.characters[component] = character
     }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Utilities
-    //=------------------------------------------------------------------------=
-    
-    @inlinable func contains(_ character: Character) -> Bool {
-        components[character] != nil
-    }
-    
-    @inlinable func contains(_ component: Component) -> Bool {
-        characters[component] != nil
-    }
 }

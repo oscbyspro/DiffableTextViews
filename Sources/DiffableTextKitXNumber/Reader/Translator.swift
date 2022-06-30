@@ -71,8 +71,8 @@ import DiffableTextKit
     // MARK: Utilities
     //=------------------------------------------------------------------------=
     
-    @inlinable func translateSingleSymbol(in proposal: inout Proposal) {
-        guard proposal.replacement.count == 1 else { return }
-        proposal.replacement = Snapshot(proposal.replacement.map(map))
+    @inlinable func translateSingleSymbol(in snapshot: inout Snapshot) {
+        guard snapshot.count == 1 else { return }
+        snapshot = snapshot.reduce(into: .init()) { $0.append(map($1)) }
     }
 }

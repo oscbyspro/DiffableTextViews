@@ -57,11 +57,6 @@ ExpressibleByStringLiteral {
     }
     
     @inlinable @inline(__always)
-    public init(_ other: Self) {
-        self = other
-    }
-    
-    @inlinable @inline(__always)
     public init(arrayLiteral symbols: Symbol...) {
         self.init(symbols)
     }

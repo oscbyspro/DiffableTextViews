@@ -88,7 +88,7 @@ extension _NumberTextStyle {
         //=--------------------------------------=
         // Commit
         //=--------------------------------------=
-        return commit(value, number, style)
+        return commit(style, value, number)
     }
     
     //=------------------------------------------------------------------------=
@@ -120,7 +120,7 @@ extension _NumberTextStyle {
         // Commit
         //=--------------------------------------=
         let style = format.precision(precision.interactive(count))
-        return commit(value, number, style)
+        return commit(style, value, number)
     }
 }
 
@@ -134,7 +134,7 @@ extension _NumberTextStyle {
     // MARK: Commit
     //=------------------------------------------------------------------------=
     
-    @inlinable func commit(_ value: Value, _ number: Number, _ style: Format) -> Commit<Value> {
+    @inlinable func commit(_ style: Format, _ value: Value, _ number: Number) -> Commit<Value> {
         let style = style.sign(number.sign).separator(number.separator)
         var characters = style.format(value)
         //=--------------------------------------=
