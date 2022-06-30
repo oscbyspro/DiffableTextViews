@@ -61,18 +61,6 @@ extension NumberTextStyleProtocol {
     @inlinable var format: Format {
         adapter.format
     }
-    
-    @inlinable var reader: NumberTextReader {
-        adapter.reader
-    }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Utilities
-    //=------------------------------------------------------------------------=
-    
-    @inlinable func number(_ proposal: Proposal) throws -> Number? {
-        try reader.number(proposal, as: Value.self)
-    }
 }
 
 //=----------------------------------------------------------------------------=

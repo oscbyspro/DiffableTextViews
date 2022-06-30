@@ -85,6 +85,6 @@ extension _OptionalNumberTextStyle {
     //=------------------------------------------------------------------------=
     
     @inlinable public func resolve(_ proposal: Proposal, with cache: inout Cache) throws -> Commit<Value> {
-        try number(proposal).map({ try Commit(style.resolve($0)) }) ?? Commit()
+        try adapter.number(proposal, as: Value.self).map({ try Commit(style.resolve($0)) }) ?? Commit()
     }
 }

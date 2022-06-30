@@ -41,11 +41,7 @@ public protocol NumberTextScheme {
     // MARK: Utilities
     //=------------------------------------------------------------------------=
     
-    /// Autocorrects a snapshot in ways specific to this instance.
-    ///
-    /// - It may mark currency expressions as virtual, for example.
-    ///
-    @inlinable func autocorrect(_ snapshot: inout Snapshot)
+    @inlinable func snapshot(_ characters: String)  -> Snapshot
 }
 
 //=----------------------------------------------------------------------------=
@@ -70,5 +66,7 @@ extension NumberTextScheme {
     // MARK: Utilities
     //=------------------------------------------------------------------------=
     
-    @inlinable func autocorrect(_ snapshot: inout Snapshot) { }
+    @inlinable func snapshot(_ characters: String) -> Snapshot {
+        Snapshot(characters, as: reader.attributes.map)
+    }
 }

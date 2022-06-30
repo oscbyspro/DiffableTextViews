@@ -71,16 +71,42 @@ public struct NumberTextAdapter<Format: NumberTextFormat>: Equatable {
     // MARK: Utilities
     //=------------------------------------------------------------------------=
     
-    @inlinable func autocorrect(_ snapshot: inout Snapshot) {
-        scheme.autocorrect(&snapshot)
+    @inlinable func snapshot(_ characters: String) -> Snapshot {
+        scheme.snapshot(characters)
     }
     
     @inlinable func value(_ number: Number) throws -> Value {
         try format.locale(.en_US_POSIX).parseStrategy.parse(number.description)
     }
     
-    @inlinable func number(_ snapshot: Snapshot) throws -> Number {
-        try Number(in: snapshot, using: reader.components, as: Value.self)!
+    @inlinable func number(_ snapshot: Snapshot, as kind: (some NumberTextKind).Type) throws -> Number? {
+        try Number(in: snapshot, using: reader.components, as: kind)
+    }
+    
+    @inlinable func number(_ proposal: Proposal, as kind: (some NumberTextKind).Type) throws -> Number? {
+        try reader.number(proposal, as: kind)
+    }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Utilities
+    //=------------------------------------------------------------------------=
+    
+    @inlinable func commit(_ value: Value, _ number: Number, _ style: Format) -> Commit<Value> {
+        var characters = style.sign(number.sign)
+        .separator(number.separator).format(value)
+        //=--------------------------------------=
+        // Autocorrect
+        //=--------------------------------------=
+        if  number.sign == .negative, value == .zero,
+        let index = characters.firstIndex(of:
+        reader.components.signs[.positive]) {
+            let replacement = String(reader.components.signs[number.sign])
+            characters.replaceSubrange(index ... index, with: replacement)
+        }
+        //=--------------------------------------=
+        // Autocorrect
+        //=--------------------------------------=
+        return Commit(value, snapshot(characters))
     }
     
     //=------------------------------------------------------------------------=

@@ -73,8 +73,10 @@ import Foundation
     // MARK: Utilities
     //=------------------------------------------------------------------------=
     
-    @inlinable func autocorrect(_ snapshot: inout Snapshot) {
+    @inlinable func snapshot(_ characters: String) -> Snapshot {
+        var snapshot = Snapshot(characters, as: reader.attributes.map)
         adjustments?.autocorrect(&snapshot)
+        return snapshot
     }
     
     //*========================================================================*

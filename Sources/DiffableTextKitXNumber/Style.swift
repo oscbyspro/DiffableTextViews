@@ -74,8 +74,8 @@ extension _NumberTextStyle {
         // Number
         //=--------------------------------------=
         let formatted = style.format(value)
-        let parseable = snapshot(formatted)
-        var number = try! adapter.number(parseable)
+        let parseable = adapter.snapshot(formatted)
+        var number = try! adapter.number(parseable, as: Value.self)!
         //=--------------------------------------=
         // Autocorrect
         //=--------------------------------------=
@@ -88,7 +88,7 @@ extension _NumberTextStyle {
         //=--------------------------------------=
         // Commit
         //=--------------------------------------=
-        return commit(value, number, style)
+        return adapter.commit(value, number, style)
     }
     
     //=------------------------------------------------------------------------=
@@ -96,7 +96,7 @@ extension _NumberTextStyle {
     //=------------------------------------------------------------------------=
     
     @inlinable public func resolve(_ proposal: Proposal, with cache: inout Cache) throws -> Commit<Value> {
-        try resolve(number(proposal)!)
+        try resolve(adapter.number(proposal, as: Value.self)!)
     }
     
     /// The resolve method body, also used by styles such as: optional.
@@ -119,54 +119,7 @@ extension _NumberTextStyle {
         //=--------------------------------------=
         // Commit
         //=--------------------------------------=
-        return commit(value, number, format.precision(precision.interactive(count)))
-    }
-}
-
-//=----------------------------------------------------------------------------=
-// MARK: + Helpers
-//=----------------------------------------------------------------------------=
-
-extension _NumberTextStyle {
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Commit
-    //=------------------------------------------------------------------------=
-    
-    @inlinable func commit(_ value: Value, _ number: Number, _ style: Format) -> Commit<Value> {
-        var characters = style.sign(number.sign)
-        .separator(number.separator).format(value)
-        //=--------------------------------------=
-        // Autocorrect
-        //=--------------------------------------=
-        if  number.sign == .negative, value == .zero,
-        let index = characters.firstIndex(of:
-        reader.components.signs[.positive]) {
-            //=----------------------------------=
-            // Make Positive Zero Negative
-            //=----------------------------------=
-            let replacement = String(reader.components.signs[number.sign])
-            characters.replaceSubrange(index ... index, with: replacement)
-        }
-        //=--------------------------------------=
-        // Autocorrect
-        //=--------------------------------------=
-        return Commit(value, snapshot(characters))
-    }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Snapshot
-    //=------------------------------------------------------------------------=
-    
-    /// Assumes characters contain at least one content character.
-    @inlinable func snapshot(_ characters: String) -> Snapshot {
-        //=--------------------------------------=
-        // Characters, Attributes
-        //=--------------------------------------=
-        var snapshot = Snapshot(characters, as: { reader.attributes[$0] })
-        //=--------------------------------------=
-        // Autocorrect
-        //=--------------------------------------=
-        adapter.autocorrect(&snapshot); return snapshot
+        let style = format.precision(precision.interactive(count))
+        return adapter.commit(value, number, style)
     }
 }

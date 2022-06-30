@@ -51,22 +51,6 @@ extension StyleTestsXCurrency {
         XCTAssertDefaultFractionLimits(2...2, locale: locale, code: "USD")
         XCTAssertDefaultFractionLimits(3...3, locale: locale, code: "BHD")
     }
-    
-    func testDefaultFractionLimitsIsSameAsCurrencyFormatter() {
-        let formatter = NumberFormatter()
-        formatter.numberStyle = .currency
-        //=--------------------------------------=
-        // Locales, Currencies
-        //=--------------------------------------=
-        for locale in locales {
-            formatter.locale = locale
-            for currencyCode in currencyCodes {
-                formatter.currencyCode = currencyCode
-                let limits = formatter.minimumFractionDigits...formatter.maximumFractionDigits
-                XCTAssertDefaultFractionLimits(limits, locale: locale, code: currencyCode)
-            }
-        }
-    }
 }
 
 //=----------------------------------------------------------------------------=
