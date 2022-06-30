@@ -57,6 +57,11 @@ ExpressibleByStringLiteral {
     }
     
     @inlinable @inline(__always)
+    public init(_ other: Self) {
+        self = other
+    }
+    
+    @inlinable @inline(__always)
     public init(arrayLiteral symbols: Symbol...) {
         self.init(symbols)
     }
@@ -500,8 +505,8 @@ extension Snapshot {
         //=--------------------------------------=
         // Inspect Initial Index
         //=--------------------------------------=
-        if peek(from: index, towards: preference).map(
-        nonpassthrough) == true { return index  }
+        if let peek = peek(from: index, towards: preference),
+        nonpassthrough(at: peek) { return index }
         //=--------------------------------------=
         // Direction
         //=--------------------------------------=
@@ -517,8 +522,8 @@ extension Snapshot {
         // Search In Opposite Direction
         //=--------------------------------------=
         if let caret = caret(from: index,
-        towards: direction.opposite,
-        jumping: Jump.to,
+        towards: direction.reversed(),
+        jumping: Jump.to, // use Jump.to on each direction
         targeting: nonpassthrough) { return caret }
         //=--------------------------------------=
         // Return End Index On Caret Not Found

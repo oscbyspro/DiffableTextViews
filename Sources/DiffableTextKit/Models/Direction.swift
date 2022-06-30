@@ -32,10 +32,14 @@
     }
     
     //=------------------------------------------------------------------------=
-    // MARK: Accessors
+    // MARK: Transformations
     //=------------------------------------------------------------------------=
     
-    @inlinable public var opposite: Self {
+    @inlinable mutating public func reverse() {
+        self = reversed()
+    }
+    
+    @inlinable public func reversed() -> Self {
         self == .forwards ? .backwards : .forwards
     }
 }

@@ -7,6 +7,8 @@
 // See http://www.apache.org/licenses/LICENSE-2.0 for license information.
 //=----------------------------------------------------------------------------=
 
+import DiffableTextKit
+
 //*============================================================================*
 // MARK: * Translator
 //*============================================================================*
@@ -17,7 +19,7 @@
     // MARK: State
     //=------------------------------------------------------------------------=
     
-    @usableFromInline private(set) var map = [Character: Character]()
+    @usableFromInline private(set) var storage = [Character: Character]()
     
     //=------------------------------------------------------------------------=
     // MARK: Initializers
@@ -35,7 +37,15 @@
     //=------------------------------------------------------------------------=
     
     @inlinable subscript(character: Character) -> Character {
-        map[character] ?? character
+        storage[character] ?? character
+    }
+    
+    @inlinable func map(_ character: Character) -> Character {
+        self[character]
+    }
+    
+    @inlinable func map(_ symbol: Symbol) -> Symbol {
+        Symbol(self[symbol.character], as: symbol.attribute)
     }
     
     //=------------------------------------------------------------------------=
@@ -53,7 +63,16 @@
         // Reduce
         //=--------------------------------------=
         for (component, character) in source.characters {
-            map[character] = destination[key(component)]
+            storage[character] = destination[key(component)]
         }
+    }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Utilities
+    //=------------------------------------------------------------------------=
+    
+    @inlinable func translateSingleSymbol(in proposal: inout Proposal) {
+        guard proposal.replacement.count == 1 else { return }
+        proposal.replacement = Snapshot(proposal.replacement.map(map))
     }
 }

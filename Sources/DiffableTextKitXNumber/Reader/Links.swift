@@ -63,7 +63,7 @@ import Foundation
     // MARK: Accessors
     //=------------------------------------------------------------------------=
     
-    /// All components map to a character, so force unwrapping characters is OK.
+    /// All components map to a character, it it's OK.
     @inlinable subscript(component: Component) -> Character {
         characters[component]!
     }

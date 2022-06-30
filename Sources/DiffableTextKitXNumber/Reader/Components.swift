@@ -7,6 +7,7 @@
 // See http://www.apache.org/licenses/LICENSE-2.0 for license information.
 //=----------------------------------------------------------------------------=
 
+import DiffableTextKit
 import Foundation
 
 //*============================================================================*
@@ -59,5 +60,15 @@ import Foundation
         signs:      .currency(formatter),
         digits:     .currency(formatter),
         separators: .currency(formatter))
+    }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Utilities
+    //=------------------------------------------------------------------------=
+    
+    @inlinable func consumeSingleSign(in proposal: inout Proposal) -> Sign? {
+        guard proposal.replacement.count == 1, let sign =
+        signs[proposal.replacement.first!.character] else { return nil }
+        proposal.replacement.removeAll(); return sign
     }
 }
