@@ -88,7 +88,7 @@ extension _NumberTextStyle {
         //=--------------------------------------=
         // Commit
         //=--------------------------------------=
-        return adapter.commit(value, number, style)
+        return commit(value, number, style)
     }
     
     //=------------------------------------------------------------------------=
@@ -120,6 +120,38 @@ extension _NumberTextStyle {
         // Commit
         //=--------------------------------------=
         let style = format.precision(precision.interactive(count))
-        return adapter.commit(value, number, style)
+        return commit(value, number, style)
+    }
+}
+
+//=----------------------------------------------------------------------------=
+// MARK: + Helpers
+//=----------------------------------------------------------------------------=
+
+extension _NumberTextStyle {
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Commit
+    //=------------------------------------------------------------------------=
+    
+    @inlinable func commit(_ value: Value, _ number: Number, _ style: Format) -> Commit<Value> {
+        let style = style.sign(number.sign).separator(number.separator)
+        var characters = style.format(value)
+        //=--------------------------------------=
+        // Autocorrect
+        //=--------------------------------------=
+        let signs = adapter.reader.components.signs
+        if number.sign == .negative, value == .zero,
+        let index = characters.firstIndex(of: signs[.positive]) {
+            //=----------------------------------=
+            // Make Positive Zero Negative
+            //=----------------------------------=
+            let replacement = String(signs[.negative])
+            characters.replaceSubrange(index...index, with: replacement)
+        }
+        //=--------------------------------------=
+        // Return
+        //=--------------------------------------=
+        return Commit(value, adapter.snapshot(characters))
     }
 }

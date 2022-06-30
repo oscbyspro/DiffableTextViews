@@ -91,28 +91,6 @@ public struct NumberTextAdapter<Format: NumberTextFormat>: Equatable {
     // MARK: Utilities
     //=------------------------------------------------------------------------=
     
-    @inlinable func commit(_ value: Value, _ number: Number, _ style: Format) -> Commit<Value> {
-        var characters = style.sign(number.sign)
-        .separator(number.separator).format(value)
-        //=--------------------------------------=
-        // Autocorrect
-        //=--------------------------------------=
-        if  number.sign == .negative, value == .zero,
-        let index = characters.firstIndex(of:
-        reader.components.signs[.positive]) {
-            let replacement = String(reader.components.signs[number.sign])
-            characters.replaceSubrange(index ... index, with: replacement)
-        }
-        //=--------------------------------------=
-        // Autocorrect
-        //=--------------------------------------=
-        return Commit(value, snapshot(characters))
-    }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Utilities
-    //=------------------------------------------------------------------------=
-    
     @inlinable public static func == (lhs: Self, rhs: Self) -> Bool {
         lhs.format == rhs.format
     }
