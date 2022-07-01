@@ -13,14 +13,13 @@ import DiffableTextKit
 // MARK: * Number
 //*============================================================================*
 
-/// A compositional model of a number.
+/// A tokenized number.
 ///
 /// - Its integer digits MUST contain at least one digit.
 /// - Its integer digits MUST NOT contain redundant prefix zeros.
 /// - It MUST NOT contain fraction digits without containing a fraction separator.
 ///
 @usableFromInline struct Number: Glyphs {
-    @usableFromInline typealias Map<Component> = [Character: Component]
     
     //=------------------------------------------------------------------------=
     // MARK: State
@@ -32,77 +31,12 @@ import DiffableTextKit
     @usableFromInline private(set) var fraction = Digits()
     
     //=------------------------------------------------------------------------=
-    // MARK: Accessors
+    // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable var rawValue: [UInt8] {
-        let size = integer.count+fraction.count+2
-        return Array<UInt8>.init(capacity: size){
-        $0.append(sign.rawValue)
-        $0.append(contentsOf: integer.rawValue)
-        guard let separator else { return }
-        $0.append(separator.rawValue)
-        $0.append(contentsOf: fraction.rawValue)}
-    }
-    
-    @inlinable var hasSeparatorAsSuffix: Bool {
-        fraction.digits.isEmpty && separator != nil
-    }
-    
-    @inlinable func count() -> Count {
-        let value = integer.count + fraction.count - integer.count(prefix: \.isZero)
-        return Count(value: value, integer: integer.count, fraction: fraction.count)
-    }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Transformations
-    //=------------------------------------------------------------------------=
-    
-    @inlinable @discardableResult mutating func removeSeparatorAsSuffix() -> Bool {
-        let remove = hasSeparatorAsSuffix; if remove { separator = nil }; return remove
-    }
-    
-    @inlinable mutating func trim(to precision: Count) -> Bool {
-        let trimmed: (integer: Bool,  fraction:  Bool)
-        //=--------------------------------------=
-        // Trim
-        //=--------------------------------------=
-        trimmed.integer = self.integer.resize(
-        suffix: min(precision.integer,  precision.value))
-        
-        trimmed.fraction = self.fraction.resize(
-        prefix: min(precision.fraction, precision.value - integer.count))
-        //=--------------------------------------=
-        // Autocorrect
-        //=--------------------------------------=
-        if  trimmed.integer {
-            self.integer.trim(prefix: \.isZero)
-            self.integer.replaceEmptyWithZero()
-        }
-        
-        if  trimmed.fraction {
-            self.fraction.trim(suffix:\.isZero)
-            self.removeSeparatorAsSuffix()
-        }
-        //=--------------------------------------=
-        // Done
-        //=--------------------------------------=
-        return trimmed.integer || trimmed.fraction
-    }
-}
-
-//=----------------------------------------------------------------------------=
-// MARK: + Parse
-//=----------------------------------------------------------------------------=
-
-extension Number {
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Characters
-    //=------------------------------------------------------------------------=
-    
-    @inlinable @inline(never) init?(unformatted: some Sequence<Character>,
-    signs: Map<Sign>, digits: Map<Digit>, separators: Map<Separator>,
+    @inlinable @inline(never) init?(
+    unformatted: some Sequence<Character>, signs: [Character: Sign],
+    digits: [Character: Digit],  separators: [Character: Separator],
     optional: Bool, unsigned: Bool, integer: Bool) throws {
         //=--------------------------------------=
         // State
@@ -177,5 +111,64 @@ extension Number {
         //=--------------------------------------=
         self.integer.trim(prefix: \.isZero)
         self.integer.replaceEmptyWithZero()
+    }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Accessors
+    //=------------------------------------------------------------------------=
+    
+    @inlinable var rawValue: [UInt8] {
+        let size = integer.count+fraction.count+2
+        return Array<UInt8>.init(capacity: size){
+        $0.append(sign.rawValue)
+        $0.append(contentsOf: integer.rawValue)
+        guard let separator else { return }
+        $0.append(separator.rawValue)
+        $0.append(contentsOf: fraction.rawValue)}
+    }
+    
+    @inlinable var hasSeparatorAsSuffix: Bool {
+        fraction.digits.isEmpty && separator != nil
+    }
+    
+    @inlinable func count() -> Count {
+        let value = integer.count + fraction.count - integer.count(prefix: \.isZero)
+        return Count(value: value, integer: integer.count, fraction: fraction.count)
+    }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Transformations
+    //=------------------------------------------------------------------------=
+    
+    @inlinable @discardableResult mutating func removeSeparatorAsSuffix() -> Bool {
+        let remove = hasSeparatorAsSuffix; if remove { separator = nil }; return remove
+    }
+    
+    @inlinable mutating func trim(to precision: Count) -> Bool {
+        let trimmed: (integer: Bool,  fraction:  Bool)
+        //=--------------------------------------=
+        // Trim
+        //=--------------------------------------=
+        trimmed.integer = self.integer.resize(
+        suffix: min(precision.integer,  precision.value))
+        
+        trimmed.fraction = self.fraction.resize(
+        prefix: min(precision.fraction, precision.value - integer.count))
+        //=--------------------------------------=
+        // Autocorrect
+        //=--------------------------------------=
+        if  trimmed.integer {
+            self.integer.trim(prefix: \.isZero)
+            self.integer.replaceEmptyWithZero()
+        }
+        
+        if  trimmed.fraction {
+            self.fraction.trim(suffix:\.isZero)
+            self.removeSeparatorAsSuffix()
+        }
+        //=--------------------------------------=
+        // Done
+        //=--------------------------------------=
+        return trimmed.integer || trimmed.fraction
     }
 }
