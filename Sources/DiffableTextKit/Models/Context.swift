@@ -244,12 +244,11 @@ extension Context {
         // Backup
         //=--------------------------------------=
         } else {
+            let range = backup!.indices(at: range)
             //=----------------------------------=
             // Update
             //=----------------------------------=
             self.write {
-                let lower = T.index(at: range.lowerBound, from: $0.backup!.startIndex, in: $0.backup!)
-                let range = lower ..< T.index(at: range.upperBound,  from:      lower, in: $0.backup!)
                 $0.backup!.replaceSubrange(range, with: characters)
             }
             //=----------------------------------=
@@ -270,9 +269,7 @@ extension Context {
         // Update
         //=--------------------------------------=
         self.write {
-            $0.layout!.merge(
-            selection: Carets(selection),
-            momentums: momentums)
+            $0.layout!.merge(selection: Carets(selection), momentums: momentums)
         }
         //=--------------------------------------=
         // Return

@@ -399,54 +399,6 @@ extension Snapshot: CustomStringConvertible {
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: + Encoding
-//=----------------------------------------------------------------------------=
-
-extension Snapshot {
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Distance
-    //=------------------------------------------------------------------------=
-        
-    @inlinable @inline(__always)
-    func offset<T>(from  start: Index, to end: Index, as encoding: T.Type = T.self) -> Offset<T> {
-        T.distance(from: start, to: end, in: self)
-    }
-    
-    @inlinable @inline(__always)
-    func offset<T>(at index:  Index, as encoding: T.Type = T.self) -> Offset<T> {
-        T.distance(from: startIndex, to: index, in: self)
-    }
-    
-    @inlinable @inline(__always)
-    func offsets<T>(at indices: Range<Index>, as encoding: T.Type = T.self) -> Range<Offset<T>> {
-        let lower = T.distance(from:         startIndex, to: indices.lowerBound, in: self)
-        let count = T.distance(from: indices.lowerBound, to: indices.upperBound, in: self)
-        return lower ..< lower + count
-    }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Index
-    //=------------------------------------------------------------------------=
-    
-    @inlinable @inline(__always)
-    func index<T>(at offset: Offset<T>, from start: Index) -> Index {
-        T.index(at:  offset, from: start, in: self)
-    }
-    
-    @inlinable @inline(__always)
-    func index<T>(at offset: Offset<T>) -> Index {
-        T.index(at:  offset, from: self.startIndex, in: self)
-    }
-    
-    @inlinable @inline(__always)
-    func indices<T>(at offsets: Range<Offset<T>>) -> Range<Index> {
-        let lower = T.index(at: offsets.lowerBound, from:   startIndex, in: self)
-        return lower ..< T.index(at: Offset(offsets.count), from:lower, in: self)
-    }
-}
-
-//=----------------------------------------------------------------------------=
 // MARK: + Helpers
 //=----------------------------------------------------------------------------=
 
