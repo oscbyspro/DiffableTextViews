@@ -18,14 +18,14 @@ NumberTextValueXSigned,
 NumberTextValueXFloatingPoint,
 NumberTextValueXNumberable,
 NumberTextValueXCurrencyable,
-NumberTextValueXPercentable
-where NumberTextStyle == _NumberTextStyle<Decimal.FormatStyle> { }
+NumberTextValueXPercentable { }
 
 //=----------------------------------------------------------------------------=
 // MARK: + Decimal
 //=----------------------------------------------------------------------------=
 
 extension Decimal: _Decimal {
+    public typealias NumberTextStyle = _NumberTextStyle<Decimal.FormatStyle>
 
     //=------------------------------------------------------------------------=
     // MARK: Precision, Bounds
