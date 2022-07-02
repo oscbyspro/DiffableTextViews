@@ -92,7 +92,7 @@ public struct Context<Style: DiffableTextStyle> {
     // MARK: * Storage
     //*========================================================================*
 
-    /// It contains text when in focus, it contains a layout otherwise.
+    /// It contains a layout when in focus, it contains text otherwise.
     @usableFromInline final class Storage {
         
         //=--------------------------------------------------------------------=
