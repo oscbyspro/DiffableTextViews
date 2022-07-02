@@ -277,6 +277,6 @@ extension Context {
         //=--------------------------------------=
         // Return
         //=--------------------------------------=
-        return Update.selection(self.selection() != selection)
+        return .selection(self.selection() != selection)
     }
 }
