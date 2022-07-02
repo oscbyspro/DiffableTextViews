@@ -35,7 +35,8 @@ import SwiftUI
 ///
 public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
     public typealias Value = Style.Value
-    
+    public typealias Cache = Style.Cache
+
     //=------------------------------------------------------------------------=
     // MARK: State
     //=------------------------------------------------------------------------=
@@ -93,7 +94,8 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
         // MARK: State
         //=--------------------------------------------------------------------=
         
-        @usableFromInline let lock   = Lock()
+        @usableFromInline let lock =   Lock()
+        @usableFromInline var cache:   Cache!
         @usableFromInline var context: Context!
         
         @usableFromInline var upstream:    Upstream!
@@ -118,7 +120,9 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
             //=----------------------------------=
             // Synchronize
             //=----------------------------------=
-            self.context = Context(self.pull()); self.push(.text)
+            self.cache = upstream.style.cache()
+            self.context = Context(pull(), with: &self.cache)
+            self.push(Update.text)
         }
         
         @inlinable @inline(never)
@@ -165,9 +169,12 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
             // Pull
             //=----------------------------------=
             attempt: do {
-                let update = try self.context.merge(characters, in:
+                let range: Range<Offset> =
                 Offset(nsrange.lowerBound) ..<
-                Offset(nsrange.upperBound))
+                Offset(nsrange.upperBound)
+                
+                let update = try self.context.merge(
+                characters, in: range, with: &cache)
                 //=------------------------------=
                 // Push
                 //=------------------------------=
@@ -244,7 +251,7 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
             // Pull
             //=----------------------------------=
             let status = self.pull()
-            let update = self.context.merge(status)
+            let update = self.context.merge(status, with: &self.cache)
             //=----------------------------------=
             // Push
             //=----------------------------------=
