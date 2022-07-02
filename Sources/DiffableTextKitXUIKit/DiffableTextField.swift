@@ -86,8 +86,8 @@ public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
     
     @MainActor public final class Coordinator: NSObject, UITextFieldDelegate {
         @usableFromInline typealias Context  = DiffableTextKit.Context<Style>
-        @usableFromInline typealias Offset   = DiffableTextKit.Offset<UTF16>
-        @usableFromInline typealias Status   = DiffableTextKit.Status<Style>
+        @usableFromInline typealias Offset   = DiffableTextKit.Offset <UTF16>
+        @usableFromInline typealias Status   = DiffableTextKit.Status <Style>
         @usableFromInline typealias Upstream = DiffableTextKitXUIKit.Upstream<Style>
         
         //=--------------------------------------------------------------------=
