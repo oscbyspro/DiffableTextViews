@@ -30,7 +30,7 @@
     //=------------------------------------------------------------------------=
     
     @inlinable init(_ snapshot: Snapshot) {
-        self.snapshot = snapshot; self.selection = Carets(snapshot.endIndex)
+        self.snapshot = snapshot; self.selection = Carets(snapshot.defaultIndex)
     }
     
     //=------------------------------------------------------------------------=

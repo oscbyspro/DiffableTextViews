@@ -29,10 +29,10 @@ public struct Proposal {
     @inlinable internal init(
     update  snapshot: Snapshot,
     with replacement: Snapshot,
-    in range: Range<some Position>) {
+    in positions: Range<some Position>) {
         self.snapshot = snapshot
         self.replacement = replacement
-        self.range = snapshot.indices(at: range)
+        self.range = snapshot.indices(at: positions)
     }
     
     //=------------------------------------------------------------------------=

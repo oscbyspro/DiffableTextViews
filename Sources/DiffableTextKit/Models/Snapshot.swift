@@ -188,6 +188,11 @@ extension Snapshot {
         as:   _attributes.endIndex)
     }
     
+    @inlinable @inline(__always)
+    var defaultIndex: Index {
+        self.endIndex
+    }
+    
     //=------------------------------------------------------------------------=
     // MARK: After, Before, Distance
     //=------------------------------------------------------------------------=
@@ -480,9 +485,9 @@ extension Snapshot {
         jumping: Jump.to, // use Jump.to on each direction
         targeting: nonpassthrough) { return caret }
         //=--------------------------------------=
-        // Return End Index On Caret Not Found
+        // Use Default Index On Caret Not Found
         //=--------------------------------------=
-        return self.endIndex
+        return self.defaultIndex
     }
     
     //=------------------------------------------------------------------------=

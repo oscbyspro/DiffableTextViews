@@ -59,9 +59,9 @@ public struct Context<Style: DiffableTextStyle> {
         // Active
         //=--------------------------------------=
         if other.status.focus == true {
-            self.write {
-                $0.status = other.status
-                $0.layout.merge(snapshot: other.layout.snapshot)
+            self.write { storage in
+                storage.status = other.status
+                storage.layout.merge(snapshot: other.layout.snapshot)
             }
         //=--------------------------------------=
         // Inactive
