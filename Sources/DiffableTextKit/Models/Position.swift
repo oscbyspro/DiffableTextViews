@@ -88,7 +88,7 @@ public extension Offset {
     
     @inlinable @inline(__always) static func indices(at positions: Range<Self>,
     in collection: some Distances<String.Index>) -> Range<String.Index> {
-        collection.indices(from: collection.startIndex, move: positions)
+        collection.indices(move: positions)
     }
     
     //=------------------------------------------------------------------------=
@@ -102,7 +102,7 @@ public extension Offset {
     
     @inlinable @inline(__always) static func indices(at positions: Range<Self>,
     in collection: some Distances<Snapshot.Index>) -> Range<Snapshot.Index> {
-        collection.indices(from: collection.startIndex, move: positions)
+        collection.indices(move: positions)
     }
 }
 
@@ -116,33 +116,29 @@ public protocol Positions<Index>: Distances {
     // MARK: Utilities
     //=------------------------------------------------------------------------=
     
-    @inlinable @inline(__always) func index(
-    at position: some Position) -> Index
+    @inlinable @inline(__always) func index(at position: some Position) -> Index
 
-    @inlinable @inline(__always) func indices(
-    at positions: Range<some Position>) -> Range<Index>
+    @inlinable @inline(__always) func indices(at positions: Range<some Position>) -> Range<Index>
 }
 
 //*============================================================================*
 // MARK: * Positions x String
 //*============================================================================*
 
-extension String: Positions { }
-extension Substring: Positions { }
+extension String:     Positions { }
+extension Substring:  Positions { }
 public extension StringProtocol where Self: Distances {
 
     //=------------------------------------------------------------------------=
     // MARK: Utilities
     //=------------------------------------------------------------------------=
 
-    @inlinable @inline(__always) func index(
-    at position: some Position) -> Index {
+    @inlinable @inline(__always) func index(at position: some Position) -> Self.Index {
         type(of: position).index(at: position, in: self)
     }
 
-    @inlinable @inline(__always) func indices(
-    at positions: Range<some Position>) -> Range<Index> {
-        type(of: positions).Bound.indices(at: positions, in: self)
+    @inlinable @inline(__always) func indices(at positions: Range<some Position>) -> Range<Index> {
+        type(of: positions).Bound.indices(at: positions,in: self)
     }
 }
 
@@ -157,13 +153,11 @@ public extension Snapshot {
     // MARK: Utilities
     //=------------------------------------------------------------------------=
 
-    @inlinable @inline(__always) func index(
-    at position: some Position) -> Index {
+    @inlinable @inline(__always) func index(at position: some Position) -> Index {
         type(of: position).index(at: position, in: self)
     }
 
-    @inlinable @inline(__always) func indices(
-    at positions: Range<some Position>) -> Range<Index> {
-        type(of: positions).Bound.indices(at: positions, in: self)
+    @inlinable @inline(__always) func indices(at positions: Range<some Position>) -> Range<Index> {
+        type(of: positions).Bound.indices(at: positions,in: self)
     }
 }

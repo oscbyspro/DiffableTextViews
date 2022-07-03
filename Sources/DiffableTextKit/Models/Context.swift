@@ -58,7 +58,7 @@ public struct Context<Style: DiffableTextStyle> {
         //=--------------------------------------=
         // Active
         //=--------------------------------------=
-        if other.status.focus == true {
+        if other.focus == true {
             self.write { storage in
                 storage.status = other.status
                 storage.layout.merge(snapshot: other.layout.snapshot)
@@ -105,7 +105,7 @@ extension Context {
     
     /// Use this on view update.
     @inlinable public init(_ status: Status, with cache: inout Cache) {
-        self = status.focus.wrapped
+        self = status.focus == true
         ?   .active(style: status.style, value: status.value, with: &cache)
         : .inactive(style: status.style, value: status.value, with: &cache)
     }
@@ -178,7 +178,7 @@ extension Context {
     
     @inlinable @inline(__always)
     public func selection<T>(as type: T.Type = T.self) -> Range<Offset<T>> {
-        layout.snapshot.distances(at: layout.selection.range)
+        layout.snapshot.distances(to: layout.selection.range)
     }
 }
 
