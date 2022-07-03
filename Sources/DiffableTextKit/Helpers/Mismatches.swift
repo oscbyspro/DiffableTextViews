@@ -11,25 +11,20 @@
 // MARK: * Mismatches
 //*============================================================================*
 
-/// A namespace for the algorithm that detects changes between snapshots.
+/// A namespace for the differentiation algorithm.
 @usableFromInline enum Mismatches<Prev, Next> where
-Prev: BidirectionalCollection, Prev.Element == Symbol,
-Next: BidirectionalCollection, Next.Element == Symbol {
+Prev: BidirectionalCollection<Symbol>,
+Next: BidirectionalCollection<Symbol> {
     
     //=------------------------------------------------------------------------=
     // MARK: Types
     //=------------------------------------------------------------------------=
     
     @usableFromInline typealias Indices = (prev: Prev.Index, next: Next.Index)
-    @usableFromInline typealias Reversed = Mismatches<ReversedCollection<Prev>, ReversedCollection<Next>>
-
+    
     //=------------------------------------------------------------------------=
     // MARK: Forwards
     //=------------------------------------------------------------------------=
-    
-    @inlinable static func forwards(to next: Next, from prev: Prev) -> Indices {
-        forwards(from: prev, to: next)
-    }
     
     @inlinable static func forwards(from prev: Prev, to next: Next) -> Indices {
         var prevIndex = prev.startIndex
@@ -68,12 +63,12 @@ Next: BidirectionalCollection, Next.Element == Symbol {
     // MARK: Backwards
     //=------------------------------------------------------------------------=
     
-    @inlinable static func backwards(to next: Next, from prev: Prev) -> Indices {
-        backwards(from: prev, to: next)
-    }
-    
     @inlinable static func backwards(from prev: Prev, to next: Next) -> Indices {
-        let reversed = Reversed.forwards(from: prev.reversed(), to: next.reversed())
+        typealias R = Mismatches<
+        ReversedCollection<Prev>,
+        ReversedCollection<Next>>
+
+        let reversed = R.forwards(from: prev.reversed(), to: next.reversed())
         return (reversed.prev.base, reversed.next.base)
     }
 }

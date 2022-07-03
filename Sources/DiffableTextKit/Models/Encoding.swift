@@ -17,21 +17,25 @@ public protocol Encoding {
     // MARK: Utilities
     //=------------------------------------------------------------------------=
     
-    @inlinable static func distance(from start: String.Index,
-    to end: String.Index, in characters: some StringProtocol) -> Offset<Self>
+    @inlinable @inline(__always) static func distance(
+    from start: String.Index, to end: String.Index,
+    in characters: some StringProtocol) -> Offset<Self>
     
-    @inlinable static func index(at distance: Offset<Self>,
-    from index: String.Index, in characters: some StringProtocol) -> String.Index
+    @inlinable @inline(__always) static func index(
+    at distance: Offset<Self>, from index: String.Index,
+    in characters: some StringProtocol) -> String.Index
     
     //=------------------------------------------------------------------------=
     // MARK: Utilities
     //=------------------------------------------------------------------------=
     
-    @inlinable static func distance(from start: Index,
-    to end: Index, in snapshot: Snapshot) -> Offset<Self>
+    @inlinable @inline(__always) static func distance(
+    from  start: Snapshot.Index, to end: Snapshot.Index,
+    in snapshot: Snapshot) -> Offset<Self>
     
-    @inlinable static func index(at distance: Offset<Self>,
-    from index: Index, in snapshot: Snapshot) -> Index
+    @inlinable @inline(__always) static func index(
+    at distance: Offset<Self>, from index: Snapshot.Index,
+    in snapshot: Snapshot) -> Snapshot.Index
 }
 
 //=----------------------------------------------------------------------------=
@@ -44,13 +48,15 @@ extension Encoding {
     // MARK: Utilities
     //=------------------------------------------------------------------------=
     
-    @inlinable @inline(__always) public static func distance(from start: Index,
-    to end: Index, in snapshot: Snapshot) -> Offset<Self> {
+    @inlinable @inline(__always) public static func distance(
+    from  start: Snapshot.Index, to end: Snapshot.Index,
+    in snapshot: Snapshot) -> Offset<Self> {
         distance(from: start.character, to: end.character, in: snapshot.characters)
     }
     
-    @inlinable public static func index(at distance: Offset<Self>,
-    from index: Index, in snapshot: Snapshot) -> Index {
+    @inlinable public static func index(
+    at distance: Offset<Self>, from index: Snapshot.Index,
+    in snapshot: Snapshot) -> Snapshot.Index {
         var character  = self.index(at: distance, from: index.character, in: snapshot.characters)
         if  character != snapshot.characters.endIndex {
             character  = snapshot.characters.rangeOfComposedCharacterSequence(at: character).lowerBound
@@ -72,13 +78,15 @@ extension Character: Encoding {
     // MARK: Utilities
     //=------------------------------------------------------------------------=
     
-    @inlinable @inline(__always) public static func distance(from start: String.Index,
-    to end: String.Index, in characters: some StringProtocol) -> Offset<Self> {
+    @inlinable @inline(__always) public static func distance(
+    from start: String.Index, to end: String.Index,
+    in characters: some StringProtocol) -> Offset<Self> {
         Offset(characters.distance(from: start, to: end))
     }
     
-    @inlinable @inline(__always) public static func index(at distance: Offset<Self>,
-    from index: String.Index, in characters: some StringProtocol) -> String.Index {
+    @inlinable @inline(__always) public static func index(
+    at distance: Offset<Self>, from index: String.Index,
+    in characters: some StringProtocol) -> String.Index {
         characters.index(index, offsetBy: Int(distance))
     }
     
@@ -86,13 +94,15 @@ extension Character: Encoding {
     // MARK: Utilities
     //=------------------------------------------------------------------------=
     
-    @inlinable @inline(__always) public static func distance(from start: Index,
-    to end: Index, in snapshot: Snapshot) -> Offset<Self> {
+    @inlinable @inline(__always) public static func distance(
+    from  start: Snapshot.Index, to end: Snapshot.Index,
+    in snapshot: Snapshot) -> Offset<Self> {
         Offset(end.attribute - start.attribute)
     }
     
-    @inlinable @inline(__always) public static func index(at distance: Offset<Self>,
-    from index: Index, in snapshot: Snapshot) -> Index {
+    @inlinable @inline(__always) public static func index(
+    at distance: Offset<Self>, from index: Snapshot.Index,
+    in snapshot: Snapshot) -> Snapshot.Index {
         snapshot.index(index, offsetBy: Int(distance))
     }
 }
@@ -107,13 +117,15 @@ extension Unicode.Scalar: Encoding {
     // MARK: Utilities
     //=------------------------------------------------------------------------=
 
-    @inlinable @inline(__always) public static func distance(from start: String.Index,
-    to end: String.Index, in characters: some StringProtocol) -> Offset<Self> {
+    @inlinable @inline(__always) public static func distance(
+    from start: String.Index, to end: String.Index,
+    in characters: some StringProtocol) -> Offset<Self> {
         Offset(characters.unicodeScalars.distance(from: start, to: end))
     }
 
-    @inlinable @inline(__always) public static func index(at distance: Offset<Self>,
-    from index: String.Index, in characters: some StringProtocol) -> String.Index {
+    @inlinable @inline(__always) public static func index(
+    at distance: Offset<Self>, from index: String.Index,
+    in characters: some StringProtocol) -> String.Index {
         characters.unicodeScalars.index(index, offsetBy: Int(distance))
     }
 }
@@ -128,13 +140,15 @@ extension UTF16: Encoding {
     // MARK: Utilities
     //=------------------------------------------------------------------------=
 
-    @inlinable @inline(__always) public static func distance(from start: String.Index,
-    to end: String.Index, in characters: some StringProtocol) -> Offset<Self> {
+    @inlinable @inline(__always) public static func distance(
+    from start: String.Index, to end: String.Index,
+    in characters: some StringProtocol) -> Offset<Self> {
         Offset(characters.utf16.distance(from: start, to: end))
     }
     
-    @inlinable @inline(__always) public static func index(at distance: Offset<Self>,
-    from index: String.Index, in characters: some StringProtocol) -> String.Index {
+    @inlinable @inline(__always) public static func index(
+    at distance: Offset<Self>, from index: String.Index,
+    in characters: some StringProtocol) -> String.Index {
         characters.utf16.index(index, offsetBy: Int(distance))
     }
 }
@@ -149,13 +163,15 @@ extension UTF8: Encoding {
     // MARK: Utilities
     //=------------------------------------------------------------------------=
 
-    @inlinable @inline(__always) public static func distance(from start: String.Index,
-    to end: String.Index, in characters: some StringProtocol) -> Offset<Self> {
+    @inlinable @inline(__always) public static func distance(
+    from start: String.Index, to end: String.Index,
+    in characters: some StringProtocol) -> Offset<Self> {
         Offset(characters.utf8.distance(from: start, to: end))
     }
 
-    @inlinable @inline(__always) public static func index(at distance: Offset<Self>,
-    from index: String.Index, in characters: some StringProtocol) -> String.Index {
+    @inlinable @inline(__always) public static func index(
+    at distance: Offset<Self>, from index: String.Index,
+    in characters: some StringProtocol) -> String.Index {
         characters.utf8.index(index, offsetBy: Int(distance))
     }
 }
@@ -170,9 +186,11 @@ public protocol Encoded: Collection {
     // MARK: Utilities
     //=------------------------------------------------------------------------=
     
-    @inlinable func offset<T>(from start: Index, to end: Index, as encoding: T.Type) -> Offset<T>
+    @inlinable @inline(__always) func offset<T>(
+    from start: Index, to end: Index, as encoding: T.Type) -> Offset<T>
     
-    @inlinable func index<T>(at offset: Offset<T>, from start: Index) -> Index
+    @inlinable @inline(__always) func index<T>(
+    at offset: Offset<T>, from start: Index) -> Index
 }
 
 //=----------------------------------------------------------------------------=
@@ -185,13 +203,13 @@ public extension Encoded {
     // MARK: Offset
     //=------------------------------------------------------------------------=
     
-    @inlinable @inline(__always)
-    func offset<T>(at index: Index, as encoding: T.Type = T.self) -> Offset<T> {
+    @inlinable @inline(__always) func offset<T>(
+    at index: Index, as encoding: T.Type = T.self) -> Offset<T> {
         offset(from: startIndex, to: index, as: encoding)
     }
     
-    @inlinable @inline(__always)
-    func offsets<T>(at indices: Range<Index>, as encoding: T.Type = T.self) -> Range<Offset<T>> {
+    @inlinable @inline(__always) func offsets<T>(
+    at indices: Range<Index>, as encoding: T.Type = T.self) -> Range<Offset<T>> {
         let lower = offset(from:         startIndex, to: indices.lowerBound, as: encoding)
         let count = offset(from: indices.lowerBound, to: indices.upperBound, as: encoding)
         return lower ..< lower + count
@@ -201,14 +219,14 @@ public extension Encoded {
     // MARK: Index
     //=------------------------------------------------------------------------=
     
-    @inlinable @inline(__always)
-    func index<T>(at offset: Offset<T>, as enconding: T.Type = T.self) -> Index {
+    @inlinable @inline(__always) func index<T>(
+    at offset: Offset<T>, as enconding: T.Type = T.self) -> Index {
         index(at: offset, from: startIndex)
     }
     
-    @inlinable @inline(__always)
-    func indices<T>(at offsets: Range<Offset<T>>, as enconding: T.Type = T.self) -> Range<Index> {
-        let lower = index(at: offsets.lowerBound,     from:  startIndex)
+    @inlinable @inline(__always) func indices<T>(
+    at offsets: Range<Offset<T>>, as enconding: T.Type = T.self) -> Range<Index> {
+        let    lower   = index(at: offsets.lowerBound, from: startIndex)
         return lower ..< index(at: Offset<T>(offsets.count), from:lower)
     }
 }
@@ -223,13 +241,13 @@ extension String: Encoded {
     // MARK: Utilities
     //=------------------------------------------------------------------------=
     
-    @inlinable @inline(__always)
-    public func offset<T>(from start: Index, to end: Index, as encoding: T.Type = T.self) -> Offset<T> {
+    @inlinable @inline(__always) public func offset<T>(
+    from start: Index, to end: Index, as encoding: T.Type = T.self) -> Offset<T> {
         T.distance(from: start, to: end, in: self)
     }
     
-    @inlinable @inline(__always)
-    public func index<T>(at offset: Offset<T>, from start: Index) -> Index {
+    @inlinable @inline(__always) public func index<T>(
+    at offset: Offset<T>, from start: Index) -> Index {
         T.index(at: offset, from: start, in: self)
     }
 }
@@ -244,13 +262,13 @@ extension Snapshot: Encoded {
     // MARK: Utilities
     //=------------------------------------------------------------------------=
 
-    @inlinable @inline(__always)
-    public func offset<T>(from start: Index, to end: Index, as encoding: T.Type = T.self) -> Offset<T> {
+    @inlinable @inline(__always) public func offset<T>(
+    from start: Index, to end: Index, as encoding: T.Type = T.self) -> Offset<T> {
         T.distance(from: start, to: end, in: self)
     }
 
-    @inlinable @inline(__always)
-    public func index<T>(at offset: Offset<T>, from start: Index) -> Index {
+    @inlinable @inline(__always) public func index<T>(
+    at offset: Offset<T>, from start: Index) -> Index {
         T.index(at: offset, from: start, in: self)
     }
 }

@@ -218,9 +218,9 @@ extension Context {
         // Interactive
         //=--------------------------------------=
         if  let layout {
-            let carets = layout.indices(at: Carets(range))
+            let range = layout.snapshot.indices(at: range)
             let proposal = Proposal(update: layout.snapshot,
-            with: Snapshot(characters), in: carets.range)
+            with: Snapshot(characters), in: range)
             //=----------------------------------=
             // Commit
             //=----------------------------------=

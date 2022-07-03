@@ -37,26 +37,15 @@
     // MARK: Accessors
     //=------------------------------------------------------------------------=
     
-    @inlinable func indices<T>(at offsets: Carets<Offset<T>>) -> Carets<Index> {
-        Carets(snapshot.indices(at: offsets.range))
-    }
-
-    @inlinable func offsets<T>(at indices: Carets<Index>) -> Carets<Offset<T>> {
-        Carets(snapshot.offsets(at: indices.range))
+    @inlinable func selection<T>(as encoding: T.Type = T.self) -> Carets<Offset<T>> {
+        Carets(snapshot.offsets(at: selection.range))
     }
     
-    @inlinable func selection<T>(as encoding: T.Type = T.self) -> Carets<Offset<T>> {
-        offsets(at: selection)
-    }
-
     //=------------------------------------------------------------------------=
     // MARK: Transformations
     //=------------------------------------------------------------------------=
     
     @inlinable mutating func merge(snapshot: Snapshot) {
-        //=--------------------------------------=
-        // Values
-        //=--------------------------------------=
         let selection = selection.map(
         lower: { Mismatches .forwards(from: self.snapshot[..<$0], to: snapshot).next },
         upper: { Mismatches.backwards(from: self.snapshot[$0...], to: snapshot).next })
@@ -71,10 +60,7 @@
     //=------------------------------------------------------------------------=
     
     @inlinable mutating func merge<T>(selection: Carets<Offset<T>>, momentums: Bool) {
-        //=--------------------------------------=
-        // Values
-        //=--------------------------------------=
-        let selection = indices(at: selection)
+        let selection = Carets(snapshot.indices(at: selection.range))
         let momentums = momentums ? Momentums(from: self.selection, to: selection) : Momentums()
         //=--------------------------------------=
         // Update

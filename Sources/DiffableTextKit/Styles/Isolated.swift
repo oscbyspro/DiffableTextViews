@@ -23,7 +23,7 @@
     //=------------------------------------------------------------------------=
     
     public var style: Style
-    @usableFromInline private(set) var shared: Storage
+    @usableFromInline let shared: Storage
     
     //=------------------------------------------------------------------------=
     // MARK: Initializers
