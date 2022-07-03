@@ -25,30 +25,15 @@ public struct Context<Style: DiffableTextStyle> {
     //=------------------------------------------------------------------------=
     // MARK: State
     //=------------------------------------------------------------------------=
-
+    
     @usableFromInline private(set) var storage: Storage
     
     //=------------------------------------------------------------------------=
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    /// Use this on view update.
-    @inlinable public init(_ status: Status, with cache: inout Cache) {
-        status.style.update(&cache)
-        //=--------------------------------------=
-        // Active
-        //=--------------------------------------=
-        if  status.focus == true {
-            let commit = status.style.interpret(status.value, with: &cache)
-            let status = Status(status.style,   commit.value, status.focus)
-            self.storage = Storage(status, Layout(commit.snapshot),    nil)
-        //=--------------------------------------=
-        // Inactive
-        //=--------------------------------------=
-        } else {
-            let backup = status.style.format(status.value, with: &cache)
-            self.storage = Storage(status, nil, backup)
-        }
+    @inlinable init( _ storage: Storage) {
+        self.storage = storage
     }
     
     //=------------------------------------------------------------------------=
@@ -61,7 +46,7 @@ public struct Context<Style: DiffableTextStyle> {
         // Unique
         //=--------------------------------------=
         if !isKnownUniquelyReferenced(&storage) {
-            self.storage = Storage(status, layout, backup)
+            self.storage = Storage(status,layout)
         }
         //=--------------------------------------=
         // Update
@@ -69,18 +54,14 @@ public struct Context<Style: DiffableTextStyle> {
         write(self.storage)
     }
     
-    //=------------------------------------------------------------------------=
-    // MARK: Transformations
-    //=------------------------------------------------------------------------=
-    
     @inlinable mutating func merge(_ other: Self) {
         //=--------------------------------------=
         // Active
         //=--------------------------------------=
-        if  layout != nil, other.layout != nil {
+        if other.status.focus == true {
             self.write {
                 $0.status = other.status
-                $0.layout!.merge(snapshot: other.layout!.snapshot)
+                $0.layout.merge(snapshot: other.layout.snapshot)
             }
         //=--------------------------------------=
         // Inactive
@@ -91,8 +72,7 @@ public struct Context<Style: DiffableTextStyle> {
     //*========================================================================*
     // MARK: * Storage
     //*========================================================================*
-
-    /// It contains a layout when in focus, it contains text otherwise.
+    
     @usableFromInline final class Storage {
         
         //=--------------------------------------------------------------------=
@@ -100,23 +80,46 @@ public struct Context<Style: DiffableTextStyle> {
         //=--------------------------------------------------------------------=
         
         @usableFromInline var status: Status
-        @usableFromInline var layout: Layout?
-        @usableFromInline var backup: String?
-
+        @usableFromInline var layout: Layout
+        
         //=--------------------------------------------------------------------=
         // MARK: Initializers
         //=--------------------------------------------------------------------=
         
-        @inlinable init(_ status: Status, _ layout: Layout?, _ backup: String?) {
+        @inlinable init(_ status: Status, _ layout: Layout) {
             self.status = status
             self.layout = layout
-            self.backup = backup
-            //=--------------------------------------=
-            // Invariants
-            //=--------------------------------------=
-            assert((status.focus ==  true) == (layout != nil))
-            assert((status.focus == false) == (backup != nil))
         }
+    }
+}
+
+//=----------------------------------------------------------------------------=
+// MARK: + Initializers
+//=----------------------------------------------------------------------------=
+
+extension Context {
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Active, Inactive
+    //=------------------------------------------------------------------------=
+    
+    /// Use this on view update.
+    @inlinable public init(_ status: Status, with cache: inout Cache) {
+        self = status.focus.wrapped
+        ?   .active(style: status.style, value: status.value, with: &cache)
+        : .inactive(style: status.style, value: status.value, with: &cache)
+    }
+    
+    @inlinable static func active(style: Style, value: Value, with cache: inout Cache) -> Self {
+        style.update(&cache); let commit = style.interpret(value, with: &cache)
+        let status = Status(style,commit.value, true); let layout = Layout(commit.snapshot)
+        return .init(Storage(status, layout))
+    }
+    
+    @inlinable static func inactive(style: Style, value: Value, with cache: inout Cache) -> Self {
+        style.update(&cache); let text = style.format(value, with: &cache)
+        let status = Status(style, value, false); let layout = Layout(Snapshot(text, as: .phantom))
+        return .init(Storage(status, layout))
     }
 }
 
@@ -129,20 +132,15 @@ extension Context {
     //=------------------------------------------------------------------------=
     // MARK: Storage
     //=------------------------------------------------------------------------=
-        
+    
     @inlinable @inline(__always)
     var status: Status {
         storage.status
     }
     
     @inlinable @inline(__always)
-    var layout: Layout? {
+    var layout: Layout {
         storage.layout
-    }
-    
-    @inlinable @inline(__always)
-    var backup: String? {
-        storage.backup
     }
     
     //=------------------------------------------------------------------------=
@@ -165,17 +163,22 @@ extension Context {
     }
     
     //=------------------------------------------------------------------------=
-    // MARK: Layout, Backup
+    // MARK: Layout
     //=------------------------------------------------------------------------=
     
     @inlinable @inline(__always)
     public var text: String {
-        layout?.snapshot.characters ?? backup!
+        layout.snapshot.characters
+    }
+    
+    @inlinable @inline(__always)
+    public var selection: Range<String.Index> {
+        layout.selection.map(caret: \.character).range
     }
     
     @inlinable @inline(__always)
     public func selection<T>(as encoding: T.Type = T.self) -> Range<Offset<T>> {
-        layout?.selection().range ?? .zero ..< .zero
+        layout.selection().range
     }
 }
 
@@ -191,20 +194,20 @@ extension Context {
     
     /// Call this on view update.
     @inlinable public mutating func merge(_ remote: Status, with cache: inout Cache) -> Update {
-        var status = status
-        let result = status.merge(remote)
-        
-        if result.isEmpty { return .none }
+        var next    = self.status
+        let changes = next.merge(remote)
+        //=--------------------------------------=
+        // At Least One Value Must Have Changed
+        //=--------------------------------------=
+        guard !changes.isEmpty else { return [] }
         //=--------------------------------------=
         // Update
         //=--------------------------------------=
-        self.merge(Self(status, with: &cache))
+        self.merge(Self(next, with: &cache))
         //=--------------------------------------=
         // Return
         //=--------------------------------------=
-        if focus == false { return .text }
-        
-        return [.text, .selection, .value(value != remote.value)]
+        return Update([.text, .selection(focus == true), .value(value != remote.value)])
     }
     
     //=------------------------------------------------------------------------=
@@ -214,48 +217,28 @@ extension Context {
     /// Call this on changes to text.
     @inlinable public mutating func merge<T>(_ characters: String, in range:
     Range<Offset<T>>, with cache: inout Cache) throws -> Update {
-        //=--------------------------------------=
-        // Interactive
-        //=--------------------------------------=
-        if  let layout {
-            let range = layout.snapshot.indices(at: range)
-            let proposal = Proposal(update: layout.snapshot,
-            with: Snapshot(characters), in: range)
-            //=----------------------------------=
-            // Commit
-            //=----------------------------------=
-            status.style.update(&cache)
-            
-            let commit = try status.style.resolve(proposal, with: &cache)
-            let value = Update.value(value != commit.value)
-            //=----------------------------------=
-            // Update
-            //=----------------------------------=
-            self.write {
-                $0.status.value = commit.value
-                $0.layout!.selection.collapse()
-                $0.layout!.merge(snapshot: commit.snapshot)
-            }
-            //=----------------------------------=
-            // Return
-            //=----------------------------------=
-            return [.text, .selection, value]
-        //=--------------------------------------=
-        // Backup
-        //=--------------------------------------=
-        } else {
-            let range = backup!.indices(at: range)
-            //=----------------------------------=
-            // Update
-            //=----------------------------------=
-            self.write {
-                $0.backup!.replaceSubrange(range, with: characters)
-            }
-            //=----------------------------------=
-            // Return
-            //=----------------------------------=
-            return .text
+        let replacement = Snapshot(characters)
+        let range = layout.snapshot.indices(at: range)
+        let proposal = Proposal(update: layout.snapshot, with: replacement, in: range)
+        //=----------------------------------=
+        // Commit
+        //=----------------------------------=
+        status.style.update(&cache)
+        
+        let commit = try status.style.resolve(proposal, with: &cache)
+        let value = Update.value(value != commit.value)
+        //=----------------------------------=
+        // Update
+        //=----------------------------------=
+        self.write {
+            $0.status.value = commit.value
+            $0.layout.selection.collapse()
+            $0.layout.merge(snapshot: commit.snapshot)
         }
+        //=----------------------------------=
+        // Return
+        //=----------------------------------=
+        return [.text, .selection(focus == true), value]
     }
     
     //=------------------------------------------------------------------------=
@@ -264,16 +247,17 @@ extension Context {
     
     /// Call this on changes to selection.
     @inlinable public mutating func merge<T>(selection: Range<Offset<T>>, momentums: Bool) -> Update {
-        guard layout != nil else { return .none }
         //=--------------------------------------=
         // Update
         //=--------------------------------------=
         self.write {
-            $0.layout!.merge(selection: Carets(selection), momentums: momentums)
+            $0.layout.merge(
+            selection: Carets(selection),
+            momentums: momentums)
         }
         //=--------------------------------------=
         // Return
         //=--------------------------------------=
-        return .selection(self.selection() != selection)
+        return Update.selection(self.selection() != selection)
     }
 }

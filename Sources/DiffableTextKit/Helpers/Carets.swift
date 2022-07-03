@@ -60,10 +60,11 @@
     // MARK: Transformations
     //=------------------------------------------------------------------------=
     
+    @inlinable func map<T>(caret: (Caret) -> T) -> Carets<T> {
+        return map(lower:  caret, upper: caret)
+    }
+    
     @inlinable func map<T>(lower: (Caret) -> T, upper: (Caret) -> T) -> Carets<T> {
-        //=--------------------------------------=
-        // Single
-        //=--------------------------------------=
         let max = upper(self.upper); var min = max
         //=--------------------------------------=
         // Double
@@ -74,6 +75,6 @@
         //=--------------------------------------=
         // Return
         //=--------------------------------------=
-        return Carets<T>(unchecked: (min, max))
+        return .init(unchecked: (min, max))
     }
 }
