@@ -177,8 +177,8 @@ extension Context {
     }
     
     @inlinable @inline(__always)
-    public func selection<T>(as encoding: T.Type = T.self) -> Range<Offset<T>> {
-        layout.selection().range
+    public func selection<T>(as type: T.Type = T.self) -> Range<Offset<T>> {
+        layout.snapshot.distances(at: layout.selection.range)
     }
 }
 
@@ -215,8 +215,8 @@ extension Context {
     //=------------------------------------------------------------------------=
     
     /// Call this on changes to text.
-    @inlinable public mutating func merge<T>(_ characters: String, in range:
-    Range<Offset<T>>, with cache: inout Cache) throws -> Update {
+    @inlinable public mutating func merge(_ characters: String, in range:
+    Range<some Position>, with cache: inout Cache) throws -> Update {
         let replacement = Snapshot(characters)
         let range = layout.snapshot.indices(at: range)
         let proposal = Proposal(update: layout.snapshot, with: replacement, in: range)
@@ -230,10 +230,10 @@ extension Context {
         //=----------------------------------=
         // Update
         //=----------------------------------=
-        self.write {
-            $0.status.value = commit.value
-            $0.layout.selection.collapse()
-            $0.layout.merge(snapshot: commit.snapshot)
+        self.write { storage in
+            storage.status.value = commit.value
+            storage.layout.selection.collapse()
+            storage.layout.merge(snapshot: commit.snapshot)
         }
         //=----------------------------------=
         // Return
@@ -246,18 +246,20 @@ extension Context {
     //=------------------------------------------------------------------------=
     
     /// Call this on changes to selection.
-    @inlinable public mutating func merge<T>(selection: Range<Offset<T>>, momentums: Bool) -> Update {
+    @inlinable public mutating func merge(selection:
+    Range<some Position>, momentums: Bool) -> Update {
+        let selection = Carets(layout.snapshot.indices(at: selection))
         //=--------------------------------------=
         // Update
         //=--------------------------------------=
-        self.write {
-            $0.layout.merge(
-            selection: Carets(selection),
+        self.write { storage in
+            storage.layout.merge(
+            selection: selection,
             momentums: momentums)
         }
         //=--------------------------------------=
         // Return
         //=--------------------------------------=
-        return Update.selection(self.selection() != selection)
+        return Update.selection(layout.selection != selection)
     }
 }

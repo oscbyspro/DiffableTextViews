@@ -39,6 +39,13 @@ ExpressibleByArrayLiteral,
 ExpressibleByStringLiteral {
     
     //=------------------------------------------------------------------------=
+    // MARK: Types
+    //=------------------------------------------------------------------------=
+    
+    public typealias Index   = DiffableTextKit.Index
+    public typealias Element = DiffableTextKit.Symbol
+
+    //=------------------------------------------------------------------------=
     // MARK: State
     //=------------------------------------------------------------------------=
         

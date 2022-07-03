@@ -29,22 +29,15 @@
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable init(_ snapshot: Snapshot = Snapshot()) {
+    @inlinable init(_ snapshot: Snapshot) {
         self.snapshot = snapshot; self.selection = Carets(snapshot.endIndex)
-    }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Accessors
-    //=------------------------------------------------------------------------=
-    
-    @inlinable func selection<T>(as encoding: T.Type = T.self) -> Carets<Offset<T>> {
-        Carets(snapshot.offsets(at: selection.range))
     }
     
     //=------------------------------------------------------------------------=
     // MARK: Transformations
     //=------------------------------------------------------------------------=
     
+    /// Use this on changes to text.
     @inlinable mutating func merge(snapshot: Snapshot) {
         let selection = selection.map(
         lower: { Mismatches .forwards(from: self.snapshot[..<$0], to: snapshot).next },
@@ -52,23 +45,14 @@
         //=--------------------------------------=
         // Update
         //=--------------------------------------=
-        self.snapshot = snapshot; self.merge(selection: selection, momentums: Momentums())
+        self.snapshot = snapshot; self.merge(selection: selection, momentums: false)
     }
     
-    //=------------------------------------------------------------------------=
-    // MARK: Transformations
-    //=------------------------------------------------------------------------=
-    
-    @inlinable mutating func merge<T>(selection: Carets<Offset<T>>, momentums: Bool) {
+    /// Use this on changes to selection.
+    @inlinable mutating func merge(selection: Carets<some Position>, momentums: Bool) {
         let selection = Carets(snapshot.indices(at: selection.range))
         let momentums = momentums ? Momentums(from: self.selection, to: selection) : Momentums()
-        //=--------------------------------------=
-        // Update
-        //=--------------------------------------=
-        self.merge(selection: selection, momentums: momentums)
-    }
-    
-    @inlinable mutating func merge(selection: Carets<Index>, momentums: Momentums) {
+        
         switch selection {
         //=--------------------------------------=
         // Accept Max Selection

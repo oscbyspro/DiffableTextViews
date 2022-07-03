@@ -18,6 +18,7 @@ import XCTest
 //*============================================================================*
 
 final class SnapshotTests: XCTestCase {
+    typealias C = Offset<Character>
     
     //=------------------------------------------------------------------------=
     // MARK: State
@@ -91,7 +92,7 @@ final class SnapshotTests: XCTestCase {
     
     func testAnchorAtIndex() {
         snapshot = Snapshot("ABC")
-        let index = snapshot.index(at: .characters(1))
+        let index = snapshot.index(at: C(1))
         
         snapshot.anchor(at: index)
         XCTAssertEqual(snapshot.anchor, index)
@@ -105,7 +106,7 @@ final class SnapshotTests: XCTestCase {
         snapshot.anchorAtEndIndex()
         snapshot.append(Symbol(" "))
         
-        XCTAssertEqual(snapshot.anchor, snapshot.index(at: .characters(1)))
+        XCTAssertEqual(snapshot.anchor, snapshot.index(at: C(1)))
     }
     
     //=------------------------------------------------------------------------=
@@ -186,16 +187,16 @@ final class SnapshotTests: XCTestCase {
     
     func testReplaceSubrangeWithSymbols() {
         snapshot = Snapshot(repeating: " ", count: 4)
-        snapshot.replaceSubrange(snapshot.indices(at: .characters(0) ..< 2), with: Snapshot("AA", as: .content))
-        snapshot.replaceSubrange(snapshot.indices(at: .characters(2) ..< 4), with: Snapshot("BB", as: .phantom))
+        snapshot.replaceSubrange(snapshot.indices(at: C(0) ..< 2), with: Snapshot("AA", as: .content))
+        snapshot.replaceSubrange(snapshot.indices(at: C(2) ..< 4), with: Snapshot("BB", as: .phantom))
         
         Assert("AABB", [.content, .content, .phantom, .phantom])
     }
     
     func testReplaceSubrangeWithCharacters() {
         snapshot = Snapshot(repeating: " ", count: 4)
-        snapshot.replaceSubrange(snapshot.indices(at: .characters(0) ..< 2), with: Snapshot("AA", as: .content))
-        snapshot.replaceSubrange(snapshot.indices(at: .characters(2) ..< 4), with: Snapshot("BB", as: .phantom))
+        snapshot.replaceSubrange(snapshot.indices(at: C(0) ..< 2), with: Snapshot("AA", as: .content))
+        snapshot.replaceSubrange(snapshot.indices(at: C(2) ..< 4), with: Snapshot("BB", as: .phantom))
         
         Assert("AABB", [.content, .content, .phantom, .phantom])
     }
@@ -206,6 +207,9 @@ final class SnapshotTests: XCTestCase {
     
     func testNumberOfAttributesMustEqualNumberOfJointCharacters() {
         snapshot = Snapshot("🇸🇪🇺🇸".unicodeScalars.map(Character.init))
+        
+        XCTAssertEqual(snapshot.characters.count, 2)
+        XCTAssertEqual(snapshot.attributes.count, 4)
         Assert("🇸🇪🇺🇸", [.content, .content, .content, .content])
     }
 }

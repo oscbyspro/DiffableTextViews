@@ -11,7 +11,7 @@
 // MARK: * Offset
 //*============================================================================*
 
-public struct Offset<Encoding: DiffableTextKit.Encoding>: Strideable,
+public struct Offset<Distance: DiffableTextKit.Distance>: Strideable,
 AdditiveArithmetic, ExpressibleByIntegerLiteral {
         
     //=------------------------------------------------------------------------=
@@ -30,7 +30,7 @@ AdditiveArithmetic, ExpressibleByIntegerLiteral {
     }
     
     @inlinable @inline(__always)
-    public init(_ distance: Int, as encoding: Encoding.Type) {
+    public init(_ distance: Int, as type: Distance.Type) {
         self.distance = distance
     }
     
@@ -89,70 +89,6 @@ AdditiveArithmetic, ExpressibleByIntegerLiteral {
     @inlinable @inline(__always)
     public static func -= (lhs: inout Self, rhs: Self) {
         lhs = lhs - rhs
-    }
-}
-
-//=----------------------------------------------------------------------------=
-// MARK: + Character
-//=----------------------------------------------------------------------------=
-
-extension Offset where Encoding == Character {
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Initializers
-    //=------------------------------------------------------------------------=
-    
-    @inlinable @inline(__always)
-    public static func characters(_ distance: Int) -> Self {
-        Self(distance)
-    }
-}
-
-//=----------------------------------------------------------------------------=
-// MARK: + Unicode.Scalar
-//=----------------------------------------------------------------------------=
-
-extension Offset where Encoding == Unicode.Scalar {
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Initializers
-    //=------------------------------------------------------------------------=
-    
-    @inlinable @inline(__always)
-    public static func unicodeScalars(_ distance: Int) -> Self {
-        Self(distance)
-    }
-}
-
-//=----------------------------------------------------------------------------=
-// MARK: + UTF8
-//=----------------------------------------------------------------------------=
-
-extension Offset where Encoding == UTF8 {
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Initializers
-    //=------------------------------------------------------------------------=
-    
-    @inlinable @inline(__always)
-    public static func utf8(_ distance: Int) -> Self {
-        Self(distance)
-    }
-}
-
-//=----------------------------------------------------------------------------=
-// MARK: + UTF16
-//=----------------------------------------------------------------------------=
-
-extension Offset where Encoding == UTF16 {
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Initializers
-    //=------------------------------------------------------------------------=
-    
-    @inlinable @inline(__always)
-    public static func utf16(_ distance: Int) -> Self {
-        Self(distance)
     }
 }
 

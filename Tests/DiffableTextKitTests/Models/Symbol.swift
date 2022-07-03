@@ -18,7 +18,6 @@ import XCTest
 //*============================================================================*
 
 final class SymbolTests: XCTestCase {
-    typealias T = Offset<Character>
     
     //=------------------------------------------------------------------------=
     // MARK: Tests x Initializers
