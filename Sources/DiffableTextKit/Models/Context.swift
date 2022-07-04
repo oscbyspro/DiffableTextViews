@@ -38,16 +38,19 @@ public struct Context<Style: DiffableTextStyle> {
         // Active
         //=--------------------------------------=
         if status.focus == true {
+            var status = status
             let commit = status.interpret(with: &cache)
             changes?.pointee.formUnion(.value(commit.value != status.value))
-            let status = status.transformed({ $0.value = commit.value })
-            self.storage = Storage(status, Layout.init(commit.snapshot))
+            
+            status.value = commit.value
+            self.storage = Storage(status, Layout(commit.snapshot))
         //=--------------------------------------=
         // Inactive
         //=--------------------------------------=
         } else {
-            let text = status.format(with: &cache)
-            self.storage = Storage(status, Layout(Snapshot(text, as: .phantom)))
+            let characters = status.format(with: &cache)
+            let snapshot = Snapshot(characters,as: .phantom)
+            self.storage = Storage(status, Layout(snapshot))
         }
     }
     

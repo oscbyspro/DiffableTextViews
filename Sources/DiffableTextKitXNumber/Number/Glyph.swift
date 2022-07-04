@@ -7,7 +7,6 @@
 // See http://www.apache.org/licenses/LICENSE-2.0 for license information.
 //=----------------------------------------------------------------------------=
 
-import DiffableTextKit
 import Foundation
 
 //*============================================================================*
@@ -15,7 +14,7 @@ import Foundation
 //*============================================================================*
 
 /// A UTF-8 encoded ASCII character.
-@usableFromInline protocol Glyph: Hashable, CaseIterable, CustomStringConvertible, Transformable {
+@usableFromInline protocol Glyph: Hashable, CaseIterable, CustomStringConvertible {
     associatedtype Enumeration: CaseIterable, RawRepresentable where Enumeration.RawValue == UInt8
 
     //=------------------------------------------------------------------------=
