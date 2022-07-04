@@ -133,7 +133,7 @@ public extension StringProtocol where Self: Distances {
     // MARK: Utilities
     //=------------------------------------------------------------------------=
 
-    @inlinable @inline(__always) func index(at position: some Position) -> Self.Index {
+    @inlinable @inline(__always) func index(at position: some Position) -> Index {
         type(of: position).index(at: position, in: self)
     }
 

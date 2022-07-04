@@ -192,9 +192,9 @@ public protocol Distances<Index>: Collection {
     
     @inlinable @inline(__always) func distance<T>(
     from start: Index, to end: Index) -> Offset<T>
-
-    @inlinable @inline(__always) func index<T>(
-    from start: Index, move distance: Offset<T>) -> Index
+    
+    @inlinable @inline(__always) func index(
+    from start: Index, move distance: Offset<some Distance>) -> Index
 }
 
 //=----------------------------------------------------------------------------=
@@ -202,20 +202,20 @@ public protocol Distances<Index>: Collection {
 //=----------------------------------------------------------------------------=
 
 public extension Distances {
-
+    
     //=------------------------------------------------------------------------=
     // MARK: Utilities
     //=------------------------------------------------------------------------=
 
     @inlinable @inline(__always) func distance<T>(
-    from start: Index, to end: Index, as type: T.Type = T.self) -> Offset<T> {
+    from start: Index, to end: Index, as type: T.Type) -> Offset<T> {
         distance(from: start, to: end)
     }
     
     @inlinable @inline(__always) func distances<T>(
     to indices: Range<Index>, as type: T.Type = T.self) -> Range<Offset<T>> {
-        let lower = distance(from:         startIndex, to: indices.lowerBound, as: type)
-        let count = distance(from: indices.lowerBound, to: indices.upperBound, as: type)
+        let lower: Offset<T> = distance(from:         startIndex, to: indices.lowerBound)
+        let count: Offset<T> = distance(from: indices.lowerBound, to: indices.upperBound)
         return lower ..< lower + count
     }
     
@@ -224,7 +224,7 @@ public extension Distances {
     //=------------------------------------------------------------------------=
     
     @inlinable @inline(__always) func index<T>(
-    from start: Index, move distance: Offset<T>, as type: T.Type = T.self) -> Index {
+    from start: Index, move distance: Offset<T>, as type: T.Type) -> Index {
         index(from: start, move: distance)
     }
     
@@ -242,7 +242,7 @@ public extension Distances {
 extension String:     Distances { }
 extension Substring:  Distances { }
 public extension StringProtocol {
-
+    
     //=------------------------------------------------------------------------=
     // MARK: Utilities
     //=------------------------------------------------------------------------=

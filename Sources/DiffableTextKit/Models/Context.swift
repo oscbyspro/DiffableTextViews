@@ -199,8 +199,8 @@ extension Context {
     //=------------------------------------------------------------------------=
     
     /// Call this on changes to text.
-    @inlinable public mutating func merge(_ characters: String, in range:
-    Range<some Position>, with cache: inout Cache) throws -> Update {
+    @inlinable public mutating func merge(_  characters: String, in
+    range: Range<some Position>, with cache: inout Cache) throws -> Update {
         let replacement = Snapshot(characters)
         let range = layout.snapshot.indices(at: range)
         let proposal = Proposal(update: layout.snapshot, with: replacement, in: range)
