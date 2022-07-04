@@ -8,16 +8,23 @@
 //=----------------------------------------------------------------------------=
 
 //*============================================================================*
-// MARK: * Mask
+// MARK: * Transformable
 //*============================================================================*
 
-public extension OptionSet {
+public protocol  Transformable { }
+public extension Transformable {
     
     //=------------------------------------------------------------------------=
-    // MARK: Transformations
+    // MARK: Utilities
     //=------------------------------------------------------------------------=
     
-    @inlinable func callAsFunction(_ mask: Bool) -> Self {
-        mask ? self : .init()
+    @inlinable @inline(__always)
+    mutating func transform(_ transform: (inout Self) throws -> Void) rethrows {
+        try transform(&self)
+    }
+    
+    @inlinable @inline(__always)
+    func transformed(_ transform: (inout Self) throws -> Void) rethrows -> Self  {
+        var instance = self; try transform(&instance);  return instance
     }
 }

@@ -8,33 +8,24 @@
 //=----------------------------------------------------------------------------=
 
 //*============================================================================*
-// MARK: * Changes
+// MARK: * Options
 //*============================================================================*
 
-/// A model used to capture comparison results.
-public struct Changes: OptionSet {
+public extension OptionSet {
     
     //=------------------------------------------------------------------------=
-    // MARK: Instances
+    // MARK: Transformations
     //=------------------------------------------------------------------------=
     
-    public static let none  = Self()
-    public static let style = Self(rawValue: 1 << 0)
-    public static let value = Self(rawValue: 1 << 1)
-    public static let focus = Self(rawValue: 1 << 2)
+    @inlinable func callAsFunction(_ mask: Bool) -> Self {
+        mask ? self : Self()
+    }
     
     //=------------------------------------------------------------------------=
-    // MARK: State
+    // MARK: Utilities
     //=------------------------------------------------------------------------=
     
-    public var rawValue: UInt8
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Initializers
-    //=------------------------------------------------------------------------=
-    
-    @inlinable @inline(__always)
-    public init(rawValue: UInt8) {
-        self.rawValue = rawValue
+    @inlinable static prefix func !(instance: Self) -> Bool {
+        instance.isEmpty
     }
 }

@@ -24,8 +24,8 @@ final class FocusTests: XCTestCase {
     //=------------------------------------------------------------------------=
     
     func testInit() {
-        XCTAssertEqual(Focus( true).wrapped,  true)
-        XCTAssertEqual(Focus(false).wrapped, false)
+        XCTAssertEqual(Focus( true).value,  true)
+        XCTAssertEqual(Focus(false).value, false)
     }
     
     func testInitAsBooleanLiteral() {

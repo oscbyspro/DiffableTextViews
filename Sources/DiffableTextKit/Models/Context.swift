@@ -32,8 +32,23 @@ public struct Context<Style: DiffableTextStyle> {
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable init( _ storage: Storage) {
-        self.storage = storage
+    @inlinable public init(_ status: Status, with cache: inout Cache, observe
+    changes: UnsafeMutablePointer<Changes>? = nil) {
+        //=--------------------------------------=
+        // Active
+        //=--------------------------------------=
+        if status.focus == true {
+            let commit = status.interpret(with: &cache)
+            changes?.pointee.formUnion(.value(commit.value != status.value))
+            let status = status.transformed({ $0.value = commit.value })
+            self.storage = Storage(status, Layout.init(commit.snapshot))
+        //=--------------------------------------=
+        // Inactive
+        //=--------------------------------------=
+        } else {
+            let text = status.format(with: &cache)
+            self.storage = Storage(status, Layout(Snapshot(text, as: .phantom)))
+        }
     }
     
     //=------------------------------------------------------------------------=
@@ -90,36 +105,6 @@ public struct Context<Style: DiffableTextStyle> {
             self.status = status
             self.layout = layout
         }
-    }
-}
-
-//=----------------------------------------------------------------------------=
-// MARK: + Initializers
-//=----------------------------------------------------------------------------=
-
-extension Context {
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Active, Inactive
-    //=------------------------------------------------------------------------=
-    
-    /// Use this on view update.
-    @inlinable public init(_ status: Status, with cache: inout Cache) {
-        self = status.focus == true
-        ?   .active(style: status.style, value: status.value, with: &cache)
-        : .inactive(style: status.style, value: status.value, with: &cache)
-    }
-    
-    @inlinable static func active(style: Style, value: Value, with cache: inout Cache) -> Self {
-        style.update(&cache); let commit = style.interpret(value, with: &cache)
-        let status = Status(style,commit.value, true); let layout = Layout(commit.snapshot)
-        return .init(Storage(status, layout))
-    }
-    
-    @inlinable static func inactive(style: Style, value: Value, with cache: inout Cache) -> Self {
-        style.update(&cache); let text = style.format(value, with: &cache)
-        let status = Status(style, value, false); let layout = Layout(Snapshot(text, as: .phantom))
-        return .init(Storage(status, layout))
     }
 }
 
@@ -194,20 +179,19 @@ extension Context {
     
     /// Call this on view update.
     @inlinable public mutating func merge(_ remote: Status, with cache: inout Cache) -> Update {
-        var next    = self.status
-        let changes = next.merge(remote)
-        //=--------------------------------------=
-        // At Least One Value Must Have Changed
-        //=--------------------------------------=
-        guard !changes.isEmpty else { return [] }
+        var status = self.status
+        if !status.merge(remote) { return .none }
         //=--------------------------------------=
         // Update
         //=--------------------------------------=
-        self.merge(Self(next, with: &cache))
+        var changes = Changes.none; withUnsafeMutablePointer(to: &changes) {
+            self.merge(Self(status, with: &cache, observe: status.focus == true ? $0 : nil))
+        }
         //=--------------------------------------=
         // Return
         //=--------------------------------------=
-        return Update([.text, .selection(focus == true), .value(value != remote.value)])
+        if status.focus == false { return .text }
+        return [.text, .selection, .value(changes.contains(.value))]
     }
     
     //=------------------------------------------------------------------------=
@@ -223,9 +207,7 @@ extension Context {
         //=----------------------------------=
         // Commit
         //=----------------------------------=
-        status.style.update(&cache)
-        
-        let commit = try status.style.resolve(proposal, with: &cache)
+        let commit = try status.resolve(proposal, with: &cache)
         let value = Update.value(value != commit.value)
         //=----------------------------------=
         // Update

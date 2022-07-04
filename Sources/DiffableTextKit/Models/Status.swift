@@ -12,8 +12,9 @@
 //*===========================================================================
 
 /// A model used to collect upstream and downstream values.
-public struct Status<Style: DiffableTextStyle>: Equatable {
+public struct Status<Style: DiffableTextStyle>: Equatable, Transformable {
     public typealias Value = Style.Value
+    public typealias Cache = Style.Cache
     
     //=------------------------------------------------------------------------=
     // MARK: State
@@ -61,4 +62,27 @@ public struct Status<Style: DiffableTextStyle>: Equatable {
         .value(lhs.value != rhs.value),
         .focus(lhs.focus != rhs.focus),
     ]}
+}
+
+//=----------------------------------------------------------------------------=
+// MARK: + Utilities
+//=----------------------------------------------------------------------------=
+
+extension Status {
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Style
+    //=------------------------------------------------------------------------=
+    
+    public func format(with cache: inout Cache) -> String {
+        style.update(&cache); return style.format(value, with: &cache)
+    }
+    
+    public func interpret(with cache: inout Cache) -> Commit<Style.Value> {
+        style.update(&cache); return style.interpret(value, with: &cache)
+    }
+    
+    public func resolve(_ proposal: Proposal, with cache: inout Cache) throws -> Commit<Style.Value> {
+        style.update(&cache); return try style.resolve(proposal, with: &cache)
+    }
 }

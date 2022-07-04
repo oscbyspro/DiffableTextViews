@@ -7,6 +7,7 @@
 // See http://www.apache.org/licenses/LICENSE-2.0 for license information.
 //=----------------------------------------------------------------------------=
 
+import DiffableTextKit
 import Foundation
 
 //*============================================================================*
@@ -14,7 +15,7 @@ import Foundation
 //*============================================================================*
 
 /// A UTF-8 encoded ASCII character.
-@usableFromInline protocol Glyph: Hashable, CaseIterable, CustomStringConvertible {
+@usableFromInline protocol Glyph: Hashable, CaseIterable, CustomStringConvertible, Transformable {
     associatedtype Enumeration: CaseIterable, RawRepresentable where Enumeration.RawValue == UInt8
 
     //=------------------------------------------------------------------------=
@@ -70,18 +71,6 @@ extension Glyph {
     
     @inlinable var description: String {
         String(unicode)
-    }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Transformations
-    //=------------------------------------------------------------------------=
-    
-    @inlinable mutating func transform(_ transform: (inout Self) -> Void) {
-        transform(&self)
-    }
-    
-    @inlinable func transformed(_ transform: (inout Self) -> Void) -> Self {
-        var result = self; transform(&result); return result
     }
     
     //=------------------------------------------------------------------------=
