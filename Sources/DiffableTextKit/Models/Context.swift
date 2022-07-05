@@ -32,26 +32,8 @@ public struct Context<Style: DiffableTextStyle> {
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable public init(_ status: Status, with cache: inout Cache, observe
-    changes: UnsafeMutablePointer<Changes>? = nil) {
-        //=--------------------------------------=
-        // Active
-        //=--------------------------------------=
-        if status.focus == true {
-            var status = status
-            let commit = status.interpret(with: &cache)
-            changes?.pointee.formUnion(.value(commit.value != status.value))
-            
-            status.value = commit.value
-            self.storage = Storage(status, Layout(commit.snapshot))
-        //=--------------------------------------=
-        // Inactive
-        //=--------------------------------------=
-        } else {
-            let characters = status.format(with: &cache)
-            let snapshot = Snapshot(characters,as: .phantom)
-            self.storage = Storage(status, Layout(snapshot))
-        }
+    @inlinable public init(_ status: Status, with cache: inout Cache) {
+        self.init(status, with: &cache, observing: nil)
     }
     
     //=------------------------------------------------------------------------=
@@ -171,13 +153,39 @@ extension Context {
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: + Transformations
+// MARK: + Upstream
 //=----------------------------------------------------------------------------=
 
 extension Context {
     
     //=------------------------------------------------------------------------=
-    // MARK: Upstream
+    // MARK: Initializers
+    //=------------------------------------------------------------------------=
+    
+    @inlinable init(_ status: Status, with cache: inout Cache,
+    observing changes: Optional<UnsafeMutablePointer<Changes>>) {
+        //=--------------------------------------=
+        // Active
+        //=--------------------------------------=
+        if status.focus == true {
+            var status = status
+            let commit = status.interpret(with: &cache)
+            changes?.pointee.formUnion(.value(commit.value != status.value))
+            
+            status.value = commit.value
+            self.storage = Storage(status, Layout(commit.snapshot))
+            //=--------------------------------------=
+            // Inactive
+            //=--------------------------------------=
+        } else {
+            let characters = status.format(with: &cache)
+            let snapshot = Snapshot(characters,as: .phantom)
+            self.storage = Storage(status, Layout(snapshot))
+        }
+    }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Synchronization
     //=------------------------------------------------------------------------=
     
     /// Call this on view update.
@@ -188,34 +196,41 @@ extension Context {
         //=--------------------------------------=
         var status = self.status
         if !status.merge(remote) { return update }
-        update.formUnion( .text)
         //=--------------------------------------=
         // Update
         //=--------------------------------------=
         var changes = Changes(); withUnsafeMutablePointer(to: &changes) {
-            let observable = status.focus == true ? $0 : nil
-            self.merge(Self(status, with: &cache, observe: observable))
+            let observable = (status.focus == true) ? $0 : nil
+            self.merge(Self(status, with: &cache, observing: observable))
         }
         //=--------------------------------------=
         // Return
         //=--------------------------------------=
+        update.formUnion(.text)
         if status.focus == false { return update }
         
         update.formUnion(.selection)
         update.formUnion(.value(changes.contains(.value)))
         return update
     }
-    
+}
+
+
+//=----------------------------------------------------------------------------=
+// MARK: + Downstream
+//=----------------------------------------------------------------------------=
+
+extension Context {
+
     //=------------------------------------------------------------------------=
-    // MARK: Downstream
+    // MARK: Text
     //=------------------------------------------------------------------------=
     
     /// Call this on changes to text.
     @inlinable public mutating func merge(_  characters: String, in
     range: Range<some Position>, with cache: inout Cache) throws -> Update {
-        let replacement = Snapshot(characters)
-        let range = layout.snapshot.indices(at: range)
-        let proposal = Proposal(update: layout.snapshot, with: replacement, in: range)
+        let proposal = Proposal(layout.snapshot,
+        with: Snapshot(characters), in: range)
         //=----------------------------------=
         // Commit
         //=----------------------------------=
@@ -238,7 +253,7 @@ extension Context {
     }
     
     //=------------------------------------------------------------------------=
-    // MARK: Downstream
+    // MARK: Selection
     //=------------------------------------------------------------------------=
     
     /// Call this on changes to selection.

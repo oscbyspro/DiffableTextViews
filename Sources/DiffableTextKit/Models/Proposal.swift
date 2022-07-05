@@ -27,7 +27,7 @@ public struct Proposal {
     //=------------------------------------------------------------------------=
     
     @inlinable internal init(
-    update  snapshot: Snapshot,
+    _ snapshot: Snapshot,
     with replacement: Snapshot,
     in positions: Range<some Position>) {
         self.snapshot = snapshot

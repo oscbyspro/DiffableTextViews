@@ -39,7 +39,7 @@ public struct Status<Style: DiffableTextStyle>: Equatable {
     //=------------------------------------------------------------------------=
     
     /// Merges member-wise inequalities.
-    @inlinable public mutating func merge(_ other: Self) -> Changes {
+    @inlinable mutating func merge(_ other: Self) -> Changes {
         let changes = (self .!= other)
         //=--------------------------------------=
         // Update

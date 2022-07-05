@@ -12,7 +12,7 @@
 //*============================================================================*
 
 /// A model used to capture comparison results.
-public struct Changes: OptionSet {
+@usableFromInline struct Changes: OptionSet {
     
     //=------------------------------------------------------------------------=
     // MARK: Instances

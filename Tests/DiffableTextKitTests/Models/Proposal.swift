@@ -28,7 +28,7 @@ final class ProposalTests: XCTestCase {
         let snapshot    = Snapshot("AxxxE")
         let replacement = Snapshot( "BCD" )
         let range = snapshot.indices(at: C(1) ..< 4)
-        let proposal = Proposal(update: snapshot, with: replacement, in: range)
+        let proposal = Proposal(snapshot, with: replacement, in: range)
         XCTAssertEqual(proposal.merged(), "ABCDE")
     }
 }
