@@ -29,16 +29,20 @@ final class MomentumsTests: XCTestCase {
     }
     
     //=------------------------------------------------------------------------=
+    // MARK: Tests x Instances
+    //=------------------------------------------------------------------------=
+    
+    func testInstanceNoneContainsOnlyNil() {
+        AssertEqual(.none, lower: nil, upper: nil)
+    }
+    
+    //=------------------------------------------------------------------------=
     // MARK: Tests x Initializers
     //=------------------------------------------------------------------------=
     
     func testInitLowerUpperSetsLowerUpper() {
         let momentums = Momentums(lower: .forwards, upper: .backwards)
         AssertEqual(momentums,    lower: .forwards, upper: .backwards)
-    }
-    
-    func testInitWithoutParametersSetsOnlyNil() {
-        AssertEqual(Momentums(), lower: nil, upper: nil)
     }
     
     func testInitFromToSetsDirectionsOfChange() {

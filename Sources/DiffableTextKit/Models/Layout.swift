@@ -50,20 +50,20 @@
     
     /// Use this on changes to selection.
     @inlinable mutating func merge(selection: Carets<some Position>, momentums: Bool) {
-        let selection = Carets(snapshot.indices(at: selection.range))
-        let momentums = momentums ? Momentums(from: self.selection, to: selection) : Momentums()
-        
-        switch selection {
+        let  selection = Carets(snapshot.indices(at: selection.range))
+        let  momentums = momentums ? Momentums(from: self.selection, to: selection) : .none
+        self.selection = selection
         //=--------------------------------------=
-        // Accept Max Selection
+        // Accept Max Or Autocorrect
         //=--------------------------------------=
-        case Carets(unchecked: (snapshot.startIndex, snapshot.endIndex)): self.selection = selection
-        //=--------------------------------------=
-        // Update
-        //=--------------------------------------=
-        default: self.selection = selection.map(
+        if selection == Carets(unchecked: (snapshot.startIndex, snapshot.endIndex)) { return }
+        self.autocorrect(momentums: momentums)
+    }
+    
+    /// Autocorrect selection according to momentums and attributes.
+    @inlinable mutating func autocorrect(momentums: Momentums = .none) {
+        self.selection = selection.map(
         lower: { snapshot.caret(from: $0, towards: momentums.lower, preferring:  .forwards) },
         upper: { snapshot.caret(from: $0, towards: momentums.upper, preferring: .backwards) })
-        }
     }
 }
