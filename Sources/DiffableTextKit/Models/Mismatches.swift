@@ -40,7 +40,7 @@ Next: BidirectionalCollection<Symbol> {
             let prevSymbol = prev[prevIndex]
             let nextSymbol = next[nextIndex]
             //=---------------------------------=
-            // Indices
+            // Differentiation
             //=---------------------------------=
             if prevSymbol.character == nextSymbol.character {
                 prev.formIndex(after: &prevIndex)

@@ -93,15 +93,6 @@ ExpressibleByStringLiteral {
     }
     
     //=------------------------------------------------------------------------=
-    // MARK: Accessors
-    //=------------------------------------------------------------------------=
-    
-    /// A lazy sequence of nonvirtual characters.
-    @inlinable public var nonvirtuals: some BidirectionalCollection<Character> {
-        self.lazy.filter({!$0.attribute.contains(.virtual)}).map({$0.character})
-    }
-    
-    //=------------------------------------------------------------------------=
     // MARK: Transformations
     //=------------------------------------------------------------------------=
     
@@ -113,6 +104,15 @@ ExpressibleByStringLiteral {
     @inlinable @inline(__always)
     public mutating func anchor(at index: Index?) {
         self._anchor = index
+    }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Utilities
+    //=------------------------------------------------------------------------=
+    
+    /// A lazy sequence of nonvirtual characters.
+    @inlinable public var nonvirtuals: some BidirectionalCollection<Character> {
+        self.lazy.filter({!$0.attribute.contains(.virtual)}).map({$0.character})
     }
 }
 
@@ -464,24 +464,30 @@ extension Snapshot {
         //=--------------------------------------=
         // Inspect Initial Index
         //=--------------------------------------=
-        if let peek = peek(from: index, towards: preference),
+        if let peek = peek(
+        from: index,
+        towards: preference),
         nonpassthrough(at: peek) { return index }
         //=--------------------------------------=
         // Direction
         //=--------------------------------------=
-        let direction = direction ?? preference
+        var direction = direction ?? preference
         //=--------------------------------------=
         // Search In Direction
         //=--------------------------------------=
-        if let caret = caret(from: index,
+        if let caret = caret(
+        from: index,
         towards: direction,
         jumping: direction == preference ? .to : .through,
         targeting: nonpassthrough) { return caret }
         //=--------------------------------------=
         // Search In Opposite Direction
         //=--------------------------------------=
-        if let caret = caret(from: index,
-        towards: direction.reversed(),
+        direction.reverse()
+
+        if let caret = caret(
+        from: index,
+        towards: direction,
         jumping: Jump.to, // use Jump.to on each direction
         targeting: nonpassthrough) { return caret }
         //=--------------------------------------=

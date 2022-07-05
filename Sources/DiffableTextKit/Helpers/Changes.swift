@@ -18,7 +18,6 @@ public struct Changes: OptionSet {
     // MARK: Instances
     //=------------------------------------------------------------------------=
     
-    public static let none  = Self()
     public static let style = Self(rawValue: 1 << 0)
     public static let value = Self(rawValue: 1 << 1)
     public static let focus = Self(rawValue: 1 << 2)

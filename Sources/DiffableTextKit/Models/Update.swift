@@ -18,7 +18,6 @@ public struct Update: OptionSet {
     // MARK: Instances
     //=------------------------------------------------------------------------=
     
-    public static let none      = Self()
     public static let value     = Self(rawValue: 1 << 0)
     public static let text      = Self(rawValue: 1 << 1)
     public static let selection = Self(rawValue: 1 << 2)

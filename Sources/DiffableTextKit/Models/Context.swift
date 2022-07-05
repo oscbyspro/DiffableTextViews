@@ -77,9 +77,9 @@ public struct Context<Style: DiffableTextStyle> {
         // Active
         //=--------------------------------------=
         if other.focus == true {
-            self.write { storage in
-                storage.status = other.status
-                storage.layout.merge(snapshot: other.layout.snapshot)
+            self.write {
+                $0.status = other.status
+                $0.layout.merge(snapshot: other.layout.snapshot)
             }
         //=--------------------------------------=
         // Inactive
@@ -182,19 +182,28 @@ extension Context {
     
     /// Call this on view update.
     @inlinable public mutating func merge(_ remote: Status, with cache: inout Cache) -> Update {
+        var update = Update()
+        //=--------------------------------------=
+        // At Least One Value Must Have Changed
+        //=--------------------------------------=
         var status = self.status
-        if !status.merge(remote) { return .none }
+        if !status.merge(remote) { return update }
+        update.formUnion( .text)
         //=--------------------------------------=
         // Update
         //=--------------------------------------=
-        var changes = Changes.none; withUnsafeMutablePointer(to: &changes) {
-            self.merge(Self(status, with: &cache, observe: status.focus == true ? $0 : nil))
+        var changes = Changes(); withUnsafeMutablePointer(to: &changes) {
+            let observable = status.focus == true ? $0 : nil
+            self.merge(Self(status, with: &cache, observe: observable))
         }
         //=--------------------------------------=
         // Return
         //=--------------------------------------=
-        if status.focus == false { return .text }
-        return [.text, .selection, .value(changes.contains(.value))]
+        if status.focus == false { return update }
+        
+        update.formUnion(.selection)
+        update.formUnion(.value(changes.contains(.value)))
+        return update
     }
     
     //=------------------------------------------------------------------------=
@@ -211,19 +220,21 @@ extension Context {
         // Commit
         //=----------------------------------=
         let commit = try status.resolve(proposal, with: &cache)
-        let value = Update.value(value != commit.value)
+        var update = Update.value(value != commit.value)
         //=----------------------------------=
         // Update
         //=----------------------------------=
-        self.write { storage in
-            storage.status.value = commit.value
-            storage.layout.selection.collapse()
-            storage.layout.merge(snapshot: commit.snapshot)
+        self.write {
+            $0.status.value = commit.value
+            $0.layout.selection.collapse()
+            $0.layout.merge(snapshot: commit.snapshot)
         }
         //=----------------------------------=
         // Return
         //=----------------------------------=
-        return [.text, .selection(focus == true), value]
+        update.formUnion(.text)
+        update.formUnion(.selection(focus == true))
+        return update
     }
     
     //=------------------------------------------------------------------------=
@@ -237,8 +248,8 @@ extension Context {
         //=--------------------------------------=
         // Update
         //=--------------------------------------=
-        self.write { storage in
-            storage.layout.merge(
+        self.write {
+            $0.layout.merge(
             selection: selection,
             momentums: momentums)
         }

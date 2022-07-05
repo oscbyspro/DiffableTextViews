@@ -18,20 +18,20 @@ public protocol Position: Comparable {
     //=------------------------------------------------------------------------=
     
     @inlinable @inline(__always) static func index(at position: Self,
-    in collection: some Distances<String.Index>) -> String.Index
+    in collection: some Offsets<String.Index>) -> String.Index
 
     @inlinable @inline(__always) static func indices(at positions: Range<Self>,
-    in collection: some Distances<String.Index>) -> Range<String.Index>
+    in collection: some Offsets<String.Index>) -> Range<String.Index>
 
     //=------------------------------------------------------------------------=
     // MARK: Utilities
     //=------------------------------------------------------------------------=
     
     @inlinable @inline(__always) static func index(at position: Self,
-    in collection: some Distances<Snapshot.Index>) -> Snapshot.Index
+    in collection: some Offsets<Snapshot.Index>) -> Snapshot.Index
     
     @inlinable @inline(__always) static func indices(at positions: Range<Self>,
-    in collection: some Distances<Snapshot.Index>) -> Range<Snapshot.Index>
+    in collection: some Offsets<Snapshot.Index>) -> Range<Snapshot.Index>
 }
 
 //*============================================================================*
@@ -46,12 +46,12 @@ public extension Snapshot.Index {
     //=------------------------------------------------------------------------=
     
     @inlinable @inline(__always) static func index(at position: Self,
-    in collection: some Distances<String.Index>) -> String.Index {
+    in collection: some Offsets<String.Index>) -> String.Index {
         position.character
     }
     
     @inlinable @inline(__always) static func indices(at positions: Range<Self>,
-    in collection: some Distances<String.Index>) -> Range<String.Index> {
+    in collection: some Offsets<String.Index>) -> Range<String.Index> {
         Range(uncheckedBounds:(positions.lowerBound.character,positions.upperBound.character))
     }
     
@@ -60,12 +60,12 @@ public extension Snapshot.Index {
     //=------------------------------------------------------------------------=
     
     @inlinable @inline(__always) static func index(at position: Self,
-    in collection: some Distances<Snapshot.Index>) -> Snapshot.Index {
+    in collection: some Offsets<Snapshot.Index>) -> Snapshot.Index {
         position
     }
     
     @inlinable @inline(__always) static func indices(at positions: Range<Self>,
-    in collection: some Distances<Snapshot.Index>) -> Range<Snapshot.Index> {
+    in collection: some Offsets<Snapshot.Index>) -> Range<Snapshot.Index> {
         positions
     }
 }
@@ -82,12 +82,12 @@ public extension Offset {
     //=------------------------------------------------------------------------=
     
     @inlinable @inline(__always) static func index(at position: Self,
-    in collection: some Distances<String.Index>) -> String.Index {
+    in collection: some Offsets<String.Index>) -> String.Index {
         collection.index(from: collection.startIndex, move: position)
     }
     
     @inlinable @inline(__always) static func indices(at positions: Range<Self>,
-    in collection: some Distances<String.Index>) -> Range<String.Index> {
+    in collection: some Offsets<String.Index>) -> Range<String.Index> {
         collection.indices(move: positions)
     }
     
@@ -96,12 +96,12 @@ public extension Offset {
     //=------------------------------------------------------------------------=
     
     @inlinable @inline(__always) static func index(at position: Self,
-    in collection: some Distances<Snapshot.Index>) -> Snapshot.Index {
+    in collection: some Offsets<Snapshot.Index>) -> Snapshot.Index {
         collection.index(from: collection.startIndex, move: position)
     }
     
     @inlinable @inline(__always) static func indices(at positions: Range<Self>,
-    in collection: some Distances<Snapshot.Index>) -> Range<Snapshot.Index> {
+    in collection: some Offsets<Snapshot.Index>) -> Range<Snapshot.Index> {
         collection.indices(move: positions)
     }
 }
@@ -110,7 +110,7 @@ public extension Offset {
 // MARK: * Positions
 //*============================================================================*
 
-public protocol Positions<Index>: Distances {
+public protocol Positions<Index>: Offsets {
     
     //=------------------------------------------------------------------------=
     // MARK: Utilities
@@ -122,12 +122,12 @@ public protocol Positions<Index>: Distances {
 }
 
 //*============================================================================*
-// MARK: * Positions x String
+// MARK: * Positions x String, Substring
 //*============================================================================*
 
-extension String:     Positions { }
-extension Substring:  Positions { }
-public extension StringProtocol where Self: Distances {
+extension String:    Positions { }
+extension Substring: Positions { }
+public extension StringProtocol where Self: Offsets {
 
     //=------------------------------------------------------------------------=
     // MARK: Utilities

@@ -14,11 +14,11 @@
 import XCTest
 
 //*============================================================================*
-// MARK: * Distance x Tests
+// MARK: * Encoding x Tests
 //*============================================================================*
 
-final class DistanceTests: XCTestCase {
-    typealias Distances<T> = (Offset<T>, Offset<T>, Offset<T>) where T: Distance
+final class EncodingTests: XCTestCase {
+    typealias Offsets<T> = (Offset<T>, Offset<T>, Offset<T>) where T: Encoding
 
     //=------------------------------------------------------------------------=
     // MARK: State
@@ -53,7 +53,7 @@ final class DistanceTests: XCTestCase {
         XCTAssertEqual(lhs.attribute, rhs.attribute)
     }
 
-    func AssertIndexWorksAsExpected(_ type: (some Distance).Type) {
+    func AssertIndexWorksAsExpected(_ type: (some Encoding).Type) {
         let max = type.distance(from: start, to:    end, in: emojis)
         let mid = type.distance(from: start, to: middle, in: emojis)
         let i = { type.index(from: $0, move: $1, in:    self.emojis) }
@@ -78,7 +78,7 @@ final class DistanceTests: XCTestCase {
         AssertIndexSubcomponentsAreEqual(i(end,   -max), start)
     }
 
-    func AssertIndexClampsToStartOfCharacter(_ type: (some Distance).Type) {
+    func AssertIndexClampsToStartOfCharacter(_ type: (some Encoding).Type) {
         let i = { type.index(from: $0,  move: $1, in: self.emojis) }
         let d = { type.distance(from: $0, to: $1, in: self.emojis) }
         //=--------------------------------------=
