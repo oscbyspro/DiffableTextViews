@@ -68,20 +68,3 @@ import Foundation
         case negative = 45 // "-"
     }
 }
-
-//=----------------------------------------------------------------------------=
-// MARK: + Bounds
-//=----------------------------------------------------------------------------=
-
-extension Sign {
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Initializers
-    //=------------------------------------------------------------------------=
-    
-    @inlinable init?(of bounds: ClosedRange<some NumberTextValue>) {
-        if      bounds.lowerBound >= .zero { self = .positive }
-        else if bounds.upperBound <= .zero { self = .negative }
-        else {  return nil }
-    }
-}

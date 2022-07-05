@@ -61,6 +61,12 @@ public struct NumberTextBounds<Value: NumberTextValue>: Equatable {
         bounds.upperBound
     }
     
+    @inlinable var sign: Sign? {
+        if      bounds.lowerBound >= .zero { return .positive }
+        else if bounds.upperBound <= .zero { return .negative }
+        else {  return nil }
+    }
+    
     //=------------------------------------------------------------------------=
     // MARK: Accessors
     //=------------------------------------------------------------------------=
@@ -179,7 +185,7 @@ extension NumberTextBounds {
     //=------------------------------------------------------------------------=
     
     @inlinable func autocorrect(_  number: inout Number) {
-        autocorrectSignOnUnambigiousBounds(&number.sign)
+        autocorrect(&number.sign)
     }
 }
 
@@ -194,7 +200,7 @@ extension NumberTextBounds {
     //=------------------------------------------------------------------------=
     
     @inlinable func autovalidate(_ number: inout Number) throws {
-        autocorrectSignOnUnambigiousBounds(&number.sign)
+        autocorrect(&number.sign)
     }
 
     //=------------------------------------------------------------------------=
@@ -227,8 +233,8 @@ extension NumberTextBounds {
     // MARK: Number
     //=------------------------------------------------------------------------=
     
-    @inlinable func autocorrectSignOnUnambigiousBounds(_ sign: inout Sign) {
-        guard let correct = Sign(of: bounds), sign != correct else { return }
+    @inlinable func autocorrect(_ sign: inout Sign) {
+        guard let correct = self .sign, sign != correct else { return }
         Brrr.autocorrection << Info([.mark(sign), "is not in \(self)"])
         sign = correct
     }
