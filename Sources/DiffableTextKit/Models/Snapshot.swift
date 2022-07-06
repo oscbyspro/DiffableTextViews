@@ -484,11 +484,11 @@ extension Snapshot {
         // Search In Opposite Direction
         //=--------------------------------------=
         direction.reverse()
-
+        
         if let caret = caret(
         from: index,
         towards: direction,
-        jumping: Jump.to, // use Jump.to on each direction
+        jumping: Jump.to,
         targeting: nonpassthrough) { return caret }
         //=--------------------------------------=
         // Use Default Index On Caret Not Found

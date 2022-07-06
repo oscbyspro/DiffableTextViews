@@ -23,7 +23,7 @@ final class SelectionTests: XCTestCase {
     // MARK: Assertions
     //=------------------------------------------------------------------------=
     
-    func AssertEqual<T>(_ selection: Selection<T>, lower: T, upper: T) {
+    func Assert<T>(_ selection: Selection<T>, lower: T, upper: T) {
         XCTAssertEqual(selection.lower, lower)
         XCTAssertEqual(selection.upper, upper)
     }
@@ -33,15 +33,15 @@ final class SelectionTests: XCTestCase {
     //=------------------------------------------------------------------------=
     
     func testInitUncheckedIsUnchecked() {
-        AssertEqual(Selection(unchecked: (1, 0)), lower: 1, upper: 0)
+        Assert(Selection(unchecked: (1, 0)), lower: 1, upper: 0)
     }
     
     func testInitCaretSetsBothToSame() {
-        AssertEqual(Selection(7), lower: 7, upper: 7)
+        Assert(Selection(7), lower: 7, upper: 7)
     }
     
     func testInitRangeSetsBoth() {
-        AssertEqual(Selection(3 ..< 7), lower: 3, upper: 7)
+        Assert(Selection(3 ..< 7), lower: 3, upper: 7)
     }
     
     //=------------------------------------------------------------------------=
@@ -49,7 +49,7 @@ final class SelectionTests: XCTestCase {
     //=------------------------------------------------------------------------=
     
     func testInitMaxIsStartIndexToEndIndex() {
-        AssertEqual(.max([7, 7, 7]), lower: 0, upper: 3)
+        Assert(Selection.max([7, 7, 7]), lower: 0, upper: 3)
     }
     
     //=------------------------------------------------------------------------=
@@ -60,8 +60,8 @@ final class SelectionTests: XCTestCase {
         let one = Selection(3 ..< 7)
         var two = one;two.collapse()
         
-        AssertEqual(one, lower: 3, upper: 7)
-        AssertEqual(two, lower: 7, upper: 7)
+        Assert(one, lower: 3, upper: 7)
+        Assert(two, lower: 7, upper: 7)
     }
     
     //=------------------------------------------------------------------------=
@@ -74,17 +74,17 @@ final class SelectionTests: XCTestCase {
     
     func testbMapUpperLowerMapsBothWhenUnequal() {
         let selection = Selection(3 ..< 7).map(lower: { $0 + 1 }, upper: { $0 - 1 })
-        AssertEqual(selection, lower: 4, upper: 6)
+        Assert(selection, lower: 4, upper: 6)
     }
     
     func testMapUpperLowerClampsLowerToUpperWhenUnequal() {
         let selection = Selection(3 ..< 7).map(lower: { $0 + 4 }, upper: { $0 - 4 })
-        AssertEqual(selection, lower: 3, upper: 3)
+        Assert(selection, lower: 3, upper: 3)
     }
     
     func testMapLowerUpperMapsBothAsUpperWhenEqual() {
         let selection = Selection(3 ..< 3).map(lower: { $0 + 1 }, upper: { $0 - 1 })
-        AssertEqual(selection, lower: 2, upper: 2)
+        Assert(selection, lower: 2, upper: 2)
     }
 }
 

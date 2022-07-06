@@ -227,8 +227,9 @@ extension Context {
     //=------------------------------------------------------------------------=
     
     /// Call this on changes to text.
-    @inlinable public mutating func merge(_  characters: String, in
-    range: Range<some Position>, with cache: inout Cache) throws -> Update {
+    @inlinable public mutating func merge(_   characters: String, in range:
+    Range<Offset<some Encoding>>, with cache: inout Cache) throws -> Update {
+        let range = layout.snapshot.indices(at: range)
         let proposal = Proposal(layout.snapshot,
         with: Snapshot(characters), in: range)
         //=----------------------------------=
@@ -257,8 +258,8 @@ extension Context {
     //=------------------------------------------------------------------------=
     
     /// Call this on changes to selection.
-    @inlinable public mutating func merge(selection:
-    Range<some Position>, momentums: Bool) -> Update {
+    @inlinable public mutating func merge(
+    selection: Range<Offset<some Encoding>>, momentums: Bool) -> Update {
         let selection = Selection(layout.snapshot.indices(at: selection))
         //=--------------------------------------=
         // Update
