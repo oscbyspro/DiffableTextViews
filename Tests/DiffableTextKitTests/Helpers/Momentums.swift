@@ -47,15 +47,15 @@ final class MomentumsTests: XCTestCase {
     
     func testInitFromToSetsDirectionsOfChange() {
         AssertEqual(Momentums(
-        from: Carets(3 ..< 7), to: Carets(3 ..< 7)),
+        from: Selection(3 ..< 7), to: Selection(3 ..< 7)),
         lower: nil, upper: nil)
 
         AssertEqual(Momentums(
-        from: Carets(3 ..< 7), to: Carets(4 ..< 6)),
+        from: Selection(3 ..< 7), to: Selection(4 ..< 6)),
         lower: .forwards, upper: .backwards)
 
         AssertEqual(Momentums(
-        from: Carets(3 ..< 7), to: Carets(2 ..< 8)),
+        from: Selection(3 ..< 7), to: Selection(2 ..< 8)),
         lower: .backwards, upper: .forwards)
     }
 }

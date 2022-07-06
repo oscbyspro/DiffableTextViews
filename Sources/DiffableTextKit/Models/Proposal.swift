@@ -26,8 +26,7 @@ public struct Proposal {
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable internal init(
-    _ snapshot: Snapshot,
+    @inlinable init(_ snapshot: Snapshot,
     with replacement: Snapshot,
     in positions: Range<some Position>) {
         self.snapshot = snapshot

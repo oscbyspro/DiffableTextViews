@@ -259,7 +259,7 @@ extension Context {
     /// Call this on changes to selection.
     @inlinable public mutating func merge(selection:
     Range<some Position>, momentums: Bool) -> Update {
-        let selection = Carets(layout.snapshot.indices(at: selection))
+        let selection = Selection(layout.snapshot.indices(at: selection))
         //=--------------------------------------=
         // Update
         //=--------------------------------------=

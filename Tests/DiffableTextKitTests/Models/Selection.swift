@@ -14,18 +14,18 @@
 import XCTest
 
 //*============================================================================*
-// MARK: * Carets x Tests
+// MARK: * Selection x Tests
 //*============================================================================*
 
-final class CaretsTests: XCTestCase {
+final class SelectionTests: XCTestCase {
     
     //=------------------------------------------------------------------------=
     // MARK: Assertions
     //=------------------------------------------------------------------------=
     
-    func AssertEqual<T>(_ carets: Carets<T>, lower: T, upper: T) {
-        XCTAssertEqual(carets.lower, lower)
-        XCTAssertEqual(carets.upper, upper)
+    func AssertEqual<T>(_ selection: Selection<T>, lower: T, upper: T) {
+        XCTAssertEqual(selection.lower, lower)
+        XCTAssertEqual(selection.upper, upper)
     }
     
     //=------------------------------------------------------------------------=
@@ -33,15 +33,15 @@ final class CaretsTests: XCTestCase {
     //=------------------------------------------------------------------------=
     
     func testInitUncheckedIsUnchecked() {
-        AssertEqual(Carets(unchecked: (1, 0)), lower: 1, upper: 0)
+        AssertEqual(Selection(unchecked: (1, 0)), lower: 1, upper: 0)
     }
     
     func testInitCaretSetsBothToSame() {
-        AssertEqual(Carets(7), lower: 7, upper: 7)
+        AssertEqual(Selection(7), lower: 7, upper: 7)
     }
     
     func testInitRangeSetsBoth() {
-        AssertEqual(Carets(3 ..< 7), lower: 3, upper: 7)
+        AssertEqual(Selection(3 ..< 7), lower: 3, upper: 7)
     }
     
     //=------------------------------------------------------------------------=
@@ -49,11 +49,11 @@ final class CaretsTests: XCTestCase {
     //=------------------------------------------------------------------------=
     
     func testCollapseSetsBothCaretsToUpper() {
-        let carets0 = Carets(3 ..< 7)
-        var carets1 = carets0; carets1.collapse()
+        let one = Selection(3 ..< 7)
+        var two = one;two.collapse()
         
-        AssertEqual(carets0, lower: 3, upper: 7)
-        AssertEqual(carets1, lower: 7, upper: 7)
+        AssertEqual(one, lower: 3, upper: 7)
+        AssertEqual(two, lower: 7, upper: 7)
     }
     
     //=------------------------------------------------------------------------=
@@ -61,22 +61,22 @@ final class CaretsTests: XCTestCase {
     //=------------------------------------------------------------------------=
     
     func testRangeEqualsLowerToUpper() {
-        XCTAssertEqual(Carets(3 ..< 7).range, 3 ..< 7)
+        XCTAssertEqual(Selection(3 ..< 7).range, 3 ..< 7)
     }
     
     func testbMapUpperLowerMapsBothWhenUnequal() {
-        let carets = Carets(3 ..< 7).map(lower: { $0 + 1 }, upper: { $0 - 1 })
-        AssertEqual(carets, lower: 4, upper: 6)
+        let selection = Selection(3 ..< 7).map(lower: { $0 + 1 }, upper: { $0 - 1 })
+        AssertEqual(selection, lower: 4, upper: 6)
     }
     
     func testMapUpperLowerClampsLowerToUpperWhenUnequal() {
-        let carets = Carets(3 ..< 7).map(lower: { $0 + 4 }, upper: { $0 - 4 })
-        AssertEqual(carets, lower: 3, upper: 3)
+        let selection = Selection(3 ..< 7).map(lower: { $0 + 4 }, upper: { $0 - 4 })
+        AssertEqual(selection, lower: 3, upper: 3)
     }
     
     func testMapLowerUpperMapsBothAsUpperWhenEqual() {
-        let carets = Carets(3 ..< 3).map(lower: { $0 + 1 }, upper: { $0 - 1 })
-        AssertEqual(carets, lower: 2, upper: 2)
+        let selection = Selection(3 ..< 3).map(lower: { $0 + 1 }, upper: { $0 - 1 })
+        AssertEqual(selection, lower: 2, upper: 2)
     }
 }
 

@@ -35,7 +35,7 @@
         self.upper = upper
     }
     
-    @inlinable init<T>(from start: Carets<T>, to end: Carets<T>) {
+    @inlinable init<T>(from start: Selection<T>, to end: Selection<T>) {
         self.lower = Direction(from: start.lower, to: end.lower)
         self.upper = Direction(from: start.upper, to: end.upper)
     }

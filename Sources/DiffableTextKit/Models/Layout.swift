@@ -17,20 +17,21 @@
 /// - Autocorrects selection when the selection changes.
 ///
 @usableFromInline struct Layout {
-
+    @usableFromInline typealias Selection = DiffableTextKit.Selection<Index>
+    
     //=------------------------------------------------------------------------=
     // MARK: State
     //=------------------------------------------------------------------------=
     
-    @usableFromInline var snapshot: Snapshot
-    @usableFromInline var selection: Carets<Index>
+    @usableFromInline var snapshot:  Snapshot
+    @usableFromInline var selection: Selection
 
     //=------------------------------------------------------------------------=
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
     @inlinable init(_ snapshot: Snapshot) {
-        self.snapshot = snapshot; self.selection = Carets(snapshot.defaultIndex)
+        self.snapshot = snapshot; self.selection = Selection(snapshot.defaultIndex)
     }
     
     //=------------------------------------------------------------------------=
@@ -49,19 +50,16 @@
     }
     
     /// Use this on changes to selection.
-    @inlinable mutating func merge(selection: Carets<some Position>, momentums: Bool) {
-        let  selection = Carets(snapshot.indices(at: selection.range))
+    @inlinable mutating func merge(selection: Selection, momentums: Bool) {
         let  momentums = momentums ? Momentums(from: self.selection, to: selection) : .none
         self.selection = selection
         //=--------------------------------------=
-        // Accept Max Or Autocorrect
+        // Accept Max Selection
         //=--------------------------------------=
-        if selection == Carets(unchecked: (snapshot.startIndex, snapshot.endIndex)) { return }
-        self.autocorrect(momentums: momentums)
-    }
-    
-    /// Autocorrect selection according to momentums and attributes.
-    @inlinable mutating func autocorrect(momentums: Momentums = .none) {
+        if selection == .max(snapshot) { return }
+        //=--------------------------------------=
+        // Autocorrect
+        //=--------------------------------------=
         self.selection = selection.map(
         lower: { snapshot.caret(from: $0, towards: momentums.lower, preferring:  .forwards) },
         upper: { snapshot.caret(from: $0, towards: momentums.upper, preferring: .backwards) })

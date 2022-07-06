@@ -8,14 +8,14 @@
 //=----------------------------------------------------------------------------=
 
 //*============================================================================*
-// MARK: * Carets
+// MARK: * Selection
 //*============================================================================*
 
 /// One or two carets.
 ///
 /// Equal carets represents an upper caret.
 ///
-@usableFromInline struct Carets<Caret: Comparable>: Equatable {
+@usableFromInline struct Selection<Caret: Comparable>: Equatable {
     
     //=------------------------------------------------------------------------=
     // MARK: State
@@ -23,7 +23,7 @@
     
     @usableFromInline let lower: Caret
     @usableFromInline let upper: Caret
-        
+    
     //=------------------------------------------------------------------------=
     // MARK: Initializers
     //=------------------------------------------------------------------------=
@@ -38,6 +38,14 @@
     
     @inlinable init(_ range: Range<Caret>) {
         self.init(unchecked: (range.lowerBound, range.upperBound))
+    }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Initializers
+    //=------------------------------------------------------------------------=
+    
+    @inlinable static func max<T>(_ collection: T) -> Self where T: Collection, T.Index == Caret {
+        Self(unchecked: (collection.startIndex, collection.endIndex))
     }
     
     //=------------------------------------------------------------------------=
@@ -60,11 +68,11 @@
     // MARK: Transformations
     //=------------------------------------------------------------------------=
     
-    @inlinable func map<T>(caret: (Caret) -> T) -> Carets<T> {
+    @inlinable func map<T>(caret: (Caret) -> T) -> Selection<T> {
         return map(lower:  caret, upper: caret)
     }
     
-    @inlinable func map<T>(lower: (Caret) -> T, upper: (Caret) -> T) -> Carets<T> {
+    @inlinable func map<T>(lower: (Caret) -> T, upper: (Caret) -> T) -> Selection<T> {
         let max = upper(self.upper); var min = max
         //=--------------------------------------=
         // Double
@@ -75,6 +83,6 @@
         //=--------------------------------------=
         // Return
         //=--------------------------------------=
-        return .init(unchecked: (min, max))
+        return Selection<T>(unchecked: (min, max))
     }
 }
