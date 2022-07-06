@@ -18,7 +18,7 @@ public struct Proposal {
     // MARK: State
     //=------------------------------------------------------------------------=
     
-    public let snapshot: Snapshot
+    public let base: Snapshot
     public var replacement: Snapshot
     public var range: Range<Index>
     
@@ -26,10 +26,11 @@ public struct Proposal {
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable init(_ snapshot: Snapshot,
+    @inlinable init(
+    _ base: Snapshot,
     with replacement: Snapshot,
     in range: Range<Index>) {
-        self.snapshot = snapshot
+        self.base = base
         self.replacement = replacement
         self.range = range
     }
@@ -40,8 +41,6 @@ public struct Proposal {
     
     /// Returns a new snapshot with the proposed change applied to it.
     @inlinable public func merged() -> Snapshot {
-        var result = snapshot
-        result.replaceSubrange(range, with: replacement)
-        return result
+        var result = base; result.replaceSubrange(range, with: replacement); return result
     }
 }

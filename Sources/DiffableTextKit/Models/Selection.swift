@@ -78,7 +78,7 @@
         // Double
         //=--------------------------------------=
         if  self.lower != self.upper {
-            min = Swift.min(lower(self.lower), max)
+            min = Swift.min(lower(self.lower),max)
         }
         //=--------------------------------------=
         // Return

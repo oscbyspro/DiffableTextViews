@@ -200,7 +200,7 @@ extension Context {
         // Update
         //=--------------------------------------=
         var changes = Changes(); withUnsafeMutablePointer(to: &changes) {
-            let observable = (status.focus == true) ? $0 : nil
+            let observable = status.focus == true ? $0 : nil
             self.merge(Self(status, with: &cache, observing: observable))
         }
         //=--------------------------------------=
@@ -229,9 +229,9 @@ extension Context {
     /// Call this on changes to text.
     @inlinable public mutating func merge(_   characters: String, in range:
     Range<Offset<some Encoding>>, with cache: inout Cache) throws -> Update {
-        let range = layout.snapshot.indices(at: range)
         let proposal = Proposal(layout.snapshot,
-        with: Snapshot(characters), in: range)
+        with: Snapshot(characters,as: .content),
+        in: layout.snapshot.indices(at:  range))
         //=----------------------------------=
         // Commit
         //=----------------------------------=
