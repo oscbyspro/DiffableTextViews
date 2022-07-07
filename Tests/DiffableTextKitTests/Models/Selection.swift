@@ -24,8 +24,8 @@ final class SelectionTests: XCTestCase {
     //=------------------------------------------------------------------------=
     
     func Assert<T>(_ selection: Selection<T>, lower: T, upper: T) {
-        XCTAssertEqual(selection.lower, lower)
-        XCTAssertEqual(selection.upper, upper)
+        XCTAssertEqual(selection.lower.position, lower)
+        XCTAssertEqual(selection.upper.position, upper)
     }
     
     //=------------------------------------------------------------------------=
@@ -73,17 +73,26 @@ final class SelectionTests: XCTestCase {
     }
     
     func testbMapUpperLowerMapsBothWhenUnequal() {
-        let selection = Selection(3 ..< 7).map(lower: { $0 + 1 }, upper: { $0 - 1 })
+        let selection = Selection(3 ..< 7).map(
+        lower: { $0.position + 1 },
+        upper: { $0.position - 1 })
+        
         Assert(selection, lower: 4, upper: 6)
     }
     
     func testMapUpperLowerClampsLowerToUpperWhenUnequal() {
-        let selection = Selection(3 ..< 7).map(lower: { $0 + 4 }, upper: { $0 - 4 })
+        let selection = Selection(3 ..< 7).map(
+        lower: { $0.position + 4 },
+        upper: { $0.position - 4 })
+        
         Assert(selection, lower: 3, upper: 3)
     }
     
     func testMapLowerUpperMapsBothAsUpperWhenEqual() {
-        let selection = Selection(3 ..< 3).map(lower: { $0 + 1 }, upper: { $0 - 1 })
+        let selection = Selection(3 ..< 3).map(
+        lower: { $0.position + 1 },
+        upper: { $0.position - 1 })
+        
         Assert(selection, lower: 2, upper: 2)
     }
 }

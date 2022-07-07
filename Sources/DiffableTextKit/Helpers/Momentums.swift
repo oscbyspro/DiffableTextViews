@@ -17,7 +17,7 @@
     // MARK: Instances
     //=------------------------------------------------------------------------=
     
-    @usableFromInline static let none = Self(lower: nil, upper: nil)
+    @usableFromInline static let none = Self()
     
     //=------------------------------------------------------------------------=
     // MARK: State
@@ -30,12 +30,12 @@
     // MARK: Initializers
     //=------------------------------------------------------------------------=
 
-    @inlinable init(lower: Direction?, upper: Direction?) {
+    @inlinable init(lower: Direction? = nil, upper: Direction? = nil) {
         self.lower = lower
         self.upper = upper
     }
     
-    @inlinable init<T>(from start: Selection<T>,  to  end: Selection<T>) {
+    @inlinable init<T>(from start:  Selection<T>, to  end: Selection<T>) {
         self.lower = Direction(from: start.lower, to: end.lower)
         self.upper = Direction(from: start.upper, to: end.upper)
     }

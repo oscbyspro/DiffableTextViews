@@ -451,11 +451,20 @@ extension Snapshot {
 extension Snapshot {
     
     //=------------------------------------------------------------------------=
+    // MARK: Selection
+    //=------------------------------------------------------------------------=
+    
+    @inlinable @inline(__always)
+    public func selection(_ detached: Selection<Detached>) -> Selection<Index> {
+        detached.map(caret)
+    }
+    
+    //=------------------------------------------------------------------------=
     // MARK: Search
     //=------------------------------------------------------------------------=
     
     @inlinable @inline(__always)
-    public func caret(_ detached: Detached<Index>) -> Index {
+    public func caret(_ detached: Detached) -> Index {
         //=--------------------------------------=
         // Anchor
         //=--------------------------------------=
@@ -536,4 +545,6 @@ extension Snapshot {
     @usableFromInline enum Jump { case to, through }
     
     @usableFromInline typealias Target = (Index) -> Bool
+    
+    public typealias Detached = DiffableTextKit.Detached<Index>
 }

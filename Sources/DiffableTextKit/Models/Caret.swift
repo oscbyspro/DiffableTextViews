@@ -11,10 +11,6 @@
 // MARK: * Caret
 //*============================================================================*
 
-/// A position with special characteristics.
-///
-/// - It SHOULD only compare positions.
-///
 public protocol Caret<Position>: Comparable {
     associatedtype Position: Comparable
     

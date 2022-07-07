@@ -60,9 +60,10 @@
         //=--------------------------------------=
         // Autocorrect
         //=--------------------------------------=
-        let  momentums = !momentums ? Momentums.none :
+        let momentums = !momentums ? Momentums() :
         Momentums(from: self.selection, to: selection)
+        
         let  selection = selection.detached(momentums)
-        self.selection = selection.map(snapshot.caret)
+        self.selection = snapshot.selection(selection)
     }
 }
