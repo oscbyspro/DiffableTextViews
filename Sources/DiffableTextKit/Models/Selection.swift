@@ -16,6 +16,7 @@
 /// Equal carets represents an upper caret.
 ///
 @usableFromInline struct Selection<Caret: Comparable>: Equatable {
+    @usableFromInline typealias Detached = DiffableTextKit.Detached<Caret>
     
     //=------------------------------------------------------------------------=
     // MARK: State
@@ -39,15 +40,7 @@
     @inlinable init(_ range: Range<Caret>) {
         self.init(unchecked: (range.lowerBound, range.upperBound))
     }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Initializers
-    //=------------------------------------------------------------------------=
-    
-    @inlinable static func max<T>(_ collection: T) -> Self where T: Collection, T.Index == Caret {
-        Self(unchecked: (collection.startIndex, collection.endIndex))
-    }
-    
+        
     //=------------------------------------------------------------------------=
     // MARK: Accessors
     //=------------------------------------------------------------------------=
@@ -68,8 +61,8 @@
     // MARK: Transformations
     //=------------------------------------------------------------------------=
     
-    @inlinable func map<T>(caret: (Caret) -> T) -> Selection<T> {
-        return map(lower:  caret, upper: caret)
+    @inlinable func map<T>(_ caret: (Caret) -> T) -> Selection<T> {
+        return map(lower: caret, upper: caret)
     }
     
     @inlinable func map<T>(lower: (Caret) -> T, upper: (Caret) -> T) -> Selection<T> {
@@ -84,5 +77,41 @@
         // Return
         //=--------------------------------------=
         return Selection<T>(unchecked: (min, max))
+    }
+}
+
+//=----------------------------------------------------------------------------=
+// MARK: + Detached
+//=----------------------------------------------------------------------------=
+
+extension Selection {
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Transformations
+    //=------------------------------------------------------------------------=
+    
+    @inlinable func detached(_ momentums: Momentums) -> Selection<Detached> {
+        Selection<Detached>(unchecked: (
+        Detached.lower(lower,momentum: momentums.lower),
+        Detached.upper(upper,momentum: momentums.upper)))
+    }
+}
+
+//=----------------------------------------------------------------------------=
+// MARK: + Snapshot
+//=----------------------------------------------------------------------------=
+
+extension Selection where Caret == Index {
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Initializers
+    //=------------------------------------------------------------------------=
+    
+    @inlinable static func max(_ snapshot:  Snapshot) -> Self {
+        Self(unchecked:(snapshot.startIndex,snapshot.endIndex))
+    }
+    
+    @inlinable static func standard(_ snapshot: Snapshot) -> Self {
+        Selection<Detached>(.upper(snapshot.endIndex)).map(snapshot.caret)
     }
 }

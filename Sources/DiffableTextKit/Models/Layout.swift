@@ -31,7 +31,15 @@
     //=------------------------------------------------------------------------=
     
     @inlinable init(_ snapshot: Snapshot) {
-        self.snapshot = snapshot; self.selection = Selection(snapshot.defaultIndex)
+        self.snapshot = snapshot; self.selection = .standard(snapshot)
+    }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Accessors
+    //=------------------------------------------------------------------------=
+    
+    @inlinable public func selection<T>(as type: T.Type = T.self) -> Range<Offset<T>> {
+        snapshot.distances(to:  selection.range)
     }
     
     //=------------------------------------------------------------------------=
@@ -51,17 +59,18 @@
     
     /// Use this on changes to selection.
     @inlinable mutating func merge(selection: Selection, momentums: Bool) {
-        let  momentums = momentums ? Momentums(from: self.selection, to: selection) : .none
-        self.selection = selection
         //=--------------------------------------=
         // Accept Max Selection
         //=--------------------------------------=
-        if selection == .max(snapshot) { return }
+        if selection == .max(snapshot) {
+            self.selection = selection; return
+        }
         //=--------------------------------------=
         // Autocorrect
         //=--------------------------------------=
-        self.selection = selection.map(
-        lower: { snapshot.caret(from: $0, towards: momentums.lower, preferring:  .forwards) },
-        upper: { snapshot.caret(from: $0, towards: momentums.upper, preferring: .backwards) })
+        let  momentums = !momentums ? Momentums.none :
+        Momentums(from:  self.selection, to:selection)
+        let  selection = selection.detached(momentums)
+        self.selection = selection.map(snapshot.caret)
     }
 }

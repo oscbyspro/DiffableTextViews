@@ -46,7 +46,7 @@ public struct Context<Style: DiffableTextStyle> {
         // Unique
         //=--------------------------------------=
         if !isKnownUniquelyReferenced(&storage) {
-            self.storage = Storage(status,layout)
+            self.storage = Storage(status, layout, backup)
         }
         //=--------------------------------------=
         // Update
@@ -58,10 +58,10 @@ public struct Context<Style: DiffableTextStyle> {
         //=--------------------------------------=
         // Active
         //=--------------------------------------=
-        if other.focus == true {
-            self.write {
-                $0.status = other.status
-                $0.layout.merge(snapshot: other.layout.snapshot)
+        if self.layout != nil, other.layout != nil {
+            self.write { storage in
+                storage.status = other.status
+                storage.layout!.merge(snapshot: other.layout!.snapshot)
             }
         //=--------------------------------------=
         // Inactive
@@ -80,15 +80,22 @@ public struct Context<Style: DiffableTextStyle> {
         //=--------------------------------------------------------------------=
         
         @usableFromInline var status: Status
-        @usableFromInline var layout: Layout
+        @usableFromInline var layout: Layout!
+        @usableFromInline var backup: String!
         
         //=--------------------------------------------------------------------=
         // MARK: Initializers
         //=--------------------------------------------------------------------=
         
-        @inlinable init(_ status: Status, _ layout: Layout) {
+        @inlinable init(_ status: Status, _ layout: Layout?, _ backup: String?) {
             self.status = status
             self.layout = layout
+            self.backup = backup
+            //=----------------------------------=
+            // Invariants
+            //=----------------------------------=
+            assert((status.focus == true) == (layout != nil))
+            assert((status.focus == true) == (backup == nil))
         }
     }
 }
@@ -109,8 +116,13 @@ extension Context {
     }
     
     @inlinable @inline(__always)
-    var layout: Layout {
+    var layout: Layout? {
         storage.layout
+    }
+    
+    @inlinable @inline(__always)
+    var backup: String? {
+        storage.backup
     }
     
     //=------------------------------------------------------------------------=
@@ -138,17 +150,18 @@ extension Context {
     
     @inlinable @inline(__always)
     public var text: String {
-        layout.snapshot.characters
+        layout?.snapshot.characters ?? backup!
     }
     
     @inlinable @inline(__always)
     public var selection: Range<String.Index> {
-        layout.selection.map(caret: \.character).range
+        layout?.selection.map( \.character).range ??
+        backup!.startIndex ..< backup!.startIndex
     }
     
     @inlinable @inline(__always)
     public func selection<T>(as type: T.Type = T.self) -> Range<Offset<T>> {
-        layout.snapshot.distances(to: layout.selection.range)
+        layout?.selection() ?? .zero ..< .zero
     }
 }
 
@@ -173,14 +186,12 @@ extension Context {
             changes?.pointee.formUnion(.value(commit.value != status.value))
             
             status.value = commit.value
-            self.storage = Storage(status, Layout(commit.snapshot))
-            //=--------------------------------------=
-            // Inactive
-            //=--------------------------------------=
+            self.storage = Storage(status, Layout(commit.snapshot), nil)
+        //=--------------------------------------=
+        // Inactive
+        //=--------------------------------------=
         } else {
-            let characters = status.format(with: &cache)
-            let snapshot = Snapshot(characters,as: .phantom)
-            self.storage = Storage(status, Layout(snapshot))
+            self.storage = Storage(status, nil, status.format(with: &cache))
         }
     }
     
@@ -229,25 +240,29 @@ extension Context {
     /// Call this on changes to text.
     @inlinable public mutating func merge(_   characters: String, in range:
     Range<Offset<some Encoding>>, with cache: inout Cache) throws -> Update {
-        let proposal = Proposal(layout.snapshot,
-        with: Snapshot(characters,as: .content),
-        in: layout.snapshot.indices(at:  range))
-        //=----------------------------------=
+        if layout == nil { return [] }
+        //=--------------------------------------=
+        // Values
+        //=--------------------------------------=
+        let proposal = Proposal(layout!.snapshot,
+        with: Snapshot(characters, as: .content),
+        in: layout!.snapshot.indices(at:  range))
+        //=--------------------------------------=
         // Commit
-        //=----------------------------------=
+        //=--------------------------------------=
         let commit = try status.resolve(proposal, with: &cache)
         var update = Update.value(value != commit.value)
-        //=----------------------------------=
+        //=--------------------------------------=
         // Update
-        //=----------------------------------=
-        self.write {
-            $0.status.value = commit.value
-            $0.layout.selection.collapse()
-            $0.layout.merge(snapshot: commit.snapshot)
+        //=--------------------------------------=
+        self.write { storage in
+            storage.status.value = commit.value
+            storage.layout.selection.collapse()
+            storage.layout.merge(snapshot: commit.snapshot)
         }
-        //=----------------------------------=
+        //=--------------------------------------=
         // Return
-        //=----------------------------------=
+        //=--------------------------------------=
         update.formUnion(.text)
         update.formUnion(.selection(focus == true))
         return update
@@ -260,18 +275,22 @@ extension Context {
     /// Call this on changes to selection.
     @inlinable public mutating func merge(
     selection: Range<Offset<some Encoding>>, momentums: Bool) -> Update {
-        let selection = Selection(layout.snapshot.indices(at: selection))
+        if layout == nil { return [] }
+        //=--------------------------------------=
+        // Values
+        //=--------------------------------------=
+        let selection = Selection(layout!.snapshot.indices(at: selection))
         //=--------------------------------------=
         // Update
         //=--------------------------------------=
-        self.write {
-            $0.layout.merge(
+        self.write { storage in
+            storage.layout!.merge(
             selection: selection,
             momentums: momentums)
         }
         //=--------------------------------------=
         // Return
         //=--------------------------------------=
-        return Update.selection(layout.selection != selection)
+        return .selection(layout!.selection != selection)
     }
 }

@@ -454,9 +454,7 @@ extension Snapshot {
     // MARK: Search
     //=------------------------------------------------------------------------=
     
-    /// Returns the preferred caret if it exists, returns endIndex otherwise.
-    @inlinable func caret(from index: Index, towards direction: Direction?,
-    preferring preference: Direction) -> Index {
+    @inlinable func caret(_ detached: Detached<Index>) -> Index {
         //=--------------------------------------=
         // Anchor
         //=--------------------------------------=
@@ -465,35 +463,35 @@ extension Snapshot {
         // Inspect Initial Index
         //=--------------------------------------=
         if let peek = peek(
-        from: index,
-        towards: preference),
-        nonpassthrough(at: peek) { return index }
+        from: detached.position,
+        towards: detached.affinity),
+        nonpassthrough(at: peek) { return detached.position }
         //=--------------------------------------=
         // Direction
         //=--------------------------------------=
-        var direction = direction ?? preference
+        var direction = detached.momentum ?? detached.affinity
         //=--------------------------------------=
         // Search In Direction
         //=--------------------------------------=
-        if let caret = caret(
-        from: index,
+        if let index = self.caret(
+        from: detached.position,
         towards: direction,
-        jumping: direction == preference ? .to : .through,
-        targeting: nonpassthrough) { return caret }
+        jumping: direction == detached.affinity ? .to : .through,
+        targeting: nonpassthrough) { return index }
         //=--------------------------------------=
         // Search In Opposite Direction
         //=--------------------------------------=
         direction.reverse()
         
-        if let caret = caret(
-        from: index,
+        if let index = self.caret(
+        from: detached.position,
         towards: direction,
         jumping: Jump.to,
-        targeting: nonpassthrough) { return caret }
+        targeting: nonpassthrough) { return index }
         //=--------------------------------------=
-        // Use Default Index On Caret Not Found
+        // Return Preference On Caret Not Found
         //=--------------------------------------=
-        return self.defaultIndex
+        return detached.affinity == .backwards ? startIndex : endIndex
     }
     
     //=------------------------------------------------------------------------=
