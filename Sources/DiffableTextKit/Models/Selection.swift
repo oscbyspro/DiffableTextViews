@@ -35,12 +35,12 @@ public struct Selection<Position: Comparable>: Equatable {
         self.upper = Upper(unchecked.upper)
     }
     
-    @inlinable init(_ caret: Position) {
-        self.init(unchecked: (caret, caret))
+    @inlinable init(_ position: Position) {
+        self.init(unchecked: (position, position))
     }
     
-    @inlinable init(_ range: Range<Position>) {
-        self.init(unchecked: (range.lowerBound, range.upperBound))
+    @inlinable init(_ positions: Range<Position>) {
+        self.init(unchecked: (positions.lowerBound, positions.upperBound))
     }
     
     //=------------------------------------------------------------------------=

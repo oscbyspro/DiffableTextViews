@@ -461,7 +461,7 @@ extension Snapshot {
         //=--------------------------------------=
         if let anchor { return anchor }
         //=--------------------------------------=
-        // Inspect Initial Index
+        // Inspect Initial Position
         //=--------------------------------------=
         if let peek = peek(
         from: detached.position,

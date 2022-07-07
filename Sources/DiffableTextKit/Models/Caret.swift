@@ -11,6 +11,10 @@
 // MARK: * Caret
 //*============================================================================*
 
+/// A position with special characteristics.
+///
+/// - It SHOULD only compare positions.
+///
 public protocol Caret<Position>: Comparable {
     associatedtype Position: Comparable
     
@@ -32,8 +36,12 @@ public extension Caret {
     // MARK: Uilities
     //=------------------------------------------------------------------------=
     
-    @inlinable static func < (lhs: Self, rhs: Self) -> Bool {
-        lhs.position < rhs.position
+    @inlinable static func == (lhs: Self, rhs: Self) -> Bool {
+        lhs.position == rhs.position
+    }
+    
+    @inlinable static func <  (lhs: Self, rhs: Self) -> Bool {
+        lhs.position <  rhs.position
     }
 }
 
