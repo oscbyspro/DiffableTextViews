@@ -67,12 +67,6 @@ public struct Selection<Position: Comparable>: Equatable {
     // MARK: Transformations
     //=------------------------------------------------------------------------=
     
-    @inlinable func detached(_ momentums: Momentums) -> Selection<Detached<Position>> {
-        Selection<Detached<Position>>(unchecked:(
-        Detached(lower,momentum:momentums.lower),
-        Detached(upper,momentum:momentums.upper)))
-    }
-    
     @inlinable func map<T>(_ position:  (Position) -> T) -> Selection<T> {
         return map(lower: {  position($0.position) }, upper: { position($0.position) })
     }
@@ -90,6 +84,16 @@ public struct Selection<Position: Comparable>: Equatable {
         //=--------------------------------------=
         return Selection<T>(unchecked: (min, max))
     }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Transformations
+    //=------------------------------------------------------------------------=
+    
+    @inlinable func detached(_ momentums: Momentums = .none) -> Selection<Detached<Position>> {
+        Selection<Detached<Position>>(unchecked:(
+        Detached(lower,momentum:momentums.lower),
+        Detached(upper,momentum:momentums.upper)))
+    }
 }
 
 //=----------------------------------------------------------------------------=
@@ -102,7 +106,7 @@ extension Selection where Position == Snapshot.Index {
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable static func max(_ snapshot:  Snapshot) -> Self {
+    @inlinable static func max(_  snapshot: Snapshot) -> Self {
         Self(unchecked:(snapshot.startIndex,snapshot.endIndex))
     }
     

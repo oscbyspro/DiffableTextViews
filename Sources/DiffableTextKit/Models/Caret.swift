@@ -65,7 +65,7 @@ public extension Caret {
 }
 
 //*============================================================================*
-// MARK: * Caret x Lower
+// MARK: * Caret x Upper
 //*============================================================================*
 
 @usableFromInline struct Upper<Position: Comparable>: Caret {
