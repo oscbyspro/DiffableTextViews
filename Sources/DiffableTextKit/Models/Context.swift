@@ -155,12 +155,12 @@ extension Context {
     
     @inlinable @inline(__always)
     public var selection: Range<String.Index> {
-        layout?.selection.map( \.character).range ??
-        backup!.startIndex ..< backup!.startIndex
+        let selection = layout?.selection.map(\.character).range
+        return selection ?? Selection(backup! .startIndex).range
     }
     
     @inlinable @inline(__always)
-    public func selection<T>(as type: T.Type = T.self) -> Range<Offset<T>> {
+    public func selection<T>(as type: T.Type = T.self) -> Range<Offset<T>> {        
         layout?.selection() ?? .zero ..< .zero
     }
 }

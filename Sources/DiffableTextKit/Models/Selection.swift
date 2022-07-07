@@ -15,29 +15,31 @@
 ///
 /// Equal carets represents an upper caret.
 ///
-@usableFromInline struct Selection<Caret: Comparable>: Equatable {
-    @usableFromInline typealias Detached = DiffableTextKit.Detached<Caret>
+public struct Selection<Position: Comparable>: Equatable {
+    @usableFromInline typealias Lower = DiffableTextKit.Lower<Position>
+    @usableFromInline typealias Upper = DiffableTextKit.Upper<Position>
     
     //=------------------------------------------------------------------------=
     // MARK: State
     //=------------------------------------------------------------------------=
     
-    @usableFromInline let lower: Caret
-    @usableFromInline let upper: Caret
+    @usableFromInline let lower: Lower
+    @usableFromInline let upper: Upper
     
     //=------------------------------------------------------------------------=
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable init(unchecked: (lower: Caret, upper: Caret)) {
-        (self.lower, self.upper) = unchecked
+    @inlinable init(unchecked: (lower: Position, upper: Position)) {
+        self.lower = Lower(unchecked.lower)
+        self.upper = Upper(unchecked.upper)
     }
     
-    @inlinable init(_ caret: Caret) {
+    @inlinable init(_ caret: Position) {
         self.init(unchecked: (caret, caret))
     }
     
-    @inlinable init(_ range: Range<Caret>) {
+    @inlinable init(_ range: Range<Position>) {
         self.init(unchecked: (range.lowerBound, range.upperBound))
     }
         
@@ -45,8 +47,12 @@
     // MARK: Accessors
     //=------------------------------------------------------------------------=
     
-    @inlinable var range: Range<Caret> {
-        Range(uncheckedBounds: (lower, upper))
+    @inlinable var single: Bool {
+        lower.position == upper.position
+    }
+    
+    @inlinable var range: Range<Position> {
+        Range(uncheckedBounds: (lower.position, upper.position))
     }
     
     //=------------------------------------------------------------------------=
@@ -54,23 +60,29 @@
     //=------------------------------------------------------------------------=
     
     @inlinable mutating func collapse() {
-        self = Self(upper)
+        self = Self(upper.position)
     }
     
     //=------------------------------------------------------------------------=
     // MARK: Transformations
     //=------------------------------------------------------------------------=
     
-    @inlinable func map<T>(_ caret: (Caret) -> T) -> Selection<T> {
-        return map(lower: caret, upper: caret)
+    @inlinable func detached(_ momentums: Momentums) -> Selection<Detached<Position>> {
+        Selection<Detached<Position>>(unchecked:(
+        Detached(lower,momentum:momentums.lower),
+        Detached(upper,momentum:momentums.upper)))
     }
     
-    @inlinable func map<T>(lower: (Caret) -> T, upper: (Caret) -> T) -> Selection<T> {
+    @inlinable func map<T>(_ position:  (Position) -> T) -> Selection<T> {
+        return map(lower: {  position($0.position) }, upper: { position($0.position) })
+    }
+    
+    @inlinable func map<T>(lower: (Lower) -> T, upper: (Upper) -> T) -> Selection<T> {
         let max = upper(self.upper); var min = max
         //=--------------------------------------=
         // Double
         //=--------------------------------------=
-        if  self.lower != self.upper {
+        if !self.single {
             min = Swift.min(lower(self.lower),max)
         }
         //=--------------------------------------=
@@ -81,27 +93,10 @@
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: + Detached
+// MARK: + Position == Snapshot.Index
 //=----------------------------------------------------------------------------=
 
-extension Selection {
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Transformations
-    //=------------------------------------------------------------------------=
-    
-    @inlinable func detached(_ momentums: Momentums) -> Selection<Detached> {
-        Selection<Detached>(unchecked: (
-        Detached.lower(lower,momentum: momentums.lower),
-        Detached.upper(upper,momentum: momentums.upper)))
-    }
-}
-
-//=----------------------------------------------------------------------------=
-// MARK: + Snapshot
-//=----------------------------------------------------------------------------=
-
-extension Selection where Caret == Index {
+extension Selection where Position == Snapshot.Index {
     
     //=------------------------------------------------------------------------=
     // MARK: Initializers
@@ -111,7 +106,7 @@ extension Selection where Caret == Index {
         Self(unchecked:(snapshot.startIndex,snapshot.endIndex))
     }
     
-    @inlinable static func standard(_ snapshot: Snapshot) -> Self {
-        Selection<Detached>(.upper(snapshot.endIndex)).map(snapshot.caret)
+    @inlinable static func initial(_ snapshot: Snapshot) -> Self {
+        Self(snapshot.caret(Detached(Upper(snapshot.endIndex))))
     }
 }

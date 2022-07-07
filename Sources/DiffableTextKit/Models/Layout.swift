@@ -31,7 +31,7 @@
     //=------------------------------------------------------------------------=
     
     @inlinable init(_ snapshot: Snapshot) {
-        self.snapshot = snapshot; self.selection = .standard(snapshot)
+        self.snapshot = snapshot; self.selection = .initial(snapshot)
     }
     
     //=------------------------------------------------------------------------=
@@ -49,16 +49,16 @@
     /// Use this on changes to text.
     @inlinable mutating func merge(snapshot: Snapshot) {
         let selection = selection.map(
-        lower: { Mismatches .forwards(from: self.snapshot[..<$0], to: snapshot).next },
-        upper: { Mismatches.backwards(from: self.snapshot[$0...], to: snapshot).next })
+        lower: { Mismatches .forwards(from: self.snapshot[..<$0.position], to: snapshot).next },
+        upper: { Mismatches.backwards(from: self.snapshot[$0.position...], to: snapshot).next })
         //=--------------------------------------=
         // Update
         //=--------------------------------------=
-        self.snapshot = snapshot; self.merge(selection: selection, momentums: false)
+        self.snapshot = snapshot; self.merge(selection: selection)
     }
     
     /// Use this on changes to selection.
-    @inlinable mutating func merge(selection: Selection, momentums: Bool) {
+    @inlinable mutating func merge(selection: Selection, momentums: Bool = false) {
         //=--------------------------------------=
         // Accept Max Selection
         //=--------------------------------------=

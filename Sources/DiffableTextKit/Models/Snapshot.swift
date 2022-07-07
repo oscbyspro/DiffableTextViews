@@ -64,7 +64,7 @@ ExpressibleByStringLiteral {
     }
     
     @inlinable @inline(__always)
-    public init(arrayLiteral symbols: Symbol...) {
+    public init(arrayLiteral  symbols: Symbol...) {
         self.init(symbols)
     }
     
@@ -132,7 +132,7 @@ extension Snapshot {
     }
     
     @inlinable @inline(__always)
-    public init(_ characters: String, as attribute: (Character) -> Attribute) {
+    public init(_ characters:  String, as attribute: (Character) -> Attribute) {
         self._characters = characters
         self._attributes = []
         
@@ -146,12 +146,14 @@ extension Snapshot {
     //=------------------------------------------------------------------------=
     
     @inlinable @inline(__always)
-    public init(_ characters: some Sequence<Character>, as attribute: Attribute = .content) {
+    public init(_ characters: some Sequence<Character>,
+    as attribute: Attribute = .content) {
         self.init(characters, as: { _ in attribute })
     }
     
     @inlinable @inline(__always)
-    public init(_ characters: some Sequence<Character>, as attribute: (Character) -> Attribute) {
+    public init(_ characters: some Sequence<Character>,
+    as attribute: (Character) -> Attribute) {
         self.init(); self.append(contentsOf: characters, as: attribute)
     }
 }
@@ -167,9 +169,9 @@ extension Snapshot {
     //=------------------------------------------------------------------------=
     
     @inlinable @inline(__always)
-    public subscript(index: Index) -> Symbol {
-        Symbol(_characters[index.character],
-        as:    _attributes[index.attribute])
+    public subscript(position: Index) -> Symbol {
+        Symbol(_characters[position.character],
+        as:    _attributes[position.attribute])
     }
     
     //=------------------------------------------------------------------------=
@@ -188,31 +190,26 @@ extension Snapshot {
         as:   _attributes.endIndex)
     }
     
-    @inlinable @inline(__always)
-    var defaultIndex: Index {
-        self.endIndex
-    }
-    
     //=------------------------------------------------------------------------=
     // MARK: After, Before, Distance
     //=------------------------------------------------------------------------=
     
     @inlinable @inline(__always)
-    public func index(after index: Index) -> Index {
-        Index(_characters.index(after: index.character),
-        as:   _attributes.index(after: index.attribute))
+    public func index(after position: Index) -> Index {
+        Index(_characters.index(after: position.character),
+        as:   _attributes.index(after: position.attribute))
     }
     
     @inlinable @inline(__always)
-    public func index(before index: Index) -> Index {
-        Index(_characters.index(before: index.character),
-        as:   _attributes.index(before: index.attribute))
+    public func index(before position: Index) -> Index {
+        Index(_characters.index(before: position.character),
+        as:   _attributes.index(before: position.attribute))
     }
     
     @inlinable @inline(__always)
-    public func index(_ index: Index, offsetBy distance: Int) -> Index {
-        let character = _characters.index(index.character, offsetBy: distance)
-        let attribute = _attributes.index(index.attribute, offsetBy: distance)
+    public func index(_ position: Index, offsetBy distance: Int) -> Index {
+        let character = _characters.index(position.character, offsetBy: distance)
+        let attribute = _attributes.index(position.attribute, offsetBy: distance)
         return Index(character, as: attribute)
     }
     
@@ -250,24 +247,27 @@ extension Snapshot {
     //=------------------------------------------------------------------------=
     
     @inlinable @inline(__always)
-    public mutating func transform(attributes index: Index,
+    public mutating func transform(
+    attributes position: Index,
     with transform: (inout Attribute) -> Void) {
-        transform(&self._attributes[index.attribute])
+        transform(&self._attributes[position.attribute])
     }
     
     @inlinable @inline(__always)
-    public mutating func transform(attributes indices: some Sequence<Index>,
+    public mutating func transform(
+    attributes positions: some Sequence<Index>,
     with transform: (inout Attribute) -> Void) {
-        for index in indices {
+        for index in positions {
             transform(&self._attributes[index.attribute])
         }
     }
     
     @inlinable @inline(__always)
-    public mutating func transform<R>(attributes indices: R,
+    public mutating func transform<R>(
+    attributes positions: R,
     with transform: (inout Attribute) -> Void)
     where R: RangeExpression, R.Bound == Index {
-        for index in self.indices[indices.relative(to: self)] {
+        for index in indices[positions.relative(to:self)] {
             transform(&self._attributes[index.attribute])
         }
     }
@@ -314,15 +314,15 @@ extension Snapshot {
     //=------------------------------------------------------------------------=
     
     @inlinable @inline(__always)
-    public mutating func insert(_ symbol: Symbol, at  index: Index) {
-        self._characters.insert(symbol.character, at: index.character)
-        self._attributes.insert(symbol.attribute, at: index.attribute)
+    public mutating func insert(_ symbol: Symbol, at  position: Index) {
+        self._characters.insert(symbol.character, at: position.character)
+        self._attributes.insert(symbol.attribute, at: position.attribute)
     }
         
     @inlinable @inline(__always)
     public mutating func insert(_ character: Character,
-    at index: Index, as attribute: Attribute = .content) {
-        self.insert(Symbol(character, as: attribute), at: index)
+    at position: Index, as attribute: Attribute = .content) {
+        self.insert(Symbol(character, as: attribute), at: position)
     }
     
     //=------------------------------------------------------------------------=
@@ -331,14 +331,14 @@ extension Snapshot {
     
     @inlinable @inline(__always)
     public mutating func insert(contentsOf characters: some Collection<Character>,
-    at index: Index, as attribute: Attribute = .content) {
-        self.insert(contentsOf: characters, at: index, as: { _ in attribute })
+    at position: Index, as attribute: Attribute = .content) {
+        self.insert(contentsOf: characters, at: position, as: { _ in attribute })
     }
     
     @inlinable @inline(__always)
     public mutating func insert(contentsOf characters: some Collection<Character>,
-    at index: Index, as attribute: (Character) -> Attribute) {
-        self.replaceSubrange(index..<index, with: characters, as: attribute)
+    at position: Index, as attribute: (Character) -> Attribute) {
+        self.replaceSubrange(position..<position, with: characters, as: attribute)
     }
     
     //=------------------------------------------------------------------------=
@@ -346,9 +346,9 @@ extension Snapshot {
     //=------------------------------------------------------------------------=
     
     @inlinable @inline(__always) @discardableResult
-    public mutating func remove(at index: Index) -> Symbol {
-        Symbol(self._characters.remove(at: index.character),
-        as:    self._attributes.remove(at: index.attribute))
+    public mutating func remove(at position: Index) -> Symbol {
+        Symbol(self._characters.remove(at: position.character),
+        as:    self._attributes.remove(at: position.attribute))
     }
     
     //=------------------------------------------------------------------------=
@@ -356,23 +356,23 @@ extension Snapshot {
     //=------------------------------------------------------------------------=
     
     @inlinable @inline(__always)
-    public mutating func replaceSubrange(_ indices: Range<Index>,
+    public mutating func replaceSubrange(_ positions: Range<Index>,
     with symbols: some Collection<Symbol>) {
-        self.replaceSubrange(indices,
+        self.replaceSubrange(positions,
         characters: symbols.lazy.map(\.character),
         attributes: symbols.lazy.map(\.attribute))
     }
     
     @inlinable @inline(__always)
-    public mutating func replaceSubrange(_ indices: Range<Index>,
+    public mutating func replaceSubrange(_ positions: Range<Index>,
     with characters: some Collection<Character>, as attribute: Attribute = .content) {
-        self.replaceSubrange(indices, with: characters, as: { _ in attribute })
+        self.replaceSubrange(positions, with: characters, as: { _ in attribute })
     }
     
     @inlinable @inline(__always)
-    public mutating func replaceSubrange(_ indices: Range<Index>,
+    public mutating func replaceSubrange(_ positions: Range<Index>,
     with characters: some Collection<Character>, as attribute: (Character) -> Attribute) {
-        self.replaceSubrange(indices,
+        self.replaceSubrange(positions,
         characters: characters,
         attributes: characters.lazy.map(attribute))
     }
@@ -382,16 +382,16 @@ extension Snapshot {
     //=------------------------------------------------------------------------=
     
     @inlinable @inline(__always)
-    mutating func replaceSubrange(_ indices: Range<Index>,
+    mutating func replaceSubrange(_ positions: Range<Index>,
     characters: some Collection<Character>,
     attributes: some Collection<Attribute>) {
         self._characters.replaceSubrange(
-        indices.lowerBound.character ..<
-        indices.upperBound.character, with: characters)
+        positions.lowerBound.character  ..<
+        positions.upperBound.character, with: characters)
         
         self._attributes.replaceSubrange(
-        indices.lowerBound.attribute ..<
-        indices.upperBound.attribute, with: attributes)
+        positions.lowerBound.attribute  ..<
+        positions.upperBound.attribute, with: attributes)
     }
 }
 
@@ -421,26 +421,26 @@ extension Snapshot {
     //=------------------------------------------------------------------------=
     
     @inlinable @inline(__always)
-    func nonpassthrough(at index: Index) -> Bool {
-        !attributes[index.attribute].contains(.passthrough)
+    func nonpassthrough(at position: Index) -> Bool {
+        !attributes[position.attribute].contains(.passthrough)
     }
     
     //=------------------------------------------------------------------------=
     // MARK: Peek
     //=------------------------------------------------------------------------=
     
-    @inlinable func peek(from index: Index, towards direction: Direction) ->  Index? {
-        direction == .forwards ? peek(ahead: index) : peek(behind: index)
+    @inlinable func peek(from position: Index, towards direction: Direction) ->  Index? {
+        direction == .forwards ? peek(ahead: position) : peek(behind: position)
     }
     
     @inlinable @inline(__always)
-    func peek(ahead index: Index) -> Index? {
-        index != endIndex ? index  : nil
+    func peek(ahead position: Index) -> Index? {
+        position != endIndex ? position  : nil
     }
     
     @inlinable @inline(__always)
-    func peek(behind index: Index) -> Index? {
-        index != startIndex ? self.index(before: index) : nil
+    func peek(behind position: Index) -> Index? {
+        position != startIndex ? self.index(before: position) : nil
     }
 }
 
@@ -454,7 +454,8 @@ extension Snapshot {
     // MARK: Search
     //=------------------------------------------------------------------------=
     
-    @inlinable func caret(_ detached: Detached<Index>) -> Index {
+    @inlinable @inline(__always)
+    public func caret(_ detached: Detached<Index>) -> Index {
         //=--------------------------------------=
         // Anchor
         //=--------------------------------------=
@@ -464,68 +465,68 @@ extension Snapshot {
         //=--------------------------------------=
         if let peek = peek(
         from: detached.position,
-        towards: detached.affinity),
+        towards: detached.preference),
         nonpassthrough(at: peek) { return detached.position }
         //=--------------------------------------=
         // Direction
         //=--------------------------------------=
-        var direction = detached.momentum ?? detached.affinity
+        var direction = detached.momentum ?? detached.preference
         //=--------------------------------------=
         // Search In Direction
         //=--------------------------------------=
-        if let index = self.caret(
+        if let caret = self.caret(
         from: detached.position,
         towards: direction,
-        jumping: direction == detached.affinity ? .to : .through,
-        targeting: nonpassthrough) { return index }
+        jumping: direction == detached.preference ? .to : .through,
+        targeting: nonpassthrough) { return caret }
         //=--------------------------------------=
         // Search In Opposite Direction
         //=--------------------------------------=
         direction.reverse()
         
-        if let index = self.caret(
+        if let caret = self.caret(
         from: detached.position,
         towards: direction,
-        jumping: Jump.to,
-        targeting: nonpassthrough) { return index }
+        jumping: Jump.to, // always use Jump.to
+        targeting: nonpassthrough) { return caret }
         //=--------------------------------------=
         // Return Preference On Caret Not Found
         //=--------------------------------------=
-        return detached.affinity == .backwards ? startIndex : endIndex
+        return detached.preference == .backwards ? startIndex : endIndex
     }
     
     //=------------------------------------------------------------------------=
     // MARK: Forwards, Backwards, To, Through
     //=------------------------------------------------------------------------=
     
-    @inlinable func caret(from index: Index, towards direction: Direction,
+    @inlinable func caret(from position: Index, towards direction: Direction,
     jumping distance: Jump, targeting target: Target) -> Index? {
         switch (direction, distance) {
-        case (.forwards,  .to     ): return caret(from: index, forwardsTo:       target)
-        case (.forwards,  .through): return caret(from: index, forwardsThrough:  target)
-        case (.backwards, .to     ): return caret(from: index, backwardsTo:      target)
-        case (.backwards, .through): return caret(from: index, backwardsThrough: target)
+        case (.forwards,  .to     ): return caret(from: position, forwardsTo:       target)
+        case (.forwards,  .through): return caret(from: position, forwardsThrough:  target)
+        case (.backwards, .to     ): return caret(from: position, backwardsTo:      target)
+        case (.backwards, .through): return caret(from: position, backwardsThrough: target)
         }
     }
     
     @inlinable @inline(__always)
-    func caret(from index: Index, forwardsTo target: Target) -> Index? {
-        indices[index...].first(where: target)
+    func caret(from position: Index, forwardsTo target: Target) -> Index? {
+        indices[position...].first(where: target)
     }
     
     @inlinable @inline(__always)
-    func caret(from index: Index, forwardsThrough target: Target) -> Index? {
-        caret(from: index, forwardsTo: target).map(self.index(after:))
+    func caret(from position: Index, forwardsThrough target: Target) -> Index? {
+        caret(from: position, forwardsTo: target).map(self.index(after:))
     }
     
     @inlinable @inline(__always)
-    func caret(from index: Index, backwardsTo target: Target) -> Index? {
-        caret(from: index, backwardsThrough: target).map(self.index(after:))
+    func caret(from position: Index, backwardsTo target: Target) -> Index? {
+        caret(from: position, backwardsThrough: target).map(self.index(after:))
     }
     
     @inlinable @inline(__always)
-    func caret(from index: Index, backwardsThrough target: Target) -> Index? {
-        indices[..<index].last(where: target)
+    func caret(from position: Index, backwardsThrough target: Target) -> Index? {
+        indices[..<position].last(where: target)
     }
     
     //*========================================================================*
