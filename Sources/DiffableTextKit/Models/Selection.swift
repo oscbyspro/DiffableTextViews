@@ -48,11 +48,11 @@ public struct Selection<Position: Comparable>: Equatable {
     //=------------------------------------------------------------------------=
         
     @inlinable static func max<T>(_ collection: T) -> Self where T: Collection, T.Index == Position {
-        Self(unchecked: (collection.startIndex, collection.endIndex))
+        Self(unchecked:(collection.startIndex, collection.endIndex))
     }
     
     @inlinable static func initial(_ collection: Snapshot) -> Self where Position == Snapshot.Index {
-        Self(collection.caret(Detached(Upper(collection.endIndex)))) // O(n)
+        Self(collection.index(Detached(Upper(collection.endIndex))))
     }
     
     //=------------------------------------------------------------------------=

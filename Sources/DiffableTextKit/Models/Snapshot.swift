@@ -455,16 +455,11 @@ extension Snapshot {
     //=------------------------------------------------------------------------=
     
     @inlinable @inline(__always)
-    public func selection(_ detached: Selection<Detached>) -> Selection<Index> {
-        detached.map(caret)
+    public func selection(_ caret: Selection<Detached>) -> Selection<Index> {
+        caret.map(self.index(_:))
     }
     
-    //=------------------------------------------------------------------------=
-    // MARK: Search
-    //=------------------------------------------------------------------------=
-    
-    @inlinable @inline(__always)
-    public func caret(_ detached: Detached) -> Index {
+    @inlinable public func index(_ caret: Detached) -> Index {
         //=--------------------------------------=
         // Anchor
         //=--------------------------------------=
@@ -472,69 +467,67 @@ extension Snapshot {
         //=--------------------------------------=
         // Inspect Initial Position
         //=--------------------------------------=
-        if let peek = peek(
-        from: detached.position,
-        towards: detached.preference),
-        nonpassthrough(at: peek) { return detached.position }
+        if let peek = self.peek(
+        from: caret.position,
+        towards: caret.preference),
+        nonpassthrough(at: peek) { return caret.position }
         //=--------------------------------------=
         // Direction
         //=--------------------------------------=
-        var direction = detached.momentum ?? detached.preference
+        let direction = caret.momentum ?? caret.preference
         //=--------------------------------------=
         // Search In Direction
         //=--------------------------------------=
-        if let caret = self.caret(
-        from: detached.position,
+        if let index = self.index(
+        from: caret.position,
         towards: direction,
-        jumping: direction == detached.preference ? .to : .through,
-        targeting: nonpassthrough) { return caret }
+        jumping: direction == caret.preference ? .to : .through,
+        targeting: nonpassthrough) { return index }
         //=--------------------------------------=
         // Search In Opposite Direction
         //=--------------------------------------=
-        direction.reverse()
-        
-        if let caret = self.caret(
-        from: detached.position,
-        towards: direction,
+        if let index = self.index(
+        from: caret.position,
+        towards: direction.reversed(),
         jumping: Jump.to, // always use Jump.to
-        targeting: nonpassthrough) { return caret }
+        targeting: nonpassthrough) { return index }
         //=--------------------------------------=
         // Return Preference On Caret Not Found
         //=--------------------------------------=
-        return detached.preference == .backwards ? startIndex : endIndex
+        return caret.preference == .backwards ? startIndex : endIndex
     }
     
     //=------------------------------------------------------------------------=
     // MARK: Forwards, Backwards, To, Through
     //=------------------------------------------------------------------------=
     
-    @inlinable func caret(from position: Index, towards direction: Direction,
+    @inlinable func index(from position: Index, towards direction: Direction,
     jumping distance: Jump, targeting target: Target) -> Index? {
         switch (direction, distance) {
-        case (.forwards,  .to     ): return caret(from: position, forwardsTo:       target)
+        case (.forwards,  .to     ): return index(from: position, forwardsTo:       target)
         case (.forwards,  .through): return caret(from: position, forwardsThrough:  target)
-        case (.backwards, .to     ): return caret(from: position, backwardsTo:      target)
-        case (.backwards, .through): return caret(from: position, backwardsThrough: target)
+        case (.backwards, .to     ): return index(from: position, backwardsTo:      target)
+        case (.backwards, .through): return index(from: position, backwardsThrough: target)
         }
     }
     
     @inlinable @inline(__always)
-    func caret(from position: Index, forwardsTo target: Target) -> Index? {
+    func index(from position: Index, forwardsTo target: Target) -> Index? {
         indices[position...].first(where: target)
     }
     
     @inlinable @inline(__always)
     func caret(from position: Index, forwardsThrough target: Target) -> Index? {
-        caret(from: position, forwardsTo: target).map(self.index(after:))
+        index(from: position, forwardsTo: target).map(self.index(after:))
     }
     
     @inlinable @inline(__always)
-    func caret(from position: Index, backwardsTo target: Target) -> Index? {
-        caret(from: position, backwardsThrough: target).map(self.index(after:))
+    func index(from position: Index, backwardsTo target: Target) -> Index? {
+        index(from: position, backwardsThrough: target).map(self.index(after:))
     }
     
     @inlinable @inline(__always)
-    func caret(from position: Index, backwardsThrough target: Target) -> Index? {
+    func index(from position: Index, backwardsThrough target: Target) -> Index? {
         indices[..<position].last(where: target)
     }
     
