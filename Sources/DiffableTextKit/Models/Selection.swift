@@ -42,7 +42,19 @@ public struct Selection<Position: Comparable>: Equatable {
     @inlinable init(_ range: Range<Position>) {
         self.init(unchecked: (range.lowerBound, range.upperBound))
     }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Initializers
+    //=------------------------------------------------------------------------=
         
+    @inlinable static func max<T>(_ collection: T) -> Self where T: Collection, T.Index == Position {
+        Self(unchecked: (collection.startIndex, collection.endIndex))
+    }
+    
+    @inlinable static func initial(_ collection: Snapshot) -> Self where Position == Snapshot.Index {
+        Self(collection.caret(Detached(Upper(collection.endIndex)))) // O(n)
+    }
+    
     //=------------------------------------------------------------------------=
     // MARK: Accessors
     //=------------------------------------------------------------------------=
@@ -93,24 +105,5 @@ public struct Selection<Position: Comparable>: Equatable {
         Selection<Detached<Position>>(unchecked:(
         Detached(lower,momentum:momentums.lower),
         Detached(upper,momentum:momentums.upper)))
-    }
-}
-
-//=----------------------------------------------------------------------------=
-// MARK: + Position == Snapshot.Index
-//=----------------------------------------------------------------------------=
-
-extension Selection where Position == Snapshot.Index {
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Initializers
-    //=------------------------------------------------------------------------=
-    
-    @inlinable static func max(_  snapshot: Snapshot) -> Self {
-        Self(unchecked:(snapshot.startIndex,snapshot.endIndex))
-    }
-    
-    @inlinable static func initial(_ snapshot: Snapshot) -> Self {
-        Self(snapshot.caret(Detached(Upper(snapshot.endIndex))))
     }
 }

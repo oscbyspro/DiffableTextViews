@@ -25,21 +25,13 @@
     
     @usableFromInline var snapshot:  Snapshot
     @usableFromInline var selection: Selection
-
+    
     //=------------------------------------------------------------------------=
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable init(_ snapshot: Snapshot) {
-        self.snapshot = snapshot; self.selection = .initial(snapshot)
-    }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Accessors
-    //=------------------------------------------------------------------------=
-    
-    @inlinable public func selection<T>(as type: T.Type = T.self) -> Range<Offset<T>> {
-        snapshot.distances(to:  selection.range)
+    @inlinable init(  _ snapshot: Snapshot) {
+        self.snapshot = snapshot; self.selection = .initial(snapshot) // O(n)
     }
     
     //=------------------------------------------------------------------------=
@@ -62,14 +54,14 @@
         //=--------------------------------------=
         // Accept Max Selection
         //=--------------------------------------=
-        if selection == .max(snapshot) {
+        if  selection == .max(snapshot) {
             self.selection = selection; return
         }
         //=--------------------------------------=
         // Autocorrect
         //=--------------------------------------=
         let  momentums = !momentums ? Momentums.none :
-        Momentums(from:  self.selection, to:selection)
+        Momentums(from: self.selection, to: selection)
         let  selection = selection.detached(momentums)
         self.selection = selection.map(snapshot.caret)
     }

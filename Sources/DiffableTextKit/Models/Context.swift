@@ -33,7 +33,7 @@ public struct Context<Style: DiffableTextStyle> {
     //=------------------------------------------------------------------------=
     
     @inlinable public init(_ status: Status, with cache: inout Cache) {
-        self.init(status, with: &cache, observing: nil)
+        self.storage = Storage(Transaction(status, with: &cache))
     }
     
     //=------------------------------------------------------------------------=
@@ -54,19 +54,19 @@ public struct Context<Style: DiffableTextStyle> {
         write(self.storage)
     }
     
-    @inlinable mutating func merge(_ other: Self) {
+    @inlinable mutating func merge(_ remote: Transaction) {
         //=--------------------------------------=
         // Active
         //=--------------------------------------=
-        if self.layout != nil, other.layout != nil {
+        if remote.base != nil, layout != nil {
             self.write { storage in
-                storage.status = other.status
-                storage.layout!.merge(snapshot: other.layout!.snapshot)
+                storage.status = remote.status
+                storage.layout!.merge(snapshot: remote.base!)
             }
         //=--------------------------------------=
         // Inactive
         //=--------------------------------------=
-        } else { self = other }
+        } else { self.storage = Storage(remote) }
     }
     
     //*========================================================================*
@@ -80,8 +80,8 @@ public struct Context<Style: DiffableTextStyle> {
         //=--------------------------------------------------------------------=
         
         @usableFromInline var status: Status
-        @usableFromInline var layout: Layout!
-        @usableFromInline var backup: String!
+        @usableFromInline var layout: Layout?
+        @usableFromInline var backup: String?
         
         //=--------------------------------------------------------------------=
         // MARK: Initializers
@@ -96,6 +96,47 @@ public struct Context<Style: DiffableTextStyle> {
             //=----------------------------------=
             assert((status.focus == true) == (layout != nil))
             assert((status.focus == true) == (backup == nil))
+        }
+        
+        @inlinable convenience init(_ remote: Transaction) {
+            self.init(remote.status,  remote.base.map(Layout.init), remote.backup)
+        }
+    }
+    
+    //*========================================================================*
+    // MARK: * Transaction
+    //*========================================================================*
+    
+    @usableFromInline struct Transaction {
+        
+        //=--------------------------------------------------------------------=
+        // MARK: State
+        //=--------------------------------------------------------------------=
+        
+        @usableFromInline private(set) var status: Status
+        @usableFromInline private(set) var base: Snapshot?
+        @usableFromInline private(set) var backup: String?
+        
+        //=--------------------------------------------------------------------=
+        // MARK: Initializers
+        //=--------------------------------------------------------------------=
+        
+        @inlinable init(_ status: Status, with cache: inout Cache,
+        observing changes: UnsafeMutablePointer<Changes>? = nil) {
+            self.status = status
+            //=----------------------------------=
+            // Active
+            //=----------------------------------=
+            if status.focus == true {
+                let commit = status.interpret(with: &cache)
+                changes?.pointee.formUnion(.value(commit.value != status.value))
+                
+                self.base = commit.snapshot
+                self.status.value = commit.value
+            //=----------------------------------=
+            // Inactive
+            //=----------------------------------=
+            } else { self.backup = status.format(with: &cache) }
         }
     }
 }
@@ -161,7 +202,7 @@ extension Context {
     
     @inlinable @inline(__always)
     public func selection<T>(as type: T.Type = T.self) -> Range<Offset<T>> {        
-        layout?.selection() ?? .zero ..< .zero
+        layout.map({$0.snapshot.distances(to:$0.selection.range)}) ?? 0 ..< 0
     }
 }
 
@@ -170,30 +211,6 @@ extension Context {
 //=----------------------------------------------------------------------------=
 
 extension Context {
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Initializers
-    //=------------------------------------------------------------------------=
-    
-    @inlinable init(_ status: Status, with cache: inout Cache,
-    observing changes: Optional<UnsafeMutablePointer<Changes>>) {
-        //=--------------------------------------=
-        // Active
-        //=--------------------------------------=
-        if status.focus == true {
-            var status = status
-            let commit = status.interpret(with: &cache)
-            changes?.pointee.formUnion(.value(commit.value != status.value))
-            
-            status.value = commit.value
-            self.storage = Storage(status, Layout(commit.snapshot), nil)
-        //=--------------------------------------=
-        // Inactive
-        //=--------------------------------------=
-        } else {
-            self.storage = Storage(status, nil, status.format(with: &cache))
-        }
-    }
     
     //=------------------------------------------------------------------------=
     // MARK: Synchronization
@@ -211,8 +228,7 @@ extension Context {
         // Update
         //=--------------------------------------=
         var changes = Changes(); withUnsafeMutablePointer(to: &changes) {
-            let observable = status.focus == true ? $0 : nil
-            self.merge(Self(status, with: &cache, observing: observable))
+            self.merge(Transaction(status, with: &cache, observing:$0))
         }
         //=--------------------------------------=
         // Return
@@ -257,8 +273,8 @@ extension Context {
         //=--------------------------------------=
         self.write { storage in
             storage.status.value = commit.value
-            storage.layout.selection.collapse()
-            storage.layout.merge(snapshot: commit.snapshot)
+            storage.layout!.selection.collapse()
+            storage.layout!.merge(snapshot: commit.snapshot)
         }
         //=--------------------------------------=
         // Return
