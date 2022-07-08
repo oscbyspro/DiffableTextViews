@@ -64,8 +64,8 @@ final class SelectionTests: XCTestCase {
     // MARK: Tests x Utilities
     //=------------------------------------------------------------------------=
     
-    func testRangeIsLowerBoundToUpperBound() {
-        XCTAssertEqual(Selection(3 ..< 7).range, 3 ..< 7)
+    func testPositionsAreLowerToUpperAsRange() {
+        XCTAssertEqual(Selection(3 ..< 7).positions(), 3 ..< 7)
     }
     
     func testbMapUpperLowerMapsBothWhenUnequal() {

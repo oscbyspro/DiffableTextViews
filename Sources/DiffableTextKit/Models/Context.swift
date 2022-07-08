@@ -194,12 +194,12 @@ extension Context {
     }
     
     @inlinable public var selection: Range<String.Index> {
-        let selection = layout?.selection.map(\.character).range
-        return selection ?? Selection(backup! .startIndex).range
+        let selection = layout?.selection.map(\.character).positions()
+        return selection ?? Selection(backup! .startIndex).positions()
     }
     
     @inlinable public func selection<T>(as type: T.Type = T.self) -> Range<Offset<T>> {
-        layout.map({$0.snapshot.distances(to:$0.selection.range)}) ?? .zero ..< .zero
+        layout.map({$0.snapshot.distances(to:$0.selection.positions())}) ?? 0 ..< 0
     }
 }
 

@@ -11,13 +11,12 @@
 // MARK: * Selection
 //*============================================================================*
 
-/// One or two carets.
+/// One or two bounds.
 ///
-/// Equal carets represents an upper caret.
+/// Equal bounds represent an upper bound.
 ///
 public struct Selection<Position: Comparable>: Equatable {
     public typealias Caret = DiffableTextKit.Caret<Position>
-    public typealias Tuple = (lower:Position,upper:Position)
     
     //=------------------------------------------------------------------------=
     // MARK: State
@@ -30,7 +29,7 @@ public struct Selection<Position: Comparable>: Equatable {
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable public init(unchecked: Tuple) {
+    @inlinable public init(unchecked: (lower: Position, upper: Position)) {
         (self.lower, self.upper) = unchecked; assert(lower <= upper)
     }
     
@@ -51,15 +50,7 @@ public struct Selection<Position: Comparable>: Equatable {
     }
     
     @inlinable static func max<T>(_ collection: T) -> Self where T: Collection, T.Index == Position {
-        Self(unchecked:(collection.startIndex, collection.endIndex))
-    }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Accessors
-    //=------------------------------------------------------------------------=
-    
-    @inlinable var range: Range<Position> {
-        Range(uncheckedBounds: (lower, upper))
+        Self(unchecked: (collection.startIndex, collection.endIndex))
     }
     
     //=------------------------------------------------------------------------=
@@ -96,9 +87,15 @@ public struct Selection<Position: Comparable>: Equatable {
     // MARK: Utilities
     //=------------------------------------------------------------------------=
     
+    @inlinable public func positions() -> Range<Position> {
+        Range(uncheckedBounds: (lower, upper))
+    }
+    
+    @inlinable public func detached() -> (lower: Position, upper: Position) {
+        (lower, upper)
+    }
+    
     @inlinable func carets() -> Selection<Caret> {
         Selection<Caret>(unchecked: (.lower(lower), .upper(upper)))
     }
-    
-    @inlinable public func detached() -> Tuple {( lower, upper )}
 }

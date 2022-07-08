@@ -18,7 +18,7 @@ public struct Caret<Position: Comparable>: Comparable {
     //=------------------------------------------------------------------------=
     
     public var position: Position
-    public let affinity: Direction
+    public var affinity: Direction
     public var momentum: Direction?
     
     //=------------------------------------------------------------------------=

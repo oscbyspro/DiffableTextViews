@@ -60,7 +60,7 @@
         // Autocorrect
         //=--------------------------------------=
         var carets = selection.carets().detached()
-
+        
         if  momentums {
             carets.lower.momentum = Direction(from: self.selection.lower, to: selection.lower)
             carets.upper.momentum = Direction(from: self.selection.upper, to: selection.upper)
