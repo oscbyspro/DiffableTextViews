@@ -28,4 +28,8 @@ public extension OptionSet {
     @inlinable static prefix func !(instance: Self) -> Bool {
         instance.isEmpty
     }
+    
+    @inlinable static func += (lhs: inout Self, rhs: Self) {
+        lhs.formUnion(rhs)
+    }
 }

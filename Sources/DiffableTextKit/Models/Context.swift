@@ -129,7 +129,7 @@ public struct Context<Style: DiffableTextStyle> {
             //=----------------------------------=
             if status.focus == true {
                 let commit = status.interpret(with: &cache)
-                changes?.pointee.formUnion(.value(commit.value != status.value))
+                changes?.pointee += .value(commit.value != status.value)
                 
                 self.base = commit.snapshot
                 self.status.value = commit.value
@@ -230,15 +230,14 @@ extension Context {
         //=--------------------------------------=
         // Return
         //=--------------------------------------=
-        update.formUnion(.text)
+        update += .text
         if status.focus == false { return update }
         
-        update.formUnion(.selection)
-        update.formUnion(.value(changes.contains(.value)))
+        update += .selection
+        update += .value(changes.contains(.value))
         return update
     }
 }
-
 
 //=----------------------------------------------------------------------------=
 // MARK: + Downstream
@@ -276,8 +275,8 @@ extension Context {
         //=--------------------------------------=
         // Return
         //=--------------------------------------=
-        update.formUnion(.text)
-        update.formUnion(.selection(focus == true))
+        update += .text
+        update += .selection(focus == true)
         return update
     }
     
