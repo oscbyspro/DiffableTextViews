@@ -11,15 +11,14 @@
 // MARK: * Caret
 //*============================================================================*
 
-public protocol Caret<Position>: Comparable {
+public protocol Caret: Comparable {
+    
+    //=------------------------------------------------------------------------=
+    // MARK: State
+    //=------------------------------------------------------------------------=
+    
     associatedtype Position: Comparable
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Requirements
-    //=------------------------------------------------------------------------=
-    
-    @inlinable var position:   Position  { get }
-    @inlinable var preference: Direction { get }
+    @inlinable var position: Position { get }
 }
 
 //=----------------------------------------------------------------------------=
@@ -57,7 +56,8 @@ public extension Caret {
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable @inline(__always) init(_ position: Position) {
+    @inlinable @inline(__always)
+    init(_ position: Position) {
         self.position = position
     }
     
@@ -65,7 +65,7 @@ public extension Caret {
     // MARK: Accessors
     //=------------------------------------------------------------------------=
     
-    @inlinable @inline(__always) var preference: Direction {  .forwards }
+    @inlinable @inline(__always) var affinity: Direction {  .forwards }
 }
 
 //*============================================================================*
@@ -84,7 +84,8 @@ public extension Caret {
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable @inline(__always) init(_ position: Position) {
+    @inlinable @inline(__always)
+    init(_ position: Position) {
         self.position = position
     }
     
@@ -92,7 +93,7 @@ public extension Caret {
     // MARK: Accessors
     //=------------------------------------------------------------------------=
     
-    @inlinable @inline(__always) var preference: Direction { .backwards }
+    @inlinable @inline(__always) var affinity: Direction { .backwards }
 }
 
 //*============================================================================*
@@ -106,7 +107,7 @@ public struct Detached<Position: Comparable>: Caret {
     //=------------------------------------------------------------------------=
     
     public let position: Position
-    public let preference: Direction
+    public let affinity: Direction
     public var momentum: Direction?
 
     //=------------------------------------------------------------------------=
@@ -114,9 +115,9 @@ public struct Detached<Position: Comparable>: Caret {
     //=------------------------------------------------------------------------=
     
     @inlinable @inline(__always)
-    init(_ caret: some Caret<Position>, momentum: Direction? = nil) {
-        self.position = caret.position
-        self.preference = caret.preference
+    init(_ position: Position, affinity: Direction, momentum: Direction? = nil) {
+        self.position = position
+        self.affinity = affinity
         self.momentum = momentum
     }
 }

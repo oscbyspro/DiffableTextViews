@@ -48,7 +48,9 @@ public struct Selection<Position: Comparable>: Equatable {
     //=------------------------------------------------------------------------=
     
     @inlinable static func initial(_ collection: Snapshot) -> Self where Position == Snapshot.Index {
-        Self(collection.index(Detached(Upper(collection.endIndex))))
+        let upper = Upper(collection.endIndex)
+        let caret = Detached(upper.position, affinity: upper.affinity)
+        return Self(collection.resolve(caret))
     }
     
     @inlinable static func max<T>(_ collection: T) -> Self where T: Collection, T.Index == Position {
@@ -88,22 +90,12 @@ public struct Selection<Position: Comparable>: Equatable {
         //=--------------------------------------=
         // Double
         //=--------------------------------------=
-        if !self.single {
+        if !single {
             min = Swift.min(lower(self.lower),max)
         }
         //=--------------------------------------=
         // Return
         //=--------------------------------------=
         return Selection<T>(unchecked: (min, max))
-    }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Transformations
-    //=------------------------------------------------------------------------=
-    
-    @inlinable func detached(_ momentums: Momentums = .none) -> Selection<Detached<Position>> {
-        Selection<Detached<Position>>(unchecked:(
-        Detached(lower,momentum:momentums.lower),
-        Detached(upper,momentum:momentums.upper)))
     }
 }
