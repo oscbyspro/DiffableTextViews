@@ -451,14 +451,14 @@ extension Snapshot {
 extension Snapshot {
     
     //=------------------------------------------------------------------------=
-    // MARK: Selection
+    // MARK: Resolve
     //=------------------------------------------------------------------------=
     
-    @inlinable public func selection(_ carets: Selection<Detached>) -> Selection<Index> {
-        carets.map(self.index(_:))
+    @inlinable public func resolve(_ selection: Selection<Caret>) -> Selection<Index> {
+        selection.map(self.resolve(_:))
     }
     
-    @inlinable public func index(_ caret: Detached) -> Index {
+    @inlinable public func resolve(_ caret: Caret) -> Index {
         //=--------------------------------------=
         // Anchor
         //=--------------------------------------=
@@ -468,19 +468,19 @@ extension Snapshot {
         //=--------------------------------------=
         if let peek = self.peek(
         from: caret.position,
-        towards: caret.preference),
+        towards: caret.affinity),
         nonpassthrough(at: peek) { return caret.position }
         //=--------------------------------------=
         // Direction
         //=--------------------------------------=
-        let direction = caret.momentum ?? caret.preference
+        let direction = caret.momentum ?? caret.affinity
         //=--------------------------------------=
         // Search In Direction
         //=--------------------------------------=
         if let index = self.index(
         from: caret.position,
         towards: direction,
-        jumping: direction == caret.preference ? .to : .through,
+        jumping: direction == caret.affinity ? .to : .through,
         targeting: nonpassthrough) { return index }
         //=--------------------------------------=
         // Search In Opposite Direction
@@ -493,7 +493,7 @@ extension Snapshot {
         //=--------------------------------------=
         // Return Preference On Caret Not Found
         //=--------------------------------------=
-        return caret.preference == .backwards ? startIndex : endIndex
+        return caret.affinity == .backwards ? startIndex : endIndex
     }
     
     //=------------------------------------------------------------------------=
@@ -538,5 +538,5 @@ extension Snapshot {
     
     @usableFromInline typealias Target = (Index) -> Bool
     
-    public typealias Detached = DiffableTextKit.Detached<Index>
+    public typealias Caret = DiffableTextKit.Caret<Index>
 }

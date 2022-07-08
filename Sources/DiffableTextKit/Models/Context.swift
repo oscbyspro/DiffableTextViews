@@ -199,7 +199,7 @@ extension Context {
     }
     
     @inlinable public func selection<T>(as type: T.Type = T.self) -> Range<Offset<T>> {
-        layout.map({$0.snapshot.distances(to:$0.selection.range)}) ?? 0 ..< 0
+        layout.map({$0.snapshot.distances(to:$0.selection.range)}) ?? .zero ..< .zero
     }
 }
 

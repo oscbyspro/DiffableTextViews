@@ -17,14 +17,13 @@
 /// - Autocorrects selection when the selection changes.
 ///
 @usableFromInline struct Layout {
-    @usableFromInline typealias Selection = DiffableTextKit.Selection<Index>
     
     //=------------------------------------------------------------------------=
     // MARK: State
     //=------------------------------------------------------------------------=
     
     @usableFromInline var snapshot:  Snapshot
-    @usableFromInline var selection: Selection
+    @usableFromInline var selection: Selection<Index>
     
     //=------------------------------------------------------------------------=
     // MARK: Initializers
@@ -41,8 +40,8 @@
     /// Use this on changes to text.
     @inlinable mutating func merge(snapshot: Snapshot) {
         let selection = selection.map(
-        lower: { Mismatches .forwards(from: self.snapshot[..<$0.position], to: snapshot).next },
-        upper: { Mismatches.backwards(from: self.snapshot[$0.position...], to: snapshot).next })
+        lower: { Mismatches .forwards(from: self.snapshot[..<$0], to: snapshot).next },
+        upper: { Mismatches.backwards(from: self.snapshot[$0...], to: snapshot).next })
         //=--------------------------------------=
         // Update
         //=--------------------------------------=
@@ -50,7 +49,7 @@
     }
     
     /// Use this on changes to selection.
-    @inlinable mutating func merge(selection: Selection, momentums: Bool = false) {
+    @inlinable mutating func merge(selection: Selection<Index>, momentums: Bool = false) {
         //=--------------------------------------=
         // Accept Max Selection
         //=--------------------------------------=
@@ -60,10 +59,13 @@
         //=--------------------------------------=
         // Autocorrect
         //=--------------------------------------=
-        let momentums = !momentums ? Momentums() :
-        Momentums(from: self.selection, to: selection)
+        var carets = selection.carets().detached()
+
+        if  momentums {
+            carets.lower.momentum = Direction(from: self.selection.lower, to: selection.lower)
+            carets.upper.momentum = Direction(from: self.selection.upper, to: selection.upper)
+        }
         
-        let  selection = selection.detached(momentums)
-        self.selection = snapshot.selection(selection)
+        self.selection = snapshot.resolve(Selection(unchecked: carets))
     }
 }
