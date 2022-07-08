@@ -24,17 +24,13 @@ final class SelectionTests: XCTestCase {
     //=------------------------------------------------------------------------=
     
     func Assert<T>(_ selection: Selection<T>, lower: T, upper: T) {
-        XCTAssertEqual(selection.lower.position, lower)
-        XCTAssertEqual(selection.upper.position, upper)
+        XCTAssertEqual(selection.lower, lower)
+        XCTAssertEqual(selection.upper, upper)
     }
     
     //=------------------------------------------------------------------------=
     // MARK: Tests x Initializers
     //=------------------------------------------------------------------------=
-    
-    func testInitUncheckedIsUnchecked() {
-        Assert(Selection(unchecked: (1, 0)), lower: 1, upper: 0)
-    }
     
     func testInitCaretSetsBothToSame() {
         Assert(Selection(7), lower: 7, upper: 7)
@@ -68,30 +64,30 @@ final class SelectionTests: XCTestCase {
     // MARK: Tests x Utilities
     //=------------------------------------------------------------------------=
     
-    func testRangeEqualsLowerToUpper() {
+    func testRangeIsLowerBoundToUpperBound() {
         XCTAssertEqual(Selection(3 ..< 7).range, 3 ..< 7)
     }
     
     func testbMapUpperLowerMapsBothWhenUnequal() {
         let selection = Selection(3 ..< 7).map(
-        lower: { $0.position + 1 },
-        upper: { $0.position - 1 })
+        lower: { $0 + 1 },
+        upper: { $0 - 1 })
         
         Assert(selection, lower: 4, upper: 6)
     }
     
     func testMapUpperLowerClampsLowerToUpperWhenUnequal() {
         let selection = Selection(3 ..< 7).map(
-        lower: { $0.position + 4 },
-        upper: { $0.position - 4 })
+        lower: { $0 + 4 },
+        upper: { $0 - 4 })
         
         Assert(selection, lower: 3, upper: 3)
     }
     
     func testMapLowerUpperMapsBothAsUpperWhenEqual() {
         let selection = Selection(3 ..< 3).map(
-        lower: { $0.position + 1 },
-        upper: { $0.position - 1 })
+        lower: { $0 + 1 },
+        upper: { $0 - 1 })
         
         Assert(selection, lower: 2, upper: 2)
     }

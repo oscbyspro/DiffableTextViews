@@ -538,5 +538,5 @@ extension Snapshot {
     
     @usableFromInline typealias Target = (Index) -> Bool
     
-    public typealias Caret = DiffableTextKit.Detached<Index>
+    public typealias Caret = DiffableTextKit.Caret<Index>
 }

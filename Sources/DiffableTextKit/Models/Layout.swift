@@ -40,8 +40,8 @@
     /// Use this on changes to text.
     @inlinable mutating func merge(snapshot: Snapshot) {
         let selection = selection.map(
-        lower: { Mismatches .forwards(from: self.snapshot[..<$0.position], to: snapshot).next },
-        upper: { Mismatches.backwards(from: self.snapshot[$0.position...], to: snapshot).next })
+        lower: { Mismatches .forwards(from: self.snapshot[..<$0], to: snapshot).next },
+        upper: { Mismatches.backwards(from: self.snapshot[$0...], to: snapshot).next })
         //=--------------------------------------=
         // Update
         //=--------------------------------------=
@@ -59,14 +59,13 @@
         //=--------------------------------------=
         // Autocorrect
         //=--------------------------------------=
-        var lower = Detached(selection.lower.position, affinity: selection.lower.affinity)
-        var upper = Detached(selection.upper.position, affinity: selection.upper.affinity)
+        var carets = selection.carets().detached()
 
         if  momentums {
-            lower.momentum = Direction(from: self.selection.lower, to: selection.lower)
-            upper.momentum = Direction(from: self.selection.upper, to: selection.upper)
+            carets.lower.momentum = Direction(from: self.selection.lower, to: selection.lower)
+            carets.upper.momentum = Direction(from: self.selection.upper, to: selection.upper)
         }
         
-        self.selection = snapshot.resolve(Selection(unchecked: (lower, upper)))
+        self.selection = snapshot.resolve(Selection(unchecked: carets))
     }
 }
