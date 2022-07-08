@@ -29,7 +29,7 @@
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable init(  _ snapshot: Snapshot) {
+    @inlinable init(_ snapshot: Snapshot) {
         self.snapshot = snapshot; self.selection = .initial(snapshot) // O(n)
     }
     
@@ -39,13 +39,11 @@
     
     /// Use this on changes to text.
     @inlinable mutating func merge(snapshot: Snapshot) {
-        let selection = selection.map(
-        lower: { Mismatches .forwards(from: self.snapshot[..<$0], to: snapshot).next },
-        upper: { Mismatches.backwards(from: self.snapshot[$0...], to: snapshot).next })
         //=--------------------------------------=
         // Update
         //=--------------------------------------=
-        self.snapshot = snapshot; self.merge(selection: selection)
+        self.selection = snapshot.interpret(selection, in: self.snapshot)
+        self.snapshot  = snapshot
     }
     
     /// Use this on changes to selection.

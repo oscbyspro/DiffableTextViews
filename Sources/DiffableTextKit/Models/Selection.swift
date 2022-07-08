@@ -95,7 +95,7 @@ public struct Selection<Position: Comparable>: Equatable {
         (lower, upper)
     }
     
-    @inlinable func carets() -> Selection<Caret> {
+    @inlinable public func carets() -> Selection<Caret> {
         Selection<Caret>(unchecked: (.lower(lower), .upper(upper)))
     }
 }

@@ -24,15 +24,15 @@
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable @inline(__always) init() {
+    @inlinable init() {
         self.storage = .none
     }
     
-    @inlinable @inline(__always) init(_ elements: Some.Elements) {
+    @inlinable init(_ elements: Some.Elements) {
         self.storage = .some(Some(elements))
     }
     
-    @inlinable @inline(__always) init(_ elements: Many.Elements) {
+    @inlinable init(_ elements: Many.Elements) {
         self.storage = .many(Many(elements))
     }
     
@@ -75,7 +75,7 @@
         // MARK: Initializers
         //=--------------------------------------------------------------------=
         
-        @inlinable @inline(__always) init(_ elements: Elements) {
+        @inlinable init(_ elements: Elements) {
             self.elements = elements
         }
         
@@ -83,7 +83,7 @@
         // MARK: Accessors
         //=--------------------------------------------------------------------=
         
-        @inlinable @inline(__always) subscript(character: Character) -> Predicate? {
+        @inlinable subscript(character: Character) -> Predicate? {
             self.elements.0 == character ? self.elements.1 : nil
         }
         
@@ -91,7 +91,7 @@
         // MARK: Utilities
         //=--------------------------------------------------------------------=
         
-        @inlinable @inline(__always) static func == (lhs: Self, rhs: Self) -> Bool {
+        @inlinable static func == (lhs: Self, rhs: Self) -> Bool {
             lhs.elements.0 == rhs.elements.0
         }
     }
@@ -113,7 +113,7 @@
         // MARK: Initializers
         //=--------------------------------------------------------------------=
         
-        @inlinable @inline(__always) init(_ elements: Elements) {
+        @inlinable init(_ elements: Elements) {
             self.elements = elements
         }
         
@@ -121,7 +121,7 @@
         // MARK: Accessors
         //=--------------------------------------------------------------------=
         
-        @inlinable @inline(__always) subscript(character: Character) -> Predicate? {
+        @inlinable subscript(character: Character) -> Predicate? {
             self.elements[character]
         }
         
@@ -129,7 +129,7 @@
         // MARK: Utilities
         //=--------------------------------------------------------------------=
         
-        @inlinable @inline(__always) static func == (lhs: Self, rhs: Self) -> Bool {
+        @inlinable static func == (lhs: Self, rhs: Self) -> Bool {
             lhs.elements.keys == rhs.elements.keys
         }
     }

@@ -420,8 +420,7 @@ extension Snapshot {
     // MARK: Attributes
     //=------------------------------------------------------------------------=
     
-    @inlinable @inline(__always)
-    func nonpassthrough(at position: Index) -> Bool {
+    @inlinable @inline(__always) func nonpassthrough(at position: Index) -> Bool {
         !attributes[position.attribute].contains(.passthrough)
     }
     
@@ -433,22 +432,38 @@ extension Snapshot {
         direction == .forwards ? peek(ahead: position) : peek(behind: position)
     }
     
-    @inlinable @inline(__always)
-    func peek(ahead position: Index) -> Index? {
+    @inlinable func peek(ahead position: Index) -> Index? {
         position != endIndex ? position  : nil
     }
     
-    @inlinable @inline(__always)
-    func peek(behind position: Index) -> Index? {
+    @inlinable func peek(behind position: Index) -> Index? {
         position != startIndex ? self.index(before: position) : nil
     }
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: + Caret
+// MARK: + Selection
 //=----------------------------------------------------------------------------=
 
 extension Snapshot {
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Interpret
+    //=------------------------------------------------------------------------=
+    
+    @inlinable public func interpret(_ selection: Selection<Index>,
+    in other: Self) -> Selection<Index> {
+        //=--------------------------------------=
+        // Differentiate
+        //=--------------------------------------=
+        let selection = selection.map(
+        lower: { Mismatches .forwards(from: other[..<$0], to: self).next },
+        upper: { Mismatches.backwards(from: other[$0...], to: self).next })
+        //=--------------------------------------=
+        // Resolve Based On Attributes
+        //=--------------------------------------=
+        return resolve(selection.carets())
+    }
     
     //=------------------------------------------------------------------------=
     // MARK: Resolve
@@ -458,7 +473,7 @@ extension Snapshot {
         selection.map(self.resolve)
     }
     
-    @inlinable public func resolve(_ caret: Caret) -> Index {
+    @inlinable func resolve(_ caret: Caret) -> Index {        
         //=--------------------------------------=
         // Anchor
         //=--------------------------------------=

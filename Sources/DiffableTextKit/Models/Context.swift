@@ -129,7 +129,7 @@ public struct Context<Style: DiffableTextStyle> {
             //=----------------------------------=
             if status.focus == true {
                 let commit = status.interpret(with: &cache)
-                changes?.pointee += .value(commit.value != status.value)
+                changes?.pointee += .value(status.value != commit.value)
                 
                 self.base = commit.snapshot
                 self.status.value = commit.value
@@ -252,6 +252,9 @@ extension Context {
     /// Call this on changes to text.
     @inlinable public mutating func merge(_   characters: String, in range:
     Range<Offset<some Encoding>>, with cache: inout Cache) throws -> Update {
+        //=--------------------------------------=
+        // Layout
+        //=--------------------------------------=
         if layout == nil { return [] }
         //=--------------------------------------=
         // Values
@@ -287,6 +290,9 @@ extension Context {
     /// Call this on changes to selection.
     @inlinable public mutating func merge(
     selection: Range<Offset<some Encoding>>, momentums: Bool) -> Update {
+        //=--------------------------------------=
+        // Layout
+        //=--------------------------------------=
         if layout == nil { return [] }
         //=--------------------------------------=
         // Values
