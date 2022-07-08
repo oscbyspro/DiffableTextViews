@@ -94,8 +94,8 @@ public struct Context<Style: DiffableTextStyle> {
             //=----------------------------------=
             // Invariants
             //=----------------------------------=
-            assert((status.focus == true) == (layout != nil))
-            assert((status.focus == true) == (backup == nil))
+            assert((status.focus ==  true) == (layout != nil))
+            assert((status.focus == false) == (backup != nil))
         }
         
         @inlinable convenience init(_ remote: Transaction) {
@@ -189,19 +189,16 @@ extension Context {
     // MARK: Layout
     //=------------------------------------------------------------------------=
     
-    @inlinable @inline(__always)
-    public var text: String {
+    @inlinable public var text: String {
         layout?.snapshot.characters ?? backup!
     }
     
-    @inlinable @inline(__always)
-    public var selection: Range<String.Index> {
+    @inlinable public var selection: Range<String.Index> {
         let selection = layout?.selection.map(\.character).range
         return selection ?? Selection(backup! .startIndex).range
     }
     
-    @inlinable @inline(__always)
-    public func selection<T>(as type: T.Type = T.self) -> Range<Offset<T>> {        
+    @inlinable public func selection<T>(as type: T.Type = T.self) -> Range<Offset<T>> {
         layout.map({$0.snapshot.distances(to:$0.selection.range)}) ?? 0 ..< 0
     }
 }

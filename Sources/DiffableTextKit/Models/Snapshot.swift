@@ -454,9 +454,8 @@ extension Snapshot {
     // MARK: Selection
     //=------------------------------------------------------------------------=
     
-    @inlinable @inline(__always)
-    public func selection(_ caret: Selection<Detached>) -> Selection<Index> {
-        caret.map(self.index(_:))
+    @inlinable public func selection(_ carets: Selection<Detached>) -> Selection<Index> {
+        carets.map(self.index(_:))
     }
     
     @inlinable public func index(_ caret: Detached) -> Index {

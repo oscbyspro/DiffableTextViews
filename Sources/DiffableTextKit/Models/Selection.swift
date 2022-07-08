@@ -46,13 +46,13 @@ public struct Selection<Position: Comparable>: Equatable {
     //=------------------------------------------------------------------------=
     // MARK: Initializers
     //=------------------------------------------------------------------------=
-        
-    @inlinable static func max<T>(_ collection: T) -> Self where T: Collection, T.Index == Position {
-        Self(unchecked:(collection.startIndex, collection.endIndex))
-    }
     
     @inlinable static func initial(_ collection: Snapshot) -> Self where Position == Snapshot.Index {
         Self(collection.index(Detached(Upper(collection.endIndex))))
+    }
+    
+    @inlinable static func max<T>(_ collection: T) -> Self where T: Collection, T.Index == Position {
+        Self(unchecked:(collection.startIndex, collection.endIndex))
     }
     
     //=------------------------------------------------------------------------=
