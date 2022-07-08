@@ -455,7 +455,7 @@ extension Snapshot {
     //=------------------------------------------------------------------------=
     
     @inlinable public func resolve(_ selection: Selection<Caret>) -> Selection<Index> {
-        selection.map(self.resolve(_:))
+        selection.map(self.resolve)
     }
     
     @inlinable public func resolve(_ caret: Caret) -> Index {

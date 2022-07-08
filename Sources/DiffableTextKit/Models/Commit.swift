@@ -33,19 +33,19 @@ public struct Commit<Value: Equatable>: Equatable {
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable public init<T>() where Value == Optional<T> {
-        self.init(nil, Snapshot())
-    }
-    
-    @inlinable public init<T>(_ commit: Commit<T>) where Value == Optional<T> {
-        self.init(commit.value, commit.snapshot)
+    @inlinable public init() where Value: RangeReplaceableCollection {
+        self.init(Value(), Snapshot())
     }
     
     //=------------------------------------------------------------------------=
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable public init() where Value: RangeReplaceableCollection {
-        self.init(Value(), Snapshot())
+    @inlinable public init<T>() where Value == Optional<T> {
+        self.init(nil, Snapshot())
+    }
+    
+    @inlinable public init<T>(_ commit: Commit<T>) where Value == Optional<T> {
+        self.init(commit.value, commit.snapshot)
     }
 }
