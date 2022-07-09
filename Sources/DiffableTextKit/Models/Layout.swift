@@ -40,10 +40,15 @@
     /// Use this on changes to text.
     @inlinable mutating func merge(snapshot: Snapshot) {
         //=--------------------------------------=
+        // Differentiate
+        //=--------------------------------------=
+        let selection = selection.map(
+        lower: { Mismatches .forwards(from: self.snapshot[..<$0], to: snapshot).next },
+        upper: { Mismatches.backwards(from: self.snapshot[$0...], to: snapshot).next })
+        //=--------------------------------------=
         // Update
         //=--------------------------------------=
-        self.selection = snapshot.interpret(selection, in: self.snapshot)
-        self.snapshot  = snapshot
+        self.snapshot = snapshot; self.merge(selection: selection)
     }
     
     /// Use this on changes to selection.
@@ -55,7 +60,7 @@
             self.selection = selection; return
         }
         //=--------------------------------------=
-        // Autocorrect
+        // Resolve
         //=--------------------------------------=
         var carets = selection.carets().detached()
         

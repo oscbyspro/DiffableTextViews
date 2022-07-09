@@ -448,24 +448,6 @@ extension Snapshot {
 extension Snapshot {
     
     //=------------------------------------------------------------------------=
-    // MARK: Interpret
-    //=------------------------------------------------------------------------=
-    
-    @inlinable public func interpret(_ selection: Selection<Index>,
-    in other: Self) -> Selection<Index> {
-        //=--------------------------------------=
-        // Differentiate
-        //=--------------------------------------=
-        let selection = selection.map(
-        lower: { Mismatches .forwards(from: other[..<$0], to: self).next },
-        upper: { Mismatches.backwards(from: other[$0...], to: self).next })
-        //=--------------------------------------=
-        // Resolve Based On Attributes
-        //=--------------------------------------=
-        return resolve(selection.carets())
-    }
-    
-    //=------------------------------------------------------------------------=
     // MARK: Resolve
     //=------------------------------------------------------------------------=
     
