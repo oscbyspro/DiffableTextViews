@@ -29,7 +29,7 @@
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable init(_ snapshot: Snapshot) {
+    @inlinable init(  _ snapshot: Snapshot) {
         self.snapshot = snapshot; self.selection = .initial(snapshot) // O(n)
     }
     

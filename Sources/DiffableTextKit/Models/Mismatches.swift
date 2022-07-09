@@ -27,10 +27,13 @@ Next: BidirectionalCollection<Symbol> {
     //=------------------------------------------------------------------------=
     
     @inlinable static func forwards(from prev: Prev, to next: Next) -> Indices {
+        //=--------------------------------------=
+        // Indices
+        //=--------------------------------------=
         var prevIndex = prev.startIndex
         var nextIndex = next.startIndex
         //=-------------------------------------=
-        // Loop
+        // Differentiation
         //=-------------------------------------=
         while prevIndex != prev.endIndex,
               nextIndex != next.endIndex {
@@ -40,7 +43,7 @@ Next: BidirectionalCollection<Symbol> {
             let prevSymbol = prev[prevIndex]
             let nextSymbol = next[nextIndex]
             //=---------------------------------=
-            // Differentiation
+            // Compare
             //=---------------------------------=
             if prevSymbol.character == nextSymbol.character {
                 prev.formIndex(after: &prevIndex)

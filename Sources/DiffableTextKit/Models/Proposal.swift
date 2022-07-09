@@ -11,7 +11,7 @@
 // MARK: * Proposal
 //*============================================================================*
 
-/// A snapshot and a continuous change that has not yet been applied to it.
+/// A snapshot and some change that has not yet been applied to it.
 public struct Proposal {
     
     //=------------------------------------------------------------------------=
@@ -26,13 +26,8 @@ public struct Proposal {
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable init(
-    _ base: Snapshot,
-    with replacement: Snapshot,
-    in range: Range<Index>) {
-        self.base = base
-        self.replacement = replacement
-        self.range = range
+    @inlinable init(_ base: Snapshot, with replacement: Snapshot, in range: Range<Index>) {
+        self.base = base; self.replacement = replacement; self.range = range
     }
     
     //=------------------------------------------------------------------------=
