@@ -14,10 +14,10 @@
 import XCTest
 
 //*============================================================================*
-// MARK: * Style x Hidden
+// MARK: * Style x Tests x Visible
 //*============================================================================*
 
-final class StyleTestsXHidden: XCTestCase, StyleTests {
+final class StyleTestsOnVisible: XCTestCase, StyleTests {
     
     //=------------------------------------------------------------------------=
     // MARK: State
@@ -26,20 +26,20 @@ final class StyleTestsXHidden: XCTestCase, StyleTests {
     let style = PatternTextStyle<String>
         .pattern("+### (###) ##-##-##")
         .placeholders("#") { $0.isASCII && $0.isNumber }
-        .hidden(true)
+        .hidden(false)
     
     //=------------------------------------------------------------------------=
     // MARK: Tests
     //=------------------------------------------------------------------------=
     
     func testNone() {
-        XCTFormat___("", format: "+")
-        XCTInterpret("", format: "+", value: "")
+        XCTFormat___("", format: "+### (###) ##-##-##")
+        XCTInterpret("", format: "+### (###) ##-##-##", value: "")
     }
     
     func testSome() {
-        XCTFormat___("12300045", format: "+123 (000) 45")
-        XCTInterpret("12300045", format: "+123 (000) 45", value: "12300045")
+        XCTFormat___("12300045", format: "+123 (000) 45-##-##")
+        XCTInterpret("12300045", format: "+123 (000) 45-##-##", value: "12300045")
     }
     
     func testFull() {
@@ -57,13 +57,13 @@ final class StyleTestsXHidden: XCTestCase, StyleTests {
     //=------------------------------------------------------------------------=
     
     func testNoneMismatch() {
-        XCTFormat___("ABC", format: "+|ABC")
-        XCTInterpret("ABC", format: "+", value: "")
+        XCTFormat___("ABC", format: "+### (###) ##-##-##|ABC")
+        XCTInterpret("ABC", format: "+### (###) ##-##-##", value: "")
     }
     
     func testSomeMismatch() {
-        XCTFormat___("12300045ABC", format: "+123 (000) 45|ABC")
-        XCTInterpret("12300045ABC", format: "+123 (000) 45", value: "12300045")
+        XCTFormat___("12300045ABC", format: "+123 (000) 45-##-##|ABC")
+        XCTInterpret("12300045ABC", format: "+123 (000) 45-##-##", value: "12300045")
     }
 }
 

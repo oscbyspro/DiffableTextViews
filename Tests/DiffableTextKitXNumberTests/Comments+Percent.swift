@@ -14,26 +14,29 @@
 import XCTest
 
 //*============================================================================*
-// MARK: * Number x Sign
+// MARK: * Comments x Percent
 //*============================================================================*
 
-final class NumberTestsXSign: XCTestCase {
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Assertions
-    //=------------------------------------------------------------------------=
-    
-    func XCTAssertASCII(_ sign: Sign, _ character: Character) {
-         XCTAssertEqual(sign.character, character)
-    }
+final class CommentsOnPercent: XCTestCase {
     
     //=------------------------------------------------------------------------=
     // MARK: Tests
     //=------------------------------------------------------------------------=
     
-    func testASCII() {
-        XCTAssertASCII(.positive, "+")
-        XCTAssertASCII(.negative, "-")
+    func testPercentLabelsAreAlwaysVirtual() throws {
+        //=--------------------------------------=
+        // Locales
+        //=--------------------------------------=
+        for scheme in standards {
+            func nonvirtual(_ character: Character) -> Bool {
+                   scheme.reader.components.signs[     character] != nil
+                || scheme.reader.components.digits[    character] != nil
+                || scheme.reader.components.separators[character] == Separator.fraction
+            }
+            
+            let zero = IntegerFormatStyle<Int>.Percent(locale: scheme.id.locale).format(0)
+            XCTAssert(zero.count(where: nonvirtual) == 1,  "\(zero), \(scheme.id.locale)")
+        }
     }
 }
 

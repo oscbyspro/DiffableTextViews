@@ -14,10 +14,10 @@
 import XCTest
 
 //*============================================================================*
-// MARK: * Reader x Components
+// MARK: * Components x Tests
 //*============================================================================*
 
-final class ReaderTestsXComponents: XCTestCase {
+final class ComponentsTests: XCTestCase {
     typealias Standard = NumberTextSchemeXStandard
     
     //=------------------------------------------------------------------------=

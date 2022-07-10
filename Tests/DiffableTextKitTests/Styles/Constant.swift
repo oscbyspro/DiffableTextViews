@@ -14,10 +14,10 @@
 import XCTest
 
 //*============================================================================*
-// MARK: * Style x Constant
+// MARK: * Constant x Tests
 //*============================================================================*
 
-final class StyleTestsXConstant: XCTestCase {
+final class ConstantTests: XCTestCase {
     
     //=------------------------------------------------------------------------=
     // MARK: Tests

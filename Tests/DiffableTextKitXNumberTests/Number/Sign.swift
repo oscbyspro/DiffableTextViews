@@ -9,28 +9,31 @@
 
 #if DEBUG
 
+@testable import DiffableTextKitXNumber
+
 import XCTest
 
 //*============================================================================*
-// MARK: * Style x Mock
+// MARK: * Sign x Tests
 //*============================================================================*
 
-final class StyleTestsXMock: XCTestCase {
+final class SignTests: XCTestCase {
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Assertions
+    //=------------------------------------------------------------------------=
+    
+    func XCTAssertASCII(_ sign: Sign, _ character: Character) {
+         XCTAssertEqual(sign.character, character)
+    }
     
     //=------------------------------------------------------------------------=
     // MARK: Tests
     //=------------------------------------------------------------------------=
-
-    func test() {
-        //=--------------------------------------=
-        // Setup
-        //=--------------------------------------=
-        let mock0 = Mock(locale: en_US)
-        let mock1 = mock0.locale(sv_SE)
-        //=--------------------------------------=
-        // Assert
-        //=--------------------------------------=
-        XCTAssertNotEqual(mock0, mock1)
+    
+    func testASCII() {
+        XCTAssertASCII(.positive, "+")
+        XCTAssertASCII(.negative, "-")
     }
 }
 

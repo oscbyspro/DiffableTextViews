@@ -14,10 +14,10 @@
 import XCTest
 
 //*============================================================================*
-// MARK: * Reader x Links
+// MARK: * Links x Tests
 //*============================================================================*
 
-final class ReaderTestsXLinks: XCTestCase {
+final class LinksTests: XCTestCase {
     
     //=------------------------------------------------------------------------=
     // MARK: Assertions

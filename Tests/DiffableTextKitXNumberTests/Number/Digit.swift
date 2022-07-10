@@ -14,10 +14,10 @@
 import XCTest
 
 //*============================================================================*
-// MARK: * Number x Digit
+// MARK: * Digit x Tests
 //*============================================================================*
 
-final class NumberTestsXDigit: XCTestCase {
+final class DigitTests: XCTestCase {
     
     //=------------------------------------------------------------------------=
     // MARK: Assertions

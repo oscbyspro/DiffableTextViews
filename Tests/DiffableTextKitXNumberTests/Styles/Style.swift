@@ -63,7 +63,7 @@ class StyleTests: XCTestCase {
     // MARK: Locales, Currencies
     //=------------------------------------------------------------------------=
     
-    /// Iterates about 144k times.
+    /// Iterates about 300k times.
     func XCTInterpretLocalesXCurrencies<T>(_ value: T.FormatInput,
     format: (String, Locale) -> T) where T: NumberTextFormat {
         //=--------------------------------------=

@@ -14,41 +14,26 @@
 import XCTest
 
 //*============================================================================*
-// MARK: * Miscellaneous x Percent
+// MARK: * Separator x Tests
 //*============================================================================*
 
-final class MiscellaneousTestsXPercent: XCTestCase {
+final class SeparatorTests: XCTestCase {
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Assertions
+    //=------------------------------------------------------------------------=
+    
+    func XCTAssertASCII(_ separator: Separator, _ character: Character) {
+         XCTAssertEqual(separator.character, character)
+    }
     
     //=------------------------------------------------------------------------=
     // MARK: Tests
     //=------------------------------------------------------------------------=
     
-    func testPercentLabelsAreAlwaysVirtual() throws {
-        //=--------------------------------------=
-        // Locales
-        //=--------------------------------------=
-        for scheme in standards {
-            let components = scheme.reader.components
-            let zero = IntegerFormatStyle<Int>.Percent(locale: scheme.id.locale).format(0)
-            XCTAssert(zero.count(where: components.nonvirtual) == 1, "\(zero), \(scheme.id.locale)")
-        }
-    }
-}
-
-//*============================================================================*
-// MARK: * Components
-//*============================================================================*
-
-fileprivate extension Components {
-        
-    //=------------------------------------------------------------------------=
-    // MARK: Utilities
-    //=------------------------------------------------------------------------=
-    
-    func nonvirtual(_ character: Character) -> Bool {
-        signs[character] != nil
-        || digits[character] != nil
-        || separators[character] == .fraction
+    func testASCII() {
+        XCTAssertASCII(.fraction, ".")
+        XCTAssertASCII(.grouping, ",")
     }
 }
 

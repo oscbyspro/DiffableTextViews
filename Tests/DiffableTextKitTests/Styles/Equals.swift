@@ -9,33 +9,33 @@
 
 #if DEBUG
 
+@testable import DiffableTextKit
+
 import XCTest
 
 //*============================================================================*
-// MARK: * Miscellaneous x Inaccurate
+// MARK: * Equals x Tests
 //*============================================================================*
 
-final class MiscellaneousTestsXInaccurate: XCTestCase {
-        
-    //=------------------------------------------------------------------------=
-    // MARK: Assertions
-    //=------------------------------------------------------------------------=
-    
-    func XCTAssert<T: BinaryFloatingPoint>(_ value: T, result: String) {
-        let style = FloatingPointFormatStyle<T>(locale: en_US)
-        XCTAssertEqual(style.precision(.fractionLength(0...)).format(value), result)
-    }
+final class EqualsTests: XCTestCase {
     
     //=------------------------------------------------------------------------=
     // MARK: Tests
     //=------------------------------------------------------------------------=
-    
-    func testFloat16IsInaccurate() {
-        XCTAssert(-1.23 as Float16, result: "-1.23046875")
-    }
-    
-    func testFloat32IsInaccurate() {
-        XCTAssert(-1.23 as Float32, result: "-1.2300000190734863")
+
+    func test() {
+        //=--------------------------------------=
+        // Setup
+        //=--------------------------------------=
+        let mock0 = Mock(locale: en_US).equals(0)
+        let mock1 = Mock(locale: sv_SE).equals(0)
+        let mock2 = Mock(locale: en_US).equals(1)
+        //=--------------------------------------=
+        // Assert
+        //=--------------------------------------=
+        XCTAssertEqual(   mock0, mock1)
+        XCTAssertNotEqual(mock0, mock2)
+        XCTAssertNotEqual(mock1, mock2)
     }
 }
 

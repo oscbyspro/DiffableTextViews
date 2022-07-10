@@ -12,16 +12,16 @@
 import XCTest
 
 //*============================================================================*
-// MARK: * Miscellaneous x Currency
+// MARK: * Comments x Tests x Currency
 //*============================================================================*
 
-final class MiscellaneousTestsXCurrency: XCTestCase {
+final class CommentsOnCurrency: XCTestCase {
     
     //=------------------------------------------------------------------------=
     // MARK: Tests
     //=------------------------------------------------------------------------=
     
-    func testCurrencyLabelsAreSometimesReal() throws {
+    func testCurrencySymbolsAreSometimesReal() throws {
         let number = -1234567.89
         let currencyCode = "PAB"
         let locale = Locale(identifier: "rhg-Rohg_MM")
@@ -29,7 +29,7 @@ final class MiscellaneousTestsXCurrency: XCTestCase {
         XCTAssertEqual(formatted, "-B/. 1,234,567.89") // currency contains a fraction separator
     }
     
-    func testCurrencyLabelsDoNotContainNumbers() throws {
+    func testCurrencySymbolsDoNotContainNumbers() throws {
         //=--------------------------------------=
         // Locales, Currencies
         //=--------------------------------------=

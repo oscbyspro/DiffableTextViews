@@ -14,10 +14,10 @@
 import XCTest
 
 //*============================================================================*
-// MARK: * Number x Glyph
+// MARK: * Glyph x Tests
 //*============================================================================*
 
-final class NumberTestsXGlyph: XCTestCase {
+final class GlyphTests: XCTestCase {
     
     //=------------------------------------------------------------------------=
     // MARK: Assertions
@@ -41,10 +41,10 @@ final class NumberTestsXGlyph: XCTestCase {
 }
 
 //*============================================================================*
-// MARK: * Number x Glyph x String
+// MARK: * Glyph x Tests x String
 //*============================================================================*
 
-final class NumberTestsXGlyphXString: XCTestCase {
+final class GlyphTestsOnString: XCTestCase {
     
     //=------------------------------------------------------------------------=
     // MARK: State

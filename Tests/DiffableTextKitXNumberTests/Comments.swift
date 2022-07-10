@@ -12,10 +12,10 @@
 import XCTest
 
 //*============================================================================*
-// MARK: * Miscellaneous x Comments
+// MARK: * Comments x Tests
 //*============================================================================*
 
-final class MiscellaneousTestsXComments: XCTestCase {
+final class Comments: XCTestCase {
     
     //=------------------------------------------------------------------------=
     // MARK: Tests

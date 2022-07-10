@@ -9,57 +9,53 @@
 
 #if DEBUG
 
-@testable import DiffableTextKitXPattern
+@testable import DiffableTextKitXNumber
 
 import XCTest
 
 //*============================================================================*
-// MARK: * Style
+// MARK: * Style x Tests x Percent
 //*============================================================================*
 
-protocol StyleTests: XCTestCase {
-    
-    //=------------------------------------------------------------------------=
-    // MARK: State
-    //=------------------------------------------------------------------------=
-    
-    var style: PatternTextStyle<String> { get }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Tests
-    //=------------------------------------------------------------------------=
-    
-    func testNone()
-    func testSome()
-    func testFull()
-    func testMore()
-        
-    //=------------------------------------------------------------------------=
-    // MARK: Tests
-    //=------------------------------------------------------------------------=
-    
-    func testNoneMismatch()
-    func testSomeMismatch()
-}
-
-//=----------------------------------------------------------------------------=
-// MARK: + Details
-//=----------------------------------------------------------------------------=
-    
-extension StyleTests {
+final class StyleTestsOnPercent: StyleTests {
     
     //=------------------------------------------------------------------------=
     // MARK: Assertions
     //=------------------------------------------------------------------------=
     
-    func XCTFormat___(_ input: String, format: String) {
-         XCTAssertEqual(style.format(input),   format)
+    func XCTInterpretLocales<T>(_ value: T) where
+    T: NumberTextValueXPercentable, T == T.NumberTextValue {
+         XCTInterpretLocales(value, format: T.NumberTextFormat.Percent.init)
     }
+}
+
+//=----------------------------------------------------------------------------=
+// MARK: + Decimal
+//=----------------------------------------------------------------------------=
+
+extension StyleTestsOnPercent {
     
-    func XCTInterpret(_ input: String, format: String, value: String) {
-        let testable = style.interpret(input)
-        XCTAssertEqual(testable.value, value)
-        XCTAssertEqual(testable.snapshot.characters, format)
+    //=------------------------------------------------------------------------=
+    // MARK: Tests
+    //=------------------------------------------------------------------------=
+    
+    func testDecimal() throws {
+        XCTInterpretLocales(-1.23 as Decimal)
+    }
+}
+
+//=----------------------------------------------------------------------------=
+// MARK: + Floats
+//=----------------------------------------------------------------------------=
+
+extension StyleTestsOnPercent {
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Tests
+    //=------------------------------------------------------------------------=
+        
+    func testFloat64_aka_Double() throws {
+        XCTInterpretLocales(-1.23 as Float64)
     }
 }
 

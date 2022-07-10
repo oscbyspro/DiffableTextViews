@@ -14,11 +14,11 @@
 import XCTest
 
 //*============================================================================*
-// MARK: * Style x Currency
+// MARK: * Style x Tests x Currency
 //*============================================================================*
 
-/// - There are about 144k locale-currency pairs, so it may take a while.
-final class StyleTestsXCurrency: StyleTests {
+/// - There are about 300k locale-currency pairs, so it may take a while.
+final class StyleTestsOnCurrency: StyleTests {
     
     //=------------------------------------------------------------------------=
     // MARK: Assertions
@@ -39,7 +39,7 @@ final class StyleTestsXCurrency: StyleTests {
 // MARK: + Defaults
 //=----------------------------------------------------------------------------=
 
-extension StyleTestsXCurrency {
+extension StyleTestsOnCurrency {
     
     //=------------------------------------------------------------------------=
     // MARK: Tests
@@ -57,7 +57,7 @@ extension StyleTestsXCurrency {
 // MARK: + Decimal
 //=----------------------------------------------------------------------------=
 
-extension StyleTestsXCurrency {
+extension StyleTestsOnCurrency {
 
     //=------------------------------------------------------------------------=
     // MARK: Tests
@@ -72,7 +72,7 @@ extension StyleTestsXCurrency {
 // MARK: + Floats
 //=----------------------------------------------------------------------------=
 
-extension StyleTestsXCurrency {
+extension StyleTestsOnCurrency {
     
     //=------------------------------------------------------------------------=
     // MARK: Tests
@@ -87,7 +87,7 @@ extension StyleTestsXCurrency {
 // MARK: + Ints
 //=----------------------------------------------------------------------------=
 
-extension StyleTestsXCurrency {
+extension StyleTestsOnCurrency {
     
     //=------------------------------------------------------------------------=
     // MARK: Tests
@@ -118,7 +118,7 @@ extension StyleTestsXCurrency {
 // MARK: + UInts
 //=----------------------------------------------------------------------------=
 
-extension StyleTestsXCurrency {
+extension StyleTestsOnCurrency {
     
     //=------------------------------------------------------------------------=
     // MARK: Tests
