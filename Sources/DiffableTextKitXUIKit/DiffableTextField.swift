@@ -34,8 +34,8 @@ import SwiftUI
 /// - diffableTextViews_tint(\_:)
 ///
 public struct DiffableTextField<Style: DiffableTextStyle>: UIViewRepresentable {
-    public typealias Value = Style.Value
     public typealias Cache = Style.Cache
+    public typealias Value = Style.Value
 
     //=------------------------------------------------------------------------=
     // MARK: State
