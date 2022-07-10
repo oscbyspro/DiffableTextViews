@@ -11,7 +11,7 @@
 // MARK: * Protocol + Precision + Transformations
 //*============================================================================*
 
-public extension NumberTextStyleProtocol {
+extension NumberTextStyleProtocol {
     
     //=------------------------------------------------------------------------=
     // MARK: Precision
@@ -26,8 +26,8 @@ public extension NumberTextStyleProtocol {
 // MARK: + Integer
 //=----------------------------------------------------------------------------=
 
-public extension NumberTextStyleProtocol
-where Format.FormatInput: NumberTextValueXInteger {
+public extension NumberTextStyleProtocol where
+Format.FormatInput: NumberTextValueXInteger {
     
     //=------------------------------------------------------------------------=
     // MARK: Length
@@ -43,16 +43,15 @@ where Format.FormatInput: NumberTextValueXInteger {
     
     @inlinable func precision<I>(_ limits: I) -> Self
     where I: RangeExpression, I.Bound == Int {
-        precision(Precision(integer: limits))
+        precision(Precision(integer:  limits))
     }
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: + Floating Point
+// MARK: + Any, Floating Point
 //=----------------------------------------------------------------------------=
 
-public extension NumberTextStyleProtocol
-where Format.FormatInput: NumberTextValueXFloatingPoint {
+public extension NumberTextStyleProtocol {
     
     //=------------------------------------------------------------------------=
     // MARK: Length

@@ -36,19 +36,19 @@ public struct NumberTextPrecision<Value: NumberTextValue>: Equatable {
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable public init() {
+    @inlinable init() {
         self.init(unchecked: (Self.integer, Self.fraction))
     }
     
-    @inlinable public init<I>(integer:  I) where I: RangeExpression, I.Bound == Int {
+    @inlinable init<I>(integer:  I) where I: RangeExpression, I.Bound == Int {
         self.init(unchecked: (Self.integer(integer), Self.fraction))
     }
     
-    @inlinable public init<F>(fraction: F) where F: RangeExpression, F.Bound == Int {
+    @inlinable init<F>(fraction: F) where F: RangeExpression, F.Bound == Int {
         self.init(unchecked: (Self.integer, Self.fraction(fraction)))
     }
     
-    @inlinable public init<I, F>(integer: I, fraction: F) where
+    @inlinable init<I, F>(integer: I, fraction: F) where
     I: RangeExpression, I.Bound == Int, F: RangeExpression, F.Bound == Int {
         self.init(unchecked: (Self.integer(integer), Self.fraction(fraction)))
     }

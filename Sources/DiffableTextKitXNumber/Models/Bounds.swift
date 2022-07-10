@@ -25,7 +25,7 @@ public struct NumberTextBounds<Value: NumberTextValue>: Equatable {
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable internal init(unchecked: (lower: Value, upper: Value)) {
+    @inlinable init(unchecked: (lower: Value,  upper: Value)) {
         self.bounds = ClosedRange(uncheckedBounds: unchecked)
     }
     
@@ -33,19 +33,19 @@ public struct NumberTextBounds<Value: NumberTextValue>: Equatable {
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable public init() {
+    @inlinable init() {
         self.init(unchecked: (Self.min, Self.max))
     }
     
-    @inlinable public init(_ limits: PartialRangeFrom<Value>) {
+    @inlinable init(_ limits: PartialRangeFrom<Value>) {
         self.init(unchecked: (Self.clamping(limits.lowerBound), Self.max))
     }
     
-    @inlinable public init(_ limits: PartialRangeThrough<Value>) {
+    @inlinable init(_ limits: PartialRangeThrough<Value>) {
         self.init(unchecked: (Self.min, Self.clamping(limits.upperBound)))
     }
     
-    @inlinable public init(_ limits: ClosedRange<Value>) {
+    @inlinable init(_ limits: ClosedRange<Value>) {
         self.init(unchecked: (Self.clamping(limits.lowerBound), Self.clamping(limits.upperBound)))
     }
     

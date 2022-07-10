@@ -148,11 +148,11 @@ Style.Format.FormatInput == Decimal {
     //=------------------------------------------------------------------------=
 
     var style: some DiffableTextStyle<Value> {
-        let bounds = NumberTextBounds<Input>(bounds.value.closed)
-        let precision = NumberTextPrecision<Input>(
-        integer:  ClosedRange(integer .value),
-        fraction: ClosedRange(fraction.value))
-        return base.bounds(bounds).precision(precision).constant()
+        let integer  = ClosedRange(integer .value)
+        let fraction = ClosedRange(fraction.value)
+        
+        return base.bounds(bounds.value.closed).precision(
+        integer: integer,   fraction: fraction).constant()
     }
     
     //=------------------------------------------------------------------------=

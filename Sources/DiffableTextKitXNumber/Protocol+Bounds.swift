@@ -11,7 +11,7 @@
 // MARK: * Protocol + Bounds + Transformations
 //*============================================================================*
 
-public extension NumberTextStyleProtocol {
+extension NumberTextStyleProtocol {
     
     //=------------------------------------------------------------------------=
     // MARK: Bounds
@@ -20,6 +20,13 @@ public extension NumberTextStyleProtocol {
     @inlinable func bounds(_ bounds: Bounds) -> Self {
         var result = self; result.bounds = bounds; return result
     }
+}
+
+//=----------------------------------------------------------------------------=
+// MARK: + Any
+//=----------------------------------------------------------------------------=
+
+public extension NumberTextStyleProtocol {
 
     //=------------------------------------------------------------------------=
     // MARK: Limits
