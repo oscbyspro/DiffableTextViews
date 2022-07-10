@@ -47,6 +47,6 @@ struct Interval: View {
     func text(_ interval: ClosedRange<Int>) -> some View {
         Text("\(title): \(interval.lowerBound) to \(interval.upperBound)")
             .font(.subheadline.weight(.light))
-            .contentTransition(.identity)
+            .animation(.none, value: interval)
     }
 }
