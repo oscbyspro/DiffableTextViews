@@ -15,13 +15,13 @@
 import XCTest
 
 //*============================================================================*
-// MARK: * Helpers x Downstream
+// MARK: * Downstream x Tests
 //*============================================================================*
 
 /// ```
 /// Asserts: UITextField/offset(from:to:) is O(1).
 /// ```
-final class HelpersTestsXDownstream: XCTestCase {
+final class DownstreamTests: XCTestCase {
     
     //=------------------------------------------------------------------------=
     // MARK: State
@@ -55,7 +55,7 @@ final class HelpersTestsXDownstream: XCTestCase {
 // MARK: + Position
 //=----------------------------------------------------------------------------=
 
-extension HelpersTestsXDownstream {
+extension DownstreamTests {
     
     //=------------------------------------------------------------------------=
     // MARK: Tests
@@ -76,7 +76,7 @@ extension HelpersTestsXDownstream {
 // MARK: + Measurements
 //=----------------------------------------------------------------------------=
 
-extension HelpersTestsXDownstream {
+extension DownstreamTests {
     
     //=------------------------------------------------------------------------=
     // MARK: Utilities

@@ -8,42 +8,48 @@
 //=----------------------------------------------------------------------------=
 
 #if DEBUG
-#if canImport(UIKit)
 
-@testable import DiffableTextKitXUIKit
+@testable import DiffableTextKitXNumber
 
 import XCTest
 
 //*============================================================================*
-// MARK: * Helpers x Base
+// MARK: * Count x Tests
 //*============================================================================*
 
-final class HelpersTestsXBase: XCTestCase {
+final class CountTests: XCTestCase {
     
     //=------------------------------------------------------------------------=
     // MARK: State
     //=------------------------------------------------------------------------=
     
-    lazy var view = Base()
+    let count = Count(value: 0, integer: 1, fraction: 2)
     
     //=------------------------------------------------------------------------=
     // MARK: Tests
     //=------------------------------------------------------------------------=
     
-    func testForceUnwrappingTextIsOK() {
-        view.text = nil
-        XCTAssertNotNil(view.text)
+    func testLanes() {
+        XCTAssertEqual(count, Count(SIMD3(0, 1, 2)))
     }
     
-    func testForceUnwrappingSelectedTextRangeIsOK() {
-        view.selectedTextRange = nil
-        XCTAssertNotNil(view.selectedTextRange)
+    func testAccessors() {
+        XCTAssertEqual(count.value,    0)
+        XCTAssertEqual(count.integer,  1)
+        XCTAssertEqual(count.fraction, 2)
     }
     
-    func testForceUnwrappingMarkedTextRangeIsBad() {
-        XCTAssertNil(view.markedTextRange)
+    func testComponents() {
+        XCTAssertEqual(count[.value],    0)
+        XCTAssertEqual(count[.integer],  1)
+        XCTAssertEqual(count[.fraction], 2)
+    }
+    
+    func testFirstWhere() {
+        XCTAssertEqual(count.first(where: (.==, 0)), .value)
+        XCTAssertEqual(count.first(where: (.==, 1)), .integer)
+        XCTAssertEqual(count.first(where: (.==, 2)), .fraction)
     }
 }
 
-#endif
 #endif
