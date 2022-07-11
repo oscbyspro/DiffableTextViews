@@ -115,7 +115,7 @@ extension Count: CustomStringConvertible {
     // MARK: Accessors
     //=------------------------------------------------------------------------=
     
-    @inlinable public var description: String {
+    public var description: String {
         String(describing: (value, integer, fraction))
     }
 }

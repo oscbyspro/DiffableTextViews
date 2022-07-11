@@ -87,15 +87,15 @@ public struct Selection<Position: Comparable>: Equatable {
     // MARK: Utilities
     //=------------------------------------------------------------------------=
     
-    @inlinable public func positions() -> Range<Position> {
-        Range(uncheckedBounds: (lower, upper))
+    @inlinable public func carets() -> Selection<Caret> {
+        Selection<Caret>(unchecked: (.lower(lower), .upper(upper)))
     }
     
     @inlinable public func detached() -> (lower: Position, upper: Position) {
         (lower, upper)
     }
-    
-    @inlinable public func carets() -> Selection<Caret> {
-        Selection<Caret>(unchecked: (.lower(lower), .upper(upper)))
+
+    @inlinable public func positions() -> Range<Position> {
+        Range(uncheckedBounds: (lower, upper))
     }
 }

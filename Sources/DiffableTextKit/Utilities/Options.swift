@@ -21,15 +21,15 @@ public extension OptionSet {
         mask ? self : Self()
     }
     
+    @inlinable static func += (lhs: inout Self, rhs: Self) {
+        lhs.formUnion(rhs)
+    }
+    
     //=------------------------------------------------------------------------=
     // MARK: Utilities
     //=------------------------------------------------------------------------=
     
     @inlinable static prefix func !(instance: Self) -> Bool {
         instance.isEmpty
-    }
-    
-    @inlinable static func += (lhs: inout Self, rhs: Self) {
-        lhs.formUnion(rhs)
     }
 }

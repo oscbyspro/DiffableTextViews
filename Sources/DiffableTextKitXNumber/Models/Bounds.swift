@@ -98,7 +98,7 @@ extension NumberTextBounds: CustomStringConvertible {
     // MARK: Accessors
     //=------------------------------------------------------------------------=
     
-    @inlinable public var description: String {
+    public var description: String {
         "\(min) to \(max)"
     }
 }

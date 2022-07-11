@@ -76,7 +76,7 @@ extension Attribute: CustomStringConvertible {
     // MARK: Accessors
     //=------------------------------------------------------------------------=
     
-    @inlinable public var description: String {
+    public var description: String {
         String(describing: rawValue)
     }
 }

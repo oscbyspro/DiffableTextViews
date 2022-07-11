@@ -14,8 +14,8 @@
 /// A collection of characters, attributes and an optional anchor.
 ///
 /// ```
-/// |$|1|2|3|,|4|5|6|.|7|8|9|_|U|S|D|~
-/// |x|o|o|o|x|o|o|o|o|o|o|o|x|x|x|x|~
+/// |+|1|2|_|(|3|4|5|)|_|6|7|8|-|9|#|-|#|#|~
+/// |x|o|o|x|x|o|o|o|x|x|o|o|o|x|o|x|x|x|x|~
 /// ```
 ///
 /// - **Anchor**
@@ -27,10 +27,10 @@
 /// - **Attributes & Characters**
 ///
 /// The number of attributes must always equal the number of joint characters in the
-/// snapshot. A failure to maintain this invariant will result in an invalid state
-/// and may crash your application. In most cases, this is a trivial constraint as
-/// the easiest and most straight forward way to create a snapshot is to loop over each
-/// characters in an already joined sequence.
+/// snapshot. An inability to maintain this invariant will result in an invalid state
+/// and may crash the application. In most cases, this is a trivial constraint because
+/// the most straight forward way to create a snapshot is to loop over each characters
+/// in an already composed character sequence.
 ///
 public struct Snapshot: Equatable,
 BidirectionalCollection,
@@ -413,7 +413,7 @@ extension Snapshot: CustomStringConvertible {
     // MARK: Accessors
     //=------------------------------------------------------------------------=
     
-    @inlinable public var description: String {
+    public var description: String {
         "\(Self.self)(\"\(_characters)\", \(_attributes))"
     }
 }
@@ -429,14 +429,15 @@ extension Snapshot {
     //=------------------------------------------------------------------------=
     
     @inlinable func resolve(_ caret: Caret<Index>) -> Index {
-        let positions = self.indices
         //=--------------------------------------=
         // Anchor
         //=--------------------------------------=
         if let anchor { return anchor }
         //=--------------------------------------=
-        // Inspect Initial Position
+        // Inspect Initial Index
         //=--------------------------------------=
+        let positions = self.indices
+        
         if let adjacent = positions.index(
         from: caret.position,
         towards: caret.affinity,
@@ -444,12 +445,10 @@ extension Snapshot {
         targeting: { _ in true }),
         nonpassthrough(adjacent) { return caret.position }
         //=--------------------------------------=
-        // Direction
+        // Search In Dominant Direction
         //=--------------------------------------=
-        let direction = caret.momentum ?? caret.affinity
-        //=--------------------------------------=
-        // Search In Direction
-        //=--------------------------------------=
+        var direction = caret.momentum ?? caret.affinity
+
         if let index = positions.index(
         from: caret.position,
         towards: direction,
@@ -458,9 +457,11 @@ extension Snapshot {
         //=--------------------------------------=
         // Search In Opposite Direction
         //=--------------------------------------=
+        direction = direction.reversed()
+        
         if let index = positions.index(
         from: caret.position,
-        towards: direction.reversed(),
+        towards: direction,
         jumping: Jump.to, // do use Jump.to here
         targeting: nonpassthrough) { return index }
         //=--------------------------------------=
