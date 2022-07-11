@@ -69,6 +69,6 @@
             carets.upper.momentum = Direction(from: self.selection.upper, to: selection.upper)
         }
         
-        self.selection = snapshot.resolve(Selection<Caret>(unchecked: carets))
+        self.selection = Selection(unchecked: carets).map(snapshot.resolve(_:))
     }
 }

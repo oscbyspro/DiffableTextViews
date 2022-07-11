@@ -93,6 +93,14 @@ ExpressibleByStringLiteral {
     }
     
     //=------------------------------------------------------------------------=
+    // MARK: Accessors
+    //=------------------------------------------------------------------------=
+    
+    @inlinable @inline(__always) func nonpassthrough(_ position: Index) -> Bool {
+        !attributes[position.attribute].contains(Attribute.passthrough)
+    }
+    
+    //=------------------------------------------------------------------------=
     // MARK: Transformations
     //=------------------------------------------------------------------------=
     
@@ -411,51 +419,17 @@ extension Snapshot: CustomStringConvertible {
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: + Helpers
-//=----------------------------------------------------------------------------=
-
-extension Snapshot {
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Attributes
-    //=------------------------------------------------------------------------=
-    
-    @inlinable @inline(__always) func nonpassthrough(at position: Index) -> Bool {
-        !attributes[position.attribute].contains(.passthrough)
-    }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Peek
-    //=------------------------------------------------------------------------=
-    
-    @inlinable func peek(from position: Index, towards direction: Direction) ->  Index? {
-        direction == .forwards ? peek(ahead: position) : peek(behind: position)
-    }
-    
-    @inlinable func peek(ahead position: Index) -> Index? {
-        position != endIndex ? position  : nil
-    }
-    
-    @inlinable func peek(behind position: Index) -> Index? {
-        position != startIndex ? self.index(before: position) : nil
-    }
-}
-
-//=----------------------------------------------------------------------------=
 // MARK: + Selection
 //=----------------------------------------------------------------------------=
 
 extension Snapshot {
     
     //=------------------------------------------------------------------------=
-    // MARK: Resolve
+    // MARK: Caret
     //=------------------------------------------------------------------------=
     
-    @inlinable public func resolve(_ selection: Selection<Caret>) -> Selection<Index> {
-        selection.map(self.resolve)
-    }
-    
-    @inlinable func resolve(_ caret: Caret) -> Index {        
+    @inlinable func resolve(_ caret: Caret<Index>) -> Index {
+        let positions = self.indices
         //=--------------------------------------=
         // Anchor
         //=--------------------------------------=
@@ -463,10 +437,12 @@ extension Snapshot {
         //=--------------------------------------=
         // Inspect Initial Position
         //=--------------------------------------=
-        if let peek = self.peek(
+        if let adjacent = positions.index(
         from: caret.position,
-        towards: caret.affinity),
-        nonpassthrough(at: peek) { return caret.position }
+        towards: caret.affinity,
+        jumping: caret.affinity == .forwards ? .to : .through,
+        targeting: { _ in true }),
+        nonpassthrough(adjacent) { return caret.position }
         //=--------------------------------------=
         // Direction
         //=--------------------------------------=
@@ -474,7 +450,7 @@ extension Snapshot {
         //=--------------------------------------=
         // Search In Direction
         //=--------------------------------------=
-        if let index = self.index(
+        if let index = positions.index(
         from: caret.position,
         towards: direction,
         jumping: direction == caret.affinity ? .to : .through,
@@ -482,58 +458,14 @@ extension Snapshot {
         //=--------------------------------------=
         // Search In Opposite Direction
         //=--------------------------------------=
-        if let index = self.index(
+        if let index = positions.index(
         from: caret.position,
         towards: direction.reversed(),
-        jumping: Jump.to, // always use Jump.to
+        jumping: Jump.to, // do use Jump.to here
         targeting: nonpassthrough) { return index }
         //=--------------------------------------=
         // Return Preference On Caret Not Found
         //=--------------------------------------=
         return caret.affinity == .backwards ? startIndex : endIndex
     }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Forwards, Backwards, To, Through
-    //=------------------------------------------------------------------------=
-    
-    @inlinable func index(from position: Index, towards direction: Direction,
-    jumping distance: Jump, targeting target: Target) -> Index? {
-        switch (direction, distance) {
-        case (.forwards,  .to     ): return index(from: position, forwardsTo:       target)
-        case (.forwards,  .through): return caret(from: position, forwardsThrough:  target)
-        case (.backwards, .to     ): return index(from: position, backwardsTo:      target)
-        case (.backwards, .through): return index(from: position, backwardsThrough: target)
-        }
-    }
-    
-    @inlinable @inline(__always)
-    func index(from position: Index, forwardsTo target: Target) -> Index? {
-        indices[position...].first(where: target)
-    }
-    
-    @inlinable @inline(__always)
-    func caret(from position: Index, forwardsThrough target: Target) -> Index? {
-        index(from: position, forwardsTo: target).map(self.index(after:))
-    }
-    
-    @inlinable @inline(__always)
-    func index(from position: Index, backwardsTo target: Target) -> Index? {
-        index(from: position, backwardsThrough: target).map(self.index(after:))
-    }
-    
-    @inlinable @inline(__always)
-    func index(from position: Index, backwardsThrough target: Target) -> Index? {
-        indices[..<position].last(where: target)
-    }
-    
-    //*========================================================================*
-    // MARK: * Types(s)
-    //*========================================================================*
-
-    @usableFromInline enum Jump { case to, through }
-    
-    @usableFromInline typealias Target = (Index) -> Bool
-    
-    public typealias Caret = DiffableTextKit.Caret<Index>
 }
