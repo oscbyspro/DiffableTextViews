@@ -22,8 +22,9 @@ Target: BidirectionalCollection, Target.Element == Character {
     // MARK: Adaptive
     //=------------------------------------------------------------------------=
     
-    @inlinable static func range(of target: Target, in source: Source,
-    towards direction: Direction) -> Range<Source.Index>? {
+    @inlinable static func range(
+    of target: Target, in source: Source, towards
+    direction: Direction) -> Range<Source.Index>? {
         switch direction {
         case  .forwards: return  forwards(search: source, locate: target)
         case .backwards: return backwards(search: source, locate: target)
@@ -34,7 +35,8 @@ Target: BidirectionalCollection, Target.Element == Character {
     // MARK: Forwards
     //=------------------------------------------------------------------------=
     
-    @inlinable static func forwards(search source: Source,
+    @inlinable static func forwards(
+    search source: Source,
     locate target: Target) -> Range<Source.Index>? {
         //=--------------------------------------=
         // Search
@@ -64,7 +66,8 @@ Target: BidirectionalCollection, Target.Element == Character {
     // MARK: Backwards
     //=------------------------------------------------------------------------=
     
-    @inlinable static func backwards(search source: Source,
+    @inlinable static func backwards(
+    search source: Source,
     locate target: Target) -> Range<Source.Index>? {
         typealias R = Search<
         ReversedCollection<Source>,

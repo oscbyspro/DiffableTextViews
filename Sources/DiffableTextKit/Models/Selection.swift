@@ -15,29 +15,29 @@
 ///
 /// Equal bounds represent an upper bound.
 ///
-public struct Selection<Position: Comparable>: Equatable {
-    public typealias Caret = DiffableTextKit.Caret<Position>
+public struct Selection<Bound: Comparable>: Equatable {
+    public typealias Caret = DiffableTextKit.Caret<Bound>
     
     //=------------------------------------------------------------------------=
     // MARK: State
     //=------------------------------------------------------------------------=
     
-    public let lower: Position
-    public let upper: Position
+    public let lower: Bound
+    public let upper: Bound
     
     //=------------------------------------------------------------------------=
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable public init(unchecked: (lower: Position, upper: Position)) {
+    @inlinable public init(unchecked:(lower: Bound, upper: Bound)) {
         (self.lower, self.upper) = unchecked; assert(lower <= upper)
     }
     
-    @inlinable public init(_ position: Position) {
+    @inlinable public init(_ position: Bound) {
         self.init(unchecked:(position, position))
     }
     
-    @inlinable public init(_ positions: Range<Position>) {
+    @inlinable public init(_ positions: Range<Bound>) {
         self.init(unchecked:(positions.lowerBound, positions.upperBound))
     }
     
@@ -45,11 +45,11 @@ public struct Selection<Position: Comparable>: Equatable {
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable static func initial(_ snapshot: Snapshot) -> Self where Position == Snapshot.Index {
+    @inlinable static func initial(_ snapshot: Snapshot) -> Self where Bound == Snapshot.Index {
         Self(snapshot.resolve(.upper(snapshot.endIndex)))
     }
     
-    @inlinable static func max<T>(_ collection: T) -> Self where T: Collection, T.Index == Position {
+    @inlinable static func max<T>(_ collection: T) -> Self where T: Collection, T.Index == Bound {
         Self(unchecked: (collection.startIndex, collection.endIndex))
     }
     
@@ -65,11 +65,11 @@ public struct Selection<Position: Comparable>: Equatable {
     // MARK: Transformations
     //=------------------------------------------------------------------------=
     
-    @inlinable public func map<T>(_ caret: (Position) -> T) -> Selection<T> {
+    @inlinable public func map<T>(_ caret: (Bound) -> T) -> Selection<T> {
         return map(lower: caret, upper: caret)
     }
     
-    @inlinable public func map<T>(lower: (Position) -> T, upper: (Position) -> T) -> Selection<T> {
+    @inlinable public func map<T>(lower: (Bound) -> T, upper: (Bound) -> T) -> Selection<T> {
         let max = upper(self.upper); var min = max
         //=--------------------------------------=
         // Double
@@ -91,11 +91,11 @@ public struct Selection<Position: Comparable>: Equatable {
         Selection<Caret>(unchecked: (.lower(lower), .upper(upper)))
     }
     
-    @inlinable public func detached() -> (lower: Position, upper: Position) {
+    @inlinable public func detached() -> (lower: Bound, upper: Bound) {
         (lower, upper)
     }
 
-    @inlinable public func positions() -> Range<Position> {
+    @inlinable public func positions() -> Range<Bound> {
         Range(uncheckedBounds: (lower, upper))
     }
 }

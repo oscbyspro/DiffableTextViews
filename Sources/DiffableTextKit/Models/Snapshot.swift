@@ -29,7 +29,7 @@
 /// The number of attributes must always equal the number of joint characters in the
 /// snapshot. An inability to maintain this invariant will result in an invalid state
 /// and may crash the application. In most cases, this is a trivial constraint because
-/// the most straight forward way to create a snapshot is to loop over each characters
+/// the most straight forward way to create a snapshot is to loop over each character
 /// in an already composed character sequence.
 ///
 public struct Snapshot: BidirectionalCollection, CustomStringConvertible, Equatable,
