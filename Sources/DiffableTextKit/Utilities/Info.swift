@@ -15,8 +15,8 @@
 ///
 /// It uses conditional compilation such that it has no size or cost in RELEASE mode.
 ///
-@resultBuilder public struct Info: Error, Equatable, CustomStringConvertible,
-ExpressibleByStringLiteral, ExpressibleByStringInterpolation  {
+@resultBuilder public struct Info: CustomStringConvertible, Error, Equatable,
+ExpressibleByStringInterpolation, ExpressibleByStringLiteral {
     public static let unknown = "[REDACTED]"
     public static let separator = "\u{0020}"
     
@@ -156,7 +156,7 @@ ExpressibleByStringLiteral, ExpressibleByStringInterpolation  {
 ///
 /// It uses conditional compilation such that it has no size or cost in RELEASE mode.
 ///
-public struct Brrr: Equatable, CustomStringConvertible {
+public struct Brrr: CustomStringConvertible, Equatable {
     
     //=------------------------------------------------------------------------=
     // MARK: Instances

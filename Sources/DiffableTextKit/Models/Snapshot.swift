@@ -32,11 +32,8 @@
 /// the most straight forward way to create a snapshot is to loop over each characters
 /// in an already composed character sequence.
 ///
-public struct Snapshot: Equatable,
-BidirectionalCollection,
-RangeReplaceableCollection,
-ExpressibleByArrayLiteral,
-ExpressibleByStringLiteral {
+public struct Snapshot: BidirectionalCollection, CustomStringConvertible, Equatable,
+ExpressibleByArrayLiteral, ExpressibleByStringLiteral, RangeReplaceableCollection {
     
     //=------------------------------------------------------------------------=
     // MARK: Types
@@ -90,14 +87,6 @@ ExpressibleByStringLiteral {
     @inlinable @inline(__always)
     public var anchor: Index? {
         _anchor
-    }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Accessors
-    //=------------------------------------------------------------------------=
-    
-    @inlinable @inline(__always) func nonpassthrough(_ position: Index) -> Bool {
-        !attributes[position.attribute].contains(Attribute.passthrough)
     }
     
     //=------------------------------------------------------------------------=
@@ -173,17 +162,7 @@ extension Snapshot {
 extension Snapshot {
     
     //=------------------------------------------------------------------------=
-    // MARK: Element
-    //=------------------------------------------------------------------------=
-    
-    @inlinable @inline(__always)
-    public subscript(position: Index) -> Symbol {
-        Symbol(_characters[position.character],
-        as:    _attributes[position.attribute])
-    }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Indices
+    // MARK: Index, Element
     //=------------------------------------------------------------------------=
     
     @inlinable @inline(__always)
@@ -196,6 +175,12 @@ extension Snapshot {
     public var endIndex: Index {
         Index(_characters.endIndex,
         as:   _attributes.endIndex)
+    }
+    
+    @inlinable @inline(__always)
+    public subscript(position: Index) -> Symbol {
+        Symbol(_characters[position.character],
+        as:    _attributes[position.attribute])
     }
     
     //=------------------------------------------------------------------------=
@@ -241,6 +226,14 @@ extension Snapshot {
     @inlinable @inline(__always)
     public var underestimatedCount: Int {
         _attributes.underestimatedCount
+    }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Descriptions
+    //=------------------------------------------------------------------------=
+    
+    public var description: String {
+        "\(Self.self)(\"\(_characters)\", \(_attributes))"
     }
 }
 
@@ -404,28 +397,13 @@ extension Snapshot {
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: + Descriptions
-//=----------------------------------------------------------------------------=
-
-extension Snapshot: CustomStringConvertible {
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Accessors
-    //=------------------------------------------------------------------------=
-    
-    public var description: String {
-        "\(Self.self)(\"\(_characters)\", \(_attributes))"
-    }
-}
-
-//=----------------------------------------------------------------------------=
-// MARK: + Selection
+// MARK: + Utilities
 //=----------------------------------------------------------------------------=
 
 extension Snapshot {
     
     //=------------------------------------------------------------------------=
-    // MARK: Caret
+    // MARK: Resolve
     //=------------------------------------------------------------------------=
     
     @inlinable func resolve(_ caret: Caret<Index>) -> Index {
@@ -468,5 +446,13 @@ extension Snapshot {
         // Return Preference On Caret Not Found
         //=--------------------------------------=
         return caret.affinity == .backwards ? startIndex : endIndex
+    }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Helpers
+    //=------------------------------------------------------------------------=
+    
+    @inlinable @inline(__always) func nonpassthrough(_ position: Index) -> Bool {
+        !attributes[position.attribute].contains(Attribute.passthrough)
     }
 }

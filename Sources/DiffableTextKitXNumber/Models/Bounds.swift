@@ -13,7 +13,7 @@ import DiffableTextKit
 // MARK: * Bounds
 //*============================================================================*
 
-public struct NumberTextBounds<Value: NumberTextValue>: Equatable {
+public struct NumberTextBounds<Value: NumberTextValue>: CustomStringConvertible, Equatable {
     
     //=------------------------------------------------------------------------=
     // MARK: State
@@ -70,6 +70,14 @@ public struct NumberTextBounds<Value: NumberTextValue>: Equatable {
     //=------------------------------------------------------------------------=
     // MARK: Accessors
     //=------------------------------------------------------------------------=
+
+    public var description: String {
+        "\(min) to \(max)"
+    }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Accessors
+    //=------------------------------------------------------------------------=
     
     @inlinable static var min: Value {
         Value.bounds.lowerBound
@@ -85,21 +93,6 @@ public struct NumberTextBounds<Value: NumberTextValue>: Equatable {
     
     @inlinable static func clamping(_ value:  Value) -> Value {
         Swift.min(Swift.max(Self.min, value), Self.max)
-    }
-}
-
-//=----------------------------------------------------------------------------=
-// MARK: + Descriptions
-//=----------------------------------------------------------------------------=
-
-extension NumberTextBounds: CustomStringConvertible {
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Accessors
-    //=------------------------------------------------------------------------=
-    
-    public var description: String {
-        "\(min) to \(max)"
     }
 }
 

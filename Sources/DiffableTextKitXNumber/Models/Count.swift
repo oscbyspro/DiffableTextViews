@@ -17,7 +17,7 @@ import DiffableTextKit
 ///
 /// - Value is defined as: integer + fraction - integer prefix zeros.
 ///
-@usableFromInline struct Count: Equatable {
+@usableFromInline struct Count: CustomStringConvertible, Equatable {
     @usableFromInline typealias SIMD = SIMD3<Int>
     @usableFromInline typealias Mask = SIMDMask<SIMD>
     
@@ -46,6 +46,14 @@ import DiffableTextKit
     @inlinable public var value:    Int { storage.x }
     @inlinable public var integer:  Int { storage.y }
     @inlinable public var fraction: Int { storage.z }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Accessors
+    //=------------------------------------------------------------------------=
+    
+    public var description: String {
+        String(describing: (value, integer, fraction))
+    }
     
     //=------------------------------------------------------------------------=
     // MARK: Transformations
@@ -102,20 +110,5 @@ extension Count {
         //=--------------------------------------------------------------------=
         
         @usableFromInline static let allCases = [value, integer, fraction]
-    }
-}
-
-//=----------------------------------------------------------------------------=
-// MARK: + Descriptions
-//=----------------------------------------------------------------------------=
-
-extension Count: CustomStringConvertible {
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Accessors
-    //=------------------------------------------------------------------------=
-    
-    public var description: String {
-        String(describing: (value, integer, fraction))
     }
 }

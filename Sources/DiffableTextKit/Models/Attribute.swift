@@ -17,7 +17,7 @@
 ///
 /// - Note: The easiest way to unformat text is to exclude symbols marked as virtual.
 ///
-public struct Attribute: OptionSet {
+public struct Attribute: CustomStringConvertible, OptionSet {
     
     //=------------------------------------------------------------------------=
     // MARK: Instances
@@ -64,13 +64,6 @@ public struct Attribute: OptionSet {
     @inlinable public init(rawValue: UInt8) {
         self.rawValue = rawValue
     }
-}
-
-//=----------------------------------------------------------------------------=
-// MARK: + Descriptions
-//=----------------------------------------------------------------------------=
-
-extension Attribute: CustomStringConvertible {
     
     //=------------------------------------------------------------------------=
     // MARK: Accessors

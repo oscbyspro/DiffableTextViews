@@ -12,7 +12,8 @@
 //*============================================================================*
 
 /// A character and an attribute describing its behavior.
-public struct Symbol: Equatable, ExpressibleByExtendedGraphemeClusterLiteral {
+public struct Symbol: CustomStringConvertible, Equatable,
+ExpressibleByExtendedGraphemeClusterLiteral {
     
     //=------------------------------------------------------------------------=
     // MARK: State
@@ -57,13 +58,6 @@ public struct Symbol: Equatable, ExpressibleByExtendedGraphemeClusterLiteral {
     public func contains(_ attribute: Attribute) -> Bool {
         self.attribute.contains(attribute)
     }
-}
-
-//=----------------------------------------------------------------------------=
-// MARK: + Descriptions
-//=----------------------------------------------------------------------------=
-
-extension Symbol: CustomStringConvertible {
     
     //=------------------------------------------------------------------------=
     // MARK: Accessors

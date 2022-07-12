@@ -14,7 +14,7 @@ import Foundation
 //*============================================================================*
 
 /// A UTF-8 encoded ASCII character.
-@usableFromInline protocol Glyph: Hashable, CaseIterable, CustomStringConvertible {
+@usableFromInline protocol Glyph: CaseIterable, CustomStringConvertible, Hashable {
     associatedtype Enumeration: CaseIterable, RawRepresentable where Enumeration.RawValue == UInt8
 
     //=------------------------------------------------------------------------=
