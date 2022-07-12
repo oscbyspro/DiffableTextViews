@@ -40,19 +40,19 @@ Target: BidirectionalCollection, Target.Element == Character {
         // Search
         //=--------------------------------------=
         haystack: for start in source.indices {
-            var index = start
+            var end = start
             
             needle: for character in target {
-                guard index != source.endIndex,
-                character == source[index].character
+                guard end != source.endIndex,
+                character == source[end].character
                 else { continue haystack }
                 
-                source.formIndex(after: &index)
+                source.formIndex(after: &end)
             }
             //=----------------------------------=
             // Some
             //=----------------------------------=
-            return start ..< index
+            return start ..< end
         }
         //=--------------------------------------=
         // None
