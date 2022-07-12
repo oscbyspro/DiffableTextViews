@@ -17,12 +17,6 @@ Prev: BidirectionalCollection<Symbol>,
 Next: BidirectionalCollection<Symbol> {
     
     //=------------------------------------------------------------------------=
-    // MARK: Types
-    //=------------------------------------------------------------------------=
-    
-    @usableFromInline typealias Indices = (prev: Prev.Index, next: Next.Index)
-    
-    //=------------------------------------------------------------------------=
     // MARK: Forwards
     //=------------------------------------------------------------------------=
     
@@ -70,8 +64,14 @@ Next: BidirectionalCollection<Symbol> {
         typealias R = Mismatches<
         ReversedCollection<Prev>,
         ReversedCollection<Next>>
-
+        
         let reversed = R.forwards(from: prev.reversed(), to: next.reversed())
         return (reversed.prev.base, reversed.next.base)
     }
+    
+    //*========================================================================*
+    // MARK: * Indices
+    //*========================================================================*
+    
+    @usableFromInline typealias Indices = (prev: Prev.Index, next: Next.Index)
 }

@@ -13,73 +13,67 @@ import DiffableTextKit
 // MARK: * Search
 //*============================================================================*
 
-/// Naive search is OK for matching currencies.
-@usableFromInline enum Search<Haystack, Needle> where
-Haystack: BidirectionalCollection, Haystack.Element == Symbol,
-Needle: BidirectionalCollection, Needle.Element == Character {
+/// A naive search for targets at or near a known edge of a collection.
+@usableFromInline enum Search<Source, Target> where
+Source: BidirectionalCollection, Source.Element == Symbol,
+Target: BidirectionalCollection, Target.Element == Character {
     
     //=------------------------------------------------------------------------=
-    // MARK: Types
+    // MARK: Adaptive
     //=------------------------------------------------------------------------=
     
-    @usableFromInline typealias Location = Range<Haystack.Index>
-    @usableFromInline typealias Reversed = Search<ReversedCollection<Haystack>, ReversedCollection<Needle>>
-
+    @inlinable static func range(of target: Target, in source: Source,
+    towards direction: Direction) -> Range<Source.Index>? {
+        switch direction {
+        case  .forwards: return  forwards(search: source, locate: target)
+        case .backwards: return backwards(search: source, locate: target)
+        }
+    }
+    
     //=------------------------------------------------------------------------=
     // MARK: Forwards
     //=------------------------------------------------------------------------=
     
-    /// A naive search, for needles at or near the start of a haystack.
-    @inlinable static func forwards(search haystack: Haystack, match needle: Needle) -> Location? {
+    @inlinable static func forwards(search source: Source,
+    locate target: Target) -> Range<Source.Index>? {
         //=--------------------------------------=
-        // Haystack
+        // Search
         //=--------------------------------------=
-        for start in haystack.indices {
+        haystack: for start in source.indices {
             var index = start
-            var found = true
-            //=----------------------------------=
-            // Needle
-            //=----------------------------------=
-            for character in needle {
-                guard index != haystack.endIndex,
-                character == haystack[index].character
-                else { found = false; break }
+            
+            needle: for character in target {
+                guard index != source.endIndex,
+                character == source[index].character
+                else { continue haystack }
                 
-                haystack.formIndex(after: &index)
+                source.formIndex(after: &index)
             }
             //=----------------------------------=
-            // Success
+            // Some
             //=----------------------------------=
-            if found { return start ..< index }
+            return start ..< index
         }
         //=--------------------------------------=
-        // Failure
+        // None
         //=--------------------------------------=
         return nil
     }
-
+    
     //=------------------------------------------------------------------------=
     // MARK: Backwards
     //=------------------------------------------------------------------------=
     
-    /// A naive search, for needles at or near the end of a haystack.
-    @inlinable static func backwards(search haystack: Haystack, match needle: Needle) -> Location? {
-        Reversed.forwards(search: haystack.reversed(), match: needle.reversed()).map { reversed in
-            reversed.upperBound.base ..< reversed.lowerBound.base
-        }
-    }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Forwards, Backwards
-    //=------------------------------------------------------------------------=
-    
-    /// A naive search, for needles at or near a known edge of a haystack.
-    @inlinable static func range(
-    of needle: Needle, in haystack:  Haystack,
-    towards direction: Direction) -> Location? {
-        switch direction {
-        case  .forwards: return  forwards(search: haystack, match: needle)
-        case .backwards: return backwards(search: haystack, match: needle)
-        }
+    @inlinable static func backwards(search source: Source,
+    locate target: Target) -> Range<Source.Index>? {
+        typealias R = Search<
+        ReversedCollection<Source>,
+        ReversedCollection<Target>>
+        
+        let reversed = R.forwards(
+        search: source.reversed(),
+        locate: target.reversed())
+        
+        return reversed.map({ $0.upperBound.base ..< $0.lowerBound.base })
     }
 }

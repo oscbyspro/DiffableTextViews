@@ -50,6 +50,51 @@
             </BuildableReference>
             <SkippedTests>
                <Test
+                  Identifier = "Comments">
+               </Test>
+               <Test
+                  Identifier = "CommentsOnCurrency">
+               </Test>
+               <Test
+                  Identifier = "CommentsOnInaccurate">
+               </Test>
+               <Test
+                  Identifier = "CommentsOnPercent">
+               </Test>
+               <Test
+                  Identifier = "StyleTestsOnCurrency/testFloat64_aka_Double()">
+               </Test>
+               <Test
+                  Identifier = "StyleTestsOnCurrency/testInt()">
+               </Test>
+               <Test
+                  Identifier = "StyleTestsOnCurrency/testInt16()">
+               </Test>
+               <Test
+                  Identifier = "StyleTestsOnCurrency/testInt32()">
+               </Test>
+               <Test
+                  Identifier = "StyleTestsOnCurrency/testInt64()">
+               </Test>
+               <Test
+                  Identifier = "StyleTestsOnCurrency/testInt8()">
+               </Test>
+               <Test
+                  Identifier = "StyleTestsOnCurrency/testUInt()">
+               </Test>
+               <Test
+                  Identifier = "StyleTestsOnCurrency/testUInt16()">
+               </Test>
+               <Test
+                  Identifier = "StyleTestsOnCurrency/testUInt32()">
+               </Test>
+               <Test
+                  Identifier = "StyleTestsOnCurrency/testUInt64()">
+               </Test>
+               <Test
+                  Identifier = "StyleTestsOnCurrency/testUInt8()">
+               </Test>
+               <Test
                   Identifier = "StyleTestsXCurrency/testFloat64_aka_Double()">
                </Test>
                <Test
