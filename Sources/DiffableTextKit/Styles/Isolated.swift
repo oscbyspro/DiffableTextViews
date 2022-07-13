@@ -13,7 +13,7 @@
 
 /// Stores and injects the style's cache.
 ///
-/// Use it to take manual ownership of a style's cache.
+/// Use it to take ownership of a style's cache.
 ///
 @usableFromInline struct Isolated<Style: DiffableTextStyle>: WrapperTextStyle {
     public typealias Value = Style.Value
@@ -109,7 +109,7 @@ extension DiffableTextStyle {
     
     /// Stores and injects the style's cache.
     ///
-    /// Use it to take manual ownership of a style's cache.
+    /// Use it to take ownership of a style's cache.
     ///
     @inlinable @inline(__always)
     public func isolated() -> some DiffableTextStyle<Value> {

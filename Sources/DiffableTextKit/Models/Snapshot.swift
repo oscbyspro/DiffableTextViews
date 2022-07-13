@@ -18,19 +18,30 @@
 /// |x|o|o|x|x|o|o|o|x|x|o|o|o|x|o|x|x|x|x|~
 /// ```
 ///
-/// - **Anchor**
+/// **Anchor**
 ///
 /// Set the anchor to select the caret represented by its index. It may be desirable
-/// on snapshots containing only formatting characters. As an example, a pattern text style
-/// bound to an empty value may anchor at the pattern's first placeholder character.
+/// on snapshots containing only formatting characters. A pattern text style, bound to
+/// an empty value, may anchor at the pattern's first placeholder character, for example.
 ///
-/// - **Attributes & Characters**
+/// ```
+///    ↓ == anchor
+/// |+|#|#|_|(|#|#|#|)|_|#|#|#|-|#|#|-|#|#|~
+/// |x|x|x|x|x|x|x|x|x|x|x|x|x|x|x|x|x|x|x|~
+/// ```
+///
+/// **Attributes & Characters**
 ///
 /// The number of attributes must always equal the number of joint characters in the
 /// snapshot. An inability to maintain this invariant will result in an invalid state
 /// and may crash the application. In most cases, this is a trivial constraint because
 /// the most straight forward way to create a snapshot is to loop over each character
 /// in an already composed character sequence.
+///
+/// ```
+/// |🇸|   |🇪|    |🇸🇪|~
+/// |➖| + |➖| -> |➖|➖|~
+/// ```
 ///
 public struct Snapshot: BidirectionalCollection, CustomStringConvertible, Equatable,
 ExpressibleByArrayLiteral, ExpressibleByStringLiteral, RangeReplaceableCollection {
@@ -129,7 +140,7 @@ extension Snapshot {
     }
     
     @inlinable @inline(__always)
-    public init(_ characters:  String, as attribute: (Character) -> Attribute) {
+    public init(_ characters: String, as attribute: (Character) -> Attribute) {
         self._characters = characters
         self._attributes = []
         
@@ -300,8 +311,7 @@ extension Snapshot {
         self.append(contentsOf: characters, as: { _ in attribute })
     }
     
-    @inlinable @inline(__always)
-    public mutating func append(
+    @inlinable public mutating func append(
     contentsOf characters: some Sequence<Character>,
     as attribute: (Character) -> Attribute) {
         for character in characters {
@@ -366,24 +376,23 @@ extension Snapshot {
     
     @inlinable @inline(__always)
     public mutating func replaceSubrange(_ positions: Range<Index>,
-    with characters: some Collection<Character>, as attribute: Attribute = .content) {
-        self.replaceSubrange(positions, with: characters, as: { _ in attribute })
-    }
-    
-    @inlinable @inline(__always)
-    public mutating func replaceSubrange(_ positions: Range<Index>,
     with characters: some Collection<Character>, as attribute: (Character) -> Attribute) {
         self.replaceSubrange(positions,
         characters: characters,
         attributes: characters.lazy.map(attribute))
     }
     
+    @inlinable @inline(__always)
+    public mutating func replaceSubrange(_ positions: Range<Index>,
+    with characters: some Collection<Character>, as attribute: Attribute = .content) {
+        self.replaceSubrange(positions, with: characters, as: { _ in attribute })
+    }
+    
     //=------------------------------------------------------------------------=
     // MARK: Helpers
     //=------------------------------------------------------------------------=
     
-    @inlinable @inline(__always)
-    mutating func replaceSubrange(_ positions: Range<Index>,
+    @inlinable mutating func replaceSubrange(_ positions: Range<Index>,
     characters: some Collection<Character>,
     attributes: some Collection<Attribute>) {
         self._characters.replaceSubrange(

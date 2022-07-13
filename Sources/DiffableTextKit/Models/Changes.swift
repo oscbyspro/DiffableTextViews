@@ -12,7 +12,7 @@
 //*============================================================================*
 
 /// A model used to capture comparison results.
-@usableFromInline struct Changes: OptionSet {
+@frozen @usableFromInline struct Changes: OptionSet {
     
     //=------------------------------------------------------------------------=
     // MARK: Instances
