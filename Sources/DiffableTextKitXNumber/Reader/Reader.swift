@@ -8,7 +8,10 @@
 //=----------------------------------------------------------------------------=
 
 import DiffableTextKit
+import Foundation
 
+#warning("Rename this as 'Interpreter'...")
+#warning("Remake this as a struct, maybe.")
 //*============================================================================*
 // MARK: * Reader
 //*============================================================================*
@@ -31,6 +34,20 @@ public final class NumberTextReader {
         self.components = components
         self.attributes = Attributes(components)
         self.translator = Translator(components)
+    }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Initializers
+    //=------------------------------------------------------------------------=
+    
+    /// - Requires that formatter.numberStyle == .none.
+    @inlinable static func standard(_ formatter: NumberFormatter) -> Self {
+        assert(formatter.numberStyle == .none); return Self(.standard(formatter))
+    }
+    
+    /// - Requires that formatter.numberStyle == .none.
+    @inlinable static func currency(_ formatter: NumberFormatter) -> Self {
+        assert(formatter.numberStyle == .none); return Self(.currency(formatter))
     }
     
     //=------------------------------------------------------------------------=
