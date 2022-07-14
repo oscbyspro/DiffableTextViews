@@ -37,8 +37,8 @@ public struct _Optional<Style: _Style>: DiffableTextStyleWrapper {
     // MARK: Utilities
     //=------------------------------------------------------------------------=
     
-    @inlinable @inline(__always)
-    public func resolve(_ proposal: Proposal, with cache: inout Style.Cache) throws -> Commit<Style.Value?> {
+    @inlinable @inline(__always) public func resolve(_ proposal:
+    Proposal, with cache: inout Cache) throws -> Commit<Value> {
         try cache.optional(proposal)
     }
 }

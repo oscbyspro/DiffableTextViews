@@ -8,63 +8,51 @@
 //=----------------------------------------------------------------------------=
 
 //*============================================================================*
-// MARK: * Style x Bounds
+// MARK: * Style x Integer
 //*============================================================================*
 
-public protocol _Style_Bounds: _Style {
+public protocol _Style_Integer: _Style where Value: NumberTextValueXInteger {
+        
+    //=------------------------------------------------------------------------=
+    // MARK: Precision
+    //=------------------------------------------------------------------------=
     
+    @inlinable func precision(_ length: Int) -> Self
+
+    //=------------------------------------------------------------------------=
+    // MARK: Precision
+    //=------------------------------------------------------------------------=
+    
+    @inlinable func precision<S>(_ limits: S) -> Self
+    where S: RangeExpression, S.Bound == Int
+}
+
+//*============================================================================*
+// MARK: * Style x Precision x Integer x Internal
+//*============================================================================*
+
+@usableFromInline protocol _Style_Integer_Internal: _Style_Integer, _Style_Internal { }
+
+//=----------------------------------------------------------------------------=
+// MARK: + Precision
+//=----------------------------------------------------------------------------=
+
+extension _Style_Integer_Internal {
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Length
+    //=------------------------------------------------------------------------=
+    
+    @inlinable public func precision(_ length: Int) -> Self {
+        self.precision(Precision(integer: length...length))
+    }
+
     //=------------------------------------------------------------------------=
     // MARK: Limits
     //=------------------------------------------------------------------------=
     
-    @inlinable func bounds(_ limits: ClosedRange<Value>) -> Self
-    
-    @inlinable func bounds(_ limits: PartialRangeFrom<Value>) -> Self
-    
-    @inlinable func bounds(_ limits: PartialRangeThrough<Value>) -> Self
-}
-
-//*============================================================================*
-// MARK: * Style x Bounds x Internal
-//*============================================================================*
-
-@usableFromInline protocol _Internal_Style_Bounds: _Style_Bounds {
-    typealias Bounds = NumberTextBounds<Value>
-    
-    //=------------------------------------------------------------------------=
-    // MARK: State
-    //=------------------------------------------------------------------------=
-    
-    @inlinable var bounds: Bounds? { get set }
-}
-
-//=----------------------------------------------------------------------------=
-// MARK: + Details
-//=----------------------------------------------------------------------------=
-
-extension _Internal_Style_Bounds {
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Bounds
-    //=------------------------------------------------------------------------=
-    
-    @inlinable @inline(__always) func bounds(_ bounds: Bounds) -> Self {
-        var result = self; result.bounds = bounds; return result
-    }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Limits
-    //=------------------------------------------------------------------------=
-    
-    @inlinable public func bounds(_ limits: ClosedRange<Value>) -> Self {
-        bounds(Bounds(limits))
-    }
-    
-    @inlinable public func bounds(_ limits: PartialRangeFrom<Value>) -> Self {
-        bounds(Bounds(limits))
-    }
-    
-    @inlinable public func bounds(_ limits: PartialRangeThrough<Value>) -> Self {
-        bounds(Bounds(limits))
+    @inlinable public func precision<I>(_ limits: I) -> Self
+    where I: RangeExpression, I.Bound == Int {
+        self.precision(Precision(integer: limits))
     }
 }

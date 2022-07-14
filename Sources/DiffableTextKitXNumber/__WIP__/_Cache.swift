@@ -27,24 +27,24 @@ public protocol _Cache: DiffableTextCache where Style: _Style, Value: NumberText
 // MARK: * Cache x Internal
 //*============================================================================*
 
-@usableFromInline protocol _Cache_Internal: _Cache {
+@usableFromInline protocol _Cache_Internal: _Cache where Style: _Style_Internal {
     associatedtype Format: _Format where Format.FormatInput == Value
     
     //=------------------------------------------------------------------------=
     // MARK: Accessors
     //=------------------------------------------------------------------------=
     
-    @inlinable var format: Format { get }
+    @inlinable var style: Style { get }
     
-    @inlinable var bounds: NumberTextBounds<Value> { get }
+    @inlinable var adapter: _Adapter<Format> { get }
     
-    @inlinable var precision: NumberTextPrecision<Value> { get }
+    @inlinable var interpreter: NumberTextReader { get }
+    
+    @inlinable var preferences: Preferences<Value> { get }
     
     //=------------------------------------------------------------------------=
     // MARK: Utilities
     //=------------------------------------------------------------------------=
-        
-    @inlinable func value(_ number: Number) throws -> Value
     
     @inlinable func number(_ snapshot: Snapshot) throws -> Number
     
@@ -61,6 +61,95 @@ public protocol _Cache: DiffableTextCache where Style: _Style, Value: NumberText
 
 //=----------------------------------------------------------------------------=
 // MARK: + Details
+//=----------------------------------------------------------------------------=
+
+extension _Cache_Internal {
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Accessors
+    //=------------------------------------------------------------------------=
+    
+    @inlinable var format: Format {
+        adapter.format
+    }
+    
+    @inlinable var bounds: NumberTextBounds<Value> {
+        style.bounds ?? preferences.bounds
+    }
+    
+    @inlinable var precision: NumberTextPrecision<Value> {
+        style.precision ?? preferences.precision
+    }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Utilities
+    //=------------------------------------------------------------------------=
+    
+    @inlinable func value(_ number: Number) throws -> Value {
+        try adapter.parse(number)
+    }
+    
+    @inlinable func number(_ snapshot: Snapshot) throws -> Number {
+        try interpreter.components.number(in: snapshot, as: Value.self)!
+    }
+    
+    @inlinable func number(_ proposal: Proposal) throws -> Number {
+        try interpreter.number(proposal, as: Value.self)!
+    }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Utilities
+    //=------------------------------------------------------------------------=
+    
+    @inlinable func characters(_ value: Value, _ number: Number, _ format: Format) -> String {
+        var characters = format.sign(number.sign)
+       .separator(number.separator).format(value)
+        let signs = interpreter.components.signs
+        //=--------------------------------------=
+        // Autocorrect
+        //=--------------------------------------=
+        if  number.sign == .negative, value == .zero,
+        let index = characters.firstIndex(of: signs[.positive]) {
+            //=----------------------------------=
+            // Make Positive Zero Negative
+            //=----------------------------------=
+            let replacement = String(signs[.negative])
+            characters.replaceSubrange(index...index, with: replacement)
+        }
+        //=--------------------------------------=
+        // Return
+        //=--------------------------------------=
+        return characters
+    }
+    
+    @inlinable func snapshot(_ characters: String) -> Snapshot {
+        Snapshot(characters, as: interpreter.attributes.map(_:))
+    }
+    
+    @inlinable func commit(_ value: Value, _ number: Number, _ format: Format) -> Commit<Value> {
+        Commit(value, snapshot(characters(value, number, format)))
+    }
+}
+
+//=----------------------------------------------------------------------------=
+// MARK: + Utilities
+//=----------------------------------------------------------------------------=
+
+extension _Cache_Internal {
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Optional
+    //=------------------------------------------------------------------------=
+    
+    #warning("WIP...............................................................")
+    @inlinable public func optional(_ proposal: Proposal) throws -> Commit<Value?> {
+        let optional = try interpreter.number(proposal, as: Value?.self)
+        return try optional.map({ try Commit(resolve($0)) }) ?? Commit()
+    }
+}
+
+//=----------------------------------------------------------------------------=
+// MARK: + Utilites
 //=----------------------------------------------------------------------------=
 
 extension _Cache_Internal {
@@ -136,107 +225,5 @@ extension _Cache_Internal {
         //=--------------------------------------=
         let format = format.precision(precision.interactive(count))
         return commit(value, number, format)
-    }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Helpers
-    //=------------------------------------------------------------------------=
-    
-    @inlinable func commit(_ value: Value, _ number: Number, _ format: Format) -> Commit<Value> {
-        Commit(value, snapshot(characters(value, number, format)))
-    }
-}
-
-//*============================================================================*
-// MARK: * Cache x Internal x Base
-//*============================================================================*
-
-@usableFromInline protocol _Cache_Internal_Base: _Cache_Internal where Style: _Style_Internal_Base {
-    
-    //=------------------------------------------------------------------------=
-    // MARK: State
-    //=------------------------------------------------------------------------=
-    
-    @inlinable var style: Style { get }
-    @inlinable var adapter: _Adapter<Format> { get }
-    @inlinable var interpreter: NumberTextReader { get }
-    @inlinable var preferences: Preferences<Value> { get }
-}
-
-//=----------------------------------------------------------------------------=
-// MARK: + Details
-//=----------------------------------------------------------------------------=
-
-extension _Cache_Internal_Base {
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Accessors
-    //=------------------------------------------------------------------------=
-    
-    @inlinable var format: Format {
-        adapter.format
-    }
-    
-    @inlinable var bounds: NumberTextBounds<Value> {
-        style.bounds ?? preferences.bounds
-    }
-    
-    @inlinable var precision: NumberTextPrecision<Value> {
-        style.precision ?? preferences.precision
-    }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Utilities
-    //=------------------------------------------------------------------------=
-    
-    @inlinable func value(_ number: Number) throws -> Value {
-        try adapter.parse(number)
-    }
-    
-    @inlinable func number(_ snapshot: Snapshot) throws -> Number {
-        try interpreter.components.number(in: snapshot, as: Value.self)!
-    }
-    
-    @inlinable func number(_ proposal: Proposal) throws -> Number {
-        try interpreter.number(proposal, as: Value.self)!
-    }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Utilities
-    //=------------------------------------------------------------------------=
-    
-    @inlinable func snapshot(_ characters: String) -> Snapshot {
-        Snapshot(characters, as: interpreter.attributes.map(_:))
-    }
-
-    @inlinable func characters(_ value: Value, _ number: Number, _ format: Format) -> String {
-        var characters = format.sign(number.sign)
-       .separator(number.separator).format(value)
-        let signs = interpreter.components.signs
-        //=--------------------------------------=
-        // Autocorrect
-        //=--------------------------------------=
-        if  number.sign == .negative, value == .zero,
-        let index = characters.firstIndex(of: signs[.positive]) {
-            //=----------------------------------=
-            // Make Positive Zero Negative
-            //=----------------------------------=
-            let replacement = String(signs[.negative])
-            characters.replaceSubrange(index...index, with: replacement)
-        }
-        //=--------------------------------------=
-        // Return
-        //=--------------------------------------=
-        return characters
-    }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Utilities
-    //=------------------------------------------------------------------------=
-    
-    #warning("WIP...............................................................")
-    @inlinable public func optional(_ proposal: Proposal) throws -> Commit<Value?> {
-        let optional = try interpreter.number(proposal, as: Value?.self)
-        return try optional.map({ try Commit(resolve($0)) }) ?? Commit()
     }
 }

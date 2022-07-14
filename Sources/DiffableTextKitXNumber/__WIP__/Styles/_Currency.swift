@@ -14,10 +14,7 @@ import Foundation
 // MARK: * Style x Currency
 //*============================================================================*
 
-public struct _Style_Currency<Format: _Format_Currency>:
-_Style_Internal_Base,
-_Internal_Style_Bounds,
-_Internal_Style_Precision {
+public struct _Style_Currency<Format: _Format_Currency>: _Style_Internal {
     
     public typealias Value = Format.FormatInput
     public typealias Cache = _Cache_Currency<Format>
@@ -39,30 +36,19 @@ _Internal_Style_Precision {
     @inlinable init(code: String, locale: Locale) {
         self.code = code; self.locale = locale
     }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Utilities
-    //=------------------------------------------------------------------------=
-    
-    @inlinable public func optional(_ proposal: Proposal, with cache: inout Cache) throws -> Commit<Value?> {
-        fatalError()
-    }
 }
 
 //=----------------------------------------------------------------------------=
 // MARK: + Conformances
 //=----------------------------------------------------------------------------=
 
-extension _Style_Currency:
-_Style_Precision_Integer,
-_Internal_Style_Precision_Integer
-where Value: NumberTextValueXInteger { }
+extension _Style_Currency: _Style_Integer, _Style_Integer_Internal where Value: NumberTextValueXInteger { }
 
 //*============================================================================*
 // MARK: * Cache x Currency
 //*============================================================================*
 
-public struct _Cache_Currency<Format>: _Cache_Internal_Base where Format: _Format_Currency {
+public struct _Cache_Currency<Format>: _Cache_Internal where Format: _Format_Currency {
     public typealias Style = _Style_Currency<Format>
     public typealias Value = Format.FormatInput
     
@@ -110,8 +96,8 @@ public struct _Cache_Currency<Format>: _Cache_Internal_Base where Format: _Forma
     // MARK: Transformations
     //=------------------------------------------------------------------------=
     
-    #warning("TODO")
-    @inlinable public mutating func merge(_ style: _Style_Currency<Format>) {
+    #warning("DRY......................................")
+    @inlinable public mutating func merge(_ style: Style) {
         //=--------------------------------------=
         // Similar
         //=--------------------------------------=

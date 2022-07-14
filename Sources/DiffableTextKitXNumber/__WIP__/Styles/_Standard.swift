@@ -14,12 +14,7 @@ import Foundation
 // MARK: * Style x Standard
 //*============================================================================*
 
-public struct _Style_Standard<Format>:
-_Style_Internal_Base,
-_Internal_Style_Bounds,
-_Internal_Style_Precision
-where Format: _Format_Standard {
-    
+public struct _Style_Standard<Format>: _Style_Internal where Format: _Format_Standard {
     public typealias Value = Format.FormatInput
     public typealias Cache = _Cache_Standard<Format>
 
@@ -45,15 +40,15 @@ where Format: _Format_Standard {
 //=----------------------------------------------------------------------------=
 
 extension _Style_Standard:
-_Style_Precision_Integer,
-_Internal_Style_Precision_Integer
+_Style_Integer,
+_Style_Integer_Internal
 where Value: NumberTextValueXInteger { }
 
 //*============================================================================*
 // MARK: * Cache x Standard
 //*============================================================================*
 
-public struct _Cache_Standard<Format>: _Cache_Internal_Base where Format: _Format_Standard {
+public struct _Cache_Standard<Format>: _Cache_Internal where Format: _Format_Standard {
     public typealias Style = _Style_Standard<Format>
     public typealias Value = Format.FormatInput
     
@@ -90,6 +85,7 @@ public struct _Cache_Standard<Format>: _Cache_Internal_Base where Format: _Forma
     // MARK: Transformations
     //=------------------------------------------------------------------------=
     
+    #warning("DRY......................................")
     @inlinable mutating public func merge(_ style: Style) {
         //=--------------------------------------=
         // Similar
