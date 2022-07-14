@@ -14,7 +14,8 @@ import Foundation
 // MARK: * Style
 //*============================================================================*
 
-public protocol _Style: DiffableTextStyle where Cache: _Cache, Value: NumberTextValue { }
+#warning("Make it a NullableTextStyle...")
+public protocol _Style: DiffableTextStyle where Cache: _Cache, Cache.Style == Self, Value: NumberTextValue { }
 
 //*============================================================================*
 // MARK: * Style x Internal x Base

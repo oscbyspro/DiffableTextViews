@@ -15,7 +15,7 @@
 ///
 /// Use it to take ownership of a style's cache.
 ///
-@usableFromInline struct Isolated<Style: DiffableTextStyle>: WrapperTextStyle {
+@usableFromInline struct Isolated<Style: DiffableTextStyle>: DiffableTextStyleWrapper {
     public typealias Value = Style.Value
     
     //=------------------------------------------------------------------------=
@@ -97,9 +97,9 @@
     }
 }
 
-//=----------------------------------------------------------------------------=
-// MARK: + Style
-//=----------------------------------------------------------------------------=
+//*============================================================================*
+// MARK: * Isolated x Style
+//*============================================================================*
 
 extension DiffableTextStyle {
 

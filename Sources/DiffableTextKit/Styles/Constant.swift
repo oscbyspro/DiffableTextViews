@@ -17,7 +17,7 @@ import Foundation
 ///
 /// Use this style to prevent changes via the environment, for example.
 ///
-@usableFromInline struct Constant<Style: DiffableTextStyle>: WrapperTextStyle {
+@usableFromInline struct Constant<Style: DiffableTextStyle>: DiffableTextStyleWrapper {
     public typealias Cache = Style.Cache
     public typealias Value = Style.Value
     
@@ -44,9 +44,9 @@ import Foundation
     public func locale(_ locale: Locale) -> Self { self }
 }
 
-//=----------------------------------------------------------------------------=
-// MARK: + Style
-//=----------------------------------------------------------------------------=
+//*============================================================================*
+// MARK: * Constant x Style
+//*============================================================================*
 
 extension DiffableTextStyle {
 

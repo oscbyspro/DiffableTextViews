@@ -15,7 +15,7 @@
 ///
 /// Use this style to optimize the comparison on view update, for example.
 ///
-@usableFromInline struct Equals<Style: DiffableTextStyle, Proxy: Equatable>: WrapperTextStyle {
+@usableFromInline struct Equals<Style: DiffableTextStyle, Proxy: Equatable>: DiffableTextStyleWrapper {
     public typealias Cache = Style.Cache
     public typealias Value = Style.Value
     
@@ -46,9 +46,9 @@
     }
 }
 
-//=----------------------------------------------------------------------------=
-// MARK: + Style
-//=----------------------------------------------------------------------------=
+//*============================================================================*
+// MARK: * Equals x Style
+//*============================================================================*
 
 extension DiffableTextStyle {
     

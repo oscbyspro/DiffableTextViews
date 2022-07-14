@@ -39,6 +39,14 @@ _Internal_Style_Precision {
     @inlinable init(code: String, locale: Locale) {
         self.code = code; self.locale = locale
     }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Utilities
+    //=------------------------------------------------------------------------=
+    
+    @inlinable public func optional(_ proposal: Proposal, with cache: inout Cache) throws -> Commit<Value?> {
+        fatalError()
+    }
 }
 
 //=----------------------------------------------------------------------------=

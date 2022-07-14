@@ -8,17 +8,16 @@
 //=----------------------------------------------------------------------------=
 
 import DiffableTextKit
-import Foundation
 
 //*============================================================================*
-// MARK: * Style x Standard
+// MARK: * Optional
 //*============================================================================*
 
 #warning("Conformances........................................")
-public struct _Style_Optional<Style: _Style>: WrapperTextStyle {
+public struct _Optional<Style: _Style>: DiffableTextStyleWrapper {
     public typealias Cache = Style.Cache
     public typealias Value = Style.Value?
-
+    
     //=------------------------------------------------------------------------=
     // MARK: State
     //=------------------------------------------------------------------------=
@@ -29,16 +28,17 @@ public struct _Style_Optional<Style: _Style>: WrapperTextStyle {
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable init(base: Style) {
-        self.style = base
+    @inlinable @inline(__always)
+    init(_ style: Style) {
+        self.style  = style
     }
     
     //=------------------------------------------------------------------------=
     // MARK: Utilities
     //=------------------------------------------------------------------------=
     
-    #warning("TODO...............")
-    @inlinable public func resolve(_ proposal: Proposal, with cache: inout Cache) throws -> Commit<Value> {
-        fatalError()
+    @inlinable @inline(__always)
+    public func resolve(_ proposal: Proposal, with cache: inout Style.Cache) throws -> Commit<Style.Value?> {
+        try cache.optional(proposal)
     }
 }

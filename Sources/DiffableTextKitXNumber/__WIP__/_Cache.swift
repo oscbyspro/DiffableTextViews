@@ -14,7 +14,14 @@ import DiffableTextKit
 // MARK: * Cache
 //*============================================================================*
 
-public protocol _Cache: DiffableTextCache where Style: _Style, Value: NumberTextValue { }
+public protocol _Cache: DiffableTextCache where Style: _Style, Value: NumberTextValue {
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Utilities
+    //=------------------------------------------------------------------------=
+    
+    @inlinable func optional(_ proposal: Proposal) throws -> Commit<Value?>
+}
 
 //*============================================================================*
 // MARK: * Cache x Internal
@@ -29,7 +36,8 @@ public protocol _Cache: DiffableTextCache where Style: _Style, Value: NumberText
     
     @inlinable var format: Format { get }
     
-    @inlinable var bounds:    NumberTextBounds<Value>    { get }
+    @inlinable var bounds: NumberTextBounds<Value> { get }
+    
     @inlinable var precision: NumberTextPrecision<Value> { get }
     
     //=------------------------------------------------------------------------=
@@ -38,9 +46,9 @@ public protocol _Cache: DiffableTextCache where Style: _Style, Value: NumberText
         
     @inlinable func value(_ number: Number) throws -> Value
     
-    @inlinable func number(_ snapshot: Snapshot, as kind: (some NumberTextKind).Type) throws -> Number?
+    @inlinable func number(_ snapshot: Snapshot) throws -> Number
     
-    @inlinable func number(_ proposal: Proposal, as kind: (some NumberTextKind).Type) throws -> Number?
+    @inlinable func number(_ proposal: Proposal) throws -> Number
     
     //=------------------------------------------------------------------------=
     // MARK: Utilities
@@ -81,8 +89,8 @@ extension _Cache_Internal {
         let format = format.precision(precision.active())
         
         let formatted = format.format(value)
-        let parseable = snapshot(formatted)
-        var number = try! number(parseable, as: Value.self)!
+        let parseable =  snapshot(formatted)
+        var number = try!  number(parseable)
         //=--------------------------------------=
         // Autocorrect
         //=--------------------------------------=
@@ -103,7 +111,7 @@ extension _Cache_Internal {
     //=------------------------------------------------------------------------=
     
     @inlinable public func resolve(_ proposal: Proposal) throws -> Commit<Value> {
-        try resolve(number(proposal, as: Value.self)!)
+        try resolve(number(proposal))
     }
     
     /// The resolve method body, also used by styles such as: optional.
@@ -143,8 +151,7 @@ extension _Cache_Internal {
 // MARK: * Cache x Internal x Base
 //*============================================================================*
 
-@usableFromInline protocol _Cache_Internal_Base: _Cache_Internal
-where Style: _Style_Internal_Base {
+@usableFromInline protocol _Cache_Internal_Base: _Cache_Internal where Style: _Style_Internal_Base {
     
     //=------------------------------------------------------------------------=
     // MARK: State
@@ -186,12 +193,12 @@ extension _Cache_Internal_Base {
         try adapter.parse(number)
     }
     
-    @inlinable func number(_ snapshot: Snapshot, as kind: (some NumberTextKind).Type) throws -> Number? {
-        try interpreter.components.number(in: snapshot, as: kind)
+    @inlinable func number(_ snapshot: Snapshot) throws -> Number {
+        try interpreter.components.number(in: snapshot, as: Value.self)!
     }
     
-    @inlinable func number(_ proposal: Proposal, as kind: (some NumberTextKind).Type) throws -> Number? {
-        try interpreter.number(proposal, as: kind)
+    @inlinable func number(_ proposal: Proposal) throws -> Number {
+        try interpreter.number(proposal, as: Value.self)!
     }
     
     //=------------------------------------------------------------------------=
@@ -221,5 +228,15 @@ extension _Cache_Internal_Base {
         // Return
         //=--------------------------------------=
         return characters
+    }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Utilities
+    //=------------------------------------------------------------------------=
+    
+    #warning("WIP...............................................................")
+    @inlinable public func optional(_ proposal: Proposal) throws -> Commit<Value?> {
+        let optional = try interpreter.number(proposal, as: Value?.self)
+        return try optional.map({ try Commit(resolve($0)) }) ?? Commit()
     }
 }
