@@ -10,40 +10,7 @@
 import DiffableTextKit
 import Foundation
 
-//*============================================================================*
-// MARK: * Style x Currency
-//*============================================================================*
-
-public struct _Style_Currency<Format: _Format_Currency>: _Style_Internal {
-    
-    public typealias Value = Format.FormatInput
-    public typealias Cache = _Cache_Currency<Format>
-    
-    //=------------------------------------------------------------------------=
-    // MARK: State
-    //=------------------------------------------------------------------------=
-    
-    @usableFromInline var code: String
-    @usableFromInline var locale: Locale
-    
-    @usableFromInline var bounds: NumberTextBounds<Value>?
-    @usableFromInline var precision: NumberTextPrecision<Value>?
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Initializers
-    //=------------------------------------------------------------------------=
-    
-    @inlinable init(code: String, locale: Locale) {
-        self.code = code; self.locale = locale
-    }
-}
-
-//=----------------------------------------------------------------------------=
-// MARK: + Conformances
-//=----------------------------------------------------------------------------=
-
-extension _Style_Currency: _Style_Integer, _Style_Integer_Internal where Value: NumberTextValueXInteger { }
-
+#warning("Rename as Currency_Cache.")
 //*============================================================================*
 // MARK: * Cache x Currency
 //*============================================================================*
@@ -68,13 +35,13 @@ public struct _Cache_Currency<Format>: _Cache_Internal where Format: _Format_Cur
     
     @inlinable public init(_ style: Style) {
         self.style = style
-        self.adapter = .init(code: style.code, locale: style.locale)
+        self.adapter = .init(code: style.key.code, locale: style.key.locale)
         //=--------------------------------------=
         // Formatter
         //=--------------------------------------=
         let formatter = NumberFormatter()
-        formatter.locale = style.locale
-        formatter.currencyCode = style.code
+        formatter.locale = style.key.locale
+        formatter.currencyCode = style.key.code
         //=--------------------------------------=
         // Formatter x None
         //=--------------------------------------=
@@ -90,23 +57,6 @@ public struct _Cache_Currency<Format>: _Cache_Internal where Format: _Format_Cur
         //=--------------------------------------=
         formatter.maximumFractionDigits = .zero
         self.adjustments = Adjustments(formatter, interpreter.components)
-    }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Transformations
-    //=------------------------------------------------------------------------=
-    
-    #warning("DRY......................................")
-    @inlinable public mutating func merge(_ style: Style) {
-        //=--------------------------------------=
-        // Similar
-        //=--------------------------------------=
-        if  self.style.locale == style.locale, self.style.code == style.code {
-            self.style = style
-        //=--------------------------------------=
-        // Unique
-        //=--------------------------------------=
-        } else { self = Self(style) }
     }
     
     //=------------------------------------------------------------------------=

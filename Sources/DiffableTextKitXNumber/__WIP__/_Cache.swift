@@ -9,7 +9,6 @@
 
 import DiffableTextKit
 
-#warning("This can be removed, don't need public protocol...")
 //*============================================================================*
 // MARK: * Cache
 //*============================================================================*
@@ -34,7 +33,7 @@ public protocol _Cache: DiffableTextCache where Style: _Style, Value: NumberText
     // MARK: Accessors
     //=------------------------------------------------------------------------=
     
-    @inlinable var style: Style { get }
+    @inlinable var style: Style { get set }
     
     @inlinable var adapter: _Adapter<Format> { get }
     
@@ -57,6 +56,33 @@ public protocol _Cache: DiffableTextCache where Style: _Style, Value: NumberText
     @inlinable func snapshot(_ characters: String) -> Snapshot
 
     @inlinable func characters(_ value: Value, _ number: Number, _ format: Format) -> String
+}
+
+//=----------------------------------------------------------------------------=
+// MARK: + Details
+//=----------------------------------------------------------------------------=
+
+extension _Cache_Internal {
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Transformations
+    //=------------------------------------------------------------------------=
+    
+    @inlinable public mutating func merge(_ style: Style) {
+        switch self.style.key == style.key {
+        case  true: self.style = style
+        case false: self = .init(style)
+        }
+    }
+        
+    //=------------------------------------------------------------------------=
+    // MARK: Utilities
+    //=------------------------------------------------------------------------=
+    
+    @inlinable public func optional(_ proposal: Proposal) throws -> Commit<Value?> {
+        let optional = try interpreter.number(proposal, as: Value?.self)
+        return try optional.map({ try Commit(resolve($0)) }) ?? Commit()
+    }
 }
 
 //=----------------------------------------------------------------------------=
@@ -128,23 +154,6 @@ extension _Cache_Internal {
     
     @inlinable func commit(_ value: Value, _ number: Number, _ format: Format) -> Commit<Value> {
         Commit(value, snapshot(characters(value, number, format)))
-    }
-}
-
-//=----------------------------------------------------------------------------=
-// MARK: + Utilities
-//=----------------------------------------------------------------------------=
-
-extension _Cache_Internal {
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Optional
-    //=------------------------------------------------------------------------=
-    
-    #warning("WIP...............................................................")
-    @inlinable public func optional(_ proposal: Proposal) throws -> Commit<Value?> {
-        let optional = try interpreter.number(proposal, as: Value?.self)
-        return try optional.map({ try Commit(resolve($0)) }) ?? Commit()
     }
 }
 

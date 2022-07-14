@@ -7,50 +7,56 @@
 // See http://www.apache.org/licenses/LICENSE-2.0 for license information.
 //=----------------------------------------------------------------------------=
 
-import DiffableTextKit
-import Foundation
-
 //*============================================================================*
-// MARK: * Style
+// MARK: * Style x Bounds
 //*============================================================================*
 
-public protocol _Style: DiffableTextStyle, _Style_Bounds, _Style_Precision where
-Cache: _Cache, Cache.Style == Self, Value: NumberTextValue { }
-
-//*============================================================================*
-// MARK: * Style x Internal
-//*============================================================================*
-
-@usableFromInline protocol _Style_Internal: _Style, _Style_Bounds_Internal, _Style_Precision_Internal {
-    associatedtype Key: Hashable
-    
-    typealias Bounds = NumberTextBounds<Value>
-    typealias Precision = NumberTextPrecision<Value>
+public protocol _Style_Bounds {
+    associatedtype Value: NumberTextValue
     
     //=------------------------------------------------------------------------=
-    // MARK: State
+    // MARK: Bounds
     //=------------------------------------------------------------------------=
     
-    @inlinable var key: Key { get set }
-    @inlinable var bounds: Bounds? { get set }
-    @inlinable var precision: Precision? { get set }
+    @inlinable func bounds(_ limits: ClosedRange<Value>) -> Self
+    
+    @inlinable func bounds(_ limits: PartialRangeFrom<Value>) -> Self
+    
+    @inlinable func bounds(_ limits: PartialRangeThrough<Value>) -> Self
+}
+
+//*============================================================================*
+// MARK: * Style x Bounds x Internal
+//*============================================================================*
+
+@usableFromInline protocol _Style_Bounds_Internal: _Style_Bounds {
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Transformations
+    //=------------------------------------------------------------------------=
+    
+    @inlinable func bounds(_ bounds: NumberTextBounds<Value>) -> Self
 }
 
 //=----------------------------------------------------------------------------=
 // MARK: + Details
 //=----------------------------------------------------------------------------=
 
-extension _Style_Internal {
+extension _Style_Bounds_Internal {
     
     //=------------------------------------------------------------------------=
-    // MARK: Transformations
+    // MARK: Limits
     //=------------------------------------------------------------------------=
     
-    @inlinable public func bounds(_ bounds: NumberTextBounds<Value>) -> Self {
-        var result = self; result.bounds = bounds; return result
+    @inlinable public func bounds(_ limits: ClosedRange<Value>) -> Self {
+        self.bounds(NumberTextBounds(limits))
     }
     
-    @inlinable public func precision(_ precision: NumberTextPrecision<Value>) -> Self {
-        var result = self; result.precision = precision; return result
+    @inlinable public func bounds(_ limits: PartialRangeFrom<Value>) -> Self {
+        self.bounds(NumberTextBounds(limits))
+    }
+    
+    @inlinable public func bounds(_ limits: PartialRangeThrough<Value>) -> Self {
+        self.bounds(NumberTextBounds(limits))
     }
 }

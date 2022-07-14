@@ -9,12 +9,15 @@
 
 import DiffableTextKit
 
+#warning("Remove")
+#warning("Remove")
+#warning("Remove")
 //*============================================================================*
 // MARK: * Optional
 //*============================================================================*
 
-#warning("Conformances........................................")
-public struct _Optional<Style: _Style>: DiffableTextStyleWrapper {
+#warning("Conformances..............................................")
+public struct _Style_Optional<Style: _Style>: DiffableTextStyleWrapper {
     public typealias Cache = Style.Cache
     public typealias Value = Style.Value?
     
@@ -42,3 +45,5 @@ public struct _Optional<Style: _Style>: DiffableTextStyleWrapper {
         try cache.optional(proposal)
     }
 }
+
+//extension _Optional: _Style_Integer, _Style_Integer_Internal where Value: NumberTextValueXInteger { }

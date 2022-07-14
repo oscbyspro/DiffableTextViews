@@ -11,7 +11,7 @@
 // MARK: * Style x Integer
 //*============================================================================*
 
-public protocol _Style_Integer: _Style where Value: NumberTextValueXInteger {
+public protocol _Style_Integer {
         
     //=------------------------------------------------------------------------=
     // MARK: Precision
@@ -31,7 +31,7 @@ public protocol _Style_Integer: _Style where Value: NumberTextValueXInteger {
 // MARK: * Style x Precision x Integer x Internal
 //*============================================================================*
 
-@usableFromInline protocol _Style_Integer_Internal: _Style_Integer, _Style_Internal { }
+@usableFromInline protocol _Style_Integer_Internal: _Style_Integer, _Style_Precision_Internal { }
 
 //=----------------------------------------------------------------------------=
 // MARK: + Precision
@@ -44,7 +44,7 @@ extension _Style_Integer_Internal {
     //=------------------------------------------------------------------------=
     
     @inlinable public func precision(_ length: Int) -> Self {
-        self.precision(Precision(integer: length...length))
+        self.precision(NumberTextPrecision(integer: length...length))
     }
 
     //=------------------------------------------------------------------------=
@@ -53,6 +53,6 @@ extension _Style_Integer_Internal {
     
     @inlinable public func precision<I>(_ limits: I) -> Self
     where I: RangeExpression, I.Bound == Int {
-        self.precision(Precision(integer: limits))
+        self.precision(NumberTextPrecision(integer: limits))
     }
 }
