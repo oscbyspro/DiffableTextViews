@@ -11,6 +11,46 @@ import DiffableTextKit
 import Foundation
 
 //*============================================================================*
+// MARK: * Style x Currency
+//*============================================================================*
+
+public struct _Style_Currency<Format: _Format_Currency>:
+_Style_Internal_Base,
+_Internal_Style_Bounds,
+_Internal_Style_Precision {
+    
+    public typealias Value = Format.FormatInput
+    public typealias Cache = _Cache_Currency<Format>
+    
+    //=------------------------------------------------------------------------=
+    // MARK: State
+    //=------------------------------------------------------------------------=
+    
+    @usableFromInline var code: String
+    @usableFromInline var locale: Locale
+    
+    @usableFromInline var bounds: NumberTextBounds<Value>?
+    @usableFromInline var precision: NumberTextPrecision<Value>?
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Initializers
+    //=------------------------------------------------------------------------=
+    
+    @inlinable init(code: String, locale: Locale) {
+        self.code = code; self.locale = locale
+    }
+}
+
+//=----------------------------------------------------------------------------=
+// MARK: + Conformances
+//=----------------------------------------------------------------------------=
+
+extension _Style_Currency:
+_Style_Precision_Integer,
+_Internal_Style_Precision_Integer
+where Value: NumberTextValueXInteger { }
+
+//*============================================================================*
 // MARK: * Cache x Currency
 //*============================================================================*
 
@@ -34,13 +74,13 @@ public struct _Cache_Currency<Format>: _Cache_Internal_Base where Format: _Forma
     
     @inlinable public init(_ style: Style) {
         self.style = style
-        self.adapter = .init(code: style.currencyCode, locale: style.locale)
+        self.adapter = .init(code: style.code, locale: style.locale)
         //=--------------------------------------=
         // Formatter
         //=--------------------------------------=
         let formatter = NumberFormatter()
         formatter.locale = style.locale
-        formatter.currencyCode = style.currencyCode
+        formatter.currencyCode = style.code
         //=--------------------------------------=
         // Formatter x None
         //=--------------------------------------=
@@ -64,7 +104,15 @@ public struct _Cache_Currency<Format>: _Cache_Internal_Base where Format: _Forma
     
     #warning("TODO")
     @inlinable public mutating func merge(_ style: _Style_Currency<Format>) {
-        fatalError()
+        //=--------------------------------------=
+        // Similar
+        //=--------------------------------------=
+        if  self.style.locale == style.locale, self.style.code == style.code {
+            self.style = style
+        //=--------------------------------------=
+        // Unique
+        //=--------------------------------------=
+        } else { self = Self(style) }
     }
     
     //=------------------------------------------------------------------------=
@@ -122,7 +170,6 @@ public struct _Cache_Currency<Format>: _Cache_Internal_Base where Format: _Forma
             }
         }
         
-        #warning("Move this to outer scope.")
         //=--------------------------------------------------------------------=
         // MARK: Utilities
         //=--------------------------------------------------------------------=

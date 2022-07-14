@@ -11,41 +11,34 @@ import DiffableTextKit
 import Foundation
 
 //*============================================================================*
-// MARK: * Style x Currency
+// MARK: * Style x Standard
 //*============================================================================*
 
-public struct _Style_Currency<Format: _Format_Currency>:
-_Style_Internal_Base,
-_Internal_Style_Bounds,
-_Internal_Style_Precision {
-    
-    public typealias Value = Format.FormatInput
-    public typealias Cache = _Cache_Currency<Format>
-    
+#warning("Conformances........................................")
+public struct _Style_Optional<Style: _Style>: WrapperTextStyle {
+    public typealias Cache = Style.Cache
+    public typealias Value = Style.Value?
+
     //=------------------------------------------------------------------------=
     // MARK: State
     //=------------------------------------------------------------------------=
     
-    @usableFromInline var locale: Locale
-    @usableFromInline var currencyCode: String
-    
-    @usableFromInline var bounds: NumberTextBounds<Value>?
-    @usableFromInline var precision: NumberTextPrecision<Value>?
+    public var style: Style
     
     //=------------------------------------------------------------------------=
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable init(code: String, locale: Locale) {
-        self.locale = locale; self.currencyCode = code
+    @inlinable init(base: Style) {
+        self.style = base
+    }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Utilities
+    //=------------------------------------------------------------------------=
+    
+    #warning("TODO...............")
+    @inlinable public func resolve(_ proposal: Proposal, with cache: inout Cache) throws -> Commit<Value> {
+        fatalError()
     }
 }
-
-//=----------------------------------------------------------------------------=
-// MARK: + Conformances
-//=----------------------------------------------------------------------------=
-
-extension _Style_Currency:
-_Style_Precision_Integer,
-_Internal_Style_Precision_Integer
-where Value: NumberTextValueXInteger { }

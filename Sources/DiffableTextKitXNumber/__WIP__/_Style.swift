@@ -26,9 +26,6 @@ public protocol _Style: DiffableTextStyle where Cache: _Cache, Value: NumberText
     // MARK: State
     //=------------------------------------------------------------------------=
     
-    @inlinable var bounds: NumberTextBounds<Value>? { get set }
-    
+    @inlinable var bounds:    NumberTextBounds<Value>?    { get set }
     @inlinable var precision: NumberTextPrecision<Value>? { get set }
 }
-
-#warning("TODO")

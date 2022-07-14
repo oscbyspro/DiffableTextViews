@@ -14,7 +14,7 @@ import DiffableTextKit
 // MARK: * Cache
 //*============================================================================*
 
-public protocol _Cache: DiffableTextCache where Value: NumberTextValue { }
+public protocol _Cache: DiffableTextCache where Style: _Style, Value: NumberTextValue { }
 
 //*============================================================================*
 // MARK: * Cache x Internal
@@ -143,8 +143,8 @@ extension _Cache_Internal {
 // MARK: * Cache x Internal x Base
 //*============================================================================*
 
-@usableFromInline protocol _Cache_Internal_Base: _Cache_Internal {
-    associatedtype Style: _Style_Internal_Base where Style.Value == Value
+@usableFromInline protocol _Cache_Internal_Base: _Cache_Internal
+where Style: _Style_Internal_Base {
     
     //=------------------------------------------------------------------------=
     // MARK: State

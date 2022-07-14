@@ -33,7 +33,7 @@ public protocol WrapperTextStyle: DiffableTextStyle {
 //=----------------------------------------------------------------------------=
 
 extension WrapperTextStyle {
-
+    
     //=------------------------------------------------------------------------=
     // MARK: Transformations
     //=------------------------------------------------------------------------=
@@ -50,45 +50,81 @@ extension WrapperTextStyle {
     //=------------------------------------------------------------------------=
     
     @inlinable @inline(__always)
-    public func cache() -> Cache
-    where Cache == Style.Cache {
+    public static func == (lhs: Self, rhs: Self) -> Bool {
+        lhs.style == rhs.style
+    }
+}
+
+//=----------------------------------------------------------------------------=
+// MARK: + Style.Cache
+//=----------------------------------------------------------------------------=
+
+public extension WrapperTextStyle where Cache == Style.Cache {
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Utilities
+    //=------------------------------------------------------------------------=
+    
+    @inlinable @inline(__always)
+    func cache() -> Cache {
         style.cache()
     }
     
     @inlinable @inline(__always)
-    public func update(_ cache: inout Cache)
-    where Cache == Style.Cache {
+    func update(_ cache: inout Cache) {
         style.update(&cache)
     }
-    
+}
+
+//=----------------------------------------------------------------------------=
+// MARK: + Style.Cache, Style.Value
+//=----------------------------------------------------------------------------=
+
+public extension WrapperTextStyle where Cache == Style.Cache, Value == Style.Value {
+
     //=------------------------------------------------------------------------=
     // MARK: Utilities
     //=------------------------------------------------------------------------=
     
     @inlinable @inline(__always)
-    public func format(_ value: Value, with cache: inout Cache) -> String
-    where Cache == Style.Cache, Value == Style.Value {
+    func format(_ value: Value, with cache: inout Cache) -> String {
         style.format(value, with: &cache)
     }
     
     @inlinable @inline(__always)
-    public func interpret(_ value: Value, with cache: inout Cache) -> Commit<Value>
-    where Cache == Style.Cache, Value == Style.Value {
+    func interpret(_ value: Value, with cache: inout Cache) -> Commit<Value> {
         style.interpret(value, with: &cache)
     }
     
     @inlinable @inline(__always)
-    public func resolve(_ proposal: Proposal, with cache: inout Cache) throws -> Commit<Value>
-    where Cache == Style.Cache, Value == Style.Value {
+    func resolve(_ proposal: Proposal, with cache: inout Cache) throws -> Commit<Value> {
         try style.resolve(proposal, with: &cache)
     }
-    
+}
+
+//=----------------------------------------------------------------------------=
+// MARK: + Style.Cache, Style.Value?
+//=----------------------------------------------------------------------------=
+
+public extension WrapperTextStyle where Cache == Style.Cache, Value == Style.Value? {
+
     //=------------------------------------------------------------------------=
     // MARK: Utilities
     //=------------------------------------------------------------------------=
     
     @inlinable @inline(__always)
-    public static func == (lhs: Self, rhs: Self) -> Bool {
-        lhs.style == rhs.style
+    func format(_ value: Value, with cache: inout Cache) -> String {
+        value.map({ style.format($0, with: &cache) }) ?? String()
+    }
+    
+    @inlinable @inline(__always)
+    func interpret(_ value: Value, with cache: inout Cache) -> Commit<Value> {
+        value.map({ Commit(style.interpret($0, with: &cache)) }) ?? Commit()
+    }
+    
+    @inlinable @inline(__always)
+    func resolve(_ proposal: Proposal, with cache: inout Cache) throws -> Commit<Value> {
+        let nonoptional = try style.resolve(proposal, with: &cache)
+        return !nonoptional.snapshot.isEmpty ?  Commit(nonoptional) : Commit()
     }
 }
