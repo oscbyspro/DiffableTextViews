@@ -116,31 +116,16 @@ extension DiffableTextStyle where Cache == Void {
     // MARK: Utilities
     //=------------------------------------------------------------------------=
     
-    /// Returns formatted text.
-    ///
-    /// This method is called in response to changes upstream while the view is idle.
-    ///
     @inlinable @inline(__always)
     public func format(_ value: Value) -> String {
         var cache: Void = (); return format(value, with: &cache)
     }
     
-    /// Returns a value and a snapshot describing it.
-    ///
-    /// This method is called in response to changes upstream while the view is in focus.
-    ///
     @inlinable @inline(__always)
     public func interpret(_ value: Value) -> Commit<Value> {
         var cache: Void = (); return interpret(value, with: &cache)
     }
     
-    /// Returns a value and a snapshot describing it.
-    ///
-    /// This method is called in response to user input.
-    ///
-    /// - Thrown errors result in input cancellation.
-    /// - Thrown errors have their descriptions printed in DEBUG mode.
-    ///
     @inlinable @inline(__always)
     public func resolve(_ proposal: Proposal) throws -> Commit<Value> {
         var cache: Void = (); return try resolve(proposal, with: &cache)

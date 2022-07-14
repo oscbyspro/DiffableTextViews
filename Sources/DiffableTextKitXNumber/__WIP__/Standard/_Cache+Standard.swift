@@ -14,7 +14,7 @@ import Foundation
 // MARK: * Cache x Standard
 //*============================================================================*
 
-public struct _Cache_Standard<Format>: _Cache_Internal_Base where Format: _Format {
+public struct _Cache_Standard<Format>: _Cache_Internal_Base where Format: _Format_Standard {
     public typealias Style = _Style_Standard<Format>
     public typealias Value = Format.FormatInput
     
@@ -23,6 +23,7 @@ public struct _Cache_Standard<Format>: _Cache_Internal_Base where Format: _Forma
     //=------------------------------------------------------------------------=
     
     @usableFromInline var style: Style
+    @usableFromInline var adapter: _Adapter<Format>
     @usableFromInline let interpreter: NumberTextReader
     @usableFromInline let preferences: Preferences<Value>
     
@@ -30,8 +31,9 @@ public struct _Cache_Standard<Format>: _Cache_Internal_Base where Format: _Forma
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable init(_ style: Style) {
+    @inlinable public init(_ style: Style) {
         self.style = style
+        self.adapter = .init(locale: style.locale)
         self.preferences = .standard()
         //=--------------------------------------=
         // Formatter
@@ -43,5 +45,14 @@ public struct _Cache_Standard<Format>: _Cache_Internal_Base where Format: _Forma
         //=--------------------------------------=
         assert(formatter.numberStyle == .none)
         self.interpreter = .standard(formatter)
+    }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Transformations
+    //=------------------------------------------------------------------------=
+    
+    #warning("TODO")
+    @inlinable public func merge(_ style: Style) {
+        fatalError()
     }
 }

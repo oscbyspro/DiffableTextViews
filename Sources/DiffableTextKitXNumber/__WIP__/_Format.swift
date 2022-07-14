@@ -68,18 +68,24 @@ extension _Format {
 }
 
 //*============================================================================*
-// MARK: * Format x Number
+// MARK: * Format x Standard
 //*============================================================================*
 
-public protocol _Format_Number: _Format
+public protocol _Format_Standard: _Format
 where _Sign == NFSC.SignDisplayStrategy {
-
+    
     //=------------------------------------------------------------------------=
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
     @inlinable init(locale: Locale)
 }
+
+//*============================================================================*
+// MARK: * Format x Number
+//*============================================================================*
+
+public protocol _Format_Number: _Format_Standard { }
 
 //*============================================================================*
 // MARK: * Format x Currency
@@ -105,15 +111,7 @@ where _Sign == CFSC.SignDisplayStrategy {
 // MARK: * Format x Percent
 //*============================================================================*
 
-public protocol _Format_Percent: _Format
-where _Sign == NFSC.SignDisplayStrategy {
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Initializers
-    //=------------------------------------------------------------------------=
-    
-    @inlinable init(locale: Locale)
-}
+public protocol _Format_Percent: _Format_Standard { }
 
 //*============================================================================*
 // MARK: * Format x Branchable(s)

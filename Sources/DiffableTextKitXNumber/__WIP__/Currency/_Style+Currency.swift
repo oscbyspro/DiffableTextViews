@@ -14,11 +14,6 @@ import Foundation
 // MARK: * Style x Currency
 //*============================================================================*
 
-extension _Style_Currency:
-_Style_Precision_Integer,
-_Internal_Style_Precision_Integer
-where Value: NumberTextValueXInteger { }
-
 public struct _Style_Currency<Format: _Format_Currency>:
 _Style_Internal_Base,
 _Internal_Style_Bounds,
@@ -44,32 +39,13 @@ _Internal_Style_Precision {
     @inlinable init(code: String, locale: Locale) {
         self.locale = locale; self.currencyCode = code
     }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Utilities
-    //=------------------------------------------------------------------------=
-    
-    @inlinable public func cache() -> Cache {
-        fatalError()
-    }
-    
-    @inlinable public func update(_ cache: inout Cache) {
-        fatalError()
-    }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Utilities
-    //=------------------------------------------------------------------------=
-    
-    @inlinable public func format(_ value: Value, with cache: inout Cache) -> String {
-        fatalError()
-    }
-    
-    @inlinable public func interpret(_ value: Value, with cache: inout Cache) -> Commit<Value> {
-        fatalError()
-    }
-    
-    @inlinable public func resolve(_ proposal: Proposal, with cache: inout Cache) throws -> Commit<Value> {
-        fatalError()
-    }
 }
+
+//=----------------------------------------------------------------------------=
+// MARK: + Conformances
+//=----------------------------------------------------------------------------=
+
+extension _Style_Currency:
+_Style_Precision_Integer,
+_Internal_Style_Precision_Integer
+where Value: NumberTextValueXInteger { }

@@ -9,23 +9,12 @@
 
 import DiffableTextKit
 
+#warning("This can be removed, don't need public protocol...")
 //*============================================================================*
 // MARK: * Cache
 //*============================================================================*
 
-public protocol _Cache {
-    associatedtype Value: NumberTextValue
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Utilities
-    //=------------------------------------------------------------------------=
-    
-    @inlinable func format(_ value: Value) -> String
-
-    @inlinable func interpret(_ value: Value) -> Commit<Value>
-
-    @inlinable func resolve(_ proposal: Proposal) throws -> Commit<Value>
-}
+public protocol _Cache: DiffableTextCache where Value: NumberTextValue { }
 
 //*============================================================================*
 // MARK: * Cache x Internal
@@ -35,7 +24,7 @@ public protocol _Cache {
     associatedtype Format: _Format where Format.FormatInput == Value
     
     //=------------------------------------------------------------------------=
-    // MARK: State
+    // MARK: Accessors
     //=------------------------------------------------------------------------=
     
     @inlinable var format: Format { get }
@@ -150,7 +139,6 @@ extension _Cache_Internal {
     }
 }
 
-
 //*============================================================================*
 // MARK: * Cache x Internal x Base
 //*============================================================================*
@@ -163,11 +151,8 @@ extension _Cache_Internal {
     //=------------------------------------------------------------------------=
     
     @inlinable var style: Style { get }
-    
-    #warning("TODO.............-....................")
-    // @inlinable var adapter: Adapter<Format> { get }
-    
-    @inlinable var interpreter: NumberTextReader   { get }
+    @inlinable var adapter: _Adapter<Format> { get }
+    @inlinable var interpreter: NumberTextReader { get }
     @inlinable var preferences: Preferences<Value> { get }
 }
 
@@ -181,9 +166,8 @@ extension _Cache_Internal_Base {
     // MARK: Accessors
     //=------------------------------------------------------------------------=
     
-    #warning("TODO")
     @inlinable var format: Format {
-        fatalError()
+        adapter.format
     }
     
     @inlinable var bounds: NumberTextBounds<Value> {
@@ -198,10 +182,8 @@ extension _Cache_Internal_Base {
     // MARK: Utilities
     //=------------------------------------------------------------------------=
     
-    #warning("TODO")
     @inlinable func value(_ number: Number) throws -> Value {
-        fatalError()
-        // try adaper.value(number)
+        try adapter.parse(number)
     }
     
     @inlinable func number(_ snapshot: Snapshot, as kind: (some NumberTextKind).Type) throws -> Number? {

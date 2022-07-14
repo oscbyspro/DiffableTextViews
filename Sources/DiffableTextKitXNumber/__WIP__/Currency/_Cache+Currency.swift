@@ -14,7 +14,7 @@ import Foundation
 // MARK: * Cache x Currency
 //*============================================================================*
 
-public struct _Cache_Currency<Format>: _Cache_Internal_Base where Format: _Format_Currency {    
+public struct _Cache_Currency<Format>: _Cache_Internal_Base where Format: _Format_Currency {
     public typealias Style = _Style_Currency<Format>
     public typealias Value = Format.FormatInput
     
@@ -23,6 +23,7 @@ public struct _Cache_Currency<Format>: _Cache_Internal_Base where Format: _Forma
     //=------------------------------------------------------------------------=
     
     @usableFromInline var style: Style
+    @usableFromInline let adapter: _Adapter<Format>
     @usableFromInline let interpreter: NumberTextReader
     @usableFromInline let preferences: Preferences<Value>
     @usableFromInline let adjustments: Adjustments?
@@ -31,8 +32,9 @@ public struct _Cache_Currency<Format>: _Cache_Internal_Base where Format: _Forma
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable init(_ style: Style) {
+    @inlinable public init(_ style: Style) {
         self.style = style
+        self.adapter = .init(code: style.currencyCode, locale: style.locale)
         //=--------------------------------------=
         // Formatter
         //=--------------------------------------=
@@ -54,6 +56,15 @@ public struct _Cache_Currency<Format>: _Cache_Internal_Base where Format: _Forma
         //=--------------------------------------=
         formatter.maximumFractionDigits = .zero
         self.adjustments = Adjustments(formatter, interpreter.components)
+    }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Transformations
+    //=------------------------------------------------------------------------=
+    
+    #warning("TODO")
+    @inlinable public mutating func merge(_ style: _Style_Currency<Format>) {
+        fatalError()
     }
     
     //=------------------------------------------------------------------------=
@@ -111,6 +122,7 @@ public struct _Cache_Currency<Format>: _Cache_Internal_Base where Format: _Forma
             }
         }
         
+        #warning("Move this to outer scope.")
         //=--------------------------------------------------------------------=
         // MARK: Utilities
         //=--------------------------------------------------------------------=
