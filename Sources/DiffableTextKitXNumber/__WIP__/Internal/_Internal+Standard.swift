@@ -60,7 +60,7 @@ extension _Internal_Style {
     //=------------------------------------------------------------------------=
     // MARK: Inactive
     //=------------------------------------------------------------------------=
-
+    
     @inlinable public func format(_ value: Input, with cache: inout Cache) -> String {
         //=--------------------------------------=
         // Limits
@@ -121,7 +121,8 @@ extension _Internal_Style {
 
     /// The resolve method body, also used by styles such as: optional.
     @inlinable func resolve(_ number: Number, with cache: inout Cache) throws -> Commit<Input> {
-        var number = number; let count = number.count()
+        let count  = number.count()
+        var number = number
         //=--------------------------------------=
         // Limits
         //=--------------------------------------=
