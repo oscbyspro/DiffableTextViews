@@ -7,52 +7,44 @@
 // See http://www.apache.org/licenses/LICENSE-2.0 for license information.
 //=----------------------------------------------------------------------------=
 
+import Foundation
+
 //*============================================================================*
-// MARK: * Style x Integer
+// MARK: * Internal x Key
 //*============================================================================*
 
-public protocol _Style_Integer {
-        
+@usableFromInline protocol _Internal_Key: _Style where Cache: _Internal_Cache {
+    
     //=------------------------------------------------------------------------=
-    // MARK: Precision
+    // MARK: State
     //=------------------------------------------------------------------------=
     
-    @inlinable func precision(_ length: Int) -> Self
-
-    //=------------------------------------------------------------------------=
-    // MARK: Precision
-    //=------------------------------------------------------------------------=
-    
-    @inlinable func precision<S>(_ limits: S) -> Self
-    where S: RangeExpression, S.Bound == Int
+    @inlinable var key: Cache.Key { get set }
 }
 
-//*============================================================================*
-// MARK: * Style x Precision x Integer x Internal
-//*============================================================================*
-
-@usableFromInline protocol _Style_Integer_Internal: _Style_Integer, _Style_Precision_Internal { }
-
 //=----------------------------------------------------------------------------=
-// MARK: + Precision
+// MARK: + Details
 //=----------------------------------------------------------------------------=
 
-extension _Style_Integer_Internal {
+extension _Internal_Key {
     
     //=------------------------------------------------------------------------=
-    // MARK: Length
+    // MARK: Transformations
     //=------------------------------------------------------------------------=
     
-    @inlinable public func precision(_ length: Int) -> Self {
-        self.precision(NumberTextPrecision(integer: length...length))
+    @inlinable public func locale(_ locale: Locale) -> Self {
+        var result = self; result.key.locale = locale; return result
     }
-
+    
     //=------------------------------------------------------------------------=
-    // MARK: Limits
+    // MARK: Utilities
     //=------------------------------------------------------------------------=
     
-    @inlinable public func precision<I>(_ limits: I) -> Self
-    where I: RangeExpression, I.Bound == Int {
-        self.precision(NumberTextPrecision(integer: limits))
+    @inlinable public func cache() -> Cache {
+        Cache(key)
+    }
+    
+    @inlinable public func update(_ cache: inout Cache) {
+        if cache.key != key { cache = self.cache() }
     }
 }

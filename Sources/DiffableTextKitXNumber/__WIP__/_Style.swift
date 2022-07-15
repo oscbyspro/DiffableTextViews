@@ -14,43 +14,68 @@ import Foundation
 // MARK: * Style
 //*============================================================================*
 
-public protocol _Style: DiffableTextStyle, _Style_Bounds, _Style_Precision where
-Cache: _Cache, Cache.Style == Self, Value: NumberTextValue { }
-
-//*============================================================================*
-// MARK: * Style x Internal
-//*============================================================================*
-
-@usableFromInline protocol _Style_Internal: _Style, _Style_Bounds_Internal, _Style_Precision_Internal {
-    associatedtype Key: Hashable
-    
-    typealias Bounds = NumberTextBounds<Value>
-    typealias Precision = NumberTextPrecision<Value>
+public protocol _Style: DiffableTextStyle where Cache: _Cache, Value: NumberTextKind {
     
     //=------------------------------------------------------------------------=
-    // MARK: State
+    // MARK: Format
+    //=------------------------------------------------------------------------=
+        
+    typealias Format = Cache.Format
+    
+    typealias Input = Format.FormatInput
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Bounds
     //=------------------------------------------------------------------------=
     
-    @inlinable var key: Key { get set }
-    @inlinable var bounds: Bounds? { get set }
-    @inlinable var precision: Precision? { get set }
+    @inlinable func bounds(_ limits: ClosedRange<Input>) -> Self
+    
+    @inlinable func bounds(_ limits: PartialRangeFrom<Input>) -> Self
+    
+    @inlinable func bounds(_ limits: PartialRangeThrough<Input>) -> Self
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Precision
+    //=------------------------------------------------------------------------=
+    
+    @inlinable func precision(integer: Int) -> Self
+    
+    @inlinable func precision(fraction: Int) -> Self
+    
+    @inlinable func precision(integer: Int, fraction: Int) -> Self
+    
+    @inlinable func precision<I>(integer: I, fraction: Int) -> Self
+    where I: RangeExpression, I.Bound == Int
+    
+    @inlinable func precision<F>(integer: Int, fraction: F) -> Self
+    where F: RangeExpression, F.Bound == Int
+    
+    @inlinable func precision<I>(integer: I) -> Self
+    where I: RangeExpression, I.Bound == Int
+    
+    @inlinable func precision<F>(fraction: F) -> Self
+    where F: RangeExpression, F.Bound == Int
+    
+    @inlinable func precision<I, F>(integer: I, fraction: F) -> Self
+    where I: RangeExpression, I.Bound == Int, F: RangeExpression, F.Bound == Int
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: + Details
+// MARK: + Details where Input: Integer
 //=----------------------------------------------------------------------------=
 
-extension _Style_Internal {
+public extension _Style where Input: NumberTextValueXInteger {
     
     //=------------------------------------------------------------------------=
-    // MARK: Transformations
+    // MARK: Precision
     //=------------------------------------------------------------------------=
     
-    @inlinable public func bounds(_ bounds: NumberTextBounds<Value>) -> Self {
-        var result = self; result.bounds = bounds; return result
+    @inlinable func precision(_ length: Int) -> Self {
+        self.precision(integer: length...length)
     }
-    
-    @inlinable public func precision(_ precision: NumberTextPrecision<Value>) -> Self {
-        var result = self; result.precision = precision; return result
+
+    @inlinable func precision<I>(_ limits: I) -> Self
+    where I: RangeExpression, I.Bound == Int {
+        self.precision(integer: limits)
     }
 }

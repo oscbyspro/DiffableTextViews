@@ -7,43 +7,46 @@
 // See http://www.apache.org/licenses/LICENSE-2.0 for license information.
 //=----------------------------------------------------------------------------=
 
-import DiffableTextKit
-
-#warning("Remove")
-#warning("Remove")
-#warning("Remove")
 //*============================================================================*
-// MARK: * Optional
+// MARK: * Internal x Bounds
 //*============================================================================*
 
-#warning("Conformances..............................................")
-public struct _Style_Optional<Style: _Style>: DiffableTextStyleWrapper {
-    public typealias Cache = Style.Cache
-    public typealias Value = Style.Value?
+@usableFromInline protocol _Internal_Bounds: _Style {
     
     //=------------------------------------------------------------------------=
     // MARK: State
     //=------------------------------------------------------------------------=
     
-    public var style: Style
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Initializers
-    //=------------------------------------------------------------------------=
-    
-    @inlinable @inline(__always)
-    init(_ style: Style) {
-        self.style  = style
-    }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Utilities
-    //=------------------------------------------------------------------------=
-    
-    @inlinable @inline(__always) public func resolve(_ proposal:
-    Proposal, with cache: inout Cache) throws -> Commit<Value> {
-        try cache.optional(proposal)
-    }
+    @inlinable var bounds: NumberTextBounds<Input>? { get set }
 }
 
-//extension _Optional: _Style_Integer, _Style_Integer_Internal where Value: NumberTextValueXInteger { }
+//=----------------------------------------------------------------------------=
+// MARK: + Details
+//=----------------------------------------------------------------------------=
+
+extension _Internal_Bounds {
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Bounds
+    //=------------------------------------------------------------------------=
+    
+    @inlinable func bounds(_ bounds: NumberTextBounds<Input>) -> Self {
+        var result = self; result.bounds = bounds; return result
+    }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Limits
+    //=------------------------------------------------------------------------=
+    
+    @inlinable public func bounds(_ limits: ClosedRange<Input>) -> Self {
+        self.bounds(NumberTextBounds(limits))
+    }
+    
+    @inlinable public func bounds(_ limits: PartialRangeFrom<Input>) -> Self {
+        self.bounds(NumberTextBounds(limits))
+    }
+    
+    @inlinable public func bounds(_ limits: PartialRangeThrough<Input>) -> Self {
+        self.bounds(NumberTextBounds(limits))
+    }
+}

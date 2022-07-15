@@ -9,26 +9,24 @@
 
 import Foundation
 
-#warning("Rename as Currency_Key.")
 //*============================================================================*
-// MARK: * Key x Currency
+// MARK: * Currency x Key
 //*============================================================================*
 
-@usableFromInline struct _Key_Currency: Hashable {
+@usableFromInline struct _Currency_Key: _Key {
     
     //=------------------------------------------------------------------------=
     // MARK: State
     //=------------------------------------------------------------------------=
     
-    @usableFromInline let code:   String
-    @usableFromInline let locale: Locale
+    @usableFromInline var code:   String
+    @usableFromInline var locale: Locale
     
     //=------------------------------------------------------------------------=
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable @inline(__always)
-    init(code: String, locale: Locale) {
+    @inlinable init(code: String, locale: Locale) {
         self.code = code; self.locale = locale
     }
 }

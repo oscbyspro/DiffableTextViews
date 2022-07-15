@@ -9,25 +9,23 @@
 
 import Foundation
 
-#warning("Rename as Standard_Key.")
 //*============================================================================*
-// MARK: * Key x Standard
+// MARK: * Standard x Key
 //*============================================================================*
 
-@usableFromInline struct _Key_Standard: Hashable {
+@usableFromInline struct _Standard_Key: _Key {
     
     //=------------------------------------------------------------------------=
     // MARK: State
     //=------------------------------------------------------------------------=
     
-    @usableFromInline let locale: Locale
+    @usableFromInline var locale: Locale
     
     //=------------------------------------------------------------------------=
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable @inline(__always)
-    init(locale: Locale) {
+    @inlinable init(locale: Locale) {
         self.locale = locale
     }
 }

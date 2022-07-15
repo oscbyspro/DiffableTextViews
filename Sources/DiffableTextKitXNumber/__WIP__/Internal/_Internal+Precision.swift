@@ -8,66 +8,35 @@
 //=----------------------------------------------------------------------------=
 
 import DiffableTextKit
+import Foundation
 
 //*============================================================================*
-// MARK: * Style x Precision
+// MARK: * Internal x Precision
 //*============================================================================*
 
-public protocol _Style_Precision {
-    associatedtype Value: NumberTextValue
+#warning("Conformance?")
+@usableFromInline protocol _Internal_Precision: _Style {
     
     //=------------------------------------------------------------------------=
-    // MARK: Length
+    // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable func precision(integer: Int) -> Self
-    
-    @inlinable func precision(fraction: Int) -> Self
-    
-    @inlinable func precision(integer: Int, fraction: Int) -> Self
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Mixed
-    //=------------------------------------------------------------------------=
-    
-    @inlinable func precision<I>(integer: I, fraction: Int) -> Self
-    where I: RangeExpression, I.Bound == Int
-    
-    @inlinable func precision<F>(integer: Int, fraction: F) -> Self
-    where F: RangeExpression, F.Bound == Int
-
-    //=------------------------------------------------------------------------=
-    // MARK: Limits
-    //=------------------------------------------------------------------------=
-    
-    @inlinable func precision<I>(integer: I) -> Self
-    where I: RangeExpression, I.Bound == Int
-    
-    @inlinable func precision<F>(fraction: F) -> Self
-    where F: RangeExpression, F.Bound == Int
-    
-    @inlinable func precision<I, F>(integer: I, fraction: F) -> Self
-    where I: RangeExpression, I.Bound == Int, F: RangeExpression, F.Bound == Int
+    @inlinable var precision: NumberTextPrecision<Input>? { get set }
 }
 
-//*============================================================================*
-// MARK: * Style x Precision x Internal
-//*============================================================================*
+//=----------------------------------------------------------------------------=
+// MARK: + Details
+//=----------------------------------------------------------------------------=
 
-@usableFromInline protocol _Style_Precision_Internal: _Style_Precision {
+extension _Internal_Precision {
     
     //=------------------------------------------------------------------------=
     // MARK: Transformations
     //=------------------------------------------------------------------------=
     
-    @inlinable func precision(_ precision: NumberTextPrecision<Value>) -> Self
-}
-
-//=----------------------------------------------------------------------------=
-// MARK: + Precision
-//=----------------------------------------------------------------------------=
-
-extension _Style_Precision_Internal {
+    @inlinable @inline(__always) func precision(_ precision: NumberTextPrecision<Input>) -> Self {
+        var result = self; result.precision = precision; return result
+    }
     
     //=------------------------------------------------------------------------=
     // MARK: Length

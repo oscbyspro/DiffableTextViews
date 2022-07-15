@@ -13,7 +13,7 @@ import Foundation
 // MARK: * Key
 //*============================================================================*
 
-public protocol Key {
+public protocol _Key: Equatable {
     
     //=------------------------------------------------------------------------=
     // MARK: State
@@ -21,5 +21,3 @@ public protocol Key {
     
     @inlinable var locale: Locale { get set }
 }
-
-#warning("Key needs a transform local method...")
