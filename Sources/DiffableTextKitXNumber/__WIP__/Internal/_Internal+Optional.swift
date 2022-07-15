@@ -13,8 +13,9 @@ import DiffableTextKit
 // MARK: * Internal x Optional
 //*============================================================================*
 
-@usableFromInline struct _Internal_Optional<Style>: DiffableTextStyleWrapper, _Style,
-_Internal_Bounds, _Internal_Precision where Style: _Internal_Style {
+@usableFromInline struct _Internal_Optional<Style>: DiffableTextStyleWrapper,
+_Internal_Style where Style: _Internal_Standard {
+    
     @usableFromInline typealias Value = Style.Value?
     @usableFromInline typealias Cache = Style.Cache
     

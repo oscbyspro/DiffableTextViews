@@ -15,17 +15,20 @@ import Foundation
 // MARK: * Internal x Style
 //*============================================================================*
 
-@usableFromInline protocol _Internal_Style:
-_Internal_Key,
-_Internal_Bounds,
-_Internal_Precision
-where Cache: _Internal_Cache, Value == Input { }
+@usableFromInline protocol _Internal_Standard: _Internal_Style where Value == Input {
+    
+    //=------------------------------------------------------------------------=
+    // MARK: State
+    //=------------------------------------------------------------------------=
+    
+    @inlinable var key: Cache.Key { get set }
+}
 
 //=----------------------------------------------------------------------------=
 // MARK: + Details
 //=----------------------------------------------------------------------------=
 
-extension _Internal_Style {
+extension _Internal_Standard {
     
     //=------------------------------------------------------------------------=
     // MARK: Transformations
