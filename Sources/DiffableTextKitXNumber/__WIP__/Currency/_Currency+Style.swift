@@ -31,4 +31,5 @@ public struct _Currency_Style<Format: _Format_Currency>: _Internal_Standard {
     
     @inlinable init(code: String, locale: Locale) {
         self.key = .init(code: code, locale: locale)
-    }}
+    }
+}

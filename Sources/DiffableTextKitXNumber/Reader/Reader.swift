@@ -54,21 +54,28 @@ public final class NumberTextReader {
     // MARK: Utilities
     //=------------------------------------------------------------------------=
     
+    @inlinable func number(_ snapshot: Snapshot, as kind: (some NumberTextKind).Type) throws -> Number? {
+        try .init(unformatted: snapshot.nonvirtuals, signs: components.signs.components,
+        digits: components.digits.components, separators: components.separators.components,
+        optional: kind.isOptional, unsigned: kind.isUnsigned, integer: kind.isInteger)
+    }
+    
     @inlinable func number(_ proposal: Proposal, as kind: (some NumberTextKind).Type) throws -> Number? {
         var proposal = proposal
         //=--------------------------------------=
-        // Process
+        // Proposal
         //=--------------------------------------=
         translator.translateSingleSymbol(in: &proposal.replacement)
         let sign = components.consumeSingleSign(in: &proposal.replacement)
         //=--------------------------------------=
-        // Parse
+        // Number
         //=--------------------------------------=
-        guard var number = try components.number(in:
+        guard var number = try self.number(
         proposal.merged(), as: kind) else { return nil }
+        if let sign { number.sign = sign }
         //=--------------------------------------=
-        // Commands
+        // Return
         //=--------------------------------------=
-        if let sign { number.sign = sign }; return number
+        return number
     }
 }

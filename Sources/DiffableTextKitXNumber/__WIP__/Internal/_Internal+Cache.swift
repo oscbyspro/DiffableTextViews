@@ -63,7 +63,7 @@ extension _Internal_Cache {
     }
 
     @inlinable func number(_ snapshot: Snapshot) throws -> Number {
-        try interpreter.components.number(in: snapshot, as: Input.self)!
+        try interpreter.number(snapshot, as: Input.self)!
     }
 
     @inlinable func number(_ proposal: Proposal) throws -> Number {
@@ -107,4 +107,3 @@ extension _Internal_Cache {
         Commit(value, snapshot(characters(value, number, format)))
     }
 }
-

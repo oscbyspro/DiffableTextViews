@@ -66,12 +66,6 @@ import Foundation
     // MARK: Utilities
     //=------------------------------------------------------------------------=
     
-    @inlinable func number(in  snapshot: Snapshot, as kind: (some NumberTextKind).Type) throws -> Number? {
-        try .init(unformatted: snapshot.nonvirtuals, signs: signs.components,
-        digits: digits.components, separators: separators.components,
-        optional: kind.isOptional, unsigned: kind.isUnsigned, integer: kind.isInteger)
-    }
-    
     @inlinable func consumeSingleSign(in snapshot: inout Snapshot) -> Sign? {
         guard snapshot.count == 1, let sign = signs[snapshot.first!.character] else { return nil }
         snapshot = Snapshot();  return sign
