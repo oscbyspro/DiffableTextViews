@@ -13,19 +13,21 @@ import DiffableTextKit
 // MARK: * Optional
 //*============================================================================*
 
-@usableFromInline struct _Optional<Key: _Key>:
+public struct _Optional<Key: _Key>:
 DiffableTextStyleWrapper, _Protocol, _Protocol_Internal {
-    @usableFromInline typealias Style = _Style<Key>
-    @usableFromInline typealias Input = Style.Value
+    public typealias Format = Key.Format
     
-    @usableFromInline typealias Value = Style.Value?
-    @usableFromInline typealias Cache = Style.Cache
+    public typealias Style = _Style<Key>
+    public typealias Input = Style.Value
+    
+    public typealias Value = Style.Value?
+    public typealias Cache = Style.Cache
     
     //=------------------------------------------------------------------------=
     // MARK: State
     //=------------------------------------------------------------------------=
     
-    @usableFromInline var style: Style
+    public var style: Style
 
     //=------------------------------------------------------------------------=
     // MARK: Initializers
@@ -53,15 +55,15 @@ DiffableTextStyleWrapper, _Protocol, _Protocol_Internal {
     // MARK: Utilities
     //=------------------------------------------------------------------------=
     
-    @inlinable func format(_ value: Value, with cache: inout Cache) -> String {
+    @inlinable public func format(_ value: Value, with cache: inout Cache) -> String {
         value.map({ style.format($0, with: &cache) }) ?? String()
     }
 
-    @inlinable func interpret(_ value: Value, with cache: inout Cache) -> Commit<Value> {
+    @inlinable public func interpret(_ value: Value, with cache: inout Cache) -> Commit<Value> {
         value.map({ Commit(style.interpret($0, with: &cache)) }) ?? Commit()
     }
 
-    @inlinable func resolve(_ proposal: Proposal, with cache: inout Cache) throws -> Commit<Value> {
+    @inlinable public func resolve(_ proposal: Proposal, with cache: inout Cache) throws -> Commit<Value> {
         try cache.resolve(proposal)
     }
 }

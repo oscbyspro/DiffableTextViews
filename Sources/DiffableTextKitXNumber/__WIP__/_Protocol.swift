@@ -15,7 +15,8 @@ import Foundation
 //*============================================================================*
 
 public protocol _Protocol: DiffableTextStyle where Value: NumberTextKind {
-    associatedtype Input: NumberTextValue = Value
+    associatedtype Format: _Format
+    typealias Input = Format.FormatInput
     
     //=------------------------------------------------------------------------=
     // MARK: Bounds

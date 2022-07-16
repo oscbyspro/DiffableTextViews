@@ -9,6 +9,7 @@
 
 import Foundation
 
+#warning("Key-Format relationship is reversed, maybe..........................")
 //*============================================================================*
 // MARK: * Key
 //*============================================================================*
@@ -37,7 +38,7 @@ public protocol _Key<Format>: Equatable {
 // MARK: * Key x Standard
 //*============================================================================*
 
-public struct _StandardID<Format: _Format_Standard>: _Key  {
+public struct _StandardID<Format: _Format_Standard>: _Key {
     
     //=------------------------------------------------------------------------=
     // MARK: State

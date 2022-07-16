@@ -9,6 +9,7 @@
 
 import Foundation
 
+#warning("associatedtype Key: _Key where Key.Format == Self...................")
 //*============================================================================*
 // MARK: * Format
 //*============================================================================*
@@ -87,6 +88,12 @@ where _Sign == NFSC.SignDisplayStrategy {
 public protocol _Format_Number: _Format_Standard { }
 
 //*============================================================================*
+// MARK: * Format x Percent
+//*============================================================================*
+
+public protocol _Format_Percent: _Format_Standard { }
+
+//*============================================================================*
 // MARK: * Format x Currency
 //*============================================================================*
 
@@ -101,12 +108,6 @@ where _Sign == CFSC.SignDisplayStrategy {
 }
 
 //*============================================================================*
-// MARK: * Format x Percent
-//*============================================================================*
-
-public protocol _Format_Percent: _Format_Standard { }
-
-//*============================================================================*
 // MARK: * Format x Branchable(s)
 //*============================================================================*
 
@@ -115,12 +116,12 @@ public protocol _Format_Numberable: _Format {
     where Number.FormatInput == FormatInput
 }
 
-public protocol _Format_Currencyable: _Format {
-    associatedtype Currency: _Format_Currency
-    where Currency.FormatInput == FormatInput
-}
-
 public protocol _Format_Percentable: _Format {
     associatedtype Percent: _Format_Percent
     where Percent.FormatInput == FormatInput
+}
+
+public protocol _Format_Currencyable: _Format {
+    associatedtype Currency: _Format_Currency
+    where Currency.FormatInput == FormatInput
 }
