@@ -10,7 +10,7 @@
 import Foundation
 
 //*============================================================================*
-// MARK: * _Graph
+// MARK: * Graph
 //*============================================================================*
 
 public protocol _Graph<Format>: Equatable {
@@ -31,10 +31,10 @@ public protocol _Graph<Format>: Equatable {
     //=------------------------------------------------------------------------=
     // MARK: Utilities
     //=------------------------------------------------------------------------=
-        
-    @inlinable static func format(_ key: Self) -> Format
     
     @inlinable static func cache(_ style: Style) -> Cache
+    
+    @inlinable static func format(_ graph: Self) -> Format
 }
 
 //=----------------------------------------------------------------------------=
@@ -50,7 +50,7 @@ public extension _Graph where Format: _Format_Currencyable {
 }
 
 //*============================================================================*
-// MARK: * Key x Standard
+// MARK: * Graph x Standard
 //*============================================================================*
 
 public struct _Standard<Format: _Format_Standard>: _Graph {
@@ -73,17 +73,17 @@ public struct _Standard<Format: _Format_Standard>: _Graph {
     // MARK: Utilities
     //=------------------------------------------------------------------------=
     
-    @inlinable public static func format(_ key: Self) -> Format {
-        .init(locale: key.locale)
-    }
-    
     @inlinable public static func cache(_ style: Style) -> Cache {
         .init(style)
+    }
+    
+    @inlinable public static func format(_ graph: Self) -> Format {
+        .init(locale: graph.locale)
     }
 }
 
 //*============================================================================*
-// MARK: * Key x Currency
+// MARK: * Graph x Currency
 //*============================================================================*
 
 public struct _Currency<Format: _Format_Currency>: _Graph {
@@ -108,11 +108,11 @@ public struct _Currency<Format: _Format_Currency>: _Graph {
     // MARK: Utilities
     //=------------------------------------------------------------------------=
     
-    @inlinable public static func format(_ key: Self) -> Format {
-        .init(code: key.currencyCode, locale: key.locale)
-    }
-    
     @inlinable public static func cache(_ style: Style) -> Cache {
         .init(style)
+    }
+    
+    @inlinable public static func format(_ graph: Self) -> Format {
+        .init(code: graph.currencyCode, locale: graph.locale)
     }
 }
