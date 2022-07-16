@@ -14,7 +14,7 @@ import Foundation
 // MARK: * Protocol
 //*============================================================================*
 
-public protocol _Protocol: DiffableTextStyle where Value: NumberTextKind {
+public protocol _Protocol: DiffableTextStyle where Value: _Value {
     associatedtype Graph: _Graph
     typealias Input = Graph.Input
     
@@ -58,7 +58,7 @@ public protocol _Protocol: DiffableTextStyle where Value: NumberTextKind {
 // MARK: + Details where Input: Integer
 //=----------------------------------------------------------------------------=
 
-public extension _Protocol where Input: _Value_Integer {
+public extension _Protocol where Input: _Input_Integer {
     
     //=------------------------------------------------------------------------=
     // MARK: Precision
@@ -84,8 +84,8 @@ public extension _Protocol where Input: _Value_Integer {
     // MARK: State
     //=------------------------------------------------------------------------=
     
-    @inlinable var bounds: NumberTextBounds<Input>? { get set }
-    @inlinable var precision: NumberTextPrecision<Input>? { get set }
+    @inlinable var bounds: _Bounds<Input>? { get set }
+    @inlinable var precision: _Precision<Input>? { get set }
 }
 
 //=----------------------------------------------------------------------------=
@@ -98,7 +98,7 @@ extension _Protocol_Internal {
     // MARK: Bounds
     //=------------------------------------------------------------------------=
     
-    @inlinable func bounds(_ bounds: NumberTextBounds<Input>) -> Self {
+    @inlinable func bounds(_ bounds: _Bounds<Input>) -> Self {
         var result = self; result.bounds = bounds; return result
     }
     
@@ -107,15 +107,15 @@ extension _Protocol_Internal {
     //=------------------------------------------------------------------------=
     
     @inlinable public func bounds(_ limits: ClosedRange<Input>) -> Self {
-        self.bounds(NumberTextBounds(limits))
+        self.bounds(_Bounds(limits))
     }
     
     @inlinable public func bounds(_ limits: PartialRangeFrom<Input>) -> Self {
-        self.bounds(NumberTextBounds(limits))
+        self.bounds(_Bounds(limits))
     }
     
     @inlinable public func bounds(_ limits: PartialRangeThrough<Input>) -> Self {
-        self.bounds(NumberTextBounds(limits))
+        self.bounds(_Bounds(limits))
     }
 }
 
@@ -129,7 +129,7 @@ extension _Protocol_Internal {
     // MARK: Transformations
     //=------------------------------------------------------------------------=
     
-    @inlinable @inline(__always) func precision(_ precision: NumberTextPrecision<Input>) -> Self {
+    @inlinable @inline(__always) func precision(_ precision: _Precision<Input>) -> Self {
         var result = self; result.precision = precision; return result
     }
     
@@ -138,15 +138,15 @@ extension _Protocol_Internal {
     //=------------------------------------------------------------------------=
     
     @inlinable public func precision(integer: Int) -> Self {
-        self.precision(NumberTextPrecision(integer: integer...integer))
+        self.precision(_Precision(integer: integer...integer))
     }
     
     @inlinable public func precision(fraction: Int) -> Self {
-        self.precision(NumberTextPrecision(fraction: fraction...fraction))
+        self.precision(_Precision(fraction: fraction...fraction))
     }
     
     @inlinable public func precision(integer: Int, fraction: Int) -> Self {
-        self.precision(NumberTextPrecision(integer: integer...integer, fraction: fraction...fraction))
+        self.precision(_Precision(integer: integer...integer, fraction: fraction...fraction))
     }
     
     //=------------------------------------------------------------------------=
@@ -155,12 +155,12 @@ extension _Protocol_Internal {
     
     @inlinable public func precision<I>(integer: I, fraction: Int) -> Self
     where I: RangeExpression, I.Bound == Int {
-        self.precision(NumberTextPrecision(integer: integer, fraction: fraction...fraction))
+        self.precision(_Precision(integer: integer, fraction: fraction...fraction))
     }
     
     @inlinable public func precision<F>(integer: Int, fraction: F) -> Self
     where F: RangeExpression, F.Bound == Int {
-        self.precision(NumberTextPrecision(integer: integer...integer, fraction: fraction))
+        self.precision(_Precision(integer: integer...integer, fraction: fraction))
     }
 
     //=------------------------------------------------------------------------=
@@ -169,16 +169,16 @@ extension _Protocol_Internal {
     
     @inlinable public func precision<I>(integer: I) -> Self
     where I: RangeExpression, I.Bound == Int {
-        self.precision(NumberTextPrecision(integer: integer))
+        self.precision(_Precision(integer: integer))
     }
     
     @inlinable public func precision<F>(fraction: F) -> Self
     where F: RangeExpression, F.Bound == Int {
-        self.precision(NumberTextPrecision(fraction: fraction))
+        self.precision(_Precision(fraction: fraction))
     }
     
     @inlinable public func precision<I, F>(integer: I, fraction: F) -> Self
     where I: RangeExpression, I.Bound == Int, F: RangeExpression, F.Bound == Int {
-        self.precision(NumberTextPrecision(integer: integer, fraction: fraction))
+        self.precision(_Precision(integer: integer, fraction: fraction))
     }
 }

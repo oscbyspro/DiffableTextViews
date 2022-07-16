@@ -10,13 +10,13 @@
 import Foundation
 
 //*============================================================================*
-// MARK: * Aliases
+// MARK: * Aliases x Style
 //*============================================================================*
 
-public typealias _WIP_NumberTextStyle<Kind: _Kind> = Kind.NumberTextGraph.Style
+public typealias _WIP_NumberTextStyle<Value: _Value> = Value.NumberTextGraph.Style
 
 //=----------------------------------------------------------------------------=
-// MARK: + Standard
+// MARK: + Branches
 //=----------------------------------------------------------------------------=
 
 public extension _Style where Graph.Format: _Format_Percentable {
@@ -27,14 +27,15 @@ public extension _Style where Graph.Format: _Format_Currencyable {
     typealias Currency = _Style<Graph.Currency>
 }
 
-//=----------------------------------------------------------------------------=
-// MARK: + Optional
-//=----------------------------------------------------------------------------=
+//*============================================================================*
+// MARK: * Aliases x Convenience
+//*============================================================================*
 
-public extension _Optional where Graph.Format: _Format_Percentable {
-    typealias Percent = _Optional<Graph.Percent>
-}
+public typealias _NFSC = NumberFormatStyleConfiguration
+public typealias _CFSC = CurrencyFormatStyleConfiguration
 
-public extension _Optional where Graph.Format: _Format_Currencyable {
-    typealias Currency = _Optional<Graph.Currency>
-}
+public typealias _NFSC_SignDS = _NFSC.SignDisplayStrategy
+public typealias _NFSC_SeparatorDS = _NFSC.DecimalSeparatorDisplayStrategy
+
+public typealias _CFSC_SignDS = _CFSC.SignDisplayStrategy
+public typealias _CFSC_SeparatorDS = _CFSC.DecimalSeparatorDisplayStrategy

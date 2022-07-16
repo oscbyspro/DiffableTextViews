@@ -14,18 +14,11 @@ import Foundation
 // MARK: * Format
 //*============================================================================*
 
-public protocol _Format: ParseableFormatStyle where FormatInput: NumberTextValue, FormatOutput == String {
+public protocol _Format: ParseableFormatStyle where FormatInput: _Input, FormatOutput == String {
     associatedtype NumberTextGraph: _Graph where NumberTextGraph.Format == Self
     
     associatedtype _Increment
     associatedtype _Sign: NumberTextFormatXSignRepresentable
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Types
-    //=------------------------------------------------------------------------=
-    
-    typealias NFSC = NumberFormatStyleConfiguration
-    typealias CFSC = CurrencyFormatStyleConfiguration
     
     //=------------------------------------------------------------------------=
     // MARK: State
@@ -39,9 +32,9 @@ public protocol _Format: ParseableFormatStyle where FormatInput: NumberTextValue
     
     @inlinable func sign(strategy: _Sign) -> Self
     
-    @inlinable func precision(_ precision: NFSC.Precision) -> Self
+    @inlinable func precision(_ precision: _NFSC.Precision) -> Self
     
-    @inlinable func decimalSeparator(strategy: NFSC.DecimalSeparatorDisplayStrategy) -> Self
+    @inlinable func decimalSeparator(strategy: _NFSC_SeparatorDS) -> Self
     
     @inlinable func rounded(rule: FloatingPointRoundingRule, increment: _Increment?) -> Self
 }
@@ -73,8 +66,7 @@ extension _Format {
 // MARK: * Format x Standard
 //*============================================================================*
 
-public protocol _Format_Standard: _Format
-where _Sign == NFSC.SignDisplayStrategy {
+public protocol _Format_Standard: _Format where _Sign == _NFSC_SignDS {
     
     //=------------------------------------------------------------------------=
     // MARK: Initializers
@@ -99,8 +91,7 @@ public protocol _Format_Percent: _Format_Standard { }
 // MARK: * Format x Currency
 //*============================================================================*
 
-public protocol _Format_Currency: _Format
-where _Sign == CFSC.SignDisplayStrategy {
+public protocol _Format_Currency: _Format where _Sign == _CFSC_SignDS {
     
     //=------------------------------------------------------------------------=
     // MARK: Initializers

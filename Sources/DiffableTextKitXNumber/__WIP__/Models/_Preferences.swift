@@ -13,9 +13,9 @@ import Foundation
 // MARK: * Preferences
 //*============================================================================*
 
-@usableFromInline struct _Preferences<Value> where Value: NumberTextValue {
-    @usableFromInline typealias Bounds = NumberTextBounds<Value>
-    @usableFromInline typealias Precision = NumberTextPrecision<Value>
+@usableFromInline struct _Preferences<Input> where Input: _Input {
+    @usableFromInline typealias Bounds = _Bounds<Input>
+    @usableFromInline typealias Precision = _Precision<Input>
     
     //=------------------------------------------------------------------------=
     // MARK: State

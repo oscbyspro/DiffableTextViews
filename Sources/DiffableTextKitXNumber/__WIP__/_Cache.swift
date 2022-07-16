@@ -24,7 +24,6 @@ public struct _Cache<Graph: _Graph>: DiffableTextCache {
     
     @usableFromInline typealias Adapter = _Adapter<Graph>
     @usableFromInline typealias Preferences = _Preferences<Input>
-    @usableFromInline typealias Interpreter = NumberTextReader
     @usableFromInline typealias Adjustments = (inout Snapshot) -> Void
     
     //=------------------------------------------------------------------------=
@@ -35,7 +34,7 @@ public struct _Cache<Graph: _Graph>: DiffableTextCache {
     @usableFromInline let adapter: Adapter
     @usableFromInline let preferences: Preferences
     
-    @usableFromInline let interpreter: Interpreter
+    @usableFromInline let interpreter: _Interpreter
     @usableFromInline let adjustments: Adjustments?
 
     //=------------------------------------------------------------------------=
@@ -93,11 +92,11 @@ public struct _Cache<Graph: _Graph>: DiffableTextCache {
     // MARK: Accessors
     //=------------------------------------------------------------------------=
     
-    @inlinable var bounds: NumberTextBounds<Input> {
+    @inlinable var bounds: _Bounds<Input> {
         style.bounds ?? preferences.bounds
     }
 
-    @inlinable var precision: NumberTextPrecision<Input> {
+    @inlinable var precision: _Precision<Input> {
         style.precision ?? preferences.precision
     }
 }
@@ -120,17 +119,17 @@ extension _Cache {
     // MARK: Active
     //=------------------------------------------------------------------------=
     
-    @inlinable public func interpret(_ value: Input) -> Commit<Input> {
-        var value = value
+    @inlinable public func interpret(_ input: Input) -> Commit<Input> {
+        var input = input
         //=--------------------------------------=
         // Autocorrect
         //=--------------------------------------=
-        bounds.autocorrect(&value)
+        bounds.autocorrect(&input)
         //=--------------------------------------=
         // Number
         //=--------------------------------------=
         let formatter = adapter.format.precision(precision.active())
-        let parseable = self.snapshot(formatter.format(value))
+        let parseable = self.snapshot(formatter.format(input))
         var number = try! interpreter.number(parseable, as: Input.self)!
         //=--------------------------------------=
         // Autocorrect
@@ -138,13 +137,13 @@ extension _Cache {
         bounds   .autocorrect(&number)
         precision.autocorrect(&number)
         //=--------------------------------------=
-        // Value
+        // Input
         //=--------------------------------------=
-        value = try! adapter.parse(number)
+        input = try! adapter.parse(number)
         //=--------------------------------------=
         // Commit
         //=--------------------------------------=
-        return self.commit(value, number, formatter)
+        return self.commit(input, number, formatter)
     }
     
     //=------------------------------------------------------------------------=
@@ -174,18 +173,18 @@ extension _Cache {
         try bounds   .autovalidate(&number)
         try precision.autovalidate(&number, count)
         //=--------------------------------------=
-        // Value
+        // Input
         //=--------------------------------------=
-        let value = try adapter.parse(number)
+        let input = try adapter.parse(number)
         //=--------------------------------------=
         // Autovalidate
         //=--------------------------------------=
-        try bounds.autovalidate(value, &number)
+        try bounds.autovalidate(input, &number)
         //=--------------------------------------=
         // Commit
         //=--------------------------------------=
         let format = adapter.format.precision(precision.interactive(count))
-        return self.commit(value, number, format)
+        return self.commit(input, number, format)
     }
     
     //=------------------------------------------------------------------------=

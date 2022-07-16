@@ -11,10 +11,10 @@ import DiffableTextKit
 import Foundation
 
 //*============================================================================*
-// MARK: * Reader
+// MARK: * Interpreter
 //*============================================================================*
 
-public final class NumberTextReader {
+@usableFromInline struct _Interpreter {
     
     //=------------------------------------------------------------------------=
     // MARK: State
@@ -52,13 +52,13 @@ public final class NumberTextReader {
     // MARK: Utilities
     //=------------------------------------------------------------------------=
     
-    @inlinable func number(_ snapshot: Snapshot, as kind: (some NumberTextKind).Type) throws -> Number? {
+    @inlinable func number(_ snapshot: Snapshot, as value: (some _Value).Type) throws -> Number? {
         try .init(unformatted: snapshot.nonvirtuals, signs: components.signs.components,
         digits: components.digits.components, separators: components.separators.components,
-        optional: kind.isOptional, unsigned: kind.isUnsigned, integer: kind.isInteger)
+        optional: value.isOptional, unsigned: value.isUnsigned, integer: value.isInteger)
     }
     
-    @inlinable func number(_ proposal: Proposal, as kind: (some NumberTextKind).Type) throws -> Number? {
+    @inlinable func number(_ proposal: Proposal, as value: (some _Value).Type) throws -> Number? {
         var proposal = proposal
         //=--------------------------------------=
         // Proposal
@@ -69,11 +69,7 @@ public final class NumberTextReader {
         // Number
         //=--------------------------------------=
         guard var number = try self.number(
-        proposal.merged(), as: kind) else { return nil }
-        if let sign { number.sign = sign }
-        //=--------------------------------------=
-        // Return
-        //=--------------------------------------=
-        return number
+        proposal.merged(), as: value) else { return nil }
+        if let sign { number.sign = sign }; return number
     }
 }
