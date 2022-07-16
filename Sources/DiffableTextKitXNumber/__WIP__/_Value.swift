@@ -9,6 +9,7 @@
 
 import Foundation
 
+#warning("Rename as Input, maybe?")
 //*============================================================================*
 // MARK: * Value
 //*============================================================================*
@@ -38,7 +39,7 @@ public extension _Value {
 }
 
 //*============================================================================*
-// MARK: * Value x Floating Point
+// MARK: * Value x Float
 //*============================================================================*
 
 public protocol  _Value_Float: _Value { }
@@ -62,8 +63,8 @@ public extension _Value_Float {
 // MARK: * Value x Integer
 //*============================================================================*
 
-public protocol  Value_Integer: _Value { }
-public extension Value_Integer {
+public protocol  _Value_Integer: _Value { }
+public extension _Value_Integer {
     
     //=------------------------------------------------------------------------=
     // MARK: Attributes
@@ -112,10 +113,10 @@ public extension _Value_Unsigned {
 //*============================================================================*
 
 public protocol _Value_Numberable: _Value
-where NumberTextFormat: _Format_Number { }
+where NumberTextGraph.Format: _Format_Number { }
 
 public protocol _Value_Currencyable: _Value
-where NumberTextFormat: _Format_Currencyable { }
+where NumberTextGraph.Format: _Format_Currencyable { }
 
-public protocol _Value_Percentable:  _Value
-where NumberTextFormat: _Format_Percentable { }
+public protocol _Value_Percentable: _Value
+where NumberTextGraph.Format: _Format_Percentable { }

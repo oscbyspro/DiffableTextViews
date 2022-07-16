@@ -7,22 +7,14 @@
 // See http://www.apache.org/licenses/LICENSE-2.0 for license information.
 //=----------------------------------------------------------------------------=
 
+#warning("Rename as Value, maybe?")
 //*============================================================================*
 // MARK: * Kind
 //*============================================================================*
 
 public protocol _Kind {
+    associatedtype NumberTextGraph: _Graph where NumberTextGraph.Style.Value == Self
     
-    //=------------------------------------------------------------------------=
-    // MARK: Style
-    //=------------------------------------------------------------------------=
-    
-    associatedtype NumberTextID: _Key
-    
-    typealias NumberTextStyle  = NumberTextID.Style
-    typealias NumberTextCache  = NumberTextID.Cache
-    typealias NumberTextFormat = NumberTextID.Format
-
     //=------------------------------------------------------------------------=
     // MARK: Attributes
     //=------------------------------------------------------------------------=

@@ -15,12 +15,14 @@ import Foundation
 // MARK: * Cache
 //*============================================================================*
 
-public struct _Cache<Key: _Key>: DiffableTextCache {
-    public typealias Style = Key.Style
-    public typealias Format = Key.Format
-    public typealias Input = Format.FormatInput
+public struct _Cache<Graph: _Graph>: DiffableTextCache {
+    #warning("Use adapter instead.......")
+    public typealias Format = Graph.Format
     
-    @usableFromInline typealias Adapter = _Adapter<Format>
+    public typealias Style = Graph.Style
+    public typealias Input = Graph.Input
+    
+    @usableFromInline typealias Adapter = _Adapter<Graph>
     @usableFromInline typealias Preferences = _Preferences<Input>
     @usableFromInline typealias Interpreter = NumberTextReader
     @usableFromInline typealias Adjustments = (inout Snapshot) -> Void
@@ -40,7 +42,7 @@ public struct _Cache<Key: _Key>: DiffableTextCache {
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable init<T>(_ style: Style) where Key == _StandardID<T> {
+    @inlinable init<T>(_ style: Style) where Graph == _Standard<T> {
         self.style = style
         self.adapter = .init(style.id)
         self.preferences = .standard()
@@ -61,7 +63,7 @@ public struct _Cache<Key: _Key>: DiffableTextCache {
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable init<T>(_ style: Style) where Key == _CurrencyID<T> {
+    @inlinable init<T>(_ style: Style) where Graph == _Currency<T> {
         self.style = style
         self.adapter = .init(style.id)
         //=--------------------------------------=

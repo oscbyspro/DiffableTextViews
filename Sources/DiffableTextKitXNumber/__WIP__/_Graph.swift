@@ -9,15 +9,18 @@
 
 import Foundation
 
-#warning("Key-Format relationship is reversed, maybe..........................")
 //*============================================================================*
-// MARK: * Key
+// MARK: * _Graph
 //*============================================================================*
 
-public protocol _Key<Format>: Equatable {
+public protocol _Graph<Format>: Equatable {
     associatedtype Format: _Format
+    typealias Parser = Format.Strategy
+    
     typealias Style = _Style<Self>
     typealias Cache = _Cache<Self>
+    
+    typealias Input = Format.FormatInput
     
     //=------------------------------------------------------------------------=
     // MARK: State
@@ -28,17 +31,29 @@ public protocol _Key<Format>: Equatable {
     //=------------------------------------------------------------------------=
     // MARK: Utilities
     //=------------------------------------------------------------------------=
-    
-    @inlinable func format() -> Format
+        
+    @inlinable static func format(_ key: Self) -> Format
     
     @inlinable static func cache(_ style: Style) -> Cache
+}
+
+//=----------------------------------------------------------------------------=
+// MARK: + Branches
+//=----------------------------------------------------------------------------=
+
+public extension _Graph where Format: _Format_Percentable {
+    typealias Percent = Format.Percent.NumberTextGraph
+}
+
+public extension _Graph where Format: _Format_Currencyable {
+    typealias Currency = Format.Currency.NumberTextGraph
 }
 
 //*============================================================================*
 // MARK: * Key x Standard
 //*============================================================================*
 
-public struct _StandardID<Format: _Format_Standard>: _Key {
+public struct _Standard<Format: _Format_Standard>: _Graph {
     
     //=------------------------------------------------------------------------=
     // MARK: State
@@ -58,8 +73,8 @@ public struct _StandardID<Format: _Format_Standard>: _Key {
     // MARK: Utilities
     //=------------------------------------------------------------------------=
     
-    @inlinable public func format() -> Format {
-        .init(locale: locale)
+    @inlinable public static func format(_ key: Self) -> Format {
+        .init(locale: key.locale)
     }
     
     @inlinable public static func cache(_ style: Style) -> Cache {
@@ -71,7 +86,7 @@ public struct _StandardID<Format: _Format_Standard>: _Key {
 // MARK: * Key x Currency
 //*============================================================================*
 
-public struct _CurrencyID<Format: _Format_Currency>: _Key {
+public struct _Currency<Format: _Format_Currency>: _Graph {
     
     //=------------------------------------------------------------------------=
     // MARK: State
@@ -93,8 +108,8 @@ public struct _CurrencyID<Format: _Format_Currency>: _Key {
     // MARK: Utilities
     //=------------------------------------------------------------------------=
     
-    @inlinable public func format() -> Format {
-        .init(code: currencyCode, locale: locale)
+    @inlinable public static func format(_ key: Self) -> Format {
+        .init(code: key.currencyCode, locale: key.locale)
     }
     
     @inlinable public static func cache(_ style: Style) -> Cache {

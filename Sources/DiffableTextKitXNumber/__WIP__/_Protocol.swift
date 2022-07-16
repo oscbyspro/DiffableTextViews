@@ -15,8 +15,8 @@ import Foundation
 //*============================================================================*
 
 public protocol _Protocol: DiffableTextStyle where Value: NumberTextKind {
-    associatedtype Format: _Format
-    typealias Input = Format.FormatInput
+    associatedtype Graph: _Graph
+    typealias Input = Graph.Input
     
     //=------------------------------------------------------------------------=
     // MARK: Bounds
@@ -58,7 +58,7 @@ public protocol _Protocol: DiffableTextStyle where Value: NumberTextKind {
 // MARK: + Details where Input: Integer
 //=----------------------------------------------------------------------------=
 
-public extension _Protocol where Input: NumberTextValueXInteger {
+public extension _Protocol where Input: _Value_Integer {
     
     //=------------------------------------------------------------------------=
     // MARK: Precision
@@ -78,8 +78,7 @@ public extension _Protocol where Input: NumberTextValueXInteger {
 // MARK: * Protocol x Internal
 //*============================================================================*
 
-@usableFromInline protocol _Protocol_Internal {
-    associatedtype Input: NumberTextValue
+@usableFromInline protocol _Protocol_Internal: _Protocol {
     
     //=------------------------------------------------------------------------=
     // MARK: State

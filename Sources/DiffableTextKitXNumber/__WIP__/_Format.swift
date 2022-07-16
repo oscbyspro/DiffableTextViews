@@ -9,14 +9,16 @@
 
 import Foundation
 
-#warning("associatedtype Key: _Key where Key.Format == Self...................")
+#warning("Rename as 'NumberTextGraph', maybe..................................")
 //*============================================================================*
 // MARK: * Format
 //*============================================================================*
 
 public protocol _Format: ParseableFormatStyle where FormatInput: NumberTextValue, FormatOutput == String {
-    associatedtype _Sign: NumberTextFormatXSignRepresentable
+    associatedtype NumberTextGraph: _Graph where NumberTextGraph.Format == Self
+    
     associatedtype _Increment
+    associatedtype _Sign: NumberTextFormatXSignRepresentable
     
     //=------------------------------------------------------------------------=
     // MARK: Types

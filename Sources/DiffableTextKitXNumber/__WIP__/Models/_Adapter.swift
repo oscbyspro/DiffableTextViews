@@ -9,25 +9,26 @@
 
 import Foundation
 
+#warning("Make generic over Graph, maybe......................................")
 //*============================================================================*
 // MARK: * Adapter
 //*============================================================================*
 
-@usableFromInline struct _Adapter<Format: _Format> {
+@usableFromInline struct _Adapter<Graph: _Graph> {
     
     //=------------------------------------------------------------------------=
     // MARK: State
     //=------------------------------------------------------------------------=
     
-    @usableFromInline let format: Format
-    @usableFromInline let parser: Format.Strategy
+    @usableFromInline let format: Graph.Format
+    @usableFromInline let parser: Graph.Parser
     
     //=------------------------------------------------------------------------=
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable init(_ id: some _Key<Format>) {
-        self.format = id.format().rounded(.towardZero)
+    @inlinable init(_ graph: Graph) {
+        self.format = Graph.format(graph).rounded(.towardZero)
         self.parser = format.locale(.en_US_POSIX).parseStrategy
     }
     
@@ -35,7 +36,7 @@ import Foundation
     // MARK: Utilities
     //=------------------------------------------------------------------------=
     
-    @inlinable func parse(_  number: Number) throws -> Format.FormatInput {
+    @inlinable func parse(_  number: Number) throws -> Graph.Input {
         try parser.parse(number.description)
     }
 }

@@ -13,16 +13,13 @@ import DiffableTextKit
 // MARK: * Optional
 //*============================================================================*
 
-public struct _Optional<Key: _Key>:
-DiffableTextStyleWrapper, _Protocol, _Protocol_Internal {
-    public typealias Format = Key.Format
+public struct _Optional<Graph: _Graph>: DiffableTextStyleWrapper, _Protocol_Internal {
+    public typealias Style = Graph.Style
+    public typealias Cache = Graph.Cache
     
-    public typealias Style = _Style<Key>
-    public typealias Input = Style.Value
-    
-    public typealias Value = Style.Value?
-    public typealias Cache = Style.Cache
-    
+    public typealias Input = Graph.Input
+    public typealias Value = Graph.Input?
+
     //=------------------------------------------------------------------------=
     // MARK: State
     //=------------------------------------------------------------------------=
@@ -33,9 +30,7 @@ DiffableTextStyleWrapper, _Protocol, _Protocol_Internal {
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable init(_ style: Style) {
-        self.style  = style
-    }
+    @inlinable init(_ style: Style) { self.style = style }
     
     //=------------------------------------------------------------------------=
     // MARK: Accessors

@@ -15,17 +15,15 @@ import Foundation
 // MARK: * Style
 //*============================================================================*
 
-public struct _Style<ID: _Key>: _Protocol, _Protocol_Internal {
-    public typealias Format = ID.Format
-    public typealias Input = Format.FormatInput
-    public typealias Value = Format.FormatInput
-    public typealias Cache = ID.Cache
-
+public struct _Style<Graph: _Graph>: _Protocol_Internal {
+    public typealias Cache = Graph.Cache
+    public typealias Value = Graph.Input
+    
     //=------------------------------------------------------------------------=
     // MARK: State
     //=------------------------------------------------------------------------=
     
-    @usableFromInline var id: ID
+    @usableFromInline var id: Graph
     @usableFromInline var bounds: NumberTextBounds<Value>?
     @usableFromInline var precision: NumberTextPrecision<Value>?
     
@@ -33,7 +31,7 @@ public struct _Style<ID: _Key>: _Protocol, _Protocol_Internal {
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable init(_ id: ID) { self.id = id }
+    @inlinable init(_ id: Graph) { self.id = id }
     
     //=------------------------------------------------------------------------=
     // MARK: Transformations
@@ -47,16 +45,11 @@ public struct _Style<ID: _Key>: _Protocol, _Protocol_Internal {
     // MARK: Utilities
     //=------------------------------------------------------------------------=
     
-    #warning("WIP..........................")
     @inlinable public func cache() -> Cache {
-        ID.cache(self)
+        Graph.cache(self)
     }
     
-    #warning("WIP....................................")
     @inlinable public func update(_ cache: inout Cache) {
-        switch cache.style.id == id {
-        case  true: cache.style = self
-        case false: cache = self.cache()
-        }
+        if cache.style.id == id { cache.style = self } else { cache = self.cache() }
     }
 }
