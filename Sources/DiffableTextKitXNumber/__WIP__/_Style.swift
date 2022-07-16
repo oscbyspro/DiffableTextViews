@@ -15,17 +15,17 @@ import Foundation
 // MARK: * Style
 //*============================================================================*
 
-public struct _Style<Key: _Key>: _Protocol, _Protocol_Internal {
-    public typealias Format = Key.Format
+public struct _Style<ID: _Key>: _Protocol, _Protocol_Internal {
+    public typealias Format = ID.Format
     public typealias Input = Format.FormatInput
     public typealias Value = Format.FormatInput
-    public typealias Cache = Key.Cache
+    public typealias Cache = ID.Cache
 
     //=------------------------------------------------------------------------=
     // MARK: State
     //=------------------------------------------------------------------------=
     
-    @usableFromInline var key: Key
+    @usableFromInline var id: ID
     @usableFromInline var bounds: NumberTextBounds<Value>?
     @usableFromInline var precision: NumberTextPrecision<Value>?
     
@@ -33,14 +33,14 @@ public struct _Style<Key: _Key>: _Protocol, _Protocol_Internal {
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable init(key: Key) { self.key = key }
+    @inlinable init(_ id: ID) { self.id = id }
     
     //=------------------------------------------------------------------------=
     // MARK: Transformations
     //=------------------------------------------------------------------------=
     
     @inlinable public func locale(_ locale: Locale) -> Self {
-        var result = self; result.key.locale = locale; return self
+        var result = self; result.id.locale = locale; return self
     }
     
     //=------------------------------------------------------------------------=
@@ -49,12 +49,12 @@ public struct _Style<Key: _Key>: _Protocol, _Protocol_Internal {
     
     #warning("WIP..........................")
     @inlinable public func cache() -> Cache {
-        Key.cache(self)
+        ID.cache(self)
     }
     
     #warning("WIP....................................")
     @inlinable public func update(_ cache: inout Cache) {
-        switch cache.style.key == key {
+        switch cache.style.id == id {
         case  true: cache.style = self
         case false: cache = self.cache()
         }

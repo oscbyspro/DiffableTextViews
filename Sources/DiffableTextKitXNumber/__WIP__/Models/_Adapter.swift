@@ -26,23 +26,9 @@ import Foundation
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable init(internal format: Format) {
-        let  format = format.rounded(.towardZero)
-        
-        self.format = format
+    @inlinable init(_ id: some _Key<Format>) {
+        self.format = id.format().rounded(.towardZero)
         self.parser = format.locale(.en_US_POSIX).parseStrategy
-    }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Initializers
-    //=------------------------------------------------------------------------=
-    
-    @inlinable init(locale: Locale) where Format: _Format_Standard {
-        self.init(internal: Format(locale: locale))
-    }
-    
-    @inlinable init(code: String, locale: Locale) where Format: _Format_Currency {
-        self.init(internal: Format(code: code, locale: locale))
     }
     
     //=------------------------------------------------------------------------=

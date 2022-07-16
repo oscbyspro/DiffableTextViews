@@ -10,26 +10,11 @@
 import Foundation
 
 //*============================================================================*
-// MARK: * Keyable
-//*============================================================================*
-
-public protocol _Keyable {
-    associatedtype Key: _Key
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Initializers
-    //=------------------------------------------------------------------------=
-    
-    init(key: Key)
-}
-
-//*============================================================================*
 // MARK: * Key
 //*============================================================================*
 
-public protocol _Key: Equatable {
+public protocol _Key<Format>: Equatable {
     associatedtype Format: _Format
-    
     typealias Style = _Style<Self>
     typealias Cache = _Cache<Self>
     
@@ -43,16 +28,16 @@ public protocol _Key: Equatable {
     // MARK: Utilities
     //=------------------------------------------------------------------------=
     
-    #warning("WIP......................................")
+    @inlinable func format() -> Format
+    
     @inlinable static func cache(_ style: Style) -> Cache
 }
-
 
 //*============================================================================*
 // MARK: * Key x Standard
 //*============================================================================*
 
-public struct StandardID<Format: _Format_Standard>: _Key  {
+public struct _StandardID<Format: _Format_Standard>: _Key  {
     
     //=------------------------------------------------------------------------=
     // MARK: State
@@ -72,6 +57,10 @@ public struct StandardID<Format: _Format_Standard>: _Key  {
     // MARK: Utilities
     //=------------------------------------------------------------------------=
     
+    @inlinable public func format() -> Format {
+        .init(locale: locale)
+    }
+    
     @inlinable public static func cache(_ style: Style) -> Cache {
         .init(style)
     }
@@ -81,7 +70,7 @@ public struct StandardID<Format: _Format_Standard>: _Key  {
 // MARK: * Key x Currency
 //*============================================================================*
 
-public struct CurrencyID<Format: _Format_Currency>: _Key {
+public struct _CurrencyID<Format: _Format_Currency>: _Key {
     
     //=------------------------------------------------------------------------=
     // MARK: State
@@ -95,15 +84,18 @@ public struct CurrencyID<Format: _Format_Currency>: _Key {
     //=------------------------------------------------------------------------=
     
     @inlinable init(code: String, locale: Locale) {
-        self.locale = locale; self.currencyCode = code
+        self.locale = locale
+        self.currencyCode = code
     }
     
-    #warning("Cache does not even need to be exposed..........................")
     //=------------------------------------------------------------------------=
     // MARK: Utilities
     //=------------------------------------------------------------------------=
     
-    #warning("Cache: DiffableTextCache where Cache.Style: Keyable, Cache.Style.Key")
+    @inlinable public func format() -> Format {
+        .init(code: currencyCode, locale: locale)
+    }
+    
     @inlinable public static func cache(_ style: Style) -> Cache {
         .init(style)
     }

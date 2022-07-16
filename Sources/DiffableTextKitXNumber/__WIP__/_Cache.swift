@@ -15,7 +15,6 @@ import Foundation
 // MARK: * Cache
 //*============================================================================*
 
-#warning("Format -> Key -> Style -> Engine, maybe?")
 public struct _Cache<Key: _Key>: DiffableTextCache {
     public typealias Style = Key.Style
     public typealias Format = Key.Format
@@ -26,7 +25,6 @@ public struct _Cache<Key: _Key>: DiffableTextCache {
     @usableFromInline typealias Interpreter = NumberTextReader
     @usableFromInline typealias Adjustments = (inout Snapshot) -> Void
     
-    #warning("Store style rather than key, maybe..............................")
     //=------------------------------------------------------------------------=
     // MARK: State
     //=------------------------------------------------------------------------=
@@ -42,15 +40,15 @@ public struct _Cache<Key: _Key>: DiffableTextCache {
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable init<T>(_ style: Style) where Key == StandardID<T> {
+    @inlinable init<T>(_ style: Style) where Key == _StandardID<T> {
         self.style = style
-        self.adapter = .init(locale: style.key.locale)
+        self.adapter = .init(style.id)
         self.preferences = .standard()
         //=--------------------------------------=
         // Formatter
         //=--------------------------------------=
         let formatter = NumberFormatter()
-        formatter.locale = style.key.locale
+        formatter.locale = style.id.locale
         //=--------------------------------------=
         // Formatter x None
         //=--------------------------------------=
@@ -63,15 +61,15 @@ public struct _Cache<Key: _Key>: DiffableTextCache {
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable init<T>(_ style: Style) where Key == CurrencyID<T> {
+    @inlinable init<T>(_ style: Style) where Key == _CurrencyID<T> {
         self.style = style
-        self.adapter = .init(code: style.key.currencyCode, locale: style.key.locale)
+        self.adapter = .init(style.id)
         //=--------------------------------------=
         // Formatter
         //=--------------------------------------=
         let formatter = NumberFormatter()
-        formatter.locale = style.key.locale
-        formatter.currencyCode = style.key.currencyCode
+        formatter.locale = style.id.locale
+        formatter.currencyCode = style.id.currencyCode
         //=--------------------------------------=
         // Formatter x None
         //=--------------------------------------=
@@ -86,7 +84,7 @@ public struct _Cache<Key: _Key>: DiffableTextCache {
         // Formatter x Currency x Fractionless
         //=--------------------------------------=
         formatter.maximumFractionDigits = .zero
-        self.adjustments = _Currency_Label(formatter, interpreter.components)?.autocorrect
+        self.adjustments = Label(formatter, interpreter.components)?.autocorrect
     }
     
     //=------------------------------------------------------------------------=

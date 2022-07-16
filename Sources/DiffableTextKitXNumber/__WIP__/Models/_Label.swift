@@ -11,11 +11,11 @@ import DiffableTextKit
 import Foundation
 
 //*============================================================================*
-// MARK: * Currecny x Label
+// MARK: * Label
 //*============================================================================*
 
 /// A model for marking real currency symbols as virtual.
-@usableFromInline struct _Currency_Label {
+@usableFromInline struct Label {
     
     //=------------------------------------------------------------------------=
     // MARK: State
