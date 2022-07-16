@@ -30,8 +30,8 @@ public protocol _Keyable {
 public protocol _Key: Equatable {
     associatedtype Format: _Format
     
-    typealias Style = _Style_WIP<Self>
-    typealias Cache = _Cache_WIP<Self>
+    typealias Style = _Style<Self>
+    typealias Cache = _Cache<Self>
     
     //=------------------------------------------------------------------------=
     // MARK: State
@@ -43,8 +43,7 @@ public protocol _Key: Equatable {
     // MARK: Utilities
     //=------------------------------------------------------------------------=
     
-    #warning("WIP..")
-    
+    #warning("WIP......................................")
     @inlinable static func cache(_ style: Style) -> Cache
 }
 

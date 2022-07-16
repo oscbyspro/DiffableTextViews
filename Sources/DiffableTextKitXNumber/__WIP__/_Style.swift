@@ -10,175 +10,53 @@
 import DiffableTextKit
 import Foundation
 
+#warning("WIP.................................................................")
 //*============================================================================*
 // MARK: * Style
 //*============================================================================*
 
-public protocol _Style: DiffableTextStyle where Value: NumberTextKind {
-    associatedtype Input: NumberTextValue = Value
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Bounds
-    //=------------------------------------------------------------------------=
-    
-    @inlinable func bounds(_ limits: ClosedRange<Input>) -> Self
-    
-    @inlinable func bounds(_ limits: PartialRangeFrom<Input>) -> Self
-    
-    @inlinable func bounds(_ limits: PartialRangeThrough<Input>) -> Self
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Precision
-    //=------------------------------------------------------------------------=
-    
-    @inlinable func precision(integer: Int) -> Self
-    
-    @inlinable func precision(fraction: Int) -> Self
-    
-    @inlinable func precision(integer: Int, fraction: Int) -> Self
-    
-    @inlinable func precision<I>(integer: I, fraction: Int) -> Self
-    where I: RangeExpression, I.Bound == Int
-    
-    @inlinable func precision<F>(integer: Int, fraction: F) -> Self
-    where F: RangeExpression, F.Bound == Int
-    
-    @inlinable func precision<I>(integer: I) -> Self
-    where I: RangeExpression, I.Bound == Int
-    
-    @inlinable func precision<F>(fraction: F) -> Self
-    where F: RangeExpression, F.Bound == Int
-    
-    @inlinable func precision<I, F>(integer: I, fraction: F) -> Self
-    where I: RangeExpression, I.Bound == Int, F: RangeExpression, F.Bound == Int
-}
+public struct _Style<Key: _Key>: _Protocol, _Protocol_Internal {
+    public typealias Format = Key.Format
+    public typealias Input = Format.FormatInput
+    public typealias Value = Format.FormatInput
+    public typealias Cache = Key.Cache
 
-//=----------------------------------------------------------------------------=
-// MARK: + Details where Input: Integer
-//=----------------------------------------------------------------------------=
-
-public extension _Style where Input: NumberTextValueXInteger {
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Precision
-    //=------------------------------------------------------------------------=
-    
-    @inlinable func precision(_ length: Int) -> Self {
-        self.precision(integer: length...length)
-    }
-
-    @inlinable func precision<I>(_ limits: I) -> Self
-    where I: RangeExpression, I.Bound == Int {
-        self.precision(integer: limits)
-    }
-}
-
-//*============================================================================*
-// MARK: * Style x Internal
-//*============================================================================*
-
-@usableFromInline protocol _Style_Internal {
-    associatedtype Input: NumberTextValue
-    
     //=------------------------------------------------------------------------=
     // MARK: State
     //=------------------------------------------------------------------------=
     
-    @inlinable var bounds: NumberTextBounds<Input>? { get set }
-    @inlinable var precision: NumberTextPrecision<Input>? { get set }
-}
-
-//=----------------------------------------------------------------------------=
-// MARK: + Bounds
-//=----------------------------------------------------------------------------=
-
-extension _Style_Internal {
+    @usableFromInline var key: Key
+    @usableFromInline var bounds: NumberTextBounds<Value>?
+    @usableFromInline var precision: NumberTextPrecision<Value>?
     
     //=------------------------------------------------------------------------=
-    // MARK: Bounds
+    // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable func bounds(_ bounds: NumberTextBounds<Input>) -> Self {
-        var result = self; result.bounds = bounds; return result
-    }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Limits
-    //=------------------------------------------------------------------------=
-    
-    @inlinable public func bounds(_ limits: ClosedRange<Input>) -> Self {
-        self.bounds(NumberTextBounds(limits))
-    }
-    
-    @inlinable public func bounds(_ limits: PartialRangeFrom<Input>) -> Self {
-        self.bounds(NumberTextBounds(limits))
-    }
-    
-    @inlinable public func bounds(_ limits: PartialRangeThrough<Input>) -> Self {
-        self.bounds(NumberTextBounds(limits))
-    }
-}
-
-//=----------------------------------------------------------------------------=
-// MARK: + Precision
-//=----------------------------------------------------------------------------=
-
-extension _Style_Internal {
+    @inlinable init(key: Key) { self.key = key }
     
     //=------------------------------------------------------------------------=
     // MARK: Transformations
     //=------------------------------------------------------------------------=
     
-    @inlinable @inline(__always) func precision(_ precision: NumberTextPrecision<Input>) -> Self {
-        var result = self; result.precision = precision; return result
+    @inlinable public func locale(_ locale: Locale) -> Self {
+        var result = self; result.key.locale = locale; return self
     }
     
     //=------------------------------------------------------------------------=
-    // MARK: Length
+    // MARK: Utilities
     //=------------------------------------------------------------------------=
     
-    @inlinable public func precision(integer: Int) -> Self {
-        self.precision(NumberTextPrecision(integer: integer...integer))
+    #warning("WIP..........................")
+    @inlinable public func cache() -> Cache {
+        Key.cache(self)
     }
     
-    @inlinable public func precision(fraction: Int) -> Self {
-        self.precision(NumberTextPrecision(fraction: fraction...fraction))
-    }
-    
-    @inlinable public func precision(integer: Int, fraction: Int) -> Self {
-        self.precision(NumberTextPrecision(integer: integer...integer, fraction: fraction...fraction))
-    }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Mixed
-    //=------------------------------------------------------------------------=
-    
-    @inlinable public func precision<I>(integer: I, fraction: Int) -> Self
-    where I: RangeExpression, I.Bound == Int {
-        self.precision(NumberTextPrecision(integer: integer, fraction: fraction...fraction))
-    }
-    
-    @inlinable public func precision<F>(integer: Int, fraction: F) -> Self
-    where F: RangeExpression, F.Bound == Int {
-        self.precision(NumberTextPrecision(integer: integer...integer, fraction: fraction))
-    }
-
-    //=------------------------------------------------------------------------=
-    // MARK: Limits
-    //=------------------------------------------------------------------------=
-    
-    @inlinable public func precision<I>(integer: I) -> Self
-    where I: RangeExpression, I.Bound == Int {
-        self.precision(NumberTextPrecision(integer: integer))
-    }
-    
-    @inlinable public func precision<F>(fraction: F) -> Self
-    where F: RangeExpression, F.Bound == Int {
-        self.precision(NumberTextPrecision(fraction: fraction))
-    }
-    
-    @inlinable public func precision<I, F>(integer: I, fraction: F) -> Self
-    where I: RangeExpression, I.Bound == Int, F: RangeExpression, F.Bound == Int {
-        self.precision(NumberTextPrecision(integer: integer, fraction: fraction))
+    #warning("WIP....................................")
+    @inlinable public func update(_ cache: inout Cache) {
+        switch cache.style.key == key {
+        case  true: cache.style = self
+        case false: cache = self.cache()
+        }
     }
 }

@@ -8,55 +8,60 @@
 //=----------------------------------------------------------------------------=
 
 import DiffableTextKit
-import Foundation
 
-#warning("WIP.................................................................")
 //*============================================================================*
-// MARK: * Style
+// MARK: * Optional
 //*============================================================================*
 
-public struct _Style_WIP<Key: _Key>: _Style, _Style_Internal {
-    public typealias Format = Key.Format
-    public typealias Input = Format.FormatInput
-    public typealias Value = Format.FormatInput
-    public typealias Cache = Key.Cache
-
+@usableFromInline struct _Optional<Key: _Key>:
+DiffableTextStyleWrapper, _Protocol, _Protocol_Internal {
+    @usableFromInline typealias Style = _Style<Key>
+    @usableFromInline typealias Input = Style.Value
+    
+    @usableFromInline typealias Value = Style.Value?
+    @usableFromInline typealias Cache = Style.Cache
+    
     //=------------------------------------------------------------------------=
     // MARK: State
     //=------------------------------------------------------------------------=
     
-    @usableFromInline var key: Key
-    @usableFromInline var bounds: NumberTextBounds<Value>?
-    @usableFromInline var precision: NumberTextPrecision<Value>?
-    
+    @usableFromInline var style: Style
+
     //=------------------------------------------------------------------------=
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable init(key: Key) { self.key = key }
+    @inlinable init(_ style: Style) {
+        self.style  = style
+    }
     
     //=------------------------------------------------------------------------=
-    // MARK: Transformations
+    // MARK: Accessors
     //=------------------------------------------------------------------------=
-    
-    @inlinable public func locale(_ locale: Locale) -> Self {
-        var result = self; result.key.locale = locale; return self
+
+    @inlinable var bounds: NumberTextBounds<Input>? {
+        get { style.bounds }
+        set { style.bounds = newValue }
+    }
+
+    @inlinable var precision: NumberTextPrecision<Input>? {
+        get { style.precision }
+        set { style.precision = newValue }
     }
     
     //=------------------------------------------------------------------------=
     // MARK: Utilities
     //=------------------------------------------------------------------------=
     
-    #warning("WIP..........................")
-    @inlinable public func cache() -> Cache {
-        Key.cache(self)
+    @inlinable func format(_ value: Value, with cache: inout Cache) -> String {
+        value.map({ style.format($0, with: &cache) }) ?? String()
     }
-    
-    #warning("WIP....................................")
-    @inlinable public func update(_ cache: inout Cache) {
-        switch cache.style.key == key {
-        case  true: cache.style = self
-        case false: cache = self.cache()
-        }
+
+    @inlinable func interpret(_ value: Value, with cache: inout Cache) -> Commit<Value> {
+        value.map({ Commit(style.interpret($0, with: &cache)) }) ?? Commit()
+    }
+
+    @inlinable func resolve(_ proposal: Proposal, with cache: inout Cache) throws -> Commit<Value> {
+        try cache.resolve(proposal)
     }
 }

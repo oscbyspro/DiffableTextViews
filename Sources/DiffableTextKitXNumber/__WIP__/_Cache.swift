@@ -12,11 +12,11 @@ import Foundation
 
 #warning("WIP.................................................................")
 //*============================================================================*
-// MARK: * Engine
+// MARK: * Cache
 //*============================================================================*
 
 #warning("Format -> Key -> Style -> Engine, maybe?")
-public struct _Cache_WIP<Key: _Key>: DiffableTextCache {
+public struct _Cache<Key: _Key>: DiffableTextCache {
     public typealias Style = Key.Style
     public typealias Format = Key.Format
     public typealias Input = Format.FormatInput
@@ -100,45 +100,13 @@ public struct _Cache_WIP<Key: _Key>: DiffableTextCache {
     @inlinable var precision: NumberTextPrecision<Input> {
         style.precision ?? preferences.precision
     }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Helpers
-    //=------------------------------------------------------------------------=
-
-    @inlinable func commit(_ value: Input, _ number: Number, _ format: Format) -> Commit<Input> {
-        Commit(value, snapshot(characters(value, number, format)))
-    }
-    
-    @inlinable func snapshot(_ characters: String) -> Snapshot {
-        var snapshot = Snapshot(characters, as: interpreter.attributes.map)
-        adjustments?(&snapshot); return snapshot
-    }
-    
-    @inlinable func characters(_ value: Input, _ number: Number, _ format: Format) -> String {
-        var characters = format.sign(number.sign)
-       .separator(number.separator).format(value)
-        let signs = interpreter.components.signs
-        //=--------------------------------------=
-        // Autocorrect
-        //=--------------------------------------=
-        if  number.sign == .negative, value == .zero,
-        let index = characters.firstIndex(of: signs[.positive]) {
-            //=----------------------------------=
-            // Make Positive Zero Negative
-            //=----------------------------------=
-            let replacement = String(signs[.negative])
-            characters.replaceSubrange(index...index, with: replacement)
-        }
-        
-        return characters
-    }
 }
 
 //=----------------------------------------------------------------------------=
 // MARK: + Utilities
 //=----------------------------------------------------------------------------=
 
-extension _Cache_WIP {
+extension _Cache {
     
     //=------------------------------------------------------------------------=
     // MARK: Inactive
@@ -218,5 +186,37 @@ extension _Cache_WIP {
         //=--------------------------------------=
         let format = adapter.format.precision(precision.interactive(count))
         return self.commit(value, number, format)
+    }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Helpers
+    //=------------------------------------------------------------------------=
+
+    @inlinable func commit(_ value: Input, _ number: Number, _ format: Format) -> Commit<Input> {
+        Commit(value, snapshot(characters(value, number, format)))
+    }
+    
+    @inlinable func snapshot(_ characters: String) -> Snapshot {
+        var snapshot = Snapshot(characters, as: interpreter.attributes.map)
+        adjustments?(&snapshot); return snapshot
+    }
+    
+    @inlinable func characters(_ value: Input, _ number: Number, _ format: Format) -> String {
+        var characters = format.sign(number.sign)
+       .separator(number.separator).format(value)
+        let signs = interpreter.components.signs
+        //=--------------------------------------=
+        // Autocorrect
+        //=--------------------------------------=
+        if  number.sign == .negative, value == .zero,
+        let index = characters.firstIndex(of: signs[.positive]) {
+            //=----------------------------------=
+            // Make Positive Zero Negative
+            //=----------------------------------=
+            let replacement = String(signs[.negative])
+            characters.replaceSubrange(index...index, with: replacement)
+        }
+        
+        return characters
     }
 }
