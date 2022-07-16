@@ -13,7 +13,7 @@ import Foundation
 // MARK: * Preferences
 //*============================================================================*
 
-@usableFromInline struct Preferences<Value> where Value: NumberTextValue {
+@usableFromInline struct _Preferences<Value> where Value: NumberTextValue {
     @usableFromInline typealias Bounds = NumberTextBounds<Value>
     @usableFromInline typealias Precision = NumberTextPrecision<Value>
     

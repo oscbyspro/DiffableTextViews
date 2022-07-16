@@ -7,49 +7,60 @@
 // See http://www.apache.org/licenses/LICENSE-2.0 for license information.
 //=----------------------------------------------------------------------------=
 
-import Foundation
+import DiffableTextKit
 
 //*============================================================================*
-// MARK: * Adapter
+// MARK: * Optional
 //*============================================================================*
 
-@usableFromInline struct _Adapter<Format: _Format> {
+@usableFromInline struct _Optional_WIP<Key: _Key>: DiffableTextStyleWrapper, _Style_Internal {
+    @usableFromInline typealias Style = _Style_WIP<Key>
+    @usableFromInline typealias Input = Style.Value
+    
+    @usableFromInline typealias Value = Style.Value?
+    @usableFromInline typealias Cache = Style.Cache
     
     //=------------------------------------------------------------------------=
     // MARK: State
     //=------------------------------------------------------------------------=
     
-    @usableFromInline let format: Format
-    @usableFromInline let parser: Format.Strategy
-    
+    @usableFromInline var style: Style
+
     //=------------------------------------------------------------------------=
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable init(internal format: Format) {
-        let  format = format.rounded(.towardZero)
-        
-        self.format = format
-        self.parser = format.locale(.en_US_POSIX).parseStrategy
+    @inlinable init(_ style: Style) {
+        self.style  = style
     }
     
     //=------------------------------------------------------------------------=
-    // MARK: Initializers
+    // MARK: Accessors
     //=------------------------------------------------------------------------=
-    
-    @inlinable init(locale: Locale) where Format: _Format_Standard {
-        self.init(internal: Format(locale: locale))
+
+    @inlinable var bounds: NumberTextBounds<Input>? {
+        get { style.bounds }
+        set { style.bounds = newValue }
     }
-    
-    @inlinable init(code: String, locale: Locale) where Format: _Format_Currency {
-        self.init(internal: Format(code: code, locale: locale))
+
+    @inlinable var precision: NumberTextPrecision<Input>? {
+        get { style.precision }
+        set { style.precision = newValue }
     }
     
     //=------------------------------------------------------------------------=
     // MARK: Utilities
     //=------------------------------------------------------------------------=
     
-    @inlinable func parse(_  number: Number) throws -> Format.FormatInput {
-        try parser.parse(number.description)
+    @inlinable func format(_ value: Value, with cache: inout Cache) -> String {
+        value.map({ style.format($0, with: &cache) }) ?? ""
+    }
+
+    @inlinable func interpret(_ value: Value, with cache: inout Cache) -> Commit<Value> {
+        value.map({ Commit(style.interpret($0, with: &cache)) }) ?? Commit()
+    }
+
+    @inlinable func resolve(_ proposal: Proposal, with cache: inout Cache) throws -> Commit<Value> {
+        try cache.resolve(proposal)
     }
 }

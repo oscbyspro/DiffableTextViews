@@ -13,8 +13,8 @@ import Foundation
 // MARK: * Format
 //*============================================================================*
 
-public protocol _Format: ParseableFormatStyle  where
-FormatInput: NumberTextValue, FormatOutput == String {
+public protocol _Format: _Keyable, ParseableFormatStyle
+where FormatInput: NumberTextValue, FormatOutput == String {
     associatedtype _Sign: NumberTextFormatXSignRepresentable
     associatedtype _Increment
     

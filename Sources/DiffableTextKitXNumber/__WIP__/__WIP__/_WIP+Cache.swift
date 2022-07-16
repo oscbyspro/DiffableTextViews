@@ -15,10 +15,14 @@ import Foundation
 // MARK: * Engine
 //*============================================================================*
 
-public struct _Engine<Format: _Format, Key: _Key> {
+#warning("Format -> Key -> Style -> Engine, maybe?")
+public struct _Cache_WIP<Key: _Key>: DiffableTextCache {
+    public typealias Style = Key.Style
+    public typealias Format = Key.Format
     public typealias Input = Format.FormatInput
     
     @usableFromInline typealias Adapter = _Adapter<Format>
+    @usableFromInline typealias Preferences = _Preferences<Input>
     @usableFromInline typealias Interpreter = NumberTextReader
     @usableFromInline typealias Adjustments = (inout Snapshot) -> Void
     
@@ -27,9 +31,9 @@ public struct _Engine<Format: _Format, Key: _Key> {
     // MARK: State
     //=------------------------------------------------------------------------=
     
-    @usableFromInline let key: Key
+    @usableFromInline var style: Style
     @usableFromInline let adapter: Adapter
-    @usableFromInline let preferences: Preferences<Input>
+    @usableFromInline let preferences: Preferences
     
     @usableFromInline let interpreter: Interpreter
     @usableFromInline let adjustments: Adjustments?
@@ -38,15 +42,36 @@ public struct _Engine<Format: _Format, Key: _Key> {
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable init(_ key: Key) where Key == _Currency_Key, Format: _Format_Currency {
-        self.key = key
-        self.adapter = .init(code: key.code, locale: key.locale)
+    @inlinable init<T>(_ style: Style) where Key == StandardID<T> {
+        self.style = style
+        self.adapter = .init(locale: style.key.locale)
+        self.preferences = .standard()
         //=--------------------------------------=
         // Formatter
         //=--------------------------------------=
         let formatter = NumberFormatter()
-        formatter.locale = key.locale
-        formatter.currencyCode = key.code
+        formatter.locale = style.key.locale
+        //=--------------------------------------=
+        // Formatter x None
+        //=--------------------------------------=
+        assert(formatter.numberStyle == .none)
+        self.interpreter = .standard(formatter)
+        self.adjustments = .none
+    }
+
+    //=------------------------------------------------------------------------=
+    // MARK: Initializers
+    //=------------------------------------------------------------------------=
+    
+    @inlinable init<T>(_ style: Style) where Key == CurrencyID<T> {
+        self.style = style
+        self.adapter = .init(code: style.key.currencyCode, locale: style.key.locale)
+        //=--------------------------------------=
+        // Formatter
+        //=--------------------------------------=
+        let formatter = NumberFormatter()
+        formatter.locale = style.key.locale
+        formatter.currencyCode = style.key.currencyCode
         //=--------------------------------------=
         // Formatter x None
         //=--------------------------------------=
@@ -68,14 +93,12 @@ public struct _Engine<Format: _Format, Key: _Key> {
     // MARK: Accessors
     //=------------------------------------------------------------------------=
     
-    #warning("...................................")
     @inlinable var bounds: NumberTextBounds<Input> {
-        fatalError()
+        style.bounds ?? preferences.bounds
     }
 
-    #warning(".........................................")
     @inlinable var precision: NumberTextPrecision<Input> {
-        fatalError()
+        style.precision ?? preferences.precision
     }
     
     //=------------------------------------------------------------------------=
@@ -115,7 +138,7 @@ public struct _Engine<Format: _Format, Key: _Key> {
 // MARK: + Utilities
 //=----------------------------------------------------------------------------=
 
-extension _Engine {
+extension _Cache_WIP {
     
     //=------------------------------------------------------------------------=
     // MARK: Inactive
@@ -169,8 +192,11 @@ extension _Engine {
         let number = try interpreter.number(proposal, as: Input?.self)
         return try number.map({ try Commit(resolve($0)) }) ?? Commit()
     }
-
-    /// The resolve method body, also used by styles such as: optional.
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Interactive x Helpers
+    //=------------------------------------------------------------------------=
+    
     @inlinable func resolve(_ number: Number) throws -> Commit<Input> {
         let count  = number.count()
         var number = number
