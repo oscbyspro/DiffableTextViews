@@ -55,7 +55,7 @@ import Foundation
     @inlinable func number(_ snapshot: Snapshot, as value: (some _Value).Type) throws -> Number? {
         try .init(unformatted: snapshot.nonvirtuals, signs: components.signs.components,
         digits: components.digits.components, separators: components.separators.components,
-        optional: value.isOptional, unsigned: value.isUnsigned, integer: value.isInteger)
+        optional: value.optional, unsigned: value.unsigned, integer: value.integer)
     }
     
     @inlinable func number(_ proposal: Proposal, as value: (some _Value).Type) throws -> Number? {

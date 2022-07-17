@@ -29,16 +29,16 @@ extension _NumberTextStyle where Format: NumberTextFormatXCurrency {
 // MARK: + Decimal
 //=----------------------------------------------------------------------------=
 
-//extension DiffableTextStyle where Self == NumberTextStyle<Decimal>.Currency {
-//    
-//    //=------------------------------------------------------------------------=
-//    // MARK: Initializers
-//    //=------------------------------------------------------------------------=
-//    
-//    @inlinable public static func currency(code: String) -> Self {
-//        Self(code: code)
-//    }
-//}
+extension DiffableTextStyle where Self == NumberTextStyle<Decimal>.Currency {
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Initializers
+    //=------------------------------------------------------------------------=
+    
+    @inlinable public static func currency(code: String) -> Self {
+        Self(code: code)
+    }
+}
 
 //=----------------------------------------------------------------------------=
 // MARK: + Double

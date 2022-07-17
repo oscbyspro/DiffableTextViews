@@ -34,15 +34,15 @@ import DiffableTextKit
     //=------------------------------------------------------------------------=
     
     @inlinable init() {
-        self.init(unchecked: (Self.min, Self.max))
+        self.init(unchecked: (Input.min, Input.max))
     }
     
     @inlinable init(_ limits: PartialRangeFrom<Input>) {
-        self.init(unchecked: (Self.clamping(limits.lowerBound), Self.max))
+        self.init(unchecked: (Self.clamping(limits.lowerBound), Input.max))
     }
     
     @inlinable init(_ limits: PartialRangeThrough<Input>) {
-        self.init(unchecked: (Self.min, Self.clamping(limits.upperBound)))
+        self.init(unchecked: (Input.min, Self.clamping(limits.upperBound)))
     }
     
     @inlinable init(_ limits: ClosedRange<Input>) {
@@ -76,23 +76,11 @@ import DiffableTextKit
     }
     
     //=------------------------------------------------------------------------=
-    // MARK: Accessors
-    //=------------------------------------------------------------------------=
-    
-    @inlinable static var min: Input {
-        Input.bounds.lowerBound
-    }
-    
-    @inlinable static var max: Input {
-        Input.bounds.upperBound
-    }
-    
-    //=------------------------------------------------------------------------=
     // MARK: Utilities
     //=------------------------------------------------------------------------=
     
     @inlinable static func clamping(_ input:  Input) -> Input {
-        Swift.min(Swift.max(Self.min, input), Self.max)
+        Swift.min(Swift.max(Input.min, input), Input.max)
     }
 }
 

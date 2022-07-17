@@ -153,9 +153,12 @@ extension _DefaultCache {
         return try resolve(number)
     }
     
+    #warning(".................................................................")
     @inlinable public func resolve(_ proposal: Proposal) throws -> Commit<Input?> {
-        let number = try interpreter.number(proposal, as: Input?.self)
-        return try number.map({ try Commit(resolve($0)) }) ?? Commit()
+        fatalError()
+        
+//        let number = try interpreter.number(proposal, as: Input?.self)
+//        return try number.map({ try Commit(resolve($0)) }) ?? Commit()
     }
     
     //=------------------------------------------------------------------------=

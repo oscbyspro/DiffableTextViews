@@ -15,17 +15,17 @@ import Foundation
 // MARK: + Decimal
 //=----------------------------------------------------------------------------=
 
-//extension Decimal.FormatStyle.Currency: NumberTextFormat,
-//NumberTextFormatXCurrency {
-//
-//    //=------------------------------------------------------------------------=
-//    // MARK: Utilities
-//    //=------------------------------------------------------------------------=
-//
-//    @inlinable public func scheme() -> some NumberTextScheme {
-//        NumberTextSchemeXCurrency.reuse(self)
-//    }
-//}
+extension Decimal.FormatStyle.Currency: NumberTextFormat,
+NumberTextFormatXCurrency {
+
+    //=------------------------------------------------------------------------=
+    // MARK: Utilities
+    //=------------------------------------------------------------------------=
+
+    @inlinable public func scheme() -> some NumberTextScheme {
+        NumberTextSchemeXCurrency.reuse(self)
+    }
+}
 
 //=----------------------------------------------------------------------------=
 // MARK: + Floating Point

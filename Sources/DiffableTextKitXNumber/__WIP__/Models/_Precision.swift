@@ -79,7 +79,7 @@ import Foundation
     
     @inlinable static var fraction: ClosedRange<Int> {
         let min = Space.lower.fraction
-        let max = Input.isInteger ? min : Input.precision
+        let max = Input.integer ? min : Input.precision
         return ClosedRange(uncheckedBounds: (min, max))
     }
     

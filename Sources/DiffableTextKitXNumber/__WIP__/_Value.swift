@@ -7,35 +7,61 @@
 // See http://www.apache.org/licenses/LICENSE-2.0 for license information.
 //=----------------------------------------------------------------------------=
 
-#warning("Rework: NumberTextGraph.............................................")
 //*============================================================================*
 // MARK: * Value
 //*============================================================================*
 
 public protocol _Value {
+    associatedtype NumberTextGraph: _Graph where NumberTextGraph.Value == Self
     
     //=------------------------------------------------------------------------=
-    // MARK: Attributes
+    // MARK: State
     //=------------------------------------------------------------------------=
     
-    @inlinable static var isOptional: Bool { get }
-    @inlinable static var isUnsigned: Bool { get }
-    @inlinable static var isInteger:  Bool { get }
+    @inlinable static var _numberTextGraph: NumberTextGraph { get }
+}
+
+//=----------------------------------------------------------------------------=
+// MARK: + Details
+//=----------------------------------------------------------------------------=
+
+extension _Value {
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Accessors
+    //=------------------------------------------------------------------------=
+    
+    @inlinable @inline(__always) static var min: NumberTextGraph.Input {
+        _numberTextGraph.min
+    }
+
+    @inlinable @inline(__always) static var max: NumberTextGraph.Input {
+        _numberTextGraph.max
+    }
+
+    @inlinable @inline(__always) static var zero: NumberTextGraph.Input {
+        _numberTextGraph.zero
+    }
+    
+    @inlinable @inline(__always) static var precision: Int {
+        _numberTextGraph.precision
+    }
+
+    @inlinable @inline(__always) static var optional: Bool {
+        _numberTextGraph.optional
+    }
+
+    @inlinable @inline(__always) static var unsigned: Bool {
+        _numberTextGraph.unsigned
+    }
+
+    @inlinable @inline(__always) static var integer:  Bool {
+        _numberTextGraph.integer
+    }
 }
 
 //*============================================================================*
-// MARK: * Value x Branchable(s)
+// MARK: * Input
 //*============================================================================*
 
-#warning("WIP")
-#warning("WIP")
-#warning("WIP")
-
-//public protocol _Value_Numberable: _Value
-//where NumberTextGraph.Format: _Format_Number { }
-//
-//public protocol _Value_Currencyable: _Value
-//where NumberTextGraph.Format: _Format_Currencyable { }
-//
-//public protocol _Value_Percentable: _Value
-//where NumberTextGraph.Format: _Format_Percentable { }
+public protocol _Input: _Value, Comparable where NumberTextGraph.Input == Self { }

@@ -29,16 +29,16 @@ extension _OptionalNumberTextStyle where Format: NumberTextFormatXNumber {
 // MARK: + Decimal
 //=----------------------------------------------------------------------------=
 
-//extension DiffableTextStyle where Self == NumberTextStyle<Decimal?> {
-//    
-//    //=------------------------------------------------------------------------=
-//    // MARK: Initializers
-//    //=------------------------------------------------------------------------=
-//    
-//    @inlinable public static var number: Self {
-//        Self()
-//    }
-//}
+extension DiffableTextStyle where Self == NumberTextStyle<Decimal?> {
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Initializers
+    //=------------------------------------------------------------------------=
+    
+    @inlinable public static var number: Self {
+        Self()
+    }
+}
 
 //=----------------------------------------------------------------------------=
 // MARK: + Double

@@ -15,7 +15,7 @@ import Foundation
 //*============================================================================*
 
 public protocol _Style: DiffableTextStyle where Value: _Value, Cache: _Cache {
-    associatedtype Input: _Input
+    typealias Input = Value.NumberTextGraph.Input
     
     //=------------------------------------------------------------------------=
     // MARK: Bounds
@@ -54,15 +54,15 @@ public protocol _Style: DiffableTextStyle where Value: _Value, Cache: _Cache {
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: + Details where Input: Integer
+// MARK: + Details where Input: Binary Integer
 //=----------------------------------------------------------------------------=
 
-public extension _Style where Input: _Input_Integer {
+public extension _Style where Input: BinaryInteger {
     
     //=------------------------------------------------------------------------=
     // MARK: Precision
     //=------------------------------------------------------------------------=
-    
+
     @inlinable func precision(_ length: Int) -> Self {
         self.precision(integer: length...length)
     }
