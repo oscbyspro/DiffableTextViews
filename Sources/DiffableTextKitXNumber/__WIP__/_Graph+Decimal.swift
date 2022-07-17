@@ -13,18 +13,18 @@ import Foundation
 // MARK: * Graph x Decimal
 //*============================================================================*
 
-public struct _Graph_Decimal: _Graph {
+public struct _Graph_Decimal: _Graph, _Graph_Number, _Graph_Percent, _Graph_Currency {
     public typealias Value = Decimal
     public typealias Input = Decimal
-
-    public typealias Base = Value.FormatStyle
     
     //=------------------------------------------------------------------------=
-    // MARK: Types
+    // MARK: Nodes
     //=------------------------------------------------------------------------=
-
-//    public typealias Number   = _DefaultID_Standard<Base         >.Style
-//    public typealias Currency = _DefaultID_Currency<Base.Currency>.Style
+    
+    public typealias Format   =  Decimal.FormatStyle
+    public typealias Number   = _DefaultID_Standard<Format         >.Style
+    public typealias Percent  = _DefaultID_Standard<Format.Percent >.Style
+    public typealias Currency = _DefaultID_Currency<Format.Currency>.Style
 
     //=------------------------------------------------------------------------=
     // MARK: State

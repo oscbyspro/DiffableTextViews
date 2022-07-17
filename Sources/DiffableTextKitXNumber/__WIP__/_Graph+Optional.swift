@@ -9,13 +9,6 @@
 
 public struct _Graph_Optional<Input: _Input>: _Graph {
     public typealias Value = Input?
-
-    //=------------------------------------------------------------------------=
-    // MARK: Types
-    //=------------------------------------------------------------------------=
-
-//    public typealias Number   = _DefaultID_Standard<Base         >.Style
-//    public typealias Currency = _DefaultID_Currency<Base.Currency>.Style
     
     //=------------------------------------------------------------------------=
     // MARK: Initializers
@@ -42,9 +35,18 @@ public struct _Graph_Optional<Input: _Input>: _Graph {
     @inlinable @inline(__always) public var integer:  Bool { Input.integer  }
 }
 
+#warning("TODO................................................................")
 //=----------------------------------------------------------------------------=
-// MARK: + Optional
+// MARK: + Nodes
 //=----------------------------------------------------------------------------=
+
+//extension _Graph_Optional: _Graph_Number where Input.NumberTextGraph: _Graph_Number {
+//    public typealias Number = _Style_Optional<Input.NumberTextGraph.Number>
+//}
+
+//*============================================================================*
+// MARK: * Graph x Optional
+//*============================================================================*
 
 extension Optional: _Value where Wrapped: _Input {
     

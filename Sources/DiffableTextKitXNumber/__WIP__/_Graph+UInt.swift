@@ -13,16 +13,16 @@ import Foundation
 // MARK: * Graph x Int
 //*============================================================================*
 
-public struct _Graph_UInt<Value: _Input>: _Graph
+public struct _Graph_UInt<Value: _Input>: _Graph, _Graph_Number, _Graph_Currency
 where Value: FixedWidthInteger & UnsignedInteger {
-    public typealias Base = IntegerFormatStyle<Value>
-
+    
     //=------------------------------------------------------------------------=
-    // MARK: Types
+    // MARK: Nodes
     //=------------------------------------------------------------------------=
 
-//    public typealias Number   = _DefaultID_Standard<Base         >.Style
-//    public typealias Currency = _DefaultID_Currency<Base.Currency>.Style
+    public typealias Format   =  IntegerFormatStyle<Value>
+    public typealias Number   = _DefaultID_Standard<Format         >.Style
+    public typealias Currency = _DefaultID_Currency<Format.Currency>.Style
 
     //=------------------------------------------------------------------------=
     // MARK: State
@@ -39,8 +39,8 @@ where Value: FixedWidthInteger & UnsignedInteger {
         self.precision = precision; self.max = .max
     }
     
-    /// IntegerFormatStyle uses an Int, I think, because values above Int.max crash.
-    @inlinable init<T>(limit: T.Type) where T: _Input & SignedInteger & BinaryInteger {
+    /// IntegerFormatStyle uses an Int, it seems; values above Int.max crash.
+    @inlinable init(limit: (some _Input & BinaryInteger).Type) {
         self.precision = limit.precision; self.max = Value(limit.max)
     }
 

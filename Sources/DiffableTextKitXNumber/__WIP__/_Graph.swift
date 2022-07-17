@@ -7,10 +7,6 @@
 // See http://www.apache.org/licenses/LICENSE-2.0 for license information.
 //=----------------------------------------------------------------------------=
 
-#warning("WIP")
-#warning("WIP")
-#warning("WIP")
-
 //*============================================================================*
 // MARK: * Graph
 //*============================================================================*
@@ -57,12 +53,14 @@ public protocol _Graph_Currency: _Graph {
     associatedtype Currency: _Style where Currency.Value == Value
 }
 
-#warning("WIP")
-#warning("WIP")
-#warning("WIP")
+//*============================================================================*
+// MARK: * Graph x Branches
+//*============================================================================*
 
-//NumberTextValueXSigned,
-//NumberTextValueXFloatingPoint,
-//NumberTextValueXNumberable,
-//NumberTextValueXCurrencyable,
-//NumberTextValueXPercentable { }
+extension _Style where Graph: _Graph_Number, Graph.Number == Self, Graph: _Graph_Percent {
+    public typealias Percent = Graph.Percent
+}
+
+extension _Style where Graph: _Graph_Number, Graph.Number == Self, Graph: _Graph_Currency {
+    public typealias Currency = Graph.Currency
+}

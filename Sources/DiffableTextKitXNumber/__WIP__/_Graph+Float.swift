@@ -13,15 +13,17 @@ import Foundation
 // MARK: * Graph x Float
 //*============================================================================*
 
-public struct _Graph_Float<Value: _Input>: _Graph where Value: BinaryFloatingPoint & SignedNumeric {
-    public typealias Base = FloatingPointFormatStyle<Value>
+public struct _Graph_Float<Value: _Input>: _Graph, _Graph_Number, _Graph_Percent,
+_Graph_Currency where Value: BinaryFloatingPoint & SignedNumeric {
     
     //=------------------------------------------------------------------------=
-    // MARK: Types
+    // MARK: Nodes
     //=------------------------------------------------------------------------=
-
-//    public typealias Number   = _DefaultID_Standard<Base         >.Style
-//    public typealias Currency = _DefaultID_Currency<Base.Currency>.Style
+    
+    public typealias Format   =  FloatingPointFormatStyle<Value>
+    public typealias Number   = _DefaultID_Standard<Format         >.Style
+    public typealias Percent  = _DefaultID_Standard<Format.Percent >.Style
+    public typealias Currency = _DefaultID_Currency<Format.Currency>.Style
 
     //=------------------------------------------------------------------------=
     // MARK: State
@@ -37,8 +39,8 @@ public struct _Graph_Float<Value: _Input>: _Graph where Value: BinaryFloatingPoi
     
     @inlinable init(precision: Int) {
         let _abs = String(repeating: "9", count: precision)
-        let  abs = try! Value(_abs, format: Base(locale: .en_US_POSIX))
-        self.min = -abs; self.max = abs; self.precision = precision
+        let  abs = try! Value(_abs, format: Format(locale: .en_US_POSIX))
+        self.precision = precision; self.min = -abs; self.max = abs
     }
 
     //=------------------------------------------------------------------------=

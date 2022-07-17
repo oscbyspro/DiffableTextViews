@@ -13,16 +13,16 @@ import Foundation
 // MARK: * Graph x Int
 //*============================================================================*
 
-public struct _Graph_Int<Value: _Input>: _Graph
+public struct _Graph_Int<Value: _Input>: _Graph, _Graph_Number, _Graph_Currency
 where Value: FixedWidthInteger, Value: SignedInteger {
-    public typealias Base = IntegerFormatStyle<Value>
-
+    
     //=------------------------------------------------------------------------=
-    // MARK: Types
+    // MARK: Nodes
     //=------------------------------------------------------------------------=
 
-//    public typealias Number   = _DefaultID_Standard<Base         >.Style
-//    public typealias Currency = _DefaultID_Currency<Base.Currency>.Style
+    public typealias Format   =  IntegerFormatStyle<Value>
+    public typealias Number   = _DefaultID_Standard<Format         >.Style
+    public typealias Currency = _DefaultID_Currency<Format.Currency>.Style
 
     //=------------------------------------------------------------------------=
     // MARK: State

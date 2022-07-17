@@ -72,17 +72,18 @@ public protocol _Format_Standard: _Format where _SignDS == _NFSC_SignDS {
     @inlinable init(locale: Locale)
 }
 
-//*============================================================================*
-// MARK: * Format x Number
-//*============================================================================*
+//=----------------------------------------------------------------------------=
+// MARK: + Types
+//=----------------------------------------------------------------------------=
 
-public protocol _Format_Number: _Format_Standard { }
+private typealias _Standard = _Format & _Format_Standard
 
-//*============================================================================*
-// MARK: * Format x Percent
-//*============================================================================*
+extension      Decimal.FormatStyle: _Standard { }
+extension FloatingPointFormatStyle: _Standard where FormatInput: _Input { }
+extension       IntegerFormatStyle: _Standard where FormatInput: _Input { }
 
-public protocol _Format_Percent: _Format_Standard { }
+extension      Decimal.FormatStyle.Percent: _Standard { }
+extension FloatingPointFormatStyle.Percent: _Standard where FormatInput: _Input { }
 
 //*============================================================================*
 // MARK: * Format x Currency
@@ -97,85 +98,35 @@ public protocol _Format_Currency: _Format where _SignDS == _CFSC_SignDS {
     @inlinable init(code: String, locale: Locale)
 }
 
-#warning("Rework: NumberTextGraph.............................................")
-//*============================================================================*
-// MARK: * Format x Branchable(s)
-//*============================================================================*
+//=----------------------------------------------------------------------------=
+// MARK: + Types
+//=----------------------------------------------------------------------------=
 
-public protocol _Format_Numberable: _Format {
-    associatedtype Number: _Format_Number
-    where Number.FormatInput == FormatInput
-}
+private typealias _Currency = _Format & _Format_Currency
 
-public protocol _Format_Percentable: _Format {
-    associatedtype Percent: _Format_Percent
-    where Percent.FormatInput == FormatInput
-}
-
-public protocol _Format_Currencyable: _Format {
-    associatedtype Currency: _Format_Currency
-    where Currency.FormatInput == FormatInput
-}
+extension      Decimal.FormatStyle.Currency: _Currency { }
+extension FloatingPointFormatStyle.Currency: _Currency where FormatInput: _Input { }
+extension       IntegerFormatStyle.Currency: _Currency where FormatInput: _Input { }
 
 //*============================================================================*
 // MARK: * Format x Strategies x Sign
 //*============================================================================*
 
-public enum _SignDS {
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Instances
-    //=------------------------------------------------------------------------=
-    
-    case always
-    case automatic
-}
+public enum     _SignDS      { case always, automatic }
+public protocol _SignDS_Init { init(_ value: _SignDS) }
 
 //=----------------------------------------------------------------------------=
-// MARK: + Protocol
-//=----------------------------------------------------------------------------=
-
-public protocol _SignDS_Init {
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Initializers
-    //=------------------------------------------------------------------------=
-    
-    @inlinable init(_ value: _SignDS)
-}
-
-//=----------------------------------------------------------------------------=
-// MARK: + Number
+// MARK: + Types
 //=----------------------------------------------------------------------------=
 
 extension _NFSC_SignDS: _SignDS_Init {
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Initializers
-    //=------------------------------------------------------------------------=
-    
     @inlinable public init(_ value: _SignDS) {
-        switch value {
-        case .always:    self = .always()
-        case .automatic: self = .automatic
-        }
+        switch value { case .always: self = .always(); case .automatic: self = .automatic }
     }
 }
 
-//=----------------------------------------------------------------------------=
-// MARK: + Currency
-//=----------------------------------------------------------------------------=
-
 extension _CFSC_SignDS: _SignDS_Init {
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Initializers
-    //=------------------------------------------------------------------------=
-    
     @inlinable public init(_ value: _SignDS) {
-        switch value {
-        case .always:    self = .always()
-        case .automatic: self = .automatic
-        }
+        switch value { case .always: self = .always(); case .automatic: self = .automatic }
     }
 }
