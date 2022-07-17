@@ -10,99 +10,175 @@
 import DiffableTextKit
 import Foundation
 
+
 //*============================================================================*
 // MARK: * Style
 //*============================================================================*
 
-public struct _Style<Graph: _Graph>: _Protocol_Internal {
-    public typealias Cache = Graph.Cache
-    public typealias Input = Graph.Input
-    public typealias Value = Graph.Input
+public protocol _Style: DiffableTextStyle where Value: _Value, Cache: _Cache {
+    associatedtype Graph: _DefaultGraph; typealias Input = Graph.Input
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Bounds
+    //=------------------------------------------------------------------------=
+    
+    @inlinable func bounds(_ limits: ClosedRange<Input>) -> Self
+    
+    @inlinable func bounds(_ limits: PartialRangeFrom<Input>) -> Self
+    
+    @inlinable func bounds(_ limits: PartialRangeThrough<Input>) -> Self
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Precision
+    //=------------------------------------------------------------------------=
+    
+    @inlinable func precision(integer: Int) -> Self
+    
+    @inlinable func precision(fraction: Int) -> Self
+    
+    @inlinable func precision(integer: Int, fraction: Int) -> Self
+    
+    @inlinable func precision<I>(integer: I, fraction: Int) -> Self
+    where I: RangeExpression, I.Bound == Int
+    
+    @inlinable func precision<F>(integer: Int, fraction: F) -> Self
+    where F: RangeExpression, F.Bound == Int
+    
+    @inlinable func precision<I>(integer: I) -> Self
+    where I: RangeExpression, I.Bound == Int
+    
+    @inlinable func precision<F>(fraction: F) -> Self
+    where F: RangeExpression, F.Bound == Int
+    
+    @inlinable func precision<I, F>(integer: I, fraction: F) -> Self
+    where I: RangeExpression, I.Bound == Int, F: RangeExpression, F.Bound == Int
+}
+
+//=----------------------------------------------------------------------------=
+// MARK: + Details where Input: Integer
+//=----------------------------------------------------------------------------=
+
+public extension _Style where Input: _Input_Integer {
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Precision
+    //=------------------------------------------------------------------------=
+    
+    @inlinable func precision(_ length: Int) -> Self {
+        self.precision(integer: length...length)
+    }
+
+    @inlinable func precision<I>(_ limits: I) -> Self
+    where I: RangeExpression, I.Bound == Int {
+        self.precision(integer: limits)
+    }
+}
+
+//*============================================================================*
+// MARK: * Style x Internal
+//*============================================================================*
+
+@usableFromInline protocol _Style_Internal: _Style {
     
     //=------------------------------------------------------------------------=
     // MARK: State
     //=------------------------------------------------------------------------=
     
-    @usableFromInline var id: Graph
-    @usableFromInline var bounds: _Bounds<Input>?
-    @usableFromInline var precision: _Precision<Input>?
+    @inlinable var bounds: _Bounds<Input>? { get set }
+    @inlinable var precision: _Precision<Input>? { get set }
+}
+
+//=----------------------------------------------------------------------------=
+// MARK: + Bounds
+//=----------------------------------------------------------------------------=
+
+extension _Style_Internal {
     
     //=------------------------------------------------------------------------=
-    // MARK: Initializers
+    // MARK: Bounds
     //=------------------------------------------------------------------------=
     
-    @inlinable init(_ id: Graph) { self.id = id }
+    @inlinable func bounds(_ bounds: _Bounds<Input>) -> Self {
+        var result = self; result.bounds = bounds; return result
+    }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Limits
+    //=------------------------------------------------------------------------=
+    
+    @inlinable public func bounds(_ limits: ClosedRange<Input>) -> Self {
+        self.bounds(_Bounds(limits))
+    }
+    
+    @inlinable public func bounds(_ limits: PartialRangeFrom<Input>) -> Self {
+        self.bounds(_Bounds(limits))
+    }
+    
+    @inlinable public func bounds(_ limits: PartialRangeThrough<Input>) -> Self {
+        self.bounds(_Bounds(limits))
+    }
+}
+
+//=----------------------------------------------------------------------------=
+// MARK: + Precision
+//=----------------------------------------------------------------------------=
+
+extension _Style_Internal {
     
     //=------------------------------------------------------------------------=
     // MARK: Transformations
     //=------------------------------------------------------------------------=
     
-    @inlinable public func locale(_ locale: Locale) -> Self {
-        var result = self; result.id.locale = locale; return self
+    @inlinable @inline(__always) func precision(_ precision: _Precision<Input>) -> Self {
+        var result = self; result.precision = precision; return result
     }
     
     //=------------------------------------------------------------------------=
-    // MARK: Utilities
+    // MARK: Length
     //=------------------------------------------------------------------------=
     
-    @inlinable public func cache() -> Cache {
-        Graph.cache(self)
+    @inlinable public func precision(integer: Int) -> Self {
+        self.precision(_Precision(integer: integer...integer))
     }
     
-    @inlinable public func update(_ cache: inout Cache) {
-        if cache.style.id == id { cache.style = self } else { cache = self.cache() }
+    @inlinable public func precision(fraction: Int) -> Self {
+        self.precision(_Precision(fraction: fraction...fraction))
     }
     
-    //*========================================================================*
-    // MARK: * Optional
-    //*========================================================================*
+    @inlinable public func precision(integer: Int, fraction: Int) -> Self {
+        self.precision(_Precision(integer: integer...integer, fraction: fraction...fraction))
+    }
     
-    public struct Optional: DiffableTextStyleWrapper, _Protocol_Internal {
-        public typealias Style = Graph.Style
-        public typealias Cache = Graph.Cache
-        public typealias Input = Graph.Input
-        public typealias Value = Graph.Input?
+    //=------------------------------------------------------------------------=
+    // MARK: Mixed
+    //=------------------------------------------------------------------------=
+    
+    @inlinable public func precision<I>(integer: I, fraction: Int) -> Self
+    where I: RangeExpression, I.Bound == Int {
+        self.precision(_Precision(integer: integer, fraction: fraction...fraction))
+    }
+    
+    @inlinable public func precision<F>(integer: Int, fraction: F) -> Self
+    where F: RangeExpression, F.Bound == Int {
+        self.precision(_Precision(integer: integer...integer, fraction: fraction))
+    }
 
-        //=--------------------------------------------------------------------=
-        // MARK: State
-        //=--------------------------------------------------------------------=
-
-        public var style: Style
-
-        //=--------------------------------------------------------------------=
-        // MARK: Initializers
-        //=--------------------------------------------------------------------=
-
-        @inlinable init(_ style: Style) { self.style = style }
-        
-        //=--------------------------------------------------------------------=
-        // MARK: Accessors
-        //=--------------------------------------------------------------------=
-
-        @inlinable var bounds: _Bounds<Input>? {
-            get { style.bounds }
-            set { style.bounds = newValue }
-        }
-
-        @inlinable var precision: _Precision<Input>? {
-            get { style.precision }
-            set { style.precision = newValue }
-        }
-        
-        //=--------------------------------------------------------------------=
-        // MARK: Utilities
-        //=--------------------------------------------------------------------=
-
-        @inlinable public func format(_ value: Value, with cache: inout Cache) -> String {
-            value.map({ style.format($0, with: &cache) }) ?? String()
-        }
-
-        @inlinable public func interpret(_ value: Value, with cache: inout Cache) -> Commit<Value> {
-            value.map({ Commit(style.interpret($0, with: &cache)) }) ?? Commit()
-        }
-
-        @inlinable public func resolve(_ proposal: Proposal, with cache: inout Cache) throws -> Commit<Value> {
-            try cache.resolve(proposal)
-        }
+    //=------------------------------------------------------------------------=
+    // MARK: Limits
+    //=------------------------------------------------------------------------=
+    
+    @inlinable public func precision<I>(integer: I) -> Self
+    where I: RangeExpression, I.Bound == Int {
+        self.precision(_Precision(integer: integer))
+    }
+    
+    @inlinable public func precision<F>(fraction: F) -> Self
+    where F: RangeExpression, F.Bound == Int {
+        self.precision(_Precision(fraction: fraction))
+    }
+    
+    @inlinable public func precision<I, F>(integer: I, fraction: F) -> Self
+    where I: RangeExpression, I.Bound == Int, F: RangeExpression, F.Bound == Int {
+        self.precision(_Precision(integer: integer, fraction: fraction))
     }
 }

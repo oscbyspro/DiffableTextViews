@@ -14,8 +14,8 @@ import Foundation
 // MARK: * Precision
 //*============================================================================*
 
-public struct _Precision<Input: _Input>: Equatable {
-    @usableFromInline typealias Name = __Precision
+@usableFromInline struct _Precision<Input: _Input>: Equatable {
+    @usableFromInline typealias Space = _Precision_Namespace
     
     //=------------------------------------------------------------------------=
     // MARK: State
@@ -58,7 +58,7 @@ public struct _Precision<Input: _Input>: Equatable {
     //=------------------------------------------------------------------------=
     
     @inlinable var lower: Count {
-        Count(value: Name.lower.value,
+        Count(value: Space.lower.value,
         integer:  integer .lowerBound,
         fraction: fraction.lowerBound)
     }
@@ -74,11 +74,11 @@ public struct _Precision<Input: _Input>: Equatable {
     //=------------------------------------------------------------------------=
     
     @inlinable static var integer: ClosedRange<Int> {
-        ClosedRange(uncheckedBounds: (Name.lower.integer, Input.precision))
+        ClosedRange(uncheckedBounds: (Space.lower.integer, Input.precision))
     }
     
     @inlinable static var fraction: ClosedRange<Int> {
-        let min = Name.lower.fraction
+        let min = Space.lower.fraction
         let max = Input.isInteger ? min : Input.precision
         return ClosedRange(uncheckedBounds: (min, max))
     }
@@ -95,14 +95,14 @@ public struct _Precision<Input: _Input>: Equatable {
     
     @inlinable func active() -> _NFSC.Precision {
         .integerAndFractionLength(
-         integerLimits: Name.lower.integer  ... Int.max,
-        fractionLimits: Name.lower.fraction ... Int.max)
+         integerLimits: Space.lower.integer  ... Int.max,
+        fractionLimits: Space.lower.fraction ... Int.max)
     }
     
     @inlinable func interactive(_ count: Count) -> _NFSC.Precision {
         .integerAndFractionLength(
-         integerLimits: max(Name.lower.integer,  count.integer ) ... Int.max,
-        fractionLimits: max(Name.lower.fraction, count.fraction) ... Int.max)
+         integerLimits: max(Space.lower.integer,  count.integer ) ... Int.max,
+        fractionLimits: max(Space.lower.fraction, count.fraction) ... Int.max)
     }
     
     //=------------------------------------------------------------------------=
@@ -111,12 +111,12 @@ public struct _Precision<Input: _Input>: Equatable {
     
     @inlinable static func integer<I>(_ limits: I) -> ClosedRange<Int>
     where I: RangeExpression, I.Bound == Int {
-        Name.clamping(limits, to: integer)
+        Space.clamping(limits, to: integer)
     }
     
     @inlinable static func fraction<F>(_ limits: F) -> ClosedRange<Int>
     where F: RangeExpression, F.Bound == Int {
-        Name.clamping(limits, to: fraction)
+        Space.clamping(limits, to: fraction)
     }
 }
 
@@ -176,7 +176,7 @@ extension _Precision {
 // MARK: * Precision x Namespace
 //*============================================================================*
 
-@usableFromInline enum __Precision {
+@usableFromInline enum _Precision_Namespace {
     
     //=------------------------------------------------------------------------=
     // MARK: Constants

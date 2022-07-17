@@ -7,12 +7,13 @@
 // See http://www.apache.org/licenses/LICENSE-2.0 for license information.
 //=----------------------------------------------------------------------------=
 
+#warning("Rework: NumberTextGraph.............................................")
 //*============================================================================*
 // MARK: * Value
 //*============================================================================*
 
 public protocol _Value {
-    associatedtype NumberTextStyle: _Protocol // node
+    associatedtype NumberTextStyle: _Style
     typealias NumberTextGraph = NumberTextStyle.Graph
     
     //=------------------------------------------------------------------------=
@@ -23,3 +24,16 @@ public protocol _Value {
     @inlinable static var isUnsigned: Bool { get }
     @inlinable static var isInteger:  Bool { get }
 }
+
+//*============================================================================*
+// MARK: * Value x Branchable(s)
+//*============================================================================*
+
+public protocol _Value_Numberable: _Value
+where NumberTextGraph.Format: _Format_Number { }
+
+public protocol _Value_Currencyable: _Value
+where NumberTextGraph.Format: _Format_Currencyable { }
+
+public protocol _Value_Percentable: _Value
+where NumberTextGraph.Format: _Format_Percentable { }

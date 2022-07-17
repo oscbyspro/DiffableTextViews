@@ -19,24 +19,24 @@ public typealias _WIP_NumberTextStyle<Value: _Value> = Value.NumberTextStyle
 // MARK: + Branches
 //=----------------------------------------------------------------------------=
 
-public extension _Style where Graph.Format: _Format_Percentable {
-    typealias Percent = _Style<Graph.Percent>
+public extension _DefaultStyle where Graph.Format: _Format_Percentable {
+    typealias Percent = _DefaultStyle<Graph.Percent>
 }
 
-public extension _Style where Graph.Format: _Format_Currencyable {
-    typealias Currency = _Style<Graph.Currency>
+public extension _DefaultStyle where Graph.Format: _Format_Currencyable {
+    typealias Currency = _DefaultStyle<Graph.Currency>
 }
 
 //=----------------------------------------------------------------------------=
 // MARK: + Branches x Optional
 //=----------------------------------------------------------------------------=
 
-public extension _Style.Optional where Graph.Format: _Format_Percentable {
-    typealias Percent = _Style<Graph.Percent>.Optional
+public extension _DefaultStyle.Optional where Graph.Format: _Format_Percentable {
+    typealias Percent = _DefaultStyle<Graph.Percent>.Optional
 }
 
-public extension _Style.Optional where Graph.Format: _Format_Currencyable {
-    typealias Currency = _Style<Graph.Currency>.Optional
+public extension _DefaultStyle.Optional where Graph.Format: _Format_Currencyable {
+    typealias Currency = _DefaultStyle<Graph.Currency>.Optional
 }
 
 //*============================================================================*
@@ -51,3 +51,5 @@ public typealias _NFSC_SeparatorDS = _NFSC.DecimalSeparatorDisplayStrategy
 
 public typealias _CFSC_SignDS = _CFSC.SignDisplayStrategy
 public typealias _CFSC_SeparatorDS = _CFSC.DecimalSeparatorDisplayStrategy
+
+public typealias _FPRR = FloatingPointRoundingRule

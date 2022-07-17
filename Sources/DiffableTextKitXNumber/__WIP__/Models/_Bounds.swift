@@ -13,7 +13,7 @@ import DiffableTextKit
 // MARK: * Bounds
 //*============================================================================*
 
-public struct _Bounds<Input: _Input>: CustomStringConvertible, Equatable {
+@usableFromInline struct _Bounds<Input: _Input>: CustomStringConvertible, Equatable {
     
     //=------------------------------------------------------------------------=
     // MARK: State

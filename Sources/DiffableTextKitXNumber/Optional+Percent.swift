@@ -29,16 +29,16 @@ extension _OptionalNumberTextStyle where Format: NumberTextFormatXPercent {
 // MARK: + Decimal
 //=----------------------------------------------------------------------------=
 
-extension DiffableTextStyle where Self == NumberTextStyle<Decimal?>.Percent {
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Initializers
-    //=------------------------------------------------------------------------=
-    
-    @inlinable public static var percent: Self {
-        Self()
-    }
-}
+//extension DiffableTextStyle where Self == NumberTextStyle<Decimal?>.Percent {
+//    
+//    //=------------------------------------------------------------------------=
+//    // MARK: Initializers
+//    //=------------------------------------------------------------------------=
+//    
+//    @inlinable public static var percent: Self {
+//        Self()
+//    }
+//}
 
 //=----------------------------------------------------------------------------=
 // MARK: + Double

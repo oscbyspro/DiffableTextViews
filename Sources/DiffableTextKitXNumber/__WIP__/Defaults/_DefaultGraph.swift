@@ -9,18 +9,18 @@
 
 import Foundation
 
+#warning("Rename as '_DefaultRecipe', maybe?")
 //*============================================================================*
 // MARK: * Graph
 //*============================================================================*
 
-public protocol _Graph<Format>: Equatable {
+public protocol _DefaultGraph<Format>: Equatable {
     associatedtype Format: _Format
     typealias Parser = Format.Strategy
-    
-    typealias Style = _Style<Self>
-    typealias Cache = _Cache<Self>
-    
     typealias Input = Format.FormatInput
+
+    typealias Style = _DefaultStyle<Self>
+    typealias Cache = _DefaultCache<Self>
     
     //=------------------------------------------------------------------------=
     // MARK: State
@@ -41,11 +41,11 @@ public protocol _Graph<Format>: Equatable {
 // MARK: + Branches
 //=----------------------------------------------------------------------------=
 
-public extension _Graph where Format: _Format_Percentable {
+public extension _DefaultGraph where Format: _Format_Percentable {
     typealias Percent = Format.Percent.NumberTextGraph
 }
 
-public extension _Graph where Format: _Format_Currencyable {
+public extension _DefaultGraph where Format: _Format_Currencyable {
     typealias Currency = Format.Currency.NumberTextGraph
 }
 
@@ -53,7 +53,7 @@ public extension _Graph where Format: _Format_Currencyable {
 // MARK: * Graph x Standard
 //*============================================================================*
 
-public struct _Standard<Format: _Format_Standard>: _Graph {
+public struct _DefaultGraph_Standard<Format: _Format_Standard>: _DefaultGraph {
     
     //=------------------------------------------------------------------------=
     // MARK: State
@@ -86,7 +86,7 @@ public struct _Standard<Format: _Format_Standard>: _Graph {
 // MARK: * Graph x Currency
 //*============================================================================*
 
-public struct _Currency<Format: _Format_Currency>: _Graph {
+public struct _DefaultGraph_Currency<Format: _Format_Currency>: _DefaultGraph {
     
     //=------------------------------------------------------------------------=
     // MARK: State

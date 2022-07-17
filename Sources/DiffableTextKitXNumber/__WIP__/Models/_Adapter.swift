@@ -7,27 +7,28 @@
 // See http://www.apache.org/licenses/LICENSE-2.0 for license information.
 //=----------------------------------------------------------------------------=
 
-import Foundation
-
 //*============================================================================*
 // MARK: * Adapter
 //*============================================================================*
 
-@usableFromInline struct _Adapter<Graph: _Graph> {
+@usableFromInline struct _Adapter<Format: _Format> {
     
     //=------------------------------------------------------------------------=
     // MARK: State
     //=------------------------------------------------------------------------=
     
-    @usableFromInline let format: Graph.Format
-    @usableFromInline let parser: Graph.Parser
+    @usableFromInline let format: Format
+    @usableFromInline let parser: Format.Strategy
     
     //=------------------------------------------------------------------------=
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable init(_ graph: Graph) {
-        self.format = Graph.format(graph).rounded(.towardZero)
+    /// - Requires that the format has only been initialized.
+    @inlinable init(unchecked format: Format) {
+        let  format = format.rounded(.towardZero)
+        
+        self.format = format
         self.parser = format.locale(.en_US_POSIX).parseStrategy
     }
     
@@ -35,7 +36,7 @@ import Foundation
     // MARK: Utilities
     //=------------------------------------------------------------------------=
     
-    @inlinable func parse(_  number: Number) throws -> Graph.Input {
+    @inlinable func parse(_  number: Number) throws -> Format.FormatInput {
         try parser.parse(number.description)
     }
 }

@@ -15,20 +15,20 @@ import Foundation
 // MARK: + Decimal
 //=----------------------------------------------------------------------------=
 
-extension Decimal.FormatStyle:
-NumberTextFormat,
-NumberTextFormatXNumber,
-NumberTextFormatXCurrencyable,
-NumberTextFormatXPercentable {
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Utilities
-    //=------------------------------------------------------------------------=
-    
-    @inlinable public func scheme() -> some NumberTextScheme {
-        NumberTextSchemeXStandard.reuse(self)
-    }
-}
+//extension Decimal.FormatStyle:
+//NumberTextFormat,
+//NumberTextFormatXNumber,
+//NumberTextFormatXCurrencyable,
+//NumberTextFormatXPercentable {
+//
+//    //=------------------------------------------------------------------------=
+//    // MARK: Utilities
+//    //=------------------------------------------------------------------------=
+//
+//    @inlinable public func scheme() -> some NumberTextScheme {
+//        NumberTextSchemeXStandard.reuse(self)
+//    }
+//}
 
 //=----------------------------------------------------------------------------=
 // MARK: + Floating Point
