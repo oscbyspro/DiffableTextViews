@@ -13,7 +13,7 @@ import Foundation
 // MARK: * Graph x Decimal
 //*============================================================================*
 
-public struct _Graph_Decimal: _Graph, _Graph_Number, _Graph_Percent, _Graph_Currency {
+public struct _Graph_Decimal: _Graph, _Graph_Percentable, _Graph_Currencyable {
     public typealias Value = Decimal
     public typealias Input = Decimal
     

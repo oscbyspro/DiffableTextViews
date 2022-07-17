@@ -13,15 +13,8 @@ import Foundation
 // MARK: * Aliases x Style
 //*============================================================================*
 
-//public typealias _WIP_NumberTextStyle<Value: _Value> = Value.NumberTextStyle
-
-#warning("WIP")
-#warning("WIP")
-#warning("WIP")
-
-//*============================================================================*
-// MARK: * Aliases x Convenience
-//*============================================================================*
+#warning("Rename.................................................................")
+public typealias _WIP_NumberTextStyle<Value: _Value> = Value.NumberTextGraph.Number
 
 public typealias _NFSC = NumberFormatStyleConfiguration
 public typealias _CFSC = CurrencyFormatStyleConfiguration

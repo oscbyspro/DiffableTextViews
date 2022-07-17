@@ -14,7 +14,7 @@ import Foundation
 // MARK: * Style
 //*============================================================================*
 
-public protocol _Style: DiffableTextStyle where Value: _Value, Cache: _Cache {
+public protocol _Style: DiffableTextStyle where Value: _Value, Cache: _Cache, Cache.Input == Input {
     typealias Graph = Value.NumberTextGraph
     typealias Input = Graph.Input
     

@@ -13,7 +13,7 @@ import Foundation
 // MARK: * Graph x Int
 //*============================================================================*
 
-public struct _Graph_Int<Value: _Input>: _Graph, _Graph_Number, _Graph_Currency
+public struct _Graph_Int<Value: _Input>: _Graph, _Graph_Currencyable
 where Value: FixedWidthInteger, Value: SignedInteger {
     
     //=------------------------------------------------------------------------=

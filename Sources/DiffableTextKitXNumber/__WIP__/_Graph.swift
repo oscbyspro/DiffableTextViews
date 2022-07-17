@@ -16,6 +16,12 @@ public protocol _Graph {
     associatedtype Input: _Input = Value
     
     //=------------------------------------------------------------------------=
+    // MARK: Nodes
+    //=------------------------------------------------------------------------=
+    
+    associatedtype Number: _Style where Number.Value == Value
+    
+    //=------------------------------------------------------------------------=
     // MARK: State
     //=------------------------------------------------------------------------=
     
@@ -30,18 +36,10 @@ public protocol _Graph {
 }
 
 //*============================================================================*
-// MARK: * Graph x Number
-//*============================================================================*
-
-public protocol _Graph_Number: _Graph {
-    associatedtype Number: _Style where Number.Value == Value
-}
-
-//*============================================================================*
 // MARK: * Graph x Percent
 //*============================================================================*
 
-public protocol _Graph_Percent: _Graph {
+public protocol _Graph_Percentable: _Graph {
     associatedtype Percent: _Style where Percent.Value == Value
 }
 
@@ -49,7 +47,7 @@ public protocol _Graph_Percent: _Graph {
 // MARK: * Graph x Currency
 //*============================================================================*
 
-public protocol _Graph_Currency: _Graph {
+public protocol _Graph_Currencyable: _Graph {
     associatedtype Currency: _Style where Currency.Value == Value
 }
 
@@ -57,10 +55,10 @@ public protocol _Graph_Currency: _Graph {
 // MARK: * Graph x Branches
 //*============================================================================*
 
-extension _Style where Graph: _Graph_Number, Graph.Number == Self, Graph: _Graph_Percent {
+extension _Style where Self == Graph.Number, Graph: _Graph_Percentable {
     public typealias Percent = Graph.Percent
 }
 
-extension _Style where Graph: _Graph_Number, Graph.Number == Self, Graph: _Graph_Currency {
+extension _Style where Self == Graph.Number, Graph: _Graph_Currencyable {
     public typealias Currency = Graph.Currency
 }

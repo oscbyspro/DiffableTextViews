@@ -13,8 +13,8 @@ import Foundation
 // MARK: * Graph x Float
 //*============================================================================*
 
-public struct _Graph_Float<Value: _Input>: _Graph, _Graph_Number, _Graph_Percent,
-_Graph_Currency where Value: BinaryFloatingPoint & SignedNumeric {
+public struct _Graph_Float<Value: _Input>: _Graph, _Graph_Percentable,
+_Graph_Currencyable where Value: BinaryFloatingPoint & SignedNumeric {
     
     //=------------------------------------------------------------------------=
     // MARK: Nodes

@@ -40,9 +40,17 @@ public struct _Graph_Optional<Input: _Input>: _Graph {
 // MARK: + Nodes
 //=----------------------------------------------------------------------------=
 
-//extension _Graph_Optional: _Graph_Number where Input.NumberTextGraph: _Graph_Number {
-//    public typealias Number = _Style_Optional<Input.NumberTextGraph.Number>
-//}
+extension _Graph_Optional {
+    public typealias Number = _Optional<Input.NumberTextGraph.Number>
+}
+
+extension _Graph_Optional: _Graph_Percentable where Input.NumberTextGraph: _Graph_Percentable {
+    public typealias Percent = _Optional<Input.NumberTextGraph.Percent>
+}
+
+extension _Graph_Optional: _Graph_Currencyable where Input.NumberTextGraph: _Graph_Currencyable {
+    public typealias Currency = _Optional<Input.NumberTextGraph.Currency>
+}
 
 //*============================================================================*
 // MARK: * Graph x Optional
