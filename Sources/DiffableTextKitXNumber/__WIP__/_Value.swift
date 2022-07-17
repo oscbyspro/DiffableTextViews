@@ -11,7 +11,7 @@
 // MARK: * Value
 //*============================================================================*
 
-public protocol _Value {
+public protocol _Value: Equatable {
     associatedtype NumberTextGraph: _Graph where NumberTextGraph.Value == Self
     
     //=------------------------------------------------------------------------=
