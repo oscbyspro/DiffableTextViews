@@ -14,7 +14,7 @@ import Foundation
 // MARK: * Cache
 //*============================================================================*
 
-public struct _DefaultCache<ID: _DefaultID>: DiffableTextCache, _Cache {    
+public struct _DefaultCache<ID: _DefaultID>: _Cache {
     public typealias Style = ID.Style
     public typealias Input = ID.Input
     
