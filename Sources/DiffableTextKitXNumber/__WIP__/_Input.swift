@@ -9,12 +9,11 @@
 
 import Foundation
 
-#warning("Rename as Input, maybe?")
 //*============================================================================*
 // MARK: * Input
 //*============================================================================*
 
-public protocol _Input: Comparable, _Value {
+public protocol _Input: _Value, Comparable where NumberTextGraph.Input == Self {
     
     //=------------------------------------------------------------------------=
     // MARK: Zero, Precision, Bounds

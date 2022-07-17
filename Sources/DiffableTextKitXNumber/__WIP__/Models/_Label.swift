@@ -28,6 +28,14 @@ import Foundation
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
+    @inlinable init(label: String, direction: Direction) {
+        self.label = label;  self.direction = direction
+    }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Initializers
+    //=------------------------------------------------------------------------=
+    
     /// Returns an instance if it is needed, returns nil otherwise.
     ///
     /// Correctness is assert by tests parsing currency formats for all locale-currency pairs.
@@ -35,26 +43,33 @@ import Foundation
     /// - Requires that formatter.numberStyle == .currency.
     /// - Requires that formatter.maximumFractionDigits == .zero.
     ///
-    @inlinable init?(_ formatter: NumberFormatter, _ components: Components) {
-        self.label = formatter.currencySymbol
-        //=----------------------------------=
+    @inlinable static func currency(_ formatter: NumberFormatter, _ components: Components) -> Self? {
+        let label = formatter.currencySymbol!
+        //=--------------------------------------=
         // Necessity
-        //=----------------------------------=
+        //=--------------------------------------=
+        assert(formatter.numberStyle == .currency)
         guard label.contains(components.separators[.fraction]) else { return nil }
-        //=----------------------------------=
+        //=--------------------------------------=
         // Formatted
-        //=----------------------------------=
+        //=--------------------------------------=
         let sides = formatter.string(from: 0)!.split(
         separator: components.digits[.zero], omittingEmptySubsequences: false)
-        //=----------------------------------=
+        //=--------------------------------------=
         // Direction
-        //=----------------------------------=
+        //=--------------------------------------=
+        let direction: Direction
+        
         switch sides[0].contains(label) {
-        case  true: self.direction =  .forwards
-        case false: self.direction = .backwards; assert(sides[1].contains(label))
+        case  true: direction =  .forwards
+        case false: direction = .backwards; assert(sides[1].contains(label))
         }
+        //=--------------------------------------=
+        // Return
+        //=--------------------------------------=
+        return .init(label: label, direction: direction)
     }
-    
+
     //=------------------------------------------------------------------------=
     // MARK: Utilities
     //=------------------------------------------------------------------------=

@@ -3,7 +3,7 @@
 //*============================================================================*
 
 extension Optional: _Value where Wrapped: _Input {
-    public typealias NumberTextGraph = Wrapped.NumberTextGraph
+    public typealias NumberTextStyle = Wrapped.NumberTextGraph.Style.Optional
     
     //=------------------------------------------------------------------------=
     // MARK: Attributes

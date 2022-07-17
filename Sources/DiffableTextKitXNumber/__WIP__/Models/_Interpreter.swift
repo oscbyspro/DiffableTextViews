@@ -59,17 +59,9 @@ import Foundation
     }
     
     @inlinable func number(_ proposal: Proposal, as value: (some _Value).Type) throws -> Number? {
-        var proposal = proposal
-        //=--------------------------------------=
-        // Proposal
-        //=--------------------------------------=
-        translator.translateSingleSymbol(in: &proposal.replacement)
+        var proposal = proposal; translator.translateSingleSymbol(in: &proposal.replacement)
         let sign = components.consumeSingleSign(in: &proposal.replacement)
-        //=--------------------------------------=
-        // Number
-        //=--------------------------------------=
-        guard var number = try self.number(
-        proposal.merged(), as: value) else { return nil }
+        guard var number = try self.number(proposal.merged(), as: value) else { return nil }
         if let sign { number.sign = sign }; return number
     }
 }

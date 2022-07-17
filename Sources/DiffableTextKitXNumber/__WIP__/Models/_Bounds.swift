@@ -91,8 +91,8 @@ public struct _Bounds<Input: _Input>: CustomStringConvertible, Equatable {
     // MARK: Utilities
     //=------------------------------------------------------------------------=
     
-    @inlinable static func clamping(_ value:  Input) -> Input {
-        Swift.min(Swift.max(Self.min, value), Self.max)
+    @inlinable static func clamping(_ input:  Input) -> Input {
+        Swift.min(Swift.max(Self.min, input), Self.max)
     }
 }
 
@@ -153,7 +153,7 @@ extension _Bounds {
 extension _Bounds {
     
     //=------------------------------------------------------------------------=
-    // MARK: Value
+    // MARK: Input
     //=------------------------------------------------------------------------=
     
     @inlinable func autocorrect(_ input: inout Input) {
@@ -197,7 +197,7 @@ extension _Bounds {
     }
 
     //=------------------------------------------------------------------------=
-    // MARK: Value
+    // MARK: Input
     //=------------------------------------------------------------------------=
     
     @inlinable func autovalidate(_ input: Input, _ number: inout Number) throws {

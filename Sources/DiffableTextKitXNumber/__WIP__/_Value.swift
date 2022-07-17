@@ -7,13 +7,13 @@
 // See http://www.apache.org/licenses/LICENSE-2.0 for license information.
 //=----------------------------------------------------------------------------=
 
-#warning("Rename as Value, maybe?")
 //*============================================================================*
-// MARK: * Kind
+// MARK: * Value
 //*============================================================================*
 
 public protocol _Value {
-    associatedtype NumberTextGraph: _Graph where NumberTextGraph.Style.Value == Self
+    associatedtype NumberTextStyle: _Protocol // node
+    typealias NumberTextGraph = NumberTextStyle.Graph
     
     //=------------------------------------------------------------------------=
     // MARK: Attributes

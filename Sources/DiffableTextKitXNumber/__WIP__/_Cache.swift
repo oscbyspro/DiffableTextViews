@@ -85,7 +85,8 @@ public struct _Cache<Graph: _Graph>: DiffableTextCache {
         // Formatter x Currency x Fractionless
         //=--------------------------------------=
         formatter.maximumFractionDigits = .zero
-        self.adjustments = Label(formatter, interpreter.components)?.autocorrect
+        let label = Label.currency(formatter, interpreter.components)
+        self.adjustments = label?.autocorrect(_:)
     }
     
     //=------------------------------------------------------------------------=

@@ -13,7 +13,7 @@ import Foundation
 // MARK: * Aliases x Style
 //*============================================================================*
 
-public typealias _WIP_NumberTextStyle<Value: _Value> = Value.NumberTextGraph.Style
+public typealias _WIP_NumberTextStyle<Value: _Value> = Value.NumberTextStyle
 
 //=----------------------------------------------------------------------------=
 // MARK: + Branches
@@ -25,6 +25,18 @@ public extension _Style where Graph.Format: _Format_Percentable {
 
 public extension _Style where Graph.Format: _Format_Currencyable {
     typealias Currency = _Style<Graph.Currency>
+}
+
+//=----------------------------------------------------------------------------=
+// MARK: + Branches x Optional
+//=----------------------------------------------------------------------------=
+
+public extension _Style.Optional where Graph.Format: _Format_Percentable {
+    typealias Percent = _Style<Graph.Percent>.Optional
+}
+
+public extension _Style.Optional where Graph.Format: _Format_Currencyable {
+    typealias Currency = _Style<Graph.Currency>.Optional
 }
 
 //*============================================================================*

@@ -15,7 +15,7 @@ import Foundation
 //*============================================================================*
 
 public protocol _Protocol: DiffableTextStyle where Value: _Value {
-    associatedtype Graph: _Graph
+    associatedtype  Graph: _Graph
     typealias Input = Graph.Input
     
     //=------------------------------------------------------------------------=
