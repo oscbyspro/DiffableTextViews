@@ -34,7 +34,7 @@ public struct _Graph_Float<Value: _Input>: _Graph where Value: BinaryFloatingPoi
     //=------------------------------------------------------------------------=
     // MARK: Initializers
     //=------------------------------------------------------------------------=
-
+    
     @inlinable init(precision: Int) {
         let _abs = String(repeating: "9", count: precision)
         let  abs = try! Value(_abs, format: Base(locale: .en_US_POSIX))

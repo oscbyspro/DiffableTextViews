@@ -28,7 +28,6 @@ where Value: FixedWidthInteger & UnsignedInteger {
     // MARK: State
     //=------------------------------------------------------------------------=
 
-    public let min: Value
     public let max: Value
     public let precision: Int
     
@@ -36,19 +35,21 @@ where Value: FixedWidthInteger & UnsignedInteger {
     // MARK: Initializers
     //=------------------------------------------------------------------------=
 
-    @inlinable init(precision: Int, min: Value = .min, max: Value = .min) {
-        self.min = min; self.max = max; self.precision = precision
+    @inlinable init(precision: Int) {
+        self.precision = precision; self.max = .max
     }
     
     /// IntegerFormatStyle uses an Int, I think, because values above Int.max crash.
     @inlinable init<T>(limit: T.Type) where T: _Input & SignedInteger & BinaryInteger {
-        self.init(precision: limit.precision, max: Value(limit.max))
+        self.precision = limit.precision; self.max = Value(limit.max)
     }
 
     //=------------------------------------------------------------------------=
     // MARK: Accessors
     //=------------------------------------------------------------------------=
 
+    @inlinable @inline(__always) public var min:  Value { .min  }
+    
     @inlinable @inline(__always) public var zero: Value { .zero }
     
     @inlinable @inline(__always) public var optional: Bool { false }

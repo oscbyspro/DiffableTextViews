@@ -27,23 +27,25 @@ where Value: FixedWidthInteger, Value: SignedInteger {
     //=------------------------------------------------------------------------=
     // MARK: State
     //=------------------------------------------------------------------------=
-
-    public let min: Value
-    public let max: Value
+    
     public let precision: Int
     
     //=------------------------------------------------------------------------=
     // MARK: Initializers
     //=------------------------------------------------------------------------=
 
-    @inlinable init(precision: Int, min: Value = .min, max: Value = .min) {
-        self.min = min; self.max = max; self.precision = precision
+    @inlinable init(precision: Int) {
+        self.precision = precision
     }
 
     //=------------------------------------------------------------------------=
     // MARK: Accessors
     //=------------------------------------------------------------------------=
 
+    @inlinable @inline(__always) public var min: Value { .min }
+    
+    @inlinable @inline(__always) public var max: Value { .max }
+    
     @inlinable @inline(__always) public var zero: Value { .zero }
     
     @inlinable @inline(__always) public var optional: Bool { false }
