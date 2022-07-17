@@ -14,16 +14,16 @@ import Foundation
 // MARK: * Style
 //*============================================================================*
 
-public struct _DefaultStyle<Graph: _DefaultGraph>: _Style_Internal {
-    public typealias Cache = Graph.Cache
-    public typealias Input = Graph.Input
-    public typealias Value = Graph.Input
+public struct _DefaultStyle<ID: _DefaultID>: _Style_Internal {
+    public typealias Cache = ID.Cache
+    public typealias Input = ID.Input
+    public typealias Value = ID.Input
     
     //=------------------------------------------------------------------------=
     // MARK: State
     //=------------------------------------------------------------------------=
     
-    @usableFromInline var id: Graph
+    @usableFromInline var id: ID
     @usableFromInline var bounds: _Bounds<Input>?
     @usableFromInline var precision: _Precision<Input>?
     
@@ -31,7 +31,7 @@ public struct _DefaultStyle<Graph: _DefaultGraph>: _Style_Internal {
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable init(_ id: Graph) { self.id = id }
+    @inlinable init(_ id: ID) { self.id = id }
     
     //=------------------------------------------------------------------------=
     // MARK: Transformations
@@ -46,7 +46,7 @@ public struct _DefaultStyle<Graph: _DefaultGraph>: _Style_Internal {
     //=------------------------------------------------------------------------=
     
     @inlinable public func cache() -> Cache {
-        Graph.cache(self)
+        ID.cache(self)
     }
     
     @inlinable public func update(_ cache: inout Cache) {
@@ -58,10 +58,10 @@ public struct _DefaultStyle<Graph: _DefaultGraph>: _Style_Internal {
     //*========================================================================*
     
     public struct Optional: DiffableTextStyleWrapper, _Style_Internal {
-        public typealias Style = Graph.Style
-        public typealias Cache = Graph.Cache
-        public typealias Input = Graph.Input
-        public typealias Value = Graph.Input?
+        public typealias Style = ID.Style
+        public typealias Cache = ID.Cache
+        public typealias Input = ID.Input
+        public typealias Value = ID.Input?
 
         //=--------------------------------------------------------------------=
         // MARK: State

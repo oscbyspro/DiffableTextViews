@@ -13,8 +13,6 @@
 //*============================================================================*
 
 public protocol _Value {
-    associatedtype NumberTextStyle: _Style
-    typealias NumberTextGraph = NumberTextStyle.Graph
     
     //=------------------------------------------------------------------------=
     // MARK: Attributes
@@ -29,11 +27,15 @@ public protocol _Value {
 // MARK: * Value x Branchable(s)
 //*============================================================================*
 
-public protocol _Value_Numberable: _Value
-where NumberTextGraph.Format: _Format_Number { }
+#warning("WIP")
+#warning("WIP")
+#warning("WIP")
 
-public protocol _Value_Currencyable: _Value
-where NumberTextGraph.Format: _Format_Currencyable { }
-
-public protocol _Value_Percentable: _Value
-where NumberTextGraph.Format: _Format_Percentable { }
+//public protocol _Value_Numberable: _Value
+//where NumberTextGraph.Format: _Format_Number { }
+//
+//public protocol _Value_Currencyable: _Value
+//where NumberTextGraph.Format: _Format_Currencyable { }
+//
+//public protocol _Value_Percentable: _Value
+//where NumberTextGraph.Format: _Format_Percentable { }

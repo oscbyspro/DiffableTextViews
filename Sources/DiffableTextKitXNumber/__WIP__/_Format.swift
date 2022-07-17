@@ -9,18 +9,11 @@
 
 import Foundation
 
-#warning("Rework: NumberTextGraph.............................................")
 //*============================================================================*
 // MARK: * Format
 //*============================================================================*
 
 public protocol _Format: ParseableFormatStyle where FormatInput: _Input, FormatOutput == String {
-    associatedtype NumberTextGraph: _DefaultGraph where NumberTextGraph.Format == Self
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Types
-    //=------------------------------------------------------------------------=
-    
     associatedtype _Increment
     associatedtype _SignDS: _SignDS_Init
     
@@ -104,6 +97,7 @@ public protocol _Format_Currency: _Format where _SignDS == _CFSC_SignDS {
     @inlinable init(code: String, locale: Locale)
 }
 
+#warning("Rework: NumberTextGraph.............................................")
 //*============================================================================*
 // MARK: * Format x Branchable(s)
 //*============================================================================*

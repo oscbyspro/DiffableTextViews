@@ -9,14 +9,12 @@
 
 import Foundation
 
-#warning("Rename as '_DefaultRecipe', maybe?")
 //*============================================================================*
-// MARK: * Graph
+// MARK: * ID
 //*============================================================================*
 
-public protocol _DefaultGraph<Format>: Equatable {
+public protocol _DefaultID<Format>: Equatable {
     associatedtype Format: _Format
-    typealias Parser = Format.Strategy
     typealias Input = Format.FormatInput
 
     typealias Style = _DefaultStyle<Self>
@@ -34,26 +32,14 @@ public protocol _DefaultGraph<Format>: Equatable {
     
     @inlinable static func cache(_ style: Style) -> Cache
     
-    @inlinable static func format(_ graph: Self) -> Format
-}
-
-//=----------------------------------------------------------------------------=
-// MARK: + Branches
-//=----------------------------------------------------------------------------=
-
-public extension _DefaultGraph where Format: _Format_Percentable {
-    typealias Percent = Format.Percent.NumberTextGraph
-}
-
-public extension _DefaultGraph where Format: _Format_Currencyable {
-    typealias Currency = Format.Currency.NumberTextGraph
+    @inlinable static func format(_ instance: Self) -> Format
 }
 
 //*============================================================================*
-// MARK: * Graph x Standard
+// MARK: * ID x Standard
 //*============================================================================*
 
-public struct _DefaultGraph_Standard<Format: _Format_Standard>: _DefaultGraph {
+public struct _DefaultID_Standard<Format: _Format_Standard>: _DefaultID {
     
     //=------------------------------------------------------------------------=
     // MARK: State
@@ -77,16 +63,16 @@ public struct _DefaultGraph_Standard<Format: _Format_Standard>: _DefaultGraph {
         .init(style)
     }
     
-    @inlinable public static func format(_ graph: Self) -> Format {
-        .init(locale: graph.locale)
+    @inlinable public static func format(_ instance: Self) -> Format {
+        .init(locale: instance.locale)
     }
 }
 
 //*============================================================================*
-// MARK: * Graph x Currency
+// MARK: * ID x Currency
 //*============================================================================*
 
-public struct _DefaultGraph_Currency<Format: _Format_Currency>: _DefaultGraph {
+public struct _DefaultID_Currency<Format: _Format_Currency>: _DefaultID {
     
     //=------------------------------------------------------------------------=
     // MARK: State
@@ -112,7 +98,7 @@ public struct _DefaultGraph_Currency<Format: _Format_Currency>: _DefaultGraph {
         .init(style)
     }
     
-    @inlinable public static func format(_ graph: Self) -> Format {
-        .init(code: graph.currencyCode, locale: graph.locale)
+    @inlinable public static func format(_ instance: Self) -> Format {
+        .init(code: instance.currencyCode, locale: instance.locale)
     }
 }

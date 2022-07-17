@@ -13,7 +13,7 @@ import Foundation
 // MARK: * Input
 //*============================================================================*
 
-public protocol _Input: _Value, Comparable where NumberTextGraph.Input == Self {
+public protocol _Input: _Value, Comparable {
     
     //=------------------------------------------------------------------------=
     // MARK: Zero, Precision, Bounds

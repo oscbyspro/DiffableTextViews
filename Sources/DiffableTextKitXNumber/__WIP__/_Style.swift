@@ -10,13 +10,12 @@
 import DiffableTextKit
 import Foundation
 
-
 //*============================================================================*
 // MARK: * Style
 //*============================================================================*
 
 public protocol _Style: DiffableTextStyle where Value: _Value, Cache: _Cache {
-    associatedtype Graph: _DefaultGraph; typealias Input = Graph.Input
+    associatedtype Input: _Input
     
     //=------------------------------------------------------------------------=
     // MARK: Bounds
@@ -107,15 +106,15 @@ extension _Style_Internal {
     //=------------------------------------------------------------------------=
     
     @inlinable public func bounds(_ limits: ClosedRange<Input>) -> Self {
-        self.bounds(_Bounds(limits))
+        self.bounds(.init(limits))
     }
     
     @inlinable public func bounds(_ limits: PartialRangeFrom<Input>) -> Self {
-        self.bounds(_Bounds(limits))
+        self.bounds(.init(limits))
     }
     
     @inlinable public func bounds(_ limits: PartialRangeThrough<Input>) -> Self {
-        self.bounds(_Bounds(limits))
+        self.bounds(.init(limits))
     }
 }
 
@@ -138,15 +137,15 @@ extension _Style_Internal {
     //=------------------------------------------------------------------------=
     
     @inlinable public func precision(integer: Int) -> Self {
-        self.precision(_Precision(integer: integer...integer))
+        self.precision(.init(integer: integer...integer))
     }
     
     @inlinable public func precision(fraction: Int) -> Self {
-        self.precision(_Precision(fraction: fraction...fraction))
+        self.precision(.init(fraction: fraction...fraction))
     }
     
     @inlinable public func precision(integer: Int, fraction: Int) -> Self {
-        self.precision(_Precision(integer: integer...integer, fraction: fraction...fraction))
+        self.precision(.init(integer: integer...integer, fraction: fraction...fraction))
     }
     
     //=------------------------------------------------------------------------=
@@ -155,12 +154,12 @@ extension _Style_Internal {
     
     @inlinable public func precision<I>(integer: I, fraction: Int) -> Self
     where I: RangeExpression, I.Bound == Int {
-        self.precision(_Precision(integer: integer, fraction: fraction...fraction))
+        self.precision(.init(integer: integer, fraction: fraction...fraction))
     }
     
     @inlinable public func precision<F>(integer: Int, fraction: F) -> Self
     where F: RangeExpression, F.Bound == Int {
-        self.precision(_Precision(integer: integer...integer, fraction: fraction))
+        self.precision(.init(integer: integer...integer, fraction: fraction))
     }
 
     //=------------------------------------------------------------------------=
@@ -169,16 +168,16 @@ extension _Style_Internal {
     
     @inlinable public func precision<I>(integer: I) -> Self
     where I: RangeExpression, I.Bound == Int {
-        self.precision(_Precision(integer: integer))
+        self.precision(.init(integer: integer))
     }
     
     @inlinable public func precision<F>(fraction: F) -> Self
     where F: RangeExpression, F.Bound == Int {
-        self.precision(_Precision(fraction: fraction))
+        self.precision(.init(fraction: fraction))
     }
     
     @inlinable public func precision<I, F>(integer: I, fraction: F) -> Self
     where I: RangeExpression, I.Bound == Int, F: RangeExpression, F.Bound == Int {
-        self.precision(_Precision(integer: integer, fraction: fraction))
+        self.precision(.init(integer: integer, fraction: fraction))
     }
 }

@@ -15,11 +15,11 @@ import Foundation
 // MARK: * Cache
 //*============================================================================*
 
-public struct _DefaultCache<Graph: _DefaultGraph>: DiffableTextCache, _Cache {    
-    public typealias Style = Graph.Style
-    public typealias Input = Graph.Input
+public struct _DefaultCache<ID: _DefaultID>: DiffableTextCache, _Cache {    
+    public typealias Style = ID.Style
+    public typealias Input = ID.Input
     
-    @usableFromInline typealias Adapter = _Adapter<Graph.Format>
+    @usableFromInline typealias Adapter = _Adapter<ID.Format>
     @usableFromInline typealias Preferences = _Preferences<Input>
     @usableFromInline typealias Adjustments = (inout Snapshot) -> Void
     
@@ -38,9 +38,9 @@ public struct _DefaultCache<Graph: _DefaultGraph>: DiffableTextCache, _Cache {
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable init<T>(_ style: Style) where Graph == _DefaultGraph_Standard<T> {
+    @inlinable init<T>(_ style: Style) where ID == _DefaultID_Standard<T> {
         self.style = style
-        self.adapter = .init(unchecked: Graph.format(style.id))
+        self.adapter = .init(unchecked: ID.format(style.id))
         self.preferences = .standard()
         //=--------------------------------------=
         // Formatter
@@ -59,9 +59,9 @@ public struct _DefaultCache<Graph: _DefaultGraph>: DiffableTextCache, _Cache {
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable init<T>(_ style: Style) where Graph == _DefaultGraph_Currency<T> {
+    @inlinable init<T>(_ style: Style) where ID == _DefaultID_Currency<T> {
         self.style = style
-        self.adapter = .init(unchecked: Graph.format(style.id))
+        self.adapter = .init(unchecked: ID.format(style.id))
         //=--------------------------------------=
         // Formatter
         //=--------------------------------------=
@@ -189,7 +189,7 @@ extension _DefaultCache {
     // MARK: Helpers
     //=------------------------------------------------------------------------=
 
-    @inlinable func commit(_ value: Input, _ number: Number, _ format: Graph.Format) -> Commit<Input> {
+    @inlinable func commit(_ value: Input, _ number: Number, _ format: ID.Format) -> Commit<Input> {
         Commit(value, snapshot(characters(value, number, format)))
     }
     
@@ -198,7 +198,7 @@ extension _DefaultCache {
         adjustments?(&snapshot); return snapshot
     }
     
-    @inlinable func characters(_ value: Input, _ number: Number, _ format: Graph.Format) -> String {
+    @inlinable func characters(_ value: Input, _ number: Number, _ format: ID.Format) -> String {
         var characters = format.sign(number.sign)
        .separator(number.separator).format(value)
         let signs = interpreter.components.signs
