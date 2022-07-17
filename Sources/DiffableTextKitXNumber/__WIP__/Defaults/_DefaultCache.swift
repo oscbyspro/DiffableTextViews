@@ -10,7 +10,6 @@
 import DiffableTextKit
 import Foundation
 
-#warning("WIP.................................................................")
 //*============================================================================*
 // MARK: * Cache
 //*============================================================================*
@@ -153,12 +152,9 @@ extension _DefaultCache {
         return try resolve(number)
     }
     
-    #warning(".................................................................")
     @inlinable public func resolve(_ proposal: Proposal) throws -> Commit<Input?> {
-        fatalError()
-        
-//        let number = try interpreter.number(proposal, as: Input?.self)
-//        return try number.map({ try Commit(resolve($0)) }) ?? Commit()
+        let number = try interpreter.number(proposal, as: Input?.self)
+        return try number.map({ try Commit(resolve($0)) }) ?? Commit()
     }
     
     //=------------------------------------------------------------------------=

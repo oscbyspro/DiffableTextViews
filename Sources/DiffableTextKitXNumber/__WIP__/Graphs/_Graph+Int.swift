@@ -42,9 +42,9 @@ where Value: FixedWidthInteger, Value: SignedInteger {
     // MARK: Accessors
     //=------------------------------------------------------------------------=
 
-    @inlinable @inline(__always) public var min: Value { .min }
+    @inlinable @inline(__always) public var min:  Value { .min  }
     
-    @inlinable @inline(__always) public var max: Value { .max }
+    @inlinable @inline(__always) public var max:  Value { .max  }
     
     @inlinable @inline(__always) public var zero: Value { .zero }
     

@@ -9,16 +9,12 @@
 
 import DiffableTextKit
 
-#warning("WIP")
-#warning("WIP")
-#warning("WIP")
-
 //*============================================================================*
 // MARK: * Cache
 //*============================================================================*
 
 public protocol _Cache {
-    associatedtype Input: Equatable
+    associatedtype Input: _Input
     
     //=------------------------------------------------------------------------=
     // MARK: Utilities

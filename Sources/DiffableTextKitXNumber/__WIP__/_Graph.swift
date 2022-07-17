@@ -25,34 +25,35 @@ public protocol _Graph {
     // MARK: State
     //=------------------------------------------------------------------------=
     
-    @inlinable var min:  Input    { get }
-    @inlinable var max:  Input    { get }
-    @inlinable var zero: Input    { get }
+    @inlinable var min:  Input { get }
+    
+    @inlinable var max:  Input { get }
+    
+    @inlinable var zero: Input { get }
+    
     @inlinable var precision: Int { get }
     
     @inlinable var optional: Bool { get }
+    
     @inlinable var unsigned: Bool { get }
+    
     @inlinable var integer:  Bool { get }
 }
 
 //*============================================================================*
-// MARK: * Graph x Percent
+// MARK: * Graph x Branches
 //*============================================================================*
 
 public protocol _Graph_Percentable: _Graph {
     associatedtype Percent: _Style where Percent.Value == Value
 }
 
-//*============================================================================*
-// MARK: * Graph x Currency
-//*============================================================================*
-
 public protocol _Graph_Currencyable: _Graph {
     associatedtype Currency: _Style where Currency.Value == Value
 }
 
 //*============================================================================*
-// MARK: * Graph x Branches
+// MARK: * Style x Branches
 //*============================================================================*
 
 extension _Style where Self == Graph.Number, Graph: _Graph_Percentable {
