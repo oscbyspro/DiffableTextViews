@@ -18,20 +18,16 @@ public struct _DefaultCache<ID: _DefaultID>: _Cache {
     public typealias Style = ID.Style
     public typealias Input = ID.Input
     
-    @usableFromInline typealias Adapter = _Adapter<ID.Format>
-    @usableFromInline typealias Preferences = _Preferences<Input>
-    @usableFromInline typealias Adjustments = (inout Snapshot) -> Void
-    
     //=------------------------------------------------------------------------=
     // MARK: State
     //=------------------------------------------------------------------------=
     
     @usableFromInline var style: Style
-    @usableFromInline let adapter: Adapter
-    @usableFromInline let preferences: Preferences
+    @usableFromInline let adapter: _Adapter<ID.Format>
+    @usableFromInline let preferences: _Preferences<Input>
     
     @usableFromInline let interpreter: _Interpreter
-    @usableFromInline let adjustments: Adjustments?
+    @usableFromInline let adjustments: ((inout Snapshot) -> Void)?
 
     //=------------------------------------------------------------------------=
     // MARK: Initializers

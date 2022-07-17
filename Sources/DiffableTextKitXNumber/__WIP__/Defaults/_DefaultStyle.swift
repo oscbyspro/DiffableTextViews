@@ -50,22 +50,27 @@ public struct _DefaultStyle<ID: _DefaultID>: _Style_Internal {
     }
     
     @inlinable public func update(_ cache: inout Cache) {
-        if cache.style.id == id { cache.style = self } else { cache = self.cache() }
+        switch cache.style.id == id {
+        case  true: cache.style = self
+        case false: cache = self.cache() }
     }
     
     //=------------------------------------------------------------------------=
     // MARK: Utilities
     //=------------------------------------------------------------------------=
     
-    @inlinable public func format(_ value: Value, with cache: inout Cache) -> String {
+    @inlinable public func format(_ value: Value,
+    with cache: inout Cache) -> String {
         cache.format(value)
     }
     
-    @inlinable public func interpret(_ value: Value, with cache: inout Cache) -> Commit<Value> {
+    @inlinable public func interpret(_ value: Value,
+    with cache: inout Cache) -> Commit<Value> {
         cache.interpret(value)
     }
     
-    @inlinable public func resolve(_ proposal: Proposal, with cache: inout Cache) throws -> Commit<Value> {
+    @inlinable public func resolve(_ proposal: Proposal,
+    with cache: inout Cache) throws -> Commit<Value> {
         try cache.resolve(proposal)
     }
 }
