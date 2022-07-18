@@ -38,9 +38,9 @@ where Value: _Input & FixedWidthInteger & UnsignedInteger {
         self.precision = precision; self.max = .max
     }
     
-    /// IntegerFormatStyle uses an Int, it seems; values above Int.max crash.
-    @inlinable init(as limit: (some _Value & FixedWidthInteger).Type) {
-        self.precision = limit.precision; self.max = Value(limit.max)
+    // IntegerFormatStyle uses an Int; values above Int.max crash.
+    @inlinable init(max  int: (some _Value & FixedWidthInteger & SignedInteger).Type) {
+        self.precision = int.precision; self.max = Value(int.max)
     }
 
     //=------------------------------------------------------------------------=
@@ -62,8 +62,8 @@ where Value: _Input & FixedWidthInteger & UnsignedInteger {
 // MARK: + UInt(s)
 //=----------------------------------------------------------------------------=
 
-extension UInt:   _Input { public static let _NumberTextGraph = _UInt<Self>(as:Int  .self) }
-extension UInt8:  _Input { public static let _NumberTextGraph = _UInt<Self>(precision: 03) }
-extension UInt16: _Input { public static let _NumberTextGraph = _UInt<Self>(precision: 05) }
-extension UInt32: _Input { public static let _NumberTextGraph = _UInt<Self>(precision: 10) }
-extension UInt64: _Input { public static let _NumberTextGraph = _UInt<Self>(as:Int64.self) }
+extension UInt:   _Input { public static let _NumberTextGraph = _UInt<Self>(max:Int  .self) }
+extension UInt8:  _Input { public static let _NumberTextGraph = _UInt<Self>(precision:  03) }
+extension UInt16: _Input { public static let _NumberTextGraph = _UInt<Self>(precision:  05) }
+extension UInt32: _Input { public static let _NumberTextGraph = _UInt<Self>(precision:  10) }
+extension UInt64: _Input { public static let _NumberTextGraph = _UInt<Self>(max:Int64.self) }
