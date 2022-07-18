@@ -22,7 +22,6 @@ where Style.Value == Style.Input {
     public typealias Value = Graph.Value
     public typealias Input = Graph.Input
     
-    
     //=-------------------------------------------------------------------------=
     // MARK: State
     //=-------------------------------------------------------------------------=

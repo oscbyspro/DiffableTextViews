@@ -13,16 +13,15 @@ import Foundation
 // MARK: * Graph x Int
 //*============================================================================*
 
-public struct _Int<Value: _Input>: _Graph, _Numberable, _Currencyable
-where Value: FixedWidthInteger & SignedInteger {
+public struct _Int<Value>: _Graph, _Numberable, _Currencyable
+where Value: _Input & FixedWidthInteger & SignedInteger {
     
     //=------------------------------------------------------------------------=
     // MARK: Nodes
     //=------------------------------------------------------------------------=
 
-    public typealias Format   =  IntegerFormatStyle<Value>
-    public typealias Number   = _StandardID<Format         >.Style
-    public typealias Currency = _CurrencyID<Format.Currency>.Style
+    public typealias Number   = _StandardID<IntegerFormatStyle<Value>         >.Style
+    public typealias Currency = _CurrencyID<IntegerFormatStyle<Value>.Currency>.Style
 
     //=------------------------------------------------------------------------=
     // MARK: State
@@ -64,9 +63,9 @@ extension Int: _Input {
     public static let _NumberTextGraph = _Int<Self>(precision: String(max).count)
 }
 
-//=------------------------------------------------------------------------=
-// MARK: Int(8, 16, 32, 64)
-//=------------------------------------------------------------------------=
+//=----------------------------------------------------------------------------=
+// MARK: + Int(s)
+//=----------------------------------------------------------------------------=
 
 extension Int8:  _Input { public static let _NumberTextGraph = _Int<Self>(precision: 03) }
 extension Int16: _Input { public static let _NumberTextGraph = _Int<Self>(precision: 05) }

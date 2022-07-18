@@ -89,12 +89,12 @@ public extension _Style where Input: BinaryInteger {
     // MARK: Precision
     //=------------------------------------------------------------------------=
 
-    @inlinable func precision(_ length: Int) -> Self {
-        self.precision(integer: length...length)
+    @inlinable func precision(_ integer: Int) -> Self {
+        precision(integer: integer...integer)
     }
-
-    @inlinable func precision<I>(_ limits: I) -> Self
+    
+    @inlinable func precision<I>(_ integer: I) -> Self
     where I: RangeExpression, I.Bound == Int {
-        self.precision(integer: limits)
+        precision(integer: integer)
     }
 }

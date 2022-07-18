@@ -21,10 +21,9 @@ public struct _Decimal: _Graph, _Numberable, _Percentable, _Currencyable {
     // MARK: Nodes
     //=------------------------------------------------------------------------=
     
-    public typealias Format   =  Value.FormatStyle
-    public typealias Number   = _StandardID<Format         >.Style
-    public typealias Percent  = _StandardID<Format.Percent >.Style
-    public typealias Currency = _CurrencyID<Format.Currency>.Style
+    public typealias Number   = _StandardID<Value.FormatStyle         >.Style
+    public typealias Percent  = _StandardID<Value.FormatStyle.Percent >.Style
+    public typealias Currency = _CurrencyID<Value.FormatStyle.Currency>.Style
 
     //=------------------------------------------------------------------------=
     // MARK: State

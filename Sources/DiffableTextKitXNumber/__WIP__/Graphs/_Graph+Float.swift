@@ -13,17 +13,16 @@ import Foundation
 // MARK: * Graph x Float
 //*============================================================================*
 
-public struct _Float<Value: _Input>: _Graph, _Numberable, _Percentable,
-_Currencyable where Value: BinaryFloatingPoint & SignedNumeric {
+public struct _Float<Value>: _Graph, _Numberable, _Percentable, _Currencyable
+where Value: _Input & BinaryFloatingPoint & SignedNumeric {
     
     //=------------------------------------------------------------------------=
     // MARK: Nodes
     //=------------------------------------------------------------------------=
     
-    public typealias Format   =  FloatingPointFormatStyle<Value>
-    public typealias Number   = _StandardID<Format         >.Style
-    public typealias Percent  = _StandardID<Format.Percent >.Style
-    public typealias Currency = _CurrencyID<Format.Currency>.Style
+    public typealias Number   = _StandardID<FloatingPointFormatStyle<Value>         >.Style
+    public typealias Percent  = _StandardID<FloatingPointFormatStyle<Value>.Percent >.Style
+    public typealias Currency = _CurrencyID<FloatingPointFormatStyle<Value>.Currency>.Style
 
     //=------------------------------------------------------------------------=
     // MARK: State
