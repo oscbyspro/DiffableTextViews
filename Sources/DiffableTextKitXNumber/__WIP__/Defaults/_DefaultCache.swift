@@ -18,13 +18,16 @@ public struct _DefaultCache<ID: _DefaultID>: _Cache {
     public typealias Style = ID.Style
     public typealias Input = ID.Input
     
+    @usableFromInline typealias Adapter = _Adapter<ID.Format>
+    @usableFromInline typealias Preferences = _Preferences<Input>
+    
     //=------------------------------------------------------------------------=
     // MARK: State
     //=------------------------------------------------------------------------=
     
     @usableFromInline var style: Style
-    @usableFromInline let adapter: _Adapter<ID.Format>
-    @usableFromInline let preferences: _Preferences<Input>
+    @usableFromInline let adapter: Adapter
+    @usableFromInline let preferences: Preferences
     
     @usableFromInline let interpreter: _Interpreter
     @usableFromInline let adjustments: ((inout Snapshot) -> Void)?
@@ -115,14 +118,17 @@ extension _DefaultCache {
     @inlinable public func interpret(_ input: Input) -> Commit<Input> {
         var input = input
         //=--------------------------------------=
+        // Adapter
+        //=--------------------------------------=
+        var adapter = adapter; adapter.transform(precision.upstream())
+        //=--------------------------------------=
         // Autocorrect
         //=--------------------------------------=
         bounds.autocorrect(&input)
         //=--------------------------------------=
         // Number
         //=--------------------------------------=
-        let formatter = adapter.format.precision(precision.upstream())
-        let parseable = self.snapshot(formatter.format(input))
+        let parseable = snapshot(adapter.format(input))
         var number = try! interpreter.number(parseable, as: Input.self)!
         //=--------------------------------------=
         // Autocorrect
@@ -136,7 +142,7 @@ extension _DefaultCache {
         //=--------------------------------------=
         // Commit
         //=--------------------------------------=
-        return self.commit(input, number, formatter)
+        return commit(&adapter, input, number)
     }
     
     //=------------------------------------------------------------------------=
@@ -161,6 +167,10 @@ extension _DefaultCache {
         let count  = number.count()
         var number = number
         //=--------------------------------------=
+        // Adapter
+        //=--------------------------------------=
+        var adapter = adapter
+        //=--------------------------------------=
         // Autovalidate
         //=--------------------------------------=
         try bounds   .autovalidate(&number)
@@ -176,16 +186,16 @@ extension _DefaultCache {
         //=--------------------------------------=
         // Commit
         //=--------------------------------------=
-        let format = adapter.format.precision(precision.downstream(count))
-        return self.commit(input, number, format)
+        adapter.transform(precision.downstream(count))
+        return commit(&adapter, input, number)
     }
     
     //=------------------------------------------------------------------------=
     // MARK: Helpers
     //=------------------------------------------------------------------------=
 
-    @inlinable func commit(_ value: Input, _ number: Number, _ format: ID.Format) -> Commit<Input> {
-        Commit(value, snapshot(characters(value, number, format)))
+    @inlinable func commit(_ adapter: inout Adapter, _ value: Input, _ number: Number) -> Commit<Input> {
+        Commit(value, snapshot(characters(&adapter, value, number)))
     }
     
     @inlinable func snapshot(_ characters: String) -> Snapshot {
@@ -193,20 +203,21 @@ extension _DefaultCache {
         adjustments?(&snapshot); return snapshot
     }
     
-    @inlinable func characters(_ value: Input, _ number: Number, _ format: ID.Format) -> String {
-        var characters = format.sign(number.sign)
-       .separator(number.separator).format(value)
-        let signs = interpreter.components.signs
+    @inlinable func characters(_ adapter: inout Adapter, _ value: Input, _ number: Number) -> String {
+        adapter.transform(number.sign)
+        adapter.transform(number.separator)
+        var characters = adapter.format(value)
         //=--------------------------------------=
         // Autocorrect
         //=--------------------------------------=
         if  number.sign == .negative, value == .zero,
-        let index = characters.firstIndex(of: signs[.positive]) {
+        let position = characters.firstIndex(
+        of: interpreter.components.signs[.positive]) {
             //=----------------------------------=
             // Make Positive Zero Negative
             //=----------------------------------=
-            let replacement = String(signs[.negative])
-            characters.replaceSubrange(index...index, with: replacement)
+            let replacement = String(interpreter.components.signs[.negative])
+            characters.replaceSubrange(position...position, with:replacement)
         }
         
         return characters

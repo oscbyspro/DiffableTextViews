@@ -17,7 +17,7 @@
     // MARK: State
     //=------------------------------------------------------------------------=
     
-    @usableFromInline let format: Format
+    @usableFromInline private(set) var format: Format
     @usableFromInline let parser: Format.Strategy
     
     //=------------------------------------------------------------------------=
@@ -25,18 +25,38 @@
     //=------------------------------------------------------------------------=
     
     /// - Requires that the format has only been initialized.
-    @inlinable init(unchecked format: Format) {
-        let  format = format.rounded(.towardZero)
-        
-        self.format = format
-        self.parser = format.locale(.en_US_POSIX).parseStrategy
+    @inlinable init(unchecked: Format) {
+        self.format = unchecked.rounded(rule: .towardZero, increment: nil)
+        self.parser = self.format.locale(.en_US_POSIX).parseStrategy
+    }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Transformations
+    //=------------------------------------------------------------------------=
+    
+    @inlinable mutating func transform(_ precision: _NFSC.Precision) {
+        self.format = format.precision(precision)
+    }
+    
+    @inlinable mutating func transform(_ sign: Sign) {
+        let display = Format._SignDS(sign == .negative ? .always : .automatic)
+        self.format = format.sign(strategy: display)
+    }
+    
+    @inlinable mutating func transform(_ separator: Separator?) {
+        let display = separator != nil ? _NFSC_SeparatorDS.always : .automatic
+        self.format = format.decimalSeparator(strategy: display)
     }
     
     //=------------------------------------------------------------------------=
     // MARK: Utilities
     //=------------------------------------------------------------------------=
     
-    @inlinable func parse(_  number: Number) throws -> Format.FormatInput {
-        try parser.parse(number.description)
+    @inlinable func format(_ value: Format.FormatInput) -> String {
+        self.format.format(value)
+    }
+    
+    @inlinable func parse(_ number: Number) throws -> Format.FormatInput {
+        try self.parser.parse(number.description)
     }
 }

@@ -36,29 +36,6 @@ public protocol _Format: ParseableFormatStyle where FormatInput: _Input, FormatO
     @inlinable func rounded(rule: _FPRR, increment: _Increment?) -> Self
 }
 
-//=----------------------------------------------------------------------------=
-// MARK: + Details
-//=----------------------------------------------------------------------------=
-
-extension _Format {
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Transformations
-    //=------------------------------------------------------------------------=
-    
-    @inlinable func sign(_ sign: Sign) -> Self {
-        self.sign(strategy: .init(sign == .negative ? .always : .automatic))
-    }
-    
-    @inlinable func separator(_ separator: Separator?) -> Self {
-        self.decimalSeparator(strategy: separator != nil ? .always : .automatic)
-    }
-    
-    @inlinable func rounded(_ rule: _FPRR) -> Self {
-        self.rounded(rule: rule, increment: nil)
-    }
-}
-
 //*============================================================================*
 // MARK: * Format x Standard
 //*============================================================================*
