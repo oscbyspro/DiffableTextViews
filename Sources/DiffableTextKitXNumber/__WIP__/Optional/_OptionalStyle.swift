@@ -10,10 +10,11 @@
 import DiffableTextKit
 
 //*============================================================================*
-// MARK: * Optional
+// MARK: * Optional x Style
 //*============================================================================*
 
-public struct _Optional<Style: _Style>: DiffableTextStyleWrapper, _Style where Style.Value == Style.Input {
+public struct _OptionalStyle<Style: _Style>: DiffableTextStyleWrapper, _Style
+where Style.Value == Style.Input {
     public typealias Cache = Style.Cache
     public typealias Value = Style.Value?
     public typealias Input = Style.Value
@@ -54,7 +55,7 @@ public struct _Optional<Style: _Style>: DiffableTextStyleWrapper, _Style where S
 // MARK: + Transformations
 //=----------------------------------------------------------------------------=
 
-extension _Optional {
+extension _OptionalStyle {
     
     //=------------------------------------------------------------------------=
     // MARK: Bounds

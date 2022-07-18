@@ -8,10 +8,10 @@
 //=----------------------------------------------------------------------------=
 
 //*============================================================================*
-// MARK: * Graph x Optional
+// MARK: * Optional x Graph
 //*============================================================================*
 
-public struct _Graph_Optional<Graph: _Graph>: _Graph where Graph.Input == Graph.Value {
+public struct _OptionalGraph<Graph: _Graph>: _Graph where Graph.Input == Graph.Value {
     public typealias Input = Graph.Value
     public typealias Value = Graph.Value?
     
@@ -44,20 +44,20 @@ public struct _Graph_Optional<Graph: _Graph>: _Graph where Graph.Input == Graph.
 // MARK: + Nodes
 //=----------------------------------------------------------------------------=
 
-extension _Graph_Optional {
-    public typealias Number = _Optional<Graph.Number>
+extension _OptionalGraph {
+    public typealias Number = _OptionalStyle<Graph.Number>
 }
 
-extension _Graph_Optional: _Graph_Percentable where Graph: _Graph_Percentable {
-    public typealias Percent = _Optional<Graph.Percent>
+extension _OptionalGraph: _Graph_Percentable where Graph: _Graph_Percentable {
+    public typealias Percent = _OptionalStyle<Graph.Percent>
 }
 
-extension _Graph_Optional: _Graph_Currencyable where Graph: _Graph_Currencyable {
-    public typealias Currency = _Optional<Graph.Currency>
+extension _OptionalGraph: _Graph_Currencyable where Graph: _Graph_Currencyable {
+    public typealias Currency = _OptionalStyle<Graph.Currency>
 }
 
 //*============================================================================*
-// MARK: * Graph x Optional
+// MARK: * Optional x Graph
 //*============================================================================*
 
 extension Optional: _Value where Wrapped: _Input {
@@ -67,6 +67,6 @@ extension Optional: _Value where Wrapped: _Input {
     //=------------------------------------------------------------------------=
     
     @inlinable @inline(__always)
-    public static var _numberTextGraph: _Graph_Optional
+    public static var _numberTextGraph: _OptionalGraph
     <Wrapped.NumberTextGraph> { .init() }
 }
