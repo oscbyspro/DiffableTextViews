@@ -37,9 +37,8 @@ _Graph_Currencyable where Value: BinaryFloatingPoint & SignedNumeric {
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable init(precision: Int) {
-        let _abs = String(repeating: "9", count: precision)
-        let  abs = try! Value(_abs, format: Format(locale: .en_US_POSIX))
+    @inlinable init(precision: Int) where Value: LosslessStringConvertible {
+        let  abs = Value(String(repeating: "9", count: precision))!
         self.precision = precision; self.min = -abs; self.max = abs
     }
 
