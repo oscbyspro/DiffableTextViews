@@ -32,18 +32,6 @@ public protocol _Style: DiffableTextStyle where Value: _Value, Cache: _Cache, Ca
     // MARK: Precision
     //=------------------------------------------------------------------------=
     
-    @inlinable func precision(integer: Int) -> Self
-    
-    @inlinable func precision(fraction: Int) -> Self
-    
-    @inlinable func precision(integer: Int, fraction: Int) -> Self
-    
-    @inlinable func precision<I>(integer: I, fraction: Int) -> Self
-    where I: RangeExpression, I.Bound == Int
-    
-    @inlinable func precision<F>(integer: Int, fraction: F) -> Self
-    where F: RangeExpression, F.Bound == Int
-    
     @inlinable func precision<I>(integer: I) -> Self
     where I: RangeExpression, I.Bound == Int
     
@@ -52,6 +40,39 @@ public protocol _Style: DiffableTextStyle where Value: _Value, Cache: _Cache, Ca
     
     @inlinable func precision<I, F>(integer: I, fraction: F) -> Self
     where I: RangeExpression, I.Bound == Int, F: RangeExpression, F.Bound == Int
+}
+
+//=----------------------------------------------------------------------------=
+// MARK: + Details
+//=----------------------------------------------------------------------------=
+
+public extension _Style {
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Precision
+    //=------------------------------------------------------------------------=
+    
+    @inlinable func precision(integer: Int) -> Self {
+        precision(integer: integer...integer)
+    }
+    
+    @inlinable func precision(fraction: Int) -> Self {
+        precision(fraction: fraction...fraction)
+    }
+    
+    @inlinable func precision(integer: Int, fraction: Int) -> Self {
+        precision(integer: integer...integer, fraction: fraction...fraction)
+    }
+    
+    @inlinable func precision<I>(integer: I, fraction: Int) -> Self
+    where I: RangeExpression, I.Bound == Int {
+        precision(integer: integer, fraction: fraction...fraction)
+    }
+    
+    @inlinable func precision<F>(integer: Int, fraction: F) -> Self
+    where F: RangeExpression, F.Bound == Int {
+        precision(integer: integer...integer, fraction: fraction)
+    }
 }
 
 //=----------------------------------------------------------------------------=
@@ -133,36 +154,6 @@ extension _Style_Internal {
         var result = self; result.precision = precision; return result
     }
     
-    //=------------------------------------------------------------------------=
-    // MARK: Length
-    //=------------------------------------------------------------------------=
-    
-    @inlinable public func precision(integer: Int) -> Self {
-        self.precision(.init(integer: integer...integer))
-    }
-    
-    @inlinable public func precision(fraction: Int) -> Self {
-        self.precision(.init(fraction: fraction...fraction))
-    }
-    
-    @inlinable public func precision(integer: Int, fraction: Int) -> Self {
-        self.precision(.init(integer: integer...integer, fraction: fraction...fraction))
-    }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Mixed
-    //=------------------------------------------------------------------------=
-    
-    @inlinable public func precision<I>(integer: I, fraction: Int) -> Self
-    where I: RangeExpression, I.Bound == Int {
-        self.precision(.init(integer: integer, fraction: fraction...fraction))
-    }
-    
-    @inlinable public func precision<F>(integer: Int, fraction: F) -> Self
-    where F: RangeExpression, F.Bound == Int {
-        self.precision(.init(integer: integer...integer, fraction: fraction))
-    }
-
     //=------------------------------------------------------------------------=
     // MARK: Limits
     //=------------------------------------------------------------------------=

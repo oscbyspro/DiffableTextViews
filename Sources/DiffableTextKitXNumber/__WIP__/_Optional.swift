@@ -34,27 +34,30 @@ public struct _Optional<Style: _Style>: DiffableTextStyleWrapper, _Style where S
     // MARK: Utilities
     //=-------------------------------------------------------------------------=
 
-    @inlinable public func format(_ value: Value, with cache: inout Cache) -> String {
+    @inlinable public func format(_ value: Value,
+    with cache: inout Cache) -> String {
         value.map({ style.format($0, with: &cache) }) ?? String()
     }
 
-    @inlinable public func interpret(_ value: Value, with cache: inout Cache) -> Commit<Value> {
+    @inlinable public func interpret(_ value: Value,
+    with cache: inout Cache) -> Commit<Value> {
         value.map({ Commit(style.interpret($0, with: &cache)) }) ?? Commit()
     }
 
-    @inlinable public func resolve(_ proposal: Proposal, with cache: inout Cache) throws -> Commit<Value> {
+    @inlinable public func resolve(_ proposal: Proposal,
+    with cache: inout Cache) throws -> Commit<Value> {
         try cache.resolve(proposal)
     }
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: + Bounds
+// MARK: + Transformations
 //=----------------------------------------------------------------------------=
 
 extension _Optional {
     
     //=------------------------------------------------------------------------=
-    // MARK: Limits
+    // MARK: Bounds
     //=------------------------------------------------------------------------=
     
     public func bounds(_ limits: ClosedRange<Input>) -> Self {
@@ -68,46 +71,9 @@ extension _Optional {
     public func bounds(_ limits: PartialRangeThrough<Input>) -> Self {
         Self(style.bounds(limits))
     }
-}
-
-//=----------------------------------------------------------------------------=
-// MARK: + Precision
-//=----------------------------------------------------------------------------=
-
-extension _Optional {
     
     //=------------------------------------------------------------------------=
-    // MARK: Length
-    //=------------------------------------------------------------------------=
-    
-    public func precision(integer: Int) -> Self {
-        Self(style.precision(integer: integer))
-    }
-    
-    public func precision(fraction: Int) -> Self {
-        Self(style.precision(fraction: fraction))
-    }
-    
-    public func precision(integer: Int, fraction: Int) -> Self {
-        Self(style.precision(integer: integer, fraction: fraction))
-    }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Mixed
-    //=------------------------------------------------------------------------=
-    
-    public func precision<I>(integer: I, fraction: Int) -> Self
-    where I: RangeExpression, I.Bound == Int {
-        Self(style.precision(integer: integer, fraction: fraction))
-    }
-    
-    public func precision<F>(integer: Int, fraction: F) -> Self
-    where F: RangeExpression, F.Bound == Int {
-        Self(style.precision(integer: integer, fraction: fraction))
-    }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Limits
+    // MARK: Precision
     //=------------------------------------------------------------------------=
     
     public func precision<I>(integer: I) -> Self where

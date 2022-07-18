@@ -105,7 +105,7 @@ extension _DefaultCache {
     //=------------------------------------------------------------------------=
     
     @inlinable public func format(_ value: Input) -> String {
-        adapter.format.precision(precision.inactive()).format(value)
+        adapter.format.precision(precision.upstream()).format(value)
     }
     
     //=------------------------------------------------------------------------=
@@ -121,7 +121,7 @@ extension _DefaultCache {
         //=--------------------------------------=
         // Number
         //=--------------------------------------=
-        let formatter = adapter.format.precision(precision.active())
+        let formatter = adapter.format.precision(precision.upstream())
         let parseable = self.snapshot(formatter.format(input))
         var number = try! interpreter.number(parseable, as: Input.self)!
         //=--------------------------------------=
@@ -176,7 +176,7 @@ extension _DefaultCache {
         //=--------------------------------------=
         // Commit
         //=--------------------------------------=
-        let format = adapter.format.precision(precision.interactive(count))
+        let format = adapter.format.precision(precision.downstream(count))
         return self.commit(input, number, format)
     }
     

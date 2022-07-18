@@ -79,7 +79,7 @@ import DiffableTextKit
     // MARK: Utilities
     //=------------------------------------------------------------------------=
     
-    @inlinable static func clamping(_ input:  Input) -> Input {
+    @inlinable static func clamping(_  input:  Input) -> Input {
         Swift.min(Swift.max(Input.min, input), Input.max)
     }
 }

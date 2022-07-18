@@ -31,11 +31,11 @@ extension _Value {
     // MARK: Accessors
     //=------------------------------------------------------------------------=
     
-    @inlinable @inline(__always) static var min: NumberTextGraph.Input {
+    @inlinable @inline(__always) static var min:  NumberTextGraph.Input {
         _numberTextGraph.min
     }
 
-    @inlinable @inline(__always) static var max: NumberTextGraph.Input {
+    @inlinable @inline(__always) static var max:  NumberTextGraph.Input {
         _numberTextGraph.max
     }
 

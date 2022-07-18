@@ -7,6 +7,10 @@
 // See http://www.apache.org/licenses/LICENSE-2.0 for license information.
 //=----------------------------------------------------------------------------=
 
+//*============================================================================*
+// MARK: * Graph x Optional
+//*============================================================================*
+
 public struct _Graph_Optional<Graph: _Graph>: _Graph where Graph.Input == Graph.Value {
     public typealias Input = Graph.Value
     public typealias Value = Graph.Value?
