@@ -12,9 +12,9 @@
 //*============================================================================*
 
 public protocol _Value: Equatable {
-    associatedtype NumberTextGraph:
-    _Numberable where
-    NumberTextGraph.Value == Self
+    
+    associatedtype NumberTextGraph where NumberTextGraph: _Graph,
+    NumberTextGraph: _Numberable,  NumberTextGraph.Value == Self
     
     //=------------------------------------------------------------------------=
     // MARK: State
