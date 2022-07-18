@@ -96,6 +96,7 @@ import Foundation
         return ClosedRange(uncheckedBounds: (0, max))
     }
     
+    /// - Requires that expression is not empty.
     @inlinable static func clamping<R: RangeExpression>(_ expression: R,
     to limits: ClosedRange<Int>) -> ClosedRange<Int> where R.Bound == Int {
         let range = expression.relative(to: Int.min ..< Int.max)

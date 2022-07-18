@@ -36,7 +36,7 @@ import DiffableTextKit
     }
     
     @inlinable init(value: Int, integer: Int, fraction: Int) {
-        self.storage = SIMD3<Int>(value, integer, fraction)
+        self.storage = SIMD3(value,  integer, fraction)
     }
     
     //=------------------------------------------------------------------------=

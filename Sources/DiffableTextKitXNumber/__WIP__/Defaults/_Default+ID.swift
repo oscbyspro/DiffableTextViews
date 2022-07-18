@@ -87,8 +87,7 @@ public struct _CurrencyID<Format: _Format_Currency>: _DefaultID {
     //=------------------------------------------------------------------------=
     
     @inlinable init(code: String, locale: Locale) {
-        self.locale = locale
-        self.currencyCode = code
+        self.locale = locale; self.currencyCode = code
     }
     
     //=------------------------------------------------------------------------=

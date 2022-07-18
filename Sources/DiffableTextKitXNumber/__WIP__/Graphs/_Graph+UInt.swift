@@ -38,7 +38,7 @@ where Value: _Input & FixedWidthInteger & UnsignedInteger {
         self.precision = precision; self.max = .max
     }
     
-    // IntegerFormatStyle uses an Int; values above Int.max crash.
+    /// IntegerFormatStyle uses an Int; values above Int.max crash.
     @inlinable init(max  int: (some _Value & FixedWidthInteger & SignedInteger).Type) {
         self.precision = int.precision; self.max = Value(int.max)
     }

@@ -35,7 +35,7 @@ public protocol _Graph {
 }
 
 //*============================================================================*
-// MARK: * Graph x Branches
+// MARK: * Graph x Nodes
 //*============================================================================*
 
 public protocol _Numberable: _Graph {
@@ -57,7 +57,7 @@ public protocol _Currencyable: _Graph {
 }
 
 //*============================================================================*
-// MARK: * Style x Branches
+// MARK: * Graph x Nodes x Style
 //*============================================================================*
 
 extension _Style where Graph: _Percentable,
