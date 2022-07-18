@@ -32,7 +32,17 @@ public struct _DefaultStyle<ID: _DefaultID>: _Style {
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable init(_ id: ID) { self.id = id }
+    @inlinable public init<T>(
+    locale: Locale = .autoupdatingCurrent)
+    where ID == _StandardID<T> {
+        self.id = ID(locale: locale)
+    }
+    
+    @inlinable public init<T>(code:String,
+    locale: Locale = .autoupdatingCurrent)
+    where ID == _CurrencyID<T> {
+        self.id = ID(code: code, locale: locale)
+    }
     
     //=------------------------------------------------------------------------=
     // MARK: Transformations
