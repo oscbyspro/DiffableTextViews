@@ -108,7 +108,7 @@ extension _DefaultCache {
     //=------------------------------------------------------------------------=
     
     @inlinable public func format(_ value: Input) -> String {
-        adapter.format.precision(precision.upstream()).format(value)
+        adapter.format.precision(precision.inactive()).format(value)
     }
     
     //=------------------------------------------------------------------------=
@@ -120,7 +120,7 @@ extension _DefaultCache {
         //=--------------------------------------=
         // Adapter
         //=--------------------------------------=
-        var adapter = adapter; adapter.transform(precision.upstream())
+        var adapter = adapter; adapter.transform(precision.active())
         //=--------------------------------------=
         // Autocorrect
         //=--------------------------------------=

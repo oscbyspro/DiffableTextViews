@@ -71,7 +71,13 @@ import Foundation
     // MARK: Utilities
     //=------------------------------------------------------------------------=
     
-    @inlinable func upstream() -> _NFSC.Precision {
+    @inlinable func inactive() -> _NFSC.Precision {
+        .integerAndFractionLength(
+         integerLimits:  integer.lowerBound ... Int.max,
+        fractionLimits: fraction.lowerBound ... Int.max)
+    }
+    
+    @inlinable func active() -> _NFSC.Precision {
         .integerAndFractionLength(
          integerLimits: 1 ... Int.max,
         fractionLimits: 0 ... Int.max)

@@ -10,7 +10,7 @@
 import Foundation
 
 //*============================================================================*
-// MARK: * Graph x Int
+// MARK: * Graph x UInt
 //*============================================================================*
 
 public struct _UInt<Value>: _Graph, _Numberable, _Currencyable
