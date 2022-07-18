@@ -14,7 +14,8 @@ import Foundation
 // MARK: * Style
 //*============================================================================*
 
-public struct _DefaultStyle<ID: _DefaultID>: _Style_Internal {
+public struct _DefaultStyle<ID: _DefaultID>: _Style {
+    public typealias Graph = ID.Graph
     public typealias Cache = ID.Cache
     public typealias Input = ID.Input
     public typealias Value = ID.Input
@@ -72,5 +73,70 @@ public struct _DefaultStyle<ID: _DefaultID>: _Style_Internal {
     @inlinable public func resolve(_ proposal: Proposal,
     with cache: inout Cache) throws -> Commit<Value> {
         try cache.resolve(proposal)
+    }
+}
+
+//=----------------------------------------------------------------------------=
+// MARK: + Bounds
+//=----------------------------------------------------------------------------=
+
+extension _DefaultStyle {
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Limits
+    //=------------------------------------------------------------------------=
+    
+    @inlinable public func bounds(_ limits: ClosedRange<Input>) -> Self {
+        self.bounds(.init(limits))
+    }
+    
+    @inlinable public func bounds(_ limits: PartialRangeFrom<Input>) -> Self {
+        self.bounds(.init(limits))
+    }
+    
+    @inlinable public func bounds(_ limits: PartialRangeThrough<Input>) -> Self {
+        self.bounds(.init(limits))
+    }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Helpers
+    //=------------------------------------------------------------------------=
+    
+    @inlinable @inline(__always) func bounds(_ bounds: _Bounds<Input>) -> Self {
+        var result = self; result.bounds = bounds; return result
+    }
+}
+
+//=----------------------------------------------------------------------------=
+// MARK: + Precision
+//=----------------------------------------------------------------------------=
+
+extension _DefaultStyle {
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Limits
+    //=------------------------------------------------------------------------=
+    
+    @inlinable public func precision<I>(integer: I) -> Self
+    where I: RangeExpression, I.Bound == Int {
+        self.precision(.init(integer: integer))
+    }
+    
+    @inlinable public func precision<F>(fraction: F) -> Self
+    where F: RangeExpression, F.Bound == Int {
+        self.precision(.init(fraction: fraction))
+    }
+    
+    @inlinable public func precision<I, F>(integer: I, fraction: F) -> Self
+    where I: RangeExpression, I.Bound == Int, F: RangeExpression, F.Bound == Int {
+        self.precision(.init(integer: integer, fraction: fraction))
+    }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Helpers
+    //=------------------------------------------------------------------------=
+    
+    @inlinable @inline(__always) func precision(_ precision: _Precision<Input>) -> Self {
+        var result = self; result.precision = precision; return result
     }
 }

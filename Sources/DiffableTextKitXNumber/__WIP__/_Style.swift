@@ -14,8 +14,12 @@ import Foundation
 // MARK: * Style
 //*============================================================================*
 
-public protocol _Style: DiffableTextStyle where Value: _Value, Cache: _Cache, Cache.Input == Input {
-    typealias Graph = Value.NumberTextGraph
+public protocol _Style: DiffableTextStyle
+where Value == Graph.Value, Cache: _Cache,
+Cache.Input == Input {
+    
+    associatedtype Graph: _Graph
+    
     typealias Input = Graph.Input
     
     //=------------------------------------------------------------------------=
@@ -92,84 +96,5 @@ public extension _Style where Input: BinaryInteger {
     @inlinable func precision<I>(_ limits: I) -> Self
     where I: RangeExpression, I.Bound == Int {
         self.precision(integer: limits)
-    }
-}
-
-//*============================================================================*
-// MARK: * Style x Internal
-//*============================================================================*
-
-@usableFromInline protocol _Style_Internal: _Style {
-    
-    //=------------------------------------------------------------------------=
-    // MARK: State
-    //=------------------------------------------------------------------------=
-    
-    @inlinable var bounds: _Bounds<Input>? { get set }
-    @inlinable var precision: _Precision<Input>? { get set }
-}
-
-//=----------------------------------------------------------------------------=
-// MARK: + Bounds
-//=----------------------------------------------------------------------------=
-
-extension _Style_Internal {
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Bounds
-    //=------------------------------------------------------------------------=
-    
-    @inlinable func bounds(_ bounds: _Bounds<Input>) -> Self {
-        var result = self; result.bounds = bounds; return result
-    }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Limits
-    //=------------------------------------------------------------------------=
-    
-    @inlinable public func bounds(_ limits: ClosedRange<Input>) -> Self {
-        self.bounds(.init(limits))
-    }
-    
-    @inlinable public func bounds(_ limits: PartialRangeFrom<Input>) -> Self {
-        self.bounds(.init(limits))
-    }
-    
-    @inlinable public func bounds(_ limits: PartialRangeThrough<Input>) -> Self {
-        self.bounds(.init(limits))
-    }
-}
-
-//=----------------------------------------------------------------------------=
-// MARK: + Precision
-//=----------------------------------------------------------------------------=
-
-extension _Style_Internal {
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Transformations
-    //=------------------------------------------------------------------------=
-    
-    @inlinable @inline(__always) func precision(_ precision: _Precision<Input>) -> Self {
-        var result = self; result.precision = precision; return result
-    }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Limits
-    //=------------------------------------------------------------------------=
-    
-    @inlinable public func precision<I>(integer: I) -> Self
-    where I: RangeExpression, I.Bound == Int {
-        self.precision(.init(integer: integer))
-    }
-    
-    @inlinable public func precision<F>(fraction: F) -> Self
-    where F: RangeExpression, F.Bound == Int {
-        self.precision(.init(fraction: fraction))
-    }
-    
-    @inlinable public func precision<I, F>(integer: I, fraction: F) -> Self
-    where I: RangeExpression, I.Bound == Int, F: RangeExpression, F.Bound == Int {
-        self.precision(.init(integer: integer, fraction: fraction))
     }
 }

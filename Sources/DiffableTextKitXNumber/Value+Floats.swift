@@ -13,7 +13,7 @@ import Foundation
 // MARK: * Value x Float(s)
 //*============================================================================*
 
-private protocol _Float: BinaryFloatingPoint,
+private protocol __Float: BinaryFloatingPoint,
 NumberTextValueXSigned,
 NumberTextValueXFloatingPoint,
 NumberTextValueXNumberable,
@@ -25,7 +25,7 @@ NumberTextStyle == _NumberTextStyle<FloatingPointFormatStyle<Self>> { }
 // MARK: + Double
 //=----------------------------------------------------------------------------=
 
-extension Double: _Float {
+extension Double: __Float {
     
     //=------------------------------------------------------------------------=
     // MARK: Precision, Bounds

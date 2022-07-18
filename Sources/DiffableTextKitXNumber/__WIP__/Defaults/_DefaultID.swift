@@ -16,6 +16,7 @@ import Foundation
 public protocol _DefaultID<Format>: Equatable {
     associatedtype Format: _Format
     typealias Input = Format.FormatInput
+    typealias Graph = Input.NumberTextGraph
 
     typealias Style = _DefaultStyle<Self>
     typealias Cache = _DefaultCache<Self>
@@ -39,7 +40,7 @@ public protocol _DefaultID<Format>: Equatable {
 // MARK: * ID x Standard
 //*============================================================================*
 
-public struct _DefaultID_Standard<Format: _Format_Standard>: _DefaultID {
+public struct _StandardID<Format: _Format_Standard>: _DefaultID {
     
     //=------------------------------------------------------------------------=
     // MARK: State
@@ -72,7 +73,7 @@ public struct _DefaultID_Standard<Format: _Format_Standard>: _DefaultID {
 // MARK: * ID x Currency
 //*============================================================================*
 
-public struct _DefaultID_Currency<Format: _Format_Currency>: _DefaultID {
+public struct _CurrencyID<Format: _Format_Currency>: _DefaultID {
     
     //=------------------------------------------------------------------------=
     // MARK: State

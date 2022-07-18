@@ -12,13 +12,15 @@
 //*============================================================================*
 
 public protocol _Value: Equatable {
-    associatedtype NumberTextGraph: _Graph where NumberTextGraph.Value == Self
+    associatedtype NumberTextGraph:
+    _Numberable where
+    NumberTextGraph.Value == Self
     
     //=------------------------------------------------------------------------=
     // MARK: State
     //=------------------------------------------------------------------------=
     
-    @inlinable static var _numberTextGraph: NumberTextGraph { get }
+    @inlinable static var _NumberTextGraph: NumberTextGraph { get }
 }
 
 //=----------------------------------------------------------------------------=
@@ -32,31 +34,31 @@ extension _Value {
     //=------------------------------------------------------------------------=
     
     @inlinable @inline(__always) static var min:  NumberTextGraph.Input {
-        _numberTextGraph.min
+        _NumberTextGraph.min
     }
 
     @inlinable @inline(__always) static var max:  NumberTextGraph.Input {
-        _numberTextGraph.max
+        _NumberTextGraph.max
     }
 
     @inlinable @inline(__always) static var zero: NumberTextGraph.Input {
-        _numberTextGraph.zero
+        _NumberTextGraph.zero
     }
     
     @inlinable @inline(__always) static var precision: Int {
-        _numberTextGraph.precision
+        _NumberTextGraph.precision
     }
 
     @inlinable @inline(__always) static var optional: Bool {
-        _numberTextGraph.optional
+        _NumberTextGraph.optional
     }
 
     @inlinable @inline(__always) static var unsigned: Bool {
-        _numberTextGraph.unsigned
+        _NumberTextGraph.unsigned
     }
 
     @inlinable @inline(__always) static var integer:  Bool {
-        _numberTextGraph.integer
+        _NumberTextGraph.integer
     }
 }
 

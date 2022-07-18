@@ -13,7 +13,7 @@ import Foundation
 // MARK: * Graph x Decimal
 //*============================================================================*
 
-public struct _Graph_Decimal: _Graph, _Graph_Percentable, _Graph_Currencyable {
+public struct _Decimal: _Graph, _Numberable, _Percentable, _Currencyable {
     public typealias Value = Decimal
     public typealias Input = Decimal
     
@@ -21,17 +21,17 @@ public struct _Graph_Decimal: _Graph, _Graph_Percentable, _Graph_Currencyable {
     // MARK: Nodes
     //=------------------------------------------------------------------------=
     
-    public typealias Format   =  Decimal.FormatStyle
-    public typealias Number   = _DefaultID_Standard<Format         >.Style
-    public typealias Percent  = _DefaultID_Standard<Format.Percent >.Style
-    public typealias Currency = _DefaultID_Currency<Format.Currency>.Style
+    public typealias Format   =  Value.FormatStyle
+    public typealias Number   = _StandardID<Format         >.Style
+    public typealias Percent  = _StandardID<Format.Percent >.Style
+    public typealias Currency = _CurrencyID<Format.Currency>.Style
 
     //=------------------------------------------------------------------------=
     // MARK: State
     //=------------------------------------------------------------------------=
 
-    public let min: Input
-    public let max: Input
+    public let min: Value
+    public let max: Value
     public let precision: Int
 
     //=------------------------------------------------------------------------=
@@ -40,7 +40,7 @@ public struct _Graph_Decimal: _Graph, _Graph_Percentable, _Graph_Currencyable {
 
     @inlinable init() {
         self.precision = 38
-        self.max = Input(string: String(repeating: "9", count: precision))!
+        self.max = Value(string: String(repeating: "9", count: precision))!
         self.min = -max
     }
 
@@ -48,7 +48,7 @@ public struct _Graph_Decimal: _Graph, _Graph_Percentable, _Graph_Currencyable {
     // MARK: Accessors
     //=------------------------------------------------------------------------=
 
-    @inlinable @inline(__always) public var zero: Input { .zero }
+    @inlinable @inline(__always) public var zero: Value { .zero }
 
     @inlinable @inline(__always) public var optional: Bool { false }
 
@@ -61,11 +61,4 @@ public struct _Graph_Decimal: _Graph, _Graph_Percentable, _Graph_Currencyable {
 // MARK: + Decimal
 //=----------------------------------------------------------------------------=
 
-extension Decimal: _Input {
-
-    //=------------------------------------------------------------------------=
-    // MARK: State
-    //=------------------------------------------------------------------------=
-    
-    public static let _numberTextGraph = _Graph_Decimal()
-}
+extension Decimal: _Input { public static let _NumberTextGraph = _Decimal() }

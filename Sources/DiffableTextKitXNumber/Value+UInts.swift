@@ -13,7 +13,7 @@ import Foundation
 // MARK: * Value x UInt(s)
 //*============================================================================*
 
-private protocol _UInt: BinaryInteger,
+private protocol __UInt: BinaryInteger,
 NumberTextValueXUnsigned,
 NumberTextValueXInteger,
 NumberTextValueXNumberable,
@@ -24,7 +24,7 @@ NumberTextStyle == _NumberTextStyle<IntegerFormatStyle<Self>> { }
 // MARK: + UInt
 //=----------------------------------------------------------------------------=
 
-extension UInt: _UInt {
+extension UInt: __UInt {
     
     //=------------------------------------------------------------------------=
     // MARK: Precision, Bounds
@@ -38,7 +38,7 @@ extension UInt: _UInt {
 // MARK: + UInt8
 //=----------------------------------------------------------------------------=
 
-extension UInt8: _UInt {
+extension UInt8: __UInt {
 
     //=------------------------------------------------------------------------=
     // MARK: Precision, Bounds
@@ -52,7 +52,7 @@ extension UInt8: _UInt {
 // MARK: + UInt16
 //=----------------------------------------------------------------------------=
 
-extension UInt16: _UInt {
+extension UInt16: __UInt {
 
     //=------------------------------------------------------------------------=
     // MARK: Precision, Bounds
@@ -66,7 +66,7 @@ extension UInt16: _UInt {
 // MARK: + UInt32
 //=----------------------------------------------------------------------------=
 
-extension UInt32: _UInt {    
+extension UInt32: __UInt {    
 
     //=------------------------------------------------------------------------=
     // MARK: Precision, Bounds
@@ -80,7 +80,7 @@ extension UInt32: _UInt {
 // MARK: + UInt64
 //=----------------------------------------------------------------------------=
 
-extension UInt64: _UInt {
+extension UInt64: __UInt {
     
     //=------------------------------------------------------------------------=
     // MARK: Precision, Bounds

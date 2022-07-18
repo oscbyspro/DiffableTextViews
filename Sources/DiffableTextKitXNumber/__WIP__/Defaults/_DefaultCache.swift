@@ -36,7 +36,7 @@ public struct _DefaultCache<ID: _DefaultID>: _Cache {
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable init<T>(_ style: Style) where ID == _DefaultID_Standard<T> {
+    @inlinable init<T>(_ style: Style) where ID == _StandardID<T> {
         self.style = style
         self.adapter = .init(unchecked: ID.format(style.id))
         self.preferences = .standard()
@@ -57,7 +57,7 @@ public struct _DefaultCache<ID: _DefaultID>: _Cache {
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable init<T>(_ style: Style) where ID == _DefaultID_Currency<T> {
+    @inlinable init<T>(_ style: Style) where ID == _CurrencyID<T> {
         self.style = style
         self.adapter = .init(unchecked: ID.format(style.id))
         //=--------------------------------------=

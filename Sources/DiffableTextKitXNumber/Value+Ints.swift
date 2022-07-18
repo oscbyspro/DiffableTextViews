@@ -13,7 +13,7 @@ import Foundation
 // MARK: * Value x Int(s)
 //*============================================================================*
 
-private protocol _Int: BinaryInteger,
+private protocol __Int: BinaryInteger,
 NumberTextValueXSigned,
 NumberTextValueXInteger,
 NumberTextValueXNumberable,
@@ -24,7 +24,7 @@ NumberTextStyle == _NumberTextStyle<IntegerFormatStyle<Self>> { }
 // MARK: + Int
 //=----------------------------------------------------------------------------=
 
-extension Int: _Int {
+extension Int: __Int {
     
     //=------------------------------------------------------------------------=
     // MARK: Precision, Bounds
@@ -38,7 +38,7 @@ extension Int: _Int {
 // MARK: + Int8
 //=----------------------------------------------------------------------------=
 
-extension Int8: _Int {
+extension Int8: __Int {
 
     //=------------------------------------------------------------------------=
     // MARK: Precision, Bounds
@@ -52,7 +52,7 @@ extension Int8: _Int {
 // MARK: + Int16
 //=----------------------------------------------------------------------------=
 
-extension Int16: _Int {
+extension Int16: __Int {
 
     //=------------------------------------------------------------------------=
     // MARK: Precision, Bounds
@@ -66,7 +66,7 @@ extension Int16: _Int {
 // MARK: + Int32
 //=----------------------------------------------------------------------------=
 
-extension Int32: _Int {
+extension Int32: __Int {
 
     //=------------------------------------------------------------------------=
     // MARK: Precision, Bounds
@@ -80,7 +80,7 @@ extension Int32: _Int {
 // MARK: + Int64
 //=----------------------------------------------------------------------------=
 
-extension Int64: _Int {
+extension Int64: __Int {
 
     //=------------------------------------------------------------------------=
     // MARK: Precision, Bounds

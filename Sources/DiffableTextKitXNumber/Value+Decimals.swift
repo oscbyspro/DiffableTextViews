@@ -13,7 +13,7 @@ import Foundation
 // MARK: * Value x Decimal(s)
 //*============================================================================*
 
-private protocol _Decimal:
+private protocol __Decimal:
 NumberTextValueXSigned,
 NumberTextValueXFloatingPoint,
 NumberTextValueXNumberable,
@@ -24,7 +24,7 @@ NumberTextValueXPercentable { }
 // MARK: + Decimal
 //=----------------------------------------------------------------------------=
 
-extension Decimal: _Decimal {
+extension Decimal: __Decimal {
     public typealias NumberTextStyle = _NumberTextStyle<Decimal.FormatStyle>
 
     //=------------------------------------------------------------------------=

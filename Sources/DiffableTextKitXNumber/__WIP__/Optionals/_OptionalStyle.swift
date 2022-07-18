@@ -13,11 +13,15 @@ import DiffableTextKit
 // MARK: * Optional x Style
 //*============================================================================*
 
-public struct _OptionalStyle<Style: _Style>: DiffableTextStyleWrapper, _Style
+public struct _OptionalStyle<Style: _Style>:
+DiffableTextStyleWrapper, _Style
 where Style.Value == Style.Input {
+    public typealias Graph = _OptionalGraph<Style.Graph>
+    
     public typealias Cache = Style.Cache
-    public typealias Value = Style.Value?
-    public typealias Input = Style.Value
+    public typealias Value = Graph.Value
+    public typealias Input = Graph.Input
+    
     
     //=-------------------------------------------------------------------------=
     // MARK: State

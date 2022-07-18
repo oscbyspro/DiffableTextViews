@@ -13,17 +13,17 @@ import Foundation
 // MARK: * Graph x Float
 //*============================================================================*
 
-public struct _Graph_Float<Value: _Input>: _Graph, _Graph_Percentable,
-_Graph_Currencyable where Value: BinaryFloatingPoint & SignedNumeric {
+public struct _Float<Value: _Input>: _Graph, _Numberable, _Percentable,
+_Currencyable where Value: BinaryFloatingPoint & SignedNumeric {
     
     //=------------------------------------------------------------------------=
     // MARK: Nodes
     //=------------------------------------------------------------------------=
     
     public typealias Format   =  FloatingPointFormatStyle<Value>
-    public typealias Number   = _DefaultID_Standard<Format         >.Style
-    public typealias Percent  = _DefaultID_Standard<Format.Percent >.Style
-    public typealias Currency = _DefaultID_Currency<Format.Currency>.Style
+    public typealias Number   = _StandardID<Format         >.Style
+    public typealias Percent  = _StandardID<Format.Percent >.Style
+    public typealias Currency = _CurrencyID<Format.Currency>.Style
 
     //=------------------------------------------------------------------------=
     // MARK: State
@@ -59,12 +59,4 @@ _Graph_Currencyable where Value: BinaryFloatingPoint & SignedNumeric {
 // MARK: + Double
 //=----------------------------------------------------------------------------=
 
-extension Double: _Input {
-    
-    //=------------------------------------------------------------------------=
-    // MARK: State
-    //=------------------------------------------------------------------------=
-    
-    public typealias   NumberTextGraph = _Graph_Float<Self>
-    public static let _numberTextGraph = _Graph_Float<Self>(precision: 15)
-}
+extension Double: _Input { public static let _NumberTextGraph = _Float<Self>(precision: 15) }

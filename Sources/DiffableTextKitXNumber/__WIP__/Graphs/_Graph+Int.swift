@@ -13,16 +13,16 @@ import Foundation
 // MARK: * Graph x Int
 //*============================================================================*
 
-public struct _Graph_Int<Value: _Input>: _Graph, _Graph_Currencyable
-where Value: FixedWidthInteger, Value: SignedInteger {
+public struct _Int<Value: _Input>: _Graph, _Numberable, _Currencyable
+where Value: FixedWidthInteger & SignedInteger {
     
     //=------------------------------------------------------------------------=
     // MARK: Nodes
     //=------------------------------------------------------------------------=
 
     public typealias Format   =  IntegerFormatStyle<Value>
-    public typealias Number   = _DefaultID_Standard<Format         >.Style
-    public typealias Currency = _DefaultID_Currency<Format.Currency>.Style
+    public typealias Number   = _StandardID<Format         >.Style
+    public typealias Currency = _CurrencyID<Format.Currency>.Style
 
     //=------------------------------------------------------------------------=
     // MARK: State
@@ -60,67 +60,15 @@ where Value: FixedWidthInteger, Value: SignedInteger {
 //=----------------------------------------------------------------------------=
 
 extension Int: _Input {
-    
-    //=------------------------------------------------------------------------=
-    // MARK: State
-    //=------------------------------------------------------------------------=
-    
-    public typealias   NumberTextGraph = _Graph_Int<Self>
-    public static let _numberTextGraph = _Graph_Int<Self>(precision: String(describing: Self.max).count)
+    public  typealias  NumberTextGraph = _Int<Self>
+    public static let _NumberTextGraph = _Int<Self>(precision: String(max).count)
 }
 
-//=----------------------------------------------------------------------------=
-// MARK: + Int8
-//=----------------------------------------------------------------------------=
+//=------------------------------------------------------------------------=
+// MARK: Int(8, 16, 32, 64)
+//=------------------------------------------------------------------------=
 
-extension Int8: _Input {
-    
-    //=------------------------------------------------------------------------=
-    // MARK: State
-    //=------------------------------------------------------------------------=
-    
-    public typealias   NumberTextGraph = _Graph_Int<Self>
-    public static let _numberTextGraph = _Graph_Int<Self>(precision: 3)
-}
-
-//=----------------------------------------------------------------------------=
-// MARK: + Int16
-//=----------------------------------------------------------------------------=
-
-extension Int16: _Input {
-    
-    //=------------------------------------------------------------------------=
-    // MARK: State
-    //=------------------------------------------------------------------------=
-    
-    public typealias   NumberTextGraph = _Graph_Int<Self>
-    public static let _numberTextGraph = _Graph_Int<Self>(precision: 5)
-}
-
-//=----------------------------------------------------------------------------=
-// MARK: + Int32
-//=----------------------------------------------------------------------------=
-
-extension Int32: _Input {
-    
-    //=------------------------------------------------------------------------=
-    // MARK: State
-    //=------------------------------------------------------------------------=
-    
-    public typealias   NumberTextGraph = _Graph_Int<Self>
-    public static let _numberTextGraph = _Graph_Int<Self>(precision: 10)
-}
-
-//=----------------------------------------------------------------------------=
-// MARK: + Int64
-//=----------------------------------------------------------------------------=
-
-extension Int64: _Input {
-    
-    //=------------------------------------------------------------------------=
-    // MARK: State
-    //=------------------------------------------------------------------------=
-    
-    public typealias   NumberTextGraph = _Graph_Int<Self>
-    public static let _numberTextGraph = _Graph_Int<Self>(precision: 19)
-}
+extension Int8:  _Input { public static let _NumberTextGraph = _Int<Self>(precision: 03) }
+extension Int16: _Input { public static let _NumberTextGraph = _Int<Self>(precision: 05) }
+extension Int32: _Input { public static let _NumberTextGraph = _Int<Self>(precision: 10) }
+extension Int64: _Input { public static let _NumberTextGraph = _Int<Self>(precision: 19) }

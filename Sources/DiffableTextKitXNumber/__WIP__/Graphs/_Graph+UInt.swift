@@ -13,7 +13,7 @@ import Foundation
 // MARK: * Graph x Int
 //*============================================================================*
 
-public struct _Graph_UInt<Value: _Input>: _Graph, _Graph_Currencyable
+public struct _UInt<Value: _Input>: _Graph, _Numberable, _Currencyable
 where Value: FixedWidthInteger & UnsignedInteger {
     
     //=------------------------------------------------------------------------=
@@ -21,8 +21,8 @@ where Value: FixedWidthInteger & UnsignedInteger {
     //=------------------------------------------------------------------------=
 
     public typealias Format   =  IntegerFormatStyle<Value>
-    public typealias Number   = _DefaultID_Standard<Format         >.Style
-    public typealias Currency = _DefaultID_Currency<Format.Currency>.Style
+    public typealias Number   = _StandardID<Format         >.Style
+    public typealias Currency = _CurrencyID<Format.Currency>.Style
 
     //=------------------------------------------------------------------------=
     // MARK: State
@@ -40,7 +40,7 @@ where Value: FixedWidthInteger & UnsignedInteger {
     }
     
     /// IntegerFormatStyle uses an Int, it seems; values above Int.max crash.
-    @inlinable init(limit: (some _Input & BinaryInteger).Type) {
+    @inlinable init(as limit: (some _Value & FixedWidthInteger).Type) {
         self.precision = limit.precision; self.max = Value(limit.max)
     }
 
@@ -60,71 +60,11 @@ where Value: FixedWidthInteger & UnsignedInteger {
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: + UInt
+// MARK: + UInt(s)
 //=----------------------------------------------------------------------------=
 
-extension UInt: _Input {
-    
-    //=------------------------------------------------------------------------=
-    // MARK: State
-    //=------------------------------------------------------------------------=
-    
-    public typealias   NumberTextGraph = _Graph_UInt<Self>
-    public static let _numberTextGraph = _Graph_UInt<Self>(limit: Int.self)
-}
-
-//=----------------------------------------------------------------------------=
-// MARK: + UInt8
-//=----------------------------------------------------------------------------=
-
-extension UInt8: _Input {
-    
-    //=------------------------------------------------------------------------=
-    // MARK: State
-    //=------------------------------------------------------------------------=
-    
-    public typealias   NumberTextGraph = _Graph_UInt<Self>
-    public static let _numberTextGraph = _Graph_UInt<Self>(precision: 3)
-}
-
-//=----------------------------------------------------------------------------=
-// MARK: + UInt16
-//=----------------------------------------------------------------------------=
-
-extension UInt16: _Input {
-    
-    //=------------------------------------------------------------------------=
-    // MARK: State
-    //=------------------------------------------------------------------------=
-    
-    public typealias   NumberTextGraph = _Graph_UInt<Self>
-    public static let _numberTextGraph = _Graph_UInt<Self>(precision: 5)
-}
-
-//=----------------------------------------------------------------------------=
-// MARK: + UInt32
-//=----------------------------------------------------------------------------=
-
-extension UInt32: _Input {
-    
-    //=------------------------------------------------------------------------=
-    // MARK: State
-    //=------------------------------------------------------------------------=
-    
-    public typealias   NumberTextGraph = _Graph_UInt<Self>
-    public static let _numberTextGraph = _Graph_UInt<Self>(precision: 10)
-}
-
-//=----------------------------------------------------------------------------=
-// MARK: + UInt64
-//=----------------------------------------------------------------------------=
-
-extension UInt64: _Input {
-    
-    //=------------------------------------------------------------------------=
-    // MARK: State
-    //=------------------------------------------------------------------------=
-    
-    public typealias   NumberTextGraph = _Graph_UInt<Self>
-    public static let _numberTextGraph = _Graph_UInt<Self>(limit: Int64.self)
-}
+extension UInt:   _Input { public static let _NumberTextGraph = _UInt<Self>(as:Int  .self) }
+extension UInt8:  _Input { public static let _NumberTextGraph = _UInt<Self>(precision: 03) }
+extension UInt16: _Input { public static let _NumberTextGraph = _UInt<Self>(precision: 05) }
+extension UInt32: _Input { public static let _NumberTextGraph = _UInt<Self>(precision: 10) }
+extension UInt64: _Input { public static let _NumberTextGraph = _UInt<Self>(as:Int64.self) }
