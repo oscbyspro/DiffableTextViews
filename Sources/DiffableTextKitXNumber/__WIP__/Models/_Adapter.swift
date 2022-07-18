@@ -12,13 +12,14 @@
 //*============================================================================*
 
 @usableFromInline struct _Adapter<Format: _Format> {
+    @usableFromInline typealias Parser = Format.Strategy
     
     //=------------------------------------------------------------------------=
     // MARK: State
     //=------------------------------------------------------------------------=
     
     @usableFromInline private(set) var format: Format
-    @usableFromInline let parser: Format.Strategy
+    @usableFromInline private(set) var parser: Parser
     
     //=------------------------------------------------------------------------=
     // MARK: Initializers

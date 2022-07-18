@@ -19,14 +19,15 @@ import DiffableTextKit
     // MARK: State
     //=------------------------------------------------------------------------=
     
-    @usableFromInline var bounds: ClosedRange<Input>
- 
+    @usableFromInline let min: Input
+    @usableFromInline let max: Input
+    
     //=------------------------------------------------------------------------=
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable init(unchecked: (lower: Input,  upper: Input)) {
-        self.bounds = ClosedRange(uncheckedBounds: unchecked)
+    @inlinable init(unchecked: (min: Input,  max: Input)) {
+        (self.min, self.max) = unchecked; assert(min <= max)
     }
     
     //=------------------------------------------------------------------------=
@@ -53,18 +54,10 @@ import DiffableTextKit
     // MARK: Accessors
     //=------------------------------------------------------------------------=
     
-    @inlinable var min: Input {
-        bounds.lowerBound
-    }
-    
-    @inlinable var max: Input {
-        bounds.upperBound
-    }
-    
     @inlinable var sign: Sign? {
-        if      bounds.lowerBound >= .zero { return .positive }
-        else if bounds.upperBound <= .zero { return .negative }
-        else {  return nil }
+        if      min >= .zero { return .positive }
+        else if max <= .zero { return .negative }
+        else {  return  nil  }
     }
     
     //=------------------------------------------------------------------------=
