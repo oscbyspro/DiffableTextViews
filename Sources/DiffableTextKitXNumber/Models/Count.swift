@@ -47,9 +47,9 @@ import DiffableTextKit
     @inlinable public var integer:  Int { storage.y }
     @inlinable public var fraction: Int { storage.z }
     
-    //=------------------------------------------------------------------------=
-    // MARK: Accessors
-    //=------------------------------------------------------------------------=
+    @inlinable subscript(component: Component) -> Int {
+        storage[component.rawValue]
+    }
     
     public var description: String {
         String(describing: (value, integer, fraction))
@@ -62,33 +62,14 @@ import DiffableTextKit
     @inlinable func map(_ transformation: ((SIMD, SIMD) -> SIMD, Self)) -> Self {
         Self(transformation.0(storage, transformation.1.storage))
     }
-}
-
-//=----------------------------------------------------------------------------=
-// MARK: + Component
-//=----------------------------------------------------------------------------=
-
-extension Count {
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Accessors
-    //=------------------------------------------------------------------------=
-    
-    @inlinable var components: [Component] {
-        Component.allCases
-    }
-    
-    @inlinable subscript(component: Component) -> Int {
-        storage[component.rawValue]
-    }
     
     //=------------------------------------------------------------------------=
     // MARK: Utilities
     //=------------------------------------------------------------------------=
     
     @inlinable func first(where predicate: ((SIMD, Int) -> Mask, Int)) -> Component? {
-        let mask = predicate.0(storage, predicate.1)
-        return components.first{ mask[$0.rawValue] }
+        let mask = predicate.0(storage,predicate.1); return
+        Component.allCases.first(where:{mask[$0.rawValue]})
     }
     
     //*========================================================================*
@@ -96,7 +77,8 @@ extension Count {
     //*========================================================================*
     
     @usableFromInline enum Component: Int, CaseIterable {
-        
+        @usableFromInline static let allCases = [value, integer, fraction]
+
         //=--------------------------------------------------------------------=
         // MARK: Instances
         //=--------------------------------------------------------------------=
@@ -104,11 +86,5 @@ extension Count {
         case value    = 0
         case integer  = 1
         case fraction = 2
-        
-        //=--------------------------------------------------------------------=
-        // MARK: Instances
-        //=--------------------------------------------------------------------=
-        
-        @usableFromInline static let allCases = [value, integer, fraction]
     }
 }

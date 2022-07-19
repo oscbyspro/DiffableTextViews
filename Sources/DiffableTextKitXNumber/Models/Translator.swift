@@ -19,7 +19,8 @@ import DiffableTextKit
     // MARK: State
     //=------------------------------------------------------------------------=
     
-    @usableFromInline private(set) var storage = [Character: Character]()
+    /// A translation map for singular input characters.
+    @usableFromInline private(set) var singular = [Character: Character]()
     
     //=------------------------------------------------------------------------=
     // MARK: Initializers
@@ -41,7 +42,7 @@ import DiffableTextKit
     }
     
     @inlinable subscript(character: Character) -> Character {
-        storage[character] ?? character
+        singular[character] ?? character
     }
     
     //=------------------------------------------------------------------------=
@@ -54,7 +55,7 @@ import DiffableTextKit
         let destination = links(destination).characters
         
         for (token, character) in source {
-            storage[character] = destination[key(token)]
+            singular[character] = destination[key(token)]
         }
     }
     

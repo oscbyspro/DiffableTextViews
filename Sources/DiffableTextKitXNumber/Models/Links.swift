@@ -28,7 +28,7 @@ import Foundation
     //=------------------------------------------------------------------------=
     
     /// Links each component to a character.
-    @inlinable init(character: (Token) throws -> Character) rethrows {
+    @inlinable init(character: (Token) -> Character) {
         let tokens = Token.allCases
         //=--------------------------------------=
         // Count
@@ -39,8 +39,8 @@ import Foundation
         // Links
         //=--------------------------------------=
         for token in tokens {
-            try self.tokens[character(token)] = token
-            try self.characters[token] = character(token)
+            self.tokens    [character(token)] = token
+            self.characters[token] = character(token)
         }
     }
     

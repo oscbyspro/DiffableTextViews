@@ -19,7 +19,7 @@ import DiffableTextKit
     // MARK: State
     //=------------------------------------------------------------------------=
     
-    @usableFromInline private(set) var storage = [Character: Attribute]()
+    @usableFromInline private(set) var map = [Character: Attribute]()
     
     //=------------------------------------------------------------------------=
     // MARK: Initializers
@@ -30,18 +30,18 @@ import DiffableTextKit
         // Signs
         //=--------------------------------------=
         for sign in components.signs.tokens.keys {
-            self.storage[sign] = .phantom.subtracting(.virtual)
+            self.map[sign] = .phantom.subtracting(.virtual)
         }
         //=--------------------------------------=
         // Digits
         //=--------------------------------------=
         for digit in components.digits.tokens.keys {
-            self.storage[digit] = .content
+            self.map[digit] = .content
         }
         //=--------------------------------------=
         // Separators
         //=--------------------------------------=
-        self.storage[components.separators[.fraction]] = .removable
+        self.map[components.separators[.fraction]] = .removable
     }
     
     //=------------------------------------------------------------------------=
@@ -49,6 +49,6 @@ import DiffableTextKit
     //=------------------------------------------------------------------------=
     
     @inlinable subscript(character: Character) -> Attribute {
-        storage[character] ?? .phantom
+        map[character] ?? .phantom
     }
 }

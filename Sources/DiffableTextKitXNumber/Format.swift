@@ -14,14 +14,10 @@ import Foundation
 //*============================================================================*
 
 public protocol _Format: ParseableFormatStyle where FormatInput: _Input, FormatOutput == String {
+    
     associatedtype _Increment
+    
     associatedtype _SignDS: _SignDS_Init
-    
-    //=------------------------------------------------------------------------=
-    // MARK: State
-    //=------------------------------------------------------------------------=
-    
-    @inlinable var locale: Locale { get }
     
     //=------------------------------------------------------------------------=
     // MARK: Transformations
