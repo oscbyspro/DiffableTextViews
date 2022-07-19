@@ -68,14 +68,24 @@ import DiffableTextKit
     // MARK: Utilities
     //=------------------------------------------------------------------------=
     
+    @inlinable static func clamping(_  input:  Input) -> Input {
+        Swift.min(Swift.max(Input.min, input), Input.max)
+    }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Helpers
+    //=------------------------------------------------------------------------=
+    
     @inlinable func full(_ input: Input) -> Bool? {
         if min < input  && input < max { return false }
         if input == max { return input > .zero || min == max }
         if input == min { return input < .zero }; return nil
     }
     
-    @inlinable static func clamping(_  input:  Input) -> Input {
-        Swift.min(Swift.max(Input.min, input), Input.max)
+    @inlinable func autocorrect(_ sign: inout Sign) {
+        guard let correct = self .sign, sign != correct else { return }
+        Brrr.autocorrection << Info([.mark(sign), "is not in \(self)"])
+        sign = correct
     }
 }
 
@@ -146,22 +156,5 @@ extension _Bounds {
         if  full, number.removeSeparatorAsSuffix() {
             Brrr.autocorrection << Info([.mark(number), "does not fit a fraction separator"])
         }
-    }
-}
-
-//=----------------------------------------------------------------------------=
-// MARK: + Upstream, Downstream
-//=----------------------------------------------------------------------------=
-
-extension _Bounds {
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Number
-    //=------------------------------------------------------------------------=
-    
-    @inlinable func autocorrect(_ sign: inout Sign) {
-        guard let correct = self .sign, sign != correct else { return }
-        Brrr.autocorrection << Info([.mark(sign), "is not in \(self)"])
-        sign = correct
     }
 }
