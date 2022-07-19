@@ -14,8 +14,7 @@ import Foundation
 // MARK: * Precision
 //*============================================================================*
 
-public struct NumberTextPrecision<Value: NumberTextValue>: Equatable {
-    @usableFromInline typealias Name = _NumberTextPrecision
+@usableFromInline struct _Precision<Input: _Input>: Equatable {
     
     //=------------------------------------------------------------------------=
     // MARK: State
@@ -28,7 +27,7 @@ public struct NumberTextPrecision<Value: NumberTextValue>: Equatable {
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable init(unchecked: (integer: ClosedRange<Int>, fraction: ClosedRange<Int>)) {
+    @inlinable init(unchecked:(integer: ClosedRange<Int>, fraction: ClosedRange<Int>)) {
         (self.integer, self.fraction) = unchecked
     }
 
@@ -37,86 +36,79 @@ public struct NumberTextPrecision<Value: NumberTextValue>: Equatable {
     //=------------------------------------------------------------------------=
     
     @inlinable init() {
-        self.init(unchecked: (Self.integer, Self.fraction))
+        self.init(unchecked:(Self.integer,Self.fraction))
     }
     
-    @inlinable init<I>(integer:  I) where I: RangeExpression, I.Bound == Int {
-        self.init(unchecked: (Self.integer(integer), Self.fraction))
+    @inlinable init<I>(integer:  I) where
+    I: RangeExpression, I.Bound == Int {
+        let integer  = Self.clamping(integer,  to: Self.integer )
+        self.init(unchecked:(integer,Self.fraction))
     }
     
-    @inlinable init<F>(fraction: F) where F: RangeExpression, F.Bound == Int {
-        self.init(unchecked: (Self.integer, Self.fraction(fraction)))
+    @inlinable init<F>(fraction: F) where
+    F: RangeExpression, F.Bound == Int {
+        let fraction = Self.clamping(fraction, to: Self.fraction)
+        self.init(unchecked:(Self.integer,fraction))
     }
     
     @inlinable init<I, F>(integer: I, fraction: F) where
-    I: RangeExpression, I.Bound == Int, F: RangeExpression, F.Bound == Int {
-        self.init(unchecked: (Self.integer(integer), Self.fraction(fraction)))
+    I: RangeExpression, I.Bound == Int,
+    F: RangeExpression, F.Bound == Int {
+        let integer  = Self.clamping(integer,  to: Self.integer )
+        let fraction = Self.clamping(fraction, to: Self.fraction)
+        self.init(unchecked:(integer,fraction))
     }
-
+    
     //=------------------------------------------------------------------------=
     // MARK: Accessors
     //=------------------------------------------------------------------------=
-    
-    @inlinable var lower: Count {
-        Count(value: Name.lower.value,
-        integer:  integer .lowerBound,
-        fraction: fraction.lowerBound)
-    }
     
     @inlinable var upper: Count {
-        Count(value: Value.precision,
-        integer:  integer .upperBound,
-        fraction: fraction.upperBound)
-    }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Accessors
-    //=------------------------------------------------------------------------=
-    
-    @inlinable static var integer: ClosedRange<Int> {
-        ClosedRange(uncheckedBounds: (Name.lower.integer, Value.precision))
-    }
-    
-    @inlinable static var fraction: ClosedRange<Int> {
-        let min = Name.lower.fraction
-        let max = Value.isInteger ? min : Value.precision
-        return ClosedRange(uncheckedBounds: (min, max))
+        Count(value: Input.precision, integer: integer.upperBound, fraction: fraction.upperBound)
     }
     
     //=------------------------------------------------------------------------=
     // MARK: Utilities
     //=------------------------------------------------------------------------=
     
-    @inlinable func inactive() -> Name.Mode {
+    @inlinable func inactive() -> _NFSC.Precision {
         .integerAndFractionLength(
          integerLimits:  integer.lowerBound ... Int.max,
         fractionLimits: fraction.lowerBound ... Int.max)
     }
     
-    @inlinable func active() -> Name.Mode {
+    @inlinable func active() -> _NFSC.Precision {
         .integerAndFractionLength(
-         integerLimits: Name.lower.integer  ... Int.max,
-        fractionLimits: Name.lower.fraction ... Int.max)
+         integerLimits: 1 ... Int.max,
+        fractionLimits: 0 ... Int.max)
     }
     
-    @inlinable func interactive(_ count: Count) -> Name.Mode {
+    @inlinable func downstream(_ count: Count) -> _NFSC.Precision {
         .integerAndFractionLength(
-         integerLimits: max(Name.lower.integer,  count.integer ) ... Int.max,
-        fractionLimits: max(Name.lower.fraction, count.fraction) ... Int.max)
+         integerLimits: max(1, count .integer) ... Int.max,
+        fractionLimits: max(0, count.fraction) ... Int.max)
     }
     
     //=------------------------------------------------------------------------=
-    // MARK: Utilities
+    // MARK: Helpers
     //=------------------------------------------------------------------------=
     
-    @inlinable static func integer<I>(_ limits: I) -> ClosedRange<Int>
-    where I: RangeExpression, I.Bound == Int {
-        Name.clamping(limits, to: integer)
+    @inlinable static var integer: ClosedRange<Int> {
+        ClosedRange(uncheckedBounds:(1, Input.precision))
     }
     
-    @inlinable static func fraction<F>(_ limits: F) -> ClosedRange<Int>
-    where F: RangeExpression, F.Bound == Int {
-        Name.clamping(limits, to: fraction)
+    @inlinable static var fraction: ClosedRange<Int> {
+        let max = Input.integer ? 0 : Input.precision
+        return ClosedRange(uncheckedBounds: (0, max))
+    }
+    
+    /// - Requires that expression is not empty.
+    @inlinable static func clamping<R: RangeExpression>(_ expression: R,
+    to limits: ClosedRange<Int>) -> ClosedRange<Int> where R.Bound == Int {
+        let range = expression.relative(to: Int.min ..< Int.max)
+        let lower = min(max(limits.lowerBound, range.lowerBound),     limits.upperBound)
+        let upper = min(max(limits.lowerBound, range.upperBound - 1), limits.upperBound)
+        return lower...upper
     }
 }
 
@@ -124,7 +116,7 @@ public struct NumberTextPrecision<Value: NumberTextValue>: Equatable {
 // MARK: + Upstream
 //=----------------------------------------------------------------------------=
 
-extension NumberTextPrecision {
+extension _Precision {
     
     //=------------------------------------------------------------------------=
     // MARK: Number
@@ -141,7 +133,7 @@ extension NumberTextPrecision {
 // MARK: + Downstream
 //=----------------------------------------------------------------------------=
 
-extension NumberTextPrecision {
+extension _Precision {
     
     //=------------------------------------------------------------------------=
     // MARK: Number
@@ -165,35 +157,7 @@ extension NumberTextPrecision {
         if let component = capacity.first(where: (.<, 0)) {
             throw Info([.mark(component), "digits exceeded max precision \(upper[component])"])
         }
-        //=--------------------------------------=
-        // Return
-        //=--------------------------------------=
+        
         return capacity
-    }
-}
-
-//*============================================================================*
-// MARK: * Precision x Namespace
-//*============================================================================*
-
-@usableFromInline enum _NumberTextPrecision {
-    @usableFromInline typealias Mode = NumberFormatStyleConfiguration.Precision
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Constants
-    //=------------------------------------------------------------------------=
-    
-    @usableFromInline static let lower = Count(value: 1, integer: 1, fraction: 0)
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Helpers
-    //=------------------------------------------------------------------------=
-    
-    @inlinable static func clamping<R: RangeExpression>(_ expression: R,
-    to limits: ClosedRange<Int>) -> ClosedRange<Int> where R.Bound == Int {
-        let range = expression.relative(to: Int.min ..< Int.max)
-        let lower = min(max(limits.lowerBound, range.lowerBound),     limits.upperBound)
-        let upper = min(max(limits.lowerBound, range.upperBound - 1), limits.upperBound)
-        return lower...upper
     }
 }

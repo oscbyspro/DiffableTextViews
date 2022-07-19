@@ -13,20 +13,21 @@ import DiffableTextKit
 // MARK: * Bounds
 //*============================================================================*
 
-public struct NumberTextBounds<Value: NumberTextValue>: CustomStringConvertible, Equatable {
+@usableFromInline struct _Bounds<Input: _Input>: CustomStringConvertible, Equatable {
     
     //=------------------------------------------------------------------------=
     // MARK: State
     //=------------------------------------------------------------------------=
     
-    @usableFromInline var bounds: ClosedRange<Value>
- 
+    @usableFromInline let min: Input
+    @usableFromInline let max: Input
+    
     //=------------------------------------------------------------------------=
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable init(unchecked: (lower: Value,  upper: Value)) {
-        self.bounds = ClosedRange(uncheckedBounds: unchecked)
+    @inlinable init(unchecked: (min: Input,  max: Input)) {
+        (self.min, self.max) = unchecked; assert(min <= max)
     }
     
     //=------------------------------------------------------------------------=
@@ -34,18 +35,18 @@ public struct NumberTextBounds<Value: NumberTextValue>: CustomStringConvertible,
     //=------------------------------------------------------------------------=
     
     @inlinable init() {
-        self.init(unchecked: (Self.min, Self.max))
+        self.init(unchecked: (Input.min, Input.max))
     }
     
-    @inlinable init(_ limits: PartialRangeFrom<Value>) {
-        self.init(unchecked: (Self.clamping(limits.lowerBound), Self.max))
+    @inlinable init(_ limits: PartialRangeFrom<Input>) {
+        self.init(unchecked: (Self.clamping(limits.lowerBound), Input.max))
     }
     
-    @inlinable init(_ limits: PartialRangeThrough<Value>) {
-        self.init(unchecked: (Self.min, Self.clamping(limits.upperBound)))
+    @inlinable init(_ limits: PartialRangeThrough<Input>) {
+        self.init(unchecked: (Input.min, Self.clamping(limits.upperBound)))
     }
     
-    @inlinable init(_ limits: ClosedRange<Value>) {
+    @inlinable init(_ limits: ClosedRange<Input>) {
         self.init(unchecked: (Self.clamping(limits.lowerBound), Self.clamping(limits.upperBound)))
     }
     
@@ -53,18 +54,10 @@ public struct NumberTextBounds<Value: NumberTextValue>: CustomStringConvertible,
     // MARK: Accessors
     //=------------------------------------------------------------------------=
     
-    @inlinable var min: Value {
-        bounds.lowerBound
-    }
-    
-    @inlinable var max: Value {
-        bounds.upperBound
-    }
-    
     @inlinable var sign: Sign? {
-        if      bounds.lowerBound >= .zero { return .positive }
-        else if bounds.upperBound <= .zero { return .negative }
-        else {  return nil }
+        if      min >= .zero { return .positive }
+        else if max <= .zero { return .negative }
+        else {  return  nil  }
     }
     
     //=------------------------------------------------------------------------=
@@ -76,23 +69,11 @@ public struct NumberTextBounds<Value: NumberTextValue>: CustomStringConvertible,
     }
     
     //=------------------------------------------------------------------------=
-    // MARK: Accessors
-    //=------------------------------------------------------------------------=
-    
-    @inlinable static var min: Value {
-        Value.bounds.lowerBound
-    }
-    
-    @inlinable static var max: Value {
-        Value.bounds.upperBound
-    }
-    
-    //=------------------------------------------------------------------------=
     // MARK: Utilities
     //=------------------------------------------------------------------------=
     
-    @inlinable static func clamping(_ value:  Value) -> Value {
-        Swift.min(Swift.max(Self.min, value), Self.max)
+    @inlinable static func clamping(_  input:  Input) -> Input {
+        Swift.min(Swift.max(Input.min, input), Input.max)
     }
 }
 
@@ -100,25 +81,25 @@ public struct NumberTextBounds<Value: NumberTextValue>: CustomStringConvertible,
 // MARK: + Location
 //=----------------------------------------------------------------------------=
 
-extension NumberTextBounds {
+extension _Bounds {
     
     //=------------------------------------------------------------------------=
     // MARK: Utilities
     //=------------------------------------------------------------------------=
     
-    @inlinable func location(of value: Value) -> Location? {
+    @inlinable func location(of input: Input) -> Location? {
         //=--------------------------------------=
         // Value Is Not Maxed Out
         //=--------------------------------------=
-        if min < value && value < max { return .body }
+        if min < input && input < max { return .body }
         //=--------------------------------------=
         // Value == Max
         //=--------------------------------------=
-        if value == max { return Location(edge: value > .zero || min == max) }
+        if input == max { return Location(edge: input > .zero || min == max) }
         //=--------------------------------------=
         // Value == Min
         //=--------------------------------------=
-        if value == min { return Location(edge: value < .zero) }
+        if input == min { return Location(edge: input < .zero) }
         //=--------------------------------------=
         // Value Is Out Of Bounds
         //=--------------------------------------=
@@ -150,26 +131,26 @@ extension NumberTextBounds {
 // MARK: + Upstream
 //=----------------------------------------------------------------------------=
 
-extension NumberTextBounds {
+extension _Bounds {
     
     //=------------------------------------------------------------------------=
-    // MARK: Value
+    // MARK: Input
     //=------------------------------------------------------------------------=
     
-    @inlinable func autocorrect(_ value: inout Value) {
+    @inlinable func autocorrect(_ input: inout Input) {
         //=--------------------------------------=
         // Lower
         //=--------------------------------------=
-        if  value < min {
-            Brrr.autocorrection << Info([.mark(value), "is less than \(min)"])
-            value = min; return
+        if  input < min {
+            Brrr.autocorrection << Info([.mark(input), "is less than \(min)"])
+            input = min; return
         }
         //=--------------------------------------=
         // Upper
         //=--------------------------------------=
-        if  value > max {
-            Brrr.autocorrection << Info([.mark(value), "is more than \(max)"])
-            value = max; return
+        if  input > max {
+            Brrr.autocorrection << Info([.mark(input), "is more than \(max)"])
+            input = max; return
         }
     }
     
@@ -177,7 +158,7 @@ extension NumberTextBounds {
     // MARK: Number
     //=------------------------------------------------------------------------=
     
-    @inlinable func autocorrect(_  number: inout Number) {
+    @inlinable func autocorrect(_ number: inout Number) {
         autocorrect(&number.sign)
     }
 }
@@ -186,7 +167,7 @@ extension NumberTextBounds {
 // MARK: + Downstream
 //=----------------------------------------------------------------------------=
 
-extension NumberTextBounds {
+extension _Bounds {
 
     //=------------------------------------------------------------------------=
     // MARK: Number
@@ -197,15 +178,15 @@ extension NumberTextBounds {
     }
 
     //=------------------------------------------------------------------------=
-    // MARK: Value
+    // MARK: Input
     //=------------------------------------------------------------------------=
     
-    @inlinable func autovalidate(_ value: Value, _ number: inout Number) throws {
+    @inlinable func autovalidate(_ input: Input, _ number: inout Number) throws {
         //=--------------------------------------=
         // Location
         //=--------------------------------------=
-        guard let location = location(of: value) else {
-            throw Info([.mark(value), "is not in \(self)"])
+        guard let location = location(of: input) else {
+            throw Info([.mark(input), "is not in \(self)"])
         }
         //=--------------------------------------=
         // Remove Separator On Value Is Maxed Out
@@ -220,7 +201,7 @@ extension NumberTextBounds {
 // MARK: + Upstream, Downstream
 //=----------------------------------------------------------------------------=
 
-extension NumberTextBounds {
+extension _Bounds {
     
     //=------------------------------------------------------------------------=
     // MARK: Number

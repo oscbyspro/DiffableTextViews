@@ -7,138 +7,63 @@
 // See http://www.apache.org/licenses/LICENSE-2.0 for license information.
 //=----------------------------------------------------------------------------=
 
-import Foundation
-
-//*============================================================================*
-// MARK: * Kind
-//*============================================================================*
-
-public protocol NumberTextKind {
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Style
-    //=------------------------------------------------------------------------=
-    
-    associatedtype NumberTextStyle: NumberTextStyleProtocol
-    typealias NumberTextFormat = NumberTextStyle.Format
-    typealias NumberTextValue = NumberTextFormat.FormatInput
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Attributes
-    //=------------------------------------------------------------------------=
-    
-    @inlinable static var isOptional: Bool { get }
-    @inlinable static var isUnsigned: Bool { get }
-    @inlinable static var isInteger:  Bool { get }
-}
-
 //*============================================================================*
 // MARK: * Value
 //*============================================================================*
 
-public protocol NumberTextValue: Comparable, NumberTextKind {
+public protocol _Value: Equatable {
+    
+    associatedtype NumberTextGraph where NumberTextGraph: _Graph,
+    NumberTextGraph: _Numberable,  NumberTextGraph.Value == Self
     
     //=------------------------------------------------------------------------=
-    // MARK: Zero, Precision, Bounds
+    // MARK: State
     //=------------------------------------------------------------------------=
     
-    @inlinable static var zero: Self { get }
-    @inlinable static var precision: Int { get }
-    @inlinable static var bounds: ClosedRange<Self> { get }
+    @inlinable static var _NumberTextGraph: NumberTextGraph { get }
 }
 
 //=----------------------------------------------------------------------------=
 // MARK: + Details
 //=----------------------------------------------------------------------------=
 
-public extension NumberTextValue {
+extension _Value {
     
     //=------------------------------------------------------------------------=
-    // MARK: Attributes
+    // MARK: Accessors
     //=------------------------------------------------------------------------=
     
-    @inlinable static var isOptional: Bool { false }
+    @inlinable @inline(__always) static var min:  NumberTextGraph.Input {
+        _NumberTextGraph.min
+    }
+
+    @inlinable @inline(__always) static var max:  NumberTextGraph.Input {
+        _NumberTextGraph.max
+    }
+
+    @inlinable @inline(__always) static var zero: NumberTextGraph.Input {
+        _NumberTextGraph.zero
+    }
+    
+    @inlinable @inline(__always) static var precision: Int {
+        _NumberTextGraph.precision
+    }
+
+    @inlinable @inline(__always) static var optional: Bool {
+        _NumberTextGraph.optional
+    }
+
+    @inlinable @inline(__always) static var unsigned: Bool {
+        _NumberTextGraph.unsigned
+    }
+
+    @inlinable @inline(__always) static var integer:  Bool {
+        _NumberTextGraph.integer
+    }
 }
 
 //*============================================================================*
-// MARK: * Value x Floating Point
+// MARK: * Input
 //*============================================================================*
 
-public protocol  NumberTextValueXFloatingPoint: NumberTextValue { }
-public extension NumberTextValueXFloatingPoint {
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Attributes
-    //=------------------------------------------------------------------------=
-    
-    @inlinable static var isInteger: Bool { false }
-
-    //=------------------------------------------------------------------------=
-    // MARK: Helpers
-    //=------------------------------------------------------------------------=
-    
-    @inlinable internal static func bounds(abs: Self) -> ClosedRange<Self>
-    where Self: SignedNumeric { -abs ... abs }
-}
-
-//*============================================================================*
-// MARK: * Value x Integer
-//*============================================================================*
-
-public protocol  NumberTextValueXInteger: NumberTextValue { }
-public extension NumberTextValueXInteger {
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Attributes
-    //=------------------------------------------------------------------------=
-    
-    @inlinable static var isInteger: Bool { true }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Helpers
-    //=------------------------------------------------------------------------=
-
-    @inlinable internal static func bounds() -> ClosedRange<Self>
-    where Self: FixedWidthInteger { Self.min ... Self.max }
-}
-
-//*============================================================================*
-// MARK: * Value x Signed
-//*============================================================================*
-
-public protocol  NumberTextValueXSigned: NumberTextValue { }
-public extension NumberTextValueXSigned {
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Attributes
-    //=------------------------------------------------------------------------=
-    
-    @inlinable static var isUnsigned: Bool { false }
-}
-
-//*============================================================================*
-// MARK: * Value x Unsigned
-//*============================================================================*
-
-public protocol  NumberTextValueXUnsigned: NumberTextValue { }
-public extension NumberTextValueXUnsigned {
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Attributes
-    //=------------------------------------------------------------------------=
-    
-    @inlinable static var isUnsigned: Bool { true }
-}
-
-//*============================================================================*
-// MARK: * Value x Branchable(s)
-//*============================================================================*
-
-public protocol NumberTextValueXNumberable: NumberTextValue
-where NumberTextFormat: NumberTextFormatXNumber { }
-
-public protocol NumberTextValueXCurrencyable: NumberTextValue
-where NumberTextFormat: NumberTextFormatXCurrencyable { }
-
-public protocol NumberTextValueXPercentable:  NumberTextValue
-where NumberTextFormat: NumberTextFormatXPercentable { }
+public protocol _Input: _Value, Comparable where NumberTextGraph.Input == Self { }

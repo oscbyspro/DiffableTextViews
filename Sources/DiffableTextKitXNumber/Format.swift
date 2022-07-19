@@ -13,18 +13,9 @@ import Foundation
 // MARK: * Format
 //*============================================================================*
 
-public protocol NumberTextFormat: ParseableFormatStyle where FormatOutput == String,
-FormatInput: DiffableTextKitXNumber.NumberTextValue {
-    associatedtype NumberTextRoundingIncrement
-    associatedtype NumberTextSign: NumberTextFormatXSignRepresentable
-    associatedtype NumberTextScheme: DiffableTextKitXNumber.NumberTextScheme
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Types
-    //=------------------------------------------------------------------------=
-    
-    typealias NFSC = NumberFormatStyleConfiguration
-    typealias CFSC = CurrencyFormatStyleConfiguration
+public protocol _Format: ParseableFormatStyle where FormatInput: _Input, FormatOutput == String {
+    associatedtype _Increment
+    associatedtype _SignDS: _SignDS_Init
     
     //=------------------------------------------------------------------------=
     // MARK: State
@@ -36,53 +27,21 @@ FormatInput: DiffableTextKitXNumber.NumberTextValue {
     // MARK: Transformations
     //=------------------------------------------------------------------------=
     
-    @inlinable func sign(strategy: NumberTextSign) -> Self
+    @inlinable func sign(strategy: _SignDS) -> Self
     
-    @inlinable func precision(_ precision: NFSC.Precision) -> Self
+    @inlinable func precision(_ precision: _NFSC.Precision) -> Self
     
-    @inlinable func decimalSeparator(
-    strategy: NFSC.DecimalSeparatorDisplayStrategy) -> Self
+    @inlinable func decimalSeparator(strategy: _NFSC_SeparatorDS) -> Self
     
-    @inlinable func rounded(rule: FloatingPointRoundingRule,
-    increment: Self.NumberTextRoundingIncrement?) -> Self
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Utilities
-    //=------------------------------------------------------------------------=
-    
-    @inlinable func scheme() -> NumberTextScheme
-}
-
-//=----------------------------------------------------------------------------=
-// MARK: + Details
-//=----------------------------------------------------------------------------=
-
-extension NumberTextFormat {
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Transformations
-    //=------------------------------------------------------------------------=
-    
-    @inlinable func sign(_ sign: Sign) -> Self {
-        self.sign(strategy: .init(sign == .negative ? .always : .automatic))
-    }
-    
-    @inlinable func separator(_ separator: Separator?) -> Self {
-        self.decimalSeparator(strategy: separator != nil ? .always : .automatic)
-    }
-    
-    @inlinable func rounded(_ rule: FloatingPointRoundingRule) -> Self {
-        self.rounded(rule: rule, increment: nil)
-    }
+    @inlinable func rounded(rule: _FPRR, increment: _Increment?) -> Self
 }
 
 //*============================================================================*
-// MARK: * Format x Number
+// MARK: * Format x Standard
 //*============================================================================*
 
-public protocol NumberTextFormatXNumber: NumberTextFormat
-where NumberTextSign == NFSC.SignDisplayStrategy {
-
+public protocol _Format_Standard: _Format where _SignDS == _NFSC_SignDS {
+    
     //=------------------------------------------------------------------------=
     // MARK: Initializers
     //=------------------------------------------------------------------------=
@@ -90,18 +49,24 @@ where NumberTextSign == NFSC.SignDisplayStrategy {
     @inlinable init(locale: Locale)
 }
 
+//=----------------------------------------------------------------------------=
+// MARK: + Types
+//=----------------------------------------------------------------------------=
+
+private typealias _Standard = _Format & _Format_Standard
+
+extension      Decimal.FormatStyle: _Standard { }
+extension FloatingPointFormatStyle: _Standard where FormatInput: _Input { }
+extension       IntegerFormatStyle: _Standard where FormatInput: _Input { }
+
+extension      Decimal.FormatStyle.Percent: _Standard { }
+extension FloatingPointFormatStyle.Percent: _Standard where FormatInput: _Input { }
+
 //*============================================================================*
 // MARK: * Format x Currency
 //*============================================================================*
 
-public protocol NumberTextFormatXCurrency: NumberTextFormat
-where NumberTextSign == CFSC.SignDisplayStrategy {
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Accessors
-    //=------------------------------------------------------------------------=
-    
-    @inlinable var currencyCode: String { get }
+public protocol _Format_Currency: _Format where _SignDS == _CFSC_SignDS {
     
     //=------------------------------------------------------------------------=
     // MARK: Initializers
@@ -110,35 +75,35 @@ where NumberTextSign == CFSC.SignDisplayStrategy {
     @inlinable init(code: String, locale: Locale)
 }
 
+//=----------------------------------------------------------------------------=
+// MARK: + Types
+//=----------------------------------------------------------------------------=
+
+private typealias _Currency = _Format & _Format_Currency
+
+extension      Decimal.FormatStyle.Currency: _Currency { }
+extension FloatingPointFormatStyle.Currency: _Currency where FormatInput: _Input { }
+extension       IntegerFormatStyle.Currency: _Currency where FormatInput: _Input { }
+
 //*============================================================================*
-// MARK: * Format x Percent
+// MARK: * Format x Strategies x Sign
 //*============================================================================*
 
-public protocol NumberTextFormatXPercent: NumberTextFormat
-where NumberTextSign == NFSC.SignDisplayStrategy {
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Initializers
-    //=------------------------------------------------------------------------=
-    
-    @inlinable init(locale: Locale)    
+public enum     _SignDS      { case always, automatic }
+public protocol _SignDS_Init { init(_ value: _SignDS) }
+
+//=----------------------------------------------------------------------------=
+// MARK: + Types
+//=----------------------------------------------------------------------------=
+
+extension _NFSC_SignDS: _SignDS_Init {
+    @inlinable public init(_ value: _SignDS) {
+        switch value { case .always: self = .always(); case .automatic: self = .automatic }
+    }
 }
 
-//*============================================================================*
-// MARK: * Format x Branchable(s)
-//*============================================================================*
-
-public protocol NumberTextFormatXNumberable: NumberTextFormat {
-    associatedtype Number: NumberTextFormatXNumber
-    where Number.FormatInput == FormatInput
-}
-
-public protocol NumberTextFormatXCurrencyable: NumberTextFormat {
-    associatedtype Currency: NumberTextFormatXCurrency
-    where Currency.FormatInput == FormatInput
-}
-
-public protocol NumberTextFormatXPercentable: NumberTextFormat {
-    associatedtype Percent: NumberTextFormatXPercent
-    where Percent.FormatInput == FormatInput
+extension _CFSC_SignDS: _SignDS_Init {
+    @inlinable public init(_ value: _SignDS) {
+        switch value { case .always: self = .always(); case .automatic: self = .automatic }
+    }
 }

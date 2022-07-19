@@ -7,31 +7,24 @@
 // See http://www.apache.org/licenses/LICENSE-2.0 for license information.
 //=----------------------------------------------------------------------------=
 
+import DiffableTextKit
 import Foundation
 
 //*============================================================================*
-// MARK: * Value x Decimal(s)
+// MARK: * Default x Percent
 //*============================================================================*
-
-private protocol __Decimal:
-NumberTextValueXSigned,
-NumberTextValueXFloatingPoint,
-NumberTextValueXNumberable,
-NumberTextValueXCurrencyable,
-NumberTextValueXPercentable { }
-
 //=----------------------------------------------------------------------------=
 // MARK: + Decimal
 //=----------------------------------------------------------------------------=
 
-extension Decimal: __Decimal {
-    public typealias NumberTextStyle = _NumberTextStyle<Decimal.FormatStyle>
+extension DiffableTextStyle where Self == NumberTextStyle<Decimal>.Percent {
+    @inlinable public static var percent: Self { Self() }
+}
 
-    //=------------------------------------------------------------------------=
-    // MARK: Precision, Bounds
-    //=------------------------------------------------------------------------=
+//=----------------------------------------------------------------------------=
+// MARK: + Float(s)
+//=----------------------------------------------------------------------------=
 
-    public static let precision: Int = 38
-    public static let bounds: ClosedRange<Self> = Self.bounds(
-    abs: Self(string: String(repeating: "9", count: precision))!)
+extension DiffableTextStyle where Self == NumberTextStyle<Double>.Percent {
+    @inlinable public static var percent: Self { Self() }
 }

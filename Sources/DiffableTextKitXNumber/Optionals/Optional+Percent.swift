@@ -11,13 +11,13 @@ import DiffableTextKit
 import Foundation
 
 //*============================================================================*
-// MARK: * Default x Percent
+// MARK: * Optional x Percent
 //*============================================================================*
 //=----------------------------------------------------------------------------=
 // MARK: + Decimal
 //=----------------------------------------------------------------------------=
 
-extension DiffableTextStyle where Self == _WIP_NumberTextStyle<Decimal>.Percent {
+extension DiffableTextStyle where Self == NumberTextStyle<Decimal?>.Percent {
     @inlinable public static var percent: Self { Self() }
 }
 
@@ -25,6 +25,6 @@ extension DiffableTextStyle where Self == _WIP_NumberTextStyle<Decimal>.Percent 
 // MARK: + Float(s)
 //=----------------------------------------------------------------------------=
 
-extension DiffableTextStyle where Self == _WIP_NumberTextStyle<Double>.Percent {
+extension DiffableTextStyle where Self == NumberTextStyle<Double?>.Percent {
     @inlinable public static var percent: Self { Self() }
 }

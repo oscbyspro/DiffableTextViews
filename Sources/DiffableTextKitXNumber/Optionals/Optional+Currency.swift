@@ -11,13 +11,13 @@ import DiffableTextKit
 import Foundation
 
 //*============================================================================*
-// MARK: * Default x Currency
+// MARK: * Optional x Currency
 //*============================================================================*
 //=----------------------------------------------------------------------------=
 // MARK: + Decimal
 //=----------------------------------------------------------------------------=
 
-extension DiffableTextStyle where Self == _WIP_NumberTextStyle<Decimal>.Currency {
+extension DiffableTextStyle where Self == NumberTextStyle<Decimal?>.Currency {
     @inlinable public static func currency(code: String) -> Self { Self(code: code) }
 }
 
@@ -25,7 +25,7 @@ extension DiffableTextStyle where Self == _WIP_NumberTextStyle<Decimal>.Currency
 // MARK: + Float(s)
 //=----------------------------------------------------------------------------=
 
-extension DiffableTextStyle where Self == _WIP_NumberTextStyle<Double>.Currency {
+extension DiffableTextStyle where Self == NumberTextStyle<Double?>.Currency {
     @inlinable public static func currency(code: String) -> Self { Self(code: code) }
 }
 
@@ -33,23 +33,23 @@ extension DiffableTextStyle where Self == _WIP_NumberTextStyle<Double>.Currency 
 // MARK: + Int(s)
 //=----------------------------------------------------------------------------=
 
-extension DiffableTextStyle where Self == _WIP_NumberTextStyle<Int>.Currency {
+extension DiffableTextStyle where Self == NumberTextStyle<Int?>.Currency {
     @inlinable public static func currency(code: String) -> Self { Self(code: code) }
 }
 
-extension DiffableTextStyle where Self == _WIP_NumberTextStyle<Int8>.Currency {
+extension DiffableTextStyle where Self == NumberTextStyle<Int8?>.Currency {
     @inlinable public static func currency(code: String) -> Self { Self(code: code) }
 }
 
-extension DiffableTextStyle where Self == _WIP_NumberTextStyle<Int16>.Currency {
+extension DiffableTextStyle where Self == NumberTextStyle<Int16?>.Currency {
     @inlinable public static func currency(code: String) -> Self { Self(code: code) }
 }
 
-extension DiffableTextStyle where Self == _WIP_NumberTextStyle<Int32>.Currency {
+extension DiffableTextStyle where Self == NumberTextStyle<Int32?>.Currency {
     @inlinable public static func currency(code: String) -> Self { Self(code: code) }
 }
 
-extension DiffableTextStyle where Self == _WIP_NumberTextStyle<Int64>.Currency {
+extension DiffableTextStyle where Self == NumberTextStyle<Int64?>.Currency {
     @inlinable public static func currency(code: String) -> Self { Self(code: code) }
 }
 
@@ -57,22 +57,22 @@ extension DiffableTextStyle where Self == _WIP_NumberTextStyle<Int64>.Currency {
 // MARK: + UInt(s)
 //=----------------------------------------------------------------------------=
 
-extension DiffableTextStyle where Self == _WIP_NumberTextStyle<UInt>.Currency {
+extension DiffableTextStyle where Self == NumberTextStyle<UInt?>.Currency {
     @inlinable public static func currency(code: String) -> Self { Self(code: code) }
 }
 
-extension DiffableTextStyle where Self == _WIP_NumberTextStyle<UInt8>.Currency {
+extension DiffableTextStyle where Self == NumberTextStyle<UInt8?>.Currency {
     @inlinable public static func currency(code: String) -> Self { Self(code: code) }
 }
 
-extension DiffableTextStyle where Self == _WIP_NumberTextStyle<UInt16>.Currency {
+extension DiffableTextStyle where Self == NumberTextStyle<UInt16?>.Currency {
     @inlinable public static func currency(code: String) -> Self { Self(code: code) }
 }
 
-extension DiffableTextStyle where Self == _WIP_NumberTextStyle<UInt32>.Currency {
+extension DiffableTextStyle where Self == NumberTextStyle<UInt32?>.Currency {
     @inlinable public static func currency(code: String) -> Self { Self(code: code) }
 }
 
-extension DiffableTextStyle where Self == _WIP_NumberTextStyle<UInt64>.Currency {
+extension DiffableTextStyle where Self == NumberTextStyle<UInt64?>.Currency {
     @inlinable public static func currency(code: String) -> Self { Self(code: code) }
 }

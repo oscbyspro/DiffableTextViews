@@ -10,31 +10,22 @@
 import Foundation
 
 //*============================================================================*
-// MARK: * Style x Aliases
+// MARK: * Aliases
 //*============================================================================*
 
-public typealias NumberTextStyle<Kind: NumberTextKind> = Kind.NumberTextStyle
+public typealias NumberTextStyle<Value: _Value> = Value.NumberTextGraph.Number
 
-//=----------------------------------------------------------------------------=
-// MARK: + Standard
-//=----------------------------------------------------------------------------=
+//*============================================================================*
+// MARK: * Aliases x Internal
+//*============================================================================*
 
-extension _NumberTextStyle where Format: NumberTextFormatXCurrencyable {
-    public typealias Currency = _NumberTextStyle<Format.Currency>
-}
+public typealias _NFSC = NumberFormatStyleConfiguration
+public typealias _CFSC = CurrencyFormatStyleConfiguration
 
-extension _NumberTextStyle where Format: NumberTextFormatXPercentable {
-    public typealias Percent = _NumberTextStyle<Format.Percent>
-}
+public typealias _NFSC_SignDS = _NFSC.SignDisplayStrategy
+public typealias _NFSC_SeparatorDS = _NFSC.DecimalSeparatorDisplayStrategy
 
-//=----------------------------------------------------------------------------=
-// MARK: + Optional
-//=----------------------------------------------------------------------------=
+public typealias _CFSC_SignDS = _CFSC.SignDisplayStrategy
+public typealias _CFSC_SeparatorDS = _CFSC.DecimalSeparatorDisplayStrategy
 
-extension _OptionalNumberTextStyle where Format: NumberTextFormatXCurrencyable {
-    public typealias Currency = _OptionalNumberTextStyle<Format.Currency>
-}
-
-extension _OptionalNumberTextStyle where Format: NumberTextFormatXPercentable {
-    public typealias Percent = _OptionalNumberTextStyle<Format.Percent>
-}
+public typealias _FPRR = FloatingPointRoundingRule

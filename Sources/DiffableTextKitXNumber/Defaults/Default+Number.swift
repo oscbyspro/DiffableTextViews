@@ -11,13 +11,13 @@ import DiffableTextKit
 import Foundation
 
 //*============================================================================*
-// MARK: * Optional x Number
+// MARK: * Default x Number
 //*============================================================================*
 //=----------------------------------------------------------------------------=
 // MARK: + Decimal
 //=----------------------------------------------------------------------------=
 
-extension DiffableTextStyle where Self == _WIP_NumberTextStyle<Decimal?> {
+extension DiffableTextStyle where Self == NumberTextStyle<Decimal> {
     @inlinable public static var number: Self { Self() }
 }
 
@@ -25,7 +25,7 @@ extension DiffableTextStyle where Self == _WIP_NumberTextStyle<Decimal?> {
 // MARK: + Float(s)
 //=----------------------------------------------------------------------------=
 
-extension DiffableTextStyle where Self == _WIP_NumberTextStyle<Double?> {
+extension DiffableTextStyle where Self == NumberTextStyle<Double> {
     @inlinable public static var number: Self { Self() }
 }
 
@@ -33,23 +33,23 @@ extension DiffableTextStyle where Self == _WIP_NumberTextStyle<Double?> {
 // MARK: + Int(s)
 //=----------------------------------------------------------------------------=
 
-extension DiffableTextStyle where Self == _WIP_NumberTextStyle<Int?> {
+extension DiffableTextStyle where Self == NumberTextStyle<Int> {
     @inlinable public static var number: Self { Self() }
 }
 
-extension DiffableTextStyle where Self == _WIP_NumberTextStyle<Int8?> {
+extension DiffableTextStyle where Self == NumberTextStyle<Int8> {
     @inlinable public static var number: Self { Self() }
 }
 
-extension DiffableTextStyle where Self == _WIP_NumberTextStyle<Int16?> {
+extension DiffableTextStyle where Self == NumberTextStyle<Int16> {
     @inlinable public static var number: Self { Self() }
 }
 
-extension DiffableTextStyle where Self == _WIP_NumberTextStyle<Int32?> {
+extension DiffableTextStyle where Self == NumberTextStyle<Int32> {
     @inlinable public static var number: Self { Self() }
 }
 
-extension DiffableTextStyle where Self == _WIP_NumberTextStyle<Int64?> {
+extension DiffableTextStyle where Self == NumberTextStyle<Int64> {
     @inlinable public static var number: Self { Self() }
 }
 
@@ -57,22 +57,22 @@ extension DiffableTextStyle where Self == _WIP_NumberTextStyle<Int64?> {
 // MARK: + UInt(s)
 //=----------------------------------------------------------------------------=
 
-extension DiffableTextStyle where Self == _WIP_NumberTextStyle<UInt?> {
+extension DiffableTextStyle where Self == NumberTextStyle<UInt> {
     @inlinable public static var number: Self { Self() }
 }
 
-extension DiffableTextStyle where Self == _WIP_NumberTextStyle<UInt8?> {
+extension DiffableTextStyle where Self == NumberTextStyle<UInt8> {
     @inlinable public static var number: Self { Self() }
 }
 
-extension DiffableTextStyle where Self == _WIP_NumberTextStyle<UInt16?> {
+extension DiffableTextStyle where Self == NumberTextStyle<UInt16> {
     @inlinable public static var number: Self { Self() }
 }
 
-extension DiffableTextStyle where Self == _WIP_NumberTextStyle<UInt32?> {
+extension DiffableTextStyle where Self == NumberTextStyle<UInt32> {
     @inlinable public static var number: Self { Self() }
 }
 
-extension DiffableTextStyle where Self == _WIP_NumberTextStyle<UInt64?> {
+extension DiffableTextStyle where Self == NumberTextStyle<UInt64> {
     @inlinable public static var number: Self { Self() }
 }

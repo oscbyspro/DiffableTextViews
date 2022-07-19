@@ -14,143 +14,87 @@ import Foundation
 // MARK: * Style
 //*============================================================================*
 
-public struct _NumberTextStyle<Format: NumberTextFormat>: NumberTextStyleProtocol {
-    public typealias Adapter = NumberTextAdapter<Format>
+public protocol _Style: DiffableTextStyle
+where Value == Graph.Value, Cache: _Cache,
+Cache.Input == Input {
+    
+    associatedtype Graph: _Graph
+    
+    typealias Input = Graph.Input
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Bounds
+    //=------------------------------------------------------------------------=
+    
+    @inlinable func bounds(_ limits: ClosedRange<Input>) -> Self
+    
+    @inlinable func bounds(_ limits: PartialRangeFrom<Input>) -> Self
+    
+    @inlinable func bounds(_ limits: PartialRangeThrough<Input>) -> Self
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Precision
+    //=------------------------------------------------------------------------=
+    
+    @inlinable func precision<I>(integer: I) -> Self
+    where I: RangeExpression, I.Bound == Int
+    
+    @inlinable func precision<F>(fraction: F) -> Self
+    where F: RangeExpression, F.Bound == Int
+    
+    @inlinable func precision<I, F>(integer: I, fraction: F) -> Self
+    where I: RangeExpression, I.Bound == Int, F: RangeExpression, F.Bound == Int
+}
 
-    //=------------------------------------------------------------------------=
-    // MARK: State
-    //=------------------------------------------------------------------------=
-    
-    public var adapter: Adapter
-    public var bounds: Bounds
-    public var precision: Precision
+//=----------------------------------------------------------------------------=
+// MARK: + Details
+//=----------------------------------------------------------------------------=
+
+public extension _Style {
     
     //=------------------------------------------------------------------------=
-    // MARK: Initializers
+    // MARK: Precision
     //=------------------------------------------------------------------------=
     
-    @inlinable init(_ format: Format) {
-        self.adapter = Adapter(format)
-        self.bounds = adapter.preferred()
-        self.precision = adapter.preferred()
+    @inlinable func precision(integer: Int) -> Self {
+        precision(integer: integer...integer)
     }
     
-    //=------------------------------------------------------------------------=
-    // MARK: Transformations
-    //=------------------------------------------------------------------------=
+    @inlinable func precision(fraction: Int) -> Self {
+        precision(fraction: fraction...fraction)
+    }
     
-    @inlinable public func locale(_ locale: Locale) -> Self {
-        var result = self; result.adapter.update(locale); return result
+    @inlinable func precision(integer: Int, fraction: Int) -> Self {
+        precision(integer: integer...integer, fraction: fraction...fraction)
+    }
+    
+    @inlinable func precision<I>(integer: I, fraction: Int) -> Self
+    where I: RangeExpression, I.Bound == Int {
+        precision(integer: integer, fraction: fraction...fraction)
+    }
+    
+    @inlinable func precision<F>(integer: Int, fraction: F) -> Self
+    where F: RangeExpression, F.Bound == Int {
+        precision(integer: integer...integer, fraction: fraction)
     }
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: + Utilities
+// MARK: + Details where Input: Binary Integer
 //=----------------------------------------------------------------------------=
 
-extension _NumberTextStyle {
+public extension _Style where Input: BinaryInteger {
     
     //=------------------------------------------------------------------------=
-    // MARK: Inactive
+    // MARK: Precision
     //=------------------------------------------------------------------------=
-    
-    @inlinable public func format(_ value: Value, with cache: inout Void) -> String {
-        format.precision(precision.inactive()).format(value)
-    }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Active
-    //=------------------------------------------------------------------------=
-    
-    @inlinable public func interpret(_ value: Value, with cache: inout Void) -> Commit<Value> {
-        let style = format.precision(precision.active())
-        var value = value
-        //=--------------------------------------=
-        // Autocorrect
-        //=--------------------------------------=
-        bounds.autocorrect(&value)
-        //=--------------------------------------=
-        // Number
-        //=--------------------------------------=
-        let formatted = style.format(value)
-        let parseable = adapter.snapshot(formatted)
-        var number = try! adapter.number(parseable, as: Value.self)!
-        //=--------------------------------------=
-        // Autocorrect
-        //=--------------------------------------=
-        bounds   .autocorrect(&number)
-        precision.autocorrect(&number)
-        //=--------------------------------------=
-        // Value
-        //=--------------------------------------=
-        value = try! adapter.value(number)
-        //=--------------------------------------=
-        // Commit
-        //=--------------------------------------=
-        return commit(style, value, number)
-    }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Interactive
-    //=------------------------------------------------------------------------=
-    
-    @inlinable public func resolve(_ proposal: Proposal, with cache: inout Void) throws -> Commit<Value> {
-        try resolve(adapter.number(proposal, as: Value.self)!)
-    }
-    
-    /// The resolve method body, also used by styles such as: optional.
-    @inlinable func resolve(_ number: Number) throws -> Commit<Value> {
-        let count  = number.count()
-        var number = number
-        //=--------------------------------------=
-        // Autovalidate
-        //=--------------------------------------=
-        try bounds   .autovalidate(&number)
-        try precision.autovalidate(&number, count)
-        //=--------------------------------------=
-        // Value
-        //=--------------------------------------=
-        let value = try adapter.value(number)
-        //=--------------------------------------=
-        // Autovalidate
-        //=--------------------------------------=
-        try bounds.autovalidate(value, &number)
-        //=--------------------------------------=
-        // Commit
-        //=--------------------------------------=
-        let style = format.precision(precision.interactive(count))
-        return commit(style, value, number)
-    }
-}
 
-//=----------------------------------------------------------------------------=
-// MARK: + Helpers
-//=----------------------------------------------------------------------------=
-
-extension _NumberTextStyle {
+    @inlinable func precision(_ integer: Int) -> Self {
+        precision(integer: integer...integer)
+    }
     
-    //=------------------------------------------------------------------------=
-    // MARK: Commit
-    //=------------------------------------------------------------------------=
-    
-    @inlinable func commit(_ style: Format, _ value: Value, _ number: Number) -> Commit<Value> {
-        let style = style.sign(number.sign).separator(number.separator)
-        var characters = style.format(value)
-        //=--------------------------------------=
-        // Autocorrect
-        //=--------------------------------------=
-        let signs = adapter.reader.components.signs
-        if number.sign == .negative, value == .zero,
-        let index = characters.firstIndex(of: signs[.positive]) {
-            //=----------------------------------=
-            // Make Positive Zero Negative
-            //=----------------------------------=
-            let replacement = String(signs[.negative])
-            characters.replaceSubrange(index...index, with: replacement)
-        }
-        //=--------------------------------------=
-        // Return
-        //=--------------------------------------=
-        return Commit(value, adapter.snapshot(characters))
+    @inlinable func precision<I>(_ integer: I) -> Self
+    where I: RangeExpression, I.Bound == Int {
+        precision(integer: integer)
     }
 }
