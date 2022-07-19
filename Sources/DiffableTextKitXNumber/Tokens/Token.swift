@@ -13,21 +13,14 @@ import Foundation
 // MARK: * Token
 //*============================================================================*
 
-/// A UTF-8 encoded ASCII character.
+/// A single ASCII-encoded character.
 @usableFromInline protocol _Token: CaseIterable, CustomStringConvertible, Hashable {
-    associatedtype Enumeration: CaseIterable, RawRepresentable where Enumeration.RawValue == UInt8
-
+    
     //=------------------------------------------------------------------------=
     // MARK: State
     //=------------------------------------------------------------------------=
     
-    @inlinable var rawValue: UInt8 { get }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Initializers
-    //=------------------------------------------------------------------------=
-    
-    @inlinable init(_ enumeration: Enumeration)
+    @inlinable var ascii: UInt8 { get }
     
     //=------------------------------------------------------------------------=
     // MARK: Utilities
@@ -45,19 +38,11 @@ import Foundation
 extension _Token {
     
     //=------------------------------------------------------------------------=
-    // MARK: Enumeration
-    //=------------------------------------------------------------------------=
-    
-    @inlinable var enumeration: Enumeration {
-        Enumeration(rawValue: rawValue)!
-    }
-    
-    //=------------------------------------------------------------------------=
     // MARK: Unicodeable
     //=------------------------------------------------------------------------=
     
     @inlinable var unicode: Unicode.Scalar {
-        Unicode.Scalar(rawValue)
+        Unicode.Scalar(ascii)
     }
     
     @inlinable var character: Character {
@@ -81,14 +66,14 @@ extension _Token {
 // MARK: * Token x Collection
 //*============================================================================*
 
-/// Multiple UTF-8 encoded ASCII characters.
+/// A collection of ASCII-encoded characters.
 @usableFromInline protocol _Tokens: CustomStringConvertible {
     
     //=------------------------------------------------------------------------=
     // MARK: State
     //=------------------------------------------------------------------------=
     
-    @inlinable var rawValue: [UInt8] { get }
+    @inlinable var ascii: [UInt8] { get }
 }
 
 //=----------------------------------------------------------------------------=
@@ -102,6 +87,6 @@ extension _Tokens {
     //=------------------------------------------------------------------------=
     
     @inlinable var description: String {
-        String(bytes: rawValue, encoding: .utf8)!
+        String(bytes: ascii, encoding: .ascii)!
     }
 }

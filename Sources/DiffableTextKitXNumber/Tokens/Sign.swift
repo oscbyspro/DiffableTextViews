@@ -14,28 +14,26 @@ import Foundation
 //*============================================================================*
 
 @usableFromInline struct Sign: _Token {
-    @usableFromInline static let allCases = Enumeration.allCases.map(Self.init)
+    @usableFromInline static let allCases = [positive, negative]
     
     //=------------------------------------------------------------------------=
     // MARK: Instances
     //=------------------------------------------------------------------------=
     
-    @usableFromInline static let positive = Self(.positive)
-    @usableFromInline static let negative = Self(.negative)
+    @usableFromInline static let positive = Self(ascii: 43) // "+"
+    @usableFromInline static let negative = Self(ascii: 45) // "-"
 
     //=------------------------------------------------------------------------=
     // MARK: State
     //=------------------------------------------------------------------------=
     
-    @usableFromInline let rawValue: UInt8
+    @usableFromInline let ascii: UInt8
     
     //=------------------------------------------------------------------------=
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable init(_ enumeration: Enumeration) {
-        self.rawValue = enumeration.rawValue
-    }
+    @inlinable init(ascii: UInt8) { self.ascii = ascii }
     
     //=------------------------------------------------------------------------=
     // MARK: Transformations
@@ -54,18 +52,8 @@ import Foundation
     //=------------------------------------------------------------------------=
     
     @inlinable func standard(_ formatter: NumberFormatter) -> Character! {
-        var characters: String { switch enumeration {
-        case .positive: return formatter .plusSign
-        case .negative: return formatter.minusSign
-        }}; return characters.first{ $0.isPunctuation || $0.isMathSymbol }
-    }
-    
-    //*========================================================================*
-    // MARK: * Enumeration
-    //*========================================================================*
-    
-    @usableFromInline enum Enumeration: UInt8, CaseIterable {
-        case positive = 43 // "+"
-        case negative = 45 // "-"
+        switch self {
+        case .positive: return formatter .plusSign.first{ $0.isPunctuation || $0.isMathSymbol }
+        default:        return formatter.minusSign.first{ $0.isPunctuation || $0.isMathSymbol } }
     }
 }

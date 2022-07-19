@@ -14,47 +14,47 @@ import Foundation
 //*============================================================================*
 
 @usableFromInline struct Digit: _Token {
-    @usableFromInline static let allCases = Enumeration.allCases.map(Self.init)
+    @usableFromInline static let allCases = [
+    zero, one, two,   three, four,
+    five, six, seven, eight, nine]
     
     //=------------------------------------------------------------------------=
     // MARK: Instances
     //=------------------------------------------------------------------------=
     
-    @usableFromInline static let zero  = Self(.zero)
-    @usableFromInline static let one   = Self(.one)
-    @usableFromInline static let two   = Self(.two)
-    @usableFromInline static let three = Self(.three)
-    @usableFromInline static let four  = Self(.four)
-    @usableFromInline static let five  = Self(.five)
-    @usableFromInline static let six   = Self(.six)
-    @usableFromInline static let seven = Self(.seven)
-    @usableFromInline static let eight = Self(.eight)
-    @usableFromInline static let nine  = Self(.nine)
+    @usableFromInline static let zero  = Self(ascii: 48) // "0"
+    @usableFromInline static let one   = Self(ascii: 49) // "1"
+    @usableFromInline static let two   = Self(ascii: 50) // "2"
+    @usableFromInline static let three = Self(ascii: 51) // "3"
+    @usableFromInline static let four  = Self(ascii: 52) // "4"
+    @usableFromInline static let five  = Self(ascii: 53) // "5"
+    @usableFromInline static let six   = Self(ascii: 54) // "6"
+    @usableFromInline static let seven = Self(ascii: 55) // "7"
+    @usableFromInline static let eight = Self(ascii: 56) // "8"
+    @usableFromInline static let nine  = Self(ascii: 57) // "9"
     
     //=------------------------------------------------------------------------=
     // MARK: State
     //=------------------------------------------------------------------------=
     
-    @usableFromInline let rawValue: UInt8
+    @usableFromInline let ascii: UInt8
     
     //=------------------------------------------------------------------------=
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable init(_ enumeration: Enumeration) {
-        self.rawValue = enumeration.rawValue
-    }
+    @inlinable init(ascii: UInt8) { self.ascii = ascii }
     
     //=------------------------------------------------------------------------=
     // MARK: Accessors
     //=------------------------------------------------------------------------=
     
     @inlinable var isZero: Bool {
-        self == Digit.zero
+        self == Self.zero
     }
     
     @inlinable var numericValue: UInt8 {
-        rawValue - Digit.zero.rawValue
+        ascii - Self.zero.ascii
     }
     
     //=------------------------------------------------------------------------=
@@ -65,22 +65,5 @@ import Foundation
     @inlinable func standard(_ formatter: NumberFormatter) -> Character! {
         assert(formatter.numberStyle == .none)
         return formatter.string(from: numericValue as NSNumber)!.first
-    }
-    
-    //*========================================================================*
-    // MARK: * Enumeration
-    //*========================================================================*
-    
-    @usableFromInline enum Enumeration: UInt8, CaseIterable {
-        case zero  = 48 // "0"
-        case one   = 49 // "1"
-        case two   = 50 // "2"
-        case three = 51 // "3"
-        case four  = 52 // "4"
-        case five  = 53 // "5"
-        case six   = 54 // "6"
-        case seven = 55 // "7"
-        case eight = 56 // "8"
-        case nine  = 57 // "9"
     }
 }

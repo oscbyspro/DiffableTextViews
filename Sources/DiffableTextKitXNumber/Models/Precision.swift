@@ -85,7 +85,7 @@ import Foundation
         fractionLimits: 0 ... Int.max)
     }
     
-    @inlinable func downstream(_ count: Count) -> _NFSC.Precision {
+    @inlinable func interactive(_ count: Count) -> _NFSC.Precision {
         .integerAndFractionLength(
          integerLimits: max(1, count .integer) ... Int.max,
         fractionLimits: max(0, count.fraction) ... Int.max)

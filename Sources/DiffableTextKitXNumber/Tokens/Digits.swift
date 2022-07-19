@@ -25,15 +25,13 @@ import DiffableTextKit
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable init(digits: [Digit] = []) {
-        self.digits = digits
-    }
+    @inlinable init(digits: [Digit] = []) { self.digits = digits }
     
     //=------------------------------------------------------------------------=
     // MARK: Accessors
     //=------------------------------------------------------------------------=
     
-    @inlinable var rawValue: [UInt8] {
+    @inlinable var ascii: [UInt8] {
         Swift.unsafeBitCast(digits, to: [UInt8].self)
     }
     
@@ -53,8 +51,8 @@ import DiffableTextKit
     // MARK: Transformations
     //=------------------------------------------------------------------------=
     
-    @inlinable mutating func append(_ element: Digit) {
-        digits.append(element)
+    @inlinable mutating func append(_ digit: Digit) {
+        digits.append(digit)
     }
         
     @inlinable mutating func replaceEmptyWithZero() {

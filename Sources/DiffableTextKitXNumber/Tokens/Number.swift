@@ -117,14 +117,14 @@ import DiffableTextKit
     // MARK: Accessors
     //=------------------------------------------------------------------------=
     
-    @inlinable var rawValue: [UInt8] {
+    @inlinable var ascii: [UInt8] {
         let size = integer.count+fraction.count+2
         return Array<UInt8>.init(capacity: size){
-        $0.append(sign.rawValue)
-        $0.append(contentsOf: integer.rawValue)
+        $0.append(sign.ascii)
+        $0.append(contentsOf: integer.ascii)
         guard let separator else { return }
-        $0.append(separator.rawValue)
-        $0.append(contentsOf: fraction.rawValue)}
+        $0.append(separator.ascii)
+        $0.append(contentsOf: fraction.ascii)}
     }
     
     @inlinable var hasSeparatorAsSuffix: Bool {

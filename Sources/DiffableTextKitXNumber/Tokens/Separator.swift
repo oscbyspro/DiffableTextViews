@@ -14,53 +14,40 @@ import Foundation
 //*============================================================================*
 
 @usableFromInline struct Separator: _Token {
-    @usableFromInline static let allCases = Enumeration.allCases.map(Self.init)
+    @usableFromInline static let allCases = [grouping, fraction]
     
     //=------------------------------------------------------------------------=
     // MARK: Instances
     //=------------------------------------------------------------------------=
     
-    @usableFromInline static let grouping = Self(.grouping)
-    @usableFromInline static let fraction = Self(.fraction)
+    @usableFromInline static let grouping = Self(ascii: 44) // ","
+    @usableFromInline static let fraction = Self(ascii: 46) // "."
     
     //=------------------------------------------------------------------------=
     // MARK: State
     //=------------------------------------------------------------------------=
     
-    @usableFromInline let rawValue: UInt8
+    @usableFromInline let ascii: UInt8
     
     //=------------------------------------------------------------------------=
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable init(_ enumeration: Enumeration) {
-        self.rawValue = enumeration.rawValue
-    }
+    @inlinable init(ascii: UInt8) { self.ascii = ascii }
     
     //=------------------------------------------------------------------------=
     // MARK: Utilities
     //=------------------------------------------------------------------------=
     
     @inlinable func standard(_ formatter: NumberFormatter) -> Character! {
-        var characters: String { switch enumeration {
-        case .grouping: return formatter.groupingSeparator
-        case .fraction: return formatter .decimalSeparator
-        }}; return characters.first
+        switch self {
+        case .grouping: return formatter.groupingSeparator.first
+        default:        return formatter .decimalSeparator.first }
     }
     
     @inlinable func currency(_ formatter: NumberFormatter) -> Character! {
-        var characters: String { switch enumeration {
-        case .grouping: return formatter.currencyGroupingSeparator
-        case .fraction: return formatter .currencyDecimalSeparator
-        }}; return characters.first
-    }
-    
-    //*========================================================================*
-    // MARK: * Enumeration
-    //*========================================================================*
-    
-    @usableFromInline enum Enumeration: UInt8, CaseIterable {
-        case grouping = 44 // ","
-        case fraction = 46 // "."
+        switch self {
+        case .grouping: return formatter.currencyGroupingSeparator.first
+        default:        return formatter .currencyDecimalSeparator.first }
     }
 }

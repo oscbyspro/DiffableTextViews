@@ -23,9 +23,9 @@ final class TokenTests: XCTestCase {
     // MARK: Assertions
     //=------------------------------------------------------------------------=
     
-    func XCTAssertEachBitPatternIsSameAsRawValue<T>(_ type: T.Type) where T: _Token {
-        for glyph in T.allCases {
-            XCTAssertEqual(glyph.rawValue, Swift.unsafeBitCast(glyph, to: UInt8.self))
+    func XCTAssertBitPatternIsSameAsRawValue<T>(_ type: T.Type) where T: _Token {
+        for token in T.allCases {
+            XCTAssertEqual(token.ascii, Swift.unsafeBitCast(token, to: UInt8.self))
         }
     }
     
@@ -33,10 +33,10 @@ final class TokenTests: XCTestCase {
     // MARK: Tests
     //=------------------------------------------------------------------------=
     
-    func testEachBitPatternIsSameAsRawValue() {
-        XCTAssertEachBitPatternIsSameAsRawValue(Sign.self)
-        XCTAssertEachBitPatternIsSameAsRawValue(Digit.self)
-        XCTAssertEachBitPatternIsSameAsRawValue(Separator.self)
+    func testBitPatternIsSameAsRawValue() {
+        XCTAssertBitPatternIsSameAsRawValue(Sign.self)
+        XCTAssertBitPatternIsSameAsRawValue(Digit.self)
+        XCTAssertBitPatternIsSameAsRawValue(Separator.self)
     }
 }
 
@@ -50,8 +50,8 @@ final class TokenTestsOnString: XCTestCase {
     // MARK: State
     //=------------------------------------------------------------------------=
     
-    let digits = [Digit](repeating: .seven, count: 1)
     let iterations = 1
+    let digits = [Digit](repeating: .seven, count: 1)
 
     //=------------------------------------------------------------------------=
     // MARK: Helpers
@@ -101,7 +101,7 @@ final class TokenTestsOnString: XCTestCase {
             //=----------------------------------=
             for _ in 0 ..< iterations {
                 for digit in digits {
-                    bytes.append(digit.rawValue)
+                    bytes.append(digit.ascii)
                 }
             }
             //=----------------------------------=

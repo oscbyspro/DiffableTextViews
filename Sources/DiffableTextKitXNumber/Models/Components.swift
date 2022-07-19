@@ -15,10 +15,7 @@ import Foundation
 //*============================================================================*
 
 @usableFromInline struct Components {
-    @usableFromInline typealias Signs = Links<Sign>
-    @usableFromInline typealias Digits = Links<Digit>
-    @usableFromInline typealias Separators = Links<Separator>
-
+    
     //=------------------------------------------------------------------------=
     // MARK: Instances
     //=------------------------------------------------------------------------=
@@ -30,15 +27,15 @@ import Foundation
     // MARK: State
     //=------------------------------------------------------------------------=
     
-    @usableFromInline let signs: Signs
-    @usableFromInline let digits: Digits
-    @usableFromInline let separators: Separators
+    @usableFromInline let signs:      Links<Sign>
+    @usableFromInline let digits:     Links<Digit>
+    @usableFromInline let separators: Links<Separator>
 
     //=------------------------------------------------------------------------=
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable init(signs: Signs, digits: Digits, separators: Separators) {
+    @inlinable init(signs: Links<Sign>, digits: Links<Digit>, separators: Links<Separator>) {
         self.signs = signs; self.digits = digits; self.separators = separators
     }
 
@@ -67,7 +64,8 @@ import Foundation
     //=------------------------------------------------------------------------=
     
     @inlinable func consumeSingleSign(in snapshot: inout Snapshot) -> Sign? {
-        guard snapshot.count == 1, let sign = signs[snapshot.first!.character] else { return nil }
+        guard snapshot.count == 1, let sign =
+        signs[snapshot.first!.character] else { return nil }
         snapshot = Snapshot();  return sign
     }
 }

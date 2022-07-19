@@ -192,7 +192,7 @@ extension _DefaultCache {
         //=--------------------------------------=
         // Commit
         //=--------------------------------------=
-        adapter.transform(precision.downstream(count))
+        adapter.transform(precision.interactive(count))
         return commit(&adapter, input, number)
     }
     

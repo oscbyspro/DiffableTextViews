@@ -51,19 +51,11 @@ import Foundation
         assert(formatter.numberStyle == .currency)
         guard label.contains(components.separators[.fraction]) else { return nil }
         //=--------------------------------------=
-        // Formatted
-        //=--------------------------------------=
-        let sides = formatter.string(from: 0)!.split(
-        separator: components.digits[.zero], omittingEmptySubsequences: false)
-        //=--------------------------------------=
         // Direction
         //=--------------------------------------=
-        let direction: Direction
-        
-        switch sides[0].contains(label) {
-        case  true: direction =  .forwards
-        case false: direction = .backwards; assert(sides[1].contains(label))
-        }
+        let sides = formatter.string(from: 0)!.split(
+        separator: components.digits[Digit.zero], omittingEmptySubsequences:  false)
+        let direction: Direction = sides[0].contains(label) ? .forwards : .backwards
         //=--------------------------------------=
         // Return
         //=--------------------------------------=
@@ -74,9 +66,9 @@ import Foundation
     // MARK: Utilities
     //=------------------------------------------------------------------------=
     
-    @inlinable func autocorrect(_ snapshot: inout Snapshot) {
-        if let range = Search.range(of: label, in: snapshot, towards: direction) {
-            snapshot.transform(attributes: range) { $0 = .phantom }
+    @inlinable func autocorrect(_  snapshot: inout Snapshot) {
+        if let label = Search.range(of: label, in: snapshot, towards: direction) {
+            snapshot.transform(attributes: label, with: { $0 = Attribute.phantom })
         }
     }
 }
