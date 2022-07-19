@@ -63,7 +63,7 @@ public struct _StandardID<Format: _Format & _Standard>: _Standard, _DefaultID {
     //=------------------------------------------------------------------------=
     
     @inlinable public static func cache(_ style: Style) -> Cache {
-        .init(style)
+        .init(style) // dedicated standard init
     }
     
     @inlinable public static func format(_ instance: Self) -> Format {
@@ -97,7 +97,7 @@ public struct _CurrencyID<Format: _Format & _Currency>: _Currency, _DefaultID {
     //=------------------------------------------------------------------------=
     
     @inlinable public static func cache(_ style: Style) -> Cache {
-        .init(style)
+        .init(style) // dedicated currency init
     }
     
     @inlinable public static func format(_ instance: Self) -> Format {

@@ -43,9 +43,10 @@ public final class _DefaultCache<ID: _DefaultID>: _Cache {
     //=------------------------------------------------------------------------=
     
     @inlinable init(_ style: Style) where ID: _Standard {
-        self.style = style
-        self.adapter = .init(unchecked: ID.format(style.id))
+        self.style  = style
+        
         self.preferences = .standard()
+        self.adapter = .init(unchecked: ID.format(style.id))
         //=--------------------------------------=
         // Formatter
         //=--------------------------------------=
@@ -64,7 +65,8 @@ public final class _DefaultCache<ID: _DefaultID>: _Cache {
     //=------------------------------------------------------------------------=
     
     @inlinable init(_ style: Style) where ID: _Currency {
-        self.style = style
+        self.style  = style
+        
         self.adapter = .init(unchecked: ID.format(style.id))
         //=--------------------------------------=
         // Formatter

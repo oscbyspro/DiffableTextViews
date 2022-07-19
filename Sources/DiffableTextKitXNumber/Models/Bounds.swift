@@ -68,58 +68,14 @@ import DiffableTextKit
     // MARK: Utilities
     //=------------------------------------------------------------------------=
     
+    @inlinable func full(_ input: Input) -> Bool? {
+        if min < input  && input < max { return false }
+        if input == max { return input > .zero || min == max }
+        if input == min { return input < .zero }; return nil
+    }
+    
     @inlinable static func clamping(_  input:  Input) -> Input {
         Swift.min(Swift.max(Input.min, input), Input.max)
-    }
-}
-
-//=----------------------------------------------------------------------------=
-// MARK: + Location
-//=----------------------------------------------------------------------------=
-
-extension _Bounds {
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Utilities
-    //=------------------------------------------------------------------------=
-    
-    @inlinable func location(of input: Input) -> Location? {
-        //=--------------------------------------=
-        // Value Is Not Maxed Out
-        //=--------------------------------------=
-        if min < input && input < max { return .body }
-        //=--------------------------------------=
-        // Value == Max
-        //=--------------------------------------=
-        if input == max { return Location(edge: input > .zero || min == max) }
-        //=--------------------------------------=
-        // Value == Min
-        //=--------------------------------------=
-        if input == min { return Location(edge: input < .zero) }
-        //=--------------------------------------=
-        // Value Is Out Of Bounds
-        //=--------------------------------------=
-        return nil
-    }
-    
-    //*========================================================================*
-    // MARK: * Location
-    //*========================================================================*
-    
-    @usableFromInline enum Location {
-        
-        //=--------------------------------------------------------------------=
-        // MARK: Instances
-        //=--------------------------------------------------------------------=
-        
-        case body
-        case edge
-        
-        //=--------------------------------------------------------------------=
-        // MARK: Initializers
-        //=--------------------------------------------------------------------=
-        
-        @inlinable init(edge: Bool) { self = edge ? .edge : .body }
     }
 }
 
@@ -181,13 +137,13 @@ extension _Bounds {
         //=--------------------------------------=
         // Location
         //=--------------------------------------=
-        guard let location = location(of: input) else {
+        guard let full = full(input) else {
             throw Info([.mark(input), "is not in \(self)"])
         }
         //=--------------------------------------=
         // Remove Separator On Value Is Maxed Out
         //=--------------------------------------=
-        if location == .edge, number.removeSeparatorAsSuffix() {
+        if  full, number.removeSeparatorAsSuffix() {
             Brrr.autocorrection << Info([.mark(number), "does not fit a fraction separator"])
         }
     }

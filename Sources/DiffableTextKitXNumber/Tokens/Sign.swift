@@ -51,8 +51,7 @@ import Foundation
     // MARK: Utilities
     //=------------------------------------------------------------------------=
     
-    @inlinable func standard(_ formatter: NumberFormatter) -> Character! {
-        switch self {
+    @inlinable func standard(_ formatter: NumberFormatter) -> Character! { switch self {
         case .positive: return formatter .plusSign.first{ $0.isPunctuation || $0.isMathSymbol }
         default:        return formatter.minusSign.first{ $0.isPunctuation || $0.isMathSymbol } }
     }

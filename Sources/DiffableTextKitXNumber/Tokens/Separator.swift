@@ -39,14 +39,12 @@ import Foundation
     // MARK: Utilities
     //=------------------------------------------------------------------------=
     
-    @inlinable func standard(_ formatter: NumberFormatter) -> Character! {
-        switch self {
+    @inlinable func standard(_ formatter: NumberFormatter) -> Character! { switch self {
         case .grouping: return formatter.groupingSeparator.first
         default:        return formatter .decimalSeparator.first }
     }
     
-    @inlinable func currency(_ formatter: NumberFormatter) -> Character! {
-        switch self {
+    @inlinable func currency(_ formatter: NumberFormatter) -> Character! { switch self {
         case .grouping: return formatter.currencyGroupingSeparator.first
         default:        return formatter .currencyDecimalSeparator.first }
     }

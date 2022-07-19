@@ -125,7 +125,7 @@ extension _Precision {
     //=------------------------------------------------------------------------=
     
     @inlinable func autocorrect(_ number: inout Number) {
-        if number.trim(to: upper) {
+        if  number.trim(to: upper) {
             Brrr.autocorrection << Info([.mark("number"), "exceeded precision \(upper)"])
         }
     }
@@ -146,7 +146,7 @@ extension _Precision {
         //=--------------------------------------=
         // Autocorrect
         //=--------------------------------------=
-        if capacity.fraction <= 0 || capacity.value <= 0, number.removeSeparatorAsSuffix() {
+        if  capacity.fraction <= 0 || capacity.value <= 0, number.removeSeparatorAsSuffix() {
             Brrr.autocorrection << Info([.mark(number), "does not fit a fraction separator"])
         }
     }
@@ -156,7 +156,7 @@ extension _Precision {
         //=--------------------------------------=
         // Validate Each Component
         //=--------------------------------------=
-        if let component = capacity.first(where: (.<, 0)) {
+        if  let component = capacity.first(where: (.<, 0)) {
             throw Info([.mark(component), "digits exceeded max precision \(upper[component])"])
         }
         
