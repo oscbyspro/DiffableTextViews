@@ -36,22 +36,6 @@ where Style.Value == Style.Input {
     @inlinable @inline(__always) init(_ style: Style) { self.style = style }
     
     //=------------------------------------------------------------------------=
-    // MARK: Initializers
-    //=------------------------------------------------------------------------=
-    
-    @inlinable public init<T>(
-    locale: Locale = .autoupdatingCurrent)
-    where Style == _StandardID<T>.Style {
-        self.style = Style(locale: locale)
-    }
-    
-    @inlinable public init<T>(code:String,
-    locale: Locale = .autoupdatingCurrent)
-    where Style == _CurrencyID<T>.Style {
-        self.style = Style(code: code, locale: locale)
-    }
-    
-    //=------------------------------------------------------------------------=
     // MARK: Utilities
     //=------------------------------------------------------------------------=
 
