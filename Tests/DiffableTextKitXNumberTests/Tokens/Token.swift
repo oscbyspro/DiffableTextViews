@@ -14,16 +14,16 @@
 import XCTest
 
 //*============================================================================*
-// MARK: * Glyph x Tests
+// MARK: * Token x Tests
 //*============================================================================*
 
-final class GlyphTests: XCTestCase {
+final class TokenTests: XCTestCase {
     
     //=------------------------------------------------------------------------=
     // MARK: Assertions
     //=------------------------------------------------------------------------=
     
-    func XCTAssertEachBitPatternIsSameAsRawValue<T>(_ type: T.Type) where T: Glyph {
+    func XCTAssertEachBitPatternIsSameAsRawValue<T>(_ type: T.Type) where T: _Token {
         for glyph in T.allCases {
             XCTAssertEqual(glyph.rawValue, Swift.unsafeBitCast(glyph, to: UInt8.self))
         }
@@ -41,10 +41,10 @@ final class GlyphTests: XCTestCase {
 }
 
 //*============================================================================*
-// MARK: * Glyph x Tests x String
+// MARK: * Token x Tests x String
 //*============================================================================*
 
-final class GlyphTestsOnString: XCTestCase {
+final class TokenTestsOnString: XCTestCase {
     
     //=------------------------------------------------------------------------=
     // MARK: State

@@ -46,7 +46,7 @@
     
     @inlinable mutating func transform(_ separator: Separator?) {
         let display = separator != nil ? _NFSC_SeparatorDS.always : .automatic
-        self.format = format.decimalSeparator(strategy: display)
+        self.format = format.decimalSeparator(strategy:display)
     }
     
     //=------------------------------------------------------------------------=

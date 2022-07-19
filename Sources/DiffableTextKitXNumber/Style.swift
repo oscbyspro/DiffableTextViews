@@ -42,7 +42,7 @@ Cache.Input == Input {
     @inlinable func precision<F>(fraction: F) -> Self
     where F: RangeExpression, F.Bound == Int
     
-    @inlinable func precision<I, F>(integer: I, fraction: F) -> Self
+    @inlinable func precision<I, F>(integer:  I, fraction: F) -> Self
     where I: RangeExpression, I.Bound == Int, F: RangeExpression, F.Bound == Int
 }
 

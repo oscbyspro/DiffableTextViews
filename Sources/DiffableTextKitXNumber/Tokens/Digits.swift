@@ -13,7 +13,7 @@ import DiffableTextKit
 // MARK: * Digits
 //*============================================================================*
 
-@usableFromInline struct Digits: Glyphs {
+@usableFromInline struct Digits: _Tokens {
     
     //=------------------------------------------------------------------------=
     // MARK: State

@@ -10,11 +10,11 @@
 import Foundation
 
 //*============================================================================*
-// MARK: * Glyph
+// MARK: * Token
 //*============================================================================*
 
 /// A UTF-8 encoded ASCII character.
-@usableFromInline protocol Glyph: CaseIterable, CustomStringConvertible, Hashable {
+@usableFromInline protocol _Token: CaseIterable, CustomStringConvertible, Hashable {
     associatedtype Enumeration: CaseIterable, RawRepresentable where Enumeration.RawValue == UInt8
 
     //=------------------------------------------------------------------------=
@@ -42,7 +42,7 @@ import Foundation
 // MARK: + Details
 //=----------------------------------------------------------------------------=
 
-extension Glyph {
+extension _Token {
     
     //=------------------------------------------------------------------------=
     // MARK: Enumeration
@@ -50,10 +50,6 @@ extension Glyph {
     
     @inlinable var enumeration: Enumeration {
         Enumeration(rawValue: rawValue)!
-    }
-    
-    @inlinable static var allCases: [Self] {
-        Enumeration.allCases.map(Self.init)
     }
     
     //=------------------------------------------------------------------------=
@@ -82,11 +78,11 @@ extension Glyph {
 }
 
 //*============================================================================*
-// MARK: * Glyphs
+// MARK: * Token x Collection
 //*============================================================================*
 
 /// Multiple UTF-8 encoded ASCII characters.
-@usableFromInline protocol Glyphs: CustomStringConvertible {
+@usableFromInline protocol _Tokens: CustomStringConvertible {
     
     //=------------------------------------------------------------------------=
     // MARK: State
@@ -99,7 +95,7 @@ extension Glyph {
 // MARK: + Details
 //=----------------------------------------------------------------------------=
 
-extension Glyphs {
+extension _Tokens {
     
     //=------------------------------------------------------------------------=
     // MARK: Accessors

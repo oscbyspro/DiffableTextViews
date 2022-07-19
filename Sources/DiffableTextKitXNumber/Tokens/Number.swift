@@ -19,7 +19,7 @@ import DiffableTextKit
 /// - Its integer digits MUST NOT contain redundant prefix zeros.
 /// - It MUST NOT contain fraction digits without containing a fraction separator.
 ///
-@usableFromInline struct Number: Glyphs {
+@usableFromInline struct Number: _Tokens {
     
     //=------------------------------------------------------------------------=
     // MARK: State

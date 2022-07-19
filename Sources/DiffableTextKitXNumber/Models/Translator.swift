@@ -36,34 +36,25 @@ import DiffableTextKit
     // MARK: Accessors
     //=------------------------------------------------------------------------=
     
+    @inlinable subscript(symbol: Symbol) -> Symbol {
+        Symbol(self[symbol.character], as: symbol.attribute)
+    }
+    
     @inlinable subscript(character: Character) -> Character {
         storage[character] ?? character
-    }
-    
-    @inlinable func map(_ character: Character) -> Character {
-        self[character]
-    }
-    
-    @inlinable func map(_ symbol: Symbol) -> Symbol {
-        Symbol(self[symbol.character], as: symbol.attribute)
     }
     
     //=------------------------------------------------------------------------=
     // MARK: Transformations
     //=------------------------------------------------------------------------=
     
-    @inlinable mutating func insert<T>(_ elements: (Components) -> Links<T>,
+    @inlinable mutating func insert<T>(_ links: (Components)  ->  Links<T>,
     from source: Components, to destination: Components, as key: (T) -> T) {
-        //=--------------------------------------=
-        // Values
-        //=--------------------------------------=
-        let source      = elements(source)
-        let destination = elements(destination)
-        //=--------------------------------------=
-        // Reduce
-        //=--------------------------------------=
-        for (component, character) in source.characters {
-            storage[character] = destination[key(component)]
+        let source      = links(source)     .characters
+        let destination = links(destination).characters
+        
+        for (token, character) in source {
+            storage[character] = destination[key(token)]
         }
     }
     
@@ -73,6 +64,6 @@ import DiffableTextKit
     
     @inlinable func translateSingleSymbol(in snapshot: inout Snapshot) {
         guard snapshot.count == 1 else { return }
-        snapshot = snapshot.reduce(into: .init()) { $0.append(map($1)) }
+        snapshot = snapshot.reduce(into: .init()) { $0.append(self[$1]) }
     }
 }

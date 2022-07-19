@@ -33,11 +33,11 @@ public struct _OptionalGraph<Graph: _Graph>: _Graph where Graph.Input == Graph.V
     
     @inlinable @inline(__always) public var precision: Int { Input.precision }
     
-    @inlinable @inline(__always) public var optional: Bool { true }
+    @inlinable @inline(__always) public var optional: Bool { true            }
     
-    @inlinable @inline(__always) public var unsigned: Bool { Input.unsigned }
+    @inlinable @inline(__always) public var unsigned: Bool { Input.unsigned  }
     
-    @inlinable @inline(__always) public var integer:  Bool { Input.integer  }
+    @inlinable @inline(__always) public var integer:  Bool { Input.integer   }
 }
 
 //=----------------------------------------------------------------------------=

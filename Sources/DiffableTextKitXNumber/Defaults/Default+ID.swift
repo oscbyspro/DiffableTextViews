@@ -17,7 +17,8 @@ public protocol _DefaultID<Format>: Equatable {
     associatedtype Format: _Format
     
     typealias Input = Format.FormatInput
-    typealias Graph = Input.NumberTextGraph
+    typealias Value = Format.FormatInput
+    typealias Graph = Format.FormatInput.NumberTextGraph
 
     typealias Style = _DefaultStyle<Self>
     typealias Cache = _DefaultCache<Self>

@@ -10,18 +10,19 @@
 import Foundation
 
 //*============================================================================*
-// MARK: * Sign
+// MARK: * Separator
 //*============================================================================*
 
-@usableFromInline struct Sign: Glyph {
+@usableFromInline struct Separator: _Token {
+    @usableFromInline static let allCases = Enumeration.allCases.map(Self.init)
     
     //=------------------------------------------------------------------------=
     // MARK: Instances
     //=------------------------------------------------------------------------=
     
-    @usableFromInline static let positive = Self(.positive)
-    @usableFromInline static let negative = Self(.negative)
-
+    @usableFromInline static let grouping = Self(.grouping)
+    @usableFromInline static let fraction = Self(.fraction)
+    
     //=------------------------------------------------------------------------=
     // MARK: State
     //=------------------------------------------------------------------------=
@@ -37,26 +38,21 @@ import Foundation
     }
     
     //=------------------------------------------------------------------------=
-    // MARK: Transformations
-    //=------------------------------------------------------------------------=
-    
-    @inlinable mutating func toggle() {
-        self = toggled()
-    }
-    
-    @inlinable func toggled() -> Self {
-        self == .positive ? .negative : .positive
-    }
-    
-    //=------------------------------------------------------------------------=
     // MARK: Utilities
     //=------------------------------------------------------------------------=
     
     @inlinable func standard(_ formatter: NumberFormatter) -> Character! {
         var characters: String { switch enumeration {
-        case .positive: return formatter .plusSign
-        case .negative: return formatter.minusSign
-        }}; return characters.first{ $0.isPunctuation || $0.isMathSymbol }
+        case .grouping: return formatter.groupingSeparator
+        case .fraction: return formatter .decimalSeparator
+        }}; return characters.first
+    }
+    
+    @inlinable func currency(_ formatter: NumberFormatter) -> Character! {
+        var characters: String { switch enumeration {
+        case .grouping: return formatter.currencyGroupingSeparator
+        case .fraction: return formatter .currencyDecimalSeparator
+        }}; return characters.first
     }
     
     //*========================================================================*
@@ -64,7 +60,7 @@ import Foundation
     //*========================================================================*
     
     @usableFromInline enum Enumeration: UInt8, CaseIterable {
-        case positive = 43 // "+"
-        case negative = 45 // "-"
+        case grouping = 44 // ","
+        case fraction = 46 // "."
     }
 }

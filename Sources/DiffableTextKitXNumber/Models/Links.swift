@@ -14,32 +14,33 @@ import Foundation
 //*============================================================================*
 
 /// A mapping model between components and characters.
-@usableFromInline struct Links<Component: Glyph> {
+@usableFromInline struct Links<Token: _Token> {
     
     //=------------------------------------------------------------------------=
     // MARK: State
     //=------------------------------------------------------------------------=
     
-    @usableFromInline private(set) var components: [Character: Component]
-    @usableFromInline private(set) var characters: [Component: Character]
+    @usableFromInline private(set) var tokens:     [Character: Token]
+    @usableFromInline private(set) var characters: [Token: Character]
     
     //=------------------------------------------------------------------------=
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
     /// Links each component to a character.
-    @inlinable init(character: (Component) throws -> Character) rethrows {
-        let components = Component.allCases; let count = components.count
+    @inlinable init(character: (Token) throws -> Character) rethrows {
+        let tokens = Token.allCases
         //=--------------------------------------=
         // Count
         //=--------------------------------------=
-        self.components = .init(minimumCapacity: count)
-        self.characters = .init(minimumCapacity: count)
+        self.tokens     = .init(minimumCapacity: tokens.count)
+        self.characters = .init(minimumCapacity: tokens.count)
         //=--------------------------------------=
         // Links
         //=--------------------------------------=
-        for component in components {
-            try link(component, character(component))
+        for token in tokens {
+            try self.tokens[character(token)] = token
+            try self.characters[token] = character(token)
         }
     }
     
@@ -63,21 +64,12 @@ import Foundation
     // MARK: Accessors
     //=------------------------------------------------------------------------=
     
-    /// All components map to a character, it it's OK.
-    @inlinable subscript(component: Component) -> Character {
-        characters[component]!
+    /// All tokens map to a character; unwrapping is OK.
+    @inlinable subscript(token: Token) -> Character {
+        characters[token]!
     }
     
-    @inlinable subscript(character: Character) -> Component? {
-        components[character]
-    }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Transformations
-    //=------------------------------------------------------------------------=
-    
-    @inlinable mutating func link( _ component: Component, _ character: Character) {
-        self.components[character] = component
-        self.characters[component] = character
+    @inlinable subscript(character: Character) -> Token? {
+        tokens[character]
     }
 }

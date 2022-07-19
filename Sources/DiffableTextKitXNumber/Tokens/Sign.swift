@@ -10,26 +10,19 @@
 import Foundation
 
 //*============================================================================*
-// MARK: * Digit
+// MARK: * Sign
 //*============================================================================*
 
-@usableFromInline struct Digit: Glyph {
+@usableFromInline struct Sign: _Token {
+    @usableFromInline static let allCases = Enumeration.allCases.map(Self.init)
     
     //=------------------------------------------------------------------------=
     // MARK: Instances
     //=------------------------------------------------------------------------=
     
-    @usableFromInline static let zero  = Self(.zero)
-    @usableFromInline static let one   = Self(.one)
-    @usableFromInline static let two   = Self(.two)
-    @usableFromInline static let three = Self(.three)
-    @usableFromInline static let four  = Self(.four)
-    @usableFromInline static let five  = Self(.five)
-    @usableFromInline static let six   = Self(.six)
-    @usableFromInline static let seven = Self(.seven)
-    @usableFromInline static let eight = Self(.eight)
-    @usableFromInline static let nine  = Self(.nine)
-    
+    @usableFromInline static let positive = Self(.positive)
+    @usableFromInline static let negative = Self(.negative)
+
     //=------------------------------------------------------------------------=
     // MARK: State
     //=------------------------------------------------------------------------=
@@ -45,25 +38,26 @@ import Foundation
     }
     
     //=------------------------------------------------------------------------=
-    // MARK: Accessors
+    // MARK: Transformations
     //=------------------------------------------------------------------------=
     
-    @inlinable var isZero: Bool {
-        self == Digit.zero
+    @inlinable mutating func toggle() {
+        self = toggled()
     }
     
-    @inlinable var numericValue: UInt8 {
-        rawValue - Digit.zero.rawValue
+    @inlinable func toggled() -> Self {
+        self == .positive ? .negative : .positive
     }
     
     //=------------------------------------------------------------------------=
     // MARK: Utilities
     //=------------------------------------------------------------------------=
     
-    /// Requires that formatter.numberStyle == .none.
     @inlinable func standard(_ formatter: NumberFormatter) -> Character! {
-        assert(formatter.numberStyle == .none)
-        return formatter.string(from: numericValue as NSNumber)!.first
+        var characters: String { switch enumeration {
+        case .positive: return formatter .plusSign
+        case .negative: return formatter.minusSign
+        }}; return characters.first{ $0.isPunctuation || $0.isMathSymbol }
     }
     
     //*========================================================================*
@@ -71,15 +65,7 @@ import Foundation
     //*========================================================================*
     
     @usableFromInline enum Enumeration: UInt8, CaseIterable {
-        case zero  = 48 // "0"
-        case one   = 49 // "1"
-        case two   = 50 // "2"
-        case three = 51 // "3"
-        case four  = 52 // "4"
-        case five  = 53 // "5"
-        case six   = 54 // "6"
-        case seven = 55 // "7"
-        case eight = 56 // "8"
-        case nine  = 57 // "9"
+        case positive = 43 // "+"
+        case negative = 45 // "-"
     }
 }

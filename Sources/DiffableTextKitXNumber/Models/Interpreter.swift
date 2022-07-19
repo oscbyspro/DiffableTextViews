@@ -53,8 +53,8 @@ import Foundation
     //=------------------------------------------------------------------------=
     
     @inlinable func number(_ snapshot: Snapshot, as value: (some _Value).Type) throws -> Number? {
-        try .init(unformatted: snapshot.nonvirtuals, signs: components.signs.components,
-        digits: components.digits.components, separators: components.separators.components,
+        try .init(unformatted: snapshot.nonvirtuals,signs: components.signs.tokens,
+        digits: components.digits.tokens, separators: components.separators.tokens,
         optional: value.optional, unsigned: value.unsigned, integer: value.integer)
     }
     

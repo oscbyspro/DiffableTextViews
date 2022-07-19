@@ -10,7 +10,6 @@
 import DiffableTextKit
 import Foundation
 
-#warning("Class or struct?")
 //*============================================================================*
 // MARK: * Cache
 //*============================================================================*
@@ -205,8 +204,9 @@ extension _DefaultCache {
         Commit(value, snapshot(characters(&adapter, value, number)))
     }
     
-    @inlinable func snapshot(_ characters: String) -> Snapshot {
-        var snapshot = Snapshot(characters, as: interpreter.attributes.map)
+    @inlinable func snapshot(_  characters: String) -> Snapshot {
+        var snapshot = Snapshot(characters,
+        as: { interpreter.attributes[$0] })
         adjustments?(&snapshot); return snapshot
     }
     

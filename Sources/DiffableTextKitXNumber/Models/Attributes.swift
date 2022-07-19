@@ -29,14 +29,14 @@ import DiffableTextKit
         //=--------------------------------------=
         // Signs
         //=--------------------------------------=
-        for sign in Sign.allCases {
-            self.storage[components.signs[sign]] = .phantom.subtracting(.virtual)
+        for sign in components.signs.tokens.keys {
+            self.storage[sign] = .phantom.subtracting(.virtual)
         }
         //=--------------------------------------=
         // Digits
         //=--------------------------------------=
-        for digit in Digit.allCases {
-            self.storage[components.digits[digit]] = .content
+        for digit in components.digits.tokens.keys {
+            self.storage[digit] = .content
         }
         //=--------------------------------------=
         // Separators
@@ -50,9 +50,5 @@ import DiffableTextKit
     
     @inlinable subscript(character: Character) -> Attribute {
         storage[character] ?? .phantom
-    }
-    
-    @inlinable func map(_ character: Character) -> Attribute {
-        self[character]
     }
 }
