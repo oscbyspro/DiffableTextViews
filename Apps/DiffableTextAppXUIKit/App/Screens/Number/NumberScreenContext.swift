@@ -38,7 +38,7 @@ final class NumberScreenContext: ObservableObject {
     // MARK: Accessors
     //=------------------------------------------------------------------------=
     
-    static var p: Int { Decimal.precision }
+    static var p: Int { Decimal._NumberTextGraph.precision }
     
     //*========================================================================*
     // MARK: * ID(s)

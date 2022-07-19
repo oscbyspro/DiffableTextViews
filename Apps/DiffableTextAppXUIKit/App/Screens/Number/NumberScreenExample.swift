@@ -109,10 +109,10 @@ struct NumberScreenExample: View {
 //*============================================================================*
 
 struct NumberScreenExampleX<Style>: View
-where Style: NumberTextStyleProtocol,
-Style.Format.FormatInput == Decimal {
+where Style: DiffableTextKitXNumber._Style,
+Style.Input == Decimal {
     typealias Value = Style.Value
-    typealias Input = Style.Format.FormatInput
+    typealias Input = Style.Input
     typealias Source = Observable<Twins<Input>>
     typealias Member = Source.KeyPath<Value>
     typealias Context = NumberScreenContext
@@ -146,13 +146,17 @@ Style.Format.FormatInput == Decimal {
     //=------------------------------------------------------------------------=
     // MARK: Accessors
     //=------------------------------------------------------------------------=
-
+    
     var style: some DiffableTextStyle<Value> {
         let integer  = ClosedRange(integer .value)
         let fraction = ClosedRange(fraction.value)
         
         return base.bounds(bounds.value.closed).precision(
         integer: integer,   fraction: fraction).constant()
+    }
+    
+    var keyboard: UIKeyboardType {
+        Value._NumberTextGraph.integer ? .numberPad : .decimalPad
     }
     
     //=------------------------------------------------------------------------=
@@ -163,6 +167,6 @@ Style.Format.FormatInput == Decimal {
         Observer(source, cache: style) {
             Example(value: $0[dynamicMember: member], style: $1)
         }
-        .diffableTextViews_keyboardType(Value.isInteger ? .numberPad : .decimalPad)
+        .diffableTextViews_keyboardType(keyboard)
     }
 }

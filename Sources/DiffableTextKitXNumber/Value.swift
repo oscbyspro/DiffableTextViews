@@ -13,6 +13,10 @@
 
 public protocol _Value: Equatable {
     
+    //=------------------------------------------------------------------------=
+    // MARK: Graph
+    //=------------------------------------------------------------------------=
+    
     associatedtype NumberTextGraph where NumberTextGraph: _Graph,
     NumberTextGraph: _Numberable,  NumberTextGraph.Value == Self
     

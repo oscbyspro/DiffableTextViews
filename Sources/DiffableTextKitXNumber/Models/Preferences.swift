@@ -47,7 +47,7 @@ import Foundation
         assert(formatter.numberStyle == .currency)
         
         let precision = Precision(fraction:
-        formatter.minimumFractionDigits ..<
+        formatter.minimumFractionDigits ...
         formatter.maximumFractionDigits)
         
         return Self(bounds: Bounds(), precision: precision)

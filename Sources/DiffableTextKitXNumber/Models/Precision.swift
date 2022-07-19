@@ -64,7 +64,9 @@ import Foundation
     //=------------------------------------------------------------------------=
     
     @inlinable var upper: Count {
-        Count(value: Input.precision, integer: integer.upperBound, fraction: fraction.upperBound)
+        .init(value: Input .precision,
+         integer:  integer.upperBound,
+        fraction: fraction.upperBound)
     }
     
     //=------------------------------------------------------------------------=
