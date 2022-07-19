@@ -40,50 +40,20 @@ public protocol _Format: ParseableFormatStyle where FormatInput: _Input, FormatO
 // MARK: * Format x Standard
 //*============================================================================*
 
-public protocol _Format_Standard: _Format where _SignDS == _NFSC_SignDS {
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Initializers
-    //=------------------------------------------------------------------------=
-    
-    @inlinable init(locale: Locale)
-}
+extension      Decimal.FormatStyle: _Format & _Standard { }
+extension FloatingPointFormatStyle: _Format & _Standard where FormatInput: _Input { }
+extension       IntegerFormatStyle: _Format & _Standard where FormatInput: _Input { }
 
-//=----------------------------------------------------------------------------=
-// MARK: + Types
-//=----------------------------------------------------------------------------=
-
-private typealias _Standard = _Format & _Format_Standard
-
-extension      Decimal.FormatStyle: _Standard { }
-extension FloatingPointFormatStyle: _Standard where FormatInput: _Input { }
-extension       IntegerFormatStyle: _Standard where FormatInput: _Input { }
-
-extension      Decimal.FormatStyle.Percent: _Standard { }
-extension FloatingPointFormatStyle.Percent: _Standard where FormatInput: _Input { }
+extension      Decimal.FormatStyle.Percent: _Format & _Standard { }
+extension FloatingPointFormatStyle.Percent: _Format & _Standard where FormatInput: _Input { }
 
 //*============================================================================*
 // MARK: * Format x Currency
 //*============================================================================*
 
-public protocol _Format_Currency: _Format where _SignDS == _CFSC_SignDS {
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Initializers
-    //=------------------------------------------------------------------------=
-        
-    @inlinable init(code: String, locale: Locale)
-}
-
-//=----------------------------------------------------------------------------=
-// MARK: + Types
-//=----------------------------------------------------------------------------=
-
-private typealias _Currency = _Format & _Format_Currency
-
-extension      Decimal.FormatStyle.Currency: _Currency { }
-extension FloatingPointFormatStyle.Currency: _Currency where FormatInput: _Input { }
-extension       IntegerFormatStyle.Currency: _Currency where FormatInput: _Input { }
+extension      Decimal.FormatStyle.Currency: _Format & _Currency { }
+extension FloatingPointFormatStyle.Currency: _Format & _Currency where FormatInput: _Input { }
+extension       IntegerFormatStyle.Currency: _Format & _Currency where FormatInput: _Input { }
 
 //*============================================================================*
 // MARK: * Format x Strategies x Sign

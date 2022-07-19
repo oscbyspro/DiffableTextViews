@@ -32,12 +32,6 @@ public struct _DefaultStyle<ID: _DefaultID>: _Style {
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable public init<T>(
-    locale: Locale = .autoupdatingCurrent)
-    where ID == _StandardID<T> {
-        self.id = ID(locale: locale)
-    }
-    
     @inlinable public init<T>(code:String,
     locale: Locale = .autoupdatingCurrent)
     where ID == _CurrencyID<T> {
@@ -148,5 +142,55 @@ extension _DefaultStyle {
     
     @inlinable @inline(__always) func precision(_ precision: _Precision<Input>) -> Self {
         var result = self; result.precision = precision; return result
+    }
+}
+
+//=----------------------------------------------------------------------------=
+// MARK: + Traits x Standard
+//=----------------------------------------------------------------------------=
+
+extension _DefaultStyle: _Standard where ID: _Standard {
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Accessors
+    //=------------------------------------------------------------------------=
+    
+    @inlinable public var locale: Locale {
+        id.locale
+    }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Initializers
+    //=------------------------------------------------------------------------=
+    
+    @inlinable public init(locale: Locale = .autoupdatingCurrent) {
+        self.id = ID(locale: locale)
+    }
+}
+
+//=----------------------------------------------------------------------------=
+// MARK: + Traits x Currency
+//=----------------------------------------------------------------------------=
+
+extension _DefaultStyle: _Currency where ID: _Currency {
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Accessors
+    //=------------------------------------------------------------------------=
+    
+    @inlinable public var locale: Locale {
+        id.locale
+    }
+    
+    @inlinable public var currencyCode: String {
+        id.currencyCode
+    }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Initializers
+    //=------------------------------------------------------------------------=
+    
+    @inlinable public init(code: String, locale: Locale = .autoupdatingCurrent) {
+        self.id = ID(code: code, locale: locale)
     }
 }

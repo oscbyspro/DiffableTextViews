@@ -13,36 +13,40 @@
 
 import XCTest
 
-//*============================================================================*
-// MARK: * Links x Tests
-//*============================================================================*
+#warning("WIP")
+#warning("WIP")
+#warning("WIP")
 
-final class LinksTests: XCTestCase {
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Assertions
-    //=------------------------------------------------------------------------=
-    
-    func XCTAssertEachIsBidirectionallyLinked<T>(_ links: Links<T>) {
-        for component in T.allCases {
-            XCTAssertEqual(component, links[links[component]])
-        }
-    }
-    
-    //=------------------------------------------------------------------------=
-    // MARK: Tests
-    //=------------------------------------------------------------------------=
-
-    func testEachIsBidirectionallyLinked() {
-        //=--------------------------------------=
-        // Components
-        //=--------------------------------------=
-        for components in standards.lazy.map(\.reader.components) {
-            XCTAssertEachIsBidirectionallyLinked(components.signs)
-            XCTAssertEachIsBidirectionallyLinked(components.digits)
-            XCTAssertEachIsBidirectionallyLinked(components.separators)
-        }
-    }
-}
+////*============================================================================*
+//// MARK: * Links x Tests
+////*============================================================================*
+//
+//final class LinksTests: XCTestCase {
+//
+//    //=------------------------------------------------------------------------=
+//    // MARK: Assertions
+//    //=------------------------------------------------------------------------=
+//
+//    func XCTAssertEachIsBidirectionallyLinked<T>(_ links: Links<T>) {
+//        for component in T.allCases {
+//            XCTAssertEqual(component, links[links[component]])
+//        }
+//    }
+//
+//    //=------------------------------------------------------------------------=
+//    // MARK: Tests
+//    //=------------------------------------------------------------------------=
+//
+//    func testEachIsBidirectionallyLinked() {
+//        //=--------------------------------------=
+//        // Components
+//        //=--------------------------------------=
+//        for components in standards.lazy.map(\.reader.components) {
+//            XCTAssertEachIsBidirectionallyLinked(components.signs)
+//            XCTAssertEachIsBidirectionallyLinked(components.digits)
+//            XCTAssertEachIsBidirectionallyLinked(components.separators)
+//        }
+//    }
+//}
 
 #endif

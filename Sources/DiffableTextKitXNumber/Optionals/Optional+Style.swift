@@ -75,21 +75,21 @@ where Style.Value == Style.Input {
 // MARK: + Transformations
 //=----------------------------------------------------------------------------=
 
-extension _OptionalStyle {
+public extension _OptionalStyle {
     
     //=------------------------------------------------------------------------=
     // MARK: Bounds
     //=------------------------------------------------------------------------=
     
-    public func bounds(_ limits: ClosedRange<Input>) -> Self {
+    @inlinable func bounds(_ limits: ClosedRange<Input>) -> Self {
         Self(style.bounds(limits))
     }
     
-    public func bounds(_ limits: PartialRangeFrom<Input>) -> Self {
+    @inlinable func bounds(_ limits: PartialRangeFrom<Input>) -> Self {
         Self(style.bounds(limits))
     }
     
-    public func bounds(_ limits: PartialRangeThrough<Input>) -> Self {
+    @inlinable func bounds(_ limits: PartialRangeThrough<Input>) -> Self {
         Self(style.bounds(limits))
     }
     
@@ -97,18 +97,68 @@ extension _OptionalStyle {
     // MARK: Precision
     //=------------------------------------------------------------------------=
     
-    public func precision<I>(integer: I) -> Self where
+    @inlinable func precision<I>(integer: I) -> Self where
     I: RangeExpression, I.Bound == Int {
         Self(style.precision(integer: integer))
     }
     
-    public func precision<F>(fraction: F) -> Self
+    @inlinable func precision<F>(fraction: F) -> Self
     where F: RangeExpression, F.Bound == Int {
         Self(style.precision(fraction: fraction))
     }
     
-    public func precision<I, F>(integer: I, fraction: F) -> Self
+    @inlinable func precision<I, F>(integer: I, fraction: F) -> Self
     where I: RangeExpression, F: RangeExpression, I.Bound == Int, F.Bound == Int {
         Self(style.precision(integer: integer, fraction: fraction))
+    }
+}
+
+//=----------------------------------------------------------------------------=
+// MARK: + Traits x Standard
+//=----------------------------------------------------------------------------=
+
+extension _OptionalStyle: _Standard where Style: _Standard {
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Accessors
+    //=------------------------------------------------------------------------=
+    
+    @inlinable public var locale: Locale {
+        style.locale
+    }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Initializers
+    //=------------------------------------------------------------------------=
+    
+    @inlinable public init(locale: Locale = .autoupdatingCurrent) {
+        self.style = Style(locale: locale)
+    }
+}
+
+//=----------------------------------------------------------------------------=
+// MARK: + Traits x Currency
+//=----------------------------------------------------------------------------=
+
+extension _OptionalStyle: _Currency where Style: _Currency {
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Accessors
+    //=------------------------------------------------------------------------=
+    
+    @inlinable public var locale: Locale {
+        style.locale
+    }
+    
+    @inlinable public var currencyCode: String {
+        style.currencyCode
+    }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Initializers
+    //=------------------------------------------------------------------------=
+    
+    @inlinable public init(code: String, locale: Locale = .autoupdatingCurrent) {
+        self.style = Style(code: code,   locale: locale)
     }
 }

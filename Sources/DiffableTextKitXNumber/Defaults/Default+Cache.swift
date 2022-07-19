@@ -10,16 +10,23 @@
 import DiffableTextKit
 import Foundation
 
+#warning("Class or struct?")
 //*============================================================================*
 // MARK: * Cache
 //*============================================================================*
 
-public struct _DefaultCache<ID: _DefaultID>: _Cache {
+public final class _DefaultCache<ID: _DefaultID>: _Cache {
     public typealias Style = ID.Style
     public typealias Input = ID.Input
     
-    @usableFromInline typealias Adapter = _Adapter<ID.Format>
+    //=------------------------------------------------------------------------=
+    // MARK: Aliases
+    //=------------------------------------------------------------------------=
+    
+    @usableFromInline typealias Adapter     = _Adapter<ID.Format>
     @usableFromInline typealias Preferences = _Preferences<Input>
+    @usableFromInline typealias Interpreter = _Interpreter
+    @usableFromInline typealias Adjustments = (inout Snapshot) -> Void
     
     //=------------------------------------------------------------------------=
     // MARK: State
@@ -29,14 +36,14 @@ public struct _DefaultCache<ID: _DefaultID>: _Cache {
     @usableFromInline let adapter: Adapter
     @usableFromInline let preferences: Preferences
     
-    @usableFromInline let interpreter: _Interpreter
-    @usableFromInline let adjustments: ((inout Snapshot) -> Void)?
+    @usableFromInline let interpreter: Interpreter
+    @usableFromInline let adjustments: Adjustments?
 
     //=------------------------------------------------------------------------=
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable init<T>(_ style: Style) where ID == _StandardID<T> {
+    @inlinable init(_ style: Style) where ID: _Standard {
         self.style = style
         self.adapter = .init(unchecked: ID.format(style.id))
         self.preferences = .standard()
@@ -57,7 +64,7 @@ public struct _DefaultCache<ID: _DefaultID>: _Cache {
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable init<T>(_ style: Style) where ID == _CurrencyID<T> {
+    @inlinable init(_ style: Style) where ID: _Currency {
         self.style = style
         self.adapter = .init(unchecked: ID.format(style.id))
         //=--------------------------------------=

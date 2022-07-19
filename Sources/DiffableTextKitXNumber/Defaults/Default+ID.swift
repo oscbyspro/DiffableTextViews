@@ -15,6 +15,7 @@ import Foundation
 
 public protocol _DefaultID<Format>: Equatable {
     associatedtype Format: _Format
+    
     typealias Input = Format.FormatInput
     typealias Graph = Input.NumberTextGraph
 
@@ -40,7 +41,7 @@ public protocol _DefaultID<Format>: Equatable {
 // MARK: * ID x Standard
 //*============================================================================*
 
-public struct _StandardID<Format: _Format_Standard>: _DefaultID {
+public struct _StandardID<Format: _Format & _Standard>: _Standard, _DefaultID {
     
     //=------------------------------------------------------------------------=
     // MARK: State
@@ -52,7 +53,7 @@ public struct _StandardID<Format: _Format_Standard>: _DefaultID {
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable init(locale: Locale) {
+    @inlinable public init(locale: Locale) {
         self.locale = locale
     }
     
@@ -73,7 +74,7 @@ public struct _StandardID<Format: _Format_Standard>: _DefaultID {
 // MARK: * ID x Currency
 //*============================================================================*
 
-public struct _CurrencyID<Format: _Format_Currency>: _DefaultID {
+public struct _CurrencyID<Format: _Format & _Currency>: _Currency, _DefaultID {
     
     //=------------------------------------------------------------------------=
     // MARK: State
@@ -86,7 +87,7 @@ public struct _CurrencyID<Format: _Format_Currency>: _DefaultID {
     // MARK: Initializers
     //=------------------------------------------------------------------------=
     
-    @inlinable init(code: String, locale: Locale) {
+    @inlinable public init(code: String, locale: Locale) {
         self.locale = locale; self.currencyCode = code
     }
     

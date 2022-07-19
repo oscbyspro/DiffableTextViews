@@ -24,14 +24,15 @@ final class StyleTestsOnCurrency: StyleTests {
     // MARK: Assertions
     //=------------------------------------------------------------------------=
     
-    func XCTInterpretLocalesXCurrencies<T>(_ value: T) where
-    T: NumberTextValueXCurrencyable, T == T.NumberTextValue {
-         XCTInterpretLocalesXCurrencies(value, format: T.NumberTextFormat.Currency.init)
+    func XCTAssertCurrencies<T: _Value>(_ value: T) where T.NumberTextGraph: _Currencyable {
+        XCTAssertCurrencies(value, with: T.NumberTextGraph.Currency.init)
     }
-    
-    func XCTAssertDefaultFractionLimits(_ limits: ClosedRange<Int>, locale: Locale, code: String) {
-        let style = NumberTextStyle<Decimal>.Currency(code: code, locale: locale)
-        XCTAssertEqual(style.precision.fraction, limits)
+        
+    func XCTAssertDefaultPrecisionLimits(_ limits: ClosedRange<Int>, code: String) {
+        typealias Style = NumberTextStyle<Decimal>.Currency
+        let cache = Style(code: code, locale: .en_US_POSIX).cache()
+        XCTAssertEqual(cache.precision.integer,  1 ... Decimal._NumberTextGraph.precision)
+        XCTAssertEqual(cache.precision.fraction, limits)
     }
 }
 
@@ -44,12 +45,11 @@ extension StyleTestsOnCurrency {
     //=------------------------------------------------------------------------=
     // MARK: Tests
     //=------------------------------------------------------------------------=
-    
+        
     func testDefaultFractionLimits_JPY_USD_BHD() {
-        let locale = Locale(identifier: "en_US")
-        XCTAssertDefaultFractionLimits(0...0, locale: locale, code: "JPY")
-        XCTAssertDefaultFractionLimits(2...2, locale: locale, code: "USD")
-        XCTAssertDefaultFractionLimits(3...3, locale: locale, code: "BHD")
+        XCTAssertDefaultPrecisionLimits(0...0, code: "JPY")
+        XCTAssertDefaultPrecisionLimits(2...2, code: "USD")
+        XCTAssertDefaultPrecisionLimits(3...3, code: "BHD")
     }
 }
 
@@ -64,7 +64,7 @@ extension StyleTestsOnCurrency {
     //=------------------------------------------------------------------------=
     
     func testDecimal() throws {
-        XCTInterpretLocalesXCurrencies(-1.23 as Decimal)
+        XCTAssertCurrencies(-1.23 as Decimal)
     }
 }
 
@@ -79,7 +79,7 @@ extension StyleTestsOnCurrency {
     //=------------------------------------------------------------------------=
     
     func testFloat64_aka_Double() throws {
-        XCTInterpretLocalesXCurrencies(-1.23 as Float64)
+        XCTAssertCurrencies(-1.23 as Float64)
     }
 }
 
@@ -94,23 +94,23 @@ extension StyleTestsOnCurrency {
     //=------------------------------------------------------------------------=
 
     func testInt() throws {
-        XCTInterpretLocalesXCurrencies(-123 as Int)
+        XCTAssertCurrencies(-123 as Int)
     }
     
     func testInt8() throws {
-        XCTInterpretLocalesXCurrencies(-123 as Int8)
+        XCTAssertCurrencies(-123 as Int8)
     }
     
     func testInt16() throws {
-        XCTInterpretLocalesXCurrencies(-123 as Int16)
+        XCTAssertCurrencies(-123 as Int16)
     }
     
     func testInt32() throws {
-        XCTInterpretLocalesXCurrencies(-123 as Int32)
+        XCTAssertCurrencies(-123 as Int32)
     }
     
     func testInt64() throws {
-        XCTInterpretLocalesXCurrencies(-123 as Int64)
+        XCTAssertCurrencies(-123 as Int64)
     }
 }
 
@@ -125,23 +125,23 @@ extension StyleTestsOnCurrency {
     //=------------------------------------------------------------------------=
     
     func testUInt() throws {
-        XCTInterpretLocalesXCurrencies(123 as UInt)
+        XCTAssertCurrencies(123 as UInt)
     }
     
     func testUInt8() throws {
-        XCTInterpretLocalesXCurrencies(123 as UInt8)
+        XCTAssertCurrencies(123 as UInt8)
     }
     
     func testUInt16() throws {
-        XCTInterpretLocalesXCurrencies(123 as UInt16)
+        XCTAssertCurrencies(123 as UInt16)
     }
     
     func testUInt32() throws {
-        XCTInterpretLocalesXCurrencies(123 as UInt32)
+        XCTAssertCurrencies(123 as UInt32)
     }
     
     func testUInt64() throws {
-        XCTInterpretLocalesXCurrencies(123 as UInt64)
+        XCTAssertCurrencies(123 as UInt64)
     }
 }
 

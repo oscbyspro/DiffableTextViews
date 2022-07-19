@@ -40,18 +40,21 @@ public protocol _Graph {
 
 public protocol _Numberable: _Graph {
     associatedtype Number: _Style where
+    Number:     _Standard,
     Number.Input == Input,
     Number.Value == Value
 }
 
 public protocol _Percentable: _Graph {
     associatedtype Percent: _Style where
+    Percent:     _Standard,
     Percent.Input == Input,
     Percent.Value == Value
 }
 
 public protocol _Currencyable: _Graph {
     associatedtype Currency: _Style where
+    Currency:     _Currency,
     Currency.Input == Input,
     Currency.Value == Value
 }

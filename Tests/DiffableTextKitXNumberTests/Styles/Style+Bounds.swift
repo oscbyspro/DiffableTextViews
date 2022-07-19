@@ -9,62 +9,64 @@
 
 #if DEBUG
 
-import DiffableTextKitXNumber
+@testable import DiffableTextKitXNumber
 
 import XCTest
 
 //*============================================================================*
-// MARK: * Style
+// MARK: * Style x Tests x Bounds
 //*============================================================================*
 
-class StyleTests: XCTestCase {
+final class StyleTestsOnBounds: XCTestCase {
     
     //=------------------------------------------------------------------------=
-    // MARK: Overrides
+    // MARK: State
     //=------------------------------------------------------------------------=
     
-    override func setUp() {
-        super.setUp(); self.continueAfterFailure = false
-    }
+    let integer = NumberTextStyle<Int>()
+    let decimal = NumberTextStyle<Decimal>()
     
     //=------------------------------------------------------------------------=
     // MARK: Assertions
     //=------------------------------------------------------------------------=
     
-    func XCTAssert<S: _Style>(_ value: S.Value, with style: S) {
-        let style = style.precision(fraction: 0...)
-        var cache = style.cache()
-
-        let commit = style.interpret(value, with: &cache)
-        XCTAssertEqual(commit.value, value, "\(style) x \(value)")
-        
-        let characters = style.format(value, with: &cache)
-        XCTAssertEqual(commit.snapshot.characters, characters, "\(style) x \(value)")
-    }
-
-    //=------------------------------------------------------------------------=
-    // MARK: Locales
-    //=------------------------------------------------------------------------=
-    
-    /// - Iterates about 1k times.
-    func XCTAssertLocales<T: _Style>(_ value: T.Value, with style: (Locale) -> T) {
-        for locale in locales {
-            XCTAssert(value, with: style(locale))
-        }
+    func XCTAssert<T>(_ style: _DefaultStyle<T>, _ expectation: ClosedRange<T.Input>?) {
+        XCTAssertEqual(style.bounds?.min, expectation?.lowerBound)
+        XCTAssertEqual(style.bounds?.max, expectation?.upperBound)
     }
     
     //=------------------------------------------------------------------------=
-    // MARK: Locales, Currencies
+    // MARK: Tests x Int
     //=------------------------------------------------------------------------=
     
-    /// - Iterates about 300k times.
-    func XCTAssertCurrencies<T: _Style>(_ value: T.Value, with style: (String, Locale) -> T) {
-        for locale in locales {
-            for code in currencyCodes {
-                XCTAssert(value, with: style(code, locale))
-            }
-        }
+    func testInteger_ClosedRange() {
+        XCTAssert(integer.bounds(5...9), 5...9)
+    }
+    
+    func testInteger_PartialRangeFrom() {
+        XCTAssert(integer.bounds(5... ), 5...Int.max)
+    }
+    
+    func testInteger_PartialRangeThrough() {
+        XCTAssert(integer.bounds( ...9), Int.min...9)
+    }
+    
+    //=------------------------------------------------------------------------=
+    // MARK: Tests x Decimal
+    //=------------------------------------------------------------------------=
+    
+    func testFloatingPoint_ClosedRange() {
+        XCTAssert(decimal.bounds(5...9), Decimal(5)...9)
+    }
+    
+    func testFloatingPoint_PartialRangeFrom() {
+        XCTAssert(decimal.bounds(5... ), 5...(Decimal.max))
+    }
+    
+    func testFloatingPoint_PartialRangeThrough() {
+        XCTAssert(decimal.bounds( ...9), (Decimal.min)...9)
     }
 }
 
 #endif
+

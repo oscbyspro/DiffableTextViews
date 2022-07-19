@@ -7,9 +7,7 @@
 // See http://www.apache.org/licenses/LICENSE-2.0 for license information.
 //=----------------------------------------------------------------------------=
 
-#if DEBUG
-
-@testable import DiffableTextKitXNumber
+import DiffableTextKitXNumber
 
 import Foundation
 
@@ -27,9 +25,3 @@ let currencyCodes: [String] = Locale
 let locales: [Locale] = Locale
     .availableIdentifiers.lazy.map(Locale.init)
     .sorted(by: { $0.identifier < $1.identifier })
-
-let standards: [NumberTextSchemeXStandard] = locales.lazy
-    .map(NumberTextSchemeXStandard.ID.init)
-    .map(NumberTextSchemeXStandard   .init)
-
-#endif

@@ -23,9 +23,8 @@ final class StyleTestsOnPercent: StyleTests {
     // MARK: Assertions
     //=------------------------------------------------------------------------=
     
-    func XCTInterpretLocales<T>(_ value: T) where
-    T: NumberTextValueXPercentable, T == T.NumberTextValue {
-         XCTInterpretLocales(value, format: T.NumberTextFormat.Percent.init)
+    func XCTAssertLocales<T: _Value>(_ value: T) where T.NumberTextGraph: _Percentable {
+        XCTAssertLocales(value, with: T.NumberTextGraph.Percent.init)
     }
 }
 
@@ -40,7 +39,7 @@ extension StyleTestsOnPercent {
     //=------------------------------------------------------------------------=
     
     func testDecimal() throws {
-        XCTInterpretLocales(-1.23 as Decimal)
+        XCTAssertLocales(-1.23 as Decimal)
     }
 }
 
@@ -55,7 +54,7 @@ extension StyleTestsOnPercent {
     //=------------------------------------------------------------------------=
         
     func testFloat64_aka_Double() throws {
-        XCTInterpretLocales(-1.23 as Float64)
+        XCTAssertLocales(-1.23 as Float64)
     }
 }
 
