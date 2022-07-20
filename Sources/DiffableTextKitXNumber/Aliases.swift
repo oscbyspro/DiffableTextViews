@@ -19,13 +19,13 @@ public typealias NumberTextStyle<Value: _Value> = Value.NumberTextGraph.Number
 // MARK: * Aliases x Internal
 //*============================================================================*
 
-public typealias _NFSC = NumberFormatStyleConfiguration
+public typealias _FPRR = FloatingPointRoundingRule
+
+public typealias _NFSC =   NumberFormatStyleConfiguration
 public typealias _CFSC = CurrencyFormatStyleConfiguration
 
 public typealias _NFSC_SignDS = _NFSC.SignDisplayStrategy
-public typealias _NFSC_SeparatorDS = _NFSC.DecimalSeparatorDisplayStrategy
-
 public typealias _CFSC_SignDS = _CFSC.SignDisplayStrategy
-public typealias _CFSC_SeparatorDS = _CFSC.DecimalSeparatorDisplayStrategy
 
-public typealias _FPRR = FloatingPointRoundingRule
+public typealias _NFSC_SeparatorDS = _NFSC.DecimalSeparatorDisplayStrategy
+public typealias _CFSC_SeparatorDS = _CFSC.DecimalSeparatorDisplayStrategy

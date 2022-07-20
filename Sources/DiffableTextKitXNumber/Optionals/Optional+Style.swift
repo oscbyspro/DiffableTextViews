@@ -15,7 +15,7 @@ import Foundation
 //*============================================================================*
 
 public struct _OptionalStyle<Style: _Style>:
-DiffableTextStyleWrapper, _Style
+_Style, DiffableTextStyleWrapper
 where Style.Value == Style.Input {
     public typealias Graph = _OptionalGraph<Style.Graph>
     
@@ -56,49 +56,56 @@ where Style.Value == Style.Input {
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: + Transformations
+// MARK: + Bounds
 //=----------------------------------------------------------------------------=
 
-public extension _OptionalStyle {
+extension _OptionalStyle {
     
     //=------------------------------------------------------------------------=
-    // MARK: Bounds
+    // MARK: Limits
     //=------------------------------------------------------------------------=
     
-    @inlinable func bounds(_ limits: ClosedRange<Input>) -> Self {
+    @inlinable public func bounds(_ limits: ClosedRange<Input>) -> Self {
         Self(style.bounds(limits))
     }
     
-    @inlinable func bounds(_ limits: PartialRangeFrom<Input>) -> Self {
+    @inlinable public func bounds(_ limits: PartialRangeFrom<Input>) -> Self {
         Self(style.bounds(limits))
     }
     
-    @inlinable func bounds(_ limits: PartialRangeThrough<Input>) -> Self {
+    @inlinable public func bounds(_ limits: PartialRangeThrough<Input>) -> Self {
         Self(style.bounds(limits))
     }
-    
+}
+
+//=----------------------------------------------------------------------------=
+// MARK: + Precision
+//=----------------------------------------------------------------------------=
+
+extension _OptionalStyle {
+
     //=------------------------------------------------------------------------=
-    // MARK: Precision
+    // MARK: Limits
     //=------------------------------------------------------------------------=
     
-    @inlinable func precision<I>(integer: I) -> Self where
+    @inlinable public func precision<I>(integer: I) -> Self where
     I: RangeExpression, I.Bound == Int {
         Self(style.precision(integer: integer))
     }
     
-    @inlinable func precision<F>(fraction: F) -> Self
+    @inlinable public func precision<F>(fraction: F) -> Self
     where F: RangeExpression, F.Bound == Int {
         Self(style.precision(fraction: fraction))
     }
     
-    @inlinable func precision<I, F>(integer: I, fraction: F) -> Self
+    @inlinable public func precision<I, F>(integer: I, fraction: F) -> Self
     where I: RangeExpression, F: RangeExpression, I.Bound == Int, F.Bound == Int {
         Self(style.precision(integer: integer, fraction: fraction))
     }
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: + Traits x Standard
+// MARK: + Optional x Traits x Standard
 //=----------------------------------------------------------------------------=
 
 extension _OptionalStyle: _Standard where Style: _Standard {
@@ -121,7 +128,7 @@ extension _OptionalStyle: _Standard where Style: _Standard {
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: + Traits x Currency
+// MARK: + Optional x Traits x Currency
 //=----------------------------------------------------------------------------=
 
 extension _OptionalStyle: _Currency where Style: _Currency {

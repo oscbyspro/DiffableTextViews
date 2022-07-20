@@ -136,7 +136,7 @@ extension _DefaultStyle {
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: + Traits x Standard
+// MARK: + Default x Traits x Standard
 //=----------------------------------------------------------------------------=
 
 extension _DefaultStyle: _Standard where ID: _Standard {
@@ -159,7 +159,7 @@ extension _DefaultStyle: _Standard where ID: _Standard {
 }
 
 //=----------------------------------------------------------------------------=
-// MARK: + Traits x Currency
+// MARK: + Default x Traits x Currency
 //=----------------------------------------------------------------------------=
 
 extension _DefaultStyle: _Currency where ID: _Currency {
